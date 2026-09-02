@@ -1,6 +1,6 @@
 # Feature 174 - One Hundred Percent, Enforced
 
-**Status**: 2026-09-02, after TEN `spec-fidelity` rounds - every item applied, each round in the
+**Status**: 2026-09-02, after FOURTEEN `spec-fidelity` rounds, the last returning FAITHFUL - every item applied, each round in the
 Review history below. 1-4 found real drafting faults; 5 escalated the pragma to the GM under the
 five-round cap and they ruled; 6 caught an arithmetic error; 7 found the ratchets still live, which
 six rounds of reading the prose had missed; 8-10 are ONE failure in three files - an item closed in
@@ -74,14 +74,15 @@ running `test-full` corrupted a measurement into reporting 44% for a tree at 95%
 
 **The 100% floor is enforced on a plain `make done`** (mechanically `coverage report --fail-under=100` in the skill Makefile - NOT a `fail_under` in `[tool.coverage.report]`, which `pytest-cov` would read and fire on every partial run; see SC5). Round 2 caught the first rewrite naming
 `make test COV_FLOORS=1` instead - which changes NOTHING, because that is already where all three
-floors live (`Makefile:1021-1023, 1058-1067`). Verified in the tree, a plain `make done` today:
+floors live (`Makefile:1021-1023, 1058-1067`). Verified in the tree BEFORE this feature landed
+(2026-08-31), a plain `make done` then:
 
 - runs `test` with `COV_FLOORS` empty (`Makefile:111`, the phase loop `hooks-test $(if $(FULL),test-full perf-gate,test)`)
   and prints *"coverage floors: deferred to `make done FULL=1`"*;
 - **stamps green anyway**, and `sync-with-main.sh:255`'s `gate-stamp.py --check` is the whole of what
   the push demands.
 
-So a merge below 100% is available today and would have stayed available under the first rewrite.
+So a merge below 100% WAS available every day, and would have stayed available under the first rewrite.
 That is the clause the GM wrote the request around, and the spec had left it standing.
 
 **The cost is stated, not used as a reason to decline**: +148 s per gate (89 s -> 237 s, R5, with
@@ -388,10 +389,16 @@ config.** `tests/tooling/test_docs_match_the_mechanism.py`:
 
 A DESCRIPTION is never flagged, only a prescription: each rule reads a +/-2 line window for a
 negation, because the disclaimer regularly wraps onto the neighbouring line - the constitution's own
-clause 5 does exactly that, and the first cut of this check fired on it. Each of the three rules was
+clause 5 does exactly that, and the first cut of this check fired on it. Each of the four rules was
 proved to fire by reintroducing the violation and watching it go red.
 
 **It found one instance the thirteen review rounds had not**, and it costs no round trip.
+
+Like FR-002, this is a requirement the SESSION added rather than one the GM asked for in those words,
+and the GM may strike it. The case for it being in scope: their ruling asks for the rule to hold
+*"for all time going forward"* and for *"no mechanism"* to remain, and two operative documents were
+found telling a reader to move `fail_under` to where `pytest-cov` reads it - which would have fired
+the floor on `make quick`, the one thing the GM exempted.
 
 ## Review history
 
@@ -411,6 +418,9 @@ subagent.
 | 9 | CHANGES REQUIRED | **The same mechanical failure a sixth time, and this round names it as the drafting method rather than the sentence.** FR-010 recorded that the GM had CLOSED the measured-surface residue - and the four places round 8 had forced to STATE that residue were never swept, so the document asserted both at once and the false half sat in the success criteria. Worst of the four was **`SKILL.md`**, which is not a record but the file the next session reads before touching the config, and which still carried the sentence the GM reversed verbatim: *"`source` ... names the measured modules one by one ... so a new tool does not owe 100% the day it lands"*. Also: **the headline count was a TALLY, not a measurement** - 22,525 is 20,682 + 1,843, two separately-dated figures added together, which is exactly what this feature's own D4 forbids; the tree measures **22,520**, and the wrong number had already been reported to the GM. And D10 still said "no pragma was added" while FR-010 disclosed one three sections away (77 comment lines, not 76; 398 excluded lines, not 385). All corrected, plus the reviewer's asides: the constitution named `pytest --cov-fail-under=100` when the mechanism is `coverage report --fail-under=100` in the Makefile, and `CLAUDE.md`'s guard row met the pre-widening number first. **The lesson recorded for the ledger**: rounds 7, 8 and 9 are one failure, not three - an edit that closes an item without SWEEPING the tree for the sentences that asserted the old state |
 | 10 | CHANGES REQUIRED | **The same failure again, and this round proved the session had REPORTED a fix it never made.** `git show` on the round-9 commit showed it touched `SKILL.md`, `pyproject.toml`, `spec.md` and `tasks.md` - and not `CLAUDE.md`, which the session had told the GM was corrected. The edit script had died on an assertion in an earlier block and the batch was reported applied without checking. So `CLAUDE.md` still carried **20,646 statements** (a third-era figure that appears nowhere else outside this spec) and "with no `pragma: no cover` added", which FR-010 had disclosed to be false three documents away; and it still named `pytest --cov-fail-under=100` as the mechanism, which the constitution had just been amended to deny. Two more places the sweep had never reached: **`.specify/templates/plan-template.md`**, whose Constitution Check still demanded the floor *"on pure-logic packages"* - the narrowed rule the GM globalized, in the template EVERY future plan copies, so the next feature would have been taught the exemption this one exists to remove - and the **constitution's own SYNC IMPACT REPORT**, which recorded no 2.15.0 amendment while the footer claimed the version. Plus the Status line, three rounds stale for the SECOND time. All verified individually this time, each edit asserted rather than assumed |
 | 11 | CHANGES REQUIRED | **The sweep reached a fifth file, and this one was ACTIVELY HARMFUL rather than merely stale.** `CLAUDE.md` still read *"Enforced in the standard manner - `fail_under = 100` in the config and a floor on the gate"* - one line BELOW round 10's own fix saying it is not a pytest flag. Measured: `fail_under` is set nowhere; it appears in `pyproject.toml` only inside a comment about what the file used to say. A session acting on that line would have put it in `[tool.coverage.report]`, where `pytest-cov` reads it - firing the global floor on every partial run (`make test-file`, `make quick`, which the GM exempted) and destroying the deliberate ordering the same paragraph defends, the floor running LAST so a run's own failures are reported first. **The guideline pointed at an action that would break what the feature built.** FR-003's own loose phrasing ("`fail_under = 100` is enforced on a plain `make done`") seeded it and is aligned to SC5's wording. Also swept: `docs/review-ledger.md`, whose feature-174 row still carried 9,168 (round 8 measured 7,325), "20,682 statements, nothing omitted" (the claim round 8 struck everywhere else), and a round count of seven |
+| 12 | CHANGES REQUIRED | **Five, and the first was a GM quotation the repository could not support.** The constitution and `CLAUDE.md` both cited the GM's *"for example ... and such"* - genuinely their phrase, from *"For example, setting `fail_under = 100` in the appropriate places, and such"* - but `request.md` recorded only the ORIGINAL request, so the later rulings existed nowhere in the repo. A quotation nobody can check is indistinguishable from an invented one, and this one was load-bearing: it licenses the feature's single departure from the GM's literal instruction, inside a NON-NEGOTIABLE clause. FIXED BY RECORDING rather than deleting - `request.md` now carries both rulings verbatim. The other four were operative docs still describing the pre-feature `make done`: `tests/CLAUDE.md` (whose whole job is saying which target runs which tree), `docs/efficiency-tooling.md`, the skill's own `CLAUDE.md`, and `settlements.md`, which named `[tool.coverage.report] fail_under = 100` - the exact key that would break the floor |
+| 13 | CHANGES REQUIRED | **Three, and the first was in the paragraph round 12 had just edited.** `settlements.md` named the config key a SECOND time, twelve clauses after the correction was prepended to the same sentence. Also: `tools/timings.py` still declared itself *"NOT UNDER THE COVERAGE GATE"* - the FOURTH exemption claim, missed by the grep that found the other three because it used different words, which falsified FR-010's "3, all removed"; and `settlements/fields.md` exempted the whole `waterfields/` package from line coverage, a claim wrong since feature 145. **This round ended the hand-sweeping**: FR-011's check was built in response, and it immediately found an instance the thirteen rounds had missed |
+| 14 | **FAITHFUL** | Requested by the GM. Counts reconciled against the tree; round 13's three items verified fixed; FR-011's check RUN rather than read (4 passed) and judged in scope rather than an unrequested addition. Six non-blocking asides, all applied before the merge - including the last surviving instance of the rounds 8-13 class: FR-003's diagnostic bullets were still in the present tense under a past-tense headline |
 
 **The ordering was wrong and is recorded as such**: implementation began before the spec existed,
 contrary to Principle XVI. The rewrite above is drawn from the request and the measurements rather
