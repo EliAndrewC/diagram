@@ -260,7 +260,7 @@ map exactly the way the registry's own docstring warns.
 `make done` is green routinely and is what the push actually requires, so nothing has ever forced the
 FULL scope to pass, and its failures have quietly accumulated.
 
-**Why it matters.** FULL is the ONLY scope that enforces the coverage floors and collects
+**Why it matters.** FULL is the ONLY scope that enforces the coverage floors **[PREMISE DISSOLVED by feature 174, 2026-09-02: a plain `make done` enforces them too, over the whole engine. The finding below is kept as dated history; do not work its worklist without re-measuring]** and collects
 `tests/full/`. So the floors this project believes it holds - the 100% rule outside the four exempt
 packages, and the derived hamlet-path floor - are not actually being enforced by anything a session
 runs. A floor nobody checks is not a floor.

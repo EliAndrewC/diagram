@@ -13,7 +13,7 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 |---|---|---|
 | `tests/` (with its mirrored packages) | `make quick`, `make done`, the full run | it is a UNIT form: milliseconds to ~0.5 s, no map rolled, no tooling run. The quick suite's 60 s budget is the bar |
 | `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
-| `tests/full/` | `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. The full run is where the coverage floors are enforced - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
+| `tests/full/` | **a plain `make done`** (feature 174 - its test phase IS `test-full`), `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. Since feature 174 a PLAIN `make done` enforces the coverage floors too - the deferral is gone, and this row's old "`make done`: no - deferred" is what that feature closed. The floors are - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
 | `tests/tooling/` | the gate and the full run; quick ONLY when the tooling changed since the last green gate; skipped at the gate too while it is unchanged (never in FULL) | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
 | `tests/tier_town/`, `tests/tier_city/` | the gate and the full run; quick once the scope lock moves to that tier | it is relevant to that tier only |
 
@@ -26,7 +26,7 @@ the GM `make test-full` ran less than the whole suite.
 | command | `tests/` | `gate/` | `full/` | `tooling/` | `tier_*/` | floors |
 |---|---|---|---|---|---|---|
 | `make quick` | yes | no | no | only if the tooling changed | no | no |
-| `make done` | yes | yes | no | only if its stamp is stale | under the lock, no | no - deferred |
+| `make done` | yes | yes | **yes** | only if its stamp is stale | under the lock, no | **all three** |
 | **`make test-full`** | **yes** | **yes** | **yes** | **yes** | **yes** | **all three** |
 | `make done FULL=1` | as `test-full` - it RUNS `test-full` | | | | | all three |
 

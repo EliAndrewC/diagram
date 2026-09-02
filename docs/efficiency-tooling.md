@@ -47,7 +47,7 @@ Measured: **48 of 314 recorded `make done` runs short-circuited entirely**, at 0
 | **the roll cache** (`pipeline/rollcache.py`) | a map roll is served from `.gencache` when nothing the roll executes changed - this is what turns the reference settlement from 29 s into a HIT |
 | **the scope lock** (`switches.py`) | with scope locked to the reference settlement, NO invocation rolls another map - no flag, variable or environment override. Map-rolling tests are deferred and owed at unlock |
 | **tier selection / tree ignores** | `quick` skips the town and city trees, `tests/gate` and `tests/full` |
-| **coverage floors deferred to FULL** | a deselected test takes its coverage with it, so a floor the reference scope cannot meet is not enforced there |
+| ~~**coverage floors deferred to FULL**~~ **RETIRED by feature 174** (GM 2026-08-31) | it was true that a deselected test takes its coverage with it - which is why closing the deferral meant making `done`'s test phase `test-full` on both branches rather than floor-ing a partial suite. A plain `make done` now enforces all three floors over the whole engine |
 | **`EXHAUSTIVE`** | sweeps run a documented subset by default and their full form only at the gate |
 
 ## 3. The command is refused, corrected, or answered before it runs
