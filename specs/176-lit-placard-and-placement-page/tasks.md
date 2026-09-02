@@ -30,6 +30,6 @@ with nothing physical behind them, so no task carries the physical checkboxes. T
       research: rendering
       verify: grep the committed page
 
-- [ ] T06 `make quick`, then `make done` in the background; commit; `sync-with-main.sh done`
+- [x] T06 `make quick`, then `make done` in the background; commit; `sync-with-main.sh done`
       research: rendering
       verify: green gate, feature complete before the push
