@@ -13,7 +13,9 @@ in dev/perf-log/. The raw `.prof` goes to dev/perf-raw/ (gitignored) and, when a
 repository is configured (`PERF_ARCHIVE`, a git URL the GM provides), is pushed there; when it is
 not, the tool says so and the finding here stands on its own.
 
-By-hand tool: not under the 100% rule (it drives the generator and cProfile), but mypy --strict.
+By-hand tool, and UNDER THE 100% RULE like everything else (GM 2026-09-02: *"a new tool absolutely
+should silently owe one hundred percent coverage the day it lands ... for everything"*). It drives the
+generator and cProfile, so its tests stub those two seams rather than run them.
 """
 
 from __future__ import annotations

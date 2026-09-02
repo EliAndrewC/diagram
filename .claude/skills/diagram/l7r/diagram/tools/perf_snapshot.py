@@ -29,7 +29,7 @@ snapshot, named for the feature and the clone that produced it, never conflicts 
 disjoint new files without help - and the filename itself reconstructs who changed what, when.
 
 It is a by-hand tool (see `pyproject.toml`'s coverage `source` list, which names the measured tools
-one by one), so it is not under the 100% rule.
+one by one). UNDER THE 100% RULE all the same (GM 2026-09-02).
 """
 
 from __future__ import annotations

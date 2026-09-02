@@ -17,7 +17,7 @@ names. A reader who has looked at the plates knows immediately why the web canno
 houses, because the plate before it is visibly empty of the things it has to thread between.
 
 It is a by-hand tool (see `pyproject.toml`'s coverage `source` list, which names the measured tools
-one by one on purpose), so it is not under the 100% rule. Re-run it whenever `STAGES` changes; the
+one by one on purpose). UNDER THE 100% RULE all the same (GM 2026-09-02). Re-run it whenever `STAGES` changes; the
 page is generated, never hand-edited.
 """
 
