@@ -39,3 +39,47 @@ GM's stated reason that the measurement does not support is recorded, not quietl
 
 The first two are checkable against the Makefile's own recorded reasons and against a measured run,
 and `research.md` does that before any floor is moved.
+
+---
+
+## The GM's later rulings, verbatim
+
+Recorded here because `request.md` is this feature's AUTHORITY and these two rulings changed its
+scope - and because round 12 of `spec-fidelity` found the constitution and `CLAUDE.md` quoting the
+second one with nothing in the repository to support it. A quotation nobody can check is
+indistinguishable from an invented one, whatever its provenance.
+
+### 2026-08-31, on `# pragma: no cover`
+
+> If there is `# pragma: no cover` code tbat cannot happen then we should delete all of those cases,
+> because dead code is bad, and it's better to remove it from the codebase. So please do that, and
+> the merge into main because I am okay with all of these changes as soon as the dead code is
+> deleted, thanks.
+
+Carried out as FR-009.
+
+### 2026-09-02, on the measured surface
+
+> To be clear, a new tool absolutely should silently owe one hundred percent coverage the day it
+> lands. Going forward, we want one hundred percent code coverage, period. That was not previously
+> the case. We now want that to be the case always. For tools, for our settlement generation, for
+> the automated checks on our hand drawn diagrams, for everything. This should be enforced in the
+> standard manner. For example, setting "fail_under = 100" in the appropriate places, and such.
+>
+> So yes. These nineteen modules should Join the measured surface. Though before you do that, can
+> you please explain to me what they are? I just want to make sure that there are things that
+> actually do belong in the codebase rather than something which should be deleted instead of unit
+> tested. Thus, what I would like you to do now is immediately update our project guidelines to
+> indicate that a new tool should silently owe one hundred percent code coverage the day it lands
+> and that indeed all new code should. And then tell me more about these nineteen uncovered modules.
+> so I can decide what to do with them.
+
+...and, after the audit of the nineteen was put to them:
+
+> I agree that none of that is abandoned code. Therefore, it should all have tests, and we should
+> require one hundred percent code coverage for it. So please proceed. with implementing that.
+
+Carried out as FR-010. **"For example ... and such" is the GM's own hedge on the MECHANISM** - it is
+what licenses `coverage report --fail-under=100` in the Makefile rather than a `fail_under` key in
+`[tool.coverage.report]`, which would fire on every partial run. That reading is argued on its merits
+in FR-003; this is where the words it rests on are recorded.
