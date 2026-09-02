@@ -119,10 +119,18 @@ markers = [
 ]
 
 [tool.coverage.run]
-# MODULE names, not directories, deliberately: `tools` and `pipeline` also hold modules that are
-# not under the 100% rule (the by-hand audits and drivers - cache_audit, cohort_audit, crop_map,
-# timings, make_regressions, gencache, regen). Naming the measured modules one by one keeps that
-# boundary explicit instead of making a new tool silently owe 100% coverage the day it lands.
+# REVERSED BY THE GM, 2026-09-02: *"a new tool absolutely should silently owe one hundred percent
+# coverage the day it lands. Going forward, we want one hundred percent code coverage, period ... For
+# tools, for our settlement generation, for the automated checks on our hand drawn diagrams, for
+# everything."* This list used to end with the opposite sentence in as many words - naming the
+# measured modules one by one "instead of making a new tool silently owe 100% coverage the day it
+# lands" - and that opt-in cost 19 engine files / 1,843 statements no obligation at all, invisible
+# because a roster nobody re-reads looks like a decision that was made once and still holds.
+#
+# THE MEASURED SURFACE IS NOW DERIVED, NOT LISTED: coverage duty follows from being engine code. The
+# list below is retained only until feature 174's audit of those 19 modules is settled with the GM
+# (some may be deleted rather than tested); the moment that lands it becomes `source = ["l7r"]` and
+# stops being something anybody maintains.
 source = ["l7r.diagram._invocation", "l7r.diagram.switches", "l7r.diagram.ci", "l7r.diagram.overlap", "l7r.diagram.settlement", "l7r.diagram.hamletgen", "l7r.diagram.sitegen", "l7r.diagram.waterfields", "l7r.diagram.interactive", "l7r.diagram.compound", "l7r.diagram.citybudget", "l7r.diagram.tools.pack_audit", "l7r.diagram.tools.scatter_audit", "l7r.diagram.tools.perf_bands", "l7r.diagram.tools.perf_review", "l7r.diagram.tools.hamlet_floor", "l7r.diagram.pipeline.rollcache", "l7r.diagram.pipeline.render_cache", "l7r.diagram.pipeline.pool_index", "l7r.diagram.pipeline.poolmaps"]
 # `waterfields` and `interactive` joined the measured set with feature 145: both are on the hamlet path (the field
 # engine, the interactive page) and the derived floor (tools/hamlet_floor.py) judges every hamlet-path module, so

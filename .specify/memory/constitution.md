@@ -622,8 +622,8 @@ artifacts. Specifically:
 
 - **Python**: the gate is `make done` in `.claude/skills/diagram/` (lint,
   format, the strict type check, the hook suites, pytest with the coverage floors -
-  nothing runs outside make, per feature 127). Target 100% line coverage on
-  pure logic. External boundaries are tested via saved fixtures, not via
+  nothing runs outside make, per feature 127). **100% line coverage on
+  everything** - not a target and not opt-in (GM 2026-09-02). External boundaries are tested via saved fixtures, not via
   transport-layer mocks.
 - **Maps**: a Mode B map is reviewed by `settlement-review` and a Mode A
   plan by `building-review` + `size-audit` before it ships (the author is
@@ -884,12 +884,32 @@ any single rule is reason enough to refuse "done" status.
      squash these; the principle is the order of work, not the shape of
      the history.
 
-5. **100% line coverage on pure logic**: `pytest --cov-fail-under=100`
-   is the enforcement gate for pure-logic packages. External-boundary
-   modules (HTTP clients, browser sessions, Claude API calls, DB
-   sessions, file I/O against external services) test against **saved
-   fixtures** of real responses, not transport-layer mocks. Fixtures
-   live in a `fixtures/` directory alongside the tests.
+5. **100% line coverage, ON EVERYTHING, WITH NO OPT-IN** (GM 2026-09-02,
+   NON-NEGOTIABLE): *"a new tool absolutely should silently owe one
+   hundred percent coverage the day it lands. Going forward, we want one
+   hundred percent code coverage, period. That was not previously the
+   case. We now want that to be the case always. For tools, for our
+   settlement generation, for the automated checks on our hand drawn
+   diagrams, for everything."* `pytest --cov-fail-under=100` is the
+   enforcement gate, and it is enforced **in the standard manner** -
+   `fail_under = 100` in the config, a floor on the gate, no per-module
+   ratchet and no hand-maintained roster of what is measured.
+
+   **The failure this replaces was a MEASURED SURFACE that had to be
+   opted into.** `[tool.coverage.run] source` used to name the measured
+   modules one by one, so 19 engine files and 1,843 statements carried
+   no obligation at all, and its own comment defended that: a new tool
+   should not "silently owe 100% coverage the day it lands". The GM
+   reversed that sentence in as many words. A module's coverage duty now
+   follows from it being engine code, never from someone remembering to
+   add it to a list.
+
+   External-boundary modules (HTTP clients, browser sessions, Claude API
+   calls, DB sessions, file I/O against external services) test against
+   **saved fixtures** of real responses, not transport-layer mocks.
+   Fixtures live in a `fixtures/` directory alongside the tests; where a
+   boundary genuinely cannot be reached, the exclusion is stated at the
+   point of change and is not a licence to leave the module unmeasured.
 
 6. **Pinned dependencies**: `requirements.txt` is generated from
    `requirements.in` via `uv pip compile` (or `pip-compile`). Installing
@@ -1682,8 +1702,10 @@ shell command that writes one. It carries no silent escape - a genuine exception
   never gains an `__init__.py`.
 - **Testing**: `pytest` + `pytest-cov` + `pytest-xdist`, always under a
   make target (`make quick`, `make done`, `make done FULL=1`); the
-  coverage floors are set by the Makefile, 100% on every measured module
-  except the ratcheted `settlement/` package.
+  coverage floor is set by the Makefile: **100%, on everything, no
+  ratchet and no opt-in list** (feature 174; the 94% `settlement/`
+  ratchet and the four-tree `--omit` both retired the day their own
+  condition was met).
 - **Dependency management**: source-of-truth in
   `.claude/skills/diagram/requirements.in` / `requirements-dev.in`, compiled
   to the `.txt` lockfiles with `pip-compile`, pinned; a re-lock that bumps
@@ -1943,4 +1965,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.13.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-08-27
+**Version**: 2.15.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-02
