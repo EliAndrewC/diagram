@@ -158,3 +158,63 @@ def test_main_requires_a_target(tmp_path):
 
     with pytest.raises(SystemExit):
         W.main([_gen(tmp_path)])
+
+
+# ---- the cause ladder (feature 174) ------------------------------------------------------------
+# `watching_fits` reads the cause off the real sub-predicates AS THEY RUN rather than re-deriving it.
+# Each rung is driven here by stubbing the underlying predicate BEFORE the context is entered, which
+# is what the wrapper captures - so what is exercised is the ladder's ORDER, which is the part a
+# reader relies on: a candidate refused by two things is reported by the first, most specific one.
+import pytest
+
+from l7r.diagram.settlement import Settlement
+
+
+@pytest.mark.parametrize(
+    ("verdict", "blocked", "corridor", "hard", "want"),
+    [
+        (True, False, False, True, "-"),
+        (False, True, False, True, "_in_blocked"),
+        (False, False, True, True, "_near_corridor"),
+        (False, False, False, False, "_hard_clear"),
+        (False, False, False, True, "the canvas edge, the bound ring, or a standing footprint"),
+        (False, True, True, False, "_in_blocked"),
+    ],
+    ids=["fits", "blocked", "corridor", "hard", "none-of-them", "blocked-wins-over-corridor"],
+)
+def test_the_refusal_cause_is_the_FIRST_predicate_that_objected(monkeypatch, verdict, blocked, corridor, hard, want) -> None:
+    """The last row is the one the docstring guards: when `_fits` refuses and no sub-predicate did,
+    the cause is a clause with no separate predicate, and it is reported as exactly that much.
+    "Naming it more precisely would mean restating `_fits` in this file, which is how a diagnostic
+    starts lying." """
+
+    def _fits(self, px, py, w, h, *a, **kw):
+        # the real `_fits` consults the sub-predicates; the tracer clears its record when `_fits`
+        # STARTS, so a stub that skipped them would exercise the fallback rung every time
+        self._in_blocked(px, py)
+        self._near_corridor(px, py)
+        self._hard_clear(px, py, w, h)
+        return verdict
+
+    monkeypatch.setattr(Settlement, "_fits", _fits, raising=False)
+    monkeypatch.setattr(Settlement, "_in_blocked", lambda self, px, py: blocked, raising=False)
+    monkeypatch.setattr(Settlement, "_near_corridor", lambda self, px, py, skip=None: corridor, raising=False)
+    monkeypatch.setattr(Settlement, "_hard_clear", lambda self, px, py, w, h: hard, raising=False)
+
+    s = settlement.Settlement(400, 400, seed=1)
+    with W.watching_fits(200.0, 200.0, radius=8.0) as refusals:
+        assert s._fits(200.0, 200.0, 10.0, 10.0) is verdict
+        s._fits(9000.0, 9000.0, 10.0, 10.0)  # outside the radius: never recorded
+
+    assert len(refusals) == 1, "only the watched point is captured"
+    assert want in refusals[0].cause
+    assert refusals[0].verdict is verdict and (refusals[0].w, refusals[0].h) == (10.0, 10.0)
+
+
+def test_watching_fits_RESTORES_all_four_methods_afterwards() -> None:
+    """The gate runs every gen in one process, so a leaked patch would follow the tracer into
+    unrelated maps - the same rule the key-watcher's own test states."""
+    before = (Settlement._fits, Settlement._in_blocked, Settlement._near_corridor, Settlement._hard_clear)
+    with W.watching_fits(10.0, 10.0):
+        assert Settlement._fits is not before[0], "patched inside"
+    assert (Settlement._fits, Settlement._in_blocked, Settlement._near_corridor, Settlement._hard_clear) == before
