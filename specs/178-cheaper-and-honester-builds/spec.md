@@ -53,6 +53,12 @@ first and authorized past the second in their follow-up (`request.md`):
   re-listed by hand. `source = ["l7r"]` is the authority (constitution X clause 5: *"if you add a file
   under `l7r/`, it is measured"*), and a second hand-kept roster would drift from it exactly as the
   roster that clause replaced did.
+  **The derivation may only ADD to what the stamp covers, never remove.** Git pathspec `*` crosses
+  `/`, so `AREAS["diagram"] = (".claude/skills/diagram", ("*.py",))` today hashes every `.py` at any
+  depth - measured, **37 files outside `l7r/` and `tests/`**, including every `pool` and
+  `legacy-hand-authored-pool` `.gen.py` and all of `wip/`. Coverage measures only `l7r/`, so a literal
+  "derive the surface from the coverage config" admits an implementation that silently drops those 37
+  from the stamp `sync-with-main.sh` checks at push time. A test MUST pin that they stay in.
 
 ### Item 2 - the strongest local proof should count
 
@@ -64,10 +70,31 @@ first and authorized past the second in their follow-up (`request.md`):
 
 ### Item 3 - perf-gate inside a build
 
-- **FR-006** A build's `perf-gate` MUST compare against a PAST snapshot from the same environment,
-  not against a start bookend it took minutes earlier in the same container. Comparing a run to
-  itself makes ordinary noise read as "any increase", which is why both of feature 177's FULL builds
-  reported band 1 while every test passed at 100% coverage.
+- **FR-006** A build's `perf-gate` MUST compare against a PAST snapshot from the same environment and
+  compute identity, using data the container already has.
+
+  **AND THE SPEC MUST BE HONEST THAT THIS DOES NOT, BY ITSELF, MAKE A FULL BUILD GREEN.** The
+  author's original diagnosis was wrong in two ways, both checked against code:
+  - The in-build `-start` bookend is taken **in a detached worktree at `origin/main`** (the skill
+    Makefile), so on a MERGE build it is already a real before/after - pre-merge main against the
+    merged tree - not "a run compared to itself". It is self-comparison only on a `ci-measure` run,
+    where no merge happened.
+  - `tools/perf_bands.py` sets `band = 1` when `total_pct > 0 or any(p > 0 for p in seeds.values())`
+    - **any positive delta on any seed**. Changing which snapshot is the baseline does not touch
+    that. A past snapshot from a different commit on a different container carries code drift PLUS
+    instance noise, so it is at least as likely to land in band 1 as the pairing it replaces.
+
+  So 177's D5 defect survives this transport change, and item 3's own instruction covers the case:
+  the GM wrote *"If so then please implement that; if not then let's talk more."* FR-006 therefore
+  requires the transport to be implemented AND the residual to be put to the GM as a question with
+  its cause named - the `> 0` threshold is theirs, set in feature 129, and relaxing it is the only
+  thing that makes a remote FULL build capable of green.
+- **FR-006a** Two consequences of pairing on compute identity MUST be stated where a reader meets
+  them, not discovered. `machine_identity()` records `host = codebuild:<COMPUTE_TYPE>` and
+  `image = <build image>`, so (a) every compute type item 5 introduces starts with NO comparable
+  prior, and (b) a `make ci-image` rebuild retires every codebuild baseline at once. Combined with
+  FR-009's do-not-fail rule, that makes the remote perf gate silently non-blocking in exactly those
+  moments. A gate that goes mute must say it is mute.
 - **FR-007** The baseline MUST come from data the container ALREADY has - `dev/perf-log/` is tracked
   and travels with the clone, which is the GM's own answer (*"we pass it along in the same manner we
   pass along our latest code"*). No new transport, no S3 fetch, no GitHub API call.
@@ -95,7 +122,9 @@ first and authorized past the second in their follow-up (`request.md`):
 
 - **FR-010a** The only renders that stay tracked are ones that are not generated output. Two classes,
   both enumerated rather than left for an implementer to rediscover by reddening the gate:
-  - the **magistracy `.svg`** (0.4 MB), which `.gitignore` already un-ignores with the reason
+  - the **magistracy `.svg`** (measured: 122,647 bytes = **0.12 MB**, not the 0.4 MB an earlier draft
+    of this FR asserted while its own last sentence demanded per-path evidence), which `.gitignore`
+    already un-ignores with the reason
     *"its `.svg` IS the source"* - a Mode A plan is hand-drawn, so the SVG is the source file;
   - the **eight hand-authored negative fixtures** in `tests/fixtures/` (`*-red.svg`, ~0.3 MB), read
     at twelve call sites in `tests/tools/test_pack_audit.py`. They are test INPUTS, deliberately
@@ -162,8 +191,19 @@ first and authorized past the second in their follow-up (`request.md`):
   the `/diagram` mirror, `gate-stamp` records, any record class keyed to commit identity, and every
   checkout the GM uses.
 - **FR-011c** The purge MUST be verified after the fact, not assumed: a FRESH clone from GitHub, its
-  `.git` size and clone time measured, and the gate run green in it. The GM's backup is the recovery
-  path if it is not.
+  `.git` size and clone time measured, and the gate run green in it. **And the spec MUST say what
+  that measurement does NOT prove** - see FR-011d: a fresh clone is small even while a peer clone is
+  still holding every purged object, ready to push them back.
+- **FR-011d** **THE PURGE UNDOES ITSELF THROUGH ANY SURVIVING CLONE, and this is the requirement that
+  prevents it.** There are **12 clones** under `/diagram/.clones/`. After the rewrite their history is
+  disjoint from main's, so the moment any one of them merges and pushes, every purged object returns
+  to main's history - and Principle VI forbids the rebase that would otherwise fix it. So BEFORE any
+  clone pushes, every clone and the `/diagram` mirror MUST be re-created or reset onto the rewritten
+  main, with dirty trees carried across as patches by the `format-patch` / `git am` procedure
+  `CLAUDE.md` already prescribes for a stray mirror commit. Mid-task work is sacred; that is exactly
+  why the patches come first and the reset second.
+  This is not satisfiable by writing an accurate list - round 1 rejected that shape once already.
+  It is satisfied by every clone being verifiably on the new history.
 - **FR-012** `git rm --cached` and a `.gitignore` line, never `git rm` - **and the spec MUST NOT
   pretend that protects anyone but this clone.** It does not. Git deletes files that an incoming
   commit removes, so the `/diagram` mirror the GM browses, the GM's laptop checkout and every future
@@ -175,8 +215,16 @@ first and authorized past the second in their follow-up (`request.md`):
   nothing can faithfully rebuild, and are therefore COMMITTED write-once (~195 MB, one time - they
   can never change again)."* Untracking them AND purging history therefore does not move those bytes
   anywhere - it destroys every copy git holds, in every checkout, permanently.
-  So before the purge runs, the 171.5 MB of irreproducible exhibit renders MUST be preserved to a
-  durable location OUTSIDE git, and that preservation MUST be VERIFIED by reading them back and
+  So before the purge runs, the 171.5 MB of irreproducible exhibit renders MUST be preserved, and the
+  destination MUST BE NAMED IN THIS SPEC rather than chosen in passing by an implementer. *"A durable
+  location outside git"* is a gesture - satisfiable by a tarball in a container that gets rebuilt.
+  Feature 177's D7 said where these bytes live *"is a content decision about the GM's own archive,
+  not a tooling decision"*, and the GM's follow-up asked about the 97.9 MB without naming a home.
+  The requirement is therefore: name the concrete destination, say how the GM RETRIEVES the bytes,
+  and say what keeps it alive across a container rebuild. The candidates, to be chosen and recorded:
+  the `/host-l7r-repo` mount (survives container rebuilds, the GM's own disk), or the CI S3 bucket
+  under a prefix with its own lifecycle rule (survives everything, costs pennies, but is a new
+  home for content that is not CI's). Preservation MUST be VERIFIED by reading the bytes back and
   comparing checksums against the pre-purge tree. The GM's stated backup is a recovery path for a
   mistake, not an archive strategy, and this feature must not rely on it.
 - **FR-012b** After the purge, each checkout the GM actually uses MUST still hold the working copies:
@@ -205,8 +253,13 @@ first and authorized past the second in their follow-up (`request.md`):
   check. Its own comment is dated `2026-08`, and every cost figure this feature reports is computed
   from it - a stale rate makes every conclusion wrong in the same direction.
 - **FR-016** The recommendation MUST name a default and say what it saves per run against today's
-  `XLARGE`. If a smaller type is chosen, the change of default is a one-line constant and belongs to
-  this feature; if the measurement does not support one, that is the finding and the default stands.
+  `XLARGE`. **Who changes the constant is decided here, not left blank**: the GM's verbs were
+  *investigate*, *explore*, *see what kinds of performance we get* - which asks for numbers, not for
+  a new default to be installed on their behalf. The default governs every future paid build, the
+  merge gate included. So the constant changes inside this feature ONLY if the measurement meets a
+  criterion stated in advance - **green on every row, and at least 50% cheaper per run at no worse
+  wall clock** - and otherwise the numbers and the recommendation go to the GM and `XLARGE` stands
+  until they say so. Either way the reasoning is recorded, not the choice alone.
 - **FR-017** `make ci-measure` MUST accept `COMPUTE=` so the experiment runs through the sanctioned
   paid route rather than a hand-rolled dispatch. `ci-check` already has this knob (feature 130 T028).
 
@@ -217,15 +270,26 @@ first and authorized past the second in their follow-up (`request.md`):
   rather than discovered by an implementer.** Feature 177 learned this three times - a blanket
   "everything still passes" clause forbade three of its own requirements in turn - so the list is
   explicit and each widening becomes a CLOSED invariant, never a loosening:
-  - **FR-001** adds a short-circuit key (`gate-stamp.py` AREAS/EXCLUDE and its tests);
+  - **FR-001** adds a short-circuit key (`gate-stamp.py` AREAS/EXCLUDE and its tests) - and that same
+    list has a SECOND consumer, the push-time stamp check in `sync-with-main.sh`, so after FR-001 a
+    ci-only DIRECT push needs a green `make done` where `make quick` sufficed under the GM's
+    feature-132 FR-025 ruling. That follows from item 1 and is correct; it is named here so it does
+    not surface as a refused push;
   - **FR-004** adds a recording site (`$(STATE) green-local test-full`);
   - **FR-010/FR-010a/FR-010b** change the subject matter of
     `tests/tooling/ci/test_sparse_checkout.py`: `test_nothing_the_gate_runs_reads_an_excluded_path`
     and `test_only_three_places_reach_a_bundles_render` (whose pinned roster names
     `tests/test_villages.py`, the very check FR-010b retires), and the two sparse-exclude patterns
-    for `wip/*.html` and `dev/placement-stages/`, which cease to describe anything git tracks. The
-    roster becomes: what does the build not check out, now that git carries no generated render at
-    all;
+    for `wip/*.html` and `dev/placement-stages/`, which cease to describe anything git tracks.
+    **The answer is stated here rather than left to an implementer**: with no generated render tracked
+    at all, the checkout is already small and the sparse mechanism has nothing left to exclude, so
+    feature 177's roster is RETIRED - `buildspec/sparse-excludes.txt` removed along with the `run.sh`
+    block that reads it and the guard suite that pins it - and the INSTALL saving is re-measured to
+    confirm the purge delivers it without them. If the re-measurement shows the mechanism still earns
+    its place, it is kept with an honest roster and that is recorded instead. Either way the decision
+    is made on a number, not left as a question, because
+    `test_the_roster_exists_and_every_pattern_is_anchored` asserts a non-empty roster and would red
+    the gate on an empty one;
   - **FR-011a** adds an escape token to `repo-safety-hooks.sh`, whose companion suite MUST prove the
     escape works AND that every other refusal it makes is unchanged.
 - **FR-019** The tree MUST stay at 100% coverage with all three floors, and every new branch MUST be
@@ -243,8 +307,13 @@ first and authorized past the second in their follow-up (`request.md`):
   the magistracy `.svg` (tracked source) and the eight `tests/fixtures/*-red.svg` (hand-authored test
   inputs); every working copy is still on disk in this clone AND restored in the mirror; the gate is
   green.
-- **SC-004a** The stale-render property survives at kilobyte cost, asserted in a checkout with no
-  renders present at all, and the skip count is pinned so the next drift is caught.
+- **SC-004a** The stale-render property is handled at kilobyte cost by whichever branch of FR-010d is
+  taken, and the criterion grades THAT branch: if (a), the always-runs assertion is shown to fail when
+  the independently derived source disagrees; if (b), the spec and the code both say plainly that a
+  renderless checkout verifies nothing. (Drafted as "asserted in a checkout with no renders present
+  at all, and the skip count is pinned" - which forbade branch (b) and carried back the R17 global
+  skip count round 2 had removed from FR-010c. The fix had landed in the requirement and not in the
+  criterion that grades it, which is round 2's own item 7 one level down.)
 - **SC-005** The purge is REHEARSED with measured before/after figures, then PERFORMED, then VERIFIED
   from a fresh clone whose `.git` size, clone time and green gate are all recorded.
 - **SC-006** A table of measured builds across at least three compute types, each with time, cost and
@@ -340,4 +409,44 @@ feature.
    ruling for the GM, on a premise FR-010d contradicts. Narrowed to the checks this feature changes.
 7. **D4 and D5 still recorded the deleted carve-out and the two switches.** Rewritten.
 
-**Round 3 - pending.**
+**Round 3 - CHANGES REQUIRED (8).** A third agent confirmed rounds 1 and 2 had landed against code
+(and reproduced the FR-010 table exactly, 91 tracked files, no residue), then found three pieces of
+new substance and five concrete defects.
+
+1. **The author's diagnosis for item 3 was WRONG, twice, and the fix does not cure the symptom.** The
+   in-build `-start` bookend is taken in a detached worktree at `origin/main`, so a MERGE build is
+   already a real before/after - self-comparison happens only on `ci-measure`. And
+   `perf_bands.py` sets band 1 on `total_pct > 0 or any(p > 0 ...)`, so **any** positive delta trips
+   it; changing the baseline cannot help, and a past snapshot from another commit on another
+   container carries code drift PLUS instance noise. 177's D5 survives this spec. The GM's own
+   instruction covers it - *"if not then let's talk more"* - so the transport is implemented AND the
+   residual goes to them, with the `> 0` threshold named as the cause and theirs to relax.
+2. **The purge undoes itself through any surviving clone.** There are 12 under `.clones/`; after the
+   rewrite their history is disjoint, and the first one to merge and push restores every purged
+   object - with Principle VI forbidding the rebase that would fix it. FR-011c's fresh-clone
+   measurement is taken before that can happen, so it cannot catch it. Now FR-011d: every clone and
+   the mirror reset onto the new history, dirty work carried as patches, BEFORE any of them pushes.
+3. **FR-012a was a gesture** - *"a durable location outside git"* names no destination, no reader and
+   no retention, and is satisfiable by a tarball in a container that gets rebuilt. Now it must name
+   the concrete home, how the GM retrieves the bytes, and what survives a container rebuild.
+4. **SC-004a carried back what round 2 deleted** - the R17 global skip count - and forbade FR-010d's
+   option (b). Round 2's own item 7, one level down: the fix landed in the requirement and not in the
+   criterion that grades it.
+5. **FR-003's derivation, read literally, would NARROW the push stamp.** `*` crosses `/` in a git
+   pathspec, so the `diagram` area hashes 37 `.py` outside `l7r/` and `tests/` that coverage does not
+   measure. "Derive from the coverage config" admits dropping them. Now: the derivation may only ADD,
+   with a test pinning the 37.
+6. **FR-018 posed the sparse-roster outcome as a question.** With no generated render tracked, both
+   patterns match nothing and `test_the_roster_exists_and_every_pattern_is_anchored` asserts a
+   non-empty roster. The answer is stated: retire the mechanism and re-measure INSTALL to confirm the
+   purge delivers the saving without it, or keep it with an honest roster if the number says so.
+7. **The magistracy figure was wrong** in an FR whose own last sentence demands per-path evidence:
+   measured 122,647 bytes = 0.12 MB, not 0.4 MB.
+8. **FR-016 left the chooser of the new default unnamed** while mandating the change. Now an explicit
+   criterion decides it automatically, or the numbers go to the GM.
+
+The reviewer's aside, passed on as it stands: the `> 0` band rule *"looks like the real cost center
+here - it is what makes every remote FULL run owe a subagent's paperwork - and it is a threshold the
+GM set, so it is theirs to relax if they want green remote builds."*
+
+**Round 4 - pending.**
