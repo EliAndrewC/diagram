@@ -31,7 +31,7 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
       reverted after the case rather than stamped: stamping changes which refusal the later
       "refusal must name the diagram area" case sees
 
-- [ ] T04 FR-018/D1: the operative documents that assert the state item 1 ends
+- [x] T04 FR-018/D1: the operative documents that assert the state item 1 ends
       research: procedure
       verify: root `CLAUDE.md` (*"every `.py` under the skill outside `tests/` and `l7r/diagram/ci/`"*
       and *"a tests-only or ci-only change skips the build and the local gate"*) and
