@@ -93,9 +93,14 @@ first and authorized past the second in their follow-up (`request.md`):
   | legacy NON-hamlet `.svg`/`.png` | 73.6 | 20 |
   | `dev/placement-stages/*.png` | 5.2 | 13 |
 
-- **FR-010a** The ONLY renders that stay tracked are ones that are tracked **SOURCE** rather than
-  generated output - the magistracy `.svg` (0.4 MB), which `.gitignore` already un-ignores with the
-  reason *"its `.svg` IS the source"*. Membership MUST be shown per path, not asserted.
+- **FR-010a** The only renders that stay tracked are ones that are not generated output. Two classes,
+  both enumerated rather than left for an implementer to rediscover by reddening the gate:
+  - the **magistracy `.svg`** (0.4 MB), which `.gitignore` already un-ignores with the reason
+    *"its `.svg` IS the source"* - a Mode A plan is hand-drawn, so the SVG is the source file;
+  - the **eight hand-authored negative fixtures** in `tests/fixtures/` (`*-red.svg`, ~0.3 MB), read
+    at twelve call sites in `tests/tools/test_pack_audit.py`. They are test INPUTS, deliberately
+    broken by hand to prove a check fires; nothing generates them and untracking them reds the gate.
+  Membership MUST be shown per path, not asserted.
 - **FR-010b** **The frozen hamlet exhibits are IN, and the check that reads them is a COST this
   feature pays rather than a reason to carve them out.** `tests/test_villages.py` walks hamlets-tier
   bundles, asserts each PNG's height against its own SVG viewBox and ends on `assert checked`, so
@@ -108,41 +113,81 @@ first and authorized past the second in their follow-up (`request.md`):
   So the stale-render property MUST be preserved by a means that needs no tracked raster - the GM
   asked for exactly that (*"there's probably a cheaper way to do this"*) - and FR-010d sets the bar.
   And because untracking makes that check SKIP in a container rather than fail, FR-010c applies.
-- **FR-010d** The replacement MUST cost kilobytes, not megabytes, and MUST keep real verification
-  rather than becoming a comment. The property under test is a handful of integers per exhibit (an
-  SVG viewBox and a PNG's pixel dimensions), so it MUST be recorded as tracked DATA and asserted
-  from that always - including in a container where no render exists - AND, wherever the actual
-  files ARE present, they MUST be checked against the recorded numbers so a re-render that changes
-  them is still caught. What is lost and what is kept MUST be stated: a frozen exhibit is write-once
-  and no generator re-rolls it, so once it is out of git the thing the old check guarded against - a
-  raster from a different roll than its manifest - can no longer be introduced by anything this
-  repository does.
-- **FR-010c** A check that becomes a SKIP in a clean checkout MUST NOT become invisible. Feature
-  177's R17 already measured 21 skips remotely against 2 locally and recorded that nobody counts
-  them; this feature ADDS to that number, so it MUST land the cheapest of R17's options - assert the
-  skip count, so the next drift is caught rather than accumulated.
+- **FR-010d** The replacement MUST cost kilobytes, not megabytes - measured, the eight exhibits'
+  numbers are **503 bytes against 97.9 MB, a 204,000x ratio** - and MUST NOT be a tautology dressed
+  as a check. **Asserting `h == round(w * vh / vw)` over numbers recorded FROM consistent files can
+  never go red**; it is an arithmetic identity that passes forever. So either:
+  (a) the always-runs assertion is against something still tracked and INDEPENDENTLY derived - each
+  exhibit's `.json` manifest is tracked and the extent its viewBox encodes is computable from the
+  manifest's own geometry, which is a real second source; or
+  (b) the spec says plainly that in a renderless checkout nothing is verified and the recorded
+  numbers are a RECORD rather than a check.
+  One or the other, chosen and stated - never a tautology labeled "real verification".
+- **FR-010e** What is LOST MUST be stated where the exhibits are documented: a frozen exhibit is
+  write-once and no generator re-rolls it, so once its renders leave git, the mismatch the old check
+  guarded against cannot be introduced by anything this repository does - the door it watched stops
+  existing. That is the honest reason the replacement can be small, and it is not the same claim as
+  "the replacement checks the same thing".
+- **FR-010c** Any check THIS FEATURE turns into a skip MUST be named and accounted for at the point
+  of change. (This was drafted as "pin the global skip count" and is narrowed: R17's 19-skip
+  aggregate is feature 177's parked ruling for the GM, and their follow-up ruled on the 97.9 MB and
+  nothing else - pinning it here would be scope this instruction does not carry. It is also the wrong
+  premise, since FR-010d requires the replacement to assert ALWAYS.)
 - **FR-011** The HISTORY purge MUST be REHEARSED in a throwaway clone before it is performed, and the
   rehearsal MUST report MEASURED before/after `.git` size, object count and fresh-clone time - not a
   sum of blob sizes. A rehearsal is not forbidden by anything: no push is involved and this
   repository's history is untouched by it.
-- **FR-011a** The purge MUST then be PERFORMED, and the guard MUST be passed deliberately rather than
-  worked around. `repo-safety-hooks.sh` has no escape token by design, so this feature MUST add one
-  that is narrow (the force push alone), requires a written reason like every other escape since
-  feature 170, records to the firing log, and carries the GM's authorization quoted at the point of
-  change. **The spec states plainly what this costs**: a "never" that now has an exception is a
-  weaker "never", and the guard's own comment says so. The alternative - the GM running one command
-  at a terminal, as they do for `perf-signoff` - was available and they chose otherwise
-  (*"you can indeed handle the history rewriting yourself"*).
-- **FR-011b** Everything the purge invalidates MUST be enumerated and handled before it runs: every
-  session clone in `.clones/` becomes unmergeable and must be re-cloned; every `verified/` record in
-  S3 and every perf bookend in `dev/perf-log/` is keyed to commits that will cease to exist; the
-  mirror at `/diagram` must be reset to the rewritten main. A list written after the fact is not a
-  plan.
+- **FR-011a** The purge MUST then be PERFORMED, and **the route past the guard MUST NOT OUTLIVE THIS
+  FEATURE.** The GM authorized an ACT - *"you can indeed handle the history rewriting yourself"* -
+  and said nothing about guards. `repo-safety-hooks.sh` has no escape by design, and says so three
+  times: its header (*"NO ESCAPE HATCH on the force push: 'never' is the rule and an escape is how
+  never becomes sometimes"*), its refusal text, and its row in `CLAUDE.md`'s enforcement table. A
+  standing token would convert a one-time authorization into a permanent doctrine change nobody
+  asked for, and would drag that row and that header with it.
+  So: the escape is added, used for the single force push, and **REMOVED inside this feature**, with
+  the removal a numbered task of its own and `scripts/test-repo-safety-hooks.sh` proving at the end
+  that the force-push refusal has no escape again. `gate-stamp` covers `scripts/*.sh`, so both states
+  are verifiable rather than asserted.
+- **FR-011a1** If the removal cannot be completed for any reason, the feature MUST NOT be reported as
+  done. A temporary hole left open is the permanent hole this requirement exists to prevent.
+- **FR-011b** Everything the purge invalidates MUST be **DERIVED by reading each consumer and stating
+  what it keys on**, not listed from memory. The author's first list was wrong in both directions and
+  is corrected here as the worked example of why: `verified/` records are keyed by
+  `delta.engine_key`, a hash over the blob ids of ENGINE paths, and generated renders are not engine
+  paths - **so every verified record SURVIVES the rewrite untouched**. `dev/perf-log/` entries carry a
+  `commit` field as information only; `perf_snapshot.identity_of` pairs on
+  `(environment, host, image)`. Meanwhile two things that genuinely break were missing: every
+  checkout outside this container (the GM's laptop), and the working-tree deletions of FR-012.
+  What must be enumerated, each with the consumer that proves it: the session clones in `.clones/`,
+  the `/diagram` mirror, `gate-stamp` records, any record class keyed to commit identity, and every
+  checkout the GM uses.
 - **FR-011c** The purge MUST be verified after the fact, not assumed: a FRESH clone from GitHub, its
   `.git` size and clone time measured, and the gate run green in it. The GM's backup is the recovery
   path if it is not.
-- **FR-012** Untracking MUST NOT delete the working copies. The renders are how the GM looks at maps;
-  `git rm --cached` and a `.gitignore` line, never `git rm`.
+- **FR-012** `git rm --cached` and a `.gitignore` line, never `git rm` - **and the spec MUST NOT
+  pretend that protects anyone but this clone.** It does not. Git deletes files that an incoming
+  commit removes, so the `/diagram` mirror the GM browses, the GM's laptop checkout and every future
+  clone lose the working copies on their next pull. FR-012a is the requirement that actually protects
+  the bytes; this one only fixes the command used here.
+- **FR-012a** **THE FROZEN EXHIBITS ARE TRACKED BECAUSE THEY CANNOT BE REBUILT, and that is recorded
+  in this repository by the GM.** The root `.gitignore` states it: *"Their gens are never re-run, so
+  once the engine drifted their renders stopped being reproducible: they are historical artifacts
+  nothing can faithfully rebuild, and are therefore COMMITTED write-once (~195 MB, one time - they
+  can never change again)."* Untracking them AND purging history therefore does not move those bytes
+  anywhere - it destroys every copy git holds, in every checkout, permanently.
+  So before the purge runs, the 171.5 MB of irreproducible exhibit renders MUST be preserved to a
+  durable location OUTSIDE git, and that preservation MUST be VERIFIED by reading them back and
+  comparing checksums against the pre-purge tree. The GM's stated backup is a recovery path for a
+  mistake, not an archive strategy, and this feature must not rely on it.
+- **FR-012b** After the purge, each checkout the GM actually uses MUST still hold the working copies:
+  the `/diagram` mirror explicitly restored and confirmed present, and the procedure written down for
+  the GM's laptop. A file that becomes gitignored persists once restored; the loss happens on the one
+  pull that removes it, and that pull is foreseeable.
+- **FR-012c** This is a DELIBERATE DECISION TO DESTROY a recorded artifact class, taken against a
+  decision the GM themselves recorded on 2026-08-16, so it MUST be written down as one - what was
+  destroyed, why, what it cost, and where the surviving copies are - in the place a future reader
+  meets the exhibits. The `.gitignore` block above ceases to be true the moment this lands and MUST
+  be rewritten rather than left to mislead.
 
 ### Item 5 - what a smaller server costs
 
@@ -194,8 +239,10 @@ first and authorized past the second in their follow-up (`request.md`):
 - **SC-002** A green `make test-full` satisfies the paid route's `green-local-since-edit`.
 - **SC-003** A build's `perf-gate` names the past snapshot it compared against, and a build with no
   comparable prior says so without failing.
-- **SC-004** `git ls-files` shows no generated `.html`, `.svg` or `.png` anywhere except the
-  magistracy `.svg` that is tracked SOURCE; every working copy is still on disk; the gate is green.
+- **SC-004** `git ls-files` shows no GENERATED `.html`, `.svg` or `.png` - the only survivors being
+  the magistracy `.svg` (tracked source) and the eight `tests/fixtures/*-red.svg` (hand-authored test
+  inputs); every working copy is still on disk in this clone AND restored in the mirror; the gate is
+  green.
 - **SC-004a** The stale-render property survives at kilobyte cost, asserted in a checkout with no
   renders present at all, and the skip count is pinned so the next drift is caught.
 - **SC-005** The purge is REHEARSED with measured before/after figures, then PERFORMED, then VERIFIED
@@ -222,8 +269,13 @@ Per constitution XII, each as **accurate**, **deliberate deviation** or **guess*
   the paid route (FR-001 to FR-003)
 - **D2** `test-full`'s recording site (FR-004, FR-005)
 - **D3** what a build's `perf-gate` compares and how the baseline is chosen (FR-006 to FR-009)
-- **D4** the untracked set, with per-path evidence, and the frozen-exhibit carve-out (FR-010, FR-010a)
-- **D5** the history purge: measured saving, procedure, breakage, and the two switches (FR-011)
+- **D4** the untracked set with per-path evidence, the frozen exhibits INCLUDED (the carve-out the
+  author proposed was declined by the GM twice - once in 177's D7 and again in their follow-up), what
+  replaces the raster check and what that replacement does and does not verify, and the two classes
+  that stay tracked because they are not generated output (FR-010 to FR-010e)
+- **D5** the history purge: the rehearsal's measured before/after, the derived breakage list, where
+  the irreproducible exhibit bytes went and how that was verified, the GM's authorization, and the
+  guard route taken - added, used, and removed inside the feature (FR-011 to FR-012c)
 - **D6** the compute measurements and the recommended default (FR-013 to FR-016)
 
 ## Review history
@@ -257,4 +309,35 @@ found the author's own suspected item to be the real one.
    enumerated, including the `test_sparse_checkout.py` roster whose pinned call sites name the very
    check FR-010b retires.
 
-**Round 2 - pending.**
+**Round 2 - CHANGES REQUIRED (7).** A second agent confirmed five of round 1's six landed cleanly,
+caught the sixth surviving in the decisions list, and then found the thing that matters most in this
+feature.
+
+1. **FR-011a made a PERMANENT hole in a guard whose design point is having none.** The GM authorized
+   an ACT and said nothing about guards; a standing token would have dragged `CLAUDE.md`'s
+   enforcement row and the guard's own header with it - doctrine changes nobody asked for, on a
+   NON-NEGOTIABLE principle. Now: added, used, and REMOVED inside the feature, with the suite proving
+   the refusal has no escape again at the end, and FR-011a1 saying the feature is not done if the
+   removal is not.
+2. **`git rm --cached` protects THIS CLONE AND NOTHING ELSE.** Git deletes files an incoming commit
+   removes, so the mirror and the GM's laptop lose the working copies on their next pull - and the
+   frozen exhibits are, in this repository's own recorded words, *"historical artifacts nothing can
+   faithfully rebuild"*, committed write-once for exactly that reason. Untracking plus purging does
+   not move those bytes, it destroys every copy git holds. Now FR-012a to FR-012c: preserve them
+   outside git and VERIFY by checksum before the purge, restore the mirror after, and write the
+   destruction down against the 2026-08-16 decision it reverses.
+3. **FR-011b's breakage list was wrong in both directions.** `verified/` records are keyed by
+   `engine_key`, a hash over ENGINE blob ids - renders are not engine paths, so every record
+   SURVIVES; `perf-log`'s `commit` field is information nothing resolves. Missing were the checkouts
+   outside this container. The list must now be DERIVED by reading each consumer.
+4. **FR-010d prescribed a tautology.** Asserting `h == round(w * vh / vw)` over numbers recorded from
+   consistent files can never go red. Now it must assert against an independently derived second
+   source (the tracked `.json` manifest) or say plainly that a renderless checkout verifies nothing
+   and the data is a record.
+5. **FR-010a would have untracked eight test fixtures the gate reads** - `tests/fixtures/*-red.svg`,
+   hand-authored broken SVGs read at twelve call sites. Now enumerated as retained.
+6. **FR-010c was unrequested scope** - it pinned R17's global skip count, which is 177's parked
+   ruling for the GM, on a premise FR-010d contradicts. Narrowed to the checks this feature changes.
+7. **D4 and D5 still recorded the deleted carve-out and the two switches.** Rewritten.
+
+**Round 3 - pending.**
