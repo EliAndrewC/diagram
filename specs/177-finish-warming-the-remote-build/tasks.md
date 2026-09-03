@@ -118,20 +118,30 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
 
 ## Piece 3 - the measurement route (the only paid part)
 
-- [ ] T15 FR-008, FR-009a: the route, with its CLOSED envelope
+- [x] T15 FR-008, FR-009a: the route, with its CLOSED envelope
       research: procedure
-      verify: bypasses ONLY `route-is-gated`; `green-local-since-edit`, `remote-enabled`,
-      `breaker-not-tripped` and (FULL) `door.py` all still refuse it, each proven by a test
+      verify: DONE. `decision.decide(..., measure=True)` passes `route-is-gated` and NOTHING else;
+      the row still prints, carrying "BYPASSED". Eight tests in
+      `tests/tooling/ci/test_measure_route.py` pin each edge. Two of them were then confirmed by the
+      LIVE route rather than only in a fixture: a docs-only delta dispatched where `ci-check`
+      refused, and a re-dispatch after a red gate was REFUSED at `green-local-since-edit` with no
+      build started - the GM's own named case, caught for free
 
-- [ ] T16 FR-009: it cannot mint a push credential
+- [x] T16 FR-009: it cannot mint a push credential
       research: procedure
-      verify: enforced on the BUILD side - a `MODE` whose `run.sh` branch writes no `verified/`
-      record and never pushes; visible in the diff, not a promise the dispatcher makes
+      verify: DONE, and PROVEN on a live GREEN run rather than only in the diff. `buildspec/measure.yml`
+      sets `MODE: measure` and `run.sh` returns before the record write, which puts it before the push.
+      Build `9f760907` went green and printed "NO verified record written and nothing pushed (FR-009)";
+      the bucket's `verified/` prefix still holds 9 objects, newest 2026-08-31
 
-- [ ] T17 FR-010, FR-019: paid, prompted, logged; `ci/CLAUDE.md` describes the new route
+- [x] T17 FR-010, FR-019: paid, prompted, logged; `ci/CLAUDE.md` describes the new route
       research: procedure
-      verify: the same class as `make ci-image`; the threat-model section says what the route
-      bypasses, what it can never do, and why that is not a hole in the five conditions
+      verify: DONE. `make ci-measure` prompts, cancels by default, needs a terminal and logs to
+      `dev/bypass-log/`; every entry this session records that the SESSION answered and quotes the
+      GM's 2026-08-25 authorization. `ci/CLAUDE.md` carries a section for the route - what it
+      bypasses, what it can never do, and why that is not a hole in the five conditions - and the
+      skill's command map gained a row with the detach rule R14 earned. FULL=1 opens `door.py` on
+      the recipe's own committed entry, observed live: "permitted entry ... authorizes FULL"
 
 - [x] T18 the local gate is green and the tree is at 100% coverage before anything is dispatched
       research: procedure
@@ -187,12 +197,21 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
 
 ## Recording
 
-- [ ] T24 D1 to D9 completed, each classed accurate / deliberate deviation / guess
+- [x] T24 D1 to D9 completed, each classed accurate / deliberate deviation / guess
       research: procedure
-      verify: every Decision Recorded filled, including D4's two halves of the GM's own sentence and
-      D7's pricing of the declined repo-side slimming over the whole 441 MB
+      verify: DONE - D1, D2, D3, D4, D5, D5a, D5b, D6, D7, D8, D9. D4 answers BOTH halves of the GM's
+      own sentence (how the image rebuild amortizes, and why baking the tree into it was declined);
+      D7 prices the repo-side slimming over the whole measured 441 MB and leaves it to the GM; D5b
+      records the race-dependent coverage member the FULL pair exposed. Every one is ACCURATE - this
+      feature made no guesses, because everything in it was measurable and got measured
 
-- [ ] T25 the answer to the GM, and the records brought current
+- [x] T25 the answer to the GM, and the records brought current
       research: procedure
-      verify: `timings.md` or `dev/` carries the before/after; the run log carries every paid build;
-      `make audit` shows the prompt answers with their quoted authorization
+      verify: DONE. The skill's command map carries `make ci-measure` with its measured cost and the
+      detach rule; `l7r/diagram/ci/CLAUDE.md` carries the route and the rewritten lifecycle document;
+      `research.md` R1-R15 carries every measurement and both corrections the reviews forced; the run
+      log and `dev/bypass-log/` carry all eight paid builds with the session's quoted authorization.
+      Four findings are left FOR the GM rather than acted on: R12 (the gate's short-circuit key does
+      not cover `ci/`, which the coverage floor measures), R15 (`test-full` cannot satisfy
+      `green-local-since-edit` while a zero-test `make quick` can), D5's note that a FULL measurement
+      can never go green, and D7's slimming question
