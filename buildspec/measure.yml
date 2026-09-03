@@ -1,0 +1,40 @@
+# buildspec/measure.yml - the MEASUREMENT route (feature 177, FR-008/FR-009). Runs on the CHECK
+# project. Identical to check.yml except `MODE`, which makes buildspec/run.sh write NO `verified/`
+# record and (as with check) push nothing.
+#
+# WHY A THIRD BUILDSPEC RATHER THAN A FLAG. This route is the only one that may dispatch without an
+# engine delta, so it is also the only one that could be used to buy a merge credential cheaply: run
+# a "measurement", have it write a `verified/` record, and let the next push read that record as
+# proof a gate passed. The refusal has to live where a reviewer can SEE it, which in this package
+# means the tree the build runs - the same bar `door.py` set for the FULL prompt ("never an
+# environment variable ... a forgery is a tracked-file diff"). A dispatcher flag would be a promise;
+# this is a file.
+#
+# WHAT IT MAY STILL NOT DO (FR-009a): `green-local-since-edit`, `remote-enabled`,
+# `breaker-not-tripped` and - for FULL - `door.py`'s committed entry all still refuse it. The ONE
+# bypass is `route-is-gated`.
+version: 0.2
+# The generation cache, identical to check.yml's - a measurement that ran cold when the gate runs
+# warm would measure the wrong thing. See check.yml for what each line is and what is deliberately
+# absent; `tests/tooling/ci/test_cache.py` fails if the buildspecs disagree.
+cache:
+  paths:
+    - 'repo/.claude/skills/diagram/.gencache/*/*.json'
+    - 'repo/.claude/skills/diagram/.gencache/*/*.svg'
+    - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
+    - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
+    - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
+    - 'repo/.git/gate-green-hooks'
+    - 'repo/.git/hooks-test/**/*'
+env:
+  variables:
+    MODE: measure
+phases:
+  install:
+    commands:
+      - git clone -q --filter=blob:none --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" bootstrap
+      - git -C bootstrap fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
+      - git -C bootstrap checkout -q "$GIT_SHA" -- buildspec/run.sh buildspec/sparse-excludes.txt
+  build:
+    commands:
+      - bash bootstrap/buildspec/run.sh

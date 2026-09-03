@@ -3,6 +3,9 @@
 status [--route]        free: the delta, route, state, verified lookup, month-to-date spend
 check  [--full] [--target OP]   the iteration check on gm-assistant-check
 merge  [--full]         the merge action's gated route on gm-assistant-merge (sync-with-main.sh calls it)
+measure [--full]        MEASURE what the remote gate costs (feature 177): the only route that may
+                        dispatch with no engine delta, and the only one that writes no verified
+                        record and pushes nothing. Every other condition still refuses it.
 image                   rebuild the build image (the Makefile prompts first)
 state EVENT TARGET      record a verification event (the Makefile calls it after quick/reference/test-file/done)
 door                    the build-side FULL door: exit 0 if this tree carries a permitted entry
@@ -34,7 +37,8 @@ def _roots() -> tuple[Path, Path]:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument(
-        "command", choices=["status", "check", "merge", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok", "tooling-green", "tooling-fresh", "cov-scope"]
+        "command",
+        choices=["status", "check", "merge", "measure", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok", "tooling-green", "tooling-fresh", "cov-scope"],
     )
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
@@ -167,6 +171,8 @@ def main(argv: list[str] | None = None) -> int:
         return dispatch.run_image(ctx).rc
     if a.target and a.command != "check":
         ap.error("--target is for ci-check only")
+    if a.command == decision.MEASURE:
+        ctx.out(f"ci-measure: this run buys a NUMBER - no verified record, no push ({config.PROJECT_CHECK}, {scope} scope)")
     out = dispatch.run(ctx)
     # sync-with-main.sh reads the verdict: SKIP-VERIFIED means "push directly", DISPATCHED means "the build landed it"
     (root / ".git" / "ci-verdict").write_text(out.verdict + "\n", encoding="utf-8")

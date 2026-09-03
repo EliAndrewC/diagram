@@ -13,7 +13,7 @@
 #   push      merge mode only: fast-forward push HEAD:main; a rejection means main moved - fail, no retry (R3)
 set -euo pipefail
 trap 'echo "run.sh: FAILED at line $LINENO (exit $?)"' ERR   # a silent set -e exit cost a build to diagnose (4483c680)
-: "${MODE:?check|merge}" "${GIT_SHA:?}" "${MAILBOX:?}" "${CI_BUCKET:?}" "${GITHUB_REPO:?}" "${GITHUB_TOKEN:?}"
+: "${MODE:?check|merge|measure}" "${GIT_SHA:?}" "${MAILBOX:?}" "${CI_BUCKET:?}" "${GITHUB_REPO:?}" "${GITHUB_TOKEN:?}"
 MAKE_TARGET=${MAKE_TARGET:-done}
 CI_SCOPE=${CI_SCOPE:-reference}
 PARK_TIMEOUT_S=${PARK_TIMEOUT_S:-120}
@@ -132,6 +132,18 @@ fi
 if [ -d "$SKILL/dev/ci-report" ]; then aws s3 cp --quiet --recursive "$SKILL/dev/ci-report" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/report/"; fi
 
 [ "$rc" -eq 0 ] || { echo "== gate RED - no record, nothing pushed"; exit "$rc"; }
+
+# A MEASUREMENT BUYS A NUMBER AND NOTHING ELSE (feature 177, FR-009). This is the ONLY route that may
+# dispatch with no engine delta, so it must not be able to mint the thing a push reads as proof: it
+# writes no `verified/` record and pushes nothing. The refusal is HERE, in the tree the build runs and
+# in a diff a reviewer can read, rather than in a promise the dispatcher makes - the bar `door.py`
+# set. Everything above this line ran exactly as a `check` build runs it, which is the point: a
+# measurement that measured something else would be worthless.
+if [ "$MODE" = measure ]; then
+  echo "== measure: gate GREEN in ${rc}; NO verified record written and nothing pushed (FR-009) - this run bought a number"
+  echo "== done"
+  exit 0
+fi
 
 # THE RECORD IS KEYED BY THE ENGINE CONTENT the gate tested (a hash over the engine paths' blobs in
 # the merge tree - the same function the dispatcher looks up with), not by the whole tree: a docs

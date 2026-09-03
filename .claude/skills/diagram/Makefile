@@ -10,7 +10,7 @@
 	 map cohort tripwire hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
 	 notes-census \
-	 ci-status ci-check ci-merge ci-image commit-permitted \
+	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
 # GUARD_EDIT_OK: feature 166 - REMOVING operations, never loosening one. The check battery is retired,
 # so the seven targets that drove it or its corpus (gate-manifest, regressions, new-check, site-justice,
@@ -631,6 +631,22 @@ ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-m
 commit-permitted:
 	@f=$$(ls -t dev/bypass-log/*.json | head -1); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
 	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
+
+ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 for the full-scope pair
+	$(REMOTE_OK)
+	@: "(GUARD_EDIT_OK: feature 177 - a NEW paid target, in the same class as ci-image: it prompts, it"; \
+	: " logs, and it cancels by default. It is the only route that may dispatch with NO engine delta,"; \
+	: " which is why it prompts at all - `ci-check` is gated by a delta it computes and cannot be asked"; \
+	: " for on a whim. What it CANNOT do is buy a merge credential: buildspec/measure.yml sets MODE"; \
+	: " measure and run.sh writes no verified/ record and pushes nothing.)"; \
+	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-measure is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-measure with no terminal"; exit 1; fi; \
+	printf '\n\033[1mAbout to MEASURE the remote gate on AWS\033[0m (a build, billed by the minute). This buys a\n'; \
+	printf 'number and nothing else - no verified record, no push. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
+	read why || true; \
+	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-measure backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
+	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
+	@$(if $(FULL),$(MAKE) --no-print-directory commit-permitted,true)
+	$(RUN).ci measure $(if $(FULL),--full,)
 
 ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
 	$(REMOTE_OK)

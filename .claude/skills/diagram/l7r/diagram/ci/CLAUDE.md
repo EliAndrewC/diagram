@@ -22,7 +22,8 @@ do not want to run anything on AWS"* come first, and the speedup second.
 | [`door.py`](door.py) | the build-side FULL door (R11): only a committed `permitted` entry whose commit is an ancestor of HEAD and not of `origin/main` opens the full scope; never an environment variable |
 | [`runlog.py`](runlog.py) | the remote run-log entry (`where: codebuild`, build id, minutes, cost) and month-to-date spend summed from LOCAL entries (never Cost Explorer) |
 | [`dispatch.py`](dispatch.py) | the sequence, and the boto3 boundary behind a small protocol - every external call injected so the suite drives it against RECORDED responses (`tests/tooling/ci/fixtures/`) |
-| [`__main__.py`](__main__.py) | `status | check | merge | image | state | door | remote-spend`, `assert_via_make` at the top |
+| [`cachepolicy.py`](cachepolicy.py) | the CI bucket's WHOLE lifecycle document (feature 177 - it owned one rule of someone else's document before, which is a hazard when the API OVERWRITES). Four rules; `verified/` is off the junk horizon that used to expire it at 14 days |
+| [`__main__.py`](__main__.py) | `status | check | merge | measure | image | state | door | remote-spend`, `assert_via_make` at the top |
 
 ## The conditions, and the GM's words each rests on
 
@@ -59,6 +60,31 @@ do not want to run anything on AWS"* come first, and the speedup second.
    runs when main moved on engine paths since your merge base, or for FULL / an operation.
 5. **breaker-not-tripped** - the monthly hard stop's deny policy; discovered at `start_build`,
    reported with the detach command (FR-021).
+
+## The MEASUREMENT route (feature 177) - a NEW route, and a change to the threat model
+
+`make ci-measure` (add `FULL=1` for the full-scope pair). It exists because **the cost of the remote
+gate could not be measured at all**: `route-is-gated` is evaluated for every mode, `delta.is_engine()`
+excludes `ci/` by the GM's own FR-025 ruling, and a feature about the build's own cost touches no
+engine path. Feature 175 owed a FULL-scope cache timing, recorded *"it rides on the next real engine
+change"*, and four features later had not taken it. A debt payable only by waiting for unrelated work
+is not a debt anyone pays.
+
+**It bypasses exactly one condition - `route-is-gated` - and the row is still printed, saying so.**
+Everything else refuses it: `green-local-since-edit` (the GM's own named case: never a paid run
+straight after a red gate), `remote-enabled` (feature 132's switch), `breaker-not-tripped` (the
+monthly hard stop) and, for FULL, `door.py`'s committed `permitted` entry. A verified record does NOT
+short-circuit it, because a record says a gate PASSED and says nothing about what it cost.
+
+**It cannot mint a push credential, and that refusal lives in the tree the build runs.**
+[`buildspec/measure.yml`](../../../../../buildspec/measure.yml) sets `MODE: measure`, and `run.sh`
+returns before writing `verified/<key>.json` - which puts it before the push as well. A dispatcher
+flag would be a promise; a buildspec is a diff, which is the bar [`door.py`](door.py) set for the FULL
+prompt. Its cache block and install phase are otherwise IDENTICAL to `check.yml`'s: a measurement that
+ran cold while the gate runs warm would measure something that does not happen.
+
+It is paid and prompted, in the same class as `make ci-image` - it cancels by default and logs to
+`dev/bypass-log/`, so `make audit` can tell a session's answer from the GM's.
 
 ## The sequence (every remote target)
 

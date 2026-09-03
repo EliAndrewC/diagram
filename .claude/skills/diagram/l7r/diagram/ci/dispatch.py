@@ -189,7 +189,7 @@ class Boto3Client:  # pragma: no cover - the real transport; its response SHAPES
 class Context:
     root: Path
     skill: Path
-    mode: str  # merge | check | image
+    mode: str  # merge | check | measure | image
     scope: str = "reference"  # reference | full
     operation: str | None = None  # ci-check TARGET=<expensive op>
     compute: str = config.COMPUTE_TYPE  # ci-check COMPUTE=BUILD_GENERAL1_2XLARGE: the scaling measurement (T028)
@@ -292,6 +292,7 @@ def status_text(ctx: Context) -> tuple[str, decision.DispatchDecision]:
         runlog.month_to_date(ctx.skill),
         ctx.operation,
         remote_off_reason(ctx.skill),
+        ctx.mode == decision.MEASURE,
     )
     text = decision.render(d, ctx.mode, ctx.scope)
     head = [f"delta: merge-base {delta.base[:12]}, {len(delta.files)} file(s), route {delta.route}", f"state: {state.describe(st, now)}"]

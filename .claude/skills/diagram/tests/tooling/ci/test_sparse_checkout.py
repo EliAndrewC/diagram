@@ -67,12 +67,7 @@ def needle(pattern: str) -> re.Pattern[str]:
 def rot_violations(pats: list[tuple[str, list[str]]], sources: dict[str, str]) -> list[str]:
     """Every (file, pattern) where source code refers to a path the build will not check out, other
     than a declared producer of that path."""
-    return [
-        f"{name} refers to {p}, which the remote build does not check out"
-        for p, producers in pats
-        for name, text in sources.items()
-        if name not in producers and needle(p).search(text)
-    ]
+    return [f"{name} refers to {p}, which the remote build does not check out" for p, producers in pats for name, text in sources.items() if name not in producers and needle(p).search(text)]
 
 
 def _sources() -> dict[str, str]:
