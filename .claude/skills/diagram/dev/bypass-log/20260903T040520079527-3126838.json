@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-03T04:05:20Z",
+  "target": "ci-measure",
+  "commit": "9eccc185",
+  "outcome": "permitted",
+  "why": "Feature 177 T20/T21: the session is answering this prompt itself under the GM's authorization of 2026-08-25 - \"all of them look like things that you should be capable of kicking off\". Reference measurement, cache cold: the post-174 remote number the GM asked for in item 3. Third attempt - the first two each found a real defect (the sparse checkout's detach, and a test that only fails where nobody lives), both fixed and verified locally before re-dispatching."
+}
