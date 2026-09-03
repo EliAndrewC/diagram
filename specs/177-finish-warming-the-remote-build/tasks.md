@@ -10,39 +10,56 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
 
 ## Piece 5 - the two found defects (cheapest, no dependencies, so they go first)
 
-- [ ] T01 FR-016, FR-017: `main-tree-hooks.sh` accepts the subshell form its own message prescribes
+- [x] T01 FR-016, FR-017: `main-tree-hooks.sh` accepts the subshell form its own message prescribes
       research: procedure
-      verify: a case in `scripts/test-main-tree-hooks.sh` that FAILS before the fix - a
-      `( cd <clone> && <write> )` issued while standing in main - plus the companion that proves the
-      guard did not widen: `( cd <mirror> && <write> )` is still refused
+      verify: DONE. `(` joins the command-position alternatives in BOTH scans - the LEAVES scan and
+      the ENTRY scan - and `\)` joins the terminators. Four new cases in
+      `scripts/test-main-tree-hooks.sh`; suite 34 passed / 0 failed. PROVEN TO FIRE by reverting the
+      two regexes and re-running: exactly those four fail, and instructively they fail in BOTH
+      directions - two false REFUSALS (the reported defect) and two false ALLOWS
+      (`( cd <mirror> && <write> )` got through), which is why the entry scan had to move in the same
+      edit. The pre-existing "documented subshell form in a clone" case passed even on the broken
+      guard, because its cwd was already the clone: that is how the suite stayed green while the
+      guard refused correct work
 
-- [ ] T02 FR-018, FR-018a: `cache_location` stops sharing one object between the gate and an operation
+- [x] T02 FR-018, FR-018a: `cache_location` stops sharing one object between the gate and an operation
       research: procedure
-      verify: keyed on the REGISTERED name from `_invocation.OPERATIONS`, never `ctx.operation` (which
-      carries arguments - `cohort SEEDS=8` and `cohort SEEDS=9` are distinct strings);
-      `test_the_cache_location_cannot_grow_with_the_number_of_builds` extended to VARY the new
-      dimension, because as it stands it enumerates projects x scopes and would pass a defaulted
-      fourth parameter green
+      verify: DONE. `dispatch.registered_operation()` maps a target to its REGISTERED name from
+      `_invocation.OPERATIONS` and nothing else, so `cohort SEEDS=8` and `cohort SEEDS=9` give ONE
+      key; `cache_location` takes it as a fourth argument. The boundedness test now varies that
+      dimension (`projects x scopes x (1 + registered expensive operations)`), which the old
+      `len(locations) == 4` form could not have done. `tests/tooling/ci/test_cache.py` 10 passed
 
 ## Piece 4 - the lifecycle document
 
-- [ ] T03 FR-013, FR-014: `cachepolicy.lifecycle_configuration()` returns the WHOLE document, three
-      rules: the cache rule, a `verified/` rule whose horizon is chosen for what those records are
-      FOR, and a catch-all at a long horizon so an unforeseen prefix still cannot accumulate
+- [x] T03 FR-013, FR-014: `cachepolicy.lifecycle_configuration()` returns the WHOLE document
       research: procedure
-      verify: the horizon and its reasoning recorded in D6; `verified/` demonstrably outside the
-      catch-all's reach
+      verify: DONE, as FOUR named rules rather than three - `expire-generation-cache` (`cache/`,
+      30 d), `expire-verified-records` (`verified/`, 365 d), `expire-large-objects`
+      (`ObjectSizeGreaterThan` 1 MiB, 30 d) and `abort-dead-multipart-uploads` (prefix `''`, 7 d, NO
+      `Expiration`). The net is a SIZE and not a prefix because S3 has no negative filter: a
+      prefix-`''` net cannot be told to skip `verified/`, so "outside its reach" is unachievable that
+      way, while a 200-byte record is structurally unreachable by a 1 MiB size filter. The split into
+      four is S3's ruling, not a preference - see T05
 
-- [ ] T04 FR-019: the lifecycle tests updated to the new CLOSED invariant, not loosened
+- [x] T04 FR-019: the lifecycle tests updated to the new CLOSED invariant, not loosened
       research: procedure
-      verify: `test_cachepolicy.py` addresses each rule BY ID rather than `Rules[0]`, asserts the
-      document is exactly those three rules and nothing else, and re-pins the module docstring to
-      the state that is now true
+      verify: DONE. `test_cachepolicy.py` addresses every rule through `cachepolicy.rule(doc, id)`,
+      asserts the document is exactly those four ids in order and that the retired one is absent,
+      asserts the multipart rule has NO `Expiration` (the load-bearing absence), and RE-PINS the
+      docstring assertion to what is true now - the overlap hazard, the retired rule's name, the 365
+      and the "no negative filter" reasoning. 9 passed
 
-- [ ] T05 FR-015: apply the document with the `[aws_admin]` credentials, READ IT BACK, record it
+- [x] T05 FR-015: apply the document with the `[aws_admin]` credentials, READ IT BACK, record it
       research: procedure
-      verify: the read-back document quoted in D6; `cachepolicy.py` no longer describes the 14-day
-      catch-all as live, and its two open questions for the GM are answered in place
+      verify: DONE via `scripts/apply-ci-lifecycle.py --apply` (dry by default; the document comes
+      from the tested module, never from the script). READ BACK from the bucket 2026-09-03: four
+      rules, `expire-ci-junk` GONE. Independently re-checked against the live objects:
+      `verified/` 9 objects / 3,012 bytes, reachable by the size net **0**; `cache/` 1 object /
+      2.65 MiB, reachable **1** (both rules say 30 d, so nothing moved); `artifacts/`, `image/`,
+      `go/` reachable 0. **The first `--apply` FAILED and that is the finding**: S3 answered
+      `InvalidRequest: AbortIncompleteMultipartUpload cannot be specified with Object Size`, which is
+      why the net is two rules. Applying rather than assuming is what produced it
 
 ## Piece 1 - the hooks-test stamp travels
 

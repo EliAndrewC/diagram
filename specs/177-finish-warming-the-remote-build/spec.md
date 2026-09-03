@@ -207,9 +207,14 @@ that justify it today.
   requires the module docstring to still name `expire-ci-junk` and `SHORTEST` - the very passage
   FR-015 says must stop describing a state that is no longer true. Those tests MUST be updated too,
   to an invariant that is likewise CLOSED: `lifecycle_configuration()` returns the WHOLE document;
-  its rules are exactly the cache rule, the rule FR-013 gives `verified/`, and the FR-014 catch-all,
-  and nothing else; each is addressed BY ID rather than by `Rules[0]`; and the docstring assertion
-  pins the state that is now true rather than being deleted.
+  its rules are exactly the cache rule, the rule FR-013 gives `verified/`, and the FR-014 net, and
+  nothing else; each is addressed BY ID rather than by `Rules[0]`; and the docstring assertion pins
+  the state that is now true rather than being deleted. (**Implementation note, recorded because it
+  changes the count and not the invariant**: the FR-014 net turned out to be TWO rules, not one. S3
+  refuses `AbortIncompleteMultipartUpload` alongside an object-size filter - *"cannot be specified
+  with Object Size"*, measured on the live bucket - because an upload in flight has no final size.
+  So the net splits into a size rule and a multipart rule, and the closed set is four named rules.
+  The split improves it: the multipart abort becomes universal where 175 had it on `cache/` alone.)
   **The measurement route of FR-008 is a NEW route
   and a change to the threat model**, not an exception inside the old one:
   `l7r/diagram/ci/CLAUDE.md` MUST be updated to describe it - what it bypasses, what it can never

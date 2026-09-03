@@ -50,8 +50,32 @@ class AwsClient(Protocol):
     def delete_object(self, bucket: str, key: str) -> None: ...
 
 
-def cache_location(bucket: str, project: str, scope: str) -> str:
-    """Where CodeBuild keeps the generation cache for this project and scope (feature 175).
+def registered_operation(target: str | None) -> str | None:
+    """The REGISTERED name of an operation target, or None when there is no operation (feature 177).
+
+    **This exists so `cache_location` cannot be keyed on a free-form string.** `__main__.py` validates
+    only `a.target.split()[0]` against `_invocation.OPERATIONS` and then passes the WHOLE target on as
+    `ctx.operation`, arguments and all - `make_target` returns it verbatim as `MAKE_TARGET` because
+    `run.sh` word-splits it on purpose. So `cohort SEEDS=8` and `cohort SEEDS=9` are both legal and
+    distinct, and a cache location built from `ctx.operation` would grow one S3 object per argument
+    spelling: the GM's named failure (*"uploading many megabytes worth of content to Amazon S3 on
+    every run and then never cleaning it up"*), reintroduced by the fix for a different defect. The
+    head is drawn from the registry instead, so the value can only be one of a finite set of names.
+
+    An unregistered head returns None - the run then shares the scope's location, exactly as it did
+    before. That is the safe direction: `__main__` has already refused an unregistered target before
+    any dispatch, so this branch is reachable only from a caller that built a Context by hand, and
+    the worst it can do is decline to partition."""
+    if not target:
+        return None
+    from l7r.diagram._invocation import OPERATIONS
+
+    head = target.split()[0]
+    return head if head in {name for name, _cost in OPERATIONS.values()} else None
+
+
+def cache_location(bucket: str, project: str, scope: str, operation: str | None = None) -> str:
+    """Where CodeBuild keeps the generation cache for this project, scope and operation (175, 177).
 
     **THE OBJECT COUNT IS BOUNDED BY CONSTRUCTION, and that is the whole point of this function.**
     CodeBuild writes one archive per cache `location`, so keying on (project, scope) means the cache
@@ -68,10 +92,21 @@ def cache_location(bucket: str, project: str, scope: str) -> str:
     `obtain` returns before storing). Sharing one location would have a reference build's `rolls/`
     ride along in every FULL restore, unread - 54 MB on the laptop that measured it.
 
-    A lifecycle rule on the bucket expires these; see `specs/175-warm-the-remote-build/` D3. The
-    bucket is the CI bucket that already holds the mailbox and go-signals, so there is one bucket,
-    one policy, and one place to look."""
-    return f"{bucket}/cache/{project}/{scope}"
+    **THE OPERATION IS IN THE KEY TOO (feature 177), and it must be the REGISTERED name.** Measured
+    2026-09-03: the green reference gate and both `TARGET=tripwire` builds of 2026-08-31 all wrote to
+    `cache/gm-assistant-check/reference`, because an operation's `ctx.scope` stays `reference` and
+    only `CI_SCOPE` becomes `operation` - so a tripwire's cache overwrote the gate's and the bucket
+    held ONE cache object where 175's D2 expected up to four. The blast radius is performance alone:
+    the gencache key is content-derived (175's A2), so a foreign entry can only MISS, never serve a
+    wrong answer. The ceiling stays finite - `projects x (scopes + registered expensive operations)` -
+    because `registered_operation` will not pass anything the registry does not name; see its
+    docstring for why keying on the raw target would not.
+
+    A lifecycle rule on the bucket expires these; see `specs/175-warm-the-remote-build/` D3 and
+    feature 177's D6, which took `verified/` out of the catch-all's reach. The bucket is the CI bucket
+    that already holds the mailbox and go-signals, so there is one bucket, one policy, and one place
+    to look."""
+    return f"{bucket}/cache/{project}/{scope}" + (f"/{operation}" if operation else "")
 
 
 class AccessDenied(Exception):
@@ -350,8 +385,9 @@ def run(ctx: Context) -> Outcome:
                 ctx.events.append("image:stale")
     # THE CACHE TRAVELS WITH THE CALL, for the same reason the buildspec does (feature 175): a cache
     # configured on the PROJECT is state nobody can review, while an override is reviewable in a diff.
-    cache_kw: dict[str, Any] = {"cacheOverride": {"type": "S3", "location": cache_location(ctx.secrets.ci_bucket, project, ctx.scope)}}
-    ctx.events.append(f"cache:{ctx.scope}")
+    op_key = registered_operation(ctx.operation)
+    cache_kw: dict[str, Any] = {"cacheOverride": {"type": "S3", "location": cache_location(ctx.secrets.ci_bucket, project, ctx.scope, op_key)}}
+    ctx.events.append(f"cache:{ctx.scope}" + (f"/{op_key}" if op_key else ""))
     try:
         started = ctx.client.start_build(
             projectName=project,

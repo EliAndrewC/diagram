@@ -11,8 +11,9 @@ from pathlib import Path
 
 import pytest
 
+from l7r.diagram._invocation import OPERATIONS
 from l7r.diagram.ci import config
-from l7r.diagram.ci.dispatch import cache_location
+from l7r.diagram.ci.dispatch import cache_location, registered_operation
 
 pytestmark = pytest.mark.tooling
 
@@ -41,6 +42,39 @@ def test_the_cache_location_cannot_grow_with_the_number_of_builds() -> None:
 
     # ...and the SAME inputs give the SAME location on every build - the property that bounds it.
     assert cache_location("bkt", config.PROJECT_CHECK, "full") == cache_location("bkt", config.PROJECT_CHECK, "full")
+
+    # FEATURE 177: THE TEST NOW VARIES THE OPERATION DIMENSION, because the version above did not and
+    # therefore could not have caught the fix that added one. It enumerated projects x scopes and
+    # asserted `len(locations) == 4`, so a fourth parameter with a default leaves it green while the
+    # property it names is gone - which is the shape of every guard this project has had to repair.
+    ops = sorted({name for name, cost in OPERATIONS.values() if cost == "expensive"})
+    every = {cache_location("bkt", p, s, o) for p in projects for s in scopes for o in [None, *ops]}
+    assert len(every) == len(projects) * len(scopes) * (1 + len(ops)), "one location per (project, scope, registered operation)"
+    assert len(every) < 200, f"the ceiling is finite and small; it is {len(every)}"
+
+
+def test_an_operation_does_not_overwrite_the_gates_cache() -> None:
+    """FEATURE 177, FR-018, MEASURED: on 2026-08-31 the green reference gate and both
+    `TARGET=tripwire` builds all reported
+    `location = gm-assistant-ci-.../cache/gm-assistant-check/reference`, and the bucket held ONE cache
+    object where 175's D2 expected four - an operation's `ctx.scope` stays `reference` and only
+    `CI_SCOPE` becomes `operation`, so the two clobbered each other. Performance only: the gencache key
+    is content-derived, so a foreign entry can only MISS."""
+    gate = cache_location("bkt", config.PROJECT_CHECK, "reference")
+    trip = cache_location("bkt", config.PROJECT_CHECK, "reference", "tripwire")
+    assert gate != trip, "an operation must not write to the gate's cache object"
+    assert trip.startswith(gate + "/"), "and it should be legible as a child of it, not an unrelated key"
+
+
+def test_the_operation_in_the_key_is_the_REGISTERED_name_not_the_raw_target() -> None:
+    """FR-018a, and the reason the bound survives the fix. `__main__.py` validates only
+    `a.target.split()[0]` and passes the WHOLE string on as `ctx.operation`, so keying on it would give
+    one S3 object per argument spelling - the GM's named failure, reintroduced by the fix for a
+    different defect."""
+    assert registered_operation("tripwire") == "tripwire"
+    assert registered_operation("cohort SEEDS=8") == registered_operation("cohort SEEDS=9") == "cohort"
+    assert registered_operation(None) is None and registered_operation("") is None
+    assert registered_operation("not-a-registered-operation") is None, "an unregistered head declines to partition rather than inventing a key"
 
 
 def test_the_cache_location_never_carries_a_commit_sha() -> None:

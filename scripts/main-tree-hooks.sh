@@ -86,7 +86,14 @@ esac
 # So a `cd` OUT of main, at a command position, moves the effective directory before the write test -
 # which is the same reasoning as the leak this guard exists for, applied in the other direction.
 if [ "$STANDING_IN_MAIN" = yes ]; then
-  LEAVES=$(printf '%s' "$SCAN" | grep -oE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?[^\"[:space:];&|]+" | tail -1 | sed 's/.*cd[[:space:]]*"\?//')
+  # GUARD_EDIT_OK: feature 177 - A GUARD THAT REFUSED THE COMMAND ITS OWN MESSAGE PRESCRIBES. The
+  # command-position alternatives were `^ ; & | &&` and did NOT include `(`, so the subshell form the
+  # refusal below recommends in as many words - "( cd <your clone> && ... ) in a subshell for anything
+  # you want to DO" - never registered as leaving main, and a session that followed the advice was
+  # refused. Four times in one session on 2026-09-03 before the workaround was found; the bare form
+  # `cd <clone> && ...` was accepted throughout, which is why it survived: it only bit a session doing
+  # what it was told. `(` is added to BOTH scans, never only this one - see the note on the next.
+  LEAVES=$(printf '%s' "$SCAN" | grep -oE "(^|[;&|(]|&&)[[:space:]]*cd[[:space:]]+\"?[^\"[:space:];&|()]+" | tail -1 | sed 's/.*cd[[:space:]]*"\?//')
   case "$LEAVES" in
     "") ;;                                    # no cd at all - the command runs where the session stands
     "$MAIN"/.clones/*) STANDING_IN_MAIN=no ;; # into a clone: a workspace
@@ -96,7 +103,12 @@ if [ "$STANDING_IN_MAIN" = yes ]; then
 fi
 
 if [ "$STANDING_IN_MAIN" = no ]; then
-  printf '%s' "$SCAN" | grep -qE "(^|[;&|]|&&)[[:space:]]*cd[[:space:]]+\"?${MAIN}/?\"?([[:space:]]*(;|&&|\||$))" || exit 0
+  # GUARD_EDIT_OK: feature 177 - the ENTRY scan takes `(` in the same breath as the LEAVES scan
+  # above, and that pairing is the whole of why the fix does not widen what is permitted. Teaching
+  # only LEAVES about subshells would let `( cd <mirror> && <write> )` through from a clone, turning a
+  # false REFUSAL into a false ALLOW - the trade this project never makes. `\)` joins the terminators
+  # for the same reason: `( cd <mirror> )` ends on a paren, not on `;`, `&&`, `|` or end of string.
+  printf '%s' "$SCAN" | grep -qE "(^|[;&|(]|&&)[[:space:]]*cd[[:space:]]+\"?${MAIN}/?\"?([[:space:]]*(;|&&|\||\)|$))" || exit 0
 fi
 
 # ...and does it then WRITE? A read in main is legitimate and stays legitimate.

@@ -54,6 +54,22 @@ run "$MAIN/.clones/worker" "cd $MAIN/.clones/worker && git commit -am work"
 check "a commit in a CLONE under the mirror -> allowed" 0 "$RC"
 run "$MAIN/.clones/worker" "( cd $MAIN/.clones/worker && make quick )"
 check "the documented subshell form in a clone -> allowed" 0 "$RC"
+# GUARD_EDIT_OK: feature 177 - THE CASE THAT FAILED BEFORE THE FIX. The guard's own refusal says
+# "( cd <your clone> && ... ) in a subshell for anything you want to DO", and from main's tree that
+# form was refused: the LEAVES scan's command positions were `^ ; & | &&` with no `(`, so the cd never
+# counted as leaving. The case above passes even on the broken guard, because its cwd is already the
+# clone - which is exactly how the suite stayed green while the guard refused correct work.
+run "$MAIN" "( cd $MAIN/.clones/worker && git commit -am work )"
+check "STANDING IN MAIN, the documented subshell form into a clone -> allowed" 0 "$RC"
+run "$MAIN" "( cd $MAIN/.clones/worker && echo x > f )"
+check "standing in main, subshell into a clone, then a redirect -> allowed" 0 "$RC"
+# ...and the half that proves the fix did not widen what is PERMITTED (FR-017). Before it, neither of
+# these was caught either: the ENTRY scan had no `(` any more than the LEAVES scan did, so teaching
+# only one about subshells would have turned a false refusal into a false allow.
+run "$MAIN/.clones/worker" "( cd $MAIN && git add -A && git commit -m 'work' )"
+check "the subshell form into the MIRROR -> still refused" 2 "$RC"
+run "$MAIN/.clones/worker" "( cd $MAIN && echo x > f )"
+check "subshell into the mirror, then a redirect -> still refused" 2 "$RC"
 run "$MAIN/.clones/worker" "git commit -am work"
 check "an ordinary commit with no cd -> allowed" 0 "$RC"
 
