@@ -1,6 +1,6 @@
 # Feature 178 - Cheaper and honester builds
 
-**Status**: DRAFT - not yet reviewed (constitution XVI)
+**Status**: FAITHFUL (`spec-fidelity`, round 4 of 5) - cleared for implementation (constitution XVI)
 **Request**: `request.md` (the GM's words, verbatim, with the four findings they answer)
 **Predecessor**: `specs/177-finish-warming-the-remote-build/` - this feature acts on the four things
 177 recorded and left for the GM, plus the compute question their measurement provoked.
@@ -99,9 +99,11 @@ first and authorized past the second in their follow-up (`request.md`):
   and travels with the clone, which is the GM's own answer (*"we pass it along in the same manner we
   pass along our latest code"*). No new transport, no S3 fetch, no GitHub API call.
 - **FR-008** The pairing MUST stay within one environment AND one compute identity. `perf_snapshot`
-  already refuses a cross-environment comparison (*"a cross-environment percentage is
-  indistinguishable from a regression"*, FR-014 of feature 129); a 4-vCPU build compared against a
-  36-vCPU one is the same error one level down, and item 5 is about to make that a live case.
+  already refuses a comparison across `(environment, host, image)`, and `host` is
+  `codebuild:<COMPUTE_TYPE>` - so the COMPARATOR already declines to pair a 4-vCPU build with a
+  36-vCPU one. **The new work is therefore in the baseline SELECTOR, not the comparator**: it must
+  choose a prior snapshot of matching identity rather than hand the comparator a mismatched pair to
+  refuse. Item 5 is about to make that a live case.
 - **FR-009** With NO prior snapshot for that environment and compute identity, `perf-gate` MUST say
   so and MUST NOT fail the gate. A first run on a new instance type has nothing to regress against.
 
@@ -274,7 +276,13 @@ first and authorized past the second in their follow-up (`request.md`):
     list has a SECOND consumer, the push-time stamp check in `sync-with-main.sh`, so after FR-001 a
     ci-only DIRECT push needs a green `make done` where `make quick` sufficed under the GM's
     feature-132 FR-025 ruling. That follows from item 1 and is correct; it is named here so it does
-    not surface as a refused push;
+    not surface as a refused push. There is a **THIRD** consumer: `dispatch.py` calls
+    `state.current_hash` for the paid route's `green-local-since-edit`, so after FR-001 a ci-only edit
+    invalidates that too - benign, a green `make quick` re-satisfies it, but it lands on this
+    feature's own item 5, where FR-017 edits `ci/` and then dispatches. And
+    `scripts/test-gate-stamp.sh` carries a NAMED case, *"ci-only change: no stamp needed (FR-025)"*,
+    which FR-001 **inverts**: it must be flipped with a note saying which half of the GM's FR-025
+    ruling item 1 supersedes (the local gate, not the paid route);
   - **FR-004** adds a recording site (`$(STATE) green-local test-full`);
   - **FR-010/FR-010a/FR-010b** change the subject matter of
     `tests/tooling/ci/test_sparse_checkout.py`: `test_nothing_the_gate_runs_reads_an_excluded_path`
@@ -335,7 +343,11 @@ first and authorized past the second in their follow-up (`request.md`):
 Per constitution XII, each as **accurate**, **deliberate deviation** or **guess**:
 
 - **D1** the second short-circuit key: what it covers, how it is derived, and why it does not reach
-  the paid route (FR-001 to FR-003)
+  the paid route (FR-001 to FR-003) - **including the operative documents that assert the state item 1
+  ends and that no mechanical check will catch**: the root `CLAUDE.md` (*"every `.py` under the skill
+  outside `tests/` and `l7r/diagram/ci/`"*, and *"a tests-only or ci-only change skips the build and
+  the local gate"*) and `docs/efficiency-tooling.md`'s four short-circuits. Feature 174 spent six
+  review rounds on exactly this class of drift
 - **D2** `test-full`'s recording site (FR-004, FR-005)
 - **D3** what a build's `perf-gate` compares and how the baseline is chosen (FR-006 to FR-009)
 - **D4** the untracked set with per-path evidence, the frozen exhibits INCLUDED (the carve-out the
