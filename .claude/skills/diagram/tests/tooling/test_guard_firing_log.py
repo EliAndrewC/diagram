@@ -164,6 +164,11 @@ def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
 _ESCAPES = {
     # token: (kind, why this kind is safe)
     "GATE_OK": ("command", "routes through _hookmatch.py escape"),
+    # TEMPORARY - feature 178 FR-011a. The force-push guard has no escape by design; this one exists
+    # for the single push that lands the purged history and is REMOVED before that feature closes
+    # (its T34). If this line is still here, so is the hole, and that is the defect. The census caught
+    # it unclassified on the first remote gate after it was added, which is the census working.
+    "HISTORY_PURGE_OK": ("command", "routes through _hookmatch.py escape; TEMPORARY, removed by feature 178 T34"),
     "MEASURE_OK": ("command", "routes through _hookmatch.py escape"),
     "POLL_OK": ("command", "routes through _hookmatch.py escape"),
     "DISCARD_OK": ("command", "routes through _hookmatch.py escape"),
