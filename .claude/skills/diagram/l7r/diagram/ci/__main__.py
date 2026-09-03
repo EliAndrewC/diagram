@@ -116,7 +116,11 @@ def main(argv: list[str] | None = None) -> int:
         scope=scope,
         operation=a.target,
         no_go=a.no_go and a.command == "check",
-        compute=a.compute if a.command == "check" else config.COMPUTE_TYPE,
+        # FEATURE 178 FR-017: `measure` takes COMPUTE too. The knob existed for `check` alone (the
+        # T028 scaling question), and the measurement route is now the sanctioned way to ask it - the
+        # GM's *"can you run some tests ... on small inexpensive servers"* needs a paid dispatch that
+        # does not require an engine delta, which is exactly what `measure` is for.
+        compute=a.compute if a.command in ("check", decision.MEASURE) else config.COMPUTE_TYPE,
     )
     # REMOTE OFF (feature 132): read BEFORE any credential is loaded or any client is built, so that
     # with the switch thrown no AWS call is even possible. `status` still answers (without a

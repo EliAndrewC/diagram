@@ -640,7 +640,11 @@ commit-permitted:
 # commits its own, so calling it too would run `git commit` with nothing staged and fail the target.
 # (A shell-level version of this note was tried first and broke the recipe: a make-escaped
 # dollar-paren inside a `: "..."` no-op is command substitution to /bin/sh. Prose belongs here.)
-ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 for the full-scope pair
+# GUARD_EDIT_OK: feature 178 FR-017 - a paid target gains the COMPUTE knob `ci-check` already has
+# (feature 130 T028). It widens nothing: the dispatch still passes every condition it passed before,
+# and the compute type only chooses which instance runs it. It is required because the GM asked for
+# measurements on smaller servers and `ci-check` cannot be asked without an engine delta.
+ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 | COMPUTE=BUILD_GENERAL1_LARGE
 	$(REMOTE_OK)
 	@: "(GUARD_EDIT_OK: feature 177 - a NEW paid target, in the same class as ci-image: it prompts, it"; \
 	: " logs, and it cancels by default. It is the only route that may dispatch with NO engine delta,"; \
@@ -657,7 +661,8 @@ ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 f
 	: "-- Syntax error: unexpected close paren. The note now lives in a make comment above the target,"; \
 	: "where no shell ever parses it. ONE prompt opens the FULL door here on purpose - see there."; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
-	$(RUN).ci measure $(if $(FULL),--full,)
+	: "GUARD_EDIT_OK feature 178 FR-017 - the COMPUTE knob, see the note above this target"; \
+	$(RUN).ci measure $(if $(FULL),--full,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
 
 ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
 	$(REMOTE_OK)
