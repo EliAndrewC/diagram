@@ -36,6 +36,16 @@ cache:
     - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
     - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
     - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
+    # THE HOOKS-TEST FRESHNESS STATE TRAVELS TOO (feature 177). Measured on build 03c8ce13: the gate
+    # spent 60 s of its 94 re-proving 21 guard suites and said so - "21 guard suites green, 0
+    # unchanged since they last went green" - because both stamps live under the git directory and a
+    # fresh container has neither. Locally that phase is 0 s. Both are hashes of file CONTENT
+    # (`gate-stamp.hash_files` salted with GATE_RECIPE; `sha256sum` over `_hookdeps.py`'s derived
+    # set), so a changed guard re-runs its suite; and the cache is written only BY A BUILD, so a
+    # remote gate skips only what a remote gate proved. `run.sh`'s restore detection had to stop
+    # keying on `repo/.git` being absent before these could be added - see the note there.
+    - 'repo/.git/gate-green-hooks'
+    - 'repo/.git/hooks-test/**/*'
 env:
   variables:
     MODE: check

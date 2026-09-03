@@ -14,6 +14,11 @@ cache:
     - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
     - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
     - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
+    # The hooks-test freshness state (feature 177) - identical to check.yml's, see there for why each
+    # line and why `run.sh`'s restore detection had to change first. `test_cache.py` fails if the two
+    # buildspecs ever disagree.
+    - 'repo/.git/gate-green-hooks'
+    - 'repo/.git/hooks-test/**/*'
 env:
   variables:
     MODE: merge

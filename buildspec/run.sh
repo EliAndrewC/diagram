@@ -35,8 +35,15 @@ echo "== fetch: $GITHUB_REPO @ $MAILBOX ($GIT_SHA), mode=$MODE target='$MAKE_TAR
 # not match a leading dot. The first draft of this used `mv repo/* "$tmp"/` and silently dropped the
 # entire cache while looking like it had preserved it - caught by a local simulation rather than by
 # another billed build, which is the only reason it is not a fifth failed dispatch.
+# FEATURE 177: THE TEST IS "IS THERE A REAL REPOSITORY HERE?", NOT "IS THERE A .git?". It used to be
+# `[ ! -d repo/.git ]`, which was right only while the cache held nothing under `.git`. Feature 177
+# puts the hooks-test freshness state there (`repo/.git/gate-green-hooks`,
+# `repo/.git/hooks-test/**`), so a restored cache now CREATES `repo/.git` - the old test would see a
+# directory, skip the set-aside, and `mv bootstrap repo` would move bootstrap INSIDE it. That is
+# build a48b730d exactly, one billed minute, and it would have come back the moment the cache paths
+# widened. `HEAD` is the file every real git directory has and a cache of stamps can never have.
 restored=""
-if [ -d repo ] && [ ! -d repo/.git ]; then mv repo .cache-restore && restored=1; fi
+if [ -d repo ] && [ ! -e repo/.git/HEAD ]; then mv repo .cache-restore && restored=1; fi
 if [ -d bootstrap/.git ]; then mv bootstrap repo; else git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo; fi
 if [ -n "$restored" ]; then cp -a .cache-restore/. repo/ && rm -rf .cache-restore && echo "== cache: generation cache laid over the checkout"; fi
 cd repo

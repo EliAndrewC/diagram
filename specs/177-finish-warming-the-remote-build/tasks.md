@@ -63,23 +63,23 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
 
 ## Piece 1 - the hooks-test stamp travels
 
-- [ ] T06 FR-004: `run.sh`'s restore detection stops keying on `repo/.git` being absent
+- [x] T06 FR-004: `run.sh`'s restore detection stops keying on `repo/.git` being absent
       research: procedure
       verify: detection is "is there a real repository here?" (`repo/.git/HEAD`), so a cache holding
       only `.git/hooks-test/` and `.git/gate-green-hooks` still takes the set-aside path; this is
       build `a48b730d`'s failure and it must be fixed BEFORE the cache paths are widened
 
-- [ ] T07 FR-001: the two freshness-state paths join the cache in both buildspecs
+- [x] T07 FR-001: the two freshness-state paths join the cache in both buildspecs
       research: procedure
       verify: `repo/.git/gate-green-hooks` and `repo/.git/hooks-test/**/*` in check.yml and merge.yml,
       identical in both (the existing drift test still binds)
 
-- [ ] T08 FR-019: `test_the_cached_paths_are_what_a_HIT_needs` updated to the CLOSED invariant
+- [x] T08 FR-019: `test_the_cached_paths_are_what_a_HIT_needs` updated to the CLOSED invariant
       research: procedure
       verify: the cache carries feature 175's derived `.gencache/` set plus exactly the two paths
       T07 adds and nothing else - not loosened to "`.git` is allowed too"
 
-- [ ] T09 FR-002, FR-003: prove the safety properties rather than arguing them
+- [x] T09 FR-002, FR-003: prove the safety properties rather than arguing them
       research: procedure
       verify: one test that a changed guard re-runs its suite (the stamp is content-keyed), one that
       a freshness state present only in a local tree cannot reach a build. Note at the point of
