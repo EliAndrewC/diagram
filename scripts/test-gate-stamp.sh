@@ -33,7 +33,22 @@ OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "docs-only ch
 mkdir -p "$W/.claude/skills/diagram/tests"; echo 'def test_x(): pass' > "$W/.claude/skills/diagram/tests/test_x.py"; git -C "$W" add -A; git -C "$W" commit -qm tests
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "tests-only change: no stamp needed (FR-024)" 0 $?
 mkdir -p "$W/.claude/skills/diagram/l7r/diagram/ci"; echo 'x = 1' > "$W/.claude/skills/diagram/l7r/diagram/ci/decision.py"; git -C "$W" add -A; git -C "$W" commit -qm ci
-OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "ci-only change: no stamp needed (FR-025)" 0 $?
+# GUARD_EDIT_OK: feature 178 FR-001 INVERTS this case, and only this half of the GM's FR-025 ruling.
+# FR-025 (GM 2026-08-25) answered TWO questions at once - does a ci-only change owe a paid BUILD, and
+# does it owe a local GATE - and said no to both. The paid half STANDS: `delta.is_engine` still
+# excludes `ci/`, so a ci-only delta still routes DIRECT and still starts no build. The local half is
+# superseded, because since 2026-09-02 the coverage floor MEASURES `l7r/diagram/ci/` (174's derived
+# `source = ["l7r"]`), and feature 177 found `make done` answering "already verified" on a delta that
+# rewrote four ci modules. A surface that owes 100% coverage must be able to re-open the gate that
+# enforces it. GM 2026-09-03: *"I think a short-circuit for 'measured but engine' is best."*
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "ci-only change NOW needs a stamp (178 FR-001 supersedes FR-025's local half)" 1 $?
+# ...and then REMOVE it, restoring the fixture exactly as the cases below found it. Under FR-001 the
+# ci file is diagram-area content, so leaving it behind (as this case did while ci/ was excluded)
+# hands every later case an unstamped diagram change and they fail on that instead of on what they
+# test. Stamping instead of reverting is NOT equivalent: it leaves a stamp, and the "refusal must name
+# the diagram area" case asserts the exact refusal, which changes from "no green gate recorded at all"
+# to "ran against DIFFERENT code".
+rm -f "$W/.claude/skills/diagram/l7r/diagram/ci/decision.py"; git -C "$W" add -A; git -C "$W" commit -qm un-ci
 
 # a guard-script change with NO hooks stamp is refused - THE motivating case
 echo 'echo changed' > "$W/scripts/x-hooks.sh"; git -C "$W" commit -qam guard

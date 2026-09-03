@@ -56,7 +56,63 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
 # recorded cost: a test edited after the last green run lands unexecuted and runs on the next real gate.
 # l7r/diagram/ci/ joins it (FR-025, GM 2026-08-25: "isn't it actually test code? ... the ci/ directory should
 # join the list of exempted things along with the tests themselves") - its tests are fast and inside `make quick`.
-EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/", "l7r/diagram/ci/")}
+_DECLARED_EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/", "l7r/diagram/ci/")}
+
+# WHAT THE COVERAGE FLOOR MEASURES CANNOT BE EXCLUDED FROM THE GATE THAT ENFORCES IT (feature 178
+# FR-001/FR-003, GM 2026-09-03: *"I think a short-circuit for 'measured but engine' is best"*).
+#
+# The failure this closes, found by feature 177 and recorded as its R12: `make done` answered
+# *"already verified"* on a delta that rewrote four modules under `l7r/diagram/ci/`. Both halves were
+# individually correct - `ci/` is excluded here by the GM's own feature-132 FR-025 ruling, and the
+# coverage floor measures it because 174's `source = ["l7r"]` is DERIVED - and together they left a
+# surface that owes 100% coverage and cannot re-open the gate enforcing it.
+#
+# THE EXCLUSION LIST IS THEREFORE DERIVED, NOT EDITED. A declared exclusion survives only if the
+# coverage configuration does not measure it: `tests/` is not under `l7r/` and stays; `l7r/diagram/ci/`
+# is and is dropped. That is add-only by construction - it can remove an exclusion, never invent one -
+# which matters because `AREAS["diagram"]`'s `*.py` crosses `/` and covers 37 files outside `l7r/` and
+# `tests/` (every pool and legacy `.gen.py`, all of `wip/`) that coverage does not measure and that
+# must stay hashed. A hand-kept second roster would have drifted from `source` exactly as the roster
+# constitution X clause 5 replaced did.
+#
+# WHAT THIS DOES NOT TOUCH: `delta.is_engine`, which answers a DIFFERENT question - does this delta
+# owe a PAID BUILD. The GM's FR-025 ruling stands there, so a ci-only change still routes DIRECT and
+# still starts no build. The two questions stop sharing one answer, which is the whole of item 1.
+_COVERAGE_TOML = ".claude/skills/diagram/pyproject.toml"
+
+
+def coverage_sources(root: Path | None = None) -> tuple[str, ...]:
+    """The paths the coverage floor measures, read from `[tool.coverage.run] source`.
+
+    Returned as area-relative prefixes (`l7r` -> `l7r/`).
+
+    **AN UNREADABLE CONFIG FALLS BACK TO `l7r/`, NOT TO NOTHING**, and the difference is the whole
+    safety of this function. Returning nothing makes the derivation below a no-op, which leaves
+    `l7r/diagram/ci/` EXCLUDED - it silently restores the exact defect feature 178 exists to close,
+    and it does so in the failure case nobody tests. The first draft did that, and its own comment
+    called it "the safe direction"; the gate-stamp suite caught it within the minute, because its
+    fixture has no `pyproject.toml`.
+    `l7r/` is the right default because it is not a guess: constitution X clause 5 states the rule
+    the config merely encodes - *"if you add a file under `l7r/`, it is measured"*."""
+    root = root or _root()
+    default = ("l7r/",)
+    if root is None:
+        return default
+    try:
+        import tomllib
+
+        with open(root / _COVERAGE_TOML, "rb") as fh:
+            src = tomllib.load(fh).get("tool", {}).get("coverage", {}).get("run", {}).get("source", [])
+    except (OSError, ValueError, KeyError, TypeError):
+        return default
+    got = tuple(f"{s.strip('/')}/" for s in src if isinstance(s, str) and s.strip("/"))
+    return got or default
+
+
+def exclusions(area: str, root: Path | None = None) -> tuple[str, ...]:
+    """`area`'s declared exclusions, minus anything the coverage floor measures."""
+    measured = coverage_sources(root)
+    return tuple(sub for sub in _DECLARED_EXCLUDE.get(area, ()) if not any(sub.startswith(m) for m in measured))
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
@@ -96,7 +152,7 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...]) -> list[P
 def _excluded(path: str, area_path: str) -> bool:
     area = next((a for a, (p, _pats) in AREAS.items() if p == area_path), None)
     return any(
-        path.startswith(f"{area_path}/{sub}") for sub in EXCLUDE.get(area or "", ())
+        path.startswith(f"{area_path}/{sub}") for sub in exclusions(area or "")
     )
 
 

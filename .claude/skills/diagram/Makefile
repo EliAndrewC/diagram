@@ -1073,9 +1073,16 @@ JOURNAL_ENV =
 # A target a session is told about only by a REFUSAL is one it will misunderstand: this session described
 # it to the GM as running less than the full suite, having read `tests/CLAUDE.md`'s "done FULL=1 and the
 # AWS check only" row, when in fact COV_FLOORS=1 switches every deselection OFF. Nothing executable changes.
+# GUARD_EDIT_OK: feature 178 FR-004/FR-005 - a green test-full records green-local, as `done`, `quick`,
+# `reference` and `test-file` already do. It is the STRONGEST local proof there is (every tree, every
+# floor, nothing deselected) and it was the only one that could not satisfy the paid route's
+# `green-local-since-edit`, while a `make quick` that selected nothing and reported "no tests ran in
+# 0.97s" could. Feature 177 hit that and recorded it as R15; GM 2026-09-03: *"Yes I agree this sounds
+# like a quick small fix, so please make that fix too."* It records ONLY on success - the `&&` is the
+# whole of that - and names its own target so an audit can tell which run vouched.
 test-full:      ## EVERY test, nothing deselected, + all three coverage floors - `done FULL=1`'s test phase without its static checks / reference roll / perf-gate
 	$(SWEEP_OK)
-	@$(MAKE) --no-print-directory test COV_FLOORS=1
+	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
 
 # A DESELECTED TEST TAKES ITS COVERAGE WITH IT, so the reference scope CANNOT hold the 100% floor
 # (measured 2026-08-24, the first green-path run of this restructure). Deselecting
