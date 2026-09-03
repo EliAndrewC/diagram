@@ -1,0 +1,52 @@
+# buildspec/sparse-excludes.txt - what a remote build does NOT check out (feature 177, FR-005/FR-006).
+#
+# ONE FILE, because this is a ROSTER and this project's rule is that a roster nobody can enumerate is
+# one nobody revisits. `tests/tooling/ci/test_sparse_checkout.py` reads THIS file, so the patterns
+# below and the evidence for them cannot drift apart, and `buildspec/run.sh` feeds it to
+# `git sparse-checkout set --no-cone` - three consumers, one source.
+#
+# WHY AT ALL. Measured 2026-09-03: the checked-out tree at HEAD is 465.8 MB over 2,102 files, and
+# 441 MB of that is 91 generated files. A remote build's INSTALL phase spent 43 s of a 154 s build
+# materializing them, every build, and read almost none of them. History filtering does not help -
+# `--depth=50` was 52 s and `--filter=blob:limit=200k` 45 s against 66 s, because the cost is HEAD,
+# not the past.
+#
+# THE BAR FOR A LINE HERE (FR-006): affirmative evidence that no gate phase reads the path. "I
+# searched and found no reader" is NOT enough and does not get a line - the burden is on the
+# exclusion, exactly as feature 175 put it on `.html`. Two lines clear that bar today.
+#
+# WHAT IS DELIBERATELY *NOT* HERE, and this is the more instructive half:
+#
+#   legacy-hand-authored-pool/**/*.svg|*.png   171.4 MB, the single biggest remaining item - RETAINED.
+#     `tests/test_villages.py` walks BOTH pool trees and, for every hamlets-tier bundle whose `.svg`
+#     and `.png` are both present, asserts the PNG's pixel height against its own SVG viewBox. It
+#     `continue`s past a missing render (a live map's renders are gitignored and legitimately absent)
+#     and ends on `assert checked` - so dropping ALL EIGHT frozen hamlet exhibits fails loudly by
+#     name, and dropping SEVEN passes green having checked one map. That second shape is the reason
+#     this file is short: the tempting exclusion is the one that cannot fail visibly.
+#     The non-hamlet tiers (73.6 MB) have no reader in the census below, but they are retained with
+#     their siblings rather than split on a distinction no consumer makes.
+#
+# THE CENSUS THAT MAKES THE TWO LINES BELOW AFFIRMATIVE (2026-09-03). Every access to a bundle's
+# render goes through `poolmaps.MapBundle.path()`, and there are exactly three call sites:
+#   pool_index.py:244-246   existence probes only; a missing render renders "render not synced"
+#   tests/pipeline/test_poolmaps.py:113,121   asserts the path STRING, on a tmp fixture pool
+#   tests/test_villages.py:379-386            the raster/viewBox agreement, hamlets tier, real pool
+# plus a grep for hardcoded `legacy-hand-authored-pool/**.png|svg` literals, which finds only
+# fixture-built pages. Neither pattern below is reachable from any of them.
+
+# 190.8 MB, 12 files of 12-17 MB each. `render_cache.engine_fingerprint` and `gencache` both PRUNE
+# `wip/` from their walks; no test in the tree names a `wip/` page. The `.py` under `wip/` STAY -
+# `ruff` and `check-file-scale.py` scan them, and `wip/shiro-daika.gen.py` is 1,592 lines.
+/.claude/skills/diagram/wip/*.html
+
+# 78.4 MB (73.2 `.html` + 5.2 `.png`). A documentation artifact written by
+# `l7r/diagram/tools/placement_stages.py` and read by a human through `dev/placement.md`. The tool is
+# `make placement-stages`, which no gate phase runs; no test names the output directory.
+#
+# `producer:` declares the module that WRITES here. It necessarily names the path (the tool's `--out`
+# default), which is not rot - and declaring it beats narrowing the guard's scan to `tests/`, because
+# a READER hiding in an engine module is precisely what the guard exists to catch. A stale
+# declaration is itself checked: the producer must exist and must still name this path.
+/.claude/skills/diagram/dev/placement-stages/
+producer: l7r/diagram/tools/placement_stages.py

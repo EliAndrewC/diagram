@@ -44,9 +44,33 @@ echo "== fetch: $GITHUB_REPO @ $MAILBOX ($GIT_SHA), mode=$MODE target='$MAKE_TAR
 # widened. `HEAD` is the file every real git directory has and a cache of stamps can never have.
 restored=""
 if [ -d repo ] && [ ! -e repo/.git/HEAD ]; then mv repo .cache-restore && restored=1; fi
-if [ -d bootstrap/.git ]; then mv bootstrap repo; else git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo; fi
+if [ -d bootstrap/.git ]; then mv bootstrap repo; else git clone -q --filter=blob:none --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" repo; fi
 if [ -n "$restored" ]; then cp -a .cache-restore/. repo/ && rm -rf .cache-restore && echo "== cache: generation cache laid over the checkout"; fi
 cd repo
+# THE BUILD DOES NOT CHECK OUT WHAT NO GATE PHASE READS (feature 177). Measured: HEAD is 465.8 MB
+# over 2,102 files and 441 MB of it is 91 generated artifacts; materializing them cost 43 s of a
+# 154 s build, every build. The patterns are DERIVED from one file with the evidence for each beside
+# it - buildspec/sparse-excludes.txt - never written here, because three consumers read that roster
+# and a second copy is how a roster goes stale.
+#
+# SPARSE-CHECKOUT TOUCHES THE WORKING TREE ONLY. The index and every tree written from it stay
+# complete, so the merge below and the `git push HEAD:main` at the end carry every path tracked at
+# the merge base - demonstrated before this shipped (specs/177 R9), including across a merge that
+# CHANGED an excluded path, where the pushed tree carried the updated content and the worktree stayed
+# sparse. That property is what makes this safe on the merge project; nothing else would be.
+if [ -f buildspec/sparse-excludes.txt ]; then
+  set -- '/*'
+  while IFS= read -r pat; do
+    # `producer:` lines are METADATA the roster's guard reads, not patterns. Without this case the
+    # loop passes `!producer: l7r/...` to git as an exclusion - which git accepts silently, matching
+    # nothing, so the roster would look applied and the real patterns would still work. A defect that
+    # cannot fail is the kind this project pays for later, so it is skipped here and pinned by
+    # `tests/tooling/ci/test_sparse_checkout.py`.
+    case "$pat" in ''|'#'*|producer:*) continue ;; esac
+    set -- "$@" "!$pat"
+  done < buildspec/sparse-excludes.txt
+  git sparse-checkout set --no-cone "$@" && echo "== sparse: excluding $(( $# - 1 )) pattern(s) no gate phase reads"
+fi
 git checkout -q -- . 2>/dev/null || true
 git config user.name "gm-assistant-ci"; git config user.email "ci@gm-assistant.invalid"
 git fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"

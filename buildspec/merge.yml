@@ -25,9 +25,10 @@ env:
 phases:
   install:
     commands:
-      - git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" bootstrap
+      # `--no-checkout` (feature 177) - identical to check.yml's; see there.
+      - git clone -q --filter=blob:none --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}" bootstrap
       - git -C bootstrap fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
-      - git -C bootstrap checkout -q "$GIT_SHA" -- buildspec/run.sh
+      - git -C bootstrap checkout -q "$GIT_SHA" -- buildspec/run.sh buildspec/sparse-excludes.txt
   build:
     commands:
       - bash bootstrap/buildspec/run.sh

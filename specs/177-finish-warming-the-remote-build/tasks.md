@@ -89,29 +89,29 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
 
 ## Piece 2 - the checkout stops carrying what nothing reads
 
-- [ ] T10 FR-005, FR-006: finish the derivation, with affirmative evidence per exclusion
+- [x] T10 FR-005, FR-006: finish the derivation, with affirmative evidence per exclusion
       research: procedure
       verify: R4 completed - `wip/*.html` and `dev/placement-stages/**` carried already; the legacy
       NON-hamlet renders (73.6 MB) either proven unread or RETAINED. For every check that touches an
       excluded path, what shows it still does the same work - a green build is not the proof
 
-- [ ] T11 FR-006c: the exclusion list lives in ONE file and is guarded against rot
+- [x] T11 FR-006c: the exclusion list lives in ONE file and is guarded against rot
       research: procedure
       verify: a test that no engine or test module references a path under the list, proven to FIRE
       by planting a reference
 
-- [ ] T12 FR-005: `run.sh` applies the sparse set to the bootstrap clone
+- [x] T12 FR-005: `run.sh` applies the sparse set to the bootstrap clone
       research: procedure
       verify: `--filter=blob:none --sparse` then `sparse-checkout set --no-cone`, applied before the
       checkout so the merge and the gate both see the reduced tree
 
-- [ ] T13 FR-006a: the merge route's pushed tree proven complete BEFORE any merge dispatch
+- [x] T13 FR-006a: the merge route's pushed tree proven complete BEFORE any merge dispatch
       research: procedure
       verify: R9's local demonstration repeated against this repository - tracked-path count or tree
       comparison at the merge base, recorded in D2. R9 already shows the property holds in a scratch
       repository, including across a merge that changed an excluded path
 
-- [ ] T14 D2: record `engine_key_worktree`'s `is_file()` filter as the sharpest instance of the class
+- [x] T14 D2: record `engine_key_worktree`'s `is_file()` filter as the sharpest instance of the class
       research: procedure
       verify: written down with the reason it is not a live conflict (no path in the set is engine
       content) - which is exactly why it is worth recording before someone widens the set
