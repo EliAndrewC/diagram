@@ -661,8 +661,13 @@ ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 |
 	: "-- Syntax error: unexpected close paren. The note now lives in a make comment above the target,"; \
 	: "where no shell ever parses it. ONE prompt opens the FULL door here on purpose - see there."; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
-	: "GUARD_EDIT_OK feature 178 FR-017 - the COMPUTE knob, see the note above this target"; \
 	$(RUN).ci measure $(if $(FULL),--full,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
+# GUARD_EDIT_OK: feature 178 - repairing my own edit. A `: "..."` no-op line was placed BEFORE the
+# line above, which put a continuation in front of $(RUN) - and $(RUN) begins with `@`, a make RECIPE
+# PREFIX that is only meaningful at the start of a line. Mid-recipe it is a literal character, so the
+# shell tried to run `@python3` and the dispatch died with "not found". This file already carries that
+# exact warning beside LOGBYPASS, where the same mistake made the bypass log silently record nothing.
+# The marker for the COMPUTE knob lives in the comment block above the target, where no shell parses it.
 
 ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
 	$(REMOTE_OK)
