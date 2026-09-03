@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-03T22:35:51Z",
+  "target": "ci-measure",
+  "commit": "6fce7e70",
+  "outcome": "permitted",
+  "why": "Feature 178 item 5 / FR-013: the session is answering this prompt itself under the GM's authorization of 2026-08-25 - \"all of them look like things that you should be capable of kicking off\". The GM asked \"can you run some tests against the latest code on small inexpensive servers and see what kinds of performance we get\". This is the 8-vCPU row (BUILD_GENERAL1_LARGE, $0.02/min against xlarge's $0.0798) - the same worker count the laptop uses. It also produces the first billing line for g1.large in this account, which is the one rate config.RATES carries unverified."
+}
