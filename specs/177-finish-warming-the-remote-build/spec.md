@@ -1,6 +1,6 @@
 # Feature 177 - Finish warming the remote build
 
-**Status**: under review (constitution XVI) - see Review history for the round reached
+**Status**: FAITHFUL (`spec-fidelity`, round 5 of 5) - cleared for implementation (constitution XVI)
 **Request**: `request.md` (the GM's words, verbatim, plus the numbered items the instruction names)
 **Predecessor**: `specs/175-warm-the-remote-build/` - this feature finishes what that one started and
 pays two debts it recorded and left open.
@@ -98,12 +98,6 @@ that justify it today.
 - **FR-006** Every path any gate phase reads MUST be present in the build's checkout. Where the
   evidence for an exclusion is "no reader was found", the path stays: FR-005's burden is on the
   exclusion, exactly as 175's FR-008 put it on `.html`.
-- **FR-006b** The excluded set is a ROSTER, and this project's rule is that a roster nobody can
-  enumerate is one nobody revisits. It MUST live in ONE place and MUST be guarded: a test asserting
-  that no engine or test module references a path under it, so a future test that starts reading an
-  excluded path turns the gate RED rather than silently skipping in the build. This is the answer to
-  "how would we ever notice", and without it FR-005's derivation is true on the day it is written
-  and unmaintained after.
 - **FR-006a** **The merge route pushes to main, and the sparse mechanism MUST NOT reach what it
   pushes.** `buildspec/merge.yml` runs the same `run.sh`, which ends in `git push origin HEAD:main`,
   so a mechanism that touched the index rather than only the working tree would land a commit
@@ -112,6 +106,12 @@ that justify it today.
   base. This MUST be PROVEN before the first merge-project dispatch, by comparing trees or tracked-
   path counts, and the proof recorded; an assurance that sparse checkout "only affects the working
   tree" is the claim being tested, not the test.
+- **FR-006c** The excluded set is a ROSTER, and this project's rule is that a roster nobody can
+  enumerate is one nobody revisits. It MUST live in ONE place and MUST be guarded: a test asserting
+  that no engine or test module references a path under it, so a future test that starts reading an
+  excluded path turns the gate RED rather than silently skipping in the build. This is the answer to
+  "how would we ever notice", and without it FR-005's derivation is true on the day it is written
+  and unmaintained after.
 - **FR-007** The measured INSTALL time MUST be reported before and after, from the phase records.
 
 ### The measurements (the GM's items 3 and 4)
@@ -202,7 +202,8 @@ that justify it today.
   **The same is true of the LIFECYCLE half, and this is the THIRD place the blanket clause has bitten
   a requirement of this feature** (round 1 caught the route, round 3 the cache).
   `tests/tooling/ci/test_cachepolicy.py` pins the document FR-013 to FR-015 change: it asserts
-  `len(rules) == 1` with `Filter == {"Prefix": "cache/"}`, indexes `Rules[0]` in three tests, and
+  `len(rules) == 1` with `Filter == {"Prefix": "cache/"}`, indexes `Rules[0]` in two tests, pins
+  `EXPIRE_AFTER_DAYS` in a third, and
   requires the module docstring to still name `expire-ci-junk` and `SHORTEST` - the very passage
   FR-015 says must stop describing a state that is no longer true. Those tests MUST be updated too,
   to an invariant that is likewise CLOSED: `lifecycle_configuration()` returns the WHOLE document;
@@ -404,7 +405,8 @@ about; D2 now records it.
 1. **FR-019's blanket clause bit a third requirement, in the half nobody had opened.** Round 1 found
    it forbidding FR-008 (the route). Round 3 found it forbidding FR-001 (the cache). Nobody had read
    `tests/tooling/ci/test_cachepolicy.py`, which pins the document FR-013 to FR-015 exist to change:
-   `len(rules) == 1`, `Filter == {"Prefix": "cache/"}`, three tests indexing `Rules[0]`, and a
+   `len(rules) == 1`, `Filter == {"Prefix": "cache/"}`, two tests indexing `Rules[0]`, a third
+   pinning `EXPIRE_AFTER_DAYS`, and a
    docstring assertion demanding `expire-ci-junk` and `SHORTEST` stay named - the exact passage
    FR-015 requires to stop being true. An implementer landing FR-013 would have hit a red suite and
    had to choose between concluding the spec forbids the change and inventing an exception FR-019
@@ -417,6 +419,31 @@ about; D2 now records it.
 
 Two asides were taken as well: FR-019's cross-reference to "FR-002's set" pointed at feature 175's
 FR-002 rather than this spec's, and is now explicit; and `plan.md`'s roster-rot guard was scope the
-plan carried and the spec did not, so it is now FR-006b, which is where the argument for it belongs.
+plan carried and the spec did not, so it is now FR-006c, which is where the argument for it belongs.
 
-**Round 5 - pending.**
+**Round 5 - FAITHFUL.** A fifth agent verified eight load-bearing claims line by line against the
+code (every one exact), confirmed round 4's two changes had landed, and then went looking for a
+FOURTH place FR-019's blanket clause might bite - the failure rounds 1, 3 and 4 each found once. It
+found none: nothing in `tests/` or `scripts/` pins the clone command, the restore detection, the
+`MODE` set or the buildspec roster, so the three widenings the spec names are the complete set.
+Verdict: nothing missing, nothing unrequested. Four asides, of which three were taken (the
+`Rules[0]` count was off by one; the plan's "rules per prefix that has churn" now says exactly
+three; the roster requirement is renumbered `FR-006c` so it no longer prints before `FR-006a`).
+
+**The fourth aside is left for the GM rather than acted on**: FR-012 inherits 175's FR-010 ladder -
+if the FULL cache does not pay, narrow the set and re-measure - which goes slightly past item 4b's
+bare *"take the timing"*. It is the predecessor's own recorded rule and the reviewer flagged it as
+worth a glance rather than a defect, so it stands; if a narrowed FULL cache set is not wanted, that
+is a one-word change to FR-012.
+
+**Cleared for implementation** (constitution XVI), at 5 rounds of a 5-round cap. Rounds 1 to 5
+returned 3, 4, 5, 2 and 0 items, each round finding NEW substance rather than re-arguing the last -
+which is the case CLAUDE.md's cap note describes as a review still converging. **But the count is
+itself the signal the GM asked to watch** (*"if features start hitting five, the drafting is the
+problem, not the cap"*), so it is recorded plainly here: this feature used the whole cap. The
+pattern in the misses is one thing, not fourteen - **a blanket no-regression clause written before
+the requirements it would collide with**. FR-019 said "everything still passes" three separate
+times while three separate requirements of this same feature needed a guard widened, and each round
+found one more. The drafting lesson: when a feature deliberately widens what a guard permits, the
+widening is part of the requirement that causes it, not a sentence in a no-regression clause
+written once and hoped over.

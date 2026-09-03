@@ -99,10 +99,10 @@ authorization, quoted in the logged reason so `make audit` can tell a session's 
 ## 4 - the lifecycle document (FR-013 to FR-015)
 
 The live document (research R5) is a 14-day catch-all on prefix `''` plus the 30-day cache rule, and
-S3 takes the shortest overlap, so `verified/` dies at 14 days. The change: replace the catch-all
-with explicit rules per prefix that has churn, keep a catch-all at a long horizon so an unforeseen
-prefix still cannot accumulate for ever (FR-014), and give `verified/` a horizon chosen for what
-those records are FOR. `cachepolicy.py` owns the whole document rather than one rule, so
+S3 takes the shortest overlap, so `verified/` dies at 14 days. The change, to exactly THREE rules
+(FR-019's closed invariant): the cache rule as it stands, a rule for `verified/` whose horizon is
+chosen for what those records are FOR, and a catch-all at a long horizon so an unforeseen prefix
+still cannot accumulate for ever (FR-014). `cachepolicy.py` owns the whole document rather than one rule, so
 `put_bucket_lifecycle_configuration` - which overwrites - stops being a hazard, and its two open
 questions for the GM are answered in place rather than left standing.
 
