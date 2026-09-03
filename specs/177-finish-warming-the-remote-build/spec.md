@@ -266,8 +266,106 @@ that justify it today.
 
 ## Decisions Recorded
 
-Per constitution XII, each as **accurate**, **deliberate deviation** or **guess**, completed during
-implementation:
+Per constitution XII, each as **accurate**, **deliberate deviation** or **guess**.
+
+**D1 what travels in the cache, and why a remote skip rests on a remote proof** - ACCURATE.
+`<git-common-dir>/gate-green-hooks` (the whole-area stamp, `hash_files` over `scripts/*.sh|*.py`
+through `content_id`, salted with `GATE_RECIPE`) and `<git-common-dir>/hooks-test/<guard>` (per suite,
+`sha256sum` over `_hookdeps.py`'s derived set). Both are hashes of file CONTENT alone - nothing
+machine-, clock- or clone-derived - so a changed guard yields a different hash and its suite runs.
+The safety property is structural rather than argued: **CodeBuild populates the cache in POST_BUILD
+and the dispatcher never writes to the cache location**, asserted by enumerating every `put_object`
+the dispatcher makes. So the remote gate can only skip what a remote gate proved. Residual asymmetry,
+stated at the point of change: neither stamp is keyed to the build IMAGE, so `make ci-image` does not
+retire them - exactly as true on a laptop after a toolchain upgrade, so it sits inside this spec's own
+bar. Measured target: the 60.1 s `hooks-test` span of build `03c8ce13`, which reported
+*"21 guard suites green, 0 unchanged"*.
+
+**D2 the excluded checkout set** - ACCURATE, with the evidence per line in
+`buildspec/sparse-excludes.txt` itself rather than in a spec nobody opens.
+
+| excluded | MB | affirmative evidence |
+|---|---|---|
+| `wip/*.html` | 190.8 | `render_cache.engine_fingerprint` and `gencache` both PRUNE `wip/`; no module names a `wip/` page. The `.py` STAY - ruff and `check-file-scale.py` read them |
+| `dev/placement-stages/` | 78.4 | written by `tools/placement_stages.py` (declared `producer:`), read by a human through `dev/placement.md`; `make placement-stages` is no gate phase |
+
+RETAINED, and this is the more instructive half: `legacy-hand-authored-pool/**/*.svg|*.png`, 171.4 MB,
+the single biggest remaining item. `tests/test_villages.py` asserts every hamlets-tier bundle's PNG
+height against its own SVG viewBox, `continue`s past a missing render and ends on `assert checked` -
+so dropping ALL EIGHT frozen hamlet exhibits fails loudly by name and dropping SEVEN passes green
+having checked one map. The tempting exclusion is the one that cannot fail visibly. The non-hamlet
+tiers (73.6 MB) have no reader in the census but are retained with their siblings rather than split on
+a distinction no consumer makes.
+
+**What makes the evidence AFFIRMATIVE rather than "no reader was found"**: render access has ONE API,
+`poolmaps.MapBundle.path()`, so the readers can be ENUMERATED - exactly three call sites
+(`pool_index.py` existence probes; `test_poolmaps.py` on a tmp fixture; `test_villages.py`, hamlets,
+real pool) - plus a grep for hardcoded literals, which finds only fixture-built pages. The census is
+pinned by a test, so a fourth reader forces the evidence to be re-taken.
+
+**And the sharpest instance of the class, recorded because it is NOT a live conflict**:
+`delta.engine_key_worktree` filters on `(root / p).is_file()`, so a sparse checkout that ever excluded
+an ENGINE path would silently change the key a build computes against the one a laptop computes. No
+path in the set is engine content (`is_engine` accepts only `l7r/**/*.py`, `pool/*.gen.py|*.json`), so
+nothing is wrong today - which is precisely why it is worth writing down before someone widens the set.
+
+**FR-006a, PROVEN rather than assured** (research R9, then against this repository): sparse-checkout
+touches the WORKING TREE only. In a scratch repository the index and every committed tree stayed
+complete, including across a merge that CHANGED an excluded path - the pushed tree carried the updated
+content while the worktree stayed sparse. Against this repository: **2,102 tracked paths in main's
+HEAD tree, 2,102 in the sparse clone's HEAD tree, 2,102 index entries.**
+
+**D3 the measurement route** - ACCURATE. It bypasses `route-is-gated` and nothing else;
+`green-local-since-edit`, `remote-enabled`, `breaker-not-tripped` and `door.py` all still refuse it,
+and a verified record does not short-circuit it. It cannot mint a push credential, and that refusal is
+in `buildspec/measure.yml` + `run.sh` where a reviewer reads it, not in a dispatcher promise - the bar
+`door.py` set. It is not a hole in the five conditions because the thing those conditions ration is a
+build that can VOUCH for code; this one is structurally unable to.
+
+**D6 the lifecycle horizons** - ACCURATE, read back from the bucket 2026-09-03:
+
+    expire-generation-cache      Prefix cache/                    Days 30
+    expire-verified-records      Prefix verified/                 Days 365
+    expire-large-objects         ObjectSizeGreaterThan 1048576    Days 30
+    abort-dead-multipart-uploads Prefix ''                        AbortIncompleteMultipartUpload 7 (no Expiration)
+
+`expire-ci-junk` (Prefix `''`, 14 days) is GONE. **The net is a SIZE and not a prefix** because S3 has
+no negative filter: a prefix-`''` rule cannot be told to skip `verified/`, and S3 applies the SHORTEST
+overlapping expiration, so such a net IS the evidence's horizon whatever else the document says. A
+size filter cannot reach a 200-byte record at any horizon, and it lands closer to the GM's own words,
+which are about *megabytes*. **365 for the evidence**: a verified record is ~200 bytes (9 of them,
+3,012 bytes total), keyed by engine content so a stale one can only fail to match - long enough that
+no plausible re-verification window falls outside it, finite so nothing here is immortal. **The
+fourth rule is S3's ruling, not a preference**: the first `--apply` failed with
+`AbortIncompleteMultipartUpload cannot be specified with Object Size`, which is correct - an upload in
+flight has no final size - and the split makes the multipart abort UNIVERSAL where 175 had it on
+`cache/` alone. Verified against the live objects: `verified/` reachable by the size net **0**.
+
+**The limitation accepted, and the alternative declined**: a SMALL object under a prefix nobody
+foresaw now has no expiry, where the 14-day catch-all would have taken it. The cost is kilobytes
+(`go/` 0 objects, `image/` 1 at 62 bytes, `artifacts/` 5 at 13,766 bytes). The declined alternative is
+keeping a bare-prefix net, which puts `verified/` back under a horizon chosen for junk - the defect
+being fixed. If small objects ever do accumulate, the answer is a fifth rule with its own prefix.
+
+**D8 the cache-location collision** - ACCURATE, and its blast radius stated honestly.
+`cache_location` keyed on scope alone, and an operation's `ctx.scope` stays `reference` while only
+`CI_SCOPE` becomes `operation` - so on 2026-08-31 the reference gate and both `TARGET=tripwire` builds
+all wrote `cache/gm-assistant-check/reference`, and the bucket held ONE cache object where 175's D2
+expected up to four. **Performance only**: the gencache key is content-derived (175's A2), so a
+foreign entry can only MISS, never serve a wrong answer. Fixed by keying on the operation's REGISTERED
+name - never `ctx.operation`, which carries arguments, so `cohort SEEDS=8` and `cohort SEEDS=9` would
+have been one S3 object per argument spelling: the GM's named failure, reintroduced by the fix for a
+different defect. The boundedness test now varies that dimension; the old form asserted
+`len(locations) == 4` over projects x scopes and would have stayed green.
+
+**D9 the guard fix** - ACCURATE. `(` joins the command-position alternatives in BOTH scans, and `\)`
+the terminators. It widens what counts as LEAVING main, never what counts as a write. Proven by
+reverting: exactly the four new cases fail, in BOTH directions - two false REFUSALS (the reported
+defect) and two false ALLOWS, because before the fix the ENTRY scan could not see
+`( cd <mirror> && <write> )` either. Teaching only `LEAVES` about subshells would have turned a false
+refusal into a false allow, which is the trade this project never makes.
+
+**Still owed** (they need the paid runs):
 
 - **D1** what travels in the cache for `hooks-test`, and the argument that a remote skip rests only
   on a remote proof (FR-001, FR-003)

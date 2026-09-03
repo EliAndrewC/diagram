@@ -236,3 +236,59 @@ And the existing guard would NOT have caught the mistake:
 `test_the_cache_location_cannot_grow_with_the_number_of_builds` enumerates `projects x scopes` and
 asserts `len(locations) == 4`, so a fourth parameter with a default leaves it green while the
 property it names is gone. FR-018a requires it to vary the new dimension.
+
+## R11 - What the implementation measured (2026-09-03)
+
+The before/after for the two local halves. The remote halves (FR-011, FR-012) ride on the paid runs.
+
+**The checkout.** Every figure is a clone of this repository from GitHub, in this container:
+
+| shape | wall | worktree |
+|---|---|---|
+| `--filter=blob:none` (what the build ran before) | 66 s | 466 MB |
+| `--depth=50 --filter=blob:none` | 52 s | - |
+| `--filter=blob:limit=200k` | 45 s | - |
+| **`--no-checkout` + the roster's sparse set (what it runs now)** | **0.9 s + 31.5 s** | **281 MB** |
+
+The split matters: the CLONE is now 0.9 s and the rest is the checkout materializing what survives
+the roster. The simulation ran the buildspec's install phase and `run.sh`'s sparse block verbatim, and
+checked the outcome rather than assuming it - `wip/*.html` 0 files, `wip/*.py` present,
+`dev/placement-stages/` 0 files, the eight frozen hamlet renders all present.
+
+CodeBuild's network is faster than this container's (40 s there against 66 s here on the same
+command), so the remote INSTALL should land near 20 s rather than 32 s. That is a PREDICTION and is
+labeled one; FR-007 is satisfied by the phase records of the paid run, not by this paragraph.
+
+**Tree completeness (FR-006a), against this repository rather than a scratch one:**
+
+    tracked in main's HEAD tree   2102
+    tracked in the sparse clone   2102
+    index entries in the clone    2102
+
+**The lifecycle document**, read back from the bucket after applying, and checked against the live
+objects: `verified/` 9 objects / 3,012 bytes, reachable by the size net **0**; `cache/` 1 object /
+2.65 MiB, reachable 1 (both rules say 30 days, so nothing moved); `artifacts/` 5 / 13,766 bytes,
+`image/` 1 / 62 bytes, `go/` 0 - all reachable 0.
+
+## R12 - The gate SHORT-CIRCUITED on this feature, and that is worth knowing
+
+`make done` answered *"already verified ... nothing it exercises has changed (docs, the Makefile,
+config and scripts/ do not count)"* on a delta that rewrote four modules under `l7r/diagram/ci/`,
+three buildspecs, two guards and the Makefile.
+
+It is not a defect: `ci/` is excluded from the engine key by the GM's own feature-132 FR-025 ruling
+(*"isn't it actually test code?"* - a ci-only change is DIRECT and gets `make quick`), and `tests/`,
+`scripts/`, `buildspec/` and the Makefile are excluded by FR-024 and the 2026-08-25 list. Every one of
+those exclusions is deliberate and each is documented.
+
+**But the two rules do not quite meet.** Since 2026-09-02 the coverage floor is DERIVED from
+`source = ["l7r"]` - *"if you add a file under `l7r/`, it is measured"* - and `l7r/diagram/ci/` is
+under `l7r/`. So `ci/` owes 100% coverage while a change confined to it cannot re-open the gate that
+enforces the floor. A session that trusted the short-circuit here would ship new engine-measured code
+the floor never saw. The way through is `make test-full`, which deselects nothing and judges all three
+floors; this feature used it.
+
+Recorded rather than fixed: closing the gap means either adding `ci/` to the engine key (which
+re-opens the paid route for ci-only changes - exactly what FR-025 removed on the GM's instruction) or
+giving the short-circuit a second key for the measured-but-not-engine surface. Both are rulings for
+the GM rather than a session, and neither is in this feature's scope.
