@@ -340,7 +340,78 @@ first and authorized past the second in their follow-up (`request.md`):
 
 ## Decisions Recorded
 
-Per constitution XII, each as **accurate**, **deliberate deviation** or **guess**:
+Per constitution XII, each as **accurate**, **deliberate deviation** or **guess**.
+
+**D1 the second short-circuit key** - ACCURATE. `gate-stamp`'s exclusion list is DERIVED from
+`[tool.coverage.run] source` rather than hand-kept: a declared exclusion survives only where coverage
+does not measure it, so `tests/` stays and `l7r/diagram/ci/` cannot. Measured on the real tree: ci
+files hashed **0 -> 12**; `.py` outside `l7r/` and `tests/` still **37** (the derivation may only ADD);
+`tests/` still 0. **An unreadable config falls back to `l7r/`, not to nothing** - the first draft did
+the latter and called it "the safe direction" while it silently restored the whole defect, and
+`test-gate-stamp.sh` caught it within the minute because its fixture has no `pyproject.toml`. The
+fallback is not a guess: constitution X clause 5 states the rule the config encodes.
+**It does not reach the paid route**: `delta.is_engine` is untouched, so a ci-only delta still routes
+DIRECT and starts no build - the MONEY half of the GM's FR-025 ruling stands and only the LOCAL GATE
+half is superseded. Three consumers of that list were named rather than discovered: the short-circuit,
+the push-time stamp check, and `dispatch.py`'s `green-local-since-edit`. Two operative documents that
+asserted the old state (root `CLAUDE.md`, `docs/efficiency-tooling.md`) are corrected, and
+`test-gate-stamp.sh`'s named FR-025 case is inverted with its reason.
+
+**D2 `test-full`'s recording site** - ACCURATE, and one line: `&& $(STATE) green-local test-full`, so
+a red sweep records nothing and an audit can tell which run vouched. It closes feature 177's R15,
+where the strongest local proof available (2,923 tests, every tree, all three floors) could not satisfy
+the paid route while a `make quick` that selected nothing and reported "no tests ran in 0.97s" could.
+
+**D3 what a build's perf-gate compares** - ACCURATE, and the GM's own answer needed no new machinery:
+`dev/perf-log/` is tracked, is not sparse-excluded, and already arrives in every container. **The bug
+was the SELECTOR.** `pairs()` grouped by environment alone while `perf_bands.evaluate` refuses only on
+an environment mismatch - so once item 5 ran one feature on two instance types, a 36-vCPU `-start` and
+an 8-vCPU `-end` were both `codebuild`, paired happily, and yielded a percentage that was pure
+instance difference. That is feature 129's own FR-014 argument one level down, and item 5 is what made
+it live. The machine `(host, image)` now joins the key; an `-end` with no matching `-start` yields no
+verdict rather than a wrong one; and `check()` reports `NO COMPARABLE BASELINE ... MUTE` rather than
+passing in silence, because a gate that has gone quiet looks identical to a green one.
+**The residual is the GM's, and their instruction anticipated it** (*"if not then let's talk more"*):
+none of this makes a FULL build green, because `perf_bands.py` sets band 1 on
+`total_pct > 0 or any(p > 0 ...)` - any positive delta on any seed. Only relaxing that threshold can.
+
+**D4 the untracked set** - ACCURATE, and it grew twice under scrutiny.
+- The **frozen exhibits** are IN. The author proposed carving them out on the strength of a check that
+  reads them; `spec-fidelity` round 1 ruled that the exception had been put to the GM in feature 177's
+  D7 and not adopted, and the GM's follow-up said so directly (*"Do we actually need to keep the
+  97.9 MB?"*). An exception the GM declined is not one a session may re-take.
+- The **magistracy `.svg` are IN too**, and this one was pure assertion on the author's part. FR-010a
+  called them "tracked SOURCE" citing the `.gitignore` comment *"a Mode A compound plan has no
+  generator that draws it from data"* - in a requirement whose own last line demands per-path evidence.
+  All five HAVE a generator and all five regenerate BYTE-FOR-BYTE (identical md5, empty `git diff`).
+  `ochiba-roundtrip-test` settled it in its own notes: *"the OUTPUT of feeding ... back through the
+  perimeter-first placer"*, a scaffold artifact.
+- **What survives is ONE class**: the eight `tests/fixtures/*-red.svg`, hand-broken by a person to
+  prove a check fires, with no generator anywhere. A cleaner rule than the spec started with: no
+  generated render is tracked, full stop.
+- **The replacement for the raster check**: 1,180 bytes against 97.9 MB. Not a tautology - it asserts
+  the recorded dimensions against each exhibit's own tracked `.json` manifest (`meta.view`), a second
+  source written by a different code path, and it is proven to fire on a planted wrong number.
+  **What is lost is stated**: a frozen exhibit is write-once and no generator re-rolls it, so the drift
+  the old check watched for can no longer be introduced. The door stopped existing.
+
+**D5 the history purge** - see the tasks; rehearsed at **345.71 MiB -> 38.68 MiB (89%)** on a throwaway
+mirror. A filename CALLBACK rather than path globs, because 179 generated paths were ever added and
+many sit at pre-reorganization homes a HEAD-derived list would miss - it would have left the bytes in
+history while appearing to succeed. **The archive is at `/host-l7r-repo/diagram-render-archive/`**:
+83 files, 440.8 MB, sha256 per file, verified 83/83 on read-back. **S3 was rejected for a reason worth
+keeping**: feature 177's own `expire-large-objects` rule (>1 MiB, 30 days) would have deleted the
+archive a month later, silently - that bucket is now hostile to anything large anyone wants to keep.
+**The guard escape is TEMPORARY** and its removal is a task of this feature; the escape-token census
+caught it unclassified on the first remote gate, which is the census working.
+**And it uncovered a real bypass of the force-push guard** (`FOO="bar" git push --force` was allowed
+while `FOO=bar` was blocked), closed with five regression cases - the most consequential thing this
+feature touched, and nothing to do with what it was for.
+
+**D6 the compute measurements** - the numbers are in the tasks; the first attempt was CONTAMINATED by
+the very rule this spec wrote (three commits, two concurrent builds racing one shared cache object)
+and is recorded as R5 rather than quietly re-run. What survives it: all three instance types ran the
+gate GREEN, including 4 vCPU / 7 GB, which answers assumption A2's memory risk.
 
 - **D1** the second short-circuit key: what it covers, how it is derived, and why it does not reach
   the paid route (FR-001 to FR-003) - **including the operative documents that assert the state item 1
