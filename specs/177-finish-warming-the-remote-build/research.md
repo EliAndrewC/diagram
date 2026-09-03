@@ -384,3 +384,56 @@ when the gate short-circuits (R12), so the two gaps are related and probably wan
 ratchet (15 s), because it was the first selection after many changed files; the immediately
 following run passed having selected nothing. That is the ratchet measuring a cold selection rather
 than a regression, and it is recorded rather than acted on.
+
+## R16 - Why remote is 1.7x, asked properly: it is doing LESS, with more workers
+
+Prompted by the GM on 2026-09-03: *"Is AWS slower because it's doing more? Like running more tests or
+more random seeds?"* No. Both sides, `make done`, same commit (`ca77f2a5`):
+
+| | local | remote |
+|---|---|---|
+| xdist workers | **8** | **36** |
+| items collected | 2,926 | 2,925 |
+| **passed** | **2,923** | **2,903** |
+| **skipped** | **2** | **21** |
+| test phase | **316.8 s** | **365.5 s** |
+
+The worker counts are deliberate, not accidental: `XDIST_WORKERS` in the skill Makefile is
+`$(if $(CODEBUILD_BUILD_ID),auto,...8)` - capped at 8 on a laptop so the gate does not monopolize the
+box, `auto` in a build, which is 36 there. So **remote runs 4.5x the workers, 20 FEWER tests, and is
+still 15% slower on the phase.** Whatever explains the gap, it is not extra work.
+
+**The arithmetic that points at the cause.** Worker-seconds: local 317 x 8 = ~2,500; remote 365 x 36 =
+~13,100. If the work were the same and parallelism were the binding constraint, remote could not be
+5x the worker-seconds and slower. So most of those 36 workers are idle most of the time, and the wall
+clock is set by something parallelism cannot shorten: per-worker interpreter start and engine import
+(paid 36 times instead of 8), coverage data written and combined across 36 files instead of 8, and a
+critical path of a few long map-rolling tests that one worker each must finish. CodeBuild vCPUs are
+also hyperthreads on shared hardware, so per-core throughput is likely below this container's.
+
+**NOT MEASURED, and the cheap experiment that would settle it**: which of those three dominates. A
+single `make ci-measure` with `XDIST_WORKERS` pinned to 8 would separate "too many workers" from
+"slower cores" for one billed run. Labeled a hypothesis until someone spends it.
+
+## R17 - The remote gate SKIPS 19 tests the local gate runs, and nobody had counted
+
+Found while answering R16, and it is the same family as the `pool_index:247` defect this feature
+already fixed. 21 skips remotely against 2 locally, and the extra ones are tests that quietly do
+nothing in a clean checkout, by their own stated reason:
+
+- `tests/pipeline/test_render_cache.py:297` - *"no live scripted map has both a .svg and a .png in
+  this checkout"*
+- `tests/tools/test_scatter_audit.py:300` - *"no live scripted map has both a .svg and a .json in
+  this checkout"*
+- `tests/full/interactive/test_page_browser.py:38` - Chromium is not installed for Playwright
+
+A live map's renders are GITIGNORED, so a container has none and these guards find nothing to check.
+Each skip is individually deliberate and documented. What is not deliberate is the AGGREGATE: **the
+remote gate - the one that runs against a tree nobody lives in, and the one a merge depends on -
+verifies ~19 checks fewer than the local gate**, and nothing reports that. It is exactly the failure
+this repository names: a check that never runs looks like a check that passes.
+
+Recorded, not fixed - the fix is a ruling rather than an edit. The options, none free: build the
+renders in the fixture as feature 177 did for `pool_index` (works for some, not for Playwright);
+install Chromium in the CI image (paid rebuild, larger image); or assert the skip COUNT so the number
+cannot drift unnoticed, which is the cheapest and catches the next one.
