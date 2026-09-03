@@ -79,21 +79,59 @@ def feature_number(feature: str) -> str:
     return n
 
 
+def machine_of(snap: dict[str, Any]) -> tuple[str, str]:
+    """The MACHINE a snapshot was taken on: `(host, image)`.
+
+    `host` is `codebuild:<COMPUTE_TYPE>` in a build (`perf_snapshot.machine_identity`), so this is
+    what separates a 36-vCPU run from an 8-vCPU one. Feature 178 needs it because item 5 puts several
+    instance types into one environment for the first time."""
+    return (str(snap.get("host", "laptop")), str(snap.get("image", "laptop")))
+
+
 def pairs(log_dir: Path, feature: str) -> dict[str, perf_bands.Verdict]:
-    """The newest `<n>-start` / `<n>-end` pair PER ENVIRONMENT for this feature (FR-015, FR-017)."""
+    """The newest `<n>-start` / `<n>-end` pair for this feature, per environment AND per MACHINE.
+
+    **WHY THE MACHINE JOINS THE KEY (feature 178, FR-008).** This grouped by environment alone, and
+    `perf_bands.evaluate` refuses only on an environment mismatch - so once feature 178's item 5 runs
+    the same feature on `BUILD_GENERAL1_LARGE` and `BUILD_GENERAL1_XLARGE`, an xlarge `-start` and an
+    8-vCPU `-end` are both `codebuild`, pair happily, and yield a percentage that is pure instance
+    difference. Nothing would have refused it and the number would have read as a regression. That is
+    feature 129's own FR-014 argument - *"a cross-environment percentage is indistinguishable from a
+    regression"* - one level down, and item 5 is what makes it live.
+
+    A pair is formed only from snapshots taken on the SAME machine; the newest `-end` chooses, and the
+    baseline is the newest `-start` that matches it. An `-end` with no matching `-start` yields no
+    verdict rather than a wrong one, which is what FR-009 reports on."""
     n = feature_number(feature)
-    by_env: dict[str, dict[str, dict[str, Any]]] = {}
+    by_key: dict[tuple[str, tuple[str, str]], dict[str, dict[str, Any]]] = {}
     for s in _snapshots(log_dir):
         label = str(s.get("label", ""))
         if label not in (f"{n}-start", f"{n}-end"):
             continue
-        env = perf_bands.environment_of(s)
-        by_env.setdefault(env, {})[label.split("-")[1]] = s  # newest wins: files sort by utc
+        key = (perf_bands.environment_of(s), machine_of(s))
+        by_key.setdefault(key, {})[label.split("-")[1]] = s  # newest wins: files sort by utc
     out: dict[str, perf_bands.Verdict] = {}
-    for env, d in by_env.items():
+    for (env, machine), d in by_key.items():
         if "start" in d and "end" in d:
-            out[env] = perf_bands.evaluate(d["start"], d["end"])
+            # one environment can now hold several machines, so the key says which
+            name = env if machine[0] in ("laptop", "") else f"{env}:{machine[0].split(':', 1)[-1]}"
+            out[name] = perf_bands.evaluate(d["start"], d["end"])
     return out
+
+
+def unpaired(log_dir: Path, feature: str) -> list[str]:
+    """Every `<n>-end` with no `-start` from the same machine - FR-009's "nothing to compare against".
+
+    A first run on a new instance type has no prior of its own, and a `make ci-image` rebuild changes
+    `image` and so retires every codebuild baseline at once. Neither is a regression, and neither may
+    quietly pass for one - or quietly pass for nothing."""
+    n = feature_number(feature)
+    seen: dict[tuple[str, tuple[str, str]], set[str]] = {}
+    for s in _snapshots(log_dir):
+        label = str(s.get("label", ""))
+        if label in (f"{n}-start", f"{n}-end"):
+            seen.setdefault((perf_bands.environment_of(s), machine_of(s)), set()).add(label.split("-")[1])
+    return sorted(f"{env} on {machine[0]}" for (env, machine), kinds in seen.items() if "end" in kinds and "start" not in kinds)
 
 
 def binding(v: perf_bands.Verdict) -> str:
@@ -124,8 +162,15 @@ def write(log_dir: Path, feature: str, v: perf_bands.Verdict, kind: str, verdict
 def check(log_dir: Path, feature: str) -> tuple[bool, str]:
     """Does every environment's newest pair carry the records its band owes? (the push's question)"""
     vs = pairs(log_dir, feature)
+    # FR-009: an `-end` with no `-start` on the SAME machine has nothing to regress against - a first
+    # run on a new instance type, or every codebuild baseline at once after a `make ci-image` rebuild
+    # changes the image. That must not fail the gate, and it must not pass in silence either: a gate
+    # that has gone mute is exactly the state this project calls worse than a red one, because it
+    # looks identical to a green.
+    mute = unpaired(log_dir, feature)
+    mute_note = ("\nperf-review: NO COMPARABLE BASELINE for " + ", ".join(mute) + " - the perf gate is MUTE for these, not green (feature 178, FR-009)") if mute else ""
     if not vs:
-        return True, f"perf-review: no {feature_number(feature)}-start/-end pair in any environment - nothing to review (perf-gate refuses a missing bookend on its own)"
+        return True, f"perf-review: no {feature_number(feature)}-start/-end pair in any environment - nothing to review (perf-gate refuses a missing bookend on its own){mute_note}"
     recs = _records(log_dir)
     lines: list[str] = []
     ok = True
@@ -154,7 +199,7 @@ def check(log_dir: Path, feature: str) -> tuple[bool, str]:
                 lines.append(f"    stale records (bound to other numbers or another commit): {', '.join(stale[-3:])}")
         else:
             lines.append(head + " - " + ("nothing owed" if v.band == 0 else "every owed record present and bound to these numbers"))
-    return ok, "\n".join(lines)
+    return ok, "\n".join(lines) + mute_note
 
 
 def main(argv: list[str] | None = None) -> int:

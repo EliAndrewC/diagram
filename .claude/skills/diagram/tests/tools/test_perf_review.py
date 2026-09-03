@@ -201,3 +201,53 @@ def test_a_snapshot_for_another_feature_is_not_paired_with_this_one(log: Path) -
         assert verdict is not None, f"{env}: no verdict from this feature's own bookends"
     # the smoking gun: 999 -> 1 across features would be an enormous 'improvement' if the filter leaked
     assert pr.pairs(log, "166-x").keys() == {"local"}, "feature 166's own pair should still resolve on its own"
+
+
+def _snap(tmp, label, host, image="img", commit="c1", secs=10.0, utc="20260903T000000Z"):
+    """One perf snapshot on a named machine. `host` is what separates a 36-vCPU run from an 8-vCPU one."""
+    import json
+
+    p = tmp / f"{utc}-{label}.json"
+    p.write_text(json.dumps({
+        "label": label, "commit": commit, "environment": "codebuild", "host": host, "image": image,
+        "rows": [{"seed": 4, "seconds": secs, "stages": {}}],
+    }), encoding="utf-8")
+    return p
+
+
+def test_a_baseline_from_a_DIFFERENT_INSTANCE_TYPE_is_not_paired(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """FEATURE 178 FR-008. `pairs()` grouped by environment alone and `perf_bands.evaluate` refuses
+    only on an environment mismatch - so once item 5 runs one feature on two instance types, a
+    36-vCPU `-start` and an 8-vCPU `-end` are both `codebuild`, pair happily, and produce a
+    percentage that is pure instance difference. Feature 129's FR-014 argument, one level down."""
+    from l7r.diagram.tools import perf_review as pr
+
+    _snap(tmp_path, "178-start", "codebuild:BUILD_GENERAL1_XLARGE", secs=10.0, utc="20260903T010000Z")
+    _snap(tmp_path, "178-end", "codebuild:BUILD_GENERAL1_LARGE", secs=40.0, utc="20260903T020000Z")
+    got = pr.pairs(tmp_path, "178-x")
+    assert got == {}, "a 4x 'regression' that is entirely the instance must not be reported as one"
+    assert pr.unpaired(tmp_path, "178-x") == ["codebuild on codebuild:BUILD_GENERAL1_LARGE"]
+
+
+def test_a_pair_on_ONE_machine_still_evaluates_and_says_which(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """...and the key names the machine, because one environment now holds several."""
+    from l7r.diagram.tools import perf_review as pr
+
+    _snap(tmp_path, "178-start", "codebuild:BUILD_GENERAL1_LARGE", secs=10.0, utc="20260903T010000Z")
+    _snap(tmp_path, "178-end", "codebuild:BUILD_GENERAL1_LARGE", secs=10.0, utc="20260903T020000Z")
+    got = pr.pairs(tmp_path, "178-x")
+    assert list(got) == ["codebuild:BUILD_GENERAL1_LARGE"]
+    assert pr.unpaired(tmp_path, "178-x") == [], "a matched pair is not unpaired"
+
+
+def test_a_MUTE_gate_says_it_is_mute_rather_than_passing_quietly(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """FR-009. A first run on a new instance type, and every codebuild baseline at once after a
+    `make ci-image` rebuild changes `image`, have nothing to regress against. That must not fail the
+    gate - and must not read as green either, which is the state this project calls worse than red."""
+    from l7r.diagram.tools import perf_review as pr
+
+    _snap(tmp_path, "178-end", "codebuild:BUILD_GENERAL1_MEDIUM", utc="20260903T020000Z")
+    ok, msg = pr.check(tmp_path, "178-x")
+    assert ok, "no baseline is not a regression"
+    assert "NO COMPARABLE BASELINE" in msg and "MUTE" in msg
+    assert "BUILD_GENERAL1_MEDIUM" in msg, "it must name which machine has nothing to compare against"
