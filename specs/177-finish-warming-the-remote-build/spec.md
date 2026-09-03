@@ -395,6 +395,73 @@ worth a separate conversation is `wip/*.html` alone, 190.8 MB of interactive pag
 not in the pool, regenerable by re-running their generators. That is 43% of the slimmable set for the
 least loss, and this feature already stops the build from downloading it.
 
+**D4 the post-174 remote gate, measured** - ACCURATE. Every row is a CodeBuild phase record.
+
+| run | PROV | INSTALL | BUILD | POST | total | billed |
+|---|---|---|---|---|---|---|
+| BEFORE - `03c8ce13`, 2026-08-31, the last green gate under the PRE-174 recipe | 16 | **43** | 94 | 1 | 154 s | 3 min $0.24 |
+| AFTER cold (cache deleted) - `cf341865`, RED | 14 | **1** | 504 | 4 | 523 s | 9 min $0.72 |
+| AFTER warm - `3937fe7c`, RED | 16 | **1** | 867 | 5 | 890 s | 15 min $1.20 |
+| **AFTER warm - `9f760907`, GREEN** | 15 | **1** | 415 | 5 | **437 s** | 8 min $0.64 |
+
+**INSTALL 43 s -> 1 s**, reproduced on three consecutive builds. That is the only row in this table
+that is a like-for-like comparison, and it is the sparse checkout's whole effect on the phase it
+targeted. The checkout work did not vanish - it moved inside BUILD, where fetch + sparse +
+checkout + merge cost ~34 s of the green run's 415.
+
+**`hooks-test`: 60 s (BEFORE) / 94 s (cold) -> 0 s.** Both warm builds reported
+*"0 guard suites green, 21 unchanged since they last went green"*. The freshness state written by
+one build was restored by the next, which is item 1 working end to end and is the largest single
+saving here.
+
+**THE TOTALS ARE NOT COMPARABLE, and saying otherwise would be the flattering half of the truth.**
+`03c8ce13` ran the pre-174 recipe: its own log says *"coverage floors: deferred to `make done FULL=1`"*
+and it collected 2,441 tests. The AFTER runs collect 2,924 and enforce all three floors, because
+since feature 174 a plain `make done` IS `test-full`. The gate got much bigger between the two rows;
+154 s -> 437 s is that, not a regression this feature caused.
+
+**So the GM's actual question - "how much faster is it even to run on AWS than locally" - answered
+post-174, both sides running the floor, on the same commit:**
+
+| | local | remote |
+|---|---|---|
+| the gate itself | **~256 s** (`test-full` 252 s + `hooks-test` 0 s warm + statics ~2 s + cached reference roll) | **380 s** |
+| plus the container | - | + 15 s provisioning, 1 s clone, ~34 s checkout/merge, 5 s cache upload |
+| **wall clock** | **~256 s** | **437 s** |
+| cost | free | $0.64 |
+
+**Remote is about 1.7x the wall clock and $0.64 a run.** The gate ALONE is 1.48x slower remotely on
+36 vCPU against this container's 22 - so the answer to the question the GM turned remote back on to
+settle (*"whether FULL scales better on homogeneous CodeBuild vCPUs than on this hybrid P/E-core
+laptop"*) is **no, it does not**. Remote's value is not speed and never was: it is the only thing
+that runs against a tree nobody lives in, and on this feature alone it found three defects a laptop
+cannot fail on (research R13, and the two in D5a below).
+
+**The image rebuild, the second half of the GM's sentence**: it does not enter the per-run cost. The
+image carries dependencies only - Python 3.14, the two pinned lockfiles, resvg, fonts, the AWS CLI -
+and never the repository, so it is rebuilt only when `requirements*.txt` or `Dockerfile.ci` change.
+Measured 2 min / $0.16, twice in the whole recorded history. Amortized over even a month of runs it
+is noise. **And baking the tree into it was considered and declined** (Scope): an image carrying the
+code goes stale on every commit, so a build would still fetch the delta, and the image would need
+rebuilding - paid and prompted - far more often than the dependency changes that justify it. The
+sparse checkout gets the same 42 s for nothing.
+
+**D5a what the paid runs found, which is the part that justifies them** - three defects, none of
+which a local gate can fail on:
+
+1. `19ff1147` ($0.08): the sparse checkout's own detach, broken under `--no-checkout` (R13).
+2. `cf341865` ($0.72): `tests/tools/test_perf_profile.py` asserted through
+   `if "GITHUB_TOKEN" in env` - and a CodeBuild build is HANDED that variable, while
+   `development-secrets.ini` does not exist there, so the ambient token satisfied the guard while
+   the branch that sets `GIT_ASKPASS` had not run. `KeyError: 'GIT_ASKPASS'`. Locally the secrets
+   file is always found, so the assertion could not fail here at all.
+3. `3937fe7c` ($1.20): `pool_index.py:247`, the branch that links a map's interactive page, was
+   covered only because gitignored `.html` files happened to exist on this machine. The remote floor
+   went red at 99% on a tree that measures 100% locally. This is the DANGEROUS half of the hazard
+   CLAUDE.md names about worktree baselines - the gitignored-artifact gap making a test pass only
+   where the artifacts are - and it had been invisible because no remote build had ever run the
+   floor: it landed 2026-08-31 and today was its first container.
+
 **Still owed** (they need the paid runs):
 
 - **D1** what travels in the cache for `hooks-test`, and the argument that a remote skip rests only

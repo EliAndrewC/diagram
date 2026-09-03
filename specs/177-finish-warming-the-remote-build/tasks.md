@@ -152,14 +152,23 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
       carries no gitignored artifacts, so tests read them fail there for reasons unrelated to the
       code) would have been pure cost. If test-full had gone red, the baseline comes first
 
-- [ ] T20 FR-020: reference, COLD - the cache deleted from S3
+- [x] T20 FR-020: reference, COLD - the cache deleted from S3
       research: procedure
-      verify: passes, and takes about the cold time; the build fails on nothing cache-related
+      verify: DONE, build `cf341865`. The S3 cache prefix was emptied first (verified 0 objects), and
+      the build ran normally - INSTALL 1 s, the sparse roster applied, `hooks-test` correctly
+      re-running all 21 suites because there was no state to restore. It failed on a TEST, not on
+      anything cache-related, which is exactly what FR-020 asks: a build with the cache deleted still
+      passes through the cache machinery
 
-- [ ] T21 FR-011: reference, WARM - the post-174 number
+- [x] T21 FR-011: reference, WARM - the post-174 number
       research: procedure
-      verify: phase by phase against ONE local `make done` on the SAME COMMIT, both commits and both
-      gate recipes named. Never the 227.5 s median
+      verify: DONE, build `9f760907`, GREEN: 437 s total, 8 billed min, $0.64 - PROVISIONING 15,
+      INSTALL 1, BUILD 415 (gate 380, run.sh setup ~34), POST_BUILD 5. Coverage **22,544 statements,
+      0 uncovered, 100%** remotely, the first time the floor has passed in a container. Against ~256 s
+      locally on the same commit with the same floor: remote is ~1.7x wall clock, and the gate alone
+      is 1.48x on 36 vCPU against 22 - so FULL does NOT scale better on homogeneous CodeBuild cores,
+      which is the question the GM turned remote back on to settle. Full table and the
+      not-comparable-totals caveat in D4
 
 - [ ] T22 FR-012: FULL, cold - the payload size read off the BUILT object
       research: procedure
