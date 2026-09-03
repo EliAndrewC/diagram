@@ -71,12 +71,24 @@ if [ -f buildspec/sparse-excludes.txt ]; then
   done < buildspec/sparse-excludes.txt
   git sparse-checkout set --no-cone "$@" && echo "== sparse: excluding $(( $# - 1 )) pattern(s) no gate phase reads"
 fi
-git checkout -q -- . 2>/dev/null || true
+# NOTHING IS MATERIALIZED BEFORE THE DETACH BELOW, and that is a fix build 19ff1147 paid $0.08 to
+# find. There used to be a `git checkout -q -- . 2>/dev/null || true` here, written for the OLD flow
+# where the install phase checked the whole tree out and a restored cache could leave it dirty. Under
+# `--no-checkout` the index is populated from HEAD (origin/main) while the worktree is EMPTY, so that
+# line materialized origin/main's content - and the detach then refused with "Your local changes to
+# the following files would be overwritten by checkout", naming exactly the files the work commit
+# changed. Reproduced locally (free) before the second dispatch; the checkout below does the
+# materializing on its own, from the right commit, and only within the sparse set.
 git config user.name "gm-assistant-ci"; git config user.email "ci@gm-assistant.invalid"
 git fetch -q origin "refs/heads/${MAILBOX}:refs/remotes/origin/${MAILBOX}"
 tip=$(git rev-parse "origin/${MAILBOX}")
 [ "$tip" = "$GIT_SHA" ] || { echo "REFUSED: GIT_SHA $GIT_SHA is not the tip of $MAILBOX ($tip)"; exit 1; }
-git checkout -q --detach "$GIT_SHA"
+# `--force` because the install phase deliberately fetched TWO files at $GIT_SHA (run.sh and the
+# sparse roster - it needs them before there is a checkout to read them from), so those two ARE
+# modified relative to HEAD by construction. We are checking out $GIT_SHA, which is where they came
+# from, so there is nothing to lose; without it git refuses the whole checkout over the two files it
+# was told to fetch.
+git checkout -q --force --detach "$GIT_SHA"
 
 echo "== wait-go: polling s3://$CI_BUCKET/go/$BUILD_UUID (<= ${PARK_TIMEOUT_S}s)"
 waited=0

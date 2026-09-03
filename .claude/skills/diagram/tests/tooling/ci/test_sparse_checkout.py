@@ -132,6 +132,15 @@ def test_the_build_reads_the_roster_rather_than_carrying_its_own_copy() -> None:
     # that can never fail. Caught by running the loop by hand, not by a test, which is why there is
     # now a test.
     assert "producer:*) continue" in run_sh, "run.sh must skip producer: metadata, not pass it to git as a pattern"
+    # BUILD 19ff1147 PAID $0.08 FOR THESE TWO LINES. Under `--no-checkout` the index is populated from
+    # HEAD while the worktree is empty, so materializing anything before the detach writes
+    # origin/main's content and the detach then refuses - "Your local changes to the following files
+    # would be overwritten by checkout", naming the work commit's own files. And `--force` is required
+    # because the install phase fetches two files at $GIT_SHA before there is a checkout to read them
+    # from, so those two are modified relative to HEAD by construction.
+    code = "\n".join(ln for ln in run_sh.splitlines() if not ln.lstrip().startswith("#"))
+    assert "checkout -q -- ." not in code, "nothing may be materialized before the detach under --no-checkout"
+    assert "checkout -q --force --detach" in code, "the detach needs --force: install fetched two files at GIT_SHA on purpose"
     for p in patterns(ROSTER.read_text(encoding="utf-8")):
         assert p not in run_sh, f"{p!r} is inlined in run.sh as well as declared in the roster"
 
