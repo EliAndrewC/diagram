@@ -88,7 +88,8 @@ set - a branch visible in the diff, which is the bar `door.py` set.
 **The runs**, in order, each with its billed minutes and cost recorded to the run log:
 
 1. reference, cold (cache deleted) - FR-020 and the cold baseline
-2. reference, warm - FR-011, the post-174 number, against the local `make done` median (227.5 s)
+2. reference, warm - FR-011, the post-174 number, against ONE local `make done` on the SAME COMMIT
+   this build tested, both commits recorded. Never the 227.5 s median, which FR-011 forbids by name
 3. FULL, cold - FR-012's cold side and the payload size read off the built object
 4. FULL, warm - FR-012's warm side
 

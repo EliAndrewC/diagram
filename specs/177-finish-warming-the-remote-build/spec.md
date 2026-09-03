@@ -98,6 +98,12 @@ that justify it today.
 - **FR-006** Every path any gate phase reads MUST be present in the build's checkout. Where the
   evidence for an exclusion is "no reader was found", the path stays: FR-005's burden is on the
   exclusion, exactly as 175's FR-008 put it on `.html`.
+- **FR-006b** The excluded set is a ROSTER, and this project's rule is that a roster nobody can
+  enumerate is one nobody revisits. It MUST live in ONE place and MUST be guarded: a test asserting
+  that no engine or test module references a path under it, so a future test that starts reading an
+  excluded path turns the gate RED rather than silently skipping in the build. This is the answer to
+  "how would we ever notice", and without it FR-005's derivation is true on the day it is written
+  and unmaintained after.
 - **FR-006a** **The merge route pushes to main, and the sparse mechanism MUST NOT reach what it
   pushes.** `buildspec/merge.yml` runs the same `run.sh`, which ends in `git push origin HEAD:main`,
   so a mechanism that touched the index rather than only the working tree would land a commit
@@ -191,8 +197,18 @@ that justify it today.
   `all(p.startswith("repo/.claude/skills/diagram/.gencache/"))`, and FR-001 requires two `repo/.git/`
   paths in that same cache block - so as it stands that assertion forbids FR-001 outright. It MUST
   be UPDATED, never deleted or loosened to "`.git` is allowed too": the new invariant is CLOSED -
-  the cache carries the `.gencache/` paths FR-002's set names, plus exactly the two freshness-state
-  paths FR-001 names, and nothing else. A test that keeps its teeth.
+  the cache carries the `.gencache/` paths feature 175's FR-002 derived, plus exactly the two
+  freshness-state paths FR-001 names, and nothing else. A test that keeps its teeth.
+  **The same is true of the LIFECYCLE half, and this is the THIRD place the blanket clause has bitten
+  a requirement of this feature** (round 1 caught the route, round 3 the cache).
+  `tests/tooling/ci/test_cachepolicy.py` pins the document FR-013 to FR-015 change: it asserts
+  `len(rules) == 1` with `Filter == {"Prefix": "cache/"}`, indexes `Rules[0]` in three tests, and
+  requires the module docstring to still name `expire-ci-junk` and `SHORTEST` - the very passage
+  FR-015 says must stop describing a state that is no longer true. Those tests MUST be updated too,
+  to an invariant that is likewise CLOSED: `lifecycle_configuration()` returns the WHOLE document;
+  its rules are exactly the cache rule, the rule FR-013 gives `verified/`, and the FR-014 catch-all,
+  and nothing else; each is addressed BY ID rather than by `Rules[0]`; and the docstring assertion
+  pins the state that is now true rather than being deleted.
   **The measurement route of FR-008 is a NEW route
   and a change to the threat model**, not an exception inside the old one:
   `l7r/diagram/ci/CLAUDE.md` MUST be updated to describe it - what it bypasses, what it can never
@@ -383,4 +399,24 @@ after a toolchain upgrade, so it sits inside the spec's own bar. And it named
 `delta.engine_key_worktree`'s `is_file()` filter as the sharpest instance of the class FR-005 asks
 about; D2 now records it.
 
-**Round 4 - pending.**
+**Round 4 - CHANGES REQUIRED (2), both one-sentence fixes, both new substance.**
+
+1. **FR-019's blanket clause bit a third requirement, in the half nobody had opened.** Round 1 found
+   it forbidding FR-008 (the route). Round 3 found it forbidding FR-001 (the cache). Nobody had read
+   `tests/tooling/ci/test_cachepolicy.py`, which pins the document FR-013 to FR-015 exist to change:
+   `len(rules) == 1`, `Filter == {"Prefix": "cache/"}`, three tests indexing `Rules[0]`, and a
+   docstring assertion demanding `expire-ci-junk` and `SHORTEST` stay named - the exact passage
+   FR-015 requires to stop being true. An implementer landing FR-013 would have hit a red suite and
+   had to choose between concluding the spec forbids the change and inventing an exception FR-019
+   says shall not be invented. The widening clause now names the lifecycle tests and states their
+   new CLOSED invariant: the whole document, exactly three rules, each addressed BY ID rather than
+   `Rules[0]`, and the docstring re-pinned rather than deleted.
+2. **`plan.md` still aimed the FR-011 measurement at the baseline FR-011 forbids by name** - *"against
+   the local `make done` median (227.5 s)"* - the same smuggling direction round 3 named and the
+   fourth line of that plan to need it. Now one comparable local run on the same commit.
+
+Two asides were taken as well: FR-019's cross-reference to "FR-002's set" pointed at feature 175's
+FR-002 rather than this spec's, and is now explicit; and `plan.md`'s roster-rot guard was scope the
+plan carried and the spec did not, so it is now FR-006b, which is where the argument for it belongs.
+
+**Round 5 - pending.**
