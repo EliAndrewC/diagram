@@ -188,6 +188,35 @@ def test_two_different_producers_never_share_one_toy_subject(tmp_path, monkeypat
     assert rollcache.obtain("same-name", other, share=True) == ({"value": 99}, "BYPASS"), "a different producer is a different roll"
 
 
+def test_a_sibling_workers_payload_is_read_from_the_RUN_store(tmp_path, monkeypatch):  # type: ignore[no-untyped-def]
+    """`BYPASS-SHARED-RUN` - the cross-worker read, covered DETERMINISTICALLY rather than by luck.
+
+    THE DEFECT THIS CLOSES, and it was a live flake in the 100% floor. These five lines are reached only
+    when one xdist worker finds a payload another worker of the same run has already written, so whether
+    they execute depends on how the workers interleave. Two FULL builds of the SAME COMMIT on 2026-09-03
+    disagreed about it: the cold one measured 22,544 statements at 100%, the warm one at 99% with
+    `rollcache.py:180-184` missing - and since feature 174 made the floor a hard gate, that is a
+    `make done` which goes red for nobody's mistake. Whoever hit it next would have gone looking for a
+    change that was not there.
+
+    The sibling is simulated exactly as the mechanism defines it: the RUN store is on disk (the first
+    call put it there) while this process's own dict is empty, which is precisely what a second worker
+    sees. Nothing about the timing is left to the scheduler."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    # a run to scope the store to, whether or not this suite is itself running under xdist
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-177-cross-worker")
+    rollcache.reset_shared()
+
+    first, how = rollcache.obtain("cross-worker", produce, share=True)
+    assert how == "BYPASS", "the first caller produces it and writes the run store"
+
+    rollcache._SHARED_BYPASS.clear()  # ...and now this process is the SIBLING: no dict, but a run store
+    again, how = rollcache.obtain("cross-worker", produce, share=True)
+    assert how == "BYPASS-SHARED-RUN", "a payload this RUN produced is read across the worker boundary"
+    assert again == first and again is not first, "a fresh copy, exactly as a served HIT hands out"
+
+
 def test_a_run_with_no_xdist_id_has_no_shared_store(monkeypatch: pytest.MonkeyPatch) -> None:
     """WITHOUT xdist there is no run to scope a shared payload to, so `_run_share_path` returns None
     and the per-process dict above it is the whole mechanism - exactly as it was before cross-worker
