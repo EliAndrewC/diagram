@@ -45,10 +45,12 @@ measure it on demand, and one guard that refuses the command its own message pre
 WORK and UNREAD BYTES, never checks. Any change that would let a remote run verify less than the
 same local run fails the request.
 
-**Out**: untracking the 264 MB of generated `.html` from the repository. The GM's item 2 is
+**Out**: untracking generated renders from the repository - the 441 MB the checkout carries across
+`.html` (264.0), `.svg` (115.2) and `.png` (61.9), not the `.html` third alone. The GM's item 2 is
 *"sparse or slim the checkout"* - an either/or - and this feature takes the sparse half, which is
 reversible, loses no content and touches no file the GM browses. The slim half is priced in D7 with
-its measured value so the GM can decide it separately; it is not decided here.
+its measured value, over the whole slimmable set as measured, so the GM can decide it separately; it
+is not decided here.
 
 **Out**: `buildspec/image.yml` and Docker layer caching, for the reason 175 gave - the image build
 runs no gate and warms no gencache.
@@ -64,7 +66,9 @@ runs no gate and warms no gencache.
   test MUST prove the re-run happens, by changing a guard and observing the suite execute.
 - **FR-003** Only a state a BUILD wrote may be restored. A stamp from a laptop MUST NOT be able to
   reach a build - the property that makes FR-001 safe is that the remote gate skips only what the
-  remote gate proved.
+  remote gate proved. **A test MUST prove it**: a freshness state present only in a local tree
+  cannot reach a build. The property is checked, not argued - in the one package whose whole job is
+  refusing to take the dispatcher's word for anything.
 - **FR-004** The cache restore in `buildspec/run.sh` MUST NOT depend on `repo/.git` being absent to
   detect a restored cache. FR-001 puts a `.git` path INTO the cache, which is exactly the condition
   that killed build `a48b730d` (`mv bootstrap repo` moved bootstrap *inside* the restored directory;
@@ -89,6 +93,14 @@ runs no gate and warms no gencache.
 - **FR-009** A measurement run MUST NOT be able to satisfy a push. It writes no `verified/` record
   and never pushes to main, so bypassing `route-is-gated` and `green-local-since-edit` buys a number
   and nothing else. Enforced on the BUILD side, in a diff, not by trusting the dispatcher.
+- **FR-009a** The route's condition envelope is CLOSED and stated here rather than chosen by an
+  implementer. It MAY bypass **only** `route-is-gated` and `green-local-since-edit`. It MUST still
+  be refused by `remote-enabled` (feature 132 - the GM: *"if it is disabled, then we do not use it
+  as a gate. and we do not dispatch to it while we are doing iteration"*), by
+  `breaker-not-tripped` (the monthly hard stop), and - for the FULL-scope runs FR-012 requires - by
+  `door.py`'s committed `permitted` entry, never an environment variable. A route that could spend
+  money with the breaker tripped or with remote off would contradict the GM's own words in features
+  130 and 132.
 - **FR-010** It MUST be paid, prompted and logged like every other paid target - the same class as
   `make ci-image`, whose prompt a session may answer under the GM's 2026-08-25 authorization, with
   the reason recording that it did and quoting it.
@@ -102,7 +114,10 @@ runs no gate and warms no gencache.
 ### The expiry (the GM's item 4)
 
 - **FR-013** Nothing that `tree-not-already-verified` reads may be expired by a rule meant for junk.
-  The bucket's lifecycle document MUST be changed so `verified/` outlives a fortnight.
+  `verified/` MUST be removed from the catch-all's reach, and any horizon it does get MUST be set
+  deliberately for what those records are FOR - evidence that a paid build passed - with the
+  reasoning recorded under FR-015, never inherited from a rule written for junk. (A 15-day horizon
+  would satisfy "outlives a fortnight" and leave the GM's complaint exactly where it was.)
 - **FR-014** The safety net MUST survive the change: after it, an unforeseen prefix MUST still
   expire on its own, because the GM's named failure is *"uploading many megabytes ... and then never
   cleaning it up"*. Removing the catch-all to save `verified/` trades one defect for the other.
@@ -125,8 +140,13 @@ runs no gate and warms no gencache.
 
 ### Not regressing anything
 
-- **FR-019** Every refusal the CI dispatcher makes today MUST still be made, and its suite MUST
-  still pass. The threat model in `l7r/diagram/ci/CLAUDE.md` is unchanged by this feature.
+- **FR-019** Every refusal `ci-status`, `ci-check` and `ci-merge` make today MUST still be made, and
+  the `tests/tooling/ci/` suite MUST still pass. **The measurement route of FR-008 is a NEW route
+  and a change to the threat model**, not an exception inside the old one:
+  `l7r/diagram/ci/CLAUDE.md` MUST be updated to describe it - what it bypasses, what it can never
+  do, and why that is not a hole in the five conditions. Declaring the threat model unchanged while
+  adding a route that spends money with no engine delta is the failure this project's own doctrine
+  names: caution in the prose while the real change goes past unstated.
 - **FR-020** A build with the cache deleted MUST still pass and take about the cold time (175's
   SC-004, re-asserted because FR-001 adds a second thing to the cache).
 
@@ -174,16 +194,56 @@ implementation:
   FR-006)
 - **D3** the measurement mechanism: what it may bypass, what it may never do, and why that is not a
   hole in the five conditions (FR-008, FR-009, FR-010)
-- **D4** the post-174 remote-versus-local numbers, with the gate recipe named (FR-011)
+- **D4** the post-174 remote-versus-local numbers, with the gate recipe named (FR-011) - and one
+  line on how the image rebuild amortizes, because the GM's sentence was *"how much faster is it
+  even to run on AWS than locally when we factor in the image rebuild?"* and a number that leaves
+  the second half of the question open has not finished answering it
 - **D5** the FULL cache: payload MB, cold, warm, and whether it pays (FR-012)
 - **D6** the lifecycle horizons and the reasoning for each, read back from the bucket (FR-013,
   FR-014, FR-015)
-- **D7** the repo-side slimming, PRICED not applied: the measured bytes and clone time it would
-  save, what it would cost the GM in browsable content, and the recommendation
+- **D7** the repo-side slimming, PRICED not applied, over the whole slimmable set (441 MB, not the
+  `.html` third): the measured bytes and clone time it would save, what it would cost the GM in
+  browsable content, and the recommendation
 - **D8** the cache-location collision and its blast radius (FR-018)
 - **D9** the guard fix, and why widening `LEAVES` does not widen what is permitted (FR-016, FR-017)
 
 ## Review history
 
-To be completed - constitution XVI: reviewed against `request.md` by an agent that did not write it,
-before implementation, up to five rounds.
+Constitution XVI: reviewed against the GM's own words in `request.md`, by an agent that did not
+write it, before any implementation.
+
+**Round 1 - CHANGES REQUIRED (3).** The reviewer verified the spec's claims against `decision.py`,
+`dispatch.py`, `run.sh` and `main-tree-hooks.sh` rather than against its prose, and confirmed that
+all four items and the defect were genuinely required rather than mentioned. Three defects:
+
+1. **FR-019 forbade FR-008.** *"Every refusal the CI dispatcher makes today MUST still be made ...
+   The threat model is unchanged by this feature"* - but today a measurement dispatch is
+   `REFUSE(route-is-gated)`, so the no-regression clause outlawed the very mechanism items 3 and 4b
+   need, and its second sentence was simply false: a route that spends money with no engine delta
+   and no green local run IS a change to the threat model. The reviewer named this as the failure
+   the project's own doctrine describes - caution in the prose while the real change goes past
+   unstated. FR-019 now scopes the bar to the existing routes and REQUIRES `ci/CLAUDE.md` to
+   describe the new one.
+2. **The new route had no closed envelope.** FR-009 said what it bypasses; nothing said what it may
+   never bypass. A measurement route that could dispatch with `remote off` or with the monthly
+   breaker tripped would contradict the GM's own words in features 130 and 132. Now FR-009a, and
+   it names `door.py` too, because FR-012 needs FULL-scope runs.
+3. **Two requirements were satisfiable by writing a sentence** - the exact failure 175's round 1
+   found three times. FR-003, the safety property the whole of item 1 rests on, had no proof clause
+   while its neighbors FR-002 and FR-016 both did; it now demands a test that a local-only stamp
+   cannot reach a build. And FR-013's *"outlives a fortnight"* was satisfied by changing 14 to 15,
+   which leaves the GM's complaint exactly where it was; it now requires `verified/` out of the
+   catch-all's reach with a horizon chosen for what the records are FOR.
+
+The reviewer also ADJUDICATED the two things the author flagged for attack, both in the spec's
+favor and for reasons better than the author's. The item-2 "Out" line is a faithful reading of an
+either/or rather than a narrowing, because *"the disjunct chosen is the one that carries the
+request's purpose"* - the sparse half delivers the whole of the item's stated value (66 s -> 4.0 s)
+- and because deciding the slim half alone *"would be a session disposing of the GM's content"*.
+FR-008/009/010 are necessary rather than invented: the reviewer read `decision.py` and confirmed
+that `operation` only nulls the verified record and does NOT exempt a run from `route-is-gated`, so
+without a mechanism items 3 and 4b are *"not merely awkward to deliver - they are undeliverable"*.
+And FR-018 belongs here under Principle XIV. One inaccuracy was caught in passing: the Out line
+priced the slim half at the `.html` third (264 MB) when the measured slimmable set is 441 MB.
+
+**Round 2 - pending.**
