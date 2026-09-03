@@ -93,11 +93,23 @@ This is the FR-005 derivation, in progress. Findings so far:
   viewBox agreement test) walks `poolmaps.bundles()` across BOTH trees, and for every **hamlets**-tier
   bundle where `.svg` AND `.png` are both present it asserts the PNG's pixel height matches the SVG's
   viewBox. Its `continue` for a missing render is deliberate ("a LIVE map's renders are gitignored; a
-  clean checkout simply has none") - so sparsing the frozen exhibits out would not fail, it would
-  make the test silently check nothing, which is this repository's named worst case. The legacy
-  hamlets' 97.9 MB therefore STAYS unless the test is changed, and changing what the gate verifies is
-  out of scope. The other legacy tiers (73.6 MB) are still open: no reader has been found yet, and
-  FR-006 says an unproven exclusion does not happen.
+  clean checkout simply has none"). The legacy hamlets' 97.9 MB therefore STAYS. The other legacy
+  tiers (73.6 MB) are still open: no reader has been found yet, and FR-006 says an unproven exclusion
+  does not happen.
+
+  **CORRECTION, round 2 of the spec review.** This paragraph first said that sparsing the frozen
+  exhibits out *"would not fail, it would make the test silently check nothing"*. That is wrong, and
+  the reviewer read four lines further than its author did: the test ends on
+
+      assert checked, "no hamlet render to check in EITHER tree - the frozen exhibits' renders are
+      committed, so this should never be zero in a real checkout..."
+
+  so a TOTAL exclusion fails loudly, by name. **The real hazard is PARTIAL exclusion**, and it is
+  worse than the one first described because it is invisible: `checked` only has to reach 1, and
+  there are EIGHT frozen hamlet exhibits (`akagahara`, `enokida`, `honda`, `ikegami`, `moritono`,
+  `shimizu`, `tanada`, `yatsuda`), so dropping seven of them passes green having checked one map.
+  The conclusion - these renders stay - is unchanged; the reasoning that gets you there is not, and
+  the corrected version is what FR-005's "a green build is not the proof" clause now rests on.
 
 Candidate set on the evidence so far: `wip/*.html` (190.8 MB) + `dev/placement-stages/**` (78.4 MB)
 = **269.2 MB of 465.8**, with a further 73.6 MB pending proof.

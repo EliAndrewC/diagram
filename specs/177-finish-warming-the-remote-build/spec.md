@@ -77,12 +77,26 @@ runs no gate and warms no gencache.
 ### The download (the GM's item 2)
 
 - **FR-005** A remote build MUST NOT download bytes that no gate phase reads. The excluded set MUST
-  be **DERIVED and PROVEN** - each exclusion recorded with the evidence that nothing reads it - and
-  a green remote build with the set applied is the proof. A set arrived at by inspection alone does
-  not satisfy this.
+  be **DERIVED and PROVEN** - each exclusion recorded with AFFIRMATIVE evidence that nothing reads
+  it. **A green remote build is NOT the proof, and must not be treated as one**: several checks here
+  skip a file they cannot find or count what they found, so green tells you nothing about whether
+  they still did the work. The evidence must show that every check touching an excluded path
+  performs the SAME work remotely that it performs locally. The worked case is
+  `tests/test_villages.py`'s raster-versus-viewBox agreement: it `continue`s past a missing render
+  and ends on `assert checked`, so removing ALL eight frozen hamlet exhibits fails loudly by name
+  while removing SEVEN passes green having checked one map. A set arrived at by inspection alone,
+  or blessed by a green build, does not satisfy this.
 - **FR-006** Every path any gate phase reads MUST be present in the build's checkout. Where the
   evidence for an exclusion is "no reader was found", the path stays: FR-005's burden is on the
   exclusion, exactly as 175's FR-008 put it on `.html`.
+- **FR-006a** **The merge route pushes to main, and the sparse mechanism MUST NOT reach what it
+  pushes.** `buildspec/merge.yml` runs the same `run.sh`, which ends in `git push origin HEAD:main`,
+  so a mechanism that touched the index rather than only the working tree would land a commit
+  missing the 441 MB of content the GM browses - the content this feature's own Scope declares out
+  of bounds to touch. A merge build's pushed commit MUST contain every path tracked at its merge
+  base. This MUST be PROVEN before the first merge-project dispatch, by comparing trees or tracked-
+  path counts, and the proof recorded; an assurance that sparse checkout "only affects the working
+  tree" is the claim being tested, not the test.
 - **FR-007** The measured INSTALL time MUST be reported before and after, from the phase records.
 
 ### The measurements (the GM's items 3 and 4)
@@ -91,16 +105,21 @@ runs no gate and warms no gencache.
   without inventing one. This is the mechanism 175 lacked and named as the reason its FULL timing
   went untaken; a debt that can only be paid by waiting for unrelated work is not a debt anyone pays.
 - **FR-009** A measurement run MUST NOT be able to satisfy a push. It writes no `verified/` record
-  and never pushes to main, so bypassing `route-is-gated` and `green-local-since-edit` buys a number
-  and nothing else. Enforced on the BUILD side, in a diff, not by trusting the dispatcher.
+  and never pushes to main, so bypassing `route-is-gated` buys a number and nothing else. Enforced
+  on the BUILD side, in a diff, not by trusting the dispatcher.
 - **FR-009a** The route's condition envelope is CLOSED and stated here rather than chosen by an
-  implementer. It MAY bypass **only** `route-is-gated` and `green-local-since-edit`. It MUST still
-  be refused by `remote-enabled` (feature 132 - the GM: *"if it is disabled, then we do not use it
-  as a gate. and we do not dispatch to it while we are doing iteration"*), by
-  `breaker-not-tripped` (the monthly hard stop), and - for the FULL-scope runs FR-012 requires - by
-  `door.py`'s committed `permitted` entry, never an environment variable. A route that could spend
-  money with the breaker tripped or with remote off would contradict the GM's own words in features
-  130 and 132.
+  implementer. It MAY bypass **only** `route-is-gated`. Every other condition still refuses it:
+  **`green-local-since-edit`** (the GM's own named case - *"make done could check whether the last
+  thing that was run was an unsuccessful make done, in which case it should just short circuit
+  immediately and refuse to run without even dispatching to AWS"*), `remote-enabled` (feature 132 -
+  *"if it is disabled, then we do not use it as a gate. and we do not dispatch to it while we are
+  doing iteration"*), `breaker-not-tripped` (the monthly hard stop), and - for the FULL-scope runs
+  FR-012 requires - `door.py`'s committed `permitted` entry, never an environment variable. Nothing
+  in this feature needs the `green-local-since-edit` bypass: FR-011 requires a local `make done` on
+  the same content anyway, which sets it, and today's nearest precedent - a paid
+  `ci-check TARGET=<operation>` - keeps the condition. A route that could spend money after a RED
+  local gate, with the breaker tripped, or with remote off would contradict the GM's own words in
+  features 130 and 132.
 - **FR-010** It MUST be paid, prompted and logged like every other paid target - the same class as
   `make ci-image`, whose prompt a session may answer under the GM's 2026-08-25 authorization, with
   the reason recording that it did and quoting it.
@@ -157,12 +176,19 @@ runs no gate and warms no gencache.
   `hooks-test`) rather than to noise.
 - **SC-002** A build whose guard scripts changed re-runs the affected suites; a build whose guards
   did not, does not. Both observed, not reasoned.
-- **SC-003** The excluded checkout set is stated with the evidence for each exclusion, and a green
-  remote build ran with it applied.
+- **SC-003** The excluded checkout set is stated with affirmative evidence for each exclusion,
+  including, for every check that touches an excluded path, what shows it still does the same work.
+  A green remote build ran with the set applied - necessary, not sufficient.
+- **SC-003a** The merge route's pushed tree was shown to carry every path tracked at its merge base,
+  and how that was shown is named.
 - **SC-004** Post-174 remote-versus-local is stated as two numbers from comparable runs, with the
   gate recipe named.
 - **SC-005** The FULL cache payload is stated in MB from the built object, with cold and warm times.
-- **SC-006** `verified/` records survive longer than 14 days, read back from the applied document.
+- **SC-006** The applied lifecycle document, READ BACK from the bucket, shows `verified/` outside
+  the catch-all's reach, and whatever horizon it carries was chosen for what those records are FOR
+  with the reasoning recorded. Separately, an unforeseen prefix still expires (FR-014), and that is
+  shown from the same document. "Longer than fourteen days" is NOT the bar - a 15-day horizon would
+  meet it and leave the GM's complaint exactly where it was.
 - **SC-007** A `( cd <clone> && <write> )` from main runs; a `cd <mirror> && <write>` is still
   refused; both are cases in `scripts/test-main-tree-hooks.sh`.
 - **SC-008** `make done` and `make hooks-test` are green, and the whole-tree 100% coverage floor
@@ -190,8 +216,9 @@ implementation:
 
 - **D1** what travels in the cache for `hooks-test`, and the argument that a remote skip rests only
   on a remote proof (FR-001, FR-003)
-- **D2** the excluded checkout set, with the evidence per exclusion and per retained path (FR-005,
-  FR-006)
+- **D2** the excluded checkout set, with the affirmative evidence per exclusion, what keeps each
+  affected check doing the same work, and the reason for every retained path (FR-005, FR-006), plus
+  how the merge route's pushed tree was proven complete (FR-006a)
 - **D3** the measurement mechanism: what it may bypass, what it may never do, and why that is not a
   hole in the five conditions (FR-008, FR-009, FR-010)
 - **D4** the post-174 remote-versus-local numbers, with the gate recipe named (FR-011) - and one
@@ -246,4 +273,34 @@ without a mechanism items 3 and 4b are *"not merely awkward to deliver - they ar
 And FR-018 belongs here under Principle XIV. One inaccuracy was caught in passing: the Out line
 priced the slim half at the `.html` third (264 MB) when the measured slimmable set is 441 MB.
 
-**Round 2 - pending.**
+**Round 2 - CHANGES REQUIRED (4).** A different agent, which confirmed round 1's three changes had
+landed as requirements rather than prose, and then reached four things round 1 had not.
+
+1. **The envelope bypassed one condition too many.** FR-009a let the measurement route past
+   `green-local-since-edit` as well as `route-is-gated`, and nothing needed it: R7 establishes only
+   `route-is-gated` as the blocker, FR-011 requires a local `make done` on the same content anyway
+   (which sets the condition), and today's nearest precedent - a paid `ci-check TARGET=<op>` - keeps
+   it. Dropping it would have removed a refusal resting on the GM's own words. Now one bypass, and
+   the rest still refuse.
+2. **SC-006 reopened the defect FR-013 had just closed** - *"survive longer than 14 days"* is met by
+   changing 14 to 15, the exact form round 1 rejected one requirement earlier. The success criterion
+   now grades what FR-013 requires, and covers FR-014 separately.
+3. **`research.md` R4 stated something the code contradicts, and FR-005 leaned on the wrong
+   instrument.** The author wrote that sparsing the frozen exhibits out would make the raster
+   agreement test *"silently check nothing"*; the test ends on `assert checked`, so a TOTAL exclusion
+   fails loudly. The real hazard is PARTIAL: eight frozen hamlet exhibits, `checked` only has to
+   reach 1, so dropping seven passes green having checked one map. R4 is corrected in place, and
+   FR-005 no longer treats a green remote build as the proof - for a check that skips what it cannot
+   find or counts what it found, green says nothing.
+4. **Nothing protected the merge route's push.** `merge.yml` runs the same `run.sh`, which ends in
+   `git push origin HEAD:main`, and the Scope line's assurance that the sparse half *"loses no
+   content"* was prose with no requirement behind it - on the one route that writes main, about the
+   exact 441 MB the spec declares out of bounds to touch. Now FR-006a and SC-003a: the pushed commit
+   must carry every path tracked at its merge base, proven before the first merge dispatch.
+
+The reviewer also confirmed the round-1 adjudications hold, ruled FR-018 legitimate under
+Principle XIV against the code (`cache_location` keys on scope; an operation keeps
+`scope="reference"`), and found FR-006's *"where the evidence is 'no reader was found', the path
+stays"* strong enough to foreclose the move R4 had flirted with.
+
+**Round 3 - pending.**
