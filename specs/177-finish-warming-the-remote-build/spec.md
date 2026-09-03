@@ -1,6 +1,6 @@
 # Feature 177 - Finish warming the remote build
 
-**Status**: DRAFT - not yet reviewed (constitution XVI)
+**Status**: under review (constitution XVI) - see Review history for the round reached
 **Request**: `request.md` (the GM's words, verbatim, plus the numbered items the instruction names)
 **Predecessor**: `specs/175-warm-the-remote-build/` - this feature finishes what that one started and
 pays two debts it recorded and left open.
@@ -54,6 +54,15 @@ is not decided here.
 
 **Out**: `buildspec/image.yml` and Docker layer caching, for the reason 175 gave - the image build
 runs no gate and warms no gencache.
+
+**Out, and stated separately because it is a DIFFERENT question**: baking repository CONTENT into
+the CI image. The GM asked *"does the image rebuild not matter because it only happens on a
+dependency change, and the actual code itself isn't part of the image? OR is that not what we're
+doing but it could be?"* - and the second half is a live competitor to the sparse checkout, since
+both attack the same 43 s. It is declined rather than ignored, and D4 records why: an image carrying
+the tree would go stale on every commit, so a build would still have to fetch the delta, and the
+image would have to be rebuilt (paid, prompted, ~2 min) far more often than the dependency changes
+that justify it today.
 
 ## Functional requirements
 
@@ -124,8 +133,13 @@ runs no gate and warms no gencache.
   `make ci-image`, whose prompt a session may answer under the GM's 2026-08-25 authorization, with
   the reason recording that it did and quoting it.
 - **FR-011** A **post-174 remote reference gate** MUST be measured phase by phase and recorded
-  against the local `make done` median on the same content (227.5 s, n=12, since 2026-08-31). Both
-  numbers MUST come from runs whose gate ran the 100% coverage floor.
+  against **one local `make done` on the same commit the remote build tested**. Not a median:
+  the 227.5 s figure quoted in `request.md` is a median over twelve runs spanning 22 s to 622 s,
+  taken while the coverage floor was landing, so it is neither the same content nor uniformly a
+  floor-running gate - and the GM's question is *"how much faster is it even to run on AWS than
+  locally"*, which a denominator mixing warm short-circuits with full sweeps answers wrong. Both
+  numbers MUST come from gates that ran the 100% coverage floor, and the record MUST say which
+  commit each ran on.
 - **FR-012** The **FULL-scope cache** MUST be measured cold versus warm, with the payload size read
   off the built object - 175's D5 for the scope it could not reach. If the FULL cache does not pay,
   175's FR-010 ladder applies: narrow the set and re-measure; report and HOLD only if nothing pays.
@@ -156,11 +170,30 @@ runs no gate and warms no gencache.
   used `cache/gm-assistant-check/reference`, so an operation's cache overwrites the gate's. It is a
   performance defect rather than a correctness one - the gencache is content-keyed, so a wrong entry
   can only MISS - and the record MUST say so rather than implying data loss.
+- **FR-018a** `cache_location` is the function that BOUNDS the S3 object count, which is guard 1 of
+  the 2 standing between this project and the GM's named failure. So the new dimension MUST be a
+  finite, registered value: **the operation's registered name from `_invocation.OPERATIONS`, never
+  the free-form `--target` string.** `__main__.py` validates only `a.target.split()[0]` and then
+  passes the WHOLE string on as `ctx.operation`, so `TARGET="cohort SEEDS=8"` and
+  `TARGET="cohort SEEDS=9"` are both legal and distinct - keying on it would grow the object count
+  without bound, which is the exact failure 175's FR-005 exists to prevent. The ceiling MUST stay
+  `projects x (scopes + registered expensive operations)`, and
+  `test_the_cache_location_cannot_grow_with_the_number_of_builds` MUST be extended to VARY the new
+  dimension: as written it enumerates projects x scopes and asserts `len(locations) == 4`, so adding
+  a defaulted fourth parameter leaves it green while the bound is gone.
 
 ### Not regressing anything
 
 - **FR-019** Every refusal `ci-status`, `ci-check` and `ci-merge` make today MUST still be made, and
-  the `tests/tooling/ci/` suite MUST still pass. **The measurement route of FR-008 is a NEW route
+  the `tests/tooling/ci/` suite MUST still pass **except where this feature deliberately widens what
+  it guards, which is stated here rather than discovered by an implementer**:
+  `test_the_cached_paths_are_what_a_HIT_needs` asserts
+  `all(p.startswith("repo/.claude/skills/diagram/.gencache/"))`, and FR-001 requires two `repo/.git/`
+  paths in that same cache block - so as it stands that assertion forbids FR-001 outright. It MUST
+  be UPDATED, never deleted or loosened to "`.git` is allowed too": the new invariant is CLOSED -
+  the cache carries the `.gencache/` paths FR-002's set names, plus exactly the two freshness-state
+  paths FR-001 names, and nothing else. A test that keeps its teeth.
+  **The measurement route of FR-008 is a NEW route
   and a change to the threat model**, not an exception inside the old one:
   `l7r/diagram/ci/CLAUDE.md` MUST be updated to describe it - what it bypasses, what it can never
   do, and why that is not a hole in the five conditions. Declaring the threat model unchanged while
@@ -218,13 +251,19 @@ implementation:
   on a remote proof (FR-001, FR-003)
 - **D2** the excluded checkout set, with the affirmative evidence per exclusion, what keeps each
   affected check doing the same work, and the reason for every retained path (FR-005, FR-006), plus
-  how the merge route's pushed tree was proven complete (FR-006a)
+  how the merge route's pushed tree was proven complete (FR-006a). It MUST also record the sharpest
+  instance of the class: `delta.engine_key_worktree` filters on `(root / p).is_file()`, so a sparse
+  checkout that ever excluded an ENGINE path would silently change the key a build computes against
+  the one a laptop computes. No path in the candidate set is engine content, so there is no live
+  conflict - which is exactly why it is worth writing down before someone widens the set
 - **D3** the measurement mechanism: what it may bypass, what it may never do, and why that is not a
   hole in the five conditions (FR-008, FR-009, FR-010)
-- **D4** the post-174 remote-versus-local numbers, with the gate recipe named (FR-011) - and one
-  line on how the image rebuild amortizes, because the GM's sentence was *"how much faster is it
-  even to run on AWS than locally when we factor in the image rebuild?"* and a number that leaves
-  the second half of the question open has not finished answering it
+- **D4** the post-174 remote-versus-local numbers, naming the commit and the gate recipe each ran
+  on (FR-011) - plus the two halves of the GM's own sentence that a bare number leaves open: how the
+  image rebuild amortizes (*"when we factor in the image rebuild?"*), and whether the tree could be
+  baked into the image instead of sparse-checked out (*"the actual code itself isn't part of the
+  image? OR is that not what we're doing but it could be?"*), the latter recorded as a priced
+  DECLINE per the project's rule on accepted limitations
 - **D5** the FULL cache: payload MB, cold, warm, and whether it pays (FR-012)
 - **D6** the lifecycle horizons and the reasoning for each, read back from the bucket (FR-013,
   FR-014, FR-015)
@@ -303,4 +342,45 @@ Principle XIV against the code (`cache_location` keys on scope; an operation kee
 `scope="reference"`), and found FR-006's *"where the evidence is 'no reader was found', the path
 stays"* strong enough to foreclose the move R4 had flirted with.
 
-**Round 3 - pending.**
+**Round 3 - CHANGES REQUIRED (5).** A third agent, which confirmed round 2's four had landed and
+then found five things neither earlier round reached. Two would have stopped the implementation dead.
+
+1. **FR-019 forbade FR-001 - the same defect round 1 found in the route half, in the cache half it
+   did not reach.** `tests/tooling/ci/test_cache.py` asserts
+   `all(p.startswith("repo/.claude/skills/diagram/.gencache/"))` over every cached path, and FR-001
+   requires two `repo/.git/` paths in that block. "The suite MUST still pass" made item 1
+   unimplementable. FR-019 now states the widening and requires the assertion be UPDATED to a CLOSED
+   invariant - the `.gencache/` set plus exactly the two freshness paths, nothing else - rather than
+   deleted or loosened to "`.git` is allowed too".
+2. **FR-018 changed the one function that bounds the S3 object count and required nothing about the
+   bound** - and the author's own R10 had got this backwards. `__main__.py` validates
+   `a.target.split()[0]` but passes the WHOLE free-form string on as `ctx.operation`, so
+   `cohort SEEDS=8` and `cohort SEEDS=9` are distinct and a location keyed on it grows without
+   bound: the GM's named failure, reintroduced by the fix for a different defect. Worse, the
+   existing boundedness test enumerates projects x scopes and asserts `len(locations) == 4`, so a
+   defaulted fourth parameter leaves it green. Now FR-018a: the REGISTERED name, and the test varies
+   the new dimension. R10 is corrected in place.
+3. **FR-011 named a baseline that failed FR-011's own condition.** It required both numbers to come
+   from floor-running gates and then pinned the local side to a median of twelve runs spanning
+   22 s to 622 s, taken across the days the floor was landing. The comparison is now one local
+   `make done` on the same commit the remote build tested, with both commits named.
+4. **`plan.md` carried three lines the spec had superseded**, each in the weaker form - the
+   two-condition bypass, "a green remote build is the proof", and R4's retracted silent-skip
+   sentence. A plan that grants an implementer authority the spec withholds is the smuggling
+   direction that matters, and all three are reconciled.
+5. **One sentence of the GM's opening question was dropped.** *"The actual code itself isn't part of
+   the image? OR is that not what we're doing but it could be?"* - baking the tree into the image is
+   the direct competitor to the sparse checkout, both attacking the same 43 s, and the Scope line's
+   `image.yml` exclusion answered a different question. Now declined explicitly, with the reason, in
+   Scope and D4.
+
+The reviewer also checked A2 by measurement rather than argument (`gate-green-hooks` is `hash_files`
+over `git ls-files -co -- scripts/*.sh scripts/*.py` through `content_id`; the per-suite stamp is
+`sha256sum` over `_hookdeps.py`'s derived set; nothing machine-, clock- or clone-derived), and
+flagged one residual asymmetry worth a line at the point of change: neither stamp is keyed to the
+build IMAGE, so a `make ci-image` rebuild does not retire them - which is equally true on a laptop
+after a toolchain upgrade, so it sits inside the spec's own bar. And it named
+`delta.engine_key_worktree`'s `is_file()` filter as the sharpest instance of the class FR-005 asks
+about; D2 now records it.
+
+**Round 4 - pending.**

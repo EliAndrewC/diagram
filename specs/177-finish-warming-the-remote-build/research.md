@@ -210,12 +210,29 @@ the merge changed the same excluded file, git needs its CONTENT to do a three-wa
 `--filter=blob:none` that is a lazy fetch - correct, just slower. Nothing in the excluded set is a
 file two branches edit concurrently (they are generated renders written by one roll at a time).
 
-## R10 - The operation set is REGISTERED, so keying the cache on it stays bounded (FR-018)
+## R10 - Keying the cache on the operation is bounded ONLY if it is the REGISTERED NAME
 
 `ci/__main__.py` refuses any `TARGET=` that is not `expensive` in `l7r/diagram/_invocation.OPERATIONS`
-(*"only an EXPENSIVE operation runs remotely"*), and that registry holds **13** expensive entries. So
-keying `cache_location` on the operation as well as the scope gives a ceiling of
-`2 projects x (2 scopes + 13 operations)`, a number that moves only when someone adds a registry row -
-never with a commit, a build or a branch, which is exactly what 175's FR-005 forbids and what the
-GM's *"uploading many megabytes ... and then never cleaning it up"* is about. In practice the live
-count is far lower: only `tripwire` has ever dispatched.
+(*"only an EXPENSIVE operation runs remotely"*), and that registry holds **13** expensive entries.
+
+**CORRECTION, round 3 of the spec review.** This entry first concluded from that alone that keying
+`cache_location` on the operation was bounded. It is not, and the reviewer read the two lines that
+say so:
+
+    head = a.target.split()[0]     # __main__.py:102 - only the HEAD is validated
+    operation=a.target,            # __main__.py:113 - the WHOLE string is passed on
+
+and `dispatch.make_target` returns `ctx.operation` verbatim as `MAKE_TARGET`, which `run.sh`
+word-splits on purpose. So `TARGET="cohort SEEDS=8"` and `TARGET="cohort SEEDS=9"` are both legal,
+both distinct, and a location keyed on `ctx.operation` grows one S3 object per argument spelling -
+the GM's named failure, reintroduced by the fix for a different defect.
+
+The bound holds only on the REGISTERED NAME (`head`), giving a ceiling of
+`2 projects x (2 scopes + 13 registered operations)`, a number that moves when someone adds a
+registry row and never with a commit, a build or a branch. In practice the live count is far lower:
+only `tripwire` has ever dispatched.
+
+And the existing guard would NOT have caught the mistake:
+`test_the_cache_location_cannot_grow_with_the_number_of_builds` enumerates `projects x scopes` and
+asserts `len(locations) == 4`, so a fourth parameter with a default leaves it green while the
+property it names is gone. FR-018a requires it to vary the new dimension.
