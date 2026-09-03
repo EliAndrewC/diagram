@@ -59,3 +59,23 @@ Remote runs 4.5x the workers, 20 fewer tests, and is 15% slower. The GM's questi
 if the parallelism is not being used, what does a far smaller and cheaper instance cost, and does it
 perform the same? `config.RATES` today: `BUILD_GENERAL1_MEDIUM` $0.01/min, `LARGE` $0.02,
 `XLARGE` $0.08 (the current default), `2XLARGE` $0.20.
+
+## The GM's follow-up, verbatim (2026-09-03, mid-implementation)
+
+Given after the session flagged the two blockers on item 4 and the frozen-exhibit carve-out:
+
+> I disabled the ruleset for force pushes and took a backup of the repo in case anything goes wrong,
+> so you can indeed handle the history rewriting yourself and if something back happens then I have a
+> backup copy of the repo we can restore from.
+>
+> Do we actually need to keep the 97.9 MB?  Like I feel like there's probably a cheaper way to do this
+> that does involve nearly 100M of generated files being checked into source control.
+
+**What this settles.** The first paragraph removes both of the session's stated blockers: the GitHub
+`remember-the-main` ruleset is disabled, and a backup exists, so the purge is authorized and
+recoverable. `scripts/repo-safety-hooks.sh` still refuses a force push with no escape token, and
+constitution VI still says never - so the guard needs a deliberate, logged, GM-authorized route rather
+than a session working around it.
+
+The second paragraph independently confirms what `spec-fidelity` round 1 ruled: the frozen hamlet
+exhibits' 97.9 MB goes too, and the GM is asking for the cheaper way to keep what the check protects.
