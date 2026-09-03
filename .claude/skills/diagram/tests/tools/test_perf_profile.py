@@ -42,11 +42,23 @@ def test_the_git_environment_carries_the_PAT_through_ASKPASS_never_a_command_lin
     """The token reaches git through GIT_ASKPASS, so it never appears in an argv anybody can read
     from `ps` or a log. When the secrets file is absent the tool degrades to an anonymous clone
     rather than raising - a public archive still works."""
-    env = perf_profile._git_env()
-    if "GITHUB_TOKEN" in env:
-        assert env["GIT_ASKPASS"].endswith("git-askpass-token.sh") and env["GIT_TERMINAL_PROMPT"] == "0"
-
+    # THE TEST OWNS ITS ENVIRONMENT, and this is a fix a REMOTE build found (feature 177, build
+    # cf341865). `_git_env()` starts from `os.environ`, and a CodeBuild build is handed `GITHUB_TOKEN`
+    # as a build environment variable - so in that container the old `if "GITHUB_TOKEN" in env:` fired
+    # on the AMBIENT token while `load_secrets` had failed (no `development-secrets.ini` in a build),
+    # the `env.update` that sets all three keys never ran, and the assertion died on
+    # `KeyError: 'GIT_ASKPASS'`. The old `bare` assertion had the same flaw in the other direction:
+    # `"GITHUB_TOKEN" not in bare` is a statement about the ambient environment, not about the
+    # function. Neither could fail on a laptop, which is exactly why nothing caught them until the
+    # gate ran somewhere nobody lives.
     import l7r.diagram.ci.config as cfg
+
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    monkeypatch.delenv("GIT_ASKPASS", raising=False)
+    monkeypatch.setattr(cfg, "load_secrets", lambda root: cfg.Secrets("r", "a", "s", "b", "e", "g", "the-pat", "m"))
+    env = perf_profile._git_env()
+    assert env["GITHUB_TOKEN"] == "the-pat", "the token comes from the secrets file, not from the ambient environment"
+    assert env["GIT_ASKPASS"].endswith("git-askpass-token.sh") and env["GIT_TERMINAL_PROMPT"] == "0"
 
     def missing(*_a: Any, **_kw: Any) -> Any:
         raise FileNotFoundError("no development-secrets.ini")
@@ -54,6 +66,7 @@ def test_the_git_environment_carries_the_PAT_through_ASKPASS_never_a_command_lin
     monkeypatch.setattr(cfg, "load_secrets", missing)
     bare = perf_profile._git_env()
     assert "GITHUB_TOKEN" not in bare, "no secrets, no token - and no exception"
+    assert "GIT_ASKPASS" not in bare, "and nothing half-set: the three keys go in together or not at all"
 
 
 def test_archive_is_SKIPPED_when_disabled_and_a_failure_DEGRADES_rather_than_raising(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
