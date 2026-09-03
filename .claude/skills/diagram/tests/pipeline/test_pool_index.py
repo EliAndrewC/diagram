@@ -43,6 +43,13 @@ def _mini_pool(tmp_path):
     _map(skill, "hamlets", "aoi", ".gen.py")
     _map(skill, "hamlets", "aoi", ".notes.md", "# Design notes: Aoi\n")
     _map(skill, "hamlets", "aoi", ".png", "png")
+    # THE INTERACTIVE PAGE IS BUILT BY THE FIXTURE, not borrowed from the real pool (feature 177).
+    # A live map's `.html` is GITIGNORED, so the branch that links it was covered only on a machine
+    # where some page happened to exist on disk - it did locally and did not in a CodeBuild
+    # container, and the coverage floor went red there at 99% with `pool_index.py:247` missing while
+    # the same tree measured 100% on a laptop. That is the dangerous half of the worktree hazard
+    # CLAUDE.md names: the gitignored-artifact gap can make a test pass ONLY where the artifacts are.
+    _map(skill, "hamlets", "aoi", ".html", "<html>interactive</html>")
     _map(skill, "hamlets", "burned", ".gen.py")  # settlement map with NO manifest
     _map(
         skill,
@@ -128,6 +135,10 @@ def test_index_contents(tmp_path):
     # Map thumbnails open in a new tab; in-page nav anchors (pinned above) do not.
     assert '<a href="hamlets/aoi/aoi.png" target="_blank" rel="noopener">' in page
     assert 'href="hamlets/aoi/aoi.notes.md"' in page
+    # ...and the interactive page links BESIDE the notes when it exists (feature 134), which is the
+    # branch the fixture's `.html` exists to reach deterministically.
+    assert 'href="hamlets/aoi/aoi.html">interactive</a>' in page
+    assert 'notes</a> | <a href="hamlets/aoi/aoi.html"' in page, "the two links share a cell, notes first"
     # ...and a FROZEN exhibit links ACROSS, which is what resolves from a file:// open (FR-018).
     assert 'src="../legacy-hand-authored-pool/villages/furu/furu.png"' in page
 
