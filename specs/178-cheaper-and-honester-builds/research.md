@@ -110,3 +110,44 @@ than a list, so nothing else has to be told.
 **The survivors are now ONE class, not two**: the eight `tests/fixtures/*-red.svg`, hand-broken by a
 person to prove a check fires, with no generator anywhere. That is a cleaner rule than the one the
 spec started with - no generated render is tracked, full stop.
+
+## R5 - The first compute comparison was CONTAMINATED, and by the rule this feature wrote
+
+Three rows were measured and none of them may be compared with the others:
+
+| run | commit | concurrency | roll cache | result |
+|---|---|---|---|---|
+| `ecfcf00a` LARGE 8 vCPU | before items 1-3 | alone | **HIT** | 620 s, 11 min, $0.22, green |
+| `aad9285f` MEDIUM 4 vCPU | after items 1-3 + untracking | beside the xlarge | MISS | 1296 s gate, green |
+| `a58671ff` XLARGE 36 vCPU | after items 1-3 + untracking | beside the medium | **MISS** | 914 s, 16 min, $1.28, green |
+
+**Three faults, all mine.** (a) Three different commits, which FR-013 forbids in terms - and it says
+so citing feature 177's D4, which says in bold that totals across trees are not comparable. (b) Two
+of them dispatched CONCURRENTLY, and every `measure` run shares one cache location
+(`cache/gm-assistant-check/reference`) whatever compute type it runs on - so they raced to write the
+same S3 object. That is the same collision feature 177's FR-018 fixed one dimension over: scope and
+operation are in the key, compute type is not. (c) The consequence is legible in the logs -
+`reference settlement (Inashiro, seed 4): CLEAN [HIT ...]` on the first, `[MISS]` on the other two -
+so the xlarge row's 914 s against its own 437 s earlier the same day is a cache miss and a different
+tree, not cores.
+
+**What survives from this batch, and it is not nothing:**
+
+- **All three went GREEN.** In particular `BUILD_GENERAL1_MEDIUM` - 4 vCPU, 7 GB - ran the whole
+  gate with the 100% floor to exit 0. Assumption A2 named memory rather than cores as the risk at
+  that size; it is answered, and "it did not finish" is off the table.
+- The one clean pair remains feature 177's warm green xlarge (437 s, $0.64) against `ecfcf00a`'s warm
+  green large (620 s, $0.22), both with a roll-cache HIT.
+
+**The re-run**: one frozen commit, sequential, after a warming run whose numbers are discarded, so
+every row sees the same cache state. Four builds, ~$1.06.
+
+## R6 - A correction to D7's per-clone figure
+
+D7 priced the repo-side slimming partly on *"12 clones, 9.9 GB"* in this container. Re-counted while
+preparing the purge: **1 clone, 1.5 GB**. The others were removed between the two measurements. The
+disk argument for slimming is therefore much weaker than D7 stated; the history argument (345.71 MiB
+-> 38.68 MiB in the pack, which every future clone pays) is unaffected and is the real one.
+
+It also makes the purge safer: FR-011d's hazard is a surviving clone whose disjoint history pushes
+the purged objects back, and there is now exactly one clone to reset, which this session owns.
