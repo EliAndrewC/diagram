@@ -1,0 +1,6 @@
+{
+  "utc": "20260903T060025Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 177 is CI tooling only - buildspecs, the ci dispatcher, two guards, the S3 lifecycle and test fixtures. It rolls no map and changes no placer, so a settlement-review has no artifact to read; no pool manifest is in the delta."
+}
