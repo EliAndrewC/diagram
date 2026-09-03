@@ -462,6 +462,57 @@ which a local gate can fail on:
    where the artifacts are - and it had been invisible because no remote build had ever run the
    floor: it landed 2026-08-31 and today was its first container.
 
+**D5 the FULL-scope cache - 175's owed measurement, TAKEN** - ACCURATE, and its premise had changed.
+
+| run | PROV | INSTALL | BUILD | POST | total | billed | cache written |
+|---|---|---|---|---|---|---|---|
+| FULL cold (`76087221`) | 14 | 1 | 1404 | 5 | 1424 s | 24 min $1.92 | **14.85 MiB** |
+| FULL warm (`ab43bfac`) | 16 | 1 | 652 | 5 | 675 s | 12 min $0.96 | **14.85 MiB** |
+
+**IT PAYS, and by a lot: the gate itself went 1351 s -> 605 s, -746 s (-55%)**, and the billed cost
+halved, 24 min -> 12. That is a far larger saving than the reference scope's, for the obvious reason -
+there is more work to skip.
+
+**But 175's actual question no longer had the answer it expected.** Its FR-004 and D1a reasoned that a
+FULL cache would be ~92 MiB against the reference scope's 2.78 MiB - **33x** - because a reference
+build reads the roll cache and a FULL build does not. That split is gone. Since feature 174 a plain
+`make done` IS `test-full`, so the remote REFERENCE gate already runs in the full test scope (its own
+log: *"scope: FULL - the full tree is collected, the coverage floors are enforced, no cache serves a
+roll"*). Measured, the two locations hold:
+
+    cache/gm-assistant-check/full/3f24faba-...       14.85 MiB
+    cache/gm-assistant-check/reference/3f24faba-...  14.85 MiB
+
+**1:1, not 33:1.** So FR-010's ladder was never reached - nothing needed narrowing, because the set
+175 worried about (54 MB of `rolls/` riding along unread) is not what either scope now carries. The
+figure to quote from here on is 14.85 MiB per scope, and 175's 2.78 MiB is a pre-174 number.
+
+**Two things the FULL runs showed that no reference run could:**
+
+- **The per-scope keying is observable and correct.** The FULL cold build restored nothing and
+  reported *"21 guard suites green, 0 unchanged"* - its own location was empty - while the
+  reference location sat beside it, full. Two locations, two objects, no leakage: D2's bound and
+  FR-018's fix both visible in one run.
+- **A FULL measurement can never go GREEN, and that is structural.** `done FULL=1` ends in
+  `perf-gate`, which takes fresh bookends in a fresh container and then reports
+  `perf bands [codebuild]: 177-end vs 177-start -> band 1`, owing a written explanation and a
+  `perf-audit` confirmation that only a subagent may write. Both FULL builds passed every test and
+  measured 100% coverage and still exited 2. The timings are valid - `perf-gate` is the last phase -
+  but the route cannot produce a green FULL build, and a session expecting one will be confused.
+  Recorded rather than fixed: suppressing `perf-gate` for a measurement would change what is being
+  measured, which is the one thing this route must not do.
+
+**D5b THE FINDING THAT JUSTIFIES THE WHOLE PAIR** - the two FULL builds DISAGREED about coverage on
+the same commit. Cold: 22,544 statements, 0 uncovered, 100%. Warm: **5 uncovered, 99%**, at
+`rollcache.py:180-184`. Those five lines are `BYPASS-SHARED-RUN`, where one xdist worker reads a
+payload a sibling of the same run has already written - so whether they execute depends on how the
+workers interleave, not on the code. **Since feature 174 made the floor a hard gate, that is a
+`make done` that goes red for nobody's mistake**, and the next person to hit it would have gone
+looking for a change that was not there. Now covered deterministically (the sibling simulated as the
+mechanism defines it: run store on disk, process dict empty), so nothing is left to the scheduler.
+It took a warm remote FULL build to disagree with a cold one, and before this feature neither
+existed.
+
 **Still owed** (they need the paid runs):
 
 - **D1** what travels in the cache for `hooks-test`, and the argument that a remote skip rests only

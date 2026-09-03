@@ -170,14 +170,20 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
       which is the question the GM turned remote back on to settle. Full table and the
       not-comparable-totals caveat in D4
 
-- [ ] T22 FR-012: FULL, cold - the payload size read off the BUILT object
+- [x] T22 FR-012: FULL, cold - the payload size read off the BUILT object
       research: procedure
-      verify: MB from the artifact, not summed from globs applied to a local `.gencache/`
+      verify: DONE, build `76087221`: 1424 s, 24 billed min, $1.92; cache written **14.85 MiB**, read
+      off the artifact. The FULL location restored nothing (`21 guard suites green, 0 unchanged`)
+      while the reference location sat beside it full - the per-scope keying, observable
 
-- [ ] T23 FR-012: FULL, warm - whether the FULL cache pays
+- [x] T23 FR-012: FULL, warm - whether the FULL cache pays
       research: procedure
-      verify: cold versus warm; if it does not pay, 175's FR-010 ladder - narrow the set and
-      re-measure; report and HOLD only if nothing pays
+      verify: DONE, build `ab43bfac`: 675 s, 12 billed min, $0.96. **The gate went 1351 s -> 605 s,
+      -55%, and the billed cost halved.** It pays; FR-010's ladder was never reached. And 175's
+      premise was void: both scopes' caches measure 14.85 MiB, 1:1 rather than the predicted 33:1,
+      because since feature 174 the reference gate already runs the full test scope. The pair also
+      caught a RACE-dependent member of the coverage floor (D5b) - the two builds disagreed about
+      the same commit
 
 ## Recording
 
