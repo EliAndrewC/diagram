@@ -67,3 +67,46 @@ sites). Nothing generated survived.
 **One classification the rehearsal forced, which round 4 flagged as unclassified (its aside A4)**:
 `pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg` was KEPT by the
 `magistracies/`-and-`.svg` rule. It should be kept deliberately or not at all - see D4.
+
+## R4 - The `.gitignore`'s Mode A exception is STALE, and the spec repeated it
+
+The GM asked what `ochiba-roundtrip-test` is. Its own notes answer plainly: *"the OUTPUT of feeding
+the EXISTING hand-authored Ochiba's real program ... back through the perimeter-first placer"*, a
+*"scaffold/test artifact"*, carrying its own regenerate command. Generated output, so it goes.
+
+**But checking it forced the same question about the other four, and the answer is the same.** The
+root `.gitignore` un-ignores `pool/magistracies/*/*.svg` with this reason:
+
+    The one exception inside the live tree: a Mode A compound plan has no generator that draws it
+    from data - its .svg IS the source, KB-sized - so magistracy .svg stays tracked...
+
+**Every one of the five HAS a generator that draws it, and every one reproduces byte-for-byte.**
+Regenerated through `make map` and compared by MD5:
+
+| magistracy | md5 before | after |
+|---|---|---|
+| county-magistracy-example | 28a853de… | 28a853de… |
+| hayakawa-magistracy | 0c1e126a… | 0c1e126a… |
+| ochiba-magistracy | 2ae706eb… | 2ae706eb… |
+| ochiba-roundtrip-test | 44484ab2… | 44484ab2… |
+| ubame-magistracy | a5640b10… | a5640b10… |
+
+`git diff --stat` over `pool/magistracies/` is empty after regenerating all five. The SOURCE is the
+`.gen.py`; the `.svg` is its output. So under the GM's rule - *"in general, the generated html pages
+should not be tracked just like the generated svg and png files should not be tracked"* - all five are
+generated `.svg` and are untracked with everything else.
+
+**The spec asserted the opposite and I should say why that happened.** FR-010a called them "tracked
+SOURCE" and cited the `.gitignore` comment as its evidence - and its own last sentence demands
+*"Membership MUST be shown per path, not asserted."* I quoted a comment instead of running the
+generator. Round 3 had already corrected a size figure in that same FR for the same reason.
+
+**What this changes downstream, and it is self-correcting**: `render_cache.is_cache_managed` decides
+Mode A from Mode B by asking `git check-ignore` - *"a generator's svg is cache-managed iff it is
+gitignored"*. Once these are ignored they become cache-managed and stamped like every other derived
+render, which is the behavior their generators already deserve. The mechanism reads gitignore rather
+than a list, so nothing else has to be told.
+
+**The survivors are now ONE class, not two**: the eight `tests/fixtures/*-red.svg`, hand-broken by a
+person to prove a check fires, with no generator anywhere. That is a cleaner rule than the one the
+spec started with - no generated render is tracked, full stop.
