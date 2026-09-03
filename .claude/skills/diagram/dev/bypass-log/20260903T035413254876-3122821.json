@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-03T03:54:13Z",
+  "target": "ci-measure",
+  "commit": "429e674f",
+  "outcome": "permitted",
+  "why": "Feature 177 T20/FR-020 and FR-011: the session is answering this prompt itself under the GM's authorization of 2026-08-25 - \"all of them look like things that you should be capable of kicking off\". Cold reference measurement, S3 cache empty: proves a build with no cache still passes and gives the cold baseline. Second attempt; the first found a real defect in the sparse checkout, now fixed and verified locally."
+}
