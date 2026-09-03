@@ -208,10 +208,19 @@ def _snap(tmp, label, host, image="img", commit="c1", secs=10.0, utc="20260903T0
     import json
 
     p = tmp / f"{utc}-{label}.json"
-    p.write_text(json.dumps({
-        "label": label, "commit": commit, "environment": "codebuild", "host": host, "image": image,
-        "rows": [{"seed": 4, "seconds": secs, "stages": {}}],
-    }), encoding="utf-8")
+    p.write_text(
+        json.dumps(
+            {
+                "label": label,
+                "commit": commit,
+                "environment": "codebuild",
+                "host": host,
+                "image": image,
+                "rows": [{"seed": 4, "seconds": secs, "stages": {}}],
+            }
+        ),
+        encoding="utf-8",
+    )
     return p
 
 

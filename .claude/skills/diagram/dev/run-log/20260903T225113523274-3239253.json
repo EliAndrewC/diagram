@@ -1,0 +1,14 @@
+{
+  "utc": "2026-09-03T22:51:13Z",
+  "target": "ci-measure",
+  "scope": "reference",
+  "seconds": 634,
+  "result": "SUCCEEDED",
+  "commit": "886deb6f",
+  "where": "codebuild",
+  "build_id": "gm-assistant-check:ecfcf00a-d25d-458d-8f37-3270e8abd31b",
+  "minutes": 11.0,
+  "cost_usd": 0.22,
+  "compute": "BUILD_GENERAL1_LARGE",
+  "reason": "done"
+}
