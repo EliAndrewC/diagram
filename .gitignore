@@ -28,26 +28,45 @@ __pycache__
 #                                 `make map GEN=pool/<tier>/<map>/<map>.gen.py`.
 #   legacy-hand-authored-pool/    FROZEN exhibits (GM 2026-08-16). Their gens are never re-run, so
 #                                 once the engine drifted their renders stopped being reproducible:
-#                                 they are historical artifacts nothing can faithfully rebuild, and
-#                                 are therefore COMMITTED write-once (~195 MB, one time - they can
-#                                 never change again). NOTHING here is ignored; that is the whole
-#                                 rule, and it is why the 36 per-file `!` un-ignore lines this
-#                                 block used to carry are gone.
+#                                 they are historical artifacts nothing can faithfully rebuild.
+#                                 They were COMMITTED write-once for exactly that reason, and as of
+#                                 feature 178 they are NOT - see below.
 #
 # Before the split the two policies were interleaved in one directory, so each exhibit had to be
 # exempted BY NAME. Separating the trees turned a per-file exemption list into a per-tree rule.
 # WHEN A MAP IS CONVERTED to scripted generation it MOVES TREES (git mv into pool/), and its
 # renders become derived and ignored automatically - no ignore line to add or delete either way.
 #
-# The one exception inside the live tree: a Mode A compound plan has no generator that draws it
-# from data - its .svg IS the source, KB-sized - so magistracy .svg stays tracked and only its .png
-# is derived.
+# FEATURE 178 (GM 2026-09-03): NO GENERATED RENDER IS TRACKED, ANYWHERE. One rule, no exceptions.
+# *"in general, the generated html pages should not be tracked just like the generated svg and png
+# files should not be tracked"* - and, on the frozen exhibits specifically, *"I don't see why we
+# should be tracking those renders."* They were also removed from git HISTORY, which took the pack
+# from 345.71 MiB to 38.68 MiB.
+#
+# TWO THINGS A LATER READER MUST KNOW, because both were true here and are no longer:
+#
+# 1. THE FROZEN EXHIBITS ARE GONE FROM GIT AND CANNOT BE REBUILT. The paragraph above is still true
+#    about them - nothing can faithfully rebuild them - so they live at
+#    `/host-l7r-repo/diagram-render-archive/` with a MANIFEST.json of sha256 per file, verified on
+#    the way in (83 files, 440.8 MB, 83/83 matched on read-back). That archive is the only copy
+#    besides the GM's own backup. Do not treat a missing exhibit as a bug to regenerate; it cannot
+#    be regenerated, and it is not lost.
+# 2. THE MODE A EXCEPTION IS RETIRED. This block used to say a magistracy `.svg` "IS the source"
+#    because "a Mode A compound plan has no generator that draws it from data". Measured 2026-09-03:
+#    all five HAVE a `.gen.py` and all five regenerate BYTE-FOR-BYTE (identical md5, empty git diff).
+#    The `.gen.py` is the source; the `.svg` is its output, so it is ignored like every other render.
+#    `render_cache.is_cache_managed` asks `git check-ignore`, so it adapts to this on its own.
+#
+# The ONLY renders still tracked are `tests/fixtures/*-red.svg`: hand-broken by a person to prove a
+# check fires, with no generator anywhere. That is the whole exception list now.
 .claude/skills/diagram/pool/*/*/*.svg
 .claude/skills/diagram/pool/*/*/*.png
 .claude/skills/diagram/pool/*/*/*.html
-!.claude/skills/diagram/pool/magistracies/*/*.svg
-# The pool's browsable index - derived from the manifests/notes by pool_index.py and rewritten by
-# render-sync (render_cache.py) so it stays current in main beside the renders it embeds.
+.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.svg
+.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.png
+.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.html
+.claude/skills/diagram/wip/*.html
+.claude/skills/diagram/dev/placement-stages/
 .claude/skills/diagram/pool/index.html
 
 # Spoiler-sensitive /dream scenes: the local tier is the GM's disk only, never committed.

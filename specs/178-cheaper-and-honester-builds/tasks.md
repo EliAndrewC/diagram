@@ -112,11 +112,16 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
       pre-reorganization homes a HEAD-derived list would miss. Exactly 13 files survived: the 5
       magistracy `.svg` and the 8 `tests/fixtures/*-red.svg`
 
-- [ ] T31 FR-012a: PRESERVE the irreproducible bytes and VERIFY by checksum, BEFORE anything is purged
+- [x] T31 FR-012a: PRESERVE the irreproducible bytes and VERIFY by checksum, BEFORE anything is purged
       research: procedure
-      verify: the frozen exhibits are tracked precisely because this repository recorded them as
-      *"historical artifacts nothing can faithfully rebuild"*. The destination is named, the GM's
-      retrieval path stated, and survival across a container rebuild established
+      verify: DONE. **83 files, 440.8 MB, copied to `/host-l7r-repo/diagram-render-archive/` with a
+      MANIFEST.json carrying a sha256 per file - and VERIFIED by reading every one back: 83/83 match.**
+      The destination is the GM's own disk (295 GB free), survives container rebuilds, and shows in
+      their `l7r` status as one untracked directory beside the `?? JapanMaps/` already there.
+      **S3 was considered and REJECTED for a reason worth keeping**: feature 177's own
+      `expire-large-objects` rule (`ObjectSizeGreaterThan` 1 MiB, 30 days) would have deleted the
+      archive a month later, silently - S3 applies the shortest overlapping rule and has no negative
+      filter, so that bucket is now actively hostile to anything large anyone wants to keep
 
 - [ ] T32 FR-010/FR-010a/FR-010b: untrack every generated render; keep the two non-generated classes
       research: procedure

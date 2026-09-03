@@ -1,0 +1,55 @@
+{
+  "_archive": "/host-l7r-repo/diagram-render-archive/ holds the renders themselves, with sha256 per file.",
+  "_what": "PNG pixel dimensions of the FROZEN hamlet exhibits, whose renders left git in feature 178.",
+  "_why": "tests/test_villages.py asserted a raster against its own SVG viewBox and needed 97.9 MB of tracked files to do it. The property is a handful of integers; this is them. The SECOND source it is checked against is each exhibit's own tracked .json manifest (meta.view), so the assertion is not a tautology over numbers recorded from one place.",
+  "renders": {
+    "akagahara": {
+      "png": [
+        2600,
+        2706
+      ]
+    },
+    "enokida": {
+      "png": [
+        2600,
+        3662
+      ]
+    },
+    "honda": {
+      "png": [
+        2600,
+        2516
+      ]
+    },
+    "ikegami": {
+      "png": [
+        2600,
+        2311
+      ]
+    },
+    "moritono": {
+      "png": [
+        2600,
+        2057
+      ]
+    },
+    "shimizu": {
+      "png": [
+        2600,
+        3488
+      ]
+    },
+    "tanada": {
+      "png": [
+        2600,
+        3506
+      ]
+    },
+    "yatsuda": {
+      "png": [
+        2600,
+        5423
+      ]
+    }
+  }
+}

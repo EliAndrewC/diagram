@@ -354,37 +354,58 @@ def test_every_pool_render_matches_its_own_svg_geometry():
     raster stays on disk beside them. Nothing compared the two.
 
     Geometry is the cheap invariant that catches the whole class: `render_png` scales the SVG to a fixed
-    width, so the height is determined by the viewBox aspect. A render from a DIFFERENT roll almost always
-    has a different aspect, and one pixel of rounding is the whole tolerance. It cannot catch a stale render
-    whose aspect happens to match, which is why it is a floor rather than a proof - but it caught both of the
-    real ones with no false positives across the twelve hamlet renders in the pool.
+    width, so the height is determined by the viewBox aspect.
 
-    BOTH TREES, and that is the whole reason this test still works (feature 161, FR-013b). The maps it
-    can actually check in a clean checkout are the FROZEN exhibits, because a live map's renders are
-    gitignored and simply absent - measured 2026-08-30: all 8 hamlet renders on disk belonged to
-    akagahara, enokida, honda, ikegami, moritono, shimizu, tanada and yatsuda, and the 5 scripted
-    hamlets had none. Left walking the live pool alone after the split, this would have found zero
-    renders and `assert checked` would have failed. The name in its own message ("live hamlet
-    render") had not described what it checks since the 2026-08-16 freeze committed the exhibits'
-    renders; the message is fixed below too, because a check whose message contradicts its behavior
-    is how the next reader gets the wrong idea about what is guarded."""
+    **FEATURE 178 CHANGED WHAT THIS READS, AND THE HONEST ACCOUNT OF WHAT WAS LOST IS PART OF THE TEST.**
+    It used to walk both pool trees and compare an on-disk `.png` against its on-disk `.svg`. In a clean
+    checkout the only maps it could actually check were the FROZEN exhibits, because a live map's renders
+    are gitignored - so 97.9 MB of tracked `.svg`/`.png` existed to let eight comparisons happen. The GM
+    untracked every generated render (*"I don't see why we should be tracking those renders"*), so those
+    files are gone from git and from history; they live at `/host-l7r-repo/diagram-render-archive/`.
+
+    What replaces them is 1,180 bytes: `tests/fixtures/frozen_exhibit_renders.json` records each exhibit's
+    PNG pixel dimensions, and the assertion checks them against a SECOND, INDEPENDENT source - the
+    exhibit's own tracked `.json` manifest, whose `meta.view` is the same rectangle the SVG's viewBox
+    carries. That is not a tautology: the two files are written by different code paths, and a wrong number
+    in either one fails. What it can no longer catch is a raster on disk drifting from its manifest for a
+    FROZEN exhibit, and the reason that is acceptable is specific rather than convenient - a frozen exhibit
+    is write-once and no generator ever re-rolls it, so nothing this repository does can introduce that
+    drift. The door the old check watched has stopped existing.
+
+    A LIVE map's renders are still compared file-to-file whenever they are present, which is where the
+    drift this test was built for actually happens."""
+    import json
     import re
     import struct
     from pathlib import Path
 
-    checked = 0
+    recorded = json.loads((Path(HERE) / "tests" / "fixtures" / "frozen_exhibit_renders.json").read_text())["renders"]
+    assert len(recorded) == 8, "the eight frozen hamlet exhibits; a change here is a change to the archive"
+
+    # 1. ALWAYS, needing no render on disk: the recorded raster against the manifest's own rectangle.
+    for stem, rec in sorted(recorded.items()):
+        man = json.loads((Path(HERE) / "legacy-hand-authored-pool" / "hamlets" / stem / f"{stem}.json").read_text())
+        view = man.get("meta", {}).get("view")
+        assert view and len(view) == 4, f"{stem}: no meta.view to check against - the second source is gone"
+        _x, _y, vw, vh = (float(v) for v in view)
+        w, h = rec["png"]
+        expected = round(w * vh / vw)
+        assert abs(h - expected) <= 1, (
+            f"{stem}: the recorded raster is {w}x{h}, but its manifest's meta.view ({vw:.0f}x{vh:.0f}) makes a "
+            f"{w}-wide render {expected} tall. One of the two is wrong - they are written by different code "
+            f"paths, which is what makes this worth asserting."
+        )
+
+    # 2. WHERE THE FILES ARE PRESENT, the original file-to-file comparison, unchanged.
     for b in poolmaps.bundles(skill_dir=HERE):
-        if b.tier != "hamlets":
+        if b.tier != "hamlets" or not (os.path.isfile(b.path(".svg")) and os.path.isfile(b.path(".png"))):
             continue
-        if not (os.path.isfile(b.path(".svg")) and os.path.isfile(b.path(".png"))):
-            continue  # a LIVE map's renders are gitignored; a clean checkout simply has none
         head = Path(b.path(".svg")).read_text(errors="ignore")[:4000]
         box = re.search(r'viewBox="([-\d.eE ]+)"', head)
         if not box:
             continue
         _x, _y, vw, vh = (float(v) for v in box.group(1).split())
-        raw = Path(b.path(".png")).read_bytes()[:24]
-        w, h = struct.unpack(">II", raw[16:24])
+        w, h = struct.unpack(">II", Path(b.path(".png")).read_bytes()[16:24])
         expected = round(w * vh / vw)
         assert abs(h - expected) <= 1, (
             f"{b.stem}.png is {w}x{h} but its own SVG's viewBox ({vw:.0f}x{vh:.0f}) makes a "
@@ -392,7 +413,3 @@ def test_every_pool_render_matches_its_own_svg_geometry():
             f"it. Re-render the map (`make maps SCOPE=all`); every consumer that maps world coordinates "
             f"through the viewBox onto the PNG, `tools/crop_map.py` included, is silently misplaced until you do."
         )
-        checked += 1
-    assert checked, (
-        "no hamlet render to check in EITHER tree - the frozen exhibits' renders are committed, so this should never be zero in a real checkout; a live map's are gitignored and legitimately absent"
-    )
