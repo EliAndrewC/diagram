@@ -365,6 +365,36 @@ defect) and two false ALLOWS, because before the fix the ENTRY scan could not se
 `( cd <mirror> && <write> )` either. Teaching only `LEAVES` about subshells would have turned a false
 refusal into a false allow, which is the trade this project never makes.
 
+**D7 the repo-side slimming - PRICED, NOT APPLIED. This one is the GM's to decide.** Item 2 was
+*"sparse or slim the checkout"*; this feature took the sparse half, which is reversible and touches no
+file the GM browses. Here is what the other half is worth, measured rather than argued.
+
+**The slimmable set is 441.1 MB of tracked generated renders**: `.html` 264.0 MB (29 files),
+`.svg` 115.2 MB (31), `.png` 61.9 MB (31). Of that, the gate reads **97.9 MB** - the eight frozen
+hamlet exhibits' `.svg`/`.png`, which the raster-versus-viewBox check needs - plus 0.1 MB of Mode A
+tracked source. So **roughly 343 MB is tracked, browsable, and read by no automated thing.**
+
+**What untracking it would buy, and where:**
+
+- The remote build: **nothing more.** The sparse checkout already declines to materialize what it
+  does not read, so this half of the item is fully paid by the half that shipped.
+- A fresh clone from GitHub (the GM's laptop, a new container): the checkout is the whole cost -
+  66 s and 466 MB today; ~343 MB less to write.
+- This container: **12 clones, 9.9 GB.** Most of a clone's bulk is its worktree copy of those
+  renders. The saving is real disk, repeated per clone.
+
+**What it would cost**: the renders are how the GM looks at maps. `pool/index.html` links thumbnails,
+and a frozen exhibit's `.png` IS the exhibit - `render_cache`'s own comment says "the files on disk
+ARE the exhibit; main() warns loudly if one is missing instead of healing it". Untracking them means
+either regenerating on demand (impossible for the 18 FROZEN maps, whose generators are not re-run by
+design) or keeping them somewhere else. **That is a content decision about the GM's own archive, not
+a tooling decision**, which is why this feature prices it and stops.
+
+**Recommendation**: do not untrack the frozen exhibits' renders - they are the archive. The candidate
+worth a separate conversation is `wip/*.html` alone, 190.8 MB of interactive pages for maps that are
+not in the pool, regenerable by re-running their generators. That is 43% of the slimmable set for the
+least loss, and this feature already stops the build from downloading it.
+
 **Still owed** (they need the paid runs):
 
 - **D1** what travels in the cache for `hooks-test`, and the argument that a remote skip rests only
