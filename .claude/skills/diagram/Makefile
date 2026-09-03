@@ -632,6 +632,14 @@ commit-permitted:
 	@f=$$(ls -t dev/bypass-log/*.json | head -1); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
 	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
 
+# GUARD_EDIT_OK: feature 177 - ONE prompt opens the FULL door here, deliberately. LOGBYPASS writes the
+# target as MAKECMDGOALS plus " FULL" when FULL is set, so with FULL=1 this recipe's own entry already
+# reads "ci-measure FULL" - and door.check asks only that the target CONTAIN FULL, that the entry be
+# `permitted`, and that its commit be an ancestor of HEAD and not of origin/main. `ci-check` calls
+# `commit-permitted` after `bypass-audit` because bypass-audit does not commit its entry; this recipe
+# commits its own, so calling it too would run `git commit` with nothing staged and fail the target.
+# (A shell-level version of this note was tried first and broke the recipe: a make-escaped
+# dollar-paren inside a `: "..."` no-op is command substitution to /bin/sh. Prose belongs here.)
 ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 for the full-scope pair
 	$(REMOTE_OK)
 	@: "(GUARD_EDIT_OK: feature 177 - a NEW paid target, in the same class as ci-image: it prompts, it"; \
@@ -644,13 +652,10 @@ ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 f
 	printf 'number and nothing else - no verified record, no push. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
 	read why || true; \
 	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-measure backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
-	: "(GUARD_EDIT_OK: feature 177 - ONE prompt opens the FULL door here, deliberately. LOGBYPASS writes"; \
-	: " target='$$(MAKECMDGOALS)$$(if $$(FULL), FULL,)', so with FULL=1 this entry already reads"; \
-	: " 'ci-measure FULL' and door.check - which asks only that the target CONTAIN FULL, that the entry"; \
-	: " be `permitted`, and that its commit be an ancestor of HEAD and not of origin/main - opens on it."; \
-	: " `ci-check` calls `commit-permitted` after `bypass-audit` because bypass-audit does not commit;"; \
-	: " this recipe commits its own entry on the line below, so calling it too would run `git commit`"; \
-	: " with nothing staged and fail the target.)"; \
+	: "GUARD_EDIT_OK feature 177 - repairing my own edit: those explanatory no-op lines carried a make"; \
+	: "escape for a dollar-paren expansion, which /bin/sh read as command substitution and died on"; \
+	: "-- Syntax error: unexpected close paren. The note now lives in a make comment above the target,"; \
+	: "where no shell ever parses it. ONE prompt opens the FULL door here on purpose - see there."; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
 	$(RUN).ci measure $(if $(FULL),--full,)
 
