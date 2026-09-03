@@ -133,9 +133,14 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
       verify: the same class as `make ci-image`; the threat-model section says what the route
       bypasses, what it can never do, and why that is not a hole in the five conditions
 
-- [ ] T18 the local gate is green and the tree is at 100% coverage before anything is dispatched
+- [x] T18 the local gate is green and the tree is at 100% coverage before anything is dispatched
       research: procedure
-      verify: `make done` green; `make hooks-test` green
+      verify: DONE. `make hooks-test` green (3 suites re-run, 18 unchanged). `make done` itself
+      SHORT-CIRCUITED - `ci/` is outside the engine key by FR-025 - so the floor was reached with
+      `make test-full`, which deselects nothing: **2,922 passed, 22,544 statements, 0 uncovered,
+      100%**. The first pass found exactly one uncovered line (`__main__.py:175`, the ci-measure
+      banner) and it is now driven end to end. The short-circuit gap is written up as research R12,
+      for the GM
 
 - [x] T19 constitution XIII: no regression, established by the instrument that can see one
       research: procedure
