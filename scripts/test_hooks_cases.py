@@ -63,6 +63,18 @@ REPO_SAFETY = [
     ("git log on the GM repo", cmd("git -C /host-l7r-repo log --oneline -5"), "ok"),
     ("git diff on the GM repo", cmd("git -C /host-l7r-repo diff"), "ok"),
     ("the documented escape", cmd("git -C /host-l7r-repo status  # HOST_GIT_OK: read-only"), "ok"),
+    # FEATURE 178 - A REAL BYPASS OF THIS GUARD, closed. Quoted strings are blanked because they are
+    # PAYLOAD, and they were replaced by the literal word ` QUOTED `; an assignment whose value was
+    # quoted therefore became `FOO= QUOTED  git push ...`, and that inserted word broke the
+    # command-position anchor. The most absolute guard here - the one whose header says it has no
+    # escape hatch on purpose - could be walked past by putting quotes round an environment variable.
+    # Demonstrated before the fix: FOO=bar blocked, FOO="bar" ALLOWED.
+    ("force push behind a QUOTED assignment", cmd('FOO="bar" git push --force origin main'), "blocked"),
+    ("force push behind a quoted *_OK name", cmd('GATE_OK="a reason" git push --force origin main'), "blocked"),
+    ("rebase behind a quoted assignment", cmd('FOO="bar" git rebase -i main'), "blocked"),
+    ("host git write behind a quoted assignment", cmd('FOO="bar" git -C /host-l7r-repo commit -am x'), "blocked"),
+    # ...and the unquoted form, which always worked, still does - the fix widened nothing else
+    ("force push behind a plain assignment", cmd("FOO=bar git push --force origin main"), "blocked"),
 ]
 
 HOUSE_STYLE = [

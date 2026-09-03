@@ -62,7 +62,24 @@ c = re.sub(r"<<-?\s*[\x27\x22]?(\w+)[\x27\x22]?\n.*?\n\s*\1\b", " <<BODY ", cmd,
 # the rule, not a violation of it - and the first cut blocked exactly that. Seventh time this repo
 # has confused a name with the thing it names, so it is stripped for the same reason heredocs are.
 c = re.sub(r"\x27[^\x27]*\x27|\x22[^\x22]*\x22", " QUOTED ", c)
-POS = r"(?:^|[\n;|]|&&|\|\|)\s*(?:timeout\s+\S+\s+|env\s+|[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*"
+# GUARD_EDIT_OK: feature 178 - FIXING A REAL BYPASS OF THIS GUARD, found while adding the temporary
+# escape below and demonstrated before it was fixed:
+#
+#     FOO=bar     git push --force origin main   -> blocked (rc=2)
+#     FOO="bar"   git push --force origin main   -> ALLOWED (rc=0)
+#     GATE_OK="x" git push --force origin main   -> ALLOWED (rc=0)
+#
+# The cause is two correct decisions meeting. Quoted strings are blanked because they are PAYLOAD
+# (`git commit -m "never git push --force"` is a message about the rule, not a violation) - and they
+# are replaced by the literal word ` QUOTED `, with spaces. An assignment whose value is quoted
+# therefore becomes `FOO= QUOTED  git push ...`, and that inserted word sits between the assignment
+# and the command, so the command-position anchor no longer sees `git` in first position. The most
+# absolute guard in this repository - the one whose header says it deliberately has no escape hatch -
+# could be walked past by quoting an environment variable.
+#
+# The fix is to let the prefix group consume the placeholder, which is the only place it can
+# legitimately appear before a command. Nothing else about the anchor moves.
+POS = r"(?:^|[\n;|]|&&|\|\|)\s*(?:timeout\s+\S+\s+|env\s+|QUOTED\s+|[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*"
 
 if re.search(POS + r"git\b[^\n;|&]*\bpush\b[^\n;|&]*(?:--force(?:-with-lease)?|(?<![\w-])-f(?![\w-]))", c):
     print("force-push"); raise SystemExit
@@ -105,6 +122,21 @@ print("ok")
 RS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$RS_HERE/_guardlog.sh"
+# GUARD_EDIT_OK: feature 178 FR-011a - A TEMPORARY ESCAPE, AND ITS REMOVAL IS A TASK OF THIS SAME
+# FEATURE (T34). Read the header above first: this guard has no force-push escape ON PURPOSE, because
+# *"'never' stops meaning never the moment one exists"*. Nothing about that has changed.
+#
+# What HAS changed is that the GM asked for one specific irreversible act and cleared the way for it:
+# *"I disabled the ruleset for force pushes and took a backup of the repo in case anything goes wrong,
+# so you can indeed handle the history rewriting yourself"* (2026-09-03). That authorizes the ACT. It
+# does not authorize a standing hole, and a session may not convert the one into the other - so this
+# token is added, used for the single push that lands the purged history, and REMOVED before the
+# feature closes, with `scripts/test-repo-safety-hooks.sh` proving the refusal is absolute again.
+#
+# It is deliberately NARROW: force-push only (a `history-rewrite` verdict is untouched), reason
+# required like every escape since feature 170, and recorded to the firing log by `escape_or_refuse`.
+# IF YOU ARE READING THIS AFTER 2026-09-03, IT SHOULD NOT BE HERE. Its presence is the defect.
+if [ "$VERDICT" = force-push ] && escape_or_refuse repo-safety HISTORY_PURGE_OK history-purge-ok "$RS_HERE"; then exit 0; fi
 case "$VERDICT" in ok) ;; *) guard_log repo-safety blocked "$(guard_cmd)" "$VERDICT" ;; esac
 case "$VERDICT" in
   force-push)
