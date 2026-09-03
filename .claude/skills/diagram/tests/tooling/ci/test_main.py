@@ -82,6 +82,22 @@ def test_a_cheap_operation_is_refused_as_a_remote_target_and_an_expensive_one_di
     assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48" and entry["compute"] == "BUILD_GENERAL1_2XLARGE"
 
 
+def test_measure_dispatches_with_NO_engine_delta_and_says_what_it_buys(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 177: the CLI end of the measurement route, on the delta that refuses every other one.
+
+    A DOCS-ONLY commit is the case: `check` refuses it at `route-is-gated` and `measure` runs, which
+    is the whole reason the route exists - feature 175 owed a FULL-scope timing and could not take it
+    because there was no engine change to point at."""
+    commit(roots, "docs/only.md", "d\n")
+    state.write(roots, state.GREEN, "quick")
+    assert cli.main(["check"]) == 1
+    assert "REFUSE(route-is-gated)" in capsys.readouterr().out
+    assert cli.main(["measure"]) == 0
+    out = capsys.readouterr().out
+    assert "buys a NUMBER - no verified record, no push" in out, "the operator is told what this run cannot do"
+    assert "BYPASSED" in out, "and the bypassed condition is still printed"
+
+
 def test_engine_key_subcommand(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert cli.main(["engine-key"]) == 0
     key = capsys.readouterr().out.strip()

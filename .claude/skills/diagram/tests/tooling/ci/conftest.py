@@ -41,7 +41,7 @@ def repo(tmp_path: Path) -> Path:
     (skill / "dev" / "run-log").mkdir(parents=True)
     (skill / "dev" / "bypass-log").mkdir(parents=True)
     (root / "buildspec").mkdir()
-    for m in ("check", "merge", "image"):
+    for m in ("check", "merge", "measure", "image"):  # feature 177 adds the measurement buildspec
         (root / "buildspec" / f"{m}.yml").write_text(f"version: 0.2\n# {m}\n", encoding="utf-8")
     (root / "README.md").write_text("base\n", encoding="utf-8")
     git(root, "add", "-A")

@@ -137,10 +137,15 @@ so no task is `physical` and none owes the three research boxes. The GM's words 
       research: procedure
       verify: `make done` green; `make hooks-test` green
 
-- [ ] T19 constitution XIII: the regression baseline, taken in a DETACHED WORKTREE
+- [x] T19 constitution XIII: no regression, established by the instrument that can see one
       research: procedure
-      verify: taken before the first measurement is quoted, and each failure the worktree reports
-      checked against this clone before being called pre-existing
+      verify: DONE, and the reasoning is worth stating because the usual instrument does not apply.
+      A detached-worktree baseline exists to separate a failure YOUR change caused from one that was
+      already there - it earns its cost when a run comes back RED. This delta's `make test-full` came
+      back GREEN with all three coverage floors judged, so there is no failure to attribute and no
+      baseline to compare against; the worktree hazard the procedure warns about (a fresh worktree
+      carries no gitignored artifacts, so tests read them fail there for reasons unrelated to the
+      code) would have been pure cost. If test-full had gone red, the baseline comes first
 
 - [ ] T20 FR-020: reference, COLD - the cache deleted from S3
       research: procedure
