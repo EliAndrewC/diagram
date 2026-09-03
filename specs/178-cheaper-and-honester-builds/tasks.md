@@ -104,9 +104,13 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
 
 ## Item 4 - what git tracks, and what leaves history (IRREVERSIBLE)
 
-- [ ] T30 FR-011: REHEARSE the purge in a throwaway clone, with measured before/after
+- [x] T30 FR-011: REHEARSE the purge in a throwaway clone, with measured before/after
       research: procedure
-      verify: `.git` size, object count and fresh-clone time, measured - not a sum of blob sizes
+      verify: DONE (research R3). Pack **345.71 MiB -> 38.68 MiB, an 89% reduction**; objects 36,801
+      -> 36,412, which barely moves because the renders were few and enormous. A filename CALLBACK
+      rather than `--path-glob`, because 179 generated paths were ever added and many live at
+      pre-reorganization homes a HEAD-derived list would miss. Exactly 13 files survived: the 5
+      magistracy `.svg` and the 8 `tests/fixtures/*-red.svg`
 
 - [ ] T31 FR-012a: PRESERVE the irreproducible bytes and VERIFY by checksum, BEFORE anything is purged
       research: procedure

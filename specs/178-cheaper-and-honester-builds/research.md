@@ -37,3 +37,33 @@ record carried the error - it was stated in conversation only.
 The lesson is the one this repository already applies to timings: a number that can be read off an
 artifact should be, rather than accumulated by hand. `make ci-status` sums the run log for exactly
 this reason, and the run log agrees with the invoice.
+
+## R3 - The purge, REHEARSED (FR-011, T30)
+
+A throwaway mirror clone of `EliAndrewC/diagram`, `git filter-repo` with a filename callback, then
+`reflog expire` + `gc --prune=now --aggressive`. Nothing of this repository was touched.
+
+| | before | after |
+|---|---|---|
+| pack size | **345.71 MiB** | **38.68 MiB** |
+| objects in pack | 36,801 | 36,412 |
+| clone from GitHub | 25.8 s | (measurable only after the real push) |
+
+**An 89% reduction.** Note the object COUNT barely moves - 389 fewer - which is the shape of the
+problem: the renders were few and enormous, not many and small. That is also why the earlier estimate
+built from HEAD would have been wrong in the useful direction: 441 MB is what HEAD carries, and
+history holds every superseded version of the same files.
+
+**A callback, not `--path-glob`, and that mattered.** The renders lived at different paths before
+feature 161's per-map reorganization and before the `tests/` reorganization. A path list built from
+HEAD would have missed them, leaving the bytes in history while appearing to succeed. The census
+across all history found **179 generated paths ever added**, including `test_fixtures/ochiba-*.svg`
+and a flat `pool/magistracies/ubame-magistracy.svg` that exist at neither of those paths today.
+
+**The 13 survivors are exactly the two classes FR-010a names**: 5 magistracy `.svg` (Mode A hand-drawn
+source) and 8 `tests/fixtures/*-red.svg` (hand-broken negative fixtures the gate reads at twelve call
+sites). Nothing generated survived.
+
+**One classification the rehearsal forced, which round 4 flagged as unclassified (its aside A4)**:
+`pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg` was KEPT by the
+`magistracies/`-and-`.svg` rule. It should be kept deliberately or not at all - see D4.
