@@ -185,3 +185,37 @@ the session stands", and refuses. That is the exact form the refusal message its
 *"`( cd <your clone> && ... )` in a subshell for anything you want to DO."* Reproduced four times
 in this session before the workaround was found. The bare form `cd <clone> && ...` is accepted,
 which is why the defect survived: it only bites a session that follows the advice.
+
+## R9 - Sparse checkout does not reach the committed tree (FR-006a, demonstrated)
+
+The spec's round-2 requirement is that the merge route's pushed commit carry every path tracked at
+its merge base, and that the assurance "sparse checkout only affects the working tree" be TESTED
+rather than accepted. Run in a scratch repository on 2026-09-03:
+
+    git clone --sparse r1 r2
+    git -C r2 sparse-checkout set --no-cone '/*' '!/drop/'
+
+| observation | result |
+|---|---|
+| worktree after the sparse set | `keep/a.txt`, `keep/c.txt` - `drop/` absent |
+| `git ls-files` (the index) | all three paths, `drop/big.bin` included |
+| `git ls-tree -r HEAD` | all three paths |
+| commit made while sparse | `drop/big.bin` still in the new commit's tree |
+| **merge of an upstream commit that CHANGED `drop/big.bin`** | merged clean; `git show HEAD:drop/big.bin` returns the UPDATED content (`b2`), and the worktree is still sparse |
+
+So the mechanism is safe for `merge.yml`: the index and every tree written under it stay complete, and
+a path the build never materializes still lands on main with the right content. The one case this
+does not cover, and which the build should be expected to survive rather than avoid: if BOTH sides of
+the merge changed the same excluded file, git needs its CONTENT to do a three-way merge, and under
+`--filter=blob:none` that is a lazy fetch - correct, just slower. Nothing in the excluded set is a
+file two branches edit concurrently (they are generated renders written by one roll at a time).
+
+## R10 - The operation set is REGISTERED, so keying the cache on it stays bounded (FR-018)
+
+`ci/__main__.py` refuses any `TARGET=` that is not `expensive` in `l7r/diagram/_invocation.OPERATIONS`
+(*"only an EXPENSIVE operation runs remotely"*), and that registry holds **13** expensive entries. So
+keying `cache_location` on the operation as well as the scope gives a ceiling of
+`2 projects x (2 scopes + 13 operations)`, a number that moves only when someone adds a registry row -
+never with a commit, a build or a branch, which is exactly what 175's FR-005 forbids and what the
+GM's *"uploading many megabytes ... and then never cleaning it up"* is about. In practice the live
+count is far lower: only `tripwire` has ever dispatched.
