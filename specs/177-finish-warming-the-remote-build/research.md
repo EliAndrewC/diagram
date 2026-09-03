@@ -346,3 +346,41 @@ a guard that models a command shape too narrowly and so fires on correct work.
    writes it is gone. The project's own rule already covers it - detach long runs - and the paid
    targets are exactly the ones where forgetting costs money. `dev/loop.md`'s detach rule should name
    `ci-measure` alongside `make maps`.
+
+## R15 - `green-local-since-edit` accepts the weakest evidence and refuses the strongest
+
+Observed while taking the warm measurement, and it is two findings.
+
+**The condition WORKED, in the GM's own named case.** The warm dispatch was refused before any build
+started, costing nothing:
+
+    state: failed-gate from `make ci-measure` at 2026-09-03T04:20:24Z (b03e14b6)
+    [--] green-local-since-edit  the last gate FAILED - run `make quick` (or reference / test-file)
+                                 green before dispatching again
+    verdict: REFUSE(green-local-since-edit)
+
+That is condition 3 doing exactly what the GM described - *"make done could check whether the last
+thing that was run was an unsuccessful make done, in which case it should just short circuit
+immediately and refuse to run without even dispatching to AWS"* - applied to the measurement route,
+which is the condition feature 177's spec review (round 2) insisted stay in the envelope. It caught a
+real re-dispatch-after-red.
+
+**And the way it was satisfied is worth recording, because it is backwards.** The strongest local
+evidence available on that commit was a green `make test-full`: 2,922 tests, every tree, all three
+coverage floors, 22,544 statements at 100%. It does not satisfy the condition, because `test-full`
+writes no verification state. What DID satisfy it was `make quick`, whose testmon selection found
+nothing to run and reported *"no tests ran in 0.97s"*.
+
+So the condition's ordering is inverted with respect to how much the run actually proves. Nothing was
+bypassed and no guard was gamed - the sequence is exactly what the tooling prescribes - but a session
+following it is asked to replace a 252-second proof with a 0.97-second one.
+
+**Not fixed here** (it is a change to what the five conditions accept, which is the GM's to rule on),
+and the fix looks small: have `test-full` record `green-local` like `done`, `quick`, `reference` and
+`test-file` do. The reason to be careful is that `test-full` is also the target a session reaches for
+when the gate short-circuits (R12), so the two gaps are related and probably want one answer.
+
+**A third, minor**: the first `make quick` after this batch of edits FAILED the feature-171 runtime
+ratchet (15 s), because it was the first selection after many changed files; the immediately
+following run passed having selected nothing. That is the ratchet measuring a cold selection rather
+than a regression, and it is recorded rather than acted on.
