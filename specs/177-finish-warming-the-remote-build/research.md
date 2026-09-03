@@ -292,3 +292,57 @@ Recorded rather than fixed: closing the gap means either adding `ci/` to the eng
 re-opens the paid route for ci-only changes - exactly what FR-025 removed on the GM's instruction) or
 giving the short-circuit a second key for the measured-but-not-engine surface. Both are rulings for
 the GM rather than a session, and neither is in this feature's scope.
+
+## R13 - The measurement route's first act was to find a defect in this same feature
+
+Build `19ff1147`, 1 billed minute, $0.08, FAILED - and it is the best $0.08 this feature spent.
+
+    error: Your local changes to the following files would be overwritten by checkout:
+        buildspec/check.yml  buildspec/merge.yml
+        scripts/main-tree-hooks.sh  scripts/test-main-tree-hooks.sh
+    Please commit your changes or stash them before you switch branches.
+    run.sh: FAILED at line 79
+
+**The mechanism**, reproduced locally and free before spending again: under `--no-checkout` the index
+is populated from HEAD (`origin/main`) while the working tree is EMPTY. `run.sh` then ran an
+inherited `git checkout -q -- .`, which materialized ORIGIN/MAIN's content into that empty tree - and
+the detach to `$GIT_SHA` refused, naming exactly the files the work commit had changed. That line was
+written for the OLD flow, where the install phase checked the whole tree out and a restored cache
+could leave it dirty; under `--no-checkout` it is not merely unnecessary but actively wrong.
+
+**The fix**: delete it, and give the detach `--force`. The `--force` is not a shrug - the install
+phase fetches TWO files at `$GIT_SHA` (`run.sh` and the sparse roster) because it needs them before
+there is a checkout to read them from, so those two are modified relative to HEAD by construction,
+and git refuses the whole checkout over the files it was told to fetch.
+
+Verified locally before the second dispatch: detach OK, 32.4 s, worktree 281 MB, index and HEAD tree
+both complete at 2,116 paths, `wip/*.html` 0 files, the eight frozen hamlet renders present, and
+`run.sh` matching `$GIT_SHA`. Both lines are pinned by `test_sparse_checkout.py`.
+
+**Two lessons worth keeping**, neither about git:
+
+1. **The route paid for itself on its first run.** A measurement build is a build; it exercises the
+   same path a merge would, and the defect it found was in the merge path. Had this shipped behind a
+   green local suite - which it had - the next real `ci-merge` would have hit it.
+2. **The second dispatch was NOT the debugging instrument.** The failure was reproduced in a scratch
+   clone for nothing, and only then re-dispatched. The alternative (re-dispatch to see if the fix
+   took) is the loop this project's guards exist to break.
+
+## R14 - Two more instances of the guard class feature 177 is already fixing
+
+Both found while doing this work, both the same shape as the `LEAVES` defect in `main-tree-hooks.sh`:
+a guard that models a command shape too narrowly and so fires on correct work.
+
+1. **A `cd` to a variable-expanded absolute path is not recognized as leaving main.** The `LEAVES`
+   scan case-matches the literal text against `"$MAIN"/.clones/*`, `"$MAIN"*` and `/*`, so
+   `cd $SP/repro2` - where `$SP` holds an absolute path outside the repository entirely - matches
+   none of them and the session is treated as still standing in main. Worked around here by writing
+   the literal path. NOT fixed in this feature: the guard cannot expand a variable it never sees, and
+   the honest fix is for it to ask the shell (or to accept `cd $VAR` as leaving, which is the wrong
+   direction - a variable could hold the mirror). Recorded for whoever reopens it.
+2. **A foreground `make ci-measure` is killed by the 2-minute tool timeout while the BUILD keeps
+   running.** That is not a guard defect but the same category of surprise: the dispatcher dies, the
+   remote build completes normally, and no run-log entry is ever written because the process that
+   writes it is gone. The project's own rule already covers it - detach long runs - and the paid
+   targets are exactly the ones where forgetting costs money. `dev/loop.md`'s detach rule should name
+   `ci-measure` alongside `make maps`.
