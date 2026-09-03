@@ -644,8 +644,14 @@ ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 f
 	printf 'number and nothing else - no verified record, no push. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
 	read why || true; \
 	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-measure backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
+	: "(GUARD_EDIT_OK: feature 177 - ONE prompt opens the FULL door here, deliberately. LOGBYPASS writes"; \
+	: " target='$$(MAKECMDGOALS)$$(if $$(FULL), FULL,)', so with FULL=1 this entry already reads"; \
+	: " 'ci-measure FULL' and door.check - which asks only that the target CONTAIN FULL, that the entry"; \
+	: " be `permitted`, and that its commit be an ancestor of HEAD and not of origin/main - opens on it."; \
+	: " `ci-check` calls `commit-permitted` after `bypass-audit` because bypass-audit does not commit;"; \
+	: " this recipe commits its own entry on the line below, so calling it too would run `git commit`"; \
+	: " with nothing staged and fail the target.)"; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
-	@$(if $(FULL),$(MAKE) --no-print-directory commit-permitted,true)
 	$(RUN).ci measure $(if $(FULL),--full,)
 
 ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
