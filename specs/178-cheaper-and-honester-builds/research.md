@@ -151,3 +151,29 @@ disk argument for slimming is therefore much weaker than D7 stated; the history 
 
 It also makes the purge safer: FR-011d's hazard is a surviving clone whose disjoint history pushes
 the purged objects back, and there is now exactly one clone to reset, which this session owns.
+
+## R7 - The gate's per-generator budgets are CPU-TIME budgets, so a cheaper core can fail them
+
+The first two clean-sweep attempts both died on the same assertion, on `BUILD_GENERAL1_MEDIUM`:
+
+    AssertionError: kuwabata.gen.py took 130.2s CPU against a 105s budget - it is a SURPRISE that this
+    gen takes so long, and the last time one did (Minami, 2026-08-02) it was a 45-minute perf bug
+
+Nothing was wrong with the code. `GEN_TIME_BUDGETS` measures **CPU seconds**, and CPU seconds for the
+same work go UP on a slower core - so the budgets are implicitly calibrated to whatever hardware they
+were set on, and a cheaper instance trips them while doing exactly what a faster one does correctly.
+
+**This is a real cost of the cheap-compute option and belongs in the decision, not in a footnote.**
+Adopting a 4-vCPU default is not simply "cheaper and slower": as configured it cannot pass the gate,
+and making it pass means either raising `GEN_TIME_BUDGETS` (which weakens a guard that has caught a
+real 45-minute perf bug, on every machine) or making the budget machine-relative (scaling by a
+measured baseline, which is a feature of its own). The 8-vCPU option showed no such failure.
+
+**And a process cost worth recording**, since this project measures those: the two failed attempts
+spent **$0.33** on a WARMING run that could never have helped. Under FULL scope
+`rollcache.bypassed()` is true and the build's own log says *"no cache serves a roll"* - so every
+build rolls every pool map for real whatever the cache holds, and the warming step warmed only the
+gencache and the hooks stamp, neither of which dominates. Worse, each failure then blocked all three
+measured rows behind it through `green-local-since-edit`, so two dispatch cycles produced no rows at
+all. The sweep now runs the rows in ascending cost with a `make quick` between them: a red row
+reports its own result instead of blocking the rest.
