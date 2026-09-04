@@ -76,7 +76,13 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, spec-fidelity round 3). Request: [`request
       `test_environments_are_checked_independently` proved independence with a +0.8% codebuild
       increase, which is now correctly under the floor - raised to +3%, and a new test asserts the
       new property directly, that the same +0.8% owes an explanation locally and nothing remotely
-- [ ] T11 `make done` green, the pairing recorded, and the answer to the GM
+- [x] T11 `make done` green, the pairing recorded, and the answer to the GM
       research: procedure
-      verify: the 100% coverage floor, all guard suites green, `PAIR_OK` recorded on the confirming
-      run (this feature rolls no map, so a settlement-review has nothing to read), pushed to main
+      verify: DONE. `make done` GREEN: **2,950 passed**, 2 skipped, 1 xfailed, **22,574 statements
+      0 uncovered 100%**, hamlet floor **12,402 / 0 / 100%**. The first run found THREE cost goldens
+      computed at the old $0.08 - `test_decision`'s estimate, `test_runlog`'s month-to-date, and a
+      `5.0 * 0.08` that was hardcoded two lines below an assertion deriving the same rate from
+      `config`; that one now derives, so the next rate change cannot leave it stale. `PAIR_OK`
+      recorded on the confirming run - this feature rolls no map, so a settlement-review has no Mode
+      B map to read. The `$0.08` in `test_sparse_checkout.py` was deliberately LEFT: it records what
+      a real build actually paid, and is an account rather than a live figure
