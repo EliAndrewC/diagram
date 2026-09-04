@@ -70,7 +70,10 @@ codebuild snapshots on record are - which is the instance type FR-001 retires. S
     with it.
   - `ESTIMATE_MINUTES["reference"]` MUST be set to the MEASURED 8-vCPU figure: **10 minutes**
     (`dev/run-log/20260904T001453005229-3306563.json` - `scope: "reference"`, build `545da8e1`,
-    569 s, 10 billed min, $0.20).
+    569 s, 10 billed min, $0.20). **The summary table's 553 s and this 569 s are the same build on
+    two different clocks** - the build's own wall time against the dispatcher's total elapsed - not a
+    discrepancy; both bill 10 minutes, and the estimate wants the dispatcher's number because that is
+    what a session waits through.
     **`full` and `operation` MUST be left alone**, and the comment MUST say they are unmeasured
     placeholders. They are not XLARGE calibrations to be scaled: `git log -S ESTIMATE_MINUTES` finds
     exactly one commit (`ed13cd61`, feature 130 wip), the constant's own comment says "Replaced by
@@ -171,6 +174,15 @@ codebuild snapshots on record are - which is the instance type FR-001 retires. S
   falsify the amendment history, for the same reason FR-005 protects `timings.md` and the run logs.
   The new 2.16.0 entry supersedes it; the old entry stays as written.
 
+- **FR-014** It does NOT change how a band is enforced, who may write a perf record, or the push
+  refusal. `perf_review --check` keeps its behavior; only which verdict it is handed changes.
+- **FR-015** It does NOT re-measure the compute types. The table is feature 178's, taken on one
+  commit sequentially, and is cited rather than reproduced.
+- **FR-016** It costs NO paid remote run. Both changes are constants with local tests; the first
+  build to use 8 vCPU will be whichever real dispatch happens next, and its actual billing line is
+  the confirmation. **No `ci-measure` may be dispatched to "verify" this**, which would spend money
+  to re-learn a number feature 178 already bought.
+
 ### A defect found while doing this (constitution Principle XIV)
 
 - **FR-017** **The in-build bookend guard can NEVER match, so every remote FULL build re-takes the
@@ -186,15 +198,6 @@ codebuild snapshots on record are - which is the instance type FR-001 retires. S
   computes. Fixed here rather than filed, per Principle XIV: it is a defect found in the exact
   mechanism this feature changes, and it is a guard predicate, not an overhaul.
   **This is the one thing in this feature the GM did not ask for**, and it is disclosed as such.
-- **FR-014** It does NOT change how a band is enforced, who may write a perf record, or the push
-  refusal. `perf_review --check` keeps its behavior; only which verdict it is handed changes.
-- **FR-015** It does NOT re-measure the compute types. The table is feature 178's, taken on one
-  commit sequentially, and is cited rather than reproduced.
-- **FR-016** It costs NO paid remote run. Both changes are constants with local tests; the first
-  build to use 8 vCPU will be whichever real dispatch happens next, and its actual billing line is
-  the confirmation. **No `ci-measure` may be dispatched to "verify" this**, which would spend money
-  to re-learn a number feature 178 already bought.
-
 ## Decisions Recorded
 
 - **D1 - 8 vCPU over 4** is a decision to ACCEPT a higher price ($0.20 vs $0.16) to avoid a flaky
