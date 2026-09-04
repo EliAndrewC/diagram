@@ -66,9 +66,15 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
       reports `NO COMPARABLE BASELINE ... MUTE` and does not fail. A first run on a new instance type
       and a `make ci-image` rebuild (which changes `image`) both land here
 
-- [ ] T09 FR-006: put the RESIDUAL to the GM, which is what their own instruction asks
+- [x] T09 FR-006: put the RESIDUAL to the GM, which is what their own instruction asks
       research: procedure
-      verify: the transport is implemented and a FULL build still cannot go green, because
+      verify: DONE - put to the GM in the closing answer, with its cause named: the transport they
+      asked for is built (`dev/perf-log/` travels with the clone, pairing is per machine), and a
+      remote FULL build still cannot go green, because band 1 fires on ANY positive delta on ANY
+      seed. That threshold is theirs from feature 129; nothing this feature did touches it, and
+      relaxing it is the only thing that makes a remote FULL build capable of green. Their own
+      words were *"if not then let's talk more"* - so it is a question, not a change made for them
+      verify (original): the transport is implemented and a FULL build still cannot go green, because
       `perf_bands.py` sets band 1 on `total_pct > 0 or any(p > 0 ...)`. The GM wrote *"if not then
       let's talk more"*; the `> 0` threshold is theirs from feature 129 and only they can relax it
 
