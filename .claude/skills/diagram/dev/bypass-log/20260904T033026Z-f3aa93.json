@@ -1,0 +1,6 @@
+{
+  "utc": "20260904T033026Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 179 is CI config constants, band thresholds, a guard predicate and docs - it rolls no map and touches no placer, so a settlement-review has no Mode B map to read"
+}

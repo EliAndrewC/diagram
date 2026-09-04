@@ -93,11 +93,12 @@ def test_breaker_is_last_and_refuses() -> None:
 
 def test_estimate_and_render_golden() -> None:
     d = decision.decide(GATED, green(), NOW, None, None, decision.CHECK, None, "reference", 1.234)
-    assert d.estimate == decision.Estimate(minutes=5.0, cost_usd=0.4, month_to_date_usd=1.23)
+    # feature 179: reference is 10 measured minutes on the 8-vCPU box at $0.02/min.
+    assert d.estimate == decision.Estimate(minutes=10.0, cost_usd=0.2, month_to_date_usd=1.23)
     text = decision.render(d, "check", "reference")
     assert text.splitlines()[0] == "ci-check (reference scope) - dispatch conditions:"
     assert "[ok] route-is-gated" in text and "[ok] green-local-since-edit" in text
-    assert f"~5 build-min at ${config.RATE_PER_MIN:.2f}/min = ~$0.40; month-to-date remote spend $1.23" in text
+    assert f"~10 build-min at ${config.RATE_PER_MIN:.2f}/min = ~$0.20; month-to-date remote spend $1.23" in text
     assert text.splitlines()[-1] == "  verdict: DISPATCH"
     op = decision.estimate("reference", 0.0, "cohort N=48")
     assert op.minutes == config.ESTIMATE_MINUTES["operation"]

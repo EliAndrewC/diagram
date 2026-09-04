@@ -23,7 +23,7 @@ def test_entry_shape_and_month_to_date(repo: Path) -> None:
     assert runlog.month_to_date(skill, now=e["utc"]) == round(14.0 * config.RATE_PER_MIN, 4)
     assert runlog.month_to_date(skill, now="1999-01-01T00:00:00Z") == 0.0
     rep = runlog.remote_spend_report(skill)
-    assert "Remote spend" in rep and "gm-assistant-merge:def" in rep and "month-to-date: $1.12" in rep and "2 run(s)" in rep
+    assert "Remote spend" in rep and "gm-assistant-merge:def" in rep and "month-to-date: $0.28" in rep and "2 run(s)" in rep
 
 
 def test_report_with_no_remote_runs(repo: Path) -> None:
@@ -42,7 +42,7 @@ def test_would_have_entries_are_recorded_reported_and_never_spend(repo: Path) ->
     before = runlog.month_to_date(skill)
     p = runlog.write_would_have(skill, "ci-check", "reference", 5.0, "remote off: attempted")
     d = json.loads(p.read_text(encoding="utf-8"))
-    assert d["where"] == "would-have-dispatched" and d["result"] == "would-have-dispatched" and d["minutes"] == 5.0 and d["cost_usd"] == round(5.0 * 0.08, 4)
+    assert d["where"] == "would-have-dispatched" and d["result"] == "would-have-dispatched" and d["minutes"] == 5.0 and d["cost_usd"] == round(5.0 * config.RATE_PER_MIN, 4)
     assert runlog.month_to_date(skill) == before, "an estimate is never spend"
     assert runlog.remote_entries(skill) == [] or all(r["where"] == "codebuild" for r in runlog.remote_entries(skill))
     rows = runlog.would_have_entries(skill)
