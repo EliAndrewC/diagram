@@ -155,5 +155,5 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
 
 ## Closing
 
-- [ ] T40 D1 to D6 completed, each classed accurate / deliberate deviation / guess
+- [x] T40 D1 to D6 completed, each classed accurate / deliberate deviation / guess
 - [ ] T41 the answer to the GM, the records current, and the local gate green with the 100% floor

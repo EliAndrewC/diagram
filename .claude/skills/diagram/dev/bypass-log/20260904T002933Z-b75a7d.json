@@ -1,0 +1,6 @@
+{
+  "utc": "20260904T002933Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 178 is CI tooling, guards, gitignore and a history purge - it rolls no map and changes no placer, so a settlement-review has no artifact to read; the only pool change is that generated renders became untracked, which alters no manifest."
+}

@@ -395,7 +395,7 @@ none of this makes a FULL build green, because `perf_bands.py` sets band 1 on
   **What is lost is stated**: a frozen exhibit is write-once and no generator re-rolls it, so the drift
   the old check watched for can no longer be introduced. The door stopped existing.
 
-**D5 the history purge** - see the tasks; rehearsed at **345.71 MiB -> 38.68 MiB (89%)** on a throwaway
+**D5 the history purge** - ACCURATE, and DONE. Rehearsed first at **345.71 MiB -> 38.68 MiB** on a throwaway
 mirror. A filename CALLBACK rather than path globs, because 179 generated paths were ever added and
 many sit at pre-reorganization homes a HEAD-derived list would miss - it would have left the bytes in
 history while appearing to succeed. **The archive is at `/host-l7r-repo/diagram-render-archive/`**:
@@ -408,7 +408,39 @@ caught it unclassified on the first remote gate, which is the census working.
 while `FOO=bar` was blocked), closed with five regression cases - the most consequential thing this
 feature touched, and nothing to do with what it was for.
 
-**D6 the compute measurements** - the numbers are in the tasks; the first attempt was CONTAMINATED by
+**THE MEASURED OUTCOME**: pack **345.71 MiB -> 45.20 MiB**, fresh clone from GitHub **25.8 s -> 3.8 s**,
+2,715 commits intact, 8 tracked renders (the hand-authored fixtures) and no others. The mirror and the
+one clone are both on the rewritten history, and the mirror's working copies were restored from the
+archive, 83/83 checksum-verified.
+**The verification caught the purge achieving NOTHING at first** (R8): the first fresh clone was
+348.03 MiB, because two stale MAILBOX branches kept every purged object reachable - `run.sh` reaps a
+mailbox only after a MERGE, so `check` and `measure` builds leave theirs behind, and one had been
+sitting there since 2026-08-31 carrying the whole pre-untracking tree. A history rewrite is only as
+complete as the ref set it covers.
+**The escape is gone**, proven against four variants including the retired token, and its removal note
+deliberately does not name it - the escape census scans the tree for every `*_OK` and counted a
+mention as a live escape, twice.
+
+**D6 the compute measurements** - ACCURATE. Three types, ONE commit, sequential, all GREEN:
+
+| compute | vCPU | $/min | total | billed | cost | vs 36-core |
+|---|---|---|---|---|---|---|
+| `g1.medium` | 4 | 0.0100 | 913 s | 16 min | **$0.16** | 2.18x time, 3.5x cheaper |
+| `g1.large` | 8 | 0.0200 | 553 s | 10 min | **$0.20** | 1.32x time, **2.8x cheaper** |
+| `g1.xlarge` | 36 | 0.0798 | 418 s | 7 min | **$0.56** | baseline |
+
+**Recommendation: 8 vCPU.** 2.8x cheaper for 1.32x the time, with nothing marginal about it. 4 vCPU
+saves only **$0.04 more** than 8, costs six more minutes, and is where `kuwabata`'s CPU-time budget
+tripped on two of three attempts (R7) - flaky rather than blocked, which in a merge gate is worse than
+slow, because a red build that means nothing teaches people to ignore red builds. And 36 cores never
+earned its price: 4.5x the cores of the 4-vCPU row for 2.18x the speed, because the suite does not
+parallelise past 8 workers - which is the same finding feature 177's R16 made from the other direction.
+
+**The default is NOT changed by this feature.** FR-016 set the criterion in advance - green on every
+row AND at least 50% cheaper at no worse wall clock - and 8 vCPU is 64% cheaper but 1.32x slower, so
+it fails that test and the choice goes to the GM, which is the rule working rather than a hedge.
+
+The first attempt was CONTAMINATED by
 the very rule this spec wrote (three commits, two concurrent builds racing one shared cache object)
 and is recorded as R5 rather than quietly re-run. What survives it: all three instance types ran the
 gate GREEN, including 4 vCPU / 7 GB, which answers assumption A2's memory risk.
