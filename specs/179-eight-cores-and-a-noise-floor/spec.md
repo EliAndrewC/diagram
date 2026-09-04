@@ -1,6 +1,15 @@
 # Feature 179 - eight cores, and a band-1 noise floor per environment
 
-**Status**: draft, pre-implementation
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5) - cleared for implementation (constitution XVI).
+Round 1 returned six items, round 2 three, round 3 none. What the rounds caught is worth recording:
+round 1, that FR-004 rested on a false premise (`ESTIMATE_MINUTES` was never calibrated on XLARGE -
+those are pre-measurement placeholders) and that a disclosure requirement was unnecessary because
+`render()` already prints every seed unconditionally; round 2, that this spec's own account of how
+its two changes INTERACT was backwards - it claimed the remote perf-gate would go mute until two
+8-vCPU snapshots existed, and the measurement says the floor is live on the FIRST remote build - plus
+the constitution amendment and the trap in it (`:123` is inside a historical PRIOR block). Round 3
+adjudicated FR-017, the defect found mid-implementation, as REQUIRED by Principle XIV rather than
+scope the author invented.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 **Predecessor**: feature 178, which measured both numbers and deliberately changed neither
 
