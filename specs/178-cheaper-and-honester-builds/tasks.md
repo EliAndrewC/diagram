@@ -162,4 +162,11 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
 ## Closing
 
 - [x] T40 D1 to D6 completed, each classed accurate / deliberate deviation / guess
-- [ ] T41 the answer to the GM, the records current, and the local gate green with the 100% floor
+- [x] T41 the answer to the GM, the records current, and the local gate green with the 100% floor
+      research: procedure
+      verify: DONE. `make done` GREEN on the post-purge commit: 2,931 passed, 2 skipped, 1 xfailed,
+      **22,557 statements 0 uncovered 100%**, hamlet floor **12,402 / 0 / 100%** over 88 derived
+      modules, 21 guard suites green. The three compute rows, the purge numbers and the four
+      findings are in the spec (D1-D6); the memory record is written; the two things left to the GM
+      are named as questions rather than decided - the compute default (FR-016's advance criterion
+      is not met) and the `> 0` perf band (T09)
