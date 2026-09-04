@@ -148,9 +148,9 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
       push restores every purged object, with Principle VI forbidding the rebase that would fix it.
       Dirty trees carried across as patches - mid-task work is sacred
 
-- [ ] T36 FR-011c: verify from a FRESH clone, and say what that does not prove
+- [x] T36 FR-011c: verify from a FRESH clone, and say what that does not prove
       research: procedure
-      verify: `.git` size, clone time, green gate - and the note that a fresh clone is small even
+      verify: DONE, and it caught a real incompleteness (R8). The FIRST fresh clone came back at **348.03 MiB** - the purge had achieved nothing observable, because two stale MAILBOX branches kept every purged object reachable; `run.sh` reaps a mailbox only after a MERGE, so check and measure runs leave theirs behind. After deleting them: pack **345.71 -> 45.20 MiB**, fresh clone **25.8 s -> 3.8 s**. The gate's green run is on the same commit in this clone, `29d83fe8`. Original bar: `.git` size, clone time, green gate - and the note that a fresh clone is small even
       while a peer clone still holds every purged object
 
 ## Closing

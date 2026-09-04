@@ -177,3 +177,36 @@ gencache and the hooks stamp, neither of which dominates. Worse, each failure th
 measured rows behind it through `green-local-since-edit`, so two dispatch cycles produced no rows at
 all. The sweep now runs the rows in ascending cost with a `make quick` between them: a red row
 reports its own result instead of blocking the rest.
+
+## R8 - The purge achieved NOTHING until the stale mailbox refs were deleted
+
+FR-011c required verifying from a fresh clone and saying what that does not prove. It earned its
+place immediately: the first fresh clone after the force-push came back at **348.03 MiB** - the purge
+had changed nothing a new cloner would see.
+
+    refs/heads/main                      29d83fe8    8 tracked renders   (purged)
+    refs/heads/session/diagram-tooling   81224cad    old history beneath it
+    refs/heads/session/diagram-testing   53d0915a    91 tracked renders
+
+**Mailbox branches keep every purged object reachable.** They are transient dispatch artifacts -
+`buildspec/run.sh` deletes the mailbox after a MERGE build - but a `check` or `measure` build never
+merges, so its mailbox lingers on GitHub for ever. One of the two here belonged to a different
+session and had been sitting there since 2026-08-31, carrying the entire pre-untracking tree.
+
+Deleting both is what made the purge real:
+
+| | before | after |
+|---|---|---|
+| pack | 345.71 MiB | **45.20 MiB** |
+| fresh clone from GitHub | 25.8 s | **3.8 s** |
+
+**The lesson generalizes past this feature**: a history rewrite is only as complete as the ref set it
+covers, and `git ls-remote` is the check. Nothing in the tooling reaps a mailbox for a non-merge
+build, so they accumulate - two were live today, and each one pins a full copy of the history it was
+cut from. That is a standing cost this repository has been paying invisibly, and a candidate for the
+dispatcher to clean up after a build it did not merge.
+
+**One honest limit**: `git push --delete` removes the ref, and a fresh clone therefore no longer
+fetches those objects. Whether GitHub has yet reclaimed the space server-side is not observable from
+here and is not what the GM asked about - what they asked about, the size everyone downloads, is
+measured above.
