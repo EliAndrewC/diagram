@@ -83,3 +83,72 @@ def test_render_names_the_measurement_the_stage_that_grew_and_what_is_owed() -> 
     assert "crossed: seed 25 +15.0% > 10%" in text and "owes: bands 1 and 2, plus the GM" in text
     quiet = pb.render(pb.evaluate(snap("s", {1: 10.0}), snap("e", {1: 9.0})))
     assert "grew" not in quiet and "owes: nothing" in quiet
+
+
+# --- feature 179: the band-1 line is PER ENVIRONMENT -------------------------------------------
+# The GM's own number ("a noise floor of about two percent"), and the measurement behind needing one:
+# three snapshots of IDENTICAL code on the same CodeBuild box fired band 1 on 5 of 6 pairwise
+# comparisons. These pin that the floor exists, that it is applied on BOTH measurements, that it
+# leaves local strict, and - the property that makes it safe - that bands 2 and 3 do not move.
+
+
+def test_the_band1_line_is_per_environment_and_the_GMs_number() -> None:
+    assert pb.BAND1_PCT == {"local": 0.0, "codebuild": 2.0}
+    assert pb.BAND1_DEFAULT_PCT == 0.0
+
+
+def test_local_is_unchanged_any_increase_still_reaches_band_1() -> None:
+    v = pb.evaluate(snap("s", {1: 100.0}, "local"), snap("e", {1: 100.5}, "local"))
+    assert v.band == 1 and v.total_pct == 0.5, "the strict rule still holds on the quiet machine"
+
+
+def test_codebuild_noise_under_the_floor_does_not_reach_band_1() -> None:
+    # +1.16% is the WORST seed feature 129 measured on identical code. It must not owe an explanation.
+    v = pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 101.16}, "codebuild"))
+    assert v.band == 0 and v.total_pct == 1.2
+
+
+def test_codebuild_over_the_floor_still_reaches_band_1() -> None:
+    v = pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 102.5}, "codebuild"))
+    assert v.band == 1
+
+
+def test_the_floor_applies_to_a_single_seed_not_only_the_total() -> None:
+    # total is NEGATIVE, one seed is over the line - feature 128's shape, one rung down.
+    v = pb.evaluate(snap("s", {1: 100.0, 2: 100.0}, "codebuild"), snap("e", {1: 103.0, 2: 90.0}, "codebuild"))
+    assert v.total_pct < 0 and v.seeds[1] == 3.0 and v.band == 1
+    # and the same shape UNDER the line owes nothing
+    quiet = pb.evaluate(snap("s", {1: 100.0, 2: 100.0}, "codebuild"), snap("e", {1: 101.0, 2: 90.0}, "codebuild"))
+    assert quiet.seeds[1] == 1.0 and quiet.band == 0
+
+
+def test_exactly_the_floor_is_not_over_the_line() -> None:
+    v = pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 102.0}, "codebuild"))
+    assert v.total_pct == 2.0 and v.band == 0, "`>` not `>=`, matching BAND2's own boundary"
+
+
+def test_an_unknown_environment_defaults_to_strict() -> None:
+    v = pb.evaluate(snap("s", {1: 100.0}, "somebox"), snap("e", {1: 100.5}, "somebox"))
+    assert v.band == 1, "a new environment must not silently arrive with a floor nobody chose"
+
+
+def test_the_floor_does_not_move_bands_2_and_3() -> None:
+    # This is the property that makes the mute safe: a real regression escalates exactly as before.
+    over2 = pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 106.0}, "codebuild"))
+    assert over2.band == 2
+    over3 = pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 111.0}, "codebuild"))
+    assert over3.band == 3
+    seed2 = pb.evaluate(snap("s", {1: 100.0, 2: 100.0}, "codebuild"), snap("e", {1: 111.0, 2: 80.0}, "codebuild"))
+    assert seed2.seeds[1] == 11.0 and seed2.band == 2, "a seed over 10% escalates though the total fell"
+
+
+def test_band0_no_longer_claims_there_was_no_increase() -> None:
+    v = pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 101.0}, "codebuild"))
+    assert v.band == 0 and "no increase on the total or on any seed" not in v.owes
+
+
+def test_a_muted_increase_is_still_fully_visible_on_the_page() -> None:
+    # FR-011: no disclosure machinery was added because none is needed - render() already prints
+    # every seed and the total unconditionally, whatever the band.
+    text = pb.render(pb.evaluate(snap("s", {1: 100.0}, "codebuild"), snap("e", {1: 101.0}, "codebuild")))
+    assert "+1.0%" in text and "band 0" in text

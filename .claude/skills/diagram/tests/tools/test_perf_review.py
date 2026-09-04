@@ -127,8 +127,11 @@ def test_a_record_is_bound_to_the_numbers_and_the_commit(log: Path, capsys: pyte
 
 
 def test_environments_are_checked_independently(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    # Feature 179 raised codebuild's band-1 line to 2.0%, so this needs an increase that is over it.
+    # The +0.8% this used to carry is now UNDER the floor and owes nothing - which is the subject of
+    # test_the_same_increase_lands_differently_per_environment below.
     band(log, -1.0, "local")
-    band(log, 0.8, "codebuild")
+    band(log, 3.0, "codebuild")
     assert run(log, "check") == 1
     out = capsys.readouterr().out
     assert "[codebuild]" in out and "MISSING" in out and "[local]" in out and "nothing owed" in out
@@ -260,3 +263,91 @@ def test_a_MUTE_gate_says_it_is_mute_rather_than_passing_quietly(tmp_path) -> No
     assert ok, "no baseline is not a regression"
     assert "NO COMPARABLE BASELINE" in msg and "MUTE" in msg
     assert "BUILD_GENERAL1_MEDIUM" in msg, "it must name which machine has nothing to compare against"
+
+
+# --- feature 179 FR-017: the in-build bookend guard asks the SNAPSHOT, not the filename ----------
+# THE DEFECT THESE PIN. `perf-gate` guarded on `ls dev/perf-log/*<n>-start*codebuild*.json`, but
+# snapshots are named `{stamp}-{label}-{clone}.json` - 0 of the 44 on record had `codebuild` in the
+# filename, so the test was unconditionally false and every remote build re-took a bookend it may
+# already have had. `test_a_codebuild_start_is_invisible_to_a_filename_match` is the one that would
+# have caught it: it writes the exact file the old glob was looking for and shows it does not exist.
+
+
+def _machine(monkeypatch: pytest.MonkeyPatch, host: str, image: str = "img") -> None:
+    monkeypatch.setattr("l7r.diagram.tools.perf_snapshot.machine_identity", lambda: {"environment": "x", "host": host, "image": image})
+
+
+def _start(log: Path, label: str, host: str, image: str = "img") -> None:
+    body: dict[str, Any] = {
+        "label": label,
+        "utc": "20260904T000000Z",
+        "commit": "abc1234",
+        "environment": "codebuild" if host.startswith("codebuild") else "local",
+        "host": host,
+        "image": image,
+        "rows": [{"seed": 1, "seconds": 10.0, "stages": {}}],
+    }
+    (log / f"20260904T000000Z-{label}-someclone.json").write_text(json.dumps(body), encoding="utf-8")
+
+
+def test_a_start_on_THIS_machine_is_found(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    _start(log, "179-start", "codebuild:BUILD_GENERAL1_LARGE")
+    assert pr.has_start_for_this_machine(log, "179-eight-cores") is True
+
+
+def test_a_start_on_a_DIFFERENT_box_does_not_count(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    # The whole point: an XLARGE bookend must not satisfy an 8-vCPU build, or feature 178's FR-008
+    # pairing would be handed a comparison that is pure instance difference.
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    _start(log, "179-start", "codebuild:BUILD_GENERAL1_XLARGE")
+    assert pr.has_start_for_this_machine(log, "179-eight-cores") is False
+
+
+def test_a_different_IMAGE_does_not_count(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    # `make ci-image` retires every baseline on the box, which is the documented consequence.
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE", image="new")
+    _start(log, "179-start", "codebuild:BUILD_GENERAL1_LARGE", image="old")
+    assert pr.has_start_for_this_machine(log, "179-eight-cores") is False
+
+
+def test_an_END_bookend_is_not_a_START(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    _start(log, "179-end", "codebuild:BUILD_GENERAL1_LARGE")
+    assert pr.has_start_for_this_machine(log, "179-eight-cores") is False
+
+
+def test_another_features_start_is_not_this_ones(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    _start(log, "178-start", "codebuild:BUILD_GENERAL1_LARGE")
+    assert pr.has_start_for_this_machine(log, "179-eight-cores") is False
+
+
+def test_no_feature_number_is_false_not_a_crash(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    assert pr.has_start_for_this_machine(log, "no-digits-here") is False
+
+
+def test_a_codebuild_start_is_invisible_to_a_filename_match(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The regression test for the defect itself: the old glob could never match a real snapshot."""
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    _start(log, "179-start", "codebuild:BUILD_GENERAL1_LARGE")
+    assert list(log.glob("*179-start*codebuild*.json")) == [], "the string `codebuild` is never in a snapshot FILENAME"
+    assert pr.has_start_for_this_machine(log, "179-eight-cores") is True, "but asking the snapshot finds it"
+
+
+def test_the_cli_subcommand_returns_the_predicate_as_an_exit_code(log: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _machine(monkeypatch, "codebuild:BUILD_GENERAL1_LARGE")
+    assert run(log, "has-start") == 1, "absent -> non-zero, so the make guard takes the branch"
+    _start(log, f"{F}-start", "codebuild:BUILD_GENERAL1_LARGE")
+    assert run(log, "has-start") == 0, "present -> zero, so the branch is skipped"
+
+
+def test_the_same_increase_lands_differently_per_environment(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """The new rule, stated as one assertion: +0.8% owes an explanation locally and nothing remotely."""
+    band(log, 0.8, "local")
+    band(log, 0.8, "codebuild")
+    assert run(log, "check") == 1
+    out = capsys.readouterr().out
+    assert "[local]" in out and "MISSING" in out, "the quiet machine keeps the strict rule"
+    assert "[codebuild]" in out and "nothing owed" in out, "the noisy one does not, at 5-of-6 false firings"

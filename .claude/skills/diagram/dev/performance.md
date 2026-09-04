@@ -185,7 +185,9 @@ The GM's matrix, evaluated on BOTH measurements and PER ENVIRONMENT (local again
 CodeBuild against CodeBuild - a cross-environment pair is REFUSED, never displayed):
 
     band            TOTAL          ANY SEED     what it takes
-    1  explain      > 0%           > 0%         `make perf-explain WHY=...` (yours) + `make perf-confirm ... AS=perf-audit` (the subagent's)
+    (band 1's line is PER ENVIRONMENT since feature 179: 0.0% local, 2.0% codebuild - see
+     perf_bands.BAND1_PCT, where the 5-of-6 noise measurement that bought the floor is recorded)
+    1  explain      over the line  over the line         `make perf-explain WHY=...` (yours) + `make perf-confirm ... AS=perf-audit` (the subagent's)
     2  audit        > 5%           > 10%        `make perf-audit VERDICT=justified NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit`
     3  GM sign-off  > 10%          > 20%        `make perf-signoff WHY=...` - the GM, at a terminal, before the push
 

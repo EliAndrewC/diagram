@@ -1,6 +1,6 @@
 ---
 name: perf-audit
-description: Independent review of a measured PERFORMANCE INCREASE in the diagram generator (feature 129). Band 1 (any increase on the total or on any seed, per environment) - confirms whether the session's written explanation is CONSISTENT with the recorded per-stage delta. Band 2 (>5% total or >10% on a seed) - independently adjudicates the GM's three criteria - necessary, commensurate with the functionality gained, no good way around it - on before/after data, and may take a function-level profile of the stage that grew. The session that caused the slowdown is not a reliable judge of it (constitution VI, same rationale as settlement-review); this agent is the one that writes the review record, and the ONLY one that passes AS=perf-audit. Use whenever `make perf-report`, `make perf-gate` or `make perf-review` reports a band of 1 or more.
+description: Independent review of a measured PERFORMANCE INCREASE in the diagram generator (feature 129). Band 1 (an increase over that environment's band-1 line - 0.0% local, 2.0% codebuild - on the total or on any seed) - confirms whether the session's written explanation is CONSISTENT with the recorded per-stage delta. Band 2 (>5% total or >10% on a seed) - independently adjudicates the GM's three criteria - necessary, commensurate with the functionality gained, no good way around it - on before/after data, and may take a function-level profile of the stage that grew. The session that caused the slowdown is not a reliable judge of it (constitution VI, same rationale as settlement-review); this agent is the one that writes the review record, and the ONLY one that passes AS=perf-audit. Use whenever `make perf-report`, `make perf-gate` or `make perf-review` reports a band of 1 or more.
 model: opus
 tools: Read, Grep, Bash
 ---
@@ -29,7 +29,7 @@ The main session names the feature (`SPECIFY_FEATURE=NNN-slug`) and the environm
 4. If the stage delta cannot explain the change: `make perf-profile SEED=<n> STAGE=<stage>` (about
    three times that stage's wall time; the derived top-25 table lands in `dev/perf-log/`).
 
-## Band 1 - confirm (any increase)
+## Band 1 - confirm (an increase over this environment's line)
 
 The question is NARROW: **does the stated cause match what the data shows?** A cause that names a
 stage the delta shows growing, at a size the diff makes plausible, is consistent. "Inside the 1.7%

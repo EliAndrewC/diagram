@@ -501,7 +501,13 @@ perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on 
 	  printf 'Set SPECIFY_FEATURE=NNN-slug (spec-kit work) or FEATURE=NNN, so the bookends can be paired.\n\n'; \
 	  exit 1; \
 	fi; \
-	if [ -n "$$CODEBUILD_BUILD_ID" ] && ! ls dev/perf-log/*"$$n"-start*codebuild*.json >/dev/null 2>&1; then \
+	if [ -n "$$CODEBUILD_BUILD_ID" ] && ! $(PERF_REVIEW) has-start --feature "$$n" >/dev/null 2>&1; then \
+	  : "GUARD_EDIT_OK: FIXING A GUARD THAT NEVER FIRED CORRECTLY (feature 179, FR-017). The old test was" ; \
+	  : "ls dev/perf-log/*<n>-start*codebuild*.json - a FILENAME test, but snapshots are named" ; \
+	  : "{stamp}-{label}-{clone}.json and 0 of the 44 on record contain 'codebuild', so it was always" ; \
+	  : "false and every remote build re-took a bookend it may already have had. has-start asks the" ; \
+	  : "SNAPSHOT for its recorded machine identity, which is also STRICTER: the filename test would" ; \
+	  : "have paired an XLARGE -start with an 8-vCPU -end. The no-baseline refusal below is untouched." ; \
 	  printf '\n\033[1mPERF GATE (in-build): taking the %s-start bookend on the pre-merge main, in a detached worktree.\033[0m\n' "$$n"; \
 	  git worktree add -q --detach /tmp/base"$$n" origin/main && ( cd /tmp/base"$$n"/.claude/skills/diagram && $(MAKE) --no-print-directory perf LABEL="$$n-start" ) && cp /tmp/base"$$n"/.claude/skills/diagram/dev/perf-log/*"$$n-start"*.json dev/perf-log/ || exit 1; \
 	fi; \
@@ -618,7 +624,8 @@ ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) 
 # (GUARD_EDIT_OK: feature 132 - remote off refuses every ci-check before any AWS call; FULL and TARGET are sweeps under the scope lock)
 	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
 # (GUARD_EDIT_OK: NO_GO=1 is the FR-036 measurement - the build must abort itself when nobody releases it; feature 130 T076.
-#  COMPUTE=BUILD_GENERAL1_2XLARGE is the T028 scaling measurement the GM asked for on 2026-08-25; the default stays xlarge)
+#  COMPUTE=BUILD_GENERAL1_2XLARGE is the T028 scaling measurement the GM asked for on 2026-08-25; the default is large, 8 vCPU, feature 179)
+# (GUARD_EDIT_OK: a forward-looking statement of the CURRENT default, falsified by feature 179's compute change - FR-005)
 
 ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-main.sh push   FULL=1 (prompts)
 	@$(if $(FULL),$(SWITCH) check scope "ci-merge FULL=1",true)
@@ -1030,7 +1037,9 @@ REFERENCE_TIER = hamlet
 # container: the quick set is as fast on 8 workers as on 22 (9.9 vs 10.1 s - each worker costs ~0.17 s to
 # spawn and collect, and past 8 that buys back the parallel gain), while the GM runs several sessions at
 # once on the laptop, so flooding every core only slows the others. CodeBuild is dedicated to the run, so
-# it takes `auto` (36 vCPU on the xlarge). CODEBUILD_BUILD_ID is set in every CodeBuild build and nowhere
+# it takes `auto` (8 vCPU on the large, since feature 179 - which is where this comment's own 8-vs-22
+# finding pointed all along). CODEBUILD_BUILD_ID is set in every CodeBuild build and nowhere
+# (GUARD_EDIT_OK: a forward-looking statement of the worker count the remote run takes, which moves with the box - FR-005)
 # else - the inverse of "is this the laptop", and it needs no hostname.
 # ...and never more workers than the box has cores (GM 2026-08-26: "I wouldn't want to run eight workers on a
 # machine that only has four cores") - min(8, nproc). CPU_COUNT is overridable so the small-box branch is testable.

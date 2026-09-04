@@ -19,20 +19,31 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-# BUILD_GENERAL1_XLARGE: 36 vCPU / 68 GB, measured 2026-08-24. Chosen against 2xlarge by the number
-# in timings.md (feature 130, T028). $0.08 per build-minute, billed from PROVISIONING to end.
-RATE_PER_MIN = 0.08
-COMPUTE_TYPE = "BUILD_GENERAL1_XLARGE"
+# BUILD_GENERAL1_LARGE: 8 vCPU / 15 GB, $0.02 per build-minute, billed from PROVISIONING to end.
+# CHOSEN BY MEASUREMENT (feature 179, GM 2026-09-04: "lock in the eight CPUs going forward"), from
+# feature 178's three-row comparison - ONE commit, run sequentially, all green:
+#     4 vCPU  BUILD_GENERAL1_MEDIUM   913 s  16 billed min  $0.16
+#     8 vCPU  BUILD_GENERAL1_LARGE    553 s  10 billed min  $0.20   <- this one
+#    36 vCPU  BUILD_GENERAL1_XLARGE   418 s   7 billed min  $0.56
+# 2.8x cheaper for 1.32x the time. 4 vCPU was REJECTED on evidence, not on price: it saves only $0.04
+# more and is where kuwabata's GEN_TIME_BUDGETS entry tripped on two of three attempts, because those
+# are CPU-SECOND budgets and CPU seconds rise on a slower core - flaky, which in a merge gate is worse
+# than slow. And 36 cores never earned its price: 4.5x the cores of the 4-vCPU row for 2.18x the
+# speed, because the suite does not parallelise past 8 workers (see the CPU_COUNT comment below).
+# Superseded: BUILD_GENERAL1_XLARGE at $0.08, chosen 2026-08-24 against 2xlarge (feature 130, T028).
+RATE_PER_MIN = 0.02
+COMPUTE_TYPE = "BUILD_GENERAL1_LARGE"
 # Per-minute rates by compute type (us-east-1 Linux on-demand price list, 2026-08): the knob
-# `make ci-check COMPUTE=BUILD_GENERAL1_2XLARGE` exists to MEASURE whether a workload scales past 36
-# vCPU - the default stays the constant above until a number says otherwise (timings.md, T028).
+# `make ci-check COMPUTE=BUILD_GENERAL1_2XLARGE` exists to MEASURE whether a workload scales - the
+# default stays the constant above until a number says otherwise. It is how the table above was
+# taken, which is the argument for keeping it.
 RATES = {"BUILD_GENERAL1_XLARGE": 0.08, "BUILD_GENERAL1_2XLARGE": 0.20, "BUILD_GENERAL1_LARGE": 0.02, "BUILD_GENERAL1_MEDIUM": 0.01}
 PROJECT_MERGE = "gm-assistant-merge"  # concurrency 1 - the merge queue
 PROJECT_CHECK = "gm-assistant-check"  # concurrency 3 - the iteration check
 GITHUB_REPO = "EliAndrewC/diagram"
 MAILBOX_PREFIX = "session/"
 # FR-036: a parked build aborts itself after this long with no go signal - the most a dead
-# dispatcher can cost (~$0.16 at the rate above). The build polls every 2 s; the dispatcher's
+# dispatcher can cost (~$0.04 at the rate above). The build polls every 2 s; the dispatcher's
 # reference check takes ~26 s, so the ceiling is generous without being open-ended.
 PARK_TIMEOUT_S = 120
 PARK_POLL_S = 2
@@ -40,7 +51,17 @@ PARK_POLL_S = 2
 # shape - at a cadence that costs nothing noticeable.
 STREAM_POLL_S = 10
 # Estimates printed BEFORE dispatch (FR-014). Replaced by measurement as timings.md fills in.
-ESTIMATE_MINUTES = {"reference": 5.0, "full": 8.0, "operation": 10.0}
+# `reference` is MEASURED on this compute type: dev/run-log/20260904T001453005229-3306563.json,
+# build 545da8e1, scope reference, 569 s elapsed, 10 billed minutes, $0.20 (feature 179).
+# `full` and `operation` are UNMEASURED PLACEHOLDERS carried from feature 130 and have never been
+# calibrated against anything - they are not XLARGE figures to be scaled, and scaling a placeholder
+# by a real ratio would dress a guess as a derivation. They move when a run measures them.
+# VISIBLE ARTIFACT OF THAT, left deliberately: `full` (8.0) now reads LOWER than the measured
+# `reference` (10.0), which cannot be true - feature 177 measured the FULL scope at 1:1 with
+# reference. It is not corrected here because correcting it means inventing a number for a scope no
+# run on this compute type has measured, and an invented estimate is what this comment exists to
+# prevent. The next FULL remote run supplies it.
+ESTIMATE_MINUTES = {"reference": 10.0, "full": 8.0, "operation": 10.0}
 
 SECRETS_EXAMPLE = """# development-secrets.ini - gitignored; copy this file, drop the .example, fill the values.
 [aws]

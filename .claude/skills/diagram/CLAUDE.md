@@ -141,7 +141,7 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 | `make switches` | the iteration switches (feature 132): `remote on\|off`, `scope unlocked\|reference`, with reason, who and when | ~1 s |
 | `make ci-off REASON=...` / `ci-on` | **remote off**: nothing dispatches to CodeBuild, `ci-check`/`ci-image`/`FULL=1` refuse, the gated push lands on a green local `make done` (LOCAL-GATED). Commits the switch | ~1 s |
 | `make scope-lock REASON=...` / `scope-unlock` | **scope locked**: no invocation rolls a map other than the reference settlement or more than one map - `cohort`, `tripwire`, `test-full`, `done FULL=1`, `cache-audit`, `regressions`, `perf`, `maps SCOPE=all` and any remote sweep refuse and name the unlock. Commits the switch. Doctrine: [`dev/switches.md`](dev/switches.md) | ~1 s |
-| `make perf-report AGAINST=<NNN>-start` | the trend, then the **BAND** the newest pair reaches (feature 129): 1 any increase, 2 >5% total / >10% seed, 3 >10% / >20% - per environment, both measurements | ~1 s |
+| `make perf-report AGAINST=<NNN>-start` | the trend, then the **BAND** the newest pair reaches (feature 129): 1 over this environment's line (0.0% local, 2.0% codebuild), 2 >5% total / >10% seed, 3 >10% / >20% - per environment, both measurements | ~1 s |
 | `make perf-explain WHY="..."` / `perf-confirm` / `perf-audit` / `perf-signoff` | the review records a band owes; `perf-confirm` and `perf-audit` are the **`perf-audit` subagent's** (they decline without `AS=perf-audit`); `perf-signoff` is the GM's, at a terminal | ~1 s |
 | `make perf-review` | does every environment's newest pair carry the records its band owes? The PUSH runs this | ~1 s |
 | `make perf-profile SEED=25 STAGE=web` | tier-2 evidence: cProfile of ONE stage of ONE seed (+225% on that stage); the derived table is committed, the raw `.prof` is not | ~3x the stage |
@@ -157,7 +157,7 @@ it as the cheap option, because it deselected two FILES and could not see that t
 rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers.py`.
 
 
-- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; any increase on any seed or the total - per environment - owes `make perf-explain WHY=...` from you and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
+- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; an increase over that environment's band-1 line (0.0% local, 2.0% codebuild) on any seed or the total owes `make perf-explain WHY=...` from you and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
 - Iterate on the ONE motivating map; run the full test bed exactly **once**, at the end. That final
   sweep is MANDATORY whenever shared engine code changed (`settlement/`, `overlap/`,
   `waterfields/`, a scripted engine).

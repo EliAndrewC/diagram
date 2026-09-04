@@ -88,6 +88,42 @@ def machine_of(snap: dict[str, Any]) -> tuple[str, str]:
     return (str(snap.get("host", "laptop")), str(snap.get("image", "laptop")))
 
 
+def has_start_for_this_machine(log_dir: Path, feature: str) -> bool:
+    """Is there a `<n>-start` for this feature taken on the machine we are running on NOW?
+
+    THE DEFECT THIS REPLACES (feature 179, constitution Principle XIV). `perf-gate`'s in-build branch
+    guarded on `ls dev/perf-log/*<n>-start*codebuild*.json` - a FILENAME test. `perf_snapshot.record`
+    names files `{stamp}-{label}-{clone}.json`, where the last field is a clone name, so the string
+    `codebuild` never appears in one: 0 of the 44 snapshots on record matched, the test was
+    unconditionally false, and every remote FULL build re-took a `-start` bookend against pre-merge
+    main whether or not it already had one. That is a full `make perf` run, roughly half of
+    `perf-gate`'s time, paid on every remote build.
+
+    Asking the SNAPSHOT is also STRICTER than the filename test was ever trying to be: a filename
+    match would have accepted an XLARGE `-start` for an 8-vCPU `-end`, which is exactly the
+    cross-machine comparison feature 178's FR-008 exists to refuse.
+
+    ONE BEHAVIORAL CHANGE, stated here because it is the point of change: a SECOND remote build of
+    the same feature now REUSES the earlier same-machine `-start` instead of re-taking one against
+    the current `origin/main`, so a delta can span main's own landings between the two builds. That
+    is the restored feature-130 intent and is the better baseline under Principle VI, which wants the
+    bookend taken on unmodified code before the first edit - not re-based each time main moves.
+
+    The downstream refusal is untouched: if NO `-start` exists at all, `perf-gate` still fails."""
+    from l7r.diagram.tools import perf_snapshot
+
+    n = feature_number(feature)
+    if not n:
+        return False
+    here = perf_snapshot.machine_identity()
+    want = (str(here.get("host", "laptop")), str(here.get("image", "laptop")))
+    for s in _snapshots(log_dir):
+        label = str(s.get("label", ""))
+        if feature_number(label) == n and label.endswith("-start") and machine_of(s) == want:
+            return True
+    return False
+
+
 def pairs(log_dir: Path, feature: str) -> dict[str, perf_bands.Verdict]:
     """The newest `<n>-start` / `<n>-end` pair for this feature, per environment AND per MACHINE.
 
@@ -204,7 +240,7 @@ def check(log_dir: Path, feature: str) -> tuple[bool, str]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["explain", "confirm", "audit", "signoff", "check", "show"])
+    ap.add_argument("command", choices=["explain", "confirm", "audit", "signoff", "check", "show", "has-start"])
     ap.add_argument("--feature", default=os.environ.get("SPECIFY_FEATURE", ""))
     ap.add_argument("--environment", default="local")
     ap.add_argument("--log-dir", default=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "dev", "perf-log"))
@@ -227,6 +263,9 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         print("perf-review: no feature named - export SPECIFY_FEATURE=NNN-slug", file=sys.stderr)
         return 2
+    if a.command == "has-start":
+        # FR-017: the in-build bookend guard, asking the SNAPSHOT rather than the filename.
+        return 0 if has_start_for_this_machine(log_dir, a.feature) else 1
     if a.command == "check":
         ok, text = check(log_dir, a.feature)
         print(text)

@@ -4,7 +4,7 @@
 run may start, or you are touching the buildspecs. The usage-level answer is one command:
 `make ci-status` prints every condition and its reason, free, with no AWS call on a DIRECT route.
 
-Every remote run costs money (`RATE_PER_MIN` = **$0.08 per build-minute** on `BUILD_GENERAL1_XLARGE`,
+Every remote run costs money (`RATE_PER_MIN` = **$0.02 per build-minute** on `BUILD_GENERAL1_LARGE`,
 in [`config.py`](config.py) - mirrored in exactly one other place, the `gm-assistant-ci-monthly-alert`
 Lambda's `RATE_PER_MIN` environment variable; change both together). So the GM's rule for this
 package is stricter than for any other: *"all of the situations in which we absolutely, positively
@@ -91,7 +91,7 @@ It is paid and prompted, in the same class as `make ci-image` - it cancels by de
     conditions -> lint/format/types locally -> push mailbox, start_build (build PARKS at wait-go)
       -> make reference locally -> red: stop_build(OUR id) | green: put go/<id> -> stream -> record
 
-The build parks for at most `PARK_TIMEOUT_S` (120 s, ~$0.16) if the dispatcher dies (FR-036). A
+The build parks for at most `PARK_TIMEOUT_S` (120 s, ~$0.04) if the dispatcher dies (FR-036). A
 started build that is stopped costs its partial minute; a queued one costs nothing. Only the id
 this dispatcher got back is ever stopped - nothing on the AWS side is shared between sessions;
 the merge project's single slot serializes merges, and the local sync lock is the only shared

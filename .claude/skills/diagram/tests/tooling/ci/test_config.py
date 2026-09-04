@@ -10,7 +10,7 @@ from l7r.diagram.ci import config
 
 
 def test_the_rate_is_the_lambdas_rate() -> None:
-    assert config.RATE_PER_MIN == 0.08 and config.COMPUTE_TYPE == "BUILD_GENERAL1_XLARGE"
+    assert config.RATE_PER_MIN == 0.02 and config.COMPUTE_TYPE == "BUILD_GENERAL1_LARGE"
     assert config.PARK_TIMEOUT_S == 120
 
 

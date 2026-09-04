@@ -1,7 +1,24 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.14.0 → 2.15.0
+Version change: 2.15.0 → 2.16.0
+
+Version 2.16.0 (amended 2026-09-04, feature 179): Principle VI's band-1 line becomes PER
+ENVIRONMENT - 0.0% local, 2.0% CodeBuild, and 0.0% for any environment not named. The GM:
+*"let's make the band one threshold per environment. with a noise floor of about two
+percent"*. What this replaces is a line of `> 0` that fired on noise: feature 129's own
+three snapshots of IDENTICAL code on one CodeBuild box produce six pairwise comparisons,
+and BAND 1 FIRES ON FIVE OF THEM. The remote gate could therefore never go green on its
+own merits, which is the residual feature 178 put to the GM rather than deciding. Bands 2
+and 3 are untouched, so a real regression still escalates on the same lines; what the floor
+drops is the mandatory explanation for an increase smaller than the machine's own noise,
+and the increase is still printed. The number is the GM's, supported by measurement and
+carrying a labeled guess: the noise was measured on the 36-vCPU box that this same feature
+retires, and the 8-vCPU box's noise is unmeasured. Dependent artifacts updated: this
+repository's CLAUDE.md, the skill's CLAUDE.md, `.claude/skills/diagram/dev/performance.md`,
+`.claude/agents/perf-audit.md` (the agent that ADJUDICATES band 1) and
+`l7r/diagram/tools/perf_bands.py`. An existing principle materially expanded: MINOR.
+
 
 Version 2.15.0 (amended 2026-09-02, feature 174): Principle X clause 5 (100% line
 coverage) becomes 100% ON EVERYTHING, WITH NO OPT-IN. The GM: *"a new tool absolutely
@@ -742,16 +759,32 @@ artifacts. Specifically:
   subagent reviewer agrees"*, with the GM's own sign-off above it):
 
       band            on the TOTAL     on ANY SINGLE SEED   what it takes
-      1  explain      any increase     any increase         a written explanation AND a perf-audit subagent confirming it matches the stage delta
+      1  explain      over the line    over the line        a written explanation AND a perf-audit subagent confirming it matches the stage delta
       2  audit        > 5%             > 10%                the subagent independently finds the increase NECESSARY, COMMENSURATE with the functionality gained, and with NO GOOD WAY AROUND IT
       3  GM sign-off  > 10%            > 20%                the GM personally, at a terminal, BEFORE the work is committed back to main
 
   - A band fires when EITHER measurement crosses its line; each rung keeps
     everything below it. Feature 128's pair - total -29.9%, seed 47 +30.7% -
     is band 3: faster overall, and still the GM's to sign off.
+  - **BAND 1'S LINE IS PER ENVIRONMENT** (GM 2026-09-04, feature 179:
+    *"let's make the band one threshold per environment. with a noise floor of
+    about two percent"*): **0.0% local, 2.0% CodeBuild**, and an environment
+    with no entry gets 0.0%, the strict original. The reason is measured, not
+    assumed - feature 129 took three snapshots of IDENTICAL code on one
+    CodeBuild box, and of the six pairwise comparisons BAND 1 FIRED ON FIVE.
+    The machine's noise is about +-1% and the line was `> 0`, so noise cleared
+    it nearly every time; a rung that fires on code that did not change teaches
+    a reader to ignore it. Bands 2 and 3 are UNCHANGED, so a real regression
+    escalates exactly as before, and the muted increase is still printed - what
+    is dropped is the mandatory explanation, not the number. The measurement,
+    and the labeled guess in it (the noise was measured on the 36-vCPU box that
+    feature 179 retires; the 8-vCPU box's noise is unmeasured), are recorded at
+    the point of change in `perf_bands.BAND1_PCT`.
   - **Each ENVIRONMENT is judged against its own history** - local against
     local, CodeBuild against CodeBuild - and a feature satisfies every
-    environment it runs in. A cross-environment comparison is REFUSED, never
+    environment it runs in. This is a DIFFERENT per-environment property from
+    the band-1 line above: this one is about which snapshots may be COMPARED,
+    that one about how big an increase must be to be worth explaining. A cross-environment comparison is REFUSED, never
     displayed: on machines of different sizes the percentage is
     indistinguishable from a regression. Every snapshot records its
     environment explicitly; nothing infers it from a CPU count.
@@ -1984,4 +2017,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.15.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-02
+**Version**: 2.16.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-04
