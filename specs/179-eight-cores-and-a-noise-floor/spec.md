@@ -116,15 +116,25 @@ codebuild snapshots on record are - which is the instance type FR-001 retires. S
   every seed's percentage and the TOTAL unconditionally (`perf_bands.py:130-135`) and annotates a
   grown stage on `p > 0` regardless of band (`:133`), so a +1.9% run under the floor is already fully
   visible on the page. The only thing the floor makes untrue is this one string.
-- **FR-012** **THE TWO CHANGES IN THIS FEATURE INTERACT, AND THE SPEC MUST SAY SO.**
+- **FR-012** **THE TWO CHANGES IN THIS FEATURE INTERACT, AND THE SPEC MUST SAY SO - AS MEASURED.**
   `perf_snapshot.machine_identity()` records `host = f"codebuild:{COMPUTE_TYPE}"`
   (`tools/perf_snapshot.py:144`), and feature 178's FR-008/FR-009 pair a baseline on that identity.
-  **The moment FR-001 lands, no stored baseline matches** - all eight codebuild snapshots on record
-  are XLARGE - so the remote perf-gate reports `NO COMPARABLE BASELINE ... MUTE` and does not fail,
-  and **the 2.0% floor changes nothing until two 8-vCPU snapshots exist.** This MUST be stated where
-  a reader meets it, per 178's FR-006a ("a gate that goes mute must say it is mute"), which is
-  exactly the case this is: a gate going non-blocking through an ABSENT baseline. It is a
-  consequence to disclose, not a defect to fix - it self-heals after two remote runs.
+  The consequence is NOT that the remote gate goes mute:
+  - **The 2.0% floor is LIVE on the FIRST remote FULL build after this change.** `perf-gate` takes
+    the `-start` bookend IN-BUILD, from `origin/main` in a detached worktree (skill `Makefile:504-508`),
+    so the `-end` taken at `:521` has a same-machine partner produced in that same build. This is
+    confirmed on the last two remote FULL runs: `20260903T052107Z-177-start-base177.json` and
+    `20260903T052247Z-177-end-repo.json`, 100 seconds apart, BOTH `codebuild:BUILD_GENERAL1_XLARGE`.
+  - **What the change does retire is the eight stored XLARGE snapshots as CROSS-FEATURE baselines**,
+    since `perf_review.pairs()`/`machine_of` key on `host`. A mute remains POSSIBLE - an `-end` on the
+    new box whose `-start` was taken locally or on the old one - and `NO COMPARABLE BASELINE ... MUTE`
+    lives in `perf_review.check()` (`perf_review.py:171`, push time, `make perf-review`), NOT in
+    `perf-gate`.
+  The disclosure written at the point of change MUST say this and not the opposite. An earlier draft
+  of this requirement asserted the gate would go mute and "self-heal after two remote runs"; that was
+  never measured and is false. Writing it would have put a false disclosure at the point of change,
+  which is the exact failure a disclosure requirement exists to prevent.
+
 - **FR-013** The module docstring's band matrix - which today says band 1 is "any increase" - MUST
   be updated to state the floor, with the 5-of-6 noise measurement as the recorded WHY at the point
   of change, per the project's research-grounding rule. The existing sentence about the matrix
@@ -134,6 +144,48 @@ codebuild snapshots on record are - which is the instance type FR-001 retires. S
 
 ### What this feature does not do
 
+- **FR-013a** **The band-1 rule is stated in prose at eight live sites; FR-013 covers one.** The
+  rest MUST be updated, bounded exactly as FR-005 is - forward-looking statements of the CURRENT
+  rule change; ACCOUNTS of what was decided or measured do not:
+  - `CLAUDE.md:272` (this repository's enforcement-table row)
+  - `.claude/skills/diagram/CLAUDE.md:144` and `:160`
+  - `.claude/skills/diagram/dev/performance.md:187-188` (the band matrix, `1 explain > 0% > 0%`)
+  - `.claude/agents/perf-audit.md:3` and `:32` - **the agent that ADJUDICATES band 1**. Note its
+    band-1 section already reasons about a "1.7% per-seed noise floor" as an acceptable cause; under
+    this floor a sub-2.0% codebuild seed no longer reaches the agent at all, so its instructions must
+    match the rule it is being asked to apply.
+  - the constitution, per FR-013b
+  **MUST NOT be rewritten**: `specs/129/*`, `specs/178/*`, both `request.md` files and the review
+  records. They are accounts of what was decided or measured at the time.
+- **FR-013b** **The constitution MUST be amended in this feature**, because it states the rule the GM
+  has just changed and it is the authority that wins on conflict (*"Where this document conflicts
+  with other guidance, this document wins"*). This is the project's own mechanism, not a session
+  widening its remit: Governance says the GM approves amendments and the implementing session makes
+  the edit, and **v2.1.0 (2026-08-25, feature 129) is the amendment that wrote this very three-band
+  matrix in**, by the session implementing it. Required: bump **2.15.0 -> 2.16.0** (MINOR - an
+  existing principle materially expanded, the same class as 2.1.0), a Sync Impact Report entry
+  quoting the GM's request verbatim, the live matrix at `:745` and the Principle VI prose around it,
+  the **Version** footer at `:1988`, and the dependent artifacts listed as prior entries do.
+  **`.specify/memory/constitution.md:123` MUST NOT be edited**: it sits inside the
+  `PRIOR (2.0.0 -> 2.1.0)` block and is a RECORD of what amendment 2.1.0 did. Rewriting it would
+  falsify the amendment history, for the same reason FR-005 protects `timings.md` and the run logs.
+  The new 2.16.0 entry supersedes it; the old entry stays as written.
+
+### A defect found while doing this (constitution Principle XIV)
+
+- **FR-017** **The in-build bookend guard can NEVER match, so every remote FULL build re-takes the
+  `-start` bookend it already has.** Skill `Makefile:504` guards on
+  `ls dev/perf-log/*"$$n"-start*codebuild*.json`, but `perf_snapshot.record` names files
+  `{stamp}-{label}-{clone}.json` where `clone` is a clone name - **0 of the 44 snapshots on record
+  have `codebuild` anywhere in the filename**, so the test is always false and the branch always
+  fires. The cost is a full `make perf` run against pre-merge main on every remote FULL build,
+  roughly half of `perf-gate`'s time, paid every time.
+  The guard MUST ask the SNAPSHOT rather than the filename - is there a `-start` for this feature
+  whose recorded machine identity matches THIS build's - which is the same `(environment, host,
+  image)` predicate feature 178 already implemented and which `perf_review.machine_of` already
+  computes. Fixed here rather than filed, per Principle XIV: it is a defect found in the exact
+  mechanism this feature changes, and it is a guard predicate, not an overhaul.
+  **This is the one thing in this feature the GM did not ask for**, and it is disclosed as such.
 - **FR-014** It does NOT change how a band is enforced, who may write a perf record, or the push
   refusal. `perf_review --check` keeps its behavior; only which verdict it is handed changes.
 - **FR-015** It does NOT re-measure the compute types. The table is feature 178's, taken on one
