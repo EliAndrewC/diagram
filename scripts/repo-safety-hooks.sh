@@ -122,21 +122,16 @@ print("ok")
 RS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$RS_HERE/_guardlog.sh"
-# GUARD_EDIT_OK: feature 178 FR-011a - A TEMPORARY ESCAPE, AND ITS REMOVAL IS A TASK OF THIS SAME
-# FEATURE (T34). Read the header above first: this guard has no force-push escape ON PURPOSE, because
-# *"'never' stops meaning never the moment one exists"*. Nothing about that has changed.
-#
-# What HAS changed is that the GM asked for one specific irreversible act and cleared the way for it:
-# *"I disabled the ruleset for force pushes and took a backup of the repo in case anything goes wrong,
-# so you can indeed handle the history rewriting yourself"* (2026-09-03). That authorizes the ACT. It
-# does not authorize a standing hole, and a session may not convert the one into the other - so this
-# token is added, used for the single push that lands the purged history, and REMOVED before the
-# feature closes, with `scripts/test-repo-safety-hooks.sh` proving the refusal is absolute again.
-#
-# It is deliberately NARROW: force-push only (a `history-rewrite` verdict is untouched), reason
-# required like every escape since feature 170, and recorded to the firing log by `escape_or_refuse`.
-# IF YOU ARE READING THIS AFTER 2026-09-03, IT SHOULD NOT BE HERE. Its presence is the defect.
-if [ "$VERDICT" = force-push ] && escape_or_refuse repo-safety HISTORY_PURGE_OK history-purge-ok "$RS_HERE"; then exit 0; fi
+# GUARD_EDIT_OK: feature 178 T34 - THE TEMPORARY ESCAPE IS GONE, and this note is the record that it
+# existed. On 2026-09-03 the GM authorized ONE history purge ("you can indeed handle the history
+# rewriting yourself") and a one-shot escape token was added for the single force push that landed
+# it. The purge is done - pack 345.84 MiB -> 38.93 MiB - and the escape was removed inside the same
+# feature. (The token is deliberately NOT named here: the escape census scans the tree for every
+# `*_OK` and would count a mention in this comment as a live escape - it caught exactly that when
+# the token was first added, unclassified, and again in this note. A mention is not an invocation,
+# but a census cannot tell, and the census is right to be blunt.)
+# feature, because the GM authorized an ACT and not a standing hole. The force push has no escape
+# again, which is this file's rule and the whole reason it is worth having.
 case "$VERDICT" in ok) ;; *) guard_log repo-safety blocked "$(guard_cmd)" "$VERDICT" ;; esac
 case "$VERDICT" in
   force-push)

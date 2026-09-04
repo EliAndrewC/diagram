@@ -123,28 +123,28 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
       archive a month later, silently - S3 applies the shortest overlapping rule and has no negative
       filter, so that bucket is now actively hostile to anything large anyone wants to keep
 
-- [ ] T32 FR-010/FR-010a/FR-010b: untrack every generated render; keep the two non-generated classes
+- [x] T32 FR-010/FR-010a/FR-010b: untrack every generated render; keep the two non-generated classes
       research: procedure
       verify: `git ls-files` shows no generated `.html`/`.svg`/`.png`; the magistracy `.svg` and the
       eight `tests/fixtures/*-red.svg` remain; `.gitignore` rewritten so its frozen-exhibit block
       stops asserting something untrue
 
-- [ ] T33 FR-010d/FR-010e: replace the raster check at kilobyte cost, honestly
+- [x] T33 FR-010d/FR-010e: replace the raster check at kilobyte cost, honestly
       research: procedure
       verify: measured, the eight exhibits' numbers are **503 bytes against 97.9 MB** (204,000x). Not
       a tautology: either asserted against an independently derived second source (each exhibit's
       tracked `.json` carries `meta.view`, identical to the SVG viewBox) or stated plainly as a record
       rather than a check
 
-- [ ] T34 FR-011a/FR-011a1: the guard escape - added, used, and REMOVED inside this feature
+- [x] T34 FR-011a/FR-011a1: the guard escape - added, used, and REMOVED inside this feature
       research: procedure
-      verify: `repo-safety-hooks.sh` has no force-push escape by design and says so three times. The
+      verify: DONE. The escape was added, used for the single force push, and REMOVED in the same feature. Proven absolute again: `git push --force`, the retired token WITH a reason, `FOO="bar"` and `GATE_OK="x"` all rc=2. The removal note deliberately does not NAME the token, because the escape census scans the tree for every `*_OK` and would count a mention as a live escape - it caught that twice, once when the token was added unclassified and once in the note itself. Original bar: `repo-safety-hooks.sh` has no force-push escape by design and says so three times. The
       GM authorized the ACT, not a standing hole. The suite must prove the refusal is absolute again
       at the end, and the feature is NOT done if the removal is not
 
-- [ ] T35 FR-011d: every clone and the mirror onto the new history BEFORE any of them pushes
+- [x] T35 FR-011d: every clone and the mirror onto the new history BEFORE any of them pushes
       research: procedure
-      verify: 12 clones under `.clones/`; after the rewrite their history is disjoint and the first to
+      verify: DONE. One clone (not the 12 D7 assumed - R6), reset onto the rewritten history at `29d83fe8`, clean. The mirror was inspected first per CLAUDE.md's recovery procedure (0 untracked, 0 modified, so a reset destroyed nothing), reset, and then its working copies RESTORED from the archive: **83/83 checksum-verified**, 18 legacy PNGs back, `git status` 0 entries because the new ignore rules make them invisible. Original bar: 12 clones under `.clones/`; after the rewrite their history is disjoint and the first to
       push restores every purged object, with Principle VI forbidding the rebase that would fix it.
       Dirty trees carried across as patches - mid-task work is sacred
 
