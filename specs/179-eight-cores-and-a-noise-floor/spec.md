@@ -165,7 +165,7 @@ codebuild snapshots on record are - which is the instance type FR-001 retires. S
   matrix in**, by the session implementing it. Required: bump **2.15.0 -> 2.16.0** (MINOR - an
   existing principle materially expanded, the same class as 2.1.0), a Sync Impact Report entry
   quoting the GM's request verbatim, the live matrix at `:745` and the Principle VI prose around it,
-  the **Version** footer at `:1988`, and the dependent artifacts listed as prior entries do.
+  the **Version** footer at `:1987`, and the dependent artifacts listed as prior entries do.
   **`.specify/memory/constitution.md:123` MUST NOT be edited**: it sits inside the
   `PRIOR (2.0.0 -> 2.1.0)` block and is a RECORD of what amendment 2.1.0 did. Rewriting it would
   falsify the amendment history, for the same reason FR-005 protects `timings.md` and the run logs.
