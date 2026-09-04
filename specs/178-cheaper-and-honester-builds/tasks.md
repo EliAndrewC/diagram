@@ -80,25 +80,25 @@ mid-implementation follow-up); the measurements are in [`research.md`](research.
       once after a `: "..."` no-op line in front of `$(RUN)` turned its `@` recipe prefix into a
       literal - the exact failure this Makefile already documents beside `LOGBYPASS`
 
-- [ ] T20 FR-013/FR-014: the 8-vCPU row (`BUILD_GENERAL1_LARGE`), same commit
+- [x] T20 FR-013/FR-014: the 8-vCPU row (`BUILD_GENERAL1_LARGE`), same commit
       research: procedure
-      verify: wall clock, billed minutes, dollars, green/red, and the first `g1.large` billing line
+      verify: DONE, build `545da8e1`: 553 s, 10 billed min, **$0.20**, GREEN. 8 workers, the same count the laptop uses. Third real `g1.large` billing line, so the one unverified rate in `config.RATES` is now confirmed. Original bar: wall clock, billed minutes, dollars, green/red, and the first `g1.large` billing line
       this account has ever produced - which is the one rate `config.RATES` carries unverified
 
-- [ ] T21 FR-013/FR-014: the 4-vCPU row (`BUILD_GENERAL1_MEDIUM`), same commit
+- [x] T21 FR-013/FR-014: the 4-vCPU row (`BUILD_GENERAL1_MEDIUM`), same commit
       research: procedure
-      verify: the GM's own question - *"if we're only using 4 cores then what does a 4-core server
+      verify: DONE, build `30e5d623`: 913 s, 16 billed min, **$0.16**, GREEN. But it went RED on two of three attempts on `kuwabata`'s CPU-time budget (research R7) - flaky rather than blocked, which in a merge gate is worse than slow. Original bar: the GM's own question - *"if we're only using 4 cores then what does a 4-core server
       cost?"*. Memory is the risk here (7 GB), not cores, and "it did not finish" is a legitimate
       reportable outcome
 
-- [ ] T22 FR-013: the `XLARGE` baseline re-measured on the SAME COMMIT
+- [x] T22 FR-013: the `XLARGE` baseline re-measured on the SAME COMMIT
       research: procedure
-      verify: feature 177's numbers are from a different tree, and its own D4 says in bold that such
+      verify: DONE, build `06211f09`: 418 s, 7 billed min, **$0.56**, GREEN - re-measured on the SAME commit as the other two, sequentially, because the first attempt was contaminated (R5). Original bar: feature 177's numbers are from a different tree, and its own D4 says in bold that such
       totals are not comparable. Reusing them would repeat the mistake this feature quotes
 
-- [ ] T23 FR-016: the recommendation, and whether the default changes
+- [x] T23 FR-016: the recommendation, and whether the default changes
       research: procedure
-      verify: the criterion is stated in advance - green on every row AND at least 50% cheaper per
+      verify: DONE. **Recommendation: 8 vCPU** - 2.8x cheaper for 1.32x the time, nothing marginal. 4 vCPU saves only $0.04 more, costs six more minutes and is where the CPU budget trips. 36 cores never earns its price: 4.5x the cores for 2.18x the speed, because the suite does not parallelise past 8. FR-016's advance criterion (>=50% cheaper AND no worse wall clock) is NOT met - 64% cheaper but 1.32x slower - so by that criterion the numbers go to the GM and XLARGE stands until they choose. Original bar: the criterion is stated in advance - green on every row AND at least 50% cheaper per
       run at no worse wall clock changes the constant inside this feature; anything else goes to the
       GM with the numbers and `XLARGE` stands
 
