@@ -4,64 +4,79 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, spec-fidelity round 3). Request: [`request
 
 ## The compute type
 
-- [ ] T01 FR-001/FR-003/FR-004: `config.py` constants and the test that pins them
+- [x] T01 FR-001/FR-003/FR-004: `config.py` constants and the test that pins them
       research: procedure
-      verify: `COMPUTE_TYPE == "BUILD_GENERAL1_LARGE"`, `RATE_PER_MIN == 0.02`, the comment records
-      the measurement that chose it, `PARK_TIMEOUT_S`'s cost is $0.04, `ESTIMATE_MINUTES["reference"]`
-      is 10.0 from the cited run-log with `full`/`operation` labeled unmeasured placeholders, and
-      `tests/tooling/ci/test_config.py` pins the new pair
-- [ ] T02 FR-002: the `gm-assistant-ci-monthly-alert` Lambda's `RATE_PER_MIN` 0.08 -> 0.02
+      verify: DONE. `BUILD_GENERAL1_LARGE` / 0.02, with the measured three-row table recorded as the
+      reason and the 4-vCPU rejection kept with its evidence. Park cost $0.04. `reference` 10.0 from
+      the cited run-log; `full`/`operation` left alone and labeled unmeasured placeholders - and the
+      visible artifact of that DISCLOSED rather than papered over: `full` (8.0) now reads LOWER than
+      the measured `reference` (10.0), which cannot be true, and is not corrected because correcting
+      it means inventing a number for a scope no run on this box has measured
+- [x] T02 FR-002: the `gm-assistant-ci-monthly-alert` Lambda's `RATE_PER_MIN` 0.08 -> 0.02
       research: procedure
-      verify: read back from AWS. `MONTHLY_BUDGET` untouched - it is denominated in real dollars and
-      is the GM's. If it cannot be done, REPORTED to the GM, never silently skipped
-- [ ] T03 FR-005/FR-005a: forward-looking rate/type prose only
+      verify: DONE, by READ-BACK from AWS: rate 0.02, `MONTHLY_BUDGET` and every other variable
+      byte-identical. Left at 0.08 the 20%-steps email would have overstated every bill 4x and
+      tripped the $75 budget at about $19 of real spend. The docstring's claim that the mirror exists
+      was CHECKED against the account rather than trusted - feature 178 was burned by a comment
+- [x] T03 FR-005/FR-005a: forward-looking rate/type prose only
       research: procedure
-      verify: `ci/CLAUDE.md:7` and `:94`, skill `Makefile:621` and `:1033`. `timings.md`, the run
-      logs and specs 130/177/178 UNTOUCHED - a grep proves the records still say XLARGE at $0.08
+      verify: DONE. `ci/CLAUDE.md:7` and `:94`, `Makefile:621` and `:1033`, the last two with
+      GUARD_EDIT_OK and a reason. The RECORDS are untouched and it is proved rather than asserted:
+      `timings.md` still carries 3 XLARGE mentions and 38 run-log files still name XLARGE at $0.08
 
 ## The band-1 noise floor
 
-- [ ] T04 FR-007/FR-008/FR-009/FR-010: `BAND1_PCT` and `evaluate`
+- [x] T04 FR-007/FR-008/FR-009/FR-010: `BAND1_PCT` and `evaluate`
       research: procedure
-      verify: the constant sits beside `BAND2_*`/`BAND3_*`; `local` 0.0, `codebuild` 2.0, unknown
-      environment defaults to 0.0; `>` not `>=`; bands 2 and 3 provably untouched
-- [ ] T05 FR-011: the `OWES[0]` string
+      verify: DONE. `{local: 0.0, codebuild: 2.0}` beside `BAND2_*`/`BAND3_*`, `BAND1_DEFAULT_PCT`
+      0.0, compared with `>` to match BAND2's own boundary. Nine tests: exactly-the-floor, the
+      seed-only path with a negative total, the unknown environment defaulting to strict, and bands
+      2 and 3 proved unmoved
+- [x] T05 FR-011: the `OWES[0]` string
       research: procedure
-      verify: band 0 under a floor no longer claims there was no increase; no other disclosure
-      machinery added (`render` already prints every seed and the total unconditionally)
-- [ ] T06 FR-012/FR-013: the interaction and the matrix, at the point of change
+      verify: DONE - now "nothing - no increase above this environment's band-1 line", which stays
+      true when a floor muted one. No disclosure machinery added: `render` already prints every seed
+      and the total unconditionally, and a test pins that a muted +1.0% is still on the page
+- [x] T06 FR-012/FR-013: the interaction and the matrix, at the point of change
       research: procedure
-      verify: the docstring states the floor, the 5-of-6 noise measurement as its WHY, and the
-      interaction AS MEASURED - the floor is live on the FIRST remote build because `perf-gate` takes
-      both bookends in-build; what is retired is the 8 stored XLARGE snapshots as cross-feature
-      baselines. It must NOT say the gate goes mute
-- [ ] T07 FR-013a: the band-1 prose sweep
+      verify: DONE, and stated AS MEASURED: the floor is LIVE on the first remote build, because
+      `perf-gate` takes both bookends in-build; what the compute move retires is the eight stored
+      XLARGE snapshots as CROSS-FEATURE baselines. An earlier draft asserted the opposite - that the
+      gate would go mute and self-heal after two runs - which was never measured and is false
+- [x] T07 FR-013a: the band-1 prose sweep
       research: procedure
-      verify: `CLAUDE.md:272`, skill `CLAUDE.md:144`/`:160`, `dev/performance.md:187-188`,
-      `.claude/agents/perf-audit.md:3`/`:32` (including its "1.7% per-seed noise floor" reasoning,
-      which must match the rule it now applies). `specs/*` and the review records UNTOUCHED
-- [ ] T08 FR-013b: the constitution, 2.15.0 -> 2.16.0 MINOR
+      verify: DONE. `CLAUDE.md:272`, skill `CLAUDE.md:144`/`:160`, `dev/performance.md`, and
+      `.claude/agents/perf-audit.md:3`/`:32` - the agent that ADJUDICATES band 1, so its own
+      instructions now match the rule it applies. A repo-wide grep leaves "any increase" alive only
+      in `specs/` and the constitution's historical PRIOR block, both records
+- [x] T08 FR-013b: the constitution, 2.15.0 -> 2.16.0 MINOR
       research: procedure
-      verify: the live matrix at `:745` and Principle VI's prose, the footer at `:1987`, a Sync
-      Impact Report entry quoting the GM verbatim and listing dependents. **`:123` UNTOUCHED** - it is
-      inside the `PRIOR (2.0.0 -> 2.1.0)` block and is a record of what 2.1.0 did
+      verify: DONE. The live matrix at `:745`, a new Principle VI clause carrying the 5-of-6
+      measurement AND the labeled guess, the footer, and a Sync Impact Report entry quoting the GM
+      verbatim and listing dependents. **`:123` UNTOUCHED**, proved by diff: zero removals of the
+      historical line. Precedent that this is the project's own mechanism and not a session widening
+      its remit: v2.1.0 is the amendment that WROTE this matrix in, by the session implementing 129
 
 ## The defect (Principle XIV)
 
-- [ ] T09 FR-017: the in-build bookend guard asks the SNAPSHOT, not the filename
+- [x] T09 FR-017: the in-build bookend guard asks the SNAPSHOT, not the filename
       research: procedure
-      verify: the guard matches on recorded machine identity; 0 of 44 filenames contain `codebuild`
-      today, so the old test was unconditionally false. The no-baseline refusal downstream is
-      untouched. The point-of-change note states the one behavioral change: a SECOND remote build of
-      the same feature now reuses the earlier same-machine `-start` rather than re-taking against the
-      current `origin/main`, which is the restored feature-130 intent
+      verify: DONE. `perf_review.has_start_for_this_machine` compares recorded `(host, image)`;
+      `make -n perf-gate` shows the guard calling `has-start`. Eight tests, including the one that
+      would have caught the original defect: it writes the exact file the old glob looked for and
+      shows the glob still finds nothing, while asking the snapshot finds it. Exercised on real data
+      too - True for a same-machine start, False for a start taken on another box
 
 ## Closing
 
-- [ ] T10 tests for everything above, at the 100% floor
+- [x] T10 tests for everything above, at the 100% floor
       research: procedure
-      verify: the floor's four cases (local unchanged, codebuild under, codebuild over, unknown
-      environment), bands 2/3 unmoved, the guard predicate, and the pinned constants
-- [ ] T11 `make done` green, the records current, and the answer to the GM
+      verify: DONE. 20 in `test_perf_bands.py`, 26 in `test_perf_review.py`, all green. One
+      PRE-EXISTING test broke and was ADAPTED rather than deleted:
+      `test_environments_are_checked_independently` proved independence with a +0.8% codebuild
+      increase, which is now correctly under the floor - raised to +3%, and a new test asserts the
+      new property directly, that the same +0.8% owes an explanation locally and nothing remotely
+- [ ] T11 `make done` green, the pairing recorded, and the answer to the GM
       research: procedure
-      verify: 100% coverage floor, all guard suites green, pushed to main
+      verify: the 100% coverage floor, all guard suites green, `PAIR_OK` recorded on the confirming
+      run (this feature rolls no map, so a settlement-review has nothing to read), pushed to main
