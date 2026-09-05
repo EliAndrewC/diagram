@@ -60,6 +60,22 @@ soak suite's first name hours after that name landed (feature 184, D1).
   mentions (1145, 1147). An earlier draft said seven sites and listed `soak`, which carries no scope
   guard at all, and `maps SCOPE=all`, which is **a separate inline call** (`Makefile:943`, with its
   own `GUARD_EDIT_OK` at 946) and MUST be removed in its own right or it will be missed.
+- **FR-005b** **THERE ARE FOUR INLINE `check scope` CALLS, not one, and they are FIRST RECIPE LINES.**
+  Round 1 broke out `maps SCOPE=all` as separate from `SWEEP_OK`; it is one of four of the same shape,
+  and feature 132's own T05 enumerates exactly this set:
+
+      Makefile:89   done      @$(if $(FULL),$(SWITCH) check scope "done FULL=1",true)
+      Makefile:642  ci-check  @$(if $(FULL)$(TARGET),$(SWITCH) check scope "ci-check ...",true)
+      Makefile:652  ci-merge  @$(if $(FULL),$(SWITCH) check scope "ci-merge FULL=1",true)
+      Makefile:943  maps      @$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)
+
+  **This is a BREAK, not a documentation gap.** FR-006 removes the `check scope` subcommand, and
+  `main()` declares `add_argument("axis", choices=("remote", "scope"))` at three places (280, 284,
+  287). With `scope` gone from `choices`, argparse exits 2 - and because these are the FIRST line of
+  each recipe, `make done FULL=1`, `make ci-check FULL=1`, `make ci-check TARGET=...` and
+  `make ci-merge FULL=1` would each die before doing anything. That is the GM's own full gate and both
+  paid dispatch routes. All four MUST go, with their `GUARD_EDIT_OK` comments (Makefile:90, the blocks
+  above 642 and 652, and 946).
 - **FR-005a** **The DERIVED ESCAPE CENSUS will go red and MUST be updated in the same change.**
   `tests/tooling/test_guard_firing_log.py:188` classifies `"SWEEP_OK": ("not-an-escape", ...)`, and
   `test_the_escape_census_is_derived_from_the_tree` asserts BOTH directions - a token classified but
@@ -73,6 +89,13 @@ soak suite's first name hours after that name landed (feature 184, D1).
   also reads `.scope_locked` directly and rewrites `a.scope` to `"reference"` at :209. Each call site
   MUST be removed, and mapcheck's locked branch (204-211, which forces `--scope all` down to the
   reference map and prints `LOCKED`) MUST go with it.
+  **BUT `mapcheck`'s OWN `--scope` SURVIVES UNTOUCHED, and this needs saying because the words
+  collide.** `mapcheck.py:190`'s `--scope choices=("auto","reference","all")`, its `SCOPE` environment
+  default, and the `SCOPE=` make variable are mapcheck's BREADTH argument - *"what you mean when you
+  know better"* (Makefile:171) - not the switch axis, and the GM did not ask to retire them. An
+  implementer reading "retire the scope" beside "remove `maps SCOPE=all`'s guard" could easily take
+  the variable with it. Only the LOCK CHECK in front of them goes: `make maps SCOPE=all` keeps
+  working and simply stops being refusable.
 - **FR-006b** **`l7r/diagram/ci/state.py` is a live consumer and one part BREAKS OUTRIGHT.**
   `_scope()` (169-174) returns `switches.read(...).scope.state`; `VerificationState.scope` (:59) is
   written at :132/:185 and parsed at :97; and :216-217 carries the refusal *"`make done` was green
@@ -86,8 +109,11 @@ soak suite's first name hours after that name landed (feature 184, D1).
 - **FR-007a** The committed `dev/switches.json` currently carries a `scope` block. It MUST be deleted
   in this feature's commit, and `read()` MUST go on IGNORING an unknown key rather than failing
   closed - **failing closed on a stray `scope` key would turn `remote` OFF in every clone.** Today
-  `_axis(data.get(...))` reads only named keys, so this is a property to PIN with a test, not a bug
-  to fix.
+  `_axis(data.get(...))` reads only named keys - `read()` (136-141) names exactly two, both through
+  `data.get`, with no key iteration and no schema validation. **`_closed()` has exactly three
+  entrances**: a JSON parse failure, a non-dict top level, or `_axis` rejecting a NAMED key. Never an
+  unrecognized one. Naming the three is what makes the test writable, so it is stated here rather
+  than left for the implementer to rediscover.
 - **FR-008** The scope-dependent test machinery MUST go with it: `ROLL_DESELECT` (Makefile:1058),
   `TIER_SELECT` (1104) and the "map-rolling tests DEFERRED" branch exist only to serve a locked scope
   - both are defined through `SCOPE_STATE` (1057), which is `$(SWITCH) state scope`, so with the axis
