@@ -76,7 +76,7 @@ Rural jin'ya genuinely housed their ~30 staff on-grounds in rowhouses; it was th
 
 **Grounds:** drives the structures-abut-walls rule above, the `pack_audit.structures_on_walls` check, and the wall clearance `compound.py`'s placer now leaves
 
-**Evidence:** attested (the wall as a thick roofed structure; the tsuijibei precedent), deviation (the drawn 3 ft - legibility, GM 2026-08-28)
+**Evidence:** attested (the wall as a thick roofed structure; the tsuijibei precedent), convention (the drawn 3 ft - a map drawing convention for legibility, GM 2026-08-28)
 
 **Sources:** `hei-jokaku-jawiki`, `kojodan-dobei` (READ)
 
@@ -84,7 +84,7 @@ Japanese compound walls of this class - the *neribei* plastered earth wall over 
 
 *Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the thickness figure, rule unchanged, awaiting the GM:* the sources read give a plastered neribei/dobei at **1 shaku (~30 cm, ~1 ft) or more**, frameless neribei "30cm程度", and only the rammed-earth **tsuijibei** reaching ~1 m (~3.3 ft). The entry's "1.5-3 ft at the base" is not supported as the typical range; the drawn 3 ft wall is a tsuijibei-class figure, not the neribei the prose names. What the rule rests on - a wall is a roofed structure with real thickness, so a building abuts it and never overlaps it - stands on either figure. Whether the vocabulary should draw a county wall at ~1-1.5 ft (a dobei) or keep 3 ft (a tsuijibei, which a well-funded seat could have) is a rendering decision for the GM; recorded in the feature 143 ledger, section G.
 
-**GM ruling (2026-08-28, feature 143 T20) - DEVIATION, disclosed:** the 3 ft wall stays as a **rendering convention for legibility**. The precedent for a wall that thick is the *tsuijibei* (築地塀, rammed earth on a plinth, up to ~1 m - `kojodan-dobei`); the ordinary neribei / dobei of a county compound was ~1 shaku (`hei-jokaku-jawiki`). A reader of the interactive map (feature 134) is to be told exactly this: drawn thicker than the typical wall so the stroke reads, with the tsuijibei as the real form it resembles. Class for the HTML modal: **deviation**.
+**GM ruling (2026-08-28, feature 143 T20) - a MAP DRAWING CONVENTION, disclosed:** the 3 ft wall stays as a **rendering convention for legibility**. The precedent for a wall that thick is the *tsuijibei* (築地塀, rammed earth on a plinth, up to ~1 m - `kojodan-dobei`); the ordinary neribei / dobei of a county compound was ~1 shaku (`hei-jokaku-jawiki`). A reader of the interactive map (feature 134) is to be told exactly this: drawn thicker than the typical wall so the stroke reads, with the tsuijibei as the real form it resembles. Class for the HTML modal: **convention** (a map drawing convention - feature 183, GM 2026-09-05: a deviation is the setting differing from history, a convention is a glyph scaled or colored for the eye).
 
 ## The granary is a staging node, not the terminal store
 

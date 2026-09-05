@@ -167,11 +167,24 @@ the ofuregaki circulars reached the peasantry through exactly this board, posted
 
 **Evidence:** attested, corroborated, liberty
 
-**Sources:** [`sphere-unicef`](SOURCES.md#sphere-unicef)
+**Sources:** [`sphere-unicef`](SOURCES.md#sphere-unicef); the size for the reader: `saijo-mizu-rekishikan`, `kotobank-idoyakata`
 
 *What the research found:* a pre-modern south-China rice village of ~70 households ran **1-3 communal drinking wells total, 2 typical** - drinking water came mostly from SURFACE water (canal/pond/stream, stored in vats, settled, boiled), which is why schistosomiasis was endemic in the Yangtze rice belt for two millennia and why >70% of rural China still drank untreated surface water in the early 1980s; wells were expensive durable capital financed by per-family subscription and dug only as surface quality forced; the classical jingtian "8 families per well" is a Warring-States ideal nobody practiced. Japan corroborates from the other side: valley villages sited on springs/streams needed few or no communal wells, the famous dense pattern (~10-18 households per well, the idobata gossip circle) is URBAN nagaya tenement density, and per-household wells appear only on shallow-water-table plains. Capacity is never the constraint (one open well serves ~400 people by Sphere/UNICEF anchors, and a nucleated village is ~250m across so carrying distance never binds) - digging cost and morning queueing are.
 
 
+
+*The size, for the reader - the true well against the head we draw (researched 2026-09-05, feature 183).*
+The wellhead is a map drawing convention (GM ruling 2026-07-21, `settlement/shrines_wells/wells.py`: a
+location marker, not a to-scale footprint): at one foot per pixel the curb is drawn at a radius of 9.36 ft
+- about 19 ft across - under a well-house roof, so the well is visible at map scale and keeps about half a
+dwelling's width at every grain. What the record gives for the real thing: a hand-dug well's SHAFT is
+*"人が入れる直径1ｍほどの縦穴"* - a vertical hole about 1 m across, big enough for a person to work in
+(Saijo City water-history museum, READ); the roof over it is a 井戸屋形, *"井戸のそばに柱を立てて、その上に屋根を
+設けただけの簡単な建物"* - posts beside the well with a roof on them and nothing more (Digital Daijisen via
+kotobank, READ). **Not found:** a measured width for the curb frame (井桁 / 井戸枠) itself - three pages
+define it and none sizes it - so the note says the shaft's meter and calls the curb a frame of that order;
+the code comment's "~3-4 ft" curb stays an unsourced estimate. Nor was the PREVALENCE of the well house
+read: the dictionaries define it, they do not say how common it was.
 
 ## Commercial frontage and wealth-stratified housing
 

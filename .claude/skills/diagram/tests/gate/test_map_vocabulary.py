@@ -41,7 +41,7 @@ def test_a_hamlet_has_no_headman_of_its_own(rolled) -> None:
 
 def test_every_mark_on_the_map_has_been_ruled_on(rolled) -> None:
     """`all_ink_is_ruled_on`. The interactive map owes its reader an answer for every feature they can
-    click: what it is, why it is there, and whether that is accurate, a deliberate deviation, or a guess.
+    click: what it is, why it is there, and whether that is accurate, a deliberate deviation, a map drawing convention, or a guess.
     A glyph drawn with no class has no answer, and the reader who clicks it gets silence - which is worse
     than an admitted guess, because it looks like the map simply has nothing to say.
 

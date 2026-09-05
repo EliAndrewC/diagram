@@ -38,7 +38,7 @@ def test_an_irrigation_channel_is_drawn_at_the_hairline_floor() -> None:
 
 def test_a_natural_watercourse_is_drawn_wider_than_a_dug_one() -> None:
     """`watercourses_wider_than_ditches`: the ORDER of the ladder, which is what a reader actually uses.
-    Absolute widths are a legibility deviation; their ordering is not negotiable."""
+    Absolute widths are a map drawing convention; their ordering is not negotiable."""
     s = _s()
     s.channel((200.0, 300.0), (900.0, 300.0), frm={"kind": "stream"}, to={"kind": "field", "name": "f"})
     s.river([(100.0, 600.0), (1100.0, 600.0)], width=20.0)

@@ -28,12 +28,45 @@
       span.className = "gl";
       span.textContent = m[0];
       span.setAttribute("data-def", glossaryDef[m[0].toLowerCase()] || "");
+      span.addEventListener("mouseenter", function () { showTip(span); });
+      span.addEventListener("mouseleave", hideTip);
       el.appendChild(span);
       last = m.index + m[0].length;
     }
     if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
   }
   var dialog = document.getElementById("explain");
+
+  // THE GLOSSARY TOOLTIP LIVES OUTSIDE THE DIALOGS (feature 182, GM 2026-09-05: "if that word is at the
+  // edge of the modal, then it gets cut off, and the modal gains a horizontal scroll bar ... the tool tip
+  // itself should be outside of the modal ... it should not extend off the right or left of the page
+  // itself"). It used to be a CSS ::after box on the word, and nothing drawn INSIDE a dialog can escape
+  // it: the dialog is centered with a transform, which makes it the containing block of every fixed
+  // descendant, so even position: fixed stayed inside its overflow: auto. So there is ONE #tip element,
+  // a sibling of the dialogs, placed in viewport coordinates from the hovered word's box: below the word,
+  // shifted along the line to stay TIP_MARGIN px inside the viewport, above the word when below would
+  // leave it, and never wider than the viewport allows. It follows the word when the dialog scrolls
+  // (repositioned, not hidden - the CSS box moved with the word, and so does this one) and goes away
+  // when the pointer leaves the word or the dialog closes.
+  var tip = document.getElementById("tip");
+  var tipFor = null;
+  var TIP_MARGIN = 8;  // a guess at a legibility constant (spec D3)
+  function placeTip() {
+    if (!tipFor) return;
+    var r = tipFor.getBoundingClientRect();
+    var W = window.innerWidth, H = window.innerHeight;
+    tip.style.maxWidth = (W - 2 * TIP_MARGIN) + "px";
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.max(TIP_MARGIN, Math.min(r.left, W - w - TIP_MARGIN));
+    var top = r.bottom + 4;
+    if (top + h > H - TIP_MARGIN) top = r.top - 4 - h;
+    top = Math.max(TIP_MARGIN, Math.min(top, H - h - TIP_MARGIN));  // neither fits: inside the viewport, over the word
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function showTip(span) { tipFor = span; tip.textContent = span.getAttribute("data-def") || ""; tip.hidden = false; placeTip(); }
+  function hideTip() { tipFor = null; tip.hidden = true; }
+  document.addEventListener("scroll", placeTip, true);  // capture: the dialog's own scroll does not bubble
 
   // Index the class groups ONCE: a few hundred groups per class at most (a bead run of ~12,000
   // circles is one group), so a hover restyles those subtrees and nothing else.
@@ -78,7 +111,7 @@
     if (refsDialog.open) refsDialog.close();
     setText("x-name", cap(d.name));
     // THE PRESUMPTION OF ACCURACY (feature 156, GM 2026-08-29). `lead` is empty for everything the
-    // record calls accurate, so the modal opens with what the feature IS; a deviation or a guess
+    // record calls accurate, so the modal opens with what the feature IS; a deviation, a convention or a guess
     // still leads with its liberty, because that is the case worth a reader's attention. The
     // caveat - the liberty an accurate class's own record discloses - goes AFTER the why.
     var label = document.getElementById("x-label");
@@ -137,7 +170,9 @@
     shade.hidden = false;
     dialog.show();
   }
-  function closeDialog() { if (refsDialog.open) refsDialog.close(); dialog.close(); shade.hidden = true; unpin(); }
+  // hideTip() here as well as in the `close` listener: `close()` dispatches its event on a later task,
+  // and the box should not outlive the dialog by even a frame (feature 182)
+  function closeDialog() { if (refsDialog.open) refsDialog.close(); hideTip(); dialog.close(); shade.hidden = true; unpin(); }
   // a sibling link's hover lights the OTHER class while the pointer is on it; the pin resumes after
   function peek(other) { var keep = pinned; pinned = null; highlight(other); pinned = keep; }
   function unpeek() { var keep = pinned; pinned = null; highlight(keep); pinned = keep; }
@@ -181,6 +216,7 @@
     // THE BUTTON SAYS WHERE IT GOES (GM 2026-09-05: "just saying close might make it seem like we are
     // closing all of the modals instead of just this one").
     setText("r-close", "Return to " + cap(d.name) + " writeup");
+    hideTip();  // the word it pointed at is about to be hidden with its dialog
     dialog.classList.add("behind");
     refsDialog.show();
   }
@@ -197,7 +233,7 @@
   var shade = document.getElementById("shade");
   document.getElementById("x-close").addEventListener("click", closeDialog);
   shade.addEventListener("click", closeDialog);  // a click outside the modal closes it
-  dialog.addEventListener("close", function () { shade.hidden = true; unpin(); });
+  dialog.addEventListener("close", function () { shade.hidden = true; unpin(); hideTip(); });
 
   // ---- ZOOM AND PAN (spec FR-013, GM 2026-08-28: "zoom in significantly more ... zoom out ... to a
   // degree that the entire settlement is visible all within the browser viewport"). The map is

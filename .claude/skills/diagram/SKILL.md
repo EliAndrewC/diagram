@@ -25,14 +25,14 @@ ran long as a finding about the tooling. The dev loop with the measured numbers 
 
 Every map begins as coordinates, becomes SVG, becomes PNG - and will one day also become **HTML**,
 where a player hovers a feature to see it highlighted and clicks it to learn what it is, why it is
-there, and whether that is historically accurate, a deliberate deviation, or a guess. On a city map:
+there, and whether that is historically accurate, a deliberate deviation (the setting differing from history), a map drawing convention (a glyph scaled or colored for the eye - feature 183), or a guess. On a city map:
 highlight every tannery, dojo or samurai country estate at once and read the research behind it -
 a tannery stands by water because hides are soaked; a well is drawn larger than life because it
 matters and must be visible; a few estates stand nearer the city than attested so the feature type
 is on the sheet and the GM has one to point to. That reader is why [`research/`](research/) keeps
 the finding behind every rule, why [`settlements/`](settlements/) and [`buildings.md`](buildings.md)
 keep the rule, why the code keeps a pointer at the point of change, and why every decision carries
-one of three labels: **accurate / deviation / guess**. Nothing is built for it yet; the record is
+one of four labels: **accurate / deviation / convention / guess** (feature 183 split the GM's "map drawing convention" out of deviation). Nothing is built for it yet; the record is
 kept now because a decision unrecorded when it is made cannot be recovered later. Constitution XII.
 
 ## Core principle: roughly to scale
@@ -220,7 +220,7 @@ resvg --width 2400 --serif-family 'DejaVu Serif' pool/magistracies/<subject>.svg
 
 - **Draw-order / layering.** The generator emits two layers: the base (`self.add`) and a deferred **top layer** (`self.add_top`), concatenated base-then-top at `finish()`. Roads, streets, terrain, and buildings live in the base; **all labels and the gate furniture (guard station + tower) live in the top layer**, so a road or street can never paint over a label or a gatehouse that sits on it (a street runs *through* the gate, under the gatehouse). Anything that records a footprint a road might overlap should carry its draw-order `z` into the manifest so `roads_drawn_under_overlays` can gate it.
 - 2400 px wide gives readable labels at typical viewing sizes. Smaller widths may render the smallest labels (latrines, well annotations) illegibly.
-- **This manual command is for Mode A only.** Mode B settlement maps render their PNG automatically: `s.finish()` calls `resvg` at 2600px after writing the SVG (pass `render=False` or a different `png_width` to override), so the `.png` stays paired with the `.svg` without a separate step. **Since feature 134 `finish()` also writes `<map>.html` - the INTERACTIVE page** (GM 2026-08-27): the same map inlined as SVG with every primitive tagged by feature class; hover a feature and every feature of its kind lights up, click it and a modal says what it is, why it stands there, whether that is historically accurate / a deliberate deviation / a guess, and its sources. Self-contained, opens from `file://`. The vocabulary and the explanations live in [`l7r/diagram/interactive/`](l7r/diagram/interactive/CLAUDE.md); the SVG and PNG are untouched by it (the PNG is byte-identical). Re-run the gen (or the test suite, which re-runs every gen) to refresh it; don't call `resvg` by hand for a Mode B map.
+- **This manual command is for Mode A only.** Mode B settlement maps render their PNG automatically: `s.finish()` calls `resvg` at 2600px after writing the SVG (pass `render=False` or a different `png_width` to override), so the `.png` stays paired with the `.svg` without a separate step. **Since feature 134 `finish()` also writes `<map>.html` - the INTERACTIVE page** (GM 2026-08-27): the same map inlined as SVG with every primitive tagged by feature class; hover a feature and every feature of its kind lights up, click it and a modal says what it is, why it stands there, whether that is historically accurate / a deliberate deviation / a map drawing convention / a guess, and its sources. Self-contained, opens from `file://`. The vocabulary and the explanations live in [`l7r/diagram/interactive/`](l7r/diagram/interactive/CLAUDE.md); the SVG and PNG are untouched by it (the PNG is byte-identical). Re-run the gen (or the test suite, which re-runs every gen) to refresh it; don't call `resvg` by hand for a Mode B map.
 - **Since the resvg switch the raster is cheap** (~0.6s even for the biggest map; the Python generation is now the long pole - for Tango, ~2.4s dominated by farmstead/appurtenance geometry). Two env knobs still make iteration cheaper **without changing committed output**:
   - `DIAGRAM_SKIP_RENDER=1` - skip the raster entirely. Everything downstream reads the JSON manifest, never the PNG, so **`test_villages` sets this** and the suite never pays to render PNGs nothing looks at.
   - `DIAGRAM_PNG_WIDTH=1300` - render at 1300px instead of 2600 for a quick visual eyeball; leave it unset for the full-res committed PNG.

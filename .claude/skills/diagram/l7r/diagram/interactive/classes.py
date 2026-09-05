@@ -2,7 +2,7 @@
 
 Feature 134 (GM 2026-08-27): a player mousing over the HTML map highlights every feature OF A KIND,
 and a click opens a modal that says what the kind is, why it stands where it does, whether that is
-historically ACCURATE, a deliberate DEVIATION or a GUESS (constitution XII), and which research
+historically ACCURATE, a deliberate DEVIATION, a map drawing CONVENTION or a GUESS (constitution XII), and which research
 entries it rests on. This module is the ONE place the vocabulary lives: the engine tags ink with a
 class KEY (`Settlement.add(..., cls=...)`), the page reads the entry for every key present on the
 map, and nothing hamlet-specific is written anywhere - the explanations are per KIND, not per map.
@@ -28,7 +28,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
-Label = Literal["accurate", "deviation", "guess"]
+#: FOUR labels since feature 183 (GM 2026-09-05). The GM's line between the two in the middle, verbatim:
+#: a DEVIATION is *"our fictional setting being different from the actual history and historical places
+#: it is based on"*; a map drawing CONVENTION is *"rendering glyphs on a map which are differently scaled
+#: or differently colored than what the features would be in order to make the map more readable and
+#: legible to human eyes."* Until then both wore `deviation`, and the bund beans' modal opened with "This
+#: is a deliberate deviation - ... the bead color is a deliberate deviation" - *"But this is not a
+#: 'deviation', This is a map rendering convention, and we should distinguish in our write up between
+#: these."* A convention's `label_note` is written in the GM's form (see `lead_sentence`).
+Label = Literal["accurate", "deviation", "convention", "guess"]
 
 #: The labels the PAGE announces. `accurate` is not among them, and that is the whole of feature 156's
 #: first change (GM 2026-08-29): *"I would like to not explicitly say that things are historically
@@ -37,7 +45,7 @@ Label = Literal["accurate", "deviation", "guess"]
 #: A claim made about nearly every feature on the map carries no information; a liberty does. The
 #: three-way classification itself is UNCHANGED and still recorded on every class (constitution XII) -
 #: only its presentation changed, and it still reaches the page as `data-label`.
-ANNOUNCED: frozenset[Label] = frozenset({"deviation", "guess"})
+ANNOUNCED: frozenset[Label] = frozenset({"deviation", "convention", "guess"})
 
 #: The pseudo-class of ink ruled out of highlighting. Recorded, never wrapped, never reported.
 NOT_HIGHLIGHTED = "-"
@@ -75,8 +83,8 @@ class FeatureClass:
     covers: str  # which manifest features it draws - documentation for the next reader
     what: str  # what the thing IS
     why: str  # why it stands where it does on the map
-    label: Label  # constitution XII: accurate | deviation | guess
-    label_note: str  # the one line that justifies the label (a deviation says what deviates; a guess says what is silent)
+    label: Label  # constitution XII: accurate | deviation | convention | guess
+    label_note: str  # the one line that justifies the label (a deviation says what deviates; a convention says what is drawn otherwise and what the real thing is; a guess says what is silent)
     sources: tuple[str, ...]  # `research/SOURCES.md` keys, or ("not recorded",)
     entry: str  # the research/ entry (file + heading) the text was written FROM
     # THE LIBERTY HALF of `label_note`, and only that (feature 156, GM 2026-08-29). An `accurate`
@@ -94,8 +102,15 @@ class FeatureClass:
 _LABEL_WORDS: dict[Label, str] = {
     "accurate": "historically accurate",
     "deviation": "a deliberate deviation",
+    "convention": "a map drawing convention",
     "guess": "a guess",
 }
+
+#: What a convention's lead-in is (feature 183): the GM's own example opens *"Note: we have rendered the
+#: bund beans as larger and darker in color than they actually are, in order to make them visible on the
+#: map at this this scale. <More information about the actual size and color goes here.>"* - so the note
+#: itself is written as that sentence and this is all that precedes it.
+CONVENTION_LEAD = "Note: "
 
 
 def label_phrase(label: Label) -> str:
@@ -111,6 +126,8 @@ def lead_sentence(label: Label, note: str) -> str:
     at the one place the sentence is built, rather than by asking every caller to remember it."""
     if label not in ANNOUNCED:
         return ""
+    if label == "convention":
+        return CONVENTION_LEAD + note
     return "This is " + _LABEL_WORDS[label] + (" - " + note if note else ".")
 
 
@@ -397,8 +414,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         covers="`farm_fixtures[kind=shrine]` - the hokora",
         what="A household's own small shrine - a stone or wooden hokora in a corner of the plot, drawn vermilion with a torii before its door.",
         why="In some regions every house had one, in others only certain old families; the GM ruled for the old-families pattern here - rare, and notable when it appears - so the count is capped at about three households in a hundred. It stands in the plot's northwest, northeast or southwest corner, all three attested.",
-        label="deviation",
-        label_note="Presence, rarity and corner are read; the glyph is drawn at 6 x 6 ft against a measured stone shrine of about 1.3 ft - a deliberate deviation for legibility.",
+        label="convention",
+        label_note="we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii before it, in order to make it visible on the map at this scale. The one measured stone hokora is about 40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence, rarity and corner are read.",
         sources=("tokushima-yashikigami", "jawiki-yashikigami", "kameyama-yashikigami", "sugiura-1973-fuzoku"),
         entry="research/homesteads.md - 'The farmstead's fixtures'",
     ),
@@ -419,8 +436,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         covers="`bamboo_stands[role=homestead]`",
         what="A household's own bamboo stand on the damp north or west strip of its plot - a clonal thicket with a hard edge, drawn as paired culm strokes with a leafy fork.",
         why="Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, poles, fences, fans, food wrappings - and the shady, always-damp service side of the yashiki was where it stood. A cold upland hamlet may have none; whether a hamlet has bamboo is rolled per settlement.",
-        label="deviation",
-        label_note="Presence and place are read; a culm is inches across and cannot be drawn at one foot per pixel, so the stand's extent is to scale and the marks inside it are symbolic - the convention Japan's own topographic legend uses.",
+        label="convention",
+        label_note="we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention Japan's own topographic legend uses. Presence and place are read.",
         sources=("not recorded",),
         entry="research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'",
     ),
@@ -430,8 +447,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         covers="`bamboo_stands` with any role other than homestead - the take-yabu at the field margin",
         what="A bamboo thicket held by the hamlet at the field margin, cut like a coppice.",
         why="The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own at the village edge, harvested under the village's rules. The two forms are two knobs, not a choice.",
-        label="deviation",
-        label_note="Presence is read; the stand-level glyph is a deviation for legibility, exactly as for the homestead stand.",
+        label="convention",
+        label_note="we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.",
         sources=("not recorded",),
         entry="research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'",
     ),
@@ -549,10 +566,10 @@ _DEFS: tuple[FeatureClass, ...] = (
         covers="the bead run along the bunds (`bund_beans`)",
         what="Soybeans planted along the tops of the paddy bunds - azemame - drawn as dark green beads.",
         why="A bund's top is soil that would otherwise grow weeds; planting it with beans took a second crop from the same ground without touching the paddy. A share of the bunds is planted, rolled per map.",
-        label="deviation",
-        label_note="The practice is attested; the bead color is a deliberate deviation - real soybean foliage is lighter, and the deep pine green was chosen so the beads read against the pale rice.",
-        sources=("not recorded",),
-        entry="research/fields.md - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; waterfields/palette.py BEAN_GREEN (the color decision)",
+        label="convention",
+        label_note="we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the plant, in order to make them visible on the map at this scale against the pale rice. A soybean is an erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund was not found, so the bead's width is not compared to it. The practice is attested.",
+        sources=("nabunken-azemame", "wikipedia-soybean", "cropfarming-soybeans"),
+        entry="research/fields.md - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)",
     ),
     _c(
         key="millet",
@@ -619,8 +636,8 @@ _DEFS: tuple[FeatureClass, ...] = (
         covers="`streams` - the brook",
         what="A natural brook off the high ground, feeding the head of the field and, below it, carrying the drain away.",
         why="A village creek runs about two meters wide in reality, six times a field ditch; every watercourse on the map declares which way it flows, because downstream is a real constraint on what may stand beside it.",
-        label="deviation",
-        label_note="The stream's type and place are read; its DRAWN width is rank, not discharge - the GM's ruling - so junctions do not conserve width.",
+        label="convention",
+        label_note="we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width (the GM's ruling). A village creek runs about 2 m wide in reality, some six times a field ditch. The stream's type and place are read.",
         sources=("gb50288", "toro-site"),
         entry="research/water.md - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'",
     ),
@@ -714,9 +731,9 @@ _DEFS: tuple[FeatureClass, ...] = (
         covers="`wells` - the wellheads",
         what="A communal wellhead: a stone curb and the dark water of the shaft, under a small roof.",
         why="A pre-modern rice village of about seventy households ran one to three communal wells, two typical - drinking water came mostly from surface water, settled and boiled, and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells outnumbered private ones.",
-        label="deviation",
-        label_note="Count and sharing are read (the Sphere/UNICEF figures, jawiki); the wellhead is DRAWN larger than true size so it can be seen at map scale.",
-        sources=("sphere-unicef",),
+        label="convention",
+        label_note="we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof - many times its true size, in order to make the well visible at map scale: the glyph marks where the well stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a person to work in, under a well house that is posts and a roof and nothing more; the width of the curb frame itself was not found. Count and sharing are read (the Sphere/UNICEF figures, jawiki).",
+        sources=("sphere-unicef", "saijo-mizu-rekishikan", "kotobank-idoyakata"),
         entry="research/urban-features.md - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.md - 'Does a DISPERSED hamlet's outlying farm have its own well?'",
     ),
     _c(

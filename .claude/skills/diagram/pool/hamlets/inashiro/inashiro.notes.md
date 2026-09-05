@@ -1214,7 +1214,7 @@ fan's foot; the collector's 20-degree drawn grade is legibility, not height. `to
 its inner edge across the slope (`pad` above the local crop bottom, smoothed) - on this map the
 reeds begin 57-89 px above the drain on every station, i.e. at the fan's foot, tucked under the crop
 by the paddy skip. Labels: the marsh-follows-the-toe rule ACCURATE; the drain's drawn grade a
-recorded DEVIATION. No per-task review (dev/reviews.md); the GM looks at the map.
+recorded MAP DRAWING CONVENTION (feature 183's word). No per-task review (dev/reviews.md); the GM looks at the map.
 
 
 ## 2026-08-27 - the lanes form one network (feature 133 T31)
@@ -1361,7 +1361,7 @@ The GM asked whether there was bamboo on the map; there was - 315 to-scale culm 
 windbreak's crowns, invisible. Built as proposed under T42: the `bamboo` knob rolled `homestead`
 for seed 4, so one stand of 46 x 29 ft (25 marks) stands on the cluster's shady north side, between
 the top farmhouses and the belt; the belt and the copse are cedar/broadleaf and fruit now. Glyph:
-paired culms with a leafy fork, pale yellow-green, the GSI convention - a DEVIATION for legibility,
+paired culms with a leafy fork, pale yellow-green, the GSI convention - a MAP DRAWING CONVENTION,
 the extent to scale. Gate: three new checks green; audit 0 violations; attempt 1 kept. Labels in
 research/vegetation.md. For the GM to judge on the sheet: the stand reads as a pale block at fit
 zoom; if it wants more presence, the mark pitch (7 ft) and the stand sizes are the constants.
@@ -1405,7 +1405,7 @@ straw rick is deferred with seasonal maps (T60).
 
 **2026-08-27 (T61).** `fixtures_min={"shrine": 1}` on the spec: the reference hamlet always carries one hokora so its rendering can be judged (seed 4 already rolled one at 1266,1154, on the plot of the house at 1303,1179; the floor is declared and held by the gate).
 
-**2026-08-27 (T62).** The hokora is drawn at the 6 ft small-shed module in vermilion with a torii before it - at 3 ft the GM could not tell what it was; a glyph convention, recorded as a deviation.
+**2026-08-27 (T62).** The hokora is drawn at the 6 ft small-shed module in vermilion with a torii before it - at 3 ft the GM could not tell what it was; a glyph convention, recorded as a map drawing convention (feature 183 renamed it from 'deviation').
 
 - 2026-08-28 (feature 134, interactive HTML map): NO visual change - the manifest gained the ink census keys (`ink_classes`, `unclassed_ink`, `unregistered_classes`) and the SVG/PNG are byte-identical to the accepted T99 state (PNG sha256 09e8d5ab... unchanged, SVG whitespace-normalized identical). No settlement-review owed; pushed with REVIEW_GATE_OK stating this.
 

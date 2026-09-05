@@ -16,7 +16,7 @@ class StandsMixin:
         (feature 133 T47, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it stood, and
         how to show it").
 
-        THE GLYPH IS A DELIBERATE DEVIATION FOR LEGIBILITY, recorded like the oversized wellhead: a culm is
+        THE GLYPH IS A MAP DRAWING CONVENTION (feature 183's word; it read DEVIATION until the GM split the two), recorded like the oversized wellhead: a culm is
         inches across and cannot be drawn at 1 px = 1 ft, so the stand's POSITION and EXTENT (`poly`) are to
         scale and the marks inside it are symbolic - the convention Japan's own GSI topographic legend uses,
         a distinct bamboo-grove symbol beside the broadleaf and conifer ones, so a reader can tell the three

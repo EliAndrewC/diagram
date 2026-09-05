@@ -509,7 +509,7 @@ Sources: rice domesticated in "naturally marshy areas" + paddy-as-reclaimed-mars
 
 ## The wet toe is as wide as the FAN, not as wide as the valley
 
-**Evidence:** attested (the fan zones, the backswamp), deviation (the drain gradient, disclosed)
+**Evidence:** attested (the fan zones, the backswamp), convention (the drain gradient - a map drawing convention, disclosed)
 
 **Sources:** `senjochi-jawiki`, `kohai-shicchi-jawiki`, `maff-drain-shape` (READ 2026-08-12 - the entry's own sources paragraph)
 
@@ -573,7 +573,7 @@ drain (承水路) *"nearly parallel to the contours, with a gentle gradient"*, a
 ([MAFF 排水路の形状・構造と適用条件](https://www.maff.go.jp/j/nousin/noukan/tyotei/kizyun/pdf/04_hojou_hata_gijutsusho20-23.pdf));
 the fan-toe spring line is an arc along the fan's foot (above). So in reality the toe drain and the
 wet edge run TOGETHER, and our collector's drawn grade is a legibility exaggeration of a fall of
-~0.1% (**deviation**, recorded: the drain is drawn steep so its flow reads; the marsh must not
+~0.1% (**convention** - a map drawing convention, recorded: the drain is drawn steep so its flow reads; the marsh must not
 inherit that fiction). *The decision:* `toe_band`'s inner edge is now sampled across the slope - at
 each station `pad` above the LOCAL lowest crop point, smoothed over three stations - so the reeds
 begin at the fan's foot everywhere along the collector (Inashiro: 57-89 px above the drain on every
@@ -716,7 +716,7 @@ farmed one.
    at all (the mechanism, and the 25x deficit that prompted it, are at the point of change).
 2. Reeds and haze keep OFF the embankment and off a pond's raised bank - because it is mown and burned
    to keep it strong, which is also why nothing is cultivated on it.
-3. Neither of the above is a legibility deviation. Both are what the record describes.
+3. Neither of the above is a map drawing convention. Both are what the record describes.
 
 **Deliberately NOT concluded.** That the reed at a tameike margin was itself cut as a thatch or screen
 crop. The reed-harvest economy (*yoshizu* screens, thatch, an uncut bed going 荒れる) is READ and well

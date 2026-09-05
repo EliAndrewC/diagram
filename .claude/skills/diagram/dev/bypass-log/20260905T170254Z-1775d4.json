@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T170254Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "features 182 and 183 change only the HTML page"
+}

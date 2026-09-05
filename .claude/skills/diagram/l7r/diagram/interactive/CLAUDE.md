@@ -2,7 +2,7 @@
 
 The map as a page a player can use: hover a feature and every feature OF ITS KIND lights up; click
 it and a modal says what it is, why it stands there, whether that is historically accurate, a
-deliberate deviation or a guess (constitution XII); "See references" lists the QUESTIONS the research
+deliberate deviation (the setting differing from history), a map drawing convention (a glyph scaled or colored for the eye - feature 183) or a guess (constitution XII); "See references" lists the QUESTIONS the research
 asked about it, each linking to its answer in `research/` on GitHub (feature 180 - see below).
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
@@ -30,13 +30,14 @@ almost always say that it is historically accurate ... I want the presumption to
 always historically accurate unless stated otherwise. In other words, we should call out liberties
 that we have taken."* A claim made about nearly every feature carries no information; a liberty does.
 
-The three-way classification is UNCHANGED and still recorded on every class (constitution XII) - it
-just is not announced. What a modal prints:
+The classification (three-way then, four-way since feature 183) is still recorded on every class
+(constitution XII) - `accurate` is just not announced. What a modal prints:
 
 | the record says | the modal leads with | and below the why |
 |---|---|---|
 | `accurate` | nothing - what the feature IS | `caveat`, when its record discloses a liberty |
-| `deviation` | "This is a deliberate deviation - ..." | nothing (the lead already carried it) |
+| `deviation` | "This is a deliberate deviation - ..." - the SETTING differs from history (canon, a ruling of the GM's about their world) | nothing (the lead already carried it) |
+| `convention` | "Note: we have rendered <the feature> ... in order to ... <the real size or color>" - a MAP DRAWING CONVENTION, a glyph scaled or colored for the eye (feature 183, GM 2026-09-05: *"this is not a 'deviation'. This is a map rendering convention, and we should distinguish in our write up between these"*); the note is written in the GM's form and ends with the figure the record holds, or says in so many words that it was not found | nothing |
 | `guess` | "This is a guess - ..." | nothing |
 
 `caveat` is the LIBERTY HALF of `label_note`, verbatim - the drawing convention, the derived number,

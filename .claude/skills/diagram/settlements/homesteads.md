@@ -134,5 +134,5 @@ research, verdict by verdict: `research/homesteads.md` "The farmstead's fixtures
 `farm_fixtures_attached` (a fixture stands within its kind's reach of ITS house), `farm_fixtures_as_declared`
 (declared kinds only, one of a kind per house, the shrine as rare as declared, a privy present).
 Record classes: the privy's independence, the coop, the two shrine patterns, the persimmon's
-ubiquity are ACCURATE; the vermilion, the fruit dots and the hokora drawn at the 6 ft shed module are DEVIATIONS
+ubiquity are ACCURATE; the vermilion, the fruit dots and the hokora drawn at the 6 ft shed module are MAP DRAWING CONVENTIONS
 for legibility (the true stone is ~1.3 ft; at 3 ft the GM could not tell what it was, T62); every share band and every other size is a GUESS.

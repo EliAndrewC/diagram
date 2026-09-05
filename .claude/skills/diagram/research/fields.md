@@ -550,6 +550,40 @@ WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated p
   the modal says so, because a reader who reads the tint as the set is being misled about the other
   22 plots.
 
+## What a bund bean actually looks like - the soybean plant against the bead we draw (researched 2026-09-05, feature 183)
+
+**Grounds:** `BEAN_GREEN` and the `r="1.4"` bead in `settlement/fields/comb.py`; the `bund beans` class note in `interactive/classes.py` (a map drawing convention, written in the GM's form)
+
+**Evidence:** attested (the practice, the height, the leaf color), liberty (the bead's size and color)
+
+**Sources:** `nabunken-azemame`, `wikipedia-soybean`, `cropfarming-soybeans`
+
+*The question.* The GM's wording rule (feature 183) asks a convention's note to say what the feature
+actually looks like beside how we draw it. The beads on the bunds are soybeans (azemame); the record
+held the practice and the color decision but no figure for the plant itself.
+
+*What the research found.* The practice, READ from the Nara National Research Institute for Cultural
+Properties' Asuka pages: *"『畦豆（あぜまめ）』とも呼ばれる大豆です ... 田植え後に畦に種がまかれ、稲刈りと同時に収穫されます"* -
+a soybean also called azemame, sown on the bund after transplanting and harvested with the rice; once
+grown all over Japan, mostly gone with land consolidation and herbicide, still grown at Asuka; the
+photo caption has them *"ずらっと育っている"* - growing in a row along the bund. The plant, READ: *"fully
+mature soybean plants are generally between 50 and 125 cm (20 and 50 in) in height"* (Wikipedia,
+Soybean, Description); *"The plant is erect and bushy, with branches coming off a central stem"* and
+*"The leaflets are broad, pointed, and medium green"* (cropfarming.org - a trade site, the one page
+read that states the leaf color; Wikipedia's Description says nothing about color). **Not found:** a
+figure for one plant's spread on the bund - the Iowa State extension page on row spacing discusses
+canopy-closure timing, not plant width - so the record does NOT say how wide a bund bean stands, and
+no note may compare the bead's width to the plant's. SUMMARY-ONLY and not used: search snippets on
+azemame roots firming the bund, miso from azemame in Noto, and nitrogen to the paddy (the last
+contradicted by 'Nitrogen - a flooded paddy makes its own' above).
+
+*The convention, stated for the reader.* We draw each plant as a round bead about 3 ft across
+(`r="1.4"` px at one foot per pixel), in a single row on the bund, in a deep pine green (`#2F6B35`)
+chosen so the beads read against the pale rice; real foliage is medium green, and the bead is drawn
+darker than the plant. The plant is a knee-to-waist-high bush (50-125 cm); the bead says only where
+it stands. `waterfields/palette.py` records why the color was chosen (GM 2026-08-15: the old olive
+read as neither rice nor bund).
+
 ## Free lore hooks, and the sources
 
 **Grounds:** /law, /calendar, village detail
