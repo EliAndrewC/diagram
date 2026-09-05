@@ -87,6 +87,25 @@ OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "asset edited
 case $OUT in *"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  stale page stamp must say the code differs: $OUT"; FAILED=1 ;; esac
 ( cd "$W" && python3 "$STAMP" --write page )
 
+# THE REGISTRY'S DOCSTRINGS ARE PAGE PROSE (feature 189): a docstring edit owes `page` and NOT `diagram`;
+# a code edit in the same file owes both. The new file is stamped in both areas first, so only the EDIT is judged.
+mkdir -p "$W/.claude/skills/diagram/l7r/diagram/interactive/classes"
+printf 'class Farmhouse:\n    """What: a house.\n\n    Why: people.\n\n    Note: read.\n    """\n\n    key = "farmhouse"\n' > "$W/.claude/skills/diagram/l7r/diagram/interactive/classes/homestead.py"
+git -C "$W" add -A; git -C "$W" commit -qm registry; ( cd "$W" && python3 "$STAMP" --write diagram && python3 "$STAMP" --write page )
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "registry file stamped in both areas -> allowed" 0 $?
+printf 'class Farmhouse:\n    """What: a thatched house.\n\n    Why: people.\n\n    Note: read.\n    """\n\n    key = "farmhouse"\n' > "$W/.claude/skills/diagram/l7r/diagram/interactive/classes/homestead.py"
+git -C "$W" commit -qam prose
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "a DOCSTRING edit in the registry -> refused (page)" 1 $?
+case $OUT in *"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  the docstring edit must stale the page stamp: $OUT"; FAILED=1 ;; esac
+case $OUT in *"diagram:"*) echo "FAIL  a docstring edit must NOT re-open the gate (diagram stays semantic): $OUT"; FAILED=1 ;; *) : ;; esac
+( cd "$W" && python3 "$STAMP" --write page )
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "page-check re-stamped -> the prose edit lands" 0 $?
+printf 'class Farmhouse:\n    """What: a thatched house.\n\n    Why: people.\n\n    Note: read.\n    """\n\n    key = "farm house"\n' > "$W/.claude/skills/diagram/l7r/diagram/interactive/classes/homestead.py"
+git -C "$W" commit -qam code
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "a CODE edit in the registry -> refused" 1 $?
+case $OUT in *"diagram: the last green gate ran against DIFFERENT code"*"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  a code edit must owe BOTH stamps: $OUT"; FAILED=1 ;; esac
+( cd "$W" && python3 "$STAMP" --write diagram && python3 "$STAMP" --write page )
+
 # a comment or docstring added AFTER the green run is not "different code" (GM 2026-08-26): the stamp
 # hashes the docstring-stripped AST of each .py, so only a token that runs re-opens the gate
 printf '"""why this is 2"""\n# see research/water.md\nx = 2  # unchanged\n' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam why

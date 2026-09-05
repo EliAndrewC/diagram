@@ -128,7 +128,7 @@ a class of bookkeeping round trips the GM measured.
 - **D3 - the tweak lane is decided by PATH, the way the route is.** The tooling has one notion of "engine
   code", `delta.is_engine`; a tweak is a delta with none. No new classifier, no flag, no marker in a
   commit message - a rule a session could misapply is not a lane.
-- **D4 - prose in `classes.py` stays engine code, for now.** See FR-013. The honest way to admit it would
+- **D4 - prose in `classes.py` stays engine code, for now.** CLOSED by feature 189 the same day: the prose became docstrings, which the semantic key strips, and the registry files joined the `page` stamp area hashed by bytes. See FR-013. The honest way to admit it would
   be a semantic key that hashes code with string constants blanked, which changes what `gate-stamp`'s
   `semantic_bytes` means for every record and is a feature of its own. Cost today: rewording a modal's
   explanation costs the full gate.

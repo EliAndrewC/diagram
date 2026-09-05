@@ -310,7 +310,7 @@ class FinishMixin:
         # THE PLACARD IS THE PLACE (feature 156, GM 2026-08-29): "I would like to be able to click on
         # the title card for a settlement and then pull up an explanation of the type of settlement
         # that this is." It was ruled map furniture on 2026-08-27 and that ruling is OVERTURNED - the
-        # card and its name now carry the reserved class `place` (`interactive/classes.py` PLACE, with
+        # card and its name now carry the reserved class `place` (`interactive/classes/` PLACE, with
         # the overturning recorded beside the ruling it replaces), so hovering lights the card and
         # clicking opens the settlement's own overview. THE SCALE BAR BELOW KEEPS `cls="-"`: it is
         # still furniture, and it has nothing to tell a reader that the card does not.

@@ -94,17 +94,22 @@ def test_test_full_records_a_green_state_so_the_strongest_local_proof_counts() -
         assert target in makefile, f"{target} must still record"
 
 
-def test_the_page_assets_are_the_page_area_s_and_not_the_gate_s() -> None:
-    """Feature 188 (GM 2026-09-05), inverting 181: a stylesheet edit must not re-open the nine-minute gate.
-    gate-stamp's `page` area is THE definition of a page asset - exactly the two files - and the `diagram`
-    area, whose stamp is the full gate's, holds no `.js` or `.css`. `ci/delta.is_engine` agrees (an asset
-    is not engine for the route), so the three cannot drift apart without a test going red."""
+def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_no_asset() -> None:
+    """Feature 188 (GM 2026-09-05), widened by 189: gate-stamp's `page` area is THE definition of what owes
+    `make page-check` - the two assets and the registry package whose docstrings are the page's prose -
+    and the `diagram` area, whose stamp is the full gate's, holds no `.js` or `.css`. `ci/delta.is_engine`
+    agrees that an asset is not engine for the route, so the definitions cannot drift apart unseen."""
     from l7r.diagram.ci.delta import is_engine
 
     gs = _gate_stamp()
-    page = sorted(str(f).rsplit("/", 1)[1] for f in gs._area_files(REPO, *gs.AREAS["page"]))
-    assert page == ["page.css", "page.js"], page
+    page = [str(f) for f in gs._area_files(REPO, *gs.AREAS["page"])]
+    assets = sorted(f.rsplit("/", 1)[1] for f in page if "/assets/" in f)
+    assert assets == ["page.css", "page.js"], assets
+    registry = sorted(f.rsplit("/", 1)[1] for f in page if "/classes/" in f)
+    assert "homestead.py" in registry and "_base.py" in registry and all(f.endswith(".py") for f in registry), registry
+    assert len(page) == len(assets) + len(registry), "nothing else is in the page area"
     diagram = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
     assert not [f for f in diagram if f.endswith((".js", ".css"))], "the gate's area holds no asset"
-    for name in page:
+    for name in assets:
         assert not is_engine(".claude/skills/diagram/l7r/diagram/interactive/assets/" + name), name
+    assert "page" in gs.RAW_AREAS and "diagram" not in gs.RAW_AREAS, "only the page area hashes bytes (spec 189 D3)"

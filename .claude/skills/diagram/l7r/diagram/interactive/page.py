@@ -550,7 +550,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
     for key in sorted(present - CLASSES.keys() - {PLACE}):
         out[key] = {
             "name": key,
-            "what": "This kind of feature has no entry in the class registry yet (interactive/classes.py).",
+            "what": "This kind of feature has no entry in the class registry yet (interactive/classes/).",
             "why": "",
             "label": "guess",
             # the stub follows the same contract as a real entry, so its announcement survives
