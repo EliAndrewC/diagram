@@ -1,6 +1,9 @@
 # Feature 185 - retire the scope lock, and rename `lint` to `static`
 
-**Status**: draft, pre-implementation. Review round 1 returned ELEVEN items; all applied. One of
+**Status**: FAITHFUL (`spec-fidelity`, round 5 of 5), GM-approved to land 2026-09-05.
+Rounds returned 11, 2, 4, 2, 1 items - a converging review, not a persistent misunderstanding, which
+is the distinction this project's cap is written around. Nothing unrequested appeared in five rounds.
+The GM was given the choice at the cap and chose to land it. Review round 1 returned ELEVEN items; all applied. One of
 them (FR-009) was not a wording fix - the requirement as drafted would have shipped a regression the
 100% floor cannot see. See D2.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
@@ -85,8 +88,19 @@ soak suite's first name hours after that name landed (feature 184, D1).
 
 ### The scope lock
 
-- **FR-004** `make scope-lock` and `make scope-unlock` MUST be removed, with their `.PHONY` entries.
+- **FR-004** `make scope-lock` and `make scope-unlock` MUST be removed. **FOUR lines in TWO files** -
+  the second file is one no requirement named until review round 5:
+  - skill `Makefile:9` (the `.PHONY` entry), `:299` and `:301` (the targets);
+  - **root `Makefile:21`** - the `FORWARD` list. Its `.PHONY` is derived from it, so deleting the two
+    words is the whole edit. Leave it and `make scope-lock` from the repository root still resolves,
+    forwards into the skill, and dies with `No rule to make target` **pointing at the wrong file** -
+    which is exactly what that list exists to prevent (`Makefile:18`: *"Kept as an explicit list, not
+    a %-rule, so a typo names the route rather than being forwarded into a second 'No rule to make
+    target'"*).
   A phony name with no recipe still resolves and exits 0 - the trap feature 184 hit with `tripwire`.
+- **FR-004a** **A DEFECT FOUND WHILE FIXING FR-004 (Principle XIV).** That same `FORWARD` list still
+  carries `gate-manifest` and `new-check`, both retired by feature 166. Two stale forwards, live
+  today, with the same failure mode. They go in this feature.
 - **FR-005** `SWEEP_OK` MUST be removed: **one definition (Makefile:288) and FIVE uses** - `cohort`
   (327), `cache-audit` (350), `perf-gate` (509), `perf` (949), `test-full` (1126) - plus its two prose
   mentions (1145, 1147). An earlier draft said seven sites and listed `soak`, which carries no scope
