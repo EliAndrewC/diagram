@@ -263,3 +263,12 @@ def test_coverage_scope_answers_EMPTY_where_there_is_no_origin_main_yet(repo: Pa
     m.parent.mkdir(parents=True, exist_ok=True)
     m.write_text("x = 1\n")
     assert d.coverage_scope(repo) == ["l7r/diagram/settlement"], "an untracked engine module still counts"
+
+
+@pytest.mark.parametrize("path", [S + "l7r/diagram/interactive/assets/page.js", S + "l7r/diagram/interactive/assets/page.css"])
+def test_the_interactive_page_s_assets_are_engine_content(path: str) -> None:
+    """Feature 181 (2026-09-05): the page's script and stylesheet are inlined into every HTML map and run by
+    the browser test. They were not engine content, so a delta that was nothing but the two of them routed
+    DIRECT and the local gate short-circuited as "already verified" - measured on feature 181 itself."""
+    assert is_engine(path), path
+    assert not is_engine(S + "l7r/diagram/interactive/assets/notes.txt"), "only the executed kinds"

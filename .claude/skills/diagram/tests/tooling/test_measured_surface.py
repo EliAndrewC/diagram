@@ -92,3 +92,17 @@ def test_test_full_records_a_green_state_so_the_strongest_local_proof_counts() -
     # ...and the four that already recorded still do, so this widened the set rather than moving it.
     for target in ("green-local quick", "green-local reference", "green-local test-file"):
         assert target in makefile, f"{target} must still record"
+
+
+def test_the_two_engine_definitions_both_see_the_page_assets() -> None:
+    """Feature 181: `gate-stamp.py`'s diagram area and `delta.is_engine` are two definitions of engine
+    content that must agree, and both must include the interactive page's `.js` and `.css` - a change to
+    either is run by the browser test, and before this both said "nothing changed"."""
+    from l7r.diagram.ci.delta import is_engine
+
+    gs = _gate_stamp()
+    files = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
+    assets = sorted(f.rsplit("/", 1)[1] for f in files if "/interactive/assets/" in f)
+    assert assets == ["page.css", "page.js"], assets
+    for name in assets:
+        assert is_engine(".claude/skills/diagram/l7r/diagram/interactive/assets/" + name), name

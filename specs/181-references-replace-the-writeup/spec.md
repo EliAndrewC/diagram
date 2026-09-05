@@ -52,6 +52,19 @@ Two changes to the interactive map's references modal, for every feature's modal
   ("Return to <Name> writeup"), the explanation's sections are all as feature 180 left them.
 - **FR-009** It does not change hover, highlight, zoom, the place card or the glossary.
 
+### A defect found while doing this (constitution Principle XIV)
+
+- **FR-010** **The interactive page's assets were not engine content, so the gate did not see them
+  change.** `make done` on this feature's delta - which was `page.js`, `page.css`, a test and docs -
+  answered *"already verified - nothing the gate exercises has changed since the last green run"*, and
+  the push route would have been DIRECT, with no gate at all. Both definitions of engine content -
+  `scripts/gate-stamp.py`'s diagram area (`*.py`) and `ci/delta.py`'s `_ENGINE_DIRS` (`l7r/` + `.py`) -
+  omitted the two assets, which are inlined into every HTML map and executed by the browser test.
+  Both MUST include `.js` and `.css` under the skill (only the two assets exist), a test MUST prove the
+  two definitions agree on them, and the four documentation sites that state the rule MUST say so.
+  **This is the one thing in this feature the GM did not ask for**, fixed here rather than filed because
+  it is the exact mechanism that was supposed to verify this feature and did not.
+
 ## Decisions Recorded
 
 - **D1 - "disappear" is HIDE, not CLOSE.** The explanation dialog's `close` event is what releases the
@@ -65,3 +78,11 @@ Two changes to the interactive map's references modal, for every feature's modal
   only way "the same" stays true when one of them changes.
 - **D3 - the title link is `<a href="#">` styled as a link, and the whole title is not a link.** The GM
   named *"the word 'Farmhouse'"* as the link; the trailing word "references" is plain text.
+- **D4 - the assets join the engine key by SUFFIX, not by path.** `("l7r/", (".py", ".js", ".css"))`
+  and `("*.py", "*.js", "*.css")` rather than naming `interactive/assets/` - a future asset (a second
+  stylesheet, a script split out of `page.js`) is then engine content the day it lands, on the same
+  principle as the coverage surface (constitution X clause 5: "if you add a file under `l7r/`, it is
+  measured"). Cost: the gate-stamp glob crosses `/`, so a `.js` anywhere under the skill would be hashed;
+  today the two assets are the only ones, and the test pins that census so a third is a decision.
+  Consequence: every stamp and verified record taken before this fix is keyed on a file set that lacked
+  the assets, so the key moves and the next `make done` runs for real - which is the point.

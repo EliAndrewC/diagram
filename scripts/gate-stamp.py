@@ -46,7 +46,11 @@ from pathlib import Path
 AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     "diagram": (
         ".claude/skills/diagram",
-        ("*.py",),
+        # *.js / *.css: the interactive page's assets (feature 181) - inlined into every HTML map and run
+        # by the browser test, hashed by their bytes (`semantic_bytes` strips only Python). Without them
+        # `make done` answered "already verified" on a delta that was nothing but `page.js` and `page.css`.
+        # Mirrored in `l7r/diagram/ci/delta.py` `_ENGINE_DIRS`; the two must agree.
+        ("*.py", "*.js", "*.css"),
     ),  # the webapp area lives in gm-assistant since feature 131
     "hooks": ("scripts", ("*.sh", "*.py")),
 }
