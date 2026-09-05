@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T181124Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 185 retires the scope lock and renames lint to static - no map rolled, no placer touched"
+}

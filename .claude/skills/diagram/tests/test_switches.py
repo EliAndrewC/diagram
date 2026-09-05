@@ -50,7 +50,9 @@ def test_empty_reason_and_unknown_state_are_refused(skill: Path) -> None:
     "body",
     # feature 185: the two `scope` bodies were malformed ONLY because of the retired axis. Unknown
     # keys are IGNORED now (FR-007a), so they are valid and belong in the test below instead.
-    ["not json", "[1, 2]", '{"remote": {"state": "sometimes"}}'],
+    # `'{"remote": "on"}'` reaches `_axis`'s not-an-object branch, which the removed scope cases used
+    # to cover - a test deleted with its subject must not take a SURVIVING branch's coverage with it.
+    ["not json", "[1, 2]", '{"remote": {"state": "sometimes"}}', '{"remote": "on"}'],
 )
 def test_malformed_file_fails_closed(skill: Path, body: str) -> None:
     (skill / "dev" / "switches.json").write_text(body)
@@ -109,6 +111,13 @@ def test_cli_show_set_check(skill: Path, monkeypatch: pytest.MonkeyPatch, capsys
     assert sw.main(["show"]) == 0 and "(default)" in capsys.readouterr().out
     assert sw.main(["set", "remote", "off"]) == 1 and "reason is required" in capsys.readouterr().err
     assert sw.main(["check", "remote", "ci-check"]) == 0
+    # `state` and a SUCCESSFUL `set`: both were covered only through the retired scope axis
+    # (`main(["state","scope"])`, `main(["set","scope",...])`), so removing those cases left two
+    # surviving CLI branches uncovered. The 100% floor named them, which is what it is for.
+    assert sw.main(["state", "remote"]) == 0 and "on" in capsys.readouterr().out
+    assert sw.main(["set", "remote", "off", "--why", "a real reason"]) == 0
+    assert "a real reason" in capsys.readouterr().out
+    assert sw.main(["state", "remote"]) == 0 and "off" in capsys.readouterr().out
     with pytest.raises(SystemExit):
         sw.main(["set", "gears", "off", "--why", "x"])
 

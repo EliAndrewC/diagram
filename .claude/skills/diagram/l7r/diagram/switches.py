@@ -96,11 +96,6 @@ def _axis(raw: object, name: str, allowed: tuple[str, ...]) -> Axis:
     return Axis(str(state), str(raw.get("why", "")), str(raw.get("who", "")), str(raw.get("utc", "")))
 
 
-def skill_root() -> Path:
-    """The skill directory this module lives under - for the Python entry points, which may be
-    reached from any cwd. The CLI uses the cwd instead, because `make` runs it from the skill dir
-    and the Makefile-level tests run the real Makefile in a fixture tree."""
-    return Path(__file__).resolve().parents[2]
 
 
 def read(skill: Path) -> Switches:
