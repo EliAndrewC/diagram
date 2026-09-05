@@ -128,7 +128,10 @@ research entry and renames no heading.
 ### The documentation
 
 - **FR-016** The approach is written down, in these three places and in this shape:
-  - `research/README.md` gains a section on WHO the record is for and HOW it is organized for them: the
+  - a new `research/CLAUDE.md` - the directory's auto-loading index, which reaches anyone writing or
+    changing a research entry - carries the section on WHO the record is for and HOW it is organized for
+    them (**amended after the round-3 verdict, see D9**: the draft named `research/README.md`, and
+    constitution XVII's guard refused the edit - a README is the GM's to write): the
     audience (casual RPG enthusiasts who want to know a little more about why the settlement is the way
     it is - the crops, the farmhouses), the principle that an entry's heading is a QUESTION a reader
     might ask from the map, the chain modal -> question -> answer on GitHub -> sources, why the sources
@@ -203,3 +206,12 @@ research entry and renames no heading.
   the word on a count of trailing question marks; the round-2 review showed the count was an artifact
   of the metric (it filed two of the GM's own three examples as not questions), and it is withdrawn.
   Dropping the lead-in is the declined alternative, and it is one line to drop.
+- **D9 - the sensibility lives in `research/CLAUDE.md`, not `research/README.md`** (amended after the
+  round-3 FAITHFUL verdict, during implementation). The draft named the README because it is the
+  research tree's existing index; `scripts/readme-hooks.sh` refused the edit under constitution XVII
+  (*"a README is written by a human for a human; if the GM wants one, the GM writes it"*), with no
+  escape hatch, on purpose. The guard's own alternative is the better home: a directory `CLAUDE.md`
+  auto-loads for any session working in `research/`, which is exactly the author of a new entry the
+  section speaks to, while a README is read by luck. `README.md` is untouched and still holds the entry
+  format, the evidence classes and the file table; the new file points at it for those. The GM asked
+  for the sensibility to be documented and named no file, so this changes where, not what.

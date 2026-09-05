@@ -2,7 +2,8 @@
 
 The map as a page a player can use: hover a feature and every feature OF ITS KIND lights up; click
 it and a modal says what it is, why it stands there, whether that is historically accurate, a
-deliberate deviation or a guess (constitution XII), and which `research/` entries it rests on.
+deliberate deviation or a guess (constitution XII); "See references" lists the QUESTIONS the research
+asked about it, each linking to its answer in `research/` on GitHub (feature 180 - see below).
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
 
@@ -17,7 +18,7 @@ PNG is byte-identical by construction; the page is a second serialization of the
 | `notes.py` | a fact you wrote into a map's `.notes.md` is not reaching its page, or you are adding a key the block understands. The reader has no error path ON PURPOSE - see below |
 | `place.py` | the title card says something wrong, or you are describing a new tier. It holds the per-tier text, the crop table and the basis the card owes its reader |
 | `glossary.py` | you are adding a term the explanations use, or a definition reads wrong - every occurrence of a term in a modal is a hover tooltip; a test proves each term is used and each explanation's terms are defined |
-| `sources.py` | a modal's references look wrong - they are READ FROM THE RECORD at page-write time: the class's research entry's `**Sources:**` keys and `research/SOURCES.md`'s citation text; the registry's own `sources` tuple is only the fallback |
+| `sources.py` | a modal's references look wrong - they are READ FROM THE RECORD at page-write time: `research_questions()` resolves the class's `entry` to the research sections it names and builds each one's GitHub anchor (`RESEARCH_URL`, `github_anchor`, `question_text`); `research_sources()` / `registry()` read the `**Sources:**` keys and `SOURCES.md`, which the record tests still prove complete though the page no longer shows them |
 | `page.py` - `merge_primitives` | the page draws too many elements, or a merge changed the picture. It gathers same-styled `<line>`/`<circle>`/`<ellipse>` into one `<path>` WHEREVER the reorder is invisible - an element joins an earlier bucket only if nothing it must pass overlaps it, and neither a TRANSLUCENT nor an OUTLINED element merges with one it overlaps (0.85 blobs stack darker than one merged fill - feature 148 R3; and a path paints every subpath fill before its stroke, so merged crowns show each other's outlines - feature 153 R5). A line has no fill and so is never outlined - getting that wrong un-merges every scatter. An extent it cannot compute counts as being in the way, and a circle's is tested as a circle |
 | `page.py` | `wrap()` (the HTML form of one stream string), `ink_census()` (the FR-009 data: elements per class, and the unclassed ones), `explanations()` (only present classes, only present siblings), `render_page()` / `write_html()` |
 | `assets/page.css`, `assets/page.js` | the look and the behavior; inlined at write time. The highlight color is a recorded rendering decision (research.md R2) - change it there and here together |
@@ -43,7 +44,36 @@ the sub-guess ("the crop mix per map is rolled from the seed and is a GUESS at t
 other half - "Topology, taper and true-size width are read" - is the accuracy claim in other words
 and is NOT rendered; four classes whose whole note is that get no caveat at all, and a test lists
 them so a fifth is a decision rather than an omission. Both halves stay in the record, and the
-sources stay one click away.
+questions - and through them the sources - stay one click away.
+
+## The references modal lists QUESTIONS, not sources (feature 180)
+
+The GM, 2026-09-05, looking at the hamlet pages: *"instead of listing individual sources on the
+references modal, we will list the questions which we asked and researched - those pages are themselves
+sourced with links, so a user who wants to follow through and read the original sources can do so."*
+The audience is a casual RPG enthusiast, and *"they are not immediately presented with an overwhelming
+amount of third party sources."* The whole sensibility - who the reader is, the four-step chain from
+map to sources, what it asks of a research heading - is written in `research/CLAUDE.md`, "Who the
+record is for"; this section is the mechanics.
+
+| on the page | where it comes from |
+|---|---|
+| the explanation's footer has NO `Record: research/...` line | removed (the GM: *"I don't think we need lines like [that] on our main modal"*); `FeatureClass.entry` stays in the registry as the record |
+| *"See references (N)"* - N questions; hidden when the entry resolves to none (only `fallow` today) | `page.js` `open()`, off `d.questions` |
+| the references modal: one lead-in line (`page.REFERENCES_LEAD`), then one link per question, opening in a new tab | `sources.research_questions(entry)` - the `##`/`###` sections the entry's quoted headings name, in the ENTRY's order (the author's primary question first), text = heading less its dated `(researched ...)` parenthetical, URL = `RESEARCH_URL + file + "#" + github_anchor(heading)` |
+| the button reads *"Return to Farmhouse writeup"* (the settlement's name on the place card) | `page.js` `openRefs()`; the GM: *"just saying close might make it seem like we are closing all of the modals"* |
+
+**The anchor rule is GitHub's, reproduced** (`github_anchor`): lowercase, drop everything but letters,
+digits, combining marks, spaces, hyphens and underscores, spaces to hyphens (so ` - ` is `---`), and a
+repeated heading in one file numbered `-1`, `-2` in order of appearance - counted over EVERY heading
+level and outside code fences, as GitHub counts. Checked against the live site on seven headings before
+it shipped (spec D7) and pinned by `test_page.py`, so a divergence fails a test that states the expected
+string. The links point at `blob/main`, not a commit (spec D1): a reader gets the current answer; a
+renamed heading breaks old pages' anchors, which is why `research/README.md` rules anchors stable and
+why every pool page re-renders at each landing.
+
+**A class with a heading nobody can find shows no link and no error** - `research_questions` is quiet
+like everything else here. So when you add a class, open its page and click "See references" once.
 
 ## The blue plot is its own class (feature 159)
 

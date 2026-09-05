@@ -32,7 +32,16 @@ from l7r.diagram.interactive.page import (
     unregistered_classes,
     wrap,
 )
-from l7r.diagram.interactive.sources import citations, registry, research_sources, section_sources, urls_of
+from l7r.diagram.interactive.sources import (
+    RESEARCH_URL,
+    github_anchor,
+    question_text,
+    registry,
+    research_questions,
+    research_sources,
+    section_sources,
+    urls_of,
+)
 from l7r.diagram.interactive.tags import Split
 
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
@@ -122,8 +131,83 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     # all (settlement-review, 2026-08-29); the copse beside it on this map does have one
     assert data["windbreak"]["caveat"] == "", "the windbreak discloses no liberty - see test_classes"
     assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
-    assert data["windbreak"]["sources"] == research_sources(CLASSES["windbreak"].entry) and "forests-2020" in data["windbreak"]["sources"]
-    assert len(data["windbreak"]["refs"]["forests-2020"]["text"]) > 20
+    # the references are QUESTIONS (feature 180): the sections the entry names, linked to GitHub; the
+    # cited keys, the citation text and the entry pointer no longer ride on the page at all
+    assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
+    assert any(q["text"].startswith("The fengshui forest") and q["url"].startswith(RESEARCH_URL + "vegetation.md#") for q in data["windbreak"]["questions"])
+    assert not {"sources", "refs", "entry"} & set(data["windbreak"]), "dropped from the page data (spec FR-011)"
+
+
+def test_a_question_link_is_github_s_own_anchor() -> None:
+    """Feature 180, spec FR-006 / D7: the anchor rule is REPRODUCED, and these seven were read off the live
+    GitHub rendering on 2026-09-05 - a `?`, parentheses, an apostrophe, ` - `, CJK characters, emphasis.
+    A divergence from GitHub's rule fails HERE, with the expected string in the assertion, rather than
+    as a silently broken link on every page."""
+    live = {
+        "How close does a farmhouse stand to the paddy? Up against it - but never on the bund (researched 2026-08-27, feature 133 T41)": "how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund-researched-2026-08-27-feature-133-t41",
+        "May a byre stand beside a wellhead? (researched 2026-08-18)": "may-a-byre-stand-beside-a-wellhead-researched-2026-08-18",
+        "DISPERSED (散村 *sankyoson*) - decisive, and our terrain is its terrain": "dispersed-散村-sankyoson---decisive-and-our-terrain-is-its-terrain",
+        "The farmstead's fixtures - privy, woodpile, manure heap, bath, coop, household shrine, persimmon (researched 2026-08-27, feature 133 T53-T59)": "the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shrine-persimmon-researched-2026-08-27-feature-133-t53-t59",
+        "Homestead groves (yashikirin) - the real scale and prevalence": "homestead-groves-yashikirin---the-real-scale-and-prevalence",
+        "The ring canal runs on the INNER toe - 一河围田": "the-ring-canal-runs-on-the-inner-toe---一河围田",
+        "Why rape (油菜) was tried and removed": "why-rape-油菜-was-tried-and-removed",
+    }
+    for heading, anchor in live.items():
+        assert github_anchor(heading) == anchor, heading
+    # a heading repeated within one file is numbered in order of appearance, as GitHub numbers it
+    seen: dict[str, int] = {}
+    assert [github_anchor("Citing", seen), github_anchor("Citing", seen), github_anchor("Other", seen), github_anchor("Citing", seen)] == ["citing", "citing-1", "other", "citing-2"]
+    # underscores and combining marks survive; other punctuation does not
+    assert github_anchor("a_b: ć") == "a_b-ć"
+
+
+def test_a_question_s_text_drops_the_dated_bookkeeping_and_nothing_else() -> None:
+    """Spec FR-005 / D2: "(researched 2026-08-27, feature 133 T41)" is for the project, not the reader."""
+    assert question_text("How does a village lane bend? (researched 2026-08-27, feature 133 T32)") == "How does a village lane bend?"
+    assert question_text("The muck heap that reads as the neighbor's (accepted 2026-08-29, feature 152)") == "The muck heap that reads as the neighbor's"
+    assert question_text("What a settlement IS, and what the place card may say about it (feature 156, 2026-08-29)") == "What a settlement IS, and what the place card may say about it"
+    assert question_text("DISPERSED (散村 *sankyoson*) - decisive, and our terrain is its terrain") == "DISPERSED (散村 sankyoson) - decisive, and our terrain is its terrain", (
+        "an undated parenthetical is part of the question; emphasis markers are not"
+    )
+    assert question_text("Why rape (油菜) was tried and removed") == "Why rape (油菜) was tried and removed"
+
+
+def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_section_has_some() -> None:
+    """Spec FR-004 / D4: the class author's primary question first, not file order; FR-002: the one entry
+    that resolves to nothing is `fallow`, whose link was hidden already."""
+    qs = research_questions(CLASSES["farmhouse"].entry)
+    assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by "], qs
+    assert all(q["url"].startswith(RESEARCH_URL + "homesteads.md#") for q in qs)
+    assert qs[1]["url"].endswith("#how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund-researched-2026-08-27-feature-133-t41")
+    # file order would put the lane entry (line 274) before the paddy entry (line 400); the entry's order wins
+    assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
+    unresolved = sorted(k for k, fc in CLASSES.items() if not research_questions(fc.entry))
+    assert unresolved == ["fallow"], "every other class's entry names at least one findable section"
+    assert research_questions("nothing here") == []
+    for k, fc in CLASSES.items():
+        for q in research_questions(fc.entry):
+            assert q["url"].startswith(RESEARCH_URL) and "#" in q["url"] and q["text"], (k, q)
+            assert "researched 20" not in q["text"] and "*" not in q["text"], (k, q)
+
+
+def test_the_page_carries_the_questions_and_no_record_line() -> None:
+    """Spec FR-001 (no `Record:` footer), FR-008 (the lead-in), FR-009 (the button is set by the script),
+    FR-011 (the JSON shape)."""
+    from l7r.diagram.interactive.page import REFERENCES_LEAD
+
+    html_text = render_page([RECT], ["farmhouse"], "T")
+    # the MARKUP, before the data and the script (the script's comments name the old footer to say it is gone)
+    markup = html_text.split('<script id="classes"')[0]
+    assert "x-entry" not in markup and "Record:" not in markup
+    assert "x-entry" not in html_text.split("<script>")[1], "and the script touches no such element"
+    assert f'<p id="r-intro" class="intro">{REFERENCES_LEAD}</p>' in html_text and "questions we asked" in REFERENCES_LEAD
+    assert '<button id="r-close" type="button">Return to writeup</button>' in html_text
+    blob = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', html_text, re.S).group(1).replace("<\\/", "</"))
+    farmhouse = blob["classes"]["farmhouse"]
+    assert farmhouse["questions"] and set(farmhouse["questions"][0]) == {"text", "url"}
+    assert not {"sources", "refs", "entry"} & set(farmhouse)
+    assert 'd.questions.length ? "See references (" + d.questions.length + ")"' in html_text, "the count is the number of questions (spec D3)"
+    assert '"Return to " + cap(d.name) + " writeup"' in html_text
 
 
 def test_the_wet_paddy_is_explained_apart_from_the_paddy_and_only_when_present() -> None:
@@ -335,7 +419,6 @@ def test_the_citations_come_from_the_research_entries() -> None:
     assert "forests-2020" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
-    assert citations(["forests-2020", "no-such-key"])["no-such-key"]["text"] == "(not in research/SOURCES.md)"
     assert urls_of("Saitama City (https://www.city.saitama.lg.jp/p077111.html; READ). See https://example.org/a).") == ["https://www.city.saitama.lg.jp/p077111.html", "https://example.org/a"]
     assert section_sources("**Sources:** `a-1`, [`b-2`](SOURCES.md#b-2) and `a-1` again") == ["a-1", "b-2"]
     assert research_sources("nothing here") == []

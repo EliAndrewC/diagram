@@ -39,7 +39,7 @@ from typing import Any
 
 from ..dwellings import DWELLING_KINDS, HOUSEHOLD
 from .notes import MapNotes
-from .sources import citations, research_sources
+from .sources import research_questions
 
 #: `l7r.md`, "The Median Domain": ~5 inhabitants per household, and a hamlet of 10-20 households
 #: holds 50-100. The tiers that record a population outright (towns, cities) use theirs instead.
@@ -185,8 +185,8 @@ COLLISIONS: dict[str, str] = {
 PLACE_KEYS = ("district", "district direction", "county", "imperial road", "town", "town direction", "also")
 
 #: The research entry the card is written FROM, in the form `sources.py` parses - so the card's
-#: references are READ FROM THE RECORD at page-write time, exactly like a class's, rather than being
-#: a second list here that could drift from it.
+#: references (the questions, since feature 180) are READ FROM THE RECORD at page-write time, exactly
+#: like a class's, rather than being a second list here that could drift from it.
 ENTRY = "research/archetypes.md - 'What a settlement IS'"
 
 #: The basis the card owes its reader (spec FR-008a). Two statements above rest on setting canon where
@@ -361,7 +361,6 @@ def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifes
     # the place located before they want its crops, and with the crops first the district sentence
     # opened on an "It" whose nearest nouns were "weeds" and "ground".
     why = " ".join(x for x in [*where_sentences(str(meta.get("scale")), notes.place), crop_sentence(present), kind.population_note] if x)
-    keys = research_sources(ENTRY)
     return {
         "name": name,
         "what": what,
@@ -369,8 +368,7 @@ def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifes
         "label": "accurate",
         "lead": "",  # the card never announces accuracy either (spec FR-001)
         "caveat": BASIS_LEAD + BASIS if kind.noun == "hamlet" else "",
-        "sources": keys,
-        "refs": citations(keys),
-        "entry": ENTRY,
+        # the card's references are the QUESTIONS its own entry names, like any class's (feature 180)
+        "questions": research_questions(ENTRY),
         "siblings": [],
     }

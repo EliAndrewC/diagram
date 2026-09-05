@@ -27,7 +27,7 @@ from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, lead_sentence, slug
 from .glossary import GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
 from .place import LANE, lane_default, place_card
-from .sources import citations, research_sources
+from .sources import research_questions
 from .tags import ClsTag, Planted, Split
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +46,11 @@ UNCLASSED_CAP = 20
 #: What introduces a feature class's caveat. The place card's basis gets its OWN lead-in
 #: (`place.BASIS_LEAD`) because it is not about the drawing - see `explanations`.
 CAVEAT_LEAD = "On the drawing: "
+
+#: The one line above the references list (feature 180, spec FR-008 / D8). A bare list of research
+#: headings under the word "References" does not tell a casual reader what the lines are, or that each
+#: is a link to a written answer with its sources. "Questions" is the GM's own word for them.
+REFERENCES_LEAD = "The questions we asked while working out this feature - each is answered in our research notes, with the sources it rests on:"
 
 
 _LINE = re.compile(r'<line ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
@@ -511,10 +516,6 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
     for key, fc in CLASSES.items():
         if key not in present:
             continue
-        # THE CITATIONS COME FROM THE RECORD (GM 2026-08-28): the keys the class's research entry
-        # cites, with each key's SOURCES.md text for the references modal; the registry's own tuple
-        # is the fallback only when the entry cannot be found or names no key.
-        keys = research_sources(fc.entry) or [k for k in fc.sources if k != "not recorded"]
         out[key] = {
             "name": fc.name,
             "what": fc.what,
@@ -530,9 +531,12 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
             # from and not about the drawing at all. A renderer cannot tell those apart; the writer of
             # the string can.
             "caveat": (CAVEAT_LEAD + fc.caveat) if fc.caveat else "",
-            "sources": keys,
-            "refs": citations(keys),
-            "entry": fc.entry,
+            # THE REFERENCES ARE QUESTIONS, READ FROM THE RECORD (feature 180, GM 2026-09-05): the
+            # research sections the class's entry names, each linking to its anchor on GitHub. The
+            # sources those sections cite no longer ride on the page - a reader reaches them through
+            # the question's own page - and neither does the entry pointer, which the modal used to
+            # print as a "Record:" footer. Both stay in the registry as the record (constitution XII).
+            "questions": research_questions(fc.entry),
             # siblings are LINKS now (hover lights the other class, click opens its modal); the
             # distinguishing texts stay in the registry as the record, not on the page
             "siblings": [other for other in fc.siblings if other in present],
@@ -554,9 +558,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY) -> dict[str, dict[s
             # nothing reads, and had silently lost its lead)
             "lead": lead_sentence("guess", "unregistered class - the gate reports it"),
             "caveat": "",
-            "sources": [],
-            "refs": {},
-            "entry": "",
+            "questions": [],
             "siblings": [],
             "on_this_map": "",
         }
@@ -761,10 +763,16 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         '<section id="x-what"></section><section id="x-why"></section>'
         '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
         '<section id="x-siblings"></section>'
-        '<footer><p id="x-entry"></p><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
+        # NO "Record:" LINE (feature 180, GM 2026-09-05: "I don't think we need lines like [Record: ...]
+        # on our main modal") - the entry pointer is bookkeeping a reader of the map does not need; the
+        # references modal below carries what it pointed at, as questions.
+        '<footer><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
-        '<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2></header><section id="r-list"></section>'
-        '<footer><button id="r-close" type="button">Close</button></footer></article></dialog>\n'
+        # THE REFERENCES MODAL lists the QUESTIONS the research asked, linked to their answers (feature
+        # 180); its button says where it goes ("Return to <Name> writeup", set by page.js), because a bare
+        # "Close" could be read as closing every modal at once.
+        f'<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2><p id="r-intro" class="intro">{REFERENCES_LEAD}</p></header><section id="r-list"></section>'
+        '<footer><button id="r-close" type="button">Return to writeup</button></footer></article></dialog>\n'
         f'<script id="classes" type="application/json">{blob}</script>\n'
         f"<script>\n{_asset('page.js')}</script>\n</body>\n</html>\n"
     )
