@@ -69,6 +69,80 @@ derive_main() {
 MAIN=${CLONE_MAIN:-$(derive_main)}
 MAPDIR=$MAIN/.clones/.session-clones
 
+# GUARD_EDIT_OK: the behind-main NOTICE (GM 2026-09-05) - see the dirty branch in `pretool` for why
+# this teaches instead of blocking. Everything below is about being CORRECT and CHEAP, in that order.
+#
+# WHICH TARGETS COUNT. The GM asked for "any type of test ... quick tests or targeted tests or
+# whatever". This list is the cheap runtime copy; `test-clone-sync-hooks.sh` DERIVES the truth from
+# the skill Makefile (every target whose recipe reaches pytest) and fails if the two drift, so this
+# is a cache rather than a hand-maintained roster - constitution Principle X clause 14. Parsing the
+# Makefile here instead would put a make-database call on every single tool call.
+# GUARD_EDIT_OK: cov-file, durations and tooling were added because the DERIVATION in the companion
+# suite caught them missing on its very first run - a hand-written list short by three, which is the
+# fourth time in this repository that a roster written from memory has been wrong within a day. The
+# derivation is the reason this is safe to keep as a literal.
+BEHIND_TEST_TARGETS='quick|test|test-file|test-full|done|verify|reference|maps|hooks-test|idle-tests|cohort|tripwire|regressions|perf|perf-gate|cov-file|durations|tooling'
+BEHIND_FETCH_MAX_AGE=${CLONE_BEHIND_FETCH_AGE:-300}   # seconds; test seam
+
+behind_main_notice() { # behind_main_notice <clone> - one line of additionalContext, or silence
+  bn_clone=$1
+  [ "$(field tool_name)" = "Bash" ] || return 0
+  bn_cmd=$(field tool_input.command)
+  [ -n "$bn_cmd" ] || return 0
+
+  # A MENTION IS NOT AN INVOCATION - this repository has made that mistake four times, so the answer
+  # is asked of `_hookmatch.py targets`, which blanks heredocs and quoted strings and only counts a
+  # target at a command position. `grep -n 'make quick' README` must say nothing.
+  bn_hit=$(printf '%s' "$INPUT" | "$(dirname "$0")/_hookmatch.py" targets 2>/dev/null \
+             | grep -cxE "$BEHIND_TEST_TARGETS" 2>/dev/null) || bn_hit=0
+  [ "${bn_hit:-0}" -gt 0 ] || return 0
+
+  # THE REFERENCE IS THE MIRROR'S origin/main, NOT ITS HEAD. The clean-tree refusal below compares
+  # against the mirror's HEAD and then needs a whole second check to survive a STRAY COMMIT in the
+  # mirror (feature 168 - a bare `cd /diagram` that leaked, twice in one day). Comparing against
+  # `origin/main` is what we actually mean by "is there anything in main we do not have", and it
+  # cannot be fooled by a stray commit at all, so that trap is avoided by construction here.
+  bn_ref=$(git -C "$MAIN" rev-parse --verify -q origin/main 2>/dev/null) || bn_ref=""
+  [ -n "$bn_ref" ] || return 0
+
+  # FRESHNESS, and the honest limit on it. `origin/main` in the mirror is refreshed by the prompt
+  # hook every message - which is precisely the thing that is NOT happening in the case this notice
+  # exists for. So refresh it here, but THROTTLED (once per BEHIND_FETCH_MAX_AGE) and with a hard
+  # timeout, and fail open in silence: a hook that hangs on a network call would block the tool call
+  # it is trying to help. Nothing here writes to the clone; the mirror fetch is what `sync-in` does
+  # on every turn already.
+  bn_stamp=$MAPDIR/.behind-fetch
+  if [ ! -f "$bn_stamp" ] || [ "$(( $(date +%s) - $(stat -c %Y "$bn_stamp" 2>/dev/null || echo 0) ))" -ge "$BEHIND_FETCH_MAX_AGE" ]; then
+    mkdir -p "$MAPDIR" 2>/dev/null || true
+    timeout 5 git -C "$MAIN" fetch -q origin main >/dev/null 2>&1 || true
+    : > "$bn_stamp" 2>/dev/null || true
+    bn_ref=$(git -C "$MAIN" rev-parse --verify -q origin/main 2>/dev/null) || return 0
+  fi
+
+  # BEHIND means main's tip is missing from this clone's history - not that the HEADs differ. A clone
+  # that is merely AHEAD (the normal mid-feature state, every commit you have made) must say nothing,
+  # which is the same `--is-ancestor` reasoning the refusal below rests on and the bug that deadlocked
+  # the workflow on 2026-07-25 when it was an equality test.
+  git -C "$bn_clone" merge-base --is-ancestor "$bn_ref" HEAD 2>/dev/null && return 0
+
+  bn_n=$(git -C "$bn_clone" rev-list --count "HEAD..$bn_ref" 2>/dev/null) || bn_n=""
+  [ -n "$bn_n" ] && [ "$bn_n" != "0" ] || bn_n="new"
+  # DOES IT MATTER? The dirty-clone message this repository already had said the same words whether
+  # main was unchanged or had landed forty engine commits, so a session could not tell "routine" from
+  # "you are meaningfully stale". Engine paths are the ones that re-key the gate and force a rerun.
+  bn_eng=$(git -C "$bn_clone" diff --name-only "HEAD..$bn_ref" 2>/dev/null \
+             | grep -cE '^\.claude/skills/diagram/(l7r/.*\.py|pool/.*\.(gen\.py|json))$' 2>/dev/null) || bn_eng=0
+  if [ "${bn_eng:-0}" -gt 0 ]; then
+    # GUARD_EDIT_OK: bn_eng counts FILES, not commits - saying "N of them" after a commit count read
+    # as N commits, which is a different and wrong number.
+    bn_why="$bn_eng changed file(s) are ENGINE paths, so the gate result you are building toward will be re-keyed and \`make done\` will have to run again anyway"
+  else
+    bn_why="no changed file is an engine path, so your gate result still stands - this is a cheap merge whenever you want it"
+  fi
+  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BEHIND MAIN (notice, not a block): main has %s commit(s) this clone does not have, and %s. Your tree is dirty, so nothing was merged - mid-task work is sacred and a merge mid-diagnosis would change the code under test underneath you. PULL IT IN AS SOON AS IT IS APPROPRIATE: when you are not reproducing or bisecting something, run `cd %s && scripts/sync-with-main.sh sync-in`, resolve any conflicts, and carry on. Not urgent, not ignorable."}}\n' \
+    "$bn_n" "$bn_why" "$bn_clone"
+}
+
 canonical_clone() { # canonical_clone <sid> [transcript] - print .clones/<kebab-name> for a session,
   # or "" if neither source names it (unresolvable -> caller falls through).
   # TWO SOURCES, transcript FIRST (GM 2026-08-27). /rename appends {"type":"custom-title"} to the
@@ -148,6 +222,26 @@ case $MODE in
     # shellcheck source=/dev/null
     . "$CS_HERE/_guardlog.sh"
     cs_block() { guard_log clone-sync blocked "${2:-}" "$1"; }
+    # GUARD_EDIT_OK: THE BEHIND-MAIN NOTICE NEEDS A DIFFERENT ROUTE IN (GM 2026-09-05). Everything
+    # below resolves the clone from `tool_input.file_path`, because every guard here is about an EDIT
+    # landing in the wrong tree. A `make quick` carries no file_path at all, so it has always fallen
+    # straight out at the `*) exit 0` below - which is why a test command could never be noticed.
+    # This branch adds the one case and changes no other: a Bash call still exits 0 exactly as it did,
+    # it just gets looked at first. The clone comes from the session's own CLAIM (one file read; the
+    # claim is written on the session's first edit), never from the cwd, which a `cd` can leak.
+    if [ "$(field tool_name)" = "Bash" ]; then
+      bn_sid=$(field session_id)
+      if [ -n "$bn_sid" ] && [ -f "$MAPDIR/$bn_sid" ]; then
+        bn_c=$(cat "$MAPDIR/$bn_sid" 2>/dev/null || true)
+        if [ -n "$bn_c" ] && [ -d "$bn_c/.git" ] \
+           && [ -n "$(git -C "$bn_c" status --porcelain 2>/dev/null)" ]; then
+          # DIRTY only. A CLEAN clone that is behind is REFUSED below on its next edit, and telling it
+          # the same thing twice in two voices would be worse than saying it once with teeth.
+          behind_main_notice "$bn_c"
+        fi
+      fi
+      exit 0
+    fi
     fp=$(field tool_input.file_path)
     case $fp in
       "$MAIN"/.clones/*/*) ;;
@@ -162,6 +256,23 @@ case $MODE in
 
     # DIRTY = mid-task work, sacred: allow (record the claim), never strand in-flight work on a
     # moving main. EVERY guard below is a clean-work-unit-boundary check only.
+    #
+    # GUARD_EDIT_OK: THE ONE HOLE THIS LEAVES, CLOSED WITH A NOTICE RATHER THAN A BLOCK (GM
+    # 2026-09-05). The refusal below covers a CLEAN clone that is behind - "new work must not build
+    # on a stale base" - and the prompt hook merges main in on every message. Between them sits
+    # exactly one uncovered case, and the GM named it: a DIRTY clone during a long autonomous
+    # stretch. No message is sent for ten minutes to an hour, so the prompt hook never fires; the
+    # tree is dirty, so this branch deliberately exempts it. Nothing checks, and the session keeps
+    # testing against a base it already knows is out of date.
+    #
+    # It stays a NOTICE and never a block, on the GM's own reasoning: *"debugging and reproducing a
+    # failure would be made harder if our quick tests always pulled from main"*. A merge mid-diagnosis
+    # changes the code under test underneath you, and this project's answer to being stuck is to take
+    # a MEASUREMENT - which needs the input to hold still. So the session is TOLD, and decides when it
+    # is out of the debugger. That is feature 164's ladder: TEACH FIRST, FREE, where a block cannot be
+    # justified. `additionalContext` at exit 0 costs no round trip.
+    # GUARD_EDIT_OK: removing a call that could never fire - the notice is emitted from the Bash
+    # branch above, and a file EDIT carries no command, so calling it here returns immediately.
     if [ -n "$dirty" ]; then claim; exit 0; fi
 
     # --- clean work-unit boundary: enforce isolation before recording any claim ---

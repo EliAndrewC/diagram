@@ -253,6 +253,92 @@ case "$OUT" in
   *) printf 'FAIL  unexpected refusal for a stale clone\n      out: %s\n' "$OUT"; FAILED=1 ;;
 esac
 
+# ---- the BEHIND-MAIN notice (GM 2026-09-05) -----------------------------------------------------
+# GUARD_EDIT_OK: the companion cases for a new guard branch (constitution XVIII - a guard without one
+# turns the gate red). The case it covers is the one the other two mechanisms leave open: a CLEAN
+# clone that is behind is REFUSED above, and the prompt hook merges main in on every message, but a
+# DIRTY clone during a long autonomous stretch gets neither - no message fires the prompt hook, and
+# dirty work is sacred so nothing blocks it. It is TOLD instead, because a merge mid-diagnosis
+# changes the code under test underneath the session.
+BM=$TMP/behind; mkdir -p "$BM"
+git init -q --bare "$BM/remote.git"; git -C "$BM/remote.git" symbolic-ref HEAD refs/heads/main
+git clone -q "$BM/remote.git" "$BM/main" 2>/dev/null
+git -C "$BM/main" config user.email t@t; git -C "$BM/main" config user.name t
+printf '.clones/\n' > "$BM/main/.gitignore"; echo one > "$BM/main/f"
+git -C "$BM/main" add -A; git -C "$BM/main" commit -qm one; git -C "$BM/main" push -q origin HEAD:main
+git clone -q "$BM/remote.git" "$BM/main/.clones/work" 2>/dev/null
+git -C "$BM/main/.clones/work" config user.email t@t; git -C "$BM/main/.clones/work" config user.name t
+mkdir -p "$BM/main/.clones/.session-clones"
+printf '%s' "$BM/main/.clones/work" > "$BM/main/.clones/.session-clones/sid-bm"
+mkdir -p "$BM/main/.claude/skills/diagram/l7r/diagram"
+echo x > "$BM/main/.claude/skills/diagram/l7r/diagram/mod.py"
+git -C "$BM/main" add -A; git -C "$BM/main" commit -qm engine
+git -C "$BM/main" push -q origin HEAD:main; git -C "$BM/main" fetch -q origin
+git -C "$BM/main/.clones/work" fetch -q origin
+echo dirty > "$BM/main/.clones/work/scratch.txt"
+
+bm() {
+  OUT=$(printf '{"session_id":"sid-bm","tool_name":"%s","tool_input":{"command":"%s"}}' "${2:-Bash}" "$1" \
+        | CLONE_MAIN="$BM/main" CLONE_SESSIONS_DIR="$SESS" CLONE_BEHIND_FETCH_AGE=99999 "$HOOK" pretool 2>&1)
+}
+bm_notice() { bm "$1" "${3:-Bash}"; case "$OUT" in *"BEHIND MAIN"*) printf 'ok    %s\n' "$2" ;; *) printf 'FAIL  %s\n      out: %s\n' "$2" "$OUT"; FAILED=1 ;; esac; }
+bm_silent() { bm "$1" "${3:-Bash}"; case "$OUT" in "") printf 'ok    %s\n' "$2" ;; *) printf 'FAIL  %s (expected silence)\n      out: %s\n' "$2" "$OUT"; FAILED=1 ;; esac; }
+
+bm_notice "make quick"                  "a test invocation on a dirty, behind clone is told"
+bm_notice "make test-file FILE=x.py"    "a TARGETED test is told too - the GM asked for any type of test"
+bm_notice "cd /x && make quick ALL=1"   "a target past a cd and a variable still counts"
+bm_silent "grep -n 'make quick' README" "a MENTION is not an invocation"
+bm_silent "make switches"               "a non-test target says nothing"
+bm_silent "echo hello"                  "an unrelated command says nothing"
+bm_silent "make quick" "an Edit is not a Bash command" Edit
+bm "make quick"; case "$OUT" in
+  *"changed file(s) are ENGINE paths"*) printf 'ok    the notice says whether the gap touches ENGINE paths\n' ;;
+  *) printf 'FAIL  the notice does not distinguish an engine change\n      out: %s\n' "$OUT"; FAILED=1 ;;
+esac
+git -C "$BM/main/.clones/work" merge -q origin/main
+bm_silent "make quick"                  "a clone that is UP TO DATE says nothing"
+echo mine > "$BM/main/.clones/work/mine.txt"
+git -C "$BM/main/.clones/work" add -A; git -C "$BM/main/.clones/work" commit -qm mine
+bm_silent "make quick"                  "a clone merely AHEAD is not behind - the 2026-07-25 deadlock"
+rm -f "$BM/main/.clones/work/scratch.txt" "$BM/main/.clones/work/mine.txt"
+git -C "$BM/main/.clones/work" checkout -q -- . 2>/dev/null || true
+bm_silent "make quick"                  "a CLEAN clone is left to the stale-base refusal, not told twice"
+
+# THE TARGET LIST IS A CACHE, NOT A ROSTER (constitution Principle X clause 14). The hook carries a
+# literal so it costs nothing on a hook that fires for every tool call; the TRUTH is derived here from
+# the skill Makefile, and any target that reaches pytest but is missing from the hook fails this
+# suite. Three hand-written rosters in this repository were each short by one within a day.
+DERIVED=$(python3 - "$HERE/../.claude/skills/diagram/Makefile" "$HOOK" <<'PYEOF'
+import re, sys
+mk = open(sys.argv[1], encoding="utf-8").read()
+hook = open(sys.argv[2], encoding="utf-8").read()
+declared = set(re.search(r"BEHIND_TEST_TARGETS='([^']*)'", hook).group(1).split("|"))
+recipes, cur = {}, None
+for line in mk.splitlines():
+    m = re.match(r"^([a-z][\w-]*):", line)
+    if m:
+        cur = m.group(1); recipes.setdefault(cur, [])
+    elif line.startswith("\t") and cur is not None:
+        recipes[cur].append(line)
+    elif line and not line[0].isspace():
+        cur = None
+runs = {t for t, r in recipes.items() if any("pytest" in l for l in r)}
+for _ in range(6):
+    pat = "|".join(map(re.escape, runs))
+    grew = {t for t, r in recipes.items()
+            if any(re.search(r"\$\(MAKE\)[^\n]*?\b(?:%s)\b" % pat, l) for l in r)} | runs
+    if grew == runs:
+        break
+    runs = grew
+missing = sorted(runs - declared)
+print("MISSING:" + ",".join(missing) if missing else "OK")
+PYEOF
+)
+case "$DERIVED" in
+  OK) printf 'ok    every Makefile target that reaches pytest is in BEHIND_TEST_TARGETS\n' ;;
+  *)  printf 'FAIL  BEHIND_TEST_TARGETS has drifted from the Makefile - %s\n' "$DERIVED"; FAILED=1 ;;
+esac
+
 [ -n "${LIVE_PID:-}" ] && kill "$LIVE_PID" 2>/dev/null; true
 rm -rf "$TMP"
 echo "-----"
