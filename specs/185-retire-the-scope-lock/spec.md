@@ -33,14 +33,41 @@ soak suite's first name hours after that name landed (feature 184, D1).
 
 ### The rename
 
-- **FR-001** `make lint` MUST become `make static`. The target, its `.PHONY` entry, the gate's phase
-  list, and every doc that names it as a target.
+- **FR-001** `make lint` MUST become `make static`. **FOUR sites, named by line, because missing the
+  third re-creates the exact trap FR-004 warns about:**
+
+  | line | what |
+  |---|---|
+  | 8 | the `.PHONY` entry |
+  | 107 | the gate's phase loop, `for phase in lint format typecheck; do` |
+  | **973** | **`lint format typecheck test: | guard`** - a TARGET-POSITION declaration, none of the other three |
+  | 981 | the target and its recipe |
+
+  Rename 981 and leave 973 and **`make lint` still resolves** - declared with an order-only
+  prerequisite and no recipe - and exits 0 silently. That is FR-004's own sentence: *"A phony name
+  with no recipe still resolves and exits 0."* No test asserts `make lint` fails, and a coverage floor
+  cannot see a Makefile target, so nothing would catch it. Also every doc that names it as a target.
 - **FR-001a** **TWO ENGINE CALL SITES invoke it BY NAME and MUST move with it** - neither is reached
   by FR-001's enumeration or FR-003's guard suites:
   - `ci/dispatch.py:366` - `["make", "--no-print-directory", "lint", "format", "typecheck"]`, the
     local pre-dispatch ladder. Missing it breaks every `ci-check` and `ci-merge`.
   - `tools/timings.py:182-188` - the phase roster `("lint", "lint (ruff check + duplicate-def scan)")`
     followed by `sh(["make", phase])`. Missing it breaks `make durations`.
+- **FR-001c** **THE ONE OPEN DECISION IN THIS SPEC, decided: ALL FIVE `lint` strings in
+  `dispatch.py` are renamed, not just the command.** Only `:366` must change for correctness; the
+  other four are an event tag, a verdict and two messages:
+
+      367  ctx.events.append(f"lint:{rc}")
+      370  ctx.out("ci: lint/format/types FAILED locally - nothing dispatched")
+      371  return Outcome(rc=1, verdict="REFUSE(lint)")
+      372  ctx.out("ci: lint, format, types clean - starting the build ...")
+
+  **Decided by measurement**: none is consumed outside `dispatch.py` and its own suite - no stored
+  record, no hook, no buildspec - so unlike `FULL` (FR-013, where `full` is a stored run-log value)
+  there is no data argument for keeping them. Leaving them would have the event log and the verdict
+  name a phase that does not exist, which is precisely the staleness feature 184 existed to remove
+  and which FR-011a forbids in live text. Renaming all five obliges updating
+  `tests/tooling/ci/test_dispatch.py:161`'s `events` assertion.
 - **FR-001b** Historical `dev/run-log/` records keep the OLD phase name (`"result": "failed: lint
   test"` and similar). They are accounts of runs that happened. Stated because FR-013 declines the
   `FULL` rename on a data argument, and the same argument applies here - the difference is that the
@@ -48,8 +75,13 @@ soak suite's first name hours after that name landed (feature 184, D1).
 - **FR-002** `format` and `typecheck` MUST NOT be merged into it. They differ, and the gate reports
   each phase separately so a failure names itself; merging would lose that. Recorded in 184's FR-008
   and unchanged here.
-- **FR-003** Any guard suite that asserts the gate's phase NAMES must move with it. A phase list is
-  a contract that something checks.
+- **FR-003** The suites that assert the phase NAMES move with them. This was the only requirement
+  stating a rule and leaving the sites to be found; there are TWO, and both go red on the rename:
+  - `tests/tools/test_timings.py:131` - `assert [c[1] for c in fake.calls] == ["lint", "format",
+    "typecheck", "test"]`, which is what PINS FR-001a's `timings.py` change;
+  - `tests/tooling/ci/test_dispatch.py:103, 106, 107, 161` - `ScriptedSh` keys the scripted shell on
+    the literal `"lint format typecheck"` string and then asserts `REFUSE(lint)`, the failure message
+    and `events == ["lint:0", ...]`. This is what PINS FR-001a's and FR-001c's `dispatch.py` changes.
 
 ### The scope lock
 
@@ -133,7 +165,7 @@ soak suite's first name hours after that name landed (feature 184, D1).
   unrecognized one. Naming the three is what makes the test writable, so it is stated here rather
   than left for the implementer to rediscover.
 - **FR-008** The scope-dependent test machinery MUST go with it: `ROLL_DESELECT` (Makefile:1058),
-  `TIER_SELECT` (1104) and the "map-rolling tests DEFERRED" branch exist only to serve a locked scope
+  `TIER_SELECT` (1104) and the "map-rolling tests DEFERRED" branch (Makefile:1200) exist only to serve a locked scope
   - both are defined through `SCOPE_STATE` (1057), which is `$(SWITCH) state scope`, so with the axis
   gone they expand empty unconditionally. **`TIER_SELECT` is also used by `make quick` (Makefile:847)**
   - behavior-neutral to remove, but named so `quick`'s recipe is not disturbed by accident.
