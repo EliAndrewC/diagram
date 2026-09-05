@@ -1,6 +1,11 @@
 # Feature 181 - the references modal REPLACES the writeup, and its title is the way back
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - cleared for implementation (constitution XVI).
+The review graded FR-002/D1 a necessary consequence rather than an addition (the explanation's `close`
+event is what drops the shade and the pin, and the one shade is shared by both dialogs) and D3 the
+literal reading of *"the word 'Farmhouse' is a link"*. Its aside - that the hiding class must be
+cleared on every path that closes the references, including `closeDialog` and a fresh `open()` - is met
+by clearing it in the references dialog's own `close` listener, one place.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 **Predecessor**: feature 180 (the references modal lists questions; its button says "Return to <Name> writeup")
 

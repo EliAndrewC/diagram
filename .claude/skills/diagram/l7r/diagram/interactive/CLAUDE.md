@@ -62,6 +62,8 @@ record is for"; this section is the mechanics.
 | *"See references (N)"* - N questions; hidden when the entry resolves to none (only `fallow` today) | `page.js` `open()`, off `d.questions` |
 | the references modal: one lead-in line (`page.REFERENCES_LEAD`), then one link per question, opening in a new tab | `sources.research_questions(entry)` - the `##`/`###` sections the entry's quoted headings name, in the ENTRY's order (the author's primary question first), text = heading less its dated `(researched ...)` parenthetical, URL = `RESEARCH_URL + file + "#" + github_anchor(heading)` |
 | the button reads *"Return to Farmhouse writeup"* (the settlement's name on the place card) | `page.js` `openRefs()`; the GM: *"just saying close might make it seem like we are closing all of the modals"* |
+| the references REPLACE the explanation while open - it is HIDDEN (class `behind`), not closed, so the shade and the pinned highlight stay; it reappears however the references close (feature 181, GM 2026-09-05: two stacked boxes *"just looks really weird"* when the top one is smaller) | `page.js` `openRefs()` adds the class; the references dialog's `close` listener removes it - the one place every way back runs through |
+| the title reads *"Farmhouse references"*, the name a link that does exactly what the button does (feature 181) | `page.js` `openRefs()` builds `#r-back`; it and `#r-close` call one `returnToWriteup()` |
 
 **The anchor rule is GitHub's, reproduced** (`github_anchor`): lowercase, drop everything but letters,
 digits, combining marks, spaces, hyphens and underscores, spaces to hyphens (so ` - ` is `---`), and a

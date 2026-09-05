@@ -208,6 +208,11 @@ def test_the_page_carries_the_questions_and_no_record_line() -> None:
     assert not {"sources", "refs", "entry"} & set(farmhouse)
     assert 'd.questions.length ? "See references (" + d.questions.length + ")"' in html_text, "the count is the number of questions (spec D3)"
     assert '"Return to " + cap(d.name) + " writeup"' in html_text
+    # feature 181: the references REPLACE the explanation (hidden by a class the stylesheet knows, cleared
+    # when the references close), and the title's name is a link sharing the button's handler
+    assert "dialog#explain.behind { display: none; }" in html_text
+    assert 'dialog.classList.add("behind")' in html_text and 'dialog.classList.remove("behind")' in html_text
+    assert 'back.id = "r-back"' in html_text and 'document.createTextNode(" references")' in html_text
 
 
 def test_the_wet_paddy_is_explained_apart_from_the_paddy_and_only_when_present() -> None:

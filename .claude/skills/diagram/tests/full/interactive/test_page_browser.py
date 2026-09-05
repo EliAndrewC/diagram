@@ -437,8 +437,29 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     assert synthetic.js("() => !document.getElementById('x-refs').hidden")
     synthetic.js("() => document.getElementById('x-refs').click()")
     synthetic.page.wait_for_timeout(30)
-    assert synthetic.js("() => document.getElementById('references').open && document.getElementById('explain').open"), "the references modal opens ON TOP of the explanation, which stays open"
+    # THE REFERENCES REPLACE THE EXPLANATION (feature 181, GM 2026-09-05): the explanation stays OPEN (its
+    # close event would release the pin and the shade) but is not DISPLAYED while the references are up
+    shown = "() => ({ refs: document.getElementById('references').open, explain: document.getElementById('explain').open, visible: getComputedStyle(document.getElementById('explain')).display !== 'none', shade: !document.getElementById('shade').hidden })"
+    assert synthetic.js(shown) == {"refs": True, "explain": True, "visible": False, "shade": True}, "the explanation disappears behind the references; the shade and the pin stay"
+    assert synthetic.js("() => window.l7rMap.pinned()") == "bund"
     assert synthetic.js("() => document.getElementById('r-list').children.length") >= 1
+    # the title is "<Name> references", the name a link that does what the button does
+    name = CLASSES["bund"].name
+    title = f"{name[0].upper()}{name[1:]}"
+    assert synthetic.js("() => document.getElementById('r-name').textContent") == f"{title} references"
+    assert synthetic.js("() => { const a = document.querySelector('#r-name a#r-back'); return a && a.textContent; }") == title
+    synthetic.js("() => document.getElementById('r-back').click()")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "the title link brings the writeup back"
+    synthetic.js("() => document.getElementById('x-refs').click()")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js(shown)["visible"] is False
+    synthetic.js("() => document.getElementById('r-close').click()")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "so does the button"
+    synthetic.js("() => document.getElementById('x-refs').click()")
+    synthetic.page.wait_for_timeout(30)
+    assert synthetic.js(shown)["visible"] is False
     # THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): every line is a link into the research
     # record on GitHub, the button says where it returns to, and the explanation carries no "Record:" line
     links = synthetic.js("() => Array.from(document.querySelectorAll('#r-list a.q')).map(a => [a.textContent, a.getAttribute('href'), a.getAttribute('target')])")
@@ -449,7 +470,7 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     assert synthetic.js("() => document.getElementById('x-entry')") is None and "Record:" not in synthetic.js("() => document.getElementById('explain').textContent")
     synthetic.page.keyboard.press("Escape")
     synthetic.page.wait_for_timeout(30)
-    assert synthetic.js("() => !document.getElementById('references').open && document.getElementById('explain').open"), "Escape closes only the top modal"
+    assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "Escape closes only the references, and the writeup comes back"
     synthetic.page.keyboard.press("Escape")
     assert not synthetic.dialog()["open"]
 

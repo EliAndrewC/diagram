@@ -141,16 +141,33 @@
   // a sibling link's hover lights the OTHER class while the pointer is on it; the pin resumes after
   function peek(other) { var keep = pinned; pinned = null; highlight(other); pinned = keep; }
   function unpeek() { var keep = pinned; pinned = null; highlight(keep); pinned = keep; }
-  // THE REFERENCES MODAL (GM 2026-08-28): a second dialog ON TOP of the explanation. Escape closes the
-  // top one. SINCE FEATURE 180 (GM 2026-09-05) IT LISTS QUESTIONS, NOT SOURCES: one link per research
-  // section the class was written from, to that section on the public GitHub rendering of the record -
-  // "a list of questions we've asked with links to the appropriate places". The sources are one click
-  // further, on the page that answers the question; a casual reader is not met with a wall of them.
+  // THE REFERENCES MODAL (GM 2026-08-28): a second dialog. SINCE FEATURE 180 (GM 2026-09-05) IT LISTS
+  // QUESTIONS, NOT SOURCES: one link per research section the class was written from, to that section
+  // on the public GitHub rendering of the record - "a list of questions we've asked with links to the
+  // appropriate places". The sources are one click further, on the page that answers the question; a
+  // casual reader is not met with a wall of them.
+  // IT REPLACES THE EXPLANATION RATHER THAN STACKING ON IT (feature 181, GM 2026-09-05: "when it is
+  // smaller, it just looks really weird. So I think that the original modal should disappear. But then
+  // if I click on the 'Return to Farmhouse writeup' button, then the current modal closes and the
+  // original modal reappears"). HIDDEN, not closed: the explanation's `close` event is what releases the
+  // pinned highlight and the shade, and the reader has not left the feature - they have gone one level
+  // deeper into it - so the map stays lit and shaded behind (spec D1/FR-002). The class comes off in the
+  // references dialog's own `close` listener below, which every way back runs through: the button, the
+  // title link, Escape, `closeDialog`, and a fresh `open()`.
   function openRefs() {
     var key = dialog.getAttribute("data-k");
     var d = data[key];
     if (!d || !d.questions.length) return;
-    setText("r-name", "References - " + cap(d.name));
+    // THE TITLE IS THE WAY BACK (feature 181): "<Name> references", the name a link doing exactly what
+    // the return button does - one handler, two triggers (spec D2). Only the word is the link (D3).
+    var title = document.getElementById("r-name");
+    title.textContent = "";
+    var back = document.createElement("a");
+    back.id = "r-back"; back.href = "#"; back.className = "back";
+    back.textContent = cap(d.name);
+    back.addEventListener("click", function (e) { e.preventDefault(); returnToWriteup(); });
+    title.appendChild(back);
+    title.appendChild(document.createTextNode(" references"));
     var list = document.getElementById("r-list");
     list.textContent = "";
     d.questions.forEach(function (q) {
@@ -164,11 +181,15 @@
     // THE BUTTON SAYS WHERE IT GOES (GM 2026-09-05: "just saying close might make it seem like we are
     // closing all of the modals instead of just this one").
     setText("r-close", "Return to " + cap(d.name) + " writeup");
+    dialog.classList.add("behind");
     refsDialog.show();
   }
+  function returnToWriteup() { refsDialog.close(); }
   document.getElementById("x-refs").addEventListener("click", function (e) { e.preventDefault(); openRefs(); });
-  document.getElementById("r-close").addEventListener("click", function () { refsDialog.close(); });
-  refsDialog.addEventListener("cancel", function (e) { e.preventDefault(); refsDialog.close(); });
+  document.getElementById("r-close").addEventListener("click", returnToWriteup);
+  refsDialog.addEventListener("cancel", function (e) { e.preventDefault(); returnToWriteup(); });
+  // ...and however the references close, the explanation comes back (feature 181)
+  refsDialog.addEventListener("close", function () { dialog.classList.remove("behind"); });
   svg.addEventListener("click", function (e) {
     var key = keyAt(e.target);
     if (key !== null) open(key);

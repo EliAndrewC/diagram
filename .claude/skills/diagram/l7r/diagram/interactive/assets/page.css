@@ -76,9 +76,15 @@ a.sib { color: #5A3F1E; text-decoration: underline dotted; }
 a.sib:hover { color: var(--hl-stroke); }
 #x-refs { color: #5A3F1E; }
 #x-refs[hidden] { display: none; }
-/* the references modal sits ABOVE the explanation; since feature 180 it is a list of QUESTIONS, each a
-   link to its answer in the research record on GitHub - one line per question, read as a list */
+/* the references modal REPLACES the explanation while it is open (feature 181, GM 2026-09-05: two boxes
+   stacked "just looks really weird" when the top one is smaller) - the explanation is hidden, not closed,
+   so the shade and the pinned highlight stay (page.js `openRefs`); since feature 180 the modal is a list
+   of QUESTIONS, each a link to its answer in the research record on GitHub - one line per question */
+dialog#explain.behind { display: none; }
 dialog#references { z-index: 11; max-width: 46rem; }
+/* the title's name is a link back to the writeup - the same thing the button does */
+dialog#references h2 a.back { color: #5A3F1E; text-decoration: underline dotted; }
+dialog#references h2 a.back:hover { color: var(--hl-stroke); }
 dialog#references p { margin: 0 0 0.6rem; font-size: 0.95rem; line-height: 1.4; }
 dialog#references p.intro { color: var(--muted); font-size: 0.9rem; margin: 0.3rem 0 0.9rem; }
 a.q { color: #5A3F1E; text-decoration: underline dotted; }
