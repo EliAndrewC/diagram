@@ -96,8 +96,6 @@ def _axis(raw: object, name: str, allowed: tuple[str, ...]) -> Axis:
     return Axis(str(state), str(raw.get("why", "")), str(raw.get("who", "")), str(raw.get("utc", "")))
 
 
-
-
 def read(skill: Path) -> Switches:
     """Absent -> defaults. Malformed -> CLOSED (remote off) with `error` set.
 
