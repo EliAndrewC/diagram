@@ -19,6 +19,6 @@ Every task is `research: rendering` - tooling, nothing physical behind it.
 - [x] T05 FR-007/FR-008: the written rule - root `CLAUDE.md` x3, `docs/session-clones.md`, skill `CLAUDE.md` table, `interactive/CLAUDE.md`
       research: rendering
       verify: DONE. root `CLAUDE.md` x3, `docs/session-clones.md`, the skill `CLAUDE.md` table (page-check, tick), `interactive/CLAUDE.md` Verifying, and the root Makefile forwards the two targets; grep for feature 181 engine-content wording finds only the records
-- [ ] T06 `make done` green (this delta touches `ci/delta.py`, engine for coverage), `hooks-test` green, push; the answer to the GM with the measured cost of `make page-check`
+- [x] T06 `make done` green (this delta touches `ci/delta.py`, engine for coverage), `hooks-test` green, push; the answer to the GM with the measured cost of `make page-check`
       research: rendering
-      verify: green gate; the push lands; `make page-check` timed
+      verify: DONE. `make done` GREEN in 628 s: 2,963 passed, 22,576 statements 0 uncovered 100%, hamlet floor 100%; both `gate-green-diagram` and `gate-green-page` written by the phases-run exit at 19:41:13. `make page-check` MEASURED at 26 s for 420 tests. `PAIR_OK` given: tooling only, no drawn ink. Pushed
