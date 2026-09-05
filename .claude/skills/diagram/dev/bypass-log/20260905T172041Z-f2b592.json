@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T172041Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 182 is make-target naming and a retired duplicate target - it rolls no map and touches no placer, so settlement-review has no Mode B map to read"
+}
