@@ -98,6 +98,10 @@ done:
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
+	  : "GUARD_EDIT_OK: the SHORT-CIRCUIT re-stamps rather than earns, and that is what kept a bogus" ; \
+	  : "record alive: each later gate refreshed its timestamp so it never aged out. No duration floor" ; \
+	  : "applies here (0 s is correct for a reuse) but the dry-run refusal does." ; \
+	  python3 "$$(git rev-parse --show-toplevel)/scripts/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
@@ -126,7 +130,16 @@ done:
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
-	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
+	: "GUARD_EDIT_OK: A RUN TOO FAST TO HAVE WORKED DOES NOT GET TO SAY IT PASSED (found 2026-09-05)." ; \
+	: "make runs \$$(MAKE) sub-invocations even under -n, so `make -n done` reached these very lines" ; \
+	: "having done nothing and wrote a correctly-hashed GREEN record - which is the whole of what a" ; \
+	: "push demands. Two such records are in dev/run-log/ (3 s and 4 s against a 382 s day median)," ; \
+	: "and each later gate short-circuited on it and RE-STAMPED it, so it never aged out. The floor is" ; \
+	: "10% of the target's PINNED RATCHET BASELINE, so one number serves the ceiling and the floor and" ; \
+	: "it tracks the era - this gate's median has been 21 s and 587 s within two weeks." ; \
+	root=$$(git rev-parse --show-toplevel 2>/dev/null); \
+	python3 "$$root/scripts/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" || exit 1; \
+	[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
 	$(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
 	: "(GUARD_EDIT_OK: feature 171 - THE RATCHET RUNS AFTER THE RECORD, deliberately: this run is part"; \
 	: " of the median it is judged against, and a gate that fails without having logged what it did"; \
@@ -922,8 +935,17 @@ reference:
 # want to run the full test suite, which is to say the one that we reserve for AWS. However, I would like to
 # run the lengthier test suite" - so it is `done` (the 21-minute unlocked gate), never `done FULL=1`, and the
 # scope lock is RELAXED for it by `switches.read` when the caller descends from the timer. Never by hand.
-IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null)
-DONE_NAME = $(if $(filter 1,$(IDLE_CTX)),idle-done,done)
+# GUARD_EDIT_OK: A FAILING PROBE MUST NOT UPGRADE A RUN'S AUTHORITY (found 2026-09-05).
+# `2>/dev/null` swallows every error from the probe, so if `switches idle` fails for ANY reason - a
+# syntax error mid-edit, a missing import, a broken interpreter - IDLE_CTX came back empty and
+# DONE_NAME fell back to `done`. That is backwards: `ci/state.py`'s GREEN_TARGETS deliberately OMITS
+# `idle-done`, and that omission is the entire mechanism by which an unattended idle gate neither
+# grants nor revokes a push (feature 136 D1/FR-006b). So a broken probe was silently PROMOTING an
+# idle run to one whose record the push honors - a failure that increases trust instead of reducing
+# it. Now the probe's failure is distinguishable from its answer, and an unreadable answer fails
+# toward `idle-done`, which is the direction that can only ever withhold authority.
+IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
+DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
 # THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
