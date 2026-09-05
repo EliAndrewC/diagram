@@ -1,6 +1,9 @@
 # Feature 184 - no dotted underlines beneath the page's links
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - cleared for implementation (constitution XVI). The
+review measured the set (the three rules are the only dotted underlines on a link anywhere in the engine)
+and graded D1 the literal reading. Its aside: the *"See references (N)"* link carries the browser's
+default SOLID underline and always has - outside this request, reported to the GM.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 **Predecessors**: features 134 (the sibling links), 180 (the question links), 181 (the title link)
 
