@@ -1,9 +1,9 @@
 {
   "remote": {
     "state": "off",
-    "why": "GM 2026-09-05: the remote had nothing left to add - it ran the same make done as the laptop, and every ci-merge since 2026-08-25 was SKIP-VERIFIED. Repointed at make sweep (tests/sweep/, the tier above the gate) which is declared and deliberately empty, so nothing dispatches until that suite has content worth paying for.",
+    "why": "GM 2026-09-05: the remote had nothing left to add - it ran the same make done as the laptop, and every ci-merge since 2026-08-25 was SKIP-VERIFIED. Repointed at make soak (tests/soak/, the tier above the gate), which is declared and deliberately empty, so nothing dispatches until that suite has content worth paying for.",
     "who": "Eli Courtwright",
-    "utc": "2026-09-05T16:17:53Z"
+    "utc": "2026-09-05T17:26:33Z"
   },
   "scope": {
     "state": "unlocked",
