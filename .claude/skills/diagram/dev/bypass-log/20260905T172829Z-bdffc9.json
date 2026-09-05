@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T172829Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 184 is make-target naming, a retired duplicate target and a static guard - it rolls no map and touches no placer, so settlement-review has no Mode B map to read"
+}

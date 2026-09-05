@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T170557Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "verifying a target rename with two test files - no map rolled, no placer touched\nsame"
+}

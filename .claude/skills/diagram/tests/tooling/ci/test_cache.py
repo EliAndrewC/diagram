@@ -65,7 +65,7 @@ def test_an_operation_does_not_overwrite_the_gates_cache() -> None:
     `CI_SCOPE` becomes `operation`, so the two clobbered each other. Performance only: the gencache key
     is content-derived, so a foreign entry can only MISS."""
     gate = cache_location("bkt", config.PROJECT_CHECK, "reference")
-    trip = cache_location("bkt", config.PROJECT_CHECK, "reference", "tripwire")
+    trip = cache_location("bkt", config.PROJECT_CHECK, "reference", "maps")
     assert gate != trip, "an operation must not write to the gate's cache object"
     assert trip.startswith(gate + "/"), "and it should be legible as a child of it, not an unrelated key"
 
@@ -75,7 +75,7 @@ def test_the_operation_in_the_key_is_the_REGISTERED_name_not_the_raw_target() ->
     `a.target.split()[0]` and passes the WHOLE string on as `ctx.operation`, so keying on it would give
     one S3 object per argument spelling - the GM's named failure, reintroduced by the fix for a
     different defect."""
-    assert registered_operation("tripwire") == "tripwire"
+    assert registered_operation("maps") == "maps"
     assert registered_operation("cohort SEEDS=8") == registered_operation("cohort SEEDS=9") == "cohort"
     assert registered_operation(None) is None and registered_operation("") is None
     assert registered_operation("not-a-registered-operation") is None, "an unregistered head declines to partition rather than inventing a key"

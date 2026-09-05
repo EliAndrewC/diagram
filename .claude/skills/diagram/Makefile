@@ -7,11 +7,14 @@
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 .PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
 	 switches ci-off ci-on scope-lock scope-unlock _switch \
-	 map cohort tripwire hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
+	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
 	 notes-census \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
+# GUARD_EDIT_OK: `tripwire` off .PHONY as well as losing its rule - a phony name with no recipe still
+# RESOLVES (make treats it as an up-to-date target and exits 0), so leaving it here would have kept a
+# dead command silently succeeding. Retired 2026-09-05; see the block comment above the `maps` target.
 # GUARD_EDIT_OK: feature 166 - REMOVING operations, never loosening one. The check battery is retired,
 # so the seven targets that drove it or its corpus (gate-manifest, regressions, new-check, site-justice,
 # check-census, firing-census, firing-census-suite) name tools that no longer exist. A target pointing at
@@ -325,9 +328,17 @@ cohort:         ## roll N seeds and report every failure      N=48
 	$(REF_FIRST)
 	$(RUN).tools.cohort_audit --count $(or $(N),48)
 
-tripwire:       ## the middle tier: reference map, then the tripwire seeds
-	$(SWEEP_OK)
-	$(RUN).tools.mapcheck $(if $(SCOPE),--scope $(SCOPE),)
+# GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
+# `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -
+# and its help line, "the middle tier: reference map, then the tripwire seeds", could not be true:
+# mapcheck's scopes are auto|reference|all and there is no `tripwire` among them. The tripwire seeds
+# (27, 33, 37, 41, 47) are a rung INSIDE the auto state machine, not a scope you can ask for, and
+# they keep that name where it is accurate - in `mapcheck.TRIPWIRE_SEEDS`.
+# The repo's own doctrine already said there should be one command here: *"Use `make maps`, which
+# picks its own scope ... There is no second command on purpose - the earlier two-command version
+# relied on the session choosing right, and it did not."* There were two. Now there is one.
+# `_invocation.py`'s operation registry names `maps` now, so `ci-check TARGET=maps` still dispatches
+# mapcheck - the operation name must equal a make target, because run.sh runs `make $MAKE_TARGET`.
 
 hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 hamlet:         ## generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
@@ -1116,15 +1127,19 @@ test-full:      ## the gate's whole test phase + all three coverage floors (ever
 	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
 
 # GUARD_EDIT_OK: THE TIER ABOVE THE GATE (GM 2026-09-05) - a new target, and the one a REMOTE run
-# dispatches (`ci/dispatch.py make_target()` returns `sweep`, not `done`). Doctrine, the membership
-# rule and why the directory is empty: tests/sweep/CLAUDE.md.
+# GUARD_EDIT_OK: the last two stale `sweep` strings in this file - both FALSE as written, since
+# make_target returns `soak` and tests/sweep/ does not exist. Caught by the spec review, not by me.
+# dispatches (`ci/dispatch.py make_target()` returns `soak`, not `done`). Doctrine, the membership
+# rule and why the directory is empty: tests/soak/CLAUDE.md.
 #
 # IT REFUSES ON AN EMPTY SUITE, deliberately. A remote build that goes green having executed zero
 # tests is worse than one that goes red: it is evidence of nothing while looking like evidence. This
 # project's rule is that non-vacuity is ASSERTED, never assumed (dev/gate.md - a seed test whose
 # subject list is empty passes). So the count is checked first and the refusal says what to do.
 #
-# No coverage flags: a sweep test covers nothing the gate does not already cover - that IS the
+# GUARD_EDIT_OK: the last stale `sweep` in the suite sense, three lines above the comment explaining
+# why the suite is NOT called that. Found by the spec review's second pass, not by my own grep.
+# No coverage flags: a soak test covers nothing the gate does not already cover - that IS the
 # membership rule - so tracing it would only slow it down.
 # GUARD_EDIT_OK: RENAMED sweep -> soak, caught by the naming audit the same day it landed. This repo
 # already uses SWEEP for a run that rolls many MAPS - `SWEEP_OK` is the scope-lock check and

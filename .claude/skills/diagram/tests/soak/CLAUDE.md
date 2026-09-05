@@ -23,7 +23,7 @@ The four tiers, cheapest first:
 | **the soak** | **the same code under REALISTIC LOAD** | **here** |
 
 The gate proves the code is *exercised*. It does not prove the code is *good*: it runs a small number
-of seeds and packs small maps, because its job is to reach every branch quickly. The sweep is the
+of seeds and packs small maps, because its job is to reach every branch quickly. The soak is the
 answer to the next question - does this hold up over many random seeds, and on maps at the size we
 actually ship?
 
@@ -100,7 +100,7 @@ held under realistic load for an extended run. It collides with nothing.
 ## Where it runs
 
 `make soak` runs it locally. It is also what a remote run dispatches - `ci/dispatch.py`'s
-`make_target()` returns `sweep`, not `done` - so a remote build does the tier the laptop skipped
+`make_target()` returns `soak`, not `done` - so a remote build does the tier the laptop skipped
 instead of repeating the tier it just finished.
 
 **Remote is currently OFF** (`make switches`), and turning it on before there are soak tests would
