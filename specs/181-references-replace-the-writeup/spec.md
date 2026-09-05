@@ -5,7 +5,10 @@ The review graded FR-002/D1 a necessary consequence rather than an addition (the
 event is what drops the shade and the pin, and the one shade is shared by both dialogs) and D3 the
 literal reading of *"the word 'Farmhouse' is a link"*. Its aside - that the hiding class must be
 cleared on every path that closes the references, including `closeDialog` and a fresh `open()` - is met
-by clearing it in the references dialog's own `close` listener, one place.
+by clearing it in the references dialog's own `close` listener, one place. **Round 2** was a narrow
+re-check of FR-010/D4, the Principle XIV fix found during implementation (the gate had short-circuited on
+this feature's own asset-only delta): FAITHFUL - a real defect, found in this work, fixed at the right
+size and disclosed as the one unrequested thing.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 **Predecessor**: feature 180 (the references modal lists questions; its button says "Return to <Name> writeup")
 
@@ -44,7 +47,9 @@ Two changes to the interactive map's references modal, for every feature's modal
   after the button, again after the title link, and again after Escape; and that the title reads
   *"<Name> references"* with the name as a link.
 - **FR-007** The SVG and the PNG are untouched (feature 134 FR-010). Only `interactive/assets/page.js`,
-  `page.css` and the markup `page.py` writes change; no other engine module does.
+  `page.css` and the markup `page.py` writes change; no other engine module does (engine in the ROUTE's
+  sense, `l7r/**/*.py` outside `ci/` - FR-010's edit to `ci/delta.py` is tooling, which the coverage
+  floor measures but the route does not count).
 
 ### What this feature does not do
 

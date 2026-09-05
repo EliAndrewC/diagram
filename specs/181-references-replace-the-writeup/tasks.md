@@ -13,9 +13,9 @@ Every task is `research: rendering` - a page convention with nothing physical be
 - [x] T03 FR-006: the browser test and the page tests updated
       research: rendering
       verify: DONE. The browser test reads `{refs, explain, visible, shade}` after opening, after the title link, after the button and after Escape (explain stays OPEN but not displayed; the pin stays "bund"); `test_page.py` sees the class rule and both handlers in the page. `make test-file` on the browser file: 19 passed; `make quick` clean
-- [ ] T04 FR-010: the page assets become engine content for the gate key AND the route (Principle XIV)
+- [x] T04 FR-010: the page assets become engine content for the gate key AND the route (Principle XIV)
       research: rendering
-      verify: `delta._ENGINE_DIRS` and `gate-stamp.AREAS["diagram"]` carry `.js`/`.css`; `test_delta.py` and `test_measured_surface.py` prove both see the two assets; the four doc sites updated; `make done` no longer short-circuits on an asset-only delta
-- [ ] T05 FR-007: regenerate the reference hamlet's page and look; `make done` green; the answer to the GM
+      verify: DONE. `("l7r/", (".py", ".js", ".css"))` and `("*.py", "*.js", "*.css")`, with the measurement recorded at both points of change; `test_delta.py` (both assets engine, a `.txt` beside them not) and `test_measured_surface.py` (the census under the skill is exactly `page.css`, `page.js`, and both definitions see them); `CLAUDE.md` x3 and `docs/session-clones.md` updated. Proved by the gate itself: the previous `make done` on this delta said "already verified"; this one ran in full
+- [x] T05 FR-007: regenerate the reference hamlet's page and look; `make done` green; the answer to the GM
       research: rendering
-      verify: green gate; `PAIR_OK` with the reason (no drawn ink moved)
+      verify: DONE. Reference page regenerated (17.8 s) and the page carries the class rule and both handlers. `make done` GREEN in 549 s, full run, 100% floors held (2,959 passed, 22,618 statements 0 uncovered, hamlet floor 12,446 / 0). `PAIR_OK` given: no drawn ink, manifest or placement moved - the page's modal behavior and the gate key - and the GM reads the page themselves (2026-08-29 ruling)
