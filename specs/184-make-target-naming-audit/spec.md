@@ -87,13 +87,33 @@ None of these were wrong when written. Each became wrong when something else cha
 
 ## What this feature does NOT do
 
-- **FR-007** It does not rename `SWEEP_OK` or reword `switches.py`. Retiring the word *sweep*
-  entirely was proposed and is NOT taken here: it is a separate ~8-site change to a guard the GM has
-  not yet ruled on, and bundling it would put a scope-lock change inside a naming audit.
+- **FR-007** It does not rename `SWEEP_OK` or reword `switches.py`, and it does not retire the scope
+  lock. **THE GM HAS SINCE AUTHORIZED BOTH** (2026-09-05: *"please go ahead and retire the concept of
+  the scope lock and the scope unlock, i.e. retiring both the concept and the specific make targets"*),
+  which subsumes the word *sweep* - `SWEEP_OK` is the scope-lock check, so retiring the lock retires
+  the term. It is NOT done here because it is a different change to different code, and folding it in
+  would invalidate the review this spec is under. **OWED AS THE NEXT FEATURE** - see the debt below.
 - **FR-008** It does not merge `lint` and `format`. They differ - `lint` is ruff plus three custom
-  guards, `format` is whitespace - and the gate reports them as separate phases. The finding recorded
-  instead: the misleading part is the NAME (`lint` is really "the static checks"), and renaming it is
-  not attempted here.
+  guards, `format` is whitespace - and the gate reports them as separate phases, so merging would
+  lose which one failed. The misleading part is the NAME: `lint` is really "the static checks".
+  **THE GM HAS SINCE AUTHORIZED THE RENAME** (2026-09-05: *"I also agree that it should be renamed to
+  make static, so please do that"*). Not done here for the same reason as FR-007. **OWED AS THE NEXT
+  FEATURE** - see the debt below.
+
+### THE DEBT THIS FEATURE LEAVES, so it cannot be lost to a context roll
+
+Two changes the GM authorized while this spec was under review. Both touch engine code or a guard, so
+both need their own feature; neither is optional and neither is a maybe:
+
+1. **`lint` -> `static`.** The target, its `.PHONY` entry, the gate's phase list, every doc that
+   names it, and the guard suites that assert the phase names.
+2. **Retire the scope lock ENTIRELY** - `make scope-lock` / `make scope-unlock`, the `SWEEP_OK`
+   check at its 7 sites, the scope half of `switches.py` (the remote half STAYS), `dev/switches.md`,
+   `tests/test_switches.py` and `tests/tools/test_scope_lock.py`, and the CLAUDE.md rows. This is
+   also what retires the word *sweep*, closing the terminology question for good.
+
+A session picking this up should confirm with the GM before doing anything a reader of this list
+would find surprising, but the two items themselves are settled.
 - **FR-009** It does not touch `make maps`'s own behavior, `idle-tests`, the scope lock, or any
   diagnostic. Those were QUESTIONED by the GM in the same conversation and are recorded in Decisions
   as the session's findings with a recommendation - **not as rulings**. D3 and D4 stay OPEN until the
