@@ -1,9 +1,17 @@
 # Feature 184 - the make-target naming audit
 
-**Status**: FAITHFUL pending - written AFTER the implementation, deliberately. The work reached two
+**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5) - written AFTER the implementation, deliberately. The work reached two
 executable lines in `l7r/`, which triggers this repository's rule that engine code always carries a
 spec-kit feature; the spec was then written to cover what had landed. A later reader should not infer
 the usual order from it. Renumbered twice (181, 182 both claimed by peer sessions mid-flight).
+Round 1 returned nine items, round 2 four. Worth recording what the rounds caught, because most of it
+was the author reporting work as done that was not: three of round 2's four items were edits round 1
+had already claimed - a script asserted before writing, so nothing landed, and it was reported without
+re-reading the file. Round 1 also found a rename asserted complete while three live strings still said
+`sweep` (one of them PRINTED as guidance by `make switches`), a whole guard absent from the spec, and
+a bug the author introduced (`LOCKED_TARGETS` carrying one value twice). Round 2 VERIFIED rather than
+accepted the one argument that mattered - that renaming `FULL` would reach stored data - and found
+`full` in 7 `dev/run-log` records.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 
 ## Summary

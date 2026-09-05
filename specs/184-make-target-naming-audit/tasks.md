@@ -25,6 +25,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
       research: procedure
       verify: DONE. `TARGET=tripwire` survives in `dispatch.py` and `test_cache.py` as accounts of
       builds that ran on 2026-08-31, and throughout `specs/`
-- [ ] T07 the gate green, the spec FAITHFUL, and the answer to the GM
+- [x] T07 the gate green, the spec FAITHFUL, and the answer to the GM
       research: procedure
-      verify: `make done` green at 100%, spec-fidelity FAITHFUL recorded in spec.md, pushed
+      verify: DONE. `make done` GREEN - 2,975 passed, **22,621 statements 0 uncovered 100%**,
+      hamlet floor **12,449 / 0 / 100%**. spec-fidelity FAITHFUL at round 2. An earlier run of the
+      SAME content reported 40 uncovered; a merge from main landed mid-collection and the re-run on
+      the settled tree was clean, which is the diagnosis the reviewer declined to take on trust
