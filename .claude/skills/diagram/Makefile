@@ -6,7 +6,7 @@
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 # GUARD_EDIT_OK: feature 185 - the .PHONY half of `lint` -> `static`, and scope-lock/scope-unlock go.
-.PHONY: done static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gatehooks-test explain \
+.PHONY: done static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file page-check tick audit perf-gatehooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
@@ -126,7 +126,10 @@ done:
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
-	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
+	: "GUARD_EDIT_OK: feature 188 - THIS exit ran the phases, so it stamps the PAGE area too (test-full includes the interactive" ; \
+	: " tests and the browser test). The already-verified short-circuit above stamps diagram ONLY: its keys are blind to the" ; \
+	: " assets since 188, so a page stamp written there would vouch for a stylesheet by running nothing." ; \
+	root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram && python3 "$$root/scripts/gate-stamp.py" --write page || true; \
 	$(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green; \
 	: "(GUARD_EDIT_OK: feature 171 - THE RATCHET RUNS AFTER THE RECORD, deliberately: this run is part"; \
 	: " of the median it is judged against, and a gate that fails without having logged what it did"; \
@@ -784,6 +787,29 @@ QUICK_BUDGET = 60
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
 tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
 	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
+
+# GUARD_EDIT_OK: feature 188 (GM 2026-09-05: "there's no actual reason to rerun all the tests for style sheet
+# changes"). THE PAGE CHECK is what an edit to interactive/assets/ owes instead of the gate: the interactive unit
+# tests and the browser test - the only tests that read the assets or the page they are inlined into - with no
+# coverage floor (a CSS or JS change cannot move the coverage of any Python module). On success it writes the
+# `page` stamp that sync-with-main.sh demands at push (gate-stamp.py AREAS["page"]) and NOTHING else: no
+# verification-state record, because ci/decision.py's green-local-since-edit reads the record's event and never
+# its target, and a one-minute check must not stand where a full gate is meant to.
+page-check:     ## the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
+	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/test_page_browser.py \
+	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
+	  && printf '\n\033[1mpage-check green\033[0m (the page stamp is written; an asset-only delta may push)\n'
+
+# GUARD_EDIT_OK: feature 188 - `make tick` (the GM: "The idea of a make tick helper. does indeed seem good"): tick ONE
+# task in a feature's tasks.md from the command line, with its verify note, refusing rather than guessing when the
+# task is missing or already ticked. Replaces the hand-rolled regex scripts that twice matched nothing and once
+# truncated a task file in the session that measured the cost.
+# THE NOTE TRAVELS IN THE ENVIRONMENT, never interpolated into the recipe: a verify note quotes code in
+# backticks, and a backtick inside a make-expanded "$(NOTE)" is a shell command substitution - the first
+# real use ran `_ENGINE_DIRS` as a command. An exported variable reaches the script's environment verbatim.
+tick: export TICK_NOTE = $(NOTE)
+tick:           ## tick a task: F=188 T=T03 NOTE="what was verified" [BOXES=1 ticks the research boxes]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/tick-task.py" "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
 
 test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file

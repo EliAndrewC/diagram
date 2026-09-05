@@ -94,15 +94,17 @@ def test_test_full_records_a_green_state_so_the_strongest_local_proof_counts() -
         assert target in makefile, f"{target} must still record"
 
 
-def test_the_two_engine_definitions_both_see_the_page_assets() -> None:
-    """Feature 181: `gate-stamp.py`'s diagram area and `delta.is_engine` are two definitions of engine
-    content that must agree, and both must include the interactive page's `.js` and `.css` - a change to
-    either is run by the browser test, and before this both said "nothing changed"."""
+def test_the_page_assets_are_the_page_area_s_and_not_the_gate_s() -> None:
+    """Feature 188 (GM 2026-09-05), inverting 181: a stylesheet edit must not re-open the nine-minute gate.
+    gate-stamp's `page` area is THE definition of a page asset - exactly the two files - and the `diagram`
+    area, whose stamp is the full gate's, holds no `.js` or `.css`. `ci/delta.is_engine` agrees (an asset
+    is not engine for the route), so the three cannot drift apart without a test going red."""
     from l7r.diagram.ci.delta import is_engine
 
     gs = _gate_stamp()
-    files = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
-    assets = sorted(f.rsplit("/", 1)[1] for f in files if "/interactive/assets/" in f)
-    assert assets == ["page.css", "page.js"], assets
-    for name in assets:
-        assert is_engine(".claude/skills/diagram/l7r/diagram/interactive/assets/" + name), name
+    page = sorted(str(f).rsplit("/", 1)[1] for f in gs._area_files(REPO, *gs.AREAS["page"]))
+    assert page == ["page.css", "page.js"], page
+    diagram = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
+    assert not [f for f in diagram if f.endswith((".js", ".css"))], "the gate's area holds no asset"
+    for name in page:
+        assert not is_engine(".claude/skills/diagram/l7r/diagram/interactive/assets/" + name), name

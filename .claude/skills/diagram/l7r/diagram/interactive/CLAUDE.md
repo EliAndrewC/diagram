@@ -169,3 +169,6 @@ unruled ink. The scale bar beside it keeps `cls="-"`.
 page (wrap, census, self-containment, present-only data), and the browser test (Playwright +
 Chromium, `rolls_map`: opens the reference hamlet's page from `file://` and drives hover, click and
 the modal). `make map GEN=pool/hamlets/inashiro/inashiro.gen.py` writes the real page; open it in a browser.
+**An edit to `assets/page.css` or `page.js` owes `make page-check`** (feature 188) - the interactive tests
+and the browser test, about a minute, stamping the `page` area the push demands - and nothing else: no
+spec-kit feature, no review, no full gate. The pages regenerate on landing (feature 187).

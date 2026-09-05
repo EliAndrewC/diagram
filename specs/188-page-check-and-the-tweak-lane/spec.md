@@ -26,8 +26,10 @@ a class of bookkeeping round trips the GM measured.
 ### The assets leave the gate key and the route (FR-001 to FR-003)
 
 - **FR-001** `ci/delta._ENGINE_DIRS` returns to `("l7r/", (".py",))`: a `.js`/`.css` change is not engine
-  code for the ROUTE, so an asset-only delta is DIRECT and dispatches nothing. `delta.is_page_asset(path)`
-  is added: true for a `.js` or `.css` under `l7r/diagram/interactive/assets/`.
+  code for the ROUTE, so an asset-only delta is DIRECT and dispatches nothing. No second definition of
+  "page asset" is added anywhere: `gate-stamp.py`'s `page` area (FR-002) IS the definition, and the tests
+  read it (the round-1 review: a third mirror of engine content with no consumer reproduces the drift
+  `test_measured_surface.py` exists to pin).
 - **FR-002** `scripts/gate-stamp.py`'s `AREAS["diagram"]` returns to `("*.py",)`, so an asset edit does not
   re-open `make done`'s short-circuit or demand a full run at push. A new area `page` covers
   `.claude/skills/diagram/l7r/diagram/interactive/assets` with `("*.js", "*.css")`.
@@ -40,18 +42,27 @@ a class of bookkeeping round trips the GM measured.
 
 - **FR-004** A new target `make page-check` runs `tests/interactive/` and
   `tests/full/interactive/test_page_browser.py` whole, `-n auto`, `--no-cov`, and on success writes the
-  `page` stamp (`gate-stamp.py --write page`) and records `green-local page-check`. About a minute
+  `page` stamp (`gate-stamp.py --write page`) and NOTHING else - no `green-local` verification-state
+  record, because `ci/decision.py`'s `green-local-since-edit` reads the record's event and never its
+  target, so a one-minute page check would satisfy the condition that keeps a paid run from following a
+  red gate. The stamp is the whole mechanism. About a minute
   (measured today: the browser file 20 to 35 s, the interactive unit files a few seconds). No coverage
   floor: a CSS or JavaScript change cannot change the coverage of any Python module.
-- **FR-005** `make done` ALSO writes the `page` stamp on success: a full gate runs those same tests, so a
-  green gate is a green page check. Otherwise an engine delta that also touched an asset would owe two
-  runs for one proof.
+- **FR-005** `make done` ALSO writes the `page` stamp - on the ONE success exit that actually ran the
+  phases (the stamping line after `test-full`), because that run includes the page tests. It MUST NOT
+  be written by the already-verified short-circuit: after FR-001/FR-002 that branch's keys are blind to
+  the assets, so an asset-only delta always takes it, and a stamp written there would satisfy the GM's
+  check by running nothing. Otherwise an engine delta that also touched an asset would owe two runs for
+  one proof.
 - **FR-006** `gate-stamp.py --check` at push time refuses a delta touching the `page` area without a
   stamp matching the assets' current bytes, naming `make page-check` as the gate that stamps it (today's
   message names `make done` for `diagram` and `make hooks-test` for `hooks`; the refusal's "Python" wording
   becomes "code"). `scripts/test-gate-stamp.sh` gains the cases: an asset edit with no page stamp is
   refused and names `make page-check`; a matching stamp admits it; a stale stamp refuses; an asset edit
-  demands NO diagram stamp.
+  demands NO diagram stamp; and an asset edit followed by a short-circuited `make done` (the branch that
+  runs no phase) is STILL refused at push, because that branch writes no `page` stamp (FR-005). The
+  Makefile case is proved in `tests/tooling/test_coverage_floor.py`'s style - the recipe text is read and
+  the short-circuit branch is shown to write `diagram` only.
 
 ### The tweak lane (FR-007 to FR-008)
 
@@ -83,10 +94,9 @@ a class of bookkeeping round trips the GM measured.
 ### Tests that move (FR-011)
 
 - **FR-011** `tests/tooling/ci/test_delta.py`'s feature-181 test (assets are engine) inverts: the two
-  assets are NOT engine, `is_page_asset` is true for them and false for a `.txt` beside them and for a
-  `.css` elsewhere. `tests/tooling/test_measured_surface.py`'s "two definitions both see the assets" test
-  becomes: the `page` area sees exactly the two assets, the `diagram` area sees no asset, and
-  `is_page_asset` agrees with the `page` area.
+  assets are NOT engine for the route. `tests/tooling/test_measured_surface.py`'s "two definitions both
+  see the assets" test becomes: the `page` area's files are exactly the two assets, and the `diagram`
+  area's files include no `.js` or `.css`.
 
 ### What this feature does not do
 
@@ -103,9 +113,12 @@ a class of bookkeeping round trips the GM measured.
   are the only tests that read the assets or the page they are inlined into; every other test's outcome
   is independent of them by construction. Declined: running `tests/full/interactive/` (it holds only the
   browser test today), and running with coverage (nothing measurable can move).
-- **D2 - one stamp, two writers.** `make done` writes the `page` stamp as well as `diagram`, because its
-  suite includes the page tests. The alternative - a second run for an engine delta that also touched
-  an asset - spends a minute proving what the nine minutes already proved.
+- **D2 - one stamp, two writers - and not three.** `make done`'s phases-run exit writes the `page` stamp
+  as well as `diagram`, because its suite includes the page tests; the alternative - a second run for an
+  engine delta that also touched an asset - spends a minute proving what the nine minutes already
+  proved. The short-circuit exit is NOT a writer (FR-005): a first draft said "on success" without
+  noticing `make done` has two success exits, and the review caught that the cheap one would have
+  hollowed out the check the GM approved.
 - **D3 - the tweak lane is decided by PATH, the way the route is.** The tooling has one notion of "engine
   code", `delta.is_engine`; a tweak is a delta with none. No new classifier, no flag, no marker in a
   commit message - a rule a session could misapply is not a lane.

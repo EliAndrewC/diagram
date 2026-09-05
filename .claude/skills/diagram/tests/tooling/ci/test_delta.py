@@ -266,9 +266,10 @@ def test_coverage_scope_answers_EMPTY_where_there_is_no_origin_main_yet(repo: Pa
 
 
 @pytest.mark.parametrize("path", [S + "l7r/diagram/interactive/assets/page.js", S + "l7r/diagram/interactive/assets/page.css"])
-def test_the_interactive_page_s_assets_are_engine_content(path: str) -> None:
-    """Feature 181 (2026-09-05): the page's script and stylesheet are inlined into every HTML map and run by
-    the browser test. They were not engine content, so a delta that was nothing but the two of them routed
-    DIRECT and the local gate short-circuited as "already verified" - measured on feature 181 itself."""
-    assert is_engine(path), path
-    assert not is_engine(S + "l7r/diagram/interactive/assets/notes.txt"), "only the executed kinds"
+def test_the_interactive_page_s_assets_are_NOT_engine_content_for_the_route(path: str) -> None:
+    """Feature 188 (GM 2026-09-05), inverting feature 181's test: "there's no actual reason to rerun all
+    the tests for style sheet changes". An asset-only delta routes DIRECT; what it owes instead is a green
+    `make page-check`, held by gate-stamp's `page` area at push time, and the pages regenerate on landing
+    through the render fingerprint (feature 187)."""
+    assert not is_engine(path), path
+    assert is_engine(S + "l7r/diagram/interactive/page.py"), "the page WRITER is still engine code"

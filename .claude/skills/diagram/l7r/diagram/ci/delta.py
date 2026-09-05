@@ -26,13 +26,16 @@ SKILL = ".claude/skills/diagram/"
 
 # (directory under the skill, accepted suffixes). An empty suffix tuple means "everything under it".
 _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
-    # THE INTERACTIVE PAGE'S ASSETS ARE ENGINE CONTENT (feature 181, 2026-09-05). `interactive/assets/
-    # page.js` and `page.css` are inlined into every HTML map at write time and EXECUTED by the browser
-    # test - and they were not here, so a change to them routed DIRECT and the local gate answered
-    # "already verified" (measured: feature 181's whole delta was the two assets, and `make done`
-    # short-circuited on it). The same two suffixes are added to `scripts/gate-stamp.py`'s diagram area;
-    # the two definitions must agree, and `tests/tooling/test_measured_surface.py` proves both see them.
-    ("l7r/", (".py", ".js", ".css")),
+    # THE INTERACTIVE PAGE'S ASSETS ARE NOT ENGINE CONTENT FOR THE ROUTE (feature 188, GM 2026-09-05:
+    # "I did not mean for the style sheet to be considered engine content in the sense of rerunning all
+    # of the tests ... there's no actual reason to rerun all the tests for style sheet changes"). Feature
+    # 181 had added `.js`/`.css` here after `make done` short-circuited on an asset-only delta; the GM's
+    # clarification split that into two things: the pages must REGENERATE when a clone lands (the render
+    # fingerprint, feature 187 - kept) and a page change must be TESTED (a green `make page-check`,
+    # owed at push through gate-stamp's `page` area) - neither of which is a full gate or a paid build.
+    # So an asset-only delta routes DIRECT; `scripts/gate-stamp.py` `AREAS["page"]` is the one
+    # definition of a page asset, and `tests/tooling/test_measured_surface.py` reads it.
+    ("l7r/", (".py",)),
     # tests/ is NOT engine content (GM 2026-08-25, feature 132 FR-024, asked and answered: *"if the only
     # thing that changed were tests AND the previous test run was green then we skipped the lengthy AWS
     # tests"* - "Yes, locally AND on AWS"). A tests-only delta is DIRECT, outside the engine key, and
