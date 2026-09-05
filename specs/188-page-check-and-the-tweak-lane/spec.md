@@ -1,6 +1,12 @@
 # Feature 188 - the page check, and the tweak lane
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5) - cleared for implementation (constitution XVI).
+Round 1 returned three items, all mechanism: `make done`'s already-verified exit would have written the
+page stamp while running nothing (FR-005 now names the phases-run exit only, and a test reads the recipe);
+a `green-local page-check` record would have satisfied the paid-dispatch condition on a one-minute check
+(FR-004 writes the stamp and nothing else); and `delta.is_page_asset` was a second definition with no
+consumer (dropped - the `page` area is the definition). Round 2 verified each against the code and
+returned none. Implemented and gated the same day; `make page-check` measured at 26 s for 420 tests.
 **Request**: [`request.md`](request.md) - the GM's words verbatim, three messages
 **Predecessors**: feature 181 FR-010 (made the page's assets engine content for the gate key and the
 route - the change this feature reverses, at the GM's clarification), 187 (the assets in the RENDER
