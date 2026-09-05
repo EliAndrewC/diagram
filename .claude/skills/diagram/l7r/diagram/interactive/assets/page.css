@@ -69,8 +69,15 @@ dialog footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid #
 dialog footer p { margin: 0 0 0.3rem; }
 dialog button { margin-top: 0.4rem; font: inherit; padding: 0.3rem 0.9rem; cursor: pointer; }
 /* the glossary (GM 2026-08-28): a dotted underline marks a defined term; hovering it shows the definition */
-.gl { border-bottom: 1px dotted var(--rule); cursor: help; position: relative; }
-.gl:hover::after { content: attr(data-def); position: absolute; left: 0; top: 1.4em; z-index: 20; width: 22rem; max-width: 60vw; padding: 0.5rem 0.7rem; background: var(--ink); color: var(--card); font-size: 0.85rem; line-height: 1.35; border-radius: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); white-space: normal; font-style: normal; }
+.gl { border-bottom: 1px dotted var(--rule); cursor: help; }
+/* THE DEFINITION IS ONE #tip ELEMENT OUTSIDE THE DIALOGS (feature 182, GM 2026-09-05), placed by page.js in
+   viewport coordinates. It used to be a ::after box on the word, and the dialog's overflow clipped it at
+   the dialog's edge and grew a horizontal scroll bar; a fixed box inside the dialog could not escape either,
+   because the dialog's centering transform makes it the containing block. Above both dialogs (11); it takes
+   no pointer events, so it never steals the hover that shows it. The width is the old 22rem; page.js caps
+   max-width to the viewport less the margins. */
+#tip { position: fixed; z-index: 30; width: 22rem; padding: 0.5rem 0.7rem; background: var(--ink); color: var(--card); font-size: 0.85rem; line-height: 1.35; border-radius: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); white-space: normal; font-style: normal; pointer-events: none; box-sizing: border-box; }
+#tip[hidden] { display: none; }
 /* a sibling link: hover lights that class on the map, click opens its modal in place of this one */
 a.sib { color: #5A3F1E; text-decoration: underline dotted; }
 a.sib:hover { color: var(--hl-stroke); }

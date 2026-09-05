@@ -773,6 +773,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
         # "Close" could be read as closing every modal at once.
         f'<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2><p id="r-intro" class="intro">{REFERENCES_LEAD}</p></header><section id="r-list"></section>'
         '<footer><button id="r-close" type="button">Return to writeup</button></footer></article></dialog>\n'
+        # THE GLOSSARY TOOLTIP, a sibling of the dialogs rather than a child of a word (feature 182): a box
+        # inside a dialog is clipped by the dialog's own scrolling edge; page.js places this one.
+        '<div id="tip" role="tooltip" hidden></div>\n'
         f'<script id="classes" type="application/json">{blob}</script>\n'
         f"<script>\n{_asset('page.js')}</script>\n</body>\n</html>\n"
     )

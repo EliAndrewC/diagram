@@ -213,6 +213,9 @@ def test_the_page_carries_the_questions_and_no_record_line() -> None:
     assert "dialog#explain.behind { display: none; }" in html_text
     assert 'dialog.classList.add("behind")' in html_text and 'dialog.classList.remove("behind")' in html_text
     assert 'back.id = "r-back"' in html_text and 'document.createTextNode(" references")' in html_text
+    # feature 182: the glossary tooltip is ONE element outside both dialogs, placed by the script
+    assert '<div id="tip" role="tooltip" hidden></div>' in markup and markup.index('id="tip"') > markup.index('id="references"')
+    assert ".gl:hover::after" not in html_text and "#tip { position: fixed;" in html_text
 
 
 def test_the_wet_paddy_is_explained_apart_from_the_paddy_and_only_when_present() -> None:

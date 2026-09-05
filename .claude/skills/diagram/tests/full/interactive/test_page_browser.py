@@ -475,6 +475,43 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     assert not synthetic.dialog()["open"]
 
 
+def test_a_glossary_tooltip_escapes_the_modal_and_stays_on_the_page(synthetic: Page) -> None:
+    """Feature 182 (GM 2026-09-05): a definition box at the modal's edge "gets cut off, and the modal gains a
+    horizontal scroll bar" - the box must be OUTSIDE the modal, free to cross the modal's edge, and inside
+    the page. Run in a viewport narrow enough that a 22rem box at the rightmost defined word would cross
+    the window's edge, so the clamp is exercised rather than assumed; the viewport is restored after."""
+    was = synthetic.page.viewport_size
+    synthetic.page.set_viewport_size({"width": 420, "height": 640})
+    try:
+        synthetic.js("() => window.l7rMap.fit()")
+        synthetic.open("bund")
+        word = synthetic.js(
+            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); if (r.width && (!best || r.left > best.left)) best = { left: r.left, x: r.left + r.width / 2, y: r.top + r.height / 2, def: s.getAttribute('data-def') }; } return best; }"
+        )
+        assert word and word["def"], "the bund's explanation carries a defined term"
+        synthetic.page.mouse.move(word["x"], word["y"])
+        synthetic.page.wait_for_timeout(50)
+        got = synthetic.js(
+            "() => { const t = document.getElementById('tip'); const r = t.getBoundingClientRect(); const d = document.getElementById('explain'); return { hidden: t.hidden, text: t.textContent, left: r.left, right: r.right, top: r.top, bottom: r.bottom, W: innerWidth, H: innerHeight, overflow: d.scrollWidth > d.clientWidth, inside: !!t.closest('dialog') }; }"
+        )
+        assert not got["hidden"] and got["text"] == word["def"], got
+        assert not got["inside"], "the box is a sibling of the dialogs, not a child of the word"
+        assert word["left"] + (got["right"] - got["left"]) > got["W"], "the box placed AT the word would have crossed the page's edge - the clamp had work to do"
+        assert got["left"] >= 0 and got["right"] <= got["W"] and got["top"] >= 0 and got["bottom"] <= got["H"], got
+        assert not got["overflow"], "the dialog gained no horizontal scroll bar"
+        synthetic.page.mouse.move(2, 2)
+        synthetic.page.wait_for_timeout(30)
+        assert synthetic.js("() => document.getElementById('tip').hidden"), "gone when the pointer leaves the word"
+        synthetic.page.mouse.move(word["x"], word["y"])
+        synthetic.page.wait_for_timeout(30)
+        synthetic.page.keyboard.press("Escape")
+        synthetic.page.wait_for_timeout(30)
+        assert not synthetic.dialog()["open"] and synthetic.js("() => document.getElementById('tip').hidden"), "gone when the dialog closes"
+    finally:
+        synthetic.page.set_viewport_size(was)
+        synthetic.js("() => window.l7rMap.fitWidth()")
+
+
 def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_on_click(synthetic: Page) -> None:
     """GM 2026-08-28: "Not to be confused with the X" - hover lights X, click opens X's modal in place."""
     synthetic.js("() => window.l7rMap.fit()")

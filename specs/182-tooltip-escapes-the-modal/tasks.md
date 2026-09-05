@@ -1,6 +1,6 @@
 # Tasks - feature 182
 
-Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
+Spec: [`spec.md`](spec.md) (FAITHFUL, spec-fidelity round 2). Request: [`request.md`](request.md).
 
 Every task is `research: rendering` - a page convention with nothing physical behind it.
 
