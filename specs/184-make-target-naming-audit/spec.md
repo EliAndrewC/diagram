@@ -1,4 +1,4 @@
-# Feature 182 - the make-target naming audit
+# Feature 184 - the make-target naming audit
 
 **Status**: FAITHFUL pending - written AFTER the implementation, deliberately. The work reached two
 executable lines in `l7r/`, which triggers this repository's rule that engine code always carries a
@@ -40,6 +40,8 @@ None of these were wrong when written. Each became wrong when something else cha
   `sweep`, each false as written, and each is now required by name:
   - `Makefile:1130-1131` - claimed `make_target()` returns `sweep` and pointed at `tests/sweep/`;
   - `tests/soak/CLAUDE.md` - the same false sentence, inside the doc that explains the rename;
+  - `Makefile:1140` - "a sweep test covers nothing the gate does not already cover", the suite sense
+    three lines above the comment explaining why the suite is NOT called `sweep`;
   - `dev/switches.json` `remote.why` - **not a frozen record**: `switches.py` PRINTS it, so
     `make switches` was telling every session to run a target that does not resolve. Corrected by
     re-throwing the switch, which is the only way to change it. This repository uses SWEEP for a run that
@@ -59,7 +61,7 @@ None of these were wrong when written. Each became wrong when something else cha
   - **FR-005a** It MUST come off `.PHONY` as well as losing its rule. A phony name with no recipe
     still RESOLVES and exits 0, so leaving it there would keep a dead command silently succeeding.
   - **FR-005b** The operation registry entry MUST name `maps`, because an operation name is used as
-    a make target verbatim (`run.sh` runs `make $MAKE_TARGET`). This is the ONE line in `l7r/`.
+    a make target verbatim (`run.sh` runs `make $MAKE_TARGET`). This is ONE of the two executable lines in `l7r/` this feature touches; the other is `ci/dispatch.py:262`, per FR-010.
   - **FR-005d** `.claude/skills/diagram/CLAUDE.md`'s scope-lock row MUST drop `tripwire` (and
     `regressions`, retired by feature 166). It is a LIVE instruction naming targets that no longer
     resolve - distinct from FR-006's records, which describe builds that really ran.
@@ -152,5 +154,8 @@ would find surprising, but the two items themselves are settled.
   live case is a session that edits engine code, never gates it and goes idle.
 - **D4 - `make reference`: the SESSION's finding, OPEN for the GM.** Recommendation: keep, and note it is not a convenience target. It is a PHASE: step 3 of the
   remote dispatch sequence, a phase of `make done`, and `REF_FIRST` before every map target. Its
-  original justification (a 15-minute suite) is gone; what it does now is fail in 0.55 s before
-  anything expensive is paid for.
+  original justification (a 15-minute suite) is gone; what it does now is fail BEFORE anything
+  expensive is paid for. **No timing is quoted, deliberately.** An earlier draft said "0.55 s" and
+  no source could be found: `dev/run-log/` holds zero `target: reference` rows, and the tree's own
+  two figures - `~26 s` (`ci/dispatch.py`) and `~60 s` (the Makefile's reference block) - describe
+  different things. A number nobody measured is what this project forbids writing down.

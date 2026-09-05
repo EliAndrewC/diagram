@@ -1137,7 +1137,9 @@ test-full:      ## the gate's whole test phase + all three coverage floors (ever
 # project's rule is that non-vacuity is ASSERTED, never assumed (dev/gate.md - a seed test whose
 # subject list is empty passes). So the count is checked first and the refusal says what to do.
 #
-# No coverage flags: a sweep test covers nothing the gate does not already cover - that IS the
+# GUARD_EDIT_OK: the last stale `sweep` in the suite sense, three lines above the comment explaining
+# why the suite is NOT called that. Found by the spec review's second pass, not by my own grep.
+# No coverage flags: a soak test covers nothing the gate does not already cover - that IS the
 # membership rule - so tracing it would only slow it down.
 # GUARD_EDIT_OK: RENAMED sweep -> soak, caught by the naming audit the same day it landed. This repo
 # already uses SWEEP for a run that rolls many MAPS - `SWEEP_OK` is the scope-lock check and
