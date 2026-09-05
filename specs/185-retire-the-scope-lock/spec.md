@@ -83,12 +83,30 @@ soak suite's first name hours after that name landed (feature 184, D1).
 - **FR-006** The SCOPE AXIS MUST be removed from `switches.py` - `DEFAULT_SCOPE`, `scope_locked`,
   the axis in `Switches`, the `check scope` subcommand and the scope half of the rendered output.
   **`make switches` MUST still work and MUST still report the remote state.**
+- **FR-006c** **FR-006's list of `switches.py` sites was PARTIAL and presented as complete** - the
+  third instance of the shape that produced rounds 1 and 2. All SEVEN carry the axis:
+
+  | site | what it is |
+  |---|---|
+  | `:61` `SCOPE_STATES` | the state tuple; the draft named `DEFAULT_SCOPE` but not this |
+  | `:94` `_closed()` | builds `Axis("reference", why)`; fail-closed becomes remote-only |
+  | `:212` `allowed = {"remote": ..., "scope": ...}` | `write()`'s axis dispatch table |
+  | `:219` | `write()`'s two-branch `Switches(...)` construction, becomes single-axis |
+  | **`:222`** | **the line that EMITS the `scope` block.** FR-007a requires that block gone from `dev/switches.json`, and nothing named the line that writes it - so an implementer could delete it by hand and have the next `make ci-off` write it straight back |
+  | `:247-251` | `refusal()`'s `elif axis == "scope"` branch - a different function from `check` |
+  | `:307-311` | `main()`'s `set` handler and its four-line "scope UNLOCKED. Nothing rolled a sweep..." reminder, keyed on `a.axis == "scope"` - reached by neither `check scope` nor `describe()` |
+
+  Most self-correct under a type error or the 100% floor. **`:222` does not**, and it is the one
+  FR-007a silently depends on.
 - **FR-006a** **`switches.locked_out()` MUST go, and it has FIVE ENGINE CALL SITES** - the largest
   thing the first draft did not know about: `pipeline/regen.py:86`, `tools/cohort_audit.py:122`,
   `tools/perf_snapshot.py:314`, `tools/cache_audit.py:228`, and `tools/mapcheck.py:204-206`, which
   also reads `.scope_locked` directly and rewrites `a.scope` to `"reference"` at :209. Each call site
-  MUST be removed, and mapcheck's locked branch (204-211, which forces `--scope all` down to the
-  reference map and prints `LOCKED`) MUST go with it.
+  MUST be removed, and mapcheck's locked branch MUST go with it - **lines 197-210, NOT 197-211.**
+  Line 211 is `recovering = a.scope == "reference" or (a.scope == "auto" and not prev_ok)`, the
+  SURVIVING state machine, read again at 215, 222, 223, 230 and 245. An earlier draft said 204-211;
+  following it literally produces a `NameError`. The comment (197-201), the local import (202), the
+  `locked` read (204) and both `if locked` branches (205-210) go; `recovering` stays.
   **BUT `mapcheck`'s OWN `--scope` SURVIVES UNTOUCHED, and this needs saying because the words
   collide.** `mapcheck.py:190`'s `--scope choices=("auto","reference","all")`, its `SCOPE` environment
   default, and the `SCOPE=` make variable are mapcheck's BREADTH argument - *"what you mean when you
@@ -148,6 +166,23 @@ soak suite's first name hours after that name landed (feature 184, D1).
   than deletion:
   - **DELETE ENTIRELY**: `tests/tools/test_scope_lock.py` - verified, all five tests exercise only the
     retired axis.
+  - **DELETE ENTIRELY**: `tests/tooling/ci/test_state.py:84-98`,
+    `test_a_locked_scope_record_does_not_survive_the_unlock` - an EIGHTH file the draft missed, and
+    the only test of the refusal FR-006b removes. It calls `switches.write(skill, "scope", ...)`,
+    which raises `ValueError` the moment `write()` is single-axis.
+  - **TWO ASSERTIONS IN `tests/test_switches.py` INVERT rather than merely reference**, and they are
+    the ones an implementer would otherwise "fix" the wrong way:
+    - `:64` parametrizes malformed-file cases including `'{"scope": "reference"}'` and
+      `'{"remote": {"state": "on"}, "scope": {"state": "all"}}'`. Both are malformed ONLY because of
+      the scope axis. After FR-007a they are **VALID**, so `:69`'s
+      `assert s.error and s.remote_off and s.scope_locked` FAILS. Both parameters go. **Today this
+      test asserts the opposite of the property FR-007a asks to pin** - and the tempting fix, making
+      `read()` strict about unknown keys, is exactly what FR-007a warns would turn `remote` OFF in
+      every clone.
+    - `:43` `assert set(data) == {"remote", "scope"}` - the written-file shape. Becomes `{"remote"}`.
+      This is the assertion that PROVES FR-007a's outcome, so it is named rather than left to taste.
+    Also needing edits and unlisted before: 32, 37-38, 47-49, 73, 83-84, 92-93, 102, 123 (the
+    rendered `"scope   unlocked   (default)"` row), 132-133, 135, and 195/200 (`state scope`, the CLI).
   - **EDIT**: `tests/tooling/test_switches.py` - a SECOND, distinct switches suite the draft missed.
     `test_make_sweeps_refuse_under_the_lock` (35-39) and the scope half of
     `test_make_switch_targets_require_a_reason_and_commit` (56-61, 68-69) go; the `_ancestors`,
