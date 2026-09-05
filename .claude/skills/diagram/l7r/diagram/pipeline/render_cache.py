@@ -88,7 +88,17 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
         dirnames[:] = sorted(d for d in dirnames if d not in (*poolmaps.TREES, "wip", "tests", "__pycache__") and not d.startswith(("test_", ".")))
         rel_dir = os.path.relpath(dirpath, skill_dir)
         for name in sorted(filenames):
-            if not name.endswith(".py") or name.startswith("test_") or name == os.path.basename(__file__):
+            # THE PAGE'S ASSETS ARE RENDER-DETERMINING (feature 187, GM 2026-09-05: "I'm looking at
+            # [inashiro.html] and still see the dotted lines. Why is the fix not there?"). `page.css` and
+            # `page.js` are inlined into every <map>.html at write time, and this walk took `.py` only - so
+            # feature 186's stylesheet-only landing left every stamp fresh, render-sync said "cached
+            # (fresh)", and the GM opened a page rendered before the change. The gate key learned the same
+            # lesson in feature 181. Assets are hashed by their bytes under the same DIRECTORY prunes; the
+            # `test_` name filter and this module's self-exclusion apply to `.py` only - neither has an
+            # analogue among assets. (The GENERATION cache never had this gap: it traces the `open()` of
+            # each asset into the entry's data files and hashes them - spec 187 D3.)
+            is_asset = name.endswith((".js", ".css"))
+            if not is_asset and (not name.endswith(".py") or name.startswith("test_") or name == os.path.basename(__file__)):
                 continue
             rel = os.path.normpath(os.path.join(rel_dir, name))
             with open(os.path.join(dirpath, name), "rb") as fh:

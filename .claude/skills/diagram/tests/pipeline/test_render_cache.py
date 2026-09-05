@@ -119,6 +119,32 @@ def test_engine_fingerprint_covers_and_skips(repo):
     assert rc.engine_fingerprint(skill) == fp2
 
 
+def test_engine_fingerprint_moves_on_a_page_asset(repo):
+    """Feature 187 (GM 2026-09-05: "still see the dotted lines. Why is the fix not there?"): the page's
+    stylesheet and script are inlined into every <map>.html, so an asset-only landing must stale every
+    render. It did not - the walk took .py only - and the mirror served a page from before the change."""
+    _, skill, _ = repo
+    assets = os.path.join(skill, "interactive", "assets")
+    os.makedirs(assets, exist_ok=True)
+    for name in ("page.css", "page.js"):
+        with open(os.path.join(assets, name), "w") as fh:
+            fh.write("/* v1 */\n")
+    fp1 = rc.engine_fingerprint(skill)
+    with open(os.path.join(assets, "page.css"), "w") as fh:
+        fh.write("/* v2: text-decoration: none */\n")
+    fp2 = rc.engine_fingerprint(skill)
+    assert fp2 != fp1, "a stylesheet edit changes every page and must move the fingerprint"
+    with open(os.path.join(assets, "page.js"), "w") as fh:
+        fh.write("// v2\n")
+    assert rc.engine_fingerprint(skill) != fp2
+    # the directory prunes still hold for assets: one under tests/ or a pool tree is not engine content
+    fp3 = rc.engine_fingerprint(skill)
+    for skipped in (os.path.join("tests", "fixture.css"), os.path.join("wip", "draft.js")):
+        with open(os.path.join(skill, skipped), "w") as fh:
+            fh.write("/* irrelevant */\n")
+    assert rc.engine_fingerprint(skill) == fp3
+
+
 def test_input_hash_depends_on_gen_and_fingerprint(repo, tmp_path):
     gen = tmp_path / "m.gen.py"
     gen.write_text("A\n")

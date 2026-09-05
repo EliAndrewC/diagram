@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T180138Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 187 changes only which files the render cache"
+}
