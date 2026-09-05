@@ -4,7 +4,31 @@ Both cases here are defects that SHIPPED and were invisible in the artifact: the
 plausible list of sources, just not the right one. Caught by the settlement-review's acceptance
 re-check, 2026-08-29."""
 
-from l7r.diagram.interactive.sources import research_sources, section_sources
+from l7r.diagram.interactive.sources import RESEARCH_URL, _sections, research_questions, research_sources, section_sources
+
+
+def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
+    """Feature 180, spec FR-012a - a latent defect the spec review noticed, fixed under Principle XIV. The
+    file pattern was `research/([a-z-]+\\.md)` and could not match `research/cities/fabric.md`, so such an
+    entry resolved to no sources and no questions with nothing said. No class named one on the day it was
+    fixed; the question URL is built from the same match, so the silent miss would have become a silent
+    broken link when the town and city vocabulary arrives."""
+    entry = "research/cities/fabric.md - 'Urban commoners built in continuous street walls'"
+    qs = research_questions(entry)
+    assert len(qs) == 1 and qs[0]["url"] == RESEARCH_URL + "cities/fabric.md#urban-commoners-built-in-continuous-street-walls", qs
+    assert research_sources(entry), "and its sources resolve too"
+
+
+def test_a_heading_inside_a_code_fence_is_not_a_section() -> None:
+    """GitHub does not anchor a heading inside a fenced block, and the numbering of a repeated heading
+    counts only real headings - so the README's entry-format example (`## <stable anchor title>` in a
+    fence) must be skipped, or every anchor after it in a file that carried one would be off by one."""
+    import os
+
+    from l7r.diagram.interactive.sources import RESEARCH_DIR
+
+    headings = [h for h, _b in _sections(os.path.join(RESEARCH_DIR, "README.md"))]
+    assert "<stable anchor title>" not in headings and "Citing" in headings
 
 
 def test_a_double_quoted_research_heading_is_read_like_a_single_quoted_one() -> None:

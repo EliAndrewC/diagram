@@ -121,10 +121,11 @@
       p.appendChild(document.createTextNode("."));
       sib.appendChild(p);
     }
+    // THE LINK COUNTS QUESTIONS (feature 180): what the references modal will list. The "Record: ..."
+    // footer that used to follow it is gone (GM 2026-09-05) - the pointer stays in the registry.
     var refs = document.getElementById("x-refs");
-    refs.hidden = !d.sources.length;
-    refs.textContent = d.sources.length ? "See references (" + d.sources.length + ")" : "";
-    setText("x-entry", d.entry ? "Record: " + d.entry + (d.sources.length ? "" : " - the research entry records no citation yet") : "");
+    refs.hidden = !d.questions.length;
+    refs.textContent = d.questions.length ? "See references (" + d.questions.length + ")" : "";
     dialog.setAttribute("data-k", key);
     dialog.setAttribute("data-label", d.label);
     // NOT showModal(): a modal dialog makes the rest of the document inert, and Chromium re-styles
@@ -140,38 +141,29 @@
   // a sibling link's hover lights the OTHER class while the pointer is on it; the pin resumes after
   function peek(other) { var keep = pinned; pinned = null; highlight(other); pinned = keep; }
   function unpeek() { var keep = pinned; pinned = null; highlight(keep); pinned = keep; }
-  // THE REFERENCES MODAL (GM 2026-08-28): a second dialog ON TOP of the explanation, listing every
-  // source the class's research entry cites, with what each was used for. Escape closes the top one.
+  // THE REFERENCES MODAL (GM 2026-08-28): a second dialog ON TOP of the explanation. Escape closes the
+  // top one. SINCE FEATURE 180 (GM 2026-09-05) IT LISTS QUESTIONS, NOT SOURCES: one link per research
+  // section the class was written from, to that section on the public GitHub rendering of the record -
+  // "a list of questions we've asked with links to the appropriate places". The sources are one click
+  // further, on the page that answers the question; a casual reader is not met with a wall of them.
   function openRefs() {
     var key = dialog.getAttribute("data-k");
     var d = data[key];
-    if (!d || !d.sources.length) return;
+    if (!d || !d.questions.length) return;
     setText("r-name", "References - " + cap(d.name));
     var list = document.getElementById("r-list");
     list.textContent = "";
-    d.sources.forEach(function (k) {
-      var ref = d.refs[k] || { text: "", urls: [] };
+    d.questions.forEach(function (q) {
       var p = document.createElement("p");
-      var b = document.createElement("b");
-      b.textContent = k + ": ";
-      p.appendChild(b);
-      p.appendChild(document.createTextNode(ref.text));
-      // THE REFERENCE LINKS TO WHERE IT CAN BE READ (GM 2026-08-28); a source with no URL says so
-      if (ref.urls && ref.urls.length) {
-        ref.urls.forEach(function (u) {
-          p.appendChild(document.createTextNode(" "));
-          var a = document.createElement("a");
-          a.href = u; a.target = "_blank"; a.rel = "noopener"; a.className = "ref";
-          a.textContent = "[read]";
-          p.appendChild(a);
-        });
-      } else {
-        var i = document.createElement("i");
-        i.textContent = " (no link on record)";
-        p.appendChild(i);
-      }
+      var a = document.createElement("a");
+      a.href = q.url; a.target = "_blank"; a.rel = "noopener"; a.className = "q";
+      a.textContent = q.text;
+      p.appendChild(a);
       list.appendChild(p);
     });
+    // THE BUTTON SAYS WHERE IT GOES (GM 2026-09-05: "just saying close might make it seem like we are
+    // closing all of the modals instead of just this one").
+    setText("r-close", "Return to " + cap(d.name) + " writeup");
     refsDialog.show();
   }
   document.getElementById("x-refs").addEventListener("click", function (e) { e.preventDefault(); openRefs(); });

@@ -76,7 +76,10 @@ a.sib { color: #5A3F1E; text-decoration: underline dotted; }
 a.sib:hover { color: var(--hl-stroke); }
 #x-refs { color: #5A3F1E; }
 #x-refs[hidden] { display: none; }
-/* the references modal sits ABOVE the explanation */
+/* the references modal sits ABOVE the explanation; since feature 180 it is a list of QUESTIONS, each a
+   link to its answer in the research record on GitHub - one line per question, read as a list */
 dialog#references { z-index: 11; max-width: 46rem; }
-dialog#references p { margin: 0 0 0.6rem; font-size: 0.9rem; line-height: 1.4; }
-a.ref { color: #5A3F1E; margin-left: 0.2rem; }
+dialog#references p { margin: 0 0 0.6rem; font-size: 0.95rem; line-height: 1.4; }
+dialog#references p.intro { color: var(--muted); font-size: 0.9rem; margin: 0.3rem 0 0.9rem; }
+a.q { color: #5A3F1E; text-decoration: underline dotted; }
+a.q:hover { color: var(--hl-stroke); }
