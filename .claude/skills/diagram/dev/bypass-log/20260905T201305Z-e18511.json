@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T201305Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "target audit removals plus a generated doc - no map rolled, no placer touched"
+}
