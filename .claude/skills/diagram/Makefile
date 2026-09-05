@@ -136,7 +136,13 @@ done:
 	med=$$(python3 "$$root/scripts/_gatecost.py" $(DONE_NAME) "$(if $(FULL),full,reference)" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
 	python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" || exit 1; \
 	$(STATE) green-local $(DONE_NAME); \
-	$(if $(FULL),printf '\n\033[1mgate green (FULL - every pool map re-gated, seeds 41-44 rolled)\033[0m\n',printf '\n\033[1mgate green\033[0m (reference settlement + non-map tests; `make done FULL=1` also rolls the other pool maps)\n')
+	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
+	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \
+	: "SAME TESTS as FULL=1 - every pool map, seeds 41-44, the lot. FULL adds the perf bookends, a bypass" ; \
+	: "audit and a scope check, and nothing else. The old text told a reader the plain gate had skipped" ; \
+	: "work it had in fact done, which is worse than vague (GM 2026-09-05)." ; \
+	$(if $(FULL),printf '\n\033[1mgate green (FULL - plus the perf bookends)\033[0m\n',printf '\n\033[1mgate green\033[0m (the whole suite: every pool map, seeds 41-44; `FULL=1` adds only the perf bookends)\n')
+	: "GUARD_EDIT_OK: the tail of the same banner still claimed FULL=1 'also rolls the other pool maps'."
 
 # THE REFERENCE-HAMLET PERFORMANCE BOOKENDS (constitution VI, GM 2026-08-23).
 #
@@ -617,7 +623,10 @@ ci-status:      ## free: delta, route, verification state, verified lookup, remo
 engine-key:
 	@$(RUN).ci engine-key $(or $(REF),HEAD)
 
-ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
+# GUARD_EDIT_OK: FINDING 4 - both ci-* help lines described PRE-REPOINT behavior. A remote run is
+# `make soak` now, not `make done`, so this is no longer "the iteration check" and ci-merge is no
+# longer a merge queue. The names are fine; the descriptions had gone stale (GM 2026-09-05).
+ci-check:       ## run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
 	$(REMOTE_OK)
 	@$(if $(FULL)$(TARGET),$(SWITCH) check scope "ci-check $(if $(FULL),FULL=1,TARGET=$(TARGET))",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
@@ -627,7 +636,8 @@ ci-check:       ## the iteration check on CodeBuild (PAID)     FULL=1 (prompts) 
 #  COMPUTE=BUILD_GENERAL1_2XLARGE is the T028 scaling measurement the GM asked for on 2026-08-25; the default is large, 8 vCPU, feature 179)
 # (GUARD_EDIT_OK: a forward-looking statement of the CURRENT default, falsified by feature 179's compute change - FR-005)
 
-ci-merge:       ## the merge action's gated route (PAID) - called by sync-with-main.sh push   FULL=1 (prompts)
+# GUARD_EDIT_OK: FINDING 4, second half - see the ci-check comment above.
+ci-merge:       ## the push's gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh   FULL=1 (prompts)
 	@$(if $(FULL),$(SWITCH) check scope "ci-merge FULL=1",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
 # (GUARD_EDIT_OK: feature 132 - FULL is a sweep under the scope lock. Remote-off is NOT checked here: the dispatcher
@@ -970,6 +980,12 @@ lint:
 # clause 12's expression count on FUNCTIONS, is still owed.
 	python3 ../../../scripts/check-file-scale.py --selftest
 	python3 ../../../scripts/check-file-scale.py ../../..
+	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
+	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
+	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \
+	: "in lint, beside its two siblings, because the gate runs lint FIRST and this costs 5 ms."
+	python3 ../../../scripts/check-stale-dirs.py --selftest
+	python3 ../../../scripts/check-stale-dirs.py ../../..
 
 format:
 	python3 -m ruff format .
@@ -1094,9 +1110,42 @@ JOURNAL_ENV =
 # 0.97s" could. Feature 177 hit that and recorded it as R15; GM 2026-09-03: *"Yes I agree this sounds
 # like a quick small fix, so please make that fix too."* It records ONLY on success - the `&&` is the
 # whole of that - and names its own target so an audit can tell which run vouched.
-test-full:      ## EVERY test, nothing deselected, + all three coverage floors - `done FULL=1`'s test phase without its static checks / reference roll / perf-gate
+# GUARD_EDIT_OK: FINDING 3 - "nothing deselected" became FALSE the day tests/soak/ was deselected.
+test-full:      ## the gate's whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)
 	$(SWEEP_OK)
 	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
+
+# GUARD_EDIT_OK: THE TIER ABOVE THE GATE (GM 2026-09-05) - a new target, and the one a REMOTE run
+# dispatches (`ci/dispatch.py make_target()` returns `sweep`, not `done`). Doctrine, the membership
+# rule and why the directory is empty: tests/sweep/CLAUDE.md.
+#
+# IT REFUSES ON AN EMPTY SUITE, deliberately. A remote build that goes green having executed zero
+# tests is worse than one that goes red: it is evidence of nothing while looking like evidence. This
+# project's rule is that non-vacuity is ASSERTED, never assumed (dev/gate.md - a seed test whose
+# subject list is empty passes). So the count is checked first and the refusal says what to do.
+#
+# No coverage flags: a sweep test covers nothing the gate does not already cover - that IS the
+# membership rule - so tracing it would only slow it down.
+# GUARD_EDIT_OK: RENAMED sweep -> soak, caught by the naming audit the same day it landed. This repo
+# already uses SWEEP for a run that rolls many MAPS - `SWEEP_OK` is the scope-lock check and
+# `switches.py` says a locked scope is one where "every sweep refuses" - so a target named `sweep`
+# sat three lines from `$(SWEEP_OK)`, the guard asserting a target is NOT one. `soak` is the standard
+# term for the thing this actually is: the same code held under realistic load for an extended run.
+soak:           ## the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
+	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
+	if [ "$$n" -eq 0 ]; then \
+	  : "GUARD_EDIT_OK: the rest of the sweep -> soak rename (see the block comment above this target)" ; \
+	  printf '\n\033[1mmake soak: the soak suite is EMPTY, so there is nothing to prove.\033[0m\n\n'; \
+	  printf 'tests/soak/ is declared and deliberately unfilled - the home of the tier above the gate\n'; \
+	  printf '(the same code over many seeds and larger, more realistic maps), kept as structure so that\n'; \
+	  printf 'when that work arrives there is no argument about where it goes.\n\n'; \
+	  printf 'Running it now would report a GREEN build having executed zero tests. Read\n'; \
+	  printf 'tests/soak/CLAUDE.md - it carries the membership rule (a test belongs there if removing\n'; \
+	  printf 'it does not change coverage) and the honest statement of when this tier earns its keep.\n\n'; \
+	  exit 1; \
+	fi; \
+	$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/soak \
+	  && $(STATE) green-local soak
 
 # A DESELECTED TEST TAKES ITS COVERAGE WITH IT, so the reference scope CANNOT hold the 100% floor
 # (measured 2026-08-24, the first green-path run of this restructure). Deselecting

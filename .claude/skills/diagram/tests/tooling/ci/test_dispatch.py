@@ -150,7 +150,7 @@ def test_check_dispatches_exactly_one_build_and_records_it(repo: Path, monkeypat
     kw = next(k for n, k in client.calls if n == "start_build")
     assert kw["projectName"] == config.PROJECT_CHECK and "# check" in kw["buildspecOverride"] and kw["computeTypeOverride"] == config.COMPUTE_TYPE
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
-    assert env["MAKE_TARGET"] == "done" and env["MAILBOX"] == "session/clone" and env["CI_SCOPE"] == "reference" and env["GIT_SHA"] == git(repo, "rev-parse", "HEAD")
+    assert env["MAKE_TARGET"] == "soak" and env["MAILBOX"] == "session/clone" and env["CI_SCOPE"] == "reference" and env["GIT_SHA"] == git(repo, "rev-parse", "HEAD")
     assert env["SPECIFY_FEATURE"] == "", "no feature named in this fixture"
     uuid = out.build_id.split(":")[-1]
     assert ("put_object", f"go/{uuid}") in client.calls, "the build is released only after the reference check, and the key is the uuid the build polls"
@@ -176,7 +176,7 @@ def test_merge_uses_the_merge_project_and_full_scope_travels(repo: Path, monkeyp
     assert out.rc == 0
     kw = next(k for n, k in client.calls if n == "start_build")
     env = {e["name"]: e["value"] for e in kw["environmentVariablesOverride"]}
-    assert kw["projectName"] == config.PROJECT_MERGE and env["MAKE_TARGET"] == "done FULL=1" and env["CI_SCOPE"] == "full"
+    assert kw["projectName"] == config.PROJECT_MERGE and env["MAKE_TARGET"] == "soak FULL=1" and env["CI_SCOPE"] == "full"
     assert env["SPECIFY_FEATURE"] == "130-x", "the build pairs its perf bookends by this feature"
 
 
@@ -474,3 +474,31 @@ def test_the_log_DRAIN_prints_the_pages_CloudWatch_still_held_when_the_build_end
     dispatch.stream(c, "gm-assistant-check:uuid-1")
     assert "  | page 1 line" in lines, "the page the main poll read"
     assert "  | page 2 line" in lines, "and the page only the drain would have reached"
+
+
+# --- the remote runs the tier the laptop SKIPPED, not the one it just finished (GM 2026-09-05) ------
+
+
+def _target_ctx(scope: str, operation: str | None = None) -> dispatch.Context:
+    """`make_target` reads only scope and operation, so this needs no repo, client or shell."""
+    return dispatch.Context(root=Path("."), skill=Path("."), mode=CHECK, scope=scope, operation=operation)
+
+
+def test_the_remote_target_is_the_soak_not_the_gate() -> None:
+    """The whole point of the repoint: a remote build must not re-run `make done`.
+
+    It used to, on the theory that the remote merges the latest main in first and so tests a tree
+    nobody has tested. Measured, that property is vestigial - `sync-in` merges main into every clone
+    on every message, and every `ci-merge` since the local short-circuit landed on 2026-08-25 has been
+    SKIP-VERIFIED. A test that pins `done` here would pin the duplication back in.
+    """
+    ref = dispatch.make_target(_target_ctx("reference"))
+    full = dispatch.make_target(_target_ctx("full"))
+    assert ref == "soak" and full == "soak FULL=1"
+    assert "done" not in ref and "done" not in full, "a remote build must not repeat the local gate"
+
+
+def test_a_named_operation_still_wins() -> None:
+    """`ci-check TARGET=<op>` is how the compute comparison and the cohort sweeps were taken; the
+    repoint must not take that away."""
+    assert dispatch.make_target(_target_ctx("operation", "cohort N=48")) == "cohort N=48"

@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T164337Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "naming-audit changes: a target rename, three corrected help/banner strings and the stale-dir guard - no map is rolled and no placer is touched, so settlement-review has no Mode B map to read"
+}
