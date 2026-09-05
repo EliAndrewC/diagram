@@ -448,7 +448,7 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     title = f"{name[0].upper()}{name[1:]}"
     assert synthetic.js("() => document.getElementById('r-name').textContent") == f"{title} references"
     assert synthetic.js("() => { const a = document.querySelector('#r-name a#r-back'); return a && a.textContent; }") == title
-    # NO DOTTED UNDERLINE ON A LINK (feature 184, GM 2026-09-05): the title link, a question link and (below,
+    # NO DOTTED UNDERLINE ON A LINK (feature 186, GM 2026-09-05): the title link, a question link and (below,
     # on the windbreak) a sibling link render with no underline at all; color and hover color are the style
     assert synthetic.js("() => ['#r-name a#r-back', '#r-list a.q'].map(s => getComputedStyle(document.querySelector(s)).textDecorationLine)") == ["none", "none"]
     synthetic.js("() => document.getElementById('r-back').click()")
@@ -525,7 +525,7 @@ def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_o
     synthetic.page.wait_for_timeout(50)
     assert synthetic.dialog()["k"] == "windbreak" and synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}
     assert "Not to be confused with the copse" in synthetic.dialog()["siblings"]
-    assert synthetic.js("() => getComputedStyle(document.querySelector('#explain a.sib')).textDecorationLine") == "none", "feature 184: no dotted underline on a sibling link"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('#explain a.sib')).textDecorationLine") == "none", "feature 186: no dotted underline on a sibling link"
     lx, ly = synthetic.js("() => { const r = document.querySelector('#explain a.sib[data-k=\"copse\"]').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
     synthetic.page.mouse.move(lx, ly)
     synthetic.page.wait_for_timeout(30)

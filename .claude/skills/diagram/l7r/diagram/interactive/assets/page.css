@@ -79,7 +79,7 @@ dialog button { margin-top: 0.4rem; font: inherit; padding: 0.3rem 0.9rem; curso
 #tip { position: fixed; z-index: 30; width: 22rem; padding: 0.5rem 0.7rem; background: var(--ink); color: var(--card); font-size: 0.85rem; line-height: 1.35; border-radius: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); white-space: normal; font-style: normal; pointer-events: none; box-sizing: border-box; }
 #tip[hidden] { display: none; }
 /* a sibling link: hover lights that class on the map, click opens its modal in place of this one.
-   NO UNDERLINE on any of the page's links (feature 184, GM 2026-09-05: "I don't think I like the dotted
+   NO UNDERLINE on any of the page's links (feature 186, GM 2026-09-05: "I don't think I like the dotted
    underlines beneath our links") - the color and the hover color are the whole style; `none` rather than
    an absent declaration, because the browser's default would be a solid underline, a style nobody asked for */
 a.sib { color: #5A3F1E; text-decoration: none; }

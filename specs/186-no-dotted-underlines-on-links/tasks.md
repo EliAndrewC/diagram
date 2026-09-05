@@ -1,4 +1,4 @@
-# Tasks - feature 184
+# Tasks - feature 186 (claimed as 184, renumbered - see the spec)
 
 Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md).
 

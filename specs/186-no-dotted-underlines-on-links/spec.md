@@ -1,10 +1,11 @@
-# Feature 184 - no dotted underlines beneath the page's links
+# Feature 186 - no dotted underlines beneath the page's links
 
 **Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - cleared for implementation (constitution XVI). The
 review measured the set (the three rules are the only dotted underlines on a link anywhere in the engine)
 and graded D1 the literal reading. Its aside: the *"See references (N)"* link carries the browser's
 default SOLID underline and always has - outside this request, reported to the GM.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
+**Number**: claimed as 184 on 2026-09-05 and RENUMBERED to 186 the same day - another session had claimed 184 for the make-target naming audit concurrently and landed it complete while this one was being reviewed, and had gone on to claim 185; theirs stays, this one moves (the protocol: the pull surfaces a same-numbered spec, renumber yours). The claim commit `a7db1a9d` and the implementation commit `4e8f6f47` still say 184 in their messages; history is not rewritten.
 **Predecessors**: features 134 (the sibling links), 180 (the question links), 181 (the title link)
 
 ## Summary
