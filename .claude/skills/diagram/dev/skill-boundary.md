@@ -59,7 +59,7 @@ each addition strengthens finding 1 rather than weakening it. Building COUNT is 
 like "given knobs X, Y, Z, lay out the estate" rather than hand-authoring from
 `pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg` - concretely, the day a `.gen.py` appears in a Mode A
 pool directory the way `hamletgen` appeared for hamlets - Mode A acquires its own knobs, cohorts,
-manifests and checks, and starts wanting its own scope lock, perf bookends and gate phases.
+manifests and checks, and starts wanting its own perf bookends and gate phases.
 
 When that happens, split in THIS order:
 

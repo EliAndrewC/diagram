@@ -363,13 +363,13 @@ def run(ctx: Context) -> Outcome:
         return Outcome(rc=0 if d.skip_verified else 1, verdict=d.verdict)
 
     # 1. the cheap local checks - nothing about AWS has happened yet (FR-033)
-    rc, out = ctx.sh(["make", "--no-print-directory", "lint", "format", "typecheck"], ctx.skill, None)
-    ctx.events.append(f"lint:{rc}")
+    rc, out = ctx.sh(["make", "--no-print-directory", "static", "format", "typecheck"], ctx.skill, None)
+    ctx.events.append(f"static:{rc}")
     if rc != 0:
         ctx.out(out)
-        ctx.out("ci: lint/format/types FAILED locally - nothing dispatched")
-        return Outcome(rc=1, verdict="REFUSE(lint)")
-    ctx.out("ci: lint, format, types clean - starting the build (parked) while the reference check runs locally")
+        ctx.out("ci: static/format/types FAILED locally - nothing dispatched")
+        return Outcome(rc=1, verdict="REFUSE(static)")
+    ctx.out("ci: static, format, types clean - starting the build (parked) while the reference check runs locally")
 
     # 2. mailbox + start, parked
     box = mailbox(ctx.root)

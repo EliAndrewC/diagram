@@ -74,9 +74,6 @@ def _tree(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> pathlib.Pa
     monkeypatch.setattr(cache_audit, "HERE", str(tmp_path))
     monkeypatch.setattr(cache_audit, "gens", lambda _all: ["pool/hamlets/x/x.gen.py"])
     monkeypatch.setattr(cache_audit, "executed_lines", lambda _paths: {rel: {1, 2}})
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: False)
     monkeypatch.setattr(subprocess, "run", lambda *a, **k: subprocess.CompletedProcess(a[0] if a else [], 0, "", ""))
     return tmp_path
 
@@ -120,15 +117,6 @@ def test_snapshot_reads_the_json_and_svg_but_never_the_png(tmp_path: pathlib.Pat
         (tmp_path / f"m{suffix}").write_bytes(body)
     snap = cache_audit.snapshot([str(gen)], str(tmp_path / "where"))
     assert snap == {"m.json": b"J", "m.svg": b"S"}
-
-
-def test_the_audit_REFUSES_under_the_scope_lock(monkeypatch: pytest.MonkeyPatch) -> None:
-    """It rolls a subset of the pool repeatedly - a sweep in any form - so it refuses first. Round 1
-    of the spec's own fidelity review found this entry point open under an enumerated lock."""
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: True)
-    assert cache_audit.main([]) == 2
 
 
 def test_a_census_that_finds_NO_mutable_literal_refuses_rather_than_reporting_health(_tree: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

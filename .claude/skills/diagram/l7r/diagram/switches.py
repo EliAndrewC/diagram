@@ -58,9 +58,7 @@ from pathlib import Path
 FILE = Path("dev") / "switches.json"  # relative to the skill directory
 
 REMOTE_STATES = ("on", "off")
-SCOPE_STATES = ("unlocked", "reference")
 DEFAULT_REMOTE = "on"
-DEFAULT_SCOPE = "unlocked"
 
 
 @dataclass(frozen=True)
@@ -74,24 +72,19 @@ class Axis:
 @dataclass(frozen=True)
 class Switches:
     remote: Axis
-    scope: Axis
-    error: str = ""  # non-empty when the file was malformed - both axes are then CLOSED
+    error: str = ""  # non-empty when the file was malformed - the axis is then CLOSED
 
     @property
     def remote_off(self) -> bool:
         return self.remote.state == "off"
 
-    @property
-    def scope_locked(self) -> bool:
-        return self.scope.state == "reference"
 
-
-DEFAULTS = Switches(Axis(DEFAULT_REMOTE), Axis(DEFAULT_SCOPE))
+DEFAULTS = Switches(Axis(DEFAULT_REMOTE))
 
 
 def _closed(error: str) -> Switches:
     why = f"switches.json is MALFORMED ({error}) - failing closed"
-    return Switches(Axis("off", why), Axis("reference", why), error=error)
+    return Switches(Axis("off", why), error=error)
 
 
 def _axis(raw: object, name: str, allowed: tuple[str, ...]) -> Axis:
@@ -110,24 +103,23 @@ def skill_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
-def locked_out(what: str) -> bool:
-    """The one-liner every multi-map entry point calls first: True (and the refusal printed) when
-    the scope lock forbids `what`."""
-    return not check(skill_root(), "scope", what)
-
-
 def read(skill: Path) -> Switches:
-    """Absent -> defaults. Malformed -> CLOSED (remote off, scope locked) with `error` set.
+    """Absent -> defaults. Malformed -> CLOSED (remote off) with `error` set.
 
-    THE IDLE CONTEXT RELAXES THE SCOPE LOCK (feature 136, the GM 2026-08-28: "I do want it to be more
-    than just the reference map tests ... please make whatever adjustment you need to relax that
-    lock when the tests are being run in the idle context"). The lock's own doctrine says no
-    variable, flag or environment overrides it, and that stands: the relaxation is not a thing a
-    session can pass. It holds only while the calling process DESCENDS from the idle timer
-    (`scripts/idle-tests-hooks.sh timer`), which writes `<clone>/.git/idle-tests.running` with its
-    pid before it runs `make idle-tests`; `idle_context` checks that the file names a live pid, that
-    the pid is an ancestor of this process, and that its command line is the timer. A session's shell
-    is never a child of the timer, so nothing it runs is relaxed. `remote` is never relaxed."""
+    UNKNOWN KEYS ARE IGNORED, and that is load-bearing (feature 185, FR-007a). Only `remote` is read,
+    through `data.get`, with no key iteration and no schema validation - so a leftover `scope` block
+    from before the lock was retired is simply not looked at. Making this strict would fail closed on
+    such a file, and failing closed means REMOTE OFF in every clone that still carries one.
+    `_closed()` has exactly three entrances: a JSON parse failure, a non-dict top level, or `_axis`
+    rejecting a NAMED key. Never an unrecognized one.
+
+    THE IDLE RELAXATION IS GONE WITH THE SCOPE LOCK (feature 185), but `idle_context` BELOW IS NOT.
+    It has a second consumer that has nothing to do with the lock: the Makefile's `DONE_NAME` picks
+    `idle-done` over `done` from it, and `ci/state.py`'s `GREEN_TARGETS` deliberately omits
+    `idle-done` - which is the whole mechanism by which an unattended idle gate neither grants nor
+    revokes a push (feature 136 D1/FR-006b). Removing it would make a detached timer write a record
+    the push honors, and nothing would catch it: the code still runs, only the recorded NAME changes,
+    so coverage stays full and every test passes."""
     path = skill / FILE
     if not path.is_file():
         sw = DEFAULTS
@@ -136,11 +128,9 @@ def read(skill: Path) -> Switches:
             data = json.loads(path.read_text(encoding="utf-8"))
             if not isinstance(data, dict):
                 raise ValueError("top level is not an object")
-            sw = Switches(_axis(data.get("remote", {"state": DEFAULT_REMOTE}), "remote", REMOTE_STATES), _axis(data.get("scope", {"state": DEFAULT_SCOPE}), "scope", SCOPE_STATES))
+            sw = Switches(_axis(data.get("remote", {"state": DEFAULT_REMOTE}), "remote", REMOTE_STATES))
         except (ValueError, OSError) as e:
             return _closed(str(e))
-    if sw.scope_locked and idle_context(skill):
-        return Switches(sw.remote, Axis("unlocked", sw.scope.why + " [RELAXED: the idle run, feature 136]", sw.scope.utc, sw.scope.who), sw.error)
     return sw
 
 
@@ -209,17 +199,17 @@ def write(skill: Path, axis: str, state: str, why: str, who: str | None = None) 
     the throw or release is the repair, and it is a diff someone reads."""
     if not why.strip():
         raise ValueError("a reason is required (REASON=...) - a reason someone will READ is a decision you have to defend")
-    allowed = {"remote": REMOTE_STATES, "scope": SCOPE_STATES}.get(axis)
+    allowed = {"remote": REMOTE_STATES}.get(axis)
     if allowed is None or state not in allowed:
         raise ValueError(f"unknown switch {axis}={state}")
     cur = read(skill)
     if cur.error:
         cur = DEFAULTS
     new = Axis(state, why.strip(), who if who is not None else _who(skill), time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
-    out = Switches(new, cur.scope) if axis == "remote" else Switches(cur.remote, new)
+    out = Switches(new)
     path = skill / FILE
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"remote": asdict(out.remote), "scope": asdict(out.scope)}, indent=2) + "\n", encoding="utf-8")
+    path.write_text(json.dumps({"remote": asdict(out.remote)}, indent=2) + "\n", encoding="utf-8")
     return out
 
 
@@ -231,8 +221,8 @@ def describe(sw: Switches) -> str:
 
     head = "switches (dev/switches.json):"
     if sw.error:
-        head += f"\n  MALFORMED - {sw.error} - both axes CLOSED until `make ci-on` / `make scope-unlock` rewrites it"
-    return "\n".join([head, line("remote", sw.remote, DEFAULT_REMOTE), line("scope", sw.scope, DEFAULT_SCOPE)])
+        head += f"\n  MALFORMED - {sw.error} - remote CLOSED until `make ci-on REASON=...` rewrites it"
+    return "\n".join([head, line("remote", sw.remote, DEFAULT_REMOTE)])
 
 
 def refusal(sw: Switches, axis: str, what: str) -> str | None:
@@ -244,11 +234,6 @@ def refusal(sw: Switches, axis: str, what: str) -> str | None:
             return None
         a, release, route = sw.remote, "make ci-on REASON=...", "a green local `make done`, then `scripts/sync-with-main.sh done` (the gated route pushes on the local verdict while remote is off)"
         head = f"REFUSED: `{what}` would run on AWS CodeBuild, and remote is OFF"
-    elif axis == "scope":
-        if not sw.scope_locked:
-            return None
-        a, release, route = sw.scope, "make scope-unlock REASON=...", "`make reference` (the reference settlement alone), `make map GEN=<one gen>`, `make done` (reference scope)"
-        head = f"REFUSED: `{what}` rolls more than the reference settlement, and scope is LOCKED to it"
     else:
         raise ValueError(f"unknown axis {axis!r}")
     return "\n".join(
@@ -277,14 +262,14 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("show")
     s = sub.add_parser("set")
-    s.add_argument("axis", choices=("remote", "scope"))
+    s.add_argument("axis", choices=("remote",))
     s.add_argument("state")
     s.add_argument("--why", default="")
     c = sub.add_parser("check")
-    c.add_argument("axis", choices=("remote", "scope"))
+    c.add_argument("axis", choices=("remote",))
     c.add_argument("what")
     q = sub.add_parser("state", help="print one axis's bare state - what the Makefile reads to shape a target")
-    q.add_argument("axis", choices=("remote", "scope"))
+    q.add_argument("axis", choices=("remote",))
     sub.add_parser("idle", help="print 1 when this process descends from the idle timer (feature 136), else 0")
     a = ap.parse_args(argv)
     skill = Path.cwd()
@@ -304,10 +289,6 @@ def main(argv: list[str] | None = None) -> int:
             print(f"switches: REFUSED - {e}", file=sys.stderr)
             return 1
         print(describe(sw))
-        if a.axis == "scope" and a.state == "unlocked":
-            print(
-                "\nscope UNLOCKED. Nothing rolled a sweep, ran the map-rolling tests, ran a per-task settlement-review or took a perf\nbookend while it was locked: run `make maps`, `make done` (its next run does NOT short-circuit - the locked record\ndeferred those tests), the owed `make perf` bookends and a settlement-review of the re-rolled pool now, in the\nbackground - what accumulated is measured, not remembered (constitution XIII; dev/reviews.md)."
-            )
         return 0
     return 0 if check(skill, a.axis, a.what) else 1
 

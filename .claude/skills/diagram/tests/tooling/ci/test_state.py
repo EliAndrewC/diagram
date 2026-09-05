@@ -81,23 +81,6 @@ def test_record_tooling_vouches_for_the_tooling_without_touching_the_gate_verdic
     assert fresh is not None and fresh.target == "tooling" and not state.already_verified(repo)[0]
 
 
-def test_a_locked_scope_record_does_not_survive_the_unlock(repo: Path) -> None:
-    """Under `scope reference` the gate defers the map-rolling tests (GM 2026-08-26), so its green
-    record is reused while the lock holds and refused the moment it is released."""
-    from l7r.diagram import switches
-
-    skill = repo / S
-    switches.write(skill, "scope", "reference", "test", who="t")
-    st = state.write(repo, state.GREEN, "done")
-    assert st.scope == "reference"
-    assert state.already_verified(repo)[0], "still locked: the record stands"
-    switches.write(skill, "scope", "unlocked", "test", who="t")
-    ok, why = state.already_verified(repo)
-    assert not ok and "deferred" in why and "LOCKED" in why
-    st2 = state.write(repo, state.GREEN, "done")
-    assert st2.scope == "unlocked" and state.already_verified(repo)[0]
-
-
 def test_failed_gate_is_recorded_and_describe_handles_none(repo: Path) -> None:
     st = state.write(repo, state.FAILED, "done")
     assert st.event == state.FAILED

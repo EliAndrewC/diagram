@@ -4,7 +4,6 @@ a session that the override is routine."""
 
 from __future__ import annotations
 
-import json
 import os
 import subprocess
 from pathlib import Path
@@ -29,24 +28,12 @@ def skill(tmp_path: Path) -> Path:
 
 def test_absent_file_means_defaults(skill: Path) -> None:
     s = sw.read(skill)
-    assert s == sw.DEFAULTS and not s.remote_off and not s.scope_locked and not s.error
-
-
-def test_write_round_trip_keeps_the_other_axis(skill: Path) -> None:
-    sw.write(skill, "remote", "off", "  no AWS this week  ")
-    s = sw.write(skill, "scope", "reference", "reference hamlet only")
-    assert s.remote_off and s.scope_locked
-    assert s.remote.why == "no AWS this week" and s.remote.who == "Test Operator" and s.remote.utc.endswith("Z")
-    again = sw.read(skill)
-    assert again == s
-    data = json.loads((skill / "dev" / "switches.json").read_text())
-    assert set(data) == {"remote", "scope"} and set(data["remote"]) == {"state", "why", "who", "utc"}  # no `commit` field (fidelity round 1)
+    assert s == sw.DEFAULTS and not s.remote_off and not s.error
 
 
 def test_release_returns_the_default(skill: Path) -> None:
-    sw.write(skill, "scope", "reference", "lock")
-    s = sw.write(skill, "scope", "unlocked", "done iterating", who="GM")
-    assert not s.scope_locked and s.scope.who == "GM" and s.scope.why == "done iterating"
+    s = sw.write(skill, "remote", "on", "done iterating", who="GM")
+    assert not s.remote_off and s.remote.who == "GM" and s.remote.why == "done iterating"
 
 
 def test_empty_reason_and_unknown_state_are_refused(skill: Path) -> None:
@@ -61,16 +48,18 @@ def test_empty_reason_and_unknown_state_are_refused(skill: Path) -> None:
 
 @pytest.mark.parametrize(
     "body",
-    ["not json", "[1, 2]", '{"remote": {"state": "sometimes"}}', '{"scope": "reference"}', '{"remote": {"state": "on"}, "scope": {"state": "all"}}'],
+    # feature 185: the two `scope` bodies were malformed ONLY because of the retired axis. Unknown
+    # keys are IGNORED now (FR-007a), so they are valid and belong in the test below instead.
+    ["not json", "[1, 2]", '{"remote": {"state": "sometimes"}}'],
 )
 def test_malformed_file_fails_closed(skill: Path, body: str) -> None:
     (skill / "dev" / "switches.json").write_text(body)
     s = sw.read(skill)
-    assert s.error and s.remote_off and s.scope_locked
+    assert s.error and s.remote_off
     assert "MALFORMED" in sw.describe(s)
     # the throw/release is the repair: a write replaces the corrupt file with a well-formed one
     fixed = sw.write(skill, "remote", "on", "repair")
-    assert not fixed.error and not fixed.remote_off and not fixed.scope_locked
+    assert not fixed.error and not fixed.remote_off
 
 
 def test_who_falls_back_when_git_has_no_identity(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -80,8 +69,8 @@ def test_who_falls_back_when_git_has_no_identity(tmp_path: Path, monkeypatch: py
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
     monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
     (tmp_path / "dev").mkdir()
-    s = sw.write(tmp_path, "scope", "reference", "x")  # not a git repo at all
-    assert s.scope.who == "unknown"
+    s = sw.write(tmp_path, "remote", "off", "x")  # not a git repo at all
+    assert s.remote.who == "unknown"
 
 
 # ---- the refusals ------------------------------------------------------------------------------
@@ -89,8 +78,7 @@ def test_who_falls_back_when_git_has_no_identity(tmp_path: Path, monkeypatch: py
 
 def test_defaults_refuse_nothing(skill: Path) -> None:
     assert sw.refusal(sw.DEFAULTS, "remote", "ci-check") is None
-    assert sw.refusal(sw.DEFAULTS, "scope", "cohort") is None
-    assert sw.check(skill, "remote", "ci-check") and sw.check(skill, "scope", "cohort")
+    assert sw.check(skill, "remote", "ci-check")
 
 
 def test_remote_off_refusal_names_the_release_and_the_local_route(skill: Path) -> None:
@@ -99,16 +87,6 @@ def test_remote_off_refusal_names_the_release_and_the_local_route(skill: Path) -
     assert text is not None
     for needle in ("REFUSED", "ci-check", "remote is OFF", "budget month exhausted", "Test Operator", "make ci-on", "make done", "sync-with-main.sh done"):
         assert needle in text
-    assert sw.refusal(sw.read(skill), "scope", "cohort") is None  # the OTHER axis is untouched
-
-
-def test_scope_lock_refusal_names_the_release_and_the_one_map_route(skill: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    sw.write(skill, "scope", "reference", "reference hamlet acceptance (feature 133)")
-    assert not sw.check(skill, "scope", "cohort")
-    err = capsys.readouterr().err
-    for needle in ("REFUSED", "cohort", "scope is LOCKED", "feature 133", "make scope-unlock", "make reference", "make map GEN=<one gen>"):
-        assert needle in err
-    assert sw.check(skill, "remote", "ci-check")
 
 
 def test_unknown_axis_is_an_error() -> None:
@@ -120,7 +98,7 @@ def test_describe_shows_defaults_and_set_axes(skill: Path) -> None:
     assert "(default)" in sw.describe(sw.DEFAULTS)
     sw.write(skill, "remote", "off", "why not")
     d = sw.describe(sw.read(skill))
-    assert "remote  off" in d and "why not" in d and "scope   unlocked   (default)" in d
+    assert "remote  off" in d and "why not" in d
 
 
 # ---- the CLI (runs under make, so the invocation guard passes) -------------------------------
@@ -129,11 +107,6 @@ def test_describe_shows_defaults_and_set_axes(skill: Path) -> None:
 def test_cli_show_set_check(skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.chdir(skill)
     assert sw.main(["show"]) == 0 and "(default)" in capsys.readouterr().out
-    assert sw.main(["check", "scope", "cohort"]) == 0
-    assert sw.main(["set", "scope", "reference", "--why", "lock it"]) == 0 and "lock it" in capsys.readouterr().out
-    assert sw.main(["check", "scope", "cohort"]) == 1 and "make scope-unlock" in capsys.readouterr().err
-    assert sw.main(["set", "scope", "unlocked", "--why", "release"]) == 0
-    assert "what accumulated is measured" in capsys.readouterr().out  # the unlock reminder
     assert sw.main(["set", "remote", "off"]) == 1 and "reason is required" in capsys.readouterr().err
     assert sw.main(["check", "remote", "ci-check"]) == 0
     with pytest.raises(SystemExit):
@@ -186,26 +159,6 @@ def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
 LOCKED_TARGETS = ("cohort", "test-full", "cache-audit", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
 
 
-def test_make_test_defers_the_map_rolling_tests_under_the_lock(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
-    """GM 2026-08-26: the 4-minute gate under the lock was the `rolls_map` tests rolling OTHER maps;
-    the lock now deselects them in `test`, says so, and never under the coverage floors."""
-    from l7r.diagram import switches
-
-    assert "not rolls_map" not in make(fixture_skill, "-n", "test").stdout
-    switches.write(fixture_skill, "scope", "reference", "test", who="t")
-    out = make(fixture_skill, "-n", "test").stdout
-    assert '-m "not rolls_map"' in out and "DEFERRED" in out
-    assert "not rolls_map" not in make(fixture_skill, "-n", "test", "COV_FLOORS=1").stdout
-    monkeypatch.chdir(fixture_skill)
-    assert switches.main(["state", "scope"]) == 0 and capsys.readouterr().out.strip() == "reference"
-
-
-# ---- THE LOCAL SHORT-CIRCUIT of `make done` (feature 132 amendment, FR-019..FR-023) ----------------
-
-
-# ---- the idle context (feature 136): the scope lock relaxes ONLY for the timer's descendants ------
-
-
 def _marker(skill: Path, pid: int) -> None:
     (skill / ".git").mkdir(exist_ok=True)
     (skill / ".git" / "idle-tests.running").write_text(f"{pid}\n")
@@ -223,17 +176,6 @@ def test_idle_context_needs_the_marker_an_ancestor_and_the_timers_command_line(s
     assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: "idle-tests-hooks.sh prompt", pid=99), "a hook mode other than timer"
     (skill / ".git" / "idle-tests.running").write_text("not-a-pid\n")
     assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: timer_cmd, pid=99), "a malformed marker"
-
-
-def test_read_relaxes_a_locked_scope_only_in_the_idle_context(skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    sw.write(skill, "scope", "reference", "the period")
-    assert sw.read(skill).scope_locked
-    monkeypatch.setattr(sw, "idle_context", lambda _s: True)
-    relaxed = sw.read(skill)
-    assert not relaxed.scope_locked and "RELAXED" in relaxed.scope.why and relaxed.remote.state == sw.read(skill).remote.state
-    assert sw.refusal(relaxed, "scope", "cohort") is None
-    monkeypatch.setattr(sw, "idle_context", lambda _s: False)
-    assert sw.read(skill).scope_locked, "outside the idle context the lock is exactly what the file says"
 
 
 def test_the_real_process_tree_is_not_the_idle_context(skill: Path) -> None:
@@ -280,3 +222,21 @@ def test_the_ancestor_walk_ends_at_INIT_at_a_VANISHED_process_and_at_its_own_dep
     assert len(sw._ancestors(199, status_of=lambda p: loop.get(p, ""))) == 64, "and the depth cap holds against a cycle"
 
     assert sw._proc_status(-1) == "", "the real reader answers empty rather than raising for a pid that is not there"
+
+
+def test_an_unknown_key_is_IGNORED_not_failed_closed(skill: Path) -> None:
+    """The property feature 185 depends on, and the one an implementer would break by "fixing" it.
+
+    A clone checked out from before the scope lock was retired still carries a `scope` block in its
+    `dev/switches.json`. `read()` names only `remote`, through `data.get`, with no key iteration and
+    no schema validation - so the stray block is simply not looked at. Making it strict would send
+    that file down `_closed()`, and failing closed means REMOTE OFF in every clone that has one.
+
+    `_closed()` has exactly three entrances: a JSON parse failure, a non-dict top level, or `_axis`
+    rejecting a NAMED key. Never an unrecognized one.
+    """
+    (skill / "dev" / "switches.json").write_text('{"remote": {"state": "on", "why": "w", "who": "t", "utc": "u"}, "scope": {"state": "reference"}}')
+    s = sw.read(skill)
+    assert not s.error, "a leftover scope block must not fail closed"
+    assert not s.remote_off, "and must not turn remote OFF"
+    assert s.remote.state == "on"

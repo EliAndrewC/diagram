@@ -48,9 +48,6 @@ def _bench(tmp_path, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
         return True, []
 
     monkeypatch.setattr(mc, "_run", fake_run)
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "read", lambda _root: type("S", (), {"scope_locked": False})())
     return {"state": state, "runs": runs, "monkeypatch": monkeypatch}
 
 
@@ -87,22 +84,6 @@ def test_a_failing_TRIPWIRE_stops_the_run_and_names_the_command_that_shows_the_w
     out = capsys.readouterr().out
     assert "tripwire FAILED" in out and "cohort_audit --count 48" in out
     assert len(_bench["runs"]) == 1, "the rest of the tier was never paid for"
-
-
-def test_the_SCOPE_LOCK_overrides_the_state_machine_and_refuses_an_explicit_all(_bench, capsys) -> None:
-    """ "says what you mean when you know better" is exactly the override the GM asked to close. A
-    locked scope means the reference map alone, never the widening - and `--scope all` is REFUSED
-    rather than quietly honoured."""
-    from l7r.diagram import switches
-
-    _bench["monkeypatch"].setattr(switches, "read", lambda _root: type("S", (), {"scope_locked": True})())
-    _bench["monkeypatch"].setattr(switches, "locked_out", lambda _why: True)
-    assert mc.main(["--scope", "all"]) == 1, "refused, not honoured"
-    assert _bench["runs"] == [], "and nothing was rolled"
-
-    assert mc.main([]) == 0
-    assert "LOCKED to the reference settlement" in capsys.readouterr().out
-    assert [len(g) for g, _ in _bench["runs"]] == [1], "the reference map alone, no widening"
 
 
 def test_the_verdict_is_SAVED_so_the_next_run_can_choose_its_own_scope(_bench) -> None:

@@ -180,7 +180,7 @@ def bench_gate(bypass: bool = True) -> Result:
     parts: list[tuple[str, float]] = []
     ok = True
     for phase, label in (
-        ("lint", "lint (ruff check + duplicate-def scan)"),
+        ("static", "static (ruff + duplicate-defs + file-scale + stale-dirs)"),
         ("format", "format (ruff format --check)"),
         ("typecheck", "typecheck (pyrefly, the engine file set)"),
         ("test", "test (pytest -n auto + 100% coverage gate)"),

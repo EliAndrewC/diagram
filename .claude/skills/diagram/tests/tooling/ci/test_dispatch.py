@@ -100,11 +100,11 @@ def test_merge_conflict_is_caught_locally_before_any_build(repo: Path) -> None:
 
 def test_lint_failure_starts_no_build(repo: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     engine_delta_with_green(repo, True, monkeypatch)
-    sh = ScriptedSh(make={"lint format typecheck": (1, "ruff: E999")})
+    sh = ScriptedSh(make={"static format typecheck": (1, "ruff: E999")})
     c, lines = ctx(repo, sh=sh)
     out = dispatch.run(c)
-    assert out.verdict == "REFUSE(lint)" and c.client.calls == [("get_object", c.client.calls[0][1])]  # type: ignore[union-attr]
-    assert any("lint/format/types FAILED" in ln for ln in lines)
+    assert out.verdict == "REFUSE(static)" and c.client.calls == [("get_object", c.client.calls[0][1])]  # type: ignore[union-attr]
+    assert any("static/format/types FAILED" in ln for ln in lines)
 
 
 def test_mailbox_push_failure_starts_no_build(repo: Path) -> None:
@@ -158,7 +158,7 @@ def test_check_dispatches_exactly_one_build_and_records_it(repo: Path, monkeypat
     # `cache:<scope>` since feature 175 - the generation cache is configured per (project, scope), and
     # the event records WHICH cache the build was pointed at. It sits beside `image:` because both are
     # start_build overrides decided just before the call.
-    assert c.events == ["lint:0", "push:0", "image:stock", "cache:reference", f"start_build:{out.build_id}", "reference:0", "go", "go:cleaned"]
+    assert c.events == ["static:0", "push:0", "image:stock", "cache:reference", f"start_build:{out.build_id}", "reference:0", "go", "go:cleaned"]
     assert "imageOverride" not in kw, "no image marker in the bucket: the stock image bootstraps"
     logs = [json.loads(p.read_text(encoding="utf-8")) for p in (repo / S / "dev" / "run-log").glob("*.json")]
     assert len(logs) == 1 and logs[0]["where"] == "codebuild" and logs[0]["build_id"] == out.build_id and logs[0]["result"] == "SUCCEEDED" and logs[0]["minutes"] == 1.0

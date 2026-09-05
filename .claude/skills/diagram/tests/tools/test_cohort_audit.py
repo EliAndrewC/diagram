@@ -37,31 +37,12 @@ def _report(failures: list[str], lines: list[str] | None = None) -> Any:
 
 @pytest.fixture
 def _clean(monkeypatch: pytest.MonkeyPatch) -> None:
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: False)
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: _report([]))
-
-
-def test_a_cohort_is_REFUSED_under_the_scope_lock_and_no_flag_walks_around_it(monkeypatch: pytest.MonkeyPatch) -> None:
-    """ "a cohort is the GM's own definition of the full test suite, and under the lock it does not
-    run - not with --anyway, not with any flag"."""
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: True)
-    called: list[int] = []
-    monkeypatch.setattr(ca, "audit", lambda *a, **k: called.append(1) or 0)
-    assert ca.main(["--count", "4"]) == 2
-    assert ca.main(["--count", "4", "--anyway"]) == 2, "--anyway does not reach the lock"
-    assert called == [], "and the cohort never started"
 
 
 def test_a_FAILING_reference_settlement_stops_the_cohort_and_says_what_to_do(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     """The 60-second question that gates the 25-minute answer. The message hands over the next
     command, and names the override rather than hiding it."""
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: False)
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: _report(["village_windbreak_is_continuous[2]"]))
     started: list[int] = []
     monkeypatch.setattr(ca, "audit", lambda *a, **k: started.append(1) or 0)
@@ -75,9 +56,6 @@ def test_a_FAILING_reference_settlement_stops_the_cohort_and_says_what_to_do(mon
 
 def test_ANYWAY_skips_the_reference_gate_because_a_rule_with_no_escape_gets_worked_around(monkeypatch: pytest.MonkeyPatch) -> None:
     """ "deliberately awkward to type" - but it exists, and it must actually reach the cohort."""
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: False)
     rolled: list[Any] = []
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rolled.append(spec) or _report(["anything"]))
     monkeypatch.setattr(ca, "audit", lambda *a, **k: 0)

@@ -43,7 +43,7 @@ reviewer, which runs multiple times on every pass."* So:
   sheet. Gate green -> hand the map back. The independent review runs at **acceptance** (one FULL
   pass of the reference settlement before T99 is ticked) and at **unlock** (the pool re-roll, where
   48 seeds are more than the GM can look at - the place an automated reviewer earns its time).
-  `make scope-unlock` names it among the owed work.
+  (the scope lock that used to defer this was retired in feature 185.)
 - **When a review does run, it runs in the BACKGROUND, after the map is handed back** - or in
   parallel with a LONG gate (`make done FULL=1`, a CodeBuild run), never alongside `make quick`
   (~30 s: launching a 3-minute review "in parallel" with it just serializes). A finding becomes a

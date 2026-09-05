@@ -17,8 +17,12 @@ help:
 
 # Forwarded verbatim. Kept as an explicit list, not a %-rule, so a typo names the route rather
 # than being forwarded into a second "No rule to make target".
-FORWARD := done quick maps reference hooks-test tooling durations gate-manifest new-check sun-audit \
-           switches ci-status ci-off ci-on scope-lock scope-unlock perf-report perf-review audit
+# GUARD_EDIT_OK: feature 185 - `scope-lock`/`scope-unlock` retired with the lock. `gate-manifest`
+# and `new-check` went with the check battery in feature 166 and were never removed here (FR-004a):
+# a stale forward resolves, forwards into the skill, and dies naming the WRONG file - the exact
+# second-order failure the comment above says this explicit list exists to prevent.
+FORWARD := done quick maps reference hooks-test tooling durations sun-audit \
+           switches ci-status ci-off ci-on perf-report perf-review audit
 .PHONY: $(FORWARD)
 $(FORWARD):
 	@$(MAKE) --no-print-directory -C $(DIAGRAM) $@ $(MAKEOVERRIDES)

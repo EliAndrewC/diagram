@@ -192,27 +192,9 @@ def test_report_says_how_to_get_a_snapshot_when_there_are_none(tmp_path, monkeyp
     assert "run: make perf" in capsys.readouterr().out
 
 
-def test_recording_a_bookend_is_REFUSED_under_the_scope_lock_but_reporting_is_not(tmp_path, monkeypatch, capsys) -> None:
-    """A snapshot rolls the reference settlement at several seeds - the GM's own definition of the
-    suite - so under the lock no bookend is taken and they are owed at unlock. `--report` reads the
-    log and is not a roll, so it stays available: the trend is still readable while locked."""
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(ps, "LOG_DIR", str(tmp_path))
-    monkeypatch.setattr(switches, "locked_out", lambda _why: True)
-    recorded: list[str] = []
-    monkeypatch.setattr(ps, "record", lambda label, seeds: recorded.append(label) or "")
-    assert ps.main(["--record", "--label", "174-end"]) == 2
-    assert recorded == [], "no bookend was taken"
-
-    assert ps.main(["--report"]) == 0, "reporting is still available under the lock"
-
-
 def test_main_records_then_reports_and_takes_its_seeds_from_the_flag(tmp_path, monkeypatch) -> None:
-    from l7r.diagram import switches
 
     monkeypatch.setattr(ps, "LOG_DIR", str(tmp_path))
-    monkeypatch.setattr(switches, "locked_out", lambda _why: False)
     seen: dict[str, _Any] = {}
     monkeypatch.setattr(ps, "record", lambda label, seeds: seen.update(label=label, seeds=seeds) or "")
     monkeypatch.setattr(ps, "report", lambda against: seen.update(against=against) or 0)

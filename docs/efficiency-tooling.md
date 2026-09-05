@@ -45,7 +45,7 @@ Measured: **48 of 314 recorded `make done` runs short-circuited entirely**, at 0
 |---|---|
 | **pytest-testmon** (`make quick`) | runs only the tests whose executed code changed. Nothing changed means nothing runs |
 | **the roll cache** (`pipeline/rollcache.py`) | a map roll is served from `.gencache` when nothing the roll executes changed - this is what turns the reference settlement from 29 s into a HIT |
-| **the scope lock** (`switches.py`) | with scope locked to the reference settlement, NO invocation rolls another map - no flag, variable or environment override. Map-rolling tests are deferred and owed at unlock |
+| ~~the scope lock~~ (RETIRED, feature 185) | it deferred multi-map rolls while the gate was slow; feature 174 made the gate run everything, so there was nothing left to defer. Was: no invocation rolls another map - no flag, variable or environment override. Map-rolling tests are deferred and owed at unlock |
 | **tier selection / tree ignores** | `quick` skips the town and city trees, `tests/gate` and `tests/full` |
 | ~~**coverage floors deferred to FULL**~~ **RETIRED by feature 174** (GM 2026-08-31) | it was true that a deselected test takes its coverage with it - which is why closing the deferral meant making `done`'s test phase `test-full` on both branches rather than floor-ing a partial suite. A plain `make done` now enforces all three floors over the whole engine |
 | **`EXHAUSTIVE`** | sweeps run a documented subset by default and their full form only at the gate |
@@ -88,7 +88,7 @@ Different in kind: each asks for a DECISION, which no substitution can supply.
 | **`make maps` picks its own scope** | after a failed run, the reference map alone; after a clean one, the whole tier. There is deliberately no second command |
 | **`FULL=1` prompts and defaults to CANCEL** | a written justification, logged with the date, target and commit |
 | **`QUICK_BUDGET` (60 s)** | `quick` fails if it exceeds its budget and points at `make durations` |
-| **the switches** (`ci-off`, `scope-lock`) | a `REASON=`, committed |
+| **the switches** (`ci-off` / `ci-on`) | a `REASON=`, committed |
 | **the CodeBuild dispatcher** | five conditions before any paid run: an engine delta, a complete feature, a green local check, no existing verified record, and the spend breaker up |
 
 `research.md` R6 of feature 164 enumerates all ten and finds exactly one convertible - the number

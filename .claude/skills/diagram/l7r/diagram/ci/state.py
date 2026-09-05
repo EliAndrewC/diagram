@@ -56,7 +56,6 @@ class VerificationState:
     hash: str
     commit: str
     engine_key: str = ""  # delta.engine_key_worktree at the time of the run - what a green local `done` VOUCHES for (GM 2026-08-25)
-    scope: str = ""  # the scope switch when written; "reference" = the map-rolling tests were deferred
     tooling: str = ""  # tooling_hash at the last green `done` - `make quick` skips the `tooling` tests while it still matches
 
 
@@ -94,7 +93,6 @@ def read(root: Path) -> VerificationState | None:
         hash=str(data["hash"]),
         commit=str(data.get("commit", "")),
         engine_key=str(data.get("engine_key", "")),
-        scope=str(data.get("scope", "")),
         tooling=str(data.get("tooling", "")),
     )
 
@@ -129,7 +127,6 @@ def write(root: Path, event: str, target: str, reused: bool = False) -> Verifica
         hash=current_hash(root),
         commit=_commit(root),
         engine_key=engine_key_worktree(root),
-        scope=_scope(root),
         # only a gate that RAN vouches for the tooling; a short-circuited `done` (`reused`) carries the
         # last real gate's record forward - the first cut re-hashed on the short-circuit and quick then
         # skipped tooling tests no gate had run on a changed Makefile (caught 2026-08-26, T22)
@@ -166,14 +163,6 @@ def tooling_hash(root: Path) -> str:
     return h.hexdigest()
 
 
-def _scope(root: Path) -> str:
-    """The scope switch's state when a record is written - `reference` means the gate DEFERRED the
-    map-rolling tests (Makefile `ROLL_DESELECT`), so the record vouches for less than an unlocked run."""
-    from l7r.diagram import switches
-
-    return switches.read(root / ".claude" / "skills" / "diagram").scope.state
-
-
 def record_tooling(root: Path) -> str:
     """`make tooling` ran every `tooling` test green: vouch for the current tooling in the standing record
     (or a fresh one) without touching the gate verdict. GM 2026-08-26 (T24): *"I don't want to wait until
@@ -181,9 +170,7 @@ def record_tooling(root: Path) -> str:
     prior = read(root)
     h = tooling_hash(root)
     if prior is None:
-        st = VerificationState(
-            event=GREEN, target="tooling", utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), hash=current_hash(root), commit=_commit(root), engine_key="", scope=_scope(root), tooling=h
-        )
+        st = VerificationState(event=GREEN, target="tooling", utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), hash=current_hash(root), commit=_commit(root), engine_key="", tooling=h)
     else:
         st = VerificationState(**{**asdict(prior), "tooling": h})
     (_state_file(root)).write_text(json.dumps(asdict(st), indent=2) + "\n", encoding="utf-8")
@@ -213,8 +200,6 @@ def already_verified(root: Path) -> tuple[bool, str]:
         return False, f"`make done` was green at {st.utc} ({st.commit}), but the skill's Python changed since - that run vouched for different code"
     if not st.engine_key or st.engine_key != engine_key_worktree(root):
         return False, f"`make done` was green at {st.utc} ({st.commit}), but a pool gen or manifest changed since - that run vouched for different content"
-    if st.scope == "reference" and _scope(root) != "reference":
-        return False, f"`make done` was green at {st.utc} ({st.commit}) while scope was LOCKED - the map-rolling tests were deferred; scope is unlocked now, so they are owed (GM 2026-08-26)"
     return (
         True,
         f"already verified: `make done` was green at {st.utc} ({st.commit}) against exactly this engine content - nothing it exercises has changed (docs, the Makefile, config and scripts/ do not count)",

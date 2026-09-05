@@ -90,9 +90,10 @@ and a soak run that comes back green is not evidence that the maps are good.
 ## Why `soak`, and not `sweep`
 
 **`sweep` was the first name and it was WRONG, caught by the naming audit the same day** (GM
-2026-09-05). This repository already uses *sweep* for something else: `SWEEP_OK` is the scope-lock
-check, and `switches.py` describes a locked scope as one where *"every sweep refuses"* - a sweep here
-means **a run that rolls many MAPS**, which the lock exists to forbid. Keeping the name would have put
+2026-09-05). This repository used *sweep* for something else: the scope-lock check was
+`SWEEP_OK`, and `switches.py` described a locked scope as one where *"every sweep refuses"* - a sweep
+there meant **a run that rolls many MAPS**, which the lock existed to forbid. (The lock itself was
+retired in feature 185, which is what finally left one meaning per word.) Keeping the name would have put
 `$(SWEEP_OK)` - the guard asserting a target is NOT a sweep - three lines from a target called
 `sweep`. **Soak** is the standard term for the thing this directory is actually for: the same code
 held under realistic load for an extended run. It collides with nothing.

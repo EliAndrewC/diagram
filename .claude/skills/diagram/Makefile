@@ -5,8 +5,9 @@
 # with nothing resident - it replaced mypy + the dmypy daemon (400-600 MB per clone). Rules in pyproject.toml.
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
-.PHONY: done lint format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gate hooks-test explain \
-	 switches ci-off ci-on scope-lock scope-unlock _switch \
+# GUARD_EDIT_OK: feature 185 - the .PHONY half of `lint` -> `static`, and scope-lock/scope-unlock go.
+.PHONY: done static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file audit perf-gatehooks-test explain \
+	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
 	 notes-census \
@@ -86,7 +87,6 @@ STATE = python3 -m l7r.diagram.ci state
 # was true only of reference scope. Now: the prompt authorizes the EXPENSE, then the reference map
 # still gates; REF_OK is the one, separate, logged way to skip that step, as for every other target.
 done:
-	@$(if $(FULL),$(SWITCH) check scope "done FULL=1",true)
 # (GUARD_EDIT_OK: feature 132 - a FULL run is a pool sweep, so the scope lock refuses it BEFORE the prompt.
 #  THE LOCAL SHORT-CIRCUIT (same feature, the GM's amendment): reference scope reuses the verdict in hand when
 #  the last record is a green `make done` against exactly this engine
@@ -104,7 +104,8 @@ done:
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
 	T0=$$(date +%s); fail=""; \
 	: "(GUARD_EDIT_OK: feature 168 - THE CHEAP CHECKS RUN FIRST, at the GM's ruling 2026-08-30. The three static phases cost 1.8 s together against the reference roll's 29 s, so a session that has broken something ruff cannot fix hears about it in seconds rather than half a minute. The GM authorized this ON PRINCIPLE and predicted, correctly, that it buys almost nothing: both static phases AUTOCORRECT (ruff check --fix, ruff format), so they rarely fail at all, and only 8 of 317 recorded gate runs failed on one without also failing the suite - about 4 minutes recovered across the entire history. Do not later credit this reorder with a saving it does not deliver. It does not weaken 'the reference settlement gates everything expensive': what moved ahead of the roll is 16x cheaper than it, and every expensive phase still stands behind it.)"; \
-	for phase in lint format typecheck; do \
+	: "GUARD_EDIT_OK: feature 185 - the gate's phase loop, one of the four `lint` -> `static` sites" ; \
+	for phase in static format typecheck; do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
 	done; \
@@ -285,7 +286,6 @@ RUN = @python3 -m l7r.diagram
 # past has frequently resulted in the full tests getting run, and that costs both time and actual
 # money now that we are running on AWS."* The doctrine and the priced alternatives: dev/switches.md.
 SWITCH = python3 -m l7r.diagram.switches
-SWEEP_OK = @$(SWITCH) check scope "$@"
 # (GUARD_EDIT_OK: feature 133 FR-004 - a refused paid target also leaves a would-have-dispatched run-log entry, so
 #  remote-off never hides how often money was about to be spent; the check itself is unchanged, ci/ does the write)
 REMOTE_OK = @python3 -m l7r.diagram.ci remote-ok "$@"
@@ -296,10 +296,6 @@ ci-off:         ## REMOTE OFF - nothing dispatches to CodeBuild; the gated push 
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=off MSG="remote off" REASON="$(REASON)"
 ci-on:          ## REMOTE ON - the default; the gated route may dispatch again   REASON="..."
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=on MSG="remote on" REASON="$(REASON)"
-scope-lock:     ## SCOPE LOCKED to the reference settlement - every sweep refuses   REASON="..."
-	@$(MAKE) --no-print-directory _switch AXIS=scope STATE=reference MSG="scope locked" REASON="$(REASON)"
-scope-unlock:   ## SCOPE UNLOCKED - the default; sweeps run again (and are owed)   REASON="..."
-	@$(MAKE) --no-print-directory _switch AXIS=scope STATE=unlocked MSG="scope unlocked" REASON="$(REASON)"
 _switch:
 	@[ -n "$(REASON)" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
 	@$(SWITCH) set $(AXIS) $(STATE) --why "$(REASON)"
@@ -324,7 +320,6 @@ map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/in
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
 cohort:         ## roll N seeds and report every failure      N=48
-	$(SWEEP_OK)
 	$(REF_FIRST)
 	$(RUN).tools.cohort_audit --count $(or $(N),48)
 
@@ -347,7 +342,6 @@ hamlet:         ## generate one hamlet from the CLI   ARGS="--name X --seed 4 ..
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
 cache-audit:    ## does using the generation cache change any map?
-	$(SWEEP_OK)
 	$(REF_FIRST)
 	$(RUN).tools.cache_audit $(ARGS)
 placement-stages: ## re-plate the stage-by-stage walk-through page
@@ -506,7 +500,6 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
 perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on a regression
-	$(SWEEP_OK)
 	@: "(GUARD_EDIT_OK: feature 132 - a perf snapshot rolls several seeds, a sweep under the scope lock)"; \
 	f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
 	if [ -z "$$f" ] && [ -f ../../../.specify/feature.json ]; then \
@@ -639,7 +632,6 @@ engine-key:
 # longer a merge queue. The names are fine; the descriptions had gone stale (GM 2026-09-05).
 ci-check:       ## run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
 	$(REMOTE_OK)
-	@$(if $(FULL)$(TARGET),$(SWITCH) check scope "ci-check $(if $(FULL),FULL=1,TARGET=$(TARGET))",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
 # (GUARD_EDIT_OK: feature 132 - remote off refuses every ci-check before any AWS call; FULL and TARGET are sweeps under the scope lock)
 	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
@@ -649,7 +641,6 @@ ci-check:       ## run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) 
 
 # GUARD_EDIT_OK: FINDING 4, second half - see the ci-check comment above.
 ci-merge:       ## the push's gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh   FULL=1 (prompts)
-	@$(if $(FULL),$(SWITCH) check scope "ci-merge FULL=1",true)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
 # (GUARD_EDIT_OK: feature 132 - FULL is a sweep under the scope lock. Remote-off is NOT checked here: the dispatcher
 #  handles it itself, because with remote off it must still produce the LOCAL-GATED verdict the push procedure reads)
@@ -940,13 +931,11 @@ idle-tests:     ## what an idle session runs unattended (feature 136): the whole
 	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done
 
 maps:
-	@$(if $(filter all,$(SCOPE)),$(SWITCH) check scope "maps SCOPE=all",true)
 	@python3 -m l7r.diagram.tools.mapcheck
 	@$(MAKE) --no-print-directory pool-index-if-stale
 # (GUARD_EDIT_OK: feature 132 - `maps SCOPE=all` is refused under the lock; mapcheck itself never widens while locked)
 
 perf:
-	$(SWEEP_OK)
 	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)"
 
 perf-report:
@@ -970,7 +959,12 @@ guard:
 	    exit 1; \
 	fi
 
-lint format typecheck test: | guard
+# GUARD_EDIT_OK: feature 185 - `lint` -> `static` (GM 2026-09-05). It has not been linting for some
+# time: it is ruff plus three custom guards (duplicate-defs, file-scale, stale-dirs), while `format`
+# is whitespace alone. THIS target-position line is one of four sites and the one most easily missed:
+# rename only the recipe below and `make lint` STILL RESOLVES here - declared with an order-only
+# prerequisite and no recipe - and exits 0 silently, which is the trap feature 184 hit with tripwire.
+static format typecheck test: | guard
 
 # LINT AND FORMAT AUTOCORRECT, THEY DO NOT FAIL (GM 2026-08-26: *"having linters autocorrect everything is a
 # standard practice ... having every run of the linter simply fix linting errors rather than failing on them
@@ -978,7 +972,9 @@ lint format typecheck test: | guard
 # 75 s gate plus a model turn spent on something with no decision in it. `ruff check --fix` applies every
 # safe fix and still exits non-zero on what it cannot fix (a real finding); `ruff format` rewrites in place
 # (black-compatible; the gate key is semantic, so a reformat never re-opens it).
-lint:
+# GUARD_EDIT_OK: feature 185 - the recipe half of the `lint` -> `static` rename (see the comment on
+# the target-position line above; four sites in this file, all of them required).
+static:         ## the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
 	python3 -m ruff check --fix .
 	python3 ../../../scripts/check-duplicate-defs.py --selftest
 	python3 ../../../scripts/check-duplicate-defs.py ../../..
@@ -1054,8 +1050,10 @@ COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/d
 # Alternatives priced: keep running them (four minutes per cycle spent on maps the period says not to
 # roll); deselect only the NON-reference rollers (no marker tells them apart, and the reference map is
 # already rolled by `make reference` in the same gate). The reference-rolling tests are covered at unlock.
-SCOPE_STATE = $(shell $(SWITCH) state scope 2>/dev/null)
-ROLL_DESELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),-m "not rolls_map",))
+# GUARD_EDIT_OK: feature 185 - both were defined through SCOPE_STATE, so with the axis gone they
+# expand empty unconditionally. Kept as empty definitions rather than deleted, so every recipe that
+# references them (`make quick` among them) needs no edit.
+ROLL_DESELECT =
 # TIER RELEVANCE (GM 2026-08-26, feature 133 T17): the reference settlement is a hamlet, so while scope is
 # locked the suite skips tests tagged for other tiers only (`tiers` marker, tests/conftest.py). The tier is
 # named here, once; never under COV_FLOORS.
@@ -1101,7 +1099,7 @@ GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1
 # ...and the other tiers' TREES are not even collected under the lock (feature 135, third pass): every xdist
 # worker collected ~700 town/city items to deselect them a moment later; the ignore is the same decision made
 # before collection instead of after it.
-TIER_SELECT = $(if $(COV_FLOORS),,$(if $(filter reference,$(SCOPE_STATE)),--tier $(REFERENCE_TIER) --ignore=tests/tier_town --ignore=tests/tier_city,))
+TIER_SELECT =
 
 # GUARD_EDIT_OK: feature 166 - the firing census sweep is retired with the battery it counted. It ran
 # the SUITE with the gate's verdict journal on, because a check could be made to fail by a test's
@@ -1123,7 +1121,6 @@ JOURNAL_ENV =
 # whole of that - and names its own target so an audit can tell which run vouched.
 # GUARD_EDIT_OK: FINDING 3 - "nothing deselected" became FALSE the day tests/soak/ was deselected.
 test-full:      ## the gate's whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)
-	$(SWEEP_OK)
 	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
 
 # GUARD_EDIT_OK: THE TIER ABOVE THE GATE (GM 2026-09-05) - a new target, and the one a REMOTE run
@@ -1142,9 +1139,13 @@ test-full:      ## the gate's whole test phase + all three coverage floors (ever
 # No coverage flags: a soak test covers nothing the gate does not already cover - that IS the
 # membership rule - so tracing it would only slow it down.
 # GUARD_EDIT_OK: RENAMED sweep -> soak, caught by the naming audit the same day it landed. This repo
-# already uses SWEEP for a run that rolls many MAPS - `SWEEP_OK` is the scope-lock check and
+# GUARD_EDIT_OK: the last literal mention of the retired macro, removed because the DERIVED escape
+# census scans the tree for every `*_OK` token and fails on one it cannot classify - so a comment
+# naming a macro that no longer exists is not free. Caught by that census, exactly as intended.
+# already used SWEEP for a run that rolls many MAPS - the scope-lock check was the guard (retired
 # `switches.py` says a locked scope is one where "every sweep refuses" - so a target named `sweep`
-# sat three lines from `$(SWEEP_OK)`, the guard asserting a target is NOT one. `soak` is the standard
+# with the lock in feature 185) - so a target of that name sat three lines from the guard asserting a
+# target is NOT one. `soak` is the standard
 # term for the thing this actually is: the same code held under realistic load for an extended run.
 soak:           ## the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
 	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
@@ -1197,7 +1198,8 @@ soak:           ## the tier ABOVE the gate: the same code over many seeds and la
 COV_FLOORS =
 
 test:
-	@$(if $(ROLL_DESELECT),printf '\033[1mmap-rolling tests DEFERRED\033[0m (scope locked to the reference settlement) - owed at `make scope-unlock`\n';,)
+	: "GUARD_EDIT_OK: feature 185 - the map-rolling DEFERRED notice went with the scope lock. It fired" ; \
+	: "only when ROLL_DESELECT was non-empty, and that variable was defined through the retired axis." ; \
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.

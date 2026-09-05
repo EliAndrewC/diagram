@@ -120,27 +120,12 @@ def test_JOBS_is_parsed_off_argv_and_its_VALUE_is_not_mistaken_for_a_path(_drive
     assert "skipping 4" not in capsys.readouterr().out
 
 
-def test_a_MULTI_MAP_regen_is_refused_under_the_scope_lock(monkeypatch: pytest.MonkeyPatch) -> None:
-    """A shell glob expands before `make` sees it, so this module is the ONLY place a whole-pool
-    sweep can be caught (feature 132). One map is always allowed; more than one asks the switch."""
-    monkeypatch.setattr(regen, "gencache", _Cache(hit=False))
-    monkeypatch.setattr(regen.poolmaps, "classify", lambda _g: "live")
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: True)
-    assert regen.main(["a.gen.py", "b.gen.py"]) == 2, "the sweep is refused"
-    assert regen.main(["a.gen.py"]) == 0, "one map is never a sweep"
-
-
 def test_several_maps_run_through_the_POOL_and_each_worker_s_output_is_printed_whole(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     """The parallel path, with a pool that maps in-process so the test stays deterministic. What is
     asserted is the contract the real pool has to keep: one result per gen, in order, each with its
     own captured stdout printed before its status line."""
     monkeypatch.setattr(regen, "gencache", _Cache(hit=False))
     monkeypatch.setattr(regen.poolmaps, "classify", lambda _g: "live")
-    from l7r.diagram import switches
-
-    monkeypatch.setattr(switches, "locked_out", lambda _why: False)
 
     class _Pool:
         def __init__(self, max_workers: int) -> None:

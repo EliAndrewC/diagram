@@ -77,14 +77,11 @@ def main(argv: list[str]) -> int:
         gens = [g for g in gens if g not in frozen]
     if not gens:
         return 0
-    # ONE MAP PER INVOCATION under the scope lock (feature 132, spec FR-010/FR-012). This module
-    # takes a LIST, and `pool/*/*/*.gen.py` is the documented whole-pool sweep - a glob expands in the
-    # shell before make sees it, so the module is the only place a globbed GEN can be caught.
-    if len(gens) > 1:
-        from l7r.diagram import switches
-
-        if switches.locked_out(f"regen of {len(gens)} maps"):
-            return 2
+    # THE ONE-MAP-PER-INVOCATION REFUSAL WENT WITH THE SCOPE LOCK (feature 185, FR-008a). It was
+    # `switches.locked_out` and nothing else, so it had no meaning once the lock was retired -
+    # feature 161's FR-014, which stated it as a standing requirement, is thereby superseded. Said
+    # here rather than silently dropped, because it reads as independent doctrine and a later session
+    # would otherwise reinstate it.
     if jobs is None:  # leave two cpus for the harness and whatever else shares the box
         jobs = max(1, min(len(gens), (os.cpu_count() or 2) - 2))
     if jobs == 1 or len(gens) == 1:

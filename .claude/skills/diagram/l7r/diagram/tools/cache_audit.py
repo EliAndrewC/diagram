@@ -220,14 +220,6 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args(argv)
 
-    # THE SCOPE LOCK (feature 132): the audit rolls a subset of the pool repeatedly (`--all`: the
-    # whole pool) - a sweep in any form, so it refuses first. Round 1 of the spec's fidelity review
-    # found this entry point open under an enumerated lock.
-    from l7r.diagram import switches
-
-    if switches.locked_out("cache-audit" + (" --all" if args.all else "")):
-        return 2
-
     paths = gens(args.all)
     print(f"auditing {len(paths)} maps against {args.trials} mutation(s) of {ENGINE}/")
     print("measuring which engine lines these maps execute...")

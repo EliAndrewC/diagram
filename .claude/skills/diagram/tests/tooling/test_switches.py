@@ -12,7 +12,6 @@ import pytest
 
 from l7r.diagram import switches as sw
 from tests.test_switches import (
-    LOCKED_TARGETS,
     SKILL,
     make,
 )
@@ -31,16 +30,6 @@ def test_make_uses_eight_workers_on_a_shared_box_and_every_core_on_codebuild(fix
 
 
 @pytest.mark.tooling
-@pytest.mark.parametrize("target", LOCKED_TARGETS)
-def test_make_sweeps_refuse_under_the_lock(fixture_skill: Path, target: str) -> None:
-    sw.write(fixture_skill, "scope", "reference", "fixture lock")
-    p = make(fixture_skill, *target.split())
-    assert p.returncode != 0, p.stdout + p.stderr
-    assert "scope is LOCKED" in p.stderr and "make scope-unlock" in p.stderr, p.stdout + p.stderr
-    assert "reference settlement" not in p.stdout  # refused BEFORE the reference step, before any map rolls
-
-
-@pytest.mark.tooling
 @pytest.mark.parametrize("target", ("ci-check", "ci-image", "ci-check FULL=1"))
 def test_make_remote_targets_refuse_when_remote_is_off(fixture_skill: Path, target: str) -> None:
     sw.write(fixture_skill, "remote", "off", "fixture off")
@@ -50,25 +39,21 @@ def test_make_remote_targets_refuse_when_remote_is_off(fixture_skill: Path, targ
 
 @pytest.mark.tooling
 def test_make_switch_targets_require_a_reason_and_commit(fixture_skill: Path) -> None:
+    """The REMOTE switch, which survived feature 185; the scope half went with the lock."""
     root = fixture_skill.parents[2]
     subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
     subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
-    assert make(fixture_skill, "scope-lock").returncode != 0  # no REASON
-    p = make(fixture_skill, "scope-lock", "REASON=iterating on Inashiro")
-    assert p.returncode == 0, p.stdout + p.stderr
-    assert sw.read(fixture_skill).scope_locked
-    log = subprocess.run(["git", "-C", str(root), "log", "--oneline"], capture_output=True, text=True).stdout
-    assert "scope locked - iterating on Inashiro" in log
-    p = make(fixture_skill, "switches")
-    assert p.returncode == 0 and "iterating on Inashiro" in p.stdout
+    assert make(fixture_skill, "ci-off").returncode != 0  # no REASON
     p = make(fixture_skill, "ci-off", "REASON=no AWS")
     assert p.returncode == 0 and sw.read(fixture_skill).remote_off
+    log = subprocess.run(["git", "-C", str(root), "log", "--oneline"], capture_output=True, text=True).stdout
+    assert "remote off - no AWS" in log
+    p = make(fixture_skill, "switches")
+    assert p.returncode == 0 and "no AWS" in p.stdout
     p = make(fixture_skill, "ci-on", "REASON=back on")
     assert p.returncode == 0 and not sw.read(fixture_skill).remote_off
-    p = make(fixture_skill, "scope-unlock", "REASON=accepted")
-    assert p.returncode == 0 and not sw.read(fixture_skill).scope_locked and "measured, not remembered" in p.stdout
     log = subprocess.run(["git", "-C", str(root), "log", "--oneline"], capture_output=True, text=True).stdout
-    assert log.count("\n") == 4  # four throws/releases, four commits
+    assert log.count("\n") == 2  # two throws/releases, two commits
 
 
 @pytest.mark.tooling

@@ -186,8 +186,9 @@ to houses; dry-to-wet crossings) surfaced in one pass instead of five.
 **The GM can switch the remote OFF** (feature 132: `make ci-off REASON=...`, released by `make ci-on`)
 - then nothing on this page dispatches, `make ci-status` shows `remote-enabled` failing first, and the
 gated push lands on a green local `make done` instead (LOCAL-GATED). A second switch, `make
-scope-lock`, refuses every map SWEEP (cohort, FULL, tripwire, cache-audit, regressions, perf) until
-`make scope-unlock`. Both are committed files with no override; see [`switches.md`](switches.md).
+the scope lock was RETIRED in feature 185 - it existed for the reference-hamlet period when the gate
+was slow and multi-map rolls had to be deferred, and feature 174 removed that condition by making the
+gate run the whole suite every time. `remote` is the only axis now; see [`switches.md`](switches.md).
 
 **A session does not decide whether to go remote - the conditions do.** `make ci-status` prints
 them, free. Five conditions, all checked locally before any AWS call, every one printed even after

@@ -15,7 +15,7 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 | `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
 | `tests/full/` | **a plain `make done`** (feature 174 - its test phase IS `test-full`), `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. Since feature 174 a PLAIN `make done` enforces the coverage floors too - the deferral is gone, and this row's old "`make done`: no - deferred" is what that feature closed. The floors enforced here are all three - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
 | `tests/tooling/` | the gate and the full run; quick ONLY when the tooling changed since the last green gate; skipped at the gate too while it is unchanged (never in FULL) | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
-| `tests/tier_town/`, `tests/tier_city/` | the gate and the full run; quick once the scope lock moves to that tier | it is relevant to that tier only |
+| `tests/tier_town/`, `tests/tier_city/` | the gate and the full run | it is relevant to that tier only |
 
 ## WHICH TARGET RUNS WHICH TREE - the table above read the other way round
 
@@ -32,7 +32,7 @@ the GM `make test-full` ran less than the whole suite.
 
 **`make test-full` DESELECTS NOTHING.** Everything is keyed on `COV_FLOORS`, which it sets, and each
 deselection is written `$(if $(COV_FLOORS),,<the deselection>)` - present only when it is EMPTY:
-`FULL_TREE_IGNORE`, `ROLL_DESELECT` and `TIER_SELECT` all switch off, `L7R_TESTS_FULL=1` and
+`FULL_TREE_IGNORE` switches off (`ROLL_DESELECT` and `TIER_SELECT` are empty since feature 185 retired the scope lock), `L7R_TESTS_FULL=1` and
 `EXHAUSTIVE` switch on. The tooling ignore is not even in that family - it lives only in `QUICK_TREE`,
 so `make quick` is the ONLY target that ever skips a tooling test.
 

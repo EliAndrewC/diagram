@@ -194,20 +194,6 @@ def main(argv: list[str] | None = None) -> int:
     tiers = [a.tier] if a.tier else list(TIERS)
     prev = _load()
     prev_ok = bool(prev.get("ok"))
-    # THE SCOPE LOCK (feature 132) overrides the state machine: locked means the reference map alone,
-    # never the tripwire, never the widening after a clean run - and an explicit `--scope all` is
-    # refused rather than honored, because "says what you mean when you know better" is exactly the
-    # override the GM asked to close ("we literally cannot"). The SCOPE environment default is read
-    # through the same check as the flag.
-    from l7r.diagram import switches
-
-    locked = switches.read(switches.skill_root()).scope_locked
-    if locked and a.scope == "all":
-        switches.locked_out("mapcheck --scope all")
-        return 1
-    if locked:
-        a.scope = "reference"
-        print("\033[1mmapcheck\033[0m: scope is LOCKED to the reference settlement (`make switches`) - reference map only, no widening\n")
     recovering = a.scope == "reference" or (a.scope == "auto" and not prev_ok)
 
     if a.scope == "auto":

@@ -113,15 +113,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--anyway", action="store_true", help="run even if the reference settlement is failing (say why in the same breath)")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
-    # THE SCOPE LOCK COMES FIRST (feature 132): a cohort is the GM's own definition of "the full
-    # test suite", and under the lock it does not run - not with --anyway, not with any flag. The
-    # check sits HERE for the same reason the reference gate below does: this module has its own
-    # entry point, and a guard on one door is not a guard.
-    from l7r.diagram import switches
-
-    if switches.locked_out(f"cohort --count {args.count}"):
-        return 2
-
     # THE REFERENCE SETTLEMENT IS A GATE, NOT A SUGGESTION (GM 2026-08-24).
     #
     # A cohort is 20-25 minutes. The reference hamlet is 60 SECONDS and answers the only question

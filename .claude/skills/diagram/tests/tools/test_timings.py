@@ -128,7 +128,7 @@ def test_bench_gate_times_the_FOUR_PHASES_and_keys_cold_and_warm_differently(mon
     fake = _sh({"typecheck": (0.5, True, "")}, default=(3.0, True, ""))
     monkeypatch.setattr(timings, "sh", fake)
     cold = timings.bench_gate()
-    assert [c[1] for c in fake.calls] == ["lint", "format", "typecheck", "test"]
+    assert [c[1] for c in fake.calls] == ["static", "format", "typecheck", "test"]
     assert cold.key == "full_gate" and cold.total == 3.0 + 3.0 + 0.5 + 3.0
     assert "GATE_NO_CACHE=1" in cold.what
 
