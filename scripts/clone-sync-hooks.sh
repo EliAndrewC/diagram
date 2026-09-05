@@ -82,7 +82,8 @@ MAPDIR=$MAIN/.clones/.session-clones
 # fourth time in this repository that a roster written from memory has been wrong within a day. The
 # derivation is the reason this is safe to keep as a literal.
 BEHIND_TEST_TARGETS='quick|test|test-file|test-full|done|verify|reference|maps|hooks-test|idle-tests|cohort|tripwire|regressions|perf|perf-gate|cov-file|durations|tooling'
-BEHIND_FETCH_MAX_AGE=${CLONE_BEHIND_FETCH_AGE:-300}   # seconds; test seam
+# GUARD_EDIT_OK: the fetch-throttle knob went with the fetch - a dead test seam is a seam that will
+# be wired to something else later by someone who assumes it still means what it says.
 
 behind_main_notice() { # behind_main_notice <clone> - one line of additionalContext, or silence
   bn_clone=$1
@@ -105,19 +106,22 @@ behind_main_notice() { # behind_main_notice <clone> - one line of additionalCont
   bn_ref=$(git -C "$MAIN" rev-parse --verify -q origin/main 2>/dev/null) || bn_ref=""
   [ -n "$bn_ref" ] || return 0
 
-  # FRESHNESS, and the honest limit on it. `origin/main` in the mirror is refreshed by the prompt
-  # hook every message - which is precisely the thing that is NOT happening in the case this notice
-  # exists for. So refresh it here, but THROTTLED (once per BEHIND_FETCH_MAX_AGE) and with a hard
-  # timeout, and fail open in silence: a hook that hangs on a network call would block the tool call
-  # it is trying to help. Nothing here writes to the clone; the mirror fetch is what `sync-in` does
-  # on every turn already.
-  bn_stamp=$MAPDIR/.behind-fetch
-  if [ ! -f "$bn_stamp" ] || [ "$(( $(date +%s) - $(stat -c %Y "$bn_stamp" 2>/dev/null || echo 0) ))" -ge "$BEHIND_FETCH_MAX_AGE" ]; then
-    mkdir -p "$MAPDIR" 2>/dev/null || true
-    timeout 5 git -C "$MAIN" fetch -q origin main >/dev/null 2>&1 || true
-    : > "$bn_stamp" 2>/dev/null || true
-    bn_ref=$(git -C "$MAIN" rev-parse --verify -q origin/main 2>/dev/null) || return 0
-  fi
+  # GUARD_EDIT_OK: REMOVING A NETWORK FETCH, deliberately, after measuring it (GM 2026-09-05).
+  # A throttled `git fetch` sat here first, on the theory that the mirror goes stale during exactly
+  # the long autonomous stretch this notice exists for. The GM asked whether that mitigates a case
+  # that essentially does not happen. The code says it does:
+  #
+  #   `mirror_refresh` in sync-with-main.sh is called TWICE - from `sync_in` (which the prompt hook
+  #   runs on EVERY message) and from `push_cmd` (after EVERY push). So the mirror is brought current
+  #   from GitHub whenever any session sends a message or lands anything, a CodeBuild merge included,
+  #   since the dispatching session refreshes on the way through.
+  #
+  # The only writer that can leave the mirror behind is the GM's own laptop pushing mid-stretch, and
+  # even then this notice becomes accurate at their very next message - which is also the first
+  # moment the session could act on it. Measured cost of the fetch that would have covered it:
+  # 148-175 ms, on a hook that fires for EVERY tool call, plus a write to the shared mirror from
+  # inside a hook and a hang risk. Not worth it. The freshness of this notice is therefore "as of the
+  # last message", the same granularity every other guard here works at.
 
   # BEHIND means main's tip is missing from this clone's history - not that the HEADs differ. A clone
   # that is merely AHEAD (the normal mid-feature state, every commit you have made) must say nothing,

@@ -279,7 +279,10 @@ echo dirty > "$BM/main/.clones/work/scratch.txt"
 
 bm() {
   OUT=$(printf '{"session_id":"sid-bm","tool_name":"%s","tool_input":{"command":"%s"}}' "${2:-Bash}" "$1" \
-        | CLONE_MAIN="$BM/main" CLONE_SESSIONS_DIR="$SESS" CLONE_BEHIND_FETCH_AGE=99999 "$HOOK" pretool 2>&1)
+        | CLONE_MAIN="$BM/main" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1)
+  # GUARD_EDIT_OK: no CLONE_BEHIND_FETCH_AGE any more - the notice makes no network call at all, so
+  # there is nothing to throttle and no seam to set. It reads the mirror's origin/main, which
+  # sync-with-main refreshes on every message AND after every push.
 }
 bm_notice() { bm "$1" "${3:-Bash}"; case "$OUT" in *"BEHIND MAIN"*) printf 'ok    %s\n' "$2" ;; *) printf 'FAIL  %s\n      out: %s\n' "$2" "$OUT"; FAILED=1 ;; esac; }
 bm_silent() { bm "$1" "${3:-Bash}"; case "$OUT" in "") printf 'ok    %s\n' "$2" ;; *) printf 'FAIL  %s (expected silence)\n      out: %s\n' "$2" "$OUT"; FAILED=1 ;; esac; }
