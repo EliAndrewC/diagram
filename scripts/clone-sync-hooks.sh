@@ -233,7 +233,15 @@ case $MODE in
     # This branch adds the one case and changes no other: a Bash call still exits 0 exactly as it did,
     # it just gets looked at first. The clone comes from the session's own CLAIM (one file read; the
     # claim is written on the session's first edit), never from the cwd, which a `cd` can leak.
-    if [ "$(field tool_name)" = "Bash" ]; then
+    # GUARD_EDIT_OK: CHEAPEST TEST FIRST, and it is not a micro-optimization - MEASURED. This hook
+    # fires on EVERY tool call, and `field` is a python3 startup (~22 ms). Calling it to ask the tool
+    # name put that 22 ms on every Read, Grep and `echo hello` in the session, none of which can ever
+    # produce this notice: measured 28.9 -> 50.9 ms on `echo hello`. A payload with no `make` anywhere
+    # in it cannot invoke a make target, and this is a shell pattern match on a string already in
+    # memory, so it costs nothing. It is a PREFILTER, deliberately over-permissive: `_hookmatch.py
+    # targets` below is still the authority on what counts as an invocation.
+    case $INPUT in *make*) bn_maybe=1 ;; *) bn_maybe= ;; esac
+    if [ -n "$bn_maybe" ] && [ "$(field tool_name)" = "Bash" ]; then
       bn_sid=$(field session_id)
       if [ -n "$bn_sid" ] && [ -f "$MAPDIR/$bn_sid" ]; then
         bn_c=$(cat "$MAPDIR/$bn_sid" 2>/dev/null || true)
