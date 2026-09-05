@@ -46,13 +46,20 @@ from pathlib import Path
 AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     "diagram": (
         ".claude/skills/diagram",
-        # *.js / *.css: the interactive page's assets (feature 181) - inlined into every HTML map and run
-        # by the browser test, hashed by their bytes (`semantic_bytes` strips only Python). Without them
-        # `make done` answered "already verified" on a delta that was nothing but `page.js` and `page.css`.
-        # Mirrored in `l7r/diagram/ci/delta.py` `_ENGINE_DIRS`; the two must agree.
-        ("*.py", "*.js", "*.css"),
+        ("*.py",),
     ),  # the webapp area lives in gm-assistant since feature 131
     "hooks": ("scripts", ("*.sh", "*.py")),
+    # THE PAGE AREA (feature 188, GM 2026-09-05): the interactive page's stylesheet and script, inlined into
+    # every HTML map and exercised only by the interactive tests and the browser test. Feature 181 had put
+    # them in the DIAGRAM area, so a stylesheet edit re-opened the whole nine-minute gate; the GM: "there's
+    # no actual reason to rerun all the tests for style sheet changes". What an asset edit owes instead is a
+    # green `make page-check` (about a minute), stamped here; `make done`'s phases-run exit stamps it too,
+    # because that run includes the same tests - its already-verified short-circuit does NOT, since after
+    # this change that branch is blind to the assets and would vouch for them by running nothing. This
+    # tuple is THE definition of a page asset (`ci/delta.py` deliberately has none); hashed by bytes, since
+    # `semantic_bytes` strips only Python. The pages REGENERATE on landing through the render fingerprint
+    # (feature 187), which is the other half of what the GM asked for.
+    "page": (".claude/skills/diagram/l7r/diagram/interactive/assets", ("*.js", "*.css")),
 }
 # Subtrees an area does NOT hash. tests/ (feature 132 FR-024, the GM's ruling 2026-08-25, asked and
 # answered "Yes, locally AND on AWS"): a tests-only change owes no gate - not the build, not the local
@@ -390,7 +397,7 @@ def check(base: str, root: Path | None = None) -> int:
             continue
         stamp = _stamp_path(root, area)
         want = hash_files(_area_files(root, area_path, patterns), root)
-        gate = "make hooks-test" if area == "hooks" else "make done"
+        gate = {"hooks": "make hooks-test", "page": "make page-check"}.get(area, "make done")
         if stamp is None or not stamp.is_file():
             bad.append(
                 f"{area}: no green gate has been recorded at all ({gate} stamps it)"
@@ -402,7 +409,7 @@ def check(base: str, root: Path | None = None) -> int:
     if not bad:
         return 0
     print(
-        "gate-stamp: refusing to push Python that no green gate has seen (constitution Principle XIII):",
+        "gate-stamp: refusing to push code that no green gate has seen (constitution Principle XIII):",
         file=sys.stderr,
     )
     for line in bad:

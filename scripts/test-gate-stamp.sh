@@ -71,6 +71,22 @@ case $OUT in *"diagram: no green gate"*) : ;; *) echo "FAIL  refusal must name t
 ( cd "$W" && python3 "$STAMP" --write diagram )
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "both areas stamped -> allowed" 0 $?
 
+# THE PAGE AREA (feature 188): an asset edit owes `make page-check`, and nothing else - not the full gate.
+mkdir -p "$W/.claude/skills/diagram/l7r/diagram/interactive/assets"
+echo 'a.q { color: red; }' > "$W/.claude/skills/diagram/l7r/diagram/interactive/assets/page.css"; git -C "$W" add -A; git -C "$W" commit -qm css
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "asset edit, no page stamp -> refused" 1 $?
+case $OUT in *"page: no green gate"*"make page-check"*) : ;; *) echo "FAIL  refusal must name the page area and make page-check: $OUT"; FAILED=1 ;; esac
+case $OUT in *"diagram:"*) echo "FAIL  an asset edit must NOT demand a diagram (full gate) stamp: $OUT"; FAILED=1 ;; *) : ;; esac
+# the short-circuit exit of make done writes `diagram` and not `page` - so re-stamping diagram does not admit the asset
+( cd "$W" && python3 "$STAMP" --write diagram )
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "asset edit + a diagram stamp (the short-circuit's) -> still refused" 1 $?
+( cd "$W" && python3 "$STAMP" --write page )
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "asset edit, matching page stamp -> allowed" 0 $?
+echo 'a.q { color: blue; }' > "$W/.claude/skills/diagram/l7r/diagram/interactive/assets/page.css"; git -C "$W" commit -qam css2
+OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "asset edited after the page stamp -> refused" 1 $?
+case $OUT in *"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  stale page stamp must say the code differs: $OUT"; FAILED=1 ;; esac
+( cd "$W" && python3 "$STAMP" --write page )
+
 # a comment or docstring added AFTER the green run is not "different code" (GM 2026-08-26): the stamp
 # hashes the docstring-stripped AST of each .py, so only a token that runs re-opens the gate
 printf '"""why this is 2"""\n# see research/water.md\nx = 2  # unchanged\n' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam why

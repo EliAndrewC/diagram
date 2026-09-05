@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T192546Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 188 changes tooling only (the gate key, the stamp areas, a make target, a task-tick script) - no drawn ink, manifest or placement moved, and the GM reads the page themselves (their 2026-08-29 ruling)"
+}

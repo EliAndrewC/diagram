@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T194830Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "integrity fixes plus a merge from another session - no map rolled, no placer touched"
+}

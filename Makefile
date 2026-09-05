@@ -21,7 +21,7 @@ help:
 # and `new-check` went with the check battery in feature 166 and were never removed here (FR-004a):
 # a stale forward resolves, forwards into the skill, and dies naming the WRONG file - the exact
 # second-order failure the comment above says this explicit list exists to prevent.
-FORWARD := done quick maps reference hooks-test tooling durations sun-audit \
+FORWARD := done quick maps reference hooks-test tooling durations sun-audit \ page-check tick
            switches ci-status ci-off ci-on perf-report perf-review audit
 .PHONY: $(FORWARD)
 $(FORWARD):
