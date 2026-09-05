@@ -227,6 +227,12 @@ push_cmd() {
   # which is precisely why the clause says the line must be CHECKED rather than felt. Selftest first,
   # same reason check-duplicate-defs does it.
   python3 "$ROOT/scripts/check-file-scale.py" --selftest >/dev/null || die "check-file-scale selftest failed - the guard itself is broken; fix scripts/check-file-scale.py before pushing"
+  # GUARD_EDIT_OK: the stale-directory check runs at the push for the same reason its two siblings do
+  # - a docs- or tests-only delta takes the DIRECT route and runs no gate at all, and a leftover
+  # namespace package is exactly the kind of thing that arrives with a deletion, which is often such
+  # a delta. Selftest first: a checker that cannot fail is worth nothing.
+  python3 "$ROOT/scripts/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/check-stale-dirs.py before pushing"
+  python3 "$ROOT/scripts/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
   python3 "$ROOT/scripts/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
   # clause says this procedure "does not run to completion on a red or regressed state" - which was

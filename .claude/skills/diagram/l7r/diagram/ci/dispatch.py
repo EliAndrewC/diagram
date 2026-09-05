@@ -221,9 +221,45 @@ def mailbox(root: Path) -> str:
 
 
 def make_target(ctx: Context) -> str:
+    """What a remote build actually RUNS.
+
+    THIS RETURNS `soak`, NOT `done` (GM 2026-09-05), and that is the whole point of the change: a
+    remote run now does the tier the laptop SKIPPED instead of repeating the tier it just finished.
+
+    WHAT IT USED TO DO, and why that stopped being worth paying for. It returned `done` - the same
+    command the local gate runs - on the theory that the remote merges the LATEST main in first, so it
+    tests a tree nobody has tested. That property was real and is now vestigial: `sync-in` merges main
+    into every clone on every message, so the trees are almost always identical, and condition 5
+    (`tree-not-already-verified`) correctly declines to spend money when they are. The record is
+    unambiguous - **every `ci-merge` since the local short-circuit landed on 2026-08-25 has been
+    SKIP-VERIFIED, four for four, and the six paid ones all predate it.**
+
+    Feature 174 then closed the other half by accident: making the coverage floors unconditional meant
+    `COV_FLOORS=1` on a plain `make done`, and that same switch sets `L7R_TESTS_FULL` and turns every
+    deselection off - so the four-seed cohort meant to be the wide, farmed-out tier began rolling on
+    every local gate. Between them, a remote build had nothing left to add.
+
+    WHAT IS GIVEN UP, stated rather than discovered later: the remote is no longer a MERGE QUEUE. It
+    does not re-run the gate against your-work-merged-with-latest-main, so a conflict that is textually
+    clean but semantically broken is no longer caught by a machine before it lands. That was the
+    original purpose of this whole route (feature 130). It is accepted because it has never once fired,
+    and because the alternative - keeping a paid route alive for a property that has not triggered in
+    ten days of daily merges - is the thing this project calls a guess dressed as a finding.
+
+    DECLINED, and why: running BOTH (`done` then `soak`) would restore the merge-queue property and
+    was rejected because it reintroduces exactly the duplication this change exists to remove, at
+    roughly double the cost, for a property measured at zero firings. Pointing the remote at
+    `done FULL=1` was rejected for a stronger reason - since feature 174 it runs the same tests as
+    `done`, adding only the perf bookends.
+
+    The soak suite is EMPTY today and `make soak` REFUSES rather than reporting a vacuously green
+    build, so this cannot quietly become a no-op. Remote is off; `tests/soak/CLAUDE.md` carries the
+    membership rule and the honest statement of when the tier earns its keep.
+    """
     if ctx.operation:
         return ctx.operation
-    return "done FULL=1" if ctx.scope == "full" else "done"
+    # The scope still selects, so a FULL soak stays available the moment the suite has anything in it.
+    return "soak FULL=1" if ctx.scope == "full" else "soak"
 
 
 def would_be_tree(ctx: Context) -> tuple[str | None, str]:

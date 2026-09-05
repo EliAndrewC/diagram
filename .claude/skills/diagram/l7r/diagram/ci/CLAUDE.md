@@ -4,6 +4,27 @@
 run may start, or you are touching the buildspecs. The usage-level answer is one command:
 `make ci-status` prints every condition and its reason, free, with no AWS call on a DIRECT route.
 
+**WHAT A REMOTE RUN NOW RUNS: `make soak`, NOT `make done` (GM 2026-09-05).** The remote used to
+run the same gate the laptop runs, on the theory that it merges the LATEST main in first and so tests
+a tree nobody has tested. That property is now vestigial - `sync-in` merges main into every clone on
+every message, so the trees are almost always identical, and condition 4 declines to spend money when
+they are. **Every `ci-merge` since the local short-circuit landed on 2026-08-25 has been
+SKIP-VERIFIED, four for four; the six paid ones all predate it.** Feature 174 closed the other half by
+accident: `COV_FLOORS=1` on a plain `make done` also sets `L7R_TESTS_FULL` and turns every
+deselection off, so the four-seed cohort meant to be the wide farmed-out tier began rolling locally.
+
+So the remote does the tier the laptop SKIPS - [`tests/soak/`](../../../tests/soak/CLAUDE.md), the
+same code over many seeds and larger, more realistic maps. **ACCEPTED IN EXCHANGE: the remote is no
+longer a MERGE QUEUE.** It does not re-run the gate against your-work-merged-with-latest-main, so a
+conflict that is textually clean but semantically broken is no longer caught by a machine before it
+lands. That was this route's original purpose (feature 130); it is given up because it has never once
+fired. **Declined**: running BOTH (`done` then `soak`), which restores the property at roughly double
+the cost for zero measured firings; and pointing the remote at `done FULL=1`, which since feature 174
+runs the same tests as `done` and adds only the perf bookends.
+
+The soak suite is EMPTY today and `make soak` REFUSES rather than reporting a vacuously green build,
+so this cannot quietly become a no-op. **Remote is OFF** - `make switches`.
+
 Every remote run costs money (`RATE_PER_MIN` = **$0.02 per build-minute** on `BUILD_GENERAL1_LARGE`,
 in [`config.py`](config.py) - mirrored in exactly one other place, the `gm-assistant-ci-monthly-alert`
 Lambda's `RATE_PER_MIN` environment variable; change both together). So the GM's rule for this

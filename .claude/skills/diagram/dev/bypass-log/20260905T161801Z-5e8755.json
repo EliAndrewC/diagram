@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T161801Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "this change is CI target selection, a deselected empty test directory, docs and the remote-off switch - it rolls no map and touches no placer, so settlement-review has no Mode B map to read"
+}

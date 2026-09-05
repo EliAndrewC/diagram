@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T163125Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "this change is a static guard against stale namespace-package directories, its companion suite, and the sweep-suite structure - it rolls no map and touches no placer, so settlement-review has no Mode B map to read"
+}

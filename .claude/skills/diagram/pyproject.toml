@@ -85,6 +85,16 @@ unused-ignore = true              # warn_unused_ignores
 # testpaths pins collection to tests/ - without it pytest walks the whole skill dir (and, from
 # the repo root, every .clones/ checkout: pytest does not read .gitignore).
 testpaths = ["tests"]
+# THE SOAK SUITE IS NOT COLLECTED BY ANY ORDINARY RUN (GM 2026-09-05). `tests/soak/` holds the tier
+# ABOVE the gate - the same code exercised over many seeds and larger, more realistic maps - and it is
+# deselected here, in ONE place, rather than by an `--ignore` repeated across the Makefile's six
+# pytest invocations, which is exactly the stale-literal shape this project has been bitten by.
+# `norecursedirs` is the right instrument and was CHOSEN BY MEASUREMENT: a broad run does not descend
+# into it, while `make soak` naming the path explicitly still collects it (probed 2026-09-05).
+# THE DEFAULTS ARE REPEATED ON PURPOSE - setting this key REPLACES pytest's own list, so dropping them
+# would make every run recurse into .git, build/, dist/ and node_modules. Read from
+# `_pytest.main` rather than from memory.
+norecursedirs = ["*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}", "soak"]
 addopts = "--cov --cov-report=term"
 # `rolls_map` marks a test that GENERATES a settlement - the thing that costs 25-110 s each and sets
 # the whole suite's wall clock. `make quick` deselects them; `make done` runs everything.
