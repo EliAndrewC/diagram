@@ -7,7 +7,14 @@ every line a "question" on a count that was never checked; FR-012 contradicting 
 subdirectory defect now fixed as FR-012a. Round 2 returned one: the corrected FR-008 had swung to
 FORBIDDING the GM's own word on a trailing-question-mark metric that filed two of the GM's three quoted
 examples as "declarative" - the metric, not the record, produced the finding, and it is withdrawn in
-D8. Round 3 returned none.
+D8. Round 3 returned none. **Rounds 4 and 5 were post-verdict, narrow, and asked for by the
+implementation**: the README guard forced FR-016's section into `research/CLAUDE.md` (D9), and round 4
+graded that relocation legitimate but caught two errors in the written file - one of the GM's four
+example questions paraphrased into a DIFFERENT question ("one household" for the GM's "each farmhouse",
+the very distinction their first example asks about) and a sentence stating a prohibition the GM never
+made ("a session does not invent the list"). Both fixed with the GM's words verbatim; round 5 returned
+FAITHFUL on the rewritten bullet. Five rounds, but not the shape the cap exists for: each round's items
+were smaller than the last and none reopened an earlier one.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 **Predecessors**: feature 134 (the interactive page and its references modal), 156 (the presumption of
 accuracy - a modal announces liberties, not accuracy), 143 (every research entry cites, and every

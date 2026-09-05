@@ -46,10 +46,13 @@ reader who asks for them.
 - **A class's explanation names the entries it was written from** (`interactive/classes.py`, the `entry`
   field), and that pointer is the whole of what puts a question on a modal: the page resolves it at
   write time, so a new section reaches every map the moment a class entry names it. Nothing is re-typed.
-- **The questions the GM has said they will add** are of this kind - how many farmers lived in each
-  farmhouse, why there are more rice plots than farmhouses, how many plots one household farmed, how
-  many different crops were grown. Each is a research entry with its citations first, and only then a
-  line on a modal. The GM names them; a session does not invent the list.
+- **The questions the GM has said they will add** are of this kind, in their words: *"how many farmers
+  lived in each farmhouse, or why are there more rice plots than there are farmhouses, and how many rice
+  plots were farmed by each farmhouse, or how many different types of crops were grown, that kind of
+  thing."* Each is a research entry with its citations first, and only then a line on a modal. Feature
+  180 added none of them - it shows only the questions the record already held (*"For now, you can just
+  limit yourself to the questions that we already have"*); the GM will say at a later time which new
+  questions they want added to what is shown.
 
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md), "The references modal
