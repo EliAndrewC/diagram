@@ -92,7 +92,7 @@ def test_an_entry_is_complete(key: str) -> None:
     # not that the two strings are identical.
     assert fc.name and key in fc.name, "the modal's heading names the class its ink carries"
     assert len(fc.what) > 40 and len(fc.why) > 40, "an explanation is a paragraph, not a label"
-    assert fc.label in ("accurate", "deviation", "guess")
+    assert fc.label in ("accurate", "deviation", "convention", "guess")
     assert fc.label_note, "the label is justified in one line"
     assert fc.sources and all(fc.sources), "a sources line, or 'not recorded'"
     assert "research/" in fc.entry, "written FROM a research entry"
@@ -104,7 +104,26 @@ def test_a_guess_says_so_in_its_note(key: str) -> None:
     if fc.label == "guess":
         assert re.search(r"\bguess", fc.label_note, re.I), "a guess is labeled a guess in its own words"
     if fc.label == "deviation":
-        assert re.search(r"deviat|legibility|drawn", fc.label_note, re.I), "a deviation says what deviates"
+        assert re.search(r"deviat|departure|liberty|drawn", fc.label_note, re.I), "a deviation says what deviates"
+        assert "legibility" not in fc.label_note.lower(), "legibility is a map drawing CONVENTION, not a deviation (feature 183)"
+    if fc.label == "convention":
+        # THE GM'S FORM (feature 183): "we have rendered <it> ... in order to ... <the real size or color>" -
+        # and where the record was searched and is silent on a figure, the note says so in so many words
+        assert re.match(r"we have (rendered|drawn) ", fc.label_note), f"{key}: a convention opens in the GM's form"
+        assert "in order to" in fc.label_note, f"{key}: a convention states its purpose"
+        assert re.search(r"\d", fc.label_note) or "not found" in fc.label_note, f"{key}: a figure, or the words 'not found'"
+        assert "deviation" not in fc.label_note.lower(), f"{key}: a convention is not called a deviation"
+
+
+def test_the_gm_s_line_between_deviation_and_convention() -> None:
+    """Feature 183 (GM 2026-09-05): a deviation is the SETTING differing from history; a map drawing
+    convention is a glyph scaled or colored for the eye. Six of the seven old deviations were the second."""
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == ["grave island"]
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "well"]
+    beans = CLASSES["bund beans"].label_note
+    assert beans.startswith("we have rendered the bund beans as") and "50 to 125 cm" in beans and "medium-green" in beans and "not found" in beans
+    well = CLASSES["well"].label_note
+    assert "about 1 m across" in well and "not found" in well, "the curb's width was searched for and not read"
 
 
 def test_siblings_are_closed_over_the_vocabulary_and_symmetric() -> None:
@@ -142,9 +161,10 @@ def test_the_distinctions_the_gm_named_are_written(a: str, b: str) -> None:
         assert b in CLASSES[a].siblings and a in CLASSES[b].siblings
 
 
-def test_label_phrases_are_the_constitutions_three() -> None:
+def test_label_phrases_are_the_constitutions_four() -> None:
     assert label_phrase("accurate") == "historically accurate"
     assert label_phrase("deviation") == "a deliberate deviation"
+    assert label_phrase("convention") == "a map drawing convention"
     assert label_phrase("guess") == "a guess"
 
 
@@ -157,7 +177,12 @@ def test_only_a_liberty_is_announced() -> None:
     assert lead_sentence("accurate", "Plot form and the irregular patchwork are read.") == ""
     assert lead_sentence("deviation", "drawn larger") == "This is a deliberate deviation - drawn larger"
     assert lead_sentence("guess", "") == "This is a guess."
-    assert {"deviation", "guess"} == ANNOUNCED
+    # a convention opens in the GM's own form (feature 183): "Note: we have rendered ..."
+    assert (
+        lead_sentence("convention", "we have rendered the beads darker, in order to see them. Real leaves are medium green.")
+        == "Note: we have rendered the beads darker, in order to see them. Real leaves are medium green."
+    )
+    assert {"deviation", "convention", "guess"} == ANNOUNCED
 
 
 @pytest.mark.parametrize("key", SPEC_CLASSES)

@@ -54,6 +54,22 @@ reader who asks for them.
   limit yourself to the questions that we already have"*); the GM will say at a later time which new
   questions they want added to what is shown.
 
+## Four labels, and the GM's line between two of them (GM 2026-09-05, feature 183)
+
+An entry's finding, and the class explanation written from it, carries one of FOUR labels (constitution
+XII; `README.md` still lists the original three and is the GM's to update): **accurate**, **deviation**,
+**convention**, **guess**. The GM's rule for the two in the middle, verbatim: a deviation is *"our
+fictional setting being different from the actual history and historical places it is based on"*; a map
+drawing convention is *"rendering glyphs on a map which are differently scaled or differently colored than
+what the features would be in order to make the map more readable and legible to human eyes."* So the
+oversized wellhead, the 6 ft hokora, the stand-level bamboo glyph, the dark bund beads and a stream drawn
+by rank are CONVENTIONS; a hamlet with no headman, the 6:4 dike reading and the 30 ft trunk road are
+DEVIATIONS. A convention's modal note is written in the GM's form - *"Note: we have rendered the bund
+beans as ... in order to make them visible on the map at this scale"* - and ends with the real size or
+color from the record, or says in so many words that it was searched for and not found. Write the word
+the same way in the entry, the rule file, the code comment and the map's notes: since feature 183 the
+record says "a map drawing convention" wherever it used to say "a deviation for legibility".
+
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md), "The references modal
 lists QUESTIONS".

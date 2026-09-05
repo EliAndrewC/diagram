@@ -147,7 +147,7 @@ def _mechanics(page: Page, present: list[str]) -> None:
             assert d["labeltext"] == "", f"{key}: an accurate class announced itself"
         else:
             assert CLASSES[key].label_note[:30] in d["labeltext"]
-            assert any(w in d["labeltext"] for w in ("deliberate deviation", "a guess"))
+            assert any(w in d["labeltext"] for w in ("deliberate deviation", "a guess", "Note: we have"))
         assert "historically accurate" not in d["labeltext"]
         assert (CLASSES[key].caveat[:30] in d["caveat"]) if CLASSES[key].caveat else (d["caveat"] == "")
         for other in CLASSES[key].siblings:

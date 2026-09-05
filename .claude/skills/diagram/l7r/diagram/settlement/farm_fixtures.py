@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 # (GUESS within the ken module). coop: a ground-level enclosure (Qimin Yaoshu 養雞), square in the
 # Ming find (size GUESS). shrine: the one measured hokora is a 40 cm stone (READ); at 3 ft the GM could
 # not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
-# glyph rendering convention (GM 2026-08-27, T62; recorded as a deviation in settlements/homesteads.md).
+# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in settlements/homesteads.md).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is `interactive/classes.py`; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}

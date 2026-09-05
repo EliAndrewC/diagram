@@ -187,7 +187,7 @@ class FieldFeaturesMixin:
         """A RARE in-field grave island (calibrated liberty) - a small raised earthen mound with a couple of
         stone markers. Recorded in M['field_graves'].
 
-        DRAWN OVER THE LATTICE, NOT CARVED OUT OF IT - a recorded deviation (settlement-review, Kashikawa,
+        DRAWN OVER THE LATTICE, NOT CARVED OUT OF IT - a recorded map drawing convention (settlement-review, Kashikawa,
         feature 145). The registry entry said "the flat paddy tiling around it" and the plots are NOT carved:
         three plot rings and nine bund junctions lie inside Kashikawa's mound. At `opacity="0.9"` they ghosted
         through and the mound read as a translucent decal pasted on the field - a bund arriving at the outline

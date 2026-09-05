@@ -111,7 +111,7 @@
     if (refsDialog.open) refsDialog.close();
     setText("x-name", cap(d.name));
     // THE PRESUMPTION OF ACCURACY (feature 156, GM 2026-08-29). `lead` is empty for everything the
-    // record calls accurate, so the modal opens with what the feature IS; a deviation or a guess
+    // record calls accurate, so the modal opens with what the feature IS; a deviation, a convention or a guess
     // still leads with its liberty, because that is the case worth a reader's attention. The
     // caveat - the liberty an accurate class's own record discloses - goes AFTER the why.
     var label = document.getElementById("x-label");

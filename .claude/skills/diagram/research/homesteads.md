@@ -705,7 +705,7 @@ NW 17 of 37 and NE 11 of 37 in a Kameyama survey (SUMMARY-ONLY - the page would 
 *"屋敷の西南隅に祀られているのが普通"* in Tokushima (READ) - three corners attested, rolled NW .45 / NE
 .35 / SW .20. Size: *"石造か木造の小祠"* (READ); one measured example *"幅・奥行き・高さ各40cm位の石の祠"*
 (Tokushima, READ) - about 1.3 ft. DRAWN at 6 x 6 ft, the small-shed module (T62; it was 3 x 3 for T58 and the GM *"could not tell
-what it even is"*) - a DEVIATION for legibility above the one measured stone, the GM's ruling: *"as
+what it even is"*) - a MAP DRAWING CONVENTION above the one measured stone, the GM's ruling: *"as
 a glyph rendering convention, we could make it the same size as one of those small sheds ... but
 also red and visually distinctive in some other way"* - vermilion, a ridge line and a torii standing
 before the door.

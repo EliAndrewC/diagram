@@ -1,7 +1,28 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.15.0 → 2.16.0
+Version change: 2.16.0 → 2.17.0
+
+Version 2.17.0 (amended 2026-09-05, feature 183): Principle XII's three-way classification of
+every rendering decision - accurate / deliberate deviation / guess - becomes FOUR-way. The GM:
+*"we should distinguish in our descriptions between 'deviations', which represent our fictional
+setting being different from the actual history and historical places it is based on, and 'map
+drawing conventions', which represent rendering glyphs on a map which are differently scaled or
+differently colored than what the features would be in order to make the map more readable and
+legible to human eyes."* What this replaces is one word doing both jobs: the deviation item named
+"legibility (the well)" as its first example, and the interactive map opened the bund beans'
+modal with "This is a deliberate deviation - ... the bead color is a deliberate deviation" - which
+the GM ruled *"is not a 'deviation'. This is a map rendering convention."* Six of the seven
+deviation-labeled classes were conventions (shrine, two bamboos, beads, stream, well); the grave
+island stays a deviation. A convention's note takes the GM's form and ends with the real figure
+from the record or an explicit "not found" - two research passes were run for the figures the
+record lacked (the soybean plant; the well's shaft and curb). Dependent artifacts updated: this
+repository's CLAUDE.md, the skill's SKILL.md, `interactive/CLAUDE.md`, `research/CLAUDE.md`,
+`interactive/classes.py` (the `Label` type and `ANNOUNCED`), and every research entry, rule file,
+code pointer and pool note that said "a deviation for legibility" (a measured census of 71 uses
+of the word, each adjudicated - `specs/183`). `research/README.md` still states three and is the
+GM's to edit (Principle XVII). An existing principle materially expanded: MINOR.
+
 
 Version 2.16.0 (amended 2026-09-04, feature 179): Principle VI's band-1 line becomes PER
 ENVIRONMENT - 0.0% local, 2.0% CodeBuild, and 0.0% for any environment not named. The GM:
@@ -1309,16 +1330,32 @@ so the GM has one to point to when players visit one.
 
 So every decision about how a map is rendered - a glyph, a size, a placement
 rule, a distance, a density, a color convention - MUST be recorded in a form
-that reader can be shown, and MUST say which of THREE things it is:
+that reader can be shown, and MUST say which of FOUR things it is (three
+until v2.17.0, when the GM split the second into two - see below):
 
 1. **Historically accurate** - what the record says, with the finding that
    grounds it (Principle XII's research bookends already require this).
-2. **A deliberate deviation** - drawn other than the record says, and WHY:
-   legibility (the well), showing a feature type on the sheet (the near
-   estate), consistency with Legend of the Five Rings canon, or a priced
-   trade-off (`CLAUDE.md`: record the accepted limitation and the
-   alternatives declined).
-3. **A guess** - the record is silent or gives no firm number, and this is
+2. **A deliberate deviation** - *"our fictional setting being different from
+   the actual history and historical places it is based on"* (GM
+   2026-09-05): consistency with Legend of the Five Rings canon (a hamlet
+   keeps no headman), a ruling of the GM's about their world (the in-field
+   grave, at a rate they approved; the 30 ft trunk road), showing a feature
+   type on the sheet (the near estate), or a priced trade-off
+   (`CLAUDE.md`: record the accepted limitation and the alternatives
+   declined).
+3. **A map drawing convention** - *"rendering glyphs on a map which are
+   differently scaled or differently colored than what the features would be
+   in order to make the map more readable and legible to human eyes"* (GM
+   2026-09-05): the oversized well, the 6 ft hokora for a 1.3 ft stone, the
+   stand-level bamboo glyph, the dark bund beads, a stream drawn by rank.
+   Its note is written in the GM's form - *"Note: we have rendered the bund
+   beans as larger and darker in color than they actually are, in order to
+   make them visible on the map at this scale"* - and ends with the real size
+   or color from the record, or says in so many words that it was searched
+   for and not found. Before v2.17.0 these wore the word "deviation", and
+   the GM ruled: *"this is not a 'deviation', This is a map rendering
+   convention, and we should distinguish in our write up between these."*
+4. **A guess** - the record is silent or gives no firm number, and this is
    what we chose and on what reasoning. Unsourced reasoning is not a fault,
    but an unlabelled guess is: the reader must never be told a guess is a
    finding. (Today's example: "a bog's margin is sedge grading into reed, and
@@ -2017,4 +2054,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.16.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-04
+**Version**: 2.17.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-05

@@ -1,7 +1,7 @@
 /* The interactive map page (feature 134). Inlined into every <base>.html by page.py - no
    external asset, so a plain file:// open works with no server (spec FR-001). */
 :root {
-  /* THE HIGHLIGHT - a rendering decision of the HTML target, class DEVIATION (specs/134 research.md
+  /* THE HIGHLIGHT - a rendering decision of the HTML target, class CONVENTION - a map drawing convention, feature 183's word (specs/134 research.md
      R2): the map's palette is the record (parchment ground, pale rice, pine beans, blue water); the
      hovered class is painted a saturated warm gold with a dark-goldenrod stroke so it reads against
      every one of those fills. A UI affordance, not a claim about the world. */

@@ -323,7 +323,7 @@ solved exactly this: the GSI legend has a distinct bamboo-grove symbol (竹林),
 broadleaf and conifer symbols, because a reader of a map must be able to tell the three apart at
 map scale. So: (1) bamboo becomes a STAND with its own record (`bamboo_stands`, a polygon), drawn
 with a stand-level glyph at legibility scale - the GSI culm-and-leaf mark or a hatch of paired culm
-strokes with a leafy tick, in bamboo's pale yellow-green - a DEVIATION for legibility recorded like
+strokes with a leafy tick, in bamboo's pale yellow-green - a MAP DRAWING CONVENTION recorded like
 the oversized well: the stand's POSITION and EXTENT to scale, the mark inside it symbolic;
 (2) bamboo leaves the species mix of the windbreak and the copse (those become cedar/zelkova and
 fruit stands, which is what they are); (3) a per-settlement knob rolls whether the hamlet has
@@ -346,7 +346,7 @@ shades; the record's "N/W strip" read that way), the thicket at the field margin
 scatter audit treats a stand as a wood. Inashiro rolled `homestead`: one stand of 46 x 29 ft and
 25 marks north of the cluster; 315 invisible culm glyphs became 0.
 Labels: bamboo's presence below the frost line and its two places ACCURATE (read); the stand
-glyph a DEVIATION for legibility (the GSI convention; the marks are symbolic, the extent is not);
+glyph a MAP DRAWING CONVENTION (the GSI convention; the marks are symbolic, the extent is not);
 the sizes (48 x 34 and 84 x 58 ft) and the 7 ft mark pitch DRAWING conventions; "north = the shady
 side" a READING of the record's N/W, recorded as such.
 

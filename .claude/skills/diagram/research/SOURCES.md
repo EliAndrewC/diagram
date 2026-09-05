@@ -2034,3 +2034,34 @@ Purdue Extension, "Wind and Snow Control Around the Farm" (NCR-191) (https://www
 ### `gd-fengshui-types`
 
 Guangdong Provincial Forestry Administration, on the four types of village fengshui forest (水口林 / 龙座林 / 垫脚林 / 宅基林) (URL: none - the page at `lyj.gd.gov.cn/news/special/forum/content/post_1876507.html` 404s and no live address for it was found; the text below is a search summary of it) - SUMMARY-ONLY: the page at lyj.gd.gov.cn 404'd on fetch and only a search summary of it could be read. Labelled here rather than dropped because it corroborates `coggins-minor-2018` independently and in categorical forestry-bureau language; nothing rests on it alone.
+
+
+### `nabunken-azemame`
+
+Nara National Research Institute for Cultural Properties, Asuka Historical Museum, "畦豆" (2023-06) (https://www.nabunken.go.jp/asuka/info/2023/06/post-444.html; READ 2026-09-05)
+
+*Used for:* azemame - soybeans sown on the paddy bund after transplanting and harvested with the rice, grown in a row along the bund; once nationwide, now rare
+
+### `wikipedia-soybean`
+
+Wikipedia, "Soybean", Description (https://en.wikipedia.org/wiki/Soybean; READ 2026-09-05)
+
+*Used for:* a mature soybean plant is 50-125 cm tall; an annual
+
+### `cropfarming-soybeans`
+
+cropfarming.org, "What do soybeans look like growing in the field?" - a farming trade site, the one page read that states the leaf color (https://cropfarming.org/what-do-soybeans-look-like-growing-in-the-field/; READ 2026-09-05)
+
+*Used for:* the plant is erect and bushy on a central stem, 2-4 ft tall; the leaflets are broad, pointed and medium green - the color the bead is drawn darker than
+
+### `saijo-mizu-rekishikan`
+
+Saijo City (Ehime) Water History Museum, on digging a well (https://www.city.saijo.ehime.jp/site/mizunorekishikan/lineup3-8-3.html; READ 2026-09-05)
+
+*Used for:* a hand-dug well's shaft is about 1 m in diameter, large enough for a person to enter - the true size the oversized wellhead glyph stands for
+
+### `kotobank-idoyakata`
+
+Digital Daijisen and Nihon Kokugo Daijiten, "井戸屋形", via kotobank (https://kotobank.jp/word/井戸屋形-435033; READ 2026-09-05)
+
+*Used for:* the well house is posts beside the well with a roof on them and nothing more - the form the glyph's roof square depicts; its prevalence is not stated
