@@ -1,0 +1,14 @@
+{
+  "utc": "2026-09-05T17:40:59Z",
+  "target": "ci-merge",
+  "scope": "reference",
+  "seconds": 0,
+  "result": "would-have-dispatched",
+  "commit": "bc638713",
+  "where": "would-have-dispatched",
+  "build_id": "",
+  "minutes": 10.0,
+  "cost_usd": 0.2,
+  "compute": "BUILD_GENERAL1_LARGE",
+  "reason": "remote off: the gated merge would have DISPATCHED (no green local `make done` on the merged engine content)"
+}
