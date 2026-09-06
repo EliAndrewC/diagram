@@ -29,4 +29,7 @@ All `research: rendering` - make targets, their documentation, and the records t
       Makefile's two contradicting notes, the stale "20 entry points" count, and four index/doctrine
       rows. Records excluded: both pool trees' notes, `wip/*.notes.md`, `docs/review-ledger.md`.
 - [x] T08 `research: rendering` FR-008: page regenerated - 55 -> **53** targets.
-- [ ] T09 `research: rendering` SC-004: `make done` green, 100% coverage held.
+- [x] T09 `research: rendering` SC-004: `make done` GREEN at exit 0, 400 s, 100% coverage held.
+      This task stayed open for several hours NOT because 195 was incomplete - it was verified
+      long before - but because the `done` ratchet was red on a median that mixed warm and cold
+      runs. Diagnosing that rather than re-pinning it produced feature 196, and 195 lands with it.
