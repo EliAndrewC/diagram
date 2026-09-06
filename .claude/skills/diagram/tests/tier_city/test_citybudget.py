@@ -79,26 +79,10 @@ def test_a_fox_eight_precinct_program_prices_eight_precincts_and_scales_the_cler
     assert monks.area_px2 == pytest.approx(48 * citybudget.C_PACKED)
 
 
-@pytest.mark.tiers("city")
-def test_cli_plan_prints_the_report(capsys):
-    rc = citybudget.main(["--plan", "--population", "3000", "--river", "--canvas", "3200x2700"])
-    out = capsys.readouterr().out
-    assert rc == 0
-    assert "required" in out.lower() and "canal" in out
 
 
-@pytest.mark.tiers("city")
-def test_cli_agri_flag_adds_the_district_line(capsys):
-    rc = citybudget.main(["--plan", "--population", "3000", "--agri"])
-    assert rc == 0
-    assert "agricultural" in capsys.readouterr().out
 
 
-@pytest.mark.tiers("city")
-def test_cli_reports_errors_on_stderr_with_exit_1(capsys):
-    rc = citybudget.main(["--plan", "--population", "99"])
-    assert rc == 1
-    assert "2000" in capsys.readouterr().err
 
 
 @pytest.mark.tiers("city")
@@ -200,32 +184,11 @@ def test_the_capital_manifest_round_trips_as_plain_json_and_adds_no_new_top_leve
     assert cap["dwelling_target"]["samurai_yashiki"] == 53
 
 
-@pytest.mark.tiers("capital", "city")
-def test_cli_plans_a_capital_when_asked(capsys):
-    assert citybudget.main(["--plan", "--tier", "capital", "--population", "12360", "--river"]) == 0
-    out = capsys.readouterr().out
-    assert "the castle" in out and "retainer terraces" in out
 
 
-@pytest.mark.tiers("city")
-def test_cli_defaults_to_the_provincial_tier(capsys):
-    assert citybudget.main(["--plan", "--population", "3000"]) == 0
-    assert "governor's mansion" in capsys.readouterr().out
 
 
-@pytest.mark.tiers("capital", "city")
-def test_cli_refuses_an_agricultural_district_at_capital_tier_rather_than_ignoring_it(capsys):
-    assert citybudget.main(["--plan", "--tier", "capital", "--population", "12360", "--agri"]) == 1
-    assert "walls its farms out" in capsys.readouterr().err
 
 
-@pytest.mark.tiers("capital", "city")
-def test_cli_reports_a_capital_band_error_on_stderr(capsys):
-    assert citybudget.main(["--plan", "--tier", "capital", "--population", "3000"]) == 1
-    assert "domain-capital band" in capsys.readouterr().err
 
 
-@pytest.mark.tiers("capital", "city")
-def test_cli_accepts_the_capital_knobs(capsys):
-    assert citybudget.main(["--plan", "--tier", "capital", "--population", "12360", "--river", "--castle-seat", "edge", "--granary-seat", "wharf"]) == 0
-    assert "seat=edge" in capsys.readouterr().out

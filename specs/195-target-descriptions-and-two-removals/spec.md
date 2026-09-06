@@ -1,6 +1,6 @@
 # 195 - Targets that say what they do, and two removals
 
-**Status**: draft, round 2
+**Status**: FAITHFUL at review round 3; implementing
 **Request**: [request.md](request.md) (the GM's words, verbatim, with two readings recorded)
 
 ## Why
@@ -75,7 +75,7 @@ rather than in the tooling:
 - **FR-007** Every pointer to either removed target, **to its route in ANY OTHER NOTATION**, or to
   `citybudget`'s removed CLI is corrected, over the search space feature 193 established: **every file outside `specs/`**. Excluded
   as dated records: `pool/**/*.notes.md`, `legacy-hand-authored-pool/**/*.notes.md`,
-  `wip/*.notes.md` and `docs/review-ledger.md`. Three site classes a target-name sweep cannot see:
+  `wip/*.notes.md` and `docs/review-ledger.md`. Four site classes a target-name sweep cannot see:
   - **live doctrine naming the CLI**: `settlements/cities/sizing.md:85` says *"Audit it with
     `python3 citybudget.py --plan --population 3000 --river`"*, in a file whose header says to read
     it BEFORE picking any wall dimension. After FR-005 that capability exists in NO form, so the
@@ -119,8 +119,9 @@ rather than in the tooling:
   no longer a runnable entry point; `test-full` still runs the hamlet floor and the gate is green.
 - **SC-002** Every target in the generated page that takes an argument shows, per argument, what it
   takes and what it does. `make durations` in particular shows `FULL`, `MARK` AND `N`.
-- **SC-003** An untruncated sweep finds no reference to either removed target, or to `citybudget`'s
-  CLI, outside `specs/` and the four record classes FR-007 names.
+- **SC-003** An untruncated sweep finds no reference to either removed target, **to its route in any
+  other notation**, or to `citybudget`'s CLI, outside `specs/` and the four record classes FR-007
+  names. The other-notation clause is what lets this criterion fail on `hamlet_floor.py:4`.
 - **SC-004** `make done` green, 100% coverage held.
 
 ## Review history
@@ -147,4 +148,10 @@ rather than in the tooling:
   the same other-notation blind spot on the hamlet-floor side that round 1 closed on the citybudget
   side - `hamlet_floor.py:4` advertises `--list` in a form no sweep for the target name finds. The
   round-1 sentence recording what `--list` costs had been dropped in the rewrite and is restored.
-- **Round 3**: pending.
+- **Round 3 (`spec-fidelity`): FAITHFUL.** *"Implement it."* It re-measured each corrected fact -
+  the 25 against `parse()`, `Makefile:1209` as the only `COV_FLOORS=1` assignment in the tree, and
+  `hamlet_floor.py:4` as the only non-target-notation route to `--list` - and ran a last completeness
+  check nobody had: no reference to either target exists in `scripts/`, `l7r/diagram/ci/` or any
+  buildspec, so the removals cannot reach the remote build. Three editorial slips fixed in the same
+  edit: a stale "Three site classes" above four bullets, an SC-003 that had not picked up FR-007's
+  widening, and the status line.

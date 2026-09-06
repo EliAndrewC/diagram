@@ -662,50 +662,8 @@ def format_budget(budget: CityBudget) -> str:
     return "\n".join(out)
 
 
-def main(argv: list[str] | None = None) -> int:
-    """CLI: `python3 citybudget.py --plan --population 3000 [--river] [--agri] [--canvas WxH]`."""
-    ap = argparse.ArgumentParser(description="Budget-first city wall sizing (features 009, 018)")
-    ap.add_argument("--plan", action="store_true", help="print the itemized budget + derived wall")
-    ap.add_argument("--population", type=int, required=True)
-    ap.add_argument("--tier", choices=("provincial", "capital"), default="provincial", help="settlement tier (default: provincial, so every existing invocation is unchanged)")
-    ap.add_argument("--river", action="store_true")
-    ap.add_argument("--agri", action="store_true", help="in-wall agricultural district (Tango-style; provincial tier only)")
-    ap.add_argument("--castle-seat", choices=CASTLE_SEATS, default="ring", help="capital only: where the castle sits ('edge' requires --river)")
-    ap.add_argument("--granary-seat", choices=IMPERIAL_GRANARY_SEATS, default="magistrate", help="capital only: where the Emperor's granaries sit")
-    ap.add_argument("--aspect", type=float, default=0.93)
-    ap.add_argument("--nring", type=int, default=20)
-    ap.add_argument("--canvas", type=str, default=None, help="WxH px, e.g. 3200x2700")
-    args = ap.parse_args(argv)
-    canvas = None
-    if args.canvas:
-        cw, ch = args.canvas.lower().split("x")
-        canvas = (float(cw), float(ch))
-    try:
-        if args.tier == "capital":
-            # Refuse rather than silently ignore: dropping a flag the GM typed is how a wrong wall
-            # gets trusted.
-            if args.agri:
-                raise ValueError("--agri is not available at capital tier - a domain capital walls its farms out, enclosing all its inhabitants and no farmland (GM 2026-08-08)")
-            budget = plan_capital(
-                CapitalProgram(population=args.population, river=args.river, castle_seat=args.castle_seat, imperial_granary_seat=args.granary_seat, aspect=args.aspect, nring=args.nring),
-                canvas=canvas,
-            )
-            print(format_budget(budget))
-            return 0
-        budget = plan_city(CityProgram(population=args.population, river=args.river, agricultural_district=args.agri, aspect=args.aspect, nring=args.nring), canvas=canvas)
-    except ValueError as e:
-        import sys
-
-        print(f"ERROR: {e}", file=sys.stderr)
-        return 1
-    print(format_budget(budget))
-    return 0
-
-
-if __name__ == "__main__":
-    from l7r.diagram._invocation import guard
-
-    # REFUSE unless invoked through this project's make (feature 127). At the TOP of the
-    # entry point, never in a loop - the determination reads /proc and is cached per process.
-    guard("l7r.diagram.citybudget")
-    raise SystemExit(main())
+# THE CLI WAS REMOVED (feature 195, GM 2026-09-06: "delete `make citybudget` since we're not using
+# it and won't for some time and might use a different shape of tool by the time we get to that
+# point"). The MODULE stays: `wip/shiro_daika/frame.py` and the three frozen city exhibits import
+# it, and live tests price the tango/nagahara programs through it. So the planner can no longer
+# be RUN - it is a library now, and a future city tier will bring its own entry point.

@@ -1,7 +1,10 @@
 """THE HAMLET-PATH COVERAGE FLOOR (feature 145, GM 2026-08-28).
 
-    python3 -m l7r.diagram.tools.hamlet_floor           # the check: every hamlet-path module at 100%, or exit 1
-    python3 -m l7r.diagram.tools.hamlet_floor --list    # the module set, one path per line
+    The CHECK runs as a phase of `make test-full` (and so of `make done`): every hamlet-path module
+    at 100%, or exit 1. There is no `make` route to this module on its own any more - `make
+    hamlet-floor` was retired 2026-09-06 (feature 195, GM: *"we already use it on `test-full`"*).
+    `--list` still exists as a flag and is still tested, but nothing reachable invokes it: asking
+    for the module set without running the gate is the capability that retirement gave up.
 
 WHAT IT ENFORCES. The GM: *"we will maintain one hundred percent code coverage on the scripted procedure
 and anything related to it, and that that will be maintained as we expand it ... I want that threshold

@@ -186,7 +186,7 @@ def _reason() -> str:
 
 # THE OPERATION REGISTRY: module -> (make target, cost).
 #
-# ENUMERATED, NEVER INFERRED. The 20 entry points do not divide by name, path or package: `tools/`
+# ENUMERATED, NEVER INFERRED. The entry points do not divide by name, path or package: `tools/`
 # holds both a 25-minute cohort and a manifest read, and `why_placed` LOOKS like a diagnostic while
 # calling `runpy.run_path` on a gen - it re-runs the generator. Any heuristic over module paths
 # misclassifies in both directions, and a misclassified cheap operation that starts prompting is how
@@ -205,15 +205,19 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
     "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
-    "l7r.diagram.tools.hamlet_floor": (
-        "hamlet-floor",
-        "cheap",
-    ),  # feature 145: the derived 100% floor on the hamlet path; rolls only what is not yet recorded  # feature 141: the check census rolls the reference and a polder stage by stage
+    # RE-POINTED, not removed (feature 195): `make hamlet-floor` is gone, but this module still
+    # carries `if __name__ == "__main__":`, so `test_operations_registry._entry_points()` counts
+    # it and a missing row fails the gate - and the block cannot go either, because the gate runs
+    # the module as a program. `test-full` is the target that actually runs it, so the refusal a
+    # bare `python3 -m` earns still names a command that works.
+    # COST STAYS `cheap` ON PURPOSE: it prices this MODULE's operation. Flipping it to `expensive`
+    # would make `test-full` remotely dispatchable and give it its own S3 cache location
+    # (`ci/__main__.py`, `dispatch.py`). Do not "correct" it.
+    "l7r.diagram.tools.hamlet_floor": ("test-full", "cheap"),
     "l7r.diagram.tools.cache_audit": ("cache-audit", "expensive"),
     "l7r.diagram.tools.placement_stages": ("placement-stages", "expensive"),
     "l7r.diagram.tools.why_placed": ("why-placed", "expensive"),
     "l7r.diagram.compound": ("compound", "expensive"),
-    "l7r.diagram.citybudget": ("citybudget", "cheap"),
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
 }

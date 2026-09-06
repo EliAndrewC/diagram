@@ -197,7 +197,7 @@ open across three features without anyone noticing it was never checked. Read 2h
 worklist, 2h is why nothing was failing over it.
 
 `research: rendering`. Whoever picks this up: the worklist is generated straight off the FULL run's
-hamlet-floor table, and `make hamlet-floor` lists the modules under it.
+hamlet-floor table; the module set is derived by `tools/hamlet_floor.py` (no make route since feature 195).
 
 ## The caption-over-a-building rule was cut, and its whole apparatus is still standing
 

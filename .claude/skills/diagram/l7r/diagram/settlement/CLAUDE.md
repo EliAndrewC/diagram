@@ -61,7 +61,7 @@ test in the suite patches a settlement module-level name (census in
 ## Coverage
 
 **Two floors since feature 145 (GM 2026-08-28), and a placement rule for other-tier code.** Every module of this package that a scripted hamlet
-roll executes owes 100% - the set is DERIVED from the roll cache's records (`make hamlet-floor` lists it;
+roll executes owes 100% - the set is DERIVED from the roll cache's records (`hamlet_floor --list`;
 `tools/hamlet_floor.py` carries the why) and enforced by the gate; a town/city-only module owes
 nothing there.
 

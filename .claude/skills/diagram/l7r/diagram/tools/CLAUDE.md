@@ -26,7 +26,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | I want to look closely at one spot on a rendered map, in manifest coordinates | `crop_map` |
 | How long does this loop actually take, and where does the time go? | `timings` |
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
-| Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` (`make hamlet-floor`) |
+| Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` - a phase of `make test-full`, with no make route of its own |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.

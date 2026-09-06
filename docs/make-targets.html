@@ -28,19 +28,19 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 55 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 53 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make cov-file</td><td class=a>FILE MOD</td><td>which lines of MOD does ONE test file reach?</td></tr>
+<tr><td class=n>make cov-file</td><td class=a><div class=ad><span class=an>FILE=&lt;test path&gt;</span><span class=aw>the test file to run</span></div><div class=ad><span class=an>MOD=&lt;module path&gt;</span><span class=aw>the module to report coverage for - e.g. `l7r/diagram/settlement/houses.py`</span></div></td><td>which lines of MOD does ONE test file reach?</td></tr>
 <tr><td class=n>make durations</td><td class=a><div class=ad><span class=an>FULL=1</span><span class=aw>also profile `tests/full/` (default: it is ignored, so this is the quick tree only)</span></div><div class=ad><span class=an>MARK=&lt;expr&gt;</span><span class=aw>a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)</span></div><div class=ad><span class=an>N=&lt;rows&gt;</span><span class=aw>how many of the slowest rows to print (default: 12)</span></div></td><td>where the suite&#x27;s time goes - run when a target feels slow</td></tr>
 <tr><td class=n>make hooks-test</td><td class=a>&ndash;</td><td>run every scripts/test-*-hooks.sh, and prove each guard still has a companion</td></tr>
 <tr><td class=n>make idle-tests<span class='b off' title="arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand">inactive</span></td><td class=a>&ndash;</td><td>what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done` <span class=w>arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand</span></td></tr>
 <tr><td class=n>make page-check</td><td class=a>&ndash;</td><td>the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push</td></tr>
-<tr><td class=n>make quick</td><td class=a>ALL</td><td>tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure</td></tr>
+<tr><td class=n>make quick</td><td class=a><div class=ad><span class=an>ALL=1</span><span class=aw>run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)</span></div></td><td>tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure</td></tr>
 <tr><td class=n>make soak<span class='b off' title="tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green">inactive</span></td><td class=a>&ndash;</td><td>the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/) <span class=w>tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green</span></td></tr>
 <tr><td class=n>make test<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>the pytest phase itself (internal - `done` and `test-full` call it, not you)</td></tr>
-<tr><td class=n>make test-file</td><td class=a>FILE</td><td>run ONE test file, whole</td></tr>
+<tr><td class=n>make test-file</td><td class=a><div class=ad><span class=an>FILE=&lt;path&gt;</span><span class=aw>the one test file to run, whole - e.g. `tests/pipeline/test_gencache.py`</span></div></td><td>run ONE test file, whole</td></tr>
 <tr><td class=n>make test-full</td><td class=a>&ndash;</td><td>the gate&#x27;s whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)</td></tr>
 <tr><td class=n>make tooling</td><td class=a>&ndash;</td><td>run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes</td></tr>
 <tr><td class=n>make verify</td><td class=a>&ndash;</td><td>THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)</td></tr>
@@ -49,12 +49,11 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <p class=sec>Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cache-audit</td><td class=a>&ndash;</td><td>does using the generation cache change any map?</td></tr>
-<tr><td class=n>make citybudget</td><td class=a>ARGS</td><td>the city/capital space-budget planner</td></tr>
-<tr><td class=n>make cohort</td><td class=a>N</td><td>roll N seeds and report every failure</td></tr>
-<tr><td class=n>make compound</td><td class=a>ARGS</td><td>draw a Mode A compound plan</td></tr>
-<tr><td class=n>make hamlet</td><td class=a>ARGS PROFILE</td><td>generate one hamlet from the CLI</td></tr>
-<tr><td class=n>make map</td><td class=a>GEN PROFILE</td><td>regenerate ONE gen and gate it</td></tr>
-<tr><td class=n>make maps</td><td class=a>SCOPE</td><td>regenerate and check the pool, picking its own scope from how the last run went</td></tr>
+<tr><td class=n>make cohort</td><td class=a><div class=ad><span class=an>N=&lt;seeds&gt;</span><span class=aw>how many seeds to roll (default: 48)</span></div></td><td>roll N seeds and report every failure</td></tr>
+<tr><td class=n>make compound</td><td class=a><div class=ad><span class=an>ARGS=&lt;out.svg&gt;</span><span class=aw>where to write the composed draft</span></div></td><td>compose a DRAFT Mode A compound plan from a feet-based program - a starting point the GM then refines by hand</td></tr>
+<tr><td class=n>make hamlet</td><td class=a><div class=ad><span class=an>ARGS=&lt;cli args&gt;</span><span class=aw>passed to the hamletgen CLI - e.g. `&quot;--name Foo --seed 4 --households 15&quot;`</span></div><div class=ad><span class=an>PROFILE=1</span><span class=aw>also print where the roll spent its time, stage by stage</span></div></td><td>generate one hamlet from the CLI</td></tr>
+<tr><td class=n>make map</td><td class=a><div class=ad><span class=an>GEN=&lt;gen path&gt;</span><span class=aw>which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)</span></div><div class=ad><span class=an>PROFILE=1</span><span class=aw>also print where the roll spent its time, stage by stage</span></div></td><td>regenerate ONE gen and gate it</td></tr>
+<tr><td class=n>make maps</td><td class=a><div class=ad><span class=an>SCOPE=reference|all</span><span class=aw>override the scope; by default it picks its own - the reference hamlet alone after a failed run, the whole tier after a clean one</span></div></td><td>regenerate and check the pool, picking its own scope from how the last run went</td></tr>
 <tr><td class=n>make placement-stages</td><td class=a>&ndash;</td><td>re-plate the stage-by-stage walk-through page</td></tr>
 <tr><td class=n>make pool-index</td><td class=a>&ndash;</td><td>rebuild the pool index</td></tr>
 <tr><td class=n>make pool-index-if-stale<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>rebuild the pool index only when a manifest, render or notes file is newer</td></tr>
@@ -63,34 +62,33 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Diagnostics</h2>
 <p class=sec>Read-only questions about a finished map or a generator&#x27;s decisions. None of these decides what ships.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make hamlet-floor</td><td class=a>&ndash;</td><td>the modules under the 100% hamlet-path floor - derived from the scripted rolls&#x27; records (feature 145)</td></tr>
-<tr><td class=n>make notes-census</td><td class=a>M</td><td>refresh the derived counts inside each map&#x27;s notes census block</td></tr>
-<tr><td class=n>make pack-audit</td><td class=a>&ndash;</td><td>empty space and geometry in a Mode A compound SVG</td></tr>
-<tr><td class=n>make why-placed</td><td class=a>AT GEN REFUSED</td><td>who placed this, and what refused to</td></tr>
+<tr><td class=n>make notes-census</td><td class=a><div class=ad><span class=an>M=&lt;glob&gt;</span><span class=aw>which manifests to refresh (default: every manifest in both pool trees)</span></div></td><td>refresh the derived counts inside each map&#x27;s notes census block</td></tr>
+<tr><td class=n>make pack-audit</td><td class=a><div class=ad><span class=an>ARGS=&lt;in.svg&gt;</span><span class=aw>the Mode A compound SVG to measure</span></div></td><td>empty space and geometry in a HAND-DRAWN Mode A compound SVG</td></tr>
+<tr><td class=n>make why-placed</td><td class=a><div class=ad><span class=an>GEN=&lt;gen path&gt;</span><span class=aw>the map to ask about</span></div><div class=ad><span class=an>AT=x,y</span><span class=aw>what was PLACED at this point, and by which stage</span></div><div class=ad><span class=an>REFUSED=x,y</span><span class=aw>what was REFUSED here, and which rule refused it</span></div></td><td>who placed this, and what refused to</td></tr>
 </table></div>
 <h2>Performance</h2>
 <p class=sec>The bookends and the three bands. A run that got slower owes records before the push.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make perf</td><td class=a>LABEL</td><td>take a performance snapshot of the reference hamlet across its seeds</td></tr>
-<tr><td class=n>make perf-audit</td><td class=a>AS COMMENSURATE NECESSARY NO_WAY_AROUND VERDICT</td><td>band 2 - the subagent adjudicates</td></tr>
-<tr><td class=n>make perf-confirm<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>AS VERDICT</td><td>band 1, second half - the perf-audit SUBAGENT runs this</td></tr>
-<tr><td class=n>make perf-explain</td><td class=a>ENV WHY</td><td>band 1, first half: the session&#x27;s written cause</td></tr>
+<tr><td class=n>make perf</td><td class=a><div class=ad><span class=an>LABEL=&lt;NNN&gt;-start|&lt;NNN&gt;-end</span><span class=aw>which bookend this snapshot is (default: `adhoc`, which counts as neither)</span></div></td><td>take a performance snapshot of the reference hamlet across its seeds</td></tr>
+<tr><td class=n>make perf-audit</td><td class=a><div class=ad><span class=an>VERDICT=justified|not-justified|cannot-determine</span><span class=aw>the band-2 adjudication</span></div><div class=ad><span class=an>NECESSARY=&lt;text&gt;</span><span class=aw>is the slowdown necessary?</span></div><div class=ad><span class=an>COMMENSURATE=&lt;text&gt;</span><span class=aw>is it commensurate with the functionality gained?</span></div><div class=ad><span class=an>NO_WAY_AROUND=&lt;text&gt;</span><span class=aw>was there no good way around it?</span></div><div class=ad><span class=an>AS=perf-audit</span><span class=aw>who is recording - only the subagent may pass this</span></div></td><td>band 2 - the subagent adjudicates</td></tr>
+<tr><td class=n>make perf-confirm<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a><div class=ad><span class=an>VERDICT=consistent|inconsistent</span><span class=aw>whether the written cause matches the recorded per-stage delta</span></div><div class=ad><span class=an>AS=perf-audit</span><span class=aw>who is recording - only the subagent may pass this, and nothing else distinguishes the shells</span></div></td><td>band 1, second half - the perf-audit SUBAGENT runs this</td></tr>
+<tr><td class=n>make perf-explain</td><td class=a><div class=ad><span class=an>WHY=&lt;text&gt;</span><span class=aw>the session&#x27;s written cause for a band-1 increase</span></div><div class=ad><span class=an>ENV=local|codebuild</span><span class=aw>which environment the increase was measured in (default: local)</span></div></td><td>band 1, first half: the session&#x27;s written cause</td></tr>
 <tr><td class=n>make perf-gate</td><td class=a>&ndash;</td><td>require the feature&#x27;s -start bookend, take -end, and FAIL on a regression</td></tr>
-<tr><td class=n>make perf-profile</td><td class=a>SEED STAGE</td><td>tier 2 evidence: cProfile ONE stage of ONE seed</td></tr>
-<tr><td class=n>make perf-report</td><td class=a>AGAINST ENV</td><td>the trend, and which BAND the newest bookend pair reaches</td></tr>
+<tr><td class=n>make perf-profile</td><td class=a><div class=ad><span class=an>SEED=&lt;n&gt;</span><span class=aw>which seed to profile - e.g. `25`</span></div><div class=ad><span class=an>STAGE=&lt;name&gt;</span><span class=aw>which single stage to cProfile - e.g. `web`</span></div></td><td>tier 2 evidence: cProfile ONE stage of ONE seed</td></tr>
+<tr><td class=n>make perf-report</td><td class=a><div class=ad><span class=an>AGAINST=&lt;NNN&gt;-start</span><span class=aw>compare the newest snapshot against this bookend</span></div><div class=ad><span class=an>ENV=local|codebuild</span><span class=aw>which environment&#x27;s band-1 line to judge against (default: local)</span></div></td><td>the trend, and which BAND the newest bookend pair reaches</td></tr>
 <tr><td class=n>make perf-review</td><td class=a>&ndash;</td><td>does every environment&#x27;s newest bookend pair carry the records its band owes? (the push runs this)</td></tr>
-<tr><td class=n>make perf-signoff</td><td class=a>WHY</td><td>band 3 - the GM, at a terminal</td></tr>
+<tr><td class=n>make perf-signoff</td><td class=a><div class=ad><span class=an>WHY=&lt;text&gt;</span><span class=aw>the GM&#x27;s own reason, given at a terminal - band 3</span></div></td><td>band 3 - the GM, at a terminal</td></tr>
 </table></div>
 <h2>Remote (AWS CodeBuild)</h2>
 <p class=sec>Everything except `ci-status` costs money. Remote is currently OFF; `make switches` says so.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make ci-check</td><td class=a>FULL NO_GO TARGET</td><td>run the SOAK suite on CodeBuild (PAID)</td></tr>
+<tr><td class=n>make ci-check</td><td class=a><div class=ad><span class=an>FULL=1</span><span class=aw>full scope instead of reference; PROMPTS, and cancels by default</span></div><div class=ad><span class=an>TARGET=&lt;make target&gt;</span><span class=aw>which target the build runs - e.g. `cohort` (default: the soak suite)</span></div><div class=ad><span class=an>NO_GO=1</span><span class=aw>prove the self-abort path: start the build and never send the go signal</span></div></td><td>run the SOAK suite on CodeBuild (PAID)</td></tr>
 <tr><td class=n>make ci-image</td><td class=a>&ndash;</td><td>rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)</td></tr>
-<tr><td class=n>make ci-measure</td><td class=a>COMPUTE FULL</td><td>MEASURE what the remote gate costs (PAID, prompts)</td></tr>
-<tr><td class=n>make ci-merge</td><td class=a>FULL</td><td>the push&#x27;s gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh</td></tr>
-<tr><td class=n>make ci-off</td><td class=a>REASON</td><td>REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done</td></tr>
-<tr><td class=n>make ci-on</td><td class=a>REASON</td><td>REMOTE ON - the default; the gated route may dispatch again</td></tr>
-<tr><td class=n>make ci-status</td><td class=a>ROUTE</td><td>free: delta, route, verification state, verified lookup, remote spend</td></tr>
+<tr><td class=n>make ci-measure</td><td class=a><div class=ad><span class=an>FULL=1</span><span class=aw>measure the full-scope pair as well as reference</span></div><div class=ad><span class=an>COMPUTE=&lt;codebuild type&gt;</span><span class=aw>which instance size to measure on - e.g. `BUILD_GENERAL1_LARGE`</span></div></td><td>MEASURE what the remote gate costs (PAID, prompts)</td></tr>
+<tr><td class=n>make ci-merge</td><td class=a><div class=ad><span class=an>FULL=1</span><span class=aw>full scope; PROMPTS, and cancels by default</span></div></td><td>the push&#x27;s gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh</td></tr>
+<tr><td class=n>make ci-off</td><td class=a><div class=ad><span class=an>REASON=&lt;text&gt;</span><span class=aw>why remote is being switched off - recorded with who and when</span></div></td><td>REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done</td></tr>
+<tr><td class=n>make ci-on</td><td class=a><div class=ad><span class=an>REASON=&lt;text&gt;</span><span class=aw>why remote is being switched back on - recorded with who and when</span></div></td><td>REMOTE ON - the default; the gated route may dispatch again</td></tr>
+<tr><td class=n>make ci-status</td><td class=a><div class=ad><span class=an>ROUTE=1</span><span class=aw>print just DIRECT|GATED instead of the whole condition table</span></div></td><td>free: delta, route, verification state, verified lookup, remote spend</td></tr>
 </table></div>
 <h2>Static checks</h2>
 <p class=sec>What the gate runs before it spends anything on a map roll.</p>
@@ -107,10 +105,10 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make bypass-audit</td><td class=a>&ndash;</td><td>every escape token taken, with the reason its user gave   (the FULL prompt reads this)</td></tr>
 <tr><td class=n>make commit-permitted</td><td class=a>&ndash;</td><td>commit the most recent bypass-log entry, which is how a paid FULL run is authorized</td></tr>
 <tr><td class=n>make docs</td><td class=a>&ndash;</td><td>regenerate docs/make-targets.html from this Makefile&#x27;s own `##` lines</td></tr>
-<tr><td class=n>make engine-key</td><td class=a>REF</td><td>the content hash the gate and the push key on</td></tr>
+<tr><td class=n>make engine-key</td><td class=a><div class=ad><span class=an>REF=&lt;commit&gt;</span><span class=aw>which commit to key (default: HEAD)</span></div></td><td>the content hash the gate and the push key on</td></tr>
 <tr><td class=n>make help</td><td class=a>&ndash;</td><td>list every target with its one-line purpose</td></tr>
 <tr><td class=n>make switches</td><td class=a>&ndash;</td><td>the iteration switch: remote on|off, with reason, who and when (feature 132)</td></tr>
-<tr><td class=n>make tick</td><td class=a>BOXES F NOTE T</td><td>tick a task: F=188 T=T03 NOTE=&quot;what was verified&quot; [BOXES=1 ticks the research boxes]</td></tr>
+<tr><td class=n>make tick</td><td class=a><div class=ad><span class=an>F=&lt;feature&gt;</span><span class=aw>the feature number or slug - e.g. `188`</span></div><div class=ad><span class=an>T=&lt;task&gt;</span><span class=aw>the task id - e.g. `T03`</span></div><div class=ad><span class=an>NOTE=&lt;text&gt;</span><span class=aw>what was VERIFIED, which is what the tick is asserting</span></div><div class=ad><span class=an>BOXES=1</span><span class=aw>also tick the three physical-research boxes (only legitimate on a `research: physical` task)</span></div></td><td>tick a task: F=188 T=T03 NOTE=&quot;what was verified&quot; [BOXES=1 ticks the research boxes]</td></tr>
 </table></div>
 <footer>Generated by <code>scripts/make-docs.py</code>. <code>make docs</code> regenerates it; the gate fails if it is stale.</footer>
 </main>

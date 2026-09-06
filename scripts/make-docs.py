@@ -81,7 +81,10 @@ def parse(makefile: Path) -> tuple[list[dict[str, str]], list[str]]:
         tail = text[m.end():].lstrip("\n")
         argdocs = []
         for line in tail.splitlines():
-            am = re.match(r"^##\s+([A-Z][A-Z0-9_]*)=(\S*)\s\s+(.*)$", line)
+            # the VALUE may contain spaces (`FILE=<test path>`), so it runs non-greedily up to the
+            # two-space separator. `(\S*)` broke on exactly those and, because a miss BREAKS the loop,
+            # silently dropped every argument of four targets rather than just the one line.
+            am = re.match(r"^##\s+([A-Z][A-Z0-9_]*)=(.*?)\s\s+(.*)$", line)
             if not am:
                 break
             argdocs.append({"name": am.group(1), "takes": am.group(2), "desc": am.group(3).strip()})
