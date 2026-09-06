@@ -32,3 +32,21 @@ covering both**: that `timings` produces `timings.md`, which `dev/loop.md` cites
 of authority - so that record loses its producer; and that "no recorded use" is the argument that
 wrongly deleted `citybudget` earlier the same day, so each removal is verified individually rather
 than as a batch.
+
+## The GM's ruling on the corrected record (2026-09-06)
+
+After being told that the first audit was wrong in three ways - `pack_audit` has live consumers and
+a standing GM ruling preserving it, `sun_audit`'s rules ARE live in the placer, and the quoted cost
+was roughly double the real figure:
+
+> The six plus sun audit, please.  Because the placer should already do the job sun audit is
+> auditing, so there's no need for that rule.  If pack_audit is used in the magistracy diagrams then
+> that's fine to keep though.
+
+**Read as**: remove SEVEN (the six plus `sun-audit`); keep `pack_audit`. The reason given for
+`sun-audit` is that the PLACER already enforces what the tool measures - which is true and measured
+(`hamletgen/homesteads/stages.py:46` calls `s.sun_corridor(SUN_CORRIDOR_FT)`, and `west_sun_lane`
+gates the grove). **"no need for that rule" is read as "no need for that AUDIT"**: the GM is
+justifying removal of the tool by the placer's enforcement, not asking for the placer's sun rules to
+be deleted. Those stay. If that reading is wrong it is cheap to correct and expensive to guess at,
+so it is stated here rather than assumed silently.
