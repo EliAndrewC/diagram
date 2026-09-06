@@ -18,16 +18,25 @@ from l7r.diagram.interactive.classes._base import install_siblings
 SNAPSHOT = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "classes_before_189.json"
 
 
-def test_the_registry_equals_the_snapshot_field_by_field() -> None:
+def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present() -> None:
+    """The conversion proof, in two halves. The DATA fields (key, name, covers, label, sources, entry,
+    siblings) are class attributes and constants the docstring move never touched; they must equal the
+    snapshot permanently - only a CODE edit (which costs the gate) could change them. The PROSE fields
+    (what, why, label_note, caveat) were proven equal to the snapshot field by field at the conversion
+    commit (`d6d86346`, gate green 2026-09-05, 2,982 passed) - and are NOT pinned here, because a later
+    prose edit is exactly what feature 189 exists to make cheap: pinning it would fail `make page-check`
+    on every reworded explanation. Here they are only required to be present."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     assert sorted(before) == sorted(CLASSES) and len(CLASSES) == 51
-    assert list(CLASSES) == [k for k in before] or True  # order is proved separately below
     for key, was in before.items():
         fc = CLASSES[key]
-        for field in ("what", "why", "label_note", "caveat", "label", "name", "covers", "entry"):
+        for field in ("label", "name", "covers", "entry"):
             assert getattr(fc, field) == was[field], (key, field)
         assert tuple(fc.sources) == tuple(was["sources"]), key
         assert fc.siblings == was["siblings"], key
+        assert fc.what and fc.why and fc.label_note, key
+        if fc.caveat:
+            assert fc.caveat in fc.label_note, key
 
 
 def test_the_order_is_the_spec_s_and_comes_from_the_families_in_sequence() -> None:
