@@ -131,6 +131,53 @@ def test_the_bypasses_produce_and_store_nothing(tmp_path, monkeypatch, var):
     assert rollcache.obtain("toy", produce)[1] == "MISS", "a bypassed roll left nothing behind to serve"
 
 
+# FEATURE 192 SPLIT THIS PROPERTY IN TWO, and the split is the feature. The parametrized test above
+# still holds for every subject it names - `toy` is not a `report:` roll - but the FULL bypass now
+# RECORDS its `report:` rolls, because the floor that reads those records was re-rolling the same maps
+# for a measured 401.6 s. `GATE_NO_CACHE` keeps its documented leave-nothing-behind contract, and these
+# cases exist so a future edit cannot quietly merge the two again.
+def test_the_FULL_bypass_records_a_report_roll_and_a_later_run_can_serve_it(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    rollcache.reset_shared()
+    assert rollcache.obtain("report:toy", produce) == ({"value": 7}, "BYPASS-STORED")
+    assert rollcache.obtain("report:toy", produce)[1] == "BYPASS-STORED", "the FULL run still PRODUCES every time - never served"
+    assert Path(rollcache._entry("report:toy")).exists(), "the record the hamlet-path floor reads"
+    monkeypatch.delenv(rollcache.FULL_ENV)
+    assert rollcache.obtain("report:toy", produce)[1] == "HIT", "a later non-FULL run serves what the FULL run recorded - the whole saving"
+
+
+def test_GATE_NO_CACHE_still_stores_nothing_even_for_a_report_roll(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`GATE_NO_CACHE=1` is the documented 'regenerate everything, leave nothing behind' escape
+    (gencache.py). `bypassed()` is true for it AND for the FULL run, so the two are easy to conflate;
+    feature 192 changed only the FULL one."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(gencache.GATE_BYPASS, "1")
+    rollcache.reset_shared()
+    assert rollcache.obtain("report:toy", produce) == ({"value": 7}, "BYPASS")
+    assert not Path(rollcache._entry("report:toy")).exists()
+
+
+def test_GATE_NO_CACHE_wins_when_both_are_set(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`GATE_NO_CACHE=1 make done` is a real, documented recovery, so both variables are set together."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(gencache.GATE_BYPASS, "1")
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    rollcache.reset_shared()
+    assert rollcache.obtain("report:toy", produce)[1] == "BYPASS"
+    assert not Path(rollcache._entry("report:toy")).exists(), "the leave-nothing-behind escape must win"
+
+
+def test_the_FULL_bypass_stores_nothing_for_a_NON_report_subject(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Confinement (FR-004): only `report:` rolls feed the floor. `hamlet:` is the shared fixture path
+    and `test:` rolls are monkeypatched; recording them would buy nothing and widen the blast radius."""
+    _, _, produce = _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    rollcache.reset_shared()
+    assert rollcache.obtain("hamlet:toy", produce)[1] == "BYPASS"
+    assert not Path(rollcache._entry("hamlet:toy")).exists()
+
+
 def test_report_deps_records_once_and_then_reads_the_record(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """`report_deps` (feature 145, the hamlet-path floor): the first call rolls and records, the second returns the
     record without rolling - and it is never bypassed, unlike `obtain`."""

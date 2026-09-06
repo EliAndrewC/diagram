@@ -1,76 +1,137 @@
 # 192 - The gate rolls once
 
-**Status**: draft
+**Status**: draft, round 2
 **Request**: [request.md](request.md)
 **Diagnosis**: `specs/191-refusals-that-tell-the-truth/research.md` R7
 
 ## Why
 
-The gate rolls the same eight maps TWICE on a cold roll cache, and the second time costs ~400 s -
-about half the gate's wall clock.
+On a cold roll cache the gate's floor phase rolls seven maps, four of which the suite has ALREADY
+rolled moments earlier under the same subject. That phase measured **401.6 s** on an instrumented
+run - about half the gate's wall clock - against ~1 s warm.
 
-`rollcache.obtain()` bypasses SERVING under `L7R_TESTS_FULL=1` (which the gate always sets), because
-a served roll executes nothing the coverage floors could see. Correct. But the bypass branch returns
-`produce(), "BYPASS"` **without calling `gencache.record(...)`**, so the suite's rolls leave no
-dependency record behind. `hamlet_floor` then derives the hamlet path from those records, finds
-none, and - by its own documented design, *"Never bypassed"* - rolls all eight subject specs itself.
+`rollcache.obtain()` bypasses SERVING under `L7R_TESTS_FULL=1` (which the gate always sets, via
+`Makefile:1130`), because a served roll executes nothing the coverage floors could see. Correct. But
+the non-shared bypass returns at line 173 - `return produce(), "BYPASS"` - before ever reaching the
+`gencache.record(...)` tail, so those rolls leave no dependency record. `hamlet_floor` derives the
+hamlet path from exactly those records, finds none, and (by its own documented design, *"Never
+bypassed"*) rolls its subjects itself.
 
-Measured (191 R7): a 401.6 s gap between the end of pytest and `hamlet-floor`'s first line, on a
-cold cache; ~1 s warm. The `[HIT]`/`[MISS]` flag printed on every gate's reference line predicts it,
-3 for 3.
+**What the fix actually removes, counted rather than asserted** (corrected at review round 1, which
+found the first draft's "the same eight maps TWICE" wrong for four of the eight):
+
+| floor subject | who else rolls it as `report:` | after this feature |
+|---|---|---|
+| Inashiro seed 4 | the `_reference` phase, which is NOT bypassed and writes the record before pytest starts | already not re-rolled today |
+| cohort seeds 41-44 | `tests/gate/hamletgen/test_driver.py:44` via `rollcache.report(spec)`, under FULL | **FIXED - 4 rolls removed** |
+| Polder 12, Polder 19 | nobody. The suite rolls these as `hamlet:{spec!r}` - a different subject and a different code path (`plan_site+build+finish` vs `hg.generate` with the gate and re-roll loop) | still a FIRST roll in the floor |
+| Polder seed 8 | nothing in the tree rolls it in any form | still a FIRST roll in the floor |
+
+So the floor rolls **seven** subjects cold and this feature removes **four**. On R7's own arithmetic
+(~57 s per roll) roughly **170 s of floor rolling remains**, and it is a first roll rather than a
+duplicate - no bypass-recording can remove it, because nothing else produces those records.
 
 ## Requirements
 
-- **FR-001** A bypassed roll RECORDS its dependencies. The suite's own rolls leave records the floor
-  can read, so the floor does not re-roll what the suite just rolled.
-- **FR-002** Nothing about SERVING changes. The bypass still PRODUCES on every call, so every line
-  the coverage floors judge is still executed. This feature must not make a served roll possible
-  where one is not possible today.
-- **FR-003** The recorded deps are written where they CANNOT cause a stale payload to be served -
-  see D1. The serve path is untouched.
-- **FR-004** Recording is confined to the subjects the floor actually consumes (`report:` rolls),
-  not every bypassed roll.
-- **FR-005** `report_deps` consults the new record before rolling.
-- **FR-006** The `done` ratchet baseline is re-pinned to the measured WARM cost, with a written
-  reason resting on 191 R7 (the GM's authorization covers this explicitly).
+- **FR-001** A roll bypassed **because `L7R_TESTS_FULL=1`** records its dependencies and stores its
+  entry. **`GATE_NO_CACHE=1` is explicitly NOT included**: it is the documented "regenerate
+  everything, leave nothing behind" escape (`gencache.py:568`), the GM did not ask to change it, and
+  `bypassed()` is true for both - so the two must be told apart rather than treated as one.
+- **FR-002** Nothing about SERVING under FULL changes: the bypass still PRODUCES on every call, so
+  every line the coverage floors judge is still executed. What changes is only what is left behind.
+- **FR-003** The entry is written as `payload.pickle` + `meta.json` TOGETHER, exactly as the MISS
+  path does, preserving the pair invariant `_place` exists to hold (D1).
+- **FR-004** Recording is confined to `report:` subjects, which is what the floor consumes. The
+  residual this leaves is stated in the table above rather than discovered from a slower-than-promised
+  run.
+- **FR-005** `report_deps` needs NO change - it already reads `meta.json`, which FR-003 now writes.
+- **FR-007** `hamlet_floor.subjects()` drops `Polder seed=8`. **AUTHORIZED AND MEASURED, in that
+  order.** The GM ruled *"I defer to you on whether that Polder seed eight earns its place or not
+  because I am not familiar with that code. If you take a look and find that it does not seem to be
+  doing anything, then we should remove it."* Measured from the recorded `report:` deps of all eight
+  subjects: seed 8 reaches **83 modules, of which 0 are reached by no other subject**. Its entire
+  contribution to the floor's module set - the floor's ONLY output - is already made by the other
+  seven, while it costs a full roll (~57 s) on every cold cache. Disclosed limit on the finding: it
+  is the only polder subject with `down_deg=None`, so it does exercise a distinct CONFIGURATION; at
+  module granularity, which is what the GM chose for this floor, that configuration reaches nothing
+  new. If the floor ever becomes line-level this decision must be revisited.
+- **FR-006** The `done` ratchet baseline is re-pinned to **400 s** - the figure in the GM's own
+  authorization - with the reason resting on 191 R7. A materially different measurement goes back to
+  the GM rather than being pinned by this session.
 
 ## Decisions Recorded
 
-- **D1 - the deps go in their OWN file (`deps.json`), NOT in `meta.json`. This is a correctness
-  decision, not tidiness.** The obvious implementation - have the bypass write `meta.json` the way
-  the MISS path does, minus the payload - introduces a way to SERVE STALE BYTES, and it was caught
-  while designing rather than in production:
-  1. a normal run rolls, writing `meta.json` (key K1) and `payload.pickle` (K1's bytes);
-  2. engine code changes, so the key becomes K2;
-  3. a FULL run bypasses, rolls, and writes `meta.json` with key K2 - the OLD payload is still on disk;
-  4. a later normal run reads `meta.json`, finds K2 matching the current engine, opens
-     `payload.pickle`, and serves **K1's bytes as if they were K2's**.
-  A separate `deps.json` that only `report_deps` reads cannot do this: the serve path still requires
-  a `meta.json`/`payload.pickle` pair written together, exactly as today.
-- **D2 - overhead was MEASURED before the design was chosen, not assumed.** One Inashiro roll:
-  23.75 s plain, 23.60 s under `gencache.record` (0.99x - within noise, 803 dep entries captured).
-  Recording is free, so there is no trade-off to price and no reason to confine it further than
-  FR-004 already does.
-- **D3 - `report:` only.** `hamlet_floor` consumes `report:` rolls. `hamlet:` rolls are the shared
-  fixture path (feature 147) and `test:` rolls are monkeypatched; neither feeds the floor, and
-  recording them would buy nothing.
+- **D1 - a `deps.json` side-file was DESIGNED AND REJECTED. Recorded because it is a dead end worth
+  not re-walking.** The first draft had the bypass write deps to their own file, on the reasoning
+  that writing `meta.json` alone - the payload withheld - would let a later run serve stale bytes:
+  meta rewritten with the current key while `payload.pickle` still held bytes from an older key, so
+  the serve path (which validates the key on meta and then unpickles the payload with no key of its
+  own) would hand back the old bytes as the new. **That hazard is real** - `_place` lands meta last
+  precisely so the pair is only ever valid together. But it is a hazard of a HOBBLED implementation:
+  the bypass has the payload in hand, so letting it fall through to `obtain()`'s existing
+  record-and-store tail writes the pair together, keeps the invariant exactly as it is today, needs
+  no new file and no new read path, and is about three lines. The side-file was solving a problem
+  created by an unnecessary constraint.
+- **D2 - a FULL-run payload is byte-identical to a MISS-run payload, so caching it is safe.**
+  Verified at review: `L7R_TESTS_FULL` is read in exactly two places in the tree - `rollcache.py:51`
+  and `tests/_scope.py:25` - and `_scope` selects WHICH tests and specs run, never engine behavior
+  inside a roll. This is what makes FR-003 legitimate rather than a shortcut; without it, storing a
+  payload produced under FULL would be storing bytes from a different program.
+- **D3 - overhead was MEASURED before the design was chosen.** One Inashiro roll: 23.75 s plain,
+  23.60 s under `gencache.record` (0.99x - within noise; 803 dep entries). Disclosed limit: that was
+  measured outside a coverage-traced pytest process, which is where FR-001 puts the recording. The
+  mechanism is sound (`gencache.record` uses `sys.monitoring.PROFILER_ID`, coverage does not share
+  it), but the number under coverage is unverified and SC-001's instrumented run is what confirms it.
+- **D4 - the three polder subjects are ACCEPTED as a residual, not fixed.** Removing them would mean
+  either changing what the suite rolls (a `report:` roll where it now does a `hamlet:` one, which
+  costs the suite the difference) or changing the floor's subject list (which changes what the floor
+  MEASURES - a coverage-floor decision, not a performance one). Neither is what the GM authorized.
 
 ## Out of scope
 
-- The ratchet's population mixing (a median over warm and cold runs describes neither). Recorded in
-  191 R7 as a separate decision; FR-006 re-pins the baseline, it does not redesign the comparison.
-- The self-sustaining run-log behavior (a run that FAILS the ratchet is still logged `green`, so it
-  feeds the median that failed it). Deliberate per the Makefile's own comment; noted, not changed.
+- The ratchet's population mixing (a median over warm and cold runs describes neither) and the
+  run-log behavior where a run that FAILS the ratchet is still logged `green` and so feeds the
+  median that failed it. Both recorded in 191 R7; deliberate per the Makefile's own comment.
+- (`Polder seed=8` was out of scope in round 2 and is now FR-007 - the GM ruled on it between
+  rounds. Its removal takes the floor's cold-cache rolls from seven to six, on top of the four
+  removed by FR-001.)
 
 ## Success Criteria
 
-- **SC-001** After a cold-cache `make done`, `hamlet_floor` finds records and does not roll: the
-  post-pytest gap falls from ~400 s to seconds, measured on an instrumented run.
-- **SC-002** No roll is ever SERVED under `L7R_TESTS_FULL=1`. Asserted.
-- **SC-003** The stale-payload sequence in D1 cannot occur: a `deps.json` written by a bypassed roll
-  does not make `obtain` serve anything. Proven by constructing that exact state in a test.
+- **SC-001** On an instrumented cold-cache `make done`, the post-pytest gap falls from ~400 s to
+  **roughly 170 s** - four of seven rolls removed, not "to seconds". The number is stated so the run
+  either meets it or contradicts it.
+- **SC-002** No roll is SERVED under `L7R_TESTS_FULL=1`. Asserted - this is the property FR-002
+  protects and the whole reason the bypass exists.
+- **SC-003** `GATE_NO_CACHE=1` still leaves nothing behind. The existing assertion
+  (`tests/pipeline/test_rollcache.py:113-131`) covers BOTH bypasses today and must be SPLIT rather
+  than deleted: FULL now stores, `GATE_NO_CACHE` still does not.
 - **SC-004** `make done` green, 100% coverage held.
+- **SC-005** Measured fact to set expectations, not a target: a 400 s baseline yields a 520 s
+  ceiling, and the current median is **543 s**. The re-pin therefore clears the deadlock only once
+  one further run lands under ~520 s and pulls the median down. If that does not happen, the block is
+  not resolved and goes back to the GM rather than being re-pinned again.
 
 ## Review history
 
-(pending `spec-fidelity`)
+- **Round 1 (`spec-fidelity`): CHANGES REQUIRED.** Five items, all accepted: (1) the "eight maps
+  twice" claim was wrong for four of eight - Inashiro's record is written by the un-bypassed
+  `_reference` phase, and the three polders are never rolled as `report:` by anything but the floor,
+  seed 8 by nothing at all; the count is seven rolled, four removed, ~170 s residual. (2) FR-004/D3
+  had to state that residual rather than leave it to be discovered. (3) D1 justified a new file
+  against a hobbled alternative - the fall-through to the existing store tail is simpler and keeps
+  the invariant, so it is adopted and the side-file recorded as a dead end. (4) FR-001 did not
+  distinguish the two bypasses, and would have silently changed `GATE_NO_CACHE`'s documented
+  behavior. (5) FR-006 said "the measured warm cost", which authorizes pinning whatever this session
+  next measures - the exact shape of the re-pin made and reverted this morning; it now names the
+  GM's own 400 s. The reviewer independently confirmed the mechanism (bypass skips `record`,
+  `report_deps` never bypassed, the gate sets FULL), the stale-payload hazard, and the ratchet
+  arithmetic; it could not reproduce R7's 401.6 s gap or D3's overhead numbers, which is stated.
+- **Round 2 (`spec-fidelity`): FAITHFUL.** *"Implement it."* The reviewer walked `obtain()` and
+  confirmed the fall-through preserves the pair invariant (payload first, meta last, both through
+  `_place`), that `bypassed()` does not collapse the two variables so FR-001's split is
+  implementable, and that FR-002 does not overstate. It also WIDENED D2's check unprompted: besides
+  `L7R_TESTS_FULL`, no engine module reads `L7R_TESTS_EXHAUSTIVE` or `L7R_COV_FLOORS` either, so a
+  payload produced inside the gate's pytest process is byte-identical to one from `make quick` on
+  every environment axis - the new serve capability rests on measurement, not assertion.
+- **Round 3**: pending - FR-007 was added after round 2, on the GM's ruling.
