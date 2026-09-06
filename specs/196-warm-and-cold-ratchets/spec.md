@@ -1,6 +1,6 @@
 # 196 - Warm and cold ratchets
 
-**Status**: draft, round 3
+**Status**: draft, round 4
 **Request**: [request.md](request.md) (the GM's words, verbatim)
 **Rests on**: `specs/191-refusals-that-tell-the-truth/research.md` R5 and R7 (192's `research.md` does
 not exist; the round-1 draft cited it and was wrong)
@@ -9,8 +9,8 @@ not exist; the round-1 draft cited it and was wrong)
 
 `make done`'s cost is bimodal on ROLL-CACHE STATE, and the ratchet medians over both populations, so
 the number it judges describes neither. **The run log records no cache state today** - that is what
-FR-001 adds - so the classification below comes from this session's own instrumented gate logs, where
-the `[HIT]`/`[MISS]` line was captured:
+FR-001 adds - so the classification below comes from this session's own instrumented gate logs,
+except for one run which is INFERRED and labeled:
 
 | cache | runs (seconds as the run log records them) | how classified |
 |---|---|---|
@@ -21,11 +21,29 @@ the `[HIT]`/`[MISS]` line was captured:
 
 **Cold median 549, ceiling 713.**
 
+**THE CIRCULARITY OBJECTION TO THE INFERRED 549, AND THE ANSWER**, because a future reader will raise
+it first: *"you inferred the class from the cost, then computed the class's baseline from it."* The
+inference does NOT rest on the duration. It rests on two facts independent of it - the run sits
+between a cold 610 and a warm 379 **on the same commit**, and it was taken while `hamlet_floor` and
+`scatter_audit` were being edited, which invalidates the roll cache by construction. It also moves the
+bar the SAFE way: including it gives 549/713, excluding it gives 577/750, so the inference tightens
+the guard rather than buying slack - a different risk class from every other error in this spec's
+history. And it is self-checking: if it is wrong and 549 was warm, then 549 exceeds the warm 520
+ceiling and D5's rule fires.
+
+**THE MEMBERSHIP RULE, stated once because getting it wrong is what went wrong three times**: a run
+enters a class only where THIS session holds its instrumented verdict line - or, for the single
+inferred run, the labeled reasoning above. 522, 544, 610 and 651 are this session's gates for features
+192, 193 and 195 (544's record was committed by `cb4a815ec` during 193's work, which is why its
+provenance is not obvious from the commit alone).
+
 **THIS POPULATION HAS NOW BEEN CORRECTED THREE TIMES, EVERY TIME IN THE PERMISSIVE DIRECTION, and
 that is the reason the number is disclosed as session-pinned rather than presented as measured**:
 round 1 wrote "525, 546, 651" (seconds in no run log) and called their median 550 (it is 546); round 2
 wrote 577 over four runs, missing the 549 that belongs in the set and wrongly counting 388, another
-session's run, as evidenced warm. Each error made the bar looser. The warm class rests on a SINGLE
+session's run, as evidenced warm. **Both were looser than the final 713 - by 2 s and by 37 s
+respectively** - stated with magnitudes so the record does not leave 577 standing as a number that was
+ever right. It never was. The warm class rests on a SINGLE
 evidenced run (379) against the GM's ratified 400.
 
 The last twelve green runs spread **379-895 s (2.4x)**. Against that, a single median crossed a 520 s
@@ -48,8 +66,18 @@ evidence that this one failed.
 ## Requirements
 
 - **FR-001** A run-log entry records the roll-cache state: `warm`, `cold`, or the field absent when
-  unknown. The tell already exists - `_reference` prints `[HIT]`/`[MISS]` - so this captures a fact
-  the run already established.
+  unknown. The tell already exists - `_reference` prints the verdict `rollcache.obtain()` returned.
+  **The rule is SEMANTIC, not an enumeration of two values**: `HIT` means the roll was SERVED, so the
+  run is `warm`; **anything else means it was PRODUCED, so the run is `cold`**. That covers `MISS`,
+  `BYPASS` and `BYPASS-STORED` - and it does not go stale when a seventh return value is added, which
+  an enumeration would.
+  **This matters, and the round-3 draft got it wrong in the worst direction.** `bypassed()` is true
+  for `GATE_NO_CACHE=1` as well as the full run, so `GATE_NO_CACHE=1 make done` makes `_reference`
+  print `[BYPASS]` - a path `Makefile:1016`'s own `[HIT]` message advertises (*"GATE_NO_CACHE=1 rolls
+  it"*). Under a two-value rule that run had no class and fell to FR-004's warm ceiling, so **the
+  strictest bar would have judged the slowest run the gate can produce** - a guaranteed false failure
+  on a documented escape. Only a run with NO MARKER AT ALL (`REF_OK`, or a marker write that failed)
+  is unknown.
 - **FR-002** `_gatecost.median_seconds` can be asked for one class. An entry with no cache field is
   excluded from a class query: it cannot be classified, and guessing would put cold runs in the warm
   population, which is the defect being fixed. **The class filter is applied BEFORE the `RECENT = 25`
@@ -62,7 +90,8 @@ evidence that this one failed.
     `check()` returns OK when that floor is `None` - so replacing the field with two new ones
     silently switches off the guard added on 2026-09-05 after a `make -n done` minted a push
     credential. `baseline` stays and remains the WARM figure; the cold one is additive.
-  - **549 is a number THIS SESSION measured and pinned**, not one the GM ratified. Feature 192's
+  - **549 is a number THIS SESSION measured and pinned - a median over five runs, one of which is
+    INFERRED rather than evidenced** (see the Why), not a figure the GM ratified. Feature 192's
     FR-006 requires saying so, after this session pinned 385 from a fresh median (`e5283ca9`) and
     reverted it (`07bcdfa2`). If a fuller sample moves it materially it goes back to the GM.
   - **Each class carries its OWN written reason** (feature 171 FR-010). `test_ratchets.py:107`
@@ -128,7 +157,9 @@ evidence that this one failed.
   (pre-fix), and **895** - which post-dates the fix by six hours on the clock but ran from a
   191-session clone (`536dbf56`) whose tree did not carry it. The round-1 draft said "the 804 s run";
   there is no 804 in the log, and a timestamp rule would have admitted the 895.
-- **D4 - this does NOT re-pin the warm baseline.** 400 s stands; measured warm runs agree with it.
+- **D4 - this does NOT re-pin the warm baseline.** 400 s stands, and the ONE warm run this session
+  can evidence (379 s) agrees with it. It is the GM's ratified figure, and feature 192's FR-006 forbids
+  re-deriving it from a fresh measurement - which is what `e5283ca9` did and `07bcdfa2` reverted.
 - **D5 - the warm class rests on ONE evidenced run, and per-run judging makes that SHARPER, not
   safer.** The round-2 draft claimed below-sample judging made a mis-set warm baseline "survivable";
   the opposite is true - if a warm run genuinely costs 549 s, a per-run bar at 520 fails it on the
@@ -169,7 +200,8 @@ evidence that this one failed.
   hours to over a week. Its SC-004 said feature 195 would pass *because* 651 < 715 when it would have
   passed because nothing judged it - the reverse-engineered-outcome shape the review was asked to
   hunt for. The cold baseline's evidence was wrong (seconds that appear in no log, a median that was
-  not the median, five of eight relevant runs) and too LOW: 577, not 550. The citation pointed at a
+  not the median, five of eight relevant runs). Its 550 gave a 715 ceiling, 2 s looser than the final
+  713; round 2's 577 gave 750, 37 s looser. The citation pointed at a
   `research.md` that does not exist; the Why claimed the run log records cache state one screen above
   the requirement that adds it; D3 excluded "the 804 s run", which is not in the log, on a timestamp
   rule that would have admitted the 895 s run whose tree lacks the fix; the per-row `reason` test
@@ -189,4 +221,15 @@ evidence that this one failed.
   `compare="median"` without naming it, that D5's mitigation was backwards, and that the search space
   covered the `baseline` field but not the CLASS chain, which is the part that would have made the
   feature inert.
-- **Round 3**: pending.
+- **Round 3 (`spec-fidelity`): CHANGES REQUIRED**, five items. The substantive one is a SECOND
+  instance of round 2's defect class, found by walking `bypassed()` rather than re-reading the spec:
+  `GATE_NO_CACHE=1` makes `_reference` print `[BYPASS]`, so the round-3 rule left the slowest run the
+  gate can produce with no class and judged it against the STRICTEST ceiling - a guaranteed false
+  failure on an escape the gate's own message advertises. FR-001's rule is now semantic (served vs
+  produced) rather than an enumeration of two values. The reviewer also ADJUDICATED the two questions
+  put to it: the warm baseline is defensible on one run precisely because the session is not deriving
+  it, and the inferred 549 is better than excluding it because it tightens the bar - but the
+  circularity objection had to be stated and answered, which it now is. Four record corrections: the
+  Why's lead-in claimed every classification was captured, the round-1 history left 577 standing as
+  once-right, D4 said "runs" plural, and the membership rule was never stated.
+- **Round 4**: pending.
