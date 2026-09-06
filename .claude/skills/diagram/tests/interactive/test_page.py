@@ -423,8 +423,8 @@ def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
 
 def test_the_citations_come_from_the_research_entries() -> None:
     """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
-    keys = research_sources("research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'")
-    assert "forests-2020" in keys
+    keys = research_sources("research/homesteads.html - 'What stood on a farmstead'")
+    assert "sugiura-1973-fuzoku" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
     assert urls_of("Saitama City (https://www.city.saitama.lg.jp/p077111.html; READ). See https://example.org/a).") == ["https://www.city.saitama.lg.jp/p077111.html", "https://example.org/a"]
@@ -432,9 +432,15 @@ def test_the_citations_come_from_the_research_entries() -> None:
     assert research_sources("nothing here") == []
 
 
-def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_five() -> None:
+def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_eight() -> None:
+    """Five entries the citation pass left without keys (report.md lists them), plus three whose every source lost
+    its citation under feature 195 (GM 2026-09-06, cite only what can be read): the fengshui-forest entry behind
+    `copse` and `windbreak` rested on two MDPI papers nobody here could read (mdpi.com refuses every fetch from
+    this container), and the water-width ladder behind `stream` on the Chinese design standard GB50288, never
+    read. Their rosters are empty until a readable source is found; the labels are listed for the GM in
+    specs/195-cite-only-what-can-be-read/tasks.md and are not changed here (FR-007)."""
     uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
-    assert uncited == ["fallow", "field pond", "field rock", "footbridge", "grave island"], "an entry the citation pass left without keys (report.md lists them)"
+    assert uncited == ["copse", "fallow", "field pond", "field rock", "footbridge", "grave island", "stream", "windbreak"], "an entry without a cited key - see the docstring for the eight known ones"
     for k, fc in CLASSES.items():
         for key in research_sources(fc.entry):
             assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"

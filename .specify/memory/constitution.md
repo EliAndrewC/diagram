@@ -1,7 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.17.0 → 2.18.0
+Version change: 2.18.0 → 2.19.0
+
+Version 2.19.0 (amended 2026-09-06, feature 195): Principle XII gains "CITE ONLY WHAT CAN BE READ" - a
+citation carries a passage that backs the assertion AND a link to a public page where that passage can be
+read, or the source is not cited; this SUPERSEDES the 2026-08-27 clause (v2.11.1) that let a claim from a
+summary of an unread source be asserted and cited labeled SUMMARY-ONLY - a summary is not a page. The record
+keeps a SUMMARY-ONLY entry as the record of what was searched, never as a citation; an assertion with nothing
+readable behind it carries an absence note. GM 2026-09-06.
+
 
 Version 2.18.0 (amended 2026-09-06, feature 194): Principle XII gains "QUOTE WHAT YOU CITE" - a
 reference supports an assertion by QUOTING the passage(s) of the source that support it, as a
@@ -1426,24 +1434,31 @@ support something, then in our references section, we quote the passage or passa
 support the assertion that we are making. There is no point in including a reference if it is not being
 quoted."* A citation is a footnote at the assertion that carries the source's key, its link and the quoted
 passage(s) verbatim - one footnote per assertion, *"even if this means multiple footnote links per paragraph or
-even multiple per sentence in sentences which make multiple assertions"*; a source that could not be read quotes
-the summary it was recorded from and says so. The `quote-check` agent confirms, before the entry lands, that the
+even multiple per sentence in sentences which make multiple assertions"*; a source whose text cannot be read on a public page is not cited at all (v2.19.0, below). The `quote-check` agent confirms, before the entry lands, that the
 quote is on the page, that it supports the assertion it is attached to, and that every relevant assertion has a
 footnote; a `research: physical` task carries `quote-check confirmed` beside `source-reader confirmed`. The
-record is HTML (`research/*.html`), its footnotes shown on hover, and the maps link to it locally.
+\g<0>
+**CITE ONLY WHAT CAN BE READ** (v2.19.0, GM 2026-09-06, feature 195): *"If we are linking to online sources whose content which is quotable from public sources does not support our claims then we should not cite it. For example, even if a given source is "known" to support a point we are making, if we are not able to simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a page on the public internet where that quote can be read, then we should NOT be claiming that the source supports us."* So a citation has two halves that must both
+hold - a quoted passage that backs the assertion, and a link to a page on the public internet where that passage
+can be read - or the source is not cited. A summary, an abstract that does not carry the passage, a library
+landing page, a paywalled or login-walled text, a page in another language that does not contain the quoted words:
+none of these is such a page. This supersedes the 2026-08-27 ruling below that let a claim from a search summary be
+asserted and cited labeled SUMMARY-ONLY: the claim MAY still be asserted, labeled as resting on no readable source
+(an ABSENCE note in the footnote's place: no key, no link, what was searched and when), and the registry entry
+stays as the record of the search - but nothing is cited. The one carve-out is the GM's own campaign notes
+(`l7r.md`, `budgets.md`), which are the setting's canon rather than a source claimed to support a historical
+point, quoted in full in their footnote and linked to their registry entry (`URL: none`). The `quote-check` agent
+returns READABLE / NOT-READABLE per footnote and a NOT-READABLE footnote does not land as a citation;
+`tests/interactive/test_footnotes.py` holds the two footnote forms.
 
 **READ WHAT YOU CITE** (GM 2026-08-27, feature 133 T44). A source is cited only after the session
 has read it - the page or paper itself, fetched and read, not a search engine's summary of it and
 not another page's paraphrase - and the finding written down is what THAT text says, in its own
 context. The failure this guards against is the academic one: a paper cited for the opposite of
 what it found, by someone who skimmed one passage, or who inherited another writer's
-mischaracterization and read the source to confirm it. Where a source cannot be fetched (a
-paywall, a blocked host), the claim MAY still be asserted and the source still cited - the GM's
-ruling, 2026-08-27: *"it is perfectly acceptable for us to assert a claim ... even if we are only
+mischaracterization and read the source to confirm it. Where a source cannot be fetched (a paywall, a blocked host), the claim MAY still be asserted but the source is NOT cited (v2.19.0 above, GM 2026-09-06, superseding the ruling of 2026-08-27 that read: *"it is perfectly acceptable for us to assert a claim ... even if we are only
 able to see a search summary of a paywalled paper ... as long as we document when we cite the
-source that we were relying on a search summary of a paywall paper rather than the paper itself"* -
-so the entry says which it was: READ, or SUMMARY-ONLY (not read, with what was seen). The one
-thing forbidden is citing a summary as if the text had been read. The GM's own words on the level of
+source that we were relying on a search summary of a paywall paper rather than the paper itself"*) - the registry entry records what was searched and seen, labeled SUMMARY-ONLY, and the assertion carries an absence note; a footnote cites only a page where its passage can be read. The GM's own words on the level of
 
 **A WORLD TASK CARRIES ITS RESEARCH AS CHECKBOXES** (GM 2026-08-27, feature 133 T46). *"anytime
 we have a documented requirement that requires that we remember to do something, then there is
@@ -2072,4 +2087,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.17.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-05
+**Version**: 2.19.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-06
