@@ -25,7 +25,11 @@ how a place was built, farmed or lived in, so the three physical-research boxes 
 - [x] T07 `research: rendering` FR-008: `report_deps` delegates to `_produce_and_store`; the store
       exists in ONE body, as its docstring claims.
 - [x] T08 `research: rendering` SC-004: `make done` green, 100% coverage held.
-- [ ] T09 `research: rendering` SC-001 closed on a post-FR-007 COLD run.
+- [x] T09 `research: rendering` SC-001 CLOSED on a post-FR-007 COLD run - **floor phase 114.0 s**
+      against SC-001's predicted ~115 s, on a genuinely cold cache (`[MISS]` reference line), gate
+      green at exit 0, **88 modules** on the hamlet path (unchanged - the floor measures the same set
+      it did before) and 22,992 statements at 100%. The arc, all three cold: **401.6 s -> 175.3 s**
+      (FR-001) **-> 114.0 s** (FR-007).
       **TICKED ONCE BEFORE IT HAD RUN, and unticked at review round 5 - the error is worth keeping.**
       A task is ticked on VERIFICATION, not on launch; the run I ticked it for short-circuited in 0 s
       as `already-verified` and rolled nothing, which is exactly the single-digit-seconds shape of the

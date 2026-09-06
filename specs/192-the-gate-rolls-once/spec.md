@@ -148,7 +148,10 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
 
 - **SC-001** On an instrumented cold-cache `make done`, the post-pytest gap falls from ~400 s to
   **roughly 115 s** - five of seven rolls removed (four by FR-001, one by FR-007).
-  **STATUS: FR-001's half is MEASURED, FR-007's is PREDICTED.** The 401.6 s -> 175.3 s run was taken
+  **STATUS: MET, both halves measured on cold runs (T09).** 401.6 s -> 175.3 s (FR-001) -> **114.0 s**
+  (FR-007), against the ~115 s predicted here; 88 modules throughout. The paragraph below records how
+  the first of those numbers was nearly mis-claimed, because that is the transferable part.
+  **FR-001's half was MEASURED, FR-007's was PREDICTED, until T09 closed it.** The 401.6 s -> 175.3 s run was taken
   BEFORE FR-007 landed, which the cache entries date precisely: that run's floor phase wrote a
   `report:` record for Polder 8 at 13:37:26, and nothing but the floor rolls that spec. So 175.3 s is
   the FOUR-removed number, correctly measured against a five-removed criterion. It corroborates
@@ -213,4 +216,19 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
   also verified the seven- and eight-subject module unions are SET-IDENTICAL rather than merely the
   same size, checked all four search-space sites landed, and confirmed the implementation matches -
   noting the four cohort records written during pytest as evidence of `BYPASS-STORED` working.
-- **Round 5**: pending - the last round the cap allows.
+- **Round 5 (`spec-fidelity`): CHANGES REQUIRED**, two mechanical items, neither in `spec.md`, both
+  now done. (1) **T09 was ticked before it had run.** The run it was ticked for short-circuited in
+  0 s as `already-verified` and rolled nothing - the single-digit-seconds shape of the "dry run
+  granted a push" defect fixed the same day. The instrument was missing a third element I had not
+  reasoned out: emptying `.gencache/rolls` cannot produce a cold gate while a green verification
+  record stands, because the short-circuit is keyed on engine content, so
+  `.git/verification-state.json` must go too. Unticked, re-run properly, and closed on 114.0 s.
+  (2) The Makefile backtick fix had landed in the feature's commits and appeared in none of its
+  artifacts; it is T10 now, recorded as a constitution-XIV find and deliberately NOT promoted to a
+  requirement. The reviewer censused it further than I had: 89 `: "..."` lines in the skill Makefile,
+  zero now carrying a backtick, none in the root Makefile.
+  **Explicitly NOT an escalation case**, in the reviewer's words: *"The cap exists to end an argument
+  about what was asked, and there is no such argument left ... I would sign it as it stands. Each
+  round has found new and smaller things - the feature-169 pattern the doctrine says the cap must not
+  cut off ... Both are verifiable by this session without another review round; do them and land it."*
+  **VERDICT: FAITHFUL on the specification**, with the two artifact corrections applied.
