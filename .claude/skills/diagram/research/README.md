@@ -6,21 +6,21 @@
 
 | Research file | Grounds the rules in |
 |---|---|
-| [`archetypes.md`](archetypes.md) | [`../settlements/archetypes.md`](../settlements/archetypes.md) |
-| [`buildings.md`](buildings.md) | [`../buildings.md`](../buildings.md) |
-| [`cities/capitals.md`](cities/capitals.md) | [`../settlements/capitals.md`](../settlements/capitals.md) |
-| [`cities/defenses.md`](cities/defenses.md) | [`../settlements/cities/defenses.md`](../settlements/cities/defenses.md) |
-| [`cities/fabric.md`](cities/fabric.md) | [`../settlements/cities/fabric.md`](../settlements/cities/fabric.md) |
-| [`cities/government.md`](cities/government.md) | [`../settlements/cities/government.md`](../settlements/cities/government.md) |
-| [`cities/hinterland.md`](cities/hinterland.md) | [`../settlements/cities/hinterland.md`](../settlements/cities/hinterland.md) |
-| [`cities/river-cities.md`](cities/river-cities.md) | [`../settlements/cities/river-cities.md`](../settlements/cities/river-cities.md) |
-| [`fields.md`](fields.md) | [`../settlements/fields.md`](../settlements/fields.md) |
-| [`homesteads.md`](homesteads.md) | [`../settlements/homesteads.md`](../settlements/homesteads.md) |
-| [`religion-and-death.md`](religion-and-death.md) | [`../settlements/religion-and-death.md`](../settlements/religion-and-death.md) |
-| [`towns.md`](towns.md) | [`../settlements/towns.md`](../settlements/towns.md) |
-| [`urban-features.md`](urban-features.md) | [`../settlements/urban-features.md`](../settlements/urban-features.md) |
-| [`vegetation.md`](vegetation.md) | [`../settlements/vegetation.md`](../settlements/vegetation.md) |
-| [`water.md`](water.md) | [`../settlements/water.md`](../settlements/water.md) |
+| [`archetypes.html`](archetypes.html) | [`../settlements/archetypes.md`](../settlements/archetypes.md) |
+| [`buildings.html`](buildings.html) | [`../buildings.md`](../buildings.md) |
+| [`cities/capitals.html`](cities/capitals.html) | [`../settlements/capitals.md`](../settlements/capitals.md) |
+| [`cities/defenses.html`](cities/defenses.html) | [`../settlements/cities/defenses.md`](../settlements/cities/defenses.md) |
+| [`cities/fabric.html`](cities/fabric.html) | [`../settlements/cities/fabric.md`](../settlements/cities/fabric.md) |
+| [`cities/government.html`](cities/government.html) | [`../settlements/cities/government.md`](../settlements/cities/government.md) |
+| [`cities/hinterland.html`](cities/hinterland.html) | [`../settlements/cities/hinterland.md`](../settlements/cities/hinterland.md) |
+| [`cities/river-cities.html`](cities/river-cities.html) | [`../settlements/cities/river-cities.md`](../settlements/cities/river-cities.md) |
+| [`fields.html`](fields.html) | [`../settlements/fields.md`](../settlements/fields.md) |
+| [`homesteads.html`](homesteads.html) | [`../settlements/homesteads.md`](../settlements/homesteads.md) |
+| [`religion-and-death.html`](religion-and-death.html) | [`../settlements/religion-and-death.md`](../settlements/religion-and-death.md) |
+| [`towns.html`](towns.html) | [`../settlements/towns.md`](../settlements/towns.md) |
+| [`urban-features.html`](urban-features.html) | [`../settlements/urban-features.md`](../settlements/urban-features.md) |
+| [`vegetation.html`](vegetation.html) | [`../settlements/vegetation.md`](../settlements/vegetation.md) |
+| [`water.html`](water.html) | [`../settlements/water.md`](../settlements/water.md) |
 
 ## Every entry carries one of three labels (GM 2026-08-26, constitution XII)
 

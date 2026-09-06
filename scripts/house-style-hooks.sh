@@ -64,6 +64,13 @@ if not body:
 # gm-request.md is a verbatim transcript of the GM speaking - correcting it would defeat its purpose
 if "/host-l7r-repo" in path or path.endswith("l7r.md") or "gm-request.md" in path:
     print(""); raise SystemExit
+# A FILE OUTSIDE THE PROJECT IS NOT PROJECT CONTENT (2026-09-06): the rule is project-wide, and a session
+# scratchpad under /tmp is not the project. Measured the day the quotation exemption landed: three of five
+# reader agents writing verbatim page text into /tmp/.../result.json each had their dashes and spellings
+# rewritten, each noticed only by diffing, and each worked around the guard with chr() escapes - a guard that
+# fires on correct work is one that gets worked around (CLAUDE.md, "deliberately NOT enforced").
+if path.startswith("/tmp/"):
+    print(""); raise SystemExit
 if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|test_hooks_cases\.py)$", path):
     print(""); raise SystemExit
 # a SOURCE block inside the added text is the GM speaking; drop it before looking
