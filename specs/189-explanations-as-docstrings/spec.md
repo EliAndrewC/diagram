@@ -1,6 +1,11 @@
 # Feature 189 - a feature class's explanation is its docstring
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5) - cleared for implementation (constitution XVI).
+Round 1 returned three items: the byte-hashed stamp area reached six modules that hold no moved prose
+(narrowed to the registry files); the package split was projected, not measured (now conditional on the
+emitted line count - measured at 1,195 lines for the class bodies alone, about 1,500 for a single module,
+so the split is taken); and the place card's deferral rested on a preference (now on its real obstacle -
+interpolated, per-map composed text). Round 2 returned none.
 **Request**: [`request.md`](request.md) - the GM's words verbatim
 **Predecessors**: feature 188 D4 (recorded that a prose edit in `classes.py` still costs the full gate,
 "for now"); feature 134 (the class registry); 156 (the presumption of accuracy - `lead`, `caveat`)
@@ -12,7 +17,7 @@ The GM's observation is correct: the gate's key is the docstring-stripped AST (`
 string constant is. Today every modal's explanation - `what`, `why`, the label note, the caveat - is a
 string constant in `interactive/classes.py`, so rewording one costs the nine-minute gate.
 
-So each feature class becomes a small Python class whose docstring IS its explanation, in a tagged form
+So each of the 51 feature classes becomes a small Python class whose docstring IS its explanation, in a tagged form
 the registry parses at import. The documentation in the code is literally the text on the page, which is
 the property the GM wants. A prose edit then costs the 26-second `make page-check` (the registry's own
 tests and the browser test) and nothing more; a code edit to the same files still costs the gate.
@@ -42,9 +47,14 @@ point.
 - **FR-002** `FeatureClass` and every consumer are unchanged: `page.py`, `place.py` and the tests keep
   reading `fc.what`, `fc.why`, `fc.label_note`, `fc.caveat`, `fc.siblings` exactly as today. The registry
   builds each `FeatureClass` from its class at import; `CLASSES` keeps the spec FR-007 insertion order.
-- **FR-003** The registry becomes a PACKAGE, `interactive/classes/`, because 52 class definitions with
-  docstrings pass the 1,000-line bar (`classes.py` is 923 lines today and would grow). Modules by feature
-  family, each with its own docstring saying what it holds: `_base.py` (the dataclass, `Label`,
+- **FR-003** The registry becomes a PACKAGE, `interactive/classes/`, IF AND ONLY IF the converted single
+  module MEASURES past the 1,000-line bar (constitution X clause 13, gated since feature 173). `classes.py`
+  is 923 lines today with 51 entries at about 11.8 lines each; the class form is about the same length,
+  and the parser and helpers can move to a `_base.py` either way - so the outcome is genuinely either side
+  of the bar and is decided by the number the conversion script emits, recorded in T02. Below the bar the
+  registry stays one `classes.py` (plus `_base.py` if that keeps it under) and nothing else in this
+  requirement applies. Past the bar, modules by feature family, each with its own docstring saying what
+  it holds: `_base.py` (the dataclass, `Label`,
   `ANNOUNCED`, the lead and phrase functions, the parser), `homestead.py` (farmhouse to persimmon),
   `greenery.py` (the two bamboos, windbreak, copse, woodland commons, scrub, marsh), `fields.py` (paddy to
   fallow), `water_and_ways.py` (stream to notice board), `dikepond.py` (fish pond to perimeter dike),
@@ -68,17 +78,22 @@ point.
 
 ### What a prose edit costs afterwards (FR-007 to FR-008)
 
-- **FR-007** `gate-stamp.py`'s `page` area (feature 188) widens from `interactive/assets` to the whole
-  `interactive/` package - `*.py`, `*.js`, `*.css` - and that area hashes files by BYTES (a per-area flag;
-  the `diagram` and `hooks` areas keep the semantic id). So a docstring edit in the registry makes the
-  `page` stamp stale and the push owes `make page-check` (26 s), while the `diagram` stamp (semantic) is
-  untouched and no full gate is owed. `make done` stamps both on its phases-run exit, as 188 made it.
-  The route is semantic too (`ci/delta._semantically_changed`), so a prose-only delta is DIRECT: a tweak,
-  no spec-kit feature, no review, no task file.
-- **FR-008** The cost stated and accepted: a COMMENT edit anywhere under `interactive/` now owes the
-  26-second page check where today it owes nothing, because bytes cannot tell a comment from a docstring.
-  Declined: an "AST with docstrings kept, comments dropped" hash for the page area - a third notion of
-  identity for one directory, for a saving of 26 s on comment edits.
+- **FR-007** `gate-stamp.py`'s `page` area (feature 188) widens from `interactive/assets` to exactly the
+  files that carry page prose in docstrings - the registry (`interactive/classes.py`, or the
+  `interactive/classes/` package if FR-003 splits it) - beside the two assets, and the REGISTRY files in
+  that area are hashed by BYTES (a per-area rule; the `diagram` and `hooks` areas keep the semantic id).
+  So a docstring edit in the registry makes the `page` stamp stale and the push owes `make page-check`
+  (26 s), while the `diagram` stamp (semantic) is untouched and no full gate is owed. `make done` stamps
+  both on its phases-run exit, as 188 made it. The route is semantic too (`ci/delta._semantically_changed`),
+  so a prose-only delta is DIRECT: a tweak, no spec-kit feature, no review, no task file. `page.py`,
+  `place.py`, `glossary.py`, `notes.py`, `sources.py` and `tags.py` are NOT in the page area: they hold no
+  moved prose, and a comment edit in them keeps costing nothing.
+- **FR-008** The cost stated and accepted: a COMMENT edit in the registry files now owes the 26-second
+  page check where today it owes nothing, because bytes cannot tell a comment from a docstring. Declined:
+  an "AST with docstrings kept, comments dropped" hash for those files - a third notion of identity for
+  one directory, for a saving of 26 s on comment edits in the one place comments sit beside page prose.
+  An earlier draft byte-hashed the whole `interactive/` package; the review narrowed it to the path that
+  carries the prose, which costs nothing and keeps the purpose.
 
 ### Documentation and tests (FR-009 to FR-010)
 
@@ -96,8 +111,12 @@ point.
 
 - **FR-011** It changes no explanation's TEXT, no glyph, no map. FR-006 is the proof.
 - **FR-012** It does not move the place card's prose (`place.py`: `BASIS`, the `KINDS` descriptions,
-  `COLLISIONS`) into docstrings. Those are the next candidates under the same principle and are recorded
-  as D5 for the GM; the request named "a modal's explanation", which is the class registry.
+  `COLLISIONS`) into docstrings, and the reason is an OBSTACLE rather than a preference: that prose is not
+  static text. `KINDS` interpolates setting numbers (`f"...{HAMLETS_PER_DOMAIN:,}..."`) and `place_card()`
+  COMPOSES its sentences per map from the manifest (the size sentence, the district sentence, the crop
+  sentence, the collisions present), so a docstring cannot hold it as it stands - it would need a template
+  form and a renderer of its own. The place card IS a modal explanation visible in the UI, so the GM's
+  principle reaches it; D5 records it as the next candidate with that obstacle named.
 
 ## Decisions Recorded
 
@@ -105,14 +124,21 @@ point.
   start. Positional paragraphs (first = what, second = why) were declined: a `why` that needs two
   paragraphs would silently become a caveat. Tags are one word each and read as prose headings.
 - **D2 - a package split by feature family**, the exemplar being `settlement/`. Declined: one module of
-  52 classes (over the bar) and one module per class (52 files for 52 docstrings, and an import list
+  51 classes (over the bar) and one module per class (51 files for 51 docstrings, and an import list
   nobody wants to maintain).
 - **D3 - the `page` area hashes bytes.** The one place a docstring must count as a change is the stamp
   that demands the page check; every other identity in the repository stays semantic. Cost in FR-008.
 - **D4 - sibling texts stay constants** (FR-004). Not rendered; a record.
-- **D5 - the place card's prose is next, not now.** `place.py` builds its text per map from `KINDS`,
-  `COLLISIONS` and `BASIS`; the same docstring principle applies and the same page check would cover it.
-  Left for the GM to call, because the request named the class explanations.
+- **D5 - the place card's prose is next, not now, because it is composed, not stored.** `place.py` builds
+  its text per map from `KINDS` (interpolated with setting numbers), `COLLISIONS` and `BASIS`, assembled by
+  `place_card()` from the manifest; a docstring holds one static string. Moving it means designing a
+  template form (a docstring with placeholders the card fills) - a feature of its own. The principle
+  reaches it and the same page check would cover it; the GM decides whether the template form is wanted.
 - **D6 - the conversion is scripted and its output is proven equal to a snapshot** before the old file
-  is deleted; the snapshot is kept as a fixture. Retyping 52 entries by hand is how a word changes
+  is deleted; the snapshot is kept as a fixture. Retyping 51 entries by hand is how a word changes
   without anyone deciding it should.
+- **D7 - `python -OO` strips docstrings, and nothing here runs it.** The standing caveat on prose in
+  docstrings, noted by the review: under `-OO` every `__doc__` is `None`. No make target, buildspec or hook
+  in this repository runs optimized Python, and the registry's parser fails at import with the class
+  named when a docstring is missing, so the failure would be loud on the first import rather than a
+  blank modal. Recorded so the next person who considers `-OO` finds the reason not to.

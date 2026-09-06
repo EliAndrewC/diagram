@@ -30,7 +30,7 @@ if TYPE_CHECKING:
 # not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
 # glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in settlements/homesteads.md).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
-# is `interactive/classes.py`; a kind missing here is a KeyError at draw time, never silent ink.
+# is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}
 # THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 150, GM 2026-08-28 choosing audit A2): the HEAP by the
 # privy or stable (Tohoku, Sugiura 1973) and the PIT - "pits made of earthenware, half buried in the ground at

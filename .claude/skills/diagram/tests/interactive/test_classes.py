@@ -276,14 +276,11 @@ def test_house_style_in_the_prose() -> None:
             assert not british.search(text), fc.key
 
 
-def test_a_sibling_pair_naming_an_unknown_class_is_refused(monkeypatch: object) -> None:
-    from l7r.diagram.interactive import classes as c
-
-    monkeypatch.setattr(c, "_PAIRS", {("house", "no-such-class"): "text"})  # type: ignore[attr-defined]
-    import pytest
+def test_a_sibling_pair_naming_an_unknown_class_is_refused() -> None:
+    from l7r.diagram.interactive.classes._base import install_siblings
 
     with pytest.raises(KeyError):
-        c._install_siblings(tuple(c.CLASSES.values()) if isinstance(c.CLASSES, dict) else tuple(c.CLASSES))
+        install_siblings(list(CLASSES.values()), {("house", "no-such-class"): "text"})
 
 
 @pytest.mark.parametrize(

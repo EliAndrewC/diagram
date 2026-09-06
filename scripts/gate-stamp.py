@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import fnmatch
 import hashlib
 import json
 import subprocess
@@ -59,8 +60,15 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # tuple is THE definition of a page asset (`ci/delta.py` deliberately has none); hashed by bytes, since
     # `semantic_bytes` strips only Python. The pages REGENERATE on landing through the render fingerprint
     # (feature 187), which is the other half of what the GM asked for.
-    "page": (".claude/skills/diagram/l7r/diagram/interactive/assets", ("*.js", "*.css")),
+    # ...AND THE REGISTRY, whose docstrings ARE the page's explanations (feature 189): `classes/*.py` joins
+    # the area, hashed by BYTES (`RAW_AREAS`), because the point of moving the prose into docstrings is that
+    # the semantic id - which strips docstrings - no longer sees a prose edit, so this area must. The other
+    # interactive modules stay out: they hold no page prose, and a comment edit in them costs nothing.
+    "page": (".claude/skills/diagram/l7r/diagram/interactive", ("assets/*.js", "assets/*.css", "classes/*.py")),
 }
+#: Areas whose files are hashed by their BYTES rather than the semantic id - the one place a docstring
+#: must count as a change (spec 189 FR-007 / D3). Everything else in the repository stays semantic.
+RAW_AREAS: frozenset[str] = frozenset({"page"})
 # Subtrees an area does NOT hash. tests/ (feature 132 FR-024, the GM's ruling 2026-08-25, asked and
 # answered "Yes, locally AND on AWS"): a tests-only change owes no gate - not the build, not the local
 # `make done`, and not this stamp, which would otherwise refuse the push for want of a green run. The
@@ -168,11 +176,13 @@ def _excluded(path: str, area_path: str) -> bool:
 
 
 def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
-    return (
-        path.startswith(area_path + "/")
-        and not _excluded(path, area_path)
-        and any(path.endswith(pat.lstrip("*")) for pat in patterns)
-    )
+    # fnmatch on the area-relative path (feature 189): `*` crosses `/` here exactly as it does in the
+    # `git ls-files` pathspec `_area_files` uses, so `*.py` still means every Python file under the area
+    # and `classes/*.py` means the registry's modules and nothing else
+    if not path.startswith(area_path + "/") or _excluded(path, area_path):
+        return False
+    rel = path[len(area_path) + 1 :]
+    return any(fnmatch.fnmatch(rel, pat) for pat in patterns)
 
 
 def semantic_bytes(data: bytes, name: str) -> bytes:
@@ -326,10 +336,10 @@ GATE_RECIPE = "2026-08-31/174-whole-tree-100-no-ratchet"
 # carry, and the first bump's own comment says so - "bump it whenever the gate's STANDARD changes".
 
 
-def hash_files(files: list[Path], root: Path | None = None) -> str:
-    """Content hash of `files`, order-independent (each path is hashed with its own SEMANTIC id),
-    salted with `GATE_RECIPE` so a record taken under an older gate standard cannot satisfy a
-    newer one."""
+def hash_files(files: list[Path], root: Path | None = None, raw: bool = False) -> str:
+    """Content hash of `files`, order-independent (each path is hashed with its own SEMANTIC id - or,
+    for a `RAW_AREAS` area, with the sha of its bytes, so a docstring edit counts), salted with
+    `GATE_RECIPE` so a record taken under an older gate standard cannot satisfy a newer one."""
     h = hashlib.sha256()
     h.update(GATE_RECIPE.encode())
     h.update(b"\0")
@@ -337,7 +347,7 @@ def hash_files(files: list[Path], root: Path | None = None) -> str:
         h.update(str(path).encode())
         h.update(b"\0")
         h.update(
-            content_id(path.read_bytes(), path.name, root).encode()
+            (hashlib.sha256(path.read_bytes()).hexdigest() if raw else content_id(path.read_bytes(), path.name, root)).encode()
             if path.is_file()
             else b"<missing>"
         )
@@ -360,7 +370,7 @@ def write_stamp(area: str) -> int:
     stamp = _stamp_path(root, area)
     if stamp is None:
         return 0  # no git dir to record into; the gate still ran, there is just nowhere to say so
-    stamp.write_text(hash_files(_area_files(root, area_path, patterns), root))
+    stamp.write_text(hash_files(_area_files(root, area_path, patterns), root, raw=area in RAW_AREAS))
     return 0
 
 
@@ -380,7 +390,7 @@ def fresh(area: str, root: Path | None = None) -> int:
         0
         if stamp.is_file()
         and stamp.read_text().strip()
-        == hash_files(_area_files(root, area_path, patterns), root)
+        == hash_files(_area_files(root, area_path, patterns), root, raw=area in RAW_AREAS)
         else 1
     )
 
@@ -396,7 +406,7 @@ def check(base: str, root: Path | None = None) -> int:
         if not any(_matches(c, area_path, patterns) for c in changed):
             continue
         stamp = _stamp_path(root, area)
-        want = hash_files(_area_files(root, area_path, patterns), root)
+        want = hash_files(_area_files(root, area_path, patterns), root, raw=area in RAW_AREAS)
         gate = {"hooks": "make hooks-test", "page": "make page-check"}.get(area, "make done")
         if stamp is None or not stamp.is_file():
             bad.append(
