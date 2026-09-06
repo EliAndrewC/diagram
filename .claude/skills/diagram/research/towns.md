@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested (the ward-to-street shift; jokamachi zoning), researched (the gate-to-yamen axis - not re-read)
 
-**Sources:** `song-architecture-enwiki` (READ: Tang walled wards -> Song shop-lined streets; "curfew" is the entry's gloss), `guanxiang-zdic` (the term; commerce outside the gates SUMMARY-ONLY), `jokamachi-jawiki` (READ: zoning and kinked streets). The gate-to-yamen axis for an ordinary county seat: SUMMARY-ONLY - re-sourced 2026-08-28, feature 143
+**Sources:** [`song-architecture-enwiki`](https://en.wikipedia.org/wiki/Architecture_of_the_Song_dynasty) (READ: Tang walled wards -> Song shop-lined streets; "curfew" is the entry's gloss), [`guanxiang-zdic`](https://zdic.net/hans/%E5%85%B3%E5%8E%A2) (the term; commerce outside the gates SUMMARY-ONLY), [`jokamachi-jawiki`](https://ja.wikipedia.org/wiki/%E5%9F%8E%E4%B8%8B%E7%94%BA) (READ: zoning and kinked streets). The gate-to-yamen axis for an ordinary county seat: SUMMARY-ONLY - re-sourced 2026-08-28, feature 143
 
 Chinese towns - Rokugan's geographic model - were *planned*, not organic: a main avenue ran from the principal (usually south) gate straight to the **government office (yamen)**, which sat on that axis facing south, with the grid divided into blocks by cross streets. Early (Tang) cities walled those blocks into curfew *wards*; by the Song the wards opened into **shop-lined streets** (merchant shophouses fronting the roadbed), and commerce spilled **outside the gates** along the approach road (the *guan-xiang* suburb). Japan copied the Tang grid for its imperial capitals (Nara/Kyoto) but laid out castle towns (*jokamachi*) as zoned districts - samurai by the castle, merchants in trade-blocks, temples at the edge - with deliberately kinked, defensive streets.
 
@@ -24,7 +24,7 @@ Chinese towns - Rokugan's geographic model - were *planned*, not organic: a main
 
 **Evidence:** attested
 
-**Sources:** `kichinyado-jawiki`, `kichinyado-kotobank` (READ: 3 mon in 1611, 6 mon in 1658, 24 + 16-24 mon in 1843); the fuller derivation in [`../flophouse-research.md`](../flophouse-research.md)
+**Sources:** [`kichinyado-jawiki`](https://ja.wikipedia.org/wiki/%E6%9C%A8%E8%B3%83%E5%AE%BF), [`kichinyado-kotobank`](https://kotobank.jp/word/木賃宿-51029) (READ: 3 mon in 1611, 6 mon in 1658, 24 + 16-24 mon in 1843); the fuller derivation in [`../flophouse-research.md`](../flophouse-research.md)
 
 A county seat exists partly *as* the periodic-market center for its hinterland: most peasants come from within a day's round-trip, but those at the far edge of the catchment stay over on market eve in cheap communal lodging - a *kichin-yado* ("firewood-fee inn"), where you sleep on straw under a roof for a sen a night.
 
@@ -34,7 +34,7 @@ A county seat exists partly *as* the periodic-market center for its hinterland: 
 
 **Evidence:** setting-canon
 
-**Sources:** setting-canon - `budgets.md` (tariffs at city and capital gates only; the yoriki audit); the traffic drivers from [`../flophouse-research.md`](../flophouse-research.md) and `guanxiang-zdic`
+**Sources:** setting-canon - `budgets.md` (tariffs at city and capital gates only; the yoriki audit); the traffic drivers from [`../flophouse-research.md`](../flophouse-research.md) and [`guanxiang-zdic`](https://zdic.net/hans/%E5%85%B3%E5%8E%A2)
 
 **The why is TRAFFIC, not taxes (GM 2026-07-24, correcting the rationale ported from the city tier):** towns levy NO import tariffs - budgets.md puts the entire tariff apparatus (the Yasuki Taka gate collection, the tariff-audit yoriki) at provincial-city and capital gates only, ~2,700 manageable collection points instead of an impossible ~14,400 town gates - and the county magistrate's jurisdiction is the whole COUNTY, so standing outside the gate crosses no tax or regulatory line at all. The honest drivers are the ones the city-tier research (flophouse-research.md) validated: through-road travelers (carters, peddlers) buying services without detouring inside, the market-day chokepoint where the rural catchment trades, and late arrivals who find the gate shut at dusk.
 
@@ -46,7 +46,7 @@ A county seat exists partly *as* the periodic-market center for its hinterland: 
 
 **Evidence:** attested
 
-**Sources:** `hutong-enwiki` (READ - the entry's quotation is a paraphrase of "alleys formed by lines of siheyuan ... formed by joining one siheyuan to another to form a hutong", not the page's words)
+**Sources:** [`hutong-enwiki`](https://en.wikipedia.org/wiki/Hutong) (READ - the entry's quotation is a paraphrase of "alleys formed by lines of siheyuan ... formed by joining one siheyuan to another to form a hutong", not the page's words)
 
 The *why* is historical: a street is **access infrastructure for the buildings it serves**, and it is paved or worn into the ground by the foot traffic to and from them - Beijing's *hutong* alleys "emerged as access routes lined by contiguous courtyard residences," and a desire path forms only between real destinations. A planned grid line that never gets built up simply **isn't drawn** (an undeveloped block).
 
@@ -56,6 +56,6 @@ The *why* is historical: a street is **access infrastructure for the buildings i
 
 **Evidence:** attested (terrain-driven irregularity), reconstruction (the cost-per-length reading)
 
-**Sources:** `chinese-city-wall-enwiki`, `thepaper-city-walls` (READ: irregular plans set by topography and by taking high points in). The gully-and-quarter imagery is the entry's own gloss; the cost argument is reasoning
+**Sources:** [`chinese-city-wall-enwiki`](https://en.wikipedia.org/wiki/Chinese_city_wall), [`thepaper-city-walls`](https://m.thepaper.cn/newsDetail_forward_1270378) (READ: irregular plans set by topography and by taking high points in). The gully-and-quarter imagery is the entry's own gloss; the cost argument is reasoning
 
 The *why* is pure economics: a rampart is the single most expensive thing a town builds (rammed earth or stone, maintained for centuries), and its cost scales with its **length**, so a town walls in exactly what it must defend and no more - the line is drawn to skirt the built-up area, not to inscribe a tidy circle around a lot of empty ground. Historically this is why town walls are *irregular*: they kink in to exclude a gully and bulge out around a quarter, following the settlement's actual footprint (and the terrain).

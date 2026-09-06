@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](SOURCES.md#nougyoudoboku-matsutan), [`toro-site`](SOURCES.md#toro-site), [`lacey-regime`](SOURCES.md#lacey-regime) (2026-08-17: the tiers below were re-consulted and sourced - they had stood unsourced since they were written)
+**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`toro-site`](SOURCES.md#toro-site), [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03) (2026-08-17: the tiers below were re-consulted and sourced - they had stood unsourced since they were written)
 
 | Tier | Real width | x field-ditch (true) |
   |---|---|---|
@@ -35,10 +35,10 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested, derived
 
-**Sources:** [`lacey-regime`](SOURCES.md#lacey-regime), [`tabayashi-1986`](SOURCES.md#tabayashi-1986), [`nougyoudoboku-suikou`](SOURCES.md#nougyoudoboku-suikou)
+**Sources:** [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03), [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), [`nougyoudoboku-suikou`](https://nougyoudoboku.com/water-entrance-exit/)
 
 *What prompted it (GM 2026-08-17).* The GM asked whether the supply ditches were right to thin as they
-feed the paddies (they are - that is Tabayashi's rule, already encoded), and then whether it is correct
+feed the paddies (they are - that is [Tabayashi](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/)'s rule, already encoded), and then whether it is correct
 for one to "reach what looks like the current minimum width and then just stop, or if they should
 continue getting thinner for some time" - and whether the widths were researched at all or invented.
 Half of the answer was already here (the taper RULE is Tabayashi's, the width LADDER was written down
@@ -46,7 +46,7 @@ but unsourced); the taper's SHAPE had never been examined.
 
 *What the research found.* Two relations, and between them they fix the profile completely.
 
-- **Width goes as the square root of discharge.** Lacey's regime equation for an unlined alluvial
+- **Width goes as the square root of discharge.** [Lacey](https://doi.org/10.1016/S0022-1694(03)'s regime equation for an unlined alluvial
   canal - which is exactly what these are - gives wetted perimeter `P = 4.75 * sqrt(Q)`, and the
   regime power laws put width at `Q^0.5` against depth `Q^0.33` and velocity `Q^0.17`. This is not a
   new finding so much as a *recovered* one: [the water-width ladder above](#water-width-ladder-the-real-world-tiers)
@@ -124,7 +124,7 @@ width - which would make every delivery's width depend on where it takes off, an
 
 **Evidence:** attested
 
-**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](SOURCES.md#nougyoudoboku-matsutan), [`nougyoudoboku-suikou`](SOURCES.md#nougyoudoboku-suikou), [`tabayashi-1986`](SOURCES.md#tabayashi-1986)
+**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`nougyoudoboku-suikou`](https://nougyoudoboku.com/water-entrance-exit/), [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/)
 
 *The question (GM 2026-08-17).* Should a delivery ditch keep thinning past its drawn minimum - taper away
 to a point - rather than ending at a visible width?
@@ -148,7 +148,7 @@ then hand over to something that is not a channel at all.
 - **And in a PRE-MODERN system the last tier is frequently not a channel at all.** Before land
   consolidation, Japanese paddy was watered 田越し灌漑 (*tagoshi kangai*) - plot-to-plot: water enters
   the head paddy of a string and cascades down through the *aze* from one plot to the next, so the
-  interior plots have no ditch of their own to draw. Tabayashi records the same relationship from the
+  interior plots have no ditch of their own to draw. [Tabayashi](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/) records the same relationship from the
   tenure side: the ditches that bring water to the plot inlets "are often considered parts of the paddy
   fields they serve". Our comb already models this - a column cascades several to ~10 rows past where
   its ditch stops - so the drawn ditch ending mid-field IS the handoff to the cascade, not a line that
@@ -172,7 +172,7 @@ is the tier we deliberately do not draw.
 
 **Evidence:** attested
 
-**Sources:** [`nougyoudoboku-suikou`](SOURCES.md#nougyoudoboku-suikou), [`aze-standard`](SOURCES.md#aze-standard), [`toro-site`](SOURCES.md#toro-site)
+**Sources:** [`nougyoudoboku-suikou`](https://nougyoudoboku.com/water-entrance-exit/), [`aze-standard`](https://www.pref.aomori.lg.jp/soshiki/nourin/noson/files/H2904_nnzusyu_H2911syuusei.pdf), [`toro-site`](SOURCES.md#toro-site)
 
 *The question (GM 2026-08-17).* We draw the earthen bunds running along the banks of the irrigation
 channels. Is that correct - and is the water reaching the paddies through gaps too small to render?
@@ -183,7 +183,7 @@ channels. Is that correct - and is the water reaching the paddies through gaps t
   basin has to be watertight on every side, and the side that faces the ditch is no exception, or the
   plot would simply drain into it. Japanese design puts the terminal channel's bed at -5 to +10 cm
   relative to the field surface with the bund between them, which only works if the bund is unbroken
-  except where an opening is deliberately made. The attested pre-modern case says the same: at Toro the
+  except where an opening is deliberately made. The attested pre-modern case says the same: at [Toro](SOURCES.md#toro-site) the
   canal *and* the bunds were revetted together with the same *yaita* sheet boards, i.e. a bank and a
   bund built as one structure.
 - **The opening is the *mizuguchi* (水口), and it is sub-pixel.** Standard practice is **one intake per
@@ -212,12 +212,12 @@ notching it**, and do not read the unbroken bund as a claim that the paddies are
 
 **Evidence:** attested, derived
 
-**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](SOURCES.md#nougyoudoboku-matsutan), [`lacey-regime`](SOURCES.md#lacey-regime), [`fao-paddy-duty`](SOURCES.md#fao-paddy-duty)
+**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03), [`fao-paddy-duty`](https://www.fao.org/4/u5835e/u5835e00.htm)
 
 *What prompted it.* Having sourced the taper law, the same sources let the ABSOLUTE widths be priced,
 which nothing had ever done - they were multipliers chosen by eye. The answer was that the net was
 about **5-6x oversize**: Inashiro's 20.9-acre (~8.5 ha) fan carries roughly 0.025 m3/s at the puddling
-peak, for which Lacey gives a wetted perimeter near 0.75 m and Manning a ~0.6 m top width on a
+peak, for which [Lacey](https://doi.org/10.1016/S0022-1694(03) gives a wetted perimeter near 0.75 m and Manning a ~0.6 m top width on a
 hand-dug 1:1 earthen section - call it 2.5 to 5 ft depending on how much freeboard and bank you count
 as "the channel". It was drawn at **14 ft**. The GM's ruling (2026-08-17), given the measurement:
 *"we can narrow the widths to be more realistic... update the net to be actual size (at least for
@@ -469,7 +469,7 @@ carries the sketch its fix would follow.
 
 **Evidence:** reconstruction (physics)
 
-**Sources:** `fao-pond-water` (READ: evaporation and seepage as a reservoir's losses); the balance equation itself is textbook hydrology stated from principle, not quoted
+**Sources:** [`fao-pond-water`](https://www.fao.org/4/r7488e/r7488e06.htm) (READ: evaporation and seepage as a reservoir's losses); the balance equation itself is textbook hydrology stated from principle, not quoted
 
 - *The physics (the load-bearing "why").* Water balance at a stable level: `outflow = inflow + rain - evaporation - seepage`. With NO outlet, `outflow = 0` forces `inflow = evaporation + seepage`; a real perennial stream delivers far more than a moat's surface can evaporate or its bed can seep, so storage climbs and the moat **overtops its banks** - "the level just keeps rising" is not a steady state, it is flooding. (A stream's upstream profile is set by its own bed slope, not the pond it enters - raising the moat only backs water up a short distance at the mouth, it cannot lift the whole feeder, so you cannot absorb continuous inflow by "raising the stream too.") The terminal-pond regime is real but belongs to a **spring/rain-fed** moat in an **arid** climate where small diffuse input is balanced by evaporation; a wet rice climate (modest evaporation; a high water table and puddled paddies that seal seepage) cannot absorb a live stream, so a stream-fed moat there MUST shed the surplus through a channel.
 
@@ -481,7 +481,7 @@ carries the sketch its fix would follow.
 
 **Evidence:** attested (Edo), researched (the Forbidden City flush - SUMMARY-ONLY)
 
-**Sources:** `sotobori-jawiki` (READ: the Hirakawa relocated to make the moat; "spiral" is the entry's word); the Forbidden City NW-in / SE-out: zh.wikipedia 筒子河 read and silent on direction; SUMMARY-ONLY from heritage pages - leftover
+**Sources:** [`sotobori-jawiki`](https://ja.wikipedia.org/wiki/外濠_(東京都) (READ: the Hirakawa relocated to make the moat; "spiral" is the entry's word); the Forbidden City NW-in / SE-out: zh.wikipedia 筒子河 read and silent on direction; SUMMARY-ONLY from heritage pages - leftover
 
 - *The diverted-stream moat is itself a historical type (GM asked whether Tango's arrangement - a stream seemingly turned into the moat, then resuming its course - was real, 2026-07-23).* It is, and commonly so: a dry-site Chinese seat dug its *hucheng he* by turning a nearby stream through the ring (the Forbidden City's NW-in / SE-out flush is the model Tango already encodes), and Japanese castle towns fed moats by the same river diversions (Edo turned the Hirakawa into its moat spiral). Two honesty notes, both deliberate: (1) **no relic of the stream's pre-diversion bed is drawn through the city** - after centuries of urban buildup the abandoned course is built over, so its absence is realistic, not an omission (do not "fix" this by threading an old channel through the blocks); (2) the ring splits the feeder's flow into two live arcs (west-about and east-about) that rejoin at the outfall, which is why irrigation taps on BOTH flanks can legitimately draw "with the current" (`moat_channels_flow_with_current`).
 
@@ -491,7 +491,7 @@ carries the sketch its fix would follow.
 
 **Evidence:** attested, corroborated
 
-**Sources:** `chang-jiang-jawiki`, `shinano-gawa-jawiki`, `sumida-gawa-jawiki` (READ; 両国川 not confirmed)
+**Sources:** [`chang-jiang-jawiki`](https://ja.wikipedia.org/wiki/%E9%95%B7%E6%B1%9F), [`shinano-gawa-jawiki`](https://ja.wikipedia.org/wiki/%E4%BF%A1%E6%BF%83%E5%B7%9D), [`sumida-gawa-jawiki`](https://ja.wikipedia.org/wiki/%E9%9A%85%E7%94%B0%E5%B7%9D) (READ; 両国川 not confirmed)
 
 *What the research found:* one-river-many-names was the NORM in the pre-modern world, in both reference cultures. China: the Yangtze never had a single pre-modern name - its course ran Tuotuo He / Tongtian He / Jinsha Jiang, then regionally Chuan Jiang (Sichuan) / Jing Jiang (Hubei) / Xunyang Jiang / Yangzi Jiang (originally only the Nanjing-Shanghai reach; modern standardization settled on Chang Jiang). Japan: per-stretch renaming was standard practice - the Chikuma-gawa becomes the Shinano-gawa at the Shinano/Echigo provincial border, the Seta/Uji/Yodo system renames at each confluence, and within Edo itself one river carried different names neighborhood by neighborhood (Asakusa-gawa / Ryogoku-gawa / Okawa / Sumida-gawa, all the same water). The mechanism: pre-modern river names were LOCAL - people named the reach they lived on and used, and nobody needed a whole-course name because nobody administered or traveled the whole course; names broke at both political borders and confluences. One-name-per-river is a modern bureaucratic artifact (national mapping agencies, Japan's 1896/1964 River Laws, the PRC settling on Chang Jiang).
 
@@ -505,13 +505,13 @@ carries the sketch its fix would follow.
 
 This is grounded in the fact that **wet rice is reclaimed FROM marsh**: the lower-Yangzi / Tai-Lake paddies are embanked **polders (圩田/围田)** diked out into marsh and lake, and where reclamation stops (or the ground is too wet to manage) it *stays* reed wetland (abandoned paddy reverts to marsh).
 
-Sources: rice domesticated in "naturally marshy areas" + paddy-as-reclaimed-marsh (AAS "Rice, Technology, and History"); Tai-Lake polders diked from marsh/lake; abandoned paddies revert to wetland.
+Sources: rice domesticated in "naturally marshy areas" + paddy-as-reclaimed-marsh ([AAS "Rice, Technology, and History"](SOURCES.md#aas-rice-technology)); Tai-Lake polders diked from marsh/lake; abandoned paddies revert to wetland.
 
 ## The wet toe is as wide as the FAN, not as wide as the valley
 
 **Evidence:** attested (the fan zones, the backswamp), convention (the drain gradient - a map drawing convention, disclosed)
 
-**Sources:** `senjochi-jawiki`, `kohai-shicchi-jawiki`, `maff-drain-shape` (READ 2026-08-12 - the entry's own sources paragraph)
+**Sources:** [`senjochi-jawiki`](https://ja.wikipedia.org/wiki/扇状地), [`kohai-shicchi-jawiki`](https://ja.wikipedia.org/wiki/後背湿地), [`maff-drain-shape`](https://www.maff.go.jp/j/nousin/noukan/tyotei/kizyun/pdf/04_hojou_hata_gijutsusho20-23.pdf) (READ 2026-08-12 - the entry's own sources paragraph)
 
 **Grounds:** `Settlement.toe_band` (the cross-slope extent of `hinterland()`'s reed marsh)
 
@@ -588,11 +588,11 @@ left no legal southern route - Ikegami's and Akagahara's - were restored to thei
 which are dry for their whole length under the researched width. Moritono's re-route stands: its
 fall is west, and its original track ran down the wet side.
 
-*Sources:* 扇状地 (Japanese Wikipedia) on 扇頂/扇央/扇端 and the 扇端 spring line; MLIT land-classification
-teaching material "扇状地と人々の暮らし"; Woods, Westbrook et al., "Hydrologic interactions between an
-alluvial fan and a slope wetland" (Wetlands, 2006) on slope wetlands at fan perimeters; the Tedori
-River alluvial fan groundwater studies (Paddy and Water Environment) on paddy-field seepage as a
-recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backswamp formation and land use.
+*Sources:* [扇状地 (Japanese Wikipedia)](https://ja.wikipedia.org/wiki/扇状地) on 扇頂/扇央/扇端 and the 扇端 spring line; [MLIT land-classification
+teaching material "扇状地と人々の暮らし"](SOURCES.md#mlit-senjochi-kurashi); [Woods, Westbrook et al., "Hydrologic interactions between an
+alluvial fan and a slope wetland" (Wetlands, 2006)](https://www.cheriewestbrook.ca/publications/16523-hydrologic-interactions-between-an-alluvial-fan-and-a-slope-wetland-in-the-central-rocky-mountains-usa) on slope wetlands at fan perimeters; [the Tedori
+River alluvial fan groundwater studies (Paddy and Water Environment)](SOURCES.md#tedori-fan-pwe) on paddy-field seepage as a
+recharge source; [後背湿地](https://ja.wikipedia.org/wiki/後背湿地) / [自然堤防 (Japanese Wikipedia, GSI)](https://ja.wikipedia.org/wiki/自然堤防) on backswamp formation and land use.
 
 ## No toe marsh at town/city scale - the drainage-investment gradient
 
@@ -600,7 +600,7 @@ recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backsw
 
 **Evidence:** attested (yatsu, shitsuden, Hibiya), reconstruction (the investment gradient)
 
-**Sources:** `yato-jawiki`, `shitsuden-kotobank`, `hibiya-irie-jawiki` (READ). Reed beds under iriai specifically, fukada persisting to Meiji, Suzhou's canal grid and the night-soil vegetable belt not re-read - leftover `fukada-kotobank` (READ: 深田 defined; reed cutting after harvest)
+**Sources:** [`yato-jawiki`](https://ja.wikipedia.org/wiki/%E8%B0%B7%E6%88%B8), [`shitsuden-kotobank`](https://kotobank.jp/word/湿田-74168), [`hibiya-irie-jawiki`](https://ja.wikipedia.org/wiki/%E6%97%A5%E6%AF%94%E8%B0%B7%E5%85%A5%E6%B1%9F) (READ). Reed beds under iriai specifically, fukada persisting to Meiji, Suzhou's canal grid and the night-soil vegetable belt not re-read - leftover [`fukada-kotobank`](https://kotobank.jp/word/%E6%B7%B1%E7%94%B0-123763) (READ: 深田 defined; reed cutting after harvest)
 
 *What the research found:* the real pattern is a **gradient of drainage investment and land value**. VILLAGES had neither the capital nor the incentive to eliminate every wet margin: residual wet ground at the low edge of village land is very well attested (Japanese *yatsuda* valley-bottom paddies were essentially managed marsh; reed beds were harvested village commons under *iriai* tenure - thatch, screens, annual burning; poorly drained *fukada* "deep fields" persisted until Meiji-and-later drainage projects), and crucially it was USED wet ground - reed bed, wet meadow, more paddy at the reclamation frontier - which is exactly what our sparse harvestable-reed rendering reads as. TOWNS/CITIES commanded corvee-scale hydraulic engineering and premium peri-urban land: ditch discharge went into an engineered moat/canal/river network (Suzhou's canal grid; Edo's canals and the immediate infill of the Hibiya inlet after 1590), and the outskirts were intensively worked (suburban vegetable belts fed by urban night soil; Edo-period reclamation waves around Osaka and Edo). Where wetness DID persist near a city it was **bounded and purposed** - a moat, a lotus/fish pond, a flood basin, a deliberate defensive inundation - never a diffuse seepage marsh below a ditch.
 
@@ -610,7 +610,7 @@ recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backsw
 
 **Evidence:** attested
 
-**Sources:** `bitchu-takamatsu-jawiki` (READ). The Song Hebei 塘泺 belt (He Chengju, 988-989) was located (fx361.com 北宋前期河北路塘泺探析; 163.com) but not read this pass - leftover
+**Sources:** [`bitchu-takamatsu-jawiki`](https://ja.wikipedia.org/wiki/高松城_(備中国) (READ). The Song Hebei 塘泺 belt (He Chengju, 988-989) was located (fx361.com 北宋前期河北路塘泺探析; 163.com) but not read this pass - leftover
 
 *What the research found:* the Northern Song built an artificial marsh-and-pond belt across the northern Hebei frontier (from 989, He Chengju's lake chain) specifically as anti-cavalry terrain; Japanese *numajiro* "marsh castles" (Bitchu Takamatsu, besieged by water 1582) used surrounding marsh as their primary defense; and flooded paddies around castle towns functioned as a de facto glacis. The constant: peri-urban wetness that survives is PURPOSED - so a defensive belt is military ground, not waste.
 
@@ -620,7 +620,7 @@ recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI) on backsw
 
 **Evidence:** attested (engineering), researched
 
-**Sources:** `offtake-angle-studies` (SUMMARY-ONLY); the FAO structures manual (fao.org/docrep/pdf/010/ai586e/ai586e02.pdf) not fetched - leftover
+**Sources:** [`offtake-angle-studies`](SOURCES.md#offtake-angle-studies) (SUMMARY-ONLY); the FAO structures manual (fao.org/docrep/pdf/010/ai586e/ai586e02.pdf) not fetched - leftover
 
 Canal practice: an offtake leaves its parent at an ACUTE angle pointing downstream - best alignment 0 deg separating out in transition, studied optimum 15-45 deg, explicitly "30 or 45 **instead of 90**"
 
@@ -630,7 +630,7 @@ Canal practice: an offtake leaves its parent at an ACUTE angle pointing downstre
 
 **Evidence:** attested
 
-**Sources:** `kagawa-tameike-structure` (READ: one intake facility, 斜樋 into 底樋); "occasionally two" not addressed there
+**Sources:** [`kagawa-tameike-structure`](https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html) (READ: one intake facility, 斜樋 into 底樋); "occasionally two" not addressed there
 
 A *tameike* reservoir has a SINGLE outlet sluice (*hi*) - occasionally two - so all its irrigation leaves by one main channel (*yosui*) that then FORKS downstream to the fields, dividing at junctions; it is NOT several independent pipes drilled into the pond.
 
@@ -664,11 +664,11 @@ delivery), never the conservation arithmetic.
 
 **Evidence:** attested
 
-**Sources:** `mbalib-canal-layout`, `saitama-minuma-tsusenbori`, `jsidre-minumadai` (Isawa corroboration in prose below)
+**Sources:** [`mbalib-canal-layout`](https://wiki.mbalib.com/wiki/灌溉渠道系统), [`saitama-minuma-tsusenbori`](https://www.city.saitama.lg.jp/004/005/006/008/p077111.html), [`jsidre-minumadai`](https://www.jsidre.or.jp/tabata5-a/) (Isawa corroboration in prose below)
 
 *What the research found (GM asked 2026-08-16, after noticing Inashiro's channel turns along one margin but never splits the way other maps' channels do).* Gravity irrigation has one governing constraint: a canal commands only the ground BELOW it. Chinese canal doctrine states it as placement law - "干渠主要布置在灌区较高的地带，以便自流控制较大的灌溉面积" (main canals sit on the district's high ground so gravity commands the largest area) - and repeats it at every tier of the hierarchy ("布置在各自控制范围内较高地带": each canal on the high ground of its OWN command area), mains and branch canals along contours and ridge lines, field channels across them. The Kishu-school exemplar the comb layout already cites goes further: **Minuma-dai (1728) deliberately DIVIDES its head channel into TWO canals** - the east-edge and west-edge canals (東縁/西縁) - running along the two elevated margins of the reclaimed lowland so water can enter the paddies from both sides, with the Shiba River down the central lowland as the drain ("見沼代用水東縁・西縁は台地の縁に沿って流れ、芝川は低地の中央を流れる"). At fan scale the same shape appears as radial canals: the Isawa fan (one of Japan's largest, ~15,000 ha) is watered by weir canals leaving the fan head and spreading over the fan (MLIT Isawa pages, consulted via search 2026-08-16).
 
-*The decision it drove.* A comb fan is planted on BOTH sides of its *bunsuiguchi* - the engine's own model already said so (`build_comb` carves canal B as a supply thread that shapes the far margin's plots and keeps deliveries off it) - so the DRAWN net must show both arms of the fork. Every `hamletgen.OFFTAKE_LADDER` row now gives canal B an offtake (~0.55), which inks the second arm partway down its margin, tapering to a thread per the Tabayashi taper rule. The hamlet rows' old `offtakes_b=()` was inherited from Ikegami's authored choice, and it left the modeled net and the inked net disagreeing: measured on the motivating map (Inashiro), **255 ft of planted paddy west of the fork carried 0 ft of drawn supply** while the east flank showed 994/995. Post-fix, every live hamlet's short flank carries ~170-200 ft of drawn supply against ~250-260 ft of paddy. Two terminations are honest, and the pool shows both: where the dug arm runs past its last offtake, the tail tapers to a thread and dies at the crop (Inashiro, Kashikawa, Mizuguchi); where the dug arm ENDS at its offtake, the canal hands its whole flow to the delivery and stops at the junction (Sawada) - what is dishonest is only a working-width canal chopped mid-margin, which the interpolated piece slicing in `build_comb` now prevents. Gated by `comb_supply_commands_both_flanks`: it reads the recorded fork and, on every flank with more than ~150 ft of paddy (cross-slope from the fork), demands drawn main/branch supply reaching at least 80 ft or 30% of that flank's extent.
+*The decision it drove.* A comb fan is planted on BOTH sides of its *bunsuiguchi* - the engine's own model already said so (`build_comb` carves canal B as a supply thread that shapes the far margin's plots and keeps deliveries off it) - so the DRAWN net must show both arms of the fork. Every `hamletgen.OFFTAKE_LADDER` row now gives canal B an offtake (~0.55), which inks the second arm partway down its margin, tapering to a thread per the [Tabayashi](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/) taper rule. The hamlet rows' old `offtakes_b=()` was inherited from Ikegami's authored choice, and it left the modeled net and the inked net disagreeing: measured on the motivating map (Inashiro), **255 ft of planted paddy west of the fork carried 0 ft of drawn supply** while the east flank showed 994/995. Post-fix, every live hamlet's short flank carries ~170-200 ft of drawn supply against ~250-260 ft of paddy. Two terminations are honest, and the pool shows both: where the dug arm runs past its last offtake, the tail tapers to a thread and dies at the crop (Inashiro, Kashikawa, Mizuguchi); where the dug arm ENDS at its offtake, the canal hands its whole flow to the delivery and stops at the junction (Sawada) - what is dishonest is only a working-width canal chopped mid-margin, which the interpolated piece slicing in `build_comb` now prevents. Gated by `comb_supply_commands_both_flanks`: it reads the recorded fork and, on every flank with more than ~150 ft of paddy (cross-slope from the fork), demands drawn main/branch supply reaching at least 80 ft or 30% of that flank's extent.
 
 *When a single arm IS honest.* The command principle cuts both ways: a tract lying wholly on ONE side of its supply needs no second arm - a ribbon strip along a contour canal, a terrace flight, a polder ring. None of those record a fork, so the check does not touch them; and a fan whose far flank is a sliver (under the 150 ft demand line) legitimately runs one arm. The frozen legacy hamlets keep their single-arm draws as exhibits - conversion, not retrofit, is their fix, per the migration doctrine.
 
@@ -681,8 +681,8 @@ is the intuitive one and it would have made the current picture correct by accid
 reservoir is maintained - the bank repaired, the silt dredged, the water drawn down each season - so
 perhaps a managed tameike's margin is kept clear, and reeds there would mean neglect.**
 
-**The record contradicts that outright, and the contradiction is the finding.** Mineta 2007 in the
-*Journal of the JSIDRE*, reporting a Kagawa Prefecture study of tameike management against aquatic flora:
+**The record contradicts that outright, and the contradiction is the finding.** [Mineta 2007](https://www.jstage.jst.go.jp/article/jjsidre2007/75/8/75_8_745/_pdf) in the
+*[Journal of the JSIDRE](https://www.jstage.jst.go.jp/article/jjsidre2007/75/8/75_8_745/_pdf)*, reporting a Kagawa Prefecture study of tameike management against aquatic flora:
 *"抽水植物や浮葉植物の出現種数に対して泥上げや池内の藻刈りとの間に有意な正の相関が認められた"* - a statistically
 significant POSITIVE correlation between the number of emergent- and floating-leaf plant species and the
 practice of dredging silt and cutting algae in the pond - and it is the small ponds where water use has
@@ -704,7 +704,7 @@ gives the reason - the bank is mown to keep it strong.
 **What the shallow shore carries, positively.** MAFF's own technical material draws the zonation from land
 to open water as riparian forest -> wet-meadow plants -> emergent plants -> floating-leaf -> submerged,
 and names the emergent belt as ヨシ・ガマ・マコモ (reed, cattail, wild rice); Mineta puts *"ヨシやガマなどの
-大型抽水植物"* in the shallow, gently-sloped part of the pond by depth and slope. A tameike museum in Hyogo
+大型抽水植物"* in the shallow, gently-sloped part of the pond by depth and slope. [A tameike museum in Hyogo](https://www.inamino-tameike-museum.com/pond-creature/aquatic-plants.html)
 says the same of lowland ponds specifically: *"このような池の周囲にはヨシ、マコモ、ヒメガマなどの大型抽水植物
 が群落を形成し"*. The low-diversity end of that spectrum is the concrete-armored urban pond, not the
 farmed one.
@@ -730,6 +730,6 @@ river-engineering vocabulary exists (堤外地, the unprotected land outside a f
 vegetation in that literature is reed bed, against 堤内地, the protected land), but nothing read compares a
 paddy dike's foot to a valley toe as such. NOT-FOUND rather than silent: the search was run and named it.
 
-**Sources:** `mineta-2007-tameike`, `tameike-jawiki`, `kagawa-tameike-structure`, `maff-tameike-shizen`,
-`nies-tameike`, `inamino-tameike-museum`, `ohmi-yoshi` (the Lake Biwa scope note).
+**Sources:** [`mineta-2007-tameike`](https://www.jstage.jst.go.jp/article/jjsidre2007/75/8/75_8_745/_pdf), [`tameike-jawiki`](https://ja.wikipedia.org/wiki/%E3%81%9F%E3%82%81%E6%B1%A0), [`kagawa-tameike-structure`](https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html), [`maff-tameike-shizen`](https://www.maff.go.jp/j/council/seisaku/nousin/seibibukai/gijutu_syoiinkai/h14-1/pdf/data3-2.pdf),
+[`nies-tameike`](https://www.nies.go.jp/biology/data/tameike.html), [`inamino-tameike-museum`](https://www.inamino-tameike-museum.com/pond-creature/aquatic-plants.html), [`ohmi-yoshi`](https://www.ohmi.or.jp/yoshi/about/whats/) (the Lake Biwa scope note).
 

@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** `kashima-kainyo-1987` (READ 2026-08-28 via Tonami City's archive page, which quotes the 1987 survey's figures verbatim - 1,542 trees over 46 households, 48% sugi; the pointer was summary-only from 2026-07 until the GM asked whether it was hallucinated); ja.wikipedia 屋敷林
+**Sources:** [`kashima-kainyo-1987`](https://1073shoso.jp/www/sankyo/detail.jsp?id=18666) (READ 2026-08-28 via Tonami City's archive page, which quotes the 1987 survey's figures verbatim - 1,542 trees over 46 households, 48% sugi; the pointer was summary-only from 2026-07 until the GM asked whether it was hallucinated); [ja.wikipedia 屋敷林](https://ja.wikipedia.org/wiki/屋敷林)
 
 ## How big was the work yard, and how did the sizes spread? (researched 2026-08-28, feature 134 T49)
 
@@ -22,20 +22,20 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested (the size band and the shape), interpolated (the wet-rice median, derived from the crop)
 
-**Sources:** [`kitamoto-mushiro-niwa`](SOURCES.md#kitamoto-mushiro-niwa), [`kamikanai-1771-houses`](SOURCES.md#kamikanai-1771-houses), [`kikoba-kenchi`](SOURCES.md#kikoba-kenchi), [`santome-shinden-allotment`](SOURCES.md#santome-shinden-allotment), [`kodaira-niwa`](SOURCES.md#kodaira-niwa), [`yonekura-mushiro`](SOURCES.md#yonekura-mushiro), [`tobunken-mushiro`](SOURCES.md#tobunken-mushiro), [`irri-drying-floor`](SOURCES.md#irri-drying-floor), [`ndl-kokumori`](SOURCES.md#ndl-kokumori)
+**Sources:** [`kitamoto-mushiro-niwa`](https://kdas.jp/test2/detail_display.php?t_cd=1&acc_cd=3&aclc_cd=0&chap=6&hp_page=74&bc_cd=1), [`kamikanai-1771-houses`](https://www.jstage.jst.go.jp/article/aijax/418/0/418_KJ00004075360/_pdf), [`kikoba-kenchi`](https://www.jstage.jst.go.jp/article/aijsaxx/222/0/222_KJ00003747888/_pdf), [`santome-shinden-allotment`](https://www.jstage.jst.go.jp/article/aijax/436/0/436_KJ00004077200/_pdf), [`kodaira-niwa`](https://adeac.jp/kodaira-lib/text-list/d100010/ht002170), [`yonekura-mushiro`](https://townweb.e-okayamacity.jp/yonegura/minna/hakubutukan/hakubutu012.htm), [`tobunken-mushiro`](https://tobunken.repo.nii.ac.jp/record/3166/files/06_55_Imaishi.pdf), [`irri-drying-floor`](https://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm), [`ndl-kokumori`](https://crd.ndl.go.jp/reference/entry/index.php?id=1000296656&page=ref_view)
 
 The GM, on the map's own modal: *"I see the threshing yard size is listed as a rendering convention.
 How large WERE these yards?"* The doc had carried ~100-300 sq m as the yard - which turns out to be
 the **homestead LOT** figure (Akishima city history: farms need a wide front yard, so lots run
 100-300 tsubo = 330-992 sq m), a real number attached to the wrong thing.
 
-**The size, as households themselves stated it.** Kitamoto (Saitama) city history, folk volume:
+**The size, as households themselves stated it.** [Kitamoto (Saitama) city history, folk volume](https://kdas.jp/test2/detail_display.php?t_cd=1&acc_cd=3&aclc_cd=0&chap=6&hp_page=74&bc_cd=1):
 「収穫期には庭一面にムシロが敷かれ、しばしば庭の広さはこのムシロの枚数で表現された。麦の耕作面積と関係
 していて、普通四〇〜六〇枚、中には百枚を越す家もあった。ちなみに、ムシロ二枚が一坪にあたる。」 - the yard
 was measured in straw mats, 40-60 usually and past 100 for a few, two mats to the tsubo: **20-30
 tsubo (66-99 sq m) ordinarily, past 50 tsubo (165 sq m) at the top**, and explicitly sized by the
-household's cropped acreage. Two independent lines agree: an Okayama museum records ~50 mats per
-farm, and the measured mat is 90 x 180 cm, so ~80 sq m; a directly measured yard at Kodaira is 70
+household's cropped acreage. Two independent lines agree: [an Okayama museum](https://townweb.e-okayamacity.jp/yonegura/minna/hakubutukan/hakubutu012.htm) records ~50 mats per
+farm, and the measured mat is 90 x 180 cm, so ~80 sq m; a directly measured yard at [Kodaira](https://adeac.jp/kodaira-lib/text-list/d100010/ht002170) is 70
 tsubo (231 sq m) - a large Musashino holding, the upper end. No survey found tabulates yards as
 areas; these are the readable figures.
 
@@ -43,16 +43,16 @@ areas; these are the readable figures.
 mugi crop, which the household spreads whole. Rice is field-dried on *hazakake* racks for 10-14
 days before it reaches the yard and is threshed in batches over days, so a paddy household needs
 less standing floor. Deriving it from the crop instead - 1.3 koku/tan (中田 石盛) -> 247 kg momi at a
-79% hulling yield -> mats at IRRI's 2.5 cm spread, batched - gives **55-100 sq m for a full cho and
+79% hulling yield -> mats at [IRRI](https://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm)'s 2.5 cm spread, batched - gives **55-100 sq m for a full cho and
 35-65 for five tan**. The generator therefore centers a rice hamlet's yards at **18 tsubo (59.5 sq
 m)** and keeps Kitamoto's 25 tsubo as the dry-field figure (`yard_sizes="dryfield"`), for the barley
 village no map draws yet. The GM ruled between the two readings on 2026-08-28: *"I agree with option
 two"* - the sourced SHAPE everywhere, the sourced SCALE appropriate to what the household dries.
 
 **The spread is lognormal, and it is right-skewed.** No survey gives a histogram of yards, so the
-shape comes from what the cadastres do tabulate, and every one is right-skewed: Kamikanai (1771)
+shape comes from what the cadastres do tabulate, and every one is right-skewed: [Kamikanai (1771)](https://www.jstage.jst.go.jp/article/aijax/418/0/418_KJ00004075360/_pdf)
 gives a complete main-house histogram whose 31 commoner houses fit a lognormal of median 22.5 tsubo
-and **sigma_ln 0.46**, with the headman detached at 3.1x; Kikoba's Genroku 検地帳 puts homestead lots
+and **sigma_ln 0.46**, with the headman detached at 3.1x; [Kikoba](https://www.jstage.jst.go.jp/article/aijsaxx/222/0/222_KJ00003747888/_pdf)'s Genroku 検地帳 puts homestead lots
 at 15-100 bu about a mode of 30, great holders at 2x the ordinary class. Kitamoto's own
 band-and-tail implies **sigma 0.35-0.45** - that convergence is what the drawn sigma of 0.40 rests
 on. A floor exists but is not zero: early registers carry a no-homestead class (無屋敷登録人), but by
@@ -67,7 +67,7 @@ independent positional draw: a large household is overwhelmingly likely to have 
 mismatch is possible and rare - the GM's own reading of what the record implies.
 
 **One attested form is NOT skewed, and is a knob.** A planned *shinden* colony issued every settler
-an identical homestead - Santome 1696, *"屋敷の規模はまったくの均等配分"* - so `yard_sizes="allotted"`
+an identical homestead - [Santome 1696](https://www.jstage.jst.go.jp/article/aijax/436/0/436_KJ00004077200/_pdf), *"屋敷の規模はまったくの均等配分"* - so `yard_sizes="allotted"`
 draws uniform yards. Principle XII's ladder: two attested forms become a per-settlement knob.
 
 **What this changed on the map.** Yards were a fixed fraction of the house (~0.8 x 0.92 of its
@@ -81,7 +81,7 @@ understand that"*).
 
 **Evidence:** reconstruction (derived from geometry)
 
-**Sources:** derived - solar geometry at 38N for the 10th month, and the minka's 46 x 28 ft footprint; the thatched-roof pitch (45 degrees or steeper) and the 6-7 m ridge of surviving farmhouses were not cited when written - leftover (ja.wikipedia 茅葺 / 民家) `kayabuki-jawiki` (READ: the steep pitch as a material requirement; the 45-degree figure and the 6-7 m ridge not on the pages read)
+**Sources:** derived - solar geometry at 38N for the 10th month, and the minka's 46 x 28 ft footprint; the thatched-roof pitch (45 degrees or steeper) and the 6-7 m ridge of surviving farmhouses were not cited when written - leftover ([ja.wikipedia 茅葺](https://ja.wikipedia.org/wiki/%E8%8C%85%E8%91%BA) / [民家](https://ja.wikipedia.org/wiki/民家)) [`kayabuki-jawiki`](https://ja.wikipedia.org/wiki/%E8%8C%85%E8%91%BA) (READ: the steep pitch as a material requirement; the 45-degree figure and the 6-7 m ridge not on the pages read)
 
 **Grounds:** the sun-corridor keep-out in the nucleated bundle placer; `yards_unshaded_by_neighbors`
 
@@ -131,13 +131,13 @@ since the corridor only forbids the shadow, not the neighbor.
 thatch, hence the large loft); solar elevations computed for 38N at the 10th-month declination;
 minka ridge heights cross-checked against surviving farmhouses.
 
-- *Historical scale - the real numbers (research grounding, for calibrating the glyph).* A homestead grove is a substantial STAND, not a few trees. The best hard data is a 1987 survey of Kashima in the Tonami plain (the classic *kainyo* dispersed-farmstead country, 46 households): **~33 trees of trunk diameter >= 10 cm per homestead**, of which cedar (*sugi*) was ~48% (**~16 cedars per house**), the rest spread over ~83 other species; **~6 species per homestead** (range 1-14); a large/notable homestead ran **200+ trees across 31 species**. That count is trunks >= 10 cm ONLY - it EXCLUDES the bamboo stand (hundreds of culms), saplings, and the trimmed hedge layer - so the honest figure for a typical grove is **~30-40 mature trees + a bamboo grove + understory**, and a big one **100-200+**. The grove canopy footprint is therefore the LARGEST homestead appurtenance - **bigger than the farmhouse**, and far bigger than the garden or threshing yard - wrapping the N/W as a belt several trees deep. The map need not draw every tree (houses/yards are already oversized symbols), but per Principle "relative sizes roughly honest" the grove glyph must read at the RIGHT relative scale: clearly the dominant homestead feature, a dense stand suggesting dozens of trees - not a garden-sized clump of 5-10. *(Cross-check on the windward rule: Okinawa's homestead groves sit on the E/N sides, because the islands' damaging wind is the typhoon/NE monsoon, not the mainland NW - same logic, different geography, which is exactly why `windward` is a per-map knob.)*
+- *Historical scale - the real numbers (research grounding, for calibrating the glyph).* A homestead grove is a substantial STAND, not a few trees. The best hard data is [a 1987 survey of Kashima](https://1073shoso.jp/www/sankyo/detail.jsp?id=18666) in the Tonami plain (the classic *kainyo* dispersed-farmstead country, 46 households): **~33 trees of trunk diameter >= 10 cm per homestead**, of which cedar (*sugi*) was ~48% (**~16 cedars per house**), the rest spread over ~83 other species; **~6 species per homestead** (range 1-14); a large/notable homestead ran **200+ trees across 31 species**. That count is trunks >= 10 cm ONLY - it EXCLUDES the bamboo stand (hundreds of culms), saplings, and the trimmed hedge layer - so the honest figure for a typical grove is **~30-40 mature trees + a bamboo grove + understory**, and a big one **100-200+**. The grove canopy footprint is therefore the LARGEST homestead appurtenance - **bigger than the farmhouse**, and far bigger than the garden or threshing yard - wrapping the N/W as a belt several trees deep. The map need not draw every tree (houses/yards are already oversized symbols), but per Principle "relative sizes roughly honest" the grove glyph must read at the RIGHT relative scale: clearly the dominant homestead feature, a dense stand suggesting dozens of trees - not a garden-sized clump of 5-10. *(Cross-check on the windward rule: Okinawa's homestead groves sit on the E/N sides, because the islands' damaging wind is the typhoon/NE monsoon, not the mainland NW - same logic, different geography, which is exactly why `windward` is a per-map knob.)*
 
 ## The garden's sun, and how far the windbreak shades (researched 2026-08-25, feature 133 T10)
 
 **Evidence:** reconstruction (derived), attested (the belt's side - SUMMARY-ONLY)
 
-**Sources:** derived from the threshing-yard entry above; the bamboo-strip aspect is SUMMARY-ONLY (flagged under T48; ja.wikipedia 屋敷林 puts Tonami's bamboo on the south) - see the entry's own flag
+**Sources:** derived from the threshing-yard entry above; the bamboo-strip aspect is SUMMARY-ONLY (flagged under T48; [ja.wikipedia 屋敷林](https://ja.wikipedia.org/wiki/屋敷林) puts Tonami's bamboo on the south) - see the entry's own flag
 
 **Grounds:** the garden half of the sun corridor (`_sun_corridor_ok` / `_gardens_sun_ok`,
 `gardens_unshaded_by_neighbors`); the belt's afternoon lane (`west_sun_lane`, `WEST_SUN_FT`,
@@ -171,10 +171,10 @@ igune (Osaki, drone survey, 2022) is **"about 10 m"**, tall sugi on the west wit
 average 7-10 m. Kainyo/igune are limb-pruned (*edauchi*), never height-capped. So the attested
 band is **~10 m for a working belt, 15-25 m for an untended mature stand**.
 
-*Where the plots stood, from the record.* The Tonami model homestead (Research Institute, 1996):
+*Where the plots stood, from the record.* The Tonami model homestead (Research Institute, 1996 (URL not found 2026-09-06)):
 house faces E, away from the SW wind; the front (E) yard is the work yard, "securing adequate open
 space" with only fruit trees and a persimmon in the yard center; S and W carry 2-3 rows of sugi;
-the N/W bamboo strip is "shady ... always damp" and given to the kitchen drain and service sheds. (SUMMARY-ONLY, flagged under T48: no fetched source carries this sentence, and ja.wikipedia "屋敷林" puts Tonami's bamboo on the SOUTH side with the storehouses - see research/vegetation.md.)
+the N/W bamboo strip is "shady ... always damp" and given to the kitchen drain and service sheds. (SUMMARY-ONLY, flagged under T48: no fetched source carries this sentence, and [ja.wikipedia "屋敷林"](https://ja.wikipedia.org/wiki/屋敷林) puts Tonami's bamboo on the SOUTH side with the storehouses - see research/vegetation.md.)
 Tohoku: the S-facing open ground in front is the drying yard. So the record's answer is that the
 HOUSE BODY was the spacer - plots on the sunlit lee side, the belt behind - and it holds **no
 measured plot-to-treeline distance**. For a nucleated village's communal belt the record is
@@ -221,16 +221,16 @@ than shrink or raise the belt - 10 m stays as the record's measured working heig
 afternoon (the yard's south corridor takes the same shortcut); the 12 px in `belt_polygon`'s
 stand-off is an average plot overhang, and the clump filter is the guarantee behind it.
 
-*Sources:* Sendai City igune species list (city.sendai.jp); Minami/Yonezawa/Okaze 2022, Osaki
-igune drone survey (J-STAGE, LES 38(2)); Tonami Scattered-Village Research Institute 1996 model
-homestead; Izumo tsuijimatsu (Kanto Gakuin column); ISA Arboriculture & Urban Forestry 37(1) on
-fukugi; solar elevations computed for 38N.
+*Sources:* [Sendai City igune species list (city.sendai.jp)](SOURCES.md#sendai-igune-list); [Minami/Yonezawa/Okaze 2022, Osaki
+igune drone survey (J-STAGE, LES 38(2))](SOURCES.md#minami-2022-igune); Tonami Scattered-Village Research Institute 1996 model
+homestead (URL not found 2026-09-06); [Izumo tsuijimatsu (Kanto Gakuin column)](SOURCES.md#kanto-gakuin-tsuijimatsu); [ISA Arboriculture & Urban Forestry 37(1) on
+fukugi](https://auf.isa-arbor.com/content/37/1/19); solar elevations computed for 38N.
 
 ## May a byre stand beside a wellhead? (researched 2026-08-18)
 
 **Evidence:** attested (the stable wing), researched (the in-house well - not re-found)
 
-**Sources:** `magariya-jawiki` (READ 2026-08-28: the stable projecting on the south face, joined to the house and warmed from its hearth); the well inside the doma or a rear projection was NOT found on the page - that half stays as the 2026-08-18 reading, unsourced
+**Sources:** [`magariya-jawiki`](https://ja.wikipedia.org/wiki/%E6%9B%B2%E3%82%8A%E5%AE%B6) (READ 2026-08-28: the stable projecting on the south face, joined to the house and warmed from its hearth); the well inside the doma or a rear projection was NOT found on the page - that half stays as the 2026-08-18 reading, unsourced
 
 **Answer: yes, and the vernacular puts them far closer than our maps do. No GM ruling wanted.**
 
@@ -312,9 +312,9 @@ genuinely two-formed, and the two-formed part becomes variance.
 
 **Sources:** the lane-gridiron and semi-private-lateral findings are from the nucleated-village
 morphology literature; the back-lane framework from planned-village morphology (see
-[`SOURCES.md`](SOURCES.md)); rear-access in Manchu villages from Ushijima, "Spatial composition and
+[`SOURCES.md`](SOURCES.md)); rear-access in Manchu villages from [Ushijima, "Spatial composition and
 premise arrangement of traditional Manchu village in Northeast China", *Japan Architectural Review*
-(2020).
+(2020)](SOURCES.md#ushijima-2020-manchu).
 
 **REVISITED 2026-08-27 (feature 133 T31) - the GM asked the question the other way round.** Looking at
 Inashiro: *"a bunch of random scattered lanes strewn about without much rhyme or reason ... a short
@@ -341,7 +341,7 @@ finding - see `_TOUCH_GAP`).
 
 **Evidence:** attested (desire lines), reconstruction (the thresholds)
 
-**Sources:** `desire-path-enwiki`, `ninety-nine-pi-desire` (READ); `ma-2024-desire-paths` (SUMMARY-ONLY, supports nothing here - see the entry)
+**Sources:** [`desire-path-enwiki`](https://en.wikipedia.org/wiki/Desire_path), [`ninety-nine-pi-desire`](https://99percentinvisible.org/article/least-resistance-desire-paths-can-lead-better-design/) (READ); [`ma-2024-desire-paths`](SOURCES.md#ma-2024-desire-paths) (SUMMARY-ONLY, supports nothing here - see the entry)
 
 **Answer: like a line feet wear - as few turns as the plots allow, none of them sharp, and never
 back on itself. Decisive on the principle; the thresholds are drawing conventions.**
@@ -351,14 +351,14 @@ unnatural. There's a place where it looks like a loop-de-loop, which isn't how a
 then there's another place where it zig-zags just below the loop de loop for no apparent reason."*
 Two lines of evidence, one from how paths form and one from how villages are laid out:
 
-- **Desire-line research.** READ (Wikipedia "Desire path"; 99% Invisible): "as few as 15 passages
+- **Desire-line research.** READ ([Wikipedia "Desire path"](https://en.wikipedia.org/wiki/Desire_path); [99% Invisible](https://99percentinvisible.org/article/least-resistance-desire-paths-can-lead-better-design/)): "as few as 15 passages
   over a site can be enough to create a distinct trail, the existence of which then attracts
   further use"; the path "usually represents the shortest or the most easily navigated route"; and
   desire paths are not necessarily straight - they follow least resistance, sidestepping slopes and
   obstacles. UNVERIFIED (the paper is paywalled and its abstract could not be fetched; the phrase
-  came from a search summary of Ma, Brandt, Seipel and Ma 2024): that walkers "consciously or
+  came from a search summary of [Ma, Brandt, Seipel and Ma 2024](SOURCES.md#ma-2024-desire-paths)): that walkers "consciously or
   unconsciously minimize the number and severity of turns". CONTRADICTED IN SCOPE (the abstract,
-  read via ideas.repec.org, T45 - and caught only on the session's spot-check of the reader's
+  read via [ideas.repec.org](SOURCES.md#ma-2024-desire-paths), T45 - and caught only on the session's spot-check of the reader's
   quote): the paper's "angle (found to be limited to a narrow range of 90-120°)" is the simulated
   agent's ANGLE OF VISION, a visual parameter of the model set against "depth of vision" - not a
   walker's turning angle. The search summary had recast a field-of-view parameter as a
@@ -389,10 +389,10 @@ crossing for under 40 ft; and make each junction once. Labels: the principle ACC
 minimizes its turns; a bend sits at a plot corner); 140 degrees / 50 degrees within 40 ft / 25 ft /
 6 ft are DRAWING thresholds chosen at the scale of a dozen paces, not findings.
 
-**Sources (read):** Wikipedia "Desire path" (citing Hampton and Cole 1988 for the fifteen-passage
-figure); 99% Invisible, "Least Resistance: How Desire Paths Can Lead to Better Design". **Pointers,
-not read (paywalled/403):** Ma, Brandt, Seipel and Ma (2024), *Environment and Planning B*
-(agent-based desire paths; its abstract READ via ideas.repec.org and found to be about the
+**Sources (read):** [Wikipedia "Desire path"](https://en.wikipedia.org/wiki/Desire_path) (citing Hampton and Cole 1988 for the fifteen-passage
+figure); [99% Invisible, "Least Resistance: How Desire Paths Can Lead to Better Design"](https://99percentinvisible.org/article/least-resistance-desire-paths-can-lead-better-design/). **Pointers,
+not read (paywalled/403):** [Ma, Brandt, Seipel and Ma (2024)](SOURCES.md#ma-2024-desire-paths), *Environment and Planning B*
+(agent-based desire paths; its abstract READ via [ideas.repec.org](SOURCES.md#ma-2024-desire-paths) and found to be about the
 agents' angle of VISION, not turning - the turn-minimization sentence is not from it); the 2025
 *Landscape and Urban Planning* energy-based desire-path paper. The plot-corner geometry is the
 2026-08-18 entry's. Corrected 2026-08-27 under T44 and the T45 spot-check.
@@ -401,7 +401,7 @@ agents' angle of VISION, not turning - the turn-minimization sentence is not fro
 
 **Evidence:** attested (the levee's role), interpolated (the 6 ft floor)
 
-**Sources:** `pmc7538448-levee`, `paddy-field-enwiki` (READ); `irri-bund-summary` (SUMMARY-ONLY); the eave-gap figure carried over from `FARMHOUSE_EAVE_GAP_FT`, unsourced
+**Sources:** [`pmc7538448-levee`](https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/), [`paddy-field-enwiki`](https://en.wikipedia.org/wiki/Paddy_field) (READ); [`irri-bund-summary`](SOURCES.md#irri-bund-summary) (SUMMARY-ONLY); the eave-gap figure carried over from `FARMHOUSE_EAVE_GAP_FT`, unsourced
 
 The GM: *"One of the farmhouses in the reference hamlet appears to actually be touching the edge of
 the rice paddy fields. Is this realistic? ... I do imagine that they would be pretty much right up
@@ -411,15 +411,15 @@ against the edge, but actually touching looks wrong to me."* Measured first: one
 **What the record gives, and what it does not.** No source states a setback in feet - the
 question is not one anyone measured - so the floor is DERIVED from three attested parts:
 
-- **The bund (aze) is a thing, not a line.** READ (PMC 7538448, verbatim): rice paddy levees "are
+- **The bund (aze) is a thing, not a line.** READ ([PMC 7538448](https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/), verbatim): rice paddy levees "are
   constructed and maintained to retain water in the paddies and to allow the passage of people and
   transportation of tools", and "farmers generally maintain levee grasslands by periodic mowing".
-  READ (Wikipedia "Paddy field"): plots "separated by bunds approximately 10 cm in height" (a Korean
-  example). SUMMARY-ONLY (the `source-reader` run of 2026-08-27, T45): the IRRI Rice Knowledge
-  Bank's "How to construct bunds" - unreachable to the tool, seen in a search snippet - says
+  READ ([Wikipedia "Paddy field"](https://en.wikipedia.org/wiki/Paddy_field)): plots "separated by bunds approximately 10 cm in height" (a Korean
+  example). SUMMARY-ONLY (the `source-reader` run of 2026-08-27, T45): the [IRRI Rice Knowledge
+  Bank](SOURCES.md#irri-bund-summary)'s "How to construct bunds" - unreachable to the tool, seen in a search snippet - says
   "bunds should be constructed no wider and taller than 50 cm x 30 cm ... high enough (at least
   20 cm) to avoid overflowing"; the "15-150 cm" range was seen nowhere. READ, and pulling the other
-  way: FAO's basin-irrigation manual (fao.org/4/ac180e/AC180E07.htm) gives a permanent "dry bund"
+  way: [FAO's basin-irrigation manual (fao.org/4/ac180e/AC180E07.htm)](https://www.fao.org/4/ac180e/AC180E07.htm) gives a permanent "dry bund"
   a 25 cm minimum height (60 recommended) and a 180 cm base tapering to 60 cm - a different, heavier
   structure than a field partition. So "about 1.5 ft" is one convention among several, and the
   6 ft floor below leans on it lightly.
@@ -445,9 +445,9 @@ Labels: the levee's footpath role ACCURATE (read); the bund's width UNVERIFIED (
 the 6 ft floor a DERIVED threshold - and a soft one, since two of its three parts are not read;
 "up against the edge" ACCURATE.
 
-**Sources (read):** "Earthworm species and density in semi-natural grasslands on rice paddy levees
-in Japanese satoyama", PMC 7538448 (levees built and kept for water retention and passage of people
-and tools; mown); Wikipedia "Paddy field" (bunds ~10 cm high, Korea). **Pointers, not read (403):**
+**Sources (read):** ["Earthworm species and density in semi-natural grasslands on rice paddy levees
+in Japanese satoyama", PMC 7538448](https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/) (levees built and kept for water retention and passage of people
+and tools; mown); [Wikipedia "Paddy field"](https://en.wikipedia.org/wiki/Paddy_field) (bunds ~10 cm high, Korea). **Pointers, not read (403):**
 ResearchGate "Scheme of bund, terrace, and field dimensions" (the 15-150 cm width); Britannica
 "Paddy". Corrected 2026-08-27 under the read-what-you-cite rule (T44): the first record cited the
 unread pages as if read.
@@ -456,13 +456,13 @@ unread pages as if read.
 
 **Evidence:** attested
 
-**Sources:** `sugiura-1973-fuzoku` (READ, all eight pages) - the one quantified source; the 37-fetch reader pass is folded into the fixtures entry below
+**Sources:** [`sugiura-1973-fuzoku`](https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja) (READ, all eight pages) - the one quantified source; the 37-fetch reader pass is folded into the fixtures entry below
 
 The GM: *"What things would exist on a noticeable percentage of farmhouses that we are not currently
 representing on our maps ... What, if anything, are we missing?"* A `source-reader` pass (37 fetches)
 plus one paper the session read itself, page by page.
 
-**READ - the one quantified source.** Sugiura Tadashi, "農村集落における農家の付属建物について - 宮城県宮崎町の例"
+**READ - the one quantified source.** [Sugiura Tadashi, "農村集落における農家の付属建物について - 宮城県宮崎町の例"](https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja)
 (On the ancillary buildings of farmhouses in agricultural settlements: Miyazaki-machi, Miyagi),
 *Tōhoku Chiri* 25(3), 1973, pp. 145-152 (JStage tga1948/25/3/25_3_145): a July 1972 survey of all
 87 households in three hamlets (Asahi, Kita-Nagasaida, Minami-Nagasaida) on the terrace south of the
@@ -481,15 +481,15 @@ author himself says is unusually many-building; the Edo hamlet this map draws is
 so these are the SHAPE of a farmstead's inventory and an upper band on counts, not a transplant.
 
 **The reader's pass, on the rest** (READ unless marked): shared wells outnumbered private ones,
-"井戸の掘削費用が高額で ... 共同所有の井戸が多かった" (ja.wikipedia 井戸) - the map's communal wells are the
+"井戸の掘削費用が高額で ... 共同所有の井戸が多かった" ([ja.wikipedia 井戸](https://ja.wikipedia.org/wiki/井戸)) - the map's communal wells are the
 norm; the harvest drying rack (稲架, hasa) "主に収穫後の田畑に作られることが多い" - stands IN THE FIELDS after
-harvest, seasonal, some regions leaving the frame up (ja.wikipedia 稲架); the household shrine
-(屋敷神) is a small stone or wood hokora in a plot corner, N/W or N/E (ja.wikipedia 屋敷神) - attested,
+harvest, seasonal, some regions leaving the frame up ([ja.wikipedia 稲架](https://ja.wikipedia.org/wiki/稲架)); the household shrine
+(屋敷神) is a small stone or wood hokora in a plot corner, N/W or N/E ([ja.wikipedia 屋敷神](https://ja.wikipedia.org/wiki/屋敷神)) - attested,
 and Sugiura counts it at 3 per 100 households, so RARE; dosojin and jizo stand on the road and at
-passes, jizo also "in the villages" (nakasendoway.com) - a village-ENTRANCE stone is summary-only;
-a gate (屋敷門) is a WARRIOR house's feature (JAANUS) - not a commoner farmstead's without a source;
+passes, jizo also "in the villages" ([nakasendoway.com](https://www.nakasendoway.com/dosojin/)) - a village-ENTRANCE stone is summary-only;
+a gate (屋敷門) is a WARRIOR house's feature ([JAANUS](http://www.aisf.or.jp/~jaanus/deta/y/yashikimon.htm)) - not a commoner farmstead's without a source;
 the magariya attached stable is a Nanbu/Tōhoku cold form - our separate byres are the temperate
-reading; a headman-class compound (Chiba museum's Boso-no-Mura reconstruction) had eight buildings:
+reading; a headman-class compound ([Chiba museum's Boso-no-Mura reconstruction](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/)) had eight buildings:
 主屋・土蔵・長屋門・馬小屋・納屋・木小屋・作業小屋・井戸 - the top of the ladder, not the typical plot.
 SUMMARY-ONLY: persimmon "planted in the gardens of farming families without exception" from the late
 Edo (MAFF, unfetched); firewood "stacked behind a shed or along the yashiki's front wall" (Chiba
@@ -514,9 +514,9 @@ Labels: every number above ACCURATE for 1972 Miyagi and a GUIDE elsewhere (state
 persimmon and the firewood placement SUMMARY-ONLY; nothing here is drawn yet - this entry is the
 list the GM chooses from.
 
-**Sources (read):** Sugiura 1973 (JStage PDF, read pp. 145-152); ja.wikipedia 井戸, 稲架, 屋敷神;
-nakasendoway.com "Dosojin"; Chiba Prefectural Museum, Boso-no-Mura headman farmstead page; JAANUS
-"yashikimon" (via the reader). **Pointers, not read:** MAFF (persimmon); the Chiba museum housing
+**Sources (read):** [Sugiura 1973](https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja) (JStage PDF, read pp. 145-152); [ja.wikipedia 井戸](https://ja.wikipedia.org/wiki/井戸), [稲架](https://ja.wikipedia.org/wiki/稲架), [屋敷神](https://ja.wikipedia.org/wiki/屋敷神);
+[nakasendoway.com "Dosojin"](https://www.nakasendoway.com/dosojin/); [Chiba Prefectural Museum, Boso-no-Mura headman farmstead page](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/); [JAANUS
+"yashikimon"](http://www.aisf.or.jp/~jaanus/deta/y/yashikimon.htm) (via the reader). **Pointers, not read:** MAFF (persimmon); the Chiba museum housing
 page (mojibake); kubota.co.jp / JA Hiroshima (waraguro); japaaan / ohgaki (goemon-buro); mizu.gr.jp
 (the 1788 waterwheel count); NDL reference desk (屋敷墓); ja.wikipedia 外便所 (the fetched text was
 Australian in scope).
@@ -596,7 +596,7 @@ and Evolution of Traditional Villages in the Mountainous Area of Southwest Zheji
 
 **Evidence:** attested
 
-**Sources:** `visit-toyama-sankyoson`, `mdpi-sho-fan-groundwater` (READ 2026-08-24)
+**Sources:** [`visit-toyama-sankyoson`](https://visit-toyama-japan.com/en/travel-inspiration/sankyoson), [`mdpi-sho-fan-groundwater`](https://www.mdpi.com/2076-3263/11/8/352) (READ 2026-08-24)
 
 **Asked** in `legacy-hand-authored-pool/hamlets/akagahara/akagahara.notes.md` as *"a GM ruling that would generalize to every
 dispersed map"*, after three east-row farms measured 501 / 622 / 741 ft from a well while
@@ -634,7 +634,7 @@ Sources: [Visit Toyama on sanson dispersed settlement](https://visit-toyama-japa
 
 **Evidence:** attested (existence and use), reconstruction (placement and size - GUESS where marked)
 
-**Sources:** `kotobank-benjo`, `sinyoken-madori`, `artic-pigsty-latrine`, `boso-no-mura-kigoya`, `jawiki-koedame`, `mizumaki-goemonburo`, `cambridge-animals-china`, `qimin-yaoshu-yangji`, `pitt-zhengzhou-coop`, `zhwiki-liuchu`, `tokushima-yashikigami`, `jawiki-yashikigami`, `kameyama-yashikigami`, `toyoko-kaki`, `uekipedia-kaki` (READ); `326woods-stack` and the japaaan / note.com sentences SUMMARY-ONLY; `sugiura-1973-fuzoku` for the rates
+**Sources:** [`kotobank-benjo`](https://kotobank.jp/word/便所-131200), [`sinyoken-madori`](https://sinyoken.sakura.ne.jp/caffee/camadori.htm), [`artic-pigsty-latrine`](https://www.artic.edu/artworks/37716), [`boso-no-mura-kigoya`](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/), [`jawiki-koedame`](https://ja.wikipedia.org/wiki/肥溜め), [`mizumaki-goemonburo`](https://www.town.mizumaki.lg.jp/museum/040/020/050/550/1258.html), [`cambridge-animals-china`](https://www.cambridge.org/core/books/animals-through-chinese-history/where-did-the-animals-go/E281204414087F0A9ACCDDCEF5358C08), [`qimin-yaoshu-yangji`](https://zh.wikisource.org/wiki/齊民要術_(四庫全書本), [`pitt-zhengzhou-coop`](https://www.haa.pitt.edu/news/tao-and-colleagues-publish-400-year-old-chinese-chicken-coop), [`zhwiki-liuchu`](https://zh.wikipedia.org/wiki/六畜), [`tokushima-yashikigami`](https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf), [`jawiki-yashikigami`](https://ja.wikipedia.org/wiki/屋敷神), [`kameyama-yashikigami`](SOURCES.md#kameyama-yashikigami), [`toyoko-kaki`](https://ameblo.jp/toyoko-housing/entry-11418946119.html), [`uekipedia-kaki`](https://www.uekipedia.jp/落葉広葉樹-カ行/カキ/) (READ); [`326woods-stack`](https://326-woods.com/2021/02/09/keepwoods/) and the japaaan / note.com sentences SUMMARY-ONLY; [`sugiura-1973-fuzoku`](https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja) for the rates
 
 The GM chose from the T52 inventory: *"privies are something that we want ... firewood stacks are
 actually large enough to render ... Same thing with manure heaps, same thing with baths, same thing
@@ -644,20 +644,20 @@ it does appear ... as for chicken coops ... go with whatever was the case in imp
 are quoted per claim below. Every drawn size is TRUE feet at the map's scale; the sizes are GUESSES
 unless a source is named, because the record describes these things and almost never measures them.
 
-**The privy (便所, kawaya) - READ.** Nipponica (kotobank 便所): *"農家では、小便所一つと大便所一つを、母屋から
+**The privy (便所, kawaya) - READ.** [Nipponica (kotobank 便所)](https://kotobank.jp/word/便所-131200): *"農家では、小便所一つと大便所一つを、母屋から
 独立した一つの建物として設けるのが普通であった"* - on a farm the urinal and the privy were ONE building
-independent of the main house, and that was the norm. Where it stood (sinyoken 間取り pages, READ):
+independent of the main house, and that was the norm. Where it stood ([sinyoken 間取り pages](https://sinyoken.sakura.ne.jp/caffee/camadori.htm), READ):
 *"便所が家の納屋のあたりに見られるようになったり、その前の中心部の裏口あたりに位置したり、背戸口の方に離れたり
 するなど様々"* - by the naya, at the back door, off toward the back entrance; and *"背戸口や脇便所、戸口便所
 として独立した便所"* - a privy at the door (戸口便所) is a named form. Three attested seats, so the seat
 is ROLLED per house (back door .60 / gate .25 / naya .15), each falling back to the others. Size
 NOT-FOUND (the one sizing page is dead) - 6 x 6 ft, the one-ken module, a GUESS. Share: "普通"
-reads as near-universal; Sugiura's 0.87 outbuildings + 0.32 in-house (overlapping) agree; the
-per-hamlet band is 0.85-0.95. In Han China (AIC catalog, READ via the museum API): *"latrines - or
+reads as near-universal; [Sugiura](https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja)'s 0.87 outbuildings + 0.32 in-house (overlapping) agree; the
+per-hamlet band is 0.85-0.95. In Han China ([AIC catalog](https://www.artic.edu/artworks/37716), READ via the museum API): *"latrines - or
 toilets - were customarily built above a pigsty and connected by pipes to a cesspool"* - the privy
 and the muck were one cluster, which is why the manure heap below is seated BEYOND THE PRIVY.
 
-**The woodpile - READ (the shed), GUESS (the stack's wall).** The Boso-no-Mura reconstructed
+**The woodpile - READ (the shed), GUESS (the stack's wall).** The [Boso-no-Mura](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/) reconstructed
 farmstead lists a 木小屋: *"燃料として使う、炭やたきぎなどを収めておく建物です"* (a building holding the
 charcoal and firewood used as fuel) - READ; where the pile stood relative to the house NOT-FOUND
 (the earlier "behind a shed or along the front wall" summary is withdrawn - the page does not say
@@ -666,7 +666,7 @@ is the cheaper and older form and the one drawn: 10 x 3.5 ft in plan, split logs
 - the 1.5 m height is modern stacking practice (326-woods, SUMMARY-ONLY and MODERN; the object has
 not changed). Wall: the back wall or the kura's outer wall, out of the rain - a GUESS; band 0.75-0.95.
 
-**The manure heap - READ (the practice), SUMMARY-ONLY (the place).** ja.wikipedia 肥溜め / 下肥 (READ):
+**The manure heap - READ (the practice), SUMMARY-ONLY (the place).** [ja.wikipedia 肥溜め](https://ja.wikipedia.org/wiki/肥溜め) / [下肥 (READ)](https://ja.wikipedia.org/wiki/下肥):
 night soil was fermented in *"地中に埋めた壺や、漆喰をほどこした穴"* (buried jars, plastered pits) of
 *"口径1-1.5メートル程度"*, *"夏の場合1-2週間、冬の場合3-4週間"*; where on the farm the pit stood the pages do
 not say - a search summary put it *"厩（馬小屋）の近くや軒下"* (near the stable, under the eaves; SUMMARY-
@@ -674,48 +674,48 @@ ONLY). Stable litter and grass composted into 厩肥 (note.com, SUMMARY-ONLY). W
 privy READ above, the heap is drawn as one 8 x 6 ft mound beyond the privy (size GUESS); share
 band 0.40-0.70 (Sugiura: a compost SHED on 0.24 - the open heap is commoner than its shed; GUESS).
 
-**The bath shed - READ (use), NOT-FOUND (placement).** Mizumaki museum (READ): the goemon-buro
+**The bath shed - READ (use), NOT-FOUND (placement).** [Mizumaki museum](https://www.town.mizumaki.lg.jp/museum/040/020/050/550/1258.html) (READ): the goemon-buro
 *"自給自足を中心とした農村で多く使われた"* - used widely in self-sufficient farm villages; that it spread
 into western-Japan homes in the late Edo is SUMMARY-ONLY (japaaan, the sentence not on the fetched
 page). Sugiura: a bath SHED on 0.29 of pre-1944 households and a bath INSIDE the house on 0.53 -
 two forms, so only the shed share is drawn (band 0.20-0.45) and the rest bathe indoors, undrawn.
 Where the shed stood NOT-FOUND: seated at the back wall or a flank (GUESS), 6 x 6 ft (GUESS).
 
-**The chicken coop - imperial China's, READ.** *Animals through Chinese History* (Cambridge, READ):
+**The chicken coop - imperial China's, READ.** [*Animals through Chinese History*](https://www.cambridge.org/core/books/animals-through-chinese-history/where-did-the-animals-go/E281204414087F0A9ACCDDCEF5358C08) (Cambridge, READ):
 *"it seems that farmers in most regions of China managed to keep a pig and some chickens in their
 yard, along with a draft animal or two"* (late imperial; the chapter leans on 1930s survey data,
-its own caveat). The Qimin Yaoshu 養雞第五十九 (wikisource, READ): *"雞棲，宜據地為籠，籠內著棧 ... 若任之
+its own caveat). The [Qimin Yaoshu 養雞第五十九](https://zh.wikisource.org/wiki/齊民要術_(四庫全書本) (wikisource, READ): *"雞棲，宜據地為籠，籠內著棧 ... 若任之
 樹林，一遇風寒，大者損瘦，小者或死"* - build the roost as a ground-level enclosure with a perch inside;
 left to roost in trees the birds sicken - so a COOP, not a tree. A late-Ming coop at Zhengzhou
-(Pitt HAA, READ): *"square-shaped structure had six niche-like openings in the west wall, with some
-eggshell fragments"* - square; no size given. The chicken is one of the 六畜 (zh.wikipedia, READ).
+([Pitt HAA](https://www.haa.pitt.edu/news/tao-and-colleagues-publish-400-year-old-chinese-chicken-coop), READ): *"square-shaped structure had six niche-like openings in the west wall, with some
+eggshell fragments"* - square; no size given. The chicken is one of the 六畜 ([zh.wikipedia](https://zh.wikipedia.org/wiki/六畜), READ).
 No source gives a household PROPORTION; the band 0.50-0.80 is a GUESS bounded by "most regions",
 above Sugiura's Japan (0.16-0.28, where pre-Meiji chickens were timekeepers). 5 x 5 ft, square
 after Zhengzhou, size a GUESS; seated on the flank by the yard (GUESS - "in their yard").
 
-**The household shrine (屋敷神) - READ, and the GM chose between two attested forms.** Tokushima
-prefectural library (READ): *"各家にある場合と特定の旧家にだけある場合がある"* - in some places every house
-has one, in others only certain old families; ja.wikipedia 屋敷神 (READ) states the same two
+**The household shrine (屋敷神) - READ, and the GM chose between two attested forms.** [Tokushima
+prefectural library](https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf) (READ): *"各家にある場合と特定の旧家にだけある場合がある"* - in some places every house
+has one, in others only certain old families; [ja.wikipedia 屋敷神](https://ja.wikipedia.org/wiki/屋敷神) (READ) states the same two
 patterns. Under Principle XII two forms would be a knob; the GM ruled for this map (T58): *"very
 rare, but which is notable when it does appear"* - the old-families pattern, Sugiura's 0.03; band
 0.03-0.08, and the count is CAPPED at the share so positional luck cannot make it common. The
 every-house pattern is the DECLINED alternative, recorded here for the knob a later tier may want.
-Corner: NE (鬼門) - *"屋敷の一隅、特に鬼門（北東隅）に、石や木、わら屋根の祠"* (ja.wikipedia, minka-en, READ);
+Corner: NE (鬼門) - *"屋敷の一隅、特に鬼門（北東隅）に、石や木、わら屋根の祠"* ([ja.wikipedia](https://ja.wikipedia.org/wiki/屋敷神), [minka-en](https://minka-en.com/shisetsu/shisetsu_7/), READ);
 NW 17 of 37 and NE 11 of 37 in a Kameyama survey (SUMMARY-ONLY - the page would not render); SW
-*"屋敷の西南隅に祀られているのが普通"* in Tokushima (READ) - three corners attested, rolled NW .45 / NE
+*"屋敷の西南隅に祀られているのが普通"* in [Tokushima](https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf) (READ) - three corners attested, rolled NW .45 / NE
 .35 / SW .20. Size: *"石造か木造の小祠"* (READ); one measured example *"幅・奥行き・高さ各40cm位の石の祠"*
-(Tokushima, READ) - about 1.3 ft. DRAWN at 6 x 6 ft, the small-shed module (T62; it was 3 x 3 for T58 and the GM *"could not tell
+([Tokushima](https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf), READ) - about 1.3 ft. DRAWN at 6 x 6 ft, the small-shed module (T62; it was 3 x 3 for T58 and the GM *"could not tell
 what it even is"*) - a MAP DRAWING CONVENTION above the one measured stone, the GM's ruling: *"as
 a glyph rendering convention, we could make it the same size as one of those small sheds ... but
 also red and visually distinctive in some other way"* - vermilion, a ridge line and a torii standing
 before the door.
 
-**The persimmon - READ.** *"だからどこの庭先にも柿の木が植えてある"* (toyoko-housing, READ) - hence a persimmon
+**The persimmon - READ.** *"だからどこの庭先にも柿の木が植えてある"* ([toyoko-housing](https://ameblo.jp/toyoko-housing/entry-11418946119.html), READ) - hence a persimmon
 in every dooryard; and *"江戸時代の農学者 宮崎安貞は、家屋敷の周りに柿の木を植える事を奨励した"* - the Edo
 agronomist Miyazaki Yasusada urged planting them round the homestead; *"夏は家に木陰を作り"* - it shades
 the house in summer, so it stands BESIDE the house (which side, a GUESS: the flank, then a front or
 back corner). The earlier MAFF "without exception" pointer is WITHDRAWN - NOT-FOUND on any MAFF
-page. Height 3-20 m (uekipedia, READ); crown width NOT-FOUND - drawn 18 ft across (GUESS); band
+page. Height 3-20 m ([uekipedia](https://www.uekipedia.jp/落葉広葉樹-カ行/カキ/), READ); crown width NOT-FOUND - drawn 18 ft across (GUESS); band
 0.80-0.95. Its fruit dots are a RENDERING convention naming the tree, not a season.
 
 **The straw rick - NOT DRAWN (T60).** Seasonal (waraguro built after the harvest, kept to spring):
@@ -730,16 +730,16 @@ tested against every placed footprint, lane, paddy, marsh and pond, the persimmo
 the engine's canopy keep-outs. Inashiro seed 4: privy 12, woodpile 7, coop 7, manure 5, bath 3,
 shrine 1, persimmon 8 on 15 houses (the first roll seated 10; 8 on the shipped roll - the review at T99 caught the stale count).
 
-**Sources (read):** kotobank 便所 (Nipponica); sinyoken.sakura.ne.jp camadori.htm and cayomo016.htm;
-Art Institute of Chicago 37716 (catalog text via api.artic.edu); Chiba Prefectural Museum,
-Boso-no-Mura 木小屋; ja.wikipedia 肥溜め, 下肥, 屋敷神, 六畜 (zh); Mizumaki town museum 五右衛門風呂;
-toyoko-housing (ameblo) 農家の庭先の柿; uekipedia カキ; Tokushima prefectural library bulletin 50 pp.
-131-133; minka-en.com 屋敷神; satologue.com 屋敷神様; Cambridge *Animals through Chinese History*,
-"Where did the animals go"; 齊民要術 卷六 養雞第五十九 (wikisource); Pitt HAA, the Zhengzhou coop.
-**SUMMARY-ONLY:** japaaan 五右衛門風呂 (late-Edo spread); 326-woods (stack height, modern); note.com
-厩肥; Kameyama city history 屋敷神 survey (17/37, 11/37); the stable-and-eaves pit placement.
-**Withdrawn:** MAFF persimmon "without exception"; Boso-no-Mura firewood placement; 百姓伝記 on
-night soil (the readable manual saying it is 農業全書, 1696). Keys in `research/SOURCES.md`.
+**Sources (read):** [kotobank 便所 (Nipponica)](https://kotobank.jp/word/便所-131200); [sinyoken.sakura.ne.jp camadori.htm and cayomo016.htm](https://sinyoken.sakura.ne.jp/caffee/camadori.htm);
+[Art Institute of Chicago 37716](https://www.artic.edu/artworks/37716) (catalog text via api.artic.edu); [Chiba Prefectural Museum,
+Boso-no-Mura 木小屋](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/); [ja.wikipedia 肥溜め](https://ja.wikipedia.org/wiki/肥溜め), [下肥](https://ja.wikipedia.org/wiki/下肥), [屋敷神](https://ja.wikipedia.org/wiki/屋敷神), [六畜 (zh)](https://zh.wikipedia.org/wiki/六畜); [Mizumaki town museum 五右衛門風呂](https://www.town.mizumaki.lg.jp/museum/040/020/050/550/1258.html);
+[toyoko-housing (ameblo) 農家の庭先の柿](https://ameblo.jp/toyoko-housing/entry-11418946119.html); [uekipedia カキ](https://www.uekipedia.jp/落葉広葉樹-カ行/カキ/); [Tokushima prefectural library bulletin 50 pp.
+131-133](https://library.bunmori.tokushima.jp/digital/webkiyou/50/131-133.pdf); [minka-en.com 屋敷神](https://minka-en.com/shisetsu/shisetsu_7/); [satologue.com 屋敷神様](https://satologue.com/living/758); [Cambridge *Animals through Chinese History*,
+"Where did the animals go"](https://www.cambridge.org/core/books/animals-through-chinese-history/where-did-the-animals-go/E281204414087F0A9ACCDDCEF5358C08); [齊民要術 卷六 養雞第五十九 (wikisource)](https://zh.wikisource.org/wiki/齊民要術_(四庫全書本); [Pitt HAA, the Zhengzhou coop](https://www.haa.pitt.edu/news/tao-and-colleagues-publish-400-year-old-chinese-chicken-coop).
+**SUMMARY-ONLY:** japaaan 五右衛門風呂 (late-Edo spread); [326-woods](https://326-woods.com/2021/02/09/keepwoods/) (stack height, modern); note.com
+厩肥; [Kameyama city history 屋敷神 survey](SOURCES.md#kameyama-yashikigami) (17/37, 11/37); the stable-and-eaves pit placement.
+**Withdrawn:** MAFF persimmon "without exception"; [Boso-no-Mura firewood placement](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/); 百姓伝記 on
+night soil (the readable manual saying it is [農業全書](https://ja.wikipedia.org/wiki/農業全書), 1696). Keys in `research/SOURCES.md`.
 
 ## The outhouse faces the SUN, not away from the wind - and 72.7% of them do
 
@@ -748,7 +748,7 @@ UPWIND of its own house (11 of 12 north-east, 1 east) and proposed seating them 
 intuitive rule, and it is wrong. The research pass sent to settle it read the one primary source we could
 reach and found the opposite consideration governing.
 
-**What the record says.** Wang & Ochiai surveyed farmhouses in Arakawa village, Shiga - a windstorm-prone
+**What the record says.** [Wang & Ochiai](https://doi.org/10.1080/13467581.2021.1972810) surveyed farmhouses in Arakawa village, Shiga - a windstorm-prone
 settlement, so a place where wind-conscious siting would show if it existed anywhere: *"toilets, as
 important sources of fertilizer for the paddy fields in the past ... tended to be located in southeast and
 south directions, with a total percentage at 72.7%, as a relatively warm temperature helped quick
@@ -803,7 +803,7 @@ the threshing floor, and a privy may not stand on it. Closing it honestly means 
 BEFORE the yard and gardens are placed - a stage reorder, recorded and not yet attempted - not widening
 the radius until the number comes out right.
 
-**Sources:** `wang-ochiai-2022`.
+**Sources:** [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810).
 
 
 ## The muck heap that reads as the neighbor's (accepted 2026-08-29, feature 152)
@@ -844,4 +844,4 @@ stays a TIE-BREAK, promoting an unambiguous seat whenever the ground offers one.
 stage reorder, the same one the sun-share entry above names). Nothing else on this list should be
 re-pulled without a new mechanism.
 
-**Sources:** `wang-ochiai-2022` (the sun-side share the heap inherits).
+**Sources:** [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810) (the sun-side share the heap inherits).

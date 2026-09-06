@@ -26,7 +26,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** `kochi-seiri-jawiki` (READ: the grid is Meiji consolidation), `nougyoudoboku-keihan` (READ: the standard bund), `aze-standard` (the earlier key). Azenuri timing and the 2-5 ft azemichi not re-read - leftover
+**Sources:** [`kochi-seiri-jawiki`](https://ja.wikipedia.org/wiki/%E8%80%95%E5%9C%B0%E6%95%B4%E7%90%86) (READ: the grid is Meiji consolidation), [`nougyoudoboku-keihan`](https://nougyoudoboku.com/a-ridge-between-rice-fields/) (READ: the standard bund), [`aze-standard`](https://www.pref.aomori.lg.jp/soshiki/nourin/noson/files/H2904_nnzusyu_H2911syuusei.pdf) (the earlier key). Azenuri timing and the 2-5 ft azemichi not re-read - leftover
 
 Pre-modern paddies were fitted to the land and water by piecemeal reclamation and inheritance, so plots are odd-sized and odd-shaped with bunds meeting at **T-junctions**; the tidy rectangular grid is a **modern (Meiji/Showa) land-consolidation (*kochi seiri*) artifact** and reads as anachronistic.
 
@@ -212,11 +212,11 @@ research. Relatedly, should there be a minimum rice paddy size? I would expect t
 
 **Evidence:** attested for the size range; the ratio is derived, from two independent arguments
 
-**Sources:** `senmaida`, `bench-terrace-riser`
+**Sources:** [`senmaida`](SOURCES.md#senmaida), [`bench-terrace-riser`](https://sti-portal.fao.org/innovations/traditional-irrigated-rice-terraces)
 
 #### What the research found: no absolute minimum exists
 
-Shiroyone Senmaida on the Noto peninsula works **1,004 basins on about 4 hectares**. The average
+[Shiroyone Senmaida](SOURCES.md#senmaida) on the Noto peninsula works **1,004 basins on about 4 hectares**. The average
 paddy is quoted at ~18-20 m2; many run about 1 m2, and the smallest is roughly **half a meter
 square - two rice stalks**. The local anecdote is the clearest statement of the scale: a paddy once
 reported missing turned up under a straw raincoat that had been laid on the ground. Obasute carries
@@ -373,11 +373,11 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** researched, MODERN - every figure below is contemporary Japanese extension guidance; no pre-modern number was found
 
-**Sources:** [`maff-suitou-mizu`](SOURCES.md#maff-suitou-mizu), [`zennoh-mizukanri`](SOURCES.md#zennoh-mizukanri)
+**Sources:** [`maff-suitou-mizu`](https://www.maff.go.jp/j/seisan/gijutsuhasshin/techinfo/attach/pdf/suitou-2.pdf), [`zennoh-mizukanri`](https://www.zennoh.or.jp/ty/einou/high_quality_rice/pdf/production_001_05.pdf)
 
 - *What we said, and why it was wrong TWICE.* From feature 134 until 2026-08-29 the map told its
   reader that a paddy holds "four to six inches of water" (about 10-15 cm), citing
-  `tabayashi-1986`. Both halves fail. The depth is wrong: the maintained figures are **2-3 cm**,
+  [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/). Both halves fail. The depth is wrong: the maintained figures are **2-3 cm**,
   about an inch - 活着後は水深2~3cmのやや浅水とし ("after rooting, a slightly shallow 2-3 cm"), and for
   the twenty days from heading, 2~3cm程度の湛水状態を保つことが重要です. And the SHAPE is wrong, which
   is the larger error: there is no season-long depth to state.
@@ -390,11 +390,11 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
   before harvest. **A paddy is not under water all season, and for part of midsummer it is dry
   enough to crack.**
 - *Where the four-to-six-inch figure DOES appear, and why it misled.* 10 cm and 20 cm are real
-  numbers in the record - but as a cold contingency, not a norm: MAFF gives them under
+  numbers in the record - but as a cold contingency, not a norm: [MAFF](https://www.maff.go.jp/j/seisan/gijutsuhasshin/techinfo/attach/pdf/suitou-2.pdf) gives them under
   気温が下がる恐れがある場合は ("when there is risk of falling temperature"), 10 cm at panicle
   formation and 20 cm at booting, to protect the young panicle. A figure read out of that context
   becomes a maintained depth that nobody maintains.
-- *The citation that never supported it.* `tabayashi-1986` is a study of the distribution and
+- *The citation that never supported it.* [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/) is a study of the distribution and
   development of irrigation systems, classified by water source. It says nothing about water depth.
   Our own `SOURCES.md` "Used for" line had always said so - tameike siting, one outlet, the canal
   taper, supply/drain separation - which is exactly what that field exists to make visible.
@@ -420,7 +420,7 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** attested (the mechanism is textbook), researched (not re-read this pass)
 
-**Sources:** searched 2026-08-28: the IntechOpen chapter (intechopen.com/chapters/69541) reads only a general "biological nitrogen fixation" clause; Springer 978-3-662-10385-2_22 paywalled; MDPI agriculture9020029 403. Azolla-cyanobacteria fixation and renge green manure want an open source (IRRI / FAO azolla pages) - leftover `azolla-enwiki` (READ, leftovers pass: Azolla on the flooded paddy releasing nitrogen; the cyanobacterial symbiont and renge - ja.wikipedia ゲンゲ - still to read)
+**Sources:** searched 2026-08-28: the IntechOpen chapter (intechopen.com/chapters/69541) reads only a general "biological nitrogen fixation" clause; Springer 978-3-662-10385-2_22 paywalled; MDPI agriculture9020029 403. Azolla-cyanobacteria fixation and renge green manure want an open source (IRRI / FAO azolla pages) - leftover [`azolla-enwiki`](https://en.wikipedia.org/wiki/Azolla) (READ, leftovers pass: Azolla on the flooded paddy releasing nitrogen; the cyanobacterial symbiont and renge - ja.wikipedia ゲンゲ - still to read)
 
 - *Nitrogen - the paddy makes its OWN, so soy is food not fertiliser.* A flooded paddy is near self-sustaining for nitrogen: the standing water hosts N-fixing **cyanobacteria + *azolla*** and the **irrigation water carries in silt/nutrients** from upstream - which is why paddies crop continuously for centuries where dry-field monoculture exhausts the soil. Legumes entered as **winter green manure grown IN the drained paddy** (*renge* / Chinese milk vetch, plowed under before spring flooding) + applied night soil / ash / fish-and-oilseed cake - NOT soy on the margins washing in. So the ~6% soy is a **food crop** (dry fields, and characteristically on the paddy bunds - *aze-mame*, "ridge beans"), NOT the paddy's nitrogen supply.
 
@@ -430,7 +430,7 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** attested (the package), researched (the police enforcement - SUMMARY-ONLY)
 
-**Sources:** `seijoue-kotobank`, `seijoue-seika`, `kubota-transplanting` (READ: seijoue rare before Meiji, promoted nationally in the 1890s-1900s with the 田打車 weeder, ropes and rulers). The police standing over the planting and the 1903 order: SUMMARY-ONLY (search syntheses of agri.hakase-jyuku.com "サーベル農政"; not read)
+**Sources:** [`seijoue-kotobank`](https://kotobank.jp/word/正条植-85971), [`seijoue-seika`](https://seikasya.town.seika.kyoto.jp/essays/seijoue), [`kubota-transplanting`](https://www.kubota.co.jp/kubotatanbo/history/tools/transplanting.html) (READ: seijoue rare before Meiji, promoted nationally in the 1890s-1900s with the 田打車 weeder, ropes and rulers). The police standing over the planting and the 1903 order: SUMMARY-ONLY (search syntheses of agri.hakase-jyuku.com "サーベル農政"; not read)
 
 - *WHY rows waited for Meiji when row planting is ancient (GM 2026-07-23 - the idea was never the bottleneck, the economics were).* Dry-crop rows are FREE: the seed goes into a plowed furrow, and the furrow IS the row. Wet rice is TRANSPLANTED into a puddled flooded sheet with no furrows and no guide lines, so rows must be PURCHASED - marked ropes or a rolled gridding frame, plus every planter aligning to them - and the bill lands in the year's tightest labor window (the whole village transplants in days, on a shared water schedule). And for centuries the purchase bought nothing: rows pay when a tool travels BETWEEN them (the ancient dry-field hoe/cultivator), but nothing could travel between rows in a flooded paddy - weeding was by hand and foot either way. What changed in Meiji was the arrival of the between-rows tool for mud: the hand-pushed ROTARY PADDY WEEDER, which only works on plants ruled in both directions - so *seijoue* + marking frame + rotary weeder spread as ONE package, pushed by state extension hard enough that police sometimes stood over farmers to enforce straight lines ("saber farming"), itself evidence the private payoff was marginal before the full package. Traditional transplanting was NOT chaos though: clump spacing was roughly even (a practiced hand keeps density consistent - density drives yield), just never ruled - which is exactly what the sparse unruled shoot-mottle renders.
 
@@ -440,9 +440,9 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** attested, corroborated
 
-**Sources:** [`tabayashi-1986`](SOURCES.md#tabayashi-1986), [`kagawa-tameike`](SOURCES.md#kagawa-tameike), [`jsidre-minumadai`](SOURCES.md#jsidre-minumadai), [`japanese-wiki-corpus`](SOURCES.md#japanese-wiki-corpus), [`beitang-studies`](SOURCES.md#beitang-studies)
+**Sources:** [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), [`kagawa-tameike`](https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html), [`jsidre-minumadai`](https://www.jsidre.or.jp/tabata5-a/), [`japanese-wiki-corpus`](https://www.japanesewiki.com/history/Jori%20sei%20(system%20of%20land%20subdivision%20in%20ancient%20Japan), [`beitang-studies`](SOURCES.md#beitang-studies)
 
-- **Pond**: a valley-head *tameike* behind an earthen dike, sitting ABOVE its fields ("located at a valley head and constructed by dividing off the valley mouth with an earthen dike... at elevations higher than the surface of the paddy fields they serve" - Tabayashi 1986, Geographical Review of Japan 60(1)). ONE outlet: an inclined intake (shahi) feeding a bottom conduit (sokohi) through the dam; the spillway is flood-safety, never distribution (Kagawa pref. tameike docs). Parent/child pond linkage (oyaike/koike, Kagawa; "melon-on-the-vine" in China) is attested flavor for larger systems.
+- **Pond**: a valley-head *tameike* behind an earthen dike, sitting ABOVE its fields ("located at a valley head and constructed by dividing off the valley mouth with an earthen dike... at elevations higher than the surface of the paddy fields they serve" - [Tabayashi 1986](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), Geographical Review of Japan 60(1)). ONE outlet: an inclined intake (shahi) feeding a bottom conduit (sokohi) through the dam; the spillway is flood-safety, never distribution (Kagawa pref. tameike docs). Parent/child pond linkage (oyaike/koike, Kagawa; "melon-on-the-vine" in China) is attested flavor for larger systems.
    - **Distribution**: sluice -> head-race -> division point (bunsuiguchi) -> a branching TREE. "Main canals **gradually decrease in size as they are tapped by branch canals**" (Tabayashi) - hence the drawn taper. The smallest ditches "are often considered parts of the paddy fields they serve" - hence ditch-as-plot-boundary. SPARSE is correct: a village digs the minimum network; a ditch beside every paddy (yohaisui bunri) is a Meiji land-readjustment (1899/1905) anachronism.
    - **Layout modes** (terrain-driven; the GM wants all three eventually):
      - **COMB (the default)**: supply canals along the HIGH margins, delivery ditches perpendicular down-slope, one drain along the low line. Grounding: the Edo Kishu-school layout (Minuma-dai 1728 - the LAYOUT is sourced, the NAME is queued: a 2026-08-29 read found 紀州流 attested as Izawa Yasobei's river-channelization method rather than a field layout, so do not re-use the name elsewhere until it checks out, `SOURCES.md` re-sourcing queue: supply on the elevated margins, drainage channel on the lowest line, water reused downstream) AND codified Chinese canal doctrine (mains along contours/ridges on high ground, field channels perpendicular to contours). Chinese *beitang* pond systems - the direct tameike analogue - were THE dominant village-scale mode in rice China (8.3M ponds serving ~39% of irrigated area into the 1950s, ~71% in hilly regions); the GM chose the Chinese default deliberately (Rokugan demographics anchor to Song/Ming China).
@@ -455,7 +455,7 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** interpolated
 
-**Sources:** `kokudaka-jawiki` (READ: one koku a year; real stipends ~1.8), `gokogomin-kotobank` (READ: 40% then 50% - the "~45%" is an undisclosed midpoint, now disclosed). Not read: the 2,000-2,500 m3/ha tameike ratio (the Aomori 21nn_17ike.pdf is unreadable to the fetcher), the 1.3 koku/tan yield, the 0.02-0.25 acre plots and the Tedori straightening - leftover
+**Sources:** [`kokudaka-jawiki`](https://ja.wikipedia.org/wiki/%E7%9F%B3%E9%AB%98) (READ: one koku a year; real stipends ~1.8), [`gokogomin-kotobank`](https://kotobank.jp/word/五公五民-64520) (READ: 40% then 50% - the "~45%" is an undisclosed midpoint, now disclosed). Not read: the 2,000-2,500 m3/ha tameike ratio (the Aomori 21nn_17ike.pdf is unreadable to the fetcher), the 1.3 koku/tan yield, the 0.02-0.25 acre plots and the Tedori straightening - leftover
 
 - **Plots**: pre-modern 0.02-0.25 acre, irregular; v2 carves ~0.1-0.15 acre, ~9 scattered plots per household (fragmented holdings were normal). STRAIGHT rectangular channels/plots are post-1900 consolidation (the Tedori fan's ditches were only straightened in the early 1900s) - the organic waver is period-correct, do not "clean it up".
 
@@ -469,15 +469,15 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.
 
 **Evidence:** researched
 
-**Sources:** [`li-bozhong-jiangnan`](SOURCES.md#li-bozhong-jiangnan), [`skinner-marketing`](SOURCES.md#skinner-marketing), [`aric-land-history`](SOURCES.md#aric-land-history), [`mdpi-kunisaki`](SOURCES.md#mdpi-kunisaki), [`buck-survey`](SOURCES.md#buck-survey)
+**Sources:** [`li-bozhong-jiangnan`](https://eh.net/book_reviews/agricultural-development-in-jiangnan-1620-1850/), [`skinner-marketing`](https://doi.org/10.2307/2050412), [`aric-land-history`](https://www.aric.or.jp/kiseki/en/tsuchi/index.html), [`mdpi-kunisaki`](SOURCES.md#mdpi-kunisaki), [`buck-survey`](https://archive.org/details/landutilizationi0000buck)
 
 The PLOT question (one leveled cell, ~0.05 ac) is settled above; this entry is the layer above it - the TRACT: one contiguous field system (a comb fan, a terrace flight, a polder) and how much ground it commands. Asked by the GM 2026-08-02 after Hoshizora's west comb read as "extremely unusual": *what range of rice paddy sizes might we see in a mixed-use settlement - partially urban, partially pastoral grazing, partially food-growing farms?*
 
-- *Per-household paddy (China first).* Mid-Qing Jiangnan farms averaged ~10 *mu* per farmer - Li Bozhong's "ten *mu* per farmer" - at the Ming-Qing *mu* of ~614 m2, so **~1.5 acres of intensively worked wet rice per farm household**; Buck's surveys corroborate that a holding was scattered over several parcels. Japan corroborates: the Edo average farm household held ~1 *cho* (~2.45 ac) TOTAL, paddy plus dry, putting its paddy share in the same ~1-1.5 ac. The working band: **~1-2.5 acres of paddy per farm household** - the same number the diet-side acreage-from-population rule above reaches independently (~0.8-1.0 *tan*/person x ~4.5-person households).
+- *Per-household paddy (China first).* Mid-Qing Jiangnan farms averaged ~10 *mu* per farmer - [Li Bozhong](https://eh.net/book_reviews/agricultural-development-in-jiangnan-1620-1850/)'s "ten *mu* per farmer" - at the Ming-Qing *mu* of ~614 m2, so **~1.5 acres of intensively worked wet rice per farm household**; [Buck](https://archive.org/details/landutilizationi0000buck)'s surveys corroborate that a holding was scattered over several parcels. Japan corroborates: the Edo average farm household held ~1 *cho* (~2.45 ac) TOTAL, paddy plus dry, putting its paddy share in the same ~1-1.5 ac. The working band: **~1-2.5 acres of paddy per farm household** - the same number the diet-side acreage-from-population rule above reaches independently (~0.8-1.0 *tan*/person x ~4.5-person households).
 
 - *The communal-system floor.* A comb fan is communal waterworks - weir, head-race, canal fork, tapering deliveries, a drain collector. The smallest attested community systems are pond/tank-fed: small *tameike* systems run ~10 ha each (Kunisaki's Tsunai ward: 5 systems totaling 50 ha across 11 farmers), and traditional village tanks typically command tens of hectares, well under 200. Even a handful of cooperating households implies ~1.5 ac each, so **the floor for a system that justifies drawn head-race-and-collector infrastructure is roughly 3-8 ha (~8-20 ac) - exactly the hamlet tier**. Nobody builds a weir and a canal fork for 2 acres; ground that size is ONE household's holding, watered by a single ditch. The GM's framing is the right mental model: a hamlet IS a small paddy tract with farmhouses around it, and a hamlet-sized tract is the honest minimum for any fully-drawn fan, wherever it appears.
 
-- *The town edge has NO tier of its own.* A market town / county seat is the CENTER of a farmed hinterland (Skinner: the standard marketing community is ~18 villages over ~300-500 km2), and cultivation historically pressed against the built edge - Chinese county seats with farmland to the walls and farmers walking out from town; Japanese post towns strung along highways through continuous paddy. Tract size is set by water, terrain, and mouths fed - never by settlement class. A mixed-use edge (urban core + hay/grazing + farms, the Hoshizora premise) legitimately carries anything from a hamlet-grade fan (~8-20 ac) where irrigable ground is short, through village-grade tracts (~50-90 ac), up to open farmland bounded only by the frame; the attested LOW end is terrain-limited (the upland Kiso post towns), and even there the limit is the terrain, not the town-ness. Small is legal where the map shows the terrain reason (hay country, forest, slope); tiny-with-full-waterworks is not attested anywhere.
+- *The town edge has NO tier of its own.* A market town / county seat is the CENTER of a farmed hinterland ([Skinner](https://doi.org/10.2307/2050412): the standard marketing community is ~18 villages over ~300-500 km2), and cultivation historically pressed against the built edge - Chinese county seats with farmland to the walls and farmers walking out from town; Japanese post towns strung along highways through continuous paddy. Tract size is set by water, terrain, and mouths fed - never by settlement class. A mixed-use edge (urban core + hay/grazing + farms, the Hoshizora premise) legitimately carries anything from a hamlet-grade fan (~8-20 ac) where irrigable ground is short, through village-grade tracts (~50-90 ac), up to open farmland bounded only by the frame; the attested LOW end is terrain-limited (the upland Kiso post towns), and even there the limit is the terrain, not the town-ness. Small is legal where the map shows the terrain reason (hay country, forest, slope); tiny-with-full-waterworks is not attested anywhere.
 
 - *What the pool draws today (audited 2026-08-02; shoelace area of each paddy `outline` x ftpx^2).* Hamlets 7.7-35.3 ac for 14-18 steadings (~0.5-2.2 ac/household - in-band). Villages 54.9-86.8 ac for 55-85 (~0.9-1.3 - in-band). Provincial cities 40.6-61.6 ac in 6-10 edge fans of 2.8-10.1 ac each, every fan visibly RUNNING OFF the frame - the truncation itself says "slice of a larger field", so the small on-frame acreage is honest. Towns are the outlier: Hoshizora 2.4 ac total against 45 depicted farmsteads, Ubame 4.0 against 35, Hirameki 8.2 against 73 - **0.05-0.11 ac per depicted farm household, 15-30x under the band; each town's whole drawn paddy is smaller than ONE real household's holding**. The cause is mechanical, not doctrinal: the town gens hand-cap `field_fall` at 145-320 px and hand-set `row_step=(52,72)` outside the `paddy_grain` lineage. The "town map shows a slice of the county's farmland" doctrine covers a fan that runs off-frame (hoshizora-ne, ubame-south do) but NOT an enclosed one - hoshizora-west is bounded by stream, road, monastery, and laborers' quarter on all four sides and therefore reads as a complete, absurdly small farm.
 
@@ -489,7 +489,7 @@ The PLOT question (one leveled cell, ~0.05 ac) is settled above; this entry is t
 
 **Evidence:** researched
 
-**Sources:** `satoyama-enwiki` (READ: the mosaic and the foothill-to-flat border zone). The Takeuchi-school catena sentence ("large middle river terraces... large areas of crop fields and small areas of paddy") is SUMMARY-ONLY - the mekongwatch PDF is unreadable to the fetcher; find the paper itself - leftover
+**Sources:** [`satoyama-enwiki`](https://en.wikipedia.org/wiki/Satoyama) (READ: the mosaic and the foothill-to-flat border zone). The Takeuchi-school catena sentence ("large middle river terraces... large areas of crop fields and small areas of paddy") is SUMMARY-ONLY - the mekongwatch PDF is unreadable to the fetcher; find the paper itself - leftover
 
 WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated paddy holds the flat valley bottom / plain; DRY fields (hatake) take the HIGHER, well-drained ground the water cannot command (river terraces, natural levees / micro-highs threading the plain, alluvial-fan edges, lower slopes, AND the slightly-raised ground the homesteads sit on); coppice woodland (satoyama) crowns the hills above. Sources: satoyama land-use literature ("wet-rice in the plains and valley bottoms... satoyama woodlands/grasslands for dry-field crops"; "large middle river terraces... large areas of crop fields and small areas of paddy"); Kanto-plain historical-GIS land-use studies. So dry fields are NOT one neat strip - historically they sit in SEVERAL positions, above all AROUND the houses ("each family has some paddy and some hatake", the household's dry plots near its home).
 
@@ -499,7 +499,7 @@ WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated p
 
 **Evidence:** researched (the category and its penalties are READ; the siting is an inference, said so below)
 
-**Sources:** [`kotobank-shitsuden`](SOURCES.md#kotobank-shitsuden), [`kotobank-kanden`](SOURCES.md#kotobank-kanden), [`kotobank-yatsuda`](SOURCES.md#kotobank-yatsuda), [`kotobank-fukada`](SOURCES.md#kotobank-fukada), [`fao-rice-water`](SOURCES.md#fao-rice-water)
+**Sources:** [`kotobank-shitsuden`](https://kotobank.jp/word/%E6%B9%BF%E7%94%B0-74168), [`kotobank-kanden`](https://kotobank.jp/word/%E4%B9%BE%E7%94%B0-49311), [`kotobank-yatsuda`](https://kotobank.jp/word/%E8%B0%B7%E6%B4%A5%E7%94%B0-400607), [`kotobank-fukada`](https://kotobank.jp/word/%E6%B7%B1%E7%94%B0-123763), [`fao-rice-water`](https://www.fao.org/4/x6905e/x6905e0g.htm)
 
 - *A wet paddy is a NAMED category, not a wetter example of the same thing.* Pre-modern Japanese
   agriculture split paddy land in two. **湿田 (shitsuden)**, "wet paddy": 水はけが悪く、水稲を栽培
@@ -536,7 +536,7 @@ WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated p
   the wettest, lowest ground"*). It is a reasoned inference from an attested mechanism, and it is
   labeled one here rather than presented as a finding.
 - *Two things we did NOT get, and do not assert.* No source read gives a maintained growing-season
-  water depth of four to six inches as such - IRRI's 5-10 cm figure could only be reached in a search
+  water depth of four to six inches as such - [IRRI](SOURCES.md#irri-bund-summary)'s 5-10 cm figure could only be reached in a search
   summary (the host refused the fetch) and FAO's fetched 5-20 cm is a bund-construction range, not a
   maintained depth. And nothing read says the water surface stays visible between the plants until
   the canopy closes, which is the sentence a reader might expect to justify drawing one plot bluer
@@ -556,20 +556,20 @@ WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated p
 
 **Evidence:** attested (the practice, the height, the leaf color), liberty (the bead's size and color)
 
-**Sources:** `nabunken-azemame`, `wikipedia-soybean`, `cropfarming-soybeans`
+**Sources:** [`nabunken-azemame`](https://www.nabunken.go.jp/asuka/info/2023/06/post-444.html), [`wikipedia-soybean`](https://en.wikipedia.org/wiki/Soybean), [`cropfarming-soybeans`](https://cropfarming.org/what-do-soybeans-look-like-growing-in-the-field/)
 
 *The question.* The GM's wording rule (feature 183) asks a convention's note to say what the feature
 actually looks like beside how we draw it. The beads on the bunds are soybeans (azemame); the record
 held the practice and the color decision but no figure for the plant itself.
 
-*What the research found.* The practice, READ from the Nara National Research Institute for Cultural
-Properties' Asuka pages: *"『畦豆（あぜまめ）』とも呼ばれる大豆です ... 田植え後に畦に種がまかれ、稲刈りと同時に収穫されます"* -
+*What the research found.* The practice, READ from the [Nara National Research Institute for Cultural
+Properties](https://www.nabunken.go.jp/asuka/info/2023/06/post-444.html)' Asuka pages: *"『畦豆（あぜまめ）』とも呼ばれる大豆です ... 田植え後に畦に種がまかれ、稲刈りと同時に収穫されます"* -
 a soybean also called azemame, sown on the bund after transplanting and harvested with the rice; once
 grown all over Japan, mostly gone with land consolidation and herbicide, still grown at Asuka; the
 photo caption has them *"ずらっと育っている"* - growing in a row along the bund. The plant, READ: *"fully
-mature soybean plants are generally between 50 and 125 cm (20 and 50 in) in height"* (Wikipedia,
+mature soybean plants are generally between 50 and 125 cm (20 and 50 in) in height"* ([Wikipedia](https://en.wikipedia.org/wiki/Soybean),
 Soybean, Description); *"The plant is erect and bushy, with branches coming off a central stem"* and
-*"The leaflets are broad, pointed, and medium green"* (cropfarming.org - a trade site, the one page
+*"The leaflets are broad, pointed, and medium green"* ([cropfarming.org](https://cropfarming.org/what-do-soybeans-look-like-growing-in-the-field/) - a trade site, the one page
 read that states the leaf color; Wikipedia's Description says nothing about color). **Not found:** a
 figure for one plant's spread on the bund - the Iowa State extension page on row spacing discusses
 canopy-closure timing, not plant width - so the record does NOT say how wide a bund bean stands, and
@@ -590,7 +590,7 @@ read as neither rice nor bund).
 
 **Evidence:** researched
 
-**Sources:** [`tabayashi-1986`](SOURCES.md#tabayashi-1986), [`kagawa-tameike`](SOURCES.md#kagawa-tameike), [`jsidre-minumadai`](SOURCES.md#jsidre-minumadai), [`maff-water-history`](SOURCES.md#maff-water-history), [`nies-shiroyone`](SOURCES.md#nies-shiroyone), [`japanese-wiki-corpus`](SOURCES.md#japanese-wiki-corpus), [`beitang-studies`](SOURCES.md#beitang-studies)
+**Sources:** [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), [`kagawa-tameike`](https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html), [`jsidre-minumadai`](https://www.jsidre.or.jp/tabata5-a/), [`maff-water-history`](https://www.maff.go.jp/j/nousin/mizu/kurasi_agwater/k_agri/pdf/detail_jp.pdf), [`nies-shiroyone`](https://ap-plat.nies.go.jp/inas/goodpractices/tradition/3.html), [`japanese-wiki-corpus`](https://www.japanesewiki.com/history/Jori%20sei%20(system%20of%20land%20subdivision%20in%20ancient%20Japan), [`beitang-studies`](SOURCES.md#beitang-studies)
 
 - **Free lore hooks from the sources** (for /law, /calendar, village details): drought rotation in fixed village turns; water-heads (mizugashira) elected to run the flow; supply turns timed by BURNING INCENSE STICKS (senkomizu); upstream villages leveraging position in water disputes; a village trading pond-management duty for water rights.
-   - Sources: Tabayashi 1986 (jstage grj1984b/60/1), Kagawa pref. tameike structure pages, JSIDRE on Minuma-dai, MAFF agricultural-water history PDF, Shiroyone terraced-paddies (NIES), jori-sei (Japanese Wiki Corpus + Tsukuba field-trace surveys), beitang studies (Nature Comms 2023; Jiang-Huai pond irrigation, PMC6695888), Chinese canal-layout doctrine (灌溉渠道 refs).
+   - Sources: [Tabayashi 1986 (jstage grj1984b/60/1)](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), [Kagawa pref. tameike structure pages](https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html), [JSIDRE on Minuma-dai](https://www.jsidre.or.jp/tabata5-a/), [MAFF agricultural-water history PDF](https://www.maff.go.jp/j/nousin/mizu/kurasi_agwater/k_agri/pdf/detail_jp.pdf), [Shiroyone terraced-paddies (NIES)](https://ap-plat.nies.go.jp/inas/goodpractices/tradition/3.html), jori-sei ([Japanese Wiki Corpus](https://www.japanesewiki.com/history/Jori%20sei%20(system%20of%20land%20subdivision%20in%20ancient%20Japan) + Tsukuba field-trace surveys), [beitang studies (Nature Comms 2023; Jiang-Huai pond irrigation, PMC6695888)](SOURCES.md#beitang-studies), Chinese canal-layout doctrine ([灌溉渠道 refs](https://wiki.mbalib.com/wiki/灌溉渠道系统)).
