@@ -20,7 +20,7 @@ backfill task carries the three boxes.
       verify: every heading, table, list, link, quote and SOURCE block present in the page; ids equal `github_anchor` for all 183 sections and the registry keys; a hover shows the quote (browser test)
 - [ ] T05 FR-012/FR-013/FR-014: `sources.py` reads the HTML; `_ENTRY_FILE` and the 52 class entries name `.html`; the scripted pointer sweep over every `research/<file>.md` literal outside `specs/` (78 engine + ~208 docs, the count recorded here) and the test that none remains; the maps link locally; feature 190's link test and the roster tests on the HTML surface; the guards' scope checked; docs
       research: rendering
-      verify: every class entry's file and every anchor a pool map emits exist on disk; `make done` green at 100%
+      verify: every class entry's file and every anchor a pool map emits exist on disk; every link target in every record page resolves (file, and id where named); no `research/<file>.md` literal outside research/ and specs/; the sweep's count recorded here; `make done` green at 100%
 - [ ] T06 FR-006/FR-007: the backfill, file by file (15 record files, one agent each), then `quote-check` over every file, then the fixes
       research: physical
       - [ ] research pass

@@ -1,6 +1,9 @@
 # Feature 191 - references that QUOTE their sources, checked, and the research record as HTML
 
-**Status**: DRAFT, round 3 - awaiting `spec-fidelity` (constitution XVI). Round 2 returned two items, both fixed:
+**Status**: DRAFT, round 4 - awaiting `spec-fidelity` (constitution XVI). Round 3 returned one item, fixed: FR-013's
+search space excluded the record's own RELATIVE links (90, invisible to a literal grep) and its test was a
+literal-absence check - now the relative forms are in the space and the test is a resolution check over every link
+in every page. Round 2 returned two items, both fixed:
 FR-001 stated the citation form in Markdown, which FR-009 deletes (now the HTML form, with T01 after T04); FR-013
 omitted the 78 engine-code pointers and ~208 doc pointers (now a stated search space, every literal updated, a
 test that none remains). Round 1 returned NOT FAITHFUL on five
@@ -74,7 +77,7 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   that rests on a source gets a footnote quoting that source; the quotes come from the page (the `source-reader` /
   `quote-check` agents fetch it), never from memory; a registry entry that already carries the verbatim passage
   (many do - `READ: 「...」`) supplies it directly and the agent confirms it. Scale, measured: 15 files, 183 sections,
-  333 registry entries, 459 keyed citation sites, 202 prose-named ones (feature 190).
+  365 registry entries, 459 keyed citation sites, 202 prose-named ones (feature 190).
 - **FR-007 The backfill runs as a batch of background agents, one per RECORD file (15)**, each writing footnotes for its file
   and reporting what it could not quote; then `quote-check` runs over every file and its findings are fixed
   (DIFFERS -> the page's text; DOES-NOT-SUPPORT -> a better passage or the assertion re-labeled; a missing
@@ -118,9 +121,13 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   root) - and the references modal opens it in a new tab as before. `RESEARCH_URL` (GitHub) is retired. A test
   proves every class entry's file and every anchor a pool map emits exist on disk (feature 180 FR-012a's silent
   miss, held for the new surface).
-- **FR-013 Everything that names the record moves to the HTML surface - the SEARCH SPACE stated: every literal
-  `research/<file>.md` (top-level or `cities/`) anywhere in the repository outside `specs/` and outside
-  `research/` itself.** Measured in the clone before the conversion, by that search: 544 literals in 120 files - 165 in `.py` (78 in 40 engine
+- **FR-013 Everything that names the record moves to the HTML surface - the SEARCH SPACE stated: every POINTER to a
+  converted file anywhere in the repository outside `specs/`: the absolute literal `research/<file>.md` (top-level
+  or `cities/`) outside `research/`, AND inside `research/` the relative forms `<file>.md`, `cities/<file>.md`,
+  `../<file>.md`, `../SOURCES.md`, each with or without a `#anchor` (measured: 90 occurrences - 71 of them feature
+  190's `SOURCES.md#key` links, `research/CLAUDE.md`'s two, `cities/capitals.md`'s link to `government.md`; the
+  GM's `README.md` table is reported under FR-009, not edited). The conversion rewrites the relative ones in the
+  pages; the sweep rewrites the absolute ones everywhere else.** Measured in the clone before the conversion, by that search: 544 literals in 120 files - 165 in `.py` (78 in 40 engine
   files, the rest in tests, tools and `wip/`), 319 in `.md`, 59 in `.json` (the fixture `classes_before_189.json` and
   three FROZEN legacy manifests, `nagahara`, `minami`, `tango` - edited as text, which is neither the regeneration
   nor the re-gating the freeze forbids, because a pointer to a deleted file is stale in an exhibit too), 1 in
@@ -131,8 +138,10 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   `interactive/CLAUDE.md`, the pool `.notes.md` files ...). EVERY one of them is updated to `.html` by one
   scripted sweep - a live link and a prose mention alike, because after FR-009 both name a file that does not
   exist, and a pointer to a missing file is exactly the stale record this project's "why" rule forbids. The
-  count the sweep changes is recorded in T05 and a test proves the literal `research/<file>.md` occurs nowhere
-  outside `specs/` afterwards. `specs/` is history and is left as written. Also moving: the house-style and
+  count the sweep changes is recorded in T05, and the test is a RESOLUTION check, not a literal-absence check:
+  every link target in every converted record page resolves to a file that exists on disk, and where the target
+  names an id that id exists in that page; plus, outside `research/` and `specs/`, the literal `research/<file>.md`
+  occurs nowhere. A relative form cannot defeat the first check; the second catches the pointers that are prose. `specs/` is history and is left as written. Also moving: the house-style and
   SOURCE-block guards (they act on edited text; the `.html` paths are checked to be in their scope), feature
   190's link test (every `<code>key</code>` in a page inside an `<a>` with the right target), the Sources-roster
   tests, the browser test (opens one research page and hovers one footnote), and 100% coverage as everything else.
