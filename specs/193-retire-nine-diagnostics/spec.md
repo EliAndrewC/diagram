@@ -98,10 +98,18 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
 - **FR-009 - `scatter-audit` splits, and the cut is DERIVED rather than enumerated.** Removed: the
   target, the `.PHONY` entry, the `_invocation.OPERATIONS` row, `main`, `adjudicate`,
   `format_report`, **and everything reachable only from those** - `_EngineView`, `_water_segs`,
-  `ADJUDICATED`, `DENSITY_BANDS`, `_QUANT_EPS`, the `MARSH_FEATHER_BS` import, and the seven `_geom`
+  `ADJUDICATED`, `DENSITY_BANDS`, `_QUANT_EPS`, the `MARSH_FEATHER_BS` import, the seven `_geom`
   imports other than `CROWN_FILLS` (`boxed_grid`, `boxed_hit`, `boxed_polys`, `boxed_seg_hit`,
-  `boxed_segs`, `edge_dist`, `point_in_poly`), plus the now-unused `argparse`, `json`, `cast` and
-  `Path`. Naming only the three functions would leave orphans that SC-004's 100% floor cannot
+  `boxed_segs`, `edge_dist`, `point_in_poly`), and the now-unused `argparse`, `json`, `cast`, `Path`,
+  `sys`, `Any` and the `Settlement` type import.
+  **The closure was COMPUTED, not listed** (an AST reachability walk from the three kept roots), and
+  the first attempt at it was WRONG in the dangerous direction: walking only the three kept
+  definitions reported `CROWN_FILLS`, `_NUM` and `re` as deletable, when the parser reaches all three
+  THROUGH its module-level regex constants (`_CROWN` is built from `CROWN_FILLS`). Deleting something
+  the parser needs is worse than leaving an orphan - the orphan fails the coverage floor loudly, the
+  deletion breaks a gate rule. The verified survivors are exactly: `parse_bases`, `_translated_spans`,
+  `Base`, `CROWN_FILLS`, `_NUM`, `re`, and the six regex constants `_BLADE_GROUP`, `_CROWN`, `_DOT`,
+  `_LINE_BASE`, `_PINE`, `_REED_GROUP`, `_TRANSLATE_G`. Naming only the three functions would leave orphans that SC-004's 100% floor cannot
   tolerate; the residue is derived from the cut, which is the lesson of round 1 applied at a smaller
   scale.
   **AND the `if __name__ == "__main__":` block at `scatter_audit.py:255-261` goes with them**, with
