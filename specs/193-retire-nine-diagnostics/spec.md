@@ -13,8 +13,13 @@ diagnostics mostly do not."*
 
 **EIGHT targets are removed**: `timings`, `crop`, `overlap-audit`, `jogs`, `polder-probe`,
 `family-census`, `sun-audit`, and `scatter-audit` (its TARGET and adjudicator - see below; its
-parser survives). Each has no import outside its own tests, no gate consumer, no agent or checklist
-consumer, and no recorded run in the guard or bypass logs.
+parser survives). Each of the SEVEN full removals has no import outside its own tests, no gate
+consumer, no agent or checklist consumer, and no recorded run in the guard or bypass logs.
+**`scatter-audit` is the PARTIAL and has two of those**: an import outside its own tests
+(`tests/settlement/test_land.py:566`) and an agent consumer
+(`.claude/agents/settlement-review.md:54-60`). That is precisely why it is a split rather than a
+deletion, and FR-009 addresses each. The blanket sentence is qualified here because an unqualified
+version of it is what made the round-1 draft wrong.
 
 **FIVE stay, and three of them stay for reasons the first draft got WRONG.** That draft is worth
 recording, because its failure is this project's recurring one - censusing a NAME when the consumer
@@ -71,23 +76,40 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   builds it, and it fails only when the type checker runs.
 - **FR-005** Every stale POINTER is corrected at the point of change. Known: `waterfields/banks.py:618`
   (jogs), `tools/scatter_audit.py:82` (crop_map), `waterfields/CLAUDE.md:22` (jogs),
-  `requirements.in:4` (`pillow # render_cache / crop_map read PNGs`), and comment pointers in KEPT
-  test files (`tests/test_compound.py:50`, `tests/gate/test_paddy_fabric.py:231`,
+  `requirements.in:4` (`pillow # render_cache / crop_map read PNGs`),
+  `l7r/diagram/settlement/land/cover.py:50` (an ENGINE comment naming `make scatter-audit`),
+  `scatter_audit.py`'s own module docstring (lines 1, 11-17, which describes the adjudicator this
+  feature removes), and comment pointers in KEPT test files (`tests/test_compound.py:50`, `tests/gate/test_paddy_fabric.py:231`,
   `tests/pipeline/test_render_cache.py:297`, `tests/test_villages.py:147, 414`).
 - **FR-006 - THE SEARCH SPACE, stated rather than enumerated by hand.** The sweep is **every file in
   the tree outside `specs/`** - not a named list of documents, because the round-1 draft named
   documents and was short inside the very files it named. It covers `research/*.md` (`fields.md:76`
   is a `**Grounds:**` line citing `tools/jogs.py`), `dev/*.md`, `settlements/*.md`, both
   `CLAUDE.md` trees, `migration-plan.md`, `requirements.in`, and `pool/**/*.notes.md`.
-  **Ruling on pool notes**: map notes are a RECORD of what was done at the time, like a spec - they
-  are NOT corrected, and SC-002 excludes them.
+  **Ruling on RECORDS**: `pool/**/*.notes.md` and `docs/review-ledger.md` are dated records of what
+  was done and found at the time, like a spec - they are NOT corrected, and SC-002 excludes both.
+  The ledger carries four rows citing `scatter_audit` verdicts (2026-08-28 x2, 2026-08-29 x2);
+  rewriting them would falsify the review history this project keeps in order to measure whether its
+  reviews pull their weight.
 - **FR-007** `timings.md` is KEPT and annotated. It is a 31 KB measured record cited as
   authoritative by four documents; this feature removes its PRODUCER, so the file must say it is
   frozen and what a future measurement would require.
 - **FR-008** `docs/make-targets.html` regenerates.
-- **FR-009 - `scatter-audit` splits.** Its target, `.PHONY` entry, `_invocation.OPERATIONS` row,
-  `main`, `adjudicate` and `format_report` are removed; `parse_bases`, `_translated_spans` and
-  `Base` survive. `.claude/agents/settlement-review.md`'s "Tooling" section (lines 54-60) and its
+- **FR-009 - `scatter-audit` splits, and the cut is DERIVED rather than enumerated.** Removed: the
+  target, the `.PHONY` entry, the `_invocation.OPERATIONS` row, `main`, `adjudicate`,
+  `format_report`, **and everything reachable only from those** - `_EngineView`, `_water_segs`,
+  `ADJUDICATED`, `DENSITY_BANDS`, `_QUANT_EPS`, the `MARSH_FEATHER_BS` import, and the seven `_geom`
+  imports other than `CROWN_FILLS` (`boxed_grid`, `boxed_hit`, `boxed_polys`, `boxed_seg_hit`,
+  `boxed_segs`, `edge_dist`, `point_in_poly`), plus the now-unused `argparse`, `json`, `cast` and
+  `Path`. Naming only the three functions would leave orphans that SC-004's 100% floor cannot
+  tolerate; the residue is derived from the cut, which is the lesson of round 1 applied at a smaller
+  scale.
+  **AND the `if __name__ == "__main__":` block at `scatter_audit.py:255-261` goes with them**, with
+  its `guard()` call and `sys.exit`. This is load-bearing and easy to miss:
+  `tests/test_operations_registry.py::_entry_points()` finds entry points by REGEX on that line, not
+  by the presence of a `main` function - so removing the `OPERATIONS` row while the block stands
+  fails the gate with *"runnable as `python3 -m ...` but carries no row"*. A mechanism, not a name.
+  Surviving: `parse_bases`, `_translated_spans`, `Base`, the regex constants and `CROWN_FILLS`. `.claude/agents/settlement-review.md`'s "Tooling" section (lines 54-60) and its
   line-135 reliance are rewritten: the GM's point is that a review whose purpose is *"the things the
   automated validator structurally CANNOT"* judge should not be running an automated adjudicator -
   and the agent's own text already says its verdict is not trusted. **Cost, stated rather than
@@ -124,16 +146,19 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
 
 ## Success Criteria
 
-- **SC-001** `make <target>` fails for all seven; `why-placed`, `notes-census`, `pack-audit`,
-  `scatter-audit` and `hamlet-floor` all still resolve.
+- **SC-001** `make <target>` fails for all EIGHT, `scatter-audit` included. The targets that still
+  resolve are `why-placed`, `notes-census`, `pack-audit` and `hamlet-floor`.
 - **SC-002** An UNTRUNCATED sweep of the tree outside `specs/` and `pool/**/*.notes.md` finds no
   reference to a removed target **or its MODULE PATH** (`tools/jogs.py`, `tools/crop_map.py`, ...).
   Module paths, not just target names: most surviving references name the module.
 - **SC-003** `tests/settlement/test_land.py::test_commons_keeps_scrub_off_every_recorded_marsh` and
-  the positional crown guard still pass - `scatter_audit` is untouched, and this proves it.
+  the positional crown guard still pass **over the REDUCED module** - proving the cut took the
+  adjudicator and left the parser. (`scatter_audit` is NOT untouched; FR-009 deletes from it.)
 - **SC-004** `make done` green, 100% coverage held, and the measured surface shrinks by the deleted
   modules rather than by an exclusion.
-- **SC-005** `make pack-audit` and the two review agents' invocations still work.
+- **SC-005** `make pack-audit` still works, and so do the invocations in `.claude/agents/size-audit.md`
+  and `.claude/agents/building-review.md`. (`settlement-review`'s invocation is REMOVED by FR-009 -
+  naming the agents avoids reading this as a promise to keep it.)
 
 ## Review history
 
@@ -145,5 +170,17 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   roughly double, having double-counted a kept module. It also missed the root Makefile's `FORWARD`
   list, `research/*.md`, `requirements.in`, `waterfields/CLAUDE.md` and several pointers. The scope
   went back to the GM, who ruled seven-and-keep-pack_audit. Every item is addressed above.
-- **Round 2**: pending - `scatter-audit` joined the removals between rounds, on the GM's own
-  observation that a non-automated review should not be running an automated adjudicator.
+- **Round 2 (`spec-fidelity`): CHANGES REQUIRED**, eight items, all accepted - every one at the seam
+  FR-009 opened between rounds, and two of them would have failed the gate. (1) FR-009 named three
+  functions to delete instead of DERIVING the residue, leaving ~15 orphans the 100% floor cannot
+  tolerate. (2) It missed the `if __name__ == "__main__":` block, which
+  `test_operations_registry._entry_points()` detects BY REGEX rather than by a `main` function - so
+  removing the registry row while the block stood would fail the gate. (3) SC-001 still said seven
+  and listed `scatter-audit` among targets that resolve, certifying that the eighth removal had not
+  happened. (4) SC-003 justified itself with "scatter_audit is untouched", which FR-009 makes false.
+  (5) The Why paragraph's blanket evidentiary claim was false for its eighth member - the same
+  sentence shape, in the same position, that made round 1 wrong. (6-8) Two more point-of-change
+  pointers, a missing ruling on `docs/review-ledger.md`, and an ambiguous SC-005. The reviewer also
+  confirmed the seam is in the right place: nothing outside the module's own tests uses `adjudicate`,
+  `format_report` or `main`.
+- **Round 3**: pending.
