@@ -1,6 +1,9 @@
 # Feature 191 - references that QUOTE their sources, checked, and the research record as HTML
 
-**Status**: DRAFT, round 2 - awaiting `spec-fidelity` (constitution XVI). Round 1 returned NOT FAITHFUL on five
+**Status**: DRAFT, round 3 - awaiting `spec-fidelity` (constitution XVI). Round 2 returned two items, both fixed:
+FR-001 stated the citation form in Markdown, which FR-009 deletes (now the HTML form, with T01 after T04); FR-013
+omitted the 78 engine-code pointers and ~208 doc pointers (now a stated search space, every literal updated, a
+test that none remains). Round 1 returned NOT FAITHFUL on five
 items and REFUSED the exception this spec had put to it (generate the HTML from Markdown that stays): the GM's
 *"the markdown on GitHub will no longer exist as it has been replaced with HTML"* is the post-condition, stated by
 the GM and used as the premise for the local links, and hand-authored HTML delivers every capability asked for.
@@ -23,17 +26,23 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
 
 ## Part 1 - the rule, and the check (FR-001 to FR-005)
 
-- **FR-001 The form of a citation is a FOOTNOTE that quotes.** An assertion in a research entry is followed by a
-  footnote reference, `[^n]` (numbered per file), and the footnote at the file's foot carries: the registry key as
-  a link (feature 190's rule decides the target), the QUOTED PASSAGE - or PASSAGES, when more than one is needed
-  to support the assertion (the GM: *"the passage or passages"*) - verbatim in the source's language (a gloss in
-  English after each when the passage is not English), and, when a quote's bearing is not plain, one clause on
-  what it supports. A sentence that makes two assertions from two sources carries two footnotes. Example:
-  `Chickens roosted in a coop in Han China[^7], and in Japan the chicken was a timekeeper, not a coop bird[^8].`
-  with `[^7]: [`qimin-yaoshu-yangji`](https://zh.wikisource.org/...) - 「雞棲，宜據地為籠，籠內著棧」 (the coop
-  is a cage set on the ground with perches inside).` The `**Sources:**` roster stays as the section's key list - the
-  modal reads it - and every key on it MUST be quoted by at least one footnote in that section (*"no point in
-  including a reference if it is not being quoted"*); a key with nothing to quote leaves the roster.
+- **FR-001 The form of a citation is a FOOTNOTE that quotes - in the record's own format, HTML (FR-009).** An
+  assertion in a research page is followed by a footnote reference, `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>`
+  (numbered per page), and the footnote in the page's foot, `<section class="footnotes"><ol><li id="fn-n">`,
+  carries: the registry key as a link (feature 190's rule decides the target), the QUOTED PASSAGE - or PASSAGES,
+  when more than one is needed to support the assertion (the GM: *"the passage or passages"*) - verbatim in the
+  source's language (a gloss in English after each when the passage is not English), one clause on what it
+  supports when that is not plain, and a return link `<a class="fnback" href="#fnref-n">`. A sentence that makes
+  two assertions from two sources carries two footnotes. Example, in a page:
+  `Chickens roosted in a coop in Han China<sup class="fn"><a id="fnref-7" href="#fn-7">7</a></sup>, and in Japan
+  the chicken was a timekeeper, not a coop bird<sup class="fn"><a id="fnref-8" href="#fn-8">8</a></sup>.` with
+  `<li id="fn-7"><a href="https://zh.wikisource.org/..."><code>qimin-yaoshu-yangji</code></a> - 「雞棲，宜據地為籠，
+  籠內著棧」 (the coop is a cage set on the ground with perches inside) <a class="fnback" href="#fnref-7">back</a></li>`.
+  The `<p><strong>Sources:</strong> ...</p>` roster stays as the section's key list - the modal reads it - and
+  every key on it MUST be quoted by at least one footnote in that section (*"no point in including a reference
+  if it is not being quoted"*); a key with nothing to quote leaves the roster. The exemplar (T01) is authored in
+  HTML AFTER the conversion (T04), and the doctrine text (T03) states this HTML form - the rule going forward is a
+  rule about the pages.
 - **FR-002 A source that could not be read quotes what WAS seen.** A SUMMARY-ONLY entry's footnote quotes the
   search summary it was recorded from, labeled `SUMMARY-ONLY` in the footnote, so the reader sees exactly what the
   claim rests on; a `URL: none` source (the GM's own notes) quotes the note. Nothing is quoted from memory.
@@ -109,12 +118,24 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   root) - and the references modal opens it in a new tab as before. `RESEARCH_URL` (GitHub) is retired. A test
   proves every class entry's file and every anchor a pool map emits exist on disk (feature 180 FR-012a's silent
   miss, held for the new surface).
-- **FR-013 Everything that reads the record moves to the HTML surface**: the house-style and SOURCE-block guards
-  (they act on edited text; the `.html` paths are checked to be in their scope), feature 190's link test (every
-  `<code>key</code>` in a page inside an `<a>` with the right target), the Sources-roster tests, the browser test
-  (opens one research page and hovers one footnote), `research/CLAUDE.md`'s pointers, the specs' and docs'
-  pointers to `research/*.md` (updated where a broken link would result; historical spec prose left as history).
-  100% coverage as everything else.
+- **FR-013 Everything that names the record moves to the HTML surface - the SEARCH SPACE stated: every literal
+  `research/<file>.md` (top-level or `cities/`) anywhere in the repository outside `specs/` and outside
+  `research/` itself.** Measured in the clone before the conversion, by that search: 544 literals in 120 files - 165 in `.py` (78 in 40 engine
+  files, the rest in tests, tools and `wip/`), 319 in `.md`, 59 in `.json` (the fixture `classes_before_189.json` and
+  three FROZEN legacy manifests, `nagahara`, `minami`, `tango` - edited as text, which is neither the regeneration
+  nor the re-gating the freeze forbids, because a pointer to a deleted file is stale in an exhibit too), 1 in
+  `scripts/test-gate-stamp.sh`. Among the engine files: 78 pointers (the
+  record-the-why pointers at the point of change - `hamletgen/ways/touch.py`, a `ValueError` message in
+  `hamletgen/plan.py`, `settlement/land/dikes.py` ...), the 52 class `entry` strings and `place.py`'s, `sources.py`'s
+  `_ENTRY_FILE`, and about 208 in skill `.md` documents (`SKILL.md`, `settlements.md`, `buildings.md`,
+  `interactive/CLAUDE.md`, the pool `.notes.md` files ...). EVERY one of them is updated to `.html` by one
+  scripted sweep - a live link and a prose mention alike, because after FR-009 both name a file that does not
+  exist, and a pointer to a missing file is exactly the stale record this project's "why" rule forbids. The
+  count the sweep changes is recorded in T05 and a test proves the literal `research/<file>.md` occurs nowhere
+  outside `specs/` afterwards. `specs/` is history and is left as written. Also moving: the house-style and
+  SOURCE-block guards (they act on edited text; the `.html` paths are checked to be in their scope), feature
+  190's link test (every `<code>key</code>` in a page inside an `<a>` with the right target), the Sources-roster
+  tests, the browser test (opens one research page and hovers one footnote), and 100% coverage as everything else.
 - **FR-014 Documentation**: `interactive/CLAUDE.md` (the page chain ends at a local page), `research/CLAUDE.md`
   (the record is HTML; the footnote form; the hover assets), `dev/` where render-sync was described as the
   pages' source (nothing generates them now).
