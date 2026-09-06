@@ -33,7 +33,9 @@ ceiling by 2 s and blocked a landing whose own delta REMOVED eight tests. Two ca
 tested and refuted - 41 newly-landed tests (3.4 s total) and cache state (both compared gates were
 cold) - so the ratchet was not detecting a regression.
 
-**The 400 s baseline the GM ratified is the WARM figure.** Measured warm runs are 379 s and 388 s.
+**The 400 s baseline the GM ratified is the WARM figure**, and the one warm run this session can
+evidence (379 s) agrees with it. That is a sample of ONE, which is why FR-003 leaves 400 alone rather
+than re-deriving it.
 
 **WHAT THIS DOES NOT FIX, disclosed because the research this feature cites says it.** R5 records a
 **2.2x hardware-driven variance independent of cache state** (P/E cores, self-contention) and warns
@@ -72,9 +74,9 @@ evidence that this one failed.
   empty and `make done`'s ratchet would have passed unconditionally for hours to over a week - the
   guard whose motivating failure was a 4x slowdown going unnoticed, switched off by the feature
   claiming to repair it. Instead: while a class has fewer than **5** runs, the RUN ITSELF is judged
-  against that class's ceiling. The run's class is always known (FR-001 captures it), so nothing is
-  ever unjudged, no backfill is needed, and no population is mixed. Once the class reaches 5 the
-  median takes over, which is feature 171's regime for this target.
+  against that class's ceiling - so nothing is unjudged, no backfill is needed, and no population is
+  mixed. Once the class reaches 5 the median takes over, which is feature 171's regime for this
+  target. Where the class is UNKNOWN rather than merely below sample, the next bullet governs.
   - **AN UNKNOWN-CLASS RUN IS JUDGED AGAINST THE WARM (STRICTER) CEILING, never passed.** The round-2
     draft claimed *"the run's class is always known"*, which contradicted FR-001's "absent when
     unknown" one screen earlier - and the contradiction was load-bearing: `REF_OK` (`Makefile:132`)
