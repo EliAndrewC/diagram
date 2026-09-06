@@ -1,6 +1,6 @@
 # Feature 191 - references that QUOTE their sources, checked, and the research record as HTML
 
-**Status**: DRAFT, round 5 of 5 - awaiting `spec-fidelity` (constitution XVI). Round 4 returned FR-013 a third
+**Status**: FAITHFUL (`spec-fidelity`, round 5 of 5, 2026-09-06) - cleared for implementation (constitution XVI). Round 4 returned FR-013 a third
 time - the absolute literal inside the record, over-sweeping of same-basename files outside it, a wrong hand
 count - and offered one formulation, a resolution rule with a three-part test; FR-013 is now that rule verbatim
 in substance, with no census in the spec. Round 3 returned one item, fixed: FR-013's

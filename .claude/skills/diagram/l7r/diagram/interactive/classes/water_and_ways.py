@@ -28,7 +28,7 @@ class Stream(Kind):
     covers = '`streams` - the brook'
     label = 'convention'
     sources = ('gb50288', 'toro-site')
-    entry = "research/water.md - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'"
+    entry = "research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'"
 
 
 class FieldDitch(Kind):
@@ -50,7 +50,7 @@ class FieldDitch(Kind):
     covers = '`field_ditches` and `channels` - the intake, head race, branches and drain'
     label = 'accurate'
     sources = ('tabayashi-1986', 'jsidre-minumadai', 'gb50288', 'nougyoudoboku-matsutan')
-    entry = "research/water.md - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.md - 'Water-first v2'"
+    entry = "research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'"
 
 
 class Pond(Kind):
@@ -70,7 +70,7 @@ class Pond(Kind):
     covers = '`pond` - the tameike'
     label = 'accurate'
     sources = ('tabayashi-1986', 'kagawa-tameike')
-    entry = "research/fields.md - 'Water-first v2 - pond, distribution and the three layout modes'"
+    entry = "research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'"
 
 
 class FieldPond(Kind):
@@ -95,7 +95,7 @@ class FieldPond(Kind):
     covers = '`field_ponds` - the in-field pond sunk into one low paddy'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'"
+    entry = "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'"
 
 
 class FieldRock(Kind):
@@ -120,7 +120,7 @@ class FieldRock(Kind):
     covers = '`field_rocks` - a bedrock outcrop inside a plot'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'"
+    entry = "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'"
 
 
 class GraveIsland(Kind):
@@ -142,7 +142,7 @@ class GraveIsland(Kind):
     covers = '`field_graves` - the rare in-field grave mound'
     label = 'deviation'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)"
+    entry = "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)"
 
 
 # WHY THE CLASS IS A *VILLAGE* LANE AND NOT A HAMLET LANE - the GM, 2026-08-29: "I have been
@@ -176,7 +176,7 @@ class VillageLane(Kind):
     covers = '`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/homesteads.md - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.md re-sourcing queue (lane width)"
+    entry = "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.html re-sourcing queue (lane width)"
 
 
 class Footbridge(Kind):
@@ -196,7 +196,7 @@ class Footbridge(Kind):
     covers = '`bridges[foot]` - every plank and deck over water'
     label = 'guess'
     sources = ('not recorded',)
-    entry = "research/water.md - 'What drawing at TRUE SIZE left open' (channel_footbridges)"
+    entry = "research/water.html - 'What drawing at TRUE SIZE left open' (channel_footbridges)"
 
 
 class Well(Kind):
@@ -219,7 +219,7 @@ class Well(Kind):
     covers = '`wells` - the wellheads'
     label = 'convention'
     sources = ('sphere-unicef', 'saijo-mizu-rekishikan', 'kotobank-idoyakata')
-    entry = "research/urban-features.md - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.md - 'Does a DISPERSED hamlet's outlying farm have its own well?'"
+    entry = "research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'"
 
 
 class NoticeBoard(Kind):
@@ -245,4 +245,4 @@ class NoticeBoard(Kind):
     covers = '`kosatsuba`, with its label'
     label = 'accurate'
     sources = ('fuchu-kosatsuba', 'ogose-kosatsuba', 'kosatsu-jawiki', 'adachi-kosatsu')
-    entry = "research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"
+    entry = "research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"

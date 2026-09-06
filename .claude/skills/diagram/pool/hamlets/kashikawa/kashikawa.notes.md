@@ -37,7 +37,7 @@ beyond the frame.
   copy of Inashiro's - both fixed the same day.
 
 - 2026-08-16 (the fork draws both arms - engine change, this map re-rolled): the GM's Inashiro
-  question settled in research/water.md "The head-race forks - supply commands both flanks";
+  question settled in research/water.html "The head-race forks - supply commands both flanks";
   every `OFFTAKE_LADDER` row now draws canal B, gated by `comb_supply_commands_both_flanks`.
   This map re-rolled three times as review fallout was fixed at the engine (canal-B thread
   tails via interpolated piece boundaries, minimax worst-served well placement, the notice
@@ -286,7 +286,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/fields.md`, "Minimum basin SIZE".
+why the gate could not sit at 0.15: `research/fields.html`, "Minimum basin SIZE".
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 827 -> 814 basins; smallest
 surviving basin 0.254 of the design cell; acreage, 20 of 20 households and the field outline all
@@ -657,7 +657,7 @@ shape-aware keep-out has to rotate the box first.
 **And a research question the reviewer raised that would settle which:** was a village's planted
 windbreak cleared around a notice board at all? The expectation is that it was not - the board stood
 at the wood's EDGE, not in a glade - which would argue for option 2 with a much tighter figure, and
-would resolve this as a side effect. Nothing in `research/urban-features.md` speaks to it.
+would resolve this as a side effect. Nothing in `research/urban-features.html` speaks to it.
 
 
 ### CLOSED the same day, by the GM's reorder rather than by either option priced above

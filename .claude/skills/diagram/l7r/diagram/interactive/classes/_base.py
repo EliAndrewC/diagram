@@ -98,7 +98,7 @@ class FeatureClass:
     why: str  # why it stands where it does on the map
     label: Label  # constitution XII: accurate | deviation | convention | guess
     label_note: str  # the one line that justifies the label (a deviation says what deviates; a convention says what is drawn otherwise and what the real thing is; a guess says what is silent)
-    sources: tuple[str, ...]  # `research/SOURCES.md` keys, or ("not recorded",)
+    sources: tuple[str, ...]  # `research/SOURCES.html` keys, or ("not recorded",)
     entry: str  # the research/ entry (file + heading) the text was written FROM
     # THE LIBERTY HALF of `label_note`, and only that (feature 156, GM 2026-08-29). An `accurate`
     # class's note usually says two things at once - which parts are READ, and which parts are a

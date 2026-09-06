@@ -65,7 +65,7 @@ def test_charcoal_yard_records_its_sheds_and_its_cooling_apron():
 
 def test_kiln_cottage_count_is_clamped_to_the_one_to_three_band():
     """Two or three households is the works we draw; a real kiln district could be a dozen, and
-    that liberty is recorded in research/urban-features.md rather than taken silently here."""
+    that liberty is recorded in research/urban-features.html rather than taken silently here."""
     s = _town()
     s.kiln(300, 300, cottages=0)
     s.kiln(700, 300, cottages=9)

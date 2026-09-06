@@ -224,7 +224,7 @@ surfaced, recorded here rather than fixed in this pass:
 ### 2026-08-02 - the log boom redesigned from a mid-stream chain to a shore-fast pen
 
 The GM's finding on the first drawn boom: "it just looks like a bunch of logs in the middle of
-the river." The research pass behind the fix is recorded in `research/urban-features.md` ("The
+the river." The research pass behind the fix is recorded in `research/urban-features.html` ("The
 log boom"); the short form: a boom is a floating fence - anchored to nothing it holds nothing -
 and attested booms anchor to the bank and run ALONG a navigated river, the pen between chain and
 shore, with the fairway kept clear by law. The redrawn glyph is a pen: chain on the offshore
@@ -249,7 +249,7 @@ seeing way MORE commoner houses in the samurai neighborhood now!"* - and the cou
 small commoner-looking glyphs against 26 before, because a servant glyph is a laborer glyph with
 a 4 ft trim and one shade of tan.
 
-Researched properly (both traditions, `research/cities/government.md`): servants are drawn as
+Researched properly (both traditions, `research/cities/government.html`): servants are drawn as
 WALLS, not houses. The ward now houses them as `s.servant_ranges()` - 41 ranges, every one bound
 to and abutting its own household, 15 ft deep and 35-82 ft long, serving 39 of the ward's 46
 samurai households; the rest have no room, which is itself attested. Gated by

@@ -7,7 +7,7 @@ band perpendicular to the fall rather than an axis-aligned box - a rectangle is 
 contour at a 0/90/180/270 fall, and at a diagonal it slices across the slope. Its WIDTH comes from
 the ground the fan waters, never from the canvas: an alluvial fan's spring line follows the FAN's
 toe, and a floodplain's backswamp is bounded by its natural levees, so wet ground is FEATURE-bounded
-in both landforms (research/water.md, 'The wet toe is as wide as the FAN'). Both corrections are
+in both landforms (research/water.html, 'The wet toe is as wide as the FAN'). Both corrections are
 argued at length in the members themselves; read them before changing either.
 
 `surface_water_dist` is module-level rather than a mixin method: it takes a MANIFEST, not a
@@ -292,7 +292,7 @@ class WetGroundMixin:
             # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi). The pad against the
             # water was the mark's own isotropic reach - 7 ft for a tuft - so reeds were held 7.7 ft off the
             # waterline all round, and the density profile out from the rim ran 12.0 / 27.4 / 33.0 / 24.4 per
-            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.md, "A
+            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.html, "A
             # reservoir's shore is reeded"; the emergent belt roots in the shallows). But a reed tuft's blades
             # are drawn near-VERTICAL - `random.uniform(-0.2, 0.2)` radians off vertical, 4-7 ft long - so they
             # reach ~7 ft UP the sheet and at most ~1.4 ft to the side. The pad is therefore split: the LATERAL
@@ -309,7 +309,7 @@ class WetGroundMixin:
         g: list[str] = []
         blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
         # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
-        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.md "A reservoir's
+        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.html "A reservoir's
         # shore is reeded, and its EMBANKMENT is mown": the intuitive counter-hypothesis (a maintained
         # reservoir has a bare margin, so reeds there would mean neglect) is contradicted by a Kagawa study
         # in which dredging and algae-cutting correlate POSITIVELY with emergent-plant richness. The tint keeps its
@@ -420,7 +420,7 @@ class WetGroundMixin:
         corners = [(-bleed, -bleed), (self.W + bleed, -bleed), (self.W + bleed, self.H + bleed), (-bleed, self.H + bleed)]
         v_out = max(c[0] * dx + c[1] * dy for c in corners)  # far enough downhill to leave the canvas
         # THE BAND IS AS WIDE AS THE GROUND THE FAN WATERS, not as wide as the canvas (GM 2026-08-12;
-        # researched, see research/water.md 'The wet toe is as wide as the fan, not as wide as the
+        # researched, see research/water.html 'The wet toe is as wide as the fan, not as wide as the
         # valley'). The cross-slope extent used to come from the CANVAS CORNERS, which drew the
         # valley wet from edge to edge - so a map falling toward its own frame had no dry exit
         # anywhere and every connector had to turn away over the settlement's back. That width was
@@ -437,7 +437,7 @@ class WetGroundMixin:
         cu = [c[0] * ux + c[1] * uy for c in corners]
         u0, u1 = max(min(cu), u_lo), min(max(cu), u_hi)
         # THE INNER EDGE FOLLOWS THE FAN'S TOE, NOT ONE CONTOUR (GM 2026-08-26, feature 133 T30; researched -
-        # research/water.md "the marsh follows the fan's toe"). It used to be a single contour through the
+        # research/water.html "the marsh follows the fan's toe"). It used to be a single contour through the
         # crop's lowest point anywhere, so on Inashiro the collector, which descends ~20 deg across the
         # contours to reach its pond, left a 324 px wedge of dry ground below its upper reach while the
         # reeds climbed above its lower end - and the boundary ran dead parallel to the frame, which the
@@ -461,7 +461,7 @@ class WetGroundMixin:
         # marsh from the plot, straight through two ranks of farmhouses, to the real toe 1,800 ft
         # further down. Nothing drew it (the marsh is inked from the field's foot), but the router
         # walls a path off wet ground, so eight steadings east of the column could not be reached.
-        # The research this band encodes (research/water.md, "the wet toe is as wide as the fan")
+        # The research this band encodes (research/water.html, "the wet toe is as wide as the fan")
         # is about the FAN's spring line; a dry plot is not a fan and has no toe.
         fan = [p for poly in polys for p in poly]
         us_fan = [p[0] * ux + p[1] * uy for p in fan]

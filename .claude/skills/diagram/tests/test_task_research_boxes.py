@@ -20,6 +20,10 @@ from pathlib import Path
 SKILL = Path(__file__).resolve().parents[1]
 REPO = SKILL.parents[2]
 BOXES = ("research pass", "source-reader confirmed", "recorded and cited")
+#: Feature 191 (GM 2026-09-06, "quote what you cite"): a physical task created from feature 191 on carries a FOURTH
+#: box, `quote-check confirmed`, beside the three - an addition, nothing retired. Older task files are history.
+QUOTE_BOX = "quote-check confirmed"
+QUOTE_BOX_FROM = 191
 
 _TASK = re.compile(r"^- \[(?P<tick>[ x])\] (?P<id>T\d+)\b", re.M)
 
@@ -38,14 +42,15 @@ def _entries(text: str) -> list[tuple[str, bool, str]]:
     return out
 
 
-def research_box_violations(text: str) -> list[str]:
-    """Every ticked `research: physical` task whose three boxes are not all ticked."""
+def research_box_violations(text: str, feature: int = 0) -> list[str]:
+    """Every ticked `research: physical` task whose boxes are not all ticked - three, or four from feature 191."""
     bad = []
+    boxes = BOXES + ((QUOTE_BOX,) if feature >= QUOTE_BOX_FROM else ())
     for tid, ticked, body in _entries(text):
         kind = re.search(r"^\s+research:\s*(\w+)", body, re.M)
         if not kind or kind.group(1) != "physical" or not ticked:
             continue
-        for box in BOXES:
+        for box in boxes:
             if not re.search(r"- \[x\] " + re.escape(box), body):
                 bad.append(f"{tid}: `{box}` not ticked")
     return bad
@@ -54,7 +59,7 @@ def research_box_violations(text: str) -> list[str]:
 def test_every_ticked_physical_task_has_its_three_research_boxes_ticked() -> None:
     files = sorted(REPO.glob("specs/*/tasks.md"))
     assert files, "no specs/*/tasks.md found - the repo root resolved wrong"
-    bad = [f"{f.relative_to(REPO)} {v}" for f in files for v in research_box_violations(f.read_text())]
+    bad = [f"{f.relative_to(REPO)} {v}" for f in files for v in research_box_violations(f.read_text(), int(f.parent.name.split("-")[0]))]
     assert not bad, "a ticked physical task owes its research boxes (constitution v2.12.0):\n  " + "\n  ".join(bad)
 
 

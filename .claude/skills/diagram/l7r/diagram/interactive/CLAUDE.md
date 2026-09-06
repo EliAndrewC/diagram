@@ -3,7 +3,7 @@
 The map as a page a player can use: hover a feature and every feature OF ITS KIND lights up; click
 it and a modal says what it is, why it stands there, whether that is historically accurate, a
 deliberate deviation (the setting differing from history), a map drawing convention (a glyph scaled or colored for the eye - feature 183) or a guess (constitution XII); "See references" lists the QUESTIONS the research
-asked about it, each linking to its answer in `research/` on GitHub (feature 180 - see below).
+asked about it, each linking to its answer in `research/`'s local page (feature 180; local since feature 191 - see below).
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
 
@@ -84,7 +84,7 @@ A paddy plot drawn with the FLOODED fill (`#93B7AC`) carries `wet paddy`, not `p
 2026-08-29: *"that is its own type of thing, and it deserves its own explanation."* It is the
 **shitsuden** - ground too poorly drained to dry out, which holds water even out of season, takes no
 winter crop and yields unreliably - against the **kanden**, the paddy that empties to a dry field.
-The research is `research/fields.md`, 'The wettest plots are their own kind of ground'.
+The research is `research/fields.html`, 'The wettest plots are their own kind of ground'.
 
 Decided at ONE emit site, `settlement/fields/comb.py` `_comb_draw_paddies`, from the fill about to be
 drawn, so the class and the color cannot disagree. Every field engine reaches that site, so every

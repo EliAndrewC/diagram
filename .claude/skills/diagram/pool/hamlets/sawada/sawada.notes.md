@@ -35,7 +35,7 @@ the low side where the gate requires it.
   review flagged got its well via the coverage-greedy well sort.
 
 - 2026-08-16 (the fork draws both arms - engine change, this map re-rolled): the GM's Inashiro
-  question settled in research/water.md "The head-race forks - supply commands both flanks";
+  question settled in research/water.html "The head-race forks - supply commands both flanks";
   every `OFFTAKE_LADDER` row now draws canal B, gated by `comb_supply_commands_both_flanks`.
   This map re-rolled three times as review fallout was fixed at the engine (canal-B thread
   tails via interpolated piece boundaries, minimax worst-served well placement, the notice
@@ -91,7 +91,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with
 
-The fan-toe SUNBURST ruling (full research in `research/fields.md`, "A basin never tapers to a
+The fan-toe SUNBURST ruling (full research in `research/fields.html`, "A basin never tapers to a
 point"; engine changes in `_comb_toe_and_hem`, `close_seams` and `_absorb`). Sawada carried 7 rings
 under the 15 deg gate line and now carries none, at a cost of **-0.27% cultivated area** - the
 sunburst was bought out almost for free, because the needles were removed by re-subdividing and
@@ -318,7 +318,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/fields.md`, "Minimum basin SIZE".
+why the gate could not sit at 0.15: `research/fields.html`, "Minimum basin SIZE".
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 843 -> 818 basins (the largest
 share in the pool); smallest surviving basin 379 sq ft against a 372 sq ft floor; total plot area
@@ -470,7 +470,7 @@ after `crop_to_content` (a draw-order change - the belt is drawn early on purpos
 clumps once the frame settles. Both are ordering changes in the stage that this feature explicitly did not
 touch, which is why it is deferred rather than half-done here.
 
-Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads.md`,
+Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads.html`,
 2026-08-18); two of four scripted hamlets now roll ZERO woodland commons, so three woodland checks pass
 vacuously - a question for feature 146's check census.
 
@@ -587,7 +587,7 @@ priced trade-off whose price has risen on this roll, not a siting bug.
 **Why this is not fixed here - and it is NOT for want of research (GM 2026-08-29).** An earlier version
 of this entry called it a research question. The GM pushed back - *"I thought that our notice board
 already was well researched? I would be really surprised if our existing research was insufficient to
-that task"* - and they were right. `research/urban-features.md` already carries the answer, READ and
+that task"* - and they were right. `research/urban-features.html` already carries the answer, READ and
 cited in feature 133 T13 from four sources: the bakufu set kosatsuba *"at points of heavy passage:
 barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"*;
 in farming villages *"at the village center, the shrine precinct, or the place where villagers

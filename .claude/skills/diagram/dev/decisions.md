@@ -22,7 +22,7 @@ research. The GM asked where both halves came from. Neither survived:
   with nothing behind it. Under the record-the-why rule that makes it not a finding at all.
 
 The research the GM then asked for settled it in the opposite direction from the code, and the fix
-is now in `research/water.md` ("The wet toe is as wide as the FAN"): an alluvial fan's spring line
+is now in `research/water.html` ("The wet toe is as wide as the FAN"): an alluvial fan's spring line
 follows the FAN's toe, and a floodplain's backswamp is bounded by its natural levees - wet ground is
 FEATURE-bounded in both landforms. `toe_band` derives its width from the ground the fan waters.
 
@@ -45,7 +45,7 @@ follow-up session re-derives them at full cost. Measured 2026-08-16: the cut-ban
 its single largest LLM turn (75s) plus part of its diagnosis re-deriving exactly what the
 open-decision author knew - the commons scatter's `wat_b` grid was the landing site, the
 drawn-channels margin test was the one to extend, streams/marsh were the exclusions.
-`research/vegetation.md` "Scrub stays off open water" carries the retro-fitted worked example.
+`research/vegetation.html` "Scrub stays off open water" carries the retro-fitted worked example.
 
 ## Do not put a question to the GM that your OWN DOCUMENTATION already answers
 
@@ -102,7 +102,7 @@ non-negotiable ("every house in the nucleated village is accessible via the inte
 narrow lanes and alleys"), while the *form* of that access is genuinely two-shaped - accretive
 alleys off the spine, or a planned back lane behind the plots. So one axis became a requirement and
 the other became a knob. Full record in
-[`../research/homesteads.md`](../research/homesteads.md) and `future-work/` section C.
+[`../research/homesteads.html`](../research/homesteads.html) and `future-work/` section C.
 
 A corollary worth stating separately, from the same day's ruling on the twin detector: **when a knob
 and the geometry disagree, that is a placer bug, not an axis-selection question.** Keep reading the

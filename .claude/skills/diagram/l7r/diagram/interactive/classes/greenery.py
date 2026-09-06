@@ -29,7 +29,7 @@ class HomesteadBamboo(Kind):
     covers = '`bamboo_stands[role=homestead]`'
     label = 'convention'
     sources = ('not recorded',)
-    entry = "research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'"
+    entry = "research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'"
 
 
 class SharedBambooGrove(Kind):
@@ -49,7 +49,7 @@ class SharedBambooGrove(Kind):
     covers = '`bamboo_stands` with any role other than homestead - the take-yabu at the field margin'
     label = 'convention'
     sources = ('not recorded',)
-    entry = "research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'"
+    entry = "research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'"
 
 
 class Windbreak(Kind):
@@ -71,7 +71,7 @@ class Windbreak(Kind):
     covers = '`village_groves[role=windbreak]`'
     label = 'accurate'
     sources = ('forests-2020',)
-    entry = "research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.md - 'The garden's sun, and how far the windbreak shades'"
+    entry = "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'"
 
 
 class Copse(Kind):
@@ -95,7 +95,7 @@ class Copse(Kind):
     covers = '`village_groves[role=copse]`'
     label = 'accurate'
     sources = ('forests-2020',)
-    entry = "research/vegetation.md - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)"
+    entry = "research/vegetation.html - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)"
 
 
 class WoodlandCommons(Kind):
@@ -120,7 +120,7 @@ class WoodlandCommons(Kind):
     covers = '`commons[role=woodland]` - the coppice patches'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/vegetation.md - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'"
+    entry = "research/vegetation.html - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'"
 
 
 class ScrubAndRoughGrazing(Kind):
@@ -144,7 +144,7 @@ class ScrubAndRoughGrazing(Kind):
     covers = '`commons[role=grazing]`'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/vegetation.md - 'The crop margin', 'Scrub stays off open water', 'The cut bank'"
+    entry = "research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'"
 
 
 class Marsh(Kind):
@@ -173,4 +173,4 @@ class Marsh(Kind):
     covers = '`marshes` - every marsh patch, whatever its role'
     label = 'accurate'
     sources = ('aas-rice-technology', 'mineta-2007-tameike', 'tameike-jawiki', 'kagawa-tameike-structure', 'maff-tameike-shizen', 'nies-tameike', 'inamino-tameike-museum')
-    entry = 'research/water.md - \'Marsh - wet rice is reclaimed FROM wetland\', \'The wet toe is as wide as the FAN\', "A reservoir\'s shore is reeded, and its EMBANKMENT is mown"; research/vegetation.md - \'The marsh margin\''
+    entry = 'research/water.html - \'Marsh - wet rice is reclaimed FROM wetland\', \'The wet toe is as wide as the FAN\', "A reservoir\'s shore is reeded, and its EMBANKMENT is mown"; research/vegetation.html - \'The marsh margin\''

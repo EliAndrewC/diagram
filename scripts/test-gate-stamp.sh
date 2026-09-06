@@ -108,7 +108,7 @@ case $OUT in *"diagram: the last green gate ran against DIFFERENT code"*"page: t
 
 # a comment or docstring added AFTER the green run is not "different code" (GM 2026-08-26): the stamp
 # hashes the docstring-stripped AST of each .py, so only a token that runs re-opens the gate
-printf '"""why this is 2"""\n# see research/water.md\nx = 2  # unchanged\n' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam why
+printf '"""why this is 2"""\n# see research/water.html\nx = 2  # unchanged\n' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam why
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "comment/docstring edit after the stamp -> still allowed" 0 $?
 echo 'x = 3' > "$W/.claude/skills/diagram/m.py"; git -C "$W" commit -qam engine3
 OUT=$(cd "$W" && python3 "$STAMP" --check origin/main 2>&1); check "code edit after the stamp -> refused" 1 $?

@@ -307,7 +307,7 @@ class TradesMixin:
         mouth is at local -x and the chimney at local +x.
 
         Historical grounding (the "why" - see settlements/urban-features.md "KILN WORKS", full
-        record in research/urban-features.md). Two GM questions on 2026-07-27 drove the whole
+        record in research/urban-features.html). Two GM questions on 2026-07-27 drove the whole
         feature: *"would whoever works the kiln also live next to it?"* and *"why is it
         specifically a tile kiln and not just a kiln?"*
 

@@ -24,7 +24,7 @@ import pytest
 
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.page import render_page
-from l7r.diagram.interactive.sources import RESEARCH_URL
+from l7r.diagram.interactive.sources import RESEARCH_PAGES
 from l7r.diagram.interactive.tags import Split
 
 playwright = pytest.importorskip("playwright.sync_api", reason="playwright is not installed (pip install -r requirements-dev.txt)")
@@ -464,9 +464,9 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     synthetic.page.wait_for_timeout(30)
     assert synthetic.js(shown)["visible"] is False
     # THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): every line is a link into the research
-    # record on GitHub, the button says where it returns to, and the explanation carries no "Record:" line
+    # record's local page (feature 191), the button says where it returns to, and the explanation carries no "Record:" line
     links = synthetic.js("() => Array.from(document.querySelectorAll('#r-list a.q')).map(a => [a.textContent, a.getAttribute('href'), a.getAttribute('target')])")
-    assert links and all(t and h.startswith(RESEARCH_URL) and "#" in h and tg == "_blank" for t, h, tg in links), links
+    assert links and all(t and h.startswith(RESEARCH_PAGES) and "#" in h and tg == "_blank" for t, h, tg in links), links
     assert synthetic.js("() => document.getElementById('x-refs').textContent") == f"See references ({len(links)})"
     name = CLASSES["bund"].name
     assert synthetic.js("() => document.getElementById('r-close').textContent") == f"Return to {name[0].upper()}{name[1:]} writeup"

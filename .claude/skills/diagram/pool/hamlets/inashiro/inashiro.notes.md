@@ -100,7 +100,7 @@ pipeline's, and it is the same order a person follows:
 
 - 2026-08-16 (the fork draws both arms): the GM noticed the head-race turns southeast along the
   northeast margin but never SPLITS toward the west side the way other maps' channels do, and asked
-  for research. Settled in research/water.md "The head-race forks - supply commands both flanks":
+  for research. Settled in research/water.html "The head-race forks - supply commands both flanks":
   a gravity canal commands only ground below it, Minuma-dai (1728) deliberately divides its head
   into two margin canals, and `build_comb` was already carving canal B as a supply thread the
   hamlet tier never inked - measured here, ~255 ft of planted paddy west of the fork against 0 ft
@@ -137,7 +137,7 @@ to 14 ft wide (the "same manifest source" trap). Fixed in `settlement._watercour
 `_on_watercourse` (drawn piece-tapered widths, pre-boxed grid at the scatter sites); ink-only,
 manifest byte-identical. The remaining sparse tufts on the bare strips beside the channels are
 DELIBERATE - no bank-margin rule exists; that open decision is recorded in
-`research/vegetation.md` "Scrub stays off open water". settlement-review DELTA: PASS
+`research/vegetation.html` "Scrub stays off open water". settlement-review DELTA: PASS
 (banks read as honestly vegetated, no sterile halo; marsh tufts correctly untouched).
 (Superseded the same day: the open decision was resolved - see the cut-bank entry below.)
 
@@ -152,7 +152,7 @@ widths). Streams and the reed marsh are deliberately unchanged - natural banks k
 vegetation to the water's edge. Ink-only; the manifest is byte-identical. Automated check:
 `test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams` (written red-first
 against the pre-fix scatter; also pins the no-margin-on-streams half). Why in
-`research/vegetation.md` "The cut bank". settlement-review DELTA: PASS (parsed all 231k scrub
+`research/vegetation.html` "The cut bank". settlement-review DELTA: PASS (parsed all 231k scrub
 bases against the exact keep-out geometry - zero inside; density flat beyond the margin, so no
 sterile halo; brook/marsh/pond fringes confirmed untouched). One intent put on record at the
 reviewer's ask: the field-toe COLLECTOR drain takes the margin too, deliberately - its bank is
@@ -253,7 +253,7 @@ raggedness preserved, Mizuguchi's re-seated cluster coherent (wells, lanes, kosa
   every pocket too thin to plant into the basin it shares the most bund with. It runs LAST, after
   `_comb_toe_and_hem`, because that pass drops acute slivers and re-hems bunds onto the drain and
   so opens fresh bare ground of its own; the channel bends are swept BEFORE it, so it holds its
-  basins off the water the map will actually paint. Research + rule: `research/fields.md` "Bunds
+  basins off the water the map will actually paint. Research + rule: `research/fields.html` "Bunds
   are shared, and the fabric is continuous". Gate: `paddy_plot_seams_shared` (written RED against
   this map first; pre-fix manifests frozen as
   `pool/regressions/paddy_plot_seams_shared_fires_on_the_pre_fix_{inashiro,kashikawa,mizuguchi,sawada}.json`).
@@ -330,7 +330,7 @@ raggedness preserved, Mizuguchi's re-seated cluster coherent (wells, lanes, kosa
   the three surviving stands (90/86/91 crowns) still stock the commons, but the reason that parcel is
   now absent is geometric slack rather than anything about the place; and the title placard moved
   576 px west onto clean hinterland. One PRE-EXISTING item wants a GM ruling, recorded in
-  `research/water.md`: a delivery ditch's flat `4.0 * grain` head is drawn WIDER than the tapering
+  `research/water.html`: a delivery ditch's flat `4.0 * grain` head is drawn WIDER than the tapering
   supply canal feeding it low in the tree, so the rank read inverts there - which is the one thing
   width-as-rank exists to convey.
 
@@ -407,7 +407,7 @@ raggedness preserved, Mizuguchi's re-seated cluster coherent (wells, lanes, kosa
   `wet_plots` 25 -> 24, `tree_crowns` 10,473 -> 10,632. Every moved item is on open cluster ground,
   fronting a lane, clear of the crop and the grove.
 
-  Recorded and NOT fixed, each with its sketch, in `research/water.md` "What drawing at TRUE SIZE
+  Recorded and NOT fixed, each with its sketch, in `research/water.html` "What drawing at TRUE SIZE
   left open": the dry-hem stand-off is pinned to the channel CENTERLINE and so did not track the
   narrowing (identical before and after while the water inside it shrank threefold - a
   derive-don't-pin violation); the delivery taper is now a 1.0 px event and sub-perceptual below the
@@ -452,7 +452,7 @@ raggedness preserved, Mizuguchi's re-seated cluster coherent (wells, lanes, kosa
   exactly their width, and found the record silent on whether it was planked, so the GM ruled: one
   plank per delivery branch at ~2.0 ft, mid-field on a bund crossing, plus two more down the main at
   2.8 and 2.4 ft; the two 1.8 ft branches and the drain stay bare; settlement-review pass; full
-  record in `research/water.md`). What follows is the HISTORY of the 3.0 ft line it replaced, kept
+  record in `research/water.html`). What follows is the HISTORY of the 3.0 ft line it replaced, kept
   because the placer/check lessons in it still hold (`FOOTPLANK_MIN_FT` was 3.0 ft then; `worth_planking`, called by
   the placer AND by `long_ditches_have_a_footbridge` so they cannot disagree). This map: **15 planks
   -> 7**, removing exactly the eight that decked delivery ditches 1.8-2.5 ft wide.
@@ -551,7 +551,7 @@ The GM ruled on the open question the previous entry left: *"I would like for us
 things that are realistic. So if this is a thing that needs to be fixed, then I would like it to be
 fixed."* Their framing was also the right diagnosis - the shape is realistic, the angles are not.
 
-The research (recorded in full in `research/fields.md`, "A basin never tapers to a point - the fan
+The research (recorded in full in `research/fields.html`, "A basin never tapers to a point - the fan
 toe truncates") split the question in two, and the split is what kept the fix from destroying
 something real. Radial convergence at the outfall is authentic - a cascade fan does narrow to its
 collector - and so is narrowness itself: the strips at Shiroyone Senmaida and in the Cordilleras
@@ -694,7 +694,7 @@ so **no shipped plot changed** - the fix removes a latent misfire, not a visible
 **Deliberate decision - end width, NOT taper.** The review noted that #458 keeps its tint with a 10.4
 ft end while converging at 18.5 deg, marginally MORE sharply than the demoted #456 (19.2 deg, 3.4 ft
 end); the only thing separating them is how deep the toe cut. That is the intended reading:
-`research/fields.md` says a basin never tapers to a point and the fan toe TRUNCATES, and 10.4 ft less
+`research/fields.html` says a basin never tapers to a point and the fan toe TRUNCATES, and 10.4 ft less
 two aze still leaves ~7.4 ft of standing water - a workable basin, which is what it reads as at fit
 zoom. Revisit only if a roll produces a 5-8 ft end that reads as a point; see future-work/ for the
 sketch, since the convergence measure now exists and switching is a one-line change.
@@ -817,7 +817,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/fields.md`, "Minimum basin SIZE".
+why the gate could not sit at 0.15: `research/fields.html`, "Minimum basin SIZE".
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 640 -> 634 basins; smallest
 surviving basin 0.262 of the 1,488 sq ft design cell; acreage 20.45 / 20.45 identical to two
@@ -1126,7 +1126,7 @@ plots. Two rules were missing, not one.
 The bed now takes the yard's 39 ft corridor (`gardens_unshaded_by_neighbors`), and the belt keeps
 a 50 ft afternoon lane west and southwest of every plot (`village_trees_unshade_from_west`),
 enforced when each is placed. Derivations in
-[`research/homesteads.md`](../../research/homesteads.md), "The garden's sun".
+[`research/homesteads.html`](../../research/homesteads.md), "The garden's sun".
 
 **The belt is thinner on the page, and that is a ruling, not a defect.** Standing off the plots
 puts the belt's near face at about the frame edge; the frame does not open for a windbreak (GM
@@ -1198,7 +1198,7 @@ wider than its recorded polygon - not the case here).
 research. Found: the hydrosere reed -> sedge/wet meadow -> alder/willow -> dry ground in the Japanese
 and Chinese record; red pine a dry-slope tree. So grass grading into the reeds with no pine or brush
 is ACCURATE; an alder-willow carr along the toe is a second supportable form and a knob candidate
-(not built). `research/vegetation.md`. And a constitution rule (v2.7.0): a guess is the last resort -
+(not built). `research/vegetation.html`. And a constitution rule (v2.7.0): a guess is the last resort -
 the research pass always runs first.
 
 
@@ -1223,7 +1223,7 @@ The GM: *"there's just a bunch of random scattered lanes strewn about without mu
 ... a short section of lane, between three farmhouses. It does not really connect to anything on
 either end ... I would have expected something like a lane leading to the reference hamlet and then
 probably just not even anything between the farmhouses. Is that right? Is that wrong? What does our
-research show?"* The research (`research/homesteads.md`, 2026-08-18 and 2026-08-23, revisited under
+research show?"* The research (`research/homesteads.html`, 2026-08-18 and 2026-08-23, revisited under
 T31) answers both halves without a new pass: a track to the hamlet and nothing between the houses is
 the DISPERSED form (a `settlement_form` knob value); Inashiro rolled NUCLEATED, and for that form the
 record is decisive - the houses are served by an INTERCONNECTED web of narrow lanes. So the form was
@@ -1248,7 +1248,7 @@ branches and such and do a review to see what other smoothing is needed."* Measu
 non-connector lane: lane 2 was 140 ft of path for a 49 ft chord with turns of 90/130/129 degrees
 inside 12 ft (the zigzag); lane 1 began with a 15 ft out-and-back (the loop, with lane 2's fold
 beside it); lanes 7/9/6 knotted into a bow-tie; every lane was a 4 ft-stepped polyline. Research
-(`research/homesteads.md` "How does a village lane bend?"): a worn path minimizes the number and
+(`research/homesteads.html` "How does a village lane bend?"): a worn path minimizes the number and
 severity of its turns; a bend sits at a plot corner. The whole web is now read as shapes once, last
 (`_smooth_web`): string-pulled, hairpin arms cut, ends within 25 ft collapsed onto one node, tails
 past a crossing cut; and the touch pass makes each junction once and joins end to end. After: 9
@@ -1267,7 +1267,7 @@ The GM: *"Should scrubland overlap with forests? It seems like it shouldn't ... 
 being represented is more accurate than what I am imagining."* Measured first: inside the belt
 polygon stood 2,688 grass blades, 158 brush dots and 11 pines. Mechanism: draw order - the scrub
 (stage 7) is drawn before the belt exists (stage 9), so it could not keep out of it. Research
-(`research/vegetation.md`): a worked village wood's floor was kept clear (litter and undergrowth
+(`research/vegetation.html`): a worked village wood's floor was kept clear (litter and undergrowth
 went to the paddies and the hearth), with a grass fringe at the edge; a shrub layer under the crowns
 is what an abandoned coppice grows. Fix: the belt polygon is computed in `stage_hinterland` (it
 derives from the houses, final by then) and passed as a SOFT keep-out - the T12 marsh rule reused:
@@ -1345,7 +1345,7 @@ called by the other caption placers - that is the GM's call after seeing this on
 ## 2026-08-27 - no wall on the bund (feature 133 T41)
 
 The GM saw a farmhouse touching the paddy. Measured: one corner 0.9 ft from the outline, every
-other house 10-13 ft. Research (`research/homesteads.md`): a bund is ~1.5 ft wide and is the
+other house 10-13 ft. Research (`research/homesteads.html`): a bund is ~1.5 ft wide and is the
 footpath; eaves overhang ~3 ft; so a 6 ft floor at the wall, derived from attested parts. The
 mechanism was the CENTER-vs-FOOTPRINT trap: the 14 px field set-back was held from the seat's
 center. Now the four corners are tested (`_wall_on_the_bund`, both seat paths) and the gate holds
@@ -1363,7 +1363,7 @@ for seed 4, so one stand of 46 x 29 ft (25 marks) stands on the cluster's shady 
 the top farmhouses and the belt; the belt and the copse are cedar/broadleaf and fruit now. Glyph:
 paired culms with a leafy fork, pale yellow-green, the GSI convention - a MAP DRAWING CONVENTION,
 the extent to scale. Gate: three new checks green; audit 0 violations; attempt 1 kept. Labels in
-research/vegetation.md. For the GM to judge on the sheet: the stand reads as a pale block at fit
+research/vegetation.html. For the GM to judge on the sheet: the stand reads as a pale block at fit
 zoom; if it wants more presence, the mark pitch (7 ft) and the stand sizes are the constants.
 
 
@@ -1371,7 +1371,7 @@ zoom; if it wants more presence, the mark pitch (7 ft) and the stand sizes are t
 
 The GM understood the one stand as the hamlet's communal thicket and asked whether household bamboo
 belonged in each farmstead block, on which side, and how often. Research (the source-reader pass,
-research/vegetation.md): every Tonami farmstead stood in its grove and bamboo was one of its
+research/vegetation.html): every Tonami farmstead stood in its grove and bamboo was one of its
 secondary species (READ); the side varies - with the storehouses on the south there, at the wet
 edge, the grove to the wind (READ / SUMMARY-ONLY) - so it is rolled per house; no share is recorded,
 so presence is a GUESS at 0.6. Inashiro (knob `homestead`): 8 of 15 farmsteads keep a 22 x 16 ft
@@ -1400,7 +1400,7 @@ privy, woodpile, manure heap, bath shed, chicken coop, household shrine and pers
 seed (shares this seed: privy .86, woodpile .86, manure .53, bath .34, coop .69, shrine .05,
 persimmon .82) and seats what fits: privy 12, woodpile 7, coop 7, manure 5, bath 3, shrine 1,
 persimmon 8 on the 15 houses (10 on the first roll; the count here is re-measured on the shipped roll). The one hokora is in the religious red at a plot corner. All at true
-size; the research and the guess labels in research/homesteads.md "The farmstead's fixtures". The
+size; the research and the guess labels in research/homesteads.html "The farmstead's fixtures". The
 straw rick is deferred with seasonal maps (T60).
 
 **2026-08-27 (T61).** `fixtures_min={"shrine": 1}` on the spec: the reference hamlet always carries one hokora so its rendering can be judged (seed 4 already rolled one at 1266,1154, on the plot of the house at 1303,1179; the floor is declared and held by the gate).

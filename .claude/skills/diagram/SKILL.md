@@ -59,7 +59,7 @@ The stroke convention is a visibility mechanism, **not a size license**: it neve
 - When you **size or place a new element**, ask "how big / how far is this relative to its neighbors in reality?" and match that proportion - don't just pick numbers that fit the gap.
 - This is why glyphs already scale with the settlement grain (`s.bscale`), why a wellhead/grave/manor is sized against the dwellings around it, and why distances (set-backs, approaches, spacing) are tuned to read at the right *relative* magnitude.
 - "Not literally 1px = 1 *shaku*" settles ties and rounds awkward numbers; it never excuses a feature that reads two or three times too big or too small for what it represents. When a check or a reviewer says something "looks too small/large/close," that is a real scale error to fix, not a quirk of a non-literal map.
-- The *relative-size* facts that anchor specific glyphs (e.g. a threshing yard is ~1-3% of the paddy it serves in reality - and the drawn yard, ~60 m² at village scale, sits honestly inside that band; verified 2026-07-21) and any other research-grounded rule are recorded **in the topic file that carries the rule** under [`settlements/`](settlements/) (Mode A grounding lives in [`research/buildings.md`](research/buildings.md)) - per project policy, every research-driven check carries its reasoning there.
+- The *relative-size* facts that anchor specific glyphs (e.g. a threshing yard is ~1-3% of the paddy it serves in reality - and the drawn yard, ~60 m² at village scale, sits honestly inside that band; verified 2026-07-21) and any other research-grounded rule are recorded **in the topic file that carries the rule** under [`settlements/`](settlements/) (Mode A grounding lives in [`research/buildings.html`](research/buildings.html)) - per project policy, every research-driven check carries its reasoning there.
 
 ## Core principle: China first (then Japan)
 
@@ -74,7 +74,7 @@ Rokugan's **land** - its geography, terrain, agriculture, demographics, settleme
 
 This skill covers two kinds of diagram that share the conventions below (palette, English-default labeling, kanji triangle, orientation, title block, label sizes, render pipeline, self-review) but differ in subject and method:
 
-- **Mode A - Compound and building plans** (manor, magistracy, temple, keep, battlefield). Interior plan view: walls, courts, rooms, building footprints. Hand-authored SVG, copied from the canonical template [`pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg`](pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) and edited. The Mode A vocabulary, composition rules and checklist live in [`buildings.md`](buildings.md) - read it before starting a Mode A diagram; it indexes [`buildings/programs.md`](buildings/programs.md) (per-building-type programs) and [`research/buildings.md`](research/buildings.md) (the research behind the conventions).
+- **Mode A - Compound and building plans** (manor, magistracy, temple, keep, battlefield). Interior plan view: walls, courts, rooms, building footprints. Hand-authored SVG, copied from the canonical template [`pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg`](pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) and edited. The Mode A vocabulary, composition rules and checklist live in [`buildings.md`](buildings.md) - read it before starting a Mode A diagram; it indexes [`buildings/programs.md`](buildings/programs.md) (per-building-type programs) and [`research/buildings.html`](research/buildings.html) (the research behind the conventions).
 - **Mode B - Settlement maps** (hamlet, village, town, provincial city - walled or unwalled). Landscape/terrain plan: a settlement in its fields, with realistic house density, irregular paddies, irrigation, and a shrine. Built by a **parametric generator** with an **automated validator** gate, because ~50 placed houses and clipped irregular fields are not practical to hand-place. Canonical example: [`legacy-hand-authored-pool/villages/kikuta/kikuta.svg`](legacy-hand-authored-pool/villages/kikuta/kikuta.svg). See [`settlements.md`](settlements.md) - read it before starting a Mode B map, then load the [`settlements/`](settlements/) topic files it indexes (water and fields nearly always; towns/cities/urban-features by tier).
 
 ## Workflow
@@ -190,7 +190,7 @@ Mode A diagrams are cropped tight - set the `viewBox` to hug the drawn content w
 
 ## Rokugan historical reference framework
 
-**Sources (feature 143, 2026-08-28):** the Edo and Sengoku defaults are the GM's setting decisions (setting-canon); the one historical claim here - Edo detention as a holding function, not imprisonment-as-punishment - is cited in `research/buildings.md` "Cells are remand, not punishment" (`tenmacho-jawiki`, with the 永牢/過怠牢 exception noted); the caste assignments cite `/host-l7r-repo/gm-assistant/setting/castes.md`.
+**Sources (feature 143, 2026-08-28):** the Edo and Sengoku defaults are the GM's setting decisions (setting-canon); the one historical claim here - Edo detention as a holding function, not imprisonment-as-punishment - is cited in `research/buildings.html` "Cells are remand, not punishment" (`tenmacho-jawiki`, with the 永牢/過怠牢 exception noted); the caste assignments cite `/host-l7r-repo/gm-assistant/setting/castes.md`.
 
 L5R/L7R blends historical periods. When uncertain about authenticity:
 

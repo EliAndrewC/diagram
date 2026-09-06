@@ -8,7 +8,7 @@ fish-cum-duck ponds fence a DRY RUN on the dike and a WET RUN in a corner of the
 below are GUESSES and the class entries say so - so they are rolled from the hamlet's seed like every
 other share, and each fixture takes a pond of its own nearest the houses: the sty sits on the bank
 between the parcel's edge and its water, the pen's dry run on the same bank with its wet run fenced
-into the pond. Research: research/archetypes.md "What stands on a dike-pond hamlet that a paddy
+into the pond. Research: research/archetypes.html "What stands on a dike-pond hamlet that a paddy
 hamlet lacks - the audit".
 """
 

@@ -163,7 +163,7 @@ s.lane([(CX + 4, CY - 10), ((CX + _fp[0]) / 2 + 8, (CY - 10 + _fp[1]) / 2 - 4), 
 # rule that paths don't pass through marshland"). This route was briefly turned west out of the
 # frame, when the toe marsh was still drawn edge to edge across the canvas and there was no dry
 # southern ground to leave by. The band is now as wide as the ground the fan WATERS (researched:
-# an alluvial fan's spring line follows the fan's toe, not the valley's width - research/water.md),
+# an alluvial fan's spring line follows the fan's toe, not the valley's width - research/water.html),
 # so the toe ends at x=402 and the original route down the west flank is dry the whole way - it clears
 # the reeds by 222-274 ft. NOT the "water-mouth" route, though: this map's water leaves SE, at the
 # drain outfall into the tameike (1395,1669), and the track leaves SW about 1,200 ft away. It is the

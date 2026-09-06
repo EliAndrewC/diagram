@@ -22,7 +22,7 @@ from .frame import CX, CY, MOAT, NRING, RX, RY, s
 # TWO GATES (GM 2026-08-09, researched): the ote-mon fronts south onto the ceremonial
 # approach; the karamete-mon - the rear gate every castle kept, the sortie gate - opens north,
 # its approach road bridging the castle's own moat to join the Imperial road's run to the
-# city's north gate. research/cities/capitals.md, "A castle has TWO gates".
+# city's north gate. research/cities/capitals.html, "A castle has TWO gates".
 s.castle(
     1400, 880, 850, 700, label="Shiro Daika", gate_dir="south", karamete_dir="north"
 )  # the castle keeps ITS axis (x=1400) - the resized wall re-centered SW, and the honmaru sits NE-of-center (the castle-at-the-back pattern); everything castle-anchored (ote-suji, ministries, karamete) reads from this axis, not from CX
@@ -54,7 +54,7 @@ s.sluice_gate(
 s.moat_flow(MOAT[4], MOAT[8])
 
 # ---- THE AQUEDUCT (feature 020; rebuilt to the researched josui form, GM 2026-08-09). What
-# the research says a josui IS (research/cities/capitals.md, "How a josui actually ran"): an
+# the research says a josui IS (research/cities/capitals.html, "How a josui actually ran"): an
 # intake WEIR on the river peeling off at a SHALLOW DOWNSTREAM angle (Hamura's nagewatashi
 # weir); an OPEN earth cut - open-topped, hence water-blue between spoil banks - falling
 # gently and continuously (Tamagawa: 92 m over 43 km, never a climb); a terminus at the city

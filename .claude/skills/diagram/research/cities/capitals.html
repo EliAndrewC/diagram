@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domain capitals: the research behind the castle-town tier</title>
+<link rel="stylesheet" href="../assets/record.css">
+<script src="../assets/record.js" defer></script>
+</head>
+<body>
+<main>
+<h1 id="domain-capitals-the-research-behind-the-castle-town-tier">Domain capitals: the research behind the castle-town tier</h1>
+<p><em>The research behind the rules in <a href="../../settlements/capitals.mdNone"><code>../../settlements/capitals.md</code></a>. Findings, anchors and disclosed departures live here so the rule file stays operational; this file is where citations and deeper historical context get added as they accumulate.</em></p>
+<p><strong>Load this file when:</strong> you are changing a capital-tier rule, questioning one, or adding to the record - never merely to draw a map.</p>
+<p>Every entry: what the research found, the decision it drove, and any deliberate departure from literal reality. Anchors are stable - rules link to them by <code>#slug</code>.</p>
+<hr>
+<h2 id="at-the-capital-tier-japan-leads-and-china-is-the-tiebreaker">At the capital tier Japan leads and China is the tiebreaker</h2>
+<p><strong>Grounds:</strong> the whole tier - the castle, the rank-graded samurai rings, the teramachi rim, the ote-suji government avenue</p>
+<p><strong>Evidence:</strong> liberty (a disclosed inversion of the project's standing research order)</p>
+<p><strong>Sources:</strong> <a href="https://www.japanesewiki.com/history/Jokamachi.html"><code>jokamachi-wiki-corpus</code></a>, <a href="../SOURCES.html#liufang-yamen"><code>liufang-yamen</code></a></p>
+<p><strong>The standing rule is China first, Japan as tiebreaker</strong> (<a href="../../SKILL.mdNone"><code>../../SKILL.md</code></a>). <strong>The capital tier inverts it, and the inversion is recorded here rather than taken silently.</strong></p>
+<p>The reason is that the subject is a <em>daimyo's castle town</em>, which is a Japanese institution. The Chinese prefectural seat has a yamen, and sometimes a walled inner citadel, but it has no tenshu, no rank-graded concentric samurai rings, and no teramachi rim<sup class="fn"><a id="fnref-1" href="#fn-1">1</a></sup> - because imperial China had no resident hereditary military aristocracy to house.<sup class="fn"><a id="fnref-3" href="#fn-3">3</a></sup> Its local officials were rotating appointees who lived <em>in</em> the yamen.<sup class="fn"><a id="fnref-2" href="#fn-2">2</a></sup></p>
+<p>Where China does have something to say the finding still uses it, and the two agree more often than the inversion suggests - see the nested-citadel and ministry-siting entries below, both of which are <code>corroborated</code>. What Japan supplies is the FORM of the tier.</p>
+<p><strong>This disturbs nothing below it.</strong> A village, a county town and a provincial city are all administrative and agrarian settlements where the Chinese reality genuinely is the better guide, and they keep the standing order.</p>
+<h2 id="both-traditions-nest-a-walled-citadel-in-the-seat-so-a-centered-castle-is-the-median-form">Both traditions nest a walled citadel in the seat, so a CENTERED castle is the median form</h2>
+<p><strong>Grounds:</strong> <code>castle_seat="ring"</code> as the default; the concentric quarter doctrine</p>
+<p><strong>Evidence:</strong> attested, corroborated</p>
+<p><strong>Sources:</strong> <a href="https://www.japanesewiki.com/history/Jokamachi.html"><code>jokamachi-wiki-corpus</code></a>, <a href="https://en.wikipedia.org/wiki/Imperial_City,_Beijing"><code>beijing-imperial-city</code></a></p>
+<p><strong>Japan.</strong> A jokamachi was established<sup class="fn"><a id="fnref-4" href="#fn-4">4</a></sup> "with the lord's castle in the center," and the town was zoned in concentric rings by status, closeness to the castle tracking rank:<sup class="fn"><a id="fnref-5" href="#fn-5">5</a></sup></p>
+<ul>
+<li><strong>samurai innermost<sup class="fn"><a id="fnref-6" href="#fn-6">6</a></sup></strong>, "retainers with higher position had a closer location to the castle" (surviving place names <em>Sange</em>, <em>Kamiyashiki-cho</em>)</li>
+<li><strong>ashigaru in a middle band</strong> (<em>Ban-cho</em>, <em>Teppo-cho</em>)</li>
+<li><strong>merchants and artisans outside the samurai town</strong>, segregated by trade (<em>Gofuku-machi</em> drapers, <em>Kaji-machi</em> smiths)<sup class="fn"><a id="fnref-7" href="#fn-7">7</a></sup></li>
+<li><strong>teramachi at the outer rim</strong>, where<sup class="fn"><a id="fnref-8" href="#fn-8">8</a></sup> "spacious temples formed part of the city defenses"</li>
+</ul>
+<p>Two further details drive rules of their own: main roads were deliberately routed past the castle's <strong>front</strong> rather than its rear,<sup class="fn"><a id="fnref-9" href="#fn-9">9</a></sup> "to indicate the glory of the ruler"; and total enclosure of the whole town (<em>sogamae</em> - moat plus earth mounds) became increasingly common, Odawara and Osaka being the exemplars.<sup class="fn"><a id="fnref-10" href="#fn-10">10</a></sup> The sogamae is what makes our single-rampart capital honest: a castle town that walls its whole population is an attested form, not a convenience.</p>
+<p><strong>China.</strong> The prefectural seat nested the same<sup class="fn"><a id="fnref-72" href="#fn-72">72</a></sup> way - <strong>yacheng</strong> (the administrative city) inside <strong>zicheng</strong> (the inner city) inside <strong>luocheng</strong> (the outer city). Tang Yangzhou grew its luocheng as the residential and commercial annex outside the fortified zicheng.</p>
+<p><strong>The decision.</strong> The centered castle is not an import we are choosing; it is what both traditions do, so <code>castle_seat="ring"</code> is the DEFAULT and the edge castle is the variant.</p>
+<h2 id="the-edge-castle-is-real-and-it-comes-with-water">The EDGE castle is real, and it comes with water</h2>
+<p><strong>Grounds:</strong> <code>castle_seat="edge"</code>, and its coupling to <code>river=</code>/coast</p>
+<p><strong>Evidence:</strong> attested</p>
+<p><strong>Sources:</strong> <a href="https://okayama-castle.jp/learn-history-en/"><code>okayama-castle</code></a>, <a href="../SOURCES.html#kitsuki-castle"><code>kitsuki-castle</code></a></p>
+<p>The cases where the castle sits on a flank rather than in the middle are the cases where a river or the sea does the defensive work on that side:</p>
+<ul>
+<li><strong>Okayama</strong> - Ukita Hideie diverted a branch of the Asahi River to serve as the moat along the castle's northeastern flank.<sup class="fn"><a id="fnref-11" href="#fn-11">11</a></sup></li>
+<li><strong>Kitsuki</strong> - the castle stands on a promontory between the mouths of the Yasaka and Takayama rivers where they open into Morie Bay, with the samurai quarters and temples on the hills around.<sup class="fn"><a id="fnref-12" href="#fn-12">12</a></sup></li>
+</ul>
+<p><strong>The decision.</strong> The edge mode is COUPLED to water. A dry inland capital takes the ring; a river or coastal capital may take either, and if it takes the edge, the castle's own outer moat becomes that stretch of the city's perimeter rather than a second line inside it. <strong>A castle on a dry edge is refused</strong> - it is not a variant, it is a weak wall.</p>
+<h2 id="a-median-castle-is-85-of-an-entire-provincial-city">A median castle is ~85% of an entire provincial city</h2>
+<p><strong>Grounds:</strong> <code>citybudget.CASTLE_PX2</code> / <code>CASTLE_HA_MIN</code> / <code>CASTLE_HA_MAX</code> and the castle budget line - <strong>SHIPPED in feature 018</strong></p>
+<p><strong>Evidence:</strong> attested (two anchors), interpolated (the median pick between them)</p>
+<p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Hirosaki_Castle"><code>hirosaki-castle</code></a>, <a href="https://en.wikipedia.org/wiki/Himeji_Castle"><code>himeji-castle</code></a></p>
+<table>
+<thead>
+<tr>
+<th>Anchor</th>
+<th>Daimyo</th>
+<th>Total enceinte</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hirosaki</strong></td>
+<td>Tsugaru, 47,000 koku<sup class="fn"><a id="fnref-13" href="#fn-13">13</a></sup></td>
+<td><strong>~50 ha / 123 acres</strong></td>
+<td>includes the moats; the keep itself ~0.6 ha</td>
+</tr>
+<tr>
+<td><strong>Himeji</strong></td>
+<td>Ikeda, ~520,000 koku</td>
+<td><strong>233 ha / 576 acres</strong>, 4,200 m circumference<sup class="fn"><a id="fnref-14" href="#fn-14">14</a></sup></td>
+<td>107 ha inside the middle moat;<sup class="fn"><a id="fnref-15" href="#fn-15">15</a></sup> 950-1,600 m E-W by 900-1,700 m N-S<sup class="fn"><a id="fnref-16" href="#fn-16">16</a></sup></td>
+</tr>
+</tbody>
+</table>
+<p>Himeji also anchors the moat glyph: average width <strong>20 m (66 ft)</strong>, max 34.5 m, depth ~2.7 m.<sup class="fn"><a id="fnref-17" href="#fn-17">17</a></sup> Our provincial-city moat default is 26 px = 78 ft at 3 ft/px, so the same glyph carries to the castle's own moat unchanged.</p>
+<p><strong>The decision.</strong> Take Hirosaki's ~50 ha as the MEDIAN capital's castle:</p>
+<pre><code>50 ha = 123.5 acres = 5.38M sq ft = ~598,000 px^2 at 3 ft/px
+</code></pre>
+<p>Tango's entire walled interior is 701,282 px^2, so <strong>a median castle is ~85% of a whole provincial city</strong>. This is the single most consequential number in the capital budget, and it is why a capital's wall cannot be sized by population alone: the ring encloses roughly four provincial cities of inhabitants plus most of a fifth in castle.</p>
+<p><code>castle_px2</code> is therefore a DECLARED program line (the pattern <code>temple_precinct_px2</code> set for Minami's eight Fox precincts), defaulting to ~598,000 with the 50-230 ha band documented - so a grand old Clan seat can declare a Himeji and a poor frontier house can declare less.</p>
+<p><strong>THE KEEP IS NOT THE CASTLE.</strong> The ~50 ha is the whole enceinte, every bailey plus all three moats. Hirosaki's tenshu occupies ~0.6 ha, about <strong>1.2%</strong> of the works. Any reasoning that treats "the keep" as the large thing is measuring the wrong object - which is exactly the error the ministry-siting question below turned on.</p>
+<h2 id="our-capital-is-a-hikone-scale-market-town-carrying-a-quarter-of-hikones-samurai">Our capital is a Hikone-scale market town carrying a quarter of Hikone's samurai</h2>
+<p><strong>Grounds:</strong> the caste inventory; the refusal to copy jokamachi proportions</p>
+<p><strong>Evidence:</strong> attested (the census), setting-canon (the ratio it is compared against)</p>
+<p><strong>Sources:</strong> <a href="https://www.nakasendoway.com/the-story-of-hikone-castle-town/"><code>hikone-castle-town</code></a></p>
+<p>Hikone (Ii, 300,000 koku) counted <strong>15,371 townspeople in 53 separate wards</strong> in the 1695 census - <em>chonin</em> only, not the samurai.<sup class="fn"><a id="fnref-18" href="#fn-18">18</a></sup> Our capital holds ~10,800 non-samurai inhabitants against ~1,560 samurai. So the commercial town is ~70% of Hikone's, while the samurai burden is far lighter.</p>
+<p>That is exactly the "deliberately restrained echo" <code>l7r.md</code> claims - historical castle towns ran 30-60% samurai,<sup class="fn"><a id="fnref-19" href="#fn-19">19</a></sup> and Rokugan's capitals at ~13% "are far more commercial." <strong>The consequence for the map is that we cannot copy a jokamachi's proportions: ours is a merchant city with a castle in it, not a garrison with a market attached.</strong> The samurai rings are real but thin; the machi are the bulk of the fabric.</p>
+<p>Hikone's <strong>53 wards</strong> is also the anchor for how many named machi a capital carries.<sup class="fn"><a id="fnref-20" href="#fn-20">20</a></sup></p>
+<h2 id="neither-tradition-walls-its-wards-the-answer-is-a-mesh-of-night-barred-gates">NEITHER tradition walls its wards: the answer is a MESH of night-barred gates</h2>
+<p><strong>Grounds:</strong> the capital's ward structure - pending the GM's decision, this entry is the research they asked for before one is made</p>
+<p><strong>Evidence:</strong> attested, corroborated (independently, in both traditions)</p>
+<p><strong>Sources:</strong> <a href="https://edoflourishing.blogspot.com/2013/10/machi-towns-and-villages.html"><code>edo-machi-kido</code></a>, <a href="https://www.atlantis-press.com/proceedings/ssha-23/125988752"><code>qing-zhalan</code></a>, <a href="https://www.nakasendoway.com/castle-towns-2/"><code>jokamachi-zoning</code></a>, <a href="https://zh.wikipedia.org/wiki/%E5%B9%B3%E6%B1%9F%E5%9B%BE"><code>pingjiang-tu</code></a></p>
+<p>The GM's instinct (2026-08-08) was that one large sealed samurai neighborhood is probably wrong and many smaller wards more likely, and asked for real research before deciding. <strong>The research says the instinct is right about the first half and the second half is still not quite the shape of it.</strong> What both traditions actually have is not smaller <em>enclosures</em> but a <strong>dense mesh of small gates barred at night</strong>, hung across street and lane mouths, with no continuous fence at all.</p>
+<p><strong>Japan (Edo).</strong> Every <strong>machi</strong> (町) block was closed by a <strong>kido</strong>, open from about 4 in the morning until about 10 at night.<sup class="fn"><a id="fnref-21" href="#fn-21">21</a></sup> Below that, every <em>nagaya</em> tenement row and every <em>roji</em> lane had its own <strong>roji-kido / nagaya-kido</strong>, locked at roughly 6 pm and reopened around 6 am, with the keys held by the nagaya owner or by trusted neighbors. The system was self-governing - the block was collectively responsible for its own gate - and it is credited with much of Edo's night-time public order.</p>
+<p><strong>China (Ming/Qing).</strong> The Tang walled-ward (<em>fang</em>) system was torn down by the Song, and post-Song wards survive only as <strong>name plaques rather than enclosures</strong> (<a href="https://zh.wikipedia.org/wiki/%E5%B9%B3%E6%B1%9F%E5%9B%BE"><code>pingjiang-tu</code></a>). What replaced them is the same answer Edo reached: Qing Beijing built <strong>zhalan</strong> (栅栏, palings) closing each street at night against thieves - the commercial street <strong>Dashilan</strong> (大栅栏,<sup class="fn"><a id="fnref-22" href="#fn-22">22</a></sup> "Big Palings") is named for its gate and still carries the name. It was backed by a real curfew: the dusk drum at 8 pm and the dawn bell at 4 am, 40 lashes for being abroad between 9 pm and 3 am (50 in the capital), and barricaded sentry points set up along the major thoroughfares every evening.</p>
+<p><strong>Two traditions, no contact, same institution.</strong> That is the strongest corroboration in this file.</p>
+<p><strong>And the samurai quarter is not ONE quarter.</strong> The jokamachi pattern was for <strong>chonin to live in wards forming narrow strips that SEPARATE different groups of samurai</strong>, those strips running along the major thoroughfares where their trades were most useful to everyone.<sup class="fn"><a id="fnref-23" href="#fn-23">23</a></sup> Within the <em>buke-chi</em>, the separation that exists is <strong>per-compound</strong> - "larger compounds separated by walls and gates" - not a district palisade. So a castle town has <em>several</em> samurai districts interleaved with commercial strips, each samurai plot walled in its own right.</p>
+<p><strong>What this implies for the tier (recommendation, not yet a decision).</strong></p>
+<ol>
+<li><strong>No continuous ward fence at capital scale.</strong> Replace it with kido at the block and lane mouths - which is the glyph <code>s.kido</code> already draws, at a far higher count and a different placement rule. No new vocabulary.</li>
+<li><strong>Several samurai districts, separated by commoner strips on the thoroughfares</strong> - not one contiguous sealed quarter.</li>
+<li><strong>The walled compound does the sealing</strong>, which dovetails with <a href="../../settlements/capitals.md#rules-that-invert">the inverted no-manor-inside-the-wall rule</a>: a capital's senior retainers live in walled yashiki, and those walls ARE the boundary that a fence was standing in for.</li>
+<li><strong>The bell-and-drum tower acquires a documented job.</strong> We already draw one (<a href="../../settlements/urban-features.mdNone"><code>../../settlements/urban-features.md</code></a>); the curfew above is what it is FOR - it sounds the hour the gates close and the hour they open.</li>
+</ol>
+<p><strong>The honest tension, flagged rather than buried.</strong> The provincial tier currently seals its samurai/government quarter with a continuous palisade (<code>city_samurai_ward_sealed</code> and its whole family of checks), justified in <a href="../../settlements/cities/government.mdNone"><code>../../settlements/cities/government.md</code></a> by the same observation that the Tang <em>fang</em> system does not apply. This research says the continuous fence is more than history supports even there. <strong>That is a question for the provincial tier, not a defect to fix in passing</strong> - three shipped cities depend on those checks, and the capital can adopt the mesh without the provincial maps changing at all. Raise it with the GM separately.</p>
+<h2 id="the-capitals-samurai-are-senior-heavy-which-inverts-the-provincial-housing-mix">The capital's samurai are SENIOR-heavy, which INVERTS the provincial housing mix</h2>
+<p><strong>Grounds:</strong> the capital's samurai housing variation; the (corrected) retainer-terrace expectation</p>
+<p><strong>Evidence:</strong> setting-canon</p>
+<p><strong>Sources:</strong> budgets.md, "Samurai rank distribution"</p>
+<p>Working the capital column of budgets.md's rank table, against the provincial column:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>R5+ (senior)</th>
+<th>R1-4 (junior)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Capital</strong> (800 working)</td>
+<td>563 - <strong>70%</strong></td>
+<td>237 - <strong>30%</strong></td>
+</tr>
+<tr>
+<td><strong>Provincial city</strong> (225 working)</td>
+<td>61 - <strong>27%</strong></td>
+<td>164 - <strong>73%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>The mix does not scale, it inverts.</strong> budgets.md says so in words too - the capital "is staffed with the senior cohort," and "low-rank samurai compose a lower proportion of retainers in the capital than in the provinces" - because a capital posting is prestigious even when the job is menial, and because the capital absorbs the rank-by-association cohort (the Doctrine of Three Steps puts the daimyo's kin at Rank 9+ holding no office at all).</p>
+<p><strong>The consequence for the map.</strong> <code>city_samurai_housing_varied</code> wants a MINORITY of large senior houses among many small junior ones, which is right for a provincial city at 27% senior. At capital scale that flips: roughly <strong>~218 senior against ~94 junior households</strong> of the ~312 total, so large houses and walled yashiki are the MAJORITY of the samurai fabric and the small houses are the minority.</p>
+<p><strong>This is also what corrects a modeling error made on 2026-08-08</strong> and caught by the GM. The first draft of the capital program expected "ashigaru terraces" - dense uniform rows of low-rank warrior housing, on the historical <em>kumi-yashiki</em> pattern. That was wrong twice over:</p>
+<ul>
+<li><strong>Wrong caste.</strong> budgets.md is explicit that <strong>in Rokugan ashigaru are PEASANTS, not samurai</strong> - "the original L5R usage, which departs from historical Japan, where ashigaru formed the lowest stratum of the samurai class." The historical <em>kumi-yashiki</em> housed the lowest <em>samurai</em>, so the institution has no Rokugani counterpart under that name.</li>
+<li><strong>Wrong place, and wrong quantity.</strong> l7r.md puts ashigaru in the villages - about 10% of farmers, licensed or unlicensed, trained by the county magistrate. They are rural peasant militia, not a resident urban caste, so a capital has no ashigaru quarter to draw. And the slot they would have filled is the one the rank table shows is <em>smallest</em> here, not largest.</li>
+</ul>
+<p>What genuinely occupies that structural position is a <strong>retainer terrace</strong>: modest housing for the capital's ~94 junior (Rank 1-4) samurai households - castle guards, household retainers of the daimyo's retinue, and junior officials in training. A real feature, correctly named, and a minority texture rather than a dominant one.</p>
+<h2 id="the-aqueduct-is-open-outside-the-wall-and-buried-inside-it---and-the-boundary-is-the-gate">The aqueduct is OPEN outside the wall and BURIED inside it - and the boundary is the gate</h2>
+<p><strong>Grounds:</strong> the capital's aqueduct; the retained well network</p>
+<p><strong>Evidence:</strong> attested</p>
+<p><strong>Sources:</strong> <a href="https://ihcsacafe-en.ihcsa.or.jp/news/josui/"><code>edo-josui</code></a>, <a href="https://www.library.metro.tokyo.lg.jp/portals/0/edo/tokyo_library/modal/index.html?d=5655"><code>kanda-kakehi</code></a></p>
+<p>The GM's preference (2026-08-08) is for an above-ground aqueduct where the history allows one, because it makes a better map - but asked for the possibility space first. <strong>The space is real and generous, and it has a sharp boundary in a surprising place.</strong></p>
+<p>The Edo <em>josui</em> is two systems with the <strong>city gate</strong> between them:</p>
+<ul>
+<li><strong>OUTSIDE, an open channel.</strong> The Tamagawa Josui runs ~43 km from Hamura to the Yotsuya Gate (<em>Yotsuya Okido<sup class="fn"><a id="fnref-24" href="#fn-24">24</a></sup></em>) as an open cut "excavated without timbering" - an earth canal, entirely above ground, terminating AT a gate of the city.</li>
+<li><strong>CROSSING a watercourse, an open flume on a bridge - the <em>kakehi</em> (懸樋).</strong> Where the Kanda Josui had to cross the Kanda River at Ochanomizu it was carried over on a flume;<sup class="fn"><a id="fnref-25" href="#fn-25">25</a></sup> the bridge downstream is called <strong>Suidōbashi</strong>, "aqueduct bridge," for exactly that reason, and Hiroshige drew the crossing in <em>Famous Places of the Eastern Capital: Ochanomizu</em>. This is the single most visually striking element in the whole system and it is fully attested.</li>
+<li><strong>INSIDE, buried conduit.</strong> Within the city the water runs in <strong>stone (<em>sekihi</em>) and wooden (<em>mokuhi</em>) pipes laid underground<sup class="fn"><a id="fnref-26" href="#fn-26">26</a></sup></strong> - ~67 km of them in Edo - feeding <strong>over 3,600 draw-wells</strong> (<em>jōsui ido</em>) and cisterns from which residents drew as they needed. The wooden pipe work was specialist enough that ship's carpenters were the trade that laid it.<sup class="fn"><a id="fnref-27" href="#fn-27">27</a></sup></li>
+</ul>
+<p><strong>No arcades.</strong> There is no East Asian equivalent of the Roman arcaded aqueduct. The vocabulary is: gravity canal at grade, buried pipe, and a flume bridge only where a watercourse must be crossed. <strong>Do not draw arches</strong> - that is the one form the possibility space excludes.</p>
+<p><strong>Why the inside is buried</strong> (inference, not attested): a dense wooden city needs its street surface, and open water threaded through the fabric is both an obstruction and a contamination problem. The boundary is functional, not arbitrary.</p>
+<p><strong>The decision.</strong> Draw it above ground wherever history put it above ground - which is most of its interesting length, and all of its drama:</p>
+<ol>
+<li>the <strong>intake works</strong> on the river,</li>
+<li>the <strong>open approach canal</strong> running to the wall,</li>
+<li>a <strong><em>kakehi</em> flume</strong> where it crosses a watercourse, if the geography gives us one,</li>
+<li>its <strong>terminus at a gate</strong>.</li>
+</ol>
+<p>Inside the wall the system is honestly buried, and it is represented by what a resident would actually see: <strong>its draw-points</strong>. Those are wells, which we already draw - so the recommendation is a distinguishable aqueduct-fed draw-basin rather than a fake surface channel. The existing well network does not go away; the aqueduct is laid on top of it.</p>
+<h2 id="the-wharf-is-the-collecting-end-and-kurayashiki-is-the-wrong-word-for-it">The wharf is the COLLECTING end, and "kurayashiki" is the wrong word for it</h2>
+<p><strong>Grounds:</strong> the wharf and tax-rice warehouse district; the domain granary</p>
+<p><strong>Evidence:</strong> attested, with one flagged divergence from setting canon</p>
+<p><strong>Sources:</strong> <a href="../SOURCES.html#osaka-kurayashiki"><code>osaka-kurayashiki</code></a>, <a href="https://en.wikipedia.org/wiki/Rice_broker"><code>asakusa-kuramae</code></a>, <a href="../SOURCES.html#kuramai"><code>kuramai</code></a></p>
+<p><strong>The correction first, because it was in our own draft.</strong> A <strong><em>kurayashiki</em></strong> (蔵屋敷) is a daimyo's warehouse-and-residence <strong>at the market</strong> - Osaka, around Nakanoshima,<sup class="fn"><a id="fnref-28" href="#fn-28">28</a></sup> more than 110 of them at the early-1800s peak - where tax rice was auctioned to brokers against tradeable rice bills. By 1700 virtually every western daimyo shipped tax rice there. <strong>That is the SELLING end, and a domain capital is not it.</strong> Calling Shiro Daika's waterfront a kurayashiki district would be wrong twice: wrong word, and wrong economic role.</p>
+<p><strong>What a domain capital actually holds.</strong> Peasants pay tax rice up to the <strong>domain granary</strong>, and the domain pays its samurai their stipends out of it (<strong><em>kuramai</em></strong>, the rice stipend).<sup class="fn"><a id="fnref-29" href="#fn-29">29</a></sup> So the capital is the <strong>collecting-and-disbursing</strong> end: rice arrives from the provinces, most of it goes straight back out as stipends, and the surplus ships downriver to the market.</p>
+<p><strong>The model to copy is Asakusa Okura / Kuramae.</strong> The shogunate's own rice granaries stood on the Sumida, and the district in front of them is literally named <strong>Kuramae</strong> (蔵前),<sup class="fn"><a id="fnref-30" href="#fn-30">30</a></sup> "before the storehouses." There sat the <strong><em>fudasashi</em></strong> - brokers who warehoused stipend rice for a fee, converted it to cash, and lent against it,<sup class="fn"><a id="fnref-31" href="#fn-31">31</a></sup> becoming rich enough that the theaters and geisha houses of neighboring Asakusa grew up on their money.<sup class="fn"><a id="fnref-32" href="#fn-32">32</a></sup></p>
+<p><strong>That gives the capital a chain of three features linked by one mechanism</strong>, which is the sort of thing that makes a map read as a real place:</p>
+<pre><code>river wharf -&gt; the domain granary -&gt; the brokers' row in front of it -&gt; the entertainment district next door
+</code></pre>
+<p><strong>The flagged divergence, which is the GM's call and not mine to invent.</strong> In Edo the arbitrage between rice and coin made <em>chonin</em> brokers rich. In L7R, budgets.md hands that income to the <strong>Ministry of Retainers</strong> - "~1,600 (rice/coin arbitrage on capital stipend throughput of ~28,000)" - a samurai ministry, not a merchant street. So our brokers' row may be a ministry annex rather than a commercial quarter, and if it is, the Edo causal chain from broker wealth to the entertainment district weakens. The two can coexist (the ministry takes the denomination cut; merchant brokers still trade), but which one the map depicts changes what is drawn there. <strong>Ask before building it.</strong></p>
+<p><strong>The Emperor's granaries are separate</strong>, and their siting is an inference. budgets.md gives the Imperial Magistrate a ~450-koku line for "local Imperial granary supervision," with "separate granary staff, materials, and operations," so they are distinct stores under a foreign authority - but nothing in the sources says where a capital would put them. Adjacent to the Imperial Magistrate's compound, or with their own water access, are both plausible; pick one and record it as a choice rather than a finding.</p>
+<h2 id="per-household-ground-costs-for-the-two-housing-types-the-budget-model-has-never-seen">Per-household ground costs for the two housing types the budget model has never seen</h2>
+<p><strong>Grounds:</strong> <code>citybudget.C_YASHIKI</code>, <code>citybudget.C_TERRACE</code>, <code>CAPITAL_RANK_BANDS</code>, <code>CAPITAL_SAMURAI_INWALL_FRAC</code> - <strong>SHIPPED in feature 018</strong>, and both constants remain PROVISIONAL pending re-derivation against the first drawn capital</p>
+<p><strong>Evidence:</strong> attested (both size anchors), interpolated (the gross-up ratios, measured from the pool)</p>
+<p><strong>Sources:</strong> <a href="https://www.library-archives.pref.fukui.lg.jp/bunsho/category/tenji/32442.html"><code>fukui-bushi-jutaku</code></a>, <a href="https://online.bunka.go.jp/heritages/detail/144338"><code>shibata-ashigaru-nagaya</code></a>, <a href="https://www.matsue-bukeyashiki.jp/about/equipment.html"><code>matsue-bukeyashiki</code></a> - all three already cited by <a href="government.html"><code>government.html</code></a></p>
+<p><code>citybudget.py</code> prices exactly two kinds of dwelling: <code>C_PACKED</code> (690 px^2 gross, a row house) and <code>C_SPACED</code> (2,480, a detached samurai house). A capital adds two more, and without rows for both the derived wall is wrong in the direction hardest to notice.</p>
+<p><strong>The gross-up ratios, measured from the three shipped cities</strong> (drawn footprint -&gt; the model's gross cost, which is footprint plus its share of eaves, roji and margins):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>measured drawn footprint</th>
+<th>model gross</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>packed row (caste-weighted)</td>
+<td>124 px^2</td>
+<td><code>C_PACKED</code> 690</td>
+<td><strong>5.6x</strong></td>
+</tr>
+<tr>
+<td>samurai house (75/25 junior/senior)</td>
+<td>330 px^2</td>
+<td><code>C_SPACED</code> 2,480</td>
+<td><strong>7.5x</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The spaced ratio is the higher one, which is the model working correctly: a detached house in a yard wastes more ground per roof than a party-wall terrace.</p>
+<p><strong><code>C_YASHIKI</code> - the walled samurai compound inside the wall.</strong> The anchor is already in our own research: the Fukui archive's <strong>Suginuma plan</strong> (a 1,000-koku retainer, 1839) is a <strong>28 x 32.5 ken plot<sup class="fn"><a id="fnref-33" href="#fn-33">33</a></sup> = ~167 x 194 ft</strong>, which at 3 ft/px is <strong>3,600 px^2</strong>. That is a PLOT, so it already contains its own yard - the walled perimeter IS the boundary, so it carries far less shared-margin overhead than a detached house. Applying only a modest ~1.15x for street margin:</p>
+<pre><code>C_YASHIKI ~= 4,150 px^2
+</code></pre>
+<p>Sanity checks against things we already draw: 1.7x an ordinary in-wall samurai house's gross (right for a chancellor against a bushi), 1.3x the drawn merchant-estate court (2,852 px^2, 0.59 acre - right for a chancellor against a very rich merchant), and comfortably under the extramural country manor (~4,900 px^2, ~1 acre), which has land a city plot does not.</p>
+<p><strong><code>C_TERRACE</code> - the retainer terrace.</strong> The anchor is likewise ours already: <a href="https://online.bunka.go.jp/heritages/detail/144338">Shibata</a>'s ICP <em>ashigaru-nagaya</em> is <strong>8 households under one roof,<sup class="fn"><a id="fnref-34" href="#fn-34">34</a></sup> 143 x 21 ft, 18 ft of frontage each<sup class="fn"><a id="fnref-35" href="#fn-35">35</a></sup></strong> = 378 sq ft per household = <strong>42 px^2</strong>. But that is the <em>lowest</em> stratum, and our retainer terrace houses <strong>Rank 1-4 samurai</strong> - poor, but a band reaching 16 koku at the top. It should therefore sit above the historical ashigaru unit and below the detached samurai house (2,322 sq ft drawn, which matches the <a href="https://www.matsue-bukeyashiki.jp/about/equipment.html">Matsue</a> mid-rank residence's ~220 m^2 almost exactly). Taking ~110 px^2 drawn (~990 sq ft, just above our laborer row house at 891) at a row-housing gross-up:</p>
+<pre><code>C_TERRACE ~= 660 px^2
+</code></pre>
+<p><strong>Confidence, stated honestly.</strong> Both SIZE anchors are attested and measured. The two DERIVED constants are interpolations, and <strong><code>C_TERRACE</code> is the softer of the two</strong> - it is bracketed by real numbers at both ends but its position between them is a judgment. <code>C_YASHIKI</code> rests directly on a measured plan and is firmer. Both should be re-derived against the first capital's drawn map, exactly as <code>C_PACKED</code>/<code>C_SPACED</code> were back-predicted from Tango.</p>
+<p><strong>What it makes the wall.</strong> Pricing the capital inventory with these rows - 2,160 packed households, a samurai cohort split by rank into ~60 walled yashiki / ~160 detached / ~94 terraced, the ~598,000 px^2 castle, ~180,000 of expanded civic program, and the 7% circulation fraction - gives a required interior of <strong>~3.2M px^2</strong> and a derived ring of about <strong>rx 1,056 / ry 982 px</strong>: roughly <strong>1.2 x 1.1 miles across, a ~3.6 mile circuit</strong>. Two consequences worth knowing before the feature starts:</p>
+<ul>
+<li><strong>The existing 3,200 x 2,700 canvas still fits it</strong> (it needs ~2,412 x 2,264 including the moat-and-margin clearance), so no canvas change is required.</li>
+<li><strong><code>plan_city</code> will refuse it outright.</strong> <code>POP_MIN, POP_MAX = 2000, 4000</code> raises rather than clamping - correctly, since it says capitals are a future tier - so the capital tier needs its own band and its own caste table, not a widened provincial one.</li>
+</ul>
+<p><strong>One knob this exposes.</strong> <code>SAMURAI_INWALL_FRAC</code> is 2/3 for a provincial city, the rest holding extramural estates they commute in from. A capital should run HIGHER - proximity to the daimyo's court is the whole point of the posting, and the walled yashiki is what makes staying in-wall attractive to exactly the senior cohort that would otherwise build outside. ~0.85 is my estimate; it is a guess, and it moves ~40 households of the priciest housing type, so it is worth the GM's eye.</p>
+<h2 id="the-brokers-row-is-merchant-and-the-ministrys-cut-is-narrower-than-it-looks">The brokers' row is MERCHANT, and the ministry's cut is narrower than it looks</h2>
+<p><strong>Grounds:</strong> the wharf brokers' row; the entertainment district's siting</p>
+<p><strong>Evidence:</strong> setting-canon (GM ruling), corroborated by the Edo pattern</p>
+<p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Rice_broker"><code>asakusa-kuramae</code></a>, budgets.md "Domain ministry budgets"</p>
+<p><strong>GM ruling, 2026-08-08.</strong> The brokers' row is a <strong>merchant</strong> quarter, not a Ministry of Retainers annex - and the reason is a distinction the budget line does not spell out on its face.</p>
+<p>budgets.md credits the Ministry of Retainers with "~1,600 (rice/coin arbitrage on capital stipend throughput of ~28,000)." <strong>That figure covers the PAYING of stipends only</strong> - the denomination decisions, the rice-versus-coin split, the payment-day logistics that the ministry administers. It is not a general franchise over rice finance. Everything else - the contracts, the clearinghouse business, the lending against next year's stipend, the arbitrage a samurai household does on its own account - sits outside it, and <strong>the merchant class has grown rich on that in Rokugan exactly as the <em>fudasashi</em> did in Edo.<sup class="fn"><a id="fnref-36" href="#fn-36">36</a></sup></strong></p>
+<p>So the Edo causal chain survives intact, and with it the reason the entertainment district belongs beside the granary: <strong>the brokers' money is what builds the theaters.</strong> Draw the row as merchant frontage - shops and merchant houses, with the wealth band skewed high - not as state violet.</p>
+<p><strong>Why this matters beyond one row of buildings.</strong> It resolves an apparent conflict between setting canon and the historical model without weakening either, and the resolution is a general one: <em>a ministry line item in budgets.md prices the ministry's own administrative function, not the whole economic activity that function touches.</em> Read another ministry's "informal income" line the same way before concluding that a trade is state-run.</p>
+<h2 id="the-emperors-granaries-are-separate-because-they-face-a-different-threat">The Emperor's granaries are separate, because they face a different THREAT</h2>
+<p><strong>Grounds:</strong> <code>imperial_granary_seat</code> (proposed knob); the Imperial Magistrate's compound</p>
+<p><strong>Evidence:</strong> setting-canon (GM ruling), reconstruction (the siting)</p>
+<p><strong>Sources:</strong> budgets.md "Imperial magistrates and their staff"</p>
+<p><strong>GM ruling, 2026-08-08</strong>, and the reasoning is a threat model rather than a plan:</p>
+<blockquote>
+<p>The Emperor's granaries do not need to be as guarded as the daimyo's, because an invading neighbor would be unlikely to attack the Emperor's granaries. They need protection from brigands, not from besiegers.</p>
+</blockquote>
+<p>That single distinction settles what was otherwise an arbitrary placement. The daimyo's siege stock has to be inside the castle because a siege is exactly what it is for; the Emperor's stores face <strong>theft, not investment</strong>, so a stout wall and a watch is sufficient and there is no reason to spend castle ground on them. <strong>They therefore sit outside the castle, as their own modest walled compound.</strong></p>
+<p>Where that compound goes is a <strong>tunable knob</strong>, because both plausible sitings are real answers and different cities will have made different choices:</p>
+<ul>
+<li><strong>beside the Imperial Magistrate's compound</strong> - the official who oversees them is right there, which is the administratively obvious arrangement; or</li>
+<li><strong>on the water</strong> - granaries want the wharf, since grain arrives and leaves by boat.</li>
+</ul>
+<p>Proposed as <code>meta(imperial_granary_seat="magistrate" | "wharf")</code>, with neither as a strong default. This is the same shape as the castle-seat knob: a genuine either/or that gives two capitals different skeletons for a documented reason rather than a die roll.</p>
+<h2 id="a-river-gets-a-towpath-not-a-road---and-they-are-not-the-same-feature">A river gets a TOWPATH, not a road - and they are not the same feature</h2>
+<p><strong>Grounds:</strong> the riverside way at a river capital; the wharf district's landward edge</p>
+<p><strong>Evidence:</strong> attested, corroborated (by opposite reasoning in the two traditions)</p>
+<p><strong>Sources:</strong> <a href="https://news.cgtn.com/news/3d3d674d7755444d33457a6333566d54/index.html"><code>shaoxing-towpath</code></a>, <a href="https://www.nakasendoway.com/river-and-sea-transport/"><code>edo-river-transport</code></a></p>
+<p>The GM asked (2026-08-08) whether a road would run along the river, or whether the river replaces it. <strong>Three different features get confused under "riverside road", and only two of them belong.</strong></p>
+<p><strong>1. A trunk road paralleling the river: NO.</strong> Water carried bulk far more cheaply than any cart, so a highway shadowing a navigable river is redundant - the river IS that route, and the road network exists to reach what the water does not. Japan makes the point at its sharpest: roads there did not follow rivers, and at the Oi-kawa on the Tokaido <strong>bridges and ferries were deliberately PROHIBITED</strong> so the river would serve as a checkpoint delaying an invader. A road meets a river to cross it, not to accompany it.</p>
+<p><strong>2. A TOWPATH on one bank: YES - and this is the real riverside way.</strong> The Chinese <strong><em>qiandao</em></strong> (纤道) is ancient and substantial: Shaoxing's, on the Eastern Zhejiang Canal, dates to <strong>815 CE</strong> and runs <strong>over 40 km</strong>; Marco Polo saw barges hauled along it by teams of horses. Its form is worth knowing because it is not road-shaped - it comes in two kinds, one on the<sup class="fn"><a id="fnref-37" href="#fn-37">37</a></sup> bank as expected, and one built <strong>out in the water parallel to the bank</strong>, slab stones laid on stone piers about half a metre above the surface.</p>
+<p><strong>What determines it</strong>: upstream haulage. A towpath exists <em>because</em> of the boats, not instead of them - downstream traffic drifts, upstream traffic is pulled. So it <strong>supplements</strong> water transport, which is exactly the GM's intuition, and it is narrow, single-bank, and goes only where the boats go.</p>
+<p><strong>3. A quay street inside the city (河岸, <em>kashi</em>): YES, but it is wharf frontage, not a route.</strong> It serves the dock, the granary and the brokers' row; it belongs to the wharf district and is already in that program.</p>
+<p><strong>The decision.</strong> A river capital draws a <strong>towpath</strong> on the wharf's own bank - a narrow hauling path, drawn distinctly from a road (no roadbed, no dashed lane centerline), running to the wharf and no further - plus the quay frontage inside the wall. It does <strong>not</strong> draw a trunk road paralleling the river. The domain's overland roads leave in the directions the water does not serve, which for Shiro Daika is exactly what the GM's road list already says: east to the Fox lands and southwest into the domain, with the Imperial road running north-south.</p>
+<p><strong>A drawable option held in reserve</strong>: the piers-in-the-water towpath is a striking, genuinely attested form. It is not the default - the bank-side path is the common case - but it is available for a capital whose bank is too steep or too built-up to carry one.</p>
+<h2 id="the-ministries-sit-outside-the-castle-flanking-the-approach-avenue">The ministries sit OUTSIDE the castle, flanking the approach avenue</h2>
+<p><strong>Grounds:</strong> the government ward and the ote-suji avenue; the six <code>s.ministry</code> compounds at capital scale</p>
+<p><strong>Evidence:</strong> attested, corroborated</p>
+<p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Imperial_City,_Beijing"><code>beijing-imperial-city</code></a>, <a href="../SOURCES.html#liufang-yamen"><code>liufang-yamen</code></a>, <a href="https://en.wikipedia.org/wiki/Nagoya_Castle"><code>nagoya-castle</code></a>, <a href="https://www.matsumoto-castle.jp/eng/about/palace"><code>matsumoto-goten</code></a></p>
+<p><strong>Both traditions answer the same way, and the split is by SCALE, not by culture.</strong> The rule in both is: <em>the ruler's own hall stays inside; the bureaucracy moves out as it grows.</em></p>
+<ul>
+<li><strong>China, county scale</strong> - there are no separate ministry buildings at all. The six <em>fang</em> (六房) are <strong>rooms<sup class="fn"><a id="fnref-38" href="#fn-38">38</a></sup></strong>: "six rooms and three shifts" (六房三班), side halls flanking the yamen's courtyards. Pingyao's county yamen runs 300+ rooms across its courts.<sup class="fn"><a id="fnref-39" href="#fn-39">39</a></sup></li>
+<li><strong>China, capital scale</strong> - the Six Ministries become their own compounds, and they line the <strong>Corridor of a Thousand Steps</strong> (千步廊) outside Chengtianmen: flanking the ceremonial approach avenue, OUTSIDE the palace's own walls.<sup class="fn"><a id="fnref-40" href="#fn-40">40</a></sup></li>
+<li><strong>Japan, castle town</strong> - the <em>goten</em> (honmaru or ninomaru palace) is where the daimyo lived and conducted official business, inside the works.<sup class="fn"><a id="fnref-41" href="#fn-41">41</a></sup> But the offices around it spilled out as they grew: Nagoya kept its <strong>Sannomaru Oyakata</strong> mansions in the third bailey,<sup class="fn"><a id="fnref-42" href="#fn-42">42</a></sup> and at Matsumoto, when the ninomaru proved too small, <strong>the county office and the town office were moved out into the town</strong> (to Rokku town) and the daimyo's conference hall to another.<sup class="fn"><a id="fnref-43" href="#fn-43">43</a></sup></li>
+</ul>
+<p><strong>The decision.</strong> A government ward outside the castle's outermost gate, the six ministries flanking the <em>ote-suji</em> approach avenue. Three reinforcing reasons:</p>
+<ol>
+<li>It is what both traditions do at exactly this tier - the tier at which the bureaucracy is finally large enough to warrant its own compounds. Given how much of this tier is extrapolation, the answer both anchors converge on is the one to take.</li>
+<li>It makes the castle's FRONT the map's compositional axis, which is the jokamachi rule above ("main roads deliberately passed through the castle's front side to indicate the glory of the ruler"). A ceremonial avenue with paired ministry compounds is the single most legible way for a map to say <em>daimyo's seat</em> rather than <em>big city</em>.</li>
+<li>It keeps the castle interior implied, which is the entire point of the empty-interior treatment, and <code>s.ministry</code> works unchanged.</li>
+</ol>
+<p>The <strong>domain school</strong> sits on the same avenue: the <em>hanko</em> was built in the castle town for the domain's own retainers,<sup class="fn"><a id="fnref-44" href="#fn-44">44</a></sup> so it belongs with the government it serves.</p>
+<p><strong>The retroactive confirmation.</strong> This also explains why our county town is right to hold its whole administration inside the magistrate's manor rather than drawing six offices: at that scale China genuinely has no separate offices, only rooms. The tier ladder - rooms in a manor, then compounds around a yamen, then compounds on a ceremonial avenue - is the same institution growing, not three unrelated conventions.</p>
+<h2 id="wall-geometry-rectangles-and-terrain-loops---the-circle-is-the-form-both-anchors-decline">Wall geometry: rectangles and terrain loops - the circle is the form BOTH anchors decline</h2>
+<p><strong>Evidence:</strong> attested (Nanjing, Shanghai), researched (the rectangle roster - not re-read)</p>
+<p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/City_Wall_of_Nanjing"><code>nanjing-wall-enwiki</code></a>, <a href="https://zh.wikipedia.org/wiki/%E4%B8%8A%E6%B5%B7%E8%80%81%E5%9F%8E%E5%8E%A2"><code>shanghai-xiancheng-zhwiki</code></a> (READ); the five rectangular cities are the earlier keys (<a href="https://en.wikipedia.org/wiki/Imperial_City,_Beijing"><code>beijing-imperial-city</code></a>, <a href="../SOURCES.html#pingyao-yamen"><code>pingyao-yamen</code></a>, <a href="https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99"><code>xian-wall-zhwiki</code></a>) - Chang'an and Suzhou not re-read; "thrown up in one season" not on the page</p>
+<p><strong>The question that prompted this</strong> (GM 2026-08-09): should the castle enceinte - and by
+extension the governor's mansion - be rectangular or rounder? The working assumption was: small
+compounds (magistrate manors, governor mansions, country estates) rectangular; large enclosures
+(provincial-city walls, capital walls, castle walls) more circular.</p>
+<p><strong>The finding: the assumption holds for small compounds and INVERTS for large walls.</strong> In both
+anchor traditions, enclosures stay rectilinear or go terrain-irregular as they grow. They never
+become circular BY DESIGN - a bigger wall in East Asia is a bigger rectangle or a longer terrain
+loop, not a rounder ring.</p>
+<ul>
+<li><strong>China: square at EVERY tier, by cosmology and by formwork.</strong> The Kaogongji's ideal capital
+  is a square, three gates a side, nine crossing streets, the palace at the center - and the
+  cosmology behind it is explicit: <strong>round heaven, SQUARE earth</strong>, so a wall (a thing of the
+  earth) takes Earth's shape. The built record follows the ideal from county seat to imperial
+  capital - Chang'an, Ming Beijing, Xi'an, Pingyao, Suzhou are all rectangles<sup class="fn"><a id="fnref-73" href="#fn-73">73</a></sup> - so the shape is
+  RANK-INDEPENDENT: a bigger administrative seat gets a bigger rectangle, never a rounder one.
+  Deviation comes from TERRAIN, not from size: Nanjing's 35 km Ming circuit bends around its
+  lakes, hills and river frontage, and is<sup class="fn"><a id="fnref-45" href="#fn-45">45</a></sup> "circular" only in the closed-circuit sense of the
+  word. The yamen and every government compound inside are strictly rectangular and axial.</li>
+<li><strong>Japan: angular masonry inside, a terrain loop outside.</strong> A castle's nawabari adapts its
+  baileys to the ground (the rinkaku/teikaku/renkaku taxonomies are all polygonal-irregular),
+  the ishigaki runs in straight revetted segments with hard corners carrying yagura, and a
+  tenshu's base is rectangular. The plains castles our capital resembles (Nagoya, Osaka, Nijo)
+  approach clean rectangles. The town's own enclosure, the sogamae, is the OTHER shape: Odawara's
+  9 km circuit runs from Mount Hachiman to the sea in a horseshoe - an organic terrain-following
+  loop, neither square nor circle.</li>
+<li><strong>The military logic, and why East Asia never needed the circle.</strong> A corner is the weak point
+  of a curtain (dead ground at the angle, a miner's favorite target), and Europe cured that by
+  CURVING - round flanking towers, shell keeps, and the organic ovals of medieval town walls.
+  East Asia cured the same problem by FLANKING instead: Chinese walls carry mamian ("horse-face")
+  bastions and corner towers on straight curtains, Japanese walls carry corner yagura and
+  masugata gate courts - because hangtu rammed-earth formwork and ishigaki masonry both want
+  straight runs, and the cosmology wanted the square anyway. Same problem, different cure, and
+  the cure is why big East Asian walls stay angular.</li>
+<li><strong>The attested circles, and why neither is our case.</strong> Shanghai's 1553 county wall was
+  genuinely round - thrown up in one season against the wokou pirate raids,<sup class="fn"><a id="fnref-46" href="#fn-46">46</a></sup> and a circle
+  encloses the most area per foot of wall, so the round wall is the SPEED-AND-ECONOMY form, not
+  a prestige form. The Hakka tulou are round communal fortress-HOUSES (a clan under one roof,
+  wedge apartments with no hierarchy and no weak corner) - and even tulou are as commonly
+  rectangular. Both are emergency/communal forms from the empire's margins; neither is how a
+  daimyo's seat or a governor's city announces itself.</li>
+</ul>
+<p><strong>Decisions:</strong></p>
+<ol>
+<li><strong>The castle enceinte stays RECTANGULAR</strong> - the drawn form is confirmed, not merely kept. A
+   round keep would be reading European castle grammar into an East Asian map.</li>
+<li><strong>Every government compound stays rectangular</strong> - yamen, magistrate manors, governor
+   mansions, lineage yashiki, country estates. The GM's working assumption for small compounds
+   was correct, and nothing changes.</li>
+<li><strong>Our city walls draw as ~elliptical polygon rings</strong> (Tango, Nagahara, Minami, Shiro Daika) -
+   now recorded as a disclosed HOUSE STYLE rather than a researched form. Of the attested
+   shapes it sits closest to the Japanese sogamae terrain loop (an organic closed circuit), and
+   furthest from the Chinese square. If a future map wants the China-first form, the grounded
+   options are the rectangle (flat open ground) or an irregular terrain-following loop (river or
+   hill ground) - not a truer circle. Reshaping the four shipped cities would re-roll the pool
+   and is a GM decision to make deliberately, not a drift to make silently.</li>
+</ol>
+<h2 id="the-chancellery-meets-in-the-castle---executive-out-council-in">The chancellery meets IN the castle - executive out, council in</h2>
+<p><strong>Evidence:</strong> attested (a median domain's administration inside the castle enclosure), setting-canon (the House Chancellery as an L7R institution)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E8%97%A9%E5%BA%81"><code>hancho-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/%E6%9C%AC%E4%B8%B8"><code>honmaru-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/%E6%8E%9B%E5%B7%9D%E5%9F%8E"><code>kakegawa-castle-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/陣屋"><code>jinya-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/%E5%AE%B6%E8%80%81"><code>karo-jawiki</code></a> (READ 2026-08-28, the GM's question); <a href="https://kotobank.jp/word/%E5%BE%A1%E7%94%A8%E9%83%A8%E5%B1%8B-66403"><code>goyobeya-kotobank</code></a> (analogy only); <a href="https://ja.wikipedia.org/wiki/%E8%A9%95%E5%AE%9A%E6%89%80"><code>hyojosho-jawiki</code></a> (the Edo anchor, corrected)</p>
+<p><strong>The question</strong> (GM 2026-08-09): would the House Chancellery actually have its own meeting
+building outside the castle? The GM's working assumption was that chancellery meetings happen in
+the castle itself - and feature 020 had drawn a chancellery compound on the government avenue.</p>
+<p><strong>The GM's assumption is right, and both anchors agree.</strong> In Edo, the Hyojosho (the supreme
+judicial council of the Roju and commissioners) sat WITHIN Edo castle, and the Roju - the
+shogunate's governing council - worked from the castle's own offices; a daimyo's karo council
+met in the goten's audience halls. In China the Grand Secretariat (neige), the emperor's
+council-of-state, sat INSIDE the palace precinct, while the Six Ministries stood outside on the
+approach. The split both traditions converge on is clean: <strong>the EXECUTIVE bureaus (clerks,
+archives, public business) stand outside the works; the ruler's COUNCIL meets beside the ruler,
+inside.</strong> A deliberative body of 5-10 lineage representatives generates no street traffic and
+holds no archives of its own - it is a chamber, not a compound.</p>
+<p><strong>Decision:</strong> the House Chancellery compound came OFF the map; the council chamber is part of
+the castle's implied goten (never drawn, per the blank-castle doctrine). The check inverted with
+it: <code>capital_chancellery_meets_in_the_castle</code> now fires if a chancellery compound is drawn
+outside. The inventory table in <code>settlements/capitals.md</code> moves the chancellery inside.</p>
+<p><em>Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the anchor, rule unchanged, awaiting the GM:</em> <a href="https://ja.wikipedia.org/wiki/%E8%A9%95%E5%AE%9A%E6%89%80">ja.wikipedia 評定所</a> places the Hyōjōsho <strong>outside Edo castle, at Tatsunokuchi</strong> (present Marunouchi) - across the moat from the Ōte gate, in the daimyo-mansion belt, not within the castle. The entry's "sat WITHIN Edo castle" is wrong as written; whether the capital's chancellery should therefore stand in the castle (the GM's ruling, which feature 020 implemented) or on the government avenue beside the castle (the Edo form) is the GM's call. Listed in the feature 143 ledger, section G.</p>
+<p><strong>Resolved (GM question 2026-08-28, feature 143 T20) - ACCURATE for a median domain; the Edo anchor replaced.</strong> The GM asked whether a TYPICAL domain's council met inside or outside its castle, Edo being an unusual capital. The record read: a castle-holding han's 藩庁 stood<sup class="fn"><a id="fnref-47" href="#fn-47">47</a></sup> "城に" - at the castle - and a castle-less han's at its jin'ya (<a href="https://ja.wikipedia.org/wiki/%E8%97%A9%E5%BA%81"><code>hancho-jawiki</code></a>); the goten's public half is the 政庁<sup class="fn"><a id="fnref-48" href="#fn-48">48</a></sup> (<a href="https://ja.wikipedia.org/wiki/%E6%9C%AC%E4%B8%B8"><code>honmaru-jawiki</code></a>); at Kakegawa, ~51-59,000 koku - a median domain - the<sup class="fn"><a id="fnref-49" href="#fn-49">49</a></sup> "政務所である二ノ丸御殿" sat in the ninomaru (<a href="https://ja.wikipedia.org/wiki/%E6%8E%9B%E5%B7%9D%E5%9F%8E"><code>kakegawa-castle-jawiki</code></a>), and Kawagoe likewise used its ninomaru; the karō decided in council and lived near the castle<sup class="fn"><a id="fnref-50" href="#fn-50">50</a></sup> (<a href="https://ja.wikipedia.org/wiki/%E5%AE%B6%E8%80%81"><code>karo-jawiki</code></a>); a small domain's jin'ya held 居館 and 役所 in one compound<sup class="fn"><a id="fnref-51" href="#fn-51">51</a></sup> (<a href="https://ja.wikipedia.org/wiki/陣屋"><code>jinya-jawiki</code></a>). No page read puts a domain's administration in the town. So the capital's chancellery meeting IN the castle is the attested median form - in the ninomaru or honmaru goten, which ring varying by castle - and the earlier prose about Edo's Hyōjōsho (a bakufu judicial council at Tatsunokuchi, outside the castle) is struck as the wrong anchor. Class for the HTML modal: <strong>accurate</strong>.</p>
+<h2 id="moat-water-drawn-connections-outside-standing-water-inside---and-yes-it-scums">Moat water: drawn connections outside, standing water inside - and yes, it scums</h2>
+<p><strong>Evidence:</strong> attested (Xi'an, Tango precedent), reconstruction (the scum)</p>
+<p><strong>Sources:</strong> <a href="https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99"><code>xian-moat-zhwiki</code></a> (READ: a permanently watered moat 20 x 10 m);<sup class="fn"><a id="fnref-74" href="#fn-74">74</a></sup> "Edo's moats bloom green" not read (<a href="https://ja.wikipedia.org/wiki/外濠_(東京都)">ja.wikipedia 外濠</a> is a disambiguation page; env.go.jp 濠環境保全 is the lead) - leftover</p>
+<p><strong>The questions</strong> (GM 2026-08-09): does the inner (castle) moat need to connect to anything?
+How is the water kept in, and kept from stagnating? And why was the CITY moat not simply
+connected to the river, as Minami's and Nagahara's are?</p>
+<p><strong>The city moat: river-fed flow-through, and the connection is drawn.</strong> Japanese wet moats
+filled from whatever water stood nearest - rivers and streams most commonly, wetlands and lakes,
+even the sea (Takamatsu's moat is seawater and its fish are ocean fish; Imabari's mixes tidewater
+with springs rising inside the moat itself) - and moat water was USED: drawn for irrigation,
+managed for flood control, boated for commerce. Minami and Nagahara back onto their rivers, so
+their moat FEET are the connection and nothing extra needs drawing. Shiro Daika's ring stands
+~200 px off its bank, so the connection is a pair of engineered channels, now drawn - and the
+first cut got them WRONG twice, which the GM's eye caught: a 48 ft thread of a leat, tapping
+the river at its CLOSEST approach (southeast). Closest is not upstream: with the land falling
+NE -&gt; SW, water entering at the low southeast corner cannot climb the east arc, so the whole
+northern ring would have been a dead arm. And the thread read nothing like the pool's own
+precedent - TANGO, the other stand-off closed ring, takes moat-width (66 ft) feeder and outfall
+channels, so the moat reads as flowing through. The second cut still ran its
+last leg up-screen, and the GM caught that too. The SETTLED form is river-to-river, the loop
+the sibling cities close at their moat feet: a 66 ft sluiced feeder taps the river's upper
+reach (downstream of the aqueduct's intake) and runs monotonically down-map - every segment
+west and south, the declared NE -&gt; SW bearing - into the ring's east arc, and the 66 ft drain
+leaves the southeast arc and rejoins the river just below its bend, approaching swept
+DOWNSTREAM, onto ground the planar fall genuinely puts below the arc. The towpath crosses the
+drain's mouth on a plank deck, as a real towpath bridged every side drain it met. The lesson
+worth the two failed cuts: on a map whose water declares a bearing, a connection is judged by
+the EYE at the bearing's grain - a leat that is net-downhill but runs a leg up-screen reads
+wrong, and the fix is monotonic geometry, not an elevation argument. The
+gate learned one rule for this: a stream may ROOT on the trunk river (<code>stream_runs_off_edge</code>'s
+river-tap clause) - the river is itself edge-sourced, so a leat rooted on it has a real source.</p>
+<p><strong>The castle's inner moat: standing water, and that is period-accurate.</strong> An inner moat dug
+below the water table holds groundwater and rain; springs rising in the moat bed (Imabari's do)
+keep some circulation, and hillside castles sectioned their moats with low dams into stepped
+pools. There is no underground aqueduct feeding it - a besieged castle wants water that cannot
+be cut off, which is exactly what groundwater is. Keeping it IN is the easy half (the moat floor
+sits below the table; earthen moats hold water the way any pond does). Keeping it CLEAN mostly
+did not happen: duckweed, algae and pond scum on a quiet moat are the historical look - Edo's
+surviving moats bloom green to this day - managed only by occasional dredging (the same sarae a
+canal got) and by the carp everyone kept in them. So the inner moat connects to NOTHING, and a
+GM describing it as still, green-skinned water with fat carp under the lilies is being accurate,
+not unflattering. Nothing to draw; recorded so nobody "fixes" it later.</p>
+<h2 id="the-aqueduct-supplies-the-city---the-moat-spill-was-a-drawing-artifact">The aqueduct supplies the CITY - the moat spill was a drawing artifact</h2>
+<p><strong>Evidence:</strong> attested</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E7%8E%89%E5%B7%9D%E4%B8%8A%E6%B0%B4"><code>tamagawa-josui-jawiki</code></a> (READ: the open cut hands off at the Yotsuya Ōkido 水番所 to buried wooden and stone pipes), <a href="https://ihcsacafe-en.ihcsa.or.jp/news/josui/"><code>edo-josui</code></a>, <a href="https://www.library.metro.tokyo.lg.jp/portals/0/edo/tokyo_library/modal/index.html?d=5655"><code>kanda-kakehi</code></a></p>
+<p><strong>The question</strong> (GM 2026-08-09): the aqueduct exists because a capital outgrows its wells, but
+the drawn cut appeared to feed the city moat instead of supplying the city. Which is it?</p>
+<p>It supplies the city - the confusion was the terminus rendering, not the design. The system is
+Edo's: OPEN cut outside the wall, BURIED pipe inside it, the GATE as the boundary;<sup class="fn"><a id="fnref-75" href="#fn-75">75</a></sup> what a
+resident sees inside is the draw-basins (feature 021's, with the wells). The open cut therefore
+ENDS at the gate by design, and the first rendering just stopped there - which read as a brook
+dribbling into the moat. The fix is the historical furniture: a TERMINAL BASIN (head-tank) at
+the gate end, the settling tank where the open cut hands off to the buried pipe - Edo's josui
+ended in exactly such tanks. The glyph now draws it, standing clear of the moat. (Any real
+josui also spilled surplus somewhere, and the moat is where a surplus WOULD go<sup class="fn"><a id="fnref-52" href="#fn-52">52</a></sup> - but the drawing
+should say "supply enters here", not "stream joins moat".) A later GM pass ("connected to
+literally nothing") forced the full research below, which retired both the roundabout route
+AND the flume - see "How a josui actually ran".</p>
+<h2 id="the-domain-school-is-the-hanko-a-school-of-letters-with-the-martial-wing">The domain school is the hanko: a school of letters WITH the martial wing</h2>
+<p><strong>Evidence:</strong> attested (hanko with martial halls), researched (the three named pairings)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/藩校"><code>hanko-jawiki</code></a> (READ: 255 schools; 武芸 and 演武場), <a href="https://ja.wikipedia.org/wiki/%E6%97%A5%E6%96%B0%E9%A4%A8"><code>nisshinkan-jawiki</code></a> (READ: 弓道場・武道場 at the reconstruction; Mito and Kagoshima not re-read)</p>
+<p><strong>The question</strong> (GM 2026-08-09): is the "Domain School" an office-like building (ministry
+glyph) or the capital equivalent of the provincial martial hall?</p>
+<p>Both, because that is what a hanko WAS: a school of LETTERS first, with a martial wing
+(bugeijo) on the same grounds<sup class="fn"><a id="fnref-53" href="#fn-53">53</a></sup> - Aizu's Nisshinkan, Mito's Kodokan and Kagoshima's Zoshikan all
+pair lecture halls with fencing floors and an archery range.<sup class="fn"><a id="fnref-54" href="#fn-54">54</a></sup> The provincial "martial hall" this
+engine already draws is exactly that martial wing at the tier below (cities/government.md); the
+capital shows the whole institution. <strong>Decision:</strong> a dedicated <code>s.hanko</code> glyph - the
+martial-hall vocabulary (state violet, dojo hall with kamiza, archery lane with azuchi) plus
+the larger civil lecture hall - recorded in <code>M['martial_halls']</code> with <code>kind='hanko'</code>, replacing
+the ministry box the first draft used.</p>
+<h2 id="why-the-temples-belt-the-wall-instead-of-clustering-in-a-temple-quarter">Why the temples belt the wall instead of clustering in a temple quarter</h2>
+<p><strong>Evidence:</strong> attested (bodaiji), setting-canon (the two sovereign temples)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E8%8F%A9%E6%8F%90%E5%AF%BA"><code>bodaiji-jawiki</code></a> (READ: the lineage temple),<sup class="fn"><a id="fnref-77" href="#fn-77">77</a></sup> <a href="https://visitkanazawa.jp/en/spot/detail_10182.html"><code>kanazawa-teramachi</code></a>, <a href="https://joetsu-stories.jp/2025/02/03/takada-teramachi-part-1/"><code>takada-teramachi</code></a>, <a href="https://en.japantravel.com/gifu/takayama-s-teramachi-gifu/13893"><code>takayama-teramachi</code></a> (the temple belt at the rim)</p>
+<p><strong>The question</strong> (GM 2026-08-09): why seven temples strewn through the city rather than two
+main temples plus smaller ones in a temple neighborhood?</p>
+<p>The structure IS "two main + the rest" - the two sovereign temples (Benten, Jurojin) are the
+capital's great complexes, flanking the government axis at equal offsets, and the five modest
+halls are the "everything else." What differs from the provincial pattern is WHERE the rest
+stand: belted along the rampart's inner face as a teramachi rim, not gathered into one
+neighborhood. That is the attested CASTLE-TOWN pattern, and it is defensive: a jokamachi
+deliberately placed its temple districts along the perimeter and the approaches, because temple
+precincts are the town's only large walled compounds outside the castle - each one a ready-made
+strongpoint<sup class="fn"><a id="fnref-76" href="#fn-76">76</a></sup> and muster ground covering a stretch of wall, and their graveyards and groves a
+firebreak. A provincial city clusters its temples into a lane (Nagahara's temple neighborhood)
+because it has only a few and they serve street life; a capital has enough to spend them on the
+defenses. The rim is the settled 018 decision (settlements/capitals.md, "Placements that
+change") - recorded here at full length because the question deserved the reasoning, not a
+pointer. If the GM prefers a gathered temple quarter anyway, that is a one-session re-seat and
+the checks do not currently care - say the word.</p>
+<h2 id="street-widths-the-ote-suji-is-a-grand-street-not-an-imperial-boulevard">Street widths: the ote-suji is a grand street, not an imperial boulevard</h2>
+<p><strong>Evidence:</strong> attested (5 ken), deviation (30 drawn for 29.5 - a rounding)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E6%9C%B1%E9%9B%80%E5%A4%A7%E8%B7%AF"><code>suzaku-oji-jawiki</code></a> (READ: 82 m Heian-kyō, 147 m Chang'an - the entry's 84 / ~150 are rounded), <a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E6%B5%B7%E9%81%93"><code>tokaido-jawiki</code></a> (READ: 5 ken in 1604 - see the correction); Honchō-dōri at 13.8 m not found (secondary pages give 9.9-11.8 m post-Meireki)</p>
+<p><strong>The question</strong> (GM 2026-08-09): is the width of the avenue into the castle realistic? "It
+looks huge."</p>
+<p>It was huge, for two stacked reasons. The honest one first: the engine's convention is REAL
+FEET through <code>lw()</code> - <code>s.road</code>'s default is <code>lw(26)</code>, 26 ft, the Tokaido's own width - and the
+first draft passed the ote-suji <code>width=32</code> in raw PIXELS, which at 3 ft/px drew a 96 ft
+boulevard, nearly 4x the Imperial highway beside it. A unit slip, not a decision.</p>
+<p>The researched band, once the units are honest: Edo's post-Meireki street plan - the SHOGUN'S
+million-person capital - made Honcho-dori 13.8 m (~45 ft) and Nihonbashi-dori 18.2 m (~60 ft),
+and those were its grandest ordinary avenues; the wider hirokoji were firebreaks, not streets.
+The truly vast processional ways (Heian-kyo's 84 m Suzaku-oji, Chang'an's ~150 m Suzaku Avenue)<sup class="fn"><a id="fnref-55" href="#fn-55">55</a></sup>
+are the ancient CONTINENTAL-capital form - the Chinese cosmological city - and no jokamachi
+ever built one. So a domain capital's ceremonial approach sits at the Honcho class: <strong>45 ft</strong>,
+half again the 26 ft highway it meets - grander by proportion, not by absurdity. The map now
+draws exactly that (<code>width=s.lw(45)</code>), with the ministry files pulled in to a ~21 ft setback so
+they front the avenue like a corridor instead of floating beside a runway.</p>
+<p><strong>The transferable rule:</strong> pass <code>s.lw(real_ft)</code> to every way's width, never raw pixels - the
+default's docstring already cites its source, and any hand width should be able to as well.</p>
+<p><em>Correction to the record (2026-08-28, feature 143) - CONTRADICTED on a drawn default, rule unchanged, awaiting the GM:</em> the engine's <code>s.road</code> default of 26 ft is glossed as "the Tōkaidō's own width"; <a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E6%B5%B7%E9%81%93">ja.wikipedia 東海道</a> gives the 1604 standard as <strong>5 ken ≈ 9 m ≈ 29.5 ft<sup class="fn"><a id="fnref-78" href="#fn-78">78</a></sup></strong>. The 45 ft ōte-suji stands as a proportion (half again the highway); the 13.8 m Honchō figure it was pegged to was not found (9.9-11.8 m are the figures seen). Ledger section G.</p>
+<p><strong>GM ruling (2026-08-28, feature 144) - FIXED:</strong> the trunk-road default is <strong>30 ft</strong> on every Mode B map (<code>ground.py</code> <code>ROAD_W_FT</code>), from the 1604 standard of 5 ken ≈ 29.5 ft (<a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E6%B5%B7%E9%81%93"><code>tokaido-jawiki</code></a>), rounded to the "about thirty feet" the GM asked for. The 26 ft gloss ("the Tōkaidō's own width") and the docstring's "~18-24 ft" are struck. The ōte-suji's 45 ft is now exactly half again the highway (45 / 30). Class for the HTML modal: <strong>accurate</strong> (the width), <strong>deviation</strong> (the half-foot rounding).</p>
+<h2 id="dimensional-audit-of-the-drawn-capital-gm-prompted-2026-08-09">Dimensional audit of the drawn capital (GM-prompted, 2026-08-09)</h2>
+<p><strong>Evidence:</strong> liberty (an audit against anchors already recorded)</p>
+<p><strong>Sources:</strong> the anchors named in the table are the entries above and their keys (<a href="https://www.japanesewiki.com/history/Jokamachi.html"><code>jokamachi-wiki-corpus</code></a>, <a href="https://www.nakasendoway.com/the-story-of-hikone-castle-town/"><code>hikone-castle-town</code></a>, <a href="https://okayama-castle.jp/learn-history-en/"><code>okayama-castle</code></a>, <a href="https://en.wikipedia.org/wiki/Imperial_City,_Beijing"><code>beijing-imperial-city</code></a>); nothing new asserted - research: rendering</p>
+<p><strong>The question</strong>: are the ministries, lineage estates, walls, river and the rest realistically
+sized? Every drawn family converted at 3 ft/px and checked against its anchor. One feature
+failed and was fixed; the rest hold.</p>
+<table>
+<thead>
+<tr>
+<th>feature</th>
+<th>drawn</th>
+<th>anchor</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wall ring</td>
+<td>6,174 x 5,742 ft (1.17 x 1.09 mi, ~3.6 mi circuit)</td>
+<td>the 018 budget's own prediction (~1.2 x 1.1 mi), Hikone-anchored</td>
+<td>HOLDS - the budget is the anchor</td>
+</tr>
+<tr>
+<td>castle</td>
+<td>2,550 x 2,100 ft = 49.7 ha</td>
+<td>the declared castle_px2 line, researched band 50-230 ha</td>
+<td>HOLDS (low end = median form)</td>
+</tr>
+<tr>
+<td>city moat 66 ft / castle moat 80 ft</td>
+<td></td>
+<td>researched in <code>castle()</code>: a castle moat outranks the city's ~66 ft</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>river</td>
+<td>120 ft</td>
+<td><code>river()</code>'s researched default ("a serious provincial river")</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>ministries</td>
+<td>224 x 148 ft each</td>
+<td>the provincial research (<code>cities/government.md</code>) - "a capital does not get a bigger yamen" (018)</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>grand lineage estates</td>
+<td>1.29-1.61 ha</td>
+<td>Edo kami-yashiki of small daimyo: ~2,500-7,000 tsubo (0.8-2.3 ha)</td>
+<td>HOLDS, mid-band</td>
+</tr>
+<tr>
+<td>kurogi estate</td>
+<td>0.76 ha (~2,300 tsubo)</td>
+<td>upper-hatamoto class - a chancellor housing few</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>modest lineage houses</td>
+<td>0.32-0.37 ha (~970-1,120 tsubo)</td>
+<td>the Suginuma 1,000-koku plot (0.30 ha)<sup class="fn"><a id="fnref-56" href="#fn-56">56</a></sup> - C_YASHIKI's own anchor</td>
+<td>HOLDS, dead on</td>
+</tr>
+<tr>
+<td>Imperial Magistrate</td>
+<td>300 x 225 ft = 0.63 ha</td>
+<td>Ubame's county magistracy manor (360 x 216 ft = 0.72 ha); ~68 staff + family</td>
+<td>HOLDS - same institutional class</td>
+</tr>
+<tr>
+<td>sovereign temple halls</td>
+<td>150 x 100 ft</td>
+<td>the shrine_hall guard's researched kondo ceiling (largest real main halls ~150-190 ft)</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>granary kura</td>
+<td>60 x 36 ft per store</td>
+<td>the town granary research (58 x 34 family)</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>ote-suji 45 ft / roads 30 ft (26 until feature 144) / ring 20 ft / brokers' lane 24 ft</td>
+<td></td>
+<td>Honcho-dori / Tokaido 5 ken / patrol-lane conventions</td>
+<td>HOLDS (see "Street widths")</td>
+</tr>
+<tr>
+<td>towpath 8 ft</td>
+<td></td>
+<td>Shaoxing's stone qiandao ~5-6.5 ft; ours carries horse teams</td>
+<td>HOLDS, upper band</td>
+</tr>
+<tr>
+<td>aqueduct cut 10 ft</td>
+<td></td>
+<td>josui earth cuts ~1-3 ken (6-18 ft)</td>
+<td>HOLDS, mid-band</td>
+</tr>
+<tr>
+<td>moat feeder leat 48 ft</td>
+<td></td>
+<td>Tango's 66 ft feeder; moat-class water</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td>jetties 60-66 ft</td>
+<td></td>
+<td>Nagahara's wharf convention</td>
+<td>HOLDS</td>
+</tr>
+<tr>
+<td><strong>hanko</strong></td>
+<td><strong>was 240 x 150 ft = 0.33 ha</strong></td>
+<td>attested band: Choshu's FIRST Meirinkan 940 tsubo (0.31 ha, 1718)<sup class="fn"><a id="fnref-57" href="#fn-57">57</a></sup> -&gt; Nisshinkan 2.65 ha -&gt; rebuilt Meirinkan ~5 ha</td>
+<td><strong>FAILED - bottom of the band</strong> for a schooling-magnet capital of a ~200k-koku-class domain; <strong>fixed to 400 x 260 ft (~1 ha, ~3,000 tsubo)</strong> - mid-band, half Nisshinkan, without claiming its fame</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The method note worth keeping</strong>: most sizes held because they were INHERITED from already-
+researched anchors (the budget, the provincial ministry, C_YASHIKI, the glyph guards). The two
+that failed at this tier - the ote-suji and the hanko - were both NEW hand-set numbers with no
+anchor cited at the point of use. A size that cannot cite its anchor is the one to audit first.</p>
+<h2 id="how-a-josui-actually-ran-gm-2026-08-09-intake-route-terminus-and-what-it-fed">How a josui actually ran (GM 2026-08-09: intake, route, terminus, and what it fed)</h2>
+<p><strong>Evidence:</strong> attested</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E7%8E%89%E5%B7%9D%E4%B8%8A%E6%B0%B4"><code>tamagawa-josui-jawiki</code></a> (READ: 92.3 m over 42.74 km; the Yotsuya Ōkido terminus), <a href="https://ja.wikipedia.org/wiki/%E6%B0%B4%E9%81%93%E6%A9%8B"><code>suidobashi-jawiki</code></a> (READ: named for the Kanda crossing), <a href="https://ihcsacafe-en.ihcsa.or.jp/news/josui/"><code>edo-josui</code></a>, <a href="https://www.library.metro.tokyo.lg.jp/portals/0/edo/tokyo_library/modal/index.html?d=5655"><code>kanda-kakehi</code></a>. Not found: the "~67 km of buried mokuhi" total and the row-house wells as the aqueduct's taps (<a href="https://ja.wikipedia.org/wiki/%E7%8E%89%E5%B7%9D%E4%B8%8A%E6%B0%B4">the 玉川上水 page</a> says the mains ran underground below the 水番所 without a length) - leftover</p>
+<p><strong>The questions</strong>: why does the aqueduct have a bridge? Why is it blue - is it open-topped? It
+leaves the river at the wrong angle, then wanders. Where did real ones start, what direction
+did they run, where did they end, and what did they feed into at the city - basins? wells?
+Above or below ground inside?</p>
+<p><strong>The Edo system, which is our anchor, answers every one of them:</strong></p>
+<ul>
+<li><strong>Where it starts</strong>: at an intake WEIR on a river, far upstream - the Tamagawa Josui's
+  nagewatashi weir at Hamura is 43 km from the city<sup class="fn"><a id="fnref-58" href="#fn-58">58</a></sup> - or at an upland spring pond (the Kanda
+  Josui rises from Inokashira).<sup class="fn"><a id="fnref-59" href="#fn-59">59</a></sup> The take-off peels away at a SHALLOW DOWNSTREAM angle: a
+  diversion swallows moving water; a perpendicular tee fights it.</li>
+<li><strong>How it runs</strong>: as an OPEN EARTH CUT - open-topped,<sup class="fn"><a id="fnref-60" href="#fn-60">60</a></sup> which is why water-blue between spoil
+  banks is the correct rendering - falling gently and CONTINUOUSLY: 92 m of drop over 43 km,
+  about 21 cm per 100 m, and never a climb.<sup class="fn"><a id="fnref-79" href="#fn-79">79</a></sup> The famous winding of real josui is
+  GRADIENT-HOLDING across long country,<sup class="fn"><a id="fnref-80" href="#fn-80">80</a></sup> not wandering; where the source is near, the cut runs
+  direct. Enclosed masonry appears nowhere outside the city, so there is no stone-colored run
+  to draw.</li>
+<li><strong>The bridge</strong>: a kakehi flume exists ONLY where the channel must cross another watercourse -
+  Edo's Suidobashi ("aqueduct bridge") is named for the Kanda's crossing of its river. A route
+  that crosses nothing carries no bridge, which is why ours no longer has one.</li>
+<li><strong>Where it ends</strong>: at the city gate's waterworks head - the Tamagawa terminates at Yotsuya
+  OKIDO, the<sup class="fn"><a id="fnref-81" href="#fn-81">81</a></sup> "great wooden gate," where the open cut hands into a settling tank on the city's
+  threshold. Our terminal basin at the east gate's approach is exactly that form.</li>
+<li><strong>Inside the city</strong>: UNDERGROUND, entirely - ~67 km of buried wooden mains (mokuhi, caulked
+  by ship-carpenters) and stone conduits running beneath the streets, feeding <strong>3,600+
+  josui-ido</strong>: cistern-wells, two-thirds sunk below grade,<sup class="fn"><a id="fnref-82" href="#fn-82">82</a></sup> that residents bucket from exactly
+  like groundwater wells. The "wells" of Edo's row-house courtyards WERE the aqueduct's taps.
+  Surplus discharged to the moats and rivers.<sup class="fn"><a id="fnref-61" href="#fn-61">61</a></sup></li>
+</ul>
+<p><strong>The decisions, applied to the map</strong>: the intake moved downstream of the moat feeder's tap
+and now peels off at ~35 degrees with the current; the cut falls short and DIRECT to the east
+gate (the river is near - only long-haul josui wind), every segment moving down the declared
+NE -&gt; SW bearing; the kakehi is gone (nothing to cross); the terminal basin stands
+Okido-fashion on the moat's outer bank at the east gate approach; and feature 021's
+draw-basins are hereby specified as JOSUI-IDO - cistern-wells on the buried mains,
+indistinguishable in use from the groundwater wells beside them, which is precisely why the
+in-wall system draws as draw-points and not as channels.</p>
+<h2 id="a-castle-has-two-gates-gm-2026-08-09-the-ote-mon--karamete-mon-pair">A castle has TWO gates (GM 2026-08-09: the ote-mon / karamete-mon pair)</h2>
+<p><strong>Evidence:</strong> attested (the ōte / karamete pair), researched (the 36 and the divination - hedged)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E6%90%A6%E6%89%8B%E9%96%80"><code>karamete-jawiki</code></a> (READ: the rear gate opposite the ōte-mon), <a href="https://ja.wikipedia.org/wiki/%E6%B1%9F%E6%88%B8%E5%9F%8E%E4%B8%89%E5%8D%81%E5%85%AD%E8%A6%8B%E9%99%84"><code>edo-36-mitsuke-jawiki</code></a> (READ - "36" is the popular number; the page says the true count ran 66-90). The south-facing-by-divination reasoning was not found on a read page</p>
+<p><strong>The question</strong>: would an interior capital castle keep a single gate, or several, with more
+than one bridge over its own moat? Multiple would be preferred - if realistic.</p>
+<p><strong>It is more than realistic; it is the standard program.</strong> The main gate is the <strong>ote-mon</strong>
+("great hand"), facing SOUTH by aspect divination (hojutsu / onmyodo) - which our castle
+already does. The rear gate is the <strong>karamete-mon<sup class="fn"><a id="fnref-62" href="#fn-62">62</a></sup></strong> ("binding hand"), typically opposite - and
+the pair is military doctrine, not convenience: during a siege the garrison SORTIES from the
+rear gate to fall on attackers held at the front. Large castles carried more gates still -
+Edo's inner and outer moats were crossed by 36 - each opening bridged over the moat it
+pierced,<sup class="fn"><a id="fnref-63" href="#fn-63">63</a></sup> so multiple bridges over a castle's own moat are the attested norm, not an
+extravagance.</p>
+<p><strong>The decision</strong>: <code>Settlement.castle</code> now takes <code>karamete_dir</code>; Shiro Daika's castle opens its
+karamete-mon NORTH, with its own (smaller) gate tower and its own deck over the castle moat,
+and a rear approach road runs from the gate to a T on the Imperial road's run toward the north
+city gate - the GM's own suggested connection, and the historically right one. The ote-suji
+remains the ceremonial front; the karamete approach is the working back door.</p>
+<h2 id="the-moat-ring-and-the-river-flank-moat-are-both-real---and-the-walls-distance-to-the-bank-decides">The moat RING and the river-flank moat are both real - and the wall's distance to the bank decides</h2>
+<p><strong>Evidence:</strong> attested, corroborated</p>
+<p><strong>Sources:</strong> <a href="https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99"><code>xian-moat-zhwiki</code></a> (READ), <a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%9D%82%E5%9F%8E"><code>osaka-castle-jawiki</code></a> (READ: the Yodo as a natural moat feeding the castle's own); Edo's Sumida flank not re-read</p>
+<p><strong>The question</strong> (GM 2026-08-09): Minami and Nagahara's moats do not fully encircle - they are
+open arcs whose ends meet the river, the river itself completing the circuit. The capital's
+moat fully encircles AND connects to the river through leats. Is that intentional? Are both
+valid? Which one is the researched form?</p>
+<p><strong>Both are researched forms, from the two anchor traditions, and neither city type is wrong:</strong></p>
+<ul>
+<li><strong>The complete ring is the CHINESE standard.</strong> Xi'an's moat is a complete artificial ring -
+  14.6 km encircling the wall entirely - fed from the region's water system by engineered
+  connections; Pingyao carries a complete circuit while the city stands NEAR the Fen, not on
+  it; Beijing's moats ringed each wall circuit, fed by the Tonghui/Jade Spring works. The
+  Chinese city habitually stands OFF its river and rings itself with engineered water.</li>
+<li><strong>The river-as-flank is the JAPANESE riverside form.</strong> A jokamachi ON a bank spent the river
+  as one side of its defenses (Edo's Sumidagawa, Osaka's northern rivers),<sup class="fn"><a id="fnref-83" href="#fn-83">83</a></sup> and its moat runs
+  as an arc closing onto the river at both ends - which is exactly the Minami/Nagahara form,
+  researched when those maps were drawn.</li>
+<li><strong>What decides between them is whether the RAMPART reaches the bank.</strong> A wall on the bank
+  gets the river for free and digs only the landward arc; a wall standing back must close its
+  own circuit, and connects to the river (if at all) by sluiced leats for supply and flushing.</li>
+</ul>
+<p><strong>The decision</strong>: Shiro Daika's rampart deliberately stands ~200 px off the bank - the wharf
+suburb, the two granary complexes and the towpath OWN the waterfront, and a rampart on the
+bank would have consumed the working shore the capital exists to use. So the capital takes
+the Chinese complete-ring form with sluiced feeder and drain leats, and the provincial river
+cities correctly keep their Japanese river-flank form: the difference is the two traditions
+showing through two different sitings, not an inconsistency. A future capital drawn ON its
+bank (castle_seat="edge" already anticipates one) would take the river-flank form instead.</p>
+<h2 id="temple-approaches-face-their-street-and-the-modest-temples-have-patrons">Temple approaches face their street, and the modest temples have PATRONS</h2>
+<p><strong>Evidence:</strong> attested</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E5%8F%82%E9%81%93"><code>sando-jawiki</code></a> (READ: the approach runs from the busy road to the hall), <a href="https://ja.wikipedia.org/wiki/%E8%8F%A9%E6%8F%90%E5%AF%BA"><code>bodaiji-jawiki</code></a> (READ: the patron temple)</p>
+<p><strong>Two GM findings in one pass (2026-08-09).</strong></p>
+<p><strong>The sando rule.</strong> A torii avenue exists so an approacher passes beneath the arches on the way
+IN - that is what a <em>monzen<sup class="fn"><a id="fnref-84" href="#fn-84">84</a></sup></em> ("before the gate") district is named for - so a hall within reach
+of a road or city street stands its avenue BETWEEN itself and the way. The capital's Jurojin
+had marched its avenue away from the kagi-no-te road, gateway behind the temple; now a general
+rule (<code>temple_torii_face_the_street</code>, all tiers: shrines, monasteries, temples) judges the
+arch-centroid's bearing against the nearest major way and fires on a far-side avenue. Halls
+with no way in reach face where they will - 021's streets will bring more of them under the
+rule.</p>
+<p><strong>The patron-temple reading, adopted as doctrine.</strong> The GM read the Temple of Hotei standing
+beside the Tokiwa Estate as TOKIWA'S temple - financed by the lineage out of a family
+connection to the fortune or its monks - and that reading is historically exact: an Edo-period
+house of standing maintained its own <em>bodaiji</em> (mortuary/patron temple; the Tokugawa kept
+Zojoji and Kan'eiji,<sup class="fn"><a id="fnref-85" href="#fn-85">85</a></sup> and han retainer families kept theirs in the castle town's temple
+districts), and <em>ujidera</em> - clan temples - are older than the castle towns themselves. So the
+capital's religious geography is now DELIBERATE at three levels, not one:</p>
+<ol>
+<li>The two SOVEREIGN temples (Benten, Jurojin) are domain institutions flanking the government
+   axis, and each grows its own monzen temple-neighborhood when 021's fabric lands - a capital
+   has temple neighborhoodS, plural, one per great house, never a single temple quarter.</li>
+<li>The modest rim halls are PATRON temples: each reads as kept by the lineage or ward nearest
+   it - Hotei by Tokiwa is the worked example, and 021 should let the others pair likewise
+   (Bishamon near Hazama, Daikoku near Anzu) where the geometry already suggests it.</li>
+<li>The rim placement itself remains the defensive teramachi finding (recorded above).</li>
+</ol>
+<p>Honesty note, per the record-the-why rule: the Hotei-Tokiwa adjacency was seat geometry, not
+planning - the GM's eye found the story in it, and the doctrine above makes it canon rather
+than accident. The best worldbuilding this map has produced was noticed, not designed.</p>
+<h2 id="which-districts-get-internal-walls---and-the-fang-ward-as-the-lion-variant">Which districts get INTERNAL walls - and the fang ward as the Lion variant</h2>
+<p><strong>Evidence:</strong> attested (the Tang ward, the Song opening), setting-canon (the Lion knob)</p>
+<p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Chang%27an"><code>changan-enwiki</code></a> (READ: walled wards, the market drum; the count SUMMARY-ONLY - 109-110 by most accounts, "108" the popular figure), <a href="https://en.wikipedia.org/wiki/Architecture_of_the_Song_dynasty"><code>song-architecture-enwiki</code></a> (READ: shops on the street after the Song), <a href="https://edoflourishing.blogspot.com/2013/10/machi-towns-and-villages.html"><code>edo-machi-kido</code></a>, <a href="https://www.atlantis-press.com/proceedings/ssha-23/125988752"><code>qing-zhalan</code></a></p>
+<p><strong>The question</strong> (GM 2026-08-09): at capital scale, are the temple neighborhoods walled, or
+just neighborhoods? Which district types take internal walls at all - and can this be a
+tunable knob, given the Lion's canonical taste for walling their districts?</p>
+<p><strong>The period default has ONE answer, already half-recorded in the ward-mesh research above:
+NOTHING is district-walled.</strong> Both anchors, at our period, run open streets barred at night -
+Edo's kido and roji-kido, Qing Beijing's zhalan palings - and the security architecture is:</p>
+<ul>
+<li><strong>Samurai districts</strong> (several, interleaved with commoner strips - the GM's memory is right):
+  NOT walled as districts. The sealing is done by each yashiki's OWN wall - a samurai quarter
+  at this tier is a street of private fortifications, not a fortified street. (The provincial
+  tier's continuous sealed-ward palisade remains the recorded outlier, flagged in the mesh
+  research as more than history supports even there.)</li>
+<li><strong>Temple neighborhoods</strong>: the PRECINCT is walled - every temple compound is its own
+  enclosure, and a teramachi row reads as a defensive line precisely because compound wall
+  adjoins compound wall - but the monzen neighborhood around a great temple is ordinary open
+  machi: shops, inns and stalls on the approach, barred at night by kido like any block, never
+  by a district wall. A walled monzen would strangle the commerce it exists for.</li>
+<li><strong>The castle and the walled compounds</strong> (yashiki, magistracy, merchant estates) are the only
+  interior walls the period draws, plus the rampart itself.</li>
+</ul>
+<p><strong>The walled ward IS real - one dynasty earlier, and that is the knob.</strong> Tang Chang'an ran 108
+lifang: residential wards behind their own perimeter walls, gates opened and closed by
+appointed officials to morning and evening drumrolls, markets confined and curfews enforced.<sup class="fn"><a id="fnref-86" href="#fn-86">86</a></sup>
+The Song ended it from below - residents knocked down the ward walls to open street-front
+shops, and the open commercial city (Kaifeng, Hangzhou) replaced the compartmented one.<sup class="fn"><a id="fnref-87" href="#fn-87">87</a></sup> So the
+two forms are not invention vs history; they are TWO PERIODS of history, and a clan that keeps
+its cities compartmented is running the OLDER imperial system on purpose.</p>
+<p><strong>The decision - a tunable knob, defaults per the research:</strong></p>
+<ul>
+<li><code>ward_style="mesh"</code> (DEFAULT, all clans): the kido/zhalan mesh the research recommends -
+  open streets, night-barred blocks, yashiki walls doing the sealing. This is the Song/Ming +
+  Edo consensus and what Shiro Daika will draw in 021.</li>
+<li><code>ward_style="fang"</code> (the LION variant, and any deliberately archaic/martial administration):
+  district perimeter walls with gated openings and a curfew drum - the Tang lifang kept alive
+  as martial philosophy and administrative practice, which is exactly the Lion's canonical
+  character. A fang-style city compartmentalizes samurai districts AND great-temple monzen
+  alike; it trades commerce for control, visibly.</li>
+</ul>
+<p>Variation within researched bounds is the skill's standing doctrine (the village/town/farm
+archetypes exist for the same reason); this knob extends it to urban administration. 021
+implements the mesh; the fang variant waits for the first Lion city, exactly as the edge
+castle waits for its first riverside capital.</p>
+<h2 id="the-sluices-lifting-frame-the-quay-side-kura-and-the-boat-length-jetty-gm-battery-2026-08-09">The sluice's lifting frame, the quay-side kura, and the boat-length jetty (GM battery, 2026-08-09)</h2>
+<p><strong>Evidence:</strong> reconstruction (the mechanism), attested (kura at the quay)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E8%94%B5%E5%89%8D"><code>kuramae-jawiki</code></a> (READ: eight numbered channels into the Asakusa storehouse ground);<sup class="fn"><a id="fnref-88" href="#fn-88">88</a></sup> the board-in-grooves / windlass mechanism was found on none of ja.wikipedia 水門, 樋門, kotobank 樋門 - it stands as reasoning; the jetty-length and fairway clauses rest on the log-boom entry</p>
+<p><strong>How a sluice was operated.</strong> The GM's inference is right on both counts: the gates control
+the moat's exchange with the river (holding its level in drought, shutting the intake in
+flood), and they were worked by a real MECHANISM. A hi / suimon board rides in grooves in its
+posts and is lifted BY HAND on small gates - by a windlass on larger ones - from a timber
+CROSSBEAM spanning the posts above the water; the operator stands on the beam walkway or the
+bank abutment. That above-water frame is exactly the visible part, so the glyph now draws it
+(crossbeam + windlass drum) at the glyph floor - the wells' vr convention, since a true-scale
+~2 ft drum would be under a pixel. The board's ANGLE stays across the channel it blocks
+(engineering, not coincidence); the boards were also moved a few steps down their channel runs
+off the junctions, where "across the channel" is unambiguous to the eye.</p>
+<p><strong>Kura stand AT the quay.</strong> The first seat held the granary rows ~84 ft inland "for flood",
+and the GM caught it: the Kuramae anchor unloads barges STRAIGHT into the stores - the flood
+answer is the kura's own raised floor and the stone revetment, not distance. The rows now
+stand a quay's width off the water, and a porter never carries a sack further than the door.</p>
+<p><strong>A jetty is a landing stage, not a causeway.</strong> At 66 ft the drawn stages reached past the
+middle of the 120 ft river; the fairway is kept clear by law (the log-boom research), so a
+stage runs about a boat-length - ~39 ft here, a third of the channel - and the wharf keeps one
+stage per granary-complex end rather than a picket line of piers.</p>
+<h2 id="ministry-offices-six-equal-compounds-the-same-size-the-province-builds---on-purpose">Ministry offices: six equal compounds, the SAME size the province builds - on purpose</h2>
+<p><strong>Evidence:</strong> setting-canon</p>
+<p><strong>Sources:</strong> the recorded feature 018 decision and the GM's rank-law reading; the provincial footprint in <code>cities/government.md</code> - nothing physical re-sourced</p>
+<p><strong>The questions</strong> (GM 2026-08-09): are the capital's ministries larger than the provincial
+ones, and was the size researched? Why are all six identical - peer standing, or oversight?</p>
+<p><strong>They are NOT larger, and that is the recorded 018 decision, not an accident.</strong> The 224 x
+148 ft compound is the researched provincial footprint (<code>cities/government.md</code>), and the
+civic-program research settled the tier rule: administrative ground grows by INSTITUTIONS
+ADDED, not by swelling the buildings - "a capital does not get a bigger yamen; it gets a
+castle, a chancellery, and a foreign magistrate." A ministry at any tier is a bureau of clerks
+and archives; the domain tier's extra weight lands in the new compounds (the hanko, the
+magistracy, the granary complexes), not in taller filing rooms.</p>
+<p><strong>All six equal is the GM's own rank-law reading, adopted as the recorded rationale</strong>: the six
+ministers are peers at the same rank as a matter of law, so their offices take peer form -
+and Beijing's Six Ministries lined the Corridor of a Thousand Steps as comparable compounds.<sup class="fn"><a id="fnref-64" href="#fn-64">64</a></sup>
+A city where one ministry visibly outbuilds its peers would be SAYING something (a War
+ministry swollen by a border command, a Revenue ministry fat on a boom) - real story material,
+but a declared exception for a specific city, never the default. Same doctrine as the waiver
+rule: the default states the law; a deviation carries its reason in writing.</p>
+<p><strong>The caption convention splits by tier</strong> (GM 2026-08-09): the capital's ministry captions sit
+ON the glyph in near-black, two stacked lines ("Ministry of" over the department name) - the
+estate rule applied to the state offices, affordable at 224 x 148 ft drawn at 3 ft/px. A
+provincial city's identical compound is drawn in a tighter fabric, so its caption stays
+BESIDE the box, exactly as shipped.</p>
+<h2 id="the-internal-dock-and-the-bank-quay-the-water-decides-which-a-city-gets">The internal dock and the bank quay: the WATER decides which a city gets</h2>
+<p><strong>Evidence:</strong> attested (Nagoya), researched (Edo's nine - SUMMARY-ONLY)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E5%A0%80%E5%B7%9D_(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82)"><code>horikawa-nagoya-jawiki</code></a>) (READ), <a href="../SOURCES.html#osaka-kurayashiki"><code>osaka-kurayashiki</code></a>, <a href="https://news.cgtn.com/news/3d3d674d7755444d33457a6333566d54/index.html"><code>shaoxing-towpath</code></a>; "Edo dug nine funairi-bori" SUMMARY-ONLY</p>
+<p><strong>The question</strong> (GM 2026-08-09): Nagahara and Minami let barges float INTO the city - water
+gate, dock basin. Shiro Daika unloads everything at a riverbank quay, and so far only grain.
+Would a city of this size have an internal dock? Is not drawing one unusual, or did some
+cities have them and some not?</p>
+<p><strong>Both forms are THE standard form - of two different kinds of water.</strong> Which one a city gets
+reads off its river, not off its size or rank.</p>
+<p><strong>China first.</strong> Canal-country cities let the boats in: Suzhou's Pan Gate is the paired
+land-and-water gate - one arch for the road, one for the barges<sup class="fn"><a id="fnref-89" href="#fn-89">89</a></sup> - opening the wall between
+the Grand Canal, the moat, and the internal canal grid. That is exactly the form the two
+sibling cities already draw (their gens call it the Suzhou pattern: canal communicates with
+the moat, the moat's river junction is the single navigation mouth). But it belongs to FLAT
+DELTA ground where the water stands at grade and near-still - in canal country the canal is
+the street grid. A Chinese city on a live river keeps its wharf ON the bank instead: boats
+moor along the shore and the goods go up the landing into a bankside commercial district.</p>
+<p><strong>Japan drew the same split and named both halves.</strong> The <em>funairi-bori</em> (boat-entry canal) is
+the internal-dock form - Edo dug nine of them,<sup class="fn"><a id="fnref-65" href="#fn-65">65</a></sup> Nagoya cut the Horikawa from the castle to the
+sea,<sup class="fn"><a id="fnref-66" href="#fn-66">66</a></sup> Matsue and Yanagawa are laced with them - and every example sits on coastal, delta, or
+lakeside ground with still or tidal water. The river towns' form is the <em>kashi</em> (bank
+landing): a public quay on the riverbank, often specialized by cargo (rice kashi, timber
+kashi, salt kashi), with the warehouses, wholesalers, and markets growing along the top of
+the bank. Kawagoe's whole prosperity ran through its Shingashi-river landings and it never
+dug a canal into town.</p>
+<p><strong>Why a live river refuses the basin.</strong> (1) Current and seasonal stage: a still-water basin
+cut into a flowing bank silts its mouth shut and floods on the rise. (2) A towpath river is a
+HAULED river - barges are dragged upstream along the bank, which is bank work; a basin serves
+boats that arrive under pole or sail on still water. (3) At a siege-grade wall the moat is a
+military work: Nagahara and Minami's moats communicate with their rivers at grade, so a barge
+slips river -&gt; moat -&gt; canal through the water gate, but Shiro Daika's ring stands off the
+bank behind two SLUICED leats whose whole job is to control the level. Opening that plumbing
+to navigation would surrender the control that makes the wet moat work.</p>
+<p><strong>Verdict: not an omission, and not a size threshold.</strong> Still, at-grade water (delta, lake,
+canal country) gets the water gate + dock basin; a live current past the wall gets the kashi
+quay + towpath. Shiro Daika's diagonal towpath reach takes the second, correctly - this is
+the research behind the earlier drafting call that removed the dock basin ("in-city canal
+vocabulary, wrong on a diagonal riverbank"), which was made on form and now has its why.</p>
+<p><strong>What the quay still owes (feature 021).</strong> A kashi was never only grain - the landing IS the
+commercial hub, and the warehouse rows, brokers, and markets belong on the bank top. The
+wharf-chain doctrine already plans exactly this (wharf -&gt; domain granary -&gt; brokers' row -&gt;
+entertainment district), so the grain-only look is the ground layer's emptiness, not the
+design.</p>
+<h2 id="how-often-is-a-sluice-open-the-duty-cycle-and-why-one-glyph-suffices">How often is a sluice OPEN? The duty cycle, and why one glyph suffices</h2>
+<p><strong>Evidence:</strong> reconstruction</p>
+<p><strong>Sources:</strong> reasoning from the moat-water and sluice entries above; no page read describes a moat gate's duty cycle - research: physical, labeled a guess</p>
+<p><strong>The question</strong> (GM 2026-08-09): were sluices closed by default and opened only when more
+water was needed, or did something else set the schedule? This decides whether the map needs
+separate open and closed glyphs.</p>
+<p><strong>The moat pair runs THROTTLED, not open-or-shut.</strong> A wet moat loses water continuously to
+seepage and evaporation, and standing water goes foul - which is why this map declares
+through-flow at all (feeder in at the east leat, around the ring, out at the southwest). So
+the resting state of BOTH boards is partly raised: a small steady trickle in, the same
+trickle out, and the operator's normal work is TRIMMING the opening a few inches, not
+opening or closing the gate. Neither board sits fully open or fully shut in ordinary times.</p>
+<p><strong>What moves a board is an EVENT, not a schedule:</strong></p>
+<ul>
+<li><strong>River in spate</strong> - the intake winds DOWN hard: storm water carries the silt load that
+  chokes a leat, and the moat must not surge.</li>
+<li><strong>Drought</strong> - the outfall shuts to hold what the ring has.</li>
+<li><strong>Dredging and repair</strong> - the one time the pair works fully opposed: intake shut, outfall
+  full open, and the ring draws down for the spade men. Moats silt and were periodically
+  dredged; this is the maintenance drawdown.</li>
+<li><strong>Siege</strong> - both shut, holding maximum water.</li>
+</ul>
+<p><strong>Irrigation sluices are the scheduled kind</strong> - the field gates on the village and city maps
+DO run a calendar: open through the growing season under the village's rotation of water
+rights (drought tightens the rotation table), shut for winter. The distinction is the JOB:
+a supply gate holds a LEVEL (trim continuously), a field gate delivers an ALLOTMENT (open on
+your day, shut on your neighbor's).</p>
+<p><strong>Consequence for the glyph: one closed-board form, with the word, is the honest drawing.</strong>
+At rest neither moat gate is "open" or "closed" - both are throttled a few inches, and a
+partly-raised board is sub-pixel at 3 ft/px. Separate open/closed glyphs would assert a
+binary state the real duty cycle does not have; the state worth showing on a map is an
+EVENT (a drawdown, a siege), which is a caption's job on the day it matters, not a
+permanent glyph.</p>
+<h2 id="how-much-of-a-capital-lives-outside-the-walls-settled-gm-ruling-2026-08-10">How much of a capital lives OUTSIDE the walls (SETTLED, GM ruling 2026-08-10)</h2>
+<p><strong>Evidence:</strong> attested (the commercial suburbs), setting-canon (the GM's ruling)</p>
+<p><strong>Sources:</strong> <a href="https://zh.wikipedia.org/wiki/%E9%98%8A%E9%97%A8"><code>changmen-zhwiki</code></a> (READ: the Ming-Qing Changmen belt), <a href="https://zdic.net/hans/%E5%85%B3%E5%8E%A2"><code>guanxiang-zdic</code></a>, <a href="https://en.wikipedia.org/wiki/1642_Yellow_River_flood"><code>kaifeng-flood-1642-enwiki</code></a>; the Song attribution for Kaifeng's suburbs not re-read</p>
+<p>The question went through three answers in one feature, and the trail matters more than the
+number:</p>
+<ol>
+<li><strong>First draw: 57% extramural</strong> - no decision at all. The wall was sized with a provincial
+   density constant, the in-wall fabric could not hold its cohort, and the overflow was seated
+   in ever-growing gate suburbs. The split was computed, recorded, and never enforced. Caught
+   by the GM from the render.</li>
+<li><strong>First correction: 30%</strong> (<code>suburb_packed_frac = 0.30</code>) - an over-reading. The research
+   behind it (Kaifeng, Suzhou's Changmen, the 大关厢 guan-xiang belts)<sup class="fn"><a id="fnref-68" href="#fn-68">68</a></sup> describes SONG/MING
+   COMMERCIAL cities, where centuries of peace let commerce sprawl past ramparts<sup class="fn"><a id="fnref-67" href="#fn-67">67</a></sup> that no
+   longer mattered militarily. Shiro Daika is not that: it is a SIEGE-BUILT castle seat on the
+   Crab border. Applying the commercial-era share to a fortified seat put ~1,800 inhabitants
+   outside a wall that exists precisely because they are supposed to be inside it.</li>
+<li><strong>The ruling: ~2.8% extramural (60 of 2,160 packed households, ~300 inhabitants).</strong> The
+   wharf working hamlet only - the brokers', boatmen's and porters' households that must
+   live at the water they work (the kashi belt the GM approved from the start), plus the
+   towpath shore. The guan-xiang gate markets REMAIN but are COMMERCE-ONLY: shop rows, inns,
+   flophouses and caravan yards are structures serving travelers, not resident households.
+   (Japan corroborates by silence: jokamachi were mostly unwalled, so<sup class="fn"><a id="fnref-90" href="#fn-90">90</a></sup> "extramural housing"
+   was not even a category; where Japan DID wall - Odawara's sogamae - the point was to bring
+   the town INSIDE.)</li>
+</ol>
+<p><strong>Knock-on effect</strong>: in-wall packed housing rises to 2,100 households, which the standing
+wall absorbs by converting the claimed-open rim bands to quarters and packing tighter -
+C_PACKED_CAPITAL re-derives to ~1,105 px^2/family (between Tango's 690 and the first
+capital draw's 1,367). A DENSER capital is also the historically better read: a fortified
+seat trades openness for the rampart's protection.</p>
+<h3 id="the-out-wall-samurai-are-a-different-budget-line-from-the-ruled-wharf-hamlet-2026-08-10">The out-wall SAMURAI are a different budget line from the ruled wharf hamlet (2026-08-10)</h3>
+<p>The settlement-review of the shipped first pass read the extramural ruling ("wharf-hamlet-only,
+~60 packed households") against the ~47 samurai the budget seats outside
+(<code>CAPITAL_SAMURAI_INWALL_FRAC</code> leaves 15% of the cohort in country seats on the approaches, the
+Tango out-wall precedent) and flagged them as disagreeing. They do not: the ruling governs the
+PACKED COMMONER cohort (the "few hundred AT MOST" conversation was about laborer/servant/merchant
+households), while the out-wall samurai are landed retainers whose seats are on the approaches by
+budget design - they count in the census and belong to no in-wall rank district. Both claims stand.</p>
+<p>What the review is RIGHT about is the drawn FORM: the first pass seats those samurai as tight
+rowpack blocks (machi-form fabric), where a country seat is a detached compound with ground. The
+re-forming is deferred with the rest of the fabric work - logged in <a href="../../future-work/cross-cutting.mdNone"><code>future-work/cross-cutting.md</code></a> (item 2) as part
+of the fabric-first regeneration, which should draw approach-road country seats as spaced walled
+compounds, not rows.</p>
+<h2 id="do-a-capitals-trades-and-funerary-program-scale-from-a-provincial-citys-research-gm-question-2026-08-10">Do a capital's trades and funerary program scale from a provincial city's? (research, GM question 2026-08-10)</h2>
+<p><strong>Evidence:</strong> attested (the theaters, the cremation ground), researched (the counts - SUMMARY-ONLY)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E6%B1%9F%E6%88%B8%E4%B8%89%E5%BA%A7"><code>edo-sanza-jawiki</code></a> (READ: exactly three licensed playhouses), <a href="https://ja.wikipedia.org/wiki/%E9%8A%AD%E6%B9%AF"><code>sento-jawiki</code></a> (READ: 600+ sento in the Bunka era - the "523 in 1810" is a search-summary figure), <a href="../SOURCES.html#shichiya-jawiki"><code>shichiya-jawiki</code></a> (the 2,700+ pawnshops SUMMARY-ONLY), <a href="https://ja.wikipedia.org/wiki/%E7%81%AB%E8%91%AC%E5%A0%B4"><code>kasoba-jawiki</code></a> (READ: temple-precinct cremation). Not found: the Kaifeng patrol-station rule of 1023 (the <a href="https://www.rujiazg.com/article/11577"><code>dongjing-menghualu-rujia</code></a> passage is the read form), the 50+ goulan</p>
+<p>The GM asked it plainly: "would there be the same number and size of kiln works in a capital
+city as in a provincial city? Same question for dye works, the common burial ground, etc."
+The answer, from the record: <strong>almost nothing is "same number and size," and the four features
+scale in four different ways.</strong> What follows is the WHY; the numbers are encoded in
+<code>capital_trade_counts_scaled</code> (check_village.py) and in the gen.</p>
+<p><strong>The four scaling classes, and why each feature lands where it does.</strong></p>
+<ol>
+<li>
+<p><strong>LINEAR - per-capita services multiply, they do not grow.</strong> Bathhouses are the cleanest
+   case in the whole record: Edo in 1810 ran <strong>523 sento for ~1.1M residents<sup class="fn"><a id="fnref-69" href="#fn-69">69</a></sup></strong>, one per ~2,100,
+   and each was an ordinary shophouse with a fuel yard. A capital of 12,400 therefore gets
+   <strong>six</strong>, all the same size - the bath did not become grander, there were simply more of
+   them. Pawnbroking is the same shape at a startling ratio (<strong>Edo: 2,700+ pawnshops, one per
+   ~400 residents</strong> - pawnbroking was the commoner's bank),<sup class="fn"><a id="fnref-70" href="#fn-70">70</a></sup> which our maps DISCLOSE as a
+   representative draw: we draw two or three with their pledge-kura courts and imply the rest
+   in the shop rows. Fire towers are linear in built AREA rather than population, because the
+   rule was always a fixed radius: Song Kaifeng from 1023 posted a patrol station with a brick
+   watchtower <strong>every 300 paces<sup class="fn"><a id="fnref-91" href="#fn-91">91</a></sup></strong>; Edo ran roughly one per ten blocks.</p>
+</li>
+<li>
+<p><strong>SUBLINEAR - works CONSOLIDATE.</strong> A kiln is a quarter, not a shop: Imado outside Edo,
+   Awataguchi and Kiyomizu outside Kyoto's eastern gates, the registered kiln households of
+   Song and Ming - firing clustered at the clay and the fuel road, immediately beyond a gate,
+   never scattered as singletons. So a capital's second works belongs BESIDE the first, sharing
+   the pit. Cremation is the strongest sublinear case: Song cities ran mass cremation through a
+   small number of Buddhist crematoria, and Edo concentrated a million residents' cremation at
+   a handful of temple kasoba<sup class="fn"><a id="fnref-92" href="#fn-92">92</a></sup> - <strong>a capital needs ONE cremation ground, sized up, not four</strong>.
+   Burial grounds likewise accreted AREA faster than SITES.</p>
+</li>
+<li>
+<p><strong>SUPERLINEAR / capital-only - the concentration IS the capital.</strong> Permanent theater is the
+   sharpest signal: Northern Song Kaifeng held <strong>50+ goulan</strong> inside its washi pleasure
+   precincts, four of them seating thousands, and Hangzhou 23-24 wazi containing 100+ goulan,
+   while provincial cities made do with touring players on temple ground. Japan reaches the
+   same place by the opposite mechanism - Edo licensed exactly <strong>three</strong> permanent kabuki
+   theaters<sup class="fn"><a id="fnref-71" href="#fn-71">71</a></sup> and provincial towns got shibai-goya on shrine ground. Either way: a permanent
+   roofed theater house is capital grammar. The domain school is the other capital-only
+   institution - <strong>200+ hanko were built by domains, in their castle towns</strong>, each with a
+   bugeijo martial wing<sup class="fn"><a id="fnref-93" href="#fn-93">93</a></sup> (Hagi's Meirinkan, Aizu's Nisshinkan).</p>
+</li>
+<li>
+<p><strong>FIXED - one per seat, whatever the seat's size.</strong> The pauper's ground is the best-attested
+   fixed feature in the list, and it is an EDICT: from 1104 Huizong ordered a <strong>louzeyuan</strong>
+   (public pauper cemetery) in every prefecture and county of the Song,<sup class="fn"><a id="fnref-94" href="#fn-94">94</a></sup> one per administrative
+   seat regardless of size. Japan corroborates with the muenzuka - Edo at a million ran a
+   handful of muenbotoke sites, not dozens, and even Kozukappara's 100,000+ dead made no great
+   mound, because cremated bone takes almost no volume. So: one pauper mound, 10-30 ft, at
+   every tier. The drum tower is fixed for a different reason (it keeps the time, and a city
+   has one time).</p>
+</li>
+</ol>
+<p><strong>The two features whose FORM changes rather than their count.</strong></p>
+<ul>
+<li><strong>Dye works become a STREET.</strong> Castle towns laid out an occupational <strong>Konya-machi</strong> (dyers'
+  ward) at founding - Yamatokoriyama established one when its castle was rebuilt in the late
+  16th century, and the toponym survives in former castle towns across Japan; Edo concentrated
+  the trade in Kanda Konya-cho, whose visual signature was the DRYING: long bolts on poles
+  dominating the block. Cloth consumption is linear, so vat count scales - but a capital draws
+  three to five contiguous dyer lots on one downstream bank, not one bigger yard. (True court
+  dyeing is a tier above us: the Qing imperial weaving-and-dyeing offices existed in exactly
+  three cities and employed ~7,000 by the mid-18th century. A clan capital gets at most a
+  purveyor-to-the-castle within the row.)</li>
+<li><strong>The mausoleum gains a lineage TIER and may leave the walls.</strong> The daimyo pattern is an
+  ancestral mortuary precinct: Sendai's <strong>Zuihoden</strong> - Date Masamune's mausoleum with his son's
+  and grandson's beside it and lesser family tombs around - stands on a forested hill outside
+  the town, across the river from the castle. So a capital carries the ruling family's precinct
+  (in-town bodaiji form or the wooded-rise form) plus two to four small karo-lineage crypts in
+  the teramachi temples. A provincial governor is an APPOINTEE, not a dynasty, which is exactly
+  why their city's single mausoleum belongs to the local great lineage and does not multiply.</li>
+</ul>
+<p><strong>Official kilns: two different attested forms, at two different distances.</strong> A capital may host
+an <strong>official tile works at the fringe</strong> - Beijing's Liulichang was one of the Ming capital's
+five official kilns, ~3 km from the palace, firing glazed tile for palaces and temples, because
+structural ceramic is bulky and follows the construction site. Or the clan's <strong>fine-ware domain
+kiln sits far away and guarded</strong>: the Nabeshima moved theirs to Okawachiyama, ~6 km up a
+barrier-controlled valley, to protect the secret. Both are clean; the on-map choice is the tile
+works, and a prestige-ware kiln is better recorded as off-map.</p>
+<p><strong>Where the record is thinnest</strong> (encode with an inference comment, and do not pretend
+otherwise): the oil-press count (Osaka's guild concentration says it is sublinear, but no count
+survives), the capital kiln count of exactly two, the dyers'-row lot count, the roofed theater's
+footprint, and the karo-crypt count.</p>
+<p><strong>The one place our canon and the research disagree, and the reconciliation.</strong> <code>city_graveyard_
+count</code> wants 2-4 graveyards, and the research says a capital carries 3-5 - but our temple
+doctrine gives EVERY temple a parish ground, and a capital has seven or eight temples. The two
+rules are counting different things: the research's "burial grounds" are the community's
+grounds (parish + extramural common), while our cemeteries key also holds each temple's own
+precinct plot. A capital therefore shows more cemetery records than the band, legitimately, and
+the band is not applied at capital scale.</p>
+<p><em>Re-sourcing note (2026-08-28, feature 143):</em> the bathhouse count reads as "over 600" in the Bunka era on the page read, not 523; the per-capita conclusion (one per ~2,000) is unchanged in magnitude.</p>
+<h2 id="how-far-outside-the-wall-does-the-funerary-ground-sit-research-gm-question-2026-08-10">How far outside the wall does the funerary ground sit? (research, GM question 2026-08-10)</h2>
+<p><strong>Evidence:</strong> attested (Edo cremation in temple precincts; the 1873 proposal), interpolated (the distance band)</p>
+<p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E7%81%AB%E8%91%AC%E5%A0%B4"><code>kasoba-jawiki</code></a> (READ), <a href="https://doi.org/10.18874/jjrs.27.3-4.2000.297-178"><code>bernstein-fire-and-earth</code></a> (SUMMARY-ONLY as to the paper; the May 1873 shubiki proposal and the stench read in a secondary account), <a href="https://zh.wikipedia.org/wiki/%E6%BC%8F%E6%BE%A4%E5%9C%92"><code>louzeyuan-zhwiki</code></a> (READ), <a href="https://ja.wikipedia.org/wiki/鈴ヶ森刑場"><code>suzugamori-jawiki</code></a>, <a href="https://ja.wikipedia.org/wiki/小塚原刑場"><code>kozukappara-jawiki</code></a>; the Rokudō-Toribeno 1,334 ft and the Zhejiang "one to ten li" spread were not re-read (ja.wikipedia 六道の辻 is Sendai's, a same-name trap; the Kyoto page gives no distance) - leftover</p>
+<p>The GM's objection: the capital's common burial ground, cremation ground and pauper's ossuary
+sat 909-1,260 real ft outside the wall, which "makes the map harder to read," and they asked for
+the distance only if research supports it. <strong>It does not.</strong> The number had been picked, never
+researched, and the record says the constraints are satisfied far closer.</p>
+<p><strong>What actually set the distance was LAND QUALITY and the ROAD, not a setback.</strong> The only
+explicit siting criterion anywhere in the record is Chinese and says nothing about distance: Cai
+Jing's edict of <strong>1104</strong>, which established a <strong>louzeyuan</strong> (public pauper cemetery) in every
+prefecture and county, directs officials to 擇高曠不毛之地<sup class="fn"><a id="fnref-95" href="#fn-95">95</a></sup> - "choose high, open, <strong>barren</strong>
+ground." The observed spread across Zhejiang county gazetteers is one to ten li (~1,800-18,100
+ft), and that spread is not a rule being obeyed: it is where each county's first patch of
+worthless ground happened to lie. A capital whose bad ground begins 300 ft past the moat is fully
+compliant. The second driver is that a corpse is carried on foot: every attested site straddles a
+highway at a gate - Kozukappara on the Ōshū/Nikkō Kaidō, Suzugamori on the Tōkaidō,<sup class="fn"><a id="fnref-96" href="#fn-96">96</a></sup> Rendaino at
+the head of Senbon-dōri, Toribeno at the Rokudō crossroads.</p>
+<p><strong>Ritual pollution is a BINARY, not a gradient.</strong> The requirement is <em>outside</em>, full stop, and
+Kyoto proves it: Injō-ji (Senbon Enmadō), the gate-temple "at the entrance of Rendaino," stands
+essentially ON Hideyoshi's Odoi rampart line and is explicitly described as marking the boundary
+between the worlds of the living and the dead. The Rokudō crossroads does the same job for
+Toribeno at ~1,334 ft. Pollution buys zero extra feet past the wall.</p>
+<p><strong>Fire buys almost nothing either, and this is the finding that settles it.</strong> Edo cremated its
+dead on open pyres <strong>inside the city, in temple precincts</strong> - a cluster of kasō-dera at Senju -
+for 250 years,<sup class="fn"><a id="fnref-97" href="#fn-97">97</a></sup> in the most flammable city on earth, through the Meireki fire that killed 100,000.
+The crematoria were never moved for fire. They were finally proposed for relocation past the
+shubiki line in <strong>May 1873</strong>, and the reason on the record is the <strong>stench</strong>, not sparks. The
+real practice was CONTAINMENT, not distance: a stone hearth inside a walled kasoba (Varanasi
+burns ~100 open pyres a day wedged into its densest quarter, solved by a stone platform and a
+river). Modern code for exactly this fire size - a bonfire, not a wildfire front - is <strong>50 ft</strong>
+(IFC §307.4.2 / NFPA 1). Wildfire ember-spotting figures do not apply: those come from crown
+fires lofting brands from a gigawatt plume, and even there firebrands need a genuine fire FRONT
+to spot past ~60 m. <strong>A wet moat ends the fire argument at its outer face.</strong></p>
+<p><strong>The three features belong together, and tighter than we drew them.</strong> At Edo's north gate one
+patch astride one road holds the Kozukappara execution and burial ground, Enmei-ji at <strong>287 ft</strong>,
+Ekō-in at <strong>258 ft</strong> (which maintains the site's muen-zuka - the literal pauper's mound), and
+Jōkan-ji the<sup class="fn"><a id="fnref-98" href="#fn-98">98</a></sup> "throw-in temple" at 1,527 ft. Kyoto's Toribeno and Rendaino were each ONE field
+doing all three jobs - exposure, cremation and burial - entered through one gate-temple. The
+Chinese louzeyuan is a walled compound with a resident caretaker monk, and Chinese cremation was
+institutionally a Buddhist-temple business,<sup class="fn"><a id="fnref-99" href="#fn-99">99</a></sup> so the crematory sat at the temple that ran the
+pauper ground.</p>
+<p><strong>The shape of the mistake we were making.</strong> In every attested case the funerary complex's
+ENTRANCE is at or just past the wall and the field extends <em>outward</em> for another 1,000-4,000 ft.
+Drawing a small compact feature at 900-1,260 ft draws what history puts at the FAR end and puts
+it at the NEAR end - which is exactly why it read unmotivated.</p>
+<p><strong>The numbers, encoded in <code>funerary_ground_within_reach</code>:</strong></p>
+<table>
+<thead>
+<tr>
+<th>quantity</th>
+<th>value</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>near edge, minimum</td>
+<td>150 ft past the moat's outer face</td>
+<td>clears moat, glacis and verge so it reads unambiguously outside; triple the 50 ft bonfire setback</td>
+</tr>
+<tr>
+<td>near edge, typical</td>
+<td>250-600 ft</td>
+<td>brackets Rendaino's gate-temple (~0-300 ft) and sits well inside Toribeno's (1,334 ft at a city 25x our size)</td>
+</tr>
+<tr>
+<td>near edge, MAX (capital)</td>
+<td>900 ft</td>
+<td>every physical constraint is satisfied far inside it - pollution at 0, fire at 50-100, smoke at a few hundred - so 900 is generous, not stingy</td>
+</tr>
+<tr>
+<td>near edge, MAX (provincial city)</td>
+<td>750 ft</td>
+<td>these constraints barely scale with population; a smaller built edge should read tighter, not looser</td>
+</tr>
+<tr>
+<td>cluster tightness</td>
+<td>the three within ~600 ft of each other</td>
+<td>Kozukappara to Enmei-ji 287 ft, to Ekō-in 258 ft</td>
+</tr>
+<tr>
+<td>pyre to nearest combustible</td>
+<td>&gt;= 100 ft clear, or &gt;= 50 ft across water</td>
+<td>IFC bonfire 50 ft doubled for a hotter, longer fire; the moat waiver is the Manikarnika argument</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: the 1104 louzeyuan edict (<a href="https://zh.wikipedia.org/wiki/%E6%BC%8F%E6%BE%A4%E5%9C%92">Chinese Wikipedia</a>; <a href="https://sxyk.henu.edu.cn/info/1014/7333.htm">史学月刊</a> on Song 漏泽园); <a href="https://doi.org/10.18874/jjrs.27.3-4.2000.297-178">Andrew Bernstein,
+"Fire and Earth: The Forging of Modern Cremation in Meiji Japan," JJRS 27/3-4 (2000)</a>, for the
+1873 shubiki proposal and the stench rationale; Kozukappara, Suzugamori, Jōkan-ji and Injō-ji
+coordinates measured against the Odoi line; <a href="https://up.codes/s/open-burning-and-recreational-fires">IFC §307 / NFPA 1</a> for the bonfire setback.</p>
+<section class="footnotes"><ol>
+<li id="fn-1"><a href="https://zhuanlan.zhihu.com/p/660442182"><code>liufang-yamen</code></a> - none (UNFETCHABLE at the check of 2026-09-06) <a class="fnback" href="#fnref-1">back</a></li>
+<li id="fn-2"><a href="https://zhuanlan.zhihu.com/p/660442182"><code>liufang-yamen</code></a> - none (UNFETCHABLE at the check of 2026-09-06) <a class="fnback" href="#fnref-2">back</a></li>
+<li id="fn-3"><a href="https://www.japanesewiki.com/history/Jokamachi.html"><code>jokamachi-wiki-corpus</code></a> - 「he gathered bushi (warriors) near his castle and established Rakuichi-rakuza (free markets and open guilds) in the city areas to stimulate the development of commerce and trade.」 <a class="fnback" href="#fnref-3">back</a></li>
+<li id="fn-4"><a href="https://www.japanesewiki.com/history/Jokamachi.html"><code>jokamachi-wiki-corpus</code></a> - 「Jokamachi (castle towns) were cities that were established with the lord's castle in the center.」 <a class="fnback" href="#fnref-4">back</a></li>
+<li id="fn-5"><a href="SOURCES.html#jokamachi-wiki-corpus"><code>jokamachi-wiki-corpus</code></a> - 「The town distribution centered on the castle and had town districts for Samurai, Ashigaru (common foot soldier), townsmen, and temples.」 <a class="fnback" href="#fnref-5">back</a></li>
+<li id="fn-6"><a href="SOURCES.html#jokamachi-wiki-corpus"><code>jokamachi-wiki-corpus</code></a> - 「Samurai towns were where the large estates of retainers, the so called Buke yashiki (samurai residence), were located and in general, retainers with higher position had a closer location to the castle. These are reflected as current place names such as Sange, Kamiyashiki-cho, and Shimoyashiki-cho.」 <a class="fnback" href="#fnref-6">back</a></li>
+<li id="fn-7"><a href="SOURCES.html#jokamachi-wiki-corpus"><code>jokamachi-wiki-corpus</code></a> - 「The townsmen district was located outside of the Samurai towns and was the town for merchants and craftsmen. People from surrounding villages were moved into the joka and merchants and craftsmen were separated into their occupation. Current place names such as Gofuku-machi, Aburaya-cho, Daiku-cho, Kaji-machi, and Koya-machi are related to this.」 <a class="fnback" href="#fnref-7">back</a></li>
+<li id="fn-8"><a href="SOURCES.html#jokamachi-wiki-corpus"><code>jokamachi-wiki-corpus</code></a> - 「The Teramachi was located at the outer rim of the jokamachi and spacious temples formed part of the city defenses.」 <a class="fnback" href="#fnref-8">back</a></li>
+<li id="fn-9"><a href="SOURCES.html#jokamachi-wiki-corpus"><code>jokamachi-wiki-corpus</code></a> - 「However, regardless of disadvantages/advantages geographically, main route roads did not go through the back of the castle but passed through the Ote side or front side of the castle to indicate the glory of the ruler.」 <a class="fnback" href="#fnref-9">back</a></li>
+<li id="fn-10"><a href="SOURCES.html#jokamachi-wiki-corpus"><code>jokamachi-wiki-corpus</code></a> - 「Therefore, construction of Sogamae or surrounding the entire town with a moat and mounds increased and gradually the trend towards wall cities was seen. Major examples are Odawara-jo Castle of the Gohojo clan and Hideyoshi TOYOTOMI's Osaka-jo Castle.」 <a class="fnback" href="#fnref-10">back</a></li>
+<li id="fn-11"><a href="https://okayama-castle.jp/learn-history-en/"><code>okayama-castle</code></a> - 「His son, Hideie, determined to place Honmaru (main enclosure and keep) on the hill of Okayama and built Okayama Castle that stands to the present day. ... In addition, the branching channels of the Asahi River were devised as they are today to protect the north and east sides of the castle and utilized to create moats, and a castle town was built that stretched long in the north-south direction between the moats.」 <a class="fnback" href="#fnref-11">back</a></li>
+<li id="fn-12"><a href="../SOURCES.html#kitsuki-castle"><code>kitsuki-castle</code></a> - none (UNFETCHABLE at the check of 2026-09-06) <a class="fnback" href="#fnref-12">back</a></li>
+<li id="fn-13"><a href="https://en.wikipedia.org/wiki/Hirosaki_Castle"><code>hirosaki-castle</code></a> - 「It was the seat of the Tsugaru clan, a 47,000 koku tozama daimyō clan which ruled over Hirosaki Domain, Mutsu Province」 <a class="fnback" href="#fnref-13">back</a></li>
+<li id="fn-14"><a href="SOURCES.html#himeji-castle"><code>himeji-castle</code></a> - 「The castle complex has a circumference of 4,200 m (2.6 mi).[5] It covers an area of 233 hectares (2,330,000 m2 or 576 acres)」 <a class="fnback" href="#fnref-14">back</a></li>
+<li id="fn-15"><a href="SOURCES.html#himeji-castle"><code>himeji-castle</code></a> - 「Area <a class="fnback" href="#fnref-15">back</a></li>
+<li id="fn-16"><a href="SOURCES.html#himeji-castle"><code>himeji-castle</code></a> - 「From east to west, the Himeji Castle complex has a length of 950 to 1,600 m (3,120 to 5,250 ft), and from north to south, it has a length of 900 to 1,700 m (3,000 to 5,600 ft).」 <a class="fnback" href="#fnref-16">back</a></li>
+<li id="fn-17"><a href="SOURCES.html#himeji-castle"><code>himeji-castle</code></a> - 「The moats have an average width of 20 m (66 ft), a maximum width of 34.5 m (113 ft), and a depth of about 2.7 m (8.9 ft).」 <a class="fnback" href="#fnref-17">back</a></li>
+<li id="fn-18"><a href="SOURCES.html#hikone-castle-town"><code>hikone-castle-town</code></a> - 「In contrast, it is known from a census conducted in 1695 that there were 15,371 townspeople in Hikone, living in 53 separate wards.」 and, for the samurai being outside the count: 「All military personnel, whether samurai or ashigaru, were normally exempt from periodic census counts of population. It is difficult to know their precise numbers therefore, although one estimate for the end of the 17th century suggests there were 20,000 warriors in Hikone at that time.」 <a class="fnback" href="#fnref-18">back</a></li>
+<li id="fn-19"><a href="SOURCES.html#hikone-castle-town"><code>hikone-castle-town</code></a> - (the two passages above) <a class="fnback" href="#fnref-19">back</a></li>
+<li id="fn-20"><a href="SOURCES.html#hikone-castle-town"><code>hikone-castle-town</code></a> - 「15,371 townspeople in Hikone, living in 53 separate wards」 <a class="fnback" href="#fnref-20">back</a></li>
+<li id="fn-21"><a href="https://edoflourishing.blogspot.com/2013/10/machi-towns-and-villages.html"><code>edo-machi-kido</code></a> - 「Each machi 町 square was closed by a kido 木戸 wooden gate. The gates were open from 4 in the morning till about 10 in the evening.」 <a class="fnback" href="#fnref-21">back</a></li>
+<li id="fn-22"><a href="https://www.atlantis-press.com/proceedings/ssha-23/125988752"><code>qing-zhalan</code></a> - 「Dashilan is one of the most important commercial blocks in Beijing. Its was named from the luxurious fence gate at the entrance of Hutong. It's a public facility that cooperated with the curfew policy and block governance in ancient Beijing, especially in Ming Dynasty and Qing Dynasty.」 <a class="fnback" href="#fnref-22">back</a></li>
+<li id="fn-23"><a href="https://www.nakasendoway.com/castle-towns-2/"><code>jokamachi-zoning</code></a> - 「A typical pattern was for chonin to reside in wards forming narrow strips separating different groups of samurai. Usually such strips would be alongside the major thoroughfares, where access to the services they offered was most convenient for all people.」 <a class="fnback" href="#fnref-23">back</a></li>
+<li id="fn-24"><a href="https://ihcsacafe-en.ihcsa.or.jp/news/josui/"><code>edo-josui</code></a> - 「the 43-km waterway from the intake weir in Hamura to Yotsuya-Okido in Edo was completed on November 15, 1653.」 <a class="fnback" href="#fnref-24">back</a></li>
+<li id="fn-25"><a href="https://www.library.metro.tokyo.lg.jp/portals/0/edo/tokyo_library/modal/index.html?d=5655"><code>kanda-kakehi</code></a> - 「神田川の上を懸樋が通り、中を神田上水が流れています。橋桁の間から見える遠景の橋が水道橋で、この景観は江戸の名所のひとつとなっていました。」 ("A kakehi (flume) passes over the Kanda River with the Kanda Jōsui flowing inside it. The bridge seen in the distance between the flume's girders is Suidōbashi; this view was one of the famous sights of Edo.") <a class="fnback" href="#fnref-25">back</a></li>
+<li id="fn-26"><a href="SOURCES.html#edo-josui"><code>edo-josui</code></a> - 「From Yotsuya-Okido pipes were buried underground to deliver water to the city. ... Since procurement was easy, wood was used for the waterpipes, which were called mokuhi.」 <a class="fnback" href="#fnref-26">back</a></li>
+<li id="fn-27"><a href="SOURCES.html#edo-josui"><code>edo-josui</code></a> - 「Fine technology was required to ensure no leakage of water, and this was where ship carpenters and underground-storage carpenters displayed their skills.」 <a class="fnback" href="#fnref-27">back</a></li>
+<li id="fn-28"><a href="../SOURCES.html#osaka-kurayashiki"><code>osaka-kurayashiki</code></a> - 「Feudal domains sold tax rice stored at kurayashiki (combined warehouses and residences) around Nakanoshima to rice brokers through auctions and issued rice bills (notes promising to exchange for rice) to successful bidders. The rice bills, including those to exchange for rice to be delivered to Osaka, were actively traded.」 <a class="fnback" href="#fnref-28">back</a></li>
+<li id="fn-29"><a href="../SOURCES.html#kuramai"><code>kuramai</code></a> - none (UNFETCHABLE at the check of 2026-09-06) <a class="fnback" href="#fnref-29">back</a></li>
+<li id="fn-30"><a href="https://en.wikipedia.org/wiki/Rice_broker"><code>asakusa-kuramae</code></a> - 「The rice brokers in Edo were called fudasashi (札差, "note/bill exchange"), and were located in the kuramae (蔵前, "before the storehouses") section of Asakusa.」 <a class="fnback" href="#fnref-30">back</a></li>
+<li id="fn-31"><a href="SOURCES.html#asakusa-kuramae"><code>asakusa-kuramae</code></a> - 「Merchants in Osaka and Edo thus began to organize storehouses where they would store a daimyō's rice in exchange for a fee, trading it for either coin or a form of receipt; essentially a precursor to paper money. Many if not all of these rice brokers also made loans, and would become quite wealthy and powerful.」 and 「A very profitable business, fudasashi acted both as usurers and as middlemen organizing the logistics of daimyō tax payments to the shogunate.」 <a class="fnback" href="#fnref-31">back</a></li>
+<li id="fn-32"><a href="SOURCES.html#asakusa-kuramae"><code>asakusa-kuramae</code></a> - 「The rice brokers, like other elements of the chōnin (townspeople) society in Edo, were frequent patrons of the kabuki theatre, Yoshiwara pleasure district, and other aspects of the urban culture of the time.」 <a class="fnback" href="#fnref-32">back</a></li>
+<li id="fn-33"><a href="https://www.library-archives.pref.fukui.lg.jp/bunsho/category/tenji/32442.html"><code>fukui-bushi-jutaku</code></a> - 「「菅沼御家絵図」1839年 ... 柳御門近く（現、裁判所付近）の知行千石の菅沼家の屋敷図です。南北28間（約59 ｍ）、東西32.5間（約51 m）の約千坪の敷地がありました。北側が通りに面し、表御門があります。」 and 「菅沼家は寄合席格で ... 貞享の半知（1686年）以降、1千石となりました。」 ("'Suganuma house plan', 1839 ... the plot plan of the Suganuma family, 1,000 koku, near the Yanagi gate: about 1,000 tsubo, 28 ken north-south, 32.5 ken east-west, facing the street on the north with its front gate." / "The Suganuma were of yoriai rank ... 1,000 koku from the 1686 halving.") <a class="fnback" href="#fnref-33">back</a></li>
+<li id="fn-34"><a href="https://online.bunka.go.jp/heritages/detail/144338"><code>shibata-ashigaru-nagaya</code></a> - 「旧新発田藩の下級武士の住んでいた長屋で八軒を一棟に連らねている。一軒分は玄関に六畳二室、三畳、台所でかなりせまく、素朴な感じがする。」 ("A nagaya where the low-ranking samurai of the former Shibata domain lived, eight dwellings joined in one building. One dwelling is an entry, two six-mat rooms, a three-mat room and a kitchen - quite cramped and plain.") <a class="fnback" href="#fnref-34">back</a></li>
+<li id="fn-35"><a href="SOURCES.html#shibata-ashigaru-nagaya"><code>shibata-ashigaru-nagaya</code></a> - 「桁行43.6m、梁間7.3m、寄棟造、茅葺、東面庇付、こけら葺」 ("Ridge length 43.6 m, depth 7.3 m, hipped roof, thatched, with a shingled eave on the east face.") <a class="fnback" href="#fnref-35">back</a></li>
+<li id="fn-36"><a href="https://en.wikipedia.org/wiki/Rice_broker"><code>asakusa-kuramae</code></a> - 「A very profitable business, fudasashi acted both as usurers and as middlemen organizing the logistics of daimyō tax payments to the shogunate.」 <a class="fnback" href="#fnref-36">back</a></li>
+<li id="fn-37"><a href="SOURCES.html#shaoxing-towpath"><code>shaoxing-towpath</code></a> - 「The towpath in Shaoxing takes two forms: one is on the bank of the canal as most people would expect, the other kind is in the middle of the water course parallel to the bank.」 and 「These towpath bridges are mostly slab stones placed on top of countless stone piers, each about 0.5 meters above the water.」 <a class="fnback" href="#fnref-37">back</a></li>
+<li id="fn-38"><a href="../SOURCES.html#liufang-yamen"><code>liufang-yamen</code></a> - none (UNFETCHABLE at the check of 2026-09-06) <a class="fnback" href="#fnref-38">back</a></li>
+<li id="fn-39"><a href="SOURCES.html#liufang-yamen"><code>liufang-yamen</code></a> - none (UNFETCHABLE at the check of 2026-09-06) <a class="fnback" href="#fnref-39">back</a></li>
+<li id="fn-40"><a href="https://en.wikipedia.org/wiki/Imperial_City,_Beijing"><code>beijing-imperial-city</code></a> - 「Further to the south was the "Corridor of a Thousand Steps" outside Chengtianmen Gate, to either side of which are the offices of the various government ministries.[citation needed]」 <a class="fnback" href="#fnref-40">back</a></li>
+<li id="fn-41"><a href="https://en.wikipedia.org/wiki/Nagoya_Castle"><code>nagoya-castle</code></a> - 「Besides serving as the residence of the lord, the palace functioned as the administrative center of the feudal government.」 (of the Ninomaru Palace) and 「Its core spaces, such as the Ninomaru Palace, functioned as both the lord's residence and the supreme government office for domain administration.」 <a class="fnback" href="#fnref-41">back</a></li>
+<li id="fn-42"><a href="SOURCES.html#nagoya-castle"><code>nagoya-castle</code></a> - 「The eastern part of the Sannomaru contained the Sannomaru Oyakata auxiliary residences of the Owari lords.」 and 「Surrounding this core, the San-no-maru enclosure accommodated high-ranking senior retainers and elder statesmen (karō).」 <a class="fnback" href="#fnref-42">back</a></li>
+<li id="fn-43"><a href="https://www.matsumoto-castle.jp/eng/about/palace"><code>matsumoto-goten</code></a> - 「However, because the Ninomaru was small in size, only about two thirds of the size of the Honmaru Palace, the county office and the town office was transferred to Rokku town, and the conference room for daimyo and village headmen was transferred to Agetsuchi town.」 <a class="fnback" href="#fnref-43">back</a></li>
+<li id="fn-44"><a href="https://ja.wikipedia.org/wiki/藩校"><code>hanko-jawiki</code></a> - 「藩校（はんこう）は、江戸時代に、諸藩が藩士の子弟を教育するために設立した学校。」 and 「藩校は、藩の費用負担により藩地に設立されたが」 ("A hankō is a school the domains founded in the Edo period to educate the children of their retainers." / "Hankō were founded in the domain's own territory at the domain's expense.") <a class="fnback" href="#fnref-44">back</a></li>
+<li id="fn-45"><a href="SOURCES.html#nanjing-wall-enwiki"><code>nanjing-wall-enwiki</code></a> - 「The difference was that it adopted a winding, free style, based on the city's complicated topography.」 and 「The construction concentrated on military defenses because the city was at the foot of a mountain - a natural barrier to control the commanding elevation with the river as its natural city moat.」 <a class="fnback" href="#fnref-45">back</a></li>
+<li id="fn-46"><a href="https://zh.wikipedia.org/wiki/%E4%B8%8A%E6%B5%B7%E8%80%81%E5%9F%8E%E5%8E%A2"><code>shanghai-xiancheng-zhwiki</code></a> - 「1553年为抵御溯江而上的倭寇第一次修建了环城的城墙。」 and 「在这幅1933年出版的英文上海地图上，老城厢的圆形轮廓仍清晰可见」 ("In 1553 a wall ringing the town was built for the first time, against the wokou pirates coming up the river." / "On this English map of Shanghai published in 1933 the round outline of the old walled town is still clearly visible.") <a class="fnback" href="#fnref-46">back</a></li>
+<li id="fn-47"><a href="https://ja.wikipedia.org/wiki/%E8%97%A9%E5%BA%81"><code>hancho-jawiki</code></a> - 「江戸時代の藩の藩庁は、大名の居城や居所のことで、城や屋敷に設置して大名が支配する領内の行政業務を執り行う。城持大名以上の藩は城に、城主格以下の城主格と無城大名の藩は城を構えることが許されなかったことから、領内に屋敷を置いて藩庁とした。」 ("An Edo-period han's hanchō was the daimyo's castle or residence; set in the castle or a mansion, it carried out the administration of the domain. Han of castle-holding rank and above had it at the castle; han of castle-lord grade and below, and castle-less daimyo, were not permitted a castle and so placed a mansion in the domain as their hanchō.") <a class="fnback" href="#fnref-47">back</a></li>
+<li id="fn-48"><a href="https://ja.wikipedia.org/wiki/%E6%9C%AC%E4%B8%B8"><code>honmaru-jawiki</code></a> - 「近世における本丸は、城主とその家族が暮らす奥御殿と政庁である表御殿を置き、必要に応じて重層な天守や櫓を建て並べ」 ("The early-modern honmaru held the inner palace where the lord and his family lived and the outer palace, which was the seat of government, with a many-storied keep and turrets as needed.") <a class="fnback" href="#fnref-48">back</a></li>
+<li id="fn-49"><a href="https://ja.wikipedia.org/wiki/%E6%8E%9B%E5%B7%9D%E5%9F%8E"><code>kakegawa-castle-jawiki</code></a> - 「掛川城には豊臣秀吉の直臣であった山内一豊が5万1千石（のち5万9千石）で入った。」 and 「この際、政務所である二ノ丸御殿、太鼓櫓、蕗の門、大手二の門は1861年（文久元年）までに再建されたが」 ("Yamauchi Kazutoyo, a direct vassal of Hideyoshi, entered Kakegawa castle at 51,000 koku (later 59,000)." / "At that time the Ninomaru goten, which was the administration office, the drum turret, the Fuki gate and the second Ōte gate were rebuilt by 1861.") <a class="fnback" href="#fnref-49">back</a></li>
+<li id="fn-50"><a href="https://ja.wikipedia.org/wiki/%E5%AE%B6%E8%80%81"><code>karo-jawiki</code></a> - 「重要事項については定例日に評定所などに集合して合議の上で決裁する。」 and 「家老が自分の屋敷とは別に下屋敷を有する場合もあり、基本的に防衛施設である城の近くに屋敷を構えていた。」 ("Important matters were decided by assembling at the hyōjōsho or the like on fixed days and deliberating in council." / "A karō sometimes had a lower mansion besides his own; basically they kept their mansions near the castle, a defensive facility.") <a class="fnback" href="#fnref-50">back</a></li>
+<li id="fn-51"><a href="https://ja.wikipedia.org/wiki/陣屋"><code>jinya-jawiki</code></a> - 「また、小藩の陣屋では、城に準ずる施設として周囲に土塁や堀をめぐらせつつも高い石垣は備えず、居館・役所・家臣の役宅や土蔵、調練場などを配置する構成がみられる」 ("In a small domain's jin'ya, a facility ranking next to a castle, one sees earthworks and a ditch around it but no high stone walls, with the residence, office, retainers' official houses, storehouses and a drill ground laid out inside.") <a class="fnback" href="#fnref-51">back</a></li>
+<li id="fn-52"><a href="SOURCES.html#tamagawa-josui-jawiki"><code>tamagawa-josui-jawiki</code></a> - (the 水番所 passage above) <a class="fnback" href="#fnref-52">back</a></li>
+<li id="fn-53"><a href="https://ja.wikipedia.org/wiki/藩校"><code>hanko-jawiki</code></a> - 「全国的な傾向として、藩校では武芸も奨励され、7歳・8歳で入学して第一に文を習い、後に武芸を学び、14歳・15歳から20歳くらいで卒業する。」 and 「発展期には全国に255校に上り[3]、ほぼ全藩に設立された。」 ("As a nationwide tendency the hankō also encouraged the martial arts: pupils entered at 7 or 8, learned letters first, then the martial arts, graduating between about 14-15 and 20." / "At their height they reached 255 schools nationwide, founded in nearly every domain.") <a class="fnback" href="#fnref-53">back</a></li>
+<li id="fn-54"><a href="https://ja.wikipedia.org/wiki/%E6%97%A5%E6%96%B0%E9%A4%A8"><code>nisshinkan-jawiki</code></a> - 「この施設は、博物館・道場（弓道場・武道場）・研修や宿泊施設・映画撮影所などを兼ねており」 and 「15歳までは素読所（小学）に属し、礼法、書学、武術などを学んだ。」 ("The facility doubles as a museum, dōjō (archery hall and martial-arts hall), training and lodging facility and film location." / "Until 15 they belonged to the reading hall (elementary school) and studied etiquette, calligraphy, martial arts and so on.") <a class="fnback" href="#fnref-54">back</a></li>
+<li id="fn-55"><a href="https://ja.wikipedia.org/wiki/%E6%9C%B1%E9%9B%80%E5%A4%A7%E8%B7%AF"><code>suzaku-oji-jawiki</code></a> - 「平城京の朱雀大路は幅73メートル、平安京では幅82メートル（延喜式）[6]となった。」, 「平安京朱雀大路は全幅84.0メートル、側溝より内側の道路幅70.2メートルとする推定もある[9]。」 and 「唐・長安の朱雀大街は幅147メートルもあったため」 ("Heijō-kyō's Suzaku avenue was 73 m wide; Heian-kyō's 82 m (Engishiki)." / "There is also an estimate of 84.0 m overall for Heian-kyō's Suzaku avenue, 70.2 m of roadway inside the side ditches." / "Tang Chang'an's Suzaku street was as much as 147 m wide.") <a class="fnback" href="#fnref-55">back</a></li>
+<li id="fn-56"><a href="https://www.library-archives.pref.fukui.lg.jp/bunsho/category/tenji/32442.html"><code>fukui-bushi-jutaku</code></a> - 「南北28間（約59 ｍ）、東西32.5間（約51 m）の約千坪の敷地がありました。」 ("a plot of about 1,000 tsubo, 28 ken north-south by 32.5 ken east-west" (1,000 tsubo = 0.33 ha)) <a class="fnback" href="#fnref-56">back</a></li>
+<li id="fn-57"><a href="https://ja.wikipedia.org/wiki/%E6%97%A5%E6%96%B0%E9%A4%A8"><code>nisshinkan-jawiki</code></a> - 「会津若松城の西隣に日新館の校舎が完成。東西約120間、南北およそ60間の敷地に日本最古のプールといわれる水練場や天文台までをも備えた、全国有数の藩校であった。」 ("The Nisshinkan's buildings were completed just west of Aizu-Wakamatsu castle: on grounds about 120 ken east-west and 60 ken north-south, with a swimming pool said to be Japan's oldest and even an observatory, it was one of the foremost hankō in the country.") <a class="fnback" href="#fnref-57">back</a></li>
+<li id="fn-58"><a href="https://ihcsacafe-en.ihcsa.or.jp/news/josui/"><code>edo-josui</code></a> - 「In particular, one of the dams there, called the Nagewatashi Weir, consisted of a combination of cedar logs, fascines (bundles of tree branches), and gravel that could be easily removed.」 and 「the 43-km waterway from the intake weir in Hamura to Yotsuya-Okido in Edo」 <a class="fnback" href="#fnref-58">back</a></li>
+<li id="fn-59"><a href="SOURCES.html#edo-josui"><code>edo-josui</code></a> - 「At the beginning of the seventeenth century it built the Kanda Josui waterway, which had its source in the present-day Inokashira Pond in Inokashira Park, Kichijoji.」 <a class="fnback" href="#fnref-59">back</a></li>
+<li id="fn-60"><a href="SOURCES.html#tamagawa-josui-jawiki"><code>tamagawa-josui-jawiki</code></a> - 「羽村市から大木戸までの約43キロメートルは全て露天掘りで」 ("the ~43 km from Hamura to the Ōkido is entirely open-cut") <a class="fnback" href="#fnref-60">back</a></li>
+<li id="fn-61"><a href="SOURCES.html#tamagawa-josui-jawiki"><code>tamagawa-josui-jawiki</code></a> - 「余った水を渋谷川（穏田川）へと放流する役割も担っていた」 and 「discharged into communal wastewater gutters, from where it flowed into moats and rivers」 ("it also had the job of releasing surplus water into the Shibuya (Onden) River") <a class="fnback" href="#fnref-61">back</a></li>
+<li id="fn-62"><a href="https://ja.wikipedia.org/wiki/%E6%90%A6%E6%89%8B%E9%96%80"><code>karamete-jawiki</code></a> - 「搦手門（からめてもん）は城門の一つで、大手門に対して開かれる裏手にあたる搦手口の門。」 ("The karamete-mon is a castle gate: the gate of the rear (karamete) entrance, opened opposite the ōte-mon.") <a class="fnback" href="#fnref-62">back</a></li>
+<li id="fn-63"><a href="https://ja.wikipedia.org/wiki/%E6%B1%9F%E6%88%B8%E5%9F%8E%E4%B8%89%E5%8D%81%E5%85%AD%E8%A6%8B%E9%99%84"><code>edo-36-mitsuke-jawiki</code></a> - 「江戸城三十六見附（えどじょうさんじゅうろくみつけ）とは、江戸城に置かれた見附（見張り番所）のうちの主な36か所を挙げたもの。堀に架けられた橋と一体的に設置されたものが多い。」 and 「実際には、江戸の城門の見張り場所自体はもっと多数あったようだが（66、90など諸説あり）、枡形門を持つ見附は、幕府作事方の資料によると外曲輪に26門あり ... 語呂の関係から、枡形の26門に、目ぼしい10門を足して「三十六見附」とし」 ("The 'thirty-six mitsuke of Edo castle' names the principal 36 of the watch-posts placed at Edo castle; many were built as one with a bridge over the moat." / "In fact there seem to have been many more watch-posts (66, 90 by various accounts); by the bakufu works office's records there were 26 masugata gates in the outer works ... for the sake of the ring of it, 10 notable gates were added to the 26 to make 'thirty-six'.") <a class="fnback" href="#fnref-63">back</a></li>
+<li id="fn-64"><a href="https://en.wikipedia.org/wiki/Imperial_City,_Beijing"><code>beijing-imperial-city</code></a> - 「Further to the south was the "Corridor of a Thousand Steps" outside Chengtianmen Gate, to either side of which are the offices of the various government ministries.」 <a class="fnback" href="#fnref-64">back</a></li>
+<li id="fn-65">SUMMARY-ONLY: <a href="https://ja.wikipedia.org/wiki/%E5%A0%80%E5%B7%9D_(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82)"><code>horikawa-nagoya-jawiki</code></a> - none on the page <a class="fnback" href="#fnref-65">back</a></li>
+<li id="fn-66"><a href="SOURCES.html#horikawa-nagoya-jawiki"><code>horikawa-nagoya-jawiki</code></a> - 「江戸時代初期の名古屋開府に際して、建築資材運搬用の運河として伊勢湾から名古屋城付近まで開削されたことがそのルーツとされる。」 and 「慶長15年（1610年）、福島正則が徳川家康の命によって掘削したとされることが多い。名古屋城築城の天下普請に際した、資材運搬を目的とした水路として」 ("Its origin is a canal dug at the founding of Nagoya in the early Edo period, from Ise Bay to near Nagoya castle, to carry building materials." / "It is usually said to have been dug in 1610 by Fukushima Masanori on Ieyasu's orders, as a waterway for carrying materials during the castle's construction.") <a class="fnback" href="#fnref-66">back</a></li>
+<li id="fn-67"><a href="https://zh.wikipedia.org/wiki/%E9%98%8A%E9%97%A8"><code>changmen-zhwiki</code></a> - 「阊门享有盛名更重要的原因，还是因为明清时期这一带曾经是全中国最繁盛的商业街区。」 and 「包括城外呈放射状的南濠街（今南浩街）、上塘街和山塘街，以及城内的阊门大街（今西中市）。... 当时这里各种店铺多达数万家，各行各业应有尽有」 ("The more important reason for Changmen's fame is that in the Ming and Qing this area was the most flourishing commercial district in all China." / "It included the radiating Nanhao, Shangtang and Shantang streets outside the wall and Changmen Avenue inside ... at that time the shops here of every kind numbered in the tens of thousands, every trade represented.") <a class="fnback" href="#fnref-67">back</a></li>
+<li id="fn-68"><a href="https://zdic.net/hans/%E5%85%B3%E5%8E%A2"><code>guanxiang-zdic</code></a> - 「关厢 ... 城门外的街道及附近区域。」 / 「英文 suburb outside city gate」 ("guanxiang: the streets outside a city gate and the area near them.") <a class="fnback" href="#fnref-68">back</a></li>
+<li id="fn-69"><a href="https://ja.wikipedia.org/wiki/%E9%8A%AD%E6%B9%AF"><code>sento-jawiki</code></a> - 「19世紀初期の文化年間（1804〜1818年）には、人口約100万〜120万人の江戸全体で600軒以上の銭湯があったという。」 ("In the Bunka era (1804-1818) there are said to have been more than 600 bathhouses in the whole of Edo, population about 1.0-1.2 million.") <a class="fnback" href="#fnref-69">back</a></li>
+<li id="fn-70">SUMMARY-ONLY: <a href="../SOURCES.html#shichiya-jawiki"><code>shichiya-jawiki</code></a> - none <a class="fnback" href="#fnref-70">back</a></li>
+<li id="fn-71"><a href="https://ja.wikipedia.org/wiki/%E6%B1%9F%E6%88%B8%E4%B8%89%E5%BA%A7"><code>edo-sanza-jawiki</code></a> - 「江戸三座（えど さんざ）は、江戸時代中期から後期にかけて江戸町奉行所によって歌舞伎興行を許された芝居小屋。... 江戸には当初数多くの芝居小屋があったが、次第に整理されて四座になり、最終的に三座となった。」 and 「正徳4年（1714年）には山村座が取り潰されて中村座・市村座・森田座の江戸三座となる」 ("The Edo sanza were the playhouses licensed by the Edo town magistracy for kabuki from the mid to late Edo period ... Edo at first had many playhouses, which were gradually reduced to four and finally three." / "In 1714 the Yamamura-za was abolished, leaving the three - Nakamura-za, Ichimura-za and Morita-za.") <a class="fnback" href="#fnref-71">back</a></li>
+<li id="fn-72"><a href="https://ja.wikipedia.org/wiki/小塚原刑場"><code>kozukappara-jawiki</code></a> - 「江戸時代は北に小塚原刑場、南に東海道沿いの鈴ヶ森刑場（東京都品川区南大井）があり、二大刑場といわれた。刑場の広さは間口60間（108メートル）、奥行30間余（54メートル）程だった。」 ("In the Edo period Kozukappara to the north and Suzugamori on the Tōkaidō to the south were called the two great execution grounds. The ground was about 60 ken (108 m) across and 30-odd ken (54 m) deep.") <a class="fnback" href="#fnref-72">back</a></li>
+<li id="fn-73"><a href="https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99"><code>xian-wall-zhwiki</code></a> - 「城墙平面近长方形，周长约13.74公里，围合区域约12平方公里。」 ("The wall is nearly rectangular in plan, about 13.74 km around, enclosing about 12 km².") <a class="fnback" href="#fnref-73">back</a></li>
+<li id="fn-74"><a href="https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99"><code>xian-moat-zhwiki</code></a> - 「城墙的外侧有护城河，宽20米，深10米，终年积水，和城墙共同构成完整的防御体系。」 ("Outside the wall is a moat 20 m wide and 10 m deep, holding water year-round, forming with the wall a complete defensive system.") <a class="fnback" href="#fnref-74">back</a></li>
+<li id="fn-75"><a href="https://ja.wikipedia.org/wiki/%E7%8E%89%E5%B7%9D%E4%B8%8A%E6%B0%B4"><code>tamagawa-josui-jawiki</code></a> - 「羽村取水堰で多摩川から取水し、武蔵野台地を東流し、現在の四谷四丁目交差点付近にあった四谷大木戸に付設された「水番所」（水番屋）を経て、江戸市中へと分配されていた。羽村市から大木戸までの約43キロメートルは全て露天掘りで、水番所以下は木樋や石樋を用いた地下水道である。」 ("Water was taken from the Tama River at the Hamura intake weir, flowed east across the Musashino plateau, passed the 'water-watch station' attached to the Yotsuya Ōkido near today's Yotsuya 4-chome crossing, and was distributed into the city. The ~43 km from Hamura to the Ōkido is entirely open-cut; below the water station it is an underground conduit of wooden and stone pipes.") <a class="fnback" href="#fnref-75">back</a></li>
+<li id="fn-76"><a href="https://joetsu-stories.jp/2025/02/03/takada-teramachi-part-1/"><code>takada-teramachi</code></a> - 「An area to the west of the castle was designated for temples. The area measured roughly 2,000 x 500m. Temples were also located near the entrances of the main roads into town.」 and 「Although the ostensible purpose of Teramachi was "protection" of the castle, this did not necessarily mean that the Buddhist monks of Takada were fighting monks. ... the temples also played a role in providing space to house the domain's foot soldiers.」 <a class="fnback" href="#fnref-76">back</a></li>
+<li id="fn-77"><a href="https://ja.wikipedia.org/wiki/%E8%8F%A9%E6%8F%90%E5%AF%BA"><code>bodaiji-jawiki</code></a> - 「菩提寺（ぼだいじ）とは、一家が代々その寺の宗旨に帰依して、先祖の菩提を弔う寺院のこと[1]。」 ("A bodaiji is a temple whose sect a family has followed for generations and where it prays for the repose of its ancestors.") <a class="fnback" href="#fnref-77">back</a></li>
+<li id="fn-78"><a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E6%B5%B7%E9%81%93"><code>tokaido-jawiki</code></a> - 「慶長9年2月に大久保長安その他に命じて街道の幅員を5間とし、路傍に榎樹を植え、1里＝36町と決め、1里ごとに里堠を設け、各駅の駄賃を定めた。」 ("In the 2nd month of Keichō 9 (1604) Ōkubo Nagayasu and others were ordered to make the highway's width 5 ken, plant hackberry trees along it, fix 1 ri = 36 chō, set a milestone every ri and fix the porterage rates at each station.") <a class="fnback" href="#fnref-78">back</a></li>
+<li id="fn-79"><a href="https://ja.wikipedia.org/wiki/%E7%8E%89%E5%B7%9D%E4%B8%8A%E6%B0%B4"><code>edo-josui</code></a> - 「Hamura ... was 126 meters above sea level, and the difference in altitude to Yotsuya-Okido, the destination, was just 92 meters. So a drop of only 21 cm could be made every 100 meters.」 and 「羽村から四谷までの高低差92.3メートルの間に全長42.74キロメートルが築かれた」 ("It was built 42.74 km long over a 92.3 m fall from Hamura to Yotsuya.") <a class="fnback" href="#fnref-79">back</a></li>
+<li id="fn-80"><a href="SOURCES.html#tamagawa-josui-jawiki"><code>tamagawa-josui-jawiki</code></a> - 「羽村から四谷大木戸までの本線は武蔵野台地の尾根筋を選んで引かれているほか、大規模な分水路もおおむね武蔵野台地内の河川の分水嶺を選んで引かれている」 ("The main line from Hamura to Yotsuya Ōkido was laid along the ridge line of the Musashino plateau, and the large distributaries likewise along the watersheds between the plateau's rivers.") <a class="fnback" href="#fnref-80">back</a></li>
+<li id="fn-81"><a href="SOURCES.html#tamagawa-josui-jawiki"><code>tamagawa-josui-jawiki</code></a> - 「玉川上水の終点である旧四谷大木戸地点には ... 往時、ここに水番所があり、ここから先は埋設された石樋・木樋を通して江戸市中各地へと配水していた。」 ("At the old Yotsuya Ōkido, the Tamagawa Jōsui's terminus ... there was once a water station here, and from here on water was distributed to every part of Edo through buried stone and wooden pipes.") <a class="fnback" href="#fnref-81">back</a></li>
+<li id="fn-82"><a href="https://ihcsacafe-en.ihcsa.or.jp/news/josui/"><code>edo-josui</code></a> - 「Pipes went to daimyo and samurai residences and to the row houses where the townspeople lived in half of Edo's numerous districts. And wells were installed in the row houses, so people never had to go far to collect water.」 <a class="fnback" href="#fnref-82">back</a></li>
+<li id="fn-83"><a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%9D%82%E5%9F%8E"><code>osaka-castle-jawiki</code></a> - 「北の台地下には淀川とその支流が流れており、天然の堀の機能を果たすとともに、城内の堀へと水を引き込むのに利用された。」 ("Below the plateau to the north flow the Yodo and its tributaries, which served as a natural moat and were used to draw water into the castle's own moats.") <a class="fnback" href="#fnref-83">back</a></li>
+<li id="fn-84"><a href="https://ja.wikipedia.org/wiki/%E5%8F%82%E9%81%93"><code>sando-jawiki</code></a> - 「狭義には、鳥居や山門などの結界内の通路のみを示すが、広義には街道筋など人通りの多いところから社寺に至る道の全てを意味する。」, 「参道は、一般的に、影響力がある神社や寺の周辺で、自然発生した鳥居前町・門前町と合わせて認識されている場所も多く」 and 「また、参詣のために街道筋が捻じ曲げられて社寺に近づいていたところなども、珍しくはなく」 ("Narrowly it means only the path inside the sacred bounds of the torii or gate; broadly it means the whole way from a busy place such as a highway to the shrine or temple." / "Sandō are often recognized together with the torii-front and gate-front towns that grew up around influential shrines and temples." / "It was not rare for a highway to be bent toward a shrine or temple for the convenience of pilgrims.") <a class="fnback" href="#fnref-84">back</a></li>
+<li id="fn-85"><a href="https://ja.wikipedia.org/wiki/%E8%8F%A9%E6%8F%90%E5%AF%BA"><code>bodaiji-jawiki</code></a> - 「菩提寺（ぼだいじ）とは、一家が代々その寺の宗旨に帰依して、先祖の菩提を弔う寺院のこと[1]。」 and 「例えば、徳川家の寛永寺や増上寺は一般に菩提寺と呼び、伊達家の瑞鳳寺は香華院と呼ぶなど。」 ("A bodaiji is a temple whose sect a family has followed for generations and where it prays for its ancestors' repose." / "For example the Tokugawa's Kan'eiji and Zōjōji are generally called bodaiji, while the Date's Zuihōji is called a kōgein.") <a class="fnback" href="#fnref-85">back</a></li>
+<li id="fn-86"><a href="https://en.wikipedia.org/wiki/Chang%27an"><code>changan-enwiki</code></a> - 「There were about 110 separately walled wards, two markets, suburbs, villas for lower-level government officials, and religious institutions.」, 「The West and East Markets would open at noon, announced by the 300 strikes on a loud drum, while the markets would close one hour and three quarters before dusk, the curfew signaled by the sound of 300 beats to a loud gong.」 and 「This was the only holiday where the government lifted its nightly curfew all across the city so that people could freely exit their wards and stroll about the main city streets」 <a class="fnback" href="#fnref-86">back</a></li>
+<li id="fn-87"><a href="https://en.wikipedia.org/wiki/Architecture_of_the_Song_dynasty"><code>song-architecture-enwiki</code></a> - 「During the Tang dynasty (618 - 907), urban areas in China were strictly divided into distinct residential and commercial wards divided by city walls」 and 「Due to intensely growing commercialism during the Song period, shops could now line streets in residential areas and did not have to be situated behind precinct walls.」 <a class="fnback" href="#fnref-87">back</a></li>
+<li id="fn-88"><a href="https://ja.wikipedia.org/wiki/%E8%94%B5%E5%89%8D"><code>kuramae-jawiki</code></a> - 「浅草御蔵は、隅田川の右岸に上流から一番、二番と数える8本の堀を作り、それに面した多くの米蔵が連なった。」 ("The Asakusa granary made eight channels on the right bank of the Sumida, numbered one, two ... from upstream, and many rice storehouses stood in rows facing them.") <a class="fnback" href="#fnref-88">back</a></li>
+<li id="fn-89"><a href="https://zh.wikipedia.org/wiki/%E5%B9%B3%E6%B1%9F%E5%9B%BE"><code>pingjiang-tu</code></a> - 「共开有齐门、娄门、葑门、盘门、阊门五座城门，每座城门均同时绘制了陆门及水门」 ("five gates - Qi, Lou, Feng, Pan and Chang - each drawn with both a land gate and a water gate") <a class="fnback" href="#fnref-89">back</a></li>
+<li id="fn-90"><a href="https://www.japanesewiki.com/history/Jokamachi.html"><code>jokamachi-wiki-corpus</code></a> - 「only the lord's residence castle was surrounded by a moat and castle wall and the town area itself was not surrounded by a castle wall in the initial jokamachi. However, as jokamachi developed in Japan, they increased in economic and political value and the necessity for their safeguard against war arose. Therefore, construction of Sogamae or surrounding the entire town with a moat and mounds increased」 <a class="fnback" href="#fnref-90">back</a></li>
+<li id="fn-91"><a href="https://www.rujiazg.com/article/11577"><code>dongjing-menghualu-rujia</code></a> - 「东京每坊三百步有军巡铺，又于高处有望火楼，上有人探望，下屯军百人及水桶、洒帚、钩锯、斧权、梯索之类，每遇生发，扑救须臾便灭。」 ("In the Eastern Capital every ward had a military patrol post every three hundred paces, and on high ground fire-watch towers with lookouts above and a hundred soldiers quartered below with buckets, brooms, hooks, saws, axes, ladders and ropes; whenever a fire broke out it was put out in moments.") <a class="fnback" href="#fnref-91">back</a></li>
+<li id="fn-92"><a href="https://ja.wikipedia.org/wiki/%E7%81%AB%E8%91%AC%E5%A0%B4"><code>kasoba-jawiki</code></a> - 「1650年ごろには江戸市中の浅草や下谷のほとんどの寺院が境内に火葬場を有していた。寛文7年（1667年）には ... 浅草や下谷に散在していた20数ケ寺の境内火葬場を小塚原刑場近くに設けた幕府指定地へ集合移転させた。」 ("By about 1650 almost every temple in Asakusa and Shitaya inside Edo had a crematory in its precinct. In 1667 ... the twenty-odd temple-precinct crematories scattered through Asakusa and Shitaya were moved together to a bakufu-designated site near the Kozukappara execution ground.") <a class="fnback" href="#fnref-92">back</a></li>
+<li id="fn-93"><a href="https://ja.wikipedia.org/wiki/藩校"><code>hanko-jawiki</code></a> - 「発展期には全国に255校に上り[3]、ほぼ全藩に設立された。」 ("At their height they reached 255 schools nationwide, founded in nearly every domain.") <a class="fnback" href="#fnref-93">back</a></li>
+<li id="fn-94"><a href="https://zh.wikipedia.org/wiki/%E6%BC%8F%E6%BE%A4%E5%9C%92"><code>louzeyuan-zhwiki</code></a> - 「蔡京於1104年2月3日建議設置漏澤園以官地收葬無主及窮乏骸骨，漏澤園制度正式確立，隨後各朝一直沿襲未改，元明皆有設立」 ("On 3 February 1104 Cai Jing proposed establishing louzeyuan to bury unclaimed and pauper remains on official land; the system was formally established and continued unchanged through the Yuan and Ming.") <a class="fnback" href="#fnref-94">back</a></li>
+<li id="fn-95"><a href="https://zh.wikipedia.org/wiki/%E6%BC%8F%E6%BE%A4%E5%9C%92"><code>louzeyuan-zhwiki</code></a> - 「漏澤園一般選在高曠不毛之地，四周建有圍欄，阻閑雜人等進入。埋葬者有葬地8或9尺，[7]，深3尺，以千字文為號，記死者姓名、鄉貫、年月日等資料。」 ("A louzeyuan was generally sited on high, open, barren ground, fenced all round to keep idlers out. Each burial had a plot of 8 or 9 chi, 3 chi deep, numbered by the Thousand Character Classic, recording the dead's name, native place and dates.") <a class="fnback" href="#fnref-95">back</a></li>
+<li id="fn-96"><a href="https://ja.wikipedia.org/wiki/鈴ヶ森刑場"><code>suzugamori-jawiki</code></a> - 「江戸時代には、江戸の北の入口（日光街道）沿いに設置されていた小塚原刑場とともに、南の入口（東海道）沿いに設置されていた刑場であった。」 ("In the Edo period it was the execution ground set on Edo's southern entrance (the Tōkaidō), paired with the Kozukappara ground set on the northern entrance (the Nikkō kaidō).") <a class="fnback" href="#fnref-96">back</a></li>
+<li id="fn-97"><a href="https://ja.wikipedia.org/wiki/%E7%81%AB%E8%91%AC%E5%A0%B4"><code>kasoba-jawiki</code></a> - 「1650年ごろには江戸市中の浅草や下谷のほとんどの寺院が境内に火葬場を有していた。寛文7年（1667年）には4代将軍徳川家綱が上野寛永寺へ墓参に赴いた際に、火葬の臭煙が及んだことが問題になって、浅草や下谷に散在していた20数ケ寺の境内火葬場を小塚原刑場近くに設けた幕府指定地へ集合移転させた。... 小塚原火葬場はその後明治20年（1887年）に操業停止するまでの220年間に亘り江戸最大の火葬場として存続する。」 ("By about 1650 almost every temple in Asakusa and Shitaya had a crematory in its precinct. In 1667, when the 4th shogun Ietsuna went to Kan'eiji to visit the graves, the smoke and smell of cremation reaching him became a problem, and the twenty-odd precinct crematories were moved together to a bakufu-designated site near the Kozukappara execution ground ... The Kozukappara crematory continued as Edo's largest for 220 years until it ceased operating in 1887.") <a class="fnback" href="#fnref-97">back</a></li>
+<li id="fn-98"><a href="https://ja.wikipedia.org/wiki/小塚原刑場"><code>kozukappara-jawiki</code></a> - 「寛文7年（1667年）に本所回向院の住職である弟誉義観（ていよぎかん）が、死者の埋葬と供養を行うため、小塚原刑場隣接地に常行堂を創建した。これが後の南千住回向院になった。」 and 「明治期に常磐線の線路が敷地中央を通過して分断され、常磐線の北側が回向院、南側が延命寺として独立した。刑場跡は ... 延命寺内に位置する。」 ("In 1667 Teiyo Gikan, abbot of Honjo Ekō-in, founded a Jōgyō hall on ground adjoining the Kozukappara execution ground to bury and pray for the dead; this became Minami-Senju Ekō-in." / "In the Meiji era the Jōban line cut the site in two, the north becoming Ekō-in and the south Enmei-ji; the execution-ground site lies within Enmei-ji.") <a class="fnback" href="#fnref-98">back</a></li>
+<li id="fn-99"><a href="SOURCES.html#louzeyuan-zhwiki"><code>louzeyuan-zhwiki</code></a> - 「自北宋以來，漏澤園皆由佛教僧人打理[5]，漏澤園中還建有屋舍，供守園僧居住[6]。漏澤園一般選在高曠不毛之地，四周建有圍欄」 ("From the Northern Song on, louzeyuan were run by Buddhist monks, with a house built inside for the caretaker monk to live in; they were generally sited on high, open, barren ground and fenced all round.") <a class="fnback" href="#fnref-99">back</a></li>
+</ol></section>
+</main>
+</body>
+</html>

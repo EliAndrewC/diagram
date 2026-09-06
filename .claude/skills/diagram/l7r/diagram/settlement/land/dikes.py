@@ -214,7 +214,7 @@ class DikeMixin:
         """A sluice gate at every cut of every perimeter dike (feature 150, GM 2026-08-28 choosing audit A7).
 
         Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
-        can be easily closed with wooden boards" (FAO; research/archetypes.md 'A dike-pond is fed and drained
+        can be easily closed with wooden boards" (FAO; research/archetypes.html 'A dike-pond is fed and drained
         through sluice gates'). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
         turned to lie along the crest, i.e. across the water, and SNAPPED onto the recorded watercourse the
         gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft

@@ -33,7 +33,7 @@ from l7r.diagram.interactive.page import (
     wrap,
 )
 from l7r.diagram.interactive.sources import (
-    RESEARCH_URL,
+    RESEARCH_PAGES,
     github_anchor,
     question_text,
     registry,
@@ -131,10 +131,10 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     # all (settlement-review, 2026-08-29); the copse beside it on this map does have one
     assert data["windbreak"]["caveat"] == "", "the windbreak discloses no liberty - see test_classes"
     assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
-    # the references are QUESTIONS (feature 180): the sections the entry names, linked to GitHub; the
+    # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
     assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
-    assert any(q["text"].startswith("The fengshui forest") and q["url"].startswith(RESEARCH_URL + "vegetation.md#") for q in data["windbreak"]["questions"])
+    assert any(q["text"].startswith("The fengshui forest") and q["url"].startswith(RESEARCH_PAGES + "vegetation.html#") for q in data["windbreak"]["questions"])
     assert not {"sources", "refs", "entry"} & set(data["windbreak"]), "dropped from the page data (spec FR-011)"
 
 
@@ -177,7 +177,7 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     that resolves to nothing is `fallow`, whose link was hidden already."""
     qs = research_questions(CLASSES["farmhouse"].entry)
     assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by "], qs
-    assert all(q["url"].startswith(RESEARCH_URL + "homesteads.md#") for q in qs)
+    assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs)
     assert qs[1]["url"].endswith("#how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund-researched-2026-08-27-feature-133-t41")
     # file order would put the lane entry (line 274) before the paddy entry (line 400); the entry's order wins
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
@@ -186,7 +186,7 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     assert research_questions("nothing here") == []
     for k, fc in CLASSES.items():
         for q in research_questions(fc.entry):
-            assert q["url"].startswith(RESEARCH_URL) and "#" in q["url"] and q["text"], (k, q)
+            assert q["url"].startswith(RESEARCH_PAGES) and "#" in q["url"] and q["text"], (k, q)
             assert "researched 20" not in q["text"] and "*" not in q["text"], (k, q)
 
 
@@ -423,12 +423,12 @@ def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
 
 def test_the_citations_come_from_the_research_entries() -> None:
     """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
-    keys = research_sources("research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'")
+    keys = research_sources("research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'")
     assert "forests-2020" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
     assert urls_of("Saitama City (https://www.city.saitama.lg.jp/p077111.html; READ). See https://example.org/a).") == ["https://www.city.saitama.lg.jp/p077111.html", "https://example.org/a"]
-    assert section_sources("**Sources:** `a-1`, [`b-2`](SOURCES.md#b-2) and `a-1` again") == ["a-1", "b-2"]
+    assert section_sources('<p><strong>Sources:</strong> <code>a-1</code>, <a href="SOURCES.html#b-2"><code>b-2</code></a> and <code>a-1</code> again</p>') == ["a-1", "b-2"]
     assert research_sources("nothing here") == []
 
 

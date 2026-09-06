@@ -21,7 +21,7 @@ CAPTION_LANE_FLOOR_FT = 2.0
 
 # THE BOARD IS ROADSIDE (GM 2026-08-26, feature 133 T13: *"I would expect it to be essentially
 # roadside ... puts it right next to one of the village lanes"*). Real feet from the tread's EDGE to
-# the board's near edge. Research (research/urban-features.md): the kosatsu stood where traffic
+# the board's near edge. Research (research/urban-features.html): the kosatsu stood where traffic
 # passed - the village entrance, the roadside, a crossroads, a bridgehead, the headman's gate - so a
 # board 24 ft off its lane (Inashiro before this) is set back from the very thing it is for. The
 # placer searched out to 60 ft and ranked caption clearance above nearness, which is how it walked

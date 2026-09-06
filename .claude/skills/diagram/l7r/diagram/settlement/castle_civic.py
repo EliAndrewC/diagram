@@ -190,7 +190,7 @@ class CastleCivicMixin:
         # STANDARD gate program - main gate south by aspect divination, rear gate opposite - and
         # the pairing is military doctrine: the garrison sorties from the rear gate to trap an
         # attacker held at the front. Its tower draws a size down from the ote-mon's, as a rear
-        # gate should. research/cities/capitals.md, "A castle has TWO gates".
+        # gate should. research/cities/capitals.html, "A castle has TWO gates".
         karamete: Pt | None = None
         if karamete_dir:
             karamete = {"north": (x, y - hh), "south": (x, y + hh), "west": (x - hw, y), "east": (x + hw, y)}[karamete_dir]

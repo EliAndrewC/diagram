@@ -521,7 +521,7 @@ _MATRIX_ALLOWED_PAIRS: dict[frozenset[str], str] = {
 _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
     frozenset(
         {"quays", "jetties"}
-    ): "a jetty SPRINGS FROM the quay face - the faced bank is the working surface the stage projects out of, so they meet by construction (research/cities/river-cities.md: the pier exists for REACH where the bank shelves too gently, and it starts at the revetment)",
+    ): "a jetty SPRINGS FROM the quay face - the faced bank is the working surface the stage projects out of, so they meet by construction (research/cities/river-cities.html: the pier exists for REACH where the bank shelves too gently, and it starts at the revetment)",
     **{
         frozenset(
             {"wall", w}
@@ -701,7 +701,7 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
 #   changed_hands - kept the old ruler's temple after passing between clans (Tango)
 #   fox_structure - the Fox seven-temple structure: many modest precincts, each an economic house
 #                   holding forest usufruct, rather than two great complexes (Minami; l7r.md
-#                   "Fox Temples", research/religion-and-death.md)
+#                   "Fox Temples", research/religion-and-death.html)
 TEMPLE_EXCEPTIONS = {"large", "pious", "changed_hands", "fox_structure"}
 
 CLAN_FORTUNES = {

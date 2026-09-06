@@ -38,7 +38,7 @@ rotating a footprint must never buy ground the square could not have had."""
 _COMMONS_FLOOR_FT = 120.0
 """The smallest square a woodland COMMONS may be drawn as, in feet.
 
-Not a historical minimum - `research/fields.md` is clear that coppice lots were "whatever odd corner
+Not a historical minimum - `research/fields.html` is clear that coppice lots were "whatever odd corner
 the village spared", and there is no attested floor. This is a LEGIBILITY floor, and it exists
 because the size-variance machinery above can compound its way under one: a per-map ladder scale
 times a per-parcel band multiplier took Kashikawa to 103 ft. The number is our own recorded
@@ -324,7 +324,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # THE COPPICE IS A HILLSIDE WOOD, SO A DOWN-SLOPE-DOMINANT SEAT LOSES TO A CROSS-SLOPE ONE
             # (settlement-review, Kashikawa 2026-08-18 round 2, and its research pass settled the
             # ruling this ledger item was waiting for). Three project files say woodland goes on the
-            # higher, farther ground - `settlements/vegetation.md`, `research/fields.md` and this
+            # higher, farther ground - `settlements/vegetation.md`, `research/fields.html` and this
             # function's own scorer comment - and Kashikawa drew both its stands downslope, one of them
             # 886 ft down and 75 ft off the reed marsh: a coppice walking onto the wet toe of the fan.
             # The scorer's additive `+0.35 * upslope` never binds, because a 90 px step toward the
@@ -443,7 +443,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # The record is decisive rather than two-sided, so this is calibrated liberty and not
                 # a knob between forms: *iriai* commons boundaries were customary and described by
                 # ridge, stream and path (UNSOURCED - read under T46, 2026-08-27: the cited Yamaguni
-                # study says nothing about boundaries; see research/vegetation.md), and satoyama
+                # study says nothing about boundaries; see research/vegetation.html), and satoyama
                 # coppice sits on the slope break - there is no attested rectilinear woodlot. Aspect and bearing therefore roll per parcel from its
                 # own position, AREA HELD (hw*hh is unchanged, so every size rule above still means
                 # what it says), and the bearing is taken off the fall line because a hillside wood
@@ -539,7 +539,7 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     ground the square could not have had. The radius runs 0.80-1.00 of the ellipse's, on two low
     harmonics seeded from the parcel's own position (`_hjit`), so the ring is smooth rather than
     spiky - a wood's edge wanders, it does not serrate - and the AREA comes out at ~85% of the
-    ellipse's: the size rules above still bound it, from above. Recorded in research/vegetation.md
+    ellipse's: the size rules above still bound it, from above. Recorded in research/vegetation.html
     "How is a coppice lot bounded?", with the one form deliberately NOT drawn here: the strip
     holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob."""
     p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)

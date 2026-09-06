@@ -133,7 +133,7 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
     one home, so no choice existed. Those need the wall MOVED, which is this pass.
 
     THE MOVE IS THE ONE A FIELD WOULD MAKE: run the wall from where it starts to where it resumes, so
-    the hop becomes a bend. `research/fields.md` says a bend is period-correct and a parcel fitted to
+    the hop becomes a bend. `research/fields.html` says a bend is period-correct and a parcel fitted to
     its neighbors is the honest look; what it never describes is a wall doubling back, which is
     exactly and only what this removes.
 

@@ -108,7 +108,7 @@ class KeepoutsMixin:
     # (_CROP_MARGIN_FT above). STREAMS and the reed marsh deliberately take NO margin: a natural
     # bank is vegetated to the water's edge, and the 2026-08-16 settlement-review pass explicitly
     # praised the absence of a sterile halo on the brooks. Full grounding:
-    # research/vegetation.md "The cut bank".
+    # research/vegetation.html "The cut bank".
     _HALO_STRUCT_FT = 30.0
     _HALO_WELL_FT = 20.0
     _HALO_PLOT_FT = 8.0

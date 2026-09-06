@@ -250,7 +250,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     return any(polyline_len(r) >= span - 0.5 for r in runs)
 
 
-# HOW A WORN LANE BENDS (researched 2026-08-27, feature 133 T32; research/homesteads.md "How does a
+# HOW A WORN LANE BENDS (researched 2026-08-27, feature 133 T32; research/homesteads.html "How does a
 # village lane bend?"). A footpath is the line feet wear: the desire-line literature finds walkers
 # minimize the NUMBER and the SEVERITY of turns, and a village lane bends at plot corners and runs
 # straight between them. Nobody walks out fifteen feet and back, so a hairpin is never worn; nobody

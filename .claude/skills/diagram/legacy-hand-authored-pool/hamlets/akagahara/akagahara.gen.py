@@ -170,7 +170,7 @@ _rng = _random.Random(SEED + 1)
 # THE TRACK WINDS S DOWN THE DRY FAR-WEST BACK-SLOPE, past the toe (GM 2026-08-12). It was briefly
 # turned west out of the frame, when the toe marsh was still drawn edge to edge across the canvas
 # and half this route lay in it. The band is now as wide as the ground the fan WATERS (researched:
-# research/water.md), so the toe ends at x=407 and this back-slope route is dry for its whole
+# research/water.html), so the toe ends at x=407 and this back-slope route is dry for its whole
 # length - which is where a dispersed hamlet's thread through its strewn farms belongs.
 # ...and it WINDS, which the comment above has always claimed and the polyline never did
 # (settlement-review 2026-08-12: 123 px of drift over 2,440 px, a ~3 degree lean with no reversal,

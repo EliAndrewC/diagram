@@ -5,7 +5,7 @@ rectangle of earthen walls is just smack dab in the middle of where the field sh
 should basically always be the case that two adjacent rice paddies share a single earthen wall
 rather than two different earthen walls"*).
 
-THE RESEARCH BEHIND THE RULE (see `research/fields.md`, "Bunds are shared, and the fabric is
+THE RESEARCH BEHIND THE RULE (see `research/fields.html`, "Bunds are shared, and the fabric is
 continuous"). An *aze* is a puddled-mud ridge 1-2 ft wide, re-plastered every spring (*azenuri*)
 so each basin holds its shallow sheet of standing water. It is the WALL BETWEEN two basins, and it
 is built once: a second parallel ridge would double the annual azenuri, drain neither basin, and
@@ -13,7 +13,7 @@ strand the strip between them - inside an irrigated command area, the most valua
 Real paddy fabric is therefore one CONNECTED bund network whose lines meet at T-junctions; a
 free-standing four-sided ring floating inside it is not a paddy at all. (The odd-shaped,
 piecemeal parcels that fabric produces are the honest look - the tidy detached rectangle is a
-modern land-consolidation read, which `research/fields.md` already flags as anachronistic.)
+modern land-consolidation read, which `research/fields.html` already flags as anachronistic.)
 
 WHAT THIS REPLACES, and why the old pass could not get there. `_fill_wedges` sampled the fan on a
 12 px grid, boxed each cluster of bare cells, and then SHRANK the box toward its own centroid

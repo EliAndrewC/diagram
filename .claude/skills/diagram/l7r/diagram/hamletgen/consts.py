@@ -199,7 +199,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/homesteads.md, "Is every farmhouse reached by a lane, and in what FORM?" - the
+# Grounding: research/homesteads.html, "Is every farmhouse reached by a lane, and in what FORM?" - the
 # record is decisive that a house in a nucleated cluster IS reached by a way. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
@@ -268,7 +268,7 @@ SUN_CORRIDOR_FT = 39.0
 # the attested band, not a choice between forms. THE FRAME QUESTION WAS THEN SETTLED SEPARATELY
 # (GM 2026-08-26): the belt's inner face now sets the frame (`windbreak_face`), so a taller belt
 # would no longer be cropped away - 10 m stays because it is the record's measured working height,
-# not because the frame forces it. research/homesteads.md, "The garden's sun".
+# not because the frame forces it. research/homesteads.html, "The garden's sun".
 WEST_SUN_FT = 50.0
 
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's
@@ -282,7 +282,7 @@ WEST_SUN_FT = 50.0
 # `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
-# overlay, which is what it is historically too (research/archetypes.md "The three overlay values":
+# overlay, which is what it is historically too (research/archetypes.html "The three overlay values":
 # the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
 # of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
@@ -299,7 +299,7 @@ POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 #   sizes are Republican-to-1980s surveys of the traditional landscape, not Ming/Qing documents),
 #   so a ~160 ft module with a merge-heavy mix ((0.10, 0.0, 0.60): mostly 160x320 ft ~0.48 ha 1:2
 #   ponds, a square ~2.4-mu minority) and ~22 ft mulberry dikes ((11, 11)) - the 6:4 water-to-dike
-#   ratio measured on Kuwabata at 76% water per parcel, 50% over the block (research/archetypes.md
+#   ratio measured on Kuwabata at 76% water per parcel, 50% over the block (research/archetypes.html
 #   "The 6:4 water-to-dike ratio").
 # `fit_polder` scales the GRID to the acreage and never the cell, so these calibrations hold
 # whatever the household count asks for.
@@ -309,7 +309,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 }
 
 # THE POND LAYOUT KNOB - two attested FORMS, so a knob rather than a choice (constitution XII,
-# GM 2026-08-18). research/archetypes.md "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
+# GM 2026-08-18). research/archetypes.html "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
 # rectilinear grid (the Song tangpu lattice) while the Pearl-delta dike-pond accreted household by
 # household into a MOSAIC - rectangles of varied size at varied local orientation around winding
 # creeks. Both systems carried dike-ponds (Lake Tai mulberry sat on the tang banks inside the
@@ -324,7 +324,7 @@ POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
-# the roll is even. research/archetypes.md "What stands on a dike-pond hamlet that a paddy hamlet lacks".
+# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks".
 MANURE_FORMS = ("heap", "pit")
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
 # settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).
@@ -398,7 +398,7 @@ POLDER_CELL_FT = 110.0
 # kayabuki thatch must be pitched 45 deg or steeper to shed rain, putting the ridge ~20 ft up, and
 # at 38N in the 10th month that throws 39 ft of shadow by 9am. Lowering the asked pitch would put
 # houses inside each other's drying shadow - a defect against the rule, arriving disguised as a
-# density win. (research/homesteads.md, "The threshing yard's sun"; specs/121 research.md D2.)
+# density win. (research/homesteads.html, "The threshing yard's sun"; specs/121 research.md D2.)
 #
 # THE HONEST WAY TO GET MORE DENSITY HERE is what real yashiki lots did: STAGGER east-west rather
 # than space rows further apart.
@@ -487,7 +487,7 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 # one dangling collector. A last offtake at ~0.88 - which is also `build_comb`'s own default - keeps
 # the tail short and inside the rice.
 # ...AND EVERY ROW DRAWS CANAL B (GM caught Inashiro's bare west margin 2026-08-16; researched -
-# research/water.md "The head-race forks - supply commands both flanks"). A gravity canal commands
+# research/water.html "The head-race forks - supply commands both flanks"). A gravity canal commands
 # only the ground BELOW it, and the carve plants paddy on BOTH sides of the bunsuiguchi fork - so
 # the hamlet rows' old offtakes_b=() (copied from Ikegami's authored choice, now a frozen exhibit)
 # left the whole canal-B flank carved as watered ground with no drawn water: the modeled net and
@@ -647,7 +647,7 @@ LANE_WEBS = ("alleys", "back_lane")
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.
 #
-# What the research supports (research/homesteads.md, "Does a hamlet have to be NUCLEATED at all?"):
+# What the research supports (research/homesteads.html, "Does a hamlet have to be NUCLEATED at all?"):
 #   - nucleated  - the default across wet-rice East Asia, because paddy is too valuable to build on,
 #                  so households cluster on whatever ground will not grow rice. The access rule
 #                  (`farmhouses_reach_a_way`) is decisive for THIS form and no other.
@@ -682,7 +682,7 @@ FIELD_ADJ_PX = 165.0
 
 # ROLLED TO NUCLEATED ONLY, FOR NOW - and the weights above are what to restore, not to re-derive.
 #
-# Feature 126 built everything the other two forms need: the research (research/homesteads.md), the
+# Feature 126 built everything the other two forms need: the research (research/homesteads.html), the
 # knob, the form-conditional access checks, the corrected field-adjacency branch, and per-form
 # seating. What it did NOT build is a per-house GROVE that behaves. That path had never been
 # exercised by the scripted tier - it was written for hand-authored dispersed maps - and switching

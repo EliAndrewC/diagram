@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class StandsMixin:
     def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
         """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
-        (feature 133 T47, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it stood, and
+        (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it stood, and
         how to show it").
 
         THE GLYPH IS A MAP DRAWING CONVENTION (feature 183's word; it read DEVIATION until the GM split the two), recorded like the oversized wellhead: a culm is
@@ -186,7 +186,7 @@ class StandsMixin:
         # bamboo (3-10 m in the Sendai igune classes), and the record puts exactly those IN the
         # sunlit yard ("a persimmon in the yard center", Tonami model homestead) - so a dooryard
         # scatter is not held to a lane that a 10 m belt is. Opt-in via `west_sun_lane` (off on the
-        # frozen pool); `village_trees_unshade_from_west` gates it. Derivation: research/homesteads.md.
+        # frozen pool); `village_trees_unshade_from_west` gates it. Derivation: research/homesteads.html.
         wl = float(getattr(self, "_west_sun_ft", 0.0)) if mix == "windbreak" else 0.0
         west = [(o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["y"] + o["h"] / 2) for k in ("threshing_yards", "gardens") for o in self.M.get(k, [])] if wl else []
         water_lines = [(st_["poly"], st_.get("w", 9) / 2) for st_ in self.M.get("streams", [])]

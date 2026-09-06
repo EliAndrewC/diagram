@@ -33,9 +33,9 @@ class GroundMixin:
         Default real width ROAD_W_FT = 30 ft (an Imperial trunk highway), converted at the
         map's ftpx and linework-floored. WHY 30 (GM 2026-08-28, feature 144): the Tokaido's
         width was standardized at 5 ken in 1604 ("街道の幅員を5間とし", ja.wikipedia 東海道 -
-        `tokaido-jawiki` in research/SOURCES.md), 5 ken = 29.5 ft; drawn at the round 30 the
+        `tokaido-jawiki` in research/SOURCES.html), 5 ken = 29.5 ft; drawn at the round 30 the
         GM asked for. The earlier 26 ft ("the Tokaido's own width") and the "~18-24 ft" this
-        docstring once claimed were both unsourced - research/cities/capitals.md "Street
+        docstring once claimed were both unsourced - research/cities/capitals.html "Street
         widths" carries the read and the correction.
         label_xy overrides the label anchor (default: the polyline midpoint). For a city the
         midpoint is the city CENTER, but the road label names the *Imperial* road, which is an

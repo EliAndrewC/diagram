@@ -5,7 +5,8 @@ quoted headings). Two things are read out of that pointer at page-write time, so
 record reaches every modal without anyone re-typing anything into `classes.py`:
 
 - **the QUESTIONS** (feature 180, GM 2026-09-05) - the headings of the sections the entry names, each
-  with a link to that section on the public GitHub rendering of the research file. This is what the
+  with a link to that section of the research PAGE - since feature 191 (GM 2026-09-06) the record is HTML
+  under `research/` and the link is local and relative, not GitHub. This is what the
   references modal shows: *"instead of listing individual sources on the references modal, we will
   list the questions which we asked and researched - those pages are themselves sourced with links,
   so a user who wants to follow through and read the original sources can do so."* The audience is
@@ -14,13 +15,14 @@ record reaches every modal without anyone re-typing anything into `classes.py`:
   answers the question.
 - **the SOURCES** (feature 134, GM 2026-08-28: "all of the things that say that there is no reference
   for them should at this point have a reference") - the `**Sources:**` keys those sections cite and
-  the `research/SOURCES.md` registry behind them. The page no longer shows these; the tests over the
+  the `research/SOURCES.html` registry behind them. The page no longer shows these; the tests over the
   record still read them, to prove every entry cites and every source carries a URL where it can be
   read (constitution v2.13.0).
 """
 
 from __future__ import annotations
 
+import html
 import os
 import re
 import unicodedata
@@ -29,43 +31,56 @@ from functools import cache
 _HERE = os.path.dirname(os.path.abspath(__file__))
 RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"))
 
-#: WHERE A QUESTION LINKS (feature 180). The GM's own example URL, less the file: the research tree as
-#: GitHub renders it, on `main`. `main` rather than a commit is a recorded decision (spec D1): a reader
-#: gets the CURRENT answer, including a correction made after their map was rendered; the cost - a
-#: renamed heading breaks the anchor on a page rendered before the rename - is accepted because
-#: `research/README.md` rules anchors stable and every pool page re-renders at each landing.
-RESEARCH_URL = "https://github.com/EliAndrewC/diagram/blob/main/.claude/skills/diagram/research/"
+#: WHERE A QUESTION LINKS (feature 191, GM 2026-09-06: *"make the links on our HTML maps link to the files
+#: locally rather than linking to the markdown on GitHub since the markdown on GitHub will no longer exist as
+#: it has been replaced with HTML"*). Relative to the MAP's own page: every map and every legacy exhibit is
+#: `pool/<tier>/<name>/<name>.html` (or `legacy-hand-authored-pool/...`), three levels under the skill root,
+#: and `research/` is one level under it. Feature 180's GitHub URL (`RESEARCH_URL`) is retired with the
+#: Markdown; a renamed heading still breaks an anchor on a page rendered before the rename (spec 180 D1),
+#: and every pool page re-renders at each landing.
+RESEARCH_PAGES = "../../../research/"
 
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
-#: A research file the entry names - `research/water.md`, or one level down, `research/cities/fabric.md`.
+#: A research page the entry names - `research/water.html`, or one level down, `research/cities/fabric.html`.
 #: The one-level form was added in feature 180 (spec FR-012a): the pattern could not match a
 #: subdirectory, so an entry naming a `cities/` file would have resolved to no sources and no questions,
 #: silently. No class did that on the day it was fixed; the URL above is built from this same match, so
 #: the silent miss would have become a silent broken link.
-_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/)?[a-z-]+\.md)")
+_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/)?[a-z-]+\.html)")
 # A heading is quoted 'like this', and "like this" when the heading itself contains an apostrophe -
 # the single-quote form cannot carry "A reservoir's shore is reeded". Both are read (settlement-review
 # 2026-08-29): with only the first form the marsh entry lost `mineta-2007-tameike` from the modal AND
 # swallowed the heading after it, because the run of characters between the two double quotes matched
 # as one giant "heading" that no section is named.
 _ENTRY_HEADING = re.compile(r"'((?:[^']|'(?=[A-Za-z]))+)'|\"([^\"]+)\"")
-_HEADING_LINE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
+#: A heading in a research PAGE (feature 191): its level, its id (the record's anchor) and its inner HTML.
+_HEADING_TAG = re.compile(r"<h([1-6])(?:\s+id=\"([^\"]*)\")?[^>]*>(.*?)</h\1>", re.S)
+_TAG = re.compile(r"<[^>]+>")
+_CODE_KEY = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
 #: The bookkeeping a heading carries for the project, not for the reader: a trailing parenthetical with
 #: a date in it - "(researched 2026-08-27, feature 133 T41)", "(accepted 2026-08-29, feature 152)",
 #: "(feature 156, 2026-08-29)". Stripped from the question TEXT only (spec FR-005, D2); the anchor is
 #: computed from the full heading, so the link still lands.
 _DATED_TAIL = re.compile(r"\s*\([^()]*\b\d{4}-\d{2}-\d{2}\b[^()]*\)\s*$")
-#: Markdown emphasis and code markers, which GitHub renders away before it slugs the heading.
+#: Markdown emphasis and code markers - what the record's headings carried before feature 191, and what a
+#: class entry may still quote; the page's heading TEXT has none, so stripping them keeps the two comparable.
 _MARKUP = re.compile(r"[*`]")
 
 
 def heading_text(heading: str) -> str:
-    """The rendered text of a markdown heading - what a reader sees and what GitHub slugs."""
+    """The rendered text of a heading - what a reader sees and what the anchor rule slugs."""
     return _MARKUP.sub("", heading).strip()
 
 
+def page_text(fragment: str) -> str:
+    """The text of an HTML fragment: tags dropped, entities decoded, whitespace collapsed."""
+    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", fragment))).strip()
+
+
 def github_anchor(heading: str, seen: dict[str, int] | None = None) -> str:
-    """GitHub's anchor for a heading (spec FR-006): the rendered text lowercased; every character that
+    """THE RECORD'S ANCHOR for a heading - GitHub's rule (feature 180, spec FR-006), kept as the id rule when
+    the record converted to HTML (feature 191) so every pointer that landed on GitHub lands on the page: the
+    rendered text lowercased; every character that
     is not a letter, a digit, a combining mark, a space, a hyphen or an underscore dropped; spaces
     replaced by hyphens (so " - " becomes "---"); and, when `seen` is passed, a heading repeated within
     one file suffixed "-1", "-2", ... in order of appearance.
@@ -97,42 +112,27 @@ def question_text(heading: str) -> str:
 
 @cache
 def _parsed(path: str) -> list[tuple[str, str, str]]:
-    """(heading, body, anchor) for every `##`/`###` section of a research file, in file order.
-
-    The ANCHOR COUNTER WALKS EVERY HEADING LEVEL, because GitHub's does: a `####` between two sections
-    takes part in the "-1" numbering of a repeated slug even though it opens no section here (fields.md
-    carries several). Headings inside a fenced code block are skipped, as GitHub skips them - the
-    README's entry-format example is one such."""
+    """(heading text, body html, id) for every `<h2>`/`<h3>` section of a research PAGE, in page order (feature
+    191: the record is HTML). The id is the page's own - `tests/interactive/test_record.py` proves it equals
+    `github_anchor` of the text; a `<code>` span in a heading (the registry's keys) reads as its text, as GitHub's
+    slugger read the backticks. A body runs to the next heading of ANY level; a `####` opens no section."""
     try:
         with open(path, encoding="utf-8") as fh:
-            text = fh.read()
+            page = fh.read()
     except OSError:
         return []
     out: list[tuple[str, str, str]] = []
-    seen: dict[str, int] = {}
-    heading = anchor = ""
-    body: list[str] = []
-    fenced = False
-    for line in text.splitlines():
-        if line.startswith("```"):
-            fenced = not fenced
-        m = None if fenced else _HEADING_LINE.match(line)
-        if m:
-            a = github_anchor(m.group(2), seen)
-            if len(m.group(1)) in (2, 3):
-                if heading:
-                    out.append((heading, "\n".join(body), anchor))
-                heading, anchor = m.group(2), a
-                body = []
-                continue
-        body.append(line)
-    if heading:
-        out.append((heading, "\n".join(body), anchor))
+    heads = list(_HEADING_TAG.finditer(page))
+    for i, m in enumerate(heads):
+        if m.group(1) not in ("2", "3"):
+            continue
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(page)
+        out.append((page_text(m.group(3)), page[m.end() : end], m.group(2) or ""))
     return out
 
 
 def _sections(path: str) -> list[tuple[str, str]]:
-    """(heading, body) for every `##`/`###` section of a research file."""
+    """(heading text, body html) for every `<h2>`/`<h3>` section of a research page."""
     return [(h, b) for h, b, _a in _parsed(path)]
 
 
@@ -151,18 +151,14 @@ def _entry_headings(entry: str) -> list[str]:
 
 
 def section_sources(body: str) -> list[str]:
-    """The SOURCES.md keys a section's `**Sources:**` line names (in order, deduplicated)."""
-    # THE LINE WRAPS, AND THE KEYS AFTER THE WRAP COUNT (2026-08-29). Matching to end-of-LINE read only
-    # the first physical line of a `**Sources:**` entry, so a section citing more keys than fit in one
-    # 100-column line silently lost the rest - and lost them INVISIBLY, since the modal still showed a
-    # plausible list. Measured on research/water.md "A reservoir's shore is reeded": the line names seven
-    # keys over two lines and only the first four reached the page, dropping `nies-tameike`,
-    # `inamino-tameike-museum` and `ohmi-yoshi`. The entry runs to the blank line that ends the paragraph.
-    m = re.search(r"^\*\*Sources:\*\*((?:.*(?:\n(?!\s*$).*)*))", body, re.M)
+    """The SOURCES keys a section's `<p><strong>Sources:</strong> ...</p>` roster names (in order, deduplicated).
+    Feature 191: the roster is one `<p>`, so the wrap that once lost keys (2026-08-29: a `**Sources:**` line read
+    to end-of-LINE dropped every key past the first physical line) cannot recur."""
+    m = re.search(r"<p><strong>Sources:</strong>(.*?)</p>", body, re.S)
     if not m:
         return []
     keys: list[str] = []
-    for k in _KEY.findall(m.group(1)):
+    for k in _CODE_KEY.findall(m.group(1)):
         if k not in keys:
             keys.append(k)
     return keys
@@ -192,7 +188,7 @@ def research_questions(entry: str, research_dir: str = RESEARCH_DIR) -> list[dic
     for quoted in _entry_headings(entry):
         for fname in files:
             for heading, _body, anchor in _parsed(os.path.join(research_dir, fname)):
-                url = f"{RESEARCH_URL}{fname}#{anchor}"
+                url = f"{RESEARCH_PAGES}{fname}#{anchor}"
                 if _names(heading, quoted) and url not in urls:
                     urls.add(url)
                     out.append({"text": question_text(heading), "url": url})
@@ -201,15 +197,14 @@ def research_questions(entry: str, research_dir: str = RESEARCH_DIR) -> list[dic
 
 @cache
 def registry(research_dir: str = RESEARCH_DIR) -> dict[str, str]:
-    """key -> the SOURCES.md entry text (citation and its 'Used for' line), markdown stripped lightly."""
+    """key -> the SOURCES.html entry text (the citation line and its 'Used for' line, as text)."""
     out: dict[str, str] = {}
-    for heading, body in _sections(os.path.join(research_dir, "SOURCES.md")):
-        m = re.fullmatch(r"`([a-z0-9][a-z0-9-]*)`", heading.strip())
+    for heading, body, _id in _parsed(os.path.join(research_dir, "SOURCES.html")):
+        m = re.fullmatch(r"[a-z0-9][a-z0-9-]*", heading.strip())
         if not m:
             continue
-        text = re.sub(r"\s*\n\s*\n\s*", " | ", body.strip())
-        text = re.sub(r"\*(Used for:)\*", r"\1", text).replace("*", "")
-        out[m.group(1)] = text
+        paras = [page_text(p) for p in re.findall(r"<p>(.*?)</p>", body, re.S)]
+        out[m.group(0)] = " | ".join(p for p in paras if p)
     return out
 
 
@@ -217,7 +212,7 @@ _URL = re.compile(r"https?://[^\s)\]>]+")
 
 
 def urls_of(text: str) -> list[str]:
-    """Every URL a SOURCES.md entry carries (GM 2026-08-28: a source records where it can be read);
+    """Every URL a SOURCES.html entry carries (GM 2026-08-28: a source records where it can be read);
     the trailing punctuation a sentence leaves on a URL is trimmed."""
     out: list[str] = []
     for u in _URL.findall(text):

@@ -10,7 +10,7 @@ inside it (`d < max(r, r_other)`). Edge overlap, between that and `r + r_other`,
 
 The measurement behind the rule: on a 13 ft grid with +-42% jitter, two neighbours landed 2-3 ft apart and
 a 6 ft crown vanished under a 12 ft one - 950 of the recorded crowns had their centre more than halfway
-inside another. `research/vegetation.md`, "Forest density and crown size".
+inside another. `research/vegetation.html`, "Forest density and crown size".
 """
 
 from __future__ import annotations

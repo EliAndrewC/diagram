@@ -40,7 +40,7 @@ class CanalsMixin:
     def towpath(self: Settlement, pts: Any, width: float | None = None) -> None:  # type: ignore[misc]
         """A TOWPATH (the Chinese qiandao) - the beaten haulage path on a navigated river's bank.
 
-        WHY IT EXISTS, AND WHY IT IS NOT A ROAD (GM 2026-08-08; research/cities/capitals.md, "A
+        WHY IT EXISTS, AND WHY IT IS NOT A ROAD (GM 2026-08-08; research/cities/capitals.html, "A
         river gets a TOWPATH, not a road"). Water carried bulk far more cheaply than carts, so no
         trunk road shadows a navigable river - the roads leave in the directions the water does
         not serve (capital_no_road_parallels_river holds that line). What the bank carries is the

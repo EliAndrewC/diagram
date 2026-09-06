@@ -12,9 +12,9 @@
 >
 > **The worked map is a DRAFT parked outside `pool/`** at [`wip/shiro-daika.gen.py`](../wip/shiro-daika.gen.py), because `tests/test_villages.py` sweeps `pool/*/*.gen.py` and a map that is not green would turn `make done` red for every session. It fails exactly one check - `imperial_road_town_has_farrier` - and that failure is CORRECT: the map has no relay stables because it has no housing fabric. **Do not fix it by drawing the farrier**; that was tried and cascaded (forge -> stables -> wells), which is the engine correctly refusing to call a half-populated city coherent. Feature 021 makes it green and moves it into `pool/capitals/`.
 >
-> Every decision here is settled with the GM (2026-08-08/09) and grounded in [`../research/cities/capitals.md`](../research/cities/capitals.md).
+> Every decision here is settled with the GM (2026-08-08/09) and grounded in [`../research/cities/capitals.html`](../research/cities/capitals.html).
 
-**Research:** the historical basis for every rule here - what was found, the decision it drove, and every disclosed departure - is in [`../research/cities/capitals.md`](../research/cities/capitals.md). Load it when you are CHANGING a rule or questioning one, not to follow it.
+**Research:** the historical basis for every rule here - what was found, the decision it drove, and every disclosed departure - is in [`../research/cities/capitals.html`](../research/cities/capitals.html). Load it when you are CHANGING a rule or questioning one, not to follow it.
 
 ---
 
@@ -24,7 +24,7 @@ A capital is the daimyo's castle-town seat: **~12,360 inhabitants, 2,472 dwellin
 
 Commercially a capital is "just a larger version of a provincial city" (`l7r.md`), and its caste mix is the same shape at 4x scale - but it carries three things a provincial city does not: **the castle**, the **domain-tier government** (a daimyo rather than a governor, with the House Chancellery and the Imperial Magistrate's office beside it), and its role as the domain's **schooling-and-retirement magnet**, which is what lifts its samurai share from ~10% to ~13%.
 
-**Critically, it is a merchant city with a castle in it, not a garrison with a market attached.** Historical castle towns ran 30-60% samurai; ours run ~13%, which `l7r.md` calls a deliberately restrained echo. So the rank-graded samurai rings are real but THIN, and the machi are the bulk of the fabric. See [the Hikone anchor](../research/cities/capitals.md#our-capital-is-a-hikone-scale-market-town-carrying-a-quarter-of-hikones-samurai).
+**Critically, it is a merchant city with a castle in it, not a garrison with a market attached.** Historical castle towns ran 30-60% samurai; ours run ~13%, which `l7r.md` calls a deliberately restrained echo. So the rank-graded samurai rings are real but THIN, and the machi are the bulk of the fabric. See [the Hikone anchor](../research/cities/capitals.html#our-capital-is-a-hikone-scale-market-town-carrying-a-quarter-of-hikones-samurai).
 
 | Caste | Households | vs provincial |
 |---|---|---|
@@ -42,7 +42,7 @@ Wealth bands that drive glyph variety: **48** very-rich merchant households (vs 
 ## Wall and compound geometry: rectangles, not circles
 
 **Small compounds AND large enclosures are both rectilinear in the anchor traditions** (GM asked
-2026-08-09; [research](../research/cities/capitals.md#wall-geometry-rectangles-and-terrain-loops---the-circle-is-the-form-both-anchors-decline)).
+2026-08-09; [research](../research/cities/capitals.html#wall-geometry-rectangles-and-terrain-loops---the-circle-is-the-form-both-anchors-decline)).
 China walls every tier square by cosmology (round heaven, SQUARE earth - Kaogongji's ideal
 capital, and the built record from Pingyao to Beijing agrees); Japan builds angular terrain-fit
 baileys inside and an organic sogamae loop around the town. Neither goes circular as walls grow -
@@ -56,7 +56,7 @@ is a GM call.
 
 **`ftpx=3`, unchanged from the provincial tier**, and the render width rises instead (~4,600-4,800 px, vs 2,600). Dropping to 4 or 5 ft/px would shrink every glyph with `bscale = 1/ftpx` - a 34x24 ft laborer house becomes 6.8x4.8 px - and the to-scale doctrine forbids rescuing that by drawing things bigger. Keeping the grain also keeps a merchant house the same size on every map in the pool, which is what lets a capital be compared to a provincial city by eye. `render_png` already takes the width; `DIAGRAM_PNG_WIDTH` already exists.
 
-**The wall is a budget output, never a hand-picked number** - the same rule as [`cities/sizing.md`](cities/sizing.md), and it binds harder here, because **a median castle is ~85% of an entire provincial city's interior** ([research](../research/cities/capitals.md#a-median-castle-is-85-of-an-entire-provincial-city)). A capital's ring encloses roughly four provincial cities of inhabitants plus most of a fifth in castle, so population alone predicts it badly.
+**The wall is a budget output, never a hand-picked number** - the same rule as [`cities/sizing.md`](cities/sizing.md), and it binds harder here, because **a median castle is ~85% of an entire provincial city's interior** ([research](../research/cities/capitals.html#a-median-castle-is-85-of-an-entire-provincial-city)). A capital's ring encloses roughly four provincial cities of inhabitants plus most of a fifth in castle, so population alone predicts it badly.
 
 Rough expectation, to be REPLACED by `plan_city`'s output: interior ~3.6M px^2, radii ~2.27x Tango's (rx ~1,115, ry ~1,046), ~1.27 mi across, ~4 mi circuit.
 
@@ -91,7 +91,7 @@ The GM authorized one attempt ("let's make one attempt and if it doesn't work th
 
 **One thing DID survive the experiment**: the **ishigaki doubling** on the outer enceinte - a battered stone rampart drawn as a doubled line reads as mass where a single stroke reads as a fence. That is the OUTER wall, so it adds no sync surface the wall did not already have. It is kept.
 
-**The enceinte opens TWO gates** (GM 2026-08-09, researched): the south **ote-mon** on the ceremonial approach, and the north **karamete-mon** - the rear/sortie gate every castle kept, a size down in tower, with its own deck over the castle moat and a rear approach road to the Imperial road (`castle(karamete_dir=...)`; [research](../research/cities/capitals.md#a-castle-has-two-gates-gm-2026-08-09-the-ote-mon--karamete-mon-pair)).
+**The enceinte opens TWO gates** (GM 2026-08-09, researched): the south **ote-mon** on the ceremonial approach, and the north **karamete-mon** - the rear/sortie gate every castle kept, a size down in tower, with its own deck over the castle moat and a rear approach road to the Imperial road (`castle(karamete_dir=...)`; [research](../research/cities/capitals.html#a-castle-has-two-gates-gm-2026-08-09-the-ote-mon--karamete-mon-pair)).
 
 **A caveat on the verdict's strength, stated because it matters for feature 020**: the blank castle was judged inside a blank city, where everything reads as empty. Once the fabric lands and the castle is the one large walled thing at the heart of a dense map, it will read considerably better than it does now. If it still reads as a void THEN, that is the point to revisit - not now.
 **Build order consequence:** the castle glyph is the FIRST thing feature 019 builds, ahead of the city fabric, precisely so this call can be judged off an early render rather than at the end of a long build.
@@ -125,14 +125,14 @@ This is the list the GM asked for - the point of the blank is that we still know
 
 **Two seats, and they are not symmetric:**
 
-- **`castle_seat="ring"` (DEFAULT).** Closed elliptical rampart as today; the castle stands inside with its own moat and walls; the quarters wrap concentrically. Both traditions nest their citadel this way ([research](../research/cities/capitals.md#both-traditions-nest-a-walled-citadel-in-the-seat-so-a-centered-castle-is-the-median-form)), so this is the median form and not one of two coin-flip options.
+- **`castle_seat="ring"` (DEFAULT).** Closed elliptical rampart as today; the castle stands inside with its own moat and walls; the quarters wrap concentrically. Both traditions nest their citadel this way ([research](../research/cities/capitals.html#both-traditions-nest-a-walled-citadel-in-the-seat-so-a-centered-castle-is-the-median-form)), so this is the median form and not one of two coin-flip options.
 - **`castle_seat="edge"`.** The castle occupies one arc of the perimeter and its own outer moat FORMS that stretch of the city's defense. **Requires water on that flank** (`river=` or a coast) - every attested edge castle is a river or sea castle, and a castle on a dry edge is not a variant but a weak wall.
 
 **Build order:** the ring first. The edge mode is both the rarer form and the bigger engine change (an open wall arc closing onto the castle works, structurally the same problem `s.moat(river=...)` already solved), and the skill's own recorded lesson is to **lock the rules in against ordinary settlements before bending them for exceptions** ([`../CLAUDE.md`](../CLAUDE.md), "Declared overrides").
 
 ## The government ward
 
-**The six domain ministries sit OUTSIDE the castle's outermost gate, flanking the *ote-suji* approach avenue** - not inside the works. Both traditions converge on this at exactly this tier ([research](../research/cities/capitals.md#the-ministries-sit-outside-the-castle-flanking-the-approach-avenue)): Beijing's Six Ministries lined the Corridor of a Thousand Steps outside Chengtianmen, and a jokamachi's offices spilled out of the ninomaru into the town as they grew.
+**The six domain ministries sit OUTSIDE the castle's outermost gate, flanking the *ote-suji* approach avenue** - not inside the works. Both traditions converge on this at exactly this tier ([research](../research/cities/capitals.html#the-ministries-sit-outside-the-castle-flanking-the-approach-avenue)): Beijing's Six Ministries lined the Corridor of a Thousand Steps outside Chengtianmen, and a jokamachi's offices spilled out of the ninomaru into the town as they grew.
 
 This makes the castle's **front** the map's compositional axis, which is the jokamachi rule that main roads ran past the castle's front "to indicate the glory of the ruler." A ceremonial avenue with paired ministry compounds is the most legible way for a map to say *daimyo's seat* rather than *big city*. It also keeps the castle interior implied and `s.ministry` working unchanged.
 
@@ -152,7 +152,7 @@ The **domain school** sits on the same avenue.
 
 ## Ward structure: a MESH of night-barred gates, not walled quarters
 
-**Recommendation, pending the GM's decision** - this is the research pass the GM asked for before any decision on how many walls the city has. Full finding: [research](../research/cities/capitals.md#neither-tradition-walls-its-wards-the-answer-is-a-mesh-of-night-barred-gates).
+**Recommendation, pending the GM's decision** - this is the research pass the GM asked for before any decision on how many walls the city has. Full finding: [research](../research/cities/capitals.html#neither-tradition-walls-its-wards-the-answer-is-a-mesh-of-night-barred-gates).
 
 Both traditions reach the same institution independently, and it is not enclosure. Edo barred every **machi** block with a **kido** (open ~4 am to ~10 pm) and every tenement lane with its own **roji-kido** (locked ~6 pm to ~6 am, keys with the nagaya owner or trusted neighbors), the block collectively responsible for its own gate. Qing Beijing, having torn down the Tang *fang* walls in the Song, closed each street at night with **zhalan** palings - the street Dashilan (大栅栏, "Big Palings") is named for its gate - backed by a real curfew (dusk drum at 8 pm, dawn bell at 4 am, 40 lashes for being abroad at night).
 
@@ -165,18 +165,18 @@ So, at capital scale:
 
 **Flagged, not acted on:** this research says the provincial tier's continuous palisade (`city_samurai_ward_sealed` and family) is more than history supports there either. That is a separate question for the provincial tier - three shipped cities depend on those checks, and the capital can adopt the mesh without any of them changing.
 
-**Nothing else is district-walled either** (GM asked 2026-08-09; [research](../research/cities/capitals.md#which-districts-get-internal-walls---and-the-fang-ward-as-the-lion-variant)): the samurai districts seal by each yashiki's OWN wall, and a great temple's monzen neighborhood is open commercial machi (the PRECINCT is walled; the neighborhood never is). The exception is a KNOB: `ward_style="mesh"` (default - the Song/Ming + Edo consensus) vs `ward_style="fang"` (the Tang lifang kept alive: district perimeter walls, gated, curfew-drummed - the LION's canonical form, for the first Lion city). 021 implements the mesh.
+**Nothing else is district-walled either** (GM asked 2026-08-09; [research](../research/cities/capitals.html#which-districts-get-internal-walls---and-the-fang-ward-as-the-lion-variant)): the samurai districts seal by each yashiki's OWN wall, and a great temple's monzen neighborhood is open commercial machi (the PRECINCT is walled; the neighborhood never is). The exception is a KNOB: `ward_style="mesh"` (default - the Song/Ming + Edo consensus) vs `ward_style="fang"` (the Tang lifang kept alive: district perimeter walls, gated, curfew-drummed - the LION's canonical form, for the first Lion city). 021 implements the mesh.
 
 ## Placements that change
 
-- **Teramachi rim.** Temples belt the inner face of the rampart as part of the defenses, rather than gathering in one quarter ([research](../research/cities/capitals.md#both-traditions-nest-a-walled-citadel-in-the-seat-so-a-centered-castle-is-the-median-form)).
+- **Teramachi rim.** Temples belt the inner face of the rampart as part of the defenses, rather than gathering in one quarter ([research](../research/cities/capitals.html#both-traditions-nest-a-walled-citadel-in-the-seat-so-a-centered-castle-is-the-median-form)).
 - **Rank-graded samurai districts.** Proximity to the castle tracks rank, and the districts are several rather than one - see the ward section above.
 - **Retainer terraces.** Modest terraced housing for the capital's **~94 junior (Rank 1-4) samurai households** - castle guards, household retainers of the daimyo's retinue, junior officials in training. **NOT "ashigaru" anything** (GM 2026-08-08): in Rokugan ashigaru are **peasants**, not samurai, and l7r.md puts them in the villages as rural militia, so a capital has no ashigaru quarter at all. The historical *kumi-yashiki* housed the lowest *samurai*, which is the slot the retainer terrace fills.
 
 ## Rules that INVERT
 
 - **`city_samurai_housing_varied` bans `s.manor(...)` inside the wall ring** - in a provincial city the only walled samurai compound is the governor's. Backwards here: karo, councilors and chancellors live in walled yashiki INSIDE the wall, and that is both the defining texture of a castle town and the mechanism for the lineage compounds above.
-- **The senior/junior housing mix inverts** ([research](../research/cities/capitals.md#the-capitals-samurai-are-senior-heavy-which-inverts-the-provincial-housing-mix)). budgets.md's rank table puts the capital at **70% senior (R5+) / 30% junior**, against the provincial city's **27% / 73%** - a capital posting is prestigious even when the job is menial, and the capital absorbs the rank-by-association cohort. So large houses and walled yashiki are the MAJORITY of the samurai fabric here (~218 senior against ~94 junior households of ~312), where `city_samurai_housing_varied` wants senior houses to be a minority. **The retainer terraces are the minority texture, not the dominant one.**
+- **The senior/junior housing mix inverts** ([research](../research/cities/capitals.html#the-capitals-samurai-are-senior-heavy-which-inverts-the-provincial-housing-mix)). budgets.md's rank table puts the capital at **70% senior (R5+) / 30% junior**, against the provincial city's **27% / 73%** - a capital posting is prestigious even when the job is menial, and the capital absorbs the rank-by-association cohort. So large houses and walled yashiki are the MAJORITY of the samurai fabric here (~218 senior against ~94 junior households of ~312), where `city_samurai_housing_varied` wants senior houses to be a minority. **The retainer terraces are the minority texture, not the dominant one.**
 - **`city_has_governor_mansion` / `city_governor_mansion_large`** - a capital has no governor.
 
 ## Counts that multiply
@@ -203,7 +203,7 @@ Everything per-gate (gate market, outside flophouse, caravan cluster, kosatsuba,
 
 A capital whose rampart stands OFF its bank closes its own moat circuit and connects to the
 river by sluiced feeder/drain leats - the Chinese standard (Xi'an's complete 14.6 km ring;
-[research](../research/cities/capitals.md#the-moat-ring-and-the-river-flank-moat-are-both-real---and-the-walls-distance-to-the-bank-decides)).
+[research](../research/cities/capitals.html#the-moat-ring-and-the-river-flank-moat-are-both-real---and-the-walls-distance-to-the-bank-decides)).
 The provincial river cities' open-arc moats closing onto the river (Minami, Nagahara) are the
 JAPANESE riverside form and stay correct for walls ON the bank; a future edge-castle capital
 would take that form too. Every deck fully crosses its water (`bridges_span_their_water` - the
@@ -215,7 +215,7 @@ oblique-crossing span rule).
 
 The wells do not go away: 2,472 households at the provincial rate of 1 per 10-20 households still puts ~160-240 draw-points across the commoner quarters, and the existing `city_neighborhoods_have_wells` / `city_well_density_sufficient` / `city_wells_in_block_interiors` family carries over unchanged.
 
-**The form is settled** ([research](../research/cities/capitals.md#the-aqueduct-is-open-outside-the-wall-and-buried-inside-it---and-the-boundary-is-the-gate)): the historical system is **open outside the wall and buried inside it, with the city GATE as the boundary**. That gives the GM's above-ground preference most of the interesting length, honestly:
+**The form is settled** ([research](../research/cities/capitals.html#the-aqueduct-is-open-outside-the-wall-and-buried-inside-it---and-the-boundary-is-the-gate)): the historical system is **open outside the wall and buried inside it, with the city GATE as the boundary**. That gives the GM's above-ground preference most of the interesting length, honestly:
 
 1. the **intake works** on the river;
 2. the **open approach canal** running to the wall (Edo's ran 43 km as a plain earth cut);
@@ -228,7 +228,7 @@ Inside the wall the conduit is honestly buried, and is represented by what a res
 
 ## Wharf and the tax-rice warehouses
 
-**Wanted (GM 2026-08-08), and the research changes its shape** ([research](../research/cities/capitals.md#the-wharf-is-the-collecting-end-and-kurayashiki-is-the-wrong-word-for-it)).
+**Wanted (GM 2026-08-08), and the research changes its shape** ([research](../research/cities/capitals.html#the-wharf-is-the-collecting-end-and-kurayashiki-is-the-wrong-word-for-it)).
 
 **Do NOT call this a *kurayashiki* district** - an earlier draft of this file did, and it was wrong twice. A kurayashiki is a daimyo's warehouse-residence **at the market** (Osaka, 110+ of them at peak), where tax rice was *sold*. A domain capital is the **collecting-and-disbursing** end: rice comes up from the six provinces into the **domain granary**, most goes straight back out as samurai stipends (*kuramai*), and the surplus ships downriver.
 
@@ -238,9 +238,9 @@ The model is **Asakusa Okura / Kuramae** - the ruler's own riverside granaries, 
 
 Nagahara supplies most of the vocabulary already (`s.dock`, `s.jetty`, `s.canal`, `s.water_gate`) - see [`cities/river-cities.md`](cities/river-cities.md). The castle keeps the siege stock (above), so the waterfront carries the working rice.
 
-**But the capital deliberately does NOT reuse the dock-basin form** ([research](../research/cities/capitals.md#the-internal-dock-and-the-bank-quay-the-water-decides-which-a-city-gets)). The internal dock (Suzhou's Pan Gate water gate; Japan's *funairi-bori*) and the bank quay (the *kashi* landing) are BOTH standard, and the water decides which a city gets: still at-grade water - delta, lake, canal country - lets the barge in (Nagahara, Minami); a live towpath river past a siege wall with sluiced moat leats moors the barge at the bank (Shiro Daika). Neither form is a function of city size or rank.
+**But the capital deliberately does NOT reuse the dock-basin form** ([research](../research/cities/capitals.html#the-internal-dock-and-the-bank-quay-the-water-decides-which-a-city-gets)). The internal dock (Suzhou's Pan Gate water gate; Japan's *funairi-bori*) and the bank quay (the *kashi* landing) are BOTH standard, and the water decides which a city gets: still at-grade water - delta, lake, canal country - lets the barge in (Nagahara, Minami); a live towpath river past a siege wall with sluiced moat leats moors the barge at the bank (Shiro Daika). Neither form is a function of city size or rank.
 
-**The brokers' row is MERCHANT** (GM 2026-08-08), so draw it as merchant frontage with the wealth band skewed high - not state violet. budgets.md's "rice/coin arbitrage" line for the Ministry of Retainers covers **the paying of stipends only** (denomination, the rice-versus-coin split, payment-day logistics); the contracts, clearinghouse business and lending sit outside it, and the merchant class has grown rich on them exactly as the *fudasashi* did. So the Edo chain holds and the entertainment district belongs beside the granary because **the brokers' money is what builds the theaters**. [Research](../research/cities/capitals.md#the-brokers-row-is-merchant-and-the-ministrys-cut-is-narrower-than-it-looks) - and note the general reading it establishes: a ministry line prices the ministry's own administrative function, not the whole trade it touches.
+**The brokers' row is MERCHANT** (GM 2026-08-08), so draw it as merchant frontage with the wealth band skewed high - not state violet. budgets.md's "rice/coin arbitrage" line for the Ministry of Retainers covers **the paying of stipends only** (denomination, the rice-versus-coin split, payment-day logistics); the contracts, clearinghouse business and lending sit outside it, and the merchant class has grown rich on them exactly as the *fudasashi* did. So the Edo chain holds and the entertainment district belongs beside the granary because **the brokers' money is what builds the theaters**. [Research](../research/cities/capitals.html#the-brokers-row-is-merchant-and-the-ministrys-cut-is-narrower-than-it-looks) - and note the general reading it establishes: a ministry line prices the ministry's own administrative function, not the whole trade it touches.
 
 **The Emperor's granaries are SEPARATE and OUTSIDE the castle** (GM 2026-08-08), because they face a different threat: an invading neighbor would not attack the Emperor's stores, so they need protection from **brigands, not besiegers**. A stout wall and a watch suffice, and there is no reason to spend castle ground on them. Their seat is a **tunable knob**, both options being real answers: `meta(imperial_granary_seat="magistrate")` puts them beside the Imperial Magistrate's compound (the official who oversees them is right there), `"wharf"` puts them on the water (grain moves by boat). Neither is a strong default - like the castle seat, it is a genuine either/or that gives two capitals different skeletons for a documented reason.
 
@@ -271,7 +271,7 @@ Confirmed against the campaign map (Shiro Daika sits in Daika's red territory we
 
 So **four gates**: south (Imperial), north (Imperial), east, southwest. Only the Imperial road is labeled.
 
-**The river gets a TOWPATH, not a road** (GM asked 2026-08-08 whether a riverside road would supplement or be replaced by the water; [research](../research/cities/capitals.md#a-river-gets-a-towpath-not-a-road---and-they-are-not-the-same-feature)). Water carried bulk far more cheaply than carts, so a trunk road shadowing a navigable river is redundant - Japan made the point at its sharpest by PROHIBITING bridges and ferries at the Oi-kawa so the river would work as a checkpoint. What is real is the Chinese *qiandao* (纤道) **towpath**: Shaoxing's dates to 815 CE and runs 40+ km, and Marco Polo saw barges hauled along it by teams of horses. It exists *because* of the boats - upstream haulage - so it supplements water transport exactly as the GM guessed. Draw it narrow, on the wharf's own bank, distinct from a road (no roadbed, no lane centerline), running to the wharf and no further; plus the quay frontage (*kashi*) inside the wall, which belongs to the wharf district. Do NOT draw a trunk road paralleling the river.
+**The river gets a TOWPATH, not a road** (GM asked 2026-08-08 whether a riverside road would supplement or be replaced by the water; [research](../research/cities/capitals.html#a-river-gets-a-towpath-not-a-road---and-they-are-not-the-same-feature)). Water carried bulk far more cheaply than carts, so a trunk road shadowing a navigable river is redundant - Japan made the point at its sharpest by PROHIBITING bridges and ferries at the Oi-kawa so the river would work as a checkpoint. What is real is the Chinese *qiandao* (纤道) **towpath**: Shaoxing's dates to 815 CE and runs 40+ km, and Marco Polo saw barges hauled along it by teams of horses. It exists *because* of the boats - upstream haulage - so it supplements water transport exactly as the GM guessed. Draw it narrow, on the wharf's own bank, distinct from a road (no roadbed, no lane centerline), running to the wharf and no further; plus the quay frontage (*kashi*) inside the wall, which belongs to the wharf district. Do NOT draw a trunk road paralleling the river.
 
 **This settles the *ote*.** The jokamachi rule is that the main road passes the castle's FRONT "to indicate the glory of the ruler", and the Imperial road connects at the south gate - so **the castle's ote-mon faces SOUTH**, and the ceremonial avenue with its flanking ministries runs south from the castle to that gate. That avenue is the map's compositional axis.
 
@@ -310,7 +310,7 @@ Note the pool's defense tiers after this: `peaceful` (Minami), `siege` (Tango, N
 
 ## Per-household ground costs (proposed `citybudget.py` rows)
 
-Full derivation and confidence: [research](../research/cities/capitals.md#per-household-ground-costs-for-the-two-housing-types-the-budget-model-has-never-seen). The model prices only `C_PACKED` (690) and `C_SPACED` (2,480); a capital needs two more.
+Full derivation and confidence: [research](../research/cities/capitals.html#per-household-ground-costs-for-the-two-housing-types-the-budget-model-has-never-seen). The model prices only `C_PACKED` (690) and `C_SPACED` (2,480); a capital needs two more.
 
 | new row | value | anchor |
 |---|---|---|

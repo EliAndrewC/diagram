@@ -98,7 +98,7 @@ class ServantRangesMixin:
         says the same thing from the other side (servants in the daozuofang, the south row whose
         blank back IS the street wall). Ranks of small uniform dwellings are a real castle-town
         texture, but they are ashigaru kumi-yashiki on the town FRINGE - never inside the fence.
-        Full findings + measured examples: research/cities/government.md.
+        Full findings + measured examples: research/cities/government.html.
 
         So the range is drawn as a LONG THIN building (15 real ft deep, running the length of its
         master's frontage) laid against the house's side and flush with its front plane - reading

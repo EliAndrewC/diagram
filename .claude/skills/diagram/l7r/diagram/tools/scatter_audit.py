@@ -14,7 +14,7 @@ irrigation cut-bank margin, and the manifest's `fields[].outline` + `dry_plots[]
 re-implemented here, so a future rule change moves this audit's verdicts automatically.
 
 Families: blade / dot / pine / crown are adjudicated; reed is REPORT-ONLY (reeds are the water
-fringe by doctrine - research/vegetation.md). Bases only - blade TIPS may lean a few real feet by
+fringe by doctrine - research/vegetation.html). Bases only - blade TIPS may lean a few real feet by
 the disclosed departure. Zero bases parsed is a LOUD failure (exit 2), never a clean pass: a
 styling drift in the engine's emission must read as "the audit is broken", not "the map is clean".
 

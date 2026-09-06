@@ -1,7 +1,14 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.16.0 → 2.17.0
+Version change: 2.17.0 → 2.18.0
+
+Version 2.18.0 (amended 2026-09-06, feature 191): Principle XII gains "QUOTE WHAT YOU CITE" - a
+reference supports an assertion by QUOTING the passage(s) of the source that support it, as a
+footnote at the assertion (one per assertion, several in a sentence when it makes several); a
+reference that is not quoted is not included; the `quote-check` agent confirms the quote is on the
+page, that it supports the assertion, and that every relevant assertion carries a footnote, before
+the entry lands; and the research record is HTML, its footnotes shown on hover. GM 2026-09-06.
 
 Version 2.17.0 (amended 2026-09-05, feature 183): Principle XII's three-way classification of
 every rendering decision - accurate / deliberate deviation / guess - becomes FOUR-way. The GM:
@@ -1361,7 +1368,7 @@ until v2.17.0, when the GM split the second into two - see below):
    finding. (Today's example: "a bog's margin is sedge grading into reed, and
    woody cover stands on the dry ground above it" was the reasoning behind
    letting grass alone grade into the marsh - it is plausible and it is
-   unsourced, and `research/vegetation.md` says so.)
+   unsourced, and `research/vegetation.html` says so.)
 
 Where it lives: the finding and its classification in the skill's `research/`
 file for that feature family (the interactive map will read from there); the
@@ -1390,7 +1397,7 @@ and is only caught if a human happens to ask about it.
 **EVERY RESEARCH FINDING CITES ITS SOURCES, AND A SOURCE IS SOMETHING A READER CAN CHECK**
 (GM 2026-08-27, feature 133 T43). A research entry - in `research/`, a feature's `research.md`,
 or wherever a finding is first written down - ends with a `**Sources:**` line naming what was
-consulted, registered by key in `research/SOURCES.md` with what each source was used FOR. This
+consulted, registered by key in `research/SOURCES.html` with what each source was used FOR. This
 is not for the session that wrote it; it is for the interactive map the project is building
 toward, where a reader clicks a feature and is owed the source behind the claim - and it is what
 lets a later reader tell an over-stretched citation from a finding. Source quality, in order:
@@ -1400,10 +1407,10 @@ references over the article itself); never an AI-generated encyclopedia or summa
 source (Grokipedia included): its content is machine-rewritten from other sources with no
 editorial community and no provenance a reader can follow, so citing it hands the reader a dead
 end. A web-search summary is a pointer to sources, never a source. Findings recorded before this
-rule without sources are re-sourced when next revisited (`research/SOURCES.md` keeps the queue),
+rule without sources are re-sourced when next revisited (`research/SOURCES.html` keeps the queue),
 not rewritten wholesale.
 
-**A SOURCE CARRIES ITS LINK** (GM 2026-08-28, feature 134). Every key in `research/SOURCES.md`
+**A SOURCE CARRIES ITS LINK** (GM 2026-08-28, feature 134). Every key in `research/SOURCES.html`
 records the URL at which the source can be read - by a later session or by a human - alongside
 the citation: the DOI or J-STAGE landing page for a paper, the article URL for an encyclopedia,
 the institution's own page for a museum, ministry or prefecture document. The interactive map's
@@ -1413,6 +1420,17 @@ genuinely has no stable URL (a print-only book, a page that has gone) records `U
 in its entry, so the absence is a statement rather than an omission. The 228 sources registered
 before this rule were linked in one pass on 2026-08-28 (feature 134 T47); a key added after it
 without a URL fails `tests/interactive/test_page.py`.
+
+**QUOTE WHAT YOU CITE** (v2.18.0, GM 2026-09-06, feature 191): *"Anytime we add a new reference in order to
+support something, then in our references section, we quote the passage or passages from the reference which
+support the assertion that we are making. There is no point in including a reference if it is not being
+quoted."* A citation is a footnote at the assertion that carries the source's key, its link and the quoted
+passage(s) verbatim - one footnote per assertion, *"even if this means multiple footnote links per paragraph or
+even multiple per sentence in sentences which make multiple assertions"*; a source that could not be read quotes
+the summary it was recorded from and says so. The `quote-check` agent confirms, before the entry lands, that the
+quote is on the page, that it supports the assertion it is attached to, and that every relevant assertion has a
+footnote; a `research: physical` task carries `quote-check confirmed` beside `source-reader confirmed`. The
+record is HTML (`research/*.html`), its footnotes shown on hover, and the maps link to it locally.
 
 **READ WHAT YOU CITE** (GM 2026-08-27, feature 133 T44). A source is cited only after the session
 has read it - the page or paper itself, fetched and read, not a search engine's summary of it and

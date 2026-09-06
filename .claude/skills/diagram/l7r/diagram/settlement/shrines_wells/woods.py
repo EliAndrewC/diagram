@@ -118,7 +118,7 @@ class TreeStandsMixin:
         another's circle - a suppressed understory stem, which the canopy layer this map draws does not
         show. Measured before the rule on Inashiro: 298 of 1,728 crowns entirely inside another
         (17%), 950 with their center more than halfway in; the 13 ft grid's +-42% jitter put two grid
-        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/vegetation.md
+        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/vegetation.html
         "Forest density and crown size"; gated by `tree_crowns_not_subsumed`."""
         return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr in crowns)
 

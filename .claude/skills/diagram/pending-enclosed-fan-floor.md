@@ -1,6 +1,6 @@
 # PENDING: the enclosed-fan tract floor check (GM decision 2026-08-03)
 
-**Sources (feature 143, 2026-08-28):** a pending engine decision; the tract-floor finding it rests on is `research/fields.md` "Tract sizes - no settlement-class cap" (`buck-survey`, `li-bozhong-jiangnan`, `skinner-marketing`, `aric-land-history`, `mdpi-kunisaki`).
+**Sources (feature 143, 2026-08-28):** a pending engine decision; the tract-floor finding it rests on is `research/fields.html` "Tract sizes - no settlement-class cap" (`buck-survey`, `li-bozhong-jiangnan`, `skinner-marketing`, `aric-land-history`, `mdpi-kunisaki`).
 
 
 **Why pending:** the rule is DECIDED (settlements/fields.md "Paddy TRACT size") and the check below
@@ -29,7 +29,7 @@ the same day (`test_enclosed_fan_at_least_hamlet_grade_fires_on_a_small_enclosed
 `test_enclosed_fan_floor_exempts_the_in_wall_district`).
 
 ```python
-    # PADDY TRACT FLOOR (GM 2026-08-03; settlements/fields.md "Paddy TRACT size", research/fields.md
+    # PADDY TRACT FLOOR (GM 2026-08-03; settlements/fields.md "Paddy TRACT size", research/fields.html
     # "Tract sizes - no settlement-class cap"). A fan that is ENCLOSED in the rendered view reads as a
     # COMPLETE field system, and the smallest attested communal waterworks - a fan with a real weir,
     # canals, and drain collector - commands ~8 acres (hamlet grade). A fan running off the view edge

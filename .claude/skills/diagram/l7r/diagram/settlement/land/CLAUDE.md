@@ -35,7 +35,7 @@ perpendicular to the fall, not an axis-aligned box - a rectangle is only an hone
 0/90/180/270 fall, and at a diagonal it slices across the slope and swallows the drain. And its
 WIDTH comes from the ground the fan waters, never from the canvas: an alluvial fan's spring line
 follows the FAN's toe and a floodplain's backswamp is bounded by its levees, so wet ground is
-FEATURE-bounded in both landforms (`research/water.md`, "The wet toe is as wide as the FAN"). The
+FEATURE-bounded in both landforms (`research/water.html`, "The wet toe is as wide as the FAN"). The
 canvas-wide version was never a decision - it arrived as a side effect - and three separate pieces
 of work built on it before anyone checked. The skill's `CLAUDE.md` keeps that story under "A side
 effect is not a rule".

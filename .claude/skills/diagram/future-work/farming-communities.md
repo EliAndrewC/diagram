@@ -929,7 +929,7 @@ its area):
 
 ## Review residue from the canal-B fork re-roll (settlement-review + cohort, 2026-08-16)
 
-The fork feature (research/water.md "The head-race forks - supply commands both flanks") re-rolled
+The fork feature (research/water.html "The head-race forks - supply commands both flanks") re-rolled
 the four live hamlets three times; the review rounds' errors are fixed (thread tails, minimax
 wells, the board's clump keep-out, the lane-crossing guards).
 
@@ -937,7 +937,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 
 - **DONE 2026-08-16: the in/out width ladder at junctions - RULED, keep the convention.** The GM
   weighed keep / intake-stilling-pool / conserve-at-fork and ruled that drawn width depicts rank,
-  not discharge (full reasoning recorded in research/water.md "Drawn width is RANK"); the
+  not discharge (full reasoning recorded in research/water.html "Drawn width is RANK"); the
   settlement-review doctrine now says junction conservation is not a finding, so reviewers stop
   re-flagging it. No ink changes.
 - **DONE 2026-08-16 (second ledger round): collector-junction wedge plots in the water-gray
@@ -982,7 +982,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 
 Both items are the CARVE's fan-toe geometry, not the seam pass that surfaced them, and both are
 measured rather than impressionistic. Full context in `pool/hamlets/inashiro/inashiro.notes.md` (2026-08-17)
-and `research/fields.md` "Bunds are shared, and the fabric is continuous".
+and `research/fields.html` "Bunds are shared, and the fabric is continuous".
 
 ### OPEN, each with its measurement: four things the 2026-08-18 review round raised and left
 
@@ -1099,7 +1099,7 @@ tint. Measured on Inashiro: the demoted #456 converges at 19.2 deg with a 3.4 ft
 keeps its tint at 18.5 deg with a 10.4 ft end - **the sharper taper is the one that stays blue**, and
 only truncation depth separates them.
 
-That is intended (`research/fields.md`: a basin never tapers to a point, and the fan toe TRUNCATES;
+That is intended (`research/fields.html`: a basin never tapers to a point, and the fan toe TRUNCATES;
 10.4 ft less two aze leaves ~7.4 ft of standing water, a workable basin, and it reads as a wedge with
 a flat end at fit zoom). **The trigger to revisit** is a roll that produces a 5-8 ft end which still
 reads as a point on the sheet - the band is empty on today's maps, so the rule is untested there.
@@ -1156,7 +1156,7 @@ Recorded here because feature 121 declined the obvious move and the reasoning sh
 houses in each other's drying shadow. The honest way to pack a nucleus tighter is what real
 *yashiki* lots did - **STAGGER the rows east-west** rather than space them further apart, which
 costs no sunlight at all. The placer is free to; nothing asks it to yet. That belongs to the village
-tier's own work. (`research/homesteads.md` "The threshing yard's sun";
+tier's own work. (`research/homesteads.html` "The threshing yard's sun";
 `specs/121-placer-drawn-footprint/research.md` D2.)
 
 ## OPEN, from the 2026-08-18 settlement-review round (four maps, four independent agents)
@@ -1195,7 +1195,7 @@ two hamlets differ.
 
 Measured against the cluster centroid with the map's own fall vector: parcel 1 is 505 ft downslope,
 parcel 2 is 887 ft downslope and stands 75 ft from the reed marsh. `settlements/vegetation.md` says
-woodland goes "on the higher / farther ground", `research/fields.md` says "satoyama crowns the hills
+woodland goes "on the higher / farther ground", `research/fields.html` says "satoyama crowns the hills
 above", and `hinterland.py`'s own comment says "the back slope behind the houses". The scorer is
 `-hypot(dist_to_cluster) + 0.35 * upslope`, so a 90 px step toward the cluster outbids 257 px of
 height and the upslope term never binds.
@@ -1330,7 +1330,7 @@ spread term still wins at one seat of three. The notes ledger a version of this 
 **The research question, and it is a research question rather than a ruling** (Principle XII): was a
 shared ox shed ever sited at the settlement edge under the shelter planting - for shade, for manure
 handling, for keeping the beasts out of the dooryard - as opposed to in a courtyard?
-`research/homesteads.md` covers the byre-vs-well question and does not address byre-vs-edge, so the
+`research/homesteads.html` covers the byre-vs-well question and does not address byre-vs-edge, so the
 search pass has not been run. **Run it before touching the placer.**
 
 **The likely shape of the answer.** The reviewer's read, which I share on the evidence so far, is
@@ -1746,7 +1746,7 @@ this file.
 
 FIX DIRECTION (from the reviewer): add a minimum working width - `area / longest side` - to the toe pass
 AND to the gate, derived rather than picked; a basin must be wide enough to stand in and puddle, which
-puts it somewhere in the 12-16 ft band. `research/fields.md` "Minimum basin SIZE" already holds the
+puts it somewhere in the 12-16 ft band. `research/fields.html` "Minimum basin SIZE" already holds the
 reasoning frame, including the point that the alternative to a scrap is making its neighbour bigger.
 **Owner: `waterfields/`** - same subsystem as the FLOODED tint and `hem_block_len`, and the toe pass is
 where all three meet.

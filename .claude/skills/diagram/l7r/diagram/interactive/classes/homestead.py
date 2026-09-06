@@ -31,7 +31,7 @@ class Farmhouse(Kind):
     covers = '`houses` - the dwelling of each household'
     label = 'accurate'
     sources = ('sugiura-1973-fuzoku',)
-    entry = "research/homesteads.md - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'"
+    entry = "research/homesteads.html - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'"
 
 
 class StorageShed(Kind):
@@ -56,7 +56,7 @@ class StorageShed(Kind):
     covers = '`houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)'
     label = 'accurate'
     sources = ('sugiura-1973-fuzoku',)
-    entry = "research/homesteads.md - 'What stood on a farmstead - the inventory, with numbers'"
+    entry = "research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'"
 
 
 class Byre(Kind):
@@ -79,7 +79,7 @@ class Byre(Kind):
     covers = '`byres` - the draft-animal sheds'
     label = 'accurate'
     sources = ('cambridge-animals-china',)
-    entry = "research/homesteads.md - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'"
+    entry = "research/homesteads.html - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'"
 
 
 class ThreshingYard(Kind):
@@ -110,7 +110,7 @@ class ThreshingYard(Kind):
     covers = '`threshing_yards`'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/homesteads.md - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'"
+    entry = "research/homesteads.html - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'"
 
 
 class Garden(Kind):
@@ -133,7 +133,7 @@ class Garden(Kind):
     covers = '`gardens`'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)"
+    entry = "research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)"
 
 
 class Privy(Kind):
@@ -156,7 +156,7 @@ class Privy(Kind):
     covers = '`farm_fixtures[kind=privy]`'
     label = 'accurate'
     sources = ('kotobank-benjo', 'sinyoken-madori', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class Woodpile(Kind):
@@ -175,7 +175,7 @@ class Woodpile(Kind):
     covers = '`farm_fixtures[kind=woodpile]`'
     label = 'guess'
     sources = ('boso-no-mura-kigoya', '326woods-stack', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class ManureHeap(Kind):
@@ -195,7 +195,7 @@ class ManureHeap(Kind):
     covers = '`farm_fixtures[kind=manure]`'
     label = 'guess'
     sources = ('jawiki-koedame', 'artic-pigsty-latrine')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class Bathhouse(Kind):
@@ -215,7 +215,7 @@ class Bathhouse(Kind):
     covers = '`farm_fixtures[kind=bath]`'
     label = 'guess'
     sources = ('mizumaki-goemonburo', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class HenCoop(Kind):
@@ -234,7 +234,7 @@ class HenCoop(Kind):
     covers = '`farm_fixtures[kind=coop]`'
     label = 'guess'
     sources = ('cambridge-animals-china', 'qimin-yaoshu-yangji', 'pitt-zhengzhou-coop')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class HouseholdShrine(Kind):
@@ -258,7 +258,7 @@ class HouseholdShrine(Kind):
     covers = '`farm_fixtures[kind=shrine]` - the hokora'
     label = 'convention'
     sources = ('tokushima-yashikigami', 'jawiki-yashikigami', 'kameyama-yashikigami', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class Persimmon(Kind):
@@ -278,4 +278,4 @@ class Persimmon(Kind):
     covers = '`persimmons` - the dooryard persimmon tree'
     label = 'guess'
     sources = ('toyoko-kaki', 'uekipedia-kaki')
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"

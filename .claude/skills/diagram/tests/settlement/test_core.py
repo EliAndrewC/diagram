@@ -582,7 +582,7 @@ def test_sluice_gate_label_names_the_black_bar():
 
 
 def test_a_homestead_may_not_stand_in_a_neighbours_drying_sun():
-    """THE RATCHET for the sun corridor (GM 2026-08-13, researched in research/homesteads.md).
+    """THE RATCHET for the sun corridor (GM 2026-08-13, researched in research/homesteads.html).
 
     A minka's ~20 ft ridge throws 39 ft of shadow by 9am in the threshing month, so a farmhouse
     that close south of a yard takes its drying day. Three things are pinned: the rule is OFF by

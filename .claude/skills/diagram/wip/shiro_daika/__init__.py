@@ -24,7 +24,7 @@ TRUNK ROAD RUNS ALONGSIDE IT: water carried bulk far more cheaply than carts, so
 shadowing a navigable river is redundant, and the roads leave in the directions the water does
 not serve. The bank carries the TOWPATH (the Chinese qiandao - upstream haulage, so it
 supplements the boats rather than replacing them), running to the wharf and no further. See
-research/cities/capitals.md, "A river gets a TOWPATH, not a road".
+research/cities/capitals.html, "A river gets a TOWPATH, not a road".
 
 THE CASTLE sits in the ring (castle_seat="ring" - both traditions nest their citadel, so it is
 the median form), north of center, with its OTE-MON FACING SOUTH onto the ceremonial approach

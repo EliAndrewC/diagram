@@ -39,7 +39,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     whole map to fix a local shortfall - the expensive, whack-a-mole loop the skill's dev notes warn
     about. Widening the band changes only the ground the candidates come from, so the houses already
     seated stay exactly where they are and the map converges instead of churning."""
-    # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/homesteads.md, "The threshing
+    # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/homesteads.html, "The threshing
     # yard's sun"). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
     # opts in - the hand-authored maps keep their packing until they are converted.

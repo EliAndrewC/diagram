@@ -17,7 +17,7 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # They are now TRUE WIDTHS IN FEET, converted to pixels by `chan_px`, so the comb net is to scale
 # like everything else on a to-scale sheet. The research, the two independent derivations behind
 # each figure, and the disclosed departures are in
-# `../../../research/water.md#the-comb-net-is-drawn-at-true-size`.
+# `../../../research/water.html#the-comb-net-is-drawn-at-true-size`.
 #
 # Sized from the ATTESTED tier ladder (a field ditch watering one paddy ~0.3 m; a distribution
 # lateral ~1 m; a district main/yosui ~5 m) placed by COMMAND AREA, with a Manning/Lacey check on a
@@ -110,7 +110,7 @@ CANAL_BERM_FT = 5.0
 # asked why the delivery ditches had no planks; the research pass found the traditional 小用水路 at
 # 2 shaku and the record SILENT on whether a ditch of that width was planked or stepped, so the GM
 # ruled on the map: they are not too narrow. At 2.0 the standard farm ditch earns a board and only
-# the ~1.2-1.5 ft tails are stepped over. Full record: research/water.md "a plank is laid only over
+# the ~1.2-1.5 ft tails are stepped over. Full record: research/water.html "a plank is laid only over
 # water you cannot stride across".
 FOOTPLANK_MIN_FT = 2.0
 
@@ -151,7 +151,7 @@ def taper_w(w0: float, w1: float, t: float) -> float:
 
     THE WIDTH SQUARED IS WHAT RUNS LINEARLY, not the width - because a channel's width goes as the
     SQUARE ROOT of the discharge it carries, and the discharge is what changes linearly along one of
-    these runs. (why: `../../../research/water.md#a-channel-taper-is-a-square-root-not-a-straight-line`)
+    these runs. (why: `../../../research/water.html#a-channel-taper-is-a-square-root-not-a-straight-line`)
 
     Both halves of that are load-bearing, so neither is a free choice:
 
@@ -175,7 +175,7 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     0.93 before), so the shape below is correct and unreadable at once. The GM asked directly, was
     given x1.5 and x2 legibility multipliers with the gradients priced, and chose true size
     (2026-08-17). Do NOT widen these strokes to make the taper show - the numbers and the reasoning
-    are in `../../../research/water.md#what-drawing-at-true-size-left-open`.
+    are in `../../../research/water.html#what-drawing-at-true-size-left-open`.
 
     **THE WORKED EXAMPLE LIVES IN A TEST, NOT HERE** -
     `test_the_delivery_taper_holds_then_dwindles` asserts the SHAPE this paragraph promises (wider

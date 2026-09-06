@@ -102,7 +102,7 @@ class HamletSpec:
         if self.kosatsuba_siting is not None and self.kosatsuba_siting not in KOSATSUBA_SITINGS:
             raise ValueError(f"kosatsuba_siting {self.kosatsuba_siting!r} must be one of {sorted(set(KOSATSUBA_SITINGS))}")
         if self.pond_layout is not None and self.pond_layout not in POND_LAYOUTS:
-            raise ValueError(f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/archetypes.md 'Grid vs mosaic')")
+            raise ValueError(f"pond_layout {self.pond_layout!r} must be one of {sorted(set(POND_LAYOUTS))} (research/archetypes.html 'Grid vs mosaic')")
         lo, hi = HOUSEHOLD_BAND
         if not lo <= self.households <= hi:
             raise ValueError(

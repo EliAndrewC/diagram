@@ -13,7 +13,7 @@ from ..plan import SitePlan
 from .frame import title_pocket
 from .parcels import _parcel_outline
 
-# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where
+# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where
 # it stood, and how to show it"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
 # ONE communal stand at the village edge held and cut under the village's rules like its coppice, seated
 # here on the cluster's shady side; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one

@@ -4,13 +4,13 @@
 `hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
 comments) are in git history with that script; what they recorded that still holds is carried here.*
 
-**Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/archetypes.md` "The 6:4 water-to-dike ratio, and coppiced mulberry".
+**Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/archetypes.html` "The 6:4 water-to-dike ratio, and coppiced mulberry".
 
 **Subject**: 16 households on polder geometry carried to the dike-pond system's rare
 **wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
 every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
 around it. The END STATE is deliberately the exception; the scattered overlay is the norm
-(research/archetypes.md "The three overlay values"). Reading this map as typical would be the
+(research/archetypes.html "The three overlay values"). Reading this map as typical would be the
 mistake it is here to make visible.
 
 ## Map notes
@@ -226,7 +226,7 @@ district's ground. Drawn at 1 ft/px.
   empty bin, and a notch bin holds 14 outline points (the ring's cut ends fill it), so it fired 0 times
   on all four flanks. The lesson is the standing one - a rule that cannot fire looks exactly like a
   rule that passes - and the guard is now a unit test that steps a notch whose bin is FULL.
-- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/water.md
+- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/water.html
   "A reservoir's shore is reeded, and its EMBANKMENT is mown"). The half that is settled: the
   reviewer's "berm on a diked margin" read is CORRECT for the embankment itself and for the reason
   the reviewer guessed - a tameike's 堤 is mown and burned and may not be cultivated, **to keep the

@@ -43,7 +43,7 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         windward=plan.windward,
         # THE FORM IS ROLLED, NOT ASSUMED (feature 126). This tier hardcoded `nucleated=True` from
         # the day it was written, which meant every hamlet the generator has ever produced was the
-        # same KIND of settlement. The research supports three (research/homesteads.md, "Does a
+        # same KIND of settlement. The research supports three (research/homesteads.html, "Does a
         # hamlet have to be NUCLEATED at all?"), so per Principle XII the form is a seeded knob.
         #
         # `nucleated` is DERIVED from `settlement_form` rather than set beside it. They were two
@@ -440,7 +440,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # THE DIKE-POND SYSTEM (桑基魚塘): convert (almost) every cell to a fish pond rimmed by a
     # mulberry dike. `eligible="all"` is the archetype's named opt-out of the topographic filter -
     # this map IS the wholesale-conversion end state, the rare case where a whole district went
-    # over to ponds and bought its grain in (research/archetypes.md "The three overlay values").
+    # over to ponds and bought its grain in (research/archetypes.html "The three overlay values").
     # Applied right after the grid is drawn and BEFORE the perimeter dike, so the ponds' banks and
     # the repainted leftovers are field ground the dike band and the houses draw over. Its RNG is
     # positional (`knob_rng`), so adding it re-rolls nothing else on the map.

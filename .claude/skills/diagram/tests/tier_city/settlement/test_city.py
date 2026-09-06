@@ -251,7 +251,7 @@ def test_city_wall_drops_a_mural_tower_boxed_in_on_both_sides():
 
 @pytest.mark.tiers("capital")
 def test_towpath_records_a_list_and_draws_no_roadbed_or_centerline():
-    """A towpath is NOT a road (research/cities/capitals.md, 'A river gets a TOWPATH, not a
+    """A towpath is NOT a road (research/cities/capitals.html, 'A river gets a TOWPATH, not a
     road'): no roadbed fill, no dashed centerline, one hairline at the linework floor."""
     s = _cap020()
     n0 = len(s.out)
@@ -269,7 +269,7 @@ def test_towpath_records_a_list_and_draws_no_roadbed_or_centerline():
 
 @pytest.mark.tiers("capital")
 def test_aqueduct_draws_no_arcade():
-    """NO ARCADED AQUEDUCT EXISTS in either anchor tradition (research/cities/capitals.md): the
+    """NO ARCADED AQUEDUCT EXISTS in either anchor tradition (research/cities/capitals.html): the
     vocabulary is a gravity canal at grade, a buried pipe, and a flume bridge only where water
     crosses water. Every path in the glyph is straight cuts - no arch curves anywhere."""
     s = _cap020()
@@ -284,7 +284,7 @@ def test_aqueduct_draws_no_arcade():
 @pytest.mark.tiers("capital")
 def test_quay_faces_the_bank_with_stepped_landings():
     """The working face at a river wharf is the BANK, faced and notched with steps - not the piers
-    (research/cities/river-cities.md: a river's level moves feet across the year, so a flight of
+    (research/cities/river-cities.html: a river's level moves feet across the year, so a flight of
     steps is the right height at every one of them while a fixed deck is right for weeks). The
     glyph records its landings and mooring posts so the checks can read them."""
     s = settlement.Settlement(1200, 1200, seed=4)

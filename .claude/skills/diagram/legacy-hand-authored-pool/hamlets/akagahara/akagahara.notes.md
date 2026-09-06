@@ -77,7 +77,7 @@ neither had ever seen a lane. This map's connector ran 1,163 px through the reed
 reason recorded on Ikegami: the toe band was taking its width from the canvas rather than from the
 ground the fan waters, which was never a rule. Researched and corrected - an alluvial fan's spring
 line follows the fan's toe. Akagahara's toe now ends at x=407 and the back-slope thread through its
-strewn farms is dry for its whole length. See `research/water.md`, 'The wet toe is as wide as the FAN'.
+strewn farms is dry for its whole length. See `research/water.html`, 'The wet toe is as wide as the FAN'.
 
 The route is not a near miss: it keeps well clear of the recorded marsh polygon along its whole
 length. A `settlement-review` pass on the result is logged in the session that made the change; its
@@ -129,7 +129,7 @@ Still open from that review, and NOT fixed:
   argument for these three (map-edge steadings, field ditches 116-315 ft off) is sound but it is an
   argument, not a check. Whether a dispersed hamlet's ring farms are expected to have a well at all
   was NOT a GM ruling - it was a research question, and it is
-  ANSWERED (2026-08-24, `research/homesteads.md`): a dispersed farmstead carries its own well,
+  ANSWERED (2026-08-24, `research/homesteads.html`): a dispersed farmstead carries its own well,
   because a shared well with a reach radius presupposes a center to be near and dispersal is the
   absence of one. The 500 ft rule is not unenforced at hamlet scale; it is the wrong rule for this
   form. The well rule should be FORM-conditional rather than scale-conditional.

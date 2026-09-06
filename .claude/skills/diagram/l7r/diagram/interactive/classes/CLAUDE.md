@@ -38,7 +38,7 @@ class HenCoop(Kind):
     covers = "`farm_fixtures[kind=coop]`"
     label = "guess"
     sources = ("cambridge-poultry", "qimin-yaoshu")
-    entry = "research/homesteads.md - 'The farmstead's fixtures'"
+    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 ```
 
 - Four tags, each at the start of a line: `What:` and `Why:` (the two paragraphs of the modal), `Note:`
@@ -49,7 +49,7 @@ class HenCoop(Kind):
   docstring or a missing required tag fails at IMPORT, naming the class.
 - The DATA stays as class attributes: `key` (what the ink carries), `name` (the modal's heading), `covers`,
   `label` (`accurate` / `deviation` / `convention` / `guess` - constitution XII, four-way since feature
-  183), `sources` (keys in `research/SOURCES.md`), `entry` (the research section the text was written
+  183), `sources` (keys in `research/SOURCES.html`), `entry` (the research section the text was written
   FROM, in the form `sources.py` parses - it is what puts the questions on the references modal).
 - Definition order within a module, and the module order in `__init__.py`, is `CLASSES`'s order.
 - Comments (`#`) above a class are for the next developer and never reach the page; the docstring is

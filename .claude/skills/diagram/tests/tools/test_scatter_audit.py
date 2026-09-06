@@ -275,7 +275,7 @@ def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
         for _dp in json.loads(Path(stem + ".json").read_text()).get("dikeponds") or []:
             anchors += [(float(q[0]), float(q[1])) for q in _dp.get("bank") or []]
         # ...and the PERIMETER DIKE, planted with willow and mulberry rows along its band
-        # (`perimeter_dike`; research/archetypes.md "Why dikes were planted at all") - anchored on
+        # (`perimeter_dike`; research/archetypes.html "Why dikes were planted at all") - anchored on
         # the recorded `dikes[].outline`.
         for _dk in json.loads(Path(stem + ".json").read_text()).get("dikes") or []:
             anchors += [(float(q[0]), float(q[1])) for q in _dk.get("outline") or []]

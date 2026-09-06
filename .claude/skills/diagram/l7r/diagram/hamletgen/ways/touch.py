@@ -114,7 +114,7 @@ def _touch_junctions(
     Every pass here - the orphan-joiner, the stub trimmer, the service trim, the reach checks - treats
     an end within `_LANE_JOIN_FT` (30 ft) of another way as JOINED, so a web could pass every gate
     while its pieces stopped 29 px short of one another. On Inashiro that was nine lanes in six
-    components. The research the web exists to honor says "interconnected" (research/homesteads.md),
+    components. The research the web exists to honor says "interconnected" (research/homesteads.html),
     and a junction is a place where two treads meet, not two ends that nearly do.
 
     Straight when the last stretch is clear, routed when it is not; the lane's record and its ink are

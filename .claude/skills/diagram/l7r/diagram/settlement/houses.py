@@ -9,7 +9,7 @@ from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_
 from ._knobs import skeleton_layout
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
-# in research/homesteads.md "How close does a farmhouse stand to the paddy?"). The paddy's margin is
+# in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
 # a bund (aze) about 1.5 ft wide (a search-summary figure the session could not read - UNVERIFIED;
 # the read source gives ~10 cm high) that is ALSO the working footpath: levees are "constructed and
 # maintained to retain water ... and to allow the passage of people and transportation of tools"

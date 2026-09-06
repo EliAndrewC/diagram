@@ -35,7 +35,7 @@ class Paddy(Kind):
     covers = 'the wet plots of every `fields[kind=paddy]` - the flooded basins'
     label = 'accurate'
     sources = ('maff-suitou-mizu', 'zennoh-mizukanri')
-    entry = "research/fields.md - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'"
+    entry = "research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'"
 
 
 class WetPaddy(Kind):
@@ -70,7 +70,7 @@ class WetPaddy(Kind):
     covers = 'the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has'
     label = 'accurate'
     sources = ('kotobank-shitsuden', 'kotobank-kanden', 'kotobank-yatsuda', 'kotobank-fukada', 'fao-rice-water')
-    entry = "research/fields.md - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'"
+    entry = "research/fields.html - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'"
 
 
 class Bund(Kind):
@@ -91,7 +91,7 @@ class Bund(Kind):
     covers = 'the stroke of every paddy plot and the piled junctions between them'
     label = 'accurate'
     sources = ('aze-standard',)
-    entry = "research/fields.md - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.md - 'The bund runs along the channel bank'"
+    entry = "research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.html - 'The bund runs along the channel bank'"
 
 
 class BundBeans(Kind):
@@ -113,7 +113,7 @@ class BundBeans(Kind):
     covers = 'the bead run along the bunds (`bund_beans`)'
     label = 'convention'
     sources = ('nabunken-azemame', 'wikipedia-soybean', 'cropfarming-soybeans')
-    entry = "research/fields.md - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)"
+    entry = "research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)"
 
 
 class Millet(Kind):
@@ -136,7 +136,7 @@ class Millet(Kind):
     covers = '`dry_plots[crop=millet]` and their furrows'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'"
+    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'"
 
 
 class Buckwheat(Kind):
@@ -157,7 +157,7 @@ class Buckwheat(Kind):
     covers = '`dry_plots[crop=buckwheat]` and their furrows'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'Where dry (hatake) crops go - the topographic catena'"
+    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'"
 
 
 class Barley(Kind):
@@ -178,7 +178,7 @@ class Barley(Kind):
     covers = '`dry_plots[crop=barley]` and their furrows'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'Where dry (hatake) crops go - the topographic catena'"
+    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'"
 
 
 class Soy(Kind):
@@ -200,7 +200,7 @@ class Soy(Kind):
     covers = '`dry_plots[crop=soy]` and their furrows'
     label = 'accurate'
     sources = ('not recorded',)
-    entry = "research/fields.md - 'Where dry (hatake) crops go - the topographic catena'"
+    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'"
 
 
 class Fallow(Kind):
@@ -219,4 +219,4 @@ class Fallow(Kind):
     covers = '`fallow_patches`'
     label = 'guess'
     sources = ('not recorded',)
-    entry = 'research/fields.md (no dedicated entry - recorded as silent)'
+    entry = 'research/fields.html (no dedicated entry - recorded as silent)'

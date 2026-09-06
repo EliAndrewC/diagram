@@ -20,10 +20,10 @@ level of curiosity:
 1. **The map.** They hover a feature and click it; the modal says what it is and why it stands there.
 2. **"See references."** The references modal lists the questions we asked while working out that kind
    of feature - the headings of the research sections its explanation was written from, each a link.
-3. **The answer.** A question links to its section on the public GitHub rendering of the research file
-   (`https://github.com/EliAndrewC/diagram/blob/main/.claude/skills/diagram/research/<file>.md#<anchor>`),
+3. **The answer.** A question links to its section of the research PAGE, locally from the map
+   (`../../../research/<file>.html#<anchor>`; feature 191 - it was the GitHub rendering of the Markdown before),
    where the well-formatted markdown gives the finding, the decision it drove and any disclosed liberty.
-4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.md`](SOURCES.md)
+4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](SOURCES.html)
    carries the URL where the work can be read (constitution v2.13.0), so a reader who truly wants to
    check can - *"which both demonstrates that this was based on actual research and also gives them the
    ability to go read Wikipedia or whatever other public source we have linked to."*
@@ -41,7 +41,7 @@ reader who asks for them.
   stays in the record and is stripped from the modal's text by `interactive/sources.py` (it is for us,
   not for them).
 - **Its anchor is stable** (already the rule in README's "Adding to the record"): the modal links to the
-  heading's GitHub anchor, so a rename must fix its inbound links - the rule files, and the class entries
+  heading's anchor (GitHub's rule, kept), so a rename must fix its inbound links - the rule files, and the class entries
   in `interactive/classes.py` that quote the heading.
 - **A class's explanation names the entries it was written from** (`interactive/classes.py`, the `entry`
   field), and that pointer is the whole of what puts a question on a modal: the page resolves it at
@@ -75,12 +75,12 @@ record says "a map drawing convention" wherever it used to say "a deviation for 
 The GM: *"I want all of our references to be links ... Any reference to an external document which we were
 able to read in order to do our research should be a link to that external document."* So a key in a
 research file is never bare. Write it as a link, and the target follows from the key's CITATION LINE in
-`SOURCES.md` (the entry's first paragraph, the one that names the work and its URL):
+`SOURCES.html` (the entry's first paragraph, the one that names the work and its URL):
 
 - a document we READ - the citation line carries a URL and no not-read marker - links to that URL, the FIRST
   one on the line: `` [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810) ``;
 - a document we did NOT read - the line says `SUMMARY-ONLY` or `URL: none`, or records its URL as `unfetched`
-  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](SOURCES.md#ma-2024-desire-paths) ``
+  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](SOURCES.html#ma-2024-desire-paths) ``
   (`../SOURCES.md#...` from `cities/`), because the entry is where "we could not read it" is said, and a link
   to the page would present an unread source as a read one.
 
@@ -99,6 +99,45 @@ or a duplicate `### ` heading in the registry fails the gate. The one-off conver
 prose-named citations, 32 new entries; five review rounds and the GM's ruling) is recorded in
 `specs/190-source-keys-are-links/`.
 
+## A reference QUOTES the passage it rests on, and the quote is checked (GM 2026-09-06, feature 191)
+
+The GM: *"Anytime we add a new reference in order to support something, then in our references section, we
+quote the passage or passages from the reference which support the assertion that we are making. There is no
+point in including a reference if it is not being quoted."* So the citation form is a FOOTNOTE that quotes:
+
+- after the assertion, `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>` - one per assertion, *"even if this means multiple footnote links per paragraph or
+  even multiple per sentence in sentences which make multiple assertions"*; a sentence that rests on two sources
+  carries two;
+- at the page's foot, in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
+  「the quoted passage」 (an English gloss when the passage is not English; one clause on what it bears on when
+  that is not plain) <a class="fnback" href="#fnref-n">back</a></li>` - the key linked by feature 190's rule, the
+  passage VERBATIM from the page, or PASSAGES when one is not enough. A SUMMARY-ONLY source quotes the summary it was recorded from and says so; the
+  GM's own notes (`URL: none`) quote the note. Nothing is quoted from memory.
+- the section's `<p><strong>Sources:</strong> ...</p>` roster stays (the map's modal reads it) and every key on it is quoted by at least
+  one footnote in that section - a key with nothing to quote leaves the roster.
+
+Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
+resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
+quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Sonnet, verification not
+judgment - the sibling of `source-reader`) holds the half a test cannot: per footnote, is the quote VERBATIM on
+the page (or DIFFERS / NOT-ON-PAGE), does it SUPPORT the assertion it is attached to (or PARTIAL /
+DOES-NOT-SUPPORT), and per section, which assertions carry no footnote. Run it in the background on every new or
+changed research entry before the feature lands, and record its verdicts in the feature's tasks (a physical
+task's `source-reader confirmed` box is `quote-check confirmed` from here). The page renders the footnotes with
+the ACOUP hover (`html/`, below): hover a reference and the note appears beside it.
+
+## The record IS HTML - edit the page (feature 191, the GM's ruling through its spec review)
+
+Since 2026-09-06 the record's files are `research/<name>.html` (`cities/<name>.html`, `SOURCES.html`), hand-authored
+and tracked; the Markdown they were converted from is gone (the GM: *"the markdown on GitHub will no longer exist
+as it has been replaced with HTML"*). A page's `<head>` carries the charset, the title and two relative links -
+`assets/record.css` and `assets/record.js` (the footnote hover; `../assets/` from `cities/`) - and its body is one
+`<main>`. Section ids are the record's anchors (`github_anchor` in `interactive/sources.py` - GitHub's rule, kept
+when the record converted), the registry's entries are `<h3 id="<key>"><code>key</code></h3>`, and a section's
+sources roster is `<p><strong>Sources:</strong> ...</p>`, which the map's modal reads. The maps' "See references"
+opens these pages locally (`../../../research/<name>.html#<id>`). GitHub shows a committed `.html` as source, so
+the reading path is the local page, not GitHub. `README.md` and this file stay Markdown: they are instructions,
+not the record.
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md), "The references modal
 lists QUESTIONS".

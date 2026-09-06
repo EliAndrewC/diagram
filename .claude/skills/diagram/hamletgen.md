@@ -327,7 +327,7 @@ The GM asked whether a threshing yard would sit directly north of a neighbor's f
 whether that house's shadow would take its light. It would: thatch is pitched 45 degrees or steeper,
 so a 46 x 28 ft minka's ridge stands ~20 ft up, and at 38N in the threshing month that is 21 ft of
 shadow at noon and 39 ft by 9am. The full derivation and sources are in
-[`research/homesteads.md`](research/homesteads.md), "The threshing yard's sun".
+[`research/homesteads.html`](research/homesteads.html), "The threshing yard's sun".
 
 **Every hand-authored nucleated map in the pool breaks it** - Ueda 45 of 85 yards shaded at noon,
 Hoshigaoka 31 of 70, Ubame 21 of 36, the hamlets 3-10 each, with neighbors' walls commonly 2-8 ft

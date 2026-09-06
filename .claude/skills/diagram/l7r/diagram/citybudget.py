@@ -57,7 +57,7 @@ C_SPACED = 2480.0
 # courts); pricing the wall from Tango's lean 690 under-built the rampart ~40% and spilled
 # 57% of the cohort into unlawful suburbs. The constant was first corrected to the measured
 # 1,350 - and then the GM's EXTRAMURAL RULING (a siege-built capital keeps its commoners
-# INSIDE; only the wharf hamlet lives out - see research/cities/capitals.md, "How much of a
+# INSIDE; only the wharf hamlet lives out - see research/cities/capitals.html, "How much of a
 # capital lives OUTSIDE the walls") pushed the in-wall cohort to 2,100 households, which the
 # standing wall absorbs only by packing TIGHTER: rim bands converted to quarters, tighter
 # courts, works' halos trimmed. 950 is that packed-tight target - between Tango's 690 and
@@ -75,7 +75,7 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # The TEMPLE PRECINCTS row used to sit here as ("temple precincts", 2, 16_250.0). Feature 016
     # moved it onto CityProgram knobs, because temple COUNT is not a fixed program floor: a Fox
     # city runs eight small precincts where an ordinary clan runs two great ones (l7r.md "Fox
-    # Temples"; research/religion-and-death.md). It is re-inserted at exactly this position by
+    # Temples"; research/religion-and-death.html). It is re-inserted at exactly this position by
     # plan_city so line ORDER - and therefore every shipped manifest's bytes - is unchanged.
     ("minor civic (theater, flophouses, funerary, inspection, kura)", None, 17_440.0),
     ("shops, inns, stables", 21, 4_700.0),
@@ -107,7 +107,7 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
 MINISTRIES_LABEL = "six provincial ministries"
 
 #: Default temple program - the two great complexes the CIVIC_PROGRAM row used to hard-code.
-#: Tango-measured; see settlements/cities/sizing.md and research/religion-and-death.md.
+#: Tango-measured; see settlements/cities/sizing.md and research/religion-and-death.html.
 #: NOTE the CIVIC_PROGRAM convention: every row's third field is the row TOTAL, not a per-unit
 #: cost (the six ministries are 7,980 px^2 for all six). The retired temple row read
 #: ("temple precincts", 2, 16_250.0) - 16,250 for BOTH precincts - so the per-precinct figure is
@@ -117,7 +117,7 @@ TEMPLE_PRECINCTS = 2
 TEMPLE_PRECINCT_PX2 = 8_125.0
 
 #: Adept-monk households per precinct. The default 2.5 x 2 precincts = the 5 households the old
-#: hard-coded line carried. A FOX precinct runs much higher (research/religion-and-death.md
+#: hard-coded line carried. A FOX precinct runs much higher (research/religion-and-death.html
 #: finding 3): only its three Bonds are celibate and the rest of its clergy are hereditary
 #: householders living out among the laity, so its families are drawn as ordinary houses around
 #: the compound rather than implied inside it.
@@ -155,7 +155,7 @@ POP_MIN, POP_MAX = 2000, 4000
 # executes zero new branches and its byte-identity is structural rather than merely tested. The
 # tiers also differ in inventory STRUCTURE - three samurai housing types against one, a castle
 # line, no agricultural district - so a shared function would be mostly branching anyway.
-# Every number here is settled and recorded in settlements/capitals.md + research/cities/capitals.md.
+# Every number here is settled and recorded in settlements/capitals.md + research/cities/capitals.html.
 
 #: Canonical capital population: the settled 12,000 of budgets.md's Capital city table plus the
 #: ~360 relocated non-working samurai (the schooling-and-retirement cohort). The ~45 foreign
@@ -457,7 +457,7 @@ def plan_city(program: CityProgram, canvas: tuple[float, float] | None = None) -
         "temple precincts",
         n_temples,
         n_temples * program.temple_precinct_px2 * k,
-        f"{n_temples} precinct(s) x {program.temple_precinct_px2:.0f} px^2 (Tango-measured complex; a Fox city declares more, smaller ones - research/religion-and-death.md)",
+        f"{n_temples} precinct(s) x {program.temple_precinct_px2:.0f} px^2 (Tango-measured complex; a Fox city declares more, smaller ones - research/religion-and-death.html)",
     )
     for label, count, area in CIVIC_PROGRAM:
         lines.append(BudgetLine(label, count, area * k, "fixed civic program floor at Tango-measured compound footprints (research.md A)"))

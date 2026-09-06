@@ -140,7 +140,7 @@ carry one. Ubame was the only settlement in the pool with no kiln works at all, 
 was an omission rather than a decision: every seat breaks and replaces bowls, pots and jars on a
 continuous cycle, and this one has a brewery's worth of vessels to keep in service besides.
 
-**The confusion hazard is real and is why the label is not the default.** `research/urban-features.md`
+**The confusion hazard is real and is why the label is not the default.** `research/urban-features.html`
 records that the pre-2026-07-27 kiln glyph was a low earthen mound - a charcoal kiln's shape - and
 that Ubame's charcoal district made the two indistinguishable. The glyph is now a chambered climbing
 kiln, which is a different silhouette, but on **this** sheet that is not enough on its own: a caption

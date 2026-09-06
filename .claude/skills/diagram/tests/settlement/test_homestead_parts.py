@@ -197,7 +197,7 @@ def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():
     # mid-strip. Decision: IRRIGATION channels (M['channels'] + M['drawn_channels']) hold a
     # maintained CUT-BANK margin of _BANK_MARGIN_FT beyond the drawn water edge - the bank is
     # walked for sluice work and scythed for fodder, the same economics as the crop margin
-    # (research/vegetation.md "The cut bank"). STREAMS deliberately get NO margin: a natural bank
+    # (research/vegetation.html "The cut bank"). STREAMS deliberately get NO margin: a natural bank
     # is vegetated to the water's edge, and a sterile halo on the brook is the defect the
     # settlement-review pass warned against. Base points asserted, as in the tests above.
     def _min_dist(gx, gy, poly):

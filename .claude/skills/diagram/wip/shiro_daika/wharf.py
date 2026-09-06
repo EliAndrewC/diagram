@@ -48,7 +48,7 @@ BANK_ROT = -60.1  # DERIVED from the river's current bearing at the wharf (119.9
 # rows lie ALONG the bank. Recompute this when the course moves - the first draw was cut to
 # a -54 constant and stayed there when the channel shifted (GM 2026-08-10).
 # ---- THE QUAY FACE (GM 2026-08-11: "is three piers the only way barges unload? Is there some
-# sort of dock that is not a boardwalk?"). Research in research/cities/river-cities.md: on a river
+# sort of dock that is not a boardwalk?"). Research in research/cities/river-cities.html: on a river
 # the working face is the BANK, faced with stone and notched with STEPPED landings, because the
 # water level moves feet across the year and a flight of steps is the right height at every one of
 # them. The piers are for reach; the quay is where most of the cargo actually comes ashore.

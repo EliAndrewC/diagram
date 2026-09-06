@@ -281,7 +281,7 @@ _GATE_MIN_APEX = 15.0
 # half a meter square - two rice stalks - with the local anecdote that a paddy once reported missing
 # turned up under a straw raincoat. Our smallest scripted-hamlet basin is 240 sq ft (~22 m2), which
 # is LARGER than a typical Senmaida paddy. Any floor stated in acres would therefore condemn the
-# most famous paddies in Japan, so the absolute floor was priced and DECLINED (research/fields.md).
+# most famous paddies in Japan, so the absolute floor was priced and DECLINED (research/fields.html).
 #
 # WHAT IS REAL IS A RATIO, AND THE REASON IS THE AZE. On a terrace the wall a basin needs already
 # exists: the riser is a structural retaining wall the slope demands whether or not anyone
@@ -603,7 +603,7 @@ def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> boo
 # goes sharply to the left before going down"). The aze is puddled mud re-plastered every spring
 # (azenuri) and its bill is its LENGTH, with the corners the part that slumps hardest; a jog buys two
 # right-angle corners and the run between them in exchange for ground that sits at the same level,
-# floods from the same offtake and is reachable from either basin. `research/fields.md` is equally
+# floods from the same offtake and is reachable from either basin. `research/fields.html` is equally
 # firm the other way - the organic waver is period-correct and an odd-shaped parcel is honest - so
 # the shape this refuses is narrow and specific: a run of wall, a short hop SIDEWAYS, and the same
 # run resuming in the SAME DIRECTION a few feet over.

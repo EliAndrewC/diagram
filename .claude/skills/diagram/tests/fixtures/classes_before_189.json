@@ -2,7 +2,7 @@
  "banana dike": {
   "caveat": "the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.",
   "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "banana dike",
   "label": "accurate",
   "label_note": "The type is read; the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.",
@@ -20,7 +20,7 @@
  "barley": {
   "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
   "covers": "`dry_plots[crop=barley]` and their furrows",
-  "entry": "research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
+  "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'",
   "key": "barley",
   "label": "accurate",
   "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -42,7 +42,7 @@
  "bathhouse": {
   "caveat": "",
   "covers": "`farm_fixtures[kind=bath]`",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "bathhouse",
   "label": "guess",
   "label_note": "Use is read (Mizumaki museum); where the shed stood was found nowhere - the back wall or a flank is a guess, and so is the 6 x 6 ft size.",
@@ -58,7 +58,7 @@
  "buckwheat": {
   "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
   "covers": "`dry_plots[crop=buckwheat]` and their furrows",
-  "entry": "research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
+  "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'",
   "key": "buckwheat",
   "label": "accurate",
   "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -80,7 +80,7 @@
  "bund": {
   "caveat": "",
   "covers": "the stroke of every paddy plot and the piled junctions between them",
-  "entry": "research/fields.md - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.md - 'The bund runs along the channel bank'",
+  "entry": "research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.html - 'The bund runs along the channel bank'",
   "key": "bund",
   "label": "accurate",
   "label_note": "Construction, width and the shared-wall finding are read; the drawn stroke is at true size.",
@@ -97,7 +97,7 @@
  "bund beans": {
   "caveat": "",
   "covers": "the bead run along the bunds (`bund_beans`)",
-  "entry": "research/fields.md - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)",
+  "entry": "research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)",
   "key": "bund beans",
   "label": "convention",
   "label_note": "we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the plant, in order to make them visible on the map at this scale against the pale rice. A soybean is an erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund was not found, so the bead's width is not compared to it. The practice is attested.",
@@ -117,7 +117,7 @@
  "byre": {
   "caveat": "the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
   "covers": "`byres` - the draft-animal sheds",
-  "entry": "research/homesteads.md - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'",
+  "entry": "research/homesteads.html - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'",
   "key": "byre",
   "label": "accurate",
   "label_note": "The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
@@ -136,7 +136,7 @@
  "copse": {
   "caveat": "how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
   "covers": "`village_groves[role=copse]`",
-  "entry": "research/vegetation.md - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)",
+  "entry": "research/vegetation.html - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)",
   "key": "copse",
   "label": "accurate",
   "label_note": "The role is attested with the fengshui-grove system; how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
@@ -155,7 +155,7 @@
  "duck pen": {
   "caveat": "",
   "covers": "every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "duck pen",
   "label": "guess",
   "label_note": "GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it.",
@@ -171,7 +171,7 @@
  "fallow": {
   "caveat": "",
   "covers": "`fallow_patches`",
-  "entry": "research/fields.md (no dedicated entry - recorded as silent)",
+  "entry": "research/fields.html (no dedicated entry - recorded as silent)",
   "key": "fallow",
   "label": "guess",
   "label_note": "The record is thin on fallow in this tier's fields; the patch is drawn where the field builder leaves ground unplanted, and that is a guess.",
@@ -192,7 +192,7 @@
  "farmhouse": {
   "caveat": "the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
   "covers": "`houses` - the dwelling of each household",
-  "entry": "research/homesteads.md - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'",
+  "entry": "research/homesteads.html - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'",
   "key": "farmhouse",
   "label": "accurate",
   "label_note": "Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
@@ -210,7 +210,7 @@
  "field ditch": {
   "caveat": "",
   "covers": "`field_ditches` and `channels` - the intake, head race, branches and drain",
-  "entry": "research/water.md - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.md - 'Water-first v2'",
+  "entry": "research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'",
   "key": "field ditch",
   "label": "accurate",
   "label_note": "Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288).",
@@ -232,7 +232,7 @@
  "field pond": {
   "caveat": "no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it does not litter the field.",
   "covers": "`field_ponds` - the in-field pond sunk into one low paddy",
-  "entry": "research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
+  "entry": "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'",
   "key": "field pond",
   "label": "accurate",
   "label_note": "The kind of obstacle a flooded paddy hosts is read (corroborated in both traditions); no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it does not litter the field.",
@@ -250,7 +250,7 @@
  "field rock": {
   "caveat": "no source counts how many, so a terraced field gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough that the field still reads as worked ground.",
   "covers": "`field_rocks` - a bedrock outcrop inside a plot",
-  "entry": "research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least'",
+  "entry": "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'",
   "key": "field rock",
   "label": "accurate",
   "label_note": "Which archetypes host an outcrop is read (corroborated); no source counts how many, so a terraced field gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough that the field still reads as worked ground.",
@@ -268,7 +268,7 @@
  "fish pond": {
   "caveat": "the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
   "covers": "the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike",
-  "entry": "research/archetypes.md - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'",
+  "entry": "research/archetypes.html - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'",
   "key": "fish pond",
   "label": "accurate",
   "label_note": "The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
@@ -286,7 +286,7 @@
  "footbridge": {
   "caveat": "",
   "covers": "`bridges[foot]` - every plank and deck over water",
-  "entry": "research/water.md - 'What drawing at TRUE SIZE left open' (channel_footbridges)",
+  "entry": "research/water.html - 'What drawing at TRUE SIZE left open' (channel_footbridges)",
   "key": "footbridge",
   "label": "guess",
   "label_note": "That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, so the plank and its spacing are a guess.",
@@ -301,7 +301,7 @@
  "fruit dike": {
   "caveat": "the tree spacing is an orchard convention, not a measured dike.",
   "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "fruit dike",
   "label": "accurate",
   "label_note": "The type is read; the tree spacing is an orchard convention, not a measured dike.",
@@ -319,7 +319,7 @@
  "fry pond": {
   "caveat": "",
   "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "fry pond",
   "label": "guess",
   "label_note": "GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.",
@@ -336,7 +336,7 @@
  "garden": {
   "caveat": "the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
   "covers": "`gardens`",
-  "entry": "research/homesteads.md - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)",
+  "entry": "research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)",
   "key": "garden",
   "label": "accurate",
   "label_note": "Presence and the sun rule are read; the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
@@ -357,7 +357,7 @@
  "grave island": {
   "caveat": "",
   "covers": "`field_graves` - the rare in-field grave mound",
-  "entry": "research/fields.md - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)",
+  "entry": "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)",
   "key": "grave island",
   "label": "deviation",
   "label_note": "A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the dead on the slope, at a rate the GM approved.",
@@ -375,7 +375,7 @@
  "hen coop": {
   "caveat": "",
   "covers": "`farm_fixtures[kind=coop]`",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "hen coop",
   "label": "guess",
   "label_note": "The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.",
@@ -394,7 +394,7 @@
  "homestead bamboo": {
   "caveat": "",
   "covers": "`bamboo_stands[role=homestead]`",
-  "entry": "research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'",
+  "entry": "research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'",
   "key": "homestead bamboo",
   "label": "convention",
   "label_note": "we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention Japan's own topographic legend uses. Presence and place are read.",
@@ -411,7 +411,7 @@
  "household shrine": {
   "caveat": "",
   "covers": "`farm_fixtures[kind=shrine]` - the hokora",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "household shrine",
   "label": "convention",
   "label_note": "we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii before it, in order to make it visible on the map at this scale. The one measured stone hokora is about 40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence, rarity and corner are read.",
@@ -429,7 +429,7 @@
  "manure heap": {
   "caveat": "",
   "covers": "`farm_fixtures[kind=manure]`",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "manure heap",
   "label": "guess",
   "label_note": "The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size are guesses - the pages describe the pit, not where it stood.",
@@ -447,7 +447,7 @@
  "manure pit": {
   "caveat": "the drawn 3.5 ft mouth is a size the record does not give.",
   "covers": "a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "manure pit",
   "label": "accurate",
   "label_note": "The form and its place behind the house are read (Fei 1939); the drawn 3.5 ft mouth is a size the record does not give.",
@@ -463,7 +463,7 @@
  "marsh": {
   "caveat": "",
   "covers": "`marshes` - every marsh patch, whatever its role",
-  "entry": "research/water.md - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\"; research/vegetation.md - 'The marsh margin'",
+  "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\"; research/vegetation.html - 'The marsh margin'",
   "key": "marsh",
   "label": "accurate",
   "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
@@ -487,7 +487,7 @@
  "millet": {
   "caveat": "the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
   "covers": "`dry_plots[crop=millet]` and their furrows",
-  "entry": "research/fields.md - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'",
+  "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'",
   "key": "millet",
   "label": "accurate",
   "label_note": "Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
@@ -509,7 +509,7 @@
  "mulberry dike": {
   "caveat": "the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
   "covers": "the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it",
-  "entry": "research/archetypes.md - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'",
+  "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'",
   "key": "mulberry dike",
   "label": "accurate",
   "label_note": "The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
@@ -529,7 +529,7 @@
  "notice board": {
   "caveat": "",
   "covers": "`kosatsuba`, with its label",
-  "entry": "research/urban-features.md - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'",
+  "entry": "research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'",
   "key": "notice board",
   "label": "accurate",
   "label_note": "Presence and siting are both read. The placement is chosen from the attested set the map can actually site, never from one preferred reading; at hamlet grain the glyph is drawn at its true 12 x 5 ft.",
@@ -547,7 +547,7 @@
  "paddy": {
   "caveat": "the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
   "covers": "the wet plots of every `fields[kind=paddy]` - the flooded basins",
-  "entry": "research/fields.md - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'",
+  "entry": "research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'",
   "key": "paddy",
   "label": "accurate",
   "label_note": "Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
@@ -573,7 +573,7 @@
  "perimeter dike": {
   "caveat": "the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
   "covers": "the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices",
-  "entry": "research/archetypes.md - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'",
+  "entry": "research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'",
   "key": "perimeter dike",
   "label": "accurate",
   "label_note": "Full enclosure, the organic outline and the planting are read; the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
@@ -595,7 +595,7 @@
  "persimmon": {
   "caveat": "",
   "covers": "`persimmons` - the dooryard persimmon tree",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "persimmon",
   "label": "guess",
   "label_note": "Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown are guesses - the crown width was found nowhere.",
@@ -613,7 +613,7 @@
  "pig sty": {
   "caveat": "",
   "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond dike",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "pig sty",
   "label": "guess",
   "label_note": "GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.",
@@ -630,7 +630,7 @@
  "pond": {
   "caveat": "",
   "covers": "`pond` - the tameike",
-  "entry": "research/fields.md - 'Water-first v2 - pond, distribution and the three layout modes'",
+  "entry": "research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'",
   "key": "pond",
   "label": "accurate",
   "label_note": "Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).",
@@ -651,7 +651,7 @@
  "pond sluice": {
   "caveat": "its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed plan.",
   "covers": "the short channel stubs of `dikepond_sluices` - where each pond's dike is cut to the canal",
-  "entry": "research/archetypes.md - 'A dike-pond is fed and drained through sluice gates'",
+  "entry": "research/archetypes.html - 'A dike-pond is fed and drained through sluice gates'",
   "key": "pond sluice",
   "label": "accurate",
   "label_note": "The sluice's form is read from the FAO pond-construction manual; its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed plan.",
@@ -670,7 +670,7 @@
  "privy": {
   "caveat": "the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
   "covers": "`farm_fixtures[kind=privy]`",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "privy",
   "label": "accurate",
   "label_note": "Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
@@ -689,7 +689,7 @@
  "scrub and rough grazing": {
   "caveat": "nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
   "covers": "`commons[role=grazing]`",
-  "entry": "research/vegetation.md - 'The crop margin', 'Scrub stays off open water', 'The cut bank'",
+  "entry": "research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'",
   "key": "scrub and rough grazing",
   "label": "accurate",
   "label_note": "The margins are read; nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
@@ -706,7 +706,7 @@
  "shared bamboo grove": {
   "caveat": "",
   "covers": "`bamboo_stands` with any role other than homestead - the take-yabu at the field margin",
-  "entry": "research/vegetation.md - 'Bamboo: how common, where it stood, and how to show it'",
+  "entry": "research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'",
   "key": "shared bamboo grove",
   "label": "convention",
   "label_note": "we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.",
@@ -723,7 +723,7 @@
  "sluice gate": {
   "caveat": "the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.",
   "covers": "the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike",
-  "entry": "research/archetypes.md - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'",
+  "entry": "research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'",
   "key": "sluice gate",
   "label": "accurate",
   "label_note": "The form is read from the FAO pond-construction manual; the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.",
@@ -742,7 +742,7 @@
  "soy": {
   "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
   "covers": "`dry_plots[crop=soy]` and their furrows",
-  "entry": "research/fields.md - 'Where dry (hatake) crops go - the topographic catena'",
+  "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'",
   "key": "soy",
   "label": "accurate",
   "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -765,7 +765,7 @@
  "storage shed": {
   "caveat": "the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
   "covers": "`houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)",
-  "entry": "research/homesteads.md - 'What stood on a farmstead - the inventory, with numbers'",
+  "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'",
   "key": "storage shed",
   "label": "accurate",
   "label_note": "Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
@@ -783,7 +783,7 @@
  "stream": {
   "caveat": "",
   "covers": "`streams` - the brook",
-  "entry": "research/water.md - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'",
+  "entry": "research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'",
   "key": "stream",
   "label": "convention",
   "label_note": "we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width (the GM's ruling). A village creek runs about 2 m wide in reality, some six times a field ditch. The stream's type and place are read.",
@@ -802,7 +802,7 @@
  "sugarcane dike": {
   "caveat": "the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.",
   "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is sugarcane, and its cane rows",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "sugarcane dike",
   "label": "accurate",
   "label_note": "The type and the loop are read; the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.",
@@ -822,7 +822,7 @@
  "threshing yard": {
   "caveat": "the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
   "covers": "`threshing_yards`",
-  "entry": "research/homesteads.md - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'",
+  "entry": "research/homesteads.html - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'",
   "key": "threshing yard",
   "label": "accurate",
   "label_note": "The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
@@ -839,7 +839,7 @@
  "vegetable ground": {
   "caveat": "nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.",
   "covers": "an unconverted parcel of a wholly converted dike-pond block, on a hamlet whose `meta.leftover` is vegetables",
-  "entry": "research/archetypes.md - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
   "key": "vegetable ground",
   "label": "accurate",
   "label_note": "The absence of rice and the vegetable ground are read; nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.",
@@ -855,7 +855,7 @@
  "village lane": {
   "caveat": "the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
   "covers": "`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur",
-  "entry": "research/homesteads.md - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.md re-sourcing queue (lane width)",
+  "entry": "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.html re-sourcing queue (lane width)",
   "key": "village lane",
   "label": "accurate",
   "label_note": "Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
@@ -870,7 +870,7 @@
  "well": {
   "caveat": "",
   "covers": "`wells` - the wellheads",
-  "entry": "research/urban-features.md - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.md - 'Does a DISPERSED hamlet's outlying farm have its own well?'",
+  "entry": "research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'",
   "key": "well",
   "label": "convention",
   "label_note": "we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof - many times its true size, in order to make the well visible at map scale: the glyph marks where the well stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a person to work in, under a well house that is posts and a roof and nothing more; the width of the curb frame itself was not found. Count and sharing are read (the Sphere/UNICEF figures, jawiki).",
@@ -887,7 +887,7 @@
  "wet paddy": {
   "caveat": "Which plots wear the tint is a drawing convention rather than a survey: on a comb field a share of the wet rank carries it rather than all of it, and seating the wettest ground at the drain foot is inferred from how water falls through the system, not stated by the record.",
   "covers": "the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has",
-  "entry": "research/fields.md - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'",
+  "entry": "research/fields.html - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'",
   "key": "wet paddy",
   "label": "accurate",
   "label_note": "The shitsuden and kanden categories, the wetness that defines them and the penalties they carry come from the dictionaries, quoted in the entry. Which plots wear the tint is a drawing convention rather than a survey: on a comb field a share of the wet rank carries it rather than all of it, and seating the wettest ground at the drain foot is inferred from how water falls through the system, not stated by the record.",
@@ -908,7 +908,7 @@
  "windbreak": {
   "caveat": "",
   "covers": "`village_groves[role=windbreak]`",
-  "entry": "research/vegetation.md - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.md - 'The garden's sun, and how far the windbreak shades'",
+  "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'",
   "key": "windbreak",
   "label": "accurate",
   "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
@@ -926,7 +926,7 @@
  "woodland commons": {
   "caveat": "a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
   "covers": "`commons[role=woodland]` - the coppice patches",
-  "entry": "research/vegetation.md - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'",
+  "entry": "research/vegetation.html - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'",
   "key": "woodland commons",
   "label": "accurate",
   "label_note": "The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.",
@@ -944,7 +944,7 @@
  "woodpile": {
   "caveat": "",
   "covers": "`farm_fixtures[kind=woodpile]`",
-  "entry": "research/homesteads.md - 'The farmstead's fixtures'",
+  "entry": "research/homesteads.html - 'The farmstead's fixtures'",
   "key": "woodpile",
   "label": "guess",
   "label_note": "The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.",

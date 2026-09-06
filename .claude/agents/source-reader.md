@@ -1,6 +1,6 @@
 ---
 name: source-reader
-description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.md. Verification, not judgment - runs on Sonnet by design (GM 2026-08-27, feature 133 T45); it never decides a rule, it reports what a page says.
+description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - runs on Sonnet by design (GM 2026-08-27, feature 133 T45); it never decides a rule, it reports what a page says.
 model: sonnet
 tools: WebFetch, WebSearch, Read
 ---
@@ -24,7 +24,7 @@ output format.
 ## Input
 
 A list of items, each: **the claim as written in the entry** (verbatim), **the source pointer(s)**
-(URL, title, or a `research/SOURCES.md` key), and optionally the entry's file and line so you can
+(URL, title, or a `research/SOURCES.html` key), and optionally the entry's file and line so you can
 `Read` the surrounding context.
 
 ## Procedure, per item

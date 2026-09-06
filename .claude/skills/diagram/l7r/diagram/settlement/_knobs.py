@@ -229,7 +229,7 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     bakufu set kosatsuba *"at points of heavy passage: barriers and ports, the foot of large bridges,
     and the entrances and centers of towns and villages"*; in farming villages *"at the village center,
     the shrine precinct, or the place where villagers assembled"*; also *"at bridgeheads and before the
-    gate of the village officials' houses"* (`research/urban-features.md`, four sources READ 2026-08-26
+    gate of the village officials' houses"* (`research/urban-features.html`, four sources READ 2026-08-26
     under feature 133 T13). The doc's own settlement-scale sentence narrows it: the board stood *"where
     the settlement's one lane carries everyone - by the headman's frontage or the lane junction /
     entrance"*.
@@ -263,7 +263,7 @@ register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage"], default
 register_knob(Knob("cluster_position", ["high_margin", "flank", "mid_margin", "valley_mouth", "valley_head", "on_rise"], default="high_margin"))
 register_knob(Knob("cluster_shape", ["round", "elongated", "crescent", "split"], default="round", typing_rule=_cluster_shape_ok))
 register_knob(Knob("lane_web", list(LANE_WEBS), default="alleys"))
-# BAMBOO (feature 133 T47, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it stood,
+# BAMBOO (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it stood,
 # and how to show it"): below the frost line a village has bamboo as a matter of course - a stand,
 # not a seasoning - and above it none. Two attested forms of WHERE: the homestead's damp N/W strip
 # and a take-yabu thicket at the field margin's shady end; a hamlet may have either, both, or (cold

@@ -259,7 +259,7 @@ class BundleFitMixin:
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?
 
-        THE RULE (GM 2026-08-13, researched in research/homesteads.md, "The threshing yard's sun"):
+        THE RULE (GM 2026-08-13, researched in research/homesteads.html, "The threshing yard's sun"):
         rice is dried on the niwa, so a yard needs clear ground to its SOUTH. A thatched roof is
         pitched 45 deg or steeper, which puts our 46x28 ft minka's ridge ~20 ft up; at 38N in the
         10th month that throws 21 ft of shadow at noon and 39 ft by 9am. So a farmhouse standing
@@ -306,7 +306,7 @@ class BundleFitMixin:
             # for the garden - the same one-obstacle shape the yard rule itself was missed by - and
             # on the reference hamlet 7 of 16 gardens had a neighbor's wall 4-38 ft to their south.
             # A kitchen garden's binding season is the same shoulder month (autumn greens, daikon)
-            # as the drying yard's, so it takes the SAME corridor; research/homesteads.md.
+            # as the drying yard's, so it takes the SAME corridor; research/homesteads.html.
             for tg in g.get("gardens", ()):
                 if abs(tg[0] - hx) < (tg[2] + hw) / 2 + side and 0 < (hy - hh / 2) - (tg[1] + tg[3] / 2) < reach:
                     return False
@@ -339,7 +339,7 @@ class BundleFitMixin:
         and SOUTHWEST of every threshing yard and garden bed - the afternoon sun. Off by default; a
         generator opts in, exactly as with `sun_corridor` (feature 133 T10, GM 2026-08-25: "the
         windbreak forest ... is so close to the gardens ... that I do not believe that those gardens
-        would get sufficient sunlight"). The number's derivation is in research/homesteads.md, "The
+        would get sufficient sunlight"). The number's derivation is in research/homesteads.html, "The
         garden's sun, and how far the windbreak shades"."""
         self._west_sun_ft = float(feet)
 

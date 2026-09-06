@@ -14,7 +14,7 @@ from ..consts import Poly, Pt
 from ..plan import SitePlan
 from .bamboo import _strip_blocked
 
-# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.md "The farmstead's
+# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.html "The farmstead's
 # fixtures"). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
 # two hamlets differ honestly where the record gives a range), and the seats tried in the house's
 # local frame (+y = the sunny front where the yard is, -y = the back wall, -x = the kura side). The
@@ -270,7 +270,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     # T16). Three candidates seated 3 of a declared 8 per map: the heap is placed against
                     # the privy, and where the privy now sits on the sun side the ground just past it is
                     # often the work yard. The researched rule is only that the heap lies BEYOND the privy
-                    # (research/homesteads.md) - which these all do; they differ in how far and how wide.
+                    # (research/homesteads.html) - which these all do; they differ in how far and how wide.
                     # ...AND NOT AT A FIXED OFFSET (feature 152 T17). Every heap sat the SAME distance
                     # beyond its privy - an acceptance review measured 15 of 19 pairs at |dy| 9.4-9.9 ft
                     # with |dx| under 1 ft - so the pair read as one stamp repeated down the row. The
@@ -301,7 +301,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     # (2) Sorting by the ownership MARGIN rather than the flag, so that where no candidate
                     #     is unambiguous the LEAST misattributable wins: 4 of 67, no better - and it pulled
                     #     heaps back toward the house to win the margin, so "the heap lies beyond the privy"
-                    #     - the actual researched rule (research/homesteads.md) - fell from 16 of 16 to
+                    #     - the actual researched rule (research/homesteads.html) - fell from 16 of 16 to
                     #     9 of 15. A reader-legibility nicety is not worth a researched rule.
                     # (3) The margin sort applied INSIDE the beyond-the-privy group only - the shape the
                     #     acceptance review named as the one both attempts stepped over, and it is a real

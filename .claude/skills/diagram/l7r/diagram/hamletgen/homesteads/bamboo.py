@@ -11,7 +11,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments
 from ..consts import Poly
 from ..plan import SitePlan
 
-# HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation.md "Bamboo: how common, where it
+# HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it
 # stood, and how to show it", the T48 pass). READ: on the Tonami plain every farmstead stood in its own
 # grove (kainyo) and bamboo was one of its named species beside a dominant cedar, valued as "important
 # daily-life material"; the bamboo stood WITH the storehouses on the plot's south side there, and at a

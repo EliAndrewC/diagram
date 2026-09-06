@@ -6,7 +6,7 @@ direction, and then instead of just continuing on and meeting at the four way in
 just goes sharply to the left before going down, thus making these extremely irregular shapes. This
 really, really looks like a rendering error." It is one: `close_seams` makes it, the carve does not
 (snapshotting the pass's input and output gives 0 steps on Inashiro's 543 carved rings and 28 on the
-634 it hands back), and `research/fields.md` "A bund runs on, or it turns for a reason" carries the
+634 it hands back), and `research/fields.html` "A bund runs on, or it turns for a reason" carries the
 research and the mechanism.
 
 WHY A TOOL AS WELL AS A GATE CHECK. `paddy_bunds_do_not_stagger` holds the shape the GM actually

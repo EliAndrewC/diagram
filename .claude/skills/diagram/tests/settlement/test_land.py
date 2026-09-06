@@ -82,7 +82,7 @@ def test_hinterland_scrub_ring_and_marsh_downhill_each_cardinal():
         #
         # THE TOE SIDE CARRIES SCRUB TOO, since 2026-08-12. It used to be left bare because the reed toe
         # covered every inch below the crop - but the toe is now only as wide as the ground the fan waters
-        # (research/water.md, "The wet toe is as wide as the FAN"), so its lateral ends are dry footslope and
+        # (research/water.html, "The wet toe is as wide as the FAN"), so its lateral ends are dry footslope and
         # were being covered by NOTHING: Ikegami shipped a ~267 x 193 ft corner of blank parchment with the
         # connector crossing it. The band is handed the marsh as a keep-out, which the reeds-vs-scrub
         # assertion below pins - a scrub tuft inside the reed flat would mean the two are fighting for the

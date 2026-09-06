@@ -187,7 +187,7 @@ PLACE_KEYS = ("district", "district direction", "county", "imperial road", "town
 #: The research entry the card is written FROM, in the form `sources.py` parses - so the card's
 #: references (the questions, since feature 180) are READ FROM THE RECORD at page-write time, exactly
 #: like a class's, rather than being a second list here that could drift from it.
-ENTRY = "research/archetypes.md - 'What a settlement IS'"
+ENTRY = "research/archetypes.html - 'What a settlement IS'"
 
 #: The basis the card owes its reader (spec FR-008a). Two statements above rest on setting canon where
 #: the historical record does not back them, and the GM's rule is that a liberty is called out. It is

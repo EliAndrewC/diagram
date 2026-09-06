@@ -109,7 +109,7 @@ class WellGroundMixin:
             # compute a band below the crop of a map that has no reeds anywhere - and TOWNS AND CITIES
             # HAVE NO TOE MARSH: their ditch discharge goes into an engineered moat/canal network and
             # their outskirts are premium intensively-worked land (the drainage-investment gradient,
-            # research/water.md). Reserving that ground as imaginary bog cost Tango six farmhouses'
+            # research/water.html). Reserving that ground as imaginary bog cost Tango six farmhouses'
             # wells on the first run of this rule. The split is by SCALE because that is how the
             # doctrine states it.
             toe = self.toe_band() if self.M.get("meta", {}).get("scale") in ("hamlet", "village") else []

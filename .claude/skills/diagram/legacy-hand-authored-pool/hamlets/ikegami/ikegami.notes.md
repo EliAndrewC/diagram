@@ -71,7 +71,7 @@ of the 2026-07 fix that made the toe rotate with the fall. Researched and correc
 fan's spring line follows the fan's toe, not the valley's width, so the band is now as wide as the
 ground the fan waters. Ikegami's toe ends at x=402, and the original track down the dry west flank
 is clear for its whole length - which is also the right route on the doctrine, since a hamlet
-leaves downslope on dry ground. See `research/water.md`, 'The wet toe is as wide as the FAN'.
+leaves downslope on dry ground. See `research/water.html`, 'The wet toe is as wide as the FAN'.
 
 Two notes for a reader arriving cold. The review-log paragraph above this one critiques the WESTWARD
 bend - that bend is gone; the critique is history, and the review that produced it is what prompted
