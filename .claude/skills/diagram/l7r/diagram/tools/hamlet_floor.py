@@ -114,12 +114,19 @@ def parked_for(path: str) -> tuple[frozenset[int], str]:
     return PARKED.get(path, (frozenset(), ""))
 
 
+# In a docstring for the same reason as `_invocation._Ladder` (feature 191): this line names a make
+# target, and a target name that cannot be corrected cheaply is one that goes stale. It named
+# `make reference` until that rung was retired on 2026-09-06.
+class _EmptyPath:
+    """hamlet-floor: the hamlet path is EMPTY - no roll record and nothing rolled; `make maps` produces the first record"""
+
+
 def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.stdout) -> int:
     """0 when every file is at 100% in the coverage data; 1 otherwise (the table names the misses); 2 when the set is empty."""
     import coverage
 
     if not files:
-        print("hamlet-floor: the hamlet path is EMPTY - no roll record and nothing rolled; `make reference` produces the first record", file=out)
+        print(_EmptyPath.__doc__, file=out)
         return 2
     cov = coverage.Coverage(data_file=data_file)
     cov.load()

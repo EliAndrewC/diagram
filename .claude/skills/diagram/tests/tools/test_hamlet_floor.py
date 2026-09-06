@@ -84,7 +84,7 @@ def test_the_floor_is_quiet_when_the_set_is_covered_and_ignores_modules_outside_
 def test_an_empty_set_is_refused_not_defaulted() -> None:
     out = io.StringIO()
     assert hf.check([], data_file="/nonexistent", out=out) == 2
-    assert "make reference" in out.getvalue()
+    assert "make maps" in out.getvalue()  # feature 191: `make reference` was retired as a public rung
 
 
 def test_main_lists_and_checks(tmp_path: Path, monkeypatch: object) -> None:
