@@ -179,7 +179,7 @@ def split_sources(path: str) -> tuple[str, dict[str, str], set[str]]:
     hit = _SPLIT_MEMO.get(memo)
     if hit is not None:
         return hit
-    # ...AND ON DISK (feature 135, second pass): the in-process memo saved nothing for `make reference` (a fresh
+    # ...AND ON DISK (feature 135, second pass): the in-process memo saved nothing for the reference roll (a fresh
     # interpreter each time, 1.2 s of parsing for a 1.7 s hit) or for each of the eight xdist workers' first key.
     # One small JSON per distinct file content under .gencache/ast/; a stale or unreadable file is simply re-parsed.
     disk = os.path.join(CACHE_DIR, "ast", memo[1] + ".json")

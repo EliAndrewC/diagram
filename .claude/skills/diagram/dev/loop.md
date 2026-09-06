@@ -555,7 +555,7 @@ over 16 physical cores - reports three tiers:
     cpu12-19   3800 MHz        E-cores (8)
     cpu20-21   2500 MHz        LP-E cores (2)
 
-And the SAME roll (`GATE_NO_CACHE=1 make reference`, pinned with `taskset`, idle box):
+And the SAME roll (`GATE_NO_CACHE=1 make _reference`, pinned with `taskset`, idle box):
 
 | pinned to | clock | wall | vs P-core |
 |---|---|---|---|

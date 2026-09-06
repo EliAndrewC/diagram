@@ -196,7 +196,7 @@ done:
 # `SCOPE=reference` / `SCOPE=all` says what you mean when you know better.
 # ---- THE REFERENCE SETTLEMENT GATES EVERYTHING EXPENSIVE (constitution VI) -------------------
 #
-# `make reference` rolls ONE seed of ONE map - Inashiro - and nothing else. It is the cheapest
+# `make _reference` rolls ONE seed of ONE map - Inashiro - and nothing else. It is the cheapest
 # question in the project (~60 s) and every expensive target now asks it FIRST:
 #
 #     make test   -> reference, then the suite
@@ -257,11 +257,11 @@ done:
 # live pool map; the ratchet rolls seeds 41-44), which is right for a pre-push gate and wrong for a
 # loop. Measured on feature 126: `make done` is ~5 minutes and I ran it repeatedly over a tree I
 # already knew was broken.
-# QUICK ROLLS NO MAPS AT ALL, and that is the whole contract. It used to run `make reference` first
+# QUICK ROLLS NO MAPS AT ALL, and that is the whole contract. It used to run the reference roll first
 # (~26 s of map generation) which contradicted its own promise and, with the marker fix below, was
 # most of what remained of its cost. FR-014's reference-first ordering binds EXPENSIVE targets - the
 # ones that would waste minutes on a tree the 60-second check would have condemned. `quick` rolls
-# nothing, so there is nothing for a broken reference map to waste; run `make reference` when you
+# nothing, so there is nothing for a broken reference map to waste; run `make maps` when you
 # want the map checked, which is a separate question from "did I break the code".
 #
 # MEASURED 2026-08-24: 254 s -> 94 s (marker deselect) -> this. The 254 s version was being pointed
@@ -867,7 +867,7 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 
 # WHY EVERY CHECK FAILED ON THE REFERENCE MAP, in detail rather than by name.
 #
-# `make reference` prints the failing check NAMES, which is the right amount when you want a verdict.
+# The reference roll prints the failing check NAMES, which is the right amount when you want a verdict.
 # It is not enough when the reference map is the thing you are operating on - and at that moment
 # every other target refuses to run, because they all check the reference map first and it is red.
 # The REF_OK escape exists for exactly that case and is itself refused by the command-shape hook, so
@@ -941,7 +941,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 	  printf "command line skips it, and a backgrounded run cannot be asked to reconsider - which is\n"; \
 	  printf "exactly how feature 126 ran the full gate THREE times against a standing instruction to\n"; \
 	  printf "run only the reference settlement. Every bypass was logged and none was stopped.\n\n"; \
-	  printf "  \033[1mmake reference\033[0m   Inashiro seed 4 alone, ~60 s - almost always what you want\n"; \
+	  printf "  \033[1mmake maps\033[0m        the pool, scoped by how the last run went - the reference alone after a failure\n"; \
 	  printf "  \033[1mmake done\033[0m        reference + lint/types + the suite (NOT the quick one)\n\n"; \
 	  : "(GUARD_EDIT_OK: feature 162 - the prompt stops quoting a hand-typed 5.5 min; make audit has the real history)"; \
 	  printf "If you truly need the FULL set, run it in the FOREGROUND and answer the prompt.\n\n"; \
@@ -1143,7 +1143,7 @@ COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/d
 # sweeps and the perf bookends. Never under COV_FLOORS (test-full is refused under the lock anyway).
 # Alternatives priced: keep running them (four minutes per cycle spent on maps the period says not to
 # roll); deselect only the NON-reference rollers (no marker tells them apart, and the reference map is
-# already rolled by `make reference` in the same gate). The reference-rolling tests are covered at unlock.
+# already rolled by `make _reference` in the same gate). The reference-rolling tests are covered at unlock.
 # GUARD_EDIT_OK: feature 185 - both were defined through SCOPE_STATE, so with the axis gone they
 # expand empty unconditionally. Kept as empty definitions rather than deleted, so every recipe that
 # references them (`make quick` among them) needs no edit.
