@@ -16,7 +16,7 @@
 .PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
-	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
+	 why-placed   pack-audit    citybudget help \
 	 notes-census \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
@@ -416,39 +416,22 @@ render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-w
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # --- cheap: they READ a recorded artifact ----------------------------------------------------
-overlap-audit:  ## [diagnostics] does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x/x.json [FAMILIES=...]
-	$(RUN).tools.overlap_audit $(M) $(if $(FAMILIES),--families $(FAMILIES),)
 
-polder-probe:   ## [diagnostics] the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
-	$(RUN).tools.polder_probe $(if $(SEED),--seed $(SEED),)$(if $(SEEDS),--seeds $(SEEDS),)$(if $(ARCHETYPE),--archetype $(ARCHETYPE),)$(if $(LAYOUT),--layout $(LAYOUT),)$(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),)
 
 why-placed:     ## [diagnostics] who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
 	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
 
-crop:           ## [diagnostics] crop a rendered map in manifest coordinates
-	$(RUN).tools.crop_map $(ARGS)
 
-jogs:           ## [diagnostics] find bunds that step sideways
-	$(RUN).tools.jogs $(ARGS)
 
 pack-audit:     ## [diagnostics] empty space and geometry in a Mode A compound SVG
 	$(RUN).tools.pack_audit $(ARGS)
 
-scatter-audit:  ## [diagnostics] is drawn ground cover standing where keep-outs should have stopped it?
-	$(RUN).tools.scatter_audit $(ARGS)
 
 notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
-sun-audit:      ## [diagnostics] the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro/inashiro.json
-	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro/inashiro.json)
 
-family-census:  ## [diagnostics] which feature families one manifest records that another does not   A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
-	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata/kuwabata.json)
-	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
 
-timings:        ## [diagnostics] where the generation loop's time goes
-	$(RUN).tools.timings $(ARGS)
 
 # GUARD_EDIT_OK: `citybudget` RETIRED 2026-09-05 by the target audit - 0 live consumers - only three FROZEN legacy exhibits and two wip files import it. The MODULE stays, tested and under the 100% floor; this was only a hand-run entry point for a tier nobody is working.
 
@@ -887,8 +870,7 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 # message", and it ran `check_village`'s gate; feature 166 deleted that battery and its five tools and
 # seven targets, and missed this one because it is a DOTFILE (`.explain.py`, hidden so
 # `gencache.engine_files()` prunes it) and so matched no sweep. Nothing replaces it: a rule about a map
-# is a test of the placer now, and the per-map questions go to `make why-placed`, `make overlap-audit`
-# and `make sun-audit`.
+# is a test of the placer now, and the per-map questions go to `make why-placed`.
 #
 # WHY NOBODY NOTICED FOR A DAY: `l7r/diagram/check_village/` survived on disk in every existing clone as
 # an empty-but-for-`__pycache__` directory. That is an importable PEP 420 namespace package, so

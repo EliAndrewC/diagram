@@ -1995,7 +1995,7 @@ first test run and fix everything a failing run lists before the next
 one; (2) use the scaffold where one exists (`make new-check`) rather than
 hand-writing a convention; (3) never write a number into a record that
 was not measured on the artifact, with the measuring tool where one
-exists (`make sun-audit`); and (4) run one verification at the end of a
+exists; and (4) run one verification at the end of a
 batch, never one per rule. A spec-kit task that adds a check, a rule or
 a record carries these steps in its own text, so the discipline is read
 at the moment it applies rather than remembered.

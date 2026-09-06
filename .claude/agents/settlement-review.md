@@ -51,31 +51,23 @@ The main agent passes you a subject name and its pool folder. Paths are under
 
 If the notes file is missing, say so prominently and review anyway, flagging that intent is unknown.
 
-## Tooling: tools/scatter_audit.py - run it YOURSELF on any scatter/ground-cover delta
+## Tooling: parsing the scatter yourself
 
 When the change under review touches ground-cover scatter (commons scrub, the cut-bank channel
 margin, crop margins), do not hand-build the SVG parse - the 2026-08-16 cut-bank DELTA spent ~21
-tool uses and most of its 350s rebuilding exactly this:
+tool uses and most of its 350 s rebuilding exactly this. `l7r.diagram.tools.scatter_audit.parse_bases`
+still exists and still does it: it extracts every scatter BASE point (grass blades, brush dots, pine
+trunks, woodland crowns, marsh reeds) from the rendered SVG and resolves a grove clump's
+`<g transform="translate(...)">`, which is the part that is easy to get wrong - reading `cx`/`cy` raw
+once put a crown at world (710.9, 1815.8) on the map at (4.9, -14.2).
 
-    python3 -m l7r.diagram.tools.scatter_audit pool/<type>/<subject>        # seconds; exit 0 clean / 1 violations / 2 audit-broken
-
-It extracts every scatter BASE point (grass blades, brush dots, pine trunks, woodland crowns;
-marsh reeds counted but report-only) and adjudicates them against the ENGINE'S OWN keep-out
-geometry (drawn watercourses + the irrigation cut-bank margin, paddy/dry-plot crop margins),
-reporting each violation with position and owning keep-out plus near-margin density bands - your
-sterile-halo evidence. The independence rules are unchanged: run it yourself and read its output
-yourself; the author's own audit run is a claim to re-verify, not evidence. Its `checked:` line
-names exactly which keep-out families ran - everything else (urban halos, corridors, glyph form,
-legibility, whether the place reads as a place) is still your judgment, not the script's. Exit 2
-means the AUDIT is broken (zero bases parsed - suspect emission-styling drift), never that the map
-is clean. Validation: on its first live run (2026-08-16) it caught 3 real crop-margin tufts in
-dry-hem seam wedges that the same day's water-only hand parse provably could not see.
-
-**Record the catch-rate.** Your review's line in the subject's notes entry must state what the
-pass CAUGHT - including "nothing new" - so the GM's standing question ("are these reviews pulling
-their weight?") stays answerable with data. The record so far says they are: the `_fill_wedges`
-nested fillers (2026-08-16, Inashiro), the bund-EDGE second pass (2026-08-15, via Sawada), the
-collector-drain intent put on record (2026-08-16).
+**WHAT WENT AWAY, AND WHY THAT IS RIGHT (feature 193, GM 2026-09-06).** The tool used to ADJUDICATE
+those points against the engine's keep-out geometry and hand you a verdict. That is gone. The GM's
+reasoning is this agent's own description: *"the purpose of that review is to do NON-automated
+checks"* - and the section below already said the verdict could not be trusted, because *"the audit
+encodes the AUTHOR'S allowances (a feather band, a keep-out inset), and the author's allowance is
+precisely what is under review."* An automated adjudicator inside a review whose whole job is
+judgment was answering the wrong question. **Parse, look, and judge; do not ask for a verdict.**
 
 ## Scope: FULL or DELTA - decide this FIRST, in one line, before reading anything
 
@@ -132,8 +124,9 @@ so a combined run just serializes them. Say so in your output if you were handed
    count - of the glyph FAMILIES the complaint names (the GM said "small pine trees and such": pines,
    brush; a family the recorded doctrine explicitly admits, such as grass grading into reeds per
    `settlements/vegetation.md`, is counted separately and reported, not charged). Any count above a
-   handful is needs-work, whatever `scatter_audit` says - the audit encodes the AUTHOR'S allowances
-   (a feather band, a keep-out inset), and the author's allowance is precisely what is under review.
+   handful is needs-work. There is no audit verdict to weigh against it any more (feature 193): the
+   adjudicator encoded the AUTHOR'S allowances - a feather band, a keep-out inset - and the author's
+   allowance is precisely what is under review, which is why it was retired rather than consulted.
    Report the count in the first paragraph. (Motivating miss and the validated run: 2026-08-26,
    below.)
 3. **Read the gen docstring and the notes.** Deliberate choices, disclosed divergences and Review-log

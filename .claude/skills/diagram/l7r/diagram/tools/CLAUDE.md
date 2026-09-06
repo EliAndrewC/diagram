@@ -21,13 +21,9 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Where can this feature legally go, under all the interacting rules? | `site_justice` |
 | Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `pack_audit` |
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` |
-| Do the yards and beds have their sun, is the belt off the plots, and how much of the belt is actually on the page? MEASURE THIS BEFORE WRITING A NUMBER INTO A RECORD | `sun_audit` (`make sun-audit`) |
-| Does this converted map carry every feature FAMILY (and fixture kind) the reference hamlet does? MEASURE THIS BEFORE SAYING SO | `family_census` (`make family-census`) |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` |
 | I want to look closely at one spot on a rendered map, in manifest coordinates | `crop_map` |
-| I changed a polder's geometry - do parcels still cross a channel, what is the berm, what did it cost in acreage, are the outlines still hand-piled? MEASURE THIS BEFORE ROLLING A MAP (0.2 s against a 47 s roll) | `polder_probe` (`make polder-probe`) |
-| Does A overlap B on a finished map - a footprint on marsh, a parcel across its ditch, reed INK over a mound or open water? | `overlap_audit` (`make overlap-audit`) |
 | How long does this loop actually take, and where does the time go? | `timings` |
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` (`make hamlet-floor`) |

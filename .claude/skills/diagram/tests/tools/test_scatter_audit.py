@@ -84,87 +84,22 @@ def _one_dot_svg(x, y):
     return f'<circle cx="{x}" cy="{y}" r="2.0" fill="#94A063" fill-opacity="0.85"/>'
 
 
-def test_adjudicate_flags_a_base_inside_the_cut_bank_margin():
-    m = _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}])
-    report = sa.adjudicate(sa.parse_bases(_one_dot_svg(110.0, 400.0)), m, "t")  # 10 px off center: inside 7+2+6
-    assert [v["keepout"] for v in report["violations"]] == ["water+cutbank"]
-    assert report["violations"][0]["family"] == "dot"
 
 
-def test_adjudicate_accepts_the_same_base_beyond_the_margin():
-    m = _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}])
-    report = sa.adjudicate(sa.parse_bases(_one_dot_svg(118.0, 400.0)), m, "t")  # 18 px: outside 15
-    assert report["violations"] == []
 
 
-def test_adjudicate_margins_scale_with_ftpx():
-    # The same dot 13 px off the centerline: at ftpx=2 the 6 ft margin is 3 px (keep-out 7+2+3=12,
-    # clean); at ftpx=1 it is 6 px (keep-out 15, violation). The engine's px() decides, not this test.
-    chan = [{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}]
-    coarse = sa.adjudicate(sa.parse_bases(_one_dot_svg(113.0, 400.0)), _manifest(meta={"ftpx": 2.0}, drawn_channels=chan), "t")
-    assert coarse["violations"] == []
-    fine = sa.adjudicate(sa.parse_bases(_one_dot_svg(113.0, 400.0)), _manifest(drawn_channels=chan), "t")
-    assert [v["keepout"] for v in fine["violations"]] == ["water+cutbank"]
 
 
-def test_adjudicate_flags_crop_margin_violations_from_fields_outline_and_dry_plots_poly():
-    m = _manifest(
-        fields=[{"outline": [[200, 200], [300, 200], [300, 300], [200, 300]]}],
-        dry_plots=[{"poly": [[400, 400], [460, 400], [460, 460], [400, 460]], "crop": "barley", "theta": 0}],
-    )
-    svg = _one_dot_svg(304.0, 250.0) + _one_dot_svg(464.0, 430.0) + _one_dot_svg(320.0, 250.0)
-    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
-    assert [v["keepout"] for v in report["violations"]] == ["crop", "crop"]  # 4 px < 6 ft margin; 20 px clear
 
 
-def test_adjudicate_flags_woody_scatter_inside_a_grove_but_not_its_crowns():
-    """Feature 133 T34 (GM 2026-08-27: "Should scrubland overlap with forests? ... it seems like it
-    shouldn't"): a brush dot inside a village grove's polygon is a violation; a crown there is the
-    grove itself; a dot outside is clean."""
-    m = _manifest(
-        village_groves=[{"role": "windbreak", "r": 14.0, "clumps": [[250, 250]], "poly": [[200, 200], [300, 200], [300, 300], [200, 300]]}],
-        commons=[{"role": "woodland", "poly": [[400, 400], [500, 400], [500, 500], [400, 500]]}, {"role": "grazing", "poly": [[0, 0], [600, 0], [600, 600], [0, 600]]}],
-    )
-    svg = _one_dot_svg(250.0, 250.0) + _one_dot_svg(320.0, 250.0) + _one_dot_svg(450.0, 450.0) + '<g transform="translate(250,250)"><circle cx="0" cy="0" r="6" fill="#4E6E3A"/></g>'
-    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
-    assert [(v["family"], v["keepout"]) for v in report["violations"]] == [("dot", "grove"), ("dot", "grove")]  # the belt AND the coppice patch (T35); the grazing commons is not a wood
-    assert "grove" in report["families_checked"]["keepouts"]
 
 
-def test_reeds_are_counted_but_never_adjudicated():
-    m = _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}])
-    svg = '<g stroke="#6E9377"><line x1="104.0" y1="400.0" x2="104.0" y2="396.0"/></g>'  # ON the water edge
-    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
-    assert report["violations"] == []
-    assert report["counts"]["reed"] == 1
-    assert "reed" not in report["families_checked"]["adjudicated"]
 
 
-def test_tapered_lateral_margin_follows_the_piece_widths():
-    # An 8-point tapered lateral (w0=14 head, w1=5 tail) slices into the engine's 7-piece width
-    # ladder: at the HEAD the piece runs ~13.4 wide (keep-out ~14.7), at the TAIL ~5.6 (keep-out
-    # ~10.8). The same 12 px offset therefore violates at the head and is legal at the tail -
-    # proving the margin follows the water's real edge down the taper.
-    pts = [[100, y] for y in (100, 186, 271, 357, 443, 529, 614, 700)]
-    m = _manifest(drawn_channels=[{"pts": pts, "w0": 14.0, "w1": 5.0}])
-    report = sa.adjudicate(sa.parse_bases(_one_dot_svg(112.0, 120.0) + _one_dot_svg(112.0, 690.0)), m, "t")
-    assert [(v["y"], v["keepout"]) for v in report["violations"]] == [(120.0, "water+cutbank")]
 
 
-def test_density_bands_count_bases_just_beyond_the_water_keepout():
-    m = _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}])
-    svg = _one_dot_svg(120.0, 300.0) + _one_dot_svg(135.0, 300.0) + _one_dot_svg(150.0, 300.0) + _one_dot_svg(400.0, 300.0)
-    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
-    assert report["density_bands"] == {"0-15": 1, "15-30": 1, "30-45": 1}  # the far dot is in no band
 
 
-def test_engine_scatter_passes_its_own_audit():
-    # The integration lock: the engine's post-cut-bank-fix scatter and the audit's engine-derived
-    # keep-outs must agree - a clean mini map audits clean.
-    s = _mini_channel_settlement()
-    report = sa.adjudicate(sa.parse_bases("".join(s.out)), s.M, "mini")
-    assert report["violations"] == []
-    assert report["counts"]["blade"] > 100
 
 
 # ---- CLI -------------------------------------------------------------------------------------
@@ -176,49 +111,18 @@ def _write_map(tmp_path, svg_body, manifest):
     return str(tmp_path / "t")
 
 
-def test_main_clean_map_exits_zero_with_report(tmp_path, capsys):
-    stem = _write_map(tmp_path, _one_dot_svg(400.0, 300.0), _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}]))
-    assert sa.main([stem]) == 0
-    out = capsys.readouterr().out
-    assert "violations: 0" in out and "checked:" in out
 
 
-@pytest.mark.parametrize("suffix", ["", ".json", ".svg"])
-def test_main_resolves_stem_json_and_svg_paths(tmp_path, suffix):
-    stem = _write_map(tmp_path, _one_dot_svg(400.0, 300.0), _manifest())
-    assert sa.main([stem + suffix]) == 0
 
 
-def test_main_violations_exit_one_and_are_listed(tmp_path, capsys):
-    stem = _write_map(tmp_path, _one_dot_svg(110.0, 400.0), _manifest(drawn_channels=[{"pts": [[100, 100], [100, 700]], "w0": 14.0, "w1": 14.0}]))
-    assert sa.main([stem]) == 1
-    assert "VIOLATION family=dot" in capsys.readouterr().out
 
 
-def test_main_json_emits_the_report_object(tmp_path, capsys):
-    stem = _write_map(tmp_path, _one_dot_svg(400.0, 300.0), _manifest())
-    assert sa.main([stem, "--json"]) == 0
-    report = json.loads(capsys.readouterr().out)
-    assert set(report) == {"map", "families_checked", "counts", "violations", "density_bands"}
 
 
-def test_main_zero_bases_is_a_loud_failure(tmp_path, capsys):
-    stem = _write_map(tmp_path, "<rect x='1' y='1' width='5' height='5'/>", _manifest())
-    assert sa.main([stem]) == 2
-    assert "ERROR" in capsys.readouterr().err
 
 
-def test_main_missing_artifacts_exit_two(tmp_path, capsys):
-    assert sa.main([str(tmp_path / "absent")]) == 2
-    (tmp_path / "only.json").write_text("{}")
-    assert sa.main([str(tmp_path / "only")]) == 2
-    assert sa.main([]) == 2  # usage
 
 
-def test_main_missing_ftpx_exits_two(tmp_path, capsys):
-    stem = _write_map(tmp_path, _one_dot_svg(400.0, 300.0), {"meta": {}})
-    assert sa.main([stem]) == 2
-    assert "ftpx" in capsys.readouterr().err
 
 
 def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
@@ -300,23 +204,6 @@ def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
         pytest.skip("no live scripted map has both a .svg and a .json in this checkout - `make map` regenerates the reference hamlet with its render, then this guard has something to check")
 
 
-def test_a_family_that_parses_nothing_the_manifest_records_is_a_LOUD_failure(tmp_path, monkeypatch, capsys):
-    """A blind - or merely PARTIAL - family must fail as loudly as a blind parser (2026-08-17).
-
-    The zero-TOTAL guard cannot see a parser that lost one family, and that is what happened: the
-    crown pattern matched three fills the engine no longer paints, so the audit printed
-    `crown=0 ... checked: blade/dot/pine/crown, violations: 0` on maps recording thousands of
-    crowns, and every review that quoted it was quoting a family nobody had looked at. Where the
-    MANIFEST records the feature, parsing none of it is drift in the tool, not cleanliness in the
-    map - so it exits 2 and says the AUDIT is broken."""
-    stem = tmp_path / "blind"
-    stem.with_suffix(".json").write_text(json.dumps({"meta": {"ftpx": 1, "scale": "hamlet"}, "tree_crowns": [10, 10, 5, 20, 20, 5]}))
-    # one parseable base so the zero-TOTAL guard does not fire first, and NO crown ink at all
-    stem.with_suffix(".svg").write_text('<g stroke="#A7A860"><line x1="10.0" y1="20.0" x2="10.5" y2="16.0"/></g>')
-    assert sa.main([str(stem)]) == 2
-    err = capsys.readouterr().err
-    assert "parsed 0 crown bases" in err and "records 2" in err and "0% coverage" in err
-    assert "treat the AUDIT as broken" in err, "it must accuse the tool, not clear the map"
 
 
 def test_parse_bases_honours_the_families_filter_and_stops_before_the_crown_transform() -> None:
@@ -356,14 +243,3 @@ def test_parse_bases_resolves_a_crowns_group_TRANSLATE_into_its_true_position() 
     assert crowns == [(5.0, 7.0), (105.0, 207.0)], "the untranslated crown keeps its own coordinates; the translated one is moved"
 
 
-def test_adjudicate_flags_scrub_standing_IN_A_MARSH_but_lets_grass_grade_into_its_feather():
-    """Feature 133 T12 (GM 2026-08-26: "the marshland is not supposed to overlap with the scrubland
-    rendering"). Reeds are the marsh's own cover; a scrub base inside a marsh polygon is dry-ground
-    cover drawn under wet ground - before the fix Inashiro carried thousands of them across its whole
-    toe band and pond fringe. Grass is the one exception: it thins INTO the reeds over the feather,
-    the same soft edge `cover.py` draws, so a blade near the rim is clean and a dot there is not."""
-    m = _manifest(marshes=[{"poly": [[200, 200], [400, 200], [400, 400], [200, 400]]}])
-    svg = _one_dot_svg(300.0, 300.0) + _one_dot_svg(500.0, 300.0)
-    report = sa.adjudicate(sa.parse_bases(svg), m, "t")
-    assert [(v["family"], v["keepout"]) for v in report["violations"]] == [("dot", "marsh")], "the bog dot, and only it"
-    assert "marsh" in report["families_checked"]["keepouts"]

@@ -47,7 +47,7 @@ class GroundCoverMixin:
         # strip was handed the toe band (2026-08-12), so the left/right ring strips, the interior fill
         # and every gen-placed patch scattered dry-ground scrub straight through the reeds, and none of
         # them knew the pond-fringe marsh recorded before them - Inashiro carried ~40k scrub bases
-        # inside its marshes (`make scatter-audit`, which now adjudicates "marsh"). Reeds are the
+        # inside its marshes (the scatter audit (retired 2026-09-06, feature 193) adjudicated "marsh"). Reeds are the
         # marsh's own cover; scrub stops where the wet ground starts. Taken here, at the source, so a
         # caller cannot forget it; the toe band that is only computed later is passed in by hinterland.
         # A SOFT keep-out, not a hard one (settlement-review 2026-08-26, round 1): the marsh thins its

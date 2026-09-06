@@ -73,7 +73,7 @@ needle basin cannot be leveled or bunded at any sane cost.
 
 ### A bund runs on, or it turns for a reason - it does not step sideways and carry on
 
-**Grounds:** `waterfields/banks.py::jog_steps`; `waterfields/seams.py::_seam_cuts`, `_unjog`; `tools/jogs.py`
+**Grounds:** `waterfields/banks.py::jog_steps`; `waterfields/seams.py::_seam_cuts`, `_unjog`
 
 **Evidence:** follows from the *aze*'s construction and maintenance, above; the *kochi seiri* framing at the head of this section
 
@@ -129,7 +129,7 @@ rule's own thresholds across the four scripted hamlets, 26/37/20/24 before):
 
 Together: **0 / 1 / 5 / 1 steps**, and - the number that answers the report - **no plot ring on any
 of the four carries more than one step**, against 6 / 9 / 4 / 7 rings that did. The staircase is
-gone; what is left is single, small, isolated corners. `tools/jogs.py` reports them on demand and
+gone; what is left is single, small, isolated corners. `tools/jogs.py` reported them on demand and
 [`future-work/farming-communities.md`](../future-work/farming-communities.md) carries the residue.
 
 *Disclosed departures.* (1) The rule is DIRECTED - it compares headings over the full circle, not

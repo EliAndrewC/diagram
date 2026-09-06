@@ -214,16 +214,8 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.why_placed": ("why-placed", "expensive"),
     "l7r.diagram.compound": ("compound", "expensive"),
     "l7r.diagram.citybudget": ("citybudget", "cheap"),
-    "l7r.diagram.tools.crop_map": ("crop", "cheap"),
-    "l7r.diagram.tools.polder_probe": ("polder-probe", "cheap"),  # 0.2 s: the polder block alone, no render (feature 151)
-    "l7r.diagram.tools.overlap_audit": ("overlap-audit", "cheap"),  # reads one finished map and its ink
-    "l7r.diagram.tools.jogs": ("jogs", "cheap"),
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
-    "l7r.diagram.tools.scatter_audit": ("scatter-audit", "cheap"),
-    "l7r.diagram.tools.sun_audit": ("sun-audit", "cheap"),
-    "l7r.diagram.tools.family_census": ("family-census", "cheap"),  # feature 150: a read-only manifest census
-    "l7r.diagram.tools.timings": ("timings", "cheap"),
 }
 
 

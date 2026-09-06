@@ -26,7 +26,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 63 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 55 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -61,17 +61,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Diagnostics</h2>
 <p class=sec>Read-only questions about a finished map or a generator&#x27;s decisions. None of these decides what ships.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make crop</td><td class=a>&ndash;</td><td>crop a rendered map in manifest coordinates</td></tr>
-<tr><td class=n>make family-census</td><td class=a>A B</td><td>which feature families one manifest records that another does not</td></tr>
 <tr><td class=n>make hamlet-floor</td><td class=a>&ndash;</td><td>the modules under the 100% hamlet-path floor - derived from the scripted rolls&#x27; records (feature 145)</td></tr>
-<tr><td class=n>make jogs</td><td class=a>&ndash;</td><td>find bunds that step sideways</td></tr>
 <tr><td class=n>make notes-census</td><td class=a>M</td><td>refresh the derived counts inside each map&#x27;s notes census block</td></tr>
-<tr><td class=n>make overlap-audit</td><td class=a>FAMILIES M</td><td>does A overlap B on a finished map (records AND drawn ink)</td></tr>
 <tr><td class=n>make pack-audit</td><td class=a>&ndash;</td><td>empty space and geometry in a Mode A compound SVG</td></tr>
-<tr><td class=n>make polder-probe</td><td class=a>ARCHETYPE SEED SEEDS</td><td>the polder block ALONE with its geometry metrics, no map</td></tr>
-<tr><td class=n>make scatter-audit</td><td class=a>&ndash;</td><td>is drawn ground cover standing where keep-outs should have stopped it?</td></tr>
-<tr><td class=n>make sun-audit</td><td class=a>M</td><td>the sun rules and the belt&#x27;s page presence, off the manifest</td></tr>
-<tr><td class=n>make timings</td><td class=a>&ndash;</td><td>where the generation loop&#x27;s time goes</td></tr>
 <tr><td class=n>make why-placed</td><td class=a>AT GEN REFUSED</td><td>who placed this, and what refused to</td></tr>
 </table></div>
 <h2>Performance</h2>

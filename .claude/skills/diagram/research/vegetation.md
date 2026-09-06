@@ -192,7 +192,7 @@ more accurate. Two findings, one from land use and one from vegetation structure
 
 **Rule** (`settlement/land/cover.py` `hinterland(soft_extra=)` -> `commons(soft=)`, the T12 marsh
 machinery reused; `hamletgen/hinterland.py` computes the belt two stages early so the scrub can see
-it; `tools/scatter_audit.py` holds a `grove` keep-out): brush dots and pines are hard-excluded from
+it; the placer holds the `grove` keep-out): brush dots and pines are hard-excluded from
 every village-grove polygon; grass blades thin into it over the reed feather (46 units) and are gone
 beyond it; crowns are the grove. Inashiro before: 2,688 blades, 158 dots, 11 pines inside the belt
 polygon; after: 1,263 blades, all within the 46-unit fringe, no dots, no pines, audit 0 violations.

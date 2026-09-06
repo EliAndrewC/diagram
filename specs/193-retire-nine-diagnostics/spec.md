@@ -114,8 +114,8 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   THROUGH its module-level regex constants (`_CROWN` is built from `CROWN_FILLS`). Deleting something
   the parser needs is worse than leaving an orphan - the orphan fails the coverage floor loudly, the
   deletion breaks a gate rule. The verified survivors are exactly: `parse_bases`, `_translated_spans`,
-  `Base`, `CROWN_FILLS`, `_NUM`, `re`, and the six regex constants `_BLADE_GROUP`, `_CROWN`, `_DOT`,
-  `_LINE_BASE`, `_PINE`, `_REED_GROUP`, `_TRANSLATE_G`. Naming only the three functions would leave orphans - and TWO different mechanisms catch them,
+  `Base`, `CROWN_FILLS`, `_NUM`, `re`, and the seven regex constants `_BLADE_GROUP`, `_CROWN`,
+  `_DOT`, `_LINE_BASE`, `_PINE`, `_REED_GROUP`, `_TRANSLATE_G`. Naming only the three functions would leave orphans - and TWO different mechanisms catch them,
   which matters because assuming one is a complete net is how half of them would survive: an orphaned
   FUNCTION BODY stops executing and fails SC-004's 100% coverage floor, but an orphaned IMPORT or
   CONSTANT still executes at import time and is invisible to coverage - `ruff` catches those at
@@ -125,8 +125,7 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   its `guard()` call and `sys.exit`. This is load-bearing and easy to miss:
   `tests/test_operations_registry.py::_entry_points()` finds entry points by REGEX on that line, not
   by the presence of a `main` function - so removing the `OPERATIONS` row while the block stands
-  fails the gate with *"runnable as `python3 -m ...` but carries no row"*. A mechanism, not a name.
-  Surviving: `parse_bases`, `_translated_spans`, `Base`, the regex constants and `CROWN_FILLS`. `.claude/agents/settlement-review.md`'s "Tooling" section (lines 54-60) and its
+  fails the gate with *"runnable as `python3 -m ...` but carries no row"*. A mechanism, not a name. `.claude/agents/settlement-review.md`'s "Tooling" section (lines 54-60) and its
   line-135 reliance are rewritten: the GM's point is that a review whose purpose is *"the things the
   automated validator structurally CANNOT"* judge should not be running an automated adjudicator -
   and the agent's own text already says its verdict is not trusted. **Cost, stated rather than
@@ -210,4 +209,9 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   execute at import time, so the coverage floor cannot see them - `ruff` catches those. (3) The title
   still carried the unqualified "nobody runs" claim that the body itself contradicts twice. It also
   endorsed the records ruling on its own reasoning.
-- **Round 4**: pending.
+- **Round 4 (`spec-fidelity`): FAITHFUL.** *"Implement it."* It re-derived the closure a third time
+  (survivor set matches exactly) and swept two package-level mechanisms it had not yet checked -
+  `tools/__init__.py` is a docstring only, with no star re-exports that deleting modules would break,
+  and no conftest or fixture references the deleted tests. Two proofreading slips fixed in passing:
+  "six regex constants" listing seven, and a looser duplicate survivor sentence that omitted `_NUM`
+  and `re`.

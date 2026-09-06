@@ -24,16 +24,9 @@ specs/108-review-loop-efficiency/contracts/scatter-audit-cli.md.
 
 from __future__ import annotations
 
-import argparse
-import json
 import re
-import sys
-from pathlib import Path
-from typing import Any, cast
 
-from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement._geom import CROWN_FILLS, boxed_grid, boxed_hit, boxed_polys, boxed_seg_hit, boxed_segs, edge_dist, point_in_poly
-from l7r.diagram.settlement.land.wet import MARSH_FEATHER_BS
+from l7r.diagram.settlement._geom import CROWN_FILLS
 
 Base = tuple[float, float]
 
@@ -54,13 +47,10 @@ _PINE = re.compile(rf'<line x1="{_NUM}" y1="{_NUM}" x2="{_NUM}" y2="{_NUM}" stro
 # check that never runs, one level down inside the tool reviewers quote as evidence.
 _CROWN = re.compile(rf'<circle cx="{_NUM}" cy="{_NUM}" r="{_NUM}" fill="(?:{"|".join(c.lstrip("#") and re.escape(c) for c in CROWN_FILLS)})"')
 
-ADJUDICATED = ("blade", "dot", "pine", "crown")
-DENSITY_BANDS = ((0.0, 15.0), (15.0, 30.0), (30.0, 45.0))
 # Coordinate-quantization slack: the engine adjudicates scatter at full float precision and then
 # WRITES the SVG at %.1f, so a base the engine legally seated a hair outside a keep-out can parse
 # back a few hundredths INSIDE it. 0.15 px is the same slack the engine's own margin unit tests
 # use (tests/settlement/test_homestead_parts.py); a real defect stands whole pixels deep.
-_QUANT_EPS = 0.15
 
 
 def _translated_spans(svg: str) -> list[tuple[int, int, float, float]]:
@@ -116,146 +106,13 @@ def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, 
     return fams
 
 
-class _EngineView:
-    """The minimal `self` the engine's geometry methods need, bound to a RECORDED manifest: `M`
-    plus the declared scale. The methods executed on it are Settlement's own (see module
-    docstring) - this class holds state, never logic."""
-
-    def __init__(self, manifest: dict[str, Any]) -> None:
-        self.M = manifest
-        self.ftpx = float(manifest["meta"]["ftpx"])
 
 
-def _water_segs(view: _EngineView, extra: float = 0.0) -> list[tuple[Any, float]]:
-    """The engine's watercourse keep-out at its cut-bank margin, widened by `extra` px (the density
-    bands re-ask the same geometry at growing offsets)."""
-    s = cast(Settlement, view)
-    margin = Settlement.px(s, Settlement._BANK_MARGIN_FT)
-    segs = Settlement._watercourse_segs(s, channel_margin=margin)
-    return [(pts, half + extra) for pts, half in segs]
 
 
-def adjudicate(fams: dict[str, list[Base]], manifest: dict[str, Any], map_name: str) -> dict[str, Any]:
-    """Test every adjudicated-family base against the water+cutbank and crop keep-outs; count the
-    near-water density bands. Reed bases are counted only."""
-    view = _EngineView(manifest)
-    crop_pad = Settlement.px(cast(Settlement, view), Settlement._CROP_MARGIN_FT)
-    wat = boxed_grid(boxed_segs(_water_segs(view, extra=-_QUANT_EPS)))  # violation test carries the quantization slack
-    crop_polys = [f["outline"] for f in manifest.get("fields", []) if f.get("outline")]
-    crop_polys += [d["poly"] for d in manifest.get("dry_plots", []) if d.get("poly")]
-    crop = boxed_grid(boxed_polys(crop_polys, pad=crop_pad))
-    # THE MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"the marshland is not
-    # supposed to overlap with the scrubland rendering"*). Reeds are the marsh's own cover; a scrub
-    # base inside a marsh polygon is dry-ground cover drawn under wet ground - before the fix Inashiro
-    # carried thousands of them across its whole toe band and pond fringe.
-    marsh_polys = [[tuple(q) for q in m["poly"]] for m in manifest.get("marshes", []) if m.get("poly")]
-    marsh = boxed_grid(boxed_polys(marsh_polys))
-    marsh_feather = MARSH_FEATHER_BS * float(getattr(view, "bscale", 1.0))  # scrub may thin INTO the marsh over its reed feather (cover.py `soft`)
-    # THE GROVE IS A SOFT KEEP-OUT TOO (feature 133 T34): a managed wood's floor is clear of brush
-    # and pine, and grass fades out over the same feather. Crowns are exempt - they ARE the grove.
-    # ...and every WOODLAND commons (the coppice patches) is a wood too (T35, GM 2026-08-27: "Did you
-    # only make it not overlap with the windbreak forest and then keep it overlapping with the
-    # other forests or something?" - yes, and the research never supported the distinction).
-    grove_polys = [[tuple(q) for q in g["poly"]] for g in manifest.get("village_groves", []) if g.get("poly")]
-    grove_polys += [[tuple(q) for q in c["poly"]] for c in manifest.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
-    grove_polys += [[tuple(q) for q in b["poly"]] for b in manifest.get("bamboo_stands", []) if b.get("poly")]  # a bamboo stand is a wood too (T47)
-    grove = boxed_grid(boxed_polys(grove_polys))
-    bands = [boxed_grid(boxed_segs(_water_segs(view, extra=hi))) for _, hi in DENSITY_BANDS]
-
-    violations: list[dict[str, Any]] = []
-    density = dict.fromkeys((f"{int(lo)}-{int(hi)}" for lo, hi in DENSITY_BANDS), 0)
-    for fam in ADJUDICATED:
-        for x, y in fams[fam]:
-            if boxed_seg_hit(x, y, wat.near(x, y)):
-                violations.append({"x": x, "y": y, "family": fam, "keepout": "water+cutbank"})
-            elif boxed_hit(x, y, crop.near(x, y), edge_pad=crop_pad - _QUANT_EPS):
-                violations.append({"x": x, "y": y, "family": fam, "keepout": "crop"})
-            elif boxed_hit(x, y, marsh.near(x, y)) and any(
-                point_in_poly(x, y, mp) and (fam != "blade" or edge_dist(x, y, mp) > marsh_feather) for mp in marsh_polys
-            ):  # grass may grade into the reeds over the feather; a dot, pine or crown never stands in the bog
-                violations.append({"x": x, "y": y, "family": fam, "keepout": "marsh"})
-            elif fam != "crown" and boxed_hit(x, y, grove.near(x, y)) and any(point_in_poly(x, y, gp) and (fam != "blade" or edge_dist(x, y, gp) > marsh_feather) for gp in grove_polys):
-                violations.append({"x": x, "y": y, "family": fam, "keepout": "grove"})
-            else:
-                for (lo, hi), grid in zip(DENSITY_BANDS, bands, strict=True):
-                    if boxed_seg_hit(x, y, grid.near(x, y)):
-                        density[f"{int(lo)}-{int(hi)}"] += 1
-                        break
-    return {
-        "map": map_name,
-        "families_checked": {"adjudicated": list(ADJUDICATED), "keepouts": ["water+cutbank", "crop", "marsh", "grove"], "report_only": ["reed"]},
-        "counts": {fam: len(pts) for fam, pts in fams.items()},
-        "violations": violations,
-        "density_bands": density,
-    }
 
 
-def format_report(report: dict[str, Any]) -> str:
-    counts = report["counts"]
-    lines = [
-        f"scatter_audit: {report['map']}",
-        "parsed: " + " ".join(f"{f}={counts[f]}" for f in ("blade", "dot", "pine", "crown", "reed")) + f" (total {sum(counts.values())})",
-        "checked: families " + "/".join(report["families_checked"]["adjudicated"]) + " vs keep-outs " + ", ".join(report["families_checked"]["keepouts"]) + "  (reed: report-only)",
-    ]
-    lines += [f"VIOLATION family={v['family']} at ({v['x']}, {v['y']}) inside {v['keepout']}" for v in report["violations"]]
-    lines.append(f"violations: {len(report['violations'])}")
-    lines.append("density beyond water keep-out: " + " ".join(f"{band}px={n}" for band, n in report["density_bands"].items()))
-    return "\n".join(lines)
 
 
-def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Audit a pool map's drawn ground-cover scatter against the engine's keep-outs.")
-    ap.add_argument("map", nargs="?", help="pool map stem or path (with or without .json/.svg)")
-    ap.add_argument("--json", action="store_true", dest="as_json", help="emit the Report as JSON")
-    ns = ap.parse_args(argv)
-    if not ns.map:
-        print("usage: python3 -m l7r.diagram.tools.scatter_audit <pool-map-path> [--json]", file=sys.stderr)
-        return 2
-    stem = re.sub(r"\.(json|svg)$", "", ns.map)
-    svg_path, json_path = Path(stem + ".svg"), Path(stem + ".json")
-    if not svg_path.is_file() or not json_path.is_file():
-        print(f"scatter_audit: need BOTH {json_path} and {svg_path}", file=sys.stderr)
-        return 2
-    manifest = json.loads(json_path.read_text())
-    if "ftpx" not in (manifest.get("meta") or {}):
-        print("scatter_audit: manifest has no meta.ftpx - cannot convert real-feet margins", file=sys.stderr)
-        return 2
-    fams = parse_bases(svg_path.read_text())
-    if sum(len(p) for p in fams.values()) == 0:
-        # A parser that finds nothing is BROKEN until proven otherwise ("a check that never runs
-        # looks exactly like a check that passes") - most likely the engine's scatter styling
-        # drifted from the anchors at the top of this file.
-        print("scatter_audit: ERROR - zero scatter bases parsed; suspect emission-styling drift, treat the AUDIT as broken (not the map as clean)", file=sys.stderr)
-        return 2
-    # ...AND A SINGLE BLIND FAMILY IS THE SAME FAILURE, one level down (2026-08-17). The zero-TOTAL
-    # guard above cannot see a parser that lost ONE family: `crown` matched three fills the engine
-    # had stopped painting, so this tool reported `crown=0 ... checked: blade/dot/pine/crown,
-    # violations: 0` on maps recording thousands of crowns, and every review that quoted it was
-    # quoting a family nobody had looked at. Where the MANIFEST records a feature the family draws,
-    # parsing none of it is drift, not cleanliness.
-    # COVERAGE, NOT MERELY NON-ZERO. The first version of this guard fired only at exactly zero, and
-    # that is how the crown family went from 0% to 63% coverage and still reported "crown checked":
-    # `CROWN_FILLS` had been made "exhaustive" while missing every woodland-commons canopy. A partial
-    # family is the same failure as a blind one, just quieter - so compare what was PARSED against
-    # what the manifest RECORDS. Crowns are recorded as a flat [x, y, r] run, hence the // 3.
-    _rec_crowns = len(manifest.get("tree_crowns") or []) // 3
-    if _rec_crowns and len(fams["crown"]) < _rec_crowns:
-        print(
-            f"scatter_audit: ERROR - parsed {len(fams['crown'])} crown bases but the manifest records {_rec_crowns} "
-            f"({100 * len(fams['crown']) / _rec_crowns:.0f}% coverage); the emission styling has drifted from "
-            f"`CROWN_FILLS` - treat the AUDIT as broken, not the map as clean",
-            file=sys.stderr,
-        )
-        return 2
-    report = adjudicate(fams, manifest, Path(stem).name)
-    print(json.dumps(report) if ns.as_json else format_report(report))
-    return 1 if report["violations"] else 0
 
 
-if __name__ == "__main__":
-    from l7r.diagram._invocation import guard
-
-    # REFUSE unless invoked through this project's make (feature 127). At the TOP of the
-    # entry point, never in a loop - the determination reads /proc and is cached per process.
-    guard("l7r.diagram.tools.scatter_audit")
-    sys.exit(main(sys.argv[1:]))

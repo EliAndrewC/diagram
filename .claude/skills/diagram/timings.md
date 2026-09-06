@@ -1,5 +1,13 @@
 # `/diagram` iteration timings - a dated ledger
 
+> **FROZEN 2026-09-06 (feature 193). This record is kept; its PRODUCER is gone.**
+> Every block below was measured by `python3 -m l7r.diagram.tools.timings`, which was retired with
+> the seven unused diagnostics - no session had a recorded run of it, and it cost 295 lines of tool
+> plus 215 of test against every gate. The numbers here remain the measured record and are still
+> cited as authoritative; what changed is that nothing appends to them. **A future measurement needs
+> a new tool** - the retired one walked the pool via `poolmaps.bundles()` and timed each stage of the
+> generation loop, so that is the shape to rebuild, not this file to edit.
+
 **Load this file when:** you are about to do performance work, you want to know what a loop costs
 before choosing one, or you suspect something got slower.
 
