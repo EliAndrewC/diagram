@@ -71,12 +71,49 @@ def parse(makefile: Path) -> tuple[list[dict[str, str]], list[str]]:
             flag, why, rest = fl.group(1), (fl.group(2) or "").strip(), fl.group(3).strip()
         # Arguments are written as WORD= in the help line; the prose is what remains.
         args = re.findall(r"\b([A-Z][A-Z0-9_]*)=", rest)
-        documented.append({"name": name, "category": cat, "help": rest, "args": " ".join(sorted(set(args))), "flag": flag, "why": why})
+        # ...and each one may be DOCUMENTED on its own `##  NAME=<what>  description` line beneath the
+        # target (GM 2026-09-06: knowing an argument EXISTS is not knowing what it does - `make
+        # durations FULL MARK` said nothing about what FULL=1 changes or what MARK takes). Make reads
+        # these as comments, so the recipe is unaffected.
+        # NOTE the lstrip: `$` under re.M matches BEFORE the newline, so text[m.end():] starts with
+        # it and splitlines() yields an empty first element - which broke out of the loop instantly
+        # and silently produced no argument docs at all.
+        tail = text[m.end():].lstrip("\n")
+        argdocs = []
+        for line in tail.splitlines():
+            am = re.match(r"^##\s+([A-Z][A-Z0-9_]*)=(\S*)\s\s+(.*)$", line)
+            if not am:
+                break
+            argdocs.append({"name": am.group(1), "takes": am.group(2), "desc": am.group(3).strip()})
+        for a in argdocs:
+            if a["name"] not in args:
+                args.append(a["name"])
+        documented.append({"name": name, "category": cat, "help": rest, "args": " ".join(sorted(set(args))),
+                           "flag": flag, "why": why, "argdocs": argdocs})
     with_rule = set()
     for m in re.finditer(r"^([a-z][\w-]*(?:\s+[a-z][\w-]*)*):(?!=)[^\n]*\n(?:\t[^\n]*\n)+", text, re.M):
         with_rule.update(m.group(1).split())
     undocumented = sorted(with_rule - {d["name"] for d in documented})
     return sorted(documented, key=lambda d: d["name"]), undocumented
+
+
+def _args_cell(r: dict) -> str:
+    """The arguments column: each documented argument on its own line with what it DOES.
+
+    An undocumented argument still shows (its bare name), so the page never hides one - it just
+    cannot say what it means until somebody writes the `##  NAME=<what>  description` line."""
+    docs = r.get("argdocs") or []
+    if not docs:
+        return html.escape(r["args"]) or "&ndash;"
+    named = {d["name"] for d in docs}
+    rows = [
+        f"<div class=ad><span class=an>{html.escape(d['name'])}={html.escape(d['takes'] or '1')}</span>"
+        f"<span class=aw>{html.escape(d['desc'])}</span></div>"
+        for d in docs
+    ]
+    rows += [f"<div class=ad><span class=an>{html.escape(a)}</span></div>"
+             for a in r["args"].split() if a and a not in named]
+    return "".join(rows)
 
 
 def render(rows: list[dict[str, str]], undocumented: list[str]) -> str:
@@ -101,7 +138,9 @@ def render(rows: list[dict[str, str]], undocumented: list[str]) -> str:
         "th,td{text-align:left;vertical-align:top;padding:.42rem .6rem;border-bottom:1px solid var(--line)}",
         "th{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:600}",
         "td.n{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}",
-        "td.a{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);font-size:.86rem}",
+        "td.a{white-space:normal;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);font-size:.86rem;min-width:15rem}",
+        "div.ad{margin:0 0 .28em}span.an{display:inline-block;color:var(--fg);font-weight:600}",
+        "span.aw{display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:.92em;line-height:1.35;margin-top:.1em}",
         "code{background:var(--code);padding:.08em .32em;border-radius:3px;font-size:.9em}",
         "span.b{margin-left:.5em;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;padding:.1em .45em;border-radius:3px;background:var(--code);color:var(--mut);border:1px solid var(--line);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}",
         "span.b.off{color:#9a3d2a;border-color:#c8907f}",
@@ -133,7 +172,7 @@ def render(rows: list[dict[str, str]], undocumented: list[str]) -> str:
             note = f" <span class=w>{html.escape(r['why'])}</span>" if r.get("flag") == "inactive" and r.get("why") else ""
             parts.append(
                 f"<tr><td class=n>make {html.escape(r['name'])}{badge}</td>"
-                f"<td class=a>{html.escape(r['args']) or '&ndash;'}</td>"
+                f"<td class=a>{_args_cell(r)}</td>"
                 f"<td>{html.escape(prose)}{note}</td></tr>"
             )
         parts.append("</table></div>")

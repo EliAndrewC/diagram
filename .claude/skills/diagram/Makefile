@@ -878,7 +878,14 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 # `tests/test_package_surfaces.py` passed here and failed on CodeBuild. A deleted package leaves a
 # phantom behind; deleting the tracked files is not the same as removing the directory.
 
-durations:       ## [tests] where the suite's time goes - run when a target feels slow   FULL=1 MARK=...
+# GUARD_EDIT_OK: the GM asked (2026-09-06) that a target's ARGUMENTS say what each one DOES, not just
+# that they exist - "make durations FULL MARK" did not tell them what FULL=1 changes, or what MARK
+# even takes. So a `##  NAME=<what>  description` line under a target documents one argument, and
+# `make-docs.py` renders them. Make treats these as ordinary comments; the recipe is unaffected.
+durations:       ## [tests] where the suite's time goes - run when a target feels slow
+##  FULL=1        also profile `tests/full/` (default: it is ignored, so this is the quick tree only)
+##  MARK=<expr>   a pytest `-m` marker expression, e.g. `tooling` (default: `not rolls_map`)
+##  N=<rows>      how many of the slowest rows to print (default: 12)
 	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$(MARK)",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 # (FULL=1 profiles the full tree too; the coverage carriers live there now, so `coverage_only` no longer needs deselecting - feature 135)
 
