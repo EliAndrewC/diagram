@@ -38,7 +38,7 @@
 PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
 perf-explain:   ## [performance] band 1, first half: the session's written cause     WHY="..." [ENV=local|codebuild]
 	@$(PERF_REVIEW) explain --why "$(WHY)" --environment "$(or $(ENV),local)"
-perf-confirm:   ## [performance] band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
+perf-confirm:   ## [performance] {internal} band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
 	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
 perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
@@ -389,7 +389,7 @@ pool-index:     ## [maps] rebuild the pool index
 # pool's manifests, renders and notes, and the rebuild (~0.5 s) runs only when one of them is newer
 # than the index or the index is missing. mtimes, not hashes: no state file to keep, and a false
 # "stale" costs half a second while a false "fresh" is impossible (a rewrite always bumps a mtime).
-pool-index-if-stale: ## [maps] rebuild the pool index only when a manifest, render or notes file is newer
+pool-index-if-stale: ## [maps] {internal} rebuild the pool index only when a manifest, render or notes file is newer
 	@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit 2>/dev/null)" ]; then \
 	  $(MAKE) --no-print-directory pool-index ARGS=; \
 	fi
@@ -412,7 +412,7 @@ citybudget:     ## [maps] the city/capital space-budget planner   ARGS=--plan --
 # is the ONLY thing a session runs there - "no generators, no tests". A reference check ahead of it
 # would be a second generator run in main, which that rule forbids. It also re-renders from main's
 # committed tip, which is already gate-verified, so the check would re-prove what the clone proved.
-render-sync:    ## [maps] regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
+render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # --- cheap: they READ a recorded artifact ----------------------------------------------------
@@ -1017,7 +1017,7 @@ _reference:
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 # GUARD_EDIT_OK: "scope relaxed" described a lock retired in feature 185 - there is nothing to relax.
-idle-tests:     ## [tests] what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
+idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
 # THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
 # bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
@@ -1041,7 +1041,7 @@ perf-report:     ## [performance] the trend, and which BAND the newest bookend p
 # needs one Makefile that works at /gm-assistant and at /diagram). A clone or a detached worktree
 # has no .clones/ of its own (it is gitignored), so the rule is: refuse when the git top level of
 # the cwd holds a .clones/ directory and the cwd is not itself inside one. No path is hardcoded.
-guard:           ## [static] refuse to run in main's tree - main is the integration point, never a workspace
+guard:           ## [static] {internal} refuse to run in main's tree - main is the integration point, never a workspace
 	@top=$$(git rev-parse --show-toplevel 2>/dev/null); \
 	case "$(CURDIR)" in */.clones/*) exit 0 ;; esac; \
 	if [ -n "$$top" ] && [ -d "$$top/.clones" ] && [ "$$GM_ASSISTANT_ALLOW_MAIN" != 1 ]; then \
@@ -1243,7 +1243,7 @@ test-full:      ## [tests] the gate's whole test phase + all three coverage floo
 # with the lock in feature 185) - so a target of that name sat three lines from the guard asserting a
 # target is NOT one. `soak` is the standard
 # term for the thing this actually is: the same code held under realistic load for an extended run.
-soak:           ## [tests] the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
+soak:           ## [tests] {inactive: tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green} the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
 	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
 	if [ "$$n" -eq 0 ]; then \
 	  : "GUARD_EDIT_OK: the rest of the sweep -> soak rename (see the block comment above this target)" ; \
@@ -1293,7 +1293,7 @@ soak:           ## [tests] the tier ABOVE the gate: the same code over many seed
 # exempted in the same request ("I don't think we need to do this for our make quick").
 COV_FLOORS =
 
-test:            ## [tests] the pytest phase itself (internal - `done` and `test-full` call it, not you)
+test:            ## [tests] {internal} the pytest phase itself (internal - `done` and `test-full` call it, not you)
 	: "GUARD_EDIT_OK: feature 185 - the map-rolling DEFERRED notice went with the scope lock. It fired" ; \
 	: "only when ROLL_DESELECT was non-empty, and that variable was defined through the retired axis." ; \
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
