@@ -24,7 +24,7 @@ multiple footnote links per paragraph or even multiple per sentence in sentences
 
 A research file path (`.claude/skills/diagram/research/<name>.md`), or one section of it named by heading. The
 file's footnotes are Markdown footnotes: `[^n]` after an assertion, and `[^n]: [`key`](url) - "quoted passage"
-(gloss)` at the file's foot. `research/SOURCES.md` holds the registry entry behind each key, with the URL.
+(gloss)` at the file's foot. `research/SOURCES.html` holds the registry entry behind each key, with the URL.
 
 ## Procedure
 

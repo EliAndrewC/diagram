@@ -34,7 +34,9 @@ def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
             if not path.exists():
                 bad.append(f"{href}: no such file")
                 continue
-            ids = set(_ID.findall(path.read_text(encoding="utf-8"))) if path.suffix == ".html" else set()
+            if path.suffix != ".html":
+                continue  # a Markdown target's anchors are GitHub's to render; the file existing is the check here
+            ids = set(_ID.findall(path.read_text(encoding="utf-8")))
         else:
             ids = ids_here
         if frag and frag not in ids:

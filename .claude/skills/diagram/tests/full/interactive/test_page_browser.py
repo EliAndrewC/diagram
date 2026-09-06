@@ -695,3 +695,26 @@ def test_reference_hamlet_timings(inashiro: tuple[Page, dict[str, Any]]) -> None
     page.clear()
     assert worst < 100, f"highlight took {worst:.1f} ms"
     assert load_ms < 5000, f"load took {load_ms} ms"
+
+
+def test_a_research_page_shows_a_footnote_on_hover_and_its_links_open_locally(browser: Any) -> None:
+    """Feature 191 (GM 2026-09-06): the record is HTML with ACOUP-style footnotes - hover a reference and the
+    note (the source link and its quoted passage) appears beside it; move away and it goes; the page's own
+    assets load from a relative path, so a file:// page is self-contained. The map's references modal links
+    the same pages locally (RESEARCH_PAGES), never GitHub."""
+    page = browser.new_page(viewport={"width": 1200, "height": 900})
+    page.goto("file://" + os.path.join(RESEARCH_DIR, "homesteads.html"), wait_until="load")
+    assert page.evaluate("() => getComputedStyle(document.querySelector('main')).maxWidth") != "none", "record.css loaded"
+    first = page.locator("sup.fn a").first
+    assert page.locator("sup.fn a").count() > 50, "the backfill left the page footnoted"
+    first.hover()
+    page.wait_for_timeout(50)
+    shown = page.evaluate("() => { const t = document.getElementById('fntip'); return t && !t.hidden && t.querySelector('code') !== null && t.textContent.length > 20; }")
+    assert shown, "the note appears beside the reference, with the source key and the passage"
+    href = first.get_attribute("href")
+    assert href and href.startswith("#fn-") and page.locator(f"li#{href[1:]} a.fnback").count() == 1, "the note carries its return link"
+    page.mouse.move(5, 5)
+    page.wait_for_timeout(300)
+    assert page.evaluate("() => document.getElementById('fntip').hidden"), "moving away dismisses it"
+    assert RESEARCH_PAGES.startswith("../../../research/")
+    page.close()

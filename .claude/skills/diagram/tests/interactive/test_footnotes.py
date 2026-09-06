@@ -16,11 +16,12 @@ import pytest
 
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
-_REF = re.compile(r'<sup class="fn"><a id="fnref-(\d+)" href="#fn-\1">\1</a></sup>')
+#: a second reference to the same note carries no id (ids are unique; the back-link returns to the first)
+_REF = re.compile(r'<sup class="fn"><a (?:id="fnref-(?:\d+)" )?href="#fn-(\d+)">\1</a></sup>')
 _DEF = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
 _KEY_LINK = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 _QUOTE = re.compile(r"[\"“「『]([^\"”」』]{12,})[\"”」』]")
-_HEADING = re.compile(r"<h[2-4][ >]")
+_HEADING = re.compile(r"<h([2-4])[ >]")
 _ROSTER = re.compile(r"<p><strong>Sources:</strong>(.*?)</p>", re.S)
 _ROSTER_KEY = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
 #: Files that hold the record's FINDINGS. The registry and the indexes carry no assertions to footnote.
@@ -67,9 +68,12 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
     text = path.read_text(encoding="utf-8")
     _refs, defs = footnotes(text)
     body = text.split('<section class="footnotes">')[0]
-    starts = [m.start() for m in _HEADING.finditer(body)] + [len(body)]
+    heads = [(m.start(), int(m.group(1))) for m in _HEADING.finditer(body)]
     unquoted = []
-    for a, b in zip(starts, starts[1:], strict=False):
+    for i, (a, level) in enumerate(heads):
+        # a section runs to the next heading of the SAME or a HIGHER level: an <h2>'s roster is quoted anywhere in
+        # its <h3> subsections too (the servant-housing entry of cities/government.html keeps its roster at the top)
+        b = next((s for s, lv in heads[i + 1 :] if lv <= level), len(body))
         section = body[a:b]
         roster = _ROSTER.search(section)
         if not roster:
