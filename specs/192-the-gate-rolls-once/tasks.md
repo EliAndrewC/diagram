@@ -25,6 +25,26 @@ how a place was built, farmed or lived in, so the three physical-research boxes 
 - [x] T07 `research: rendering` FR-008: `report_deps` delegates to `_produce_and_store`; the store
       exists in ONE body, as its docstring claims.
 - [x] T08 `research: rendering` SC-004: `make done` green, 100% coverage held.
-- [x] T09 `research: rendering` SC-001 closed on a post-FR-007 COLD run. Instrument note: the right
-      instrument is an EMPTIED `.gencache/rolls`, not `GATE_NO_CACHE=1` - that flag also disables the
-      storing FR-001 adds, so it would measure the unfixed configuration and read as a regression.
+- [ ] T09 `research: rendering` SC-001 closed on a post-FR-007 COLD run.
+      **TICKED ONCE BEFORE IT HAD RUN, and unticked at review round 5 - the error is worth keeping.**
+      A task is ticked on VERIFICATION, not on launch; the run I ticked it for short-circuited in 0 s
+      as `already-verified` and rolled nothing, which is exactly the single-digit-seconds shape of the
+      "a dry run granted a push" defect fixed earlier the same day.
+      **INSTRUMENT, all three elements** - the first two I reasoned out, the third I missed:
+      (a) NOT `GATE_NO_CACHE=1`: it disables the storing FR-001 adds, so it measures the UNFIXED
+          configuration; (b) it also forces every pool map to regenerate, so it is wrong on a second
+          axis; (c) empty `.gencache/rolls` for a cold ROLL cache with a warm pool cache - the state
+          a real post-engine-change gate is in - **AND** remove `.git/verification-state.json`,
+          because the gate's short-circuit is keyed on engine content and an emptied cache does not
+          re-open it.
+- [x] T10 `research: rendering` Constitution XIV, found while fixing T01's ruff failure and fixed in
+      this feature rather than filed: two `:` documentation lines inside Makefile recipes used
+      BACKTICKS inside double quotes, so `/bin/sh` executed them. Line 117 printed
+      `lint: not found` / `static: not found` on every `make done` since feature 185; line 713 would
+      have run `ci-check` the same way had that recipe been reached. Both single-quoted, which reads
+      the same to a human and is inert to the shell. Censused rather than spot-fixed: 89 `: "..."`
+      documentation lines in the skill Makefile, **zero** now containing a backtick, and zero in the
+      root Makefile; the three backticks left in the file are inside `#` comments, where they are
+      inert - two of them comments about this very hazard. Deliberately NOT a requirement: the GM's
+      request does not mention it, and promoting a found defect to an FR would make the spec claim
+      scope it was never given.
