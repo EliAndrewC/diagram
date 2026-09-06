@@ -45,8 +45,11 @@ rather than in the tooling:
   the module's CLI (`main`, the `guard()` call and the `if __name__ == "__main__":` block, which
   `tests/test_operations_registry.py::_entry_points()` matches BY REGEX - removing the row while the
   block stands fails the gate, as feature 193 learned). The CLI's own tests go with it.
-  **The MODULE STAYS**, per the reading in request.md: three frozen city exhibits and 1,732 lines of
-  in-progress capital work import it.
+  **The MODULE STAYS**, per the reading in request.md and the GM's ratification of it: three frozen
+  city exhibits import it, and so does `wip/shiro_daika/frame.py` (156 lines, part of a 1,732-line
+  in-progress capital package - only `frame.py` imports it). `pyproject.toml:69` type-checks it and
+  live tests price the tango/nagahara programs through it, which is the load-bearing half; the
+  frozen-gen half is weaker, since `dev/pool.md:102` says legacy gens are never re-run.
 - **FR-006** `make hamlet-floor` is removed: the target and its recipe. **The module stays** -
   `test-full` invokes it directly (`Makefile:1303`), which is the GM's own stated reason.
   Two corrections that make the naive version of this requirement IMPOSSIBLE:
@@ -79,10 +82,11 @@ rather than in the tooling:
   already the widest line in the file and cannot hold three arguments' prose). A comment directly
   under the target keeps the documentation three characters from the thing it documents - the same
   argument that put the `[category]` tag there in feature 191.
-- **D2 - `citybudget`'s module is kept and the GM was told.** Their instruction names the target and
-  their reasoning is that the city tier is future work; `wip/shiro_daika/` is the start of that work
-  and imports the module. Deleting it would break the thing the instruction anticipates resuming.
-  Recoverable either way - this is recorded so the choice is visible, not to avoid the question.
+- **D2 - `citybudget`'s module is kept, and this is now the GM's own decision rather than a session
+  narrowing.** Told that `wip/shiro_daika/frame.py` imports it, they ruled: *"Leaving the module is
+  fine as long as the make target for citybudget is gone."* **Stated consequence**: with the CLI gone
+  the planner cannot be RUN at all - it survives as a library other code imports. That is what the
+  instruction asks for, and FR-007 makes `sizing.md` say so rather than lose the sentence.
 - **D3 - `hamlet-floor`'s module is kept for a different reason**: it is not future work, it is a
   LIVE gate phase. Removing the module would break `test-full`.
 
@@ -100,8 +104,8 @@ rather than in the tooling:
   no longer a runnable entry point; `test-full` still runs the hamlet floor and the gate is green.
 - **SC-002** Every target in the generated page that takes an argument shows, per argument, what it
   takes and what it does. `make durations` in particular shows `FULL`, `MARK` AND `N`.
-- **SC-003** An untruncated sweep finds no reference to either removed target outside `specs/` and
-  the two record classes.
+- **SC-003** An untruncated sweep finds no reference to either removed target, or to `citybudget`'s
+  CLI, outside `specs/` and the four record classes FR-007 names.
 - **SC-004** `make done` green, 100% coverage held.
 
 ## Review history
