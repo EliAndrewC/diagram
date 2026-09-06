@@ -28,5 +28,10 @@ All `research: rendering` - guard mechanics and the run log. No claim about how 
       below-sample judging (over its ceiling FAILS), unknown class taking the warm bar, full scope
       staying unjudged, a per-CLASS written reason, the class-exclusion median, and the dry-run floor
       still reading `baseline`. 24 passed; `test_run_plausible.py` 6 passed.
-- [ ] T07 `research: rendering` SC-006: `make done` green, 100% coverage, `make hooks-test` green -
-      and feature 195 lands with it.
+- [x] T07 `research: rendering` SC-006/SC-001: `make done` GREEN at exit 0, **400 s**, and the entry
+      it wrote records `"cache": "warm"` on a `[HIT]` reference - FR-001 proven END TO END by a real
+      run rather than by reading the macro. Two earlier gates could not prove it: the first recorded
+      no class (the half-inert chain), the second short-circuited as `already-verified` and wrote the
+      classless entry that site is supposed to write. The verification record was deleted to force a
+      real run, which is the same instrument feature 192's T09 needed and the same lesson - a task is
+      ticked on VERIFICATION, not on plausibility.
