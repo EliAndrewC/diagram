@@ -15,7 +15,7 @@ class Farmhouse(Kind):
     slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands
     alone, its own yashikirin sheltering it.
 
-    Why: A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but
+    Why: A house in a nucleated hamlet is reached by a lane, and stands close to the paddy - up against it, but
     never on the bund. The lanes between farmsteads are trodden by the households already living there.
 
     Note: Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it
