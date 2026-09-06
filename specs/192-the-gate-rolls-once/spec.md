@@ -28,7 +28,8 @@ found the first draft's "the same eight maps TWICE" wrong for four of the eight)
 | Polder seed 8 | nothing in the tree rolls it in any form | **REMOVED from the subject list** - FR-007 |
 
 So the floor rolls **seven** subjects cold. FR-001 removes **four** (the duplicated cohort seeds) and
-FR-007 removes **one** (seed 8, which reaches no module the others do not). **Two remain** - Polder 12
+FR-007 removes **one** (seed 8, which nothing else rolls; see FR-007 for why the coverage
+measurement alone does not single it out). **Two remain** - Polder 12
 and Polder 19 - and those are FIRST rolls rather than duplicates, so no amount of bypass-recording can
 remove them: nothing else in the tree produces their `report:` records. On R7's own arithmetic
 (~57 s per roll) roughly **115 s of floor rolling remains**.
@@ -46,20 +47,46 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
 - **FR-004** Recording is confined to `report:` subjects, which is what the floor consumes. The
   residual this leaves is stated in the table above rather than discovered from a slower-than-promised
   run.
-- **FR-005** `report_deps` needs NO change - it already reads `meta.json`, which FR-003 now writes.
-- **FR-007** `hamlet_floor.subjects()` drops `Polder seed=8`. **AUTHORIZED AND MEASURED, in that
-  order.** The GM ruled *"I defer to you on whether that Polder seed eight earns its place or not
-  because I am not familiar with that code. If you take a look and find that it does not seem to be
-  doing anything, then we should remove it."* Measured from the recorded `report:` deps of all eight
-  subjects: seed 8 reaches **83 modules, of which 0 are reached by no other subject**. Its entire
-  contribution to the floor's module set - the floor's ONLY output - is already made by the other
-  seven, while it costs a full roll (~57 s) on every cold cache. Disclosed limit on the finding: it
-  is the only polder subject with `down_deg=None`, so it does exercise a distinct CONFIGURATION; at
-  module granularity, which is what the GM chose for this floor, that configuration reaches nothing
-  new. If the floor ever becomes line-level this decision must be revisited.
+- **FR-005** `report_deps` needs no change to READ the new record - it already reads `meta.json`,
+  which FR-003 now writes. (It does change under FR-008, for an unrelated duplication.)
 - **FR-006** The `done` ratchet baseline is re-pinned to **400 s** - the figure in the GM's own
   authorization - with the reason resting on 191 R7. A materially different measurement goes back to
   the GM rather than being pinned by this session.
+- **FR-007** `hamlet_floor.subjects()` drops `Polder seed=8`, on the GM's ruling: *"I defer to you on
+  whether that Polder seed eight earns its place or not because I am not familiar with that code. If
+  you take a look and find that it does not seem to be doing anything, then we should remove it."*
+
+  **WHAT THE MEASUREMENT SHOWS, AND WHAT IT DOES NOT.** Seed 8 reaches 83 modules, of which **0 are
+  reached by no other subject** - and the honest form of that finding, which the first draft of this
+  requirement got wrong, is that **this is true of EVERY subject**: all eight have 0 unique modules,
+  and the union is **88 modules with or without any single one of them**. So the leave-one-out
+  measurement does NOT by itself single seed 8 out; it establishes only that dropping it costs the
+  floor nothing. What singles seed 8 out is the other half: **nothing in the tree rolls that spec in
+  any form**, so its roll has no second consumer and no test depends on it - and the GM ruled on this
+  subject specifically. The two together are the case; neither is sufficient alone.
+
+  **Disclosed limits**, both of the same kind - this is a measurement of TODAY's tree:
+  - seed 8 is the only polder subject with `down_deg=None`, so it exercises a distinct CONFIGURATION
+    even though it reaches no distinct module at the granularity this floor uses. If the floor ever
+    becomes line-level, revisit.
+  - a future engine change could make that configuration reach a module the others do not, and with
+    seed 8 gone the floor would not see it.
+
+  **THE SEARCH SPACE OF THE REMOVAL, stated because a deletion is never one line** (and because this
+  project has now made the census-the-token mistake repeatedly). The count and the phrase "three
+  polders" are censused across `l7r/`, `tests/` and the Makefile; four places are affected and only
+  one of them fails a gate:
+  - `tests/tools/test_hamlet_floor.py:41` asserts `seen.count("Polder") == 3 and len(seen) == 8` -
+    goes red, and is the only automatic signal;
+  - `l7r/diagram/tools/hamlet_floor.py:50` - "the gate's three polders";
+  - `l7r/diagram/tools/hamlet_floor.py:16` - "the three polder rolls the gate tests use", which is
+    **already false today** (no gate test rolls seed 8) and is therefore a defect fixed at the point
+    of change, not a consequence of this feature;
+  - `Makefile:1320` - "the three gate polders".
+- **FR-008** `report_deps` delegates to `_produce_and_store` rather than carrying its own copy of the
+  record-and-store lines. Found while reviewing FR-003: `_produce_and_store`'s docstring claims the
+  store exists in ONE body so the pair invariant cannot drift, which is not true while a second copy
+  sits in `report_deps`. Either the copy goes or the docstring's claim does; the copy goes.
 
 ## Decisions Recorded
 
@@ -84,12 +111,13 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
   measured outside a coverage-traced pytest process, which is where FR-001 puts the recording. The
   mechanism is sound (`gencache.record` uses `sys.monitoring.PROFILER_ID`, coverage does not share
   it), but the number under coverage is unverified and SC-001's instrumented run is what confirms it.
-- **D4 - Polder 12 and 19 are ACCEPTED as a residual, not fixed.** Removing them would mean either
-  changing what the suite rolls (a `report:` roll where it now does a `hamlet:` one, which costs the
-  suite the difference) or dropping them from the subject list - and unlike seed 8 they are NOT free
-  to drop: the seed-8 measurement that justifies FR-007 was specifically that it adds no module the
-  others do not, and no such finding exists for these two. Dropping them would change what the floor
-  MEASURES on no evidence, which is the opposite of what FR-007 does.
+- **D4 - Polder 12 and 19 are ACCEPTED as a residual, not fixed - and NOT on the ground the first
+  draft gave.** That draft said they were "not free to drop" because the no-unique-modules finding
+  did not exist for them. It does: it exists for all eight (FR-007). The correct ground is narrower
+  and is about authorization rather than evidence: the GM ruled on seed 8 and on nothing else, and
+  unlike seed 8 these two ARE rolled by the suite (as `hamlet:` maps), so dropping them from the
+  floor's subject list would change what the floor MEASURES for specs the suite still exercises.
+  That is a coverage-floor decision, and it is the GM's, not this feature's.
 
 ## Out of scope
 
@@ -138,4 +166,17 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
   `L7R_TESTS_FULL`, no engine module reads `L7R_TESTS_EXHAUSTIVE` or `L7R_COV_FLOORS` either, so a
   payload produced inside the gate's pytest process is byte-identical to one from `make quick` on
   every environment axis - the new serve capability rests on measurement, not assertion.
-- **Round 3**: pending - FR-007 was added after round 2, on the GM's ruling.
+- **Round 3 (`spec-fidelity`): CHANGES REQUIRED**, two items, both accepted, both in the FR-007 text
+  added after round 2. (1) **My evidence did not discriminate and the spec claimed it did.** The
+  reviewer measured all eight subjects: every one has 0 unique modules and the union is 88 with or
+  without any single one, so "0 unique modules" cannot be what singles seed 8 out - and D4's claim
+  that no such finding existed for Polder 12/19 was simply false. FR-007 now states the finding in
+  its honest form and rests the case on the half that IS discriminating (nothing rolls seed 8; the
+  GM ruled on it), and D4 rests on authorization rather than on evidence that does not exist.
+  (2) FR-007 named the line to delete but not the SEARCH SPACE: four other places carry the count or
+  the phrase "three polders", only one of which fails a gate - and one of them
+  (`hamlet_floor.py:16`) is ALREADY false today. All four are now named. The reviewer independently
+  reproduced the seed-8 measurement, confirmed the arithmetic, and checked the FR-001..005
+  implementation against the approved spec with no contradiction. Its two asides are taken: the
+  duplicated store body is now FR-008, and FR-007 was renumbered below FR-006.
+- **Round 4**: pending.
