@@ -31,9 +31,11 @@ rather than in the tooling:
   Make reads the lines as ordinary comments; `make -n durations` resolves unchanged with them in
   place. **Two process notes, recorded rather than hidden**: implementing before the Principle XVI
   review was out of order, and the number-claim commit was supposed to carry `specs/` alone.
-- **FR-002 - the REMAINING WORK: 24 targets.** 26 targets declare an argument in their help line;
-  `durations` is done and two are being removed here, leaving **24** to document, one line per
-  argument, each description read off the RECIPE rather than guessed.
+- **FR-002 - the REMAINING WORK: 25 targets.** Counted with `make-docs.py`'s own `parse()` - the
+  parser that renders the page - **27** targets declare an argument; `durations` is documented and
+  `citybudget` is removed here, leaving **25**. The off-by-one worth naming: removing `hamlet-floor`
+  subtracts nothing, because it declares no argument at all. One line per argument, each description
+  read off the RECIPE rather than guessed.
 - **FR-003** `compound`'s description says it composes a DRAFT that is then refined by hand, not that
   it draws the plan.
 - **FR-004** `pack-audit`'s description says it is for HAND-DRAWN Mode A maps. **Only that** - the
@@ -51,7 +53,12 @@ rather than in the tooling:
   live tests price the tango/nagahara programs through it, which is the load-bearing half; the
   frozen-gen half is weaker, since `dev/pool.md:102` says legacy gens are never re-run.
 - **FR-006** `make hamlet-floor` is removed: the target and its recipe. **The module stays** -
-  `test-full` invokes it directly (`Makefile:1303`), which is the GM's own stated reason.
+  `test-full` (`Makefile:1208`) runs it through `make test COV_FLOORS=1`, and the phase itself is
+  `Makefile:1303` inside the `test:` recipe. (The first draft called 1303 "test-full invoking it
+  directly"; it is in a different target, and a precise-but-wrong pointer is worse than a vague one -
+  this repository's own recorded lesson.) No other route sets `COV_FLOORS=1`, so the GM's reason
+  holds. **What is LOST, stated rather than dropped**: `--list` was reachable only through this
+  target, so the module set can no longer be asked for without running the gate.
   Two corrections that make the naive version of this requirement IMPOSSIBLE:
   - **the registry row is RE-POINTED, not removed.** `hamlet_floor.py:182` carries
     `if __name__ == "__main__":`, so `test_operations_registry._entry_points()` counts it; deleting
@@ -59,10 +66,14 @@ rather than in the tooling:
     the gate phase that runs the module as a program. The row becomes
     `("test-full", "cheap")` - the target that actually runs it, so a bare `python3 -m` refusal still
     names a command that exists. Same mechanism feature 193 met; met again here.
+    **The cost stays `cheap`, and that needs a half-line comment at the row**: it prices the MODULE's
+    operation, and flipping it to `expensive` would make `test-full` remotely dispatchable and give it
+    its own S3 cache location (`ci/__main__.py:105`, `dispatch.py:74`). A later reader must not
+    "correct" it.
   - **there is no `.PHONY` entry to remove.** `hamlet-floor` appears on no `.PHONY` line (measured);
     `citybudget` does. Naming one would send the implementation to "fix" something adjacent.
-- **FR-007** Every pointer to either removed target **or to `citybudget`'s removed CLI** is
-  corrected, over the search space feature 193 established: **every file outside `specs/`**. Excluded
+- **FR-007** Every pointer to either removed target, **to its route in ANY OTHER NOTATION**, or to
+  `citybudget`'s removed CLI is corrected, over the search space feature 193 established: **every file outside `specs/`**. Excluded
   as dated records: `pool/**/*.notes.md`, `legacy-hand-authored-pool/**/*.notes.md`,
   `wip/*.notes.md` and `docs/review-ledger.md`. Three site classes a target-name sweep cannot see:
   - **live doctrine naming the CLI**: `settlements/cities/sizing.md:85` says *"Audit it with
@@ -74,6 +85,10 @@ rather than in the tooling:
   - **DERIVED COUNTS, which are not pointers**: `_invocation.py:189` says *"The 20 entry points"*
     (measured 19, becoming 18), and `test_operations_registry._entry_points()`'s docstring asserts
     that `citybudget` IS an entry point.
+  - **A ROUTE IN ANOTHER NOTATION**: `hamlet_floor.py:4`'s own docstring advertises
+    `python3 -m l7r.diagram.tools.hamlet_floor --list`, which no sweep for `hamlet-floor` finds - and
+    after the re-point, the refusal a bare invocation earns sends the reader to `make test-full`,
+    which offers no `--list`. Same blind spot on this side that round 1 closed on the other.
 
 ## Decisions Recorded
 
@@ -122,4 +137,14 @@ rather than in the tooling:
   legitimate, and corrected the evidence for one: `wip/shiro_daika/frame.py` is **156 lines** (1,732
   is the whole 7-file package, and only `frame.py` imports `citybudget`), last substantively touched
   2026-08-31.
-- **Round 2**: pending.
+- **Round 2 (`spec-fidelity`): CHANGES REQUIRED**, three items, all applied. It VERIFIED the
+  re-pointed row end to end - `test-full` matches the registry regex, both directions of the registry
+  test pass, and it priced the row's three other consumers (a `cheap` target is refused for a paid
+  run before a Context is built, and the cache-location test enumerates only `expensive` rows), so
+  nothing breaks. The three items: FR-002's count was 24 and is 25 (`hamlet-floor` declares no
+  argument, so removing it subtracts nothing); FR-006 cited `Makefile:1303` as `test-full` invoking
+  the module "directly" when 1303 is inside the `test:` recipe behind `COV_FLOORS`; and FR-007 had
+  the same other-notation blind spot on the hamlet-floor side that round 1 closed on the citybudget
+  side - `hamlet_floor.py:4` advertises `--list` in a form no sweep for the target name finds. The
+  round-1 sentence recording what `--list` costs had been dropped in the rewrite and is restored.
+- **Round 3**: pending.
