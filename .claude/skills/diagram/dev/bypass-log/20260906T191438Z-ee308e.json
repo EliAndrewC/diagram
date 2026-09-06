@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T191438Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "a section blurb and a help line in the generated target reference; no engine behavior, no placer, no map content - settlement-review has no map to read"
+}
