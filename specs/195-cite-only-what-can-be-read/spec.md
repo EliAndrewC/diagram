@@ -1,6 +1,6 @@
 # Feature 195 - cite only what can be read
 
-**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-06). **Status**: specified; spec-fidelity round 1 returned three changes (census by derivation over all footnotes, no label exception, carve-out by key + reported), applied; round 2 pending.
+**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-06). **Status**: specified; spec-fidelity round 1 returned three changes (census by derivation over all footnotes, no label exception, carve-out by key + reported), applied; round 2 FAITHFUL (three asides applied: 780 footnotes, CITATION footnote in US1, A1 covers `budgets.md` too).
 
 ## Summary
 
@@ -31,7 +31,7 @@ A player hovers a footnote on a research page, reads the quoted passage, clicks 
 where that passage is. Never on a registry entry that says the page could not be fetched, a paywalled abstract, a
 library landing page with no text, or a page in another language that does not contain the quoted words.
 
-**Acceptance**: for every footnote in `research/**/*.html`, the link target is an `http(s)` URL (not
+**Acceptance**: for every CITATION footnote in `research/**/*.html`, the link target is an `http(s)` URL (not
 `SOURCES.html#...`), and an agent fetching that URL finds the quoted passage on it. The one carve-out is A1 below.
 
 ### User Story 2 - a session adding a citation cannot cite what it cannot show (P1)
@@ -79,7 +79,7 @@ source" and what was searched and when. Constitution XII: an unlabeled guess is 
   <code>key</code></a> - 「passage」 (gloss)`, the link an `http(s)` URL on which the passage can be read. ABSENCE:
   no key and no link - `no publicly readable source (searched YYYY-MM-DD: what was searched)`. A footnote linking
   to `SOURCES.html#` is neither, with ONE carve-out named by KEY: the GM's own campaign notes - `l7r-median-domain`
-  and any key whose registry entry cites `l7r.md` (A1). No other unreadable entry is carved out: not a `URL: none`
+  and any key whose registry entry cites `l7r.md` or `budgets.md`, the GM's own notes (A1). No other unreadable entry is carved out: not a `URL: none`
   print-only book, not a page that has gone away, not a paywalled full text, not a SUMMARY-ONLY entry - each of those
   becomes an absence note. `tests/interactive/test_footnotes.py` enforces the two forms and the by-key carve-out;
   `tests/interactive/test_sources.py`'s classifier no longer sends a footnote to the registry for an unread source -
@@ -92,7 +92,7 @@ source" and what was searched and when. Constitution XII: an unlabeled guess is 
 - **FR-004 (source-reader)**: `.claude/agents/source-reader.md` keeps the `SUMMARY-ONLY` verdict as a REPORT and
   states what the session does with it under this rule: record the search in the registry entry, cite nothing, and
   give the assertion an absence note (or find a readable page).
-- **FR-005 (the sweep - census)**: the SEARCH SPACE is every footnote in `research/**/*.html` (779 on 2026-09-06). A
+- **FR-005 (the sweep - census)**: the SEARCH SPACE is every footnote in `research/**/*.html` (780 on 2026-09-06). A
   footnote is a CANDIDATE unless a recorded verdict says its quoted passage was SEEN on the page its own link targets:
   the feature-194 `quote-check` reports (per footnote, VERBATIM or DIFFERS means the checker fetched the linked page
   and found the passage there) and the 2026-09-06 re-fetch (SAME or RESTORED). A footnote with no such verdict - the

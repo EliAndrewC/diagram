@@ -111,10 +111,30 @@ point in including a reference if it is not being quoted."* So the citation form
 - at the page's foot, in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
   「the quoted passage」 (an English gloss when the passage is not English; one clause on what it bears on when
   that is not plain) <a class="fnback" href="#fnref-n">back</a></li>` - the key linked by feature 190's rule, the
-  passage VERBATIM from the page, or PASSAGES when one is not enough - verbatim INCLUDING the source's own spelling and dashes: the house-style guard holds quoted spans (「」, “”, a straight-quoted span in prose) out of its corrections (GM 2026-09-06: *"The house style should not normalize british spellings or em-dashes inside things we are quoting, because that requires us to edit other people's quotes"*), and a `quote-check` reports a hyphen for a dash or an Americanized spelling as `DIFFERS`. A SUMMARY-ONLY source quotes the summary it was recorded from and says so; the
+  passage VERBATIM from the page, or PASSAGES when one is not enough - verbatim INCLUDING the source's own spelling and dashes: the house-style guard holds quoted spans (「」, “”, a straight-quoted span in prose) out of its corrections (GM 2026-09-06: *"The house style should not normalize british spellings or em-dashes inside things we are quoting, because that requires us to edit other people's quotes"*), and a `quote-check` reports a hyphen for a dash or an Americanized spelling as `DIFFERS`. A SUMMARY-ONLY source is NOT cited (feature 195, below); the
   GM's own notes (`URL: none`) quote the note. Nothing is quoted from memory.
 - the section's `<p><strong>Sources:</strong> ...</p>` roster stays (the map's modal reads it) and every key on it is quoted by at least
   one footnote in that section - a key with nothing to quote leaves the roster.
+
+## A citation LINKS to a page where its quote can be READ - or there is no citation (GM 2026-09-06, feature 195)
+
+The GM: *"If we are linking to online sources whose content which is quotable from public sources does not support our claims then we should not cite it. For example, even if a given source is "known" to support a point we are making, if we are not able to simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a page on the public internet where that quote can be read, then we should NOT be claiming that the source supports us."* Two halves, both or neither: the quoted passage that backs the assertion, and a link to a page on
+the public internet where that passage can be read. So a footnote is one of exactly two forms:
+
+- **CITATION**: `<a href="https://..."><code>key</code></a> - 「passage」 (gloss)`, the link an `http(s)` page on which the
+  passage can be read - the paper's public PDF rather than its abstract page, the full-text view rather than a library
+  landing page, the original-language page rather than an English rendering that is on no page. A paywalled or
+  login-walled text, a search summary, an abstract that does not carry the passage: none is such a page.
+- **ABSENCE**: `no publicly readable source (searched YYYY-MM-DD: what was tried; the passage the record carried came from
+  the registry entry key, which is no longer cited)` - no key link (not even a bare `<code>` one), no URL. The assertion stands, honestly
+  labeled as resting on nothing a reader can check (constitution XII: an unlabeled guess is the one failure); the
+  registry entry stays as the record of the search, marked *Not cited*.
+
+The one carve-out, by KEY: the GM's own campaign notes (`l7r.md`, `budgets.md`; today `l7r-median-domain`) are canon,
+not a source claimed to support a historical point - they keep their registry link. Nothing else is carved out: not a
+`URL: none` print-only book, not a page that has gone away, not a SUMMARY-ONLY entry. This superseded the 2026-08-27
+SUMMARY-ONLY citation clause (constitution v2.19.0); the 2026-09-06 sweep that brought the record under it - 780
+footnotes, every one without a recorded SEEN verdict re-fetched - is `specs/195-cite-only-what-can-be-read/`.
 
 Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
 resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is

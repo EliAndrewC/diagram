@@ -62,8 +62,12 @@ NOTE: <a scope or number mismatch, a hedge the entry dropped, a better source yo
 ```
 
 - **READ** - the fetched text says it; quote the sentence(s).
-- **SUMMARY-ONLY** - no fetchable text; record what was seen and where. The claim may still stand,
-  labeled; that is the session's call, not yours.
+- **SUMMARY-ONLY** - no fetchable text; record what was seen and where. Since feature 195 (GM
+  2026-09-06: *"if we are not able to simultaneously quote a relevant passage ... and then link to a page
+  on the public internet where that quote can be read, then we should NOT be claiming that the source
+  supports us"*) this verdict means NOT CITABLE: the session records the search in the registry entry,
+  cites nothing, and gives the assertion an absence note - or finds a public page where the passage can
+  be read. Say in NOTE where such a page might be if you saw a pointer to one.
 - **CONTRADICTED** - the text says something different; quote it. This is the finding you exist
   for; put it first in the summary table.
 - **NOT-FOUND** - the page fetched but says nothing on the subject.

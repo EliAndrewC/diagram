@@ -44,6 +44,40 @@ def registry_keys() -> set[str]:
     return set(re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)"', src))
 
 
+#: Feature 195 (GM 2026-09-06): a footnote CITES only a page on the public internet where its quote can be read, or
+#: it is an ABSENCE note - no key, no link, what was searched. The one carve-out, by KEY: the GM's own campaign
+#: notes (`l7r.md`, `budgets.md`), canon rather than a source claimed to support a historical point, keep their
+#: registry link. Derived from the registry rather than listed, so a new canon key is covered the day it lands.
+_ABSENCE = re.compile(r"^no publicly readable source \(searched \d{4}-\d{2}-\d{2}:")
+_ENTRY = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*<p>(.*?)</p>', re.S)
+_HREF_OF_KEY = re.compile(r'<a href="([^"]*)"><code>[a-z0-9][a-z0-9-]*</code></a>')
+
+
+def canon_keys() -> set[str]:
+    src = pathlib.Path(RESEARCH_DIR, "SOURCES.html").read_text(encoding="utf-8")
+    return {m.group(1) for m in _ENTRY.finditer(src) if re.search(r"\bl7r\.md\b|\bbudgets\.md\b", m.group(2))}
+
+
+def footnote_form(body: str, canon: set[str]) -> str | None:
+    """'citation', 'absence', or the defect (feature 195 FR-002). A citation links its key to an http(s) page - the
+    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link
+    and no URL at all (its only anchor is the back link)."""
+    if _ABSENCE.match(body):
+        if "<code>" in body or re.search(r'href="(?!#fnref-)', body):
+            return "an absence note carries no key and no link"
+        return "absence"
+    key = _KEY_LINK.search(body)
+    href = _HREF_OF_KEY.search(body)
+    if not key or not href:
+        return None
+    target = href.group(1)
+    if target.startswith(("http://", "https://")):
+        return "citation"
+    if "SOURCES.html#" in target and key.group(1) in canon:
+        return "citation"
+    return f"links the key to {target!r}, which is not a page on the public internet where the quote can be read"
+
+
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)
 def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source(path: pathlib.Path) -> None:
     text = path.read_text(encoding="utf-8")
@@ -51,14 +85,32 @@ def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source
     keys = registry_keys()
     assert set(refs) <= set(defs), f"{path.name}: references without a definition: {sorted(set(refs) - set(defs))}"
     assert set(defs) <= set(refs), f"{path.name}: definitions nothing references: {sorted(set(defs) - set(refs))}"
+    canon = canon_keys()
     bad = []
     for fid, body in defs.items():
+        form = footnote_form(body, canon)
+        if form == "absence":
+            continue
         key = _KEY_LINK.search(body)
         if not key or key.group(1) not in keys:
             bad.append(f"[^{fid}]: no registry key link")
         elif not _QUOTE.search(body):
             bad.append(f"[^{fid}]: no quotation (a passage of 12+ characters in quotation marks)")
+        elif form != "citation":
+            bad.append(f"[^{fid}]: {form}")
     assert not bad, f"{path.name}:\n" + "\n".join(bad)
+
+
+def test_the_footnote_forms_are_told_apart() -> None:
+    """Feature 195 FR-002, the classifier on plain strings: the two forms pass, the three defects are named."""
+    canon = {"l7r-median-domain"}
+    fnback = ' <a class="fnback" href="#fnref-1">back</a>'
+    assert footnote_form('<a href="https://x.y/z"><code>k-1</code></a> - 「twelve characters here」' + fnback, canon) == "citation"
+    assert footnote_form('<a href="../SOURCES.html#l7r-median-domain"><code>l7r-median-domain</code></a> - 「the GM wrote this」' + fnback, canon) == "citation"
+    assert footnote_form("no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)" + fnback, canon) == "absence"
+    assert footnote_form('<a href="SOURCES.html#k-2"><code>k-2</code></a> - 「a summary, not a page」' + fnback, canon).startswith("links the key to")
+    assert footnote_form('no publicly readable source (searched 2026-09-06: x) <a href="https://x.y"><code>k</code></a>' + fnback, canon) == "an absence note carries no key and no link"
+    assert footnote_form("something else entirely" + fnback, canon) is None
 
 
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)

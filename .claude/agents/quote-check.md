@@ -1,6 +1,6 @@
 ---
 name: quote-check
-description: Checks a research entry's footnotes against the pages they quote - per footnote, whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Verification, not judgment - Sonnet by design, like source-reader; it never decides a rule, it reports what the page says and what the text asserts. (Tools: WebFetch, WebSearch, Read)
+description: Checks a research entry's footnotes against the pages they quote - per footnote, whether the footnote's own link is a public page on which the passage can be READ (READABLE / NOT-READABLE; feature 195, GM 2026-09-06), whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Verification, not judgment - Sonnet by design, like source-reader; it never decides a rule, it reports what the page says and what the text asserts. (Tools: WebFetch, WebSearch, Read)
 model: sonnet
 tools: WebFetch, WebSearch, Read
 ---
@@ -22,18 +22,28 @@ multiple footnote links per paragraph or even multiple per sentence in sentences
 
 ## Input
 
-A research file path (`.claude/skills/diagram/research/<name>.md`), or one section of it named by heading. The
-file's footnotes are Markdown footnotes: `[^n]` after an assertion, and `[^n]: [`key`](url) - "quoted passage"
-(gloss)` at the file's foot. `research/SOURCES.html` holds the registry entry behind each key, with the URL.
+A research file path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of it
+named by heading. The record is HTML (feature 194): `<sup class="fn"><a href="#fn-n">n</a></sup>` after an
+assertion, and `<li id="fn-n"><a href="url"><code>key</code></a> - 「quoted passage」 (gloss)</li>` in the page's
+`<section class="footnotes">`. `research/SOURCES.html` holds the registry entry behind each key. A footnote with no
+key and no link that reads `no publicly readable source (searched ...)` is an ABSENCE note - report it as such and
+check nothing for it.
 
 ## Procedure
 
 1. `Read` the file (or section). List every footnote reference in reading order with the sentence it is attached
    to - the ASSERTION - and its definition: key, URL, quoted passage.
 2. For each DISTINCT URL, fetch the page ONCE (one attempt per host; a refused host is recorded, never
-   retried; a `SUMMARY-ONLY` footnote quotes a search summary and is checked against a fresh search of the same
-   terms, not a fetch).
-3. Per footnote, two verdicts:
+   retried). The URL you fetch is the footnote's OWN link - not the registry entry, not a page you know of.
+3. Per footnote, three verdicts. The first is the GM's rule of 2026-09-06 (feature 195): *"if we are not able to
+   simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a
+   page on the public internet where that quote can be read, then we should NOT be claiming that the source
+   supports us."*
+   - **Readability**: `READABLE` (the footnote's link is a page on the public internet - no login, purchase or
+     institutional network - and the passage is on it); `NOT-READABLE` (a paywall, a login wall, an abstract or
+     landing page that does not carry the passage, a page in another language with no such words, a host that
+     refused, a link to our own registry - say which). A NOT-READABLE footnote cannot land as a citation: the
+     session re-points it to a public page where the passage can be read, or turns it into an absence note.
    - **Quotation**: `VERBATIM` (the passage is on the page, character for character apart from whitespace and
      the quotation marks that delimit it - a dash written as a hyphen or a British spelling written American IS
      a difference, because the record keeps a source's own characters: GM 2026-09-06, *"The house style should
@@ -50,6 +60,8 @@ file's footnotes are Markdown footnotes: `[^n]` after an assertion, and `[^n]: [
 
 ## Output
 
-One block per footnote: `[^n]` - key - Quotation verdict - Support verdict - the page text where it differs.
+One block per footnote: `fn-n` - key - Readability verdict - Quotation verdict - Support verdict - the page text
+where it differs. Put every NOT-READABLE first: under the rule of 2026-09-06 it is the finding that changes the
+record.
 Then, per section, the unfootnoted assertions. Then a summary table: counts of each verdict, and the hosts that
 refused. Never fix anything; never write to a file. Report what you found.
