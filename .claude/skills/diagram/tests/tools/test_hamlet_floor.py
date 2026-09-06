@@ -38,7 +38,7 @@ def test_module_set_asks_the_records_for_every_fixed_subject() -> None:
         return _deps("l7r/diagram/hamletgen/plan.py")
 
     assert hf.module_set(deps_for) == ["l7r/diagram/hamletgen/plan.py"]
-    assert seen[0] == "Inashiro" and seen.count("Polder") == 3 and len(seen) == 8  # reference, three polders, cohort 41-44
+    assert seen[0] == "Inashiro" and seen.count("Polder") == 2 and len(seen) == 7  # reference, two polders, cohort 41-44 (seed 8 dropped: feature 192 FR-007)
 
 
 def _measure(tmp_path: Path, body: str, call: str) -> tuple[str, str]:

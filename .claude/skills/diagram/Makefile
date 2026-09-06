@@ -1317,7 +1317,7 @@ test:            ## [tests] the pytest phase itself (internal - `done` and `test
 # THE HAMLET-PATH FLOOR (GUARD_EDIT_OK: feature 145 adds a new gate phase - GM 2026-08-28: "one hundred percent code
 # coverage on the scripted procedure and anything related to it ... automatic rather than something that we just
 # remember to maintain"): every module the scripted rolls execute - derived from the roll cache's records of the
-# reference, the three gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
+# reference, the two gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
 # modules owe nothing here. (GUARD_EDIT_OK: feature 174 - this line used to end "and the settlement ratchet above
 # stays"; that ratchet is retired, so what stays above is the flat 100% floor over the whole tree, and this finer
 # per-module check sits UNDER it rather than beside it.) The module set: `make hamlet-floor`. The why:

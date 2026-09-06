@@ -170,7 +170,7 @@ def _run_share_dir() -> str | None:
     return os.path.join(tempfile.gettempdir(), f"l7r-runshare-{safe}")
 
 
-def _produce_and_store[T](subject: str, produce: Callable[[], T]) -> T:
+def _produce_and_store[T](subject: str, produce: Callable[[], T]) -> tuple[T, dict[str, Any]]:
     """Roll, RECORD what the roll executed, and store the entry - payload first, meta LAST.
 
     ONE BODY, deliberately (feature 192): both the ordinary MISS path and the FULL-run bypass store
@@ -184,7 +184,7 @@ def _produce_and_store[T](subject: str, produce: Callable[[], T]) -> T:
     os.makedirs(entry, exist_ok=True)
     _place(pickle.dumps(payload), os.path.join(entry, "payload.pickle"))
     _place(json.dumps({"key": gencache.key_for(subject.encode(), deps), "deps": deps, "subject": subject}).encode(), os.path.join(entry, "meta.json"))
-    return payload
+    return payload, deps
 
 
 def _stores_under_bypass(subject: str) -> bool:
@@ -221,7 +221,7 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tu
     if bypassed():
         if not share:
             if _stores_under_bypass(subject):
-                return _produce_and_store(subject, produce), "BYPASS-STORED"
+                return _produce_and_store(subject, produce)[0], "BYPASS-STORED"
             return produce(), "BYPASS"
         key = _share_key(subject, produce)
         cached = _SHARED_BYPASS.get(key)
@@ -253,7 +253,7 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tu
             return served, "HIT"
     except OSError, ValueError, KeyError, EOFError, AttributeError, pickle.UnpicklingError:
         pass  # an unreadable or half-written entry is DOUBT, and doubt produces - the pool cache's rule
-    return _produce_and_store(subject, produce), "MISS"
+    return _produce_and_store(subject, produce)[0], "MISS"
 
 
 def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: str = "") -> tuple[T, str]:
@@ -309,9 +309,6 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
             return deps
     except OSError, ValueError, KeyError:
         pass
-    holder: list[Report] = []
-    fresh = gencache.record(lambda: holder.append(hg.generate(spec, out_base=None, render=False)))
-    os.makedirs(entry, exist_ok=True)
-    _place(pickle.dumps(holder[0]), payload_path)
-    _place(json.dumps({"key": gencache.key_for(subject.encode(), fresh), "deps": fresh, "subject": subject}).encode(), meta_path)
-    return fresh
+    # DELEGATES rather than repeating the store (feature 192 FR-008). `_produce_and_store`'s docstring
+    # claims the pair invariant is held by ONE body; a second copy of these lines here made that untrue.
+    return _produce_and_store(subject, lambda: hg.generate(spec, out_base=None, render=False))[1]

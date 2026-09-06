@@ -12,7 +12,7 @@ because eventually, we will just go back to one hundred percent code coverage ev
 
 HOW THE SET IS DERIVED, so that no one edits a list. The roll cache records, for every scripted roll,
 the engine functions it executed (`gencache.record` - the same trace that keys the cache). The hamlet
-path is the union of those records over a FIXED set of subjects - the reference settlement, the three
+path is the union of those records over a FIXED set of subjects - the reference settlement, the two
 polder rolls the gate tests use, and the cohort's ratchet seeds 41-44 - mapped to the files they live
 in. A module any of those rolls touches owes 100%; a module none of them touches owes nothing here
 (the settlement package's ratchet still applies to it - that floor stays, GM's round-1 review). When
@@ -47,13 +47,20 @@ EXCLUDED_PARTS = ("tests", "ci")  # a test file or the CodeBuild dispatcher is n
 
 
 def subjects() -> list[Any]:
-    """The fixed specs whose rolls define the path: the reference, the gate's three polders, the cohort's ratchet seeds."""
+    """The fixed specs whose rolls define the path: the reference, the gate's two polders, the cohort's ratchet seeds.
+
+    `Polder seed=8` LEFT THIS LIST on 2026-09-06 (feature 192 FR-007, the GM's ruling). Two facts
+    together, because neither is sufficient: nothing in the tree rolled that spec in any form, so its
+    roll had no second consumer; and dropping it does not change what this floor measures - the union
+    is 88 modules with or without it. Note the second fact is true of EVERY subject here (each one has
+    zero modules unique to it), so it is the FIRST that singles seed 8 out. Measured on today's tree:
+    if the engine changes such that a `down_deg=None` polder reaches something the others do not, this
+    floor will no longer see it."""
     from l7r.diagram import hamletgen as hg
 
     return [
         hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"),  # `make reference`
         hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0),
-        hg.HamletSpec(name="Polder", seed=8, households=16, field_archetype="polder_grid"),
         hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90),
         *hg.driver.cohort_specs(4, first_seed=41),
     ]
