@@ -122,9 +122,6 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 | `make quick` | lint, types, and every test that does not roll a map; stops at the first failure, failed-first (`--ff`) so a fix that did not take fails in seconds | **~11 s** (feature 158, 2026-08-29: 41 s before it - one 39 s test was the whole critical path) |
 | `make page-check` | THE PAGE CHECK (feature 188): the interactive tests + the browser test, no coverage, then the `page` stamp - what an edit to `interactive/assets/` owes at push instead of the gate (GM 2026-09-05: *"there's no actual reason to rerun all the tests for style sheet changes"*). An asset-only delta is a TWEAK: DIRECT route, no spec-kit feature, no review, no tasks | ~1 min |
 | `make tick F=188 T=T03 NOTE="..." [BOXES=1]` | tick ONE task in a feature's tasks.md with its verify note; refuses a missing or already-ticked task rather than guessing (feature 188) | ~0 s |
-| `make sun-audit M=...` | the sun rules and the belt's page presence off the manifest - the numbers a record may quote | ~1 s |
-| `make polder-probe SEED=21` | the polder block ALONE with its geometry metrics - parcels across a channel, the berm, acreage, the organic numbers. The geometry loop's fast path: it builds through the same `fit_polder` the map does, so it cannot pass while the map fails | **0.2 s** (a map roll is ~47 s) |
-| `make overlap-audit M=...` | does A overlap B on a finished map, over RECORDS and over drawn INK (five families). Replaces the point-in-polygon script that got hand-written twelve times across feature 150 | ~2 s |
 | `make map GEN=... PROFILE=1` | the same roll, plus where its time went: per-stage timings, the total and the slowest stage | the roll + ~0 |
 | `make verify` | THE PAIRED RUN: starts the gate and prints the settlement-review to dispatch in the same turn. Neither half runs alone (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, with the review beside it |
 | `make _reference` (internal since 2026-09-06; the public rung was retired) | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
@@ -176,7 +173,7 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
   coordinate are ten-second fixes that cost a full model round trip each when a test finds them one
   at a time; fix everything a failing run lists before re-running; **scaffold a check with
   and **never write a number into a record
-  that was not measured on the artifact** (`make sun-audit` for the sun and the belt) - a guessed
+  that was not measured on the artifact** - a guessed
   figure is a correction round the reviewer will make you pay.
 
 **Placement** ([`dev/placement.md`](dev/placement.md))
@@ -221,7 +218,7 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 - Adjudicate a multi-rule siting against the GATE (`tools/site_justice.py`), never against a
   re-statement of the rules.
 - Read derived geometry from the MANIFEST (0.2s), not by re-running the generators (minutes).
-- Batch every crop you want to look at into ONE `tools/crop_map.py` call, then Read them together.
+- Batch every crop you want to look at into ONE call, then Read them together.
 - **A diagnostic that restates what it observes will lie to you.** Print the value and its
   provenance from ONE expression, or do not print the provenance.
 

@@ -144,7 +144,7 @@ GEN_TIME_BUDGETS = {
     #
     # WORTH A LOOK BUT NOT CHASED HERE: why solo doubled in a week. It tracks the features that landed
     # (the lane web, byres, the woodland scan, cluster shape), so it is probably real work rather than
-    # waste - but nobody has measured which stage owns the growth, and `tools/timings.py` would answer
+    # waste - but nobody has measured which stage owns the growth, and `tools/timings.py` (retired 2026-09-06, feature 193) would have answered
     # it.
     #
     # CORRECTED 2026-08-28 (feature 138; the GM: *"bisecting a field several times per map does not seem
@@ -411,5 +411,5 @@ def test_every_pool_render_matches_its_own_svg_geometry():
             f"{b.stem}.png is {w}x{h} but its own SVG's viewBox ({vw:.0f}x{vh:.0f}) makes a "
             f"{w}-wide render {expected} tall - the raster is from a DIFFERENT roll than the manifest beside "
             f"it. Re-render the map (`make maps SCOPE=all`); every consumer that maps world coordinates "
-            f"through the viewBox onto the PNG, `tools/crop_map.py` included, is silently misplaced until you do."
+            f"through the viewBox onto the PNG, is silently misplaced until you do."
         )

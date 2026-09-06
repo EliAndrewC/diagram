@@ -16,7 +16,7 @@
 .PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
-	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
+	 why-placed   pack-audit    citybudget help \
 	 notes-census \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
@@ -38,7 +38,7 @@
 PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
 perf-explain:   ## [performance] band 1, first half: the session's written cause     WHY="..." [ENV=local|codebuild]
 	@$(PERF_REVIEW) explain --why "$(WHY)" --environment "$(or $(ENV),local)"
-perf-confirm:   ## [performance] band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
+perf-confirm:   ## [performance] {internal} band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
 	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
 perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
@@ -49,7 +49,9 @@ perf-review:    ## [performance] does every environment's newest bookend pair ca
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 
-hamlet-floor:   ## [diagnostics] the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
+# GUARD_EDIT_OK: the marker moves off the `##` line into this comment - `make-docs.py` publishes
+# help text verbatim, so a marker there ends up in the reference page a reader sees.
+hamlet-floor:   ## [diagnostics] the modules under the 100% hamlet-path floor - derived from the scripted rolls' records (feature 145)
 	$(RUN).tools.hamlet_floor --list
 
 # GUARD_EDIT_OK: `hamlet-floor-check` RETIRED 2026-09-05 by the target audit - a convenience alias for what test-full's last phase already does inline (Makefile calls hamlet_floor directly); no caller, no doc, never run.
@@ -114,7 +116,7 @@ done:
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
 	T0=$$(date +%s); fail=""; \
 	: "(GUARD_EDIT_OK: feature 168 - THE CHEAP CHECKS RUN FIRST, at the GM's ruling 2026-08-30. The three static phases cost 1.8 s together against the reference roll's 29 s, so a session that has broken something ruff cannot fix hears about it in seconds rather than half a minute. The GM authorized this ON PRINCIPLE and predicted, correctly, that it buys almost nothing: both static phases AUTOCORRECT (ruff check --fix, ruff format), so they rarely fail at all, and only 8 of 317 recorded gate runs failed on one without also failing the suite - about 4 minutes recovered across the entire history. Do not later credit this reorder with a saving it does not deliver. It does not weaken 'the reference settlement gates everything expensive': what moved ahead of the roll is 16x cheaper than it, and every expensive phase still stands behind it.)"; \
-	: "GUARD_EDIT_OK: feature 185 - the gate's phase loop, one of the four `lint` -> `static` sites" ; \
+	: "GUARD_EDIT_OK: feature 185 - the gate's phase loop, one of the four 'lint' -> 'static' sites (quoted with SINGLE quotes: backticks here are command substitution and were running lint/static on every gate)" ; \
 	for phase in static format typecheck; do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
@@ -387,7 +389,7 @@ pool-index:     ## [maps] rebuild the pool index
 # pool's manifests, renders and notes, and the rebuild (~0.5 s) runs only when one of them is newer
 # than the index or the index is missing. mtimes, not hashes: no state file to keep, and a false
 # "stale" costs half a second while a false "fresh" is impossible (a rewrite always bumps a mtime).
-pool-index-if-stale: ## [maps] rebuild the pool index only when a manifest, render or notes file is newer
+pool-index-if-stale: ## [maps] {internal} rebuild the pool index only when a manifest, render or notes file is newer
 	@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit 2>/dev/null)" ]; then \
 	  $(MAKE) --no-print-directory pool-index ARGS=; \
 	fi
@@ -410,43 +412,26 @@ citybudget:     ## [maps] the city/capital space-budget planner   ARGS=--plan --
 # is the ONLY thing a session runs there - "no generators, no tests". A reference check ahead of it
 # would be a second generator run in main, which that rule forbids. It also re-renders from main's
 # committed tip, which is already gate-verified, so the check would re-prove what the clone proved.
-render-sync:    ## [maps] regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
+render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # --- cheap: they READ a recorded artifact ----------------------------------------------------
-overlap-audit:  ## [diagnostics] does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x/x.json [FAMILIES=...]
-	$(RUN).tools.overlap_audit $(M) $(if $(FAMILIES),--families $(FAMILIES),)
 
-polder-probe:   ## [diagnostics] the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
-	$(RUN).tools.polder_probe $(if $(SEED),--seed $(SEED),)$(if $(SEEDS),--seeds $(SEEDS),)$(if $(ARCHETYPE),--archetype $(ARCHETYPE),)$(if $(LAYOUT),--layout $(LAYOUT),)$(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),)
 
 why-placed:     ## [diagnostics] who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
 	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
 
-crop:           ## [diagnostics] crop a rendered map in manifest coordinates
-	$(RUN).tools.crop_map $(ARGS)
 
-jogs:           ## [diagnostics] find bunds that step sideways
-	$(RUN).tools.jogs $(ARGS)
 
 pack-audit:     ## [diagnostics] empty space and geometry in a Mode A compound SVG
 	$(RUN).tools.pack_audit $(ARGS)
 
-scatter-audit:  ## [diagnostics] is drawn ground cover standing where keep-outs should have stopped it?
-	$(RUN).tools.scatter_audit $(ARGS)
 
 notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
-sun-audit:      ## [diagnostics] the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro/inashiro.json
-	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro/inashiro.json)
 
-family-census:  ## [diagnostics] which feature families one manifest records that another does not   A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
-	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata/kuwabata.json)
-	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
 
-timings:        ## [diagnostics] where the generation loop's time goes
-	$(RUN).tools.timings $(ARGS)
 
 # GUARD_EDIT_OK: `citybudget` RETIRED 2026-09-05 by the target audit - 0 live consumers - only three FROZEN legacy exhibits and two wip files import it. The MODULE stays, tested and under the 100% floor; this was only a hand-run entry point for a tier nobody is working.
 
@@ -710,7 +695,7 @@ ci-measure:     ## [remote] MEASURE what the remote gate costs (PAID, prompts)  
 	$(REMOTE_OK)
 	@: "(GUARD_EDIT_OK: feature 177 - a NEW paid target, in the same class as ci-image: it prompts, it"; \
 	: " logs, and it cancels by default. It is the only route that may dispatch with NO engine delta,"; \
-	: " which is why it prompts at all - `ci-check` is gated by a delta it computes and cannot be asked"; \
+	: " which is why it prompts at all - 'ci-check' is gated by a delta it computes and cannot be asked"; \
 	: " for on a whim. What it CANNOT do is buy a merge credential: buildspec/measure.yml sets MODE"; \
 	: " measure and run.sh writes no verified/ record and pushes nothing.)"; \
 	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-measure is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-measure with no terminal"; exit 1; fi; \
@@ -885,8 +870,7 @@ cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=t
 # message", and it ran `check_village`'s gate; feature 166 deleted that battery and its five tools and
 # seven targets, and missed this one because it is a DOTFILE (`.explain.py`, hidden so
 # `gencache.engine_files()` prunes it) and so matched no sweep. Nothing replaces it: a rule about a map
-# is a test of the placer now, and the per-map questions go to `make why-placed`, `make overlap-audit`
-# and `make sun-audit`.
+# is a test of the placer now, and the per-map questions go to `make why-placed`.
 #
 # WHY NOBODY NOTICED FOR A DAY: `l7r/diagram/check_village/` survived on disk in every existing clone as
 # an empty-but-for-`__pycache__` directory. That is an importable PEP 420 namespace package, so
@@ -985,7 +969,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 # `_`-prefixed is this Makefile's existing internal convention (`_switch`), and `make-docs.py` skips
 # such targets by construction - its rule regex requires a leading [a-z] - so this needs no exemption.
 _reference:
-	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m (reference only under the lock).\n'; \
+	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m.\n'; \
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 # GUARD_EDIT_OK: feature 130 FR-012's `$(STATE) green-local reference` is DELETED here, at the GM's
 # 2026-09-06 ruling. It was the line that made a green reference a push credential; with `reference`
@@ -1015,7 +999,7 @@ _reference:
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
 # GUARD_EDIT_OK: "scope relaxed" described a lock retired in feature 185 - there is nothing to relax.
-idle-tests:     ## [tests] what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
+idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand} what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
 # THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
 # bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
@@ -1039,7 +1023,7 @@ perf-report:     ## [performance] the trend, and which BAND the newest bookend p
 # needs one Makefile that works at /gm-assistant and at /diagram). A clone or a detached worktree
 # has no .clones/ of its own (it is gitignored), so the rule is: refuse when the git top level of
 # the cwd holds a .clones/ directory and the cwd is not itself inside one. No path is hardcoded.
-guard:           ## [static] refuse to run in main's tree - main is the integration point, never a workspace
+guard:           ## [static] {internal} refuse to run in main's tree - main is the integration point, never a workspace
 	@top=$$(git rev-parse --show-toplevel 2>/dev/null); \
 	case "$(CURDIR)" in */.clones/*) exit 0 ;; esac; \
 	if [ -n "$$top" ] && [ -d "$$top/.clones" ] && [ "$$GM_ASSISTANT_ALLOW_MAIN" != 1 ]; then \
@@ -1241,7 +1225,7 @@ test-full:      ## [tests] the gate's whole test phase + all three coverage floo
 # with the lock in feature 185) - so a target of that name sat three lines from the guard asserting a
 # target is NOT one. `soak` is the standard
 # term for the thing this actually is: the same code held under realistic load for an extended run.
-soak:           ## [tests] the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
+soak:           ## [tests] {inactive: tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green} the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
 	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
 	if [ "$$n" -eq 0 ]; then \
 	  : "GUARD_EDIT_OK: the rest of the sweep -> soak rename (see the block comment above this target)" ; \
@@ -1291,7 +1275,7 @@ soak:           ## [tests] the tier ABOVE the gate: the same code over many seed
 # exempted in the same request ("I don't think we need to do this for our make quick").
 COV_FLOORS =
 
-test:            ## [tests] the pytest phase itself (internal - `done` and `test-full` call it, not you)
+test:            ## [tests] {internal} the pytest phase itself (internal - `done` and `test-full` call it, not you)
 	: "GUARD_EDIT_OK: feature 185 - the map-rolling DEFERRED notice went with the scope lock. It fired" ; \
 	: "only when ROLL_DESELECT was non-empty, and that variable was defined through the retired axis." ; \
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
@@ -1317,7 +1301,7 @@ test:            ## [tests] the pytest phase itself (internal - `done` and `test
 # THE HAMLET-PATH FLOOR (GUARD_EDIT_OK: feature 145 adds a new gate phase - GM 2026-08-28: "one hundred percent code
 # coverage on the scripted procedure and anything related to it ... automatic rather than something that we just
 # remember to maintain"): every module the scripted rolls execute - derived from the roll cache's records of the
-# reference, the three gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
+# reference, the two gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
 # modules owe nothing here. (GUARD_EDIT_OK: feature 174 - this line used to end "and the settlement ratchet above
 # stays"; that ratchet is retired, so what stays above is the flat 100% floor over the whole tree, and this finer
 # per-module check sits UNDER it rather than beside it.) The module set: `make hamlet-floor`. The why:

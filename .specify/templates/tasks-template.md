@@ -19,8 +19,8 @@ description: "Task list template for feature implementation"
 - **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
 - Include exact file paths in descriptions
 - **Every task that adds a gate check, a placement rule or a documented number carries its cycle plan
-  in its own text** (constitution v2.4.0, cycle discipline): `scaffold: make new-check ...` for a
-  check; `measure: make sun-audit` (or the tool that measures the thing) BEFORE the record is
+  in its own text** (constitution v2.4.0, cycle discipline): `scaffold: <the scaffold, where one
+  exists>` for a check; `measure: <the tool that measures the thing>` BEFORE the record is
   written; `verify: one make quick after the whole diff is re-read for convention misses`. The
   task is where the discipline is read, so it is written there, not remembered.
 

@@ -107,16 +107,10 @@ wall time is model-turn latency (root CLAUDE.md, 2026-07-20 profile), so each ex
 pure cost. Instead: in ONE Bash call, crop EVERY region you want to look at (all four viewports of
 a defect, before/after of several maps, the toe + the top + a control), then Read them together in
 the next turn. A footbridge review that touched 3 maps should be ~2 turns of imagery, not ~10.
-**Use [`tools/crop_map.py`](../l7r/diagram/tools/crop_map.py) rather than re-writing the arithmetic** - it reads the viewBox
-itself and takes as many regions as you like in one invocation, which is the batching win made easy:
+**Cropping a rendered map** was `tools/crop_map.py`, (retired 2026-09-06, feature 193) with the rest of the unused
+diagnostics. It read the viewBox and did the world-to-page arithmetic; nothing replaced it, because
+no recorded session had run it. If cropping is wanted again, that arithmetic is the thing to rebuild.
 
-    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/towns/hoshizora/hoshizora 1600,900,220 1200,400,150   # x,y,radius (world coords)
-    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/hamlets/moritono/moritono --box 2100,150,2418,760 --zoom 1.5
-    python3 -m l7r.diagram.tools.crop_map legacy-hand-authored-pool/villages/ueda/ueda --whole --zoom 0.4            # whole map, downscaled
-
-It prints one path per line - feed them straight to Read, together. (The conversion is
-`(coord - viewBox_origin) * (png_w / viewBox_w)`; it was hand-written five times in one session,
-once wrong, which is why it is a script now.)
 
 ## A DIAGNOSTIC that restates what it observes will lie to you, or die
 

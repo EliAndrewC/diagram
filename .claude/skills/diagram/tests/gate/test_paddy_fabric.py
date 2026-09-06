@@ -228,7 +228,7 @@ def test_a_bund_does_not_build_a_flight_of_steps(fan) -> None:
     move the wall without breaking another rule. Seven of those survive across the pool, each ledgered
     with the guard that refuses it.
 
-    The grain conversion is the engine's own (`grain = 2 / ftpx`), taken from `tools/jogs.py` rather than
+    The grain conversion is the engine's own (`grain = 2 / ftpx`), taken from `tools/jogs.py` (retired 2026-09-06, feature 193) rather than
     restated as a second rule of thumb that would drift."""
     M, f = fan
     grain = 2.0 / float(M["meta"].get("ftpx") or 1.0)

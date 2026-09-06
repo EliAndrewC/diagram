@@ -17,29 +17,34 @@ th{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mu
 td.n{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 td.a{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);font-size:.86rem}
 code{background:var(--code);padding:.08em .32em;border-radius:3px;font-size:.9em}
+span.b{margin-left:.5em;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;padding:.1em .45em;border-radius:3px;background:var(--code);color:var(--mut);border:1px solid var(--line);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+span.b.off{color:#9a3d2a;border-color:#c8907f}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) span.b.off{color:#e0a08c;border-color:#7a4436}}
+:root[data-theme=dark] span.b.off{color:#e0a08c;border-color:#7a4436}
+span.w{color:var(--mut);font-style:italic}
 footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--mut);font-size:.86rem}
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 63 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 55 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cov-file</td><td class=a>FILE MOD</td><td>which lines of MOD does ONE test file reach?</td></tr>
 <tr><td class=n>make durations</td><td class=a>FULL MARK</td><td>where the suite&#x27;s time goes - run when a target feels slow</td></tr>
 <tr><td class=n>make hooks-test</td><td class=a>&ndash;</td><td>run every scripts/test-*-hooks.sh, and prove each guard still has a companion</td></tr>
-<tr><td class=n>make idle-tests</td><td class=a>&ndash;</td><td>what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`</td></tr>
+<tr><td class=n>make idle-tests<span class='b off' title="arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand">inactive</span></td><td class=a>&ndash;</td><td>what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done` <span class=w>arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand</span></td></tr>
 <tr><td class=n>make page-check</td><td class=a>&ndash;</td><td>the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push</td></tr>
 <tr><td class=n>make quick</td><td class=a>ALL</td><td>tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure</td></tr>
-<tr><td class=n>make soak</td><td class=a>&ndash;</td><td>the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)</td></tr>
-<tr><td class=n>make test</td><td class=a>&ndash;</td><td>the pytest phase itself (internal - `done` and `test-full` call it, not you)</td></tr>
+<tr><td class=n>make soak<span class='b off' title="tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green">inactive</span></td><td class=a>&ndash;</td><td>the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/) <span class=w>tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green</span></td></tr>
+<tr><td class=n>make test<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>the pytest phase itself (internal - `done` and `test-full` call it, not you)</td></tr>
 <tr><td class=n>make test-file</td><td class=a>FILE</td><td>run ONE test file, whole</td></tr>
 <tr><td class=n>make test-full</td><td class=a>&ndash;</td><td>the gate&#x27;s whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)</td></tr>
 <tr><td class=n>make tooling</td><td class=a>&ndash;</td><td>run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes</td></tr>
 <tr><td class=n>make verify</td><td class=a>&ndash;</td><td>THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)</td></tr>
 </table></div>
 <h2>Maps</h2>
-<p class=sec>Generating and checking the pool. `reference` is the cheap tripwire everything expensive runs behind.</p>
+<p class=sec>Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cache-audit</td><td class=a>&ndash;</td><td>does using the generation cache change any map?</td></tr>
 <tr><td class=n>make citybudget</td><td class=a>ARGS</td><td>the city/capital space-budget planner</td></tr>
@@ -50,23 +55,15 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make maps</td><td class=a>SCOPE</td><td>regenerate and check the pool, picking its own scope from how the last run went</td></tr>
 <tr><td class=n>make placement-stages</td><td class=a>&ndash;</td><td>re-plate the stage-by-stage walk-through page</td></tr>
 <tr><td class=n>make pool-index</td><td class=a>&ndash;</td><td>rebuild the pool index</td></tr>
-<tr><td class=n>make pool-index-if-stale</td><td class=a>&ndash;</td><td>rebuild the pool index only when a manifest, render or notes file is newer</td></tr>
-<tr><td class=n>make render-sync</td><td class=a>&ndash;</td><td>regenerate MAIN&#x27;s renders (called by sync-with-main.sh; not for hand use)</td></tr>
+<tr><td class=n>make pool-index-if-stale<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>rebuild the pool index only when a manifest, render or notes file is newer</td></tr>
+<tr><td class=n>make render-sync<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>regenerate MAIN&#x27;s renders (called by sync-with-main.sh; not for hand use)</td></tr>
 </table></div>
 <h2>Diagnostics</h2>
 <p class=sec>Read-only questions about a finished map or a generator&#x27;s decisions. None of these decides what ships.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make crop</td><td class=a>&ndash;</td><td>crop a rendered map in manifest coordinates</td></tr>
-<tr><td class=n>make family-census</td><td class=a>A B</td><td>which feature families one manifest records that another does not</td></tr>
-<tr><td class=n>make hamlet-floor</td><td class=a>&ndash;</td><td>the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls&#x27; records; GUARD_EDIT_OK: a new operation)</td></tr>
-<tr><td class=n>make jogs</td><td class=a>&ndash;</td><td>find bunds that step sideways</td></tr>
+<tr><td class=n>make hamlet-floor</td><td class=a>&ndash;</td><td>the modules under the 100% hamlet-path floor - derived from the scripted rolls&#x27; records (feature 145)</td></tr>
 <tr><td class=n>make notes-census</td><td class=a>M</td><td>refresh the derived counts inside each map&#x27;s notes census block</td></tr>
-<tr><td class=n>make overlap-audit</td><td class=a>FAMILIES M</td><td>does A overlap B on a finished map (records AND drawn ink)</td></tr>
 <tr><td class=n>make pack-audit</td><td class=a>&ndash;</td><td>empty space and geometry in a Mode A compound SVG</td></tr>
-<tr><td class=n>make polder-probe</td><td class=a>ARCHETYPE SEED SEEDS</td><td>the polder block ALONE with its geometry metrics, no map</td></tr>
-<tr><td class=n>make scatter-audit</td><td class=a>&ndash;</td><td>is drawn ground cover standing where keep-outs should have stopped it?</td></tr>
-<tr><td class=n>make sun-audit</td><td class=a>M</td><td>the sun rules and the belt&#x27;s page presence, off the manifest</td></tr>
-<tr><td class=n>make timings</td><td class=a>&ndash;</td><td>where the generation loop&#x27;s time goes</td></tr>
 <tr><td class=n>make why-placed</td><td class=a>AT GEN REFUSED</td><td>who placed this, and what refused to</td></tr>
 </table></div>
 <h2>Performance</h2>
@@ -74,7 +71,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make perf</td><td class=a>LABEL</td><td>take a performance snapshot of the reference hamlet across its seeds</td></tr>
 <tr><td class=n>make perf-audit</td><td class=a>AS COMMENSURATE NECESSARY NO_WAY_AROUND VERDICT</td><td>band 2 - the subagent adjudicates</td></tr>
-<tr><td class=n>make perf-confirm</td><td class=a>AS VERDICT</td><td>band 1, second half - the perf-audit SUBAGENT runs this</td></tr>
+<tr><td class=n>make perf-confirm<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>AS VERDICT</td><td>band 1, second half - the perf-audit SUBAGENT runs this</td></tr>
 <tr><td class=n>make perf-explain</td><td class=a>ENV WHY</td><td>band 1, first half: the session&#x27;s written cause</td></tr>
 <tr><td class=n>make perf-gate</td><td class=a>&ndash;</td><td>require the feature&#x27;s -start bookend, take -end, and FAIL on a regression</td></tr>
 <tr><td class=n>make perf-profile</td><td class=a>SEED STAGE</td><td>tier 2 evidence: cProfile ONE stage of ONE seed</td></tr>
@@ -97,7 +94,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <p class=sec>What the gate runs before it spends anything on a map roll.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make format</td><td class=a>&ndash;</td><td>ruff format over the tree</td></tr>
-<tr><td class=n>make guard</td><td class=a>&ndash;</td><td>refuse to run in main&#x27;s tree - main is the integration point, never a workspace</td></tr>
+<tr><td class=n>make guard<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>refuse to run in main&#x27;s tree - main is the integration point, never a workspace</td></tr>
 <tr><td class=n>make static</td><td class=a>&ndash;</td><td>the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)</td></tr>
 <tr><td class=n>make typecheck</td><td class=a>&ndash;</td><td>pyrefly over the engine, one-shot, no daemon (feature 142)</td></tr>
 </table></div>

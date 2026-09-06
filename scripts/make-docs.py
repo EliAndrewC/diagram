@@ -42,7 +42,7 @@ OUT = Path("docs/make-targets.html")
 # not a silent "other" bucket - an unrecognised tag is almost always a typo.
 SECTIONS: list[tuple[str, str, str]] = [
     ("tests", "Tests", "The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter."),
-    ("maps", "Maps", "Generating and checking the pool. `reference` is the cheap tripwire everything expensive runs behind."),
+    ("maps", "Maps", "Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run."),
     ("diagnostics", "Diagnostics", "Read-only questions about a finished map or a generator's decisions. None of these decides what ships."),
     ("performance", "Performance", "The bookends and the three bands. A run that got slower owes records before the push."),
     ("remote", "Remote (AWS CodeBuild)", "Everything except `ci-status` costs money. Remote is currently OFF; `make switches` says so."),
@@ -57,13 +57,21 @@ def parse(makefile: Path) -> tuple[list[dict[str, str]], list[str]]:
     documented: list[dict[str, str]] = []
     for m in re.finditer(r"^([a-z][\w-]*):(?!=)[^\n#]*##\s*(.*)$", text, re.M):
         name, rest = m.group(1), m.group(2).strip()
-        cat = ""
+        cat, flag, why = "", "", ""
         tag = re.match(r"\[([\w-]+)\]\s*(.*)", rest)
         if tag:
             cat, rest = tag.group(1), tag.group(2).strip()
+        # {internal} - nobody types this; a recipe or a script calls it.
+        # {inactive: why} - the target exists and is kept on purpose, but currently does nothing.
+        # Two SEPARATE designations because they answer different questions (GM 2026-09-06): "would I
+        # ever run this?" and "does running it do anything today?". A target can be neither, either,
+        # or both, and collapsing them would hide a disabled thing behind an internal label.
+        fl = re.match(r"\{(internal|inactive)(?::\s*([^}]*))?\}\s*(.*)", rest)
+        if fl:
+            flag, why, rest = fl.group(1), (fl.group(2) or "").strip(), fl.group(3).strip()
         # Arguments are written as WORD= in the help line; the prose is what remains.
         args = re.findall(r"\b([A-Z][A-Z0-9_]*)=", rest)
-        documented.append({"name": name, "category": cat, "help": rest, "args": " ".join(sorted(set(args)))})
+        documented.append({"name": name, "category": cat, "help": rest, "args": " ".join(sorted(set(args))), "flag": flag, "why": why})
     with_rule = set()
     for m in re.finditer(r"^([a-z][\w-]*(?:\s+[a-z][\w-]*)*):(?!=)[^\n]*\n(?:\t[^\n]*\n)+", text, re.M):
         with_rule.update(m.group(1).split())
@@ -95,6 +103,11 @@ def render(rows: list[dict[str, str]], undocumented: list[str]) -> str:
         "td.n{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}",
         "td.a{white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);font-size:.86rem}",
         "code{background:var(--code);padding:.08em .32em;border-radius:3px;font-size:.9em}",
+        "span.b{margin-left:.5em;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;padding:.1em .45em;border-radius:3px;background:var(--code);color:var(--mut);border:1px solid var(--line);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}",
+        "span.b.off{color:#9a3d2a;border-color:#c8907f}",
+        "@media (prefers-color-scheme:dark){:root:not([data-theme=light]) span.b.off{color:#e0a08c;border-color:#7a4436}}",
+        ":root[data-theme=dark] span.b.off{color:#e0a08c;border-color:#7a4436}",
+        "span.w{color:var(--mut);font-style:italic}",
         "footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--mut);font-size:.86rem}",
         "</style>",
         "<main>",
@@ -112,10 +125,16 @@ def render(rows: list[dict[str, str]], undocumented: list[str]) -> str:
                   "<div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>"]
         for r in group:
             prose = re.sub(r"\s{2,}[A-Z][A-Z0-9_]*=.*$", "", r["help"]).strip()
+            badge = ""
+            if r.get("flag") == "internal":
+                badge = "<span class=b title='called by a recipe or a script - you would not type this'>internal</span>"
+            elif r.get("flag") == "inactive":
+                badge = f"<span class='b off' title=\"{html.escape(r.get('why') or 'currently does nothing')}\">inactive</span>"
+            note = f" <span class=w>{html.escape(r['why'])}</span>" if r.get("flag") == "inactive" and r.get("why") else ""
             parts.append(
-                f"<tr><td class=n>make {html.escape(r['name'])}</td>"
+                f"<tr><td class=n>make {html.escape(r['name'])}{badge}</td>"
                 f"<td class=a>{html.escape(r['args']) or '&ndash;'}</td>"
-                f"<td>{html.escape(prose)}</td></tr>"
+                f"<td>{html.escape(prose)}{note}</td></tr>"
             )
         parts.append("</table></div>")
     stray = sorted(set(by_cat) - seen - {""})

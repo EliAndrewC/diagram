@@ -65,8 +65,27 @@ RATCHETS = {
     ),
     "done": Ratchet(
         target="done",
-        baseline=310,
-        reason="GUARD_EDIT_OK: RE-PINNED BY FEATURE 174 (2026-08-31), which is the condition the GM "
+        baseline=400,
+        reason="GUARD_EDIT_OK: RE-PINNED TO 400 s BY FEATURE 192 (2026-09-06), on the GM's explicit "
+               "authorization and with the cause of the drift KNOWN rather than guessed. Both halves "
+               "of that sentence matter, because THIS SESSION ALREADY RE-PINNED THIS ROW ONCE TODAY "
+               "AND REVERTED IT: e5283ca9 moved it 310 -> 385 from a fresh median, the very next gate "
+               "blew past even the widened ceiling, and 07bcdfa2 put it back - a baseline moved to "
+               "chase a measurement is the failure this whole mechanism exists to prevent. What is "
+               "different now is a diagnosis: `specs/191-.../research.md` R7 found the gate BIMODAL on "
+               "roll-cache state - warm ~400 s, cold ~800 s - because the floor phase re-rolled maps "
+               "the suite had already rolled (a measured 401.6 s gap, instrumented). Feature 192 fixes "
+               "that. 400 s is the WARM cost, which is the number the GM named in their own "
+               "authorization (*'re-pin to the measured warm cost (~400 s)'*) - it is not a fresh "
+               "measurement this session chose, and a materially different one goes back to them. "
+               "MEASURED CONSEQUENCE, stated so nobody expects magic: this yields a 520 s ceiling "
+               "against a median of 543 s at the time of pinning, so the re-pin does NOT by itself "
+               "clear the block - one further run under ~520 s has to land and pull the median down. "
+               "If that does not happen the block is unresolved and goes back to the GM rather than "
+               "being re-pinned a second time. The GM's 45 s hard ceiling and its 35 s trigger are "
+               "untouched and take over unchanged if the efficiency work ever gets the gate there. "
+               "--- the previous reason, kept verbatim --- "
+               "RE-PINNED BY FEATURE 174 (2026-08-31), which is the condition the GM "
                "attached to D1 when they ratified it on 2026-08-30 - re-pin once real runs exist. "
                "Two things had to happen together and both have: the first post-172 full-gate "
                "measurement was taken (310 s, `dev/run-log/`), and feature 174 CHANGED WHAT `done` "

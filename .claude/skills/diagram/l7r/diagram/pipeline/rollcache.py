@@ -20,6 +20,12 @@ unpickle, a vanished data file - regenerates. Under `GATE_NO_CACHE=1` and under 
 rolled code) every call produces - EXCEPT a caller that opts into `share=True`, which produces once per
 process and re-serves those bytes thereafter (feature 147; see `_SHARED_BYPASS`). Only `hamlet()` opts in.
 
+PRODUCING AND STORING ARE NOW SEPARATE QUESTIONS (feature 192). The FULL run still produces on every
+call - that is what the coverage floors need and it has not changed - but a `report:` roll under it now
+also RECORDS what it executed, because `hamlet_floor` derives the hamlet path from those records and,
+finding none, used to re-roll the same maps itself for a measured 401.6 s. `GATE_NO_CACHE=1` is
+deliberately excluded and still leaves nothing behind. See `_stores_under_bypass`.
+
 A TEST THAT MONKEYPATCHES THE ENGINE goes through `keyed_to(test, ...)`, never bare `obtain`: a patched
 function changes what the roll does without changing any hashed engine source, so the engine key alone
 cannot see it. What CAN change the patch is the test's own code - the lambdas live there - so the test
@@ -164,12 +170,58 @@ def _run_share_dir() -> str | None:
     return os.path.join(tempfile.gettempdir(), f"l7r-runshare-{safe}")
 
 
+def _produce_and_store[T](subject: str, produce: Callable[[], T]) -> tuple[T, dict[str, Any]]:
+    """Roll, RECORD what the roll executed, and store the entry - payload first, meta LAST.
+
+    ONE BODY, deliberately (feature 192): both the ordinary MISS path and the FULL-run bypass store
+    through here, so the pair invariant `_place` exists to hold cannot drift apart between two
+    copies of these five lines. Writing meta alone - the payload withheld - is what the rejected
+    `deps.json` design was avoiding; sharing this function makes that impossible by construction."""
+    entry = _entry(subject)
+    holder: list[T] = []
+    deps = gencache.record(lambda: holder.append(produce()))
+    payload = holder[0]
+    os.makedirs(entry, exist_ok=True)
+    _place(pickle.dumps(payload), os.path.join(entry, "payload.pickle"))
+    _place(json.dumps({"key": gencache.key_for(subject.encode(), deps), "deps": deps, "subject": subject}).encode(), os.path.join(entry, "meta.json"))
+    return payload, deps
+
+
+def _stores_under_bypass(subject: str) -> bool:
+    """Does this bypassed roll still leave its record behind? (feature 192, and the WHOLE of the why.)
+
+    THE GATE USED TO ROLL THE SAME MAPS TWICE. `obtain` bypasses SERVING under the FULL run because a
+    served roll executes nothing the coverage floors could see - correct, and unchanged. But the
+    bypass also stored NOTHING, so `hamlet_floor`, which derives the hamlet path from exactly these
+    records, found none and re-rolled its subjects itself: a measured 401.6 s phase against ~1 s when
+    the records exist. The suite had already rolled four of them moments earlier.
+
+    TWO CONDITIONS, and each is load-bearing:
+      - `L7R_TESTS_FULL` only. `bypassed()` is ALSO true for `GATE_NO_CACHE=1`, which is the
+        documented "regenerate everything, leave nothing behind" escape - folding the two together
+        would silently change a contract nobody asked to change.
+      - `report:` subjects only, because that is what the floor consumes. `hamlet:` rolls are the
+        shared fixture path and `test:` rolls are monkeypatched; neither feeds the floor.
+
+    WHY STORING A FULL-RUN PAYLOAD IS SAFE, which is the part that deserved measuring rather than
+    asserting: a later non-FULL run can now HIT on an entry this run wrote. That is only legitimate
+    if FULL-run bytes equal MISS-run bytes, so the environment axes the gate sets were checked -
+    `L7R_TESTS_FULL` is read only here and in `tests/_scope.py` (which selects WHICH tests and specs
+    run, never engine behavior inside a roll), and no engine module reads `L7R_TESTS_EXHAUSTIVE` or
+    `L7R_COV_FLOORS` at all. The roll is the same program either way."""
+    return os.environ.get(FULL_ENV) == "1" and os.environ.get(gencache.GATE_BYPASS) != "1" and subject.startswith("report:")
+
+
 def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tuple[T, str]:
-    """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored), "BYPASS"
-    (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this subject under the
-    bypass; a fresh copy of it). `subject` must determine the roll completely (a spec's repr)."""
+    """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored),
+    "BYPASS-STORED" (produced and recorded, never served - the FULL run's `report:` rolls, feature
+    192), "BYPASS" (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this
+    subject under the bypass; a fresh copy of it). `subject` must determine the roll completely (a
+    spec's repr)."""
     if bypassed():
         if not share:
+            if _stores_under_bypass(subject):
+                return _produce_and_store(subject, produce)[0], "BYPASS-STORED"
             return produce(), "BYPASS"
         key = _share_key(subject, produce)
         cached = _SHARED_BYPASS.get(key)
@@ -201,13 +253,7 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tu
             return served, "HIT"
     except OSError, ValueError, KeyError, EOFError, AttributeError, pickle.UnpicklingError:
         pass  # an unreadable or half-written entry is DOUBT, and doubt produces - the pool cache's rule
-    holder: list[T] = []
-    deps = gencache.record(lambda: holder.append(produce()))
-    payload = holder[0]
-    os.makedirs(entry, exist_ok=True)
-    _place(pickle.dumps(payload), payload_path)
-    _place(json.dumps({"key": gencache.key_for(subject.encode(), deps), "deps": deps, "subject": subject}).encode(), meta_path)
-    return payload, "MISS"
+    return _produce_and_store(subject, produce)[0], "MISS"
 
 
 def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: str = "") -> tuple[T, str]:
@@ -254,8 +300,8 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
     from l7r.diagram import hamletgen as hg
 
     subject = f"report:{spec!r}"
-    entry = _entry(subject)
-    meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
+    # only the META is read here - the payload path went with the store body this now delegates to
+    meta_path = os.path.join(_entry(subject), "meta.json")
     try:
         meta = json.loads(Path(meta_path).read_text(encoding="utf-8"))
         if meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key"):
@@ -263,9 +309,6 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
             return deps
     except OSError, ValueError, KeyError:
         pass
-    holder: list[Report] = []
-    fresh = gencache.record(lambda: holder.append(hg.generate(spec, out_base=None, render=False)))
-    os.makedirs(entry, exist_ok=True)
-    _place(pickle.dumps(holder[0]), payload_path)
-    _place(json.dumps({"key": gencache.key_for(subject.encode(), fresh), "deps": fresh, "subject": subject}).encode(), meta_path)
-    return fresh
+    # DELEGATES rather than repeating the store (feature 192 FR-008). `_produce_and_store`'s docstring
+    # claims the pair invariant is held by ONE body; a second copy of these lines here made that untrue.
+    return _produce_and_store(subject, lambda: hg.generate(spec, out_base=None, render=False))[1]

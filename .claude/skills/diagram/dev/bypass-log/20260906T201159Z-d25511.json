@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T201159Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "NOT OWED: this removes unused diagnostic TOOLS and their docs. No placer, glyph, size, placement rule or manifest changes - settlement-review has no map to read (GM 2026-08-29), and its own tooling section is part of what this feature rewrites."
+}

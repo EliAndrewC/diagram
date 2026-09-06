@@ -236,12 +236,6 @@ Written after a time audit of feature 150's T55 - 79.8 minutes for a one-functio
 19 map rolls (13.6 min), 42 hand-written measurement scripts, and 33.6 minutes waiting on background
 verification with a 17-minute review LAST because it is dispatched from memory.
 
-- **`make polder-probe SEED=21`** - the polder block alone with its geometry metrics, **measured 0.2 s**
-  against the 47 s median map roll it replaces. It builds through the same `fit_polder` the map does, and
-  a test holds its numbers against a rolled manifest, so it cannot pass while the map fails.
-- **`make overlap-audit M=...`** - "does A overlap B" over records AND drawn ink, five families. It found
-  a real defect on its first run (reed ink on the inlet hairline: the source pond's fringe was scattered
-  before the field's channels existed, so its keep-out had nothing to keep off).
 - **`make map ... PROFILE=1`** - per-stage timings, the total and the slowest stage. First use: Kuwabata
   33.7 s, `stage_hinterland` 13.9 s (41%), `stage_waterward` 9.5 s (28%).
 - **`make verify`** - the gate and the settlement-review start together, and `pair-hooks.sh` refuses

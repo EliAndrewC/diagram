@@ -1272,9 +1272,9 @@ coppice, so the fix is a different crown vocabulary for the belt, which would al
 **Two counts, and they are measured at different thresholds - say which, or the numbers look wrong**
 (settlement-review caught this file quoting one and meaning the other, 2026-08-19). At the GATE's
 line (run 8 ft, link 25 ft, offset 3 ft) the four maps carry **0 / 1 / 5 / 1 = 7**. At the PLACER's
-stricter line, which is what `tools/jogs.py` runs (run 6 ft, link 30 ft, offset 2 ft), they carry
+stricter line, which is what `tools/jogs.py` ran (retired 2026-09-06, feature 193) (run 6 ft, link 30 ft, offset 2 ft), they carry
 **2 / 2 / 9 / 3 = 16**, the largest 16.0 ft at Mizuguchi (1571.7, 897.6). The table above is the gate
-column. `python3 -m l7r.diagram.tools.jogs pool/hamlets/*.json` prints the placer column.
+column. (That tool is retired; the placer column would have to be re-derived.)
 
 Every one is a SINGLE step on a single ring - no POOL map carries a flight of them, though the 48-seed
 cohort does; see "LIVE RESIDUE ON THE COHORT" at the end of this section. Traced, they are

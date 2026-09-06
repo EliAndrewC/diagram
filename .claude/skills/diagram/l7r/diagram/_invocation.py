@@ -214,16 +214,8 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.why_placed": ("why-placed", "expensive"),
     "l7r.diagram.compound": ("compound", "expensive"),
     "l7r.diagram.citybudget": ("citybudget", "cheap"),
-    "l7r.diagram.tools.crop_map": ("crop", "cheap"),
-    "l7r.diagram.tools.polder_probe": ("polder-probe", "cheap"),  # 0.2 s: the polder block alone, no render (feature 151)
-    "l7r.diagram.tools.overlap_audit": ("overlap-audit", "cheap"),  # reads one finished map and its ink
-    "l7r.diagram.tools.jogs": ("jogs", "cheap"),
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
-    "l7r.diagram.tools.scatter_audit": ("scatter-audit", "cheap"),
-    "l7r.diagram.tools.sun_audit": ("sun-audit", "cheap"),
-    "l7r.diagram.tools.family_census": ("family-census", "cheap"),  # feature 150: a read-only manifest census
-    "l7r.diagram.tools.timings": ("timings", "cheap"),
 }
 
 
@@ -241,6 +233,27 @@ def guard(module: str) -> None:
     assert_via_make(module, target_for(module))
 
 
+# THE LADDER LIVES IN A DOCSTRING ON PURPOSE (feature 191; GM 2026-09-06: *"They are printed if you
+# print them"*). `gate-stamp.semantic_bytes` hashes each .py as its docstring-STRIPPED AST, and this
+# file is in the `diagram` area, which is not in `RAW_AREAS` - so correcting this text later is an
+# AST-identical edit that routes DIRECT and owes no spec-kit feature. That is not a convenience: this
+# text ROTTED precisely because correcting it was expensive. It named `make reference` for hours after
+# that rung was retired, quoted durations feature 162 forbids in a guard message, and described the
+# scope lock feature 185 deleted. Keep it duration-free, name only targets that resolve, and let
+# tests/tooling/test_guard_message_durations.py enforce both.
+class _Ladder:
+    """
+    Every operation in this project goes through a make target, so the expensive ones can ask
+    whether the cheap one would do first:
+
+        make quick        lint, types, and every test that does not roll a map
+        make maps         the pool, scoped by how the last run went
+        make help         every operation, with what it does
+        make done         the full gate, NOT the quick check
+
+    """
+
+
 def assert_via_make(operation: str, target: str) -> None:
     """Refuse unless this process is running under this project's make.
 
@@ -256,15 +269,5 @@ def assert_via_make(operation: str, target: str) -> None:
     """
     if via_make():
         return
-    sys.stderr.write(
-        f"\n\033[1mREFUSED: {operation} was not run through make.\033[0m\n\n"
-        f"  {_reason()}.\n\n"
-        f"  Run this instead:  \033[1mmake {target}\033[0m\n\n"
-        "Every operation in this project goes through a make target, so the expensive ones can ask\n"
-        "whether the cheap one would do first. Measured, not estimated:\n\n"
-        "    make quick        ~33 s    lint, types, every test that does not roll a map\n"
-        "    make reference    ~26 s    one seed of the reference hamlet\n"
-        "    make help                  every operation, with what it does\n"
-        "    make done         ~75 s locked / ~4.5 min unlocked - the full gate, NOT the quick check\n\n"
-    )
+    sys.stderr.write(f"\n\033[1mREFUSED: {operation} was not run through make.\033[0m\n\n  {_reason()}.\n\n  Run this instead:  \033[1mmake {target}\033[0m\n{_Ladder.__doc__}")
     raise SystemExit(2)

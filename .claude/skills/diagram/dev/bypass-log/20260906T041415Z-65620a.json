@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T041415Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 191 - printed message text and a widened guard test; no placer, no map content, no manifest moves, so settlement-review has nothing to read (GM 2026-08-29)"
+}
