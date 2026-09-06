@@ -43,3 +43,14 @@ Then, on the answers:
 - **`pack-audit`** is KEPT (GM 2026-09-06, and their 2026-08-30 ruling); only its DESCRIPTION changes
   to say it is for hand-drawn Mode A maps. The GM's *"I thought we decided to get rid of pack-audit"*
   was answered before this instruction: it was kept on their own earlier words.
+
+## The GM ratifies the narrowing (2026-09-06)
+
+Asked whether the `citybudget` MODULE should go too, given that `wip/shiro_daika/` (1,732 lines of
+in-progress capital work) imports it:
+
+> Leaving the module is fine as long as the make target for citybudget is gone, thanks.
+
+So D2 is not a session-chosen narrowing any more - it is the GM's own decision on a stated
+consequence. The same shape applies to `hamlet-floor` by their earlier reason (*"we already use it on
+`test-full`"*), which is about the module being live rather than about future work.
