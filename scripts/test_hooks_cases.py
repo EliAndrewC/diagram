@@ -116,6 +116,9 @@ HOUSE_STYLE = [
     # gm-request.md is a verbatim transcript of the GM speaking; correcting it defeats its purpose
     ("the GM's own words, by heredoc", cmd("cat > specs/128-x/gm-request.md <<'EOF'\nthey wrote colour\nEOF"), "ok"),
     ("merely GREPPING for one", cmd("grep -n colour docs/a.md"), "ok"),
+    # a session scratchpad is outside the project (2026-09-06: three reader agents had verbatim page text in
+    # /tmp result files rewritten and each worked around the guard)
+    ("a file under /tmp is not project content", edit("/tmp/claude-1000/x/scratchpad/result.json", new="{\"t\": \"the col\u006fur\"}"), "ok"),
 ]
 
 
