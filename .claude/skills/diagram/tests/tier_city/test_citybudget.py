@@ -79,12 +79,6 @@ def test_a_fox_eight_precinct_program_prices_eight_precincts_and_scales_the_cler
     assert monks.area_px2 == pytest.approx(48 * citybudget.C_PACKED)
 
 
-
-
-
-
-
-
 @pytest.mark.tiers("city")
 def test_the_new_ground_costs_sit_in_their_documented_ranges_and_order():
     """A walled compound costs more ground than a detached house, which costs more than a terrace.
@@ -182,13 +176,3 @@ def test_the_capital_manifest_round_trips_as_plain_json_and_adds_no_new_top_leve
     prov = json.loads(json.dumps(budget_to_manifest(plan_city(_prog()))))
     assert set(cap) == set(prov)
     assert cap["dwelling_target"]["samurai_yashiki"] == 53
-
-
-
-
-
-
-
-
-
-
