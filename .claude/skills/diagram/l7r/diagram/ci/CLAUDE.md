@@ -110,7 +110,7 @@ It is paid and prompted, in the same class as `make ci-image` - it cancels by de
 ## The sequence (every remote target)
 
     conditions -> lint/format/types locally -> push mailbox, start_build (build PARKS at wait-go)
-      -> make reference locally -> red: stop_build(OUR id) | green: put go/<id> -> stream -> record
+      -> make _reference locally -> red: stop_build(OUR id) | green: put go/<id> -> stream -> record
 
 The build parks for at most `PARK_TIMEOUT_S` (120 s, ~$0.04) if the dispatcher dies (FR-036). A
 started build that is stopped costs its partial minute; a queued one costs nothing. Only the id

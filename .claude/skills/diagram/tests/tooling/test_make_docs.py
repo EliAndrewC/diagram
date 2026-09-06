@@ -94,4 +94,6 @@ def test_the_page_groups_and_names_its_source() -> None:
     for section in ("Tests", "Maps", "Diagnostics", "Performance", "Remote", "Static checks", "Project state"):
         assert f">{section}" in page or f">{section}<" in page, f"missing section: {section}"
     assert "DO NOT EDIT" in page and "make-docs.py" in page, "the page must say what generates it"
-    assert "make done" in page and "make quick" in page and "make reference" in page
+    # `make reference` was here until the GM retired the public rung on 2026-09-06; `static` replaces
+    # it as the third probe - a target from a DIFFERENT section, which is what this line is checking.
+    assert "make done" in page and "make quick" in page and "make static" in page

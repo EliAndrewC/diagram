@@ -16,7 +16,7 @@ CodeBuild dispatcher's conditions - exists for one reason the GM stated on 2026-
 v2.3.0): *"iterations are expensive in terms of wall clock time. And if me asking for a simple
 change results in half an hour of work being done when it should have only taken five minutes, then
 that limits the number of changes that I can make in a single day."* A session drawing or fixing a
-map picks the cheapest command that answers its question (`make reference`, `make map` on the one
+map picks the cheapest command that answers its question (`make maps`, `make map` on the one
 map, `make quick`), batches changes so one verification covers many, and treats a simple task that
 ran long as a finding about the tooling. The dev loop with the measured numbers is
 [`CLAUDE.md`](CLAUDE.md).

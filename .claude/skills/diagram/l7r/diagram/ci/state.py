@@ -2,9 +2,9 @@
 
 `.git/verification-state.json` - per CLONE and surviving a session restart, because a merge can
 happen a day after the local check that vouches for it (which is why `scripts/gate-hooks.sh`'s
-per-harness-session state under /tmp was declined). Written by the Makefile: `quick`, `reference`,
-`test-file` and a green local `done` record `green-local`; a red local `done` and a failed remote
-build record `failed-gate`.
+per-harness-session state under /tmp was declined). Written by the Makefile: `quick`, `test-file`
+and a green local `done` record `green-local`; a red local `done` and a failed remote build record
+`failed-gate`. (`reference` wrote one too until the GM retired it as a rung on 2026-09-06.)
 
 "A source edit resets the state" is not an event to catch. The state carries the content hash of
 the diagram area's Python at the time of the run - the SAME hash `scripts/gate-stamp.py` computes
@@ -45,7 +45,12 @@ def _state_file(root: Path) -> Path:
 
 GREEN = "green-local"
 FAILED = "failed-gate"
-GREEN_TARGETS = ("quick", "reference", "test-file", "done")
+# `reference` LEFT THIS TUPLE on 2026-09-06 (GM), when `make reference` was retired as a public rung.
+# It was the weakest credential here by a wide margin - one seed of one map, ~26 s - and any entry in
+# this tuple can satisfy a PUSH. The roll still happens (reference-first is untouched); it simply no
+# longer records a verdict, so nothing can merge on the strength of it. See the Makefile's
+# `_reference` target for the full decision.
+GREEN_TARGETS = ("quick", "test-file", "done")
 
 
 @dataclass(frozen=True)
@@ -102,9 +107,10 @@ def write(root: Path, event: str, target: str, reused: bool = False) -> Verifica
         raise ValueError(f"unknown verification event {event!r} (want {GREEN} or {FAILED})")
     from l7r.diagram.ci.delta import engine_key_worktree
 
-    # A GREEN SUBSET NEVER FORGETS A GREEN GATE (GM 2026-08-26, the make quick profile). `quick`,
-    # `test-file` and `reference` each record themselves here, and the record is ONE slot - so a
-    # `make quick` after a green `make done` on the same content replaced the gate's verdict with a
+    # A GREEN SUBSET NEVER FORGETS A GREEN GATE (GM 2026-08-26, the make quick profile). `quick`
+    # and `test-file` each record themselves here (`reference` did too until 2026-09-06), and the
+    # record is ONE slot - so a `make quick` after a green `make done` on the same content replaced
+    # the gate's verdict with a
     # lesser one, and the next `make done` ran its 70 s again for nothing (measured: it did, on the
     # first commit after this rule was noticed). If the standing record is a green `done` against
     # exactly this content, a green run of anything smaller leaves it standing.

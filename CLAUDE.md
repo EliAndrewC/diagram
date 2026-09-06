@@ -189,7 +189,7 @@ that has found a path forward takes it.
   interpreter reaching an engine entry point, a bare pytest, a make driven by a foreign makefile, or
   an inline override supplied to skip a prompt is refused BEFORE it runs by
   `scripts/make-only-hooks.sh`; the engine refuses in-process calls too. In the diagram skill the
-  ladder, cheapest first, is `make quick`, `make reference`, `make done` (NOT the quick one),
+  ladder, cheapest first, is `make quick`, `make done` (NOT the quick one),
   `make done FULL=1` (prompts, cancels by default, logs a reason). **What each costs is asked of the
   recorded runs, never written down here** (feature 162, GM 2026-08-30: *"I think those numbers for
   `make quick` are wrong and outdated"* - they were: the guard message said the gate cost ~70 s with

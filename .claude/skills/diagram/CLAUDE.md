@@ -127,7 +127,7 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 | `make overlap-audit M=...` | does A overlap B on a finished map, over RECORDS and over drawn INK (five families). Replaces the point-in-polygon script that got hand-written twelve times across feature 150 | ~2 s |
 | `make map GEN=... PROFILE=1` | the same roll, plus where its time went: per-stage timings, the total and the slowest stage | the roll + ~0 |
 | `make verify` | THE PAIRED RUN: starts the gate and prints the settlement-review to dispatch in the same turn. Neither half runs alone (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, with the review beside it |
-| `make reference` | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
+| `make _reference` (internal since 2026-09-06; the public rung was retired) | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
 | `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
 | `make cov-file FILE=... MOD=...` | which lines of MOD does ONE test file reach - the answer `make test-full` costs 10 minutes to give (feature 146). Serial, no workers; grep the module you care about out of the table | ~2-10 s |
 | `make maps` | picks its own scope from how the last run went | 1 min - many |

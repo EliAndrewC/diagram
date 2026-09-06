@@ -16,7 +16,7 @@ execution - so the number of sequential turns is the cost, not the speed of any 
 | target | what it runs | measured 2026-08-30 |
 |---|---|---|
 | `make quick` | lint, types, and every test that does not roll a map | **4.1 s** warm / 25.3 s cold |
-| `make reference` | one seed of the reference hamlet, and nothing else | **29 s**, or ~0 on a roll-cache hit |
+| `make _reference` (internal; the public rung was retired 2026-09-06) | one seed of the reference hamlet, and nothing else | **29 s**, or ~0 on a roll-cache hit |
 | `make done` | lint/format/types, THEN reference, then hooks + the suite (feature 168: the static phases run first, so a break ruff cannot fix is reported before a map is rolled) | **median 156 s** over the last 20 green runs |
 | `make done FULL=1` | + every pool map + the seeds 41-44 ratchet | minutes; prompts, and cancels by default |
 

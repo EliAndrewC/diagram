@@ -201,7 +201,7 @@ def test_an_operation_target_is_dispatched_as_itself(repo: Path) -> None:
 def test_local_reference_failure_stops_OUR_build_and_records_the_abort(repo: Path) -> None:
     engine_delta_with_green(repo, False)
     client = FakeClient()
-    c, lines = ctx(repo, client=client, sh=ScriptedSh(make={"reference": (1, "reference settlement (Inashiro, seed 4): FAILING")}))
+    c, lines = ctx(repo, client=client, sh=ScriptedSh(make={"_reference": (1, "reference settlement (Inashiro, seed 4): FAILING")}))
     out = dispatch.run(c)
     assert out.rc == 1 and out.verdict == "ABORTED(local-reference)"
     stops = [i for n, i in client.calls if n == "stop_build"]

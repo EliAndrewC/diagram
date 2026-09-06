@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T013733Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "pure tooling delta - a disabled hook switch and a renamed internal make target; no placer, no map content, no manifest moves, so there is nothing for settlement-review to read (GM 2026-08-29: the review is not per-map)"
+}

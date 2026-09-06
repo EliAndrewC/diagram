@@ -2,7 +2,7 @@
 # make-only-hooks.sh - a Claude Code PreToolUse hook that BLOCKS any route to an expensive
 # operation other than its make target (feature 127, guard layer 1).
 #
-# WHY (GM 2026-08-24). The fast path already existed - `make reference` answers in ~26 s - and a
+# WHY (GM 2026-08-24). The fast path already existed - `make quick` answers in seconds - and a
 # session kept taking the five-minute and twenty-five-minute paths anyway. Four times in one feature,
 # each time after being told not to, each time by a route the guards of the day did not cover:
 #
@@ -83,7 +83,6 @@ block() { # reason, then the make target to use instead
 Every operation in this project goes through a make target, so the expensive ones can ask whether
 the cheap one would do first. Cheapest first, so the choice is informed rather than habitual:
 
-    make reference    one seed of the reference hamlet - answers most questions
     make quick        lint, types, and every test that does not roll a map, stops at the first
     make done         reference + lint/types + the suite; NOT the quick check
     make done FULL=1  + every pool map + the seeds 41-44 ratchet; prompts, cancels by default
