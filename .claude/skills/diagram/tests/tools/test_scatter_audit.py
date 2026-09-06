@@ -84,24 +84,6 @@ def _one_dot_svg(x, y):
     return f'<circle cx="{x}" cy="{y}" r="2.0" fill="#94A063" fill-opacity="0.85"/>'
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # ---- CLI -------------------------------------------------------------------------------------
 
 
@@ -109,20 +91,6 @@ def _write_map(tmp_path, svg_body, manifest):
     (tmp_path / "t.svg").write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800">{svg_body}</svg>')
     (tmp_path / "t.json").write_text(json.dumps(manifest))
     return str(tmp_path / "t")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
@@ -204,8 +172,6 @@ def test_crown_fills_covers_every_recorded_crown(pool_tier_glob):
         pytest.skip("no live scripted map has both a .svg and a .json in this checkout - `make map` regenerates the reference hamlet with its render, then this guard has something to check")
 
 
-
-
 def test_parse_bases_honours_the_families_filter_and_stops_before_the_crown_transform() -> None:
     """Feature 174: the `families` argument, which every caller so far leaves at its default.
 
@@ -241,5 +207,3 @@ def test_parse_bases_resolves_a_crowns_group_TRANSLATE_into_its_true_position() 
     svg = f'<circle cx="5" cy="7" r="9" fill="{fill}"/><g transform="translate(100,200)"><circle cx="5" cy="7" r="9" fill="{fill}"/></g>'
     crowns = sorted(sa.parse_bases(svg, families=("crown",))["crown"])
     assert crowns == [(5.0, 7.0), (105.0, 207.0)], "the untranslated crown keeps its own coordinates; the translated one is moved"
-
-

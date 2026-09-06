@@ -104,15 +104,3 @@ def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, 
         ox, oy = _offset(m.start())
         fams["crown"].append((float(m.group(1)) + ox, float(m.group(2)) + oy))
     return fams
-
-
-
-
-
-
-
-
-
-
-
-
