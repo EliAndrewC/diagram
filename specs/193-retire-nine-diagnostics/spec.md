@@ -29,7 +29,7 @@ checklists**, invisible to a grep for `make <target>`, to `import`, and to the g
 | `scatter_audit.parse_bases` (the PARSER only) | `tests/settlement/test_land.py:566` imports it for a settlement gate test (the GM's 2026-08-26 scrub-in-the-reeds ruling) and it drives the positional crown guard. The **audit half goes** - see FR-009 |
 | `hamlet-floor` | not a diagnostic at all - `test-full` invokes `hamlet_floor` directly as a gate phase (`Makefile:1314`); the target is the `--list` view of what the gate enforces |
 
-**Why `sun-audit` is in the seven, stated correctly this time.** The first draft claimed it measures
+**Why `sun-audit` is in the removals, stated correctly this time.** The first draft claimed it measures
 against a standard that no longer exists. **That was false**: `hamletgen/homesteads/stages.py:46`
 calls `s.sun_corridor(SUN_CORRIDOR_FT)` and `west_sun_lane` gates the grove, so the rules are LIVE
 and enforced at placement. Feature 166 deleted the post-hoc check SEGMENT, not the standard. It is
@@ -37,7 +37,8 @@ removed on the GM's own reasoning instead: *"the placer should already do the jo
 auditing, so there's no need for that rule."* The placer's sun rules STAY - only the tool goes.
 
 **The cost, corrected.** The first draft told the GM ~8,496 lines; it double-counted a module it
-proposed to keep and attributed unrelated test files to individual tools. Measured, for the seven:
+proposed to keep and attributed unrelated test files to individual tools. Measured, for the seven
+full removals (scatter-audit is a partial - FR-009 - and is not counted here):
 
 | target | tool | its own tests |
 |---|---|---|
@@ -54,14 +55,15 @@ proposed to keep and attributed unrelated test files to individual tools. Measur
 
 ## Requirements
 
-- **FR-001** The seven targets are removed: recipe, `##` line, and `.PHONY` entry in the SKILL
+- **FR-001** The seven FULLY removed targets lose their recipe, `##` line, and `.PHONY` entry in the SKILL
   Makefile **and the `FORWARD` list in the ROOT Makefile** (`Makefile:24` carries `sun-audit`; that
   list's own guard-edit note records that a stale forward there *"resolves, forwards into the skill,
   and dies naming the WRONG file - the exact second-order failure this explicit list exists to
   prevent."*).
 - **FR-002** Their `_invocation.OPERATIONS` rows are removed. The rows are DATA naming a target as a
   string - the consumer kind that made `citybudget` look dead this morning.
-- **FR-003** Their modules and their own test files are deleted.
+- **FR-003** Their modules and their own test files are deleted. (`scatter_audit` is the exception
+  and is governed by FR-009: its module and test file survive, reduced.)
 - **FR-004** `pyproject.toml`'s `project-includes` (line 69, *"the one list of checked files"*) drops
   **`tools/timings.py` only**. `tools/pack_audit` and `tools/scatter_audit.py` STAY - both modules
   survive this feature, and dropping a live gate-tested module from the type checker's only file
