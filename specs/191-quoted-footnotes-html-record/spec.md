@@ -1,6 +1,12 @@
 # Feature 191 - references that QUOTE their sources, checked, and the research record as HTML
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: DRAFT, round 2 - awaiting `spec-fidelity` (constitution XVI). Round 1 returned NOT FAITHFUL on five
+items and REFUSED the exception this spec had put to it (generate the HTML from Markdown that stays): the GM's
+*"the markdown on GitHub will no longer exist as it has been replaced with HTML"* is the post-condition, stated by
+the GM and used as the premise for the local links, and hand-authored HTML delivers every capability asked for.
+So the record CONVERTS (Part 3 rewritten); the file surface is 15 record files plus the registry, not "18";
+`quote-check confirmed` is ADDED beside `source-reader confirmed`, not swapped for it; the class entries and
+`_ENTRY_FILE` move to `.html` with an existence test; a footnote may carry more than one passage.
 **Request**: [`request.md`](request.md) - the GM's words verbatim (2026-09-06, three parts)
 **Predecessors**: 143 (read what you cite; `SOURCES.md` keys with URLs), 180 (the modal's references are the
 research QUESTIONS, linked to GitHub), 190 (every reference is a link)
@@ -19,8 +25,9 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
 
 - **FR-001 The form of a citation is a FOOTNOTE that quotes.** An assertion in a research entry is followed by a
   footnote reference, `[^n]` (numbered per file), and the footnote at the file's foot carries: the registry key as
-  a link (feature 190's rule decides the target), the QUOTED PASSAGE verbatim in the source's language (a gloss in
-  English after it when the passage is not English), and, when the quote's bearing is not plain, one clause on
+  a link (feature 190's rule decides the target), the QUOTED PASSAGE - or PASSAGES, when more than one is needed
+  to support the assertion (the GM: *"the passage or passages"*) - verbatim in the source's language (a gloss in
+  English after each when the passage is not English), and, when a quote's bearing is not plain, one clause on
   what it supports. A sentence that makes two assertions from two sources carries two footnotes. Example:
   `Chickens roosted in a coop in Han China[^7], and in Japan the chicken was a timekeeper, not a coop bird[^8].`
   with `[^7]: [`qimin-yaoshu-yangji`](https://zh.wikisource.org/...) - 「雞棲，宜據地為籠，籠內著棧」 (the coop
@@ -36,11 +43,13 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   for the assertion the footnote is attached to; and, per section, the assertions it finds WITHOUT a footnote (the
   GM: *"every relevant assertion has a footnote link"*). One fetch per host; background; stall-watched like the
   reader. The doctrine: every new or changed research entry is checked by it before its feature lands, and the
-  result is recorded in the feature's tasks (the `research: physical` checkbox `source-reader confirmed` becomes
-  `quote-check confirmed`).
+  result is recorded in the feature's tasks: a `research: physical` task gains a FOURTH box, `quote-check confirmed`,
+  beside `source-reader confirmed` - the GM's words are *"both ... and also ... and"*, an addition on top of the
+  check they say is already in place, so nothing is retired (`tests/test_task_research_boxes.py` learns the
+  fourth box).
 - **FR-004 The mechanical half is a TEST.** `tests/interactive/test_footnotes.py`: every footnote reference resolves
-  to a definition and every definition is referenced; every definition carries a registry key and a quotation
-  (quotation marks, 「」 or a `>`-style quote span, at least 12 characters); every key on a section's Sources
+  to a definition and every definition is referenced; every definition carries a registry key and at least one quotation
+  (quotation marks or 「」, at least 12 characters; several passages from the same source may follow one another); every key on a section's Sources
   roster is quoted by a footnote in that section; footnote numbers are unique per file. The judgment half
   (verbatim, supports, complete) is FR-003's agent - a test cannot read a page.
 - **FR-005 The rule is written where the record is written**: `research/CLAUDE.md` (the form, the check, the
@@ -50,12 +59,14 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
 
 ## Part 2 - the backfill (FR-006 to FR-008)
 
-- **FR-006 Every existing section is backfilled.** For each of the 183 sections in the 18 files: each assertion
+- **FR-006 Every existing section is backfilled.** For each of the 183 sections in the 15 RECORD files - the 9 top-level and 6 `cities/` files that carry findings;
+  `SOURCES.md` is the registry, `README.md` and `CLAUDE.md` are instruction files with no assertion to footnote
+  (feature 190 FR-004 states the same surface): each assertion
   that rests on a source gets a footnote quoting that source; the quotes come from the page (the `source-reader` /
   `quote-check` agents fetch it), never from memory; a registry entry that already carries the verbatim passage
-  (many do - `READ: 「...」`) supplies it directly and the agent confirms it. Scale, measured: 183 sections,
+  (many do - `READ: 「...」`) supplies it directly and the agent confirms it. Scale, measured: 15 files, 183 sections,
   333 registry entries, 459 keyed citation sites, 202 prose-named ones (feature 190).
-- **FR-007 The backfill runs as a batch of background agents, one per file**, each writing footnotes for its file
+- **FR-007 The backfill runs as a batch of background agents, one per RECORD file (15)**, each writing footnotes for its file
   and reporting what it could not quote; then `quote-check` runs over every file and its findings are fixed
   (DIFFERS -> the page's text; DOES-NOT-SUPPORT -> a better passage or the assertion re-labeled; a missing
   footnote -> added). The residue - sources that no longer resolve, pages that refuse the fetch - is recorded per
@@ -65,53 +76,63 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   finding and is reported to the GM in the answer, the text left as it is unless the fix is a plain error of
   fact (feature 190's precedent: the year 1697).
 
-## Part 3 - the record as HTML (FR-009 to FR-014)
+## Part 3 - the record CONVERTS to HTML (FR-009 to FR-014)
 
-- **FR-009 Each research file is rendered to an HTML page** with footnotes at the foot and ACOUP-style hover:
-  moving the mouse over a footnote link shows the footnote - the source link and the quote - in a tooltip beside
-  it, clicking it jumps to the footnote, and the footnote carries a return link. The pages are
-  `research/html/<name>.html` (`research/html/cities/<name>.html`), one per source file, with a `SOURCES.html`
-  for the registry; section ids equal the anchors the modal already computes (`github_anchor`), so a link that
-  worked on GitHub works on the page.
-- **FR-010 The record stays AUTHORED in Markdown and the HTML is GENERATED** - the one place this spec departs
-  from the request's literal words (*"the markdown on GitHub will no longer exist as it has been replaced with
-  HTML"*), put to `spec-fidelity` as a constitution-XVI exception with the reasoning: what the GM asked FOR - hover
-  footnotes, many footnote links per paragraph, local links from the maps - is delivered in full by the generated
-  pages; what generation preserves is the thing every other artifact here already has: a SOURCE the guards, the
-  tests, the parser and the sessions read and edit as text (`sources.py` reads headings and Sources rosters from
-  the `.md`; the house-style and SOURCE-block guards act on it; every research edit by every session is a Markdown
-  edit), with the rendered form derived, gitignored and regenerated on landing exactly like a map's `.html`
-  (`.gitignore`: *"the generated html pages should not be tracked just like the generated svg and png"*).
-  Hand-authoring HTML would make every future research edit an HTML edit and the record's diffs markup, for no
-  capability the generated page lacks. If the reviewer rules this a carve-out, the files convert (D2).
-- **FR-011 The renderer** is `python-markdown` (added to `requirements.in`, re-locked, checked by
-  `setup-dev-env.sh`) with its footnotes and tables extensions, wrapped by `l7r/diagram/interactive/researchpage.py`:
-  heading ids by `github_anchor`, the footnote hover (inline CSS/JS in the page, no external asset, so a
-  `file://` page has everything), the four-label styling the modal uses, a title and a "back to the map" note.
-  `make research-html` renders all 18 (+ the registry); the render cache fingerprints the `.md` files and the
-  renderer, so a landing regenerates only what changed; `render-sync` calls it in the mirror, which is where the
-  GM's laptop reads the files.
-- **FR-012 The maps link locally.** `research_questions()` returns a path RELATIVE to the map's own page -
-  `../../../research/html/homesteads.md.html#anchor` from `pool/<tier>/<name>/<name>.html` - and the references
-  modal opens it in a new tab as before. `RESEARCH_URL` (GitHub) is retired; the class entries' `entry` strings
-  are unchanged (they name `research/<file>.md`, which the resolver maps to the page).
-- **FR-013 Tests**: the renderer (ids equal `github_anchor` for every heading in every file; every footnote
-  rendered with its hover data; a SOURCE block rendered verbatim; the tables); the links (every question URL a
-  map emits resolves to an existing page and an existing id); the `page` stamp area gains the renderer's assets;
-  100% coverage as everything else. The browser test opens one research page and hovers one footnote.
-- **FR-014 Documentation**: `interactive/CLAUDE.md` (the page chain now ends at a local page),
-  `research/CLAUDE.md` (the HTML is generated - edit the `.md`), `dev/cache.md` (the research fingerprint).
+- **FR-009 The record files convert in place, and the Markdown is deleted.** The 15 record files and the registry
+  become tracked, hand-authored HTML at the same paths with the `.html` extension - `research/water.html`,
+  `research/cities/fabric.html`, `research/SOURCES.html` - and `research/water.md` etc. are removed in the same
+  commit (`git mv` plus the conversion, so history follows the file). From then on a research edit is an HTML
+  edit. `research/CLAUDE.md` and `research/README.md` are NOT converted: they are instruction files, not
+  reference sections, and the README is the GM's (constitution XVII) - its link table now names files that moved,
+  which is reported to the GM. The one-time conversion is scripted (python-markdown as a throwaway tool in the
+  scratchpad, never a dependency of the engine), and its output is checked before commit: every heading, table,
+  list, link, quote and SOURCE block of the Markdown present in the page, and the page readable and editable as
+  text - one block element per line group, the source's line wraps kept inside paragraphs so diffs stay small.
+- **FR-010 Section ids keep exactly the strings `github_anchor` computes today**, so every pointer that landed on
+  GitHub lands on the page: `<h2 id="...">`; the function stays as THE id rule for the record, renamed in its
+  docstring from "GitHub's anchor" to "the record's anchor (GitHub's rule, kept when the record converted)".
+  Registry entries are `<h3 id="<key>"><code>key</code></h3>`, so feature 190's `SOURCES.md#key` links become
+  `SOURCES.html#key` and still resolve.
+- **FR-011 Footnotes, and the hover.** In a page: `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>` after
+  the assertion; at the foot `<section class="footnotes"><ol><li id="fn-n">` with the key link, the quoted
+  passage(s), the gloss and a return link `<a class="fnback" href="#fnref-n">`. One shared stylesheet and one
+  shared script, `research/assets/record.css` and `research/assets/record.js`, referenced relatively from every
+  page (`cities/` pages with `../`), so a `file://` page is self-contained and a fix to the hover is one edit:
+  moving the mouse over a reference shows the footnote beside it (ACOUP's form), clicking jumps to it, Escape
+  and moving away dismiss it, the box stays inside the viewport. A page's `<head>` carries the charset, the
+  title (the file's H1) and the two links; nothing else is required of an author.
+- **FR-012 The maps link locally, and the code reads HTML.** `sources.py` parses the pages: headings and their
+  ids, the `Sources:` rosters (`<p><strong>Sources:</strong> ...`) and the `<code>key</code>` tokens in them, the
+  section bodies; `_ENTRY_FILE` and every class's `entry` string name `research/<file>.html`;
+  `research_questions()` returns a path RELATIVE to the map's own page - `../../../research/homesteads.html#anchor`
+  from `pool/<tier>/<name>/<name>.html` (every map and every legacy exhibit sits three levels under the skill
+  root) - and the references modal opens it in a new tab as before. `RESEARCH_URL` (GitHub) is retired. A test
+  proves every class entry's file and every anchor a pool map emits exist on disk (feature 180 FR-012a's silent
+  miss, held for the new surface).
+- **FR-013 Everything that reads the record moves to the HTML surface**: the house-style and SOURCE-block guards
+  (they act on edited text; the `.html` paths are checked to be in their scope), feature 190's link test (every
+  `<code>key</code>` in a page inside an `<a>` with the right target), the Sources-roster tests, the browser test
+  (opens one research page and hovers one footnote), `research/CLAUDE.md`'s pointers, the specs' and docs'
+  pointers to `research/*.md` (updated where a broken link would result; historical spec prose left as history).
+  100% coverage as everything else.
+- **FR-014 Documentation**: `interactive/CLAUDE.md` (the page chain ends at a local page), `research/CLAUDE.md`
+  (the record is HTML; the footnote form; the hover assets), `dev/` where render-sync was described as the
+  pages' source (nothing generates them now).
 
 ## Decisions Recorded
 
 - **D1 - footnotes, not inline quotes.** The GM named footnotes and the ACOUP hover; a quote inline after every
   assertion would double the record's length on the page and bury the argument.
-- **D2 - Markdown source, generated HTML** (FR-010) - held for `spec-fidelity`'s ruling under XVI.
+- **D2 - the record converts; generation was REFUSED.** Round 1 ruled the generate-from-Markdown proposal an
+  illegitimate exception: the GM stated the post-condition (*"the markdown on GitHub will no longer exist"*) and
+  built the local links on it, and hand-authored HTML loses no capability asked for. Recorded so the question is
+  not reopened. Cost accepted with it: GitHub shows a committed `.html` as source, so the public GitHub view of
+  the record stops being browsable prose - the reading path feature 180 built; the maps link locally instead.
+  Reported to the GM in the answer.
 - **D3 - the Sources roster stays and is bound to the footnotes.** The modal reads keys per section from it; the
   footnotes are where the quotes live; FR-004 binds the two (every roster key quoted). Declined: deriving the
   roster from the footnotes (the modal's parser and 190's test both read the roster; two consumers would change
   for nothing the reader sees).
-- **D4 - numbering per FILE** (`[^1]` ...), the Markdown footnote convention, so a footnote is the same number in
-  the source and on the page and GitHub's renderer shows the same footnotes while the `.md` still renders there.
+- **D4 - numbering per FILE** (`fn-1` ...): a footnote is one id in one page, and a new one takes the next number.
 - **D5 - the backfill is per file, in parallel, and checked by a second agent.** The writer agent and the checker
   are different runs so the check is independent (constitution I's author-is-not-reviewer rule).

@@ -15,17 +15,18 @@ backfill task carries the three boxes.
 - [ ] T03 FR-005: the rule in `research/CLAUDE.md`, root `CLAUDE.md`, the constitution (XII, v2.17.0); README reported
       research: rendering
       verify: read back
-- [ ] T04 FR-011/FR-009: `python-markdown` added and locked; `researchpage.py` renders every file with ids = `github_anchor`, footnotes and the hover; `make research-html`; render cache + render-sync
+- [ ] T04 FR-009/FR-010/FR-011: the one-time conversion of the 15 record files and the registry to hand-authored HTML (scripted, checked, `git mv`; the `.md` deleted); `research/assets/record.css` + `record.js` (the hover); README and CLAUDE.md not converted, the README's link table reported
       research: rendering
-      verify: 19 pages render; the ids of every heading match; a hover shows the quote (browser test)
-- [ ] T05 FR-012/FR-013/FR-014: the maps link locally; tests; docs; `page` stamp area
+      verify: every heading, table, list, link, quote and SOURCE block present in the page; ids equal `github_anchor` for all 183 sections and the registry keys; a hover shows the quote (browser test)
+- [ ] T05 FR-012/FR-013/FR-014: `sources.py` reads the HTML; `_ENTRY_FILE` and the 51 class entries name `.html`; the maps link locally; feature 190's link test and the roster tests on the HTML surface; the guards' scope checked; docs
       research: rendering
-      verify: every question URL a pool map emits resolves to a page and an id on disk; `make done` green at 100%
-- [ ] T06 FR-006/FR-007: the backfill, file by file (18 files, one agent each), then `quote-check` over every file, then the fixes
+      verify: every class entry's file and every anchor a pool map emits exist on disk; `make done` green at 100%
+- [ ] T06 FR-006/FR-007: the backfill, file by file (15 record files, one agent each), then `quote-check` over every file, then the fixes
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed
       - [ ] recorded and cited
+      - [ ] quote-check confirmed
       verify: every section's roster keys are quoted (the test); the checker's verdicts per file recorded here; the residue listed with what was tried
 - [ ] T07 FR-008: the answer to the GM - contradictions found, the residue, D2's ruling; push (GATED: engine code)
       research: rendering

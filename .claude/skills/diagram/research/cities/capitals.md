@@ -420,7 +420,7 @@ outside. The inventory table in `settlements/capitals.md` moves the chancellery 
 
 **Evidence:** attested (Xi'an, Tango precedent), reconstruction (the scum)
 
-**Sources:** [`xian-moat-zhwiki`](https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99) (READ: a permanently watered moat 20 x 10 m); "Edo's moats bloom green" not read ([ja.wikipedia 外濠](https://ja.wikipedia.org/wiki/外濠_(東京都) is a disambiguation page; env.go.jp 濠環境保全 is the lead) - leftover
+**Sources:** [`xian-moat-zhwiki`](https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%AE%89%E5%9F%8E%E5%A2%99) (READ: a permanently watered moat 20 x 10 m); "Edo's moats bloom green" not read ([ja.wikipedia 外濠](https://ja.wikipedia.org/wiki/外濠_(東京都)) is a disambiguation page; env.go.jp 濠環境保全 is the lead) - leftover
 
 **The questions** (GM 2026-08-09): does the inner (castle) moat need to connect to anything?
 How is the water kept in, and kept from stagnating? And why was the CITY moat not simply
@@ -846,7 +846,7 @@ BESIDE the box, exactly as shipped.
 
 **Evidence:** attested (Nagoya), researched (Edo's nine - SUMMARY-ONLY)
 
-**Sources:** [`horikawa-nagoya-jawiki`](https://ja.wikipedia.org/wiki/%E5%A0%80%E5%B7%9D_(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82) (READ), [`osaka-kurayashiki`](../SOURCES.md#osaka-kurayashiki), [`shaoxing-towpath`](https://news.cgtn.com/news/3d3d674d7755444d33457a6333566d54/index.html); "Edo dug nine funairi-bori" SUMMARY-ONLY
+**Sources:** [`horikawa-nagoya-jawiki`](https://ja.wikipedia.org/wiki/%E5%A0%80%E5%B7%9D_(%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82))) (READ), [`osaka-kurayashiki`](../SOURCES.md#osaka-kurayashiki), [`shaoxing-towpath`](https://news.cgtn.com/news/3d3d674d7755444d33457a6333566d54/index.html); "Edo dug nine funairi-bori" SUMMARY-ONLY
 
 **The question** (GM 2026-08-09): Nagahara and Minami let barges float INTO the city - water
 gate, dock basin. Shiro Daika unloads everything at a riverbank quay, and so far only grain.

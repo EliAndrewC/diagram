@@ -14,7 +14,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested
 
-**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`toro-site`](SOURCES.md#toro-site), [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03) (2026-08-17: the tiers below were re-consulted and sourced - they had stood unsourced since they were written)
+**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`toro-site`](SOURCES.md#toro-site), [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03)00069-6)00069-6) (2026-08-17: the tiers below were re-consulted and sourced - they had stood unsourced since they were written)
 
 | Tier | Real width | x field-ditch (true) |
   |---|---|---|
@@ -35,7 +35,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 **Evidence:** attested, derived
 
-**Sources:** [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03), [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), [`nougyoudoboku-suikou`](https://nougyoudoboku.com/water-entrance-exit/)
+**Sources:** [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03)00069-6)00069-6), [`tabayashi-1986`](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/), [`nougyoudoboku-suikou`](https://nougyoudoboku.com/water-entrance-exit/)
 
 *What prompted it (GM 2026-08-17).* The GM asked whether the supply ditches were right to thin as they
 feed the paddies (they are - that is [Tabayashi](https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_article/-char/en/)'s rule, already encoded), and then whether it is correct
@@ -46,7 +46,7 @@ but unsourced); the taper's SHAPE had never been examined.
 
 *What the research found.* Two relations, and between them they fix the profile completely.
 
-- **Width goes as the square root of discharge.** [Lacey](https://doi.org/10.1016/S0022-1694(03)'s regime equation for an unlined alluvial
+- **Width goes as the square root of discharge.** [Lacey](https://doi.org/10.1016/S0022-1694(03)00069-6)'s regime equation for an unlined alluvial
   canal - which is exactly what these are - gives wetted perimeter `P = 4.75 * sqrt(Q)`, and the
   regime power laws put width at `Q^0.5` against depth `Q^0.33` and velocity `Q^0.17`. This is not a
   new finding so much as a *recovered* one: [the water-width ladder above](#water-width-ladder-the-real-world-tiers)
@@ -212,12 +212,12 @@ notching it**, and do not read the unbroken bund as a claim that the paddies are
 
 **Evidence:** attested, derived
 
-**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03), [`fao-paddy-duty`](https://www.fao.org/4/u5835e/u5835e00.htm)
+**Sources:** [`gb50288`](SOURCES.md#gb50288), [`nougyoudoboku-matsutan`](https://nougyoudoboku.com/terminal-irrigation-canal/), [`lacey-regime`](https://doi.org/10.1016/S0022-1694(03)00069-6)00069-6), [`fao-paddy-duty`](https://www.fao.org/4/u5835e/u5835e00.htm)
 
 *What prompted it.* Having sourced the taper law, the same sources let the ABSOLUTE widths be priced,
 which nothing had ever done - they were multipliers chosen by eye. The answer was that the net was
 about **5-6x oversize**: Inashiro's 20.9-acre (~8.5 ha) fan carries roughly 0.025 m3/s at the puddling
-peak, for which [Lacey](https://doi.org/10.1016/S0022-1694(03) gives a wetted perimeter near 0.75 m and Manning a ~0.6 m top width on a
+peak, for which [Lacey](https://doi.org/10.1016/S0022-1694(03)00069-6) gives a wetted perimeter near 0.75 m and Manning a ~0.6 m top width on a
 hand-dug 1:1 earthen section - call it 2.5 to 5 ft depending on how much freeboard and bank you count
 as "the channel". It was drawn at **14 ft**. The GM's ruling (2026-08-17), given the measurement:
 *"we can narrow the widths to be more realistic... update the net to be actual size (at least for
@@ -481,7 +481,7 @@ carries the sketch its fix would follow.
 
 **Evidence:** attested (Edo), researched (the Forbidden City flush - SUMMARY-ONLY)
 
-**Sources:** [`sotobori-jawiki`](https://ja.wikipedia.org/wiki/外濠_(東京都) (READ: the Hirakawa relocated to make the moat; "spiral" is the entry's word); the Forbidden City NW-in / SE-out: zh.wikipedia 筒子河 read and silent on direction; SUMMARY-ONLY from heritage pages - leftover
+**Sources:** [`sotobori-jawiki`](https://ja.wikipedia.org/wiki/外濠_(東京都))) (READ: the Hirakawa relocated to make the moat; "spiral" is the entry's word); the Forbidden City NW-in / SE-out: zh.wikipedia 筒子河 read and silent on direction; SUMMARY-ONLY from heritage pages - leftover
 
 - *The diverted-stream moat is itself a historical type (GM asked whether Tango's arrangement - a stream seemingly turned into the moat, then resuming its course - was real, 2026-07-23).* It is, and commonly so: a dry-site Chinese seat dug its *hucheng he* by turning a nearby stream through the ring (the Forbidden City's NW-in / SE-out flush is the model Tango already encodes), and Japanese castle towns fed moats by the same river diversions (Edo turned the Hirakawa into its moat spiral). Two honesty notes, both deliberate: (1) **no relic of the stream's pre-diversion bed is drawn through the city** - after centuries of urban buildup the abandoned course is built over, so its absence is realistic, not an omission (do not "fix" this by threading an old channel through the blocks); (2) the ring splits the feeder's flow into two live arcs (west-about and east-about) that rejoin at the outfall, which is why irrigation taps on BOTH flanks can legitimately draw "with the current" (`moat_channels_flow_with_current`).
 
@@ -610,7 +610,7 @@ recharge source; [後背湿地](https://ja.wikipedia.org/wiki/後背湿地) / [�
 
 **Evidence:** attested
 
-**Sources:** [`bitchu-takamatsu-jawiki`](https://ja.wikipedia.org/wiki/高松城_(備中国) (READ). The Song Hebei 塘泺 belt (He Chengju, 988-989) was located (fx361.com 北宋前期河北路塘泺探析; 163.com) but not read this pass - leftover
+**Sources:** [`bitchu-takamatsu-jawiki`](https://ja.wikipedia.org/wiki/高松城_(備中国))) (READ). The Song Hebei 塘泺 belt (He Chengju, 988-989) was located (fx361.com 北宋前期河北路塘泺探析; 163.com) but not read this pass - leftover
 
 *What the research found:* the Northern Song built an artificial marsh-and-pond belt across the northern Hebei frontier (from 989, He Chengju's lake chain) specifically as anti-cavalry terrain; Japanese *numajiro* "marsh castles" (Bitchu Takamatsu, besieged by water 1582) used surrounding marsh as their primary defense; and flooded paddies around castle towns functioned as a de facto glacis. The constant: peri-urban wetness that survives is PURPOSED - so a defensive belt is military ground, not waste.
 
