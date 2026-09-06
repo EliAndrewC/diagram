@@ -114,7 +114,7 @@ done:
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
 	T0=$$(date +%s); fail=""; \
 	: "(GUARD_EDIT_OK: feature 168 - THE CHEAP CHECKS RUN FIRST, at the GM's ruling 2026-08-30. The three static phases cost 1.8 s together against the reference roll's 29 s, so a session that has broken something ruff cannot fix hears about it in seconds rather than half a minute. The GM authorized this ON PRINCIPLE and predicted, correctly, that it buys almost nothing: both static phases AUTOCORRECT (ruff check --fix, ruff format), so they rarely fail at all, and only 8 of 317 recorded gate runs failed on one without also failing the suite - about 4 minutes recovered across the entire history. Do not later credit this reorder with a saving it does not deliver. It does not weaken 'the reference settlement gates everything expensive': what moved ahead of the roll is 16x cheaper than it, and every expensive phase still stands behind it.)"; \
-	: "GUARD_EDIT_OK: feature 185 - the gate's phase loop, one of the four `lint` -> `static` sites" ; \
+	: "GUARD_EDIT_OK: feature 185 - the gate's phase loop, one of the four 'lint' -> 'static' sites (quoted with SINGLE quotes: backticks here are command substitution and were running lint/static on every gate)" ; \
 	for phase in static format typecheck; do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
@@ -710,7 +710,7 @@ ci-measure:     ## [remote] MEASURE what the remote gate costs (PAID, prompts)  
 	$(REMOTE_OK)
 	@: "(GUARD_EDIT_OK: feature 177 - a NEW paid target, in the same class as ci-image: it prompts, it"; \
 	: " logs, and it cancels by default. It is the only route that may dispatch with NO engine delta,"; \
-	: " which is why it prompts at all - `ci-check` is gated by a delta it computes and cannot be asked"; \
+	: " which is why it prompts at all - 'ci-check' is gated by a delta it computes and cannot be asked"; \
 	: " for on a whim. What it CANNOT do is buy a merge credential: buildspec/measure.yml sets MODE"; \
 	: " measure and run.sh writes no verified/ record and pushes nothing.)"; \
 	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-measure is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-measure with no terminal"; exit 1; fi; \

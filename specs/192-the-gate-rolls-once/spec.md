@@ -56,6 +56,22 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
   whether that Polder seed eight earns its place or not because I am not familiar with that code. If
   you take a look and find that it does not seem to be doing anything, then we should remove it."*
 
+  **THIS COMPLETES A DECISION FEATURE 158 ALREADY MADE, which is the fact that turns the case from an
+  observation into a prior ruling.** `dev/loop.md:474`: *"**SEED 8 WAS DROPPED** - 39.8 s, the most
+  expensive polder in the suite - because its test asserts only what every polder owes and names no
+  seed, and seed 19 carries all of it."* That is WHY nothing in the tree rolls this spec: somebody
+  removed its test on purpose and measured the reason. The floor's subject list was simply never
+  updated to match, so it has been paying 39.8-58 s a run to roll a spec the suite deliberately
+  stopped exercising.
+
+  **THE STRONGEST COUNTER-EVIDENCE IS IN THIS REPOSITORY AND IS CITED RATHER THAN OMITTED.**
+  `dev/loop.md:394` measures seed 8 at **29 unique covered LINES** - differenced under `coverage.py`
+  against the union of every other spec - so at line granularity seed 8 was demonstrably NOT
+  redundant. Two things reconcile that with FR-007: this floor is module-level by the GM's own choice
+  (`hamlet_floor.py`'s "WHY NOT LINES"), and that measurement predates feature 158 removing the test,
+  after which the tree still holds 100% coverage - so those lines are reached elsewhere today. This is
+  the concrete instance of the line-granularity limit disclosed below, not an abstraction.
+
   **WHAT THE MEASUREMENT SHOWS, AND WHAT IT DOES NOT.** Seed 8 reaches 83 modules, of which **0 are
   reached by no other subject** - and the honest form of that finding, which the first draft of this
   requirement got wrong, is that **this is true of EVERY subject**: all eight have 0 unique modules,
@@ -131,8 +147,13 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
 ## Success Criteria
 
 - **SC-001** On an instrumented cold-cache `make done`, the post-pytest gap falls from ~400 s to
-  **roughly 115 s** - five of seven rolls removed (four by FR-001, one by FR-007), not "to seconds".
-  The number is stated so the run either meets it or contradicts it.
+  **roughly 115 s** - five of seven rolls removed (four by FR-001, one by FR-007).
+  **STATUS: FR-001's half is MEASURED, FR-007's is PREDICTED.** The 401.6 s -> 175.3 s run was taken
+  BEFORE FR-007 landed, which the cache entries date precisely: that run's floor phase wrote a
+  `report:` record for Polder 8 at 13:37:26, and nothing but the floor rolls that spec. So 175.3 s is
+  the FOUR-removed number, correctly measured against a five-removed criterion. It corroborates
+  rather than contradicts (three residual rolls at ~58 s each = 175 s; two = ~117 s), but corroborated
+  is not measured, and this criterion is met only by a cold run taken after FR-007.
 - **SC-002** No roll is SERVED under `L7R_TESTS_FULL=1`. Asserted - this is the property FR-002
   protects and the whole reason the bypass exists.
 - **SC-003** `GATE_NO_CACHE=1` still leaves nothing behind. The existing assertion
@@ -179,4 +200,17 @@ remove them: nothing else in the tree produces their `report:` records. On R7's 
   reproduced the seed-8 measurement, confirmed the arithmetic, and checked the FR-001..005
   implementation against the approved spec with no contradiction. Its two asides are taken: the
   duplicated store body is now FR-008, and FR-007 was renumbered below FR-006.
-- **Round 4**: pending.
+- **Round 4 (`spec-fidelity`): CHANGES REQUIRED**, two items, both accepted. (1) **SC-001 was ticked
+  on a measurement of a configuration the spec no longer describes.** The reviewer dated the
+  instrumented run from its own cache entries - the floor wrote a Polder 8 record at 13:37:26, so the
+  run predates FR-007 and measures four-of-seven removed against a five-removed criterion. SC-001 and
+  T04 now separate MEASURED from PREDICTED, and the post-FR-007 cold run is what closes it. (2)
+  **FR-007 did not cite `dev/loop.md`, where both the reason and the counter-evidence live**:
+  `:474` records feature 158 dropping seed 8's test deliberately (which is WHY nothing rolls it - a
+  prior decision, not an accident), and `:394` measures it at 29 unique covered LINES, which is the
+  strongest evidence against this feature's own finding and was sitting in the repository. Both are
+  now cited, the second as the concrete instance of the disclosed line-granularity limit. The reviewer
+  also verified the seven- and eight-subject module unions are SET-IDENTICAL rather than merely the
+  same size, checked all four search-space sites landed, and confirmed the implementation matches -
+  noting the four cohort records written during pytest as evidence of `BYPASS-STORED` working.
+- **Round 5**: pending - the last round the cap allows.

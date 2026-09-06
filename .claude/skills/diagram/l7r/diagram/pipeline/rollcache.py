@@ -300,8 +300,8 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
     from l7r.diagram import hamletgen as hg
 
     subject = f"report:{spec!r}"
-    entry = _entry(subject)
-    meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
+    # only the META is read here - the payload path went with the store body this now delegates to
+    meta_path = os.path.join(_entry(subject), "meta.json")
     try:
         meta = json.loads(Path(meta_path).read_text(encoding="utf-8"))
         if meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key"):
