@@ -6,7 +6,11 @@
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 # GUARD_EDIT_OK: feature 185 - the .PHONY half of `lint` -> `static`, and scope-lock/scope-unlock go.
-.PHONY: done static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file page-check tick audit perf-gatehooks-test explain \
+# GUARD_EDIT_OK: restoring `citybudget`, which I retired on a census that missed its only caller -
+# `_invocation.OPERATIONS` names it as DATA (the target a bare `python3 -m ...citybudget` is sent to),
+# so no grep for the shell string `make citybudget` could see it. Also splits `perf-gatehooks-test`,
+# a missing space that had left BOTH `perf-gate` and `hooks-test` undeclared here.
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
@@ -29,24 +33,23 @@
 # distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
 # AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
 PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
-perf-explain:   ## band 1, first half: the session's written cause     WHY="..." [ENV=local|codebuild]
+perf-explain:   ## [performance] band 1, first half: the session's written cause     WHY="..." [ENV=local|codebuild]
 	@$(PERF_REVIEW) explain --why "$(WHY)" --environment "$(or $(ENV),local)"
-perf-confirm:   ## band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
+perf-confirm:   ## [performance] band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
 	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-audit:     ## band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
+perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-signoff:   ## band 3 - the GM, at a terminal   WHY="..."
+perf-signoff:   ## [performance] band 3 - the GM, at a terminal   WHY="..."
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
-perf-review:    ## does every environment's newest bookend pair carry the records its band owes? (the push runs this)
+perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check
-perf-profile:   ## tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
+perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 
-hamlet-floor:   ## the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
+hamlet-floor:   ## [diagnostics] the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
 	$(RUN).tools.hamlet_floor --list
 
-hamlet-floor-check:   ## judge the last coverage data against the hamlet-path floor (what test-full's last phase does; GUARD_EDIT_OK: a new operation)
-	$(RUN).tools.hamlet_floor
+# GUARD_EDIT_OK: `hamlet-floor-check` RETIRED 2026-09-05 by the target audit - a convenience alias for what test-full's last phase already does inline (Makefile calls hamlet_floor directly); no caller, no doc, never run.
 
 # THE VERIFICATION STATE (feature 130, FR-012 - GUARD_EDIT_OK: adding the CodeBuild gate). Every
 # local target that proves something records it in .git/verification-state.json with the content
@@ -307,11 +310,13 @@ SWITCH = python3 -m l7r.diagram.switches
 #  remote-off never hides how often money was about to be spent; the check itself is unchanged, ci/ does the write)
 REMOTE_OK = @python3 -m l7r.diagram.ci remote-ok "$@"
 
-switches:       ## the iteration switches: remote on|off, scope unlocked|reference (feature 132)
+# GUARD_EDIT_OK: help text left describing the scope axis after feature 185 retired it - found by the
+# target audit, and the same class as feature 184's findings: a live line stating something false.
+switches:       ## [project] the iteration switch: remote on|off, with reason, who and when (feature 132)
 	@$(SWITCH) show
-ci-off:         ## REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done   REASON="..."
+ci-off:         ## [remote] REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done   REASON="..."
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=off MSG="remote off" REASON="$(REASON)"
-ci-on:          ## REMOTE ON - the default; the gated route may dispatch again   REASON="..."
+ci-on:          ## [remote] REMOTE ON - the default; the gated route may dispatch again   REASON="..."
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=on MSG="remote on" REASON="$(REASON)"
 _switch:
 	@[ -n "$(REASON)" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
@@ -319,7 +324,7 @@ _switch:
 	@git add dev/switches.json && git commit -q -m "chore: $(MSG) - $(REASON)" && printf '\ncommitted: %s - %s\n' "$(MSG)" "$(REASON)"
 
 # --- expensive: they generate ---------------------------------------------------------------
-verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
+verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
@@ -331,12 +336,12 @@ verify:         ## THE PAIRED RUN: start the gate and dispatch the settlement-re
 	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
 
 map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
-map:            ## regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
+map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 	$(REF_FIRST)
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
-cohort:         ## roll N seeds and report every failure      N=48
+cohort:         ## [maps] roll N seeds and report every failure      N=48
 	$(REF_FIRST)
 	$(RUN).tools.cohort_audit --count $(or $(N),48)
 
@@ -353,19 +358,19 @@ cohort:         ## roll N seeds and report every failure      N=48
 # mapcheck - the operation name must equal a make target, because run.sh runs `make $MAKE_TARGET`.
 
 hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
-hamlet:         ## generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
+hamlet:         ## [maps] generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
 	$(REF_FIRST)
 	$(RUN).hamletgen $(ARGS)
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
-cache-audit:    ## does using the generation cache change any map?
+cache-audit:    ## [maps] does using the generation cache change any map?
 	$(REF_FIRST)
 	$(RUN).tools.cache_audit $(ARGS)
-placement-stages: ## re-plate the stage-by-stage walk-through page
+placement-stages: ## [maps] re-plate the stage-by-stage walk-through page
 	$(REF_FIRST)
 	$(RUN).tools.placement_stages $(ARGS)
 
-pool-index:     ## rebuild the pool index
+pool-index:     ## [maps] rebuild the pool index
 	$(RUN).pipeline.pool_index $(ARGS)
 
 # THE INDEX FOLLOWS THE TREE IT IS IN (GM 2026-08-27). pool/index.html is derived and gitignored, so
@@ -376,60 +381,68 @@ pool-index:     ## rebuild the pool index
 # pool's manifests, renders and notes, and the rebuild (~0.5 s) runs only when one of them is newer
 # than the index or the index is missing. mtimes, not hashes: no state file to keep, and a false
 # "stale" costs half a second while a false "fresh" is impossible (a rewrite always bumps a mtime).
-pool-index-if-stale: ## rebuild the pool index only when a manifest, render or notes file is newer
+pool-index-if-stale: ## [maps] rebuild the pool index only when a manifest, render or notes file is newer
 	@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \( -name '*.json' -o -name '*.png' -o -name '*.notes.md' \) -print -quit 2>/dev/null)" ]; then \
 	  $(MAKE) --no-print-directory pool-index ARGS=; \
 	fi
 # (GUARD_EDIT_OK: adds a derived-artifact refresh, no gate or prompt is touched - GM 2026-08-27)
 
-compound:       ## draw a Mode A compound plan                ARGS=<out.svg>
+compound:       ## [maps] draw a Mode A compound plan                ARGS=<out.svg>
 	$(RUN).compound $(ARGS)
+
+# GUARD_EDIT_OK: restores an operation, see the .PHONY note above.
+# THIS TARGET'S ONLY CALLER IS A DATA ROW, WHICH IS WHY IT LOOKED DEAD. `_invocation.OPERATIONS` maps
+# `l7r.diagram.citybudget` to this name, so a bare `python3 -m l7r.diagram.citybudget` is refused and
+# sent HERE; delete the target and that refusal points at a command that does not exist. Retired on
+# 2026-09-06 by a census that grepped for the shell string, restored the same day when
+# `tests/test_operations_registry.py` failed - which is exactly the derived check earning its place.
+citybudget:     ## [maps] the city/capital space-budget planner   ARGS=--plan --population 3000 [--river] [--agri]
+	$(RUN).citybudget $(ARGS)
 
 # RENDER-SYNC IS REFUSAL-ONLY AND NOT SUBJECT TO REFERENCE-FIRST (FR-009a, adjudicated at spec round
 # 3). It runs in MAIN's tree during the stop-work procedure, and CLAUDE.md is explicit that render-sync
 # is the ONLY thing a session runs there - "no generators, no tests". A reference check ahead of it
 # would be a second generator run in main, which that rule forbids. It also re-renders from main's
 # committed tip, which is already gate-verified, so the check would re-prove what the clone proved.
-render-sync:    ## regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
+render-sync:    ## [maps] regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # --- cheap: they READ a recorded artifact ----------------------------------------------------
-overlap-audit:  ## does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x/x.json [FAMILIES=...]
+overlap-audit:  ## [diagnostics] does A overlap B on a finished map (records AND drawn ink)   M=pool/hamlets/x/x.json [FAMILIES=...]
 	$(RUN).tools.overlap_audit $(M) $(if $(FAMILIES),--families $(FAMILIES),)
 
-polder-probe:   ## the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
+polder-probe:   ## [diagnostics] the polder block ALONE with its geometry metrics, no map   SEED=21 | SEEDS=21,22 ARCHETYPE=...
 	$(RUN).tools.polder_probe $(if $(SEED),--seed $(SEED),)$(if $(SEEDS),--seeds $(SEEDS),)$(if $(ARCHETYPE),--archetype $(ARCHETYPE),)$(if $(LAYOUT),--layout $(LAYOUT),)$(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),)
 
-why-placed:     ## who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
+why-placed:     ## [diagnostics] who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
 	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
 
-crop:           ## crop a rendered map in manifest coordinates
+crop:           ## [diagnostics] crop a rendered map in manifest coordinates
 	$(RUN).tools.crop_map $(ARGS)
 
-jogs:           ## find bunds that step sideways
+jogs:           ## [diagnostics] find bunds that step sideways
 	$(RUN).tools.jogs $(ARGS)
 
-pack-audit:     ## empty space and geometry in a Mode A compound SVG
+pack-audit:     ## [diagnostics] empty space and geometry in a Mode A compound SVG
 	$(RUN).tools.pack_audit $(ARGS)
 
-scatter-audit:  ## is drawn ground cover standing where keep-outs should have stopped it?
+scatter-audit:  ## [diagnostics] is drawn ground cover standing where keep-outs should have stopped it?
 	$(RUN).tools.scatter_audit $(ARGS)
 
-notes-census:   ## refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
+notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
-sun-audit:      ## the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro/inashiro.json
+sun-audit:      ## [diagnostics] the sun rules and the belt's page presence, off the manifest   M=pool/hamlets/inashiro/inashiro.json
 	$(RUN).tools.sun_audit $(or $(M),pool/hamlets/inashiro/inashiro.json)
 
-family-census:  ## which feature families one manifest records that another does not   A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
+family-census:  ## [diagnostics] which feature families one manifest records that another does not   A=pool/hamlets/inashiro/inashiro.json B=pool/hamlets/kuwabata/kuwabata.json
 	$(RUN).tools.family_census --a $(or $(A),pool/hamlets/inashiro/inashiro.json) --b $(or $(B),pool/hamlets/kuwabata/kuwabata.json)
 	@: "(GUARD_EDIT_OK: feature 150 - a read-only manifest census, the measured answer to 'does the converted map carry every reference-hamlet family')"
 
-timings:        ## where the generation loop's time goes
+timings:        ## [diagnostics] where the generation loop's time goes
 	$(RUN).tools.timings $(ARGS)
 
-citybudget:     ## the city/capital space-budget planner
-	$(RUN).citybudget $(ARGS)
+# GUARD_EDIT_OK: `citybudget` RETIRED 2026-09-05 by the target audit - 0 live consumers - only three FROZEN legacy exhibits and two wip files import it. The MODULE stays, tested and under the 100% floor; this was only a hand-run entry point for a tier nobody is working.
 
 # BOTH BOOKENDS ARE ENFORCED HERE, not requested (constitution VI, GM 2026-08-24: "are we now
 # actually requiring at the tool level that -start was run at the beginning of a session and -end was
@@ -458,7 +471,7 @@ citybudget:     ## the city/capital space-budget planner
 # guard refuses a scripts/ change whose stamp is missing or stale, exactly as it refuses engine
 # Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; procedure`
 # landed on main, because nothing at push time knew the guards had been edited.
-hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still has a companion
+hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --absolute-git-dir); fail=""; n=0; skipped=0; \
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
@@ -516,7 +529,7 @@ hooks-test:     ## run every scripts/test-*-hooks.sh, and prove each guard still
 # every suite is green, exactly as before.
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
-perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on a regression
+perf-gate:      ## [performance] require the feature's -start bookend, take -end, and FAIL on a regression
 	@: "(GUARD_EDIT_OK: feature 132 - a perf snapshot rolls several seeds, a sweep under the scope lock)"; \
 	f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
 	if [ -z "$$f" ] && [ -f ../../../.specify/feature.json ]; then \
@@ -555,7 +568,7 @@ perf-gate:      ## require the feature's -start bookend, take -end, and FAIL on 
 	$(MAKE) --no-print-directory perf-report AGAINST="$$n-start"
 
 # (GUARD_EDIT_OK: the audit gains "Remote spend" - feature 130, FR-020)
-audit:          ## how the gate has actually been used - every run, every bypass, and remote spend
+audit:          ## [project] how the gate has actually been used - every run, every bypass, and remote spend
 	@python3 -m l7r.diagram.ci remote-spend
 # GUARD_EDIT_OK: feature 162 - FIXING A DEFECT FOUND WHILE WORKING (Principle XIV). `make audit` died
 # with a KeyError on any bypass entry written by `pair-hooks.sh`, which records `guard`/`reason`/`what`
@@ -620,7 +633,14 @@ print()"
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
 	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
 
-help:           ## list every target with its one-line purpose
+# GUARD_EDIT_OK: THE TARGET REFERENCE GENERATES ITSELF (GM 2026-09-05). Two hand audits of the target
+# list disagreed with each other - the first declared everything valid and was contradicted the moment
+# the GM asked about specific targets - so the list stopped being hand-maintained. The page is derived
+# from this file's own `##` lines; `--check` runs in `static` and fails when it drifts.
+docs:           ## [project] regenerate docs/make-targets.html from this Makefile's own `##` lines
+	@python3 ../../../scripts/make-docs.py ../../.. --write
+
+help:           ## [project] list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
 	@grep -hE '^[a-z][a-z0-9-]*:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' | sort | awk -F'\t' '{printf "  \033[1m%-18s\033[0m %s\n", $$1, $$2}'
 # GUARD_EDIT_OK: feature 162 - the help line stops quoting durations typed in by hand (GM 2026-08-30:
@@ -638,16 +658,16 @@ help:           ## list every target with its one-line purpose
 # reference settlement locally with the build parked in parallel, and refuses a re-dispatch after a
 # failed gate until a local check is green. `ci-merge` is the push's gated route and is called by
 # scripts/sync-with-main.sh - never by hand. `ci-status` is the free "why won't it dispatch".
-ci-status:      ## free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
+ci-status:      ## [remote] free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
 	$(RUN).ci status $(if $(ROUTE),--route,)
 # the verification key of a tree - the build records a green gate under it (GUARD_EDIT_OK: feature 130, keyed by engine content since 2026-08-25)
-engine-key:
+engine-key:      ## [project] the content hash the gate and the push key on   REF=<commit>
 	@$(RUN).ci engine-key $(or $(REF),HEAD)
 
 # GUARD_EDIT_OK: FINDING 4 - both ci-* help lines described PRE-REPOINT behavior. A remote run is
 # `make soak` now, not `make done`, so this is no longer "the iteration check" and ci-merge is no
 # longer a merge queue. The names are fine; the descriptions had gone stale (GM 2026-09-05).
-ci-check:       ## run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
+ci-check:       ## [remote] run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
 	$(REMOTE_OK)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
 # (GUARD_EDIT_OK: feature 132 - remote off refuses every ci-check before any AWS call; FULL and TARGET are sweeps under the scope lock)
@@ -657,14 +677,14 @@ ci-check:       ## run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) 
 # (GUARD_EDIT_OK: a forward-looking statement of the CURRENT default, falsified by feature 179's compute change - FR-005)
 
 # GUARD_EDIT_OK: FINDING 4, second half - see the ci-check comment above.
-ci-merge:       ## the push's gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh   FULL=1 (prompts)
+ci-merge:       ## [remote] the push's gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh   FULL=1 (prompts)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
 # (GUARD_EDIT_OK: feature 132 - FULL is a sweep under the scope lock. Remote-off is NOT checked here: the dispatcher
 #  handles it itself, because with remote off it must still produce the LOCAL-GATED verdict the push procedure reads)
 	$(RUN).ci merge $(if $(FULL),--full,)
 
 # the operator's `permitted` answer becomes a commit, so the build finds it in the tree it tests (FR-025)
-commit-permitted:
+commit-permitted: ## [project] commit the most recent bypass-log entry, which is how a paid FULL run is authorized
 	@f=$$(ls -t dev/bypass-log/*.json | head -1); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
 	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
 
@@ -680,7 +700,7 @@ commit-permitted:
 # (feature 130 T028). It widens nothing: the dispatch still passes every condition it passed before,
 # and the compute type only chooses which instance runs it. It is required because the GM asked for
 # measurements on smaller servers and `ci-check` cannot be asked without an engine delta.
-ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 | COMPUTE=BUILD_GENERAL1_LARGE
+ci-measure:     ## [remote] MEASURE what the remote gate costs (PAID, prompts)   FULL=1 | COMPUTE=BUILD_GENERAL1_LARGE
 	$(REMOTE_OK)
 	@: "(GUARD_EDIT_OK: feature 177 - a NEW paid target, in the same class as ci-image: it prompts, it"; \
 	: " logs, and it cancels by default. It is the only route that may dispatch with NO engine delta,"; \
@@ -705,7 +725,7 @@ ci-measure:     ## MEASURE what the remote gate costs (PAID, prompts)   FULL=1 |
 # exact warning beside LOGBYPASS, where the same mistake made the bypass log silently record nothing.
 # The marker for the COMPUTE knob lives in the comment block above the target, where no shell parses it.
 
-ci-image:       ## rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
+ci-image:       ## [remote] rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
 	$(REMOTE_OK)
 	@: "(GUARD_EDIT_OK: feature 132 - remote off refuses the image rebuild before the prompt)"; \
 	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-image is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-image with no terminal"; exit 1; fi; \
@@ -799,7 +819,7 @@ QUICK_BUDGET = 60
 # guard that blocks a legitimate action without offering the alternative is one that gets worked
 # around - the same gap `make durations` filled for "why is this slow".
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
-tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
+tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
 	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
 
 # GUARD_EDIT_OK: feature 188 (GM 2026-09-05: "there's no actual reason to rerun all the tests for style sheet
@@ -809,7 +829,7 @@ tooling:        ## run every `tooling` test (make/ci/pipeline, exhaustive) and r
 # `page` stamp that sync-with-main.sh demands at push (gate-stamp.py AREAS["page"]) and NOTHING else: no
 # verification-state record, because ci/decision.py's green-local-since-edit reads the record's event and never
 # its target, and a one-minute check must not stand where a full gate is meant to.
-page-check:     ## the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
+page-check:     ## [tests] the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/test_page_browser.py \
 	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
 	  && printf '\n\033[1mpage-check green\033[0m (the page stamp is written; an asset-only delta may push)\n'
@@ -822,10 +842,10 @@ page-check:     ## the interactive tests + the browser test, then the `page` sta
 # backticks, and a backtick inside a make-expanded "$(NOTE)" is a shell command substitution - the first
 # real use ran `_ENGINE_DIRS` as a command. An exported variable reaches the script's environment verbatim.
 tick: export TICK_NOTE = $(NOTE)
-tick:           ## tick a task: F=188 T=T03 NOTE="what was verified" [BOXES=1 ticks the research boxes]
+tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [BOXES=1 ticks the research boxes]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/tick-task.py" "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
 
-test-file:      ## run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
+test-file:      ## [tests] run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file
 
 # WHICH LINES DOES THIS TEST ACTUALLY REACH? (feature 146, and it is an ITERATION-LOOP target rather than a
@@ -835,7 +855,7 @@ test-file:      ## run ONE test file, whole              FILE=tests/pipeline/tes
 # runs spent discovering that `_in_blocked` had already refused the seat the byre and garden tests meant to
 # have refused one line further down. This asks the same question in about a second. Serial (-n0) on purpose:
 # xdist's coverage combine is the slow half, and one file does not need workers.
-cov-file:       ## which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
+cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
 	@python3 -m pytest -n0 -q --no-header -p no:cacheprovider --cov=$(MOD) --cov-report=term-missing $(FILE)
 # (worksteal, feature 135: two 50 s rollers landing on one worker under the default scheduler doubled a file's wall clock)
 
@@ -868,11 +888,11 @@ cov-file:       ## which lines of MOD does ONE test file reach?   FILE=tests/set
 # `tests/test_package_surfaces.py` passed here and failed on CodeBuild. A deleted package leaves a
 # phantom behind; deleting the tracked files is not the same as removing the directory.
 
-durations:
+durations:       ## [tests] where the suite's time goes - run when a target feels slow   FULL=1 MARK=...
 	@python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov $(if $(FULL),,--ignore=tests/full) $(if $(MARK),-m "$(MARK)",-m "not rolls_map") --durations=$(or $(N),12) 2>&1 | grep -E "^[0-9.]+s (call|setup)|passed|failed" | head -$$(( $(or $(N),12) + 2 ))
 # (FULL=1 profiles the full tree too; the coverage carriers live there now, so `coverage_only` no longer needs deselecting - feature 135)
 
-quick:
+quick:           ## [tests] tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure   ALL=1
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
@@ -906,7 +926,7 @@ quick:
 # dev/bypass-log/ whose commit is an ancestor of HEAD and NOT of origin/main - the operator's
 # answer at the LOCAL prompt, committed by `commit-permitted` and shipped with the work. Locally,
 # with CODEBUILD_BUILD_ID unset, every line below behaves exactly as before (FR-026).
-bypass-audit:
+bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
 	@if [ -n "$$CODEBUILD_BUILD_ID" ]; then python3 -m l7r.diagram.ci door && exit 0; printf '\n\033[1mREFUSED: the FULL scope in a build needs the committed answer to the local prompt.\033[0m\n\n'; exit 1; fi; \
 	why="$(REF_WHY)"; \
 	if [ -n "$$why" ] && [ ! -t 0 ]; then \
@@ -946,7 +966,7 @@ bypass-audit:
 	printf '\nlogged to dev/bypass-log/ - proceeding\n\n'
 # (GUARD_EDIT_OK: the message named a file that does not exist - the log is a directory; feature 130 T073, Principle XIV)
 
-reference:
+reference:       ## [maps] one seed of the reference hamlet (Inashiro) - the cheap tripwire the gate and the dispatcher run first
 	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m (reference only under the lock).\n'; \
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 	@$(STATE) green-local reference
@@ -973,21 +993,22 @@ reference:
 # toward `idle-done`, which is the direction that can only ever withhold authority.
 IDLE_CTX = $(shell $(SWITCH) idle 2>/dev/null || echo unreadable)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
-idle-tests:     ## what an idle session runs unattended (feature 136): the whole gate, scope relaxed, never FULL
+# GUARD_EDIT_OK: "scope relaxed" described a lock retired in feature 185 - there is nothing to relax.
+idle-tests:     ## [tests] what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done`
 # THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
 # bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
 	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done
 
-maps:
+maps:            ## [maps] regenerate and check the pool, picking its own scope from how the last run went   SCOPE=reference|all
 	@python3 -m l7r.diagram.tools.mapcheck
 	@$(MAKE) --no-print-directory pool-index-if-stale
 # (GUARD_EDIT_OK: feature 132 - `maps SCOPE=all` is refused under the lock; mapcheck itself never widens while locked)
 
-perf:
+perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds   LABEL=<NNN>-start|-end
 	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)"
 
-perf-report:
+perf-report:     ## [performance] the trend, and which BAND the newest bookend pair reaches   AGAINST=<NNN>-start ENV=local|codebuild
 	@python3 -m l7r.diagram.tools.perf_snapshot --report $(if $(AGAINST),--against $(AGAINST),)
 
 # Refuse to run from the MAIN tree (CLAUDE.md "Session clones": main is the integration point,
@@ -997,7 +1018,7 @@ perf-report:
 # needs one Makefile that works at /gm-assistant and at /diagram). A clone or a detached worktree
 # has no .clones/ of its own (it is gitignored), so the rule is: refuse when the git top level of
 # the cwd holds a .clones/ directory and the cwd is not itself inside one. No path is hardcoded.
-guard:
+guard:           ## [static] refuse to run in main's tree - main is the integration point, never a workspace
 	@top=$$(git rev-parse --show-toplevel 2>/dev/null); \
 	case "$(CURDIR)" in */.clones/*) exit 0 ;; esac; \
 	if [ -n "$$top" ] && [ -d "$$top/.clones" ] && [ "$$GM_ASSISTANT_ALLOW_MAIN" != 1 ]; then \
@@ -1023,7 +1044,7 @@ static format typecheck test: | guard
 # (black-compatible; the gate key is semantic, so a reformat never re-opens it).
 # GUARD_EDIT_OK: feature 185 - the recipe half of the `lint` -> `static` rename (see the comment on
 # the target-position line above; four sites in this file, all of them required).
-static:         ## the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
+static:         ## [static] the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
 	python3 -m ruff check --fix .
 	python3 ../../../scripts/check-duplicate-defs.py --selftest
 	python3 ../../../scripts/check-duplicate-defs.py ../../..
@@ -1040,13 +1061,16 @@ static:         ## the static checks: ruff, duplicate-defs, file-scale, stale-di
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \
 	: "in lint, beside its two siblings, because the gate runs lint FIRST and this costs 5 ms."
+	: "GUARD_EDIT_OK: the generated target reference must match this Makefile - a doc that drifts is" ; \
+	: "worse than none, and this one is derived so drift is always a stale FILE, never a stale FACT." ; \
+	python3 ../../../scripts/make-docs.py ../../.. --check
 	python3 ../../../scripts/check-stale-dirs.py --selftest
 	python3 ../../../scripts/check-stale-dirs.py ../../..
 
-format:
+format:          ## [static] ruff format over the tree
 	python3 -m ruff format .
 
-typecheck:
+typecheck:       ## [static] pyrefly over the engine, one-shot, no daemon (feature 142)
 	$(TYPECHECK)
 
 # parallel across cores when pytest-xdist is installed (~1 min vs ~5 min serial, measured
@@ -1169,7 +1193,7 @@ JOURNAL_ENV =
 # like a quick small fix, so please make that fix too."* It records ONLY on success - the `&&` is the
 # whole of that - and names its own target so an audit can tell which run vouched.
 # GUARD_EDIT_OK: FINDING 3 - "nothing deselected" became FALSE the day tests/soak/ was deselected.
-test-full:      ## the gate's whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)
+test-full:      ## [tests] the gate's whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)
 	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
 
 # GUARD_EDIT_OK: THE TIER ABOVE THE GATE (GM 2026-09-05) - a new target, and the one a REMOTE run
@@ -1196,7 +1220,7 @@ test-full:      ## the gate's whole test phase + all three coverage floors (ever
 # with the lock in feature 185) - so a target of that name sat three lines from the guard asserting a
 # target is NOT one. `soak` is the standard
 # term for the thing this actually is: the same code held under realistic load for an extended run.
-soak:           ## the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
+soak:           ## [tests] the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
 	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
 	if [ "$$n" -eq 0 ]; then \
 	  : "GUARD_EDIT_OK: the rest of the sweep -> soak rename (see the block comment above this target)" ; \
@@ -1246,7 +1270,7 @@ soak:           ## the tier ABOVE the gate: the same code over many seeds and la
 # exempted in the same request ("I don't think we need to do this for our make quick").
 COV_FLOORS =
 
-test:
+test:            ## [tests] the pytest phase itself (internal - `done` and `test-full` call it, not you)
 	: "GUARD_EDIT_OK: feature 185 - the map-rolling DEFERRED notice went with the scope lock. It fired" ; \
 	: "only when ROLL_DESELECT was non-empty, and that variable was defined through the retired axis." ; \
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
