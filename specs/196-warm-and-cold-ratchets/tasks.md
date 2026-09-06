@@ -7,6 +7,12 @@ All `research: rendering` - guard mechanics and the run log. No claim about how 
       would always read HIT (the first fills the cache), and `@` mid-continuation is not a valid
       recipe-line start. Verified BOTH branches end to end - a normal roll writes `warm`,
       `GATE_NO_CACHE=1` writes `cold` (it reports `[BYPASS]`, the case round 4 caught).
+- [x] T01b `research: rendering` FR-001, SECOND HALF, caught by the first real gate run: the class
+      reached the RATCHET but never the RUN LOG, so the entry carried no `cache` field and the classes
+      would never have filled - the below-sample rule would have applied for ever and the feature
+      would have been half-inert. This is the same "one argument short" defect the review caught for
+      the scope, in the one place I had not walked. `LOGRUN` now takes the class at the GREEN site
+      only; the other three sites run without `_reference` and must not invent one.
 - [x] T02 `research: rendering` D1: the gate clears the marker at `T0`, so a marker left by another
       target's `REF_FIRST` can never classify a later gate.
 - [x] T03 `research: rendering` FR-002: `_gatecost.median_seconds` and `class_count` take a class,
