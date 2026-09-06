@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T135740Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "NOT OWED: message text and cache-record behavior only; no placer, glyph, size, placement rule or manifest changes, so settlement-review has no map to read (GM 2026-08-29)."
+}
