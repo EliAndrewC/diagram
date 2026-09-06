@@ -18,7 +18,7 @@ Every entry: what the research found, the decision it drove, and any deliberate 
 
 - *Scale - the real numbers (research grounding, for calibrating the glyph).* Field surveys of southern-China village fengshui forests: **~2 groves per village** on average; **stem density ~3,400 woody stems/ha**, basal area ~49 m²/ha (genuine closed-canopy forest, not scattered trees); patch AREA is highly variable (famous lineage-village groves exceed 20 ha, e.g. Lingtou, 800 years old), but a TYPICAL village grove is a small forest patch, **~1-2 ha for the back grove** (modest villages <1 ha, big clan villages much larger) and **~0.1-0.5 ha for the water-mouth cluster**. So a ~1-2 ha back belt is *thousands* of woody stems in total, of which roughly **100-300 are mature canopy trees** over a dense bamboo/shrub understory; the water-mouth is **a few dozen big old trees**. Per "relative sizes roughly honest": the back belt reads as a real small FOREST (clearly the largest vegetation feature, a wall of dozens-to-hundreds of crowns - `village_grove` fills its polygon with overlapping dense clumps so a big belt does not read as a handful of lone trees), the water-mouth as a distinct smaller cluster, plus the bamboo/fruit scatter through the village. Hoshigaoka draws a ~1-2 ha embracing windward belt + a ~0.3 ha water-mouth + the leafy scatter.
 
-- *Why the sizing is honest at this scale.* At 1 px = 2 ft a ~1-2 ha grove is ~27,000-54,000 px² - genuinely large relative to the ~11 ha built cluster (~10-18%), so the belt reads as the dominant feature without being cartoonishly oversized. Sources: Fengshui woodland (Wikipedia); Chen & Coggins et al., "Fengshui forests and village landscapes in China" (57-village survey); Hu et al., "Values of village fengshui forest patches" (Pearl River Delta, 32 patches, the density/basal-area figures); "Village Fengshui Forests as Cultural and Ecological Heritage" (Forests 2020).
+- *Why the sizing is honest at this scale.* At 1 px = 2 ft a ~1-2 ha grove is ~27,000-54,000 px² - genuinely large relative to the ~11 ha built cluster (~10-18%), so the belt reads as the dominant feature without being cartoonishly oversized. Sources: [Fengshui woodland (Wikipedia)](https://en.wikipedia.org/wiki/Fengshui_woodland); [Chen & Coggins et al., "Fengshui forests and village landscapes in China"](https://jayna.usfca.edu/asia-pacific-perspectives/pdfs/1-coggins-minor-fengshui-forests.pdf) (57-village survey); [Hu et al., "Values of village fengshui forest patches"](SOURCES.md#hu-2011-fengshui-patches) (Pearl River Delta, 32 patches, the density/basal-area figures); ["Village Fengshui Forests as Cultural and Ecological Heritage" (Forests 2020)](SOURCES.md#forests-2020).
 
 ## Forest density and crown size
 
@@ -55,7 +55,7 @@ crown constant, the researched one, for every stand on the map.
 
 **Evidence:** observed (the GM's own trees), derived from the density entry above
 
-**Sources:** the GM's observation (2026-08) and the density entry above (`satoyama-enwiki`; the stems/ha band SUMMARY-ONLY, see "Forest density and crown size") - re-sourced 2026-08-28, feature 143; the stand structure itself is not separately asserted
+**Sources:** the GM's observation (2026-08) and the density entry above ([`satoyama-enwiki`](https://en.wikipedia.org/wiki/Satoyama); the stems/ha band SUMMARY-ONLY, see "Forest density and crown size") - re-sourced 2026-08-28, feature 143; the stand structure itself is not separately asserted
 
 The GM, on the interactive map's highlight: *"practically every tree might have a smaller tree
 underneath it ... I understand that real life trees can, in fact, overlap with each other ... but I
@@ -82,7 +82,7 @@ rule (a canopy has one tree per crown), the density unchanged from the entry abo
 
 **Evidence:** reconstruction (web research 2026-08-15; searched paddy-levee structure/width and traditional field-margin management)
 
-**Sources:** `aze-standard`, `nougyoudoboku-keihan` (the bund), PMC 7538448 via the homesteads.md paddy-setback entry (levees mowed periodically). The Lake Biwa levee-flora study and "cut several times a season" were not re-found (search returned only Biwa aquatic-weed work) - leftover
+**Sources:** [`aze-standard`](https://www.pref.aomori.lg.jp/soshiki/nourin/noson/files/H2904_nnzusyu_H2911syuusei.pdf), [`nougyoudoboku-keihan`](https://nougyoudoboku.com/a-ridge-between-rice-fields/) (the bund), [PMC 7538448](https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/) via the homesteads.md paddy-setback entry (levees mowed periodically). The Lake Biwa levee-flora study and "cut several times a season" were not re-found (search returned only Biwa aquatic-weed work) - leftover
 
 - *What was found.* A paddy levee (*keihan*/*aze*; Chinese *tian'geng*) is a narrow earthen ridge - roughly 1-2 ft wide and under a foot tall, up to ~3 ft where it doubles as a footpath (*azemichi*). Levee structure studies (e.g. the Lake Biwa paddy-levee flora work) describe a flat trodden part plus a grassed face, and the levee grass was CUT several times a season - fodder, thatch, green manure - as was the strip immediately beside any crop. Constant cutting is why woody scrub could not establish within about a scythe's swath (~1-2 m) of a field edge; the same ~1 m clean strip separating crop from boundary vegetation shows up as standing practice in traditional field-margin management. The 6 m+ "conservation headlands" of modern European agri-environment schemes are a MODERN wildlife intervention, not the historical norm, and East Asian land hunger kept margins at the narrow end of the range.
 - *The decision it drove.* `settlement/homestead_parts.py` `_CROP_MARGIN_FT = 6.0` - bund plus one cut swath (~1.8 m total). The `commons` scatter (all roles) skips every paddy and dry plot padded by this margin, converted at the map's `ftpx`; tall glyphs (scraggly pines ~14*bs px tip reach, woodland crowns ~11.5*bs px radius) additionally stand their own drawn reach back so no ink leans over a crop.
@@ -105,7 +105,7 @@ rule (a canopy has one tree per crown), the density unchanged from the entry abo
 
 **Evidence:** reconstruction
 
-**Sources:** reasoning from the crop-margin entry (`pmc7538448-levee`: levees mown; bund upkeep) applied to the channel bank; no source states a bank margin in feet - the 6 ft is the crop margin's figure reused
+**Sources:** reasoning from the crop-margin entry ([`pmc7538448-levee`](https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/): levees mown; bund upkeep) applied to the channel bank; no source states a bank margin in feet - the 6 ft is the crop margin's figure reused
 
 - *What prompted it.* After the drawn-width fix (previous section), tufts still seeded the 10-16 ft berm strips between the supply channels and the dry hem plots: the drawn-width skip (2 px pad) and the 6 ft crop margin each guarded their own edge and left a legal sliver mid-strip. The GM read the strips as scrub crowding the channels and resolved the open decision: the bank takes a margin too.
 - *The decision.* The `commons` scatter (all roles) stands its base points `_BANK_MARGIN_FT = 6.0` real feet off the drawn water edge of every IRRIGATION course - `M['channels']` and `M['drawn_channels']` at their drawn (piece-tapered) widths, converted at the map's `ftpx`. The reasoning is the crop margin's, applied to the bank: a supply channel's bank is maintained ground - walked for sluice operation and bund upkeep, its grass scythed for fodder on the same rotation as the field margins - so woody scrub never establishes within a swath of the water. 6 ft = one scythe swath, the same figure as `_CROP_MARGIN_FT`. Between them the crop margin and the bank margin close any berm strip up to ~12 ft of bare ground, which covers every hem berm the comb builds (Inashiro's run 3-9 ft).
@@ -116,7 +116,7 @@ rule (a canopy has one tree per crown), the density unchanged from the entry abo
 
 **Evidence:** attested
 
-**Sources:** `packer-2017-phragmites`, `kushiro-mire-2014`, `otanoshike-2004`, `mlit-vegetation-classes`, `hotes-wetland-diversity`, `plos-2016-pine`, `gymnosperm-densiflora` (READ 2026-08-26 - the inline links); the managed-margin reasoning is marked unsourced in the entry
+**Sources:** [`packer-2017-phragmites`](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797), [`kushiro-mire-2014`](https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706), [`otanoshike-2004`](https://link.springer.com/article/10.1111/j.1440-1703.2004.00644.x), [`mlit-vegetation-classes`](https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf), [`hotes-wetland-diversity`](https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf), [`plos-2016-pine`](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153972), [`gymnosperm-densiflora`](https://www.conifers.org/pi/Pinus_densiflora.php) (READ 2026-08-26 - the inline links); the managed-margin reasoning is marked unsourced in the entry
 
 **Label: accurate** for the rule as drawn (grass alone grades into the reeds; no pine or brush in
 the marsh); **the managed-margin reasoning below is unsourced and marked**. Researched 2026-08-26
@@ -161,27 +161,27 @@ were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - 
 
 **Evidence:** attested
 
-**Sources:** `satoyama-enwiki`, `geography-hub-satoyama`, `uehara-2009-agris`, `waldrand-dewiki`, `pmc7898781-fukugi` (READ); EUNIS E5.2 (404) and Forests 2025 Okinawa (403) SUMMARY-ONLY / not read
+**Sources:** [`satoyama-enwiki`](https://en.wikipedia.org/wiki/Satoyama), [`geography-hub-satoyama`](https://thegeographyhub.com/japans-satoyama-landscapes/), [`uehara-2009-agris`](https://agris.fao.org/search/fr/records/64724aabe17b74d2224f9430), [`waldrand-dewiki`](https://de.wikipedia.org/wiki/Waldrand), [`pmc7898781-fukugi`](https://pmc.ncbi.nlm.nih.gov/articles/PMC7898781/) (READ); EUNIS E5.2 (404) and Forests 2025 Okinawa (403) SUMMARY-ONLY / not read
 
 The GM: *"Should scrubland overlap with forests? It seems like it shouldn't. Like, visually, it looks
 weird. but maybe what is being represented is more accurate than what I am imagining."* It was not
 more accurate. Two findings, one from land use and one from vegetation structure:
 
-- **A satoyama wood's floor was kept clear, on purpose.** READ (Wikipedia "Satoyama"): "During the
+- **A satoyama wood's floor was kept clear, on purpose.** READ ([Wikipedia "Satoyama"](https://en.wikipedia.org/wiki/Satoyama)): "During the
   Edo era, young and fallen leaves were gathered from community forests to use as fertilizer in wet
   rice paddy fields"; "succession to dense and dark laurel forest is prevented by farmers that cut
   down these trees for firewood and charcoal every 15 to 20 years"; satoyama declined with "the
   drastic shift ... from charcoal and firewood to oil and the change from compost to chemical
-  fertilizer". READ (the Geography Hub): leaf litter (*ochiba*) went to fertilizer, oak and chestnut
+  fertilizer". READ ([the Geography Hub](https://thegeographyhub.com/japans-satoyama-landscapes/)): leaf litter (*ochiba*) went to fertilizer, oak and chestnut
   were cyclically cut, and the cutting let sunlight reach the floor - so the floor's cover was
-  herbs and flowers under a managed canopy, not brush. READ (Uehara et al. 2009, AGRIS): a managed
+  herbs and flowers under a managed canopy, not brush. READ ([Uehara et al. 2009, AGRIS](https://agris.fao.org/search/fr/records/64724aabe17b74d2224f9430)): a managed
   coppice stand held 42 plant species against 23 in a stand left uncared for 50 years, the neglected
   one poorer in herbs - the abandoned wood is the different one. UNVERIFIED and softened: "the
   undergrowth was cut" (a search-summary phrase; the read sources say litter was gathered and the
   trees cut on a cycle). So brush and young pine under the crowns of an inhabited village's grove
   is the form the read record does not show; the floor is litter-raked ground under a canopy cut
   every 15-20 years.
-- **The edge is a gradient, and it is grass.** READ (German Wikipedia "Waldrand", found by the
+- **The edge is a gradient, and it is grass.** READ ([German Wikipedia "Waldrand"](https://de.wikipedia.org/wiki/Waldrand), found by the
   `source-reader` run of 2026-08-27 when the English pointer turned out not to carry the terms):
   "Ein idealer, ausgewachsener Waldrand gliedert sich von außen nach innen in Krautsaum,
   Strauchgürtel und Waldmantel" - an ideal mature forest edge runs, outside to inside, herb fringe,
@@ -202,16 +202,16 @@ shared with the marsh (one ramp for every soft edge, so two edges never read dif
 reason). Not built, recorded: an abandoned-coppice shrub layer is a real second form for a
 DESERTED settlement, never for an inhabited one.
 
-**Sources (read):** Wikipedia "Satoyama"; the Geography Hub, "Japan's Satoyama Landscapes"; Uehara,
+**Sources (read):** [Wikipedia "Satoyama"](https://en.wikipedia.org/wiki/Satoyama); [the Geography Hub, "Japan's Satoyama Landscapes"](https://thegeographyhub.com/japans-satoyama-landscapes/); [Uehara,
 Shigematsu, Fujii, Iwamoto (2009), "Succession of shrub-layer vegetation and situation of wild
-Rhododendron in the abandoned Satoyama coppice forest" (AGRIS record). **Pointers, not read:**
+Rhododendron in the abandoned Satoyama coppice forest" (AGRIS record)](https://agris.fao.org/search/fr/records/64724aabe17b74d2224f9430). **Pointers, not read:**
 Springer "Forest Edges, Scrub, Hedges and Their Herb Communities"; EUNIS "Thermophile woodland
 fringes" (404); Forests 2025 on Okinawa homestead windbreaks (MDPI 403). **Read by the
-source-reader run (T45):** German Wikipedia "Waldrand" (herb fringe / shrub belt / forest mantle);
-"Distribution and utilization of homestead windbreak Fukugi trees", PMC 7898781 - "Homestead
+source-reader run (T45):** [German Wikipedia "Waldrand"](https://de.wikipedia.org/wiki/Waldrand) (herb fringe / shrub belt / forest mantle);
+["Distribution and utilization of homestead windbreak Fukugi trees", PMC 7898781](https://pmc.ncbi.nlm.nih.gov/articles/PMC7898781/) - "Homestead
 windbreaks are managed as part of a residence and are strips of trees planted and maintained to
 alter wind flow and microclimate ... designed based on Feng Shui concepts in the Ryukyu Kingdom,
-around 300 years ago". English Wikipedia "Woodland edge" was read and does NOT carry the
+around 300 years ago". [English Wikipedia "Woodland edge"](https://en.wikipedia.org/wiki/Woodland_edge) was read and does NOT carry the
 three-layer terms. Corrected 2026-08-27 under T44 and T45.
 
 
@@ -219,7 +219,7 @@ three-layer terms. Corrected 2026-08-27 under T44 and T45.
 
 **Evidence:** attested (iriai institutions), reconstruction (the boundary forms)
 
-**Sources:** `ijc-yamaguni`, `satoyama-enwiki`, `kichijoji-enwiki` (READ); the "bounded by ridge, stream and path" sentence is marked summary-only of unknown provenance in the entry; Totman *The Green Archipelago* and the Indiana DLC paper not read
+**Sources:** [`ijc-yamaguni`](https://thecommonsjournal.org/articles/10.18352/ijc.348), [`satoyama-enwiki`](https://en.wikipedia.org/wiki/Satoyama), [`kichijoji-enwiki`](https://en.wikipedia.org/wiki/Kichijōji) (READ); the "bounded by ridge, stream and path" sentence is marked summary-only of unknown provenance in the entry; Totman *The Green Archipelago* and the Indiana DLC paper not read
 
 The GM: *"those coppice Patches. basically it looked like little squares ... I want to make sure that
 that is intentional and based on research rather than just happenstance because when we decided to
@@ -228,7 +228,7 @@ draw patches of trees, we just kind of unthinkingly drew a square."* It was happ
 **What the record says.** The village woods of the period were *iriai* commons - customary
 common-property land held by the village and governed by its own rules on who might cut, when, and
 how much (the usufruct the GM describes): firewood, forage and grass were the products, coppiced on
-a 10-30 year cycle. READ (IJC, the Yamaguni district study): "each of the 11
+a 10-30 year cycle. READ ([IJC, the Yamaguni district study](https://thecommonsjournal.org/articles/10.18352/ijc.348)): "each of the 11
 villages in Yamaguni district has its own unique institutions for managing its customary common
 property forests", held by residents' associations with membership limited to qualifying
 residents - the management was a matter of RULES over a wood. UNSOURCED (found by the T46 read):
@@ -260,9 +260,9 @@ outside the reach the keep-outs were tested at. Area comes out ~85% of the ellip
 rule still bounds it from above. Labels: the irregular, feature-bounded outline ACCURATE; the ring's
 harmonic wobble and its 0.80 floor DRAWING conventions; the strip form a recorded knob-in-waiting.
 
-**Sources (read):** International Journal of the Commons, "External impacts on traditional commons
-and present-day changes: a case study of iriai forests in Yamaguni district" (management by
-village institutions; NO boundary description); Wikipedia "Satoyama"; Wikipedia "Kichijōji" (the
+**Sources (read):** [International Journal of the Commons, "External impacts on traditional commons
+and present-day changes: a case study of iriai forests in Yamaguni district"](https://thecommonsjournal.org/articles/10.18352/ijc.348) (management by
+village institutions; NO boundary description); [Wikipedia "Satoyama"](https://en.wikipedia.org/wiki/Satoyama); [Wikipedia "Kichijōji"](https://en.wikipedia.org/wiki/Kichijōji) (the
 1000 m strip grants and dry fields; the founding year and the 1664 survey are NOT in it and are
 dropped). **Pointers, not read:** the Indiana DLC "Village Commons in Japan"; Totman, *The Green
 Archipelago*; Takeuchi et al., *Satoyama* (Springer). **Unsourced:** "described by ridge, stream
@@ -273,25 +273,25 @@ and path" (2026-08-18). Corrected 2026-08-27 under T44/T46.
 
 **Evidence:** attested (presence and use), interpolated (how common at a hamlet)
 
-**Sources:** `satoyama-enwiki`, `phyllostachys-enwiki`, `pmc5723622-bamboo-range`, `bamboo-growers-hardiness`, `tsuijimatsu` (READ); the Shirakawa farmstead grove (Kids Web Japan, 403) SUMMARY-ONLY
+**Sources:** [`satoyama-enwiki`](https://en.wikipedia.org/wiki/Satoyama), [`phyllostachys-enwiki`](https://en.wikipedia.org/wiki/Phyllostachys_bambusoides), [`pmc5723622-bamboo-range`](https://pmc.ncbi.nlm.nih.gov/articles/PMC5723622/), [`bamboo-growers-hardiness`](https://completebamboo.com/species_bamboo/Phyllostachys_bambusoides.html), [`tsuijimatsu`](https://tsuijimatsu.com/) (READ); the Shirakawa farmstead grove (Kids Web Japan, 403) SUMMARY-ONLY
 
 The GM: *"is there supposed to be bamboo on the reference hamlet? Why or why not? how common was it
 for there to be bamboo in settlements such as this?"* - and the rendering problem behind it: a culm
 is a few inches across, so at 1 px = 1 ft a bamboo stand has nothing to draw at true scale.
 
-**How common: ubiquitous below the frost line.** READ (Wikipedia "Satoyama"): satoyama "contains a
+**How common: ubiquitous below the frost line.** READ ([Wikipedia "Satoyama"](https://en.wikipedia.org/wiki/Satoyama)): satoyama "contains a
 mosaic of mixed forests, rice paddy fields, dry rice fields, grasslands, streams, ponds, and
 reservoirs for irrigation", and by the 1960s were used as "rice fields, plowed fields, shifting
 cultivation, grasslands, thatch fields, secondary forests for fuel, and giant bamboo forests". READ
-(Wikipedia "Phyllostachys bambusoides"): madake's "long internodes and equally long fibres ... make
+([Wikipedia "Phyllostachys bambusoides"](https://en.wikipedia.org/wiki/Phyllostachys_bambusoides)): madake's "long internodes and equally long fibres ... make
 it ideal for traditional basket-weaving and the production of fans"; its sheaths wrapped food and
-covered geta; it made shakuhachi. READ (PMC 5723622, the moso/madake range study): bamboo
+covered geta; it made shakuhachi. READ ([PMC 5723622](https://pmc.ncbi.nlm.nih.gov/articles/PMC5723622/), the moso/madake range study): bamboo
 "distribution remained south of 41°N, in areas that included plains and hilly regions of central
 Honshu, as well as the coasts of northern Honshu"; stands "were not found at study sites where ...
 mean annual minimum temperature was below -16.8°C", and "moso and madake bamboo distribution in
 northern Japan depends primarily on temperature", agreeing with prior work "that moso bamboo cannot
 withstand temperatures around or below -18 to -20°C". READ (the `source-reader` run, T45):
-madake "Minimum Temp: 5°F (-15°C), Hardiness Zone: 7" (completebamboo.com), with other readable
+madake "Minimum Temp: 5°F (-15°C), Hardiness Zone: 7" ([completebamboo.com](https://completebamboo.com/species_bamboo/Phyllostachys_bambusoides.html)), with other readable
 growers giving -18 to -23 C - a spread, not a number; and no read source says new SHOOTS take
 frost, only that "colder weather will likely cause frost damage to leaves and canes" (bambubatu),
 so that clause is softened to "frost-tender at the margin". SUMMARY-ONLY, still: that a typical Edo
@@ -354,11 +354,11 @@ side" a READING of the record's N/W, recorded as such.
 common.** The GM asked whether a farmstead's own bamboo always stood to the north-west and whether
 every farmstead had one. A `source-reader` pass (27 fetches) answered what could be read:
 
-- WHERE (READ, ja.wikipedia "屋敷林"): on the Tonami plain "南側には蔵や納屋などがあり、無花果や葡萄、
+- WHERE (READ, [ja.wikipedia "屋敷林"](https://ja.wikipedia.org/wiki/屋敷林)): on the Tonami plain "南側には蔵や納屋などがあり、無花果や葡萄、
   柿などの果実がなる植物や竹などが植えられていた" - storehouses and barns on the SOUTH side, and there
   the fruit trees and the bamboo; and separately, "河川の近い家や水害の多い地域では、防水用として
   ハンノキや、根を張る竹を植えて土壌の流出を防いでいる" - by rivers and in flood-prone ground, bamboo (and
-  alder) planted for its roots. READ (tsuijimatsu.com): the kainyo "はスギが中心で、ほかにアテ（アスナロ）
+  alder) planted for its roots. READ ([tsuijimatsu.com](https://tsuijimatsu.com/)): the kainyo "はスギが中心で、ほかにアテ（アスナロ）
   ・ケヤキ・カシ類・竹・柿・栗などで" - cedar central, bamboo among the secondary species. SUMMARY-ONLY:
   the grove as a whole faces the local harmful wind - north and west (Isawa, Iwate; Hikawa, Shimane),
   west (Iide, Yamagata), south and west (Tonami) - a regional table the reader saw in a search snippet
@@ -367,9 +367,9 @@ every farmstead had one. A `source-reader` pass (27 fetches) answered what could
   two-formed at least (with the storehouses; at the wet edge; on the wind side) and is ROLLED per
   farmstead, weighted toward the back of the house and the shed's side (Principle XII: two supportable
   forms become a knob, here a per-house roll).
-- HOW COMMON (READ, Visit Toyama): on the Tonami plain "each house has been surrounded by homestead
+- HOW COMMON (READ, [Visit Toyama](https://visit-toyama-japan.com/en/travel-inspiration/sankyoson)): on the Tonami plain "each house has been surrounded by homestead
   woodland ... over 7,000 houses", with "cedar, Japanese zelkova, and bamboo ... used as materials for
-  building new houses as well as materials for various everyday tools"; READ (tsuijimatsu.com):
+  building new houses as well as materials for various everyday tools"; READ ([tsuijimatsu.com](https://tsuijimatsu.com/)):
   "竹は日常生活の資材として重要なものでした". NOT-FOUND: any share of farmsteads keeping bamboo, and any
   source distinguishing household bamboo from the communal take-yabu by number. So the presence rate
   is a GUESS - `HOUSEHOLD_BAMBOO_PREVALENCE` 0.6, "one of several secondary species" read as common but
@@ -384,12 +384,12 @@ every farmstead had one. A `source-reader` pass (27 fetches) answered what could
   6 ft verge, and could align a board to a lane that was not its nearest - three latent defects the
   reservations exposed, fixed in `hamletgen/frame.py`.
 
-**Sources (read):** ja.wikipedia "屋敷林" (the Tonami south-side passage; bamboo at the wet edge);
-築地松景観保全対策推進協議会, tsuijimatsu.com/62 (kainyo species; bamboo as daily material); Visit
-Toyama, "Sankyoson" (7,000 farmsteads each in its grove); Wikipedia "Satoyama"; Wikipedia
-"Phyllostachys bambusoides"; "Detecting latitudinal and altitudinal expansion of invasive bamboo
-Phyllostachys edulis and Phyllostachys bambusoides in Japan", PMC 5723622; completebamboo.com, bambubatu.com and practicalplants.org on
-madake hardiness (T45 run); ridgelineimages.com "Reading GSI Topographic Maps" - the bamboo forest
+**Sources (read):** [ja.wikipedia "屋敷林"](https://ja.wikipedia.org/wiki/屋敷林) (the Tonami south-side passage; bamboo at the wet edge);
+[築地松景観保全対策推進協議会, tsuijimatsu.com/62](https://tsuijimatsu.com/) (kainyo species; bamboo as daily material); [Visit
+Toyama, "Sankyoson"](https://visit-toyama-japan.com/en/travel-inspiration/sankyoson) (7,000 farmsteads each in its grove); [Wikipedia "Satoyama"](https://en.wikipedia.org/wiki/Satoyama); [Wikipedia
+"Phyllostachys bambusoides"](https://en.wikipedia.org/wiki/Phyllostachys_bambusoides); ["Detecting latitudinal and altitudinal expansion of invasive bamboo
+Phyllostachys edulis and Phyllostachys bambusoides in Japan", PMC 5723622](https://pmc.ncbi.nlm.nih.gov/articles/PMC5723622/); [completebamboo.com](https://completebamboo.com/species_bamboo/Phyllostachys_bambusoides.html), [bambubatu.com](https://bambubatu.com/phyllostachys-bambusoides-japanese-timber-bamboo/) and [practicalplants.org](https://practicalplants.org/wiki/phyllostachys_bambusoides/) on
+madake hardiness (T45 run); [ridgelineimages.com "Reading GSI Topographic Maps"](https://ridgelineimages.com/maps/reading-gsi-topographic-maps/) - the bamboo forest
 (竹林) symbol listed as its own category beside broad-leaved (広葉樹林) and coniferous (針葉樹林)
 forest, and distinct from the bamboo-grass (笹地) symbol (T45 run). **Pointers, not read (403):**
 Kids Web Japan (the Shirakawa farmstead); PFAF and Gardenia; Highlighting Japan 2022 (uses); the

@@ -1363,7 +1363,7 @@ ja.wikipedia 備中高松城 and 備中高松城の戦い (READ 2026-08-28) (htt
 
 香川県, ため池の構造 (https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html; READ 2026-08-28 - the page behind the older `kagawa-tameike` key)
 
-*Used for:* the intake as one facility - 斜樋/堅樋 into the 底樋 discharging to the canal, plus a sediment drain
+*Used for:* the intake as one facility - 斜樋/堅樋 into the 底樋 discharging to the canal, plus a sediment drain Also (a second entry under the same key, READ again 2026-08-29, merged here by feature 190): the dam's water-contact slope being armored against wave erosion - 捨石、石張り、コンクリートブロック張 - i.e. one part of a reservoir's shore is bare by engineering, which is why the rule is positional rather than a single answer for the whole margin.
 
 ### `offtake-angle-studies`
 
@@ -1597,7 +1597,7 @@ ja.wikipedia 水路橋 (READ 2026-08-28) (https://ja.wikipedia.org/wiki/水路�
 
 ja.wikipedia 屋敷林 (居久根 redirects here; READ 2026-08-28) (https://ja.wikipedia.org/wiki/屋敷林)
 
-*Used for:* igune on the north and west of the homestead as windbreak and snowbreak; the species named - スギ, マツ, ヒノキ, ケヤキ (three evergreen conifers and one deciduous broadleaf; the page never says "evergreen-heavy")
+*Used for:* igune on the north and west of the homestead as windbreak and snowbreak; the species named - スギ, マツ, ヒノキ, ケヤキ (three evergreen conifers and one deciduous broadleaf; the page never says "evergreen-heavy") Also (a second entry under the same key, READ again 2026-08-29, merged here by feature 190): the east side as the entrance with garden and ornamental trees against tall cedar on the west and south; and - the load-bearing part - the Izumo *tsuijimatsu*, which "enclosed the entire circumference of the house" before Meiji and was later reduced to a 鉤型 hook shape "covering only the north and west sides". That is what makes full-ring versus two-sided a KNOB rather than one right answer.
 
 ### `kuwa-jawiki`
 
@@ -1917,12 +1917,6 @@ ja.wikipedia 家老 (READ 2026-08-28) (https://ja.wikipedia.org/wiki/%E5%AE%B6%E
 
 *Used for:* the embankment being managed by forbidding cultivation and by mowing and controlled burning, TO KEEP THE BANK STRONG, and the dry-grassland herbs (not wetland plants) that grow there as a result - the independent confirmation of the GM's T54 rule that reeds keep off a raised planted bank. An encyclopedia article, cited for a plainly-stated maintenance practice that the prefectural and MAFF sources corroborate.
 
-### `kagawa-tameike-structure`
-
-香川県 ため池の構造 (https://www.pref.kagawa.lg.jp/tochikai/about_tameike/repair/structure.html) - READ 2026-08-29
-
-*Used for:* the dam's water-contact slope being armored against wave erosion - 捨石、石張り、コンクリートブロック張 - i.e. one part of a reservoir's shore is bare by engineering, which is why the rule is positional rather than a single answer for the whole margin.
-
 ### `maff-tameike-shizen`
 
 農林水産省, 自然環境に果たす役割 - 2. ため池 (https://www.maff.go.jp/j/council/seisaku/nousin/seibibukai/gijutu_syoiinkai/h14-1/pdf/data3-2.pdf) - READ 2026-08-29 (the PDF, page 1)
@@ -2013,12 +2007,6 @@ Honda Seiroku, *Hoanrin Zorinho* (1915), quoted verbatim in Miura Osamu, "Invent
 
 *Used for:* the FOUNDING technical definition of *yashikirin*, which restricts the belt to two named sides - 屋敷林ハ...農家ノ周圍特ニ西ト北トノ両側ニ設ケラルヽモノ, "established mainly on the two sides, specifically west and north" of an isolated farmhouse. The source of the rule that an absent flank is not a gap. Cited through Miura because Honda's 1915 text was reached in his verbatim quotation of it, not separately.
 
-### `yashikirin-jawiki`
-
-ウィキペディア日本語版 屋敷林 (https://ja.wikipedia.org/wiki/%E5%B1%8B%E6%95%B7%E6%9E%97) - READ 2026-08-29
-
-*Used for:* the east side as the entrance with garden and ornamental trees against tall cedar on the west and south; and - the load-bearing part - the Izumo *tsuijimatsu*, which "enclosed the entire circumference of the house" before Meiji and was later reduced to a 鉤型 hook shape "covering only the north and west sides". That is what makes full-ring versus two-sided a KNOB rather than one right answer.
-
 ### `igune-jawiki`
 
 ウィキペディア日本語版 居久根 (https://ja.wikipedia.org/wiki/%E5%B1%85%E4%B9%85%E6%A0%B9) - READ 2026-08-29
@@ -2065,3 +2053,195 @@ Saijo City (Ehime) Water History Museum, on digging a well (https://www.city.sai
 Digital Daijisen and Nihon Kokugo Daijiten, "井戸屋形", via kotobank (https://kotobank.jp/word/井戸屋形-435033; READ 2026-09-05)
 
 *Used for:* the well house is posts beside the well with a roof on them and nothing more - the form the glyph's roof square depicts; its prevalence is not stated
+
+### `sendai-igune-list`
+
+Sendai City, 居久根 conservation page, which links the city's PDF list of trees suited to an igune (https://www.city.sendai.jp/ryokuchihozen/kurashi/shizen/midori/hyakunen/hozen.html; SUMMARY-ONLY 2026-09-06 - the page was read and names the list, the PDF itself did not render as text; the species named in the record come from a pre-143 reading)
+
+*Used for:* the igune species list behind the windbreak belt's composition (`homesteads.md`, the windbreak height section's sources).
+
+### `minami-2022-igune`
+
+Minami, Yonezawa and Okaze 2022, the Osaki igune flow-field study, J-STAGE (https://www.jstage.jst.go.jp/article/jass/38/2/38_37/_article/-char/en; abstract READ 2026-09-06, the full text closed - SUMMARY-ONLY for the siting the record attributes to it: the abstract places the 10 m igune "on the prevailing wind direction side" and names no compass side)
+
+*Used for:* the igune as a 10 m windbreak on the wind side of a dispersed farmstead.
+
+### `kanto-gakuin-tsuijimatsu`
+
+Kaneko Tomoya, 「築地松：島根の気候風土に根ざした環境デザイン」, Kanto Gakuin University column (https://kyousei.kanto-gakuin.ac.jp/column/kaneko-tomoya/20140911-1906/; SUMMARY-ONLY 2026-09-06 - the page returned 404; a search snippet of it carries the claim: black pines on the north and west sides of the house against the northwest winter wind)
+
+*Used for:* Izumo tsuijimatsu standing on the north and west sides of the house.
+
+### `isa-auf-fukugi-2011`
+
+Chen and Nakama, on the Fukugi homestead windbreaks of Okinawa, *Arboriculture & Urban Forestry* 37(1) (https://auf.isa-arbor.com/content/37/1/19; READ 2026-09-06) - "House-embracing Fukugi trees were functionally laid out with denser forests on the northern side of the houses and on the sides facing the sea"; "the greatest number of large Fukugi trees stand to the north of the house, followed by the eastern side"
+
+*Used for:* the homestead windbreak as a line of trees on the house's wind sides (Okinawa).
+
+### `ido-jawiki`
+
+ja.wikipedia 井戸 (https://ja.wikipedia.org/wiki/井戸; READ 2026-09-06) - the shaft's lining: 「地盤が堅固であれば素掘りでもよいが、崩れやすい場合には井戸側が必要となる」; nothing on where in a yard the well stands
+
+*Used for:* the well's construction (the lined shaft); read in the outbuildings pass of 2026-08-27, registered here.
+
+### `hasa-jawiki`
+
+ja.wikipedia 稲架 (https://ja.wikipedia.org/wiki/稲架; READ 2026-09-06) - 「主に収穫後の田畑に作られることが多い」; the regional names (稲掛け, 稲機, はさ/はざ/はせ/はぜ/はで)
+
+*Used for:* the rice-drying rack as a post-harvest fixture of the fields - the record's "or the yard" is not on the page.
+
+### `nakasendoway-dosojin`
+
+Nakasendo Way, "Dosojin" (https://www.nakasendoway.com/dosojin/; READ 2026-09-06) - dosojin "are closely associated with roads, travelers and local boundaries", "found most often in the more isolated parts of the highway ... and near the mountain passes"
+
+*Used for:* dosojin standing on the road and at boundaries, not inside the farmstead.
+
+### `jaanus-yashikimon`
+
+JAANUS (Japanese Architecture and Art Net Users System), "yashikimon" 屋敷門 (http://www.aisf.or.jp/~jaanus/deta/y/yashikimon.htm; READ 2026-09-06) - "The front gate of a warrior's manor house"; the illustrated example is the former Tōjin yashiki gate at Kōfukuji, Nagasaki, 1740. NOTE (the reader, 2026-09-06): the term as JAANUS defines it is a WARRIOR'S gate, not a farmstead's; the record lists the page among its read sources and ties no farmstead claim to it by name
+
+*Used for:* the gate vocabulary (yashikimon) in the outbuildings pass; a farmstead gate's status meaning must not be sourced to it.
+
+### `bambubatu-madake`
+
+Bambu Batu, Phyllostachys bambusoides (https://bambubatu.com/phyllostachys-bambusoides-japanese-timber-bamboo/; READ 2026-09-06) - "Cold hardiness: Approximately -5 to -10°F (-20 to -23°C)"
+
+*Used for:* madake hardiness (one of the three grower pages behind `bamboo-growers-hardiness`).
+
+### `practicalplants-madake`
+
+Practical Plants, Phyllostachys bambusoides (https://practicalplants.org/wiki/phyllostachys_bambusoides/; READ 2026-09-06) - "tolerating temperatures down to about -18°c, but it dislikes prolonged exposure to hard frosts"
+
+*Used for:* madake hardiness (the second of the three grower pages behind `bamboo-growers-hardiness`).
+
+### `ridgelineimages-gsi`
+
+Ridgeline Images, "Reading GSI Topographic Maps" (https://ridgelineimages.com/maps/reading-gsi-topographic-maps/; READ 2026-09-06) - the bamboo-forest symbol described as its own category beside broad-leaved forest, coniferous forest and the bamboo-grass (sasa) zone
+
+*Used for:* the bamboo stand drawn as its own class of ground, distinct from woodland and from dwarf bamboo.
+
+### `mlit-senjochi-kurashi`
+
+MLIT land-classification teaching material, 「扇状地と人々の暮らし」 (https://nlftp.mlit.go.jp/kokjo/inspect/landclassification/land/teaching_material_1.pdf; SUMMARY-ONLY 2026-09-06 - the PDF did not render as text; a search synthesis of it and related MLIT pages carries the claim: springs at the fan edge, settlement and paddy there since ancient times)
+
+*Used for:* the fan-toe spring line as the place villages and paddies sit on an alluvial fan.
+
+### `woods-westbrook-2006`
+
+Woods, Westbrook et al., "Hydrologic interactions between an alluvial fan and a slope wetland in the central Rocky Mountains, USA", *Wetlands* 2006 (https://www.cheriewestbrook.ca/publications/16523-hydrologic-interactions-between-an-alluvial-fan-and-a-slope-wetland-in-the-central-rocky-mountains-usa; abstract READ 2026-09-06 on the author's page, the Springer page behind a login) - "Continuing ground-water discharge into the upper part of the wetland limited the water level declines"; stream seepage "is the primary source of ground-water recharge for the alluvial fan"
+
+*Used for:* slope wetlands at a fan's perimeter fed by the fan's groundwater - which the stream recharges; the chain is kept whole.
+
+### `tedori-fan-pwe`
+
+"Analysis of water balance in the Tedori river alluvial fan areas of Japan", *Paddy and Water Environment* (https://link.springer.com/article/10.1007/s10333-013-0373-3; SUMMARY-ONLY 2026-09-06 - Springer login wall; the search summary carries the finding: irrigation water, chiefly paddy, is the main input to the fan's groundwater, and a paddy area smaller by more than 30% could not maintain the water table)
+
+*Used for:* paddy-field seepage as a major recharge source of fan groundwater.
+
+### `minka-en-yashikigami`
+
+minka-en.com, 屋敷神 (https://minka-en.com/shisetsu/shisetsu_7/; READ 2026-09-06) - 「屋敷の一隅、特に鬼門（きもん）（北東隅）に、石や木、わら屋根の祠（ほこら）があり」
+
+*Used for:* the household shrine in a corner of the yard, especially the NE (鬼門) corner, as a small stone or wooden shrine.
+
+### `satologue-yashikigami`
+
+satologue.com, 屋敷神様 (https://satologue.com/living/758; READ 2026-09-06) - 「敷地の一角に佇む小さな祠には、屋敷神様がいます」; no compass direction on the page
+
+*Used for:* the shrine's small size and its corner-of-the-grounds placement.
+
+### `shimogoe-jawiki`
+
+ja.wikipedia 下肥 (https://ja.wikipedia.org/wiki/下肥; READ 2026-09-06) - 「新鮮な屎尿は作物にとって有害であり、肥料として用いる際には、一定期間貯蔵して腐熟させる」; the storage vessel is the 肥溜め
+
+*Used for:* night soil stored to ripen in the manure pit and used on the fields.
+
+### `woodland-edge-enwiki`
+
+en.wikipedia "Woodland edge" (https://en.wikipedia.org/wiki/Woodland_edge; READ 2026-09-06) - describes the edge generically ("trees are often different from those inside the wood, as well as hedge vegetation, brambles and low-growing plants") and does NOT carry the herb-fringe / shrub-belt / forest-mantle layers
+
+*Used for:* the negative the record states: the English page does not carry the three-layer terms; `waldrand-dewiki` does.
+
+### `shizen-teibo-jawiki`
+
+ja.wikipedia 自然堤防 (https://ja.wikipedia.org/wiki/自然堤防; READ 2026-09-06) - 「沖積低地において、古くからの集落はまず自然堤防上に立地し、また畑として利用される」, against the 後背湿地 behind it
+
+*Used for:* settlement and dry fields on the natural levee, paddy in the backswamp.
+
+### `lianou-zhwiki`
+
+zh.wikipedia 莲藕 (https://zh.wikipedia.org/wiki/莲藕; READ 2026-09-06) - cultivation 「主要在酸沼地或水田（莲田）栽培」; no acreage, mu or percentage figure for the share of land under lotus
+
+*Used for:* the negative the record states: the lotus area share was found nowhere (`archetypes.md`).
+
+### `izumo-taisha-jawiki`
+
+ja.wikipedia 出雲大社 (https://ja.wikipedia.org/wiki/出雲大社; READ 2026-09-06) - 「高さは8丈（およそ24メートル）と、神社としては破格の大きさである」; no plan dimension such as 二間四方
+
+*Used for:* the 24 m height of the main hall, and the absence of a floor dimension (`buildings.md`).
+
+### `taisha-zukuri-jawiki`
+
+ja.wikipedia 大社造 (https://ja.wikipedia.org/wiki/大社造; READ 2026-09-06) - the 1744 Izumo hall 「約24mと巨大である」; no plan dimension
+
+*Used for:* the same negative - height only, no floor dimension (`buildings.md`).
+
+### `shixue-yuekan-louzeyuan`
+
+陈朝云 / 张晓芊, 「宋代漏泽园及社会救助研究」, 史学月刊 (Henan University), the journal's own listing page (https://sxyk.henu.edu.cn/info/1014/7333.htm; abstract READ 2026-09-06, the CNKI full text behind a paywall) - 「"漏泽园"名称始见于宋徽宗崇宁三年（1104年）」
+
+*Used for:* the 1104 date of the louzeyuan public burial grounds (`cities/capitals.md`).
+
+### `ifc-307-bonfire`
+
+International Fire Code section 307.4, open burning - read in a state adoption (New York State Fire Code 2010, 307.4.1) at UpCodes (https://up.codes/s/open-burning-and-recreational-fires; READ 2026-09-06; codes.iccsafe.org returned 403) - "A bonfire shall not be conducted within 50 feet (15 240 mm) of a structure or combustible material unless the fire is contained in a barbecue pit"
+
+*Used for:* the 50 ft bonfire setback the pyre-ground clearance is derived from (`cities/capitals.md`).
+
+### `ushijima-2020-manchu`
+
+Ushijima et al., "Spatial composition and premise arrangement of traditional Manchu village in Northeast China", *Japan Architectural Review* 3 (2020) (https://onlinelibrary.wiley.com/doi/full/10.1002/2475-8876.12146; SUMMARY-ONLY 2026-09-06 - Wiley, ResearchGate and DOAJ each returned 403; the search summary describes the study's variables and the 1960s streets built behind the housing lots, and does not state the traditional rear access the record attributes to it)
+
+*Used for:* rear access to house premises in Manchu villages (`homesteads.md`, the lane-gridiron sources) - held at summary level.
+
+### `terauke-seido-jawiki`
+
+ja.wikipedia 寺請制度 (https://ja.wikipedia.org/wiki/寺請制度; READ 2026-09-06) - 「元禄9年（1696年）当時存在した6000か所の浄土宗寺院のうち、16世紀以降の創建が9割を占めていた」; no all-sect total of Edo temples on the page
+
+*Used for:* the 6,000 Jōdo temples of 1696, and the absence of a total (`religion-and-death.md`).
+
+### `nogyo-zensho-jawiki`
+
+ja.wikipedia 農業全書 (https://ja.wikipedia.org/wiki/農業全書; READ 2026-09-06) - 「元禄10年（1697年）刊行された農書」. NOTE (the reader, 2026-09-06): the record says 1696 - the page says 1697 (Genroku 10); and the page does not mention 下肥 or fertilizer at all, so the record's "the readable manual saying it" about night soil is not supported by this page (it may be true of the book, not stated here)
+
+*Used for:* the farming manual named in the night-soil withdrawal note (`homesteads.md`); the year and the night-soil attribution are flagged for the GM.
+
+### `kaifeng-enwiki`
+
+en.wikipedia Kaifeng (https://en.wikipedia.org/wiki/Kaifeng; READ 2026-09-06) - "Five major floods devastated the city between 1375 and 1416, and flooding occurred more than 300 times from the Southern Song Dynasty to the late Qing dynasty"
+
+*Used for:* Kaifeng's flood count (`cities/river-cities.md`).
+
+### `fao-ac180e-rice-fish`
+
+FAO, *Fish Culture in Rice Fields*, chapter 7 "Culture Operations" (https://www.fao.org/4/ac180e/AC180E07.htm; READ 2026-09-06) - "the height of the dry bund should be at least 25 cm, but a height of 60 cm is recommended". NOTE (the reader, 2026-09-06): the record calls this URL "FAO's basin-irrigation manual"; the document behind it is the rice-fish culture chapter, and the basin-irrigation chapter (fao.org/4/s8684e/s8684e03.htm) speaks of "permanent bunds" of 60-90 cm and never of a "dry bund"
+
+*Used for:* the permanent dry bund and its height, as quoted in the bund entry (`homesteads.md`); the chapter's name is corrected here and flagged for the GM.
+
+### `minka-jawiki`
+
+ja.wikipedia 民家 (https://ja.wikipedia.org/wiki/民家; READ 2026-09-06) - a general page on commoner dwellings; no roof pitch and no ridge height on it
+
+*Used for:* the negative the record states beside `kayabuki-jawiki`: neither the 45-degree pitch nor the 6-7 m ridge is on the pages read (`homesteads.md`).
+
+### `fengshui-woodland-enwiki`
+
+en.wikipedia Fengshui woodland (https://en.wikipedia.org/wiki/Fengshui_woodland; READ 2026-09-06) - the concept ("A Fengshui woodland, Fungshui woodland, or Fengshui forest, known in Chinese as 風水林"), regional totals and the 57-village survey mentioned; NO per-village grove count and NO grove size on the page - the "~2 groves per village, 1-2 ha" the record states beside it is not this article's (the survey papers are)
+
+*Used for:* the fengshui forest as a named village-woodland class (`vegetation.md`); not for its count or size.
+
+### `hu-2011-fengshui-patches`
+
+Hu et al., "Values of village fengshui forest patches in biodiversity conservation in the Pearl River Delta, China", *Biological Conservation* 144 (2011), doi 10.1016/j.biocon.2011.01.023 (https://doi.org/10.1016/j.biocon.2011.01.023; SUMMARY-ONLY 2026-09-06 - ScienceDirect, ResearchGate and a preprint host each returned 403; the search summary carries 3,403 stems/ha and 49.1 m2/ha basal area over 32 patches, matching the record)
+
+*Used for:* the stem density and basal area of village fengshui forest patches (`vegetation.md`) - held at summary level.

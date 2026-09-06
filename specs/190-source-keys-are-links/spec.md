@@ -1,6 +1,12 @@
 # Feature 190 - every source in a research finding is a link
 
-**Status**: NOT FAITHFUL at round 5 of 5 (`spec-fidelity`, 2026-09-06) - ESCALATED TO THE GM under constitution XVI.
+**Status**: GM RULING 2026-09-06 on the round-5 question - *"My answer: Yes link them too, thanks."* (`request.md`) - the
+author-surname citations are in scope (FR-006 (iv), D9); round 5's item 2 was fixed on the day. The review reached the
+five-round cap and the GM's answer, not a sixth draft, closes it; cleared for implementation.
+**Round 5** (`spec-fidelity`, 2026-09-06) returned NOT FAITHFUL and the matter went to the GM under constitution XVI.
+**Verdict for the review gate**: FAITHFUL - by the GM's ruling on the escalated question, not by a sixth review
+round (the cap is five); the reviewer's other item was a defect and is fixed. Recorded here in so many words so the
+record cannot be read as a reviewer's pass.
 Round 5 returned two items: (1) the document-name pattern in FR-006 misses citation by AUTHOR SURNAME in a
 finding's body (*"Sugiura counts a firewood SHED on 0.76"*, *"that is Tabayashi's rule"*, *"Wang & Ochiai surveyed
 farmhouses"* - nine sites found, every one already keyed and linked on its section's Sources line), and whether
@@ -89,7 +95,7 @@ is what a read document looks like - most say READ with a date, the pre-143 ones
   223 body lines, across 13 of the 18 files. **Every candidate carries a verdict in the script's table,
   and the script fails on a candidate without one or a verdict without a candidate**, so the surface cannot
   drift from the table. The verdicts, by class:
-  - a code, no document to link - 163 `status` (READ or "read" as a status word or verb: *"the
+  - a code, no document to link - 162 `status` (READ or "read" as a status word or verb: *"the
     category and its penalties are READ"*, *"reads as a brook"*), 15 `unnamed` (a page referred
     to and not named: *"the page read gives"*), 25 `linked` (already a markdown link to the
     document), 4 `keyed` (the document is the registry key on the line, which FR-001 links),
@@ -97,21 +103,21 @@ is what a read document looks like - most say READ with a date, the pre-143 ones
     (*"Sources: none - a rendering rule"*), 2 `repeat` (the same document named again in the
     paragraph where it is already linked), 1 `notread` (a pointer not read, no name to record);
   - or a list of NAME rows, each asserted to occur exactly once in its paragraph or line. Three treatments:
-    - (i) **registered under a key the prose does not name** - **130 link sites** (*"Wikipedia 'Desire
+    - (i) **registered under a key the prose does not name** - **131 link sites** (*"Wikipedia 'Desire
       path'"* is `desire-path-enwiki`, *"an Okayama museum"* is `yonekura-mushiro`, *"the Himeji page"* is
       `himeji-shironameshi-jawiki`). The NAME becomes the link text, wrapped in place, with FR-001's target rule
-      (119 to the document, 11 to a not-read entry - measured with the same D5-on classifier as FR-004, which is now the sweep's default so the two passes cannot disagree about one key; round 5, item 2). A
+      (119 to the document, 12 to a not-read entry - measured with the same D5-on classifier as FR-004, which is now the sweep's default so the two passes cannot disagree about one key; round 5, item 2). A
       registered name is linked WHATEVER the sentence says about it - in a `**SUMMARY-ONLY:**` or
       `**Withdrawn:**` list, in a "not re-read" note - because the citation line, not the label around the
       name, decides read-ness (round 4, item 3: `326-woods` sat under SUMMARY-ONLY while its entry says READ
       with a URL; `Boso-no-Mura firewood placement` under Withdrawn - a claim withdrawn, not a document unread).
-    - (ii) **read, but not registered** - 32 documents sent to the `source-reader` on 2026-09-06 with the claim
-      the record attributes to each: **24 READ** (a new entry: key, citation line with URL and READ
-      date, *Used for:*; the name links to the URL - 30 sites), **6 SUMMARY-ONLY** (a new entry
-      labeled so; the name links to it - 6 sites): the Kanto Gakuin tsuijimatsu column (404), the MLIT
+    - (ii) **read, but not registered** - 34 documents sent to the `source-reader` on 2026-09-06 with the claim
+      the record attributes to each: **25 READ** (a new entry: key, citation line with URL and READ
+      date, *Used for:*; the name links to the URL - 31 sites), **7 SUMMARY-ONLY** (a new entry
+      labeled so; the name links to it - 7 sites): the Kanto Gakuin tsuijimatsu column (404), the MLIT
       「扇状地と人々の暮らし」 PDF (did not render), the Tedori fan paper (Springer login), the Sendai igune
       species PDF (did not render), Minami/Yonezawa/Okaze 2022 (abstract only, and the abstract does not
-      carry the north/west siting), Ushijima 2020 (Wiley, ResearchGate and DOAJ all 403). Three results
+      carry the north/west siting), Ushijima 2020 (Wiley, ResearchGate and DOAJ all 403), Hu et al. 2011 on fengshui forest patches (ScienceDirect, ResearchGate and a preprint host all 403). One READ page corrects the record too: en.wikipedia "Fengshui woodland" carries none of the grove count or size the record states beside it (those are the survey papers'). Three results
       CORRECT the record and are recorded in the entry and reported to the GM, the link still made: JAANUS
       "yashikimon" defines a WARRIOR'S gate (the record's own body line at `homesteads.md:490` already says
       so); ja.wikipedia 農業全書 gives 1697 where the record says 1696, and does not mention night soil; the URL
@@ -123,6 +129,22 @@ is what a read document looks like - most say READ with a date, the pre-143 ones
       figure; general pages only) and the J-STAGE study of Kishū multi-hamlet villages (five searches on
       J-STAGE and the geography journals; nothing tied to Kishū). Each stays plain and gains *"(URL not
       found 2026-09-06)"*. Nothing is guessed at: a URL is written only after the page was fetched.
+    - (iv) **citation by AUTHOR SURNAME in a finding's body** (round 5, item 1; the GM's ruling 2026-09-06: *"Yes
+      link them too"*). The NAME INDEX is derived from the registry, never listed by hand (`names190.py`): every
+      citation line that OPENS with a person pattern - *"Sugiura Tadashi, 「...」"*, *"Tabayashi 1986,"*, *"Kenneth
+      Ruddle and Gongfu Zhong,"*, *"Uehara et al. 2009,"*, *"Steven B. Miles,"*, *"Lacey's regime theory"* - yields
+      its surname or surnames (the last word of a Western name, the first of a surname-first Japanese or Chinese
+      one); a citation line written in kanji (嶺田拓也 ... *Journal of the JSIDRE*) yields the romanized surname
+      the record uses from the key's first segment (`mineta-2007-tameike` -> Mineta). Measured: 83 surnames,
+      **70 occurrences** in the 18 files outside links, keys and Sources paragraphs, each with a recorded verdict -
+      **33 linked** (27 to the document, 6 to a not-read entry: *"Ruddle & Zhong 1988"*, *"Miles 2003"*,
+      *"Kinoshita 1995"*, *"Ma, Brandt, Seipel and Ma 2024"*, *"Toro"*), 18 `repeat` (D9), 10 `coincidence`
+      (*"Chang Jiang"* the river against Sen-dou Chang; *"Matsue and Yanagawa are laced with them"* the city
+      against the Matsue museum; *"Shen Kuo's Mengxi Bitan"* against the registry's Wanchun polder records;
+      the *"attested (Fushimi)"* evidence labels; the *"Tameike pond"* table row), 2 `pair` (the second surname of
+      a two-author citation, wrapped with the first: *"Wang & Ochiai"*, *"Ruddle & Zhong 1988"*) and 6 `surface`
+      (already wrapped by (i)'s rows). The name pass runs AFTER the (i)-(iii) pass, so a name inside a link that
+      pass made is masked and never wrapped twice.
     - and **75 names recorded and left plain**, each a `plain` row so the decision is on the record: a
       `**Pointers, not read:**` item with no entry (*"Britannica 'Paddy'"*, *"Kids Web Japan"*), a page named
       only as silent, 404, unreadable or a disambiguation (*"zh.wikipedia 圩田 silent"*, *"ja.wikipedia 外濠 is a
@@ -197,3 +219,11 @@ is what a read document looks like - most say READ with a date, the pre-143 ones
   `plain` row. Declined: excluding by label (round 3's FR-007), and registering the unread pointers as
   SUMMARY-ONLY entries to give them a link (feature 143's queue owns that; a link to "we could not read it"
   adds nothing for the reader that the sentence does not already say).
+- **D9 - an author is linked at the first mention in a SECTION; later mentions in the same section stay plain.**
+  The GM's words are "all of our references"; a paragraph that says Sugiura six times is one reference to one
+  paper, and six identical links would read as noise. A section (a `##` heading, the unit the modal's
+  references point at) is the scope because it is the unit a reader lands on from the map: whatever section they
+  arrive at, its first mention of the author is a link. Declined: per-file (a reader landing mid-file may never
+  see the linked mention) and per-paragraph (a chain of links). A surname that is a PLACE or another work in that
+  sentence is recorded `coincidence` and left plain; the verdicts are in `names190.py` and the script fails on an
+  occurrence without one.
