@@ -89,6 +89,17 @@ HOUSE_STYLE = [
     ("an en-dash", edit("/r/docs/a.md", new="a range 1\u20132"), "rewritten:a range 1 - 2"),
     # ...and the two the correction must NEVER touch
     ("a backticked MENTION is not a use", edit("/r/docs/a.md", new="the word `colour` is British"), "ok"),
+    # GUARD_EDIT_OK: GM 2026-09-06 - A QUOTATION IS SOMEONE ELSE'S TEXT: *"The house style should not normalize
+    # british spellings or em-dashes inside things we are quoting, because that requires us to edit other
+    # people's quotes"*. Corner brackets, curly quotes and the HTML quotation elements are held out everywhere;
+    # straight double quotes only in a prose file - in code they delimit a string. (Some words below are
+    # written with \u escapes because the hook of the day corrected this file's own cases as they were typed.)
+    ("a British spelling inside a footnote quotation", edit("/r/research/a.html", new="<li id=\"fn-3\">「depressional cent\u0072es」 (gloss)</li>"), "ok"),
+    ("an en-dash inside curly quotes", edit("/r/docs/a.md", new="Wikipedia: \u201cTang (618\u2013907)\u201d"), "ok"),
+    ("a straight-quoted passage in prose", edit("/r/docs/a.md", new="the chapter reads \"a dr\u0061ught animal\" on the page"), "ok"),
+    ("an HTML <q> element", edit("/r/research/a.html", new="<q>a plain-col\u006fur sheath</q>"), "ok"),
+    ("a straight-quoted string in CODE is still corrected", edit("/r/l7r/x.py", new="label = \"the col\u006fur\""), "rewritten:label = \"the color\""),
+    ("a quotation beside a plain violation: only the plain one is corrected", edit("/r/docs/a.md", new="「col\u006fur」 and the col\u006fur"), "rewritten:「col\u006fur」 and the color"),
     ("the GM verbatim request is refused, not corrected", edit("/r/specs/164-x/request.md", new="fix the colour"), "blocked"),
     ("American spellings", edit("/r/docs/a.md", new="the center is gray, the color honors judgment"), "ok"),
     # the files that must QUOTE the forbidden words in order to state the rule

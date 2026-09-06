@@ -62,5 +62,12 @@ if grep -q "CLAUDE.md in the directory it governs" /tmp/rm.err; then
 else echo "  FAIL    refusal does not say where knowledge belongs"; FAIL=$((FAIL+1)); fi
 
 echo
+echo "4. THE GM MAY DELEGATE ONE EDIT (2026-09-06): README_OK with a reason permits, a bare token does not"
+check "README_OK with a reason"    ok "$(bash_ev 'sed -i s/a/b/ research/README.md  # README_OK: the GM authorized this link-table update on 2026-09-06')"
+check "README_OK bare"             blocked "$(bash_ev 'sed -i s/a/b/ research/README.md  # README_OK')"
+check "README_OK merely grepped"   blocked "$(bash_ev 'grep README_OK scripts/readme-hooks.sh && cat > docs/README.md')"
+check "README_OK on the Edit tool (no command to carry a reason)" blocked "$(tool_ev Edit /repo/research/README.md)"
+
+echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

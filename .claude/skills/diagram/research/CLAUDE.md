@@ -111,7 +111,7 @@ point in including a reference if it is not being quoted."* So the citation form
 - at the page's foot, in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
   「the quoted passage」 (an English gloss when the passage is not English; one clause on what it bears on when
   that is not plain) <a class="fnback" href="#fnref-n">back</a></li>` - the key linked by feature 190's rule, the
-  passage VERBATIM from the page, or PASSAGES when one is not enough. A SUMMARY-ONLY source quotes the summary it was recorded from and says so; the
+  passage VERBATIM from the page, or PASSAGES when one is not enough - verbatim INCLUDING the source's own spelling and dashes: the house-style guard holds quoted spans (「」, “”, a straight-quoted span in prose) out of its corrections (GM 2026-09-06: *"The house style should not normalize british spellings or em-dashes inside things we are quoting, because that requires us to edit other people's quotes"*), and a `quote-check` reports a hyphen for a dash or an Americanized spelling as `DIFFERS`. A SUMMARY-ONLY source quotes the summary it was recorded from and says so; the
   GM's own notes (`URL: none`) quote the note. Nothing is quoted from memory.
 - the section's `<p><strong>Sources:</strong> ...</p>` roster stays (the map's modal reads it) and every key on it is quoted by at least
   one footnote in that section - a key with nothing to quote leaves the roster.
