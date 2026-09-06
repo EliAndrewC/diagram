@@ -1,6 +1,6 @@
-# 193 - Retire the eight diagnostics nobody runs
+# 193 - Retire eight diagnostics
 
-**Status**: draft, round 2 (scope corrected by the GM after review round 1 found the first draft's
+**Status**: draft, round 4 (scope corrected by the GM after review round 1 found the first draft's
 evidence wrong in three ways)
 **Request**: [request.md](request.md) - the GM's words across four messages, including the ruling on
 the corrected record
@@ -90,7 +90,13 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   was done and found at the time, like a spec - they are NOT corrected, and SC-002 excludes both.
   The ledger carries four rows citing `scatter_audit` verdicts (2026-08-28 x2, 2026-08-29 x2);
   rewriting them would falsify the review history this project keeps in order to measure whether its
-  reviews pull their weight.
+  reviews pull their weight (root `CLAUDE.md:219`: *"so 'is it pulling its weight' is a total, not an
+  impression"* - and a total computed from edited rows is not a total).
+  **Why `timings.md` is treated differently (FR-007) and this is not arbitrary**: that file loses its
+  PRODUCER and is cited as authoritative for FUTURE measurement, so a reader needs to know it is
+  frozen; the ledger and the pool notes are closed history nothing will append to. Note also that the
+  ledger's four rows name `scatter_audit`, whose module still EXISTS - a reader following them finds
+  a real file that no longer adjudicates, not a dangling reference.
 - **FR-007** `timings.md` is KEPT and annotated. It is a 31 KB measured record cited as
   authoritative by four documents; this feature removes its PRODUCER, so the file must say it is
   frozen and what a future measurement would require.
@@ -109,9 +115,12 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   the parser needs is worse than leaving an orphan - the orphan fails the coverage floor loudly, the
   deletion breaks a gate rule. The verified survivors are exactly: `parse_bases`, `_translated_spans`,
   `Base`, `CROWN_FILLS`, `_NUM`, `re`, and the six regex constants `_BLADE_GROUP`, `_CROWN`, `_DOT`,
-  `_LINE_BASE`, `_PINE`, `_REED_GROUP`, `_TRANSLATE_G`. Naming only the three functions would leave orphans that SC-004's 100% floor cannot
-  tolerate; the residue is derived from the cut, which is the lesson of round 1 applied at a smaller
-  scale.
+  `_LINE_BASE`, `_PINE`, `_REED_GROUP`, `_TRANSLATE_G`. Naming only the three functions would leave orphans - and TWO different mechanisms catch them,
+  which matters because assuming one is a complete net is how half of them would survive: an orphaned
+  FUNCTION BODY stops executing and fails SC-004's 100% coverage floor, but an orphaned IMPORT or
+  CONSTANT still executes at import time and is invisible to coverage - `ruff` catches those at
+  `make lint`, the gate's FIRST phase. The residue is derived from the cut rather than listed, which
+  is the lesson of round 1 applied at a smaller scale.
   **AND the `if __name__ == "__main__":` block at `scatter_audit.py:255-261` goes with them**, with
   its `guard()` call and `sys.exit`. This is load-bearing and easy to miss:
   `tests/test_operations_registry.py::_entry_points()` finds entry points by REGEX on that line, not
@@ -156,7 +165,8 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
 
 - **SC-001** `make <target>` fails for all EIGHT, `scatter-audit` included. The targets that still
   resolve are `why-placed`, `notes-census`, `pack-audit` and `hamlet-floor`.
-- **SC-002** An UNTRUNCATED sweep of the tree outside `specs/` and `pool/**/*.notes.md` finds no
+- **SC-002** An UNTRUNCATED sweep of the tree outside `specs/`, `pool/**/*.notes.md` and
+  `docs/review-ledger.md` (the two record classes FR-006 protects) finds no
   reference to a removed target **or its MODULE PATH** (`tools/jogs.py`, `tools/crop_map.py`, ...).
   Module paths, not just target names: most surviving references name the module.
 - **SC-003** `tests/settlement/test_land.py::test_commons_keeps_scrub_off_every_recorded_marsh` and
@@ -191,4 +201,13 @@ full removals (scatter-audit is a partial - FR-009 - and is not counted here):
   pointers, a missing ruling on `docs/review-ledger.md`, and an ambiguous SC-005. The reviewer also
   confirmed the seam is in the right place: nothing outside the module's own tests uses `adjudicate`,
   `format_report` or `main`.
-- **Round 3**: pending.
+- **Round 3 (`spec-fidelity`): CHANGES REQUIRED**, three items. It re-derived the reachability
+  closure independently and found **no false positives** - nothing on the removal list is needed by
+  `parse_bases` - confirming the computed residue. (1) SC-002 did not exclude `docs/review-ledger.md`
+  while FR-006 protected it, so the criterion fired on the four rows the requirement exists to
+  preserve. (2) `Settlement`, `Any` and `sys` were missing from the residue (added in the commit that
+  crossed this review), and the stated MECHANISM was wrong: orphaned imports and constants still
+  execute at import time, so the coverage floor cannot see them - `ruff` catches those. (3) The title
+  still carried the unqualified "nobody runs" claim that the body itself contradicts twice. It also
+  endorsed the records ruling on its own reasoning.
+- **Round 4**: pending.
