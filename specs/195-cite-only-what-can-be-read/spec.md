@@ -1,6 +1,6 @@
 # Feature 195 - cite only what can be read
 
-**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-06). **Status**: specified; spec-fidelity round 1 returned three changes (census by derivation over all footnotes, no label exception, carve-out by key + reported), applied; round 2 FAITHFUL (three asides applied: 780 footnotes, CITATION footnote in US1, A1 covers `budgets.md` too).
+**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-06). **Status**: IMPLEMENTED 2026-09-06 (tasks.md); spec-fidelity round 1 returned three changes (census by derivation over all footnotes, no label exception, carve-out by key + reported), applied; round 2 FAITHFUL (three asides applied: 780 footnotes, CITATION footnote in US1, A1 covers `budgets.md` too).
 
 ## Summary
 
