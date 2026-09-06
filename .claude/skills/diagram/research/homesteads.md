@@ -314,7 +314,7 @@ genuinely two-formed, and the two-formed part becomes variance.
 morphology literature; the back-lane framework from planned-village morphology (see
 [`SOURCES.md`](SOURCES.md)); rear-access in Manchu villages from [Ushijima, "Spatial composition and
 premise arrangement of traditional Manchu village in Northeast China", *Japan Architectural Review*
-(2020)](SOURCES.md#ushijima-2020-manchu).
+(2020)](SOURCES.md#ushijima-2020-manchu) (SUMMARY-ONLY since 2026-09-06, feature 190: Wiley, ResearchGate and DOAJ each refused the fetch; the search summary describes the study's variables and does not state the rear access).
 
 **REVISITED 2026-08-27 (feature 133 T31) - the GM asked the question the other way round.** Looking at
 Inashiro: *"a bunch of random scattered lanes strewn about without much rhyme or reason ... a short
@@ -419,7 +419,7 @@ question is not one anyone measured - so the floor is DERIVED from three atteste
   Bank](SOURCES.md#irri-bund-summary)'s "How to construct bunds" - unreachable to the tool, seen in a search snippet - says
   "bunds should be constructed no wider and taller than 50 cm x 30 cm ... high enough (at least
   20 cm) to avoid overflowing"; the "15-150 cm" range was seen nowhere. READ, and pulling the other
-  way: [FAO's basin-irrigation manual (fao.org/4/ac180e/AC180E07.htm)](https://www.fao.org/4/ac180e/AC180E07.htm) gives a permanent "dry bund"
+  way: [FAO's *Fish Culture in Rice Fields*, ch. 7 (fao.org/4/ac180e/AC180E07.htm)](https://www.fao.org/4/ac180e/AC180E07.htm) - the record called this "the basin-irrigation manual" until 2026-09-06 (feature 190); the URL is the rice-fish culture chapter, and FAO's basin-irrigation chapter speaks of "permanent bunds" of 60-90 cm, never of a "dry bund" - gives a permanent "dry bund"
   a 25 cm minimum height (60 recommended) and a 180 cm base tapering to 60 cm - a different, heavier
   structure than a field partition. So "about 1.5 ft" is one convention among several, and the
   6 ft floor below leans on it lightly.
@@ -739,7 +739,7 @@ Boso-no-Mura 木小屋](https://www.chiba-muse.or.jp/MURA/facility/page-15211818
 **SUMMARY-ONLY:** japaaan 五右衛門風呂 (late-Edo spread); [326-woods](https://326-woods.com/2021/02/09/keepwoods/) (stack height, modern); note.com
 厩肥; [Kameyama city history 屋敷神 survey](SOURCES.md#kameyama-yashikigami) (17/37, 11/37); the stable-and-eaves pit placement.
 **Withdrawn:** MAFF persimmon "without exception"; [Boso-no-Mura firewood placement](https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/); 百姓伝記 on
-night soil (the readable manual saying it is [農業全書](https://ja.wikipedia.org/wiki/農業全書), 1696). Keys in `research/SOURCES.md`.
+night soil (the readable manual saying it is [農業全書](https://ja.wikipedia.org/wiki/農業全書), 1697 - corrected 2026-09-06, feature 190: its page gives Genroku 10, 1697, not 1696, and does not itself mention night soil; the attribution to the manual rests on the earlier reading, not on that page). Keys in `research/SOURCES.md`.
 
 ## The outhouse faces the SUN, not away from the wind - and 72.7% of them do
 
