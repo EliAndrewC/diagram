@@ -1,6 +1,6 @@
 # 196 - Warm and cold ratchets
 
-**Status**: draft, round 5
+**Status**: FAITHFUL at review round 5; implementing
 **Request**: [request.md](request.md) (the GM's words, verbatim)
 **Rests on**: `specs/191-refusals-that-tell-the-truth/research.md` R5 and R7 (192's `research.md` does
 not exist; the round-1 draft cited it and was wrong)
@@ -133,6 +133,15 @@ evidence that this one failed.
     feature's own defect, mirrored. **A below-sample full-scope run therefore stays unjudged, exactly
     as today.** Pinning a full-scope baseline needs evidence that does not exist (zero green runs);
     when it does, that is its own feature.
+    **THE MECHANISM, because the rule above has none today.** `Makefile:172` passes `_ratchet.py`
+    only target, seconds and median - the scope reaches `_gatecost.py` on line 171 and stops. Today a
+    full-scope run passes only BY ACCIDENT: its median is empty, so `verdict()` takes the
+    `measured is None` branch. FR-004 is precisely the requirement that stops an empty median meaning
+    "pass", so it would remove that accident and judge a cold FULL run against 713. **The scope
+    becomes a FOURTH argument to `_ratchet.py`, and the below-sample per-run rule applies only when
+    it is `reference`.** The alternative - calling the ratchet classless under `FULL` so the run keeps
+    falling through the empty-median path - was declined for the reason this whole feature exists: it
+    leaves the behavior resting on an accident rather than on a stated rule.
   - **FR-004 SUSPENDS A GM-RATIFIED DECISION for the first five runs of a class, and says so.**
     `_ratchet.py`'s `done` row records `compare="median"` as *"D2, RATIFIED BY THE GM 2026-08-30"*,
     on the measured ground that *"a per-run bar would fire on 28% of NORMAL runs"*. What makes a
@@ -153,7 +162,9 @@ evidence that this one failed.
     `tests/tooling/test_run_plausible.py:78`, `tests/tooling/test_ratchets.py:76,78`.
   - the CLASS: `LOGRUN` (`Makefile:785`) and its FOUR invocation sites - 118 (`already-verified`),
     129 and 146 (`failed:`), 161 (green); the first three run WITHOUT `_reference` and must not emit
-    a class. `Makefile:171-172`, where the class must reach BOTH `_gatecost.py` and `_ratchet.py` -
+    a class. `Makefile:171-172`, where the CLASS must reach BOTH `_gatecost.py` and `_ratchet.py`,
+    **and the SCOPE must reach `_ratchet.py` too** - it does not today, and without it FR-004's
+    reference-only rule is itself inert, the same defect one axis over -
     the single most load-bearing edit, because missing it makes the whole feature inert.
     `_gatecost.py`'s `__main__` slice `median_seconds(*sys.argv[1:3])`, which needs a third
     positional. Two callers that must keep working CLASSLESS: `scripts/make-only-hooks.sh:81` and
@@ -197,8 +208,8 @@ evidence that this one failed.
 
 ## Success Criteria
 
-- **SC-001** A cold `make done` is judged against the cold ceiling and a warm one against the warm
-  ceiling, from the FIRST run after landing - by the run itself while the class is below sample, by
+- **SC-001** At `reference` scope, a cold `make done` is judged against the cold ceiling and a warm
+  one against the warm ceiling, from the FIRST run after landing - by the run itself while the class is below sample, by
   the class median once it reaches 5. The run-log entry records which class it was.
 - **SC-002** The below-sample path JUDGES rather than passes - proven by a test that a run over its
   class ceiling fails while that class holds fewer than 5 runs. This is the path that could have
@@ -261,4 +272,16 @@ evidence that this one failed.
   unjudged today - and FR-004 would have armed a per-run bar on a paid, prompted target using
   reference-scope ceilings, failing a completed cold FULL run by construction. The class ceilings now
   bind at reference scope only.
-- **Round 5**: pending.
+- **Round 5 (`spec-fidelity`): CHANGES REQUIRED then FAITHFUL**, one item - round 2's defect shape
+  one axis over. FR-004's reference-scope-only rule had NO MECHANISM: `Makefile:172` passes the
+  ratchet target, seconds and median but not the scope, so a below-sample cold FULL run would have
+  been judged against 713 - exactly what the bullet forbids. The scope becomes a fourth argument; the
+  alternative (rely on the empty-median fall-through) was declined because resting on an accident is
+  what this feature exists to stop. SC-001 gained the `reference` qualifier. The reviewer verified the
+  served/produce partition EXHAUSTIVELY - seven return sites, six values, and line 245's `share=True`
+  branch also returning `BYPASS` creates no seventh case.
+  **NOT ESCALATED at the cap, deliberately.** The doctrine's test is whether five rounds mean a
+  persistent misunderstanding or a review still converging. There has been no disagreement about the
+  GM's request since round 1, the design settled at round 2, and the findings shrank strictly:
+  12, 7, 5, 2, 1. That is the feature-169 pattern CLAUDE.md names as the thing the cap must not cut
+  off, and feature 192 ended the same way at round 5.
