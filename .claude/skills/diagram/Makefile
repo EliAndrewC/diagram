@@ -6,11 +6,14 @@
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 # GUARD_EDIT_OK: feature 185 - the .PHONY half of `lint` -> `static`, and scope-lock/scope-unlock go.
+# GUARD_EDIT_OK: `reference` -> `_reference` on the .PHONY line below - the public-rung retirement
+# the GM ordered on 2026-09-06. Reference-first itself is untouched; see the target's own note.
 # GUARD_EDIT_OK: restoring `citybudget`, which I retired on a census that missed its only caller -
 # `_invocation.OPERATIONS` names it as DATA (the target a bare `python3 -m ...citybudget` is sent to),
 # so no grep for the shell string `make citybudget` could see it. Also splits `perf-gatehooks-test`,
 # a missing space that had left BOTH `perf-gate` and `hooks-test` undeclared here.
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
+# GUARD_EDIT_OK: and `reference` becomes `_reference` below - the retired public rung.
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
@@ -118,7 +121,8 @@ done:
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
 	: "(GUARD_EDIT_OK: feature 170 - REF_OK reaches the firing log as well as the bypass log)"; \
-	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory reference || exit 1;) \
+	: "GUARD_EDIT_OK: internal name only - the gate's reference-first step is unchanged (GM 2026-09-06)"; \
+	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || exit 1;) \
 	: "GUARD_EDIT_OK: feature 174 makes the merge gate STRICTER, not looser - the GM's own request (2026-08-31)" ; \
 	: "is that a plain make done cannot finish below 100% coverage, 'and there will no longer be any mechanism" ; \
 	: "by which this can be accomplished'. The floors live behind COV_FLOORS=1, which is also what switches every" ; \
@@ -291,7 +295,9 @@ done:
 # REF_OK=1 skips the reference check, and demands a logged reason like every other bypass here.
 # ============================================================================================
 
-REF_FIRST = @$(if $(REF_OK),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory reference)
+# GUARD_EDIT_OK: the reference-first macro is UNCHANGED in behavior - it just calls the target by its
+# internal name now that the public rung is retired (GM 2026-09-06). Same roll, same stop-if-red.
+REF_FIRST = @$(if $(REF_OK),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory _reference)
 RUN = @python3 -m l7r.diagram
 
 # ---- THE ITERATION SWITCHES (feature 132 - GUARD_EDIT_OK: a new guard, thrown by the GM) ----------
@@ -966,11 +972,26 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 	printf '\nlogged to dev/bypass-log/ - proceeding\n\n'
 # (GUARD_EDIT_OK: the message named a file that does not exist - the log is a directory; feature 130 T073, Principle XIV)
 
-reference:       ## [maps] one seed of the reference hamlet (Inashiro) - the cheap tripwire the gate and the dispatcher run first
+# GUARD_EDIT_OK: the GM retired `make reference` as a PUBLIC RUNG on 2026-09-06, keeping the
+# reference-first MECHANISM. Both halves of that, because the distinction is the whole decision:
+#   GONE - the rung a session chose to type. It is off the ladder in `make-only-hooks.sh`, out of
+#     `make help` and the generated reference, and out of `ci/state.py`'s GREEN_TARGETS, so a 26 s
+#     one-map run no longer mints a verification record that a PUSH will honor. That last part is a
+#     strengthening, not a loss: `reference` vouched for far less than the gate it could stand in for.
+#   KEPT - reference-first itself (feature 130 FR-014). `done`, `test` and `maps` still roll Inashiro
+#     before anything expensive and still stop dead if it is red, `REF_OK` still escapes with a logged
+#     reason, and `dispatch.py` step 3 still runs it before a build is PAID for. The incident that
+#     bought this rule (five 10-12 minute cycles chasing what one map would have shown) is unchanged.
+# `_`-prefixed is this Makefile's existing internal convention (`_switch`), and `make-docs.py` skips
+# such targets by construction - its rule regex requires a leading [a-z] - so this needs no exemption.
+_reference:
 	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m (reference only under the lock).\n'; \
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
-	@$(STATE) green-local reference
-# (GUARD_EDIT_OK: a green reference records green-local - feature 130, FR-012)
+# GUARD_EDIT_OK: feature 130 FR-012's `$(STATE) green-local reference` is DELETED here, at the GM's
+# 2026-09-06 ruling. It was the line that made a green reference a push credential; with `reference`
+# out of GREEN_TARGETS the record would no longer be honored anyway, and writing an unhonored record
+# is worse than writing none - it looks like verification in `make ci-status` and is not.
+# The FAILED half still happens, in `dispatch.py` step 3, which is where it has teeth.
 
 # THE IDLE RUN (feature 136, D1 - GUARD_EDIT_OK: a new target, the one an idle session's detached timer runs;
 # the GM: "a test which is relatively expensive in terms of me having to wait for it time becomes very cheap

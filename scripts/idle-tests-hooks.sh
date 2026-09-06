@@ -55,6 +55,18 @@ except Exception:
 }
 
 # ---- configuration (D2, D4), and the seams
+#
+# GUARD_EDIT_OK: DISABLED BY THE GM, 2026-09-06 - "disable idle-tests but do not eliminate it".
+# ARMING is off; everything else is intact and still tested. What that means precisely:
+#   - a Stop hook arms NOTHING, so no timer is ever started and no unattended gate ever runs;
+#   - `make idle-tests` still exists and still works, by hand, whenever someone wants that run;
+#   - `prompt` (disarm/abort) stays LIVE on purpose - a timer armed before the switch was thrown
+#     must still be cleaned up, and a disable that stranded a running gate would be worse than none;
+#   - the 26 companion cases still exercise the whole mechanism, because the fixture sets IDLE_ARM=1.
+# Re-enable by setting DEF_ARM=1. Nothing else has to move, which is the point of disabling here
+# rather than deleting the arming code: the feature-136 machinery is expensive to rebuild and its
+# decisions (D1-D9, the stagger, the suspend restart, the host-wide lock) are all still recorded.
+DEF_ARM=0
 DEF_TICK=60 DEF_WAIT_MIN=60 DEF_WAIT_SPAN=60 DEF_SUSPEND_S=300 DEF_DEFER_MIN=5 DEF_DEFER_SPAN=10 DEF_GIVE_UP_S=21600
 seams_ok() { # exit 0 iff the seams may be honored here: a fixture, outside this repository's tree
   [ "${IDLE_FIXTURE:-}" = "1" ] || return 1
@@ -68,11 +80,13 @@ configure() {
     GIVE_UP_S=${IDLE_GIVE_UP_S:-$DEF_GIVE_UP_S}; CLOCK=${IDLE_CLOCK:-date +%s}; RUN=${IDLE_RUN:-}
     IDLE_HOME_DIR=${IDLE_HOME:-${HOME:-/home/agent}/.claude}; SESSIONS_DIR=${IDLE_SESSIONS_DIR:-${HOME:-/home/agent}/.claude/sessions}
     WAIT_S_OVERRIDE=${IDLE_WAIT_S:-}; DEFER_S_OVERRIDE=${IDLE_DEFER_S:-}; BUSY_CMD=${IDLE_BUSY_CMD:-}
+    ARM=${IDLE_ARM:-1}  # GUARD_EDIT_OK: a fixture arms by default so all 26 cases still test the machinery
   else
     if env | grep '^IDLE_[A-Z]' | grep -qv '^IDLE_ROOT=' ; then echo "idle-tests: IDLE_* seams are honored only inside a fixture (IDLE_FIXTURE=1, outside $OWN_ROOT) - ignored" >&2; fi  # GUARD_EDIT_OK: IDLE_ROOT is the arming's own handoff to its timer, not a seam - the first real arming (2026-08-28 03:29Z) logged a false warning; feature 136
     TICK=$DEF_TICK; WAIT_MIN=$DEF_WAIT_MIN; WAIT_SPAN=$DEF_WAIT_SPAN; SUSPEND_S=$DEF_SUSPEND_S; DEFER_MIN=$DEF_DEFER_MIN; DEFER_SPAN=$DEF_DEFER_SPAN
     GIVE_UP_S=$DEF_GIVE_UP_S; CLOCK="date +%s"; RUN=""; IDLE_HOME_DIR=${HOME:-/home/agent}/.claude; SESSIONS_DIR=${HOME:-/home/agent}/.claude/sessions
     WAIT_S_OVERRIDE=""; DEFER_S_OVERRIDE=""; BUSY_CMD=""
+    ARM=$DEF_ARM  # GUARD_EDIT_OK: real use takes the GM's switch; IDLE_ARM is a seam, not a way to turn it back on
   fi
 }
 now() { $CLOCK; }
@@ -117,7 +131,13 @@ make_running_in() { # exit 0 iff a make process has its cwd inside the clone (a 
 
 # ---- the modes
 do_stop() {
-  configure; locate || exit 0  # main, or no git: nothing to arm
+  configure
+  # GUARD_EDIT_OK: the GM's disable (see DEF_ARM above). Checked BEFORE `locate` so a disabled hook
+  # does no git work at all - a Stop hook runs on every turn end, and this is the cheapest possible
+  # no-op. Silent by design: a Stop hook that printed a line every turn would be noise, and the
+  # switch is discoverable where it is set rather than by nagging.
+  [ "${ARM:-0}" = "1" ] || exit 0
+  locate || exit 0  # main, or no git: nothing to arm
   local sf sid pid
   sf="$CLONE/.git/idle-tests.json"; sid=$(field session_id)
   if [ -f "$sf" ]; then

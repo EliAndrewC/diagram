@@ -57,7 +57,7 @@ check "tier 4: --makefile spelling"            blocked "make --makefile=/tmp/evi
 
 echo
 echo "2. IT STAYS QUIET - ordinary work must never be blocked (FR-016)"
-check "the cheap check"                        ok "make reference"
+check "the cheap check"                        ok "make quick"
 check "the gate"                               ok "make done"
 check "the full gate, no inline override"      ok "make done FULL=1"
 check "a map sweep"                            ok "make maps"

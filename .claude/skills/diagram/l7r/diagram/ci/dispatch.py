@@ -5,7 +5,7 @@ THE SEQUENCE (FR-033..FR-037, the GM's five arrows), the same for every remote t
     0. conditions          free   delta, feature (merge only), state, verified record  -> refuse / skip
     1. lint+format+types   ~5 s   fail -> stop, NOTHING has touched AWS
     2. push mailbox, start_build (the build PARKS at wait-go)          provisioning overlaps step 3
-    3. make reference      ~26 s  fail -> stop_build(OUR id), state failed-gate, no go signal
+    3. make _reference     ~26 s  fail -> stop_build(OUR id), state failed-gate, no go signal
     4. put go/<build-id>          the build proceeds: merge main, gate, record, (merge: push main)
     5. stream the log; exit with the build's status; run-log entry with minutes and cost
 
@@ -87,7 +87,7 @@ def cache_location(bucket: str, project: str, scope: str, operation: str | None 
     `tests/tooling/ci/test_cache.py`.
 
     **The scope is in the key rather than shared** because the two scopes want different contents: a
-    reference build reads the roll cache (`make reference` calls `rollcache.report`) while a FULL
+    reference build reads the roll cache (`make _reference` calls `rollcache.report`) while a FULL
     build neither reads nor writes it (`rollcache.bypassed()` is true under `L7R_TESTS_FULL=1` and
     `obtain` returns before storing). Sharing one location would have a reference build's `rolls/`
     ride along in every FULL restore, unread - 54 MB on the laptop that measured it.
@@ -446,8 +446,11 @@ def run(ctx: Context) -> Outcome:
     ctx.events.append(f"start_build:{build_id}")
     ctx.out(f"ci: build {build_id} started on {project} / {ctx.compute} (parked at wait-go, {config.PARK_TIMEOUT_S} s ceiling)")
 
-    # 3. the reference settlement(s), locally - `make reference` runs every tier's reference map
-    rc, out = ctx.sh(["make", "--no-print-directory", "reference"], ctx.skill, None)
+    # 3. the reference settlement(s), locally - `make _reference` runs every tier's reference map.
+    # STILL HERE ON PURPOSE after the 2026-09-06 retirement of the public rung: this is the step that
+    # stops a PAID build being spent on a map that is already red, which is the one place the check
+    # has money attached. Only the name changed.
+    rc, out = ctx.sh(["make", "--no-print-directory", "_reference"], ctx.skill, None)
     ctx.events.append(f"reference:{rc}")
     if rc != 0:
         ctx.out(out)

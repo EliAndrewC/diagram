@@ -27,7 +27,11 @@ tick_clock() { echo $(( $(cat "$CLOCKF") + ${1:-1} )) > "$CLOCKF"; }
 # a run stand-in that records start/end and sleeps a little
 RUNNER="$TMP/run.sh"; RUNLOG="$TMP/runs.log"
 printf '#!/bin/sh\necho "start $(date +%%s.%%N) $PWD" >> %s; sleep 0.6; echo "end $(date +%%s.%%N) $PWD" >> %s; echo FAKE-OK\n' "$RUNLOG" "$RUNLOG" > "$RUNNER"; chmod +x "$RUNNER"
-export IDLE_FIXTURE=1 IDLE_TICK=0.2 IDLE_SUSPEND_S=100 IDLE_HOME="$HOMEDIR" IDLE_SESSIONS_DIR="$SESS" IDLE_CLOCK="$CLOCK" IDLE_RUN="$RUNNER" IDLE_GIVE_UP_S=100000 IDLE_BUSY_CMD="false"
+# IDLE_ARM=1: the GM disabled ARMING on 2026-09-06 (DEF_ARM=0 in the hook), and the machinery it
+# switches off is still wanted and still tested - so the fixture arms explicitly and every case below
+# goes on exercising the timer, the stagger, the lock and the abort. Section 11 is the one case that
+# leaves IDLE_ARM unset, and it is what proves the switch actually reaches `do_stop`.
+export IDLE_ARM=1 IDLE_FIXTURE=1 IDLE_TICK=0.2 IDLE_SUSPEND_S=100 IDLE_HOME="$HOMEDIR" IDLE_SESSIONS_DIR="$SESS" IDLE_CLOCK="$CLOCK" IDLE_RUN="$RUNNER" IDLE_GIVE_UP_S=100000 IDLE_BUSY_CMD="false"
 hook() { # hook <mode> <clone> [sid] -> RC, OUT
   OUT=$(printf '{"cwd":"%s","session_id":"%s"}' "$2" "${3:-sid-a}" | (cd "$2" && IDLE_ROOT="$2" "$HOOK" "$1" 2>&1)); RC=$?
 }
@@ -169,6 +173,19 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_RUN="$RUNNER"
 REAL=$(cd "$(dirname "$HOOK")/.." && pwd)
 out=$(cd "$REAL" && IDLE_FIXTURE=1 IDLE_ROOT="$REAL" IDLE_WAIT_MIN=1 IDLE_WAIT_SPAN=0 "$HOOK" stagger sess-a 2>&1)
 check "seams ignored in the repository's own tree" 'printf "%s" "$out" | grep -q "ignored" && [ "$(printf "%s" "$out" | tail -1)" -ge 60 ]'
+
+# --- 11. THE GM'S DISABLE (2026-09-06). Two properties, because "disabled" has to mean both halves:
+# arming does nothing, and everything else is untouched. Proven by DELETING the guard line and
+# watching this go red, per the add-a-guard rule.
+rm -f "$CA/.git/idle-tests.json"
+OUT=$(printf '{"cwd":"%s","session_id":"sid-a"}' "$CA" | (cd "$CA" && IDLE_ARM=0 IDLE_ROOT="$CA" "$HOOK" stop 2>&1)); RC=$?
+check "disabled: a Stop arms nothing"        '[ "$RC" -eq 0 ] && [ ! -f "$CA/.git/idle-tests.json" ]'
+check "disabled: and says nothing"           '[ -z "$OUT" ]'
+check "the shipped default IS disabled"      'grep -q "^DEF_ARM=0" "$HOOK"'
+# the disarm half stays live: a timer armed BEFORE the switch must still be cleanable
+printf '{"session":"s","session_id":"sid-a","armed_at":1,"wait_min":9,"timer_pid":999999}' > "$CA/.git/idle-tests.json"
+hook prompt "$CA" >/dev/null 2>&1
+check "disabled: prompt still disarms a leftover" '[ ! -f "$CA/.git/idle-tests.json" ]'
 
 echo "idle-tests hooks: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]
