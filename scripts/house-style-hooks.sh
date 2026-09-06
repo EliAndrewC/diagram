@@ -17,12 +17,19 @@
 # specs/123-lane-web-and-cluster-shape/tasks.md and `centre` in specs/125-lanes-do-not-break/spec.md,
 # both against a rule documented project-wide since long before either.
 #
-# TWO EXEMPTIONS, and both are load-bearing:
+# THREE EXEMPTIONS, and all three are load-bearing:
 #
 #   - THE GM'S OWN WRITING. Never "correct" text inside a <!-- SOURCE: GM NOTES --> block, or in
 #     l7r.md, or a direct quotation of either. Their prose is theirs.
 #   - A FILE THAT STATES THE RULE quotes the forbidden words by necessity - CLAUDE.md lists every
 #     British spelling it forbids. Flagging those would make the rule unwritable.
+#   - A QUOTATION OF SOMEONE ELSE'S TEXT (GUARD_EDIT_OK: GM 2026-09-06: *"The house style should not
+#     normalize british spellings or em-dashes inside things we are quoting, because that requires us
+#     to edit other people's quotes, which I don't think we should do"*). A passage inside 「」, 『』,
+#     “” or <q>/<blockquote> anywhere, or inside straight double quotes in a PROSE file (.md/.html/.txt
+#     - in code a double-quoted string is a string, and the rule covers code), keeps the source's own
+#     characters. Found by feature 194's backfill: the readers' reports recorded a dozen en-dashes and
+#     four British spellings hyphenated and Americanized INSIDE verbatim quotes as they were saved.
 set -uo pipefail
 
 MODE="${1:-pretool}"
@@ -57,7 +64,7 @@ if not body:
 # gm-request.md is a verbatim transcript of the GM speaking - correcting it would defeat its purpose
 if "/host-l7r-repo" in path or path.endswith("l7r.md") or "gm-request.md" in path:
     print(""); raise SystemExit
-if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh)$", path):
+if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|test_hooks_cases\.py)$", path):
     print(""); raise SystemExit
 # a SOURCE block inside the added text is the GM speaking; drop it before looking
 body = re.sub(r"<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->", " ", body, flags=re.S | re.I)
@@ -77,7 +84,14 @@ body = re.sub(r"<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->", " ", body, f
 #     a British spelling in a sentence about how it is handled. Spans are held out of both the
 #     detection and the correction.
 #   - GUESS. Every pair below is CLAUDE.md own, one American form per word.
-SPAN = re.compile(r"\x60{3}.*?\x60{3}|\x60[^\x60]*\x60", re.S)  # a code span, written by codepoint: a literal backtick inside $( ) is command substitution
+CODE = r"\x60{3}.*?\x60{3}|\x60[^\x60]*\x60"  # a code span, written by codepoint: a literal backtick inside $( ) is command substitution
+# A QUOTATION IS SOMEONE ELSE TEXT (GM 2026-09-06, header bullet three): corner brackets, curly quotes and
+# the two HTML quotation elements anywhere; straight double quotes only in a prose file, where they quote -
+# in a .py or .sh they delimit a string, and the rule reaches code. The heredoc path list is joined by spaces.
+QUOTE = r"「[^」]*」|『[^』]*』|“[^”]*”|<q\b[^>]*>.*?</q>|<blockquote\b[^>]*>.*?</blockquote>"
+if re.search(r"\.(?:md|html|txt)(\s|$)", path):
+    QUOTE += r"|\x22[^\x22\n]*\x22"
+SPAN = re.compile(CODE + "|" + QUOTE, re.S)
 PAIRS = {
     "colour": "color", "colours": "colors", "centre": "center", "centres": "centers",
     "centred": "centered", "behaviour": "behavior", "behaviours": "behaviors",
@@ -172,7 +186,8 @@ if fixed_fields and notes and not still_bad and not GM_VERBATIM:
             "House style was applied to this edit for you (" + ", ".join(notes[:6]) + "). "
             "Both rules are exact substitutions from CLAUDE.md, so the correction is made rather "
             "than the edit refused - a refusal costs a model round trip to say the same thing. "
-            "Text inside backticks was left alone: a word in a code span is being named, not used."),
+            "Text inside backticks was left alone: a word in a code span is being named, not used. "
+            "Text inside quotation marks was left alone too: a quotation is someone else text (GM 2026-09-06)."),
     }}))
     raise SystemExit
 

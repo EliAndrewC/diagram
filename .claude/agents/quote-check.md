@@ -34,9 +34,10 @@ file's footnotes are Markdown footnotes: `[^n]` after an assertion, and `[^n]: [
    retried; a `SUMMARY-ONLY` footnote quotes a search summary and is checked against a fresh search of the same
    terms, not a fetch).
 3. Per footnote, two verdicts:
-   - **Quotation**: `VERBATIM` (the passage is on the page, character for character apart from whitespace,
-     quotation marks, and the two normalizations this repository's house-style guard applies to every file it
-     writes - a dash written as a hyphen, a British spelling written American; those are not differences); `DIFFERS` (the page has the passage with different words - give the page's text);
+   - **Quotation**: `VERBATIM` (the passage is on the page, character for character apart from whitespace and
+     the quotation marks that delimit it - a dash written as a hyphen or a British spelling written American IS
+     a difference, because the record keeps a source's own characters: GM 2026-09-06, *"The house style should
+     not normalize british spellings or em-dashes inside things we are quoting"*); `DIFFERS` (the page has the passage with different characters or words - give the page's text);
      `NOT-ON-PAGE` (nothing like it on the page - say what the page does say on the point, if anything);
      `UNFETCHABLE` (the host refused; say how).
    - **Support**: `SUPPORTS` (a reader of the quote alone would grant the assertion); `PARTIAL` (the quote grants

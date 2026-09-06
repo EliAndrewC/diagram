@@ -59,7 +59,7 @@ These conventions govern any edit to `/host-l7r-repo/setting/l7r.md` - both copy
 - **Clan** (capital C) as part of a clan's name or the institution: `Crab Clan`, `Lion Clan`, the minor clans (`Wasp Clan`, `Fox Clan`), `Clan daimyo`, `Clan capital`, the `Family/Clan/Imperial` kick-up tiers, and the fixed labels `Great Clans` / `Minor Clans`. Lowercase `clan` only in relational/process compounds: `clan-supplied`, `cross-clan`, `inter-clan`, `clan-level`.
 - Quick test: "the daimyo's family" is their parents/siblings/spouse/children; "the daimyo's Family" is e.g. the Hida Family.
 
-- Hyphens only. No em-dashes (U+2014) or en-dashes (U+2013) anywhere.
+- Hyphens only. No em-dashes (U+2014) or en-dashes (U+2013) anywhere - except inside a quotation of another source, which keeps the source's own dashes and spellings (GM 2026-09-06; the rule as this repository applies it is in the root `CLAUDE.md`).
 - Two spaces after a period is house style. Preserve it.
 - Section headings have no trailing colons: `### Hikobayashi County`, not `### Hikobayashi County:`.
 - Numbered lists use `N.` not `N)`. Sub-bullets under a numbered item need **three** leading spaces to align with text after `N. ` (e.g. `   - sub-bullet`). Sub-bullets under a `-` bullet need two.
