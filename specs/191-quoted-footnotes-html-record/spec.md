@@ -1,6 +1,9 @@
 # Feature 191 - references that QUOTE their sources, checked, and the research record as HTML
 
-**Status**: DRAFT, round 4 - awaiting `spec-fidelity` (constitution XVI). Round 3 returned one item, fixed: FR-013's
+**Status**: DRAFT, round 5 of 5 - awaiting `spec-fidelity` (constitution XVI). Round 4 returned FR-013 a third
+time - the absolute literal inside the record, over-sweeping of same-basename files outside it, a wrong hand
+count - and offered one formulation, a resolution rule with a three-part test; FR-013 is now that rule verbatim
+in substance, with no census in the spec. Round 3 returned one item, fixed: FR-013's
 search space excluded the record's own RELATIVE links (90, invisible to a literal grep) and its test was a
 literal-absence check - now the relative forms are in the space and the test is a resolution check over every link
 in every page. Round 2 returned two items, both fixed:
@@ -121,30 +124,23 @@ backfilled, and the record rendered as HTML with hover footnotes (the ACOUP form
   root) - and the references modal opens it in a new tab as before. `RESEARCH_URL` (GitHub) is retired. A test
   proves every class entry's file and every anchor a pool map emits exist on disk (feature 180 FR-012a's silent
   miss, held for the new surface).
-- **FR-013 Everything that names the record moves to the HTML surface - the SEARCH SPACE stated: every POINTER to a
-  converted file anywhere in the repository outside `specs/`: the absolute literal `research/<file>.md` (top-level
-  or `cities/`) outside `research/`, AND inside `research/` the relative forms `<file>.md`, `cities/<file>.md`,
-  `../<file>.md`, `../SOURCES.md`, each with or without a `#anchor` (measured: 90 occurrences - 71 of them feature
-  190's `SOURCES.md#key` links, `research/CLAUDE.md`'s two, `cities/capitals.md`'s link to `government.md`; the
-  GM's `README.md` table is reported under FR-009, not edited). The conversion rewrites the relative ones in the
-  pages; the sweep rewrites the absolute ones everywhere else.** Measured in the clone before the conversion, by that search: 544 literals in 120 files - 165 in `.py` (78 in 40 engine
-  files, the rest in tests, tools and `wip/`), 319 in `.md`, 59 in `.json` (the fixture `classes_before_189.json` and
-  three FROZEN legacy manifests, `nagahara`, `minami`, `tango` - edited as text, which is neither the regeneration
-  nor the re-gating the freeze forbids, because a pointer to a deleted file is stale in an exhibit too), 1 in
-  `scripts/test-gate-stamp.sh`. Among the engine files: 78 pointers (the
-  record-the-why pointers at the point of change - `hamletgen/ways/touch.py`, a `ValueError` message in
-  `hamletgen/plan.py`, `settlement/land/dikes.py` ...), the 52 class `entry` strings and `place.py`'s, `sources.py`'s
-  `_ENTRY_FILE`, and about 208 in skill `.md` documents (`SKILL.md`, `settlements.md`, `buildings.md`,
-  `interactive/CLAUDE.md`, the pool `.notes.md` files ...). EVERY one of them is updated to `.html` by one
-  scripted sweep - a live link and a prose mention alike, because after FR-009 both name a file that does not
-  exist, and a pointer to a missing file is exactly the stale record this project's "why" rule forbids. The
-  count the sweep changes is recorded in T05, and the test is a RESOLUTION check, not a literal-absence check:
-  every link target in every converted record page resolves to a file that exists on disk, and where the target
-  names an id that id exists in that page; plus, outside `research/` and `specs/`, the literal `research/<file>.md`
-  occurs nowhere. A relative form cannot defeat the first check; the second catches the pointers that are prose. `specs/` is history and is left as written. Also moving: the house-style and
-  SOURCE-block guards (they act on edited text; the `.html` paths are checked to be in their scope), feature
-  190's link test (every `<code>key</code>` in a page inside an `<a>` with the right target), the Sources-roster
-  tests, the browser test (opens one research page and hovers one footnote), and 100% coverage as everything else.
+- **FR-013 Everything that names the record moves to the HTML surface - by a RESOLUTION RULE, not a list of
+  shapes.** The space: every `.md` token in every tracked file outside `specs/` and outside the GM's
+  `research/README.md`, links and prose alike, that RESOLVES - against the containing file's own directory, or
+  as a skill-root or repository-root path - to one of the 16 converted files. A token that resolves anywhere
+  else (`../settlements/water.md`, `../buildings.md` - the skill's `buildings.md`, not the record's -
+  `budgets.md`, `l7r.md`) is OUT and must be byte-identical after the sweep. The sweep is scripted on that rule,
+  and its count is recorded in T05 (no hand census in this spec: rounds 2, 3 and 4 each found a hand-listed
+  shape short by one - the absolute literal, the record's relative links, the absolute literal INSIDE the
+  record and the prose tokens of `research/CLAUDE.md`). The test, three halves: (a) every link target in every
+  converted page resolves to a file that exists on disk, and where it names an id that id exists in that page;
+  (b) NO `.md` token anywhere outside `specs/` and `research/README.md` resolves to a converted file - prose,
+  inline code, `research/CLAUDE.md` and the record's own pages included; (c) every `.md` link target in every
+  converted page and in `research/CLAUDE.md` still exists on disk - what fails if the sweep touches a
+  `settlements/` or `buildings.md` pointer. Also moving: the house-style and SOURCE-block guards (they act on
+  edited text; the `.html` paths are checked to be in their scope), feature 190's link test (every
+  `<code>key</code>` in a page inside an `<a>` with the right target), the Sources-roster tests, the browser
+  test (opens one research page and hovers one footnote), and 100% coverage as everything else.
 - **FR-014 Documentation**: `interactive/CLAUDE.md` (the page chain ends at a local page), `research/CLAUDE.md`
   (the record is HTML; the footnote form; the hover assets), `dev/` where render-sync was described as the
   pages' source (nothing generates them now).
