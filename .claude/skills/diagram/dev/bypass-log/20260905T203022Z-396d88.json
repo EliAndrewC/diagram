@@ -1,0 +1,6 @@
+{
+  "utc": "20260905T203022Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "T06 demonstration: a docstring-only edit must short-circuit"
+}

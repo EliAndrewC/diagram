@@ -19,6 +19,6 @@ Every task is `research: rendering` - a code form, nothing physical behind it; n
 - [x] T05 FR-009: `interactive/CLAUDE.md`, root `CLAUDE.md` tweak-lane bullet, 188 D4 noted closed
       research: rendering
       verify: DONE. `interactive/CLAUDE.md` classes row -> the package and its own CLAUDE.md (families, the format, a worked entry, the conversion record); root `CLAUDE.md` tweak-lane bullet gains the docstring clause and its page-check figure reads the measured 26 s; 188 D4 marked CLOSED by 189. Also fixed on the way: the root Makefile FORWARD line that feature 188 had broken by appending after its continuation backslash
-- [ ] T06 `make done` green (the registry's Python changed semantically - classes instead of calls), push; then PROVE the property: a docstring-only edit in the landed package makes `make done` short-circuit and `page-check` alone satisfy the push
+- [x] T06 `make done` green (the registry's Python changed semantically - classes instead of calls), push; then PROVE the property: a docstring-only edit in the landed package makes `make done` short-circuit and `page-check` alone satisfy the push
       research: rendering
-      verify: green gate; the push lands; the property demonstrated and its timings in the answer to the GM
+      verify: DONE. `make done` GREEN in 585 s: 2,982 passed, 22,989 statements 0 uncovered 100%, hamlet floor 100%. Pushed. The property is demonstrated after landing (see the answer to the GM): a docstring-only edit -> `make done` answers already-verified, `make page-check` alone re-stamps `page`, `gate-stamp --check` admits the push
