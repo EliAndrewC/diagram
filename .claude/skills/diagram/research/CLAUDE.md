@@ -70,6 +70,35 @@ color from the record, or says in so many words that it was searched for and not
 the same way in the entry, the rule file, the code comment and the map's notes: since feature 183 the
 record says "a map drawing convention" wherever it used to say "a deviation for legibility".
 
+## Every reference is a link (GM 2026-09-06, feature 190)
+
+The GM: *"I want all of our references to be links ... Any reference to an external document which we were
+able to read in order to do our research should be a link to that external document."* So a key in a
+research file is never bare. Write it as a link, and the target follows from the key's CITATION LINE in
+`SOURCES.md` (the entry's first paragraph, the one that names the work and its URL):
+
+- a document we READ - the citation line carries a URL and no not-read marker - links to that URL, the FIRST
+  one on the line: `` [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810) ``;
+- a document we did NOT read - the line says `SUMMARY-ONLY` or `URL: none`, or records its URL as `unfetched`
+  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](SOURCES.md#ma-2024-desire-paths) ``
+  (`../SOURCES.md#...` from `cities/`), because the entry is where "we could not read it" is said, and a link
+  to the page would present an unread source as a read one.
+
+The key stays the link text (the registry, the tests and the class entries name keys). A document named in
+prose without a key - *"Wikipedia 'Desire path'"* in an older `**Sources (read):**` paragraph or a body
+sentence - is linked the same way, by looking its key up; and so is a citation by AUTHOR SURNAME in a finding's
+body (*"Sugiura counts a firewood SHED on 0.76"*, *"that is Tabayashi's rule"*; GM 2026-09-06: *"Yes link them
+too"*), at its first mention in a section, later mentions in the same section staying plain. A read document with
+no entry gets one first (the `source-reader` fetches the page; the entry records the URL and the READ date) and is
+never linked to a URL nobody fetched; before a key is coined the registry is searched by URL, percent-decoded, and
+by the whole entry - six "unregistered" documents in feature 190 were registered under keys the prose did not
+suggest. A `**Pointers, not read:**` item with no entry, a page named only as silent or unreadable, and an
+unregistered summary-only or withdrawn item stay plain; a REGISTERED name is linked whatever label surrounds it.
+`tests/interactive/test_sources.py` holds the rule: a bare key anywhere in a research file, a mis-targeted link,
+or a duplicate `### ` heading in the registry fails the gate. The one-off conversion (459 keyed sites, 202
+prose-named citations, 32 new entries; five review rounds and the GM's ruling) is recorded in
+`specs/190-source-keys-are-links/`.
+
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md), "The references modal
 lists QUESTIONS".
