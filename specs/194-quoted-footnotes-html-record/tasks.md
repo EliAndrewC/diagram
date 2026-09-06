@@ -23,9 +23,9 @@ backfill task carries the three boxes.
       verify: DONE. sources.py reads the pages (_parsed on <h2>/<h3> ids, the <p><strong>Sources:</strong> roster, SOURCES.html entries); _ENTRY_FILE and the 51 class entries + place.py name .html; RESEARCH_PAGES = ../../../research/ and RESEARCH_URL retired; sweep191.py by the resolution rule rewrote 574 tokens in 124 files (plus 3 on a second run) - the frozen manifests and the 189 fixture included; tests/interactive/test_record.py holds the three-part FR-013 test; the guards act on any edited text so .html is in scope; interactive/CLAUDE.md and research/CLAUDE.md pointers updated; make quick 432 passed
 - [x] T06 FR-006/FR-007: the backfill, file by file (15 record files, one agent each), then `quote-check` over every file, then the fixes
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
       - [x] quote-check confirmed
       verify: DONE. 15 gather agents (one per record file, reports in the session scratchpad) -> 722 footnotes placed by applyquotes191.py; 15 finisher agents quoted or dropped the 86 roster keys left unquoted, made the readers' corrections (Shibata 7.3 m, Suganuma, Hikone 290,000, the rice share 25 percent, the tanning soak 'several days', the coppice cycle, Tabayashi 1987 ...), labeled unsourced assertions; then quote-check over every page (15 reports) and 9 repair agents acted on every DIFFERS / NOT-ON-PAGE / DOES-NOT-SUPPORT: 22 footnotes removed and their assertions labeled, quotes made verbatim, sub-pages named, misplaced markers moved, two sentences the finishers had noted but left standing corrected. Final: 780 footnotes on 15 pages, every roster key quoted in its section. research pass = the gather reports; source-reader confirmed = the readers' READ verdicts; recorded and cited = the footnotes; quote-check confirmed = the 15 check reports and the repairs. Residue: paywalled hosts (springer, sciencedirect, mdpi, wiley, tandfonline, jstor, baidu, zhihu) stay UNFETCHABLE in their footnotes with the registry's passage
 - [x] T07 FR-008: the answer to the GM - contradictions found, the residue, D2's ruling; push (GATED: engine code)
