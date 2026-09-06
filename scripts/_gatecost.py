@@ -44,7 +44,17 @@ def _logs(cwd: str) -> list[str]:
     return out
 
 
-def median_seconds(target: str, scope: str | None = None, cwd: str | None = None) -> int | None:
+def median_seconds(target: str, scope: str | None = None, cwd: str | None = None, cache: str | None = None) -> int | None:
+    """The median of recent green runs, optionally of ONE roll-cache class (feature 196).
+
+    THE CLASS FILTER RUNS BEFORE THE `RECENT` SLICE, deliberately: "recent" must mean the last 25 runs
+    OF THAT CLASS. Filtering after the slice would shrink a class's sample every time the other class
+    got busier, which is the mixing this whole feature exists to remove.
+
+    AN ENTRY WITH NO `cache` FIELD IS EXCLUDED from a class query rather than defaulted. Every entry
+    written before feature 196 lacks it, and guessing would put cold runs in the warm population -
+    the exact defect being fixed. It costs a slow start (see `_ratchet`'s below-sample rule, which
+    keeps the guard live meanwhile) and it cannot lie."""
     seen: dict[str, dict] = {}
     for pattern in _logs(cwd or os.getcwd()):
         for path in glob.glob(pattern):
@@ -54,15 +64,38 @@ def median_seconds(target: str, scope: str | None = None, cwd: str | None = None
                 continue
             if rec.get("target") != target or rec.get("result") != "green":
                 continue
-            if scope is None or rec.get("scope") == scope:
-                seen[os.path.basename(path)] = rec        # same entry in clone and mirror counts once
+            if scope is not None and rec.get("scope") != scope:
+                continue
+            if cache is not None and rec.get("cache") != cache:
+                continue
+            seen[os.path.basename(path)] = rec            # same entry in clone and mirror counts once
     runs = sorted(seen.values(), key=lambda r: r.get("utc", ""))[-RECENT:]
     if not runs:
         return None
     return int(statistics.median(r["seconds"] for r in runs))
 
 
+def class_count(target: str, scope: str | None = None, cwd: str | None = None, cache: str | None = None) -> int:
+    """How many recent green runs the class holds - what `_ratchet`'s below-sample rule reads."""
+    seen: dict[str, dict] = {}
+    for pattern in _logs(cwd or os.getcwd()):
+        for path in glob.glob(pattern):
+            try:
+                rec = json.load(open(path))
+            except Exception:
+                continue
+            if rec.get("target") != target or rec.get("result") != "green":
+                continue
+            if scope is not None and rec.get("scope") != scope:
+                continue
+            if cache is not None and rec.get("cache") != cache:
+                continue
+            seen[os.path.basename(path)] = rec
+    return len(sorted(seen.values(), key=lambda r: r.get("utc", ""))[-RECENT:])
+
+
 if __name__ == "__main__":
-    got = median_seconds(*sys.argv[1:3]) if len(sys.argv) > 1 else None
+    # `_gatecost.py <target> [scope] [cache]` - the third positional is feature 196's class.
+    got = median_seconds(*sys.argv[1:4]) if len(sys.argv) > 1 else None
     if got is not None:
         print(got)

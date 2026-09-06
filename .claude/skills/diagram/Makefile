@@ -120,6 +120,10 @@ done:
 	fi; \
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
 	T0=$$(date +%s); fail=""; \
+	: "(GUARD_EDIT_OK: feature 196 D1 - clear the roll-cache marker at T0. REF_FIRST runs"; \
+	: " _reference from other targets too, so a marker left at 10:00 must not classify an 11:00"; \
+	: " gate - under the class rule that decides WHICH CEILING judges the run, not just a median.)"; \
+	rm -f "$$(git rev-parse --absolute-git-dir)/roll-cache-class"; \
 	: "(GUARD_EDIT_OK: feature 168 - THE CHEAP CHECKS RUN FIRST, at the GM's ruling 2026-08-30. The three static phases cost 1.8 s together against the reference roll's 29 s, so a session that has broken something ruff cannot fix hears about it in seconds rather than half a minute. The GM authorized this ON PRINCIPLE and predicted, correctly, that it buys almost nothing: both static phases AUTOCORRECT (ruff check --fix, ruff format), so they rarely fail at all, and only 8 of 317 recorded gate runs failed on one without also failing the suite - about 4 minutes recovered across the entire history. Do not later credit this reorder with a saving it does not deliver. It does not weaken 'the reference settlement gates everything expensive': what moved ahead of the roll is 16x cheaper than it, and every expensive phase still stands behind it.)"; \
 	: "GUARD_EDIT_OK: feature 185 - the gate's phase loop, one of the four 'lint' -> 'static' sites (quoted with SINGLE quotes: backticks here are command substitution and were running lint/static on every gate)" ; \
 	for phase in static format typecheck; do \
@@ -168,8 +172,15 @@ done:
 	: " run is judged against reference-scope runs. _gatecost already excludes anything that is not"; \
 	: " green, which is what keeps a short-circuited 'already-verified' at seconds=0 out of the median"; \
 	: " - a naive average over every row would be dragged toward zero and lower everybody's bar.)"; \
-	med=$$(python3 "$$root/scripts/_gatecost.py" $(DONE_NAME) "$(if $(FULL),full,reference)" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
-	python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" || exit 1; \
+	: "(GUARD_EDIT_OK: feature 196 - the CLASS and the SCOPE both reach the ratchet. The class picks"; \
+	: " which ceiling judges the run; the SCOPE is what makes FR-004's reference-only rule real - without"; \
+	: " it a below-sample cold FULL run would be judged against a reference-derived ceiling and fail by"; \
+	: " construction, on a paid prompted target the ratchet has never judged.)"; \
+	cls=$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true); \
+	scp="$(if $(FULL),full,reference)"; \
+	med=$$(python3 "$$root/scripts/_gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
+	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts'); import _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
+	python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; \
 	$(STATE) green-local $(DONE_NAME); \
 	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
 	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \
@@ -1013,7 +1024,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 # `_`-prefixed is this Makefile's existing internal convention (`_switch`), and `make-docs.py` skips
 # such targets by construction - its rule regex requires a leading [a-z] - so this needs no exemption.
 _reference:
-	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m.\n'; \
+	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed; GATE_NO_CACHE=1 rolls it' if how == 'HIT' else '') + ']'); 	open(__import__('os').path.join(__import__('subprocess').run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip() or '.git','roll-cache-class'),'w').write('warm' if how.startswith('HIT') or how.startswith('BYPASS-SHARED') else 'cold'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m.\n'; \
 	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
 # GUARD_EDIT_OK: feature 130 FR-012's `$(STATE) green-local reference` is DELETED here, at the GM's
 # 2026-09-06 ruling. It was the line that made a green reference a push credential; with `reference`

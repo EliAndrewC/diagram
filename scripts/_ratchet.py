@@ -50,6 +50,14 @@ class Ratchet:
     hard_at_or_below: int | None = None  # ...which becomes the fixed rule at or below this baseline
     compare: str = "run"   # "run" or "median" - what is measured against the ceiling
     armed: bool = True
+    # FEATURE 196: the cost of `done` is BIMODAL on roll-cache state, so one baseline described
+    # neither regime. `baseline` is the WARM figure and KEEPS ITS NAME - `scripts/check-run-plausible.py`
+    # derives the dry-run floor from `RATCHETS[target].baseline` via getattr and treats a missing
+    # value as "no floor", so renaming it would silently switch off the guard that stopped a
+    # `make -n done` minting a push credential on 2026-09-05. `baseline_cold` is ADDITIVE.
+    baseline_cold: int | None = None
+    reason_cold: str = ""      # its OWN written reason (171 FR-010) - the per-ROW check cannot see this
+    min_class_runs: int = 5    # below this many same-class runs, the RUN is judged, never waved through
 
 
 # THE TABLE. One row per target; adding a target is a row.
@@ -102,6 +110,18 @@ RATCHETS = {
                "runs, most of which are still cheap pre-174 ones, so the bar will not bite until "
                "they age out - loose for a while beats unarmed, which is how the 4x slowdown went "
                "unnoticed in the first place, and the median is also what absorbs one noisy run",
+        baseline_cold=549,
+        reason_cold="GUARD_EDIT_OK: PINNED BY FEATURE 196 (2026-09-06). The GM: *\"separate medians "
+                    "for warm and cold seem like the correct solution\"*. 549 is the median of the five "
+                    "cold (roll-cache MISS) runs this session can account for - 522, 544, 549, 610, 651 - "
+                    "of which FOUR are evidenced by an instrumented `[MISS]` line and ONE (the 549 itself) "
+                    "is INFERRED: it sits between a cold 610 and a warm 379 on the same commit and was "
+                    "taken while hamlet_floor/scatter_audit were being edited, which invalidates the roll "
+                    "cache by construction. The inference TIGHTENS the bar (549/713) rather than loosening "
+                    "it (577/750 without), which is the opposite direction from every error this feature "
+                    "made on the way here - its population was corrected twice, both times permissive. "
+                    "THIS IS A SESSION-PINNED NUMBER, not one the GM ratified: 400 is theirs and is "
+                    "untouched. If a fuller sample moves 549 materially it goes back to them. Ceiling 713.",
         hard_ceiling=45,
         hard_at_or_below=35,   # not yet - today's baseline is 155
         compare="median",      # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while
@@ -149,21 +169,59 @@ def ceiling_for(r: Ratchet) -> tuple[int, str]:
     return derive_ceiling(r.baseline, hard=None), r.compare
 
 
-def verdict(target: str, seconds: int | None, median: int | None = None) -> tuple[bool, str]:
-    """(ok, message). `seconds` is this run; `median` the recent same-scope median where needed."""
+def ceiling_for_class(r: Ratchet, cache: str | None) -> tuple[int, str]:
+    """The ceiling for one ROLL-CACHE CLASS (feature 196), and what it is compared against.
+
+    THE CLASSES, and why the rule is SERVED vs NOT-SERVED rather than a list of values: `rollcache
+    .obtain()` returns six things, and three of them are SERVES - `HIT`, `BYPASS-SHARED` and
+    `BYPASS-SHARED-RUN` (the last two hand back a payload another caller or worker already produced).
+    The rest - `MISS`, `BYPASS`, `BYPASS-STORED` - are produces. A run that was served did no work, so
+    it is `warm`; a run that produced did the work, so it is `cold`. An earlier draft said "anything
+    not HIT is a produce", which is false for the two shared values and would have filed a SERVED roll
+    as cold - a warm run dragging the cold median down.
+    Only `HIT` is reachable from `_reference` today, because `report()` calls `obtain` with the default
+    `share=False`; the sole sharing caller is `hamlet()`. **If `report()` is ever given `share=True`,
+    this rule must be revisited.**
+
+    UNKNOWN means no marker at all - `REF_OK` skips the reference roll entirely, so no verdict exists.
+    Such a run is judged against the WARM (stricter) ceiling, never waved through: an unknown class
+    with no rule is how this feature nearly disarmed the guard it was written to repair."""
+    if cache == "cold" and r.baseline_cold is not None:
+        return derive_ceiling(r.baseline_cold, hard=None), r.compare
+    return ceiling_for(r)
+
+
+def verdict(target: str, seconds: int | None, median: int | None = None,
+            cache: str | None = None, scope: str | None = None, class_runs: int | None = None) -> tuple[bool, str]:
+    """(ok, message). `seconds` is this run; `median` the recent same-scope, same-class median.
+
+    THE BELOW-SAMPLE RULE (feature 196): when a class holds fewer than `min_class_runs` green runs
+    there is no honest median, so THE RUN ITSELF is judged against that class's ceiling. It is never
+    waved through. The draft that did wave it through would have disarmed this ratchet completely for
+    hours to a week, because no run-log entry written before feature 196 carries a class at all.
+
+    AND IT BINDS AT `reference` SCOPE ONLY. `done` has 240 green reference-scope runs and ZERO green
+    full-scope ones, so `make done FULL=1` is unjudged today; arming a per-run bar on a paid, prompted
+    target against ceilings derived wholly from reference runs would fail a completed cold FULL run by
+    construction, and would merge populations on a second axis while splitting them on the first."""
     r = RATCHETS.get(target)
     if r is None or not r.armed:
         return True, ""
-    ceiling, mode = ceiling_for(r)
+    ceiling, mode = ceiling_for_class(r, cache)
+    below_sample = class_runs is not None and class_runs < r.min_class_runs
+    if below_sample and scope == "reference":
+        mode = "run"          # judge THIS run - never "pass for lack of evidence"
     measured = seconds if mode == "run" else median
     if measured is None:
         return True, ""   # nothing to judge on - never fail a target for lack of evidence
     if measured < ceiling:
         return True, ""
     what = "this run" if mode == "run" else "the median of recent green runs"
+    klass = f" ({cache} roll cache)" if cache else ""
+    base = r.baseline_cold if (cache == "cold" and r.baseline_cold is not None) else r.baseline
     return False, (
-        f"\n\033[1m{target} is at {measured}s, at or over its {ceiling}s ceiling.\033[0m\n"
-        f"Measured on {what}, against a pinned baseline of {r.baseline}s.\n"
+        f"\n\033[1m{target} is at {measured}s, at or over its {ceiling}s ceiling{klass}.\033[0m\n"
+        f"Measured on {what}, against a pinned baseline of {base}s.\n"
         f"STOP and find out what got slower - that is the point of this failing rather than you\n"
         f"noticing in three days' time. `make audit` shows the history; `make durations` shows where\n"
         f"the suite's time goes.\n"
@@ -174,10 +232,16 @@ def verdict(target: str, seconds: int | None, median: int | None = None) -> tupl
 
 if __name__ == "__main__":
     # `_ratchet.py <target> <seconds> [median]` - exits 1 and prints when the target is over.
+    # `_ratchet.py <target> <seconds> [median] [cache] [scope] [class_runs]` - the last three are
+    # feature 196's. The SCOPE is here because FR-004's reference-only rule needs a mechanism: without
+    # it the rule was inert, and a below-sample cold FULL run would have been judged against 713.
     _t = sys.argv[1] if len(sys.argv) > 1 else ""
     _s = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2].isdigit() else None
     _m = int(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3].isdigit() else None
-    _ok, _msg = verdict(_t, _s, _m)
+    _c = sys.argv[4] if len(sys.argv) > 4 and sys.argv[4] in ("warm", "cold") else None
+    _sc = sys.argv[5] if len(sys.argv) > 5 and sys.argv[5] else None
+    _n = int(sys.argv[6]) if len(sys.argv) > 6 and sys.argv[6].isdigit() else None
+    _ok, _msg = verdict(_t, _s, _m, _c, _sc, _n)
     if not _ok:
         print(_msg, file=sys.stderr)
         sys.exit(1)

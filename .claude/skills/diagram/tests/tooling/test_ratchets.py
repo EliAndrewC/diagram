@@ -169,3 +169,83 @@ def test_the_median_ignores_short_circuits_failures_and_other_scopes(tmp_path) -
 
     got = gatecost.median_seconds("done", "reference", cwd=str(tmp_path))
     assert got == 100, f"the median took the excluded rows into account: {got}"
+
+
+# ---------------------------------------------------------------------------------------------
+# FEATURE 196: warm and cold are separate populations. A median over both described neither, and
+# it blocked two landings in one day on a finding of "no regression".
+def test_a_cold_run_is_judged_against_the_cold_ceiling_not_the_warm_one() -> None:
+    r = ratchet.RATCHETS["done"]
+    assert ratchet.ceiling_for_class(r, "cold")[0] == ratchet.derive_ceiling(r.baseline_cold)
+    assert ratchet.ceiling_for_class(r, "warm")[0] == ratchet.derive_ceiling(r.baseline)
+    assert ratchet.ceiling_for_class(r, "cold")[0] > ratchet.ceiling_for_class(r, "warm")[0]
+
+
+def test_below_sample_the_RUN_is_judged_and_never_waved_through() -> None:
+    """SC-002, and the path that would have disarmed this ratchet entirely.
+
+    The round-1 draft passed an unjudgeable run. Measured at the time: 0 of 507 run-log entries
+    carried a cache field, so BOTH classes started empty and `make done` would have been unjudged for
+    hours to over a week - the guard whose motivating failure was a 4x slowdown going unnoticed."""
+    over = ratchet.derive_ceiling(ratchet.RATCHETS["done"].baseline_cold) + 1
+    ok, msg = ratchet.verdict("done", over, None, "cold", "reference", 0)
+    assert not ok and "cold roll cache" in msg, "a below-sample run over its class ceiling must FAIL"
+    under = ratchet.derive_ceiling(ratchet.RATCHETS["done"].baseline_cold) - 1
+    assert ratchet.verdict("done", under, None, "cold", "reference", 0)[0]
+
+
+def test_an_unknown_class_takes_the_STRICTER_warm_ceiling() -> None:
+    """`REF_OK` skips the reference roll, so no verdict exists and no marker is written. An unknown
+    class with no rule is how this feature nearly re-introduced its own defect through a side door."""
+    warm_ceiling = ratchet.derive_ceiling(ratchet.RATCHETS["done"].baseline)
+    assert not ratchet.verdict("done", warm_ceiling + 1, None, None, "reference", 0)[0]
+
+
+def test_full_scope_stays_UNJUDGED_below_sample() -> None:
+    """`done` has zero green full-scope runs, so FULL is unjudged today. Arming a per-run bar on a
+    PAID, prompted target against ceilings derived wholly from reference runs would fail a completed
+    cold FULL run by construction - and would split populations on one axis while merging on another."""
+    way_over = ratchet.derive_ceiling(ratchet.RATCHETS["done"].baseline_cold) + 500
+    assert ratchet.verdict("done", way_over, None, "cold", "full", 0)[0], "FULL must stay unjudged"
+
+
+def test_each_baseline_carries_its_OWN_written_reason() -> None:
+    """171 FR-010 per CLASS, not per row. The existing per-row check passes while a second baseline
+    inherits a reason that is not about it - the property gone, the test still green."""
+    for name, r in ratchet.RATCHETS.items():
+        if getattr(r, "baseline_cold", None) is not None:
+            assert len(r.reason_cold.split()) >= 5, f"{name}'s cold baseline has no written reason"
+
+
+def test_the_dry_run_floor_still_reads_baseline() -> None:
+    """SC-004. `check-run-plausible.py` derives its floor from `RATCHETS[target].baseline` via
+    getattr and treats a missing value as NO FLOOR - so renaming that field would silently restore
+    the 2026-09-05 defect where `make -n done` minted a push credential."""
+    spec = importlib.util.spec_from_file_location("crp", SCRIPTS / "check-run-plausible.py")
+    crp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(crp)
+    assert crp.floor_for("done") == max(crp.ABSOLUTE_MIN, int(ratchet.RATCHETS["done"].baseline * crp.FRACTION))
+
+
+def test_a_class_median_EXCLUDES_entries_that_carry_no_class(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """SC-003. Every entry written before feature 196 lacks a cache field, and DEFAULTING them would
+    put cold runs in the warm population - the exact defect this feature removes. Excluding costs a
+    slow start (the below-sample rule covers it) and cannot lie."""
+    spec = importlib.util.spec_from_file_location("gc", SCRIPTS / "_gatecost.py")
+    gc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gc)
+    logs = tmp_path / ".claude/skills/diagram/dev/run-log"
+    logs.mkdir(parents=True)
+    rows = [
+        {"target": "done", "scope": "reference", "result": "green", "seconds": 900, "utc": "2026-01-01T00:00:00Z"},
+        {"target": "done", "scope": "reference", "result": "green", "seconds": 100, "utc": "2026-01-02T00:00:00Z", "cache": "warm"},
+        {"target": "done", "scope": "reference", "result": "green", "seconds": 700, "utc": "2026-01-03T00:00:00Z", "cache": "cold"},
+    ]
+    for i, r in enumerate(rows):
+        (logs / f"{i}.json").write_text(json.dumps(r))
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    cwd = str(tmp_path)
+    assert gc.median_seconds("done", "reference", cwd, "warm") == 100, "the classless 900 must not count"
+    assert gc.median_seconds("done", "reference", cwd, "cold") == 700
+    assert gc.class_count("done", "reference", cwd, "warm") == 1
+    assert gc.median_seconds("done", "reference", cwd) == 700, "classless still sees all three"
