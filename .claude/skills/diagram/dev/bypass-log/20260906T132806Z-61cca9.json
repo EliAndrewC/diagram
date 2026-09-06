@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T132806Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "ratchet suite only\nNOT OWED, and this is the reason rather than a token: feature 191 changes printed message text and feature 192 changes what a bypassed roll RECORDS - neither touches the placer, a glyph, a size, a placement rule or any map"
+}

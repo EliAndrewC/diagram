@@ -24,12 +24,14 @@ found the first draft's "the same eight maps TWICE" wrong for four of the eight)
 |---|---|---|
 | Inashiro seed 4 | the `_reference` phase, which is NOT bypassed and writes the record before pytest starts | already not re-rolled today |
 | cohort seeds 41-44 | `tests/gate/hamletgen/test_driver.py:44` via `rollcache.report(spec)`, under FULL | **FIXED - 4 rolls removed** |
-| Polder 12, Polder 19 | nobody. The suite rolls these as `hamlet:{spec!r}` - a different subject and a different code path (`plan_site+build+finish` vs `hg.generate` with the gate and re-roll loop) | still a FIRST roll in the floor |
-| Polder seed 8 | nothing in the tree rolls it in any form | still a FIRST roll in the floor |
+| Polder 12, Polder 19 | nobody. The suite rolls these as `hamlet:{spec!r}` - a different subject and a different code path (`plan_site+build+finish` vs `hg.generate` with the gate and re-roll loop) | still a FIRST roll in the floor - accepted, D4 |
+| Polder seed 8 | nothing in the tree rolls it in any form | **REMOVED from the subject list** - FR-007 |
 
-So the floor rolls **seven** subjects cold and this feature removes **four**. On R7's own arithmetic
-(~57 s per roll) roughly **170 s of floor rolling remains**, and it is a first roll rather than a
-duplicate - no bypass-recording can remove it, because nothing else produces those records.
+So the floor rolls **seven** subjects cold. FR-001 removes **four** (the duplicated cohort seeds) and
+FR-007 removes **one** (seed 8, which reaches no module the others do not). **Two remain** - Polder 12
+and Polder 19 - and those are FIRST rolls rather than duplicates, so no amount of bypass-recording can
+remove them: nothing else in the tree produces their `report:` records. On R7's own arithmetic
+(~57 s per roll) roughly **115 s of floor rolling remains**.
 
 ## Requirements
 
@@ -82,10 +84,12 @@ duplicate - no bypass-recording can remove it, because nothing else produces tho
   measured outside a coverage-traced pytest process, which is where FR-001 puts the recording. The
   mechanism is sound (`gencache.record` uses `sys.monitoring.PROFILER_ID`, coverage does not share
   it), but the number under coverage is unverified and SC-001's instrumented run is what confirms it.
-- **D4 - the three polder subjects are ACCEPTED as a residual, not fixed.** Removing them would mean
-  either changing what the suite rolls (a `report:` roll where it now does a `hamlet:` one, which
-  costs the suite the difference) or changing the floor's subject list (which changes what the floor
-  MEASURES - a coverage-floor decision, not a performance one). Neither is what the GM authorized.
+- **D4 - Polder 12 and 19 are ACCEPTED as a residual, not fixed.** Removing them would mean either
+  changing what the suite rolls (a `report:` roll where it now does a `hamlet:` one, which costs the
+  suite the difference) or dropping them from the subject list - and unlike seed 8 they are NOT free
+  to drop: the seed-8 measurement that justifies FR-007 was specifically that it adds no module the
+  others do not, and no such finding exists for these two. Dropping them would change what the floor
+  MEASURES on no evidence, which is the opposite of what FR-007 does.
 
 ## Out of scope
 
@@ -99,8 +103,8 @@ duplicate - no bypass-recording can remove it, because nothing else produces tho
 ## Success Criteria
 
 - **SC-001** On an instrumented cold-cache `make done`, the post-pytest gap falls from ~400 s to
-  **roughly 170 s** - four of seven rolls removed, not "to seconds". The number is stated so the run
-  either meets it or contradicts it.
+  **roughly 115 s** - five of seven rolls removed (four by FR-001, one by FR-007), not "to seconds".
+  The number is stated so the run either meets it or contradicts it.
 - **SC-002** No roll is SERVED under `L7R_TESTS_FULL=1`. Asserted - this is the property FR-002
   protects and the whole reason the bypass exists.
 - **SC-003** `GATE_NO_CACHE=1` still leaves nothing behind. The existing assertion
