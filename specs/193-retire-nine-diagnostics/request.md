@@ -50,3 +50,24 @@ gates the grove). **"no need for that rule" is read as "no need for that AUDIT"*
 justifying removal of the tool by the placer's enforcement, not asking for the placer's sun rules to
 be deleted. Those stay. If that reading is wrong it is cheap to correct and expensive to guess at,
 so it is stated here rather than assumed silently.
+
+## The GM on scatter-audit (2026-09-06, fourth message)
+
+> Also it seems like we can remove scatter-audit if it is used in settlement-review.md because I
+> don't see why that review process needs it.  The purpose of that review is to do NON-automated
+> checks, right?  So why do we actually need scatter-audit anymore?
+
+**The premise is correct and the agent's own text supports it.** `settlement-review`'s description
+is *"Judges the things the automated validator structurally CANNOT"*, and its line 135 says *"Any
+count above a handful is needs-work, whatever `scatter_audit` says - the audit encodes the AUTHOR'S
+allowances ... and the author's allowance is precisely what is under review."* The review does not
+trust the verdict; it uses the tool to avoid hand-parsing SVG.
+
+**So the module splits on a clean seam, and only half of it is the audit the GM is questioning:**
+- `adjudicate` / `format_report` / `main` / the target / the registry row - the AUTOMATED JUDGMENT.
+  Its only consumer is the review that disclaims it. **Removed.**
+- `parse_bases` / `_translated_spans` / `Base` - the SVG PARSER, which resolves a grove clump's
+  `<g transform>`. Imported by `tests/settlement/test_land.py:566` (the GM's own 2026-08-26
+  scrub-in-the-reeds rule) and by the positional crown guard that caught ~78% of the crown family
+  being adjudicated in the wrong place. **Kept, as test support.** Deleting it deletes a rule, which
+  is the one thing this feature must not do.
