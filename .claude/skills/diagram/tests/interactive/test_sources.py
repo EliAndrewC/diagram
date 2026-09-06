@@ -1,6 +1,6 @@
 """`interactive/sources.py` - reading a research page's headings and the keys those sections cite.
 
-The record is HTML since feature 191 (GM 2026-09-06); the first cases here are defects that SHIPPED on the
+The record is HTML since feature 194 (GM 2026-09-06); the first cases here are defects that SHIPPED on the
 Markdown record and were invisible in the artifact - the page still rendered a plausible list of sources,
 just not the right one - and they hold on the page form too."""
 
@@ -46,7 +46,7 @@ def test_a_double_quoted_research_heading_is_read_like_a_single_quoted_one() -> 
 
 
 def test_a_sources_roster_is_read_whole_and_deduplicated() -> None:
-    """The roster is one `<p>` on the page (feature 191), so the 2026-08-29 wrap defect - keys past the first
+    """The roster is one `<p>` on the page (feature 194), so the 2026-08-29 wrap defect - keys past the first
     physical line of a `**Sources:**` paragraph dropped invisibly - cannot recur; the keys are still read in
     order and once each, linked or bare."""
     body = '<p>text</p>\n<p><strong>Sources:</strong> <a href="https://x"><code>alpha-one</code></a>, <code>beta-two</code>,\n<a href="SOURCES.html#gamma-three"><code>gamma-three</code></a> (a note), <code>alpha-one</code>.</p>\n<p><code>not-a-source</code></p>\n'

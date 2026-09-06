@@ -3,7 +3,7 @@
 The map as a page a player can use: hover a feature and every feature OF ITS KIND lights up; click
 it and a modal says what it is, why it stands there, whether that is historically accurate, a
 deliberate deviation (the setting differing from history), a map drawing convention (a glyph scaled or colored for the eye - feature 183) or a guess (constitution XII); "See references" lists the QUESTIONS the research
-asked about it, each linking to its answer in `research/`'s local page (feature 180; local since feature 191 - see below).
+asked about it, each linking to its answer in `research/`'s local page (feature 180; local since feature 194 - see below).
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
 

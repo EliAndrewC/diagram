@@ -1,4 +1,4 @@
-// The research record's footnote hover (feature 191, GM 2026-09-06): the form ACOUP uses - move the mouse over a
+// The research record's footnote hover (feature 194, GM 2026-09-06): the form ACOUP uses - move the mouse over a
 // footnote reference and the note (the source link and its quoted passage) appears beside it; move onto the box
 // to follow its link; move away, or press Escape, and it goes. Clicking still jumps to the note, and the note's
 // back-link returns. One script for every page under research/; loaded with `defer` from each page's <head>.

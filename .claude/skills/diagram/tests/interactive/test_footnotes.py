@@ -1,4 +1,4 @@
-"""Feature 191 (GM 2026-09-06): a reference QUOTES the passage that supports the assertion - the mechanical half.
+"""Feature 194 (GM 2026-09-06): a reference QUOTES the passage that supports the assertion - the mechanical half.
 
 The record's citation form (research/CLAUDE.md): `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>` after an
 assertion, and in the page's `<section class="footnotes"><ol>` a `<li id="fn-n">` with the key link and the quote. What a test can hold: every reference resolves and every

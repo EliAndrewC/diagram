@@ -21,7 +21,7 @@ level of curiosity:
 2. **"See references."** The references modal lists the questions we asked while working out that kind
    of feature - the headings of the research sections its explanation was written from, each a link.
 3. **The answer.** A question links to its section of the research PAGE, locally from the map
-   (`../../../research/<file>.html#<anchor>`; feature 191 - it was the GitHub rendering of the Markdown before),
+   (`../../../research/<file>.html#<anchor>`; feature 194 - it was the GitHub rendering of the Markdown before),
    where the well-formatted markdown gives the finding, the decision it drove and any disclosed liberty.
 4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](SOURCES.html)
    carries the URL where the work can be read (constitution v2.13.0), so a reader who truly wants to
@@ -99,7 +99,7 @@ or a duplicate `### ` heading in the registry fails the gate. The one-off conver
 prose-named citations, 32 new entries; five review rounds and the GM's ruling) is recorded in
 `specs/190-source-keys-are-links/`.
 
-## A reference QUOTES the passage it rests on, and the quote is checked (GM 2026-09-06, feature 191)
+## A reference QUOTES the passage it rests on, and the quote is checked (GM 2026-09-06, feature 194)
 
 The GM: *"Anytime we add a new reference in order to support something, then in our references section, we
 quote the passage or passages from the reference which support the assertion that we are making. There is no
@@ -126,7 +126,7 @@ changed research entry before the feature lands, and record its verdicts in the 
 task's `source-reader confirmed` box is `quote-check confirmed` from here). The page renders the footnotes with
 the ACOUP hover (`html/`, below): hover a reference and the note appears beside it.
 
-## The record IS HTML - edit the page (feature 191, the GM's ruling through its spec review)
+## The record IS HTML - edit the page (feature 194, the GM's ruling through its spec review)
 
 Since 2026-09-06 the record's files are `research/<name>.html` (`cities/<name>.html`, `SOURCES.html`), hand-authored
 and tracked; the Markdown they were converted from is gone (the GM: *"the markdown on GitHub will no longer exist

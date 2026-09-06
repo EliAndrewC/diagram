@@ -464,7 +464,7 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     synthetic.page.wait_for_timeout(30)
     assert synthetic.js(shown)["visible"] is False
     # THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): every line is a link into the research
-    # record's local page (feature 191), the button says where it returns to, and the explanation carries no "Record:" line
+    # record's local page (feature 194), the button says where it returns to, and the explanation carries no "Record:" line
     links = synthetic.js("() => Array.from(document.querySelectorAll('#r-list a.q')).map(a => [a.textContent, a.getAttribute('href'), a.getAttribute('target')])")
     assert links and all(t and h.startswith(RESEARCH_PAGES) and "#" in h and tg == "_blank" for t, h, tg in links), links
     assert synthetic.js("() => document.getElementById('x-refs').textContent") == f"See references ({len(links)})"
@@ -698,7 +698,7 @@ def test_reference_hamlet_timings(inashiro: tuple[Page, dict[str, Any]]) -> None
 
 
 def test_a_research_page_shows_a_footnote_on_hover_and_its_links_open_locally(browser: Any) -> None:
-    """Feature 191 (GM 2026-09-06): the record is HTML with ACOUP-style footnotes - hover a reference and the
+    """Feature 194 (GM 2026-09-06): the record is HTML with ACOUP-style footnotes - hover a reference and the
     note (the source link and its quoted passage) appears beside it; move away and it goes; the page's own
     assets load from a relative path, so a file:// page is self-contained. The map's references modal links
     the same pages locally (RESEARCH_PAGES), never GitHub."""

@@ -3,7 +3,7 @@ SYNC IMPACT REPORT
 ==================
 Version change: 2.17.0 → 2.18.0
 
-Version 2.18.0 (amended 2026-09-06, feature 191): Principle XII gains "QUOTE WHAT YOU CITE" - a
+Version 2.18.0 (amended 2026-09-06, feature 194): Principle XII gains "QUOTE WHAT YOU CITE" - a
 reference supports an assertion by QUOTING the passage(s) of the source that support it, as a
 footnote at the assertion (one per assertion, several in a sentence when it makes several); a
 reference that is not quoted is not included; the `quote-check` agent confirms the quote is on the
@@ -1421,7 +1421,7 @@ in its entry, so the absence is a statement rather than an omission. The 228 sou
 before this rule were linked in one pass on 2026-08-28 (feature 134 T47); a key added after it
 without a URL fails `tests/interactive/test_page.py`.
 
-**QUOTE WHAT YOU CITE** (v2.18.0, GM 2026-09-06, feature 191): *"Anytime we add a new reference in order to
+**QUOTE WHAT YOU CITE** (v2.18.0, GM 2026-09-06, feature 194): *"Anytime we add a new reference in order to
 support something, then in our references section, we quote the passage or passages from the reference which
 support the assertion that we are making. There is no point in including a reference if it is not being
 quoted."* A citation is a footnote at the assertion that carries the source's key, its link and the quoted

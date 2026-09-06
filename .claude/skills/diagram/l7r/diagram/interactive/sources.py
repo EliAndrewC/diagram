@@ -5,7 +5,7 @@ quoted headings). Two things are read out of that pointer at page-write time, so
 record reaches every modal without anyone re-typing anything into `classes.py`:
 
 - **the QUESTIONS** (feature 180, GM 2026-09-05) - the headings of the sections the entry names, each
-  with a link to that section of the research PAGE - since feature 191 (GM 2026-09-06) the record is HTML
+  with a link to that section of the research PAGE - since feature 194 (GM 2026-09-06) the record is HTML
   under `research/` and the link is local and relative, not GitHub. This is what the
   references modal shows: *"instead of listing individual sources on the references modal, we will
   list the questions which we asked and researched - those pages are themselves sourced with links,
@@ -31,7 +31,7 @@ from functools import cache
 _HERE = os.path.dirname(os.path.abspath(__file__))
 RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"))
 
-#: WHERE A QUESTION LINKS (feature 191, GM 2026-09-06: *"make the links on our HTML maps link to the files
+#: WHERE A QUESTION LINKS (feature 194, GM 2026-09-06: *"make the links on our HTML maps link to the files
 #: locally rather than linking to the markdown on GitHub since the markdown on GitHub will no longer exist as
 #: it has been replaced with HTML"*). Relative to the MAP's own page: every map and every legacy exhibit is
 #: `pool/<tier>/<name>/<name>.html` (or `legacy-hand-authored-pool/...`), three levels under the skill root,
@@ -53,7 +53,7 @@ _ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/)?[a-z-]+\.html)")
 # swallowed the heading after it, because the run of characters between the two double quotes matched
 # as one giant "heading" that no section is named.
 _ENTRY_HEADING = re.compile(r"'((?:[^']|'(?=[A-Za-z]))+)'|\"([^\"]+)\"")
-#: A heading in a research PAGE (feature 191): its level, its id (the record's anchor) and its inner HTML.
+#: A heading in a research PAGE (feature 194): its level, its id (the record's anchor) and its inner HTML.
 _HEADING_TAG = re.compile(r"<h([1-6])(?:\s+id=\"([^\"]*)\")?[^>]*>(.*?)</h\1>", re.S)
 _TAG = re.compile(r"<[^>]+>")
 _CODE_KEY = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
@@ -62,7 +62,7 @@ _CODE_KEY = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
 #: "(feature 156, 2026-08-29)". Stripped from the question TEXT only (spec FR-005, D2); the anchor is
 #: computed from the full heading, so the link still lands.
 _DATED_TAIL = re.compile(r"\s*\([^()]*\b\d{4}-\d{2}-\d{2}\b[^()]*\)\s*$")
-#: Markdown emphasis and code markers - what the record's headings carried before feature 191, and what a
+#: Markdown emphasis and code markers - what the record's headings carried before feature 194, and what a
 #: class entry may still quote; the page's heading TEXT has none, so stripping them keeps the two comparable.
 _MARKUP = re.compile(r"[*`]")
 
@@ -79,7 +79,7 @@ def page_text(fragment: str) -> str:
 
 def github_anchor(heading: str, seen: dict[str, int] | None = None) -> str:
     """THE RECORD'S ANCHOR for a heading - GitHub's rule (feature 180, spec FR-006), kept as the id rule when
-    the record converted to HTML (feature 191) so every pointer that landed on GitHub lands on the page: the
+    the record converted to HTML (feature 194) so every pointer that landed on GitHub lands on the page: the
     rendered text lowercased; every character that
     is not a letter, a digit, a combining mark, a space, a hyphen or an underscore dropped; spaces
     replaced by hyphens (so " - " becomes "---"); and, when `seen` is passed, a heading repeated within
@@ -152,7 +152,7 @@ def _entry_headings(entry: str) -> list[str]:
 
 def section_sources(body: str) -> list[str]:
     """The SOURCES keys a section's `<p><strong>Sources:</strong> ...</p>` roster names (in order, deduplicated).
-    Feature 191: the roster is one `<p>`, so the wrap that once lost keys (2026-08-29: a `**Sources:**` line read
+    Feature 194: the roster is one `<p>`, so the wrap that once lost keys (2026-08-29: a `**Sources:**` line read
     to end-of-LINE dropped every key past the first physical line) cannot recur."""
     m = re.search(r"<p><strong>Sources:</strong>(.*?)</p>", body, re.S)
     if not m:

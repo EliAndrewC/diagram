@@ -1,4 +1,4 @@
-"""Feature 191 FR-013: every link in every record page resolves - the file exists, and the id where one is named.
+"""Feature 194 FR-013: every link in every record page resolves - the file exists, and the id where one is named.
 A relative link cannot hide from this; the literal check beside it catches prose pointers outside the record."""
 
 from __future__ import annotations

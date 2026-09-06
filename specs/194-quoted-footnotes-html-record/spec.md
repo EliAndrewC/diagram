@@ -1,4 +1,4 @@
-# Feature 191 - references that QUOTE their sources, checked, and the research record as HTML
+# Feature 194 - references that QUOTE their sources, checked, and the research record as HTML
 
 **Status**: FAITHFUL (`spec-fidelity`, round 5 of 5, 2026-09-06) - cleared for implementation (constitution XVI). Round 4 returned FR-013 a third
 time - the absolute literal inside the record, over-sweeping of same-basename files outside it, a wrong hand

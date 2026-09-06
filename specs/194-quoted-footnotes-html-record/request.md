@@ -1,4 +1,4 @@
-# Feature 191 - the GM's request, verbatim (2026-09-06, via /goal)
+# Feature 194 - the GM's request, verbatim (2026-09-06, via /goal)
 
 > Okay. So here is something that I would now like. It's great that we are citing sources. However, what would be even better is To have references which quote those sources. So for example, if we are saying that chicken coops existed in Imperial China, but not in Imperial Japan, then that is probably two different citations, each of which could have a quote from the source from which we got that information. This would make the references section much longer, but we could put these in footnotes at the bottom of the page.  So I would like you to do the following three things now.
 >
