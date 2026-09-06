@@ -24,7 +24,7 @@ import pytest
 
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.page import render_page
-from l7r.diagram.interactive.sources import RESEARCH_PAGES
+from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES
 from l7r.diagram.interactive.tags import Split
 
 playwright = pytest.importorskip("playwright.sync_api", reason="playwright is not installed (pip install -r requirements-dev.txt)")
