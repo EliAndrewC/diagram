@@ -39,7 +39,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make verify</td><td class=a>&ndash;</td><td>THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)</td></tr>
 </table></div>
 <h2>Maps</h2>
-<p class=sec>Generating and checking the pool. `reference` is the cheap tripwire everything expensive runs behind.</p>
+<p class=sec>Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cache-audit</td><td class=a>&ndash;</td><td>does using the generation cache change any map?</td></tr>
 <tr><td class=n>make citybudget</td><td class=a>ARGS</td><td>the city/capital space-budget planner</td></tr>
@@ -58,7 +58,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make crop</td><td class=a>&ndash;</td><td>crop a rendered map in manifest coordinates</td></tr>
 <tr><td class=n>make family-census</td><td class=a>A B</td><td>which feature families one manifest records that another does not</td></tr>
-<tr><td class=n>make hamlet-floor</td><td class=a>&ndash;</td><td>the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls&#x27; records; GUARD_EDIT_OK: a new operation)</td></tr>
+<tr><td class=n>make hamlet-floor</td><td class=a>&ndash;</td><td>the modules under the 100% hamlet-path floor - derived from the scripted rolls&#x27; records (feature 145)</td></tr>
 <tr><td class=n>make jogs</td><td class=a>&ndash;</td><td>find bunds that step sideways</td></tr>
 <tr><td class=n>make notes-census</td><td class=a>M</td><td>refresh the derived counts inside each map&#x27;s notes census block</td></tr>
 <tr><td class=n>make overlap-audit</td><td class=a>FAMILIES M</td><td>does A overlap B on a finished map (records AND drawn ink)</td></tr>

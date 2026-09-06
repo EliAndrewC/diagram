@@ -49,7 +49,9 @@ perf-review:    ## [performance] does every environment's newest bookend pair ca
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
 	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
 
-hamlet-floor:   ## [diagnostics] the modules under the 100% hamlet-path floor (feature 145; derived from the scripted rolls' records; GUARD_EDIT_OK: a new operation)
+# GUARD_EDIT_OK: the marker moves off the `##` line into this comment - `make-docs.py` publishes
+# help text verbatim, so a marker there ends up in the reference page a reader sees.
+hamlet-floor:   ## [diagnostics] the modules under the 100% hamlet-path floor - derived from the scripted rolls' records (feature 145)
 	$(RUN).tools.hamlet_floor --list
 
 # GUARD_EDIT_OK: `hamlet-floor-check` RETIRED 2026-09-05 by the target audit - a convenience alias for what test-full's last phase already does inline (Makefile calls hamlet_floor directly); no caller, no doc, never run.

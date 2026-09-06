@@ -42,7 +42,7 @@ OUT = Path("docs/make-targets.html")
 # not a silent "other" bucket - an unrecognised tag is almost always a typo.
 SECTIONS: list[tuple[str, str, str]] = [
     ("tests", "Tests", "The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter."),
-    ("maps", "Maps", "Generating and checking the pool. `reference` is the cheap tripwire everything expensive runs behind."),
+    ("maps", "Maps", "Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run."),
     ("diagnostics", "Diagnostics", "Read-only questions about a finished map or a generator's decisions. None of these decides what ships."),
     ("performance", "Performance", "The bookends and the three bands. A run that got slower owes records before the push."),
     ("remote", "Remote (AWS CodeBuild)", "Everything except `ci-status` costs money. Remote is currently OFF; `make switches` says so."),
