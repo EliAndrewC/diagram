@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T035034Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "instrumented gate run to locate ~400s of wall time no phase accounts for; measurement only, no content change"
+}
