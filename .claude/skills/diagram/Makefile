@@ -6,10 +6,14 @@
 
 # (GUARD_EDIT_OK: feature 132 adds the iteration switches - a new guard and five new operations)
 # GUARD_EDIT_OK: feature 185 - the .PHONY half of `lint` -> `static`, and scope-lock/scope-unlock go.
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file page-check tick audit perf-gatehooks-test explain \
+# GUARD_EDIT_OK: restoring `citybudget`, which I retired on a census that missed its only caller -
+# `_invocation.OPERATIONS` names it as DATA (the target a bare `python3 -m ...citybudget` is sent to),
+# so no grep for the shell string `make citybudget` could see it. Also splits `perf-gatehooks-test`,
+# a missing space that had left BOTH `perf-gate` and `hooks-test` undeclared here.
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
-	 why-placed crop jogs pack-audit scatter-audit sun-audit timings help \
+	 why-placed crop jogs pack-audit scatter-audit sun-audit timings citybudget help \
 	 notes-census \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
@@ -385,6 +389,15 @@ pool-index-if-stale: ## [maps] rebuild the pool index only when a manifest, rend
 
 compound:       ## [maps] draw a Mode A compound plan                ARGS=<out.svg>
 	$(RUN).compound $(ARGS)
+
+# GUARD_EDIT_OK: restores an operation, see the .PHONY note above.
+# THIS TARGET'S ONLY CALLER IS A DATA ROW, WHICH IS WHY IT LOOKED DEAD. `_invocation.OPERATIONS` maps
+# `l7r.diagram.citybudget` to this name, so a bare `python3 -m l7r.diagram.citybudget` is refused and
+# sent HERE; delete the target and that refusal points at a command that does not exist. Retired on
+# 2026-09-06 by a census that grepped for the shell string, restored the same day when
+# `tests/test_operations_registry.py` failed - which is exactly the derived check earning its place.
+citybudget:     ## [maps] the city/capital space-budget planner   ARGS=--plan --population 3000 [--river] [--agri]
+	$(RUN).citybudget $(ARGS)
 
 # RENDER-SYNC IS REFUSAL-ONLY AND NOT SUBJECT TO REFERENCE-FIRST (FR-009a, adjudicated at spec round
 # 3). It runs in MAIN's tree during the stop-work procedure, and CLAUDE.md is explicit that render-sync
