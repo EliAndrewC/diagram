@@ -33,7 +33,8 @@ Then, on the answers:
 
 - **`make citybudget`**: the GM named the TARGET. The MODULE `l7r/diagram/citybudget.py` is imported
   at module level by three frozen city exhibits (`tango`, `minami`, `nagahara`) and by
-  `wip/shiro_daika/frame.py` - **1,732 lines of in-progress capital work last touched 2026-08-31**,
+  `wip/shiro_daika/frame.py` - **`wip/shiro_daika/frame.py`, part of a 1,732-line in-progress capital package, last
+  substantively touched 2026-08-31** (only `frame.py` itself, 156 lines, imports it),
   which is exactly the "when we get to that point" the GM names. So the target, its CLI and its
   registry row go; the module stays as a library. The GM was told this and can order the module gone
   as a follow-up; deleting it silently would break the work their own sentence anticipates resuming.
