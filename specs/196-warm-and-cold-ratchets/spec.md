@@ -1,6 +1,6 @@
 # 196 - Warm and cold ratchets
 
-**Status**: draft, round 4
+**Status**: draft, round 5
 **Request**: [request.md](request.md) (the GM's words, verbatim)
 **Rests on**: `specs/191-refusals-that-tell-the-truth/research.md` R5 and R7 (192's `research.md` does
 not exist; the round-1 draft cited it and was wrong)
@@ -37,7 +37,7 @@ inferred run, the labeled reasoning above. 522, 544, 610 and 651 are this sessio
 192, 193 and 195 (544's record was committed by `cb4a815ec` during 193's work, which is why its
 provenance is not obvious from the commit alone).
 
-**THIS POPULATION HAS NOW BEEN CORRECTED THREE TIMES, EVERY TIME IN THE PERMISSIVE DIRECTION, and
+**THIS POPULATION HAS BEEN CORRECTED TWICE - three versions - AND BOTH ERRORS RAN PERMISSIVE, and
 that is the reason the number is disclosed as session-pinned rather than presented as measured**:
 round 1 wrote "525, 546, 651" (seconds in no run log) and called their median 550 (it is 546); round 2
 wrote 577 over four runs, missing the 549 that belongs in the set and wrongly counting 388, another
@@ -67,10 +67,18 @@ evidence that this one failed.
 
 - **FR-001** A run-log entry records the roll-cache state: `warm`, `cold`, or the field absent when
   unknown. The tell already exists - `_reference` prints the verdict `rollcache.obtain()` returned.
-  **The rule is SEMANTIC, not an enumeration of two values**: `HIT` means the roll was SERVED, so the
-  run is `warm`; **anything else means it was PRODUCED, so the run is `cold`**. That covers `MISS`,
-  `BYPASS` and `BYPASS-STORED` - and it does not go stale when a seventh return value is added, which
-  an enumeration would.
+  **The rule is SERVED vs NOT-SERVED**: a roll that was SERVED means the run is `warm`; a roll that
+  was PRODUCED means it is `cold`. `obtain()` has six return values and three of them are serves -
+  `HIT`, `BYPASS-SHARED` and `BYPASS-SHARED-RUN` (the last two are a payload handed back from a
+  process-local or sibling-worker share, per `obtain()`'s own docstring). The rest - `MISS`, `BYPASS`,
+  `BYPASS-STORED` - are produces.
+  **AND IT IS ANCHORED TO THE CALL SITE, which is what actually makes it safe today.** Only `HIT` is
+  reachable from `_reference`, because `report()` calls `obtain` with the default `share=False`; the
+  sole sharing caller is `hamlet()` (`rollcache.py:284`), which `_reference` does not use. A round-4
+  draft claimed instead that "anything not `HIT` means produced", which is FALSE for the two shared
+  values and would record a SERVED roll as cold - a warm run in the cold population, dragging the cold
+  median down and tightening the bar on runs that did no work. **If `report()` is ever given
+  `share=True`, this rule must be revisited**, and that is the sentence a future reader needs.
   **This matters, and the round-3 draft got it wrong in the worst direction.** `bypassed()` is true
   for `GATE_NO_CACHE=1` as well as the full run, so `GATE_NO_CACHE=1 make done` makes `_reference`
   print `[BYPASS]` - a path `Makefile:1016`'s own `[HIT]` message advertises (*"GATE_NO_CACHE=1 rolls
@@ -113,6 +121,18 @@ evidence that this one failed.
     green` and the ratchet. An unknown class with no rule is round-1's defect arriving by a side
     door. `REF_OK` has zero recorded uses, which is exactly the shape feature 169 warns about: an
     escape nobody was thinking about silently switching off a second guard.
+  - **THE CLASS CEILINGS BIND AT `reference` SCOPE ONLY.** Measured: `done` has **240 green
+    reference-scope runs and ZERO green full-scope runs** (four full entries exist, all
+    `failed: test-full`, 499-947 s). So `median_seconds("done","full")` returns `None` today and
+    `make done FULL=1` is not judged by the ratchet at all. `Makefile:171-172` runs the ratchet on
+    both scopes unconditionally, so a below-sample per-run rule would silently ARM it - against
+    ceilings derived wholly from reference-scope runs (522, 544, 549, 610, 651 are all reference), on
+    a target that is a pool sweep plus perf bookends. A completed cold FULL run would fail by
+    construction. That is a behavior change to a PAID, prompted target the GM did not ask to touch,
+    and it would merge populations on a second axis while splitting them on the first - this
+    feature's own defect, mirrored. **A below-sample full-scope run therefore stays unjudged, exactly
+    as today.** Pinning a full-scope baseline needs evidence that does not exist (zero green runs);
+    when it does, that is its own feature.
   - **FR-004 SUSPENDS A GM-RATIFIED DECISION for the first five runs of a class, and says so.**
     `_ratchet.py`'s `done` row records `compare="median"` as *"D2, RATIFIED BY THE GM 2026-08-30"*,
     on the measured ground that *"a per-run bar would fire on 28% of NORMAL runs"*. What makes a
@@ -232,4 +252,13 @@ evidence that this one failed.
   circularity objection had to be stated and answered, which it now is. Four record corrections: the
   Why's lead-in claimed every classification was captured, the round-1 history left 577 standing as
   once-right, D4 said "runs" plural, and the membership rule was never stated.
-- **Round 4**: pending.
+- **Round 4 (`spec-fidelity`): CHANGES REQUIRED**, two items, both consequences nobody had walked.
+  (1) The round-4 "semantic" rule was WRONG and less accurate than the enumeration it replaced:
+  `BYPASS-SHARED` and `BYPASS-SHARED-RUN` are SERVES, so "anything not `HIT` is a produce" is false
+  for two of six values, and the claim that it could not go stale was backwards. Restated as served
+  vs not-served and anchored to the call site (`report()` passes `share=False`), with the condition
+  that would break it named. (2) `done` has ZERO green full-scope runs, so `make done FULL=1` is
+  unjudged today - and FR-004 would have armed a per-run bar on a paid, prompted target using
+  reference-scope ceilings, failing a completed cold FULL run by construction. The class ceilings now
+  bind at reference scope only.
+- **Round 5**: pending.
