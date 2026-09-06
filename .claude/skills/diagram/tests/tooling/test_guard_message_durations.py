@@ -86,12 +86,7 @@ def _is_output_call(node: ast.AST) -> bool:
     fn = node.func
     if isinstance(fn, ast.Name) and fn.id == "print":
         return True
-    return (
-        isinstance(fn, ast.Attribute)
-        and fn.attr == "write"
-        and isinstance(fn.value, ast.Attribute)
-        and fn.value.attr in _OUTPUT_ATTRS
-    )
+    return isinstance(fn, ast.Attribute) and fn.attr == "write" and isinstance(fn.value, ast.Attribute) and fn.value.attr in _OUTPUT_ATTRS
 
 
 def printed_text(source: str) -> list[str]:
@@ -105,34 +100,20 @@ def printed_text(source: str) -> list[str]:
     guard that cannot tell one from the other fires on protected history and gets switched off.
     """
     tree = ast.parse(source)
-    docs = {
-        node.name: ast.get_docstring(node) or ""
-        for node in ast.walk(tree)
-        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
-    }
+    docs = {node.name: ast.get_docstring(node) or "" for node in ast.walk(tree) if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))}
     out: list[str] = []
     for call in (n for n in ast.walk(tree) if _is_output_call(n)):
         for arg in call.args:
             for part in ast.walk(arg):
                 if isinstance(part, ast.Constant) and isinstance(part.value, str):
                     out.append(part.value)
-                elif (
-                    isinstance(part, ast.Attribute)
-                    and part.attr == "__doc__"
-                    and isinstance(part.value, ast.Name)
-                    and part.value.id in docs
-                ):
+                elif isinstance(part, ast.Attribute) and part.attr == "__doc__" and isinstance(part.value, ast.Name) and part.value.id in docs:
                     out.append(docs[part.value.id])
     return out
 
 
 def py_offenders(source: str) -> list[str]:
-    return [
-        line.strip()
-        for chunk in printed_text(source)
-        for line in chunk.splitlines()
-        if _DURATION.search(line) and _COMMAND.search(line)
-    ]
+    return [line.strip() for chunk in printed_text(source) for line in chunk.splitlines() if _DURATION.search(line) and _COMMAND.search(line)]
 
 
 def _python_guard_files() -> list[Path]:

@@ -3,7 +3,11 @@
 **Question**: `make done` ran 806 s and then 873 s against a recorded range of 275-643 s. What got
 slower? (GM 2026-09-06: *"investigate the gate slowdown"*.)
 
-**Answer**: NO CODE REGRESSION EXISTS - that much is established. The gate's cost is dominated by a
+**Answer (FOUND - see R7, which supersedes R2's and R6's inconclusive endings)**: no code
+regression exists. The gate is BIMODAL on ROLL-CACHE STATE. With the cache warm it costs ~400 s;
+with it cold it costs ~800 s, and essentially all of the difference is one phase - `hamlet_floor`
+ROLLS eight maps before it can print its first line. The tell is printed in every gate run:
+`reference settlement ... [HIT]` or `[MISS]`. The gate's cost is dominated by a
 long SINGLE-THREADED tail (~72% of the suite's wall clock), and self-inflicted foreground contention
 was present on both slow runs. But the two 800 s outliers themselves are **still unexplained**: three
 candidate mechanisms have been tested and refuted, including the heterogeneous cores that R2 first
@@ -119,3 +123,41 @@ because they were taken against ALREADY-COMBINED data. That is a lead, not an an
 contention is a contributing factor of unmeasured size. Anyone continuing should start from the
 coverage-combine lead and should instrument a run that reproduces the 800 s case, which no run since
 has.
+
+
+## R7 - THE ANSWER, and the bad proxy that hid it for five hypotheses
+
+The 401.6 s gap in the instrumented 803 s run sits between the coverage table and `hamlet-floor`'s
+FIRST line. Nothing prints in it. Two things run there, and only one is expensive:
+
+- `coverage combine --append` - **MEASURED AT 0 s**, with eight parallel data files and an existing
+  `.coverage` to append into. Not the cause; refuted like the rest.
+- `python3 -m l7r.diagram.tools.hamlet_floor` - which, before printing anything, derives its module
+  set from the roll cache's records for eight fixed specs: the reference, the gate's three polders,
+  and the cohort's ratchet seeds 41-44. **When those records do not exist, it ROLLS THEM.** The
+  module's own docstring says so: *"or on CodeBuild the tool rolls them once
+  (`rollcache.report_deps`) - ~1-2 minutes, then cached."*
+
+So a cold roll cache is paid TWICE in one gate: once by the map-rolling tests inside pytest, and
+again by the floor phase rolling its eight subjects. Warm, the same phase costs ~1 s (measured).
+
+**Confirmed against every instrumented run, 3 for 3** - and the indicator was printed in all of them:
+
+| run | `_reference` line | floor phase | total |
+|---|---|---|---|
+| 397 s | `[HIT]` | ~10 s | fast |
+| 803 s | `[MISS]` | **401.6 s** | slow |
+| 873 s | `[MISS]` | (not instrumented) | slow |
+
+**WHY THIS TOOK FIVE REFUTED HYPOTHESES, which is the transferable lesson.** R3 tested "roll-cache
+cold/warm" and refuted it - using the wrong proxy. It classified each run by whether that run's
+COMMIT touched a roll path, when the cache is keyed on the FUNCTIONS A ROLL EXECUTES and is equally
+invalidated by content merged in from main at `sync-in`. The right proxy was sitting in the output
+of every single run - the `[HIT]`/`[MISS]` flag - and was read past four times. A hypothesis is only
+as refuted as its proxy is faithful; when a mechanism is directly observable, do not infer it.
+
+**What follows for the ratchet** (recorded, not acted on - it is a decision for its own feature):
+`compare="median"` mixes two populations that differ by 2x for a legitimate reason. A median over
+warm and cold runs together is a number describing neither. The candidates are to compare like with
+like (the `[HIT]`/`[MISS]` flag is already recorded per run and could join the run-log), or to stop
+the floor phase re-rolling what the suite just rolled.

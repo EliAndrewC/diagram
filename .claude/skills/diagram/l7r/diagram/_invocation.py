@@ -251,15 +251,15 @@ def guard(module: str) -> None:
 # tests/tooling/test_guard_message_durations.py enforce both.
 class _Ladder:
     """
-Every operation in this project goes through a make target, so the expensive ones can ask
-whether the cheap one would do first:
+    Every operation in this project goes through a make target, so the expensive ones can ask
+    whether the cheap one would do first:
 
-    make quick        lint, types, and every test that does not roll a map
-    make maps         the pool, scoped by how the last run went
-    make help         every operation, with what it does
-    make done         the full gate, NOT the quick check
+        make quick        lint, types, and every test that does not roll a map
+        make maps         the pool, scoped by how the last run went
+        make help         every operation, with what it does
+        make done         the full gate, NOT the quick check
 
-"""
+    """
 
 
 def assert_via_make(operation: str, target: str) -> None:
@@ -277,10 +277,5 @@ def assert_via_make(operation: str, target: str) -> None:
     """
     if via_make():
         return
-    sys.stderr.write(
-        f"\n\033[1mREFUSED: {operation} was not run through make.\033[0m\n\n"
-        f"  {_reason()}.\n\n"
-        f"  Run this instead:  \033[1mmake {target}\033[0m\n"
-        f"{_Ladder.__doc__}"
-    )
+    sys.stderr.write(f"\n\033[1mREFUSED: {operation} was not run through make.\033[0m\n\n  {_reason()}.\n\n  Run this instead:  \033[1mmake {target}\033[0m\n{_Ladder.__doc__}")
     raise SystemExit(2)
