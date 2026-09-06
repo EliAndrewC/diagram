@@ -36,5 +36,7 @@ apply.
 - [x] T08 `research: rendering` FR-007: `timings.md` kept and annotated as FROZEN, naming what a
       future measurement would have to rebuild.
 - [x] T09 `research: rendering` FR-008: `docs/make-targets.html` regenerated - 63 -> 55 targets.
-- [ ] T10 `research: rendering` SC-004: `make done` green, 100% coverage held, surface shrunk by the
-      deleted modules rather than by an exclusion.
+- [x] T10 `research: rendering` SC-004: `make done` GREEN at exit 0 (544 s, cold cache - floor phase
+      115.5 s, consistent with feature 192's measured ~115 s). 2,918 tests passed, down from 2,999 as
+      the deleted tools took their own tests with them; 100% coverage held with the surface shrunk by
+      the deleted modules rather than by any exclusion, and 88 modules still on the hamlet path.
