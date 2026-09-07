@@ -10,7 +10,7 @@
 | Kweon and Youn 2021, Forest Policy and Economics (open access) | full PDF | 24 Korean groves: mean 0.22 ha, range 0.025-0.63 ha; "less than 10 to more than 100" trees |
 | Kim, Kang, Park, Lee 2018, Landscape and Urban Planning | public excerpt | no sizes (an occurrence model); six Korean location types |
 
-Still unread, for the GM if wanted: the Zhongshan municipal survey (66 groves, 269.85 ha in a search summary - rdswxb.hainanu.edu.cn refused); a Huangshan news piece naming a water-mouth grove of "百余亩" with near a thousand ancient trees (yrdcpcn.org.cn refused) - the only water-mouth AREA figure any pass surfaced, unverified; Zhuang and Corlett 1997's plot tables (Cambridge, paywalled) for Hong Kong stem density; Yip et al. 2004, *Venturing Fung Shui Woods* (print); Hu et al. 2011 full text for patch areas.
+Read after the landing (GM 2026-09-07, second download): the Zhongshan municipal survey - 66 groves in 66 natural villages, 269.85 ha, about 4.1 ha each (fn-79). Still unread: the Huangshan Daily piece on Jiekou (Shexian County) naming a water-mouth grove of 「百余亩」 (100-odd mu, about 7 ha) with nearly a thousand ancient trees and 56 yews over 500 years old, the largest in East China - the GM could open it, but the saved copy is an English machine translation, so it is not quoted until the original-language page is saved; Zhuang and Corlett 1997's plot tables (Cambridge, paywalled) for Hong Kong stem density; Yip et al. 2004, *Venturing Fung Shui Woods* (print); Hu et al. 2011 full text for patch areas.
 
 ## What the surveys measure, by type
 
@@ -26,7 +26,7 @@ Still unread, for the GM if wanted: the Zhongshan municipal survey (66 groves, 2
 
 | figure | drawn (settlements/vegetation.md, Hoshigaoka) | measured | verdict |
 |---|---|---|---|
-| back grove area | ~1-2 ha | HK median 0.99 ha, 39% of woods in 1-2 ha, 10% larger | inside the band, upper half - a legibility choice, now recorded as such |
+| back grove area | ~1-2 ha | HK median 0.99 ha, 39% of woods in 1-2 ha, 10% larger; Zhongshan mean 4.1 ha over 66 | inside the band, upper half - a legibility choice, now recorded as such |
 | water-mouth cluster | ~0.1-0.5 ha (Hoshigaoka ~0.3 ha) | none (China); Korea 0.22-0.71 ha means | GUESS, inside the analogue spread |
 | canopy trees in the belt | 100-300 mature over understory | none; 3,403 stems/ha of all sizes | GUESS, bracketed |
 | water-mouth trees | a few dozen big old trees | none; Korea <10 to >100 per grove | GUESS, bracketed |
