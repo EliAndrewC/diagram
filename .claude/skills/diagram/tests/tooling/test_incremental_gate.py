@@ -154,7 +154,7 @@ def run_gate(root: Path, skill: Path, force_full: str | None = None) -> tuple[st
     """One gate test phase as the Makefile runs it: plan -> pytest (traced, contexts, the plugin, xdist) -> merge -> report.
     Returns (the plan's mode, the result the plugin wrote, the `coverage report --fail-under=100` exit code, its output)."""
     bdir = incremental.baseline_dir(root)
-    argv = ["plan"] + (["--full", force_full] if force_full else [])
+    argv = ["plan"] + (["full", force_full] if force_full else [])
     assert incremental.main(argv, root, skill) == 0
     proc = subprocess.run(PYTEST + ["-n", "2"], cwd=skill, env=gate_env(bdir), capture_output=True, text=True)
     assert proc.returncode == 0, proc.stdout + proc.stderr

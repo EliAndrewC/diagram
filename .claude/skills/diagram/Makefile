@@ -148,7 +148,7 @@ done:
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
-	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
+	  $(MAKE) --no-print-directory $$phase FROM_DONE=1 || fail="$$fail $$phase"; \
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	: "GUARD_EDIT_OK: A RUN TOO FAST TO HAVE WORKED DOES NOT GET TO SAY IT PASSED (found 2026-09-05)." ; \
@@ -1322,7 +1322,11 @@ JOURNAL_ENV =
 # whole of that - and names its own target so an audit can tell which run vouched.
 # GUARD_EDIT_OK: FINDING 3 - "nothing deselected" became FALSE the day tests/soak/ was deselected.
 test-full:      ## [tests] the gate's whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)
-	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
+	@: "GUARD_EDIT_OK: feature 207 - make test-full on its own keeps its promise (EVERY test, nothing deselected: a full run, which"; \
+	: " also records the next baseline); only done, which passes FROM_DONE=1, lets it run the incremental selection. NO BACKTICKS"; \
+	: " in these comment strings: they are double-quoted shell, and the first draft wrote the target name in backticks - the shell"; \
+	: " ran it as a command substitution and make test-full recursed 914 deep, exhausting the container's process limit (2026-09-07)."; \
+	$(MAKE) --no-print-directory test COV_FLOORS=1 $(if $(FROM_DONE),,INCREMENTAL=0) && $(STATE) green-local test-full
 
 # GUARD_EDIT_OK: THE TIER ABOVE THE GATE (GM 2026-09-05) - a new target, and the one a REMOTE run
 # GUARD_EDIT_OK: the last two stale `sweep` strings in this file - both FALSE as written, since
@@ -1411,7 +1415,7 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	: " forces a full run, which is what records the baseline. COVERAGE_CORE=ctrace, MEASURED 2026-09-07: Python 3.14's default"; \
 	: " sys.monitoring core disables a line's event after its first hit, so a second test executing the same line records NOTHING"; \
 	: " under its own context - 4 of 8 contexts lost on the fixture project; the C tracer keeps all 8. Contexts need ctrace."; \
-	$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),--full "$(INCR_FORCE)",) || exit 1;,) \
+	$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
 	: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
 	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \

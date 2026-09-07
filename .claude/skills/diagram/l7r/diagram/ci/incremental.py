@@ -351,8 +351,8 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
     """`plan [--full REASON]` | `merge` | `save-baseline` | `mode` - the Makefile's four calls."""
     bdir = baseline_dir(root)
     cmd = argv[0] if argv else ""
-    if cmd == "plan":
-        force = argv[2] if len(argv) > 2 and argv[1] == "--full" else None
+    if cmd == "plan":  # `plan [full REASON]` - a positional, because the ci parser owns `--full` (feature 130) and would eat the flag
+        force = argv[2] if len(argv) > 2 and argv[1] == "full" else None
         pl = plan(root, force)
         bdir.mkdir(parents=True, exist_ok=True)
         (bdir / PLAN).write_text(json.dumps(pl.dump(), indent=1), encoding="utf-8")
@@ -390,5 +390,5 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
         where = save_baseline(root, skill / ".coverage")
         print(f"gate: baseline saved under {where}")
         return 0
-    print("usage: incremental plan [--full REASON] | where | mode | selected | merge | save-baseline", file=sys.stderr)
+    print("usage: incremental plan [full REASON] | where | mode | selected | merge | save-baseline", file=sys.stderr)
     return 2

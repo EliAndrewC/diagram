@@ -113,5 +113,18 @@ any changed engine file that is not `.py` (a pool generator or manifest); any ch
 hash moved (Makefile, pyproject, lockfiles, `scripts/`); more than 60% of the suite selected (the saving
 is then under the cost of a second collection, and a full run refreshes the baseline).
 
-Cost of contexts on the full run: to be measured on the first full run (`--cov-context=test` is the
-only change to the pytest line). The baseline file's size: measured then.
+## R5. The coverage core, measured
+
+Python 3.14 + coverage 7.15.2: the default core is sys.monitoring. On the fixture project of
+`tests/tooling/test_incremental_gate.py` (eight tests, one session fixture), the contexts recorded:
+
+| core | serial | xdist `-n 2` |
+|---|---|---|
+| sysmon (default) | 4 of 8 - `''`, `fixture:built`, `test_dike[1]|run`, `test_shallow|run` | 6 of 8, with phases misattributed (`test_dike[4]|teardown`) |
+| ctrace | 8 of 8 | 8 of 8 |
+
+The sysmon core disables a line's event after its first hit (a performance optimization coverage makes
+for plain line coverage), so a second context executing the same line records nothing. The gate pins
+`COVERAGE_CORE=ctrace` on the traced run. Cost: measured at T11 against the run log's medians.
+
+Cost of contexts on the full run and the baseline file's size: tasks.md T11.

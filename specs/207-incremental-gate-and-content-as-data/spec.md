@@ -137,5 +137,21 @@ to ten minutes a plain `make done` costs on any engine change.
   stamp area, like a docs edit; their tests run in `make quick` and at the next gate. Stated rather
   than hidden.
 - **D6 - the taxonomy stays code.** FR-007.
+- **D8 - the C tracer is pinned for the gate's pytest (`COVERAGE_CORE=ctrace`).** Found on the fixture
+  project, 2026-09-07: Python 3.14's default sys.monitoring core disables a line's event after its first
+  hit, so the second test to execute a line records nothing under its own context - four of eight contexts
+  lost serially, two of eight under xdist, and never the one whose lines a fixture hit first. The C tracer
+  keeps all eight. `test_the_sysmon_core_loses_contexts_which_is_why_the_gate_uses_ctrace` re-measures it
+  on every gate, so the pin is revisited the day it stops being true. Its cost is in tasks.md T11.
+- **D9 - a fixture gets its own coverage context.** pytest-cov attributes a session fixture's setup to the
+  first test that asks for it, so forty tests reading a rolled hamlet would select as one. The plugin
+  switches to `fixture:<name>` around every fixture setup, the planner selects by fixture closure, and the
+  merge drops the contexts of fixtures affected transitively (a fixture whose input fixture changed).
+- **D10 - the manifest hashes RAW bytes, not the docstring-stripped id.** A formatting-only edit moves line
+  numbers, and the baseline's line data for that file would then lie; the short-circuit still keys on the
+  semantic id, so a comment edit alone never reaches the planner.
+- **D11 - an import-time line change is a full run.** A changed line the baseline's import-time context
+  executed (a `def` line, a decorator, a module-level statement) changes what every importer sees; the
+  planner diffs the old file against the baseline blob and falls back rather than reasoning about it.
 - **D7 - the audit is by kind, not by size.** FR-005a; the first census used a 1.5 KB threshold and
   missed five reader-facing phrases, which the review found.
