@@ -62,8 +62,8 @@ def median_seconds(target: str, scope: str | None = None, cwd: str | None = None
                 rec = json.load(open(path))
             except Exception:
                 continue
-            if rec.get("target") != target or rec.get("result") != "green":
-                continue
+            if rec.get("target") != target or rec.get("result") != "green" or rec.get("mode") == "incremental":
+                continue  # feature 207: an incremental run re-ran a selection; only full runs measure the target
             if scope is not None and rec.get("scope") != scope:
                 continue
             if cache is not None and rec.get("cache") != cache:
@@ -84,8 +84,8 @@ def class_count(target: str, scope: str | None = None, cwd: str | None = None, c
                 rec = json.load(open(path))
             except Exception:
                 continue
-            if rec.get("target") != target or rec.get("result") != "green":
-                continue
+            if rec.get("target") != target or rec.get("result") != "green" or rec.get("mode") == "incremental":
+                continue  # feature 207: an incremental run re-ran a selection; only full runs measure the target
             if scope is not None and rec.get("scope") != scope:
                 continue
             if cache is not None and rec.get("cache") != cache:

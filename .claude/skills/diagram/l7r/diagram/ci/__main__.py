@@ -38,7 +38,23 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="l7r.diagram.ci", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument(
         "command",
-        choices=["status", "check", "merge", "measure", "image", "state", "door", "remote-spend", "engine-key", "verified-done", "remote-ok", "tooling-green", "tooling-fresh", "cov-scope"],
+        choices=[
+            "status",
+            "check",
+            "merge",
+            "measure",
+            "image",
+            "state",
+            "door",
+            "remote-spend",
+            "engine-key",
+            "verified-done",
+            "remote-ok",
+            "tooling-green",
+            "tooling-fresh",
+            "cov-scope",
+            "incremental",
+        ],
     )
     ap.add_argument("args", nargs="*")
     ap.add_argument("--full", action="store_true", help="the full sweep (the Makefile has already run the local prompt)")
@@ -50,6 +66,10 @@ def main(argv: list[str] | None = None) -> int:
     root, skill = _roots()
     scope = "full" if a.full else "reference"
 
+    if a.command == "incremental":  # the incremental gate (feature 207): plan | mode | merge | save-baseline
+        from l7r.diagram.ci import incremental
+
+        return incremental.main(a.args, root, skill)
     if a.command == "state":
         if len(a.args) not in (2, 3) or (len(a.args) == 3 and a.args[2] != "reused"):
             ap.error("state needs EVENT TARGET [reused]")
