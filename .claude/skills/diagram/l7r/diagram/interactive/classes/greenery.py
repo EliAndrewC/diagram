@@ -57,13 +57,17 @@ class Windbreak(Kind):
     What: The village shelter belt - the fengshui back grove: a dense, cedar-backed stand of real crowns on the
     windward, high side of the cluster, embracing it.
 
-    Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Surveys of
-    southern-China village fengshui forests find about two groves per village at closed-canopy density, the
-    typical back grove one to two hectares - large relative to the cluster, and drawn so. It is kept off the
-    west side of the gardens so the beds keep their afternoon sun.
+    Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages
+    keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
+    the one large measured sample of grove size, Hong Kong's survey of 115 village woods, puts the grove behind
+    the village at a median of about one hectare - half under a hectare, four in ten between one and two - so the
+    one-to-two-hectare belt drawn here sits in the upper half of the measured band, large relative to the
+    cluster, and drawn so. It is kept off the west side of the gardens so the beds keep their afternoon sun.
 
-    Note: Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the
-    terrain and the cluster.
+    Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
+    (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
+    size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
+    the terrain and the cluster.
     """
 
     key = 'windbreak'

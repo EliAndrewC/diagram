@@ -1,6 +1,6 @@
 # Feature 196 - the fengshui grove sizes: a research pass
 
-**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-07). **Status**: specified; spec-fidelity round 1 CHANGES (three: no docstring ban - the modal follows the record; D1 not attributed beyond 'first', XII's ladder after the pass; papers reported to the GM during the pass), applied; round 2 CHANGES (one: the Summary still handed the follow-up to a GM ruling), applied; round 3 FAITHFUL.
+**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-07). **Status**: IMPLEMENTED 2026-09-07 (tasks.md, findings.md); spec-fidelity round 1 CHANGES (three: no docstring ban - the modal follows the record; D1 not attributed beyond 'first', XII's ladder after the pass; papers reported to the GM during the pass), applied; round 2 CHANGES (one: the Summary still handed the follow-up to a GM ruling), applied; round 3 FAITHFUL.
 
 ## Summary
 
