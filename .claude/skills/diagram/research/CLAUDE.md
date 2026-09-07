@@ -130,7 +130,7 @@ the public internet where that passage can be read. So a footnote is one of exac
   labeled as resting on nothing a reader can check (constitution XII: an unlabeled guess is the one failure); the
   registry entry stays as the record of the search, marked *Not cited*.
 
-The one carve-out, by KEY: the GM's own campaign notes (`l7r.md`, `budgets.md`; today `l7r-median-domain`) are canon,
+The one exception, by KEY, RULED by the GM (2026-09-07: *"it is correct to make L7R setting notes an exception to the citation rule, so that should indeed be a documented exception"*): the GM's own campaign notes (`l7r.md`, `budgets.md`; today `l7r-median-domain`) are canon,
 not a source claimed to support a historical point - they keep their registry link. Nothing else is carved out: not a
 `URL: none` print-only book, not a page that has gone away, not a SUMMARY-ONLY entry. This superseded the 2026-08-27
 SUMMARY-ONLY citation clause (constitution v2.19.0); the 2026-09-06 sweep that brought the record under it - 780
