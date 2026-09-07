@@ -903,12 +903,13 @@ tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [
 # The tool reads every place a claim can be (main's tree, its fetched origin/main, EVERY clone's specs/, and its
 # own ledger) under one flock on the mirror, and creates the directory before it lets go. `tick`'s sibling: a
 # bookkeeping step that refuses rather than guesses. Refuses in the mirror itself; PEEK=1 looks without claiming.
-claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug [PEEK=1: look, claim nothing]
-##  SLUG=<slug>  lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
-##  PEEK=1       print what the claim would be and create nothing
-	@if [ -z "$(SLUG)" ]; then printf 'make claim: SLUG=<kebab-slug> is required - e.g. make claim SLUG=cheaper-widgets\n' >&2; exit 2; fi
-	@: "GUARD_EDIT_OK: feature 197 - the slug follows '--' so a slug beginning with a hyphen is refused as a BAD SLUG, not misread as an option"; \
-	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) -- "$(SLUG)"
+claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
+##  SLUG=<slug>          lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
+##  RENUMBER=<specs/dir> instead of a slug: MOVE that existing directory to the next number (a deduplication, GM 2026-09-07)
+##  PEEK=1               print what the claim would be and create or move nothing
+	@if [ -z "$(SLUG)$(RENUMBER)" ]; then printf 'make claim: SLUG=<kebab-slug> is required (or RENUMBER=specs/NNN-slug to move an existing directory) - e.g. make claim SLUG=cheaper-widgets\n' >&2; exit 2; fi
+	@: "GUARD_EDIT_OK: feature 197 - the slug follows '--' so a slug beginning with a hyphen is refused as a BAD SLUG, not misread as an option; RENUMBER passes the directory and no slug"; \
+	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
 
 test-file:      ## [tests] run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 ##  FILE=<path>  the one test file to run, whole - e.g. `tests/pipeline/test_gencache.py`
@@ -1393,5 +1394,5 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # reference, the two gate polders and the cohort's ratchet seeds, never a hand list - must be at 100%; town/city-only
 # modules owe nothing here. (GUARD_EDIT_OK: feature 174 - this line used to end "and the settlement ratchet above
 # stays"; that ratchet is retired, so what stays above is the flat 100% floor over the whole tree, and this finer
-# per-module check sits UNDER it rather than beside it.) The module set: `hamlet_floor --list` (no make route since feature 195). The why:
+# per-module check sits UNDER it rather than beside it.) The module set: `hamlet_floor --list` (no make route since feature 198, claimed as 195 and renumbered 2026-09-07; GUARD_EDIT_OK: feature 197, a comment's number). The why:
 # tools/hamlet_floor.py.

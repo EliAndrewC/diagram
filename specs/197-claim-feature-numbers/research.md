@@ -9,9 +9,10 @@ Measured 2026-09-07 on main's history (`git log --diff-filter=A -- 'specs/*/spec
 taken off each added path, `sort | uniq -d`; renames from `git log --diff-filter=R --name-status -- specs/`).
 
 **Fourteen numbers have been claimed by two features at some point**: 134, 136, 139, 144, 146, 147,
-148, 152, 154, 158, 161, 182, 191, 195. One is still a collision on main today: **195**
-(`195-cite-only-what-can-be-read`, claimed `f2083d5e4`; `195-target-descriptions-and-two-removals`,
-claimed `0bfc26c01`; both 2026-09-06).
+148, 152, 154, 158, 161, 182, 191, 195. One was still a collision on main when this was measured:
+**195** (`195-cite-only-what-can-be-read`, claimed `f2083d5e4`; `195-target-descriptions-and-two-removals`,
+claimed `0bfc26c01`; both 2026-09-06). Resolved the same day this feature landed, at the GM's request,
+by `make claim RENUMBER=specs/195-target-descriptions-and-two-removals` -> **198** (spec D3, amended).
 
 The others were resolved by the loser renumbering - which is the cost the GM named. The renumber
 commits since the protocol was written down (2026-08-16), with their own descriptions of what happened:

@@ -1,4 +1,4 @@
-# Tasks - 195 Targets that say what they do, and two removals
+# Tasks - 198 (was 195 until 2026-09-07 - see spec.md) Targets that say what they do, and two removals
 
 All `research: rendering` - make targets, their documentation, and the records that point at them.
 

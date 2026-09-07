@@ -32,3 +32,11 @@ about how a place was built.
 - [x] T09 `make done` green; `make hooks-test` stamp fresh; memory note written; land DIRECT
       research: rendering
       verify: DONE. hooks-test 2 suites re-ran green (hooks area stamped); make done already-verified against unchanged engine content; test_make_docs 6 passed; test_claim_feature 25 passed; memory note written; peek from diagram-html answers 198-probe
+- [x] T10 (GM follow-up 2026-09-07: *"Yes please fix 195 by deduplicating it"*) `--renumber` / `make claim
+      RENUMBER=specs/NNN-slug` moves an existing directory to the next number under the same lock, with
+      a `renumbered_from` ledger row; `195-target-descriptions-and-two-removals` -> 198 (the one with six
+      references to its number, against the other's constitution clause, agents, tests and research
+      index); every reference to the moved number rewritten; D3 amended - the tool still never renumbers
+      on a CLAIM, the GM's ruling is what the RENUMBER form carries out
+      research: rendering
+      verify: DONE. 31 tests green incl. 6 renumber cases; hooks-test 2 suites re-ran green; make done already-verified (engine edits are comments only); ls specs dup check prints nothing; old directory name survives only in 197's history notes, the tool's docstring and the moved spec's own header

@@ -220,6 +220,60 @@ def test_twelve_concurrent_claims_split_across_two_clones_are_distinct_and_conse
     assert len(created) == 12
 
 
+# --- renumbering: a deduplication is a claim under the same lock (GM 2026-09-07) --------------------------
+
+
+def renumber(root: pathlib.Path, spec_dir: str, *opts: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run([sys.executable, str(TOOL), "--root", str(root), "--renumber", spec_dir, *opts], capture_output=True, text=True)
+
+
+def test_renumber_moves_a_tracked_directory_to_the_next_number_and_records_where_it_came_from(world) -> None:
+    """alpha's tracked 002-b is a duplicate of something: it moves to 004-b via git mv, staged."""
+    r = renumber(world["alpha"], "specs/002-b")
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.strip() == "004-b"
+    assert not (world["alpha"] / "specs" / "002-b").exists() and (world["alpha"] / "specs" / "004-b" / "spec.md").read_text() == "002-b"
+    assert "R" in git(world["alpha"], "status", "--porcelain", "--", "specs"), "git mv staged the rename"
+    rows = ledger(world)
+    assert rows == [{**rows[0], "number": 4, "slug": "b", "renumbered_from": 2, "clone": "alpha"}]
+    assert not (world["alpha"] / ".specify" / "feature.json").exists(), "a renumber does not repoint the clone's active feature"
+    assert "renumbered specs/002-b/ -> specs/004-b/" in r.stderr and "fix every reference" in r.stderr
+
+
+def test_renumber_of_an_untracked_claim_is_a_plain_rename(world) -> None:
+    (world["alpha"] / "specs" / "003-mine").mkdir()
+    assert renumber(world["alpha"], "specs/003-mine").stdout.strip() == "004-mine"
+    assert (world["alpha"] / "specs" / "004-mine").is_dir() and not (world["alpha"] / "specs" / "003-mine").exists()
+
+
+def test_renumber_is_not_tripped_by_its_own_slug_but_is_by_another_directory_with_it(world) -> None:
+    (world["beta"] / "specs" / "007-b").mkdir()
+    r = renumber(world["alpha"], "specs/002-b")
+    assert r.returncode == 2 and "007-b" in r.stderr and "already in use" in r.stderr
+    assert (world["alpha"] / "specs" / "002-b").is_dir(), "nothing moved"
+
+
+def test_renumber_refuses_a_directory_that_is_not_there_and_a_bare_slug_at_the_same_time(world) -> None:
+    r = renumber(world["alpha"], "specs/009-nothing")
+    assert r.returncode == 2 and "not an existing" in r.stderr
+    r = subprocess.run([sys.executable, str(TOOL), "--root", str(world["alpha"]), "--renumber", "specs/002-b", "--", "also-a-slug"], capture_output=True, text=True)
+    assert r.returncode == 2 and "exactly one" in r.stderr
+    r = subprocess.run([sys.executable, str(TOOL), "--root", str(world["alpha"])], capture_output=True, text=True)
+    assert r.returncode == 2 and "exactly one" in r.stderr
+    assert (world["alpha"] / "specs" / "002-b").is_dir() and ledger(world) == []
+
+
+def test_renumber_dry_run_moves_nothing(world) -> None:
+    r = renumber(world["alpha"], "specs/002-b", "--dry-run")
+    assert r.returncode == 0 and r.stdout.strip() == "004-b"
+    assert (world["alpha"] / "specs" / "002-b").is_dir() and ledger(world) == []
+
+
+def test_renumber_follows_the_same_sources_as_a_claim(world) -> None:
+    (world["beta"] / "specs" / "011-x").mkdir()
+    assert renumber(world["alpha"], "specs/001-a").stdout.strip() == "012-a"
+
+
 # --- the derivations, on their own -----------------------------------------------------------------------
 
 

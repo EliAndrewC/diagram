@@ -661,7 +661,7 @@ def format_budget(budget: CityBudget) -> str:
     return "\n".join(out)
 
 
-# THE CLI WAS REMOVED (feature 195, GM 2026-09-06: "delete `make citybudget` since we're not using
+# THE CLI WAS REMOVED (feature 198 - claimed as 195, renumbered 2026-09-07 - GM 2026-09-06: "delete `make citybudget` since we're not using
 # it and won't for some time and might use a different shape of tool by the time we get to that
 # point"). The MODULE stays: `wip/shiro_daika/frame.py` and the three frozen city exhibits import
 # it, and live tests price the tango/nagahara programs through it. So the planner can no longer

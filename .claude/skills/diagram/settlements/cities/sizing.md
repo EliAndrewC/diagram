@@ -82,7 +82,7 @@ Every settlement mode grows from a first principle - villages from water flow, m
 
 **The workflow** (see `specs/009-city-area-budget/` for the full feature):
 
-1. `budget = plan_city(CityProgram(population=..., river=..., agricultural_district=..., aspect=..., nring=...), canvas=(W, H))` - BEFORE anything is drawn. (The `python3 citybudget.py --plan ...` audit CLI was removed 2026-09-06, feature 195 - `citybudget` is a library now, so audit the returned `budget` object directly.)
+1. `budget = plan_city(CityProgram(population=..., river=..., agricultural_district=..., aspect=..., nring=...), canvas=(W, H))` - BEFORE anything is drawn. (The `python3 citybudget.py --plan ...` audit CLI was removed 2026-09-06, feature 198 (claimed as 195, renumbered 2026-09-07) - `citybudget` is a library now, so audit the returned `budget` object directly.)
 2. Take the wall from `budget.wall.rx/.ry` (never hand-pick RX/RY) and record the promise: `s.meta(budget=budget_to_manifest(budget))`.
 3. Render order as ever (river -> walls -> roads -> ring -> ... -> packs), with the budget's `dwelling_target` feeding the same population/caste floors as always.
 4. `city_wall_matches_budget` (walled-city gate) compares the wall's enclosed area against `budget.required_interior_px2`: over +8% = the empty-space defect (shrink, or declare+draw the ground as an itemized line); under -5% = the program cannot fit (enlarge, or trim the program). `city_capacity` must read `sized_and_packed` on the FIRST derivation - if it wants a resize, the budget model (not the wall) is what needs fixing.

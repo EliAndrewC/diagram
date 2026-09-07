@@ -141,8 +141,8 @@ This project uses spec-driven development governed by [`.specify/memory/constitu
   protocol). The GM runs several sessions at once, and each used to allocate its own `specs/NNN` by
   reading "highest `NNN` under `specs/` + 1" after `sync-in` - which two sessions did at the same
   moment often enough that fourteen numbers were claimed twice, eight renumber commits landed in
-  one week, and main carries two features numbered 195 (the census is
-  `specs/197-claim-feature-numbers/research.md` R2). The old protocol's blind spot was structural: a
+  one week, and main carried two features numbered 195 until the GM had one moved to 198 on
+  2026-09-07 (the census is `specs/197-claim-feature-numbers/research.md` R2). The old protocol's blind spot was structural: a
   sibling's claim lives in `<mirror>/.clones/<other>/specs/` until that session pushes, and nothing
   read it. `make claim` (`scripts/claim-feature.py`) takes one `flock` on the mirror
   (`<mirror>/.specify/feature-numbers.lock`), reads every place a claim can be - main's `specs/`, its
@@ -151,8 +151,10 @@ This project uses spec-driven development governed by [`.specify/memory/constitu
   records, so a lost one is recreated rather than restored) - creates `specs/NNN-slug/` in YOUR clone
   before releasing the lock, writes `.specify/feature.json` and prints the two exports below. `PEEK=1`
   looks without claiming. It refuses from the mirror, a slug that is not lower-case kebab, a slug
-  already in use anywhere, and a lock held past 30 s; it WARNS about the standing 195 duplicate and
-  never renumbers anything (that is the GM's call). Then write `spec.md` there, commit the directory
+  already in use anywhere, and a lock held past 30 s; it WARNS about any number main holds twice and
+  never renumbers on a claim (that is the GM's call - and when they make it, `make claim
+  RENUMBER=specs/NNN-slug` moves the directory to the next number under the same lock, which is how
+  the 195 pair was resolved). Then write `spec.md` there, commit the directory
   and push it (`scripts/sync-with-main.sh push`, a mid-feature milestone push): the claim is already
   visible to every session on this host through the clone scan, and the push makes it visible to the
   GM's laptop and to GitHub. The one window the lock cannot see is a spec pushed to GitHub from

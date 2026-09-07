@@ -1,4 +1,11 @@
-# 195 - Targets that say what they do, and two removals
+# 198 - Targets that say what they do, and two removals
+
+**Number**: claimed and landed as **195** on 2026-09-06, the same day `195-cite-only-what-can-be-read`
+claimed 195 - the collision that motivated feature 197. Moved to 198 on 2026-09-07 at the GM's request
+(*"Yes please fix 195 by deduplicating it"*) with `make claim RENUMBER=`, under the lock. This one moved
+because it had six references to its number against the other's constitution clause, agents, tests and
+research index. Commit messages reading `195:` before that date refer to this feature or to that one;
+`specs/197-claim-feature-numbers/research.md` R2 has the history.
 
 **Status**: FAITHFUL at review round 3; implementing
 **Request**: [request.md](request.md) (the GM's words, verbatim, with two readings recorded)

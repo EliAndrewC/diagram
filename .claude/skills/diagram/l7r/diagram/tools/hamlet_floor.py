@@ -2,7 +2,7 @@
 
     The CHECK runs as a phase of `make test-full` (and so of `make done`): every hamlet-path module
     at 100%, or exit 1. There is no `make` route to this module on its own any more - `make
-    hamlet-floor` was retired 2026-09-06 (feature 195, GM: *"we already use it on `test-full`"*).
+    hamlet-floor` was retired 2026-09-06 (feature 198 - claimed as 195, renumbered 2026-09-07 - GM: *"we already use it on `test-full`"*).
     `--list` still exists as a flag and is still tested, but nothing reachable invokes it: asking
     for the module set without running the gate is the capability that retirement gave up.
 

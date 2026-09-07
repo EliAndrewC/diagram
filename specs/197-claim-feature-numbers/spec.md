@@ -11,8 +11,9 @@ scan cannot see); implemented
 ## Why
 
 Two sessions each read "the highest number under `specs/` plus one", each got the same answer, and each
-built a feature under it. Main carries the result today: `specs/195-cite-only-what-can-be-read` and
-`specs/195-target-descriptions-and-two-removals` both landed under 195 on 2026-09-06, and on 2026-09-05
+built a feature under it. Main carried the result when this was written: `specs/195-cite-only-what-can-be-read` and
+`specs/195-target-descriptions-and-two-removals` both landed under 195 on 2026-09-06 (the second is 198
+since 2026-09-07 - D3), and on 2026-09-05
 two sessions both claimed 184 (one renumbered to 186 before landing). The existing protocol
 (CLAUDE.md "Concurrent sessions", `docs/session-clones.md`) allocates from main's `specs/` after
 `sync-in` and relies on the PUSH to surface a collision - but the push comes hours or days after the
@@ -117,8 +118,18 @@ consequence (D2).
 - **D3 The 195 duplicate is the GM's to resolve.** Both features landed, both have commit histories
   reading `195:`, and one may still carry open tasks in another session's clone. Renumbering a landed
   feature rewrites the meaning of its history without rewriting the history, which this repository
-  never does. The tool reports the duplicate on every claim until it is resolved; this feature does
-  not touch either directory.
+  never does. The tool reports the duplicate on every claim until it is resolved; a CLAIM never
+  touches either directory.
+  **Amended 2026-09-07, after landing - the GM resolved it**: *"Yes please fix 195 by deduplicating
+  it."* The ruling is carried out by the tool rather than by hand: `make claim RENUMBER=specs/NNN-slug`
+  (`--renumber`) moves an existing directory to the next number under the same lock and the same four
+  sources, `git mv` staged, a `renumbered_from` ledger row, `.specify/feature.json` untouched.
+  `195-target-descriptions-and-two-removals` became **198**: it was claimed FIRST (21:13 against 22:28
+  UTC), but the choice was made on the cost of the move, not on priority - it had six references to
+  its number (two engine comments, a tool docstring, the Makefile, a future-work note, a sizing rule)
+  against the other's constitution clause (v2.19.0), CLAUDE.md, two agents, three test files and the
+  research index. Every reference was rewritten to "198 (claimed as 195, renumbered 2026-09-07)"; the
+  `195:` commit messages stand, and the moved spec's header says which feature they were.
 - **D4 No network under the lock.** `sync-in` runs at every prompt and fetches GitHub main, so source 2
   is at most one turn old. A spec authored on the GM's laptop and pushed to GitHub between that fetch
   and the claim is the residual window; the old renumber rule covers exactly that and nothing else

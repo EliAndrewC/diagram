@@ -38,12 +38,16 @@ that turn is the one residual window, and the old "renumber the unpushed spec" r
 that case (spec D4).
 
     claim-feature.py <slug> [--dry-run] [--root DIR] [--main DIR] [--lock-timeout S]
+    claim-feature.py --renumber specs/NNN-slug [--dry-run ...]     (move an existing directory to the next number)
 
 Refusals (exit 2, nothing created, nothing appended): run from the mirror itself (main is never a
 workspace); a slug that is not lower-case kebab; a slug already in use anywhere the scan reads; the
 lock not acquired within the timeout (a held lock is a hung process, not a queue - the refusal names
-the file). A number held by two directories in main (195 today) is REPORTED on every claim and never
-renumbered - both landed, and renumbering a landed feature is the GM's call (spec D3).
+the file). A number held by two directories in main is REPORTED on every claim and never renumbered
+by a claim - renumbering a landed feature is the GM's call (spec D3). When the GM makes it, `--renumber`
+(`make claim RENUMBER=specs/NNN-slug`) performs the move under the same lock: that is how the 195
+duplicate was resolved on 2026-09-07 (`195-target-descriptions-and-two-removals` -> 198, the one with
+fewer references to its number).
 """
 
 from __future__ import annotations
@@ -193,8 +197,24 @@ def claim(
     dry_run: bool = False,
     lock_timeout: float = 30.0,
     err=sys.stderr,
+    move_from: Path | None = None,
 ) -> str:
-    """Claim (or, dry-run, name) the next feature directory. Returns its name; raises Refusal."""
+    """Claim (or, dry-run, name) the next feature directory. Returns its name; raises Refusal.
+
+    `move_from` is the RENUMBER form (GM 2026-09-07, on the standing 195 duplicate: *"Yes please fix
+    195 by deduplicating it"*): an existing `specs/NNN-slug/` in the clone is moved to the next number
+    under the same lock and the same derivation, so a deduplication is a claim like any other rather
+    than a hand-typed `git mv` against a number read from a listing. The slug is the directory's own;
+    the slug-in-use refusal exempts the directory being moved; `git mv` stages the rename when the
+    directory is tracked (a plain rename otherwise); the ledger row records `renumbered_from`; and
+    `.specify/feature.json` is left alone, because the feature being renumbered is not necessarily the
+    one this clone is working on."""
+    old_number: int | None = None
+    if move_from is not None:
+        m = NUMBERED.match(move_from.name)
+        if not m or not (root / "specs" / move_from.name).is_dir():
+            raise Refusal(f"{move_from} is not an existing specs/NNN-<slug>/ directory in {root}")
+        old_number, slug = int(m.group(1)), m.group(2)
     if not SLUG_RE.match(slug):
         raise Refusal(f"slug {slug!r} is not lower-case kebab (letters, digits, single hyphens - the house style)")
     if root.resolve() == mirror.resolve():
@@ -203,11 +223,12 @@ def claim(
         sources = collect(root, mirror)
         for n, names in duplicates_in(sources["main"]):
             print(
-                f"claim-feature: WARNING - main holds {n:03d} twice: {', '.join(names)} (reported, never renumbered here - spec 197 D3)",
+                f"claim-feature: WARNING - main holds {n:03d} twice: {', '.join(names)} (reported, never renumbered on a claim - spec 197 D3; `make claim RENUMBER=specs/<one of them>` moves it deliberately)",
                 file=err,
             )
         every = [d for dirs in sources.values() for d in dirs]
-        in_use = sorted({name for _, name in every if name.split("-", 1)[1] == slug})  # every name matched NUMBERED
+        moving = move_from.name if move_from is not None else None
+        in_use = sorted({name for _, name in every if name.split("-", 1)[1] == slug and name != moving})  # every name matched NUMBERED
         if in_use:
             raise Refusal(f"slug {slug!r} is already in use: {', '.join(in_use)} - a second directory with the same slug is a mistake nobody wants; pick another")
         top = max((n for n, _ in every), default=0)
@@ -216,15 +237,28 @@ def claim(
         if dry_run:
             print(f"claim-feature: DRY RUN - next is {name}  ({maxima})", file=err)
             return name
-        (root / "specs" / name).mkdir(parents=True, exist_ok=False)
+        if move_from is not None:
+            old, new = root / "specs" / move_from.name, root / "specs" / name
+            if subprocess.run(["git", "-C", str(root), "mv", str(old), str(new)], capture_output=True).returncode != 0:
+                old.rename(new)  # untracked (a claim not yet committed): a plain rename is the same move
+        else:
+            (root / "specs" / name).mkdir(parents=True, exist_ok=False)
         row = {
             "number": top + 1,
             "slug": slug,
             "clone": root.name,
             "utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
+        if old_number is not None:
+            row["renumbered_from"] = old_number
         with open(mirror / ".specify" / LEDGER_NAME, "a") as f:
             f.write(json.dumps(row) + "\n")
+    if move_from is not None:
+        print(
+            f"claim-feature: renumbered specs/{move_from.name}/ -> specs/{name}/ in {root}  ({maxima}); now fix every reference to the old number (grep for it) and commit the move",
+            file=err,
+        )
+        return name
     (root / ".specify").mkdir(exist_ok=True)
     (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": f"specs/{name}"}, indent=2) + "\n")
     print(
@@ -238,7 +272,14 @@ def claim(
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="claim the next spec-kit feature number under the host-wide lock")
-    ap.add_argument("slug", help="lower-case kebab slug; the directory becomes specs/NNN-<slug>/")
+    ap.add_argument("slug", nargs="?", default=None, help="lower-case kebab slug; the directory becomes specs/NNN-<slug>/")
+    ap.add_argument(
+        "--renumber",
+        type=Path,
+        default=None,
+        metavar="specs/NNN-slug",
+        help="RENUMBER an existing directory to the next number instead of claiming a new one (no slug)",
+    )
     ap.add_argument(
         "--dry-run",
         action="store_true",
@@ -264,9 +305,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     a = ap.parse_args(argv)
     try:
+        if (a.slug is None) == (a.renumber is None):
+            raise Refusal("give exactly one of a slug (claim a new number) or --renumber specs/NNN-slug (move an existing directory to the next number)")
         root = (a.root or repo_root()).resolve()
         mirror = (a.main or mirror_of(root)).resolve()
-        print(claim(a.slug, root, mirror, a.dry_run, a.lock_timeout))
+        print(claim(a.slug or "", root, mirror, a.dry_run, a.lock_timeout, move_from=a.renumber))
         return 0
     except Refusal as e:
         print(f"claim-feature: REFUSED - {e}", file=sys.stderr)
