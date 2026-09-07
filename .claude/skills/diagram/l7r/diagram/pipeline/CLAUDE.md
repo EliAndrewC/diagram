@@ -14,6 +14,7 @@ Run these as modules, from the skill root:
 |---|---|---|
 | `gencache` | the generation cache: the KEY, `store`/`load`, and `gate_obtain` (the gate rides this cache since feature 026) | no - a driver |
 | `regen` | the ITERATION path: regenerate a map, or skip it when nothing it depends on changed | no - a driver |
+| `rollcache` | the ROLL cache the gate tests ride (feature 135): `obtain` serves a keyed roll or produces and records it; `hamlet()` is the gate fixtures' roll and **runs in a child process** (feature 210, GM 2026-09-07: *"roll in a forked child ... trying it in one place"*) - a subprocess under `coverage run --parallel-mode` when the parent is covered, publishing its data file like `gate_obtain`, so the roll's working set never enters the worker (a worker on a roll-heavy file: 242 MB resting -> 90). `report()` / `report_deps()` still roll in-process; the roll-out list is `specs/210` FR-004 | yes |
 | `render_cache` | main's renders: a content-hash short-circuit so main regenerates its own renders from its own tip after the stop-work push | yes |
 | `poolmaps` | the SINGLE source of truth for WHICH MAPS EXIST, in which tree, of which kind - `bundles()` for the walk, `classify()` for the kind | yes |
 | `pool_index` | writes `pool/index.html`, the browsable index over the whole pool | yes |

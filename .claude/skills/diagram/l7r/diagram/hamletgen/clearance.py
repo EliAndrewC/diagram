@@ -49,6 +49,19 @@ def bounds(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
 # does that (polygons are built, then read), and the byte-identity sweep over every roll is the check.
 _MEMO: dict[tuple[object, ...], FabricIndex] = {}
 _MEMO_MAX = 64
+
+
+def reset() -> None:
+    """Forget every memoized index. Called when a roll ends (`driver.roll_scope`, feature 210, GM
+    2026-09-07: "we should clear the clearance memo at the end of a roll"). The keys are object identities,
+    so a later roll can never hit an earlier roll's entries - yet the memo kept up to 64 of them for the
+    life of the process, and a test worker at the end of a full run held 46 MB of a finished roll's
+    geometry through it: every RingIndex and PointGrid alive, 110,000 of its 112,000 lists
+    (`specs/210-the-roll-leaves-the-worker/research.md` R1). Clearing costs nothing within a roll, which is
+    the only place a hit can happen."""
+    _MEMO.clear()
+
+
 # AN ENTRY THAT WOULD SPAN MORE THAN THIS MANY CELLS IS NOT FILED IN THE GRID - the field envelope, a crop
 # polygon, the marsh: each spans thousands of cells, so filing them cost 25 million dict inserts per polder.
 # They go to `big` and are tested by bounds on every lookup, which is what the old prefilter did anyway.

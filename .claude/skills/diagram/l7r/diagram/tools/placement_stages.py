@@ -36,8 +36,8 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 if SKILL not in sys.path:
     sys.path.insert(0, SKILL)
 
-from l7r.diagram.hamletgen import HamletSpec, plan_site  # noqa: E402
-from l7r.diagram.hamletgen.driver import STAGES  # noqa: E402
+from l7r.diagram.hamletgen import HamletSpec, SitePlan, plan_site  # noqa: E402
+from l7r.diagram.hamletgen.driver import STAGES, roll_scope  # noqa: E402
 from l7r.diagram.settlement import Settlement  # noqa: E402
 
 # WHAT EACH STAGE IS FOR, AND WHY IT SITS WHERE IT SITS. Keyed by function name so a reordering of
@@ -273,38 +273,51 @@ def build_page(out_dir: str, width: int, spec: HamletSpec) -> str:
     # puts the canvas W/H into `meta`, and starting empty made stage 1's card claim credit for two
     # values the constructor set. A no-ink card must show what THAT stage decided and nothing else.
     known: dict[str, object] = _decisions(s)
-    for i, stage in enumerate(STAGES, 1):
-        before = _ink(s)
-        with redirect_stdout(io.StringIO()):
-            stage(s, plan)
-        drew = _ink(s) - before
-        title, why = NOTES.get(stage.__name__, ("(no note yet)", "This stage has no entry in `NOTES` - add one."))
-        stem = f"{i:02d}-{stage.__name__}"
-        now = _decisions(s)
-        # A STAGE THAT LAYS NO INK GETS A CARD, NOT A PLATE (GM, 2026-08-23: *"the water skeleton,
-        # which is the first picture, appears to be blank"*). `stage_water_frame` emits zero SVG
-        # records - it settles the drainage bearing and the land's fall and writes them to `meta` -
-        # so its plate was a plain cream square, which is indistinguishable from a broken render and
-        # was reasonably read as one. The honest page shows what such a stage DECIDED instead. This
-        # is generic rather than a special case for stage 1: any future metadata-only stage gets the
-        # same treatment automatically, and a stage that stops drawing announces itself here rather
-        # than turning quietly blank.
-        if drew:
-            # A COPY IS FINISHED, NOT THE LIVE SETTLEMENT: `finish` flushes deferred canopies, seats
-            # captions and crops, all of which mutate. Snapshotting the real one would change the map
-            # the next stage sees, and the page would document a build nobody runs.
-            img, iw, ih = _plate(copy.deepcopy(s), out_dir, stem, width)
-            decided: list[tuple[str, str]] = []
-        else:
-            img, iw, ih = None, 0, 0
-            decided = [(k, str(v)) for k, v in now.items() if known.get(k) != v]
-            stale = os.path.join(out_dir, stem + ".png")
-            if os.path.isfile(stale):
-                os.remove(stale)  # a stage that used to draw and no longer does leaves no orphan plate
-        known = now
-        rows.append((i, stage.__name__, title, why, img, iw, ih, decided))
-        print(f"  {i:>2}. {stage.__name__:<22} -> {img or f'(no ink - {len(decided)} values decided)'}")
+    _walk(s, plan, out_dir, width, rows, known)
+    return _write_page(out_dir, rows, spec)
 
+
+def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[tuple[object, ...]], known: dict[str, object]) -> None:
+    """The stage loop of `build_page`, lifted out so the roll scope wraps exactly the loop (feature 210)."""
+    # THE WALK-THROUGH IS A ROLL (feature 210): the whole stage loop sits in one `roll_scope`, so the memo
+    # is cleared and the heap trimmed when the page is built, as after any roll. Not per stage: the memo
+    # serves across stages within a roll, and a plate is a copy finished mid-roll.
+    with roll_scope():
+        for i, stage in enumerate(STAGES, 1):
+            before = _ink(s)
+            with redirect_stdout(io.StringIO()):
+                stage(s, plan)
+            drew = _ink(s) - before
+            title, why = NOTES.get(stage.__name__, ("(no note yet)", "This stage has no entry in `NOTES` - add one."))
+            stem = f"{i:02d}-{stage.__name__}"
+            now = _decisions(s)
+            # A STAGE THAT LAYS NO INK GETS A CARD, NOT A PLATE (GM, 2026-08-23: *"the water skeleton,
+            # which is the first picture, appears to be blank"*). `stage_water_frame` emits zero SVG
+            # records - it settles the drainage bearing and the land's fall and writes them to `meta` -
+            # so its plate was a plain cream square, which is indistinguishable from a broken render and
+            # was reasonably read as one. The honest page shows what such a stage DECIDED instead. This
+            # is generic rather than a special case for stage 1: any future metadata-only stage gets the
+            # same treatment automatically, and a stage that stops drawing announces itself here rather
+            # than turning quietly blank.
+            if drew:
+                # A COPY IS FINISHED, NOT THE LIVE SETTLEMENT: `finish` flushes deferred canopies, seats
+                # captions and crops, all of which mutate. Snapshotting the real one would change the map
+                # the next stage sees, and the page would document a build nobody runs.
+                img, iw, ih = _plate(copy.deepcopy(s), out_dir, stem, width)
+                decided: list[tuple[str, str]] = []
+            else:
+                img, iw, ih = None, 0, 0
+                decided = [(k, str(v)) for k, v in now.items() if known.get(k) != v]
+                stale = os.path.join(out_dir, stem + ".png")
+                if os.path.isfile(stale):
+                    os.remove(stale)  # a stage that used to draw and no longer does leaves no orphan plate
+            known = now
+            rows.append((i, stage.__name__, title, why, img, iw, ih, decided))
+            print(f"  {i:>2}. {stage.__name__:<22} -> {img or f'(no ink - {len(decided)} values decided)'}")
+
+
+def _write_page(out_dir: str, rows: list[tuple[object, ...]], spec: HamletSpec) -> str:
+    """The tail of `build_page`: prune the orphan plates, write the index page, return its path."""
     # PRUNE EVERY PLATE THIS RUN DID NOT WRITE. The per-stage removal above only catches a stage that
     # kept its index and stopped drawing; it cannot see a RENAME or a RENUMBER, which is what actually
     # happens when `STAGES` is reordered. Feature 128 split `stage_ways` into `stage_seat` and

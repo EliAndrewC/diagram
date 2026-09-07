@@ -40,6 +40,21 @@ def test_the_index_agrees_with_the_brute_force_scan_on_random_fabric() -> None:
                     assert i in cands, (trial, q, i)
 
 
+def test_reset_forgets_every_memoized_index() -> None:
+    """Feature 210 (GM 2026-09-07: "clear the clearance memo at the end of a roll"): the memo is keyed by
+    object identity, so nothing in it can serve a later roll; `reset()` empties it."""
+    from l7r.diagram.hamletgen import clearance
+
+    ring = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    idx = clearance.fabric_index([ring], 2.0)
+    assert clearance.fabric_index([ring], 2.0) is idx, "the same objects hit within a roll"
+    assert clearance._MEMO
+    clearance.reset()
+    assert clearance._MEMO == {}
+    assert clearance.fabric_index([ring], 2.0) is not idx, "after the reset the same objects build afresh"
+    clearance.reset()
+
+
 def test_empty_fabric_fouls_nothing_and_a_degenerate_polygon_is_skipped() -> None:
     idx = FabricIndex([], 8.0, [[]], 4.0, [], 14.0)
     assert not idx.fouled((3.0, 3.0)) and idx.candidates((3.0, 3.0)) == []

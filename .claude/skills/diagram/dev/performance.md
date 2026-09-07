@@ -261,3 +261,21 @@ and `malloc_trim` (which the GM had authorized if the child alone did not do it)
 instruments live in the session scratchpad and are cheap to rebuild: sample `/proc/self/statm` from a
 thread inside a pytest plugin loaded through `PYTEST_ADDOPTS`, and read the peak per test - `ru_maxrss`
 sees the peak but cannot say which test, and before/after readings cannot see inside one.
+
+**The second look (feature 210, the same day).** With the raster gone the GM asked what a worker's
+resting 200-250 MB was made of, and whether the "rolled manifests it holds" could be loaded and purged.
+A heap census (RSS split from `/proc/self/status`, glibc `mallinfo2` through ctypes, a `gc` type
+histogram, every module-level container in the engine with `__slots__` descended, the objects reachable
+from each) found no manifest held at all - the fixtures release their rolls and the FULL run's shared
+pickles were 0.7 MB - but `hamletgen/clearance.py`'s `_MEMO` holding 46 MB of a finished roll's geometry
+(keyed by object identity, so it could never serve a later roll, yet kept for the process's life), glibc
+keeping 14-68 MB freed, and the rest pymalloc arenas left fragmented by rolls. Three rules from it:
+**a per-roll memo is cleared when the roll ends** (`driver.roll_scope()`, which every stage-running
+loop enters - a static test walks the engine's AST for loops whose body calls a stage, because the
+feature's spec review found one such loop outside the scope four rounds running); **`malloc_trim(0)`
+when a roll ends** (`_memory.trim_heap`); and **the roll itself runs in a child** where it can -
+`rollcache.hamlet()` first, the gate fixtures' rolls, a subprocess in `gate_obtain`'s shape so its
+coverage still lands. Measured on one roll-heavy file: the worker rested at 90 MB instead of 242, with
+3 MB retained instead of 41 and no memo at all. And the GM's file-cache question: the 2-3 GiB `file` in
+`memory.stat` is the kernel's page cache (git packs, pool renders and pages, `.pyc`, coverage data), clean
+and reclaimable, not tmpfs - nothing here is in RAM by mistake, and a kill is decided by `anon`.

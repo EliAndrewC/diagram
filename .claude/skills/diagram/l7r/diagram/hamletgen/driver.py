@@ -7,10 +7,11 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import contextlib
 import os
 import sys
 import time
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 
 # IMPORTED AT MODULE LEVEL, not inside generate(). A local import would run the guard's own
@@ -175,6 +176,26 @@ class Report:
         )
 
 
+@contextlib.contextmanager
+def roll_scope() -> Iterator[None]:
+    """The boundary every roll crosses (feature 210, GM 2026-09-07: "we should clear the clearance memo
+    at the end of a roll and ... do the malloc_trim after a roll"). Every loop that runs the stages sits
+    inside one - `build()` and the three tools that iterate `STAGES` themselves (`perf_snapshot`,
+    `perf_profile`, `placement_stages`); `tests/hamletgen/test_driver.py` walks the engine's AST and fails
+    on a stage-running loop outside it. On exit, success or failure: the clearance memo is cleared
+    (nothing in it can serve a later roll - its keys are object identities) and glibc's freed arenas go
+    back to the kernel. Measured before: a worker rested at 197-266 MB after its rolls with 46 MB of that
+    the memo and 14-68 MB retained by the allocator (specs/210 research.md R1)."""
+    from l7r.diagram._memory import trim_heap
+    from l7r.diagram.hamletgen import clearance
+
+    try:
+        yield
+    finally:
+        clearance.reset()
+        trim_heap()
+
+
 def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settlement:
     """Run every stage, in order, against a fresh `Settlement`.
 
@@ -184,8 +205,9 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
 
     if not os.environ.get(STAGE_PROFILE_ENV):
-        for stage in STAGES:
-            stage(s, plan)
+        with roll_scope():
+            for stage in STAGES:
+                stage(s, plan)
         return s
     # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
@@ -194,10 +216,11 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     # feature 132 forbids a variable that changes what a map ROLLS, and this changes only what is
     # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
     timings: list[tuple[str, float]] = []
-    for stage in STAGES:
-        t0 = time.time()
-        stage(s, plan)
-        timings.append((stage.__name__, time.time() - t0))
+    with roll_scope():
+        for stage in STAGES:
+            t0 = time.time()
+            stage(s, plan)
+            timings.append((stage.__name__, time.time() - t0))
     total = sum(d for _n, d in timings)
     slowest = max(timings, key=lambda t: t[1])
     print(f"\n\033[1mstage profile\033[0m {plan.spec.name} seed {plan.spec.seed}: {total:.1f}s total, slowest {slowest[0]} {slowest[1]:.1f}s", file=sys.stderr)
