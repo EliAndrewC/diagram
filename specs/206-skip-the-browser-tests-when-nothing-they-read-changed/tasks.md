@@ -19,5 +19,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T05 the record (FR-007): `interactive/CLAUDE.md`, `tests/CLAUDE.md`, root `CLAUDE.md`
       research: rendering
       verify: DONE. DONE. interactive/CLAUDE.md Verifying, tests/CLAUDE.md interactive row, root CLAUDE.md gate-skip bullet; the why in gate-stamp.py's area comment and the Makefile's BROWSER_SKIP comment
-- [ ] T06 `make hooks-test` green, `make done` green (SC-003); land DIRECT
+- [x] T06 `make hooks-test` green, `make done` green (SC-003); land DIRECT
       research: rendering
+      verify: DONE. DONE. make test-full green with the skip live: the line 'browser tests: already green against exactly what they read - skipped' printed, 3,022 passed (the 17 browser tests left out, the 6 new tooling tests in), coverage 100% on both floors, 365 s; make hooks-test green (2 suites re-run, 19 unchanged); make done itself short-circuits on this delta (no engine content changed) so the phases-run stamp site is proved by test_browser_skip.py's recipe assertions; landing DIRECT
