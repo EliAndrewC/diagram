@@ -1,6 +1,6 @@
 # Feature 202 - quote the translation, and say so
 
-**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-07). **Status**: specified; spec-fidelity round 1 CHANGES (three: the sweep covers body prose and the registry, not footnotes only; the test derives from the note, not from CJK - German and Korean are the fixtures; no house-style duty on quote-check), applied; round 2 CHANGES (three consistency fixes: FR-005/SC-002 verify every converted passage, the Edge Cases bullet matches D2, FR-002 states the test's limit), applied; round 3 FAITHFUL.
+**Request**: [`request.md`](request.md), the GM's words verbatim (2026-09-07). **Status**: IMPLEMENTED 2026-09-07 (tasks.md); spec-fidelity round 1 CHANGES (three: the sweep covers body prose and the registry, not footnotes only; the test derives from the note, not from CJK - German and Korean are the fixtures; no house-style duty on quote-check), applied; round 2 CHANGES (three consistency fixes: FR-005/SC-002 verify every converted passage, the Edge Cases bullet matches D2, FR-002 states the test's limit), applied; round 3 FAITHFUL.
 
 ## Summary
 
