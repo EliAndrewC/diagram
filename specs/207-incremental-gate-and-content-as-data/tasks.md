@@ -3,13 +3,15 @@
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Every task is `research: rendering` or
 `research: procedure` - tooling, nothing physical.
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
       research: procedure
-- [ ] T02 the reference page, the pool index and the placement-stages page captured BEFORE any move (FR-008's baseline)
+      verify: DONE. FAITHFUL at round 3 (round 1: `name`/`covers` were kept as attributes on a ground true only of `key`, and the audit's 1.5 KB threshold missed five phrases; round 2: FR-005a's KEEP clause and FR-004's list disagreed with R2)
+- [x] T02 the reference page, the pool index and the placement-stages page captured BEFORE any move (FR-008's baseline)
       research: procedure
+      verify: DONE. scratchpad/before207/: inashiro.html (7.97 MB), index.html, hamlet-placement.html and the 13 per-stage pages (`make placement-stages`, 3m33s)
 - [ ] T03 `glossary.json` + loader (FR-001); `siblings.json` + loader (FR-002); `place.json` + loader (FR-004)
       research: rendering
-- [ ] T04 `Label:`/`Sources:`/`Entry:` docstring tags: the parser, `Kind.feature()`, the 51 classes rewritten by an asserted script (FR-003)
+- [ ] T04 `Name:`/`Covers:`/`Label:`/`Sources:`/`Entry:` docstring tags: the parser, `Kind.feature()`, the 51 classes rewritten by an asserted script (FR-003); `assets/page-text.json` + the loaders in `page.py` and `_base.py` (FR-005a)
       research: rendering
 - [ ] T05 the notes file and the pool-index stylesheet (FR-005)
       research: rendering

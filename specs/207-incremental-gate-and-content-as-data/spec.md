@@ -1,6 +1,6 @@
 # Feature 207 - the incremental gate, and content as data
 
-**Status**: DRAFT - awaiting `spec-fidelity`.
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5; round 1: `name`/`covers` move too, the audit by kind not size; round 2: two enumeration slips in FR-004/FR-005a). (round 1: two changes in the content half - `name`/`covers` move too; the audit's criterion is what a reader sees, not a byte count).
 **Request**: [`request.md`](request.md) - the GM's words verbatim, three messages.
 **Research**: [`research.md`](research.md) - the gate's cost and its two settings (R1), the census of
 content living in code (R2), every place an asset is enumerated (R3), and the soundness argument for
@@ -35,18 +35,29 @@ to ten minutes a plain `make done` costs on any engine change.
 - **FR-002** The sibling pair texts are `assets/siblings.json`: a `texts` object of shared passages and a
   `pairs` list of `[class a, class b, text]`, where a text beginning `@` names a shared passage (the one
   text for four crop-dike pairs stays one text); `siblings.py` loads it into the same `_PAIRS` mapping.
-- **FR-003** Each class's `label`, `sources` and `entry` move into its docstring as `Label:`, `Sources:`
-  and `Entry:` tags beside `What:`/`Why:`/`Note:`/`Caveat:`; `parse_explanation` reads them and
-  `Kind.feature()` builds the same `FeatureClass`. `key`, `name` and `covers` stay class attributes
-  (identity and the manifest keys the class covers - engine-facing). The 51-class snapshot test still
-  holds field for field.
+- **FR-003** Each class's `name`, `covers`, `label`, `sources` and `entry` move into its docstring as
+  `Name:`, `Covers:`, `Label:`, `Sources:` and `Entry:` tags beside `What:`/`Why:`/`Note:`/`Caveat:`;
+  `parse_explanation` reads them and `Kind.feature()` builds the same `FeatureClass`. Only `key` stays
+  a class attribute: it is the tag the engine writes on the ink and the CSS token, the one field that is
+  identity rather than prose. The 51-class snapshot test still holds field for field.
 - **FR-004** The place card's content - `KINDS`, `CROPS`, `_CROP_LEAD`, `CROP_SENTENCES`, `COLLISIONS`,
-  `BASIS`, `ENTRY` - is `assets/place.json`; `place.py` loads it and formats the three demographic
+  `BASIS`, `BASIS_LEAD`, `ENTRY` - is `assets/place.json`; `place.py` loads it and formats the three demographic
   fields (`HAMLETS_PER_DOMAIN`, `VILLAGES_PER_DOMAIN`, `HAMLET_SHARE`) into the hamlet's text at load,
   so the numbers stay derived from `dwellings.py`.
 - **FR-005** The placement-stages notes are `l7r/diagram/tools/placement_stages_notes.json`; the pool
-  index's stylesheet is `l7r/diagram/pipeline/pool_index.css`; each module loads its file. The
-  NOTES-to-STAGES roster test stands.
+  index's stylesheet is `l7r/diagram/pipeline/pool_index.css` and its section headings and tree
+  banners `pool_index_text.json` beside it; each module loads its files. The NOTES-to-STAGES roster
+  test stands.
+- **FR-005a** THE AUDIT'S CRITERION is what a thing IS, never how long it is: prose a reader sees (or a
+  record kept for a reader) moves to data; data the engine executes on stays code. A one-word edit to
+  a sixty-byte lead-in re-opens the same gate the glossary did. So the page's fixed phrases move too,
+  into `assets/page-text.json`: the caveat lead-in, the references lead-in, the convention lead-in,
+  the four label phrases, and the two not-highlighted rulings lists (a record of the GM's rulings,
+  never rendered - a record, like the sibling texts). `page.py` and `classes/_base.py` load them under
+  the names their consumers and tests use today. Research R2 lists every module-level prose constant
+  in the page package, the placement-stages tool and the pool index by this criterion, with a verdict
+  for each; the KEEP rows are the keys the page executes on (`HIT_REGIONS`, `HIT_FROM_MARKS`,
+  `PLACE_KEYS`, `CROPS`' keys), the parsers' regexes and markup templates, and FR-007's taxonomy.
 - **FR-006** Every content file under `interactive/assets/` is a page asset everywhere an asset is
   named (research R3): gate-stamp's `page` area covers `assets/*`, and the render fingerprint hashes
   every file in that directory, so the pages regenerate on landing. A content-only delta routes DIRECT
@@ -116,11 +127,15 @@ to ten minutes a plain `make done` costs on any engine change.
 - **D3 - 60% is the fallback fraction.** Above it the incremental run costs about what a full run does
   (collection, the reference roll and the floors are fixed costs) and gives up the baseline refresh. A
   knob in the planner with the reason beside it; not a measured optimum.
-- **D4 - a class's label and research pointer go into the docstring, not a JSON.** The explanation and
-  the claim about it are one record, edited together; feature 189 already made the docstring the
-  cheap-to-edit place. `key`/`name`/`covers` stay attributes: identity, and manifest keys the engine
-  writes.
+- **D4 - a class's name, covers, label, sources and entry go into the docstring, not a JSON.** The
+  explanation, its heading, the claim about it and where it came from are one record, edited together;
+  feature 189 already made the docstring the cheap-to-edit place. Only `key` stays an attribute: it is
+  what the engine writes on the ink and what the stylesheet matches, so it IS code. (Round 1 of the
+  review caught the first draft keeping `name` and `covers` as attributes on a ground - engine-written
+  keys - that is true of `key` alone.)
 - **D5 - the notes file and the pool-index stylesheet owe nothing at push.** They are outside every
   stamp area, like a docs edit; their tests run in `make quick` and at the next gate. Stated rather
   than hidden.
 - **D6 - the taxonomy stays code.** FR-007.
+- **D7 - the audit is by kind, not by size.** FR-005a; the first census used a 1.5 KB threshold and
+  missed five reader-facing phrases, which the review found.

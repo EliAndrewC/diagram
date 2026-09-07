@@ -23,8 +23,11 @@ definition invalidated every cached roll (the 120 s warm/cold gap).
 
 ## R2. What content lives in code - the census
 
-`python3 -c` over every module under `l7r/`, summing the bytes of string constants in module-level
-assignments and class attributes; the rows over 1.5 KB:
+THE CRITERION (spec FR-005a, after round 1 of the review): prose a reader sees, or a record kept for a
+reader, is content and moves to data; data the engine executes on is code and stays. Size is not a
+criterion - the first pass used a 1.5 KB threshold and missed five short phrases. The census: every
+module-level constant under `l7r/` holding a string of 16+ characters with a space in it (regexes and
+markup excluded), and every class attribute of the registry; first the rows the threshold found:
 
 | module | prose bytes | consumer | verdict |
 |---|---|---|---|
@@ -36,7 +39,21 @@ assignments and class attributes; the rows over 1.5 KB:
 | `pipeline/pool_index.py` `_CSS` | 1,142 | the pool index page | MOVE - a stylesheet, to a `.css` file |
 | `overlap/taxonomy.py` the exemption rows | 15,602 | the overlap checks | KEEP - the engine EXECUTES these rows; an edit must run the gate |
 
-Every other module under 1.5 KB of prose is code with messages in it.
+Then the rows the criterion adds, all in the page package:
+
+| constant | bytes | consumer | verdict |
+|---|---|---|---|
+| `page.py` `CAVEAT_LEAD` ("On the drawing: "), `REFERENCES_LEAD` (the line above the references list) | 141 | the page | MOVE - `assets/page-text.json` |
+| `classes/_base.py` `_LABEL_WORDS` (the four label phrases), `CONVENTION_LEAD` ("Note: ") | ~90 | `label_phrase`, `lead_sentence` | MOVE - `page-text.json` |
+| `classes/_base.py` `NOT_HIGHLIGHTED_RULINGS`, `NOT_HIGHLIGHTED_OVERTURNED` | 468 | the ink census tests; never rendered | MOVE - `page-text.json`; a record of the GM's rulings, like the sibling texts |
+| `classes/*.py` `name`, `covers` | scattered | `page.explanations` (`name` is the modal's heading); `covers` is documentation | MOVE - docstring tags `Name:`, `Covers:` |
+| `place.py` `BASIS_LEAD` ("What this rests on: ") | 20 | the place card | MOVE - with the rest of `place.py`'s content into `place.json` |
+| `pipeline/pool_index.py` `TIER_SECTIONS` (the section headings), `TREE_BANNERS` (the two trees' banner prose) | 432 | the pool index page | MOVE - `pipeline/pool_index_text.json`, beside the stylesheet |
+| `page.py` `HIT_REGIONS`, `HIT_FROM_MARKS`; `place.py` `PLACE_KEYS`, `CROPS`' keys | - | the writer: which manifest keys become hit regions, which notes keys the card reads | KEEP - keys the page executes on (the crop WORDS move with `place.json`) |
+| `notes.py`, `page.py`, `sources.py`, `tags.py` regexes and markup templates | - | the parsers and the writer | KEEP - code |
+| `overlap/taxonomy.py` | 15,602 | the checks | KEEP - executed (FR-007) |
+
+Every other string constant in the engine is a message in code (an error text, a log line) or a key.
 
 ## R3. Where a content file must be seen, so it is not seen as engine
 
