@@ -31,3 +31,24 @@ unchanged (resvg ignores it), the ruling that the bar is not highlighted stands 
 `data-k`). The bar's two captions are `<text>` and already vector everywhere (feature 201).
 
 Cost: two rectangles, four lines and three texts painted as vector in raster mode - nothing.
+
+## R3. What the gate's ratchet found: the picture's encode, 9.6 s per page write
+
+The first green-test gate of this feature ran 772 s against the `done` ratchet's 713 s ceiling (pinned
+baseline 549 s; the two green gates before it 690 and 549), and the ratchet refused (feature 171: a
+target that gets slower fails). Measured on Kuwabata's page (18.6 Mpx picture):
+
+| step | time |
+|---|---|
+| resvg render of the picture at 3 px per map px | 5.1 s |
+| lossless WebP encode, method 4 (feature 200 as shipped) | 9.6 s, 2.97 MB |
+| lossless WebP encode, method 2 | 9.1 s, 2.96 MB |
+| lossless WebP encode, method 0 | 2.2 s, 3.20 MB |
+| the id map render | 0.3 s |
+
+The gate writes a page for every map it rolls, so the slow encode cost it about 7 s per roll for a
+quarter-megabyte saving on a 6 MB page. Method 0 - still lossless, the same pixels - is what ships
+(feature 200's D2 chose lossless WebP for the bytes; it did not price the encode). The slowest tests
+otherwise are the polder gate tests' roll (54 s of setup, most of it the roll itself) and the perf
+snapshot (25 s); the browser package is ~100 s wall on one worker and is the other cost features
+199-203 added.

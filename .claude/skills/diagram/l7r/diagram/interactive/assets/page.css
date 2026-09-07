@@ -62,7 +62,12 @@ g.f.on.f-place text { fill: var(--ink) !important; }
    raster image and <defs>. One selector, so a lit class inside an opacity wrapper keeps its ink (a
    separate sheet-level rule hid it - specs/201 research.md R4). `visibility` instead of `display` was
    measured at ten times the wheel cost and declined (R2). */
-svg#map[data-mode="raster"] :is(path, circle, ellipse, line, rect, polygon, polyline, image):not(g.f.on *):not(g.raster *):not(defs *) { display: none; }
+/* ...EXCEPT THE PLACARD (feature 203, GM 2026-09-07: "when I move my mouse over the title card, it becomes
+   highlighted, and then I move it away, and suddenly the scrub land is laid over top"): the lit class is drawn
+   above the image, the image holds the card, and the scrub has blades under the card that the vector page
+   hides beneath it - so the card, its name (the `place` class) and its scale bar (`g.scale`, a marker the writer
+   sets, still not highlighted) stay vector in both modes, drawn last, above every lit class. */
+svg#map[data-mode="raster"] :is(path, circle, ellipse, line, rect, polygon, polyline, image):not(g.f.on *):not(g.raster *):not(defs *):not(g.f-place *):not(g.scale *) { display: none; }
 svg#map[data-mode="vector"] g.raster { display: none; }
 g.raster image { pointer-events: none; }
 /* THE LIT CLASS IS A WASH OVER THE IMAGE (feature 201, GM 2026-09-07: "when I move my mouse over the rice

@@ -248,7 +248,7 @@ def test_in_raster_mode_text_is_vector_and_the_lit_class_is_a_wash(kuwabata: Pag
         const vis = sel => [...document.querySelectorAll(sel)].filter(e => e.checkVisibility());  // an ancestor's display:none counts; a computed display does not inherit
         const out = {};
         out.text = [vis('svg#map text').length, document.querySelectorAll('svg#map text').length];
-        out.leaves_unlit = vis('svg#map :is(path,circle,ellipse,line,rect,polygon,polyline,image)').filter(e => !e.closest('defs') && !e.closest('g.raster')).length;
+        out.leaves_unlit = vis('svg#map :is(path,circle,ellipse,line,rect,polygon,polyline,image)').filter(e => !e.closest('defs') && !e.closest('g.raster') && !e.closest('g.f-place') && !e.closest('g.scale')).length;  // the placard and its scale bar stay vector on top (feature 203)
         window.l7rMap.highlight('place');
         const name = document.querySelector('g.f.on text'); const cs = getComputedStyle(name);
         out.place_lit = [cs.fill, cs.fillOpacity, cs.fontFamily, cs.fontSize];
@@ -270,3 +270,54 @@ def test_in_raster_mode_text_is_vector_and_the_lit_class_is_a_wash(kuwabata: Pag
     assert r["place_lit"][2:] == r["place_unlit"], "the lit name is the unlit name's font and size"
     assert r["paddy_wash"] == "0.45" and r["paddy_leaves"] > 0, "a lit paddy is the wash"
     assert r["stream_leaves"] > 0, "a lit class inside an opacity wrapper still shows its ink"
+
+
+# ---- feature 203: the placard stays on top (GM 2026-09-07) -----------------------------------------------
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_the_placard_stays_above_a_lit_class_in_raster_mode(kuwabata: Page) -> None:
+    """Feature 203 FR-004. The GM: "when I move my mouse over the title card, it becomes highlighted, and then I
+    move it away, and suddenly the scrub land is laid over top." The lit class is drawn above the image and the
+    scrub has blades under the card, so the card and its scale bar are vector in both modes, drawn last. With
+    the scrub lit, a pixel inside the card is the card's parchment and a pixel on the bar's line is the bar's
+    ink; the same after the card has been lit and left (SC-002 shows the pixel assertion red with the
+    exemption reverted)."""
+    import io
+
+    from PIL import Image
+
+    page = kuwabata
+    assert _raster_ready(page)
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+    page.js("() => window.l7rMap.highlight(null)")
+    box = page.js("""() => {
+        const r = document.querySelector('g.f[data-k="place"] rect').getBoundingClientRect();
+        const l = document.querySelector('g.scale line').getBoundingClientRect();
+        return {card: [r.x, r.y, r.width, r.height], bar: [l.x, l.y, l.width, l.height]};
+    }""")
+    assert box["card"][2] > 0 and box["bar"][2] > 0, "the card and the bar are displayed with nothing lit"
+    shown = page.js("() => [...document.querySelectorAll('g.f[data-k=\"place\"] rect, g.scale line')].every(e => getComputedStyle(e).display !== 'none')")
+    assert shown, "the placard's leaves are never hidden in raster mode"
+
+    def pixel(x: float, y: float) -> tuple[int, int, int]:
+        im = Image.open(io.BytesIO(page.page.screenshot(clip={"x": x - 1, "y": y - 1, "width": 3, "height": 3}))).convert("RGB")
+        return im.getpixel((1, 1))
+
+    cx, cy = box["card"][0] + box["card"][2] * 0.15, box["card"][1] + box["card"][3] * 0.15  # inside the card, off the name and the bar
+    bx, by = box["bar"][0] + box["bar"][2] / 2, box["bar"][1] + box["bar"][3] / 2  # the middle of the bar's long line
+    for step in ("scrub lit", "after the card was lit and left"):
+        if step.startswith("after"):
+            page.js("k => window.l7rMap.highlight(k)", "place")
+            _frame(page)
+            page.js("() => window.l7rMap.highlight(null)")
+            _frame(page)
+        page.js("k => window.l7rMap.highlight(k)", "scrub and rough grazing")
+        _frame(page)
+        card, bar = pixel(cx, cy), pixel(bx, by)
+        page.js("() => window.l7rMap.highlight(null)")
+        _frame(page)
+        assert max(abs(a - b) for a, b in zip(card, (247, 240, 220), strict=True)) <= 6, f"{step}: the card's pixel is {card}, not the parchment (247, 240, 220)"
+        assert max(bar) < 120, f"{step}: the scale bar's line pixel is {bar}, not the bar's ink"

@@ -214,3 +214,15 @@ def test_label_hits_counts_a_gate_STRUCTURE_a_caption_would_cover() -> None:
     s.M["gate_structs"] = [{"x": 600.0, "y": 600.0, "w": 96.0, "h": 46.0}]
     assert s._label_hits(600.0, 600.0, "a caption", 9.0) > 0, "the caption covers the guard station"
     assert s._label_hits(200.0, 200.0, "a caption", 9.0) == 0, "and clear of it, nothing is hit"
+
+
+def test_the_scalebar_carries_the_stylesheet_marker_and_stays_unhighlighted() -> None:
+    """Feature 203 FR-002: the bar's group is `class="scale"` so the page can keep it vector on top in raster
+    mode (the placard's opaque card would otherwise bury the image's copy); it stays `cls="-"` - furniture,
+    not the place (GM 2026-08-29) - with no `data-k` and no feature class."""
+    s = _hamlet()
+    s.title("Labelton")
+    bars = [t for t in s.toplabels if '<g class="scale" stroke=' in t]
+    assert len(bars) == 1, "the scale bar's group carries the marker once"
+    assert 'f-' not in bars[0] and "data-k" not in bars[0]
+    assert s.toplabels_cls[s.toplabels.index(bars[0])] == "-", "the bar is still not highlighted"
