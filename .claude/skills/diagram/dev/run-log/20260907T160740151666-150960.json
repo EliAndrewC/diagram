@@ -1,0 +1,8 @@
+{
+  "utc": "2026-09-07T16:07:40Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 620,
+  "result": "failed: hooks-test test-full",
+  "commit": "9a780fb2"
+}
