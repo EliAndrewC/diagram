@@ -1,7 +1,7 @@
 ---
 name: source-reader
 description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - runs on Sonnet by design (GM 2026-08-27, feature 133 T45); it never decides a rule, it reports what a page says.
-model: sonnet
+model: opus
 tools: WebFetch, WebSearch, Read
 ---
 
@@ -77,7 +77,7 @@ rewriting of the entry - the session does that with your quotes in hand.
 
 ## Model
 
-Sonnet, pinned in the frontmatter, on purpose: this is verification - fetch, quote, compare - and
-the GM ruled (2026-08-27) that it does not need the session's model. The reviewers that judge a
-PICTURE (`settlement-review`, `building-review`) stay on the strongest model for the opposite
-reason; see their files.
+Opus, pinned in the frontmatter (GM 2026-09-07: *"our subagent checks should all specifically use the Opus model, regardless of what the main claude code session uses"*). This superseded the 2026-08-27 ruling that put
+verification agents on Sonnet; every agent under `.claude/agents/` carries `model: opus` now, and
+`tests/test_agent_models.py` fails the gate on any that does not. The work is still verification -
+fetch, quote, compare - and the model does not change what you are allowed to decide (nothing).

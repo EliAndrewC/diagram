@@ -136,9 +136,18 @@ not a source claimed to support a historical point - they keep their registry li
 SUMMARY-ONLY citation clause (constitution v2.19.0); the 2026-09-06 sweep that brought the record under it - 780
 footnotes, every one without a recorded SEEN verdict re-fetched - is `specs/195-cite-only-what-can-be-read/`.
 
+**A page the container cannot fetch is not thereby unreadable.** mdpi.com, Wiley, Springer, ScienceDirect and others
+refuse automated fetches while serving a person; when a source matters, the GM downloads it (2026-09-07: *"I can try to
+download them myself as a human and then save them somewhere that you can see them"*) into `l7r/academic-sources/`,
+mounted here at `/host-l7r-repo/academic-sources/`. The session reads the copy (an Opus reader per paper, passages
+verbatim with page or section), the footnote links the PUBLIC page and says the copy was read, and the quote-check runs
+against the copy. A paywalled full text whose abstract is public is cited for the abstract's words only. What the paper
+does NOT say is written down where the claim stands - the first six papers read this way (feature 195 T07) supported
+about half of what the record had attributed to them, and the rest is labeled GUESS now.
+
 Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
 resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
-quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Sonnet, verification not
+quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus like every check agent - GM 2026-09-07, verification not
 judgment - the sibling of `source-reader`) holds the half a test cannot: per footnote, is the quote VERBATIM on
 the page (or DIFFERS / NOT-ON-PAGE), does it SUPPORT the assertion it is attached to (or PARTIAL /
 DOES-NOT-SUPPORT), and per section, which assertions carry no footnote. Run it in the background on every new or

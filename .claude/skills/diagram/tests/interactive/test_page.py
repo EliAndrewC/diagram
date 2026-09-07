@@ -432,15 +432,16 @@ def test_the_citations_come_from_the_research_entries() -> None:
     assert research_sources("nothing here") == []
 
 
-def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_eight() -> None:
-    """Five entries the citation pass left without keys (report.md lists them), plus three whose every source lost
-    its citation under feature 195 (GM 2026-09-06, cite only what can be read): the fengshui-forest entry behind
-    `copse` and `windbreak` rested on two MDPI papers nobody here could read (mdpi.com refuses every fetch from
-    this container), and the water-width ladder behind `stream` on the Chinese design standard GB50288, never
-    read. Their rosters are empty until a readable source is found; the labels are listed for the GM in
+def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_six() -> None:
+    """Five entries the citation pass left without keys (report.md lists them), plus `stream`, whose water-width
+    ladder rested on the Chinese design standard GB50288, never read - uncited since feature 195 (GM 2026-09-06,
+    cite only what can be read). `copse` and `windbreak` were uncited for a day: their fengshui-forest entry rested
+    on two MDPI papers mdpi.com would not serve to this container, until the GM downloaded them (2026-09-07) and
+    the passages were read from the copies - the Fujian paper supports the two-groves-per-village figure and reads
+    AGAINST the record's grove areas, which are labeled GUESS now. Labels are listed for the GM in
     specs/195-cite-only-what-can-be-read/tasks.md and are not changed here (FR-007)."""
     uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
-    assert uncited == ["copse", "fallow", "field pond", "field rock", "footbridge", "grave island", "stream", "windbreak"], "an entry without a cited key - see the docstring for the eight known ones"
+    assert uncited == ["fallow", "field pond", "field rock", "footbridge", "grave island", "stream"], "an entry without a cited key - see the docstring for the six known ones"
     for k, fc in CLASSES.items():
         for key in research_sources(fc.entry):
             assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"

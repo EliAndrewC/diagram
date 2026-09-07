@@ -23,6 +23,14 @@ establish whether a passage can be read, not to settle a physical question.
       research: rendering
       verify: DONE. labels listed above (copse, windbreak: accurate; stream: convention - none changed); census second run 0 candidates; route DIRECT (no engine code: research HTML, tests, agents, constitution, CLAUDE.md); pushed by sync-with-main.sh done; the answer to the GM carries the per-file counts, the 36 dropped sources, the labels, the MDPI note and the A1 carve-out
 
+- [x] T07 follow-up 2026-09-07: the GM downloaded the six papers this container cannot fetch (l7r/academic-sources/, mounted at /host-l7r-repo/academic-sources/); six Opus readers read them for the ten footnotes that had cited them; the record follows what the papers say
+      research: physical
+      - [x] research pass (the six papers read from the GM's copies, one Opus reader each; verdicts in the session transcript)
+      - [x] source-reader confirmed (the readers ARE the reading; passages returned verbatim with page or section)
+      - [x] recorded and cited (six footnotes restored as citations linking the public page and saying the copy was read; four stay absence notes quoting what the paper does say)
+      - [x] quote-check confirmed (Opus quote-check over the six restored footnotes and the four absence notes' inline passages against the saved texts; result recorded below)
+      verify: DONE. forests-2020 supports ONLY 'two fengshui forests on average' (Fujian, reported from Xu et al. 2012) and reads AGAINST the record's 1-2 ha grove area (its Table 1: whole-village forests over 3, 6 and 20 ha) - fn-1 cited, fn-4/fn-6 absence + the prose labeled GUESS; hu-2011: the public abstract carries 3403 plants/ha, 49.1 m2/ha, 32 patches - fn-2/fn-9 cited to the ScienceDirect abstract page, the 'closed canopy' gloss replaced by the authors' comparison; mdpi-kunisaki: fn-34 cited (5 systems / 11 farmers / 50 ha), fn-35 absence + GUESS (no typical range in the paper); mdpi-3860: describes NO layout - fn-81 stays absence, the entry's Evidence line no longer says corroborated; sho-fan: fn-64 cited for river + precipitation and the fan spanning the Tonami plain, the 'easily-reached water table' labeled GUESS (wells up to 100 m, levels unknown, no paddy mentioned); packer: fn-65 cited for the hydrosere open water - littoral - reed - marsh - alluvial forest; the sedge/wet-meadow step is NOT in Packer. copse and windbreak are cited again (test_page roster back to six)
+
 ## FR-007 - map class labels whose entry lost every cited source (listed for the GM, none changed)
 
 | class | label | entry | what it rested on | why it is uncited now |

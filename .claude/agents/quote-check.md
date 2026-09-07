@@ -1,7 +1,7 @@
 ---
 name: quote-check
-description: Checks a research entry's footnotes against the pages they quote - per footnote, whether the footnote's own link is a public page on which the passage can be READ (READABLE / NOT-READABLE; feature 195, GM 2026-09-06), whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Verification, not judgment - Sonnet by design, like source-reader; it never decides a rule, it reports what the page says and what the text asserts. (Tools: WebFetch, WebSearch, Read)
-model: sonnet
+description: Checks a research entry's footnotes against the pages they quote - per footnote, whether the footnote's own link is a public page on which the passage can be READ (READABLE / NOT-READABLE; feature 195, GM 2026-09-06), whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Verification, not judgment - on Opus like every subagent check (GM 2026-09-07); it never decides a rule, it reports what the page says and what the text asserts. (Tools: WebFetch, WebSearch, Read)
+model: opus
 tools: WebFetch, WebSearch, Read
 ---
 
