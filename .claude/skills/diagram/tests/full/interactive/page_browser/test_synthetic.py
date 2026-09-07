@@ -1,14 +1,15 @@
-"""THE FULL TREE (the GM, 2026-08-28: a 15 s browser test belongs with the lengthy tests - *"I agree that that is where it belongs"*; feature 135's three-tree rule): collected by the FULL run and the AWS check, never by quick or the gate.
+"""THE FULL TREE (the GM, 2026-08-28: a 15 s browser test belongs with the lengthy tests - *"I agree that that is where it belongs"*; feature 135's three-tree rule): collected by the FULL run and the AWS check, never by quick.
 
 The page in a real browser (feature 134, spec FR-012 - a page that was never opened has not been
 verified). Playwright drives headless Chromium over a plain `file://` open.
 
-Two tiers. The SYNTHETIC page (quick) is a hand-built map of a dozen classed primitives: it proves
+ONE tier since 2026-09-07. The SYNTHETIC page is a hand-built map of a dozen classed primitives: it proves
 the mechanics - hover lights every group of a class and none of another, a label and its subject
 are one class, a click opens the modal with the label words and the present siblings only, Escape
-/ the close button / the backdrop close it, zero console errors, zero network requests. The
-REFERENCE HAMLET page (`rolls_map`, the gate) generates Inashiro and proves the same on the real
-16 MB page for every class and every sibling pair present, and records the timings SC-004 asks for.
+/ the close button / the backdrop close it, zero console errors, zero network requests - and every
+behavior ruling the GM has made about the page since. The REFERENCE HAMLET tier (a rolled Inashiro, the
+same mechanics on the real page, the SC-004 timings) and the Kuwabata speed tier (features 199-203's caps)
+were retired by the GM on 2026-09-07 - the reason and the ruling are in conftest.py.
 
 Skipped with a reason when Playwright or its Chromium is absent (`setup-dev-env.sh` installs both).
 """

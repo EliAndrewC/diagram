@@ -14,6 +14,7 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
@@ -25,10 +26,20 @@ REPO = SKILL.parents[2]
 
 
 @pytest.fixture(autouse=True)
-def _clear_cache() -> None:
+def _clear_cache() -> Iterator[None]:
     """The verdict is cached per process on purpose; a test that inherited it would be testing the
-    previous test's tree."""
+    previous test's tree.
+
+    AND RESTORED AFTERWARD (2026-09-07, found by a `make test-full` run): this fixture cleared the cache
+    before each test and left behind whatever the test computed - `test_reason_computes_the_verdict_when_
+    asked_first` patches the ancestry EMPTY and caches (False, "not invoked through make"), and under
+    worksteal the next test on that xdist worker inherits it. The Kashikawa roll in `test_villages.py`
+    landed there and was REFUSED by the guard mid-gate, an order-dependent red that a re-run hides. The
+    verdict is a process-wide cache, so a test that pokes it owes the process the value it found."""
+    saved = inv._verdict
     inv._verdict = None
+    yield
+    inv._verdict = saved
 
 
 # --------------------------------------------------------------------------------------------

@@ -17,6 +17,7 @@ frame is the vector page at today's cost); the switch was stated in units the of
 FR-004/FR-006/D5 give it in zoom multiples at DPR 1 and 2, and say plainly that a DPR-2 screen gets
 raster mode at the opening view only); the off-map drop was justified as a ride-along (now FR-001 ties
 it to the first-load clause with its measurement, 0.83 -> 0.58 s).
+**Retired 2026-09-07 (GM)**: the FR-010/FR-011 browser guards (vector first, the id map, the switch, the raster-CPU caps) were DELETED with every browser test that loads a rolled page or times anything - the GM ruled the page's speed a matter of judgment measured by hand while a feature is worked, never a gated test (*"the juice is not worth the squeeze"*; the ruling in `l7r/diagram/interactive/CLAUDE.md`, "Verifying"). The measurements those tests recorded stand in research.md; the behavior they proved is unchanged in the page.
 **Request**: [`request.md`](request.md) - the GM's words verbatim, and the offer they accepted.
 **Research**: [`research.md`](research.md) - the trace, the off-map census, the priced levers, the
 prototype's numbers.
