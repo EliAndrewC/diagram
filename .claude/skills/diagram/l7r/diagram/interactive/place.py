@@ -38,6 +38,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from ..dwellings import DWELLING_KINDS, HOUSEHOLD
+from .content import content
 from .notes import MapNotes
 from .sources import research_questions
 
@@ -101,72 +102,26 @@ class Kind:
 #: Keyed by `meta.scale`. Written from `l7r.md` (a hamlet "belongs to a village district and is
 #: overseen by a village headsman who lives in the main village and not in the hamlet"; "county towns
 #: are the lowest level at which samurai live") and from `settlements.md`'s tier rules.
+_CONTENT = content("place.json")  # the card's wording is DATA (feature 207) - see content.py
 KINDS: dict[str, Kind] = {
-    "hamlet": Kind(
-        "hamlet",
-        "a small outlying farming community belonging to a village district. It has no headsman of its own - the village headsman who oversees it lives in the main village - and no shrine and no burial ground; its dead go to the district's ground. "
-        f"A hamlet is the commonest kind of settlement there is: a domain holds {HAMLETS_PER_DOMAIN:,} of them to {VILLAGES_PER_DOMAIN} villages, and {HAMLET_SHARE} of its inhabitants live in one.",
-        "farmhouses",
-        False,
-        "",
-    ),
-    "village": Kind(
-        "village",
-        "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only; no samurai live here.",
-        "farmhouses",
-        False,
-        "",
-    ),
-    "town": Kind(
-        "town",
-        "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
-        "non-farmhouse dwellings",
-        True,
-        "A town runs to about 238 households and most of them farm - roughly two in three work the fields around the town and belong to it, the rest being of every other trade. Every dwelling of that rest is drawn, and is the number counted above; only a sample of the farmhouses is, which is why the figure is larger than anything on the sheet can add up to. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
-        1200,
-    ),
-    "city": Kind(
-        "city",
-        "the seat of a province's governor and its ministries, and a market the whole province turns toward.",
-        "non-farmhouse dwellings",
-        True,
-        "A city is counted the other way from a town: its figure is the households of the city itself, and it does NOT take in the farming countryside. The farms out on this sheet belong to village districts and counties, which the Imperial census counts separately. (By convention it does take in the samurai country estates around the city, only some of which are drawn; this map does not yet state that larger number.)",
-    ),
+    key: Kind(**{**fields, "what": fields["what"].format(HAMLETS_PER_DOMAIN=HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN=VILLAGES_PER_DOMAIN, HAMLET_SHARE=HAMLET_SHARE)})
+    for key, fields in _CONTENT["kinds"].items()
 }
 
 #: Which classes are a CROP, and how the card groups them. Read from the classes PRESENT on the map
 #: (spec FR-010, FR-014), never from a per-map list - which is what lets the dike-pond hamlet, whose
 #: fields are mulberry, sugarcane, banana and fish and which draws no dry plot at all, describe
 #: itself correctly with no code of its own.
-CROPS: dict[str, tuple[str, str]] = {
-    "paddy": ("wet", "rice"),
-    "millet": ("dry", "millet"),
-    "buckwheat": ("dry", "buckwheat"),
-    "barley": ("dry", "barley"),
-    "soy": ("dry", "soy"),
-    "vegetable ground": ("dry", "vegetables"),
-    "mulberry dike": ("dike", "mulberry, for silkworms"),
-    "sugarcane dike": ("dike", "sugarcane"),
-    "banana dike": ("dike", "bananas"),
-    "fruit dike": ("dike", "fruit trees"),
-    "fish pond": ("water", "fish"),
-}
+CROPS: dict[str, tuple[str, str]] = {key: (group, word) for key, (group, word) in _CONTENT["crops"].items()}
 
 #: How each group is introduced. A group with nothing present is skipped, so a map that grows only
 #: dike crops never says "the flooded fields grow" of fields it does not have.
-_CROP_LEAD: dict[str, str] = {
-    "wet": "The flooded fields grow",
-    "dry": "The dry ground carries",
-    "dike": "The pond dikes are planted with",
-    "water": "The ponds are stocked with",
-}
+_CROP_LEAD: dict[str, str] = _CONTENT["crop_lead"]
 
 #: A crop whose mention is a whole SENTENCE rather than an item in a list. Bund beans are the case
 #: and the reason the split exists: they are neither the wet field nor the dry ground but the wall
 #: between them, and listing them under either says something false about where they grow.
-CROP_SENTENCES: dict[str, str] = {
-    "bund beans": "Soybeans are sown along the tops of the paddy bunds, a second crop off ground that would otherwise grow weeds.",
-}
+CROP_SENTENCES: dict[str, str] = _CONTENT["crop_sentences"]
 
 #: Where the card and the class vocabulary use ONE WORD FOR TWO THINGS, and the sentence that keeps a
 #: reader from meeting a contradiction. Appended only when that class is actually drawn on this map -
@@ -175,10 +130,7 @@ CROP_SENTENCES: dict[str, str] = {
 #: mound, and Mizuguchi draws none). The wording follows the CLASS's own, not the card's: the hokora
 #: stands in a corner of the plot, which is where `household shrine` puts it and where Sawada's sits,
 #: 46 ft from its house.
-COLLISIONS: dict[str, str] = {
-    "household shrine": "(The little hokora in a corner of a farmstead plot is one household's own, and is a different thing from a village shrine.)",
-    "grave island": "(The mound out among the plots is a field grave, not a burial ground.)",
-}
+COLLISIONS: dict[str, str] = _CONTENT["collisions"]
 
 #: The `### Place` keys the card understands. Anything else an author writes is ignored rather than
 #: guessed at - the block stays a place to record things this module has not learned to use yet.
@@ -187,22 +139,18 @@ PLACE_KEYS = ("district", "district direction", "county", "imperial road", "town
 #: The research entry the card is written FROM, in the form `sources.py` parses - so the card's
 #: references (the questions, since feature 180) are READ FROM THE RECORD at page-write time, exactly
 #: like a class's, rather than being a second list here that could drift from it.
-ENTRY = "research/archetypes.html - 'What a settlement IS'"
+ENTRY: str = _CONTENT["entry"]
 
 #: The basis the card owes its reader (spec FR-008a). Two statements above rest on setting canon where
 #: the historical record does not back them, and the GM's rule is that a liberty is called out. It is
 #: the FINE PRINT and it reads as fine print: the facts themselves belong in the body, where the reader
 #: meets them (settlement-review, 2026-08-29 - the basis block had grown longer than the card).
-BASIS = (
-    "the counts above are Rokugan's own arithmetic rather than a historical finding, and so is the rule that a "
-    "hamlet keeps no headman - the Edo record has branch hamlets that kept their own officials and stood on a par "
-    "with the parent village."
-)
+BASIS: str = _CONTENT["basis"]
 
 #: What introduces the basis on the card. NOT "On the drawing:", which is what a class's caveat gets:
 #: this paragraph is about where the card's claims COME FROM, not about how anything was drawn, and a
 #: renderer that decides the lead-in for both cannot tell them apart (settlement-review, 2026-08-29).
-BASIS_LEAD = "What this rests on: "
+BASIS_LEAD: str = _CONTENT["basis_lead"]
 
 
 def join(items: list[str]) -> str:

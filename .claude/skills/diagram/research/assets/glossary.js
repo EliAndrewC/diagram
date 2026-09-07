@@ -1,5 +1,5 @@
-// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/glossary.py (feature 209). Never edit
-// here: add or change a term in glossary.py and run `make glossary`; the gate fails while the two differ.
+// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/assets/glossary.json (features 207 and 209). Never
+// edit here: add or change a term in glossary.json and run `make glossary`; the gate fails while the two differ.
 window.RECORD_GLOSSARY = [
  {
   "term": "bund",

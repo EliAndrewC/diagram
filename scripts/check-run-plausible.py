@@ -75,14 +75,17 @@ def dry_run(makeflags: str | None = None) -> bool:
     return "=" not in first and "n" in first
 
 
-def check(target: str, seconds: float, makeflags: str | None = None) -> tuple[bool, str]:
+def check(target: str, seconds: float, makeflags: str | None = None, mode: str = "full") -> tuple[bool, str]:
+    """`mode` is the gate's run mode (feature 207): an INCREMENTAL run re-ran only the tests a change could
+    reach, so its floor is the absolute minimum - the duration says nothing about whether it did the work,
+    and the merged coverage floors are what say that."""
     if dry_run(makeflags):
         return False, (
             f"REFUSED to record `{target}` green: this is a DRY RUN (`make -n`).\n"
             "  make executes $(MAKE) sub-invocations even under -n, so the recipe reaches its\n"
             "  recording lines having done no work. A dry run must not mint a push credential."
         )
-    fl = floor_for(target)
+    fl = ABSOLUTE_MIN if mode == "incremental" else floor_for(target)
     if fl is None:
         return True, ""
     if seconds < fl:
@@ -110,14 +113,14 @@ def main(argv: list[str]) -> int:
             )
             return 1
         return 0
-    if len(argv) != 2:
-        print("usage: check-run-plausible.py <target> <elapsed-seconds> | --reuse <target>", file=sys.stderr)
+    if len(argv) not in (2, 3):
+        print("usage: check-run-plausible.py <target> <elapsed-seconds> [full|incremental] | --reuse <target>", file=sys.stderr)
         return 2
     try:
         secs = float(argv[1])
     except ValueError:
         return 0  # an unparseable duration is not this guard's business
-    ok, why = check(argv[0], secs)
+    ok, why = check(argv[0], secs, mode=argv[2] if len(argv) == 3 else "full")
     if not ok:
         print(f"\n\033[1m{why}\033[0m\n", file=sys.stderr)
         return 1

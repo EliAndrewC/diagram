@@ -27,14 +27,15 @@ class FishPond(Kind):
 
     Caveat: the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents,
     and the whole-block conversion drawn here is the rare end state of a normally scattered system.
+
+    Name: fish pond
+    Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
+    Label: accurate
+    Sources: isis-dykepond, ruddle-zhong-1988, fao-ac241e, gmrb-2024-sangji
+    Entry: research/archetypes.html - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'
     """
 
     key = 'fish pond'
-    name = 'fish pond'
-    covers = 'the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike'
-    label = 'accurate'
-    sources = ('isis-dykepond', 'ruddle-zhong-1988', 'fao-ac241e', 'gmrb-2024-sangji')
-    entry = "research/archetypes.html - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'"
 
 
 class MulberryDike(Kind):
@@ -54,14 +55,15 @@ class MulberryDike(Kind):
 
     Caveat: the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found
     and stays on the re-sourcing queue.
+
+    Name: mulberry dike
+    Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
+    Label: accurate
+    Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988
+    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'
     """
 
     key = 'mulberry dike'
-    name = 'mulberry dike'
-    covers = 'the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it'
-    label = 'accurate'
-    sources = ('gd-gazetteer-sangji', 'fao-ac241e', 'isis-dykepond', 'ruddle-zhong-1988')
-    entry = "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'"
 
 
 class PondSluice(Kind):
@@ -78,14 +80,15 @@ class PondSluice(Kind):
 
     Caveat: its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed
     plan.
+
+    Name: pond sluice
+    Covers: the short channel stubs of `dikepond_sluices` - where each pond's dike is cut to the canal
+    Label: accurate
+    Sources: fao-x6708e, cssn-sangyuanwei
+    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates'
     """
 
     key = 'pond sluice'
-    name = 'pond sluice'
-    covers = "the short channel stubs of `dikepond_sluices` - where each pond's dike is cut to the canal"
-    label = 'accurate'
-    sources = ('fao-x6708e', 'cssn-sangyuanwei')
-    entry = "research/archetypes.html - 'A dike-pond is fed and drained through sluice gates'"
 
 
 class SugarcaneDike(Kind):
@@ -101,14 +104,15 @@ class SugarcaneDike(Kind):
     Ming or Qing figure.
 
     Caveat: the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.
+
+    Name: sugarcane dike
+    Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is sugarcane, and its cane rows
+    Label: accurate
+    Sources: gd-gazetteer-sangji, isis-dykepond, ruddle-zhong-1988, dili360-2005-sangji
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'sugarcane dike'
-    name = 'sugarcane dike'
-    covers = 'the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is sugarcane, and its cane rows'
-    label = 'accurate'
-    sources = ('gd-gazetteer-sangji', 'isis-dykepond', 'ruddle-zhong-1988', 'dili360-2005-sangji')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class BananaDike(Kind):
@@ -123,14 +127,15 @@ class BananaDike(Kind):
     surveyed figure.
 
     Caveat: the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.
+
+    Name: banana dike
+    Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps
+    Label: accurate
+    Sources: gd-gazetteer-sangji, dili360-2005-sangji
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'banana dike'
-    name = 'banana dike'
-    covers = 'the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps'
-    label = 'accurate'
-    sources = ('gd-gazetteer-sangji', 'dili360-2005-sangji')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class FruitDike(Kind):
@@ -144,14 +149,15 @@ class FruitDike(Kind):
     Note: The type is read; the tree spacing is an orchard convention, not a measured dike.
 
     Caveat: the tree spacing is an orchard convention, not a measured dike.
+
+    Name: fruit dike
+    Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
+    Label: accurate
+    Sources: gd-gazetteer-sangji, dili360-2005-sangji
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'fruit dike'
-    name = 'fruit dike'
-    covers = 'the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees'
-    label = 'accurate'
-    sources = ('gd-gazetteer-sangji', 'dili360-2005-sangji')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class VegetableGround(Kind):
@@ -167,14 +173,15 @@ class VegetableGround(Kind):
     take whatever the crop dikes and the ponds leave over.
 
     Caveat: nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.
+
+    Name: vegetable ground
+    Covers: an unconverted parcel of a wholly converted dike-pond block, on a hamlet whose `meta.leftover` is vegetables
+    Label: accurate
+    Sources: fei-1939, gd-gazetteer-sangji
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'vegetable ground'
-    name = 'vegetable ground'
-    covers = 'an unconverted parcel of a wholly converted dike-pond block, on a hamlet whose `meta.leftover` is vegetables'
-    label = 'accurate'
-    sources = ('fei-1939', 'gd-gazetteer-sangji')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class PigSty(Kind):
@@ -188,14 +195,15 @@ class PigSty(Kind):
 
     Note: GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many
     households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.
+
+    Name: pig sty
+    Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
+    Label: guess
+    Sources: fao-ac264e, isis-dykepond, ruddle-zhong-1988
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'pig sty'
-    name = 'pig sty'
-    covers = 'every `pig_sties[]` record - a shed with its railed pen on a pond dike'
-    label = 'guess'
-    sources = ('fao-ac264e', 'isis-dykepond', 'ruddle-zhong-1988')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class DuckPen(Kind):
@@ -208,14 +216,15 @@ class DuckPen(Kind):
 
     Note: GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is
     the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it.
+
+    Name: duck pen
+    Covers: every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner
+    Label: guess
+    Sources: fao-ac264e, isis-dykepond
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'duck pen'
-    name = 'duck pen'
-    covers = "every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner"
-    label = 'guess'
-    sources = ('fao-ac264e', 'isis-dykepond')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class FryPond(Kind):
@@ -230,14 +239,15 @@ class FryPond(Kind):
 
     Note: GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet
     kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.
+
+    Name: fry pond
+    Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels
+    Label: guess
+    Sources: miles-2003, cssn-sangyuanwei, isis-dykepond
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'fry pond'
-    name = 'fry pond'
-    covers = "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels"
-    label = 'guess'
-    sources = ('miles-2003', 'cssn-sangyuanwei', 'isis-dykepond')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class ManurePit(Kind):
@@ -254,14 +264,15 @@ class ManurePit(Kind):
     does not give.
 
     Caveat: the drawn 3.5 ft mouth is a size the record does not give.
+
+    Name: manure pit
+    Covers: a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap
+    Label: accurate
+    Sources: fei-1939, sugiura-1973-fuzoku
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
     """
 
     key = 'manure pit'
-    name = 'manure pit'
-    covers = 'a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap'
-    label = 'accurate'
-    sources = ('fei-1939', 'sugiura-1973-fuzoku')
-    entry = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'"
 
 
 class SluiceGate(Kind):
@@ -278,14 +289,15 @@ class SluiceGate(Kind):
     set, a glyph the record does not measure.
 
     Caveat: the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.
+
+    Name: sluice gate
+    Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
+    Label: accurate
+    Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo
+    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'
     """
 
     key = 'sluice gate'
-    name = 'sluice gate'
-    covers = 'the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike'
-    label = 'accurate'
-    sources = ('fao-x6708e', 'cssn-sangyuanwei', 'shen-kuo')
-    entry = "research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'"
 
 
 class PerimeterDike(Kind):
@@ -303,11 +315,12 @@ class PerimeterDike(Kind):
     drawing calibration inside the attested 6-10 m dike widths.
 
     Caveat: the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.
+
+    Name: perimeter dike
+    Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
+    Label: accurate
+    Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988
+    Entry: research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'
     """
 
     key = 'perimeter dike'
-    name = 'perimeter dike'
-    covers = "the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices"
-    label = 'accurate'
-    sources = ('shen-kuo', 'isis-dykepond', 'ruddle-zhong-1988')
-    entry = "research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'"

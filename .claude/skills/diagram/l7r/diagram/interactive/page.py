@@ -25,6 +25,7 @@ from typing import Any
 
 from . import raster
 from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, lead_sentence, slug
+from .content import content
 from .glossary import GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
 from .place import LANE, lane_default, place_card
@@ -46,12 +47,13 @@ UNCLASSED_CAP = 20
 
 #: What introduces a feature class's caveat. The place card's basis gets its OWN lead-in
 #: (`place.BASIS_LEAD`) because it is not about the drawing - see `explanations`.
-CAVEAT_LEAD = "On the drawing: "
+_TEXT = content("page-text.json")  # the page's fixed phrases are DATA (feature 207) - see content.py
+CAVEAT_LEAD: str = _TEXT["caveat_lead"]
 
 #: The one line above the references list (feature 180, spec FR-008 / D8). A bare list of research
 #: headings under the word "References" does not tell a casual reader what the lines are, or that each
 #: is a link to a written answer with its sources. "Questions" is the GM's own word for them.
-REFERENCES_LEAD = "The questions we asked while working out this feature - each is answered in our research notes, with the sources it rests on:"
+REFERENCES_LEAD: str = _TEXT["references_lead"]
 
 
 _LINE = re.compile(r'<line ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')

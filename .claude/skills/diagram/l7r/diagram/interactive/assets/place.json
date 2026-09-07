@@ -1,0 +1,98 @@
+{
+  "kinds": {
+    "hamlet": {
+      "noun": "hamlet",
+      "what": "a small outlying farming community belonging to a village district. It has no headsman of its own - the village headsman who oversees it lives in the main village - and no shrine and no burial ground; its dead go to the district's ground. A hamlet is the commonest kind of settlement there is: a domain holds {HAMLETS_PER_DOMAIN:,} of them to {VILLAGES_PER_DOMAIN} villages, and {HAMLET_SHARE} of its inhabitants live in one.",
+      "houses_noun": "farmhouses",
+      "excludes_farms": false,
+      "population_note": "",
+      "default_population": null
+    },
+    "village": {
+      "noun": "village",
+      "what": "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its tax-free plots and the burial ground the whole district uses. Like every village district it is peasant-only; no samurai live here.",
+      "houses_noun": "farmhouses",
+      "excludes_farms": false,
+      "population_note": "",
+      "default_population": null
+    },
+    "town": {
+      "noun": "town",
+      "what": "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
+      "houses_noun": "non-farmhouse dwellings",
+      "excludes_farms": true,
+      "population_note": "A town runs to about 238 households and most of them farm - roughly two in three work the fields around the town and belong to it, the rest being of every other trade. Every dwelling of that rest is drawn, and is the number counted above; only a sample of the farmhouses is, which is why the figure is larger than anything on the sheet can add up to. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
+      "default_population": 1200
+    },
+    "city": {
+      "noun": "city",
+      "what": "the seat of a province's governor and its ministries, and a market the whole province turns toward.",
+      "houses_noun": "non-farmhouse dwellings",
+      "excludes_farms": true,
+      "population_note": "A city is counted the other way from a town: its figure is the households of the city itself, and it does NOT take in the farming countryside. The farms out on this sheet belong to village districts and counties, which the Imperial census counts separately. (By convention it does take in the samurai country estates around the city, only some of which are drawn; this map does not yet state that larger number.)",
+      "default_population": null
+    }
+  },
+  "crops": {
+    "paddy": [
+      "wet",
+      "rice"
+    ],
+    "millet": [
+      "dry",
+      "millet"
+    ],
+    "buckwheat": [
+      "dry",
+      "buckwheat"
+    ],
+    "barley": [
+      "dry",
+      "barley"
+    ],
+    "soy": [
+      "dry",
+      "soy"
+    ],
+    "vegetable ground": [
+      "dry",
+      "vegetables"
+    ],
+    "mulberry dike": [
+      "dike",
+      "mulberry, for silkworms"
+    ],
+    "sugarcane dike": [
+      "dike",
+      "sugarcane"
+    ],
+    "banana dike": [
+      "dike",
+      "bananas"
+    ],
+    "fruit dike": [
+      "dike",
+      "fruit trees"
+    ],
+    "fish pond": [
+      "water",
+      "fish"
+    ]
+  },
+  "crop_lead": {
+    "wet": "The flooded fields grow",
+    "dry": "The dry ground carries",
+    "dike": "The pond dikes are planted with",
+    "water": "The ponds are stocked with"
+  },
+  "crop_sentences": {
+    "bund beans": "Soybeans are sown along the tops of the paddy bunds, a second crop off ground that would otherwise grow weeds."
+  },
+  "collisions": {
+    "household shrine": "(The little hokora in a corner of a farmstead plot is one household's own, and is a different thing from a village shrine.)",
+    "grave island": "(The mound out among the plots is a field grave, not a burial ground.)"
+  },
+  "basis": "the counts above are Rokugan's own arithmetic rather than a historical finding, and so is the rule that a hamlet keeps no headman - the Edo record has branch hamlets that kept their own officials and stood on a par with the parent village.",
+  "basis_lead": "What this rests on: ",
+  "entry": "research/archetypes.html - 'What a settlement IS'"
+}

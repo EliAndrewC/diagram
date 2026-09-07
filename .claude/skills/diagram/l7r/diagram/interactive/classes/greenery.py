@@ -22,14 +22,15 @@ class HomesteadBamboo(Kind):
     show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at
     one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
     Japan's own topographic legend uses. Presence and place are read.
+
+    Name: homestead bamboo
+    Covers: `bamboo_stands[role=homestead]`
+    Label: convention
+    Sources: not recorded
+    Entry: research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'
     """
 
     key = 'homestead bamboo'
-    name = 'homestead bamboo'
-    covers = '`bamboo_stands[role=homestead]`'
-    label = 'convention'
-    sources = ('not recorded',)
-    entry = "research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'"
 
 
 class SharedBambooGrove(Kind):
@@ -42,14 +43,15 @@ class SharedBambooGrove(Kind):
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
     strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn
     at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.
+
+    Name: shared bamboo grove
+    Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the field margin
+    Label: convention
+    Sources: not recorded
+    Entry: research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'
     """
 
     key = 'shared bamboo grove'
-    name = 'shared bamboo grove'
-    covers = '`bamboo_stands` with any role other than homestead - the take-yabu at the field margin'
-    label = 'convention'
-    sources = ('not recorded',)
-    entry = "research/vegetation.html - 'Bamboo: how common, where it stood, and how to show it'"
 
 
 class Windbreak(Kind):
@@ -68,14 +70,15 @@ class Windbreak(Kind):
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
     the terrain and the cluster.
+
+    Name: windbreak forest
+    Covers: `village_groves[role=windbreak]`
+    Label: accurate
+    Sources: forests-2020
+    Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'
     """
 
     key = 'windbreak'
-    name = 'windbreak forest'
-    covers = '`village_groves[role=windbreak]`'
-    label = 'accurate'
-    sources = ('forests-2020',)
-    entry = "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'"
 
 
 class Copse(Kind):
@@ -92,14 +95,15 @@ class Copse(Kind):
 
     Caveat: how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and
     crop leave it.
+
+    Name: copse
+    Covers: `village_groves[role=copse]`
+    Label: accurate
+    Sources: forests-2020
+    Entry: research/vegetation.html - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)
     """
 
     key = 'copse'
-    name = 'copse'
-    covers = '`village_groves[role=copse]`'
-    label = 'accurate'
-    sources = ('forests-2020',)
-    entry = "research/vegetation.html - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)"
 
 
 class WoodlandCommons(Kind):
@@ -117,14 +121,15 @@ class WoodlandCommons(Kind):
     boundary was NOT laid out as a surveyed square, so the patches are irregular.
 
     Caveat: a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.
+
+    Name: woodland commons
+    Covers: `commons[role=woodland]` - the coppice patches
+    Label: accurate
+    Sources: not recorded
+    Entry: research/vegetation.html - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'
     """
 
     key = 'woodland commons'
-    name = 'woodland commons'
-    covers = '`commons[role=woodland]` - the coppice patches'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/vegetation.html - 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?', 'Forest density and crown size'"
 
 
 class ScrubAndRoughGrazing(Kind):
@@ -141,14 +146,15 @@ class ScrubAndRoughGrazing(Kind):
 
     Caveat: nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing
     rather than as any surveyed pattern.
+
+    Name: scrub and rough grazing
+    Covers: `commons[role=grazing]`
+    Label: accurate
+    Sources: not recorded
+    Entry: research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'
     """
 
     key = 'scrub and rough grazing'
-    name = 'scrub and rough grazing'
-    covers = '`commons[role=grazing]`'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'"
 
 
 class Marsh(Kind):
@@ -170,11 +176,12 @@ class Marsh(Kind):
 
     Note: The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the
     embankment is mown in the record as it is bare on the map.
+
+    Name: marsh
+    Covers: `marshes` - every marsh patch, whatever its role
+    Label: accurate
+    Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum
+    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown"; research/vegetation.html - 'The marsh margin'
     """
 
     key = 'marsh'
-    name = 'marsh'
-    covers = '`marshes` - every marsh patch, whatever its role'
-    label = 'accurate'
-    sources = ('aas-rice-technology', 'mineta-2007-tameike', 'tameike-jawiki', 'kagawa-tameike-structure', 'maff-tameike-shizen', 'nies-tameike', 'inamino-tameike-museum')
-    entry = 'research/water.html - \'Marsh - wet rice is reclaimed FROM wetland\', \'The wet toe is as wide as the FAN\', "A reservoir\'s shore is reeded, and its EMBANKMENT is mown"; research/vegetation.html - \'The marsh margin\''

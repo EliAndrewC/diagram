@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T223750Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 207 landing gate, relaunched detached after the harness killed the foreground run for memory; no map, glyph or placement changes, nothing for settlement-review to judge"
+}

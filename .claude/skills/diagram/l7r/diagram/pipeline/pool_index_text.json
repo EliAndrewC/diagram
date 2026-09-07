@@ -1,0 +1,38 @@
+{
+  "tier_sections": [
+    [
+      "hamlets",
+      "Hamlets"
+    ],
+    [
+      "villages",
+      "Villages"
+    ],
+    [
+      "towns",
+      "Towns"
+    ],
+    [
+      "provincial-cities",
+      "Provincial cities"
+    ],
+    [
+      "capitals",
+      "Capital cities"
+    ],
+    [
+      "magistracies",
+      "Magistracies (Mode A compound plans)"
+    ]
+  ],
+  "tree_banners": {
+    "pool": [
+      "The live pool",
+      "Regenerated and re-gated on every run. Scripted settlements, plus the Mode A compound plans that are hand-authored by design."
+    ],
+    "legacy-hand-authored-pool": [
+      "Frozen hand-authored exhibits",
+      "Never regenerated, never re-gated (GM 2026-08-16). Their renders are committed write-once: once the engine drifted, nothing could faithfully rebuild them. A map leaves this tree only by being converted to scripted generation."
+    ]
+  }
+}

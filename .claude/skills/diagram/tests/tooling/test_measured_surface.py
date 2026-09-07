@@ -61,7 +61,7 @@ def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     that coverage does not measure and that the push-time stamp check must keep hashing."""
     gs = _gate_stamp()
     files = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
-    assert sum("/l7r/diagram/ci/" in f for f in files) == 12, "ci/ is inside the gate's surface now (was 0)"
+    assert sum("/l7r/diagram/ci/" in f for f in files) == 15, "ci/ is inside the gate's surface now (was 0; 12 before feature 207 added incremental.py, selection.py and gate_plugin.py)"
     assert sum("/l7r/" not in f and "/tests/" not in f for f in files) == 37, "the add-only rule: these must not be dropped"
     assert sum("/tests/" in f for f in files) == 0, "FR-024 is untouched - a tests-only change still owes no gate"
 
@@ -104,12 +104,12 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     gs = _gate_stamp()
     page = [str(f) for f in gs._area_files(REPO, *gs.AREAS["page"])]
     assets = sorted(f.rsplit("/", 1)[1] for f in page if "/assets/" in f)
-    assert assets == ["page.css", "page.js"], assets
+    assert assets == ["glossary.json", "page-text.json", "page.css", "page.js", "place.json", "siblings.json"], assets  # feature 207: the content files are assets
     registry = sorted(f.rsplit("/", 1)[1] for f in page if "/classes/" in f)
     assert "homestead.py" in registry and "_base.py" in registry and all(f.endswith(".py") for f in registry), registry
     assert len(page) == len(assets) + len(registry), "nothing else is in the page area"
     diagram = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
-    assert not [f for f in diagram if f.endswith((".js", ".css"))], "the gate's area holds no asset"
+    assert not [f for f in diagram if f.endswith((".js", ".css", ".json"))], "the gate's area holds no asset, and no content file"
     for name in assets:
         assert not is_engine(".claude/skills/diagram/l7r/diagram/interactive/assets/" + name), name
     assert "page" in gs.RAW_AREAS and "diagram" not in gs.RAW_AREAS, "only the page area hashes bytes (spec 189 D3)"
