@@ -37,7 +37,25 @@ unpushed claim in a sibling clone was invisible by construction - it exists only
 `<mirror>/.clones/<other>/specs/` until that session pushes. The tool reads exactly that directory
 (spec.md, source 3), which is the whole of the difference.
 
-## R1 - The concurrency proof
+## R1 - The concurrency proof: the lock is what does the work
 
-(Filled in by T03: the twelve-process test with the lock in place, and the same test run once with the
-flock lines removed, with the duplicate count it produced.)
+Measured 2026-09-07. A copy of `scripts/claim-feature.py` with the two `fcntl.flock` calls replaced by
+`pass` - everything else identical, including the directory creation and the ledger append - was run
+against the same fixture the test suite uses (a mirror with `specs/001-a`, one clone), twelve
+concurrent claims per trial, twenty trials, and the real tool the same way:
+
+| variant | duplicate numbers | failed claims | trials x claims |
+|---|---|---|---|
+| flock removed | **31** | 0 | 20 x 12 = 240 |
+| the tool as shipped | **0** | 0 | 20 x 12 = 240 |
+
+Trial 0 without the lock handed out `[2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12]` - two features numbered
+005, and no process saw an error, because the slugs differ so both `mkdir`s succeed. That is exactly the
+shape of the 195 collision on main: two directories, one number, nothing refusing. With the lock every
+trial gave twelve distinct consecutive numbers.
+
+Why the test suite does not run the lock-removed variant itself: it would need a switch that disables
+the lock, which is a seam a session could reach, and this repository refuses seams outside a fixture.
+The measurement is recorded here instead, and `test_twelve_concurrent_claims_*` asserts the property
+the lock provides on every run. (Script: the R1 block in this session's transcript; rerunnable by
+substituting `pass` for the two `fcntl.flock` lines and running the suite's `_concurrent` helper.)

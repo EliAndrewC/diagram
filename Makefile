@@ -21,8 +21,16 @@ help:
 # and `new-check` went with the check battery in feature 166 and were never removed here (FR-004a):
 # a stale forward resolves, forwards into the skill, and dies naming the WRONG file - the exact
 # second-order failure the comment above says this explicit list exists to prevent.
-FORWARD := done quick maps reference hooks-test tooling durations page-check tick \
+# GUARD_EDIT_OK: feature 197 - `claim` forwards too; it is the specify step's first command and runs from the clone root.
+FORWARD := done quick maps reference hooks-test tooling durations page-check tick claim \
            switches ci-status ci-off ci-on perf-report perf-review audit
+# GUARD_EDIT_OK: feature 197 - FIXING A FORWARD THAT BROKE ON CORRECT WORK (Principle XIV, found while ticking
+# this feature's own tasks). `$(MAKEOVERRIDES)` expanded to the raw `NOTE=<text>` and was pasted UNQUOTED into
+# the recipe, so `make tick NOTE="green; every case"` from the repository root ran `tick NOTE=green` and then
+# tried to execute `every case` as a command (exit 127) - four of eight ticks landed with their notes cut at
+# the first `;`, and four with `(` failed outright. GNU make already hands command-line variable definitions to
+# a sub-make through MAKEFLAGS, correctly quoted, so the explicit paste was redundant as well as wrong.
+# Verified: `make tick ... NOTE="a; b (c)"` and `make claim SLUG=x PEEK=1` both reach the skill Makefile intact.
 .PHONY: $(FORWARD)
 $(FORWARD):
-	@$(MAKE) --no-print-directory -C $(DIAGRAM) $@ $(MAKEOVERRIDES)
+	@$(MAKE) --no-print-directory -C $(DIAGRAM) $@

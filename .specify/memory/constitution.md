@@ -1,7 +1,22 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.18.0 → 2.19.0
+Version change: 2.19.0 → 2.20.0
+
+Version 2.20.0 (amended 2026-09-07, feature 197): the Development Workflow gains a mandatory step - a
+spec-kit feature NUMBER is claimed with `make claim SLUG=<slug>`, which hands it out under a host-wide
+lock, and nothing else allocates one. The GM: *"two different sessions each end up claiming the same
+spec kit feature number, and then this causes problems later when one clone needs to go back and update
+their feature to use a different number ... a makefile target that selects the next feature number ...
+using some file locking or other kind of multiprocess locking just to make sure that we always grab the
+next available feature number."* What this replaces is the 2026-08-16 protocol - read main's `specs/`
+after `sync-in`, take the highest plus one, let the push surface a collision - under which fourteen
+numbers were claimed by two features, eight renumber commits landed between 2026-08-29 and 2026-09-06,
+and main still carries two features numbered 195 (`specs/197-claim-feature-numbers/research.md` R2).
+The tool reads every clone's UNPUSHED claims, which is the source the old rule could not see.
+Dependent artifacts updated: CLAUDE.md "Concurrent sessions", `docs/session-clones.md`, the
+`speckit-specify` skill, the root and skill Makefiles, `.gitignore`. A new obligation on every
+session: MINOR.
 
 Version 2.19.0 (amended 2026-09-06, feature 195): Principle XII gains "CITE ONLY WHAT CAN BE READ" - a
 citation carries a passage that backs the assertion AND a link to a public page where that passage can be
@@ -1872,6 +1887,24 @@ with `/speckit-plan`, decompose with `/speckit-tasks`, and execute with
 `/speckit-implement`. Constitutional principles are enforced at the plan
 gate via the *Constitution Check* section of `plan-template.md`.
 
+**The feature number is CLAIMED, never computed (feature 197, GM 2026-09-07)**
+A spec-kit feature's number comes from `make claim SLUG=<kebab-slug>`, run
+from the session's clone, and from nothing else - not from a scan of
+`specs/`, not from the highest number in a listing, not from a peer session.
+The target holds one `flock` on the mirror while it reads every place a
+claim can exist (main's `specs/`, its fetched `origin/main`, EVERY clone's
+`specs/`, its own ledger), creates `specs/NNN-<slug>/` in the clone before
+releasing, and prints the `SPECIFY_FEATURE` / `SPECIFY_FEATURE_DIRECTORY`
+exports the chain needs. Why: the GM runs several sessions at once, and a
+number read from a listing is stale the moment a sibling reads the same
+listing - fourteen numbers were claimed twice that way, and main carries two
+features numbered 195. The lock and the ledger are host state under the
+mirror's `.specify/` (gitignored, on the volume, derivable), so a fresh
+container needs nothing regenerated. `PEEK=1` looks without claiming. The
+old "renumber the unpushed spec on collision" rule survives only for a spec
+pushed to GitHub from outside the container between the last `sync-in` and
+the claim. Protocol: `docs/session-clones.md` "Concurrent sessions".
+
 **Map review workflow (mandatory before a map ships)**
 The verification described in Principle VI: a Mode B map goes to
 `settlement-review`, a Mode A plan to `building-review` and `size-audit`,
@@ -2087,4 +2120,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.19.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-06
+**Version**: 2.20.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-07

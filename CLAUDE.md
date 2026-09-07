@@ -136,15 +136,30 @@ This project uses spec-driven development governed by [`.specify/memory/constitu
   usage-facing index. A rule that applies to only one domain belongs in that domain's CLAUDE.md,
   not in a forked constitution.
 - **NO FEATURE BRANCHES - spec-kit work included** (GM 2026-07-27). Isolation already comes from the session clone; a branch on top of it is a second axis that buys nothing and broke the stop-work procedure for a whole session. Branch creation is off (`.specify/extensions.yml`, `before_specify`, `enabled: false`) and [`scripts/no-branch-hooks.sh`](scripts/no-branch-hooks.sh) blocks a hand-rolled `git checkout -b` (escape hatch: `NO_BRANCH_OK` in the command, with a reason). Spec-kit still needs to know which feature is active: **`export SPECIFY_FEATURE=NNN-slug`**, which `common.sh`'s `get_current_branch()` returns ahead of asking git, so `check_feature_branch()` in `setup-plan.sh` / `setup-tasks.sh` is satisfied with no branch at all. **Export `SPECIFY_FEATURE_DIRECTORY` alongside it** - `export SPECIFY_FEATURE_DIRECTORY=specs/NNN-slug`. `SPECIFY_FEATURE` alone is NOT enough and the difference is silent: `common.sh` resolves `FEATURE_DIR` from `SPECIFY_FEATURE_DIRECTORY` (priority 1), then `.specify/feature.json` (priority 2), and only then from the branch name that `SPECIFY_FEATURE` supplies (priority 3) - so with a stale pointer present, `SPECIFY_FEATURE=115` yields `CURRENT_BRANCH=115` and `FEATURE_DIR=.../116`, and spec-kit writes into a PEER's feature directory while every log line looks right. Measured 2026-08-16 on features 115/116.
-- **Concurrent sessions: spec numbers are CLAIMED IN MAIN, not negotiated** (GM 2026-08-16). The
-  GM runs several sessions at once, and each allocates its own `specs/NNN` - so allocate from
-  main's state and publish the claim immediately: after `sync-in`, next number = highest `NNN`
-  under `specs/` + 1; the moment `/speckit-specify` writes `spec.md`, commit the new
-  `specs/NNN-slug/` in the clone and run `scripts/sync-with-main.sh push` (a mid-feature
-  milestone push). The locked pull+push makes the claim atomic - if the pull surfaces another
-  session's same-numbered spec, renumber yours before pushing. Do NOT coordinate numbering by
-  messaging peer sessions: a busy session replies late or never, while main serializes with zero
-  cooperation. Full protocol (and what peer messaging IS for) in
+- **Concurrent sessions: a spec number comes from `make claim SLUG=<slug>`, under a lock - never
+  from a scan by hand** (GM 2026-09-07, feature 197; this supersedes the 2026-08-16 claim-in-main
+  protocol). The GM runs several sessions at once, and each used to allocate its own `specs/NNN` by
+  reading "highest `NNN` under `specs/` + 1" after `sync-in` - which two sessions did at the same
+  moment often enough that fourteen numbers were claimed twice, eight renumber commits landed in
+  one week, and main carries two features numbered 195 (the census is
+  `specs/197-claim-feature-numbers/research.md` R2). The old protocol's blind spot was structural: a
+  sibling's claim lives in `<mirror>/.clones/<other>/specs/` until that session pushes, and nothing
+  read it. `make claim` (`scripts/claim-feature.py`) takes one `flock` on the mirror
+  (`<mirror>/.specify/feature-numbers.lock`), reads every place a claim can be - main's `specs/`, its
+  fetched `origin/main`, EVERY clone's `specs/`, and its own ledger
+  (`<mirror>/.specify/feature-numbers.jsonl`; gitignored host state, derivable from the directories it
+  records, so a lost one is recreated rather than restored) - creates `specs/NNN-slug/` in YOUR clone
+  before releasing the lock, writes `.specify/feature.json` and prints the two exports below. `PEEK=1`
+  looks without claiming. It refuses from the mirror, a slug that is not lower-case kebab, a slug
+  already in use anywhere, and a lock held past 30 s; it WARNS about the standing 195 duplicate and
+  never renumbers anything (that is the GM's call). Then write `spec.md` there, commit the directory
+  and push it (`scripts/sync-with-main.sh push`, a mid-feature milestone push): the claim is already
+  visible to every session on this host through the clone scan, and the push makes it visible to the
+  GM's laptop and to GitHub. The one window the lock cannot see is a spec pushed to GitHub from
+  OUTSIDE the container between the last `sync-in` fetch and the claim; if a pull ever surfaces one,
+  renumber yours before pushing, exactly as before. Do NOT coordinate numbering by messaging peer
+  sessions: a busy session replies late or never, while the lock serializes with zero cooperation.
+  Full protocol (and what peer messaging IS for) in
   [`docs/session-clones.md`](docs/session-clones.md).
 
 **FIXING IT IS THE EXIT.** Principle XIII's three ways out are not a menu (GM 2026-08-23): FIX is

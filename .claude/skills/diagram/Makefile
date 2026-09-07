@@ -8,7 +8,8 @@
 # GUARD_EDIT_OK: feature 185 - the .PHONY half of `lint` -> `static`, and scope-lock/scope-unlock go.
 # GUARD_EDIT_OK: `reference` -> `_reference` on the .PHONY line below - the public-rung retirement
 # the GM ordered on 2026-09-06. Reference-first itself is untouched; see the target's own note.
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick audit perf-gate hooks-test explain \
+# GUARD_EDIT_OK: feature 197 - `claim` joins the phony list (a new operation).
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -659,6 +660,17 @@ print()"
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
 	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
+# GUARD_EDIT_OK: feature 197 - the audit gains the FEATURE-NUMBER LEDGER (spec FR-008): every claim `make claim`
+# made, newest last, read from the mirror's `.specify/feature-numbers.jsonl` (the mirror is a clone's grandparent;
+# from the mirror itself it is the toplevel). A ledger nobody reads is a file nobody notices is broken.
+	@python3 -c "import json,os,pathlib,subprocess; \
+root=pathlib.Path(subprocess.run(['git','rev-parse','--show-toplevel'],capture_output=True,text=True).stdout.strip()); \
+mirror=root.parent.parent if root.parent.name=='.clones' else root; \
+p=mirror/'.specify'/'feature-numbers.jsonl'; \
+rows=[json.loads(l) for l in p.read_text().splitlines() if l.strip()] if p.is_file() else []; \
+print('\033[1mFeature numbers claimed\033[0m ('+str(p)+' - make claim, feature 197)'); \
+[print(f\"  {r.get('utc','?'):<20} {r.get('number',0):>4}  {r.get('slug','?'):<40} {r.get('clone','?')}\") for r in rows[-10:]] or print('  (none yet - every claim made by make claim lands here)'); \
+print(f'  {len(rows)} claims recorded') if rows else None; print()"
 
 # GUARD_EDIT_OK: THE TARGET REFERENCE GENERATES ITSELF (GM 2026-09-05). Two hand audits of the target
 # list disagreed with each other - the first declared everything valid and was contradicted the moment
@@ -883,6 +895,20 @@ tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [
 ##  NOTE=<text>  what was VERIFIED, which is what the tick is asserting
 ##  BOXES=1      also tick the three physical-research boxes (only legitimate on a `research: physical` task)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/tick-task.py" "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
+
+# GUARD_EDIT_OK: feature 197 - adding a new operation (`claim`); no existing guard changes.
+# FEATURE 197 (GM 2026-09-07): THE NUMBER COMES FROM HERE, NEVER FROM A SCAN BY HAND. Two sessions each read
+# "highest under specs/ plus one" and each built a feature under the same number - fourteen numbers were claimed
+# twice in this repository's history, eight renumber commits landed in one week, and main still carries two 195s.
+# The tool reads every place a claim can be (main's tree, its fetched origin/main, EVERY clone's specs/, and its
+# own ledger) under one flock on the mirror, and creates the directory before it lets go. `tick`'s sibling: a
+# bookkeeping step that refuses rather than guesses. Refuses in the mirror itself; PEEK=1 looks without claiming.
+claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug [PEEK=1: look, claim nothing]
+##  SLUG=<slug>  lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
+##  PEEK=1       print what the claim would be and create nothing
+	@if [ -z "$(SLUG)" ]; then printf 'make claim: SLUG=<kebab-slug> is required - e.g. make claim SLUG=cheaper-widgets\n' >&2; exit 2; fi
+	@: "GUARD_EDIT_OK: feature 197 - the slug follows '--' so a slug beginning with a hyphen is refused as a BAD SLUG, not misread as an option"; \
+	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) -- "$(SLUG)"
 
 test-file:      ## [tests] run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
 ##  FILE=<path>  the one test file to run, whole - e.g. `tests/pipeline/test_gencache.py`

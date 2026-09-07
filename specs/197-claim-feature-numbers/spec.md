@@ -1,6 +1,10 @@
 # 197 - Claim feature numbers under a lock
 
-**Status**: Draft (awaiting spec-fidelity review)
+**Status**: FAITHFUL at review round 1 (spec-fidelity, 2026-09-07: "Nothing MISSING ... No requirement
+contradicts the request. Scope is not inflated"; D1 judged faithful to the GM's words, D3 a legitimate
+boundary; its one aside - whether the commit-and-push-the-claim step is still load-bearing - is answered
+in `docs/session-clones.md` point 2: the push publishes the claim to the laptop and GitHub, which the
+scan cannot see); implemented
 **Request**: [request.md](request.md) (the GM's words, verbatim)
 **Classification**: tooling; every task `research: rendering` (nothing here is about how a place was built)
 

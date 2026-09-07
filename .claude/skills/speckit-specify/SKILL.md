@@ -91,25 +91,29 @@ Given that feature description, do this:
 
    **Resolution order for `SPECIFY_FEATURE_DIRECTORY`**:
    1. If the user explicitly provided `SPECIFY_FEATURE_DIRECTORY` (e.g., via environment variable, argument, or configuration), use it as-is
-   2. Otherwise, auto-generate it under `specs/`:
-      - Check `.specify/init-options.json` for `branch_numbering`
-      - If `"timestamp"`: prefix is `YYYYMMDD-HHMMSS` (current timestamp)
-      - If `"sequential"` or absent: prefix is `NNN` (next available 3-digit number after scanning existing directories in `specs/`)
-      - Construct the directory name: `<prefix>-<short-name>` (e.g., `003-user-auth` or `20260319-143022-user-auth`)
-      - Set `SPECIFY_FEATURE_DIRECTORY` to `specs/<directory-name>`
+   2. Otherwise **CLAIM THE NUMBER WITH `make claim SLUG=<short-name>`** from the clone root (feature 197,
+      GM 2026-09-07). NEVER compute the number yourself by scanning `specs/` - that is exactly what two
+      concurrent sessions did to produce the same number (fourteen times in this repository's history).
+      The target takes the host-wide lock, reads every clone's unpushed claims as well as main's, creates
+      `specs/NNN-<short-name>/` in this clone, writes `.specify/feature.json`, and prints the directory
+      name on stdout with the two `export` lines on stderr. Take its answer:
+      - `SPECIFY_FEATURE_DIRECTORY` = `specs/<the name it printed>`; run the two `export` lines it printed
+      - a slug it refuses (not lower-case kebab, or already in use) is renamed, not forced
+      - `PEEK=1` shows what the claim would be without making it; do not use it in place of the claim
+      (The `.specify/init-options.json` `branch_numbering: "timestamp"` form is not used in this repository.)
 
-   **Create the directory and spec file**:
-   - `mkdir -p SPECIFY_FEATURE_DIRECTORY`
+   **Create the spec file** (the directory already exists - `make claim` made it, and that directory IS the claim):
    - Copy `.specify/templates/spec-template.md` to `SPECIFY_FEATURE_DIRECTORY/spec.md` as the starting point
    - Set `SPEC_FILE` to `SPECIFY_FEATURE_DIRECTORY/spec.md`
-   - Persist the resolved path to `.specify/feature.json`:
+   - `.specify/feature.json` was written by `make claim`; confirm it reads:
      ```json
      {
        "feature_directory": "<resolved feature dir>"
      }
      ```
-     Write the actual resolved directory path value (for example, `specs/003-user-auth`), not the literal string `SPECIFY_FEATURE_DIRECTORY`.
+     with the actual resolved directory path value (for example, `specs/003-user-auth`), not the literal string `SPECIFY_FEATURE_DIRECTORY`.
      This allows downstream commands (`/speckit-plan`, `/speckit-tasks`, etc.) to locate the feature directory without relying on git branch name conventions.
+   - Save the GM's request VERBATIM as `SPECIFY_FEATURE_DIRECTORY/request.md` (the spec review grades the spec against it)
 
    **IMPORTANT**:
    - You must only create one feature per `/speckit-specify` invocation

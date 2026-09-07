@@ -276,23 +276,20 @@ if [ "$USE_TIMESTAMP" = true ]; then
     FEATURE_NUM=$(date +%Y%m%d-%H%M%S)
     BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
 else
-    # Determine branch number
+    # Determine branch number - THROUGH THE ONE ALLOCATOR (feature 197, GM 2026-09-07). This script used to
+    # compute "highest under specs/ (and the branches) plus one" on its own, which is the scan two concurrent
+    # sessions perform at the same moment and get the same answer from. scripts/claim-feature.py takes the
+    # host-wide lock, reads every clone's unpushed claims, and creates specs/NNN-<suffix>/ before releasing;
+    # `--dry-run` only names it. An explicit --number is a deliberate re-use of an existing claim and is honored.
+    # (check_existing_branches / get_highest_from_specs above are kept only as helpers for that manual path.)
     if [ -z "$BRANCH_NUMBER" ]; then
-        if [ "$DRY_RUN" = true ] && [ "$HAS_GIT" = true ]; then
-            # Dry-run: query remotes via ls-remote (side-effect-free, no fetch)
-            BRANCH_NUMBER=$(check_existing_branches "$SPECS_DIR" true)
-        elif [ "$DRY_RUN" = true ]; then
-            # Dry-run without git: local spec dirs only
-            HIGHEST=$(get_highest_from_specs "$SPECS_DIR")
-            BRANCH_NUMBER=$((HIGHEST + 1))
-        elif [ "$HAS_GIT" = true ]; then
-            # Check existing branches on remotes
-            BRANCH_NUMBER=$(check_existing_branches "$SPECS_DIR")
-        else
-            # Fall back to local directory check
-            HIGHEST=$(get_highest_from_specs "$SPECS_DIR")
-            BRANCH_NUMBER=$((HIGHEST + 1))
+        CLAIM_ARGS=()
+        [ "$DRY_RUN" = true ] && CLAIM_ARGS+=(--dry-run)
+        if ! CLAIMED=$(python3 "$REPO_ROOT/scripts/claim-feature.py" "${CLAIM_ARGS[@]}" -- "$BRANCH_SUFFIX"); then
+            >&2 echo "Error: the feature-number claim was refused (see above) - nothing created."
+            exit 2
         fi
+        BRANCH_NUMBER=${CLAIMED%%-*}
     fi
 
     # Force base-10 interpretation to prevent octal conversion (e.g., 010 → 8 in octal, but should be 10 in decimal)

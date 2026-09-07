@@ -103,6 +103,13 @@ top_up-improvement.md
 # shares it. See CLAUDE.md 'Concurrent sessions' and scripts/clone-sync-hooks.sh's re-track guard.
 .specify/feature.json
 
+# Feature 197: the LEDGER of spec-kit feature numbers `make claim` has handed out (its lock file is
+# covered by `*.lock` above). Both live under the MIRROR's .specify/ - the mirror root is the host
+# volume, so they survive a container rebuild and are seen by every session's clone - and both are
+# host state, never content: the ledger is derivable from the specs/ directories it records (spec 197
+# D2), so a missing one is recreated by the next claim rather than restored from git.
+.specify/feature-numbers.jsonl
+
 # feature 130: the AWS/GitHub credentials the CodeBuild dispatcher reads (see development-secrets.ini.example)
 development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
