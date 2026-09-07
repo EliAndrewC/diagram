@@ -67,7 +67,11 @@ _TAG = re.compile(r"<[^>]+>")
 
 
 def _text(fragment: str) -> str:
-    return html.unescape(_TAG.sub("", fragment))
+    """The citation line's text WITH its comments' text: since feature 209 the verification markers the classifier
+    reads (READ, SUMMARY-ONLY, unfetched, the feature and task) live in an HTML comment inside the citation
+    paragraph, hidden from the reader (GM 2026-09-07: a note for a session is an HTML comment) and still the rule's
+    input here. The first URL on the line still governs, and a READ-at comment placed first carries it."""
+    return html.unescape(_TAG.sub("", re.sub(r"<!--(.*?)-->", r" \1 ", fragment, flags=re.S)))
 
 
 def citation_lines(sources_html: str) -> dict[str, str]:

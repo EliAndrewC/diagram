@@ -25,3 +25,6 @@ a.fnback { font-family: system-ui, sans-serif; margin-left: .35em; }
 #fntip { position: absolute; z-index: 10; max-width: 34rem; padding: .6rem .8rem; background: var(--paper); color: var(--ink);
   border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 6px 24px rgba(0,0,0,.18); font-size: .9em; line-height: 1.45; }
 #fntip .fnback { display: none; }
+/* the glossary (feature 209, GM 2026-09-07 - the map's rule, page.css): a dotted underline marks a defined term;
+   hovering it shows the definition in the same box the footnotes use */
+.gl { border-bottom: 1px dotted var(--rule); cursor: help; }
