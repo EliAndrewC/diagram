@@ -1,6 +1,8 @@
 # Feature 205 - tsubo in the glossary
 
-**Status**: DRAFT - awaiting `spec-fidelity`.
+**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implemented. Its one note taken: D2 had claimed the compound
+`tsuke-tsubo` would not match whole-word - it would (a hyphen is a word boundary); the decision stands on
+the true reason and the false clause is struck.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - what the record already says a tsubo is.
 **Predecessors**: feature 134 (the glossary: every occurrence of a listed term in a modal's
@@ -44,5 +46,8 @@ not touched.
   `research/homesteads.html`, "How big was the work yard, and how did the sizes spread?", footnotes 12
   and 15.
 - **D2 - one variant.** "tsubo" is used as its own plural in the prose and in the sources' English, so
-  no `tsubos` variant is listed; the compound `tsuke-tsubo` appears only in the research record, never
-  in an explanation, and would not match whole-word anyway.
+  no `tsubos` variant is listed. The compound `tsuke-tsubo` (the night-soil contract) appears only in
+  the research record, never in an explanation; if an explanation ever used it, `\btsubo\b` WOULD match
+  inside it (a hyphen is a word boundary, `page.py` `glossary_for`) and the tooltip would define the
+  wrong thing - the spec-fidelity review's note, recorded here so the matcher is not believed stricter
+  than it is.

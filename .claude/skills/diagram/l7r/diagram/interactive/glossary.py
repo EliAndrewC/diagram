@@ -45,6 +45,13 @@ GLOSSARY: dict[str, tuple[tuple[str, ...], str]] = {
     "daizu": (("daizu",), "The soybean - grown as a field crop of its own on the dry hem, and along the paddy bunds as azemame."),
     "catena": (("catena",), "The sequence of soils and crops down a slope: paddy on the wet valley floor, dry crops on the well-drained ground above, woodland on the hill."),
     "hem": (("hem",), "The band of dry ground above the paddy's supply canal where the dry crops grow."),
+    # Feature 205 (GM 2026-09-07). Written from the record the threshing yard cites - research/homesteads.html,
+    # "How big was the work yard, and how did the sizes spread?": two straw mats to the tsubo (fn 12), a mat
+    # 3 x 6 shaku, 90 x 180 cm (fn 15) - so one ken square, the 59.5 sq m the explanation gives for 18 tsubo.
+    "tsubo": (
+        ("tsubo",),
+        "The Japanese unit of area, a square about six feet on a side - the floor of two straw mats laid side by side, about 3.3 square meters (36 square feet). House floors and work yards were counted in it.",
+    ),
     "head race": (("head race",), "The channel that carries water from the intake along the field's high edge to where it is divided into the ditches."),
     "lateral": (("lateral", "laterals"), "A branch ditch running down-slope from the head race between the plots."),
     "polder": (("polder",), "Land reclaimed from marsh or lake behind an enclosing dike and drained by canals."),
