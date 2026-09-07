@@ -11,10 +11,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T03 `hamlet()` rolls in a coverage-recording child (FR-003); the `recorded=` producer; tests (FR-005)
       research: rendering
       verify: DONE. DONE. rollcache._hamlet_payload (lifted from hamlet()'s closure), _CHILD_DRIVER, _hamlet_in_child (spec by pickle in, (payload, deps) by pickle out; coverage run --parallel-mode under a COV_CORE_SOURCE parent with the hooks stripped and the data file published as .coverage.rollchild-*; plain otherwise; a failing child raises with its stderr); obtain/_produce_and_store take recorded= and every serving mode is unchanged; hamlet() passes both. Tests: recorded= stores the record it brings and the next call hits, a failing child raises, coverage file only under a covered parent (test_rollcache, 19 passed); the child rolls the same hamlet as in-process - manifest identical as JSON, plan fields equal, the record names hamletgen functions (tests/full/pipeline/test_rollcache_child.py, 31 s)
-- [ ] T04 measure after: one roll-heavy file on one worker, then the full run's per-worker census (FR-006);
+- [x] T04 measure after: one roll-heavy file on one worker, then the full run's per-worker census (FR-006);
       research R5
       research: rendering
-- [ ] T05 the record (FR-007): the roll-out list, `pipeline/CLAUDE.md`, `dev/performance.md`
+      verify: DONE. DONE. One roll-heavy file, one worker: resting 242 -> 90 MB, the memo 46 MB -> absent, glibc retained 41 -> 3, live objects 252k -> 84k, the highest per-test peak 242 -> 91 (the roll never entered the worker). The landing gate: container peak 6,544 -> 5,549 MiB, Python 2,372 -> 2,192 MiB, worker peaks 240-341 -> 168-271, resting 197-266 -> 148-213, no FabricIndex alive at the end of any worker. Research R5
+- [x] T05 the record (FR-007): the roll-out list, `pipeline/CLAUDE.md`, `dev/performance.md`
       research: rendering
-- [ ] T06 `make done` green with the floors (SC-002); land GATED
+      verify: DONE. DONE. The roll-out list is FR-004 (derived from the callers of generate/build/STAGES, with the two non-candidates stated); pipeline/CLAUDE.md gains the rollcache row; dev/performance.md's memory section carries the second look (the memo, the trim, the child, the file-cache answer); the why at each point of change
+- [x] T06 `make done` green with the floors (SC-002); land GATED
       research: rendering
+      verify: DONE. DONE. make done green on the third run: 3,114 passed, 100% on both floors, 341 s. The first run overlapped another session's gate (the cap) and lost three lines of water.py because this pytest-cov sets no COV_CORE_SOURCE - the child now takes its cue from the worker's live Coverage; the second lost one line to the child data file being named per worker rather than per child - fixed and tested. Landing GATED (LOCAL-GATED)

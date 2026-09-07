@@ -89,4 +89,25 @@ bypassed, the same census as R1):
 | the highest per-test peak | 242 | 91 - the roll never entered the worker |
 | the file's 7 tests | 73.9 s | 65.6 s (two child interpreters started; two rolls) |
 
-**The full run**: (filled in from the landing gate's census.)
+**The full run** (the landing `make done`, the per-test plugin and the cgroup sampler; the container held
+3.6 GiB idle at the start, 2.3 GiB of it file cache):
+
+| | after 208 (the R1 profile) | after 210 (the landing gate) |
+|---|---|---|
+| test phase | 328 s (3,033 tests) | 341 s (3,114 tests; main had grown by 80) |
+| container peak | 6,544 MiB (baseline 3,733) | 5,549 MiB (baseline 3,627) |
+| Python at the peak | 2,372 MiB | 2,192 MiB |
+| worker peak in a test (highest / typical) | 341 / 240-253 | 271 / 168-238 |
+| worker resting at the end (range) | 197-266 | 148-213 |
+| a `FabricIndex` alive at the end of any worker | every worker | none |
+
+The highest remaining peaks are the in-process rolls the roll-out list names: the cohort test (271, four
+rolls in one worker through `generate()`), the immune test (222, `report()`), and the new child-equality
+test, which rolls once in-process on purpose. The pool sweep's children (`gate_obtain`, a coverage
+subprocess per map) were seen at 550 MB each in the first 210 gate - the next lever after the roll-out,
+since worksteal can put several of them on the clock at once.
+
+**Two things the landing taught, recorded at the point of change:** this pytest-cov sets no
+`COV_CORE_SOURCE`, so the child's cue is the worker's live `coverage.Coverage` (three lines of `water.py`
+lost to the environment signal alone); and a worker rolls several hamlets, so the child's published data
+file is named per child, not per worker (one more line lost to the collision).

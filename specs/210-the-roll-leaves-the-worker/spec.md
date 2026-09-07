@@ -1,6 +1,8 @@
 # Feature 210 - the roll leaves the worker
 
-**Status**: FAITHFUL (`spec-fidelity`, round 5 of 5 - the cap) - cleared for implementation (constitution XVI). Rounds 1-4 each found the roll-out list or the "every roll" boundary short of what the code holds: `generate()` alone, then `build()` alone, then the regen site, then the three tools that iterate `STAGES`, then a token form that missed `enumerate(STAGES, 1)`. Every miss was the same shape - a surface enumerated by hand rather than derived - and the fix each time was to derive it (the callers of `generate`/`build`/`STAGES`; loops by what they DO). Watched per CLAUDE.md: a feature reaching five rounds says the drafting is the problem.
+**Status**: FAITHFUL (`spec-fidelity`, round 5 of 5 - the cap) - implemented; the gate green with the
+after numbers in research R5 (a worker on a roll-heavy file 242 -> 90 MB; the gate's Python 2.4 -> 2.2 GiB,
+no `FabricIndex` alive anywhere at the end). Rounds 1-4 each found the roll-out list or the "every roll" boundary short of what the code holds: `generate()` alone, then `build()` alone, then the regen site, then the three tools that iterate `STAGES`, then a token form that missed `enumerate(STAGES, 1)`. Every miss was the same shape - a surface enumerated by hand rather than derived - and the fix each time was to derive it (the callers of `generate`/`build`/`STAGES`; loops by what they DO). Watched per CLAUDE.md: a feature reaching five rounds says the drafting is the problem.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the heap census, the file cache, the three levers, why a
 subprocess.
