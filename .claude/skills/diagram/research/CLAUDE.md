@@ -141,7 +141,10 @@ refuse automated fetches while serving a person; when a source matters, the GM d
 download them myself as a human and then save them somewhere that you can see them"*) into `l7r/academic-sources/`,
 mounted here at `/host-l7r-repo/academic-sources/`. The session reads the copy (an Opus reader per paper, passages
 verbatim with page or section), the footnote links the PUBLIC page and says the copy was read, and the quote-check runs
-against the copy. A paywalled full text whose abstract is public is cited for the abstract's words only. What the paper
+against the copy. A paywalled full text whose abstract is public is cited for the abstract's words only. **Whether a page is public is the GM's
+test, not the container's**: the GM has no academic subscription, so a page they can open is open to anyone (GM 2026-09-07: *"if it is
+visible to me then you can presume in the future that it is visible to anyone"*) - a 403 to an automated fetch says nothing about
+a reader. The Wiley Biological Flora page behind `packer-2017-phragmites` was confirmed public that way. What the paper
 does NOT say is written down where the claim stands - the first six papers read this way (feature 195 T07) supported
 about half of what the record had attributed to them, and the rest is labeled GUESS now.
 
