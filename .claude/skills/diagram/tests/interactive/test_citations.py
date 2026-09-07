@@ -18,8 +18,8 @@ import pytest
 from l7r.diagram.interactive.citations import (
     WORKS_CLOSE,
     WORKS_OPEN,
-    cited_keys,
     citations_page,
+    cited_keys,
     derive,
     note_for_script,
     notes,

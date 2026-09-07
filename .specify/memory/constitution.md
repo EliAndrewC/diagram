@@ -1,7 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.20.0 → 2.21.0
+Version change: 2.21.0 → 2.22.0
+
+Version 2.22.0 (amended 2026-09-07, feature 211): Principle XII gains "A SOURCE IS JUDGED BEFORE IT IS
+USED" - every cited work's registry entry says what it is and why it applies with its honest limitations
+(two write-ups, written once, derived into the works list of every citations page that cites it); the
+`source-applicability` agent judges a source when its write-ups land and BEFORE a session integrates its
+numbers, claims or details into a map or a rule; a `research: physical` task carries a fifth box,
+`source-applicability confirmed`. The record's notes moved to citations pages beside each research
+page. GM 2026-09-07. MINOR.
 
 Version 2.21.0 (amended 2026-09-07, feature 202): Principle XII gains "QUOTE THE TRANSLATION" - a
 foreign-language passage is quoted in English translation, marked as a translation (from which language, by
@@ -1498,8 +1506,29 @@ physical reality behind it) or `research: physical` (how a place was built, farm
 bounded or lived in), and a `physical` task carries three sub-boxes that must all be ticked before
 the task is: `research pass` (the record first - an existing finding that answers it is a valid
 result, cited), `source-reader confirmed` (the agent read what is cited), `recorded and cited`
-(the finding, the rule, the labels, the sources). A test at the gate refuses a ticked `physical`
+(the finding, the rule, the labels, the sources) - four with `quote-check confirmed` (v2.18.0),
+five with `source-applicability confirmed` (v2.22.0). A test at the gate refuses a ticked `physical`
 task with an unticked box.
+
+**A SOURCE IS JUDGED BEFORE IT IS USED, AND SAYS WHAT IT IS** (v2.22.0, GM 2026-09-07, feature 211). *"whatever
+subagent check we create in order to justify whether a source is applicable to be used in the creation of our
+diagrams, that subagent check should also be run when we first begin to make use of the source prior to
+integrating its numbers or claims or details into our maps. In that way, we might avoid, in the future,
+accidentally pulling in numbers or making use of sources, which should not be used to drive the creation of these
+maps and diagrams. That can be part of our procedures going forward."* So every registry entry a footnote cites
+carries two write-ups: what the work is (its kind, authors, date, subject - one to three sentences) and why it is a
+good and valid source for what we use it to look up, INCLUDING its honest limitations (*"some of our research may be
+from the year nineteen hundred ... we should still be honest that there were modern agricultural techniques which
+would have been employed in the year nineteen hundred, which would not have been employed in our fictional setting";
+"we use sources on Korea and Korean agriculture because we were not able to find publicly available sources that
+were more directly applicable"*). The write-ups are written ONCE, in the registry, and DERIVED into the works list at
+the top of every citations page that cites the work (*"we do not want to have multiple different write ups of a
+single paper"*); a cited key without them fails the gate. And the `source-applicability` agent
+(`.claude/agents/source-applicability.md`) judges the source - APPLICABLE, APPLICABLE-WITH-LIMITS with each limit
+named, or NOT-APPLICABLE - and whether the write-up's limits are honest, at two moments: when its write-ups are added
+or changed, and before a session integrates its numbers into a map or a rule, which is the fifth research box. The
+record's own notes live on a citations page beside each research page (`research/citations/<name>.html`), the
+research page's hover reading a derived script, so nothing is typed twice.
 rigor: the consequences of a wrong bund width on a hobby map are small and the players have been
 told the level of rigor honestly - but the project still wants as much rigor as its time and
 tokens allow, and reading the source is the cheapest rigor there is.

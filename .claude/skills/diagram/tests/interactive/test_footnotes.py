@@ -129,7 +129,9 @@ def test_the_footnote_forms_are_told_apart() -> None:
     assert footnote_form('<a href="https://x.y/z"><code>k-1</code></a> - 「twelve characters here」' + fnback, canon) == "citation"
     assert footnote_form('<a href="../SOURCES.html#l7r-median-domain"><code>l7r-median-domain</code></a> - 「the GM wrote this」' + fnback, canon) == "citation"
     assert footnote_form("no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)" + fnback, canon) == "absence"
-    assert footnote_form("no publicly readable source (searched 2026-09-06: x)" + ' <a class="fnback" href="../cities/p.html#fnref-1">back</a>', canon) == "absence", "a back link to the research page (feature 211)"
+    assert footnote_form("no publicly readable source (searched 2026-09-06: x)" + ' <a class="fnback" href="../cities/p.html#fnref-1">back</a>', canon) == "absence", (
+        "a back link to the research page (feature 211)"
+    )
     assert footnote_form('<a href="SOURCES.html#k-2"><code>k-2</code></a> - 「a summary, not a page」' + fnback, canon).startswith("links the key to")
     assert footnote_form('no publicly readable source (searched 2026-09-06: x) <a href="https://x.y"><code>k</code></a>' + fnback, canon) == "an absence note carries no key and no link"
     assert footnote_form("something else entirely" + fnback, canon) is None

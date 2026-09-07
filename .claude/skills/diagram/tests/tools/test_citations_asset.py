@@ -18,7 +18,9 @@ def _record(root: pathlib.Path, keys: str = "k-1") -> None:
     (root / "citations").mkdir(parents=True, exist_ok=True)
     (root / "SOURCES.html").write_text(_SOURCES, encoding="utf-8")
     (root / "p.html").write_text("<p>x<sup class=\"fn\"><a id=\"fnref-1\" href=\"citations/p.html#fn-1\">1</a></sup></p>", encoding="utf-8")
-    notes = "".join(f'<li id="fn-{i + 1}"><a href="https://x.y/z"><code>{k}</code></a> - 「a quoted passage」 <a class="fnback" href="../p.html#fnref-{i + 1}">back</a></li>' for i, k in enumerate(keys.split()))
+    notes = "".join(
+        f'<li id="fn-{i + 1}"><a href="https://x.y/z"><code>{k}</code></a> - 「a quoted passage」 <a class="fnback" href="../p.html#fnref-{i + 1}">back</a></li>' for i, k in enumerate(keys.split())
+    )
     (root / "citations" / "p.html").write_text(f"<h1>c</h1>\n{WORKS_OPEN}\n{WORKS_CLOSE}\n<section class=\"footnotes\"><ol>{notes}</ol></section>", encoding="utf-8")
 
 

@@ -41,7 +41,9 @@ whether there are references to things which are past edits that should no longe
 ## Input
 
 A research page path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of
-it named by heading. The glossary is `l7r/diagram/interactive/glossary.py` (`GLOSSARY`: term, variants,
+it named by heading - or a CITATIONS PAGE (`research/citations/<name>.html`, feature 211: the page's notes, and at
+its top the works section derived from the registry's write-ups, which a reader meets like any other page) or the
+registry itself. The glossary is `l7r/diagram/interactive/glossary.py` (`GLOSSARY`: term, variants,
 definition) - every occurrence of a term in a page's visible text is a hover tooltip, so a word IN the glossary
 needs nothing from you. HTML comments (`<!-- ... -->`) are invisible to the reader: whatever is inside one is
 already where it belongs, and you do not report it.
