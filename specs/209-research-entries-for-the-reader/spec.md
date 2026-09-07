@@ -144,7 +144,19 @@ citation. The registry has no `Grounds:`/`Evidence:` fields; every other rule ho
 - **D5 - a new sibling agent rather than a longer `quote-check`.** `quote-check` fetches pages and compares
   characters; the format check reads one file and judges what a reader sees. One agent per question keeps each
   one's report readable, and `research/CLAUDE.md` binds both to every changed entry, which is how the checks
-  are "extended". If the GM would rather have one agent, the procedure sections fold together without loss.
+  are "extended". **RULED, GM 2026-09-07: two agents, dispatched together** (*"Sounds good. Let's go with
+  that"*). The reason is how the two fail, not what they ask: `quote-check` spends its time fetching pages, one
+  attempt per host, and a stalled fetch would take a merged report down with it, while `record-format` reads one
+  file; one is character comparison and the other a judgment about a reader; and their reports are consumed by
+  different hands (re-pointing citations against editing prose). The rule of thumb this records: one agent per
+  question you would want answered even if the other question's answer never arrived. The cost of two - two things
+  to remember - is a recall problem, and its remedy is a pairing guard on the feature-151 pattern, not a merge;
+  that guard is a separate feature if the GM wants it.
+- **D7 - a footnote whose quote is not on its page becomes an absence note, and `quote-check` is not re-run over
+  the record for it.** Two such footnotes (hinterland fn-4, homesteads fn-87) were found by the editors and
+  converted; the GM ruled on 2026-09-07 that this closes the item (*"I am okay with footnotes becoming absence
+  notes without quote check being rerun over the full record"*), because no quoted passage elsewhere changed and
+  the mechanical footnote tests hold every footnote's form.
 - **D6 - the registry is swept, and its markers move into comments where the classifier still reads them.**
   Round 1 of the spec review struck the first draft's exclusion of `SOURCES.html`: the GM's rule 2 names
   *"references to spec kit features or the history of how things came to be this way"* without scoping it to
