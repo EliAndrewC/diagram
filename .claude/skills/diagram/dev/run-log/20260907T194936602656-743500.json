@@ -1,0 +1,8 @@
+{
+  "utc": "2026-09-07T19:49:36Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 103,
+  "result": "failed: test-full",
+  "commit": "ea795b30"
+}
