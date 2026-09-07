@@ -786,7 +786,9 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     # showed bare parchment), with no href: page.js sets it, so its `load` cannot fire before anyone
     # listens (FR-016 - the page paints the vector first and switches when both are decoded).
     raster_payload: dict[str, Any] = {"r": 0}
-    pic = raster.picture(svg) if vb is not None else None
+    # the picture carries NO TEXT (feature 201): every <text> stays vector in both modes, so the scale and
+    # the placard's name are the browser's font once, never resvg's under Chrome's - `raster.without_text`
+    pic = raster.picture(raster.without_text(svg)) if vb is not None else None
     if pic is not None and vb is not None:
         idpng, palette = raster.id_map(svg, raster.class_keys(svg))
         assert idpng is not None, "resvg rendered the picture and not the id map"

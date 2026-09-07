@@ -158,6 +158,19 @@ def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
     return buf.getvalue()
 
 
+_TEXT = re.compile(r"<text\b[^>]*>.*?</text>", re.S)
+
+
+def without_text(svg_text: str) -> str:
+    """The SVG less every `<text>` - what the PICTURE is rendered from (feature 201, FR-001). Text is never in
+    the image and always the browser's: feature 200's picture carried resvg's DejaVu Serif rendering of the
+    scale and the placard, and the page drew Chrome's own text over it - two fonts on top of each other on
+    the scale (the GM: "two different lines of text are overlapped on each other"), and a placard whose
+    lit name was one font and whose unlit name was another. The id map keeps its text: a caption is hit as
+    its class."""
+    return _TEXT.sub("", svg_text)
+
+
 def class_keys(svg_text: str) -> list[str]:
     """Every class key on the page, in order of first appearance - derived from the groups, never listed."""
     keys: list[str] = []
@@ -207,7 +220,10 @@ def id_map(svg_text: str, keys: Sequence[str]) -> tuple[bytes | None, dict[str, 
     out.append(_unpaint(svg_text[pos:]))
     doc = _OPACITY.sub("", "".join(out))
     doc = doc.replace("<svg ", '<svg shape-rendering="crispEdges" ', 1)
-    return resvg_png(doc, "--zoom", "1", "--shape-rendering", "crispEdges"), palette
+    # THE FONT MAPPING TOO (feature 201): without it resvg finds no 'serif' and draws no text at all, so a
+    # caption was unhittable in raster mode - a feature-200 defect the picture never showed, because the
+    # picture passed the mapping and the id map did not
+    return resvg_png(doc, "--zoom", "1", "--shape-rendering", "crispEdges", *RESVG_FONT_ARGS), palette
 
 
 def _unpaint(text: str) -> str:

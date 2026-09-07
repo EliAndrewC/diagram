@@ -190,7 +190,9 @@ rendered beside the picture (FR-007).
   them answerable while unpainted either fails `visiblePainted` or lets a bund's interior take the
   pointer (R5). The id map reproduces the DOM's own rule in one render and agrees with it on 98.2% of
   points; the disagreements are single-pixel boundaries.
-- **D4 - the lit class draws above everything in raster mode** (FR-008). Priced against keeping the
+- **D4 - the lit class draws above everything in raster mode** (FR-008). REVISED by feature 201 (GM
+  2026-09-07: a solid lit paddy hid its bunds, beans and ponds): still above everything, but its filled
+  shapes at 0.45 opacity, so what it covers shows through. Priced against keeping the
   stacking (which needs the covering elements drawn too, i.e. the vector page) and accepted.
 - **D5 - the switch is on screen scale x devicePixelRatio**, so a retina screen leaves raster mode where
   the image would upsample, not where a DPR-1 screen would.

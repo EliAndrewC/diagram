@@ -169,3 +169,36 @@ def test_a_class_group_nested_in_another_takes_the_outer_class_and_is_painted_on
     png, palette = id_map(doc, class_keys(doc))
     assert png is not None and palette == {"4": "outer", "8": "inner"}
     assert _png(png).getpixel((10, 10))[0] == 4, "the outer class's color"
+
+
+# ---- feature 201: text is never in the picture --------------------------------------------------------
+
+
+def test_without_text_strips_every_text_element_and_nothing_else() -> None:
+    from l7r.diagram.interactive.raster import without_text
+
+    doc = '<svg><text x="1" y="2" class="c">Kuwa\nbata</text><rect x="0" y="0" width="1" height="1"/><g><text>a</text><text font-size="3">b</text></g></svg>'
+    assert without_text(doc) == '<svg><rect x="0" y="0" width="1" height="1"/><g></g></svg>'
+    assert without_text("<svg/>") == "<svg/>"
+
+
+def test_the_picture_carries_no_text_while_the_id_map_paints_it() -> None:
+    """FR-001: the placard's name and the scale are drawn by the browser once, never by resvg under it; a
+    caption still hits as its class."""
+    from l7r.diagram.interactive.raster import without_text
+
+    doc = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40">'
+        '<rect width="60" height="40" fill="#EFE3C2"/>'
+        '<g class="f f-place" data-k="place"><text x="4" y="30" font-size="28" font-family="serif" fill="#FF00FF">MM</text></g>'
+        "</svg>"
+    )
+    magenta = lambda data: any(px[:3] == (255, 0, 255) for px in _png(data).getdata())  # noqa: E731
+    with_text, no_text = picture(doc, 2.0), picture(without_text(doc), 2.0)
+    assert with_text is not None and no_text is not None
+    assert magenta(with_text), "resvg does draw the text when it is there (fonts-dejavu is installed)"
+    assert not magenta(no_text), "the picture the page carries has none of it"
+    png, palette = id_map(doc, class_keys(doc))
+    assert png is not None
+    reds = {px[0] for px in _png(png).getdata()}
+    assert PALETTE_STEP in reds, "the caption is painted in its class's color, so it hits as its class"
