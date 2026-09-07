@@ -456,6 +456,15 @@ def test_the_glossary_is_well_formed_and_used() -> None:
     assert not unused, f"glossary terms no explanation uses: {sorted(unused)}"
 
 
+def test_glossary_for_defines_tsubo_where_an_explanation_counts_in_it() -> None:
+    """Feature 205 (GM 2026-09-07): the word is a tooltip wherever a modal uses it, and nowhere else."""
+    counted = {"yard": {"what": "an ordinary yard is 20 to 30 tsubo", "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
+    entry = [g for g in glossary_for(counted) if g["term"] == "tsubo"]
+    assert entry and entry[0]["variants"] == ["tsubo"] and "two straw mats" in entry[0]["def"]
+    uncounted = {"yard": {"what": "an ordinary yard is 66 to 99 sq m", "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
+    assert not [g for g in glossary_for(uncounted) if g["term"] == "tsubo"]
+
+
 def test_every_registered_source_carries_a_link_or_says_why_not() -> None:
     """Constitution v2.13.0 (GM 2026-08-28): a SOURCES.md key records the URL where the source can be
     read, or an explicit `URL: none - <why>`; the references modal links to it."""
