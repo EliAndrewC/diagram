@@ -30,6 +30,7 @@ page, nothing about how a place was built.
 - [x] T07 documents: `interactive/CLAUDE.md`, the 134 R5 annotation, memory (FR-012)
       research: rendering
       verify: DONE. interactive/CLAUDE.md raster.py row; 134 research.md R5 annotated as superseded for the low-zoom range; memory note project_page_paint_cost_giant_paths.md
-- [ ] T08 `make done` green, `make page-check` green, the Kuwabata page driven across the switch by the
+- [x] T08 `make done` green, `make page-check` green, the Kuwabata page driven across the switch by the
       session (SC-004); land on the GATED route
       research: rendering
+      verify: DONE. make done green (3,024 passed, coverage 100%, 464 s; the first run found one line of raster.py uncovered - the nested-group guard - now tested); the gate's test phase is the page check; the Kuwabata page driven across the switch by the browser tests and by T06's sweep; landing GATED (LOCAL-GATED, remote off)
