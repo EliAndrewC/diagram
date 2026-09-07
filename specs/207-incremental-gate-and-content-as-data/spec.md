@@ -153,5 +153,16 @@ to ten minutes a plain `make done` costs on any engine change.
 - **D11 - an import-time line change is a full run.** A changed line the baseline's import-time context
   executed (a `def` line, a decorator, a module-level statement) changes what every importer sees; the
   planner diffs the old file against the baseline blob and falls back rather than reasoning about it.
+- **D12 - the `-p` plugin is an excluded two-hook shim.** A `-p` module is imported before pytest-cov
+  starts measuring, so its import-time lines - and those of everything it imports - are invisible to
+  coverage on every worker. The first full gate reported 130 such lines (the planner's constants, the
+  plugin's defs, `state.py`'s dataclass) as uncovered. `gate_plugin.py` holds two one-line delegates and
+  carries `# pragma: exclude file` with the reason; `selection.py` is imported lazily from them and is
+  measured. The 100% rule's exception clause is used exactly as written: a boundary that cannot be
+  reached, stated at the point of change.
+- **D13 - no backticks in a Makefile recipe comment.** The `: "..."` comment form is a double-quoted shell
+  string, so a target name written in backticks is a command substitution; `make test-full` recursed 914
+  deep and exhausted the container's process limit (2026-09-07, killed by a peer session). The comment
+  now says so at the point of change.
 - **D7 - the audit is by kind, not by size.** FR-005a; the first census used a 1.5 KB threshold and
   missed five reader-facing phrases, which the review found.

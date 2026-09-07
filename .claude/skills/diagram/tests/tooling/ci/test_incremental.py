@@ -274,8 +274,13 @@ def test_configure_registers_the_plugin_with_the_plan_and_closures(tmp_path: Pat
 
 
 def test_the_shim_delegates_only_under_the_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    import importlib
+
     from l7r.diagram.ci import gate_plugin
 
+    # At the gate this module was imported by `-p` BEFORE coverage started, so its five import-time lines
+    # were never recorded; a reload re-runs them under coverage. pluggy keeps the hook objects it registered.
+    importlib.reload(gate_plugin)
     monkeypatch.delenv(selection.ENV, raising=False)
     cfg = _Config(None)
     gate_plugin.pytest_configure(cfg)

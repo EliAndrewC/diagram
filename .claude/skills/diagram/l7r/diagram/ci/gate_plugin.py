@@ -1,15 +1,16 @@
 """The `-p` entry of the incremental gate (feature 207): `-p l7r.diagram.ci.gate_plugin` on every traced gate run.
 
-# pragma: exclude file
-
-THIS FILE IS EXCLUDED FROM COVERAGE, AND THE REASON IS STRUCTURAL, NOT CONVENIENCE. A `-p` plugin is imported
-while pytest parses its command line, BEFORE pytest-cov's `pytest_load_initial_conftests` starts measuring - so
-every line executed at this module's import (the imports, the `def` lines) is invisible to coverage on every
-worker, forever. The first draft loaded `selection.py` this way, and the gate reported its import-time lines,
-`incremental.py`'s constants and `state.py`'s dataclass fields - 130 lines that no test could ever reach - as
-uncovered. So this shim holds ONLY what pytest must see at load time: two hook functions whose bodies run
-after coverage has started and delegate, one line each, to `selection.py`, which they import lazily and which
-is measured like any other module. Nothing else may be added here; add it to `selection.py`.
+WHY THIS FILE IS TINY. A `-p` plugin is imported while pytest parses its command line, BEFORE pytest-cov's
+`pytest_load_initial_conftests` starts measuring - so every line executed at this module's import (the imports,
+the `def` lines) is invisible to coverage on every worker. The first draft loaded `selection.py` this way, and
+the gate reported its import-time lines, `incremental.py`'s constants and `state.py`'s dataclass fields - 130
+lines no test could ever reach - as uncovered. So this shim holds ONLY what pytest must see at load time: two
+hook functions whose bodies run after coverage has started and delegate, one line each, to `selection.py`,
+which they import lazily and which is measured like any other module. Its own five import-time lines are
+measured by `tests/tooling/ci/test_incremental.py`, which RELOADS the module under coverage (a reload re-runs
+the body; pluggy keeps the hook objects it registered, so the running gate is unaffected). Nothing else may be
+added here; add it to `selection.py`. (`# pragma: exclude file` is NOT a coverage feature, whatever
+coverage's own `pth_file.py` says - it was tried first and excluded nothing.)
 """
 
 from __future__ import annotations
