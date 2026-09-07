@@ -95,9 +95,11 @@ def test_the_works_section_names_every_cited_work_once_in_order_of_first_citatio
 
 def test_a_work_cited_from_two_pages_has_one_write_up_and_both_pages_show_it() -> None:
     """Spec SC-004: the hand-authored paragraph is in the registry; every other occurrence is between the markers."""
-    what = registry_entries()["wang-ochiai-2022"]["what"]
+    # `visit-toyama-sankyoson` is cited from homesteads and vegetation (the spec's example pair, wang-ochiai-2022 on
+    # homesteads AND fields, was the GM's hypothetical - that key is cited from homesteads alone)
+    what = registry_entries()["visit-toyama-sankyoson"]["what"]
     assert what and what in _read("SOURCES.html")
-    for page in ("citations/homesteads.html", "citations/fields.html"):
+    for page in ("citations/homesteads.html", "citations/vegetation.html"):
         text = _read(page)
         assert what in text[text.find(WORKS_OPEN) : text.find(WORKS_CLOSE)], page
     outside = [p for p in pathlib.Path(RESEARCH_DIR).glob("*.html") if what in p.read_text(encoding="utf-8")]
