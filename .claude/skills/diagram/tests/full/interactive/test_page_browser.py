@@ -693,6 +693,14 @@ def test_reference_hamlet_timings(inashiro: tuple[Page, dict[str, Any]]) -> None
         ms = page.js("k => { const t0 = performance.now(); window.l7rMap.highlight(k); return performance.now() - t0; }", key)
         worst = max(worst, ms)
     page.clear()
+    # feature 199 FR-008: the reference sweep is RECORDED, not capped - Inashiro was never the slow page
+    # (19.5 ms per move before the tiling, 17.8 after; research.md R2), so no cap here could fail
+    import statistics
+
+    times = _sweep_ms(page)
+    print(
+        f"inashiro opening view: mean {statistics.fmean(times):.1f} ms per pointer move, median {statistics.median(times):.1f}, max {max(times):.1f}; highlight worst {worst:.1f} ms; load {load_ms} ms"
+    )
     assert worst < 100, f"highlight took {worst:.1f} ms"
     assert load_ms < 5000, f"load took {load_ms} ms"
 
@@ -718,3 +726,98 @@ def test_a_research_page_shows_a_footnote_on_hover_and_its_links_open_locally(br
     assert page.evaluate("() => document.getElementById('fntip').hidden"), "moving away dismisses it"
     assert RESEARCH_PAGES.startswith("../../../research/")
     page.close()
+
+
+# ---- feature 199: the merged scatter paths are tiled, and the page the GM reported is fast ----------
+
+
+def _anchor_cells(d: str) -> set[tuple[int, int]]:
+    """The TILE cells of a merged path's subpath anchors: a line subpath starts at its anchor, an arc
+    subpath (circle, ellipse) starts a radius left of its center, which is the anchor."""
+    import math
+    import re
+
+    from l7r.diagram.interactive.page import TILE
+
+    cells: set[tuple[int, int]] = set()
+    for m in re.finditer(r"M(-?[\d.]+),(-?[\d.]+)(a(-?[\d.]+))?", d):
+        x, y = float(m.group(1)), float(m.group(2))
+        if m.group(3):
+            x += float(m.group(4))
+        cells.add((math.floor(x / TILE), math.floor(y / TILE)))
+    return cells
+
+
+def _sweep_ms(page: Page) -> list[float]:
+    """Wall time of each of 150 REAL pointer moves over a grid across the viewport - research.md R1's
+    instrument. Each move fires `pointerover`, the page restyles the hovered class and Chromium repaints
+    before the driver accepts the next move, so the number is what a reader's hand feels."""
+    import time
+
+    times: list[float] = []
+    for y in range(50, 1000, 95):
+        for x in range(50, 1400, 90):
+            t0 = time.perf_counter()
+            page.page.mouse.move(x, y)
+            times.append((time.perf_counter() - t0) * 1000)
+    page.page.mouse.move(0, 0)
+    return times
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_every_large_merged_path_on_the_reference_page_is_one_cell(inashiro: tuple[Page, dict[str, Any]]) -> None:
+    """Feature 199 FR-007, the structural guard: on the real rolled page every `<path>` of TILE_MIN or
+    more subpaths is confined to one TILE cell. Deterministic, whatever the machine is doing - untiled,
+    the six giant scatter paths span 8 to 30 cells each, so a split that stops running fails here at
+    once. Paths UNDER the threshold are exempt on purpose: the merge has gathered separated elements since
+    feature 148, and spec-fidelity measured 280-289 sub-threshold merged paths spanning more than 400 px
+    on the reference page - each a correct output of FR-001."""
+    import re
+
+    from l7r.diagram.interactive.page import TILE_MIN
+
+    page, _m = inashiro
+    with open(page.page.url[len("file://") :], encoding="utf-8") as fh:
+        html = fh.read()
+    large = [d for d in re.findall(r'<path [^>]*?d="([^"]*)"', html) if d.count("M") >= TILE_MIN]
+    assert len(large) >= 10, f"the reference page has {len(large)} paths of {TILE_MIN}+ subpaths - the guard would be testing nothing"
+    spanning = [(d.count("M"), sorted(_anchor_cells(d))) for d in large if len(_anchor_cells(d)) > 1]
+    assert spanning == [], f"{len(spanning)} large merged paths span more than one cell: {spanning[:3]}"
+
+
+@pytest.fixture(scope="module")
+def kuwabata(browser: Any) -> Iterator[Page]:
+    """The page the GM reported (feature 199): the pool's own declaration, generated the way `inashiro` is."""
+    from l7r.diagram import hamletgen as hg
+
+    with tempfile.TemporaryDirectory() as d:
+        base = os.path.join(d, "kuwabata")
+        hg.generate(
+            hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"), out_base=base, render=False
+        )
+        page = Page(browser, base + ".html")
+        yield page
+        page.close()
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_kuwabata_pointer_moves_are_cheap_at_the_opening_view(kuwabata: Page) -> None:
+    """Feature 199 FR-008: the GM's own symptom on the GM's own page. Research.md R2 measured 57.0 ms per
+    real pointer move at Kuwabata's opening view before the tiling and 17.3 after; the cap sits between
+    them - 2.3x over the tiled page for a loaded FULL run, 20 ms under the untiled one.
+
+    ON THE MEAN, NOT THE MEDIAN (research.md R6, measured in this harness with the split switched off):
+    untiled the moves are mean 59.5 / median 21.0 / p90 156 / max 183 ms, tiled 17.1 / 16.7 / 20.5 / 32.5.
+    The cost lands on the one move in five that crosses into a map-spanning class and repaints the whole
+    scrub; the median never sees those moves and PASSED the untiled page, so a cap on it could not fail.
+    The mean is what a reader's hand feels, and a single scheduler stall under `-n auto` moves a mean of
+    150 by a millisecond. The structural guard above is the deterministic half; this is the half that
+    fails on what the GM felt."""
+    import statistics
+
+    times = _sweep_ms(kuwabata)
+    mean = statistics.fmean(times)
+    print(f"kuwabata opening view: mean {mean:.1f} ms per pointer move, median {statistics.median(times):.1f}, p90 {sorted(times)[int(len(times) * 0.9)]:.1f}, max {max(times):.1f}, n={len(times)}")
+    assert mean < 40, f"mean {mean:.1f} ms per pointer move at Kuwabata's opening view (untiled measured 59.5, tiled 17.1)"

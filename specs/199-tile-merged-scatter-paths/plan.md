@@ -40,9 +40,9 @@ floor(ay / TILE))` of the anchor (`x1,y1` for a line; `cx,cy` for a circle or el
 first appearance, and write one `<path>` per group, concatenated, at `repl[first]`. The attribute
 string and the `fill="none"` tail are computed once and repeated. Under the threshold, unchanged.
 
-`_cell` is a module-level function (feature 146: no closures), with a guard for an anchor that cannot
-be read (falls into cell `(0, 0)` - it cannot happen for the three tags the merge folds, whose
-coordinates `_COORDS` names, but a KeyError there must not take the page down).
+`_cell` and `_tiles` are module-level functions (feature 146: no closures). No guard for an unreadable
+anchor: `_sub` already reads the same attributes to write the subpath, so a member without them never
+reaches the emit loop, and a guard nothing can reach would be an uncovered line.
 
 ### Tests
 

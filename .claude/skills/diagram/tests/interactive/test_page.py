@@ -802,3 +802,86 @@ def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
     # circles: touching exactly at the rims counts, a hair further apart does not
     assert _hits((0.0, 0.0, 5.0), (10.0, 0.0, 5.0)) is True
     assert _hits((0.0, 0.0, 5.0), (10.1, 0.0, 5.0)) is False
+
+
+# ---- feature 199: a merged scatter is written as one path per cell (GM 2026-09-07) -----------------
+
+
+def _blades(n: int, cells: list[tuple[int, int]], style: str = 'stroke="#000"') -> str:
+    """`n` same-styled lines, the i-th anchored in `cells[i % len(cells)]` (TILE px cells), interleaved
+    so every cell's members are separated by the others' - the shape a scatter actually has."""
+    from l7r.diagram.interactive.page import TILE
+
+    out = []
+    for i in range(n):
+        cx, cy = cells[i % len(cells)]
+        x = cx * TILE + 10 + (i % 37) * 10
+        y = cy * TILE + 10 + (i % 29) * 10
+        out.append(f'<line x1="{x:g}" y1="{y:g}" x2="{x + 2:g}" y2="{y + 3:g}" {style}/>')
+    return "".join(out)
+
+
+def _anchor_cells(d: str) -> list[tuple[int, int]]:
+    """The TILE cells of a merged path's subpath anchors, in order of first appearance. A line subpath
+    starts at its anchor; an arc subpath (a circle or ellipse) starts at `cx - rx`, so its anchor - the
+    center - is that plus the first arc radius."""
+    import math
+
+    from l7r.diagram.interactive.page import TILE
+
+    cells: list[tuple[int, int]] = []
+    for m in re.finditer(r"M(-?[\d.]+),(-?[\d.]+)(a(-?[\d.]+))?", d):
+        x, y = float(m.group(1)), float(m.group(2))
+        if m.group(3):
+            x += float(m.group(4))
+        c = (math.floor(x / TILE), math.floor(y / TILE))
+        if c not in cells:
+            cells.append(c)
+    return cells
+
+
+def test_a_large_merged_scatter_is_one_path_per_cell() -> None:
+    """FR-001: a bucket of TILE_MIN+ members is written as one path per cell of its anchors, the cells
+    in order of first appearance, every subpath kept, the style and the line's `fill="none"` on each."""
+    from l7r.diagram.interactive.page import TILE_MIN, merge_primitives
+
+    n = 2 * TILE_MIN + 50
+    out = merge_primitives(_blades(n, [(0, 0), (1, 0), (0, 1)]))
+    paths = re.findall(r'<path d="([^"]*)"([^>]*)/>', out)
+    assert out.count("<line") == 0 and len(paths) == 3, out[:300]
+    assert sum(d.count("M") for d, _ in paths) == n, "every blade is still drawn"
+    assert [_anchor_cells(d) for d, _ in paths] == [[(0, 0)], [(1, 0)], [(0, 1)]], "one cell per path, first-appearance order"
+    assert all('stroke="#000"' in a and 'fill="none"' in a for _, a in paths), "each tile carries the whole style"
+
+
+def test_a_small_merged_scatter_stays_one_path() -> None:
+    """FR-001's threshold: under TILE_MIN members the bucket is one path exactly as before, whatever it spans."""
+    from l7r.diagram.interactive.page import TILE_MIN, merge_primitives
+
+    out = merge_primitives(_blades(TILE_MIN - 1, [(0, 0), (1, 0), (0, 1)]))
+    paths = re.findall(r'<path d="([^"]*)"', out)
+    assert len(paths) == 1 and paths[0].count("M") == TILE_MIN - 1
+    assert len(_anchor_cells(paths[0])) == 3, "the one path spans three cells, untiled"
+
+
+def test_tiling_leaves_the_other_buckets_alone() -> None:
+    """FR-006: a run that mixes a tiled bucket with a small one leaves the small one as it was, in its place."""
+    from l7r.diagram.interactive.page import TILE, TILE_MIN, merge_primitives
+
+    far = 5 * TILE + 20
+    crowns = "".join(f'<circle cx="{far + i * 30:g}" cy="{far:g}" r="4" fill="#0a0"/>' for i in range(3))
+    out = merge_primitives(_blades(TILE_MIN + 50, [(0, 0), (1, 0)]) + crowns)
+    paths = re.findall(r'<path d="([^"]*)"([^>]*)/>', out)
+    assert len(paths) == 3 and out.count("<circle") == 0
+    assert [_anchor_cells(d) for d, _ in paths[:2]] == [[(0, 0)], [(1, 0)]]
+    assert paths[2][0].count("M") == 3 and "a4,4" in paths[2][0] and 'fill="#0a0"' in paths[2][1], "the crowns are one path, after the blades"
+
+
+def test_a_round_marks_cell_is_its_centers_not_where_its_arc_starts() -> None:
+    """FR-001 / D6: the anchor of a circle or ellipse is its CENTER. Its subpath starts a radius to the
+    left, which can sit in the neighboring cell."""
+    from l7r.diagram.interactive.page import TILE, _cell
+
+    assert _cell("circle", {"cx": f"{TILE + 2:g}", "cy": "10", "r": "5"}) == (1, 0)
+    assert _cell("ellipse", {"cx": f"{TILE - 1:g}", "cy": f"{TILE:g}", "rx": "5", "ry": "3"}) == (0, 1)
+    assert _cell("line", {"x1": "-1", "y1": "0", "x2": "5", "y2": "5"}) == (-1, 0)
