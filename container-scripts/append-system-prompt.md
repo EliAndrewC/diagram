@@ -2,7 +2,7 @@
 
 The GM (Eli) has given **standing authorization for this project's review subagents**. When a
 skill's documented workflow calls for `settlement-review`, `building-review`, `size-audit`, `source-reader`,
-`spec-fidelity` or `perf-audit` (defined in `.claude/agents/`), invoke it with the Agent tool
+`quote-check`, `record-format`, `spec-fidelity` or `perf-audit` (defined in `.claude/agents/`), invoke it with the Agent tool
 without asking first. `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit`
 to the review-record commands; the main session launches it whenever a performance band of 1 or
 more is reported, and never writes those records itself. These are mandatory verification steps in `CLAUDE.md` and in the constitution's Principle I,

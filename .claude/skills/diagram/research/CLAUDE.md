@@ -170,6 +170,61 @@ changed research entry before the feature lands, and record its verdicts in the 
 task's `source-reader confirmed` box is `quote-check confirmed` from here). The page renders the footnotes with
 the ACOUP hover (`html/`, below): hover a reference and the note appears beside it.
 
+## Written for the reader: tooltips, comments, no history (GM 2026-09-07, feature 209)
+
+The GM read the first entry of `homesteads.html` as a reader would and ruled three things, each *"not only a
+change to this one specific section, but a general rule for how these research sections should look"*. They
+are the form of every entry from here, new or revised:
+
+1. **A term the reader would not know is a tooltip, as on the map.** *"Please apply the same kind of tooltip
+   rules to our research sections that we have in our diagram HTML pages ... having a tool tip with the actual
+   definition of this would be helpful."* ONE glossary serves both surfaces: `l7r/diagram/interactive/glossary.py`.
+   Add the term there, with its variants and a definition written from the record's own text, and run
+   `make glossary`, which writes `research/assets/glossary.js`; every page loads it, and `assets/record.js`
+   wraps every occurrence in the visible text - headings, prose, footnotes, never a code span - in the map's
+   dotted-underline `.gl` span, the definition shown in the footnote box on hover. Nothing is wrapped by hand.
+   The gate holds the asset in sync and fails a term no modal and no page uses
+   (`tests/interactive/test_record_format.py`).
+2. **A note for a session is an HTML comment.** *"anything which is a note for you, which is to say a note
+   for Claude code sessions, which are modifying these things, should be hidden in HTML comments. This
+   includes, but is not limited to, references to spec kit features or the history of how things came to be
+   this way ... If you feel that you actually need this because it helps you to understand what each research
+   section is in reference to, then that is fine, and you can keep that sort of thing in HTML comments."* So an
+   entry's `Grounds:` and `Evidence:` fields are comments on the lines after the heading (`<!-- Grounds: ... -->`,
+   `<!-- Evidence: ... -->`; of `Evidence: attested` the GM: *"not especially helpful to a human reader"*), and a
+   spec-kit feature, a task id, a spec directory, a test, a make target, an engine identifier - a constant, a
+   function, a knob's code name, a module path - or a fetch verdict (`READ`, `SUMMARY-ONLY`, `UNFETCHABLE`) in the
+   body goes into a comment beside the sentence it annotates, or is dropped when the sentence reads whole
+   without it. The `Sources:` roster stays visible: it is the reader's list of the works, and each key's
+   parenthetical says what the work contributed, nothing about when or how it was read. What is NOT a note for
+   a session: a source key that links to its work; a GM ruling and the alternatives it declined (the decision the
+   record owes its reader); the honest label on a claim - a GUESS, or a search that found nothing, with its date.
+3. **No history of the document in the document.** *"I do not see any purpose in recording in our research
+   findings references to things which used to be in these documents that were wrong and have since been
+   removed ... the commentary about the history of how this research document came to read as it does now is
+   pointless. If we ever need to get that information, we can look it up in our version control history. And
+   the purpose of this document is to contain information which continues to be useful in an ongoing basis for
+   our project, both for future Claude Code sessions, which are using this research to drive the generation of
+   our maps, and for the humans who read this document."* So no "corrected 2026-09-06: the page gives X, not
+   Y", no "used to say", no "re-read with the charset honored", no "the pointer was summary-only until", no
+   "carried from the 2026-07 chat research", no "feature 143 re-sourced this". When a finding changes, the entry
+   is REWRITTEN to say the finding; the old wording lives in git. What stays is what continues to be useful: the
+   figure, the quoted evidence, the decision and who made it, and the honest label on what the record could not
+   support. The feature-195 absence note keeps its visible half - `no publicly readable source (searched
+   YYYY-MM-DD: what was tried)` - and its provenance ("the passage came from `key`") is a comment in the `<li>`.
+
+**Two checks hold it**, the same split as feature 194's. `tests/interactive/test_record_format.py` holds the
+mechanical half at the gate: the fields are comments, every page loads the glossary, the asset equals its
+derivation, every term is used, and the shapes of session-speak and history that recurred (a feature number, a
+task id, a correction date, a fetch verdict, "used to say") are absent from the visible text. The
+**`record-format` agent** (`.claude/agents/record-format.md`, Opus like every check agent) holds the half a
+test cannot: per section, the VOCABULARY that deserves a tooltip (with a definition drafted from the record),
+the SESSION NOTES still visible, and the HISTORY still visible, each quoted with the rewrite it proposes. Run
+it beside `quote-check` on every new or changed entry before the feature lands, and record its verdicts in the
+feature's tasks. The registry (`SOURCES.html`) loads the glossary but is not under rules 2 and 3 (spec 209 D6:
+its `READ` markers are read by the link classifier and its entries are the record of the search); whether it
+should be is the GM's question.
+
 ## The record IS HTML - edit the page (feature 194, the GM's ruling through its spec review)
 
 Since 2026-09-06 the record's files are `research/<name>.html` (`cities/<name>.html`, `SOURCES.html`), hand-authored

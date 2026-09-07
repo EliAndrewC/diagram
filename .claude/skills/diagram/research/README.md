@@ -32,27 +32,29 @@ which of the three it is. An entry that presents reasoning as a finding is the o
 
 ## Entry format
 
-Every entry carries the same four fields, in this order:
+Every entry carries the same four fields, in this order - two of them HTML comments, because they are notes
+for a session and not for the reader (GM 2026-09-07, feature 209; the reader-facing form is
+[`CLAUDE.md`](CLAUDE.md), "Written for the reader"):
 
 ```
-## <stable anchor title>
+<h2 id="<stable anchor>">The question a reader would ask from the map - and, often, its answer</h2>
+<!-- researched YYYY-MM-DD, feature NNN Tnn -->
+<!-- Grounds: the checks, generator methods or constants this finding justifies -->
+<!-- Evidence: <one or more classes, see below> -->
+<p><strong>Sources:</strong> <a href="..."><code>key</code></a> (what the work contributed), <a href="..."><code>key</code></a></p>
 
-**Grounds:** the checks, generator methods or constants this finding justifies
-
-**Evidence:** <one or more classes, see below>
-
-**Sources:** `key`, `key` - or an explicit "not recorded"
+<the finding: what the research found, the decision it drove, and any disclosed departure - every assertion
+footnoted (CLAUDE.md, "A reference QUOTES the passage"), every term a reader would not know a glossary tooltip,
+nothing addressed to a session outside a comment, nothing about what the entry used to say>
 ```
 
-Every key in `SOURCES.md` carries the URL where the source can be read (constitution v2.13.0, GM
-2026-08-28), or `URL: none - <why>`; the interactive map's references modal links to it.
+Every key in `SOURCES.html` carries the URL where the source can be read (constitution v2.13.0, GM
+2026-08-28), or `URL: none - <why>`.
 
-```
-
-<the finding: what the research found, the decision it drove, and any disclosed departure>
-```
-
-`**Grounds:**` is what makes a stale finding visible - if nothing in the codebase matches it any more, the entry is describing a rule that no longer exists.
+`Grounds:` is what makes a stale finding visible - if nothing in the codebase matches it any more, the entry
+is describing a rule that no longer exists. It is a comment so that it can say so in code's own names; a
+knob's code name, a constant or a function in the BODY goes into a comment too (`<!-- _grove_arm_rect -->`
+beside the sentence that describes the drawn arm).
 
 ## Evidence classes
 
@@ -79,4 +81,4 @@ Named real-world measurements (Suzugamori, Pingyao, Himeji, Fushimi...) are *anc
 
 ## Adding to the record
 
-Keep the four fields. Anchors are stable - rules link to `#slug`, so rename a heading only if you also fix its inbound links. Citations belong here rather than in the rule file: per project policy the *why* is mandatory and explicit sources are optional, so a bare finding is fine and a cited one is better.
+Keep the four fields. Anchors are stable - rules link to `#slug`, so rename a heading only if you also fix its inbound links. Citations belong here rather than in the rule file: per project policy the *why* is mandatory and explicit sources are optional, so a bare finding is fine and a cited one is better. When a finding CHANGES, rewrite the entry to say the finding - never annotate it with what it used to say or when it was corrected (feature 209): the old wording lives in git, and `tests/interactive/test_record_format.py` fails on the shapes of that annotation. A new term gets its definition in `interactive/glossary.py` and a `make glossary`.

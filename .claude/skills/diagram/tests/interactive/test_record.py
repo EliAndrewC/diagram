@@ -90,12 +90,15 @@ def _resolves_to_converted(token: str, containing_rel: str) -> bool:
 
 
 def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
-    """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/ and the GM's README."""
+    """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/ and the GM's README.
+    `scripts/fixtures/` is out too (feature 209, found red on main after feature 204 landed): a guard's replay corpus
+    is a verbatim census of commands sessions actually ran, some of them from before the record was HTML, and
+    rewriting a recorded command to satisfy this test would falsify the corpus it exists to replay."""
     root = _repo_root()
     files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
     hits = []
     for rel in files:
-        if not rel or rel.startswith("specs/") or rel == f"{_SKILL}/research/README.md":
+        if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
             continue
         try:
             text = (root / rel).read_text(encoding="utf-8")

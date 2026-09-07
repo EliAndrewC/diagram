@@ -452,8 +452,9 @@ def test_the_glossary_is_well_formed_and_used() -> None:
         assert variants and len(definition) > 30 and "\u2014" not in definition, term
     used = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
     assert {"bund", "coppice", "iriai", "tameike", "yashikirin", "kosatsuba", "hokora"} <= used
-    unused = set(GLOSSARY) - used
-    assert not unused, f"glossary terms no explanation uses: {sorted(unused)}"
+    # Since feature 209 the glossary serves the research record too, so a term no modal uses may still be live:
+    # `tests/interactive/test_record_format.py` holds the widened rule (used by a modal OR a record page).
+    assert "kainyo" in GLOSSARY and "kainyo" not in used, "a record-only term is in the table and not on the map (non-vacuity of the split)"
 
 
 def test_glossary_for_defines_tsubo_where_an_explanation_counts_in_it() -> None:
