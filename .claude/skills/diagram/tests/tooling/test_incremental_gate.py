@@ -333,6 +333,16 @@ def test_e_over_the_fraction_the_plugin_runs_everything_and_marks_the_run_full(p
     assert "8 passed" in proc.stdout
 
 
+def test_nothing_changed_selects_nothing_and_the_run_is_green_on_the_untouched_baseline(project: tuple[Path, Path]) -> None:
+    """The gate's cheapest shape after the short-circuit: the tree equals the baseline, so nothing is selected,
+    pytest would say "no tests ran" (exit 5), the plugin turns that into a green run, and the merged floors judge
+    the baseline as it stands."""
+    root, skill = project
+    baseline(root, skill)
+    mode, result, rc, out = run_gate(root, skill)
+    assert mode == "incremental" and result["selected"] == [] and rc == 0, out
+
+
 def test_an_incremental_run_never_writes_the_baseline(project: tuple[Path, Path]) -> None:
     root, skill = project
     baseline(root, skill)

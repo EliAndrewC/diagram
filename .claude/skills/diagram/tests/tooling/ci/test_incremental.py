@@ -257,6 +257,28 @@ def test_modifyitems_over_the_fraction_runs_everything_and_a_worker_other_than_g
     assert result["mode"] == "full" and "fraction" in result["reason"] and len(result["selected"]) == 3
 
 
+def test_an_empty_selection_turns_no_tests_ran_into_a_green_run(tmp_path: Path) -> None:
+    plugin = selection.GateSelection(tmp_path, {"mode": "incremental", "reason": "nothing changed"}, {})
+
+    class Sess:
+        exitstatus = 5
+
+    s = Sess()
+    plugin.pytest_sessionfinish(s, 5)  # type: ignore[arg-type]
+    assert s.exitstatus == 5, "no result file: not ours to overrule"
+    (tmp_path / incremental.RESULT).write_text(json.dumps({"mode": "incremental", "selected": [], "collected": ["t::a"]}), encoding="utf-8")
+    plugin.pytest_sessionfinish(s, 5)  # type: ignore[arg-type]
+    assert s.exitstatus == 0
+    s2 = Sess()
+    (tmp_path / incremental.RESULT).write_text(json.dumps({"mode": "incremental", "selected": ["t::a"], "collected": ["t::a"]}), encoding="utf-8")
+    plugin.pytest_sessionfinish(s2, 5)  # type: ignore[arg-type]
+    assert s2.exitstatus == 5, "a selection that ran and reported 5 is a real 'no tests ran'"
+    full = selection.GateSelection(tmp_path, {"mode": "full", "reason": "r"}, {})
+    s3 = Sess()
+    full.pytest_sessionfinish(s3, 5)  # type: ignore[arg-type]
+    assert s3.exitstatus == 5
+
+
 def test_configure_registers_the_plugin_with_the_plan_and_closures(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     (tmp_path / incremental.PLAN).write_text(
         json.dumps({"mode": "incremental", "reason": "r", "affected_tests": [], "affected_fixtures": [], "changed_test_modules": [], "baseline_tests": []}), encoding="utf-8"

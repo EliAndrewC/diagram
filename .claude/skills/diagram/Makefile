@@ -1437,12 +1437,13 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # THE INCREMENTAL GATE'S KNOBS (feature 207, GM 2026-09-07). On a floored run (`COV_FLOORS=1`, i.e. the gate) the
 # pytest line records a coverage context per test phase and per fixture (`--cov-context=test` + the selection plugin,
 # which re-arms the fast core's events at every switch and deselects what the plan says; the note in the `test`
-# recipe). `--cov-report=` silences pytest-cov's own table on a floored run: on an incremental run it would report the
-# SELECTION's coverage (49% on the first measured run) a screen above the merged report that is the verdict.
+# recipe). On an incremental run pytest-cov's own table - the first `TOTAL` on the screen - is the SELECTION's coverage
+# (49% on the first measured run) and is not the verdict; the merged report a screen below is. (`--cov-report=` was
+# tried to silence it and does not: pytest-cov keeps the `term` from addopts.)
 # `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests` passes INCREMENTAL=0 because an unattended
 # run is the cheapest time to refresh the baseline.
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))
-INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test --cov-report= -p l7r.diagram.ci.gate_plugin,)
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin,)
 INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)",)
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
 # `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was

@@ -118,6 +118,19 @@ class GateSelection:
             if pl["mode"] == "incremental":
                 print(f"\ngate: {mode.upper()} - {len(selected)} of {len(collected)} tests selected ({reason})")
 
+    @pytest.hookimpl(trylast=True)
+    def pytest_sessionfinish(self, session: pytest.Session, exitstatus: int) -> None:
+        """AN EMPTY SELECTION IS A GREEN RUN, NOT "NO TESTS RAN". When nothing the baseline exercised has changed
+        the plan selects nothing, every test is deselected, and pytest (and xdist's controller) would exit 5 -
+        which the Makefile reads as a failed phase. The merged floors are the verdict of such a run, and they
+        judge the untouched baseline. Read from the result file, because on the xdist controller this hook runs
+        but the collection hook never did."""
+        if int(exitstatus) != 5 or self.plan.get("mode") != "incremental":
+            return
+        res = self.bdir / incremental.RESULT
+        if res.is_file() and json.loads(res.read_text(encoding="utf-8")).get("selected") == []:
+            session.exitstatus = 0
+
 
 def _all_items(session: pytest.Session, kept: list[pytest.Item]) -> list[pytest.Item]:
     """Every collected item, deselected ones included - the baseline's `tests.json` must know them all."""
