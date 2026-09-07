@@ -1,8 +1,8 @@
 # Feature 209 - research entries for the reader
 
-**Status**: round 2 of 5 - round 1 (FAITHFUL on the four changes, the guidelines and the checks) required the
-registry brought under rules 2 and 3 with only the machine-read markers exempted (D6 rewritten, FR-005/FR-006
-widened, D1's count corrected).
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5; round 1 struck the registry's exclusion - D6 rewritten,
+FR-005/FR-006 widened, D1's count; round 2 one word, SC-002 over all sixteen pages) - cleared for implementation
+(constitution XVI).
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Predecessors**: feature 134 (the map's glossary: a term in a modal is a hover tooltip); 180 (the record is
 written for the reader who reaches it from the map); 194 (the record is hand-authored HTML with hover
@@ -119,7 +119,7 @@ citation. The registry has no `Grounds:`/`Evidence:` fields; every other rule ho
   browser shows the heading's `yashikirin` dotted, its definition on hover; no `Grounds:` or `Evidence:` line;
   no "Corrected 2026-09-07" note; the `Sources:` roster's first item reads as the survey's figures and nothing
   about a pointer's history.
-- **SC-002** `grep -c` over the visible text of the fifteen pages for `feature [0-9]`, `Grounds:`, `Evidence:`,
+- **SC-002** `grep -c` over the visible text of all sixteen pages (the fifteen research pages and `SOURCES.html`) for `feature [0-9]`, `Grounds:`, `Evidence:`,
   `corrected 20`, `re-read`, `SUMMARY-ONLY` is zero; the same strings inside comments are allowed.
 - **SC-003** `record-format` run over every page after the sweep returns no remaining item in any of its three
   classes, or every remaining item is one the session resolved and recorded in `tasks.md`.

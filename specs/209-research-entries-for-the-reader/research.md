@@ -21,8 +21,13 @@ reproduced in tasks T03); the judgment half - a note for a session, a piece of h
 editing agents (one per page or page group, on the session's own model; editors, not checks) under a written
 rulebook that quoted the GM's three rules, listed the shapes, named what NEVER changes (headings, ids, every
 footnote reference and its position, every quoted passage, house style outside quotes) and ended with the four
-test files each editor had to run green. Then the `record-format` check (Opus) over every page, its items resolved
-by the session. The mechanical test (`FORBIDDEN_VISIBLE`) is the floor under both.
+test files each editor had to run green. Then the `record-format` check (Opus) over every page, five agents in parallel, and a second round of five editors
+applying their reports under a written rule set (`apply-rules.md`: no heading renamed, GM rulings and dated absence
+labels kept, engine nouns out of the visible text, unkeyed reading logs to comments). The check found what the
+mechanical test cannot see - the tally is in `docs/review-ledger.md` - and the mechanical test (`FORBIDDEN_VISIBLE`)
+stayed green throughout: it is the floor, not the bar. The glossary grew from 27 terms to about 410, every
+definition drafted from the record's own text by the check and pasted by the session; a term the pages use only in
+kanji cannot fire, so the editors wrote the romaji beside the characters at first use.
 
 ## R3 - the glossary boundary in JavaScript
 

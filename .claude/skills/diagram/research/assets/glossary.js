@@ -4,6 +4,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "bund",
   "variants": [
+   "tian'geng",
+   "tiangeng",
+   "keihan",
    "bunds",
    "bund",
    "aze"
@@ -13,6 +16,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "azemame",
   "variants": [
+   "aze-mame",
    "azemame"
   ],
   "def": "Bund beans: soybeans planted along the top of a paddy bund, a second crop from ground that would otherwise grow weeds."
@@ -74,7 +78,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kosatsuba",
   "variants": [
-   "kosatsuba"
+   "kosatsuba",
+   "kosatsu"
   ],
   "def": "The notice board: a small roofed frame where the authorities posted the standing law, rate tables and ban lists, sited where everyone passes."
  },
@@ -182,7 +187,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "night soil",
   "variants": [
-   "night soil"
+   "night soil",
+   "nightsoil"
   ],
   "def": "Human waste collected from privies and composted as fertilizer."
  },
@@ -217,6 +223,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "sugi",
   "variants": [
+   "Cryptomeria japonica",
    "sugi"
   ],
   "def": "Japanese cedar: the tall, straight conifer planted for timber and shelter, and the mainstay of a homestead grove."
@@ -253,7 +260,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "bushi",
   "variants": [
-   "bushi"
+   "bushi",
+   "buke"
   ],
   "def": "A warrior of the samurai class; the word the sources use for the class as a whole."
  },
@@ -324,6 +332,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "machiya",
   "variants": [
+   "kyo-machiya",
    "machiya"
   ],
   "def": "A townhouse: a merchant's or artisan's house on a narrow street frontage and a deep lot, shop at the front and living quarters behind."
@@ -1164,6 +1173,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "shuikou",
   "variants": [
+   "water mouth",
+   "water-mouth",
    "shuikou"
   ],
   "def": "The water mouth: the fengshui grove at a Chinese village's entrance, where its stream flows out of the village."
@@ -1215,7 +1226,9 @@ window.RECORD_GLOSSARY = [
   "term": "lineage village",
   "variants": [
    "lineage villages",
-   "lineage village"
+   "lineage village",
+   "lineages",
+   "lineage"
   ],
   "def": "A village of one clan descended from a common ancestor - the settlement form of south China; the great ones hold forests of tens of hectares."
  },
@@ -1259,6 +1272,7 @@ window.RECORD_GLOSSARY = [
   "term": "rammed earth",
   "variants": [
    "rammed earth",
+   "hanchiku",
    "hangtu"
   ],
   "def": "Walling made by pounding damp earth in layers inside a timber form - the oldest form of Chinese city wall, and why those walls run straight."
@@ -1281,6 +1295,7 @@ window.RECORD_GLOSSARY = [
   "term": "shukuba",
   "variants": [
    "shukuba",
+   "yizhan",
    "shuku"
   ],
   "def": "A post town on a highway, with its transport office, inns and relay horses strung along one street."
@@ -1452,7 +1467,9 @@ window.RECORD_GLOSSARY = [
   "term": "Tang dynasty",
   "variants": [
    "Tang dynasty",
-   "Tang-dynasty"
+   "Tang-dynasty",
+   "Tang-Song",
+   "Tang"
   ],
   "def": "The Tang, 618-907: the dynasty of the walled, curfewed city ward, and of Chang'an, the capital Nara and Kyoto were modeled on."
  },
@@ -1468,7 +1485,8 @@ window.RECORD_GLOSSARY = [
   "term": "Ming dynasty",
   "variants": [
    "Ming dynasty",
-   "Ming-dynasty"
+   "Ming-dynasty",
+   "Ming"
   ],
   "def": "The Ming, 1368-1644, the dynasty of the great brick city walls."
  },
@@ -1476,7 +1494,9 @@ window.RECORD_GLOSSARY = [
   "term": "Qing dynasty",
   "variants": [
    "Qing dynasty",
-   "Qing-dynasty"
+   "Qing-dynasty",
+   "Ming-Qing",
+   "Qing"
   ],
   "def": "The Qing, 1644-1912, China's last dynasty, whose gazetteers and surveys supply many of the record's figures."
  },
@@ -1518,8 +1538,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "lifang",
   "variants": [
-   "lifang",
-   "fang"
+   "lifang"
   ],
   "def": "The walled residential ward of a Tang Chinese city, its gates opened and closed by officials to the morning and evening drums; torn down under the Song."
  },
@@ -1735,6 +1754,7 @@ window.RECORD_GLOSSARY = [
   "term": "muenzuka",
   "variants": [
    "muenbotoke",
+   "muen-zuka",
    "muenzuka"
   ],
   "def": "The pauper's mound for the unclaimed dead, and the unclaimed dead themselves."
@@ -1920,6 +1940,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "jiegao",
   "variants": [
+   "shadoof",
    "jiegao"
   ],
   "def": "A shadoof: a counterweighted lever that lifts a bucket from a well or a channel."
@@ -1927,6 +1948,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "lulu",
   "variants": [
+   "windlass",
    "lulu"
   ],
   "def": "A windlass on a frame over a well, the usual water-lifting gear of north China."
@@ -1948,7 +1970,10 @@ window.RECORD_GLOSSARY = [
  {
   "term": "gulou",
   "variants": [
+   "bell-and-drum tower",
    "zhonggulou",
+   "drum tower",
+   "bell tower",
    "zhonglou",
    "qiaolou",
    "gulou"
@@ -1965,7 +1990,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "umagutsu",
   "variants": [
-   "umagutsu"
+   "umagutsu",
+   "umazouri"
   ],
   "def": "Woven straw horse-sandals, worn in place of iron shoes and used up within a day's travel."
  },
@@ -2086,7 +2112,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "hojo seibi",
   "variants": [
-   "hojo seibi"
+   "hojo seibi",
+   "ほ場整備",
+   "圃場整備"
   ],
   "def": "Japan's postwar consolidation of paddy into uniform machine-sized strips, on a 1963 standard of 30 by 100 meters."
  },
@@ -2176,5 +2204,860 @@ window.RECORD_GLOSSARY = [
    "Inari"
   ],
   "def": "The rice deity, whose small fox-guarded shrine most compounds and villages kept."
+ },
+ {
+  "term": "beitang",
+  "variants": [
+   "beitang"
+  ],
+  "def": "The Chinese village pond system, the direct analogue of the tameike: millions of them watered about two-fifths of China's irrigated land into the 1950s."
+ },
+ {
+  "term": "senmaida",
+  "variants": [
+   "Shiroyone Senmaida",
+   "senmaida"
+  ],
+  "def": "'A thousand paddies': the terraced-paddy site at Shiroyone on the Noto peninsula, 1,004 basins on about 4 hectares, the smallest half a meter square."
+ },
+ {
+  "term": "Nara period",
+  "variants": [
+   "Nara period",
+   "Nara-period"
+  ],
+  "def": "The eighth-century period of the court at Nara, in which the jori land grid first appears in the record (743)."
+ },
+ {
+  "term": "Showa",
+  "variants": [
+   "Showa"
+  ],
+  "def": "The era from 1926; with Meiji, the modern period whose land consolidation produced the rectangular paddy grid a pre-modern map must not show."
+ },
+ {
+  "term": "MAFF",
+  "variants": [
+   "MAFF"
+  ],
+  "def": "Japan's Ministry of Agriculture, Forestry and Fisheries, whose design standards for fields, drains and reservoirs the record cites."
+ },
+ {
+  "term": "MLIT",
+  "variants": [
+   "MLIT"
+  ],
+  "def": "Japan's Ministry of Land, Infrastructure, Transport and Tourism, whose land-classification and river material the record cites."
+ },
+ {
+  "term": "IRRI",
+  "variants": [
+   "IRRI"
+  ],
+  "def": "The International Rice Research Institute, in the Philippines, whose modern paddy-water and drying figures the record reads backward from."
+ },
+ {
+  "term": "GSI",
+  "variants": [
+   "GSI"
+  ],
+  "def": "The Geospatial Information Authority of Japan, the national mapping agency, whose topographic legend gives a bamboo grove its own symbol."
+ },
+ {
+  "term": "emergent",
+  "variants": [
+   "emergent plants",
+   "emergent plant",
+   "emergents",
+   "emergent"
+  ],
+  "def": "A tree whose crown stands clear above the general canopy; of a water plant, one rooted in the bed with its stems standing out of the water - reed, cattail, wild rice."
+ },
+ {
+  "term": "littoral",
+  "variants": [
+   "littoral"
+  ],
+  "def": "The shallow-water shore zone of a pond, between open water and the reed swamp."
+ },
+ {
+  "term": "Carex",
+  "variants": [
+   "Carex lyngbyei",
+   "Carex"
+  ],
+  "def": "Sedge: the tufted grass-like plants of the wet meadow between reed swamp and dry ground."
+ },
+ {
+  "term": "Calamagrostis",
+  "variants": [
+   "Calamagrostis"
+  ],
+  "def": "Small-reed: the coarse grass of the wet meadow on the higher, less-flooded ground above the sedge marsh."
+ },
+ {
+  "term": "Spiraea",
+  "variants": [
+   "Spiraea"
+  ],
+  "def": "Meadowsweet: the low shrubs that come in on the drier margin of a reed grassland."
+ },
+ {
+  "term": "Phragmites",
+  "variants": [
+   "Phragmites australis",
+   "Phragmites"
+  ],
+  "def": "The common reed (yoshi): the tall grass of the reed swamp between open water and the sedge zone."
+ },
+ {
+  "term": "Castanopsis",
+  "variants": [
+   "Castanopsis"
+  ],
+  "def": "Chinquapin: the evergreen broadleaf of the East Asian hill wood, the stand type the density figures are taken from."
+ },
+ {
+  "term": "baren",
+  "variants": [
+   "baren"
+  ],
+  "def": "The pad a woodblock printer rubs over the paper to lift the impression; its cover is woven from bamboo sheath."
+ },
+ {
+  "term": "Buyi",
+  "variants": [
+   "Buyi"
+  ],
+  "def": "One of the ethnic minorities of Guizhou in southwest China, whose villages keep fengshui forests."
+ },
+ {
+  "term": "comb",
+  "variants": [
+   "comb layout",
+   "comb field",
+   "comb maps",
+   "comb net",
+   "comb fan",
+   "comb map"
+  ],
+  "def": "The fan-shaped field layout these maps draw: a head race forking into a canal along each margin, with delivery ditches running down between the columns of paddy like a comb's teeth."
+ },
+ {
+  "term": "Manning",
+  "variants": [
+   "Manning's formula",
+   "Manning"
+  ],
+  "def": "The engineering formula for flow in an open channel from its slope, section and roughness; it yields a width only once four parameters are assumed."
+ },
+ {
+  "term": "regime equation",
+  "variants": [
+   "regime power laws",
+   "regime equation",
+   "regime theory"
+  ],
+  "def": "The empirical rule for a stable unlined earth canal: its wetted perimeter goes as the square root of the discharge, with width, depth and velocity as smaller powers of it."
+ },
+ {
+  "term": "sanshaku-michi",
+  "variants": [
+   "sanshaku-michi"
+  ],
+  "def": "The three-shaku farm path, about 90 cm: the standard width of a way between paddies, against the two-shaku (60 cm) farm water channel."
+ },
+ {
+  "term": "hucheng he",
+  "variants": [
+   "hucheng he"
+  ],
+  "def": "The Chinese city moat: the ring of water dug around a walled seat, often made by turning a nearby stream through it."
+ },
+ {
+  "term": "Kishu school",
+  "variants": [
+   "Kishu-school",
+   "Kishu school"
+  ],
+  "def": "The Kishu school of Edo-period Japanese hydraulic engineering, whose works - Minuma-dai, 1728 - are the record's exemplar of a head canal deliberately divided into two."
+ },
+ {
+  "term": "eutrophication",
+  "variants": [
+   "eutrophication",
+   "eutrophic"
+  ],
+  "def": "The enrichment of still water with nutrients, which thickens its plant and algae growth; the shallow lowland dish ponds are the eutrophic ones."
+ },
+ {
+  "term": "yoshizu",
+  "variants": [
+   "yoshizu"
+  ],
+  "def": "Reed blinds: screens woven from cut reed, one product of a reed bed's winter harvest along with thatch."
+ },
+ {
+  "term": "seven autumn grasses",
+  "variants": [
+   "seven autumn grasses"
+  ],
+  "def": "The seven plants of the Japanese autumn, a conventional set of dry-grassland flowers - what a mown, burned pond embankment carries instead of reeds."
+ },
+ {
+  "term": "Senbon Torii",
+  "variants": [
+   "Senbon Torii"
+  ],
+  "def": "The 'Thousand Torii': the tunnel of donated gates on the approach at Fushimi Inari, the densest form of the donation row."
+ },
+ {
+  "term": "yizhong",
+  "variants": [
+   "yizhong"
+  ],
+  "def": "The Ming charity graveyard for the poor and unclaimed dead, the successor of the Song louzeyuan."
+ },
+ {
+  "term": "Thousand Character Classic",
+  "variants": [
+   "Thousand Character Classic"
+  ],
+  "def": "The Chinese primer of a thousand different characters learned in a fixed order, and so used as a numbering sequence - here for a pauper cemetery's plots."
+ },
+ {
+  "term": "nucleated",
+  "variants": [
+   "nucleated"
+  ],
+  "def": "Of a settlement: gathered into one compact cluster of houses and plots, as against farmsteads dispersed each among its own fields."
+ },
+ {
+  "term": "byre",
+  "variants": [
+   "byres",
+   "byre"
+  ],
+  "def": "A cattle shed: the small building a farm keeps its draft ox or cow in."
+ },
+ {
+  "term": "umaya",
+  "variants": [
+   "umaya"
+  ],
+  "def": "The stable of a farmhouse; in the L-shaped magariya form a wing under the house's own roof, warmed from the kitchen hearth."
+ },
+ {
+  "term": "omoya",
+  "variants": [
+   "omoya"
+  ],
+  "def": "The main house of a farmstead - the dwelling itself, as against its wings and outbuildings."
+ },
+ {
+  "term": "ido",
+  "variants": [
+   "ido"
+  ],
+  "def": "A well; where a farmhouse had its own, it stood in the rear corner of the earth-floored doma or in a back projection."
+ },
+ {
+  "term": "edauchi",
+  "variants": [
+   "edauchi"
+  ],
+  "def": "Limb-pruning: cutting the side branches from a grove tree so it grows tall and clean-stemmed, as against topping it at a fixed height."
+ },
+ {
+  "term": "sankyoson",
+  "variants": [
+   "sankyoson",
+   "sanson"
+  ],
+  "def": "Dispersed settlement: the form in which each farmstead stands alone among its own fields, with no village street; the Tonami plain is the canonical case."
+ },
+ {
+  "term": "roson",
+  "variants": [
+   "row village",
+   "roson"
+  ],
+  "def": "Row village: a settlement strung in one or two lines along a road, river or valley floor, each holding's land running back from its house."
+ },
+ {
+  "term": "desire path",
+  "variants": [
+   "desire paths",
+   "desire path",
+   "desire-line",
+   "desire line"
+  ],
+  "def": "A track worn by feet rather than laid out - the shortest or most easily walked line between two places; as few as fifteen passages make one."
+ },
+ {
+  "term": "hutong",
+  "variants": [
+   "hutongs",
+   "hutong"
+  ],
+  "def": "A lane of old Beijing, formed by the blank outer walls of courtyard houses built side against side."
+ },
+ {
+  "term": "levee",
+  "variants": [
+   "levees",
+   "levee"
+  ],
+  "def": "The raised earthen bank that holds water in a paddy or out of a floodplain; a paddy levee is the bund, and is walked as a path."
+ },
+ {
+  "term": "gentry",
+  "variants": [
+   "gentry"
+  ],
+  "def": "The landowning, degree-holding families of a Chinese district: the local elite from whom officials came and with whom a magistrate had to deal."
+ },
+ {
+  "term": "Sengoku",
+  "variants": [
+   "Sengoku"
+  ],
+  "def": "The age of civil wars, roughly 1467-1600, before the castle towns: the age of the fortified rural warrior residence."
+ },
+ {
+  "term": "Han dynasty",
+  "variants": [
+   "Han dynasty",
+   "Han-dynasty",
+   "Eastern Han",
+   "Han China"
+  ],
+  "def": "The Han, 206 BC to AD 220, whose tomb models are much of what is known of the ordinary Chinese farmyard - the pigsty-latrine among them."
+ },
+ {
+  "term": "Muromachi",
+  "variants": [
+   "Muromachi"
+  ],
+  "def": "The Muromachi period, 1336-1573, the age of the Ashikaga shoguns."
+ },
+ {
+  "term": "Genroku",
+  "variants": [
+   "Genroku"
+  ],
+  "def": "The Genroku era, 1688-1704, the height of Edo prosperity and the date on many of the village registers the record reads."
+ },
+ {
+  "term": "Kyoho",
+  "variants": [
+   "Kyoho",
+   "Kyōhō"
+  ],
+  "def": "The Kyoho era, 1716-1736, of the shogunate's reforms and of many surviving village registers."
+ },
+ {
+  "term": "Qimin Yaoshu",
+  "variants": [
+   "Qimin Yaoshu"
+  ],
+  "def": "The sixth-century Chinese farming manual, the oldest complete agricultural treatise to survive, where the coop, the orchard and the rotations are first written down."
+ },
+ {
+  "term": "azimuth",
+  "variants": [
+   "azimuth"
+  ],
+  "def": "The compass bearing of the sun, in degrees clockwise from north; with its height it fixes where a shadow falls."
+ },
+ {
+  "term": "county seat",
+  "variants": [
+   "county seats",
+   "county seat"
+  ],
+  "def": "The walled town a county was governed from: the magistrate's yamen, and the market center of the countryside around it."
+ },
+ {
+  "term": "geomancy",
+  "variants": [
+   "geomantic",
+   "geomancy"
+  ],
+  "def": "Siting graves, houses and villages by the lie of hills, water and wind - feng shui and its Japanese kin."
+ },
+ {
+  "term": "waraguro",
+  "variants": [
+   "waraguro"
+  ],
+  "def": "A straw rick: the rice straw stacked round a pole after the harvest and drawn on through the winter."
+ },
+ {
+  "term": "understory",
+  "variants": [
+   "understory"
+  ],
+  "def": "The shrubs and young trees growing below a wood's canopy."
+ },
+ {
+  "term": "rape",
+  "variants": [
+   "rapeseed",
+   "nanohana",
+   "aburana",
+   "rape"
+  ],
+  "def": "The yellow-flowered oilseed sown into drained rice stubble in autumn and cut in flower in March and April; its seed is pressed for lamp and cooking oil."
+ },
+ {
+  "term": "loess",
+  "variants": [
+   "loess"
+  ],
+  "def": "The deep wind-blown silt of north China: fertile, free-draining dryland farmed without irrigation, so its crops live on the summer rain and on lifted groundwater."
+ },
+ {
+  "term": "caravanserai",
+  "variants": [
+   "caravanserais",
+   "caravanserai"
+  ],
+  "def": "The walled courtyard inn of the overland trade routes, which watered and stabled a whole caravan from one courtyard well or cistern."
+ },
+ {
+  "term": "kon-ya",
+  "variants": [
+   "kon-ya",
+   "konya"
+  ],
+  "def": "A dyer's shop: the indigo works, its sunken vats and boiling hearth inside a deep shopfront, its drying poles, racks and rooftop platforms filling the ground behind."
+ },
+ {
+  "term": "zaimokuya",
+  "variants": [
+   "zaimokuya"
+  ],
+  "def": "A timber dealer, whose stacked timber and floated logs need an open yard with a landing on the water at the edge of town."
+ },
+ {
+  "term": "aburaya",
+  "variants": [
+   "aburaya",
+   "youfang"
+  ],
+  "def": "An oil presser's works: the wedge-and-beam press, the seed-roasting stove and the ox-driven mill that crush rape and sesame seed for oil."
+ },
+ {
+  "term": "shichiya",
+  "variants": [
+   "shichiya"
+  ],
+  "def": "A pawnbroker: an ordinary shopfront whose bulky pledges fill two or three fireproof storehouses in a walled rear court."
+ },
+ {
+  "term": "kaji-ya",
+  "variants": [
+   "kaji-ya"
+  ],
+  "def": "A smith's shop: the ordinary town smithy of one forge and a little yard, which also shoes horses and oxen where iron is worth it."
+ },
+ {
+  "term": "kame",
+  "variants": [
+   "kame"
+  ],
+  "def": "A large glazed storage jar, the brewery's fermenting and storage vessel; heavy and cheap by weight, so made near where it is used."
+ },
+ {
+  "term": "kanagashi",
+  "variants": [
+   "kanagashi"
+  ],
+  "def": "Loose-log driving: floating felled logs down the upper, unnavigable river one at a time, as against binding them into rafts on the lower reaches."
+ },
+ {
+  "term": "ōkaji",
+  "variants": [
+   "ōkajiba",
+   "okajiba",
+   "ōkaji",
+   "okaji"
+  ],
+  "def": "The refining forge: the second stage of Japanese iron making, which turns the tatara's pig iron and low-carbon fractions into flat bars of forgeable iron. The okajiba is its building."
+ },
+ {
+  "term": "dōba",
+  "variants": [
+   "dōba",
+   "doba"
+  ],
+  "def": "The crushing floor of a Japanese ironworks, where the bloom from the tatara is broken up and sorted before refining."
+ },
+ {
+  "term": "kan",
+  "variants": [
+   "kan"
+  ],
+  "def": "A Japanese weight of 3.75 kg. Rice was baled by it; charcoal, which had no standard bale, had to be weighed at sale."
+ },
+ {
+  "term": "coping",
+  "variants": [
+   "coping"
+  ],
+  "def": "The small tiled roof capping an earthen wall, which keeps rain off its earth core."
+ },
+ {
+  "term": "schistosomiasis",
+  "variants": [
+   "schistosomiasis"
+  ],
+  "def": "The parasitic disease carried by standing fresh water, endemic where a village drank from its canals and ponds rather than from wells."
+ },
+ {
+  "term": "jingtian",
+  "variants": [
+   "jingtian"
+  ],
+  "def": "The 'well-field': the classical Chinese scheme of nine squares farmed by eight households around a ninth with the well - an ideal of the texts rather than a practice."
+ },
+ {
+  "term": "Warring States",
+  "variants": [
+   "Warring States",
+   "Warring-States"
+  ],
+  "def": "The Chinese age of warring kingdoms, the fifth to third centuries BC, before the empire."
+ },
+ {
+  "term": "idoyakata",
+  "variants": [
+   "idoyakata"
+  ],
+  "def": "The well house: posts set beside a well with a roof laid over them and nothing more."
+ },
+ {
+  "term": "igeta",
+  "variants": [
+   "idowaku",
+   "igeta"
+  ],
+  "def": "The well curb: the square frame of timber or stone set around a well's mouth."
+ },
+ {
+  "term": "toki no kane",
+  "variants": [
+   "toki no kane"
+  ],
+  "def": "The licensed time bell of an Edo town, rung for the hours by contract - a separate institution from the fire lookout."
+ },
+ {
+  "term": "taiping-gang",
+  "variants": [
+   "taiping-gang",
+   "men-hai"
+  ],
+  "def": "The great bronze or iron water vats kept standing full in a Chinese palace's courtyards and at its gates against fire."
+ },
+ {
+  "term": "machi-bugyosho",
+  "variants": [
+   "machi-bugyōsho",
+   "machi-bugyosho",
+   "bugyosho"
+  ],
+  "def": "An urban magistracy: the walled office-and-residence compound from which a town magistrate governed."
+ },
+ {
+  "term": "ginmisho",
+  "variants": [
+   "ginmisho"
+  ],
+  "def": "The examination room beside a magistracy's hearing court, where a suspect was questioned."
+ },
+ {
+  "term": "goyoba",
+  "variants": [
+   "goyōba",
+   "goyoba"
+  ],
+  "def": "The day office of a magistracy, where the routine paperwork of the post was done, as against the hall where cases were heard."
+ },
+ {
+  "term": "eiro",
+  "variants": [
+   "katairo",
+   "eiro"
+  ],
+  "def": "The two Edo sentences that were actual imprisonment - life confinement and confinement in default - both imposed only exceptionally; the ordinary sentence was exile, flogging, a fine or death."
+ },
+ {
+  "term": "nuriya",
+  "variants": [
+   "nuriya"
+  ],
+  "def": "Plaster-faced construction: a wooden building rendered outside with earth as a fire precaution, one step short of a full storehouse."
+ },
+ {
+  "term": "fish fry",
+  "variants": [
+   "fish fry"
+  ],
+  "def": "Newly hatched fish, caught in the river and reared in small nursery ponds before they are stocked into the big ponds to grow out."
+ },
+ {
+  "term": "green manure",
+  "variants": [
+   "green manure"
+  ],
+  "def": "A crop grown to be plowed back into the ground rather than harvested, to feed the crop that follows it."
+ },
+ {
+  "term": "yulin wei",
+  "variants": [
+   "fish-scale polders",
+   "fish-scale polder",
+   "yulin wei"
+  ],
+  "def": "The small islet-like polders packed into a water net, named for the irregular overlapping outlines they show from the air."
+ },
+ {
+  "term": "Willow Palisade",
+  "variants": [
+   "Willow Palisade"
+  ],
+  "def": "The Qing dynasty's frontier earthwork in Manchuria, planted with willow along its bank - the one place a planting interval is written into law."
+ },
+ {
+  "term": "kata",
+  "variants": [
+   "kata"
+  ],
+  "def": "A fixed solo form of practice movements, drilled alone in a square of eight to ten feet."
+ },
+ {
+  "term": "dS/m",
+  "variants": [
+   "dS/m"
+  ],
+  "def": "Decisiemens per meter, the unit of water saltiness. Rice is the most salt-sensitive cereal, and its yield falls above about 0.9 dS/m in the field water."
+ },
+ {
+  "term": "board foot",
+  "variants": [
+   "board feet",
+   "board foot"
+  ],
+  "def": "A foot square and an inch thick: the unit sawn timber is counted in."
+ },
+ {
+  "term": "fairway",
+  "variants": [
+   "fairway"
+  ],
+  "def": "The open water kept clear for boats to pass; a boom that spills into it obstructs navigation."
+ },
+ {
+  "term": "komono",
+  "variants": [
+   "komono"
+  ],
+  "def": "The lowest of a samurai household's live-in menservants, of commoner birth like the chugen, lodged inside the master's walled plot."
+ },
+ {
+  "term": "nando",
+  "variants": [
+   "nando"
+  ],
+  "def": "A closed inner room of a Japanese house used for storage and sleeping; where a small household's servants slept, under the main roof."
+ },
+ {
+  "term": "banfang",
+  "variants": [
+   "banfang"
+  ],
+  "def": "The runners' shed at a Chinese yamen: an improvised lean-to against the inside of the compound wall, of no fixed position or size."
+ },
+ {
+  "term": "daozuofang",
+  "variants": [
+   "daozuofang"
+  ],
+  "def": "The south row of a Chinese courtyard house, its windowless back forming the compound's street wall and its doors facing inward - the household servants' quarters."
+ },
+ {
+  "term": "houzhaofang",
+  "variants": [
+   "houzhaofang"
+  ],
+  "def": "The rear service row of a Chinese courtyard house, behind the main hall."
+ },
+ {
+  "term": "gongxiefang",
+  "variants": [
+   "gongxiefang",
+   "lishe"
+  ],
+  "def": "A Ming yamen's clerks' lodging: one named courtyard inside the yamen wall where the office's clerks were housed."
+ },
+ {
+  "term": "kondo",
+  "variants": [
+   "kondo"
+  ],
+  "def": "The main hall of a Japanese Buddhist temple, where its principal image stands; the largest building of a precinct, the biggest real ones about 150-190 ft long."
+ },
+ {
+  "term": "kamiza",
+  "variants": [
+   "kamiza"
+  ],
+  "def": "The upper seat of a hall - the honored end, from which a dojo or a reception room is laid out."
+ },
+ {
+  "term": "azuchi",
+  "variants": [
+   "azuchi"
+  ],
+  "def": "The earth-and-sand butt at the far end of an archery range, into which the targets are set and the arrows stop."
+ },
+ {
+  "term": "sarae",
+  "variants": [
+   "sarae"
+  ],
+  "def": "The periodic dredging of a moat or canal: shoveling out the silt that settles in still or slow water."
+ },
+ {
+  "term": "nagewatashi",
+  "variants": [
+   "nagewatashi"
+  ],
+  "def": "A weir thrown across a river to turn part of its flow into a canal's intake."
+ },
+ {
+  "term": "josui-ido",
+  "variants": [
+   "josui-ido",
+   "jōsui ido",
+   "josui ido"
+  ],
+  "def": "A cistern-well on a buried aqueduct main: a shaft sunk mostly below grade that residents bucketed from exactly as from a groundwater well."
+ },
+ {
+  "term": "onmyodo",
+  "variants": [
+   "onmyodo",
+   "hojutsu"
+  ],
+  "def": "The divination of direction and time by yin-yang and the five phases, by which a gate's auspicious aspect - a castle's front gate facing south - was chosen."
+ },
+ {
+  "term": "kami-yashiki",
+  "variants": [
+   "kami-yashiki"
+  ],
+  "def": "A domain lord's upper mansion in Edo, the principal compound of their household there; a small lord's ran 2,500-7,000 tsubo."
+ },
+ {
+  "term": "Kaogongji",
+  "variants": [
+   "Kaogongji"
+  ],
+  "def": "The classical Chinese text that lays down the ideal capital: a square wall, three gates a side, nine crossing streets, the palace at the center."
+ },
+ {
+  "term": "Odoi",
+  "variants": [
+   "Odoi"
+  ],
+  "def": "The earth rampart Hideyoshi threw around Kyoto in 1591, which fixed the city's outer boundary."
+ },
+ {
+  "term": "kaso-dera",
+  "variants": [
+   "kasō-dera",
+   "kaso-dera"
+  ],
+  "def": "A cremation temple: the temple whose precinct held the burning ground and ran the cremations for a quarter of a city."
+ },
+ {
+  "term": "shibai-goya",
+  "variants": [
+   "shibai-goya"
+  ],
+  "def": "A playhouse shed: the boarded, temporary theater a touring troupe raised on shrine or temple ground, as against a city's licensed permanent theater."
+ },
+ {
+  "term": "cribbing",
+  "variants": [
+   "cribbing"
+  ],
+  "def": "A bank facing built of squared timbers stacked in an open box frame and filled with stone."
+ },
+ {
+  "term": "jiguchi-sen",
+  "variants": [
+   "jiguchi-sen"
+  ],
+  "def": "The frontage tax attributed to Hideyoshi, assessed on the width of a house's street front - the popular explanation of the narrow machiya lot, which the Kyoto record disputes."
+ },
+ {
+  "term": "wokou",
+  "variants": [
+   "wokou"
+  ],
+  "def": "The pirate raiders of the 16th-century China coast, against whom the coastal counties threw up walls in haste."
+ },
+ {
+  "term": "suimon",
+  "variants": [
+   "suimon"
+  ],
+  "def": "A sluice gate on a channel: a board riding in grooves between two posts, lifted by hand or by a windlass from a crossbeam above the water."
+ },
+ {
+  "term": "kokumori",
+  "variants": [
+   "kokumori"
+  ],
+  "def": "The assessed yield per tan set for each grade of paddy at a survey - 1.5 koku upper, 1.3 middle, 1.1 lower - the figure a holding's kokudaka was built from."
+ },
+ {
+  "term": "kenchicho",
+  "variants": [
+   "kenchi-cho",
+   "kenchicho"
+  ],
+  "def": "The land-survey register: the book of every plot and homestead lot in a village, with its grade, area and holder."
+ },
+ {
+  "term": "yashikigami",
+  "variants": [
+   "yashikigami"
+  ],
+  "def": "The homestead deity: the household's own god, enshrined in a small hokora in a corner of the house plot."
+ },
+ {
+  "term": "liuchu",
+  "variants": [
+   "liuchu"
+  ],
+  "def": "The six domestic animals of Chinese farming: horse, ox, sheep, chicken, dog and pig."
+ },
+ {
+  "term": "beishan mianshui",
+  "variants": [
+   "beishan mianshui"
+  ],
+  "def": "'Back to the hill, facing the water': the fengshui seat that puts a house or a village with high ground behind it and open water in front."
+ },
+ {
+  "term": "kyuhi",
+  "variants": [
+   "kyuhi"
+  ],
+  "def": "Stable manure: the litter and grass of a byre or stable, rotted down and put on the fields."
  }
 ];
