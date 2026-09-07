@@ -221,7 +221,9 @@ task id, a correction date, a fetch verdict, "used to say") are absent from the 
 test cannot: per section, the VOCABULARY that deserves a tooltip (with a definition drafted from the record),
 the SESSION NOTES still visible, and the HISTORY still visible, each quoted with the rewrite it proposes. Run
 it beside `quote-check` on every new or changed entry before the feature lands, and record its verdicts in the
-feature's tasks. The registry (`SOURCES.html`) loads the glossary but is not under rules 2 and 3 (spec 209 D6:
+feature's tasks. **They stay two agents, dispatched in the same turn** (GM 2026-09-07, spec 209 D5): one fetches
+and can stall, the other reads one file; one verifies characters, the other judges what a reader meets; the rule
+of thumb is one agent per question you would want answered even if the other's answer never arrived. The registry (`SOURCES.html`) loads the glossary but is not under rules 2 and 3 (spec 209 D6:
 its `READ` markers are read by the link classifier and its entries are the record of the search); whether it
 should be is the GM's question.
 
