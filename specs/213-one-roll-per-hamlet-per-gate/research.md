@@ -49,9 +49,15 @@ run's growth ~50. Eight copies of the same 110 MB collection baseline is 880 MB.
 manifest)` by `plan_site` + `build` + `finish`, and `report()` produces a `Report` by `generate` (the
 re-roll loop, then `finish` into a scratch directory that is deleted, then the reachability verdict). One
 child roll produces all three - the plan, the finished manifest of the roll `generate` KEPT, and the
-Report - under one subject; `hamlet()` and `report()` read their part. A `Report` gains the manifest it
-was judged on. The lane-rule tests then read the SAME map the cohort test judged, which is more honest
-than today, where they read a `build`-only roll `generate` might have re-rolled.
+Report - under one subject; `hamlet()`, `report()` and `report_deps()` read their part. A `Report` gains
+the manifest it was judged on. The lane-rule tests then read the SAME map the cohort test judged, which is
+more honest than today, where they read a `build`-only roll `generate` might have re-rolled. **The same
+change closes feature 207's D14** (relayed by the GM): the hamlet floor's `report_deps` reads the roll's
+stored record, so on an incremental run the floor phase no longer re-rolls the subjects the tests just
+rolled (207's R8: about 140 s of the polder-only run's 219 s). Two conditions make it hold: the unified
+subject must be STORED under the full-run bypass, as `report:` is today (`_stores_under_bypass`, feature
+192), not shared only in memory; and the floor's fixed subjects (Inashiro, the two polders, the cohort
+seeds) must all be rostered specs - they are.
 
 **The first-wave lock (FR-002).** The run share (`_run_share_path`) gains a lock file per subject: the
 first worker takes it (`fcntl.flock`, exclusive) and rolls; a second worker finding it held blocks on it,
@@ -60,31 +66,50 @@ waiter rolls itself; a wait is bounded (10 minutes, longer than any roll) so a w
 the run. Measured cost: the waiters idle for one roll's length instead of rolling - 9 rolls and about
 230 s of CPU saved per gate, and the container's coincident peak drops with them.
 
-**The census gate (FR-003, FR-004).** The instrument, made permanent: a pytest plugin in `l7r/diagram/ci/`
-loaded by the gate's test phase records every roll request per worker; after pytest the Makefile
-aggregates and fails on (a) a spec requested twice in one run, (b) a spec absent from the roster, (c) a
-roster entry no test requested (a stale roster). Re-roll attempts inside one `generate` are ONE request,
-reported with their count. The roster is a Python module in `tests/` naming each spec allowed to roll at
-the gate with its reason and the unique coverage or emergent condition it carries (from the packing
-record); adding a rolling test means adding its entry with its reason, and the gate says so.
+**The census gate (FR-003, FR-004).** NOT the instrument made permanent as it was: the instrument patched
+six entry points and missed one on its first run (the package's re-exported `build`, reached by five
+tests) - the spec review named that as the shape that lets the drift return under a green gate. The
+record is written instead at the chokepoint every roll crosses in every process: `driver.roll_scope()`,
+which feature 210's static AST test proves every stage-running loop enters. It appends one line per roll
+(spec, pid, attempts, seconds) to the file named by `L7R_ROLL_CENSUS`, an environment variable the gate
+sets and every child inherits - a worker, a roll child, a pool-sweep child, a cohort pool child all
+record alike. The pytest plugin (`ci/rollcensus.py`, loaded as a second `-p` beside 207's `gate_plugin`,
+which stays a two-hook shim) does attribution and verdicts: it sets `L7R_ROLL_CENSUS_TEST` around each
+test so every record names the test that caused it, and records each `obtain` verdict (served or
+rolled). After pytest, `python3 -m l7r.diagram.ci rollcensus verdict` aggregates and fails on: a second
+ROLL of a spec (a request the share did not serve - many requests served by one roll is the passing
+state; attempts inside one `generate` are one roll, reported), a rolled spec absent from the roster, on a
+full run a roster entry nothing rolled, a render from a test without the `renders` marker, an in-process
+roll in a test worker from a site the roster does not except. The roster (`tests/rolls.py`) names each
+spec with its reason and unique coverage, and the stated duplicates with their mechanism.
 
-**First-attempt seeds (FR-005).** The census reports attempts per spec. Cohort seeds 41-44 are the
-ratchet's pinned canonical range and stay; the CLI test's seed 8 (2 attempts) is free and moves to a
-first-attempt seed. The two re-roll tests keep their attempts on purpose.
+**First-attempt seeds (FR-005).** The census reports attempts per spec. Cohort seeds 41-44 stay: what
+pins them is `GATE_COHORT_EXPECTED` (the expected-failure record over seeds 41-44, measured 2026-08-27,
+`tests/gate/hamletgen/test_driver.py`) and the strict seed-43 expected failure in
+`tests/gate/test_cohort_lane_rules.py`, both over a contiguous `cohort_specs(4, first_seed=41)`; the perf
+ratchet's seeds (4, 25, 39, 47, `perf_snapshot.DEFAULT_SEEDS`) are a different set and not the reason.
+The cost accepted: seed 42's two extra attempts, about 140 s of one worker per gate. The CLI test's seed
+8 (2 attempts) is free and moves. The two re-roll tests keep their attempts on purpose.
 
 **Tests do not render (FR-006).** `DIAGRAM_SKIP_RENDER=1` as the suite's default in `tests/conftest.py`;
-the tests OF rendering opt out with `monkeypatch.delenv`. Derived, not enumerated: the census also records
-every `render_png` and `raster.picture` call with its test, and the gate fails on one from a test that
-did not opt out.
+a test OF rendering carries a `renders` marker and clears the switch itself. The census records a render
+at the one site that consults the switch for both the PNG and the raster (`finish()`'s `rendering`) and at
+a direct `picture()`/`render_png()` call, and the gate fails on a render from a test without the marker.
 
-**The child roll-out (FR-007).** Feature 210's FR-004 list, done: `report()`/`report_deps()` (folded into
-FR-001's one roll), the five direct-`build` closures (their produce functions lifted to module level and
-run in the child by name - the feature-146 doctrine), the immune test (the child applies the one-extra-draw
-perturbation when told), the CLI test and the fan-out test (the fan-out compares the pool-child path with
-the serial path and rolls twice by design - the serial half moves to the child, the comparison stands),
-the three tools' tests (stub stages; nothing to move), and the regen site (`run_and_record` in a child,
-`gate_obtain`'s driver minus coverage). What stays in-process, stated: `gate_obtain` (already a child),
-the perf-snapshot and perf-profile tests (they time stages and must roll where they measure).
+**The child roll-out (FR-007), the surface derived.** The callers of `hamletgen.generate`,
+`hamletgen.build` and `driver.STAGES` (feature 210's own derivation) are the sites; each is in a child or
+a stated exception, and the census enforces it by failing on an in-process roll in a worker from any other
+site. Moved: `report()`/`report_deps()` (FR-001's one roll); the direct-`build` closures
+(`test_homesteads` x3, `test_sink`, `test_woodland_shrink_147`) and the direct-`generate` closures (the
+two re-roll tests) - lifted to module-level functions the child runs by name, with their monkeypatches
+applied inside the child through `unittest.mock.patch`; the immune test (the child applies the perturbation
+when told); the CLI test's roll (`main()` rolls through `generate`, which FR-001 makes a child roll); the
+fan-out's serial half (served from the shared roll); the regen site. Not needing a change: the tools
+(`cohort_audit`, `mapcheck`, `driver.cohort()` and `driver.main()`) roll through `generate`. The
+exceptions: the perf-snapshot and perf-profile tests time the stages where they run; each rolls a seed of
+its own, entered in the roster, so neither is a second roll of Inashiro (the perf-snapshot test rolled
+seed 4 today - a duplicate the review caught). The fan-out's parallel half is a stated duplicate: the
+cohort pool child IS the mechanism under test. `gate_obtain` is the rule, not an exception.
 
 **The pool sweep's child (FR-008).** Profile one `gate_obtain` child with the per-stage instrument: the
 550 MB against 121 in-process is unexplained. Coverage under `sys.monitoring` on a 22,000-statement

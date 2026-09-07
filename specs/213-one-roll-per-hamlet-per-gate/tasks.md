@@ -23,3 +23,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
       research: rendering
 - [ ] T09 the record (FR-013); `make done` green; SC-001 read off the census; land GATED
       research: rendering
+- [ ] T10 feature 207's D14 confirmed closed (FR-001, SC-004): the polder-only incremental run measured
+      with the census - the floor phase rolls nothing, the gate's time recorded against 219 s; ticked with
+      the numbers whether or not a change beyond FR-001 was needed (the GM's request, relayed 2026-09-07)
+      research: rendering

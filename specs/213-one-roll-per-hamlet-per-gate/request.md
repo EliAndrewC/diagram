@@ -67,3 +67,23 @@ re-roll) plus the census made permanent as the gate. The GM:
 The session raised no objection; it noted that item 5 has nothing to build (feature 207 is another
 session's, in flight) and that the gate's test target is shared with that feature, so main is merged
 before the Makefile is touched.
+
+## Relayed from the "Diagram html" session, 2026-09-07 (the GM's request through that session)
+
+> The GM asks that the spec-kit feature you are working on include a task that confirms the following is
+> addressed, whether by your existing work or by a fix you add, and the task should exist and be ticked
+> even if no change turns out to be needed.
+>
+> The problem, measured under feature 207 (specs/207-incremental-gate-and-content-as-data, research
+> R7/R8, decision D14). On an incremental gate run, the selected tests re-roll a changed subject under the
+> test fixtures' cache subject (the `hamlet()` share path), and then the hamlet floor phase rolls the same
+> spec AGAIN under `report:`'s subject, because `hamlet_floor.module_set` asks `rollcache.report_deps` per
+> fixed subject and a subject whose cache key moved re-rolls itself, serially, at about 40 to 60 s each. On
+> the polder-only run that was about 140 s of a 219 s gate: 79 s of pytest and the rest the floor rolling
+> the two polder subjects a second time. It is feature 192's double-roll shape, on the incremental path.
+> The fix I sketched and deliberately did not attempt inside 207: one cache subject per spec across the
+> two callers, so a roll the tests made serves the floor's dependency record. The GM suspects your
+> roll-census work may already cover it. Please read D14 and R7 in that spec directory, decide, and record
+> the verdict in a task of your own feature.
+
+Carried by FR-001, SC-004 and T10.
