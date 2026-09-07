@@ -31,14 +31,15 @@ class HenCoop(Kind):
 
     Note: The coop's existence and ground form are read; the household proportion and the 5 x 5 ft size
     are guesses bounded by 'most regions'.
+
+    Name: hen coop
+    Covers: `farm_fixtures[kind=coop]`
+    Label: guess
+    Sources: cambridge-poultry, qimin-yaoshu
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = "hen coop"
-    name = "hen coop"
-    covers = "`farm_fixtures[kind=coop]`"
-    label = "guess"
-    sources = ("cambridge-poultry", "qimin-yaoshu")
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 ```
 
 - Four tags, each at the start of a line: `What:` and `Why:` (the two paragraphs of the modal), `Note:`
@@ -47,10 +48,19 @@ class HenCoop(Kind):
   half of the note, shown under the why; it must be a verbatim substring of `Note:` - a test holds that).
 - A value runs to the next tag; wrapped lines are joined with one space, so wrap freely. A missing
   docstring or a missing required tag fails at IMPORT, naming the class.
-- The DATA stays as class attributes: `key` (what the ink carries), `name` (the modal's heading), `covers`,
-  `label` (`accurate` / `deviation` / `convention` / `guess` - constitution XII, four-way since feature
-  183), `sources` (keys in `research/SOURCES.html`), `entry` (the research section the text was written
-  FROM, in the form `sources.py` parses - it is what puts the questions on the references modal).
+- The DATA tags follow the prose, each one line (feature 207 - they were class attributes until then, and
+  relabeling a class or repointing its research entry was an ENGINE change that cost the whole gate):
+  `Name:` (the modal's heading), `Covers:` (which manifest features the class draws - documentation for
+  the next reader), `Label:` (`accurate` / `deviation` / `convention` / `guess` - constitution XII,
+  four-way since feature 183), `Sources:` (keys in `research/SOURCES.html`, comma-separated, or
+  `not recorded`), `Entry:` (the research section the text was written FROM, in the form `sources.py`
+  parses - it is what puts the questions on the references modal). All five are required of a `Kind`;
+  a missing one fails at import naming the class.
+- ONE class attribute stays: `key` - the tag the engine writes on the ink and the CSS token. It is code:
+  changing it changes what the engine emits, so it re-keys the gate, as it should.
+- The sibling texts are `../assets/siblings.json` and the page's fixed phrases and rulings record
+  `../assets/page-text.json` (`_base.py` loads them via `../content.py`). A docstring or a content-file
+  edit owes `make page-check`, not the gate.
 - Definition order within a module, and the module order in `__init__.py`, is `CLASSES`'s order.
 - Comments (`#`) above a class are for the next developer and never reach the page; the docstring is
   for the reader and always does.

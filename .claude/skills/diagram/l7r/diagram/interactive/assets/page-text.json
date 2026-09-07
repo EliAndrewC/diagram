@@ -1,0 +1,33 @@
+{
+  "caveat_lead": "On the drawing: ",
+  "references_lead": "The questions we asked while working out this feature - each is answered in our research notes, with the sources it rests on:",
+  "convention_lead": "Note: ",
+  "label_words": {
+    "accurate": "historically accurate",
+    "deviation": "a deliberate deviation",
+    "convention": "a map drawing convention",
+    "guess": "a guess"
+  },
+  "not_highlighted_rulings": [
+    [
+      "the background sheet",
+      "the spec (FR-002)",
+      "2026-08-27",
+      "not a feature of the place"
+    ],
+    [
+      "the scale bar and its captions",
+      "the spec (FR-002)",
+      "2026-08-27",
+      "map furniture, not a feature"
+    ]
+  ],
+  "not_highlighted_overturned": [
+    [
+      "the title placard and its text",
+      "the GM",
+      "2026-08-29",
+      "ruled map furniture on 2026-08-27 (feature 134 FR-002) and overturned by the GM in feature 156: \"I would like to be able to click on the title card for a settlement and then pull up an explanation of the type of settlement that this is.\" The placard now carries the reserved class `place`; the scale bar beside it keeps its ruling, having nothing to say."
+    ]
+  ]
+}

@@ -39,7 +39,12 @@ from __future__ import annotations
 import inspect
 import re
 from dataclasses import dataclass, field
-from typing import ClassVar, Literal
+from typing import ClassVar, Literal, cast
+
+from ..content import content
+
+#: The page's fixed phrases and the rulings record - DATA in `assets/page-text.json` (feature 207; see `content.py`).
+_TEXT = content("page-text.json")
 
 #: FOUR labels since feature 183 (GM 2026-09-05). The GM's line between the two in the middle, verbatim:
 #: a DEVIATION is *"our fictional setting being different from the actual history and historical places
@@ -70,21 +75,11 @@ NOT_HIGHLIGHTED = "-"
 PLACE = "place"
 
 #: Each ruling that put a kind of ink on the not-highlighted list: (what, who, when, why).
-NOT_HIGHLIGHTED_RULINGS: tuple[tuple[str, str, str, str], ...] = (
-    ("the background sheet", "the spec (FR-002)", "2026-08-27", "not a feature of the place"),
-    ("the scale bar and its captions", "the spec (FR-002)", "2026-08-27", "map furniture, not a feature"),
-)
+NOT_HIGHLIGHTED_RULINGS: tuple[tuple[str, str, str, str], ...] = tuple((what, who, when, why) for what, who, when, why in _TEXT["not_highlighted_rulings"])
 
 #: A ruling that was OVERTURNED, kept beside the list rather than deleted from it - the record should
 #: show that a decision was made and then remade, not quietly lose one: (what, who, when, why).
-NOT_HIGHLIGHTED_OVERTURNED: tuple[tuple[str, str, str, str], ...] = (
-    (
-        "the title placard and its text",
-        "the GM",
-        "2026-08-29",
-        'ruled map furniture on 2026-08-27 (feature 134 FR-002) and overturned by the GM in feature 156: "I would like to be able to click on the title card for a settlement and then pull up an explanation of the type of settlement that this is." The placard now carries the reserved class `place`; the scale bar beside it keeps its ruling, having nothing to say.',
-    ),
-)
+NOT_HIGHLIGHTED_OVERTURNED: tuple[tuple[str, str, str, str], ...] = tuple((what, who, when, why) for what, who, when, why in _TEXT["not_highlighted_overturned"])
 
 
 @dataclass(frozen=True)
@@ -112,18 +107,13 @@ class FeatureClass:
     siblings: dict[str, str] = field(default_factory=dict)  # sibling key -> how THIS class differs from it
 
 
-_LABEL_WORDS: dict[Label, str] = {
-    "accurate": "historically accurate",
-    "deviation": "a deliberate deviation",
-    "convention": "a map drawing convention",
-    "guess": "a guess",
-}
+_LABEL_WORDS: dict[Label, str] = {cast(Label, label): words for label, words in _TEXT["label_words"].items()}
 
 #: What a convention's lead-in is (feature 183): the GM's own example opens *"Note: we have rendered the
 #: bund beans as larger and darker in color than they actually are, in order to make them visible on the
 #: map at this this scale. <More information about the actual size and color goes here.>"* - so the note
 #: itself is written as that sentence and this is all that precedes it.
-CONVENTION_LEAD = "Note: "
+CONVENTION_LEAD: str = _TEXT["convention_lead"]
 
 
 def label_phrase(label: Label) -> str:
@@ -151,8 +141,13 @@ def slug(key: str) -> str:
 
 # ---- the class form (feature 189) -----------------------------------------------------------------
 
-_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat")
-_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat):\s?(.*)$")
+#: The prose tags, then the DATA tags (feature 207: `Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:` moved
+#: from class attributes into the docstring, so a relabeling or a repointed research entry is a page-content
+#: edit like any rewording - `make page-check`, not the gate; only `key` stays code, being what the engine
+#: writes on the ink and what the stylesheet matches).
+_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "Name", "Covers", "Label", "Sources", "Entry")
+_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat|Name|Covers|Label|Sources|Entry):\s?(.*)$")
+_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Label", "Sources", "Entry")
 
 
 def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
@@ -189,12 +184,7 @@ class Kind:
     Subclasses register themselves in definition order (`__init_subclass__`), which - with the family
     modules imported in the spec's FR-007 order by `__init__.py` - is `CLASSES`'s insertion order."""
 
-    key: str
-    name: str
-    covers: str
-    label: Label
-    sources: tuple[str, ...]
-    entry: str
+    key: str  # the ONE attribute: the tag the engine writes on the ink, and the CSS token - everything else is in the docstring
     registry: ClassVar[list[type[Kind]]] = []
 
     def __init_subclass__(cls, **kwargs: object) -> None:
@@ -205,16 +195,21 @@ class Kind:
     def feature(cls) -> FeatureClass:
         """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring."""
         parts = parse_explanation(cls.__doc__, cls.__name__)
+        for tag in _DATA_TAGS:
+            if not parts.get(tag):
+                raise ValueError(f"{cls.__name__}: the docstring has no {tag}: section")
+        if parts["Label"] not in _LABEL_WORDS:
+            raise ValueError(f"{cls.__name__}: Label: {parts['Label']!r} is not one of {sorted(_LABEL_WORDS)}")
         return FeatureClass(
             key=cls.key,
-            name=cls.name,
-            covers=cls.covers,
+            name=parts["Name"],
+            covers=parts["Covers"],
             what=parts["What"],
             why=parts["Why"],
-            label=cls.label,
+            label=cast(Label, parts["Label"]),
             label_note=parts["Note"],
-            sources=cls.sources,
-            entry=cls.entry,
+            sources=tuple(s.strip() for s in parts["Sources"].split(",") if s.strip()),
+            entry=parts["Entry"],
             caveat=parts.get("Caveat", ""),
         )
 

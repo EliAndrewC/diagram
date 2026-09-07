@@ -27,9 +27,7 @@ PACKAGE = "tests/full/interactive/page_browser"
 
 
 def _gate_stamp() -> Any:
-    spec = importlib.util.spec_from_file_location(
-        "gate_stamp_206", REPO / "scripts" / "gate-stamp.py"
-    )
+    spec = importlib.util.spec_from_file_location("gate_stamp_206", REPO / "scripts" / "gate-stamp.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -55,10 +53,7 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
     nothing under tests/ is excluded from it, though the area shares the diagram area's root, whose
     exclusion list drops tests/ (the reason `_excluded` takes the area name)."""
     gs = _gate_stamp()
-    files = {
-        str(f.relative_to(REPO))
-        for f in gs._area_files(REPO, *gs.AREAS["browser"], area="browser")
-    }
+    files = {str(f.relative_to(REPO)) for f in gs._area_files(REPO, *gs.AREAS["browser"], area="browser")}
     base = ".claude/skills/diagram/"
     for want in (
         "l7r/diagram/interactive/assets/page.js",
@@ -70,21 +65,11 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
         "research/fields.html",
     ):
         assert base + want in files, want
-    assert not [f for f in files if f.startswith(base + "l7r/diagram/settlement/")], (
-        "no engine module outside interactive/"
-    )
+    assert not [f for f in files if f.startswith(base + "l7r/diagram/settlement/")], "no engine module outside interactive/"
     assert not [f for f in files if f.startswith(base + "pool/")], "no map"
-    assert "browser" in gs.RAW_AREAS, (
-        "docstrings are page prose: hashed by bytes (spec D3 of 189, carried here)"
-    )
-    assert (
-        "browser" in gs.SKIP_ONLY_AREAS
-        and "page" not in gs.SKIP_ONLY_AREAS
-        and "diagram" not in gs.SKIP_ONLY_AREAS
-    )
-    assert gs.exclusions("browser") == (), (
-        "the browser area excludes nothing - its test package is its own input"
-    )
+    assert "browser" in gs.RAW_AREAS, "docstrings are page prose: hashed by bytes (spec D3 of 189, carried here)"
+    assert "browser" in gs.SKIP_ONLY_AREAS and "page" not in gs.SKIP_ONLY_AREAS and "diagram" not in gs.SKIP_ONLY_AREAS
+    assert gs.exclusions("browser") == (), "the browser area excludes nothing - its test package is its own input"
 
 
 @pytest.fixture
@@ -133,9 +118,7 @@ def _stale(gs: Any, root: pathlib.Path) -> bool:
     return gs.fresh("browser", root) != 0
 
 
-def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(
-    repo: pathlib.Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(repo: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """FR-001/FR-006: written, the stamp is fresh; one byte in the stylesheet, the page writer's docstring
     (bytes, not the semantic id), the test package, or a research page makes it stale; so does a different
     installed browser; an engine module outside the area does not."""
@@ -162,9 +145,7 @@ def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(
         assert not _stale(gs, repo)
     with open(skill / "l7r/diagram/settlement/houses.py", "a") as fh:
         fh.write("y = 2\n")
-    assert not _stale(gs, repo), (
-        "an engine module the tests never read does not re-run them"
-    )
+    assert not _stale(gs, repo), "an engine module the tests never read does not re-run them"
     monkeypatch.setattr(
         gs,
         "_salt",
@@ -197,9 +178,7 @@ def test_check_never_demands_a_browser_stamp(repo: pathlib.Path) -> None:
         },
     )
     assert gs.check("origin/main", repo) == 0
-    assert not (repo / ".git" / "gate-green-browser").exists(), (
-        "and no stamp was needed to get there"
-    )
+    assert not (repo / ".git" / "gate-green-browser").exists(), "and no stamp was needed to get there"
 
 
 def test_the_real_salt_names_the_installed_browser() -> None:
@@ -209,9 +188,7 @@ def test_the_real_salt_names_the_installed_browser() -> None:
     pytest.importorskip("playwright")
     salt = gs._salt("browser")
     assert salt.startswith("playwright=") and ";chromium=" in salt, salt
-    assert (
-        gs._salt("page") == "" and gs._salt("diagram") == "" and gs._salt("hooks") == ""
-    )
+    assert gs._salt("page") == "" and gs._salt("diagram") == "" and gs._salt("hooks") == ""
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -224,36 +201,21 @@ def test_the_test_phase_skips_the_package_on_a_fresh_stamp_and_says_so() -> None
     carries it and prints one line when it is set; nothing forces either direction."""
     define = re.search(r"^BROWSER_SKIP = (.*)$", MAKEFILE, re.M)
     assert define, "BROWSER_SKIP is defined"
-    assert "--fresh browser" in define.group(
-        1
-    ) and f"--ignore={PACKAGE}" in define.group(1)
+    assert "--fresh browser" in define.group(1) and f"--ignore={PACKAGE}" in define.group(1)
     body = _recipe("test")
-    assert body.count("$(BROWSER_SKIP)") >= 2, (
-        "both pytest lines (with and without xdist) carry the skip"
-    )
+    assert body.count("$(BROWSER_SKIP)") >= 2, "both pytest lines (with and without xdist) carry the skip"
     assert "$(if $(BROWSER_SKIP),printf" in body, "the skip is announced in one line"
-    assert "BROWSER_ALL" not in MAKEFILE, (
-        "no flag forces either direction (the spec review struck one)"
-    )
+    assert "BROWSER_ALL" not in MAKEFILE, "no flag forces either direction (the spec review struck one)"
 
 
-def test_page_check_and_the_phases_run_exit_earn_the_stamp_and_the_short_circuit_does_not() -> (
-    None
-):
+def test_page_check_and_the_phases_run_exit_earn_the_stamp_and_the_short_circuit_does_not() -> None:
     """FR-003: `page-check` always runs the package and writes the browser stamp; `done`'s phases-run exit
     writes it only when BROWSER_SKIP was empty for that run; the already-verified short-circuit, which ran
     nothing, writes none."""
     assert 'gate-stamp.py" --write browser' in _recipe("page-check")
     body = _recipe("done")
     short = re.search(r"verified-done; then(.*?)exit 0;", body, re.S)
-    assert short and "--write browser" not in short.group(1), (
-        "the short-circuit ran nothing"
-    )
+    assert short and "--write browser" not in short.group(1), "the short-circuit ran nothing"
     after = body[short.end() :]
-    assert (
-        '$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write browser'
-        in after
-    )
-    assert "--write page" in after and after.index("--write page") < after.index(
-        "--write browser"
-    ), "after the page stamp, in the phases-run exit"
+    assert '$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write browser' in after
+    assert "--write page" in after and after.index("--write page") < after.index("--write browser"), "after the page stamp, in the phases-run exit"

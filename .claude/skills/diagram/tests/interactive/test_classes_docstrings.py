@@ -88,18 +88,51 @@ def test_a_kind_builds_its_feature_class_from_its_docstring() -> None:
         Note: read; the size is a guess.
 
         Caveat: the size is a guess.
+
+        Name: the probe
+        Covers: nothing
+        Label: guess
+        Sources: not recorded, second-key
+        Entry: research/none.md
         """
 
         key = "probe"
-        name = "the probe"
-        covers = "nothing"
-        label = "guess"
-        sources = ("not recorded",)
-        entry = "research/none.md"
 
     fc = Probe.feature()
     assert isinstance(fc, FeatureClass) and fc.what == "a probe." and fc.caveat == "the size is a guess." and fc.label == "guess"
+    assert fc.name == "the probe" and fc.covers == "nothing" and fc.sources == ("not recorded", "second-key") and fc.entry == "research/none.md"
     Kind.registry.remove(Probe)  # a test class must not join the vocabulary
+
+
+@pytest.mark.parametrize(
+    ("missing", "why"),
+    [
+        ("Label: guess", "no Label: section"),
+        ("Sources: not recorded", "no Sources: section"),
+        ("Entry: research/none.md", "no Entry: section"),
+        ("Name: the probe", "no Name: section"),
+        ("Covers: nothing", "no Covers: section"),
+    ],
+)
+def test_a_kind_without_a_data_tag_fails_loudly_naming_the_class(missing: str, why: str) -> None:
+    """Feature 207: the five data tags are required of a Kind (not of `parse_explanation`, which only reads)."""
+    doc = "What: a.\n\nWhy: b.\n\nNote: c.\n\nName: the probe\nCovers: nothing\nLabel: guess\nSources: not recorded\nEntry: research/none.md\n".replace(missing + "\n", "")
+    Probe = type("Probe", (Kind,), {"__doc__": doc, "key": "probe"})
+    try:
+        with pytest.raises(ValueError, match=why) as e:
+            Probe.feature()
+        assert "Probe" in str(e.value)
+    finally:
+        Kind.registry.remove(Probe)
+
+
+def test_a_kind_with_a_label_outside_the_four_fails_loudly() -> None:
+    Probe = type("Probe", (Kind,), {"__doc__": "What: a.\n\nWhy: b.\n\nNote: c.\n\nName: p\nCovers: n\nLabel: rumor\nSources: not recorded\nEntry: research/none.md\n", "key": "probe"})
+    try:
+        with pytest.raises(ValueError, match="rumor"):
+            Probe.feature()
+    finally:
+        Kind.registry.remove(Probe)
 
 
 def test_install_siblings_refuses_an_unknown_pair() -> None:

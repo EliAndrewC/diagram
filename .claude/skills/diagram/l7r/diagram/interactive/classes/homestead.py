@@ -24,14 +24,15 @@ class Farmhouse(Kind):
 
     Caveat: the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of
     what the read bounds allow, close enough that the household works its own ground.
+
+    Name: farmhouse
+    Covers: `houses` - the dwelling of each household
+    Label: accurate
+    Sources: sugiura-1973-fuzoku
+    Entry: research/homesteads.html - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'
     """
 
     key = 'farmhouse'
-    name = 'farmhouse'
-    covers = '`houses` - the dwelling of each household'
-    label = 'accurate'
-    sources = ('sugiura-1973-fuzoku',)
-    entry = "research/homesteads.html - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane'"
 
 
 class StorageShed(Kind):
@@ -49,14 +50,15 @@ class StorageShed(Kind):
 
     Caveat: the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder
     and better-stocked district than this one.
+
+    Name: storage shed
+    Covers: `houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)
+    Label: accurate
+    Sources: sugiura-1973-fuzoku
+    Entry: research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'
     """
 
     key = 'storage shed'
-    name = 'storage shed'
-    covers = '`houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)'
-    label = 'accurate'
-    sources = ('sugiura-1973-fuzoku',)
-    entry = "research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'"
 
 
 class Byre(Kind):
@@ -72,14 +74,15 @@ class Byre(Kind):
     cold-country form and is deliberately not drawn.
 
     Caveat: the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.
+
+    Name: byre
+    Covers: `byres` - the draft-animal sheds
+    Label: accurate
+    Sources: cambridge-animals-china
+    Entry: research/homesteads.html - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'
     """
 
     key = 'byre'
-    name = 'byre'
-    covers = '`byres` - the draft-animal sheds'
-    label = 'accurate'
-    sources = ('cambridge-animals-china',)
-    entry = "research/homesteads.html - 'May a byre stand beside a wellhead?', 'What stood on a farmstead'"
 
 
 class ThreshingYard(Kind):
@@ -103,14 +106,15 @@ class ThreshingYard(Kind):
     Caveat: the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy
     household needs less floor than the barley district the mat counts come from), and the sun corridor is
     derived from the read roof pitch.
+
+    Name: threshing yard
+    Covers: `threshing_yards`
+    Label: accurate
+    Sources: not recorded
+    Entry: research/homesteads.html - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'
     """
 
     key = 'threshing yard'
-    name = 'threshing yard'
-    covers = '`threshing_yards`'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/homesteads.html - 'How big was the work yard, and how did the sizes spread'; 'The threshing yard's sun, and how far a farmhouse shades'"
 
 
 class Garden(Kind):
@@ -126,14 +130,15 @@ class Garden(Kind):
 
     Caveat: the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row
     count, so those are drawn to read as a worked kitchen bed at this scale.
+
+    Name: garden
+    Covers: `gardens`
+    Label: accurate
+    Sources: not recorded
+    Entry: research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)
     """
 
     key = 'garden'
-    name = 'garden'
-    covers = '`gardens`'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)"
 
 
 class Privy(Kind):
@@ -149,14 +154,15 @@ class Privy(Kind):
     sizing page is dead.
 
     Caveat: the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.
+
+    Name: privy
+    Covers: `farm_fixtures[kind=privy]`
+    Label: accurate
+    Sources: kotobank-benjo, sinyoken-madori, sugiura-1973-fuzoku
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'privy'
-    name = 'privy'
-    covers = '`farm_fixtures[kind=privy]`'
-    label = 'accurate'
-    sources = ('kotobank-benjo', 'sinyoken-madori', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class Woodpile(Kind):
@@ -168,14 +174,15 @@ class Woodpile(Kind):
 
     Note: The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found
     nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.
+
+    Name: woodpile
+    Covers: `farm_fixtures[kind=woodpile]`
+    Label: guess
+    Sources: boso-no-mura-kigoya, 326woods-stack, sugiura-1973-fuzoku
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'woodpile'
-    name = 'woodpile'
-    covers = '`farm_fixtures[kind=woodpile]`'
-    label = 'guess'
-    sources = ('boso-no-mura-kigoya', '326woods-stack', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class ManureHeap(Kind):
@@ -188,14 +195,15 @@ class ManureHeap(Kind):
 
     Note: The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size
     are guesses - the pages describe the pit, not where it stood.
+
+    Name: manure heap
+    Covers: `farm_fixtures[kind=manure]`
+    Label: guess
+    Sources: jawiki-koedame, artic-pigsty-latrine
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'manure heap'
-    name = 'manure heap'
-    covers = '`farm_fixtures[kind=manure]`'
-    label = 'guess'
-    sources = ('jawiki-koedame', 'artic-pigsty-latrine')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class Bathhouse(Kind):
@@ -208,14 +216,15 @@ class Bathhouse(Kind):
 
     Note: Use is read (Mizumaki museum); where the shed stood was found nowhere - the back wall or a flank is a
     guess, and so is the 6 x 6 ft size.
+
+    Name: bathhouse
+    Covers: `farm_fixtures[kind=bath]`
+    Label: guess
+    Sources: mizumaki-goemonburo, sugiura-1973-fuzoku
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'bathhouse'
-    name = 'bathhouse'
-    covers = '`farm_fixtures[kind=bath]`'
-    label = 'guess'
-    sources = ('mizumaki-goemonburo', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class HenCoop(Kind):
@@ -227,14 +236,15 @@ class HenCoop(Kind):
 
     Note: The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the
     household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.
+
+    Name: hen coop
+    Covers: `farm_fixtures[kind=coop]`
+    Label: guess
+    Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'hen coop'
-    name = 'hen coop'
-    covers = '`farm_fixtures[kind=coop]`'
-    label = 'guess'
-    sources = ('cambridge-animals-china', 'qimin-yaoshu-yangji', 'pitt-zhengzhou-coop')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class HouseholdShrine(Kind):
@@ -251,14 +261,15 @@ class HouseholdShrine(Kind):
     before it, in order to make it visible on the map at this scale. The one measured stone hokora is about
     40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence,
     rarity and corner are read.
+
+    Name: household shrine
+    Covers: `farm_fixtures[kind=shrine]` - the hokora
+    Label: convention
+    Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'household shrine'
-    name = 'household shrine'
-    covers = '`farm_fixtures[kind=shrine]` - the hokora'
-    label = 'convention'
-    sources = ('tokushima-yashikigami', 'jawiki-yashikigami', 'kameyama-yashikigami', 'sugiura-1973-fuzoku')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"
 
 
 class Persimmon(Kind):
@@ -271,11 +282,12 @@ class Persimmon(Kind):
 
     Note: Presence and the beside-the-house placement are read (toyoko, uekipedia); WHICH side and the 18 ft crown
     are guesses - the crown width was found nowhere.
+
+    Name: persimmon
+    Covers: `persimmons` - the dooryard persimmon tree
+    Label: guess
+    Sources: toyoko-kaki, uekipedia-kaki
+    Entry: research/homesteads.html - 'The farmstead's fixtures'
     """
 
     key = 'persimmon'
-    name = 'persimmon'
-    covers = '`persimmons` - the dooryard persimmon tree'
-    label = 'guess'
-    sources = ('toyoko-kaki', 'uekipedia-kaki')
-    entry = "research/homesteads.html - 'The farmstead's fixtures'"

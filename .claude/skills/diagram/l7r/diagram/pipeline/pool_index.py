@@ -56,14 +56,10 @@ SKILL_DIR = os.path.abspath(
 
 # Known tiers, in the order the GM reads the pool (smallest settlement first, Mode A last). A
 # tier not listed here still gets a section, appended alphabetically after these.
-TIER_SECTIONS: tuple[tuple[str, str], ...] = (
-    ("hamlets", "Hamlets"),
-    ("villages", "Villages"),
-    ("towns", "Towns"),
-    ("provincial-cities", "Provincial cities"),
-    ("capitals", "Capital cities"),
-    ("magistracies", "Magistracies (Mode A compound plans)"),
-)
+# THE HEADINGS AND BANNERS ARE DATA - `pool_index_text.json` beside this module (feature 207): prose a reader sees.
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pool_index_text.json"), encoding="utf-8") as _fh:
+    _TEXT = json.load(_fh)
+TIER_SECTIONS: tuple[tuple[str, str], ...] = tuple((key, title) for key, title in _TEXT["tier_sections"])
 
 # Tiers holding Mode A compound plans: tracked svg source, no JSON manifest, 3 px = 1 ft.
 MODE_A_DIRS = frozenset({"magistracies"})
@@ -71,18 +67,8 @@ MODE_A_DIRS = frozenset({"magistracies"})
 # What each tree is called on the page, and the one line that says what it IS. The banner is not
 # decoration: a frozen exhibit and a live map look identical in a table, and the difference (one is
 # regenerated every gate, the other can never change again) is the reason the trees were split.
-TREE_BANNERS: dict[str, tuple[str, str]] = {
-    poolmaps.LIVE_TREE: (
-        "The live pool",
-        "Regenerated and re-gated on every run. Scripted settlements, plus the Mode A compound plans that are hand-authored by design.",
-    ),
-    poolmaps.LEGACY_TREE: (
-        "Frozen hand-authored exhibits",
-        "Never regenerated, never re-gated (GM 2026-08-16). Their renders are committed write-once: "
-        "once the engine drifted, nothing could faithfully rebuild them. A map leaves this tree only "
-        "by being converted to scripted generation.",
-    ),
-}
+TREE_BANNERS: dict[str, tuple[str, str]] = {tree: (title, line) for tree, (title, line) in _TEXT["tree_banners"].items()}
+assert set(TREE_BANNERS) == {poolmaps.LIVE_TREE, poolmaps.LEGACY_TREE}, "pool_index_text.json names the two trees by their directory names"
 
 COLUMNS: tuple[str, ...] = ("Map", "Name", "Method", "Subtype", "Scale", "Size", "Knobs", "Notes")
 
@@ -112,31 +98,9 @@ _CONSUMED = frozenset(
     }
 )
 
-_CSS = """
-body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 90rem; padding: 0 1rem;
-       background: #faf8f4; color: #2a2620; }
-h1 { margin-bottom: 0.2rem; }
-p.lede { color: #6b6355; margin-top: 0; }
-nav { margin: 0.6rem 0 0; color: #6b6355; }
-nav a { margin-right: 0.9rem; }
-h2 { border-bottom: 2px solid #d8cfc0; padding-bottom: 0.2rem; margin-top: 2.2rem; }
-h2.tree { border-bottom-width: 4px; margin-top: 3rem; }
-h3 { margin-top: 1.8rem; }
-h2.tree + p.lede { margin: 0.3rem 0 0; max-width: 60rem; }
-.tablewrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid #d8cfc0; padding: 0.45rem 0.6rem; text-align: left;
-         vertical-align: top; }
-th { background: #efe9de; }
-tr:nth-child(even) td { background: #f4f0e8; }
-td.thumb { width: 170px; text-align: center; }
-td.thumb img { max-width: 160px; max-height: 120px; border: 1px solid #c9bfae; background: #fff; }
-td.thumb span { color: #99917f; font-size: 0.85rem; }
-td.knobs { font-size: 0.85rem; color: #4a443a; }
-td.method { white-space: nowrap; }
-.none { color: #b3ab99; }
-.warn { color: #a03123; font-weight: 600; }
-"""
+# THE STYLESHEET IS A FILE - `pool_index.css` beside this module (feature 207): an edit is not an engine change.
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pool_index.css"), encoding="utf-8") as _fh:
+    _CSS = "\n" + _fh.read()  # the inline literal opened with a newline; keeping it keeps the page byte-identical (feature 207 FR-008)
 
 
 def _fmt_val(v: object) -> str:

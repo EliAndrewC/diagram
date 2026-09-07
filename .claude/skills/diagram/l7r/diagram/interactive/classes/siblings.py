@@ -3,161 +3,21 @@
 Kept as string constants rather than docstrings on purpose (spec 189 FR-004 / D4): since 2026-08-28 the
 page renders sibling LINKS, not these texts, so they are a record and not documentation visible in the
 user interface. Installed in both directions by `_base.install_siblings`.
+
+THE TEXTS ARE DATA - `assets/siblings.json` (feature 207): a `texts` object of shared passages and a `pairs`
+list of `[class a, class b, text]`, where a text beginning `@` names a shared passage, so the one text
+written for four crop-dike pairs stays ONE text. Editing a text owes `make page-check`, not the gate.
+
+The record behind the two shared passages (JSON carries no comments, so it is kept here):
+
+- `crop-vs-perimeter`: One text for all four rolled crop-dike values - the distinction from the perimeter dike is identical whichever crop the knob rolled, and four copies is four chances for a later edit to fix one and leave three (settlement-review, 2026-08-29). The walk figures are measured on Kuwabata: the crop dike loops run a median 815 ft (3.1 min at 260 ft/min), the perimeter dike 4,591 ft along its CREST (18 min) - the walkable top of the bank, which is the thing you would walk. The first version of this line said half an hour, on the manifest's `outline`: that is the band POLYGON, outer face plus inner face returned, 1.99x the crest, so it counted the same walk twice (settlement-review round 2).
+- `pond-vs-polder-sluice`: The near-homonym the GM's own list did not name, and the pair a reader is likeliest to confuse on a dike-pond map: both are "sluice", both are boards in a cut (settlement-review, 2026-08-29).
 """
 
 from __future__ import annotations
 
-# The sibling texts, written once per PAIR and installed in both directions by `_base.install_siblings`. Each is how the
-# FIRST-named class differs from the second. SINCE 2026-08-28 THE PAGE DOES NOT SHOW THEM: the GM
-# asked for the linkage as "Not to be confused with the X" LINKS (hover lights X, click opens X's
-# modal) so each modal's text stays its own; the texts remain here as the record of what
-# distinguishes each pair, to be folded into the classes' own explanations as those lengthen.
-#: One text for all four rolled crop-dike values - the distinction from the perimeter dike is identical
-#: whichever crop the knob rolled, and four copies is four chances for a later edit to fix one and leave
-#: three (settlement-review, 2026-08-29). The walk figures are measured on Kuwabata: the crop dike loops
-#: run a median 815 ft (3.1 min at 260 ft/min), the perimeter dike 4,591 ft along its CREST
-#: (18 min) - the walkable top of the bank, which is the thing you would walk. The first
-#: version of this line said half an hour, on the manifest's `outline`: that is the band POLYGON, outer
-#: face plus inner face returned, 1.99x the crest, so it counted the same walk twice
-#: (settlement-review round 2).
-_CROP_VS_PERIMETER = "The crop dike is the wall AROUND one pond - six to ten meters of dredged mud, planted, and part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes the better part of twenty, and it is the reason the hamlet is dry."
+from ..content import content
 
-#: The near-homonym the GM's own list did not name, and the pair a reader is likeliest to confuse on a
-#: dike-pond map: both are "sluice", both are boards in a cut (settlement-review, 2026-08-29).
-_POND_VS_POLDER_SLUICE = "Both are boards in a cut, and the difference is which wall they sit in. A pond sluice is a gate in a fish pond's own dike, worked by the household that farms that pond - it moves water between pond and channel. A sluice gate is set in the POLDER dike, and it is what lets water in or out of the settlement as a whole; nobody opens one on their own account."
-
-_PAIRS: dict[tuple[str, str], str] = {
-    (
-        "pond sluice",
-        "sluice gate",
-    ): _POND_VS_POLDER_SLUICE,
-    (
-        "field ditch",
-        "pond sluice",
-    ): "A field ditch carries water through the CROP - it is the paddy fabric's own plumbing, cut between the plots and crossed by a plank. A pond sluice is a gate in a dike: a cut closed with boards that lets one fish pond take water in at its high side and let it out at its low side. The ditch moves water along; the sluice decides whether it moves at all.",
-    (
-        "mulberry dike",
-        "perimeter dike",
-    ): _CROP_VS_PERIMETER,
-    (
-        "sugarcane dike",
-        "perimeter dike",
-    ): _CROP_VS_PERIMETER,
-    (
-        "banana dike",
-        "perimeter dike",
-    ): _CROP_VS_PERIMETER,
-    (
-        "fruit dike",
-        "perimeter dike",
-    ): _CROP_VS_PERIMETER,
-    (
-        "farmhouse",
-        "storage shed",
-    ): "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house.",
-    (
-        "farmhouse",
-        "byre",
-    ): "A farmhouse shelters the household; a byre shelters its draft animal. In the temperate lowland this map draws the two are separate buildings - the attached stable wing (magariya) is a cold-country form and is not drawn.",
-    (
-        "storage shed",
-        "byre",
-    ): "A storage shed holds things; a byre holds an ox or a water buffalo. The GM's own line: a storage shed attached to a farmhouse is different from the animal sheds where the animals are kept - so the two never highlight together.",
-    (
-        "byre",
-        "hen coop",
-    ): "The byre is for the one draft animal a household could keep; the hen coop is a small ground-level roost for a few chickens - the Qimin Yaoshu says to build the roost as an enclosure on the ground with a perch inside, because birds left to the trees sicken.",
-    (
-        "threshing yard",
-        "garden",
-    ): "The threshing yard is bare, swept, tamped earth - a work floor for drying and threshing the harvest; the kitchen garden is tilled soil in planted rows. Both want sun, which is why neither is put in a neighbor's shadow.",
-    ("garden", "millet"): "The dooryard garden grows the household's vegetables beside the house; the millet plot is a field crop on the dry hem above the paddy, worked in rows.",
-    ("garden", "buckwheat"): "The dooryard garden grows the household's vegetables beside the house; the buckwheat plot is a field crop on the dry hem above the paddy, worked in rows.",
-    ("garden", "barley"): "The dooryard garden grows the household's vegetables beside the house; the barley plot is a field crop on the dry hem above the paddy, worked in rows.",
-    (
-        "privy",
-        "manure heap",
-    ): "The privy is the one-room outhouse; the manure heap is where its night soil and the byre's litter are composted before going onto the fields. They stand together because they were one cluster - in Han China the latrine sat over the pigsty and drained to the cesspool.",
-    (
-        "persimmon",
-        "copse",
-    ): "The persimmon is one household's dooryard tree, planted beside the house for its fruit and its summer shade; the copse is village greenery standing in the open ground among the houses.",
-    (
-        "homestead bamboo",
-        "shared bamboo grove",
-    ): "This stand belongs to one household - the damp north or west strip of its plot, cut for the household's own baskets, poles and fences. A shared grove is a take-yabu held by the hamlet at the field margin and cut like a coppice, under the village's rules on who may cut and when.",
-    (
-        "windbreak",
-        "copse",
-    ): "The windbreak is a planted shelter belt - the fengshui back grove - kept on the windward, high side of the cluster to break the winter monsoon, cedar-backed and dense. A copse is looser fruit-tree and broadleaf greenery in the gaps among the houses, with no sheltering purpose; the households used it for shade and fruit, not as a wall against the wind.",
-    (
-        "windbreak",
-        "woodland commons",
-    ): "The windbreak belongs to the settlement as shelter and was kept standing - a village would not cut its own wind wall. The woodland commons was cut: an iriai wood coppiced on a 10-30 year cycle for firewood, forage and leaf litter, under customary rules on who might cut, when, and how much.",
-    (
-        "copse",
-        "woodland commons",
-    ): "The copse is greenery among the houses, used for shade and fruit; the woodland commons is a managed coppice on the slope above the paddy, cut on a cycle for fuel and fertilizer under the village's own rules.",
-    (
-        "scrub and rough grazing",
-        "marsh",
-    ): "Scrub is dry ground - cut-over fuel and fodder land with grass and the odd scraggly pine, grazed and cut; marsh is the undrained wet ground that wet rice was reclaimed from and that stays reed wetland where reclamation stopped.",
-    ("marsh", "pond"): "Marsh is reed wetland on undrained low ground; the pond is an engineered tameike - open water behind an earthen dike, sitting above the fields it waters.",
-    (
-        "paddy",
-        "wet paddy",
-    ): "Both are flooded rice basins and both grow the same crop; what differs is the ground under them. An ordinary paddy sits where the water can be let out again, so it dries between crops and can take a winter crop. A wet paddy - shitsuden - is on ground that will not drain, so it stands waterlogged out of season too, works harder, and yields less.",
-    ("paddy", "millet"): "A paddy is a basin flooded under a shallow sheet of water for wet rice; millet is a dry crop on the higher, well-drained hem the water cannot command.",
-    ("paddy", "buckwheat"): "A paddy is a basin flooded under a shallow sheet of water for wet rice; buckwheat is a dry crop on the higher, well-drained hem the water cannot command.",
-    ("paddy", "barley"): "A paddy is a basin flooded under a shallow sheet of water for wet rice; barley is a dry crop on the higher, well-drained hem the water cannot command.",
-    ("paddy", "fallow"): "A paddy is in crop and under water; a fallow patch is ground resting out of crop for the season.",
-    (
-        "bund",
-        "bund beans",
-    ): "The bund is the earthwork - the puddled-mud ridge between two basins, re-plastered every spring so each paddy holds its water. The beans are the crop planted along its top (azemame): the bund is soil, the beans are what grows on it, so each highlights on its own.",
-    (
-        "millet",
-        "buckwheat",
-    ): "Millet is a summer grain; buckwheat is a short-season crop sown late and taken in autumn, tolerant of poor soil. Both sit on the dry hem; the furrows run the same way, the crop differs.",
-    ("millet", "barley"): "Millet is a summer grain; barley is the winter grain of the dry hem, sown in autumn and taken before the rice is transplanted. Both sit on the dry hem; the crop differs.",
-    ("buckwheat", "barley"): "Buckwheat is a short-season late crop for thin soil; barley is the winter grain, sown in autumn and taken in early summer. Both sit on the dry hem; the crop differs.",
-    ("millet", "fallow"): "The millet plot is in crop; a fallow patch rests out of crop for the season.",
-    ("buckwheat", "fallow"): "The buckwheat plot is in crop; a fallow patch rests out of crop for the season.",
-    ("barley", "fallow"): "The barley plot is in crop; a fallow patch rests out of crop for the season.",
-    (
-        "stream",
-        "field ditch",
-    ): "The stream is a natural brook - about two meters across in reality, the widest water on a hamlet map short of the pond. A field ditch is dug: a hairline in reality (about a third of a meter, one three-hundredth of the paddy it waters), drawn at true size.",
-    ("stream", "pond"): "The stream is running water off the high ground; the pond is standing water held behind a dike, fed by the stream and let out through one outlet.",
-    (
-        "pond",
-        "field pond",
-    ): "The pond is the tameike - the reservoir behind a dike at the field's foot, the hamlet's water store. A field pond is a small open-water pocket sunk into one low paddy, the one obstacle that genuinely belongs in the wet middle of a flooded field.",
-    ("paddy", "field pond"): "The paddy is the flooded rice basin; the field pond is a small pocket of open water sunk into one low plot, reed-fringed, drawn where the ground pools.",
-    (
-        "field ditch",
-        "pond",
-    ): "The ditches distribute the water; the pond stores it. One outlet leaves the pond and branches into the head race and the laterals - the smallest ditches were often counted as part of the paddy they serve.",
-    (
-        "soy",
-        "millet",
-    ): "Soybean and millet are both summer crops of the dry hem; the bean fixes its own nitrogen and was as often grown along the bunds (azemame) as in a plot of its own. Both sit on the dry hem; the crop differs.",
-    ("soy", "buckwheat"): "Soybean is a summer crop that fixes its own nitrogen; buckwheat is the short-season late crop for thin soil. Both sit on the dry hem; the crop differs.",
-    ("soy", "barley"): "Soybean is the summer crop; barley the winter grain of the same hem, sown in autumn and taken before the rice is transplanted. The crop differs, the ground is the same.",
-    ("soy", "paddy"): "A paddy is a basin flooded under a shallow sheet of water for wet rice; soybean is a dry crop on the higher, well-drained hem the water cannot command.",
-    ("soy", "fallow"): "The soybean plot is in crop; a fallow patch rests out of crop for the season.",
-    ("soy", "garden"): "The dooryard garden grows the household's vegetables beside the house; the soybean plot is a field crop on the dry hem above the paddy, worked in rows.",
-    (
-        "soy",
-        "bund beans",
-    ): "The same plant in two places: a soybean PLOT is a field crop of its own on the dry hem; the bund beans are soybeans planted along the tops of the paddy bunds, taking a second crop from ground that would otherwise grow weeds.",
-    (
-        "grave island",
-        "paddy",
-    ): "The paddy is the flooded basin; the grave island is a small raised earthen mound with a few stone markers standing in it, the paddy tiling around. Graves in the wet middle are the north-China and Japanese look; in the rice south the dead went to the slope - so this one is drawn rarely, on purpose.",
-    (
-        "field rock",
-        "paddy",
-    ): "The paddy is the flooded basin; the rock is a bedrock outcrop the field could not clear, a cluster of boulders the plots wrap around - a terrace feature, absent on alluvial ground.",
-    ("grave island", "field rock"): "The grave island is made ground - a mound raised for the dead; the rock is ground that was never made - bedrock the terrace risers had to wrap around.",
-}
+_RAW = content("siblings.json")
+_TEXTS: dict[str, str] = _RAW["texts"]
+_PAIRS: dict[tuple[str, str], str] = {(a, b): (_TEXTS[text[1:]] if text.startswith("@") else text) for a, b, text in _RAW["pairs"]}

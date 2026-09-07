@@ -21,14 +21,15 @@ class Stream(Kind):
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
     (the GM's ruling). A village creek runs about 2 m wide in reality, some six times a field ditch. The
     stream's type and place are read.
+
+    Name: stream
+    Covers: `streams` - the brook
+    Label: convention
+    Sources: gb50288, toro-site
+    Entry: research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'
     """
 
     key = 'stream'
-    name = 'stream'
-    covers = '`streams` - the brook'
-    label = 'convention'
-    sources = ('gb50288', 'toro-site')
-    entry = "research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'"
 
 
 class FieldDitch(Kind):
@@ -43,14 +44,15 @@ class FieldDitch(Kind):
     a hairline.
 
     Note: Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288).
+
+    Name: field ditch
+    Covers: `field_ditches` and `channels` - the intake, head race, branches and drain
+    Label: accurate
+    Sources: tabayashi-1986, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'
     """
 
     key = 'field ditch'
-    name = 'field ditch'
-    covers = '`field_ditches` and `channels` - the intake, head race, branches and drain'
-    label = 'accurate'
-    sources = ('tabayashi-1986', 'jsidre-minumadai', 'gb50288', 'nougyoudoboku-matsutan')
-    entry = "research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'"
 
 
 class Pond(Kind):
@@ -63,14 +65,15 @@ class Pond(Kind):
     for floods, never for distribution. On this map the pond is the field's drainage sink, at its low foot.
 
     Note: Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).
+
+    Name: pond
+    Covers: `pond` - the tameike
+    Label: accurate
+    Sources: tabayashi-1986, kagawa-tameike
+    Entry: research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'
     """
 
     key = 'pond'
-    name = 'pond'
-    covers = '`pond` - the tameike'
-    label = 'accurate'
-    sources = ('tabayashi-1986', 'kagawa-tameike')
-    entry = "research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'"
 
 
 class FieldPond(Kind):
@@ -88,14 +91,15 @@ class FieldPond(Kind):
 
     Caveat: no source counts how often, so the rate is chosen - often enough that a reader meets the feature, rare
     enough that it does not litter the field.
+
+    Name: field pond
+    Covers: `field_ponds` - the in-field pond sunk into one low paddy
+    Label: accurate
+    Sources: not recorded
+    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
     """
 
     key = 'field pond'
-    name = 'field pond'
-    covers = '`field_ponds` - the in-field pond sunk into one low paddy'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'"
 
 
 class FieldRock(Kind):
@@ -113,14 +117,15 @@ class FieldRock(Kind):
 
     Caveat: no source counts how many, so a terraced field gets one to three - enough that the reader meets the
     obstacle the terrace was cut around, few enough that the field still reads as worked ground.
+
+    Name: field rock
+    Covers: `field_rocks` - a bedrock outcrop inside a plot
+    Label: accurate
+    Sources: not recorded
+    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
     """
 
     key = 'field rock'
-    name = 'field rock'
-    covers = '`field_rocks` - a bedrock outcrop inside a plot'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'"
 
 
 class GraveIsland(Kind):
@@ -135,14 +140,15 @@ class GraveIsland(Kind):
 
     Note: A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the
     dead on the slope, at a rate the GM approved.
+
+    Name: grave island
+    Covers: `field_graves` - the rare in-field grave mound
+    Label: deviation
+    Sources: not recorded
+    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)
     """
 
     key = 'grave island'
-    name = 'grave island'
-    covers = '`field_graves` - the rare in-field grave mound'
-    label = 'deviation'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least' (the CALIBRATED LIBERTY paragraph, GM 2026-07-20)"
 
 
 # WHY THE CLASS IS A *VILLAGE* LANE AND NOT A HAMLET LANE - the GM, 2026-08-29: "I have been
@@ -169,14 +175,15 @@ class VillageLane(Kind):
     Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane -
     laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one
     cart road the record does measure.
+
+    Name: village lane
+    Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur
+    Label: accurate
+    Sources: not recorded
+    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.html re-sourcing queue (lane width)
     """
 
     key = 'village lane'
-    name = 'village lane'
-    covers = '`lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?'; research/SOURCES.html re-sourcing queue (lane width)"
 
 
 class Footbridge(Kind):
@@ -189,14 +196,15 @@ class Footbridge(Kind):
 
     Note: That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a
     two-foot ditch, so the plank and its spacing are a guess.
+
+    Name: footbridge
+    Covers: `bridges[foot]` - every plank and deck over water
+    Label: guess
+    Sources: not recorded
+    Entry: research/water.html - 'What drawing at TRUE SIZE left open' (channel_footbridges)
     """
 
     key = 'footbridge'
-    name = 'footbridge'
-    covers = '`bridges[foot]` - every plank and deck over water'
-    label = 'guess'
-    sources = ('not recorded',)
-    entry = "research/water.html - 'What drawing at TRUE SIZE left open' (channel_footbridges)"
 
 
 class Well(Kind):
@@ -212,14 +220,15 @@ class Well(Kind):
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
     frame itself was not found. Count and sharing are read (the Sphere/UNICEF figures, jawiki).
+
+    Name: well
+    Covers: `wells` - the wellheads
+    Label: convention
+    Sources: sphere-unicef, saijo-mizu-rekishikan, kotobank-idoyakata
+    Entry: research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
     """
 
     key = 'well'
-    name = 'well'
-    covers = '`wells` - the wellheads'
-    label = 'convention'
-    sources = ('sphere-unicef', 'saijo-mizu-rekishikan', 'kotobank-idoyakata')
-    entry = "research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'"
 
 
 class NoticeBoard(Kind):
@@ -238,11 +247,12 @@ class NoticeBoard(Kind):
 
     Note: Presence and siting are both read. The placement is chosen from the attested set the map can actually
     site, never from one preferred reading; at hamlet grain the glyph is drawn at its true 12 x 5 ft.
+
+    Name: notice board
+    Covers: `kosatsuba`, with its label
+    Label: accurate
+    Sources: fuchu-kosatsuba, ogose-kosatsuba, kosatsu-jawiki, adachi-kosatsu
+    Entry: research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
     """
 
     key = 'notice board'
-    name = 'notice board'
-    covers = '`kosatsuba`, with its label'
-    label = 'accurate'
-    sources = ('fuchu-kosatsuba', 'ogose-kosatsuba', 'kosatsu-jawiki', 'adachi-kosatsu')
-    entry = "research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'"
