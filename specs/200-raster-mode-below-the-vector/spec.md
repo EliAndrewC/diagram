@@ -186,6 +186,8 @@ rendered beside the picture (FR-007).
   per class does not fit in memory. The highlight is the hovered class's own vector above the image.
 - **D2 - 3 px per map px, lossless WebP.** R4's resolution paragraph; PNG is twice the bytes, lossy WebP
   rings on line art.
+  AMENDED by feature 203 (its R3): the encode is method 0, not 4 - still lossless, 2.2 s instead of 9.6 per
+  page write for 8% more bytes; the gate's duration ratchet found the difference.
 - **D3 - hit-testing from an id map.** The DOM cannot answer for hidden groups, and every way of keeping
   them answerable while unpainted either fails `visiblePainted` or lets a bund's interior take the
   pointer (R5). The id map reproduces the DOM's own rule in one render and agrees with it on 98.2% of

@@ -331,7 +331,10 @@ class FinishMixin:
         # under that.
         self.M["scalebar"] = {"ft": bar_ft, "ftpx": self.ftpx, "bbox": [round(bx0, 1), round(by - 5, 1), round(bx1, 1), round(by + 33, 1)]}
         self.add_label(
-            f'<g stroke="#3A2E1C" stroke-width="2">'
+            # `class="scale"` is a NAME for the page's stylesheet, not a hover target (feature 203, GM 2026-09-07: the
+            # lit scrub was painting over the card in raster mode): the placard is vector in both modes, its card
+            # is opaque, so the bar drawn on it must be vector too - the ruling above stands, `cls="-"` stays
+            f'<g class="scale" stroke="#3A2E1C" stroke-width="2">'
             f'<line x1="{bx0:.0f}" y1="{by:.0f}" x2="{bx1:.0f}" y2="{by:.0f}"/>'
             f'<line x1="{bx0:.0f}" y1="{by - 5:.0f}" x2="{bx0:.0f}" y2="{by + 5:.0f}"/>'
             f'<line x1="{bx1:.0f}" y1="{by - 5:.0f}" x2="{bx1:.0f}" y2="{by + 5:.0f}"/>'

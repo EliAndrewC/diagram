@@ -1,6 +1,7 @@
 # Feature 203 - the placard stays on top
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implemented. Its aside is taken in the delivery note:
+the card's z-order never moves; the lit scrub was painting over the raster image.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the mechanism (the lit scrub above the image, not the
 card's z-order) and why the fix reaches the scale bar.

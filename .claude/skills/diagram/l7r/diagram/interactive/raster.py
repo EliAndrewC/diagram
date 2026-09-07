@@ -154,7 +154,10 @@ def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
     from PIL import Image
 
     buf = io.BytesIO()
-    Image.open(io.BytesIO(png)).save(buf, "WEBP", lossless=True, quality=100, method=4)
+    # ENCODE METHOD 0, NOT 4 (feature 203, found by the gate's duration ratchet): still lossless, and measured on
+    # Kuwabata at 18.6 Mpx - method 4 took 9.6 s for 2.97 MB, method 0 2.2 s for 3.20 MB (+8%). The gate writes a
+    # page for every map it rolls, so the slow setting cost it 7 s per roll for a quarter-megabyte saving.
+    Image.open(io.BytesIO(png)).save(buf, "WEBP", lossless=True, quality=100, method=0)
     return buf.getvalue()
 
 
