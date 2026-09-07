@@ -627,11 +627,17 @@ class FinishMixin:
             f.write('\n'.join(body))
         # THE INTERACTIVE PAGE (feature 134): the same primitives, each wrapped by its class, with the
         # explanations of the classes present. Written beside the SVG whenever the SVG is - a string
-        # pass, so DIAGRAM_SKIP_RENDER (which spares only the raster) does not skip it. The census
-        # goes into the manifest FIRST so the gate can read it (`all_ink_is_ruled_on`, FR-009).
+        # pass, so DIAGRAM_SKIP_RENDER does not skip it. The census goes into the manifest FIRST so the
+        # gate can read it (`all_ink_is_ruled_on`, FR-009).
+        # ...BUT ITS RASTER IS A RENDER (feature 208, GM 2026-09-07: "a whole lot of rasterizing that is
+        # completely pointless and not actually needed for the tests"): the page's picture and id map are made
+        # on exactly the PNG's condition below - `render` and no DIAGRAM_SKIP_RENDER - and a roll that does not
+        # render gets the vector-only page (`"r": 0`). Before this every test roll paid the picture: 7.3 s and a
+        # 450 MB spike per roll, about thirty times a gate, for pages nothing reads (specs/208 research.md R1).
         self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
         self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
-        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M)
+        rendering = bool(render) and not os.environ.get("DIAGRAM_SKIP_RENDER")
+        write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M, with_raster=rendering)
         with open(basepath + '.json', 'w') as f:
             json.dump(self.M, f)
         # Two env knobs make iteration cheap without changing committed output (see SKILL.md
@@ -640,7 +646,7 @@ class FinishMixin:
         #   DIAGRAM_SKIP_RENDER  - skip the raster entirely; the gate reads the JSON, so tests set this and
         #                          never pay to render a PNG no test looks at.
         #   DIAGRAM_PNG_WIDTH=N  - render at N px instead of 2600; unset for the full-res committed PNG.
-        if render and not os.environ.get("DIAGRAM_SKIP_RENDER"):
+        if rendering:
             env_w = os.environ.get("DIAGRAM_PNG_WIDTH")
             self.render_png(basepath, int(env_w) if env_w else png_width)  # keep the .png paired with the .svg
         return len(self.placed)

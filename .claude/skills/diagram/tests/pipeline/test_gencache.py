@@ -156,7 +156,29 @@ def test_round_trip_restores_byte_identical_outputs(tmp_path, monkeypatch):
     assert gencache.compute_key(str(gen), stored["deps"]) != stored["key"], "a changed dep must not still match the stored key"
 
 
-def test_no_recorded_deps_falls_back_to_the_coarse_whole_engine_key(tmp_path, monkeypatch):
+def test_a_skip_render_page_is_not_filed_and_a_stale_one_is_evicted(tmp_path, monkeypatch):
+    """Feature 208: under DIAGRAM_SKIP_RENDER the page is written WITHOUT its raster (the vector-only form), so
+    it is treated exactly as the PNG has been since 2026-08-17 - never filed as the key's output, and any page
+    already in the entry evicted - or a later hit would restore a degraded page into the pool beside a current
+    manifest (the spec review's finding). The manifest is still filed; a clean run still files the page."""
+    eng, gen, out = _fixture(tmp_path)
+    _with_engine(monkeypatch, tmp_path, eng)
+    page = tmp_path / "toy.html"
+    png = tmp_path / "toy.png"
+    entry = Path(gencache.CACHE_DIR, "toy")
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER", raising=False)
+    deps = gencache.run_and_record(str(gen))
+    page.write_text("<full page>")
+    png.write_bytes(b"png")
+    gencache.store(str(gen), deps)
+    assert (entry / "toy.html").read_text() == "<full page>" and (entry / "toy.png").exists(), "a rendered run files both"
+    monkeypatch.setenv("DIAGRAM_SKIP_RENDER", "1")
+    page.write_text("<vector-only page>")
+    gencache.store(str(gen), deps)
+    assert not (entry / "toy.html").exists() and not (entry / "toy.png").exists(), "evicted, not filed"
+    assert (entry / "toy.json").exists(), "the manifest is filed regardless"
+    assert gencache.load(str(gen)) is True
+    assert not page.exists() and not png.exists(), "a hit deletes the standing page the entry lacks, as it does the PNG"
     eng, gen, _ = _fixture(tmp_path)
     _with_engine(monkeypatch, tmp_path, eng)
     before = gencache.compute_key(str(gen), None)

@@ -233,8 +233,15 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int) -> tuple[str, 
     from PIL import Image
 
     base = os.path.join(out_dir, stem)
+    # THE PLATE IS THE PNG, SO ONLY THE PNG IS RENDERED (feature 208, GM 2026-09-07: "a whole lot of rasterizing
+    # that is completely pointless"). `finish(render=True)` also made the interactive page's raster picture -
+    # resvg at 3 px per map px, PIL, libwebp - for each of the eighteen stage pages, and nothing reads those
+    # pages: the walk-through links the plates. So the page is written vector-only (`render=False`) and the PNG
+    # is rendered by the same call `finish` would have made. The gate's sampler caught this process at 1.6 GB.
     with redirect_stdout(io.StringIO()):
-        snap.finish(base, render=True)
+        snap.finish(base, render=False)
+    env_w = os.environ.get("DIAGRAM_PNG_WIDTH")
+    snap.render_png(base, int(env_w) if env_w else 2600)
     png = base + ".png"
     with Image.open(png) as im:
         w, h = im.size

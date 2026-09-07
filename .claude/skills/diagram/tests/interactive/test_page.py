@@ -894,3 +894,29 @@ def test_a_round_marks_cell_is_its_centers_not_where_its_arc_starts() -> None:
     assert _cell("circle", {"cx": f"{TILE + 2:g}", "cy": "10", "r": "5"}) == (1, 0)
     assert _cell("ellipse", {"cx": f"{TILE - 1:g}", "cy": f"{TILE:g}", "rx": "5", "ry": "3"}) == (0, 1)
     assert _cell("line", {"x1": "-1", "y1": "0", "x2": "5", "y2": "5"}) == (-1, 0)
+
+
+def test_a_page_without_its_raster_never_calls_the_encoder_and_is_the_vector_only_form(monkeypatch) -> None:
+    """Feature 208 FR-001 (GM 2026-09-07: "not write it at all for test rolls where it is not needed"): with
+    `with_raster=False` neither the picture nor the id map is made - the encoder would raise if it were called -
+    and the page is the vector-only form (`"r": 0`, no image element) a host without resvg gets; with the
+    default the same strings get their picture."""
+    from l7r.diagram.interactive import page as page_mod
+    from l7r.diagram.interactive import raster
+
+    strings = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">', RECT, "</svg>"]
+    tags = [None, "farmhouse", None]
+
+    def boom(*_a, **_kw):
+        raise AssertionError("the raster was made for a page that asked for none")
+
+    monkeypatch.setattr(raster, "picture", boom)
+    monkeypatch.setattr(raster, "id_map", boom)
+    plain = render_page(strings, tags, "T", with_raster=False)
+    assert '"raster": {"r": 0}' in plain and 'id="raster"' not in plain
+    assert page_mod.raster_wanted(False, (0.0, 0.0, 40.0, 40.0)) is False
+    assert page_mod.raster_wanted(True, None) is False, "no viewBox, no picture - as before"
+    assert page_mod.raster_wanted(True, (0.0, 0.0, 40.0, 40.0)) is True
+    monkeypatch.undo()
+    full = render_page(strings, tags, "T")
+    assert 'id="raster"' in full and '"r": 0' not in full
