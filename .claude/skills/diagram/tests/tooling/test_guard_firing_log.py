@@ -64,6 +64,79 @@ def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str,
     assert any(e["event"] == event and e["rule"] == rule for e in entries), f"{guard} recorded {[(e['event'], e['rule']) for e in entries]}, wanted ({event}, {rule})"
 
 
+def _fake_mirror(tmp_path: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
+    """A mirror with one clone under it, and a claim map naming session "t" -> that clone."""
+    main = tmp_path / "diagram"
+    git = ["git", "-c", "user.email=t@t", "-c", "user.name=t"]
+    subprocess.run(["git", "init", "-q", str(main)], check=True)
+    (main / "f").write_text("a\n")
+    subprocess.run([*git, "-C", str(main), "add", "f"], check=True)
+    subprocess.run([*git, "-C", str(main), "commit", "-qm", "a"], check=True)
+    clone = main / ".clones" / "worker"
+    subprocess.run(["git", "clone", "-q", str(main), str(clone)], check=True)
+    (main / ".clones" / ".session-clones").mkdir()
+    (main / ".clones" / ".session-clones" / "t").write_text(str(clone))
+    return main, clone
+
+
+def _fire_main_tree(tmp_path: pathlib.Path, cwd: pathlib.Path, command: str) -> list[dict]:
+    payload = json.dumps(
+        {
+            "session_id": "t",
+            "cwd": str(cwd),
+            "tool_name": "Bash",
+            "transcript_path": str(tmp_path / "none.jsonl"),
+            "tool_input": {"command": command},
+        }
+    )
+    (tmp_path / "home").mkdir(exist_ok=True)
+    subprocess.run(
+        [str(SCRIPTS / "main-tree-hooks.sh"), "pretool"],
+        input=payload,
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=str(cwd),
+        env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path / "home"), "GUARD_LOG_DIR": str(tmp_path / "log")},
+    )
+    return [json.loads(f.read_text()) for f in sorted((tmp_path / "log").glob("*.json"))]
+
+
+def test_main_tree_records_a_rewrite_with_the_fields_an_audit_needs(tmp_path) -> None:
+    """Feature 204 (GM 2026-09-07): *"log the specific commands that they blocked along with when this
+    happened and the name of the session in which this occurred. and any other context which is
+    loggable at that time."* Before it, 2,049 of 2,371 entries said `session: unknown` and every command
+    was cut at 200 characters. A REAL firing, on a fake mirror, asserting every new field."""
+    main, clone = _fake_mirror(tmp_path)
+    long = "git add -A && git commit -m " + "x" * 300
+    entries = _fire_main_tree(tmp_path, main, long)
+    assert len(entries) == 1, entries
+    e = entries[0]
+    assert (e["event"], e["rule"]) == ("rewrote", "moved-to-clone")
+    assert e["session"] == "t"
+    assert e["session_name"] == "worker", "the name is resolved at FIRING time through the claim map"
+    assert e["cwd"] == str(main) and e["tool"] == "Bash"
+    assert e["command"] == long and len(e["command"]) > 200, "the full command, never truncated"
+    assert e["detail"] == long[:200], "detail keeps its old truncated form for the existing readers"
+    assert e["context"]["verdict"] == "rewrite" and e["context"]["context"]["clone"] == str(clone)
+    assert "hook" not in e["context"], "the hook payload is not duplicated into the record"
+
+
+def test_main_tree_records_the_refusal_that_names_main(tmp_path) -> None:
+    main, clone = _fake_mirror(tmp_path)
+    entries = _fire_main_tree(tmp_path, clone, f"git -C {main} commit -am x")
+    assert [(e["event"], e["rule"]) for e in entries] == [("blocked", "named-main")]
+    assert entries[0]["session_name"] == "worker"
+
+
+def test_main_tree_records_an_unresolvable_clone_by_the_id(tmp_path) -> None:
+    main, _ = _fake_mirror(tmp_path)
+    (main / ".clones" / ".session-clones" / "t").unlink()
+    entries = _fire_main_tree(tmp_path, main, "git commit -am x")
+    assert [(e["event"], e["rule"]) for e in entries] == [("blocked", "clone-unresolved")]
+    assert entries[0]["session_name"] == "t", "no name resolvable -> the id, never 'unknown' when the payload has one"
+
+
 def test_the_gm_s_source_block_records_both_the_refusal_and_the_escape(tmp_path) -> None:
     """`source-block` needs a file on disk to judge, so it gets its own case rather than a row above.
 

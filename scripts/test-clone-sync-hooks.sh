@@ -100,6 +100,24 @@ runt pretool sid-me "$TR/plain.jsonl" miscellaneous a.txt;         check "transc
 runt pretool sid-me "$TR/missing.jsonl" miscellaneous a.txt;       check "transcript path that does not exist -> sessions json fallback" 0 "$RC"
 rm -f "$MAPDIR/sid-cleared" "$MAPDIR/sid-me"
 
+# ---- resolve mode (GUARD_EDIT_OK: feature 204 - the resolver exposed for main-tree and the firing log) ----
+# The load-bearing case is the SUBAGENT one: its payload carries the parent's session_id and a
+# transcript under <parent>/subagents/ with no rename record, and the answer must be the PARENT's
+# clone - a rewrite into a different session's clone would write one session's work into another's.
+res() { # res <sid> <transcript> ; OUT = the clone path resolve prints (or nothing)
+  OUT=$(printf '{"session_id":"%s","transcript_path":"%s","cwd":"%s"}' "$1" "$2" "$FMAIN" \
+        | CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" "$HOOK" resolve 2>/dev/null); RC=$?
+}
+printf '%s' "$FMAIN/.clones/diagram-town" > "$MAPDIR/sid-mapped"
+res sid-mapped "";                            check "resolve: the claim map answers first" "$FMAIN/.clones/diagram-town" "$OUT"
+rm -f "$MAPDIR/sid-mapped"
+res sid-cleared "$TR/cleared.jsonl";          check "resolve: no map entry -> the transcript's rename" "$FMAIN/.clones/diagram-town" "$OUT"
+mkdir -p "$TR/sid-me/subagents"
+echo '{"type":"user","message":{"role":"user","content":"a subagent transcript, no rename record"}}' > "$TR/sid-me/subagents/abc123.jsonl"
+res sid-me "$TR/sid-me/subagents/abc123.jsonl"; check "resolve: a SUBAGENT payload (parent id, own transcript) -> the PARENT's clone" "$FMAIN/.clones/miscellaneous" "$OUT"
+res sid-nobody "$TR/missing.jsonl";           check "resolve: an unresolvable id prints nothing" "" "$OUT"
+rm -f "$MAPDIR/sid-me"
+
 printf '%s' "$FMAIN/.clones/miscellaneous" > "$MAPDIR/sid-live-other"
 run pretool sid-me miscellaneous a.txt;        check "canonical clone claimed by a LIVE other session -> blocked" 2 "$RC"
 rm -f "$MAPDIR/sid-live-other"

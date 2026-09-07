@@ -9,7 +9,9 @@
 # GUARD_EDIT_OK: `reference` -> `_reference` on the .PHONY line below - the public-rung retirement
 # the GM ordered on 2026-09-06. Reference-first itself is untouched; see the target's own note.
 # GUARD_EDIT_OK: feature 197 - `claim` joins the phony list (a new operation).
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit perf-gate hooks-test explain \
+# (GUARD_EDIT_OK: feature 204 - guard-log joins .PHONY beside audit; a target with a recipe and no
+# .PHONY entry is shadowed by any file of that name)
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -594,6 +596,12 @@ perf-gate:      ## [performance] require the feature's -start bookend, take -end
 	fi; \
 	$(MAKE) --no-print-directory perf LABEL="$$n-end" >/dev/null; \
 	$(MAKE) --no-print-directory perf-report AGAINST="$$n-start"
+
+# (GUARD_EDIT_OK: feature 204 - a NEW target, the ROWS behind the census `audit` prints. GM 2026-09-07:
+# "anytime we block a command invocation, we can see what specifically was happening and whether the
+# command was rewritable safely". A reader over ~/.claude/guard-log/, nothing derived.)
+guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
 # (GUARD_EDIT_OK: the audit gains "Remote spend" - feature 130, FR-020)
 audit:          ## [project] how the gate has actually been used - every run, every bypass, and remote spend

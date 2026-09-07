@@ -72,7 +72,13 @@ is destructive or the refusal is itself the content.
 commit message quoting it escaped the guard - and, in `measure` and `gate`, also reset the state that
 decides whether the NEXT expensive command is refused. `main-tree-hooks` joined the roster in the same
 feature: a bare `cd` into the mirror root followed by a write or a commit, which none of the three
-existing main-write guards could see because none of them sees a `git commit`.
+existing main-write guards could see because none of them sees a `git commit`. **Feature 204
+(2026-09-07) turned it from a refusal into a REWRITE**: it judges where a write LANDS (`_hm_tree.py`,
+the command's own cds, variables and subshells walked from the payload's cwd) and moves one that would
+land in main to the session's clone with `additionalContext`, because its own firing log showed 173
+refusals in a week of which 2 were the shape it was built for. The same feature made EVERY guard's
+firing record carry the session name (resolved at firing time), the cwd, the tool and the full command,
+and added `make guard-log` to list them.
 
 The other six (`discard`, `guard-file`, `repo-safety`, `source-block`, `readme`, `clone-sync`,
 `no-branch`) are protective rather than economic and stay refusals by design; the reason for each is

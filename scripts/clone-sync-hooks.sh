@@ -81,7 +81,9 @@ MAPDIR=$MAIN/.clones/.session-clones
 # suite caught them missing on its very first run - a hand-written list short by three, which is the
 # fourth time in this repository that a roster written from memory has been wrong within a day. The
 # derivation is the reason this is safe to keep as a literal.
-BEHIND_TEST_TARGETS='quick|test|test-file|test-full|done|verify|reference|maps|hooks-test|idle-tests|cohort|tripwire|regressions|perf|perf-gate|cov-file|durations|tooling'
+# GUARD_EDIT_OK: feature 204 - page-check (feature 188) and soak had joined the Makefile without joining this
+# cache; the companion suite's derivation caught the drift on 2026-09-07, which is what it is for.
+BEHIND_TEST_TARGETS='quick|test|test-file|test-full|done|verify|reference|maps|hooks-test|idle-tests|cohort|tripwire|regressions|perf|perf-gate|cov-file|durations|tooling|page-check|soak'
 # GUARD_EDIT_OK: the fetch-throttle knob went with the fetch - a dead test seam is a seam that will
 # be wired to something else later by someone who assumes it still means what it says.
 
@@ -434,8 +436,24 @@ case $MODE in
     fi
     exit 0
     ;;
+  resolve)
+    # GUARD_EDIT_OK: feature 204 - a NEW read-only mode. THIS SESSION'S CLONE, for the guards that need
+    # it: main-tree-hooks.sh (to move a write that would land in the mirror into the clone instead of
+    # refusing it) and _guardlog.sh (to record the session's NAME at firing time). The claim map first -
+    # one file read, written at the session's first edit - then canonical_clone (the transcript's last
+    # /rename, else the sessions json). A SUBAGENT's payload carries its PARENT's session_id (measured
+    # 2026-09-07 on a live subagent transcript: `sessionId` equals the parent's), so both sources answer
+    # with the parent's clone, and the subagent's own transcript - which holds no custom-title - never
+    # decides. 127 of the 173 refusals feature 204 rewrote were subagents'. Prints the clone path, or
+    # nothing. Never blocks, never writes, never records.
+    sid=$(field session_id)
+    [ -n "$sid" ] || exit 0
+    if [ -f "$MAPDIR/$sid" ]; then cat "$MAPDIR/$sid"; exit 0; fi
+    canonical_clone "$sid" "$(field transcript_path)"
+    exit 0
+    ;;
   *)
-    echo "clone-sync-hooks: unknown mode '$MODE' (want: prompt | pretool)" >&2
+    echo "clone-sync-hooks: unknown mode '$MODE' (want: prompt | pretool | resolve)" >&2
     exit 1
     ;;
 esac

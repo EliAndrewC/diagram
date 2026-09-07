@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T181645Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 204 changes guard scripts, their tests and docs only and draws no map; no settlement-review is owed"
+}
