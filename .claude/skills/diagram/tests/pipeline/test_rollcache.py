@@ -300,11 +300,11 @@ def test_the_roll_child_records_coverage_only_under_a_covered_parent(monkeypatch
     monkeypatch.setattr(rollcache, "_CHILD_DRIVER", _TRIVIAL_CHILD)
     here = Path(gencache.HERE)
     before = set(here.glob(".coverage.rollchild-*"))
-    monkeypatch.delenv("COV_CORE_SOURCE", raising=False)
+    monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: False)
     payload, deps = rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
     assert payload == ("plan", {"M": 1}) and deps == {"functions": [], "files": []}
     assert set(here.glob(".coverage.rollchild-*")) == before, "a plain parent gets a plain child"
-    monkeypatch.setenv("COV_CORE_SOURCE", "l7r")
+    monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: True)
     try:
         rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
         published = set(here.glob(".coverage.rollchild-*")) - before
@@ -312,6 +312,26 @@ def test_the_roll_child_records_coverage_only_under_a_covered_parent(monkeypatch
     finally:
         for f in set(here.glob(".coverage.rollchild-*")) - before:
             f.unlink()
+
+
+def test_the_parent_knows_when_it_is_covered_by_either_signal(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 210: the gate that landed this feature lost three lines of `water.py` because the child took its
+    cue from `COV_CORE_SOURCE` alone and this pytest-cov never sets it; the live `coverage.Coverage` in the
+    worker is the signal that is actually there. Either suffices; neither means plain."""
+    import types
+
+    monkeypatch.delenv("COV_CORE_SOURCE", raising=False)
+
+    class _Cov:
+        current = staticmethod(lambda: None)
+
+    monkeypatch.setitem(sys.modules, "coverage", types.SimpleNamespace(Coverage=_Cov))
+    assert rollcache._parent_is_covered() is False, "no env, no live coverage: plain"
+    monkeypatch.setitem(sys.modules, "coverage", types.SimpleNamespace(Coverage=types.SimpleNamespace(current=lambda: object())))
+    assert rollcache._parent_is_covered() is True, "a live Coverage in this process"
+    monkeypatch.setitem(sys.modules, "coverage", types.SimpleNamespace(Coverage=_Cov))
+    monkeypatch.setenv("COV_CORE_SOURCE", "l7r")
+    assert rollcache._parent_is_covered() is True, "pytest-cov's environment signal, where a version sets it"
 
 
 def test_a_run_with_no_xdist_id_has_no_shared_store(monkeypatch: pytest.MonkeyPatch) -> None:

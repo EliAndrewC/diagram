@@ -311,6 +311,18 @@ _CHILD_DRIVER = (
 )
 
 
+def _parent_is_covered() -> bool:
+    """Is THIS process recording coverage - so the child must record its own, or the roll's lines vanish
+    from the floor. Two signals, either suffices: pytest-cov's subprocess environment (`COV_CORE_SOURCE`),
+    and a live `coverage.Coverage` in this process (what pytest-cov actually runs in an xdist worker; the
+    landing gate of feature 210 lost three lines of `water.py` to the environment signal alone)."""
+    if os.environ.get("COV_CORE_SOURCE"):
+        return True
+    cov = sys.modules.get("coverage")
+    current = getattr(getattr(cov, "Coverage", None), "current", None)
+    return current is not None and current() is not None
+
+
 def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]], dict[str, Any]]:
     """`(_hamlet_payload(spec), its dependency record)`, produced in a child process - see `_CHILD_DRIVER`."""
     here = gencache.HERE
@@ -322,7 +334,7 @@ def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]],
         Path(driver).write_text(_CHILD_DRIVER.format(here=here, spec_path=spec_path, out_path=out_path), encoding="utf-8")
         # the child must be the ONLY coverage recorder in its process (gate_obtain's rule): the parent's
         # pytest-cov hooks are stripped, and when the parent IS under coverage the child records its own
-        under_coverage = bool(os.environ.get("COV_CORE_SOURCE"))
+        under_coverage = _parent_is_covered()
         env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
         covbase = os.path.join(workdir, "cov")
         if under_coverage:
