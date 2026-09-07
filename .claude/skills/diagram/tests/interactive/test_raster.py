@@ -202,3 +202,21 @@ def test_the_picture_carries_no_text_while_the_id_map_paints_it() -> None:
     assert png is not None
     reds = {px[0] for px in _png(png).getdata()}
     assert PALETTE_STEP in reds, "the caption is painted in its class's color, so it hits as its class"
+
+
+def test_the_webp_child_matches_an_in_process_encode_and_a_failing_child_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 208 FR-002 (GM 2026-09-07: "write the picture in a subprocess"): the child is the same PIL and
+    the same libwebp, so its bytes are the in-process encode's bytes exactly; and a child that dies is an
+    error with its stderr, never a picture that is not one."""
+    im = Image.new("RGBA", (24, 16), (0x8B, 0x73, 0x55, 255))
+    im.putpixel((3, 4), (0, 120, 200, 255))
+    src = io.BytesIO()
+    im.save(src, "PNG")
+    want = io.BytesIO()
+    Image.open(io.BytesIO(src.getvalue())).save(want, "WEBP", lossless=True, quality=100, method=0)
+    got = raster.webp_lossless(src.getvalue())
+    assert got == want.getvalue(), "byte-identical to the in-process encode"
+    assert Image.open(io.BytesIO(got)).convert("RGBA").getpixel((3, 4)) == (0, 120, 200, 255), "lossless"
+    monkeypatch.setattr(raster, "_WEBP_CHILD", "import sys; sys.stderr.write('no PIL here'); sys.exit(3)")
+    with pytest.raises(RuntimeError, match=r"rc=3.*no PIL here"):
+        raster.webp_lossless(src.getvalue())

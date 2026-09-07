@@ -100,6 +100,12 @@ def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
     for rel in files:
         if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
             continue
+        # A RECORDED FIXTURE IS HISTORY, NOT A POINTER (2026-09-07): `scripts/fixtures/` holds guard firings
+        # replayed by the guard suites - the commands sessions actually typed, verbatim, some of them naming
+        # research files that were Markdown at the time. Feature 204 landed one and turned main red here; the
+        # commands are quotations of what happened, like a spec, and are never followed as links.
+        if rel.startswith("scripts/fixtures/"):
+            continue
         try:
             text = (root / rel).read_text(encoding="utf-8")
         except UnicodeDecodeError, OSError:

@@ -235,3 +235,29 @@ aspect to bisect a multiplier whose first carve already predicted the answer, an
 aspects where the fan had saturated. Predict from the curve's own shape (acres ~ k^2), probe the
 bracket's end once to detect saturation, and stop when the bracket is narrower than a plot row.
 Seed 47's field: 39 carves -> 8.
+
+## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
+
+The GM asked why a full gate costs 6.8 GiB and whether each of the eight workers really needs most of a
+gigabyte. Measured with a per-test RSS sampler (a thread at 20 ms), a cgroup sampler, tracemalloc on one
+file and a per-stage wrapper (`specs/208-the-raster-is-a-render/research.md` R1):
+
+- A worker is 111 MB after import, and a whole hamlet roll - all 18 placement stages - takes it only to
+  121. The engine's own geometry is cheap.
+- The spike was the PAGE's raster picture: PIL decoding resvg's 18.6-megapixel PNG (70 MB of RGBA) and
+  libwebp encoding it lossless (a further 240 MB of working memory) - 146 -> 598 -> 173 MB in 7.3 s, on
+  EVERY roll, including the scratch page the roll driver writes into a temp directory and deletes. About
+  thirty times a gate, for pages nothing reads. Tracemalloc saw 93 MB of Python objects at an 870 MB peak:
+  the rest was C memory the interpreter's allocator never returns, which is also why a worker then RESTED
+  at 250 MB.
+- Two gates at once reached the container's 8 GiB cap (3,455 reclaim events).
+
+Two rules came out of it. **A render is made on the render condition, never on the roll** - the page's
+raster now shares the PNG's `render and not DIAGRAM_SKIP_RENDER`, so a test roll writes the vector-only
+page: 9.2 s and 598 MB became 1.6 s and 153 MB. **Large C buffers are made in a child process** - the
+picture's decode and encode run in a PIL-only child (`raster.webp_lossless`), so the worker never holds
+them and there is nothing for the allocator to keep: the parent rests at 125 MB after a rendered page,
+and `malloc_trim` (which the GM had authorized if the child alone did not do it) was not needed. The
+instruments live in the session scratchpad and are cheap to rebuild: sample `/proc/self/statm` from a
+thread inside a pytest plugin loaded through `PYTEST_ADDOPTS`, and read the peak per test - `ru_maxrss`
+sees the peak but cannot say which test, and before/after readings cannot see inside one.

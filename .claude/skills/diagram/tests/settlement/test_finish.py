@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+from pathlib import Path
 
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _crop_settlement, _town
@@ -302,3 +303,31 @@ def test_a_caption_wrapped_onto_two_lines_never_leaves_a_short_word_standing_alo
     assert len(lines) >= 2, "the single-line form was blocked, so it wrapped"
     assert all(len(ln) > 3 for ln in lines), "no short word left standing alone - the rule this test is for"
     assert " ".join(lines).split() == ["A", "Long", "Village", "Name", "Here"], "every word kept, in order"
+
+
+def test_the_page_raster_is_a_render_like_the_png(monkeypatch):
+    """Feature 208 FR-001/FR-004 (GM 2026-09-07): the page's picture and id map are made on exactly the PNG's
+    condition. `render=False` -> a complete vector-only page (`"r": 0`, no image element) and no PNG;
+    `render=True` -> the raster and the PNG; `DIAGRAM_SKIP_RENDER=1` -> neither, whatever `render` says."""
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER", raising=False)
+    monkeypatch.setenv("DIAGRAM_PNG_WIDTH", "300")  # the PNG small; the page's raster is at its own scale regardless
+    with tempfile.TemporaryDirectory() as d:
+        base = os.path.join(d, "t")
+        _town().finish(base, render=False)
+        page = Path(base + ".html").read_text(encoding="utf-8")
+        assert '"raster": {"r": 0}' in page and 'id="raster"' not in page and "<svg" in page
+        assert not os.path.exists(base + ".png")
+        base2 = os.path.join(d, "u")
+        _town().finish(base2)  # render=True, no skip: the render condition holds
+        page2 = Path(base2 + ".html").read_text(encoding="utf-8")
+        assert 'id="raster"' in page2 and '"picture": "data:image/webp;base64,' in page2 and os.path.exists(base2 + ".png")
+        monkeypatch.setenv("DIAGRAM_SKIP_RENDER", "1")
+        base3 = os.path.join(d, "v")
+        _town().finish(base3)  # render=True, but the suite's skip switch: the same condition that spares the PNG spares the raster
+        page3 = Path(base3 + ".html").read_text(encoding="utf-8")
+        assert '"raster": {"r": 0}' in page3 and not os.path.exists(base3 + ".png")
+    # FR-003 / D3, decided by measurement: with the picture's buffers in a child the parent rests at the roll's
+    # own level (125 MB against 121), so there is no trim call to make - and none exists.
+    from l7r.diagram.settlement import finish as finish_mod
+
+    assert "malloc_trim" not in Path(finish_mod.__file__).read_text(encoding="utf-8")
