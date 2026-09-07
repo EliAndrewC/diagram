@@ -308,8 +308,9 @@ def test_the_roll_child_records_coverage_only_under_a_covered_parent(monkeypatch
     monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: True)
     try:
         rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
+        rollcache._hamlet_in_child({"b": "another spec"})  # type: ignore[arg-type]
         published = set(here.glob(".coverage.rollchild-*")) - before
-        assert published, "a covered parent's child publishes its coverage data file"
+        assert len(published) == 2, "each child publishes its OWN data file - a name keyed on the worker alone lost a roll's coverage (the landing gate)"
     finally:
         for f in set(here.glob(".coverage.rollchild-*")) - before:
             f.unlink()

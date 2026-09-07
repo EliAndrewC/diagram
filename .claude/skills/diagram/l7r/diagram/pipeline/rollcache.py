@@ -349,8 +349,10 @@ def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]],
             payload, deps = pickle.load(fh)  # noqa: S301 - our own child's bytes, written above
         for i, covfile in enumerate(sorted(glob.glob(covbase + ".*"))):
             # published onto the session's data-file glob that `coverage combine --append` sweeps -
-            # copy-then-replace, as gate_obtain: the scratch dir may be on another filesystem
-            dest = os.path.join(here, f".coverage.rollchild-{os.getpid()}-{i}")
+            # copy-then-replace, as gate_obtain: the scratch dir may be on another filesystem. UNIQUE PER
+            # CHILD, not per worker: a worker rolls several hamlets, and a name keyed on the worker's pid
+            # alone had each child overwrite the last - the landing gate lost one line of water.py to it.
+            dest = os.path.join(here, f".coverage.rollchild-{os.getpid()}-{os.path.basename(workdir)[len('rollchild-') :]}-{i}")
             shutil.copyfile(covfile, dest + ".tmp")
             os.replace(dest + ".tmp", dest)
     finally:
