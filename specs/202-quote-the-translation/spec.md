@@ -106,3 +106,9 @@ original-language page has been read; where it has not, the note says the origin
 - **A1**: keeping the original passage after the translation note does not contradict *"rather than the original
   text"* - the quote is the translation; the original is an anchor, not a second quote. Reported to the GM as such.
 - **A2**: the sweep runs on Opus agents (GM 2026-09-07); one translator per file, then quote-check.
+
+## Review history
+
+- Round 1 (spec-fidelity, Opus, 2026-09-07): CHANGES - the sweep covered footnotes only (the GM said "foreign language things": body prose and the registry added); the test derived from CJK script, not from the note (German and Korean fixtures named); a house-style duty had been bolted onto quote-check (removed).
+- Round 2: CHANGES - FR-005/SC-002 still verified footnotes only; the Edge Cases bullet contradicted D2; FR-002 claimed a coverage the ASCII test could not give (limit stated).
+- Round 3: FAITHFUL.
