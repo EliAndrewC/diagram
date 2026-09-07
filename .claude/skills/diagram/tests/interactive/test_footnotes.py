@@ -1,8 +1,9 @@
 """Feature 194 (GM 2026-09-06): a reference QUOTES the passage that supports the assertion - the mechanical half.
 
-The record's citation form (research/CLAUDE.md): `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>` after an
-assertion, and in the page's `<section class="footnotes"><ol>` a `<li id="fn-n">` with the key link and the quote. What a test can hold: every reference resolves and every
-definition is used; every definition names a registry key and carries a quotation; every key on a section's
+The record's citation form (research/CLAUDE.md): `<sup class="fn"><a id="fnref-n" href="citations/<name>.html#fn-n">n</a></sup>`
+after an assertion, and - since feature 211 (GM 2026-09-07: the notes moved out of the research page into
+`research/citations/<name>.html`) - on the page's CITATIONS PAGE a `<li id="fn-n">` with the key link and the quote. What a test can hold: every reference points at its own
+citations page and resolves there, and every note is referenced; every note names a registry key and carries a quotation; every key on a section's
 `**Sources:**` roster is quoted by a footnote in that section ("no point in including a reference if it is not
 being quoted"). What only the `quote-check` agent can hold - the quote is verbatim on the page, it supports the
 assertion, and every assertion has one - is its job, before a research edit lands."""
@@ -10,16 +11,19 @@ assertion, and every assertion has one - is its job, before a research edit land
 from __future__ import annotations
 
 import html
+import os
 import pathlib
 import re
 
 import pytest
 
+from l7r.diagram.interactive.citations import citations_page, notes
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
-#: a second reference to the same note carries no id (ids are unique; the back-link returns to the first)
-_REF = re.compile(r'<sup class="fn"><a (?:id="fnref-(?:\d+)" )?href="#fn-(\d+)">\1</a></sup>')
-_DEF = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
+#: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
+#: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
+_REF = re.compile(r'<sup class="fn"><a (?:id="fnref-(?:\d+)" )?href="[^"#]*#fn-(\d+)">\1</a></sup>')
+_REF_TARGET = re.compile(r'<sup class="fn"><a (?:id="fnref-\d+" )?href="([^"#]*)#fn-\d+">')
 _KEY_LINK = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 _QUOTE = re.compile(r"[\"“「『]([^\"”」』]{12,})[\"”」』]")
 _HEADING = re.compile(r"<h([2-4])[ >]")
@@ -34,10 +38,19 @@ def _finding_files() -> list[pathlib.Path]:
     return [p for p in sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) if p.name not in _NOT_FINDINGS]
 
 
-def footnotes(text: str) -> tuple[list[str], dict[str, str]]:
-    """(reference ids in reading order, {definition id: body})."""
-    defs = {m.group(1): m.group(2).strip() for m in _DEF.finditer(text)}
-    return [m.group(1) for m in _REF.finditer(text)], defs
+def _rel(path: pathlib.Path) -> str:
+    return str(path.relative_to(RESEARCH_DIR)).replace(os.sep, "/")
+
+
+def citations_of(path: pathlib.Path) -> pathlib.Path:
+    """The citations page of a research page (feature 211)."""
+    return pathlib.Path(RESEARCH_DIR, citations_page(_rel(path)))
+
+
+def footnotes(text: str, citations: str) -> tuple[list[str], dict[str, str]]:
+    """(reference ids in reading order - the research page's, then the ones a note makes to another note on the
+    citations page; {note id: body} from the citations page)."""
+    return [m.group(1) for m in _REF.finditer(text)] + [m.group(1) for m in _REF.finditer(citations)], dict(notes(citations))
 
 
 def registry_keys() -> set[str]:
@@ -63,9 +76,10 @@ def canon_keys() -> set[str]:
 def footnote_form(body: str, canon: set[str]) -> str | None:
     """'citation', 'absence', or the defect (feature 195 FR-002). A citation links its key to an http(s) page - the
     registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link
-    and no URL at all (its only anchor is the back link)."""
+    and no URL at all (its only anchor is the back link, which since feature 211 names the research page)."""
+    body = re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body)
     if _ABSENCE.match(body):
-        if "<code>" in body or re.search(r'href="(?!#fnref-)', body):
+        if "<code>" in body or 'href="' in body:
             return "an absence note carries no key and no link"
         return "absence"
     key = _KEY_LINK.search(body)
@@ -83,10 +97,15 @@ def footnote_form(body: str, canon: set[str]) -> str | None:
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)
 def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source(path: pathlib.Path) -> None:
     text = path.read_text(encoding="utf-8")
-    refs, defs = footnotes(text)
+    cpath = citations_of(path)
+    assert cpath.exists(), f"{path.name}: no citations page at {cpath} (feature 211: every research page has one)"
+    refs, defs = footnotes(text, cpath.read_text(encoding="utf-8"))
+    want = "../" * _rel(path).count("/") + citations_page(_rel(path))
+    wrong = sorted({t for t in _REF_TARGET.findall(text) if t != want}) + sorted({t for t in _REF_TARGET.findall(cpath.read_text(encoding="utf-8")) if t})
+    assert not wrong, f"{path.name}: references pointing somewhere other than its citations page {want!r}: {wrong}"
     keys = registry_keys()
-    assert set(refs) <= set(defs), f"{path.name}: references without a definition: {sorted(set(refs) - set(defs))}"
-    assert set(defs) <= set(refs), f"{path.name}: definitions nothing references: {sorted(set(defs) - set(refs))}"
+    assert set(refs) <= set(defs), f"{path.name}: references without a note on {cpath.name}: {sorted(set(refs) - set(defs))}"
+    assert set(defs) <= set(refs), f"{path.name}: notes on {cpath.name} nothing references: {sorted(set(defs) - set(refs))}"
     canon = canon_keys()
     bad = []
     for fid, body in defs.items():
@@ -110,6 +129,7 @@ def test_the_footnote_forms_are_told_apart() -> None:
     assert footnote_form('<a href="https://x.y/z"><code>k-1</code></a> - 「twelve characters here」' + fnback, canon) == "citation"
     assert footnote_form('<a href="../SOURCES.html#l7r-median-domain"><code>l7r-median-domain</code></a> - 「the GM wrote this」' + fnback, canon) == "citation"
     assert footnote_form("no publicly readable source (searched 2026-09-06: doi 403; the passage came from registry entry k-1)" + fnback, canon) == "absence"
+    assert footnote_form("no publicly readable source (searched 2026-09-06: x)" + ' <a class="fnback" href="../cities/p.html#fnref-1">back</a>', canon) == "absence", "a back link to the research page (feature 211)"
     assert footnote_form('<a href="SOURCES.html#k-2"><code>k-2</code></a> - 「a summary, not a page」' + fnback, canon).startswith("links the key to")
     assert footnote_form('no publicly readable source (searched 2026-09-06: x) <a href="https://x.y"><code>k</code></a>' + fnback, canon) == "an absence note carries no key and no link"
     assert footnote_form("something else entirely" + fnback, canon) is None
@@ -120,8 +140,8 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
     """The roster is what the modal reads; the footnotes are where the quotes live; a key on the roster that no
     footnote of the section quotes is a reference that is not being quoted."""
     text = path.read_text(encoding="utf-8")
-    _refs, defs = footnotes(text)
-    body = text.split('<section class="footnotes">')[0]
+    _refs, defs = footnotes(text, citations_of(path).read_text(encoding="utf-8"))
+    body = text.split('<section class="citations">')[0]
     heads = [(m.start(), int(m.group(1))) for m in _HEADING.finditer(body)]
     unquoted = []
     for i, (a, level) in enumerate(heads):
@@ -196,7 +216,7 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
     return bad
 
 
-@pytest.mark.parametrize("path", [p for p in _finding_files()] + [pathlib.Path(RESEARCH_DIR, "SOURCES.html")], ids=lambda p: p.name)
+@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()] + [pathlib.Path(RESEARCH_DIR, "SOURCES.html")], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
     bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8"))
     assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])

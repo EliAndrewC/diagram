@@ -1,6 +1,6 @@
 # Feature 211 - citations pages
 
-**Status**: Draft - `spec-fidelity` round 1 returned one change (SC-004 restated); round 2 pending (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5; round 1 restated SC-004) - cleared for implementation (constitution XVI).
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Predecessors**: feature 194 (a citation is a footnote that quotes; the record is hand-authored HTML with the
 ACOUP hover); 195 (cite only what can be read; the absence note); 190 (every key is a link, the target decided by the

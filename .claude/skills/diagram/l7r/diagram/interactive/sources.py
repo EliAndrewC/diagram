@@ -210,6 +210,87 @@ def registry(research_dir: str = RESEARCH_DIR) -> dict[str, str]:
 
 _URL = re.compile(r"https?://[^\s)\]>]+")
 
+# ---- feature 190: where a key LINKS - the classifier, one body (feature 211 moved it here from
+# tests/interactive/test_sources.py, because `make citations` derives the works section of every citations page
+# with it and a tool under l7r/ does not import from tests/; the test imports these three from here) ----------
+#: A registry entry: its key and everything up to the next entry.
+_ENTRY_BLOCK = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*(.*?)(?=<h3 id=|<h2 id=|</main>)', re.S)
+_FIRST_P = re.compile(r"<p>(.*?)</p>", re.S)
+_CITE_URL = re.compile(r"https?://[^\s<>\"]+")
+_COMMENT = re.compile(r"<!--(.*?)-->", re.S)
+#: The two write-ups a registry entry carries since feature 211 (GM 2026-09-07: what the work is, and why it is a
+#: good and valid source for what we look up in it, with its honest limitations), as `<p><em>label</em> ...</p>`.
+WHAT_LABEL = "What it is:"
+WHY_LABEL = "Why it applies, and its limits:"
+USED_LABEL = "Used for:"
+
+
+def _line_text(fragment: str) -> str:
+    """The citation line's text WITH its comments' text: since feature 209 the verification markers the classifier
+    reads (READ, SUMMARY-ONLY, unfetched, the feature and task) live in an HTML comment inside the citation
+    paragraph, hidden from the reader (GM 2026-09-07: a note for a session is an HTML comment) and still the rule's
+    input here. The first URL on the line still governs, and a READ-at comment placed first carries it."""
+    return html.unescape(_TAG.sub("", _COMMENT.sub(r" \1 ", fragment)))
+
+
+def citation_lines(sources_html: str) -> dict[str, str]:
+    """key -> the entry's citation line (its first paragraph, as text)."""
+    return {m.group(1): _line_text(_FIRST_P.search(m.group(2)).group(1)) for m in _ENTRY_BLOCK.finditer(sources_html) if _FIRST_P.search(m.group(2))}
+
+
+def not_read(cite: str) -> bool:
+    """The record says the document was NOT read: SUMMARY-ONLY, `URL: none`, or the URL recorded as
+    unfetched with no READ beside it (feature 143's re-sourcing pass recorded addresses it did not fetch).
+    Where a line says both (`artic-pigsty-latrine`: the text READ through the museum's API, the page
+    itself unfetched) the READ governs - the GM's qualifier is "which we were able to read"."""
+    if "SUMMARY-ONLY" in cite or "URL: none" in cite:
+        return True
+    return bool(re.search(r"unfetched|not fetched", cite)) and "READ" not in cite
+
+
+def link_target(key: str, cite: str, rel: str) -> str:
+    """Where a citation of `key` links: the document's URL (the FIRST on the citation line, spec 190 D2; a URL that
+    carries parentheses keeps them - the defect of 2026-09-06) when it was read, else the registry entry that
+    says it was not (`rel` is '' from research/, '../' from cities/ and citations/, '../../' from citations/cities/)."""
+    m = _CITE_URL.search(cite)
+    if not_read(cite) or m is None:
+        return f"{rel}SOURCES.html#{key}"
+    u = m.group(0).rstrip(".,;:")
+    while u.endswith(")") and u.count(")") > u.count("("):
+        u = u[:-1]
+    return u
+
+
+def _labeled(body: str, label: str) -> str:
+    """The inner HTML of the entry's `<p><em>label</em> ...</p>` paragraph, '' when it has none."""
+    m = re.search(r"<p><em>" + re.escape(label) + r"</em>\s*(.*?)</p>", body, re.S)
+    return m.group(1).strip() if m else ""
+
+
+@cache
+def registry_entries(research_dir: str = RESEARCH_DIR) -> dict[str, dict[str, str]]:
+    """key -> the parts of its SOURCES.html entry (feature 211): `cite` (the citation line's inner HTML, comments
+    dropped - the reader's line, naming the work and its authors), `line` (the same as text WITH comment text, the
+    classifier's input), `what` and `why` (the two write-ups' inner HTML, '' when not yet written), `used`."""
+    try:
+        with open(os.path.join(research_dir, "SOURCES.html"), encoding="utf-8") as fh:
+            src = fh.read()
+    except OSError:
+        return {}
+    out: dict[str, dict[str, str]] = {}
+    for m in _ENTRY_BLOCK.finditer(src):
+        body = m.group(2)
+        first = _FIRST_P.search(body)
+        cite = first.group(1) if first else ""
+        out[m.group(1)] = {
+            "cite": re.sub(r"\s+", " ", _COMMENT.sub("", cite)).strip(),
+            "line": _line_text(cite),
+            "what": _labeled(body, WHAT_LABEL),
+            "why": _labeled(body, WHY_LABEL),
+            "used": _labeled(body, USED_LABEL),
+        }
+    return out
+
 
 def urls_of(text: str) -> list[str]:
     """Every URL a SOURCES.html entry carries (GM 2026-08-28: a source records where it can be read);

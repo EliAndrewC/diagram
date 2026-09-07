@@ -17,10 +17,11 @@ _ID = re.compile(r'\sid="([^"]+)"')
 
 def _pages() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
-    return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html"))
+    # the citations pages (feature 211) are record pages: their notes link out and back, and their works sections link keys
+    return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) + sorted((root / "citations").glob("*.html")) + sorted((root / "citations" / "cities").glob("*.html"))
 
 
-@pytest.mark.parametrize("page", _pages(), ids=lambda p: p.name)
+@pytest.mark.parametrize("page", _pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_every_link_in_a_record_page_resolves(page: pathlib.Path) -> None:
     text = page.read_text(encoding="utf-8")
     ids_here = set(_ID.findall(text))

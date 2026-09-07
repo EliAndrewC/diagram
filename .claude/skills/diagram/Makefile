@@ -11,7 +11,7 @@
 # GUARD_EDIT_OK: feature 197 - `claim` joins the phony list (a new operation).
 # (GUARD_EDIT_OK: feature 204 - guard-log joins .PHONY beside audit; a target with a recipe and no
 # .PHONY entry is shadowed by any file of that name)
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain \
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain citations \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -476,6 +476,10 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 
 glossary:       ## [docs] write research/assets/glossary.js from interactive/glossary.py - the ONE glossary the map's modals and the record's pages share (feature 209)   CHECK=1: exit 1 if stale
 	$(RUN).tools.glossary_asset $(if $(CHECK),--check,)
+
+# GUARD_EDIT_OK: feature 211 - a new operation, `citations`: the citations pages' derived scripts and works sections.
+citations:      ## [docs] write each research page's citations script (research/citations/<name>.js) and the works section at the top of its citations page, from the page's notes and SOURCES.html (feature 211)   CHECK=1: exit 1 if stale or a cited key has no write-up
+	$(RUN).tools.citations_asset $(if $(CHECK),--check,)
 
 
 

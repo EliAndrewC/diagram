@@ -10,10 +10,22 @@
   var hideTimer = null;
   function keep() { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } }
   function hideSoon() { keep(); hideTimer = setTimeout(function () { tip.hidden = true; }, 180); }
+  // WHERE A NOTE COMES FROM (feature 211, GM 2026-09-07): the notes live on the page's CITATIONS PAGE
+  // (research/citations/<name>.html), and a reference points there ("citations/<name>.html#fn-n"). The hover
+  // reads the note from window.RECORD_CITATIONS - the script `make citations` derives from that page, loaded
+  // before this one - because a page opened from disk cannot fetch a sibling file. A note still in the page
+  // (the synthetic test page, an older page) is read from the page, as before.
+  function noteHtml(ref) {
+    var href = ref.getAttribute('href') || ''; var id = href.slice(href.indexOf('#') + 1);
+    var note = id && document.getElementById(id);
+    if (note) { return note.innerHTML; }
+    var table = window.RECORD_CITATIONS || {};
+    return Object.prototype.hasOwnProperty.call(table, id) ? table[id] : '';
+  }
   function show(ref) {
-    var id = (ref.getAttribute('href') || '').slice(1); var note = id && document.getElementById(id);
-    if (!note) { return; }
-    tip.innerHTML = note.innerHTML; place(ref);
+    var html = noteHtml(ref);
+    if (!html) { return; }
+    tip.innerHTML = html; wrapGlossary(tip, false); place(ref);
   }
   function place(el) {
     tip.hidden = false;
@@ -24,7 +36,7 @@
     var y = r.bottom + 6; if (y + h + margin > vh) { y = r.top - h - 6; } if (y < margin) { y = margin; }
     tip.style.left = (window.scrollX + x) + 'px'; tip.style.top = (window.scrollY + y) + 'px';
   }
-  document.querySelectorAll('sup.fn a[href^="#fn-"]').forEach(function (ref) {
+  document.querySelectorAll('sup.fn a[href*="#fn-"]').forEach(function (ref) {
     ref.addEventListener('mouseenter', function () { keep(); show(ref); });
     ref.addEventListener('focus', function () { keep(); show(ref); });
     ref.addEventListener('mouseleave', hideSoon);
@@ -38,13 +50,20 @@
   // characters, so a quoted passage keeps its own. The definition shows in the footnote box, placed the same way.
   // The word boundary is written with Unicode classes rather than \b, because a term may carry a macron.
   var glossary = window.RECORD_GLOSSARY || [];
+  var glossaryRe = null; var defs = {};
   if (glossary.length) {
-    var alts = []; var defs = {};
+    var alts = [];
     glossary.forEach(function (g) { g.variants.forEach(function (v) { alts.push(v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); defs[v.toLowerCase()] = g.def; }); });
     alts.sort(function (a, b) { return b.length - a.length; });
-    var glossaryRe = new RegExp('(?<![\\p{L}\\p{N}])(' + alts.join('|') + ')(?![\\p{L}\\p{N}])', 'giu');
-    var SKIP = { CODE: true, PRE: true, SCRIPT: true, STYLE: true };
-    var root = document.querySelector('main') || document.body;
+    glossaryRe = new RegExp('(?<![\\p{L}\\p{N}])(' + alts.join('|') + ')(?![\\p{L}\\p{N}])', 'giu');
+  }
+  var SKIP = { CODE: true, PRE: true, SCRIPT: true, STYLE: true };
+  // Wrap every term under `root`. In the page (`live`), a wrapped term shows its definition in the box on hover;
+  // inside the box itself (feature 211: a note arriving from the derived script was never in the page, so it is
+  // wrapped when shown) the term is marked and carries its definition as a title, because the box cannot hover
+  // over itself.
+  function wrapGlossary(root, live) {
+    if (!glossaryRe) { return; }
     var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (n) {
       for (var p = n.parentNode; p && p !== root; p = p.parentNode) { if (SKIP[p.nodeName]) { return NodeFilter.FILTER_REJECT; } }
       return NodeFilter.FILTER_ACCEPT;
@@ -57,14 +76,20 @@
         if (!frag) { frag = document.createDocumentFragment(); }
         if (m.index > last) { frag.appendChild(document.createTextNode(text.slice(last, m.index))); }
         var span = document.createElement('span'); span.className = 'gl'; span.textContent = m[0];
-        span.setAttribute('data-def', defs[m[0].toLowerCase()] || '');
-        span.addEventListener('mouseenter', function (e) { keep(); tip.textContent = e.currentTarget.getAttribute('data-def'); place(e.currentTarget); });
-        span.addEventListener('mouseleave', hideSoon);
+        var def = defs[m[0].toLowerCase()] || '';
+        if (live) {
+          span.setAttribute('data-def', def);
+          span.addEventListener('mouseenter', function (e) { keep(); tip.textContent = e.currentTarget.getAttribute('data-def'); place(e.currentTarget); });
+          span.addEventListener('mouseleave', hideSoon);
+        } else {
+          span.setAttribute('title', def);
+        }
         frag.appendChild(span); last = m.index + m[0].length;
       }
       if (frag) { if (last < text.length) { frag.appendChild(document.createTextNode(text.slice(last))); } node.parentNode.replaceChild(frag, node); }
     });
   }
+  wrapGlossary(document.querySelector('main') || document.body, true);
   tip.addEventListener('mouseenter', keep);
   tip.addEventListener('mouseleave', hideSoon);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { keep(); tip.hidden = true; } });

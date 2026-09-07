@@ -3,8 +3,9 @@
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Every task is `research: rendering` (the record's form) or
 `research: procedure` (how sessions work) - nothing physical is decided in this feature.
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code (up to five rounds)
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code (up to five rounds)
       research: procedure
+      verify: DONE. FAITHFUL at round 2 of 5: round 1's one item was SC-004 (it asked for one paragraph in the whole repository while FR-003 derives copies into the pages); restated as one HAND-AUTHORED paragraph plus derived copies between markers. Round 2 FAITHFUL; both rounds' aside for the GM: the registry doubles (D2)
 - [ ] T02 the reading code (FR-002, FR-003, FR-006): `citation_lines`/`not_read`/`link_target` lifted from `test_sources.py` into `interactive/sources.py`; `registry_entries()`; new `interactive/citations.py` (a citations page's notes, the derived script, the works section, the works region rewrite); `tests/interactive/test_citations.py`
       research: rendering
 - [ ] T03 the tool and target: `tools/citations_asset.py`, `make citations` (`CHECK=1`), the `_invocation.py` row, `tests/tools/test_citations_asset.py`

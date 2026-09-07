@@ -393,8 +393,17 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     record.page.mouse.move(1, 1)
     record.page.wait_for_timeout(300)
     assert record.js("() => document.getElementById('fntip').hidden") is True
-    record.page.hover("sup.fn a")
+    record.page.hover("sup.fn a[href='#fn-1']")
     record.page.wait_for_timeout(30)
     note = record.js("() => document.getElementById('fntip').textContent")
     assert "a quoted passage" in note, "the footnote hover uses the same box"
+    # FEATURE 211: a note that is NOT in the page - it lives on the citations page, and reaches this page as the
+    # derived script's table - shows in the same box, with its glossary term marked and carrying its definition
+    record.page.mouse.move(1, 1)
+    record.page.wait_for_timeout(300)
+    record.page.hover("sup.fn a[href$='#fn-2']")
+    record.page.wait_for_timeout(30)
+    note = record.js("() => document.getElementById('fntip').textContent")
+    assert "a derived note naming a tameike" in note, f"a note from window.RECORD_CITATIONS shows in the box ({record.errors})"
+    assert record.js("() => document.querySelector('#fntip span.gl').getAttribute('title')").startswith("An irrigation reservoir")
     assert record.errors == [] and record.requests == []
