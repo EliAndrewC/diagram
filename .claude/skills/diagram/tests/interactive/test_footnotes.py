@@ -172,7 +172,7 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
             before = block[max(0, q.start() - 12) : q.start()]
             if "original:" in before or "original 「" in before:
                 continue
-            after = block[q.end() : q.end() + 400]
+            after = html.unescape(block[q.end() : q.end() + 400])
             if _TRANSLATION_NOTE.search(after):
                 continue
             bad.append(passage[:60])
