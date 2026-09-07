@@ -99,7 +99,7 @@ def _where() -> str:
 def measure(seeds: tuple[int, ...]) -> list[dict[str, Any]]:
     """Roll the reference hamlet on each seed, timing every stage."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
-    from l7r.diagram.hamletgen.driver import STAGES
+    from l7r.diagram.hamletgen.driver import STAGES, roll_scope
     from l7r.diagram.settlement import Settlement
 
     rows: list[dict[str, Any]] = []
@@ -108,11 +108,12 @@ def measure(seeds: tuple[int, ...]) -> list[dict[str, Any]]:
         s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
         s._avoid_seats = []  # type: ignore[attr-defined]
         stages: dict[str, float] = {}
-        for st in STAGES:
-            t0 = time.time()
-            with redirect_stdout(io.StringIO()):
-                st(s, plan)
-            stages[st.__name__.replace("stage_", "")] = round(time.time() - t0, 2)
+        with roll_scope():  # a roll like any other: the memo cleared and the heap trimmed when it ends (feature 210)
+            for st in STAGES:
+                t0 = time.time()
+                with redirect_stdout(io.StringIO()):
+                    st(s, plan)
+                stages[st.__name__.replace("stage_", "")] = round(time.time() - t0, 2)
         rows.append(
             {
                 "seed": seed,

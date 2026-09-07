@@ -121,6 +121,89 @@ def test_cohort_derives_each_spec_and_can_be_forced_serial(monkeypatch) -> None:
     assert [s.households for s in seen] == [14, 14]
 
 
+@pytest.mark.rolls_map  # it builds a Settlement (two stand-in stages, no render) - the marker keeps `make quick` honest about what it runs
+def test_a_roll_clears_the_clearance_memo_and_trims_the_heap_whether_it_ends_well_or_not(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 210 FR-001/FR-002: `build()`'s stage loop sits in `roll_scope()`, whose exit clears the memo
+    and trims the heap - on success and when a stage raises."""
+    from l7r.diagram import _memory
+    from l7r.diagram.hamletgen import clearance, driver, plan_site
+
+    trims: list[bool] = []
+    monkeypatch.setattr(_memory, "trim_heap", lambda: trims.append(True) or True)
+    ring = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+
+    def stage_fills_the_memo(s, plan):  # type: ignore[no-untyped-def]
+        clearance.fabric_index([ring], 2.0)
+        assert clearance._MEMO, "within the roll the memo serves"
+
+    def stage_raises(s, plan):  # type: ignore[no-untyped-def]
+        raise RuntimeError("a stage that fails")
+
+    plan = plan_site(driver.HamletSpec(name="Scope", seed=1, households=10))
+    monkeypatch.setattr(driver, "STAGES", (stage_fills_the_memo,))
+    driver.build(plan)
+    assert clearance._MEMO == {} and trims == [True]
+    monkeypatch.setattr(driver, "STAGES", (stage_fills_the_memo, stage_raises))
+    with pytest.raises(RuntimeError, match="a stage that fails"):
+        driver.build(plan)
+    assert clearance._MEMO == {} and trims == [True, True], "the scope's exit runs on failure too"
+
+
+def test_every_loop_that_runs_the_stages_sits_inside_a_roll_scope() -> None:
+    """Feature 210 FR-005, a static test over the engine's source as an AST: every `for` loop under `l7r/`
+    whose iterable references `STAGES` and whose body calls the loop's own stage variable - `for stage in
+    STAGES`, `for i, stage in enumerate(STAGES, 1)`, whatever the form - is inside a `with roll_scope()`.
+    The rounds of this feature's spec review each found a stage-running loop the previous wording missed
+    (`build()` alone; then the three tools; then `enumerate`), which is why the rule is by what a loop DOES.
+    The one excluded shape is a comprehension that only reads stage attributes - `perf_profile.py`'s
+    `names = [st.__name__ ... for st in STAGES]` - which runs no stage: asserted present, so the exclusion
+    stays honest rather than silent."""
+    import ast
+    import pathlib
+
+    from l7r.diagram.hamletgen import driver
+
+    engine = pathlib.Path(driver.__file__).resolve().parents[1]
+    found: list[str] = []
+    outside: list[str] = []
+    comprehensions = 0
+
+    def mentions_stages(node: ast.AST) -> bool:
+        return any(isinstance(n, ast.Name) and n.id == "STAGES" for n in ast.walk(node))
+
+    def loop_targets(target: ast.AST) -> set[str]:
+        return {n.id for n in ast.walk(target) if isinstance(n, ast.Name)}
+
+    for path in sorted(engine.rglob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        parents: dict[ast.AST, ast.AST] = {c: p for p in ast.walk(tree) for c in ast.iter_child_nodes(p)}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ListComp) and mentions_stages(node):
+                comprehensions += 1
+            if not isinstance(node, ast.For) or not mentions_stages(node.iter):
+                continue
+            names = loop_targets(node.target)
+            calls_a_stage = any(isinstance(c, ast.Call) and isinstance(c.func, ast.Name) and c.func.id in names for b in node.body for c in ast.walk(b))
+            if not calls_a_stage:
+                continue
+            where = f"{path.relative_to(engine)}:{node.lineno}"
+            found.append(where)
+            p = parents.get(node)
+            in_scope = False
+            while p is not None:
+                if isinstance(p, ast.With) and any(
+                    isinstance(it.context_expr, ast.Call) and getattr(it.context_expr.func, "id", getattr(it.context_expr.func, "attr", "")) == "roll_scope" for it in p.items
+                ):
+                    in_scope = True
+                    break
+                p = parents.get(p)
+            if not in_scope:
+                outside.append(where)
+    assert len(found) >= 5, f"the engine has fewer stage-running loops than it did (build's two branches and three tools): {found}"
+    assert outside == [], f"stage-running loops outside roll_scope(): {outside}"
+    assert comprehensions >= 1, "the excluded shape (perf_profile's attribute-reading comprehension) is still there; if it went, drop this line"
+
+
 # ---- feature 151 US4: the stage profile prints, and changes nothing -------------------------------
 @pytest.mark.rolls_map  # it builds a Settlement (two stand-in stages, no render) - the marker keeps `make quick` honest about what it runs
 def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeypatch, capfd) -> None:

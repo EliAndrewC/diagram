@@ -27,7 +27,6 @@ Every number here is a rendering decision (constitution XII), recorded in specs/
 from __future__ import annotations
 
 import base64
-import io
 import re
 import shutil
 import subprocess
@@ -151,14 +150,35 @@ def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
     png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
     if png is None:
         return None
-    from PIL import Image
+    return webp_lossless(png)
 
-    buf = io.BytesIO()
-    # ENCODE METHOD 0, NOT 4 (feature 203, found by the gate's duration ratchet): still lossless, and measured on
-    # Kuwabata at 18.6 Mpx - method 4 took 9.6 s for 2.97 MB, method 0 2.2 s for 3.20 MB (+8%). The gate writes a
-    # page for every map it rolls, so the slow setting cost it 7 s per roll for a quarter-megabyte saving.
-    Image.open(io.BytesIO(png)).save(buf, "WEBP", lossless=True, quality=100, method=0)
-    return buf.getvalue()
+
+# THE ENCODE RUNS IN A CHILD PROCESS (feature 208, GM 2026-09-07: "write the picture in a subprocess"). PIL's
+# decode of the 18.6-megapixel PNG (70 MB of RGBA) and libwebp's lossless encode (a further 240 MB of working
+# memory) are C allocations the Python process never returns to the OS: measured on one worker, the page write
+# went 146 -> 598 -> 173 MB and the worker then RESTED at 250 MB where the roll itself had ended at 121 - eight
+# such workers under the gate was the 3 GiB the GM asked about (specs/208 research.md R1). In a child the 400 MB
+# lives and dies with it; the parent holds the 6 MB PNG and the 3 MB WebP. The child imports only PIL - no engine
+# module, so the make-only guard has nothing to say and coverage nothing to measure (the snippet is data here).
+# ENCODE METHOD 0, NOT 4 (feature 203, found by the gate's duration ratchet): still lossless, and measured on
+# Kuwabata at 18.6 Mpx - method 4 took 9.6 s for 2.97 MB, method 0 2.2 s for 3.20 MB (+8%).
+_WEBP_CHILD = (
+    "import io, sys\n"
+    "from PIL import Image\n"
+    "buf = io.BytesIO()\n"
+    "Image.open(io.BytesIO(sys.stdin.buffer.read())).save(buf, 'WEBP', lossless=True, quality=100, method=0)\n"
+    "sys.stdout.buffer.write(buf.getvalue())\n"
+)
+
+
+def webp_lossless(png: bytes) -> bytes:
+    """`png` re-encoded as lossless WebP by a child Python that imports only PIL - the same bytes an
+    in-process `Image.save` would produce, without the decode and encode buffers ever living in this
+    process. A child that fails raises, with its stderr, rather than returning a picture that is not one."""
+    proc = subprocess.run([sys.executable, "-c", _WEBP_CHILD], input=png, capture_output=True, check=False)
+    if proc.returncode != 0 or not proc.stdout:
+        raise RuntimeError(f"the WebP child failed (rc={proc.returncode}): {proc.stderr.decode('utf-8', 'replace').strip()[-400:]}")
+    return proc.stdout
 
 
 _TEXT = re.compile(r"<text\b[^>]*>.*?</text>", re.S)

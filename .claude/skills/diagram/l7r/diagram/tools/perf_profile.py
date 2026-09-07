@@ -64,7 +64,7 @@ def _git_env() -> dict[str, str]:
 def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
     """(the derived table, the raw .prof path)."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
-    from l7r.diagram.hamletgen.driver import STAGES
+    from l7r.diagram.hamletgen.driver import STAGES, roll_scope
     from l7r.diagram.settlement import Settlement
     from l7r.diagram.tools.perf_snapshot import REFERENCE
 
@@ -77,7 +77,7 @@ def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
     target = STAGES[names.index(stage)]
     plain = profiled = 0.0
     prof = cProfile.Profile()
-    with redirect_stdout(io.StringIO()):
+    with redirect_stdout(io.StringIO()), roll_scope():  # a roll like any other (feature 210)
         for st in STAGES:
             if st is target:
                 # the stage runs ONCE, profiled; the plain time is the snapshot's job (a second run would double the stage's side effects)

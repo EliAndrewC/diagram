@@ -746,12 +746,19 @@ def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
     return f'<clipPath id="hit-keep-clear"><path clip-rule="evenodd" d="{d}"/></clipPath>', ' clip-path="url(#hit-keep-clear)"'
 
 
-def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None, notes: MapNotes = EMPTY) -> str:
+def render_page(
+    strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None, notes: MapNotes = EMPTY, with_raster: bool = True
+) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
     `notes` is the map's own `.notes.md` "Map notes" block, and is EMPTY for most maps and for every
     caller that does not have one. Nothing here fails on its absence: the place card falls back to
-    what the map itself knows, and a class with no annotation simply carries none."""
+    what the map itself knows, and a class with no annotation simply carries none.
+
+    `with_raster=False` (named so because `raster` is the module) writes the page WITHOUT its picture and id map (feature 208, GM 2026-09-07: "not write it
+    at all for test rolls where it is not needed") - the vector-only form a host without resvg gets, complete
+    and openable, `"r": 0`. The raster is a RENDER: `finish()` passes the PNG's own condition, so a roll a test
+    makes never pays the 7.3 s and 450 MB spike of a picture nobody opens (specs/208 research.md R1)."""
     present = present_classes(tags)
     # THE OFF-MAP INK IS DROPPED FIRST (feature 200, FR-001): 90% of a hamlet page's subpaths lay outside
     # the viewBox - the hinterland scatter the generator draws over the whole commons and the crop never
@@ -790,7 +797,7 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     raster_payload: dict[str, Any] = {"r": 0}
     # the picture carries NO TEXT (feature 201): every <text> stays vector in both modes, so the scale and
     # the placard's name are the browser's font once, never resvg's under Chrome's - `raster.without_text`
-    pic = raster.picture(raster.without_text(svg)) if vb is not None else None
+    pic = raster.picture(raster.without_text(svg)) if raster_wanted(with_raster, vb) else None
     if pic is not None and vb is not None:
         idpng, palette = raster.id_map(svg, raster.class_keys(svg))
         assert idpng is not None, "resvg rendered the picture and not the id map"
@@ -848,10 +855,17 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     )
 
 
-def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None) -> None:
+def raster_wanted(with_raster: bool, vb: tuple[float, float, float, float] | None) -> bool:
+    """Whether the page gets its picture: asked for (`with_raster`, the render condition - feature 208)
+    AND there is a viewBox to render. Lifted out so the two conditions are one named place."""
+    return bool(with_raster) and vb is not None
+
+
+def write_html(path: str, strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta: dict[str, Any] | None = None, manifest: dict[str, Any] | None = None, with_raster: bool = True) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
-    notes file in the same directory can never be picked up (spec, Edge Cases)."""
+    notes file in the same directory can never be picked up (spec, Edge Cases). `with_raster` is the
+    render condition (feature 208) - see `render_page`."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster))

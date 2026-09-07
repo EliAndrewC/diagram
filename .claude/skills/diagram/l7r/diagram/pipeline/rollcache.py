@@ -38,12 +38,15 @@ Excluded from the engine file set (`gencache._NOT_ENGINE`): this module serves r
 from __future__ import annotations
 
 import contextlib
+import glob
 import hashlib
 import inspect
 import json
 import os
 import pickle
 import shutil
+import subprocess
+import sys
 import tempfile
 from collections.abc import Callable
 from pathlib import Path
@@ -170,17 +173,23 @@ def _run_share_dir() -> str | None:
     return os.path.join(tempfile.gettempdir(), f"l7r-runshare-{safe}")
 
 
-def _produce_and_store[T](subject: str, produce: Callable[[], T]) -> tuple[T, dict[str, Any]]:
+def _produce_and_store[T](subject: str, produce: Callable[[], T], recorded: Callable[[], tuple[T, dict[str, Any]]] | None = None) -> tuple[T, dict[str, Any]]:
     """Roll, RECORD what the roll executed, and store the entry - payload first, meta LAST.
 
     ONE BODY, deliberately (feature 192): both the ordinary MISS path and the FULL-run bypass store
     through here, so the pair invariant `_place` exists to hold cannot drift apart between two
     copies of these five lines. Writing meta alone - the payload withheld - is what the rejected
-    `deps.json` design was avoiding; sharing this function makes that impossible by construction."""
+    `deps.json` design was avoiding; sharing this function makes that impossible by construction.
+
+    `recorded`, when given, produces the payload AND its dependency record together - a roll made in a
+    CHILD process records itself there, where the functions actually ran (feature 210, `hamlet()`)."""
     entry = _entry(subject)
-    holder: list[T] = []
-    deps = gencache.record(lambda: holder.append(produce()))
-    payload = holder[0]
+    if recorded is not None:
+        payload, deps = recorded()
+    else:
+        holder: list[T] = []
+        deps = gencache.record(lambda: holder.append(produce()))
+        payload = holder[0]
     os.makedirs(entry, exist_ok=True)
     _place(pickle.dumps(payload), os.path.join(entry, "payload.pickle"))
     _place(json.dumps({"key": gencache.key_for(subject.encode(), deps), "deps": deps, "subject": subject}).encode(), os.path.join(entry, "meta.json"))
@@ -212,16 +221,17 @@ def _stores_under_bypass(subject: str) -> bool:
     return os.environ.get(FULL_ENV) == "1" and os.environ.get(gencache.GATE_BYPASS) != "1" and subject.startswith("report:")
 
 
-def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tuple[T, str]:
+def obtain[T](subject: str, produce: Callable[[], T], share: bool = False, recorded: Callable[[], tuple[T, dict[str, Any]]] | None = None) -> tuple[T, str]:
     """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored),
     "BYPASS-STORED" (produced and recorded, never served - the FULL run's `report:` rolls, feature
     192), "BYPASS" (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this
     subject under the bypass; a fresh copy of it). `subject` must determine the roll completely (a
-    spec's repr)."""
+    spec's repr). `recorded` (feature 210) is `produce` with its own dependency record, for a roll that
+    runs in a child process; the storing paths use it and every serving path is unchanged."""
     if bypassed():
         if not share:
             if _stores_under_bypass(subject):
-                return _produce_and_store(subject, produce)[0], "BYPASS-STORED"
+                return _produce_and_store(subject, produce, recorded)[0], "BYPASS-STORED"
             return produce(), "BYPASS"
         key = _share_key(subject, produce)
         cached = _SHARED_BYPASS.get(key)
@@ -253,7 +263,7 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False) -> tu
             return served, "HIT"
     except OSError, ValueError, KeyError, EOFError, AttributeError, pickle.UnpicklingError:
         pass  # an unreadable or half-written entry is DOUBT, and doubt produces - the pool cache's rule
-    return _produce_and_store(subject, produce)[0], "MISS"
+    return _produce_and_store(subject, produce, recorded)[0], "MISS"
 
 
 def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: str = "") -> tuple[T, str]:
@@ -265,23 +275,107 @@ def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: st
     return obtain(f"test:{test.__module__}.{test.__qualname__}:{label}:{hashlib.sha256(src.encode()).hexdigest()[:16]}", produce)
 
 
-def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
-    """The plan and the FINISHED manifest of a scripted hamlet built from `spec` (no gate, no files)."""
+def _hamlet_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
+    """Plan, build, finish - the roll `hamlet()` serves. Module-level so the child driver can call it by
+    name and a test can compare the child's result with the same code run in-process."""
     from l7r.diagram import hamletgen as hg
 
+    plan = hg.plan_site(spec)
+    s = hg.build(plan)
+    with tempfile.TemporaryDirectory() as tmp:
+        s.finish(os.path.join(tmp, "scratch"), render=False)  # the manifest is not complete until finish() runs
+    return plan, s.M
+
+
+# THE ROLL LEAVES THE WORKER (feature 210, GM 2026-09-07: "we should also roll in a forked child ... test out by
+# trying it in one place"). This is the one place: `hamlet()` produces the gate fixtures' rolls, the bulk of a
+# gate's rolls, and its payload is already the picklable pair the FULL run shares between workers. The child is
+# a SUBPROCESS rather than `os.fork()` - a forked copy of a coverage-traced xdist worker carries the parent's
+# `sys.monitoring` tool, its execnet channel and pytest-cov's hooks ("two recorders fight over the sys.monitoring
+# tool id", gate_obtain) - and it is the pool sweep's proven shape (`gencache.gate_obtain`, feature 026): under a
+# coverage-recording parent it runs `coverage run --parallel-mode` with the parent's hooks stripped and publishes
+# its data file into the skill directory's `.coverage.*` glob for the Makefile's `combine --append`; plain
+# otherwise. The dependency record the cache keys on is taken IN the child, where the functions ran. What it
+# saves: the roll's whole working set - the 121 MB a roll ends at, the memo, the retained arenas, the pymalloc
+# fragmentation - never enters the worker (specs/210 research.md R1, R3). The roll-out list is the spec's FR-004.
+_CHILD_DRIVER = (
+    "import pickle, sys\n"
+    "sys.path.insert(0, {here!r})\n"
+    "from l7r.diagram.pipeline import gencache, rollcache\n"
+    "with open({spec_path!r}, 'rb') as fh:\n"
+    "    spec = pickle.load(fh)\n"
+    "holder = []\n"
+    "deps = gencache.record(lambda: holder.append(rollcache._hamlet_payload(spec)))\n"
+    "with open({out_path!r}, 'wb') as fh:\n"
+    "    pickle.dump((holder[0], deps), fh)\n"
+)
+
+
+def _parent_is_covered() -> bool:
+    """Is THIS process recording coverage - so the child must record its own, or the roll's lines vanish
+    from the floor. Two signals, either suffices: pytest-cov's subprocess environment (`COV_CORE_SOURCE`),
+    and a live `coverage.Coverage` in this process (what pytest-cov actually runs in an xdist worker; the
+    landing gate of feature 210 lost three lines of `water.py` to the environment signal alone)."""
+    if os.environ.get("COV_CORE_SOURCE"):
+        return True
+    cov = sys.modules.get("coverage")
+    current = getattr(getattr(cov, "Coverage", None), "current", None)
+    return current is not None and current() is not None
+
+
+def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]], dict[str, Any]]:
+    """`(_hamlet_payload(spec), its dependency record)`, produced in a child process - see `_CHILD_DRIVER`."""
+    here = gencache.HERE
+    workdir = tempfile.mkdtemp(prefix="rollchild-")
+    try:
+        spec_path, out_path, driver = (os.path.join(workdir, n) for n in ("spec.pickle", "out.pickle", "driver.py"))
+        with open(spec_path, "wb") as fh:
+            pickle.dump(spec, fh)
+        Path(driver).write_text(_CHILD_DRIVER.format(here=here, spec_path=spec_path, out_path=out_path), encoding="utf-8")
+        # the child must be the ONLY coverage recorder in its process (gate_obtain's rule): the parent's
+        # pytest-cov hooks are stripped, and when the parent IS under coverage the child records its own
+        under_coverage = _parent_is_covered()
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
+        covbase = os.path.join(workdir, "cov")
+        if under_coverage:
+            env["COVERAGE_FILE"] = covbase
+            cmd = [sys.executable, "-m", "coverage", "run", "--parallel-mode", driver]
+        else:
+            cmd = [sys.executable, driver]
+        proc = subprocess.run(cmd, cwd=here, env=env, capture_output=True, text=True, check=False)
+        if proc.returncode or not os.path.isfile(out_path):
+            raise RuntimeError(f"the roll child failed for {spec!r} (exit {proc.returncode}):\n{proc.stdout[-1500:]}\n{proc.stderr[-1500:]}")
+        with open(out_path, "rb") as fh:
+            payload, deps = pickle.load(fh)  # noqa: S301 - our own child's bytes, written above
+        for i, covfile in enumerate(sorted(glob.glob(covbase + ".*"))):
+            # published onto the session's data-file glob that `coverage combine --append` sweeps -
+            # copy-then-replace, as gate_obtain: the scratch dir may be on another filesystem. UNIQUE PER
+            # CHILD, not per worker: a worker rolls several hamlets, and a name keyed on the worker's pid
+            # alone had each child overwrite the last - the landing gate lost one line of water.py to it.
+            dest = os.path.join(here, f".coverage.rollchild-{os.getpid()}-{os.path.basename(workdir)[len('rollchild-') :]}-{i}")
+            shutil.copyfile(covfile, dest + ".tmp")
+            os.replace(dest + ".tmp", dest)
+    finally:
+        shutil.rmtree(workdir, ignore_errors=True)
+    return payload, deps
+
+
+def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
+    """The plan and the FINISHED manifest of a scripted hamlet built from `spec` (no gate, no files).
+    Rolled in a child process (feature 210); served from the cache or the FULL run's share as before."""
+
+    def recorded() -> tuple[tuple[SitePlan, dict[str, Any]], dict[str, Any]]:
+        return _hamlet_in_child(spec)
+
     def produce() -> tuple[SitePlan, dict[str, Any]]:
-        plan = hg.plan_site(spec)
-        s = hg.build(plan)
-        with tempfile.TemporaryDirectory() as tmp:
-            s.finish(os.path.join(tmp, "scratch"), render=False)  # the manifest is not complete until finish() runs
-        return plan, s.M
+        return recorded()[0]
 
     # SHARED (feature 147): the scripted negative fixtures are the measured case - 31 of them across two
     # specs, each deep-copying the manifest before breaking it, so a shared roll is exactly what they want.
     # Sharing is OPT-IN and stays here for now: turned on for `obtain` generally it made the hamlet-path
     # floor NON-DETERMINISTIC (`hinterland.py` 503-504 flipped between otherwise identical full runs), and a
     # coverage floor that flips is worse than a slow one. What the fixtures need is this call and no other.
-    return obtain(f"hamlet:{spec!r}", produce, share=True)[0]
+    return obtain(f"hamlet:{spec!r}", produce, share=True, recorded=recorded)[0]
 
 
 def report(spec: HamletSpec) -> tuple[Report, str]:

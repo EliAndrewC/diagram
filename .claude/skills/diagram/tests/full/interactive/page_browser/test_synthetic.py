@@ -374,3 +374,27 @@ def test_scrolling_stops_at_the_edge_of_the_map(synthetic: Page) -> None:
         "() => { const r = document.getElementById('map').getBoundingClientRect(); return r.top >= -0.5 && r.bottom <= innerHeight + 0.5; }"
     ), "at fit the whole map stays in view"
     synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: Page) -> None:
+    """Feature 209 (GM 2026-09-07): "apply the same kind of tooltip rules to our research sections that we have
+    in our diagram HTML pages." The glossary term in the heading, the prose and the quoted footnote is wrapped;
+    the one in a code span is not; hovering shows the definition in the footnote box, and leaving hides it."""
+    spans = record.js("() => Array.from(document.querySelectorAll('span.gl')).map(s => s.textContent)")
+    assert spans == ["yashikirin", "kainyo", "sugi", "yashikirin"], "heading, prose (two terms), the footnote's quote - and never the code span"
+    assert record.js("() => document.querySelector('code span.gl')") is None
+    assert record.js("() => document.getElementById('fntip').hidden") is True
+    record.page.hover("h2 span.gl")
+    record.page.wait_for_timeout(30)
+    shown = record.js("() => { const t = document.getElementById('fntip'); return t.hidden ? null : t.textContent; }")
+    assert shown and shown.startswith("A homestead grove:"), shown
+    box = record.js("() => { const r = document.getElementById('fntip').getBoundingClientRect(); return [r.left, r.right, window.innerWidth]; }")
+    assert box[0] >= 0 and box[1] <= box[2], "the box stays inside the viewport"
+    record.page.mouse.move(1, 1)
+    record.page.wait_for_timeout(300)
+    assert record.js("() => document.getElementById('fntip').hidden") is True
+    record.page.hover("sup.fn a")
+    record.page.wait_for_timeout(30)
+    note = record.js("() => document.getElementById('fntip').textContent")
+    assert "a quoted passage" in note, "the footnote hover uses the same box"
+    assert record.errors == [] and record.requests == []

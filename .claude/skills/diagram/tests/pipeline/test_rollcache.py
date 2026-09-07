@@ -7,6 +7,7 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import sys
 import textwrap
 from pathlib import Path
 
@@ -262,6 +263,77 @@ def test_a_sibling_workers_payload_is_read_from_the_RUN_store(tmp_path, monkeypa
     again, how = rollcache.obtain("cross-worker", produce, share=True)
     assert how == "BYPASS-SHARED-RUN", "a payload this RUN produced is read across the worker boundary"
     assert again == first and again is not first, "a fresh copy, exactly as a served HIT hands out"
+
+
+def test_a_recorded_producer_stores_the_record_it_brings_and_the_next_call_hits(tmp_path, monkeypatch):  # type: ignore[no-untyped-def]
+    """Feature 210: `obtain(recorded=)` is `produce` with its own dependency record - a roll made in a child
+    records itself there. The MISS stores that record and the next call is a HIT with the same payload."""
+    eng, data, produce = _toy(tmp_path, monkeypatch)
+
+    def recorded():  # type: ignore[no-untyped-def]
+        holder = []
+        deps = gencache.record(lambda: holder.append(produce()))
+        return holder[0], deps
+
+    payload, how = rollcache.obtain("recorded-toy", produce, recorded=recorded)
+    assert how == "MISS" and payload == {"value": 7}
+    meta = json.loads(Path(rollcache._entry("recorded-toy"), "meta.json").read_text())
+    assert str(eng) in json.dumps(meta["deps"]), "the record the producer brought is what was stored"
+    assert rollcache.obtain("recorded-toy", produce, recorded=recorded) == ({"value": 7}, "HIT")
+
+
+def test_a_failing_roll_child_raises_with_its_stderr(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 210 FR-003: a child that dies is an error naming the failure, never a served roll."""
+    monkeypatch.setattr(rollcache, "_CHILD_DRIVER", "import sys\nsys.stderr.write('no engine here')\nsys.exit(7)\n")
+    monkeypatch.delenv("COV_CORE_SOURCE", raising=False)
+    with pytest.raises(RuntimeError, match=r"(?s)exit 7.*no engine here"):
+        rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
+
+
+_TRIVIAL_CHILD = "import pickle\nwith open({out_path!r}, 'wb') as fh:\n    pickle.dump((('plan', {{'M': 1}}), {{'functions': [], 'files': []}}), fh)\n"
+
+
+def test_the_roll_child_records_coverage_only_under_a_covered_parent(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 210 FR-003: with pytest-cov's `COV_CORE_SOURCE` in the parent's environment the child runs under
+    `coverage run --parallel-mode` and publishes its data file into the skill directory's `.coverage.*` glob
+    (what `coverage combine --append` sweeps, as for `gate_obtain`); without it the child runs plain and
+    leaves none. The driver is a trivial template here - the real one rolls a hamlet."""
+    monkeypatch.setattr(rollcache, "_CHILD_DRIVER", _TRIVIAL_CHILD)
+    here = Path(gencache.HERE)
+    before = set(here.glob(".coverage.rollchild-*"))
+    monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: False)
+    payload, deps = rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
+    assert payload == ("plan", {"M": 1}) and deps == {"functions": [], "files": []}
+    assert set(here.glob(".coverage.rollchild-*")) == before, "a plain parent gets a plain child"
+    monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: True)
+    try:
+        rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
+        rollcache._hamlet_in_child({"b": "another spec"})  # type: ignore[arg-type]
+        published = set(here.glob(".coverage.rollchild-*")) - before
+        assert len(published) == 2, "each child publishes its OWN data file - a name keyed on the worker alone lost a roll's coverage (the landing gate)"
+    finally:
+        for f in set(here.glob(".coverage.rollchild-*")) - before:
+            f.unlink()
+
+
+def test_the_parent_knows_when_it_is_covered_by_either_signal(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 210: the gate that landed this feature lost three lines of `water.py` because the child took its
+    cue from `COV_CORE_SOURCE` alone and this pytest-cov never sets it; the live `coverage.Coverage` in the
+    worker is the signal that is actually there. Either suffices; neither means plain."""
+    import types
+
+    monkeypatch.delenv("COV_CORE_SOURCE", raising=False)
+
+    class _Cov:
+        current = staticmethod(lambda: None)
+
+    monkeypatch.setitem(sys.modules, "coverage", types.SimpleNamespace(Coverage=_Cov))
+    assert rollcache._parent_is_covered() is False, "no env, no live coverage: plain"
+    monkeypatch.setitem(sys.modules, "coverage", types.SimpleNamespace(Coverage=types.SimpleNamespace(current=lambda: object())))
+    assert rollcache._parent_is_covered() is True, "a live Coverage in this process"
+    monkeypatch.setitem(sys.modules, "coverage", types.SimpleNamespace(Coverage=_Cov))
+    monkeypatch.setenv("COV_CORE_SOURCE", "l7r")
+    assert rollcache._parent_is_covered() is True, "pytest-cov's environment signal, where a version sets it"
 
 
 def test_a_run_with_no_xdist_id_has_no_shared_store(monkeypatch: pytest.MonkeyPatch) -> None:

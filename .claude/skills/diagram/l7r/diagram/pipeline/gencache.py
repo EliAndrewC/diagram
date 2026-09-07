@@ -475,7 +475,13 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
     # rather than restoring one, and the next render regenerates it.
     _skip_render = bool(os.environ.get("DIAGRAM_SKIP_RENDER"))
     for out in _outputs(gen):
-        if _skip_render and out.endswith(".png"):
+        # ...AND THE PAGE IS A RENDER TOO (feature 208): under DIAGRAM_SKIP_RENDER the page is written WITHOUT
+        # its raster picture - the vector-only `"r": 0` form - so filing it would bless a degraded page as this
+        # key's output and a later hit would restore it into the pool beside a current manifest, the exact
+        # shape of the stale-PNG bug above (the spec review found this before it shipped). Same treatment:
+        # not filed, evicted from the entry; `load` deletes any standing page the entry lacks and render-sync
+        # regenerates it, as it does the PNG (`render_cache._is_fresh` wants both).
+        if _skip_render and out.endswith((".png", ".html")):
             # EVICT, DO NOT SKIP. `continue` alone leaves any PNG already sitting in the entry
             # directory in place, and the meta.json written below then blesses that stale image as
             # THIS key's output - so a later hit restores the previous roll's picture beside a

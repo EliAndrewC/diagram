@@ -90,15 +90,21 @@ def _resolves_to_converted(token: str, containing_rel: str) -> bool:
 
 
 def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
-    """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/ and the GM's README."""
+    """FR-013 (b): prose, inline code and links alike, in every tracked file outside specs/ and the GM's README.
+    `scripts/fixtures/` is out too (feature 209, found red on main after feature 204 landed): a guard's replay corpus
+    is a verbatim census of commands sessions actually ran, some of them from before the record was HTML, and
+    rewriting a recorded command to satisfy this test would falsify the corpus it exists to replay."""
     root = _repo_root()
     files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
     hits = []
     for rel in files:
-        # `scripts/fixtures/` joins the exclusions (feature 207, 2026-09-07): feature 204's replay corpus is every
-        # main-tree refusal of a week with its command VERBATIM, and those commands named the record's old
-        # Markdown files. A recorded command is history, like a spec - rewriting it would falsify the replay.
         if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
+            continue
+        # A RECORDED FIXTURE IS HISTORY, NOT A POINTER (2026-09-07): `scripts/fixtures/` holds guard firings
+        # replayed by the guard suites - the commands sessions actually typed, verbatim, some of them naming
+        # research files that were Markdown at the time. Feature 204 landed one and turned main red here; the
+        # commands are quotations of what happened, like a spec, and are never followed as links.
+        if rel.startswith("scripts/fixtures/"):
             continue
         try:
             text = (root / rel).read_text(encoding="utf-8")

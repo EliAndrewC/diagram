@@ -15,7 +15,7 @@
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
-	 notes-census \
+	 notes-census glossary \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
 # GUARD_EDIT_OK: `tripwire` off .PHONY as well as losing its rule - a phony name with no recipe still
@@ -477,6 +477,9 @@ pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A
 notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
 ##  M=<glob>  which manifests to refresh (default: every manifest in both pool trees)
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
+
+glossary:       ## [docs] write research/assets/glossary.js from interactive/glossary.py - the ONE glossary the map's modals and the record's pages share (feature 209)   CHECK=1: exit 1 if stale
+	$(RUN).tools.glossary_asset $(if $(CHECK),--check,)
 
 
 
