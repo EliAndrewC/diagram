@@ -137,12 +137,17 @@ to ten minutes a plain `make done` costs on any engine change.
   stamp area, like a docs edit; their tests run in `make quick` and at the next gate. Stated rather
   than hidden.
 - **D6 - the taxonomy stays code.** FR-007.
-- **D8 - the C tracer is pinned for the gate's pytest (`COVERAGE_CORE=ctrace`).** Found on the fixture
-  project, 2026-09-07: Python 3.14's default sys.monitoring core disables a line's event after its first
-  hit, so the second test to execute a line records nothing under its own context - four of eight contexts
-  lost serially, two of eight under xdist, and never the one whose lines a fixture hit first. The C tracer
-  keeps all eight. `test_the_sysmon_core_loses_contexts_which_is_why_the_gate_uses_ctrace` re-measures it
-  on every gate, so the pin is revisited the day it stops being true. Its cost is in tasks.md T11.
+- **D8 - the fast coverage core keeps its contexts by RE-ARMING its events at every context switch.**
+  Found on the fixture project, 2026-09-07: Python 3.14's default sys.monitoring core disables a line's
+  event after its first hit, so the second test to execute a line records nothing under its own context -
+  four of eight contexts lost serially, two of eight under xdist, and never the one whose lines a fixture
+  hit first. The first fix pinned the C tracer, which keeps all eight - and cost a FULL run 2.4x (research
+  R6: the pytest phase 424 s -> 1,099 s, because the map rolls are traced line by line). The second fix
+  keeps the fast core and calls `sys.monitoring.restart_events()` in the plugin at every context switch,
+  which re-arms the disabled events so each context records every line it executes once; the per-context
+  line sets are IDENTICAL to the C tracer's on the fixture project (12 of 12 rows), and
+  `test_the_fast_core_keeps_every_context_once_its_events_are_re_armed` re-measures that on every gate.
+  Cost: one event per line per context instead of one per execution.
 - **D9 - a fixture gets its own coverage context.** pytest-cov attributes a session fixture's setup to the
   first test that asks for it, so forty tests reading a rolled hamlet would select as one. The plugin
   switches to `fixture:<name>` around every fixture setup, the planner selects by fixture closure, and the

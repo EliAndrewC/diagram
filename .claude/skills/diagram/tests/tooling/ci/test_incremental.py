@@ -178,9 +178,10 @@ class _Config:
 
 
 class _Item:
-    def __init__(self, nodeid: str, fixtures: tuple[str, ...] = ()) -> None:
+    def __init__(self, nodeid: str, fixtures: tuple[str, ...] = (), config: _Config | None = None) -> None:
         self.nodeid = nodeid
         self.fixturenames = list(fixtures)
+        self.config = config or _Config(None)
 
 
 class _Session:
@@ -197,7 +198,7 @@ def test_the_hooks_switch_the_coverage_context_around_a_fixture_and_back_to_the_
     cov = _Cov()
     cfg = _Config(cov)
     plugin = selection.GateSelection(Path("/nowhere"), {"mode": "full", "reason": "r"}, {})
-    item = _Item("t/test_a.py::x")
+    item = _Item("t/test_a.py::x", config=cfg)
     _drive(plugin.pytest_runtest_setup(item))
 
     class FD:
@@ -209,7 +210,7 @@ def test_the_hooks_switch_the_coverage_context_around_a_fixture_and_back_to_the_
     _drive(plugin.pytest_fixture_setup(FD(), Req()))
     _drive(plugin.pytest_runtest_call(item))
     _drive(plugin.pytest_runtest_teardown(item))
-    assert cov.contexts == ["fixture:built", "t/test_a.py::x|setup"]
+    assert cov.contexts == ["t/test_a.py::x|setup", "fixture:built", "t/test_a.py::x|setup", "t/test_a.py::x|run", "t/test_a.py::x|teardown"]
     # with no coverage plugin running the fixture hook is a no-op
     _drive(selection.GateSelection(Path("/nowhere"), {"mode": "full", "reason": "r"}, {}).pytest_fixture_setup(FD(), type("R", (), {"config": _Config(None)})()))
 

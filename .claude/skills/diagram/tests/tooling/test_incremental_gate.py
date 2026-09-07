@@ -9,7 +9,8 @@ merge, then judged by `coverage report --fail-under=100` exactly as the Makefile
   (c) a change that makes a line of an UNCHANGED module unreachable FAILS - the test that reached it re-runs;
   (d) an unrelated edit selects only the tests that executed it, and the merged report is 100%;
   (e) each fallback rule fires on its shape (no baseline, a conftest edit, a non-Python engine file, the
-      tooling hash, an import-time line, the 60% fraction).
+      tooling hash, an import-time line, the 60% fraction);
+  and the coverage-core proof: the fast core with re-armed events records the same per-context lines as the C tracer.
 
 The fixture engine's session fixture `built` is what makes (a) and (c) honest: it executes `core.py` once,
 under the first test that asks, and two test modules read what it built. Eight tests, so that the four polder
@@ -142,11 +143,14 @@ def project(tmp_path: Path) -> tuple[Path, Path]:
 PYTEST = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-p", "l7r.diagram.ci.gate_plugin", "--cov", "--cov-context=test", "tests"]
 
 
-def gate_env(bdir: Path, core: str = "ctrace") -> dict[str, str]:
-    """The environment the Makefile's floored run sets: the baseline directory, and the C tracer - see
-    `test_the_sysmon_core_loses_contexts`, which is why `ctrace` is not optional."""
-    env = {**os.environ, "L7R_GATE_SELECT": str(bdir), "PYTHONPATH": str(SKILL), "COVERAGE_CORE": core}
+def gate_env(bdir: Path, core: str | None = None) -> dict[str, str]:
+    """The environment the Makefile's floored run sets: the baseline directory. `core` pins a coverage core for
+    the comparison test; the gate itself runs the default (fast) core, whose events the plugin re-arms."""
+    env = {**os.environ, "L7R_GATE_SELECT": str(bdir), "PYTHONPATH": str(SKILL)}
     env.pop("L7R_VIA_MAKE", None)
+    env.pop("COVERAGE_CORE", None)
+    if core:
+        env["COVERAGE_CORE"] = core
     return env
 
 
@@ -180,23 +184,36 @@ def write(skill: Path, rel: str, text: str) -> None:
 # ---- the coverage core --------------------------------------------------------------------------------------
 
 
-def test_the_sysmon_core_loses_contexts_which_is_why_the_gate_uses_ctrace(project: tuple[Path, Path]) -> None:
-    """THE FINDING BEHIND `COVERAGE_CORE=ctrace` IN THE MAKEFILE (measured 2026-09-07). Python 3.14's default
-    sys.monitoring core disables a line's event after its first hit - correct for plain line coverage, fatal for
-    dynamic contexts: the second test to execute a line records nothing under its own context, so the planner
-    would never learn it touched the file. On this project the C tracer records all eight contexts and sysmon
-    four (serial) or six (xdist), never `test_add|run`, whose only engine lines the `built` fixture hit first.
-    If this test ever passes under sysmon, the core has been fixed and the Makefile's pin can be revisited."""
+def _context_lines(db: Path) -> dict[tuple[str, str], frozenset[int]]:
+    import sqlite3
+
+    from coverage.numbits import numbits_to_nums
+
+    con = sqlite3.connect(str(db))
+    try:
+        rows = con.execute("select c.context, f.path, l.numbits from line_bits l join file f on f.id = l.file_id join context c on c.id = l.context_id").fetchall()
+    finally:
+        con.close()
+    return {(c, os.path.basename(f)): frozenset(numbits_to_nums(n)) for c, f, n in rows}
+
+
+def test_the_fast_core_keeps_every_context_once_its_events_are_re_armed(project: tuple[Path, Path]) -> None:
+    """THE FINDING BEHIND `selection.switch` (measured 2026-09-07, spec D8). Python 3.14's default sys.monitoring
+    core disables a line's event after its first hit - correct for plain line coverage, fatal for dynamic contexts:
+    the second test to execute a line records nothing under its own context. With the plugin re-arming the events
+    at every switch, the per-(context, file) line sets under sysmon EQUAL the C tracer's - here, 12 of 12 rows,
+    `test_add|run` (whose only engine lines the `built` fixture hit first) included - at a fraction of the
+    tracer's cost. If this ever fails, the fast core's behavior changed and the planner's selection is unsound."""
     root, skill = project
     bdir = incremental.baseline_dir(root)
     assert incremental.main(["plan"], root, skill) == 0
     got = {}
     for core in ("sysmon", "ctrace"):
-        proc = subprocess.run(PYTEST, cwd=skill, env=gate_env(bdir, core), capture_output=True, text=True)
+        proc = subprocess.run(PYTEST + ["-n", "2"], cwd=skill, env=gate_env(bdir, core), capture_output=True, text=True)
         assert proc.returncode == 0, proc.stdout + proc.stderr
-        got[core] = set(incremental.all_contexts(skill / ".coverage"))
-    assert "tests/test_core.py::test_add|run" in got["ctrace"] and "tests/test_polder.py::test_dike[4]|run" in got["ctrace"]
-    assert "tests/test_core.py::test_add|run" not in got["sysmon"], sorted(got["sysmon"])
+        got[core] = _context_lines(skill / ".coverage")
+    assert ("tests/test_core.py::test_add|run", "core.py") in got["sysmon"], sorted(got["sysmon"])
+    assert got["sysmon"] == got["ctrace"], "the fast core with re-armed events records exactly what the C tracer records"
 
 
 # ---- the baseline itself --------------------------------------------------------------------------------

@@ -1412,9 +1412,9 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	@: "GUARD_EDIT_OK: feature 207 - THE INCREMENTAL GATE. A floored run first asks the planner which tests a change can reach"; \
 	: " (l7r/diagram/ci/incremental.py, the argument in its docstring), runs with per-test coverage CONTEXTS and the selection"; \
 	: " plugin, merges this run's coverage over the last full run's, and judges the floors over the merge. INCREMENTAL=0 or FULL=1"; \
-	: " forces a full run, which is what records the baseline. COVERAGE_CORE=ctrace, MEASURED 2026-09-07: Python 3.14's default"; \
-	: " sys.monitoring core disables a line's event after its first hit, so a second test executing the same line records NOTHING"; \
-	: " under its own context - 4 of 8 contexts lost on the fixture project; the C tracer keeps all 8. Contexts need ctrace."; \
+	: " forces a full run, which is what records the baseline. THE FAST COVERAGE CORE STAYS: Python 3.14's sys.monitoring core"; \
+	: " disables a line's event after its first hit, which loses contexts, and the plugin re-arms the events at every context"; \
+	: " switch (selection.switch); the C tracer, pinned first, cost a full run 2.4x (spec D8, research R5/R6, 2026-09-07)."; \
 	$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
 	: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
@@ -1436,12 +1436,14 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 
 # THE INCREMENTAL GATE'S KNOBS (feature 207, GM 2026-09-07). On a floored run (`COV_FLOORS=1`, i.e. the gate) the
 # pytest line records a coverage context per test phase and per fixture (`--cov-context=test` + the selection plugin,
-# which also deselects what the plan says), under the C tracer because the sys.monitoring core cannot keep contexts
-# (measured; the note in the `test` recipe). `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests`
-# passes INCREMENTAL=0 because an unattended run is the cheapest time to refresh the baseline.
+# which re-arms the fast core's events at every switch and deselects what the plan says; the note in the `test`
+# recipe). `--cov-report=` silences pytest-cov's own table on a floored run: on an incremental run it would report the
+# SELECTION's coverage (49% on the first measured run) a screen above the merged report that is the verdict.
+# `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests` passes INCREMENTAL=0 because an unattended
+# run is the cheapest time to refresh the baseline.
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))
-INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin,)
-INCR_ENV = $(if $(COV_FLOORS),COVERAGE_CORE=ctrace L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)",)
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test --cov-report= -p l7r.diagram.ci.gate_plugin,)
+INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)",)
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
 # `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
 # red on pre-existing tooling misses. Each records its own failure; the phase exits non-zero once, at the end.

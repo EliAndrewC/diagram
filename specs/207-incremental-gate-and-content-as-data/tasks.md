@@ -24,14 +24,18 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Every task is `research:
 - [x] T07 FR-008: the three pages regenerated and diffed byte-for-byte against T02's capture (SC-002)
       research: procedure
       verify: DONE. inashiro.html IDENTICAL (7.97 MB), pool/index.html IDENTICAL (after the stylesheet's leading newline was kept - the first regeneration differed at byte 170), hamlet-placement.html and all 13 stage pages IDENTICAL
-- [ ] T08 `ci/incremental.py` planner + `ci/selection.py` plugin, with unit tests over synthetic coverage data (FR-010, FR-011)
+- [x] T08 `ci/incremental.py` planner + `ci/selection.py` plugin, with unit tests over synthetic coverage data (FR-010, FR-011)
       research: rendering
-- [ ] T09 the Makefile wiring: contexts on, plan/merge/save-baseline, the run-log `mode`/`selected`, the ratchet and plausibility by mode, `make audit` (FR-009, FR-012, FR-013)
+      verify: DONE. `incremental.py` (manifest by raw blob id, `changed`, `contexts_touching`, `import_time_change`, `plan` with six fallbacks, `prune`/`merge`/`save_baseline`, the command), `selection.py` (fixture contexts, `keep_set`, `fixture_graph`, the writer rule) and `gate_plugin.py` (the two-hook `-p` shim, D12); `tests/tooling/ci/test_incremental.py` 20 tests over synthetic sqlite data and plain fakes; both modules at 100% across the two test files (`make cov-file`)
+- [x] T09 the Makefile wiring: contexts on, plan/merge/save-baseline, the run-log `mode`/`selected`, the ratchet and plausibility by mode, `make audit` (FR-009, FR-012, FR-013)
       research: rendering
-- [ ] T10 the fixture-project proof, five shapes (FR-014, SC-004)
+      verify: DONE. `test`: plan before pytest, `--cov-context=test -p l7r.diagram.ci.gate_plugin` + `COVERAGE_CORE=ctrace` under COV_FLOORS, merge before the floors, save-baseline after green floors; `done`: the mode reaches the plausibility floor (absolute minimum on incremental), the run-log entry (`mode`, `selected`) and the ratchet (full runs only); `_gatecost` excludes incremental rows; `test-full` alone stays a full run (FROM_DONE); `idle-tests` passes INCREMENTAL=0; `make audit` shows mode and k/n. The recipe-comment backtick recursion (D13) found and fixed on the way
+- [x] T10 the fixture-project proof, five shapes (FR-014, SC-004)
       research: rendering
-- [ ] T11 the first FULL gate with contexts: green, baseline saved, the context cost and baseline size recorded (FR-015)
+      verify: DONE. `tests/tooling/test_incremental_gate.py`, 14 tests on a real git repo with an eight-test engine, through the real planner, plugin (xdist, ctrace, contexts) and merge, judged by `coverage report --fail-under=100`: (a) an uncovered line in a changed function FAILS and selects the fixture's readers too; (b) deleting the only covering test FAILS; (c) an unchanged module's line made unreachable FAILS; (d) a polder-only edit selects the 4 polder tests of 8 and the merge is 100%; (e) no baseline, conftest, manifest, tooling, import-time line and the fraction each force FULL; the baseline is never written by an incremental run; the sysmon core's context loss proved (D8)
+- [x] T11 the first FULL gate with contexts: green, baseline saved, the context cost and baseline size recorded (FR-015)
       research: procedure
+      verify: DONE. 2026-09-07 21:04, commit 714eaf21: gate green, 3,089 passed, 100% over 22,545 statements, baseline saved under `.git/gate-baseline/` (coverage.db 3.3 MB, tests.json 345 KB for 3,092 tests, manifest.json 59 KB). COST: pytest phase 1,099 s / whole gate 1,273 s (cold roll cache) against 424 s / 589 s the day before - the C tracer with contexts is 2.4-2.6x on a FULL run (research R6); four launches to get here (the `--full` flag eaten by the ci parser, the backtick recursion, the `-p` import-order coverage hole, the module count)
 - [ ] T12 three incremental runs measured - polder-only, core placer, a tools module - selected counts and wall clock recorded (FR-015, SC-003)
       research: procedure
 - [ ] T13 docs: `CLAUDE.md` (the gate's two settings become three), `docs/efficiency-tooling.md`, the interactive package `CLAUDE.md`, `dev/gate.md`; `make done` green; land GATED (SC-005)

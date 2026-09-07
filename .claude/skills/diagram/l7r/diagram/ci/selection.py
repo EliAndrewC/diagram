@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +37,17 @@ def _cov(config: pytest.Config) -> Any:
     return ctl.cov if ctl is not None and getattr(ctl, "started", False) else None
 
 
+def switch(cov: Any, name: str) -> None:
+    """Switch the coverage context AND RE-ARM THE FAST CORE'S EVENTS (spec D8, measured 2026-09-07). Python
+    3.14's default `sys.monitoring` core disables a line's event after its first hit, so without this the
+    second context to execute a line records nothing - four of eight contexts lost on the fixture project.
+    `restart_events()` re-arms every disabled event, so each context records each line it executes once:
+    the per-context line sets equal the C tracer's (12 of 12 rows), at one event per line per context
+    instead of one per execution - the C tracer cost a full run 2.4x. Harmless under any other core."""
+    cov.switch_context(name)
+    sys.monitoring.restart_events()
+
+
 class GateSelection:
     def __init__(self, bdir: Path, plan: dict[str, Any], closures: dict[str, list[str]]) -> None:
         self.bdir = bdir
@@ -48,28 +60,37 @@ class GateSelection:
     @pytest.hookimpl(hookwrapper=True, tryfirst=True)
     def pytest_runtest_setup(self, item: pytest.Item) -> Any:
         self.nodeid, self.phase = item.nodeid, "setup"
+        cov = _cov(item.config)
+        if cov is not None:
+            switch(cov, f"{item.nodeid}|setup")  # pytest-cov switches to the same name after us; the re-arm is ours
         yield
 
     @pytest.hookimpl(hookwrapper=True, tryfirst=True)
     def pytest_runtest_call(self, item: pytest.Item) -> Any:
         self.nodeid, self.phase = item.nodeid, "run"
+        cov = _cov(item.config)
+        if cov is not None:
+            switch(cov, f"{item.nodeid}|run")  # pytest-cov switches to the same name after us; the re-arm is ours
         yield
 
     @pytest.hookimpl(hookwrapper=True, tryfirst=True)
     def pytest_runtest_teardown(self, item: pytest.Item) -> Any:
         self.nodeid, self.phase = item.nodeid, "teardown"
+        cov = _cov(item.config)
+        if cov is not None:
+            switch(cov, f"{item.nodeid}|teardown")  # pytest-cov switches to the same name after us; the re-arm is ours
         yield
 
     @pytest.hookimpl(hookwrapper=True)
     def pytest_fixture_setup(self, fixturedef: Any, request: Any) -> Any:
         cov = _cov(request.config)
         if cov is not None:
-            cov.switch_context(f"fixture:{fixturedef.argname}")
+            switch(cov, f"fixture:{fixturedef.argname}")
         try:
             yield
         finally:
             if cov is not None:
-                cov.switch_context(f"{self.nodeid}|{self.phase}")
+                switch(cov, f"{self.nodeid}|{self.phase}")
 
     # ---- selection ----
     @pytest.hookimpl(trylast=True)

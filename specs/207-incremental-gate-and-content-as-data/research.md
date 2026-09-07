@@ -124,7 +124,29 @@ Python 3.14 + coverage 7.15.2: the default core is sys.monitoring. On the fixtur
 | ctrace | 8 of 8 | 8 of 8 |
 
 The sysmon core disables a line's event after its first hit (a performance optimization coverage makes
-for plain line coverage), so a second context executing the same line records nothing. The gate pins
-`COVERAGE_CORE=ctrace` on the traced run. Cost: measured at T11 against the run log's medians.
+for plain line coverage), so a second context executing the same line records nothing. The first fix
+pinned `COVERAGE_CORE=ctrace`; R6 measured what that costs. The second fix keeps sysmon and re-arms its
+events: `sys.monitoring.restart_events()` at every context switch. Measured on the same fixture project,
+per (context, file) line sets: sysmon-with-restart 12 rows, ctrace 12 rows, 0 differing - identical,
+serially and under xdist. The cost model is one event per executed line per CONTEXT (first hit), against
+the C tracer's one event per EXECUTION; the map rolls, which dominate the suite, execute their lines
+millions of times and a few thousand distinct lines, so the difference is the whole of R6's 2.4x.
 
-Cost of contexts on the full run and the baseline file's size: tasks.md T11.
+## R6. What the C tracer and the contexts cost a FULL run - measured
+
+The pytest phase of the whole suite, 8 workers, this clone, no other recorded gate running in the window:
+
+| run | core | contexts | pytest phase | whole gate |
+|---|---|---|---|---|
+| 2026-09-07 18:06 (feature 205, before this feature) | sysmon | none | 424 s (3,034 tests) | 589 s (cold roll cache) |
+| 2026-09-07 20:15 (this feature, red on two unrelated tests) | ctrace | per test + per fixture | 964 s (3,079 tests) | 971 s |
+| 2026-09-07 20:41 (red on one count) | ctrace | per test + per fixture | 1,026 s (3,088 tests) | 1,067 s |
+
+So under the C tracer a FULL run cost about 2.4x what it did, and the T12 runs taken under it showed why
+that was not acceptable: a polder-only edit ran 33 of 3,075 tests in 381 s (a saving), but a core-placer
+edit ran 318 tests in 1,203 s - every map re-rolled under the slow tracer - which is TWICE the old full
+gate. The fix is R5's second paragraph: keep the fast core and re-arm its events, which removes the
+tracer penalty from both the full run and the rolls. The numbers under the fast core are T11/T12's
+final entries in tasks.md.
+
+The first green run's number and the baseline file's size (under the C tracer): tasks.md T11.
