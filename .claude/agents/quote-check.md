@@ -49,7 +49,11 @@ check nothing for it.
      a difference, because the record keeps a source's own characters: GM 2026-09-06, *"The house style should
      not normalize british spellings or em-dashes inside things we are quoting"*); `DIFFERS` (the page has the passage with different characters or words - give the page's text);
      `NOT-ON-PAGE` (nothing like it on the page - say what the page does say on the point, if anything);
-     `UNFETCHABLE` (the host refused; say how).
+     `UNFETCHABLE` (the host refused; say how). **A translated quote** (feature 202, GM 2026-09-07: the quote is the
+     English translation, marked "translated from the ... by ...", the original after "original:") is judged in two
+     halves: the ORIGINAL against the page with the verdicts above, and the TRANSLATION against the original -
+     `TRANSLATION-FAITHFUL` (complete and accurate: every clause, number and hedge carried, nothing added) or
+     `TRANSLATION-DIFFERS` (give the rendering you would accept). A translation is the project's own English.
    - **Support**: `SUPPORTS` (a reader of the quote alone would grant the assertion); `PARTIAL` (the quote grants
      part - say which part is not in it); `DOES-NOT-SUPPORT` (the quote is about something else, or says the
      opposite - say what it says).

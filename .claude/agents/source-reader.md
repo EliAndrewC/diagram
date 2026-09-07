@@ -57,6 +57,7 @@ CLAIM: <verbatim from the entry>
 SOURCE: <what you fetched, final URL>
 VERDICT: READ | SUMMARY-ONLY | CONTRADICTED | NOT-FOUND
 QUOTE: "<the verbatim passage, or the closest one>"          (READ / CONTRADICTED)
+TRANSLATION: "<your complete English translation, when the passage is not English>"   (feature 202: the record quotes the translation, marked as one, the original after it)
 SEEN: <what the search summary or alternate page said>       (SUMMARY-ONLY)
 NOTE: <a scope or number mismatch, a hedge the entry dropped, a better source you found>
 ```

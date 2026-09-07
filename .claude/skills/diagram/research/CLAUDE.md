@@ -114,8 +114,15 @@ point in including a reference if it is not being quoted."* So the citation form
   even multiple per sentence in sentences which make multiple assertions"*; a sentence that rests on two sources
   carries two;
 - at the page's foot, in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
-  「the quoted passage」 (an English gloss when the passage is not English; one clause on what it bears on when
-  that is not plain) <a class="fnback" href="#fnref-n">back</a></li>` - the key linked by feature 190's rule, the
+  「the quoted passage」 (one clause on what it bears on when that is not plain) <a class="fnback" href="#fnref-n">back</a></li>` -
+  and when the passage is not English, **the quote is the English translation, marked as one** (GM 2026-09-07, feature
+  202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated from the Japanese by this project; original: 「原文」)` - the note names the language
+  and the translator (this project; the GM's browser, a machine translation saved on a date; the source's own English
+  elsewhere on the page), and the original follows the note as the anchor a checker finds on the page, never as a
+  second quote; a translation is this project's own English and follows house style (the guard's 「」 exemption
+  cannot tell it from an original - held by hand); a source's own English needs no note. The same form holds in body
+  prose and in a `SOURCES.html` entry. The record's 472 foreign-language passages were converted on 2026-09-07
+  (`specs/202-quote-the-translation/`) - the key linked by feature 190's rule, the
   passage VERBATIM from the page, or PASSAGES when one is not enough - verbatim INCLUDING the source's own spelling and dashes: the house-style guard holds quoted spans (「」, “”, a straight-quoted span in prose) out of its corrections (GM 2026-09-06: *"The house style should not normalize british spellings or em-dashes inside things we are quoting, because that requires us to edit other people's quotes"*), and a `quote-check` reports a hyphen for a dash or an Americanized spelling as `DIFFERS`. A SUMMARY-ONLY source is NOT cited (feature 195, below); the
   GM's own notes (`URL: none`) quote the note. Nothing is quoted from memory.
 - the section's `<p><strong>Sources:</strong> ...</p>` roster stays (the map's modal reads it) and every key on it is quoted by at least

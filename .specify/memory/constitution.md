@@ -1,7 +1,12 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.19.0 → 2.20.0
+Version change: 2.20.0 → 2.21.0
+
+Version 2.21.0 (amended 2026-09-07, feature 202): Principle XII gains "QUOTE THE TRANSLATION" - a
+foreign-language passage is quoted in English translation, marked as a translation (from which language, by
+whom), the original kept after the note as the verification anchor; the record's foreign-language quotations
+converted. GM 2026-09-07.
 
 Version 2.20.0 (amended 2026-09-07, feature 197): the Development Workflow gains a mandatory step - a
 spec-kit feature NUMBER is claimed with `make claim SLUG=<slug>`, which hands it out under a host-wide
@@ -1467,6 +1472,15 @@ point, quoted in full in their footnote and linked to their registry entry (`URL
 returns READABLE / NOT-READABLE per footnote and a NOT-READABLE footnote does not land as a citation;
 `tests/interactive/test_footnotes.py` holds the two footnote forms.
 
+**QUOTE THE TRANSLATION** (v2.21.0, GM 2026-09-07, feature 202): *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"* A passage in another language is quoted in
+English translation - 「English translation」 (translated from the Japanese by this project; original: 「原文」) - the note naming the language and the
+translator (this project; the GM's browser, a machine translation saved on a date; the source's own English
+elsewhere on the page); the original passage follows the note as the anchor a checker finds on the page, never
+as a second quote. A translation is the project's own English and follows house style. A source's own English
+(an abstract, an English page) is quoted as the source's words with no note. The `quote-check` agent verifies the
+original on the page and the translation against it (`TRANSLATION-FAITHFUL` / `TRANSLATION-DIFFERS`);
+`tests/interactive/test_footnotes.py` fails a non-ASCII quote that carries no translation note.
+
 **READ WHAT YOU CITE** (GM 2026-08-27, feature 133 T44). A source is cited only after the session
 has read it - the page or paper itself, fetched and read, not a search engine's summary of it and
 not another page's paraphrase - and the finding written down is what THAT text says, in its own
@@ -2121,4 +2135,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.20.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-07
+**Version**: 2.21.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-07

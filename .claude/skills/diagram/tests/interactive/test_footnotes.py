@@ -9,6 +9,7 @@ assertion, and every assertion has one - is its job, before a research edit land
 
 from __future__ import annotations
 
+import html
 import pathlib
 import re
 
@@ -136,3 +137,59 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
             if key not in quoted:
                 unquoted.append(f"{section.splitlines()[0][:60]!r}: `{key}`")
     assert not unquoted, f"{path.name}: roster keys no footnote in the section quotes:\n" + "\n".join(unquoted)
+
+
+#: Feature 202 (GM 2026-09-07): "for foreign language things we want to quote the English translation rather than the
+#: original text but we also want to note that it is a translation." A 「」 quote in a research page is either ASCII-only
+#: or is followed, in the same footnote / paragraph / registry entry, by a translation note; the original after
+#: "original:" is the anchor and is exempt. Derived from the NOTE, not the script - the record quotes German and Korean
+#: as well as Japanese and Chinese. The limit, stated in the spec: a Latin-script foreign quote with no non-ASCII
+#: character reads as English here; the sweep and the quote-check carry those.
+_QUOTE_SPAN = re.compile(r"「([^」]+)」")
+_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*;\s*)?(?:translated from the|machine translation|the source.s own English|translation:)", re.I)
+_BLOCK = re.compile(r"<(p|li|h[2-4])\b[^>]*>(.*?)</\1>", re.S)
+#: English quotes carry macrons (daimyō), curly quotes and the source's own dashes, so "not ASCII" is not "foreign".
+#: Foreign is a NON-LATIN script (CJK, kana, hangul, Cyrillic, Greek...) or, for a Latin-script language, a run of its
+#: function words - German is the one the record quotes (the `waldrand-dewiki` fixture). The stated limit (spec 202
+#: FR-002): a Latin-script foreign quote outside that list reads as English here; the sweep and quote-check carry it.
+_NON_LATIN = re.compile(r"[\u0370-\u03ff\u0400-\u04ff\u0590-\u06ff\u0e00-\u0e7f\u1100-\u11ff\u3000-\u30ff\u3400-\u9fff\uac00-\ud7af\uf900-\ufaff\uff00-\uffef]")
+_GERMAN = re.compile(r"\b(und|der|die|das|von|mit|nach|sich|ist|ein|eine|nicht|auch|bei|zum|zur|des|dem|wird|werden|oder)\b")
+
+
+def _looks_foreign(passage: str) -> bool:
+    return bool(_NON_LATIN.search(passage)) or len(_GERMAN.findall(passage)) >= 2
+
+
+def unmarked_foreign_quotes(text: str) -> list[str]:
+    """The 「」 quotes that are not ASCII and carry no translation note in their block, original anchors excluded."""
+    bad = []
+    for m in _BLOCK.finditer(text):
+        block = m.group(2)
+        for q in _QUOTE_SPAN.finditer(block):
+            passage = html.unescape(q.group(1))
+            if not _looks_foreign(passage):
+                continue
+            before = block[max(0, q.start() - 12) : q.start()]
+            if "original:" in before or "original 「" in before:
+                continue
+            after = block[q.end() : q.end() + 400]
+            if _TRANSLATION_NOTE.search(after):
+                continue
+            bad.append(passage[:60])
+    return bad
+
+
+@pytest.mark.parametrize("path", [p for p in _finding_files()] + [pathlib.Path(RESEARCH_DIR, "SOURCES.html")], ids=lambda p: p.name)
+def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
+    bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8"))
+    assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])
+
+
+def test_the_translation_form_is_told_apart() -> None:
+    """The German and Korean fixtures fire; the marked form and the anchor pass; ASCII passes."""
+    de = "<li>「Ein idealer Waldrand gliedert sich von außen nach innen」 (an ideal forest edge)</li>"
+    ko = "<li>「동구숲 7,149 727」 (Table 8)</li>"
+    ok = "<li>「An ideal forest edge is layered from outside in」 (translated from the German by this project; original: 「Ein idealer Waldrand gliedert sich von außen nach innen」)</li>"
+    assert unmarked_foreign_quotes(de) and unmarked_foreign_quotes(ko)
+    assert unmarked_foreign_quotes(ok) == [] and unmarked_foreign_quotes("<p>「plain ascii quote here」</p>") == []
+    assert unmarked_foreign_quotes("<li>「the daimyō’s rice — stored (1603–1867)」 (English with macrons and the source's dashes)</li>") == []
