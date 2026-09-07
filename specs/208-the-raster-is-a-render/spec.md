@@ -1,6 +1,7 @@
 # Feature 208 - the raster is a render
 
-**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - cleared for implementation (constitution XVI). The review flagged one implementation hazard, taken up in FR-001: the generation cache must not file a skip-render page as a pool output.
+**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implemented; the gate green with the after
+numbers in research R5 (no test peaks above 400 MB, from 21). The review flagged one implementation hazard, taken up in FR-001: the generation cache must not file a skip-render page as a pool output.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the audit: what a page write costs, who pays it, who reads it.
 **Predecessors**: feature 200 (the page's raster picture and id map); 134 (the page beside every map);

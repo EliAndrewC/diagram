@@ -90,5 +90,19 @@ the GM named (130 MB retained) is gone with the child, so `malloc_trim` is NOT a
 page's raster payload is byte-identical to main's page for the same roll: picture sha 51b3c0e5c6e7bb9e,
 id map sha 84dacedcbb6bd32d, before and after (SC-002).
 
-**The gate**: (filled in from the `make done` that lands this feature - the container's peak against the
-2026-09-07 profile's 5,955 MiB, the test phase against 355 s.)
+**The gate** (`make done` with the same per-test plugin and cgroup sampler as the 2026-09-07 profile;
+the container held 3.3 GiB idle at the start, against 2.8 before, most of it file cache):
+
+| | the profile (before) | the landing gate (after) |
+|---|---|---|
+| test phase | 355 s (3,046 tests) | 315 s (3,050 tests) |
+| container peak | 5,955 MiB | 5,568 MiB (with 0.5 GiB more cache at the start) |
+| Python at the peak | 3,261 MiB | 2,047 MiB |
+| worker peak in a test (highest / typical) | 808 / 630-750 MiB | 341 / 240-253 MiB |
+| tests peaking above 400 / 600 / 800 MiB | 21 / 13 / 1 | 0 / 0 / 0 |
+| a worker's resting level after its rolls | 245-266 MiB | 200-246 MiB |
+| the placement-stages re-plate (one process) | 1,632 MiB | 210 MiB |
+
+The one remaining outlier is the cohort test (`test_a_rolled_cohort_passes_the_whole_gate`, 341 MB over
+252 s): it holds a whole cohort of rolls at once. What a worker now carries is the engine, the coverage
+tracer and its rolled manifests - the shape the GM asked about is gone.

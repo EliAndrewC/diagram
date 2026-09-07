@@ -22,6 +22,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T06 SC-002: Kuwabata's page through `make map`, raster payload byte-identical to main's
       research: rendering
       verify: DONE. DONE. make map GEN=pool/hamlets/kuwabata/kuwabata.gen.py REGENERATED in 44 s; the page's picture (sha 51b3c0e5c6e7bb9e, 4,264,703 chars of data URI) and id map (84dacedcbb6bd32d) identical to main's page and to the clone's page before the change
-- [ ] T07 the record (FR-006); `make done` green with the gate's peak and time recorded (FR-005, SC-003);
+- [x] T07 the record (FR-006); `make done` green with the gate's peak and time recorded (FR-005, SC-003);
       land GATED
       research: rendering
+      verify: DONE. DONE. make done green: 3,050 passed, 100% on both floors, the test phase 315 s (355 before). Profiled in the same run: the container peaked at 5,568 MiB (5,955 before, with 0.5 GiB more file cache at the start), Python 2,047 MiB at the peak (3,261), no test above 400 MB (21 before; the highest is the cohort test at 341), the placement-stages re-plate 210 MB (1,632). Record: research R5, interactive/CLAUDE.md, dev/performance.md. Landing GATED (LOCAL-GATED)
