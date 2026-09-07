@@ -60,7 +60,7 @@ changed, you know which directory to open.
 | `sitegen/` | the machinery the tiers SHARE (geometry, types, worker counts) | - |
 | `waterfields/` | the water-first field engine | - |
 | `pipeline/` | the cache, regen driver, render cache and pool index | - |
-| `interactive/` | the interactive HTML map (feature 134): the class registry and the page's string layer; the Playwright browser test is the package `full/interactive/page_browser/` (the GM's ruling, 2026-08-28: a 15 s browser test is full-tree material) | - |
+| `interactive/` | the interactive HTML map (feature 134): the class registry and the page's string layer; the Playwright browser test is the package `full/interactive/page_browser/` (the GM's ruling, 2026-08-28: a 15 s browser test is full-tree material) - the synthetic page only since 2026-09-07 (the rolled-page and timing tests were retired; `page_browser/CLAUDE.md`), and **skipped by the gate while nothing it reads changed** (feature 206: `gate-stamp.py`'s `browser` key - the interactive modules, the assets, the package, `research/*.html`, the installed browser; earned by `make page-check` or a `make done` that ran it) | - |
 | `tools/` | the audits and diagnostics that are under the 100% rule | - |
 | `fixtures/` | DATA, not tests: frozen red SVGs (Mode A negative fixtures), `gate_check_names.json`, `registry_legacy_rows.json` | - |
 

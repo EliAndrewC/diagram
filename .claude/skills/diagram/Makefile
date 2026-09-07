@@ -163,6 +163,10 @@ done:
 	root=$$(git rev-parse --show-toplevel 2>/dev/null); \
 	python3 "$$root/scripts/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" || exit 1; \
 	[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram && python3 "$$root/scripts/gate-stamp.py" --write page || true; \
+	: "GUARD_EDIT_OK: feature 206 - the BROWSER stamp is earned here only when this run RAN the package (BROWSER_SKIP" ; \
+	: " was empty). A run that skipped it leaves the stamp as found - re-stamping a skip is the 're-stamps rather" ; \
+	: " than earns' trap the short-circuit above records; the short-circuit itself writes no browser stamp either." ; \
+	$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write browser || true;) \
 	: "(GUARD_EDIT_OK: feature 196 FR-001 - the GREEN entry records the roll-cache class. The other"; \
 	: " three LOGRUN sites (already-verified, and the two failure paths) run WITHOUT _reference, so"; \
 	: " they have no class to record and must not invent one - an absent field is excluded from a"; \
@@ -877,9 +881,11 @@ tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustiv
 # verification-state record, because ci/decision.py's green-local-since-edit reads the record's event and never
 # its target, and a one-minute check must not stand where a full gate is meant to.
 page-check:     ## [tests] the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
-	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/page_browser \
+	@: "GUARD_EDIT_OK: feature 206 - page-check always RUNS the browser package, so it earns the browser stamp too"; \
+	python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/page_browser \
 	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
-	  && printf '\n\033[1mpage-check green\033[0m (the page stamp is written; an asset-only delta may push)\n'
+	  && python3 "$$root/scripts/gate-stamp.py" --write browser \
+	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n'
 
 # GUARD_EDIT_OK: feature 188 - `make tick` (the GM: "The idea of a make tick helper. does indeed seem good"): tick ONE
 # task in a feature's tasks.md from the command line, with its verify note, refusing rather than guessing when the
@@ -1202,6 +1208,21 @@ typecheck:       ## [static] pyrefly over the engine, one-shot, no daemon (featu
 # the full run (the tooling tests then never skip - the ci package owes its 100% there).
 FULL_TREE_IGNORE = $(if $(COV_FLOORS),,--ignore=tests/full)
 FULL_ENV = $(if $(COV_FLOORS),L7R_TESTS_FULL=1,)
+# THE BROWSER TESTS ARE SKIPPED WHILE NOTHING THEY READ CHANGED (feature 206, GM 2026-09-07: "Do we have logic in
+# place to skip them if the content which they are testing has not changed? ... this is about saving memory, not
+# saving time"). GUARD_EDIT_OK: feature 206 - a stamp-keyed skip of one test package, the hooks-test pattern.
+# `gate-stamp.py --fresh browser` compares the `browser` stamp with a key over everything the synthetic-page
+# browser tests read (every interactive/ module, the two assets, the test package, research/*.html, the installed
+# Playwright and Chromium - the area's own comment in gate-stamp.py). Fresh -> the package is left out of the test
+# phase and `test` says so in one line; stale or no stamp -> it runs exactly as before. The stamp is EARNED only
+# by a run that ran the package green: `page-check` (always runs it) and `done`'s phases-run exit when this was
+# empty for that run; the already-verified short-circuit writes none. No flag forces either direction (the spec
+# review struck one, as it struck `done`'s FORCE=): `make page-check` is the way to run the package on demand.
+# What it saves, measured: one Chromium at ~430 MB for under 9 s of a gate - the 3.9 GiB was the rolled-page
+# tests, retired the same day. The floor cannot be loosened by it: a skipped test lowers measured coverage,
+# never hides an uncovered line (specs/206 research.md R3). Recursive `=`, evaluated where it is used, so a
+# `make` that never reaches the test phase never pays the check.
+BROWSER_SKIP = $(shell root=$$(git rev-parse --show-toplevel 2>/dev/null); [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --fresh browser >/dev/null 2>&1 && echo --ignore=tests/full/interactive/page_browser)
 # COVERAGE FOLLOWS THE DIFF at reference scope (feature 135, second pass; the why is on `delta.coverage_scope`):
 # the gate traces only the engine modules the diff touched - `uncovered-in-diff.py` needs no more - and nothing
 # when none changed; measured 9 s of a 25 s locked gate. FULL traces everything (the floors). An empty answer
@@ -1372,7 +1393,9 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
-	@if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	@: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
+	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
+	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \

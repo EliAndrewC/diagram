@@ -37,6 +37,7 @@ import ast
 import fnmatch
 import hashlib
 import json
+import os  # GUARD_EDIT_OK: feature 206 - `_salt` reads PLAYWRIGHT_BROWSERS_PATH
 import subprocess
 import sys
 import tempfile
@@ -65,10 +66,29 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # the semantic id - which strips docstrings - no longer sees a prose edit, so this area must. The other
     # interactive modules stay out: they hold no page prose, and a comment edit in them costs nothing.
     "page": (".claude/skills/diagram/l7r/diagram/interactive", ("assets/*.js", "assets/*.css", "classes/*.py")),
+    # THE BROWSER KEY (feature 206, GM 2026-09-07: "Do we have logic in place to skip them if the content which
+    # they are testing has not changed? ... this is about saving memory, not saving time").
+    # GUARD_EDIT_OK: adding an area the GATE may SKIP on, never one the push demands (SKIP_ONLY_AREAS below).
+    # The synthetic-page browser tests (tests/full/interactive/page_browser/, 17 tests, one Chromium at ~430 MB
+    # for under 9 s of a gate) read exactly this: the page writer and everything it inlines (every .py under
+    # interactive/ - the registry's DOCSTRINGS are the modal text the tests compare, hence RAW), the two assets,
+    # the test package itself, and research/*.html (the references modal's links are built from the record's
+    # headings at page-write time; a research edit therefore re-runs the package - spec D2, the conservative
+    # choice). Salted with the installed Playwright and Chromium (`_salt`), because a browser upgrade is an
+    # input to a browser test. The area shares the diagram area's ROOT, which is why `_excluded` takes the area
+    # NAME: the diagram area excludes tests/, and this area must not. `--check` never looks at it: a research
+    # or test edit owes no gate at push (feature 132 FR-024), and this key would otherwise invent that obligation.
+    "browser": (
+        ".claude/skills/diagram",
+        ("l7r/diagram/interactive/*.py", "l7r/diagram/interactive/assets/*", "tests/full/interactive/page_browser/*.py", "research/*.html"),
+    ),
 }
 #: Areas whose files are hashed by their BYTES rather than the semantic id - the one place a docstring
 #: must count as a change (spec 189 FR-007 / D3). Everything else in the repository stays semantic.
-RAW_AREAS: frozenset[str] = frozenset({"page"})
+#: `browser` joins (feature 206): the registry's docstrings are the modal text the synthetic tests assert on.
+RAW_AREAS: frozenset[str] = frozenset({"page", "browser"})
+#: Areas that are a SKIP key for a gate, never a push obligation: `--check` ignores them (feature 206 FR-004).
+SKIP_ONLY_AREAS: frozenset[str] = frozenset({"browser"})
 # Subtrees an area does NOT hash. tests/ (feature 132 FR-024, the GM's ruling 2026-08-25, asked and
 # answered "Yes, locally AND on AWS"): a tests-only change owes no gate - not the build, not the local
 # `make done`, and not this stamp, which would otherwise refuse the push for want of a green run. The
@@ -147,10 +167,11 @@ def _root() -> Path | None:
         return None  # not a git checkout: the guard is a no-op rather than an obstacle
 
 
-def _area_files(root: Path, area_path: str, patterns: tuple[str, ...]) -> list[Path]:
+def _area_files(root: Path, area_path: str, patterns: tuple[str, ...], area: str | None = None) -> list[Path]:
     """Tracked AND untracked-but-not-ignored files under `area_path` matching `patterns` - a new
     module nobody has added yet is still code the gate ran on, and omitting it would let an
-    untracked file slip past."""
+    untracked file slip past. `area` names which area's exclusions apply (feature 206: two areas
+    share a root now); left None, it is derived from the root as before."""
     out = _git(
         "ls-files",
         "-co",
@@ -163,16 +184,38 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...]) -> list[P
         {
             root / line
             for line in out.splitlines()
-            if line.strip() and not _excluded(line, area_path)
+            if line.strip() and not _excluded(line, area_path, area)
         }
     )
 
 
-def _excluded(path: str, area_path: str) -> bool:
-    area = next((a for a, (p, _pats) in AREAS.items() if p == area_path), None)
+def _excluded(path: str, area_path: str, area: str | None = None) -> bool:
+    # GUARD_EDIT_OK: feature 206 - the area is passed by NAME where the caller knows it. Deriving it from the
+    # root alone answers "diagram" for the browser area (same root), whose tests/ exclusion would silently
+    # drop the browser test package out of the browser key - the one file set a stale stamp must never miss.
+    if area is None:
+        area = next((a for a, (p, _pats) in AREAS.items() if p == area_path), None)
     return any(
         path.startswith(f"{area_path}/{sub}") for sub in exclusions(area or "")
     )
+
+
+def _salt(area: str) -> str:
+    """What an area's key depends on BESIDES its files. Only `browser` has any (feature 206 D3): the
+    installed Playwright version and the installed Chromium builds, read from the package metadata and the
+    browser cache's directory names - never by launching a browser, which costs a second and is exactly the
+    side effect a stamp check must not have. Playwright absent: "absent" (the tests skip themselves then)."""
+    if area != "browser":
+        return ""
+    try:
+        import importlib.metadata
+
+        version = importlib.metadata.version("playwright")
+    except importlib.metadata.PackageNotFoundError:
+        return "absent"
+    cache = Path(os.environ.get("PLAYWRIGHT_BROWSERS_PATH") or (Path.home() / ".cache" / "ms-playwright"))
+    builds = sorted(p.name for p in cache.glob("chromium*")) if cache.is_dir() else []
+    return f"playwright={version};chromium={','.join(builds) or 'none'}"
 
 
 def _matches(path: str, area_path: str, patterns: tuple[str, ...]) -> bool:
@@ -336,12 +379,15 @@ GATE_RECIPE = "2026-08-31/174-whole-tree-100-no-ratchet"
 # carry, and the first bump's own comment says so - "bump it whenever the gate's STANDARD changes".
 
 
-def hash_files(files: list[Path], root: Path | None = None, raw: bool = False) -> str:
+def hash_files(files: list[Path], root: Path | None = None, raw: bool = False, salt: str = "") -> str:
     """Content hash of `files`, order-independent (each path is hashed with its own SEMANTIC id - or,
     for a `RAW_AREAS` area, with the sha of its bytes, so a docstring edit counts), salted with
-    `GATE_RECIPE` so a record taken under an older gate standard cannot satisfy a newer one."""
+    `GATE_RECIPE` so a record taken under an older gate standard cannot satisfy a newer one, and with
+    `salt` - an area's non-file inputs (`_salt`; the browser build, feature 206)."""
     h = hashlib.sha256()
     h.update(GATE_RECIPE.encode())
+    h.update(b"\0")
+    h.update(salt.encode())
     h.update(b"\0")
     for path in sorted(files):
         h.update(str(path).encode())
@@ -362,15 +408,20 @@ def _stamp_path(root: Path, area: str) -> Path | None:
     return (d / f"gate-green-{area}") if d is not None else None
 
 
-def write_stamp(area: str) -> int:
-    root = _root()
+def _area_key(root: Path, area: str) -> str:
+    """The whole of what `area`'s stamp records: its files (by the area's own exclusions) and its salt."""
+    area_path, patterns = AREAS[area]
+    return hash_files(_area_files(root, area_path, patterns, area), root, raw=area in RAW_AREAS, salt=_salt(area))
+
+
+def write_stamp(area: str, root: Path | None = None) -> int:
+    root = root or _root()
     if root is None:
         return 0
-    area_path, patterns = AREAS[area]
     stamp = _stamp_path(root, area)
     if stamp is None:
         return 0  # no git dir to record into; the gate still ran, there is just nowhere to say so
-    stamp.write_text(hash_files(_area_files(root, area_path, patterns), root, raw=area in RAW_AREAS))
+    stamp.write_text(_area_key(root, area))
     return 0
 
 
@@ -382,17 +433,10 @@ def fresh(area: str, root: Path | None = None) -> int:
     root = root or _root()
     if root is None:
         return 1
-    area_path, patterns = AREAS[area]
     stamp = _stamp_path(root, area)
     if stamp is None:
         return 1  # no git dir to have recorded a stamp in - treat as NOT fresh, never as fresh
-    return (
-        0
-        if stamp.is_file()
-        and stamp.read_text().strip()
-        == hash_files(_area_files(root, area_path, patterns), root, raw=area in RAW_AREAS)
-        else 1
-    )
+    return 0 if stamp.is_file() and stamp.read_text().strip() == _area_key(root, area) else 1
 
 
 def check(base: str, root: Path | None = None) -> int:
@@ -403,10 +447,12 @@ def check(base: str, root: Path | None = None) -> int:
     changed = _git("diff", "--name-only", f"{base}...HEAD", cwd=root).splitlines()
     bad: list[str] = []
     for area, (area_path, patterns) in AREAS.items():
+        if area in SKIP_ONLY_AREAS:
+            continue  # a skip key, not an obligation (feature 206 FR-004): research and test edits owe no gate at push
         if not any(_matches(c, area_path, patterns) for c in changed):
             continue
         stamp = _stamp_path(root, area)
-        want = hash_files(_area_files(root, area_path, patterns), root, raw=area in RAW_AREAS)
+        want = _area_key(root, area)
         gate = {"hooks": "make hooks-test", "page": "make page-check"}.get(area, "make done")
         if stamp is None or not stamp.is_file():
             bad.append(

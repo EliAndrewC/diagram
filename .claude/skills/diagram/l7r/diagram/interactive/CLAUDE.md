@@ -193,6 +193,16 @@ GM's words, *"that simply adds too much to the time that it takes to make small 
 tests stay because they are cheap (one Chromium, a page of fifteen elements) and are the only record of
 the page's behavior rulings.
 
+**...AND THEY ARE SKIPPED WHILE NOTHING THEY READ CHANGED (feature 206, GM 2026-09-07: *"Do we have logic in
+place to skip them if the content which they are testing has not changed? ... this is about saving memory,
+not saving time"*).** `gate-stamp.py` keeps a `browser` key over everything the synthetic tests read - every
+module here, the two assets, the test package, `research/*.html` (the references modal's links), and the
+installed Playwright and Chromium - and the gate's test phase leaves the package out while the stamp matches,
+saying so in one line. The stamp is earned only by a run that ran the package green: `make page-check`, or a
+`make done` whose test phase included it. It is a skip key, never a push obligation: the push's `--check`
+ignores it. Measured: what a gate saves is one Chromium at ~430 MB for under 9 s (the 3.9 GiB was the
+retired rolled-page tests); the floor cannot be loosened by a skip (`specs/206` research.md R3).
+
 **An edit to `assets/page.css` or `page.js` owes `make page-check`** (feature 188) - the interactive tests
 and the browser test, about a minute, stamping the `page` area the push demands - and nothing else: no
 spec-kit feature, no review, no full gate. The pages regenerate on landing (feature 187).
