@@ -33,7 +33,8 @@
 <ul>
 <li><em>Density and crown size - the numbers and the why.</em> A closed premodern hill wood (the mixed broadleaf/conifer cover of a settled valley's back slope, cut over for fuel and timber on a rotation) carries roughly <strong>500-800 canopy stems per hectare</strong> (unsourced at the check of 2026-09-06). 1 ha = 107,639 sq ft, so ~600 stems/ha is one canopy tree per ~180 sq ft: a mean spacing near <strong>13 ft</strong> (<code>CANOPY_SPACING_FT</code>) (unsourced at the check of 2026-09-06). Canopy crowns in such a stand run <strong>~5-8 m across</strong> (16-26 ft) (unsourced at the check of 2026-09-06) with occasional wider emergents, so <code>CANOPY_R_FT = 8.5</code> is the mean radius, jittered 0.75-1.4x. Crowns of ~17 ft mean diameter on 13 ft centers OVERLAP, and that is the point - <strong>closure is what makes a wood a wood</strong>, so the packed look is honest rather than decorative. Same finding as the mulberry rows (<code>_mulberry_rows</code>): at a to-scale grain, drawing real planted density honestly IS a dense mass of crowns, not sparse symbols spaced for the eye. Nothing is inflated for legibility - at 1 ft/px a crown is r ~6-12 px and it shrinks with the map at coarser grains, exactly like the buildings.</li>
 </ul>
-<h2 id="the-belts-crowns-are-the-same-real-size-as-the-woods-2026-08-28-feature-134-t36">The belt's crowns are the same real size as the woods' (2026-08-28, feature 134 T36)</h2>
+<h2 id="the-belts-crowns-are-the-same-real-size-as-the-woods">The belt's crowns are the same real size as the woods'</h2>
+<!-- 2026-08-28, feature 134 T36 -->
 <p><strong>Grounds:</strong> <code>_draw_grove</code>'s crown radius (<code>CANOPY_R_FT</code>); <code>village_windbreak_scales_with_cluster</code></p>
 <p><strong>Evidence:</strong> derived from the density entry above (a canopy crown ~5-8 m across)</p>
 <p><strong>Sources:</strong> the entry above</p>
@@ -46,7 +47,8 @@ at 2 ft/px and never rescaled it by the map's feet-per-pixel, while the woods an
 cedars are real-sized on every tier; a village at 2 ft/px draws within a pixel of what it did.
 Measured after on Inashiro: belt median radius 7.6 ft (~15 ft across; 325 crowns in the belt, 505 on the map, none subsumed). Class: <strong>accurate</strong> - one
 crown constant, the researched one, for every stand on the map.</p>
-<h2 id="no-canopy-tree-stands-under-anothers-crown-researched-2026-08-28-feature-134">No canopy tree stands under another's crown (researched 2026-08-28, feature 134)</h2>
+<h2 id="no-canopy-tree-stands-under-anothers-crown">No canopy tree stands under another's crown</h2>
+<!-- researched 2026-08-28, feature 134 -->
 <p><strong>Grounds:</strong> <code>woods._crown_seat_clear</code> / <code>_canopy_seats</code> / <code>_crowns_near</code>, the grove clump's seat test in <code>_draw_grove</code>; <code>tree_crowns_not_subsumed</code></p>
 <p><strong>Evidence:</strong> observed (the GM's own trees), derived from the density entry above</p>
 <p><strong>Sources:</strong> the GM's observation (2026-08) and the density entry above (the stems/ha band SUMMARY-ONLY, see "Forest density and crown size") - re-sourced 2026-08-28, feature 143; the stand structure itself is not separately asserted ( dropped 2026-09-06, feature 194: nothing in this section rests on it, and the Satoyama page carries no stems/ha figure)</p>
@@ -94,7 +96,8 @@ rule (a canopy has one tree per crown), the density unchanged from the entry abo
 <li><em>The decision.</em> The <code>commons</code> scatter (all roles) stands its base points <code>_BANK_MARGIN_FT = 6.0</code> real feet off the drawn water edge of every IRRIGATION course - <code>M['channels']</code> and <code>M['drawn_channels']</code> at their drawn (piece-tapered) widths, converted at the map's <code>ftpx</code>. The reasoning is the crop margin's, applied to the bank: a supply channel's bank is maintained ground - walked for sluice operation and bund upkeep,<sup class="fn"><a id="fnref-16" href="#fn-16">16</a></sup> its grass scythed for fodder on the same rotation as the field margins (unsourced at the check of 2026-09-06)<sup class="fn"><a id="fnref-17" href="#fn-17">17</a></sup> - so woody scrub never establishes within a swath of the water. 6 ft = one scythe swath, the same figure as <code>_CROP_MARGIN_FT</code>. Between them the crop margin and the bank margin close any berm strip up to ~12 ft of bare ground, which covers every hem berm the comb builds (Inashiro's run 3-9 ft).</li>
 <li><em>Deliberate exclusions.</em> (1) STREAMS take no margin - a natural brook bank is vegetated to the water's edge, and the 2026-08-16 settlement-review pass explicitly praised the ABSENCE of a sterile halo on the banks; only the engineered courses are maintained ground. (2) The reed <code>marsh</code> keeps its no-margin rule from the crop-margin entry - reeds ARE the water fringe. (3) Grass-tuft blade TIPS keep their few-feet lean allowance, exactly as at crop edges.</li>
 </ul>
-<h2 id="the-marsh-margin-reed---sedgegrass---dry-ground-woody-at-a-reed-edge-is-alder-or-willow-never-pine---accurate-researched-2026-08-26">The marsh margin: reed -&gt; sedge/grass -&gt; dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE (researched 2026-08-26)</h2>
+<h2 id="the-marsh-margin-reed--gt-sedgegrass--gt-dry-ground-woody-at-a-reed-edge-is-alder-or-willow-never-pine---accurate">The marsh margin: reed -&gt; sedge/grass -&gt; dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE</h2>
+<!-- researched 2026-08-26 -->
 <p><strong>Evidence:</strong> attested</p>
 <p><strong>Sources:</strong> <a href="https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf"><code>mlit-vegetation-classes</code></a>, <a href="https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf"><code>hotes-wetland-diversity</code></a>, <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153972"><code>plos-2016-pine</code></a>, <a href="https://www.takao599museum.jp/treasures/selected/1419/?lang=en"><code>gymnosperm-densiflora</code></a> (READ 2026-08-26 - the inline links); the managed-margin reasoning is marked unsourced in the entry, <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797"><code>packer-2017-phragmites</code></a></p>
 <p><strong>Label: accurate</strong> for the rule as drawn (grass alone grades into the reeds; no pine or brush in
@@ -132,7 +135,8 @@ the dry scrub and the fengshui grove). Recorded as future work, not built here; 
 per-settlement roll like every other knob. <em>Unsourced, and labeled so:</em> that Edo-period reed beds
 were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - plausible, searched, not found.
 <strong>Grounds:</strong> <code>settlements/vegetation.md</code> "Scrub NEVER scatters into a marsh"; <code>cover.py</code> <code>_in_soft</code>.</p>
-<h2 id="does-scrub-stand-under-a-village-wood-no---the-floor-was-worked-clear-grass-fringes-the-edge-researched-2026-08-27-feature-133-t34">Does scrub stand under a village wood? No - the floor was worked clear; grass fringes the edge (researched 2026-08-27, feature 133 T34)</h2>
+<h2 id="does-scrub-stand-under-a-village-wood-no---the-floor-was-worked-clear-grass-fringes-the-edge">Does scrub stand under a village wood? No - the floor was worked clear; grass fringes the edge</h2>
+<!-- researched 2026-08-27, feature 133 T34 -->
 <p><strong>Evidence:</strong> attested</p>
 <p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Satoyama"><code>satoyama-enwiki</code></a>, <a href="https://thegeographyhub.com/japans-satoyama-landscapes/"><code>geography-hub-satoyama</code></a>, <a href="https://agris.fao.org/search/fr/records/64724aabe17b74d2224f9430"><code>uehara-2009-agris</code></a>, <a href="https://de.wikipedia.org/wiki/Waldrand"><code>waldrand-dewiki</code></a>, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7898781/"><code>pmc7898781-fukugi</code></a> (READ); EUNIS E5.2 (404) and Forests 2025 Okinawa (403) SUMMARY-ONLY / not read</p>
 <p>The GM: <em>"Should scrubland overlap with forests? It seems like it shouldn't. Like, visually, it looks
@@ -184,7 +188,8 @@ windbreaks are managed as part of a residence and are strips of trees planted an
 alter wind flow and microclimate<sup class="fn"><a id="fnref-38" href="#fn-38">38</a></sup> ... designed based on Feng Shui concepts in the Ryukyu Kingdom,
 around 300 years ago". <a href="https://en.wikipedia.org/wiki/Woodland_edge">English Wikipedia "Woodland edge"</a> was read and does NOT carry the
 three-layer terms.<sup class="fn"><a id="fnref-39" href="#fn-39">39</a></sup> Corrected 2026-08-27 under T44 and T45.</p>
-<h2 id="how-is-a-coppice-lot-bounded-by-ridge-stream-and-path---never-by-a-page-axis-researched-2026-08-18-revisited-2026-08-27-feature-133-t36">How is a coppice lot bounded? By ridge, stream and path - never by a page axis (researched 2026-08-18, revisited 2026-08-27, feature 133 T36)</h2>
+<h2 id="how-is-a-coppice-lot-bounded-by-ridge-stream-and-path---never-by-a-page-axis">How is a coppice lot bounded? By ridge, stream and path - never by a page axis</h2>
+<!-- researched 2026-08-18, revisited 2026-08-27, feature 133 T36 -->
 <p><strong>Evidence:</strong> attested (iriai institutions), reconstruction (the boundary forms)</p>
 <p><strong>Sources:</strong> <a href="https://thecommonsjournal.org/articles/10.18352/ijc.348"><code>ijc-yamaguni</code></a>, <a href="https://en.wikipedia.org/wiki/Satoyama"><code>satoyama-enwiki</code></a>, <a href="https://en.wikipedia.org/wiki/Kichijōji"><code>kichijoji-enwiki</code></a> (READ); the "bounded by ridge, stream and path" sentence is marked summary-only of unknown provenance in the entry; Totman <em>The Green Archipelago</em> and the Indiana DLC paper not read</p>
 <p>The GM: <em>"those coppice Patches. basically it looked like little squares ... I want to make sure that
@@ -228,7 +233,8 @@ village institutions; NO boundary description); <a href="https://en.wikipedia.or
 dropped). <strong>Pointers, not read:</strong> the Indiana DLC "Village Commons in Japan"; Totman, <em>The Green
 Archipelago</em>; Takeuchi et al., <em>Satoyama</em> (Springer). <strong>Unsourced:</strong> "described by ridge, stream
 and path" (2026-08-18). Corrected 2026-08-27 under T44/T46.</p>
-<h2 id="bamboo-how-common-where-it-stood-and-how-to-show-it-researched-2026-08-27-feature-133-t42---a-question-not-yet-a-rule">Bamboo: how common, where it stood, and how to show it (researched 2026-08-27, feature 133 T42 - a question, not yet a rule)</h2>
+<h2 id="bamboo-how-common-where-it-stood-and-how-to-show-it">Bamboo: how common, where it stood, and how to show it</h2>
+<!-- researched 2026-08-27, feature 133 T42 - a question, not yet a rule -->
 <p><strong>Evidence:</strong> attested (presence and use), interpolated (how common at a hamlet)</p>
 <p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Satoyama"><code>satoyama-enwiki</code></a>, <a href="https://en.wikipedia.org/wiki/Phyllostachys_bambusoides"><code>phyllostachys-enwiki</code></a>, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5723622/"><code>pmc5723622-bamboo-range</code></a>, <a href="https://completebamboo.com/species_bamboo/Phyllostachys_bambusoides.html"><code>bamboo-growers-hardiness</code></a>, <a href="https://tsuijimatsu.com/62"><code>tsuijimatsu</code></a> (READ); the Shirakawa farmstead grove (Kids Web Japan, 403) SUMMARY-ONLY</p>
 <p>The GM: <em>"is there supposed to be bamboo on the reference hamlet? Why or why not? how common was it

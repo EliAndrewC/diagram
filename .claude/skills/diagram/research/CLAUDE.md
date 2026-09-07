@@ -37,9 +37,14 @@ reader who asks for them.
 - **Its heading is the question a reader might ask from the map**, and the answer may follow in the same
   line - *"How close does a farmhouse stand to the paddy? Up against it - but never on the bund"*, *"Is
   every farmhouse reached by a lane, and in what FORM?"*. A heading is the line the reader sees on the
-  modal, so write it for them. The trailing bookkeeping - *"(researched 2026-08-27, feature 133 T41)"* -
-  stays in the record and is stripped from the modal's text by `interactive/sources.py` (it is for us,
-  not for them).
+  modal, so write it for them. **The bookkeeping is never in the heading** (GM 2026-09-07: *"A parenthetical
+  footnote is not useful to a human. If it is useful to you for your future efforts, then you should save it as an
+  HTML comment"*): the date, the feature and the task - *"researched 2026-08-27, feature 133 T41"* - go in an HTML
+  comment on the line after the heading, `<!-- researched 2026-08-27, feature 133 T41 -->`, where a session parsing
+  the page reads it and a reader never sees it. The 28 headings that carried one were converted on 2026-09-07 and
+  their anchors recomputed (`interactive/sources.py` `github_anchor` of the clean text); `question_text` still
+  strips a dated tail defensively. The map's class entries name a heading by PREFIX (`_names`), so a converted
+  heading still matches an entry that quotes the old tail.
 - **Its anchor is stable** (already the rule in README's "Adding to the record"): the modal links to the
   heading's anchor (GitHub's rule, kept), so a rename must fix its inbound links - the rule files, and the class entries
   in `interactive/classes.py` that quote the heading.

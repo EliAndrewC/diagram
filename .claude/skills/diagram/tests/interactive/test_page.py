@@ -178,7 +178,7 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     qs = research_questions(CLASSES["farmhouse"].entry)
     assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by "], qs
     assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs)
-    assert qs[1]["url"].endswith("#how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund-researched-2026-08-27-feature-133-t41")
+    assert qs[1]["url"].endswith("#how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund")
     # file order would put the lane entry (line 274) before the paddy entry (line 400); the entry's order wins
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
     unresolved = sorted(k for k, fc in CLASSES.items() if not research_questions(fc.entry))
