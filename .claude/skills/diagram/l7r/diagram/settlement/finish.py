@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.classes import PLACE
 from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
+from l7r.diagram.interactive.raster import RESVG_FONT_ARGS
 from l7r.diagram.interactive.tags import ClsTag
 
 from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, segments_cross
@@ -663,4 +664,5 @@ class FinishMixin:
         if not exe:  # pragma: no cover - depends on the host toolchain, not on any code path
             sys.stderr.write(f'warning: resvg not found (sudo apt-get install -y resvg fonts-dejavu-extra); {basepath}.png not refreshed\n')
             return
-        subprocess.run([exe, '--width', str(width), '--serif-family', 'DejaVu Serif', basepath + '.svg', basepath + '.png'], check=True)
+        # the font mapping is ONE definition, shared with the page's raster (interactive/raster.py, feature 200)
+        subprocess.run([exe, '--width', str(width), *RESVG_FONT_ARGS, basepath + '.svg', basepath + '.png'], check=True)

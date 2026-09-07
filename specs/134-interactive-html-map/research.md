@@ -142,6 +142,13 @@ is a finding for the record, listed in `tasks.md` at the closing bookend).
 
 ## R5. Performance: where the elements are, and why the fix is a merge, not raster layers (GM 2026-08-28)
 
+**Superseded for the LOW-ZOOM RANGE by feature 200 (2026-09-07).** The refusal below stands where it was
+made - a raster at 16x is a 46,000 px square - but below the scale at which a 3 px per map px image
+would be upsampled, the page now shows ONE such image of the whole picture and draws the lit class
+as vector above it, switching to this vector page beyond it; the GM's *"all of the above feel slow"*
+after feature 199's merge and tiling, and the trace that showed every hover, scroll and zoom
+re-rasterizing all the visible ink, are in `specs/200-raster-mode-below-the-vector/research.md`.
+
 **The GM's question**: every blade and crown is its own element - *"many, many thousands"* - and
 the GM proposed prerendered raster layers per class (a normal and a highlighted image each, swapped
 on hover, every layer the full map's size with transparency), asking whether that was the best way.

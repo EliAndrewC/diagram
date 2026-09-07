@@ -46,7 +46,9 @@ and `page.js` then never enters raster mode - `RASTER_R` is 0 in the payload.
 
 ### `page.js`
 
-- `apply()` sets `data-mode` from `view.s * devicePixelRatio` against `payload.raster.r`.
+- `apply()` sets `data-mode` from `view.s * devicePixelRatio` against `payload.raster.r` - and only
+  once a `ready` flag is set by the picture's `load` event and the id map's decode (FR-016); before
+  that the mode is `vector` whatever the scale, and `apply()` is re-run when the flag turns.
 - The id map is decoded into an offscreen canvas at load (`Image` + `drawImage` + `getImageData`).
 - `keyAtPoint(clientX, clientY)` maps viewport to map px through `view`; `pointermove` and `click` on
   the stage use it in raster mode; the existing `pointerover`/`click` on the svg are gated to vector

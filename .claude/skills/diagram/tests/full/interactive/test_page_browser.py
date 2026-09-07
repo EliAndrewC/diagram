@@ -634,37 +634,34 @@ def test_the_blue_plots_highlight_and_open_apart_from_the_green_ones(inashiro: t
     # wedge - so aiming at the center lit `bund` on the first run of this test. What the GM's request
     # needs is that SOME point a mouse can land on inside the plot lights it, so the test samples the
     # plot's own box and asserts the reachable fraction rather than one guessed pixel.
+    # ...AND SINCE FEATURE 200 THE PAGE ANSWERS THE POINTER FROM ITS ID MAP WHILE IN RASTER MODE, the
+    # vector groups being hidden there, so the probe asks the page's own hit-test in whichever mode it is in
+    # (`l7rMap.keyAtPoint` in raster mode, the DOM in vector mode) and then lands a REAL pointer on a hit.
     reach = page.js(
         """() => {
             const g = document.querySelector('g.f[data-k="wet paddy"]');
+            const svg = document.getElementById('map');
+            const raster = window.l7rMap.mode() === 'raster';
+            svg.setAttribute('data-mode', 'vector');  // a hidden group's box is empty: measure it shown
             const r = g.getBoundingClientRect();
-            let hit = 0, tried = 0;
+            svg.setAttribute('data-mode', window.l7rMap.mode());
+            let hit = 0, tried = 0, at = null;
             for (let i = 1; i < 10; i++) for (let j = 1; j < 10; j++) {
                 const x = r.x + r.width * i / 10, y = r.y + r.height * j / 10;
                 if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) continue;
                 tried++;
-                const el = document.elementFromPoint(x, y);
-                const owner = el && el.closest ? el.closest('g.f') : null;
-                if (owner && owner.getAttribute('data-k') === 'wet paddy') hit++;
+                let k = null;
+                if (raster) { k = window.l7rMap.keyAtPoint(x, y); }
+                else { const el = document.elementFromPoint(x, y); const owner = el && el.closest ? el.closest('g.f') : null; k = owner ? owner.getAttribute('data-k') : null; }
+                if (k === 'wet paddy') { hit++; if (at === null) at = [x, y]; }
             }
-            return [hit, tried];
+            return [hit, tried, at];
         }"""
     )
     assert reach[1] > 0, "the plot is off-screen at the opening view - the probe measured nothing"
     assert reach[0] > 0, f"no point inside the blue plot's box reaches it with a real pointer ({reach[0]}/{reach[1]})"
     # ...and landing on it lights the blue plots and no green one
-    page.js(
-        """() => {
-            const g = document.querySelector('g.f[data-k="wet paddy"]');
-            const r = g.getBoundingClientRect();
-            for (let i = 1; i < 10; i++) for (let j = 1; j < 10; j++) {
-                const x = r.x + r.width * i / 10, y = r.y + r.height * j / 10;
-                const el = document.elementFromPoint(x, y);
-                const owner = el && el.closest ? el.closest('g.f') : null;
-                if (owner && owner.getAttribute('data-k') === 'wet paddy') { owner.dispatchEvent(new PointerEvent('pointerover', {bubbles: true})); return; }
-            }
-        }"""
-    )
+    page.page.mouse.move(reach[2][0], reach[2][1])
     on = page.settles({"wet paddy": 2}, page.on)
     assert on == {"wet paddy": 2}, f"a pointer on a blue plot lit {on}"
     # ...and a green plot lights the green ones and no blue one
@@ -821,3 +818,159 @@ def test_kuwabata_pointer_moves_are_cheap_at_the_opening_view(kuwabata: Page) ->
     mean = statistics.fmean(times)
     print(f"kuwabata opening view: mean {mean:.1f} ms per pointer move, median {statistics.median(times):.1f}, p90 {sorted(times)[int(len(times) * 0.9)]:.1f}, max {max(times):.1f}, n={len(times)}")
     assert mean < 40, f"mean {mean:.1f} ms per pointer move at Kuwabata's opening view (untiled measured 59.5, tiled 17.1)"
+
+
+# ---- feature 200: raster mode below the vector (GM 2026-09-07: "all of the above feel slow") -------
+
+TRACE_CATS = ("devtools.timeline", "disabled-by-default-devtools.timeline", "cc")
+
+
+def raster_cpu_ms(page: Page, fn: Any) -> float:
+    """The rasterizer CPU `fn()` costs, in ms summed over Chromium's worker threads, from a Chrome DevTools
+    trace - feature 200 FR-011's instrument. A CPU sum moves by percent under machine load where wall time
+    moves by multiples (feature 199 R6), which is why the gate can cap it."""
+    cdp = page.page.context.new_cdp_session(page.page)
+    buf: list[dict[str, Any]] = []
+    done: list[int] = []
+    cdp.on("Tracing.dataCollected", lambda ev: buf.extend(ev["value"]))
+    cdp.on("Tracing.tracingComplete", lambda _ev: done.append(1))
+    cdp.send("Tracing.start", {"categories": ",".join(TRACE_CATS), "transferMode": "ReportEvents"})
+    fn()
+    page.page.wait_for_timeout(250)  # the raster tasks the action queued
+    cdp.send("Tracing.end")
+    for _ in range(200):
+        if done:
+            break
+        page.page.wait_for_timeout(25)
+    cdp.detach()
+    return sum(e["dur"] / 1000.0 for e in buf if e.get("ph") == "X" and e.get("name") == "RasterTask")
+
+
+def _frame(page: Page) -> None:
+    page.js("() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))")
+
+
+def _raster_ready(page: Page) -> bool:
+    return bool(page.settles(True, lambda: page.js("() => window.l7rMap.rasterReady()"), ms=8000))
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_kuwabata_paints_the_vector_first_and_then_enters_raster_mode(kuwabata: Page) -> None:
+    """FR-010 (a) and (b), FR-016: the very first apply() chose vector - the first frame costs what it costs
+    today - and once the picture and the id map are decoded the opening view is raster. `readyAt` is the
+    ms after navigation raster mode became available; SC-003 asks 0.8 s on an idle box and the cap here is
+    a loaded-run multiple of it."""
+    page = kuwabata
+    assert page.js("() => window.l7rMap.firstMode()") == "vector", "the first frame must be the vector page (FR-016)"
+    assert _raster_ready(page), "the picture and the id map never decoded"
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+    assert page.js("() => window.l7rMap.mode()") == "raster"
+    assert page.js("() => document.getElementById('map').getAttribute('data-mode')") == "raster"
+    ready_at = page.js("() => window.l7rMap.readyAt()")
+    print(f"kuwabata: raster mode ready {ready_at:.0f} ms after navigation")
+    assert ready_at < 4000, f"raster mode took {ready_at:.0f} ms to become available"
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_in_raster_mode_the_id_map_lights_a_class_and_a_click_opens_it(kuwabata: Page) -> None:
+    """FR-010 (c): with every vector group hidden, a real pointer over the scrub still lights it (drawn lit
+    as vector above the image) and a click opens its modal - both answered from the id map."""
+    page = kuwabata
+    assert _raster_ready(page)
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+    pt = page.js(
+        """() => { for (let y = 40; y < innerHeight; y += 15) for (let x = 40; x < innerWidth - 80; x += 15) { if (window.l7rMap.keyAtPoint(x, y) === 'scrub and rough grazing') return [x, y]; } return null; }"""
+    )
+    assert pt is not None, "no scrub under the opening view"
+    page.page.mouse.move(pt[0], pt[1])
+    lit = page.settles({"scrub and rough grazing": page.groups("scrub and rough grazing")}, page.on)
+    assert lit == {"scrub and rough grazing": page.groups("scrub and rough grazing")}, f"the pointer lit {lit}"
+    assert page.js("() => getComputedStyle(document.querySelector('g.f.on')).display") != "none", "the lit class is drawn"
+    page.page.mouse.click(pt[0], pt[1])
+    got = page.settles("scrub and rough grazing", lambda: page.dialog()["k"] if page.dialog()["open"] else None)
+    assert got == "scrub and rough grazing", "the click opened the modal from the id map"
+    page.page.keyboard.press("Escape")
+    page.page.mouse.move(0, 0)
+    page.settles({}, page.on)
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_the_id_map_agrees_with_the_dom_on_a_grid(kuwabata: Page) -> None:
+    """FR-010 (d): the id map is the DOM's own hit-testing rule rendered once - painted geometry, draw
+    order, the hit copies - so with the vector groups shown the two must name the same class almost
+    everywhere. Measured 98.2% on the prototype; the rest are single-pixel boundaries. Points under the
+    zoom buttons are skipped (the DOM hits the button)."""
+    page = kuwabata
+    assert _raster_ready(page)
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+    agree = page.js("""() => {
+        const svg = document.getElementById('map'); svg.setAttribute('data-mode', 'vector');
+        let same = 0, n = 0;
+        for (let y = 30; y < innerHeight; y += 25) for (let x = 30; x < innerWidth; x += 25) {
+            const el = document.elementFromPoint(x, y);
+            if (el && el.closest && el.closest('#zoom')) continue;
+            const g = el && el.closest ? el.closest('g.f') : null;
+            const dom = g ? g.getAttribute('data-k') : null;
+            n++; if (dom === window.l7rMap.keyAtPoint(x, y)) same++;
+        }
+        svg.setAttribute('data-mode', window.l7rMap.mode());
+        return [same, n];
+    }""")
+    print(f"kuwabata: id map agrees with the DOM on {agree[0]}/{agree[1]} points ({100 * agree[0] / agree[1]:.1f}%)")
+    assert agree[1] > 1500 and agree[0] >= 0.97 * agree[1], f"the id map agrees with the DOM on only {agree[0]}/{agree[1]}"
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_zooming_past_the_switch_is_vector_and_fit_is_raster_again(kuwabata: Page) -> None:
+    """FR-010 (e), FR-004: at DPR 1 Kuwabata's opening view (1.31 px per map px) and the first `+` (2.62)
+    are under RASTER_R = 3; the second `+` (5.2) is not; `fit` comes back under it."""
+    page = kuwabata
+    assert _raster_ready(page)
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+    assert page.js("() => window.l7rMap.mode()") == "raster"
+    page.page.keyboard.press("+")
+    _frame(page)
+    assert page.js("() => window.l7rMap.mode()") == "raster", "the first + is still under the switch at DPR 1"
+    page.page.keyboard.press("+")
+    _frame(page)
+    assert page.js("() => window.l7rMap.mode()") == "vector"
+    assert page.js("() => document.getElementById('map').getAttribute('data-mode')") == "vector"
+    page.js("() => window.l7rMap.fit()")
+    _frame(page)
+    assert page.js("() => window.l7rMap.mode()") == "raster"
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+
+
+@pytest.mark.rolls_map
+@pytest.mark.tiers("hamlet")
+def test_kuwabata_raster_cpu_caps(kuwabata: Page) -> None:
+    """FR-011, the gate's raster-CPU guards on the GM's page at the GM's view: hovering the scrub under
+    100 ms of RasterTask CPU (prototype 32-38; the vector page 221-251), one wheel turn under 60 (12-14;
+    163-178). Deliberately looser than SC-001's idle-box criteria (60 / 25): a loaded FULL run must clear
+    them without flaking, and both still fail the vector page by 2x."""
+    page = kuwabata
+    assert _raster_ready(page)
+    page.js("() => window.l7rMap.fitWidth()")
+    page.page.mouse.move(0, 0)
+    _frame(page)
+    hover = raster_cpu_ms(page, lambda: (page.js("k => window.l7rMap.highlight(k)", "scrub and rough grazing"), _frame(page)))
+    page.js("() => window.l7rMap.highlight(null)")
+    _frame(page)
+    page.page.mouse.move(700, 500)
+    _frame(page)
+    wheel = raster_cpu_ms(page, lambda: (page.page.mouse.wheel(0, 120), _frame(page)))
+    page.page.mouse.move(0, 0)
+    page.js("() => window.l7rMap.fitWidth()")
+    _frame(page)
+    print(f"kuwabata opening view: hover the scrub {hover:.0f} ms of raster CPU, one wheel turn {wheel:.0f} ms")
+    assert hover < 100, f"hovering the scrub rasterized {hover:.0f} ms of CPU (raster mode 32-38, the vector page 221-251)"
+    assert wheel < 60, f"a wheel turn rasterized {wheel:.0f} ms of CPU (raster mode 12-14, the vector page 163-178)"

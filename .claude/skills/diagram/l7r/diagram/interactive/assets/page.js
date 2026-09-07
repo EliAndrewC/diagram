@@ -6,6 +6,14 @@
   var payload = JSON.parse(document.getElementById("classes").textContent);
   var data = payload.classes;
   var glossary = payload.glossary || [];
+  // RASTER MODE (feature 200): below a screen scale the map is one image of the whole picture and the
+  // hovered class alone is drawn lit as vector above it; the pointer is answered from a class id map.
+  // `r` is 0 on a page written without resvg, and then the page never leaves vector mode.
+  var raster = payload.raster || { r: 0 };
+  var rasterReady = false;  // both the picture and the id map decoded (FR-016) - never raster before
+  var idmap = null;
+  var firstMode = null;     // what the very first apply() chose - the browser test asserts "vector"
+  var readyAt = null;       // ms after navigation when raster mode became available (recorded, T06)
   // GLOSSARY TOOLTIPS (GM 2026-08-28): every occurrence of a glossary term in an explanation is
   // wrapped so hovering it shows the definition. Built as DOM nodes, never innerHTML of the text.
   var glossaryRe = null;
@@ -98,7 +106,8 @@
     var g = target && target.closest ? target.closest("g.f") : null;
     return g ? g.getAttribute("data-k") : null;
   }
-  svg.addEventListener("pointerover", function (e) { highlight(keyAt(e.target)); });
+  // in raster mode the vector groups are hidden and the id map answers instead (below, `keyAtPoint`)
+  svg.addEventListener("pointerover", function (e) { if (mode() !== "raster") highlight(keyAt(e.target)); });
   svg.addEventListener("pointerleave", function () { highlight(null); });
   function unpin() { pinned = null; highlight(null); }
 
@@ -227,6 +236,7 @@
   // ...and however the references close, the explanation comes back (feature 181)
   refsDialog.addEventListener("close", function () { dialog.classList.remove("behind"); });
   svg.addEventListener("click", function (e) {
+    if (mode() === "raster") return;  // the stage's own click handler answers from the id map
     var key = keyAt(e.target);
     if (key !== null) open(key);
   });
@@ -267,7 +277,15 @@
     svg.style.left = view.tx + "px";
     svg.style.top = view.ty + "px";
     svg.setAttribute("data-zoom", (view.s / view.fit).toFixed(3));
+    // THE SWITCH (feature 200, FR-004/FR-006): raster while the image would not be upsampled - screen
+    // scale (CSS px per map px) times the device's pixel ratio at or under the image's px per map px -
+    // and never before both images are decoded. On Kuwabata in a 1400 x 1000 viewport that is the opening
+    // view and the first "+" on a DPR-1 screen, the opening view only on a DPR-2 screen (spec D5).
+    var m = mode();
+    if (firstMode === null) firstMode = m;
+    svg.setAttribute("data-mode", m);
   }
+  function mode() { return rasterReady && view.s * (window.devicePixelRatio || 1) <= raster.r ? "raster" : "vector"; }
   function fit() {
     var W = stage.clientWidth, H = stage.clientHeight;
     view.fit = Math.min(W / vb.width, H / vb.height);
@@ -346,8 +364,52 @@
   });
   fitWidth();
 
+  // ---- RASTER MODE (feature 200). The picture's href is set HERE rather than in the markup so its
+  // `load` cannot fire before the listener exists; the id map is drawn into a canvas once and read per
+  // move. The page has already painted the vector picture above (fitWidth), at today's cost, and
+  // switches when both are decoded (FR-016) - the two pictures are the same to the eye, so the switch
+  // is invisible. Hit-testing in raster mode: the pixel of the id map under the pointer names the class;
+  // a value one off the palette's grid (a PNG round trip) snaps back; anything else is no class.
+  function keyAtPoint(clientX, clientY) {
+    if (!idmap) return null;
+    var r = stage.getBoundingClientRect();
+    var px = Math.floor((clientX - r.left - view.tx) / view.s), py = Math.floor((clientY - r.top - view.ty) / view.s);
+    if (px < 0 || py < 0 || px >= idmap.w || py >= idmap.h) return null;
+    var v = idmap.d[(py * idmap.w + px) * 4];
+    var snapped = Math.round(v / raster.step) * raster.step;
+    return (Math.abs(v - snapped) <= 1 && raster.palette[String(snapped)]) || null;
+  }
+  stage.addEventListener("pointermove", function (e) { if (mode() === "raster") highlight(keyAtPoint(e.clientX, e.clientY)); });
+  stage.addEventListener("click", function (e) {
+    if (mode() !== "raster") return;
+    var k = keyAtPoint(e.clientX, e.clientY);
+    if (k !== null) open(k);
+  });
+  if (raster.r > 0) {
+    var pending = 2;
+    var arm = function () { if (--pending === 0) { rasterReady = true; readyAt = performance.now(); apply(); } };
+    var pic = document.getElementById("raster");
+    pic.addEventListener("load", arm, { once: true });
+    pic.setAttribute("href", raster.picture);
+    var im = new Image();
+    im.onload = function () {
+      var c = document.createElement("canvas");
+      c.width = im.width; c.height = im.height;
+      var g = c.getContext("2d", { willReadFrequently: true });
+      g.drawImage(im, 0, 0);
+      idmap = { w: im.width, h: im.height, d: g.getImageData(0, 0, im.width, im.height).data };
+      arm();
+    };
+    im.src = raster.idmap;
+  }
+
   // For the browser test: the same entry points the pointer uses.
   window.l7rMap = {
+    mode: mode,
+    firstMode: function () { return firstMode; },
+    rasterReady: function () { return rasterReady; },
+    readyAt: function () { return readyAt; },
+    keyAtPoint: keyAtPoint,
     highlight: highlight,
     open: open,
     current: function () { return current; },

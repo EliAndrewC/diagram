@@ -23,6 +23,7 @@ import re
 from collections.abc import Iterator, Sequence
 from typing import Any
 
+from . import raster
 from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, lead_sentence, slug
 from .glossary import GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
@@ -750,6 +751,14 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     caller that does not have one. Nothing here fails on its absence: the place card falls back to
     what the map itself knows, and a class with no annotation simply carries none."""
     present = present_classes(tags)
+    # THE OFF-MAP INK IS DROPPED FIRST (feature 200, FR-001): 90% of a hamlet page's subpaths lay outside
+    # the viewBox - the hinterland scatter the generator draws over the whole commons and the crop never
+    # shows (specs/200 research.md R2). Invisible by construction, and the reason the page still loads
+    # near today's once the raster below adds its decode (0.36 s today, 0.83 with this ink kept, 0.58
+    # without). Only classed strings are judged; the sheet and the unclassed pass through.
+    vb = raster.viewbox_of(strings[0]) if strings else None
+    if vb is not None:
+        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED else s for s, t in zip(strings, tags, strict=True)]
     wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
@@ -770,6 +779,21 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     wrapped.insert(close, hit_layer(strings, tags, manifest))
     svg = "\n".join(wrapped)
     svg = svg.replace("<svg ", '<svg id="map" ', 1)
+    # THE RASTER AND THE ID MAP (feature 200): the whole picture as one image for the low-zoom range, and
+    # the class under every pixel for the pointer while the vector groups are hidden - `raster.py` carries
+    # the why and the numbers. Rendered from THIS svg text, so the image is the page's own picture. The
+    # image element rides above the sheet and below the first class group (a first cut under the sheet
+    # showed bare parchment), with no href: page.js sets it, so its `load` cannot fire before anyone
+    # listens (FR-016 - the page paints the vector first and switches when both are decoded).
+    raster_payload: dict[str, Any] = {"r": 0}
+    pic = raster.picture(svg) if vb is not None else None
+    if pic is not None and vb is not None:
+        idpng, palette = raster.id_map(svg, raster.class_keys(svg))
+        assert idpng is not None, "resvg rendered the picture and not the id map"
+        raster_payload = {"r": raster.RASTER_R, "step": raster.PALETTE_STEP, "palette": palette, "picture": raster.data_uri("image/webp", pic), "idmap": raster.data_uri("image/png", idpng)}
+        image = f'<g class="raster"><image id="raster" x="{vb[0]:g}" y="{vb[1]:g}" width="{vb[2]:g}" height="{vb[3]:g}" style="pointer-events: none"/></g>'
+        at = svg.find('<g class="f ')
+        svg = svg[:at] + image + svg[at:] if at != -1 else svg.replace("</svg>", image + "</svg>", 1)
     data = explanations(present, notes)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
@@ -782,7 +806,7 @@ def render_page(strings: Sequence[str], tags: Sequence[ClsTag], name: str, meta:
     # on every hamlet in the pool.
     if LANE in data and not data[LANE]["on_this_map"]:
         data[LANE]["on_this_map"] = lane_default(str((meta or {}).get("scale") or ""), notes.place)
-    blob = json.dumps({"classes": data, "glossary": glossary_for(data)}, ensure_ascii=False).replace("</", "<\\/")
+    blob = json.dumps({"classes": data, "glossary": glossary_for(data), "raster": raster_payload}, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
     # carries its own title placard and scale bar; the page is the map and nothing else.

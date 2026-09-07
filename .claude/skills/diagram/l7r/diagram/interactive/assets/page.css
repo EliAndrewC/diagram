@@ -49,6 +49,13 @@ g.f.on.planted:not([fill="none"]), g.f.on.planted *:not([fill="none"]) { fill: v
    contrast ratio, well past the 4.5:1 WCAG AA bar for body text. Placed after the fill rules so it
    wins; scoped to the placard because that is the one lit class whose text sits on its own fill. */
 g.f.on.f-place text { fill: var(--ink) !important; }
+/* RASTER MODE (feature 200, GM 2026-09-07: "all of the above feel slow"): below the switch the map is one
+   image of the whole picture and every class group is hidden except the lit one, which is drawn as vector
+   above it; above the switch the image is hidden and the page is the vector page. The image never takes
+   the pointer - the id map answers it (page.js `keyAtPoint`). */
+svg#map[data-mode="raster"] g.f:not(.on) { display: none; }
+svg#map[data-mode="vector"] g.raster { display: none; }
+g.raster image { pointer-events: none; }
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */
 #shade { position: fixed; inset: 0; background: rgba(45, 42, 36, 0.45); z-index: 9; }
