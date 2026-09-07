@@ -18,8 +18,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Every task is `research:
 - [x] T05 the record tests follow the notes (FR-006): `test_footnotes.py`, `test_sources.py`, `test_record.py`, `test_record_format.py`; `gate-stamp.py`'s browser key covers `research/citations/**`; the browser synthetic record page hovers a note that is only in the derived script
       research: rendering
       verify: DONE. DONE. test_footnotes.py (refs point at the page's own citations page, notes read from it, a note's reference to a note counts, the absence classifier ignores the back link), test_sources.py (scans the 30 pages, imports the classifier from sources.py; 1,000+ links checked), test_record.py (33 passed over 31 pages), test_record_format.py (80 passed; citations pages are record pages, not finding files); gate-stamp.py browser key + research/citations/*.js; the synthetic record page hovers a note only in the derived table (18 browser tests passed)
-- [ ] T06 the write-ups drafted (FR-003, FR-004): 20 batches of 16 keys, one Opus drafter each under the rulebook (`research.md` R2); drafts collected, house style held
+- [x] T06 the write-ups drafted (FR-003, FR-004): 20 batches of 16 keys, one Opus drafter each under the rulebook (`research.md` R2); drafts collected, house style held
       research: rendering
+      verify: DONE. DONE. 20 Opus drafters, one per batch of 16 keys, under specs/211/writeup-rules.md; 319 write-ups, every key with both paragraphs, no dashes; drafts kept in the session scratchpad and landed by specs/211/land_writeups.py
 - [ ] T07 the `source-applicability` agent (FR-005): `.claude/agents/source-applicability.md` (Opus); run over every batch's drafts by agents other than the drafters; verdicts recorded in `research.md` R3; MISSING limits written in; NOT-APPLICABLE sources listed for the GM (D5)
       research: procedure
 - [ ] T08 the write-ups landed in `SOURCES.html` (all 319 cited keys), `make citations` (the works sections derived), `record-format` over the registry and the citations pages, findings resolved

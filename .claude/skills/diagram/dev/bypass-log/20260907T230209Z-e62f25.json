@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T230209Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 211 changes the research record, its assets, the interactive reading code, tests and tooling; no placer, glyph, size or placement changed and no map is drawn - a settlement-review is NOT OWED"
+}
