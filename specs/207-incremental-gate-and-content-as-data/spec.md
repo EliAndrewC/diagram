@@ -1,6 +1,6 @@
 # Feature 207 - the incremental gate, and content as data
 
-**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5; round 1: `name`/`covers` move too, the audit by kind not size; round 2: two enumeration slips in FR-004/FR-005a). (round 1: two changes in the content half - `name`/`covers` move too; the audit's criterion is what a reader sees, not a byte count).
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5; round 1: `name`/`covers` move too, the audit by kind not size; round 2: two enumeration slips in FR-004/FR-005a) - implemented; the numbers in research R8. (round 1: two changes in the content half - `name`/`covers` move too; the audit's criterion is what a reader sees, not a byte count).
 **Request**: [`request.md`](request.md) - the GM's words verbatim, three messages.
 **Research**: [`research.md`](research.md) - the gate's cost and its two settings (R1), the census of
 content living in code (R2), every place an asset is enumerated (R3), and the soundness argument for
@@ -169,5 +169,11 @@ to ten minutes a plain `make done` costs on any engine change.
   string, so a target name written in backticks is a command substitution; `make test-full` recursed 914
   deep and exhausted the container's process limit (2026-09-07, killed by a peer session). The comment
   now says so at the point of change.
+- **D14 - the floor's subject re-roll on an incremental run is MEASURED AND LEFT** (research R7). When a
+  changed file is on a subject's roll path, the selected gate tests re-roll that spec under `hamlet()`'s
+  cache subject and the hamlet floor rolls it again under `report:`'s - 137 s of the polder run's 381 s.
+  The fix is one subject string per spec across the two callers (rollcache's `share` path and
+  `report_deps`), which is feature 192's territory and an ordering change in a cache two features have
+  already reworked; it is recorded here with the number rather than attempted inside this one.
 - **D7 - the audit is by kind, not by size.** FR-005a; the first census used a 1.5 KB threshold and
   missed five reader-facing phrases, which the review found.

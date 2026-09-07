@@ -141,8 +141,10 @@ The pytest phase of the whole suite, 8 workers, this clone, no other recorded ga
 | 2026-09-07 18:06 (feature 205, before this feature) | sysmon | none | 424 s (3,034 tests) | 589 s (cold roll cache) |
 | 2026-09-07 20:15 (this feature, red on two unrelated tests) | ctrace | per test + per fixture | 964 s (3,079 tests) | 971 s |
 | 2026-09-07 20:41 (red on one count) | ctrace | per test + per fixture | 1,026 s (3,088 tests) | 1,067 s |
+| 2026-09-07 21:04 (GREEN, the first baseline) | ctrace | per test + per fixture | 1,099 s (3,089 tests) | 1,273 s |
+| 2026-09-07 21:57 (GREEN, the baseline that ships) | **sysmon, events re-armed** | per test + per fixture | **497 s** (3,072 tests) | **664 s** |
 
-So under the C tracer a FULL run cost about 2.4x what it did, and the T12 runs taken under it showed why
+So the contexts themselves cost a full run about 17% on the pytest phase (424 -> 497 s) and 13% on the gate (589 -> 664 s, both cold); under the C tracer a FULL run had cost about 2.4x what it did, and the T12 runs taken under it showed why
 that was not acceptable: a polder-only edit ran 33 of 3,075 tests in 381 s (a saving), but a core-placer
 edit ran 318 tests in 1,203 s - every map re-rolled under the slow tracer - which is TWICE the old full
 gate. The fix is R5's second paragraph: keep the fast core and re-arm its events, which removes the
@@ -150,3 +152,44 @@ tracer penalty from both the full run and the rolls. The numbers under the fast 
 final entries in tasks.md.
 
 The first green run's number and the baseline file's size (under the C tracer): tasks.md T11.
+
+## R7. The three incremental runs under the C tracer (T12, first set), and two things they exposed
+
+Each run: one harmless executable statement planted in one function (`_ = 0`), `make done`, the probe
+removed. Baseline: the 21:04 full run (R6's third row, 3,092 tests).
+
+| edit | selected | pytest phase | whole gate | note |
+|---|---|---|---|---|
+| `waterfields/polder.py` `s_on_side` (a polder-only function) | 33 of 3,075 (27 tests + 2 fixtures touched it) | 244 s | 381 s | the 33 include the polder gate tests, whose fixtures re-roll the polder maps - correct, the engine changed |
+| `settlement/houses.py` `house` (the core placer, every roll executes it) | 318 of 3,075 (248 + 4 fixtures) | 1,034 s | 1,203 s | every map re-rolled under the C tracer: NO saving against the old 589 s gate |
+| `tools/notes_census.py` `census` (a tool) | 11 of 3,075 | 11 s | 437 s | see below |
+
+Two findings. (1) THE C TRACER MADE THE CORE CASE WORSE THAN THE OLD GATE - a change every roll executes
+must re-roll every map, and the tracer's per-execution cost falls on exactly that; R5's second fix (the
+fast core with re-armed events) is what this measurement forced. (2) THE FLOOR PHASE RE-ROLLS SUBJECTS
+THE SELECTED TESTS DID NOT: `hamlet_floor.module_set` asks `rollcache.report_deps` for each fixed
+subject, and when a subject's cache key has moved it rolls the subject itself (~40-60 s each, serially)
+- on the polder run that is the 137 s outside pytest (the two polder subjects), and on the tools run
+~390 s, because the preceding core run had OVERWRITTEN every subject's single cache slot with its probe's
+roll, so restoring `houses.py` left every key stale (a measurement artifact of the probe sequence: a real
+edit is not restored; the second set runs tools first). The polder case is real: the selected polder tests
+roll the same specs under `hamlet()`'s subject string, and the floor rolls them again under `report:`'s -
+feature 192's double-roll shape, on the incremental path. Not fixed here (D14).
+
+## R8. The three incremental runs under the fast core (T12, second set) - the numbers that ship
+
+Same three probes, tools first so no earlier probe's roll had overwritten a cache slot. Baseline: the
+21:57 full run (R6's last row, 664 s cold; 3,072 tests). The old gate, for comparison: 589 s cold.
+
+| edit | selected | pytest phase | whole gate | against the old full gate |
+|---|---|---|---|---|
+| `tools/notes_census.py` `census` (a tool no roll executes) | 11 of 3,072 | 9 s | **32 s** | 18x faster |
+| `waterfields/polder.py` `s_on_side` (polder-only) | 33 of 3,072 (27 + 2 fixtures) | 79 s | **219 s** | 2.7x faster; ~140 s of it is the floor's second roll of the two polder subjects (D14) |
+| `settlement/houses.py` `house` (the core placer, every roll executes it) | 318 of 3,072 (248 + 4 fixtures) | 419 s | **595 s** | parity: every map re-rolls, and the rolls ARE the cost |
+| (a full run, `INCREMENTAL=0` or a fallback) | 3,072 | 497 s | 664 s | 13% slower than before the feature - the contexts' price |
+
+So the gate's cost now follows the change's REACH rather than the suite's size: a leaf edit is a
+half-minute, a subsystem edit a few minutes, and a core-placer edit costs what it always did, because a
+change every map executes must re-roll every map and no selection can avoid that. The GM's motivating
+case - feature 205's one glossary term - is not in this table at all: it is a content edit now (R2), and
+owes `make page-check`, about a minute, with no gate.
