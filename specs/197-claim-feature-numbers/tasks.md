@@ -29,6 +29,6 @@ about how a place was built.
 - [x] T08 research.md R2 - the collision census from main's history (184/186, 195/195, 107)
       research: rendering
       verify: DONE. R2 written from git log --diff-filter=A/R: 14 numbers ever duplicated, 8 renumber commits cited by hash
-- [ ] T09 `make done` green; `make hooks-test` stamp fresh; memory note written; land DIRECT
+- [x] T09 `make done` green; `make hooks-test` stamp fresh; memory note written; land DIRECT
       research: rendering
-      verify: the push lands and `make claim SLUG=x PEEK=1` from the other live clone answers `198-x`
+      verify: DONE. hooks-test 2 suites re-ran green (hooks area stamped); make done already-verified against unchanged engine content; test_make_docs 6 passed; test_claim_feature 25 passed; memory note written; peek from diagram-html answers 198-probe
