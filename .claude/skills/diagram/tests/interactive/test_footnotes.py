@@ -160,17 +160,34 @@ def _looks_foreign(passage: str) -> bool:
     return bool(_NON_LATIN.search(passage)) or len(_GERMAN.findall(passage)) >= 2
 
 
+def _anchor_spans(block: str) -> list[tuple[int, int]]:
+    """The [start, end) of every `original: 「...」` anchor, closed at bracket depth zero - an original may itself
+    quote (「A「B」C」), and everything inside the anchor is the source's text, exempt from the note rule."""
+    spans = []
+    for m in re.finditer(r"original: 「", block):
+        depth = 0
+        for j in range(m.end() - 1, len(block)):
+            if block[j] == "「":
+                depth += 1
+            elif block[j] == "」":
+                depth -= 1
+                if depth == 0:
+                    spans.append((m.start(), j + 1))
+                    break
+    return spans
+
+
 def unmarked_foreign_quotes(text: str) -> list[str]:
     """The 「」 quotes that are not ASCII and carry no translation note in their block, original anchors excluded."""
     bad = []
     for m in _BLOCK.finditer(text):
         block = m.group(2)
+        anchors = _anchor_spans(block)
         for q in _QUOTE_SPAN.finditer(block):
             passage = html.unescape(q.group(1))
             if not _looks_foreign(passage):
                 continue
-            before = block[max(0, q.start() - 12) : q.start()]
-            if "original:" in before or "original 「" in before:
+            if any(a <= q.start() < b for a, b in anchors):
                 continue
             after = html.unescape(block[q.end() : q.end() + 400])
             if _TRANSLATION_NOTE.search(after):
