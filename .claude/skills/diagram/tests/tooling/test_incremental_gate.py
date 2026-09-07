@@ -1,7 +1,7 @@
 """THE INCREMENTAL GATE, PROVED ON A FIXTURE PROJECT (feature 207, spec FR-014).
 
 A tiny engine (`eng/`) and suite under a git repo shaped like this one, run through the REAL planner
-(`l7r.diagram.ci.incremental`), the REAL plugin (`-p l7r.diagram.ci.selection`, under xdist) and the real
+(`l7r.diagram.ci.incremental`), the REAL plugin (`-p l7r.diagram.ci.gate_plugin`, under xdist) and the real
 merge, then judged by `coverage report --fail-under=100` exactly as the Makefile does. Five shapes:
 
   (a) a changed function with a new uncovered line FAILS;
@@ -139,7 +139,7 @@ def project(tmp_path: Path) -> tuple[Path, Path]:
     return root, skill
 
 
-PYTEST = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-p", "l7r.diagram.ci.selection", "--cov", "--cov-context=test", "tests"]
+PYTEST = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-p", "l7r.diagram.ci.gate_plugin", "--cov", "--cov-context=test", "tests"]
 
 
 def gate_env(bdir: Path, core: str = "ctrace") -> dict[str, str]:

@@ -1,4 +1,8 @@
-"""The pytest plugin of the incremental gate (feature 207) - `-p l7r.diagram.ci.selection`, on every traced gate run.
+"""The pytest plugin of the incremental gate (feature 207), reached through `-p l7r.diagram.ci.gate_plugin`.
+
+WHY TWO MODULES: `gate_plugin.py` is what `-p` loads, which happens before pytest-cov starts measuring, so its
+import-time lines can never be covered; it is excluded with the reason at its top and holds two one-line delegates.
+Everything real is here, imported lazily from those delegates once coverage is running.
 
 Two jobs. (1) FIXTURE CONTEXTS: pytest-cov's `--cov-context=test` attributes a fixture's setup to whichever
 test first asked for it, so a session fixture that rolls a hamlet is recorded under ONE test's `setup`
@@ -136,19 +140,16 @@ def keep_set(pl: dict[str, Any], collected: list[str], closures: dict[str, list[
     return out
 
 
-def pytest_configure(config: pytest.Config) -> None:
-    where = os.environ.get(ENV)
-    if not where:
-        return
-    bdir = Path(where)
+def configure(config: pytest.Config) -> None:
+    """`gate_plugin.pytest_configure`'s body: read the plan and register the selection plugin."""
+    bdir = Path(os.environ[ENV])
     plan_file, tests = bdir / incremental.PLAN, bdir / incremental.TESTS
     pl = json.loads(plan_file.read_text(encoding="utf-8")) if plan_file.is_file() else {"mode": "full", "reason": "no plan"}
     closures = json.loads(tests.read_text(encoding="utf-8")) if pl["mode"] == "incremental" and tests.is_file() else {}
     config.pluginmanager.register(GateSelection(bdir, pl, closures), "_l7r_gate_selection")
 
 
-@pytest.hookimpl(tryfirst=True)
-def pytest_collection_modifyitems(session: pytest.Session, config: pytest.Config, items: list[pytest.Item]) -> None:
-    """Runs FIRST, before any deselection (ours or `-m`'s): remember every collected item for `tests.json`."""
-    if os.environ.get(ENV):
-        session._l7r_all_items = list(items)  # type: ignore[attr-defined]
+def remember_all(session: pytest.Session, items: list[pytest.Item]) -> None:
+    """`gate_plugin.pytest_collection_modifyitems`'s body, which runs before any deselection (ours or `-m`'s):
+    remember every collected item, so `tests.json` knows the deselected ones too."""
+    session._l7r_all_items = list(items)  # type: ignore[attr-defined]

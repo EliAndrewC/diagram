@@ -95,7 +95,10 @@ def test_no_md_token_anywhere_resolves_to_a_converted_record_file() -> None:
     files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split("\n")
     hits = []
     for rel in files:
-        if not rel or rel.startswith("specs/") or rel == f"{_SKILL}/research/README.md":
+        # `scripts/fixtures/` joins the exclusions (feature 207, 2026-09-07): feature 204's replay corpus is every
+        # main-tree refusal of a week with its command VERBATIM, and those commands named the record's old
+        # Markdown files. A recorded command is history, like a spec - rewriting it would falsify the replay.
+        if not rel or rel.startswith(("specs/", "scripts/fixtures/")) or rel == f"{_SKILL}/research/README.md":
             continue
         try:
             text = (root / rel).read_text(encoding="utf-8")

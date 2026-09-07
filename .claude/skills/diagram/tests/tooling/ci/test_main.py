@@ -27,6 +27,13 @@ def roots(repo: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     return repo
 
 
+def test_incremental_subcommand_reaches_the_planner(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 207: `ci incremental <word>` is the Makefile's route to the planner; `where` names the baseline directory."""
+    assert cli.main(["incremental", "where"]) == 0
+    assert capsys.readouterr().out.strip().endswith("gate-baseline")
+    assert cli.main(["incremental", "mode"]) == 0 and capsys.readouterr().out.strip() == "full"
+
+
 def test_state_subcommand_writes_the_file(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert cli.main(["state", "green-local", "quick"]) == 0
     assert state.read(roots).target == "quick"  # type: ignore[union-attr]

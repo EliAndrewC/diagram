@@ -1440,7 +1440,7 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # (measured; the note in the `test` recipe). `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests`
 # passes INCREMENTAL=0 because an unattended run is the cheapest time to refresh the baseline.
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))
-INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.selection,)
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin,)
 INCR_ENV = $(if $(COV_FLOORS),COVERAGE_CORE=ctrace L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)",)
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
 # `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
