@@ -9,6 +9,7 @@ its aside - that "SC-004" in FR-008 could be read as feature 134's criterion of 
 Amended after round 2 during T04: FR-008's statistic is the MEAN, not the median - the reversion probe
 measured the untiled page's median at 21 ms, under the cap (R6); round 3 returned FAITHFUL on that change
 ("the MEAN is strictly harder to pass than the median it replaced, so this narrows nothing").
+**Retired 2026-09-07 (GM)**: the FR-007/FR-008 guards (`test_every_large_merged_path_on_the_reference_page_is_one_cell`, the Kuwabata pointer-move cap) were DELETED with every browser test that loads a rolled page or times anything - the GM ruled the page's speed a matter of judgment measured by hand while a feature is worked, never a gated test (*"the juice is not worth the squeeze"*; the ruling in `l7r/diagram/interactive/CLAUDE.md`, "Verifying"). The measurements those tests recorded stand in research.md; the behavior they proved is unchanged in the page.
 **Request**: [`request.md`](request.md) - the GM's words verbatim (an analysis asked for, then "run
 that feature end to end").
 **Research**: [`research.md`](research.md) - the measurements the feature rests on.

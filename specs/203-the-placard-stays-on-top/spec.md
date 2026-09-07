@@ -2,6 +2,7 @@
 
 **Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implemented. Its aside is taken in the delivery note:
 the card's z-order never moves; the lit scrub was painting over the raster image.
+**Retired 2026-09-07 (GM)**: the FR-004 browser guard (the placard pixel with the scrub lit) were DELETED with every browser test that loads a rolled page or times anything - the GM ruled the page's speed a matter of judgment measured by hand while a feature is worked, never a gated test (*"the juice is not worth the squeeze"*; the ruling in `l7r/diagram/interactive/CLAUDE.md`, "Verifying"). The measurements those tests recorded stand in research.md; the behavior they proved is unchanged in the page.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the mechanism (the lit scrub above the image, not the
 card's z-order) and why the fix reaches the scale bar.

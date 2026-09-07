@@ -1,8 +1,8 @@
-"""The driver over one open page, the mechanics every tier runs, and the synthetic map (feature 134)."""
+"""The driver over one open page, the mechanics, and the synthetic map (feature 134). The pointer-sweep
+instrument that lived here (`_sweep_ms`, feature 199) went with the timing tests on 2026-09-07 - see conftest.py."""
 
 from __future__ import annotations
 
-import time
 from typing import Any
 
 from l7r.diagram.interactive.classes import CLASSES, PLACE
@@ -160,18 +160,3 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     strings.append("</svg>")
     tags.append(None)
     return strings, tags
-
-
-def _sweep_ms(page: Page) -> list[float]:
-    """Wall time of each of 150 REAL pointer moves over a grid across the viewport - research.md R1's
-    instrument. Each move fires `pointerover`, the page restyles the hovered class and Chromium repaints
-    before the driver accepts the next move, so the number is what a reader's hand feels."""
-
-    times: list[float] = []
-    for y in range(50, 1000, 95):
-        for x in range(50, 1400, 90):
-            t0 = time.perf_counter()
-            page.page.mouse.move(x, y)
-            times.append((time.perf_counter() - t0) * 1000)
-    page.page.mouse.move(0, 0)
-    return times

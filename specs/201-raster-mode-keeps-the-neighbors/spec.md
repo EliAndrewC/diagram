@@ -2,6 +2,7 @@
 
 **Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implemented. Its aside - a crop of a small lit class
 beside the paddy's, so the wash constant can be judged on both - is taken in research.md R5.
+**Retired 2026-09-07 (GM)**: the FR-006 browser guard (text as vector, the wash) were DELETED with every browser test that loads a rolled page or times anything - the GM ruled the page's speed a matter of judgment measured by hand while a feature is worked, never a gated test (*"the juice is not worth the squeeze"*; the ruling in `l7r/diagram/interactive/CLAUDE.md`, "Verifying"). The measurements those tests recorded stand in research.md; the behavior they proved is unchanged in the page.
 **Request**: [`request.md`](request.md) - the GM's words verbatim, two defects seen on the feature-200
 pages.
 **Research**: [`research.md`](research.md) - the mechanism, the two exact answers priced and declined,

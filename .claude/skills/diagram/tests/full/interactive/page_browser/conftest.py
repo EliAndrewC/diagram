@@ -1,6 +1,16 @@
-"""The Playwright browser and the three pages the tests drive (feature 134; split into a package on
-2026-09-07 when the one file passed the 1,000-line bar - constitution X clause 13). Skipped with a reason
-when Playwright or its Chromium is absent (`setup-dev-env.sh` installs both)."""
+"""The Playwright browser and the ONE page the tests drive - the synthetic map (feature 134; split into a
+package on 2026-09-07 when the one file passed the 1,000-line bar - constitution X clause 13). Skipped with
+a reason when Playwright or its Chromium is absent (`setup-dev-env.sh` installs both).
+
+THERE IS NO ROLLED PAGE HERE, AND NO TIMING (GM 2026-09-07). The `inashiro` and `kuwabata` fixtures - a real
+hamletgen roll and, for Kuwabata, its 18.6-megapixel raster, rebuilt by EVERY xdist worker - and the thirteen
+tests over them (the reference mechanics and timings of feature 134, the blue plots of 159, the footnote hover
+of 194, the pointer-move and raster-CPU caps of 199-203) were retired the day the container crashed twice
+under them: the package alone cost 3.9 GiB at 8 workers against an 8 GiB cap. The GM: *"the performance tests
+are never really going to be good enough to detect whether a human feels that the page is too sluggish. that
+is fundamentally a matter of judgment and vibes ... the juice is not worth the squeeze."* A speed request is
+measured by hand in a browser while it is being worked and the numbers go in its research.md - never a
+repeatable test that runs at the gate or on a page edit (`l7r/diagram/interactive/CLAUDE.md`, "Verifying")."""
 
 from __future__ import annotations
 
@@ -44,36 +54,5 @@ def synthetic(browser: Any) -> Iterator[Page]:
                 )
             )
         page = Page(browser, path)
-        yield page
-        page.close()
-
-
-@pytest.fixture(scope="module")
-def inashiro(browser: Any) -> Iterator[tuple[Page, dict[str, Any]]]:
-    from l7r.diagram import hamletgen as hg
-
-    with tempfile.TemporaryDirectory() as d:
-        base = os.path.join(d, "inashiro")
-        hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}), out_base=base, render=False)
-        with open(base + ".json") as fh:
-            import json
-
-            m = json.load(fh)
-        page = Page(browser, base + ".html")
-        yield page, m
-        page.close()
-
-
-@pytest.fixture(scope="module")
-def kuwabata(browser: Any) -> Iterator[Page]:
-    """The page the GM reported (feature 199): the pool's own declaration, generated the way `inashiro` is."""
-    from l7r.diagram import hamletgen as hg
-
-    with tempfile.TemporaryDirectory() as d:
-        base = os.path.join(d, "kuwabata")
-        hg.generate(
-            hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"), out_base=base, render=False
-        )
-        page = Page(browser, base + ".html")
         yield page
         page.close()
