@@ -43,4 +43,4 @@ establish whether a passage can be read, not to settle a physical question.
 
 Four footnotes quote the GM's own campaign notes (`l7r-median-domain`, `URL: none`) and keep their registry link:
 archetypes.html fn-72, fn-75, fn-76 and fn-77 (by key; see `test_footnotes.py::canon_keys`). They are canon, not a source
-claimed to support a historical point. If the GM rules otherwise they become absence notes in one pass.
+claimed to support a historical point. The GM RULED it an exception on 2026-09-07: *"it is correct to make L7R setting notes an exception to the citation rule, so that should indeed be a documented exception"*.

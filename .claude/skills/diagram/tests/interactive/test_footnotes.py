@@ -47,7 +47,8 @@ def registry_keys() -> set[str]:
 #: Feature 195 (GM 2026-09-06): a footnote CITES only a page on the public internet where its quote can be read, or
 #: it is an ABSENCE note - no key, no link, what was searched. The one carve-out, by KEY: the GM's own campaign
 #: notes (`l7r.md`, `budgets.md`), canon rather than a source claimed to support a historical point, keep their
-#: registry link. Derived from the registry rather than listed, so a new canon key is covered the day it lands.
+#: registry link - the GM's ruling of 2026-09-07 ("it is correct to make L7R setting notes an exception to the
+#: citation rule"). Derived from the registry rather than listed, so a new canon key is covered the day it lands.
 _ABSENCE = re.compile(r"^no publicly readable source \(searched \d{4}-\d{2}-\d{2}:")
 _ENTRY = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*<p>(.*?)</p>', re.S)
 _HREF_OF_KEY = re.compile(r'<a href="([^"]*)"><code>[a-z0-9][a-z0-9-]*</code></a>')

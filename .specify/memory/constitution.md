@@ -1460,9 +1460,10 @@ landing page, a paywalled or login-walled text, a page in another language that 
 none of these is such a page. This supersedes the 2026-08-27 ruling below that let a claim from a search summary be
 asserted and cited labeled SUMMARY-ONLY: the claim MAY still be asserted, labeled as resting on no readable source
 (an ABSENCE note in the footnote's place: no key, no link, what was searched and when), and the registry entry
-stays as the record of the search - but nothing is cited. The one carve-out is the GM's own campaign notes
+stays as the record of the search - but nothing is cited. The one exception is the GM's own campaign notes
 (`l7r.md`, `budgets.md`), which are the setting's canon rather than a source claimed to support a historical
-point, quoted in full in their footnote and linked to their registry entry (`URL: none`). The `quote-check` agent
+point, quoted in full in their footnote and linked to their registry entry (`URL: none`) - the GM's ruling, 2026-09-07:
+*"it is correct to make L7R setting notes an exception to the citation rule, so that should indeed be a documented exception"*. The `quote-check` agent
 returns READABLE / NOT-READABLE per footnote and a NOT-READABLE footnote does not land as a citation;
 `tests/interactive/test_footnotes.py` holds the two footnote forms.
 
