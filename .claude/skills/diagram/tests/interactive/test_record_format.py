@@ -95,9 +95,7 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
 
     in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
     record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8"), flags=re.S))) for p in _all_pages()).lower()
-    in_record = {
-        term for term, (variants, _) in GLOSSARY.items() if any(re.search(r"(?<![\w'])" + re.escape(v.lower()) + r"(?![\w])", record) for v in variants)
-    }
+    in_record = {term for term, (variants, _) in GLOSSARY.items() if any(re.search(r"(?<![\w'])" + re.escape(v.lower()) + r"(?![\w])", record) for v in variants)}
     unused = set(GLOSSARY) - in_modals - in_record
     assert not unused, f"glossary terms no modal and no record page uses: {sorted(unused)}"
     assert {"kainyo", "sugi", "koku"} <= in_record - in_modals, "record-only terms are what this test exists for (non-vacuity)"
@@ -119,7 +117,10 @@ def test_no_session_note_or_document_history_is_visible(page: pathlib.Path) -> N
     The registry's verification markers - READ, SUMMARY-ONLY, unfetched, the feature - live in a comment inside each
     citation paragraph, where `test_sources.py`'s classifier still reads them and a reader does not see them."""
     found = offenses(visible_text(page.read_text(encoding="utf-8")))
-    assert not found, f"{page.name}: {len(found)} visible note(s) for a session or piece(s) of the document's history - move each into an HTML comment or drop it (research/CLAUDE.md, 'Written for the reader'):\n" + "\n".join(found[:40])
+    assert not found, (
+        f"{page.name}: {len(found)} visible note(s) for a session or piece(s) of the document's history - move each into an HTML comment or drop it (research/CLAUDE.md, 'Written for the reader'):\n"
+        + "\n".join(found[:40])
+    )
 
 
 def test_the_forbidden_shapes_fire_and_stay_quiet_on_a_reader_s_sentence() -> None:
