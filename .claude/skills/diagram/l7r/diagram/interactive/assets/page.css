@@ -53,9 +53,30 @@ g.f.on.f-place text { fill: var(--ink) !important; }
    image of the whole picture and every class group is hidden except the lit one, which is drawn as vector
    above it; above the switch the image is hidden and the page is the vector page. The image never takes
    the pointer - the id map answers it (page.js `keyAtPoint`). */
-svg#map[data-mode="raster"] g.f:not(.on) { display: none; }
+/* WHAT RASTER MODE HIDES IS LEAF INK, NOT GROUPS (feature 201, GM 2026-09-07: "the title card for each map
+   is now messed up ... two different lines of text are overlapped ... the font and font size of the lit up
+   version of the title card is different"): feature 200 hid every class group but the lit one, which hid
+   the placard's name until lit and never reached the scale bar (in no class group), so Chrome's text was
+   drawn over the image's resvg text. Now every <text> stays displayed in both modes - the picture carries
+   none (raster.without_text) - and the ink that is hidden is the leaf shapes outside a lit group, the
+   raster image and <defs>. One selector, so a lit class inside an opacity wrapper keeps its ink (a
+   separate sheet-level rule hid it - specs/201 research.md R4). `visibility` instead of `display` was
+   measured at ten times the wheel cost and declined (R2). */
+svg#map[data-mode="raster"] :is(path, circle, ellipse, line, rect, polygon, polyline, image):not(g.f.on *):not(g.raster *):not(defs *) { display: none; }
 svg#map[data-mode="vector"] g.raster { display: none; }
 g.raster image { pointer-events: none; }
+/* THE LIT CLASS IS A WASH OVER THE IMAGE (feature 201, GM 2026-09-07: "when I move my mouse over the rice
+   paddy, then it just lights up the entire outline and then fills it in with a solid form. So I can no
+   longer see where the earthen bunds are Or the bund beans or the field ponds"). In raster mode the lit
+   class is drawn above an image of the whole picture, so a solid gold paddy covers the bunds, beans and
+   ponds the vector page draws above it. The exact answer - showing the classes drawn after the lit one -
+   costs 223 ms of raster on the paddy, the number feature 200 removed; a mask from an ink-only id map
+   costs 300-1,100 ms and breaks tile caching (R2, R3). The GM allowed the inexact version, so a lit
+   class's FILLED shapes are drawn at 0.45 opacity: the bunds, beans and ponds beneath show through the
+   gold, the strokes stay solid, and text stays at full opacity - on the shapes, never on the group, or the
+   placard's name inherits it. 0.45 was chosen by eye on one crop and not swept (spec D2): the GM's to move.
+   Above the switch the vector page is unchanged: solid gold, the bunds drawn crisply above. */
+svg#map[data-mode="raster"] g.f.on :is(path, circle, ellipse, rect, polygon, polyline):not([fill="none"]) { fill-opacity: 0.45; }
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */
 #shade { position: fixed; inset: 0; background: rgba(45, 42, 36, 0.45); z-index: 9; }

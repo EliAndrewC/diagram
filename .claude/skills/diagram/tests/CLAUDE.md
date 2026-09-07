@@ -60,7 +60,7 @@ changed, you know which directory to open.
 | `sitegen/` | the machinery the tiers SHARE (geometry, types, worker counts) | - |
 | `waterfields/` | the water-first field engine | - |
 | `pipeline/` | the cache, regen driver, render cache and pool index | - |
-| `interactive/` | the interactive HTML map (feature 134): the class registry and the page's string layer; the Playwright browser test is `full/interactive/test_page_browser.py` (the GM's ruling, 2026-08-28: a 15 s browser test is full-tree material) | - |
+| `interactive/` | the interactive HTML map (feature 134): the class registry and the page's string layer; the Playwright browser test is the package `full/interactive/page_browser/` (the GM's ruling, 2026-08-28: a 15 s browser test is full-tree material) | - |
 | `tools/` | the audits and diagnostics that are under the 100% rule | - |
 | `fixtures/` | DATA, not tests: frozen red SVGs (Mode A negative fixtures), `gate_check_names.json`, `registry_legacy_rows.json` | - |
 

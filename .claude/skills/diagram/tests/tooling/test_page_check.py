@@ -26,7 +26,7 @@ def _recipe(target: str) -> str:
 
 def test_page_check_runs_the_two_page_surfaces_without_coverage_and_stamps_page_only() -> None:
     body = _recipe("page-check")
-    assert "tests/interactive tests/full/interactive/test_page_browser.py" in body
+    assert "tests/interactive tests/full/interactive/page_browser" in body
     assert "--no-cov" in body, "a CSS or JS change cannot move Python coverage - no floor"
     assert "gate-stamp.py\" --write page" in body
     assert "green-local" not in body and "$(STATE)" not in body, "no verification-state record (ci/decision.py reads the event, not the target)"

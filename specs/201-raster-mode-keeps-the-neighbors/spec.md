@@ -1,6 +1,7 @@
 # Feature 201 - raster mode keeps the neighbors
 
-**Status**: DRAFT - awaiting `spec-fidelity` (constitution XVI).
+**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implemented. Its aside - a crop of a small lit class
+beside the paddy's, so the wash constant can be judged on both - is taken in research.md R5.
 **Request**: [`request.md`](request.md) - the GM's words verbatim, two defects seen on the feature-200
 pages.
 **Research**: [`research.md`](research.md) - the mechanism, the two exact answers priced and declined,

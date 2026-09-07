@@ -877,7 +877,7 @@ tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustiv
 # verification-state record, because ci/decision.py's green-local-since-edit reads the record's event and never
 # its target, and a one-minute check must not stand where a full gate is meant to.
 page-check:     ## [tests] the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
-	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/test_page_browser.py \
+	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/page_browser \
 	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
 	  && printf '\n\033[1mpage-check green\033[0m (the page stamp is written; an asset-only delta may push)\n'
 
