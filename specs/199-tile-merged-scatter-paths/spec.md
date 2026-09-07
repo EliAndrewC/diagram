@@ -1,9 +1,14 @@
 # Feature 199 - tile the merged scatter paths
 
-**Status**: DRAFT - round 2 of `spec-fidelity` (constitution XVI). Round 1 returned two items: FR-007's
+**Status**: FAITHFUL (`spec-fidelity`, rounds 2 and 3 of 5) - cleared for implementation (constitution XVI).
+Round 1 returned two items: FR-007's
 condition failed on a correct implementation (sub-threshold paths span the map - now scoped to paths
 of `TILE_MIN`+ subpaths), and FR-008's 100 ms cap on Inashiro could never fail (now a Kuwabata fixture
-capped at 40 ms on the median); its aside on FR-010 overstating R1 is taken.
+capped at 40 ms on the median); its aside on FR-010 overstating R1 is taken. Round 2 returned none;
+its aside - that "SC-004" in FR-008 could be read as feature 134's criterion of that name - is taken below.
+Amended after round 2 during T04: FR-008's statistic is the MEAN, not the median - the reversion probe
+measured the untiled page's median at 21 ms, under the cap (R6); round 3 returned FAITHFUL on that change
+("the MEAN is strictly harder to pass than the median it replaced, so this narrows nothing").
 **Request**: [`request.md`](request.md) - the GM's words verbatim (an analysis asked for, then "run
 that feature end to end").
 **Research**: [`research.md`](research.md) - the measurements the feature rests on.
@@ -73,12 +78,17 @@ every zoom, the picture is unchanged to within anti-aliasing seams (R4), and the
 - **FR-008** The FULL tree's browser test gains the instrument of R1 ON THE PAGE THE GM REPORTED: a
   Kuwabata fixture (the pool's own declaration - seed 21, 16 households, the mulberry-dike fish-pond
   archetype, mosaic ponds, mulberry dikes - generated the way the `inashiro` fixture is), a sweep of
-  real pointer moves across the viewport at the opening view, the MEDIAN per-move cost recorded in the
+  real pointer moves across the viewport at the opening view, the MEAN per-move cost recorded in the
   test's output and capped at 40 ms. R2 measured 57.0 ms before the fix and 17.3 after at that view,
-  so the cap sits between them with a 2.3x margin over the tiled page for a loaded FULL run and fails
-  the untiled one by 17 ms; the median rather than the mean, so a scheduler stall on one move under
-  `-n auto` does not decide the test. The reference hamlet's own sweep (19.5 before, 17.8 after - never
-  separable) is recorded beside SC-004's numbers in `test_reference_hamlet_timings`, not capped. Both
+  and the harness itself (R6) 59.5 and 17.1, so the cap sits between them with a 2.3x margin over the
+  tiled page for a loaded FULL run and fails the untiled one by 20 ms. THE MEAN, NOT THE MEDIAN: the
+  first draft said median, and the reversion probe (SC-005) showed the untiled page's median is 21.0 ms
+  - the cost lands on the one move in five that crosses into a map-spanning class and repaints the
+  whole scrub (p90 156 ms, max 183), and the median never sees those moves, so a median cap PASSED the
+  untiled page. The mean is what a reader's hand feels; a scheduler stall on one move under `-n auto`
+  moves a mean of 150 by about a millisecond, which the margin absorbs. The reference hamlet's own sweep (19.5 before, 17.8 after - never
+  separable) is recorded beside feature 134's SC-004 numbers (the highlight and load times) in
+  `test_reference_hamlet_timings`, not capped. Both
   guards together are what "so the regression is gated" means here: FR-007 fails deterministically when
   the split stops running; FR-008 fails on the GM's own symptom on the GM's own page.
 
@@ -108,6 +118,9 @@ every zoom, the picture is unchanged to within anti-aliasing seams (R4), and the
 - **SC-002** Every live pool page costs under 25 ms per move at the whole-map, opening, 2x and 4x
   views on the analysis machine (prototype: 16.6 to 18.8 ms). Recorded in T05, not gated (D5).
 - **SC-003** The page's node count grows by under 10% on every pool page (prototype: +7% on Kuwabata).
+  **MISSED on Sawada, +14.4%** (R7) - the other four are +5.8% to +9.2%. Reported to the GM with the
+  measurement rather than the bar moved; the growth costs nothing the instrument can see (Sawada's
+  whole-map view 27.1 -> 18.2 ms).
 - **SC-004** `make done` green; `make page-check` green; the Kuwabata page opened and hovered by
   the session at the opening view before the push.
 - **SC-005** With the tiling reverted (FR-001 off) and nothing else changed, BOTH FR-007 and FR-008
@@ -131,8 +144,9 @@ every zoom, the picture is unchanged to within anti-aliasing seams (R4), and the
   fail: Inashiro was never the slow page (19.5 ms before the fix), so a full reversion would have
   passed with 4x to spare. The GM accepted "so the regression is gated", and a gate that cannot fail
   is not one. So the timing runs on Kuwabata's opening view, where before and after are 57 and 17 ms,
-  capped at 40 on the median. Feature 145's lesson (two fixed waits in this file flaked under a loaded
-  FULL run) is met by the margin and the median, not by loosening the cap past the regression.
+  capped at 40 on the MEAN (the median was written first and measured unable to fail - FR-008, R6).
+  Feature 145's lesson (two fixed waits in this file flaked under a loaded FULL run) is met by the
+  margin and by averaging 150 moves, not by loosening the cap past the regression.
 - **D6 - a subpath that straddles a cell border belongs to its anchor's cell.** The tile's bounding
   box then reaches a stroke's length past the cell, which costs nothing - culling is by box, and a
   box a few px larger than the cell culls the same.

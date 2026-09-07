@@ -74,6 +74,45 @@ Extent = tuple[float, float, float] | tuple[float, float, float, float] | None
 #: How many skipped extents one bucket will hold before it gives up and starts a new run. A bound on the
 #: work, not a rule about the map: past this the bucket is almost certainly blocked anyway.
 _SKIP_CAP = 400
+#: A MERGED SCATTER IS WRITTEN AS ONE PATH PER CELL, NOT ONE PATH (feature 199, GM 2026-09-07: "The HTML
+#: page for the hamlet of Kuwabata seems a lot more noticeably sluggish than the HTML page for Inashiro").
+#: The merge below folded Kuwabata's scrub into three <path>s of 61,000-87,000 subpaths whose bounding box
+#: spans the map, and Chromium rasterizes the page in screen tiles: a hover repaints the hovered class's
+#: box, and every raster tile in it replays every display item whose box touches the tile - so each tile
+#: replayed the WHOLE scrub. Measured (specs/199 research.md R1, headless Chromium, 150 real pointer
+#: moves): 57 ms per move on Kuwabata's opening view against Inashiro's 19; it was not hit-testing (taking
+#: the marks out of hit-testing left it at 59), not the hit layer, opacity, clip-paths, the dike or the
+#: ditches; deleting the scrub gave 17, and splitting the same paths by cell gave 17 with the ink
+#: unchanged. A portrait map opens at a larger scale (2.5x fit on Kuwabata against 1.4x on Inashiro),
+#: which is why the GM saw it there first; Kashikawa and Sawada reached 99-129 ms once zoomed.
+#: TILE is the cell, in map px (400 ft at the hamlet scale, which is incidental - nothing physical is
+#: behind it): 200 px measured the same as 400 and tripled the added nodes, 800 gave part of the gain
+#: back (R3). TILE_MIN is the bucket size below which one path is kept: a small merged path costs nothing
+#: to replay, and a tile per cell would only multiply elements. A bucket's members are mutually
+#: reorderable by the merge's own admission rule (the translucent and outlined refusals in `_refused`),
+#: so writing them as several consecutive paths changes nothing any other element can see - measured at
+#: 0-17 pixels of 1,400,000 against the untiled page, the anti-aliasing seams where a stroke ends at a
+#: cell border (R4).
+TILE = 400.0
+TILE_MIN = 200
+
+
+def _cell(tag: str, at: dict[str, str]) -> tuple[int, int]:
+    """The TILE cell of an element's anchor - a line's first endpoint, a circle's or ellipse's center."""
+    ax, ay = (at["x1"], at["y1"]) if tag == "line" else (at["cx"], at["cy"])
+    return (math.floor(float(ax) / TILE), math.floor(float(ay) / TILE))
+
+
+def _tiles(tag: str, members: Sequence[int], elems: Sequence[tuple[int, int, str, dict[str, str]]]) -> list[list[int]]:
+    """A bucket's members as the runs that become one `<path>` each: one run per cell, in order of each
+    cell's first appearance, members in their original order within it - or the whole bucket as one run
+    when it is under TILE_MIN."""
+    if len(members) < TILE_MIN:
+        return [list(members)]
+    cells: dict[tuple[int, int], list[int]] = {}
+    for k in members:
+        cells.setdefault(_cell(tag, elems[k][3]), []).append(k)
+    return list(cells.values())
 
 
 def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
@@ -259,10 +298,10 @@ def merge_primitives(s: str) -> str:
         tag = b["tag"]
         at0 = elems[b["members"][0]][3]
         style = {k: v for k, v in at0.items() if k not in _COORDS[tag]}
-        d = "".join(_sub(tag, elems[k][3]) for k in b["members"])
         attrs = " ".join(f'{k}="{v}"' for k, v in style.items())
-        tail = ' fill="none"' if tag == "line" and "fill" not in style else ""
-        repl[b["members"][0]] = f'<path d="{d}"' + (" " + attrs if attrs else "") + tail + "/>"
+        tail = (" " + attrs if attrs else "") + (' fill="none"' if tag == "line" and "fill" not in style else "")
+        # one path per TILE cell once the bucket is TILE_MIN or larger (feature 199) - see TILE above
+        repl[b["members"][0]] = "".join(f'<path d="{"".join(_sub(tag, elems[k][3]) for k in run)}"{tail}/>' for run in _tiles(tag, b["members"], elems))
         for k in b["members"][1:]:
             repl[k] = ""
 
