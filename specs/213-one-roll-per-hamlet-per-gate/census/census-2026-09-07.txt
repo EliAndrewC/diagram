@@ -1,0 +1,115 @@
+ROLL CENSUS, make test-full, 2026-09-07 (before feature 213). One line per roll; the requesting test.
+
+== build
+    21.7s  Clitest seed=8 hh=11 arch=valley fall=90.0 sink=offmap  <- full/hamletgen/test_driver.py::test_the_cli_reports_a_single_hamlet
+    18.6s  Clitest seed=8 hh=11 arch=valley fall=90.0 sink=offmap  <- full/hamletgen/test_driver.py::test_the_cli_reports_a_single_hamlet
+    19.7s  Cohort-41 seed=41 hh=11 arch=valley fall=None sink=None  <- full/hamletgen/test_driver.py::test_the_fan_out_agrees_with_the_serial_path
+    32.0s  Inashiro seed=4 hh=15 arch=valley fall=90 sink=pond  <- full/pipeline/test_gencache.py::test_the_real_pool_round_trips_through_the_cache
+    18.1s  Retry seed=4 hh=10 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_for
+    18.2s  Retry seed=4 hh=10 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_for
+    18.2s  NoHelp seed=4 hh=10 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_re_roll_that_does_not_help_is_not_kept
+    18.4s  NoHelp seed=4 hh=10 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_re_roll_that_does_not_help_is_not_kept
+    18.8s  NoHelp seed=4 hh=10 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_re_roll_that_does_not_help_is_not_kept
+    39.2s  Kashikawa seed=3 hh=20 arch=valley fall=315 sink=offmap  <- full/test_villages.py::test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws
+     0.0s  Scope seed=1 hh=10 arch=valley fall=None sink=None  <- hamletgen/test_driver.py::test_a_roll_clears_the_clearance_memo_and_trims_the_heap_whether_it_ends_w
+     0.0s  Scope seed=1 hh=10 arch=valley fall=None sink=None  <- hamletgen/test_driver.py::test_a_roll_clears_the_clearance_memo_and_trims_the_heap_whether_it_ends_w
+     0.1s  Prof seed=3 hh=10 arch=valley fall=None sink=None  <- hamletgen/test_driver.py::test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map
+     0.0s  Prof seed=3 hh=10 arch=valley fall=None sink=None  <- hamletgen/test_driver.py::test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map
+     0.6s  Prof seed=3 hh=10 arch=valley fall=None sink=None  <- hamletgen/test_driver.py::test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map
+    18.5s  Cohort-41 seed=41 hh=11 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+    66.7s  Cohort-42 seed=42 hh=18 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+    57.8s  Cohort-42 seed=42 hh=18 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+    80.3s  Cohort-42 seed=42 hh=18 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+    22.4s  Cohort-43 seed=43 hh=14 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+    10.7s  Cohort-44 seed=44 hh=10 arch=valley fall=None sink=None  <- gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+
+== child
+    15.9s  Childroll seed=3 hh=10 arch=valley fall=None sink=None  <- full/pipeline/test_rollcache_child.py::test_the_child_rolls_the_same_hamlet_as_the_worker_would
+    27.4s  Inashiro seed=4 hh=15 arch=valley fall=90 sink=pond  <- gate/test_cluster_and_homes.py::test_the_settlement_seats_the_byres_it_asked_for
+    21.4s  Cohort-41 seed=41 hh=11 arch=valley fall=None sink=None  <- gate/test_cohort_lane_rules.py::test_the_clean_cohort_seeds_bend_like_paths[seed41]
+    66.1s  Cohort-42 seed=42 hh=18 arch=valley fall=None sink=None  <- gate/test_cohort_lane_rules.py::test_the_clean_cohort_seeds_bend_like_paths[seed42]
+    14.0s  Cohort-44 seed=44 hh=10 arch=valley fall=None sink=None  <- gate/test_cohort_lane_rules.py::test_the_clean_cohort_seeds_bend_like_paths[seed44]
+    37.9s  Kuwabata seed=21 hh=16 arch=mulberry_dike_fishpond fall=90 sink=None  <- gate/test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork
+     0.2s  None seed=None hh=None arch=valley fall=None sink=None  <- pipeline/test_rollcache.py::test_a_failing_roll_child_raises_with_its_stderr
+     0.0s  None seed=None hh=None arch=valley fall=None sink=None  <- pipeline/test_rollcache.py::test_the_roll_child_records_coverage_only_under_a_covered_parent
+     0.2s  None seed=None hh=None arch=valley fall=None sink=None  <- pipeline/test_rollcache.py::test_the_roll_child_records_coverage_only_under_a_covered_parent
+     0.1s  None seed=None hh=None arch=valley fall=None sink=None  <- pipeline/test_rollcache.py::test_the_roll_child_records_coverage_only_under_a_covered_parent
+    28.6s  Inashiro seed=4 hh=15 arch=valley fall=90 sink=pond  <- gate/test_paddy_fabric.py::test_the_rings_double_count_only_marginally
+    69.2s  Polder seed=12 hh=16 arch=polder_grid fall=0 sink=None  <- gate/hamletgen/test_water.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop
+    52.6s  Polder seed=19 hh=16 arch=polder_grid fall=90 sink=None  <- gate/hamletgen/test_water.py::test_a_polder_hamlet_draws_its_grid_dike_and_reservoir
+    23.6s  Cohort-43 seed=43 hh=14 arch=valley fall=None sink=None  <- gate/test_cohort_lane_rules.py::test_seed_43_still_kinks_round_a_house_corner
+    28.3s  Inashiro seed=4 hh=15 arch=valley fall=90 sink=pond  <- gate/test_lane_network.py::test_no_tree_is_planted_in_a_path
+    37.6s  Kuwabata seed=21 hh=16 arch=mulberry_dike_fishpond fall=90 sink=None  <- gate/test_no_feature_overlaps.py::test_the_polder_hamlet_draws_no_forbidden_overlap
+    29.0s  Inashiro seed=4 hh=15 arch=valley fall=90 sink=pond  <- gate/test_water_flow.py::test_no_stream_runs_through_a_field
+    38.0s  Kuwabata seed=21 hh=16 arch=mulberry_dike_fishpond fall=90 sink=None  <- gate/test_water_junctions.py::test_every_lateral_lands_on_a_trunk_at_both_ends
+    54.2s  Polder seed=19 hh=16 arch=polder_grid fall=90 sink=None  <- gate/hamletgen/test_water.py::test_the_polders_keep_outs_contain_what_they_stand_for
+
+== gate_obtain
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_the_gate_reuses_a_verified_hit
+     0.0s HIT toy.gen.py  <- gate/pipeline/test_gencache.py::test_the_gate_reuses_a_verified_hit
+     0.2s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_a_hit_still_runs_current_checks
+     0.0s HIT toy.gen.py  <- gate/pipeline/test_gencache.py::test_a_hit_still_runs_current_checks
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_an_entry_without_coverage_data_is_a_gate_miss
+     0.0s HIT toy.gen.py  <- gate/pipeline/test_gencache.py::test_an_entry_without_coverage_data_is_a_gate_miss
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_gate_miss_stores_coverage_the_next_hit_replays
+     0.0s HIT toy.gen.py  <- gate/pipeline/test_gencache.py::test_gate_miss_stores_coverage_the_next_hit_replays
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_a_hit_is_refused_when_its_stored_coverage_names_a_file_that_is_
+     0.0s HIT toy.gen.py  <- gate/pipeline/test_gencache.py::test_a_hit_is_refused_when_its_stored_coverage_names_a_file_that_is_
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_a_hit_is_refused_when_its_stored_coverage_names_a_file_that_is_
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_gate_bypass_forces_regeneration
+     0.0s HIT toy.gen.py  <- gate/pipeline/test_gencache.py::test_gate_bypass_forces_regeneration
+     0.3s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_gate_bypass_forces_regeneration
+     0.1s HIT kashikawa.gen.py  <- full/test_villages.py::test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws
+     0.4s REGENERATED toy.gen.py  <- gate/pipeline/test_gencache.py::test_gate_miss_scratch_files_stay_out_of_the_engine_tree
+    28.5s REGENERATED inashiro.gen.py  <- full/test_villages.py::test_village_passes_gate[inashiro.gen.py]
+     0.1s HIT kashikawa.gen.py  <- full/test_villages.py::test_village_passes_gate[kashikawa.gen.py]
+     0.0s HIT kuwabata.gen.py  <- full/test_villages.py::test_village_passes_gate[kuwabata.gen.py]
+     0.0s HIT mizuguchi.gen.py  <- full/test_villages.py::test_village_passes_gate[mizuguchi.gen.py]
+     0.1s HIT sawada.gen.py  <- full/test_villages.py::test_village_passes_gate[sawada.gen.py]
+
+== run_and_record
+    46.0s  inashiro.gen.py  <- full/pipeline/test_gencache.py::test_the_real_pool_round_trips_through_the_cache
+     0.0s  toy.gen.py  <- tooling/pipeline/test_gencache.py::test_a_gen_that_ends_by_exiting_does_not_kill_the_sweep
+     0.0s  toy.gen.py  <- tooling/pipeline/test_gencache.py::test_a_gen_that_exits_NONZERO_still_fails_loudly
+     0.0s  toy.gen.py  <- gate/pipeline/test_gencache.py::test_an_entry_without_coverage_data_is_a_gate_miss
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_change_to_an_executed_function_invalidates
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_change_outside_the_dep_set_is_a_hit_AND_the_hit_is_correct
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_change_outside_the_dep_set_is_a_hit_AND_the_hit_is_correct
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_module_level_change_invalidates_even_though_no_function_moved
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_renamed_dep_falls_back_to_the_whole_file_rather_than_being_ignored
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_the_gen_file_itself_is_part_of_the_key
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_data_file_the_run_read_is_part_of_the_key
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_round_trip_restores_byte_identical_outputs
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_skip_render_page_is_not_filed_and_a_stale_one_is_evicted
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_second_gen_in_the_same_process_records_its_own_full_dep_set
+     0.0s  toy2.gen.py  <- pipeline/test_gencache.py::test_a_second_gen_in_the_same_process_records_its_own_full_dep_set
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_the_environment_is_part_of_the_key
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_an_entry_is_written_atomically_and_declared_valid_last
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_a_dependency_change_invalidates_every_entry
+     0.0s  toy.gen.py  <- pipeline/test_gencache.py::test_an_entry_never_keeps_coverage_it_did_not_just_record
+
+== roll_scope entries per test
+   6 gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate
+   3 gate/hamletgen/test_driver.py::test_a_re_roll_that_does_not_help_is_not_kept
+   3 hamletgen/test_driver.py::test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map
+   2 full/hamletgen/test_driver.py::test_the_cli_reports_a_single_hamlet
+   2 gate/hamletgen/test_driver.py::test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden
+   2 hamletgen/test_driver.py::test_a_roll_clears_the_clearance_memo_and_trims_the_heap_whether_it_ends_well_or_not
+   1 full/hamletgen/test_driver.py::test_the_fan_out_agrees_with_the_serial_path
+   1 full/pipeline/test_gencache.py::test_the_real_pool_round_trips_through_the_cache
+   1 full/pipeline/test_rollcache_child.py::test_the_child_rolls_the_same_hamlet_as_the_worker_would
+   1 gate/hamletgen/test_homesteads.py::test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothi
+   1 tools/test_perf_profile.py::test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_it_mea
+   1 tools/test_perf_profile.py::test_a_LATER_stage_is_profiled_alone_while_the_stages_before_it_are_timed_plainly
+   1 full/test_villages.py::test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws
+   1 gate/hamletgen/test_homesteads.py::test_the_linear_frontage_pass_stops_once_the_households_are_housed
+   1 gate/hamletgen/test_sink.py::test_a_pond_the_canvas_cannot_hold_falls_back_to_draining_OFF_MAP
+   1 gate/hamletgen/test_homesteads.py::test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing
+   1 gate/hamletgen/test_woodland_shrink_147.py::test_the_woodland_shrink_ladder_is_walked_on_a_real_site
+   1 tools/test_perf_snapshot.py::test_measure_times_every_STAGE_of_the_reference_hamlet
+   1 tools/test_placement_stages.py::test_a_stage_that_lays_NO_INK_gets_a_card_of_what_it_decided_rather_than_a_bla
+   1 tools/test_placement_stages.py::test_the_decision_baseline_is_taken_BEFORE_stage_one
+   1 tools/test_placement_stages.py::test_a_stage_that_DRAWS_gets_a_plate_and_the_live_settlement_is_not_finished
+   1 tools/test_placement_stages.py::test_a_plate_this_run_did_not_write_is_PRUNED
+   1 tools/test_placement_stages.py::test_a_stage_that_USED_to_draw_and_no_longer_does_leaves_no_orphan_at_its_own_
+   1 tools/test_placement_stages.py::test_a_stage_with_no_NOTES_entry_says_so_on_the_page
