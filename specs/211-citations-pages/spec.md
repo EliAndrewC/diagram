@@ -1,6 +1,6 @@
 # Feature 211 - citations pages
 
-**Status**: Draft - awaiting `spec-fidelity` (constitution XVI).
+**Status**: Draft - `spec-fidelity` round 1 returned one change (SC-004 restated); round 2 pending (constitution XVI).
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Predecessors**: feature 194 (a citation is a footnote that quotes; the record is hand-authored HTML with the
 ACOUP hover); 195 (cite only what can be read; the absence note); 190 (every key is a link, the target decided by the
@@ -123,9 +123,11 @@ the tooling and tests that read the record, and the procedure documents.
   as before the split; clicking it lands on `citations/homesteads.html#fn-1`, whose back link returns.
 - **SC-003** Every one of the 319 cited keys has both write-ups in `SOURCES.html`; the `source-applicability`
   agent's verdict on each is recorded in this feature's `research.md`, and no MISSING limit is left unwritten.
-- **SC-004** `grep -c 'wang-ochiai-2022'` finds ONE `What it is:` paragraph for it in the whole repository - in
-  the registry - while both `citations/homesteads.html` and `citations/fields.html` show it (derived); a change to
-  the registry paragraph followed by `make citations` changes both pages.
+- **SC-004** Exactly ONE hand-authored `What it is:` paragraph exists for `wang-ochiai-2022` in the repository - in
+  its `SOURCES.html` entry; every other occurrence (`citations/homesteads.html`, `citations/fields.html`) lies
+  between the FR-003 derivation markers, where the derivation test pins it to the registry's text. Editing the
+  registry paragraph and running `make citations` changes both citations pages; a grep for the paragraph outside
+  `research/citations/` finds the registry's copy and no other.
 - **SC-005** `make page-check` and `make done` green; the derivation is exercised by the tests that compare it.
 
 ## Decisions Recorded
@@ -167,6 +169,10 @@ the tooling and tests that read the record, and the procedure documents.
   saying so and the assertions that rest on the source labeled as resting on a source of limited applicability;
   replacing the source is a research pass under the physical-task procedure, listed for the GM in this feature's
   `research.md` (constitution XIV's carve-out for work that is a pass of its own, with the measurement stated).
+  The GM gave no instruction for this case, and the constitution's four labels (accurate, deviation, convention,
+  guess) have no class for "rests on a source of limited applicability": until the GM rules, such an assertion
+  keeps the label it has, its footnote's work carries the write-up that states the limit, and the question of
+  what the MAP should call it is put to the GM with the list.
 - **D6 - numbering stays per page.** Notes keep the numbers they have (`fn-1`... per research page), so no
   reference changes its text and no anchor a reader may have bookmarked moves; a citations page's ids are its
   research page's.
