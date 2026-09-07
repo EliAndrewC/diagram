@@ -20,5 +20,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T06 the guidelines (FR-004): `research/CLAUDE.md` "Written for the reader", `research/README.md`, `interactive/CLAUDE.md`, `tests/CLAUDE.md`, root `CLAUDE.md`
       research: rendering
       verify: DONE. research/CLAUDE.md 'Written for the reader' (the GM's words, the three rules, the two checks); research/README.md entry format (two fields as comments, the rewrite rule); interactive/CLAUDE.md glossary row; tests/CLAUDE.md interactive row; root CLAUDE.md one sentence in the WHAT THE RECORD IS FOR bullet; container-scripts/append-system-prompt.md lists quote-check and record-format
-- [ ] T07 `make page-check` green, `make done` green (FR-007, SC-004); SC-001 checked in a browser by hand; land GATED
+- [x] T07 `make page-check` green, `make done` green (FR-007, SC-004); SC-001 checked in a browser by hand; land GATED
       research: rendering
+      verify: DONE. make page-check green (569 interactive tests + 18 browser tests, the record's synthetic page among them); make done green on the second run - 3,100 passed, coverage 100% (22,464 statements), 438 s - after the first run's one red (the new tool's operations-registry row); SC-001 checked in Chromium (sc-001-hover.png: the heading's yashikirin dotted, the definition in the box, no field, no correction note); landing GATED
