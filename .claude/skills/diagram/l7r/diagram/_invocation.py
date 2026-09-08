@@ -202,6 +202,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.cohort_audit": ("cohort", "expensive"),
     "l7r.diagram.tools.mapcheck": ("maps", "expensive"),  # feature: `tripwire` retired 2026-09-05 - it was `maps` with a false help line
     "l7r.diagram.tools.perf_snapshot": ("perf", "expensive"),
+    "l7r.diagram.tools.roll_audit": ("roll-audit", "cheap"),  # feature 216: the engine lines each roll alone reaches, off the gate baseline
     "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
     "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed

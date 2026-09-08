@@ -62,7 +62,7 @@ def test_the_fan_out_agrees_with_the_serial_path() -> None:
     map the serial path does - a map being a pure function of its spec is the immune test's claim, asserted
     there against the pool's committed manifest. The method when the fan-out landed (2026-08-16) still holds
     for anyone re-checking that: diff against the same code, never against an older log."""
-    specs = [*rolls.COVERAGE, rolls.KINK]
+    specs = list(rolls.COVERAGE)
     parallel = hg.driver.roll_pool(specs, jobs=2, produce=stub_produce)
     serial = hg.driver.roll_pool(specs, jobs=1, produce=stub_produce)
     assert [r.plan.spec for r in parallel] == specs == [r.plan.spec for r in serial], "in order, every spec, both paths"

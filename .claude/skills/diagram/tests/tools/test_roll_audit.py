@@ -65,3 +65,20 @@ def test_main_reads_the_gate_baseline_or_a_named_db_and_says_when_there_is_none(
     (bdir / incremental.COVERAGE_DB).write_bytes((tmp_path / ".coverage").read_bytes())
     out = io.StringIO()
     assert roll_audit.main([], root=tmp_path, out=out) == 0 and "rolling context" in out.getvalue()
+
+
+def test_main_finds_the_repository_root_from_its_own_location(monkeypatch: pytest.MonkeyPatch) -> None:
+    """With no `--db` and no `root`, `main` walks up from its own file to the repository root - five
+    levels, and a wrong depth is silent (it lands one directory short of `.claude/`), so the depth is
+    proved by what the resolved root contains."""
+    seen: dict[str, Path] = {}
+
+    def fake_baseline(root: Path) -> Path:
+        seen["root"] = root
+        return root / "no-such-coverage-db"
+
+    monkeypatch.setattr(roll_audit, "baseline_db", fake_baseline)
+    out = io.StringIO()
+    assert roll_audit.main([], out=out) == 2
+    assert (seen["root"] / ".claude" / "skills" / "diagram" / "Makefile").is_file(), seen
+    assert "no baseline" in out.getvalue()

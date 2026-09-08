@@ -133,3 +133,58 @@ def test_the_web_stage_draws_nothing_for_fewer_than_two_houses_or_no_envelope() 
     plan.envelope = []
     stage_web(s2, plan)
     assert s2.M["lanes"] == [], "no envelope: no web"
+
+
+def test_an_arm_that_crosses_a_kept_arm_by_accident_is_dropped(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_lay_skeleton` drops an arm `_arm_crossing_accidental` refuses, and inks nothing for it. The
+    crossing predicate has its own tests; this is the branch that ACTS on its verdict, which feature
+    216 found reached only by a roll the gate no longer makes. The control half proves the frame
+    below yields a real arm, so the empty result is the predicate's doing."""
+    from l7r.diagram.hamletgen.ways import web as _web
+
+    def frame(arc: float, standoff: float) -> tuple[float, float]:
+        return (200.0 + arc, 200.0 - standoff)
+
+    def fresh() -> Settlement:
+        plan = a_plan(lane_skeleton="spine")
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["houses"] = [{"x": 250.0, "y": 230.0, "w": 20.0, "h": 14.0}, {"x": 350.0, "y": 230.0, "w": 20.0, "h": 14.0}]
+        return s
+
+    plan = a_plan(lane_skeleton="spine")
+    s = fresh()
+    assert hg.ways._lay_skeleton(s, plan, frame, [0.0, 200.0], [0.0, 10.0]), "control: the frame yields an arm"  # type: ignore[arg-type]
+    assert s.M.get("lanes"), "control: the arm is inked"
+    monkeypatch.setattr(_web, "_arm_crossing_accidental", lambda arm, raw, kept: True)
+    s = fresh()
+    assert hg.ways._lay_skeleton(s, plan, frame, [0.0, 200.0], [0.0, 10.0]) == []  # type: ignore[arg-type]
+    assert not s.M.get("lanes"), "an accidental crossing is not inked"
+
+
+def test_a_lane_the_smoothing_collapsed_is_emptied_reinked_and_deleted() -> None:
+    """`_drop_collapsed` (lifted from `stage_web` by feature 216): a non-connector lane the knot
+    collapse left with one point, or two points under a foot apart, is emptied, its ink pulled, and
+    the husk removed back-to-front so the survivors keep their order. The connector is kept whatever
+    its shape - it is the map's way out."""
+    from l7r.diagram.hamletgen.ways import web as _web
+
+    class _S:
+        def __init__(self) -> None:
+            self.M: dict = {
+                "lanes": [
+                    {"pts": [[0.0, 0.0]], "connector": True},
+                    {"pts": [[10.0, 10.0]]},
+                    {"pts": [[20.0, 20.0], [20.0, 20.5]]},
+                    {"pts": [[30.0, 30.0], [80.0, 30.0], [80.0, 80.0]]},
+                    {"pts": []},
+                ]
+            }
+            self.reinked: list[int] = []
+
+        def reink_lane(self, i: int) -> None:
+            self.reinked.append(i)
+
+    s = _S()
+    assert _web._drop_collapsed(s) == [1, 2, 4]  # type: ignore[arg-type]
+    assert s.reinked == [1, 2, 4], "each collapsed lane is reinked at its ORIGINAL index before any deletion"
+    assert [ln["pts"] for ln in s.M["lanes"]] == [[[0.0, 0.0]], [[30.0, 30.0], [80.0, 30.0], [80.0, 80.0]]]

@@ -185,6 +185,30 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     return kept
 
 
+def _drop_collapsed(s: Settlement) -> list[int]:
+    """A way the knot collapse emptied to one point is dropped - emptied, reinked and REMOVED.
+
+    Lifted out of `stage_web` by feature 216 so it can be tested on a plain lane list: the only
+    roll in the gate that reached it was retired, and a hamlet rolled to cover a five-line loop is
+    the shape that feature exists to stop. Returns the indices removed, in the original numbering.
+
+    AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 155). This was the third
+    and last place that emptied a record without removing it, and it was the one that survived the
+    other two being fixed: sawada still shipped a `role=bridge-breaks` record with no points, a
+    bridge the smoothing had collapsed. Removed back-to-front so the earlier indices stay valid.
+    A connector is never dropped, however short - it is the map's way out."""
+    collapsed: list[int] = []
+    for i, ln in enumerate(s.M.get("lanes", [])):
+        p = ln.get("pts") or []
+        if not ln.get("connector") and (len(p) < 2 or math.dist(p[0], p[-1]) < 1.0 and len(p) == 2):
+            ln["pts"] = []
+            s.reink_lane(i)
+            collapsed.append(i)
+    for i in sorted(collapsed, reverse=True):
+        del s.M["lanes"][i]
+    return collapsed
+
+
 def stage_web(s: Settlement, plan: SitePlan) -> None:
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -439,19 +463,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # AND TOUCH AGAIN (T99 unlock, tripwire seed 37): the smoothing cuts knots and hairpins into stubs,
     # and a stub that ends 3-30 ft short of the run it left is exactly the gap _touch_junctions closes -
     # but that pass ran BEFORE the smoothing. A way the knot collapse emptied to one point is dropped first.
-    _collapsed: list[int] = []
-    for _i, _ln in enumerate(s.M.get("lanes", [])):
-        _p = _ln.get("pts") or []
-        if not _ln.get("connector") and (len(_p) < 2 or math.dist(_p[0], _p[-1]) < 1.0 and len(_p) == 2):
-            _ln["pts"] = []
-            s.reink_lane(_i)
-            _collapsed.append(_i)
-    # AND THE HUSK GOES WITH THE INK HERE TOO (settlement-review x2, feature 155). This was the third
-    # and last place that emptied a record without removing it, and it was the one that survived the
-    # other two being fixed: sawada still shipped a `role=bridge-breaks` record with no points, a
-    # bridge the smoothing had collapsed. Removed back-to-front so the earlier indices stay valid.
-    for _i in sorted(_collapsed, reverse=True):
-        del s.M["lanes"][_i]
+    _drop_collapsed(s)
     _touch_junctions(
         s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=_STUB_REACH_FT, only_orphans=True, final=True
     )  # the stubs the smoothing leaves stop 30-35 ft short (seed 37); a connected web is untouched

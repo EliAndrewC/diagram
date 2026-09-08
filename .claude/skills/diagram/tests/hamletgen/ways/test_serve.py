@@ -1,6 +1,9 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
+import pytest
+
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.ways import serve as _serve
 
 from ._builders import _StubSettlement
 
@@ -218,3 +221,25 @@ def test_a_web_lane_of_fewer_than_two_points_is_never_laid() -> None:
     s.M.setdefault("meta", {"ftpx": 1})
     assert _lay_web_lane(s, [(50.0, 50.0)], [], [], []) is False, "a single point is not a run"
     assert _lay_web_lane(s, [], [], [], []) is False, "and neither is nothing at all"
+
+
+def test_a_door_path_trimmed_below_two_points_is_not_drawn(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A DOOR PATH THAT REACHES NO WAY IS NOT DRAWN (feature 137 T03): the clip and the trim can eat a
+    straggler's footpath down to its doorstep, and what is left is a mark in the grass, not a way.
+    Feature 216: the only gate roll that reached this refusal was retired, so the trim is stood in for
+    directly - the control half proves the same steading otherwise gets its footpath."""
+
+    class _Plan:
+        envelope = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
+        watercourses: list = []
+
+    def fresh() -> _StubSettlement:
+        return _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(150.0, 200.0)])
+
+    s = fresh()
+    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
+    assert len(s.M["lanes"]) == 2, "control: the steading gets its footpath"
+    monkeypatch.setattr(_serve, "_trim_to_service", lambda path, *a, **k: path[:1])
+    s = fresh()
+    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
+    assert len(s.M["lanes"]) == 1, "a path the trim ate down to its doorstep is not a way"
