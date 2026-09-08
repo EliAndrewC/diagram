@@ -1,11 +1,11 @@
 # Feature 215 - the floor itself
 
-**Status**: DRAFT - `spec-fidelity` round 1 required three changes, applied: FR-006 itemizes the three sites that
+**Status**: IMPLEMENTED 2026-09-08 (FAITHFUL at round 5 of 5) - round 1 required three changes, applied: FR-006 itemizes the three sites that
 prove less (and SC-002 says so); FR-003 faces 214's D3 and reverses it in a recorded decision (D5); FR-001 no
 longer attributes the brief alignment to the GM. Round 2 required one change (a fourth site that proves less - the re-roll loop over stand-in stages - stated in
 FR-004, FR-006 d and SC-002), applied. Round 3 required one change (FR-006 e: what proves less if seed 43 packs), applied; the reviewer's aside -
 the audit kept runnable as `make roll-audit` - taken into FR-007. Round 4 required one change (the `make roll-audit` target, taken from a reviewer's aside, dropped from
-FR-007 - an aside is not the GM's consent; recorded in D6 as priced and not taken). Round 5 pending.
+FR-007 - an aside is not the GM's consent; recorded in D6 as priced and not taken). Round 5: FAITHFUL.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) R1 - the audit, per roll,
 of the lines nothing else reaches; the count after.
 **Predecessors**: 213 (the census), 214 (the first packing, 21 -> 13 specs, 24 -> 16 rolls); the packing

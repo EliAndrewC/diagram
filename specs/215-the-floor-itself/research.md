@@ -69,6 +69,27 @@ real site"), Clamped (3 lines), Polder 19 (0 alone; the fall-90 form and the kee
 three seatings sharing one partial roll (the stages run once to the seating pass, the state copied, three
 patched seatings) - together another 4 rolls, to 4-5.
 
-## R2. Measured after
+## R2. Measured after (2026-09-08)
 
-(The census line and the gate's time, at the end.)
+The green gate's census: **9 rolls of 9 specs, 11 requests served from a shared roll, roster 9 rows, no
+duplicates** - SC-001 exactly (the pool gens served; the run before, cold, had 12 of 12 with three pool gens
+rolled). The pytest phase **147 s** and the whole `make done` **165 s**, against 204 / 222 s after feature 214
+and 313-336 / 333-418 s after 213. Since the start of 213: 37 rolls of 14 specs and a 541 s median gate, to 9
+of 9 and a gate under three minutes.
+
+**The kink did not reproduce synthetically (FR-005).** Seed 43's kinked lane is a touch-role link
+(1125,272)-(1039,254)-(991,188)-(1003,164)-(1128,186) routed west round the well at (1016,188) and back. With
+its own houses, garden, well and board as the fabric (`_homestead_polys` on the extracted geometry), every
+route between the piece's vertices and the network - the tight lattice, the detour, with and without the
+fabric as hard ground - runs straight or with one bend: the real route depends on map state beyond the local
+fabric (the other lanes' corridors, the envelope, the smoothing passes). So the seed stays as the open defect's
+carrier, its eight lines are direct unit tests (`tests/hamletgen/ways/test_touch.py`, `test_seams.py`), and
+the count is nine rather than eight. The probe is in the transcript of 2026-09-08; the geometry it used is in
+`census/kink-seed-43.json`.
+
+**Found on the way (Principle XIV), fixed here.** The ci parser owns `--full` (feature 130) and ATE the roll
+verdict's `--full`, so every gate since 213 judged with `full=False` and the stale-roster rule never ran under
+a gate - found when the two re-roll rows left behind for one gate came up green; the word is positional now and
+a test drives it through the real entry point. And the ratchet's acreage and seating read from the pool's map
+needed the manifest to carry them (D3): `roll_failures`, `roll_placed`, `roll_acres` join `roll_attempt` in
+the meta, so the shipped map answers what the Report did.
