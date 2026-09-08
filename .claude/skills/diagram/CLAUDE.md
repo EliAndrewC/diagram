@@ -194,7 +194,7 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
   entry with every new gap rule.
 - **Never let an aggregate (a centroid) stand in for the distributed thing a verdict is about.**
   Measure to the nearest member, or to the wall.
-- **Randomness is POSITIONAL or SCOPED, never "wherever the stream happens to be":** `self._hjit(x, y, salt)`
+- **Randomness is POSITIONAL or SCOPED - the engine's practice, no longer a gate-proved requirement** (GM 2026-09-08, feature 219: *"I am actually okay with an upstream change in the number of random draws moving a map"*; the immune test that proved it is retired)**: `self._hjit(x, y, salt)`
   for a per-feature attribute, `with self.rng_scope(name, *key)` for a phase or region.
 
 **The gate** ([`dev/gate.md`](dev/gate.md))

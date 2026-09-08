@@ -318,7 +318,7 @@ def key_for(subject: bytes, deps: dict[str, Any] | None) -> str:
 def _run_gen_arg(gen: str) -> None:
     """The roll child's target for a GEN (feature 213): run `gen` in this process. Module-level so the child
     driver reaches it by name; the dependency record is taken around it by the driver. (The immune test's
-    perturbation lived here until feature 215 moved the experiment onto the reference: `rollcache.extra_draws`.)"""
+    perturbation lived here until feature 215; the GM retired that requirement on 2026-09-08, feature 219.)"""
     try:
         runpy.run_path(gen, run_name="__main__")
     except SystemExit as ex:
@@ -348,7 +348,7 @@ def run_gen_child(gen: str) -> dict[str, Any]:
 def run_and_record(gen: str) -> dict[str, Any]:
     """Run a gen IN THIS PROCESS, recording which functions executed and which files it read. `gate_obtain`'s
     coverage child calls this (it is already a child, and a grandchild would carry its coverage away); the
-    regen site and the immune test call `run_gen_child`."""
+    regen site calls `run_gen_child` (the immune test did too, until the GM retired it in feature 219)."""
 
     def run_gen() -> None:
         try:

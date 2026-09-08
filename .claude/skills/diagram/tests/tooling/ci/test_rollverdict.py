@@ -222,8 +222,10 @@ def test_main_reads_the_census_and_the_renders_file_and_judges_against_the_real_
     pathlib.Path(rollverdict.renders_file(str(census))).write_text("tests/settlement/test_finish.py::t\n")
     assert rollverdict.main(["verdict"]) == 0, capsys.readouterr().out
     assert "roll census: green" in capsys.readouterr().out
-    assert rollverdict.main(["verdict", "full"]) == 1, "the real roster has more rows than this one roll: stale on a full run"
-    assert "ROLL CENSUS FAILED" in capsys.readouterr().out
+    # since feature 219 the real roster holds no Roll row, so a full run has nothing stale to report; the stale-row rule is
+    # proved on the synthetic roster in test_a_stale_roster_row_fails_a_full_run_only
+    assert rollverdict.main(["verdict", "full"]) == 0
+    assert "roll census: green" in capsys.readouterr().out
 
 
 def test_the_shim_delegates_and_its_import_lines_are_measured(monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path) -> None:

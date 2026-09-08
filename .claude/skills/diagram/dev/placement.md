@@ -467,9 +467,17 @@ it** - and if a correction loop is not converging, suspect the measurement befor
 
 ## RANDOMNESS IS POSITIONAL OR SCOPED - never "wherever the stream happens to be"
 
-The rule, and it governs every new draw you add: **a feature's randomness must depend on the feature,
-not on how much randomness the map has drawn before it.** Two mechanisms, and one of them fits every
-case.
+**THE REQUIREMENT IS RETIRED; THE PRACTICE STAYS (feature 219, GM 2026-09-08).** This section was written as a rule
+the gate proved - an upstream change in the number of random draws must not move a map - with the measurement below
+as its reason and the immune test as its proof. The GM retired the requirement: *"I am actually okay with an
+upstream change in the number of random draws moving a map"*. The test, `rollcache.extra_draws` and
+`_perturbed_manifest` went with it, and nothing proves the property any more. What follows is how the engine's
+randomness IS structured, and why it was built that way - every current draw site uses the two mechanisms, and a new
+draw is easier to reason about if it does too - not a rule a gate enforces. The measurement and the probe recipe
+are history.
+
+The practice: **a feature's randomness depends on the feature, not on how much randomness the map has drawn
+before it.** Two mechanisms, and one of them fits every case.
 
 - **A per-feature attribute** - a house's rake, its wall color, whether it has a kura, which kind a
   ring seat gets - comes from **`self._hjit(x, y, salt)`**, which is a deterministic hash of the

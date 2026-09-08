@@ -52,7 +52,7 @@ EXCLUDED_PARTS = ("tests", "ci")  # a test file or the CodeBuild dispatcher is n
 
 
 def subjects() -> list[Any]:
-    """The fixed specs whose rolls define the path: the reference, the gate's two polders, the cohort's ratchet seeds.
+    """The fixed specs whose rolls define the path: the two shipped maps the gate reads (feature 219: nothing else is rolled).
 
     `Polder seed=8` LEFT THIS LIST on 2026-09-06 (feature 192 FR-007, the GM's ruling). Two facts
     together, because neither is sufficient: nothing in the tree rolled that spec in any form, so its
@@ -69,8 +69,7 @@ def subjects() -> list[Any]:
     return [
         hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}),  # the pool's brief
         hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"),
-        hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0),
-    ]  # Polder 19 and seed 43 left at feature 216: no coverage line of their own (215 R1); the seatings' partial roll is keyed to its test, not a subject here
+    ]  # Polder 19 and seed 43 left at feature 216, Polder 12 at 219 (its three lines are unit tests, its behavior the soak tier's): the gate rolls no spec of its own
 
 
 def hamlet_path_files(records: Iterable[dict[str, Any]]) -> list[str]:

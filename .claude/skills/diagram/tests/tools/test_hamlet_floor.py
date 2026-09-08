@@ -38,7 +38,7 @@ def test_module_set_asks_the_records_for_every_fixed_subject() -> None:
         return _deps("l7r/diagram/hamletgen/plan.py")
 
     assert hf.module_set(deps_for) == ["l7r/diagram/hamletgen/plan.py"]
-    assert seen == ["Inashiro", "Kuwabata", "Polder"]  # the plain shared rolls: the first two the POOL's maps since 215; Polder 19 and seed 43 left at 216, seeds 41/42/44 at 214, seed 8 at 192
+    assert seen == ["Inashiro", "Kuwabata"]  # the POOL's two maps (feature 215); Polder 12 left at 219, Polder 19 and seed 43 at 216, seeds 41/42/44 at 214, seed 8 at 192
 
 
 def _measure(tmp_path: Path, body: str, call: str) -> tuple[str, str]:
@@ -102,8 +102,11 @@ def test_module_set_defaults_to_the_roll_cache_records(monkeypatch: object) -> N
     monkeypatch.setattr(rollcache, "report_deps", lambda spec: _deps("l7r/diagram/hamletgen/sink.py"))  # type: ignore[attr-defined]
     asked: list[str] = []
     monkeypatch.setattr(hf, "pool_deps", lambda spec: (asked.append(spec.name), _deps("l7r/diagram/hamletgen/plan.py"))[1])  # type: ignore[attr-defined]
-    assert hf.module_set() == ["l7r/diagram/hamletgen/plan.py", "l7r/diagram/hamletgen/sink.py"]
-    assert asked == ["Inashiro", "Kuwabata"], "the shipped maps' records come from the gen cache (feature 215), the others' from the roll cache"
+    assert hf.module_set() == ["l7r/diagram/hamletgen/plan.py"], "every subject is a shipped map since feature 219: the gen cache's records, nothing rolled"
+    assert asked == ["Inashiro", "Kuwabata"], "the shipped maps' records come from the gen cache (feature 215)"
+    # ...and a spec the pool does not carry still has its route, the roll cache's record (no fixed subject takes it since 219)
+    probe = type("S", (), {"name": "Probe", "seed": 9})()
+    assert hf._deps_for(probe) == _deps("l7r/diagram/hamletgen/sink.py")
 
 
 def test_pool_deps_reads_the_gen_cache_entry_and_obtains_it_first_when_absent(tmp_path: Path, monkeypatch: object) -> None:

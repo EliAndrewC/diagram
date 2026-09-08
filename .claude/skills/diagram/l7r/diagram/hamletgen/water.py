@@ -336,6 +336,38 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
     ]  # pragma: no cover - the same unreachable fallback, one line down [174: KEPT, not deletable - part of that same terminal return]
 
 
+def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any], ux: float, uy: float, step: float = 12.0, limit: int = 60) -> tuple[float, float, float, float]:
+    """The header reservoir walked UPHILL (against the fall) until no point of its rim lies on the crop.
+
+    Lifted out of `stage_polder` by feature 219 so the walk is a unit test on a rectangle rather than a roll of a
+    polder that needs it (seed 12 did; seeds 3, 8, 19 and 22 cleared first try). `pond` is (cx, cy, rx, ry); the
+    walk is bounded so a rim that can never clear cannot loop forever."""
+    for _ in range(limit):
+        rim = [(pond[0] + pond[2] * math.cos(a), pond[1] + pond[3] * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
+        if not any(point_in_poly(q[0], q[1], envelope) for q in rim):
+            break
+        pond = (pond[0] + ux * step, pond[1] + uy * step, pond[2], pond[3])
+    return pond
+
+
+def dike_gaps_at_channels(ring: list[Any], channels: Any, sluices: Any) -> list[Any]:
+    """The perimeter dike's gaps: the two sluices `build_polder` names, plus a gap WHEREVER a channel actually
+    crosses the ring - a dug gap is what lets water through an earthwork, and a dike drawn straight over a running
+    channel is the defect `polder_dike_gapped_at_sluices` named. A crossing within 30 ft of a gap already listed
+    is that gap. Lifted out of `stage_polder` by feature 219 (a unit test on a square and two channels)."""
+    gaps = list(sluices)
+    for ch in channels:
+        pts = ch["pts"]
+        for i in range(len(pts) - 1):
+            for k in range(len(ring)):
+                a, b = ring[k], ring[(k + 1) % len(ring)]
+                if segments_cross(tuple(pts[i]), tuple(pts[i + 1]), a, b):
+                    hit = seg_intersect(tuple(pts[i]), tuple(pts[i + 1]), a, b)
+                    if hit is not None and not any(math.hypot(hit[0] - g[0], hit[1] - g[1]) < 30 for g in gaps):
+                        gaps.append(hit)
+    return gaps
+
+
 def stage_polder(s: Settlement, plan: SitePlan) -> None:
     """The POLDER field: a surveyed orthogonal grid diked out of standing water on flat ground.
 
@@ -406,12 +438,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
             0
         ]  # pragma: no cover - build_polder always returns a main feeder and a sluice [174: KEPT, not deletable - an else branch that binds `anchor`]
     ux, uy = -plan.fall[0], -plan.fall[1]  # uphill
-    pond = (anchor[0] + ux * (pry + 30.0), anchor[1] + uy * (pry + 30.0), prx, pry)
-    for _ in range(60):
-        rim = [(pond[0] + pond[2] * math.cos(a), pond[1] + pond[3] * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
-        if not any(point_in_poly(q[0], q[1], plan.envelope) for q in rim):
-            break
-        pond = (pond[0] + ux * 12.0, pond[1] + uy * 12.0, pond[2], pond[3])
+    pond = walk_pond_uphill((anchor[0] + ux * (pry + 30.0), anchor[1] + uy * (pry + 30.0), prx, pry), list(plan.envelope), ux, uy)
     # THE STUB REACHES THE RIM (feature 150 T51, GM 2026-08-28: "the irrigated channel which feeds into the water
     # for everything stops short of actually being connected to the feeder pond"). `build_polder` ends the
     # feeder's inlet stub a fixed 52 ft past the ring's corner, and the reservoir is walked uphill until its
@@ -463,16 +490,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # names. A dug gap is what lets water through an earthwork; anywhere else the dike would be
     # drawn straight over a running channel (`polder_dike_gapped_at_sluices`).
     ring = list(plan.envelope)
-    gaps = list(net.get("dike_sluices") or [])
-    for ch in net.get("channels", []):
-        pts = ch["pts"]
-        for i in range(len(pts) - 1):
-            for k in range(len(ring)):
-                a, b = ring[k], ring[(k + 1) % len(ring)]
-                if segments_cross(tuple(pts[i]), tuple(pts[i + 1]), a, b):
-                    hit = seg_intersect(tuple(pts[i]), tuple(pts[i + 1]), a, b)
-                    if hit is not None and not any(math.hypot(hit[0] - g[0], hit[1] - g[1]) < 30 for g in gaps):
-                        gaps.append(hit)
+    gaps = dike_gaps_at_channels(ring, net.get("channels", []), net.get("dike_sluices") or [])
     # ...and UNLABELED on this tier. `perimeter_dike` captions itself 8 px above the band it picks,
     # and the band is not in the crop's hard set (`_CROP_HARD`), so on some bearings that caption
     # lands outside the frame (`labels_within_image`, seen at down_deg=270). Adding `dikes` to the

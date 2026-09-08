@@ -736,7 +736,8 @@ artifacts. Specifically:
   census (feature 213) enforces the roster it produces; a behavior asserted on a real map that no coverage
   line requires is a unit test of the placer that decides it, or a test in `tests/soak/`, the tier above
   the gate, which no ordinary run collects. The count on the day this was written: 37 rolls of 14 hamlets at
-  the start of feature 213, 3 of 3 after 216, 2 of 2 after 217. AND THE GATE MEASURES IT (feature 217, GM
+  the start of feature 213, 3 of 3 after 216, 2 of 2 after 217, NONE of its own after 219 (the five shipped maps are
+  rolled cold when their key moved and served warm; the GM retired the immune requirement on 2026-09-08). AND THE GATE MEASURES IT (feature 217, GM
   2026-09-08: *"if it is literally ever possible for us to achieve one hundred percent code coverage in our make
   done tests, Without adding a new map roll to the unit tests. then we should always do that"*): the census
   verdict computes, for every rostered roll, the engine lines its coverage context reaches that no other context

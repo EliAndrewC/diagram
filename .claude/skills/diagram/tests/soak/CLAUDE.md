@@ -113,3 +113,9 @@ project's rule is that non-vacuity is asserted, never assumed.
 **`test_seatings.py` (feature 217, 2026-09-08)**: the three seating behavior tests - the `cluster_seeds` cloud alone,
 the lane frontage alone, the frontage stopping at one household - on copies of one partial roll in a child. Their one
 coverage line is `tests/hamletgen/homesteads/test_seats.py`; what they assert is behavior, which this tier is for.
+
+**`test_polder_fall_0.py` (feature 219, 2026-09-08)**: the polder-grid archetype on Polder seed 12 - the reservoir walk on
+the one seed that needs it, the grid solved to its acreage with every household seated and the dike gated, the keep-outs,
+the lanes bending like paths, the ratchet's seating and acreage. Its three engine lines are unit tests in
+`tests/hamletgen/test_water.py`; the pool ships no polder-grid map, so until this tier runs the archetype's behavior is
+proved by nothing (stated to the GM at the feature's landing).

@@ -385,41 +385,6 @@ def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: st
     return obtain(subject, lambda: recorded()[0], share=True, recorded=recorded)
 
 
-@contextlib.contextmanager
-def extra_draws(n: int) -> Iterator[None]:
-    """`n` extra `random.random()` draws at every `Settlement.meta()` call - THE IMMUNE EXPERIMENT (GM 2026-08-08:
-    an upstream change in the number of random draws must not move a map). Lifted from the gen child (feature 215)
-    so the experiment runs on the reference through `_perturbed_manifest`, against the pool's committed manifest."""
-    import random
-
-    from l7r.diagram import settlement
-
-    orig = settlement.Settlement.meta
-
-    def patched(self: Any, *a: Any, **kw: Any) -> Any:
-        r = orig(self, *a, **kw)
-        for _ in range(n):
-            random.random()
-        return r
-
-    settlement.Settlement.meta = patched  # type: ignore[method-assign]
-    try:
-        yield
-    finally:
-        settlement.Settlement.meta = orig  # type: ignore[method-assign]
-
-
-def _perturbed_manifest(spec: HamletSpec) -> dict[str, Any]:
-    """The manifest of `spec` rolled with ONE extra draw at every `meta()` - the immune test's perturbed side, a
-    child's target by name (feature 215). Its clean side is the pool's committed manifest of the same brief."""
-    from l7r.diagram import hamletgen as hg
-
-    with extra_draws(1):
-        rep = hg.generate(spec, out_base=None, render=False)
-    assert rep.manifest is not None
-    return rep.manifest
-
-
 def _roll_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any], Report]:
     """THE ONE ROLL of a spec (feature 213 FR-001): `generate()` - the re-roll loop, the finish, the
     reachability verdict - and what every reader needs of it: the plan, the finished manifest of the kept

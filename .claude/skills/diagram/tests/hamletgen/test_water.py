@@ -211,3 +211,65 @@ def test_a_fan_with_no_plots_counts_as_DANGLING() -> None:
     state is refused rather than drawn. Production reaches it only through a fan that has already
     failed, which is why it was excluded; the function answers it directly."""
     assert hg.water.tail_dangles({"plots": [], "channels": []}) is True
+
+
+# ---- feature 219: Polder 12's three lines, as unit tests of the functions that own them ----------------
+
+
+def test_the_reservoir_walks_uphill_until_its_rim_clears_the_crop_and_stays_put_when_already_clear() -> None:
+    """`walk_pond_uphill` (lifted from `stage_polder`): the pond steps against the fall until no rim point lies on
+    the envelope; a pond already clear is returned unchanged - the stop on the first step is the line the polder
+    roll alone used to reach."""
+    from l7r.diagram.hamletgen import water
+    from l7r.diagram.settlement import point_in_poly
+
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    walked = water.walk_pond_uphill((50.0, 50.0, 10.0, 6.0), square, 0.0, -1.0)
+    assert walked[0] == 50.0 and walked[2:] == (10.0, 6.0), "only the position along the walk moves"
+    assert walked[1] < 50.0 and walked[1] + 6.0 <= 0.0, walked
+    rim_in = [(walked[0] + 10.0 * math.cos(a), walked[1] + 6.0 * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
+    assert not any(point_in_poly(x, y, square) for x, y in rim_in)
+    clear = (50.0, -40.0, 10.0, 6.0)
+    assert water.walk_pond_uphill(clear, square, 0.0, -1.0) == clear, "already clear: the first test stops the walk"
+    assert water.walk_pond_uphill((50.0, 50.0, 10.0, 6.0), square, 0.0, -1.0, limit=1)[1] == 38.0, "the walk is bounded"
+
+
+def test_the_dike_is_gapped_where_a_channel_crosses_it_and_not_twice_within_thirty_feet() -> None:
+    """`dike_gaps_at_channels` (lifted from `stage_polder`): the named sluices, plus a gap at every real crossing of the
+    ring, except a crossing within 30 ft of a gap already listed."""
+    from l7r.diagram.hamletgen import water
+
+    ring = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    channels = [
+        {"pts": [[-20.0, 50.0], [20.0, 50.0]]},  # crosses the west side at (0, 50): a new gap
+        {"pts": [[-20.0, 10.0], [20.0, 10.0]]},  # crosses at (0, 10), 10 ft from the sluice at (0, 0): that sluice's gap
+        {"pts": [[30.0, 30.0], [60.0, 60.0]]},  # inside the ring: crosses nothing
+    ]
+    gaps = water.dike_gaps_at_channels(ring, channels, [(0.0, 0.0)])
+    assert gaps[0] == (0.0, 0.0) and len(gaps) == 2, gaps
+    assert abs(gaps[1][0]) < 1e-6 and abs(gaps[1][1] - 50.0) < 1e-6, gaps
+
+
+def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tolerance(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`fit_polder`'s stop: the first candidate whose acreage is within tolerance ends the search. `build_polder` and
+    `net_acres` are stood in for, so the stop is tested on its own rather than on a solve that happens to land."""
+    from l7r.diagram import hamletgen as hg
+    from l7r.diagram.hamletgen import water
+
+    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
+    built: list[int] = []
+
+    def fake_build(W, H, origin, seed, **kw):  # type: ignore[no-untyped-def]
+        built.append(kw["rows"])
+        return {"envelope": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], "rows": kw["rows"]}
+
+    monkeypatch.setattr(water, "build_polder", fake_build)
+    monkeypatch.setattr(water, "net_acres", lambda net, ftpx: plan.target_acres)
+    # the winner's parcel cleanup runs on the real net; the stub has no parcels to clean
+    from l7r.diagram.waterfields import polder as _polder
+
+    monkeypatch.setattr(water, "clean_polder_parcels", lambda net: net, raising=False)
+    monkeypatch.setattr(_polder, "clean_polder_parcels", lambda net: net)
+    net = water.fit_polder(plan, 12)
+    assert built == [25], "one candidate, within tolerance: the bisection stops there"
+    assert net["rows"] == 25

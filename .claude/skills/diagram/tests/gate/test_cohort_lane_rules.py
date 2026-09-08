@@ -30,9 +30,9 @@ import pytest
 from tests import rolls
 from tests.gate import _pool
 
-# THE POPULATION IS THE ROSTER'S COVERAGE ROLLS since feature 214 (the shared rolls every gate makes). Seed 43's kink -
-# the one open defect - is in the tier above the gate since feature 216 (tests/soak/test_seed_43_kink.py): a roll that
-# carries no coverage line is not the gate's to make.
+# THE POPULATION IS THE TWO SHIPPED MAPS THE GATE READS (feature 219; the roster's coverage rolls since 214). Seed 43's kink
+# is in the tier above the gate since feature 216 (tests/soak/test_seed_43_kink.py) and Polder 12 since 219
+# (tests/soak/test_polder_fall_0.py): a roll that carries no coverage line of its own is not the gate's to make.
 COHORT = tuple(rolls.COVERAGE)
 DOUBLE_BACK_DEG = 140.0
 BEND_RUN_FT = 40.0

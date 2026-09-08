@@ -584,6 +584,14 @@ FR-006, five items, each raised with the GM. What did NOT pack: seed 43's kink, 
 its own local fabric (the router's route depends on more of the map), so the seed stays as the open defect's
 carrier.
 
+**AND THEN NONE (features 216-219, 2026-09-08).** 216 made the floor doctrine (constitution VI) and took the rolls to 3;
+217 made the gate MEASURE it - a rostered roll with no line of its own fails - and took the seatings to 2; 219 retired the
+immune requirement at the GM's word (*"I am actually okay with an upstream change in the number of random draws moving a
+map"*) and, on the audit the GM asked for, Polder 12: three engine lines as unit tests, the behavior in the soak tier.
+**The gate rolls no map of its own.** Its coverage is the five shipped generators - rolled cold when their key moved,
+served warm with their coverage replayed - and unit tests. The packing question for the hamlet tier ends here; the next
+one is a tier question, and the lever on the five cold rolls is the pool's contents, the GM's exhibit decision.
+
 **AND THEN THE DOCTRINE (feature 216, the same day).** The GM: *"Not only should we do that here, we should always
 do that for the make done tests"* - the gate rolls only what 100% coverage strictly needs; a test that rolls
 more belongs in the tier above the gate (`tests/soak/`), which no ordinary run collects. The four rolls 215 had

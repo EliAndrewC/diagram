@@ -102,7 +102,8 @@ allow the same hamlet to be rolled twice within the tests and also to have some 
 adding another hamlet that gets rolled."* So:
 
 - **`tests/rolls.py` is the roster.** Every spec the gate may roll, with the unique coverage or emergent
-  condition it carries - TWO rows since feature 217 (`rolls.COVERAGE`, `rolls.REFERENCE` are the names to read): the
+  condition it carries - ZERO rows since feature 219: the gate rolls no map of its own (the GM retired the immune
+  requirement on 2026-09-08 and Polder 12's lines became unit tests; `rolls.COVERAGE` is the two shipped maps the gate reads): the
   gate rolls only what 100% coverage strictly needs, and since feature 217 the census verdict MEASURES it - a rostered
   roll whose coverage context reaches no engine line no other context reaches FAILS the gate, every roll's count and
   lines are printed on every gate, `make roll-audit` asks the same off the last baseline, the roster is a GUARD file
@@ -110,10 +111,10 @@ adding another hamlet that gets rolled."* So:
   row points at the research section recording its audit (`audit=`, checked by `tests/test_rolls.py`); a test that
   rolls more belongs in `tests/soak/` (constitution VI v2.23.0). The reference and Kuwabata are the POOL's maps: every gate reader takes them
   through `tests/gate/_pool.py` (`rolled_map`, `rolled_report` - the sweep's entry, served warm, rolled cold once
-  under a per-gen lock), so the gate's one roll of the reference is the immune experiment's perturbed one. A rolling test's spec must be there; the roll census fails the gate otherwise and
+  under a per-gen lock); since feature 219 nothing rolls the reference under a spec (the immune experiment's perturbed roll was retired with its requirement). A rolling test's spec must be there; the roll census fails the gate otherwise and
   says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's
   roll instead. Three stated exceptions live beside it: a `Duplicate` (a site that must roll a rostered spec
-  again by its nature - the fan-out's pool child, the immune test's perturbed roll, the cache round trip),
+  again by its nature - historically the fan-out's pool child, the immune test's perturbed roll, the cache round trip; none since 215),
   a `PoolGen` (a shipped generator the pool sweep runs only when its cache key moved) and an `InProcess`
   module (the perf tests, which time the stages where they run, each on its own seed; the stub-stage
   tests, `stub=True`, whose stand-in rolls are reported and bounded rather than counted).

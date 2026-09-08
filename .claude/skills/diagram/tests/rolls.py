@@ -34,8 +34,9 @@ THREE KINDS OF ENTRY BESIDES A ROLL, each a stated exception the verdict prints 
   feature 214 the perf tests) - its records are reported and bounded (`rollverdict.STUB_MAX_S`), never counted.
 
 THE NUMBER (feature 216, GM 2026-09-08: *"the make done tests are trying to minimize the number of map rolls and are
-doing only what is strictly necessary in order to reach one hundred percent code coverage"*): TWO rows since feature
-217, two rolls on a warm gate, no duplicates, every row carrying engine lines nothing else reaches.
+doing only what is strictly necessary in order to reach one hundred percent code coverage"*): ZERO rows since feature
+219 - the gate rolls no map of its own (GUARD_EDIT_OK: feature 219 - the immune requirement retired by the GM, Polder 12's
+lines unit tests); its coverage is the five shipped generators and unit tests. A row added here is judged by 217's rule.
 A test that rolls more than that belongs in `tests/soak/`, the tier above the gate, which no ordinary run collects.
 
 A ROLL EARNS ITS LINES, AND THE GATE MEASURES IT (feature 217, GM 2026-09-08 - GUARD_EDIT_OK: feature 217, the roster
@@ -52,8 +53,8 @@ in `tests/soak/`; and if a roll is still needed, record the audit in the feature
 makes the next gate a FULL run so the new row is judged against every context of the suite. A `PoolGen` row is the one
 kind the verdict prints and never fails: a shipped map is the GM's exhibit decision, rolled cold only.
 Feature 215 had reached the packing record's nine; 216 traded the rest for unit tests and one shared partial roll. The reference and Kuwabata are read from the POOL's
-maps (the sweep rolls them cold, serves them warm; `tests/gate/_pool.py`), so the reference's one roll is the
-immune experiment's perturbed one; the re-roll loop runs on stand-in stages; the fan-out's pool child runs a
+maps (the sweep rolls them cold, serves them warm; `tests/gate/_pool.py`), so the reference's one roll WAS the
+immune experiment's perturbed one (retired in 219 - GUARD_EDIT_OK: feature 219); the re-roll loop runs on stand-in stages; the fan-out's pool child runs a
 stub producer; the child-equality proof is retired; the cache round trip runs on the sweep's entry. Seed 43 stays
 for its kink, which did not reproduce synthetically (specs/215 research R2). The audit that found all of this -
 the engine lines each roll alone reaches, off the gate's own coverage baseline - is `specs/215-the-floor-itself/
@@ -116,37 +117,34 @@ class PoolGen:
 REFERENCE = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1})  # THE POOL'S BRIEF (feature 215 D1)
 KUWABATA = HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
 POLDER_FALL_0 = HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0)
-COVERAGE: tuple[HamletSpec, ...] = (REFERENCE, KUWABATA, POLDER_FALL_0)  # Polder 19 left at feature 216: no line of its own (215 R1)
+COVERAGE: tuple[HamletSpec, ...] = (
+    REFERENCE,
+    KUWABATA,
+)  # the two shipped maps the gate reads; Polder 19 left at 216, Polder 12 at 219 (GUARD_EDIT_OK: feature 219 - POLDER_FALL_0 stays as the spec the soak tier rolls)
 # THE SEATINGS' PARTIAL ROLL left the gate in feature 217 (GUARD_EDIT_OK: feature 217 - its one unique line is a unit test,
 # tests/hamletgen/homesteads/test_seats.py, and the three seating behavior tests roll it in tests/soak/test_seatings.py).
 
-ROLLS: tuple[Roll, ...] = (
-    # THE REFERENCE AND THE POOL
-    # THE REFERENCE IS THE POOL'S MAP (feature 215): every gate reader takes it from the sweep's entry (`tests/gate/_pool.py`),
-    # so the gate's only roll of it is the immune experiment's PERTURBED roll - one extra draw at every meta() against the
-    # committed manifest. Kuwabata is read the same way and has no roll row at all: it is a `PoolGen` below.
-    Roll(
-        REFERENCE,
-        "the immune experiment (GM 2026-08-08): one extra random draw at meta() must not move the map - the perturbed roll cannot be served and is compared with the pool's committed manifest; the gate's fifteen readers of the reference read that manifest",
-        "rollcache._perturbed_manifest in a child (full/test_villages); the clean side is pool/hamlets/inashiro/inashiro.json through gate_obtain",
-        audit="specs/216-the-floor-as-doctrine/research.md#R2",  # GUARD_EDIT_OK: feature 217 - 17 lines only this roll reaches, all the perturbation machinery
-    ),
-    Roll(
-        POLDER_FALL_0,
-        "the polder grid at fall 0: 13 unique lines; the reservoir that must WALK back from the crop (an emergent condition - seeds 8, 19, 22 clear first try)",
-        "rollcache.hamlet - one shared child roll",
-        audit="specs/216-the-floor-as-doctrine/research.md#R2",  # GUARD_EDIT_OK: feature 217 - 21 lines only the polder fixture reaches (comb fields, water.py)
-    ),
-    # (GUARD_EDIT_OK: feature 217 - the seatings' row left: its one unique line, the connector skip in `lane_frontage`, is
-    #  tests/hamletgen/homesteads/test_seats.py, and the three behavior tests roll their partial state in tests/soak/.)
-)
+# GUARD_EDIT_OK: feature 219 (GM 2026-09-08) - NO ROLL OF THE GATE'S OWN. The reference's row was the immune experiment
+# (one extra random draw at meta() must not move the map, GM 2026-08-08) and the GM retired that requirement: *"I am
+# actually okay with an upstream change in the number of random draws moving a map"* - the test, `rollcache.extra_draws`
+# and `_perturbed_manifest` went with it. Polder 12's row went on the audit the GM asked for: its three engine lines are
+# unit tests (tests/hamletgen/test_water.py: the reservoir walk and the dike gaps lifted out of `stage_polder`,
+# `fit_polder`'s stop), its five machinery lines are stubs' (tests/pipeline/test_rollcache.py, tests/gate/test_pool.py),
+# and its behavior is the soak tier's (tests/soak/test_polder_fall_0.py). The seatings' row left in 217 the same way.
+# What the gate's coverage is now: the five shipped generators (rolled cold when their key moved, served warm with
+# their coverage replayed) and unit tests. A `Roll` added from here is judged by 217's rule like any other.
+ROLLS: tuple[Roll, ...] = ()
 
 DUPLICATES: tuple[Duplicate, ...] = ()  # none since feature 215: the fan-out's pool child runs a stub producer, the child-equality proof is retired, the cache round trip runs on the sweep's entry
 
 POOL_GENS: tuple[PoolGen, ...] = (
     PoolGen(("Inashiro", 4), "pool/hamlets/inashiro/inashiro.gen.py", "THE REFERENCE: the gate's fifteen readers take this map (feature 215); the brief is the tests' REFERENCE exactly"),
     PoolGen(("Kuwabata", 21), "pool/hamlets/kuwabata/kuwabata.gen.py", "the dike-pond archetype: the gate's readers take this map (feature 215); the brief is the tests' KUWABATA exactly"),
-    PoolGen(("Kashikawa", 3), "pool/hamlets/kashikawa/kashikawa.gen.py", "the largest hamlet; the immune experiment moved off it onto the reference (feature 215 D5)"),
+    PoolGen(
+        ("Kashikawa", 3),
+        "pool/hamlets/kashikawa/kashikawa.gen.py",
+        "the largest hamlet: 20 households, fall 315, the off-map sink (the immune experiment perturbed it until 215, and was retired in 219 - GUARD_EDIT_OK: feature 219)",
+    ),
     PoolGen(("Sawada", 6), "pool/hamlets/sawada/sawada.gen.py", "a pool-only hamlet: 19 households, fall 225, off-map sink"),
     PoolGen(("Mizuguchi", 23), "pool/hamlets/mizuguchi/mizuguchi.gen.py", "a pool-only hamlet: 12 households, fall 0, a pond"),
 )

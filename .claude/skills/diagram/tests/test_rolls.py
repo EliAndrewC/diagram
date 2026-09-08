@@ -15,7 +15,8 @@ def test_every_roster_key_is_unique_and_every_row_says_what_it_carries() -> None
     for r in rolls.ROLLS:
         assert len(r.carries) > 20, f"{r.key}: a roll must say what it uniquely carries"
         assert r.rolled_by, f"{r.key}: a roll must say where it is requested from"
-    assert rolls.by_key()[("Inashiro", 4)].spec.households == 15
+    assert rolls.by_key() == {}, "feature 219: the gate rolls no map of its own - a Roll row added from here is judged by 217's rule"
+    assert rolls.REFERENCE.households == 15 and rolls.REFERENCE.fixtures_min == {"shrine": 1}, "the pool's brief, which the gate READS (feature 215)"
 
 
 def test_every_stated_duplicate_and_exception_points_at_something_real() -> None:

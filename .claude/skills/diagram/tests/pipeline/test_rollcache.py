@@ -516,3 +516,39 @@ def test_a_child_roll_keyed_to_a_test_is_shared_across_workers_under_the_full_ru
     again, how = keyed_to_toy(a_test, lambda: {"seated": 10}, child="tests.x:roll")
     assert how == "BYPASS-SHARED-RUN" and again == first, how
     assert calls == ["tests.x:roll"], "the child ran ONCE for the run"
+
+
+def test_the_roll_payload_is_generate_s_plan_manifest_and_report(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`_roll_payload` (feature 213), on a stood-in `generate`: the child's target returns the three views one roll
+    serves. Feature 219: the gate rolls no spec of its own, so the machinery is proved here rather than by a polder."""
+    from l7r.diagram import hamletgen as hg
+
+    spec = hg.HamletSpec(name="Probe", seed=1, households=10)
+    plan = hg.plan_site(spec)
+    fake = hg.Report(plan=plan, failures=[], attempt=1, rerolled_after=[], manifest={"houses": []})
+    monkeypatch.setattr(hg, "generate", lambda s, out_base=None, render=False: fake)
+    got_plan, manifest, rep = rollcache._roll_payload(spec)
+    assert got_plan is plan and manifest == {"houses": []} and rep is fake
+
+
+def test_hamlet_and_report_are_two_views_of_the_one_child_roll(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`hamlet()` and `report()` read the same `roll:<spec>` subject (feature 213 FR-001) - one child roll, shared;
+    the second view is served from the run's share, never rolled again."""
+    from l7r.diagram import hamletgen as hg
+
+    calls: list[int] = []
+
+    def fake_child(spec):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        return (("plan", {"M": 1}, "report"), {"functions": [], "files": []})
+
+    monkeypatch.setattr(rollcache, "_hamlet_in_child", fake_child)
+    monkeypatch.setattr(rollcache, "_entry", lambda subject: str(tmp_path / "entry"))
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-219-two-views-" + tmp_path.name)
+    rollcache.reset_shared()
+    spec = hg.HamletSpec(name="Probe", seed=2, households=10)
+    assert rollcache.hamlet(spec) == ("plan", {"M": 1})
+    rep, how = rollcache.report(spec)
+    assert rep == "report" and how.startswith("BYPASS-SHARED"), how
+    assert calls == [1], "one roll serves both views"
