@@ -946,6 +946,16 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # gate-hooks records a `K=` (or a `::` node id) run as the same SUBSET a bare `pytest -k` is.
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
+# GUARD_EDIT_OK: feature 216 - the audit that answered "are you really not able to combine?" is a command now, for any
+# tier. ONE recipe line: `$(RUN)` carries its own `@`, so a `: "..." ; \` continuation in front of it put `@python3`
+# mid-command and the target died with "@python3: not found" the first time it was run.
+roll-audit:     ## [tests] per rolling context of the gate baseline, the engine lines NO other context reaches   MIN_LINES=2000 (the tier knob)
+	$(RUN).tools.roll_audit --min-lines $(or $(MIN_LINES),2000)
+
+roll-census:    ## [tests] the roll census of the LAST test phase, judged against tests/rolls.py   FULL=1: a stale roster row counts
+	@: "GUARD_EDIT_OK: feature 213 - the census the gate wrote is re-read here, outside the gate: how SC-001 is checked and a red verdict re-read" ; \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),full,)
+
 # WHICH LINES DOES THIS TEST ACTUALLY REACH? (feature 146, and it is an ITERATION-LOOP target rather than a
 # gate one - CLAUDE.md, "iterations are expensive in terms of wall clock time"). Writing a test for an
 # uncovered branch and then finding out from `make test-full` costs 10 minutes per answer, and the answer is
@@ -953,14 +963,7 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # runs spent discovering that `_in_blocked` had already refused the seat the byre and garden tests meant to
 # have refused one line further down. This asks the same question in about a second. Serial (-n0) on purpose:
 # xdist's coverage combine is the slow half, and one file does not need workers.
-roll-audit:     ## [tests] per rolling context of the gate baseline, the engine lines NO other context reaches   MIN_LINES=2000 (the tier knob)
-	@: "GUARD_EDIT_OK: feature 216 - the audit that answered 'are you really not able to combine?' is a command now, for any tier" ; \
-	$(RUN).tools.roll_audit --min-lines $(or $(MIN_LINES),2000)
-
-roll-census:    ## [tests] the roll census of the LAST test phase, judged against tests/rolls.py   FULL=1: a stale roster row counts
-	@: "GUARD_EDIT_OK: feature 213 - the census the gate wrote is re-read here, outside the gate: how SC-001 is checked and a red verdict re-read" ; \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),full,)
-
+# (GUARD_EDIT_OK: feature 216 moved this block back beside its target - two later targets had been inserted between them.)
 cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
 ##  FILE=<test path>   the test file to run
 ##  MOD=<module path>  the module to report coverage for - e.g. `l7r/diagram/settlement/houses.py`

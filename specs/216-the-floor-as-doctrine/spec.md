@@ -1,6 +1,6 @@
 # Feature 216 - the floor as doctrine
 
-**Status**: DRAFT - `spec-fidelity` round 1 required three changes, applied: the conditional second partial roll
+**Status**: IMPLEMENTED 2026-09-08 (four gate runs to green, three of them the census catching what it exists to catch - research R2) - was DRAFT; `spec-fidelity` round 1 required three changes, applied: the conditional second partial roll
 deleted (a fifth roll can never be strictly necessary for a spec with no unique line); FR-005 d states the loss
 the collapse causes; the amendment is 2.23.0 and corrects the footer. Round 2 required two changes, applied: seed 43 - the one gate roll carrying no coverage line - leaves the
 gate roster for the CI tier's tree under the very clause this feature writes (FR-002 e, FR-005 e); the woodland

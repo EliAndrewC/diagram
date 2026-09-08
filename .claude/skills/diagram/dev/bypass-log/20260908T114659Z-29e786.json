@@ -1,0 +1,6 @@
+{
+  "utc": "20260908T114659Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map changed - feature 216 retires gate rolls and adds unit tests, the pool manifests are byte-identical outside meta"
+}
