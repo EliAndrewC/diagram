@@ -93,6 +93,37 @@ skill's [`../CLAUDE.md`](../CLAUDE.md).
 skill directory, and from the repo root it walks every `.clones/` checkout as well - pytest does
 not read `.gitignore`.
 
+## A HAMLET IS ROLLED ONCE PER GATE, AND ROLLING ANOTHER IS A RECORDED DECISION (feature 213, GM 2026-09-07)
+
+The GM, on finding the gate rolling 37 hamlets where the packing record had measured 11: *"we definitely had
+this solved at one point, and then the problem just came back on its own ... program our unit tests to never
+allow the same hamlet to be rolled twice within the tests and also to have some required process around
+adding another hamlet that gets rolled."* So:
+
+- **`tests/rolls.py` is the roster.** Every spec the gate may roll, with the unique coverage or emergent
+  condition it carries. A rolling test's spec must be there; the roll census fails the gate otherwise and
+  says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's
+  roll instead. Three stated exceptions live beside it: a `Duplicate` (a site that must roll a rostered spec
+  again by its nature - the fan-out's pool child, the immune test's perturbed roll, the cache round trip),
+  a `PoolGen` (a shipped generator the pool sweep runs only when its cache key moved) and an `InProcess`
+  module (the perf tests, which time the stages where they run, each on its own seed; the stub-stage
+  tests, `stub=True`, whose stand-in rolls are reported and bounded rather than counted).
+- **The census is written at the chokepoint, not by patching.** `driver.roll_scope()` - which every
+  stage-running loop enters, proven by the AST test in `tests/hamletgen/test_driver.py` - appends a record
+  to the file `L7R_ROLL_CENSUS` names, in every process of the run; the `-p l7r.diagram.ci.rollcensus`
+  plugin attributes each record to the test that caused it; `python3 -m l7r.diagram.ci rollcensus verdict`
+  judges the run after pytest (`ci/rollverdict.py`): a second roll of a spec, an unrostered roll, a stale
+  row on a full run, a render from an unmarked test, an in-process roll from an unexcepted module.
+- **Rolling tests get their roll from the roll cache, in a child.** `rollcache.hamlet(spec)` /
+  `report(spec)` are two views of ONE roll per spec (`generate`, kept manifest and all), shared across the
+  workers behind a lock so the first wave waits instead of each rolling, and stored so the hamlet floor
+  reads the same roll. A test that must patch the engine lifts its produce closure to a module-level
+  function and passes `child="module:function"` to `rollcache.keyed_to` (the feature-146 doctrine, now
+  with a reason beyond testability: the roll must leave the worker).
+- **Tests do not render.** `DIAGRAM_SKIP_RENDER=1` is the suite's default (`conftest.py`); a test OF
+  rendering carries the `renders` marker and clears it itself. The census records every PNG and page-raster
+  render and the verdict fails on one from an unmarked test.
+
 ## Conventions
 
 - **`_builders.py`** in a mirrored package holds that package's shared manifest/settlement

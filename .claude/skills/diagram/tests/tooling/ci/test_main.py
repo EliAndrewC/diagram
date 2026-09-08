@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram import _invocation
+from l7r.diagram import _census, _invocation
 from l7r.diagram.ci import __main__ as cli
 from l7r.diagram.ci import config, dispatch, state
 from tests.tooling.ci.conftest import FakeClient, ScriptedSh, commit, git
@@ -251,3 +251,16 @@ def test_the_tooling_freshness_subcommands_round_trip(roots: Path, capsys: pytes
     assert cli.main(["tooling-green"]) == 0
     assert "recorded green" in capsys.readouterr().out
     assert cli.main(["tooling-fresh"]) == 0, "and now it is - `make quick` may skip the tooling tests"
+
+
+def test_the_roll_census_verdict_is_routed_by_the_ci_command(roots: Path, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 213: `rollcensus verdict` is the Makefile's call after the test phase, routed through the ci
+    command like the incremental subcommands; an open, empty census against the real roster is green on an
+    incremental run (nothing rolled, nothing stale), and no census at all is a usage error."""
+    monkeypatch.delenv(_census.ENV, raising=False)
+    assert cli.main(["rollcensus", "verdict"]) == 2
+    census = tmp_path / "census.jsonl"
+    census.write_text("")
+    monkeypatch.setenv(_census.ENV, str(census))
+    assert cli.main(["rollcensus", "verdict"]) == 0
+    assert "roll census: green" in capsys.readouterr().out

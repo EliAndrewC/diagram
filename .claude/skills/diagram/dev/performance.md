@@ -279,3 +279,13 @@ coverage still lands. Measured on one roll-heavy file: the worker rested at 90 M
 3 MB retained instead of 41 and no memo at all. And the GM's file-cache question: the 2-3 GiB `file` in
 `memory.stat` is the kernel's page cache (git packs, pool renders and pages, `.pyc`, coverage data), clean
 and reclaimable, not tmpfs - nothing here is in RAM by mistake, and a kill is decided by `anon`.
+
+**The third pass (feature 213, the same week): the rolls themselves were the count, not the size.** A
+census of one gate found 37 real rolls of 14 distinct specs - the same spec rolled by four workers at once,
+the cohort seeds rolled under two cache subjects, Inashiro rolled seven times by four mechanisms - against a
+packing record that had measured 11 a week earlier. The memory work of 208 and 210 had made each roll cheap
+to the worker; 213 made the gate roll each hamlet ONCE (one subject per spec, a lock so the first wave waits,
+every roll in a child) and put a census gate on it so the number cannot drift back unnoticed. The six
+levers from the 5.5 GiB breakdown are its FRs: no test renders (a suite-wide default, a `renders` marker for
+the tests of rendering), the child roll-out finished, the pool sweep's child profiled, the worker count
+measured, the rolling tests collected first and their concurrency capped. Numbers: `specs/213` research R4.

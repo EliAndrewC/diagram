@@ -21,7 +21,9 @@ in. A module any of those rolls touches owes 100%; a module none of them touches
 (the settlement package's ratchet still applies to it - that floor stays, GM's round-1 review). When
 the scripted tier grows, the rolls execute more modules and the set grows with them. The subjects are
 fixed rather than "whatever is in the cache" so the set is the same on every machine: on a fresh clone
-or on CodeBuild the tool rolls them once (`rollcache.report_deps`) - ~1-2 minutes, then cached.
+or on CodeBuild the tool rolls them once (`rollcache.report_deps`) - ~1-2 minutes, then cached. Since
+feature 213 the record it reads is the ONE roll the gate's tests made of each subject (`roll:<spec>`, stored
+under the full-run bypass), so an incremental gate no longer rolls a subject the tests just rolled (207's D14).
 
 WHY NOT LINES. A line-level floor ("every line a hamlet roll executes is covered") is a tautology when
 the suite includes the rolls, and is a different, much larger program when it does not (every line

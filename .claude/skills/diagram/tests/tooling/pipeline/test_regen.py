@@ -35,6 +35,9 @@ class _Cache:
         print(f"drawing {gen}")
         return ["dep.py"]
 
+    def run_gen_child(self, gen: str) -> list[str]:  # feature 213: regen rolls in a child; the fake answers as run_and_record did
+        return self.run_and_record(gen)
+
     def store(self, gen: str, deps: list[str]) -> None:
         self.calls.append(("store", gen, tuple(deps)))
 

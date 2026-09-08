@@ -690,6 +690,8 @@ rows=[json.loads(l) for l in p.read_text().splitlines() if l.strip()] if p.is_fi
 print('\033[1mFeature numbers claimed\033[0m ('+str(p)+' - make claim, feature 197)'); \
 [print(f\"  {r.get('utc','?'):<20} {r.get('number',0):>4}  {r.get('slug','?'):<40} {r.get('clone','?')}\") for r in rows[-10:]] or print('  (none yet - every claim made by make claim lands here)'); \
 print(f'  {len(rows)} claims recorded') if rows else None; print()"
+	@: "GUARD_EDIT_OK: feature 213 - the roster's size IS the recorded roll count (FR-004); a reader asks the audit, not a memory" ; \
+	python3 -c "from tests import rolls; print('\033[1mHamlets the gate may roll\033[0m (tests/rolls.py, feature 213 - one roll each per gate, enforced by the roll census)'); [print(f'  {r.spec.name:<16} seed={r.spec.seed:<3} {r.carries[:96]}') for r in rolls.ROLLS]; print(f'  {len(rolls.ROLLS)} rostered rolls; {len(rolls.DUPLICATES)} stated duplicate(s); {len(rolls.POOL_GENS)} pool gen(s), rolled only when their key moved; {len(rolls.IN_PROCESS)} in-process exception(s)'); print()"
 
 # GUARD_EDIT_OK: THE TARGET REFERENCE GENERATES ITSELF (GM 2026-09-05). Two hand audits of the target
 # list disagreed with each other - the first declared everything valid and was contradicted the moment
@@ -947,6 +949,10 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # runs spent discovering that `_in_blocked` had already refused the seat the byre and garden tests meant to
 # have refused one line further down. This asks the same question in about a second. Serial (-n0) on purpose:
 # xdist's coverage combine is the slow half, and one file does not need workers.
+roll-census:    ## [tests] the roll census of the LAST test phase, judged against tests/rolls.py   FULL=1: a stale roster row counts
+	@: "GUARD_EDIT_OK: feature 213 - the census the gate wrote is re-read here, outside the gate: how SC-001 is checked and a red verdict re-read" ; \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),--full,)
+
 cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
 ##  FILE=<test path>   the test file to run
 ##  MOD=<module path>  the module to report coverage for - e.g. `l7r/diagram/settlement/houses.py`

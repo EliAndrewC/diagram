@@ -18,13 +18,22 @@ WHAT IT NEVER SERVES. Any doubt at all - a missing or unreadable entry, a payloa
 unpickle, a vanished data file - regenerates. Under `GATE_NO_CACHE=1` and under the FULL run
 (`L7R_TESTS_FULL=1`, where the coverage floors are enforced and a served roll would execute none of the
 rolled code) every call produces - EXCEPT a caller that opts into `share=True`, which produces once per
-process and re-serves those bytes thereafter (feature 147; see `_SHARED_BYPASS`). Only `hamlet()` opts in.
+process and re-serves those bytes thereafter (feature 147; see `_SHARED_BYPASS`). Only the spec roll opts in.
 
 PRODUCING AND STORING ARE NOW SEPARATE QUESTIONS (feature 192). The FULL run still produces on every
-call - that is what the coverage floors need and it has not changed - but a `report:` roll under it now
+call - that is what the coverage floors need and it has not changed - but a `roll:` subject under it now
 also RECORDS what it executed, because `hamlet_floor` derives the hamlet path from those records and,
 finding none, used to re-roll the same maps itself for a measured 401.6 s. `GATE_NO_CACHE=1` is
 deliberately excluded and still leaves nothing behind. See `_stores_under_bypass`.
+
+ONE ROLL PER SPEC, IN A CHILD, SHARED BEHIND A LOCK (feature 213, GM 2026-09-07: "never allow the same
+hamlet to be rolled twice within the tests"). `hamlet()`, `report()` and `report_deps()` read one
+`roll:<spec>` subject - `generate` with its kept manifest - produced once per run in a child process and
+handed to every other worker that asks; a worker that asks while the roll is in flight WAITS on its lock
+instead of rolling its own (`_share_lock`). The census the gate writes at `driver.roll_scope` proves it on
+every run (`_census.py`, `ci/rollverdict.py`, the roster `tests/rolls.py`). Before this, `hamlet()` rolled
+`build` alone under one subject and `report()` rolled `generate` under another, and the first wave of
+workers each rolled the shared specs at t=0: 37 rolls of 14 specs per gate (specs/213 research R1).
 
 A TEST THAT MONKEYPATCHES THE ENGINE goes through `keyed_to(test, ...)`, never bare `obtain`: a patched
 function changes what the roll does without changing any hashed engine source, so the engine key alone
@@ -283,7 +292,7 @@ def _stores_under_bypass(subject: str) -> bool:
       - `L7R_TESTS_FULL` only. `bypassed()` is ALSO true for `GATE_NO_CACHE=1`, which is the
         documented "regenerate everything, leave nothing behind" escape - folding the two together
         would silently change a contract nobody asked to change.
-      - `report:` subjects only, because that is what the floor consumes. `hamlet:` rolls are the
+      - `roll:` subjects only (the one subject per spec since feature 213; `report:` before it), because that is what the floor consumes. `test:` rolls are the
         shared fixture path and `test:` rolls are monkeypatched; neither feeds the floor.
 
     WHY STORING A FULL-RUN PAYLOAD IS SAFE, which is the part that deserved measuring rather than
@@ -298,7 +307,7 @@ def _stores_under_bypass(subject: str) -> bool:
 
 def obtain[T](subject: str, produce: Callable[[], T], share: bool = False, recorded: Callable[[], tuple[T, dict[str, Any]]] | None = None) -> tuple[T, str]:
     """`(payload, how)` for `subject` - "HIT" (served), "MISS" (produced, recorded, stored),
-    "BYPASS-STORED" (produced and recorded, never served - the FULL run's `report:` rolls, feature
+    "BYPASS-STORED" (produced and recorded, never served - the FULL run's `roll:` subjects, feature
     192), "BYPASS" (produced, nothing stored) or "BYPASS-SHARED" (this process already produced this
     subject under the bypass; a fresh copy of it). `subject` must determine the roll completely (a
     spec's repr). `recorded` (feature 210) is `produce` with its own dependency record, for a roll that
@@ -386,12 +395,6 @@ def _roll_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any], Report]:
     rep = hg.generate(spec, out_base=None, render=False)
     assert rep.manifest is not None, "generate() carries the kept attempt's manifest (feature 213)"
     return rep.plan, rep.manifest, rep
-
-
-def _hamlet_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
-    """The `hamlet()` view of `_roll_payload`: the plan and the manifest."""
-    plan, manifest, _rep = _roll_payload(spec)
-    return plan, manifest
 
 
 # THE ROLL LEAVES THE WORKER (feature 210, GM 2026-09-07: "we should also roll in a forked child ... test out by

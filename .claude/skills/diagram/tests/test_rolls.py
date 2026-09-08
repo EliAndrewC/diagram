@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from pathlib import Path
 
 from tests import rolls
 
@@ -24,3 +25,15 @@ def test_every_stated_duplicate_and_exception_points_at_something_real() -> None
         assert d.test.startswith("tests/") and "::" in d.test and d.reason
     for e in rolls.IN_PROCESS:
         assert e.module.startswith("tests/") and e.module.endswith(".py") and e.reason
+
+
+def test_every_pool_gen_names_a_shipped_generator_and_only_the_sweep_may_roll_it() -> None:
+    skill = Path(__file__).resolve().parents[1]
+    keys = Counter(p.key for p in rolls.POOL_GENS)
+    assert [k for k, n in keys.items() if n > 1] == []
+    for p in rolls.POOL_GENS:
+        assert (skill / p.gen).is_file(), p.gen
+        assert p.test == rolls.POOL_TEST and p.test.startswith("tests/full/")
+    assert len(rolls.POOL_GENS) == 5, "one per live scripted hamlet in the pool"
+    for e in rolls.IN_PROCESS:
+        assert isinstance(e.stub, bool)

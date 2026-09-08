@@ -12,7 +12,9 @@ WHAT FAILS THE GATE, each named in the spec (FR-003):
   - a rolled spec the roster does not list - the message says to add the row with its reason;
   - on a FULL run, a roster row nothing rolled - a stale roster is as wrong as a short one;
   - a render (a PNG or the page's raster) from a test that does not carry the `renders` marker;
-  - a roll IN THE WORKER (the record's pid is the worker's) from a test module the roster does not except.
+  - a roll IN THE WORKER (the record's pid is the worker's) from a test module the roster does not except;
+  - a roll from a STUB-excepted module that took longer than a stand-in stage can (STUB_MAX_S).
+A `PoolGen` (the pool sweep's gate_obtain child) may roll its generator once, when its cache key moved.
 Many tests SERVED by one roll is the passing state - that is the whole point of the share.
 """
 
@@ -30,7 +32,7 @@ from typing import Any
 from l7r.diagram import _census
 
 MARKER = "renders"  # the marker a test OF rendering carries (registered in pyproject.toml)
-STUB_SPEC_NAMES = ()  # none: a stub-stage roll is excused by its test module in the roster's IN_PROCESS, not by name
+STUB_MAX_S = 5.0  # a stand-in stage roll (a stub `InProcess` module) costs milliseconds; the shortest real hamlet roll in the 2026-09-08 census was 11 s
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -102,9 +104,17 @@ def _module(nodeid: str | None) -> str:
     return (nodeid or "").split("::")[0]
 
 
-def _excepted(nodeid: str | None, in_process: Any) -> bool:
+def _exception(nodeid: str | None, in_process: Any) -> Any:
+    """The roster's `InProcess` entry covering `nodeid`'s module, or None."""
     mod = _module(nodeid)
-    return any(mod == e.module or mod.startswith(e.module) for e in in_process)
+    for e in in_process:
+        if mod == e.module or mod.startswith(e.module):
+            return e
+    return None
+
+
+def _excepted(nodeid: str | None, in_process: Any) -> bool:
+    return bool(_exception(nodeid, in_process) is not None)
 
 
 def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: set[str]) -> tuple[list[str], list[str]]:
@@ -112,9 +122,17 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
 
     `renders_ok` is the set of test ids that carry the `renders` marker (the plugin cannot see markers
     at record time; the Makefile passes the file the collection wrote). A roll is a group of `roll`
-    records sharing (spec key, request id): its attempts are the records, its test the first record's."""
-    rolls: dict[tuple[tuple[str, int], str], list[dict[str, Any]]] = defaultdict(list)
+    records sharing (spec key, request id, PROCESS): a `generate` that re-rolls does so inside one process,
+    so its attempts share all three, while two children of one test - the fan-out's serial and pool halves,
+    the immune test's plain and perturbed runs - differ by pid and are two rolls (the first census grouped by
+    request alone and reported the fan-out as one roll with two attempts, which hid the duplicate it exists
+    to state). Three roster kinds soften the rule where the census found it had to: a `Duplicate` (a second
+    roll a test makes by its nature), a `PoolGen` (the pool sweep's `gate_obtain` child, which rolls a shipped
+    generator only when its cache key moved - allowed once, never stale), and a stub `InProcess` module
+    (stand-in stages: its records are reported and bounded by `STUB_MAX_S`, never counted as hamlets)."""
+    rolls: dict[tuple[tuple[str, int], str, str], list[dict[str, Any]]] = defaultdict(list)
     unnamed: list[dict[str, Any]] = []
+    stubs: list[dict[str, Any]] = []
     for r in rows:
         if r.get("kind") != "roll":
             continue
@@ -122,11 +140,17 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
         if key is None:
             unnamed.append(r)
             continue
-        rolls[(key, str(r.get("request")))].append(r)
+        exc = _exception(r.get("test"), roster.IN_PROCESS)
+        if exc is not None and getattr(exc, "stub", False):
+            stubs.append(r)
+            continue
+        rolls[(key, str(r.get("request")), str(r.get("pid")))].append(r)
     by_spec: dict[tuple[str, int], list[list[dict[str, Any]]]] = defaultdict(list)
-    for (key, _req), attempts in rolls.items():
+    for (key, _req, _pid), attempts in rolls.items():
         by_spec[key].append(attempts)
     rostered = roster.by_key()
+    pool_gens = {p.key: p for p in getattr(roster, "POOL_GENS", ())}
+    pool_rolled: set[tuple[str, int]] = set()
     failures: list[str] = []
     lines: list[str] = []
     served = sum(1 for r in rows if r.get("kind") == "served")
@@ -138,17 +162,34 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
         attempts = ", ".join(str(len(g)) for g in groups)
         secs = sum(float(r.get("dt") or 0) for g in groups for r in g)
         row = rostered.get(key)
-        lines.append(f"  {key[0]} seed={key[1]}: {len(groups)} roll(s), attempts {attempts}, {secs:.0f}s - {'rostered' if row else 'NOT IN THE ROSTER'}; requested by {', '.join(t.split('::')[-1][:60] for t in tests)}")
-        if row is None:
-            failures.append(f"{key[0]} seed={key[1]} was rolled by {tests[0]} but is not in the roster: add a `Roll` to tests/rolls.py naming what this roll uniquely carries - or reuse a rostered roll")
+        pool = pool_gens.get(key)
+        is_pool = [pool is not None and str(g[0].get("test", "")).startswith(pool.test) for g in groups]
+        others = [g for g, p in zip(groups, is_pool, strict=True) if not p]
+        n_pool = sum(is_pool)
+        if n_pool:
+            pool_rolled.add(key)
+        status = "rostered" if row else ("pool gen" if pool else "NOT IN THE ROSTER")
+        tail = " (+ the pool gen: its key moved)" if n_pool and row else ""
+        lines.append(f"  {key[0]} seed={key[1]}: {len(groups)} roll(s), attempts {attempts}, {secs:.0f}s - {status}{tail}; requested by {', '.join(t.split('::')[-1][:60] for t in tests)}")
+        if n_pool > 1:
+            failures.append(f"{key[0]} seed={key[1]}: the pool sweep rolled its generator {n_pool} times in one run - gate_obtain rolls a gen once per key")
+        if others and row is None:
+            failures.append(
+                f"{key[0]} seed={key[1]} was rolled by {tests[0]} but is not in the roster: add a `Roll` to tests/rolls.py naming what this roll uniquely carries - or reuse a rostered roll"
+            )
         allowed_dups = [d for d in roster.DUPLICATES if d.key == key]
-        extra = len(groups) - 1 - len([d for d in allowed_dups if any(str(g[0].get("test", "")).startswith(d.test) for g in groups)])
+        matched = len([d for d in allowed_dups if any(str(g[0].get("test", "")).startswith(d.test) for g in others)])
+        extra = len(others) - 1 - matched
         if extra > 0:
-            failures.append(f"{key[0]} seed={key[1]} was rolled {len(groups)} times in one run (by {', '.join(tests)}) - a spec is rolled ONCE per gate and shared; a site that must roll it again by its nature is a stated `Duplicate` in tests/rolls.py")
-        for g in groups:
+            failures.append(
+                f"{key[0]} seed={key[1]} was rolled {len(others)} times in one run (by {', '.join(tests)}) - a spec is rolled ONCE per gate and shared; a site that must roll it again by its nature is a stated `Duplicate` in tests/rolls.py"
+            )
+        for g in others:
             first = g[0]
             if str(first.get("pid")) == str(first.get("worker")) and not _excepted(first.get("test"), roster.IN_PROCESS):
-                failures.append(f"{key[0]} seed={key[1]} was rolled IN THE TEST WORKER by {first.get('test')} - every gate roll runs in a child (spec FR-007); a site that must roll in the worker is a stated `InProcess` exception in tests/rolls.py")
+                failures.append(
+                    f"{key[0]} seed={key[1]} was rolled IN THE TEST WORKER by {first.get('test')} - every gate roll runs in a child (spec FR-007); a site that must roll in the worker is a stated `InProcess` exception in tests/rolls.py"
+                )
     if full:
         for key, row in sorted(rostered.items()):
             if key not in by_spec:
@@ -156,11 +197,22 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
     for r in unnamed:
         if str(r.get("pid")) == str(r.get("worker")) and not _excepted(r.get("test"), roster.IN_PROCESS):
             failures.append(f"a roll with no spec ran in the test worker under {r.get('test')} - pass the spec to roll_scope, or except the module in tests/rolls.py")
+    for r in stubs:
+        dt = float(r.get("dt") or 0)
+        if dt > STUB_MAX_S:
+            spec = r.get("spec") or {}
+            failures.append(
+                f"{r.get('test')} is excepted as a stub-stage module, but its roll of {spec.get('name')} seed={spec.get('seed')} took {dt:.0f}s - a stand-in stage costs milliseconds; a real roll there is a real roll: a roster row and a child"
+            )
+    if stubs:
+        lines.append(f"  stand-in stage rolls (stub-excepted modules, no map): {len(stubs)}, {sum(float(r.get('dt') or 0) for r in stubs):.1f}s in all")
     for r in rows:
         if r.get("kind") == "render" and str(r.get("test") or "") not in renders_ok:
             failures.append(f"{r.get('test')} rendered a {r.get('what')} - tests do not render (DIAGRAM_SKIP_RENDER is the suite's default); a test OF rendering carries the `renders` marker")
     for d in roster.DUPLICATES:
         lines.append(f"  stated duplicate: {d.key[0]} seed={d.key[1]} by {d.test.split('::')[-1][:60]} ({d.mechanism}) - {d.reason}")
+    for key, p in sorted(pool_gens.items()):
+        lines.append(f"  pool gen: {key[0]} seed={key[1]} ({p.gen}) - {'ROLLED this run: its cache key moved' if key in pool_rolled else 'served from the gen cache, not rolled'}")
     return failures, lines
 
 

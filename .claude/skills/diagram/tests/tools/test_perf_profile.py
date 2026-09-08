@@ -126,11 +126,11 @@ def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_
     archive's status named - a reader must not think the `.prof` is committed."""
     monkeypatch.setattr(perf_profile, "RAW_DIR", str(tmp_path / "raw"))
     monkeypatch.setenv("PERF_ARCHIVE", "")
-    table, raw = perf_profile.profile_stage(5, "water_frame", top=5)
+    table, raw = perf_profile.profile_stage(7, "water_frame", top=5)  # seed 7: the LATER-stage test below rolls seed 5 in this worker, and a spec is rolled once per gate (feature 213, tests/rolls.py)
 
     assert Path(raw).is_file() and raw.endswith(".prof"), "the raw profile lands on disk"
     assert str(tmp_path) in raw, "in the raw directory, not beside the committed evidence"
-    assert "perf-profile seed 5 stage water_frame" in table
+    assert "perf-profile seed 7 stage water_frame" in table
     assert "under cProfile" in table and "+225%" in table, "the table says its number is inflated"
     assert "gitignored" in table and "archive disabled" in table
     assert "cumulative" in table or "function calls" in table, "and it carries pstats' own output"

@@ -16,10 +16,11 @@ Skipped with a reason when Playwright or its Chromium is absent (`setup-dev-env.
 
 from __future__ import annotations
 
+import pytest
+
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.sources import RESEARCH_PAGES
 from tests.full.interactive.page_browser._driver import Page, _mechanics
-import pytest
 
 pytestmark = pytest.mark.renders  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
 

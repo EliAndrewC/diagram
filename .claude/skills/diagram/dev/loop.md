@@ -535,6 +535,28 @@ HYPOTHESIS and was not what happened.** The incidental lines it worried about tu
 by other tests, so the merge was free. Keep the distinction as a thing to CHECK; do not use it to
 decline a merge without running the measurement, which costs one FULL run and answers exactly.
 
+## THE ROLL COUNT IS GATED NOW, BECAUSE IT DRIFTED (feature 213, 2026-09-07)
+
+The two sections above measured 11 distinct rolls and a floor of 8-9 and then nothing enforced it. A week
+later a census of one gate (`specs/213-one-roll-per-hamlet-per-gate/census/`) counted **37 real rolls of 14
+distinct specs**: the same spec rolled by four workers at once because the run-scoped share only helped a
+worker that started after another had finished; the cohort seeds rolled once under `hamlet()`'s subject and
+again under `report()`'s (feature 192 introduced the second); the generator's re-roll loop rolling seed 42
+three times; Inashiro rolled seven times in one gate by four different mechanisms. The GM: *"we definitely
+had this solved at one point, and then the problem just came back on its own. So that is usually a sign that
+something about our testing procedures is bad."*
+
+So the number is a gate, not a memory. **`tests/rolls.py`** is the roster - one row per spec with what it
+uniquely carries, seeded from the packing record above - and the gate's test phase writes a census at the
+one chokepoint every roll crosses (`driver.roll_scope`) and judges it afterward (`ci/rollverdict.py`): a
+second roll of a spec in one run, a roll of an unrostered spec, a roster row nothing rolled (on a full run), a
+render from a test not marked as one of rendering, an in-process roll from an unexcepted module - each fails
+the gate and names the tests. Adding a rolling test means adding its row with its reason, and the row's
+"carries" column is what makes packing 14 toward 8-9 a later, cheap conversation rather than a re-derivation.
+The mechanics that took 37 to one-per-spec: one `roll:` subject per spec serving `hamlet()`, `report()` and
+the floor; a lock so the first wave waits on the roll in flight; every roll in a child. The numbers after:
+`specs/213` research R4.
+
 ## A TIMING FROM THIS BOX IS NOT A TIMING - THE CORES ARE NOT THE SAME SPEED (measured 2026-08-31)
 
 The GM asked why our map rolls do not parallelize, and correctly ruled out the obvious answer:

@@ -54,6 +54,7 @@ def main(argv: list[str] | None = None) -> int:
             "tooling-fresh",
             "cov-scope",
             "incremental",
+            "rollcensus",  # feature 213: the roll census verdict after the test phase
         ],
     )
     ap.add_argument("args", nargs="*")

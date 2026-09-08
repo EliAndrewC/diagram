@@ -36,7 +36,7 @@ from l7r.diagram.hamletgen.driver import STAGES
 from l7r.diagram.tools import placement_stages as ps
 from l7r.diagram.tools.placement_stages import NOTES
 
-pytestmark = pytest.mark.tooling
+pytestmark = [pytest.mark.tooling, pytest.mark.renders]  # the plates ARE renders: the tool writes a PNG per stage on purpose (feature 213 FR-006)
 
 _SPEC = HamletSpec(name="Probe", seed=4, households=10, down_deg=90, water_sink="pond")
 

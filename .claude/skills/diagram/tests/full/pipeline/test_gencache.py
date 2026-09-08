@@ -5,8 +5,6 @@ Inashiro at `make done FULL=1` and on AWS."""
 import json
 import os
 import shutil
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -40,11 +38,13 @@ def test_the_real_pool_round_trips_through_the_cache():
     # nothing here creates a render (the gen runs under DIAGRAM_SKIP_RENDER), so restoring exactly
     # what was standing beforehand leaves the pool as it was found, render present or not
     committed = {p: Path(p).read_bytes() for p in (manifest, base + ".svg", base + ".png") if os.path.isfile(p)}
-    env = {**os.environ, "DIAGRAM_SKIP_RENDER": "1"}
     try:
-        subprocess.run([sys.executable, gen], check=True, capture_output=True, env=env, cwd=HERE)
+        # ONE child roll gives both the files and the dependency record (feature 213). This used to run the gen
+        # TWICE - a subprocess for the files, then `run_and_record` in the worker for the record - and the first
+        # roll census showed both, one of them the suite's one in-worker roll of the reference. The child
+        # inherits DIAGRAM_SKIP_RENDER=1, the suite's default (tests/conftest.py).
+        deps = json.loads(json.dumps(gencache.run_gen_child(gen)))  # round-trips through JSON like a stored entry
         fresh = Path(manifest).read_bytes()
-        deps = json.loads(json.dumps(gencache.run_and_record(gen)))  # round-trips through JSON like a stored entry
         assert any("/settlement/" in f for f, _ in deps["functions"]), "a real gen must record engine deps"
         gencache.store(gen, deps)
         os.remove(manifest)
