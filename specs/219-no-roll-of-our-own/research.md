@@ -53,6 +53,35 @@ pool's maps. The cold side is the five shipped generators alone: the first run o
 that read the roster's old shape, below) re-rolled all five because `water.py` and `rollcache.py` changed, and with the
 two rostered rolls gone that IS the cold census - 217 R2's cold run minus the immune and Polder rolls.
 
+**And the cold census, measured** (the third run, on the tree with feature 218 merged in - an import-time line changed,
+so every shipped generator re-rolled): 5 rolls of 5 specs, roster 0 rows, every roll the pool's:
+
+    roll census: 5 roll(s) of 5 spec(s); 8 request(s) served from a shared roll; roster 0 row(s)
+      Inashiro seed=4: 1 roll(s), attempts 1, 11s - pool gen; requested by test_the_cli_reports_a_single_hamlet
+          lines only this roll reaches: 7 (the shipped generator's roll: printed, never judged) - hamletgen/homesteads/fixtures.py:415; hamletgen/ways/smooth.py:333-336,339,342
+      Kashikawa seed=3: 1 roll(s), attempts 1, 19s - pool gen; requested by test_village_passes_gate[kashikawa.gen.py]
+          lines only this roll reaches: 6 (the shipped generator's roll: printed, never judged) - hamletgen/ways/serve.py:109; hamletgen/ways/smooth.py:332; hamletgen/ways/web.py:454,457; settlement/structures/fixtures/siting.py:221-222
+      Kuwabata seed=21: 1 roll(s), attempts 1, 18s - pool gen; requested by test_every_lateral_lands_on_a_trunk_at_both_ends
+          lines only this roll reaches: 94 (the shipped generator's roll: printed, never judged) - hamletgen/frame.py:53-54; hamletgen/sink.py:31,129; hamletgen/water.py:384-395,399-400,427-428,434-435,440-441,448-456,458-460,465-466,474,477-484,492-493,501,522-526,593-594,596-598,611-612,802-803; hamletgen/ways/clearance.py:173; hamletgen/ways/track.py:317-324; settlement/city/bridges.py:491; settlement/fields/comb.py:75-78,481,516-518,520-526,534,586-587; settlement/land/dikes.py:112-113
+      Mizuguchi seed=23: 1 roll(s), attempts 1, 6s - pool gen; requested by test_village_passes_gate[mizuguchi.gen.py]
+          lines only this roll reaches: 15 (the shipped generator's roll: printed, never judged) - hamletgen/hinterland/bamboo.py:59; hamletgen/hinterland/stages.py:161-163; hamletgen/ways/serve.py:463; hamletgen/ways/sweeps.py:189; settlement/water_ways/lanes.py:198-204,210-211
+      Sawada seed=6: 1 roll(s), attempts 1, 25s - pool gen; requested by test_village_passes_gate[sawada.gen.py]
+          lines only this roll reaches: 14 (the shipped generator's roll: printed, never judged) - hamletgen/sink.py:168-169; hamletgen/ways/route.py:147-149; hamletgen/ways/touch.py:237,239; hamletgen/ways/web.py:294-296; settlement/shrines_wells/byres.py:37,100; settlement/water_ways/lanes.py:207-208
+      stand-in stage rolls (stub-excepted modules, no map): 19, 2.4s in all
+      pool gen: Inashiro seed=4 (pool/hamlets/inashiro/inashiro.gen.py) - ROLLED this run: its cache key moved
+      pool gen: Kashikawa seed=3 (pool/hamlets/kashikawa/kashikawa.gen.py) - ROLLED this run: its cache key moved
+      pool gen: Kuwabata seed=21 (pool/hamlets/kuwabata/kuwabata.gen.py) - ROLLED this run: its cache key moved
+      pool gen: Mizuguchi seed=23 (pool/hamlets/mizuguchi/mizuguchi.gen.py) - ROLLED this run: its cache key moved
+      pool gen: Sawada seed=6 (pool/hamlets/sawada/sawada.gen.py) - ROLLED this run: its cache key moved
+
+Read against the audit: with Polder 12 gone, the polder substrate's lines (`water.py` 384-612, `fields/comb.py`,
+`land/dikes.py`) are now Kuwabata's alone among the rolls - 94 lines only its cold roll reaches, where 217's census
+had 21 - which is what "the dike-pond archetype is built on the polder's substrate" means in coverage terms. Every one
+of those lines is still reached on a warm gate, because a shipped generator's coverage is replayed from the gen cache
+when it is served. Inashiro's cold roll now carries 7 lines of its own (feature 218's smoothing change), no longer zero.
+The whole gate on this cold run: pytest 83 s, 3,470 passed; the engine floor 23,415 statements (218's additions) at
+100%, the hamlet-path floor 13,140 at 100%.
+
 **The gate**: pytest 3460 passed, 2 skipped, 5 warnings in 61.99s (0:01:01); the whole gate under two minutes warm (the two rostered rolls were 26 s and 64 s of the
 previous gate's critical path). The engine floor 23,292 statements at 100% (23,307 before: the 17 lines of perturbation
 machinery left, the two lifted functions and their callers are a few lines); the hamlet-path floor 13,017 statements at

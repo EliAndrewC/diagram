@@ -1,0 +1,6 @@
+{
+  "utc": "20260908T132609Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map changed - feature 219 retires rolls and adds unit tests; the pool manifests are untouched; rerun after main merged in"
+}
