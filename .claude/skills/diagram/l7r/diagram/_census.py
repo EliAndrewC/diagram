@@ -38,6 +38,11 @@ CONTEXT_ENV = "L7R_COV_CONTEXT"  # the parent's CURRENT coverage context, export
 # context for the work alone - `coverage run --context=` labeled the imports too, and every roller then "touched" every
 # engine file - so the baseline sees the roll where 207 expects it and nothing more.
 WORKER_ENV = "L7R_ROLL_CENSUS_WORKER"  # the test worker's pid - a record from another pid came from a child
+# THE MECHANISM, NOT THE REQUESTER (feature 217): a shipped generator's cold roll (`gencache.gate_obtain`) is requested by
+# WHICHEVER reader of the pool's map comes first under worksteal - the sweep or a gate module - so the verdict cannot tell a
+# `PoolGen` roll from a rostered one by the test that asked. The gen child carries its generator's path in this variable and
+# the record writes it; the verdict prints such a roll and never judges it (the pool's membership is the GM's decision).
+GEN_ENV = "L7R_ROLL_CENSUS_GEN"
 
 
 def spec_row(spec: Any) -> dict[str, Any] | None:
@@ -54,7 +59,17 @@ def record(kind: str, **fields: Any) -> None:
     path = os.environ.get(ENV)
     if not path:
         return
-    row = {"kind": kind, "t": round(time.time(), 3), "pid": os.getpid(), "test": os.environ.get(TEST_ENV), "request": os.environ.get(REQUEST_ENV), "worker": os.environ.get(WORKER_ENV), **fields}
+    row = {
+        "kind": kind,
+        "t": round(time.time(), 3),
+        "pid": os.getpid(),
+        "test": os.environ.get(TEST_ENV),
+        "request": os.environ.get(REQUEST_ENV),
+        "worker": os.environ.get(WORKER_ENV),
+        "context": os.environ.get(CONTEXT_ENV),
+        "gen": os.environ.get(GEN_ENV),
+        **fields,
+    }  # context: feature 217, the verdict maps a roll to the lines it earned
     try:
         with open(path, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, default=str) + "\n")

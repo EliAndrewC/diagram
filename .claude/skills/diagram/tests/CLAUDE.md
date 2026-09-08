@@ -102,9 +102,13 @@ allow the same hamlet to be rolled twice within the tests and also to have some 
 adding another hamlet that gets rolled."* So:
 
 - **`tests/rolls.py` is the roster.** Every spec the gate may roll, with the unique coverage or emergent
-  condition it carries - THREE rows since feature 216 (`rolls.COVERAGE`, `rolls.REFERENCE`, `rolls.SEATINGS` are the names
-  to read): the gate rolls only what 100% coverage strictly needs, `make roll-audit` measures it per roll, and a
-  test that rolls more belongs in `tests/soak/` (constitution VI v2.23.0). The reference and Kuwabata are the POOL's maps: every gate reader takes them
+  condition it carries - TWO rows since feature 217 (`rolls.COVERAGE`, `rolls.REFERENCE` are the names to read): the
+  gate rolls only what 100% coverage strictly needs, and since feature 217 the census verdict MEASURES it - a rostered
+  roll whose coverage context reaches no engine line no other context reaches FAILS the gate, every roll's count and
+  lines are printed on every gate, `make roll-audit` asks the same off the last baseline, the roster is a GUARD file
+  (an edit needs `GUARD_EDIT_OK` with a reason; a change to it makes the next gate FULL) and every `Roll`/`Duplicate`
+  row points at the research section recording its audit (`audit=`, checked by `tests/test_rolls.py`); a test that
+  rolls more belongs in `tests/soak/` (constitution VI v2.23.0). The reference and Kuwabata are the POOL's maps: every gate reader takes them
   through `tests/gate/_pool.py` (`rolled_map`, `rolled_report` - the sweep's entry, served warm, rolled cold once
   under a per-gen lock), so the gate's one roll of the reference is the immune experiment's perturbed one. A rolling test's spec must be there; the roll census fails the gate otherwise and
   says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's

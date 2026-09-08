@@ -43,16 +43,29 @@ try:
     path = json.load(sys.stdin).get("tool_input", {}).get("file_path", "") or ""
 except Exception:
     raise SystemExit
-guard = re.search(r"(/\.claude/skills/diagram/Makefile|/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json)$", path)
+# GUARD_EDIT_OK: feature 217 - THE ROSTER OF ROLLED HAMLETS IS A GUARD (GM 2026-09-08: a later session "not
+# remembering the context of how we got here" must not add rolls back thoughtlessly). tests/rolls.py joins the
+# list, and its Read-time context is its own: the doctrine and the command to run first.
+guard = re.search(r"(/\.claude/skills/diagram/Makefile|/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/\.claude/skills/diagram/tests/rolls\.py)$", path)
 if guard and not re.search(r"/scripts/test-[\w-]+-hooks\.sh$", path):
-    print(json.dumps({"hookSpecificOutput": {
-        "hookEventName": "PreToolUse",
-        "additionalContext": (
+    if path.endswith("/tests/rolls.py"):
+        context = (
+            "This is the ROSTER OF ROLLED HAMLETS, and it is a GUARD file: an edit to it is refused unless the "
+            "edit itself contains GUARD_EDIT_OK and a short reason. Before adding a row, read constitution VI, "
+            "THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS: the gate rolls a map only for engine lines no other "
+            "roll reaches, and the census verdict FAILS a rostered roll with none. Run `make roll-audit` first "
+            "and point the new row (its audit= field) at the research section recording it; pack the assertion onto a roll "  # GUARD_EDIT_OK: feature 217 - no apostrophe inside this single-quoted program: one broke the whole hook
+            "already made, make it a unit test, or move the test to tests/soak/ before you add a roll.")
+    else:
+        context = (
             "This is a GUARD file. An edit to it is refused unless the edit itself contains "
             "GUARD_EDIT_OK and a short reason - put the intent in the diff, where the GM reads it. "
             "Say which you are doing: fixing a guard that fires on correct work, adding a guard or "
             "an operation, or making a guard stop blocking something you want (that last one is what "
-            "the rule exists to catch)."),
+            "the rule exists to catch).")
+    print(json.dumps({"hookSpecificOutput": {
+        "hookEventName": "PreToolUse",
+        "additionalContext": context,
     }}))
 ' 2>/dev/null || true
   # GUARD_EDIT_OK: feature 164 - the teach-at-Read is recorded too, so its worth is a total
@@ -106,7 +119,9 @@ esac
 # this feature's own spec, describing the escape - was refused for "GUARD_EDIT_OK with no reason": a
 # guard firing on correct work, on a file it does not guard. A non-guard file now exits here first.
 case "$FILE" in
-  */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json) ;;
+  # (GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets is a guard: a row added without a stated reason is
+  #  the thoughtless roll the GM asked to make impossible; the census verdict judges what the row claims)
+  */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json|*/.claude/skills/diagram/tests/rolls.py) ;;
   # (GUARD_EDIT_OK: feature 132 - the iteration switches are a guard; a hand edit is flagged like any other, the
   #  make targets `ci-off` / `ci-on` are the supported write path; the scope lock was retired in 185)
   */.claude/skills/diagram/dev/switches.json) ;;

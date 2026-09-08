@@ -1,10 +1,15 @@
-"""gate tests split out of `tests.hamletgen.test_homesteads` (feature 133 T29, GM 2026-08-26): `make quick` collects
-`tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
-locked to another tier; the gate collects everything. Helpers stay in the source module and are imported.
+"""THE THREE SEATINGS, in the tier ABOVE the gate (feature 217, GM 2026-09-08; moved from tests/gate/hamletgen/).
 
-SERVED FROM THE ROLL CACHE, KEYED TO EACH TEST'S OWN SOURCE (feature 135): every test here monkeypatches a seating
-pass, so `rollcache.keyed_to` hashes the test function - where the patch lives - into the key beside the engine
-functions the roll executed. `produce` returns plain data; the assertions run on it served or fresh (15-30 s each)."""
+Each test drives one seating pass with the others silenced - the `cluster_seeds` cloud alone, the lane frontage alone,
+the frontage stopping at one household - on copies of ONE partial roll (the stages before the homestead pass, then the
+pass and the track per variant; feature 216). They assert BEHAVIOR: that a fallback nothing on a shipped map exercises
+still seats a hamlet. Their one coverage line is a unit test now (`tests/hamletgen/homesteads/test_seats.py`), so under
+constitution VI - the gate rolls only what the floor needs - the roll they share belongs here, where `make soak` runs
+it and no ordinary run does. The GM accepted the loss at feature 217's landing: until the soak tier runs, these three
+assertions are proved by nothing.
+
+SERVED FROM THE ROLL CACHE, KEYED TO THE PRODUCER'S OWN SOURCE (feature 135): `rollcache.keyed_to` hashes `roll_seatings`
+into the key beside the engine functions the roll executed, and the roll runs in a child shared across workers."""
 
 import contextlib
 from unittest import mock
@@ -12,10 +17,12 @@ from unittest import mock
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen import HamletSpec
 from l7r.diagram.pipeline import rollcache
-from tests import rolls
 
-HERE_MOD = "tests.gate.hamletgen.test_homesteads"
+HERE_MOD = "tests.soak.test_seatings"
+# THE SEATINGS' PARTIAL ROLL: the linear form LaneOnly and OneHouse need; the cloud's assertions hold on it too (specs/216 R1).
+SEATINGS = HamletSpec(name="Seatings", seed=5, households=10, settlement_form="linear")
 
 
 # ONE PARTIAL ROLL FOR THE THREE SEATINGS (feature 216, GM 2026-09-08: the gate rolls "only what is strictly necessary
@@ -35,7 +42,7 @@ def roll_seatings() -> dict[str, tuple]:  # type: ignore[type-arg]
 
     names = [st.__name__ for st in driver.STAGES]
     cut, track = names.index("stage_homesteads"), names.index("stage_track")
-    plan = hg.plan_site(rolls.SEATINGS)
+    plan = hg.plan_site(SEATINGS)
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = []  # type: ignore[attr-defined]
     with driver.roll_scope(plan.spec):

@@ -1,6 +1,6 @@
 # 217 - rolls earn their lines
 
-**Status**: FAITHFUL at round 2 (implementation in progress) - `spec-fidelity` round 1 required four changes, applied: every row KIND is stated under the rule
+**Status**: IMPLEMENTED 2026-09-08 (three gate runs to green - research R2; FAITHFUL at round 2) - `spec-fidelity` round 1 required four changes, applied: every row KIND is stated under the rule
 (FR-001a; `PoolGen` is the one exclusion, with its reason, for the GM to see); the proves-less section names the three seating
 assertions that leave the gate; D2 states the real reason the seatings convert here; FR-007 (a `LINES=1` mode and a
 twenty-line threshold) deleted, the line listing folded into FR-001's printout with no threshold. Round 2: FAITHFUL (one cross-reference slip fixed in passing).

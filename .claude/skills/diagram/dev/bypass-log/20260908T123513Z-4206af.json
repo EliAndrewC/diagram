@@ -1,0 +1,6 @@
+{
+  "utc": "20260908T123513Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map changed - feature 217 adds a verdict rule, a guard and unit tests; the pool manifests are untouched"
+}

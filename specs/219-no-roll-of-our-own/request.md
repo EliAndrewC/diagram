@@ -1,0 +1,9 @@
+# Feature 219 - the GM's request, verbatim (2026-09-08)
+
+After feature 217 landed (a warm gate rolls 2 of 2: the immune experiment's perturbed reference and Polder 12; a cold
+gate 7 of 6 with the five shipped generators), the GM asked whether unifying the reference's brief would save a roll.
+The session answered that the briefs were unified in 215 and the second Inashiro roll is the immune experiment (the
+GM's 2026-08-08 rule that an upstream change in the number of random draws must not move a map), whose 17 unique lines
+are all its own perturbation machinery, and that under the 216 doctrine it could move to the soak tier. The GM:
+
+> Okay. I think that I am actually okay with an upstream change in the number of random draws moving a map. So if we remove that requirement, then does that reduce the number of map rolls that we need to make? I think that would make things even easier. With that being said, are there any other map rolls which could be removed if we assert behavior rather than coverage, as in Maintaining our one hundred percent coverage but asserting behavior without doing another full map roll? I understand that we are now down to a much smaller number of rolls, so we might not have any more fat to trim, but I feel like it's worth asking. So how about this? Please proceed with implementing that feature in which we remove the requirement about the number of random draws not moving a map because I think I am okay with maps changing based on that kind of thing. And then that will allow us to remove one of our rolls. And then as part of this feature, you can do an audit to see if there are any other places where we can assert behavior without losing coverage, and thus reduce the number of rolls that we are making even further. Please proceed with that feature start to finish. Thanks.

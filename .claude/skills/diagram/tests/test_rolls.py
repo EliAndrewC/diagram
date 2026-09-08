@@ -37,3 +37,19 @@ def test_every_pool_gen_names_a_shipped_generator_and_only_the_sweep_may_roll_it
     assert len(rolls.POOL_GENS) == 5, "one per live scripted hamlet in the pool"
     for e in rolls.IN_PROCESS:
         assert isinstance(e.stub, bool)
+
+
+def test_every_roll_and_duplicate_points_at_the_audit_that_justified_it() -> None:
+    """Feature 217 (GM 2026-09-08): a row's reason used to be free text, written in ten seconds; now it points at the
+    research section that RECORDS the `make roll-audit` run which justified it - a section that exists only if the
+    audit was run. The path is repository-relative, the anchor a research heading (`#R2`)."""
+    repo = Path(__file__).resolve().parents[4]
+    for r in (*rolls.ROLLS, *rolls.DUPLICATES):
+        assert r.audit, f"{r.key}: a roll must point at the audit that justified it (specs/NNN-<slug>/research.md#R<k>)"
+        path, _, anchor = r.audit.partition("#")
+        f = repo / path
+        assert f.is_file() and path.startswith("specs/") and path.endswith("research.md"), r.audit
+        text = f.read_text(encoding="utf-8")
+        assert anchor and f"## {anchor}" in text, f"{r.audit}: the anchor must be a research heading"
+        section = text.split(f"## {anchor}", 1)[1].split("\n## ", 1)[0]
+        assert "roll audit:" in section or "unique of" in section, f"{r.audit}: the section must carry the audit's output"

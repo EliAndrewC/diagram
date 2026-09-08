@@ -412,3 +412,20 @@ def test_switch_exports_the_context_so_a_coverage_child_can_label_its_data(monke
     assert os.environ[_census.CONTEXT_ENV] == "fixture:built"
     selection.switch(cov, "t/test_a.py::x|run")
     assert os.environ[_census.CONTEXT_ENV] == "t/test_a.py::x|run"
+
+
+def test_a_roster_change_plans_a_full_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 217 FR-003: a new roll must be judged against EVERY context of the suite, never a partial merge, so a
+    change to `tests/rolls.py` - a non-module file under tests/ - plans FULL. Pinned here because the rule about "no
+    other context" depends on it, and the fallback that provides it was written for another reason."""
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    roster = ".claude/skills/diagram/tests/rolls.py"
+    before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1", roster: "1"}, "tooling": "T"}
+    (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
+    (bdir / incremental.COVERAGE_DB).write_bytes(b"")
+    (bdir / incremental.TESTS).write_text(json.dumps({"t/test_a.py::x": []}), encoding="utf-8")
+    monkeypatch.setattr(incremental, "manifest", lambda root: {**before, "tests": {**before["tests"], roster: "2"}})
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "full" and roster in pl.reason, pl

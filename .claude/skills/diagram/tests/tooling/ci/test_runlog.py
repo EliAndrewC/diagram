@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from l7r.diagram.ci import config, runlog
 from tests.tooling.ci.conftest import git
 
@@ -50,3 +52,17 @@ def test_would_have_entries_are_recorded_reported_and_never_spend(repo: Path) ->
     rep = runlog.remote_spend_report(skill)
     assert "Would have dispatched" in rep and "ci-check" in rep and "1 attempt(s)" in rep and "not spent" in rep
     assert "(none)" in runlog.would_have_report(repo / "nowhere")
+
+
+def test_the_entry_stamp_takes_seconds_and_microseconds_from_one_clock_read(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 217: two reads straddling a second boundary named an entry `...00` + `000002`, which sorted before an
+    entry written earlier in that second - the would-have trail flaked once under a loaded gate. One read, one name."""
+    import time
+
+    ns = 1_700_000_001_000_005_000  # five microseconds past a whole second (nanoseconds since the epoch)
+    monkeypatch.setattr(time, "time_ns", lambda: ns)
+    stamp = runlog._stamp()
+    assert stamp.endswith("000005") and stamp[:15] == time.strftime("%Y%m%dT%H%M%S", time.gmtime(1_700_000_001)), stamp
+    earlier = 1_700_000_000_999_999_000
+    monkeypatch.setattr(time, "time_ns", lambda: earlier)
+    assert runlog._stamp() < stamp, "write order is sort order across the boundary"

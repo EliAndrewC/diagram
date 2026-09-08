@@ -21,6 +21,17 @@ from l7r.diagram.ci import config
 RUN_LOG = "dev/run-log"
 
 
+def _stamp() -> str:
+    """A filename stamp that SORTS in write order: seconds and microseconds from ONE clock read.
+
+    Feature 217 found the flake this closes: the seconds came from `time.gmtime()` and the microseconds from a
+    separate `time.time_ns()`, so an entry whose two reads straddled a second boundary was named `...00` +
+    `000002` and sorted BEFORE an entry written earlier in that second - the would-have trail then listed
+    `ci-image` ahead of the `ci-check` refused before it, once, under a loaded gate."""
+    ns = time.time_ns()
+    return time.strftime("%Y%m%dT%H%M%S", time.gmtime(ns // 1_000_000_000)) + f"{ns // 1000 % 1_000_000:06d}"
+
+
 def _short_head(skill: Path) -> str:
     out = subprocess.run(["git", "-C", str(skill), "rev-parse", "--short", "HEAD"], capture_output=True, text=True)
     return out.stdout.strip()
@@ -30,7 +41,7 @@ def write_remote(
     skill: Path, target: str, scope: str, seconds: int, result: str, build_id: str, minutes: float, reason: str = "", rate: float = config.RATE_PER_MIN, compute: str = config.COMPUTE_TYPE
 ) -> Path:
     os.makedirs(skill / RUN_LOG, exist_ok=True)
-    ts = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + f"{time.time_ns() // 1000 % 1000000:06d}"
+    ts = _stamp()
     entry = {
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "target": target,
@@ -61,7 +72,7 @@ def write_would_have(skill: Path, target: str, scope: str, minutes: float, reaso
     `would-have-dispatched`, and NEVER counted as spend (`remote_entries` filters on `codebuild`).
     The period's audit (FR-005) reads these back and asks, for each, whether it should have run."""
     os.makedirs(skill / RUN_LOG, exist_ok=True)
-    ts = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + f"{time.time_ns() // 1000 % 1000000:06d}"
+    ts = _stamp()
     entry = {
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "target": target,
