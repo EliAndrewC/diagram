@@ -291,7 +291,8 @@ def test_a_failing_roll_child_raises_with_its_stderr(monkeypatch: pytest.MonkeyP
         rollcache._hamlet_in_child({"a": "toy spec"})  # type: ignore[arg-type]
 
 
-_TRIVIAL_CHILD = "import pickle\nwith open({out_path!r}, 'wb') as fh:\n    pickle.dump((('plan', {{'M': 1}}), {{'functions': [], 'files': []}}), fh)\n"
+# the template carries the coverage slots the real driver has (feature 213): a covered parent's child starts its own recorder
+_TRIVIAL_CHILD = "{prelude}import pickle\nwith open({out_path!r}, 'wb') as fh:\n    pickle.dump((('plan', {{'M': 1}}), {{'functions': [], 'files': []}}), fh)\n{epilogue}"
 
 
 def test_the_roll_child_records_coverage_only_under_a_covered_parent(monkeypatch: pytest.MonkeyPatch) -> None:
