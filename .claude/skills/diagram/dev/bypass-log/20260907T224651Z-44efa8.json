@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T224651Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 207 landing gate on the tree merged with main (208, 210); no map, glyph or placement changes of ours, nothing for settlement-review to judge"
+}

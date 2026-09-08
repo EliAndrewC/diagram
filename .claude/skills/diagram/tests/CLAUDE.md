@@ -30,6 +30,8 @@ the GM `make test-full` ran less than the whole suite.
 | **`make test-full`** | **yes** | **yes** | **yes** | **yes** | **yes** | **all three** |
 | `make done FULL=1` | as `test-full` - it RUNS `test-full` | | | | | all three |
 
+**A plain `make done` is INCREMENTAL since feature 207** - the rows above say what a target COLLECTS; the incremental gate then deselects, within the collected suite, every test the change cannot reach (its own coverage contexts and its fixtures' never executed a changed file), and the floors are judged over the merge with the last full run. `make done INCREMENTAL=0` and `make test-full` run everything.
+
 **`make test-full` DESELECTS NOTHING.** Everything is keyed on `COV_FLOORS`, which it sets, and each
 deselection is written `$(if $(COV_FLOORS),,<the deselection>)` - present only when it is EMPTY:
 `FULL_TREE_IGNORE` switches off (`ROLL_DESELECT` and `TIER_SELECT` are empty since feature 185 retired the scope lock), `L7R_TESTS_FULL=1` and

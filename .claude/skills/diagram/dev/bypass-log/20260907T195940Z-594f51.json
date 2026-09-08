@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T195940Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 207 first FULL gate with coverage contexts, relaunched after the recipe-comment backtick fix; no map, glyph or placement changes, nothing for settlement-review to judge"
+}

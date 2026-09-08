@@ -178,7 +178,7 @@ are the form of every entry from here, new or revised:
 
 1. **A term the reader would not know is a tooltip, as on the map.** *"Please apply the same kind of tooltip
    rules to our research sections that we have in our diagram HTML pages ... having a tool tip with the actual
-   definition of this would be helpful."* ONE glossary serves both surfaces: `l7r/diagram/interactive/glossary.py`.
+   definition of this would be helpful."* ONE glossary serves both surfaces: `l7r/diagram/interactive/assets/glossary.json`, loaded by `glossary.py` (feature 207 made the entries data).
    Add the term there, with its variants and a definition written from the record's own text, and run
    `make glossary`, which writes `research/assets/glossary.js`; every page loads it, and `assets/record.js`
    wraps every occurrence in the visible text - headings, prose, footnotes, never a code span - in the map's

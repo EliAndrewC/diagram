@@ -148,7 +148,7 @@ done:
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
-	  $(MAKE) --no-print-directory $$phase || fail="$$fail $$phase"; \
+	  $(MAKE) --no-print-directory $$phase FROM_DONE=1 || fail="$$fail $$phase"; \
 	done; \
 	if [ -n "$$fail" ]; then $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	: "GUARD_EDIT_OK: A RUN TOO FAST TO HAVE WORKED DOES NOT GET TO SAY IT PASSED (found 2026-09-05)." ; \
@@ -163,7 +163,11 @@ done:
 	: "by --reuse: its keys are blind to the assets, so a page stamp written there would vouch for a" ; \
 	: "stylesheet by running nothing." ; \
 	root=$$(git rev-parse --show-toplevel 2>/dev/null); \
-	python3 "$$root/scripts/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" || exit 1; \
+	: "GUARD_EDIT_OK: feature 207 - the run's MODE (full | incremental, from the selection plugin's record) reaches the plausibility floor,"; \
+	: " the run-log entry and the ratchet: an incremental run that selected little legitimately finishes in under a minute, and it is"; \
+	: " never in the median a full run is judged against."; \
+	mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); sel=$$(python3 -m l7r.diagram.ci incremental selected 2>/dev/null || true); \
+	python3 "$$root/scripts/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
 	[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram && python3 "$$root/scripts/gate-stamp.py" --write page || true; \
 	: "GUARD_EDIT_OK: feature 206 - the BROWSER stamp is earned here only when this run RAN the package (BROWSER_SKIP" ; \
 	: " was empty). A run that skipped it leaves the stamp as found - re-stamping a skip is the 're-stamps rather" ; \
@@ -173,7 +177,7 @@ done:
 	: " three LOGRUN sites (already-verified, and the two failure paths) run WITHOUT _reference, so"; \
 	: " they have no class to record and must not invent one - an absent field is excluded from a"; \
 	: " class median rather than defaulted, which is what keeps the two populations honest.)"; \
-	$(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green "$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true)"; \
+	RUN_MODE="$$mode" RUN_SELECTED="$$sel" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green "$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true)"; \
 	: "(GUARD_EDIT_OK: feature 171 - THE RATCHET RUNS AFTER THE RECORD, deliberately: this run is part"; \
 	: " of the median it is judged against, and a gate that fails without having logged what it did"; \
 	: " would hide the very number the next session needs. It judges the MEDIAN in today's regime, so"; \
@@ -191,7 +195,7 @@ done:
 	scp="$(if $(FULL),full,reference)"; \
 	med=$$(python3 "$$root/scripts/_gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
 	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts'); import _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
-	python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; \
+	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
 	$(STATE) green-local $(DONE_NAME); \
 	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
 	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \
@@ -626,7 +630,7 @@ audit:          ## [project] how the gate has actually been used - every run, ev
 	@python3 -c "import json,glob,collections,os; \
 rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/*.json')),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
-[print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}\") for r in rows[-25:]] or print('  (none yet)'); \
+[print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}  {(r.get('mode','')+' '+r.get('selected','')).strip()}\") for r in rows[-25:]] or print('  (none yet)'); \
 c=collections.Counter(r['scope'] for r in rows); \
 print(f\"  {len(rows)} runs: \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))) if rows else None; \
 b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/*.json')),key=lambda r:r.get('utc','')); \
@@ -832,7 +836,7 @@ LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
   os.makedirs('dev/run-log',exist_ok=True); \
-  open(f'dev/run-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {})},indent=2)+chr(10))"
+  open(f'dev/run-log/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {})},indent=2)+chr(10))"
 
 # THE TARGET RECORDS THE SCOPE (feature 130 - GUARD_EDIT_OK: the build-side door keys on it). `done`
 # with FULL=1 logs as `done FULL`, `ci-merge FULL=1` as `ci-merge FULL`: the entry is what the build
@@ -1110,7 +1114,7 @@ idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 
 # THE PAIRING'S ONE-SIDED CASE, TAKEN RATHER THAN CARVED OUT (feature 151): a detached timer has no
 # session to dispatch a settlement-review from, so it supplies the override with its reason and the
 # bypass log carries it like any other. An exemption inside the guard is the shape the spec review struck.
-	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done
+	@PAIR_OK="idle run: no session attached to dispatch a review" $(MAKE) --no-print-directory done INCREMENTAL=0
 
 maps:            ## [maps] regenerate and check the pool, picking its own scope from how the last run went   SCOPE=reference|all
 ##  SCOPE=reference|all  override the scope; by default it picks its own - the reference hamlet alone after a failed run, the whole tier after a clean one
@@ -1325,7 +1329,11 @@ JOURNAL_ENV =
 # whole of that - and names its own target so an audit can tell which run vouched.
 # GUARD_EDIT_OK: FINDING 3 - "nothing deselected" became FALSE the day tests/soak/ was deselected.
 test-full:      ## [tests] the gate's whole test phase + all three coverage floors (everything except tests/soak/, which only `make soak` runs)
-	@$(MAKE) --no-print-directory test COV_FLOORS=1 && $(STATE) green-local test-full
+	@: "GUARD_EDIT_OK: feature 207 - make test-full on its own keeps its promise (EVERY test, nothing deselected: a full run, which"; \
+	: " also records the next baseline); only done, which passes FROM_DONE=1, lets it run the incremental selection. NO BACKTICKS"; \
+	: " in these comment strings: they are double-quoted shell, and the first draft wrote the target name in backticks - the shell"; \
+	: " ran it as a command substitution and make test-full recursed 914 deep, exhausting the container's process limit (2026-09-07)."; \
+	$(MAKE) --no-print-directory test COV_FLOORS=1 $(if $(FROM_DONE),,INCREMENTAL=0) && $(STATE) green-local test-full
 
 # GUARD_EDIT_OK: THE TIER ABOVE THE GATE (GM 2026-09-05) - a new target, and the one a REMOTE run
 # GUARD_EDIT_OK: the last two stale `sweep` strings in this file - both FALSE as written, since
@@ -1408,9 +1416,16 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
-	@: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
+	@: "GUARD_EDIT_OK: feature 207 - THE INCREMENTAL GATE. A floored run first asks the planner which tests a change can reach"; \
+	: " (l7r/diagram/ci/incremental.py, the argument in its docstring), runs with per-test coverage CONTEXTS and the selection"; \
+	: " plugin, merges this run's coverage over the last full run's, and judges the floors over the merge. INCREMENTAL=0 or FULL=1"; \
+	: " forces a full run, which is what records the baseline. THE FAST COVERAGE CORE STAYS: Python 3.14's sys.monitoring core"; \
+	: " disables a line's event after its first hit, which loses contexts, and the plugin re-arms the events at every context"; \
+	: " switch (selection.switch); the C tracer, pinned first, cost a full run 2.4x (spec D8, research R5/R6, 2026-09-07)."; \
+	$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
+	: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
-	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) python3 -m pytest $(COV_SCOPE) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \
@@ -1419,10 +1434,24 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	  exit 0; \
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
+	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	cov_ec=0; \
 	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines. GUARD_EDIT_OK: feature 174 makes this STRICTER. It used to omit settlement/, waterfields/, interactive/ and overlap/ and hand them to a 94% ratchet, which is precisely what the GM asked to end (2026-08-31: 'we have some ratchets somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred percent coverage in whatever the relevant place is'). The omit list and SETTLEMENT_COV_FLOOR both retired the day their own condition was met - measured on this feature's green run, settlement/ 10,342 statements 0 missing, the other three trees 3,015 statements 0 missing. The hamlet-path floor below STAYS: it is a finer check (feature 145), not a weaker one"; cov_ec=1; }; \
 	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
+	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
 	exit $$cov_ec
+
+# THE INCREMENTAL GATE'S KNOBS (feature 207, GM 2026-09-07). On a floored run (`COV_FLOORS=1`, i.e. the gate) the
+# pytest line records a coverage context per test phase and per fixture (`--cov-context=test` + the selection plugin,
+# which re-arms the fast core's events at every switch and deselects what the plan says; the note in the `test`
+# recipe). On an incremental run pytest-cov's own table - the first `TOTAL` on the screen - is the SELECTION's coverage
+# (49% on the first measured run) and is not the verdict; the merged report a screen below is. (`--cov-report=` was
+# tried to silence it and does not: pytest-cov keeps the `term` from addopts.)
+# `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests` passes INCREMENTAL=0 because an unattended
+# run is the cheapest time to refresh the baseline.
+INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin,)
+INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)",)
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
 # `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
 # red on pre-existing tooling misses. Each records its own failure; the phase exits non-zero once, at the end.

@@ -65,7 +65,7 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # the area, hashed by BYTES (`RAW_AREAS`), because the point of moving the prose into docstrings is that
     # the semantic id - which strips docstrings - no longer sees a prose edit, so this area must. The other
     # interactive modules stay out: they hold no page prose, and a comment edit in them costs nothing.
-    "page": (".claude/skills/diagram/l7r/diagram/interactive", ("assets/*.js", "assets/*.css", "classes/*.py")),
+    "page": (".claude/skills/diagram/l7r/diagram/interactive", ("assets/*", "classes/*.py")),  # `assets/*`: the two inlined assets AND the content files (feature 207: glossary.json, siblings.json, place.json, page-text.json)
     # THE BROWSER KEY (feature 206, GM 2026-09-07: "Do we have logic in place to skip them if the content which
     # they are testing has not changed? ... this is about saving memory, not saving time").
     # GUARD_EDIT_OK: adding an area the GATE may SKIP on, never one the push demands (SKIP_ONLY_AREAS below).

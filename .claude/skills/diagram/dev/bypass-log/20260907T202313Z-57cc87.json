@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T202313Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 207 first FULL gate with coverage contexts, third launch after the plugin-shim fix; no map, glyph or placement changes, nothing for settlement-review to judge"
+}

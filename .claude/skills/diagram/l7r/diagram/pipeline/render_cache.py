@@ -97,7 +97,9 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
             # `test_` name filter and this module's self-exclusion apply to `.py` only - neither has an
             # analogue among assets. (The GENERATION cache never had this gap: it traces the `open()` of
             # each asset into the entry's data files and hashes them - spec 187 D3.)
-            is_asset = name.endswith((".js", ".css"))
+            # EVERY file in interactive/assets/ is an asset (feature 207): the stylesheet and script, and the
+            # page's content files (`*.json`) - a glossary edit must regenerate the pages on landing too.
+            is_asset = os.path.basename(dirpath) == "assets" and os.path.basename(os.path.dirname(dirpath)) == "interactive"
             if not is_asset and (not name.endswith(".py") or name.startswith("test_") or name == os.path.basename(__file__)):
                 continue
             rel = os.path.normpath(os.path.join(rel_dir, name))

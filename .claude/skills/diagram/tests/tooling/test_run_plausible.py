@@ -117,3 +117,14 @@ def test_the_floor_would_have_caught_the_KNOWN_dry_runs_and_nothing_else() -> No
     assert stamps == ["2026-09-05T18:01:45", "2026-09-05T18:07:40"], "the replay should name exactly the two known `make -n done` records; got " + repr(stamps)
     for d in implausible:
         assert not m.check("done", float(d["seconds"]), makeflags="")[0], f"the floor must reject the known dry run at {d['utc']}"
+
+
+def test_an_incremental_run_floors_at_the_absolute_minimum_not_the_target_s_fraction() -> None:
+    """Feature 207: an incremental gate re-ran a selection, so its duration says nothing about whether it did the
+    work - the merged coverage floors say that. Its floor is the 5 s smoke alarm, never 10% of a full run."""
+    m = _mod()
+    fl = m.floor_for("done")
+    assert fl is not None and fl > m.ABSOLUTE_MIN
+    assert not m.check("done", fl - 1)[0], "a full run under the target's floor is refused"
+    assert m.check("done", fl - 1, mode="incremental")[0], "the same duration on an incremental run is fine"
+    assert not m.check("done", m.ABSOLUTE_MIN - 1, mode="incremental")[0], "but nothing runs in under the absolute minimum"
