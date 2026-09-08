@@ -172,6 +172,31 @@ def indexed_grid(lst: Any, key: str, build: Callable[[Any], PointGrid], add: Cal
     return fresh
 
 
+def boxed_circles(circles: Any) -> list[tuple[float, float, float, float, float, float, float]]:
+    """Each `(cx, cy, r)` circle with its bounding box, in the `(payload..., x0, y0, x1, y1)` shape
+    `PointGrid` files (feature 218). A point inside the circle is inside the box, so a zero-pad
+    query is exact - the occupancy keep-outs of a grove, the wellhead aprons of a scatter."""
+    return [(cx, cy, r, cx - r, cy - r, cx + r, cy + r) for cx, cy, r in circles]
+
+
+def circle_hit(px: float, py: float, near: Any) -> bool:
+    """Is (px, py) STRICTLY inside any circle `near` returns? The expression a grove's keep-out ran
+    (`< rr * rr`), so the verdict is bit-identical to its linear scan. A scatter's CLOSED halo test
+    lives in `KeepoutGrid`, which files every family of one scatter together."""
+    return any((px - cx) ** 2 + (py - cy) ** 2 < r * r for cx, cy, r, _x0, _y0, _x1, _y1 in near)
+
+
+def boxed_rects(rects: Any) -> list[tuple[float, float, float, float, float, float, float, float]]:
+    """Each `(x0, y0, x1, y1)` rectangle with itself as its box - the payload IS the extent."""
+    return [(x0, y0, x1, y1, x0, y0, x1, y1) for x0, y0, x1, y1 in rects]
+
+
+def rect_hit(px: float, py: float, near: Any) -> bool:
+    """Is (px, py) STRICTLY inside any rectangle `near` returns - a grove's sun corridors and light
+    lanes, written `a < q < b`? A scatter's closed halo test lives in `KeepoutGrid`."""
+    return any(x0 < px < x1 and y0 < py < y1 for x0, y0, x1, y1, _bx0, _by0, _bx1, _by1 in near)
+
+
 def boxed_grid(boxed: Any) -> PointGrid:
     """A PointGrid over already-boxed items, for a caller that builds its keep-outs ONCE per region
     and then queries them per scatter point. `boxed_hit`/`boxed_seg_hit` accept the narrowed list
@@ -303,6 +328,91 @@ class RingIndex:
                 if d < best:
                     best = d
         return best if best < limit else None
+
+
+class KeepoutGrid:
+    """EVERY static keep-out of one scatter in ONE grid, so a scatter point asks its cell ONCE
+    (feature 218, GM 2026-09-08: *"something much, much simpler ... which would take a fraction of a
+    second rather than the many seconds that we are spending now"*).
+
+    The ground-cover scatters had indexed each keep-out family on its own since feature 145 - the
+    crop rings, the corridors, the water, the halo rects and circles, the building footprints, the
+    clearings, the avoid polygons, and for a marsh the mound crests and the pond banks - and asked
+    every one of those grids per point: on the reference roll's 134,877 commons points that was
+    1.33 million `near` calls and ten wrapper calls per point, most returning an empty cell. Filing
+    every family in one grid turns that into one cell read and one loop over what the cell holds.
+
+    The verdict is the linear scan's, item by item: a RING answers `inside or (pad > 0 and
+    edge_within(pad))`, a SEG `seg_dist < reach`, a RECT and a CIRCLE the strict or closed test their
+    caller wrote. A family whose pad or reach varies PER QUERY (the crop margin plus a glyph's lean;
+    a marsh mark's mound pad) files its BASE and a `slot`, and `hit` takes the extras as a tuple
+    indexed by slot - `None` in a slot skips that family for this query, which is how a marsh mark
+    whose pad has no mound grid stays exempt from the mounds exactly as before. Boxes carry the base
+    pad plus `reach`, the widest extra a query may add, so the prefilter never rejects an item the
+    exact test would have refused on (`boxed_hit`'s contract). Filing order does not matter: every
+    test is a pure predicate with no randomness, so `any` of them is the same in any order."""
+
+    __slots__ = ("grid",)
+    RING, SEG, RECT, CIRCLE = 0, 1, 2, 3
+
+    def __init__(self) -> None:
+        self.grid = PointGrid()
+
+    def rings(self, polys: Any, pad: float = 0.0, slot: int = 0, reach: float = 0.0) -> None:
+        """Rings refused inside or within `pad` (+ the query's extra for `slot`) of an edge."""
+        items = []
+        for poly in polys:
+            idx = RingIndex(poly)
+            r = pad + reach
+            items.append((self.RING, idx, pad, slot, idx.x0 - r, idx.y0 - r, idx.x1 + r, idx.y1 + r))
+        self.grid.extend(items)
+
+    def segs(self, corridors: Any, slot: int = 0, reach: float = 0.0) -> None:
+        """`(polyline, half-width)` pairs refused within the half-width (+ the query's extra)."""
+        items = []
+        for pl, hw in corridors:
+            for i in range(len(pl) - 1):
+                a, b = pl[i], pl[i + 1]
+                r = hw + reach
+                items.append((self.SEG, a, b, hw, slot, min(a[0], b[0]) - r, min(a[1], b[1]) - r, max(a[0], b[0]) + r, max(a[1], b[1]) + r))
+        self.grid.extend(items)
+
+    def rects(self, rects: Any, closed: bool = False) -> None:
+        self.grid.extend([(self.RECT, x0, y0, x1, y1, closed, x0, y0, x1, y1) for x0, y0, x1, y1 in rects])
+
+    def circles(self, circles: Any, closed: bool = False) -> None:
+        self.grid.extend([(self.CIRCLE, cx, cy, r, closed, cx - r, cy - r, cx + r, cy + r) for cx, cy, r in circles])
+
+    def hit(self, px: float, py: float, extra: tuple[float | None, ...] = (0.0,)) -> bool:
+        """Is (px, py) refused by any keep-out its cell holds? `extra[slot]` widens a family's pad for
+        this query; `None` there skips the family."""
+        for item in self.grid.near(px, py):
+            kind = item[0]
+            if kind == 0:
+                _k, idx, pad, slot, bx0, by0, bx1, by1 = item
+                ex = extra[slot]
+                if ex is None:
+                    continue
+                pad += ex
+                if bx0 <= px <= bx1 and by0 <= py <= by1 and (idx.inside(px, py) or (pad > 0 and idx.edge_within(px, py, pad) is not None)):
+                    return True
+            elif kind == 1:
+                _k, a, b, hw, slot, bx0, by0, bx1, by1 = item
+                ex = extra[slot]
+                if ex is None:
+                    continue
+                if bx0 <= px <= bx1 and by0 <= py <= by1 and seg_dist(px, py, a, b) < hw + ex:
+                    return True
+            elif kind == 2:
+                _k, x0, y0, x1, y1, closed, _bx0, _by0, _bx1, _by1 = item
+                if (x0 <= px <= x1 and y0 <= py <= y1) if closed else (x0 < px < x1 and y0 < py < y1):
+                    return True
+            else:
+                _k, cx, cy, r, closed, _bx0, _by0, _bx1, _by1 = item
+                d2 = (px - cx) ** 2 + (py - cy) ** 2
+                if (d2 <= r * r) if closed else (d2 < r * r):
+                    return True
+        return False
 
 
 def boxed_rings(polys: Any, pad: float = 0.0) -> list[tuple[RingIndex, float, float, float, float]]:

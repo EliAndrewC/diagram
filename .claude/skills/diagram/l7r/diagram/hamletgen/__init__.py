@@ -82,7 +82,7 @@ from .consts import *
 from .driver import *
 from .frame import *
 from .hinterland import *
-from .hinterland import _clear_gap as _clear_gap
+from .hinterland import _crop_refuses as _crop_refuses
 from .hinterland import _near_line as _near_line
 from .homesteads import *
 from .plan import *

@@ -124,7 +124,12 @@ approval before /speckit-tasks may run.
   dependencies via `requirements.in` → `requirements.txt` (or `uv.lock`),
   no swallowed exceptions, no `print` in production paths, behavior-named
   tests, parametrized variants, and ConfigObj / pydantic-settings for
-  configuration (no hardcoded magic). Functions stay at human scale
+  configuration (no hardcoded magic). An overlap or proximity check the
+  feature adds within a map - a candidate tested against features already
+  on the map - is performed in its efficient form (clause 15, GM
+  2026-09-08): the plan MUST say which index answers it (a grid, a ring
+  index, an outline of the blocked ground, built once) and MUST NOT walk
+  every item on the map per candidate. Functions stay at human scale
   (clause 12): a plan whose implementation would grow any function past a
   few hundred logical statements MUST say so and justify it, and past
   ~1,000 the function carries an inline justification annotation or gets

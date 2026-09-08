@@ -140,7 +140,7 @@ CONSUMED_PUBLIC = [
 # that owns each. A bare star import DROPS these - they need the aliased explicit block.
 ALIASED_UNDERSCORE = {
     "_arm_crossing_accidental": "l7r.diagram.hamletgen.cluster",
-    "_clear_gap": "l7r.diagram.hamletgen.hinterland",
+    "_crop_refuses": "l7r.diagram.hamletgen.hinterland",
     "_fork_spur": "l7r.diagram.hamletgen.cluster",
     "_near_line": "l7r.diagram.hamletgen.hinterland",
 }

@@ -1,6 +1,6 @@
 # Feature 218 - efficient overlap checks
 
-**Status**: DRAFT 2026-09-08.
+**Status**: IN PROGRESS 2026-09-08 - `spec-fidelity` FAITHFUL at round 2 of 5 (the reviewer's two asides recorded: FR-003's SVG is a hair beyond the manifest the GM's "Yes" named, and strictly stronger; a stage landing between the 50% floor and the one-second target is reported as a shortfall and the GM decides whether it earns a second pass). Round 1 required three changes, applied: the constitution clause is stated in the GM's terms (a prospective obligation on how a feature performs its checks) and no longer declares a fix-on-sight duty D5 would then decline (FR-005); the leave-it bar in the hinterland census is a NUMBER (FR-002, D5), and the commons scatter's disposition is reported either way; SC-002's target is the GM's own - a fraction of a second - with 50% only the reportable floor.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - the profiles before
 and after, the census of per-candidate scans in the two stages, the timings the GM asked for.
 **Predecessors**: 145 (the `RingIndex` and `boxed_rings`, which gave the ground-cover scatters their
@@ -41,14 +41,23 @@ the future review is recorded as a declined-for-now option.
   pre-boxed grid for EVERY mark type - one grid per distinct pad, built once per marsh - so
   `_watercourse_segs` (and the taper split inside it) is never rebuilt per point. The rest of the
   hinterland stage (the commons scatter, the open-ground parcels, `_on_watercourse`'s other callers)
-  is CENSUSED for the same shape: each per-candidate scan of static geometry that costs measurable
-  time on the reference profile is converted the same way; one that costs nothing measurable is
-  listed in the research with its measured share and left, because a conversion that buys nothing
-  is churn (research R2). Verdicts identical, as FR-001.
-- **FR-003 Byte-identical maps are the oracle.** Every live pool map regenerates byte-identical
-  (manifest, SVG) with the two stages converted - `dev/performance.md`'s own rule for this shape: an
-  index that only prunes is output-preserving by construction, so any drift is a soundness bug, not a
-  judgment call. A map that moves is a defect in the conversion and is fixed, never accepted.
+  is CENSUSED for the same shape, against a stated bar: each per-candidate scan of static geometry
+  whose cumulative time on the seed-4 cProfile of its stage (`make perf-profile SEED=4 STAGE=hinterland`)
+  is 0.10 s or more is converted the same way; one below 0.10 s is listed in research R2 with its
+  measured share and left, because a conversion that buys nothing is churn. The commons scrub scatter
+  - the GM's *"grass strokes and scrub pines and such"* - is reported in R2 either way: converted, or
+  listed with its measured share and the reason. Verdicts identical, as FR-001.
+- **FR-003 Byte-identical maps are the PROOF, no longer the requirement.** As specified and reviewed,
+  every live pool map was to regenerate byte-identical (manifest, SVG) with the two stages converted -
+  `dev/performance.md`'s own rule for this shape: an index that only prunes is output-preserving by
+  construction, so any drift is a soundness bug. Mid-implementation the GM relaxed it (request.md, the
+  two closing messages): *"It is absolutely not required that the changes that we are making here
+  result in bite identical output ... as long as they still follow our general rules, and the maps end
+  up looking more or less the same"*, and further speed *"at the cost of having the maps look a little
+  bit different"* is acceptable *"so long as nothing ends up overlapping, which isn't supposed to
+  overlap"*. Every conversion this feature ships is an exact index and DID regenerate byte-identical
+  (research R3), so the stronger proof is reported and no map review is owed; a later, map-changing
+  lever (D6) starts from the GM's relaxation rather than from this clause.
 - **FR-004 The timings the GM asked for are recorded.** (a) The stage profile of the reference hamlet
   (seed 4) before and after, per stage, and the from-scratch wall clock of one roll with every output
   (SVG, PNG, HTML) - research R1 and R3. (b) The feature's performance bookends (`make perf
@@ -58,13 +67,17 @@ the future review is recorded as a declined-for-now option.
   windbreak or hinterland stage that does not get materially faster is a finding to report, not a
   reason to widen the scope.
 - **FR-005 The practice becomes doctrine.** The constitution's Principle X (Python Discipline) gains a
-  clause, in the GM's words where they are quotable: an overlap or proximity check within a map or
-  diagram - any test of a candidate against features already on the map - is performed in its efficient
-  form: the geometry that does not change during the scan is built into an index ONCE (a bounding-box
-  prefilter, a grid, a ring index, an outline of the blocked ground), and each candidate asks the index;
-  a per-candidate walk over every item on the map is a defect to fix where it is found, because a
-  larger map multiplies it (*"We do not have literally every item on the map checking for overlap with
-  literally every other item"*). A MINOR amendment (2.24.0). The root `CLAUDE.md` (the verification
+  clause, in the GM's words where they are quotable, as a PROSPECTIVE obligation on how a feature
+  performs its checks: every feature that involves overlapping or overlap checking within a map or
+  diagram - any test of a candidate against features already on the map - performs the efficient
+  version of that check, so that tens of seconds are not spent on what a fraction of a second can do:
+  the geometry that does not change during the scan is built into an index ONCE (a bounding-box
+  prefilter, a grid, a ring index, an outline of the blocked ground) and each candidate asks the
+  index, and *"We do not have literally every item on the map checking for overlap with literally
+  every other item"* - a rule that matters more as the maps get larger. The clause governs new code
+  and code a profile shows costing time (this feature's two cases are its exemplars); it does not
+  declare a retroactive fix-everything duty, which is why D5 can stand beside it. A MINOR amendment
+  (2.24.0). The root `CLAUDE.md` (the verification
   bullets), the skill's `CLAUDE.md` (the existing "INDEX it - do not coarsen it" line gains the
   build-once form and this feature's measurement) and `dev/performance.md` (a third shape: the index
   that exists and is not used) carry the rule and its date. The `plan-template.md` Constitution Check
@@ -82,8 +95,11 @@ the future review is recorded as a declined-for-now option.
 
 - **SC-001** Every live pool map regenerates byte-identical after the change (`make maps` over the
   tier, `git status` clean on `pool/`).
-- **SC-002** On the reference hamlet's seed 4 profile, `stage_windbreak` and `stage_hinterland` each
-  fall by more than half; the numbers are recorded, whatever they are.
+- **SC-002** On the reference hamlet's seed 4 stage profile, `stage_windbreak` and `stage_hinterland`
+  each take UNDER ONE SECOND - the GM's own target (*"a fraction of a second rather than the many
+  seconds that we are spending now"*). A fall of more than half is only the reportable FLOOR: a stage
+  that lands between the floor and the target is reported to the GM as a shortfall against their
+  words (FR-004 d), never recorded as a pass. The numbers are recorded, whatever they are.
 - **SC-003** `make done` green at 100% on both floors; the bookends recorded; the gate's time recorded
   beside its predecessor.
 - **SC-004** The constitution carries the clause at 2.24.0; the three guidance files and the plan
@@ -111,8 +127,21 @@ the future review is recorded as a declined-for-now option.
   the shape of a later one: *"any code which involves overlaps or overlap checking gets reviewed by a
   subagent"*. Recorded here so a later feature starts from the GM's words rather than from a session's
   guess; nothing under `.claude/agents/` changes.
-- **D5 - a scan that costs nothing is listed, not converted.** The census (FR-002) will find linear
-  scans in code the profile does not reach (the woodland placer tests every crop polygon per tree and
-  runs in 0.01 s). Converting those is churn with a nonzero regression risk and no measured gain; the
-  doctrine (FR-005) governs NEW code and code that measurably costs time. Each is listed with its
-  measured share so the next reader knows it was seen.
+- **D6 - the map-changing levers are recorded, not taken.** With byte-identity relaxed (FR-003), the
+  hinterland's remaining time is the commons scatter's own work per glyph in Python - a random draw
+  per throw, the outline test, one cell read, the feather distance, then the tuft's three blades and
+  their SVG text - not any per-candidate scan (research R2: three quarters of the throws are ACCEPTED
+  and drawn, so there is little waste left to remove). The levers that would cut it further all change
+  what a map draws: fewer marks per acre (a density the research set), or a vectorized scatter (every
+  throw tested at once through numpy/shapely, the SVG assembled in bulk). Both are recorded in R2 with
+  their estimated gain as the next feature's starting point; neither is taken here, because each
+  changes every hamlet's ground cover and so owes a settlement-review pass over the pool that this
+  feature's exact conversions do not, and the spec the GM approved bounds this feature to the
+  efficient CHECK. The GM decides whether the shortfall against the one-second target (SC-002) earns
+  that pass.
+- **D5 - a scan under the bar is listed, not converted; the bar is 0.10 s.** The census (FR-002) will
+  find linear scans in code the profile barely reaches (the woodland placer tests every crop polygon
+  per tree and its whole stage runs in 0.01 s). Converting one below 0.10 s of profiled cumulative
+  time is churn with a nonzero regression risk and no gain a reader could measure; the doctrine
+  (FR-005) governs NEW code and code a profile shows costing time, and says so. Each is listed with
+  its measured share so the next reader knows it was seen and can convert it the day it grows.

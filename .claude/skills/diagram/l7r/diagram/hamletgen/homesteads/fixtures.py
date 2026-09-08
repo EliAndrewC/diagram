@@ -6,13 +6,14 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement._geom import boxed_ring_hit
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .bamboo import _strip_blocked
+from .bamboo import Footing, _strip_blocked
 
 # FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.html "The farmstead's
 # fixtures"). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
@@ -126,6 +127,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(3.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
+    footing = Footing(s, fields, marsh)  # the static ground, indexed once per pass (feature 218)
     count = 0
     shrines_left = max(1, round(shares["shrine"] * len(houses)), mins.get("shrine", 0))  # RARE means rare: positional luck cannot exceed the share (a spec floor may)
     # THE FLOOR (T61, GM 2026-08-27: "a min number of something which may or may not appear"): after the
@@ -173,7 +175,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     # the TRUNK is tested against drawn footprints, not the plot reservations: a yard tree
                     # stands at a plot's edge, and in a nucleated cluster the reservations tile the ground
-                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes):
+                    if _trunk_blocked(s, cx, cy, px(4.0), fields, marsh, pond, lanes, footing):
                         continue
                     # no tree on a roof: the SAME keep-outs and the same test the grove drawer uses, so
                     # structures_clear_of_trees (which mirrors them) cannot disagree with this seat
@@ -373,7 +375,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             for lx, ly, cw, ch in seats:
                 cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                 ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
-                if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes):
+                if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
                     continue
                 spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
                 s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=("pit" if kind == "manure" and plan.manure_form == "pit" else None))  # the rolled manure form (feature 150)
@@ -389,10 +391,13 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     return count
 
 
-def _trunk_blocked(s: Settlement, cx: float, cy: float, t: float, fields: Sequence[Poly], marsh: Sequence[Poly], pond: Any, lanes: Sequence[tuple[Poly, float]]) -> bool:
+def _trunk_blocked(
+    s: Settlement, cx: float, cy: float, t: float, fields: Sequence[Poly], marsh: Sequence[Poly], pond: Any, lanes: Sequence[tuple[Poly, float]], footing: Footing | None = None
+) -> bool:
     """Would a tree trunk (a t x t box) stand on a drawn footprint, a lane, a paddy, the marsh or the pond?"""
     if cx - t < 30 or cy - t < 30 or cx + t > s.W - 30 or cy + t > s.H - 30:
         return True
+    ft = footing or Footing(s, fields, marsh)  # (feature 218) see `Footing`
     for key in ("houses", "farm_sheds", "gardens", "threshing_yards", "byres", "wells", "kosatsuba", "farm_fixtures", "persimmons", "bamboo_stands"):
         for o in s.M.get(key, []):
             if "x" not in o:
@@ -401,16 +406,13 @@ def _trunk_blocked(s: Settlement, cx: float, cy: float, t: float, fields: Sequen
             if abs(cx - float(o["x"])) < (t + ow) / 2 + 2 and abs(cy - float(o["y"])) < (t + oh) / 2 + 2:
                 return True
     corners = [(cx - t / 2, cy - t / 2), (cx + t / 2, cy - t / 2), (cx + t / 2, cy + t / 2), (cx - t / 2, cy + t / 2)]
-    for poly in list(fields) + list(marsh):
-        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 6.0 for q in corners):
-            return True
+    if any(boxed_ring_hit(q[0], q[1], ft.rings.near(q[0], q[1]), 6.0) for q in corners):  # a paddy or the marsh, inside or within 6 ft
+        return True
     for pts, half in lanes:
         if any(seg_dist(q[0], q[1], pts[k], pts[k + 1]) < half for q in corners for k in range(len(pts) - 1)):
             return True
-    for o in s.M.get("dry_plots", []):
-        poly = [(float(a), float(b)) for a, b in o.get("poly") or []]
-        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) for q in corners):
-            return True
-    if any(s._on_watercourse(q[0], q[1], pad=4.0) for q in corners):
+    if any(boxed_ring_hit(q[0], q[1], ft.dry.near(q[0], q[1])) for q in corners):  # standing IN a dry plot (no margin here, as before)
+        return True
+    if any(ft.on_water(s, q[0], q[1]) for q in corners):
         return True
     return bool(pond) and ((cx - pond[0]) / (pond[2] + 20.0)) ** 2 + ((cy - pond[1]) / (pond[3] + 20.0)) ** 2 <= 1.0

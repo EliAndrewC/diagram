@@ -13,6 +13,7 @@ Split from the 1,353-line `homestead_parts.py` by feature 173 (constitution Prin
 | `gardens.py` (110) | the kitchen garden and the farm shed it shares a corner with - dimensions, fit, and the spot search |
 | `groves.py` (252) | the homestead grove (yashikirin): which way the wind comes from, whether this house gets one, the L-belt arms, and the drawing |
 | `stands.py` (545) | the two big stands - the household bamboo stand and `village_grove`, the settlement-scale windbreak |
+| `grove_blocks.py` | the keep-outs of ONE grove fill indexed once and asked per candidate clump (`GroveBlocks`, `Seats`; feature 218) - open it when `village_grove` refuses or accepts a seat you did not expect, or when a new keep-out joins the fill |
 | `keepouts.py` (265) | what a grove or a stand may NOT cover: corridor buffers, watercourses, canopy crowns and the urban keepouts |
 | `farmstead.py` (39) | the three farmstead helpers feature 120 moved here - attaching a grove, finding appurtenances, and the nudge sequence |
 | `__init__.py` | the composed surface only - the class this package exists to provide, plus the module-level helpers the tests import by name. Never add logic here |

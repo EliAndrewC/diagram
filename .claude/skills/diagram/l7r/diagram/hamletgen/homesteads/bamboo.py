@@ -6,7 +6,8 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
+from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
 
 from ..consts import Poly
 from ..plan import SitePlan
@@ -45,6 +46,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
+    footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
@@ -84,7 +86,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 d = math.hypot(lx0, ly0) or 1.0
                 lx, ly = lx0 + lx0 / d * k * sh, ly0 + ly0 / d * k * sh
                 cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes):
+                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing):
                     continue
                 ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
                 out.append(ring)
@@ -96,12 +98,48 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     return out
 
 
+class Footing:
+    """The static ground a household strip or a tree trunk is tested against, indexed ONCE per pass
+    (feature 218). `_strip_blocked` and `_trunk_blocked` used to walk every edge of every paddy and
+    marsh polygon per corner of every candidate, and asked `_on_watercourse` with no `near`, which
+    REBUILT the watercourse segment list (the laterals re-split into taper pieces) on every corner -
+    210 rebuilds and 0.55 s of profiled time on the reference roll's 1,064 strip tests. A caller
+    builds one of these after it gathers `fields` and `marsh` and passes it in; a call without one
+    builds its own (slower, never wrong), which is what keeps the old positional signature and its
+    unit tests valid. The rings carry the wider of the two pads the callers apply (6 ft for a paddy
+    or the marsh, 3 ft for a dry plot); the exact tests are the ones each caller ran."""
+
+    __slots__ = ("dry", "rings", "water")
+
+    def __init__(self, s: Settlement, fields: Sequence[Poly], marsh: Sequence[Poly]) -> None:
+        self.rings: PointGrid = boxed_grid(boxed_rings([p for p in list(fields) + list(marsh) if len(p) >= 3], 6.0))
+        dry = [[(float(a), float(b)) for a, b in o.get("poly") or []] for o in s.M.get("dry_plots", [])]
+        self.dry: PointGrid = boxed_grid(boxed_rings([p for p in dry if len(p) >= 3], 3.0))
+        self.water: PointGrid = boxed_grid(boxed_segs(s._watercourse_segs(4.0)))
+
+    def on_water(self, s: Settlement, x: float, y: float) -> bool:
+        """`_on_watercourse(x, y, pad=4.0)`, answered from the grid - the crescent pond still by `s`."""
+        return s._on_watercourse(x, y, pad=4.0, near=self.water.near)
+
+
 def _strip_blocked(
-    s: Settlement, cx: float, cy: float, cw: float, ch: float, hx: float, hy: float, fields: Sequence[Poly], marsh: Sequence[Poly], pond: Any, lanes: Sequence[tuple[Poly, float]]
+    s: Settlement,
+    cx: float,
+    cy: float,
+    cw: float,
+    ch: float,
+    hx: float,
+    hy: float,
+    fields: Sequence[Poly],
+    marsh: Sequence[Poly],
+    pond: Any,
+    lanes: Sequence[tuple[Poly, float]],
+    footing: Footing | None = None,
 ) -> bool:
     """Would a household bamboo strip centered here stand on something? Its own farmhouse is not something."""
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True
+    ft = footing or Footing(s, fields, marsh)  # a caller that tests many seats builds one and passes it (feature 218)
     corners = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2), (cx, cy)]
     for px_, py_, pw, ph, *_ in s.placed:
         if px_ == hx and py_ == hy:
@@ -113,9 +151,8 @@ def _strip_blocked(
             ow, oh = float(o.get("w", 2 * float(o.get("r", 8)))), float(o.get("h", 2 * float(o.get("r", 8))))
             if abs(cx - float(o["x"])) < (cw + ow) / 2 + 6 and abs(cy - float(o["y"])) < (ch + oh) / 2 + 6:
                 return True
-    for poly in list(fields) + list(marsh):
-        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 6.0 for q in corners):
-            return True
+    if any(boxed_ring_hit(q[0], q[1], ft.rings.near(q[0], q[1]), 6.0) for q in corners):  # a paddy or the marsh, inside or within 6 ft of an edge
+        return True
     # A LANE THROUGH THE STRIP, not only past its corners (feature 137, cohort seed 03): five sample
     # points on a 22 by 16 ft strip let a lane cross it diagonally between them, and
     # `lanes_clear_of_bamboo` walks the tread's quarter-points. So the tread is also tested as a
@@ -131,11 +168,9 @@ def _strip_blocked(
     # the dry hem's plots and the watercourses (unlock tripwire seed 47: a fixture on a dry plot and one
     # on the stream - neither is a paddy, a lane or the pond, so nothing above saw them), and any crown
     # already drawn (seed 37: a fixture seated under a grove crown drawn two stages earlier)
-    for o in s.M.get("dry_plots", []):
-        poly = [(float(a), float(b)) for a, b in o.get("poly") or []]
-        if len(poly) >= 3 and any(point_in_poly(q[0], q[1], poly) or min(seg_dist(q[0], q[1], poly[k], poly[(k + 1) % len(poly)]) for k in range(len(poly))) < 3.0 for q in corners):
-            return True
-    if any(s._on_watercourse(q[0], q[1], pad=4.0) for q in corners):
+    if any(boxed_ring_hit(q[0], q[1], ft.dry.near(q[0], q[1]), 3.0) for q in corners):  # a dry plot, inside or within 3 ft
+        return True
+    if any(ft.on_water(s, q[0], q[1]) for q in corners):
         return True
     tc = s.M.get("tree_crowns") or []
     for k in range(0, len(tc) - 2, 3):

@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.22.0 → 2.23.0
+Version change: 2.23.0 → 2.24.0
+
+Version 2.24.0 (amended 2026-09-08, feature 218): Principle X gains clause 15, "An overlap check within a map
+is performed in its efficient form" - the geometry that does not change during a scan is indexed once and each
+candidate asks the index, never a per-candidate walk over every item on the map; the GM's words on the day the
+windbreak went from 7.3 s to 0.5 s and the hinterland from 8.1 s to 1.3 s with byte-identical maps. The plan
+template's Principle X entry asks how a new overlap check is indexed. MINOR.
 
 Version 2.23.0 (amended 2026-09-08, feature 216): Principle VI gains "THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS"
 - the `make done` tests minimize the number of map rolls and roll only what is strictly necessary to reach 100%
@@ -1166,6 +1172,38 @@ any single rule is reason enough to refuse "done" status.
     consumer changes - the exemplar; full method in
     `specs/027-init-star-imports/`.
 
+15. **An overlap check within a map is performed in its efficient form**
+    (added v2.24.0, GM-directed 2026-09-08, feature 218). Every feature
+    that involves overlapping or overlap checking within a map or diagram
+    - any test of a candidate against the features already on the map: a
+    tree against the crops, a scatter mark against the treads and the
+    water, a parcel against the houses - performs the efficient version
+    of that check, so that tens of seconds are not spent on what a
+    fraction of a second can do. The efficient form is the engine's
+    prefilter pattern (`settlement/_geom/indexes.py`): the geometry that
+    does not change during the scan is built into an index ONCE - a
+    bounding-box prefilter, a grid, a ring index, an outline of the
+    blocked ground - and each candidate asks the index; the index PRUNES
+    and the exact test still DECIDES, so nothing is coarsened. The GM's
+    words: *"We will need to take care to make sure that We do not have
+    literally every item on the map checking for overlap with literally
+    every other item. or anything silly like that"* - a rule that matters
+    more as the maps get larger, because a per-candidate walk over every
+    item on the map is multiplied by the map's size twice. It governs new
+    code and code a profile shows costing time; a plan that adds an
+    overlap check says how it is indexed (the Constitution Check in the
+    plan template asks). Not mechanically enforced and not reviewed by a
+    subagent today - the GM declined both for now and named the shape of
+    a possible later one (*"any code which involves overlaps or overlap
+    checking gets reviewed by a subagent"*). Motivating case: the
+    reference hamlet's windbreak tested each of 37,490 candidate clump
+    positions against every edge of every crop polygon - 7.2 million
+    segment distances, 77% of a 7.3 s stage, beside an `Indexed` registry
+    the farmhouse placer already queried - and the marsh scatter rebuilt
+    its whole watercourse list per point; indexing both took the two
+    stages from 15.4 s to under 2 s with byte-identical maps
+    (`specs/218-efficient-overlap-checks/`).
+
 ### XI. Japanese Authenticity (NON-NEGOTIABLE)
 
 Any content this project generates or surfaces in Japanese script - relic
@@ -2181,4 +2219,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.23.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-08
+**Version**: 2.24.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-08

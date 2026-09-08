@@ -23,7 +23,7 @@ from .frame import title_pocket as title_pocket
 from .parcels import _COMMONS_FLOOR_FT as _COMMONS_FLOOR_FT
 from .parcels import CROP_MARGIN as CROP_MARGIN
 from .parcels import WOODLAND_BBOX_FLOOR as WOODLAND_BBOX_FLOOR
-from .parcels import _clear_gap as _clear_gap
+from .parcels import _crop_refuses as _crop_refuses
 from .parcels import _near_line as _near_line
 from .parcels import _parcel_outline as _parcel_outline
 from .parcels import fit_square_parcel as fit_square_parcel

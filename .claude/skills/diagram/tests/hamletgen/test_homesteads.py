@@ -156,7 +156,7 @@ def test_strip_blocked_refuses_a_dry_plot_and_a_watercourse(monkeypatch) -> None
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a corner inside a dry plot"
     s.M["dry_plots"] = []
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False
-    monkeypatch.setattr(s, "_on_watercourse", lambda x, y, pad=4.0: True)
+    monkeypatch.setattr(s, "_on_watercourse", lambda x, y, pad=4.0, near=None: True)  # the footing passes its grid as `near` (feature 218)
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a corner on the stream"
 
 

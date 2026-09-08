@@ -3,8 +3,9 @@
 import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import edge_dist, point_in_poly, seg_dist
+from .._geom import point_in_poly
 from ._helpers import _BELT_GAP_FT, _belt_axis
+from .grove_blocks import GroveBlocks, Seats
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -194,38 +195,38 @@ class StandsMixin:
         if self.M.get("moat"):
             water_lines.append((self.M["moat"], self.M.get("moat_width", 22) / 2))
 
-        def _hard_blocked(qx: float, qy: float) -> bool:
-            """Reasons a clump may not stand here that MOVING IT A FEW FEET DOES NOT CHANGE - the crop,
-            open water, the dike bank. These are the edges a belt is supposed to stop at, so a clump
-            refused for one of them is simply dropped; it never re-seats."""
-            return (
-                any(point_in_poly(qx, qy, f) or edge_dist(qx, qy, f) < 12 + cr for f in self.field_polys)
-                or any(point_in_poly(qx, qy, d) or edge_dist(qx, qy, d) < 12 for d in self.dry_polys)
-                or any(point_in_poly(qx, qy, dk["outline"]) for dk in self.M.get("dikes", []))
-                or any(seg_dist(qx, qy, wl[k], wl[k + 1]) < whw + cr for wl, whw in water_lines for k in range(len(wl) - 1))
-            )
+        # EVERY KEEP-OUT ABOVE IS INDEXED ONCE, HERE, AND ASKED PER CANDIDATE (feature 218, GM
+        # 2026-09-08). Three closures used to answer these questions by walking the whole registry
+        # per candidate - `_hard_blocked` ran `edge_dist` over every crop polygon and `seg_dist` over
+        # every watercourse segment, `_lane_blocked` over every corridor segment - and the re-seat
+        # search re-asked all of it eight times per ring: 7.19 million `seg_dist` calls and 77% of
+        # the stage on the reference hamlet, to keep 150 clumps (specs/218 research R1). The split
+        # the closures encoded is kept on the index's methods: `hard` (the crop, open water, the dike
+        # bank - the edges a belt STOPS at, so a refusal drops the clump), `lane` (a lane that ends at
+        # the belt is an edge, one that runs through it is an obstacle - interior-vs-rim separates
+        # them below), `local` (a house, a yard, a wellhead's wide keep-out, a sun corridor, a light
+        # lane - obstacles a real planted belt is planted AROUND, so an interior refusal re-seats).
+        # The index prunes; the same expressions decide; the maps are byte-identical.
+        blocks = GroveBlocks(
+            outline=poly,
+            crops=self.field_polys,
+            crop_pad=12 + cr,
+            dry=self.dry_polys,
+            dry_pad=12,
+            dikes=[dk["outline"] for dk in self.M.get("dikes", [])],
+            water=[(wl, whw + cr) for wl, whw in water_lines],
+            corridors=corr,
+            circles=occ,
+            displacers=occ_grove,
+            rects=[(sx - shw, se - cr - 2, sx + shw, se + 24 + cr) for sx, se, shw in sun]
+            + [(ex - cr - 2, ey - ehh, ex + 24 + cr, ey + ehh) for ex, ey, ehh in east]
+            + [(wx0 - wl - cr - 3, wy0 - cr - 1, wx0 + cr + 1, wy1 + wl + cr + 1) for wx0, wy0, wy1 in west],
+        )
+        # the clumps seated so far, filed as they land: the re-seat search keeps `step * 0.55` off the
+        # ROUNDED clumps and the gap fill keeps half a crown off the unrounded seats, as each always did
+        near_clumps, near_seats = Seats(step * 0.55), Seats(clump * 0.5)
 
-        def _lane_blocked(qx: float, qy: float) -> bool:
-            """A LANE only. Kept apart from the other local obstacles because the interior test below
-            exists for exactly this case and for no other: a lane that ENDS at the belt is an edge the
-            belt stops at, while one that RUNS THROUGH it is an obstacle to plant around, and
-            interior-vs-rim is what separates them."""
-            return any(seg_dist(qx, qy, lp[k], lp[k + 1]) < buf for lp, buf in corr for k in range(len(lp) - 1))
-
-        def _local_blocked(qx: float, qy: float) -> bool:
-            """LOCAL obstacles standing in the belt's line - a house, a yard, a wellhead's wide keep-out,
-            a lane, a threshing yard's southern sun corridor, a garden's eastern light lane. A real
-            planted belt is planted AROUND these, so an interior clump refused by one re-seats."""
-            return (
-                any((qx - ox) ** 2 + (qy - oy) ** 2 < rr * rr for ox, oy, rr in occ)
-                or any(abs(qx - sx) < shw and se - cr - 2 < qy < se + 24 + cr for sx, se, shw in sun)
-                or any(ex - cr - 2 < qx < ex + 24 + cr and abs(qy - ey) < ehh for ex, ey, ehh in east)
-                # +1 ft of slack on the west sun-lane: the check reads clumps rounded to 0.1 with a strict `<`, and a
-                # clump seated exactly on the window's edge (cohort seed 16: 1793.9 against 1794) read as shading
-                or any(wx0 - wl - cr - 3 < qx < wx0 + cr + 1 and wy0 - cr - 1 < qy < wy1 + wl + cr + 1 for wx0, wy0, wy1 in west)
-            )
-
-        def _reseat(qx: float, qy: float, placed: list[Any], require_interior: bool) -> tuple[float, float] | None:
+        def _reseat(qx: float, qy: float, require_interior: bool) -> tuple[float, float] | None:
             """A DENSE belt flows around a local obstacle instead of losing the column.
 
             Which obstacles, and why this is not "re-seat around everything": a clump refused by the
@@ -281,9 +282,9 @@ class StandsMixin:
             # nothing to do with the settlement's own texture - measured, it cost Inashiro 10 of its
             # 11 copse clumps. So exactly that class relocates, and every other refusal still drops.
             # This repairs the harm the keep-out did without redesigning the scatter.
-            if not dense and not any((qx - ox) ** 2 + (qy - oy) ** 2 < rr * rr for ox, oy, rr in occ_grove):
+            if not dense and not blocks.displaced(qx, qy):
                 return None
-            if require_interior and edge_dist(qx, qy, poly) <= clump:
+            if require_interior and blocks.rim_within(qx, qy, clump):
                 return None
             # THE RADII REACH PAST THE WIDEST LOCAL OBSTACLE, which is the sun corridor: a yard's
             # no-tree strip is ~25 px half-width across and ~31 px deep, so a search capped at
@@ -305,13 +306,13 @@ class StandsMixin:
             for _nr in (step * 0.6, step * 1.0, step * 1.4, step * 1.8, step * 2.2):
                 for _na in range(0, 360, 45):
                     ax, ay = qx + _nr * math.cos(math.radians(_na)), qy + _nr * math.sin(math.radians(_na))
-                    if not point_in_poly(ax, ay, poly):
+                    if not blocks.inside(ax, ay):
                         continue
                     if within is not None and (ax + clump * 0.9 < within[0] or ax - clump * 0.9 > within[2] or ay + clump * 0.9 < within[1] or ay - clump * 0.9 > within[3]):
                         continue
-                    if _hard_blocked(ax, ay) or _local_blocked(ax, ay) or _lane_blocked(ax, ay):
+                    if blocks.hard(ax, ay) or blocks.local(ax, ay) or blocks.lane(ax, ay):
                         continue
-                    if any((ax - qx2) ** 2 + (ay - qy2) ** 2 < (step * 0.55) ** 2 for qx2, qy2 in placed):
+                    if near_clumps.too_near(ax, ay):
                         continue
                     return (ax, ay)
             return None
@@ -325,7 +326,7 @@ class StandsMixin:
                 gy = y0 + iy * (y1 - y0) / ny
                 jx = gx + (self._hjit(gx, gy, 21.0) - 0.5) * step  # jitter the grid so the stand + its edge read ragged
                 jy = gy + (self._hjit(gx, gy, 22.0) - 0.5) * step
-                if not point_in_poly(jx, jy, poly):
+                if not blocks.inside(jx, jy):
                     continue
                 # ...AND NOT WHOLLY OFF THE PAGE, when the caller gives a `within`. ONLY wholly - a
                 # clump whose crown merely CROSSES the frame edge is kept, and that is doctrine, not
@@ -374,15 +375,17 @@ class StandsMixin:
                 # separate causes have now punched holes in a wind wall here - a wellhead inside the
                 # belt, a peer session's lane crossing it, and a threshing yard's sun corridor - and
                 # each was fixed with its own ad-hoc nudge until the third made the pattern obvious.
-                if _hard_blocked(jx, jy):
+                if blocks.hard(jx, jy):
                     continue
-                if _local_blocked(jx, jy) or _lane_blocked(jx, jy):
-                    _alt = _reseat(jx, jy, clumps, require_interior=not _local_blocked(jx, jy))
+                if blocks.local(jx, jy) or blocks.lane(jx, jy):
+                    _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
                     if _alt is None:
                         continue
                     jx, jy = _alt
                 seated.append((jx, jy))
                 clumps.append([round(jx, 1), round(jy, 1)])
+                near_seats.add(jx, jy)
+                near_clumps.add(round(jx, 1), round(jy, 1))
         # AND CLOSE THE INTERIOR HOLES (feature 152, acceptance review; the GM's own complaint in its
         # last form - "it's not clear that it will, in fact, be breaking much wind"). The grid decides
         # where a clump is TRIED, and where a try is refused the belt carries a hole: Kuwabata shipped
@@ -447,12 +450,12 @@ class StandsMixin:
                         for _k in range(33):
                             _d = _d0 + (_d1 - _d0) * _k / 32
                             _qx, _qy = _col * _wv[0] + _d * _perp[0], _col * _wv[1] + _d * _perp[1]
-                            if point_in_poly(_qx, _qy, poly):
+                            if blocks.inside(_qx, _qy):
                                 _inside.append((_qx, _qy))
                         for _qx, _qy in _inside[len(_inside) // 2 :] + _inside[: len(_inside) // 2]:  # the band's middle outward
                             if within is not None and (_qx + clump * 0.9 < within[0] or _qx - clump * 0.9 > within[2] or _qy + clump * 0.9 < within[1] or _qy - clump * 0.9 > within[3]):
                                 continue
-                            if _hard_blocked(_qx, _qy) or _local_blocked(_qx, _qy) or _lane_blocked(_qx, _qy):
+                            if blocks.hard(_qx, _qy) or blocks.local(_qx, _qy) or blocks.lane(_qx, _qy):
                                 continue
                             # ...AND NEVER ON TOP OF A CLUMP THAT IS ALREADY THERE (settlement-review
                             # 2026-08-29, acceptance re-check). The depth search is deterministic, so a gap
@@ -464,10 +467,12 @@ class StandsMixin:
                             # the same belt in at 101 on-page clumps with nothing stacked. A stacked crown
                             # is invisible in ink and inflates every count taken off the record - including
                             # the one I first quoted for this feature.
-                            if any((_qx - _sx) ** 2 + (_qy - _sy) ** 2 < (clump * 0.5) ** 2 for _sx, _sy in seated):
+                            if near_seats.too_near(_qx, _qy):
                                 continue
                             seated.append((_qx, _qy))
                             clumps.append([round(_qx, 1), round(_qy, 1)])
+                            near_seats.add(_qx, _qy)
+                            near_clumps.add(round(_qx, 1), round(_qy, 1))
                             _took = True
                             break
                         if _took:

@@ -1,0 +1,36 @@
+perf-profile seed 4 stage hinterland: 3.8s under cProfile (the stages before it took 7.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260908T130538Z-seed4-hinterland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         7371914 function calls (7369206 primitive calls) in 3.820 seconds
+
+   Ordered by: cumulative time
+   List reduced from 249 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    3.823    3.823 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py:17(stage_hinterland)
+        2    0.007    0.003    3.555    1.778 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:280(hinterland)
+        5    0.702    0.140    3.018    0.604 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:34(commons)
+   134877    0.401    0.000    1.770    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:141(_sparse)
+   157865    0.116    0.000    0.869    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:326(edge_within)
+   316475    0.575    0.000    0.774    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:261(near)
+        1    0.157    0.157    0.528    0.528 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:182(marsh)
+   865961    0.264    0.000    0.378    0.000 /usr/lib/python3.14/random.py:500(uniform)
+  1026266    0.330    0.000    0.368    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:316(inside)
+   155722    0.096    0.000    0.366    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:390(hit)
+    27383    0.051    0.000    0.275    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:281(_sparse)
+  1456911    0.239    0.000    0.239    0.000 {method 'get' of 'dict' objects}
+   101093    0.062    0.000    0.195    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+        1    0.003    0.003    0.176    0.176 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:102(open_ground_patches)
+   137677    0.124    0.000    0.164    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/keepouts.py:73(_on_crescent_pond)
+     2565    0.013    0.000    0.163    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:286(_ok)
+  1007987    0.133    0.000    0.133    0.000 {method 'random' of '_random.Random' objects}
+   101093    0.081    0.000    0.114    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+     5097    0.002    0.000    0.080    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:311(<genexpr>)
+     3190    0.003    0.000    0.078    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:568(_crop_refuses)
+        1    0.005    0.005    0.074    0.074 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py:107(farmstead_fixtures)
+    12573    0.023    0.000    0.072    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:158(_in_soft)
+   329336    0.050    0.000    0.050    0.000 {method 'append' of 'list' objects}
+   111170    0.033    0.000    0.048    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:166(<genexpr>)
+153208/150504    0.028    0.000    0.042    0.000 {built-in method builtins.min}
+
+

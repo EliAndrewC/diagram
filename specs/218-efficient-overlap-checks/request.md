@@ -64,3 +64,17 @@ manifests as the acceptance test. The GM:
 > anything silly, like what we are doing right now. and that we therefore implement the smart version
 > that we are currently going to change into during this spec kit feature, which you are about to
 > implement start to finish. Thanks a bunch. Please proceed.
+
+While the session was converting the hinterland's scatters (the windbreak already at 0.5 s and the
+reference hamlet regenerating byte-identical after each step), the GM added two messages:
+
+> For what it's worth, just to be clear, the results do not need to be bite identical to what we
+> were doing before. It is okay if the hinterlands lay out their glyphs a little bit differently or
+> if the trees of the windbreak forests show up in a slightly different place. It is absolutely not
+> required that the changes that we are making here result in bite identical output or even in the
+> things being placed in exactly the same manner as long as they still follow our general rules, and
+> the maps end up looking more or less the same.
+
+> In particular, if we are able to gain additional performance benefits at the cost of having the
+> maps look a little bit different than that is okay so long as nothing ends up overlapping, which
+> isn't supposed to overlap, etcetera.
