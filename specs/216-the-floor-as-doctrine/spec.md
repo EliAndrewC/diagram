@@ -2,7 +2,9 @@
 
 **Status**: DRAFT - `spec-fidelity` round 1 required three changes, applied: the conditional second partial roll
 deleted (a fifth roll can never be strictly necessary for a spec with no unique line); FR-005 d states the loss
-the collapse causes; the amendment is 2.23.0 and corrects the footer. Round 2 pending (constitution XVI).
+the collapse causes; the amendment is 2.23.0 and corrects the footer. Round 2 required two changes, applied: seed 43 - the one gate roll carrying no coverage line - leaves the
+gate roster for the CI tier's tree under the very clause this feature writes (FR-002 e, FR-005 e); the woodland
+band's site is stated as the stub the probe settled on (FR-002 a, FR-005 a). Round 3 pending (constitution XVI).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - the four cuts' sites, the
 feasibility probes, the count after.
 **Predecessors**: 215 (the floor itself: 9 rolls of 9; its R1 audit and the four cuts it priced and left), 214,
@@ -25,10 +27,10 @@ test goes if one is ever made.
   the knob) - the engine lines NO other context of the suite reaches, with the files they sit in; 215's R1
   method, for any tier. `make roll-audit` runs it; `make audit` names it. Unit-tested on a synthetic coverage
   database with contexts; the target documented in the command map.
-- **FR-002 The four cuts.** (a) Woodland-shrink: the parcel band and floor are asserted on a map that already
-  exists - the pool's reference through `_pool.rolled_map` on a Settlement carrying its manifest - or, if
-  `open_ground_patches` cannot run on a loaded manifest, on a stub site; the ladder's own decisions stay
-  pinned in `tests/hamletgen/test_hinterland.py`. (b) Clamped: the pond-to-off-map fallback is a unit test of
+- **FR-002 The four cuts, and the fifth the clause forces.** (a) Woodland-shrink: the parcel band and floor
+  are asserted on the hinterland unit tests' stub site (the pool's loaded manifest cannot run
+  `open_ground_patches` - R1's probe; the ladder's own decisions stay pinned in
+  `tests/hamletgen/test_hinterland.py`). (b) Clamped: the pond-to-off-map fallback is a unit test of
   the sink stage's decision with `pond_setback` and `pond_clear_of_crop` patched and `stage_sink` recorded -
   the three lines only it reached. (c) Polder 19: its two tests (the grid, dike and reservoir; the keep-outs)
   read Polder 12; the roster's polder is one. (d) The three seatings share ONE partial roll: the stages before
@@ -40,6 +42,11 @@ test goes if one is ever made.
   roll, since a spec with no unique line can never be strictly necessary for the floor. The ten engine lines the
   three FULL rolls alone reached (`ways/route.py`, `ways/touch.py`, `ways/web.py`, `homesteads/wells.py`,
   `hinterland/stages.py`; R1) become direct unit tests, the gate's floor naming any the count missed.
+  (e) Seed 43: its eight unique lines became unit tests in feature 215 and its only remaining reason is the
+  strict xfail over the open kink defect - a roll that carries no coverage line, which is exactly what the
+  clause of FR-003 assigns to the CI tier. So it leaves the gate roster: the xfail moves to `tests/ci/`, the
+  CI tier's tree, which no target runs today (`tests/CLAUDE.md` names it as the place), and the defect stays
+  recorded in the research (feature 166 R2b) and in that test.
 - **FR-003 The doctrine, in the guidelines.** Constitution Principle VI gains the clause, in the GM's words:
   the `make done` tests minimize the number of map rolls and roll only what is strictly necessary to reach 100%
   coverage; a test that rolls more than that belongs in the CI tier (the AWS check), which is not a kind of test
@@ -47,22 +54,25 @@ test goes if one is ever made.
   records 2.22.0 for feature 211 while the footer still says 2.21.0; the amendment sets both). The root `CLAUDE.md`
   roster bullet, `tests/CLAUDE.md`'s tree table (a row for the CI tier: not run today; the place for a test that
   rolls more than the floor) and `dev/loop.md`'s packing section carry the rule and its date.
-- **FR-004 The roster, the census, the record.** `tests/rolls.py` at 4 rows (the perturbed reference, Polder 12,
-  seed 43, the seatings' partial roll); a warm gate's census reads 4 rolls of 4 specs; `make done` green; R2 the census line and the gate's time; the audit re-run after landing and its
+- **FR-004 The roster, the census, the record.** `tests/rolls.py` at 3 rows (the perturbed reference, Polder 12,
+  the seatings' partial roll), every row carrying a coverage line nothing else reaches, as the clause requires;
+  a warm gate's census reads 3 rolls of 3 specs; `make done` green; R2 the census line and the gate's time; the audit re-run after landing and its
   output recorded.
-- **FR-005 What proves less, stated.** (a) the woodland band is asserted on the pool's map or a stub, not on
-  a site rolled for it; (b) the clamp's fallback is asserted as a decision, no longer that the brook it promised
+- **FR-005 What proves less, stated.** (a) the woodland band and floor are no longer asserted on any rolled
+  site - they hold on a stub site's parcels; (b) the clamp's fallback is asserted as a decision, no longer that the brook it promised
   was actually cut on a real map; (c) the polder grid at fall 90 is no longer rolled - its form, its keep-outs
   and its web are no longer asserted on a real map; (d) the three seatings are asserted on a shared partial
   state, and the stages after the homestead pass (lanes, track, hinterland) no longer run on the seated
   variants - their lines hold as unit tests; the cloud's seating is asserted on the shared LINEAR state rather
   than on a rolled nucleated hamlet (its roster row existed for the cloud seating a default-form hamlet, seed
   7); and the three seatings are no longer three distinct maps (OneHouse's own map, whose placard width made it
-  differ from LaneOnly's, ceases to exist). Each raised with the GM at landing.
+  differ from LaneOnly's, ceases to exist); (e) seed 43's kink is no longer observed by any gate run - the
+  strict xfail lives in the CI tier's tree, which nothing runs today, so the gate will not go red the day the
+  router stops making the kink. Each raised with the GM at landing.
 
 ## Success criteria
 
-- **SC-001** A warm full gate's census reads 4 rolls of 4 specs, no duplicates.
+- **SC-001** A warm full gate's census reads 3 rolls of 3 specs, no duplicates, every row with a coverage reason.
 - **SC-002** `make done` green at 100% on both floors; no assertion removed except the four FR-005 states.
 - **SC-003** `make roll-audit` prints the table for the landed baseline, and the constitution carries the clause.
 
