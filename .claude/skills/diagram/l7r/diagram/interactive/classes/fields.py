@@ -28,14 +28,15 @@ class Paddy(Kind):
     Caveat: the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back;
     the depths behind that choice are modern extension figures, and no pre-modern record of either the
     depths or the drying stages was found.
+
+    Name: paddy
+    Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
+    Label: accurate
+    Sources: maff-suitou-mizu, zennoh-mizukanri
+    Entry: research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'
     """
 
     key = 'paddy'
-    name = 'paddy'
-    covers = 'the wet plots of every `fields[kind=paddy]` - the flooded basins'
-    label = 'accurate'
-    sources = ('maff-suitou-mizu', 'zennoh-mizukanri')
-    entry = "research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands'"
 
 
 class WetPaddy(Kind):
@@ -63,14 +64,15 @@ class WetPaddy(Kind):
     Caveat: Which plots wear the tint is a drawing convention rather than a survey: on a comb field a share of the
     wet rank carries it rather than all of it, and seating the wettest ground at the drain foot is inferred
     from how water falls through the system, not stated by the record.
+
+    Name: wet paddy (shitsuden)
+    Covers: the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has
+    Label: accurate
+    Sources: kotobank-shitsuden, kotobank-kanden, kotobank-yatsuda, kotobank-fukada, fao-rice-water
+    Entry: research/fields.html - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'
     """
 
     key = 'wet paddy'
-    name = 'wet paddy (shitsuden)'
-    covers = 'the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has'
-    label = 'accurate'
-    sources = ('kotobank-shitsuden', 'kotobank-kanden', 'kotobank-yatsuda', 'kotobank-fukada', 'fao-rice-water')
-    entry = "research/fields.html - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'"
 
 
 class Bund(Kind):
@@ -84,14 +86,15 @@ class Bund(Kind):
     the plots; the footplanks over the ditches serve that walking.
 
     Note: Construction, width and the shared-wall finding are read; the drawn stroke is at true size.
+
+    Name: bund
+    Covers: the stroke of every paddy plot and the piled junctions between them
+    Label: accurate
+    Sources: aze-standard
+    Entry: research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.html - 'The bund runs along the channel bank'
     """
 
     key = 'bund'
-    name = 'bund'
-    covers = 'the stroke of every paddy plot and the piled junctions between them'
-    label = 'accurate'
-    sources = ('aze-standard',)
-    entry = "research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason'; research/water.html - 'The bund runs along the channel bank'"
 
 
 class BundBeans(Kind):
@@ -106,14 +109,15 @@ class BundBeans(Kind):
     erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row
     along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund
     was not found, so the bead's width is not compared to it. The practice is attested.
+
+    Name: bund beans
+    Covers: the bead run along the bunds (`bund_beans`)
+    Label: convention
+    Sources: nabunken-azemame, wikipedia-soybean, cropfarming-soybeans
+    Entry: research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)
     """
 
     key = 'bund beans'
-    name = 'bund beans'
-    covers = 'the bead run along the bunds (`bund_beans`)'
-    label = 'convention'
-    sources = ('nabunken-azemame', 'wikipedia-soybean', 'cropfarming-soybeans')
-    entry = "research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)"
 
 
 class Millet(Kind):
@@ -129,14 +133,15 @@ class Millet(Kind):
 
     Caveat: the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and
     is a GUESS at the proportions.
+
+    Name: millet
+    Covers: `dry_plots[crop=millet]` and their furrows
+    Label: accurate
+    Sources: not recorded
+    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'
     """
 
     key = 'millet'
-    name = 'millet'
-    covers = '`dry_plots[crop=millet]` and their furrows'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji'"
 
 
 class Buckwheat(Kind):
@@ -150,14 +155,15 @@ class Buckwheat(Kind):
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+
+    Name: buckwheat
+    Covers: `dry_plots[crop=buckwheat]` and their furrows
+    Label: accurate
+    Sources: not recorded
+    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena'
     """
 
     key = 'buckwheat'
-    name = 'buckwheat'
-    covers = '`dry_plots[crop=buckwheat]` and their furrows'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'"
 
 
 class Barley(Kind):
@@ -171,14 +177,15 @@ class Barley(Kind):
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+
+    Name: barley
+    Covers: `dry_plots[crop=barley]` and their furrows
+    Label: accurate
+    Sources: not recorded
+    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena'
     """
 
     key = 'barley'
-    name = 'barley'
-    covers = '`dry_plots[crop=barley]` and their furrows'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'"
 
 
 class Soy(Kind):
@@ -193,14 +200,15 @@ class Soy(Kind):
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
+
+    Name: soy
+    Covers: `dry_plots[crop=soy]` and their furrows
+    Label: accurate
+    Sources: not recorded
+    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena'
     """
 
     key = 'soy'
-    name = 'soy'
-    covers = '`dry_plots[crop=soy]` and their furrows'
-    label = 'accurate'
-    sources = ('not recorded',)
-    entry = "research/fields.html - 'Where dry (hatake) crops go - the topographic catena'"
 
 
 class Fallow(Kind):
@@ -212,11 +220,12 @@ class Fallow(Kind):
 
     Note: The record is thin on fallow in this tier's fields; the patch is drawn where the field builder leaves
     ground unplanted, and that is a guess.
+
+    Name: fallow
+    Covers: `fallow_patches`
+    Label: guess
+    Sources: not recorded
+    Entry: research/fields.html (no dedicated entry - recorded as silent)
     """
 
     key = 'fallow'
-    name = 'fallow'
-    covers = '`fallow_patches`'
-    label = 'guess'
-    sources = ('not recorded',)
-    entry = 'research/fields.html (no dedicated entry - recorded as silent)'

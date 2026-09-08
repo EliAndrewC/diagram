@@ -161,11 +161,13 @@ def test_the_median_ignores_short_circuits_failures_and_other_scopes(tmp_path) -
         + [("already-verified", "reference", 0)] * 9  # short-circuits: no work done
         + [("failed:test", "reference", 4)] * 3  # died early: not evidence of speed
         + [("green", "full", 900)] * 3  # a different scope entirely
+        + [("green", "reference", 30)] * 5  # INCREMENTAL runs (feature 207): a selection, not the target - excluded below
     )
     for i, (result, scope, secs) in enumerate(rows):
-        (log / f"2026083{i // 10}T{i:06d}-{i}.json").write_text(
-            json.dumps({"utc": f"2026-08-30T{i:02d}:00:00Z", "target": "done", "scope": scope, "seconds": secs, "result": result, "commit": "abc1234"})
-        )
+        entry = {"utc": f"2026-08-30T{i:02d}:00:00Z", "target": "done", "scope": scope, "seconds": secs, "result": result, "commit": "abc1234"}
+        if secs == 30:
+            entry["mode"] = "incremental"
+        (log / f"2026083{i // 10}T{i:06d}-{i}.json").write_text(json.dumps(entry))
 
     got = gatecost.median_seconds("done", "reference", cwd=str(tmp_path))
     assert got == 100, f"the median took the excluded rows into account: {got}"

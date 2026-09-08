@@ -182,3 +182,11 @@ served from the roll cache while nothing they execute has changed) and the cover
 no longer does is put every map through a validator, and the pool sweep in `tests/full/` no longer
 gates the manifests it produces: it proves every shipped generator RUNS, inside its time budget, and
 emits a manifest - which was always the half the battery did not cover.
+
+**And since feature 207 (GM 2026-09-07) it is INCREMENTAL by default.** A run that does happen re-runs
+only the tests the change can reach - selected from the last full green run's per-test and per-fixture
+coverage contexts - and judges the 100% floor and the hamlet floor over that run's coverage merged over
+the kept coverage. The argument for why that is exact, every fallback to a full run, and the coverage-core
+finding are in `l7r/diagram/ci/incremental.py`'s docstring; the proof on a fixture project is
+`tests/tooling/test_incremental_gate.py` (five shapes, each one a way the merged floor must still fail).
+`make done INCREMENTAL=0` is a full run, and a full run is what records the next baseline.

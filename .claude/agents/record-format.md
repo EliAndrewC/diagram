@@ -41,7 +41,7 @@ whether there are references to things which are past edits that should no longe
 ## Input
 
 A research page path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of
-it named by heading. The glossary is `l7r/diagram/interactive/glossary.py` (`GLOSSARY`: term, variants,
+it named by heading. The glossary is `l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
 definition) - every occurrence of a term in a page's visible text is a hover tooltip, so a word IN the glossary
 needs nothing from you. HTML comments (`<!-- ... -->`) are invisible to the reader: whatever is inside one is
 already where it belongs, and you do not report it.
@@ -83,5 +83,5 @@ already where it belongs, and you do not report it.
 
 Per section, the three lists, each item one block: the class, the quoted text, the proposal. Then a summary
 table: sections read, items per class, and the glossary terms you would add (term, variants, draft definition)
-so the session can paste them into `glossary.py`. An empty class says `none`. Never fix anything; never write
+so the session can paste them into `assets/glossary.json`. An empty class says `none`. Never fix anything; never write
 to a file. Report what a reader would see.

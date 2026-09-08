@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T214035Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 207 baseline gate under the fast coverage core with re-armed events (INCREMENTAL=0); no map, glyph or placement changes, nothing for settlement-review to judge"
+}

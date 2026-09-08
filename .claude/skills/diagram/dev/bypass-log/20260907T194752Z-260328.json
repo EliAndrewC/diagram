@@ -1,0 +1,6 @@
+{
+  "utc": "20260907T194752Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 207 first FULL gate with coverage contexts - no map, glyph or placement changes; the tooling and page content moved, nothing for settlement-review to judge"
+}
