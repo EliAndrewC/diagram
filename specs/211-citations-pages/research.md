@@ -92,7 +92,7 @@ in place rather than the source re-found (a re-sourcing is a research pass of it
 
 ## R5 - for the GM (spec D5: recorded, not silently acted on)
 
-- **Three key names** that misdescribe their work (R3). Renaming is one `make citations` plus the citing pages.
+- **Three key names** that misdescribed their work (R3) - RENAMED on 2026-09-08 at the GM's ruling (*"If something is misdescribed then we should fix it rather than leave it misdescribed"*): `plos-2016-pine` -> `lou-2016-floodplain-zones`, `tabayashi-1986` -> `tabayashi-1987`, `sphere-unicef` -> `sphere-2004-water`, across every research and citations page, one class docstring and its snapshot fixture; the guard corpus (`scripts/fixtures/`) keeps the old name as recorded history.
 - **`sugiura-1973-fuzoku`**: the check reads Table 5 as MEAN COUNTS of outbuildings per household (the paper's
   own headline is 4.38 per household), while `homesteads.html` reads 0.87 / 0.76 / 0.24 as the SHARE of
   households owning one. The two agree only where no household kept two of a kind. A `research: physical` pass
@@ -105,7 +105,6 @@ in place rather than the source re-found (a re-sourcing is a research pass of it
   `kojodan-dobei` (a conservation report on a surviving compound wall). Each is a research pass under the
   five-box procedure.
 - **The registry's size**: `SOURCES.html` went from 195,671 to 537,047 bytes - the write-ups run longer than the
-  two short paragraphs D2 priced (median about 1,050 bytes for the pair). Splitting the registry is the GM's
-  question, as D2 said.
+  two short paragraphs D2 priced (median about 1,050 bytes for the pair). The GM accepted the growth on 2026-09-08 (*"The growth of the registry's size is fine and I accept it"*).
 - **What the map should call an assertion resting on a source of limited applicability** (D5): none arose as a
   whole-source NOT-APPLICABLE; the component cases above were labeled GUESS or "our reading" in place.

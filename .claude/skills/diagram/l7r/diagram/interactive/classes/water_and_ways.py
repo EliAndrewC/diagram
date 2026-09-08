@@ -48,7 +48,7 @@ class FieldDitch(Kind):
     Name: field ditch
     Covers: `field_ditches` and `channels` - the intake, head race, branches and drain
     Label: accurate
-    Sources: tabayashi-1986, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
+    Sources: tabayashi-1987, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
     Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'
     """
 
@@ -69,7 +69,7 @@ class Pond(Kind):
     Name: pond
     Covers: `pond` - the tameike
     Label: accurate
-    Sources: tabayashi-1986, kagawa-tameike
+    Sources: tabayashi-1987, kagawa-tameike
     Entry: research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'
     """
 
@@ -224,7 +224,7 @@ class Well(Kind):
     Name: well
     Covers: `wells` - the wellheads
     Label: convention
-    Sources: sphere-unicef, saijo-mizu-rekishikan, kotobank-idoyakata
+    Sources: sphere-2004-water, saijo-mizu-rekishikan, kotobank-idoyakata
     Entry: research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
     """
 

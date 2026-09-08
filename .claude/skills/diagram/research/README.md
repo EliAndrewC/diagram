@@ -49,7 +49,8 @@ nothing addressed to a session outside a comment, nothing about what the entry u
 ```
 
 Every key in `SOURCES.html` carries the URL where the source can be read (constitution v2.13.0, GM
-2026-08-28), or `URL: none - <why>`.
+2026-08-28), or `URL: none - <why>` - and what the work is and why it applies with its limits, the two write-ups
+the citations pages derive their works section from.
 
 `Grounds:` is what makes a stale finding visible - if nothing in the codebase matches it any more, the entry
 is describing a rule that no longer exists. It is a comment so that it can say so in code's own names; a
@@ -75,9 +76,9 @@ The classes were seeded from each entry's own language and hand-set for the entr
 
 ## Citing
 
-Sources live in [`SOURCES.md`](SOURCES.md) with stable keys; an entry cites by key. **Never add a citation that has not actually been consulted** - if a finding's source was not written down at the time, its `**Sources:**` line says `not recorded` and that is the correct, honest state. Feature 143 (2026-08-28) re-sourced every entry that said so - 73 of them, plus 44 that had no sources line - so no entry says `not recorded` any more; where a page could not be read the line says what was searched and labels the claim SUMMARY-ONLY or a guess, and `SOURCES.md`'s queue lists those. A new entry never says `not recorded`: it cites, or it says what was searched and not found.
+Sources live in [`SOURCES.html`](SOURCES.html) with stable keys; an entry cites by key, in a footnote whose note is on the page's citations page (`citations/<name>.html`; the research page keeps the reference and loads the derived `citations/<name>.js` for the hover - run `make citations` after a note changes). Every registry entry a footnote cites carries two write-ups after its citation line - `<p><em>What it is:</em> ...</p>` and `<p><em>Why it applies, and its limits:</em> ...</p>` - written once and derived into the works section of every citations page that cites it; a key without them fails the gate, and the `source-applicability` agent judges the source before its numbers reach a map and when its write-ups land ([`CLAUDE.md`](CLAUDE.md), "The notes live on a CITATIONS PAGE"). **Never add a citation that has not actually been consulted** - if a finding's source was not written down at the time, its `**Sources:**` line says `not recorded` and that is the correct, honest state. Feature 143 (2026-08-28) re-sourced every entry that said so - 73 of them, plus 44 that had no sources line - so no entry says `not recorded` any more; where a page could not be read the line says what was searched and labels the claim SUMMARY-ONLY or a guess, and `SOURCES.md`'s queue lists those. A new entry never says `not recorded`: it cites, or it says what was searched and not found.
 
-Named real-world measurements (Suzugamori, Pingyao, Himeji, Fushimi...) are *anchors* rather than works - they are listed in a separate table in `SOURCES.md` and cited inline by name.
+Named real-world measurements (Suzugamori, Pingyao, Himeji, Fushimi...) are *anchors* rather than works - they are listed in a separate table in `SOURCES.html` and cited inline by name.
 
 ## Adding to the record
 

@@ -221,7 +221,7 @@
    "stream": "The stream is a natural brook - about two meters across in reality, the widest water on a hamlet map short of the pond. A field ditch is dug: a hairline in reality (about a third of a meter, one three-hundredth of the paddy it waters), drawn at true size."
   },
   "sources": [
-   "tabayashi-1986",
+   "tabayashi-1987",
    "jsidre-minumadai",
    "gb50288",
    "nougyoudoboku-matsutan"
@@ -642,7 +642,7 @@
    "stream": "The stream is running water off the high ground; the pond is standing water held behind a dike, fed by the stream and let out through one outlet."
   },
   "sources": [
-   "tabayashi-1986",
+   "tabayashi-1987",
    "kagawa-tameike"
   ],
   "what": "An irrigation reservoir - a valley-head tameike behind an earthen dike, sitting above the fields it waters.",
@@ -877,7 +877,7 @@
   "name": "well",
   "siblings": {},
   "sources": [
-   "sphere-unicef",
+   "sphere-2004-water",
    "saijo-mizu-rekishikan",
    "kotobank-idoyakata"
   ],
