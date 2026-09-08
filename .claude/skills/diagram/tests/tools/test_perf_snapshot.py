@@ -285,13 +285,34 @@ def test_a_seed_the_baseline_never_measured_is_skipped_rather_than_compared_agai
 
 def test_measure_times_every_STAGE_of_the_reference_hamlet(monkeypatch) -> None:
     """The per-stage breakdown is what makes a snapshot actionable: "the free per-stage delta every
-    snapshot carries says WHICH stage grew". One seed, because this rolls the real generator."""
-    rows = ps.measure((6,))  # its OWN seed (feature 213 FR-007): seed 4 is the reference roll, which the gate rolls once
+    snapshot carries says WHICH stage grew". STAND-IN STAGES under a deterministic clock (feature 214, GM
+    2026-09-08): the tool's behavior - one row per seed, a time per stage that sums to the row's seconds,
+    what was asked beside what landed - holds on stages that do nothing, and the real seeds belong to
+    `make perf-gate`. What this no longer proves, stated (spec FR-007): the reference hamlet's own times."""
+    from l7r.diagram.hamletgen import driver
+
+    def stage_water_frame(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    def stage_field(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    def stage_sink(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    monkeypatch.setattr(driver, "STAGES", (stage_water_frame, stage_field, stage_sink))
+    # a COUNTER clock, not a list: roll_scope and the census read the clock too, so a fixed list of ticks lands on
+    # the wrong calls (measured: every stage came out 0.0); every call advancing 0.05 s makes each stage 0.05 s
+    # whatever else reads it
+    clock = iter(i * 0.05 for i in range(1000))
+    monkeypatch.setattr(ps.time, "time", lambda: next(clock))
+    rows = ps.measure((6,))
     assert len(rows) == 1
     row = rows[0]
-    assert row["seed"] == 6 and row["seconds"] > 0.0
-    assert row["stages"] and sum(row["stages"].values()) == pytest.approx(row["seconds"], abs=0.5)
-    assert row["houses"] <= row["asked"], "and it records what was ASKED beside what landed"
+    assert row["seed"] == 6 and row["seconds"] == pytest.approx(0.15, abs=0.06)
+    assert row["stages"] == {"water_frame": 0.05, "field": 0.05, "sink": 0.05}
+    assert sum(row["stages"].values()) == pytest.approx(row["seconds"], abs=0.5)
+    assert row["houses"] == 0 and row["asked"] == ps.REFERENCE["households"], "and it records what was ASKED beside what landed"
 
 
 def test_the_skill_root_is_put_on_sys_path_when_it_is_not_already_there(monkeypatch) -> None:

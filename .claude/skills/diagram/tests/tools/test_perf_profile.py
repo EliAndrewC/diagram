@@ -119,6 +119,29 @@ def test_an_unknown_stage_is_refused_and_NAMES_the_stages_there_are() -> None:
         assert "the stages are:" in str(e) and "," in str(e)
 
 
+def _stand_in_stages(monkeypatch: pytest.MonkeyPatch, step: float = 0.05) -> None:
+    """STAND-IN STAGES under a deterministic clock (feature 214, GM 2026-09-08): the profiler's behavior - the target
+    stage profiled once, the ones before it timed plainly and reported apart, the raw file and the table - holds on
+    stages that do nothing; the real seeds belong to `make perf-gate`. What the two tests below no longer prove,
+    stated (spec FR-007): a real stage's own time. The names must resolve: `water_frame` and `sink` are targets."""
+    from l7r.diagram.hamletgen import driver
+
+    def stage_water_frame(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    def stage_field(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    def stage_sink(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    monkeypatch.setattr(driver, "STAGES", (stage_water_frame, stage_field, stage_sink))
+    # a COUNTER clock (see test_perf_snapshot): roll_scope and the census read the clock too, so a fixed list of ticks
+    # lands on the wrong calls; every call advancing `step` makes each timed span `step` whatever else reads it
+    clock = iter(i * step for i in range(1000))
+    monkeypatch.setattr(perf_profile.time, "time", lambda: next(clock))
+
+
 def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_it_measured(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """The real thing, on the cheapest stage there is. Two properties the head line has to carry, and
     both are honesty rather than data: the profiled time is under cProfile (~+225%, research R2) and
@@ -126,7 +149,8 @@ def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_
     archive's status named - a reader must not think the `.prof` is committed."""
     monkeypatch.setattr(perf_profile, "RAW_DIR", str(tmp_path / "raw"))
     monkeypatch.setenv("PERF_ARCHIVE", "")
-    table, raw = perf_profile.profile_stage(7, "water_frame", top=5)  # seed 7: the LATER-stage test below rolls seed 5 in this worker, and a spec is rolled once per gate (feature 213, tests/rolls.py)
+    _stand_in_stages(monkeypatch)
+    table, raw = perf_profile.profile_stage(7, "water_frame", top=5)
 
     assert Path(raw).is_file() and raw.endswith(".prof"), "the raw profile lands on disk"
     assert str(tmp_path) in raw, "in the raw directory, not beside the committed evidence"
@@ -163,6 +187,7 @@ def test_a_LATER_stage_is_profiled_alone_while_the_stages_before_it_are_timed_pl
     reported separately so the two numbers are never added together."""
     monkeypatch.setattr(perf_profile, "RAW_DIR", str(tmp_path / "raw"))
     monkeypatch.setenv("PERF_ARCHIVE", "")
+    _stand_in_stages(monkeypatch)  # water_frame and field plain, sink profiled - each span 0.05 s on the counter clock
     table, _raw = perf_profile.profile_stage(5, "sink", top=3)
     assert "stage sink" in table
     head = table.splitlines()[0]

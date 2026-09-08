@@ -413,8 +413,15 @@ def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs:
     spawns its own pool is competing with the other 21 (the "CPU inflates 2-4x inside the gate"
     entry in the skill CLAUDE.md)."""
     specs = cohort_specs(count, first_seed, households)
-    jobs = default_jobs(count) if jobs is None else max(1, jobs)
-    if jobs == 1:
+    return roll_pool(specs, default_jobs(count) if jobs is None else max(1, jobs))
+
+
+def roll_pool(specs: Sequence[HamletSpec], jobs: int) -> list[Report]:
+    """Roll `specs` - serially for `jobs == 1`, else across a process pool - and return the reports in order.
+    The body `cohort()` always had, taking explicit specs (feature 214): the fan-out test pool-rolls the
+    REFERENCE and compares it with the gate's shared roll of the same spec, instead of a cohort seed nothing
+    else reads."""
+    if jobs <= 1:
         return [generate(spec, out_base=None) for spec in specs]
     with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
         return list(ex.map(generate, specs))

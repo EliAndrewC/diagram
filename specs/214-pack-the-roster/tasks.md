@@ -2,8 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering`.
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
       research: rendering
+      verify: DONE. DONE. FAITHFUL at round 3 of 5. Round 1: FR-007 restated site by site naming the two sites that prove less; the target in the record's unit (11 measured, NINE after its merges) with the delivery itemized; the immune test kept on Kashikawa per the reviewer's aside (its clean side is already the sweep's shared entry). Round 2: D2 in the record's unit and count; the research aligned. Round 3's aside (the delivery in the Summary) applied
 - [ ] T02 the ratchet and the lane rules over the roster's coverage rolls; the floor's fixed subjects; seed 43 kept (FR-001)
       research: rendering
 - [ ] T03 the fan-out over `roll_pool` on the reference (FR-002)

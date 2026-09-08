@@ -3,7 +3,7 @@
 **Status**: DRAFT - `spec-fidelity` round 1 required three changes, all applied (FR-007 restated site by site; the
 target number established in the record's own unit and the delivery itemized against it; the immune test kept on
 Kashikawa per the reviewer's aside, so its `Roll` and `PoolGen` rows both stay). Round 2 required two changes (D2 in the record's unit and count; the research aligned with FR-003 and
-FR-006), applied. Round 3 pending (constitution XVI).
+FR-006), applied. FAITHFUL at round 3 of 5.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - the ten rolls adjudicated
 one by one, the probe over the coverage rolls, the count after.
 **Predecessor**: 213 (the roll census and the roster it enforces); the packing record of 2026-08-31
@@ -18,7 +18,8 @@ stages; three genuinely roll (the perturbed roll, the in-process half of the chi
 seed-43 kink). This feature makes every test that can read a shared roll read one - *"back down to the number
 it was at before, especially if we do the 'shared roll' thing for most or all of these."* The number before, in
 the packing record's own unit (DISTINCT SPECS a gate rolls): 11 measured on 2026-08-31, NINE after the two merges
-that section then made; the feature is judged against the nine, which is the coverage set unchanged today.
+that section then made; the feature is judged against the nine, which is the coverage set unchanged today - and lands at thirteen
+specs and sixteen rolls on a warm gate, the four above nine each named in FR-006.
 
 ## Functional requirements
 

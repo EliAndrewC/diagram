@@ -29,9 +29,16 @@ THREE KINDS OF ENTRY BESIDES A ROLL, each a stated exception the verdict prints 
   (name, seed) as a rostered gate roll, so on a cold run the reference is rolled twice: once as a spec, once
   as the generator that ships it. Priced and left (spec D7): unifying the two would have the sweep read the
   spec roll's manifest instead of running the gen, and the gen script is the unit the sweep exists to run.
-- `InProcess`: a test module allowed to roll IN THE WORKER rather than in a child. The perf tests time the
-  stages where they run (each on a seed of its own, rostered); a `stub=True` module runs STAND-IN stages
-  and rolls no map - its records are reported and bounded (`rollverdict.STUB_MAX_S`), never counted.
+- `InProcess`: a test module allowed to roll IN THE WORKER rather than in a child - the in-process half of the
+  child-equality proof; a `stub=True` module runs STAND-IN stages and rolls no map (the stage tests, and since
+  feature 214 the perf tests) - its records are reported and bounded (`rollverdict.STUB_MAX_S`), never counted.
+
+THE NUMBER (feature 214, GM 2026-09-08: *"is it ACTUALLY the case that the test's behavior needs a roll of its
+own ... and not just some assertions we could add onto the existing tests where that same hamlet was already
+rolled elsewhere?!"*): the packing record's NINE coverage specs, plus the two re-roll-loop rolls, seed 43 and
+the immune experiment's perturbed roll - 13 rows, 16 rolls on a warm gate with the three duplicates of the
+reference. Every other reader shares a roll: the ratchet, the lane rules, the fan-out, the child-equality
+proof; the CLI test patches `generate`; the perf tests run stand-in stages.
 """
 
 from __future__ import annotations
@@ -79,41 +86,44 @@ class PoolGen:
     test: str = POOL_TEST  # the one site that may roll it, once, when its key moved
 
 
-COHORT = cohort_specs(4, first_seed=41)
+# THE COVERAGE ROLLS, shared by name (feature 214): the plain `roll:<spec>` subjects every reader can share - the
+# ratchet, the lane rules, the fan-out, the child-equality proof and the hamlet floor all read these.
+REFERENCE = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+KUWABATA = HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
+POLDER_FALL_0 = HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0)
+POLDER_FALL_90 = HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90)
+COVERAGE: tuple[HamletSpec, ...] = (REFERENCE, KUWABATA, POLDER_FALL_0, POLDER_FALL_90)
+KINK = cohort_specs(1, first_seed=43)[0]  # the one open defect's carrier (research R2b of feature 166; the 214 probe found no other)
 
 ROLLS: tuple[Roll, ...] = (
     # THE REFERENCE AND THE POOL
     Roll(
-        HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"),
+        REFERENCE,
         "the reference hamlet: 66 lines nothing else reaches (the packing record); the valley-paddy archetype, a pond sink, the placard's basis",
         "rollcache.hamlet / report - one shared child roll; also the pool sweep's coverage child (gate_obtain) and the cache round-trip",
     ),
     Roll(
-        HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"),
+        KUWABATA,
         "the dike-pond archetype with the mosaic layout and mulberry: 7 lines the dikepond spec does not reach; the only live map with laterals",
         "rollcache.hamlet - one shared child roll",
     ),
     Roll(
-        HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0),
+        POLDER_FALL_0,
         "the polder grid at fall 0: 13 unique lines; the reservoir that must WALK back from the crop (an emergent condition - seeds 8, 19, 22 clear first try)",
         "rollcache.hamlet - one shared child roll",
     ),
     Roll(
-        HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90),
+        POLDER_FALL_90,
         "the polder grid at fall 90: the inner splice-refusal branch of the web (one line, recorded as the weak ratio, kept)",
         "rollcache.hamlet - one shared child roll",
     ),
-    # THE GATE COHORT - the contiguous range GATE_COHORT_EXPECTED and the seed-43 expected failure pin (spec FR-005)
+    # THE ONE OPEN DEFECT (feature 214 packed the cohort seeds 41, 42 and 44 away: the ratchet and the lane rules read the
+    # coverage rolls above; seed 42 alone was three attempts and the gate's longest roll)
     Roll(
-        COHORT[0],
-        "cohort seed 41: the ratchet's range; the lane-rule tests read it; the fan-out test compares the pool-child path against it",
-        "rollcache.report / hamlet - one shared child roll (plus the fan-out's pool child: a stated Duplicate)",
+        KINK,
+        "cohort seed 43: the strict expected failure - the routed footpath's kink round a house corner at (991, 188); the 214 probe found no coverage map that carries it, so the xfail has no other reader",
+        "rollcache.hamlet - one shared child roll (gate test_cohort_lane_rules)",
     ),
-    Roll(
-        COHORT[1], "cohort seed 42: the ratchet's range; a map generate() re-rolls (3 attempts - the cost FR-005 accepts and the census reports)", "rollcache.report / hamlet - one shared child roll"
-    ),
-    Roll(COHORT[2], "cohort seed 43: the ratchet's range; the strict expected failure (the kink round a house corner)", "rollcache.report / hamlet - one shared child roll"),
-    Roll(COHORT[3], "cohort seed 44: the ratchet's range", "rollcache.report / hamlet - one shared child roll"),
     # THE EMERGENT CONDITIONS - each pins a seed because some condition must HOLD, not because a knob is set
     Roll(
         HamletSpec(name="CloudOnly", seed=7, households=10),
@@ -152,46 +162,20 @@ ROLLS: tuple[Roll, ...] = (
         "the immune test: one extra random draw at meta() must not move the map (the largest pool hamlet)",
         "a gen run in a child with the perturbation (full/test_villages)",
     ),
-    Roll(
-        HamletSpec(name="Clitest", seed=9, households=11, down_deg=90, water_sink="offmap", windward="N"),
-        "the CLI end to end: a seed that finishes on the first attempt (seed 8 took two - FR-005)",
-        "hg.main -> generate, a child roll (full/hamletgen/test_driver)",
-    ),
-    Roll(
-        HamletSpec(name="Childroll", seed=3, households=10),
-        "feature 210's proof that the child rolls the same hamlet the worker would: rolled once in-process and once in a child, by design",
-        "rollcache._roll_payload in-process and _hamlet_in_child (full/pipeline/test_rollcache_child)",
-    ),
-    # THE PERF TESTS - they time the stages where they run, so each rolls IN PROCESS a seed of its own (spec FR-007)
-    Roll(
-        HamletSpec(name="Inashiro", seed=6, households=15, down_deg=90, water_sink="pond"),
-        "perf_snapshot.measure timed stage by stage: its own seed, so it is not a second roll of the reference",
-        "tools/perf_snapshot.measure in the worker (tests/tools/test_perf_snapshot)",
-    ),
-    Roll(
-        HamletSpec(name="Inashiro", seed=7, households=15, down_deg=90, water_sink="pond"),
-        "perf_profile.profile_stage on the FIRST stage: stops after water_frame (milliseconds) - its own seed because the later-stage test rolls seed 5 in the same worker",
-        "tools/perf_profile.profile_stage in the worker (tests/tools/test_perf_profile, the first-stage test)",
-    ),
-    Roll(
-        HamletSpec(name="Inashiro", seed=5, households=15, down_deg=90, water_sink="pond"),
-        "perf_profile.profile_stage on a LATER stage (sink): the stages before it timed plainly, the target profiled; stops there",
-        "tools/perf_profile.profile_stage in the worker (tests/tools/test_perf_profile, the later-stage test)",
-    ),
 )
 
 DUPLICATES: tuple[Duplicate, ...] = (
     Duplicate(
-        ("Cohort-41", 41),
+        ("Inashiro", 4),
         "tests/full/hamletgen/test_driver.py::test_the_fan_out_agrees_with_the_serial_path",
-        "cohort pool child (jobs=2)",
-        "the pool-child path IS the mechanism under test; the serial half is served from the shared roll",
+        "a process-pool child (roll_pool, jobs=2)",
+        "the pool-child path IS the mechanism under test; the serial half is the gate's shared roll of the reference",
     ),
     Duplicate(
-        ("Childroll", 3),
+        ("Inashiro", 4),
         "tests/full/pipeline/test_rollcache_child.py::test_the_child_rolls_the_same_hamlet_as_the_worker_would",
-        "in-process against the child",
-        "the equality of the two paths is the assertion",
+        "in-process, in the worker, against the shared child roll",
+        "the equality of the two paths is the assertion; the child half is the gate's shared roll of the reference",
     ),
     Duplicate(
         ("Kashikawa", 3),
@@ -220,8 +204,8 @@ POOL_GENS: tuple[PoolGen, ...] = (
 )
 
 IN_PROCESS: tuple[InProcess, ...] = (
-    InProcess("tests/tools/test_perf_snapshot.py", "times the stages where it runs"),
-    InProcess("tests/tools/test_perf_profile.py", "profiles a stage where it runs"),
+    InProcess("tests/tools/test_perf_snapshot.py", "stand-in stages under a deterministic clock: the tool's behavior, not a map's time (feature 214)", stub=True),
+    InProcess("tests/tools/test_perf_profile.py", "stand-in stages under a deterministic clock: the tool's behavior, not a map's time (feature 214)", stub=True),
     InProcess("tests/tools/test_placement_stages.py", "stand-in stages; rolls no map (milliseconds)", stub=True),
     InProcess("tests/hamletgen/test_driver.py", "stand-in stages: the stage-profile and roll-scope tests roll no map (milliseconds)", stub=True),
     InProcess("tests/full/pipeline/test_rollcache_child.py", "the in-process half of the child-equality proof"),

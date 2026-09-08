@@ -1,10 +1,12 @@
-"""THE FULL TREE (feature 135, GM 2026-08-27): the fan-out agreement (two real rolls of seed 41, one of them in a
-process pool no cache can reach - and the only walk of the pool branch) and the CLI's artifact-writing roll. The
+"""THE FULL TREE (feature 135, GM 2026-08-27): the fan-out agreement (a pool-child roll of the reference against the
+gate's shared roll - the only walk of the pool branch) and the CLI's wiring over the same shared roll (feature 214). The
 pool path and the CLI are exercised by every `make map` / regen; their gate-time value is the coverage they carry,
 which only the full run enforces."""
 
 import contextlib
+import dataclasses
 import io
+import json
 import os
 import tempfile
 
@@ -12,28 +14,39 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
+from tests import rolls
 
 
-# ROLLED IN A CHILD (feature 213 FR-007): `main()` rolls through `generate` in the process that calls it, so the
-# CLI test's roll runs in the roll cache's child by name. SEED 9, NOT 8 (FR-005): seed 8 took two attempts of the
-# re-roll loop on every gate, and nothing here tests re-rolling.
-def roll_cli() -> tuple[bool, bool, str]:
+@pytest.mark.rolls_map  # it reads the shared roll of the reference (no roll of its own since feature 214)
+def test_the_cli_reports_a_single_hamlet(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`main()` parses its arguments into a spec, hands it to `generate`, and reports the map: the CLI's WIRING,
+    proven for no roll (feature 214, GM 2026-09-08: *"not just some assertions we could add onto the existing tests
+    where that same hamlet was already rolled elsewhere?!"*). `generate` is patched to serve the gate's shared roll
+    of the reference and to write the artifacts from its manifest; `generate` itself is proven by every roll in
+    the suite. What this no longer proves, stated (spec FR-007): `main` -> the real `generate` end to end.
+    The RETURN CODE reports the gate's verdict on the map, which is not what this test is about."""
+    plan, manifest = rollcache.hamlet(rolls.REFERENCE)
+    rep, _how = rollcache.report(rolls.REFERENCE)
+    seen: list[hg.HamletSpec] = []
+
+    def serve(spec: hg.HamletSpec, out_base: str | None = None, render: bool = True) -> hg.Report:
+        seen.append(spec)
+        assert out_base is not None and render is False
+        with open(out_base + ".json", "w", encoding="utf-8") as fh:
+            json.dump(manifest, fh)
+        with open(out_base + ".svg", "w", encoding="utf-8") as fh:
+            fh.write("<svg xmlns='http://www.w3.org/2000/svg'/>")
+        return dataclasses.replace(rep, path=out_base)
+
+    monkeypatch.setattr(hg.driver, "generate", serve)
     with tempfile.TemporaryDirectory() as d:
         out = os.path.join(d, "cli")
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            hg.main(["--name", "Clitest", "--seed", "9", "--households", "11", "--down-deg", "90", "--sink", "offmap", "--windward", "N", "--out", out, "--no-render"])
-        return os.path.exists(out + ".json"), os.path.exists(out + ".svg"), buf.getvalue()
-
-
-@pytest.mark.rolls_map
-def test_the_cli_reports_a_single_hamlet() -> None:
-    # the RETURN CODE reports the gate's verdict on this particular seed, which is not what this
-    # test is about - it is about the CLI writing the artifacts and reporting the map. Asserting a
-    # green gate here would pin one arbitrary seed's luck (see the cohort ratchet above for the rate).
-    has_json, has_svg, out = rollcache.keyed_to(test_the_cli_reports_a_single_hamlet, roll_cli, child="tests.full.hamletgen.test_driver:roll_cli")[0]
-    assert has_json and has_svg
-    assert "Clitest" in out
+            hg.main(["--name", "Inashiro", "--seed", "4", "--households", "15", "--down-deg", "90", "--sink", "pond", "--out", out, "--no-render"])
+        assert os.path.exists(out + ".json") and os.path.exists(out + ".svg")
+    assert seen == [rolls.REFERENCE], "the CLI built exactly the reference spec from its arguments"
+    assert "Inashiro" in buf.getvalue() and f"hh={plan.placed}/{plan.spec.households}" in buf.getvalue()
 
 
 @pytest.mark.rolls_map
@@ -48,11 +61,13 @@ def test_the_fan_out_agrees_with_the_serial_path() -> None:
     until the baseline turned out to predate a mid-task merge of another session's engine round.
     Re-rolling exactly those seeds serially on the SAME code reproduced the parallel verdicts.
     Diff against the same code, never against an older log."""
-    (parallel,) = hg.cohort(1, first_seed=41, jobs=2)
-    # THE SERIAL HALF IS THE SHARED ROLL (feature 213 FR-007): `report()` serves the one roll of seed 41 the gate
-    # already made for the cohort test and the lane-rule fixtures - the same `generate`, in a child, so the
-    # comparison stands and only the pool-child path rolls again here (a stated Duplicate in tests/rolls.py).
-    serial, _how = rollcache.report(hg.driver.cohort_specs(1, first_seed=41)[0])
+    # THE POOL CHILD ROLLS THE REFERENCE (feature 214): `roll_pool` is `cohort()`'s body with explicit specs, so the
+    # pool path rolls a spec the gate already shares instead of a cohort seed nothing else reads.
+    (parallel,) = hg.driver.roll_pool([rolls.REFERENCE], jobs=2)
+    # THE SERIAL HALF IS THE SHARED ROLL (feature 213 FR-007): `report()` serves the gate's one roll of the reference -
+    # the same `generate`, in a child, so the comparison stands and only the pool-child path rolls again here (a
+    # stated Duplicate of the reference in tests/rolls.py).
+    serial, _how = rollcache.report(rolls.REFERENCE)
     assert parallel.line() == serial.line()
     assert parallel.failures == serial.failures
     assert parallel.path is None  # a cohort member is gated, then thrown away

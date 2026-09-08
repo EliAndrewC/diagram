@@ -63,11 +63,14 @@ def subjects() -> list[Any]:
     floor will no longer see it."""
     from l7r.diagram import hamletgen as hg
 
+    # THE PLAIN SHARED ROLLS (feature 214): the same specs the ratchet and the lane rules read, so the record each
+    # needs is the one the tests just made. Seeds 41, 42 and 44 went with the cohort; 43 stays for its kink.
     return [
         hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"),  # `make reference`
+        hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"),
         hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0),
         hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90),
-        *hg.driver.cohort_specs(4, first_seed=41),
+        *hg.driver.cohort_specs(1, first_seed=43),
     ]
 
 
