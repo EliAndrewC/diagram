@@ -669,6 +669,9 @@ class FinishMixin:
         italic label silently renders upright.
         A no-op (with a warning) when resvg is absent - the skill cannot render at all
         without it, so that is a host-setup problem, not a generation bug."""
+        from l7r.diagram import _census  # noqa: PLC0415 - render-time only
+
+        _census.record("render", what="png", base=os.path.basename(basepath))  # the gate refuses a render from a test not marked as one of rendering (feature 213)
         exe = shutil.which('resvg')
         if not exe:  # pragma: no cover - depends on the host toolchain, not on any code path
             sys.stderr.write(f'warning: resvg not found (sudo apt-get install -y resvg fonts-dejavu-extra); {basepath}.png not refreshed\n')

@@ -108,7 +108,7 @@ def measure(seeds: tuple[int, ...]) -> list[dict[str, Any]]:
         s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
         s._avoid_seats = []  # type: ignore[attr-defined]
         stages: dict[str, float] = {}
-        with roll_scope():  # a roll like any other: the memo cleared and the heap trimmed when it ends (feature 210)
+        with roll_scope(plan.spec):  # a roll like any other: the memo cleared and the heap trimmed when it ends (feature 210), the census written (213)
             for st in STAGES:
                 t0 = time.time()
                 with redirect_stdout(io.StringIO()):

@@ -119,7 +119,7 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[tu
     # THE WALK-THROUGH IS A ROLL (feature 210): the whole stage loop sits in one `roll_scope`, so the memo
     # is cleared and the heap trimmed when the page is built, as after any roll. Not per stage: the memo
     # serves across stages within a roll, and a plate is a copy finished mid-roll.
-    with roll_scope():
+    with roll_scope(plan.spec):
         for i, stage in enumerate(STAGES, 1):
             before = _ink(s)
             with redirect_stdout(io.StringIO()):

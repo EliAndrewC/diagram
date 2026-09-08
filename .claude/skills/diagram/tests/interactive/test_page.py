@@ -44,6 +44,8 @@ from l7r.diagram.interactive.sources import (
 )
 from l7r.diagram.interactive.tags import Split
 
+pytestmark = pytest.mark.renders  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
+
 RECT = '<rect x="1" y="2" width="3" height="4" fill="#abc" stroke="#123"/>'
 
 

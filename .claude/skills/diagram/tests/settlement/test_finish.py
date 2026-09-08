@@ -4,13 +4,17 @@ import os
 import tempfile
 from pathlib import Path
 
+import pytest
+
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _crop_settlement, _town
 
 
-def test_finish_writes_svg_json_and_renders_png():
+@pytest.mark.renders  # a test OF rendering (feature 213): it clears the suite's skip-render default itself
+def test_finish_writes_svg_json_and_renders_png(monkeypatch):
     # finish() must pair a .png with the .svg automatically (the render step that used to be a
     # forgettable manual command); render=False writes only the source files.
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER", raising=False)
     with tempfile.TemporaryDirectory() as d:
         base = os.path.join(d, "t")
         s = _town()
@@ -305,6 +309,7 @@ def test_a_caption_wrapped_onto_two_lines_never_leaves_a_short_word_standing_alo
     assert " ".join(lines).split() == ["A", "Long", "Village", "Name", "Here"], "every word kept, in order"
 
 
+@pytest.mark.renders  # a test OF rendering (feature 213)
 def test_the_page_raster_is_a_render_like_the_png(monkeypatch):
     """Feature 208 FR-001/FR-004 (GM 2026-09-07): the page's picture and id map are made on exactly the PNG's
     condition. `render=False` -> a complete vector-only page (`"r": 0`, no image element) and no PNG;

@@ -286,10 +286,10 @@ def test_a_seed_the_baseline_never_measured_is_skipped_rather_than_compared_agai
 def test_measure_times_every_STAGE_of_the_reference_hamlet(monkeypatch) -> None:
     """The per-stage breakdown is what makes a snapshot actionable: "the free per-stage delta every
     snapshot carries says WHICH stage grew". One seed, because this rolls the real generator."""
-    rows = ps.measure((4,))
+    rows = ps.measure((6,))  # its OWN seed (feature 213 FR-007): seed 4 is the reference roll, which the gate rolls once
     assert len(rows) == 1
     row = rows[0]
-    assert row["seed"] == 4 and row["seconds"] > 0.0
+    assert row["seed"] == 6 and row["seconds"] > 0.0
     assert row["stages"] and sum(row["stages"].values()) == pytest.approx(row["seconds"], abs=0.5)
     assert row["houses"] <= row["asked"], "and it records what was ASKED beside what landed"
 

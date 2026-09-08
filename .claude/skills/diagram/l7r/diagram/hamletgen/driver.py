@@ -13,6 +13,7 @@ import sys
 import time
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
+from typing import Any
 
 # IMPORTED AT MODULE LEVEL, not inside generate(). A local import would run the guard's own
 # module-init on the FIRST generate() of a process and not on later ones, and gencache keys a
@@ -160,6 +161,11 @@ class Report:
     # (`roll_attempt`, `roll_after`), so the picture can always be attributed to the roll that drew it.
     attempt: int = 1
     rerolled_after: list[str] = field(default_factory=list)
+    # THE MANIFEST THE REPORT WAS JUDGED ON (feature 213): one roll now serves the cohort test (the
+    # verdict), the lane-rule fixtures (the finished manifest) and the hamlet floor (the record), so the
+    # report carries the kept attempt's finished manifest instead of finishing it into a scratch directory
+    # and throwing it away. None only when a caller built the Report by hand.
+    manifest: dict[str, Any] | None = None
 
     @property
     def ok(self) -> bool:
@@ -177,7 +183,7 @@ class Report:
 
 
 @contextlib.contextmanager
-def roll_scope() -> Iterator[None]:
+def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
     """The boundary every roll crosses (feature 210, GM 2026-09-07: "we should clear the clearance memo
     at the end of a roll and ... do the malloc_trim after a roll"). Every loop that runs the stages sits
     inside one - `build()` and the three tools that iterate `STAGES` themselves (`perf_snapshot`,
@@ -185,15 +191,26 @@ def roll_scope() -> Iterator[None]:
     on a stage-running loop outside it. On exit, success or failure: the clearance memo is cleared
     (nothing in it can serve a later roll - its keys are object identities) and glibc's freed arenas go
     back to the kernel. Measured before: a worker rested at 197-266 MB after its rolls with 46 MB of that
-    the memo and 14-68 MB retained by the allocator (specs/210 research.md R1)."""
+    the memo and 14-68 MB retained by the allocator (specs/210 research.md R1).
+
+    AND IT IS WHERE THE ROLL CENSUS IS WRITTEN (feature 213, GM 2026-09-07: "never allow the same hamlet
+    to be rolled twice within the tests"): because every stage-running loop enters this scope, a record
+    written here cannot miss a roll - which is what the gate's roster check needs, and what a census that
+    patched entry points could not promise (`_census.py`). `spec` is what the roll is of; the callers pass
+    it, and a scope entered without one is recorded as such."""
+    from l7r.diagram import _census
     from l7r.diagram._memory import trim_heap
     from l7r.diagram.hamletgen import clearance
 
+    t0 = time.time()
+    ok = False
     try:
         yield
+        ok = True
     finally:
         clearance.reset()
         trim_heap()
+        _census.record("roll", spec=_census.spec_row(spec), ok=ok, dt=round(time.time() - t0, 1))
 
 
 def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settlement:
@@ -205,7 +222,7 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
 
     if not os.environ.get(STAGE_PROFILE_ENV):
-        with roll_scope():
+        with roll_scope(plan.spec):
             for stage in STAGES:
                 stage(s, plan)
         return s
@@ -216,7 +233,7 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     # feature 132 forbids a variable that changes what a map ROLLS, and this changes only what is
     # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
     timings: list[tuple[str, float]] = []
-    with roll_scope():
+    with roll_scope(plan.spec):
         for stage in STAGES:
             t0 = time.time()
             stage(s, plan)
@@ -253,6 +270,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
 
     plan = plan_site(spec)
     rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
+    rolled_m: dict[str, dict[str, Any]] = {}  # ...and its finished manifest, by the same argument (feature 213: the report carries it)
 
     def _roll(avoid: Sequence[tuple[float, float]], out: str | None = None, attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
         """Build, finish and gate once. Returns the settlement, the gate's verdict, and the seats the
@@ -276,6 +294,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
 
         rolled["plan"] = copy.deepcopy(plan)
         s2 = build(rolled["plan"], avoid=avoid)
+        rolled_m["M"] = s2.M  # the kept attempt rolls last, so this is the report's manifest (feature 213)
         # ATTRIBUTION (T33): the manifest says which roll drew it, and why the earlier ones were
         # rejected, so a changed connector or web is never mistaken for the effect of an edit.
         s2.M["meta"]["roll_attempt"] = attempt
@@ -356,7 +375,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # is the same map with the same failures; taking the re-gate's answer instead would let a
         # second opinion overwrite the one that was actually chosen.
         _roll(kept, out_base, kept_attempt, after[: kept_attempt - 1])
-    return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1])
+    return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1], manifest=rolled_m.get("M"))
 
 
 def cohort_specs(count: int, first_seed: int = 1, households: int | None = None) -> list[HamletSpec]:

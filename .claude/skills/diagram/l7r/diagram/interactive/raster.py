@@ -147,6 +147,9 @@ def resvg_png(doc: str, *args: str) -> bytes | None:
 def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
     """The whole picture at `r` px per map px, as lossless WebP (half the bytes of PNG; lossy WebP rings on
     line art and was declined - spec D2). The same SVG text the page carries, so the same picture."""
+    from l7r.diagram import _census
+
+    _census.record("render", what="raster")  # the gate refuses a render from a test not marked as one of rendering (feature 213)
     png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
     if png is None:
         return None

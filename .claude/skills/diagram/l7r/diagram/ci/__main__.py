@@ -116,6 +116,10 @@ def main(argv: list[str] | None = None) -> int:
     if a.command == "remote-spend":
         print(runlog.remote_spend_report(skill))
         return 0
+    if a.command == "rollcensus":  # feature 213: the roll census's verdict after the test phase (`verdict [--full]`)
+        from l7r.diagram.ci import rollverdict
+
+        return rollverdict.main(list(a.args))
 
     if a.target:
         # ONLY AN EXPENSIVE OPERATION MAY RUN REMOTELY (FR-010, fourth request): the registry decides,

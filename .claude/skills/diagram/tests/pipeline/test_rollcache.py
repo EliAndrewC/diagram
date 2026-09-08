@@ -137,15 +137,15 @@ def test_the_bypasses_produce_and_store_nothing(tmp_path, monkeypatch, var):
 # RECORDS its `report:` rolls, because the floor that reads those records was re-rolling the same maps
 # for a measured 401.6 s. `GATE_NO_CACHE` keeps its documented leave-nothing-behind contract, and these
 # cases exist so a future edit cannot quietly merge the two again.
-def test_the_FULL_bypass_records_a_report_roll_and_a_later_run_can_serve_it(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+def test_the_FULL_bypass_records_a_roll_subject_and_a_later_run_can_serve_it(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
     _, _, produce = _toy(tmp_path, monkeypatch)
     monkeypatch.setenv(rollcache.FULL_ENV, "1")
     rollcache.reset_shared()
-    assert rollcache.obtain("report:toy", produce) == ({"value": 7}, "BYPASS-STORED")
-    assert rollcache.obtain("report:toy", produce)[1] == "BYPASS-STORED", "the FULL run still PRODUCES every time - never served"
-    assert Path(rollcache._entry("report:toy")).exists(), "the record the hamlet-path floor reads"
+    assert rollcache.obtain("roll:toy", produce) == ({"value": 7}, "BYPASS-STORED")
+    assert rollcache.obtain("roll:toy", produce)[1] == "BYPASS-STORED", "the FULL run still PRODUCES every time - never served"
+    assert Path(rollcache._entry("roll:toy")).exists(), "the record the hamlet-path floor reads"
     monkeypatch.delenv(rollcache.FULL_ENV)
-    assert rollcache.obtain("report:toy", produce)[1] == "HIT", "a later non-FULL run serves what the FULL run recorded - the whole saving"
+    assert rollcache.obtain("roll:toy", produce)[1] == "HIT", "a later non-FULL run serves what the FULL run recorded - the whole saving"
 
 
 def test_GATE_NO_CACHE_still_stores_nothing_even_for_a_report_roll(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
@@ -180,8 +180,9 @@ def test_the_FULL_bypass_stores_nothing_for_a_NON_report_subject(tmp_path, monke
 
 
 def test_report_deps_records_once_and_then_reads_the_record(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """`report_deps` (feature 145, the hamlet-path floor): the first call rolls and records, the second returns the
-    record without rolling - and it is never bypassed, unlike `obtain`."""
+    """`report_deps` (feature 145, the hamlet-path floor): the first call rolls (in a child, feature 213) and records,
+    the second returns the record without rolling - and it is never bypassed, unlike `obtain`. The record is the
+    CHILD's (feature 210: the functions ran there), under the one `roll:` subject the tests' own roll uses (213)."""
     import os
 
     from l7r.diagram import hamletgen as hg
@@ -189,11 +190,11 @@ def test_report_deps_records_once_and_then_reads_the_record(tmp_path, monkeypatc
 
     calls: list[int] = []
 
-    def fake_generate(spec, out_base=None, render=False):  # type: ignore[no-untyped-def]
+    def fake_child(spec):  # type: ignore[no-untyped-def]
         calls.append(1)
-        return {"ok": True}
+        return (("plan", {"M": 1}, "report"), {"functions": [], "files": []})
 
-    monkeypatch.setattr(hg, "generate", fake_generate)
+    monkeypatch.setattr(rollcache, "_hamlet_in_child", fake_child)
     monkeypatch.setattr(rollcache, "_entry", lambda subject: str(tmp_path / "entry"))
     monkeypatch.setenv("L7R_TESTS_FULL", "1")  # bypass is for SERVING; recording still happens
     spec = hg.HamletSpec(name="Probe", seed=1, households=10)
@@ -349,3 +350,98 @@ def test_a_run_with_no_xdist_id_has_no_shared_store(monkeypatch: pytest.MonkeyPa
     """
     monkeypatch.delenv("PYTEST_XDIST_TESTRUNUID", raising=False)
     assert rollcache._run_share_path(("subject", "producer")) is None
+
+
+def test_the_first_wave_waits_on_one_roll_instead_of_each_rolling(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 213 FR-002: two workers asking for the same shared subject at the same moment make ONE roll - the
+    second waits on the first's lock and reads the payload it wrote. Threads stand in for workers (each `os.open`
+    is its own file description, so `flock` separates them exactly as it separates processes); a fresh
+    PYTEST_XDIST_TESTRUNUID gives them a run store of their own."""
+    import threading
+    import time as _time
+
+    from l7r.diagram.pipeline import rollcache
+
+    _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "lock-test-" + tmp_path.name)
+    monkeypatch.setattr(rollcache.tempfile, "gettempdir", lambda: str(tmp_path))
+    rollcache.reset_shared()
+    rolls: list[int] = []
+
+    def slow_produce():  # type: ignore[no-untyped-def]
+        rolls.append(1)
+        _time.sleep(0.6)
+        return {"value": 42}
+
+    results: list[tuple[dict, str]] = []
+
+    def worker() -> None:
+        rollcache._SHARED_BYPASS.clear()  # each "worker" starts with an empty process dict, as a real one does
+        results.append(rollcache.obtain("shared-lock-toy", slow_produce, share=True))
+
+    threads = [threading.Thread(target=worker) for _ in range(3)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert rolls == [1], "three simultaneous requests, one roll"
+    assert sorted(h for _p, h in results) == ["BYPASS", "BYPASS-SHARED-RUN", "BYPASS-SHARED-RUN"] and all(p == {"value": 42} for p, _h in results)
+    rollcache.reset_shared()
+
+
+def test_a_wedged_lock_holder_does_not_hang_the_run(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """FR-002's bound: past LOCK_WAIT_S a waiter proceeds and rolls itself - today's behavior, never a hang."""
+    import fcntl
+    import os
+
+    from l7r.diagram.pipeline import rollcache
+
+    run_path = str(tmp_path / "share" / "payload.pickle")
+    os.makedirs(os.path.dirname(run_path))
+    holder = os.open(run_path + ".lock", os.O_RDWR | os.O_CREAT)
+    fcntl.flock(holder, fcntl.LOCK_EX)  # a holder that never releases
+    monkeypatch.setattr(rollcache, "LOCK_WAIT_S", 0.4)
+    entered = []
+    with rollcache._share_lock(run_path):
+        entered.append(1)
+    assert entered == [1], "the waiter gave up waiting and went on"
+    os.close(holder)
+    with rollcache._share_lock(None):
+        pass  # no run store: nothing to lock
+
+
+def test_the_roll_slots_bound_how_many_child_rolls_run_at_once(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 213 FR-010: with one slot, two rolls serialize; the second starts only when the first releases."""
+    import threading
+    import time as _time
+
+    from l7r.diagram.pipeline import rollcache
+
+    monkeypatch.setenv(rollcache.ROLL_SLOTS_ENV, "1")
+    monkeypatch.delenv("PYTEST_XDIST_TESTRUNUID", raising=False)
+    monkeypatch.setattr(rollcache.tempfile, "gettempdir", lambda: str(tmp_path))
+    spans: list[tuple[float, float]] = []
+
+    def hold() -> None:
+        with rollcache._roll_slot():
+            t0 = _time.time()
+            _time.sleep(0.3)
+            spans.append((t0, _time.time()))
+
+    a, b = threading.Thread(target=hold), threading.Thread(target=hold)
+    a.start()
+    b.start()
+    a.join()
+    b.join()
+    (s0, e0), (s1, e1) = sorted(spans)
+    assert s1 >= e0 - 0.01, f"the second roll started at {s1 - s0:.2f}s, before the first released at {e0 - s0:.2f}s"
+    monkeypatch.setenv(rollcache.ROLL_SLOTS_ENV, "2")
+    spans.clear()
+    a, b = threading.Thread(target=hold), threading.Thread(target=hold)
+    a.start()
+    b.start()
+    a.join()
+    b.join()
+    (s0, e0), (s1, e1) = sorted(spans)
+    assert s1 < e0, "with two slots the two rolls overlap"

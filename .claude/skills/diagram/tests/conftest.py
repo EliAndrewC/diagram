@@ -19,9 +19,20 @@ the file I just changed" with no answer but the override.
 
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from l7r.diagram._invocation import assert_via_make
+
+# TESTS DO NOT RENDER (feature 213, GM 2026-09-07: "Tests must not render real maps ... A suite-wide default, with the
+# handful of tests that test rendering itself opting in"). The gate reads manifests; a PNG is resvg at 420 MB and the
+# page's raster picture a 444 MB PIL child, and the census found both made by tests that never looked at them (the
+# cache round-trip test regenerated a real map with its picture). So the switch `finish()` consults for both is set
+# here for every test; a test OF rendering carries the `renders` marker and clears it itself, and the roll census
+# fails the gate on a render from any other test (`ci/rollverdict.py`). `setdefault`, so a session that exports the
+# variable for its own reasons is not overridden.
+os.environ.setdefault("DIAGRAM_SKIP_RENDER", "1")
 
 # At import of the suite's root conftest - once, before any test runs.
 assert_via_make("the test suite", "quick   (~33 s)  or  make done   (~5.5 min, the full gate)")

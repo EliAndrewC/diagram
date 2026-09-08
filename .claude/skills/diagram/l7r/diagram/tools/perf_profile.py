@@ -77,7 +77,7 @@ def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
     target = STAGES[names.index(stage)]
     plain = profiled = 0.0
     prof = cProfile.Profile()
-    with redirect_stdout(io.StringIO()), roll_scope():  # a roll like any other (feature 210)
+    with redirect_stdout(io.StringIO()), roll_scope(plan.spec):  # a roll like any other (feature 210; the census, 213)
         for st in STAGES:
             if st is target:
                 # the stage runs ONCE, profiled; the plain time is the snapshot's job (a second run would double the stage's side effects)

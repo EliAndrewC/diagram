@@ -30,6 +30,8 @@ was stale cached coverage rather than anything here.
 
 from __future__ import annotations
 
+from unittest import mock
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -56,43 +58,36 @@ found: the site this file used returned ZERO parcels, so the loop never ran, and
 a passing test for three features."""
 
 
-@pytest.mark.rolls_map
-def test_the_woodland_shrink_ladder_is_walked_on_a_real_site(monkeypatch) -> None:
-    def produce():  # type: ignore[no-untyped-def]
-        walked: list[float] = []
-        real = hinterland.fit_square_parcel
+# ROLLED IN A CHILD (feature 213 FR-007): the produce closure is lifted to this module-level function - the
+# feature-146 doctrine - so the roll cache's child can import it by name; its patches are applied inside it.
+def roll_woodland_shrink() -> tuple[list[tuple[float, float]], list[float]]:
+    walked: list[float] = []
+    real = hinterland.fit_square_parcel
 
-        def _spy(half: float, floor_half: float, fits):  # noqa: ANN001, ANN202 - a pass-through spy
-            got = real(half, floor_half, fits)
-            if got is not None:
-                walked.append(got)
-            return got
+    def _spy(half: float, floor_half: float, fits):  # noqa: ANN001, ANN202 - a pass-through spy
+        got = real(half, floor_half, fits)
+        if got is not None:
+            walked.append(got)
+        return got
 
-        monkeypatch.setattr(hinterland.parcels, "fit_square_parcel", _spy)
-        # THE PATCH MUST LAND WHERE THE CALLER RESOLVES THE NAME (feature 173): `hinterland.py`
-        # is the `hinterland/` package now, and `open_ground_patches` reads `fit_square_parcel`
-        # in `hinterland/parcels.py` - patching the package would bind a name nothing reads.
-        # ASSERTED rather than trusted, because the check below is CONDITIONAL (`if walked:`):
-        # a mislanded patch leaves `walked` empty, the conditional skips, and the test passes
-        # having verified nothing. Coverage does not catch that - the lines all run. Whether a
-        # given site REACHES the shrink is engine-dependent and stays conditional; whether the
-        # spy landed is not. (Found by the peer session that wrote this test, 2026-08-31.)
+    with mock.patch.object(hinterland.parcels, "fit_square_parcel", _spy):
         assert hinterland.parcels.fit_square_parcel is _spy, "the spy did not land where open_ground_patches reads the name"
         plan = hg.plan_site(SPEC)
         s = hg.build(plan)  # the expensive half, paid once and then cached
-        # THE BAND IS SWEPT, NOT GUESSED. Too small and the full square fits, so the ladder is never
-        # reached; too large and even the floor-sized rung fails, so it is reached and gives up. The rung
-        # runs in between, and where that band sits moves with the engine - which is exactly what made
-        # the pinned-size version of this test rot twice.
         widest: list[tuple[float, float]] = []
         for asked in ASKED:
             for poly in open_ground_patches(s, plan, 3, size=float(asked)):
                 w = max(p[0] for p in poly) - min(p[0] for p in poly)
                 h = max(p[1] for p in poly) - min(p[1] for p in poly)
                 widest.append((float(asked), max(w, h)))
-        return widest, list(walked)
+    return widest, list(walked)
 
-    (widest, walked), _how = rollcache.keyed_to(test_the_woodland_shrink_ladder_is_walked_on_a_real_site, produce)
+
+@pytest.mark.rolls_map
+def test_the_woodland_shrink_ladder_is_walked_on_a_real_site() -> None:
+    (widest, walked), _how = rollcache.keyed_to(
+        test_the_woodland_shrink_ladder_is_walked_on_a_real_site, roll_woodland_shrink, child="tests.gate.hamletgen.test_woodland_shrink_147:roll_woodland_shrink"
+    )
 
     assert widest, "no parcel came back at ANY asked size - this test would assert nothing, which is the state it was found in"
     for asked, got in widest:

@@ -4,7 +4,6 @@ decides when a test runs). Helpers stay in `tests.test_villages`, whose cheap te
 
 import json
 import os
-import runpy
 
 import pytest
 
@@ -30,30 +29,15 @@ def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
     (ring, pack, frontage). When the town tier converts to scripted generation, move the subject
     to a scripted town: a hamlet alone would not have held the original line.
     """
-    import random
-
-    from l7r.diagram import settlement
 
     gen = os.path.join(
         HERE, "pool", "hamlets", "kashikawa", "kashikawa.gen.py"
     )  # feature 161 moved every map into a per-map folder; this literal kept the flat path and stopped matching SILENTLY (found by feature 166's FULL run, fixed on sight per constitution XIV)
 
     def once(perturb):
-        orig = settlement.Settlement.meta
-
-        def patched(self, *a, **kw):
-            r = orig(self, *a, **kw)
-            for _ in range(perturb):
-                random.random()
-            return r
-
-        settlement.Settlement.meta = patched
-        os.environ["DIAGRAM_SKIP_RENDER"] = "1"
-        try:
-            runpy.run_path(gen, run_name="__main__")
-        finally:
-            settlement.Settlement.meta = orig
-            del os.environ["DIAGRAM_SKIP_RENDER"]
+        # IN A CHILD (feature 213 FR-007): the gen runs in a child process that applies the perturbation itself
+        # (`gencache.run_gen_child`, the same shape as the regen site), so the worker never holds the roll
+        gencache.run_gen_child(gen, perturb=perturb)
         with open(gen[: -len(".gen.py")] + ".json") as fh:
             return fh.read()
 

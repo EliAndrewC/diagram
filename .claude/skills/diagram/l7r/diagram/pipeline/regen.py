@@ -44,7 +44,7 @@ def regen(gen: str, use_cache: bool = True) -> tuple[str, float]:
     started = time.time()
     if use_cache and gencache.load(gen):
         return "CACHED", time.time() - started
-    deps = gencache.run_and_record(gen)
+    deps = gencache.run_gen_child(gen)  # in a child (feature 213 FR-007): `make map`'s roll never sits in the driver's process
     gencache.store(gen, deps)
     return "REGENERATED", time.time() - started
 

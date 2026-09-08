@@ -126,6 +126,10 @@ markers = [
     # file records their hash); always run at the gate. "no reason to run a five-CPU-second test to validate the
     # makefile behavior if we don't make any changes to the makefile itself."
     "tooling: exercises the make/ci/pipeline tooling by running it. Skipped by quick when the tooling is unchanged since the last green gate; always run at the gate.",
+    # `renders` (feature 213, GM 2026-09-07: "Tests must not render real maps ... with the handful of tests that test rendering itself
+    # opting in"): DIAGRAM_SKIP_RENDER=1 is the suite's default (tests/conftest.py); a test OF rendering carries this marker and clears the
+    # switch itself. The gate's roll census records every PNG and page-raster render with its test and fails on one from an unmarked test.
+    "renders: a test OF rendering - it may produce a PNG or the page's raster picture. Every other test runs under DIAGRAM_SKIP_RENDER=1.",
 ]
 
 [tool.coverage.run]

@@ -13,12 +13,14 @@ from tests._scope import full_or
 from tests.settlement._builders import _cap020, _castle_map, _crop_settlement, _max_turn_deg, _memo_city, _town
 
 
+@pytest.mark.renders  # a test OF rendering (feature 213): it clears the suite's skip-render default for its first half
 def test_png_width_env_overrides_render_resolution(monkeypatch):
     # DIAGRAM_PNG_WIDTH renders at a lower resolution for a quick iteration eyeball (raster cost is
-    # ~quadratic in width); DIAGRAM_SKIP_RENDER skips it entirely (the test suite's default - the gate
-    # reads the JSON, never the PNG). Committed maps still render at the full default width.
+    # ~quadratic in width); DIAGRAM_SKIP_RENDER skips it entirely (the test suite's default since
+    # feature 213 - the gate reads the JSON, never the PNG). Committed maps still render at the full default width.
     from PIL import Image
 
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER", raising=False)
     with tempfile.TemporaryDirectory() as d:
         base = os.path.join(d, "t")
         monkeypatch.setenv("DIAGRAM_PNG_WIDTH", "400")

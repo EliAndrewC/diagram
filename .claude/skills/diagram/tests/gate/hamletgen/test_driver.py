@@ -2,13 +2,54 @@
 `tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
+import os
 import re
+import tempfile
+from unittest import mock
 
 import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
 from tests._scope import FULL
+
+
+# ROLLED IN A CHILD (feature 213 FR-007): the produce closure is lifted to this module-level function - the
+# feature-146 doctrine - so the roll cache's child can import it by name; its patches are applied inside it.
+def roll_retry() -> tuple[list[str], list[list[tuple[float, float]]]]:
+    calls: list[int] = []
+
+    def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        if len(calls) == 1:  # the first roll strands two houses; the predicate names them
+            return [(1262, 848, 211), (1397, 890, 287)]
+        return []
+
+    seen: list[list[tuple[float, float]]] = []
+    real_build = hg.driver.build
+
+    def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
+        seen.append(list(avoid))
+        return real_build(plan, avoid=avoid)
+
+    with mock.patch.object(hg.driver, "unreached_houses", fake_unreached), mock.patch.object(hg.driver, "build", spy_build):
+        rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
+    return rep.failures, seen
+
+
+def roll_no_help() -> tuple[list[str], int, list[str], str]:
+    rolls: list[int] = []
+
+    def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
+        rolls.append(1)
+        return [(100, 100, 200)] if len(rolls) == 1 else [(100, 100, 200), (900, 900, 300)]
+
+    with tempfile.TemporaryDirectory() as d, mock.patch.object(hg.driver, "unreached_houses", fake_unreached):
+        out = os.path.join(d, "nohelp")
+        rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
+        with open(out + ".svg", encoding="utf-8") as fh:
+            svg = fh.read()
+    return rep.failures, len(rolls), rep.fail_lines, svg
 
 
 @pytest.mark.rolls_map
@@ -97,7 +138,7 @@ GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
 
 
 @pytest.mark.rolls_map
-def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden() -> None:
     """`generate` re-rolls a map whose FINISHED manifest strands a farmhouse, forbidding the ground
     those houses stood on. Three seat-time tests were built before this and all three failed, because
     whether a way can reach a steading depends on fabric that does not exist when seats are chosen;
@@ -110,33 +151,7 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
     just no longer the battery. That the old version of this test stopped working when the seam moved is
     the point: it was pinned to the dependency this feature removes."""
 
-    def produce():  # type: ignore[no-untyped-def]
-        calls: list[int] = []
-
-        def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
-            calls.append(1)
-            if len(calls) == 1:  # the first roll strands two houses; the predicate names them
-                return [(1262, 848, 211), (1397, 890, 287)]
-            return []
-
-        # PATCH `hg.driver`, not `ways`: the driver imports the predicate at module level, so the name it
-        # calls is its OWN. (The old test had to patch `check_village` instead, because `generate`
-        # imported `gate` inside the function - the note is kept because the reasoning still applies to
-        # any future seam: patch the namespace that does the CALLING.)
-        monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
-        seen: list[list[tuple[float, float]]] = []
-        real_build = hg.driver.build
-
-        def spy_build(plan, avoid=()):  # type: ignore[no-untyped-def]
-            seen.append(list(avoid))
-            return real_build(plan, avoid=avoid)
-
-        monkeypatch.setattr(hg.driver, "build", spy_build)
-        rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
-        return rep.failures, seen
-
-    # served from the roll cache keyed to this test's source (feature 135): two 10-household rolls, ~36 s fresh
-    failures, seen = rollcache.keyed_to(test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden, produce)[0]
+    failures, seen = rollcache.keyed_to(test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden, roll_retry, child="tests.gate.hamletgen.test_driver:roll_retry")[0]
     assert failures == []  # the re-roll's verdict is the one reported
     assert len(seen) == 2  # one roll, then exactly one re-roll
     assert seen[0] == []  # the first roll forbids nothing
@@ -145,7 +160,7 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
 
 
 @pytest.mark.rolls_map
-def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
+def test_a_re_roll_that_does_not_help_is_not_kept() -> None:
     """The retry is self-limiting: a re-roll is kept only if it strands NO MORE houses than the roll it
     replaces. Without that a map could be re-rolled into a worse state and shipped, which is the opposite
     of the point.
@@ -156,31 +171,7 @@ def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch, tmp_path) -> None
     re-rolls by an unrelated total let a defect elsewhere veto a genuine reach fix, KEEPING the map with
     the stranded house."""
 
-    def produce():  # type: ignore[no-untyped-def]
-        rolls: list[int] = []
-
-        def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
-            rolls.append(1)
-            # the RE-ROLL strands MORE than the roll it would replace, so it must be rejected
-            return [(100, 100, 200)] if len(rolls) == 1 else [(100, 100, 200), (900, 900, 300)]
-
-        monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
-
-        # NO GATE STUB ANY MORE (feature 166 Phase 4). This used to patch `check_village.gate` with a
-        # fake that PRINTED a FAIL line, because `Report.fail_lines` was scraped from the gate's stdout.
-        # The driver now writes both `failures` and `fail_lines` itself from the reach predicate, so the
-        # only seam this test needs is the one above - and the assertions below are unchanged except for
-        # the count the report now carries.
-        # WITH AN OUT PATH, because rejecting a re-roll leaves THAT roll's files on disk - the keeper has
-        # to be re-emitted, and it cannot be done by finishing the kept Settlement a second time (that
-        # splices the water block twice and its `</g>` closes the <svg> root early; see `_roll`). So the
-        # rejected-re-roll path only exists when there is somewhere to write.
-        out = str(tmp_path / "nohelp")
-        rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
-        return rep.failures, len(rolls), rep.fail_lines, (tmp_path / "nohelp.svg").read_text()
-
-    # served from the roll cache keyed to this test's source (feature 135): three 10-household rolls, ~57 s fresh
-    failures, n_rolls, fail_lines, svg = rollcache.keyed_to(test_a_re_roll_that_does_not_help_is_not_kept, produce)[0]
+    failures, n_rolls, fail_lines, svg = rollcache.keyed_to(test_a_re_roll_that_does_not_help_is_not_kept, roll_no_help, child="tests.gate.hamletgen.test_driver:roll_no_help")[0]
     assert failures == ["farmhouses_reach_a_way[1]"]  # the FIRST roll's verdict is kept, not the worse one
     assert n_rolls == 3  # roll, rejected re-roll, then the keeper re-emitted
     assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]

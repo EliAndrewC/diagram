@@ -38,6 +38,7 @@ Excluded from the engine file set (`gencache._NOT_ENGINE`): this module serves r
 from __future__ import annotations
 
 import contextlib
+import fcntl
 import glob
 import hashlib
 import inspect
@@ -48,10 +49,12 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections.abc import Callable
+import time
+from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram import _census
 from l7r.diagram.pipeline import gencache
 
 if TYPE_CHECKING:
@@ -108,6 +111,77 @@ def _share_key(subject: str, produce: Callable[[], Any]) -> tuple[str, str]:
     code = getattr(produce, "__code__", None)
     site = f"{code.co_filename}:{code.co_firstlineno}:{code.co_name}" if code is not None else repr(type(produce))
     return (subject, site)
+
+
+#: How long a waiter gives the holder of a share lock before rolling itself - longer than any roll (the slowest
+#: cohort seed under coverage was 205 s with its re-rolls), so it fires only for a holder that is wedged.
+LOCK_WAIT_S = 600.0
+
+
+@contextlib.contextmanager
+def _share_lock(run_path: str | None) -> Iterator[None]:
+    """An exclusive lock beside the run store's payload for one key (feature 213 FR-002) - or nothing when
+    there is no run store, which is a single process with nobody to wait for. `flock`, so a holder that dies
+    releases it; polled with a bound, so a wedged holder cannot hang the run: past LOCK_WAIT_S the waiter
+    proceeds without the lock and rolls, which is today's behavior."""
+    if run_path is None:
+        yield
+        return
+    os.makedirs(os.path.dirname(run_path), exist_ok=True)
+    fd = os.open(run_path + ".lock", os.O_RDWR | os.O_CREAT, 0o644)
+    held = False
+    try:
+        deadline = time.time() + LOCK_WAIT_S
+        while True:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                held = True
+                break
+            except OSError:
+                if time.time() >= deadline:
+                    break
+                time.sleep(0.25)
+        yield
+    finally:
+        if held:
+            with contextlib.suppress(OSError):
+                fcntl.flock(fd, fcntl.LOCK_UN)
+        os.close(fd)
+
+
+#: How many child rolls may run at once across the whole run (feature 213 FR-010): each is ~120-270 MB and
+#: 15-70 s, and worksteal starts every gate module at t=0. Measured in specs/213 research R4.
+ROLL_SLOTS_ENV = "L7R_ROLL_SLOTS"
+ROLL_SLOTS_DEFAULT = 4
+
+
+@contextlib.contextmanager
+def _roll_slot() -> Iterator[None]:
+    """One of N slots for a child roll: the first free slot, else a wait on the slot this pid hashes to.
+    Slots live in the run share directory (or the temp directory without one, so a plain `make test-file`
+    of two rolling files is bounded too)."""
+    n = max(1, int(os.environ.get(ROLL_SLOTS_ENV) or ROLL_SLOTS_DEFAULT))
+    base = _run_share_dir() or os.path.join(tempfile.gettempdir(), "l7r-roll-slots")
+    os.makedirs(base, exist_ok=True)
+    fds = [os.open(os.path.join(base, f"slot-{i}.lock"), os.O_RDWR | os.O_CREAT, 0o644) for i in range(n)]
+    held = -1
+    try:
+        for i, fd in enumerate(fds):
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                held = i
+                break
+            except OSError:
+                continue
+        if held < 0:
+            held = os.getpid() % n
+            fcntl.flock(fds[held], fcntl.LOCK_EX)
+        yield
+    finally:
+        with contextlib.suppress(OSError):
+            fcntl.flock(fds[held], fcntl.LOCK_UN)
+        for fd in fds:
+            os.close(fd)
 
 
 def reset_shared() -> None:
@@ -218,7 +292,8 @@ def _stores_under_bypass(subject: str) -> bool:
     `L7R_TESTS_FULL` is read only here and in `tests/_scope.py` (which selects WHICH tests and specs
     run, never engine behavior inside a roll), and no engine module reads `L7R_TESTS_EXHAUSTIVE` or
     `L7R_COV_FLOORS` at all. The roll is the same program either way."""
-    return os.environ.get(FULL_ENV) == "1" and os.environ.get(gencache.GATE_BYPASS) != "1" and subject.startswith("report:")
+    # `roll:` since feature 213 - the ONE subject per spec that hamlet(), report() and report_deps() all read
+    return os.environ.get(FULL_ENV) == "1" and os.environ.get(gencache.GATE_BYPASS) != "1" and subject.startswith("roll:")
 
 
 def obtain[T](subject: str, produce: Callable[[], T], share: bool = False, recorded: Callable[[], tuple[T, dict[str, Any]]] | None = None) -> tuple[T, str]:
@@ -236,22 +311,35 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False, recor
         key = _share_key(subject, produce)
         cached = _SHARED_BYPASS.get(key)
         if cached is not None:
+            _census.record("served", subject=subject[:80], how="BYPASS-SHARED")
             return pickle.loads(cached), "BYPASS-SHARED"  # noqa: S301 - our own bytes, dumped below
         run_path = _run_share_path(key)
-        if run_path is not None and os.path.exists(run_path):
-            with contextlib.suppress(OSError, EOFError, pickle.UnpicklingError):
-                with open(run_path, "rb") as fh:
-                    payload_from_run = pickle.load(fh)  # noqa: S301 - written by a sibling worker of this run
-                _SHARED_BYPASS[key] = pickle.dumps(payload_from_run)
-                return payload_from_run, "BYPASS-SHARED-RUN"
-        payload = produce()
-        # an unpicklable payload shares nothing rather than sharing wrongly - the next caller rolls
-        with contextlib.suppress(pickle.PicklingError, TypeError, RecursionError):
-            blob = pickle.dumps(payload)
-            _SHARED_BYPASS[key] = blob
-            if run_path is not None:
-                os.makedirs(os.path.dirname(run_path), exist_ok=True)
-                _place(blob, run_path)
+        # THE FIRST WAVE WAITS (feature 213 FR-002, GM 2026-09-07). The run store served a worker that
+        # started AFTER another had finished the roll; under worksteal every gate module starts at t=0, and
+        # the census found Inashiro rolled by four workers at once, Kuwabata by three, the polder by two - 9
+        # rolls and ~230 s of CPU per gate for payloads the share existed to hand out. So the store is now
+        # guarded by a lock per key: the first worker takes it and rolls; a worker that finds it held waits
+        # for the payload the holder writes, then reads it. A holder that dies releases the lock with no
+        # payload, and the next waiter rolls; the wait is bounded so a wedged holder cannot hang the run.
+        with _share_lock(run_path):
+            if run_path is not None and os.path.exists(run_path):
+                with contextlib.suppress(OSError, EOFError, pickle.UnpicklingError):
+                    with open(run_path, "rb") as fh:
+                        payload_from_run = pickle.load(fh)  # noqa: S301 - written by a sibling worker of this run
+                    _SHARED_BYPASS[key] = pickle.dumps(payload_from_run)
+                    _census.record("served", subject=subject[:80], how="BYPASS-SHARED-RUN")
+                    return payload_from_run, "BYPASS-SHARED-RUN"
+            # ...AND THE ONE ROLL IS STORED WHEN THE FLOOR READS IT (feature 213 FR-001, 207's D14): a `roll:` subject's
+            # record goes to the on-disk entry too, so `report_deps` (the hamlet floor) reads the roll the tests made
+            # instead of rolling the spec a second time.
+            payload = _produce_and_store(subject, produce, recorded)[0] if recorded is not None and _stores_under_bypass(subject) else produce()
+            # an unpicklable payload shares nothing rather than sharing wrongly - the next caller rolls
+            with contextlib.suppress(pickle.PicklingError, TypeError, RecursionError):
+                blob = pickle.dumps(payload)
+                _SHARED_BYPASS[key] = blob
+                if run_path is not None:
+                    os.makedirs(os.path.dirname(run_path), exist_ok=True)
+                    _place(blob, run_path)
         return payload, "BYPASS"
     entry = _entry(subject)
     meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
@@ -266,25 +354,44 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False, recor
     return _produce_and_store(subject, produce, recorded)[0], "MISS"
 
 
-def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: str = "") -> tuple[T, str]:
+def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: str = "", child: str | None = None) -> tuple[T, str]:
     """`obtain` for a roll whose behavior depends on the TEST's own code - its monkeypatches - so the
     test function's source joins the key: edit the patch and the roll is re-made; leave it and the
     engine key decides, as for any roll. `produce` must return plain data (what the assertions read),
     never the Settlement itself."""
     src = inspect.getsource(test)
-    return obtain(f"test:{test.__module__}.{test.__qualname__}:{label}:{hashlib.sha256(src.encode()).hexdigest()[:16]}", produce)
+    subject = f"test:{test.__module__}.{test.__qualname__}:{label}:{hashlib.sha256(src.encode()).hexdigest()[:16]}"
+    if child is None:
+        return obtain(subject, produce)
+    # THE ROLL RUNS IN A CHILD (feature 213 FR-007): `child` names a module-level function (`module:function`,
+    # the test's produce closure lifted out - the feature-146 doctrine) that the child imports and calls with
+    # no argument; `produce` is kept only as the in-process fallback signature `obtain` expects.
+
+    def recorded() -> tuple[T, dict[str, Any]]:
+        return _in_child(child, None)
+
+    return obtain(subject, lambda: recorded()[0], recorded=recorded)
+
+
+def _roll_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any], Report]:
+    """THE ONE ROLL of a spec (feature 213 FR-001): `generate()` - the re-roll loop, the finish, the
+    reachability verdict - and what every reader needs of it: the plan, the finished manifest of the kept
+    attempt, and the Report. `hamlet()` reads the first two, `report()` the third, `report_deps()` (the
+    hamlet floor) the dependency record taken around it. Before this, `hamlet()` rolled `build` alone and
+    `report()` rolled `generate` under a different cache subject, so the cohort seeds were rolled twice
+    per gate and the lane-rule tests read a map `generate` might have re-rolled. Module-level so the child
+    driver calls it by name and a test can compare the child's result with the same code run in-process."""
+    from l7r.diagram import hamletgen as hg
+
+    rep = hg.generate(spec, out_base=None, render=False)
+    assert rep.manifest is not None, "generate() carries the kept attempt's manifest (feature 213)"
+    return rep.plan, rep.manifest, rep
 
 
 def _hamlet_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
-    """Plan, build, finish - the roll `hamlet()` serves. Module-level so the child driver can call it by
-    name and a test can compare the child's result with the same code run in-process."""
-    from l7r.diagram import hamletgen as hg
-
-    plan = hg.plan_site(spec)
-    s = hg.build(plan)
-    with tempfile.TemporaryDirectory() as tmp:
-        s.finish(os.path.join(tmp, "scratch"), render=False)  # the manifest is not complete until finish() runs
-    return plan, s.M
+    """The `hamlet()` view of `_roll_payload`: the plan and the manifest."""
+    plan, manifest, _rep = _roll_payload(spec)
+    return plan, manifest
 
 
 # THE ROLL LEAVES THE WORKER (feature 210, GM 2026-09-07: "we should also roll in a forked child ... test out by
@@ -299,16 +406,21 @@ def _hamlet_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
 # saves: the roll's whole working set - the 121 MB a roll ends at, the memo, the retained arenas, the pymalloc
 # fragmentation - never enters the worker (specs/210 research.md R1, R3). The roll-out list is the spec's FR-004.
 _CHILD_DRIVER = (
-    "import pickle, sys\n"
+    "import importlib, pickle, sys\n"
     "sys.path.insert(0, {here!r})\n"
-    "from l7r.diagram.pipeline import gencache, rollcache\n"
+    "from l7r.diagram.pipeline import gencache\n"
     "with open({spec_path!r}, 'rb') as fh:\n"
-    "    spec = pickle.load(fh)\n"
+    "    arg = pickle.load(fh)\n"
+    "mod, fn = {target!r}.rsplit(':', 1)\n"
+    "produce = getattr(importlib.import_module(mod), fn)\n"
     "holder = []\n"
-    "deps = gencache.record(lambda: holder.append(rollcache._hamlet_payload(spec)))\n"
+    "deps = gencache.record(lambda: holder.append(produce(arg) if arg is not None else produce()))\n"
     "with open({out_path!r}, 'wb') as fh:\n"
     "    pickle.dump((holder[0], deps), fh)\n"
 )
+
+#: The child's target for THE roll of a spec: `module:function`, called with the spec.
+ROLL_TARGET = "l7r.diagram.pipeline.rollcache:_roll_payload"
 
 
 def _parent_is_covered() -> bool:
@@ -323,15 +435,22 @@ def _parent_is_covered() -> bool:
     return current is not None and current() is not None
 
 
-def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]], dict[str, Any]]:
-    """`(_hamlet_payload(spec), its dependency record)`, produced in a child process - see `_CHILD_DRIVER`."""
+def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any], Report], dict[str, Any]]:
+    """`(_roll_payload(spec), its dependency record)`, produced in a child process - see `_CHILD_DRIVER`."""
+    return _in_child(ROLL_TARGET, spec)
+
+
+def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
+    """`(target(arg), its dependency record)` from a child Python. `target` is `module:function`: feature 213
+    FR-007 generalizes feature 210's child so a test's lifted produce function runs here by name, with its
+    patches applied inside the function; `arg` is pickled in, and None means call with no argument."""
     here = gencache.HERE
     workdir = tempfile.mkdtemp(prefix="rollchild-")
     try:
         spec_path, out_path, driver = (os.path.join(workdir, n) for n in ("spec.pickle", "out.pickle", "driver.py"))
         with open(spec_path, "wb") as fh:
-            pickle.dump(spec, fh)
-        Path(driver).write_text(_CHILD_DRIVER.format(here=here, spec_path=spec_path, out_path=out_path), encoding="utf-8")
+            pickle.dump(arg, fh)
+        Path(driver).write_text(_CHILD_DRIVER.format(here=here, spec_path=spec_path, out_path=out_path, target=target), encoding="utf-8")
         # the child must be the ONLY coverage recorder in its process (gate_obtain's rule): the parent's
         # pytest-cov hooks are stripped, and when the parent IS under coverage the child records its own
         under_coverage = _parent_is_covered()
@@ -342,9 +461,10 @@ def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]],
             cmd = [sys.executable, "-m", "coverage", "run", "--parallel-mode", driver]
         else:
             cmd = [sys.executable, driver]
-        proc = subprocess.run(cmd, cwd=here, env=env, capture_output=True, text=True, check=False)
+        with _roll_slot():  # at most N child rolls at once across the run (FR-010)
+            proc = subprocess.run(cmd, cwd=here, env=env, capture_output=True, text=True, check=False)
         if proc.returncode or not os.path.isfile(out_path):
-            raise RuntimeError(f"the roll child failed for {spec!r} (exit {proc.returncode}):\n{proc.stdout[-1500:]}\n{proc.stderr[-1500:]}")
+            raise RuntimeError(f"the roll child failed for {target} {arg!r} (exit {proc.returncode}):\n{proc.stdout[-1500:]}\n{proc.stderr[-1500:]}")
         with open(out_path, "rb") as fh:
             payload, deps = pickle.load(fh)  # noqa: S301 - our own child's bytes, written above
         for i, covfile in enumerate(sorted(glob.glob(covbase + ".*"))):
@@ -360,29 +480,32 @@ def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any]],
     return payload, deps
 
 
-def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
-    """The plan and the FINISHED manifest of a scripted hamlet built from `spec` (no gate, no files).
-    Rolled in a child process (feature 210); served from the cache or the FULL run's share as before."""
+def _roll(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any], Report], str]:
+    """THE ONE ROLL a gate makes of `spec` (feature 213 FR-001): `(plan, manifest, report)` under the one
+    subject `roll:<spec>`, produced in a child (feature 210), shared across the run's workers behind the
+    first-wave lock (FR-002), and STORED under the full-run bypass so the hamlet floor's `report_deps` reads
+    the same roll (207's D14). `hamlet()` and `report()` are its two views."""
 
-    def recorded() -> tuple[tuple[SitePlan, dict[str, Any]], dict[str, Any]]:
+    def recorded() -> tuple[tuple[SitePlan, dict[str, Any], Report], dict[str, Any]]:
         return _hamlet_in_child(spec)
 
-    def produce() -> tuple[SitePlan, dict[str, Any]]:
+    def produce() -> tuple[SitePlan, dict[str, Any], Report]:
         return recorded()[0]
 
-    # SHARED (feature 147): the scripted negative fixtures are the measured case - 31 of them across two
-    # specs, each deep-copying the manifest before breaking it, so a shared roll is exactly what they want.
-    # Sharing is OPT-IN and stays here for now: turned on for `obtain` generally it made the hamlet-path
-    # floor NON-DETERMINISTIC (`hinterland.py` 503-504 flipped between otherwise identical full runs), and a
-    # coverage floor that flips is worse than a slow one. What the fixtures need is this call and no other.
-    return obtain(f"hamlet:{spec!r}", produce, share=True, recorded=recorded)[0]
+    return obtain(f"roll:{spec!r}", produce, share=True, recorded=recorded)
+
+
+def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
+    """The plan and the FINISHED manifest of a scripted hamlet built from `spec` (no files) - the roll
+    `generate()` kept, since feature 213 (before it, a `build`-only roll under a subject of its own)."""
+    (plan, manifest, _rep), _how = _roll(spec)
+    return plan, manifest
 
 
 def report(spec: HamletSpec) -> tuple[Report, str]:
     """`hg.generate(spec)` - build, finish, gate, with the re-roll loop - and how it was obtained."""
-    from l7r.diagram import hamletgen as hg
-
-    return obtain(f"report:{spec!r}", lambda: hg.generate(spec, out_base=None, render=False))
+    (_plan, _manifest, rep), how = _roll(spec)
+    return rep, how
 
 
 def report_deps(spec: HamletSpec) -> dict[str, Any]:
@@ -391,9 +514,8 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
     run bypasses SERVING (a served roll executes nothing the coverage floors could see), but the floor
     that derives the hamlet path from these records (feature 145, `tools/hamlet_floor.py`) needs the
     record itself, and on a fresh clone or CodeBuild there is none until something rolls."""
-    from l7r.diagram import hamletgen as hg
 
-    subject = f"report:{spec!r}"
+    subject = f"roll:{spec!r}"  # the ONE subject per spec (feature 213); the tests' roll IS this record
     # only the META is read here - the payload path went with the store body this now delegates to
     meta_path = os.path.join(_entry(subject), "meta.json")
     try:
@@ -405,4 +527,4 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
         pass
     # DELEGATES rather than repeating the store (feature 192 FR-008). `_produce_and_store`'s docstring
     # claims the pair invariant is held by ONE body; a second copy of these lines here made that untrue.
-    return _produce_and_store(subject, lambda: hg.generate(spec, out_base=None, render=False))[1]
+    return _produce_and_store(subject, lambda: _hamlet_in_child(spec)[0], lambda: _hamlet_in_child(spec))[1]

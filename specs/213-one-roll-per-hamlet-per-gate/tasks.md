@@ -2,8 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering` (tooling; nothing physical).
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
       research: rendering
+      verify: DONE. FAITHFUL at round 2 of 5 (round 2's first attempt died on an API limit before reading; relaunched). Round 1 required five changes, all applied: FR-007's surface derived from the callers of generate/build/STAGES with a census check; FR-003 on a second ROLL not a second request; the exceptions adjudicated (perf tests roll their own rostered seeds; the fan-out's pool half a stated duplicate; gate_obtain the rule); the record at the chokepoint roll_scope() (D5); FR-005's pin named exactly with its cost. The relayed D14 request (FR-001, SC-004, T10) reviewed in the same round
 - [ ] T02 the census plugin, its verdict and the roster (FR-003, FR-004); the Makefile loads it; each
       refusal proved (FR-013)
       research: rendering

@@ -19,6 +19,9 @@ from __future__ import annotations
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.sources import RESEARCH_PAGES
 from tests.full.interactive.page_browser._driver import Page, _mechanics
+import pytest
+
+pytestmark = pytest.mark.renders  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
 
 
 def test_synthetic_page_mechanics(synthetic: Page) -> None:

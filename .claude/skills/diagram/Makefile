@@ -1419,6 +1419,8 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	: " disables a line's event after its first hit, which loses contexts, and the plugin re-arms the events at every context"; \
 	: " switch (selection.switch); the C tracer, pinned first, cost a full run 2.4x (spec D8, research R5/R6, 2026-09-07)."; \
 	$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
+	: "GUARD_EDIT_OK: feature 213 - a fresh census per run; the verdict reads it after the merge below" ; \
+	$(if $(COV_FLOORS),rm -f "$(ROLL_CENSUS)" "$(ROLL_CENSUS).renders";,) \
 	: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
 	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
@@ -1431,6 +1433,10 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
+	: "GUARD_EDIT_OK: feature 213 - THE ROLL CENSUS VERDICT, before the floors: one roll per rostered hamlet, no render outside" ; \
+	: " the tests of rendering, no roll in a worker outside the excepted modules. A stale roster row counts only on a full run." ; \
+	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo --full) || exit 1; \
 	cov_ec=0; \
 	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines. GUARD_EDIT_OK: feature 174 makes this STRICTER. It used to omit settlement/, waterfields/, interactive/ and overlap/ and hand them to a 94% ratchet, which is precisely what the GM asked to end (2026-08-31: 'we have some ratchets somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred percent coverage in whatever the relevant place is'). The omit list and SETTLEMENT_COV_FLOOR both retired the day their own condition was met - measured on this feature's green run, settlement/ 10,342 statements 0 missing, the other three trees 3,015 statements 0 missing. The hamlet-path floor below STAYS: it is a finer check (feature 145), not a weaker one"; cov_ec=1; }; \
 	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
@@ -1446,8 +1452,15 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests` passes INCREMENTAL=0 because an unattended
 # run is the cheapest time to refresh the baseline.
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))
-INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin,)
-INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)",)
+# THE ROLL CENSUS RIDES THE SAME SWITCH (feature 213, GM 2026-09-07: "never allow the same hamlet to be rolled twice
+# within the tests"). GUARD_EDIT_OK: feature 213 - a second `-p` beside gate_plugin (207's shape: a two-hook shim
+# each), an environment variable naming the census file that every child of the run inherits, and the verdict after
+# the coverage merge (below). The engine writes the census at its chokepoints (l7r/diagram/_census.py); the roster is
+# tests/rolls.py; the verdict fails the phase on a second roll, an unrostered roll, a stale row on a full run, a render
+# from an unmarked test, or an in-process roll from an unexcepted module.
+ROLL_CENSUS = $(shell git rev-parse --absolute-git-dir 2>/dev/null)/roll-census.jsonl
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin -p l7r.diagram.ci.rollcensus,)
+INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" L7R_ROLL_CENSUS="$(ROLL_CENSUS)",)
 # ALL THREE FLOORS REPORT TOGETHER (GUARD_EDIT_OK: feature 145) - the same rule as the test phase: a first floor that
 # `exit 1`s hides every floor after it, and on 2026-08-28 that made the hamlet floor UNREACHABLE while the global one was
 # red on pre-existing tooling misses. Each records its own failure; the phase exits non-zero once, at the end.

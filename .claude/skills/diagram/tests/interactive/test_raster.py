@@ -14,6 +14,8 @@ from PIL import Image
 from l7r.diagram.interactive import raster
 from l7r.diagram.interactive.raster import OFFMAP_MARGIN, PALETTE_STEP, class_keys, data_uri, drop_offmap, id_map, picture, resvg_png, viewbox_of
 
+pytestmark = pytest.mark.renders  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
+
 VB = (100.0, 200.0, 300.0, 400.0)  # x 100-400, y 200-600; the margin reaches 24 px past each edge
 
 
