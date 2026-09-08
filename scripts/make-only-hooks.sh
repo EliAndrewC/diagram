@@ -42,6 +42,14 @@
 #
 # ESCAPE HATCH: none, deliberately. The make targets carry the override, where it is prompted,
 # defaulted to cancel, and logged. An escape hatch here would be tier 2 with extra steps.
+#
+# WHAT IT CORRECTS RATHER THAN REFUSES (GUARD_EDIT_OK: feature 212, GM 2026-09-07 - the header
+# names the two rewrites the branches below perform): a TARGETED bare pytest - files, a directory, a
+# node id, `-k`, output flags, whatever pipeline follows it - becomes `make test-file FILE=... [K=...]`;
+# an engine entry point that a one-line `$(RUN).<module>` recipe wraps becomes that target, derived
+# from the Makefile at hook time. Everything the rewrite cannot rebuild exactly keeps the refusal,
+# and the refusal names the token that stopped it. Feature 164 took the one-file case; the census
+# in specs/212 found it had converted none of the eleven targeted runs in the record.
 
 set -uo pipefail
 
@@ -110,7 +118,34 @@ case "$VERDICT" in
   foreign-makefile)
     block "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here." "make <target>   (from .claude/skills/diagram)" ;;
   engine-entry-point)
-    block "an engine entry point run outside make." "make <target>   (see future-work/ and the Makefile for the operation list)" ;;
+    # GUARD_EDIT_OK: feature 212 - AN ENTRY POINT A MAKE TARGET WRAPS BECOMES THAT TARGET. The
+    # compliant command is derived from the Makefile at hook time (`_hm_make.py as-wrapped`): a
+    # one-line `$(RUN).<module>` recipe whose arguments the command's lay onto. A module nothing
+    # wraps keeps the refusal, which now LISTS what is wrapped instead of pointing at the Makefile.
+    FIXED=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" as-wrapped 2>/dev/null || true)
+    if [ -n "$FIXED" ]; then
+      guard_log make-only rewrote "$(guard_cmd)" entry-point
+      printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '
+import json, os, re, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+was = re.search(r"-m\s+(l7r\.diagram\.[\w.]+)", payload.get("command", ""))
+now = re.search(r"\bmake\s+([a-z][\w-]*(?:\s+[A-Z_]+=\S*)*)", os.environ["REWRITTEN"])
+module = was.group(1) if was else "l7r.diagram..."   # GUARD_EDIT_OK: no single quotes inside this single-quoted script
+target = now.group(1) if now else "<target>"
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": (
+        f"`python3 -m {module}` was rewritten to "
+        f"`make {target}`, the target that wraps it - every engine "
+        "entry point here is invoked through its make target (`make help` lists them). Corrected "
+        "rather than refused, because a refusal costs a model round trip."),
+}}))'
+      exit 0
+    fi
+    WHY=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" why-not-wrapped 2>/dev/null || true)
+    block "an engine entry point run outside make${WHY:+ - $WHY}." "make <target>   (make help lists the operations)" ;;
   bare-pytest)
     # GUARD_EDIT_OK: feature 164 - CORRECT THE ONE SHAPE THAT HAS AN EXACT COMPLIANT FORM, at the
     # GM's request (2026-08-30). A bare pytest of ONE test file is `make test-file` written the long
@@ -126,25 +161,35 @@ case "$VERDICT" in
     #     the cheap one would do first.
     #   - it named only the gate targets, never `make test-file`, the target this project added for
     #     precisely the question "re-run the file I just changed" - missing from this message since 127.
+    # GUARD_EDIT_OK: feature 212 - THE TARGETED RUN CONVERTS (GM 2026-09-07: "targeting a specific
+    # module or even a specific test case ... we translate it into the make target which should
+    # have been run"). The 164 rewrite took one file and nothing else and converted NONE of the eight
+    # targeted runs in the record - each had `2>&1 | tail` after it. Now the pytest segment alone is
+    # rebuilt (files, a directory, a node id, `-k` -> `K=`, output flags dropped) and what follows it
+    # is kept verbatim; the refusal names the token that stopped a rewrite it could not make.
     FIXED=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" as-make-target 2>/dev/null || true)
     if [ -n "$FIXED" ]; then
-      guard_log make-only rewrote "$(guard_cmd)"
+      guard_log make-only rewrote "$(guard_cmd)" targeted-pytest
       printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '
-import json, os, sys
+import json, os, re, sys
 payload = json.load(sys.stdin).get("tool_input", {})
+now = re.search(r"make test-file FILE=(?:\"[^\"]*\"|\S+)(?:\s+K=\"[^\"]*\")?", os.environ["REWRITTEN"])
+label = now.group(0) if now else "make test-file FILE=..."   # GUARD_EDIT_OK: no single quotes inside this single-quoted script
 payload["command"] = os.environ["REWRITTEN"]
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "updatedInput": payload,
     "additionalContext": (
-        "That bare pytest was rewritten to `make test-file`, the target this project added for "
-        "running one file whole - everything here goes through make so an expensive run can ask "
-        "whether the cheap one would do first. Corrected rather than refused, because a refusal "
-        "costs a model round trip."),
+        f"That bare pytest was rewritten to `{label}` - "
+        "everything here goes through make so an expensive run can ask whether the cheap one would "
+        "do first. Next time write it that way: `make test-file FILE=<file|dir|node id> [K=\"<-k "
+        "expression>\"]`; a K= or node-id run is a SUBSET and owes a whole-file run before the gate. "
+        "Corrected rather than refused, because a refusal costs a model round trip."),
 }}))'
       exit 0
     fi
-    block "pytest run directly rather than through make. Everything here goes through a make target, so an expensive run can ask whether the cheap one would do first - and a filter, a coverage flag or a second path is a shape this hook will not rewrite for you." "make test-file FILE=<one file>   (the whole file, no filter)  or  make quick   (stops at the first failure)  or  make done   (the gate)" ;;
+    WHY=$(printf '%s' "$INPUT" | "$HERE/_hm_make.py" why-not-make-target 2>/dev/null || true)
+    block "pytest run directly rather than through make. Everything here goes through a make target, so an expensive run can ask whether the cheap one would do first. A targeted run (files, a directory, a node id, -k, output flags, a pipeline after it) is rewritten for you; this one was not because of ${WHY:-its shape} - a marker, a deselect, a collection, a coverage or plugin flag changes WHAT runs, and that is yours to decide." "make test-file FILE=<file|dir|node id> [K=\"<expr>\"]  or  make quick   (stops at the first failure)  or  make done   (the gate)" ;;
   inline-override)
     block "an override supplied on the command line, which skips the prompt whose default answer is CANCEL. That prompt is the whole mechanism: it exists to be answered, not pre-empted." "make <target>   without the override, and answer the prompt if it appears" ;;
   guard-write)

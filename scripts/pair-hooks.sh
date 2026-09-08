@@ -12,8 +12,13 @@
 # overlap.
 #
 # WHAT IT ENFORCES
-#   - a GATE invocation (`done`, `maps`) is refused unless a settlement-review is pending in this session,
-#     or one has already been recorded for this exact engine content, or `make verify` started it;
+#   - a GATE invocation (`done`, `maps`) with no settlement-review pending in this session and none
+#     recorded for this exact engine content: a plain `make done` is REWRITTEN to `make verify`
+#     (feature 164); every other shape is RECORDED AND PERMITTED with the DISPATCH NOW context
+#     (GUARD_EDIT_OK: feature 212, GM 2026-09-07 - the header follows the pretool branch, which says
+#     why, and spec 212 D7 records what a foreground gate costs the pairing); the refusal that used to
+#     sit here fired 24 times against 98 waivers, and eleven of its real firings were shapes `verify`
+#     cannot take;
 #   - a SETTLEMENT-REVIEW dispatch is refused unless a gate is running or freshly green for that content;
 #   - a turn may not END with a half-open pairing (a gate went green, no review was dispatched).
 #
@@ -242,17 +247,46 @@ print(json.dumps({"hookSpecificOutput": {
 }}))'
       exit 0
     fi
-    printf '\n\033[1mBLOCKED: the gate and the independent review run TOGETHER.\033[0m\n' >&2
-    printf 'No settlement-review is pending in this session and none is recorded for this content.\n' >&2
-    printf 'The review catches what the author cannot (four real findings on the last map, one of them\n' >&2
-    printf 'a berm about to ship), and dispatched AFTER the gate it adds its whole runtime to the wall\n' >&2
-    printf 'clock - 17 minutes of T55 sat there. Start both at once instead:\n\n' >&2
-    printf '    make verify        # starts this gate and prints the review to dispatch in the same turn\n\n' >&2
-    printf 'One-sided case (docs, tests, a guard script, an unattended run)? Take it deliberately:\n' >&2
-    printf '    PAIR_OK="<why this needs no review>" <your command>\n' >&2
-    printf '(the reason lands in dev/bypass-log/ where make bypass-audit reads it; GM 2026-08-29)\n' >&2
-    guard_log pair blocked "$cmd" gate-without-review   # GUARD_EDIT_OK: feature 168
-    exit 2
+    # GUARD_EDIT_OK: feature 212 - EVERY OTHER SHAPE IS RECORDED AND PERMITTED, NOT REFUSED (GM
+    # 2026-09-07: "anytime we are able to say that a command was run incorrectly and then supply the
+    # correct thing to do ... simply do the correct thing and then inform the session through hook
+    # context that we have done it"). The census (specs/212 R1) found the rewrite above fired ONCE
+    # while every real refusal since - eight `make maps`, three detached `make done` - was a shape
+    # `verify` cannot take; the record for this branch was 24 refusals and 98 PAIR_OK waivers. What
+    # `make verify` adds to the gate is two writes and a printf, so the hook does those itself and
+    # lets the command run unchanged. A DETACHED run returns at once and the review overlaps the gate
+    # exactly as under verify; a FOREGROUND run returns when the gate does, so the context says the
+    # review will follow it and how to overlap them next time (spec D7 - the one place this changes
+    # what feature 151 delivers, to be raised with the GM). The Stop hook is the backstop as before:
+    # a turn may not end on the gate green with no review dispatched.
+    [ -n "$key" ] && write_pairing "$(pairing_file)" gate_key "$key"
+    guard_log pair permitted "$cmd" review-owed
+    maps="$(git -C "$CLONE_ROOT" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*/*.json' '.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' ' | sed 's/ $//')"
+    bg="$(printf '%s' "$payload" | python3 -c 'import json,sys; print("yes" if (json.load(sys.stdin).get("tool_input") or {}).get("run_in_background") else "")' 2>/dev/null)"
+    detached=""
+    case " $(printf '%s' "$cmd" | tr '\n' ' ') " in
+      *" nohup "*|*" setsid "*|*"& "*|*"&) "*|*"&;"*) detached=yes ;;
+    esac
+    [ -n "$bg" ] && detached=yes
+    printf '%s' "$payload" | PAIR_MAPS="${maps:-the delta}" PAIR_KEY="${key:0:12}" PAIR_DETACHED="$detached" python3 -c '
+import json, os, sys
+maps, key, detached = os.environ["PAIR_MAPS"], os.environ["PAIR_KEY"], os.environ["PAIR_DETACHED"]
+how = ("This run is detached, so it returns now and the review overlaps the gate."
+       if detached else
+       "This gate runs in the FOREGROUND, so you read this only when it returns and the review will "
+       "start AFTER it, adding its whole runtime to the wall clock. To overlap them next time, detach "
+       "the gate (`setsid nohup make ... > <log> 2>&1 &` - run_in_background reaps `make maps`) or use "
+       "`make verify` for a plain gate.")
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "additionalContext": (
+        f"GATE PERMITTED WITH A REVIEW OWED (engine key {key}). The gate and the independent "
+        f"settlement-review run TOGETHER (GM 2026-08-29). DISPATCH NOW, in the same turn: "
+        f"settlement-review over {maps}. {how} A turn may not end with this gate green and no review "
+        f"dispatched. One-sided case (docs, tests, a guard script)? Say so: "
+        f"PAIR_OK=\"<why this needs no review>\" <command> - the reason lands in dev/bypass-log/."),
+}}))'
+    exit 0
   fi
 
   if [ "$tool" = "Agent" ] && { [ "$atype" = "settlement-review" ] || [ "$atype" = "building-review" ]; }; then

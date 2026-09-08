@@ -34,12 +34,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _hm_escape import escape_reason, escape_used, reason_is_enough  # noqa: E402
-from _hm_make import as_make_target, as_paired, classify, combine, targets  # noqa: E402
+from _hm_make import as_make_target, as_paired, as_wrapped_target, classify, combine, targets, why_not_make_target, why_not_wrapped_target  # noqa: E402
 from _hm_shape import _strip_heredocs, _strip_quotes, bracket_pattern, file_watching_wait  # noqa: E402
 
 __all__ = [
-    "as_make_target", "as_paired", "bracket_pattern", "classify", "combine", "escape_reason",
-    "escape_used", "file_watching_wait", "reason_is_enough", "targets",
+    "as_make_target", "as_paired", "as_wrapped_target", "bracket_pattern", "classify", "combine", "escape_reason",
+    "escape_used", "file_watching_wait", "reason_is_enough", "targets", "why_not_make_target", "why_not_wrapped_target",
 ]
 
 

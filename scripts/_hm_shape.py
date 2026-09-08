@@ -46,7 +46,9 @@ _FILE_TEST = re.compile(r"(?:^|\s)(?:test|\[)\s+[^;]*-(?:e|f|s|r|d|w|x)\s+\S", r
 # the match target must be a PATH OPERAND and the LAST thing in the condition - either something with
 # a directory in it or something with an extension. The first cut allowed only ONE directory segment,
 # so `/tmp/164-done.log` - the exact command this ruling exists for - did not qualify.
-_GREP_PATH = re.compile(r"(?:^|\s)grep\b[^|;<>]*\s(?:(?:~?[\w.-]*/)+[\w.-]+|[\w.-]+\.[\w-]+)\s*$", re.M)
+_GREP_PATH = re.compile(r"(?:^|\s)grep\b[^|;<>]*\s(?:\$\{?\w+\}?)?(?:(?:~?[\w.-]*/)+[\w.-]+|[\w.-]+\.[\w-]+)\s*$", re.M)
+# ...and the path may carry a shell-variable prefix (`$S/gate.log`), which is how the record writes
+# it - a variable in front of a path operand is still a path operand (feature 212)
 
 _IN_REDIR = re.compile(r"<\s*(?:\./|/|~/)?[\w./-]+")
 
@@ -63,16 +65,46 @@ def file_watching_wait(payload: dict) -> bool:
     inp = payload.get("tool_input") or {}
     if not inp.get("run_in_background"):
         return False
-    cmd = inp.get("command", "") or ""
+    return file_watching_loop(inp.get("command", "") or "")
+
+
+# stderr discarded is not a file written: `grep -q x f 2>/dev/null` reads f and writes nothing
+_STDERR_NULL = re.compile(r"\s2>\s*/dev/null")
+_SINGLE_PIPE = re.compile(r"(?<!\|)\|(?!\|)")
+_JOIN = re.compile(r"&&|\|\|")
+_QUOTED = re.compile(r"([\"'])(?:\\.|(?!\1).)*\1", re.S)
+
+
+def file_watching_loop(cmd: str) -> bool:
+    """Would `cmd` be the permitted file-watching wait if it were backgrounded? The condition test,
+    separated from the `run_in_background` test so a FOREGROUND loop of the same shape can be
+    recognized and backgrounded rather than refused (feature 212).
+
+    GUARD_EDIT_OK: feature 212 - THE QUALIFIER MISREAD THE PERMITTED SHAPE. Of the eight real
+    backgrounded log-watching waits in the record, it refused SEVEN (specs/212 R1): it read the
+    condition RAW, so the `|` inside `grep -qE "gate green|GATE FAILED"` counted as a pipeline, a
+    `2>/dev/null` counted as an output redirection, and `[ -s f ] && grep -q x f` matched none of
+    the three forms. Quoted strings are blanked before the pipeline and substitution tests, stderr
+    sent to /dev/null is not a written file, and a condition of `&&`/`||`-joined parts qualifies
+    when EVERY part is one of the three forms. The boundary itself is the GM's from feature 165:
+    an output file, a substitution, a real pipeline, a process or network test all still fail it.
+    """
     heads = _LOOP_HEAD.findall(cmd)
     if not heads:
         return False
     for cond in heads:
-        # nothing may hide inside the condition
-        if "$(" in cond or "`" in cond or "|" in cond or ">" in cond:
+        # a substitution cannot hide inside quotes legitimately, so it is tested on the RAW condition
+        if "$(" in cond or "`" in cond:
             return False
-        if not (_FILE_TEST.search(cond) or _GREP_PATH.search(cond) or _IN_REDIR.search(cond)):
+        # a `|`, `>` or `;` INSIDE a quoted string is regex or message text, not shell grammar - it is
+        # dropped from the copy the grammar tests read, while the rest of the quoted text (a path)
+        # stays so `grep -q x "$S/gate.log"` still reads as a wait on a file
+        c = _STDERR_NULL.sub(" ", _QUOTED.sub(lambda m: re.sub(r"[|<>;&]", "", m.group(0)[1:-1]), cond))
+        if _SINGLE_PIPE.search(c) or ">" in c:
             return False
+        for part in _JOIN.split(c):
+            if not (_FILE_TEST.search(part) or _GREP_PATH.search(part) or _IN_REDIR.search(part)):
+                return False
     return True
 
 # The bracket trick, APPLIED rather than recommended: `no-poll` refuses a literal process-matching
@@ -118,6 +150,11 @@ if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
     if mode == "sanitize":
         print(_strip_quotes(_strip_heredocs(CMD)))
+    elif mode == "file-wait-loop":
+        # would this loop qualify if it were backgrounded? (feature 212: the foreground form is
+        # backgrounded rather than refused)
+        if file_watching_loop(CMD):
+            print("yes")
     elif mode == "bracket":
         out = bracket_pattern(CMD)
         if out:

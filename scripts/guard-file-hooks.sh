@@ -79,6 +79,43 @@ except Exception:
 GF2_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$GF2_HERE/_guardlog.sh"
+# GUARD_EDIT_OK: feature 212 - A RECIPE COMMENT THAT WOULD RUN IS REFUSED, BEFORE THE ESCAPE (the GM,
+# relayed 2026-09-07, after feature 207's `: "... make test-full ..."` comment ran `make test-full`
+# from inside test-full and recursed 914 levels to the container's process limit: *"just commenting,
+# saying not to do it again is not a good way to reliably make sure that the problem does not
+# recur"*). Any Makefile, any route (Edit or Write), and NO escape: this is not a policy a reason can
+# argue past, it is a shell fact - a backtick or `$$(` inside the double-quoted `: "..."` string is a
+# command substitution. `\`` and `\$$(` are literal and pass. The detector is `_hm_make.py
+# recipe_comment_hazards`, shared with the gate-phase scan in tests/tooling.
+case "$FILE" in
+  */Makefile|*.mk)
+    GF_HAZ=$(printf '%s' "$INPUT" | "$GF2_HERE/_hm_make.py" recipe-hazards 2>/dev/null || true)
+    if [ -n "$GF_HAZ" ]; then
+      printf 'BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of %s:\n\n%s\n\n' "$FILE" "$GF_HAZ" >&2
+      printf 'A `: "..."` recipe comment is a shell string, and a backtick or a $$( inside it RUNS. On 2026-09-07\n' >&2
+      printf 'one such comment naming `make test-full` in backticks ran test-full from inside test-full, 914 levels\n' >&2
+      printf 'deep, until the container hit its process limit. Write the name without backticks, or escape them\n' >&2
+      printf '(\\` and \\$$( are literal), or use single quotes. There is no escape token for this - it is\n' >&2
+      printf 'a shell fact, not a policy. (scripts/guard-file-hooks.sh; feature 212)\n' >&2
+      guard_log guard-file blocked "$FILE" recipe-comment-substitution
+      exit 2
+    fi ;;
+esac
+# GUARD_EDIT_OK: feature 212 - THE ESCAPE IS JUDGED AFTER THE FILE, NOT BEFORE (moved below). The
+# marker test used to run first, on EVERY file, so a spec or a doc that merely MENTIONED the token -
+# this feature's own spec, describing the escape - was refused for "GUARD_EDIT_OK with no reason": a
+# guard firing on correct work, on a file it does not guard. A non-guard file now exits here first.
+case "$FILE" in
+  */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json) ;;
+  # (GUARD_EDIT_OK: feature 132 - the iteration switches are a guard; a hand edit is flagged like any other, the
+  #  make targets `ci-off` / `ci-on` are the supported write path; the scope lock was retired in 185)
+  */.claude/skills/diagram/dev/switches.json) ;;
+  *) exit 0 ;;
+esac
+
+# A hook editing its own test file is how these get maintained; only the guards themselves are held.
+case "$FILE" in */scripts/test-*-hooks.sh) exit 0 ;; esac
+
 # GUARD_EDIT_OK: feature 170 - the marker must carry a REASON, not merely be present. The repository's
 # own convention already writes it that way (135 of the tree's occurrences use the colon form), so this
 # makes the convention the rule, through the same floor every command guard uses.
@@ -96,17 +133,6 @@ if [ "$NEW" = "True" ]; then
   guard_log guard-file escaped "$GF_REASON" guard-edit-ok
   exit 0
 fi
-
-case "$FILE" in
-  */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json) ;;
-  # (GUARD_EDIT_OK: feature 132 - the iteration switches are a guard; a hand edit is flagged like any other, the
-  #  make targets `ci-off` / `ci-on` are the supported write path; the scope lock was retired in 185)
-  */.claude/skills/diagram/dev/switches.json) ;;
-  *) exit 0 ;;
-esac
-
-# A hook editing its own test file is how these get maintained; only the guards themselves are held.
-case "$FILE" in */scripts/test-*-hooks.sh) exit 0 ;; esac
 
 cat >&2 <<TAIL
 BLOCKED: $FILE is a GUARD, not ordinary source.

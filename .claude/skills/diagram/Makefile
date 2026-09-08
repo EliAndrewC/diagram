@@ -932,9 +932,13 @@ claim:          ## [project] claim the next spec-kit feature number under the ho
 	@: "GUARD_EDIT_OK: feature 197 - the slug follows '--' so a slug beginning with a hyphen is refused as a BAD SLUG, not misread as an option; RENUMBER passes the directory and no slug"; \
 	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
 
-test-file:      ## [tests] run ONE test file, whole              FILE=tests/pipeline/test_gencache.py
-##  FILE=<path>  the one test file to run, whole - e.g. `tests/pipeline/test_gencache.py`
-	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(FILE) && $(STATE) green-local test-file
+test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
+##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run
+##  K=<expr>      a pytest `-k` expression - a SUBSET, which owes a whole-file run before the gate
+# GUARD_EDIT_OK: feature 212 - `K=` carries the `-k` filter the GM named ("even a specific test case"),
+# so the make-only guard can rewrite a targeted bare pytest into this target instead of refusing it.
+# gate-hooks records a `K=` (or a `::` node id) run as the same SUBSET a bare `pytest -k` is.
+	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
 # WHICH LINES DOES THIS TEST ACTUALLY REACH? (feature 146, and it is an ITERATION-LOOP target rather than a
 # gate one - CLAUDE.md, "iterations are expensive in terms of wall clock time"). Writing a test for an

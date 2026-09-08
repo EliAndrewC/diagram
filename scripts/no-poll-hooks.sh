@@ -115,6 +115,31 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]
     guard_log no-poll permitted "$(guard_cmd)" detached-file-wait   # GUARD_EDIT_OK: feature 168, the rule slug
     exit 0
   fi
+  # GUARD_EDIT_OK: feature 212 - THE FOREGROUND FORM OF THAT SAME WAIT IS BACKGROUNDED, NOT REFUSED.
+  # The permitted shape is this command with `run_in_background` set - the harness's own single
+  # completion notification - so a foreground loop that would qualify backgrounded is returned
+  # with the flag set and told (GM 2026-09-07: "simply do the correct thing and then inform the
+  # session through hook context that we have done it"). The boundary does not move: the same
+  # condition test (`_hm_shape.py file-wait-loop`), and a loop on a process or a network call is
+  # refused below as before.
+  if [ "$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait-loop 2>/dev/null)" = "yes" ]; then
+    guard_log no-poll rewrote "$(guard_cmd)" backgrounded-file-wait
+    printf '%s' "$INPUT" | python3 -c '
+import json, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["run_in_background"] = True
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": (
+        "This file-watching wait was BACKGROUNDED for you (run_in_background): in the foreground it "
+        "would have held the whole turn at model-turn cost. Its output - including whatever follows "
+        "the loop - arrives as a completion notification; the turn is free meanwhile, so do the next "
+        "thing. If the pattern might never appear, give the loop a bound. Next time set "
+        "run_in_background yourself; a wait on a process or a network call is still refused."),
+}}))'
+    exit 0
+  fi
   block "this is a busy-wait loop (a loop containing \`sleep\`)." \
     "Waiting in a loop burns wall-clock at full model-turn cost and, for anything the harness tracks, it
 is pure waste: a backgrounded Bash command notifies you the moment it exits." busy-wait-loop
