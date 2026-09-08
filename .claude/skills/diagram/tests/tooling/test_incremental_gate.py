@@ -224,12 +224,14 @@ def test_a_full_run_records_per_test_and_per_fixture_contexts_and_the_manifest(p
     baseline(root, skill)
     bdir = incremental.baseline_dir(root)
     contexts = set(incremental.all_contexts(bdir / incremental.COVERAGE_DB))
-    assert "tests/test_core.py::test_add|run" in contexts and "fixture:built" in contexts, sorted(contexts)
+    assert "tests/test_core.py::test_add|run" in contexts and "fixture:tests::built" in contexts, sorted(
+        contexts
+    )  # the fixture is keyed by its definition site since feature 213 (tests/conftest.py -> baseid "tests")
     # the session fixture's execution of core.py is recorded under the FIXTURE, not under whichever test asked first
     touched = incremental.contexts_touching(bdir / incremental.COVERAGE_DB, root, (f"{S}/eng/core.py",))
-    assert "fixture:built" in touched
+    assert "fixture:tests::built" in touched
     tests = json.loads((bdir / incremental.TESTS).read_text(encoding="utf-8"))
-    assert "built" in tests["tests/test_tool.py::test_shallow"] and "built" not in tests["tests/test_polder.py::test_dike[1]"]
+    assert "tests::built" in tests["tests/test_tool.py::test_shallow"] and "tests::built" not in tests["tests/test_polder.py::test_dike[1]"]
     man = json.loads((bdir / incremental.MANIFEST).read_text(encoding="utf-8"))
     assert f"{S}/eng/core.py" in man["engine"] and f"{S}/tests/conftest.py" in man["tests"] and man["tooling"]
 
