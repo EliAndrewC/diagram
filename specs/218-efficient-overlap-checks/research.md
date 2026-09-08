@@ -121,6 +121,32 @@ check served from a warm roll cache, `time make hamlet ... --out <scratch>`:
 
 The render (PNG and the raster-backed HTML, about 10 s) is untouched and is now half the roll.
 
-## R4 - the gate's time
+## R4 - the gate's time, and the bookends
 
-(a green `make done` after the change, beside the last recorded one before it)
+The GM asked how long `make done` takes when this is finished, with their own caveat that the gate
+rolls only 3 maps and might not move much. The green gate that verified this feature:
+
+| run | wall | test phase | tests | what it did |
+|---|---|---|---|---|
+| feature 216's landing gate (the last recorded before this), 2026-09-08 | 143 s | 123 s | 3,471 | warm roll cache, hooks-test skipped, incremental |
+| this feature's gate, 2026-09-08 13:22 UTC | 215 s | 131 s | 3,487 | FULL (no baseline after the merge of main), every roll cold (the engine changed, so the five pool hamlets and the reference re-rolled), all 21 guard suites re-run (main's merge touched them), and another session's `make done` running beside it on the same box |
+
+So the number the GM asked for is 215 s, and it is not a like-for-like comparison: the test phase
+itself was 131 s against 123 s with six cold rolls where 216's run had none, which is the rolls
+halving (below) paying for the cache miss. The gate's cost is set by what it runs around the rolls -
+the guard suites, the coverage merge, the browser test - so, as the GM expected, the roll speed-up
+is most of a roll and a small share of a gate. `scripts/_gatecost.py done` (the median of recorded
+green runs) is the standing figure to ask.
+
+The bookends (`make perf`, the reference spec across seeds 4/25/39/47, local, `perf-report`):
+
+| seed | 218-start | 218-end | change |
+|---|---|---|---|
+| 4 | 24.1 s | 10.2 s | -57.7% |
+| 25 | 25.9 s | 14.0 s | -45.9% |
+| 39 | 21.1 s | 9.8 s | -53.6% |
+| 47 | 26.2 s | 14.2 s | -45.8% |
+| **total** | **97.3 s** | **48.2 s** | **-50.5%** |
+
+Band 0: nothing owed. Seeds 25 and 47 fall less than seed 4 because their field stage (out of scope)
+is a larger share of their roll.

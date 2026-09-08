@@ -22,7 +22,8 @@ changes how a place is built; the maps are byte-identical by requirement.
       `CLAUDE.md`, `dev/performance.md`, the plan template (FR-005)
       research: rendering
       verify: DONE. constitution 2.24.0 Principle X clause 15 + log + footer; plan-template X entry; root CLAUDE.md bullet; skill CLAUDE.md Performance bullet; dev/performance.md third shape with the measured table
-- [ ] T06 `make done` green; `218-end` bookend and `perf-report`; the timings the GM asked for in
+- [x] T06 `make done` green; `218-end` bookend and `perf-report`; the timings the GM asked for in
       research R3/R4 (the stage profile after, the from-scratch roll, the gate's time beside its
       predecessor); spec IMPLEMENTED; land (FR-004, SC-001..004)
       research: rendering
+      verify: DONE. make done green 215 s (FULL, cold rolls, 21 guard suites, a concurrent gate; pytest 131 s, 3,487 passed, both floors 100%; roll census 7 of 6, green); 218-end bookend total 97.3 s -> 48.2 s (-50.5%), band 0; R4 written; spec IMPLEMENTED
