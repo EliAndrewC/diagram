@@ -273,8 +273,13 @@ The escape is now judged only for a guard file.
   name), so the review starts when the command returns. That is the serialization feature 151 was
   built to prevent, and this feature accepts it FOR THAT SHAPE ONLY, because the alternative in
   the record was not simultaneity: it was 24 refusals and 98 `PAIR_OK` waivers (80% escaped). The
-  context tells the session how to overlap them next time. **To be raised with the GM once the
-  implementation works**, as the one place this feature changes what feature 151's ruling delivers.
+  context tells the session how to overlap them next time. Raised with the GM at landing as the one
+  place this feature changes what feature 151's ruling delivers, with three options priced: keep
+  the permit (recommended - the old refusal was 80% waivers, so it was not buying simultaneity),
+  restore the refusal for the foreground shape only, or add a `verify` variant for `maps` that
+  trades the inline `| tail` for a log file. **The GM accepted the recommendation on 2026-09-08**
+  (*"I accept your recommendation"*): the permit stands for every shape; the `maps` variant is the
+  lever to reach for if sessions keep running sweeps in the foreground despite being told.
 - **D8 - the file-wait qualifier is fixed as a defect, not widened as a rule.** The three permitted
   forms are unchanged; what changes is that the qualifier now reads them the way the GM's own
   example was written (a regex with `|` in it, a variable in front of the log's path, stderr
