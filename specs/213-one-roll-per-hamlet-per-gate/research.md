@@ -200,3 +200,5 @@ rows are the reason the census exists: each was green on every floor and would h
 selection that was blind (row 2) or ten times too wide (rows 3-4); only the roll count told them apart.
 Two defects of feature 207's own were fixed on the way (spec D9: a fixture's context keyed by its definition
 site; the import-time attribution above), both invisible before a child could carry a label at all.
+
+**Packed further by feature 214 (2026-09-08)**: 13 rows, 16 rolls on a warm gate - the rolls that existed for a test's own mechanism read the shared coverage rolls instead (`specs/214-pack-the-roster`).

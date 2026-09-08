@@ -101,7 +101,8 @@ allow the same hamlet to be rolled twice within the tests and also to have some 
 adding another hamlet that gets rolled."* So:
 
 - **`tests/rolls.py` is the roster.** Every spec the gate may roll, with the unique coverage or emergent
-  condition it carries. A rolling test's spec must be there; the roll census fails the gate otherwise and
+  condition it carries - 13 rows since feature 214 packed the rolls that existed for a test's own mechanism
+  onto the shared coverage rolls (`rolls.COVERAGE`, `rolls.REFERENCE`, `rolls.KINK` are the names to read). A rolling test's spec must be there; the roll census fails the gate otherwise and
   says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's
   roll instead. Three stated exceptions live beside it: a `Duplicate` (a site that must roll a rostered spec
   again by its nature - the fan-out's pool child, the immune test's perturbed roll, the cache round trip),

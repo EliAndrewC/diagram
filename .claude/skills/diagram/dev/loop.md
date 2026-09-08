@@ -557,6 +557,20 @@ The mechanics that took 37 to one-per-spec: one `roll:` subject per spec serving
 the floor; a lock so the first wave waits on the roll in flight; every roll in a child. The numbers after:
 `specs/213` research R4.
 
+**AND THEN PACKED, the day after (feature 214, GM 2026-09-08).** 213 left 21 rostered specs, and the session
+called half of them "a test's behavior needs a roll of its own". The GM: *"is it ACTUALLY the case ... and not
+just some assertions we could add onto the existing tests where that same hamlet was already rolled elsewhere?!"*
+It was not. The ratchet and the lane rules now read the four plain shared rolls (Inashiro, Kuwabata, the two
+polders - the probe in `specs/214` showed every assertion holds on them); the fan-out pool-rolls the reference
+and compares it with the gate's shared roll; the child-equality proof compares an in-process roll of the
+reference with the same; the CLI test patches `generate` to serve the shared roll; the perf tests run stand-in
+stages under a counter clock. Three rolls genuinely stayed: the immune test's perturbed roll (its clean side was
+already the pool sweep's entry), the in-process half of the equality proof, and seed 43 for its kink, which no
+coverage map carries. The roster: the packing record's NINE coverage specs, the two re-roll-loop rolls, seed
+43, Kashikawa - **13 rows, 16 rolls on a warm gate**, against the 24 of 21 that 213 landed and the 37 of 14 it
+found. The lesson the GM drew and this file keeps: a roll that exists for what a TEST does, rather than for
+lines nothing else reaches, is a roll to question - the assertions almost always fit on a roll already made.
+
 ## A TIMING FROM THIS BOX IS NOT A TIMING - THE CORES ARE NOT THE SAME SPEED (measured 2026-08-31)
 
 The GM asked why our map rolls do not parallelize, and correctly ruled out the obvious answer:
