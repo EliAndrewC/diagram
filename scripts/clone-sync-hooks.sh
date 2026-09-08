@@ -367,7 +367,24 @@ case $MODE in
         cs_block stray-mirror-commit "$MAIN"
         exit 2
       fi
-      echo "BLOCKED: $clone has a clean tree (a new work unit) but its HEAD is behind main - new work must not build on a stale base. Run: cd $clone && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' / sync-in rule)" >&2
+      # GUARD_EDIT_OK: feature 212 - THE ONE COMMAND THIS REFUSAL NAMES IS RUN FOR THE SESSION. Every
+      # one of the 13 stale-head refusals in the record (specs/212 R1) fired MID-TURN: the prompt hook
+      # had synced the clone at the turn's start, main moved while the session worked, and the next
+      # Edit met a clean clone one commit behind. `sync-in` on a clean clone is a fast-forward (1.4 s
+      # measured), so it is run here under a bound that fits the hook's 30 s timeout, and the edit
+      # proceeds when the clone is no longer behind - told, because a file the merge changed must be
+      # re-read (the harness's own staleness check catches that). A sync that fails, times out or
+      # leaves the clone behind falls through to the refusal below, unchanged. The DIRTY clone is not
+      # touched (mid-task work is sacred; the GM's 2026-09-05 ruling above) and neither is the
+      # stray-mirror-commit case, which is refused before this point.
+      if [ -x "$clone/scripts/sync-with-main.sh" ] \
+         && ( cd "$clone" && timeout 25 scripts/sync-with-main.sh sync-in >/dev/null 2>&1 ) \
+         && git -C "$clone" merge-base --is-ancestor "$main_head" HEAD 2>/dev/null; then
+        guard_log clone-sync permitted "$clone" synced-in
+        printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"clone-sync: %s was a clean clone BEHIND main (main moved during this turn), so main was merged in - a fast-forward - before this edit; it proceeds on the current base. If this edit fails as stale, the merge changed the file: re-read it and retry. (feature 212; CLAUDE.md, Session clones / sync-in rule)"}}\n' "$clone"
+        exit 0
+      fi
+      echo "BLOCKED: $clone has a clean tree (a new work unit) but its HEAD is behind main - new work must not build on a stale base, and the automatic sync-in could not fast-forward it (a diverged clone, or the merge failed). Run: cd $clone && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' / sync-in rule)" >&2
       cs_block stale-head "$clone"
       exit 2
     fi

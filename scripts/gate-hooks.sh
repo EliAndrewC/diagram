@@ -152,8 +152,11 @@ print(json.dumps({"hookSpecificOutput": {
     [ "$VERDICT" = "bare-pytest" ] && RUNS_TESTS=yes
     case "$TARGETS" in *" test-file "*|*" test "*|*" quick "*) RUNS_TESTS=yes ;; esac
     if [ "$RUNS_TESTS" = yes ]; then
+      # GUARD_EDIT_OK: feature 212 - `make test-file K="..."` and a `FILE=...::node` are the SAME
+      # subset a bare `pytest -k` is; the make-only guard now REWRITES a targeted bare pytest into
+      # exactly those forms, so a subset the guard used to see would otherwise vanish from its view.
       case "$CMD" in
-        *" -k "*|*" -k="*)  printf '%s' "$CMD" | head -c 120 > "$STATE" ;;
+        *" -k "*|*" -k="*|*" K="*|*"FILE="*"::"*)  printf '%s' "$CMD" | head -c 120 > "$STATE" ;;
         *)                  rm -f "$STATE" ;;   # a whole-file / whole-suite run vouches for the code
       esac
     fi

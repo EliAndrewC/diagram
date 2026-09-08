@@ -47,7 +47,9 @@ except Exception: pass' 2>/dev/null)
 }
 rewritten "bare literal pattern is bracketed" 'pgrep -f "make done"' '[m]ake done'
 rewritten "pkill literal pattern is bracketed" 'pkill -f "cherryd"' '[c]herryd'
-check "while + sleep busy-wait" blocked 'while [ ! -f /tmp/done ]; do sleep 2; done'
+# GUARD_EDIT_OK: feature 212 - a FOREGROUND file-watching wait is BACKGROUNDED now (section 5b), so
+# the busy-wait vector here waits on something that is not a file
+check "while + sleep busy-wait" blocked 'while ! nc -z localhost 8080; do sleep 2; done'
 check "until + sleep busy-wait" blocked 'until curl -s localhost:8080 >/dev/null; do sleep 3; done'
 check "for + sleep busy-wait" blocked 'for i in 1 2 3; do sleep 10; done'
 check "command sleep (foreground-sleep guard bypass)" blocked 'command sleep 30'
@@ -107,7 +109,37 @@ bgcheck() { # label, expected, command, background(1|0)
 }
 bgcheck "a backgrounded watch on a log file" ok "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done" 1
 bgcheck "a backgrounded file test" ok "until [ -s /tmp/gate.log ]; do sleep 5; done" 1
-bgcheck "the SAME watch in the foreground is still refused" blocked "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done" 0
+# GUARD_EDIT_OK: feature 212 - the qualifier reads the permitted shape the way the record writes it
+# (a `|` inside the quoted regex, a `$S/` path, a `2>/dev/null`, `[ -s f ] && grep`): seven of the
+# eight real backgrounded waits in the record were refused by the raw reading. The boundary is the
+# GM's from feature 165, unchanged - a substitution inside quotes, an output file, a network or a
+# process wait all still fail it, and the every-part rule is TIGHTER than the whole-condition search.
+bgcheck "the corpus shape: a | inside the quoted regex" ok 'until grep -qE "gate green|GATE FAILED|EXIT=" /tmp/161-done2.log; do sleep 5; done; tail -3 /tmp/161-done2.log' 1
+bgcheck "the corpus shape: a variable in front of the path" ok 'until grep -qE "[0-9]+ (passed|failed|error)" $S/test-full.log; do sleep 5; done' 1
+bgcheck "the corpus shape: stderr discarded" ok 'until grep -q DONE-BASELINE /tmp/x/baseline.log 2>/dev/null; do sleep 10; done; echo BASELINE-COMPLETE' 1
+bgcheck "the corpus shape: a file test AND a grep" ok 'until [ -s /tmp/t/b.output ] && grep -qE "^real|passed|failed" /tmp/t/b.output; do sleep 5; done' 1
+bgcheck "a quoted path is still a path" ok 'until grep -q "gate green" "$S/gate.log"; do sleep 10; done' 1
+bgcheck "a substitution INSIDE quotes still disqualifies" blocked 'until grep -q "$(curl -s https://h/x)" /tmp/f; do sleep 5; done' 1
+bgcheck "a file test AND a network call (every part must qualify)" blocked 'until [ -f x ] && curl -sf https://h; do sleep 5; done' 1
+bgcheck "a backtick in the condition" blocked 'until grep -q x `cat f`; do sleep 5; done' 1
+# GUARD_EDIT_OK: feature 212 - THE FOREGROUND FORM IS BACKGROUNDED, NOT REFUSED (GM 2026-09-07): the
+# permitted shape is this command with run_in_background set, so the hook sets it and says so.
+backgrounded() { # label, command
+  local out; out=$(bgrun "$2" 0 2>/dev/null); local rc=$?
+  local flag; flag=$(printf '%s' "$out" | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["run_in_background"])
+except Exception: print("")' 2>/dev/null)
+  if [ "$rc" -eq 0 ] && [ "$flag" = "True" ] && printf '%s' "$out" | grep -q "BACKGROUNDED"; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (rc=$rc, run_in_background='${flag:-<unset>}')"; FAIL=$((FAIL+1))
+  fi
+}
+backgrounded "the SAME watch in the foreground is backgrounded and told" "until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"
+backgrounded "...with what follows the loop kept" "until grep -q x /tmp/a.log; do sleep 5; done; tail /tmp/a.log"
+backgrounded "the file-test form, foreground" 'while [ ! -f /tmp/done ]; do sleep 2; done'
+bgcheck "a foreground NETWORK wait is still refused" blocked "until curl -sf https://host/x; do sleep 5; done" 0
+bgcheck "a foreground PROCESS wait is still refused" blocked "until pgrep -f '[m]ake done'; do sleep 5; done" 0
 bgcheck "a backgrounded NETWORK wait" blocked "until curl -sf https://host/x; do sleep 5; done" 1
 bgcheck "...even with an output redirect (a redirect is not a file read)" blocked "until curl -sf https://host/x > /tmp/out; do sleep 5; done" 1
 bgcheck "a backgrounded PROCESS check through a pipe" blocked "until ps aux | grep -q make; do sleep 5; done" 1

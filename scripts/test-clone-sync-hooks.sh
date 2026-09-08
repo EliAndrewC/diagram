@@ -143,16 +143,25 @@ rm -f "$FMAIN/.clones/miscellaneous/dirt"
 # stale-base: a dedicated main advanced one commit past its clone
 FMAIN2=$TMP/main2; git init -q "$FMAIN2"; git -C "$FMAIN2" config user.email t@t; git -C "$FMAIN2" config user.name t
 echo a > "$FMAIN2/f"; git -C "$FMAIN2" add f; git -C "$FMAIN2" commit -qm a
+# GUARD_EDIT_OK: feature 212 - the fixture carries a `scripts/sync-with-main.sh` that fast-forwards
+# from its origin, TRACKED so the clone stays clean: the guard now runs that command itself on a
+# clean clone that fell behind and lets the edit proceed, told, instead of refusing it.
+mkdir -p "$FMAIN2/scripts"; printf '#!/bin/sh\ngit pull -q --ff-only origin HEAD\n' > "$FMAIN2/scripts/sync-with-main.sh"; chmod +x "$FMAIN2/scripts/sync-with-main.sh"
+git -C "$FMAIN2" add scripts; git -C "$FMAIN2" commit -qm stub
 mkdir -p "$FMAIN2/.clones"; git clone -q "$FMAIN2" "$FMAIN2/.clones/miscellaneous"
 echo b > "$FMAIN2/f"; git -C "$FMAIN2" commit -qam b   # advance main past the clone
 OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/miscellaneous/a.txt"}}' "$FMAIN2" \
-      | CLONE_MAIN="$FMAIN2" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); check "canonical clone behind main -> sync-in block" 2 $?
+      | CLONE_MAIN="$FMAIN2" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); check "canonical clone behind main -> synced in, edit allowed (feature 212)" 0 $?
+case $OUT in *"merged in"*) echo "ok    ...and the session is told main was merged in" ;; *) echo "FAIL  the permit did not say main was merged in: $OUT"; FAILED=1 ;; esac
+[ "$(git -C "$FMAIN2/.clones/miscellaneous" rev-parse HEAD)" = "$(git -C "$FMAIN2" rev-parse HEAD)" ] && echo "ok    ...and the clone is at main's tip" || { echo "FAIL  the clone was not fast-forwarded"; FAILED=1; }
 
 # ...but a clone that is merely AHEAD of main (the normal state right after committing your own
 # work, before the push back) must keep working. The equality test this replaced blocked it, which
 # deadlocked every multi-commit work unit - GM-reported 2026-07-25, spec-kit's per-step commits.
 FMAIN3=$TMP/main3; git init -q "$FMAIN3"; git -C "$FMAIN3" config user.email t@t; git -C "$FMAIN3" config user.name t
 echo a > "$FMAIN3/f"; git -C "$FMAIN3" add f; git -C "$FMAIN3" commit -qm a
+mkdir -p "$FMAIN3/scripts"; printf '#!/bin/sh\ngit pull -q --ff-only origin HEAD\n' > "$FMAIN3/scripts/sync-with-main.sh"; chmod +x "$FMAIN3/scripts/sync-with-main.sh"
+git -C "$FMAIN3" add scripts; git -C "$FMAIN3" commit -qm stub   # GUARD_EDIT_OK: feature 212 - the same stub, so the DIVERGED case proves a sync that cannot fast-forward still refuses
 mkdir -p "$FMAIN3/.clones"; git clone -q "$FMAIN3" "$FMAIN3/.clones/miscellaneous"
 git -C "$FMAIN3/.clones/miscellaneous" config user.email t@t; git -C "$FMAIN3/.clones/miscellaneous" config user.name t
 echo c > "$FMAIN3/.clones/miscellaneous/f"; git -C "$FMAIN3/.clones/miscellaneous" commit -qam c  # clone ahead, tree clean

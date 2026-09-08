@@ -219,47 +219,361 @@ def combine(cmd: str) -> str | None:
 # its own refusal - it may as well produce it. These decisions live here rather than in the hooks so
 # they can be tested with plain strings instead of through bash quoting.
 
-# What `make test-file` runs: pytest with workers, `-q` and `--no-cov` on ONE file. A flag that target
-# already supplies, or one that only asks for less output, is safe to drop. Anything that changes
-# WHICH tests run or HOW they are measured is not, so those keep the refusal - the same never-guess
-# rule feature 162 set for the quick/done rewrite.
-_DROPPABLE = re.compile(
-    r"^(-q|-qq|--quiet|-x|--exitfirst|--no-cov|--no-header|-p|no:cacheprovider|-n|auto|\d+"
-    r"|--dist|worksteal|-v|--tb=\S+|--color=\S+)$"
-)
+# What `make test-file` runs: pytest with workers, `-q` and `--no-cov` on the paths in FILE, with
+# `-k "$(K)"` when K is set (feature 212). A flag that target already supplies, or one that only
+# shapes output, is safe to drop. Anything that changes WHICH tests run or HOW they are measured is
+# not, so those keep the refusal - the same never-guess rule feature 162 set for the quick/done
+# rewrite - and the refusal names the token that stopped the rewrite (`why_not_make_target`).
+#
+# GUARD_EDIT_OK: feature 212 - THE TARGETED RUN CONVERTS, NOT ONLY THE BARE FILE (GM 2026-09-07:
+# *"if A Claude code session is using Pytest to run a targeted set of tests, such as targeting a
+# specific module or even a specific test case, then rather than failing ... we translate it into
+# the make target which should have been run"*). Feature 164's rewrite took ONE file and nothing
+# else, and the census of every refusal since (specs/212, R2) found it had converted none of the
+# eight targeted runs in the record: every one carried `2>&1 | tail -N` after the pytest segment,
+# which the old rule read as "a pipeline: not ours to rebuild". The pipeline is not part of the
+# pytest invocation - it consumes the output of whatever runs - so the segment is rebuilt and what
+# follows it is kept verbatim. `-k` (the GM's "specific test case") becomes `K=`, a directory or a
+# node id is a path, several paths are several. Still refused: a marker filter, a deselect, a
+# collection, a coverage run, a plugin LOAD, an absolute path - each a change to what runs.
+_DROP_FLAG = re.compile(r"^(-q|-qq|--quiet|-x|--exitfirst|--no-cov|--no-header|-v|-vv|-vvv|--tb=\S+|--color=\S+)$")
+_DROP_PAIR = {"-n", "--dist", "--tb", "--color"}     # take one argument, then are dropped
+_REDIR = re.compile(r"^(?:\d?>>?&?\S+|\d?<\S+)$")      # 2>&1  >log  2>/dev/null  <in
+_REDIR_OP = re.compile(r"^\d?>>?$")                    # `> log` written with a space
+# a RELATIVE test path: the tests tree, a directory under it, or a test file with an optional node id
+_TESTPATH = re.compile(r"^(?:tests(?:/[\w.-]+)*/?|(?:[\w.-]+/)*test_[\w-]+\.py(?:::[\w\[\]:.,-]+)?)$")
 
-_TESTPATH = re.compile(r"^[\w./-]+/test_[\w-]+\.py$|^test_[\w-]+\.py$")
+_PYTEST_RUN = re.compile(r"(?:\S*/)?python3?\s+(?:-\S+\s+)*-m\s+pytest\b|(?<![\w/.-])pytest\b")
 
-_PYTEST_RUN = re.compile(r"(?:\S*/)?python3?\s+(?:-\S+\s+)*-m\s+pytest\s+|(?:^|\s)pytest\s+")
+_MASK_HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?\n.*?\n\s*\1\b", re.S)
+_MASK_QUOTE = re.compile(r"(?<!-c )(?<!-c\t)([\"'])(?:\\.|(?!\1).)*\1", re.S)
+
+def _masked(cmd: str) -> str:
+    """`cmd` with heredoc bodies and quoted strings replaced by spaces OF THE SAME LENGTH, so a match
+    found in the masked text sits at the same offset in the raw one. `_strip_*` change the length,
+    which is fine for a yes/no verdict and useless for a rewrite that must cut the raw command."""
+    def blank(m: re.Match[str]) -> str:
+        return " " * len(m.group(0))
+    return _MASK_QUOTE.sub(blank, _MASK_HEREDOC.sub(blank, cmd))
+
+def _segment(tail: str) -> tuple[str, str]:
+    """Split the text after the invocation at its first unquoted separator: (segment, rest)."""
+    i, q = 0, ""
+    while i < len(tail):
+        ch = tail[i]
+        if q:
+            if ch == "\\" and q == '"':
+                i += 2
+                continue
+            if ch == q:
+                q = ""
+        elif ch in "\"'":
+            q = ch
+        elif ch == "\\":
+            i += 2
+            continue
+        elif ch in ";\n)|":
+            return tail[:i], tail[i:]
+        elif ch == "&":
+            if tail[i : i + 2] == "&&" or i == 0 or tail[i - 1] != ">":
+                return tail[:i], tail[i:]       # a chain or a background `&`; `>&` is a redirect
+        i += 1
+    return tail, ""
+
+def _words(seg: str) -> list[tuple[str, str]]:
+    """Shell-ish word split: (raw word, its unquoted value)."""
+    out: list[tuple[str, str]] = []
+    i, n = 0, len(seg)
+    while i < n:
+        while i < n and seg[i] in " \t":
+            i += 1
+        if i >= n:
+            break
+        j, q, buf = i, "", ""
+        while j < n and (q or seg[j] not in " \t"):
+            c = seg[j]
+            if q:
+                if c == q:
+                    q = ""
+                else:
+                    buf += c
+            elif c in "\"'":
+                q = c
+            else:
+                buf += c
+            j += 1
+        out.append((seg[i:j], buf))
+        i = j
+    return out
+
+def _targeted_pytest(cmd: str) -> tuple[str | None, str]:
+    """(the compliant command, "") or (None, why the shape keeps its refusal)."""
+    if not cmd:
+        return None, "no command"
+    m = _PYTEST_RUN.search(_masked(cmd))
+    if not m:
+        return None, "no pytest invocation"
+    head, tail = cmd[: m.start()], cmd[m.end() :]
+    seg, rest = _segment(tail)
+    body = seg.rstrip()
+    trail = seg[len(body) :]
+    ws = _words(body)
+    paths: list[str] = []
+    redirs: list[str] = []
+    k: str | None = None
+    i = 0
+    while i < len(ws):
+        raw, w = ws[i]
+        nxt = ws[i + 1][1] if i + 1 < len(ws) else None
+        if w == "-k" or w.startswith("-k="):
+            if k is not None:
+                return None, "`-k` given twice"
+            if w == "-k":
+                if nxt is None:
+                    return None, "`-k` with no expression"
+                k, i = nxt, i + 2
+            else:
+                k, i = w[3:], i + 1
+            continue
+        if _REDIR_OP.match(w):
+            if nxt is None:
+                return None, "a redirect with no target"
+            redirs.append(f"{raw} {ws[i + 1][0]}")
+            i += 2
+            continue
+        if _REDIR.match(w):
+            redirs.append(raw)
+            i += 1
+            continue
+        if w == "-p":
+            if nxt is None or not nxt.startswith("no:"):
+                return None, f"`-p {nxt or ''}` loads a plugin"
+            i += 2
+            continue
+        if w.startswith("-p") and w[2:].startswith("no:"):
+            i += 1
+            continue
+        if w in _DROP_PAIR:
+            i += 2
+            continue
+        if _DROP_FLAG.match(w):
+            i += 1
+            continue
+        if w.startswith("-"):
+            return None, f"`{w}`"
+        if w.startswith("/"):
+            return None, f"the absolute path `{w}`"
+        if _TESTPATH.match(w):
+            paths.append(w)
+            i += 1
+            continue
+        return None, f"the argument `{w}`"
+    if not paths:
+        return None, "no test path"
+    out = f"{head}make test-file FILE=" + (f'"{" ".join(paths)}"' if len(paths) > 1 else paths[0])
+    if k is not None:
+        if any(ch in k for ch in "\"$`"):
+            return None, "a `-k` expression carrying a quote, a dollar or a backtick"
+        out += f' K="{k}"'
+    if redirs:
+        out += " " + " ".join(redirs)
+    return out + trail + rest, ""
+
 
 def as_make_target(cmd: str) -> str | None:
-    """A bare pytest of ONE test file as `make test-file FILE=...`, or None to keep refusing.
+    """A targeted pytest run as `make test-file FILE=... [K=...]`, or None to keep refusing.
 
-    None means the shape is not one that can be rebuilt exactly - a filter, a coverage flag, a second
-    path, a directory, a pipeline - and the guard refuses it as it always has. What the rewrite
-    preserves is feature 127's invariant, that every test invocation goes through a make target; it
-    does NOT preserve coverage floors, because neither this command nor the target holds them.
+    None means the shape is not one that can be rebuilt exactly - a marker filter, a deselect, a
+    collection, a coverage flag, a plugin load - and the guard refuses it as it always has; the
+    reason is `why_not_make_target`. What the rewrite preserves is feature 127's invariant, that
+    every test invocation goes through a make target; it does NOT preserve coverage floors,
+    because neither this command nor the target holds them.
     """
-    m = _PYTEST_RUN.search(cmd)
+    return _targeted_pytest(cmd)[0]
+
+
+def why_not_make_target(cmd: str) -> str:
+    """Why `as_make_target` declined - the token that stopped it, for the refusal to name."""
+    return _targeted_pytest(cmd)[1]
+
+
+# ---- AN ENGINE ENTRY POINT A MAKE TARGET WRAPS BECOMES THAT TARGET (feature 212) ----------------
+#
+# GUARD_EDIT_OK: feature 212 - the compliant command is DERIVED from the Makefile at hook time,
+# never kept in a table here: a table names targets that get renamed (feature 193 retired nine) and
+# misses the ones added after it. A target qualifies when its recipe is ONE line of the form
+# `$(RUN).<module> <args>` (or `$(SWITCH) <word>` for the switches module) and the command's
+# arguments lay onto that recipe word for word - a literal matches itself, `$(ARGS)` takes the rest,
+# `$(or $(VAR),default)` takes one word, `$(if $(VAR),--flag,)` takes an optional flag. A recipe with
+# a `$(REF_FIRST)` guard or a second line is not one command, and a module nothing wraps keeps the
+# refusal: a derived table cannot name a target that does not exist. Of the 29 entry-point refusals
+# in the record, four were modules a target wraps (specs/212 R1); the twelve `tools.scatter_audit`
+# runs were not, and the refusal now lists what IS wrapped so the next session can tell.
+_ENTRY_RUN = re.compile(r"(?:\S*/)?python3?\s+(?:-\S+\s+)*-m\s+l7r\.diagram\.([\w.]+)")
+_RECIPE_ARG = re.compile(r"\$\(ARGS\)|\$\(or \$\((\w+)\),([^)]*)\)|\$\(if \$\((\w+)\),([^,]*),\)|(\S+)")
+_TARGET_LINE = re.compile(r"^([a-z][\w-]*):(?!=)")
+
+def _makefile_for(cwd: str) -> str:
+    """The skill Makefile of the tree the command runs in - walking up from `cwd` - else this
+    repository's own. A clone and main carry the same targets, and a target missing from the tree
+    the command runs in fails loudly in make, never silently."""
+    from pathlib import Path
+    rel = Path(".claude/skills/diagram/Makefile")
+    here = Path(cwd).resolve() if cwd else None
+    while here is not None:
+        if (here / rel).is_file():
+            return (here / rel).read_text()
+        if here.parent == here:
+            break
+        here = here.parent
+    own = Path(__file__).resolve().parents[1] / rel
+    return own.read_text() if own.is_file() else ""
+
+def _recipes(text: str) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {}
+    cur: str | None = None
+    for line in text.split("\n"):
+        if line.startswith("\t"):
+            if cur is not None:
+                body = line[1:].strip()
+                if body and not body.startswith("#") and not body.startswith(': "'):
+                    out[cur].append(body)
+            continue
+        m = _TARGET_LINE.match(line)
+        if m and ": export" not in line:
+            cur = m.group(1)
+            out.setdefault(cur, [])
+        elif not line.startswith("#"):
+            cur = None
+    return out
+
+def wrapped_modules(text: str) -> dict[str, list[tuple[str, list[tuple[str, ...]]]]]:
+    """module -> [(target, recipe tokens)] for every one-line `$(RUN).<module>` recipe in `text`."""
+    out: dict[str, list[tuple[str, list[tuple[str, ...]]]]] = {}
+    for target, lines in _recipes(text).items():
+        if len(lines) != 1:
+            continue
+        line = lines[0].lstrip("@")
+        if line.startswith("$(SWITCH)"):
+            module, rest = "switches", line[len("$(SWITCH)") :]
+        else:
+            m = re.match(r"^\$\(RUN\)\.([\w.]+)\s*(.*)$", line)
+            if not m:
+                continue
+            module, rest = m.group(1), m.group(2)
+        toks: list[tuple[str, ...]] = []
+        for a in _RECIPE_ARG.finditer(rest):
+            if a.group(0) == "$(ARGS)":
+                toks.append(("ARGS",))
+            elif a.group(1):
+                toks.append(("OR", a.group(1), a.group(2)))
+            elif a.group(3):
+                toks.append(("IF", a.group(3), a.group(4)))
+            else:
+                toks.append(("LIT", a.group(5)))
+        out.setdefault(module, []).append((target, toks))
+    return out
+
+def _lay(args: list[str], toks: list[tuple[str, ...]]) -> list[str] | None:
+    """The `VAR=value` assignments that reproduce `args` through `toks`, or None when they cannot."""
+    out: list[str] = []
+    i = 0
+    for tok in toks:
+        if tok[0] == "LIT":
+            if i < len(args) and args[i] == tok[1]:
+                i += 1
+            else:
+                return None
+        elif tok[0] == "OR":
+            if i < len(args) and not args[i].startswith("-"):
+                out.append(f"{tok[1]}={args[i]}")
+                i += 1
+        elif tok[0] == "IF":
+            if i < len(args) and args[i] == tok[2]:
+                out.append(f"{tok[1]}=1")
+                i += 1
+        elif tok[0] == "ARGS":
+            rest, i = args[i:], len(args)
+            if rest:
+                if any(ch in r for r in rest for ch in "\"'$`"):
+                    return None
+                out.append('ARGS="' + " ".join(rest) + '"')
+    return out if i == len(args) else None
+
+def _wrapped(cmd: str, cwd: str = "") -> tuple[str | None, str]:
+    if not cmd:
+        return None, "no command"
+    m = _ENTRY_RUN.search(_masked(cmd))
     if not m:
-        return None
+        return None, "no engine entry point"
+    module = m.group(1)
     head, tail = cmd[: m.start()], cmd[m.end() :]
-    if any(sep in tail for sep in ("|", ">", "&&", ";", "<<")):
-        return None                       # a pipeline or a chain: not ours to rebuild
-    # `( cd <abs> && ... )` is this project's own convention for a command needing a cwd, so the
-    # closing paren is part of the shape rather than an argument. Kept and re-appended verbatim.
-    close = ""
-    if tail.rstrip().endswith(")"):
-        tail, close = tail.rstrip()[:-1], " )"
-    paths, unknown = [], []
-    for word in tail.split():
-        if _TESTPATH.match(word):
-            paths.append(word)
-        elif not _DROPPABLE.match(word):
-            unknown.append(word)
-    if len(paths) != 1 or unknown:
-        return None
-    return f"{head}make test-file FILE={paths[0]}{close}"
+    seg, rest = _segment(tail)
+    body = seg.rstrip()
+    trail = seg[len(body) :]
+    args, redirs = [], []
+    for raw, w in _words(body):
+        if _REDIR.match(w):
+            redirs.append(raw)
+        elif raw != w:
+            return None, f"the quoted argument {raw}"
+        else:
+            args.append(w)
+    table = wrapped_modules(_makefile_for(cwd))
+    if module not in table:
+        wrapped = ", ".join(f"`{mod}` -> `make {t}`" for mod in sorted(table) for t, _ in table[mod])
+        return None, f"no make target wraps `l7r.diagram.{module}` (wrapped: {wrapped})"
+    for target, toks in table[module]:
+        laid = _lay(args, toks)
+        if laid is not None:
+            out = f"{head}make {target}" + "".join(" " + v for v in laid)
+            if redirs:
+                out += " " + " ".join(redirs)
+            return out + trail + rest, ""
+    return None, f"`make {table[module][0][0]}` cannot carry these arguments"
+
+
+# ---- A RECIPE COMMENT MUST NOT RUN (feature 212, the GM's request relayed 2026-09-07) ---------------
+#
+# GUARD_EDIT_OK: feature 212 - THE SAME HAZARD, THREE TIMES. This project comments a recipe with a shell
+# no-op, `: "..."`, and inside a double-quoted shell string a backtick or a `$(` is a COMMAND
+# SUBSTITUTION. Feature 185 found `test-full`'s phase loop running lint on every gate because its
+# comment named `lint` in backticks; feature 207 wrote a comment naming `make test-full` in backticks
+# INTO `test-full`, which ran itself, reached the comment again, and recursed 914 levels until the
+# container hit its 2,048-process limit and every session's forks failed; feature 188's `make tick`
+# ran `_ENGINE_DIRS` as a command out of an interpolated note. Each fix was a reworded line and a note
+# saying not to do it again, and the GM ruled that a note is not prevention: *"anytime I see a bad
+# problem having occurred, then just commenting, saying not to do it again is not a good way to
+# reliably make sure that the problem does not recur."* So the shape is REFUSED at edit time by
+# `guard-file-hooks.sh` (the only point that sees every Makefile write before it can execute - a
+# gate-phase check runs only inside a target that includes the phase, and the recursion fired from a
+# bare `make test-full`) and scanned at the gate by `tests/tooling/test_makefile_recipe_comments.py`
+# for the routes an edit can arrive by that the hook does not see (a merge, a scripted sweep).
+#
+# WHAT COUNTS: a recipe line (a tab, optional `@`, `: "`) whose double-quoted string holds an
+# UNESCAPED backtick, or `$$(` / `$${` (make's `$$` is one `$` to the shell, so that IS `$(` when the
+# line runs). `\`` and `\$$(` are literal to the shell and pass - the Makefile's own `\$$(MAKE)`
+# mention is the worked example. A single-quoted comment (`: '...'`) cannot substitute and passes.
+_RECIPE_COMMENT = re.compile(r'^\t\s*@?\s*:\s+"((?:[^"\\]|\\.)*)"')
+_UNESCAPED_SUBST = re.compile(r"(?<!\\)`|(?<!\\)\$\$[({]")
+
+def recipe_comment_hazards(text: str) -> list[tuple[int, str]]:
+    """(1-based line, the line) for every `: "..."` recipe comment whose string would RUN something."""
+    out: list[tuple[int, str]] = []
+    for n, line in enumerate(text.split("\n"), 1):
+        m = _RECIPE_COMMENT.match(line)
+        if m and _UNESCAPED_SUBST.search(m.group(1)):
+            out.append((n, line))
+    return out
+
+
+def as_wrapped_target(cmd: str, cwd: str = "") -> str | None:
+    """`python3 -m l7r.diagram.<module> <args>` as the make target that wraps it, or None."""
+    return _wrapped(cmd, cwd)[0]
+
+
+def why_not_wrapped_target(cmd: str, cwd: str = "") -> str:
+    return _wrapped(cmd, cwd)[1]
 
 
 def as_paired(cmd: str) -> str | None:
@@ -318,6 +632,23 @@ if __name__ == "__main__":
         out = as_make_target(CMD)
         if out:
             print(out)
+    elif mode == "why-not-make-target":
+        print(why_not_make_target(CMD))
+    elif mode == "recipe-hazards":
+        # the edit's text (new_string + content), one offending line per row: "<n>: <line>"
+        for n, line in recipe_comment_hazards(_CONTENT):
+            print(f"{n}: {line.strip()}")
+    elif mode in ("as-wrapped", "why-not-wrapped"):
+        try:
+            _cwd = json.loads(RAW).get("cwd", "") or ""
+        except Exception:
+            _cwd = ""
+        if mode == "as-wrapped":
+            out = as_wrapped_target(CMD, _cwd)
+            if out:
+                print(out)
+        else:
+            print(why_not_wrapped_target(CMD, _cwd))
     elif mode == "as-paired":
         out = as_paired(CMD)
         if out:

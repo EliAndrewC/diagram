@@ -38,6 +38,22 @@ grep -q "WHOLE test file" /tmp/gt.err && { echo "  ok    message says what to ru
 run "$(bash_ev 'make done')"; check "re-issuing the gate goes through (blocks once, no deadlock)" ok $?
 teardown
 
+# GUARD_EDIT_OK: feature 212 - the make-only guard rewrites a targeted bare pytest into
+# `make test-file FILE=... K=...` or a `::` node id, so those two forms must arm the subset flag
+# exactly as the bare `-k` does, and a plain `make test-file` must still clear it.
+echo "1b. the make-target spellings of a subset (feature 212)"
+setup
+run "$(bash_ev 'make test-file FILE=tests/test_x.py K="kura_side or punishment"')"; check "a K= run is allowed" ok $?
+run "$(bash_ev 'make done')"; check "make done BLOCKED after a K=-only run" blocked $?
+run "$(bash_ev 'make test-file FILE=tests/test_x.py::test_kura')"
+run "$(bash_ev 'make done')"; check "make done BLOCKED after a node-id-only run" blocked $?
+run "$(bash_ev 'make test-file FILE=tests/test_x.py::test_kura')"
+run "$(bash_ev 'make test-file FILE=tests/test_x.py')"
+run "$(bash_ev 'make done')"; check "a whole-file make test-file clears the flag" ok $?
+run "$(bash_ev 'make test-file FILE=tests/test_x.py SKIP_LOCK=1')"
+run "$(bash_ev 'make done')"; check "a variable merely ENDING in K= does not arm the flag" ok $?
+teardown
+
 echo "2. a WHOLE-FILE run clears the flag"
 setup
 run "$(bash_ev 'pytest test_settlement.py -k foo')"

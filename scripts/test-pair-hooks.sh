@@ -46,8 +46,25 @@ try: sys.exit(0 if json.load(sys.stdin)[\"hookSpecificOutput\"][\"updatedInput\"
 except Exception: sys.exit(1)"'
 check "...and the correction says to dispatch the review in the same turn" 'run_pretool "$GATE" | grep -q "SAME TURN"'
 check "...and still names the override for a one-sided case" 'run_pretool "$GATE" | grep -q "PAIR_OK"'
-check "a shape that cannot convert is still REFUSED" '[ "$(rc_pretool "$GATE_FULL")" -eq 2 ]'
-check "...naming the paired command" 'run_pretool "$GATE_FULL" | grep -q "make verify"'
+# GUARD_EDIT_OK: feature 212 - a shape `verify` cannot take is RECORDED AND PERMITTED with the
+# DISPATCH NOW context, not refused (GM 2026-09-07): the census found the rewrite above fired once
+# while every real refusal - eight `make maps`, three detached `make done` - was such a shape.
+permitted_with() { # label, payload, text the context must carry
+  local out; out=$(run_pretool "$2"); local rc=$?
+  if [ "$rc" -eq 0 ] && printf '%s' "$out" | grep -q "DISPATCH NOW" && printf '%s' "$out" | grep -q -- "$3" \
+     && ! printf '%s' "$out" | grep -q "updatedInput"; then ok; else bad "$1 (rc=$rc: $out)"; fi
+}
+rm -f "$CLONE/.git/pairing-state.json"
+permitted_with "make done FULL=1 is permitted, told the review is owed, and told it serializes" "$GATE_FULL" "FOREGROUND"
+check "...and records the gate key for the pairing" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
+MAPS=$(stdin_for Bash '{"command":"make maps SCOPE=all 2>&1 | tail -60"}')
+permitted_with "make maps ... | tail is permitted (foreground: the review follows the gate)" "$MAPS" "make verify"
+DETACHED=$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')
+permitted_with "a detached make done is permitted and told the review overlaps" "$DETACHED" "detached"
+BGGATE=$(stdin_for Bash '{"command":"make maps","run_in_background":true}')
+permitted_with "a run_in_background gate counts as detached" "$BGGATE" "detached"
+check "...the permit names PAIR_OK for the one-sided case" 'run_pretool "$MAPS" | grep -q "PAIR_OK"'
+rm -f "$CLONE/.git/pairing-state.json"
 check "a settlement-review alone is refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
 
 # --- 2. a MENTION is not an invocation ------------------------------------------------------------
