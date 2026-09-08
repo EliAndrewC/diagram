@@ -105,3 +105,15 @@ in place rather than the source re-found (a re-sourcing is a research pass of it
   two short paragraphs D2 priced (median about 1,050 bytes for the pair). The GM accepted the growth on 2026-09-08 (*"The growth of the registry's size is fine and I accept it"*).
 - **What the map should call an assertion resting on a source of limited applicability** (D5): none arose as a
   whole-source NOT-APPLICABLE; the component cases above were labeled GUESS or "our reading" in place.
+
+## R6 - the GM's five downloads (2026-09-08)
+
+Read from `/host-l7r-repo/academic-sources/` under the five-box procedure (T11-T14):
+
+- **Takeuchi 2010** (Ecological Research) carries only the DEFINITION of satoyama; the litter and the rotation are not on its pages, so `source-applicability` returned NOT-APPLICABLE for those two claims and the entry cites it for the definition alone.
+- **Jiao et al. 2019** (Sustainability) carries all three satoyama claims: litter and compost gathered for the paddies (3.2), konara and kunugi cut for firewood and charcoal (3.1), the 20-40-year coppice rotation and shrub cutting (Table 2), light on the floor (3.1). The 15-20-year figure the record kept from Uehara stands beside it as the second value.
+- **Tajima 2007** (Environnement Urbain) carries the tsuke-tsubo contract in rice or cash (Kanazawa; Edo landlords in cash), the early-eighteenth-century exchange of fuel, charcoal and young plants for the right to empty a castle's or an estate's privies, the koebune boats and the 3-5 km / 20 km reach; new fn-75 on buildings.
+- **Yuan and Liu 2009**: the file is the publisher's preview (title page and abstract), so the entry's preview-only limits stand and nothing was changed.
+- **Xu, Qiu and Wang 2012** was not among the files.
+
+`quote-check` over the six new or changed notes: 6 READABLE, 6 VERBATIM, 5 SUPPORTS and 1 PARTIAL (fn-34's "not brush" clause, now carried by the review's next sentence and its Table 2 row); two inner quotation marks straightened by transcription were restored to the source's curly ones; seven unfootnoted clauses it flagged in the two sections were sourced, labeled as our inference, or dropped (the privy "off the engawa", which no note carried). `record-format`: twelve vocabulary items added to the glossary, one write-up phrase reworded.

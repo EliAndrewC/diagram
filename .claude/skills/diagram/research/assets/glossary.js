@@ -193,6 +193,7 @@ window.RECORD_GLOSSARY = [
   "term": "night soil",
   "variants": [
    "night soil",
+   "night-soil",
    "nightsoil"
   ],
   "def": "Human waste collected from privies and composted as fertilizer."
@@ -633,13 +634,6 @@ window.RECORD_GLOSSARY = [
   "def": "The earth-floored working half of a farmhouse, where the hearth, the kitchen work and the animals were."
  },
  {
-  "term": "engawa",
-  "variants": [
-   "engawa"
-  ],
-  "def": "The veranda running along the outside of a house's rooms, under the eaves."
- },
- {
   "term": "genkan",
   "variants": [
    "genkan"
@@ -978,6 +972,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kochi seiri",
   "variants": [
+   "consolidated paddies",
    "land consolidation",
    "consolidated paddy",
    "land-readjustment",
@@ -1112,7 +1107,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "koedame",
   "variants": [
-   "koedame"
+   "cesspits",
+   "koedame",
+   "cesspit"
   ],
   "def": "The night-soil pit: a buried jar or plastered pit a meter or so across, in which night soil was rotted down for a few weeks before it went on the fields."
  },
@@ -3292,6 +3289,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "secondary forest",
   "variants": [
+   "secondary woodlands",
+   "secondary woodland",
    "secondary forest"
   ],
   "def": "Wood grown back on cleared ground, as against the old stand a village kept."
@@ -3596,5 +3595,54 @@ window.RECORD_GLOSSARY = [
    "Wanli"
   ],
   "def": "The Wanli reign of the Ming, 1573 to 1620."
+ },
+ {
+  "term": "ochiba",
+  "variants": [
+   "ochiba"
+  ],
+  "def": "Fallen leaves: the forest litter raked off a coppice wood's floor and carried to the paddies as fertilizer."
+ },
+ {
+  "term": "konara",
+  "variants": [
+   "Quercus serrata",
+   "konara"
+  ],
+  "def": "A deciduous oak of the coppice wood, cut on a cycle for firewood and charcoal."
+ },
+ {
+  "term": "kunugi",
+  "variants": [
+   "Quercus acutissima",
+   "kunugi"
+  ],
+  "def": "The sawtooth oak, a deciduous oak cut for firewood and charcoal beside konara in a coppice wood."
+ },
+ {
+  "term": "forest litter",
+  "variants": [
+   "forest litters",
+   "forest litter",
+   "leaf litter"
+  ],
+  "def": "The fallen leaves on a wood's floor, raked up and carried to the fields as fertilizer rather than left to lie - which is what keeps a worked wood's floor light."
+ },
+ {
+  "term": "thatch field",
+  "variants": [
+   "thatch fields",
+   "thatch field"
+  ],
+  "def": "Grassland mown for roofing thatch - one of the parts of the satoyama landscape a village worked, beside its coppice woods, paddies and ponds."
+ },
+ {
+  "term": "fertilizer boat",
+  "variants": [
+   "fertilizer boats",
+   "fertilizer boat",
+   "koebune"
+  ],
+  "def": "The barge that carried night soil out of a city to the farming villages, where a canal or river allowed it."
  }
 ];
