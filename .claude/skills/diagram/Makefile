@@ -1281,9 +1281,12 @@ REFERENCE_TIER = hamlet
 # (GUARD_EDIT_OK: a forward-looking statement of the worker count the remote run takes, which moves with the box - FR-005)
 # else - the inverse of "is this the laptop", and it needs no hostname.
 # ...and never more workers than the box has cores (GM 2026-08-26: "I wouldn't want to run eight workers on a
-# machine that only has four cores") - min(8, nproc). CPU_COUNT is overridable so the small-box branch is testable.
+# machine that only has four cores") - min(6, nproc). CPU_COUNT is overridable so the small-box branch is testable.
+# SIX, NOT EIGHT, since feature 213 (GUARD_EDIT_OK: FR-009's measured default - four full test phases on identical
+# content, specs/213 research R4: 4 workers 346 s, 6 workers 301 s, 8 workers 297-322 s; the rule was the smallest
+# count within 10% of the fastest, and two idle workers fewer is ~250 MiB the other sessions' gates get back).
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
-XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8))
+XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 6 ] && echo "$(CPU_COUNT)" || echo 6))
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
@@ -1445,11 +1448,13 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	: "GUARD_EDIT_OK: feature 213 - THE ROLL CENSUS VERDICT, before the floors: one roll per rostered hamlet, no render outside" ; \
 	: " the tests of rendering, no roll in a worker outside the excepted modules. A stale roster row counts only on a full run." ; \
-	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo --full) || exit 1; \
 	cov_ec=0; \
 	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines. GUARD_EDIT_OK: feature 174 makes this STRICTER. It used to omit settlement/, waterfields/, interactive/ and overlap/ and hand them to a 94% ratchet, which is precisely what the GM asked to end (2026-08-31: 'we have some ratchets somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred percent coverage in whatever the relevant place is'). The omit list and SETTLEMENT_COV_FLOOR both retired the day their own condition was met - measured on this feature's green run, settlement/ 10,342 statements 0 missing, the other three trees 3,015 statements 0 missing. The hamlet-path floor below STAYS: it is a finer check (feature 145), not a weaker one"; cov_ec=1; }; \
-	python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
+	: "GUARD_EDIT_OK: feature 213 - the verdict runs AFTER the floor, under the same census, so a floor that re-rolled a subject" ; \
+	: " the tests should have rolled is seen (the polder-only run of 2026-09-08 hid two such rolls before the floor was in the census)" ; \
+	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo --full) || cov_ec=1; \
 	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
 	exit $$cov_ec
 

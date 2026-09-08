@@ -228,3 +228,14 @@ def test_the_shim_delegates_and_its_import_lines_are_measured(monkeypatch: pytes
     assert os.environ[_census.TEST_ENV] == "x::t"
     rollcensus.pytest_runtest_logfinish("x::t", None)
     assert _census.TEST_ENV not in os.environ
+
+
+def test_a_roll_no_test_requested_is_the_floor_s_and_fails() -> None:
+    """The hamlet-floor phase runs after pytest under the same census (feature 213, the polder-only run of
+    2026-09-08: it re-rolled both polder subjects unseen). A roll with no requesting test is its; the tests'
+    roll must be its record, so any such roll fails and the message says where to look."""
+    floor = {"kind": "roll", "spec": _spec("Polder", 12), "test": None, "request": None, "pid": "4242", "worker": None, "dt": 64.0, "ok": True}
+    failures, lines = rollverdict.judge([floor], _roster(("Polder", 12)), full=False, renders_ok=set())
+    assert len(failures) == 1 and "hamlet-floor phase ROLLED Polder seed=12" in failures[0] and "CONTEXT_ENV" in failures[0]
+    assert any("hamlet-floor rolls (no test requested them): 1" in ln for ln in lines)
+    assert rollverdict.judge([_roll("Polder", 12, "tests/gate/p.py::t", "r1")], _roster(("Polder", 12)), full=True, renders_ok=set())[0] == []

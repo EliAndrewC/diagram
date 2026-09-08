@@ -133,12 +133,16 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
     rolls: dict[tuple[tuple[str, int], str, str], list[dict[str, Any]]] = defaultdict(list)
     unnamed: list[dict[str, Any]] = []
     stubs: list[dict[str, Any]] = []
+    floor: list[dict[str, Any]] = []  # rolls no test requested: the hamlet-floor phase's own (it runs after pytest, under the same census)
     for r in rows:
         if r.get("kind") != "roll":
             continue
         key = _key(r.get("spec"))
         if key is None:
             unnamed.append(r)
+            continue
+        if not r.get("test"):
+            floor.append(r)
             continue
         exc = _exception(r.get("test"), roster.IN_PROCESS)
         if exc is not None and getattr(exc, "stub", False):
@@ -197,6 +201,15 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
     for r in unnamed:
         if str(r.get("pid")) == str(r.get("worker")) and not _excepted(r.get("test"), roster.IN_PROCESS):
             failures.append(f"a roll with no spec ran in the test worker under {r.get('test')} - pass the spec to roll_scope, or except the module in tests/rolls.py")
+    for r in floor:
+        spec = r.get("spec") or {}
+        failures.append(
+            f"the hamlet-floor phase ROLLED {spec.get('name')} seed={spec.get('seed')} itself ({float(r.get('dt') or 0):.0f}s) - the tests' roll is the floor's record (spec FR-001, 207's D14): "
+            "on a full run every rostered spec was just rolled and stored; on an incremental run this means the selection did not run the test that rolls it - a roll child's coverage carries "
+            "its requester's context since feature 213 (_census.CONTEXT_ENV), so check the baseline was taken after that landed, or that the roller is a rostered test at all"
+        )
+    if floor:
+        lines.append(f"  hamlet-floor rolls (no test requested them): {len(floor)}")
     for r in stubs:
         dt = float(r.get("dt") or 0)
         if dt > STUB_MAX_S:

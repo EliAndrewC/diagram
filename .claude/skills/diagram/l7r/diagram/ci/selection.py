@@ -26,6 +26,7 @@ from typing import Any
 
 import pytest
 
+from l7r.diagram import _census
 from l7r.diagram.ci import incremental
 
 ENV = "L7R_GATE_SELECT"  # the baseline directory; set by the Makefile on a traced gate run
@@ -46,6 +47,7 @@ def switch(cov: Any, name: str) -> None:
     instead of one per execution - the C tracer cost a full run 2.4x. Harmless under any other core."""
     cov.switch_context(name)
     sys.monitoring.restart_events()
+    os.environ[_census.CONTEXT_ENV] = name  # a coverage child started under this context labels its data with it (feature 213, _census.py)
 
 
 class GateSelection:

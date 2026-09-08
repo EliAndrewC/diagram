@@ -25,9 +25,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T07 first-attempt seeds (FR-005); collection order (FR-010)
       research: rendering
       verify: DONE. DONE. The CLI test rolls Clitest seed 9 (seed 8 took two attempts); the perf-snapshot test seed 6 and the perf-profile tests seeds 5 and 7, each rostered; the cohort seeds 41-44 stay with seed 42's three attempts recorded (FR-005). rollverdict.rolls_first moves the rolls_map tests to the front of collection (proved in test_rollverdict). Verified on the green full run: seed 42 reported as 1 roll, attempts 3
-- [ ] T08 measurements: the pool-sweep child profile (FR-008); 4/6/8 workers (FR-009); the cap count;
+- [x] T08 measurements: the pool-sweep child profile (FR-008); 4/6/8 workers (FR-009); the cap count;
       research R4
       research: rendering
+      verify: DONE. DONE. Research R4: four full test phases on identical content (commit eebdf8d57) - 4/6/8 workers at cap 4: 346/301/322 s pytest; cap 2 at 8 workers 391 s, cap 8 297 s; the 10% rule picks 6 workers (XDIST_WORKERS default 6, R4 states the numbers), the cap stays 4. The pool sweep's gate_obtain child sampled at 50 ms: 131 MiB peak RSS (the 550 MB of R3 predates feature 208 and does not reproduce; nothing to act on). Roll children 180-183 MiB. The census after: 25 rolls of 21 specs warm, 30 of 23 cold
 - [ ] T09 the record (FR-013); `make done` green; SC-001 read off the census; land GATED
       research: rendering
 - [x] T11 the first gated census read and acted on (D6, D7): the process in the roll key, the three sites

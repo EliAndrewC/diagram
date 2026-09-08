@@ -161,3 +161,16 @@ count is measured; the long rolls start first and their concurrency is capped; i
   Inashiro carries `fixtures_min={'shrine': 1}` and the gate's SPEC literals do not (recorded in the roster
   row and R4; the GM's to rule on). The verdict allows a pool gen once per run, from the sweep only, and
   prints whether it rolled or was served.
+- **D8 - a coverage child is labeled with its requester's context, and the floor phase is inside the
+  census.** The polder-only incremental run of T10 (2026-09-08) ran 54 tests in 38 s and took 228 s - no
+  faster than 207's 219 s - and its census showed one roll, by the cache round trip. The polder gate tests
+  had not been selected at all: feature 207 selects from the baseline's per-test and per-fixture coverage
+  contexts, and a roll made in a child (210, 213) records the engine's lines under NO context, so a change
+  only a roll reaches selected 46 unit tests and not one roller; the hamlet floor then re-rolled both polder
+  subjects itself, unseen, because the floor phase ran outside the census. Two fixes, both gated:
+  `ci/selection.switch` exports the context it sets (`_census.CONTEXT_ENV`) and every coverage child - the
+  roll child, the pool sweep's `gate_obtain` child - runs `coverage run --context=<it>`, so the baseline sees
+  the roll under its requesting fixture or test exactly as it did when the roll was in the worker; and the
+  floor phase runs under `L7R_ROLL_CENSUS` with the verdict AFTER it, where a roll no test requested fails
+  the gate and says what it means. SC-004 is read off that verdict after a full baseline taken with the
+  labels in place.

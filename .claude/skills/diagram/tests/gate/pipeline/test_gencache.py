@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 
+from l7r.diagram import _census
 from l7r.diagram.pipeline import gencache
 from tests.pipeline.test_gencache import (
     HERE,
@@ -30,15 +31,21 @@ def test_gate_miss_scratch_files_stay_out_of_the_engine_tree(tmp_path, monkeypat
     seen: list[str] = []
     real_run = subprocess.run
 
+    flags: list[list[str]] = []
+
     def spy_run(cmd, *a, **k):
         if isinstance(cmd, list) and cmd[-1].endswith("driver.py"):
             seen.append(cmd[-1])
+            flags.append([x for x in cmd if x.startswith("--context=")])
         return real_run(cmd, *a, **k)
 
     monkeypatch.setattr(gencache.subprocess, "run", spy_run)
+    monkeypatch.setenv(_census.CONTEXT_ENV, "tests/full/test_villages.py::test_village_passes_gate[toy]|run")  # the sweep test's context (feature 213)
     _, how, _ = gencache.gate_obtain(str(gen))
     assert how == "REGENERATED" and seen, "the miss path must have spawned a driver"
     assert not seen[0].startswith(gencache.HERE + os.sep), f"scratch driver inside the engine tree: {seen[0]}"
+    # ...and the child's coverage is LABELED with the requester's context, so an engine change selects the sweep (feature 213)
+    assert flags[0] == ["--context=tests/full/test_villages.py::test_village_passes_gate[toy]|run"]
 
 
 @pytest.mark.tooling

@@ -127,6 +127,57 @@ contexts over the last full run so a change re-rolls only what it reaches. This 
 second answer, and its census gate must hold under 207's incremental runs too (a subset of the roster
 requested is not stale - only a full run judges (c)).
 
-## R4. Measured after
+## R4. Measured after (2026-09-08)
 
-(Filled in by the implementation: rolls per gate, gate time, container peak, worker peaks.)
+**Rolls per gate.** A warm full run (`make test-full`, every test, the pool gens served from the gen cache)
+rolls **25 times for 21 specs**: the 21 roster rows once each, plus the four stated duplicates (the fan-out's
+pool child, the child-equality test's in-process half, the immune test's perturbed roll, the cache round
+trip's gen), with 28-29 requests served from shared rolls and 11 stand-in-stage records costing 1.4 s in
+all. A cold run (the engine changed, so every pool gen's key moved) adds the five pool gens: 30 rolls of 23
+specs. Before: 37 rolls of 14 specs (R1). The verdict prints all of this on every run, and `make roll-census`
+re-reads the last one.
+
+**What the first two gated censuses caught before the number was reached** - each a defect the roster
+would have hidden had the gate been written to the draft's picture rather than to the census (spec D6, D7):
+the round-trip test running the reference gen TWICE (a subprocess for the files, then in the worker for
+the record); the two perf-profile tests both rolling Inashiro 5 in the worker; the placement-stages plates
+rendered from an unmarked module; the fan-out's two children reported as one roll with two attempts (the
+key lacked the process); the pool sweep's five generators with no roster kind to belong to; the stub-stage
+modules' eleven no-map records; and two that took the third and fourth runs to surface - the round-trip
+test EVICTING the pool sweep's Inashiro entry, so the next gate's sweep rolled that gen cold again (a
+coverage child of 117-133 MiB, ~30 s, every run, on content nothing had changed - the pool-gen line said
+"ROLLED this run: its cache key moved"), and `tools/why_placed.run_gen` POPPING `DIAGRAM_SKIP_RENDER`
+instead of restoring it, so a roll child started later in that worker rendered a PNG and a page raster (the
+immune test's Kashikawa child, on the run where the tool's test happened to land first). Both fixed in this
+feature; the roster's Inashiro row also records that the pool's brief carries `fixtures_min={'shrine': 1}`
+and the gate's SPEC literals do not - the same (name, seed), a brief that differs by one forced fixture,
+left for the GM.
+
+**The worker count and the roll cap (FR-009, FR-010).** Four full test phases on identical engine content
+(commit `eebdf8d57`, the browser tests running in each - `test-full` never skips them), the container
+sampled at 0.5 s (`memsample3.py`), the three Claude sessions and the page cache in the baseline (3.0-3.3
+GiB before each run started):
+
+| workers | roll cap | pytest phase | whole `test-full` | cgroup peak | python RSS sum, max | note |
+|---|---|---|---|---|---|---|
+| 4 | 4 | 346 s | 357 s | 4,112 MiB | 1,141 MiB | chromium 550 MiB at the peak sample |
+| 6 | 4 | 301 s | 312 s | 5,597 MiB | 2,252 MiB | a resvg render (556 MiB) at the peak sample |
+| 8 | 4 | 322 s | - | 5,999 MiB | 3,346 MiB | the second gated run: one failing docs test, chromium 2,238 MiB at the peak sample |
+| 8 | 2 | 391 s | 402 s | 4,654 MiB | 1,652 MiB | the cap serializes the long rolls: +30% |
+| 8 | 8 | 297 s | 299 s | 5,234 MiB | 2,362 MiB | no faster than cap 4 within this box's noise |
+
+The rule stated in R3 - the smallest worker count within 10% of the fastest - picks **6**: 301 s against
+297 s at 8 (1.3%), while 4 workers cost 16%. So `XDIST_WORKERS` defaults to 6 on a box with 6 or more
+cores (it was `min(cpu, 8)`); two idle workers fewer is ~250 MiB the other sessions' gates get back, for no
+time anyone can measure here (`dev/loop.md`, "A TIMING FROM THIS BOX IS NOT A TIMING"). The roll cap stays
+at 4: 2 costs a third of the gate, 8 buys nothing measurable, and 4 bounds the concurrent roll children -
+each 180-183 MiB at peak - to ~730 MiB. The container's peak is a COINCIDENCE more than a level: the
+chromium burst (the synthetic browser tests, 0.4-2.2 GiB for a few seconds) or a resvg render landing on
+the sample is what separates 4.1 GiB from 6.0 GiB in the table, while the workers themselves sit at
+1.1-2.4 GiB in total.
+
+**The pool sweep's child (FR-008).** One `gate_obtain` coverage child (Inashiro, forced cold with
+`GATE_NO_CACHE=1`) sampled at 50 ms: **131 MiB peak RSS**; 117-133 MiB across the full runs at 0.5 s; a
+plain roll child 180-183 MiB (it carries the pickled plan, manifest and Report out). The 550 MB in R3 does
+not reproduce - it was measured before feature 208 took the page raster (PIL and libwebp's C buffers) out
+of every roll. Nothing to act on.

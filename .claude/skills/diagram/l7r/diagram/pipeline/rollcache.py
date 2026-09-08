@@ -461,7 +461,9 @@ def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
         covbase = os.path.join(workdir, "cov")
         if under_coverage:
             env["COVERAGE_FILE"] = covbase
-            cmd = [sys.executable, "-m", "coverage", "run", "--parallel-mode", driver]
+            # ...LABELED WITH THE REQUESTER'S CONTEXT, or the incremental gate cannot see who rolled (_census.CONTEXT_ENV)
+            label = os.environ.get(_census.CONTEXT_ENV)
+            cmd = [sys.executable, "-m", "coverage", "run", "--parallel-mode", *([f"--context={label}"] if label else []), driver]
         else:
             cmd = [sys.executable, driver]
         with _roll_slot():  # at most N child rolls at once across the run (FR-010)

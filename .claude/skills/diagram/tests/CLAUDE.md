@@ -112,8 +112,12 @@ adding another hamlet that gets rolled."* So:
   stage-running loop enters, proven by the AST test in `tests/hamletgen/test_driver.py` - appends a record
   to the file `L7R_ROLL_CENSUS` names, in every process of the run; the `-p l7r.diagram.ci.rollcensus`
   plugin attributes each record to the test that caused it; `python3 -m l7r.diagram.ci rollcensus verdict`
-  judges the run after pytest (`ci/rollverdict.py`): a second roll of a spec, an unrostered roll, a stale
-  row on a full run, a render from an unmarked test, an in-process roll from an unexcepted module.
+  judges the run after the hamlet-floor phase (`ci/rollverdict.py`), which runs under the same census: a
+  second roll of a spec, an unrostered roll, a stale row on a full run, a render from an unmarked test, an
+  in-process roll from an unexcepted module, a roll the floor made itself. And because the incremental gate
+  (feature 207) selects tests from coverage CONTEXTS, every coverage child is labeled with its requester's
+  context (`_census.CONTEXT_ENV`, exported by `ci/selection.switch`) - a roll in a child would otherwise be
+  invisible to the selection, which is exactly what the polder-only run of 2026-09-08 showed.
 - **Rolling tests get their roll from the roll cache, in a child.** `rollcache.hamlet(spec)` /
   `report(spec)` are two views of ONE roll per spec (`generate`, kept manifest and all), shared across the
   workers behind a lock so the first wave waits instead of each rolling, and stored so the hamlet floor

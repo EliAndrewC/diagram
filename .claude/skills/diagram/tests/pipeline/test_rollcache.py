@@ -445,3 +445,39 @@ def test_the_roll_slots_bound_how_many_child_rolls_run_at_once(tmp_path, monkeyp
     b.join()
     (s0, e0), (s1, e1) = sorted(spans)
     assert s1 < e0, "with two slots the two rolls overlap"
+
+
+def test_a_covered_child_is_labeled_with_the_parent_s_coverage_context(tmp_path, monkeypatch) -> None:
+    """Feature 213 (found on the polder-only run): the child's coverage data must carry its requester's context, or
+    the incremental gate cannot select the test that rolls. Under a covered parent with a context exported the
+    child runs `coverage run --context=<it>`; with no context exported, no flag; with no coverage, plain python."""
+    import pickle
+    import subprocess
+
+    from l7r.diagram import _census
+    from l7r.diagram.pipeline import gencache
+
+    seen: list[list[str]] = []
+
+    def fake_run(cmd, **kw):
+        seen.append(list(cmd))
+        workdir = os.path.dirname(cmd[-1])
+        with open(os.path.join(workdir, "out.pickle"), "wb") as fh:
+            pickle.dump(("payload", {"functions": [], "files": []}), fh)
+        if "coverage" in cmd:
+            open(os.path.join(workdir, "cov.abc"), "w").close()  # the parallel-mode data file the child would leave
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(gencache, "HERE", str(tmp_path))
+    monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: True)
+    monkeypatch.setenv(_census.CONTEXT_ENV, "fixture:inashiro")
+    assert rollcache._in_child("mod:fn", None)[0] == "payload"
+    assert "--context=fixture:inashiro" in seen[-1] and "coverage" in seen[-1]
+    assert [f for f in os.listdir(tmp_path) if f.startswith(".coverage.rollchild-")], "the child's data file is published for the combine"
+    monkeypatch.delenv(_census.CONTEXT_ENV)
+    rollcache._in_child("mod:fn", None)
+    assert not [a for a in seen[-1] if a.startswith("--context")]
+    monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: False)
+    rollcache._in_child("mod:fn", None)
+    assert "coverage" not in seen[-1]

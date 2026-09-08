@@ -27,6 +27,14 @@ from typing import Any
 ENV = "L7R_ROLL_CENSUS"
 TEST_ENV = "L7R_ROLL_CENSUS_TEST"
 REQUEST_ENV = "L7R_ROLL_CENSUS_REQUEST"
+CONTEXT_ENV = "L7R_COV_CONTEXT"  # the parent's CURRENT coverage context, exported by ci/selection.switch so a coverage child labels its data with it (below)
+# WHY A CHILD'S COVERAGE CARRIES ITS REQUESTER'S CONTEXT (feature 213, found on the polder-only run of 2026-09-08).
+# Feature 207 selects the tests an engine change can reach from the baseline's per-test and per-fixture coverage
+# contexts. A roll made IN a worker recorded the engine's lines under the rolling fixture's context; a roll made in
+# a CHILD (210, 213) records them under no context at all - so a polder-only edit selected 46 unit tests and NOT
+# ONE of the polder gate tests, and the hamlet floor re-rolled both polder subjects itself (207's D14 back again,
+# by a different door). So every coverage child - the roll child, the pool sweep's gate_obtain child - runs
+# `coverage run --context=<the parent's context>`, and the baseline sees the roll where 207 expects it.
 WORKER_ENV = "L7R_ROLL_CENSUS_WORKER"  # the test worker's pid - a record from another pid came from a child
 
 

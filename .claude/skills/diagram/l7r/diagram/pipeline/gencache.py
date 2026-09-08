@@ -66,6 +66,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from l7r.diagram import _census
+
 from . import poolmaps
 
 HERE = os.path.abspath(
@@ -662,8 +664,9 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
     env["DIAGRAM_SKIP_RENDER"] = "1"  # the gate reads the manifest, never the PNG
     env["COVERAGE_FILE"] = covbase
+    label = os.environ.get(_census.CONTEXT_ENV)  # the sweep test's context, so an engine change selects the sweep (feature 213, _census.py)
     try:
-        proc = subprocess.run([sys.executable, "-m", "coverage", "run", "--parallel-mode", driver], cwd=HERE, env=env, capture_output=True, text=True)
+        proc = subprocess.run([sys.executable, "-m", "coverage", "run", "--parallel-mode", *([f"--context={label}"] if label else []), driver], cwd=HERE, env=env, capture_output=True, text=True)
         if proc.returncode:
             raise RuntimeError(f"gate regeneration failed for {os.path.basename(gen)} (exit {proc.returncode}):\n{proc.stdout[-2000:]}\n{proc.stderr[-2000:]}")
         with open(recfile) as fh:

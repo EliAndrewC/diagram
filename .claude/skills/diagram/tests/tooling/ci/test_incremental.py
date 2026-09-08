@@ -7,6 +7,7 @@ plan and the merge apply, so a wrong selection is named by the rule that made it
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from pathlib import Path
 
@@ -357,3 +358,18 @@ def test_main_where_mode_and_selected(tmp_path: Path, monkeypatch: pytest.Monkey
     assert incremental.main(["mode"], tmp_path, tmp_path) == 0 and capsys.readouterr().out.strip() == "incremental"
     assert incremental.main(["selected"], tmp_path, tmp_path) == 0 and capsys.readouterr().out.strip() == "2/3"
     assert incremental.main(["save-baseline"], tmp_path, tmp_path) == 0 and "stays" in capsys.readouterr().out
+
+
+def test_switch_exports_the_context_so_a_coverage_child_can_label_its_data(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 213: a roll made in a child recorded the engine's lines under NO context, so the polder-only
+    incremental run selected 46 unit tests and not one polder gate test (the floor then re-rolled both polder
+    subjects). `switch` now exports the context it set; `rollcache._in_child` and `gencache.gate_obtain` pass it
+    to `coverage run --context=`, and the baseline sees the roll under its requester."""
+    from l7r.diagram import _census
+
+    monkeypatch.delenv(_census.CONTEXT_ENV, raising=False)
+    cov = _Cov()
+    selection.switch(cov, "fixture:built")
+    assert os.environ[_census.CONTEXT_ENV] == "fixture:built"
+    selection.switch(cov, "t/test_a.py::x|run")
+    assert os.environ[_census.CONTEXT_ENV] == "t/test_a.py::x|run"
