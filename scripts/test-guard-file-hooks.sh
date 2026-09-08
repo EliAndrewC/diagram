@@ -86,5 +86,21 @@ run "$ROOT/.claude/skills/diagram/Makefile" "${TAB}: \"\`x\`\"" Edit >/dev/null
 grep -q "There is no escape token" /tmp/gf.err && { echo "  ok      the refusal says there is no escape and how to write it"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal is unhelpful"; FAIL=$((FAIL+1)); }
 
 echo
+echo
+echo "6. THE ROSTER OF ROLLED HAMLETS IS A GUARD (feature 217), with its own Read-time context"
+ROSTER="$ROOT/.claude/skills/diagram/tests/rolls.py"
+check blocked "$ROSTER"
+check blocked "$ROSTER" "x" "Write"
+check ok "$ROSTER" "GUARD_EDIT_OK: adding a roll row after make roll-audit showed its lines"
+check ok "$ROOT/.claude/skills/diagram/tests/test_rolls.py"   # the roster's TEST is ordinary source
+ctx=$(ev "$ROSTER" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
+  echo "  ok      the Read of the roster names the doctrine, make roll-audit and the three exits"; PASS=$((PASS+1))
+else echo "  FAIL    the roster's Read-time context is missing the doctrine or the command: $ctx"; FAIL=$((FAIL+1)); fi
+ctx=$(ev "$ROOT/.claude/skills/diagram/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "roll-audit"; then
+  echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
+else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
+
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

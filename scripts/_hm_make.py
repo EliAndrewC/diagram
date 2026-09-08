@@ -16,7 +16,9 @@ from _hm_escape import escape_used
 from _hm_shape import _POS, _PY, _strip_heredocs, _strip_quotes
 
 # a guard file, as the TARGET of a write - the filename adjacent to the operator that writes it
-_GUARD = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json)"
+# GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets (tests/rolls.py) is a guard on the shell route too, so a
+# heredoc or a redirect cannot add a roll row where the Edit tool would have asked for a reason.
+_GUARD = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py)"
 
 # GUARD_EDIT_OK: feature 169 - TWO FALSE POSITIVES, one of which blocked a command that wrote
 # nothing at all. These were matched against the RAW command, so:
