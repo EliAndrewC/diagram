@@ -34,7 +34,9 @@ CONTEXT_ENV = "L7R_COV_CONTEXT"  # the parent's CURRENT coverage context, export
 # a CHILD (210, 213) records them under no context at all - so a polder-only edit selected 46 unit tests and NOT
 # ONE of the polder gate tests, and the hamlet floor re-rolled both polder subjects itself (207's D14 back again,
 # by a different door). So every coverage child - the roll child, the pool sweep's gate_obtain child - runs
-# `coverage run --context=<the parent's context>`, and the baseline sees the roll where 207 expects it.
+# starts coverage itself (gencache.child_coverage), imports the engine under NO context, and switches to the parent's
+# context for the work alone - `coverage run --context=` labeled the imports too, and every roller then "touched" every
+# engine file - so the baseline sees the roll where 207 expects it and nothing more.
 WORKER_ENV = "L7R_ROLL_CENSUS_WORKER"  # the test worker's pid - a record from another pid came from a child
 
 

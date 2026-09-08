@@ -169,7 +169,9 @@ count is measured; the long rolls start first and their concurrency is capped; i
   only a roll reaches selected 46 unit tests and not one roller; the hamlet floor then re-rolled both polder
   subjects itself, unseen, because the floor phase ran outside the census. Two fixes, both gated:
   `ci/selection.switch` exports the context it sets (`_census.CONTEXT_ENV`) and every coverage child - the
-  roll child, the pool sweep's `gate_obtain` child - runs `coverage run --context=<it>`, so the baseline sees
+  roll child, the pool sweep's `gate_obtain` child - starts coverage itself, imports the engine under no
+  context and switches to that context for the work alone (`coverage run --context=` labeled the imports too,
+  so every roller "touched" every engine file and a polder-only edit re-rolled 14 specs), so the baseline sees
   the roll under its requesting fixture or test exactly as it did when the roll was in the worker; and the
   floor phase runs under `L7R_ROLL_CENSUS` with the verdict AFTER it, where a roll no test requested fails
   the gate and says what it means. SC-004 is read off that verdict after a full baseline taken with the
