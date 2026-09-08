@@ -113,8 +113,8 @@ point in including a reference if it is not being quoted."* So the citation form
 - after the assertion, `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>` - one per assertion, *"even if this means multiple footnote links per paragraph or
   even multiple per sentence in sentences which make multiple assertions"*; a sentence that rests on two sources
   carries two;
-- at the page's foot, in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
-  「the quoted passage」 (one clause on what it bears on when that is not plain) <a class="fnback" href="#fnref-n">back</a></li>` -
+- on the page's CITATIONS PAGE (feature 211, below; it was the page's own foot until then), in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
+  「the quoted passage」 (one clause on what it bears on when that is not plain) <a class="fnback" href="../<name>.html#fnref-n">back</a></li>` -
   and when the passage is not English, **the quote is the English translation, marked as one** (GM 2026-09-07, feature
   202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated from the Japanese by this project; original: 「原文」)` - the note names the language
   and the translator (this project; the GM's browser, a machine translation saved on a date; the source's own English
@@ -227,12 +227,59 @@ of thumb is one agent per question you would want answered even if the other's a
 its `READ` markers are read by the link classifier and its entries are the record of the search); whether it
 should be is the GM's question.
 
+## The notes live on a CITATIONS PAGE, and every cited work says what it is (GM 2026-09-07, feature 211)
+
+The GM: *"this is making the research pages fairly long ... I think that we should have, inside to our research/
+directory, a research/citations directory ... All of the citations at the end of a research file can be moved into
+the citations document. We should be careful to avoid duplicating content because currently the tooltips ... display
+the actual content."* So every research page `research/<name>.html` has a citations page
+`research/citations/<name>.html` (`citations/cities/<name>.html` for a `cities/` page), and three things follow:
+
+- **The notes are on the citations page, once.** Its `<section class="footnotes"><ol>` holds every `<li id="fn-n">` -
+  the key link, the quoted passage, the gloss, exactly as before; a note may run to several paragraphs (`<p>` inside
+  the `<li>`) when a quotation is lengthened or explanation added. The research page keeps the references
+  (`<sup class="fn"><a id="fnref-n" href="citations/<name>.html#fn-n">n</a></sup>`; `../citations/cities/<name>.html#fn-n`
+  from `cities/`) and, where the notes were, one line linking to the citations page. **The hover still shows the
+  note**: the research page loads `citations/<name>.js`, a DERIVED script `make citations` writes from the citations
+  page (a page opened from disk cannot fetch a sibling file, so the note reaches it as a script), and
+  `tests/interactive/test_citations.py` fails while the committed script differs from its derivation. Nothing is
+  typed twice. **To add a footnote**: the `<li>` on the citations page (its back link `../<name>.html#fnref-n`),
+  the reference on the research page, then `make citations`.
+- **Every cited work is explained ONCE, in its registry entry.** Since feature 211 a `SOURCES.html` entry carries,
+  after its citation line, `<p><em>What it is:</em> ...</p>` (one to three sentences: the kind of work, its authors,
+  its date, what it is about) and `<p><em>Why it applies, and its limits:</em> ...</p>` (one to three sentences: why it
+  is a good and valid source for what we use it to look up, and its honest limitations - the GM's examples: *"some of
+  our research may be from the year nineteen hundred ... much of the land surveyed in China during that period was not
+  yet industrialized ... However, we should still be honest that there were modern agricultural techniques which would
+  have been employed"*; *"we use sources on Korea and Korean agriculture because we were not able to find publicly
+  available sources that were more directly applicable"*). The WORKS section at the top of every citations page -
+  each work its footnotes cite, in order of first citation, with its citation line and both write-ups - is DERIVED
+  from those entries by `make citations` between two markers, so a work cited from two pages has one write-up
+  (*"we do not want to have multiple different write ups of a single paper"*). A cited key with no write-up fails the
+  gate: a new source is not cited until its entry says what it is and why it applies. Both write-ups are written for
+  the reader (the rules above: tooltips, comments, no history).
+- **A source is JUDGED before it is used, and when its write-up lands.** The **`source-applicability` agent**
+  (`.claude/agents/source-applicability.md`, Opus like every check agent) reads the work and reports whether it is
+  APPLICABLE, APPLICABLE-WITH-LIMITS (each limit named) or NOT-APPLICABLE to a premodern East Asian setting modeled on
+  imperial China and pre-Meiji Japan, and whether the write-up's limits are HONEST, MISSING one or OVERSTATED. It runs
+  at TWO moments: whenever a source's write-ups are added or changed (every new registry key), and BEFORE a session
+  integrates a new source's numbers, claims or details into a map or a rule - a `research: physical` task's fifth
+  box, `source-applicability confirmed` (constitution XII; `tests/test_task_research_boxes.py`, from feature 211 on).
+  The GM: *"whatever subagent check we create in order to justify whether a source is applicable to be used in the
+  creation of our diagrams, that subagent check should also be run when we first begin to make use of the source
+  prior to integrating its numbers or claims or details into our maps."* A source it finds NOT-APPLICABLE is recorded
+  as such in its write-up and listed for the GM; the assertions resting on it keep their label until the GM rules
+  what the map should call them (spec 211 D5). The check of the record's 319 cited sources on 2026-09-07 is
+  `specs/211-citations-pages/research.md` R3.
+
 ## The record IS HTML - edit the page (feature 194, the GM's ruling through its spec review)
 
-Since 2026-09-06 the record's files are `research/<name>.html` (`cities/<name>.html`, `SOURCES.html`), hand-authored
+Since 2026-09-06 the record's files are `research/<name>.html` (`cities/<name>.html`, `SOURCES.html`, and since feature
+211 `citations/<name>.html` beside each), hand-authored
 and tracked; the Markdown they were converted from is gone (the GM: *"the markdown on GitHub will no longer exist
 as it has been replaced with HTML"*). A page's `<head>` carries the charset, the title and two relative links -
-`assets/record.css` and `assets/record.js` (the footnote hover; `../assets/` from `cities/`) - and its body is one
+`assets/record.css` and `assets/record.js` (the footnote hover; `../assets/` from `cities/`) - plus, on a research
+page, its derived `citations/<name>.js` before `record.js` - and its body is one
 `<main>`. Section ids are the record's anchors (`github_anchor` in `interactive/sources.py` - GitHub's rule, kept
 when the record converted), the registry's entries are `<h3 id="<key>"><code>key</code></h3>`, and a section's
 sources roster is `<p><strong>Sources:</strong> ...</p>`, which the map's modal reads. The maps' "See references"

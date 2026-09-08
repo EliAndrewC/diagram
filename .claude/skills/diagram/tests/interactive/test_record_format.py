@@ -30,11 +30,13 @@ _NOT_FINDINGS = {"SOURCES.html"}
 
 def _all_pages() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
-    return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html"))
+    # the citations pages (feature 211) are record pages a reader meets: the works write-ups and the notes are under
+    # every rule here except the Grounds/Evidence one (they are not findings)
+    return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) + sorted((root / "citations").glob("*.html")) + sorted((root / "citations" / "cities").glob("*.html"))
 
 
 def _finding_files() -> list[pathlib.Path]:
-    return [p for p in _all_pages() if p.name not in _NOT_FINDINGS]
+    return [p for p in _all_pages() if p.name not in _NOT_FINDINGS and "citations" not in p.parts]
 
 
 def visible_text(page: str) -> str:
@@ -69,10 +71,10 @@ def offenses(text: str) -> list[str]:
     return out
 
 
-@pytest.mark.parametrize("page", _all_pages(), ids=lambda p: p.name)
+@pytest.mark.parametrize("page", _all_pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_every_record_page_loads_the_glossary_before_the_record_script(page: pathlib.Path) -> None:
     text = page.read_text(encoding="utf-8")
-    prefix = "../assets/" if page.parent.name == "cities" else "assets/"
+    prefix = "../" * len(page.relative_to(RESEARCH_DIR).parts[:-1]) + "assets/"
     g = text.find(f'<script src="{prefix}glossary.js" defer></script>')
     r = text.find(f'<script src="{prefix}record.js" defer></script>')
     assert 0 <= g < r, f"{page.name}: the glossary asset is loaded, and before record.js (both deferred, so document order is run order)"
@@ -111,7 +113,7 @@ def test_the_fields_for_a_session_are_comments(page: pathlib.Path) -> None:
     assert not re.search(r"\b(?:Grounds|Evidence):", visible_text(text)), f"{page.name}: a field for a session is visible"
 
 
-@pytest.mark.parametrize("page", _all_pages(), ids=lambda p: p.name)
+@pytest.mark.parametrize("page", _all_pages(), ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_no_session_note_or_document_history_is_visible(page: pathlib.Path) -> None:
     """Every page, the registry included (spec 209 round 1: the GM's rules 2 and 3 are not scoped to finding entries).
     The registry's verification markers - READ, SUMMARY-ONLY, unfetched, the feature - live in a comment inside each

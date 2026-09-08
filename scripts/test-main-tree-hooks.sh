@@ -189,7 +189,10 @@ rules=$(python3 -c "
 import json,glob,os,collections
 rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
 print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))
-named=[r for r in rows if r.get('rule')=='named-main']
+# the entry inspected is the one section 2's FIRST refusal wrote (git -C the mirror, from the worker clone) - section 2
+# writes three named-main entries, one of them from the mirror itself, and a bare glob lists them in the filesystem's
+# order (feature 211 found this case failing in one clone and passing in another on that order alone)
+named=[r for r in rows if r.get('rule')=='named-main' and r.get('command','').startswith('git -C ')]
 print('FIELDS', named[0]['session'], named[0]['session_name'], named[0]['cwd']=='$WORKER', named[0]['tool'], len(named[0]['command'])>0, named[0]['context']['verdict'])" 2>/dev/null)
 for want in "'rewrote', 'moved-to-clone'" "'blocked', 'named-main'" "'blocked', 'clone-unresolved'" "'blocked', 'clone-missing'" "'blocked', 'shape'" "'escaped', 'main-tree-ok'" "'blocked', 'MAIN_TREE_OK-no-reason'"; do
   case "$rules" in *"($want)"*) printf 'ok    records (%s)\n' "$want"; PASS=$((PASS+1));;

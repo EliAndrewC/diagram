@@ -11,7 +11,9 @@ import os
 import pathlib
 import re
 
-from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES, _sections, research_questions, research_sources, section_sources
+from l7r.diagram.interactive.citations import citations_page
+from l7r.diagram.interactive.citations import research_pages as _record_pages
+from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES, _sections, citation_lines, link_target, not_read, research_questions, research_sources, section_sources
 
 
 def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
@@ -55,56 +57,25 @@ def test_a_sources_roster_is_read_whole_and_deduplicated() -> None:
 
 
 # ---- feature 190: every source in a research finding is a link ------------------------------------------------
-# The classifier below is THE rule (spec 190 FR-001/FR-005, D5): the one-off sweep that converted the record
-# imported it from here, so the rule has one body. It reads the CITATION LINE - the first paragraph of an entry -
-# never the *Used for:* notes, which can say SUMMARY-ONLY about a different claim drawn from a read document.
+# The classifier is THE rule (spec 190 FR-001/FR-005, D5) and has one body: since feature 211 it lives in
+# `interactive/sources.py` (`citation_lines`, `not_read`, `link_target`), because `make citations` derives the works
+# section of every citations page with it and a tool under l7r/ does not import from tests/. It reads the CITATION
+# LINE - the first paragraph of an entry, WITH its comments' text (the READ markers moved into comments in feature 209)
+# - never the *Used for:* notes, which can say SUMMARY-ONLY about a different claim drawn from a read document.
 
-_ENTRY = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*<p>(.*?)</p>', re.S)
-_URL = re.compile(r"https?://[^\s<>\"]+")
 _LINKED = re.compile(r'<a href="([^"]*)"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 _BARE = re.compile(r'(?<!">)<code>([a-z0-9][a-z0-9-]*)</code>')
-_TAG = re.compile(r"<[^>]+>")
 
 
-def _text(fragment: str) -> str:
-    """The citation line's text WITH its comments' text: since feature 209 the verification markers the classifier
-    reads (READ, SUMMARY-ONLY, unfetched, the feature and task) live in an HTML comment inside the citation
-    paragraph, hidden from the reader (GM 2026-09-07: a note for a session is an HTML comment) and still the rule's
-    input here. The first URL on the line still governs, and a READ-at comment placed first carries it."""
-    return html.unescape(_TAG.sub("", re.sub(r"<!--(.*?)-->", r" \1 ", fragment, flags=re.S)))
-
-
-def citation_lines(sources_html: str) -> dict[str, str]:
-    """key -> the entry's citation line (its first paragraph, as text)."""
-    return {m.group(1): _text(m.group(2)) for m in _ENTRY.finditer(sources_html)}
-
-
-def not_read(cite: str) -> bool:
-    """The record says the document was NOT read: SUMMARY-ONLY, `URL: none`, or the URL recorded as
-    unfetched with no READ beside it (feature 143's re-sourcing pass recorded addresses it did not fetch).
-    Where a line says both (`artic-pigsty-latrine`: the text READ through the museum's API, the page
-    itself unfetched) the READ governs - the GM's qualifier is "which we were able to read"."""
-    if "SUMMARY-ONLY" in cite or "URL: none" in cite:
-        return True
-    return bool(re.search(r"unfetched|not fetched", cite)) and "READ" not in cite
-
-
-def link_target(key: str, cite: str, rel: str) -> str:
-    """Where a citation of `key` links: the document's URL (the FIRST on the citation line, D2; a URL that
-    carries parentheses keeps them - the defect of 2026-09-06) when it was read, else the registry entry that
-    says it was not (`rel` is '' from research/, '../' from cities/)."""
-    m = _URL.search(cite)
-    if not_read(cite) or m is None:
-        return f"{rel}SOURCES.html#{key}"
-    u = m.group(0).rstrip(".,;:")
-    while u.endswith(")") and u.count(")") > u.count("("):
-        u = u[:-1]
-    return u
-
-
-def research_pages() -> list[str]:
-    root = pathlib.Path(RESEARCH_DIR)
-    return sorted(str(p) for p in list(root.glob("*.html")) + list((root / "cities").glob("*.html")) if p.name != "SOURCES.html")
+def research_pages() -> list[tuple[str, str]]:
+    """(path, the prefix that reaches research/ from it) for every page a key may be cited on: the research pages and,
+    since feature 211, their citations pages - where the footnotes are, and the derived works section."""
+    out = []
+    for rel in _record_pages():
+        out.append((os.path.join(RESEARCH_DIR, rel), "../" * rel.count("/")))
+        crel = citations_page(rel)
+        out.append((os.path.join(RESEARCH_DIR, crel), "../" * crel.count("/")))
+    return out
 
 
 def test_the_registry_has_one_entry_per_key() -> None:
@@ -125,8 +96,7 @@ def test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_targ
     assert len(cites) > 300, "the registry parsed"
     bare, wrong = [], []
     checked = 0
-    for path in research_pages():
-        rel = "../" if os.sep + "cities" + os.sep in path else ""
+    for path, rel in research_pages():
         text = pathlib.Path(path).read_text(encoding="utf-8")
         name = os.path.relpath(path, RESEARCH_DIR)
         for m in _BARE.finditer(text):
@@ -139,7 +109,7 @@ def test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_targ
                 want = link_target(key, cites[key], rel)
                 if target != want:
                     wrong.append(f"{name}: {key} -> {target} (want {want})")
-    assert checked > 400, "the record's citations were found (non-vacuity)"
+    assert checked > 1000, "the record's citations were found - the rosters, the notes and the works sections (non-vacuity)"
     assert not bare, "bare keys (write them as <a href=...><code>key</code></a>):\n" + "\n".join(bare)
     assert not wrong, "mis-targeted keys:\n" + "\n".join(wrong)
 

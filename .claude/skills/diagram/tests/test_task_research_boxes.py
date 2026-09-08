@@ -24,6 +24,13 @@ BOXES = ("research pass", "source-reader confirmed", "recorded and cited")
 #: box, `quote-check confirmed`, beside the three - an addition, nothing retired. Older task files are history.
 QUOTE_BOX = "quote-check confirmed"
 QUOTE_BOX_FROM = 194
+#: Feature 211 (GM 2026-09-07): a FIFTH box, `source-applicability confirmed` - the `source-applicability` agent judged
+#: every source the task's research pass brought in BEFORE its numbers, claims or details reached a map or a rule
+#: ("that subagent check should also be run when we first begin to make use of the source prior to integrating its
+#: numbers or claims or details into our maps ... That can be part of our procedures going forward"). Same shape as
+#: the fourth: binds on task files from feature 211 on; older ones are history.
+APPLICABILITY_BOX = "source-applicability confirmed"
+APPLICABILITY_BOX_FROM = 211
 
 _TASK = re.compile(r"^- \[(?P<tick>[ x])\] (?P<id>T\d+)\b", re.M)
 
@@ -43,9 +50,9 @@ def _entries(text: str) -> list[tuple[str, bool, str]]:
 
 
 def research_box_violations(text: str, feature: int = 0) -> list[str]:
-    """Every ticked `research: physical` task whose boxes are not all ticked - three, or four from feature 194."""
+    """Every ticked `research: physical` task whose boxes are not all ticked - three, four from feature 194, five from 211."""
     bad = []
-    boxes = BOXES + ((QUOTE_BOX,) if feature >= QUOTE_BOX_FROM else ())
+    boxes = BOXES + ((QUOTE_BOX,) if feature >= QUOTE_BOX_FROM else ()) + ((APPLICABILITY_BOX,) if feature >= APPLICABILITY_BOX_FROM else ())
     for tid, ticked, body in _entries(text):
         kind = re.search(r"^\s+research:\s*(\w+)", body, re.M)
         if not kind or kind.group(1) != "physical" or not ticked:
@@ -69,3 +76,11 @@ def test_the_rule_fires_on_a_ticked_physical_task_with_an_open_box() -> None:
     assert research_box_violations(text.replace("[ ] source", "[x] source")) == []
     assert research_box_violations(text.replace("- [x] T01", "- [ ] T01")) == [], "an OPEN task may still owe its boxes"
     assert research_box_violations(text.replace("physical", "rendering").replace("- [x] research pass  - [ ] source-reader confirmed  - [x] recorded and cited", "")) == []
+
+
+def test_the_fourth_and_fifth_boxes_bind_from_their_features() -> None:
+    four = "- [x] T01 **x**\n      research: physical\n      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed\n"
+    assert research_box_violations(four, 210) == []
+    assert research_box_violations(four, 211) == ["T01: `source-applicability confirmed` not ticked"]
+    assert research_box_violations(four + "      - [x] source-applicability confirmed\n", 211) == []
+    assert research_box_violations(four.replace("  - [x] quote-check confirmed", ""), 193) == []

@@ -23,9 +23,11 @@ multiple footnote links per paragraph or even multiple per sentence in sentences
 ## Input
 
 A research file path (`.claude/skills/diagram/research/<name>.html`, or `cities/<name>.html`), or one section of it
-named by heading. The record is HTML (feature 194): `<sup class="fn"><a href="#fn-n">n</a></sup>` after an
-assertion, and `<li id="fn-n"><a href="url"><code>key</code></a> - 「quoted passage」 (gloss)</li>` in the page's
-`<section class="footnotes">`. `research/SOURCES.html` holds the registry entry behind each key. A footnote with no
+named by heading. The record is HTML (feature 194): `<sup class="fn"><a href="citations/<name>.html#fn-n">n</a></sup>`
+after an assertion, and - since feature 211 (GM 2026-09-07) - the note `<li id="fn-n"><a href="url"><code>key</code></a>
+- 「quoted passage」 (gloss)</li>` in the `<section class="footnotes">` of the page's CITATIONS PAGE,
+`research/citations/<name>.html` (`citations/cities/<name>.html` for a `cities/` page): read BOTH files, the research
+page for the assertions and the citations page for the notes. `research/SOURCES.html` holds the registry entry behind each key. A footnote with no
 key and no link that reads `no publicly readable source (searched ...)` is an ABSENCE note - report it as such and
 check nothing for it.
 

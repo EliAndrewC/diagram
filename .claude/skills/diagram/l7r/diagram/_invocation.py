@@ -221,6 +221,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
     "l7r.diagram.tools.glossary_asset": ("glossary", "cheap"),  # feature 209: the record's derived glossary asset
+    "l7r.diagram.tools.citations_asset": ("citations", "cheap"),  # feature 211: the citations pages' derived scripts and works sections
 }
 
 

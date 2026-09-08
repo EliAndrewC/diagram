@@ -36,7 +36,12 @@ description: "Task list template for feature implementation"
   `- [ ] source-reader confirmed` (the `source-reader` agent read what the pass cites and its
   verdicts are folded in - READ / SUMMARY-ONLY labels on every source);
   `- [ ] recorded and cited` (the finding in `research/`, the rule where it lives, the labels
-  ACCURATE / DEVIATION / GUESS, the `**Sources:**` line, the SOURCES.md keys). The boxes exist
+  ACCURATE / DEVIATION / GUESS, the `**Sources:**` line, the SOURCES.md keys);
+  `- [ ] quote-check confirmed` (feature 194: every footnote's quote is on its page and supports its assertion);
+  `- [ ] source-applicability confirmed` (feature 211, GM 2026-09-07: the `source-applicability` agent judged each
+  source the pass brought in BEFORE its numbers, claims or details reached a map or a rule - APPLICABLE,
+  APPLICABLE-WITH-LIMITS with each limit written into the registry entry's write-ups, or NOT-APPLICABLE and not
+  used). The boxes exist
   because a documented requirement that relies on memory gets skipped; `tests/test_task_research_boxes.py`
   turns a ticked `physical` task with an unticked box red at the gate.
 
