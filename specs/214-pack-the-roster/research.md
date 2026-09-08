@@ -31,6 +31,20 @@ full gate: the 13 plus three duplicates of the reference (the fan-out's pool chi
 in-process half, the cache round trip's gen): **16**, against 24 before and 37 at the start of feature 213.
 And the single longest roll in the suite (seed 42, three attempts) is gone.
 
-## R2. Measured after
+## R2. Measured after (2026-09-08)
 
-(Filled in at the end: the census line, the full gate's time.)
+The green gate's census: **16 rolls of 13 specs, 34 requests served from a shared roll** - SC-001 exactly, the
+three duplicates all of the reference (Kashikawa's clean side served from the gen cache). The pytest phase
+**204 s** and the whole `make done` **222 s** on six workers, against 313-336 s and 333-418 s for the full gates
+of feature 213 the day before: the packing removed a third of the test phase, most of it seed 42's three
+attempts. Before 213: 37 rolls of 14 specs and a 541 s median.
+
+**Two things the first gate of this feature found.** Six engine lines were reached by the cohort seeds and by
+nothing else - `frame.py` (the popped board's ink blanked; a verge refused because its nearest way runs across),
+`homesteads/bamboo.py` (a strip on a dry plot, on a watercourse), `water_ways/_helpers.py` (a vertex consumed by
+the pull-back) - so the packing record's "seeds 41-44 carry no unique lines" no longer held; each is now a direct
+unit test of the function beside the tests that already existed for it, which is what constitution X asks for
+in the first place. And the reference rolled TWICE in one gate seconds apart: `tests/pipeline/test_rollcache.py`
+calls `rollcache.reset_shared()` ten times, and that removes the RUN SHARE DIRECTORY - under the gate's own
+xdist id, so every reset wiped the payloads sibling workers had placed. The toy fixture gives those tests a run
+store of their own now. Both were invisible until the census counted; both would have stayed so.

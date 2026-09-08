@@ -1,6 +1,6 @@
 # Feature 214 - pack the roster
 
-**Status**: DRAFT - `spec-fidelity` round 1 required three changes, all applied (FR-007 restated site by site; the
+**Status**: IMPLEMENTED 2026-09-08 - `spec-fidelity` round 1 required three changes, all applied (FR-007 restated site by site; the
 target number established in the record's own unit and the delivery itemized against it; the immune test kept on
 Kashikawa per the reviewer's aside, so its `Roll` and `PoolGen` rows both stay). Round 2 required two changes (D2 in the record's unit and count; the research aligned with FR-003 and
 FR-006), applied. FAITHFUL at round 3 of 5.
@@ -91,3 +91,7 @@ specs and sixteen rolls on a warm gate, the four above nine each named in FR-006
   runs. The immune test is left as it is.
 - **D4 - the CLI's `generate` is patched.** The CLI test proved `main` and `generate` end to end; `generate`
   is proven by every roll in the suite, so the CLI test proves `main`'s wiring alone, for no roll.
+- **D5 - two defects the first gate found, fixed here (Principle XIV).** Six engine lines reached only by the
+  retired cohort seeds now have direct unit tests (research R2); and the roll cache's unit tests, whose
+  `reset_shared()` removes the whole run share directory, ran under the gate's own xdist id and wiped sibling
+  workers' payloads - the reference rolled twice in one gate. They have a run store of their own now.
