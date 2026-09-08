@@ -1,6 +1,6 @@
 # 219 - no roll of our own
 
-**Status**: FAITHFUL at round 2 (implementation in progress) - `spec-fidelity` round 1 required two changes, applied: FR-001 records the retirement in
+**Status**: IMPLEMENTED 2026-09-08 (two gate runs to green - research R2; FAITHFUL at round 2) - `spec-fidelity` round 1 required two changes, applied: FR-001 records the retirement in
 `dev/placement.md`'s "RANDOMNESS IS POSITIONAL OR SCOPED" and the skill CLAUDE.md line, which stated the requirement as
 live law (the engine's practice stays; the rule that a draw-count change must not move a map is what goes); FR-002's
 audit covers every roll a gate makes, the five shipped generators included, with the reason each stays. Round 2: FAITHFUL.

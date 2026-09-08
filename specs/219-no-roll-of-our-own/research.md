@@ -35,7 +35,38 @@ the reference's every line is also reached by the other four maps and the unit t
 cache; the two shipped maps' come from the gen cache). The floor's docstring records that every subject has zero modules
 unique to it, so the hamlet-path module set should not move; R2 measures it by the floor's statement count.
 
-## R2. Measured after
+## R2. Measured after (2026-09-08)
 
-(The census on the landed gate, warm and cold; the gate time; the hamlet-path floor's statement count before, 13,012,
-and after; the soak tier's polder module by hand.)
+**The census on the landed gate** (the second run, WARM - the engine content was unchanged since the first run rolled the
+five shipped generators cold):
+
+    roll census: 0 roll(s) of 0 spec(s); 8 request(s) served from a shared roll; roster 0 row(s)
+      stand-in stage rolls (stub-excepted modules, no map): 19, 2.3s in all
+      pool gen: Inashiro seed=4 (pool/hamlets/inashiro/inashiro.gen.py) - served from the gen cache, not rolled
+      pool gen: Kashikawa seed=3 (pool/hamlets/kashikawa/kashikawa.gen.py) - served from the gen cache, not rolled
+      pool gen: Kuwabata seed=21 (pool/hamlets/kuwabata/kuwabata.gen.py) - served from the gen cache, not rolled
+      pool gen: Mizuguchi seed=23 (pool/hamlets/mizuguchi/mizuguchi.gen.py) - served from the gen cache, not rolled
+      pool gen: Sawada seed=6 (pool/hamlets/sawada/sawada.gen.py) - served from the gen cache, not rolled
+
+**The gate rolls nothing of its own.** SC-001 holds on the warm side: 0 rolls of 0 specs, eight requests served from the
+pool's maps. The cold side is the five shipped generators alone: the first run of this feature (red on three tests
+that read the roster's old shape, below) re-rolled all five because `water.py` and `rollcache.py` changed, and with the
+two rostered rolls gone that IS the cold census - 217 R2's cold run minus the immune and Polder rolls.
+
+**The gate**: pytest 3460 passed, 2 skipped, 5 warnings in 61.99s (0:01:01); the whole gate under two minutes warm (the two rostered rolls were 26 s and 64 s of the
+previous gate's critical path). The engine floor 23,292 statements at 100% (23,307 before: the 17 lines of perturbation
+machinery left, the two lifted functions and their callers are a few lines); the hamlet-path floor 13,017 statements at
+100% (13,012 before). The floor's module set did not move with Polder 12's departure - the +5 statements are the lifted
+`walk_pond_uphill` / `dike_gaps_at_channels` bodies inside `water.py`, a module every subject already executed - which is
+what the floor's docstring predicted (every subject has zero modules unique to it). SC-003 holds.
+
+**The soak tier by hand** (SC-002): `make test-file FILE=tests/soak/test_polder_fall_0.py` - 5 passed, the polder rolled
+once in a child and served to the other four. `extra_draws` and `_perturbed_manifest` are gone (`grep` finds them only
+in the roster's own note); no gate test rolls the reference or a polder under a spec.
+
+**Two gate runs to green.** The first (3 failed, 3457 passed, 2 skipped, 5 warnings in 122.40s (0:02:02)) failed on three tests that read the roster's OLD shape, none a
+defect of the feature: the ci-parser test expected the real roster to have a stale row on a full run (it plants one
+now); the marker guard read the new two-views test's `rollcache.hamlet` call as a map roll (it calls through the toy
+aliases, as `keyed_to_toy` already did); and the waterfields surface census saw a new consumer, the `polder` submodule
+the `fit_polder` test imported to stand in `clean_polder_parcels` (patching `water`'s own name is enough - it imports
+the function by name).
