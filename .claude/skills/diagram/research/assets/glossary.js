@@ -7,6 +7,7 @@ window.RECORD_GLOSSARY = [
    "tian'geng",
    "tiangeng",
    "keihan",
+   "bunded",
    "bunds",
    "bund",
    "aze"
@@ -63,7 +64,10 @@ window.RECORD_GLOSSARY = [
   "variants": [
    "fengshui back grove",
    "fengshui forest",
+   "fung shui woods",
    "fengshui grove",
+   "fung shui wood",
+   "fung shui",
    "fengshui"
   ],
   "def": "The grove a village keeps on its windward, high side - the back grove of Chinese village planning - as its wall against the winter wind."
@@ -122,7 +126,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "goemon-buro",
   "variants": [
-   "goemon-buro"
+   "goemon-buro",
+   "goemonburo"
   ],
   "def": "The cauldron bath: an iron tub heated from below, the bath of self-sufficient farm villages."
  },
@@ -282,7 +287,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "ashigaru-nagaya",
   "variants": [
-   "ashigaru-nagaya"
+   "ashigaru-nagaya",
+   "ashigaru nagaya"
   ],
   "def": "The foot soldiers' row housing at a castle town's outer edge - the town's outermost ring of defense as well as its cheapest samurai housing."
  },
@@ -554,7 +560,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kakehi",
   "variants": [
-   "kakehi"
+   "kakehi",
+   "flume"
   ],
   "def": "An aqueduct: a wooden flume carrying an irrigation channel over a stream or a gully."
  },
@@ -935,6 +942,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "sara-ike",
   "variants": [
+   "dish ponds",
+   "dish pond",
    "sara-ike"
   ],
   "def": "A 'dish pond': a shallow lowland reservoir ringed by embankments, as against the valley-head pond behind one dam."
@@ -1476,6 +1485,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "Song dynasty",
   "variants": [
+   "Southern Song",
+   "Northern Song",
    "Song dynasty",
    "Song-dynasty"
   ],
@@ -2306,7 +2317,8 @@ window.RECORD_GLOSSARY = [
   "term": "Phragmites",
   "variants": [
    "Phragmites australis",
-   "Phragmites"
+   "Phragmites",
+   "yoshi"
   ],
   "def": "The common reed (yoshi): the tall grass of the reed swamp between open water and the sedge zone."
  },
@@ -2672,6 +2684,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kanagashi",
   "variants": [
+   "loose-log driving",
+   "loose-log drive",
    "kanagashi"
   ],
   "def": "Loose-log driving: floating felled logs down the upper, unnavigable river one at a time, as against binding them into rafts on the lower reaches."
@@ -3059,5 +3073,220 @@ window.RECORD_GLOSSARY = [
    "kyuhi"
   ],
   "def": "Stable manure: the litter and grass of a byre or stable, rotted down and put on the fields."
+ },
+ {
+  "term": "tertiary source",
+  "variants": [
+   "tertiary summaries",
+   "tertiary summary",
+   "tertiary source",
+   "tertiary"
+  ],
+  "def": "A work that summarizes what other studies say - an encyclopedia, dictionary or reference entry - rather than presenting evidence of its own; the record takes a figure from one only where the entry's own references support it."
+ },
+ {
+  "term": "extension advice",
+  "variants": [
+   "extension document",
+   "extension leaflet",
+   "extension advice",
+   "extension manual",
+   "extension guide",
+   "extension"
+  ],
+  "def": "The public advisory service that carries farming research to working farmers; an extension leaflet is present-day advice to today's growers, not a record of older practice."
+ },
+ {
+  "term": "landrace",
+  "variants": [
+   "landraces",
+   "cultivars",
+   "landrace",
+   "cultivar"
+  ],
+  "def": "A landrace is a local crop variety kept and selected by farmers themselves, taller and more varied than a modern bred cultivar."
+ },
+ {
+  "term": "DBH",
+  "variants": [
+   "diameter at breast height",
+   "DBH"
+  ],
+  "def": "Diameter at breast height: the thickness of a tree's trunk measured at chest height, the size at which a survey counts a stem."
+ },
+ {
+  "term": "matsu",
+  "variants": [
+   "matsu"
+  ],
+  "def": "Pine; the black pine (kuromatsu) is the windbreak pine of coasts and homestead groves."
+ },
+ {
+  "term": "batter",
+  "variants": [
+   "batter"
+  ],
+  "def": "The slope of a bank's face, given as its horizontal spread against its height; a 1:1 batter is a face at forty-five degrees."
+ },
+ {
+  "term": "tozama",
+  "variants": [
+   "tozama daimyo",
+   "tozama"
+  ],
+  "def": "An \"outside lord\": a domain lord whose house submitted to the Tokugawa only after 1600, ranked apart from the hereditary vassal houses."
+ },
+ {
+  "term": "danna-dera",
+  "variants": [
+   "danna-dera",
+   "danka"
+  ],
+  "def": "The temple a household is registered with and supports - the same relation as the bodaiji, named from the patron (danna)."
+ },
+ {
+  "term": "Siku Quanshu",
+  "variants": [
+   "Siku Quanshu"
+  ],
+  "def": "The Qing imperial collectanea of 1782, in which many older Chinese texts survive; the farming manual quoted here is read in its edition."
+ },
+ {
+  "term": "spillway",
+  "variants": [
+   "spillways",
+   "spillway"
+  ],
+  "def": "The overflow that carries a flood past a dam instead of over its crest."
+ },
+ {
+  "term": "riprap",
+  "variants": [
+   "riprap"
+  ],
+  "def": "Loose stone tipped onto a bank's water face to take the wash of the waves."
+ },
+ {
+  "term": "filature",
+  "variants": [
+   "filatures",
+   "filature"
+  ],
+  "def": "A silk-reeling factory: the machine works that took reeling out of the farm household."
+ },
+ {
+  "term": "abutment",
+  "variants": [
+   "abutments",
+   "abutment"
+  ],
+  "def": "The solid block of masonry or earth on the bank that a bridge's or a boom's end is anchored to."
+ },
+ {
+  "term": "transect",
+  "variants": [
+   "transects",
+   "transect"
+  ],
+  "def": "A measured strip of ground in which a survey counts everything growing, so a whole wood is described from a sample."
+ },
+ {
+  "term": "cyanobacterium",
+  "variants": [
+   "cyanobacterium",
+   "cyanobacteria"
+  ],
+  "def": "Blue-green algae - the kind living inside the azolla fern that takes nitrogen out of the air."
+ },
+ {
+  "term": "kobito",
+  "variants": [
+   "kobito"
+  ],
+  "def": "The lowest grade of a samurai household's manservants, of commoner birth like the chugen and komono."
+ },
+ {
+  "term": "monk outlet",
+  "variants": [
+   "monk-style outlet",
+   "monk outlet",
+   "monk"
+  ],
+  "def": "The older of a fish pond's two draining works: an upright boarded shaft against the dike, as against a sluice cut through it."
+ },
+ {
+  "term": "tawing",
+  "variants": [
+   "tawing",
+   "tawed"
+  ],
+  "def": "Dressing a hide with salt and oil rather than tannin or lime - the Japanese shironameshi."
+ },
+ {
+  "term": "Five Dynasties",
+  "variants": [
+   "Five Dynasties"
+  ],
+  "def": "907 to 960: the broken half-century between the Tang and the Song."
+ },
+ {
+  "term": "Spring and Autumn",
+  "variants": [
+   "Spring and Autumn"
+  ],
+  "def": "The Chinese period before the Warring States, roughly the eighth to fifth centuries BC."
+ },
+ {
+  "term": "bakumatsu",
+  "variants": [
+   "bakumatsu"
+  ],
+  "def": "The last decades of the Tokugawa period, from the 1850s to 1868."
+ },
+ {
+  "term": "perched river",
+  "variants": [
+   "perched, silt-choked river",
+   "perched river",
+   "perched"
+  ],
+  "def": "Of a river: running above the plain on beds of its own silt, held in only by its dikes."
+ },
+ {
+  "term": "exposure burial",
+  "variants": [
+   "exposure burial"
+  ],
+  "def": "Leaving the dead in the open at a set place rather than burying or burning them."
+ },
+ {
+  "term": "broadcast sowing",
+  "variants": [
+   "broadcast oilseed stand",
+   "broadcast sowing",
+   "broadcast"
+  ],
+  "def": "Scattering seed by hand over the whole field, as against setting plants in rows."
+ },
+ {
+  "term": "subgrade",
+  "variants": [
+   "subgrade"
+  ],
+  "def": "The prepared ground a channel or road is laid on, below its lining."
+ },
+ {
+  "term": "secondary forest",
+  "variants": [
+   "secondary forest"
+  ],
+  "def": "Wood grown back on cleared ground, as against the old stand a village kept."
+ },
+ {
+  "term": "GIS",
+  "variants": [
+   "GIS"
+  ],
+  "def": "Mapping software that measures an area from a boundary drawn on a map."
  }
 ];
