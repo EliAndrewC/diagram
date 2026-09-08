@@ -11,7 +11,7 @@ import contextlib
 import os
 import sys
 import time
-from collections.abc import Iterator, Sequence
+from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -299,6 +299,14 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # rejected, so a changed connector or web is never mistaken for the effect of an edit.
         s2.M["meta"]["roll_attempt"] = attempt
         s2.M["meta"]["roll_after"] = list(dict.fromkeys(after))
+        # THE MANIFEST CARRIES ITS OWN VERDICT (feature 215, D3): the roll's self-report, what it seated and the acreage
+        # it reached go into the meta BEFORE the finish writes the file, so a map read back from disk - the pool's, which
+        # the gate's ratchet reads instead of rolling the reference again - answers the same questions the Report does.
+        # `unreached_houses` reads the lanes and the houses, which the stages have drawn by now; the finish only inks.
+        _seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s2.M)]
+        s2.M["meta"]["roll_failures"] = [f"farmhouses_reach_a_way[{len(_seats)}]"] if _seats else []
+        s2.M["meta"]["roll_placed"] = int(rolled["plan"].placed)
+        s2.M["meta"]["roll_acres"] = float(rolled["plan"].acres)
         if out is not None:
             s2.finish(out, render=render)
         else:
@@ -316,8 +324,8 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # (T02) rather than re-derived: a hand-rolled reach measure was tried and was wrong on five of
         # six seeds (see future-work 2b), over-counting and never reading zero, so anything steered by
         # it was steered by noise.
-        seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s2.M)]
-        red = [f"farmhouses_reach_a_way[{len(seats)}]"] if seats else []
+        seats = _seats
+        red = list(s2.M["meta"]["roll_failures"])
         lines = [f"FAIL farmhouses_reach_a_way  -> {len(seats)} farmhouse(s) stand off the connected way network, at {[(round(x), round(y)) for x, y in seats[:4]]}"] if seats else []
         return s2, red, seats, lines
 
@@ -413,11 +421,20 @@ def cohort(count: int, first_seed: int = 1, households: int | None = None, jobs:
     spawns its own pool is competing with the other 21 (the "CPU inflates 2-4x inside the gate"
     entry in the skill CLAUDE.md)."""
     specs = cohort_specs(count, first_seed, households)
-    jobs = default_jobs(count) if jobs is None else max(1, jobs)
-    if jobs == 1:
-        return [generate(spec, out_base=None) for spec in specs]
+    return roll_pool(specs, default_jobs(count) if jobs is None else max(1, jobs))
+
+
+def roll_pool(specs: Sequence[HamletSpec], jobs: int, produce: Callable[[HamletSpec], Report] | None = None) -> list[Report]:
+    """Roll `specs` - serially for `jobs == 1`, else across a process pool - and return the reports in order.
+    The body `cohort()` always had, taking explicit specs (feature 214). `produce` is `generate` unless a
+    caller names a module-level producer of its own (feature 215): the fan-out test proves the pool branch -
+    the fan-out, the order, the pickling - on a producer that rolls nothing, since a map being a pure
+    function of its spec is the immune test's claim and not this branch's."""
+    fn = produce if produce is not None else generate
+    if jobs <= 1:
+        return [fn(spec) for spec in specs]
     with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
-        return list(ex.map(generate, specs))
+        return list(ex.map(fn, specs))
 
 
 # THE FITTED COHORT'S KNOWN FAILURES, pinned. Constitution Principle XIII requires a regression to

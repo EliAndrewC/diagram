@@ -28,13 +28,13 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
 from l7r.diagram.waterfields.banks import supply_bank_clearance
 from l7r.diagram.waterfields.frame import BANK_MARGIN
+from tests import rolls
+from tests.gate import _pool
 
-INASHIRO = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
-KUWABATA = hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
+INASHIRO = rolls.REFERENCE  # the pool's brief (feature 215)
+KUWABATA = rolls.KUWABATA
 
 DIKE_IRREGULARITY = 1.4
 """How much wider a dike's widest stretch must be than its narrowest. A uniform-width band reads as a
@@ -118,12 +118,12 @@ def _bund_edge_intrusions(field, supplies) -> list[tuple[int, int]]:
 
 @pytest.fixture(scope="module")
 def comb():
-    return rollcache.hamlet(INASHIRO)
+    return _pool.rolled_map(INASHIRO)
 
 
 @pytest.fixture(scope="module")
 def polder():
-    return rollcache.hamlet(KUWABATA)
+    return _pool.rolled_map(KUWABATA)
 
 
 def test_no_bund_is_drawn_down_the_middle_of_a_supply_channel(comb) -> None:

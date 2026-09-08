@@ -7,11 +7,13 @@ import os
 
 import pytest
 
-from l7r.diagram.pipeline import gencache
-from tests.test_villages import GENERATORS, HERE, _channels_under_plots, _regen_and_gate, _typical_cell_acres
+from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
+from tests.test_villages import GENERATORS, _channels_under_plots, _regen_and_gate, _typical_cell_acres
 
 
-@pytest.mark.rolls_map  # ONE real Kashikawa roll - three at feature 135, two at 158, one since 2026-08-31 (see the comment on the rolls below); marked because it rolls through runpy, which no marker can see
+@pytest.mark.rolls_map  # ONE real roll: the reference PERTURBED, in a child (feature 215); the clean side is the pool's committed manifest
 def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
     """THE RATCHET for positional/scoped randomness (GM 2026-08-08).
 
@@ -21,53 +23,29 @@ def test_a_map_is_immune_to_an_upstream_change_in_the_number_of_random_draws():
     houses, wells, gardens, groves and 2,754 tree crowns; the visible cost was a farm shed drawn on a
     garden 700 px from anything that had changed.
 
-    The subject was a hand-authored TOWN (hoshizora) until the 2026-08-16 legacy freeze, because a
-    town exercises both mechanisms at once: position-seeded attributes (a house's rake, its wall
-    color, its kura) and scoped phases (ring, pack, frontage, pasture, grove, wells, farmsteads).
-    Legacy gens are never run by the suite now, so the subject is a large SCRIPTED hamlet - it
-    holds the attribute mechanism and the farmstead/well/grove scopes, but not the urban scopes
-    (ring, pack, frontage). When the town tier converts to scripted generation, move the subject
-    to a scripted town: a hamlet alone would not have held the original line.
-    """
+    THE SUBJECT IS THE REFERENCE (feature 215, D5 - reversing 214's D3). It was a hand-authored TOWN until the
+    2026-08-16 legacy freeze, then the largest scripted hamlet (Kashikawa: 20 households, fall 315, the off-map
+    sink) for the mechanisms a large map exercises. The GM asked for the roster at the packing record's floor,
+    and Kashikawa was a spec that existed only to be perturbed; the reference holds the same mechanisms -
+    position-seeded attributes, the farmstead, well and grove scopes - on the map every gate test reads. What
+    this no longer proves, stated (spec FR-006 c): the immunity of the off-map sink and fall-315 stages, which
+    the pool sweep's Kashikawa child still covers but no longer perturbs. When the town tier converts to
+    scripted generation, move the subject to a scripted town.
 
-    gen = os.path.join(
-        HERE, "pool", "hamlets", "kashikawa", "kashikawa.gen.py"
-    )  # feature 161 moved every map into a per-map folder; this literal kept the flat path and stopped matching SILENTLY (found by feature 166's FULL run, fixed on sight per constitution XIV)
-
-    def once(perturb):
-        # IN A CHILD (feature 213 FR-007): the gen runs in a child process that applies the perturbation itself
-        # (`gencache.run_gen_child`, the same shape as the regen site), so the worker never holds the roll
-        gencache.run_gen_child(gen, perturb=perturb)
-        with open(gen[: -len(".gen.py")] + ".json") as fh:
-            return fh.read()
-
-    # ONE ROLL, NOT TWO (2026-08-31; three at feature 135, two at 158 - "the largest single item in
-    # the full tier" at 214 s, then ~143 s). The claim needs a PERTURBED roll and a CLEAN one, and
-    # the clean one is precisely what the verified gate cache already holds: `gate_obtain` is keyed
-    # on ENGINE CONTENT, so a HIT is a clean roll of exactly this code and a MISS rolls it once
-    # right here. That makes this never worse than the roll it replaces and free whenever the sweep
-    # has already served kashikawa - which, being in this same tree, it has.
-    #
-    # This is the GM's own statement of the rule (2026-08-30): "we are essentially using a cache,
-    # but we are building the cache as part of the test run in order to ensure that the process that
-    # builds the cache is part of what's being tested." The MISS path is that build.
-    #
-    # WHY THE CLEAN SIDE IS THE ONE TO CACHE, and not the perturbed side: the perturbation is the
-    # experiment. Serving it from any cache would assert the ratchet against a manifest no perturbed
-    # run produced, which is the one substitution that would make this test vacuous.
-    clean_path, how, _ = gencache.gate_obtain(gen)
-    with open(clean_path) as fh:
-        clean = fh.read()
-    perturbed = once(1)
-    # The perturbed roll has just overwritten the committed manifest. Putting the clean bytes back is
-    # what the second roll used to be for - the pool artifact on disk must be the unperturbed one.
-    with open(clean_path, "w") as fh:
-        fh.write(clean)
-    assert perturbed == clean, (
-        "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md "
-        f"'RANDOMNESS IS POSITIONAL OR SCOPED'. (The clean side was served {how!r}. If that says "
-        "'HIT' and you believe the committed manifest is merely STALE rather than the draw order "
-        "wrong, re-run with GATE_NO_CACHE=1, which forces the clean side to roll for real.)"
+    THE CLEAN SIDE IS THE POOL'S COMMITTED MANIFEST - the GM's own statement of the rule (2026-08-30): "we are
+    essentially using a cache, but we are building the cache as part of the test run in order to ensure that
+    the process that builds the cache is part of what's being tested." The sweep rolls it cold in its coverage
+    child and serves it warm; either way it is a clean roll of exactly this code. The PERTURBED side is the
+    experiment and is never served: a child roll of the reference with the extra draw applied inside it
+    (`rollcache._perturbed_manifest`), the one roll of the reference a gate makes."""
+    clean_path = _pool.obtain(_pool.gen_of(rolls.REFERENCE))
+    with open(clean_path, encoding="utf-8") as fh:
+        clean = json.load(fh)
+    perturbed, _deps = rollcache._in_child("l7r.diagram.pipeline.rollcache:_perturbed_manifest", rolls.REFERENCE)
+    assert json.dumps(perturbed, sort_keys=True) == json.dumps(clean, sort_keys=True), (
+        "an upstream change in the number of random draws re-rolled the map - see CLAUDE.md 'RANDOMNESS IS POSITIONAL OR SCOPED'. "
+        "(The clean side is the pool's committed manifest through the gen cache; if you believe it is merely STALE rather than the draw "
+        "order wrong, re-run with GATE_NO_CACHE=1, which forces the sweep to roll it for real.)"
     )
 
 

@@ -38,7 +38,7 @@ def test_module_set_asks_the_records_for_every_fixed_subject() -> None:
         return _deps("l7r/diagram/hamletgen/plan.py")
 
     assert hf.module_set(deps_for) == ["l7r/diagram/hamletgen/plan.py"]
-    assert seen[0] == "Inashiro" and seen.count("Polder") == 2 and len(seen) == 7  # reference, two polders, cohort 41-44 (seed 8 dropped: feature 192 FR-007)
+    assert seen == ["Inashiro", "Kuwabata", "Polder", "Polder", "Cohort-43"]  # the plain shared rolls (feature 214); seed 8 dropped at 192 FR-007, seeds 41/42/44 at 214
 
 
 def _measure(tmp_path: Path, body: str, call: str) -> tuple[str, str]:
@@ -100,7 +100,33 @@ def test_module_set_defaults_to_the_roll_cache_records(monkeypatch: object) -> N
     from l7r.diagram.pipeline import rollcache
 
     monkeypatch.setattr(rollcache, "report_deps", lambda spec: _deps("l7r/diagram/hamletgen/sink.py"))  # type: ignore[attr-defined]
-    assert hf.module_set() == ["l7r/diagram/hamletgen/sink.py"]
+    asked: list[str] = []
+    monkeypatch.setattr(hf, "pool_deps", lambda spec: (asked.append(spec.name), _deps("l7r/diagram/hamletgen/plan.py"))[1])  # type: ignore[attr-defined]
+    assert hf.module_set() == ["l7r/diagram/hamletgen/plan.py", "l7r/diagram/hamletgen/sink.py"]
+    assert asked == ["Inashiro", "Kuwabata"], "the shipped maps' records come from the gen cache (feature 215), the others' from the roll cache"
+
+
+def test_pool_deps_reads_the_gen_cache_entry_and_obtains_it_first_when_absent(tmp_path: Path, monkeypatch: object) -> None:
+    """Feature 215: a shipped map's record is the sweep's entry; on a clone where nothing has swept yet the entry is
+    obtained (served or rolled) before it is read."""
+    import json
+
+    from l7r.diagram.pipeline import gencache
+
+    gen_dir = tmp_path / "cache" / "inashiro"
+    monkeypatch.setattr(gencache, "_entry_dir", lambda gen: str(gen_dir))  # type: ignore[attr-defined]
+    obtained: list[str] = []
+
+    def obtain(gen: str) -> tuple[str, str, None]:
+        obtained.append(gen)
+        gen_dir.mkdir(parents=True)
+        (gen_dir / "meta.json").write_text(json.dumps({"deps": _deps("l7r/diagram/hamletgen/plan.py")}))
+        return "m", "REGENERATED", None
+
+    monkeypatch.setattr(gencache, "gate_obtain", obtain)  # type: ignore[attr-defined]
+    spec = type("S", (), {"name": "Inashiro", "seed": 4})()
+    assert hf.pool_deps(spec) == _deps("l7r/diagram/hamletgen/plan.py") and len(obtained) == 1
+    assert hf.pool_deps(spec) == _deps("l7r/diagram/hamletgen/plan.py") and len(obtained) == 1, "present: read, not obtained again"
 
 
 def test_a_PARKED_line_is_excused_loudly_and_does_not_excuse_its_neighbours(tmp_path: Path, monkeypatch: object) -> None:

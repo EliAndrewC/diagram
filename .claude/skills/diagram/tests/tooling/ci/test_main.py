@@ -264,3 +264,16 @@ def test_the_roll_census_verdict_is_routed_by_the_ci_command(roots: Path, monkey
     monkeypatch.setenv(_census.ENV, str(census))
     assert cli.main(["rollcensus", "verdict"]) == 0
     assert "roll census: green" in capsys.readouterr().out
+
+
+def test_the_roll_census_full_run_word_survives_the_ci_parser(roots: Path, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 215: `--full` is the ci parser's own flag (feature 130) and it ATE the verdict's, so every gate judged
+    with full=False and a stale roster row never failed - found when two rows left behind on purpose came up green.
+    The word `full` is positional now, and this drives it through the real entry point against the real roster."""
+    census = tmp_path / "census.jsonl"
+    spec = {"name": "Inashiro", "seed": 4, "households": 15, "field_archetype": None, "down_deg": 90, "water_sink": "pond", "settlement_form": None}
+    census.write_text(json.dumps({"kind": "roll", "spec": spec, "test": "tests/full/test_villages.py::immune", "request": "r1", "pid": "9", "worker": "7", "dt": 25.0, "ok": True}) + "\n")
+    monkeypatch.setenv(_census.ENV, str(census))
+    assert cli.main(["rollcensus", "verdict"]) == 0, "an incremental run: one roll of a rostered spec is green"
+    assert cli.main(["rollcensus", "verdict", "full"]) == 1, "a full run: every other roster row is stale"
+    assert "stale" in capsys.readouterr().out

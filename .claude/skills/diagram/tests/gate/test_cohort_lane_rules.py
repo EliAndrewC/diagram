@@ -27,10 +27,12 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-COHORT = tuple(hg.cohort_specs(4, first_seed=41))
+# THE POPULATION IS THE ROSTER'S COVERAGE ROLLS since feature 214 (the shared rolls every gate makes), plus seed 43 alone
+# for its kink - the 214 probe found none of the four carries one, so the xfail keeps its own roll.
+COHORT = (*rolls.COVERAGE, rolls.KINK)
 DOUBLE_BACK_DEG = 140.0
 BEND_RUN_FT = 40.0
 
@@ -65,12 +67,12 @@ def _kinks(M) -> list[tuple[str, int, int]]:
 
 
 @pytest.mark.rolls_map
-@pytest.mark.parametrize("spec", [s for s in COHORT if s.seed != 43], ids=lambda s: f"seed{s.seed}")
+@pytest.mark.parametrize("spec", [s for s in COHORT if s is not rolls.KINK], ids=lambda s: f"{s.name}-{s.seed}")
 def test_the_clean_cohort_seeds_bend_like_paths(spec) -> None:
     """Seeds 41, 42 and 44. These are the ones the pin said were clean, and holding them is what makes
     the seed-43 xfail below mean something: without them, "seed 43 fails" is indistinguishable from "the
     predicate fails on everything"."""
-    _plan, M = rollcache.hamlet(spec)
+    _plan, M = _pool.rolled_map(spec)
     assert M.get("lanes"), f"seed {spec.seed} drew no lane, so this rule would judge nothing"
     assert not _kinks(M), f"seed {spec.seed}: {_kinks(M)}"
 
@@ -83,5 +85,5 @@ def test_seed_43_still_kinks_round_a_house_corner() -> None:
     STRICT, so it fails the day the router stops making this - which is the half of the old
     `baseline_verdict` that mattered most: a pin that only ever loosens hides the next regression on the
     seed it covers."""
-    _plan, M = rollcache.hamlet([s for s in COHORT if s.seed == 43][0])
+    _plan, M = _pool.rolled_map(rolls.KINK)
     assert not _kinks(M), f"seed 43: {_kinks(M)}"

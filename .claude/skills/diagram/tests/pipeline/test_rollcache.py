@@ -43,6 +43,10 @@ def _toy(tmp_path, monkeypatch):
     monkeypatch.setattr(gencache, "_renderer_version", lambda: "pinned")
     monkeypatch.delenv(gencache.GATE_BYPASS, raising=False)
     monkeypatch.delenv(rollcache.FULL_ENV, raising=False)
+    # A RUN STORE OF ITS OWN (feature 214): `reset_shared()` removes the run share directory, and under the gate
+    # these tests ran with the GATE'S xdist id - every reset wiped the payloads sibling workers had placed, and
+    # the census showed the reference rolled twice by two workers seconds apart. A per-test id keeps the resets here.
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "toy-" + os.path.basename(str(tmp_path)))
 
     def produce():
         m = importlib.reload(importlib.import_module(mod)) if mod in importlib.sys.modules else importlib.import_module(mod)

@@ -7,8 +7,8 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
 from l7r.diagram.settlement import point_in_poly
+from tests.gate import _pool
 
 # SERVED FROM THE ROLL CACHE (feature 135): each polder is ~50-100 s to roll and nothing here patches the engine,
 # so `rollcache.hamlet` serves the plan and finished manifest while every function the roll executed is unchanged,
@@ -24,7 +24,7 @@ def test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop() -> None:
 
     Seed 12 is chosen because it NEEDS the walk (one step at falls 0 and 180); seeds 3, 8, 19 and 22
     clear on the first try, so testing one of those would exercise nothing."""
-    plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
+    plan, M = _pool.rolled_map(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
     pond = M.get("pond")
     assert pond, "the polder's water source is its header reservoir"
     rim = [(pond[0] + pond[2] * math.cos(a), pond[1] + pond[3] * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
@@ -57,7 +57,7 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
     it NEEDS the reservoir walk, and an assertion that passes because the pond never had to move looks
     identical to one that passes because the walk worked. Merging on assertions alone would have made
     that test vacuous - the exact failure `tests/CLAUDE.md` warns about."""
-    plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    plan, M = _pool.rolled_map(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
     assert plan.field_archetype == "polder_grid"
     assert M["meta"]["field_archetype"] == "polder_grid"
     assert abs(plan.acres - plan.target_acres) / plan.target_acres < 0.12, f"{plan.acres:.1f} acres against a {plan.target_acres:.1f} target"
@@ -78,7 +78,7 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     # THE KUWABATA SPEC, SHARED WITH THE THREE GATE FILES THAT ALREADY ROLL IT (2026-08-31). This test
     # was a spec of its own differing only in leaving `dike_crop` to roll (seed 21 gives sugarcane), and
     # it asserts nothing about the crop. Measured: Kuwabata's map carries every assertion below.
-    plan, M = rollcache.hamlet(hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"))
+    plan, M = _pool.rolled_map(hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"))
     m = M["meta"]
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
@@ -100,7 +100,7 @@ def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
     dozen chords around the ring dike, under ten on the field's house side."""
     from l7r.diagram.settlement._geom.primitives import chain_violated
 
-    _plan, M = rollcache.hamlet(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    _plan, M = _pool.rolled_map(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
     dk = M["dikes"][0]
     assert dk["keepout_chords"] <= 24 and len(dk["keepout"]) <= 48
     outside = [(x, y) for x, y in dk["outline"] if not point_in_poly(x, y, dk["keepout"])]

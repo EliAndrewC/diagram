@@ -5,18 +5,31 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 import os
 import re
 import tempfile
-from unittest import mock
 
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
-from tests._scope import FULL
+from tests import rolls
+from tests.gate import _pool
 
 
-# ROLLED IN A CHILD (feature 213 FR-007): the produce closure is lifted to this module-level function - the
-# feature-146 doctrine - so the roll cache's child can import it by name; its patches are applied inside it.
-def roll_retry() -> tuple[list[str], list[list[tuple[float, float]]]]:
+# THE RE-ROLL LOOP ON STAND-IN STAGES (feature 215, FR-004): `generate()`'s loop - roll, ask the oracle, forbid the
+# stranded ground, roll again, keep the better - runs over stages that draw nothing, in this worker, in
+# milliseconds. The loop's decisions are what these two tests assert; what they no longer prove, stated (spec
+# FR-006 d): that a REAL map's verdict is the one carried forward, and that a real map's re-emission after a
+# rejected re-roll is well formed. Until this feature each was a rostered roll of a 10-household hamlet.
+def _stand_in_stages(monkeypatch: pytest.MonkeyPatch) -> None:
+    def stage_a(s, plan):  # noqa: ANN001, ARG001
+        s.M.setdefault("houses", [])
+
+    def stage_b(s, plan):  # noqa: ANN001, ARG001
+        return None
+
+    monkeypatch.setattr(hg.driver, "STAGES", (stage_a, stage_b))
+
+
+def roll_retry(monkeypatch: pytest.MonkeyPatch) -> tuple[list[str], list[list[tuple[float, float]]]]:
+    _stand_in_stages(monkeypatch)
     calls: list[int] = []
 
     def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
@@ -32,24 +45,27 @@ def roll_retry() -> tuple[list[str], list[list[tuple[float, float]]]]:
         seen.append(list(avoid))
         return real_build(plan, avoid=avoid)
 
-    with mock.patch.object(hg.driver, "unreached_houses", fake_unreached), mock.patch.object(hg.driver, "build", spy_build):
-        rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
+    monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
+    monkeypatch.setattr(hg.driver, "build", spy_build)
+    rep = hg.generate(hg.HamletSpec(name="Retry", seed=4, households=10), out_base=None, render=False)
     return rep.failures, seen
 
 
-def roll_no_help() -> tuple[list[str], int, list[str], str]:
-    rolls: list[int] = []
+def roll_no_help(monkeypatch: pytest.MonkeyPatch) -> tuple[list[str], int, list[str], str]:
+    _stand_in_stages(monkeypatch)
+    rolls_: list[int] = []
 
     def fake_unreached(M, reach=None):  # type: ignore[no-untyped-def]
-        rolls.append(1)
-        return [(100, 100, 200)] if len(rolls) == 1 else [(100, 100, 200), (900, 900, 300)]
+        rolls_.append(1)
+        return [(100, 100, 200)] if len(rolls_) == 1 else [(100, 100, 200), (900, 900, 300)]
 
-    with tempfile.TemporaryDirectory() as d, mock.patch.object(hg.driver, "unreached_houses", fake_unreached):
+    monkeypatch.setattr(hg.driver, "unreached_houses", fake_unreached)
+    with tempfile.TemporaryDirectory() as d:
         out = os.path.join(d, "nohelp")
         rep = hg.generate(hg.HamletSpec(name="NoHelp", seed=4, households=10), out_base=out, render=False)
         with open(out + ".svg", encoding="utf-8") as fh:
             svg = fh.read()
-    return rep.failures, len(rolls), rep.fail_lines, svg
+    return rep.failures, len(rolls_), rep.fail_lines, svg
 
 
 @pytest.mark.rolls_map
@@ -81,8 +97,13 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     # EIGHT IN THE FULL RUN since feature 145: the hamlet-path floor counts what these in-process rolls execute, and the
     # seed-dependent placer branches (the fabric threader, the web smoother, the strip and trunk guards) are reached by
     # rolls, not by a fixture; four more seeds (~50 s in FULL) reach what four did not. Their verdicts are pinned below.
-    specs = hg.driver.cohort_specs(4 if FULL else 1, first_seed=41)  # FULL, not EXHAUSTIVE: the gate is always EXHAUSTIVE, and a seed sweep is the full run's
-    reports = [rollcache.report(spec)[0] for spec in specs]
+    # THE POPULATION IS THE ROSTER'S COVERAGE ROLLS (feature 214, GM 2026-09-08): the four plain shared rolls every
+    # gate makes anyway, read through the roll cache - not a cohort of seeds rolled for this test alone. The
+    # assertions are unchanged and hold on them (specs/214 research R1's probe); what changed is that "seeds nobody
+    # looked at" is no longer literally true of the reference (spec D1). Seeds 41, 42 and 44 rolled for nothing else,
+    # and seed 42 was the gate's longest roll at three attempts.
+    specs = list(rolls.COVERAGE)
+    reports = [_pool.rolled_report(spec) for spec in specs]
     assert len(reports) == len(specs)
     for report in reports:
         assert report.plan.placed >= round(0.85 * report.plan.spec.households), f"{report.plan.spec.name} seated {report.plan.placed}/{report.plan.spec.households}"
@@ -105,7 +126,8 @@ def test_a_rolled_cohort_passes_the_whole_gate() -> None:
     assert clean, "\n".join(lines)
 
 
-# The gate cohort's expected failures (seeds 41-44), measured 2026-08-27 at the T99 unlock - see above.
+# The ratchet's expected failures, keyed by SEED (the coverage rolls since feature 214: Inashiro 4, Kuwabata 21, Polder 12, Polder 19;
+# seeds 41-44 before it, measured 2026-08-27 at the T99 unlock - see above).
 # A FAN THAT SATURATES: seed 45 (17 households, 22.1 acres asked) reaches 18.6 acres with the feature-145 solver and
 # reached 18.1 with the bisection it replaced (measured on the pre-145 worktree, 2026-08-28) - the envelope clamps the
 # fan at every aspect, so this is the canvas/envelope sizing for a large household count at that fall, not the solver.
@@ -138,7 +160,7 @@ GATE_COHORT_EXPECTED: dict[int, frozenset[str]] = {
 
 
 @pytest.mark.rolls_map
-def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden() -> None:
+def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(monkeypatch: pytest.MonkeyPatch) -> None:
     """`generate` re-rolls a map whose FINISHED manifest strands a farmhouse, forbidding the ground
     those houses stood on. Three seat-time tests were built before this and all three failed, because
     whether a way can reach a steading depends on fabric that does not exist when seats are chosen;
@@ -151,7 +173,7 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
     just no longer the battery. That the old version of this test stopped working when the seam moved is
     the point: it was pinned to the dependency this feature removes."""
 
-    failures, seen = rollcache.keyed_to(test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden, roll_retry, child="tests.gate.hamletgen.test_driver:roll_retry")[0]
+    failures, seen = roll_retry(monkeypatch)
     assert failures == []  # the re-roll's verdict is the one reported
     assert len(seen) == 2  # one roll, then exactly one re-roll
     assert seen[0] == []  # the first roll forbids nothing
@@ -160,7 +182,7 @@ def test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden(
 
 
 @pytest.mark.rolls_map
-def test_a_re_roll_that_does_not_help_is_not_kept() -> None:
+def test_a_re_roll_that_does_not_help_is_not_kept(monkeypatch: pytest.MonkeyPatch) -> None:
     """The retry is self-limiting: a re-roll is kept only if it strands NO MORE houses than the roll it
     replaces. Without that a map could be re-rolled into a worse state and shipped, which is the opposite
     of the point.
@@ -171,7 +193,7 @@ def test_a_re_roll_that_does_not_help_is_not_kept() -> None:
     re-rolls by an unrelated total let a defect elsewhere veto a genuine reach fix, KEEPING the map with
     the stranded house."""
 
-    failures, n_rolls, fail_lines, svg = rollcache.keyed_to(test_a_re_roll_that_does_not_help_is_not_kept, roll_no_help, child="tests.gate.hamletgen.test_driver:roll_no_help")[0]
+    failures, n_rolls, fail_lines, svg = roll_no_help(monkeypatch)
     assert failures == ["farmhouses_reach_a_way[1]"]  # the FIRST roll's verdict is kept, not the worse one
     assert n_rolls == 3  # roll, rejected re-roll, then the keeper re-emitted
     assert fail_lines and "farmhouses_reach_a_way" in fail_lines[0]

@@ -82,15 +82,25 @@ def test_a_pool_gen_may_roll_once_when_its_key_moved_and_is_never_stale() -> Non
     assert warm[0] == [], "a pool gen served from the gen cache is not a stale row"
     assert any("served from the gen cache" in ln for ln in warm[1])
     twice = cold + [_roll("Sawada", 6, "tests/full/test_villages.py::test_village_passes_gate[sawada.gen.py]", "r2", pid="601")]
-    assert any("rolled its generator 2 times" in f for f in rollverdict.judge(twice, _roster(pool_gens=(pool,)), full=False, renders_ok=set())[0])
+    assert any("rolled 2 times" in f for f in rollverdict.judge(twice, _roster(pool_gens=(pool,)), full=False, renders_ok=set())[0])
     # the same key as a rostered roll: the gate's roll plus the cold pool gen is the passing state, and the line says so
     both = [_roll("Inashiro", 4, "tests/gate/a.py::t", "r1"), _roll("Inashiro", 4, "tests/full/test_villages.py::test_village_passes_gate[inashiro.gen.py]", "r2", pid="602")]
     ref = types.SimpleNamespace(key=("Inashiro", 4), gen="pool/hamlets/inashiro/inashiro.gen.py", note="", test="tests/full/test_villages.py::test_village_passes_gate")
     failures, lines = rollverdict.judge(both, _roster(("Inashiro", 4), pool_gens=(ref,)), full=True, renders_ok=set())
     assert failures == [] and any("rostered (+ the pool gen: its key moved)" in ln for ln in lines)
-    # ...and a roll of the pool gen's key from any OTHER test is still an unrostered roll
+    # ...and the pool gen's one cold roll may be requested by ANY reader (feature 215: a gate module reading the pool's
+    # map through gate_obtain rolls it when it comes first); a second roll of it in the same run still fails
     stray = [_roll("Sawada", 6, "tests/gate/s.py::t", "r1", pid="700")]
-    assert any("not in the roster" in f for f in rollverdict.judge(stray, _roster(pool_gens=(pool,)), full=False, renders_ok=set())[0])
+    assert rollverdict.judge(stray, _roster(pool_gens=(pool,)), full=False, renders_ok=set())[0] == []
+    twice_by_readers = stray + [_roll("Sawada", 6, "tests/gate/u.py::t", "r2", pid="701")]
+    assert any("rolled 2 times" in f for f in rollverdict.judge(twice_by_readers, _roster(pool_gens=(pool,)), full=False, renders_ok=set())[0])
+    # a key that is BOTH a roll (the immune experiment's perturbed reference) and a pool gen allows one of each
+    both_kinds = [_roll("Inashiro", 4, "tests/full/test_villages.py::immune", "r1", pid="800"), _roll("Inashiro", 4, "tests/gate/a.py::t", "r2", pid="801")]
+    assert rollverdict.judge(both_kinds, _roster(("Inashiro", 4), pool_gens=(ref,)), full=True, renders_ok=set())[0] == []
+    assert any(
+        "rolled 3 times" in f
+        for f in rollverdict.judge(both_kinds + [_roll("Inashiro", 4, "tests/gate/b.py::t", "r3", pid="802")], _roster(("Inashiro", 4), pool_gens=(ref,)), full=False, renders_ok=set())[0]
+    )
 
 
 def test_a_stub_module_s_rolls_are_reported_and_bounded_never_counted() -> None:
@@ -212,7 +222,7 @@ def test_main_reads_the_census_and_the_renders_file_and_judges_against_the_real_
     pathlib.Path(rollverdict.renders_file(str(census))).write_text("tests/settlement/test_finish.py::t\n")
     assert rollverdict.main(["verdict"]) == 0, capsys.readouterr().out
     assert "roll census: green" in capsys.readouterr().out
-    assert rollverdict.main(["verdict", "--full"]) == 1, "the real roster has more rows than this one roll: stale on a full run"
+    assert rollverdict.main(["verdict", "full"]) == 1, "the real roster has more rows than this one roll: stale on a full run"
     assert "ROLL CENSUS FAILED" in capsys.readouterr().out
 
 
@@ -257,3 +267,12 @@ def test_a_roll_no_test_requested_is_the_floor_s_and_fails() -> None:
     failures, lines = rollverdict.judge([floor], _roster(("Polder", 12)), full=False, renders_ok=set(), engine_changed=False)
     assert failures == [] and any("allowed: no engine file changed" in ln for ln in lines)
     assert rollverdict.judge([_roll("Polder", 12, "tests/gate/p.py::t", "r1")], _roster(("Polder", 12)), full=True, renders_ok=set())[0] == []
+
+
+def test_a_roster_row_whose_only_rolls_are_stand_ins_is_stale_on_a_full_run() -> None:
+    """Feature 215 moved the re-roll loop onto stand-in stages and left its two roster rows behind for one gate; the
+    stand-in records are excused from the count, so on a full run the rows had no real roll and must read as stale."""
+    stub = types.SimpleNamespace(module="tests/gate/hamletgen/test_driver.py", reason="stand-in stages", stub=True)
+    rows = [_roll("Retry", 4, "tests/gate/hamletgen/test_driver.py::t", "r1", pid=W, dt=0.01)]
+    failures, _ = rollverdict.judge(rows, _roster(("Retry", 4), in_process=(stub,)), full=True, renders_ok=set())
+    assert any("stale" in f and "Retry seed=4" in f for f in failures), failures

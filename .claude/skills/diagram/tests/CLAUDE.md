@@ -101,7 +101,10 @@ allow the same hamlet to be rolled twice within the tests and also to have some 
 adding another hamlet that gets rolled."* So:
 
 - **`tests/rolls.py` is the roster.** Every spec the gate may roll, with the unique coverage or emergent
-  condition it carries. A rolling test's spec must be there; the roll census fails the gate otherwise and
+  condition it carries - NINE rows since feature 215, the packing record's floor (`rolls.COVERAGE`, `rolls.REFERENCE`,
+  `rolls.KINK` are the names to read). The reference and Kuwabata are the POOL's maps: every gate reader takes them
+  through `tests/gate/_pool.py` (`rolled_map`, `rolled_report` - the sweep's entry, served warm, rolled cold once
+  under a per-gen lock), so the gate's one roll of the reference is the immune experiment's perturbed one. A rolling test's spec must be there; the roll census fails the gate otherwise and
   says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's
   roll instead. Three stated exceptions live beside it: a `Duplicate` (a site that must roll a rostered spec
   again by its nature - the fan-out's pool child, the immune test's perturbed roll, the cache round trip),

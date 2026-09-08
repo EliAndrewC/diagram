@@ -430,3 +430,27 @@ def test_close_seams_survives_a_fabric_of_slivers() -> None:
         {"poly": [(1000.0, 200.0), (1000.02, 500.0), (1000.04, 200.0), (1000.06, 500.0)], "crop": "rice"},
     ]
     assert isinstance(_close(plots), list)
+
+
+def test_the_hem_pass_leaves_a_bank_that_already_reaches_the_field_edge_alone() -> None:
+    """`_hem_pass`: where the bank's chord is within six grid steps of the field's lowest plot there is nothing to
+    hem (the bank already reaches the field edge), and where the gap is deeper a hem plot is snapped onto the
+    collector. Asserted directly (feature 215: cohort seed 43 was the only roll reaching the first branch)."""
+    import random
+
+    from l7r.diagram.waterfields.carve import _hem_pass
+    from l7r.diagram.waterfields.frame import _Frame
+
+    F = _Frame(90.0)  # fall due south: u is x, f is y
+    drain = [F.to_xy(0.0, 500.0), F.to_xy(1000.0, 500.0)]
+    g = 4.0
+
+    def field_plot(f_top: float, f_bottom: float) -> dict[str, object]:
+        return {"poly": [F.to_xy(0.0, f_top), F.to_xy(1000.0, f_top), F.to_xy(1000.0, f_bottom), F.to_xy(0.0, f_bottom)]}
+
+    shallow = [field_plot(465.0, 486.0)]  # the field's lowest plot ends 14 px above the bank: under 6 g, nothing to hem
+    _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, [], shallow)
+    assert len(shallow) == 1, "a bank that already reaches the field edge is left alone"
+    deep = [field_plot(430.0, 440.0)]  # 60 px of bare ground down to the collector: hemmed
+    _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, [], deep)
+    assert len(deep) > 1, "a real gap is filled with hem plots"

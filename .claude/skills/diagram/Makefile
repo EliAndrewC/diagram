@@ -955,7 +955,7 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # xdist's coverage combine is the slow half, and one file does not need workers.
 roll-census:    ## [tests] the roll census of the LAST test phase, judged against tests/rolls.py   FULL=1: a stale roster row counts
 	@: "GUARD_EDIT_OK: feature 213 - the census the gate wrote is re-read here, outside the gate: how SC-001 is checked and a red verdict re-read" ; \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),--full,)
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),full,)
 
 cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
 ##  FILE=<test path>   the test file to run
@@ -1455,10 +1455,11 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	cov_ec=0; \
 	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines. GUARD_EDIT_OK: feature 174 makes this STRICTER. It used to omit settlement/, waterfields/, interactive/ and overlap/ and hand them to a 94% ratchet, which is precisely what the GM asked to end (2026-08-31: 'we have some ratchets somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred percent coverage in whatever the relevant place is'). The omit list and SETTLEMENT_COV_FLOOR both retired the day their own condition was met - measured on this feature's green run, settlement/ 10,342 statements 0 missing, the other three trees 3,015 statements 0 missing. The hamlet-path floor below STAYS: it is a finer check (feature 145), not a weaker one"; cov_ec=1; }; \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
+	: "GUARD_EDIT_OK: feature 215 - the full-run word is POSITIONAL: the ci parser owns --full and ate it, so the stale-row rule never ran" ; \
 	: "GUARD_EDIT_OK: feature 213 - the verdict runs AFTER the floor, under the same census, so a floor that re-rolled a subject" ; \
 	: " the tests should have rolled is seen (the polder-only run of 2026-09-08 hid two such rolls before the floor was in the census)" ; \
 	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo --full) || cov_ec=1; \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1; \
 	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
 	exit $$cov_ec
 

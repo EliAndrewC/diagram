@@ -167,28 +167,32 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
         secs = sum(float(r.get("dt") or 0) for g in groups for r in g)
         row = rostered.get(key)
         pool = pool_gens.get(key)
-        is_pool = [pool is not None and str(g[0].get("test", "")).startswith(pool.test) for g in groups]
-        others = [g for g, p in zip(groups, is_pool, strict=True) if not p]
-        n_pool = sum(is_pool)
-        if n_pool:
+        # A STATED DUPLICATE claims one group (matched by its test); what remains must fit the roster: one roll for a
+        # `Roll` row, one for a `PoolGen` (the cold gen roll, requested by WHICHEVER reader came first - the sweep or
+        # a gate module reading the pool's map, feature 215), both when a key is both.
+        dups = [d for d in roster.DUPLICATES if d.key == key]
+        claimed: list[int] = []
+        for d in dups:
+            for gi, g in enumerate(groups):
+                if gi not in claimed and str(g[0].get("test", "")).startswith(d.test):
+                    claimed.append(gi)
+                    break
+        rest = [g for gi, g in enumerate(groups) if gi not in claimed]
+        allowed = (1 if row else 0) + (1 if pool else 0)
+        if pool and len(rest) >= (1 if row else 0) + 1:
             pool_rolled.add(key)
         status = "rostered" if row else ("pool gen" if pool else "NOT IN THE ROSTER")
-        tail = " (+ the pool gen: its key moved)" if n_pool and row else ""
+        tail = " (+ the pool gen: its key moved)" if pool and row and len(rest) >= 2 else ""
         lines.append(f"  {key[0]} seed={key[1]}: {len(groups)} roll(s), attempts {attempts}, {secs:.0f}s - {status}{tail}; requested by {', '.join(t.split('::')[-1][:60] for t in tests)}")
-        if n_pool > 1:
-            failures.append(f"{key[0]} seed={key[1]}: the pool sweep rolled its generator {n_pool} times in one run - gate_obtain rolls a gen once per key")
-        if others and row is None:
+        if allowed == 0 and rest:
             failures.append(
                 f"{key[0]} seed={key[1]} was rolled by {tests[0]} but is not in the roster: add a `Roll` to tests/rolls.py naming what this roll uniquely carries - or reuse a rostered roll"
             )
-        allowed_dups = [d for d in roster.DUPLICATES if d.key == key]
-        matched = len([d for d in allowed_dups if any(str(g[0].get("test", "")).startswith(d.test) for g in others)])
-        extra = len(others) - 1 - matched
-        if extra > 0:
+        elif len(rest) > allowed:
             failures.append(
-                f"{key[0]} seed={key[1]} was rolled {len(others)} times in one run (by {', '.join(tests)}) - a spec is rolled ONCE per gate and shared; a site that must roll it again by its nature is a stated `Duplicate` in tests/rolls.py"
+                f"{key[0]} seed={key[1]} was rolled {len(groups)} times in one run (by {', '.join(tests)}) - a spec is rolled ONCE per gate and shared; a site that must roll it again by its nature is a stated `Duplicate` in tests/rolls.py"
             )
-        for g in others:
+        for g in rest:
             first = g[0]
             if str(first.get("pid")) == str(first.get("worker")) and not _excepted(first.get("test"), roster.IN_PROCESS):
                 failures.append(
@@ -255,12 +259,12 @@ def engine_changed(root: Path | None) -> bool:
 
 
 def main(argv: list[str], root: Path | None = None) -> int:
-    """`verdict [--full]` - the Makefile's call after the test phase; `--full` when the run was a full one,
+    """`verdict [full]` - the Makefile's call after the test phase; the word `full` when the run was a full one,
     so a stale roster row counts. `root` (the repository) locates the incremental plan, which says whether an
     engine file changed - the difference between a floor roll that signals a missed roller and one that refreshes
     a record the selection could not have known was stale."""
     if not argv or argv[0] != "verdict":
-        print("usage: rollcensus verdict [--full]", file=sys.stderr)
+        print("usage: rollcensus verdict [full]", file=sys.stderr)
         return 2
     path = os.environ.get(_census.ENV)
     if not path:
@@ -270,7 +274,10 @@ def main(argv: list[str], root: Path | None = None) -> int:
     renders_ok = {ln.strip() for ln in rfile.read_text(encoding="utf-8").splitlines() if ln.strip()} if rfile.is_file() else set()
     from tests import rolls  # the roster lives beside the tests it governs (spec D1)
 
-    full = "--full" in argv
+    # A POSITIONAL WORD, NOT A FLAG (feature 215): the ci parser owns `--full` (feature 130) and ate it, so the verdict
+    # ran every gate with `full=False` and the stale-row rule never fired - found when two rows left behind on purpose
+    # came up green. Feature 207's `incremental plan full` met the same trap the same way.
+    full = "full" in argv[1:]
     failures, lines = judge(read(Path(path)), rolls, full=full, renders_ok=renders_ok, engine_changed=full or engine_changed(root))
     print("\n".join(lines))
     if failures:

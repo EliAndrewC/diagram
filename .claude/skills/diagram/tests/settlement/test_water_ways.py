@@ -675,6 +675,13 @@ def test_pull_back_will_not_consume_the_last_segment_of_a_two_point_lane() -> No
     # a long lane whose end reaches nothing also comes back whole
     long_run = [(0.0, 0.0), (200.0, 0.0)]
     assert _pull_back(long_run, lambda _q: False) == long_run
+    # A WHOLE VERTEX CONSUMED (feature 214: the cohort seeds that reached this went): a three-point lane whose
+    # LAST segment is already shorter than a step drops that vertex and walks on from the one before it -
+    # untouched when nothing reaches, and shortened past the dropped vertex when everything does
+    dogleg = [(0.0, 0.0), (100.0, 0.0), (104.0, 0.0)]
+    assert _pull_back(dogleg, lambda _q: False) == dogleg
+    shortened = _pull_back(dogleg, lambda _q: True)
+    assert len(shortened) == 2 and 40.0 <= shortened[-1][0] < 100.0, shortened
 
 
 def test_junction_floor_protects_a_crossing_and_ignores_a_fraying_neighbor() -> None:

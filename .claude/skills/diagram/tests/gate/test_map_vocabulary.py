@@ -11,15 +11,15 @@ from __future__ import annotations
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 
 @pytest.fixture(scope="module")
 def rolled():
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 def test_a_hamlet_has_no_headman_of_its_own(rolled) -> None:
