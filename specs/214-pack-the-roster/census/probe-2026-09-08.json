@@ -1,0 +1,96 @@
+[
+ {
+  "spec": "Inashiro 4",
+  "how": "MISS",
+  "failures": [],
+  "placed": 15,
+  "households": 15,
+  "acres": 18.9,
+  "target": 19.5,
+  "kinks": [],
+  "line": "Inashiro           seed=4    hh=15/15  acres= 18.9/ 19.5 fall=90   wind=W   sink=pond    crescent   spine  attempt 1  OK"
+ },
+ {
+  "spec": "Kuwabata 21",
+  "how": "MISS",
+  "failures": [],
+  "placed": 16,
+  "households": 16,
+  "acres": 19.1,
+  "target": 20.8,
+  "kinks": [],
+  "line": "Kuwabata           seed=21   hh=16/16  acres= 19.1/ 20.8 fall=90   wind=NW  sink=pond    round      Y      attempt 1  OK"
+ },
+ {
+  "spec": "Polder 12",
+  "how": "MISS",
+  "failures": [],
+  "placed": 16,
+  "households": 16,
+  "acres": 19.5,
+  "target": 20.8,
+  "kinks": [],
+  "line": "Polder             seed=12   hh=16/16  acres= 19.5/ 20.8 fall=0    wind=NW  sink=pond    elongated  T      attempt 1  OK"
+ },
+ {
+  "spec": "Polder 19",
+  "how": "MISS",
+  "failures": [],
+  "placed": 16,
+  "households": 16,
+  "acres": 19.5,
+  "target": 20.8,
+  "kinks": [],
+  "line": "Polder             seed=19   hh=16/16  acres= 19.5/ 20.8 fall=90   wind=N   sink=offmap  crescent   Y      attempt 1  OK"
+ },
+ {
+  "spec": "Cohort-41 41",
+  "how": "MISS",
+  "failures": [],
+  "placed": 11,
+  "households": 11,
+  "acres": 14.8,
+  "target": 14.3,
+  "kinks": [],
+  "line": "Cohort-41          seed=41   hh=11/11  acres= 14.8/ 14.3 fall=180  wind=E   sink=offmap  elongated  T      attempt 1  OK"
+ },
+ {
+  "spec": "Cohort-42 42",
+  "how": "MISS",
+  "failures": [],
+  "placed": 18,
+  "households": 18,
+  "acres": 22.3,
+  "target": 23.4,
+  "kinks": [],
+  "line": "Cohort-42          seed=42   hh=18/18  acres= 22.3/ 23.4 fall=180  wind=N   sink=offmap  crescent   T      attempt 3 (re-rolled after: farmhouses_reach_a_way) OK"
+ },
+ {
+  "spec": "Cohort-43 43",
+  "how": "MISS",
+  "failures": [],
+  "placed": 14,
+  "households": 14,
+  "acres": 17.5,
+  "target": 18.2,
+  "kinks": [
+   [
+    "kinks",
+    991,
+    188
+   ]
+  ],
+  "line": "Cohort-43          seed=43   hh=14/14  acres= 17.5/ 18.2 fall=135  wind=NW  sink=pond    round      spine  attempt 1  OK"
+ },
+ {
+  "spec": "Cohort-44 44",
+  "how": "MISS",
+  "failures": [],
+  "placed": 10,
+  "households": 10,
+  "acres": 12.8,
+  "target": 13.0,
+  "kinks": [],
+  "line": "Cohort-44          seed=44   hh=10/10  acres= 12.8/ 13.0 fall=0    wind=S   sink=pond    elongated  spine  attempt 1  OK"
+ }
+]
