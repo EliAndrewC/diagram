@@ -36,7 +36,12 @@ CASES = [
     ("no-poll", _payload(command="while :; do sleep 5; done"), "blocked", "busy-wait-loop"),
     ("no-poll", _payload(command="command sleep 30"), "blocked", "disguised-sleep"),
     ("no-poll", _payload(command="make done  # POLL_OK: an external port"), "escaped", "poll-ok"),
-    ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo"), "blocked", "bare-pytest"),
+    ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py --collect-only"), "blocked", "bare-pytest"),
+    # feature 212: the targeted run and the wrapped entry point are REWRITTEN, and each records its rule
+    ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo 2>&1 | tail -3"), "rewrote", "targeted-pytest"),
+    ("make-only", _payload(command="python3 -m l7r.diagram.ci status"), "rewrote", "entry-point"),
+    ("no-poll", _payload(command="until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"), "rewrote", "backgrounded-file-wait"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/.claude/skills/diagram/Makefile", new_string='\t: "GUARD_EDIT_OK: `make done` in a recipe comment"'), "blocked", "recipe-comment-substitution"),
     ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
     ("no-branch", _payload(command="git checkout -b side"), "blocked", "branch-creation"),
     ("no-branch", _payload(command="git checkout -b side  # NO_BRANCH_OK: a throwaway bisect"), "escaped", "no-branch-ok"),

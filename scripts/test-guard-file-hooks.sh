@@ -60,6 +60,31 @@ if [ "$rc" -ne 0 ] && grep -q "GUARD_EDIT_OK" /tmp/gf.err && grep -q "fires on c
   echo "  ok      names the escape and distinguishes legitimate edits"; PASS=$((PASS+1))
 else echo "  FAIL    refusal did not carry the escape or the categories"; FAIL=$((FAIL+1)); fi
 
+# GUARD_EDIT_OK: feature 212 - a recipe comment that would RUN is refused on any Makefile, by any
+# route, marker or no marker (the GM's relayed ruling after feature 207's 914-level recursion).
+echo
+echo "5. A RECIPE COMMENT THAT WOULD RUN IS REFUSED (feature 212)"
+TAB=$(printf '\t')
+hazard() { # label, expected, new_string (Edit) - against the skill Makefile
+  local rc; rc=$(run "$ROOT/.claude/skills/diagram/Makefile" "$3" Edit)
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' /tmp/gf.err | head -3; FAIL=$((FAIL+1)); fi
+}
+hazard "the 207 shape: a backtick in a : \"...\" comment, WITH the marker" blocked "${TAB}: \"GUARD_EDIT_OK: feature 207 - \`make test-full\` is the gate's test phase\" ; \\"
+hazard "an @-prefixed comment with a backtick" blocked "${TAB}@: \"see \`make help\`\""
+hazard "a \$\$( substitution in the comment" blocked "${TAB}: \"GUARD_EDIT_OK: the key is \$\$(git rev-parse HEAD) here\""
+hazard "the same comment without backticks passes" ok "${TAB}: \"GUARD_EDIT_OK: feature 207 - make test-full is the gate's test phase\" ; \\"
+hazard "an escaped backtick passes" ok "${TAB}: \"GUARD_EDIT_OK: the target is \\\`make done\\\`\""
+hazard "the Makefile's own escaped \\\$\$(MAKE) mention passes" ok "${TAB}: \"GUARD_EDIT_OK: make runs \\\$\$(MAKE) sub-invocations even under -n\" ; \\"
+hazard "a single-quoted comment cannot substitute" ok "${TAB}: 'GUARD_EDIT_OK: \`make done\` in single quotes is inert'"
+hazard "a backtick in a make COMMENT line (#) is not a recipe" ok "# GUARD_EDIT_OK: \`make done\` is fine in a hash comment"
+hazard "a backtick in a recipe COMMAND is the session's business" ok "${TAB}@echo \"GUARD_EDIT_OK: \$\$(date) runs on purpose\""
+RC=$(ev "$ROOT/other/Makefile" "${TAB}: \"a \`backtick\` comment\"" Write | "$HOOK" pretool >/dev/null 2>&1; echo $?)
+[ "$RC" -ne 0 ] && { echo "  ok      any Makefile, by Write too"; PASS=$((PASS+1)); } || { echo "  FAIL    a Write to another Makefile was not checked"; FAIL=$((FAIL+1)); }
+run "$ROOT/.claude/skills/diagram/Makefile" "${TAB}: \"\`x\`\"" Edit >/dev/null
+grep -q "There is no escape token" /tmp/gf.err && { echo "  ok      the refusal says there is no escape and how to write it"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal is unhelpful"; FAIL=$((FAIL+1)); }
+
 echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]
