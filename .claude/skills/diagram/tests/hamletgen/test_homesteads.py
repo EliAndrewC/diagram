@@ -146,6 +146,20 @@ def test_strip_blocked_refuses_a_lane_that_only_crosses_the_strip() -> None:
     assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, beside) is False
 
 
+def test_strip_blocked_refuses_a_dry_plot_and_a_watercourse(monkeypatch) -> None:
+    """The two arms the unlock tripwire seed 47 added (a fixture on a dry plot, one on the stream) - reached by the
+    cohort seeds until feature 214 packed them away, so asserted directly: a strip with a corner inside a dry hem
+    plot is blocked, and so is one whose corner stands on a watercourse."""
+    s, _plan = _strip_settlement()
+    blocked = hg.homesteads._strip_blocked
+    s.M["dry_plots"] = [{"poly": [(480.0, 480.0), (520.0, 480.0), (520.0, 520.0), (480.0, 520.0)]}]
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a corner inside a dry plot"
+    s.M["dry_plots"] = []
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is False
+    monkeypatch.setattr(s, "_on_watercourse", lambda x, y, pad=4.0: True)
+    assert blocked(s, 500, 500, 30, 20, 0, 0, [], [], None, []) is True, "a corner on the stream"
+
+
 def test_trunk_blocked_refuses_the_canvas_edge_and_a_record_without_a_footprint() -> None:
     """Feature 146: two arms of the trunk test - a trunk hanging off the canvas, and a record in one of the
     scanned lists that carries no `x` at all (a synthetic entry another check keeps), which is skipped
