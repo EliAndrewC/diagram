@@ -4,7 +4,8 @@
 prove less (and SC-002 says so); FR-003 faces 214's D3 and reverses it in a recorded decision (D5); FR-001 no
 longer attributes the brief alignment to the GM. Round 2 required one change (a fourth site that proves less - the re-roll loop over stand-in stages - stated in
 FR-004, FR-006 d and SC-002), applied. Round 3 required one change (FR-006 e: what proves less if seed 43 packs), applied; the reviewer's aside -
-the audit kept runnable as `make roll-audit` - taken into FR-007. Round 4 pending (constitution XVI).
+the audit kept runnable as `make roll-audit` - taken into FR-007. Round 4 required one change (the `make roll-audit` target, taken from a reviewer's aside, dropped from
+FR-007 - an aside is not the GM's consent; recorded in D6 as priced and not taken). Round 5 pending.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) R1 - the audit, per roll,
 of the lines nothing else reaches; the count after.
 **Predecessors**: 213 (the census), 214 (the first packing, 21 -> 13 specs, 24 -> 16 rolls); the packing
@@ -74,9 +75,8 @@ packs) - the record's floor - with every assertion kept where it was.
   for the GM to take or leave.
 - **FR-007 The roster, the census, the record.** `tests/rolls.py` at 9 rows (8 if seed 43 packs); a warm
   gate's census reads 9 rolls of 9 specs (8 of 8); `make done` green; R2 the census line and the gate's time;
-  `dev/loop.md`'s packing section extended; `tests/CLAUDE.md`. The audit itself stays runnable: `make
-  roll-audit` runs R1's script over the current gate baseline, so the next packing question is answered by
-  a command rather than re-derived.
+  `dev/loop.md`'s packing section extended; `tests/CLAUDE.md`. The audit's script stays committed at
+  `specs/215-the-floor-itself/census/unique_lines.py` as the record of how the count was derived.
 
 ## Success criteria
 
@@ -106,3 +106,8 @@ packs) - the record's floor - with every assertion kept where it was.
   unique line is the perturbation itself, so the cost is behavioral (FR-006 c), not coverage; the reference's
   perturbed roll asserts the same mechanisms (position-seeded attributes, the farmstead, well and grove
   scopes) on the map every gate test reads. Recorded here rather than done silently.
+- **D6 - a standing `make roll-audit` target, priced and not taken.** R1's method (unique lines per roll off
+  the gate's own coverage baseline) is what made the GM's question answerable, and a target would keep it a
+  command rather than a re-derivation; it is also a new tool under the 100% floor and the hooks-test surface,
+  and no sentence of the request asks for it. The script is committed beside this spec; whether it becomes a
+  target is the GM's call at landing.
