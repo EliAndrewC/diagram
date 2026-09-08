@@ -59,10 +59,10 @@ def test_the_entry_stamp_takes_seconds_and_microseconds_from_one_clock_read(monk
     entry written earlier in that second - the would-have trail flaked once under a loaded gate. One read, one name."""
     import time
 
-    ns = 1_700_000_001_000_005  # five microseconds past a whole second
+    ns = 1_700_000_001_000_005_000  # five microseconds past a whole second (nanoseconds since the epoch)
     monkeypatch.setattr(time, "time_ns", lambda: ns)
     stamp = runlog._stamp()
     assert stamp.endswith("000005") and stamp[:15] == time.strftime("%Y%m%dT%H%M%S", time.gmtime(1_700_000_001)), stamp
-    earlier = 1_700_000_000_999_999
+    earlier = 1_700_000_000_999_999_000
     monkeypatch.setattr(time, "time_ns", lambda: earlier)
     assert runlog._stamp() < stamp, "write order is sort order across the boundary"
