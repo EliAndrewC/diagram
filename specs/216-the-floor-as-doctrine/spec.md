@@ -1,6 +1,8 @@
 # Feature 216 - the floor as doctrine
 
-**Status**: DRAFT - `spec-fidelity` round 1 pending (constitution XVI).
+**Status**: DRAFT - `spec-fidelity` round 1 required three changes, applied: the conditional second partial roll
+deleted (a fifth roll can never be strictly necessary for a spec with no unique line); FR-005 d states the loss
+the collapse causes; the amendment is 2.23.0 and corrects the footer. Round 2 pending (constitution XVI).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - the four cuts' sites, the
 feasibility probes, the count after.
 **Predecessors**: 215 (the floor itself: 9 rolls of 9; its R1 audit and the four cuts it priced and left), 214,
@@ -31,30 +33,36 @@ test goes if one is ever made.
   the three lines only it reached. (c) Polder 19: its two tests (the grid, dike and reservoir; the keep-outs)
   read Polder 12; the roster's polder is one. (d) The three seatings share ONE partial roll: the stages before
   the homestead pass run once in a child (inside `roll_scope`, so the census counts it), the state is copied
-  three times and each seating runs with its patch - the cloud alone, the lane frontage alone, the one-household
-  stop; if the cloud's assertions do not hold on the linear spec the other two need, a second partial roll for
-  the nucleated form, stated in R2. The nine engine lines the three FULL rolls alone reached (`ways/route.py`,
-  `ways/touch.py`, `ways/web.py`, `homesteads/wells.py`, `hinterland/stages.py`) become direct unit tests.
+  three times and each seating runs with its patch followed by the track stage (the frontage offers seats along
+  the connector the track draws) - the cloud alone, the lane frontage alone, the one-household stop. ONE roll:
+  the probe of 2026-09-08 showed all three assertions hold on the linear state; had the cloud's not, it would
+  have become a unit test of the cloud pass's decision or been dropped and recorded in FR-005 - never a second
+  roll, since a spec with no unique line can never be strictly necessary for the floor. The ten engine lines the
+  three FULL rolls alone reached (`ways/route.py`, `ways/touch.py`, `ways/web.py`, `homesteads/wells.py`,
+  `hinterland/stages.py`; R1) become direct unit tests, the gate's floor naming any the count missed.
 - **FR-003 The doctrine, in the guidelines.** Constitution Principle VI gains the clause, in the GM's words:
   the `make done` tests minimize the number of map rolls and roll only what is strictly necessary to reach 100%
   coverage; a test that rolls more than that belongs in the CI tier (the AWS check), which is not a kind of test
-  run today and is where such a test goes if one is ever made (a MINOR amendment, 2.22.0). The root `CLAUDE.md`
+  run today and is where such a test goes if one is ever made (a MINOR amendment, 2.23.0 - the log already
+  records 2.22.0 for feature 211 while the footer still says 2.21.0; the amendment sets both). The root `CLAUDE.md`
   roster bullet, `tests/CLAUDE.md`'s tree table (a row for the CI tier: not run today; the place for a test that
   rolls more than the floor) and `dev/loop.md`'s packing section carry the rule and its date.
 - **FR-004 The roster, the census, the record.** `tests/rolls.py` at 4 rows (the perturbed reference, Polder 12,
-  seed 43, the seatings' partial roll; 5 if the cloud needs its own); a warm gate's census reads as many rolls
-  as rows; `make done` green; R2 the census line and the gate's time; the audit re-run after landing and its
+  seed 43, the seatings' partial roll); a warm gate's census reads 4 rolls of 4 specs; `make done` green; R2 the census line and the gate's time; the audit re-run after landing and its
   output recorded.
 - **FR-005 What proves less, stated.** (a) the woodland band is asserted on the pool's map or a stub, not on
   a site rolled for it; (b) the clamp's fallback is asserted as a decision, no longer that the brook it promised
   was actually cut on a real map; (c) the polder grid at fall 90 is no longer rolled - its form, its keep-outs
   and its web are no longer asserted on a real map; (d) the three seatings are asserted on a shared partial
   state, and the stages after the homestead pass (lanes, track, hinterland) no longer run on the seated
-  variants - their nine lines hold as unit tests. Each raised with the GM at landing.
+  variants - their lines hold as unit tests; the cloud's seating is asserted on the shared LINEAR state rather
+  than on a rolled nucleated hamlet (its roster row existed for the cloud seating a default-form hamlet, seed
+  7); and the three seatings are no longer three distinct maps (OneHouse's own map, whose placard width made it
+  differ from LaneOnly's, ceases to exist). Each raised with the GM at landing.
 
 ## Success criteria
 
-- **SC-001** A warm full gate's census reads 4 rolls of 4 specs (5 of 5 if the cloud needs its own), no duplicates.
+- **SC-001** A warm full gate's census reads 4 rolls of 4 specs, no duplicates.
 - **SC-002** `make done` green at 100% on both floors; no assertion removed except the four FR-005 states.
 - **SC-003** `make roll-audit` prints the table for the landed baseline, and the constitution carries the clause.
 
@@ -64,7 +72,8 @@ test goes if one is ever made.
   explicitly make it clear"*; Principle VI is where the gate's obligations live, and a new obligation is a MINOR
   amendment by the versioning policy.
 - **D2 - a partial roll is a roll.** The stages-before-seating run sits inside `roll_scope` (the AST rule of
-  feature 210 demands it), so the census counts it as one roll with its own roster row; that is the honest
-  count, and it is why the three seatings become one.
+  feature 210 demands it), so the census counts it as one roll with its own roster row - the three seatings'
+  runs in the same child are its attempts, not rolls of their own; that is the honest count, and it is why the
+  three seatings become one.
 - **D3 - the audit is a tool, not a script beside a spec.** A tool owes 100% coverage and a place in the command
   map; that cost is what makes it a command the next tier can run rather than a file someone must find.
