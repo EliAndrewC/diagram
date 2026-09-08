@@ -9,6 +9,8 @@ the tracer into unrelated maps.
 
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from l7r.diagram import settlement
@@ -218,3 +220,16 @@ def test_watching_fits_RESTORES_all_four_methods_afterwards() -> None:
     with W.watching_fits(10.0, 10.0):
         assert Settlement._fits is not before[0], "patched inside"
     assert (Settlement._fits, Settlement._in_blocked, Settlement._near_corridor, Settlement._hard_clear) == before
+
+
+def test_run_gen_restores_the_render_switch_it_found(tmp_path, monkeypatch):
+    """Feature 213: the suite runs with DIAGRAM_SKIP_RENDER=1 as a worker-wide default, and `run_gen` used to POP
+    it afterwards - so a roll child started later in the same worker rendered its map (the roll census caught the
+    immune test's Kashikawa child writing a PNG and a raster). Both directions: a value found is put back, and
+    an absent variable is absent again."""
+    monkeypatch.setenv("DIAGRAM_SKIP_RENDER", "1")
+    W.run_gen(_gen(tmp_path))
+    assert os.environ.get("DIAGRAM_SKIP_RENDER") == "1", "the suite's default must survive the tool"
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER")
+    W.run_gen(_gen(tmp_path))
+    assert "DIAGRAM_SKIP_RENDER" not in os.environ

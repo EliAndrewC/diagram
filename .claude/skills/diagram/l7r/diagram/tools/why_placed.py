@@ -221,12 +221,19 @@ def run_gen(path: str) -> None:
     d = os.path.dirname(os.path.abspath(path))
     if d not in sys.path:
         sys.path.insert(0, d)
+    # RESTORE, never pop: under the suite DIAGRAM_SKIP_RENDER=1 is the default for the whole worker (feature 213
+    # FR-006), and popping it here left every later child of the same worker rendering - the roll census caught
+    # the immune test's Kashikawa child writing a PNG and a raster after this tool's test had run first.
+    prior = os.environ.get("DIAGRAM_SKIP_RENDER")
     os.environ["DIAGRAM_SKIP_RENDER"] = "1"
     try:
         with open(os.devnull, "w") as devnull, contextlib.redirect_stdout(devnull):
             runpy.run_path(path, run_name="__main__")
     finally:
-        os.environ.pop("DIAGRAM_SKIP_RENDER", None)
+        if prior is None:
+            os.environ.pop("DIAGRAM_SKIP_RENDER", None)
+        else:
+            os.environ["DIAGRAM_SKIP_RENDER"] = prior
 
 
 def report_hits(hits: Sequence[Hit], x: float, y: float, radius: float) -> str:

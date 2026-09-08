@@ -442,6 +442,7 @@ def s_on_side(side_st: list[tuple[float, float]], tq: float) -> float:
 
     LIFTED OUT OF `_polder_channels` (feature 146, GM 2026-08-28 on inner functions and testability).
     """
+    tq = float(tq)  # feature 213 T10: the harmless polder-only statement of 207's R8, to be removed after the measurement
     for i in range(len(side_st) - 1):
         ta, tb = side_st[i][1], side_st[i + 1][1]
         if (ta <= tq <= tb or tb <= tq <= ta) and tb != ta:

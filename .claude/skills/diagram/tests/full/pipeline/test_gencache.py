@@ -4,7 +4,6 @@ Inashiro at `make done FULL=1` and on AWS."""
 
 import json
 import os
-import shutil
 from pathlib import Path
 
 import pytest
@@ -14,7 +13,7 @@ from tests.pipeline.test_gencache import HERE
 
 
 @pytest.mark.rolls_map  # regenerates a REAL scripted hamlet: 58 s, the suite's single largest test
-def test_the_real_pool_round_trips_through_the_cache():
+def test_the_real_pool_round_trips_through_the_cache(tmp_path, monkeypatch):
     """The end-to-end proof on a REAL map: regenerate, cache, wipe, restore, and demand the bytes
     match. Uses the cheapest SCRIPTED hamlet - the hand-authored pool is FROZEN
     (`pipeline/poolmaps.py`) and its gens are never run - and restores the artifacts BYTE-FOR-BYTE
@@ -38,6 +37,12 @@ def test_the_real_pool_round_trips_through_the_cache():
     # nothing here creates a render (the gen runs under DIAGRAM_SKIP_RENDER), so restoring exactly
     # what was standing beforehand leaves the pool as it was found, render present or not
     committed = {p: Path(p).read_bytes() for p in (manifest, base + ".svg", base + ".png") if os.path.isfile(p)}
+    # THE CACHE UNDER TEST IS A SCRATCH ONE. This used to store into the REAL gen cache and wipe the entry
+    # afterwards - which evicted the pool sweep's coverage-bearing entry for Inashiro, so the NEXT gate's sweep
+    # rolled the gen cold again (a 30 s coverage child, every run). Found by feature 213's roll census, whose
+    # pool-gen line said "ROLLED this run: its cache key moved" on content nothing had changed. The real entry
+    # is never touched now; the round trip proves the same thing against a directory of its own.
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "gencache"))
     try:
         # ONE child roll gives both the files and the dependency record (feature 213). This used to run the gen
         # TWICE - a subprocess for the files, then `run_and_record` in the worker for the record - and the first
@@ -51,6 +56,5 @@ def test_the_real_pool_round_trips_through_the_cache():
         assert gencache.load(gen) is True, "an unchanged pool map must hit"
         assert Path(manifest).read_bytes() == fresh
     finally:
-        shutil.rmtree(os.path.join(gencache.CACHE_DIR, "inashiro"), ignore_errors=True)
         for p, data in committed.items():
             Path(p).write_bytes(data)
