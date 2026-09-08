@@ -1,0 +1,6 @@
+{
+  "utc": "20260908T001745Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 212 changes guard scripts, their suites, the Makefile"
+}
