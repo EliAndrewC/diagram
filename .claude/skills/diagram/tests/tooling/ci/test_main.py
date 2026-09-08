@@ -274,6 +274,13 @@ def test_the_roll_census_full_run_word_survives_the_ci_parser(roots: Path, monke
     spec = {"name": "Inashiro", "seed": 4, "households": 15, "field_archetype": None, "down_deg": 90, "water_sink": "pond", "settlement_form": None}
     census.write_text(json.dumps({"kind": "roll", "spec": spec, "test": "tests/full/test_villages.py::immune", "request": "r1", "pid": "9", "worker": "7", "dt": 25.0, "ok": True}) + "\n")
     monkeypatch.setenv(_census.ENV, str(census))
-    assert cli.main(["rollcensus", "verdict"]) == 0, "an incremental run: one roll of a rostered spec is green"
-    assert cli.main(["rollcensus", "verdict", "full"]) == 1, "a full run: every other roster row is stale"
+    # feature 219: the real roster holds no Roll row, so a stale row is planted on it - the Inashiro roll above is the
+    # pool's (a PoolGen) and stays green; only the full-run word can make the planted row count
+    import types
+
+    from tests import rolls
+
+    monkeypatch.setattr(rolls, "by_key", lambda: {("Gone", 1): types.SimpleNamespace(key=("Gone", 1), rolled_by="a child roll")})
+    assert cli.main(["rollcensus", "verdict"]) == 0, "an incremental run: a stale row does not count"
+    assert cli.main(["rollcensus", "verdict", "full"]) == 1, "a full run: the planted row is stale"
     assert "stale" in capsys.readouterr().out

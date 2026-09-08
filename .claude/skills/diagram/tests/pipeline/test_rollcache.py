@@ -18,6 +18,7 @@ from l7r.diagram.pipeline import gencache, rollcache
 # `keyed_to` through an alias: the marker guard (tests/test_markers.py) reads `rollcache.keyed_to` as a map roll, which
 # it is everywhere but here - this file rolls a TOY engine in milliseconds and belongs to the quick tree.
 keyed_to_toy = rollcache.keyed_to
+hamlet_toy, report_toy = rollcache.hamlet, rollcache.report  # feature 219: the two views on a stood-in child, no map rolled
 
 _ENGINE = """
 CONSTANT = 3
@@ -548,7 +549,7 @@ def test_hamlet_and_report_are_two_views_of_the_one_child_roll(tmp_path, monkeyp
     monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-219-two-views-" + tmp_path.name)
     rollcache.reset_shared()
     spec = hg.HamletSpec(name="Probe", seed=2, households=10)
-    assert rollcache.hamlet(spec) == ("plan", {"M": 1})
-    rep, how = rollcache.report(spec)
+    assert hamlet_toy(spec) == ("plan", {"M": 1})
+    rep, how = report_toy(spec)
     assert rep == "report" and how.startswith("BYPASS-SHARED"), how
     assert calls == [1], "one roll serves both views"

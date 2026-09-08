@@ -265,11 +265,7 @@ def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tole
 
     monkeypatch.setattr(water, "build_polder", fake_build)
     monkeypatch.setattr(water, "net_acres", lambda net, ftpx: plan.target_acres)
-    # the winner's parcel cleanup runs on the real net; the stub has no parcels to clean
-    from l7r.diagram.waterfields import polder as _polder
-
-    monkeypatch.setattr(water, "clean_polder_parcels", lambda net: net, raising=False)
-    monkeypatch.setattr(_polder, "clean_polder_parcels", lambda net: net)
+    monkeypatch.setattr(water, "clean_polder_parcels", lambda net: net)  # the winner's parcel cleanup: the stub has no parcels to clean
     net = water.fit_polder(plan, 12)
     assert built == [25], "one candidate, within tolerance: the bisection stops there"
     assert net["rows"] == 25

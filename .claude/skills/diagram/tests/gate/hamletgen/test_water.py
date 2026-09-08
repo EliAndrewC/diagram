@@ -2,7 +2,6 @@
 `tests/` minus the tier, gate and tooling trees, so these are neither imported nor collected while the scope is
 locked to another tier; the gate collects everything. Helpers stay in the source module and are imported."""
 
-
 import pytest
 
 from l7r.diagram import hamletgen as hg
