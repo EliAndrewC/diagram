@@ -2,7 +2,8 @@
 
 **Status**: DRAFT - `spec-fidelity` round 1 required three changes, all applied (FR-007 restated site by site; the
 target number established in the record's own unit and the delivery itemized against it; the immune test kept on
-Kashikawa per the reviewer's aside, so its `Roll` and `PoolGen` rows both stay). Round 2 pending (constitution XVI).
+Kashikawa per the reviewer's aside, so its `Roll` and `PoolGen` rows both stay). Round 2 required two changes (D2 in the record's unit and count; the research aligned with FR-003 and
+FR-006), applied. Round 3 pending (constitution XVI).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - the ten rolls adjudicated
 one by one, the probe over the coverage rolls, the count after.
 **Predecessor**: 213 (the roll census and the roster it enforces); the packing record of 2026-08-31
@@ -52,7 +53,8 @@ that section then made; the feature is judged against the nine, which is the cov
   NoHelp - the loop's own lines), Cohort-43 (the open defect's only carrier) and Kashikawa 3 (the immune
   experiment's perturbed roll, which cannot be served); the `Duplicate`s are the fan-out's pool child, the
   child-equality proof's in-process half and the cache round trip, all of the reference, plus Kashikawa's
-  clean side rolled cold. A warm full gate therefore rolls **16 times for 13 specs**, against 24 for 21 before
+  clean side rolled cold. A warm full gate therefore rolls **16 times for 13 specs** - the 13 plus the three duplicates a warm gate
+  rolls; Kashikawa's clean side is served from the gen cache warm - against 24 for 21 before
   and 37 for 14 at the start of feature 213. Against the record's nine: +2 the re-roll tests, +1 seed 43, +1
   the immune experiment - each named, none of them a coverage roll the packing could remove. The census
   verdict is green on a full run; `dev/loop.md`'s packing section and 213's research point at the new count;
@@ -78,8 +80,10 @@ that section then made; the feature is judged against the nine, which is the cov
 - **D1 - the ratchet population is no longer "seeds nobody looked at".** The cohort test's docstring made
   that claim; of the new population only Inashiro was tuned by hand, and the polders and Kuwabata were chosen
   for their archetypes, not looked at as maps. The property pinned (seating, acreage, the gate) is the same.
-- **D2 - seed 43 stays.** The GM's number is 11; this is 12, because the probe found no other carrier for
-  the one open defect and hiding it is worse than one roll of 21 s. Raised with the GM at landing.
+- **D2 - the record's number is nine; this is thirteen, each addition named.** The nine coverage specs, plus
+  Retry and NoHelp (added after the record, the re-roll loop's own lines), plus seed 43 (the probe found no
+  other carrier for the one open defect, and hiding it is worse than one roll of 21 s), plus Kashikawa 3
+  (the immune experiment's perturbed roll, which cannot be served). Each is raised with the GM at landing.
 - **D3 - the immune subject stays the largest hamlet.** The draft moved it to the reference to drop a
   distinct spec; the reviewer (round 1) pointed out the clean side is ALREADY the pool sweep's shared entry, so
   the move would save no roll and would lose the off-map sink and the fall-315 stages the reference never
