@@ -259,12 +259,12 @@ def engine_changed(root: Path | None) -> bool:
 
 
 def main(argv: list[str], root: Path | None = None) -> int:
-    """`verdict [--full]` - the Makefile's call after the test phase; `--full` when the run was a full one,
+    """`verdict [full]` - the Makefile's call after the test phase; the word `full` when the run was a full one,
     so a stale roster row counts. `root` (the repository) locates the incremental plan, which says whether an
     engine file changed - the difference between a floor roll that signals a missed roller and one that refreshes
     a record the selection could not have known was stale."""
     if not argv or argv[0] != "verdict":
-        print("usage: rollcensus verdict [--full]", file=sys.stderr)
+        print("usage: rollcensus verdict [full]", file=sys.stderr)
         return 2
     path = os.environ.get(_census.ENV)
     if not path:
@@ -274,7 +274,10 @@ def main(argv: list[str], root: Path | None = None) -> int:
     renders_ok = {ln.strip() for ln in rfile.read_text(encoding="utf-8").splitlines() if ln.strip()} if rfile.is_file() else set()
     from tests import rolls  # the roster lives beside the tests it governs (spec D1)
 
-    full = "--full" in argv
+    # A POSITIONAL WORD, NOT A FLAG (feature 215): the ci parser owns `--full` (feature 130) and ate it, so the verdict
+    # ran every gate with `full=False` and the stale-row rule never fired - found when two rows left behind on purpose
+    # came up green. Feature 207's `incremental plan full` met the same trap the same way.
+    full = "full" in argv[1:]
     failures, lines = judge(read(Path(path)), rolls, full=full, renders_ok=renders_ok, engine_changed=full or engine_changed(root))
     print("\n".join(lines))
     if failures:

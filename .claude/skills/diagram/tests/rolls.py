@@ -150,12 +150,7 @@ ROLLS: tuple[Roll, ...] = (
         "the woodland shrink ladder walked on a real site (23 unique lines)",
         "rollcache.keyed_to, a child roll (test_woodland_shrink_147)",
     ),
-    Roll(
-        HamletSpec(name="Retry", seed=4, households=10),
-        "the re-roll loop: a stranded farmhouse forbids its ground on the second attempt (2 attempts by design)",
-        "rollcache.keyed_to, a child roll (gate test_driver)",
-    ),
-    Roll(HamletSpec(name="NoHelp", seed=4, households=10), "the re-roll loop: a re-roll that helps nothing is not kept (3 attempts by design)", "rollcache.keyed_to, a child roll (gate test_driver)"),
+    # Retry and NoHelp LEFT the roster at feature 215: the re-roll loop's decisions run on stand-in stages in the worker (tests/gate/hamletgen/test_driver.py, a stub InProcess module)
 )
 
 DUPLICATES: tuple[Duplicate, ...] = ()  # none since feature 215: the fan-out's pool child runs a stub producer, the child-equality proof is retired, the cache round trip runs on the sweep's entry

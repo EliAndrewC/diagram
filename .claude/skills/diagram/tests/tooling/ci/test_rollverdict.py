@@ -222,7 +222,7 @@ def test_main_reads_the_census_and_the_renders_file_and_judges_against_the_real_
     pathlib.Path(rollverdict.renders_file(str(census))).write_text("tests/settlement/test_finish.py::t\n")
     assert rollverdict.main(["verdict"]) == 0, capsys.readouterr().out
     assert "roll census: green" in capsys.readouterr().out
-    assert rollverdict.main(["verdict", "--full"]) == 1, "the real roster has more rows than this one roll: stale on a full run"
+    assert rollverdict.main(["verdict", "full"]) == 1, "the real roster has more rows than this one roll: stale on a full run"
     assert "ROLL CENSUS FAILED" in capsys.readouterr().out
 
 
@@ -267,3 +267,12 @@ def test_a_roll_no_test_requested_is_the_floor_s_and_fails() -> None:
     failures, lines = rollverdict.judge([floor], _roster(("Polder", 12)), full=False, renders_ok=set(), engine_changed=False)
     assert failures == [] and any("allowed: no engine file changed" in ln for ln in lines)
     assert rollverdict.judge([_roll("Polder", 12, "tests/gate/p.py::t", "r1")], _roster(("Polder", 12)), full=True, renders_ok=set())[0] == []
+
+
+def test_a_roster_row_whose_only_rolls_are_stand_ins_is_stale_on_a_full_run() -> None:
+    """Feature 215 moved the re-roll loop onto stand-in stages and left its two roster rows behind for one gate; the
+    stand-in records are excused from the count, so on a full run the rows had no real roll and must read as stale."""
+    stub = types.SimpleNamespace(module="tests/gate/hamletgen/test_driver.py", reason="stand-in stages", stub=True)
+    rows = [_roll("Retry", 4, "tests/gate/hamletgen/test_driver.py::t", "r1", pid=W, dt=0.01)]
+    failures, _ = rollverdict.judge(rows, _roster(("Retry", 4), in_process=(stub,)), full=True, renders_ok=set())
+    assert any("stale" in f and "Retry seed=4" in f for f in failures), failures

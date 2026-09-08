@@ -439,3 +439,19 @@ def test_a_data_file_is_hashed_from_THIS_tree_not_from_the_recorded_path(monkeyp
     before = gencache.key_for(b"s", deps)
     data.write_text("two", encoding="utf-8")
     assert gencache.key_for(b"s", deps) != before, "the key must follow THIS tree's data file"
+
+
+def test_run_gen_child_runs_the_gen_by_name_in_the_roll_child_and_returns_its_record(monkeypatch) -> None:
+    """Feature 213: the regen site's gen runs in the roll cache's child, by the module-level target; feature 215 took the
+    immune test's perturbation out of it. The child is faked here; the real child is proven in tests/pipeline/test_rollcache.py."""
+    from l7r.diagram.pipeline import rollcache
+
+    asked: list[tuple[str, object]] = []
+
+    def fake_child(target: str, arg: object) -> tuple[None, dict[str, object]]:
+        asked.append((target, arg))
+        return None, {"functions": [["f", "x"]], "files": []}
+
+    monkeypatch.setattr(rollcache, "_in_child", fake_child)
+    assert gencache.run_gen_child("/pool/x.gen.py") == {"functions": [["f", "x"]], "files": []}
+    assert asked == [("l7r.diagram.pipeline.gencache:_run_gen_arg", "/pool/x.gen.py")]
