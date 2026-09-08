@@ -184,3 +184,8 @@ count is measured; the long rolls start first and their concurrency is capped; i
   name), in the context, the closure file and the dependency graph alike (`ci/selection.fixture_id`).
   A defect in 207's own granularity, found because the census made the roll count visible, fixed here
   under Principle XIV.
+- **D10 - a floor roll with no engine change against the baseline is a refresh, not a missed roller.** The
+  probe's revert left the roll cache holding the edited polder rolls while the baseline said nothing had
+  changed, so no test could be selected and the floor rolled both subjects to refresh their records - the
+  only way they could be. The verdict reads the incremental plan: a floor roll FAILS on a full run or when
+  an engine file changed (the selection missed the roller), and is reported as allowed otherwise.

@@ -29,8 +29,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
       research R4
       research: rendering
       verify: DONE. DONE. Research R4: four full test phases on identical content (commit eebdf8d57) - 4/6/8 workers at cap 4: 346/301/322 s pytest; cap 2 at 8 workers 391 s, cap 8 297 s; the 10% rule picks 6 workers (XDIST_WORKERS default 6, R4 states the numbers), the cap stays 4. The pool sweep's gate_obtain child sampled at 50 ms: 131 MiB peak RSS (the 550 MB of R3 predates feature 208 and does not reproduce; nothing to act on). Roll children 180-183 MiB. The census after: 25 rolls of 21 specs warm, 30 of 23 cold
-- [ ] T09 the record (FR-013); `make done` green; SC-001 read off the census; land GATED
+- [x] T09 the record (FR-013); `make done` green; SC-001 read off the census; land GATED
       research: rendering
+      verify: DONE. DONE. The record: tests/CLAUDE.md, pipeline/CLAUDE.md, dev/loop.md, dev/performance.md, root CLAUDE.md, the roster's own docstring, research R4 (before/after, the worker and cap table, FR-008, the four T10 measurements), spec D6-D10. make done green on 2026-09-08 (full, 3426 passed, 100% both floors, roll census green: 29 rolls of 23 specs cold / 24 of 21 warm against 37 of 14 before; SC-001 read off the verdict). Landing GATED (remote off: LOCAL-GATED on the green local done)
 - [x] T11 the first gated census read and acted on (D6, D7): the process in the roll key, the three sites
       that roll again by their nature stated, the stub modules bounded, the pool gens their own kind, the
       perf-profile seed; a second full run green on the census
