@@ -1377,7 +1377,8 @@ test-full:      ## [tests] the gate's whole test phase + all three coverage floo
 # target is NOT one. `soak` is the standard
 # term for the thing this actually is: the same code held under realistic load for an extended run.
 soak:           ## [tests] the tier ABOVE the gate, run by nothing ordinary (constitution VI v2.23.0): the tests that roll more than the floor needs; REFUSES when empty rather than reporting a vacuous green and larger maps (tests/soak/)
-	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
+	@: "GUARD_EDIT_OK: adding an operation knob (feature 216) - SOAK_DIR lets the vacuous-green test prove the refusal on an EMPTY fixture; the gate must never run the real soak tier (constitution VI v2.23.0), and it did the first time the tree had content" ; \
+	n=$$(ls $(SOAK_DIR)/*.py 2>/dev/null | wc -l); \
 	if [ "$$n" -eq 0 ]; then \
 	  : "GUARD_EDIT_OK: the rest of the sweep -> soak rename (see the block comment above this target)" ; \
 	  printf '\n\033[1mmake soak: the soak suite is EMPTY, so there is nothing to prove.\033[0m\n\n'; \
@@ -1389,8 +1390,12 @@ soak:           ## [tests] the tier ABOVE the gate, run by nothing ordinary (con
 	  printf 'it does not change coverage) and the honest statement of when this tier earns its keep.\n\n'; \
 	  exit 1; \
 	fi; \
-	$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/soak \
+	$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(SOAK_DIR) \
 	  && $(STATE) green-local soak
+# GUARD_EDIT_OK: feature 216 - the soak tree, overridable so a tooling test can hand the target an EMPTY directory and
+# prove the refusal without running the real tier from inside the gate (the roll census caught exactly that: Cohort-43
+# rolled by test_make_soak_refuses... the first time tests/soak/ held a test). Never set it in an ordinary run.
+SOAK_DIR ?= tests/soak
 
 # A DESELECTED TEST TAKES ITS COVERAGE WITH IT, so the reference scope CANNOT hold the 100% floor
 # (measured 2026-08-24, the first green-path run of this restructure). Deselecting
