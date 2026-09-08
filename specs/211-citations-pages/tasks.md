@@ -33,3 +33,18 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Every task is `research:
 - [x] T10 `make page-check` green, `make done` green (FR-008, SC-005); SC-001 and SC-002 checked in a browser from disk; land GATED
       research: rendering
       verify: DONE. DONE. make done green on the merged content (506 s; a later run short-circuited as already verified), make page-check green (677 passed) after the asset edits; SC-001: homesteads.html 157,538 -> 101,225 bytes (the spec's 'at most 100 KB' was arithmetic that missed the references growing by the citations page's path, ~25 bytes each - the page lost its 58.9 KB of notes and gained 2.6 KB of longer references), citations/homesteads.html 130 KB with its works list and 88 notes; SC-002 checked in Chromium from disk: hovering footnote 1 shows the Kashima quote in the box with its glossary term wrapped, the click lands on citations/homesteads.html#fn-1, the back link returns to #fnref-1, no page errors; landing GATED
+
+## The GM's downloads (2026-09-08: "I have added those 5 downloads to the academic-sources/ folder so please take a look")
+
+- [ ] T11 satoyama: the three claims on `geography-hub-satoyama` (leaf litter gathered for fertilizer; oak and chestnut cut on a cycle; cutting to the stump lets light onto the floor) re-sourced to Takeuchi 2010 (Ecological Research) and Jiao et al. 2019 (Sustainability), read from the GM's copies; the blog key retired to Not cited
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+- [ ] T12 fengshui groves: `yuan-liu-2009` read in full from the GM's copy - the two-parcels-per-village count and any grove areas quoted from the body, the 133 ha Letu figure kept as the paper's secondhand citation of Guan 2002
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+- [ ] T13 night soil: Tajima 2007 (Environnement Urbain) read from the GM's copy - the household contracts paid in rice and the farmers' payments in kind to the estates quoted from the scholarship rather than from the magazine's retelling
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+- [ ] T14 the record: registry entries for the new keys with their two write-ups, `make citations`, the tests, page-check, push
+      research: rendering
+
