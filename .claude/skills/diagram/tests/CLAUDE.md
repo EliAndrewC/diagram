@@ -16,6 +16,7 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 | `tests/full/` | **a plain `make done`** (feature 174 - its test phase IS `test-full`), `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. Since feature 174 a PLAIN `make done` enforces the coverage floors too - the deferral is gone, and this row's old "`make done`: no - deferred" is what that feature closed. The floors enforced here are all three - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
 | `tests/tooling/` | the gate and the full run; quick ONLY when the tooling changed since the last green gate; skipped at the gate too while it is unchanged (never in FULL) | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
 | `tests/tier_town/`, `tests/tier_city/` | the gate and the full run | it is relevant to that tier only |
+| `tests/soak/` | **no ordinary run** (`norecursedirs`); `make soak` names it - the CI or AWS tier, not a kind of test run today (GM 2026-09-08) | it rolls MORE than the gate's floor strictly needs - a behavior asserted on a real map that no coverage line requires (constitution VI, feature 216); today: the seed-43 kink's strict xfail |
 
 ## WHICH TARGET RUNS WHICH TREE - the table above read the other way round
 
@@ -101,8 +102,9 @@ allow the same hamlet to be rolled twice within the tests and also to have some 
 adding another hamlet that gets rolled."* So:
 
 - **`tests/rolls.py` is the roster.** Every spec the gate may roll, with the unique coverage or emergent
-  condition it carries - NINE rows since feature 215, the packing record's floor (`rolls.COVERAGE`, `rolls.REFERENCE`,
-  `rolls.KINK` are the names to read). The reference and Kuwabata are the POOL's maps: every gate reader takes them
+  condition it carries - THREE rows since feature 216 (`rolls.COVERAGE`, `rolls.REFERENCE`, `rolls.SEATINGS` are the names
+  to read): the gate rolls only what 100% coverage strictly needs, `make roll-audit` measures it per roll, and a
+  test that rolls more belongs in `tests/soak/` (constitution VI v2.23.0). The reference and Kuwabata are the POOL's maps: every gate reader takes them
   through `tests/gate/_pool.py` (`rolled_map`, `rolled_report` - the sweep's entry, served warm, rolled cold once
   under a per-gen lock), so the gate's one roll of the reference is the immune experiment's perturbed one. A rolling test's spec must be there; the roll census fails the gate otherwise and
   says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's

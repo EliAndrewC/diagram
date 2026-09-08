@@ -584,6 +584,15 @@ FR-006, five items, each raised with the GM. What did NOT pack: seed 43's kink, 
 its own local fabric (the router's route depends on more of the map), so the seed stays as the open defect's
 carrier.
 
+**AND THEN THE DOCTRINE (feature 216, the same day).** The GM: *"Not only should we do that here, we should always
+do that for the make done tests"* - the gate rolls only what 100% coverage strictly needs; a test that rolls
+more belongs in the tier above the gate (`tests/soak/`), which no ordinary run collects. The four rolls 215 had
+priced went: the woodland band on the stub site, the pond clamp as a decision, Polder 19's two tests onto Polder
+12, the three seatings onto ONE partial roll (the stages before the homestead pass once, three copies, each
+seating followed by the track). And seed 43's kink - the one gate roll with no coverage line - is the soak tier's
+first test. **Three rows, three rolls.** `make roll-audit` is the audit that answered every one of the GM's three
+questions this week, as a command for the next tier: per roll, the engine lines nothing else reaches.
+
 ## A TIMING FROM THIS BOX IS NOT A TIMING - THE CORES ARE NOT THE SAME SPEED (measured 2026-08-31)
 
 The GM asked why our map rolls do not parallelize, and correctly ruled out the obvious answer:

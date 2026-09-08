@@ -33,8 +33,11 @@ THREE KINDS OF ENTRY BESIDES A ROLL, each a stated exception the verdict prints 
   child-equality proof; a `stub=True` module runs STAND-IN stages and rolls no map (the stage tests, and since
   feature 214 the perf tests) - its records are reported and bounded (`rollverdict.STUB_MAX_S`), never counted.
 
-THE NUMBER (feature 215, GM 2026-09-08: *"are you really, truly not able to combine?"*): NINE rows, nine rolls
-on a warm gate, no duplicates - the packing record's floor. The reference and Kuwabata are read from the POOL's
+THE NUMBER (feature 216, GM 2026-09-08: *"the make done tests are trying to minimize the number of map rolls and are
+doing only what is strictly necessary in order to reach one hundred percent code coverage"*): THREE rows, three rolls
+on a warm gate, no duplicates, every row carrying engine lines nothing else reaches (`make roll-audit` measures it).
+A test that rolls more than that belongs in `tests/soak/`, the tier above the gate, which no ordinary run collects.
+Feature 215 had reached the packing record's nine; 216 traded the rest for unit tests and one shared partial roll. The reference and Kuwabata are read from the POOL's
 maps (the sweep rolls them cold, serves them warm; `tests/gate/_pool.py`), so the reference's one roll is the
 immune experiment's perturbed one; the re-roll loop runs on stand-in stages; the fan-out's pool child runs a
 stub producer; the child-equality proof is retired; the cache round trip runs on the sweep's entry. Seed 43 stays
@@ -48,7 +51,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from l7r.diagram.hamletgen import HamletSpec
-from l7r.diagram.hamletgen.driver import cohort_specs
 
 
 @dataclass(frozen=True)
@@ -93,9 +95,12 @@ class PoolGen:
 REFERENCE = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1})  # THE POOL'S BRIEF (feature 215 D1)
 KUWABATA = HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
 POLDER_FALL_0 = HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0)
-POLDER_FALL_90 = HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90)
-COVERAGE: tuple[HamletSpec, ...] = (REFERENCE, KUWABATA, POLDER_FALL_0, POLDER_FALL_90)
-KINK = cohort_specs(1, first_seed=43)[0]  # the one open defect's carrier (research R2b of feature 166; the 214 probe found no other)
+COVERAGE: tuple[HamletSpec, ...] = (REFERENCE, KUWABATA, POLDER_FALL_0)  # Polder 19 left at feature 216: no line of its own (215 R1)
+# THE SEATINGS' PARTIAL ROLL (feature 216): the stages before the homestead pass once, then the three seatings on copies of
+# that state - the cloud alone, the lane frontage alone, the one-household stop - each followed by the track; one roll,
+# its variants the census's "attempts". The spec is the linear one LaneOnly and OneHouse need; the cloud's assertions hold
+# on it too (specs/216 research R1's probe).
+SEATINGS = HamletSpec(name="Seatings", seed=5, households=10, settlement_form="linear")
 
 ROLLS: tuple[Roll, ...] = (
     # THE REFERENCE AND THE POOL
@@ -112,45 +117,12 @@ ROLLS: tuple[Roll, ...] = (
         "the polder grid at fall 0: 13 unique lines; the reservoir that must WALK back from the crop (an emergent condition - seeds 8, 19, 22 clear first try)",
         "rollcache.hamlet - one shared child roll",
     ),
+    # THE SEATINGS (feature 216): one partial roll in a child serving the three seating tests (tests/gate/hamletgen/test_homesteads.py)
     Roll(
-        POLDER_FALL_90,
-        "the polder grid at fall 90: the inner splice-refusal branch of the web (one line, recorded as the weak ratio, kept)",
-        "rollcache.hamlet - one shared child roll",
+        SEATINGS,
+        "the three seatings on one partial state: the cloud alone (185 lines shared only among the three), the lane frontage alone, the frontage stopping at one household - each followed by the track, whose connector the frontage seats along",
+        "rollcache.keyed_to on roll_seatings, a child (test_homesteads) - the variants are the roll's attempts",
     ),
-    # THE ONE OPEN DEFECT (feature 214 packed the cohort seeds 41, 42 and 44 away: the ratchet and the lane rules read the
-    # coverage rolls above; seed 42 alone was three attempts and the gate's longest roll)
-    Roll(
-        KINK,
-        "cohort seed 43: the strict expected failure - the routed footpath's kink round a house corner at (991, 188); the 214 probe found no coverage map that carries it, so the xfail has no other reader",
-        "rollcache.hamlet - one shared child roll (gate test_cohort_lane_rules)",
-    ),
-    # THE EMERGENT CONDITIONS - each pins a seed because some condition must HOLD, not because a knob is set
-    Roll(
-        HamletSpec(name="CloudOnly", seed=7, households=10),
-        "both row passes silenced: the cloud must seat the hamlet alone (185 lines shared only with LaneOnly/OneHouse, and a different assertion)",
-        "rollcache.keyed_to, a child roll (test_homesteads)",
-    ),
-    Roll(
-        HamletSpec(name="LaneOnly", seed=5, households=10, settlement_form="linear"),
-        "the field row silenced on a linear hamlet: the frontage pass must seat it",
-        "rollcache.keyed_to, a child roll (test_homesteads)",
-    ),
-    Roll(
-        HamletSpec(name="OneHouse", seed=5, households=10, settlement_form="linear"),
-        "households cut to 1 after planning: the frontage pass must STOP once housed (the spec name sets the placard width, so it is a different map from LaneOnly)",
-        "rollcache.keyed_to, a child roll (test_homesteads)",
-    ),
-    Roll(
-        HamletSpec(name="Clamped", seed=23, households=12, water_sink="pond"),
-        "a pond set-back the canvas cannot give: the fallback to draining off-map (28 unique lines)",
-        "rollcache.keyed_to, a child roll (test_sink)",
-    ),
-    Roll(
-        HamletSpec(name="Woodland-shrink", seed=4, households=10, down_deg=90),
-        "the woodland shrink ladder walked on a real site (23 unique lines)",
-        "rollcache.keyed_to, a child roll (test_woodland_shrink_147)",
-    ),
-    # Retry and NoHelp LEFT the roster at feature 215: the re-roll loop's decisions run on stand-in stages in the worker (tests/gate/hamletgen/test_driver.py, a stub InProcess module)
 )
 
 DUPLICATES: tuple[Duplicate, ...] = ()  # none since feature 215: the fan-out's pool child runs a stub producer, the child-equality proof is retired, the cache round trip runs on the sweep's entry

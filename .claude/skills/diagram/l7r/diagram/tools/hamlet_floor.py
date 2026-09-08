@@ -70,9 +70,7 @@ def subjects() -> list[Any]:
         hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}),  # the pool's brief
         hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"),
         hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0),
-        hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90),
-        *hg.driver.cohort_specs(1, first_seed=43),
-    ]
+    ]  # Polder 19 and seed 43 left at feature 216: no coverage line of their own (215 R1); the seatings' partial roll is keyed to its test, not a subject here
 
 
 def hamlet_path_files(records: Iterable[dict[str, Any]]) -> list[str]:

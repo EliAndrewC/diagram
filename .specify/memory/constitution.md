@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.21.0 → 2.22.0
+Version change: 2.22.0 → 2.23.0
+
+Version 2.23.0 (amended 2026-09-08, feature 216): Principle VI gains "THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS"
+- the `make done` tests minimize the number of map rolls and roll only what is strictly necessary to reach 100%
+coverage; a test that rolls more than that belongs in the tier above the gate (`tests/soak/`, the CI or AWS
+tests), which is not a kind of test run today and is where such a test goes if one is ever made. The GM's words,
+verbatim, on the day the roll count went from 37 to 3 (features 213-216). MINOR.
 
 Version 2.22.0 (amended 2026-09-07, feature 211): Principle XII gains "A SOURCE IS JUDGED BEFORE IT IS
 USED" - every cited work's registry entry says what it is and why it applies with its honest limitations
@@ -720,6 +726,17 @@ artifacts. Specifically:
   nothing runs outside make, per feature 127). **100% line coverage on
   everything** - not a target and not opt-in (GM 2026-09-02). External boundaries are tested via saved fixtures, not via
   transport-layer mocks.
+- **THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS** (v2.23.0, GM 2026-09-08, feature 216): *"the make done tests
+  are trying to minimize the number of map rolls and are doing only what is strictly necessary in order to
+  reach one hundred percent code coverage. the correct place for the kind of test in which we make more map
+  rolls than are strictly necessary is in the AWS tests. or the CI tests if we want to speak of it
+  generically. Currently, that is not a type of test that we actually run, but that is the correct place for
+  that type of test if we ever decide to create it."* So a gate roll exists for engine lines nothing else
+  reaches - `make roll-audit` measures that per roll off the gate's own coverage baseline, and the roll
+  census (feature 213) enforces the roster it produces; a behavior asserted on a real map that no coverage
+  line requires is a unit test of the placer that decides it, or a test in `tests/soak/`, the tier above
+  the gate, which no ordinary run collects. The count on the day this was written: 37 rolls of 14 hamlets at
+  the start of feature 213, 3 of 3 after 216.
 - **Maps**: a Mode B map is reviewed by `settlement-review` and a Mode A
   plan by `building-review` + `size-audit` before it ships (the author is
   not a reliable reviewer of their own visual output); `review-gate.sh`
@@ -2164,4 +2181,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.21.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-07
+**Version**: 2.23.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-08

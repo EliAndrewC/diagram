@@ -38,7 +38,7 @@ def test_module_set_asks_the_records_for_every_fixed_subject() -> None:
         return _deps("l7r/diagram/hamletgen/plan.py")
 
     assert hf.module_set(deps_for) == ["l7r/diagram/hamletgen/plan.py"]
-    assert seen == ["Inashiro", "Kuwabata", "Polder", "Polder", "Cohort-43"]  # the plain shared rolls (feature 214); seed 8 dropped at 192 FR-007, seeds 41/42/44 at 214
+    assert seen == ["Inashiro", "Kuwabata", "Polder"]  # the plain shared rolls: the first two the POOL's maps since 215; Polder 19 and seed 43 left at 216, seeds 41/42/44 at 214, seed 8 at 192
 
 
 def _measure(tmp_path: Path, body: str, call: str) -> tuple[str, str]:

@@ -4,7 +4,7 @@
 deleted (a fifth roll can never be strictly necessary for a spec with no unique line); FR-005 d states the loss
 the collapse causes; the amendment is 2.23.0 and corrects the footer. Round 2 required two changes, applied: seed 43 - the one gate roll carrying no coverage line - leaves the
 gate roster for the CI tier's tree under the very clause this feature writes (FR-002 e, FR-005 e); the woodland
-band's site is stated as the stub the probe settled on (FR-002 a, FR-005 a). Round 3 pending (constitution XVI).
+band's site is stated as the stub the probe settled on (FR-002 a, FR-005 a). Round 3: FAITHFUL (the reviewer's aside on the tree's name taken: `tests/soak/`, D4).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - the four cuts' sites, the
 feasibility probes, the count after.
 **Predecessors**: 215 (the floor itself: 9 rolls of 9; its R1 audit and the four cuts it priced and left), 214,
@@ -44,9 +44,9 @@ test goes if one is ever made.
   `hinterland/stages.py`; R1) become direct unit tests, the gate's floor naming any the count missed.
   (e) Seed 43: its eight unique lines became unit tests in feature 215 and its only remaining reason is the
   strict xfail over the open kink defect - a roll that carries no coverage line, which is exactly what the
-  clause of FR-003 assigns to the CI tier. So it leaves the gate roster: the xfail moves to `tests/ci/`, the
-  CI tier's tree, which no target runs today (`tests/CLAUDE.md` names it as the place), and the defect stays
-  recorded in the research (feature 166 R2b) and in that test.
+  clause of FR-003 assigns to the CI tier. So it leaves the gate roster: the xfail moves to `tests/soak/`, the
+  tier above the gate this project declared empty on 2026-09-05, which no ordinary run collects (`norecursedirs`;
+  `make soak` names it) - D4 - and the defect stays recorded in the research (feature 166 R2b) and in that test.
 - **FR-003 The doctrine, in the guidelines.** Constitution Principle VI gains the clause, in the GM's words:
   the `make done` tests minimize the number of map rolls and roll only what is strictly necessary to reach 100%
   coverage; a test that rolls more than that belongs in the CI tier (the AWS check), which is not a kind of test
@@ -85,5 +85,8 @@ test goes if one is ever made.
   feature 210 demands it), so the census counts it as one roll with its own roster row - the three seatings'
   runs in the same child are its attempts, not rolls of their own; that is the honest count, and it is why the
   three seatings become one.
+- **D4 - the CI tier's tree is `tests/soak/`, not a new `tests/ci/`.** The reviewer's aside stood: `tests/ci/` would
+  read as the tests of `l7r/diagram/ci/` under the mirror rule, and the project had already declared the tier above
+  the gate as `tests/soak/` (2026-09-05, deliberately empty until a test for it existed). Seed 43's xfail is its first.
 - **D3 - the audit is a tool, not a script beside a spec.** A tool owes 100% coverage and a place in the command
   map; that cost is what makes it a command the next tier can run rather than a file someone must find.

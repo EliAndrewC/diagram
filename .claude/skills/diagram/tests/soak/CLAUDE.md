@@ -1,9 +1,11 @@
 # `tests/soak/` - the tier ABOVE the gate
 
-**This directory is deliberately EMPTY.** It is not an oversight and it is not a stub waiting to be
-filled in by whoever notices it next. It is the declared home of a tier of testing this project wants
-and does not yet have, kept as structure so that when the work arrives there is no argument about
-where it goes.
+**This directory holds the tests that roll MORE than the gate's floor strictly needs** (constitution VI
+v2.23.0, GM 2026-09-08, feature 216: *"the correct place for the kind of test in which we make more map
+rolls than are strictly necessary is in the AWS tests. or the CI tests"*). It was declared empty on
+2026-09-05 as the home of a tier this project wants and does not yet run; its first test arrived with feature
+216 - the seed-43 kink's strict xfail, a roll that carried no coverage line and so could not stay in the gate.
+The tier is still not RUN by anything ordinary; `make soak` runs it by hand.
 
 **Nothing here is collected by any ordinary run** - not `make quick`, not `make done`, not
 `make test-full`. The deselection is one line, `norecursedirs` in the skill's `pyproject.toml`,

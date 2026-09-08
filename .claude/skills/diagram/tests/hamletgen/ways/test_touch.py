@@ -266,3 +266,16 @@ def test_a_splice_that_would_fold_a_straight_piece_is_refused_from_either_end() 
         _join_piece(s, lanes, 0, way, v, link, [], posts, [], [])
         assert lanes[0]["pts"] == [list(p) for p in way], f"the fold at {v} must be refused: the piece stays as it was ({lanes[0]['pts']})"
         assert len(s.M["lanes"]) == before + 1, "and the link is still drawn as its own lane"
+
+
+def test_a_link_leaving_an_interior_vertex_is_always_drawn_as_its_own_lane() -> None:
+    """`_join_piece`'s third branch: a link whose foot is neither end of the piece cannot be spliced (a splice extends an
+    end), so it is drawn as a lane of its own whatever its shape. Asserted directly (feature 216)."""
+    from l7r.diagram.hamletgen.ways.touch import _join_piece
+
+    way = [(0.0, 0.0), (50.0, 0.0), (100.0, 0.0)]
+    s = _StubSettlement(lanes=[[(500.0, 500.0), (600.0, 500.0)]])
+    lanes = [{"pts": [list(p) for p in way], "w": 5}]
+    before = len(s.M["lanes"])
+    _join_piece(s, lanes, 0, way, (50.0, 0.0), [(50.0, 0.0), (50.0, 60.0)], [], [], [], [])
+    assert lanes[0]["pts"] == [list(p) for p in way] and len(s.M["lanes"]) == before + 1

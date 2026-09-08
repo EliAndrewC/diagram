@@ -364,3 +364,43 @@ def test_the_belt_is_one_band_rather_than_scattered_pieces() -> None:
     assert belt, "even a gapped cluster gets a belt"
     xs = [p[0] for p in belt]
     assert max(xs) - min(xs) > 800.0, "the belt spans the whole ragged fringe rather than one lobe of it"
+
+
+def test_the_woodland_shrink_ladder_keeps_every_parcel_inside_the_band_and_above_the_floor() -> None:
+    """THE PARCEL BAND, on the stub site (feature 216; until then a rostered roll, `Woodland-shrink` seed 4, whose lines
+    the audit found reached by nothing it alone did - 215 R1). Sweep the asked sizes and demand every parcel that comes
+    back is no larger than the ladder-and-roll ceiling and no smaller than the commons floor.
+
+    THE CEILING IS 1.10 x 1.15 (feature 147): the first rung is `size * _ladder` where `_ladder = 0.90 + 0.20 * jitter`
+    reaches 1.10, and a per-parcel size roll of +/-15% sits on top of it - the old assertion `max(w, h) <= asked` had
+    never been promised and had never run (the site it used returned zero parcels). What this no longer proves, stated
+    (specs/216 FR-005 a): the band on a ROLLED site; the ladder's own decisions are pinned above, and the site here is
+    the one the scan tests use. The control assertion guards the vacuous case that hid the false claim for three features."""
+    from l7r.diagram.hamletgen.hinterland import _COMMONS_FLOOR_FT, open_ground_patches
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["fields"] = []
+    plan.belt = []
+    ceiling = 1.10 * 1.15
+    widest: list[tuple[float, float]] = []
+    for asked in range(120, 720, 40):  # from the commons floor up: below it the floor is the asked size's own, not the commons'
+        for poly in open_ground_patches(s, plan, 3, size=float(asked)):
+            w = max(p[0] for p in poly) - min(p[0] for p in poly)
+            h = max(p[1] for p in poly) - min(p[1] for p in poly)
+            widest.append((float(asked), max(w, h)))
+    assert widest, "no parcel came back at ANY asked size - this test would assert nothing"
+    for asked, got in widest:
+        assert got <= asked * ceiling, f"a parcel came back {got / asked:.2f}x the asked size, past the ladder-and-roll band ({got:.0f} for {asked:.0f})"
+        assert got >= _COMMONS_FLOOR_FT, f"a parcel came back at {got:.0f} px, under the {_COMMONS_FLOOR_FT:.0f} ft floor"
+
+
+def test_the_windbreak_stage_draws_nothing_when_the_plan_has_no_belt() -> None:
+    """`stage_windbreak`'s first return (feature 216): a plan whose belt is empty - a linear hamlet after the frontage
+    pass, or any site the belt derivation refused - draws no grove and records none."""
+    plan = a_plan()
+    plan.belt = []
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    before = dict(s.M.get("village_groves", [])) if isinstance(s.M.get("village_groves"), dict) else list(s.M.get("village_groves", []))
+    hinterland.stage_windbreak(s, plan)
+    assert list(s.M.get("village_groves", [])) == list(before), "no belt, no windbreak"

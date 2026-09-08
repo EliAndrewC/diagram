@@ -695,7 +695,7 @@ print('\033[1mFeature numbers claimed\033[0m ('+str(p)+' - make claim, feature 1
 [print(f\"  {r.get('utc','?'):<20} {r.get('number',0):>4}  {r.get('slug','?'):<40} {r.get('clone','?')}\") for r in rows[-10:]] or print('  (none yet - every claim made by make claim lands here)'); \
 print(f'  {len(rows)} claims recorded') if rows else None; print()"
 	@: "GUARD_EDIT_OK: feature 213 - the roster's size IS the recorded roll count (FR-004); a reader asks the audit, not a memory" ; \
-	python3 -c "from tests import rolls; print('\033[1mHamlets the gate may roll\033[0m (tests/rolls.py, feature 213 - one roll each per gate, enforced by the roll census)'); [print(f'  {r.spec.name:<16} seed={r.spec.seed:<3} {r.carries[:96]}') for r in rolls.ROLLS]; print(f'  {len(rolls.ROLLS)} rostered rolls; {len(rolls.DUPLICATES)} stated duplicate(s); {len(rolls.POOL_GENS)} pool gen(s), rolled only when their key moved; {len(rolls.IN_PROCESS)} in-process exception(s)'); print()"
+	python3 -c "from tests import rolls; print('\033[1mHamlets the gate may roll\033[0m (tests/rolls.py, feature 213 - one roll each per gate, enforced by the roll census)'); [print(f'  {r.spec.name:<16} seed={r.spec.seed:<3} {r.carries[:96]}') for r in rolls.ROLLS]; print(f'  {len(rolls.ROLLS)} rostered rolls; {len(rolls.DUPLICATES)} stated duplicate(s); {len(rolls.POOL_GENS)} pool gen(s), rolled only when their key moved; {len(rolls.IN_PROCESS)} in-process exception(s)'); print('  make roll-audit: the engine lines each roll alone reaches (feature 216)'); print()"
 
 # GUARD_EDIT_OK: THE TARGET REFERENCE GENERATES ITSELF (GM 2026-09-05). Two hand audits of the target
 # list disagreed with each other - the first declared everything valid and was contradicted the moment
@@ -953,6 +953,10 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # runs spent discovering that `_in_blocked` had already refused the seat the byre and garden tests meant to
 # have refused one line further down. This asks the same question in about a second. Serial (-n0) on purpose:
 # xdist's coverage combine is the slow half, and one file does not need workers.
+roll-audit:     ## [tests] per rolling context of the gate baseline, the engine lines NO other context reaches   MIN_LINES=2000 (the tier knob)
+	@: "GUARD_EDIT_OK: feature 216 - the audit that answered 'are you really not able to combine?' is a command now, for any tier" ; \
+	$(RUN).tools.roll_audit --min-lines $(or $(MIN_LINES),2000)
+
 roll-census:    ## [tests] the roll census of the LAST test phase, judged against tests/rolls.py   FULL=1: a stale roster row counts
 	@: "GUARD_EDIT_OK: feature 213 - the census the gate wrote is re-read here, outside the gate: how SC-001 is checked and a red verdict re-read" ; \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),full,)
@@ -1372,7 +1376,7 @@ test-full:      ## [tests] the gate's whole test phase + all three coverage floo
 # with the lock in feature 185) - so a target of that name sat three lines from the guard asserting a
 # target is NOT one. `soak` is the standard
 # term for the thing this actually is: the same code held under realistic load for an extended run.
-soak:           ## [tests] {inactive: tests/soak/ is declared and deliberately empty, so this REFUSES rather than reporting a vacuous green} the tier ABOVE the gate: the same code over many seeds and larger maps (tests/soak/)
+soak:           ## [tests] the tier ABOVE the gate, run by nothing ordinary (constitution VI v2.23.0): the tests that roll more than the floor needs; REFUSES when empty rather than reporting a vacuous green and larger maps (tests/soak/)
 	@n=$$(ls tests/soak/*.py 2>/dev/null | wc -l); \
 	if [ "$$n" -eq 0 ]; then \
 	  : "GUARD_EDIT_OK: the rest of the sweep -> soak rename (see the block comment above this target)" ; \

@@ -6,49 +6,73 @@ SERVED FROM THE ROLL CACHE, KEYED TO EACH TEST'S OWN SOURCE (feature 135): every
 pass, so `rollcache.keyed_to` hashes the test function - where the patch lives - into the key beside the engine
 functions the roll executed. `produce` returns plain data; the assertions run on it served or fresh (15-30 s each)."""
 
+import contextlib
 from unittest import mock
 
 import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.pipeline import rollcache
-
-
-# ROLLED IN A CHILD (feature 213 FR-007): the produce closure is lifted to this module-level function - the
-# feature-146 doctrine - so the roll cache's child can import it by name; its patches are applied inside it.
-def roll_cloud_only() -> tuple[int, str, dict]:  # type: ignore[type-arg]
-    from l7r.diagram.hamletgen import homesteads as HS
-
-    with mock.patch.object(HS.stages, "front_row", lambda plan, count, standoff=46.0: []), mock.patch.object(HS.stages, "lane_frontage", lambda s, seat, step=86.0: []):
-        plan = hg.plan_site(hg.HamletSpec(name="CloudOnly", seed=7, households=10))
-        s = hg.build(plan)
-    return plan.placed, plan.cluster_shape, s.M["meta"]
-
-
-def roll_lane_only() -> tuple[int, int]:
-    from l7r.diagram.hamletgen import homesteads as HS
-
-    with mock.patch.object(HS.stages, "front_row", lambda plan, count, standoff=46.0: []):
-        plan = hg.plan_site(hg.HamletSpec(name="LaneOnly", seed=5, households=10, settlement_form="linear"))
-        s = hg.build(plan)
-    return plan.placed, len(HS.lane_frontage(s, plan.seat, connector=True))
-
-
-def roll_one_house() -> tuple[int, int]:
-    from l7r.diagram.hamletgen import homesteads as HS
-
-    with mock.patch.object(HS.stages, "front_row", lambda plan, count, standoff=46.0: []):
-        plan = hg.plan_site(hg.HamletSpec(name="OneHouse", seed=5, households=10, settlement_form="linear"))
-        object.__setattr__(plan.spec, "households", 1)  # frozen, and `replace` would re-run the band validator
-        s = hg.build(plan)
-    return len(s.M["houses"]), len(HS.lane_frontage(s, plan.seat, connector=True))
-
+from tests import rolls
 
 HERE_MOD = "tests.gate.hamletgen.test_homesteads"
 
 
+# ONE PARTIAL ROLL FOR THE THREE SEATINGS (feature 216, GM 2026-09-08: the gate rolls "only what is strictly necessary
+# in order to reach one hundred percent code coverage"). The stages before the homestead pass run once, in a child;
+# the state is copied three times and each seating runs with its patch - the cloud alone, the lane frontage alone, the
+# one-household stop - followed by the track, whose connector the frontage seats along (measured: the frontage offers
+# nothing until the track has drawn it). The three runs share the child's pid and request, so the census reads one
+# roll with four attempts. What this no longer proves, stated (specs/216 FR-005 d): the stages after the track on the
+# seated variants (their lines are unit tests), the cloud on a rolled NUCLEATED hamlet (it is asserted on the shared
+# linear state), and three distinct maps.
+def roll_seatings() -> dict[str, tuple]:  # type: ignore[type-arg]
+    import copy
+
+    from l7r.diagram.hamletgen import driver
+    from l7r.diagram.hamletgen import homesteads as HS
+    from l7r.diagram.settlement import Settlement
+
+    names = [st.__name__ for st in driver.STAGES]
+    cut, track = names.index("stage_homesteads"), names.index("stage_track")
+    plan = hg.plan_site(rolls.SEATINGS)
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s._avoid_seats = []  # type: ignore[attr-defined]
+    with driver.roll_scope(plan.spec):
+        for st in driver.STAGES[:cut]:
+            st(s, plan)
+
+    def seat(patches: dict[str, object], households: int | None = None) -> tuple:  # type: ignore[type-arg]
+        s2, p2 = copy.deepcopy(s), copy.deepcopy(plan)
+        if households is not None:
+            object.__setattr__(p2.spec, "households", households)  # frozen, and `replace` would re-run the band validator
+        with contextlib.ExitStack() as stack:
+            for name, fake in patches.items():
+                stack.enter_context(mock.patch.object(HS.stages, name, fake))
+            with driver.roll_scope(p2.spec):
+                driver.STAGES[cut](s2, p2)
+                driver.STAGES[track](s2, p2)
+        return s2, p2
+
+    silent_row = {"front_row": lambda plan, count, standoff=46.0, **kw: []}
+    silent_both = {**silent_row, "lane_frontage": lambda s, seat, step=86.0, **kw: []}
+    c_s, c_p = seat(silent_both)
+    l_s, l_p = seat(silent_row)
+    o_s, o_p = seat(silent_row, households=1)
+    return {
+        "cloud": (c_p.placed, c_p.cluster_shape, c_s.M["meta"]),
+        "lane": (l_p.placed, len(HS.lane_frontage(l_s, l_p.seat, connector=True))),
+        "one": (len(o_s.M["houses"]), len(HS.lane_frontage(o_s, o_p.seat, connector=True))),
+    }
+
+
+@pytest.fixture(scope="module")
+def seatings() -> dict[str, tuple]:  # type: ignore[type-arg]
+    return rollcache.keyed_to(roll_seatings, roll_seatings, child=f"{HERE_MOD}:roll_seatings")[0]
+
+
 @pytest.mark.rolls_map
-def test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing() -> None:
+def test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing(seatings: dict[str, tuple]) -> None:  # type: ignore[type-arg]
     """The front row + lane frontage seat every household on all four scripted hamlets, so the
     `cluster_seeds` CLOUD - the fallback behind them - runs on no real map. It got quieter still on
     2026-08-17, when `front_row` began sampling by bundle pitch instead of by household count.
@@ -57,7 +81,7 @@ def test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothin
     both row passes returning no seats, the cloud has to seat the hamlet by itself. This also pins
     the lean-toward-the-field transform (`ly = -wdep + (ly + wdep) * 0.75`), which is the only place
     that compression is applied."""
-    placed, cluster_shape, meta = rollcache.keyed_to(test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing, roll_cloud_only, child=f"{HERE_MOD}:roll_cloud_only")[0]
+    placed, cluster_shape, meta = seatings["cloud"]
     assert placed > 0, "with both row passes silent, every farmstead must come from the cloud"
     assert meta["cluster_seeding"] == "cloud"
     # THE INVARIANT IS A TRACE EITHER WAY, not an unconditional stamp (updated 2026-08-19). The
@@ -69,19 +93,19 @@ def test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothin
 
 
 @pytest.mark.rolls_map
-def test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing() -> None:
+def test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing(seatings: dict[str, tuple]) -> None:  # type: ignore[type-arg]
     """The lane-frontage pass seats the BACK RANK on a real map, but only the households past one
     rank's worth of the band - so on a small hamlet it can place very few, and for part of one day
     (while `front_row` sampled by density with no cap) it placed nothing at all and the cluster came
     out a single rank. Drive it directly, with the field row silent, so the code that puts a door on
     a lane is exercised whatever the cap leaves it."""
-    placed, offered = rollcache.keyed_to(test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing, roll_lane_only, child=f"{HERE_MOD}:roll_lane_only")[0]
+    placed, offered = seatings["lane"]
     assert placed > 0, "with the field row silent, the farmsteads must still be seated"
     assert offered, "a linear hamlet must be offered seats along the connector it fronts"
 
 
 @pytest.mark.rolls_map
-def test_the_linear_frontage_pass_stops_once_the_households_are_housed() -> None:
+def test_the_linear_frontage_pass_stops_once_the_households_are_housed(seatings: dict[str, tuple]) -> None:  # type: ignore[type-arg]
     """The connector offers more verge than the hamlet needs, and the pass must stop taking it.
 
     `lane_frontage` returns every seat the connector can carry, which is routinely more than there
@@ -99,6 +123,6 @@ def test_the_linear_frontage_pass_stops_once_the_households_are_housed() -> None
 
     `front_row` is silenced for the same reason as the test above - so the frontage pass is what
     seats the hamlet, rather than whatever the field row happens to leave it."""
-    houses, offered = rollcache.keyed_to(test_the_linear_frontage_pass_stops_once_the_households_are_housed, roll_one_house, child=f"{HERE_MOD}:roll_one_house")[0]
+    houses, offered = seatings["one"]
     assert houses == 1, "a one-household target gets one farmstead, however much verge is on offer"
     assert offered > 1, "the guard is only under test when more seats were offered than taken"

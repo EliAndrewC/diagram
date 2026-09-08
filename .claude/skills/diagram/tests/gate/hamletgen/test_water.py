@@ -8,6 +8,7 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import point_in_poly
+from tests import rolls
 from tests.gate import _pool
 
 # SERVED FROM THE ROLL CACHE (feature 135): each polder is ~50-100 s to roll and nothing here patches the engine,
@@ -24,7 +25,7 @@ def test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop() -> None:
 
     Seed 12 is chosen because it NEEDS the walk (one step at falls 0 and 180); seeds 3, 8, 19 and 22
     clear on the first try, so testing one of those would exercise nothing."""
-    plan, M = _pool.rolled_map(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
+    plan, M = _pool.rolled_map(rolls.POLDER_FALL_0)
     pond = M.get("pond")
     assert pond, "the polder's water source is its header reservoir"
     rim = [(pond[0] + pond[2] * math.cos(a), pond[1] + pond[3] * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
@@ -57,7 +58,7 @@ def test_a_polder_hamlet_draws_its_grid_dike_and_reservoir() -> None:
     it NEEDS the reservoir walk, and an assertion that passes because the pond never had to move looks
     identical to one that passes because the walk worked. Merging on assertions alone would have made
     that test vacuous - the exact failure `tests/CLAUDE.md` warns about."""
-    plan, M = _pool.rolled_map(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    plan, M = _pool.rolled_map(rolls.POLDER_FALL_0)  # Polder 12 since feature 216: seed 19 reached no line of its own (215 R1), and these assertions hold on either
     assert plan.field_archetype == "polder_grid"
     assert M["meta"]["field_archetype"] == "polder_grid"
     assert abs(plan.acres - plan.target_acres) / plan.target_acres < 0.12, f"{plan.acres:.1f} acres against a {plan.target_acres:.1f} target"
@@ -100,9 +101,9 @@ def test_the_polders_keep_outs_contain_what_they_stand_for() -> None:
     dozen chords around the ring dike, under ten on the field's house side."""
     from l7r.diagram.settlement._geom.primitives import chain_violated
 
-    _plan, M = _pool.rolled_map(hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90))
+    _plan, M = _pool.rolled_map(rolls.POLDER_FALL_0)  # Polder 12 since feature 216: seed 19 reached no line of its own (215 R1), and these assertions hold on either
     dk = M["dikes"][0]
-    assert dk["keepout_chords"] <= 24 and len(dk["keepout"]) <= 48
+    assert dk["keepout_chords"] <= 24 and len(dk["keepout"]) <= 50  # the chord count is the GM's number; the vertex cap is its consequence - measured 48 on seed 19, 50 on seed 12 (feature 216)
     outside = [(x, y) for x, y in dk["outline"] if not point_in_poly(x, y, dk["keepout"])]
     assert not outside, f"{len(outside)} of {len(dk['outline'])} band vertices outside the keep-out, e.g. {outside[:3]}"
     fld = M["fields"][0]

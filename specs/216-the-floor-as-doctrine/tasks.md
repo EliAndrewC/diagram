@@ -2,8 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering`.
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
       research: rendering
+      verify: DONE. DONE. FAITHFUL at round 3 of 5: round 1 deleted the conditional second partial roll, itemized FR-005 d, set the amendment to 2.23.0; round 2 sent seed 43 (no coverage line) to the CI tier's tree under the clause itself and settled the woodland site on the stub. The tree is tests/ci_tier/ (the reviewer's aside: tests/ci/ would read as the tests of l7r/diagram/ci)
 - [ ] T02 `make roll-audit`: the tool, its tests, the target, the audit's pointer (FR-001)
       research: rendering
 - [ ] T03 the woodland band on the pool's map; the clamp decision as a unit test; the polder tests on Polder 12 (FR-002 a-c)

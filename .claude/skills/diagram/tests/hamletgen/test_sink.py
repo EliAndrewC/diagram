@@ -94,3 +94,26 @@ def test_the_pond_setback_search_gives_up_at_its_own_limit() -> None:
     plan = a_plan()
     plan.envelope = [(-5000.0, -5000.0), (5000.0, -5000.0), (5000.0, 5000.0), (-5000.0, 5000.0)]
     assert hg.sink.pond_setback(plan, (0.0, 0.0), 20.0, 14.0, step=50.0, limit=300.0) == 300.0
+
+
+def test_a_pond_the_canvas_cannot_hold_falls_back_to_draining_OFF_MAP(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A CLAMPED pond is no pond, and the stage must say so rather than draw one on the rice. `pond_setback` walks the
+    tameike downslope until its rim clears the crop; the canvas clamp then pulls it back on-frame - and straight back
+    onto the rice it had just cleared. The stage treats that as the same finding as a set-back past the limit and
+    drains the field off the frame instead. THE DECISION, asserted directly (feature 216; until then a rostered roll,
+    `Clamped` seed 23, forced by the same patches around a full build): the solver is made to ask for a set-back the
+    canvas cannot give, and the stage must flip the sink to off-map and re-enter itself for the brook. What this no
+    longer proves, stated (specs/216 FR-005 b): that the brook it promised was actually cut on a real map."""
+    plan = a_plan()
+    plan.water_sink = "pond"
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    real = hg.sink.stage_sink
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (plan.W / 2.0, plan.H / 2.0))
+    monkeypatch.setattr(hg.sink, "POND_SETBACK_LIMIT", 1e9)
+    monkeypatch.setattr(hg.sink, "pond_setback", lambda plan_, out, prx, pry, **kw: 5000.0)
+    reentered: list[str] = []
+    monkeypatch.setattr(hg.sink, "stage_sink", lambda s_, plan_: reentered.append(plan_.water_sink))  # the recursive call resolves the module name
+    real(s, plan)
+    assert plan.water_sink == "offmap", "a pond the canvas cannot hold must fall back to the off-map brook"
+    assert reentered == ["offmap"], "and the stage re-enters itself once, as an off-map map, to cut the brook"
+    assert not s.M.get("ponds"), "and no pond may be drawn"

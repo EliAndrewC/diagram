@@ -30,9 +30,10 @@ import pytest
 from tests import rolls
 from tests.gate import _pool
 
-# THE POPULATION IS THE ROSTER'S COVERAGE ROLLS since feature 214 (the shared rolls every gate makes), plus seed 43 alone
-# for its kink - the 214 probe found none of the four carries one, so the xfail keeps its own roll.
-COHORT = (*rolls.COVERAGE, rolls.KINK)
+# THE POPULATION IS THE ROSTER'S COVERAGE ROLLS since feature 214 (the shared rolls every gate makes). Seed 43's kink -
+# the one open defect - is in the tier above the gate since feature 216 (tests/soak/test_seed_43_kink.py): a roll that
+# carries no coverage line is not the gate's to make.
+COHORT = tuple(rolls.COVERAGE)
 DOUBLE_BACK_DEG = 140.0
 BEND_RUN_FT = 40.0
 
@@ -67,7 +68,7 @@ def _kinks(M) -> list[tuple[str, int, int]]:
 
 
 @pytest.mark.rolls_map
-@pytest.mark.parametrize("spec", [s for s in COHORT if s is not rolls.KINK], ids=lambda s: f"{s.name}-{s.seed}")
+@pytest.mark.parametrize("spec", list(COHORT), ids=lambda s: f"{s.name}-{s.seed}")
 def test_the_clean_cohort_seeds_bend_like_paths(spec) -> None:
     """Seeds 41, 42 and 44. These are the ones the pin said were clean, and holding them is what makes
     the seed-43 xfail below mean something: without them, "seed 43 fails" is indistinguishable from "the
@@ -75,15 +76,3 @@ def test_the_clean_cohort_seeds_bend_like_paths(spec) -> None:
     _plan, M = _pool.rolled_map(spec)
     assert M.get("lanes"), f"seed {spec.seed} drew no lane, so this rule would judge nothing"
     assert not _kinks(M), f"seed {spec.seed}: {_kinks(M)}"
-
-
-@pytest.mark.rolls_map
-@pytest.mark.xfail(strict=True, reason="known-open: seed 43's routed footpath keeps a 36 px lattice step round a house corner (research R2b)")
-def test_seed_43_still_kinks_round_a_house_corner() -> None:
-    """The pin `GATE_COHORT_EXPECTED` used to hold, moved somewhere that can still read it.
-
-    STRICT, so it fails the day the router stops making this - which is the half of the old
-    `baseline_verdict` that mattered most: a pin that only ever loosens hides the next regression on the
-    seed it covers."""
-    _plan, M = _pool.rolled_map(rolls.KINK)
-    assert not _kinks(M), f"seed 43: {_kinks(M)}"

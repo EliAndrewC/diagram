@@ -115,3 +115,21 @@ def test_an_arm_clipped_down_to_a_stub_is_debris_and_is_not_drawn() -> None:
 
     assert hg.ways._lay_skeleton(s, plan, flat, [0.0, 20.0], [0.0, 10.0]) == []  # type: ignore[arg-type]
     assert not s.M.get("lanes"), "a half-pixel arm must not be inked"
+
+
+def test_the_web_stage_draws_nothing_for_fewer_than_two_houses_or_no_envelope() -> None:
+    """`stage_web`'s first return (feature 216: only the seatings' full rolls reached it): a hamlet of one house has no
+    internal network to draw, and neither has a plan with no envelope."""
+    from l7r.diagram.hamletgen.ways.web import stage_web
+
+    from .._builders import a_plan
+    from ._builders import _StubSettlement
+
+    plan = a_plan()
+    s = _StubSettlement(lanes=[], houses=[(300.0, 300.0)])
+    stage_web(s, plan)
+    assert s.M["lanes"] == [], "one house: no web"
+    s2 = _StubSettlement(lanes=[], houses=[(300.0, 300.0), (400.0, 300.0)])
+    plan.envelope = []
+    stage_web(s2, plan)
+    assert s2.M["lanes"] == [], "no envelope: no web"

@@ -92,3 +92,29 @@ def test_an_eased_corner_may_not_itself_be_a_hairpin() -> None:
     # ...and a chord long enough for the same offsets eases cleanly
     wide = hg.ways._ease_corner((0.0, 0.0), (60.0, 12.0), (120.0, 0.0), [], [], [])
     assert wide is not None and len(wide) == 1
+
+
+def test_unjog_walks_a_zigzag_corner_off_its_apex_when_its_chord_and_knee_are_both_blocked() -> None:
+    """`_unjog`'s last resort for a ZIGZAG (feature 134 T50): two turns past 50 degrees inside 40 ft whose straight
+    chord is blocked AND whose knee - the step's midpoint - is blocked too, walked round through `_ease_corner`.
+    Asserted directly (feature 216: the seatings' full rolls alone reached it): a post sits on the chord and on the
+    knee, and the eased path clears it with fewer sharp turns than the zigzag had."""
+    from l7r.diagram.hamletgen.ways.route import _unjog
+
+    path = [(0.0, 0.0), (100.0, 0.0), (115.0, 35.0), (130.0, 0.0), (230.0, 0.0)]  # a 38 ft step out and back: a zigzag
+    # one post ON the chord (0,0)-(130,0) at its middle (x 60-70), one ON the knee (107.5, 17.5): the chord and the knee
+    # are both blocked, and the corner walked off its apex - perpendicular to the chord from its midpoint, 4 ft a step -
+    # clears both once it is 8 ft off (measured: a post further along the chord grazed every eased leg's far end)
+    posts = [[(60.0, -3.0), (70.0, -3.0), (70.0, 3.0), (60.0, 3.0)], [(104.0, 14.0), (111.0, 14.0), (111.0, 21.0), (104.0, 21.0)]]
+    out = _unjog(path, [], posts, [])
+    assert out != path, "the zigzag must be worked on"
+    assert not any(_turn(out, k) >= 140.0 for k in range(1, len(out) - 1)), out
+
+
+def _turn(pts: list[tuple[float, float]], k: int) -> float:
+    import math
+
+    (ax, ay), (bx, by), (cx, cy) = pts[k - 1], pts[k], pts[k + 1]
+    v1, v2 = (bx - ax, by - ay), (cx - bx, cy - by)
+    n1, n2 = math.hypot(*v1), math.hypot(*v2)
+    return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2))))) if n1 and n2 else 0.0
