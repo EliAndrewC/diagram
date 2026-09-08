@@ -36,7 +36,7 @@ def test_gate_miss_scratch_files_stay_out_of_the_engine_tree(tmp_path, monkeypat
     def spy_run(cmd, *a, **k):
         if isinstance(cmd, list) and cmd[-1].endswith("driver.py"):
             seen.append(cmd[-1])
-            flags.append([x for x in cmd if x.startswith("--context=")])
+            flags.append(["--context=" + line.split("switch_context(")[1].split(")")[0].strip("'") for line in Path(cmd[-1]).read_text().splitlines() if "switch_context(" in line])
         return real_run(cmd, *a, **k)
 
     monkeypatch.setattr(gencache.subprocess, "run", spy_run)

@@ -460,11 +460,12 @@ def test_a_covered_child_is_labeled_with_the_parent_s_coverage_context(tmp_path,
     seen: list[list[str]] = []
 
     def fake_run(cmd, **kw):
-        seen.append(list(cmd))
+        driver = Path(cmd[-1]).read_text()
+        seen.append(driver)
         workdir = os.path.dirname(cmd[-1])
         with open(os.path.join(workdir, "out.pickle"), "wb") as fh:
             pickle.dump(("payload", {"functions": [], "files": []}), fh)
-        if "coverage" in cmd:
+        if "_covmod.Coverage(" in driver:
             open(os.path.join(workdir, "cov.abc"), "w").close()  # the parallel-mode data file the child would leave
         return subprocess.CompletedProcess(cmd, 0, "", "")
 
@@ -473,11 +474,13 @@ def test_a_covered_child_is_labeled_with_the_parent_s_coverage_context(tmp_path,
     monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: True)
     monkeypatch.setenv(_census.CONTEXT_ENV, "fixture:inashiro")
     assert rollcache._in_child("mod:fn", None)[0] == "payload"
-    assert "--context=fixture:inashiro" in seen[-1] and "coverage" in seen[-1]
+    d = seen[-1]
+    assert "_covmod.Coverage(" in d and "_cov.switch_context('fixture:inashiro')" in d and "_cov.save()" in d
+    assert d.index("_cov.start()") < d.index("import l7r.diagram.hamletgen") < d.index("switch_context"), "coverage starts before the engine imports; the label applies only to the roll"
     assert [f for f in os.listdir(tmp_path) if f.startswith(".coverage.rollchild-")], "the child's data file is published for the combine"
     monkeypatch.delenv(_census.CONTEXT_ENV)
     rollcache._in_child("mod:fn", None)
-    assert not [a for a in seen[-1] if a.startswith("--context")]
+    assert "_covmod.Coverage(" in seen[-1] and "switch_context" not in seen[-1]
     monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: False)
     rollcache._in_child("mod:fn", None)
-    assert "coverage" not in seen[-1]
+    assert "_covmod" not in seen[-1]

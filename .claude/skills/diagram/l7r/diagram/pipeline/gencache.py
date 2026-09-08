@@ -627,6 +627,29 @@ def _coverage_is_current(cov_src: str) -> bool:
         return False
 
 
+#: What a child imports BEFORE its coverage context is switched to the requester's - the engine's import
+#: closure, so import-time lines (every `def`) land in the EMPTY context as they do in a worker.
+ENGINE_IMPORTS = "import l7r.diagram.hamletgen, l7r.diagram.settlement, l7r.diagram.waterfields, l7r.diagram.interactive, l7r.diagram.compound  # noqa\n"
+
+
+def child_coverage(covbase: str | None, label: str | None) -> tuple[str, str, str]:
+    """`(prelude, switch, epilogue)` - source lines for a child driver that records its own coverage.
+
+    The child starts coverage ITSELF, before the engine is imported, and switches to `label` - the requesting
+    test's or fixture's context (`_census.CONTEXT_ENV`) - only for the work. `coverage run --context=LABEL`
+    labeled the imports too, and every engine file's def-lines then sat under every roller's context: the
+    polder-only edit of specs/213 R4 selected 49 tests and re-rolled 14 specs, because each roll child had
+    "executed" a line of polder.py by importing it. After the switch the events are re-armed exactly as
+    `ci/selection.switch` does, so a line first hit during the import is recorded again under the label
+    when the work executes it. No `covbase`: plain Python, no recording (the parent is not measured)."""
+    if not covbase:
+        return "", "", ""
+    prelude = f"import coverage as _covmod\n_cov = _covmod.Coverage(data_file={covbase!r}, data_suffix=True)\n_cov.start()\n"
+    switch = f"_cov.switch_context({label!r})\nimport sys as _sys\n_sys.monitoring.restart_events()\n" if label else ""
+    epilogue = "_cov.stop()\n_cov.save()\n"
+    return prelude, switch, epilogue
+
+
 def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     """Obtain a map for the GATE (feature 026): returns `(manifest_path, how, gen_cpu_s)`.
 
@@ -651,22 +674,27 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     covbase = os.path.join(workdir, "cov")
     recfile = os.path.join(workdir, "rec.json")
     driver = os.path.join(workdir, "driver.py")
+    # the child records its own coverage (child_coverage): started before the engine imports, switched to the
+    # sweep test's context for the gen itself, so an engine change selects the sweep and nothing else (feature 213)
+    prelude, switch, epilogue = child_coverage(covbase, os.environ.get(_census.CONTEXT_ENV))
     Path(driver).write_text(
-        "import json, sys, time\n"
-        f"sys.path.insert(0, {HERE!r})\n"
-        "from l7r.diagram.pipeline import gencache\n"
-        "t0 = time.process_time()\n"
-        f"deps = gencache.run_and_record({gen!r})\n"
-        f"json.dump({{'deps': deps, 'cpu': time.process_time() - t0}}, open({recfile!r}, 'w'))\n"
+        prelude
+        + "import json, sys, time\n"
+        + f"sys.path.insert(0, {HERE!r})\n"
+        + "from l7r.diagram.pipeline import gencache\n"
+        + ENGINE_IMPORTS
+        + switch
+        + "t0 = time.process_time()\n"
+        + f"deps = gencache.run_and_record({gen!r})\n"
+        + f"json.dump({{'deps': deps, 'cpu': time.process_time() - t0}}, open({recfile!r}, 'w'))\n"
+        + epilogue
     )
     # the child must be the ONLY coverage recorder in its process: strip the parent pytest-cov
     # session's subprocess hooks, or two recorders fight over the sys.monitoring tool id
     env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
     env["DIAGRAM_SKIP_RENDER"] = "1"  # the gate reads the manifest, never the PNG
-    env["COVERAGE_FILE"] = covbase
-    label = os.environ.get(_census.CONTEXT_ENV)  # the sweep test's context, so an engine change selects the sweep (feature 213, _census.py)
     try:
-        proc = subprocess.run([sys.executable, "-m", "coverage", "run", "--parallel-mode", *([f"--context={label}"] if label else []), driver], cwd=HERE, env=env, capture_output=True, text=True)
+        proc = subprocess.run([sys.executable, driver], cwd=HERE, env=env, capture_output=True, text=True)
         if proc.returncode:
             raise RuntimeError(f"gate regeneration failed for {os.path.basename(gen)} (exit {proc.returncode}):\n{proc.stdout[-2000:]}\n{proc.stderr[-2000:]}")
         with open(recfile) as fh:

@@ -409,17 +409,19 @@ def _roll_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any], Report]:
 # saves: the roll's whole working set - the 121 MB a roll ends at, the memo, the retained arenas, the pymalloc
 # fragmentation - never enters the worker (specs/210 research.md R1, R3). The roll-out list is the spec's FR-004.
 _CHILD_DRIVER = (
+    "{prelude}"
     "import importlib, pickle, sys\n"
     "sys.path.insert(0, {here!r})\n"
-    "from l7r.diagram.pipeline import gencache\n"
-    "with open({spec_path!r}, 'rb') as fh:\n"
+    "from l7r.diagram.pipeline import gencache\n" + gencache.ENGINE_IMPORTS + "with open({spec_path!r}, 'rb') as fh:\n"
     "    arg = pickle.load(fh)\n"
     "mod, fn = {target!r}.rsplit(':', 1)\n"
     "produce = getattr(importlib.import_module(mod), fn)\n"
+    "{switch}"
     "holder = []\n"
     "deps = gencache.record(lambda: holder.append(produce(arg) if arg is not None else produce()))\n"
     "with open({out_path!r}, 'wb') as fh:\n"
     "    pickle.dump((holder[0], deps), fh)\n"
+    "{epilogue}"
 )
 
 #: The child's target for THE roll of a spec: `module:function`, called with the spec.
@@ -453,19 +455,15 @@ def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
         spec_path, out_path, driver = (os.path.join(workdir, n) for n in ("spec.pickle", "out.pickle", "driver.py"))
         with open(spec_path, "wb") as fh:
             pickle.dump(arg, fh)
-        Path(driver).write_text(_CHILD_DRIVER.format(here=here, spec_path=spec_path, out_path=out_path, target=target), encoding="utf-8")
         # the child must be the ONLY coverage recorder in its process (gate_obtain's rule): the parent's
-        # pytest-cov hooks are stripped, and when the parent IS under coverage the child records its own
-        under_coverage = _parent_is_covered()
-        env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
+        # pytest-cov hooks are stripped, and when the parent IS under coverage the child records its own -
+        # started before the engine imports and switched to the REQUESTER'S context for the roll itself
+        # (gencache.child_coverage; _census.CONTEXT_ENV), or the incremental gate cannot see who rolled
         covbase = os.path.join(workdir, "cov")
-        if under_coverage:
-            env["COVERAGE_FILE"] = covbase
-            # ...LABELED WITH THE REQUESTER'S CONTEXT, or the incremental gate cannot see who rolled (_census.CONTEXT_ENV)
-            label = os.environ.get(_census.CONTEXT_ENV)
-            cmd = [sys.executable, "-m", "coverage", "run", "--parallel-mode", *([f"--context={label}"] if label else []), driver]
-        else:
-            cmd = [sys.executable, driver]
+        prelude, switch, epilogue = gencache.child_coverage(covbase if _parent_is_covered() else None, os.environ.get(_census.CONTEXT_ENV))
+        Path(driver).write_text(_CHILD_DRIVER.format(here=here, spec_path=spec_path, out_path=out_path, target=target, prelude=prelude, switch=switch, epilogue=epilogue), encoding="utf-8")
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
+        cmd = [sys.executable, driver]
         with _roll_slot():  # at most N child rolls at once across the run (FR-010)
             proc = subprocess.run(cmd, cwd=here, env=env, capture_output=True, text=True, check=False)
         if proc.returncode or not os.path.isfile(out_path):
