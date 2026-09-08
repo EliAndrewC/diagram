@@ -3,7 +3,8 @@
 **Status**: DRAFT - `spec-fidelity` round 1 required three changes, applied: FR-006 itemizes the three sites that
 prove less (and SC-002 says so); FR-003 faces 214's D3 and reverses it in a recorded decision (D5); FR-001 no
 longer attributes the brief alignment to the GM. Round 2 required one change (a fourth site that proves less - the re-roll loop over stand-in stages - stated in
-FR-004, FR-006 d and SC-002), applied. Round 3 pending (constitution XVI).
+FR-004, FR-006 d and SC-002), applied. Round 3 required one change (FR-006 e: what proves less if seed 43 packs), applied; the reviewer's aside -
+the audit kept runnable as `make roll-audit` - taken into FR-007. Round 4 pending (constitution XVI).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) R1 - the audit, per roll,
 of the lines nothing else reaches; the count after.
 **Predecessors**: 213 (the census), 214 (the first packing, 21 -> 13 specs, 24 -> 16 rolls); the packing
@@ -63,17 +64,25 @@ packs) - the record's floor - with every assertion kept where it was.
   (the re-roll's verdict is the one carried forward) and the emitted-SVG assertions (finished exactly once,
   its groups balanced) no longer hold over a REAL map, while the loop's own decisions - the attempt count,
   the forbidden ground handed to the second build, the re-roll that helps nothing not kept - are asserted
-  exactly as before. FOUR sites, then, each raised at landing. The audit's further cuts (Woodland-shrink, Clamped, Polder 19, the three seatings on one partial
+  exactly as before; (e) IF FR-005's synthetic reproduction succeeds, the seed-43 kink is asserted on a stub
+  (a house corner and a lattice step through the router) and no longer on a routed map, so the strict xfail
+  no longer fails the day the router stops producing the kink on a real hamlet - and, seed 43 having left the
+  roster, no rolled map is checked for a kink thereafter (the lane-rules population is the coverage rolls,
+  none of which carries one). FOUR sites, then, or FIVE if seed 43 packs, each raised at landing. The
+  audit's further cuts (Woodland-shrink, Clamped, Polder 19, the three seatings on one partial
   roll) each trade a behavior asserted on a real map for a unit test and are listed in R1 with their cost
   for the GM to take or leave.
 - **FR-007 The roster, the census, the record.** `tests/rolls.py` at 9 rows (8 if seed 43 packs); a warm
   gate's census reads 9 rolls of 9 specs (8 of 8); `make done` green; R2 the census line and the gate's time;
-  `dev/loop.md`'s packing section extended; `tests/CLAUDE.md`.
+  `dev/loop.md`'s packing section extended; `tests/CLAUDE.md`. The audit itself stays runnable: `make
+  roll-audit` runs R1's script over the current gate baseline, so the next packing question is answered by
+  a command rather than re-derived.
 
 ## Success criteria
 
 - **SC-001** A warm full gate's census reads 9 rolls of 9 specs, or 8 of 8, with no stated duplicates.
-- **SC-002** `make done` green at 100% on both floors; no assertion removed except the four FR-006 states.
+- **SC-002** `make done` green at 100% on both floors; no assertion removed except the four FR-006 states, or the
+  five if seed 43 packs.
 - **SC-003** No roll of a retired spec appears in the census, and the pytest phase is not slower than 214's 204 s.
 
 ## Decisions Recorded
