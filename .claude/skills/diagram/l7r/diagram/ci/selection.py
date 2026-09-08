@@ -87,7 +87,7 @@ class GateSelection:
     def pytest_fixture_setup(self, fixturedef: Any, request: Any) -> Any:
         cov = _cov(request.config)
         if cov is not None:
-            switch(cov, f"fixture:{fixturedef.argname}")
+            switch(cov, f"fixture:{fixture_id(fixturedef)}")
         try:
             yield
         finally:
@@ -113,7 +113,7 @@ class GateSelection:
                 config.hook.pytest_deselected(items=dropped)
         if _writer(config):
             self.bdir.mkdir(parents=True, exist_ok=True)
-            (self.bdir / (incremental.TESTS + ".next")).write_text(json.dumps({it.nodeid: sorted(getattr(it, "fixturenames", ())) for it in _all_items(session, items)}, indent=0), encoding="utf-8")
+            (self.bdir / (incremental.TESTS + ".next")).write_text(json.dumps({it.nodeid: fixture_ids(it) for it in _all_items(session, items)}, indent=0), encoding="utf-8")
             (self.bdir / incremental.RESULT).write_text(
                 json.dumps({"mode": mode, "reason": reason, "selected": selected, "collected": collected, "fixture_dependents": graph}, indent=0), encoding="utf-8"
             )
@@ -148,17 +148,41 @@ def _writer(config: pytest.Config) -> bool:
     return info is None or info.get("workerid") == "gw0"
 
 
+def fixture_id(fd: Any) -> str:
+    """A fixture's identity for contexts and closures: WHERE it is defined plus its name - `tests/gate/test_x.py::rolled`
+    for a module fixture, `tests/gate::rolled` for a conftest's, the bare name for the root conftest's (feature 213,
+    the polder-only run of 2026-09-08). Feature 207 keyed on the argument name alone, and ten gate modules each define
+    a `rolled` fixture of their own - one context name for all of them, so a change one of their rolls touched selected
+    every test behind any of them: a polder-only edit re-rolled 18 specs in 297 s where 2 would do."""
+    base = getattr(fd, "baseid", "") or ""
+    return f"{base}::{fd.argname}" if base else str(fd.argname)
+
+
+def fixture_ids(item: Any) -> list[str]:
+    """The fixture ids in `item`'s closure - the definition each name resolves to for THIS item (the innermost)."""
+    info = getattr(item, "_fixtureinfo", None)
+    names = list(getattr(item, "fixturenames", ()))
+    if info is None:
+        return sorted(names)
+    out = []
+    for name in names:
+        defs = info.name2fixturedefs.get(name)
+        out.append(fixture_id(defs[-1]) if defs else name)
+    return sorted(set(out))
+
+
 def fixture_graph(items: list[pytest.Item]) -> dict[str, list[str]]:
-    """fixture name -> the fixtures that request it (the REVERSE dependency edges the merge walks)."""
+    """fixture id -> the fixture ids that request it (the REVERSE dependency edges the merge walks)."""
     dependents: dict[str, set[str]] = {}
     for it in items:
         info = getattr(it, "_fixtureinfo", None)
         if info is None:
             continue
-        for name, defs in info.name2fixturedefs.items():
+        for _name, defs in info.name2fixturedefs.items():
             for fd in defs:
                 for dep in fd.argnames:
-                    dependents.setdefault(dep, set()).add(name)
+                    dep_defs = info.name2fixturedefs.get(dep)
+                    dependents.setdefault(fixture_id(dep_defs[-1]) if dep_defs else str(dep), set()).add(fixture_id(fd))
     return {k: sorted(v) for k, v in sorted(dependents.items())}
 
 

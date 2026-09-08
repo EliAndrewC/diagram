@@ -174,3 +174,11 @@ count is measured; the long rolls start first and their concurrency is capped; i
   floor phase runs under `L7R_ROLL_CENSUS` with the verdict AFTER it, where a roll no test requested fails
   the gate and says what it means. SC-004 is read off that verdict after a full baseline taken with the
   labels in place.
+- **D9 - a fixture's context is keyed by WHERE it is defined, not by its argument name.** With D8 in place
+  the polder-only run selected the rollers - and 106 tests with them, re-rolling 18 specs in 297 s, because
+  ten gate modules each define a `rolled` fixture and feature 207 named every one of them `fixture:rolled`:
+  one context, so a file one of their rolls touched selected every test behind any of them. The id is now
+  `<definition site>::<name>` (`tests/gate/test_water.py::rolled`; a root-conftest fixture keeps its bare
+  name), in the context, the closure file and the dependency graph alike (`ci/selection.fixture_id`).
+  A defect in 207's own granularity, found because the census made the roll count visible, fixed here
+  under Principle XIV.

@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
+import types
 from pathlib import Path
 
 import pytest
@@ -106,11 +107,11 @@ def test_prune_drops_files_and_contexts_in_place(tmp_path: Path) -> None:
 
 def test_fixture_graph_reads_the_reverse_edges() -> None:
     class FD:
-        def __init__(self, argnames: tuple[str, ...]) -> None:
-            self.argnames = argnames
+        def __init__(self, argname: str, argnames: tuple[str, ...], baseid: str = "") -> None:
+            self.argname, self.argnames, self.baseid = argname, argnames, baseid
 
     class Info:
-        name2fixturedefs = {"hamlet": [FD(("roll",))], "houses": [FD(("hamlet",))], "roll": [FD(())]}
+        name2fixturedefs = {"hamlet": [FD("hamlet", ("roll",))], "houses": [FD("houses", ("hamlet",))], "roll": [FD("roll", ())]}
 
     class Item:
         _fixtureinfo = Info()
@@ -119,6 +120,44 @@ def test_fixture_graph_reads_the_reverse_edges() -> None:
         pass
 
     assert selection.fixture_graph([Item(), Bare()]) == {"hamlet": ["houses"], "roll": ["hamlet"]}  # type: ignore[list-item]
+
+
+def test_a_fixture_is_identified_by_where_it_is_defined_so_two_modules_rolled_fixtures_stay_apart() -> None:
+    """Feature 213 (the polder-only run of 2026-09-08): ten gate modules each define a `rolled` fixture, and keying the
+    context by argument name alone gave them ONE context - a change one of their rolls touched selected every test
+    behind any of them (18 specs re-rolled for a polder-only edit). The id is the definition site plus the name; a
+    root-conftest fixture (no baseid) keeps its bare name, so the context-switch test above still reads `fixture:built`."""
+
+    class FD:
+        def __init__(self, argname: str, argnames: tuple[str, ...], baseid: str = "") -> None:
+            self.argname, self.argnames, self.baseid = argname, argnames, baseid
+
+    polder = FD("rolled", ("spec",), "tests/gate/test_water.py")
+    inashiro = FD("rolled", (), "tests/gate/test_paddy_fabric.py")
+    assert selection.fixture_id(polder) == "tests/gate/test_water.py::rolled"
+    assert selection.fixture_id(FD("built", ())) == "built"
+
+    class InfoA:
+        name2fixturedefs = {"rolled": [polder], "spec": [FD("spec", (), "tests/gate")]}
+
+    class InfoB:
+        name2fixturedefs = {"rolled": [inashiro]}
+
+    class ItemA:
+        nodeid, fixturenames, _fixtureinfo = "tests/gate/test_water.py::t", ["rolled", "request"], InfoA()
+
+    class ItemB:
+        nodeid, fixturenames, _fixtureinfo = "tests/gate/test_paddy_fabric.py::t", ["rolled"], InfoB()
+
+    assert selection.fixture_ids(ItemA()) == ["request", "tests/gate/test_water.py::rolled"], "a name with no definition (request) stays bare"
+    assert selection.fixture_ids(ItemB()) == ["tests/gate/test_paddy_fabric.py::rolled"]
+    assert selection.fixture_ids(types.SimpleNamespace(fixturenames=["b", "a"])) == ["a", "b"], "no fixture info: the names, as before"
+    graph = selection.fixture_graph([ItemA(), ItemB()])  # type: ignore[list-item]
+    assert graph == {"tests/gate::spec": ["tests/gate/test_water.py::rolled"]}, "edges are between ids, so the two rolled fixtures never meet"
+    # and keep_set sees the two apart: an affected polder fixture selects A and not B
+    pl = {"affected_tests": [], "affected_fixtures": ["tests/gate/test_water.py::rolled"], "changed_test_modules": [], "baseline_tests": [ItemA.nodeid, ItemB.nodeid]}
+    closures = {ItemA.nodeid: selection.fixture_ids(ItemA()), ItemB.nodeid: selection.fixture_ids(ItemB())}
+    assert selection.keep_set(pl, [ItemA.nodeid, ItemB.nodeid], closures) == {ItemA.nodeid}
 
 
 def test_plan_dump_is_json_shaped() -> None:
