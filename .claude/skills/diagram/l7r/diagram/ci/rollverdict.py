@@ -117,7 +117,47 @@ def _excepted(nodeid: str | None, in_process: Any) -> bool:
     return bool(_exception(nodeid, in_process) is not None)
 
 
-def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: set[str], engine_changed: bool = True) -> tuple[list[str], list[str]]:
+def run_db(root: Path) -> Path:
+    """The run's COMBINED coverage database, as the Makefile leaves it before the verdict (`coverage combine`, then
+    the incremental merge over the kept baseline contexts) - the same file the floors are judged on."""
+    return root / ".claude" / "skills" / "diagram" / ".coverage"
+
+
+def unique_by_context(db: Path) -> dict[str, list[tuple[str, int]]] | None:
+    """Per coverage context, the engine lines NO other context of the run reaches - `make roll-audit`'s arithmetic
+    with no floor, so every context is both a candidate and an "other". None when there is no database (a run
+    without contexts, `make quick`): the rule cannot be judged and is not."""
+    if not db.is_file():
+        return None
+    from l7r.diagram.tools import roll_audit
+
+    return {ctx: uniq for ctx, _n, uniq in roll_audit.unique_lines(roll_audit.read_contexts(db), 0)}
+
+
+def _fmt_lines(uniq: list[tuple[str, int]]) -> str:
+    """`file:12-14,20; other.py:7` - the lines a roll alone reaches, compact enough to read in a gate log."""
+    by_file: dict[str, list[int]] = defaultdict(list)
+    for f, ln in uniq:
+        by_file[f].append(ln)
+    parts = []
+    for f in sorted(by_file):
+        nums = sorted(set(by_file[f]))
+        runs: list[str] = []
+        start = prev = nums[0]
+        for n in nums[1:]:
+            if n == prev + 1:
+                prev = n
+                continue
+            runs.append(str(start) if start == prev else f"{start}-{prev}")
+            start = prev = n
+        runs.append(str(start) if start == prev else f"{start}-{prev}")
+        parts.append(f"{f}:{','.join(runs)}")
+    return "; ".join(parts)
+
+
+def judge(
+    rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: set[str], engine_changed: bool = True, unique: dict[str, list[tuple[str, int]]] | None = None
+) -> tuple[list[str], list[str]]:
     """`(failures, report_lines)` for one run's census against `roster` (the `tests.rolls` module).
 
     `renders_ok` is the set of test ids that carry the `renders` marker (the plugin cannot see markers
@@ -188,6 +228,30 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
         status = "rostered" if row else ("pool gen" if pool else "NOT IN THE ROSTER")
         tail = " (+ the pool gen: its key moved)" if pool and row and len(rest) >= 2 else ""
         lines.append(f"  {key[0]} seed={key[1]}: {len(groups)} roll(s), attempts {attempts}, {secs:.0f}s - {status}{tail}; requested by {', '.join(t.split('::')[-1][:60] for t in tests)}")
+        # THE LINES A ROLL EARNS (feature 217, GM 2026-09-08: *"if it is literally ever possible for us to achieve one
+        # hundred percent code coverage in our make done tests, Without adding a new map roll to the unit tests. then we
+        # should always do that"*). A roll is justified by the engine lines its coverage context reaches that NO other
+        # context of the run reaches; a roll with none can be removed with 100% kept, so under constitution VI it must be.
+        # The count and the lines are PRINTED for every roll, green or red, so the number is seen every gate; the pool
+        # sweep's roll of a shipped generator is printed and never judged (the pool's membership is the GM's exhibit
+        # decision, spec FR-001a). A record with no context, or a context the database never saw, is not judged.
+        for g in groups:
+            first = g[0]
+            ctx = str(first.get("context") or f"{first.get('test')}|run")
+            if unique is None or ctx not in unique:
+                continue
+            uniq = unique[ctx]
+            is_pool = bool(pool) and str(first.get("test") or "").startswith(str(getattr(pool, "test", "") or "\0"))
+            lines.append(
+                f"      lines only this roll reaches: {len(uniq)}" + (" (the shipped generator's roll: printed, never judged)" if is_pool else "") + (f" - {_fmt_lines(uniq)}" if uniq else "")
+            )
+            if not uniq and not is_pool:
+                failures.append(
+                    f"{key[0]} seed={key[1]} (rolled by {first.get('test')}, context {ctx}) reaches NO engine line that no other context reaches - "
+                    "constitution VI, THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS: a roll with no line of its own is removed with 100% kept. "
+                    "Pack its assertions onto a roll already made, make them unit tests of the placer, or move the test to tests/soak/ "
+                    "(the tier above the gate; `make soak` names it) - then remove the row from tests/rolls.py. `make roll-audit` shows every roll's lines."
+                )
         if allowed == 0 and rest:
             failures.append(
                 f"{key[0]} seed={key[1]} was rolled by {tests[0]} but is not in the roster: add a `Roll` to tests/rolls.py naming what this roll uniquely carries - or reuse a rostered roll"
@@ -282,7 +346,8 @@ def main(argv: list[str], root: Path | None = None) -> int:
     # ran every gate with `full=False` and the stale-row rule never fired - found when two rows left behind on purpose
     # came up green. Feature 207's `incremental plan full` met the same trap the same way.
     full = "full" in argv[1:]
-    failures, lines = judge(read(Path(path)), rolls, full=full, renders_ok=renders_ok, engine_changed=full or engine_changed(root))
+    unique = unique_by_context(run_db(root)) if root is not None else None
+    failures, lines = judge(read(Path(path)), rolls, full=full, renders_ok=renders_ok, engine_changed=full or engine_changed(root), unique=unique)
     print("\n".join(lines))
     if failures:
         print("\nROLL CENSUS FAILED:")

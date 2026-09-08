@@ -54,7 +54,16 @@ def record(kind: str, **fields: Any) -> None:
     path = os.environ.get(ENV)
     if not path:
         return
-    row = {"kind": kind, "t": round(time.time(), 3), "pid": os.getpid(), "test": os.environ.get(TEST_ENV), "request": os.environ.get(REQUEST_ENV), "worker": os.environ.get(WORKER_ENV), **fields}
+    row = {
+        "kind": kind,
+        "t": round(time.time(), 3),
+        "pid": os.getpid(),
+        "test": os.environ.get(TEST_ENV),
+        "request": os.environ.get(REQUEST_ENV),
+        "worker": os.environ.get(WORKER_ENV),
+        "context": os.environ.get(CONTEXT_ENV),
+        **fields,
+    }  # context: feature 217, the verdict maps a roll to the lines it earned
     try:
         with open(path, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, default=str) + "\n")

@@ -109,3 +109,7 @@ instead of repeating the tier it just finished.
 **Remote is currently OFF** (`make switches`), and turning it on before there are soak tests would
 buy a vacuously green build. `make soak` refuses on an empty suite for exactly that reason: this
 project's rule is that non-vacuity is asserted, never assumed.
+
+**`test_seatings.py` (feature 217, 2026-09-08)**: the three seating behavior tests - the `cluster_seeds` cloud alone,
+the lane frontage alone, the frontage stopping at one household - on copies of one partial roll in a child. Their one
+coverage line is `tests/hamletgen/homesteads/test_seats.py`; what they assert is behavior, which this tier is for.

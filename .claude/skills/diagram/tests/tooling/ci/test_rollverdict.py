@@ -292,3 +292,81 @@ def test_a_child_roll_requested_from_a_stub_module_is_a_real_roll_judged_by_the_
     in_worker = [_roll("Polder", 12, "tests/gate/hamletgen/test_driver.py::test_fanout", "r1", pid=W, dt=62.0)]
     failures, _ = rollverdict.judge(in_worker, _roster(("Polder", 12), in_process=(stub,)), full=False, renders_ok=set())
     assert len(failures) == 1 and "excepted as a stub-stage module" in failures[0], "...and the in-worker one still is, and is still too slow"
+
+
+# ---- feature 217: a roll earns its lines ----------------------------------------------------------
+
+
+def _rolled_with_context(name: str, seed: int, test: str, ctx: str, pid: str = "99") -> dict[str, Any]:
+    return {**_roll(name, seed, test, "r1", pid=pid), "context": ctx}
+
+
+def test_a_rostered_roll_with_no_unique_line_fails_and_one_with_lines_is_printed() -> None:
+    """FR-001: zero unique lines means the roll can go with 100% kept, so it must; a roll with lines passes and its
+    count and lines are printed on the green run too."""
+    roster = _roster(("Polder", 12))
+    row = _rolled_with_context("Polder", 12, "tests/gate/a.py::t", "fixture:tests/gate/a.py::polder")
+    failures, lines = rollverdict.judge([row], roster, full=True, renders_ok=set(), unique={"fixture:tests/gate/a.py::polder": []})
+    assert len(failures) == 1 and "reaches NO engine line" in failures[0] and "tests/soak/" in failures[0] and "tests/rolls.py" in failures[0], failures
+    assert any("lines only this roll reaches: 0" in ln for ln in lines)
+    uniq = [("hamletgen/water.py", 12), ("hamletgen/water.py", 13), ("hamletgen/water.py", 14), ("hamletgen/water.py", 20), ("ways/route.py", 7)]
+    failures, lines = rollverdict.judge([row], roster, full=True, renders_ok=set(), unique={"fixture:tests/gate/a.py::polder": uniq})
+    assert failures == [], failures
+    assert any("lines only this roll reaches: 5 - hamletgen/water.py:12-14,20; ways/route.py:7" in ln for ln in lines), lines
+
+
+def test_a_roll_without_a_context_is_judged_under_its_test_s_run_context_and_an_unseen_context_is_not_judged() -> None:
+    roster = _roster(("Polder", 12))
+    plain = _roll("Polder", 12, "tests/gate/a.py::t", "r1")  # no context field: a census written before 217
+    failures, lines = rollverdict.judge([plain], roster, full=True, renders_ok=set(), unique={"tests/gate/a.py::t|run": []})
+    assert len(failures) == 1, "the test's own run context stands in"
+    failures, lines = rollverdict.judge([plain], roster, full=True, renders_ok=set(), unique={"tests/other.py::t|run": []})
+    assert failures == [] and not any("lines only this roll" in ln for ln in lines), "a context the database never saw is not judged"
+    failures, lines = rollverdict.judge([plain], roster, full=True, renders_ok=set(), unique=None)
+    assert failures == [] and not any("lines only this roll" in ln for ln in lines), "no database (make quick): not judged"
+
+
+def test_the_pool_sweep_s_roll_of_a_shipped_generator_is_printed_and_never_judged() -> None:
+    ref = types.SimpleNamespace(key=("Inashiro", 4), gen="pool/hamlets/inashiro/inashiro.gen.py", test="tests/full/test_villages.py::test_village_passes_gate")
+    sweep = _rolled_with_context(
+        "Inashiro", 4, "tests/full/test_villages.py::test_village_passes_gate[inashiro.gen.py]", "tests/full/test_villages.py::test_village_passes_gate[inashiro.gen.py]|run", pid="801"
+    )
+    failures, lines = rollverdict.judge([sweep], _roster(pool_gens=(ref,)), full=False, renders_ok=set(), unique={sweep["context"]: []})
+    assert failures == [], failures
+    assert any("lines only this roll reaches: 0 (the shipped generator's roll: printed, never judged)" in ln for ln in lines), lines
+    # ...while the SAME spec's rostered roll (the immune test's perturbed reference) is judged
+    immune = _rolled_with_context("Inashiro", 4, "tests/full/test_villages.py::test_a_map_is_immune", "tests/full/test_villages.py::test_a_map_is_immune|run", pid="802")
+    failures, _ = rollverdict.judge([sweep, immune], _roster(("Inashiro", 4), pool_gens=(ref,)), full=False, renders_ok=set(), unique={sweep["context"]: [], immune["context"]: []})
+    assert len(failures) == 1 and "test_a_map_is_immune" in failures[0]
+
+
+def test_unique_by_context_reads_the_run_s_database_and_main_judges_with_it(monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """The arithmetic on a real coverage database, then `main` wiring it in: the roll's context reaches one engine
+    line nothing else does -> green with the line printed; the same line reached by another context too -> red."""
+    import coverage
+
+    engine = "/repo/.claude/skills/diagram/l7r/diagram"
+    census = tmp_path / "census.jsonl"
+    monkeypatch.setenv(_census.ENV, str(census))
+    census.write_text(json.dumps(_rolled_with_context("Inashiro", 4, "tests/gate/a.py::t", "tests/gate/a.py::t|run")) + "\n")
+    monkeypatch.setattr(rollverdict, "run_db", lambda root: tmp_path / ".coverage")
+    monkeypatch.setattr(rollverdict, "engine_changed", lambda root: True)
+    assert rollverdict.unique_by_context(tmp_path / ".coverage") is None, "no database: not judged"
+
+    def build(shared: bool) -> None:
+        (tmp_path / ".coverage").unlink(missing_ok=True)
+        data = coverage.CoverageData(basename=str(tmp_path / ".coverage"))
+        data.set_context("tests/gate/a.py::t|run")
+        data.add_lines({f"{engine}/hamletgen/sink.py": [10, 11, 12], f"{engine}/../../tests/x.py": [1]})
+        data.set_context("tests/unit/test_w.py::t|run")
+        data.add_lines({f"{engine}/hamletgen/sink.py": [10, 11] + ([12] if shared else [])})
+        data.write()
+
+    build(shared=False)
+    assert rollverdict.unique_by_context(tmp_path / ".coverage") == {"tests/gate/a.py::t|run": [("hamletgen/sink.py", 12)], "tests/unit/test_w.py::t|run": []}
+    assert rollverdict.main(["verdict"], root=tmp_path) == 0
+    out = capsys.readouterr().out
+    assert "lines only this roll reaches: 1 - hamletgen/sink.py:12" in out, out
+    build(shared=True)
+    assert rollverdict.main(["verdict"], root=tmp_path) == 1
+    assert "reaches NO engine line" in capsys.readouterr().out
