@@ -187,12 +187,13 @@ sys.exit(0 if ok else 1)' "$REPLAY" && PASS=$((PASS+1)) || FAIL=$((FAIL+1))
 echo "--- 6. it records, with a rule slug and the fields an audit needs (features 168 and 204) ---"
 rules=$(python3 -c "
 import json,glob,os,collections
-rows=[json.load(open(f)) for f in sorted(glob.glob(os.path.join('$GUARD_LOG_DIR','*.json')), key=os.path.getmtime)]
+rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
 print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))
-# the probe's own entry is the LATEST named-main one (the corpus replay above writes named-main entries too, and a
-# bare glob's order is the filesystem's - feature 211 found this case failing in one clone and passing in another)
-named=[r for r in rows if r.get('rule')=='named-main']
-print('FIELDS', named[-1]['session'], named[-1]['session_name'], named[-1]['cwd']=='$WORKER', named[-1]['tool'], len(named[-1]['command'])>0, named[-1]['context']['verdict'])" 2>/dev/null)
+# the entry inspected is the one section 2's FIRST refusal wrote (git -C the mirror, from the worker clone) - section 2
+# writes three named-main entries, one of them from the mirror itself, and a bare glob lists them in the filesystem's
+# order (feature 211 found this case failing in one clone and passing in another on that order alone)
+named=[r for r in rows if r.get('rule')=='named-main' and r.get('command','').startswith('git -C ')]
+print('FIELDS', named[0]['session'], named[0]['session_name'], named[0]['cwd']=='$WORKER', named[0]['tool'], len(named[0]['command'])>0, named[0]['context']['verdict'])" 2>/dev/null)
 for want in "'rewrote', 'moved-to-clone'" "'blocked', 'named-main'" "'blocked', 'clone-unresolved'" "'blocked', 'clone-missing'" "'blocked', 'shape'" "'escaped', 'main-tree-ok'" "'blocked', 'MAIN_TREE_OK-no-reason'"; do
   case "$rules" in *"($want)"*) printf 'ok    records (%s)\n' "$want"; PASS=$((PASS+1));;
     *) printf 'FAIL  did not record (%s): %s\n' "$want" "$rules"; FAIL=$((FAIL+1));; esac
