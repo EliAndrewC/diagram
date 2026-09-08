@@ -117,7 +117,7 @@ def _excepted(nodeid: str | None, in_process: Any) -> bool:
     return bool(_exception(nodeid, in_process) is not None)
 
 
-def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: set[str]) -> tuple[list[str], list[str]]:
+def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: set[str], engine_changed: bool = True) -> tuple[list[str], list[str]]:
     """`(failures, report_lines)` for one run's census against `roster` (the `tests.rolls` module).
 
     `renders_ok` is the set of test ids that carry the `renders` marker (the plugin cannot see markers
@@ -203,13 +203,24 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
             failures.append(f"a roll with no spec ran in the test worker under {r.get('test')} - pass the spec to roll_scope, or except the module in tests/rolls.py")
     for r in floor:
         spec = r.get("spec") or {}
-        failures.append(
-            f"the hamlet-floor phase ROLLED {spec.get('name')} seed={spec.get('seed')} itself ({float(r.get('dt') or 0):.0f}s) - the tests' roll is the floor's record (spec FR-001, 207's D14): "
-            "on a full run every rostered spec was just rolled and stored; on an incremental run this means the selection did not run the test that rolls it - a roll child's coverage carries "
-            "its requester's context since feature 213 (_census.CONTEXT_ENV), so check the baseline was taken after that landed, or that the roller is a rostered test at all"
-        )
+        if full or engine_changed:
+            failures.append(
+                f"the hamlet-floor phase ROLLED {spec.get('name')} seed={spec.get('seed')} itself ({float(r.get('dt') or 0):.0f}s) - the tests' roll is the floor's record (spec FR-001, 207's D14): "
+                "on a full run every rostered spec was just rolled and stored; on an incremental run with an engine change this means the selection did not run the test that rolls it - a roll "
+                "child's coverage carries its requester's context since feature 213 (_census.CONTEXT_ENV), so check the baseline was taken after that landed, or that the roller is a rostered test at all"
+            )
     if floor:
-        lines.append(f"  hamlet-floor rolls (no test requested them): {len(floor)}")
+        # NO ENGINE CHANGE and the floor still rolled: the roll cache's record was stale for a reason the selection cannot see -
+        # an edit made and then reverted leaves the cache holding the edited roll while the baseline says nothing changed.
+        # The floor's roll is then the only way the record gets refreshed: reported, not failed.
+        lines.append(
+            f"  hamlet-floor rolls (no test requested them): {len(floor)}"
+            + (
+                ""
+                if full or engine_changed
+                else " - allowed: no engine file changed against the baseline, so the cache's record was stale on its own (an edit reverted?) and no test could have been selected to refresh it"
+            )
+        )
     for r in stubs:
         dt = float(r.get("dt") or 0)
         if dt > STUB_MAX_S:
@@ -229,9 +240,25 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
     return failures, lines
 
 
-def main(argv: list[str]) -> int:
+def engine_changed(root: Path | None) -> bool:
+    """Did this run's plan see an engine change against the baseline? Read from the incremental plan the test
+    phase wrote; no root or no plan reads as changed - the strict side, where a floor roll fails."""
+    if root is None:
+        return True
+    from l7r.diagram.ci import incremental
+
+    plan = incremental.baseline_dir(root) / incremental.PLAN
+    try:
+        return bool(json.loads(plan.read_text(encoding="utf-8")).get("changed_engine"))
+    except OSError, ValueError:
+        return True
+
+
+def main(argv: list[str], root: Path | None = None) -> int:
     """`verdict [--full]` - the Makefile's call after the test phase; `--full` when the run was a full one,
-    so a stale roster row counts."""
+    so a stale roster row counts. `root` (the repository) locates the incremental plan, which says whether an
+    engine file changed - the difference between a floor roll that signals a missed roller and one that refreshes
+    a record the selection could not have known was stale."""
     if not argv or argv[0] != "verdict":
         print("usage: rollcensus verdict [--full]", file=sys.stderr)
         return 2
@@ -243,7 +270,8 @@ def main(argv: list[str]) -> int:
     renders_ok = {ln.strip() for ln in rfile.read_text(encoding="utf-8").splitlines() if ln.strip()} if rfile.is_file() else set()
     from tests import rolls  # the roster lives beside the tests it governs (spec D1)
 
-    failures, lines = judge(read(Path(path)), rolls, full="--full" in argv, renders_ok=renders_ok)
+    full = "--full" in argv
+    failures, lines = judge(read(Path(path)), rolls, full=full, renders_ok=renders_ok, engine_changed=full or engine_changed(root))
     print("\n".join(lines))
     if failures:
         print("\nROLL CENSUS FAILED:")

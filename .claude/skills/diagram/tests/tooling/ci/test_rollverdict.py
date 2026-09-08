@@ -184,6 +184,19 @@ def test_begin_and_end_set_and_clear_the_attribution(monkeypatch: pytest.MonkeyP
     assert _census.TEST_ENV not in os.environ and _census.REQUEST_ENV not in os.environ
 
 
+def test_engine_changed_reads_the_plan_and_defaults_to_the_strict_side(tmp_path: pathlib.Path) -> None:
+    from l7r.diagram.ci import incremental
+
+    assert rollverdict.engine_changed(None) is True
+    assert rollverdict.engine_changed(tmp_path) is True, "no plan: strict"
+    bdir = incremental.baseline_dir(tmp_path)
+    bdir.mkdir(parents=True)
+    (bdir / incremental.PLAN).write_text(json.dumps({"changed_engine": []}))
+    assert rollverdict.engine_changed(tmp_path) is False
+    (bdir / incremental.PLAN).write_text(json.dumps({"changed_engine": ["x.py"]}))
+    assert rollverdict.engine_changed(tmp_path) is True
+
+
 def test_main_reads_the_census_and_the_renders_file_and_judges_against_the_real_roster(monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.delenv(_census.ENV, raising=False)
     assert rollverdict.main(["verdict"]) == 2
@@ -235,7 +248,12 @@ def test_a_roll_no_test_requested_is_the_floor_s_and_fails() -> None:
     2026-09-08: it re-rolled both polder subjects unseen). A roll with no requesting test is its; the tests'
     roll must be its record, so any such roll fails and the message says where to look."""
     floor = {"kind": "roll", "spec": _spec("Polder", 12), "test": None, "request": None, "pid": "4242", "worker": None, "dt": 64.0, "ok": True}
-    failures, lines = rollverdict.judge([floor], _roster(("Polder", 12)), full=False, renders_ok=set())
+    failures, lines = rollverdict.judge([floor], _roster(("Polder", 12)), full=False, renders_ok=set(), engine_changed=True)
     assert len(failures) == 1 and "hamlet-floor phase ROLLED Polder seed=12" in failures[0] and "CONTEXT_ENV" in failures[0]
     assert any("hamlet-floor rolls (no test requested them): 1" in ln for ln in lines)
+    assert rollverdict.judge([floor], _roster(("Polder", 12)), full=True, renders_ok=set(), engine_changed=False)[0], "on a full run every spec was just rolled: a floor roll is always wrong"
+    # NO engine change against the baseline (an edit reverted: the cache holds the edited roll, the baseline says nothing
+    # moved, no test could be selected) - the floor's roll is the record's only refresh: reported, allowed
+    failures, lines = rollverdict.judge([floor], _roster(("Polder", 12)), full=False, renders_ok=set(), engine_changed=False)
+    assert failures == [] and any("allowed: no engine file changed" in ln for ln in lines)
     assert rollverdict.judge([_roll("Polder", 12, "tests/gate/p.py::t", "r1")], _roster(("Polder", 12)), full=True, renders_ok=set())[0] == []

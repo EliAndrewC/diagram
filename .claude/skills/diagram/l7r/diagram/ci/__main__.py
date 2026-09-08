@@ -120,7 +120,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.command == "rollcensus":  # feature 213: the roll census's verdict after the test phase (`verdict [--full]`)
         from l7r.diagram.ci import rollverdict
 
-        return rollverdict.main(list(a.args))
+        return rollverdict.main(list(a.args), root)
 
     if a.target:
         # ONLY AN EXPENSIVE OPERATION MAY RUN REMOTELY (FR-010, fourth request): the registry decides,
