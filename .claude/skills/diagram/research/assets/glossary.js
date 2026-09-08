@@ -425,6 +425,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "daikan",
   "variants": [
+   "intendancy",
+   "intendants",
+   "intendant",
    "daikan"
   ],
   "def": "An intendant: the magistrate who administered a tract of the shogunate's own land from a local office."
@@ -575,7 +578,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "shirimito",
   "variants": [
-   "shirimito"
+   "shirimito",
+   "mizujiri"
   ],
   "def": "A paddy's outlet: the overflow notch in the bund, set a little below the field surface, through which surplus water leaves the plot."
  },
@@ -869,7 +873,7 @@ window.RECORD_GLOSSARY = [
    "puddling",
    "puddled"
   ],
-  "def": "Working the flooded paddy soil into a smooth, water-holding mud before transplanting - the peak of a paddy's water demand; a bund is puddled mud."
+  "def": "Working the flooded paddy soil into a smooth, water-holding mud before transplanting - the peak of a paddy's water demand; a bund is puddled mud. In ironmaking the same word names a different thing: stirring molten pig iron under blast to work it into wrought iron."
  },
  {
   "term": "alluvial fan",
@@ -907,6 +911,7 @@ window.RECORD_GLOSSARY = [
   "variants": [
    "yatsuda",
    "yachida",
+   "yatsu",
    "yato"
   ],
   "def": "A narrow spring-fed valley head cut into a plateau; its bottom paddies, developed early, were as much managed marsh as field."
@@ -973,6 +978,10 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kochi seiri",
   "variants": [
+   "land consolidation",
+   "consolidated paddy",
+   "land-readjustment",
+   "land readjustment",
    "kochi seiri",
    "kochi-seiri"
   ],
@@ -1303,6 +1312,10 @@ window.RECORD_GLOSSARY = [
  {
   "term": "shukuba",
   "variants": [
+   "post stations",
+   "post station",
+   "post towns",
+   "post town",
    "shukuba",
    "yizhan",
    "shuku"
@@ -1327,7 +1340,10 @@ window.RECORD_GLOSSARY = [
  {
   "term": "shironameshi",
   "variants": [
-   "shironameshi"
+   "shironameshi",
+   "white-tawed",
+   "tawing",
+   "tawed"
   ],
   "def": "Japanese 'white tanning': hides soaked in the river for several days, the hair knifed off, the hide finished with salt and rapeseed oil alone - no lime, tannin, dung or urine."
  },
@@ -1669,6 +1685,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "mamian",
   "variants": [
+   "enemy platforms",
+   "enemy platform",
+   "enemy tower",
    "mamian"
   ],
   "def": "The 'horse-face' bastion: a rectangular spur projecting from a Chinese city wall, spaced a bowshot apart so that neighbors cover each other's curtain with flanking fire."
@@ -1824,6 +1843,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "yayi",
   "variants": [
+   "runners",
    "yayi"
   ],
   "def": "A yamen's runners: the constables, messengers and guards who waited in sheds against the inside of its wall."
@@ -3006,7 +3026,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "cribbing",
   "variants": [
-   "cribbing"
+   "cribbing",
+   "cribs",
+   "crib"
   ],
   "def": "A bank facing built of squared timbers stacked in an open box frame and filled with stone."
  },
@@ -3215,14 +3237,6 @@ window.RECORD_GLOSSARY = [
   "def": "The older of a fish pond's two draining works: an upright boarded shaft against the dike, as against a sluice cut through it."
  },
  {
-  "term": "tawing",
-  "variants": [
-   "tawing",
-   "tawed"
-  ],
-  "def": "Dressing a hide with salt and oil rather than tannin or lime - the Japanese shironameshi."
- },
- {
   "term": "Five Dynasties",
   "variants": [
    "Five Dynasties"
@@ -3288,5 +3302,299 @@ window.RECORD_GLOSSARY = [
    "GIS"
   ],
   "def": "Mapping software that measures an area from a boundary drawn on a map."
+ },
+ {
+  "term": "Kofun period",
+  "variants": [
+   "Kofun period",
+   "Kofun"
+  ],
+  "def": "The tomb-mound period of Japan, roughly the third to the sixth century, before the Nara court - the age of the oldest irrigation works of western Japan."
+ },
+ {
+  "term": "discharge",
+  "variants": [
+   "discharge"
+  ],
+  "def": "The volume of water a channel carries past a point each second - the flow whose square root sets the channel's width."
+ },
+ {
+  "term": "water duty",
+  "variants": [
+   "duty of water",
+   "water duty",
+   "true duty"
+  ],
+  "def": "The water a crop is owed per unit of land - for paddy about a liter a second per hectare, plus the one-off soaking that puddling takes."
+ },
+ {
+  "term": "sill",
+  "variants": [
+   "sill"
+  ],
+  "def": "The bottom edge of an opening in a bund: an intake's sill sits just above the field surface, an outlet's a little below."
+ },
+ {
+  "term": "catchment",
+  "variants": [
+   "catchment"
+  ],
+  "def": "The ground that drains to a point, whose area sizes the drain carrying its water away."
+ },
+ {
+  "term": "boom",
+  "variants": [
+   "sheer boom",
+   "log boom",
+   "booms",
+   "boom"
+  ],
+  "def": "A floating barrier of chained or bolted timbers strung across or along a river to catch drifting logs, anchored to solid ground at both banks; a sheer boom is the hinged one that swings the logs to one side."
+ },
+ {
+  "term": "row house",
+  "variants": [
+   "terraced form",
+   "party walls",
+   "terrace of",
+   "party wall"
+  ],
+  "def": "One long building divided by party walls into separate dwellings - the nagaya form, a terrace in the English sense."
+ },
+ {
+  "term": "river terrace",
+  "variants": [
+   "river terraces",
+   "river terrace"
+  ],
+  "def": "A step of old floodplain left standing above a river as it cut down: dry ground above the paddy, and hard to water."
+ },
+ {
+  "term": "Six Chambers",
+  "variants": [
+   "Six Chambers"
+  ],
+  "def": "The six clerical offices of a Chinese local government, housed at county scale as side halls flanking the yamen's courtyards rather than as separate buildings."
+ },
+ {
+  "term": "bailey",
+  "variants": [
+   "baileys",
+   "bailey"
+  ],
+  "def": "A walled enclosure of a Japanese castle - the innermost is the honmaru, the second the ninomaru, the third the sannomaru, with the moats between them."
+ },
+ {
+  "term": "building fabric",
+  "variants": [
+   "fabric is later",
+   "Edo fabric",
+   "fabric"
+  ],
+  "def": "The physical material a building is actually made of - old fabric being what still stands from its own time, as against a later reconstruction."
+ },
+ {
+  "term": "Kamakura period",
+  "variants": [
+   "Kamakura period",
+   "Kamakura"
+  ],
+  "def": "The Kamakura period, 1185 to 1333, the age of the first warrior government - earlier than the Muromachi and Edo periods the record mostly draws on."
+ },
+ {
+  "term": "salvage excavation",
+  "variants": [
+   "salvage excavation"
+  ],
+  "def": "A dig made ahead of building work, to record a site before it is destroyed."
+ },
+ {
+  "term": "wall circuit",
+  "variants": [
+   "circuit's length",
+   "circuit"
+  ],
+  "def": "The whole ring of a city's wall, measured round."
+ },
+ {
+  "term": "outwork",
+  "variants": [
+   "outworks",
+   "outwork"
+  ],
+  "def": "A defensive work built outside the main wall - the barbican before a gate."
+ },
+ {
+  "term": "Lower Yangzi",
+  "variants": [
+   "Lower Yangtze",
+   "Lower Yangzi"
+  ],
+  "def": "The rich rice-and-silk country of the lower Yangtze around Lake Tai and Suzhou - the Jiangnan of the record's Chinese sources."
+ },
+ {
+  "term": "Yuan dynasty",
+  "variants": [
+   "Yuan dynasty",
+   "Yuan rebuild",
+   "Yuan"
+  ],
+  "def": "The Mongol dynasty that ruled China between the Song and the Ming, 1279 to 1368."
+ },
+ {
+  "term": "wrought iron",
+  "variants": [
+   "wrought iron"
+  ],
+  "def": "The tough, workable low-carbon iron a forge can beat into tools - what refining makes out of brittle pig iron."
+ },
+ {
+  "term": "stone pitching",
+  "variants": [
+   "stone pitching"
+  ],
+  "def": "Stone laid by hand over a bank's face to armor it against the wash of waves."
+ },
+ {
+  "term": "mire",
+  "variants": [
+   "mire"
+  ],
+  "def": "A peat-forming wetland; the nutrient-rich lowland kind carries sedge, reed, cattail and alder."
+ },
+ {
+  "term": "zonation",
+  "variants": [
+   "zonation"
+  ],
+  "def": "The banding of plants around still water, each band on the depth it can stand."
+ },
+ {
+  "term": "plant association",
+  "variants": [
+   "willow association",
+   "plant association",
+   "association"
+  ],
+  "def": "A named plant community - the willow association of a river's sand and mud, the alder community of waterlogged ground."
+ },
+ {
+  "term": "interceptor",
+  "variants": [
+   "interceptor channel",
+   "interceptor"
+  ],
+  "def": "The drain run nearly along the contour at the head of a field, catching the water coming off the slope above."
+ },
+ {
+  "term": "outfall",
+  "variants": [
+   "outfall"
+  ],
+  "def": "Where a drain discharges what it has gathered."
+ },
+ {
+  "term": "flora",
+  "variants": [
+   "peer-reviewed flora",
+   "flora"
+  ],
+  "def": "A systematic published account of the plants of a region."
+ },
+ {
+  "term": "center-pivot",
+  "variants": [
+   "center-pivot"
+  ],
+  "def": "The rotating sprinkler boom of modern American irrigated farming, which sweeps a circle of field."
+ },
+ {
+  "term": "ring dike",
+  "variants": [
+   "ring-dike",
+   "ring dike"
+  ],
+  "def": "A dike thrown right round a village and its fields against flood."
+ },
+ {
+  "term": "gate throat",
+  "variants": [
+   "gate-throat",
+   "gate throat"
+  ],
+  "def": "The narrow passage through a gate structure, where traffic is checked."
+ },
+ {
+  "term": "made ground",
+  "variants": [
+   "made ground"
+  ],
+  "def": "Land made by filling shallow water or marsh with earth."
+ },
+ {
+  "term": "fall",
+  "variants": [
+   "total length and fall"
+  ],
+  "def": "The height a channel drops over its length - 92 meters over 43 kilometers for the Tamagawa aqueduct."
+ },
+ {
+  "term": "shoji",
+  "variants": [
+   "shoji"
+  ],
+  "def": "The paper-covered sliding screen of a Japanese room; the summer set is woven of reed."
+ },
+ {
+  "term": "aquifer",
+  "variants": [
+   "aquifer"
+  ],
+  "def": "The water-bearing layer of ground a well is sunk to reach."
+ },
+ {
+  "term": "recharge",
+  "variants": [
+   "recharges",
+   "recharge"
+  ],
+  "def": "The water that soaks down to replenish groundwater - from a stream's bed, or from the paddies above it."
+ },
+ {
+  "term": "species richness",
+  "variants": [
+   "species richness"
+  ],
+  "def": "The number of different species found on a plot."
+ },
+ {
+  "term": "natural village",
+  "variants": [
+   "natural villages",
+   "natural village"
+  ],
+  "def": "The settlement as it stands on the ground - the cluster of houses - as against the administrative village the tax system recognized."
+ },
+ {
+  "term": "edge castle",
+  "variants": [
+   "edge castle"
+  ],
+  "def": "A castle set at the settlement's edge, taking a river branch or a bay as the moat on its outer flanks, as against one at the town's center."
+ },
+ {
+  "term": "sugumagi",
+  "variants": [
+   "sugumagi"
+  ],
+  "def": "The Korean village-entrance grove that blocks the water mouth of a valley - the Korean analogue of the fengshui grove."
+ },
+ {
+  "term": "Wanli era",
+  "variants": [
+   "Wanli era",
+   "Wanli"
+  ],
+  "def": "The Wanli reign of the Ming, 1573 to 1620."
  }
 ];
