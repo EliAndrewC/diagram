@@ -52,11 +52,11 @@ def test_the_child_s_gen_target_tolerates_a_zero_exit_and_raises_a_nonzero_one(t
     _with_engine(monkeypatch, tmp_path, eng)
     orig = settlement.Settlement.meta
     gen.write_text(gen.read_text() + "\nraise SystemExit(0)\n")
-    gencache._run_gen_arg((str(gen), 1))  # must RETURN, not raise
+    gencache._run_gen_arg(str(gen))  # must RETURN, not raise
     assert out.read_text() == "7" and settlement.Settlement.meta is orig
     gen.write_text(gen.read_text().replace("raise SystemExit(0)", "raise SystemExit(2)"))
     with pytest.raises(SystemExit):
-        gencache._run_gen_arg((str(gen), 0))
+        gencache._run_gen_arg(str(gen))
     assert settlement.Settlement.meta is orig
 
 

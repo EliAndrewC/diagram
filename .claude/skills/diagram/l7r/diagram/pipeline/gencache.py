@@ -315,41 +315,24 @@ def key_for(subject: bytes, deps: dict[str, Any] | None) -> str:
     return _sha("\n".join(parts).encode())
 
 
-def _run_gen_arg(arg: tuple[str, int]) -> None:
-    """The roll child's target for a GEN (feature 213): run `gen` in this process, with `perturb` extra random
-    draws taken at every `Settlement.meta()` call - the immune test's experiment - or none. Module-level so the
-    child driver reaches it by name; the dependency record is taken around it by the driver."""
-    import random
-
-    from l7r.diagram import settlement
-
-    gen, perturb = arg
-    orig = settlement.Settlement.meta
-
-    def patched(self: Any, *a: Any, **kw: Any) -> Any:
-        r = orig(self, *a, **kw)
-        for _ in range(perturb):
-            random.random()
-        return r
-
-    settlement.Settlement.meta = patched  # type: ignore[method-assign]
+def _run_gen_arg(gen: str) -> None:
+    """The roll child's target for a GEN (feature 213): run `gen` in this process. Module-level so the child
+    driver reaches it by name; the dependency record is taken around it by the driver. (The immune test's
+    perturbation lived here until feature 215 moved the experiment onto the reference: `rollcache.extra_draws`.)"""
     try:
-        try:
-            runpy.run_path(gen, run_name="__main__")
-        except SystemExit as ex:
-            if ex.code:
-                raise
-    finally:
-        settlement.Settlement.meta = orig  # type: ignore[method-assign]
+        runpy.run_path(gen, run_name="__main__")
+    except SystemExit as ex:
+        if ex.code:
+            raise
 
 
-def run_gen_child(gen: str, perturb: int = 0) -> dict[str, Any]:
-    """`run_and_record(gen)` in a CHILD process (feature 213 FR-007 - the regen site and the immune test): the
-    roll's whole working set leaves the caller, and under a covered parent the child records its own coverage
-    (`rollcache._in_child`). Returns the dependency record the child took."""
+def run_gen_child(gen: str) -> dict[str, Any]:
+    """`run_and_record(gen)` in a CHILD process (feature 213 FR-007 - the regen site): the roll's whole working
+    set leaves the caller, and under a covered parent the child records its own coverage (`rollcache._in_child`).
+    Returns the dependency record the child took."""
     from l7r.diagram.pipeline import rollcache
 
-    _none, deps = rollcache._in_child("l7r.diagram.pipeline.gencache:_run_gen_arg", (gen, perturb))
+    _none, deps = rollcache._in_child("l7r.diagram.pipeline.gencache:_run_gen_arg", gen)
     return deps
 
 

@@ -571,6 +571,19 @@ coverage map carries. The roster: the packing record's NINE coverage specs, the 
 found. The lesson the GM drew and this file keeps: a roll that exists for what a TEST does, rather than for
 lines nothing else reaches, is a roll to question - the assertions almost always fit on a roll already made.
 
+**AND THEN THE FLOOR ITSELF (feature 215, the same day).** The GM, on 16 of 13: *"are you really, truly not able
+to combine?"* The audit that answered it is the one this file should have had: for every rolling context in the
+gate's coverage baseline, the engine lines NO other context reaches (`specs/215-the-floor-itself/census/
+unique_lines.py`). The gate's Inashiro and Kuwabata reached nothing the pool sweep's own children did not; the
+three duplicates nothing at all; the rest a few lines each. So the gate READS the pool's two maps (`tests/gate/
+_pool.py`), the fan-out runs a stub producer through the pool, the child-equality proof is retired, the cache
+round trip runs on the sweep's entry, the re-roll loop runs on stand-in stages, the immune experiment perturbs
+the reference against the pool's committed manifest, and seed 43's eight lines are unit tests. **Nine rows,
+nine rolls on a warm gate, no duplicates** - the record's floor. What proves less is stated in the spec's
+FR-006, five items, each raised with the GM. What did NOT pack: seed 43's kink, which does not reproduce from
+its own local fabric (the router's route depends on more of the map), so the seed stays as the open defect's
+carrier.
+
 ## A TIMING FROM THIS BOX IS NOT A TIMING - THE CORES ARE NOT THE SAME SPEED (measured 2026-08-31)
 
 The GM asked why our map rolls do not parallelize, and correctly ruled out the obvious answer:

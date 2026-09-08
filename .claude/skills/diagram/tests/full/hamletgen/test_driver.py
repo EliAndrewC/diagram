@@ -1,5 +1,5 @@
-"""THE FULL TREE (feature 135, GM 2026-08-27): the fan-out agreement (a pool-child roll of the reference against the
-gate's shared roll - the only walk of the pool branch) and the CLI's wiring over the same shared roll (feature 214). The
+"""THE FULL TREE (feature 135, GM 2026-08-27): the fan-out's pool branch on a stub producer (feature 215 - the only walk
+of the pool branch) and the CLI's wiring over the pool's map of the reference (feature 214, 215). The
 pool path and the CLI are exercised by every `make map` / regen; their gate-time value is the coverage they carry,
 which only the full run enforces."""
 
@@ -13,8 +13,8 @@ import tempfile
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
 from tests import rolls
+from tests.gate import _pool
 
 
 @pytest.mark.rolls_map  # it reads the shared roll of the reference (no roll of its own since feature 214)
@@ -25,8 +25,8 @@ def test_the_cli_reports_a_single_hamlet(monkeypatch: pytest.MonkeyPatch) -> Non
     of the reference and to write the artifacts from its manifest; `generate` itself is proven by every roll in
     the suite. What this no longer proves, stated (spec FR-007): `main` -> the real `generate` end to end.
     The RETURN CODE reports the gate's verdict on the map, which is not what this test is about."""
-    plan, manifest = rollcache.hamlet(rolls.REFERENCE)
-    rep, _how = rollcache.report(rolls.REFERENCE)
+    plan, manifest = _pool.rolled_map(rolls.REFERENCE)
+    rep = _pool.rolled_report(rolls.REFERENCE)
     seen: list[hg.HamletSpec] = []
 
     def serve(spec: hg.HamletSpec, out_base: str | None = None, render: bool = True) -> hg.Report:
@@ -45,29 +45,26 @@ def test_the_cli_reports_a_single_hamlet(monkeypatch: pytest.MonkeyPatch) -> Non
         with contextlib.redirect_stdout(buf):
             hg.main(["--name", "Inashiro", "--seed", "4", "--households", "15", "--down-deg", "90", "--sink", "pond", "--out", out, "--no-render"])
         assert os.path.exists(out + ".json") and os.path.exists(out + ".svg")
-    assert seen == [rolls.REFERENCE], "the CLI built exactly the reference spec from its arguments"
+    # the CLI has no `--fixtures-min`, so what it can build is the reference's brief without the pool's forced shrine
+    assert seen == [dataclasses.replace(rolls.REFERENCE, fixtures_min=None)], "the CLI built the reference spec from its arguments"
     assert "Inashiro" in buf.getvalue() and f"hh={plan.placed}/{plan.spec.households}" in buf.getvalue()
 
 
-@pytest.mark.rolls_map
-def test_the_fan_out_agrees_with_the_serial_path() -> None:
-    """The fan-out's entire safety claim, pinned: a map is a pure function of its spec, so rolling
-    it in a worker must produce exactly the report rolling it here does. This is also the only test
-    that walks the `ProcessPoolExecutor` branch (`jobs > 1` takes the pool path even for one map),
-    which is why it rolls for real rather than stubbing `generate`.
+def stub_produce(spec: hg.HamletSpec) -> hg.Report:
+    """A producer that rolls nothing: the plan and an empty verdict. Module-level, so the pool's children import it by name."""
+    return hg.Report(plan=hg.plan_site(spec), failures=[])
 
-    The method matters as much as the assertion. When the fan-out landed (2026-08-16) the parallel
-    24-seed run differed from the session's serial baseline on 3 of 24 maps - which looked damning
-    until the baseline turned out to predate a mid-task merge of another session's engine round.
-    Re-rolling exactly those seeds serially on the SAME code reproduced the parallel verdicts.
-    Diff against the same code, never against an older log."""
-    # THE POOL CHILD ROLLS THE REFERENCE (feature 214): `roll_pool` is `cohort()`'s body with explicit specs, so the
-    # pool path rolls a spec the gate already shares instead of a cohort seed nothing else reads.
-    (parallel,) = hg.driver.roll_pool([rolls.REFERENCE], jobs=2)
-    # THE SERIAL HALF IS THE SHARED ROLL (feature 213 FR-007): `report()` serves the gate's one roll of the reference -
-    # the same `generate`, in a child, so the comparison stands and only the pool-child path rolls again here (a
-    # stated Duplicate of the reference in tests/rolls.py).
-    serial, _how = rollcache.report(rolls.REFERENCE)
-    assert parallel.line() == serial.line()
-    assert parallel.failures == serial.failures
-    assert parallel.path is None  # a cohort member is gated, then thrown away
+
+def test_the_fan_out_agrees_with_the_serial_path() -> None:
+    """THE POOL BRANCH, on a producer that rolls nothing (feature 215, FR-002): `roll_pool` fans the specs out
+    across a `ProcessPoolExecutor`, brings the results back in seed order, and the branch is the same code
+    `cohort()` runs. What this no longer proves, stated (spec FR-006 b): that the pool path produces the REAL
+    map the serial path does - a map being a pure function of its spec is the immune test's claim, asserted
+    there against the pool's committed manifest. The method when the fan-out landed (2026-08-16) still holds
+    for anyone re-checking that: diff against the same code, never against an older log."""
+    specs = [*rolls.COVERAGE, rolls.KINK]
+    parallel = hg.driver.roll_pool(specs, jobs=2, produce=stub_produce)
+    serial = hg.driver.roll_pool(specs, jobs=1, produce=stub_produce)
+    assert [r.plan.spec for r in parallel] == specs == [r.plan.spec for r in serial], "in order, every spec, both paths"
+    assert [r.line() for r in parallel] == [r.line() for r in serial]
+    assert all(r.path is None and r.ok for r in parallel)

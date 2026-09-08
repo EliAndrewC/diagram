@@ -21,22 +21,22 @@ from __future__ import annotations
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
 # the forms the engine actually declares - read off the placer rather than guessed (my first
 # draft allowed "detached" and the roll declares "detached_commons"). A superset would make this
 # assertion weaker than the rule it replaces, which is the quiet way a migration loses a guarantee.
 FORMS = ("courtyard", "detached_commons")
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 
 @pytest.fixture(scope="module")
 def rolled():
     """The reference hamlet's plan and FINISHED manifest, served from the roll cache while nothing it
     executes has changed."""
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 @pytest.mark.rolls_map

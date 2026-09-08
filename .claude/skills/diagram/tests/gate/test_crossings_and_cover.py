@@ -25,10 +25,10 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 PLANK_MIN_PX = 140.0
 """A ditch shorter than this is stepped over, not bridged. Below it a plank is a feature nobody built."""
@@ -74,7 +74,7 @@ def _point_in(pt, ring) -> bool:
 
 @pytest.fixture(scope="module")
 def rolled():
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 def test_every_deck_is_long_enough_to_land_on_dry_ground(rolled) -> None:

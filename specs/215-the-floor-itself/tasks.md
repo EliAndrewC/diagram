@@ -2,8 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering`.
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code
       research: rendering
+      verify: DONE. DONE. FAITHFUL at round 5 of 5 - every round found a new, smaller item: FR-006 itemized (round 1), D5 facing 214's D3 (1), the fourth site that proves less (2), the fifth if seed 43 packs (3), the make roll-audit target dropped as unrequested (4). The synthetic kink probe ran during the review and did not reproduce the kink (R2), so FR-005 keeps seed 43: 9 of 9
 - [ ] T02 the reference brief aligned; the manifest carries the roll's verdict; the gate reads the pool's Inashiro and Kuwabata (FR-001, D1, D3)
       research: rendering
 - [ ] T03 the three duplicates gone: the fan-out on a stub producer, the child-equality proof retired, the round trip on the sweep's entry (FR-002)

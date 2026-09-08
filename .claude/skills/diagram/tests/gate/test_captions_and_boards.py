@@ -27,10 +27,10 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 HUG_PX = 120.0
 """How far a caption may sit from the feature it names before the reader has to guess. The standoff
@@ -72,7 +72,7 @@ def _box_gap(a, b) -> float:
 
 @pytest.fixture(scope="module")
 def rolled():
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 @pytest.fixture(scope="module")

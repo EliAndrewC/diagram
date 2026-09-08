@@ -26,10 +26,10 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 TRUNK_TOL = 13.0
 """How near a delivery ditch's end must come to the trunk it discharges into. A trunk is a stroke with
@@ -68,19 +68,19 @@ def _in_ellipse(pt, e, scale: float = 1.0) -> bool:
     return ((pt[0] - px) / rx) ** 2 + ((pt[1] - py) / ry) ** 2 <= 1.0
 
 
-KUWABATA = hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
+KUWABATA = rolls.KUWABATA
 
 
 @pytest.fixture(scope="module")
 def rolled():
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 @pytest.fixture(scope="module")
 def kuwabata():
     """The one live roll that lays laterals - see the lateral test for why a second roll is worth its
     seconds here."""
-    return rollcache.hamlet(KUWABATA)
+    return _pool.rolled_map(KUWABATA)
 
 
 def test_every_lateral_lands_on_a_trunk_at_both_ends(kuwabata) -> None:

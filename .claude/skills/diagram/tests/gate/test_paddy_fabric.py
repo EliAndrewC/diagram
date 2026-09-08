@@ -31,11 +31,11 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
 from l7r.diagram.waterfields.banks import _GATE_MIN_AREA, floor_overhang, jog_vertices, pointed_ring
+from tests import rolls
+from tests.gate import _pool
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 FLOOR_OVERHANG_FT = 16.0
 """The retired check's tolerance, and its reasoning: a fan's outline legitimately runs ON the collector
@@ -61,7 +61,7 @@ def _ring_area(ring) -> float:
 
 @pytest.fixture(scope="module")
 def rolled():
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 @pytest.fixture(scope="module")

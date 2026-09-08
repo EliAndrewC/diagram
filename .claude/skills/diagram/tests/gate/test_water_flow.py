@@ -21,10 +21,10 @@ import math
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-SPEC = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
 DOWNHILL_FRACTION = 0.2
 """How much of a channel's run must be down-fall before it counts as flowing downhill. Deliberately not
@@ -55,7 +55,7 @@ def _poly_dist(pt, poly) -> float:
 
 @pytest.fixture(scope="module")
 def rolled():
-    return rollcache.hamlet(SPEC)
+    return _pool.rolled_map(SPEC)
 
 
 def test_the_map_declares_the_fall_every_rule_below_is_measured_against(rolled) -> None:

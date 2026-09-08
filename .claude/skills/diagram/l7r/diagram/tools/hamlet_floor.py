@@ -64,9 +64,10 @@ def subjects() -> list[Any]:
     from l7r.diagram import hamletgen as hg
 
     # THE PLAIN SHARED ROLLS (feature 214): the same specs the ratchet and the lane rules read, so the record each
-    # needs is the one the tests just made. Seeds 41, 42 and 44 went with the cohort; 43 stays for its kink.
+    # needs is the one the tests just made. Seeds 41, 42 and 44 went with the cohort; 43 stays for its kink. The
+    # reference and Kuwabata are the POOL's maps since feature 215 (their record is the gen cache's, `pool_deps`).
     return [
-        hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"),  # `make reference`
+        hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}),  # the pool's brief
         hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"),
         hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0),
         hg.HamletSpec(name="Polder", seed=19, households=16, field_archetype="polder_grid", down_deg=90),
@@ -92,13 +93,39 @@ def hamlet_path_files(records: Iterable[dict[str, Any]]) -> list[str]:
     return sorted(out)
 
 
+#: The subjects that are SHIPPED maps (feature 215): their record is the gen cache's entry, written by the pool
+#: sweep's coverage child - the gate no longer rolls them under a spec of their own.
+POOL_GENS: dict[tuple[str, int], str] = {
+    ("Inashiro", 4): "pool/hamlets/inashiro/inashiro.gen.py",
+    ("Kuwabata", 21): "pool/hamlets/kuwabata/kuwabata.gen.py",
+}
+
+
+def pool_deps(spec: Any) -> dict[str, Any]:
+    """The dependency record of a shipped map: the gen cache entry's, obtained (served or rolled) if absent."""
+    import json
+
+    from l7r.diagram.pipeline import gencache
+
+    gen = str(SKILL / POOL_GENS[(spec.name, spec.seed)])
+    meta = Path(gencache._entry_dir(gen)) / "meta.json"
+    if not meta.is_file():
+        gencache.gate_obtain(gen)
+    record: dict[str, Any] = json.loads(meta.read_text(encoding="utf-8"))["deps"]
+    return record
+
+
+def _deps_for(spec: Any) -> dict[str, Any]:
+    if (spec.name, spec.seed) in POOL_GENS:
+        return pool_deps(spec)
+    from l7r.diagram.pipeline import rollcache
+
+    return rollcache.report_deps(spec)
+
+
 def module_set(deps_for: Callable[[Any], dict[str, Any]] | None = None) -> list[str]:
     """The hamlet path, derived from the fixed subjects' records (rolled now if not yet recorded)."""
-    if deps_for is None:
-        from l7r.diagram.pipeline import rollcache
-
-        deps_for = rollcache.report_deps
-    return hamlet_path_files(deps_for(spec) for spec in subjects())
+    return hamlet_path_files((deps_for or _deps_for)(spec) for spec in subjects())
 
 
 # PARKED LINES (feature 147, GM 2026-08-29). A line listed here is KNOWN-uncovered and deliberately does

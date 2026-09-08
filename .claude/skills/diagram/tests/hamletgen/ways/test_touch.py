@@ -202,3 +202,67 @@ def test_an_end_is_NOT_moved_onto_a_junction_when_the_rewrite_rule_refuses(monke
     assert len(refused.M["lanes"]) == 3, "and with it refusing, no end is moved onto another, so all three stand"
     kept = [tuple(p) for p in refused.M["lanes"][2]["pts"]]
     assert all(q in kept for q in lanes[2]), f"the lane keeps every point it had - it is reached, never rewritten: {kept}"
+
+
+# THE FOUR LINES ONLY COHORT SEED 43 REACHED (feature 215, research R1): asserted directly, in milliseconds, on the
+# geometry that makes each branch fire, instead of by a 20 s roll that happened to. Each test names the branch.
+
+
+def test_the_detour_rung_routes_the_WIDER_box_when_the_tight_one_finds_no_way_round() -> None:
+    """`_detour_links` line two: the tight lattice (a 4 ft gap, a box padded to twice the span) reports no route round a
+    yard that walls the slot, and the DETOUR - a 7 ft gap, five times the span - finds the way round its end."""
+    from l7r.diagram.hamletgen.consts import WEB_FABRIC_GAP
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP
+    from l7r.diagram.hamletgen.ways.route import _route
+    from l7r.diagram.hamletgen.ways.touch import _detour_links
+
+    v, q = (100.0, 60.0), (100.0, 0.0)
+    yard = [[(-60.0, 20.0), (260.0, 20.0), (260.0, 40.0), (-60.0, 40.0)]]  # a wall the tight box (±120) cannot reach the ends of
+    assert not _route(v, q, [], yard, [], gap=_TOUCH_GAP, pad_mult=2.0, cell=6.0), "the tight lattice must find no route, or this test proves nothing"
+    assert _route(v, q, [], yard, [], gap=WEB_FABRIC_GAP, pad_mult=5.0, cell=10.0), "the detour box reaches round the yard"
+    found = _detour_links([(60.0, v, q)], [], yard, [])
+    assert len(found) == 1 and found[0][1] == v and len(found[0][2]) >= 3, "the detour's route round the yard is what the rung offers"
+
+
+def test_a_piece_no_direct_link_can_reach_is_joined_by_the_detour_rung() -> None:
+    """`_touch_junctions` rung 3: an orphan piece whose every candidate link is walled off from the network at the
+    rung-2 box is joined through `_detour_links` (or the fine lattice) - the `found` branch that picks the shortest
+    route and splices it. Two lanes, one yard between them, and the network is one piece afterward."""
+    from l7r.diagram.hamletgen.consts import WEB_FABRIC_GAP
+    from l7r.diagram.hamletgen.ways.route import _route
+
+    main = [(0.0, 0.0), (400.0, 0.0)]
+    piece = [(120.0, 60.0), (180.0, 60.0)]
+    yard = [(-20.0, 20.0), (300.0, 20.0), (300.0, 40.0), (-20.0, 40.0)]
+    assert not _route((120.0, 60.0), (120.0, 0.0), [], [yard], [], gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0), "rung 2 must fail here, or the detour rung is not what joined it"
+    s = _StubSettlement(lanes=[main, piece])
+    hg.ways._touch_junctions(s, [], [yard], [])  # its return counts the ends rungs 1 and 2 closed; a rung-3 join shows in the lanes
+    lanes = s.M["lanes"]
+    assert sum(len(ln["pts"]) for ln in lanes) > 4, "the route round the yard was drawn (a splice onto the piece, or a link lane of its own)"
+    drawn = [tuple(map(float, p)) for ln in lanes for p in ln["pts"]]
+    assert any(abs(y) < 1.0 for _x, y in drawn) and any(abs(y - 60.0) < 1.0 for _x, y in drawn), "the join runs from the piece to the way"
+    assert any(x < -20.0 or x > 300.0 for x, _y in drawn), "and it goes round the yard's end, which only the detour box reaches"
+
+
+def test_a_splice_that_would_fold_a_straight_piece_is_refused_from_either_end() -> None:
+    """`_join_piece`: the splice may not put a fold in a lane that had none (`_may_write`'s rule) - so a link that
+    doubles back on the piece is refused whether it leaves the piece's END or its START, and the link is drawn as
+    its own lane both times. The START case is the branch the end-case test above never reaches."""
+    from l7r.diagram.hamletgen.ways.touch import _join_piece
+
+    way = [(0.0, 0.0), (100.0, 0.0)]
+    # the link doubles back over the piece. Two pieces of fabric make it the FOLD RULE that decides: a yard under the
+    # hairpin blocks the chord `_unjog` would cut AND every eased corner it tries (measured: the fold survives), and
+    # a post 1.5 ft off the tread sets the piece's own clearance so low that the clearance rule passes the run.
+    post = [(50.0, 1.5), (52.0, 1.5), (52.0, 3.0), (50.0, 3.0)]
+    cases = (
+        ((100.0, 0.0), [(100.0, 0.0), (40.0, -20.0)], [post, [(5.0, -18.0), (35.0, -18.0), (35.0, -4.0), (5.0, -4.0)]]),
+        ((0.0, 0.0), [(0.0, 0.0), (60.0, -20.0)], [post, [(65.0, -18.0), (95.0, -18.0), (95.0, -4.0), (65.0, -4.0)]]),
+    )
+    for v, link, posts in cases:
+        s = _StubSettlement(lanes=[[(500.0, 500.0), (600.0, 500.0)]])
+        lanes = [{"pts": [list(p) for p in way], "w": 5}]
+        before = len(s.M["lanes"])
+        _join_piece(s, lanes, 0, way, v, link, [], posts, [], [])
+        assert lanes[0]["pts"] == [list(p) for p in way], f"the fold at {v} must be refused: the piece stays as it was ({lanes[0]['pts']})"
+        assert len(s.M["lanes"]) == before + 1, "and the link is still drawn as its own lane"

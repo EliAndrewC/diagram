@@ -26,22 +26,22 @@ from __future__ import annotations
 
 import pytest
 
-from l7r.diagram import hamletgen as hg
 from l7r.diagram.overlap import matrix_extents, matrix_violations
-from l7r.diagram.pipeline import rollcache
+from tests import rolls
+from tests.gate import _pool
 
-INASHIRO = hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
-KUWABATA = hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
+INASHIRO = rolls.REFERENCE  # the pool's brief (feature 215)
+KUWABATA = rolls.KUWABATA
 
 
 @pytest.fixture(scope="module")
 def comb():
-    return rollcache.hamlet(INASHIRO)
+    return _pool.rolled_map(INASHIRO)
 
 
 @pytest.fixture(scope="module")
 def polder():
-    return rollcache.hamlet(KUWABATA)
+    return _pool.rolled_map(KUWABATA)
 
 
 def test_the_comb_hamlet_draws_no_forbidden_overlap(comb) -> None:
