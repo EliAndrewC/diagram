@@ -332,7 +332,16 @@ def run_gen_child(gen: str) -> dict[str, Any]:
     Returns the dependency record the child took."""
     from l7r.diagram.pipeline import rollcache
 
-    _none, deps = rollcache._in_child("l7r.diagram.pipeline.gencache:_run_gen_arg", gen)
+    # the child inherits the environment: its census record carries the generator (feature 217), as gate_obtain's does
+    prior = os.environ.get(_census.GEN_ENV)
+    os.environ[_census.GEN_ENV] = gen
+    try:
+        _none, deps = rollcache._in_child("l7r.diagram.pipeline.gencache:_run_gen_arg", gen)
+    finally:
+        if prior is None:
+            os.environ.pop(_census.GEN_ENV, None)
+        else:
+            os.environ[_census.GEN_ENV] = prior
     return deps
 
 
@@ -676,6 +685,7 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     # session's subprocess hooks, or two recorders fight over the sys.monitoring tool id
     env = {k: v for k, v in os.environ.items() if not k.startswith(("COV_CORE_", "COVERAGE_"))}
     env["DIAGRAM_SKIP_RENDER"] = "1"  # the gate reads the manifest, never the PNG
+    env[_census.GEN_ENV] = gen  # the census marks this roll as the shipped generator's, whoever requested it (feature 217)
     try:
         proc = subprocess.run([sys.executable, driver], cwd=HERE, env=env, capture_output=True, text=True)
         if proc.returncode:

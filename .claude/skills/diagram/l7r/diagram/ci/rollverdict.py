@@ -241,7 +241,8 @@ def judge(
             if unique is None or ctx not in unique:
                 continue
             uniq = unique[ctx]
-            is_pool = bool(pool) and str(first.get("test") or "").startswith(str(getattr(pool, "test", "") or "\0"))
+            # a gen child marks its record (`_census.GEN_ENV`); the requester-prefix test is the fallback for a census written before that
+            is_pool = bool(pool) and (bool(first.get("gen")) or str(first.get("test") or "").startswith(str(getattr(pool, "test", "") or "\0")))
             lines.append(
                 f"      lines only this roll reaches: {len(uniq)}" + (" (the shipped generator's roll: printed, never judged)" if is_pool else "") + (f" - {_fmt_lines(uniq)}" if uniq else "")
             )

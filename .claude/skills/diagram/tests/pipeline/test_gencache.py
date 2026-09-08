@@ -24,6 +24,7 @@ from pathlib import Path
 
 import pytest
 
+from l7r.diagram import _census
 from l7r.diagram.pipeline import gencache
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # the skill root; this test lives in tests/pipeline/
@@ -449,9 +450,14 @@ def test_run_gen_child_runs_the_gen_by_name_in_the_roll_child_and_returns_its_re
     asked: list[tuple[str, object]] = []
 
     def fake_child(target: str, arg: object) -> tuple[None, dict[str, object]]:
-        asked.append((target, arg))
+        asked.append((target, arg, os.environ.get(_census.GEN_ENV)))  # feature 217: the child sees the generator it rolls
         return None, {"functions": [["f", "x"]], "files": []}
 
     monkeypatch.setattr(rollcache, "_in_child", fake_child)
+    monkeypatch.delenv(_census.GEN_ENV, raising=False)
     assert gencache.run_gen_child("/pool/x.gen.py") == {"functions": [["f", "x"]], "files": []}
-    assert asked == [("l7r.diagram.pipeline.gencache:_run_gen_arg", "/pool/x.gen.py")]
+    assert asked == [("l7r.diagram.pipeline.gencache:_run_gen_arg", "/pool/x.gen.py", "/pool/x.gen.py")]
+    assert _census.GEN_ENV not in os.environ, "the mark is the child's, not the caller's"
+    monkeypatch.setenv(_census.GEN_ENV, "outer")
+    gencache.run_gen_child("/pool/y.gen.py")
+    assert os.environ[_census.GEN_ENV] == "outer" and asked[-1][2] == "/pool/y.gen.py", "an outer mark is restored"

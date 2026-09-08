@@ -24,6 +24,7 @@ def test_a_record_carries_the_spec_the_test_and_the_request(monkeypatch: pytest.
     monkeypatch.setenv(_census.REQUEST_ENV, "abc123")
     monkeypatch.setenv(_census.WORKER_ENV, "42")
     monkeypatch.setenv(_census.CONTEXT_ENV, "fixture:tests/gate/a.py::polder")  # feature 217: the roll's coverage context
+    monkeypatch.setenv(_census.GEN_ENV, "pool/hamlets/x/x.gen.py")  # feature 217: a gen child's roll, whoever requested it
     spec = HamletSpec(name="X", seed=7, households=12)
     _census.record("roll", spec=_census.spec_row(spec), ok=True, dt=1.5)
     _census.record("served", subject="roll:X")
@@ -32,6 +33,7 @@ def test_a_record_carries_the_spec_the_test_and_the_request(monkeypatch: pytest.
     assert rows[0]["spec"]["name"] == "X" and rows[0]["spec"]["seed"] == 7 and rows[0]["spec"]["households"] == 12
     assert rows[0]["test"] == "tests/x.py::test_y" and rows[0]["request"] == "abc123" and rows[0]["worker"] == "42" and rows[0]["ok"] is True
     assert rows[0]["context"] == "fixture:tests/gate/a.py::polder", "the verdict maps the roll to the lines it earned by this (feature 217)"
+    assert rows[0]["gen"] == "pool/hamlets/x/x.gen.py", "the verdict prints a shipped generator's roll and never judges it (feature 217)"
     assert _census.spec_row(None) is None
 
 

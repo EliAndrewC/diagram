@@ -370,3 +370,16 @@ def test_unique_by_context_reads_the_run_s_database_and_main_judges_with_it(monk
     build(shared=True)
     assert rollverdict.main(["verdict"], root=tmp_path) == 1
     assert "reaches NO engine line" in capsys.readouterr().out
+
+
+def test_a_gen_marked_roll_is_the_shipped_generator_s_whoever_requested_it() -> None:
+    """Feature 217, found on its own first gate: a shipped generator's cold roll is requested by WHICHEVER reader of
+    the pool's map comes first under worksteal - a gate module, not the sweep - and by requester alone it looked like
+    the rostered roll and was judged. The gen child marks its record; the mark decides."""
+    ref = types.SimpleNamespace(key=("Inashiro", 4), gen="pool/hamlets/inashiro/inashiro.gen.py", test="tests/full/test_villages.py::test_village_passes_gate")
+    cold = {**_rolled_with_context("Inashiro", 4, "tests/full/hamletgen/test_driver.py::test_the_cli", "tests/full/hamletgen/test_driver.py::test_the_cli|run", pid="801"), "gen": ref.gen}
+    immune = _rolled_with_context("Inashiro", 4, "tests/full/test_villages.py::test_a_map_is_immune", "tests/full/test_villages.py::test_a_map_is_immune|run", pid="802")
+    unique = {cold["context"]: [], immune["context"]: [("pipeline/rollcache.py", 393)]}
+    failures, lines = rollverdict.judge([cold, immune], _roster(("Inashiro", 4), pool_gens=(ref,)), full=False, renders_ok=set(), unique=unique)
+    assert failures == [], failures
+    assert any("printed, never judged" in ln for ln in lines) and any("lines only this roll reaches: 1 - pipeline/rollcache.py:393" in ln for ln in lines), lines
