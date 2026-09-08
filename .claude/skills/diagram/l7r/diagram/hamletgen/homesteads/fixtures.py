@@ -23,7 +23,8 @@ from .bamboo import _strip_blocked
 #   privy    READ  an independent outbuilding was "普通" (Nipponica) - near-universal; sited at the back
 #                  door, by the naya, or at the gate (戸口便所) - three attested seats, so rolled
 #   woodpile READ  a woodshed for firewood/charcoal on the reconstructed farmstead (Boso-no-Mura);
-#                  Sugiura counts the SHED on 0.76 - a stack under the eaves is the cheaper, older
+#                  Sugiura counts 0.76 SHEDS per household (a mean count, so an upper bound on the share of
+#                  households owning one - feature 211) - a stack under the eaves is the cheaper, older
 #                  form; its wall is a GUESS (the back wall or the kura's, out of the rain)
 #   manure   READ  in Han China the latrine stood over the pigsty (AIC) - muck and privy are one
 #                  cluster; in Japan the pit stood "near the stable, under the eaves" (SUMMARY-ONLY);
@@ -34,7 +35,10 @@ from .bamboo import _strip_blocked
 #                  yard" (Animals through Chinese History); a ground-level enclosure (Qimin Yaoshu);
 #                  the share is a GUESS bounded by "most regions"
 #   shrine   READ  two patterns - every house, or only certain old families (Tokushima; ja.wikipedia);
-#                  the GM chose the rare pattern (T58); Sugiura 0.03; corner NE (kimon, READ), NW
+#                  the GM chose the rare pattern (T58); Sugiura's shrine column is 0.01 per household over all
+#                  houses and empty among the pre-1944 ones (feature 211 re-read the table: the 0.03 once cited
+#                  was a neighboring shed column) - the 0.03-0.08 band is the GM's ruling, above the paper's
+#                  figure; corner NE (kimon, READ), NW
 #                  (17 of 37, SUMMARY-ONLY), SW (Tokushima, READ) - rolled
 #   persimmon READ "どこの庭先にも柿の木が植えてある" and Miyazaki Yasusada urged planting them round the
 #                  homestead; it shades the house in summer, so it stands beside it (side a GUESS)

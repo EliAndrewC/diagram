@@ -45,7 +45,7 @@ class StorageShed(Kind):
     anomaly. The count drawn here is a band below that snow-country figure, because the temperate lowland
     hamlet this map draws kept fewer.
 
-    Note: Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the
+    Note: Presence and the mean count per household read (Sugiura 1973 - an upper bound on the share of households keeping one); the drawn count per household is deliberately set below the
     source's Tohoku figure, which is a colder and better-stocked district than this one.
 
     Caveat: the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder
