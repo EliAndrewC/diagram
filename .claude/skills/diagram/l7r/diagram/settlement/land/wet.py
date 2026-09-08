@@ -28,7 +28,7 @@ from shapely.errors import GEOSException
 from shapely.geometry import Polygon as ShapelyPolygon
 from shapely.ops import unary_union
 
-from .._geom import Pt, RingIndex, boxed_grid, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, point_in_poly, seg_dist
+from .._geom import KeepoutGrid, Pt, RingIndex, point_in_poly, seg_dist
 
 MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
 MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts
@@ -238,27 +238,45 @@ class WetGroundMixin:
         corridors = self._corridor_buffers(3 * bs)  # every trodden tread (lane/street/road), not just lanes
         # PRE-BOX every static keep-out ONCE (see boxed_hit) - the field boxes carry the SAME 10px
         # pad as the edge test below, so the prefilter can never reject a point that test wanted
-        fld_b, blk_b = boxed_grid(boxed_rings(self.field_polys, 10.0)), boxed_grid(boxed_rings(self.block_polys))
-        clr_b, avd_b, cor_b = boxed_grid(boxed_rings(self.clearings)), boxed_grid(boxed_rings(avoid)), boxed_grid(boxed_segs(corridors))
-        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 150 T54, GM 2026-08-28: "the hazy blue that denotes the
-        # marsh is clearly overlaid on top of the greenery of the earthen mounds"). A perimeter dike and a fish
-        # pond's mulberry bank are raised, maintained, PLANTED earth; reeds root in the shallow standing water
-        # OUTSIDE the embankment, so wet ground abuts a mound and never crosses it. Neither was in any keep-out
-        # the scatter read. The band is tested as its CREST plus half of `w_max` rather than its 2,880-point
-        # ribbon - the ribbon's bbox covers the whole block, so it pruned nothing and cost 21.7 s of a roll;
-        # the trade is one-directional (a pinched stretch keeps reeds a few feet further back, never a mark ON
-        # the mound). Both sets are pruned to this polygon's own reach first: a waterward strip lies outside
-        # the block, so none of the pond banks can touch it.
+        # ONE GRID FOR EVERY STATIC KEEP-OUT (feature 218; `KeepoutGrid` carries the argument). The
+        # field rings carry the same 10 px pad as the old edge test; the building footprints, the
+        # sacred verge and the avoid set are footprints; every trodden tread is a corridor (a
+        # causeway/path/road through the marsh stays bare, not reeded over); the urban halo is the
+        # closed test it always was. Three families take the MARK'S OWN PAD per query, by slot:
+        # REEDS KEEP OFF THE EARTHEN MOUNDS (feature 150 T54, GM 2026-08-28: "the hazy blue that
+        # denotes the marsh is clearly overlaid on top of the greenery of the earthen mounds"). A
+        # perimeter dike and a fish pond's mulberry bank are raised, maintained, PLANTED earth; reeds
+        # root in the shallow standing water OUTSIDE the embankment, so wet ground abuts a mound and
+        # never crosses it. The dike band is tested as its CREST plus half of `w_max` rather than its
+        # 2,880-point ribbon - the ribbon's bbox covers the whole block, so it pruned nothing and cost
+        # 21.7 s of a roll; the trade is one-directional (a pinched stretch keeps reeds a few feet
+        # further back, never a mark ON the mound). Both sets are pruned to this polygon's own reach
+        # first: a waterward strip lies outside the block, so none of the pond banks can touch it.
+        # Slot 1 is the crests, and a mark whose pad is not one of the two mound pads (a narrow
+        # fringe's smaller tint) is exempt from them, as it always was; slot 2 the pond banks, by the
+        # mark's reach; slot 3 the drawn water - a stream, an irrigation channel, a comb lateral - at
+        # its drawn half-width + 2 px + the mark's pad (a pond fringe's reeds keep the 2 px only;
+        # settlement-review 2026-08-29: reeds grow AT a ditch's edge, the tuft's own reach against a
+        # 2.5 ft inlet cut a bare lane through the fringe).
         _pads = {MARSH_TINT_R * bs, MARSH_TUFT_R * bs}
         _reach = max(_pads) + 40.0
         _near_box = lambda pts: not (min(q[0] for q in pts) - _reach > x1 or max(q[0] for q in pts) + _reach < x0 or min(q[1] for q in pts) - _reach > y1 or max(q[1] for q in pts) + _reach < y0)  # noqa: E731
         _crests = [
             ([(float(mx), float(my)) for mx, my in dk["crest"]], float(dk.get("w_max", 0.0)) / 2) for dk in self.M.get("dikes", []) if len(dk.get("crest") or []) >= 2 and _near_box(dk["crest"])
         ]
-        mnd_g = {pad: boxed_grid(boxed_segs([(pl, hw + pad) for pl, hw in _crests])) for pad in _pads}
         _banks = [[(float(mx), float(my)) for mx, my in dp["bank"][:: max(1, len(dp["bank"]) // 16)]] for dp in self.M.get("dikeponds", []) if dp.get("bank") and _near_box(dp["bank"])]
-        bank_b = boxed_grid(boxed_rings(_banks, max(_pads)))
-        wat_b = boxed_grid(boxed_segs(self._watercourse_segs()))  # drawn water (streams/channels/comb laterals), pre-boxed once - see _watercourse_segs
+        keep = KeepoutGrid()
+        keep.rings(self.field_polys, pad=10.0)
+        keep.rings(self.block_polys)
+        keep.rings(self.clearings)
+        keep.rings(avoid)
+        keep.segs(corridors)
+        keep.rects(halo_rects, closed=True)
+        keep.circles(halo_circles, closed=True)
+        keep.segs(_crests, slot=1, reach=max(_pads))
+        keep.rings(_banks, slot=2, reach=max(_pads))
+        keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
+        crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
         ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
 
         def _sparse(
@@ -266,23 +284,10 @@ class WetGroundMixin:
         ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
             if (
                 not ring.inside(px, py)
-                or boxed_ring_hit(px, py, fld_b.near(px, py), 10.0)
-                or boxed_seg_hit(px, py, cor_b.near(px, py))  # a causeway/path/road through the marsh stays bare, not reeded over
-                # ... and OFF a stream/channel bed (reeds fringe water, they do not float on it). A REED
-                # FRINGE KEEPS A NARROWER BERTH (settlement-review 2026-08-29): the mark's own reach is the
-                # right pad against a wide watercourse, and far too wide against the 2.5 ft inlet crossing a
-                # 44 ft fringe - it cut a bare 18 ft lane through the reeds where the eye follows the water
-                # out of the reservoir, leaving one 30-degree sector empty and its neighbor at 9 marks
-                # against 33. Reeds grow AT a ditch's edge; only the pond's open surface (tested above at the
-                # mark's full reach) is water they may not stand on.
-                or self._on_watercourse(px, py, pad=2.0 if role == "pond_fringe" else 2.0 + mound_pad, near=wat_b.near if (role == "pond_fringe" or not mound_pad) else None)
-                or any(x0r <= px <= x1r and y0r <= py <= y1r for x0r, y0r, x1r, y1r in halo_rects)  # ... and OUT of the urban-clearance halo (the swept/trodden ground around every structure)
-                or any((px - hx) ** 2 + (py - hy) ** 2 <= hr * hr for hx, hy, hr in halo_circles)  # ... and clear of every wellhead's trodden apron
-                or boxed_ring_hit(px, py, blk_b.near(px, py))  # ... and OFF any building/shrine/torii footprint
-                or boxed_ring_hit(px, py, clr_b.near(px, py))  # ... and off the swept sacred/funerary verge
-                or boxed_ring_hit(px, py, avd_b.near(px, py))
-                or (mound_pad in mnd_g and boxed_seg_hit(px, py, mnd_g[mound_pad].near(px, py)))  # ... and off every earthen mound, by the drawn mark's own reach (T54)
-                or boxed_ring_hit(px, py, bank_b.near(px, py), mound_pad)  # ... and off every fish pond's mulberry bank
+                or keep.hit(
+                    px, py, (0.0, mound_pad if mound_pad in _pads else None, mound_pad, 2.0 if role == "pond_fringe" else 2.0 + mound_pad)
+                )  # one cell read: the paddy, every footprint, the treads, the halo, the mounds, the banks, the water
+                or (crescents and self._on_crescent_pond(px, py, 2.0 if role == "pond_fringe" else 2.0 + mound_pad))  # ... and the fengshui pond's open water
             ):  # ... and OUT of any keep-out
                 return True
             # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 150 T54,

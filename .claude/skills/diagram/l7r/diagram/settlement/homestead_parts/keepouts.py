@@ -68,8 +68,12 @@ class KeepoutsMixin:
             for p, half in self._watercourse_segs(pad):
                 if any(seg_dist(px, py, p[i], p[i + 1]) < half for i in range(len(p) - 1)):
                     return True
-        # ... and the fengshui crescent pond's open water (found 2026-07-21: scrub tufts drew ON the
-        # half-moon pond - the skip knew M['pond'] and the linear courses but not this water body)
+        return self._on_crescent_pond(px, py, pad)
+
+    def _on_crescent_pond(self: Settlement, px: float, py: float, pad: float = 2.0) -> bool:  # type: ignore[misc]
+        """The fengshui crescent pond's open water (found 2026-07-21: scrub tufts drew ON the half-moon
+        pond - the skip knew M['pond'] and the linear courses but not this water body). The second half
+        of `_on_watercourse`, on its own for a scatter whose watercourses sit in a `KeepoutGrid`."""
         return any(math.hypot(px - cp["cx"], py - cp["cy"]) < cp["r"] + pad for cp in self.M.get("crescent_ponds", []))
 
     # THE URBAN-CLEARANCE HALO (GM 2026-07-21, Hoshizora): loose ground-cover (scrub, reeds) stays out of

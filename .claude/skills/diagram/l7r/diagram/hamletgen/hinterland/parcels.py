@@ -7,6 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -156,6 +157,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         return any(point_in_poly(x + ddx * half_, y + ddy * half_, mp) for mp in marshes for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
 
     crops: list[Poly] = [list(plan.envelope)] + [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in s.M.get("dry_plots", [])]
+    crop_idx = [RingIndex(c) for c in crops]  # each crop's edges indexed once (feature 218); the rung below boxes them by its own set-back
     _hx = [h["x"] for h in s.M.get("houses", [])] or [plan.W / 2]
     _hy = [h["y"] for h in s.M.get("houses", [])] or [plan.H / 2]
     ccx, ccy = sum(_hx) / len(_hx), sum(_hy) / len(_hy)
@@ -268,6 +270,14 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # the margin absorbs the features that may still grow it.
             sx0, sy0 = max(cbx0 + 16.0, _fx0 - 0.6 * half), max(cby0 + 16.0, _fy0 - 0.6 * half)
             sx1, sy1 = min(cbx1 - 16.0, _fx1 + 0.6 * half), min(cby1 - 16.0, _fy1 + 0.6 * half)
+            # THE CROPS ARE BOXED ONCE PER RUNG (feature 218): `_clear_gap` measured every candidate
+            # square against every edge of every crop polygon - 1,907 calls, 220k segment distances
+            # on the reference roll. A crop can only refuse a seat it stands in or lies within
+            # `sunny + half` of (the widest set-back the gap test applies), so the boxes carry that
+            # pad and a seat asks only the crops its cell holds; `_clear_gap` decides on those exactly
+            # as before. A seat no crop's box reaches is clear of all of them - the answer the full
+            # list would have given - unless there are no crops at all, when it was never offered.
+            crop_g = boxed_grid([(idx, idx.x0 - _sb_s - half, idx.y0 - _sb_s - half, idx.x1 + _sb_s + half, idx.y1 + _sb_s + half) for idx in crop_idx])
 
             # THE QUALIFICATION IS ONE PREDICATE, so a seat can be re-asked after it is nudged. It
             # used to be an inline `if` that only the lattice scan could evaluate, which is why the
@@ -283,6 +293,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 sy0: float = sy0,
                 sx1: float = sx1,
                 sy1: float = sy1,
+                crop_g: PointGrid = crop_g,
             ) -> bool:
                 # ONE guard clause, deliberately: the window bounds and the kept-window AREA are the
                 # same question asked of a seat that may have been MOVED since the scan offered it
@@ -296,7 +307,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 ):
                     return False  # off the window, or under the check's own 70%-of-bbox rule (0.8 here, for prediction slack)
                 return (
-                    _clear_gap((x, y), half, crops, dy, n, sn) is not None
+                    bool(crops)
+                    and not any(_crop_refuses((x, y), half, idx, n, sn) for idx, _bx0, _by0, _bx1, _by1 in crop_g.near(x, y))
                     and not any(math.hypot(x - kx, y - ky) < kr + half for kx, ky, kr in keep)
                     and not any(rx0 - half < x < rx1 + half and ry0 - half < y < ry1 + half for rx0, ry0, rx1, ry1 in keep_rects)
                     and not any(_near_line((x, y), half, pts, pad) for pts, pad in lanes + streams)
@@ -553,24 +565,26 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     return ring
 
 
-def _clear_gap(center: Pt, half: float, crops: Sequence[Poly], fall_y: float, normal: float = 80.0, sunny: float = 180.0) -> float | None:
-    """Distance from a candidate square to the nearest crop, or None if it is too close.
+def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0, sunny: float = 180.0) -> bool:
+    """Does this crop refuse a candidate square here - standing in it, or nearer than its set-back?
 
     The set-back is 80 px normally and 180 px when the square sits on the crop's SUNNY side (south,
     in screen terms) - the shading case. `woodland_clear_of_crops` uses 1 : 2.5-ish set-backs for the
     same reason; this is deliberately a little more generous than the check, so a patch that passes
-    here passes there with room to spare rather than sitting on the line."""
+    here passes there with room to spare rather than sitting on the line.
+
+    One crop at a time, from its ring index (feature 218): the scan used to measure every candidate
+    against every edge of every crop to return the nearest distance, and its only caller asked
+    whether that was None. The distance is asked of the index only under the widest set-back this
+    crop could apply (+1 px of slack), and the refusal is the expression the scan ran - `d - half <
+    set-back` on the true distance - so the verdict is the same to the bit."""
     cx, cy = center
-    best = 1e9
-    for crop in crops:
-        d = min(seg_dist(cx, cy, crop[i], crop[(i + 1) % len(crop)]) for i in range(len(crop))) - half
-        if point_in_poly(cx, cy, list(crop)):
-            return None
-        south_of = cy - half > max(p[1] for p in crop) - 40 and min(p[0] for p in crop) - half < cx < max(p[0] for p in crop) + half
-        if d < (sunny if south_of else normal):
-            return None
-        best = min(best, d)
-    return None if best >= 1e9 else best
+    if crop.inside(cx, cy):
+        return True
+    south_of = cy - half > crop.y1 - 40 and crop.x0 - half < cx < crop.x1 + half
+    limit = sunny if south_of else normal
+    dist = crop.edge_within(cx, cy, limit + half + 1.0)
+    return dist is not None and dist - half < limit
 
 
 def _near_line(center: Pt, half: float, pts: Sequence[Pt], pad: float) -> bool:

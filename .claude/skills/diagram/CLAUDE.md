@@ -229,6 +229,11 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
   not change during the scan*. Hoist, prefilter, or index - and if a gen "hangs", suspect that shape
   and profile before bisecting.
 - When a check is slow, **INDEX it - do not coarsen it.** The index prunes; it never decides.
+- **Build the blocked ground ONCE, then ask it per candidate** (constitution X clause 15, GM
+  2026-09-08, feature 218): every keep-out that does not change during a fill or a scatter goes
+  into a `PointGrid` / `RingIndex` / `KeepoutGrid` before the first candidate is tried, and no
+  candidate walks a registry. The index beside the scan that did not use it is the third shape in
+  `dev/performance.md`: the windbreak 7.3 s -> 0.5 s and the hinterland 8.1 s -> 1.3 s, byte-identical.
 - Trust the A/B against HEAD, not cProfile's seconds.
 
 **The pool** ([`dev/pool.md`](dev/pool.md))

@@ -1,5 +1,7 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
+import math
+
 from l7r.diagram import overlap
 from l7r.diagram.settlement import Settlement
 from tests.settlement._builders import _crop_settlement, _nuc_village, _scatter_base_points, _town
@@ -188,6 +190,19 @@ def test_commons_keeps_scrub_off_drawn_channels():
     assert pts
     _clear_of(pts, uniform, 14.0 / 2)
     _clear_of(pts, taper, 5.0 / 2)  # conservative: every piece of the taper is at least w1 wide
+
+
+def test_commons_keeps_scrub_off_a_crescent_pond():
+    """The fengshui crescent pond's open water is the one watercourse a scatter's `KeepoutGrid` does not
+    hold (feature 218): it is a disc, asked of `_on_crescent_pond` once the registry is known to be
+    non-empty. Base points asserted, as in the tests above."""
+    s = _nuc_village()
+    s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 420.0, "r": 40.0}]
+    before = len(s.out)
+    s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")
+    pts = _scatter_base_points(s.out[before:])
+    assert pts and any(abs(gx - 300.0) < 80 and abs(gy - 420.0) < 80 for gx, gy in pts), "scrub stands near the pond"
+    assert all(math.hypot(gx - 300.0, gy - 420.0) >= 40.0 + 2 - 0.15 for gx, gy in pts), "... but never on its water"
 
 
 def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():

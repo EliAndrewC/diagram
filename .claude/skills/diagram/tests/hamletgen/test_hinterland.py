@@ -12,15 +12,19 @@ from l7r.diagram import hamletgen as hg
 # widen the package's public contract for a test's convenience (tests/hamletgen/test_surface.py).
 from l7r.diagram.hamletgen import hinterland
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement._geom import RingIndex
 
 from ._builders import SQUARE, a_plan
 
 
 def test_a_square_far_from_the_crop_clears_and_one_on_it_does_not() -> None:
-    assert hg._clear_gap((700.0, 700.0), 50.0, [SQUARE], 1.0) is None  # standing in it
-    assert hg._clear_gap((700.0, 200.0), 50.0, [SQUARE], 1.0) == pytest.approx(150.0)
-    assert hg._clear_gap((700.0, 1100.0), 50.0, [SQUARE], 1.0) is None  # in the crop's sunny shadow
-    assert hg._clear_gap((700.0, 700.0), 50.0, [], 1.0) is None  # no crop at all - nothing to measure
+    crop = RingIndex(SQUARE)
+    assert hg._crop_refuses((700.0, 700.0), 50.0, crop) is True  # standing in it
+    assert hg._crop_refuses((700.0, 200.0), 50.0, crop) is False  # 150 px clear, north of it: the 80 px set-back holds
+    assert hg._crop_refuses((700.0, 1100.0), 50.0, crop) is True  # in the crop's sunny shadow: the 180 px set-back does not
+    assert hg._crop_refuses((700.0, 1200.0), 50.0, crop) is True  # 150 px clear but SOUTH of it: the 180 px sunny set-back refuses
+    assert hg._crop_refuses((700.0, 1200.0), 50.0, crop, sunny=100.0) is False  # ... unless the sunny set-back is the tighter profile
+    assert hg._crop_refuses((700.0, 200.0), 50.0, crop, normal=200.0) is True  # a wide normal set-back refuses the northern seat too
 
 
 def test_a_square_near_a_line_is_detected() -> None:
