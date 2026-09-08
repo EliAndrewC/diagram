@@ -281,3 +281,18 @@ def test_keep_the_route_wide_skips_a_neighbour_lane_too_short_to_have_ends() -> 
     assert _keep_the_route_wide(s, [], [], []) == 0, "the one-point lane offers nothing to join and raises nothing"
     s2 = _StubSettlement(lanes=[[(0.0, 0.0), (100.0, 0.0)], [(120.0, 0.0), (220.0, 0.0)]])
     _keep_the_route_wide(s2, [], [], [])  # the two-point neighbour IS walked - no exception, same call shape
+
+
+def test_keep_the_route_wide_declines_a_join_that_would_hairpin_and_takes_it_from_the_other_end() -> None:
+    """The bend refusal inside `_keep_the_route_wide` - `_bends_badly` on the joined run - which no rostered
+    roll reaches since feature 213 moved the CLI test off seed 8 (the line was that seed's alone). Lane A
+    runs east and lane B starts 11 ft back over A's shoulder: joining from A's end doubles back on A (a
+    hairpin, declined), while the same two ends joined from B's side run straight on - so the pass makes
+    exactly one join, from B, and A's record is untouched. Both directions in one case: the refusal is not
+    the pass simply declining everything."""
+    a = [(0.0, 0.0), (100.0, 0.0)]
+    b = [(90.0, 5.0), (60.0, 20.0)]  # its first point is 11.2 ft from A's end; its run continues the join's own direction
+    s = _StubSettlement(lanes=[a, b])
+    assert _keep_the_route_wide(s, [], [], []) == 1
+    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (100.0, 0.0)], "A's join would hairpin: declined"
+    assert [tuple(p) for p in s.M["lanes"][1]["pts"]] == [(100.0, 0.0), (90.0, 5.0), (60.0, 20.0)], "B's join to the same end runs straight: taken"

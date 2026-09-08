@@ -60,8 +60,10 @@ count is measured; the long rolls start first and their concurrency is capped; i
   gate with its reason and the unique coverage or emergent condition it carries, seeded from the packing
   record and the census. A site that must roll a rostered spec a second time by its nature carries its own
   entry naming the mechanism and the reason, and the verdict lists it as a stated duplicate: the fan-out
-  test's pool-child path (the mechanism under test; its serial half is served from the shared roll) and
-  nothing else today. A test that rolls a spec not in the roster fails the gate with the instruction to
+  test's pool-child path (the mechanism under test; its serial half is served from the shared roll) -
+  the only one the drafting census showed; the first gated census (2026-09-08) found three more sites that
+  roll a rostered spec by their nature and two roster kinds the draft had no word for, all recorded in D6
+  and D7 rather than waived. A test that rolls a spec not in the roster fails the gate with the instruction to
   add the entry with its reason. The roster's size is the recorded roll count; `make audit` prints it.
 - **FR-005 First-attempt seeds.** Where a test does not exist to exercise the re-roll loop and its seed
   needs more than one attempt, the seed moves to one that finishes first (the CLI test's seed 8). The
@@ -137,3 +139,25 @@ count is measured; the long rolls start first and their concurrency is capped; i
   instrument patched six functions and missed the package's re-exported `build` on its first run; the
   gate must not be able to be short the same way, so `roll_scope()` writes the record and the AST test of
   feature 210 is what proves the chokepoint is total.
+- **D6 - a roll is (spec, request, PROCESS), and two more duplicates and a seed.** The first gated census
+  (2026-09-08) grouped by request alone and reported the fan-out's serial and pool children as one roll with
+  two attempts - hiding the very duplicate FR-004 states. A `generate` that re-rolls does so in one process,
+  so grouping by pid keeps its attempts together and separates two children of one test. The same census
+  found: the immune test's perturbed second roll (Kashikawa 3) and the real-map cache round trip (Inashiro
+  4, which ran the gen TWICE - a subprocess for the files and `run_and_record` in the worker for the record;
+  now one child roll) are stated `Duplicate`s with their reasons; the two perf-profile tests both rolled
+  Inashiro 5 in the worker, so the first-stage test rolls seed 7, rostered (it stops after `water_frame`,
+  milliseconds); and the stub-stage modules (`tests/hamletgen/test_driver.py`, `test_placement_stages.py`)
+  record rolls of stand-in stages - `InProcess(stub=True)`: reported and bounded by `STUB_MAX_S` (5 s
+  against an 11 s shortest real roll), never counted as hamlets.
+- **D7 - the pool sweep's generators are a roster kind of their own, `PoolGen`, not unified with the spec
+  roll.** `gate_obtain` rolls a shipped `.gen.py` only when its cache key moved (an engine change) and
+  serves it from the gen cache otherwise, so it can be neither a `Roll` (stale on every warm full run) nor
+  a `Duplicate` (two of the five - Sawada, Mizuguchi - ship no rostered spec). Three of the five share a
+  (name, seed) with a gate roll, so a COLD run rolls the reference twice: once as the spec the gate tests
+  read, once as the generator that ships it. Unifying them - the sweep reading the spec roll's manifest
+  instead of running the gen - was priced and declined: the gen script is the unit the sweep exists to run
+  (its budget, its manifest, its coverage child), and the two briefs are not the same today - the pool's
+  Inashiro carries `fixtures_min={'shrine': 1}` and the gate's SPEC literals do not (recorded in the roster
+  row and R4; the GM's to rule on). The verdict allows a pool gen once per run, from the sweep only, and
+  prints whether it rolled or was served.

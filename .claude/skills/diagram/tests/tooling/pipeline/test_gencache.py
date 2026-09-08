@@ -42,6 +42,25 @@ def test_a_gen_that_exits_NONZERO_still_fails_loudly(tmp_path, monkeypatch):
 
 
 @pytest.mark.tooling
+def test_the_child_s_gen_target_tolerates_a_zero_exit_and_raises_a_nonzero_one(tmp_path, monkeypatch):
+    """`_run_gen_arg` is what the roll child runs for a gen (feature 213: the regen site and the immune test
+    roll in a child) - the same exit tolerance as `run_and_record`, proved in both directions, and the
+    perturbation it applies to `Settlement.meta` is put back afterwards whichever way the gen ends."""
+    from l7r.diagram import settlement
+
+    eng, gen, out = _fixture(tmp_path)
+    _with_engine(monkeypatch, tmp_path, eng)
+    orig = settlement.Settlement.meta
+    gen.write_text(gen.read_text() + "\nraise SystemExit(0)\n")
+    gencache._run_gen_arg((str(gen), 1))  # must RETURN, not raise
+    assert out.read_text() == "7" and settlement.Settlement.meta is orig
+    gen.write_text(gen.read_text().replace("raise SystemExit(0)", "raise SystemExit(2)"))
+    with pytest.raises(SystemExit):
+        gencache._run_gen_arg((str(gen), 0))
+    assert settlement.Settlement.meta is orig
+
+
+@pytest.mark.tooling
 def test_a_foreign_parallel_coverage_file_reaches_the_report(tmp_path):
     """R3 spike - THE load-bearing mechanism of the cache-backed gate (026): a parallel-mode
     coverage data file present beside the session's data file is merged by

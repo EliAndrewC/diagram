@@ -492,10 +492,9 @@ def _roll(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any], Report], st
     def recorded() -> tuple[tuple[SitePlan, dict[str, Any], Report], dict[str, Any]]:
         return _hamlet_in_child(spec)
 
-    def produce() -> tuple[SitePlan, dict[str, Any], Report]:
-        return recorded()[0]
-
-    return obtain(f"roll:{spec!r}", produce, share=True, recorded=recorded)
+    # `produce` is the in-process fallback signature `obtain` expects (as in `keyed_to`); every storing path
+    # takes `recorded` and a `roll:` subject always stores, so it is never called under the gate
+    return obtain(f"roll:{spec!r}", lambda: recorded()[0], share=True, recorded=recorded)
 
 
 def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
