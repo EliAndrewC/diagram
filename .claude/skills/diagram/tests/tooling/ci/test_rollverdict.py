@@ -276,3 +276,19 @@ def test_a_roster_row_whose_only_rolls_are_stand_ins_is_stale_on_a_full_run() ->
     rows = [_roll("Retry", 4, "tests/gate/hamletgen/test_driver.py::t", "r1", pid=W, dt=0.01)]
     failures, _ = rollverdict.judge(rows, _roster(("Retry", 4), in_process=(stub,)), full=True, renders_ok=set())
     assert any("stale" in f and "Retry seed=4" in f for f in failures), failures
+
+
+def test_a_child_roll_requested_from_a_stub_module_is_a_real_roll_judged_by_the_roster() -> None:
+    """Feature 216: the stub exception is about rolls made IN THE WORKER. A child roll a stub-excepted module
+    merely REQUESTS is the shared roll every other module reads, and is judged against the roster - the first
+    census after 216 bucketed the fan-out's request for Polder 12 as a 62 s "stub" and then reported the
+    Polder row as never rolled by the run."""
+    stub = types.SimpleNamespace(module="tests/gate/hamletgen/test_driver.py", reason="stand-in stages", stub=True)
+    child = [_roll("Polder", 12, "tests/gate/hamletgen/test_driver.py::test_fanout", "r1", pid="4242", dt=62.0)]
+    failures, lines = rollverdict.judge(child, _roster(("Polder", 12), in_process=(stub,)), full=True, renders_ok=set())
+    assert failures == [], failures
+    assert any("Polder seed=12: 1 roll(s)" in ln and "rostered" in ln for ln in lines), lines
+    assert not any("stand-in stage rolls" in ln for ln in lines), "a child roll is not a stub"
+    in_worker = [_roll("Polder", 12, "tests/gate/hamletgen/test_driver.py::test_fanout", "r1", pid=W, dt=62.0)]
+    failures, _ = rollverdict.judge(in_worker, _roster(("Polder", 12), in_process=(stub,)), full=False, renders_ok=set())
+    assert len(failures) == 1 and "excepted as a stub-stage module" in failures[0], "...and the in-worker one still is, and is still too slow"

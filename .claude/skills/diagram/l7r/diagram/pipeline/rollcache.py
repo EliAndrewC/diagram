@@ -379,7 +379,10 @@ def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: st
     def recorded() -> tuple[T, dict[str, Any]]:
         return _in_child(child, None)
 
-    return obtain(subject, lambda: recorded()[0], recorded=recorded)
+    # SHARED ACROSS WORKERS (feature 216): without `share=True` the FULL run's bypass stores the child's record and
+    # serves nobody, so a module fixture reached from two xdist workers rolled the seatings twice (the census named
+    # both tests). The key is the subject - the test's source hash - so two callers can never be handed each other's roll.
+    return obtain(subject, lambda: recorded()[0], share=True, recorded=recorded)
 
 
 @contextlib.contextmanager

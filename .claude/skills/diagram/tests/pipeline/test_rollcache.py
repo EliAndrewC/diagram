@@ -489,3 +489,30 @@ def test_a_covered_child_is_labeled_with_the_parent_s_coverage_context(tmp_path,
     monkeypatch.setattr(rollcache, "_parent_is_covered", lambda: False)
     rollcache._in_child("mod:fn", None)
     assert "_covmod" not in seen[-1]
+
+
+def test_a_child_roll_keyed_to_a_test_is_shared_across_workers_under_the_full_run(tmp_path, monkeypatch):  # type: ignore[no-untyped-def]
+    """Feature 216: `keyed_to(..., child=)` shares like `hamlet()` does. Without `share=True` the FULL run's bypass
+    stored the child's record and served nobody, so a module fixture reached from two xdist workers rolled the
+    seatings twice - the census named both tests. Simulated as the sibling worker exactly as the test above."""
+    _toy(tmp_path, monkeypatch)
+    monkeypatch.setenv(rollcache.FULL_ENV, "1")
+    monkeypatch.setenv("PYTEST_XDIST_TESTRUNUID", "feature-216-keyed-child")
+    rollcache.reset_shared()
+    calls: list[str] = []
+
+    def in_child(child, arg):  # type: ignore[no-untyped-def]
+        calls.append(child)
+        return {"seated": 10}, {}
+
+    monkeypatch.setattr(rollcache, "_in_child", in_child)
+
+    def a_test() -> None:
+        pass
+
+    first, how = keyed_to_toy(a_test, lambda: {"seated": 10}, child="tests.x:roll")
+    assert how == "BYPASS" and calls == ["tests.x:roll"], (how, calls)
+    rollcache._SHARED_BYPASS.clear()  # the sibling worker: no dict, but this run's store
+    again, how = keyed_to_toy(a_test, lambda: {"seated": 10}, child="tests.x:roll")
+    assert how == "BYPASS-SHARED-RUN" and again == first, how
+    assert calls == ["tests.x:roll"], "the child ran ONCE for the run"

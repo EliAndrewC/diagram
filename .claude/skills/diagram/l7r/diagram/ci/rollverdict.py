@@ -145,7 +145,11 @@ def judge(rows: list[dict[str, Any]], roster: Any, *, full: bool, renders_ok: se
             floor.append(r)
             continue
         exc = _exception(r.get("test"), roster.IN_PROCESS)
-        if exc is not None and getattr(exc, "stub", False):
+        # A STUB IS AN IN-PROCESS RECORD (feature 216): the exception is about rolls made IN THE WORKER, so only a
+        # record whose pid is the worker's is a stand-in stage. A child roll a stub-excepted module REQUESTS is a
+        # real shared roll and is judged by the roster like any other - the first census after 216 bucketed the
+        # fan-out's request for Polder 12 as a 62 s "stub" and then reported the Polder row as never rolled.
+        if exc is not None and getattr(exc, "stub", False) and str(r.get("pid")) == str(r.get("worker")):
             stubs.append(r)
             continue
         rolls[(key, str(r.get("request")), str(r.get("pid")))].append(r)
