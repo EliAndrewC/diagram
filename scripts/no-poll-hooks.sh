@@ -29,7 +29,9 @@
 # ESCAPE HATCH: genuine waits on EXTERNAL state the harness cannot notify about (a dev server's
 # port opening, a remote queue) are legitimate - put the token POLL_OK in the command, ideally as a
 # comment naming what is being waited on. The token is deliberately explicit so the choice is
-# visible in the transcript rather than habitual.
+# visible in the transcript rather than habitual. The escape permits the WAIT; it does not switch
+# off the self-match correction (GUARD_EDIT_OK: GM 2026-09-08, after an escaped waiter looped for
+# hours on a gate that had finished) - a literal `pgrep -f` pattern is bracketed on the escaped path too.
 #
 # Wired from .claude/settings.json alongside batching-hooks.sh / clone-sync-hooks.sh (every session
 # runs MAIN's copy via an absolute path, so a change here takes effect everywhere at once).
@@ -57,11 +59,51 @@ except Exception: print("")' 2>/dev/null || true)
 NP_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$NP_HERE/_guardlog.sh"
+
+# bracket_self_match <rule> <context> - if the command carries a literal process-match pattern
+# (`pgrep -f "make done"`), emit it REWRITTEN with the bracket trick and exit 0; otherwise return.
+# The pattern is part of this very command line, so pgrep -f finds this shell and reports "running"
+# forever. A pattern built from a variable ($VAR - the literal text on the command line is the
+# variable name) or written with the bracket trick ([m]ake) does not self-match, so both are left
+# alone (`_hm_shape.py bracket` returns nothing for them). Shared by the escape branch and section 4.
+# GUARD_EDIT_OK: 2026-09-08 (GM) - THE ESCAPE NO LONGER SKIPS THE CORRECTION. A POLL_OK wait exited
+# this guard before section 4 ran, so an escaped loop kept its self-matching pattern: a waiter on a
+# detached `make page-check` carried `! pgrep -f "make page-check"` in its exit condition, escaped
+# with POLL_OK because the loop was legitimately waiting on a detached run's log, and then looped for
+# hours on a gate that had finished in 7 s - the exact 2026-07-25 fault, let through by the token.
+# The escape decides whether the WAIT is permitted; it says nothing about whether the pattern is
+# correct, and the correction is mechanical, so it applies on both paths.
+bracket_self_match() {  # rule, context
+  printf '%s' "$SCAN" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f' || return 0
+  local fixed
+  fixed=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" bracket 2>/dev/null || true)
+  [ -n "$fixed" ] || return 0
+  guard_log no-poll rewrote "$(guard_cmd)" "$1"
+  printf '%s' "$INPUT" | REWRITTEN="$fixed" CONTEXT="$2" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": os.environ["CONTEXT"],
+}}))'
+  exit 0
+}
+# The sanitized copy (heredoc bodies and quoted strings blanked - see the note at section 1) is
+# computed here so the escape branch can ask the same question section 4 asks.
+SCAN=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+[ -n "$SCAN" ] || SCAN="$CMD"
+
 # GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention (was `case *POLL_OK*`).
 # GUARD_EDIT_OK: feature 169 - $NP_HERE, not $HERE. This branch sits at line 60 and `HERE` is not
 # defined until line 72, so the path was empty and the escape silently stopped working - caught by
 # the new suite within a minute, which is why the escape is tested in BOTH directions.
-if escape_or_refuse no-poll POLL_OK poll-ok "$NP_HERE"; then exit 0; fi   # GUARD_EDIT_OK: feature 170
+if escape_or_refuse no-poll POLL_OK poll-ok "$NP_HERE"; then   # GUARD_EDIT_OK: feature 170
+  bracket_self_match escaped-self-match \
+    "POLL_OK permitted this wait, and its process-match pattern was bracketed for you: a literal pattern is an argument of the command line being searched, so it always finds the searching shell itself and the loop never ends (2026-09-08: an escaped waiter on a detached page-check looped for hours on a gate that finished in 7 s). The escape decides whether you may wait; it does not make the pattern correct."
+  exit 0
+fi
 
 # GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION, and this guard was the last common
 # offender. It matches substrings, so it refused the very command that was WRITING feature 164's
@@ -70,11 +112,7 @@ if escape_or_refuse no-poll POLL_OK poll-ok "$NP_HERE"; then exit 0; fi   # GUAR
 # and quoted strings, which is where prose travels; every pattern below now runs against that, so a
 # command that TALKS about a busy-wait passes and one that RUNS one does not. Same fix `gate-hooks`
 # took on 2026-08-29, same reason, and CLAUDE.md's standing rule for guards: match INVOCATIONS.
-HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=/dev/null
-. "$HERE/_guardlog.sh"
-SCAN=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
-[ -n "$SCAN" ] || SCAN="$CMD"
+HERE="$NP_HERE"   # GUARD_EDIT_OK: 2026-09-08 - one resolution; SCAN is computed above the escape branch now
 
 block() {  # reason, alternative, RULE
   # GUARD_EDIT_OK: feature 168 - the entry names WHICH rule fired, because this guard enforces three
@@ -171,25 +209,9 @@ fi
 # substitution, so the hook performs it: the command runs, correctly, and no round trip is spent
 # (GM 2026-08-30). `_hm_shape.py bracket` returns nothing for a pattern that is already bracketed or
 # built from a variable - neither can match its own command line - so those are untouched as before.
-if printf '%s' "$SCAN" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f'; then
-  FIXED=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" bracket 2>/dev/null || true)
-  if [ -n "$FIXED" ]; then
-    guard_log no-poll rewrote "$(guard_cmd)"
-    printf '%s' "$INPUT" | REWRITTEN="$FIXED" python3 -c '
-import json, os, sys
-payload = json.load(sys.stdin).get("tool_input", {})
-payload["command"] = os.environ["REWRITTEN"]
-print(json.dumps({"hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "updatedInput": payload,
-    "additionalContext": (
-        "The process-match pattern was bracketed for you: a literal pattern is an argument of the "
-        "command line being searched, so it always finds the searching shell itself and the wait "
-        "never ends. Corrected rather than refused - the refusal used to cost a round trip to say "
-        "the same thing."),
-}}))'
-    exit 0
-  fi
-fi
+# GUARD_EDIT_OK: 2026-09-08 - the emission moved into `bracket_self_match` above, shared with the
+# escape branch; the rule slug `self-match` names this branch in the log (it defaulted to the event).
+bracket_self_match self-match \
+  "The process-match pattern was bracketed for you: a literal pattern is an argument of the command line being searched, so it always finds the searching shell itself and the wait never ends. Corrected rather than refused - the refusal used to cost a round trip to say the same thing."
 
 exit 0

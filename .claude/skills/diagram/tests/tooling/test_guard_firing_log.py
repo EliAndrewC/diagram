@@ -36,6 +36,9 @@ CASES = [
     ("no-poll", _payload(command="while :; do sleep 5; done"), "blocked", "busy-wait-loop"),
     ("no-poll", _payload(command="command sleep 30"), "blocked", "disguised-sleep"),
     ("no-poll", _payload(command="make done  # POLL_OK: an external port"), "escaped", "poll-ok"),
+    # GUARD_EDIT_OK: GM 2026-09-08 - an escaped wait whose pattern self-matches is corrected too
+    ("no-poll", _payload(command='true POLL_OK waits on a detached run; until ! pgrep -f "make page-check" >/dev/null; do sleep 5; done'), "rewrote", "escaped-self-match"),
+    ("no-poll", _payload(command='pgrep -f "make done"'), "rewrote", "self-match"),
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py --collect-only"), "blocked", "bare-pytest"),
     # feature 212: the targeted run and the wrapped entry point are REWRITTEN, and each records its rule
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo 2>&1 | tail -3"), "rewrote", "targeted-pytest"),

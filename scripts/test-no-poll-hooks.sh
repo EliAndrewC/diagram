@@ -166,6 +166,24 @@ check "POLL_OK allows a real port wait" ok '# POLL_OK: waiting for the dev serve
 until curl -s localhost:8080 >/dev/null; do sleep 2; done'
 check "POLL_OK allows a bare sleep bypass" ok 'command sleep 5  # POLL_OK: external deploy settling'
 
+# GUARD_EDIT_OK: GM 2026-09-08 - THE ESCAPE DOES NOT SKIP THE SELF-MATCH CORRECTION. The real one: a
+# waiter on a detached `make page-check`, escaped with POLL_OK because it read the run's log, whose
+# exit condition ALSO asked `! pgrep -f "make page-check"` - which matched the waiter's own shell, so
+# the loop ran for hours on a gate that had finished in 7 s. The escape used to exit before the
+# correction ran. Now the wait is permitted AND the pattern is bracketed, and both are recorded.
+echo "4b. an escaped wait still gets the self-match correction"
+ESCAPED_SELF='true POLL_OK waits on the detached page-check gate writing its log; L=/tmp/pc.log; until grep -qE "passed|failed" $L 2>/dev/null && ! pgrep -f "make page-check" >/dev/null; do sleep 5; done; tail -6 $L'
+rewritten "the 2026-09-08 waiter: escaped AND bracketed" "$ESCAPED_SELF" '[m]ake page-check'
+# GUARD_EDIT_OK: 2026-09-08 - both entries land: the escape (rule poll-ok) and the rewrite
+if grep -rlq 'poll-ok' "$GUARD_LOG_ROOT" && grep -rlq 'escaped-self-match' "$GUARD_LOG_ROOT"; then
+  echo "  ok      the escaped-and-corrected wait records both the escape and the rewrite"; PASS=$((PASS+1))
+else
+  echo "  FAIL    the escaped-and-corrected wait did not record both entries"; FAIL=$((FAIL+1))
+fi
+check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep -f "[m]ake done" >/dev/null; do sleep 5; done  # POLL_OK: a run detached by another session'
+rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "make done"; pgrep -f "make quick"' '[m]ake quick'
+rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' '[m]ake done'
+
 echo
 echo "no-poll-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

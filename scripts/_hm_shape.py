@@ -116,18 +116,22 @@ _PROCMATCH = re.compile(
 
 
 def bracket_pattern(cmd: str) -> str | None:
-    """`cmd` with a literal process-match pattern bracketed, or None when there is nothing to fix."""
-    m = _PROCMATCH.search(cmd)
-    if not m:
-        return None
-    pat = m.group(4)
-    if not pat.strip() or "[" in pat or "$" in pat:
-        return None                       # already bracketed, or built from a variable: cannot self-match
-    first, rest = pat[0], pat[1:]
-    if not first.isalnum():
-        return None
-    quoted = m.group(3) or "'"
-    return cmd[: m.start()] + f"{m.group(1)}{m.group(2)} {quoted}[{first}]{rest}{quoted}" + cmd[m.end() :]
+    """`cmd` with EVERY literal process-match pattern bracketed, or None when there is nothing to fix.
+
+    GUARD_EDIT_OK: 2026-09-08 - every match, not the first one. The first-match form returned None as
+    soon as the first pattern was already bracketed, which left a second, self-matching one untouched.
+    """
+    out = cmd
+    for m in reversed(list(_PROCMATCH.finditer(cmd))):
+        pat = m.group(4)
+        if not pat.strip() or "[" in pat or "$" in pat:
+            continue                      # already bracketed, or built from a variable: cannot self-match
+        first, rest = pat[0], pat[1:]
+        if not first.isalnum():
+            continue
+        quoted = m.group(3) or "'"
+        out = out[: m.start()] + f"{m.group(1)}{m.group(2)} {quoted}[{first}]{rest}{quoted}" + out[m.end() :]
+    return None if out == cmd else out
 
 
 # ---------------------------------------------------------------------------------------------
