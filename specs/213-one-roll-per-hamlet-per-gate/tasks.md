@@ -36,7 +36,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
       perf-profile seed; a second full run green on the census
       research: rendering
       verify: DONE. DONE. D6 and D7 in spec.md: the roll key carries the pid; Kashikawa's perturbed roll and the cache round trip are stated Duplicates; the five pool gens are PoolGen rows (allowed once, from the sweep, never stale); the stub modules are InProcess(stub=True), bounded by STUB_MAX_S; the first-stage perf-profile test rolls seed 7. Verified: the full run of 2026-09-08 (t08-w4-s4) green on the census after the first two runs had failed it
-- [ ] T10 feature 207's D14 confirmed closed (FR-001, SC-004): the polder-only incremental run measured
+- [x] T10 feature 207's D14 confirmed closed (FR-001, SC-004): the polder-only incremental run measured
       with the census - the floor phase rolls nothing, the gate's time recorded against 219 s; ticked with
       the numbers whether or not a change beyond FR-001 was needed (the GM's request, relayed 2026-09-07)
       research: rendering
+      verify: DONE. DONE. SC-004 measured on the polder-only edit of 207's R8, four times (research R4): 228 s blind (the polder tests unselected, the floor re-rolling both maps unseen), 315 s and 262 s while the child's label was too coarse (D8, D9), and finally 125 s against 207's 219 s - 28 tests, pytest 107 s, four rolls of three specs all by the tests (Polder 12, Polder 19, Kuwabata 21 + its pool gen cold), the floor rolling nothing. D14 closed by FR-001's one subject per spec, and the two 207 defects the census exposed fixed on the way

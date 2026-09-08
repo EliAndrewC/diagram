@@ -1,6 +1,6 @@
 # Feature 213 - one roll per hamlet per gate
 
-**Status**: DRAFT - `spec-fidelity` round 1 required five changes, all applied: FR-007's surface DERIVED
+**Status**: IMPLEMENTED 2026-09-08 - `spec-fidelity` FAITHFUL at round 2 of 5 (T01); every mechanism gated and
 from the callers of `generate`/`build`/`STAGES` with every site in a child or a stated exception and a
 gate check on it; FR-003's rule on a second ROLL, not a second request; the three exceptions adjudicated
 (perf tests roll their own rostered seed; the fan-out's pool half a stated duplicate; `gate_obtain` not

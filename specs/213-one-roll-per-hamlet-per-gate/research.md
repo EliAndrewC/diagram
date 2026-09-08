@@ -181,3 +181,22 @@ the sample is what separates 4.1 GiB from 6.0 GiB in the table, while the worker
 plain roll child 180-183 MiB (it carries the pickled plan, manifest and Report out). The 550 MB in R3 does
 not reproduce - it was measured before feature 208 took the page raster (PIL and libwebp's C buffers) out
 of every roll. Nothing to act on.
+
+**The polder-only incremental run (T10, SC-004, 207's D14) - four measurements, because the first three each
+found something.** The same edit as 207's R8 (a harmless statement in `waterfields/polder.py` `s_on_side`),
+each against a fresh full baseline:
+
+| baseline's child coverage | selected | pytest | whole gate | rolled | the floor |
+|---|---|---|---|---|---|
+| (207's R8, rolls in the worker) | 33 tests | 79 s | 219 s | the two polder maps by the tests | re-rolled both (~140 s) |
+| unlabeled (rolls in a child, no context) | 54 tests | 38 s | 228 s | 1 spec, by the cache round trip - NO polder test was selected | re-rolled both, unseen: the floor ran outside the census |
+| labeled `coverage run --context=`, fixtures keyed by argument name | 106 tests | 298 s | 315 s | 18 specs: ten modules' `rolled` fixtures shared one context | nothing |
+| labeled, fixtures keyed by definition site | 49 tests | 244 s | 262 s | 14 specs: the child's IMPORT of the engine was under the label, so every roller had "touched" polder.py | nothing |
+| **the child starts coverage itself: imports under no context, the roll under the label** | **28 tests** | **107 s** | **125 s** | **Polder 12, Polder 19, Kuwabata 21 (its comb runs through the polder code) - and the Kuwabata pool gen, cold** | **nothing** |
+
+So D14 is closed and then some: 125 s against 219 s, the floor's second roll gone (`report_deps` reads the
+tests' `roll:` record) and the gate rolling three maps where 207's rolled two twice. The three intermediate
+rows are the reason the census exists: each was green on every floor and would have shipped as "done" with a
+selection that was blind (row 2) or ten times too wide (rows 3-4); only the roll count told them apart.
+Two defects of feature 207's own were fixed on the way (spec D9: a fixture's context keyed by its definition
+site; the import-time attribution above), both invisible before a child could carry a label at all.
