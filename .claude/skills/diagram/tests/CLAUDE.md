@@ -117,7 +117,9 @@ adding another hamlet that gets rolled."* So:
   in-process roll from an unexcepted module, a roll the floor made itself. And because the incremental gate
   (feature 207) selects tests from coverage CONTEXTS, every coverage child is labeled with its requester's
   context (`_census.CONTEXT_ENV`, exported by `ci/selection.switch`) - a roll in a child would otherwise be
-  invisible to the selection, which is exactly what the polder-only run of 2026-09-08 showed.
+  invisible to the selection, which is exactly what the polder-only run of 2026-09-08 showed. And a fixture's
+  context is keyed by WHERE it is defined (`tests/gate/test_water.py::rolled`, `ci/selection.fixture_id`): ten
+  gate modules each define a `rolled` fixture, and one shared name made that same edit re-roll 18 specs.
 - **Rolling tests get their roll from the roll cache, in a child.** `rollcache.hamlet(spec)` /
   `report(spec)` are two views of ONE roll per spec (`generate`, kept manifest and all), shared across the
   workers behind a lock so the first wave waits instead of each rolling, and stored so the hamlet floor
