@@ -601,4 +601,14 @@ that splits the web. Open, recorded for the GM: the through-way's tread 4.1 ft f
 2026-08-29 item, wanting its `research: physical` task on the drip line - nothing in the gate measures
 clearance, only overlap); the kura rate (8 of 12 here, the pool at 44% against the documented 30%); the
 wet-paddy class absent from this sheet; the board's caption crossing three windbreak crowns; the copse still
-not reading as a copse. Reviewed twice (`settlement-review`, DELTA).
+not reading as a copse. Reviewed twice (`settlement-review`, DELTA). The second pass confirmed both fixes (the
+collar's ground planted, not bare: +1.9 sq ft in its box; the web one piece by a 29 ft straggler link biting
+nothing) and measured what else the re-plant moved: 124 of 482 rings, ALL 24 dry plots re-cut (the planted-basin
+count feeds the shared random stream the hem draws from - `specs/220-field-fitted-once/research.md` R4c), the
+sharpest basin apex 21.7 -> 25.3 deg (the map's one sub-25-degree ring gone), and the frame 27 ft taller because
+one windbreak clump extended the content, which re-clothed the hinterland (tree crowns 699 -> 773, a fourth
+woodland parcel). One thing it asked to fix is left as it stands, by a recorded decision: ring 413, a right
+triangle at 0.230 of the design cell, is a TRADE's result, and `_unjog` judges a repair at the gate's own line
+(`_GATE_MIN_AREA`, 0.20) rather than the placer's margin above it (0.25) - "a repair is not a placement choice,
+so it is allowed exactly where the map would have been allowed to draw it" - so it is inside the rules the map
+is held to, and the only basin in the pool in that band.
