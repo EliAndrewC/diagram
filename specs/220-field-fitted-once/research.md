@@ -66,3 +66,74 @@ Against the GM's yardstick (field under 3 s, the roll around 7.5 s): both met.
 the finished figure moves the chosen multiplier in its fourth decimal, so every coordinate shifts by a
 fraction of a pixel. A moved manifest all the same, so the pool sweep and the review pass of FR-005 run
 over it (R2b below).
+
+## R2b - step 1 on the pool
+
+`make maps` clean (the reference, the five tripwire seeds, then Kashikawa, Kuwabata, Mizuguchi, Sawada).
+Four hamlets moved and are under `settlement-review` (FR-005); Kuwabata, the polder, is byte-identical:
+
+| map | paddy plots | roll acres | else |
+|---|---|---|---|
+| Inashiro | 574 -> 574 | 18.8777 -> 18.8778 | sub-pixel |
+| Kashikawa | 802 -> 801 | 26.930 -> 26.924 | dry plots 29 -> 27, lanes 13 -> 14, cluster aspect 3.08 -> 3.17 |
+| Mizuguchi | 498 -> 481 | 15.82 -> 15.49 | cluster aspect 3.44 -> 2.40 - the house cloud re-seated |
+| Sawada | 778 -> 770 | 24.55 -> 24.62 | dry plots 22 -> 26, lanes 16 -> 13 |
+
+The search's path through its guesses is what moves: each guess's predicted acreage sits a few
+hundredths of a percent off the finished figure the old search read, the power-law step reads those
+numbers, and on three maps the winning multiplier landed a plot row away.
+
+## R3 - step 2: the stroke index (2026-09-09)
+
+`StrokeIndex` (`waterfields/banks.py`): the stroke's segments in a 64 px cell grid; a query walks the
+segments in the cells within the caller's reach, in index order, with `supply_bank_clearance`'s own
+arithmetic (`_nearest_segment`, one body for both walks). The first cut fell back to the full walk
+whenever the nearest of those was beyond the reach - and that was a THIRD of all calls (27,000 of
+78,000), because the callers' bbox gate admits every point inside a stroke's box, most of them far
+from its line. Measured: no gain, 2.48 s against 2.43 s. The two hot callers (`_clear_supply`,
+`_quad_in_supply`) only ever act on a gap under the reach, so for them a beyond-reach point is
+answered `BEYOND` (gap 1e9) without the walk - the same verdict, proven by `test_strokes.py` on random
+strokes and points; the hem's `_bank` reads the nearest half-width wherever the point stands and keeps
+the exact fallback. Then: **`stage_field` 2.43 s -> 2.09 s**, the roll 7.2 s -> 6.9 s, every pool map
+byte-identical to step 1. Against the GM's yardstick (near 2.4 s after step 2): met.
+
+## R4 - step 3: one geometry per plot, neighbors by tree (2026-09-09)
+
+`waterfields/seams/geoms.py`: `PlotGeoms` builds `Polygon(ring).buffer(0)` once per ring OBJECT (the
+passes reassign a ring, never mutate one in place) and answers "which plots touch this box" from an
+`STRtree` over the same vertex-extent boxes the old gate compared, so the candidate set is identical;
+`_trade`'s three scans over every plot and `_absorb`'s scan over every basin read it. `_unjog` fell from
+0.78 s to 0.22 s profiled.
+
+**A dead end, measured.** `GeomTree`'s first form rebuilt its tree after every merge the pocket pass
+made - 101 rebuilds of a 600-basin tree per roll, 0.68 s profiled, MORE than the scan it replaced. It
+now keeps a `changed` set and reads a replaced basin's current envelope directly; the tree is built once
+per round. `stage_field` **2.09 s -> 1.71 s**, `close_seams` 1.8 s -> 0.95 s profiled, the roll 6.5 s,
+every map byte-identical to step 1.
+
+**After the three steps** (seed 4, real seconds):
+
+| | before | step 1 | step 2 | step 3 |
+|---|---|---|---|---|
+| `stage_field` | 5.25 | 2.43 | 2.09 | **1.71** |
+| roll total | 9.9 | 7.2 | 6.9 | **6.5** |
+
+**What is left in the field** (3.7 s profiled, ~1.7 s real): the four carves are 2.1 s profiled - the
+sector-row carve itself (`_sector_body_rows`, `edge`, `_bnd`, the per-quad supply test at a 3 px step) -
+and the one finish 1.0 s, of which the seam passes are 0.95. The GM's assessment named the carve as what
+"under a second would need"; its share is now 58% of the stage and it is the next lever (spec D3).
+
+## R4b - a defect the review found, fixed in the work (Principle XIV)
+
+The `settlement-review` of Inashiro (step 1's delta) found two recorded plot rings that cross
+themselves - #29 at (1433.7, 1312) and #303 at (1897.7, 1553.3), a 2 px needle each, one of them
+byte-identical across the delta and so pre-existing. Ink-invisible under the bund stroke; not a simple
+polygon for any shape metric. Cause: `close_seams` repairs bow-ties at its START (so a crossing ring's
+ground returns to the pocket pool), but the trades and welds that follow judge a `buffer(0)` COPY of the
+ring they record, and the manifest rounds every vertex to 0.1 px - a ring valid unrounded can revisit a
+vertex exactly once rounded. Fix: the repair is lifted to `_repair_crossing_rings` and runs again at the
+END of the pass on the ring as the manifest will round it; consumes no randomness, so the plot count
+and the RNG are untouched. On the reference: 574 rings, the two repaired, none invalid, `roll_acres`
+18.8778 -> 18.8766. Guard: `tests/gate/test_paddy_fabric.py::test_every_recorded_plot_ring_is_a_simple_polygon`
+on the cached roll - it fails on the code before the fix. The review's second note, the stale acreage in
+`inashiro.notes.md`'s comparison table (18.4 for a drawn 18.9), is corrected in place.

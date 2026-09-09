@@ -234,3 +234,16 @@ def test_a_bund_does_not_build_a_flight_of_steps(fan) -> None:
     grain = 2.0 / float(M["meta"].get("ftpx") or 1.0)
     staircases = [i for i, r in enumerate(f["plot_rings"]) if len(jog_vertices([(float(a), float(b)) for a, b in r], grain)) > 1]
     assert not staircases, f"{len(staircases)} plot ring(s) carry more than one step - a staircase, not a nudge"
+
+
+def test_every_recorded_plot_ring_is_a_simple_polygon(fan) -> None:
+    """A ring that crosses itself is not a basin (feature 220, from the settlement-review of Inashiro:
+    two rings shipped with a vertex revisited - a 2 px needle each, ink-invisible under the bund stroke,
+    and not a simple polygon for any shape metric). The seam pass repairs bow-ties at its start; this
+    holds the rings AS RECORDED, rounded to 0.1 px, after every trade and weld that follows."""
+    shapely = pytest.importorskip("shapely.geometry")
+    _M, f = fan
+    rings = f["plot_rings"]
+    assert rings, "no plot rings on the fan"
+    crossing = [i for i, r in enumerate(rings) if len(r) >= 3 and not shapely.Polygon([(float(a), float(b)) for a, b in r]).is_valid]
+    assert not crossing, f"self-crossing plot rings as recorded: {crossing[:6]}"

@@ -41,7 +41,7 @@ The comparison is the evidence:
 | | Ikegami (authored) | Inashiro (scripted) |
 |---|---|---|
 | generator | 239 lines, ~40 literal coordinates | 9 lines, no coordinates |
-| paddy acreage | 15.3 acres against a stated target of ~20 | 18.4 acres against a computed 19.5 |
+| paddy acreage | 15.3 acres against a stated target of ~20 | 18.9 acres against a computed 19.5 |
 | households seated | 15 of 15 | 15 of 15 |
 | gate | green | green |
 

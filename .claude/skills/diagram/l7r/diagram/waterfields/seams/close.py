@@ -75,21 +75,7 @@ def close_seams(
     # passes the ring's ground is simply gone, and the neighbor's wall is left standing alone -
     # 12 of 48 cohort seeds failed `paddy_plot_seams_shared` that way. Dropped HERE the ground is
     # just more bare pocket, and this pass reclaims it like any other.
-    for _p in plots:
-        if len(_p["poly"]) < 3 or Polygon(_p["poly"]).is_valid:
-            continue
-        _fixed = _parts(Polygon(_p["poly"]).buffer(0))
-        if not _fixed:
-            continue
-        # ...and the repaired ring faces the same bar every other basin does. Noding a bow-tie can
-        # leave the surviving lobe pointed - cohort seed 20 came out as a needle and tripped
-        # `paddy_plots_are_workable_basins` - so a repair that is not a workable basin is refused and
-        # the ground returns to the bare pocket below, which is this pass's standing answer for a
-        # scrap. Judged at the GATE's own threshold, since a repair is not a placement choice.
-        _cand = _ring(max(_fixed, key=lambda q: q.area))
-        if len(_cand) >= 3 and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
-            _p["poly"] = _cand
-    plots[:] = [_p for _p in plots if len(_p["poly"]) >= 3 and Polygon(_p["poly"]).is_valid]
+    _repair_crossing_rings(plots)
     keep = [Polygon(p["poly"]).buffer(0) for p in plots]
     field = Polygon(envelope).buffer(0)
     outside = _outside_command(F, a_pts, dpts, field, g, bank)
@@ -177,6 +163,14 @@ def close_seams(
         # plot the CARVE sited rather than one this pass reclaimed
         plots.append({"poly": ring, "fill": R.choice(RICE_GREENS), "filler": True})
     _unjog(plots, g, _GATE_MIN_AREA * cell_area(plot_across, row_step), water, outside)
+    # ...AND ONCE MORE AT THE END, ON THE RINGS AS THE MANIFEST WILL ROUND THEM (feature 220,
+    # settlement-review of Inashiro, 2026-09-09). The repair above runs first so a bow-tie's ground
+    # returns to the pocket pool; but the trades and welds after it judge a `buffer(0)` COPY of the ring
+    # they record, and the manifest rounds every vertex to 0.1 px - so a ring that is valid unrounded
+    # can revisit a vertex exactly once rounded. Two shipped that way on the reference hamlet (#29 and
+    # #303, a 2 px needle each, ink-invisible under the bund stroke, and not a simple polygon for any
+    # shape metric). This pass consumes no randomness, so the plot count and the RNG are untouched.
+    _repair_crossing_rings(plots, rounded=True)
     # A POINTED SLIVER MUST NOT WEAR THE WATER TINT - the same rule `_sector_closing_rank` applies
     # when it carves one, and for the same reason: a blue plot tapering to a needle reads as a tiny
     # triangular pond at fit zoom, not as a leveled basin. The carve's own demotion judges the quad
@@ -262,3 +256,25 @@ def close_seams(
             or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
         ):
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
+
+
+def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:
+    """Node every self-crossing ring into its largest valid part, and drop what cannot be rescued.
+    `rounded`: judge and repair the ring as the manifest will record it (0.1 px), which is where a
+    needle that is open unrounded closes on itself."""
+    for _p in plots:
+        ring = [(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]
+        if len(ring) < 3 or Polygon(ring).is_valid:
+            continue
+        _fixed = _parts(Polygon(ring).buffer(0))
+        if not _fixed:
+            continue
+        # ...and the repaired ring faces the same bar every other basin does. Noding a bow-tie can
+        # leave the surviving lobe pointed - cohort seed 20 came out as a needle and tripped
+        # `paddy_plots_are_workable_basins` - so a repair that is not a workable basin is refused and
+        # the ground returns to the bare pocket below, which is this pass's standing answer for a
+        # scrap. Judged at the GATE's own threshold, since a repair is not a placement choice.
+        _cand = _ring(max(_fixed, key=lambda q: q.area))
+        if len(_cand) >= 3 and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
+            _p["poly"] = _cand
+    plots[:] = [_p for _p in plots if len(_p["poly"]) >= 3 and Polygon([(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]).is_valid]
