@@ -80,11 +80,13 @@ gate's placement tests and a `settlement-review` pass over the pool, not by a ma
 
 ## Decisions Recorded
 
-- **D1 - the search measures the carve, not the finish.** The finish conserves ground (the trades and
-  absorptions hand the same polygon across a wall; pockets are planted from bare floor inside the
-  envelope), so the pre-seam acreage is within the search's 6% tolerance of the finished one on every
-  map measured (R2 records the numbers). Where a map's winner changes, the map changes - accepted
-  under the GM's standing relaxation, verified per FR-005.
+- **D1 - the search measures the carve's PREDICTION of the finish, not the carve.** The premise in the
+  approved assessment - that the finish conserves ground - was right about a trade (the same polygon
+  handed across a wall) and wrong about the total: the seam pass PLANTS the bare pockets, 11-21% of the
+  fan, and a first cut that scored the bare carve overshot the target by 12% (research R2). So each
+  guess is scored on `CombCarve.planted_area`, the carved plots plus the bare ground inside the command
+  area, which is within 0.05% of the finished acreage at every size measured. Where a map's winner
+  changes, the map changes - accepted under the GM's standing relaxation, verified per FR-005.
 - **D2 - the three steps in the GM's order, each measured, all three implemented.** The GM approved
   *"one feature with those three steps in that order, each measured on the reference hamlet before the
   next"*; a step the measurement shows buying less than expected is still implemented and its result

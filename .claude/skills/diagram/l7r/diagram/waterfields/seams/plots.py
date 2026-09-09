@@ -79,10 +79,28 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
         for fa, fb in zip(fs[:-1], fs[1:], strict=True):
             cell = Polygon([F.to_xy(ua, fa), F.to_xy(ub, fa), F.to_xy(ub, fb), F.to_xy(ua, fb)])
             cells += _parts(_despike(pocket.intersection(cell)))
-    good = [c for c in cells if not c.buffer(-half).is_empty]
+    # A BASIN IS ITS FAT PART; ITS ARMS GO BACK AS OFFCUTS (feature 220, settlement-review of Mizuguchi).
+    # A cell piece counted as a basin if it held ONE disk of the minimum side anywhere, and kept whatever
+    # hung off that disk: Mizuguchi shipped ring 475, a 17 x 23 ft lobe with a 4 ft collar wrapping three
+    # sides of the plot beside it - two bunds with a strip of paddy between, on a plot the `_despike`
+    # opening (2 px) could not see. Opening each piece by `half` - the same disk the basin test asks for,
+    # mitred so a square cell keeps its corners - keeps the part a farmer would bund and hands the arms to
+    # the offcuts, which `_absorb` welds into the neighbor whose wall they lie along.
+    good: list[Polygon] = []
+    thin: list[Polygon] = []
+    for c in cells:
+        core = c.buffer(-half)
+        if core.is_empty:
+            thin.append(c)
+            continue
+        fat = core.buffer(half, join_style="mitre", mitre_limit=2.0).buffer(0)
+        kept = _parts(_despike(c.intersection(fat)))
+        arms = _parts(c.difference(fat).buffer(0))
+        good += [k for k in kept if not k.buffer(-half).is_empty]
+        thin += [k for k in kept if k.buffer(-half).is_empty] + arms
     if not good:
         return [pocket], []  # the grid cut the one thick part up; the pocket is a basin as it stands
-    return good, [c for c in cells if c.buffer(-half).is_empty]
+    return good, [t for t in thin if not t.is_empty and t.area > 0.0]
 
 
 def _tab_cut(poly: Poly, g: float, rb: Pt, rc: Pt) -> set[Pt] | None:

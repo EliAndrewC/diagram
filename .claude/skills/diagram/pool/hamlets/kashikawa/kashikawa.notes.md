@@ -607,8 +607,8 @@ correct the last one - so the numbers a reader can check now come from the artif
 - windbreak: **173** clumps drawn, **14** off the page
 - copse: **19** clumps drawn
 - farmhouses: **20**
-- farmstead fixtures: bath **3**, coop **10**, pit **3**, privy **12**, woodpile **13**
-- notice board at **(2244.5, 2990.6)**, **9** of 20 farmhouses within 250 ft
+- farmstead fixtures: bath **3**, coop **10**, pit **3**, privy **12**, woodpile **14**
+- notice board at **(2244.5, 2990.4)**, **9** of 20 farmhouses within 250 ft
 <!-- /census -->
 
 ## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)

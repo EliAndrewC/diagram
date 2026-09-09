@@ -1,0 +1,6 @@
+{
+  "utc": "20260909T050528Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 220: settlement-reviews of the four moved hamlets (Inashiro, Kashikawa, Mizuguchi, Sawada) were dispatched at step 1 and are running; steps 2 and 3 moved no map (byte-identical sweeps); the ring repair moved Inashiro alone and its reviewer is confirming it"
+}

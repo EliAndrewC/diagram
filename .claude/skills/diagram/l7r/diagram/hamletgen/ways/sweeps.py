@@ -330,6 +330,15 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         served = [c for c in centers if _reach(c, ways[i]) <= WEB_REACH_FT]
         if any(all(_reach(c, o) > WEB_REACH_FT for o in others if len(o) >= 2) for c in served):
             continue  # a farmhouse would be stranded; a visible remnant beats an unreached house
+        # ...AND THE INK MUST STAY ONE NETWORK (feature 220, settlement-review of Sawada). `shadowing_lane`
+        # reads both ends against another way at the gate's 40 ft REACH figure, so a lane whose two ends
+        # each stand 12 ft from a neighbor shadows it - while being the only TREAD joining two halves of the
+        # web. Dropping it left Sawada, Kashikawa and Mizuguchi in two pieces at the 4 ft ink tolerance the
+        # one-network pass itself uses, and nothing after this sweep re-asks. So the drop is refused when
+        # it would raise the component count: a reach figure is not an ink-continuity figure.
+        _live = [o for o in others if len(o) >= 2]
+        if len(set(_components(_live, _TOUCH_GAP))) > len(set(_components([w for w in ways if len(w) >= 2], _TOUCH_GAP))):
+            continue  # the remnant is the only tread between two parts of the web; a doubled band beats a hole
         ways[i] = []
         ln["pts"] = []
         s.reink_lane(i)

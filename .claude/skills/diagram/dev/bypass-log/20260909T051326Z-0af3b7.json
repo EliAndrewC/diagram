@@ -1,0 +1,6 @@
+{
+  "utc": "20260909T051326Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 220: settlement-reviews over every moved hamlet (Inashiro, Kashikawa, Mizuguchi, Sawada) are dispatched in this same turn on the regenerated maps"
+}

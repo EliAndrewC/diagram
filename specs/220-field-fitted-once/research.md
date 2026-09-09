@@ -137,3 +137,53 @@ and the RNG are untouched. On the reference: 574 rings, the two repaired, none i
 18.8778 -> 18.8766. Guard: `tests/gate/test_paddy_fabric.py::test_every_recorded_plot_ring_is_a_simple_polygon`
 on the cached roll - it fails on the code before the fix. The review's second note, the stale acreage in
 `inashiro.notes.md`'s comparison table (18.4 for a drawn 18.9), is corrected in place.
+
+## R4c - what the reviews of the moved maps found, and the fixes (Principle XIV)
+
+Four `settlement-review` passes (Inashiro, Kashikawa, Mizuguchi, Sawada; the follow-up on Inashiro's
+repaired rings confirmed the delta was exactly the two rings and improved the ink). Beyond the ring
+repair (R4b):
+
+**The lane web shipped in two pieces on three maps - fixed at the source.** Sawada's reviewer measured
+the web at the router's own 4 ft ink tolerance: Sawada, Kashikawa and Mizuguchi each went from one
+network to two with the re-fitted field, joined only at the gate's 40 ft REACH figure, so
+`unreached_houses` stayed empty and the one-network test - which reads the reference roll alone - never
+looked. A probe after each sweep of `stage_web` on Sawada (component count at 4 ft) found the split:
+`_sweep_doubled_remnants` dropped a lane whose two ends each stood within 40 ft of another way, so it
+"shadowed" it - while being the only TREAD joining the two halves; nothing after that sweep re-asks
+the one-network rule. The sweep now refuses a drop that would raise the component count at the ink
+tolerance (a reach figure is not an ink-continuity figure), and
+`tests/gate/test_lane_network.py::test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance`
+reads every shipped hamlet's manifest - it fired on the three broken maps before the fix. Sawada's
+"lane 0 dies in the open" was the same drop seen from the other end.
+
+**A basin with a 4 ft collar - fixed at the source.** Mizuguchi's reviewer found ring 475 wrapping ring
+378 on three sides: a 17 x 23 ft lobe with 4 ft and 10 ft arms, two bunds with a strip of paddy between.
+`_plant` counted a cell piece as a basin if it held one disk of the minimum side anywhere and kept
+whatever hung off it; the `_despike` opening (2 px) cannot see a 4 ft arm. Each piece is now opened by
+the basin's own half-width (mitred, so a square cell keeps its corners); the fat part is the basin and
+the arms go back as offcuts for `_absorb` to weld into the neighbor whose wall they lie along.
+
+**Recorded, not fixed here** (each a standing item or a design order the record already carries):
+Kashikawa's homestead bamboo 4 -> 2 stands and Sawada's lost bath, both ground taken by the re-solved
+web (the fixture and bamboo placers run after the web by the feature-155 order, and lose to it by
+design - the prevalence shortfall on bamboo predates this feature); Mizuguchi's through-way tread at
+4.1 ft from a farmhouse wall (the 2026-08-29 log's open item, wanting a `research: physical` task with
+the drip-line figure sourced - nothing in the gate measures clearance, only overlap); Mizuguchi's kura
+rate (8 of 12; the pool at 44% against the documented 30% - positional dice, a question for the GM);
+the wet-paddy class absent from Mizuguchi; the notice-board caption crossing three windbreak crowns;
+the copse still not reading as a copse (the 2026-08-29 recorded-not-fixed item). The stale notes
+censuses on the three moved maps were refreshed by `make notes-census`.
+
+**The fixes' own cascade, measured, and a deferral for the GM.** The planter fix changed the number of
+planted basins (Inashiro 574 -> 579 rings), and the seam pass draws one `R.choice` per planted basin
+BEFORE `_comb_dry_and_beans` rolls the dry hem from the same stream - so the hem re-rolled (24 -> 29 dry
+plots), the houses seated against it re-packed (all 15 moved, median 221 ft, max 631 ft; cluster aspect
+2.08 -> 2.86; lanes 9 -> 7, one network) and Kashikawa's hem went 27 -> 29 with two houses moved. The
+stream is shared where the skill's doctrine says randomness is POSITIONAL or SCOPED, never "wherever the
+stream happens to be" (`CLAUDE.md`, Placement); scoping the dry-hem roll to its own `knob_rng` would
+make every future seam change local to the seams. It is NOT taken here: the scoped stream re-rolls
+every map's hem and cluster once, on the whole pool at the tail of a feature that has already moved
+four maps, and which maps the GM wants re-drawn is theirs to decide. Sketch: `finish_comb` hands
+`_comb_dry_and_beans` `random.Random(knob_seed(seed, "dry-hem"))` instead of `R`; one `settlement-review`
+pass per map at landing; the pool's accepted exhibits move once.

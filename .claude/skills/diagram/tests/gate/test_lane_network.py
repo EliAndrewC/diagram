@@ -19,10 +19,14 @@ design, and these assertions are what pins it.
 
 from __future__ import annotations
 
+import glob
+import json
 import math
+import os
 
 import pytest
 
+from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, _components
 from tests import rolls
 from tests.gate import _pool
 
@@ -213,3 +217,22 @@ def test_no_tree_is_planted_in_a_path(lanes) -> None:
     assert trunks, "the roll drew no tree, so this rule would judge nothing"
     on_path = [(round(x), round(y)) for x, y in trunks if min(_min_dist((x, y), p) for p in ways) < 4.0]
     assert not on_path, f"tree trunk(s) stand ON a lane at {on_path[:4]}"
+
+
+_POOL = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "pool")
+
+
+@pytest.mark.parametrize("manifest", sorted(glob.glob(os.path.join(_POOL, "hamlets", "*", "*.json"))), ids=os.path.basename)
+def test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance(manifest: str) -> None:
+    """ONE NETWORK OR NOTHING holds on every SHIPPED hamlet, read from the committed manifest (feature 220,
+    settlement-review of Sawada): the rule had a reader on the reference roll only, and the doubled-remnant
+    sweep left three pool maps in two pieces at the 4 ft ink tolerance the one-network pass itself uses -
+    joined only at the gate's 40 ft REACH figure, which is not an ink-continuity figure. Static data, so it
+    costs nothing to ask of every map."""
+    with open(manifest) as fh:
+        M = json.load(fh)
+    ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in M.get("lanes") or [] if len(ln.get("pts") or []) >= 2]
+    if len(ways) < 2:
+        pytest.skip("fewer than two lanes")
+    comp = _components(ways, _TOUCH_GAP)
+    assert len(set(comp)) == 1, f"{os.path.basename(manifest)}: {len(set(comp))} lane networks at {_TOUCH_GAP} ft"
