@@ -10,6 +10,7 @@ import pytest
 from l7r.diagram import hamletgen as hg
 from l7r.diagram import waterfields as wf
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE
 
 from ._builders import a_plan
 
@@ -164,14 +165,20 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
 
     carves: list[tuple[float, float]] = []
 
-    def fake_comb(W: float, H: float, sluice: object, seed: int, **kw: object) -> dict[str, object]:
+    finishes: list[object] = []
+
+    def fake_carve(W: float, H: float, sluice: object, seed: int, **kw: object) -> SimpleNamespace:
         k = float(kw["field_fall"]) / w.REF_FIELD_FALL  # type: ignore[arg-type]
         aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
         carves.append((round(aspect, 2), round(k, 3)))
-        return {"k": k, "aspect": aspect}
+        return SimpleNamespace(net={"k": k, "aspect": aspect}, planted_area=lambda k=k: min(9.0 * k**2, 10.0) * SQ_FT_PER_ACRE)  # saturates at 10 acres (ftpx 1)
 
-    monkeypatch.setattr(w, "build_comb", fake_comb)  # type: ignore[attr-defined]
-    monkeypatch.setattr(w, "net_acres", lambda net, ftpx: min(9.0 * net["k"] ** 2, 10.0))  # type: ignore[attr-defined]  # saturates at 10 acres
+    def fake_finish(carve: SimpleNamespace) -> dict[str, object]:
+        finishes.append(carve)
+        return dict(carve.net)
+
+    monkeypatch.setattr(w, "carve_comb", fake_carve)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
     monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
     monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
     plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0)
@@ -183,6 +190,7 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     assert max(n for a, n in per_aspect.items() if a != first) <= 3, per_aspect  # every other aspect: k = 1, the probe, dropped
     assert per_aspect[first] > 3  # the rolled aspect was searched again in full
     assert net["k"] > 0
+    assert len(finishes) == 1 and finishes[0].net["k"] == net["k"]  # ONE finish, of the winner (feature 220, SC-003)
 
 
 def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_cannot_grow() -> None:
@@ -200,9 +208,9 @@ def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_
     # ...on a COARSE plot grid, for the reason recorded at `test_the_fit_gives_a_saturated_best_aspect`
     # (feature 158): the probe's decision is about the TARGET being unreachable, not about how many
     # plots a carve lays, and the plot count is all this test's seconds were.
-    (bad, err), net = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
+    (bad, err), carve = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
     assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
-    assert net["plots"], "and it is a real fan, not an empty one"
+    assert carve.plots, "and it is a real fan, not an empty one"  # a CARVE since feature 220: the search finishes only the winner
 
 
 def test_a_fan_with_no_plots_counts_as_DANGLING() -> None:

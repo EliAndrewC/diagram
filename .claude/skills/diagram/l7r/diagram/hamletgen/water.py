@@ -11,8 +11,8 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
-from l7r.diagram.sitegen.geom import crosses_poly, net_acres, poly_area
-from l7r.diagram.waterfields import build_comb, build_polder, clean_polder_parcels
+from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, crosses_poly, net_acres, poly_area
+from l7r.diagram.waterfields import CombCarve, build_polder, carve_comb, clean_polder_parcels, finish_comb
 
 from .consts import DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, WATERWARD_DEPTH, Poly, Pt
 from .plan import SitePlan, _roll
@@ -95,16 +95,29 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     author picks a number, looks at the render, and adjusts; Ikegami's 1150 is such a number, and it
     lands 24% under the acreage its own docstring asks for.
 
-    A script does not have to guess. `build_comb` is pure, deterministic and fast, so this bisects a
+    A script does not have to guess. `carve_comb` is pure and deterministic, so this bisects a
     single SIZE multiplier - applied to the fall length AND both canal lengths together, so the fan
     scales without changing shape - until the drawn plot area is within `tolerance` of the target.
     Returns the best net found, which is the one whose acreage is closest, not merely the last.
 
+    THE SEARCH CARVES; ONLY THE WINNER IS FINISHED (feature 220, GM 2026-09-09). Each guess used to
+    run the whole `build_comb` - and seam closing, added after this docstring first promised a build
+    "well under a second", had grown to two thirds of one: on the reference hamlet four full builds
+    at 1.35 s each made a 5.4 s stage, three of them thrown away. The scorers below read only the
+    carved plots and the channels, so each guess is a `carve_comb` (about a third of a build), the
+    best carve is kept, and `finish_comb` runs once on it. The acreage each guess is scored on is the
+    carve's PREDICTION of the finished acreage (`CombCarve.planted_area`: the plots plus the bare
+    ground the seam pass will plant) - the carve alone under-reads it by the pockets, 11-21% on the
+    reference fan, and a first cut that scored the bare carve overshot the target by 12% (specs/220
+    research R2). The prediction is within 0.05% of the finish, so the search lands on the size the
+    full build landed on; a map on which it does not is a map that moved, judged by the gate and a
+    settlement-review like any other change.
+
     The multiplier is bracketed rather than solved because acreage is monotone in it but stepwise:
     a small change can add or drop a whole plot row, so the curve has small flats and the bisection
     is on a monotone-but-lumpy function. Nine rounds resolves the multiplier to ~0.3%, far finer
-    than one plot row, and costs well under a second."""
-    best: tuple[tuple[bool, float], dict[str, Any]] | None = None
+    than one plot row; the cost is the carves (specs/220 research R2 has the measured figure)."""
+    best: tuple[tuple[bool, float], CombCarve] | None = None
     # THE ASPECT IS PART OF THE SEARCH, not just a roll. A fan's legality - whether its supply canal
     # dies among the plots, whether its collector folds back on itself - depends on its SHAPE as much
     # as its size, and a roll can land on an aspect at which no size is legal. So the rolled aspect
@@ -133,13 +146,13 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
         again = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, best_aspect, tolerance, rounds, probe=False)
         if again[0] < best[0]:
             best = again
-    return best[1]
+    return finish_comb(best[1])  # ONE finish per roll: the seams closed, the dry plots laid, on the winner alone
 
 
 def _fit_at_aspect(
     plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_step: tuple[float, float], aspect: float, tolerance: float, rounds: int, probe: bool = True
-) -> tuple[tuple[bool, float], dict[str, Any]]:
-    """`fit_field`'s search at ONE fan aspect. Returns ((illegal, acreage error), net).
+) -> tuple[tuple[bool, float], CombCarve]:
+    """`fit_field`'s search at ONE fan aspect. Returns ((illegal, acreage error), the best CARVE).
 
     `probe`: when the first carve (k = 1) falls short, the second goes straight to the bracket's END
     - the largest fan this aspect can draw. If even that is short of the target by more than the
@@ -149,7 +162,7 @@ def _fit_at_aspect(
     with `probe=False` when no aspect lands the target, so the refinement is never lost on the map
     that needs it."""
     lo, hi = 0.35, 2.2
-    best: tuple[tuple[bool, float], dict[str, Any]] | None = None
+    best: tuple[tuple[bool, float], CombCarve] | None = None
     # PREDICT THE MULTIPLIER, THEN BRACKET IT (feature 145, GM 2026-08-28: "maps are now allowed to
     # move ... we should just go ahead and fix it"). The fan scales in both dimensions with k, so
     # its acreage goes roughly as k^2: from one carve the size that lands the target is
@@ -164,7 +177,7 @@ def _fit_at_aspect(
     k = 1.0
     for _ in range(rounds):
         k = min(max(k, lo + 1e-3), hi - 1e-3)
-        net = build_comb(
+        carve = carve_comb(
             plan.W,
             plan.H,
             sluice,
@@ -181,7 +194,8 @@ def _fit_at_aspect(
             grain=GRAIN,
             supply_banks=True,  # bunds hem onto the supply strokes' banks (GM 2026-08-15); scripted tier only, see paddy_bunds_clear_the_supply_channels
         )
-        acres = net_acres(net, plan.ftpx)
+        net = carve.net  # the two keys the scorers read: the carved plots and the channels
+        acres = carve.planted_area() * plan.ftpx * plan.ftpx / SQ_FT_PER_ACRE  # what the finish will plant, predicted (see `fit_field`); `net_acres`'s own conversion
         err = abs(acres - plan.target_acres) / plan.target_acres
 
         # A DANGLING CANAL TAIL disqualifies a fan before its acreage is even considered. Whatever
@@ -192,7 +206,7 @@ def _fit_at_aspect(
         # picks the best fan that is legal rather than the best fan and then hoping.
         score = (tail_dangles(net) or net_bends_acutely(net), err)
         if best is None or score < best[0]:
-            best = (score, net)
+            best = (score, carve)
         if err <= tolerance and not score[0]:
             break
         if acres < plan.target_acres:

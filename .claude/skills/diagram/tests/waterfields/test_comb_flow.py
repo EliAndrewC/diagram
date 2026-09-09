@@ -83,3 +83,23 @@ def test_the_collector_turns_with_the_map() -> None:
 # above: it asserted a property of the SAME drain at the SAME fall, so as a separate test it doubled the
 # builds to re-derive a net the bearing test had already made. Merging it costs no coverage - both
 # assertions still run at every fall, and a failure still names which one - and halves this file's cost.
+
+
+def test_a_carve_predicts_the_finished_planted_area_and_a_finished_carve_is_a_build(seed: int = 7) -> None:
+    """Feature 220: `fit_field` scores each guess on `CombCarve.planted_area` - the carved plots plus the
+    bare ground the seam pass will plant - and finishes only the winner. Two facts hold the design up:
+    the prediction is within a hair of what the finish actually plants (the first cut scored the bare
+    carve and overshot the target by 12%), and carve-then-finish IS `build_comb`, key for key."""
+    from l7r.diagram.sitegen.geom import poly_area
+    from l7r.diagram.waterfields import build_comb, carve_comb, finish_comb
+
+    args = dict(W=1400, H=1400, sluice=(200.0, 200.0), seed=seed, down_deg=60.0, canal_a_len=(700.0, 800.0), canal_b_len=(400.0, 460.0))
+    carve = carve_comb(**args)  # type: ignore[arg-type]
+    carved = sum(poly_area(p["poly"]) for p in carve.plots)  # BEFORE the finish, which reshapes this very list in place
+    predicted = carve.planted_area()
+    net = finish_comb(carve)
+    planted = sum(poly_area(p["poly"]) for p in net["plots"])
+    assert planted > carved * 1.02, "the finish PLANTS the pockets - it does not conserve the carved area"
+    assert abs(predicted - planted) / planted < 0.01, (predicted, planted)
+    built = build_comb(**args)  # type: ignore[arg-type]
+    assert built.keys() == net.keys() and built["plots"] == net["plots"] and built["channels"] == net["channels"] and built["acres"] == net["acres"]

@@ -3,7 +3,11 @@
 import math
 import random
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from typing import Any
+
+from shapely.geometry import Polygon
+from shapely.ops import unary_union
 
 from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
 from .carve import _bund_beans, _carve, _dry_fields
@@ -32,6 +36,222 @@ from .frame import (
     chan_px,
 )
 from .seams import close_seams
+from .seams.pockets import _outside_command, _water
+
+
+@dataclass
+class CombCarve:
+    """A comb between its carve and its finish (feature 220) - the plots as carved, the channels,
+    the envelope, the random generator where the carve left it, and every input the finish needs.
+    `fit_field` scores these (`net`: the two keys its scorers read) and finishes only the winner."""
+
+    R: random.Random
+    F: _Frame
+    fork: Any
+    a_pts: Poly
+    bc: Any
+    threads: Any
+    dpts: Poly
+    brook: Any
+    drain_bank: Any
+    channels: list[dict[str, Any]]
+    plots: list[dict[str, Any]]
+    envelope: Poly
+    W: float
+    H: float
+    down_deg: float
+    plot_across: float
+    row_step: tuple[float, float]
+    dry_keepout: Sequence[tuple[float, float, float]]
+    dry_band: tuple[float, float]
+    bean_frac: float
+    furrow_spread: float
+    grain_drift: float
+    grain: float
+
+    @property
+    def net(self) -> dict[str, Any]:
+        """What the fit's scorers read of a carve: the plots and the channels."""
+        return {"plots": self.plots, "channels": self.channels}
+
+    def planted_area(self) -> float:
+        """The plot area the FINISH will leave, in px^2, predicted from the carve: the carved plots plus
+        every scrap of bare ground inside the command area, because `close_seams` plants or absorbs all
+        of it (its module docstring: "every square foot inside the command area ends up planted, water,
+        or outside the fan"). The finish does NOT conserve the carved area - it GROWS it by the pockets,
+        11-21% on the reference fan (specs/220 research R2) - so a search that scored the carve alone
+        overshot the target by that much. This asks the same three geometries the seam pass asks first
+        (`field`, `_water`, `_outside_command`), so the estimate and the finish read one source; measured
+        against the finished acreage at six sizes it was within 0.05%, at a fifteenth of the finish's cost."""
+        field = Polygon(self.envelope).buffer(0)
+        keep = [Polygon(p["poly"]).buffer(0) for p in self.plots if len(p["poly"]) >= 3]
+        bare = field.difference(unary_union(keep)).difference(_water(self.channels, self.grain)).difference(_outside_command(self.F, self.a_pts, self.dpts, field, self.grain, self.drain_bank))
+        return sum(_poly_area(p["poly"]) for p in self.plots) + bare.area
+
+
+def carve_comb(
+    W: float,
+    H: float,
+    sluice: Pt,
+    seed: int,
+    down_deg: float = 45,
+    canal_a_len: tuple[float, float] = (1250, 1450),
+    canal_b_len: tuple[float, float] = (680, 800),
+    offtakes_a: Sequence[float] = (0.22, 0.45, 0.68, 0.88),
+    offtakes_b: Sequence[float] = (0.45, 0.8),
+    plot_across: float = 48,
+    row_step: tuple[float, float] = (26, 36),
+    dry_keepout: Sequence[tuple[float, float, float]] = (),
+    dry_band: tuple[float, float] = (70, 132),
+    bean_frac: float = 0.28,
+    field_fall: float | None = None,
+    furrow_spread: float = 1.1,
+    grain_drift: float = 0.0,
+    grain: float = 1.0,
+    supply_banks: bool = False,
+) -> CombCarve:
+    """The CARVE half of `build_comb` (feature 220): everything up to the planted plots and the
+    envelope, before the seams are closed - what `fit_field`'s search measures. Returns a
+    `CombCarve`; `finish_comb` turns it into the net `build_comb` returns. ONE body: `build_comb`
+    is `finish_comb(carve_comb(...))`, so every other caller is unchanged."""
+    R = random.Random(seed)
+    F = _Frame(down_deg)
+    DOWN = F.down
+    channels: list[dict[str, Any]] = []
+
+    fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels)
+    threads, bc, spawns = _comb_threads(R, F, DOWN, fork, a_pts, canal_b_len, offtakes_a, offtakes_b, plot_across)
+    # ---- the lockstep march (no thread may cross another or pinch under GAP)
+    _comb_march(R, F, DOWN, threads, spawns, W, H, field_fall)
+    dpts = _comb_drain(R, F, threads, W, H, grain, channels)
+    brook = _comb_brook(R, F, dpts, W, H)
+
+    drain_bank = _drain_bank(F, dpts, grain)  # the ditch's own edge, the one line the field may not cross
+    _comb_clip_and_cap(R, F, threads, dpts, drain_bank)
+    _comb_canal_pieces(F, threads, bc, a_pts, offtakes_a, fork, grain, channels)
+    # SWEEP THE BENDS BEFORE ANYTHING CLEARS GROUND AGAINST THEM (2026-08-17). This used to run
+    # after `_carve`, which meant the carve hemmed its bunds onto UN-SWEPT channel centerlines and
+    # the sweep then moved the drawn water sideways underneath them - so a bund the carve had
+    # cleared ended up inside a branch's swept bend. That is the identical defect the note below
+    # records against `close_seams`, one call earlier and unnoticed: cohort seed 24 carried a bund
+    # vertex 0.6 px from a branch ditch, buried in the stroke the map actually paints.
+    # `_comb_canal_pieces` is the last thing that appends to `channels`, and neither
+    # `_comb_floor_and_winding` nor `_comb_toe_and_hem` reads them, so this is the earliest point
+    # the list is complete - and the latest one that is still before any consumer.
+    # PLACEMENT AND ITS CHECK MUST READ THE SAME SOURCE, AND THE SOURCE IS WHAT GETS PAINTED.
+    round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
+
+    # `supply_banks` hands the carve the very strokes assembled above, so the bunds hem onto the
+    # banks that will actually be painted - placer and paint reading the same source. OPT-IN
+    # (default False) so every legacy comb gen re-runs byte-identical; the scripted tier passes
+    # True and the gate holds it there (paddy_bunds_clear_the_supply_channels, gated on
+    # meta.generated_by per the migration doctrine - legacy maps inherit the rule at conversion).
+    plots = _carve(
+        R,
+        F,
+        threads,
+        a_pts,
+        dpts,
+        W,
+        H,
+        plot_across,
+        row_step,
+        grain,
+        seed,
+        drain_bank,
+        supply=[c for c in channels if c.get("role") != "drain"] if supply_banks else None,
+    )
+
+    envelope = _comb_floor_and_winding(plots, threads, a_pts, dpts, F)
+
+    _comb_toe_and_hem(plots, dpts, down_deg, plot_across, row_step, grain)
+    return CombCarve(
+        R=R,
+        F=F,
+        fork=fork,
+        a_pts=a_pts,
+        bc=bc,
+        threads=threads,
+        dpts=dpts,
+        brook=brook,
+        drain_bank=drain_bank,
+        channels=channels,
+        plots=plots,
+        envelope=envelope,
+        W=W,
+        H=H,
+        down_deg=down_deg,
+        plot_across=plot_across,
+        row_step=row_step,
+        dry_keepout=dry_keepout,
+        dry_band=dry_band,
+        bean_frac=bean_frac,
+        furrow_spread=furrow_spread,
+        grain_drift=grain_drift,
+        grain=grain,
+    )
+
+
+def finish_comb(c: CombCarve) -> dict[str, Any]:
+    """The FINISH half of `build_comb` (feature 220): close the seams, measure the acreage, lay the
+    dry plots and the bund beans, and assemble the net. Consumes the carve's own random generator
+    from where the carve left it - each build seeds its own `R`, so a carve kept during a search and
+    finished later sees the state an inline finish would have seen."""
+    R, F, plots, channels, envelope, a_pts, dpts, drain_bank, grain = c.R, c.F, c.plots, c.channels, c.envelope, c.a_pts, c.dpts, c.drain_bank, c.grain
+    W, H, down_deg, plot_across, row_step, fork, bc, threads, brook = c.W, c.H, c.down_deg, c.plot_across, c.row_step, c.fork, c.bc, c.threads, c.brook
+    dry_keepout, dry_band, bean_frac, furrow_spread, grain_drift = c.dry_keepout, c.dry_band, c.bean_frac, c.furrow_spread, c.grain_drift
+    # Sweep the channel bends BEFORE the seam pass, not after: rounding a joint moves the drawn
+    # water sideways by a few px, and `close_seams` holds its new basins off the water it is shown.
+    # Called last (as it was) the pass reconciled the fan against a course the map does not draw,
+    # and 9 basins came out with a bund inside a swept branch bend - placement and its check must
+    # read the same source, and the source is what will actually be painted.
+    # SEAM CLOSING, LAST. The carve leaves awkward ground wherever ditch threads diverge, the
+    # closing geometry misses, or a guard drops a quad - and a real cascade fan wasted nothing:
+    # fork wedges were terraced into small IRREGULAR paddies, and the odd unplantable scrap was
+    # simply taken into the basin beside it rather than walled off on its own. `close_seams` does
+    # exactly that, so every square foot inside the command area ends up planted, water, or
+    # outside the fan, and every bund is SHARED with whatever lies across it (its module docstring
+    # carries the research and the defect it replaced; the gate is `paddy_plot_seams_shared`).
+    #
+    # It runs AFTER `_comb_toe_and_hem` on purpose: the toe pass drops slivers too acute to bund
+    # and re-hems every bund onto the drain bank, both of which open fresh bare ground - anything
+    # reconciling the fan before it would have its work undone. Ungated: the hand-authored pool is
+    # FROZEN since 2026-08-16, so a new rule no longer needs a byte-stability escape (the retired
+    # `grain != 1.0` gate on the old wedge filler was exactly that).
+    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank)
+    acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
+
+    dry_plots, dry_acres, bund_beans = _comb_dry_and_beans(R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift)
+    # furrows_vary tells the checker whether to REQUIRE neighboring dry plots to differ in row direction: a
+    # gentle-valley village spreads them (the patchwork quilt, default); a STEEP/terraced village narrows the
+    # spread so the rows converge back onto the contour (ridge-along-contour erosion control) and no variation
+    # is required. Threshold at ~0.3 rad (~17 deg): above it the plots visibly fan, below it they read aligned.
+    return {
+        "down_deg": down_deg,  # the LOCAL fall this fan was carved to - recorded so the drainage-slope
+        # checks can judge each drain against ITS OWN field rather than one map-level constant (a city
+        # ringed by farmland genuinely drains several ways at once; GM 2026-07-25)
+        "fork": fork,  # the bunsuiguchi division point - recorded so comb_supply_commands_both_flanks
+        # can measure each flank's planted extent and drawn-supply reach FROM the point the model
+        # itself divides at (placement and check reading the same source; GM 2026-08-16)
+        # THE DESIGN CELL this fan was carved to, recorded so `paddy_basins_are_worth_their_bund`
+        # judges each basin against the reference the PLACER used rather than one it re-derives.
+        # It cannot be re-derived from `meta.ftpx`: `plot_texture` scales the target per map
+        # (small_irregular 0.72x, medium 1.0x, large_block 1.35x, strip long-and-narrow), so a gate
+        # computing `paddy_grain(ftpx)` for itself would hold a textured fan to a cell it never
+        # aimed at.
+        "cell": cell_area(plot_across, row_step),
+        "channels": channels,
+        "plots": plots,
+        "threads": threads,
+        "drain": dpts,
+        "brook": brook,
+        "envelope": envelope,
+        "acres": acres,
+        "dry_plots": dry_plots,
+        "dry_acres": dry_acres,
+        "bund_beans": bund_beans,
+        "furrows_vary": furrow_spread >= 0.3,
+    }
 
 
 def build_comb(
@@ -102,109 +322,29 @@ def build_comb(
     the closing rank) and the cities then re-exposed at their coarser grain (2026-07-21).
     The canal/thread/drain SKELETON is deliberately NOT scaled here: its lengths arrive
     pre-scaled from the caller, and the map-edge margins (8px) are canvas facts, not feet."""
-    R = random.Random(seed)
-    F = _Frame(down_deg)
-    DOWN = F.down
-    channels: list[dict[str, Any]] = []
-
-    fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels)
-    threads, bc, spawns = _comb_threads(R, F, DOWN, fork, a_pts, canal_b_len, offtakes_a, offtakes_b, plot_across)
-    # ---- the lockstep march (no thread may cross another or pinch under GAP)
-    _comb_march(R, F, DOWN, threads, spawns, W, H, field_fall)
-    dpts = _comb_drain(R, F, threads, W, H, grain, channels)
-    brook = _comb_brook(R, F, dpts, W, H)
-
-    drain_bank = _drain_bank(F, dpts, grain)  # the ditch's own edge, the one line the field may not cross
-    _comb_clip_and_cap(R, F, threads, dpts, drain_bank)
-    _comb_canal_pieces(F, threads, bc, a_pts, offtakes_a, fork, grain, channels)
-    # SWEEP THE BENDS BEFORE ANYTHING CLEARS GROUND AGAINST THEM (2026-08-17). This used to run
-    # after `_carve`, which meant the carve hemmed its bunds onto UN-SWEPT channel centerlines and
-    # the sweep then moved the drawn water sideways underneath them - so a bund the carve had
-    # cleared ended up inside a branch's swept bend. That is the identical defect the note below
-    # records against `close_seams`, one call earlier and unnoticed: cohort seed 24 carried a bund
-    # vertex 0.6 px from a branch ditch, buried in the stroke the map actually paints.
-    # `_comb_canal_pieces` is the last thing that appends to `channels`, and neither
-    # `_comb_floor_and_winding` nor `_comb_toe_and_hem` reads them, so this is the earliest point
-    # the list is complete - and the latest one that is still before any consumer.
-    # PLACEMENT AND ITS CHECK MUST READ THE SAME SOURCE, AND THE SOURCE IS WHAT GETS PAINTED.
-    round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
-
-    # `supply_banks` hands the carve the very strokes assembled above, so the bunds hem onto the
-    # banks that will actually be painted - placer and paint reading the same source. OPT-IN
-    # (default False) so every legacy comb gen re-runs byte-identical; the scripted tier passes
-    # True and the gate holds it there (paddy_bunds_clear_the_supply_channels, gated on
-    # meta.generated_by per the migration doctrine - legacy maps inherit the rule at conversion).
-    plots = _carve(
-        R,
-        F,
-        threads,
-        a_pts,
-        dpts,
-        W,
-        H,
-        plot_across,
-        row_step,
-        grain,
-        seed,
-        drain_bank,
-        supply=[c for c in channels if c.get("role") != "drain"] if supply_banks else None,
+    return finish_comb(
+        carve_comb(
+            W=W,
+            H=H,
+            sluice=sluice,
+            seed=seed,
+            down_deg=down_deg,
+            canal_a_len=canal_a_len,
+            canal_b_len=canal_b_len,
+            offtakes_a=offtakes_a,
+            offtakes_b=offtakes_b,
+            plot_across=plot_across,
+            row_step=row_step,
+            dry_keepout=dry_keepout,
+            dry_band=dry_band,
+            bean_frac=bean_frac,
+            field_fall=field_fall,
+            furrow_spread=furrow_spread,
+            grain_drift=grain_drift,
+            grain=grain,
+            supply_banks=supply_banks,
+        )
     )
-
-    envelope = _comb_floor_and_winding(plots, threads, a_pts, dpts, F)
-
-    _comb_toe_and_hem(plots, dpts, down_deg, plot_across, row_step, grain)
-    # Sweep the channel bends BEFORE the seam pass, not after: rounding a joint moves the drawn
-    # water sideways by a few px, and `close_seams` holds its new basins off the water it is shown.
-    # Called last (as it was) the pass reconciled the fan against a course the map does not draw,
-    # and 9 basins came out with a bund inside a swept branch bend - placement and its check must
-    # read the same source, and the source is what will actually be painted.
-    # SEAM CLOSING, LAST. The carve leaves awkward ground wherever ditch threads diverge, the
-    # closing geometry misses, or a guard drops a quad - and a real cascade fan wasted nothing:
-    # fork wedges were terraced into small IRREGULAR paddies, and the odd unplantable scrap was
-    # simply taken into the basin beside it rather than walled off on its own. `close_seams` does
-    # exactly that, so every square foot inside the command area ends up planted, water, or
-    # outside the fan, and every bund is SHARED with whatever lies across it (its module docstring
-    # carries the research and the defect it replaced; the gate is `paddy_plot_seams_shared`).
-    #
-    # It runs AFTER `_comb_toe_and_hem` on purpose: the toe pass drops slivers too acute to bund
-    # and re-hems every bund onto the drain bank, both of which open fresh bare ground - anything
-    # reconciling the fan before it would have its work undone. Ungated: the hand-authored pool is
-    # FROZEN since 2026-08-16, so a new rule no longer needs a byte-stability escape (the retired
-    # `grain != 1.0` gate on the old wedge filler was exactly that).
-    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank)
-    acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
-
-    dry_plots, dry_acres, bund_beans = _comb_dry_and_beans(R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift)
-    # furrows_vary tells the checker whether to REQUIRE neighboring dry plots to differ in row direction: a
-    # gentle-valley village spreads them (the patchwork quilt, default); a STEEP/terraced village narrows the
-    # spread so the rows converge back onto the contour (ridge-along-contour erosion control) and no variation
-    # is required. Threshold at ~0.3 rad (~17 deg): above it the plots visibly fan, below it they read aligned.
-    return {
-        "down_deg": down_deg,  # the LOCAL fall this fan was carved to - recorded so the drainage-slope
-        # checks can judge each drain against ITS OWN field rather than one map-level constant (a city
-        # ringed by farmland genuinely drains several ways at once; GM 2026-07-25)
-        "fork": fork,  # the bunsuiguchi division point - recorded so comb_supply_commands_both_flanks
-        # can measure each flank's planted extent and drawn-supply reach FROM the point the model
-        # itself divides at (placement and check reading the same source; GM 2026-08-16)
-        # THE DESIGN CELL this fan was carved to, recorded so `paddy_basins_are_worth_their_bund`
-        # judges each basin against the reference the PLACER used rather than one it re-derives.
-        # It cannot be re-derived from `meta.ftpx`: `plot_texture` scales the target per map
-        # (small_irregular 0.72x, medium 1.0x, large_block 1.35x, strip long-and-narrow), so a gate
-        # computing `paddy_grain(ftpx)` for itself would hold a textured fan to a cell it never
-        # aimed at.
-        "cell": cell_area(plot_across, row_step),
-        "channels": channels,
-        "plots": plots,
-        "threads": threads,
-        "drain": dpts,
-        "brook": brook,
-        "envelope": envelope,
-        "acres": acres,
-        "dry_plots": dry_plots,
-        "dry_acres": dry_acres,
-        "bund_beans": bund_beans,
-        "furrows_vary": furrow_spread >= 0.3,
-    }
 
 
 def _comb_toe_and_hem(plots: list[dict[str, Any]], dpts: Poly, down_deg: float, plot_across: float, row_step: tuple[float, float], grain: float) -> None:
