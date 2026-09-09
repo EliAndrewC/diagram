@@ -19,6 +19,7 @@ from ..banks import (
     polyline_cum,
 )
 from ..frame import BANK_MARGIN, Poly, _f_at_u, _Frame, taper_w
+from .geoms import GeomTree
 
 # The carve's own "too narrow to plant" side (`_sector_body_rows` / `_sector_canal_closers` both
 # refuse an edge under 6 * grain), reused here so a pocket this pass plants is exactly a pocket the
@@ -226,18 +227,16 @@ def _min_apex(ring: Poly) -> float:
     return out
 
 
-def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, g: float) -> bool:
+def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, g: float, tree: GeomTree | None = None) -> bool:
     """Fold a too-thin pocket into the basin it shares the most bund with - the weld that turns two
     walls with a strip between them into the one wall a real aze is. The neighbor is chosen by
     SHARED BOUNDARY LENGTH rather than by distance or area: the basin whose wall actually forms
     most of this strip is the one whose farmer would have taken it in."""
-    bx0, by0, bx1, by1 = pocket.bounds
+    tree = tree or GeomTree(into)  # the pocket pass shares one across a round (feature 220); a lone call builds its own
     reach = pocket.buffer(0.4)
     ranked: list[tuple[float, int]] = []
-    for j, q in enumerate(into):
-        qx0, qy0, qx1, qy1 = q.bounds
-        if qx1 < bx0 - 1 or qx0 > bx1 + 1 or qy1 < by0 - 1 or qy0 > by1 + 1:
-            continue
+    for j in tree.near(pocket.bounds, pad=1.0):  # the basins whose envelope comes within a px of the pocket's - the old gate, from the tree
+        q = into[j]
         shared = q.boundary.intersection(reach).length
         if shared > 0.0:
             ranked.append((-shared, j))
@@ -327,6 +326,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
                     # point at one end and a bite in its side.
                     if Polygon(_r2).is_valid and _min_apex(dedup_ring(_r2, 1.0)) >= _WELD_MIN_APEX and not is_chevron(_r2):
                         into[j] = _c2
+                        tree.replaced(j)
                         grown.add(j)
                         return True
             if _fallback is None or _apex > _fallback[0]:
@@ -371,6 +371,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
                 _jogged = (_jog, j, candidate)
             continue
         into[j] = candidate
+        tree.replaced(j)
         grown.add(j)
         return True
     # THE LEAST-JOGGING WELD, ahead of both. When no host takes the scrap without complaint, a wall
@@ -380,6 +381,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     if _jogged is not None:
         _, j, candidate = _jogged
         into[j] = candidate
+        tree.replaced(j)
         grown.add(j)
         return True
     # THE LEAST-LUMPY WELD, ahead of the needle fallback below. A lobe is a milder defect than an
@@ -389,6 +391,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     if _lumpy is not None:
         _, j, candidate = _lumpy
         into[j] = candidate
+        tree.replaced(j)
         grown.add(j)
         return True
     # ...then the least-bad ARROWHEAD, behind the lump. A chevron is the worse read of the two - a
@@ -400,6 +403,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     if _chev is not None:
         _, j, candidate = _chev
         into[j] = candidate
+        tree.replaced(j)
         grown.add(j)
         return True
     # THE LEAST-BAD WELD, and only if it still clears the GATE. `_WELD_MIN_APEX` is the placer's
@@ -411,6 +415,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     if _fallback is not None and _fallback[0] >= _GATE_MIN_APEX + 1.0:
         _, j, candidate = _fallback
         into[j] = candidate
+        tree.replaced(j)
         grown.add(j)
         return True
     return False

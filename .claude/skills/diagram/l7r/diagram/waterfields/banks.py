@@ -120,8 +120,16 @@ def supply_bank_clearance(q: Pt, pts: Poly, w0: float, w1: float, cum: list[floa
     (`paddy_bunds_clear_the_supply_channels`), for the same reason `drain_bank_clearance` is: a
     placer and a checker that classify the same ground from two formulas drift into disagreeing
     about which side of a ditch a point is on."""
+    return _stroke_verdict(q, pts, w0, w1, cum, _nearest_segment(q, pts, cum, range(len(pts) - 1)))
+
+
+def _nearest_segment(q: Pt, pts: Poly, cum: list[float], which: Any) -> tuple[float, Pt, float, bool, Pt]:
+    """The nearest of the segments `which` names (indices into `pts`, in order - ties go to the first,
+    as the full walk always resolved them): `(gap, foot, arc, past, nrm)`. ONE body for the full walk
+    and the indexed walk (`StrokeIndex`), so the two cannot drift."""
     off, foot, arc, past, nrm = 1e9, (0.0, 0.0), 0.0, False, (0.0, 1.0)
-    for i in range(len(pts) - 1):
+    last = len(pts) - 2
+    for i in which:
         ax, ay = pts[i]
         vx, vy = pts[i + 1][0] - ax, pts[i + 1][1] - ay
         t = ((q[0] - ax) * vx + (q[1] - ay) * vy) / ((vx * vx + vy * vy) or 1.0)
@@ -131,9 +139,16 @@ def supply_bank_clearance(q: Pt, pts: Poly, w0: float, w1: float, cum: list[floa
         if d < off:
             off, foot = d, (sx, sy)
             arc = cum[i] + tc * math.hypot(vx, vy)
-            past = (i == 0 and t < 0.0) or (i == len(pts) - 2 and t > 1.0)
+            past = (i == 0 and t < 0.0) or (i == last and t > 1.0)
             nl = math.hypot(vx, vy) or 1.0
             nrm = (-vy / nl, vx / nl)
+    return off, foot, arc, past, nrm
+
+
+def _stroke_verdict(q: Pt, pts: Poly, w0: float, w1: float, cum: list[float], nearest: tuple[float, Pt, float, bool, Pt]) -> tuple[float, float, bool, Pt, Pt]:
+    """`supply_bank_clearance`'s answer from the nearest segment: the drawn half-width at that arc, and
+    the `past` reading with its manifest-rounding slack."""
+    off, foot, arc, past, nrm = nearest
     halfw = taper_w(w0, w1, arc / (cum[-1] or 1.0)) / 2
     # `past` IS ROBUST AT THE MANIFEST ROUNDING SCALE (the seed-25 hairline, 2026-08-16): the
     # placer works in unrounded floats and exempted a carved corner projecting epsilon PAST the
@@ -145,6 +160,57 @@ def supply_bank_clearance(q: Pt, pts: Poly, w0: float, w1: float, cum: list[floa
     # gate's 0.15 gap slack).
     past = past or arc <= _PAST_EPS or arc >= (cum[-1] or 1.0) - _PAST_EPS
     return off, halfw, past, foot, nrm
+
+
+class StrokeIndex:
+    """`supply_bank_clearance` for ONE stroke, answered from a grid of its segments (feature 220,
+    constitution X clause 15). The carve asked it 86,000 times per roll and every call walked every
+    segment of the stroke - the three callers (`_clear_supply` per carved corner, `_quad_in_supply`
+    per 3 px step along every plot edge near a stroke, the hem's `_bank`) all want the nearest
+    segment, and all decide on whether the gap is under a reach of a few px (half-width + margin).
+
+    EXACT, by this argument: if any segment lies within `reach` of the point, the true nearest lies
+    within `reach` too, so it is among the segments whose box the cells within `reach` hold, and the
+    walk over those - in index order, so a tie resolves as the full walk resolved it - returns the
+    same tuple. If the nearest of those is itself beyond `reach`, the true nearest may be a segment
+    the cells did not hold, and the full walk runs instead: the callers only ever act on a gap under
+    the reach, so that fallback is rare (a point inside the stroke's box but far from its line) and
+    costs what every call used to cost. `test_strokes.py` proves tuple equality on random points."""
+
+    __slots__ = ("cell", "cells", "cum", "pts", "reach", "w0", "w1")
+
+    def __init__(self, pts: Poly, w0: float, w1: float, cum: list[float], reach: float, cell: float = 64.0) -> None:
+        self.pts, self.w0, self.w1, self.cum, self.reach, self.cell = pts, w0, w1, cum, reach, cell
+        self.cells: dict[tuple[int, int], list[int]] = {}
+        for i in range(len(pts) - 1):
+            (ax, ay), (bx, by) = pts[i], pts[i + 1]
+            for cx in range(int(min(ax, bx) // cell), int(max(ax, bx) // cell) + 1):
+                for cy in range(int(min(ay, by) // cell), int(max(ay, by) // cell) + 1):
+                    self.cells.setdefault((cx, cy), []).append(i)
+
+    BEYOND: tuple[float, float, bool, Pt, Pt] = (1e9, 0.0, False, (0.0, 0.0), (0.0, 1.0))  # "no segment within reach", for a caller that decides only under the reach
+
+    def clearance(self, q: Pt, exact: bool = True) -> tuple[float, float, bool, Pt, Pt]:
+        """`supply_bank_clearance(q, pts, w0, w1, cum)`, to the bit - or, with `exact=False`, `BEYOND` when
+        no segment lies within the reach. A caller that acts only on `gap < need` with `need <= reach`
+        (`_clear_supply`, `_quad_in_supply`) reads the same verdict from `BEYOND` as from the true far
+        gap, and skips the full walk that a point inside the stroke's box but off its line used to cost -
+        a third of all calls on the reference fan, and the reason the first cut of this index bought
+        nothing (specs/220 research R3). The hem's `_bank` reads the nearest half-width wherever the
+        point stands, so it keeps `exact=True`."""
+        c, r = self.cell, self.reach
+        near: set[int] = set()
+        for cx in range(int((q[0] - r) // c), int((q[0] + r) // c) + 1):
+            for cy in range(int((q[1] - r) // c), int((q[1] + r) // c) + 1):
+                hit = self.cells.get((cx, cy))
+                if hit:
+                    near.update(hit)
+        nearest = _nearest_segment(q, self.pts, self.cum, sorted(near)) if near else None
+        if nearest is None or nearest[0] > r:
+            if not exact:
+                return self.BEYOND
+            nearest = _nearest_segment(q, self.pts, self.cum, range(len(self.pts) - 1))  # beyond the reach: the full walk, as before
+        return _stroke_verdict(q, self.pts, self.w0, self.w1, self.cum, nearest)
 
 
 def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:

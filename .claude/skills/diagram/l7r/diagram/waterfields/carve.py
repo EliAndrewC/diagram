@@ -12,12 +12,12 @@ import random
 from collections.abc import Callable, Sequence
 from typing import Any
 
-from .banks import _TINT_END_FT, _TINT_MIN_APEX, dedup_ring, pointed_ring, polyline_cum, supply_bank_clearance, tapers_to_a_point
+from .banks import _TINT_END_FT, _TINT_MIN_APEX, StrokeIndex, dedup_ring, pointed_ring, polyline_cum, tapers_to_a_point
 from .frame import BANK_MARGIN, CANAL_BERM_FT, Poly, Pt, _at_f, _f_at_u, _Frame, _miter_normals, _pip, _seg_d, _Thread, taper_w
 from .palette import DRY_CROPS, FLOODED, RICE_GREENS
 
 # a supply-stroke index row: (pts, cumulative arc-length, head width, tail width, padded bbox)
-_SupRow = tuple[Poly, list[float], float, float, tuple[float, float, float, float]]
+_SupRow = tuple[Poly, list[float], float, float, tuple[float, float, float, float], StrokeIndex]  # ..., the stroke's segment index (feature 220)
 _BankAt = Callable[[float], float]
 _EdgeFn = Callable[[float, int, int], Pt]
 
@@ -67,7 +67,8 @@ def _supply_index(supply: list[dict[str, Any]] | None, g: float) -> list[_SupRow
             _sw0, _sw1 = float(sc["w"]), float(sc.get("w_tail", sc["w"]))  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
             _sreach = max(_sw0, _sw1) / 2 + BANK_MARGIN * g + 2.0  # bbox prefilter: prunes only, never decides
             _sbb = (min(p[0] for p in spts) - _sreach, min(p[1] for p in spts) - _sreach, max(p[0] for p in spts) + _sreach, max(p[1] for p in spts) + _sreach)
-            sup_idx.append((spts, polyline_cum(spts), _sw0, _sw1, _sbb))
+            _scum = polyline_cum(spts)
+            sup_idx.append((spts, _scum, _sw0, _sw1, _sbb, StrokeIndex(spts, _sw0, _sw1, _scum, _sreach)))  # the reach is the bbox pad: every caller decides under it
     return sup_idx
 
 
@@ -77,10 +78,10 @@ def _clear_supply(x: float, y: float, hx: float, hy: float, sup_idx: list[_SupRo
     sector's own interior, so the two sectors sharing a ditch are pushed onto opposite banks."""
     for _ in range(6):  # a corner near a takeoff can sit in two strokes; re-test until clear
         moved = False
-        for spts, scum, w0, w1, sbb in sup_idx:
+        for _spts, _scum, _w0, _w1, sbb, sidx in sup_idx:
             if not (sbb[0] <= x <= sbb[2] and sbb[1] <= y <= sbb[3]):
                 continue
-            gap, halfw, past, foot, nrm = supply_bank_clearance((x, y), spts, w0, w1, scum)
+            gap, halfw, past, foot, nrm = sidx.clearance((x, y), exact=False)  # `need` below is under the index's reach, so BEYOND reads as clear
             need = halfw + BANK_MARGIN * g
             if past or gap >= need:
                 continue
@@ -112,14 +113,14 @@ def _quad_in_supply(quad: Poly, sup_idx: list[_SupRow], g: float) -> bool:
     further down, at BANK_MARGIN - 0.15 over halfw)."""
     for i in range(len(quad)):
         a, b = quad[i], quad[(i + 1) % len(quad)]
-        for spts, scum, w0, w1, sbb in sup_idx:
+        for _spts, _scum, _w0, _w1, sbb, sidx in sup_idx:
             if max(a[0], b[0]) < sbb[0] or min(a[0], b[0]) > sbb[2] or max(a[1], b[1]) < sbb[1] or min(a[1], b[1]) > sbb[3]:
                 continue
             nstep = max(1, int(math.dist(a, b) / 3.0))
             for k in range(nstep + 1):
                 t = k / nstep
                 q = (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
-                gap, halfw, past, _foot, _nrm = supply_bank_clearance(q, spts, w0, w1, scum)
+                gap, halfw, past, _foot, _nrm = sidx.clearance(q, exact=False)  # the threshold below is under the reach; BEYOND reads as clear
                 if not past and gap < halfw + BANK_MARGIN * g - 0.5:
                     return True
     return False
@@ -737,17 +738,27 @@ def _dry_fields(
             continue
         _w0, _w1 = float(_c["w"]), float(_c.get("w_tail", _c["w"]))  # pyrefly: ignore[bad-argument-type]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
         _reach = max(_w0, _w1) / 2 + berm_px + 2.0  # bbox prefilter: prunes only, never decides
-        _sup.append((_sp, _w0, _w1, polyline_cum(_sp), (min(p[0] for p in _sp) - _reach, min(p[1] for p in _sp) - _reach, max(p[0] for p in _sp) + _reach, max(p[1] for p in _sp) + _reach)))
+        _scum = polyline_cum(_sp)
+        _sup.append(
+            (
+                _sp,
+                _w0,
+                _w1,
+                _scum,
+                (min(p[0] for p in _sp) - _reach, min(p[1] for p in _sp) - _reach, max(p[0] for p in _sp) + _reach, max(p[1] for p in _sp) + _reach),
+                StrokeIndex(_sp, _w0, _w1, _scum, _reach),
+            )
+        )
 
     def _bank(q: Pt) -> tuple[float, float]:
         """`(gap, halfw)` against the NEAREST supply stroke at `q` - distance to its centerline and
         half its drawn width there. `(1e9, 0.0)` where no stroke governs the point."""
         best: tuple[float, float] | None = None
         past_best: tuple[float, float] | None = None
-        for _pts, _w0, _w1, _cum, _bb in _sup:
+        for _pts, _w0, _w1, _cum, _bb, _sidx in _sup:
             if not (_bb[0] <= q[0] <= _bb[2] and _bb[1] <= q[1] <= _bb[3]):
                 continue
-            gap, halfw, past, _foot, _nrm = supply_bank_clearance(q, _pts, _w0, _w1, _cum)
+            gap, halfw, past, _foot, _nrm = _sidx.clearance(q)  # the indexed walk (feature 220): the same tuple `supply_bank_clearance` returns
             if past:
                 if past_best is None or gap < past_best[0]:
                     past_best = (gap, halfw)

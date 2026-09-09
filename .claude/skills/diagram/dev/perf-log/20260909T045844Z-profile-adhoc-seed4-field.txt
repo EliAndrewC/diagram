@@ -1,0 +1,36 @@
+perf-profile seed 4 stage field: 4.4s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260909T045844Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         7006622 function calls (6988149 primitive calls) in 4.346 seconds
+
+   Ordered by: cumulative time
+   List reduced from 465 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    4.354    4.354 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:618(stage_field)
+        1    0.000    0.000    4.242    4.242 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:89(fit_field)
+        1    0.002    0.002    2.558    2.558 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:152(_fit_at_aspect)
+        4    0.000    0.000    2.111    0.528 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:92(carve_comb)
+        4    0.000    0.000    1.757    0.439 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:576(_carve)
+        1    0.001    0.001    1.684    1.684 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:195(finish_comb)
+        1    0.017    0.017    1.611    1.611 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/seams/close.py:37(close_seams)
+       24    0.001    0.000    1.420    0.059 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:387(_carve_sector)
+   167312    0.325    0.000    1.413    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+       20    0.032    0.002    1.260    0.063 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:202(_sector_body_rows)
+103175/93450    0.081    0.000    1.236    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+      101    0.005    0.000    0.858    0.008 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/seams/pockets.py:230(_absorb)
+      101    0.036    0.000    0.681    0.007 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/seams/geoms.py:85(near)
+    14248    0.057    0.000    0.635    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:443(edge)
+    78494    0.179    0.000    0.515    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/banks.py:193(clearance)
+     2557    0.002    0.000    0.450    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:487(in_supply)
+     2576    0.088    0.000    0.449    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:101(_quad_in_supply)
+        4    0.006    0.002    0.443    0.111 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:77(planted_area)
+    31516    0.028    0.000    0.406    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:129(_bnd)
+    31516    0.233    0.000    0.357    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/frame.py:254(_at_f)
+     7778    0.027    0.000    0.337    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:462(buffer)
+        4    0.001    0.000    0.334    0.083 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:499(_hem_pass)
+      577    0.038    0.000    0.329    0.001 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:516(inside_any)
+        4    0.014    0.004    0.326    0.081 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:350(_comb_toe_and_hem)
+   323215    0.088    0.000    0.291    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:517(<genexpr>)
+
+

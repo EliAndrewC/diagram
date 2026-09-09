@@ -16,6 +16,7 @@ from ..banks import (
     pointed_ring,
 )
 from ..frame import Poly, Pt, _Frame
+from .geoms import PlotGeoms
 from .pockets import _despike, _parts, _ring
 
 
@@ -173,6 +174,7 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
     another and the cheapest cut for a ring often only becomes available once its neighbor has been
     repaired. The cap is a backstop against a repair that undoes itself, not a tuning knob - on every
     pool map the set converges in three rounds or fewer."""
+    geoms = PlotGeoms(plots)  # one geometry per plot, neighbors by tree, for every trade of this pass (feature 220)
     for _ in range(6):
         moved = False
         seen: set[frozenset[Pt]] = set()
@@ -206,7 +208,7 @@ def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeome
                 # one step in four maps (5/5/7/5 -> 5/5/6/5) and costs 70% of the regeneration, because
                 # finding the other side means scanning every plot's vertices for the corner.
                 for _drop in _cuts:
-                    if _trade(plots, i, _drop, g, floor, water, outside):
+                    if _trade(plots, i, _drop, g, floor, water, outside, geoms):
                         moved = True
                         break
         if not moved:
@@ -221,6 +223,7 @@ def _trade(
     floor: float,
     water: BaseGeometry,
     outside: BaseGeometry,
+    geoms: PlotGeoms | None = None,
 ) -> bool:
     """Move the wall of plot `i` past the step at (`rb`, `rc`), giving the corner it cuts off to
     whatever lies on the other side. Returns whether the trade happened.
@@ -236,6 +239,7 @@ def _trade(
     cut = [q for q in plots[i]["poly"] if (round(q[0], 1), round(q[1], 1)) not in drop]
     if len(cut) < 3:
         return False
+    geoms = geoms or PlotGeoms(plots)  # a caller trading once builds its own; `_unjog` shares one across the pass
     # AND THE REPAIR MUST ACTUALLY RETIRE THE STEP. Dropping ONE end of the hop absorbs the offset as
     # a slant over the run beside it - a bend, which is what the fabric should have had - and dropping
     # BOTH cuts the corner off square. Either can fail to help on an awkward ring, and a repair that
@@ -244,7 +248,7 @@ def _trade(
     if jog_steps([(float(q[0]), float(q[1])) for q in cut], g) >= jog_steps([(float(q[0]), float(q[1])) for q in plots[i]["poly"]], g):
         return False
     try:
-        was = Polygon(plots[i]["poly"]).buffer(0)
+        was = geoms.geom(i)
         now = Polygon(cut).buffer(0)
         if not isinstance(now, Polygon) or not now.is_valid or now.is_empty or now.area < floor:
             return False
@@ -285,20 +289,15 @@ def _trade(
             # step standing. Measured before this loop existed: 366 of 1,468 trades refused on a
             # needle and 248 more on a malformed union, against 260 that went through.
             ranked: list[tuple[float, int]] = []
-            nx0, ny0, nx1, ny1 = near.bounds
-            for k, q in enumerate(plots):
-                if k == i or len(q["poly"]) < 3:
-                    continue
-                if max(v[0] for v in q["poly"]) < nx0 or min(v[0] for v in q["poly"]) > nx1 or max(v[1] for v in q["poly"]) < ny0 or min(v[1] for v in q["poly"]) > ny1:
-                    continue
-                qp = Polygon(q["poly"]).buffer(0)
+            for k in geoms.near(near.bounds, exclude=i):  # the plots whose extent touches the corner's - the old vertex gate, from the tree
+                qp = geoms.geom(k)
                 if not isinstance(qp, Polygon) or not qp.is_valid or qp.is_empty or not qp.intersects(near):
                     continue
                 shared = qp.boundary.intersection(near).length
                 if shared > 0.0:
                     ranked.append((-shared, k))
             for _neg, k in sorted(ranked):
-                grew = (Polygon(plots[k]["poly"]).buffer(0).union(traded.buffer(0.02))).buffer(0)
+                grew = (geoms.geom(k).union(traded.buffer(0.02))).buffer(0)
                 if not isinstance(grew, Polygon) or grew.interiors or grew.is_empty or grew.area < floor:
                     continue
                 gr = _ring(grew)
@@ -322,10 +321,8 @@ def _trade(
             # change decisions already taken. The orphan is capped against the trade so this stays a repair
             # rather than a land grab, and every guard below still judges the widened result.
             _orphans = []
-            for _k, _q in enumerate(plots):
-                if _k == i or len(_q["poly"]) < 3:
-                    continue
-                _qp = Polygon(_q["poly"]).buffer(0)
+            for _k in geoms.near(traded.bounds, exclude=i):  # a plot whose extent misses the corner's intersects it with area 0, which the test below refuses anyway
+                _qp = geoms.geom(_k)
                 if not isinstance(_qp, Polygon) or not _qp.is_valid or _qp.is_empty or _qp.intersection(traded).area <= 0.01:
                     continue
                 _lost = _qp.difference(traded).buffer(0)
@@ -345,13 +342,8 @@ def _trade(
                 ):
                     traded, now, _new = _wide, _grown, _gr
             rings = [(i, _new)]
-            tx0, ty0, tx1, ty1 = traded.bounds
-            for k, q in enumerate(plots):
-                if k == i or len(q["poly"]) < 3:
-                    continue
-                if max(v[0] for v in q["poly"]) < tx0 or min(v[0] for v in q["poly"]) > tx1 or max(v[1] for v in q["poly"]) < ty0 or min(v[1] for v in q["poly"]) > ty1:
-                    continue
-                qp = Polygon(q["poly"]).buffer(0)
+            for k in geoms.near(traded.bounds, exclude=i):
+                qp = geoms.geom(k)
                 if not isinstance(qp, Polygon) or not qp.is_valid or qp.is_empty or qp.intersection(traded).area <= 0.01:
                     continue
                 lost = qp.difference(traded).buffer(0)

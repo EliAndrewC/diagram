@@ -26,6 +26,7 @@ from ..banks import (
 )
 from ..frame import Poly, _Frame
 from ..palette import FLOODED, RICE_GREENS
+from .geoms import GeomTree
 from .plots import _plant, _unjog
 from .pockets import MIN_PLOT_SIDE, _absorb, _despike, _outside_command, _parts, _ring, _water
 
@@ -146,6 +147,7 @@ def close_seams(
         # planted: a scrap's best neighbor is often the new basin beside it, and a scrap offered
         # only its own siblings has nowhere to go when they refuse the union.
         keep += sorted(basins, key=lambda q: (round(q.bounds[0], 1), round(q.bounds[1], 1)))
+        _tree = GeomTree(keep)  # the basins' envelopes, indexed once per round (feature 220); `_absorb` tells it when it merges
         for scrap in sorted(scraps, key=lambda q: (round(q.bounds[0], 1), round(q.bounds[1], 1))):
             # The 3 ft `paddy_plot_seams_shared` itself ignores, in px at this map's scale. MIND THE
             # UNIT: `grain` is `2 / ftpx` (the scripted tier's principled value), so px-per-foot is
@@ -154,7 +156,7 @@ def close_seams(
             # a strip whose whole mean width was 5.6 px, so it annihilated every scrap it was handed
             # and the escape hatch silently did nothing (cohort seeds 9 and 11). Measured at the
             # corrected width the same weld comes out at a 77.1 deg apex.
-            _absorb(scrap, keep, grown, 1.5 * g, g)
+            _absorb(scrap, keep, grown, 1.5 * g, g, _tree)
     for j in sorted(j for j in grown if j < carved):
         plots[j]["poly"] = _ring(keep[j])
     for basin in keep[carved:]:
