@@ -96,3 +96,24 @@ baseline's contexts for that file: 15 contexts touch the module, one line has a 
 `tests/settlement/test_geom.py::test_water_index_refuses_a_narrow_fixture_from_its_grid_cell`, and the
 determinism test is `tests/soak/test_village_determinism.py` with its reason, taking its 6.7 s roll pair -
 the two longest tests in the gate - out of every ordinary run.
+
+**After landing, `make roll-audit`** lists 10 rolling contexts (was 11): the determinism roll is gone; the
+pinned-knob roll keeps its 15 lines. Two village-tier contexts outside the GM's item show empty sets and
+did before this feature - `tests/gate/settlement/test_rolling.py::test_roll_village_honors_a_pinned_knob`
+and the `comb` fixture of `tests/gate/test_no_feature_overlaps.py` - recorded here for a later pass under
+feature 216's clause, not taken under this one.
+
+## R6 - the gate after (2026-09-09)
+
+| | before (R1) | after |
+|---|---|---|
+| pytest under the gate | 47.0 s, 6 workers | **31.8 s**, 10 workers (37.2 s on the run with two tables) |
+| `test-full`, full, warm rolls | ~58 s | **43 s** |
+| coverage tables printed on a passing run | 3 | **1** |
+| `make done`, full, warm, hooks stamped | 65 s | **55 s** (the run before the last table left; the last content short-circuited as already verified) |
+| rolling contexts at the gate | 11 | 10 |
+
+Against the GM's yardstick for item 1 (47 s near 30 s): 32 s with all four items together, 40 s from
+the workers alone. The gate's remaining fixed costs, for whoever asks next: the reference roll when cold
+(9 s), the hook suites when a guard changed (27-63 s), and around the test phase ~8 s of planning, the
+coverage combine and merge, the floor and the census.

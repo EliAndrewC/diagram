@@ -1,6 +1,6 @@
 # Feature 221 - the gate's fixed costs
 
-**Status**: DRAFT 2026-09-09; `spec-fidelity` round 1 required three changes, applied: FR-001 raises the cap when the GM's memory condition holds at a count above 6, with feature 213's rule choosing AMONG 8, 10 and 12 rather than re-opening the raise, and no longer pre-authorizes staying at 6 (a measurement that shows no faster count goes to the GM with the numbers); the memory bar is the GM's exactly - two concurrent gates under 8 GiB, no unstated headroom (the container's cap, measured, is 10 GiB; 8 is the GM's figure and the stricter one); FR-003 delivers ONE table by also suppressing the hamlet floor's on a passing run.
+**Status**: IMPLEMENTED 2026-09-09 (workers 6 -> 10 by the measured rule, two gates 5.9 GiB; contexts ~2 s, left; one coverage table; the determinism roll to the soak tier with its line as a unit test; pytest under the gate 47 s -> 32 s, `make done` 65 s -> 55 s - research R2-R6). `spec-fidelity` round 1 required three changes, applied: FR-001 raises the cap when the GM's memory condition holds at a count above 6, with feature 213's rule choosing AMONG 8, 10 and 12 rather than re-opening the raise, and no longer pre-authorizes staying at 6 (a measurement that shows no faster count goes to the GM with the numbers); the memory bar is the GM's exactly - two concurrent gates under 8 GiB, no unstated headroom (the container's cap, measured, is 10 GiB; 8 is the GM's figure and the stricter one); FR-003 delivers ONE table by also suppressing the hamlet floor's on a passing run.
 **Request**: [`request.md`](request.md) - the session's profile and four-item proposal the GM approved,
 and the approval. **Research**: [`research.md`](research.md) - the profile before (R1), each item's
 measurement (R2-R5), the gate after (R6). **Predecessors**: 213 (the worker cap's measurement and rule),
@@ -73,8 +73,10 @@ changes what the measurement supports, and records what it does not.
   (near 30 s from 47 s); a result that does not support a raise goes to the GM with the numbers.
 - **SC-002** The contexts' cost is a measured number in R3 and the arrangement matches it.
 - **SC-003** A gated run that passes prints one coverage table, and the saving is measured.
-- **SC-004** `make roll-audit` shows every gate roll with a non-empty set; the determinism test is in the
-  soak tier; the water-index line is a unit test; `make done` green at 100%.
+- **SC-004** `make roll-audit` no longer lists the determinism roll (the two village rolls the GM named are
+  answered: one stays with its 15 lines, one moved); the water-index line is a unit test; `make done` green
+  at 100%. Two other village-tier contexts with empty sets, outside the GM's item, are recorded in R5.
+
 
 ## Decisions Recorded
 
@@ -88,3 +90,12 @@ changes what the measurement supports, and records what it does not.
   selection rule - the smallest count within 10% of the fastest - only picks which of 8, 10 or 12.
 - **D3 - the pinned-knob roll stays.** The audit says it carries 15 lines of the village roller nothing
   else reaches; a roll with a unique set is what feature 216 keeps.
+
+## Review history
+
+- **Round 1** (`spec-fidelity`, Mode 2, the GM's request verbatim, 2026-09-09): CHANGES REQUIRED, three - the
+  raise is the GM's condition's to decide, feature 213's rule only chooses among 8, 10 and 12, and the spec may
+  not pre-authorize keeping 6; the memory bar is the GM's 8 GiB as written, no headroom; "Print one" means one
+  table, so the hamlet floor's prints only on a miss. All three applied.
+- **Round 2** (`spec-fidelity`, Mode 2, 2026-09-09): **FAITHFUL**.
+
