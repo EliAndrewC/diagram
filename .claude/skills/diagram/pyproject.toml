@@ -95,10 +95,11 @@ testpaths = ["tests"]
 # would make every run recurse into .git, build/, dist/ and node_modules. Read from
 # `_pytest.main` rather than from memory.
 norecursedirs = ["*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}", "soak"]
-# No terminal report here (feature 221): a gated run prints ONE coverage table, the merged verdict the
-# Makefile asks for; `make cov-file` asks for its own. pytest-cov keeps a `term` given here even when the
-# command line says `--cov-report=`, which is why it is removed rather than overridden.
-addopts = "--cov"
+# No terminal report from pytest-cov (feature 221): a gated run prints ONE coverage table, the merged
+# verdict the Makefile asks for; `make cov-file` asks for its own. The empty `--cov-report=` is what
+# silences it - with no report option at all pytest-cov defaults to `term`, and a `term` given here
+# survives an empty `--cov-report=` on the command line, which is why the setting lives here.
+addopts = "--cov --cov-report="
 # `rolls_map` marks a test that GENERATES a settlement - the thing that costs 25-110 s each and sets
 # the whole suite's wall clock. `make quick` deselects them; `make done` runs everything.
 #

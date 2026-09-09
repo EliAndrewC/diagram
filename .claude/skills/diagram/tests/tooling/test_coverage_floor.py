@@ -103,5 +103,5 @@ def test_a_gated_run_prints_ONE_coverage_table() -> None:
 
     pyproject = (pathlib.Path(__file__).resolve().parents[2] / "pyproject.toml").read_text()
     addopts = next(ln for ln in pyproject.splitlines() if ln.startswith("addopts"))
-    assert "--cov" in addopts and "--cov-report=term" not in addopts, addopts
+    assert "--cov" in addopts and "--cov-report=term" not in addopts and "--cov-report=" in addopts, addopts  # the EMPTY report: with none at all pytest-cov defaults to `term`
     assert MAKEFILE.count("coverage report -m --fail-under=100") == 1, "the one table a passing gate prints"
