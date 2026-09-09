@@ -693,3 +693,21 @@ Labels also have a phase of their own now (the GM's other ask): the board is pla
 will always depend on what else is on the map."* On a hamlet nothing is placed between the two, so
 the phase move alone is byte-neutral - which is what lets the one changed box above be attributed to
 the seat rules and to nothing else.
+
+## 2026-09-09 - feature 220 (the field fitted once)
+
+The paddy fit scores each size guess on the carve's prediction of the planted acreage and closes the seams
+once, on the winner. The fan moved by a plot row (778 -> 770 -> 776 rings, `roll_acres` 24.55 -> 24.62), the
+frame narrowed 14 px on the west toe, and the lane web re-solved: 16 -> 13 lanes, and for a day the web shipped
+in TWO pieces at the router's own 4 ft ink tolerance - the doubled-remnant sweep dropped the one tread joining
+the two halves because both its ends stood within the gate's 40 ft REACH figure of another way. The sweep now
+refuses a drop that raises the component count, and every shipped hamlet's manifest is read for one network at
+the gate; the web is 14 lanes, one piece. The basin shave (a planted basin is its fat part; arms are absorbed)
+re-planted six rings AND re-rolled the dry hem - 23 of 26 dry plots are new geometry, centroids up to 115 ft
+along the belt, every furrow angle re-rolled, buckwheat 1 -> 3 - because the planted-basin count feeds the
+shared random stream the hem draws from (recorded for the GM in `specs/220-field-fitted-once/research.md`
+R4c). Bund beans 754 -> 698 with the re-roll. Lane 0's free end at (1330.6, 2071.1) is the FIELD SPUR from the
+track stage, ending 30 ft from the paddy outline: inside `lanes_reach_something`'s 60 ft field clause, and
+present before the web is laid, so it is not a way that dies in the open. A bath at (1719.5, 2274.9) was lost to
+new lane 8, ground the fixture placer no longer had - by the feature-155 order, recorded for the GM. Reviewed
+twice (`settlement-review`, DELTA).

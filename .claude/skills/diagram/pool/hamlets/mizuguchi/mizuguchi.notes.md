@@ -587,3 +587,18 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmstead fixtures: bath **4**, coop **3**, pit **7**, privy **7**, shrine **1**, woodpile **5**
 - notice board at **(867.5, 1904.7)**, **8** of 12 farmhouses within 250 ft
 <!-- /census -->
+
+## 2026-09-09 - feature 220 (the field fitted once)
+
+The paddy fit scores each size guess on the carve's prediction of the planted acreage and closes the seams
+once, on the winner. This is the map that moved most under it: 498 -> 481 rings, `roll_acres` 15.82 -> 15.49
+(the target band unchanged), and the house cloud re-seated to a different shape (drawn cluster aspect 3.44 ->
+2.40). The `settlement-review` found ring 475 wrapping ring 378 on three sides with a 4 ft collar - two bunds
+with a strip of paddy between - which the pocket planter had kept because the piece held one fat lobe; a
+planted basin is now shaved to its fat part and its arms absorbed. The lane web had shipped in two pieces at
+the 4 ft ink tolerance (7 lanes) and is one again (8) after the doubled-remnant sweep learned to refuse a drop
+that splits the web. Open, recorded for the GM: the through-way's tread 4.1 ft from two farmhouse walls (the
+2026-08-29 item, wanting its `research: physical` task on the drip line - nothing in the gate measures
+clearance, only overlap); the kura rate (8 of 12 here, the pool at 44% against the documented 30%); the
+wet-paddy class absent from this sheet; the board's caption crossing three windbreak crowns; the copse still
+not reading as a copse. Reviewed twice (`settlement-review`, DELTA).

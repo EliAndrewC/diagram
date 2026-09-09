@@ -596,6 +596,11 @@ quoted:**
   2026-08-17. Re-recorded as sound so the next session does not trim it.
 
 
+**Correction (2026-09-09, feature 220).** The two caps this entry names, (2009.0, 2938.3) and (2000.9, 2914.7), no
+longer exist: the field re-fit re-solved the whole lane web, no two free lane ends on the sheet are now within 128
+ft of each other, and the worst house-to-way figure is 72 ft (center) / 55 ft (nearest corner). The reasoning above
+stays as the record of why a short hole was once accepted; the hole it describes does not ship.
+
 ## Census - the counts this map ships with
 
 Derived, never typed. `make notes-census` rewrites the block below from the manifest and
@@ -712,3 +717,26 @@ Labels also have a phase of their own now (the GM's other ask): the board is pla
 will always depend on what else is on the map."* On a hamlet nothing is placed between the two, so
 the phase move alone is byte-neutral - which is what lets the one changed box above be attributed to
 the seat rules and to nothing else.
+
+## 2026-09-09 - feature 220 (the field fitted once)
+
+The paddy fit scores each size guess on the carve's prediction of the planted acreage and closes the seams
+once, on the winner. The fan moved by a plot row (802 -> 801 -> 802 rings, `roll_acres` 26.930 -> 26.924),
+and the lane web with it - and the web shipped in TWO pieces at the router's own 4 ft ink tolerance for a
+day: the doubled-remnant sweep dropped a lane whose two ends each stood within 40 ft of another way, so it
+"shadowed" it, while being the only tread joining the two halves. The sweep now refuses a drop that would
+raise the component count, and `tests/gate/test_lane_network.py` reads every shipped hamlet for one network.
+The basin shave (a pocket-planted basin is now its fat part; thin arms are absorbed) changed the planted-basin
+count and so the shared random stream into the dry hem: 27 -> 29 dry plots, one house re-seated (35.8 ft, at the
+cluster's SW end - a manifest diff shows a second "move" of 763 ft that is two records swapping index, not a house),
+the windbreak 162 -> 173 clumps, the copse 22 -> 19, and the well 124 ft from the notice board gone with one now
+at (1856.6, 3049.6), so `kosatsuba_well_ft` 124 -> 276 ft (the board itself moved 7 ft). Homestead
+bamboo 4 -> 2 stands, the ground taken by the re-solved web - the fixture and bamboo placers run after the
+web by the feature-155 order and lose to it by design; the prevalence shortfall predates this feature and is
+recorded for the GM. Reviewed twice (`settlement-review`, DELTA); the second pass found the copse contradicting its
+own rolled knob - `meta.copse_siting: among_the_houses`, yet 2 of 19 clumps within 60 ft of a house and all 19 inside
+the windbreak's box, the `against_the_belt` form happening by accident (the defect `hinterland/stages.py` names as
+the knob's reason). Mechanism measured: the knob seats the scatter in the house-cloud BBOX, and on a cluster this
+elongated the homestead keep-outs occupy exactly the ground the knob names, leaving the box's SE corner where the
+belt is. Recorded for the GM with the reviewer's direction (seat by distance to the nearest house, or record the
+achieved form beside the rolled one as `kosatsuba_well_ft` does) - the 2026-08-29 copse item's current form.

@@ -1542,3 +1542,17 @@ fine."*
 15 dwellings within 250 ft, broadside to the way it fronts, one caption on the board's own side
 of the tread. `kosatsuba_by_the_road` and `kosatsuba_faces_the_road` - the only two live gate checks
 that constrain where the board goes, the other five merely asserting it exists - both pass.
+
+## 2026-09-09 - feature 220 (the field fitted once)
+
+The paddy fit now scores each size guess on the carve's prediction of the planted acreage and closes the
+seams once, on the winner (`fit_field`, `CombCarve.planted_area`). This map moved twice under it. First by a
+hair (the same 574 rings, `roll_acres` 18.8777 -> 18.8778). Then the seam pass gained an end-of-pass repair
+of any ring that crosses itself as the manifest rounds it - the `settlement-review` found two needles here,
+#29 and #303, ink-invisible under the bund stroke - and a pocket-planted basin is now shaved to its fat part
+(a 4 ft collar had shipped on Mizuguchi). That shave changed the planted-basin count (574 -> 579), which
+moved the shared random stream into the dry-hem roll: the hem went 24 -> 29 plots and the whole cluster
+re-packed against it - every house moved, median 221 ft, cluster aspect 2.08 -> 2.86, lanes 9 -> 7, one
+network. The stream coupling is recorded for the GM in `specs/220-field-fitted-once/research.md` R4c
+(scoping the hem's roll would make a seam change local to the seams; it re-rolls every map's hem once).
+Reviewed twice (`settlement-review`, DELTA); the second pass is in the same research section.

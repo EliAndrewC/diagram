@@ -187,3 +187,15 @@ every map's hem and cluster once, on the whole pool at the tail of a feature tha
 four maps, and which maps the GM wants re-drawn is theirs to decide. Sketch: `finish_comb` hands
 `_comb_dry_and_beans` `random.Random(knob_seed(seed, "dry-hem"))` instead of `R`; one `settlement-review`
 pass per map at landing; the pool's accepted exhibits move once.
+
+**Second-pass reviews (after the two fixes).** Sawada: pass - both blocking findings closed, one network at
+4 ft on all five hamlets (the reviewer confirmed pool-wide), the re-joined lane bites nothing; it asked that
+the record say the dry hem re-rolled (it did: 23 of 26 plots new geometry, from the same stream coupling),
+which the notes now do, and it named lane 0's free end - the field spur from the track stage, 30 ft from the
+paddy outline, inside `lanes_reach_something`'s 60 ft field clause and present before the web is laid, so not
+a way dying in the open. Kashikawa: no blocking; the "763 ft move" in the delta summary was two records
+swapping index (the real re-seat is 35.8 ft), the well moved rather than the board, and the copse now
+contradicts its own rolled knob (`among_the_houses`, drawn along the belt) by a mechanism the reviewer
+measured - the knob seats in the house-cloud BBOX, which on an elongated cluster is mostly homestead keep-out
+- recorded in the map's notes for the GM as the 2026-08-29 copse item's current form; the stale
+accepted-limitation entry (a 24.95 ft hole that no longer ships) carries its correction.
