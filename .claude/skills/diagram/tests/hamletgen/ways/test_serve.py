@@ -243,3 +243,24 @@ def test_a_door_path_trimmed_below_two_points_is_not_drawn(monkeypatch: pytest.M
     s = fresh()
     hg.ways._serve_stragglers(s, _Plan(), [], [], [])
     assert len(s.M["lanes"]) == 1, "a path the trim ate down to its doorstep is not a way"
+
+
+def test_a_footpaths_last_leg_is_routed_when_the_straight_link_is_refused(monkeypatch) -> None:
+    """`_serve_stragglers` (feature 220, the step-1 re-fit's coverage): the path from an outlying steading is cut
+    where it comes within the join distance of the network, and the last leg from the cut to the nearest point on
+    the way is drawn straight when the ground allows - and ROUTED when it does not, so long as the detour stays
+    within the directness bound. The straight leg is refused outright here, so the routed tail is the only way home."""
+
+    class _Plan:
+        envelope = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
+        watercourses: list = []
+
+    from l7r.diagram.hamletgen.ways import serve as serve_mod
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(170.0, 200.0)])
+    before = len(s.M["lanes"])
+    monkeypatch.setattr(serve_mod, "_clear_link", lambda *a, **k: False)  # every straight last leg is refused: only the routed tail can finish the path
+    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
+    assert len(s.M["lanes"]) > before, "the steading gets its footpath, by the routed tail"
+    ends = [tuple(ln["pts"][-1]) for ln in s.M["lanes"][before:]] + [tuple(ln["pts"][0]) for ln in s.M["lanes"][before:]]
+    assert any(abs(x) <= 6.0 for x, _y in ends), f"the routed tail must reach the way at x=0: {ends}"

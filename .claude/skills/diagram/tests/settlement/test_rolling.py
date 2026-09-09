@@ -457,3 +457,16 @@ def test_the_sun_corridor_clears_a_bundle_that_has_no_yard_of_its_own() -> None:
     off.meta(name="V", scale="hamlet")
     off.M["houses"] = list(s.M["houses"])
     assert off._sun_corridor_ok({"house": (400.0, 400.0, 46.0, 28.0)}) is True
+
+
+def test_a_nucleated_bundle_with_no_fitting_side_is_refused_after_the_slide() -> None:
+    """`_place_bundle_nucleated` (feature 220, the step-1 re-fit's coverage): a seat the first probe accepts can
+    still fit NO side once the two slides have moved it - the paddy hug, then the pack along the cluster - and
+    then there is no bundle to return. Asked with the three collaborators patched on the instance."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    s._fits_any_side = lambda *a, **k: True  # type: ignore[method-assign]
+    s._slide_nuc = lambda cx, cy, hw, hh, fn, keep_field=False: (cx, cy)  # type: ignore[method-assign]
+    s._bundle_fits = lambda geom: False  # type: ignore[method-assign]
+    assert s._place_bundle_nucleated(300.0, 300.0, 23.0, 14.0) is None

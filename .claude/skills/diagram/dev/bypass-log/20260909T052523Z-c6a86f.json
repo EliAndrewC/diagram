@@ -1,0 +1,6 @@
+{
+  "utc": "20260909T052523Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 220: settlement-reviews over the four moved hamlets are running on the regenerated maps (dispatched this feature, second pass)"
+}

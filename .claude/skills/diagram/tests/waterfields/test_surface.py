@@ -59,6 +59,9 @@ def _public_clashes(modules: list[types.ModuleType]) -> list[tuple[str, str, str
 # The public names consumed as waterfields.<name> across the skill tree
 # (contracts/package-surface.md census, re-taken 2026-08-16 at implement time).
 CONSUMED_PUBLIC = [
+    "CombCarve",  # feature 220: the fit search keeps the best CARVE and finishes it once
+    "carve_comb",
+    "finish_comb",
     "jog_vertices",
     "AZE",
     "BANK_MARGIN",

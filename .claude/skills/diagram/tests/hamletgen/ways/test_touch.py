@@ -279,3 +279,22 @@ def test_a_link_leaving_an_interior_vertex_is_always_drawn_as_its_own_lane() -> 
     before = len(s.M["lanes"])
     _join_piece(s, lanes, 0, way, (50.0, 0.0), [(50.0, 0.0), (50.0, 60.0)], [], [], [], [])
     assert lanes[0]["pts"] == [list(p) for p in way] and len(s.M["lanes"]) == before + 1
+
+
+def test_a_short_gap_walled_on_both_lattices_is_left_for_the_orphan_rungs() -> None:
+    """`_touch_junctions` rung 2's second lattice (feature 220, the step-1 re-fit's coverage): a free end within the
+    join distance of another way whose direct chord is walled tries the coarse lattice, then the FINE one (5 ft cells,
+    the tight box), and when that too finds nothing the end is left where it is for the orphan rungs below - it is
+    not moved, and no link is drawn from it."""
+    from l7r.diagram.hamletgen.consts import WEB_FABRIC_GAP
+    from l7r.diagram.hamletgen.ways.route import _route
+
+    main = [(0.0, 0.0), (400.0, 0.0)]
+    piece = [(150.0, 120.0), (150.0, 30.0)]  # its free end 30 ft off the main way: inside the 40 ft join distance
+    wall = [(-100.0, 10.0), (500.0, 10.0), (500.0, 20.0), (-100.0, 20.0)]  # across the whole sheet: no lattice gets round it
+    q, foot = (150.0, 30.0), (150.0, 0.0)
+    assert not _route(q, foot, [], [wall], [], gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
+    assert not _route(q, foot, [], [wall], [], gap=WEB_FABRIC_GAP, pad_mult=1.0, cell=5.0), "the fine lattice must fail too, or the branch under test never runs"
+    s = _StubSettlement(lanes=[main, piece])
+    hg.ways._touch_junctions(s, [], [wall], [])
+    assert s.M["lanes"][1]["pts"][-1] == [150.0, 30.0], "the walled end stays where it was"

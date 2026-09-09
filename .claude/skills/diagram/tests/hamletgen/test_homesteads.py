@@ -256,3 +256,21 @@ def test_nearer_own_house_with_no_other_houses_is_unambiguously_its_owners() -> 
     assert rank == 0
     assert dmine == pytest.approx(50.0), "3-4-5 from its own house"
     assert margin == pytest.approx(-50.0), "negative: unambiguously this house's"
+
+
+def test_a_trunk_on_a_stream_is_refused_by_the_water_arm_alone() -> None:
+    """`_trunk_blocked`'s water arm reached through `Footing` (feature 220), on a sheet that carries NOTHING but the
+    stream - so no earlier arm (a paddy ring, a dry plot, a lane) can be the one that refused it."""
+    from l7r.diagram.hamletgen.homesteads import _trunk_blocked
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["streams"] = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 60}]
+    assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, []) is True
+    assert _trunk_blocked(s, 700.0, 200.0, 20.0, [], [], None, []) is False
+    # ...and the DRY-PLOT arm the same way: a trunk corner standing in a dry plot, nothing else on the sheet
+    s.M["streams"] = []
+    s.M["dry_plots"] = [{"poly": [(650.0, 150.0), (750.0, 150.0), (750.0, 250.0), (650.0, 250.0)]}]
+    assert _trunk_blocked(s, 700.0, 200.0, 20.0, [], [], None, []) is True
+    assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, []) is False

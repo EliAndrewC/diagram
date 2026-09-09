@@ -118,3 +118,18 @@ def _turn(pts: list[tuple[float, float]], k: int) -> float:
     v1, v2 = (bx - ax, by - ay), (cx - bx, cy - by)
     n1, n2 = math.hypot(*v1), math.hypot(*v2)
     return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2))))) if n1 and n2 else 0.0
+
+
+def test_unjog_eases_a_hairpin_whose_chord_is_blocked_instead_of_leaving_it() -> None:
+    """`_unjog`'s eased-corner branch for a HAIRPIN (a turn past 140 deg): the chord across the fold is blocked by a
+    post, so the corner cannot simply be dropped; `_ease_corner` slides it off its apex until both legs clear, and
+    the apex is REPLACED rather than deleted (feature 220, the step-1 re-fit's coverage - the reference roll used
+    to reach this on its own)."""
+    from l7r.diagram.hamletgen.ways.route import _clear_touch, _unjog
+
+    path = [(0.0, 0.0), (100.0, 0.0), (50.0, 12.0), (200.0, 12.0)]  # two hairpins: at (100, 0) and at (50, 12)
+    post = [[(22.0, 2.0), (28.0, 2.0), (28.0, 8.0), (22.0, 8.0)]]  # on the chord (0,0)-(50,12), at its middle
+    assert not _clear_touch(path[0], path[2], [], post, []), "the chord must be blocked, or the eased branch is not what fires"
+    out = _unjog(path, [], post, [])
+    assert out != path
+    assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))

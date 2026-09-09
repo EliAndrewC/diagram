@@ -296,3 +296,21 @@ def test_keep_the_route_wide_declines_a_join_that_would_hairpin_and_takes_it_fro
     assert _keep_the_route_wide(s, [], [], []) == 1
     assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (100.0, 0.0)], "A's join would hairpin: declined"
     assert [tuple(p) for p in s.M["lanes"][1]["pts"]] == [(100.0, 0.0), (90.0, 5.0), (60.0, 20.0)], "B's join to the same end runs straight: taken"
+
+
+def test_a_break_already_walkable_round_through_two_other_lanes_is_not_bridged() -> None:
+    """`_bridge_collinear_breaks`' detour clause (feature 220, the step-1 re-fit's coverage): two collinear ends 80 ft
+    apart, routable straight across - but the network already walks from one to the other through three short lanes
+    at 2.5x the gap... which is OVER the 2x detour, so it IS bridged; and at 1.5x it is not. Neither of the walk's
+    lanes comes within 40 ft of BOTH ends, so the earlier "a third way already joins them" filter cannot be the one
+    deciding."""
+    a, b = [(200.0, 500.0), (400.0, 500.0)], [(520.0, 500.0), (700.0, 500.0)]  # a 120 ft hole, inside the 150 ft span
+
+    def walk(rise: float) -> list[list[tuple[float, float]]]:  # three lanes round the hole; the crossbar stands `rise` from BOTH ends - past 40 ft, so it is no "third way already joining them"
+        return [[(400.0, 500.0), (400.0, 500.0 + rise)], [(400.0, 500.0 + rise), (520.0, 500.0 + rise)], [(520.0, 500.0 + rise), (520.0, 500.0)]]
+
+    near = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], a, b, *walk(50.0)])  # walk 220 ft, under 2x the gap: already served
+    assert hg.ways._bridge_collinear_breaks(near, [], [], []) == 0
+    assert len(near.M["lanes"]) == 6
+    far = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], a, b, *walk(70.0)])  # walk 260 ft, over 2x: the hole is bridged
+    assert hg.ways._bridge_collinear_breaks(far, [], [], []) == 1

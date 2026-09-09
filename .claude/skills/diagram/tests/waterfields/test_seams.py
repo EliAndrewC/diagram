@@ -454,3 +454,13 @@ def test_the_hem_pass_leaves_a_bank_that_already_reaches_the_field_edge_alone() 
     deep = [field_plot(430.0, 440.0)]  # 60 px of bare ground down to the collector: hemmed
     _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, [], deep)
     assert len(deep) > 1, "a real gap is filled with hem plots"
+
+
+def test_a_tab_cut_needs_the_step_to_be_one_edge_of_the_ring() -> None:
+    """`_tab_cut` (feature 220, the step-1 re-fit's coverage): the two step vertices must be CONSECUTIVE on the
+    ring - a pair that are both on the ring but not adjacent is not a step of it, and there is no tab to cut."""
+    from l7r.diagram.waterfields.seams.plots import _tab_cut
+
+    ring = [(0.0, 0.0), (40.0, 0.0), (40.0, 6.0), (80.0, 6.0), (80.0, 40.0), (0.0, 40.0)]
+    assert _tab_cut(ring, 2.0, (0.0, 0.0), (40.0, 6.0)) is None  # vertices 0 and 2: on the ring, not adjacent
+    assert _tab_cut(ring, 2.0, (0.0, 0.0), (99.0, 99.0)) is None  # not on the ring at all

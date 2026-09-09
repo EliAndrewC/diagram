@@ -49,3 +49,16 @@ def test_a_lane_whose_every_VERTEX_falls_inside_the_knot_is_left_exactly_as_it_w
     _smooth_web(s, [], [], [])  # the regression this guards is an IndexError on `_q[-2]`, so reaching here is half the test
     assert s.M["lanes"][2]["pts"] == [], "the stub is not rewritten to a one-point lane; the debris sweep drops it"
     assert tuple(s.M["lanes"][1]["pts"][0]) == (1.0, 301.0), "and its neighbor's end is pulled onto the knot's node"
+
+
+def test_a_lane_crossing_another_loses_its_short_head_past_the_crossing() -> None:
+    """`_smooth_web`'s bow-tie pass (feature 220, the step-1 re-fit's coverage): a lane whose head runs a few feet
+    past the way it crosses is cut back to the crossing, and the cut is committed to the record."""
+    from l7r.diagram.hamletgen.ways.smooth import _smooth_web
+
+    from ._builders import _webbed
+
+    s = _webbed([{"pts": [[0.0, 0.0], [400.0, 0.0]], "w": 5}, {"pts": [[100.0, -6.0], [100.0, 200.0]], "w": 3}])
+    assert _smooth_web(s, [], [], []) >= 1
+    head = s.M["lanes"][1]["pts"][0]
+    assert abs(head[0] - 100.0) < 1.0 and abs(head[1] - 0.0) < 1.0, head
