@@ -1,0 +1,6 @@
+{
+  "utc": "20260909T122109Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 221 changes the Makefile, pyproject, a tool and the test trees; no map moves - nothing for a settlement-review to see"
+}

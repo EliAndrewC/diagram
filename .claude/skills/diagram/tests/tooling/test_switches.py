@@ -19,14 +19,15 @@ from tests.test_switches import (
 
 @pytest.mark.tooling
 @pytest.mark.tooling
-def test_make_uses_six_workers_on_a_shared_box_and_every_core_on_codebuild(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_make_uses_ten_workers_on_a_shared_box_and_every_core_on_codebuild(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """GM 2026-08-26 (T23): the quick set is as fast on 8 workers as on 22, and the laptop runs several
     sessions at once - so a fixed count everywhere except CodeBuild, which is dedicated and announces itself.
     SIX since feature 213 (FR-009, specs/213 research R4): four full test phases on identical content ran in
     346 s on 4 workers, 301 s on 6 and 297-322 s on 8, and the rule was the smallest count within 10% of the
-    fastest; two idle workers fewer is memory the other sessions' gates get back."""
+    fastest. TEN since feature 221 (GM 2026-09-09, specs/221 research R2): the same rule on today's gate -
+    49 / 45 / 40 / 45 s at 6 / 8 / 10 / 12 workers - with two concurrent gates at 5.9 GiB under the GM's 8."""
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
-    assert "-n 6" in make(fixture_skill, "-n", "quick", "CPU_COUNT=22").stdout
+    assert "-n 10" in make(fixture_skill, "-n", "quick", "CPU_COUNT=22").stdout
     assert "-n 4" in make(fixture_skill, "-n", "quick", "CPU_COUNT=4").stdout, "never more workers than cores (GM 2026-08-26)"
     monkeypatch.setenv("CODEBUILD_BUILD_ID", "diagram-merge:abc")
     assert "-n auto" in make(fixture_skill, "-n", "quick", "CPU_COUNT=4").stdout
