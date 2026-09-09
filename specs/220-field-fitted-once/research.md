@@ -199,3 +199,19 @@ contradicts its own rolled knob (`among_the_houses`, drawn along the belt) by a 
 measured - the knob seats in the house-cloud BBOX, which on an elongated cluster is mostly homestead keep-out
 - recorded in the map's notes for the GM as the 2026-08-29 copse item's current form; the stale
 accepted-limitation entry (a 24.95 ft hole that no longer ships) carries its correction.
+
+## R5 - the gate's time, the bookends, the roll (2026-09-09)
+
+| measurement | before 218 | at 220-start | after 220 |
+|---|---|---|---|
+| placement roll, seed 4 (`make map PROFILE=1`) | 23.7 s | 10.2 s | **6.8 s** |
+| `stage_field` | 5.4 s | 5.25 s | **1.8 s** |
+| from-scratch rendered roll, warm reference check | 36.2 s | 22.7 s | **19.7 s** |
+| bookends, four seeds total (`make perf`) | 97.3 s (218-start) | 49.1 s | **32.5 s** (-33.8%, band 0) |
+
+The green gate that verified this feature ran in **65 s** (3,496 passed, 100% on both floors, one roll of one
+spec with eight requests served warm; a FULL run because a test-tree index changed) against the 143 s the last
+warm gate before feature 218 recorded and the 215 s cold FULL run of 218. The gate's cost is set by what it runs
+around the rolls; the roll speed-up shows in the roll.
+
+Remaining in the field, for the next feature (spec D3): the sector-row carve itself, now 58% of a 1.8 s stage.
