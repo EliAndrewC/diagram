@@ -94,3 +94,16 @@ gate's placement tests and a `settlement-review` pass over the pool, not by a ma
 - **D3 - the carve itself stays.** Under a second would also need the sector-row carve reworked
   (research R1: 26% of a build); the GM's approved assessment named it as possible, not planned. It
   is recorded in R4 as the next lever with its measured share.
+
+## Review history
+
+- **Round 1** (`spec-fidelity`, Mode 2, the GM's request verbatim, 2026-09-09): CHANGES REQUIRED, three -
+  the pool regeneration and the `settlement-review` pass must follow ANY step that moves a map, not step 1
+  alone, and FR-003's "or records why not" escape had to go; the neighbor search must use the spatial tree the
+  GM named (`STRtree`), a bounds prefilter only in front of it; the whole-roll figure the GM predicted belongs on
+  the yardstick and in SC-001. All three applied.
+- **Round 2** (`spec-fidelity`, Mode 2, 2026-09-09): **FAITHFUL**. The reviewer's aside - that finishing a kept
+  carve later might see a different random state than an inline finish - does not arise: each build seeds its
+  own generator inside `carve_comb`, so a carve kept and finished later sees exactly the state the inline finish
+  would have (R2 confirmed it: the same multiplier gives the same map).
+
