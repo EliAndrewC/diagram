@@ -17,5 +17,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T05 step 3: one geometry per plot in the seam passes, a prefilter for the neighbor searches; measured (R4) (FR-003)
       research: rendering
       verify: DONE. PlotGeoms (one geometry per ring object, STRtree neighbors) and GeomTree (changed set, never rebuilt in a round - the rebuild was a measured dead end); no map moved; field 2.09 -> 1.71 s (R4)
-- [ ] T06 `make done` green; `220-end` bookend and `perf-report`; the rendered roll; R5; spec IMPLEMENTED; land (FR-004, SC-001..003)
+- [x] T06 `make done` green; `220-end` bookend and `perf-report`; the rendered roll; R5; spec IMPLEMENTED; land (FR-004, SC-001..003)
       research: rendering
+      verify: DONE. make done green 65 s (warm, one roll of one spec, 100% both floors); 220-end bookend total 49.1 -> 32.5 s (-33.8%, band 0); rendered roll 19.7 s (was 22.7); R5; eight second-pass review findings acted on or recorded; spec IMPLEMENTED; landing

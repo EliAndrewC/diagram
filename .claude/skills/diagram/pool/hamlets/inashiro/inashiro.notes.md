@@ -87,7 +87,7 @@ pipeline's, and it is the same order a person follows:
   belt's side here is circular: the belt stands west because the cluster's back is west, and the
   wind was then named to match. On a cluster seated on the field's UPSLOPE margin the two rules
   agree and the declared wind carries real information; on a flank seat it does not.
-- **Dry hem plots run ~4.5x the size of Ikegami's** (median 7,711 sq ft against 1,707; the coarsest of the four scripted hamlets - Kashikawa 6,221, Mizuguchi 6,092, Sawada 6,913. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or
+- **Dry hem plots run ~3.6x the size of Ikegami's** (median 6,084 sq ft against 1,707; the finest of the four scripted hamlets - Kashikawa 6,137, Mizuguchi 7,323, Sawada 6,478. This bullet read "~3.5x" until a settlement-review re-measured it on the SHIPPED manifests, 2026-08-18: a standing known-open carries the current number or it is not a measurement) and chain single-file rather than packing two or (numbers re-measured 2026-09-09, feature 220, after the dry hem re-rolled 24 -> 29 plots: Inashiro is now the finest of the four, not the coarsest.)
   three deep, so the hem reads as large fields rather than household strips (`settlement-review`,
   2026-08-11). Parcel size, not acreage - the total is comparable. It wants a researched constant of
   its own.
@@ -1555,4 +1555,13 @@ moved the shared random stream into the dry-hem roll: the hem went 24 -> 29 plot
 re-packed against it - every house moved, median 221 ft, cluster aspect 2.08 -> 2.86, lanes 9 -> 7, one
 network. The stream coupling is recorded for the GM in `specs/220-field-fitted-once/research.md` R4c
 (scoping the hem's roll would make a seam change local to the seams; it re-rolls every map's hem once).
-Reviewed twice (`settlement-review`, DELTA); the second pass is in the same research section.
+Reviewed twice (`settlement-review`, DELTA). The second pass found the re-packed map coherent and nothing broken -
+the crescent bows properly again (sagitta 0.2% -> 5.4% of its length), the belt followed the cluster (156 x 732 ft,
+29 ft off the nearest wall), every free lane end lands on a frontage - and left three things recorded for the GM:
+the copse has DISSOLVED into five lone trees 49-178 ft apart (it was two tight pairs and a third; the same form
+question as Kashikawa's and Mizuguchi's copse this feature, and the 2026-08-29 copse item); well 0 now stands 76
+ft past the westernmost house, at the belt's drip line, rather than in a courtyard (coverage unharmed, max walk
+275 ft); and the fixture shortfall against the declared shares (the 2026-08-29 standing defect) got worse on the
+privy, 11 -> 6 seated against 12.9 expected. Two nitpicks it named: eight bund samples 0.4-1.2 ft inside a water
+stroke at the head-race (1590, 546), at the edge of the manifest's rounding, and persimmon 5 overhanging lane 5's
+tread by 1.5 ft.

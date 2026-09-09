@@ -1,0 +1,6 @@
+{
+  "utc": "20260909T053256Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 220: settlement-review passes were dispatched over every moved hamlet (Inashiro, Kashikawa, Mizuguchi, Sawada) on the regenerated maps - two rounds, findings fixed in the work and recorded in research R4c; the detached gate launch carried this reason but the hook reads only a foreground command"
+}
