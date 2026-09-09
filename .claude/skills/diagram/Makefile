@@ -1296,8 +1296,18 @@ REFERENCE_TIER = hamlet
 # SIX, NOT EIGHT, since feature 213 (GUARD_EDIT_OK: FR-009's measured default - four full test phases on identical
 # content, specs/213 research R4: 4 workers 346 s, 6 workers 301 s, 8 workers 297-322 s; the rule was the smallest
 # count within 10% of the fastest, and two idle workers fewer is ~250 MiB the other sessions' gates get back).
+# TEN SINCE FEATURE 221 (GM 2026-09-09: "Re-measure peak memory at 8, 10 and 12 workers ... if two concurrent gates
+# still fit under 8 GiB, raise the cap"). Feature 213 measured a gate that rolled 37 hamlets; today's rolls three,
+# and the phase is 3,500 tests, not rolls. Measured on identical content (specs/221 research R2), the test phase's
+# pytest wall: 6 workers 49 s; 8 workers 47.0 / 45.8 / 42.8 s; 10 workers 43.3 / 38.8 / 38.9 s; 12 workers 44.8 s.
+# The same rule - the smallest count within 10% of the fastest - now picks 10 (8 is 12% off it). Memory: a gate's
+# own footprint above the container's 3.1 GiB base was 0.95 / 1.14 / 1.39 / 1.52 GiB at 6 / 8 / 10 / 12 workers
+# (cgroup memory.current sampled at 0.5 s), a worker's per-test peak RSS 170-190 MB since feature 208 took the
+# raster out of the workers; two gates at 10 workers are 3.1 + 2 x 1.4 = 5.9 GiB, under the GM's 8 (the container's
+# cap is 10 GiB). The GM's "near 30 s" was not reached: 40 s, because past ten workers the suite's tail (a 5 s
+# glossary scan, a 3 s seating, the browser test) and each worker's ~0.2 s spawn-and-collect bound it, not the cores.
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
-XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 6 ] && echo "$(CPU_COUNT)" || echo 6))
+XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 10 ] && echo "$(CPU_COUNT)" || echo 10))
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
@@ -1479,8 +1489,10 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # pytest line records a coverage context per test phase and per fixture (`--cov-context=test` + the selection plugin,
 # which re-arms the fast core's events at every switch and deselects what the plan says; the note in the `test`
 # recipe). On an incremental run pytest-cov's own table - the first `TOTAL` on the screen - is the SELECTION's coverage
-# (49% on the first measured run) and is not the verdict; the merged report a screen below is. (`--cov-report=` was
-# tried to silence it and does not: pytest-cov keeps the `term` from addopts.)
+# (49% on the first measured run) and is not the verdict; the merged report a screen below is. Since feature 221 it
+# is not printed at all: `--cov-report=term` left pyproject's addopts (a `--cov-report=` on the command line could not
+# silence it, because pytest-cov keeps the `term` from addopts; removing it there is what does), so a gated run prints
+# ONE coverage table - the verdict - and the hamlet floor prints its own only when a module is under 100%.
 # `INCREMENTAL=0` forces a full run; so does `FULL=1`; `make idle-tests` passes INCREMENTAL=0 because an unattended
 # run is the cheapest time to refresh the baseline.
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))

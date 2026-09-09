@@ -170,7 +170,6 @@ def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.std
     cov = coverage.Coverage(data_file=data_file)
     cov.load()
     print(f"hamlet-floor: {len(files)} modules on the hamlet path (derived from the scripted rolls' records)", file=out)
-    total = cov.report(include=[str(SKILL / f) for f in files], show_missing=True, file=out)
 
     # THE VERDICT IS TAKEN PER LINE, NOT FROM THE PERCENTAGE, so a parked line can be excused without
     # excusing anything else in the same module (feature 147).
@@ -189,12 +188,18 @@ def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.std
     for _f, (_lines, _why) in sorted(PARKED.items()):
         print(f"hamlet-floor: PARKED (feature 147, the GM's ruling - known wrong, owned, NOT to be re-derived): {_f} {sorted(_lines)} - {_why}", file=out)
     if unparked:
+        # THE TABLE PRINTS ONLY WHEN IT HAS SOMETHING TO SAY (feature 221, GM 2026-09-09: "Print one"): a passing
+        # floor's per-module table was the third full coverage table on every gated run, ~2.5 s of `cov.report`
+        # over 94 modules to print 100% ninety-four times. The verdict comes from `analysis2` above; the report
+        # is asked for here, where its missing lines are the point.
+        total = cov.report(include=[str(SKILL / f) for f in files], show_missing=True, file=out)
         print(
             f"COVERAGE: a module on the HAMLET PATH is under 100% ({total:.2f}% combined) - {'; '.join(unparked)} "
             "(feature 145: the path is derived from what the scripted rolls execute; bring it up BY TESTS, spec FR-002)",
             file=out,
         )
         return 1
+    print(f"hamlet-floor: every one of the {len(files)} modules at 100%", file=out)
     return 0
 
 

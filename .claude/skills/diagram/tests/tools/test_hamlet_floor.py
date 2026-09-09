@@ -78,6 +78,7 @@ def test_the_floor_is_quiet_when_the_set_is_covered_and_ignores_modules_outside_
     monkeypatch.setattr(hf, "SKILL", Path("/"))  # type: ignore[attr-defined]
     out = io.StringIO()
     assert hf.check([str(Path(mod).resolve()).lstrip("/")], data_file=data, out=out) == 0
+    assert "at 100%" in out.getvalue() and "Stmts" not in out.getvalue(), "a passing floor prints one line, not the per-module table (feature 221)"
     assert "city_only" not in out.getvalue()
 
 
@@ -150,6 +151,7 @@ def test_a_PARKED_line_is_excused_loudly_and_does_not_excuse_its_neighbours(tmp_
     monkeypatch.setattr(hf, "PARKED", {rel: (frozenset({5}), "owned by feature 149 - do not re-derive")})  # type: ignore[attr-defined]
     out = io.StringIO()
     assert hf.check([rel], data_file=data, out=out) == 1, "the unparked miss still fails the floor"
+    assert "Stmts" in out.getvalue(), "...and a miss prints the table, where its missing lines are the point"
     assert "PARKED" in out.getvalue() and "feature 149" in out.getvalue(), "and the park is announced with its owner"
 
     # now park both: the floor passes, and still says so out loud

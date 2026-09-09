@@ -1,29 +1,14 @@
-"""THE FULL TREE (feature 135, GM 2026-08-27): the two `roll_village` DETERMINISM tests. Each must roll the same
-seed twice for real - a second roll served from a cache would make "same seed, same bytes" vacuous - so they run
-where every roll is real: `make done FULL=1` and the AWS check. The stream-fed and pinned-knob path tests stay at
-the gate, cached."""
+"""THE FULL TREE (feature 135, GM 2026-08-27): the `roll_village` pinned-knob DETERMINISM test. It must roll the same
+seed twice for real - a second roll served from a cache would make "same seed, same bytes" vacuous - so it runs
+where every roll is real. It EARNS its two village rolls: `make roll-audit` finds 15 lines of `settlement/rolling/roll.py`
+that nothing else in the gate reaches (feature 221). Its sibling - "the same seed rolls the same combination, a different
+seed a different one" - reached ONE line nothing else reached (`_geom/water_index.py`'s grid refusal, now a unit test in
+`tests/settlement/test_geom.py`), so under feature 216's clause it moved to `tests/soak/test_village_determinism.py`.
+The stream-fed and pinned-knob path tests stay at the gate, cached."""
 
 import pytest
 
 from l7r.diagram.settlement import Settlement
-
-
-@pytest.mark.rolls_map
-def test_roll_village_is_deterministic_and_seed_varies_the_combination():
-    # US2 (SC-004): the same seed rolls the SAME combination (byte-identical), a different seed rolls a
-    # DIFFERENT one, and a rolled map is populated with no hand-placed coordinates.
-    def roll(seed):
-        s = Settlement(W=2000, H=2600, seed=seed)
-        s.meta(name="R", scale="hamlet", ftpx=1, toscale=True, households=18, field_footbridges=True)
-        return s, s.roll_village("R", households=18, down_deg=90, water_kind="pond", field_fall=1260)
-
-    s7a, k7a = roll(7)
-    _s7b, k7b = roll(7)
-    assert k7a == k7b  # same seed -> identical roll
-    _s8, k8 = roll(8)
-    combo = ("cluster_position", "cluster_shape", "lane_skeleton", "water_source_position")
-    assert tuple(k7a[c] for c in combo) != tuple(k8[c] for c in combo)  # different seeds -> different combination
-    assert 15 <= len(s7a.M["houses"]) <= 19 and s7a.M["fields"] and s7a.view  # a populated, framed map
 
 
 @pytest.mark.rolls_map

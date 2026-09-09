@@ -4,7 +4,9 @@
 v2.23.0, GM 2026-09-08, feature 216: *"the correct place for the kind of test in which we make more map
 rolls than are strictly necessary is in the AWS tests. or the CI tests"*). It was declared empty on
 2026-09-05 as the home of a tier this project wants and does not yet run; its first test arrived with feature
-216 - the seed-43 kink's strict xfail, a roll that carried no coverage line and so could not stay in the gate.
+216 - the seed-43 kink's strict xfail, a roll that carried no coverage line and so could not stay in the gate. Feature
+221 added the village roll's determinism test (`test_village_determinism.py`): two 6.7 s rolls whose only unique line
+became a unit test.
 The tier is still not RUN by anything ordinary; `make soak` runs it by hand.
 
 **Nothing here is collected by any ordinary run** - not `make quick`, not `make done`, not

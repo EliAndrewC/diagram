@@ -670,3 +670,18 @@ def test_torii_wall_conflicts_names_the_wall_an_arch_is_standing_in() -> None:
     assert bad and bad[0][0] == 70.0 and bad[0][1] == 100.0, "the arch's own coordinates, rounded"
     assert "manor" in bad[0][2], "and the label of the wall it stands in"
     assert torii_wall_conflicts({"meta": {"ftpx": 1}, "manors": M["manors"], "torii": [(400.0, 400.0)]}) == [], "an arch clear of every wall is not a conflict"
+
+
+def test_water_index_refuses_a_narrow_fixture_from_its_grid_cell() -> None:
+    """`WaterIndex.clear`'s grid path (feature 221): a fixture narrower than the slack asks only the segments filed in
+    its own cell, and one within `need + half` refuses it. The village determinism roll was the only thing in the gate
+    reaching the refusal - two 6.7 s rolls for this line - so it is asked here directly, and that roll moved to the
+    soak tier."""
+    from l7r.diagram.settlement._geom.water_index import SLACK, WaterIndex
+
+    M = {"streams": [{"poly": [[0.0, 100.0], [400.0, 100.0]], "w": 10}]}
+    idx = WaterIndex(M)
+    half = min(2.0, SLACK / 2)
+    assert idx.clear(200.0, 104.0, half) is False  # 4 ft off a stream 5 ft to the bank: refused from the cell
+    assert idx.clear(200.0, 100.0 + 5.0 + half + 1.0, half) is True  # a foot past need + half: clear
+    assert idx.clear(200.0, 300.0, half) is True  # an empty cell: nothing to refuse

@@ -92,3 +92,16 @@ def test_the_gates_own_STANDARD_is_part_of_the_stamp_key() -> None:
     gs.GATE_RECIPE = gs.GATE_RECIPE + "/next"
     after = gs.hash_files([path])
     assert before != after, "bumping the recipe retires every existing stamp, which is the point"
+
+
+def test_a_gated_run_prints_ONE_coverage_table() -> None:
+    """Feature 221 (GM 2026-09-09: "The bookkeeping prints three full coverage tables ... Print one."). pytest-cov's own
+    terminal report - the SELECTION's coverage on an incremental run, not the verdict - is gone from addopts (a
+    `--cov-report=` on the command line cannot silence it; removing `term` from addopts does), and the hamlet floor
+    prints its table only on a miss. What remains on a passing gated run is the merged `coverage report`, the verdict."""
+    import pathlib
+
+    pyproject = (pathlib.Path(__file__).resolve().parents[2] / "pyproject.toml").read_text()
+    addopts = next(ln for ln in pyproject.splitlines() if ln.startswith("addopts"))
+    assert "--cov" in addopts and "--cov-report=term" not in addopts, addopts
+    assert MAKEFILE.count("coverage report -m --fail-under=100") == 1, "the one table a passing gate prints"
