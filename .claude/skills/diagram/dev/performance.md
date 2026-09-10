@@ -336,3 +336,126 @@ every roll in a child) and put a census gate on it so the number cannot drift ba
 levers from the 5.5 GiB breakdown are its FRs: no test renders (a suite-wide default, a `renders` marker for
 the tests of rendering), the child roll-out finished, the pool sweep's child profiled, the worker count
 measured, the rolling tests collected first and their concurrency capped. Numbers: `specs/213` research R4.
+
+## Where a pool hamlet's time goes, end to end (audit, session `diagram-performance`, 2026-09-10)
+
+The GM asked, after features 218-221, whether more low-hanging fruit remained. The stage profile
+answers only for the stage loop, so each pool gen was timed end to end (`make map GEN="--no-cache ..."`,
+one at a time, load average 0.5 on 22 cores) with phase marks around everything outside the stages, in a
+detached scratch worktree. **The stage loop is under half of a regen.** Seconds, one run each:
+
+| phase | inashiro | kashikawa | kuwabata | mizuguchi | sawada | mean |
+|---|---|---|---|---|---|---|
+| engine stages (`build`) | 6.9 | 10.4 | 16.6 | 6.3 | 14.4 | 10.9 |
+| page picture: resvg `--zoom 3` + lossless WebP | 7.8 | 7.1 | 6.5 | 6.9 | 6.4 | 6.9 |
+| PNG render: resvg 2600 px | 2.1 | 3.0 | 2.7 | 2.0 | 2.4 | 2.5 |
+| page text: `drop_offmap` | 0.7 | 1.0 | 0.8 | 0.6 | 1.1 | 0.8 |
+| page text: `wrap` (merge + hit copies) | 0.5 | 0.3 | 0.3 | 0.4 | 0.3 | 0.3 |
+| page: explanations + json blob | 0.3 | 0.3 | 0.4 | 0.3 | 0.3 | 0.3 |
+| page: id map (resvg zoom 1) | 0.3 | 0.2 | 0.3 | 0.3 | 0.2 | 0.3 |
+| page: hit regions | 0.1 | 0.1 | 0.0 | 0.1 | 0.1 | 0.1 |
+| svg/json write + ink census | 0.1 | 0.2 | 0.1 | 0.1 | 0.2 | 0.1 |
+| child interpreter + engine imports | 0.2 | 0.2 | 0.2 | 0.2 | 0.2 | 0.2 |
+| `gencache.store` | 0.1 | 0.1 | 0.1 | 0.1 | 0.1 | 0.1 |
+| **regen total (child)** | **19.3** | **23.0** | **27.9** | **17.3** | **25.6** | **22.6** |
+
+`make map` adds ~0.6 s (the reference HIT check, the pool index) and 9 s more when the reference must
+first roll on a MISS. Stages, the same runs:
+
+| stage | inashiro | kashikawa | kuwabata | mizuguchi | sawada | mean |
+|---|---|---|---|---|---|---|
+| hinterland | 1.3 | 2.4 | **10.0** | 1.7 | 3.7 | 3.8 |
+| field | 1.8 | 2.4 | 0.7 | 1.1 | 3.7 | 2.0 |
+| homesteads | 1.0 | 1.3 | 2.6 | 0.8 | 1.0 | 1.3 |
+| track | 0.8 | 0.9 | 1.1 | 1.0 | 0.9 | 0.9 |
+| appurtenances | 0.2 | 1.3 | 1.1 | 0.2 | 1.2 | 0.8 |
+| web | 0.2 | 0.7 | 0.4 | 0.4 | 2.1 | 0.8 |
+| notice | 0.3 | 0.6 | 0.5 | 0.3 | 1.0 | 0.5 |
+| windbreak | 0.7 | 0.2 | 0.2 | 0.5 | 0.4 | 0.4 |
+| crossings | 0.3 | 0.4 | 0.0 | 0.3 | 0.4 | 0.3 |
+
+**The picture, split.** `raster.picture` is resvg rendering the page's SVG at 3 px per map px (Inashiro
+5103 x 5136 = 26 Mpx, 2.1-3.6 s) and then a child decoding the PNG and encoding it as LOSSLESS WebP
+(2.9-5.2 s). Measured on Inashiro's picture alone: PIL decode 0.41 s; lossless WebP `method=0` 4.12 s for
+3.87 MB; lossy WebP q90 0.93 s for 2.32 MB; PNG level 1 1.15 s for 8.3 MB; JPEG q90 0.20 s. The lossless
+encode is the single most expensive step of the whole generation, on every map, and it is a rendering
+decision (feature 200) - lossy at q90+ is a question for the GM, not a substitution.
+
+**The SVG is 13-16 MB and 89% of it is one glyph.** Inashiro's file holds 268,156 `<line>` elements
+(14.6 MB of 16.4) - the bucketed grass blades of the commons scrub (`land/cover.py`, `#A7A860`) and the
+marsh reeds (`land/wet.py`, `#6E9377`) - beside 18k circles, 2k polygons and 235 paths. Every consumer
+pays for them: resvg parses them three times per gen (the PNG, the picture, the id map), and
+`drop_offmap` walks them all to discard the ~90% that lie outside the viewBox (specs/200 R2). Measured
+with resvg on Inashiro's SVG: 2600 px render 2.13 s as shipped, 1.17 s with each blade group merged into
+ONE `<path d="M..L..M..L..">` (9.4 MB), 0.89 s with the blades removed; the zoom-3 render 3.81 / 2.86 /
+2.43 s. So merging the blade lines into one path per group saves ~1 s per resvg pass with no change to
+the ink (the page's `merge_primitives` already does this merge for the browser - it would move upstream
+into the writer), and NOT EMITTING the off-map blades at all - the writer knows the viewBox only at crop
+time, but the scrub could be clipped to the frame's content box plus a margin when it is scattered, or
+culled in `finish` before the SVG is written - would take the file to ~3 MB and every downstream pass
+with it.
+
+**Inside the stages (cProfile of the gen child, +100-170%; relative shares only).** Both maps' hot
+spots are constitution X clause 15's shape again - a candidate tested against every edge of everything:
+
+- **Kuwabata's hinterland, 87% of the stage**: `title_pocket` -> `Settlement._blank_label_spot` ->
+  `_box_clear`, 4,027 candidate boxes each tested against every edge of every obstacle polygon and line
+  by `segments_cross` - 16.4 million segment pairs, 34 million `ccw`. A dike-pond hamlet's obstacle
+  list is every pond and every ditch. `_rect_hits` two files away already bbox-prefilters each polygon and
+  each edge; `_box_clear` has no prefilter at all, and the scan tries every 24 px box top-to-bottom until
+  one clears. A per-polygon bbox reject plus a coarse occupancy grid of the obstacles, built once per
+  `_title_obstacles` call, would take the ~8.7 real seconds to well under one. The same scan runs again in
+  `title()` at the label phase.
+- **Sawada's hinterland, 52% of the stage**: `bamboo_seats` -> `_fits` (15 samples per candidate) ->
+  `bamboo_blocked`, which tests each sample against every segment of every lane and every polygon by
+  `seg_dist` - 2.2 million distances for 9,796 samples. A `KeepoutGrid` of the rects, lanes, polys and
+  pond (the windbreak's shape from feature 218) asked once per sample is the fix.
+- **`place_wells` (appurtenances, 1.1-1.3 s on three maps)**: the minimax sort key calls `_worst_after`
+  70k times - `pool.sort(key=...)` evaluates the tuple's `_worst_after(c)` TWICE per candidate and the
+  inner `min` over `placed` for every needy house each time; a precomputed nearest-standing-well distance
+  per house and one `_worst_after` per candidate is the same answer at a fraction of the calls.
+- **`stage_web` on Sawada (2.1 s)**: `_serve_stragglers` -> `_route` x135 -> `clearance.fouled` 647k
+  queries. The router's lattice is 10 ft cells over a box padded to 0.75 x span; most of its cost is
+  marking cells that the string-pulled path never visits. A lazy (on-demand) `fouled` per popped cell
+  rather than a whole-lattice pre-mark, or a coarser first pass, is the lever; measure before choosing.
+- **`stage_notice` on Sawada (1.0 s)**: `place_kosatsuba` probes every verge spot along every lane with
+  `edge_within` (640k calls) - the same shape, a `RingIndex` per lane bed built once.
+- **`commons` scatter (`land/cover.py`, 3-3.5 s profiled, ~1 s real per map)**: 1-1.3 million
+  `random.uniform` draws, most refused by `_sparse`. It is already indexed (feature 218); what is left is
+  the draw count itself, and the off-map share of it (see the SVG note above) - a scatter clipped to the
+  content box draws fewer points AND writes fewer lines.
+- **`stage_field` (1-3.7 s)**: `carve_comb` / `close_seams` / `banks.clearance`, as profiled in feature
+  220; nothing new found here.
+
+**The page's text passes run on every TEST roll too.** A gate roll (render=False) still pays
+`drop_offmap` + `wrap` + explanations, ~1.6 s per roll, for a page no test opens (feature 208 took the
+raster out of test rolls; the vector page stayed). Small now that the gate rolls only the shipped
+five on a cold cache, but it is a cost without a reader.
+
+**Levers, ranked by seconds per regen for the effort** (each is a rendering or engine change and owes its
+own feature; a knob or a visual change is the GM's call):
+
+1. Lossless -> lossy WebP for the page picture, or `RASTER_R` 3 -> 2 (2.25x fewer pixels): -3 to -4 s
+   per map (GM decision: it is what the reader sees below the switch scale).
+2. Run the three renders concurrently - the PNG (resvg 2600), the picture (resvg zoom 3 + WebP) and the
+   id map are independent subprocesses today run in sequence: -2 to -3 s of wall per map at zero
+   change to any output.
+3. Bucketed blades as ONE path per group in the writer, and the off-map scatter never emitted: -1 s per
+   resvg pass (three passes), -0.5 s of `drop_offmap`, and a 13-16 MB SVG becomes ~3 MB.
+4. `_box_clear` with a bbox prefilter and an occupancy grid: -8 s on Kuwabata, -0.5 to -2 s elsewhere,
+   and the `title()` rescan with it.
+5. `bamboo_blocked` on a `KeepoutGrid`: -3 s on Sawada, -1 s typical.
+6. `place_wells` minimax key computed once per candidate: -0.5 to -1 s on three maps.
+7. `place_kosatsuba` and `_route` indexed: -0.5 to -1.5 s where they bite.
+
+**Two defects met on the way (no engine change made in this audit; both owe a feature).** `make map
+... PROFILE=1` prints NOTHING since feature 213 moved the roll into a child: the stage profile goes to the
+child's stderr, which `rollcache._in_child` captures and discards on success - so the GM's own instrument
+for "where the roll spent its time" (feature 151) has been silent for two days. Forward the child's
+stderr, or carry the timings in the pickled payload. And cProfile cannot run inside a gen child: the
+dependency recorder holds `sys.monitoring.PROFILER_ID`, so `cProfile.Profile().enable()` raises "Another
+profiling tool is already active" - `make perf-profile` avoids it only because it profiles a stage in
+the driver's own process. py-spy 0.4.2 does not recognize Python 3.14 either, so a sampling profile is not
+available on this host today. The scratch method that worked: a detached worktree, a `_phase.mark()`
+helper printing deltas to stderr at each boundary, the child's stderr forwarded, and the recorder moved to
+tool id 3 while cProfile is on.
