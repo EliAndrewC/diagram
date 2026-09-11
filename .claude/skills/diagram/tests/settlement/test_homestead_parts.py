@@ -187,6 +187,7 @@ def test_commons_keeps_scrub_off_drawn_channels():
     # is offset from the base point _sparse tests) so every element is base-tested - the same idiom
     # as the urban-halo tests.
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")  # laid over both laterals
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts = _scatter_base_points(s.out[before:])
     assert pts
     _clear_of(pts, uniform, 14.0 / 2)
@@ -201,6 +202,7 @@ def test_commons_keeps_scrub_off_a_crescent_pond():
     s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 420.0, "r": 40.0}]
     before = len(s.out)
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts = _scatter_base_points(s.out[before:])
     assert pts and any(abs(gx - 300.0) < 80 and abs(gy - 420.0) < 80 for gx, gy in pts), "scrub stands near the pond"
     assert all(math.hypot(gx - 300.0, gy - 420.0) >= 40.0 + 2 - 0.15 for gx, gy in pts), "... but never on its water"
@@ -231,6 +233,7 @@ def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():
     m = s.px(s._BANK_MARGIN_FT)
     before = len(s.out)
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")  # laid over both laterals
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts = _scatter_base_points(s.out[before:])
     assert pts
     for gx, gy in pts:  # every base clears drawn half-width + the cut-bank margin (w1 conservative on the taper)
@@ -242,6 +245,7 @@ def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():
     s2.M["streams"] = [{"poly": stream, "w": 8}]
     before = len(s2.out)
     s2.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")
+    s2.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts2 = _scatter_base_points(s2.out[before:])
     assert pts2
     assert all(_min_dist(gx, gy, [tuple(p) for p in stream]) >= 8 / 2 + 2 - 0.15 for gx, gy in pts2)  # still off the water itself
