@@ -242,6 +242,8 @@ class GroundCoverMixin:
                 # before finish culled the result. The count is the parcel's own (D3), so the in-frame density is unchanged;
                 # the in-frame texture re-rolls (D1, the GM's 2026-09-08 ruling). `_scatter_frame` is None outside a hamlet.
                 _fr = self._scatter_frame
+                if _fr is not None:
+                    self._scatter_frames.append((_fr, (x0, y0, x1, y1)))  # for finish()'s breach record: the frame, and the ground this throw covered
                 for _ in range(int(area / (74 * bs * bs))):  # coarse grass tufts + the odd low brush dot
                     gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
                     if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):

@@ -33,7 +33,6 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # THE SCATTER THROWS ONLY INSIDE A PREDICTED FRAME (feature 224): set before each scatter from what is known then -
     # the marsh before the coppice and the pocket exist, the commons after them - and kept for finish()'s breach record.
     s._scatter_frame = scatter_frame(s, plan)
-    s._scatter_frames.append(s._scatter_frame)
     s.hinterland(commons=False)
     plan.woodland_polys = open_ground_patches(s, plan, plan.woodland_patches)
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
@@ -42,7 +41,6 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plan.bamboo_polys += household_bamboo(s, plan, s.M.get("houses", []))  # T49: after the web and the board, before the scrub
     plan.bamboo_polys += bamboo_seats(s, plan)
     s._scatter_frame = scatter_frame(s, plan)
-    s._scatter_frames.append(s._scatter_frame)
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
     s._scatter_frame = None  # the later scatters (a stand's understory, a hand call) throw whole
 

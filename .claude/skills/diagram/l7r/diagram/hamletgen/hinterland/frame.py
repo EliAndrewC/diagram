@@ -30,6 +30,10 @@ def content_box(s: Settlement, plan: SitePlan, pad: float = 0.0) -> tuple[float,
 #: reserved polygon the crop can take in; the band covers a hard feature placed after the hinterland that lands
 #: outside everything known. The pool's and the cohort's largest realized overhangs are in specs/224 research R2.
 SCATTER_PAD = 120.0
+#: ...and the TITLE BAND on the north side (feature 224, the 48-map cohort): a sheet with no room for its name grows a
+#: band above the map sized to the placard (`Settlement.title`, 30 * 1.2 + 46 + 24 + 32 = 138 px) AFTER the crop, and
+#: on four of 48 seeds it reached 6 px past the pad - so the prediction's top edge carries the band's full height too.
+TITLE_BAND_ALLOWANCE = 140.0
 
 
 def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
@@ -53,7 +57,7 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     if not xs:
         return (0.0, 0.0, float(s.W), float(s.H))  # pragma: no cover - a hamlet has its field and houses by now [224: the empty case keeps the throw whole]
     grow = CROP_MARGIN + SCATTER_PAD
-    return (min(xs) - grow, min(ys) - grow, max(xs) + grow, max(ys) + grow)
+    return (min(xs) - grow, min(ys) - grow - TITLE_BAND_ALLOWANCE, max(xs) + grow, max(ys) + grow)
 
 
 def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190.0) -> tuple[float, float, float, float]:

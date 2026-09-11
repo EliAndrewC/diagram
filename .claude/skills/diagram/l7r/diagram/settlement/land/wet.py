@@ -338,6 +338,8 @@ class WetGroundMixin:
         # re-roll every marsh on every map, which is why the widest radius is used below.
         _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
         _fr = self._scatter_frame  # a throw outside the predicted frame is skipped before the keep-out test (feature 224; the note in cover.py)
+        if _fr is not None:
+            self._scatter_frames.append((_fr, (x0, y0, x1, y1)))
         for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
             if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):

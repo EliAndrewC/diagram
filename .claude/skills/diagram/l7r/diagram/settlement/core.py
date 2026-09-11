@@ -82,7 +82,7 @@ class Settlement(
         # the frame the scatter may predict (feature 224): a throw outside it is skipped before the keep-out test; each frame
         # used is kept so `finish()` can record whether the view stayed inside the tightest of them
         self._scatter_frame: tuple[float, float, float, float] | None = None
-        self._scatter_frames: list[tuple[float, float, float, float]] = []
+        self._scatter_frames: list[tuple[tuple[float, float, float, float], tuple[float, float, float, float]]] = []  # (the frame, the parcel's box) per scatter that threw within one
         self._pending_stands: list[
             tuple[Poly, int, bool, str | None]
         ] = []  # tree-stand canopies queued at forest()/forest_patch() time, DRAWN at crop time when every building + well exists (see flush_tree_stands)

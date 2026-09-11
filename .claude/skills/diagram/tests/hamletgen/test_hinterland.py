@@ -457,25 +457,33 @@ def test_scatter_frame_holds_the_crops_boxes_the_reserved_polygons_and_the_pad()
     plan.title_pocket = (500.0, 1100.0, 800.0, 1290.0)
     x0, y0, x1, y1 = scatter_frame(s, plan)
     grow = CROP_MARGIN + SCATTER_PAD
-    assert (x0, y0) == (min(500.0, 600.0, 780.0) - grow, 700.0 - grow) and (x1, y1) == (1300.0 + grow, 1290.0 + grow)
+    from l7r.diagram.hamletgen.hinterland.frame import TITLE_BAND_ALLOWANCE
+
+    assert (x0, y0) == (min(500.0, 600.0, 780.0) - grow, 700.0 - grow - TITLE_BAND_ALLOWANCE) and (x1, y1) == (1300.0 + grow, 1290.0 + grow)
 
 
-def test_finish_records_the_scatter_frame_and_a_breach_only_when_the_view_reaches_past_it(tmp_path) -> None:
-    """Feature 224 FR-002: the tightest frame any scatter threw within is recorded; the overhang per side too; a breach
-    only when the view reaches past it on some side."""
+def test_finish_records_the_scatter_frame_and_a_breach_only_where_the_view_shows_kept_out_ground(tmp_path) -> None:
+    """Feature 224 FR-002: the tightest frame any scatter threw within is recorded; the overhang per side is judged
+    on the ground each parcel actually covers inside the view; a breach only where the view shows part of a
+    parcel the frame kept the throw out of - a small frame over a parcel the view never reaches is no breach."""
     import os
 
     s = Settlement(W=1000, H=1000, seed=1)
-    s._scatter_frames = [(50.0, 50.0, 900.0, 900.0), (60.0, 40.0, 950.0, 880.0)]
+    s._scatter_frames = [((50.0, 50.0, 900.0, 900.0), (0.0, 0.0, 1000.0, 1000.0)), ((60.0, 40.0, 950.0, 880.0), (0.0, 0.0, 1000.0, 1000.0))]
     s.set_view(100, 100, 700, 700)
     s.finish(os.path.join(tmp_path, "a"), render=False)
     assert s.M["meta"]["scatter_frame"] == [60.0, 50.0, 900.0, 880.0]
     assert s.M["meta"]["scatter_frame_overhang"] == [-40.0, -50.0, -100.0, -80.0] and "scatter_frame_breach" not in s.M["meta"]
     t = Settlement(W=1000, H=1000, seed=1)
-    t._scatter_frames = [(50.0, 50.0, 900.0, 900.0)]
+    t._scatter_frames = [((50.0, 50.0, 900.0, 900.0), (0.0, 0.0, 1000.0, 1000.0))]
     t.set_view(100, 100, 850, 700)
     t.finish(os.path.join(tmp_path, "b"), render=False)
     assert t.M["meta"]["scatter_frame_breach"] == [-50.0, -50.0, 50.0, -100.0]
+    v = Settlement(W=1000, H=1000, seed=1)
+    v._scatter_frames = [((50.0, 50.0, 900.0, 900.0), (0.0, 850.0, 1000.0, 1000.0))]  # a parcel only along the bottom
+    v.set_view(100, 100, 850, 700)  # the view reaches past the frame on the RIGHT, but the parcel lies below the view
+    v.finish(os.path.join(tmp_path, "d"), render=False)
+    assert "scatter_frame_overhang" not in v.M["meta"] and "scatter_frame_breach" not in v.M["meta"]
     u = Settlement(W=1000, H=1000, seed=1)
     u.finish(os.path.join(tmp_path, "c"), render=False)
     assert "scatter_frame" not in u.M["meta"], "no scatter threw within a frame: nothing recorded"

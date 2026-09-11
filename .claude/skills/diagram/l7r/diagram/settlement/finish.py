@@ -490,14 +490,29 @@ class FinishMixin:
         # threw within; a view reaching past it means a strip inside the frame may hold no scatter - a visible defect,
         # recorded here as `scatter_frame_breach` (the overhang per side), asserted absent over the pool by the gate.
         if self._scatter_frames:
-            _tight = (max(f[0] for f in self._scatter_frames), max(f[1] for f in self._scatter_frames), min(f[2] for f in self._scatter_frames), min(f[3] for f in self._scatter_frames))
+            _tight = (
+                max(f[0] for f, _b in self._scatter_frames),
+                max(f[1] for f, _b in self._scatter_frames),
+                min(f[2] for f, _b in self._scatter_frames),
+                min(f[3] for f, _b in self._scatter_frames),
+            )
             self.M["meta"]["scatter_frame"] = [round(v, 1) for v in _tight]
             if self.view:
+                # PER SCATTER, ON THE GROUND IT COVERED: the breach is where the view shows part of a parcel the frame kept
+                # the throw out of - a frame too small for a parcel the view never reaches is no breach (the 48-map
+                # cohort's first run flagged the marsh's early frame against a title band the marsh never neared).
                 _vx, _vy, _vw, _vh = self.view
-                _over = [round(_tight[0] - _vx, 1), round(_tight[1] - _vy, 1), round((_vx + _vw) - _tight[2], 1), round((_vy + _vh) - _tight[3], 1)]
-                self.M["meta"]["scatter_frame_overhang"] = _over  # left, top, right, bottom: positive = the view reaches past the frame
-                if max(_over) > 0:
-                    self.M["meta"]["scatter_frame_breach"] = _over
+                _over = [-1e9, -1e9, -1e9, -1e9]
+                for (_f0, _f1, _f2, _f3), (_p0, _p1, _p2, _p3) in self._scatter_frames:
+                    _s0, _s1, _s2, _s3 = max(_vx, _p0), max(_vy, _p1), min(_vx + _vw, _p2), min(_vy + _vh, _p3)
+                    if _s2 <= _s0 or _s3 <= _s1:
+                        continue  # the parcel lies outside the view
+                    _over = [max(_over[0], _f0 - _s0), max(_over[1], _f1 - _s1), max(_over[2], _s2 - _f2), max(_over[3], _s3 - _f3)]
+                if max(_over) > -1e9:
+                    _over = [round(v, 1) for v in _over]
+                    self.M["meta"]["scatter_frame_overhang"] = _over  # left, top, right, bottom: positive = the view shows ground a throw was kept out of
+                    if max(_over) > 0:
+                        self.M["meta"]["scatter_frame_breach"] = _over
         # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
         # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
         # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.
