@@ -445,3 +445,14 @@ an 82% reduction, and sliding it out would trade the axis the new check measures
 does); and the recorded referent is the board's UNROTATED footprint, 12 x 5 against a drawn rotated
 AABB of 13.2 x 10.1, which is conservative in both directions and so tightens two live rules rather
 than loosening them.
+
+## 2026-09-11 (feature 222): the blade buckets as tiled paths, the page picture a JPEG - no placement change
+
+NO feature moved: the manifest differs from the previous roll only in `ink_classes` (the scrub and marsh counts fell
+8-13x because the census counts the writer's tile paths where it counted one `<line>` per blade). The title,
+the labels, the crop and the PNG's size are unchanged. settlement-review (2026-09-11) diffed the render against
+main's: the blade coordinate multiset is identical to the last digit; 0.4-1.7% of the sheet's pixels differ by up
+to 61/255 at tuft roots, where a path anti-aliases a shared root once instead of once per blade (~8/255
+lighter), invisible at every zoom (the mechanism is at `interactive/page.py` `merge_lines`). The page's picture is
+a JPEG q90 4:4:4 now (the GM, 2026-09-11, to try it and reverse it if it looks bad); the review judged it clean at
+1:1 and 4x - no ringing, no color smear, zero blocking on the parchment.

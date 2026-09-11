@@ -24,9 +24,12 @@ four of the levers offered; this feature delivers exactly those four. Anything e
   (`settlement/land/cover.py`, `<g stroke="#A7A860" ...>`) and the marsh reed bucket
   (`settlement/land/wet.py`, `<g stroke="#6E9377" ...>`) are written to the SVG as `<path>` elements in
   the page's own merge grammar (`interactive/page.py` `merge_primitives`: `M x,y L x,y` subpaths,
-  `fill="none"`, the group's stroke) instead of one `<line>` per blade. The ink is identical - a path of
-  M/L subpaths draws the same strokes - and the SVG, the PNG, the page's picture and its id map all read
-  the smaller file. The page's later `merge_primitives` pass finds paths and leaves them, so the page
+  `fill="none"`, the group's stroke) instead of one `<line>` per blade. The ink is the same geometry - a path
+  of M/L subpaths draws the same strokes from the same coordinates - though not the same pixels: a path unions
+  its subpaths' coverage where separate elements composite in turn, so a tuft's shared root is anti-aliased
+  once and comes out ~8/255 lighter (settlement-review: 0.4-1.7% of pixels, max delta 61, invisible at every
+  zoom; the mechanism is recorded at `merge_lines`). The SVG, the PNG, the page's picture and its id map all
+  read the smaller file. The page's later `merge_primitives` pass finds paths and leaves them, so the page
   carries what it carried; `drop_offmap` already judges merge-grammar subpaths and `_MARK_XY` already
   reads `M x,y`, so the scrub's hit region and the off-map drop are unchanged. The two readers that parse
   blade roots from `<line x1= y1=` - `tools/scatter_audit.py` and `tests/settlement/test_wet_ground.py`
@@ -109,6 +112,10 @@ four of the levers offered; this feature delivers exactly those four. Anything e
   resolution) for one megabyte more page; q95 buys little visible fidelity for two more. The picture has
   no transparency (its alpha channel is 255 everywhere - the sheet is drawn), so JPEG loses nothing there.
   The GM asked for JPEG by name, not lossy WebP, and named the reversal clause.
+  Per map (settlement-review, the pictures reproduced): JPEG q90 4:4:4 4.51 / 4.68 / 2.88 / 4.35 / 4.29 MB
+  (inashiro / kashikawa / kuwabata / mizuguchi / sawada) against the lossless WebP's 3.67 / 3.11 / 3.20 / 3.86 /
+  2.81 - larger on four, up to +1.6 MB on Sawada and Kashikawa, smaller on Kuwabata; the review judged the
+  picture clean on all five (PSNR 41-43, no ringing, no smear, zero blocking on the parchment).
 - **D3 Threads over subprocess calls, not processes.** Each render is already a subprocess (resvg, the
   encode child); the parent only waits, so a thread per render overlaps them with no pickling and no
   change to the working set of the parent. Order of the output files on disk may change (the PNG may
@@ -140,3 +147,10 @@ four of the levers offered; this feature delivers exactly those four. Anything e
   SC-1 now admits `title`, `meta.title_band` and the view on a map FR-008 moves; D5 splits the waiver -
   the ink-census-only maps under the 2026-08-29 ruling, a moved title named to the GM. Applied.
 - Round 3 (2026-09-11): FAITHFUL - both amendments applied as stated, nothing else loosened.
+- settlement-review (2026-09-11), over the five renders against main's and the JPEG pictures: the blade coordinate
+  multisets identical on all five; the JPEG clean at 1:1 and 4x on every map; two things acted on - the clone's pages
+  had lost their pictures to the gate's render-free re-roll (re-rendered before landing), and the shared-root
+  anti-aliasing difference is now recorded at `merge_lines` and in FR-001; the per-map picture sizes in D2; a notes
+  entry per map; `ink_classes`' changed meaning stated at `ink_census`.
+- perf-audit (2026-09-11): band 1 (+0.9% on the reference's stage total) CONSISTENT - the blade merge moved into the
+  timed hinterland stage, +0.10-0.16 s per seed, against page-side savings an order of magnitude larger.

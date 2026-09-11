@@ -127,7 +127,14 @@ def merge_lines(lines: Sequence[tuple[str, str, str, str]]) -> str:
     never merged). The writer's form of the merge (feature 222): the grass and reed buckets are 260,000 lines
     on Inashiro, and writing them as elements for `merge_primitives` to parse back cost 1.9 s of the
     hinterland stage where this costs a fraction of that. `test_merge_lines_is_merge_primitives_on_the_same_lines`
-    holds the two to the same bytes."""
+    holds the two to the same bytes.
+
+    THE INK IS THE SAME GEOMETRY, NOT THE SAME PIXELS (settlement-review, 2026-09-11): a tuft's three or four blades
+    share one root, and a path unions its subpaths' coverage where separate elements composite one after another,
+    so every shared root is anti-aliased once instead of three times and comes out ~8/255 lighter. Measured on the
+    five pool hamlets against the `<line>` form: 0.4-1.7% of the sheet's pixels differ, max channel delta 61,
+    whole-sheet mean tone shift under 0.2/255, invisible at 1:1 and at 6x magnification - a render diff that
+    finds it has found this, not a moved blade (the coordinate multisets are identical to the last digit)."""
     if not lines:
         return ""
     if len(lines) == 1:
@@ -535,7 +542,12 @@ def _snippet(piece: str) -> str:
 
 def ink_census(strings: Sequence[str], tags: Sequence[ClsTag]) -> tuple[dict[str, int], list[str]]:
     """Count drawn elements per class, and list the ones with no class at all (capped, with a final
-    "... and N more" entry so the count is never lost). `"-"` is counted under its own key."""
+    "... and N more" entry so the count is never lost). `"-"` is counted under its own key.
+
+    THE COUNT IS OF DRAWN ELEMENTS, and since feature 222 a class whose marks the writer merges (the scrub's grass, the
+    marsh's reeds) counts its tile paths - one per 400 px cell - where it counted one element per blade, so its number
+    fell 8-13x with identical ink and is a measure of spread, not density; every other class still counts marks. Do
+    not compare the two kinds, or a post-222 manifest's merged classes against a pre-222 one's."""
     counts: dict[str, int] = {}
     unclassed: list[str] = []
     more = 0

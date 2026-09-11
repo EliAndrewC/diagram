@@ -740,3 +740,14 @@ the knob's reason). Mechanism measured: the knob seats the scatter in the house-
 elongated the homestead keep-outs occupy exactly the ground the knob names, leaving the box's SE corner where the
 belt is. Recorded for the GM with the reviewer's direction (seat by distance to the nearest house, or record the
 achieved form beside the rolled one as `kosatsuba_well_ft` does) - the 2026-08-29 copse item's current form.
+
+## 2026-09-11 (feature 222): the blade buckets as tiled paths, the page picture a JPEG - no placement change
+
+NO feature moved: the manifest differs from the previous roll only in `ink_classes` (the scrub and marsh counts fell
+8-13x because the census counts the writer's tile paths where it counted one `<line>` per blade). The title,
+the labels, the crop and the PNG's size are unchanged. settlement-review (2026-09-11) diffed the render against
+main's: the blade coordinate multiset is identical to the last digit; 0.4-1.7% of the sheet's pixels differ by up
+to 61/255 at tuft roots, where a path anti-aliases a shared root once instead of once per blade (~8/255
+lighter), invisible at every zoom (the mechanism is at `interactive/page.py` `merge_lines`). The page's picture is
+a JPEG q90 4:4:4 now (the GM, 2026-09-11, to try it and reverse it if it looks bad); the review judged it clean at
+1:1 and 4x - no ringing, no color smear, zero blocking on the parchment.
