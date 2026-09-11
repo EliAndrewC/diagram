@@ -53,7 +53,7 @@ def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     # production reports on a map nobody will ever see.
     with contextlib.redirect_stdout(io.StringIO()):
         report = hg.generate(hspec, out_base=None, render=False)
-    _breach = ((report.manifest or {}).get("meta") or {}).get("scatter_frame_breach")
+    _breach = ((getattr(report, "manifest", None) or {}).get("meta") or {}).get("scatter_frame_breach")  # a test's stub report carries no manifest
     if _breach:  # feature 224: the scatter's predicted frame was too small - a strip inside the view may hold no scatter
         report.fail_lines.append(f"FAIL scatter_frame_breach -> the view reaches {_breach} px past the predicted scatter frame (left, top, right, bottom)")
         report.failures.append("scatter_frame_breach")
