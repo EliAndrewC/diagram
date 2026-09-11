@@ -461,7 +461,9 @@ class FinishMixin:
         crop is not known when the scatter runs (`stage_frame` follows the hinterland), so the buckets wait here,
         the way the tree canopies do, and are culled by drop_offmap's own rule - a blade kept unless it lies wholly
         outside the viewBox plus `OFFMAP_MARGIN`, judged on the same formatted coordinates - then merged by
-        `merge_lines`. The page then finds nothing more to drop from a classed bucket, so it is unchanged; an
+        `merge_lines`. The page then finds nothing more to drop from a classed bucket, so its ink is unchanged (its
+        element count can shrink by one: a bucket that falls under `TILE_MIN` blades once culled is one path where
+        the page used to tile it - Kuwabata's marsh, 24 subpaths, settlement-review 2026-09-11); an
         unclassed bucket (a pasture's), which the page never judged, loses its off-map blades too - invisible by
         construction, the viewBox clipped them. A map with no view is judged against its whole canvas, which is
         what the page's `viewbox_of` reads then. Idempotent; runs first in `finish()`."""

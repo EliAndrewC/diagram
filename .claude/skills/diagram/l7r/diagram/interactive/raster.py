@@ -204,6 +204,8 @@ def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> byt
     _census.record("render", what="raster")  # the gate refuses a render from a test not marked as one of rendering (feature 213)
     vb = viewbox_of(svg_text[: svg_text.find(">") + 1])
     n = tiles if tiles else (tile_count(vb, r) if vb is not None else 1)
+    if not float(r).is_integer():
+        n = 1  # the tiles are pixel-aligned only at a whole-number zoom (the note at TILE_MPX): a fractional `r` renders single, never with a seam
     if vb is None or n <= 1:
         png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
         return None if png is None else encode_picture([(0, 0, png)])

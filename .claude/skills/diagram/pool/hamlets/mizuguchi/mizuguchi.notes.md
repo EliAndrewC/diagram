@@ -623,3 +623,15 @@ to 61/255 at tuft roots, where a path anti-aliases a shared root once instead of
 lighter), invisible at every zoom (the mechanism is at `interactive/page.py` `merge_lines`). The page's picture is
 a JPEG q90 4:4:4 now (the GM, 2026-09-11, to try it and reverse it if it looks bad); the review judged it clean at
 1:1 and 4x - no ringing, no color smear, zero blocking on the parchment.
+
+## 2026-09-11 (feature 223): the off-frame blades no longer written, the page picture tiled at 2 px per map px - no placement change
+
+NO feature moved: `bamboo_stands`, `wells`, the title, the labels, the crop and the PNG's size are unchanged, and the
+manifest differs from the previous roll only in `ink_classes` (the marsh and scrub rows, down 0.2-0.4%: the writer now
+culls the blades wholly outside the frame plus 24 px before merging, so the SVG holds 47,380 blade subpaths where it
+held 208,060; the page's own subpath count did not move, since the page had dropped them itself). settlement-review
+(2026-09-11) diffed the render against the previous one: byte-identical; the scrub and reed ink in the outer 36 px band is pixel
+for pixel the same, so nothing reaches the frame edge that did not before. The page's picture is rendered as four
+pixel-aligned tiles by parallel resvg processes and stitched, at 2 px per map px (the GM's item; the note at
+`interactive/raster.py` `RASTER_R`): the review found the seams statistically invisible and the picture at its
+display scale indistinguishable from the 3 px one; a retina reader's opening view is now the vector page (spec D3).

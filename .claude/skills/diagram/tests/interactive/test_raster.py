@@ -250,3 +250,13 @@ def test_a_tiled_picture_is_none_when_a_tile_cannot_render(monkeypatch: pytest.M
     """A host without resvg gets no picture from the tiled path either - one tile's None is the picture's None."""
     monkeypatch.setattr(raster, "resvg_png", lambda *_a: None)
     assert picture(TINY, 2.0, tiles=2) is None and picture(TINY, 2.0, tiles=1) is None
+
+
+def test_a_fractional_zoom_renders_the_picture_single_never_tiled(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The tiles are pixel-aligned only at a whole-number zoom, so a fractional `r` (a one-line change to RASTER_R
+    could make one) falls back to the single render rather than risk a seam - one resvg call, not four."""
+    calls: list[tuple[str, ...]] = []
+    real = raster.resvg_png
+    monkeypatch.setattr(raster, "resvg_png", lambda doc, *a: calls.append(a) or real(doc, *a))
+    assert picture(TINY, 2.5, tiles=2) is not None
+    assert len(calls) == 1 and calls[0][1] == "2.5"

@@ -547,7 +547,9 @@ def ink_census(strings: Sequence[str], tags: Sequence[ClsTag]) -> tuple[dict[str
     THE COUNT IS OF DRAWN ELEMENTS, and since feature 222 a class whose marks the writer merges (the scrub's grass, the
     marsh's reeds) counts its tile paths - one per 400 px cell - where it counted one element per blade, so its number
     fell 8-13x with identical ink and is a measure of spread, not density; every other class still counts marks. Do
-    not compare the two kinds, or a post-222 manifest's merged classes against a pre-222 one's."""
+    not compare the two kinds, or a post-222 manifest's merged classes against a pre-222 one's - nor a post-223 one's
+    against a post-222 one's: since feature 223 the writer culls the off-frame blades before the merge, so a merged
+    class counts only its cells INSIDE the frame."""
     counts: dict[str, int] = {}
     unclassed: list[str] = []
     more = 0
