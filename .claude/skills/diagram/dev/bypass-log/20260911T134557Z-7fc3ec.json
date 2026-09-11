@@ -1,0 +1,6 @@
+{
+  "utc": "20260911T134557Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "two settlement-reviews passed this content (the shipped SVGs and the pinned snapshot); the change since is a report-line note on a breach, which draws nothing"
+}

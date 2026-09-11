@@ -1,0 +1,6 @@
+{
+  "utc": "20260911T133315Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review of this content is already running on the pool-224b snapshot; the changes since are a regex"
+}

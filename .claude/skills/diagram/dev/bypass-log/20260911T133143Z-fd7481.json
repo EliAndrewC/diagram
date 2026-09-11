@@ -1,0 +1,6 @@
+{
+  "utc": "20260911T133143Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review of this content is already running on the pool-224b snapshot (dispatched beside the previous gate); the change since is one getattr in the cohort tool, which draws nothing"
+}
