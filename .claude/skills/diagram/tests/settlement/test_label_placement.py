@@ -70,7 +70,9 @@ def test_the_blank_spot_scan_refuses_a_box_that_covers_an_obstacle() -> None:
     Tested here rather than through `title()` because the scan takes its obstacles from the settlement
     and a test that builds a whole map to occupy one seat is testing the map, not the rule."""
     s = _hamlet()
-    obs = ([(300.0, 300.0, 400.0, 400.0)], [], [])  # (rects, polys, lines) - the shape _title_obstacles yields
+    from l7r.diagram.settlement._geom.indexes import BoxObstacles
+
+    obs = BoxObstacles([(300.0, 300.0, 400.0, 400.0)], [], [])  # (rects, polys, lines), indexed - the shape _title_obstacles yields (feature 222)
     assert not s._box_clear(320.0, 320.0, 380.0, 380.0, obs), "a box inside the obstacle is not clear"
     assert not s._box_clear(280.0, 280.0, 340.0, 340.0, obs), "nor is one overlapping its corner"
     assert s._box_clear(100.0, 100.0, 200.0, 200.0, obs), "a box well away from it is clear"

@@ -38,6 +38,20 @@ from collections.abc import Sequence
 #: past the switch, so such a reader would see no change; 4 doubles the decoded image (Kuwabata 33 Mpx,
 #: 132 MB). At 3: Kuwabata 3210 x 5784 = 18.6 Mpx, 74 MB decoded, 2.95 MB on the page (specs/200 R4).
 RASTER_R = 3.0
+#: THE PICTURE IS A LOSSY JPEG (feature 222, GM 2026-09-11: "I am willing to at least try the lossy JPEG compression
+#: for the final image if that seems like it will gain us about four seconds ... if the lossy nature means that it
+#: becomes blurry or otherwise bad, then we can always reverse it"). Measured on Inashiro's 5103 x 5136 picture
+#: (specs/222 research R1): lossless WebP method 0 4.12 s / 3.87 MB - the single most expensive step of a whole
+#: regeneration, paid on every map; JPEG q90 4:4:4 0.15 s / 4.56 MB; JPEG q90 4:2:0 0.10 s / 3.58 MB; lossy WebP q90
+#: 0.93 s / 2.32 MB. 4:4:4 (`subsampling=0`) keeps full chroma resolution on the map's thin colored strokes - a
+#: 0.8 px blade is 2.4 px here and 4:2:0 would halve its color resolution - for one megabyte more page. This
+#: supersedes specs/200 D2 ("lossy WebP rings on line art and was declined") by the GM's words above. To REVERSE:
+#: `PICTURE_FORMAT = "WEBP"` with `lossless=True, quality=100, method=0` in `_PICTURE_CHILD` and the mime back to
+#: image/webp - these three lines are the whole of the decision.
+PICTURE_FORMAT = "JPEG"
+PICTURE_QUALITY = 90
+PICTURE_SUBSAMPLING = 0  # 4:4:4
+PICTURE_MIME = "image/jpeg"
 #: How far past the viewBox an element may lie and still be kept - wider than any stroke width or blob
 #: radius the writer emits, so a mark reaching in by a pixel is never lost (spec D6).
 OFFMAP_MARGIN = 24.0
@@ -145,42 +159,42 @@ def resvg_png(doc: str, *args: str) -> bytes | None:
 
 
 def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
-    """The whole picture at `r` px per map px, as lossless WebP (half the bytes of PNG; lossy WebP rings on
-    line art and was declined - spec D2). The same SVG text the page carries, so the same picture."""
+    """The whole picture at `r` px per map px, encoded as `PICTURE_FORMAT` (a JPEG since feature 222 - the
+    note at `PICTURE_FORMAT`). The same SVG text the page carries, so the same picture."""
     from l7r.diagram import _census
 
     _census.record("render", what="raster")  # the gate refuses a render from a test not marked as one of rendering (feature 213)
     png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
     if png is None:
         return None
-    return webp_lossless(png)
+    return encode_picture(png)
 
 
 # THE ENCODE RUNS IN A CHILD PROCESS (feature 208, GM 2026-09-07: "write the picture in a subprocess"). PIL's
-# decode of the 18.6-megapixel PNG (70 MB of RGBA) and libwebp's lossless encode (a further 240 MB of working
-# memory) are C allocations the Python process never returns to the OS: measured on one worker, the page write
-# went 146 -> 598 -> 173 MB and the worker then RESTED at 250 MB where the roll itself had ended at 121 - eight
-# such workers under the gate was the 3 GiB the GM asked about (specs/208 research.md R1). In a child the 400 MB
-# lives and dies with it; the parent holds the 6 MB PNG and the 3 MB WebP. The child imports only PIL - no engine
-# module, so the make-only guard has nothing to say and coverage nothing to measure (the snippet is data here).
-# ENCODE METHOD 0, NOT 4 (feature 203, found by the gate's duration ratchet): still lossless, and measured on
-# Kuwabata at 18.6 Mpx - method 4 took 9.6 s for 2.97 MB, method 0 2.2 s for 3.20 MB (+8%).
-_WEBP_CHILD = (
+# decode of the 18.6-megapixel PNG (70 MB of RGBA) and the encoder's working memory are C allocations the Python
+# process never returns to the OS: measured on one worker with the lossless WebP encode, the page write went
+# 146 -> 598 -> 173 MB and the worker then RESTED at 250 MB where the roll itself had ended at 121 - eight such
+# workers under the gate was the 3 GiB the GM asked about (specs/208 research.md R1). In a child the spike lives
+# and dies with it; the parent holds the 6 MB PNG and the picture. The child imports only PIL - no engine module,
+# so the make-only guard has nothing to say and coverage nothing to measure (the snippet is data here).
+# The picture is opaque (its alpha channel is 255 everywhere - the sheet is drawn), so the RGB conversion JPEG
+# needs loses nothing. (Feature 203's lossless method 0 over method 4 - 2.2 s vs 9.6 s - is history since 222.)
+_PICTURE_CHILD = (
     "import io, sys\n"
     "from PIL import Image\n"
     "buf = io.BytesIO()\n"
-    "Image.open(io.BytesIO(sys.stdin.buffer.read())).save(buf, 'WEBP', lossless=True, quality=100, method=0)\n"
+    f"Image.open(io.BytesIO(sys.stdin.buffer.read())).convert('RGB').save(buf, {PICTURE_FORMAT!r}, quality={PICTURE_QUALITY}, subsampling={PICTURE_SUBSAMPLING})\n"
     "sys.stdout.buffer.write(buf.getvalue())\n"
 )
 
 
-def webp_lossless(png: bytes) -> bytes:
-    """`png` re-encoded as lossless WebP by a child Python that imports only PIL - the same bytes an
-    in-process `Image.save` would produce, without the decode and encode buffers ever living in this
+def encode_picture(png: bytes) -> bytes:
+    """`png` re-encoded as the page's picture (`PICTURE_FORMAT`) by a child Python that imports only PIL - the same
+    bytes an in-process `Image.save` would produce, without the decode and encode buffers ever living in this
     process. A child that fails raises, with its stderr, rather than returning a picture that is not one."""
-    proc = subprocess.run([sys.executable, "-c", _WEBP_CHILD], input=png, capture_output=True, check=False)
+    proc = subprocess.run([sys.executable, "-c", _PICTURE_CHILD], input=png, capture_output=True, check=False)
     if proc.returncode != 0 or not proc.stdout:
-        raise RuntimeError(f"the WebP child failed (rc={proc.returncode}): {proc.stderr.decode('utf-8', 'replace').strip()[-400:]}")
+        raise RuntimeError(f"the picture child failed (rc={proc.returncode}): {proc.stderr.decode('utf-8', 'replace').strip()[-400:]}")
     return proc.stdout
 
 

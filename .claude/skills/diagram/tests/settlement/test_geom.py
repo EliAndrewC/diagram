@@ -685,3 +685,53 @@ def test_water_index_refuses_a_narrow_fixture_from_its_grid_cell() -> None:
     assert idx.clear(200.0, 104.0, half) is False  # 4 ft off a stream 5 ft to the bank: refused from the cell
     assert idx.clear(200.0, 100.0 + 5.0 + half + 1.0, half) is True  # a foot past need + half: clear
     assert idx.clear(200.0, 300.0, half) is True  # an empty cell: nothing to refuse
+
+
+def test_box_obstacles_match_the_linear_box_scan_exactly() -> None:
+    """Feature 222 (GM 2026-09-11, "the title pocket scan index"): `BoxObstacles.clear` gives the verdict
+    `box_clear_brute` gives on every box, over rects, polygons (convex, concave, a degenerate two-point one)
+    and polylines - the index prunes, the exact test decides. Boxes of the title's own sizes and smaller,
+    across the whole sheet and past its edges, so every branch of the pruning is crossed both ways."""
+    from l7r.diagram.settlement._geom.indexes import BoxObstacles, box_clear_brute
+
+    rng = random.Random(222)
+    rects = [(x, y, x + rng.uniform(4, 60), y + rng.uniform(4, 40)) for x, y in ((rng.uniform(0, 900), rng.uniform(0, 900)) for _ in range(25))]
+    polys: list[list[tuple[float, float]]] = []
+    for _ in range(30):
+        cx, cy, n = rng.uniform(0, 900), rng.uniform(0, 900), rng.randint(3, 9)
+        polys.append([(cx + rng.uniform(10, 120) * math.cos(2 * math.pi * k / n), cy + rng.uniform(10, 120) * math.sin(2 * math.pi * k / n)) for k in range(n)])
+    polys.append([(400.0, 400.0), (520.0, 400.0)])  # degenerate: two points, a closed ring that is a segment
+    polys.append([])  # nothing: skipped by the index, harmless to the brute scan
+    lines = [[(rng.uniform(0, 900), rng.uniform(0, 900)) for _ in range(rng.randint(2, 7))] for _ in range(20)]
+    obs = BoxObstacles(rects, polys, lines)
+    sizes = ((300.0, 190.0), (210.0, 120.0), (24.0, 24.0), (2.0, 2.0))
+    agree = {True: 0, False: 0}
+    for _ in range(3000):
+        w, h = rng.choice(sizes)
+        x, y = rng.uniform(-100, 950), rng.uniform(-100, 950)
+        want = box_clear_brute(x, y, x + w, y + h, rects, polys, lines)
+        assert obs.clear(x, y, x + w, y + h) is want, (x, y, w, h)
+        agree[want] += 1
+    assert agree[True] > 100 and agree[False] > 100, "both verdicts were exercised"
+
+
+def test_box_obstacles_on_a_real_manifest_is_the_scan_the_title_made() -> None:
+    """The obstacles `Settlement._title_obstacles` builds are what the scan asks; on a settlement with a
+    label, a house, a grove and a lane the indexed `_box_clear` agrees with the brute scan on a sweep of
+    the sheet, and `cover_ok` (feature 137's cover rung - dead until feature 222 removed a duplicate
+    block that re-added the cover unconditionally) really does drop the grove."""
+    from l7r.diagram.settlement._geom.indexes import box_clear_brute
+
+    s = Settlement(W=600, H=400, seed=3)
+    s.M["houses"] = [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 30.0}]
+    s.M["labels"] = [[300.0, 50.0, 360.0, 62.0, 5, "a label"]]
+    s.M["village_groves"] = [{"poly": [[400, 200], [500, 200], [500, 300], [400, 300]]}]
+    s.M["lanes"] = [{"pts": [[0, 350], [600, 350]]}]
+    obs = s._title_obstacles()
+    rects, polys, lines = obs.rects, [ring for ring, *_ in obs.polys], [[(0.0, 350.0), (600.0, 350.0)]]
+    for x in range(0, 600, 20):
+        for y in range(0, 400, 20):
+            assert s._box_clear(x, y, x + 60, y + 30, obs) is box_clear_brute(x, y, x + 60, y + 30, rects, polys, lines)
+    assert not s._box_clear(420, 220, 480, 250, obs), "a box inside the grove is not clear"
+    assert s._box_clear(420, 220, 480, 250, s._title_obstacles(cover_ok=True)), "...unless cover is allowed - the rung feature 137 documented"
+    assert len(obs.rects) == 2, "the house and the label, each once (the label used to be filed twice)"

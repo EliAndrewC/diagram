@@ -28,6 +28,15 @@ from shapely.errors import GEOSException
 from shapely.geometry import Polygon as ShapelyPolygon
 from shapely.ops import unary_union
 
+# THE BLADES ARE WRITTEN AS MERGED PATHS (feature 222, GM 2026-09-11: "merging each blade group into one path"):
+# one <line> per blade made a hamlet's SVG 13-16 MB, 89% of it these two buckets, and resvg parsed every one of
+# them three times per gen (the PNG, the page's picture, its id map). The page's own `merge_primitives` turns the
+# bucket into `M x,y L x,y` paths - one per 400 px tile past 200 blades (feature 199's paint tiling, kept), one
+# path below that - and `merge_lines` is that merge on the coordinates themselves (parsing 260,000 written elements
+# back cost 1.9 s), so the file carries exactly what the page carried, the ink is unchanged, and every reader of
+# the file is smaller: measured on Inashiro, resvg at 2600 px 2.13 s -> 1.18 s (specs/222 research R1, R2).
+from l7r.diagram.interactive.page import merge_lines
+
 from .._geom import KeepoutGrid, Pt, RingIndex, point_in_poly, seg_dist
 
 MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
@@ -312,7 +321,7 @@ class WetGroundMixin:
             return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
-        blades: list[str] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
+        blades: list[tuple[str, str, str, str]] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
         # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
         # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.html "A reservoir's
         # shore is reeded, and its EMBANKMENT is mown": the intuitive counter-hypothesis (a maintained
@@ -341,8 +350,8 @@ class WetGroundMixin:
             else:  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
                 for _ in range(4):
                     a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
-                    blades.append(f'<line x1="{gx:.1f}" y1="{gy:.1f}" x2="{gx + math.sin(a) * bl:.1f}" y2="{gy - math.cos(a) * bl:.1f}"/>')
-        self.add(f'<g stroke="#6E9377" stroke-width="0.8">{"".join(blades)}</g>', cls="marsh")  # bucketed blades (empty group when none - harmless)
+                    blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
+        self.add(f'<g stroke="#6E9377" stroke-width="0.8">{merge_lines(blades)}</g>', cls="marsh")  # bucketed blades (empty group when none - harmless)
         self.add(''.join(g), cls="marsh")
         random.setstate(st)
         self._cover_n += 1

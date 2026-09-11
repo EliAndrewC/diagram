@@ -553,3 +553,18 @@ def test_hamlet_and_report_are_two_views_of_the_one_child_roll(tmp_path, monkeyp
     rep, how = report_toy(spec)
     assert rep == "report" and how.startswith("BYPASS-SHARED"), how
     assert calls == [1], "one roll serves both views"
+
+
+def test_the_childs_stderr_is_forwarded_under_the_stage_profile_flag(monkeypatch, capsys):
+    """Feature 222 FR-005 (Principle XIV): `make map PROFILE=1` prints the stage profile again. The child
+    writes it to its stderr; `_in_child` forwards that stream when `L7R_STAGE_PROFILE` is set and stays
+    silent when it is not (a test roll's child is quiet by design)."""
+    monkeypatch.setattr(
+        rollcache, "_CHILD_DRIVER", "import pickle, sys\nsys.stderr.write('stage profile Toy seed 1: 0.1s total\\n')\nwith open({out_path!r}, 'wb') as fh:\n    pickle.dump(('payload', {{}}), fh)\n"
+    )
+    monkeypatch.delenv(rollcache.STAGE_PROFILE_ENV, raising=False)
+    assert rollcache._in_child("x:y", None)[0] == "payload"
+    assert "stage profile" not in capsys.readouterr().err
+    monkeypatch.setenv(rollcache.STAGE_PROFILE_ENV, "1")
+    assert rollcache._in_child("x:y", None)[0] == "payload"
+    assert "stage profile Toy seed 1" in capsys.readouterr().err

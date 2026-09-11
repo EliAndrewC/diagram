@@ -52,6 +52,14 @@ def test_parse_counts_one_base_per_blade_line_three_per_tuft():
     assert fams["blade"] == [(10.0, 20.0)] * 3  # one BasePoint per blade line, tips ignored
 
 
+def test_parse_reads_blade_roots_from_the_merged_paths_the_writer_emits_now():
+    """Feature 222: the buckets are written as `M x,y L x,y` paths (one per tile); a root is each subpath's M."""
+    svg = '<g stroke="#A7A860" stroke-width="0.8"><path d="M10.0,20.0L10.5,16.0M10.0,20.0L9.4,16.2" fill="none"/><path d="M500.0,20.0L500.1,15.9" fill="none"/></g><g stroke="#6E9377" stroke-width="0.8"><path d="M5.0,6.0L5.0,2.0" fill="none"/></g>'
+    fams = sa.parse_bases(svg)
+    assert fams["blade"] == [(10.0, 20.0), (10.0, 20.0), (500.0, 20.0)]
+    assert fams["reed"] == [(5.0, 6.0)]
+
+
 def test_parse_reeds_pine_trunks_and_crowns_but_not_companion_ink():
     """...and the CROWN fill is taken from the engine's own `CROWN_FILLS`, never written out here.
 

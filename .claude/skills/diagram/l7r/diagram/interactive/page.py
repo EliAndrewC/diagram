@@ -21,6 +21,7 @@ import math
 import os
 import re
 from collections.abc import Iterator, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from . import raster
@@ -116,6 +117,31 @@ def _tiles(tag: str, members: Sequence[int], elems: Sequence[tuple[int, int, str
     for k in members:
         cells.setdefault(_cell(tag, elems[k][3]), []).append(k)
     return list(cells.values())
+
+
+def merge_lines(lines: Sequence[tuple[str, str, str, str]]) -> str:
+    """The `<path>`s `merge_primitives` would make of `<line x1 y1 x2 y2/>` elements of ONE style with nothing
+    between them, built from the coordinate strings directly: one path per TILE cell of each line's first
+    endpoint once there are TILE_MIN or more (cells in order of first appearance, lines in their order within
+    a cell - `_tiles`), one path below that, a single line left as the `<line>` it is (a one-member bucket is
+    never merged). The writer's form of the merge (feature 222): the grass and reed buckets are 260,000 lines
+    on Inashiro, and writing them as elements for `merge_primitives` to parse back cost 1.9 s of the
+    hinterland stage where this costs a fraction of that. `test_merge_lines_is_merge_primitives_on_the_same_lines`
+    holds the two to the same bytes."""
+    if not lines:
+        return ""
+    if len(lines) == 1:
+        x1, y1, x2, y2 = lines[0]
+        return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
+    runs: list[list[tuple[str, str, str, str]]]
+    if len(lines) < TILE_MIN:
+        runs = [list(lines)]
+    else:
+        cells: dict[tuple[int, int], list[tuple[str, str, str, str]]] = {}
+        for ln in lines:
+            cells.setdefault((math.floor(float(ln[0]) / TILE), math.floor(float(ln[1]) / TILE)), []).append(ln)
+        runs = list(cells.values())
+    return "".join('<path d="' + "".join(f"M{x1},{y1}L{x2},{y2}" for x1, y1, x2, y2 in run) + '" fill="none"/>' for run in runs)
 
 
 def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
@@ -797,11 +823,20 @@ def render_page(
     raster_payload: dict[str, Any] = {"r": 0}
     # the picture carries NO TEXT (feature 201): every <text> stays vector in both modes, so the scale and
     # the placard's name are the browser's font once, never resvg's under Chrome's - `raster.without_text`
-    pic = raster.picture(raster.without_text(svg)) if raster_wanted(with_raster, vb) else None
+    pic = None
+    if raster_wanted(with_raster, vb):
+        # THE PICTURE AND THE ID MAP RENDER AT THE SAME TIME (feature 222, GM 2026-09-11: "running the three renders
+        # concurrently instead of in sequence"): each is a resvg subprocess this process only waits on (the picture
+        # then its encode child), so two threads overlap them; the PNG is the third, started by `finish()` as soon
+        # as the .svg is written. Same inputs, same bytes, only the waiting overlaps.
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            f_pic = pool.submit(raster.picture, raster.without_text(svg))
+            f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg))
+        pic = f_pic.result()
+        idpng, palette = f_id.result()
     if pic is not None and vb is not None:
-        idpng, palette = raster.id_map(svg, raster.class_keys(svg))
         assert idpng is not None, "resvg rendered the picture and not the id map"
-        raster_payload = {"r": raster.RASTER_R, "step": raster.PALETTE_STEP, "palette": palette, "picture": raster.data_uri("image/webp", pic), "idmap": raster.data_uri("image/png", idpng)}
+        raster_payload = {"r": raster.RASTER_R, "step": raster.PALETTE_STEP, "palette": palette, "picture": raster.data_uri(raster.PICTURE_MIME, pic), "idmap": raster.data_uri("image/png", idpng)}
         image = f'<g class="raster"><image id="raster" x="{vb[0]:g}" y="{vb[1]:g}" width="{vb[2]:g}" height="{vb[3]:g}" style="pointer-events: none"/></g>'
         at = svg.find('<g class="f ')
         svg = svg[:at] + image + svg[at:] if at != -1 else svg.replace("</svg>", image + "</svg>", 1)

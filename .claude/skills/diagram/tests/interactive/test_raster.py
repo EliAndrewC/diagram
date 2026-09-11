@@ -103,12 +103,15 @@ def _png(data: bytes) -> Image.Image:
     return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
-def test_the_picture_is_a_lossless_webp_at_r_px_per_map_px() -> None:
+def test_the_picture_is_a_jpeg_at_r_px_per_map_px() -> None:
+    """Feature 222 (GM 2026-09-11): the picture is a lossy JPEG - the farmhouse's own color to within the
+    quantization, not exactly (the lossless WebP it replaces was exact; the note at `PICTURE_FORMAT`)."""
     data = picture(TINY, 2.0)
     assert data is not None
     im = Image.open(io.BytesIO(data))
-    assert im.format == "WEBP" and im.size == (80, 80)
-    assert im.convert("RGB").getpixel((10, 10)) == (0x8B, 0x73, 0x55), "the farmhouse's own color, exactly - lossless"
+    assert im.format == "JPEG" and im.size == (80, 80)
+    got = im.convert("RGB").getpixel((10, 10))
+    assert all(abs(g - w) <= 4 for g, w in zip(got, (0x8B, 0x73, 0x55), strict=True)), got
 
 
 def test_class_keys_are_derived_in_order_of_first_appearance() -> None:
@@ -206,19 +209,20 @@ def test_the_picture_carries_no_text_while_the_id_map_paints_it() -> None:
     assert PALETTE_STEP in reds, "the caption is painted in its class's color, so it hits as its class"
 
 
-def test_the_webp_child_matches_an_in_process_encode_and_a_failing_child_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_picture_child_matches_an_in_process_encode_and_a_failing_child_raises(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 208 FR-002 (GM 2026-09-07: "write the picture in a subprocess"): the child is the same PIL and
-    the same libwebp, so its bytes are the in-process encode's bytes exactly; and a child that dies is an
-    error with its stderr, never a picture that is not one."""
+    the same encoder, so its bytes are the in-process encode's bytes exactly; and a child that dies is an
+    error with its stderr, never a picture that is not one. Since feature 222 the encode is the JPEG at
+    `PICTURE_QUALITY` / `PICTURE_SUBSAMPLING`."""
     im = Image.new("RGBA", (24, 16), (0x8B, 0x73, 0x55, 255))
     im.putpixel((3, 4), (0, 120, 200, 255))
     src = io.BytesIO()
     im.save(src, "PNG")
     want = io.BytesIO()
-    Image.open(io.BytesIO(src.getvalue())).save(want, "WEBP", lossless=True, quality=100, method=0)
-    got = raster.webp_lossless(src.getvalue())
+    Image.open(io.BytesIO(src.getvalue())).convert("RGB").save(want, raster.PICTURE_FORMAT, quality=raster.PICTURE_QUALITY, subsampling=raster.PICTURE_SUBSAMPLING)
+    got = raster.encode_picture(src.getvalue())
     assert got == want.getvalue(), "byte-identical to the in-process encode"
-    assert Image.open(io.BytesIO(got)).convert("RGBA").getpixel((3, 4)) == (0, 120, 200, 255), "lossless"
-    monkeypatch.setattr(raster, "_WEBP_CHILD", "import sys; sys.stderr.write('no PIL here'); sys.exit(3)")
+    assert Image.open(io.BytesIO(got)).format == "JPEG"
+    monkeypatch.setattr(raster, "_PICTURE_CHILD", "import sys; sys.stderr.write('no PIL here'); sys.exit(3)")
     with pytest.raises(RuntimeError, match=r"rc=3.*no PIL here"):
-        raster.webp_lossless(src.getvalue())
+        raster.encode_picture(src.getvalue())

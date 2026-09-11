@@ -37,6 +37,7 @@ _NUM = r"(-?[\d.]+)"
 _BLADE_GROUP = re.compile(r'<g stroke="#A7A860"[^>]*>(.*?)</g>', re.S)  # commons grass bucket
 _REED_GROUP = re.compile(r'<g stroke="#6E9377"[^>]*>(.*?)</g>', re.S)  # marsh reed bucket
 _LINE_BASE = re.compile(rf'<line x1="{_NUM}" y1="{_NUM}"')  # a blade/reed line's root
+_PATH_BASE = re.compile(rf'M{_NUM},{_NUM}L')  # ...or, since feature 222, its `M x,y L` subpath in the bucket's merged paths
 _TRANSLATE_G = re.compile(rf'<g transform="translate\({_NUM},{_NUM}\)[^"]*"[^>]*>')  # grove clumps draw their canopy in a translated group
 _DOT = re.compile(rf'<circle cx="{_NUM}" cy="{_NUM}" r="[\d.]+" fill="#94A063"')  # brush dot
 _PINE = re.compile(rf'<line x1="{_NUM}" y1="{_NUM}" x2="{_NUM}" y2="{_NUM}" stroke="#7A6A48"')  # trunk (branches are #6E8452 - canopy ink, not a base)
@@ -85,7 +86,7 @@ def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, 
         if fam not in want:
             continue
         for body in group.findall(svg):
-            fams[fam] += [(float(x), float(y)) for x, y in _LINE_BASE.findall(body)]
+            fams[fam] += [(float(x), float(y)) for x, y in _LINE_BASE.findall(body)] + [(float(x), float(y)) for x, y in _PATH_BASE.findall(body)]
     if "dot" in want:
         fams["dot"] = [(float(x), float(y)) for x, y in _DOT.findall(svg)]
     if "pine" in want:

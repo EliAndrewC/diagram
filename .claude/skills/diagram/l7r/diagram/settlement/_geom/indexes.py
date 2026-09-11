@@ -13,7 +13,7 @@ from collections.abc import Callable
 from typing import Any, SupportsIndex, cast
 
 from .base import Poly, Pt
-from .primitives import edge_dist, point_in_poly, seg_dist
+from .primitives import edge_dist, point_in_poly, seg_dist, segments_cross
 
 
 def boxed_polys(polys: Any, pad: float = 0.0) -> list[tuple[Poly, float, float, float, float]]:
@@ -432,3 +432,91 @@ def boxed_rings(polys: Any, pad: float = 0.0) -> list[tuple[RingIndex, float, fl
 def boxed_ring_hit(px: float, py: float, boxed: Any, edge_pad: float = 0.0) -> bool:
     """`boxed_hit` over `boxed_rings` items - identical verdicts, indexed edges."""
     return any(bx0 <= px <= bx1 and by0 <= py <= by1 and (idx.inside(px, py) or (edge_pad > 0 and idx.edge_within(px, py, edge_pad) is not None)) for idx, bx0, by0, bx1, by1 in boxed)
+
+
+def box_clear_brute(bx0: float, by0: float, bx1: float, by1: float, rects: Any, polys: Any, lines: Any) -> bool:
+    """Whether the axis-aligned box clears every obstacle in (rects, polys, lines) - the linear scan that
+    `Settlement._box_clear` was until feature 222, kept as the ORACLE for `BoxObstacles`' tests: every
+    rect, every polygon (a box corner inside it, a vertex inside the box, or an edge crossing the box's
+    edge), every polyline (a vertex inside the box or a segment crossing its edge)."""
+    for ox0, oy0, ox1, oy1 in rects:
+        if not (bx1 < ox0 or bx0 > ox1 or by1 < oy0 or by0 > oy1):
+            return False
+    corners = [(bx0, by0), (bx1, by0), (bx1, by1), (bx0, by1)]
+    for poly in polys:
+        n = len(poly)
+        if (
+            any(point_in_poly(cx, cy, poly) for cx, cy in corners)
+            or any(bx0 <= vx <= bx1 and by0 <= vy <= by1 for vx, vy in poly)
+            or any(segments_cross(corners[e], corners[(e + 1) % 4], poly[k], poly[(k + 1) % n]) for e in range(4) for k in range(n))
+        ):
+            return False
+    for poly in lines:
+        if any(bx0 <= vx <= bx1 and by0 <= vy <= by1 for vx, vy in poly) or any(segments_cross(corners[e], corners[(e + 1) % 4], poly[k], poly[k + 1]) for e in range(4) for k in range(len(poly) - 1)):
+            return False
+    return True
+
+
+class BoxObstacles:
+    """Axis-aligned BOX queries against static obstacles - rects, polygons, polylines - built once (feature
+    222, GM 2026-09-11: "the title pocket scan index"). The title's blank-box scan (`Settlement._blank_label_spot`)
+    tried every 24 px box of the framed window, top to bottom, against every edge of every obstacle by
+    `segments_cross`: on Kuwabata, whose obstacle list is every dike pond and every ditch, 4,027 boxes cost
+    16.4 million segment pairs and 8.7 of the hinterland stage's 10 s (specs/222 research R1). The same
+    PREFILTER family as everything else here: every polygon and polyline edge is filed in a `PointGrid`
+    once, each polygon keeps its bounding box, and a query visits only the obstacles whose box meets the
+    candidate and the edges the grid returns near it - by the same three tests `box_clear_brute` makes.
+    The index prunes, the exact test decides, so every verdict is the linear scan's and no map moves.
+
+    Exactness, test by test: a box corner inside a polygon lies inside that polygon's bounding box, so a
+    polygon whose box misses the candidate cannot contain a corner; every vertex is an endpoint of an edge
+    whose bounding box therefore meets any box containing the vertex, so the endpoint test over the grid's
+    near edges finds every vertex the brute scan finds; and an edge crossing the box's edge meets the
+    box, so its own bounding box does too. The grid returns a superset (and sometimes an item twice), which
+    changes nothing an `any` can see."""
+
+    __slots__ = ("grid", "polys", "rects")
+
+    def __init__(self, rects: Any, polys: Any, lines: Any, cell: float = 128.0) -> None:
+        self.rects = [(float(r[0]), float(r[1]), float(r[2]), float(r[3])) for r in rects]
+        self.polys: list[tuple[Poly, float, float, float, float]] = []
+        edges: list[tuple[Pt, Pt, float, float, float, float]] = []
+        for poly in polys:
+            ring = [(float(p[0]), float(p[1])) for p in poly]
+            if not ring:
+                continue
+            xs = [p[0] for p in ring]
+            ys = [p[1] for p in ring]
+            self.polys.append((ring, min(xs), min(ys), max(xs), max(ys)))
+            n = len(ring)
+            for k in range(n):
+                a, b = ring[k], ring[(k + 1) % n]
+                edges.append((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])))
+        for line in lines:
+            pts = [(float(p[0]), float(p[1])) for p in line]
+            for k in range(len(pts) - 1):
+                a, b = pts[k], pts[k + 1]
+                edges.append((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])))
+        self.grid = PointGrid(cell)
+        self.grid.extend(edges)
+
+    def clear(self, bx0: float, by0: float, bx1: float, by1: float) -> bool:
+        """`box_clear_brute` over the same obstacles, visiting only the ones that can matter."""
+        for ox0, oy0, ox1, oy1 in self.rects:
+            if not (bx1 < ox0 or bx0 > ox1 or by1 < oy0 or by0 > oy1):
+                return False
+        corners = [(bx0, by0), (bx1, by0), (bx1, by1), (bx0, by1)]
+        for ring, px0, py0, px1, py1 in self.polys:
+            if px1 < bx0 or px0 > bx1 or py1 < by0 or py0 > by1:
+                continue  # a corner inside the polygon would be inside its box
+            if any(point_in_poly(cx, cy, ring) for cx, cy in corners):
+                return False
+        pad = max(bx1 - bx0, by1 - by0) / 2.0
+        for a, b, ex0, ey0, ex1, ey1 in self.grid.near((bx0 + bx1) / 2.0, (by0 + by1) / 2.0, pad):
+            if ex1 < bx0 or ex0 > bx1 or ey1 < by0 or ey0 > by1:
+                continue  # neither endpoint in the box, no crossing possible
+            if (bx0 <= a[0] <= bx1 and by0 <= a[1] <= by1) or (bx0 <= b[0] <= bx1 and by0 <= b[1] <= by1):
+                return False
+            if any(segments_cross(corners[e], corners[(e + 1) % 4], a, b) for e in range(4)):
+                return False
+        return True

@@ -66,6 +66,8 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram import _census
 from l7r.diagram.pipeline import gencache
 
+STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # = `hamletgen.driver.STAGE_PROFILE_ENV`; the literal keeps the driver out of this module's imports
+
 if TYPE_CHECKING:
     from l7r.diagram.hamletgen import HamletSpec, Report, SitePlan
 
@@ -469,6 +471,11 @@ def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
         cmd = [sys.executable, driver]
         with _roll_slot():  # at most N child rolls at once across the run (FR-010)
             proc = subprocess.run(cmd, cwd=here, env=env, capture_output=True, text=True, check=False)
+        if os.environ.get(STAGE_PROFILE_ENV) and proc.stderr:
+            # THE STAGE PROFILE IS PRINTED IN THE CHILD (feature 222, Principle XIV): `driver.build` writes it to
+            # stderr under `make map PROFILE=1` (feature 151), and from feature 213 to 2026-09-11 that stderr was
+            # captured here and discarded on success - the instrument printed nothing and nothing warned.
+            sys.stderr.write(proc.stderr)
         if proc.returncode or not os.path.isfile(out_path):
             raise RuntimeError(f"the roll child failed for {target} {arg!r} (exit {proc.returncode}):\n{proc.stdout[-1500:]}\n{proc.stderr[-1500:]}")
         with open(out_path, "rb") as fh:

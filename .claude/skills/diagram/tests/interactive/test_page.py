@@ -10,6 +10,7 @@ paragraphs whose other class is present (spec US4 scenario 4).
 from __future__ import annotations
 
 import json
+import random
 import re
 
 import pytest
@@ -322,6 +323,28 @@ def test_same_styled_lines_merge_into_one_path_and_keep_their_group_style() -> N
     """The scrub's 225,000 blades are one <path> on the page (GM 2026-08-28, performance)."""
     g = '<g stroke="#A7A860" stroke-width="0.8"><line x1="1" y1="2" x2="3" y2="4"/><line x1="5" y1="6" x2="7" y2="8"/><line x1="9" y1="9" x2="9" y2="10"/></g>'
     assert merge_primitives(g) == '<g stroke="#A7A860" stroke-width="0.8"><path d="M1,2L3,4M5,6L7,8M9,9L9,10" fill="none"/></g>'
+
+
+def test_merge_lines_is_merge_primitives_on_the_same_lines() -> None:
+    """Feature 222: the writer merges its blade buckets from the coordinates (`merge_lines`) and must produce the
+    bytes `merge_primitives` produces from the same lines written out - one line, a few, TILE_MIN - 1 (one path),
+    TILE_MIN and more (one path per tile, cells in order of first appearance), across tile edges and negatives."""
+    from l7r.diagram.interactive.page import TILE_MIN, merge_lines
+
+    rng = random.Random(222)
+
+    def coords(n: int) -> list[tuple[str, str, str, str]]:
+        out = []
+        for _ in range(n):
+            x, y = rng.uniform(-50, 1300), rng.uniform(-50, 1300)
+            out.append((f"{x:.1f}", f"{y:.1f}", f"{x + rng.uniform(-3, 3):.1f}", f"{y - rng.uniform(2, 5):.1f}"))
+        return out
+
+    for n in (0, 1, 2, 7, TILE_MIN - 1, TILE_MIN, 1500):
+        lines = coords(n)
+        written = "".join(f'<line x1="{a}" y1="{b}" x2="{c}" y2="{d}"/>' for a, b, c, d in lines)
+        assert merge_lines(lines) == merge_primitives(written), n
+    assert merge_lines(coords(1500)).count("<path") > 1, "the large bucket is tiled"
 
 
 def test_same_styled_circles_merge_into_one_path_of_arcs() -> None:

@@ -215,8 +215,8 @@ def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:
     s = Settlement(W=1000, H=1000, seed=1)
     s.M["road"] = [[0, 500], [1000, 500]]
     s.M["moat"] = [[100, 100], [900, 100]]
-    _rects, _polys, lines = s._title_obstacles()
-    assert len(lines) >= 2, lines
+    obs = s._title_obstacles()
+    assert obs.grid.n >= 2, obs.grid.n  # the index files every polyline segment (feature 222); two one-segment lines here
 
 
 def test_pull_caption_toward_keeps_its_seat_when_the_two_centres_coincide() -> None:
@@ -273,14 +273,13 @@ def test_a_title_never_covers_a_placed_label() -> None:
     s.set_view(0, 0, 2000, 1500)
     s.M["labels"] = [[400.0, 400.0, 560.0, 424.0, 5, "pauper ossuary mound"]]
     obs = s._title_obstacles()
-    rects = obs[0]
+    rects = obs.rects
     assert (400.0, 400.0, 560.0, 424.0) in rects, "the label's own box is an obstacle"
-    # DEFECT NOTED, NOT FIXED HERE (feature 174): the box is appended TWICE - `_title_obstacles`
-    # carries two identical `for lb in self.M["labels"]` loops, and both run on every call. Harmless
-    # to the answer, since `_box_clear` only asks whether any rect hits, and it is why both of the
-    # module's uncovered label lines close together. Recorded rather than silently deduplicated,
-    # because removing one loop is an engine change that belongs to whoever owns that function.
-    assert rects.count((400.0, 400.0, 560.0, 424.0)) == 2, "pinning the duplication so a fix is a deliberate change, not a surprise"
+    # ONCE (feature 222). Feature 174 pinned the box appearing TWICE here - `_title_obstacles` carried two identical
+    # `for lb in self.M["labels"]` loops - and recorded the fix as belonging to whoever next owned the function. The
+    # second loop was the visible edge of a duplicated block whose other half re-added the cover unconditionally
+    # (specs/222 FR-008); both halves are gone.
+    assert rects.count((400.0, 400.0, 560.0, 424.0)) == 1, "each placed label is filed once"
     assert s._box_clear(410.0, 405.0, 500.0, 420.0, obs) is False, "and a placard over it is refused"
     assert s._box_clear(1500.0, 1200.0, 1600.0, 1240.0, obs) is True, "clear ground elsewhere still takes one"
 
@@ -325,7 +324,7 @@ def test_the_page_raster_is_a_render_like_the_png(monkeypatch):
         base2 = os.path.join(d, "u")
         _town().finish(base2)  # render=True, no skip: the render condition holds
         page2 = Path(base2 + ".html").read_text(encoding="utf-8")
-        assert 'id="raster"' in page2 and '"picture": "data:image/webp;base64,' in page2 and os.path.exists(base2 + ".png")
+        assert 'id="raster"' in page2 and '"picture": "data:image/jpeg;base64,' in page2 and os.path.exists(base2 + ".png")
         monkeypatch.setenv("DIAGRAM_SKIP_RENDER", "1")
         base3 = os.path.join(d, "v")
         _town().finish(base3)  # render=True, but the suite's skip switch: the same condition that spares the PNG spares the raster

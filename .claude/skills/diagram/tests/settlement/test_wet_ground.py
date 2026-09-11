@@ -67,6 +67,7 @@ def _marks(s: Settlement) -> list[tuple[float, float]]:
     out += [(float(a), float(b)) for a, b in re.findall(r'<ellipse cx="([-\d.]+)" cy="([-\d.]+)"[^>]*fill="#C2D6CE"', svg)]
     for g in re.findall(r'<g stroke="#6E9377" stroke-width="0.8">(.*?)</g>', svg, re.S):
         out += [(float(a), float(b)) for a, b in re.findall(r'<line x1="([-\d.]+)" y1="([-\d.]+)"', g)]
+        out += [(float(a), float(b)) for a, b in re.findall(r'M([-\d.]+),([-\d.]+)L', g)]  # the merged form (feature 222)
     return out
 
 

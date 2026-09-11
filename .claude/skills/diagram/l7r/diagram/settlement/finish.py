@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 from collections.abc import Sequence
+from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.classes import PLACE
@@ -14,7 +15,7 @@ from l7r.diagram.interactive.page import ink_census, unregistered_classes, write
 from l7r.diagram.interactive.raster import RESVG_FONT_ARGS
 from l7r.diagram.interactive.tags import ClsTag
 
-from ._geom import LAND, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, point_in_poly, rects_overlap, segments_cross
+from ._geom import LAND, BoxObstacles, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, rects_overlap
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -345,8 +346,8 @@ class FinishMixin:
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
 
-    def _title_obstacles(self: Settlement, cover_ok: bool = False) -> tuple[list[Any], list[Any], list[Any]]:  # type: ignore[misc]
-        """Feature footprints a title must clear, as (rects, polys, lines). Solid buildings/plots -> rects;
+    def _title_obstacles(self: Settlement, cover_ok: bool = False) -> BoxObstacles:  # type: ignore[misc]
+        """Feature footprints a title must clear, indexed for box queries (feature 222) from (rects, polys, lines). Solid buildings/plots -> rects;
         the fields, groves, and commons -> polygons (so the title can sit in the empty corners around a diagonal
         field); the pond -> a rect; water lines + lanes -> polylines (a title must not cross a road or stream)."""
         rects: list[Any] = []
@@ -407,25 +408,11 @@ class FinishMixin:
         for o in self.M.get("kosatsuba", []):
             _kw, _kh = float(o.get("w", 14.0)) / 2 + 4.0, float(o.get("h", 8.0)) / 2 + 4.0
             rects.append((o["x"] - _kw, o["y"] - _kh, o["x"] + _kw, o["y"] + _kh))
-        for lb in self.M.get("labels", []):  # placed LABEL boxes: a title must never cover a label
-            rects.append((lb[0], lb[1], lb[2], lb[3]))  # (caught 2026-07-23: the Tango content crop landed the
-            #                                             placard on the 'pauper ossuary mound' label)
-        # NOT the scrub commons: it is sparse GROUND COVER (a feathered scatter of grass tufts on open ground),
-        # not a feature with a footprint, and a bold place name reads perfectly well over it. Treating it as an
-        # obstacle only worked while some ground was left bare - once the commons properly clothes the field's
-        # voids too, scrub covers nearly the whole map and a title could find nowhere at all to sit. The grove
-        # (dense closed canopy) and the marsh (a distinct wetland) stay obstacles.
-        # ...and a WOODLAND commons is dense canopy too, so it is an obstacle by the same test the
-        # paragraph above applies (2026-08-17). The exclusion above is for the SCRUB commons - a
-        # feathered scatter of grass tufts that a bold place name reads perfectly well over - and a
-        # `role="woodland"` parcel is not that: it is a stand of tree crowns, the same closed canopy
-        # as a grove. Left out, the placard printed over 64-68% of one of Sawada's two woodland
-        # parcels, with a dozen crown circles ghosting up through the title card: one of the map's
-        # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
-        # excluded, which is what keeps a title from having nowhere to sit.
-        _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
-        for o in self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + self.M.get("marshes", []) + _woodland:
-            polys.append([tuple(p) for p in o["poly"]])
+        # ONE BLOCK, NOT TWO (feature 222, Principle XIV). A second copy of the labels loop and an UNCONDITIONAL
+        # loop over the groves, the bamboo stands, the marshes and the woodland stood here from feature 137 T06
+        # until 2026-09-11, so `cover_ok=True` - the cover rung of the title ladder - never excluded anything
+        # and every title that missed blank ground fell straight to a corner or the band. The rung works now;
+        # which pool titles it moved is in specs/222 research R2.
         for fd in self.M.get("fields", []):
             polys.append([tuple(p) for p in fd["outline"]])
         if self.M.get("pond"):
@@ -443,29 +430,12 @@ class FinishMixin:
             pl = self.M.get(key)
             if pl and len(pl) >= 2:
                 lines.append([tuple(p) for p in pl])
-        return rects, polys, lines
+        return BoxObstacles(rects, polys, lines)
 
-    def _box_clear(self: Settlement, bx0: float, by0: float, bx1: float, by1: float, obs: Any) -> bool:  # type: ignore[misc]
-        """Whether the axis-aligned box clears every obstacle in (rects, polys, lines)."""
-        rects, polys, lines = obs
-        for ox0, oy0, ox1, oy1 in rects:
-            if not (bx1 < ox0 or bx0 > ox1 or by1 < oy0 or by0 > oy1):
-                return False
-        corners = [(bx0, by0), (bx1, by0), (bx1, by1), (bx0, by1)]
-        for poly in polys:
-            n = len(poly)
-            if (
-                any(point_in_poly(cx, cy, poly) for cx, cy in corners)
-                or any(bx0 <= vx <= bx1 and by0 <= vy <= by1 for vx, vy in poly)
-                or any(segments_cross(corners[e], corners[(e + 1) % 4], poly[k], poly[(k + 1) % n]) for e in range(4) for k in range(n))
-            ):
-                return False
-        for poly in lines:
-            if any(bx0 <= vx <= bx1 and by0 <= vy <= by1 for vx, vy in poly) or any(
-                segments_cross(corners[e], corners[(e + 1) % 4], poly[k], poly[k + 1]) for e in range(4) for k in range(len(poly) - 1)
-            ):
-                return False
-        return True
+    def _box_clear(self: Settlement, bx0: float, by0: float, bx1: float, by1: float, obs: BoxObstacles) -> bool:  # type: ignore[misc]
+        """Whether the axis-aligned box clears every obstacle - asked of the index `_title_obstacles` built
+        (feature 222); the linear scan this was is `_geom.box_clear_brute`, the oracle its tests hold it to."""
+        return obs.clear(bx0, by0, bx1, by1)
 
     def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False) -> Pt | None:  # type: ignore[misc]
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
@@ -625,6 +595,16 @@ class FinishMixin:
             raise RuntimeError(f"feature-class side list out of step with the record streams: {len(body_cls)} tags for {len(body)} strings")
         with open(basepath + '.svg', 'w') as f:
             f.write('\n'.join(body))
+        # THE PNG RENDERS WHILE THE PAGE IS BUILT (feature 222, GM 2026-09-11: "running the three renders concurrently
+        # instead of in sequence"). resvg reads the .svg just written and this process only waits on it, so it starts
+        # here in a thread and is joined after the .json - the page's own two renders (the picture and the id map)
+        # overlap each other inside `render_page`. Measured on the sequence (specs/222 research R1): the PNG 2-3 s,
+        # the picture 6.4-7.8 s, the id map 0.3 s, one after another. Nothing reads any of the files until this
+        # returns, so the order they land in does not matter; a failed render still raises out of here.
+        rendering = bool(render) and not os.environ.get("DIAGRAM_SKIP_RENDER")
+        png_pool = ThreadPoolExecutor(max_workers=1) if rendering else None
+        env_w = os.environ.get("DIAGRAM_PNG_WIDTH")
+        png_job = png_pool.submit(self.render_png, basepath, int(env_w) if env_w else png_width) if png_pool else None  # keep the .png paired with the .svg
         # THE INTERACTIVE PAGE (feature 134): the same primitives, each wrapped by its class, with the
         # explanations of the classes present. Written beside the SVG whenever the SVG is - a string
         # pass, so DIAGRAM_SKIP_RENDER does not skip it. The census goes into the manifest FIRST so the
@@ -636,7 +616,6 @@ class FinishMixin:
         # 450 MB spike per roll, about thirty times a gate, for pages nothing reads (specs/208 research.md R1).
         self.M["ink_classes"], self.M["unclassed_ink"] = ink_census(body, body_cls)
         self.M["unregistered_classes"] = unregistered_classes(self.M["ink_classes"])
-        rendering = bool(render) and not os.environ.get("DIAGRAM_SKIP_RENDER")
         write_html(basepath + '.html', body, body_cls, name=str(self.M["meta"].get("name") or os.path.basename(basepath)), meta=self.M["meta"], manifest=self.M, with_raster=rendering)
         with open(basepath + '.json', 'w') as f:
             json.dump(self.M, f)
@@ -646,9 +625,11 @@ class FinishMixin:
         #   DIAGRAM_SKIP_RENDER  - skip the raster entirely; the gate reads the JSON, so tests set this and
         #                          never pay to render a PNG no test looks at.
         #   DIAGRAM_PNG_WIDTH=N  - render at N px instead of 2600; unset for the full-res committed PNG.
-        if rendering:
-            env_w = os.environ.get("DIAGRAM_PNG_WIDTH")
-            self.render_png(basepath, int(env_w) if env_w else png_width)  # keep the .png paired with the .svg
+        if png_pool is not None and png_job is not None:
+            try:
+                png_job.result()
+            finally:
+                png_pool.shutdown()
         return len(self.placed)
 
     def render_png(self: Settlement, basepath: str, width: int = 2600) -> None:  # type: ignore[misc]

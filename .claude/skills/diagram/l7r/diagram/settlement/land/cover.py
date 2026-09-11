@@ -23,6 +23,15 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
+# THE BLADES ARE WRITTEN AS MERGED PATHS (feature 222, GM 2026-09-11: "merging each blade group into one path"):
+# one <line> per blade made a hamlet's SVG 13-16 MB, 89% of it these two buckets, and resvg parsed every one of
+# them three times per gen (the PNG, the page's picture, its id map). The page's own `merge_primitives` turns the
+# bucket into `M x,y L x,y` paths - one per 400 px tile past 200 blades (feature 199's paint tiling, kept), one
+# path below that - and `merge_lines` is that merge on the coordinates themselves (parsing 260,000 written elements
+# back cost 1.9 s), so the file carries exactly what the page carried, the ink is unchanged, and every reader of
+# the file is smaller: measured on Inashiro, resvg at 2600 px 2.13 s -> 1.18 s (specs/222 research R1, R2).
+from l7r.diagram.interactive.page import merge_lines
+
 from .._geom import KeepoutGrid, Poly, RingIndex
 from ..land.wet import MARSH_FEATHER_BS
 
@@ -182,7 +191,7 @@ class GroundCoverMixin:
             # render is visually identical (only the z-order of overlapping scrub texture shifts, in the margins;
             # the fields/buildings are pixel-identical). The sparse dots/pines keep their inline styles.
             g: list[str] = []
-            blades: list[str] = []
+            blades: list[tuple[str, str, str, str]] = []  # (x1, y1, x2, y2), merged by `merge_lines` at the group
             _wd_crowns = 0
             if role == "woodland":
                 # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
@@ -238,7 +247,7 @@ class GroundCoverMixin:
                     else:  # a grass tuft: a few short diverging blades (bucketed - see the note at `blades`)
                         for _ in range(3):
                             a, bl = random.uniform(-0.45, 0.45), random.uniform(2.4, 4.2) * bs
-                            blades.append(f'<line x1="{gx:.1f}" y1="{gy:.1f}" x2="{gx + math.sin(a) * bl:.1f}" y2="{gy - math.cos(a) * bl:.1f}"/>')
+                            blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
                     for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
                         px, py = random.uniform(x0 + 6, x1 - 6), random.uniform(y0 + 6, y1 - 6)
@@ -253,7 +262,7 @@ class GroundCoverMixin:
             # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
             # name yet (pasture) stays unclassed so the census reports it rather than misfiling it
             _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing"}.get(role)
-            self.add(f'<g stroke="#A7A860" stroke-width="0.8">{"".join(blades)}</g>', cls=_ccls)  # bucketed blades (empty group when none - harmless)
+            self.add(f'<g stroke="#A7A860" stroke-width="0.8">{merge_lines(blades)}</g>', cls=_ccls)  # bucketed blades (empty group when none - harmless)
             self.add(''.join(g), cls=_ccls)
             random.setstate(st)
             self._cover_n += 1
