@@ -244,3 +244,9 @@ def test_a_tiled_picture_is_the_single_render() -> None:
     assert tile_count((0.0, 0.0, 40.0, 40.0), 2.0) == 1
     assert tile_count(vb, 3.0) == 2 and tile_count(vb, 2.0) == 2
     assert tile_count((0.0, 0.0, 4000.0, 3000.0), 3.0) == 4 and TILE_MPX == 8.0
+
+
+def test_a_tiled_picture_is_none_when_a_tile_cannot_render(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A host without resvg gets no picture from the tiled path either - one tile's None is the picture's None."""
+    monkeypatch.setattr(raster, "resvg_png", lambda *_a: None)
+    assert picture(TINY, 2.0, tiles=2) is None and picture(TINY, 2.0, tiles=1) is None
