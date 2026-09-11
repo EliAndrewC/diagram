@@ -48,4 +48,6 @@ and the breach is judged per scatter on the ground its parcel covers inside the 
 view against the tightest frame regardless of where the parcel lay, and would have flagged the marsh's early frame
 against a band the marsh never neared. The second cohort's verdict is below.
 
-(the second cohort)
+The second cohort, with the band allowance and the per-scatter judgment: **48 of 48 passed the whole gate**, no
+`scatter_frame_breach` on any seed. The pool's five: no breach, the tightest side still the 120 px pad, the north
+side now 260-564 px inside the frame.
