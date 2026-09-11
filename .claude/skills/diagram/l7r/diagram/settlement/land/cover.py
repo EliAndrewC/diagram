@@ -268,13 +268,28 @@ class GroundCoverMixin:
                         if _sparse(px, py, 0.5, 14 * bs) or _in_soft(px, py):  # lean = the tallest pine's tip reach, so no pine leans over a crop; and never in the bog
                             continue
                         th = random.uniform(9, 14) * bs
-                        marks.append((px - bs, py - th - bs, px + bs, py + bs, f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')
+                        marks.append(
+                            (px - bs, py - th - bs, px + bs, py + bs, f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')
                         )  # thin trunk; the extents carry a stroke's slack (settlement-review 2026-09-11)
                         for k in range(3):  # sparse open branches - a scraggly wind-cropped pine, NOT a dense crown
                             ly, sp = py - th * (0.45 + 0.25 * k), (3.6 - k) * bs
-                            marks.append((px - sp - bs, ly - bs, px + bs, ly + 3 * bs, f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px - sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
+                            marks.append(
+                                (
+                                    px - sp - bs,
+                                    ly - bs,
+                                    px + bs,
+                                    ly + 3 * bs,
+                                    f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px - sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>',
+                                )
                             )
-                            marks.append((px - bs, ly - bs, px + sp + bs, ly + 3 * bs, f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px + sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
+                            marks.append(
+                                (
+                                    px - bs,
+                                    ly - bs,
+                                    px + sp + bs,
+                                    ly + 3 * bs,
+                                    f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px + sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>',
+                                )
                             )
             # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
             # name yet (pasture) stays unclassed so the census reports it rather than misfiling it
