@@ -1,6 +1,6 @@
 # Feature 223 - the two remaining scans, the off-map scatter, and the picture in tiles
 
-**Status**: IN PROGRESS 2026-09-11. `spec-fidelity` round 1: CHANGES REQUIRED - FR-005's "measured, not lowered" was a carve-out; rewritten as the item (`RASTER_R` 2, the DPR-2 cost priced in D3); FR-004 (the tiles) faithful to the question. Round 2 FAITHFUL.
+**Status**: IMPLEMENTED 2026-09-11 (regen per pool hamlet 11-19 s -> 8-14 s; Sawada's hinterland 3.7 -> 1.8 s, the appurtenances 1.1-1.3 -> 0.5-0.7; the SVG 9.4 -> 3.4-4.5 MB; the picture step 2.8-4.1 -> 1.1-1.6 s as four parallel tiles at `RASTER_R` 2, the page 7.8-8.9 -> 4.3-6.4 MB - research R2). `spec-fidelity` round 1 CHANGES REQUIRED (FR-005 had declined `RASTER_R` on a consequence the GM "did not weigh"; rewritten as the item with the DPR-2 cost priced in D3), round 2 FAITHFUL. Misses reported, not chased: SC-1's Sawada hinterland 1.8 against 1.5 (the scatter's own draw count is what remains), SC-2's 4 MB on Kashikawa and Sawada by under half a megabyte and `drop_offmap` 0.20-0.22 against 0.2 on four maps, SC-3's picture step on Kuwabata 1.61 against 1.5 and the page on Inashiro and Kashikawa 0.2-0.4 MB over 6. `make done` green (3,527 tests, 100% over 23,690 statements).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the before (from
 specs/222 R2 and the 2026-09-10 profile), R2 the after. **Predecessors**: 222 (the four levers before these;
 `merge_lines`, `BoxObstacles`, the JPEG, the concurrent renders), 218 (the scatter's `KeepoutGrid`), 200 (the
