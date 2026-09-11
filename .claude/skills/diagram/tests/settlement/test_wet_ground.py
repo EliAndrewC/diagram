@@ -99,6 +99,7 @@ def test_a_wet_tint_circle_keeps_its_whole_body_off_the_mound() -> None:
     s.meta(name="V", scale="village")
     s.M["dikes"] = [{"outline": _BAND, "crest": _CREST, "w_min": 40.0, "w_max": 40.0}]
     s.marsh(_WIDE, role="waterside")
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     svg = "".join(s.out)
     tints = [(float(a), float(b), float(r)) for a, b, r in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)" fill="#9FBBAE"', svg)]
     assert tints, "no tint drawn at all - the test would pass vacuously"

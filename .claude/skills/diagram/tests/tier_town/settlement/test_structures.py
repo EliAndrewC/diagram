@@ -55,6 +55,7 @@ def test_commons_keeps_scrub_off_the_road_bed():
     # corridor set now covers lanes + town streets + the road
     s = _crop_settlement()
     s.road([(100, 300), (700, 300)])
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     before = len(s.out)
     s.commons([(150, 150), (600, 150), (600, 450), (150, 450)], role="pasture")
     lim = s.M["road_width"] / 2 + 3 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
