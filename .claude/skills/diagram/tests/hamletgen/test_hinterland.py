@@ -487,3 +487,14 @@ def test_finish_records_the_scatter_frame_and_a_breach_only_where_the_view_shows
     u = Settlement(W=1000, H=1000, seed=1)
     u.finish(os.path.join(tmp_path, "c"), render=False)
     assert "scatter_frame" not in u.M["meta"], "no scatter threw within a frame: nothing recorded"
+
+
+def test_the_scatter_pad_covers_the_widest_mark_the_scatter_throws() -> None:
+    """Feature 225 D2 (settlement-review 2026-09-11): the lateral pad's only job is to let a mark centered just outside
+    the view still paint into it, so it must exceed the widest mark's reach - the wet tint's radius, a pine's height,
+    a dot's or a glint's radius at hamlet scale - by a margin a test owns rather than a comment claims."""
+    from l7r.diagram.hamletgen.hinterland.frame import SCATTER_PAD
+    from l7r.diagram.settlement.land.wet import MARSH_TINT_R
+
+    widest = max(MARSH_TINT_R, 14.0, 2.4, 4.6)  # the tint disc; a pine's tallest trunk; a brush dot; a glint's long radius (cover.py, wet.py)
+    assert widest == MARSH_TINT_R and widest + 10.0 <= SCATTER_PAD, (widest, SCATTER_PAD)

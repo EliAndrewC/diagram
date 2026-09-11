@@ -14,5 +14,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T04 FR-004 the rows cut to their plot where convex; Inashiro; the pool
       research: rendering
       verify: DONE. `line_cuts` (general) and `row_cuts` (horizontal) in landuse.py; `_draw_furrows` (the comb's 29 clips on Inashiro) and `_rows_cut_to_plot` (the tea fringe, the vegetable ground) write cut rows, the clip kept for a plot a row meets other than twice; tests; Inashiro's file 30 -> 1 clip; Kuwabata's records move only in draw-position indexes (three veg clips gone)
-- [ ] T05 FR-006/FR-007: R2; `make done`; the settlement-review; spec IMPLEMENTED; land
+- [x] T05 FR-006/FR-007: R2; `make done`; the settlement-review; spec IMPLEMENTED; land
       research: rendering
+      verify: DONE. R2 (the phase split, the bars mostly missed and named, the bookends band 0); the 48-map cohort 48 of 48 at the 40 px pad; `make done` green (3,550 tests, 100%); settlement-review pass x5 with its records applied; spec IMPLEMENTED; landing under 222 D5's first route (nothing placed moved)

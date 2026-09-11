@@ -85,3 +85,15 @@ merge's scan. Each is measured.
 ## Review history
 
 - Round 1 (2026-09-11): FAITHFUL - FR-003/FR-004 the only available way to do item 2 (the cost is in the document, not the tiling); FR-002 the item itself (the pad is what keeps the ring), argued from 224 R3; nothing beyond the three. Asides: name `drop_offmap`'s number and decision in the report; SC-1's PNG and SC-3's size are consequences, a miss there is a reported miss.
+- settlement-review (2026-09-11), over the snapshot of the rendered pool beside the gate: pass on all five. The fold:
+  every folded element audited for a second effective paint through the group stack - none on any map; 0
+  multi-subpath paths folded; an isolated resvg A/B max channel difference 1. The rows: no row that crossed its
+  plot is missing (the count drop is rows the clip erased whole); rows within 0.11 map px of where they lay; the
+  horizontal rows' start offset 1.77 px in both; no saw-tooth or overshoot at 4x. The cull and the pad: no bare
+  strip on any edge (the outermost 20 px band never emptier than the bands behind it); in-frame density within
+  3.5% (Kuwabata's pines 29 -> 21, a 1.5-sigma re-roll on a tiny population, named); 0 marks on a plot, a house, a
+  yard, a lane or bog, and two pre-existing residues cleaner. Nothing else moved: every drawn string byte-identical,
+  the structural SVG diff identical once the four changed families are normalized. Acted on: a test ties the pad
+  to the widest mark's reach; the pine marks' extents carry a stroke's slack. Recorded: 230 of Inashiro's kept dots
+  lie inside the 24 px margin outside the view (legitimately), and an unstamped snapshot SVG is not a defect.
+- perf-audit not owed: the bookends read band 0 (-1.4%).

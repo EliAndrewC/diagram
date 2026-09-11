@@ -480,3 +480,15 @@ recorded feature are byte-identical. settlement-review (2026-09-11) adjudicated 
 keep-out geometry at zero pad: 0 on crop plots, structures, lane treads or water, 0 woody marks on bog pixels, 0 reeds on
 water, 0 inside the cluster's hull - before and after; in-view density per 1,000 sq ft blades 3.55 -> 3.50, reeds 3.26 -> 3.26; the
 outer 40 px of every side within 10% of before, no bare strip; the same place at fit zoom and 1:1.
+
+## 2026-09-11 (feature 225): element opacity folded, the hem's rows cut to their plot, the scatter's marks culled, the pad 40 px - no placement change
+
+NO feature moved: the manifest differs from the previous roll only in `ink_classes` and the scatter-frame meta keys
+(on Kuwabata also in draw-position indexes, by exactly 3: three vegetable-ground clip strings left the stream). Every
+single-paint element's `opacity` is now the paint's own opacity (pixel-identical; settlement-review 2026-09-11 audited
+every folded element for a second paint through the group stack and found none, an isolated resvg A/B differs by 1 in
+255); the dry plots' furrow rows end at the plot's edges instead of under a clip (no crossing row missing, rows within
+0.11 px of where they lay, the ends clean at 4x); the brush dots, pines, tint and glints outside the frame are no
+longer written and the scatter throws only 40 px past the crop's boxes (the widest mark is 28 px), so the in-frame
+texture re-rolled again under the GM's 2026-09-08 ruling - density within 3.5%, no bare strip on any edge, 0 marks on
+a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; the crop and the PNG's size unchanged.
