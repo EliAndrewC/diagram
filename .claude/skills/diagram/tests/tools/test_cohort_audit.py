@@ -147,3 +147,13 @@ def test_the_skill_root_is_put_on_sys_path_when_it_is_not_already_there(monkeypa
     monkeypatch.setattr(sys, "path", [p for p in sys.path if Path(p).resolve() != Path(ca.HERE).resolve()])
     reloaded = importlib.reload(ca)
     assert Path(reloaded.HERE).resolve() in [Path(p).resolve() for p in sys.path]
+
+
+def test_roll_one_reports_a_scatter_frame_breach_the_manifest_records(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 224 FR-002: a rolled map whose view reached past the scatter's predicted frame carries
+    `meta.scatter_frame_breach`, and the cohort reports it as a failure so the pad is revisited."""
+    rep = _report([])
+    rep.manifest = {"meta": {"scatter_frame_breach": [-261.3, 5.6, -120.2, -307.7]}}
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    _header, failures, lines = ca.roll_one((13, 13))
+    assert failures == ["scatter_frame_breach"] and "5.6" in lines[-1]

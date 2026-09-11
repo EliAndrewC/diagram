@@ -96,10 +96,10 @@ _ATTRS = re.compile(r'([a-z0-9-]+)="([^"]*)"')
 #: coordinates in one fixed order, so one anchored regex per tag reads them without building an attribute dict per
 #: element; an element in any other order falls back to the general parse below, so the verdict is the same.
 _FAST = {
-    "circle": re.compile(r'cx="(-?[\d.]+)" cy="(-?[\d.]+)" r="(-?[\d.]+)"'),
-    "ellipse": re.compile(r'cx="(-?[\d.]+)" cy="(-?[\d.]+)" rx="(-?[\d.]+)" ry="(-?[\d.]+)"'),
-    "line": re.compile(r'x1="(-?[\d.]+)" y1="(-?[\d.]+)" x2="(-?[\d.]+)" y2="(-?[\d.]+)"'),
-    "rect": re.compile(r'x="(-?[\d.]+)" y="(-?[\d.]+)" width="(-?[\d.]+)" height="(-?[\d.]+)"'),
+    "circle": re.compile(r'\s*cx="(-?[\d.]+)" cy="(-?[\d.]+)" r="(-?[\d.]+)"'),
+    "ellipse": re.compile(r'\s*cx="(-?[\d.]+)" cy="(-?[\d.]+)" rx="(-?[\d.]+)" ry="(-?[\d.]+)"'),
+    "line": re.compile(r'\s*x1="(-?[\d.]+)" y1="(-?[\d.]+)" x2="(-?[\d.]+)" y2="(-?[\d.]+)"'),
+    "rect": re.compile(r'\s*x="(-?[\d.]+)" y="(-?[\d.]+)" width="(-?[\d.]+)" height="(-?[\d.]+)"'),
 }
 _GROUP = re.compile(r'<g class="f f-[a-z0-9-]+(?: planted)?" data-k="([^"]*)"[^>]*>')
 _GTAG = re.compile(r"<g\b|</g>")

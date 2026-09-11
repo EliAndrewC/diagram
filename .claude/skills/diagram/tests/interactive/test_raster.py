@@ -286,6 +286,10 @@ def test_the_direct_shape_parse_matches_the_general_one_in_any_attribute_order()
         '<rect fill="#123" height="10" width="30" y="250" x="410"/>'
         '<rect fill="#123" height="10" width="30" y="250" x="430"/>'
     )
+    from l7r.diagram.interactive.raster import _FAST
+
+    assert _FAST["circle"].match(' cx="150" cy="250" r="3" fill="#123"') is not None, "the writer's order, with the leading space the element regex leaves, takes the direct path"
+    assert _FAST["circle"].match(' fill="#123" r="3" cy="250" cx="150"') is None, "any other order falls back to the general parse"
     a, b = drop_offmap(writer, vb), drop_offmap(shuffled, vb)
     assert a.count("<") == b.count("<") == 4, (a, b)
     assert 'cx="150" cy="250"' in a and 'x1="90"' in a and 'x="410"' in a and 'ry="20"' in a
