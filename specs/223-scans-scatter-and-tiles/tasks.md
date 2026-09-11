@@ -2,8 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering`.
 
-- [ ] T01 spec-fidelity review FAITHFUL (D3 put to it explicitly); research R1
+- [x] T01 spec-fidelity review FAITHFUL (D3 put to it explicitly); research R1
       research: rendering
+      verify: DONE. round 1 CHANGES REQUIRED (FR-005 declined an approved item - rewritten as the item, D3 priced), round 2 FAITHFUL; R1 from 222's R2 and the profile
 - [x] T02 FR-001 `BambooObstacles` + the sampler on it; oracle test; `make map` Sawada byte-identical
       research: rendering
       verify: DONE. `BambooObstacles` (rects/lanes in PointGrids, polygons as RingIndex + point_in_poly) + `bamboo_blocked_indexed`; oracle test on 4,000 random points; Sawada hinterland 3.7 -> 1.8 s, manifest byte-identical
