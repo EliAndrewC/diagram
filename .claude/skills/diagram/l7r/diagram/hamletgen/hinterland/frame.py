@@ -25,6 +25,37 @@ def content_box(s: Settlement, plan: SitePlan, pad: float = 0.0) -> tuple[float,
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
+#: How far past the predicted frame the scatter still throws (feature 224, D2): the crop is the frame-setting boxes
+#: plus CROP_MARGIN (48) and may not exceed the content by more than 56 px, and the prediction already holds every
+#: reserved polygon the crop can take in; the band covers a hard feature placed after the hinterland that lands
+#: outside everything known. The pool's and the cohort's largest realized overhangs are in specs/224 research R2.
+SCATTER_PAD = 120.0
+
+
+def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
+    """The frame the scatter predicts and throws within (feature 224, GM 2026-09-11: "the scatter still throws its
+    off-map blades"): the crop's own frame-setting boxes at this moment (`_crop_boxes`, the source `crop_to_content`
+    reads), the belt, the woodland patches and the bamboo seats already scanned, and the title pocket when one is
+    reserved - grown by the crop's margin and `SCATTER_PAD`. The same prediction `stage_windbreak` makes for the
+    belt's clumps, with the reserved polygons added because this runs earlier. Recorded on the settlement so
+    `finish()` can say whether the view stayed inside it (`meta.scatter_frame_breach`)."""
+    from .parcels import CROP_MARGIN  # noqa: PLC0415 - parcels imports this module
+
+    boxes = s._crop_boxes(city=False)
+    xs = [v for b in boxes for v in (b[0], b[1])]
+    ys = [v for b in boxes for v in (b[2], b[3])]
+    for poly in [plan.belt or [], *plan.woodland_polys, *plan.bamboo_polys]:
+        xs += [float(q[0]) for q in poly]
+        ys += [float(q[1]) for q in poly]
+    if plan.title_pocket is not None:
+        xs += [plan.title_pocket[0], plan.title_pocket[2]]
+        ys += [plan.title_pocket[1], plan.title_pocket[3]]
+    if not xs:
+        return (0.0, 0.0, float(s.W), float(s.H))  # pragma: no cover - a hamlet has its field and houses by now [224: the empty case keeps the throw whole]
+    grow = CROP_MARGIN + SCATTER_PAD
+    return (min(xs) - grow, min(ys) - grow, max(xs) + grow, max(ys) + grow)
+
+
 def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190.0) -> tuple[float, float, float, float]:
     """Ground held back so the map has somewhere to put its NAME.
 

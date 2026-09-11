@@ -486,6 +486,18 @@ class FinishMixin:
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
         self.flush_blade_groups()
+        # THE PREDICTION IS VERIFIED, NEVER TRUSTED (feature 224 FR-002): the view against the tightest frame any scatter
+        # threw within; a view reaching past it means a strip inside the frame may hold no scatter - a visible defect,
+        # recorded here as `scatter_frame_breach` (the overhang per side), asserted absent over the pool by the gate.
+        if self._scatter_frames:
+            _tight = (max(f[0] for f in self._scatter_frames), max(f[1] for f in self._scatter_frames), min(f[2] for f in self._scatter_frames), min(f[3] for f in self._scatter_frames))
+            self.M["meta"]["scatter_frame"] = [round(v, 1) for v in _tight]
+            if self.view:
+                _vx, _vy, _vw, _vh = self.view
+                _over = [round(_tight[0] - _vx, 1), round(_tight[1] - _vy, 1), round((_vx + _vw) - _tight[2], 1), round((_vy + _vh) - _tight[3], 1)]
+                self.M["meta"]["scatter_frame_overhang"] = _over  # left, top, right, bottom: positive = the view reaches past the frame
+                if max(_over) > 0:
+                    self.M["meta"]["scatter_frame_breach"] = _over
         # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
         # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
         # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.

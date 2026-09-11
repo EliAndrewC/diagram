@@ -946,3 +946,21 @@ def test_a_page_without_its_raster_never_calls_the_encoder_and_is_the_vector_onl
     monkeypatch.undo()
     full = render_page(strings, tags, "T")
     assert 'id="raster"' in full and '"r": 0' not in full
+
+
+def test_glossary_for_with_the_substring_prefilter_is_the_regex_scan() -> None:
+    """Feature 224: a variant absent as a substring cannot match with word boundaries, so the `in` test first changes
+    no term - checked against the pure regex form over the real GLOSSARY on a text that holds some variants whole,
+    one only inside a longer word (not a match either way), and one split across a boundary."""
+    from l7r.diagram.interactive.glossary import GLOSSARY
+    from l7r.diagram.interactive.page import glossary_for
+
+    terms = list(GLOSSARY.items())
+    whole = [v for _t, (vs, _d) in terms[:6] for v in vs][:6]
+    inside = [v for _t, (vs, _d) in terms[6:9] for v in vs][:2]
+    text = " ".join(whole) + " " + " ".join(f"x{v}y" for v in inside) + " sluice-gate paddy"
+    data = {"a": {"what": text, "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
+    got = {e["term"] for e in glossary_for(data)}
+    low = text.lower()
+    want = {t for t, (vs, _d) in terms if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", low) for v in vs)}
+    assert got == want and got, "the same terms as the regex scan alone"

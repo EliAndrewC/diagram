@@ -260,3 +260,33 @@ def test_a_fractional_zoom_renders_the_picture_single_never_tiled(monkeypatch: p
     monkeypatch.setattr(raster, "resvg_png", lambda doc, *a: calls.append(a) or real(doc, *a))
     assert picture(TINY, 2.5, tiles=2) is not None
     assert len(calls) == 1 and calls[0][1] == "2.5"
+
+
+def test_the_direct_shape_parse_matches_the_general_one_in_any_attribute_order() -> None:
+    """Feature 224: `fix_shape` reads the writer's own attribute order straight from a per-tag regex and falls back to
+    the general parse for any other order; the drop's verdict is the same both ways, kept or dropped."""
+    vb = (100.0, 200.0, 300.0, 400.0)
+    writer = (
+        '<circle cx="150" cy="250" r="3" fill="#123"/>'  # in
+        '<circle cx="10" cy="250" r="3" fill="#123"/>'  # out
+        '<ellipse cx="150" cy="700" rx="4" ry="2" fill="#123"/>'  # out
+        '<ellipse cx="150" cy="590" rx="4" ry="20" fill="#123"/>'  # reaches in
+        '<line x1="10" y1="250" x2="12" y2="253"/>'  # out
+        '<line x1="90" y1="250" x2="110" y2="253"/>'  # in
+        '<rect x="410" y="250" width="30" height="10" fill="#123"/>'  # out (x0 = 410 > 400 + 24? no: 410 < 424 -> kept)
+        '<rect x="430" y="250" width="30" height="10" fill="#123"/>'  # out
+    )
+    shuffled = (
+        '<circle fill="#123" r="3" cy="250" cx="150"/>'
+        '<circle fill="#123" r="3" cy="250" cx="10"/>'
+        '<ellipse fill="#123" ry="2" rx="4" cy="700" cx="150"/>'
+        '<ellipse fill="#123" ry="20" rx="4" cy="590" cx="150"/>'
+        '<line y2="253" x2="12" y1="250" x1="10"/>'
+        '<line y2="253" x2="110" y1="250" x1="90"/>'
+        '<rect fill="#123" height="10" width="30" y="250" x="410"/>'
+        '<rect fill="#123" height="10" width="30" y="250" x="430"/>'
+    )
+    a, b = drop_offmap(writer, vb), drop_offmap(shuffled, vb)
+    assert a.count("<") == b.count("<") == 4, (a, b)
+    assert 'cx="150" cy="250"' in a and 'x1="90"' in a and 'x="410"' in a and 'ry="20"' in a
+    assert 'cx="10"' not in a and 'cy="700"' not in a and 'x="430"' not in a and 'x1="10"' not in a

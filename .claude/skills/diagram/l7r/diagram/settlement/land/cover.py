@@ -237,8 +237,15 @@ class GroundCoverMixin:
                     g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')  # the crown
                     g.append(f'<circle cx="{cx - r * 0.32:.1f}" cy="{cy - r * 0.32:.1f}" r="{r * 0.42:.1f}" fill="#A6BA79" fill-opacity="0.55"/>')  # sun highlight
             else:
+                # A THROW OUTSIDE THE PREDICTED FRAME COSTS ITS TWO DRAWS AND NOTHING ELSE (feature 224): ~90% of a hamlet's
+                # throws land where the frame will clip them, and each used to pay the keep-out test and its marks' draws
+                # before finish culled the result. The count is the parcel's own (D3), so the in-frame density is unchanged;
+                # the in-frame texture re-rolls (D1, the GM's 2026-09-08 ruling). `_scatter_frame` is None outside a hamlet.
+                _fr = self._scatter_frame
                 for _ in range(int(area / (74 * bs * bs))):  # coarse grass tufts + the odd low brush dot
                     gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
+                    if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
+                        continue
                     if _sparse(gx, gy, 0.7):
                         continue
                     if random.random() < 0.14:  # a low brush dot
@@ -252,6 +259,8 @@ class GroundCoverMixin:
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
                     for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
                         px, py = random.uniform(x0 + 6, x1 - 6), random.uniform(y0 + 6, y1 - 6)
+                        if _fr is not None and not (_fr[0] <= px <= _fr[2] and _fr[1] <= py <= _fr[3]):
+                            continue
                         if _sparse(px, py, 0.5, 14 * bs) or _in_soft(px, py):  # lean = the tallest pine's tip reach, so no pine leans over a crop; and never in the bog
                             continue
                         th = random.uniform(9, 14) * bs

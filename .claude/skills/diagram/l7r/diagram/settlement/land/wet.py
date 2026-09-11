@@ -337,13 +337,18 @@ class WetGroundMixin:
         # over the water. The radius is rolled BEFORE the test only here: rolling it first everywhere would
         # re-roll every marsh on every map, which is why the widest radius is used below.
         _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
+        _fr = self._scatter_frame  # a throw outside the predicted frame is skipped before the keep-out test (feature 224; the note in cover.py)
         for _ in range(int(area / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
+            if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
+                continue
             if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
                 continue
             g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
         for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
+            if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
+                continue
             if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
                 continue
             if random.random() < 0.12:  # a standing-water glint

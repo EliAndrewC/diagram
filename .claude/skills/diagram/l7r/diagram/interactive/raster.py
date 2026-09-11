@@ -92,6 +92,15 @@ _SHAPE = re.compile(r"<(circle|ellipse|line|rect|polygon|polyline)\b([^>]*)/>")
 _MERGE_GRAMMAR = re.compile(r"(M-?[\d.]+,-?[\d.]+(L-?[\d.]+,-?[\d.]+|a[^Mm]*))+")
 _SUBPATH = re.compile(r"[Mm][^Mm]*")
 _ATTRS = re.compile(r'([a-z0-9-]+)="([^"]*)"')
+#: THE WRITER'S OWN ATTRIBUTE ORDER, matched directly (feature 224): every shape the engine emits leads with its
+#: coordinates in one fixed order, so one anchored regex per tag reads them without building an attribute dict per
+#: element; an element in any other order falls back to the general parse below, so the verdict is the same.
+_FAST = {
+    "circle": re.compile(r'cx="(-?[\d.]+)" cy="(-?[\d.]+)" r="(-?[\d.]+)"'),
+    "ellipse": re.compile(r'cx="(-?[\d.]+)" cy="(-?[\d.]+)" rx="(-?[\d.]+)" ry="(-?[\d.]+)"'),
+    "line": re.compile(r'x1="(-?[\d.]+)" y1="(-?[\d.]+)" x2="(-?[\d.]+)" y2="(-?[\d.]+)"'),
+    "rect": re.compile(r'x="(-?[\d.]+)" y="(-?[\d.]+)" width="(-?[\d.]+)" height="(-?[\d.]+)"'),
+}
 _GROUP = re.compile(r'<g class="f f-[a-z0-9-]+(?: planted)?" data-k="([^"]*)"[^>]*>')
 _GTAG = re.compile(r"<g\b|</g>")
 _OPACITY = re.compile(r'\s(?:fill-opacity|stroke-opacity|opacity)="[^"]*"')
@@ -136,7 +145,21 @@ def drop_offmap(s: str, vb: Viewbox) -> str:
         return m.group(1) + "".join(keep) + m.group(3)
 
     def fix_shape(m: re.Match[str]) -> str:
-        tag, at = m.group(1), dict(_ATTRS.findall(m.group(2)))
+        tag, attrs = m.group(1), m.group(2)
+        fast = _FAST.get(tag)
+        fm = fast.match(attrs) if fast else None
+        if fm is not None:  # the writer's order: the numbers straight from the match
+            g = [float(v) for v in fm.groups()]
+            if tag == "circle":
+                xs, ys = [g[0] - g[2], g[0] + g[2]], [g[1] - g[2], g[1] + g[2]]
+            elif tag == "ellipse":
+                xs, ys = [g[0] - g[2], g[0] + g[2]], [g[1] - g[3], g[1] + g[3]]
+            elif tag == "line":
+                xs, ys = [g[0], g[2]], [g[1], g[3]]
+            else:
+                xs, ys = [g[0], g[0] + g[2]], [g[1], g[1] + g[3]]
+            return "" if outside(xs, ys) else m.group(0)
+        at = dict(_ATTRS.findall(attrs))
         try:
             if tag == "circle":
                 cx, cy, r = float(at["cx"]), float(at["cy"]), float(at["r"])

@@ -658,8 +658,11 @@ def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     in `test_page.py` catches from the other direction."""
     text = " ".join(" ".join(str(d.get(k, "")) for k in ("what", "why", "lead", "caveat", "on_this_map")) for d in data.values()).lower()
     out: list[dict[str, Any]] = []
+    # A SUBSTRING TEST FIRST (feature 224): 729 word-boundary searches over the whole text cost 0.28 s per page and
+    # nearly all of them fail; a variant that is not a substring of the text cannot match with boundaries either, so
+    # the C-speed `in` runs first and the regex only on the few that pass - the same terms for the same text.
     for term, (variants, definition) in GLOSSARY.items():
-        if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", text) for v in variants):
+        if any(v.lower() in text and re.search(r"\b" + re.escape(v.lower()) + r"\b", text) for v in variants):
             out.append({"term": term, "variants": sorted(variants, key=len, reverse=True), "def": definition})
     return out
 
