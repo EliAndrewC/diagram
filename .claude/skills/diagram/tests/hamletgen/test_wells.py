@@ -49,3 +49,21 @@ def test_the_count_stays_inside_the_researched_band_of_2_to_20_households_per_we
     for n in range(2, 121):
         per_well = n / well_target(n)
         assert 2.0 <= per_well <= 20.0, f"{n} households over {well_target(n)} wells is {per_well:.1f} per well"
+
+
+def test_worst_after_is_the_nested_minimax_it_replaced() -> None:
+    """Feature 223 (GM 2026-09-11, "the wells key"): the lifted objective, given each needy house's walk to its
+    nearest standing well computed once, is the value the nested form computed from the standing wells each call."""
+    import math
+    import random
+
+    from l7r.diagram.hamletgen.homesteads.wells import worst_after
+
+    rng = random.Random(7)
+    needy = [{"x": rng.uniform(0, 900), "y": rng.uniform(0, 900)} for _ in range(14)]
+    placed = [(rng.uniform(0, 900), rng.uniform(0, 900)) for _ in range(2)]
+    standing = [min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed) for h in needy]
+    for _ in range(50):
+        c = (0.0, rng.uniform(0, 900), rng.uniform(0, 900))
+        nested = max(min(min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed), math.hypot(h["x"] - c[1], h["y"] - c[2])) for h in needy)
+        assert worst_after(c, needy, standing) == nested

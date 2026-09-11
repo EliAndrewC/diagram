@@ -62,6 +62,7 @@ _WIDE = [(300.0, 200.0), (900.0, 200.0), (900.0, 800.0), (300.0, 800.0)]  # a ma
 
 def _marks(s: Settlement) -> list[tuple[float, float]]:
     """Every reed blade start, wet-tint center and glint the marsh drew, from the ink itself."""
+    s.flush_blade_groups()  # the reed bucket is written at finish since feature 223
     svg = "".join(s.out)
     out = [(float(a), float(b)) for a, b in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="[\d.]+" fill="#9FBBAE"', svg)]
     out += [(float(a), float(b)) for a, b in re.findall(r'<ellipse cx="([-\d.]+)" cy="([-\d.]+)"[^>]*fill="#C2D6CE"', svg)]

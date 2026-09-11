@@ -77,6 +77,8 @@ class Settlement(
             tuple[float, float, float, float, float, Any]
         ] = []  # stable-yard scatters queued at stables()/animal_ground() time, DRAWN at crop time when every way/footprint exists (GM 2026-07-24: a yard drawn at stables-time could not see later-drawn streets, so its furniture landed on them)
         # DEFERRED: drawn at crop time, not where it is called. See "DRAW ORDER" in CLAUDE.md.
+        # the grass and reed buckets, kept as coordinates until `finish()` knows the frame and culls the off-map ones (feature 223)
+        self._blade_groups: list[tuple[int, str, list[tuple[str, str, str, str]]]] = []
         self._pending_stands: list[
             tuple[Poly, int, bool, str | None]
         ] = []  # tree-stand canopies queued at forest()/forest_patch() time, DRAWN at crop time when every building + well exists (see flush_tree_stands)

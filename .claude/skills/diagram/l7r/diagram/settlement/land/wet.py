@@ -35,8 +35,9 @@ from shapely.ops import unary_union
 # path below that - and `merge_lines` is that merge on the coordinates themselves (parsing 260,000 written elements
 # back cost 1.9 s), so the file carries exactly what the page carried, the ink is unchanged, and every reader of
 # the file is smaller: measured on Inashiro, resvg at 2600 px 2.13 s -> 1.18 s (specs/222 research R1, R2).
-from l7r.diagram.interactive.page import merge_lines
-
+# AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
+# lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
+# so the file never carries them (`Settlement.flush_blade_groups`).
 from .._geom import KeepoutGrid, Pt, RingIndex, point_in_poly, seg_dist
 
 MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
@@ -351,7 +352,7 @@ class WetGroundMixin:
                 for _ in range(4):
                     a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
                     blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
-        self.add(f'<g stroke="#6E9377" stroke-width="0.8">{merge_lines(blades)}</g>', cls="marsh")  # bucketed blades (empty group when none - harmless)
+        self._blade_groups.append((self.add("", cls="marsh"), "#6E9377", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
         self.add(''.join(g), cls="marsh")
         random.setstate(st)
         self._cover_n += 1

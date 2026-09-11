@@ -27,17 +27,25 @@ Every number here is a rendering decision (constitution XII), recorded in specs/
 from __future__ import annotations
 
 import base64
+import math
+import pickle
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
 from collections.abc import Sequence
+from concurrent.futures import ThreadPoolExecutor
 
-#: Px per map px of the picture. 2 puts a DPR-2 screen's opening view of Kuwabata (screen scale 1.31 x 2)
-#: past the switch, so such a reader would see no change; 4 doubles the decoded image (Kuwabata 33 Mpx,
-#: 132 MB). At 3: Kuwabata 3210 x 5784 = 18.6 Mpx, 74 MB decoded, 2.95 MB on the page (specs/200 R4).
-RASTER_R = 3.0
+#: Px per map px of the picture. Feature 200 chose 3 (Kuwabata 3210 x 5784 = 18.6 Mpx, 74 MB decoded) over 2
+#: because 2 puts a DPR-2 screen's opening view of Kuwabata (screen scale 1.31 x 2 = 2.62) past the switch, so such
+#: a reader's first view is the vector page and the picture serves them only zoomed out from it; 4 would double the
+#: decoded image (specs/200 R4). FEATURE 223 SET IT TO 2 (GM 2026-09-11: the fourth item of the list they approved,
+#: on feature 222's pattern for a visible change to this picture - make it, look, reverse it in one line if bad):
+#: 44% of the pixels (Inashiro 3402 x 3424 = 11.6 Mpx against 26.2), so the render, the decode, the JPEG and the
+#: page's bytes all fall by about that - the numbers are specs/223 research R2. The DPR-2 reader's opening view is
+#: the priced cost (spec D3). To REVERSE: `RASTER_R = 3.0` - this line is the whole of the decision.
+RASTER_R = 2.0
 #: THE PICTURE IS A LOSSY JPEG (feature 222, GM 2026-09-11: "I am willing to at least try the lossy JPEG compression
 #: for the final image if that seems like it will gain us about four seconds ... if the lossy nature means that it
 #: becomes blurry or otherwise bad, then we can always reverse it"). Measured on Inashiro's 5103 x 5136 picture
@@ -52,6 +60,19 @@ PICTURE_FORMAT = "JPEG"
 PICTURE_QUALITY = 90
 PICTURE_SUBSAMPLING = 0  # 4:4:4
 PICTURE_MIME = "image/jpeg"
+#: THE PICTURE IS RENDERED IN TILES, IN PARALLEL (feature 223, GM 2026-09-11: "is there anything that we can do
+#: about that SVG render time?"). resvg is single-threaded and the picture's cost is its pixel count, not its ink
+#: (Inashiro at zoom 3 with every blade removed still took 2.4 s of 26 megapixels - specs/223 research R1), so the
+#: picture is split into an n x n grid of PIXEL-ALIGNED tiles, each rendered by its own resvg process from the same
+#: document with the tile's viewBox and the same `--zoom`, all at once, and the encode child pastes them into one
+#: image. A tile's viewBox origin is the picture's origin plus a whole number of MAP pixels, and its size a whole
+#: number of map pixels, so at an integer zoom every tile pixel is a whole number of picture pixels from the origin
+#: and resvg rasterizes it from the same geometry-to-pixel mapping the single render used: the stitched picture is
+#: the single render pixel for pixel (`test_a_tiled_picture_is_the_single_render`; the pool's diffed by review).
+#: `n` is the smallest count putting each tile under TILE_MPX megapixels - every resvg process parses the whole
+#: document (~0.3 s), so tiles cost parse time in proportion; 8 puts a hamlet at 2 x 2 and a city at 3 x 3.
+TILE_MPX = 8.0
+_VIEWBOX_ATTR = re.compile(r'viewBox="[^"]*"')
 #: How far past the viewBox an element may lie and still be kept - wider than any stroke width or blob
 #: radius the writer emits, so a mark reaching in by a pixel is never lost (spec D6).
 OFFMAP_MARGIN = 24.0
@@ -158,16 +179,43 @@ def resvg_png(doc: str, *args: str) -> bytes | None:
             return fh.read()
 
 
-def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
+def tile_count(vb: Viewbox, r: float) -> int:
+    """The tiles per axis for a picture of `vb` at `r` px per map px - the smallest n with each tile under TILE_MPX."""
+    return max(1, math.ceil(math.sqrt(vb[2] * r * vb[3] * r / (TILE_MPX * 1e6))))
+
+
+def tile_boxes(vb: Viewbox, n: int) -> list[tuple[int, int, Viewbox]]:
+    """(column, row, viewBox) for an n x n split of `vb` on whole map pixels - every tile but the last in each
+    axis is `ceil(size / n)` map px wide, the last takes the remainder - so an integer zoom lands every tile on
+    the picture's own pixel grid."""
+    mw, mh = math.ceil(vb[2] / n), math.ceil(vb[3] / n)
+    xs = [min(i * mw, vb[2]) for i in range(n + 1)]
+    ys = [min(j * mh, vb[3]) for j in range(n + 1)]
+    return [(i, j, (vb[0] + xs[i], vb[1] + ys[j], xs[i + 1] - xs[i], ys[j + 1] - ys[j])) for j in range(n) for i in range(n) if xs[i + 1] > xs[i] and ys[j + 1] > ys[j]]
+
+
+def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> bytes | None:
     """The whole picture at `r` px per map px, encoded as `PICTURE_FORMAT` (a JPEG since feature 222 - the
-    note at `PICTURE_FORMAT`). The same SVG text the page carries, so the same picture."""
+    note at `PICTURE_FORMAT`), rendered as `tiles` x `tiles` pixel-aligned tiles in parallel (feature 223, the
+    note at `TILE_MPX`; None picks the count from the pixel area). The same SVG text the page carries, so the
+    same picture."""
     from l7r.diagram import _census
 
     _census.record("render", what="raster")  # the gate refuses a render from a test not marked as one of rendering (feature 213)
-    png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
-    if png is None:
+    vb = viewbox_of(svg_text[: svg_text.find(">") + 1])
+    n = tiles if tiles else (tile_count(vb, r) if vb is not None else 1)
+    if vb is None or n <= 1:
+        png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
+        return None if png is None else encode_picture([(0, 0, png)])
+    boxes = tile_boxes(vb, n)
+    with ThreadPoolExecutor(max_workers=len(boxes)) as pool:
+        jobs = [
+            (i, j, pool.submit(resvg_png, _VIEWBOX_ATTR.sub(f'viewBox="{tx:g} {ty:g} {tw:g} {th:g}"', svg_text, count=1), "--zoom", f"{r:g}", *RESVG_FONT_ARGS)) for i, j, (tx, ty, tw, th) in boxes
+        ]
+    rendered = [(i, j, job.result()) for i, j, job in jobs]
+    if any(png is None for _i, _j, png in rendered):
         return None
-    return encode_picture(png)
+    return encode_picture([(i, j, png) for i, j, png in rendered if png is not None])
 
 
 # THE ENCODE RUNS IN A CHILD PROCESS (feature 208, GM 2026-09-07: "write the picture in a subprocess"). PIL's
@@ -180,19 +228,32 @@ def picture(svg_text: str, r: float = RASTER_R) -> bytes | None:
 # The picture is opaque (its alpha channel is 255 everywhere - the sheet is drawn), so the RGB conversion JPEG
 # needs loses nothing. (Feature 203's lossless method 0 over method 4 - 2.2 s vs 9.6 s - is history since 222.)
 _PICTURE_CHILD = (
-    "import io, sys\n"
+    "import io, pickle, sys\n"
     "from PIL import Image\n"
+    "tiles = pickle.load(sys.stdin.buffer)\n"
+    "ims = {(c, r): Image.open(io.BytesIO(b)) for c, r, b in tiles}\n"
+    "cols, rows = sorted({c for c, _r in ims}), sorted({r for _c, r in ims})\n"
+    "ws, hs = [ims[(c, rows[0])].width for c in cols], [ims[(cols[0], r)].height for r in rows]\n"
+    "out = Image.new('RGB', (sum(ws), sum(hs)))\n"
+    "y = 0\n"
+    "for r, h in zip(rows, hs):\n"
+    "    x = 0\n"
+    "    for c, w in zip(cols, ws):\n"
+    "        out.paste(ims[(c, r)].convert('RGB'), (x, y))\n"
+    "        x += w\n"
+    "    y += h\n"
     "buf = io.BytesIO()\n"
-    f"Image.open(io.BytesIO(sys.stdin.buffer.read())).convert('RGB').save(buf, {PICTURE_FORMAT!r}, quality={PICTURE_QUALITY}, subsampling={PICTURE_SUBSAMPLING})\n"
+    f"out.save(buf, {PICTURE_FORMAT!r}, quality={PICTURE_QUALITY}, subsampling={PICTURE_SUBSAMPLING})\n"
     "sys.stdout.buffer.write(buf.getvalue())\n"
 )
 
 
-def encode_picture(png: bytes) -> bytes:
-    """`png` re-encoded as the page's picture (`PICTURE_FORMAT`) by a child Python that imports only PIL - the same
-    bytes an in-process `Image.save` would produce, without the decode and encode buffers ever living in this
-    process. A child that fails raises, with its stderr, rather than returning a picture that is not one."""
-    proc = subprocess.run([sys.executable, "-c", _PICTURE_CHILD], input=png, capture_output=True, check=False)
+def encode_picture(tiles: Sequence[tuple[int, int, bytes]]) -> bytes:
+    """The rendered tiles - `(column, row, PNG bytes)`, one tile for a single render - pasted into one image and
+    encoded as the page's picture (`PICTURE_FORMAT`) by a child Python that imports only PIL: the same bytes an
+    in-process paste-and-save would produce, without the decode and encode buffers ever living in this process.
+    A child that fails raises, with its stderr, rather than returning a picture that is not one."""
+    proc = subprocess.run([sys.executable, "-c", _PICTURE_CHILD], input=pickle.dumps(list(tiles)), capture_output=True, check=False)
     if proc.returncode != 0 or not proc.stdout:
         raise RuntimeError(f"the picture child failed (rc={proc.returncode}): {proc.stderr.decode('utf-8', 'replace').strip()[-400:]}")
     return proc.stdout

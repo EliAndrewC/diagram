@@ -25,6 +25,7 @@ def _mini_channel_settlement(seed: int = 1) -> Settlement:
     s.meta(name="A", scale="village", ftpx=1.0)  # ftpx recorded, as every real pool map records it
     s.field_channel([(300, 100), (310, 700)], "#6C9CBE", 14.0, 14.0)
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="grazing")
+    s.flush_blade_groups()  # the buckets are written at finish since feature 223; this reads the ink before one
     return s
 
 

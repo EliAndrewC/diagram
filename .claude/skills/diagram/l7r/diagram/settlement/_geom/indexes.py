@@ -520,3 +520,45 @@ class BoxObstacles:
             if any(segments_cross(corners[e], corners[(e + 1) % 4], a, b) for e in range(4)):
                 return False
         return True
+
+
+class BambooObstacles:
+    """Point queries for the bamboo sampler (feature 223, GM 2026-09-11: "the bamboo seat scan") - the rects, the
+    lanes and the polygons `hamletgen.hinterland.bamboo.bamboo_blocked` tests every sample against, filed once.
+    On Sawada the sampler asked 9,796 points and each walked every lane segment and every polygon edge by
+    `seg_dist` - 2.2 million distances, 52% of the hinterland stage (specs/223 research R1). Each padded rect
+    goes into a `PointGrid` by its padded box, each lane segment by its box inflated by the lane's half-width,
+    and each polygon keeps its bounding box and a `RingIndex` for the edge distance; `blocked` asks the grids
+    and makes the same tests `bamboo_blocked` makes on what they return - a padded rect containing the point
+    (closed), a lane segment nearer than its half-width (strict), a polygon containing the point
+    (`point_in_poly`, prefiltered by the box a contained point must lie in) or an edge nearer than its pad
+    (strict, `RingIndex.edge_within`). The index prunes, the exact test decides: the verdicts are the linear
+    scan's, and `bamboo_blocked` stays as the oracle its tests hold this to. The margin, the title pocket and
+    the pond are not here - they are one comparison each and the sampler keeps them."""
+
+    __slots__ = ("lanes", "rects", "rings")
+
+    def __init__(self, rects: Any, lanes: Any, polys: Any, cell: float = 128.0) -> None:
+        self.rects = PointGrid(cell)
+        self.rects.extend([(float(rx), float(ry), float(rw), float(rh), float(pad), rx - rw / 2 - pad, ry - rh / 2 - pad, rx + rw / 2 + pad, ry + rh / 2 + pad) for rx, ry, rw, rh, pad in rects])
+        self.lanes = PointGrid(cell)
+        segs = []
+        for pts, half in lanes:
+            for k in range(len(pts) - 1):
+                a, b = pts[k], pts[k + 1]
+                segs.append((a, b, float(half), min(a[0], b[0]) - half, min(a[1], b[1]) - half, max(a[0], b[0]) + half, max(a[1], b[1]) + half))
+        self.lanes.extend(segs)
+        self.rings: list[tuple[RingIndex, float]] = [(RingIndex(poly), float(pad)) for poly, pad in polys if len(poly) >= 3]
+
+    def blocked(self, x: float, y: float) -> bool:
+        """The rect, lane and polygon arms of `bamboo_blocked`, over what the grids return."""
+        for rx, ry, rw, rh, pad, _x0, _y0, _x1, _y1 in self.rects.near(x, y):
+            if abs(x - rx) <= rw / 2 + pad and abs(y - ry) <= rh / 2 + pad:
+                return True
+        for a, b, half, _x0, _y0, _x1, _y1 in self.lanes.near(x, y):
+            if seg_dist(x, y, a, b) < half:
+                return True
+        for ring, pad in self.rings:
+            if ring.x0 - pad <= x <= ring.x1 + pad and ring.y0 - pad <= y <= ring.y1 + pad and (point_in_poly(x, y, ring.ring) or ring.edge_within(x, y, pad) is not None):
+                return True
+        return False

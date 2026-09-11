@@ -27,6 +27,14 @@ def well_target(households: int) -> int:
     return max(1, min(6, round(households / 6.0)))
 
 
+def worst_after(c: tuple[float, float, float], needy: Sequence[Mapping[str, Any]], standing: Sequence[float]) -> float:
+    """The walk of the household WORST served once a well is dug at `c` - the minimax objective of the greedy
+    pass in `place_wells`, lifted out (feature 223). `standing[i]` is needy house i's distance to its nearest
+    well already standing, computed once per sort by the caller; the house's walk after the dig is the smaller
+    of that and its distance to `c`, and the seat's score is the largest such walk."""
+    return max(min(sd, math.hypot(h["x"] - c[1], h["y"] - c[2])) for h, sd in zip(needy, standing, strict=True))
+
+
 def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
     """Seat the communal wells INSIDE the house cloud, not on a box around it.
 
@@ -144,14 +152,16 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                 # would remain from its nearest well. A seat past the row's end cannot beat an
                 # in-row seat (it serves nobody the row seat does not), and a seat in an unserved
                 # lobe wins outright, which is what the greedy fix was for in the first place.
-                def _worst_after(c: tuple[float, float, float]) -> float:
-                    return max(
-                        min(
-                            min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed),
-                            math.hypot(h["x"] - c[1], h["y"] - c[2]),
-                        )
-                        for h in needy
-                    )
+                # ONCE PER SORT, ONCE PER CANDIDATE (feature 223, GM 2026-09-11: "the wells key"). The standing wells do
+                # not change while the pool is sorted, so each needy house's walk to its nearest standing well is
+                # taken once here, and the key tuple below is built once per candidate - it used to call
+                # `_worst_after` and `_extent_added` twice each per candidate and re-derive every house's walk to every
+                # standing well inside each call (70,416 calls, 1.2 million terms on Kuwabata). Same numbers, same
+                # order: `worst_after` is the lifted body, held to the nested form by its test.
+                _standing = [min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed) for h in needy]
+
+                def _worst_after(c: tuple[float, float, float], standing: Sequence[float] = _standing) -> float:
+                    return worst_after(c, needy, standing)
 
                 # AND AN INTERIOR SEAT BEATS A PADDED ONE THAT SERVES THE SAME HOUSEHOLDS. The sweep
                 # box above is padded 120 px past the house CENTERS because a bundle's courtyard
@@ -240,7 +250,11 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                 # bought nothing. Behind the minimax bucket it can only decide between seats that
                 # serve the households equally well - which is all "do not stand in the windbreak"
                 # was ever entitled to decide.
-                pool.sort(key=lambda c: ((_worst_after(c) + _extent_added(c)) // 66.0, _in_belt(c), _extent_added(c), _worst_after(c), _neighborhood(c)))
+                def _key(c: tuple[float, float, float]) -> tuple[float, int, float, float, float]:
+                    _w, _e = _worst_after(c), _extent_added(c)
+                    return ((_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
+
+                pool.sort(key=_key)
             _, x, y = pool.pop(0)
             if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
                 continue  # `wells_not_clustered`: shared wells serve separate courtyards

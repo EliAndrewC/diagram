@@ -408,3 +408,34 @@ def test_the_windbreak_stage_draws_nothing_when_the_plan_has_no_belt() -> None:
     before = dict(s.M.get("village_groves", [])) if isinstance(s.M.get("village_groves"), dict) else list(s.M.get("village_groves", []))
     hinterland.stage_windbreak(s, plan)
     assert list(s.M.get("village_groves", [])) == list(before), "no belt, no windbreak"
+
+
+def test_bamboo_blocked_indexed_matches_bamboo_blocked_on_random_ground() -> None:
+    """Feature 223 (GM 2026-09-11, "the bamboo seat scan"): the sampler asks a `BambooObstacles` index and must
+    get `bamboo_blocked`'s verdict on every point - rects with their pads, lanes with their half-widths, polygons
+    (convex, concave, and a two-point one the oracle skips) with their pads, the pond, the margin, the pocket."""
+    import math
+    import random
+
+    from l7r.diagram.hamletgen.hinterland.bamboo import bamboo_blocked, bamboo_blocked_indexed
+    from l7r.diagram.settlement._geom.indexes import BambooObstacles
+
+    rng = random.Random(223)
+    rects = [(rng.uniform(50, 950), rng.uniform(50, 950), rng.uniform(10, 60), rng.uniform(8, 40), rng.uniform(4, 14)) for _ in range(30)]
+    lanes = [([(rng.uniform(0, 1000), rng.uniform(0, 1000)) for _ in range(rng.randint(2, 6))], rng.uniform(4, 12)) for _ in range(12)]
+    polys: list[tuple[list[tuple[float, float]], float]] = []
+    for _ in range(15):
+        cx, cy, n = rng.uniform(0, 1000), rng.uniform(0, 1000), rng.randint(3, 8)
+        polys.append(([(cx + rng.uniform(20, 140) * math.cos(2 * math.pi * k / n), cy + rng.uniform(20, 140) * math.sin(2 * math.pi * k / n)) for k in range(n)], rng.uniform(6, 20)))
+    polys.append(([(300.0, 300.0), (420.0, 330.0)], 12.0))  # two points: not a polygon, skipped by both
+    pond = (500.0, 500.0, 60.0, 40.0)
+    extent, pocket = (1000.0, 1000.0), (700.0, 100.0, 900.0, 220.0)
+    index = BambooObstacles(rects, lanes, polys)
+    agree = {True: 0, False: 0}
+    for _ in range(4000):
+        x, y = rng.uniform(-20, 1020), rng.uniform(-20, 1020)
+        want = bamboo_blocked(x, y, extent, pocket, rects, lanes, polys, pond, 30.0)
+        assert bamboo_blocked_indexed(x, y, extent, pocket, index, pond, 30.0) is want, (x, y)
+        agree[want] += 1
+    assert agree[True] > 200 and agree[False] > 200, "both verdicts exercised"
+    assert index.blocked(rects[0][0], rects[0][1]) and not BambooObstacles([], [], []).blocked(1.0, 1.0)

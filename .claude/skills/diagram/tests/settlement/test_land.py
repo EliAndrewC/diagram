@@ -576,9 +576,9 @@ def test_commons_keeps_scrub_off_every_recorded_marsh():
     s = _nuc_village()  # field to the EAST (x >= 640)
     wet = [(40, 280), (300, 280), (300, 700), (40, 700)]  # open ground WEST of the field
     s.marsh(wet)
-    n_reed = len(parse_bases("".join(s.out))["reed"])
+    n_reed = len(parse_bases("".join(s.flush_blade_groups() or s.out))["reed"])
     s.commons([(20, 250), (330, 250), (330, 720), (20, 720)])  # a scrub pass that straddles the marsh
-    fams = parse_bases("".join(s.out))
+    fams = parse_bases("".join(s.flush_blade_groups() or s.out))
     assert len(fams["reed"]) == n_reed and fams["blade"] and fams["dot"], "reeds untouched, scrub drawn around them"
     from l7r.diagram.settlement._geom import edge_dist
     from l7r.diagram.settlement.land.wet import MARSH_FEATHER_BS

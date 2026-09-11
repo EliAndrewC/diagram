@@ -7,6 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement._geom.indexes import BambooObstacles
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -59,6 +60,20 @@ def bamboo_blocked(
     return bool(((x - pond[0]) / (pond[2] + pond_pad)) ** 2 + ((y - pond[1]) / (pond[3] + pond_pad)) ** 2 <= 1.0)
 
 
+def bamboo_blocked_indexed(x: float, y: float, extent: Pt, pocket: tuple[float, float, float, float], index: BambooObstacles, pond: Any, pond_pad: float) -> bool:
+    """`bamboo_blocked` with its rect, lane and polygon arms asked of a `BambooObstacles` index (feature 223);
+    the margin, the pocket and the pond are the same one comparison each."""
+    if x < 30 or y < 30 or x > extent[0] - 30 or y > extent[1] - 30:
+        return True
+    if pocket[0] <= x <= pocket[2] and pocket[1] <= y <= pocket[3]:
+        return True
+    if index.blocked(x, y):
+        return True
+    if not pond:
+        return False
+    return bool(((x - pond[0]) / (pond[2] + pond_pad)) ** 2 + ((y - pond[1]) / (pond[3] + pond_pad)) ** 2 <= 1.0)
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
@@ -105,8 +120,13 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     pond = s.M.get("pond")
     tp = title_pocket(s, plan)
 
+    # THE THREE LISTS ARE INDEXED ONCE (feature 223, constitution X clause 15): they do not change during the scan,
+    # and `bamboo_blocked` walked every lane segment and polygon edge for each of ~10,000 samples - 2.2 million
+    # `seg_dist` on Sawada, 52% of the hinterland stage. Same verdicts; `bamboo_blocked` is the oracle its test uses.
+    index = BambooObstacles(rects, lanes, polys)
+
     def _blocked(x: float, y: float) -> bool:
-        return bamboo_blocked(x, y, (s.W, s.H), tp, rects, lanes, polys, pond, px(30.0))
+        return bamboo_blocked_indexed(x, y, (s.W, s.H), tp, index, pond, px(30.0))
 
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
         samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.5, 0.0, 0.5, 1.0) for dy in (-1.0, 0.0, 1.0)]

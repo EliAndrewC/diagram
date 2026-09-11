@@ -11,8 +11,8 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.classes import PLACE
-from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
-from l7r.diagram.interactive.raster import RESVG_FONT_ARGS
+from l7r.diagram.interactive.page import ink_census, merge_lines, unregistered_classes, write_html
+from l7r.diagram.interactive.raster import OFFMAP_MARGIN, RESVG_FONT_ARGS
 from l7r.diagram.interactive.tags import ClsTag
 
 from ._geom import LAND, BoxObstacles, Poly, Pt, label_quad, label_tilt, linear_tilt, linear_tilt_full, rects_overlap
@@ -453,11 +453,37 @@ class FinishMixin:
             y += step
         return None
 
+    def flush_blade_groups(self: Settlement) -> None:  # type: ignore[misc]
+        """Write every deferred grass and reed bucket at its draw position, WITHOUT the blades the frame clips
+        (feature 223, GM 2026-09-11: "dropping the off-map scatter in the writer"). The scatter covers the whole
+        parcel and ~90% of its blades lie outside the viewBox the map is cropped to (specs/200 R2); the page
+        dropped them (`raster.drop_offmap`, 0.6-1.1 s per map) and the file and the PNG's resvg carried them. The
+        crop is not known when the scatter runs (`stage_frame` follows the hinterland), so the buckets wait here,
+        the way the tree canopies do, and are culled by drop_offmap's own rule - a blade kept unless it lies wholly
+        outside the viewBox plus `OFFMAP_MARGIN`, judged on the same formatted coordinates - then merged by
+        `merge_lines`. The page then finds nothing more to drop from a classed bucket, so it is unchanged; an
+        unclassed bucket (a pasture's), which the page never judged, loses its off-map blades too - invisible by
+        construction, the viewBox clipped them. A map with no view is judged against its whole canvas, which is
+        what the page's `viewbox_of` reads then. Idempotent; runs first in `finish()`."""
+        pending = self._blade_groups
+        self._blade_groups = []
+        vx, vy, vw, vh = self.view if self.view else (0.0, 0.0, float(self.W), float(self.H))
+        x0, y0, x1, y1 = vx - OFFMAP_MARGIN, vy - OFFMAP_MARGIN, vx + vw + OFFMAP_MARGIN, vy + vh + OFFMAP_MARGIN
+        for z, color, blades in pending:
+            kept = []
+            for ln in blades:
+                ax, ay, bx, by = float(ln[0]), float(ln[1]), float(ln[2]), float(ln[3])
+                if max(ax, bx) < x0 or min(ax, bx) > x1 or max(ay, by) < y0 or min(ay, by) > y1:
+                    continue
+                kept.append(ln)
+            self.out[z] = f'<g stroke="{color}" stroke-width="0.8">{merge_lines(kept)}</g>'
+
     def finish(self: Settlement, basepath: str, render: bool = True, png_width: int = 2600) -> int:  # type: ignore[misc]
         # BACKSTOP for the deferred canopy: crop_to_content / crop_city normally flush it, but a map
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
+        self.flush_blade_groups()
         # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
         # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
         # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.

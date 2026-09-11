@@ -220,9 +220,27 @@ def test_the_picture_child_matches_an_in_process_encode_and_a_failing_child_rais
     im.save(src, "PNG")
     want = io.BytesIO()
     Image.open(io.BytesIO(src.getvalue())).convert("RGB").save(want, raster.PICTURE_FORMAT, quality=raster.PICTURE_QUALITY, subsampling=raster.PICTURE_SUBSAMPLING)
-    got = raster.encode_picture(src.getvalue())
+    got = raster.encode_picture([(0, 0, src.getvalue())])
     assert got == want.getvalue(), "byte-identical to the in-process encode"
     assert Image.open(io.BytesIO(got)).format == "JPEG"
     monkeypatch.setattr(raster, "_PICTURE_CHILD", "import sys; sys.stderr.write('no PIL here'); sys.exit(3)")
     with pytest.raises(RuntimeError, match=r"rc=3.*no PIL here"):
-        raster.encode_picture(src.getvalue())
+        raster.encode_picture([(0, 0, src.getvalue())])
+
+
+def test_a_tiled_picture_is_the_single_render() -> None:
+    """Feature 223: the picture rendered as 2 x 2 pixel-aligned tiles by four resvg processes and stitched is the
+    single render byte for byte (the same pixels through the same deterministic encoder), and the tile boxes
+    partition the viewBox on whole map pixels. Also the count rule: a tiny page is one tile, a city's area three."""
+    from l7r.diagram.interactive.raster import TILE_MPX, tile_boxes, tile_count
+
+    assert picture(TINY, 2.0, tiles=2) == picture(TINY, 2.0, tiles=1)
+    assert picture(TINY, 3.0, tiles=3) == picture(TINY, 3.0)
+    vb = (996.0, 383.0, 1701.0, 1712.0)  # Inashiro's crop
+    boxes = tile_boxes(vb, 2)
+    assert [b[:2] for b in boxes] == [(0, 0), (1, 0), (0, 1), (1, 1)]
+    assert boxes[0][2] == (996.0, 383.0, 851.0, 856.0) and boxes[3][2] == (1847.0, 1239.0, 850.0, 856.0)
+    assert sum(b[2][2] for b in boxes if b[1] == 0) == vb[2] and sum(b[2][3] for b in boxes if b[0] == 0) == vb[3]
+    assert tile_count((0.0, 0.0, 40.0, 40.0), 2.0) == 1
+    assert tile_count(vb, 3.0) == 2 and tile_count(vb, 2.0) == 2
+    assert tile_count((0.0, 0.0, 4000.0, 3000.0), 3.0) == 4 and TILE_MPX == 8.0

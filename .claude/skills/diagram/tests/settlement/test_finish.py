@@ -335,3 +335,28 @@ def test_the_page_raster_is_a_render_like_the_png(monkeypatch):
     from l7r.diagram.settlement import finish as finish_mod
 
     assert "malloc_trim" not in Path(finish_mod.__file__).read_text(encoding="utf-8")
+
+
+def test_flush_blade_groups_culls_the_blades_the_frame_clips_and_keeps_them_all_without_a_frame():
+    """Feature 223 FR-003: a deferred bucket is written at its draw position at finish; with a view, a blade wholly
+    outside the viewBox plus OFFMAP_MARGIN is culled (drop_offmap's own rule) and one inside or reaching in is
+    kept; with no view every blade stays. Idempotent, and an empty bucket is an empty group."""
+    from l7r.diagram.interactive.raster import OFFMAP_MARGIN
+
+    s = Settlement(W=1000, H=1000, seed=1)
+    s.set_view(100, 100, 400, 400)
+    inside = ("150.0", "150.0", "151.0", "146.0")
+    reaching = (f"{100 - OFFMAP_MARGIN - 2:.1f}", "150.0", f"{100 - OFFMAP_MARGIN + 1:.1f}", "146.0")
+    far = ("900.0", "900.0", "901.0", "896.0")
+    z = s.add("", cls="marsh")
+    s._blade_groups.append((z, "#6E9377", [inside, far, reaching]))
+    s.flush_blade_groups()
+    assert s.out[z] == '<g stroke="#6E9377" stroke-width="0.8"><path d="M150.0,150.0L151.0,146.0M74.0,150.0L77.0,146.0" fill="none"/></g>'
+    s.flush_blade_groups()  # nothing pending: nothing changes
+    assert "M900.0" not in s.out[z]
+    t = Settlement(W=1000, H=1000, seed=1)
+    z2 = t.add("", cls="marsh")
+    t._blade_groups.append((z2, "#6E9377", [inside, far]))
+    t._blade_groups.append((t.add("", cls=None), "#A7A860", []))
+    t.flush_blade_groups()
+    assert t.out[z2].count("M") == 2 and t.out[z2 + 1] == '<g stroke="#A7A860" stroke-width="0.8"></g>'
