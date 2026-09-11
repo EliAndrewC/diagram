@@ -970,3 +970,5 @@ def test_merge_primitives_returns_a_string_with_under_two_elements_untouched_wit
     """Feature 225 FR-005: the C-speed count runs before the element scan; one element is never merged."""
     one = '<circle cx="1" cy="2" r="3" fill="#2F6B35"/>'
     assert merge_primitives(one) is one and merge_primitives("") == "" and merge_primitives("<g></g>") == "<g></g>"
+    two_uses = '<use href="#a"/><use href="#b"/>'  # two self-closing elements, neither a primitive: past the count, nothing to merge
+    assert merge_primitives(two_uses) is two_uses
