@@ -57,3 +57,38 @@ side now 260-564 px inside the frame.
 
 The perf bookends: 224-end vs 224-start on the reference hamlet's four seeds -10.9% total (31.1 -> 27.7 s), every
 seed faster, band 0.
+
+## R3 - the settlement-review's measurements, and the pad's argument (2026-09-11)
+
+The review (over the shipped SVGs at 832a506d, its own raster of each, against main's renders) adjudicated every
+scatter base against the recorded keep-out geometry at zero pad: **0 bases on crop plots, structures, lane treads or
+water on all five maps, before and after; 0 brush dots and 0 pines on bog-tinted pixels; 0 reeds on water; 0
+scatter bases inside the cluster's hull.** In-view density per 1,000 sq ft, main -> shipped: blades 10.55 -> 10.47 /
+5.43 -> 5.48 / 3.55 -> 3.50 / 10.21 -> 10.27 / 4.53 -> 4.61 (inashiro / kashikawa / kuwabata / mizuguchi / sawada),
+reeds 4.75 -> 4.69 / 3.71 -> 3.65 / 3.26 -> 3.26 / 5.20 -> 5.34 / 3.92 -> 3.78, dots and pines within a hundredth,
+crowns identical; the wet-tint discs 1513 -> 1494 / 1096 -> 1114 / 727 -> 727 / 1690 -> 1620 / 1083 -> 1100 at an
+unchanged mean radius. The edge-band density (the outer 40 px of every side) holds within 10% on every side of every
+map; no bare strip. The same place, five for five.
+
+**Why 120 px suffices laterally - the enumeration the review asked for.** The prediction is the crop's own boxes at
+hinterland time plus every polygon the crop can later take in. What is placed AFTER the hinterland: `stage_bamboo`
+draws the stands on `plan.bamboo_polys` (in the prediction; not in `_CROP_HARD` anyway); `stage_woodland` draws the
+coppice patches on `plan.woodland_polys` (in the prediction; they ARE hard, as `forest_patches`); `stage_windbreak`
+draws the belt on `plan.belt` (in the prediction; the crop reads its inner face plus the margin); `stage_crossings`
+seats footbridges on water inside the frame (not hard); `stage_notice` seats the board on a lane's verge among the
+houses (not hard); `stage_labels` runs after the crop. So no hard feature unknown at hinterland time grows the crop
+laterally at all - which is what the pool shows: the tightest side is the pad exactly on every map, the prediction's
+non-pad part coinciding with the view. The one late grower is the title band, on the north only, covered by
+`TITLE_BAND_ALLOWANCE`. The widest scatter mark is the wet tint's 28 px radius against the 120 px pad, so no skipped
+throw could have painted into the view. The pad is slack, kept as slack, and the breach record is what would say so
+if a later placer changed this.
+
+**A pre-existing thing the review noticed, not this feature's.** A few brush dots and pines stand inside a recorded
+`marshes[].poly` on every map (Kuwabata 3 dots and 1 pine after; 4 dots before) while 0 stand on drawn bog: the
+recorded polygon is the parcel's outline and `_in_soft` tests the feathered interior, so the two describe different
+ground. The doctrine (woody never in the bog) is about the drawn bog and holds; whether the record and the test
+should ever disagree is a code question, left here for whoever next touches the marsh.
+
+**And a convention to state:** since this feature the SVG's scatter is a function of the PREDICTED frame, not of the
+parcel: a map re-cropped wider than its recorded view would find bare ground from 120 px out. Recorded at
+`scatter_frame`.

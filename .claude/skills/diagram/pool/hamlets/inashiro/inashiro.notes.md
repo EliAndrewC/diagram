@@ -1588,3 +1588,15 @@ for pixel the same, so nothing reaches the frame edge that did not before. The p
 pixel-aligned tiles by parallel resvg processes and stitched, at 2 px per map px (the GM's item; the note at
 `interactive/raster.py` `RASTER_R`): the review found the seams statistically invisible and the picture at its
 display scale indistinguishable from the 3 px one; a retina reader's opening view is now the vector page (spec D3).
+
+## 2026-09-11 (feature 224): the scatter thrown only inside a predicted frame - the texture re-rolls, nothing placed moves
+
+NO feature moved: the manifest differs from the previous roll only in `ink_classes` and two new meta keys
+(`scatter_frame`, the frame the commons and marsh scatters threw within - the crop's boxes plus the reserved polygons,
+the margin and a 120 px pad, 140 more on the north for a title band - and `scatter_frame_overhang`, the view's
+distance inside it per side, negative on every side). The in-frame scrub and marsh TEXTURE is a different throw of the
+same density under the same keep-outs (the GM's 2026-09-08 ruling); the houses, fields, lanes, water, crowns and every
+recorded feature are byte-identical. settlement-review (2026-09-11) adjudicated every scatter base against the recorded
+keep-out geometry at zero pad: 0 on crop plots, structures, lane treads or water, 0 woody marks on bog pixels, 0 reeds on
+water, 0 inside the cluster's hull - before and after; in-view density per 1,000 sq ft blades 10.55 -> 10.47, reeds 4.75 -> 4.69; the
+outer 40 px of every side within 10% of before, no bare strip; the same place at fit zoom and 1:1.

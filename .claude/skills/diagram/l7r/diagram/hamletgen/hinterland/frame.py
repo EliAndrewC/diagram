@@ -42,7 +42,9 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     reads), the belt, the woodland patches and the bamboo seats already scanned, and the title pocket when one is
     reserved - grown by the crop's margin and `SCATTER_PAD`. The same prediction `stage_windbreak` makes for the
     belt's clumps, with the reserved polygons added because this runs earlier. Recorded on the settlement so
-    `finish()` can say whether the view stayed inside it (`meta.scatter_frame_breach`)."""
+    `finish()` can say whether the view stayed inside it (`meta.scatter_frame_breach`). A convention this sets: the file's
+    scatter is a function of this frame, not of the parcel - a map re-cropped wider than its recorded view finds bare
+    ground from `SCATTER_PAD` out (settlement-review, 2026-09-11)."""
     from .parcels import CROP_MARGIN  # noqa: PLC0415 - parcels imports this module
 
     boxes = s._crop_boxes(city=False)
