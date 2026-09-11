@@ -1,0 +1,6 @@
+{
+  "utc": "20260911T141642Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review of this content is running on the pool-225 snapshot; the change since is tests only (five reads flush the deferred marks first)"
+}
