@@ -79,6 +79,8 @@ class Settlement(
         # DEFERRED: drawn at crop time, not where it is called. See "DRAW ORDER" in CLAUDE.md.
         # the grass and reed buckets, kept as coordinates until `finish()` knows the frame and culls the off-map ones (feature 223)
         self._blade_groups: list[tuple[int, str, list[tuple[str, str, str, str]]]] = []
+        # the scatter's other marks - brush dots, pines, wet tint, glints - kept as (extent, string) until finish culls the off-frame ones (feature 225)
+        self._mark_groups: list[tuple[int, list[tuple[float, float, float, float, str]]]] = []
         # the frame the scatter may predict (feature 224): a throw outside it is skipped before the keep-out test; each frame
         # used is kept so `finish()` can record whether the view stayed inside the tightest of them
         self._scatter_frame: tuple[float, float, float, float] | None = None

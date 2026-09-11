@@ -22,6 +22,7 @@ from .._geom import (
 )
 from .._knobs import _centroid, _sharp_corners, _toward
 from ..land.wet import pond_fringe_ring
+from .landuse import line_cuts
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -602,15 +603,33 @@ class CombMixin:
         diag = math.hypot(max(xs) - min(xs), max(ys) - min(ys))
         dx, dy = math.cos(theta), math.sin(theta)
         nx, ny = -dy, dx
-        cid = self._cid("dry")
-        pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
-        g = [f'<clipPath id="{cid}"><polygon points="{pts}"/></clipPath>', f'<g clip-path="url(#{cid})">']
-        t = -diag / 2
-        while t <= diag / 2:
-            mx, my = cx + nx * t, cy + ny * t
-            g.append(
-                f'<line x1="{mx - dx * diag / 2:.1f}" y1="{my - dy * diag / 2:.1f}" x2="{mx + dx * diag / 2:.1f}" y2="{my + dy * diag / 2:.1f}" stroke="{color}" stroke-width="0.8" opacity="0.8"/>'
-            )
-            t += 5
-        g.append("</g>")
-        self.add("".join(g), cls=cls)
+        # THE ROWS ARE CUT TO THE PLOT AT WRITE TIME (feature 225 FR-004): each row is a line at `theta` and the plot a
+        # convex quadrilateral, so the row's ends are its two crossings of the plot's edges (`line_cuts`) and the
+        # `<clipPath>` the rows sat in - a layer per plot in resvg, 29 on Inashiro, a quarter tile 0.74 -> 0.44 s
+        # without them (specs/225 research R1) - is not needed; a plot a row meets other than twice keeps the clip.
+        rows: list[tuple[float, float, float, float]] = []
+        ts = -diag / 2
+        clip = False
+        while ts <= diag / 2:
+            mx, my = cx + nx * ts, cy + ny * ts
+            cut = line_cuts(poly, mx, my, dx, dy)
+            if cut is None:
+                clip = True
+                break
+            rows += [(mx + dx * t0, my + dy * t0, mx + dx * t1, my + dy * t1) for t0, t1 in cut]
+            ts += 5
+        if clip:
+            cid = self._cid("dry")
+            pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
+            g = [f'<clipPath id="{cid}"><polygon points="{pts}"/></clipPath>', f'<g clip-path="url(#{cid})">']
+            t = -diag / 2
+            while t <= diag / 2:
+                mx, my = cx + nx * t, cy + ny * t
+                g.append(
+                    f'<line x1="{mx - dx * diag / 2:.1f}" y1="{my - dy * diag / 2:.1f}" x2="{mx + dx * diag / 2:.1f}" y2="{my + dy * diag / 2:.1f}" stroke="{color}" stroke-width="0.8" opacity="0.8"/>'
+                )
+                t += 5
+            g.append("</g>")
+            self.add("".join(g), cls=cls)
+            return
+        self.add("".join(f'<line x1="{ax:.1f}" y1="{ay:.1f}" x2="{bx:.1f}" y2="{by:.1f}" stroke="{color}" stroke-width="0.8" opacity="0.8"/>' for ax, ay, bx, by in rows), cls=cls)

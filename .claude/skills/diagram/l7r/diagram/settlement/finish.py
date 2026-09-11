@@ -3,6 +3,7 @@
 import itertools
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -43,6 +44,43 @@ def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size
     cy_ = y - size * 0.275
     half = (size * 1.05 + (n - 1) * size * 1.15) / 2
     return (x0_, cy_ - half, x0_ + w_, cy_ + half)
+
+
+_ELEMENT_OPACITY = re.compile(r"<(line|circle|ellipse|rect|polygon|path)\b([^>]*?) opacity=\"([^\"]*)\"([^>]*)/>")
+
+
+def fold_element_opacity(s: str) -> str:
+    """Element `opacity` folded into the ONE paint's own opacity, where the picture is the same (feature 225, item
+    2 of the GM's 2026-09-11 list). An element with one paint - a stroke-only `<line>`, a fill-only circle,
+    ellipse, rect or polygon, a `fill="none"` shape, a single-subpath path with one paint - draws the same pixels
+    under `stroke-opacity` or `fill-opacity` as under `opacity`, but resvg (and a browser) composites `opacity`
+    through a layer per element and folds a paint's opacity into the paint: on Inashiro's page 1,237 such elements
+    (958 crop-row lines, 203 crown circles, the rest rects and paths) cost a full render at zoom 2 1.35 -> 1.02 s
+    and a quarter tile 0.75 -> 0.44 (specs/225 research R1). Declined, and left as written: an element with both
+    paints (the two opacities compound differently where the stroke overlaps the fill), one already carrying the
+    paint's opacity, and a path with more than one subpath (overlapping subpaths blend under stroke-opacity and
+    do not under a group's). One pass over every record string at finish, so every writer shares it (D1)."""
+
+    def fold(m: re.Match[str]) -> str:
+        tag, before, value, after = m.group(1), m.group(2), m.group(3), m.group(4)
+        attrs = before + after
+        fill = re.search(r'\bfill="([^"]*)"', attrs)
+        stroke = re.search(r'\bstroke="([^"]*)"', attrs)
+        has_stroke = stroke is not None and stroke.group(1) != "none"
+        has_fill = tag != "line" and (fill is None or fill.group(1) != "none")
+        if tag == "path" and (m.group(0).count("M") + m.group(0).count("m ")) != 1:
+            return m.group(0)
+        if has_fill and has_stroke:
+            return m.group(0)
+        if has_stroke or (tag == "line" and not has_fill):
+            if "stroke-opacity=" in attrs:
+                return m.group(0)
+            return f'<{tag}{before} stroke-opacity="{value}"{after}/>'
+        if has_fill and "fill-opacity=" not in attrs:
+            return f'<{tag}{before} fill-opacity="{value}"{after}/>'
+        return m.group(0)
+
+    return _ELEMENT_OPACITY.sub(fold, s) if " opacity=" in s else s
 
 
 class FinishMixin:
@@ -469,6 +507,8 @@ class FinishMixin:
         what the page's `viewbox_of` reads then. Idempotent; runs first in `finish()`."""
         pending = self._blade_groups
         self._blade_groups = []
+        pending_marks = self._mark_groups
+        self._mark_groups = []
         vx, vy, vw, vh = self.view if self.view else (0.0, 0.0, float(self.W), float(self.H))
         x0, y0, x1, y1 = vx - OFFMAP_MARGIN, vy - OFFMAP_MARGIN, vx + vw + OFFMAP_MARGIN, vy + vh + OFFMAP_MARGIN
         for z, color, blades in pending:
@@ -479,6 +519,10 @@ class FinishMixin:
                     continue
                 kept.append(ln)
             self.out[z] = f'<g stroke="{color}" stroke-width="0.8">{merge_lines(kept)}</g>'
+        # ...AND THE OTHER MARKS (feature 225): the brush dots, pines, wet tint and glints, each with its extent, appended to the
+        # slot their scatter took (after the crowns that slot may already hold) - the pad's ring never reaches the file.
+        for z, marks in pending_marks:
+            self.out[z] = self.out[z] + "".join(mk for mx0, my0, mx1, my1, mk in marks if not (mx1 < x0 or mx0 > x1 or my1 < y0 or my0 > y1))
 
     def finish(self: Settlement, basepath: str, render: bool = True, png_width: int = 2600) -> int:  # type: ignore[misc]
         # BACKSTOP for the deferred canopy: crop_to_content / crop_city normally flush it, but a map
@@ -644,7 +688,7 @@ class FinishMixin:
         if self.view:  # crop the viewBox to the requested window
             ox, oy, vw, vh = self.view
             self.out[0] = self.out[0].replace(f'viewBox="0 0 {self.W} {self.H}"', f'viewBox="{ox} {oy} {vw} {vh}"')
-        body = self.out + self.walls + self.top + self.toplabels + ['</svg>']  # WALLS over lanes; TOP furniture; LABEL text topmost
+        body = [fold_element_opacity(b) for b in self.out + self.walls + self.top + self.toplabels] + ['</svg>']  # WALLS over lanes; TOP furniture; LABEL text topmost
         body_cls: list[ClsTag] = self.out_cls + self.walls_cls + self.top_cls + self.toplabels_cls + [None]
         if len(body_cls) != len(body):  # the side-list drifted from the stream - a stream write that bypassed add()
             raise RuntimeError(f"feature-class side list out of step with the record streams: {len(body_cls)} tags for {len(body)} strings")

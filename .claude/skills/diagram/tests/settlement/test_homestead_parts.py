@@ -156,6 +156,7 @@ def test_commons_keeps_scrub_off_dry_plots_and_the_crop_margin():
     for role in ("grazing", "woodland"):
         before = len(s.out)
         s.commons([(100, 150), (700, 150), (700, 650), (100, 650)], role=role)  # over the dry plot AND the paddy's W edge
+        s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225; this reads the ink before one
         pts = _scatter_base_points(s.out[before:])
         assert pts
         for gx, gy in pts:

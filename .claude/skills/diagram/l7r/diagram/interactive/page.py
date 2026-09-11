@@ -289,6 +289,8 @@ def merge_primitives(s: str) -> str:
     # touching everything, which makes the test too careful rather than wrong. That is why the trees
     # gather at all: a crown's own blobs overlap and keep their order, while tree 40's foliage never
     # reaches tree 12's.
+    if s.count("/>") < 2:  # nothing to merge: a C-speed count before the element scan (feature 225)
+        return s
     elems: list[tuple[int, int, str, dict[str, str]]] = []
     for m in _ELEM.finditer(s):
         elems.append((m.start(), m.end(), m.group(1), _attrs(m.group(2))))

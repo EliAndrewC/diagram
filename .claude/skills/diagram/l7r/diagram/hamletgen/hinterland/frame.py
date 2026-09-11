@@ -25,11 +25,13 @@ def content_box(s: Settlement, plan: SitePlan, pad: float = 0.0) -> tuple[float,
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
-#: How far past the predicted frame the scatter still throws (feature 224, D2): the crop is the frame-setting boxes
-#: plus CROP_MARGIN (48) and may not exceed the content by more than 56 px, and the prediction already holds every
-#: reserved polygon the crop can take in; the band covers a hard feature placed after the hinterland that lands
-#: outside everything known. The pool's and the cohort's largest realized overhangs are in specs/224 research R2.
-SCATTER_PAD = 120.0
+#: How far past the predicted frame the scatter still throws. 120 in feature 224 (D2), for a hard feature placed after the
+#: hinterland that lands outside everything known; 224's own R3 then enumerated every such placer and found none that grows
+#: the crop laterally (the pool's tightest side was the pad exactly, the prediction's non-pad part coinciding with the
+#: view), so laterally the pad's only job is to let a mark centered just outside the view still paint into it - the widest
+#: mark is the wet tint at `MARSH_TINT_R` 28 px. 40 covers it with room (feature 225 FR-002, D2); the north keeps the band
+#: allowance below. The breach record, the pool test, the cohort and the report line say so if a later placer breaks this.
+SCATTER_PAD = 40.0
 #: ...and the TITLE BAND on the north side (feature 224, the 48-map cohort): a sheet with no room for its name grows a
 #: band above the map sized to the placard (`Settlement.title`, 30 * 1.2 + 46 + 24 + 32 = 138 px) AFTER the crop, and
 #: on four of 48 seeds it reached 6 px past the pad - so the prediction's top edge carries the band's full height too.

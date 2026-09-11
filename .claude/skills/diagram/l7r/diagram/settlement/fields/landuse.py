@@ -26,6 +26,46 @@ if TYPE_CHECKING:
 DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "sugarcane": "sugarcane dike", "banana": "banana dike", "fruit": "fruit dike"}
 
 
+def line_cuts(poly: Sequence[Sequence[float]], px: float, py: float, dx: float, dy: float) -> list[tuple[float, float]] | None:
+    """Where the line through (px, py) with direction (dx, dy) lies inside `poly`, as `[(t0, t1)]` in the line's own
+    parameter - the general form of `row_cuts` for the comb's angled dry rows (feature 225 FR-004). `[]` when the
+    line misses the polygon, None when it meets the edges other than twice (a concave plot keeps its clip). Each
+    edge is crossed where the edge's endpoints lie on opposite sides of the line (half-open, so a vertex on the
+    line counts once), the same rule as the horizontal case."""
+    ts: list[float] = []
+    n = len(poly)
+    for i in range(n):
+        (x1, y1), (x2, y2) = (poly[i][0], poly[i][1]), (poly[(i + 1) % n][0], poly[(i + 1) % n][1])
+        s1 = (x1 - px) * dy - (y1 - py) * dx  # the side of the line each endpoint lies on
+        s2 = (x2 - px) * dy - (y2 - py) * dx
+        if (s1 > 0) != (s2 > 0):
+            f = s1 / (s1 - s2)  # the crossing along the edge
+            cx, cy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
+            ts.append((cx - px) * dx + (cy - py) * dy)
+    if not ts:
+        return []
+    if len(ts) != 2:
+        return None
+    return [(min(ts), max(ts))]
+
+
+def row_cuts(poly: Sequence[Sequence[float]], y: float) -> list[tuple[float, float]] | None:
+    """Where the horizontal line at `y` lies inside `poly`: `[(xa, xb)]` for a convex polygon the line crosses,
+    `[]` when it misses it, None when the line meets the edges other than twice (a concave plot - the caller keeps
+    its clip). The crossing rule is `point_in_poly`'s own half-open one, so a vertex on the row counts once."""
+    xs: list[float] = []
+    n = len(poly)
+    for i in range(n):
+        (x1, y1), (x2, y2) = (poly[i][0], poly[i][1]), (poly[(i + 1) % n][0], poly[(i + 1) % n][1])
+        if (y1 > y) != (y2 > y):
+            xs.append(x1 + (x2 - x1) * (y - y1) / (y2 - y1))
+    if not xs:
+        return []
+    if len(xs) != 2:
+        return None
+    return [(min(xs), max(xs))]
+
+
 class LandUseMixin:
     def apply_land_use(  # type: ignore[misc]
         self: Settlement, net: dict[str, Any], overlay: str, rng: random.Random, fraction: float = 0.55, eligible: str = "wet", dike_crop: str = "mulberry", leftover: str = "rice"
@@ -179,6 +219,25 @@ class LandUseMixin:
         )
         return n
 
+    def _rows_cut_to_plot(self: Settlement, poly: Any, ys: Sequence[float], style: str, prefix: str, cls: Any = None) -> None:  # type: ignore[misc]
+        """The plot's horizontal rows, each cut to the plot at write time (feature 225, item 2 of the GM's 2026-09-11 list):
+        a row is a horizontal line and a dry plot a convex quadrilateral, so the row's ends are its two intersections
+        with the plot's edges and the `<clipPath>` the rows used to sit in - a layer per plot in resvg, 30 of them on
+        Inashiro costing a quarter tile 0.74 -> 0.44 s (specs/225 research R1) - is not needed. A plot that is not
+        convex (some row meets its edges more or fewer than twice, D3) keeps the clip and the full-width rows, exactly
+        as before. The difference at a slanted edge: a butt cap where the clip cut along the slant, a sliver under
+        the stroke's width - within the GM's 2026-09-08 ruling; the settlement-review looks."""
+        cuts = [row_cuts(poly, y) for y in ys]
+        if any(c is None for c in cuts):
+            pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
+            xs = [q[0] for q in poly]
+            cid = self._cid(prefix)
+            self.add(f'<clipPath id="{cid}"><polygon points="{pts}"/></clipPath>', cls=cls)
+            rows = "".join(f'<line x1="{min(xs):.1f}" y1="{y:.1f}" x2="{max(xs):.1f}" y2="{y:.1f}" {style}/>' for y in ys)
+            self.add(f'<g clip-path="url(#{cid})">{rows}</g>', cls=cls)
+            return
+        self.add("".join(f'<line x1="{xa:.1f}" y1="{y:.1f}" x2="{xb:.1f}" y2="{y:.1f}" {style}/>' for y, c in zip(ys, cuts, strict=True) for xa, xb in (c or [])), cls=cls)
+
     def _landuse_tea_fringe(self: Settlement, net: dict[str, Any], overlay: str) -> int:  # type: ignore[misc]
         """Tea bush rows along the field's dry HIGH margin - the one overlay that is not plot-based.
 
@@ -186,16 +245,8 @@ class LandUseMixin:
         net['dry_plots'] already is."""
         n = 0
         for dp in net["dry_plots"]:
-            pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in dp["poly"])
-            cid = self._cid("tea")
-            self.add(f'<clipPath id="{cid}"><polygon points="{pts}"/></clipPath>')
-            xs = [p[0] for p in dp["poly"]]
             ys = [p[1] for p in dp["poly"]]
-            rows = "".join(
-                f'<line x1="{min(xs):.1f}" y1="{y:.1f}" x2="{max(xs):.1f}" y2="{y:.1f}" stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"/>'
-                for y in [min(ys) + 6 + i * 8 for i in range(int((max(ys) - min(ys)) / 8))]
-            )
-            self.add(f'<g clip-path="url(#{cid})">{rows}</g>')
+            self._rows_cut_to_plot(dp["poly"], [min(ys) + 6 + i * 8 for i in range(int((max(ys) - min(ys)) / 8))], 'stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"', "tea")
             n += 1
         self.M.setdefault("land_use", []).append({"overlay": overlay, "count": n})
         return n
@@ -217,16 +268,11 @@ class LandUseMixin:
                 pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
                 lfill = p.get("fill", "#A6C398")
                 if leftover == "vegetables":
-                    xs_ = [q[0] for q in p["poly"]]
                     ys_ = [q[1] for q in p["poly"]]
-                    vcid = self._cid("veg")
                     self.add(f'<polygon points="{pts}" fill="#C9B784" stroke="#C9B784" stroke-width="3" stroke-linejoin="round"/>', cls="vegetable ground")  # tilled earth, the bund erased
-                    self.add(f'<clipPath id="{vcid}"><polygon points="{pts}"/></clipPath>', cls="vegetable ground")
-                    vrows = "".join(
-                        f'<line x1="{min(xs_):.1f}" y1="{yy:.1f}" x2="{max(xs_):.1f}" y2="{yy:.1f}" stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"/>'
-                        for yy in [min(ys_) + 4 + i * 6 for i in range(int((max(ys_) - min(ys_)) / 6))]
+                    self._rows_cut_to_plot(
+                        p["poly"], [min(ys_) + 4 + i * 6 for i in range(int((max(ys_) - min(ys_)) / 6))], 'stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"', "veg", cls="vegetable ground"
                     )
-                    self.add(f'<g clip-path="url(#{vcid})">{vrows}</g>', cls="vegetable ground")
                     continue
                 random.seed(int(sum(x for x, _ in p["poly"]) * 7 + sum(y for _, y in p["poly"]) * 13))
                 if lfill == "#93B7AC":

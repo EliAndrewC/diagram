@@ -193,6 +193,7 @@ class GroundCoverMixin:
             # the fields/buildings are pixel-identical). The sparse dots/pines keep their inline styles.
             g: list[str] = []
             blades: list[tuple[str, str, str, str]] = []  # (x1, y1, x2, y2), merged by `merge_lines` at the group
+            marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the brush dots and pines, culled to the frame at finish (feature 225); the woodland crowns stay in `g`
             _wd_crowns = 0
             if role == "woodland":
                 # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
@@ -253,7 +254,8 @@ class GroundCoverMixin:
                     if random.random() < 0.14:  # a low brush dot
                         if _in_soft(gx, gy):
                             continue  # WOODY: never in the bog (see _in_soft)
-                        g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(1.5, 2.4) * bs:.1f}" fill="#94A063" fill-opacity="0.85"/>')
+                        _r = random.uniform(1.5, 2.4) * bs
+                        marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#94A063" fill-opacity="0.85"/>'))
                     else:  # a grass tuft: a few short diverging blades (bucketed - see the note at `blades`)
                         for _ in range(3):
                             a, bl = random.uniform(-0.45, 0.45), random.uniform(2.4, 4.2) * bs
@@ -266,16 +268,22 @@ class GroundCoverMixin:
                         if _sparse(px, py, 0.5, 14 * bs) or _in_soft(px, py):  # lean = the tallest pine's tip reach, so no pine leans over a crop; and never in the bog
                             continue
                         th = random.uniform(9, 14) * bs
-                        g.append(f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')  # thin trunk
+                        marks.append(
+                            (px - 1.0, py - th, px + 1.0, py, f'<line x1="{px:.1f}" y1="{py:.1f}" x2="{px:.1f}" y2="{py - th:.1f}" stroke="#7A6A48" stroke-width="{1.1 * bs:.1f}"/>')
+                        )  # thin trunk
                         for k in range(3):  # sparse open branches - a scraggly wind-cropped pine, NOT a dense crown
                             ly, sp = py - th * (0.45 + 0.25 * k), (3.6 - k) * bs
-                            g.append(f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px - sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
-                            g.append(f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px + sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
+                            marks.append(
+                                (px - sp, ly, px, ly + 2 * bs, f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px - sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
+                            )
+                            marks.append(
+                                (px, ly, px + sp, ly + 2 * bs, f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px + sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>')
+                            )
             # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
             # name yet (pasture) stays unclassed so the census reports it rather than misfiling it
             _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing"}.get(role)
             self._blade_groups.append((self.add("", cls=_ccls), "#A7A860", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
-            self.add(''.join(g), cls=_ccls)
+            self._mark_groups.append((self.add(''.join(g), cls=_ccls), marks))  # the crowns now, the dots and pines at finish, into one slot
             random.setstate(st)
             self._cover_n += 1
             if role == "woodland":

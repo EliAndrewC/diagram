@@ -964,3 +964,9 @@ def test_glossary_for_with_the_substring_prefilter_is_the_regex_scan() -> None:
     low = text.lower()
     want = {t for t, (vs, _d) in terms if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", low) for v in vs)}
     assert got == want and got, "the same terms as the regex scan alone"
+
+
+def test_merge_primitives_returns_a_string_with_under_two_elements_untouched_without_scanning() -> None:
+    """Feature 225 FR-005: the C-speed count runs before the element scan; one element is never merged."""
+    one = '<circle cx="1" cy="2" r="3" fill="#2F6B35"/>'
+    assert merge_primitives(one) is one and merge_primitives("") == "" and merge_primitives("<g></g>") == "<g></g>"

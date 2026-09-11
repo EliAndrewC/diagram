@@ -322,6 +322,7 @@ class WetGroundMixin:
             return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
+        marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the tint and the glints, culled to the frame at finish (feature 225)
         blades: list[tuple[str, str, str, str]] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
         # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
         # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.html "A reservoir's
@@ -346,7 +347,8 @@ class WetGroundMixin:
                 continue
             if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
                 continue
-            g.append(f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>')
+            _r = random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs
+            marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
         for _ in range(int(area / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
             gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
             if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
@@ -354,13 +356,14 @@ class WetGroundMixin:
             if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
                 continue
             if random.random() < 0.12:  # a standing-water glint
-                g.append(f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{random.uniform(2.6, 4.6) * bs:.1f}" ry="{random.uniform(1.2, 2.0) * bs:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>')
+                _rx, _ry = random.uniform(2.6, 4.6) * bs, random.uniform(1.2, 2.0) * bs
+                marks.append((gx - _rx, gy - _ry, gx + _rx, gy + _ry, f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{_rx:.1f}" ry="{_ry:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
             else:  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
                 for _ in range(4):
                     a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
                     blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
         self._blade_groups.append((self.add("", cls="marsh"), "#6E9377", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
-        self.add(''.join(g), cls="marsh")
+        self._mark_groups.append((self.add(''.join(g), cls="marsh"), marks))  # `g` holds nothing today; the marks are flushed into this slot at finish
         random.setstate(st)
         self._cover_n += 1
         self.M["marshes"].append(

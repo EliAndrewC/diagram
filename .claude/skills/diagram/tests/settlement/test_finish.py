@@ -360,3 +360,44 @@ def test_flush_blade_groups_culls_the_blades_the_frame_clips_and_keeps_them_all_
     t._blade_groups.append((t.add("", cls=None), "#A7A860", []))
     t.flush_blade_groups()
     assert t.out[z2].count("M") == 2 and t.out[z2 + 1] == '<g stroke="#A7A860" stroke-width="0.8"></g>'
+
+
+def test_fold_element_opacity_folds_one_paint_elements_and_declines_the_rest():
+    """Feature 225 FR-003: element `opacity` becomes the one paint's own opacity - stroke-opacity on a stroke-only
+    line or a fill="none" shape, fill-opacity on a fill-only shape - and is left where the fold is not exact: two
+    paints, a paint opacity already present, a multi-subpath path, no opacity at all."""
+    from l7r.diagram.settlement.finish import fold_element_opacity as f
+
+    assert (
+        f('<line x1="1" y1="2" x2="3" y2="4" stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"/>') == '<line x1="1" y1="2" x2="3" y2="4" stroke="#5C7A3E" stroke-width="2.4" stroke-opacity="0.75"/>'
+    )
+    assert f('<line x1="1" y1="2" x2="3" y2="4" opacity="0.8"/>') == '<line x1="1" y1="2" x2="3" y2="4" stroke-opacity="0.8"/>', "a line inherits its stroke from the group: still stroke-only"
+    assert f('<circle cx="1" cy="2" r="3" fill="#364D22" opacity="0.55"/>') == '<circle cx="1" cy="2" r="3" fill="#364D22" fill-opacity="0.55"/>'
+    assert f('<rect x="1" y="2" width="3" height="4" fill="none" stroke="#000" opacity="0.6"/>') == '<rect x="1" y="2" width="3" height="4" fill="none" stroke="#000" stroke-opacity="0.6"/>'
+    assert f('<path d="M1,2L3,4" stroke="#000" fill="none" opacity="0.4"/>') == '<path d="M1,2L3,4" stroke="#000" fill="none" stroke-opacity="0.4"/>'
+    for left in (
+        '<rect x="1" y="2" width="3" height="4" fill="#E2D2A2" stroke="#5A4326" opacity="0.9"/>',  # two paints
+        '<circle cx="1" cy="2" r="3" fill="#364D22" fill-opacity="0.3" opacity="0.55"/>',  # the paint's opacity already there
+        '<line x1="1" y1="2" x2="3" y2="4" stroke-opacity="0.5" opacity="0.8"/>',
+        '<path d="M1,2L3,4M5,6L7,8" stroke="#000" fill="none" opacity="0.4"/>',  # two subpaths
+        '<circle cx="1" cy="2" r="3" fill="#364D22" fill-opacity="0.55"/>',  # nothing to fold
+        '<g opacity="0.85"><line x1="1" y1="2" x2="3" y2="4"/></g>',  # a group, not an element
+    ):
+        assert f(left) == left, left
+    assert (
+        f('<polygon points="1,2 3,4 5,6" fill="#abc" opacity="0.5"/><line x1="0" y1="0" x2="1" y2="1" stroke="#000" opacity="0.7"/>')
+        == '<polygon points="1,2 3,4 5,6" fill="#abc" fill-opacity="0.5"/><line x1="0" y1="0" x2="1" y2="1" stroke="#000" stroke-opacity="0.7"/>'
+    )
+
+
+def test_finish_flushes_the_scatter_marks_culled_to_the_frame_after_the_slots_own_ink():
+    """Feature 225 FR-001: a deferred mark group is appended to its slot at finish with drop_offmap's rule - a mark
+    wholly outside the viewBox plus the margin is dropped, one inside or reaching in is kept, the slot's existing
+    string (a woodland's crowns) stays first."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    s.set_view(100, 100, 400, 400)
+    z = s.add('<circle cx="200" cy="200" r="9" fill="#6E8B4A"/>', cls=None)
+    s._mark_groups.append((z, [(150.0, 150.0, 154.0, 154.0, "<in/>"), (900.0, 900.0, 904.0, 904.0, "<out/>"), (70.0, 150.0, 78.0, 154.0, "<reach/>")]))
+    s.flush_blade_groups()
+    assert s.out[z] == '<circle cx="200" cy="200" r="9" fill="#6E8B4A"/><in/><reach/>'
+    assert not s._mark_groups

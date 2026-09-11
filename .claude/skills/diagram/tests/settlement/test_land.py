@@ -672,3 +672,56 @@ def test_a_paddy_basin_sets_BACK_from_funerary_ground_in_BOTH_of_its_recorded_sh
 
     _box_form, n_box = _seeded(cremation_grounds=[{"x": 250.0, "y": 150.0, "w": 300.0, "h": 300.0}])
     assert n_box < n_clear, f"and so does the BOX form: {n_box} of {n_clear}"
+
+
+def test_row_cuts_meet_a_convex_plot_twice_miss_it_cleanly_and_refuse_a_concave_one():
+    """Feature 225 FR-004/D3: a horizontal row's ends on a convex plot are its two edge crossings; a row above or
+    below the plot is nothing; a concave plot (a notch) can meet a row four times, and then the caller keeps its clip."""
+    from l7r.diagram.settlement.fields.landuse import row_cuts
+
+    quad = [(10.0, 0.0), (110.0, 10.0), (100.0, 60.0), (0.0, 50.0)]  # a rotated rectangle
+    assert row_cuts(quad, 30.0) == [(4.0, 106.0)]
+    assert row_cuts(quad, -5.0) == [] and row_cuts(quad, 80.0) == []
+    notch = [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (60.0, 50.0), (60.0, 20.0), (40.0, 20.0), (40.0, 50.0), (0.0, 50.0)]
+    assert row_cuts(notch, 30.0) is None and row_cuts(notch, 10.0) == [(0.0, 100.0)]
+
+
+def test_rows_cut_to_plot_writes_segments_for_a_convex_plot_and_keeps_the_clip_for_a_concave_one():
+    s = Settlement(W=400, H=400, seed=1)
+    z = len(s.out)
+    s._rows_cut_to_plot([(10.0, 0.0), (110.0, 10.0), (100.0, 60.0), (0.0, 50.0)], [30.0, 80.0], 'stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"', "tea")
+    assert s.out[z] == '<line x1="4.0" y1="30.0" x2="106.0" y2="30.0" stroke="#5C7A3E" stroke-width="2.4" opacity="0.75"/>' and "clipPath" not in "".join(s.out[z:])
+    notch = [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (60.0, 50.0), (60.0, 20.0), (40.0, 20.0), (40.0, 50.0), (0.0, 50.0)]
+    z2 = len(s.out)
+    s._rows_cut_to_plot(notch, [10.0, 30.0], 'stroke="#6E8B4A" stroke-width="1.6" opacity="0.8"', "veg", cls="vegetable ground")
+    assert s.out[z2].startswith("<clipPath id=\"veg") and s.out[z2 + 1].startswith('<g clip-path="url(#veg') and s.out[z2 + 1].count("<line") == 2
+
+
+def test_line_cuts_is_row_cuts_for_a_horizontal_line_and_cuts_an_angled_row_across_a_convex_plot():
+    """Feature 225 FR-004: the comb's rows run at the field's angle; the cut is the row's two edge crossings in the
+    row's own parameter, agreeing with the horizontal form and refusing a concave plot."""
+    import math
+
+    from l7r.diagram.settlement.fields.landuse import line_cuts, row_cuts
+
+    quad = [(10.0, 0.0), (110.0, 10.0), (100.0, 60.0), (0.0, 50.0)]
+    (t0, t1) = line_cuts(quad, 0.0, 30.0, 1.0, 0.0)[0]
+    assert (round(t0, 6), round(t1, 6)) == tuple(round(v, 6) for v in row_cuts(quad, 30.0)[0])
+    th = math.radians(30.0)
+    cut = line_cuts(quad, 55.0, 30.0, math.cos(th), math.sin(th))
+    assert cut is not None and len(cut) == 1 and cut[0][0] < 0 < cut[0][1]
+    a = (55.0 + math.cos(th) * cut[0][0], 30.0 + math.sin(th) * cut[0][0])
+    assert abs(a[1] - 0.0 - (a[0] - 10.0) * 0.1) < 1e-6 or abs(a[0] - (10.0 - (a[1]) * 0.2)) < 1e-6, "an end lies on an edge"
+    assert line_cuts(quad, 0.0, 500.0, 1.0, 0.0) == []
+    notch = [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (60.0, 50.0), (60.0, 20.0), (40.0, 20.0), (40.0, 50.0), (0.0, 50.0)]
+    assert line_cuts(notch, 0.0, 30.0, 1.0, 0.0) is None
+
+
+def test_draw_furrows_writes_cut_rows_for_a_convex_plot_and_keeps_the_clip_for_a_concave_one():
+    s = Settlement(W=400, H=400, seed=1)
+    z = len(s.out)
+    s._draw_furrows([(10.0, 0.0), (110.0, 10.0), (100.0, 60.0), (0.0, 50.0)], "#A98E54", 0.3)
+    assert "clipPath" not in s.out[z] and s.out[z].count("<line") > 5
+    z2 = len(s.out)
+    s._draw_furrows([(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (60.0, 50.0), (60.0, 20.0), (40.0, 20.0), (40.0, 50.0), (0.0, 50.0)], "#A98E54", 0.0)
+    assert s.out[z2].startswith('<clipPath id="dry') and 'clip-path="url(#dry' in s.out[z2]
