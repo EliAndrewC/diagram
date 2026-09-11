@@ -179,7 +179,15 @@ class Report:
             f"acres={p.acres:5.1f}/{p.target_acres:5.1f} fall={int(p.down_deg):<4} wind={p.windward:<3} "
             f"sink={p.water_sink:<7} {p.cluster_shape[:9]:<10} {p.lane_skeleton:<6} {roll:<10} "
             f"{'OK' if self.ok else 'FAIL: ' + ', '.join(self.failures[:4])}"
+            + self._breach_note()
         )
+
+    def _breach_note(self) -> str:
+        """The scatter's predicted frame was too small for this roll (feature 224 FR-002): a strip inside the view may
+        hold no scatter. The cohort and the pool test fail on it; a hand roll (`make hamlet`) meets it HERE, on the
+        line it prints, or nowhere (settlement-review 2026-09-11)."""
+        breach = ((self.manifest or {}).get("meta") or {}).get("scatter_frame_breach")
+        return f"  SCATTER FRAME BREACHED by {breach} px (left, top, right, bottom) - see specs/224" if breach else ""
 
 
 @contextlib.contextmanager

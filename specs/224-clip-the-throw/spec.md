@@ -82,3 +82,12 @@ with a substring test, and gives the drop's shape parser a direct path - and mea
 ## Review history
 
 - Round 1 (2026-09-11): FAITHFUL - the three FRs are the three items in order; D1 rests on the GM's general 2026-09-08 ruling with its conditions met; FR-002 is how "the rules held" is known rather than asserted; the aside: item 3's cost may also sit in the per-string scans around `fix_shape`, SC-3 bounds it either way.
+- settlement-review x2 (2026-09-11): pass on all five, twice - the first ran on the clone's shipped SVGs against
+  main's renders with its own raster, the second on the pinned snapshot: every scatter base adjudicated against the
+  recorded keep-out geometry at zero pad, 0 violations before and after; 0 woody marks on bog pixels; density per
+  family within noise, the edge bands within 10%, no bare strip; the same place at fit zoom and 1:1. Acted on: R3
+  records the enumeration of the late-placed hard features that the pad's lateral sufficiency rests on, the
+  `_in_soft`-vs-recorded-marsh observation (pre-existing) and the frame-specific convention at `scatter_frame`; a
+  hand roll now prints a breach on its report line (`Report._breach_note`). Left, recorded: the pad's ring of marks
+  drawn outside the view (58% of Inashiro's brush dots) is the next measurement if speed is wanted again.
+- perf-audit not owed: the bookends read band 0 (-10.9%).

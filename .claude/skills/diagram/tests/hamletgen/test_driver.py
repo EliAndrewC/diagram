@@ -263,3 +263,14 @@ def test_the_stage_profile_prints_only_when_asked_and_rolls_the_same_map(monkeyp
     for row in ("stage_alpha", "stage_beta"):
         assert row in table, f"{row} took 0.1 s and owes a row"
     assert "%" in table and "s  " in table, "the row carries its duration and its share of the roll"
+
+
+def test_the_report_line_names_a_scatter_frame_breach_and_is_silent_without_one() -> None:
+    """Feature 224 FR-002: a hand roll meets a breach on the line it prints (settlement-review 2026-09-11)."""
+    from l7r.diagram.hamletgen.driver import Report
+
+    plan = type("P", (), {"spec": type("S", (), {"name": "Toy", "seed": 9, "households": 12})(), "placed": 12, "acres": 15.0, "target_acres": 15.0, "down_deg": 90.0, "windward": "N", "water_sink": "pond", "cluster_shape": "round", "lane_skeleton": "spine"})()
+    quiet = Report(plan=plan, failures=[], path=None, manifest={"meta": {}})  # type: ignore[arg-type]
+    assert "BREACHED" not in quiet.line() and quiet.line().rstrip().endswith("OK")
+    loud = Report(plan=plan, failures=[], path=None, manifest={"meta": {"scatter_frame_breach": [-261.3, 5.6, -120.2, -307.7]}})  # type: ignore[arg-type]
+    assert "SCATTER FRAME BREACHED by [-261.3, 5.6, -120.2, -307.7] px" in loud.line()
