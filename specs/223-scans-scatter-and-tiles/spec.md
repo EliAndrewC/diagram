@@ -116,3 +116,11 @@ tiles by parallel resvg processes and stitched, which is the same pixels in abou
   Summary and SC-3 carried the same carve-out. FR-004 faithful to the question (a question whose answer is work);
   nothing else beyond the request. Applied.
 - Round 2 (2026-09-11): FAITHFUL - both items closed, nothing added; the SC-1 aside (stricter than the byte-identity ruling) noted.
+- settlement-review (2026-09-11), over a snapshot of the rendered pool beside the detached gate: pass on all five - three
+  PNGs byte-identical to main's, two within 6 px at a channel delta of 1; the edge-band blade ink pixel-identical (no
+  bare strip); the tile seams statistically invisible against an independent single-process re-render; the picture at
+  2 px per map px indistinguishable at its display scale; `bamboo_stands` and `wells` byte-identical. Acted on: a notes
+  entry per map, `ink_census` and `scatter_audit` say the file now holds on-frame blades only, `flush_blade_groups`
+  names the case where a culled bucket under `TILE_MIN` becomes one path, and a fractional zoom renders single (a
+  guard with a test) so the pixel-alignment premise cannot be broken by a one-line `RASTER_R` change.
+- perf-audit not owed: the bookends read band 0 (223-end vs 223-start -8.3% on the reference's stage total).

@@ -19,5 +19,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T06 FR-005 `RASTER_R` lowered to 2; the picture step and page size at 2 against 3 measured; the DPR-2 consequence and the reversal in the note and the report
       research: rendering
       verify: DONE. `RASTER_R = 2.0` with the note (the DPR-2 cost, the one-line reversal); Inashiro 10.7 -> 9.6 s, page 8.92 -> 6.36 MB, picture 4.51 -> 2.59 MB; R2
-- [ ] T07 FR-006/FR-007: R2; `make done` green; the pool; the settlement-review's diff; spec IMPLEMENTED; land under D5
+- [x] T07 FR-006/FR-007: R2; `make done` green; the pool; the settlement-review's diff; spec IMPLEMENTED; land under D5
       research: rendering
+      verify: DONE. R2 (totals and the phase split, the misses named); `make done` green (3,529 passed, 100% over 23,700 statements); the pool regenerated with manifests differing only in `ink_classes`; settlement-review pass x5 with its records applied; the bookends band 0; spec IMPLEMENTED; landing under D5's first route (nothing placed moved)
