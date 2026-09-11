@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "d233a9cf",
+    "label": "222-start",
+    "utc": "20260911T114414Z"
+  },
+  "binding": "8170f790018eebbca9540269f1dfd1e132f0e609ef4d96bd7656cbb1239ad087",
+  "end": {
+    "commit": "e753bb97",
+    "label": "222-end",
+    "utc": "20260911T114447Z"
+  },
+  "environment": "local",
+  "feature": "222-faster-renders-and-title-scan",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "008f34b2-3392-461d-bd88-fbb348290e9f",
+    "utc": "20260911T114644Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 1.2,
+      "39": 1.5,
+      "4": 0.0,
+      "47": 1.0
+    },
+    "total_pct": 0.9
+  },
+  "note": "hinterland is the only stage that grew on all four seeds (+0.10/+0.12/+0.11/+0.16 s = the whole +0.3 s total), and the diff puts merge_lines exactly there: cover.py commons and wet.py marsh, both composed by hinterland(), where the blade buckets used to be written as raw <line> elements for the page's wrap pass (untimed - perf_snapshot's seconds is the sum of stage times) to merge back",
+  "verdict": "consistent"
+}
