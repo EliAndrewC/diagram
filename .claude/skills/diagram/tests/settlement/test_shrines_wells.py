@@ -80,10 +80,10 @@ def test_fringe_trees_keep_off_the_crop():
 def test_commons_clears_the_wellhead_apron():
     s = _crop_settlement()
     s.well(300, 300)
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     before = len(s.out)
     s.commons([(150, 150), (500, 150), (500, 450), (150, 450)], role="pasture")
     lim = s.M["wells"][0]["vr"] + 20 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts = _scatter_base_points(s.out[before:])
     assert pts and all((px - 300) ** 2 + (py - 300) ** 2 > lim * lim for px, py in pts)
 

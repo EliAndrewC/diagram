@@ -32,9 +32,9 @@ def test_commons_clears_the_urban_halo_around_buildings():
     s.building(300, 300, 40, 28, "merchant")  # axis-aligned
     s.building(430, 300, 40, 28, "laborer", rot=30)  # rotated - covered by its half-diagonal square
     s.building(1900, 1400, 40, 28, "shop")  # far outside the cover poly - the bbox prefilter drops it
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     before = len(s.out)
     s.commons([(150, 150), (600, 150), (600, 500), (150, 500)], role="pasture")
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts = _scatter_base_points(s.out[before:])
     assert pts  # the open ground beyond the halos still got its scatter
     halo = 30 * s.bscale - 0.06  # the SVG rounds coords to 0.1, so a base just OUTSIDE the halo can print ON its edge
@@ -48,11 +48,11 @@ def test_marsh_clears_the_urban_halo_and_wellheads():
     s = _crop_settlement()
     s.building(300, 300, 40, 28, "merchant")
     s.well(460, 300)
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     before = len(s.out)
     s.marsh([(150, 150), (600, 150), (600, 450), (150, 450)])
     lim = s.M["wells"][0]["vr"] + 20 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
     halo = 30 * s.bscale - 0.06
+    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
     pts = _scatter_base_points(s.out[before:])
     assert pts
     for px, py in pts:
