@@ -1,6 +1,6 @@
 # Feature 224 - clip the throw, the glossary scan, and the drop's last pass
 
-**Status**: IN PROGRESS 2026-09-11. `spec-fidelity` round 1 FAITHFUL (D1 a faithful application of the 2026-09-08 ruling; FR-002 the necessary form of item 1).
+**Status**: IMPLEMENTED 2026-09-11 (the hinterland stage 1.1-1.8 s -> 0.6-0.7 on every hamlet; the explanations step 0.30-0.38 -> 0.05-0.06; the SVG 3.4-4.5 -> 1.9-2.6 MB; regen 8.4-14.3 -> 7.7-13.1; the bookends band 0, -10.9% - research R2). `spec-fidelity` round 1 FAITHFUL. SC-3 missed (`drop_offmap` 0.10-0.17 against 0.1, the per-string scans remain) and SC-4 on Mizuguchi (0.7 s against 1), both reported. The first 48-map cohort found the title band reaching past the pad on four seeds; the prediction's north edge carries the band now and the second cohort passed 48 of 48. `make done` green (3,541 tests, 100% over 23,761 statements).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the before (from
 specs/223 R2 and this feature's own measurements), R2 the after. **Predecessors**: 223 (the off-frame blades
 culled at finish; the phase table these three items come from), 218 (the scatter's `KeepoutGrid`), 200

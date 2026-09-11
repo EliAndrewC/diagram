@@ -27,15 +27,18 @@ gen alone; a settlement-review's own renders ran on the box for part of it):
 |---|---|---|---|---|---|
 | `stage_hinterland` (was 1.3 / 1.8 / 1.4 / 1.1 / 1.8) | 0.61 | 0.62 | 0.60 | 0.63 | 0.63 |
 | `flush_blade_groups` (was 0.17 / 0.21 / 0.16 / 0.14 / 0.23) | 0.07 | 0.05 | 0.05 | 0.07 | 0.05 |
-| `drop_offmap` (was 0.22 / 0.21 / 0.15 / 0.20 / 0.20) | 0.21 | 0.12 | 0.10 | 0.18 | 0.13 |
+| `drop_offmap` (was 0.22 / 0.21 / 0.15 / 0.20 / 0.20; see the note) | 0.17 | 0.12 | 0.10 | 0.17 | 0.12 |
 | explanations + json blob (was 0.35 / 0.32 / 0.38 / 0.32 / 0.30) | 0.06 | 0.06 | 0.06 | 0.06 | 0.05 |
 | the picture's four tiles | 0.97 | 0.83 | 1.26 | 1.00 | 0.69 |
 | regen total (was 9.7 / 12.1 / 10.3 / 8.4 / 14.3) | 8.7 | 10.3 | 9.1 | 7.7 | 12.7 |
 
 SC-1: the hinterland stage 0.60-0.63 s on every map (under 1.0 / 1.4). SC-2: the explanations step 0.05-0.06 s
-(under 0.1). SC-3: `drop_offmap` under 0.1 s on none - 0.10-0.21; the direct parse took the per-element cost out,
-and what is left is the per-string regex scan itself (`_PATH.sub` and `_SHAPE.sub` over every classed string,
-the reviewer's aside), reported, not chased. SC-4: 1.0 / 1.8 / 1.2 / 0.7 / 1.6 s saved - Mizuguchi 0.3 s under
+(under 0.1). SC-3: `drop_offmap` under 0.1 s on none - 0.10-0.17 (the row above is the re-measurement after the gate's
+coverage floor found the direct parse had never fired: the element regex leaves a leading space on the attribute
+string and the anchored per-tag regexes did not allow it; the first measurement, 0.10-0.21, was the general parse
+alone). The direct parse takes a fifth off; what is left is the per-string regex scan itself (`_PATH.sub` and
+`_SHAPE.sub` over every classed string, the reviewer's aside) and the elements the pad band still carries -
+reported, not chased. SC-4: 1.0 / 1.8 / 1.2 / 0.7 / 1.6 s saved - Mizuguchi 0.3 s under
 the 1 s bar. The SVG: 2.52 / 1.98 / 2.03 / 2.43 / 1.86 MB (3.4-4.5 after 223).
 
 The prediction against the frame. On the five pool maps the view's tightest side is exactly the 120 px pad inside
@@ -51,3 +54,6 @@ against a band the marsh never neared. The second cohort's verdict is below.
 The second cohort, with the band allowance and the per-scatter judgment: **48 of 48 passed the whole gate**, no
 `scatter_frame_breach` on any seed. The pool's five: no breach, the tightest side still the 120 px pad, the north
 side now 260-564 px inside the frame.
+
+The perf bookends: 224-end vs 224-start on the reference hamlet's four seeds -10.9% total (31.1 -> 27.7 s), every
+seed faster, band 0.
