@@ -459,3 +459,14 @@ the driver's own process. py-spy 0.4.2 does not recognize Python 3.14 either, so
 available on this host today. The scratch method that worked: a detached worktree, a `_phase.mark()`
 helper printing deltas to stderr at each boundary, the child's stderr forwarded, and the recorder moved to
 tool id 3 while cProfile is on.
+
+**What feature 222 took off it (2026-09-11, the GM's four picks from the ranked list - specs/222):** regen per
+pool hamlet 17-28 s -> 11-19 s. The title-pocket scan on a `BoxObstacles` index (Kuwabata's hinterland 10.0 ->
+1.6 s, verdicts identical); the blade buckets written as the page's tiled paths straight from their coordinates
+(`merge_lines` - calling `merge_primitives` on the written lines first cost 1.9 s of the stage, the parse-back
+trap; SVG 16.4 -> 9.4 MB, each resvg pass ~1 s faster); the page picture a JPEG (the encode child 2.9-5.2 s ->
+0.5-0.8; reversible in three lines in `raster.py`); the PNG render threaded under the page's own work, its join
+0.00 s. Found on the way and fixed: `_title_obstacles` carried a duplicate block since feature 137 that made the
+cover fallback dead, and `make map PROFILE=1` had printed nothing since 213. What is left is the list above
+minus those four: the bamboo seat scan, the wells key, the router, `drop_offmap` (or not emitting the off-map
+scatter), and `RASTER_R`.
