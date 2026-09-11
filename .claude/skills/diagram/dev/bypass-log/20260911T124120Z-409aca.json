@@ -1,0 +1,6 @@
+{
+  "utc": "20260911T124120Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review already passed this content (five maps, a snapshot beside the previous gate); the only engine change since is a guard for a fractional RASTER_R that no shipped map takes, so nothing it judged moved"
+}
