@@ -1,6 +1,6 @@
 # Feature 222 - faster renders and an indexed title scan
 
-**Status**: IN PROGRESS 2026-09-11. `spec-fidelity` round 1 FAITHFUL (D1 adjudicated legitimate; FR-005 faithful under Principle XIV); round 2 FAITHFUL on FR-008/D6 with two amendments (SC-1, D5), applied; round 3 FAITHFUL.
+**Status**: IMPLEMENTED 2026-09-11 (regen per pool hamlet 17-28 s -> 11-19 s, Kuwabata 27.9 -> 14.1; its hinterland stage 10.0 -> 1.6 s with byte-identical manifests; the SVG 16.4 -> 9.4 MB; the picture's encode child 2.9-5.2 s -> 0.5-0.8 s; the PNG render fully hidden under the page's work; `make map PROFILE=1` prints again - research R2). `spec-fidelity` round 1 FAITHFUL (D1 legitimate; FR-005 under Principle XIV), round 2 FAITHFUL on FR-008/D6 with two amendments (SC-1, D5), round 3 FAITHFUL. SC-2 missed on Kuwabata (4.10 s, its resvg render alone 3.56) and SC-4 on Mizuguchi by 0.1 s - both reported in R2, neither reached for. `make done` green (3,521 tests, 100% coverage, roll census green).
 **Request**: [`request.md`](request.md) - the GM's words after the 2026-09-10 end-to-end profile
 (`.claude/skills/diagram/dev/performance.md`, last section). **Research**: [`research.md`](research.md)
 - the measurements before (R1, from the profile) and after (R2). **Predecessors**: 200 (the page's raster
@@ -84,7 +84,9 @@ four of the levers offered; this feature delivers exactly those four. Anything e
   rendered sheet) where a title band is dropped or added. Nothing else.
 - SC-2 The page's picture step under 3.5 s on every pool hamlet (6.4-7.8 s before), the JPEG encode
   itself under 0.5 s where the lossless WebP was about 4 s.
-- SC-3 A pool hamlet's `.svg` under 5 MB (13-16 MB before); each resvg pass at least 0.8 s faster.
+- SC-3 A pool hamlet's `.svg` under 10 MB (13-16 MB before; R1 measured the merged form of Inashiro's at
+  9.37 MB - the draft said 5 MB against its own number, corrected at T07); each resvg pass at least 0.8 s
+  faster, measured on the TILED form.
 - SC-4 Regeneration wall time per pool hamlet down by at least 6 s on every map, by at least 12 s on
   Kuwabata.
 - SC-5 `make map GEN=... PROFILE=1` prints the stage profile.
