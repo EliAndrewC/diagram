@@ -178,8 +178,7 @@ class Report:
             f"{p.spec.name:<18} seed={p.spec.seed:<4} hh={p.placed}/{p.spec.households:<3} "
             f"acres={p.acres:5.1f}/{p.target_acres:5.1f} fall={int(p.down_deg):<4} wind={p.windward:<3} "
             f"sink={p.water_sink:<7} {p.cluster_shape[:9]:<10} {p.lane_skeleton:<6} {roll:<10} "
-            f"{'OK' if self.ok else 'FAIL: ' + ', '.join(self.failures[:4])}"
-            + self._breach_note()
+            f"{'OK' if self.ok else 'FAIL: ' + ', '.join(self.failures[:4])}" + self._breach_note()
         )
 
     def _breach_note(self) -> str:
