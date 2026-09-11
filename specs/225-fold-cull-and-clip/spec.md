@@ -1,6 +1,6 @@
 # Feature 225 - the marks culled, the pad tightened, the opacity folded, the rows clipped
 
-**Status**: IN PROGRESS 2026-09-11. `spec-fidelity` round 1 FAITHFUL (item 2 lives in the document resvg parses, so the SVG and PNG share it; the pad is the item; the asides on FR-005 and the consequence bars noted).
+**Status**: IMPLEMENTED 2026-09-11 (the picture's tiles 0.7-1.3 s -> 0.5-0.7; Inashiro's clips 30 -> 1 and element opacities 1,237 -> 17; the SVG 1.9-2.6 -> 1.5-2.3 MB; regen 7.9-13.1 -> 7.0-12.4; the bookends band 0 - research R2). `spec-fidelity` round 1 FAITHFUL. Most bars missed and reported in R2: the tiles' 0.6 s on two maps, `drop_offmap` + `wrap` under 0.2 s on none (0.23-0.37, the per-string scans), the SVG's 1.5 MB and the hinterland's 0.55 s on none, SC-4's 0.8 s on one map of five. The 48-map cohort 48 of 48 at the 40 px pad.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the before, with the
 resvg experiments that found where a tile's time goes; R2 the after. **Predecessors**: 224 (the predicted frame,
 the breach record, the cohort), 223 (the blades culled at finish, the tiles), 222 (`merge_lines`), 200/199 (the
