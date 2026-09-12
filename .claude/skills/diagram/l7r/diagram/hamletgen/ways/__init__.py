@@ -88,5 +88,6 @@ from .track import stage_track as stage_track
 from .web import _lay_skeleton as _lay_skeleton
 from .web import _reachable_runs as _reachable_runs
 from .web import stage_web as stage_web
+from .web import tidy_lane_ends as tidy_lane_ends
 
 __all__ = [_n for _n, _v in sorted(globals().items()) if not _n.startswith("_") and not isinstance(_v, _types.ModuleType)]

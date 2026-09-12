@@ -212,6 +212,59 @@ def _drop_collapsed(s: Settlement) -> list[int]:
     return collapsed
 
 
+def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
+    """THE LAST PASS OVER EVERY LANE END, after the stragglers: pull back anything that still reaches nothing.
+
+    LIFTED TO MODULE LEVEL (feature 227, the GM's 2026-08-28 ruling on inner functions and testability). It was the
+    tail of `stage_web`, and its shortening branch had no reader but the shipped rolls - so the moment the end rule
+    learned to see a tread that had ARRIVED at a dooryard, no pool map needed shortening and the branch went
+    uncovered. That is the right outcome for the maps and the wrong way to test a safety net: it still has to work
+    for the seed that needs it. Everything it needs comes from the settlement and the crop's envelope, so it takes
+    those two and nothing else.
+    """
+    _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    _final_steadings = steading_footprints(s.M)  # a tread that stops at a dooryard has arrived there (feature 227 D11)
+    _W, _H = float((s.M.get("meta") or {}).get("W", s.W)), float((s.M.get("meta") or {}).get("H", s.H))
+
+    def _inside(q: Pt) -> bool:
+        return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
+
+    _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
+    for _i, _ln in enumerate(list(s.M.get("lanes", []))):
+        # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
+        # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
+        # survives to here - and injecting one to prove it fails earlier, in the orphan joiner, which
+        # cannot handle a one-point way at all. As of feature 155 that is true of the knot-collapse
+        # drop BELOW this line as well, which used to be the exception this comment pointed at. The
+        # guard stays because a future reorder would hand one straight to `_ln["pts"][0]`, and because
+        # three separate passes have now had to learn this rule one at a time.
+        if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
+            continue
+        _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
+        _others = [
+            sg
+            for _o in s.M.get("lanes", [])
+            if _o is not _ln and len(_o.get("pts") or []) >= 2
+            for sg in zip([(float(x), float(y)) for x, y in _o["pts"]], [(float(x), float(y)) for x, y in _o["pts"]][1:], strict=False)
+        ]
+        # THE LATE PASS HOLDS THE GATE'S OWN BAR (feature 227 D11). It used to keep the loose 90 ft house
+        # bar, and so could pull an end back to a point 63-68 px from anything - past the 60 px
+        # `WAY_END_REACH_FT` the gate asks of every internal end - which is how a map that refused a
+        # straggler path at draw time shipped a dangling end anyway. The houses this lane is the ONLY way to
+        # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
+        _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
+        _kept = (
+            _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
+            if _ln.get("connector")
+            else _trim_to_service(_pts, _others, _final_houses, [list(envelope)], end_reach=WAY_END_REACH_FT, keep=_keep, steadings=_final_steadings)
+        )
+        if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
+            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
+            # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
+            # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
+            s.reink_lane(_i)
+
+
 def stage_web(s: Settlement, plan: SitePlan) -> None:
     """The lanes the settlement wore.
 
@@ -463,47 +516,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # NOT `trim_lane_stubs`: that is a different, harsher rule (71 ft floor) meant for a skeleton arm
     # laid before the houses, and running it here eats the footpaths the straggler pass just drew -
     # measured once at 43/48 -> 9/48.
-    _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
-    _final_steadings = steading_footprints(s.M)  # a tread that stops at a dooryard has arrived there (feature 227 D11)
-    _W, _H = float(s.M["meta"].get("W", s.W)), float(s.M["meta"].get("H", s.H))
-
-    def _inside(q: Pt) -> bool:
-        return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
-
-    _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
-    for _i, _ln in enumerate(list(s.M.get("lanes", []))):
-        # KEPT AND NOT REACHABLE TODAY, deliberately (feature 146). Every pass that can empty a lane
-        # DELETES the record with the ink (feature 145's "the husk goes with the ink"), so no husk
-        # survives to here - and injecting one to prove it fails earlier, in the orphan joiner, which
-        # cannot handle a one-point way at all. As of feature 155 that is true of the knot-collapse
-        # drop BELOW this line as well, which used to be the exception this comment pointed at. The
-        # guard stays because a future reorder would hand one straight to `_ln["pts"][0]`, and because
-        # three separate passes have now had to learn this rule one at a time.
-        if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
-            continue
-        _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
-        _others = [
-            sg
-            for _o in s.M.get("lanes", [])
-            if _o is not _ln and len(_o.get("pts") or []) >= 2
-            for sg in zip([(float(x), float(y)) for x, y in _o["pts"]], [(float(x), float(y)) for x, y in _o["pts"]][1:], strict=False)
-        ]
-        # THE LATE PASS HOLDS THE GATE'S OWN BAR (feature 227 D11). It used to keep the loose 90 ft house
-        # bar, and so could pull an end back to a point 63-68 px from anything - past the 60 px
-        # `WAY_END_REACH_FT` the gate asks of every internal end - which is how a map that refused a
-        # straggler path at draw time shipped a dangling end anyway. The houses this lane is the ONLY way to
-        # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
-        _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
-        _kept = (
-            _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
-            if _ln.get("connector")
-            else _trim_to_service(_pts, _others, _final_houses, [list(plan.envelope)], end_reach=WAY_END_REACH_FT, keep=_keep, steadings=_final_steadings)
-        )
-        if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
-            _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
-            # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the
-            # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
-            s.reink_lane(_i)
+    tidy_lane_ends(s, list(plan.envelope))
     # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
     # trim, because the trim is the last pass that changes a record; then touch once more, because
     # cutting a hairpin's arm can move an end.

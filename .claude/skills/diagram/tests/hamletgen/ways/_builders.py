@@ -20,7 +20,10 @@ def _lanes(*polys):
 class _StubSettlement:
     """The two things the web helpers touch on a Settlement: the manifest and `lane()`."""
 
-    def __init__(self, lanes=(), houses=()):
+    def __init__(self, lanes=(), houses=(), W=1200.0, H=1200.0):
+        # the canvas, for the helpers that ask how big the map is when the manifest has no `meta` (feature 227:
+        # `tidy_lane_ends` tests whether a pulled-back end is still on the sheet)
+        self.W, self.H = W, H
         self.M = {
             "lanes": [{"pts": [list(q) for q in p], "w": 5, "connector": i == 0} for i, p in enumerate(lanes)],
             "houses": [{"x": x, "y": y, "w": 46.0, "h": 28.0, "rot": 0.0} for x, y in houses],

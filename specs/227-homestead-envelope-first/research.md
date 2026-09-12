@@ -161,3 +161,28 @@ its watermark is not a document resvg will read (`expected 'svg' tag, not 'g'`, 
 fixes every other such prefix). The page says that in words where the plate would be, so "no plate" keeps meaning
 "this step drew nothing"; a STAGE plate that will not render still fails the run, because that is a moment the engine
 really passes through.
+
+## R6 - why the GM found maps with no PNG and no HTML (2026-09-12)
+
+Not a lost run: the GATE removes them, by design. `make done` rolls every pool generator with
+`DIAGRAM_SKIP_RENDER=1` ("the gate reads the manifest, never the PNG"), and the generation cache then refuses to FILE
+the `.png` and `.html` standing on disk, because they belong to an earlier roll - filing one "is how four hamlets came
+to ship the previous roll's image while their manifests were current" - so the entry is render-less and `load` DELETES
+any standing render rather than restoring it (`pipeline/gencache.py`). On MAIN that is invisible: render-sync
+regenerates both from main's own tip at every landing. In a CLONE nothing does, so the moment a gate runs, the clone's
+pool carries current manifests and no pictures until a `make maps` sweep - which is the state the GM walked into.
+
+Measured the same afternoon: after the gate run at 17:16 the clone had zero `pool/hamlets/*/*.png`, and the sweep
+restored all five with their pages.
+
+What it means for this feature: the renders are the LAST thing to do before handing the work over (FR-006), after the
+last gate, never before - and they are checked by listing them rather than assumed. It is also the reason a session
+cannot answer "are the maps there?" from memory of having run a sweep: a gate since then has removed them.
+
+**And `make maps` does NOT restore them** (measured the same afternoon): the generation cache answers CACHED for every
+map - the manifest matches - and the entry it hits holds no render, so nothing is written and `load` has already
+deleted what stood there. The route that works in a clone is `make render-sync`, whose freshness test asks for the SVG,
+the PNG and the page on disk and regenerates when any is missing. One caveat, recorded because it looks like a
+failure: that target walks BOTH pool trees and dies on the Mode A magistracies, whose hand-authored `.svg` is
+gitignored and so has never existed in a clone (`resvg: failed to open the provided file`) - by then every Mode B
+hamlet has been written, which is the set the GM reads.
