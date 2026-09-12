@@ -41,10 +41,14 @@ things so basic they do not need one? Every open note is in exactly one of three
 - `fields.html` fn-85 - a bund holds water in and a ditch takes it away, so a bund across the collector is a
   wall standing in the drain. True by what the two things are.
 - `cities/fabric.html` fn-29 - a rampart that keeps raiders out keeps a blaze in.
-- `cities/fabric.html` fn-18 - a fire tower needs a footing, light around its frame and a public way to reach
-  it, so it cannot be inside a private court. Follows from the tower's own attested form.
-- `water.html` fn-2 - a field ditch is about 1/300 of the paddy it feeds. Arithmetic on figures cited
-  elsewhere on the same page.
+- `cities/fabric.html` fn-18 - **this row named the wrong sentence and is corrected**: the footnote hangs on
+  the merchant-compound wall and the quay, not on a fire tower, and its own note records that no source was
+  sought because the doctrine is the GM's and the reasoning is this record's own. It is a decision plus a
+  physical necessity.
+- `water.html` fn-2 - a field ditch is about 1/300 of the paddy it feeds. **This row was wrong and is
+  corrected**: the ratio's only input on that page, the ~0.3 m field ditch, is itself footnoted to an absence
+  note, so there is nothing cited to derive from. It stays an OPEN absence note, and what wants the research
+  is the input figure.
 
 **TWO IN THIS CLASS ARE DEFECTS, not claims.**
 

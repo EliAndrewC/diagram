@@ -5,16 +5,28 @@ Tooling used: `curl` with a browser user agent, Unpaywall / OpenAlex / DOAJ /
 Semantic Scholar, `search.yahoo.co.jp` through curl, the MediaWiki API as a
 per-site search on `ja.` and `zh.wikipedia.org`.
 
+**A note on transcription.** Kotobank renders some readings as ruby and marks
+non-joyo kanji with a small superscript `×`; it also puts spaces around words it
+hyperlinks. The Japanese originals below are transcribed as a READER sees the
+running text - ruby readings and the `×` marker dropped, hyperlink spacing closed
+up - and every one was re-checked character for character against the live page
+with ruby stripped. Parenthesized readings that the dictionary itself prints in the
+text, as Nipponica does (庄屋(しょうや)), are kept. The *Qimin yaoshu* originals are
+given in the Wikisource WIKITEXT form, where Jia Sixie's interlinear notes are
+wrapped in `{{*|` ... `|}}`; on the rendered page at the URL given, the same
+characters appear as inline notes without the braces, and each passage quoted below
+was confirmed present on that rendered page.
+
 ## Verdict table
 
 | # | note | claim in one line | verdict |
 |---|---|---|---|
 | 1 | `cities/defenses.html` fn-14 | the East Asian near-equivalents of a postern: karamete-mon, umon, shuimen | **CITED** for each term; **STILL ABSENT** for the comparison to a sally port |
-| 2 | `cities/fabric.html` fn-17 | a merchant's walled compound marks a granted legal standing, not wealth | IN PROGRESS |
-| 3 | `cities/fabric.html` fn-25 | a caravan brings dozens of draft animals a town inn cannot stable | IN PROGRESS |
+| 2 | `cities/fabric.html` fn-17 | a merchant's walled compound marks a granted legal standing, not wealth | **CITED** for the mechanism (nagayamon by rank/office; myoji-taito in perpetuity to purveyor merchants); the "wealth cannot buy it" half is a **deviation** the record contradicts for late Edo |
+| 3 | `cities/fabric.html` fn-25 | a caravan brings dozens of draft animals a town inn cannot stable | **CITED** for the scale (100 horses + 100 porters standing per Tokaido station, overflow to 10 ri) and for oxen as freight animals; **STILL ABSENT** for the town-inn-versus-city contrast |
 | 4 | `urban-features.html` fn-62 | the Chinese *chao* 炒 fining process | **CITED** (3 of 4 assertions; the Xuxiebian site name STILL ABSENT / FOR THE GM) |
-| 5 | `urban-features.html` fn-85 | the outcast hamlet sat at the village edge or across its stream | IN PROGRESS |
-| 6 | `cities/hinterland.html` fn-11 | the size of an urban kitchen-garden bed | IN PROGRESS |
+| 5 | `urban-features.html` fn-85 | the outcast hamlet sat at the village edge or across its stream | **CITED** (Abele 2018, open access: "a clear separation" inside one village territory, peasants nearer two OTHER villages than their own kawata); the stream half rests on the kawaramono etymology |
+| 6 | `cities/hinterland.html` fn-11 | the size of an urban kitchen-garden bed | **CITED** - *Qimin yaoshu* gives the bed as 2 x 1 paces with its reason, and a 30-mu ten-well market garden backing on the city wall; the entry's 55 ft is a PARCEL, not a bed |
 
 ---
 
@@ -203,7 +215,7 @@ English translation (mine, from the Japanese):
 
 Original Japanese, kept as the checker's anchor:
 
-> ② 城の 裏門 。敵の裏面。⇔ 大手 ・ 追手(おうて) 。〔吾妻鏡‐嘉禎元年（1235）九月一〇日〕
+> ② 城の裏門。敵の裏面。⇔大手・追手(おうて)。〔吾妻鏡‐嘉禎元年（1235）九月一〇日〕
 
 (The dictionary's own earliest attestation is the *Azuma kagami* for 1235.) Sense 3
 gives the other half of the pairing:
@@ -214,7 +226,7 @@ English translation (mine):
 
 Original:
 
-> ③ 城の裏門または敵の背面を攻める 軍勢 。⇔ 大手 ・ 追手(おうて) 。
+> ③ 城の裏門または敵の背面を攻める軍勢。⇔大手・追手(おうて)。
 
 This supports "the rear gate opposite the main approach": the dictionary defines
 *karamete* as the rear gate and marks it as the express antonym of the *ote* /
@@ -222,13 +234,14 @@ This supports "the rear gate opposite the main approach": the dictionary defines
 at <https://kotobank.jp/word/%E6%90%A6%E3%82%81%E6%89%8B%E9%96%80-467679> says the
 same in four characters:
 
-English translation (mine):
+English translation (mine), of the definition under the headword
+からめて‐もん【搦め手門】:
 
-> karamete-mon: the rear gate of a castle. ⇔ ote-mon.
+> The rear gate of a castle. ⇔ ote-mon.
 
 Original:
 
-> からめて‐もん【搦め手門】 城の 裏門 。⇔ 大手門 。
+> 城の裏門。⇔大手門。
 
 ### (b) umon 埋門 - the small walled-up postern
 
@@ -325,4 +338,460 @@ So the wengcheng as a walled court between an outer and an inner gate, with real
 dimensions, IS citable. What is not: that it is where the sortie is made from, and
 "urn-shaped" - this example is 平面略成方形, "roughly square in plan". 瓮 does mean
 an urn or jar, so the NAME is urn-ish; the plan of this one is not.
+
+---
+
+## 2. `cities/fabric.html` fn-17 - the merchant's wall marks legal standing, not money
+
+**Verdict: CITED for the historical mechanism the setting rule is modeled on**
+(with one honest limit that cuts against it, below). The GM's ruling about the
+setting is canon and needs no citation; what CAN now be footnoted is that the rule
+has a real Tokugawa analogue, and that the analogue runs through the GATE
+specifically.
+
+### The gate itself was a permission, and its form was fixed by rank
+
+This is the closest historical thing to "a gated compound is a right the daimyo
+explicitly grants to a particular family". The *nagayamon* 長屋門, the gatehouse
+with flanking wings, is the form in question.
+
+*Sekai daihyakka jiten* 世界大百科事典（旧版）(Heibonsha), in the passage on 長屋門
+within its article on the *nagaya*, via Kotobank,
+<https://kotobank.jp/word/%E9%95%B7%E5%B1%8B%E9%96%80>
+(Kotobank labels this block 世界大百科事典（旧版）内の 長屋門 の言及):
+
+English translation (mine, from the Japanese):
+
+> The nagayamon, made by putting a door in part of this row-house and placing a watchman's (chugen's) room beside it for a lookout, was what expressed the formal rank of a warrior residence. In the villages, this nagayamon was permitted to be built only by the upper stratum of farmers who served as village officials such as nanushi and shoya.
+
+Original Japanese, as the checker's anchor:
+
+> この長屋の一部に扉をつけて出入口にし，その脇に見張り番人(中間)部屋を置いたのが長屋門で，武家屋敷の格式を表すものであった。この長屋門は農村においては名主，庄屋など村役人を務める上層の農民だけに建てることが許されていた。
+
+*Nihon daihyakka zensho (Nipponica)* 日本大百科全書, article 長屋門 by Kudo Keisho
+工藤圭章, same page:
+
+English translation (mine):
+
+> As a gate of a warrior residence the yakui-mon and the heichu-mon were also used, but the nagayamon is distinguished by having guard posts projecting on either side of the gate, and its form and structure were laid down according to the house rank of the daimyo or hatamoto. ... In time, besides warrior residences, there appeared farmhouses whose owners had served as shoya or nanushi, townhouses such as those of the machi-doshiyori, and temples too, that took the nagayamon form. These have no guard post, and the rooms on either side of the doorway were used as men's rooms, attendants' rooms, sheds, stables and so on.
+
+Original:
+
+> 武家屋敷の門としては薬医(やくい)門・屏中(へいちゅう)門なども用いられたが、長屋門は門の両わきに突出する番所(ばんしょ)を設けるのが特徴で、大名や旗本の家格によってその形や構造が定められていた。 ... やがて武家屋敷のほか、庄屋(しょうや)・名主を勤めた農家や、町年寄などの町家や寺院にも、長屋門形式をとるものが現れる。これらには番所はなく、扉口両わきの部屋は男部屋、伴部屋(ともべや)、納屋(なや)、厩(うまや)などに利用された。
+
+*Britannica kokusai daihyakka jiten* ブリタニカ国際大百科事典 小項目事典, same page:
+
+English translation (mine):
+
+> Its form was laid down according to the koku yield. Also, local notables and old houses and the like were permitted to have a nagayamon.
+
+Original:
+
+> 石高(こくだか)によってその形式が定められていた。また地方の名士や旧家などにも長屋門をもつことが認められた。
+
+**This supports the entry's rule closely.** The gate is not a thing a householder
+simply builds: its form follows the holder's rank, and outside the warrior class it
+belongs to an OFFICE - *nanushi* and *shoya* in the villages, *machi-doshiyori* (town
+elder) among townsmen - and is described in the sources with the verbs of permission
+(許されていた, 認められた). A rich commoner who was not one of those did not have one.
+Note also the last sentence of the Nipponica quote for the map: on the commoner
+version there is no guard post, and the flanking rooms are men's rooms, sheds and
+STABLES - which is what a merchant compound's gate range would actually hold.
+
+### The companion privilege: the surname carried down the generations
+
+The entry's parallel ("permission to carry a surname down the generations without
+being samurai") is *myoji-taito* 苗字帯刀, and it is attested in exactly that shape.
+
+*Nihon daihyakka zensho (Nipponica)*, article 苗字帯刀 by Kitahara Akio 北原章男, via
+Kotobank, <https://kotobank.jp/word/%E8%8B%97%E5%AD%97%E5%B8%AF%E5%88%80>:
+
+English translation (mine):
+
+> In the Edo period, one of the privileges permitted to warriors, along with kirisute-gomen and the like. But it was at times permitted to the common people of farmer, artisan and merchant as well. Most of these were goshi, and shoya (nanushi) of special pedigree, town elders, purveyor merchants and so on, and besides these there were filial sons and persons of special merit. However, it was rare to be permitted both the surname and the wearing of swords; there were those with the surname only, those with the sword only, and among them some for a single generation only and some in perpetuity, and so on in various forms.
+
+Original:
+
+> 江戸時代、切捨御免(きりすてごめん)などとともに武士に許された特権の一つ。しかし、ときとして農工商の庶民にも許された。その多くは郷士をはじめ特別の由緒をもつ庄屋(しょうや)（名主(なぬし)）、町年寄、御用商人などであり、ほかに孝行者や特別に功労のあったものなどがあった。だが、苗字と帯刀をともに許されるのはまれであり、苗字だけのもの、帯刀だけのもの、それも一代限りのもの、永代にわたるものなどさまざまであった。
+
+**"Purveyor merchants" (御用商人), "in perpetuity" (永代), and "the surname only" are
+the entry's sentence almost word for word.** The same article adds the point the
+entry's "one to three of them have one" depends on - that a domain could grant it
+only inside its own territory:
+
+English translation (mine):
+
+> The shogunate permitted it without regard to whether the land was shogunal or private, and in that case the privilege was valid throughout the country. In the case of a daimyo or hatamoto, however, the privilege could be permitted only to those within the domain, and its validity too was limited to the domain.
+
+Original:
+
+> 幕府は御領・私領のいかんを問わずにそれを許したが、その場合、特権は全国に通用した。しかし、大名・旗本の場合、特権は領内のものにしか許すことができず、その有効範囲も領内に限られた。
+
+And *Kaitei shinpan Sekai daihyakka jiten* 改訂新版 世界大百科事典, article 苗字帯刀, by
+Mizubayashi Takeshi 水林彪, same page, on the political point of granting it - which IS the entry's
+point about privilege as an instrument of rule:
+
+English translation (mine):
+
+> Entering the early modern period, by a series of state policies such as the separation of warrior from peasant and the sword hunt, it was institutionally settled that myoji-taito was in principle a privilege proper to the warrior status. There were, however, exceptions, and the shogunate and the domains in special cases permitted myoji-taito to persons not of warrior status, giving them an authority equivalent to the warrior status. ... Such a policy of specially licensing myoji-taito constituted one powerful means by which early modern power penetrated the localities.
+
+Original:
+
+> 近世に入って兵農分離，刀狩等の一連の国家の政策によって，苗字帯刀が原則として武士身分に固有の特権であることが制度的に確定される。しかし，例外があり，幕府，藩は特別の場合に士身分以外の者に苗字帯刀を許し，士身分に準ずる権威を与えていた。 ... このような苗字帯刀の特許の政策は，近世権力が在地に浸透してゆくための一つの有力な手段をなしていた。
+
+### The honest limit - the record says money often DID buy it
+
+The entry's load-bearing sentence is "a gated compound is not something wealth can
+buy". For the surname-and-sword privilege the record contradicts that for the later
+Edo period, and the entry should know it is departing:
+
+*Hyakka jiten Mypaedia* 百科事典マイペディア (Heibonsha), article 苗字帯刀, same page:
+
+English translation (mine):
+
+> From the middle of the early modern period onward, in line with the various domains' financial distress, they issued the qualification indiscriminately to peasants and townsmen as well, in exchange for monetary contributions and the like.
+
+Original:
+
+> 近世中期以降は百姓・町人に対しても諸藩の財政窮乏に従い献金などと引換えにその資格を乱発。
+
+and *Yamakawa Nihonshi shojiten* 山川 日本史小辞典 改訂新版, article 苗字帯刀, same page:
+
+English translation (mine):
+
+> The shogunate and the domains gave this privilege as a favor even to the ruled statuses other than the warrior status - to those who had rendered special social service, those who made large monetary contributions, and those who performed auxiliary duties connected with rule, such as ogashoya and machi-doshiyori.
+
+Original:
+
+> しかし幕府や諸藩は，武士身分以外の被支配身分にも，特別の社会的功績があった者，多額の献金をした者，大庄屋・町年寄などの統治に関わる補助的業務を行う者には，この特権を恩典として与えた。
+
+So: it was always the lord's GRANT and never simply a purchase - which is the
+entry's structural point and it stands - but by late Edo a large enough contribution
+was one of the three recognized grounds for the grant, so "not something wealth can
+buy" is a **deliberate deviation** from the record's later phase rather than a
+finding. Nothing was found stating that a WALL or GATE could be bought this way;
+the gate sources above tie it only to rank and office. **The cleanest form for the
+entry**: the gate follows rank and office (cited, *nagayamon*), the surname is
+granted and can be perpetual (cited, *myoji-taito*), and the setting's refusal to
+let money alone buy the grant is the GM's ruling, marked as a deviation.
+
+### What was NOT found
+
+- No source setting a numerical ratio of walled to unwalled merchant compounds in a
+  settlement of any size, so "one to three of them have one" out of "a dozen or so"
+  remains uncited and should stay a setting figure.
+- No sumptuary edict text naming a wall or gate among the things forbidden to
+  townsmen was reached in this pass. Searched Kotobank for 長屋門 (hit, used above)
+  and 苗字帯刀 (hit, used above); a Yahoo Japan search for
+  `苗字帯刀 御免 町人 豪商 特権 藩 許可` was returned as a 3.7 KB throttle page
+  (Yahoo rate-limited this session after about eight queries) and was not retried.
+  **Worth one more pass** at the shogunal edict collections (*Ofuregaki kanpo
+  shusei* and the domain codes) for a clause on 門構え, which is where a direct
+  prohibition would be if it exists.
+
+---
+
+## 3. `cities/fabric.html` fn-25 - what a caravan's animals need at a city
+
+**Verdict: CITED for the scale of animals a settlement on a trade road had to
+hold, and for oxen as goods-carrying animals; STILL ABSENT for the town-inn versus
+city contrast.**
+
+### The standing requirement was a hundred horses and a hundred porters, and it rose with traffic
+
+Ministry of Land, Infrastructure, Transport and Tourism, Kanto Regional Development
+Bureau, Yokohama National Highway Office, *Tokaido e no izanai*, Tokaido Q&A Q17,
+"人馬の「継ぎ送り」とはどういうことですか？",
+<https://www.ktr.mlit.go.jp/yokohama/tokaido/02_tokaido/04_qa/index2/a0217.htm>:
+
+English translation (mine, from the Japanese):
+
+> For this reason each post station was placed under an obligation to keep permanently on hand porters and horses for carrying the baggage. At first each station on the Tokaido was made to keep 36 horses, but from Kan'ei 15 (1638) onward the stationing and relaying of 100 post horses and 100 post porters was made obligatory.
+
+Original:
+
+> このため各宿では、荷物を運ぶための人足と馬を常備することが義務づけられていました。はじめ東海道の各宿には３６疋の馬を備えさせましたが、寛永１５年（１６３８）以降、１００疋の伝馬と１００人の伝馬人足の設置および継立が義務づけられました。
+
+Same source, Q5, "宿駅伝馬制度って、なんのこと？",
+<https://www.ktr.mlit.go.jp/yokohama/tokaido/02_tokaido/04_qa/index1/a0105.htm>,
+for the fact that the number tracked traffic:
+
+English translation (mine):
+
+> The post horses were at first fixed at 36, but subsequently, as the volume of traffic increased, were raised to 100.
+
+Original:
+
+> 伝馬は当初36疋と定められていましたが、その後交通量が増えるとともに100疋に増えています。
+
+Yokkaichi City Museum, exhibition guide 3411, "東海道伝馬制度",
+<http://guidance.city.yokkaichi.mie.jp/hakubutsukan/jp/3411.html>, which adds the
+spacing and the word "every day":
+
+English translation (mine):
+
+> On the Tokaido, post stations were set up at intervals of roughly 2 to 3 ri (about 10 km), and the shogunate had each post station make ready 100 horses and 100 porters every day. ... This is because it was laid down that the horses and porters were to be made ready by the post station and the surrounding villages (sukego).
+
+Original:
+
+> 東海道にはおよそ２～３里（10km前後）ごとに宿場が設置され、幕府は各宿場に馬100匹と人足100人を毎日用意させました。 ... これは馬や人足は、宿場と周辺の村々（助郷）で用意すると決められているからです。
+
+**This supports the entry's "many dozens of draft animals ... with their guards,
+porters and drivers" as the real order of magnitude**, and supports the entry's
+core idea that the requirement is a matter of SCALE fixed by the traffic the place
+carries - 36 rising to 100 as the road got busier.
+
+### And a hundred was routinely not enough - the overflow ran out to ten ri
+
+*Nihon daihyakka zensho (Nipponica)*, article 助郷 by Maruyama Yasunari 丸山雍成, via
+Kotobank, <https://kotobank.jp/word/%E5%8A%A9%E9%83%B7>:
+
+English translation (mine):
+
+> In the Edo period, the villages in the neighborhood of a highway post station that supplied men and horses supplementarily when the station's permanently kept men and horses alone were insufficient for the relay; or the levy or system itself.
+
+Original:
+
+> 江戸時代、街道宿駅の常備人馬だけでは継ぎ送りに支障をきたす場合、補助的に人馬を提供する宿駅近傍の郷村、またはその課役・制度をいう。
+
+Same article, on the 1694 settlement and on the burden running away:
+
+English translation (mine):
+
+> In 1694 (Genroku 7) the shogunate newly laid down the sukego system ... designating the villages in the neighborhood of each post station as attached sukego, and setting the men-and-horses duty at 2 men and 2 horses per 100 koku of assessed yield. ... The Genroku-period standard for the men-and-horses burden acted as no brake at all, and by the late Edo period it had reached several hundred times that.
+
+Original:
+
+> 幕府は1694年（元禄7）新たに助郷制を画定したが、それは従来の助郷が封境・国郡を限界としたのを改めて、各宿駅近傍の村々を付属助郷に指定し、高100石につき2人・2疋(ひき)の人馬役負担とした。
+> 元禄(げんろく)度の人馬負担基準はなんら歯止めとならず、江戸後期にはその数百倍に達した。
+
+*Britannica kokusai daihyakka jiten* 小項目事典, article 助郷, same page, for the
+catchment:
+
+English translation (mine):
+
+> At first the extent of the sukego villages was 2 to 3 ri around the station, but it was gradually widened to more than 10 ri, and when the supply of men and horses was impossible it was commuted into money, becoming a kind of tax.
+
+Original:
+
+> 最初，助郷村の範囲は宿の周囲2～3里であったが，次第に10里以上にも拡大され，人馬提供が不可能の場合，金銭で代納し，一種の租税となった。
+
+**This is the strongest thing found for the entry's underlying idea.** A post
+station keeping a hundred horses standing was still regularly swamped, and the
+answer was to draw animals from a ring of villages that started at 2-3 ri and grew
+past 10 ri. The bottleneck the entry describes - a settlement that cannot absorb
+what arrives at it - is documented, and the historical solution was to widen the
+catchment rather than to enlarge the yard.
+
+### Oxen did carry goods
+
+Michael Thomas Abele, *Peasants, skinners, and dead cattle: the transformation of
+rural society in western Japan, 1600-1890*, PhD dissertation, University of Illinois
+at Urbana-Champaign, 2018, p. 177,
+<https://www.ideals.illinois.edu/items/107042>
+(PDF: <https://www.ideals.illinois.edu/items/107042/bitstreams/349107/data.pdf>):
+
+> During the off season, the kawata rented their animals out to cattle drivers, who used the oxen to transport goods for local peasants (niushi). The cattle owners themselves did not handle these animals, but assigned this work to subordinates, usually a younger male in their household. Kawata cattle drivers collected fees from their customers, ensuring the cattle of the village remained profitable even when not working in agriculture.
+
+This carries the entry's "oxen and packhorses" against a reader who thinks Japanese
+overland freight was horses only. **Its limit**: this is the Kinai, the herd is
+small (Abele counts "roughly fourteen kawata households in Saraike held draft
+animals" and "never more than fifteen"), and it is local hire, not a caravan.
+
+### What was NOT found
+
+**Nothing supports the contrast itself** - "A town inn can absorb that into a small
+stable yard and a city cannot." No source was found that compares the stabling a
+town inn holds with what a city needs, or that puts a number on either. The
+Tokaido evidence above is all about POST STATIONS, which are towns, and it says
+they too failed to absorb the load; it does not say a city succeeded where a town
+failed. As written, the sentence should stay labeled a guess, or be rewritten to
+the thing the record does say: that even a hundred horses standing at a station was
+not enough, and the overflow was pushed out into a ring of villages up to ten ri
+deep. Searched: `宿場 人馬 常備 百人百疋 東海道 伝馬 問屋場` (Yahoo Japan, hit, gave the
+three sources above) and `助郷 制度 宿場 人馬 不足 近隣 村 補う` (Yahoo Japan, returned
+a 3.7 KB throttle page; answered instead from Kotobank's 助郷 article, used above).
+
+---
+
+## 5. `urban-features.html` fn-85 - the outcast hamlet at the village edge
+
+**Verdict: CITED.** This is the one that had "no work named" and it turns out to be
+well documented, with an open-access monograph-length treatment.
+
+### A separate residential cluster inside the same village territory - not a fixed distance
+
+Michael Thomas Abele, *Peasants, skinners, and dead cattle: the transformation of
+rural society in western Japan, 1600-1890*, PhD dissertation, University of Illinois
+at Urbana-Champaign, 2018,
+<https://www.ideals.illinois.edu/items/107042>. Abele's case study is Saraike
+village, Kawachi province (now Matsubara, Osaka), which held both a peasant and a
+*kawata* community.
+
+> Though the kawata lived within the territory of Saraike, there was a clear separation between their residential plots and those of the peasants, while the Saraike peasants were geographically much closer to Higashi-Dai and Mukai villages.
+
+> Though they were in the same village territory, these were separate communities (Figure 4).
+
+> Figure 4: Saraike Village in 1690. The Circle on the left is the peasant village, and the kawata are on the right. In reality, the kawata community was much larger, and the peasant community much smaller, than is depicted here.
+
+**This supports the entry's sentence almost exactly, and improves it.** The outcast
+settlement is a distinct residential cluster with "a clear separation" from the
+peasant plots, standing in the same village territory - so it is at the village's
+edge rather than a separate place. And the second clause is the direct support for
+"rather than at any fixed distance out": the peasants of Saraike were physically
+NEARER to two OTHER villages than to the *kawata* of their own. The gap is a local
+arrangement, not a standard.
+
+Abele also gives the case where the cluster sits on an administrative boundary:
+
+> Ōji village was located in Shinoda-gō, in Izumi District, Izumi Province. In the late sixteenth century, the kawata community that would become Minami-Ōji Village lived within the boundaries of Ōji village, on the border between Shinoda-gō and Kami-Izumi-gō.
+
+> By the late seventeenth century "Minami-Ōji" (South-Ōji) was appearing on shogunal registers as a separate village. The kawata even had their own headman (shōya) and village elder (toshiyori). However, the residential plots of the kawata still lay within the boundaries of Ōji Village, placing them under the jurisdiction of the Ōji headman.
+
+and the general rule behind it:
+
+> ... explain why most kawata communities were never recognized as independent villages.
+
+### The stream half
+
+Abele, on the status name itself:
+
+> That status was not always "kawata," but could also be "kawara" or kawaramono; that is, "people of the riverbank."
+
+and *Yamakawa Nihonshi shojiten* 山川 日本史小辞典 改訂新版, article 穢多, via Kotobank,
+<https://kotobank.jp/word/%E7%A9%A2%E5%A4%9A>:
+
+English translation (mine, from the Japanese):
+
+> In the later medieval period, through the differentiation of the hinin-yado, groups of kawaramono specializing in the disposal of dead cattle and horses and in the carrying out of punishments were formed. These kawaramono connect to the early modern eta status. ... Generally they constituted a branch village (edamura) of a main village (honmura) made up of peasants, and carried out the disposal of dead cattle and horses within the territories called kusaba, dannaba and shokuba that spread around it.
+
+Original:
+
+> 中世後期には非人宿の分化により，斃牛馬処理や行刑を専業とする河原者(かわらもの)の集団が形成されていく。この河原者が近世の穢多身分につながった。 ... 一般的には百姓からなる本村の枝村を構成し，その周辺に展開する草場・旦那場・職場などとよばれる縄張り(権域)で斃牛馬処理を行った。
+
+**The "across its stream" half is supported obliquely, not directly.** The medieval
+antecedent is literally "people of the riverbank", which is where marginal untaxed
+ground was, and 枝村 / *edamura* - "branch village of a main village" - is exactly
+the relation the entry's map draws. I found no source stating that the Tokugawa
+outcast hamlet characteristically stood across a stream from the main village. **If
+the entry wants to keep "or across its stream" it should rest it on the kawaramono
+etymology and say so**, which the two quotes above will carry; the "branch village
+of the main village" formulation is the better-evidenced half.
+
+### The residence restriction itself
+
+*Seisenban Nihon kokugo daijiten* 精選版 日本国語大辞典, article 穢多, sense 2, same
+Kotobank page:
+
+English translation (mine):
+
+> Their places of residence too were collectively isolated and set apart in inferior areas, and down to their children and grandchildren they could not leave that status.
+
+Original:
+
+> 居住地も劣悪な地域に集団的に隔離疎外され、子々孫々までその身分から離れることができなかった。
+
+and *Digital daijisen* デジタル大辞泉, same page:
+
+English translation (mine):
+
+> In the Edo period, together with the people called hinin, they were placed below the shi-no-ko-sho and suffered unjust discrimination, their places of residence among other things being restricted.
+
+Original:
+
+> 江戸時代には非人とよばれた人々とともに士農工商の下におかれ、居住地も制限されるなど、不当な差別を受けた。
+
+This carries the entry's framing of the standoff as "a zoning statement about who
+lives beside whom": the restriction the record attests is on WHERE, not on how far.
+
+**Nothing was found giving a distance in any unit**, so the entry's 60 ft remains
+correctly labeled a calibration against the drawn maps rather than a finding. The
+record positively supports that labeling - Abele's Saraike, where the peasant
+village was closer to two neighbors than to its own *kawata*, is a case in which no
+fixed collar existed at all.
+
+---
+
+## 6. `cities/hinterland.html` fn-11 - the size of an urban kitchen-garden bed
+
+**Verdict: CITED, and it changes the number.** This note "never got a search of its
+own"; the record is not silent. A sixth-century Chinese agricultural treatise gives
+the bed, gives the reason for the size, and gives the size of the market garden
+outside a city wall as well.
+
+### The source
+
+Jia Sixie 賈思勰, *Qimin yaoshu* 齊民要術 (Essential techniques for the common people),
+Northern Wei, c. 540, juan 3, chapter 17 "Planting kui [mallow]" 種葵第十七, full text
+at Chinese Wikisource,
+<https://zh.wikisource.org/wiki/%E9%BD%8A%E6%B0%91%E8%A6%81%E8%A1%93/%E5%8D%B7%E7%AC%AC%E4%B8%89>.
+(The main text is given first; Jia Sixie's own interlinear notes are in {{*| |}} in
+the wikitext and are marked "author's note" below.)
+
+### The bed, and why it is that size
+
+English translation (mine, from the Chinese):
+
+> In spring one must plant in beds and water them. [author's note: In spring there is much wind and drought, so without beds it cannot be done. Moreover with beds the ground is economized and the vegetables are many; one bed supplies one mouth.] The bed is two paces long and one pace wide. [author's note: If it is larger the water is hard to spread evenly, and also one does not want a person's foot to go into it.]
+
+Original Chinese, as the checker's anchor:
+
+> 春必畦種、水澆。{{*|春多風、旱，非畦不得。且畦者地省而菜多，一畦供一口。}}畦長兩步，廣一步。{{*|大則水難均，又不用人足入。}}
+
+and the generalization a few lines later:
+
+English translation (mine):
+
+> For all things planted in beds, the making of the bed is in every case as in the method for planting kui; I shall not set it out again at tiresome length.
+
+Original:
+
+> 凡畦種之物，治畦皆如種葵法，不復條列煩文。
+
+**This is the exact answer to "the size of an urban kitchen-garden bed", with its
+reason, and the reason is the one the entry already guessed at.** The entry says "A
+kitchen garden is hand-worked ground, so its parcels are smaller than a grain
+field's"; Jia Sixie says the bed is kept small because beyond a certain size water
+cannot be spread evenly over it by hand and because nobody should have to step into
+it. And the note "one bed supplies one mouth" gives the unit a demographic meaning
+a map can use: beds per household, not an arbitrary tiling.
+
+**The number, and the caution on it.** The text gives 2 *bu* 步 by 1 *bu*. Converting
+a Northern Wei *bu* needs a metrology source I did not read, and the two common
+reckonings (a *bu* of 5 or of 6 *chi*, with a *chi* of roughly 28-30 cm) put the bed
+somewhere in the region of 1.4-1.8 m wide by 2.8-3.6 m long, i.e. very roughly 5-6 ft
+by 9-12 ft. **I am flagging that conversion as mine and unverified** - the figure
+that is actually sourced is "two paces by one pace". **Before this reaches a map it
+needs a metrology citation**, which is a short pass at a history of Chinese weights
+and measures.
+
+**What this does to the entry's 55 ft.** A bed of about 5 ft by 10 ft is not 55 ft
+across; 55 ft is roughly five to eleven beds wide. So the entry's 55 ft figure is
+not a BED, it is a garden PARCEL made of many beds, and the word "beds" in "a
+vegetable tract's beds are the SMALLEST dry parcels on the map" is doing the wrong
+work. The entry can now say something better than a guess: that the hand-worked
+bed itself is a documented ~2 x 1 paces sized so the waterer's foot stays out of it,
+and that the drawn parcel is a block of them.
+
+### And the treatise sizes the market garden outside the city wall
+
+The same chapter, on the winter crop, describes a commercial vegetable garden sited
+at a city - which is the entry's actual subject, "Does a city farm inside its walls?"
+
+English translation (mine):
+
+> Also, the method for winter-planting kui: near a prefectural or commandery town or city where there is a market, thirty mu of good land backing onto the city wall; after taking the vegetables in the ninth month, plow it at once, and by the middle of the tenth month get three passes done. ... In the middle of it, sink ten wells along its length. [author's note: The wells must correspond to one another; set at a skew angle they waste the ground. If the shape of the ground is narrow and long, the wells must be made in a single row; if the shape of the ground is a true square, making two or three rows is not objectionable either.] For each well make a well-sweep and a windlass. [author's note: For a deep well use a windlass, for a shallow well a well-sweep.] A willow bucket, made to take one shi.
+
+Original:
+
+> 又冬種葵法：近州郡都邑有市之處，負郭良田三十畝，九月收菜後卽耕，至十月半，令得三遍。每耕卽勞，以鐵齒杷耬去陳根，使地極熟，令如麻地。於中逐長穿井十口。{{*|井必相當，斜角則妨地。地形狹長者，井必作一行；地形正方者，作兩三行亦不嫌也。}}井別作桔橰、轆轤。{{*|井深用轆轤，井淺用桔橰。}}柳鑵，令受一石。
+
+**This is worth more to the map than the bed figure.** It gives, for a garden
+serving a city with a market: the siting (*fu guo* 負郭, backing onto the city wall),
+the extent (30 *mu* of good land), the well density (ten wells in that tract), and
+the rule for laying the wells out by the shape of the plot - one row if the ground
+is long and narrow, two or three if it is square, and never skew, because a skew
+line wastes ground. A map drawing a city vegetable tract has a sourced layout rule
+here, including how many wells to put in it and how to line them up. The 30 *mu*
+figure carries the same conversion caution as the bed.
 

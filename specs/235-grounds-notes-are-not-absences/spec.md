@@ -1,6 +1,6 @@
 # Feature 235 - a claim with nothing to find is not an absence
 
-**Status**: DRAFT (spec-fidelity rounds 1-2 applied; awaiting round 3)
+**Status**: DRAFT (spec-fidelity rounds 1-4 applied; awaiting round 5)
 **Request**: [`request.md`](request.md), the GM's words verbatim, 2026-09-12.
 
 ## The defect
@@ -29,10 +29,10 @@ The cost is exactly what the GM names: **the count stops being a work list.**
 ## Requirements
 
 **FR-001 The GROUNDS note.** A footnote may say `no source is owed: <reason>`. It means there is nothing to
-find. The absence note keeps its present wording and its present meaning, with the one addition FR-005 makes
+find. The absence note keeps its present wording and its present meaning, with the one addition FR-004 makes
 to it.
 
-**FR-002 The reason comes from a closed list.** Free text would make the new kind a place to put anything
+**FR-002 The reason comes from a closed list, and a note may name more than one of them.** Free text would make the new kind a place to put anything
 inconvenient, hiding real absences instead of separating them. The list, and the note it was derived from:
 
 | reason | what it covers | derived from |
@@ -44,7 +44,11 @@ inconvenient, hiding real absences instead of separating them. The list, and the
 | `the record's own silence` | a sentence whose CONTENT is that no source says this | `cities/fabric.html` fn-22, `religion-and-death.html` fn-50/54/57 |
 | `measured on our own maps` | a number read off this project's drawings | `cities/sizing.html` fn-2, `religion-and-death.html` fn-75/78 |
 
-Adding a seventh reason is a change to this spec, not a judgment at writing time. **`setting canon` is
+A note may name SEVERAL reasons where a sentence genuinely rests on several - `cities/fabric.html` fn-18
+rests on a GM ruling and on a physical necessity together - and every reason it names must come from the
+list. Splitting such a note in two would clutter the reader's page to record a distinction the reader does
+not have. The list's protective property is unaffected: what it forbids is an invented reason, not a second
+true one. Adding a seventh reason is a change to this spec, not a judgment at writing time. **`setting canon` is
 deliberately NOT on this list**: the GM's campaign notes are already a CITATION form, keyed and linked to
 their registry entry (feature 195's carve-out, GM 2026-09-07), and no canon citation is converted here.
 
@@ -52,27 +56,7 @@ their registry entry (feature 195's carve-out, GM 2026-09-07), and no canon cita
 farmed, planted, governed or lived in owes a citation or an absence note, whatever else is true of it. A
 sentence that mixes the two is SPLIT.
 
-**FR-004 A claim derived from sources cited ELSEWHERE gets a cross-reference citation, not a grounds note,
-and the chain must end in a quoted passage.** This is the case FR-003 would otherwise crush: `water.html`
-fn-2 states a ratio that is arithmetic on two figures quoted on the same page, and `cities/fabric.html`
-fn-18 infers a siting rule from a tower's attested form. Both ARE claims about the world, so neither may be
-grounds; neither is unsupported either.
-
-Four conditions, because a footnote that cites footnotes is otherwise a way to launder an unsupported claim
-through internal pointers:
-
-1. **Every footnote a cross-reference names is itself a CITATION carrying its own quoted passage.** It may
-   not name a grounds note, an absence note, or another cross-reference.
-2. **The named footnotes are on the same page as the assertion**, so a reader following the derivation never
-   leaves the entry.
-3. **The footnote states the STEP**, and the two steps are not the same animal. Arithmetic over quoted
-   figures carries its conclusion as far as its inputs go. An INFERENCE does not: the quoted passage supports
-   the premise, not the assertion.
-4. **An inference says on its face that the conclusion is this project's reasoning over the quoted facts**,
-   not something a source asserts. Without that a reader is shown a quotation that does not say what the
-   sentence says, which is the one failure constitution XII names.
-
-**FR-005 The absence note gains a SETTLED state, so the category is one a claim can leave.** The GM: *"the
+**FR-004 The absence note gains a SETTLED state, so the category is one a claim can leave.** The GM: *"the
 number of things in that category should eventually be zero."* Under the rule as it stands that cannot
 happen - a claim the record is genuinely silent about keeps an open absence note for ever, and the backlog
 has a permanent floor made of work nobody can do. So an absence note that has been searched to exhaustion
@@ -82,57 +66,61 @@ naming the tools it used**, the second naming at least one the first did not hav
 A settled note is re-opened by anything that changes what can be read - a new source, a new tool, the GM
 supplying a document - which is not hypothetical: this feature's own parent re-opened 90 of them that way.
 
-**FR-006 The two counts are produced by a tool and reported, because today nothing counts footnotes at all.**
+**FR-005 The two counts are produced by a tool and reported, because today nothing counts footnotes at all.**
 `make notes-census` counts MAP features and is unrelated; the "162" everyone has been quoting was built by
-hand for feature 232. This feature adds the census - open absences, settled absences, grounds notes, cross-reference citations and
-source citations, per page and in total - and a test that the numbers it prints are the numbers in the files.
-A cross-reference is counted APART from a source citation: it is not a citation in this record's sense (a key,
-a link, the passage), and folding the two together would put one label on two different things, which is the
-defect this feature exists to end one layer down. The
+hand for feature 232. This feature adds the census - open absences, settled absences, grounds notes and citations, per page and
+in total - and a test that the numbers it prints are the numbers in the files. Four kinds, matching the
+four states above. The
 open-absence count is the backlog and is the only one anybody has to act on.
 
-**FR-007 The eighteen notes named in the triage are reclassified, one at a time, each re-read first.** The
+**FR-006 The eighteen notes named in the triage are reclassified, one at a time, each re-read first.** The
 set is enumerated here so that no success criterion depends on a count: `archetypes.html` fn-93;
 `cities/defenses.html` fn-18; `cities/fabric.html` fn-18, fn-22, fn-24, fn-29; `cities/hinterland.html`
 fn-10; `cities/river-cities.html` fn-17; `cities/sizing.html` fn-2; `fields.html` fn-85;
 `religion-and-death.html` fn-49, fn-50, fn-54, fn-57, fn-75, fn-78; `towns.html` fn-23; `water.html` fn-2.
 The triage is the proposal, not the authority: a note that turns out to need a source keeps its absence note
-and the disagreement is written down.
+and the disagreement is written down. **This feature adds ONE new footnote kind.** Two of the eighteen are
+already settled by reading the files and are named here so the implementation does not re-argue them:
+`water.html` fn-2 keeps its OPEN absence note, with the argument written down, because the ratio's only
+input figure on that page is itself footnoted to an absence note - what wants the research is that input;
+and `cities/fabric.html` fn-18 becomes a GROUNDS note, its own note recording that no source was sought
+because the doctrine is the GM's and the reasoning is this record's own.
 
-**FR-008 Two of the eighteen are not notes at all and are fixed as defects.** `cities/river-cities.html`
+**FR-007 Two of the eighteen are not notes at all and are fixed as defects.** `cities/river-cities.html`
 fn-17 hangs on "Do not 'fix' it." and `cities/defenses.html` fn-18 on a sentence describing this project's
 own rule to a session. Both are instructions in the reader's visible text, which feature 209 sends to HTML
 comments, and `record-format` did not catch either. Their footnotes go with their sentences.
 
-**FR-008a The record's own definition of a footnote is corrected.** `research/CLAUDE.md` says a footnote is
+**FR-008 The record's own definition of a footnote is corrected.** `research/CLAUDE.md` says a footnote is
 one of exactly two forms and gives CITATION and ABSENCE. That sentence is what the next session writing an
 entry will read, and the GM asked what we can do in the FUTURE - so the grounds note, the closed list of six
-reasons, the cross-reference form and the settled state land there, and the "exactly two forms" sentence is
+reasons and the settled state land there, and the "exactly two forms" sentence is
 corrected to match.
 
-**FR-009 The mechanical shape is checked, and the judgment is reviewed.** A test holds the form: a grounds
-note names one of the six reasons; a settled note carries both dates AND both passes' tools; a cross-reference
-names only footnotes that are source citations on its own page; a note is one kind only. The judgment
+**FR-009 The mechanical shape is checked, and the judgment is reviewed.** A test holds the form: every reason a grounds
+note names is one of the six; a settled note carries both dates AND both passes' tools; a note is one
+kind only. The judgment
 that a reason is TRUE is not mechanical, so `record-format` gains it - for every grounds note on a changed
-page, is the reason honest and is FR-003 respected; and for every cross-reference, does the quoted passage it
-rests on actually carry the step the footnote claims?
+page, is the reason honest and is FR-003 respected?
 
 ## Success criteria
 
-- **SC-001** Each of the eighteen notes enumerated in FR-007 ends in exactly one of four recorded outcomes:
-  reclassified as a grounds note with its reason; converted to a cross-reference citation under FR-004;
-  removed with its sentence under FR-008; or left an absence note with a written argument for why the triage
-  was wrong.
+- **SC-001** Each of the eighteen notes enumerated in FR-006 ends in exactly one of three recorded outcomes:
+  reclassified as a grounds note with its reason or reasons; removed with its sentence under FR-007; or left
+  an open absence note with a written argument for why the triage was wrong - FR-006 names ONE that ends this
+  way, `water.html` fn-2, because its own input figure is unsourced.
 - **SC-002** No grounds note carries a claim about how a place was built, farmed, planted, governed or lived
   in - checked by `record-format` over every changed page.
-- **SC-003** The census of FR-006 exists, runs, and its open-absence count falls by exactly the number of the
-  eighteen that left the open-absence state - reclassified, cross-referenced or removed - with the three
-  numbers stated separately so the arithmetic can be checked.
-- **SC-003a** Every cross-reference citation names only source citations on its own page, states its step,
-  and where the step is an inference says on its face that the conclusion is this project's reasoning.
-- **SC-004** The two defects in FR-008 are fixed and no longer visible to a reader.
+- **SC-003** The census of FR-005 exists and runs, and is run TWICE ON THE SAME TREE - once before this
+  feature's changes and once after - so its open-absence count is judged over this feature's own delta. The
+  global count cannot be used: feature 232's second wave is converting absence notes to citations on the same
+  files at the same time. The two numbers that left the open-absence state here, reclassified and removed, are
+  stated separately so the arithmetic can be checked.
+- **SC-004** The two defects in FR-007 are fixed and no longer visible to a reader.
 - **SC-004a** `research/CLAUDE.md` defines all the forms a footnote may take, and no longer says there are
   exactly two.
+- **SC-004b** Every reason any grounds note names is one of the six in FR-002, and no footnote is of two
+  kinds at once - held by the test in FR-009, which is the property the closed list exists to give.
 - **SC-005** Every settled absence note carries two dated passes, each naming the tools it used, the later
   naming at least one the earlier lacked - all judgeable from the note itself.
 - **SC-006** `make page-check` green; `make done` green.
@@ -144,17 +132,28 @@ rests on actually carry the step the footnote claims?
 - **Re-reading the notes feature 232 converted to citations.**
 - **A new label for a GUESS.** The four evidence classes of constitution XII are unchanged; this feature is
   about the FOOTNOTE's kind, not the sentence's evidence class.
-- **Settling the seven class-C notes.** FR-005 builds the mechanism; which notes are settled with it is a
+- **Settling the seven class-C notes.** FR-004 builds the mechanism; which notes are settled with it is a
   judgment each note's own research owes, and feature 232 is still working several of them.
 
 ## Decisions recorded
 
-- **D1 The absence note's wording does not change**, beyond FR-005's added `settled` clause. Most are correct
+- **D1 The absence note's wording does not change**, beyond FR-004's added `settled` clause. Most are correct
   as they stand and rewording them would churn the record and break every reader's pattern-match.
 - **D2 The closed list beats free text**, at the cost of a spec change when a seventh reason appears. An open
   list is how a category meant to denote problems stops denoting problems, which is the whole defect.
-- **D3 The GM's "should eventually be zero" is taken at face value, and FR-005 is what makes it reachable.**
+- **D3 The GM's "should eventually be zero" is taken at face value, and FR-004 is what makes it reachable.**
   An earlier draft of this spec answered that the sentence was "taken seriously but not literally" and
   redefined what should trend to zero. That was a session narrowing an instruction it found inconvenient,
   which constitution XVI forbids; `spec-fidelity` caught it. The honest reading is that the GM described a
   property the category ought to have, and the category did not have it, so the category changes.
+- **D4 An earlier draft of this spec added a SECOND new footnote form, and it was built on two examples that
+  do not exist as described.** It proposed a cross-reference citation - a footnote citing other footnotes -
+  for `water.html` fn-2, described as arithmetic over two figures quoted on the same page, and
+  `cities/fabric.html` fn-18, described as an inference from a tower's attested form. Both descriptions were
+  carried over from feature 232's triage and neither survives reading the files: fn-2's only input on that
+  page is itself footnoted to an absence note, and fn-18 hangs on the merchant-compound-wall sentence with
+  its own note recording that no source was sought. `spec-fidelity` caught it at round 3; the files were then
+  read and confirmed it. The form had no instance and is gone, and the triage's two false rows were corrected
+  where they live. The error is worth recording because it is the same one this feature exists to fix - a
+  rule written from a DESCRIPTION of the record rather than from the record - committed while writing the
+  rule against it.

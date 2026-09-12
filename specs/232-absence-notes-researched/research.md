@@ -397,3 +397,54 @@ themselves at this paper is a small follow-on left for the systematic pass.
 Two bibliographic corrections the registry now carries: the author is **Mukoyama**, not Koyama as every
 earlier pass had it; and the file carries no Creative Commons statement, so the registry asserts no licence
 for it even though the open-access indexes report one.
+
+
+## R21 - the second pass, batch B2 (Japanese and Chinese local material): 8 of 11 moved
+
+The triage said these 11 had never been searched with the tools that work for Japanese and Chinese
+material. That was right, and the batch converted eight.
+
+**Closed, with verbatim passages and translations.** The igune grove on the north or west side is now on a
+2020 agricultural-science paper hosted openly by the Japanese agriculture ministry, which states the rule
+and attributes it to a 1963 study - so the record no longer needs the 1915 definition it was leaning on. The
+jin'ya town's fire posture, which the record admitted was its own identification, is carried almost whole by
+the Japanese article on the town watch house: a ladder on the roof as a small fire-watch tower, a hansho
+bell, stored pumps and buckets, water butts, clappers, and the fireproof kura for the tax rice. The pauper
+ossuary's form is on a Tokyo ward's own cultural-property listing: bones gathered, a burial mound raised, a
+Kannon image set on top, 1708, more than seven hundred gaol dead.
+
+**Two corrections rather than confirmations.**
+
+- `towns.html` fn-24 said a gate faces south because south is AUSPICIOUS. The Neixiang county yamen's own
+  documentation gives it as Qing **regulation** and ritual propriety. Formal, not auspicious - a different
+  claim, and the weaker of the two to assert without evidence.
+- `homesteads.html` fn-92 said the north-China courtyard house ranges its animals along "one wing". The
+  Chinese article names the wing: the EAST one, unlivable for sun and wind, used by wealthier households as
+  grain store, kitchen or horse stable. Sharper than what the record says.
+
+**One contradiction.** `religion-and-death.html` fn-22 gives Nagao Shrine's first-to-second torii as 200 m.
+Nara Prefecture's own page says about 300 m, twice - and supplies a figure the record lacks, an approach a
+little over 7 m wide. Meiji Jingu's ten-minute walk is confirmed from the shrine's own access page. Kasuga's
+1.3 km is on none of the three sources fetched for it - not the shrine's walk page, not the tourism
+database, not the Japanese article - so that third figure is unsupported and must go or be re-sourced.
+
+**Two framing corrections the record should take regardless of citation.** The dooryard-garden entry treats
+the *yashikibatake* as the bed by the door, where the literature has it often as gap-land away from the
+homestead; and the temple-gate entry's Chinese half reads better as a DONATION (lamp-oil and incense money)
+than as a sale, which makes it converge with the Japanese half the entry already carries rather than sit
+beside it.
+
+## R22 - what actually works for Japanese and Chinese sources, measured over two passes
+
+Yahoo Japan through curl, which rescued the first wave, **began refusing partway through this one**, and
+every other general engine was unusable: DuckDuckGo serves a CAPTCHA, Startpage a JavaScript challenge, Bing
+returns unrelated results, and Mojeek, goo and Ecosia come back empty.
+
+What kept working, and found the exact paper for two of the three claims this batch could not close, was
+**the scholarly APIs: J-STAGE, CiNii and NDL Search**, beside the MediaWiki API. Those are not search
+engines and no budget touches them. **The next pass reaches for them FIRST**, before any search engine, and
+treats a general engine as the fallback rather than the opening move.
+
+The highest-value host still uncracked is `adeac.jp`, which carries the full text of hundreds of Japanese
+municipal histories behind a viewer no fetcher renders. The GM's Kodaira material came from there by hand
+(R19), and a way in would open a whole literature this project keeps needing.
