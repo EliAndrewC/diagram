@@ -7,48 +7,52 @@ recorded at the end, because it is the same error the record itself kept making.
 
 ## What each footnote actually hangs on
 
-**GENUINELY no citation owed - 5.** Each says, in its own words, that the figure is this project's
-calibration or that no source was found, and none asserts a fact about the world beyond that.
+*Corrected 2026-09-12 after a `spec-fidelity` round went to the pages and found THIS file's first reading
+still too generous. It had five notes owing no citation. Of those five: **one survives**
+(`cities/sizing.html` fn-2), **two became open absences** (`religion-and-death.html` fn-57 and fn-75, with
+the reasons below), and **two became arguable** (`religion-and-death.html` fn-49 and fn-78). The distinction
+the two removals turn on is the one that kept being missed, and it is written out below.*
+
+**GENUINELY no citation owed - 1.**
 
 | note | the sentence it annotates | reason |
 |---|---|---|
 | `cities/sizing.html` fn-2 | "that band is a calibration against the cities this project has drawn rather than a historical share, because no readable source gives a percentage of a walled city's interior for its civic buildings" | measured on our own maps |
-| `religion-and-death.html` fn-49 | "No source gives a village shrine a footprint: the whole band is this project's own calibration on the drawn maps." | measured on our own maps |
-| `religion-and-death.html` fn-57 | "How wide that collar ran is in no source read: the figure below is this project's own." | measured on our own maps |
-| `religion-and-death.html` fn-75 | "A pauper bone mound is drawn at 10 to 30 ft across with nothing behind the band" | measured on our own maps |
-| `religion-and-death.html` fn-78 | "is not remembered for a mound; no page read describes one raised there" | the record's own silence |
 
-**BORDERLINE - 1.** `fields.html` fn-85 - "the bund is what holds the water in and the ditch is what takes
-it away, so a bund drawn across the collector is a basin with its wall standing in the drain". The
-conclusion really is a necessity of what the two things are, but the sentence labels itself general reading.
-It is the one case where `follows from the definitions` is arguable, and it should be argued at the point of
-change rather than assumed here.
+**ARGUABLE, to be argued at its own page - 3.** None is settled by what the page says, and deciding them
+from a summary is the method that produced three wrong tables.
 
-**GENUINE OPEN ABSENCES - 12.** Every one of these asserts something about how a place was built, worked or
-used, and every one carries "this rests on general reading; no source is cited" or its equivalent. Under
-FR-003 none of them may be a grounds note. They are research, and they belong in the backlog.
+| note | why it is not settled |
+|---|---|
+| `fields.html` fn-85 | the sentence labels itself general reading while its content is a necessity of what a bund and a ditch are |
+| `religion-and-death.html` fn-78 | its own comment calls the claim an inference, so which clause a grounds note would cover is open |
+| `religion-and-death.html` fn-49 | its section's Sources line credits "the GM's ruling of 2026-07-21 on the footprint band", which points at `this project's decision` - a reason with no verified instance, and therefore barred under feature 235 |
 
-`archetypes.html` fn-93 (a bund junction is the most worked point in a field - four basins push water at it,
-it carries the crossing traffic, it is where someone stands to work the water, it slumps first);
-`cities/defenses.html` fn-18 (a fortified city keeps a clear lap inside its rampart so troops can be moved);
-`cities/fabric.html` fn-18 (a wall footed in water is undermined, and a quay is working ground);
-`cities/fabric.html` fn-22 (the ruling class did not record the lodging of the poor, and the surviving
-gazetteers foreground the post-stations); `cities/fabric.html` fn-24 (family hatago that were not distinct
-buildings - shophouses whose back rooms took lodgers); `cities/fabric.html` fn-29 (an open road-town's field
-gaps are natural breaks, so a tower does not earn its cost); `cities/hinterland.html` fn-10 (a field's fan
-has a hand, and both hands were real); `cities/river-cities.html` fn-17 (a river moat was kept full by the
-river's own stage rather than flushed through); `religion-and-death.html` fn-50 (a shrine's precinct was a
-swept raked-gravel or flagged surface); `religion-and-death.html` fn-54 (the path and the ground under each
-arch were swept the whole length); `towns.html` fn-23 (that a road-town's field gaps do the work of a fire
-break); `water.html` fn-2 (a field ditch is about 1/300 of the paddy it feeds - and its own input figure is
-footnoted to an absence note).
+**GENUINE OPEN ABSENCES - 14.** Each asserts something about how a place was built, worked or used while
+saying no source is cited, or is labeled a guess by the record itself. None may be a grounds note.
 
-## The count, corrected
+`archetypes.html` fn-93; `cities/defenses.html` fn-18; `cities/fabric.html` fn-18, fn-22, fn-24, fn-29;
+`cities/hinterland.html` fn-10; `cities/river-cities.html` fn-17; `religion-and-death.html` fn-50, fn-54,
+**fn-57**, **fn-75**; `towns.html` fn-23; `water.html` fn-2.
 
-| | triage said | the files say |
-|---|---|---|
-| no citation owed | 18 | **5**, with 1 arguable |
-| genuine open absences among those 18 | 0 | **12** |
+**The two this file had wrong, and the distinction they turn on.**
+
+- **fn-75** - "A pauper bone mound is drawn at 10 to 30 ft across **with nothing behind the band**", and the
+  next clause calls the neighbouring figure "**a guess of the same kind**". The record labels it a guess
+  about the size of a real feature, so it is barred by the SECOND clause of the prohibition - a sentence the
+  record calls a guess about the physical world is never a grounds note - rather than by the first.
+- **fn-57** - "How wide that collar **ran** is in no source read: the figure below is this project's own."
+  Past tense, about the real world, and the 115 ft lives in a separate rule paragraph: it was CHOSEN and then
+  drawn. **A number chosen and then drawn is not a number measured on our own maps.** That is the distinction
+  this file missed, and it is the gap through which a research question can be relabelled a decision.
+
+## The count, corrected twice
+
+| | first said | this file first said | the pages say |
+|---|---|---|---|
+| no citation owed | 18 | 5 | **1** |
+| arguable | 0 | 1 | **3** |
+| genuine open absences | 0 | 12 | **14** |
 
 ## How the error happened, and why it is the feature's own subject
 
