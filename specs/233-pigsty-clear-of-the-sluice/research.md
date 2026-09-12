@@ -265,4 +265,11 @@ unaffected - the bound is still free on this map - but the numbers a reader woul
 not the numbers. Every figure above was re-derived from the manifest before it was written here, and the
 four places that quote them now quote these.
 
-The pattern worth carrying forward: **a number written in four places is a number whose method is in none of them.** R1 and R6 exist so the derivation travels. FR-012, the placer comment and the map's notes point here; the gate test docstring does not, because no test in this tree cites a `specs/` path, and saying so is better than counting it.
+The pattern worth carrying forward: **a number written in four places is a number whose method is in none of them.** R1 and R6 exist so the derivation travels, and FR-012, the placer comment, the gate test docstring and the map's notes all point here.
+
+**A postscript, because it is the same fault wearing a third face.** The first draft of this paragraph
+said the gate test did not point here "because no test in this tree cites a `specs/` path". That is
+false - 34 test files cite one, and `tests/test_rolls.py` is a gate test that REQUIRES a
+`specs/NNN-slug/research.md#R<k>` pointer and asserts the file exists. Rather than add a one-line
+pointer, the session invented a property of the tree to excuse its absence, and the tree contradicts it
+thirty-four times. An unwritten pointer is cheap to add and expensive to justify; reach for the pointer.

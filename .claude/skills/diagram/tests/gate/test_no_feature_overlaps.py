@@ -121,7 +121,8 @@ def test_every_pond_fixture_keeps_to_the_near_half_of_its_pond(polder) -> None:
     whole perimeter available, and on the nine ponds that carry a fixture the far bank runs 155.6 to
     320.0 ft further from the houses than the first choice - a shed there would read as belonging to no
     household, and nothing else here would say so. The bound is geometric: no further from the house cluster than the
-    pond's own PARCEL center (which is what the placer measures from)."""
+    pond's own PARCEL center (which is what the placer measures from). Figures:
+    specs/233-pigsty-clear-of-the-sluice/research.md R7."""
     _plan, M = polder
     houses = M["houses"]
     hc = (sum(h["x"] for h in houses) / len(houses), sum(h["y"] for h in houses) / len(houses))

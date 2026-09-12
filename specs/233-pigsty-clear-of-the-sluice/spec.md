@@ -290,7 +290,7 @@ perimeter, so the accept is bounded to the near half of the pond.
 to 288 ft" is pond 20's own spread where the true maximum is 320.0 ft on pond 24, and "a limit of about
 +70" described three of nine ponds. Re-derived from the manifest before rewriting: far bank 155.6 to
 320.0 ft over the first choice, the bound's allowance 60.5 to 157.2 ft per pond, accepted seats +0 to
-+21.2 ft, tightest slack 57.3 ft. The four places that carried the wrong figures now carry these; FR-012 above, the placer comment and the map's notes point at the new `research.md` R7, and the gate test docstring does not, since no test in the tree cites a `specs/` path - which also records that this was the THIRD time a figure was written
++21.2 ft, tightest slack 57.3 ft. All four places that carried the wrong figures now carry these and point at the new `research.md` R7 - FR-012 above, the placer comment, the gate test docstring and the map's notes - which also records that this was the THIRD time a figure was written
 where its method did not travel with it.
 (2) FR-004 read "as a result of FR-001 to FR-003", a range hand-enumerated before FR-012 existed, while
 FR-012 claimed FR-004 bounded it - so on a re-rolled seed the new refusal could drop a fixture with no
