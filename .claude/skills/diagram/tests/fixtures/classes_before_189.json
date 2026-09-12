@@ -136,7 +136,7 @@
  "copse": {
   "caveat": "how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",
   "covers": "`village_groves[role=copse]`",
-  "entry": "research/vegetation.html - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)",
+  "entry": "research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'",
   "key": "copse",
   "label": "accurate",
   "label_note": "The role is attested with the fengshui-grove system; how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and crop leave it.",

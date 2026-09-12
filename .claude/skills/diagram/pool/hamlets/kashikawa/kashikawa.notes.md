@@ -264,7 +264,7 @@ thinner; it is a target now. Parcels under the 120 ft legibility floor are DROPP
 drawn small.
 
 OPEN, wanting a one-line ruling rather than a fix: the maximin spread put a byre 38 ft from a
-communal wellhead (the other three are 168-317 ft from any well). Nothing governs it - `homesteads.md`
+communal wellhead (the other three are 168-317 ft from any well). Nothing governs it - `research/homesteads.html`
 puts byres and wells in the same interstitial courtyard ground, so the adjacency is structural. The
 reading I would take is "the beasts are watered at the well, that is where a byre goes". Recording
 the decision matters more than which way it goes, because the next re-pack will produce it again.

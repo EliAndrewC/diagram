@@ -147,7 +147,8 @@ _RETIRED_BASENAMES = {stem.rsplit("/", 1)[-1] + ".md" for stem in _RETIRED_STEMS
 #: tokens they were recorded with; `research/README.md` is the GM's (constitution XVII) and keeps its table until
 #: the GM applies the correction offered in specs/229.
 _RETIRED_EXEMPT_PREFIXES = ("specs/", "scripts/fixtures/")
-_RETIRED_EXEMPT_FILES = {f"{_SKILL}/research/README.md", f"{_SKILL}/tests/fixtures/classes_before_189.json"}
+#: and this file itself, which necessarily names them: it is where the rule and its own self-test live.
+_RETIRED_EXEMPT_FILES = {f"{_SKILL}/research/README.md", f"{_SKILL}/tests/fixtures/classes_before_189.json", f"{_SKILL}/tests/interactive/test_record.py"}
 
 
 def _normalize(base: pathlib.PurePosixPath, token: str) -> str:

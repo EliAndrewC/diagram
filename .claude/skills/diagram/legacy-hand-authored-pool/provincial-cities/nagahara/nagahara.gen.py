@@ -1343,7 +1343,7 @@ s.kosatsuba(1874, 1317, rot=0, label=None)  # UNLABELED: at this seat the below-
 # in the east gate's 'guard / inspection stations' band at y1323-1332 (the band that forced
 # the north board's 2026-07-25 nudge) and the above-caption lands on a laborer house, so the
 # set's one label rides the market-bend principal instead ("whichever board has room for it";
-# an unlabeled board also fits the tight gate verges a labeled one cannot - urban-features.md)
+# an unlabeled board also fits the tight gate verges a labeled one cannot - research/urban-features.html)
 # ...the north road gate's board, UNLABELED, 51px inside the gate on the road verge,
 # aligned to the road's local ~72 deg bearing.
 s.kosatsuba(1492, 954, rot=72, label=None)  # nudged 10px up the wall (2026-07-25): the martial-hall budget line grew the derived ring 3px, the N-quarter pack reflowed, and a laborer_large came to rest under the board's old y961 seat. y951 then overshot into the gate's 'guard / inspection stations' caption band (y940-950), which only surfaced when the label check started reading the registry - y957 is the gap between the two

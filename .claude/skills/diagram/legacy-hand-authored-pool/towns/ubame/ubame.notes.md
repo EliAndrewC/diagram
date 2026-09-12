@@ -429,7 +429,7 @@ one), and a cart is the same 12x5 ft as the kosatsuba (1,550 ft apart, one of th
     This also retires round 1's manor resizing as a NON-fix. The 250 x 180 -> 290 x 200 change was
     made to match the Mode A envelope; under the convention it was never required. It is harmless
     and stands, but the reasoning recorded for it - "two artifacts of one place must contradict
-    nothing" - was wrong about extent, and `towns.md` has been corrected.
+    nothing" - was wrong about extent, and the town record has been corrected.
   - **CONFIRMED and left alone**: the pareidolia fix on the forge holds (no face); the windbreak is a
     belt, not a blob; the manor agrees with its Mode A sheet at 290 x 200 with its east wall ON the
     line; both nuisance axes diverge and every nuisance is on its correct one; the trunk road is

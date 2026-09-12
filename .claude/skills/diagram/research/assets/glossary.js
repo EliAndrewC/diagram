@@ -3644,5 +3644,320 @@ window.RECORD_GLOSSARY = [
    "koebune"
   ],
   "def": "The barge that carried night soil out of a city to the farming villages, where a canal or river allowed it."
+ },
+ {
+  "term": "module",
+  "variants": [
+   "module"
+  ],
+  "def": "The repeating bay a polder's ditch grid is laid out on: the distance from one lateral ditch to the next."
+ },
+ {
+  "term": "headman",
+  "variants": [
+   "headman"
+  ],
+  "def": "The peasant head of a village and its district, answerable for its taxes and its order; his house is the largest on a village map."
+ },
+ {
+  "term": "village district",
+  "variants": [
+   "village district"
+  ],
+  "def": "The administrative unit a village heads and several hamlets belong to, named for its village."
+ },
+ {
+  "term": "Fortune",
+  "variants": [
+   "Fortune"
+  ],
+  "def": "One of the setting's lesser deities. Two are a Great Clan's patrons and take its sovereign temples."
+ },
+ {
+  "term": "tax-free plot",
+  "variants": [
+   "tax-free plot"
+  ],
+  "def": "A field whose yield funds a village's own expenses rather than the tax assessment."
+ },
+ {
+  "term": "copse",
+  "variants": [
+   "copse"
+  ],
+  "def": "A small stand of trees; here, the loose greenery of fruit trees and bamboo in the gaps between a village's houses."
+ },
+ {
+  "term": "water-mouth",
+  "variants": [
+   "water-mouth"
+  ],
+  "def": "The low point where a village's stream and track leave the valley - the place a grove is planted to hold the water in."
+ },
+ {
+  "term": "masson pine",
+  "variants": [
+   "masson pine"
+  ],
+  "def": "A hardy southern Chinese pine of poor, cut-over hillsides; the tree left standing on stripped slopes."
+ },
+ {
+  "term": "China fir",
+  "variants": [
+   "China fir"
+  ],
+  "def": "A fast-growing southern Chinese conifer grown for timber, common in the open stands on worked-over hills."
+ },
+ {
+  "term": "itabashi",
+  "variants": [
+   "itabashi"
+  ],
+  "def": "A plank bridge: a deck of boards laid across its bearers, the small crossing a household lays over a farm ditch."
+ },
+ {
+  "term": "dobashi",
+  "variants": [
+   "dobashi"
+  ],
+  "def": "An earthen bridge: logs laid side by side and covered with earth trodden level, so its deck is soil rather than plank."
+ },
+ {
+  "term": "daihachiguruma",
+  "variants": [
+   "daihachiguruma"
+  ],
+  "def": "The large two-wheeled hand cart of Edo Japan, pulled by men and confined by law to a few cities."
+ },
+ {
+  "term": "scour",
+  "variants": [
+   "scour"
+  ],
+  "def": "The undercutting of a bank or a foundation by moving water - the reason a bridge's bearing sits back from the edge."
+ },
+ {
+  "term": "baulk",
+  "variants": [
+   "baulk"
+  ],
+  "def": "The unplowed strip of raised earth between two field plots, wide enough to walk on."
+ },
+ {
+  "term": "gate market",
+  "variants": [
+   "gate market"
+  ],
+  "def": "The stalls and shops that stand outside a city gate, trading with the traffic that never enters the walls."
+ },
+ {
+  "term": "frontage",
+  "variants": [
+   "frontage"
+  ],
+  "def": "A row of shops or houses laid along a street with their fronts on the roadbed."
+ },
+ {
+  "term": "saien",
+  "variants": [
+   "saien"
+  ],
+  "def": "The small intensive vegetable bed by a farmhouse kitchen, worked for the household's daily greens."
+ },
+ {
+  "term": "se",
+  "variants": [
+   "se"
+  ],
+  "def": "A Japanese unit of area: thirty tsubo, about 99 square meters, a tenth of a tan."
+ },
+ {
+  "term": "banyuetang",
+  "variants": [
+   "banyuetang"
+  ],
+  "def": "The half-moon pond dug in front of a village, its flat bank toward the houses - a geomantic feature, not a religious one."
+ },
+ {
+  "term": "kagura",
+  "variants": [
+   "kagura"
+  ],
+  "def": "The Shinto ceremonial music and dance performed on shrine ground; the stage built for it is the model for a town's theater stage."
+ },
+ {
+  "term": "hansho",
+  "variants": [
+   "hansho"
+  ],
+  "def": "The small bronze alarm bell on a fire-watch tower, struck in a cadence that says how near the fire is."
+ },
+ {
+  "term": "machi-bikeshi",
+  "variants": [
+   "machi-bikeshi"
+  ],
+  "def": "The chartered townsman fire companies of Tokugawa Edo, the 'iroha' companies."
+ },
+ {
+  "term": "hatago",
+  "variants": [
+   "hatago"
+  ],
+  "def": "An ordinary household's inn - a shophouse whose back rooms took lodgers."
+ },
+ {
+  "term": "ura-nagaya",
+  "variants": [
+   "ura-nagaya"
+  ],
+  "def": "A back-alley tenement row, its one entrance opening on the alley rather than the street."
+ },
+ {
+  "term": "postern",
+  "variants": [
+   "postern"
+  ],
+  "def": "A small secondary gate in a fortification, away from the main gates, for messengers or a sortie."
+ },
+ {
+  "term": "parapet",
+  "variants": [
+   "parapet"
+  ],
+  "def": "The low breastwork along the top of a wall or tower, which an archer shoots over."
+ },
+ {
+  "term": "koraimon",
+  "variants": [
+   "koraimon"
+  ],
+  "def": "A Japanese castle-town gate form, narrower than a Chinese city's gate tunnel."
+ },
+ {
+  "term": "bedload",
+  "variants": [
+   "bedload"
+  ],
+  "def": "The sand and gravel a river rolls along its bed, as against the finer silt it carries suspended."
+ },
+ {
+  "term": "culvert",
+  "variants": [
+   "culvert"
+  ],
+  "def": "A covered drain carrying water beneath a road, a wall or an embankment."
+ },
+ {
+  "term": "confluence",
+  "variants": [
+   "confluence"
+  ],
+  "def": "The point where two watercourses join and run on as one."
+ },
+ {
+  "term": "tributary",
+  "variants": [
+   "tributary"
+  ],
+  "def": "A watercourse that flows into a larger one rather than to a sink of its own."
+ },
+ {
+  "term": "meander",
+  "variants": [
+   "meander"
+  ],
+  "def": "A loop a channel cuts in its own floodplain; how tight it turns scales with the channel's width."
+ },
+ {
+  "term": "causeway",
+  "variants": [
+   "causeway"
+  ],
+  "def": "A raised road carried across wet or flooded ground."
+ },
+ {
+  "term": "windlass",
+  "variants": [
+   "windlass"
+  ],
+  "def": "The drum and crank over a well, turned to raise the bucket."
+ },
+ {
+  "term": "aqueduct",
+  "variants": [
+   "aqueduct"
+  ],
+  "def": "A built channel carrying water across country, sometimes on arches."
+ },
+ {
+  "term": "glebe",
+  "variants": [
+   "glebe"
+  ],
+  "def": "Land assigned to a temple or shrine to support it, worked on its behalf and exempt from tax."
+ },
+ {
+  "term": "drawdown",
+  "variants": [
+   "drawdown"
+  ],
+  "def": "The letting-out of a field's standing water, when its drains carry their heaviest flow."
+ },
+ {
+  "term": "inkyo",
+  "variants": [
+   "inkyo"
+  ],
+  "def": "Retirement: an elder who has handed the household to their heir, and the separate modest quarters they then live in."
+ },
+ {
+  "term": "drill ground",
+  "variants": [
+   "drill ground"
+  ],
+  "def": "The bare open ground inside a walled city where its garrison musters and trains."
+ },
+ {
+  "term": "ryobosei",
+  "variants": [
+   "ryobosei"
+  ],
+  "def": "The two-grave system: the body buried in a local patch, a separate venerated stone raised at the central temple."
+ },
+ {
+  "term": "chinju no mori",
+  "variants": [
+   "chinju no mori"
+  ],
+  "def": "The grove kept standing around a tutelary shrine - preserved rather than cleared."
+ },
+ {
+  "term": "haka-mairi",
+  "variants": [
+   "haka-mairi"
+  ],
+  "def": "The Japanese custom of visiting and tending a family grave, which clears the weeds from it."
+ },
+ {
+  "term": "Qingming",
+  "variants": [
+   "Qingming"
+  ],
+  "def": "The Chinese tomb-sweeping festival, at which families clear and tend their ancestors' graves."
+ },
+ {
+  "term": "meibutsu",
+  "variants": [
+   "meibutsu"
+  ],
+  "def": "A regional specialty sold as a souvenir of the place."
+ },
+ {
+  "term": "omamori",
+  "variants": [
+   "omamori"
+  ],
+  "def": "An amulet bestowed by a shrine or temple in return for an offering."
  }
 ];

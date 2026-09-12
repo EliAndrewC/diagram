@@ -146,7 +146,7 @@ s.hanko(1482, 1658)  # ~1 ha compound (size audit 2026-08-09) - shifted east so 
 # state violet, so it reads as not-of-the-domain; gate west, facing the government ward it works
 # beside.
 # captioned as the INSTITUTION, not the officeholder (settlement-review 2026-08-09; Ubame's
-# sibling is "Magistrate's Manor" and capitals.md says "the Imperial Magistrate's compound")
+# sibling is "Magistrate's Manor" and research/cities/capitals.html says "the Imperial Magistrate's compound")
 # "Imperial Magistracy" - the institution, shortened so the caption fits INSIDE the court
 s.manor(1720, 1445, 100, 75, "Imperial Magistracy", gate_dir="west", ink="#274D3D", label_inside=True)
 
@@ -192,7 +192,7 @@ s.shrine_hall(1850, 1620, "Temple of Benten", w=s.px(150), h=s.px(100), kind="te
 s.shrine_hall(950, 1620, "Temple of Jurojin", w=s.px(150), h=s.px(100), kind="temple", torii=[(950, 1583), (950, 1547)])
 # THE PRECINCT IS RESERVED EVEN THOUGH ONLY THE HALL IS DRAWN (settlement-review 2026-08-09): a
 # sovereign temple is a HEAD HOUSE - abbot's residence, order administration, library, the monks
-# living inside the precinct (capitals.md, "a different program, not a scaled precinct") - and
+# living inside the precinct (research/cities/capitals.html, "a different program, not a scaled precinct") - and
 # this is the ground-reserving feature, so the complex's ~390x300 ft ground is held NOW and
 # feature 021 draws it. Both registries, like the castle: block_polys is center-tested by the
 # packs, placed is distance-tested and stops a wide building overhanging the precinct.
