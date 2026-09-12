@@ -176,12 +176,21 @@ The measurements, pool-wide, against what each pass found:
 | turns past 70 deg | - | up to 16 on one map | up to 16 | **0 on three maps, 2 on Kashikawa** |
 | the offtake angle a reader measures | 64 and 46 deg | 64 and 46 | 35 | **35 on every map, the record's own figure** |
 | homesteads across the water from their lanes | - | 2, no crossing | 1, no crossing | **0** |
+| the brook's course with no meander at all | - | - | 32% of one map | **0 to 10%, and only where it leaves** |
 
-**What is left, measured and accepted.** Kashikawa keeps one 121 degree corner at (2480, 1766), where the course
-meets the frame's own edge and slides along it; its next turn, 83 degrees, is off the view. Every other turn on
-that map is 2 degrees. The cause is the bound that keeps the course on the sheet: on a map whose land falls on a
-diagonal the bound is a box in the sheet's frame and the course runs across it, so where the two meet the course
-must turn. Two ways out were priced and neither is this feature's: loosen the bound, which puts part of the course
-back outside the picture (the defect pass 3 measured at 67% on Sawada); or bound the course in the frame's own
-axes from the start, which is a different construction and would move every map again. The corner is recorded here
-rather than left for a reader to find.
+The last pass's two errors closed by two changes apiece. The stranded homestead: the seater now REFUSES a margin
+the brook divides rather than scoring it down, keeping the scored form only for a hamlet whose every margin is
+divided; and the fan's supply canal is trimmed on the brook's flank, which gives the stream its own ground to run
+in. The mitred head and the ruled reaches: the corner cut rounds by a DISTANCE from each vertex rather than a
+fraction of the leg, so a turn whose other arm is short is rounded too; the approach above the tap wanders like
+the rest; and the reach that leaves the frame is exempt from the bound that keeps the rest on the sheet, since
+holding a leaving course inside the picture is what folded it back on itself.
+
+**What is left, measured and accepted.** Kashikawa keeps one turn of 105 degrees where its course meets the frame
+bound and slides along it; every other turn on that map is 4 degrees, and the three other maps' sharpest are 49,
+49 and 52. The cause is the bound itself: on a map whose land falls on a diagonal the bound is a box in the
+sheet's own axes and the course runs across it, so where they meet the course must turn. Two ways out were priced
+and neither belongs to this feature: loosen the bound, which puts part of the course back outside the picture -
+the defect measured at 67% of one brook in three pieces - or build the course in the frame's axes from the start,
+which is a different construction and would move every map again. It is recorded here rather than left for a
+reader to find.

@@ -97,6 +97,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     lat = max(240.0, min(plan.spec.households * (BUNDLE_PITCH**2) / (math.pi * dep), 1100.0))
 
     best: tuple[float, Pt, Pt] | None = None
+    divided: list[tuple[float, Pt, Pt]] = []  # margins the brook runs through, kept only as the fallback
     n = len(env)
     for i in range(n):
         ax, ay = env[i]
@@ -196,9 +197,20 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             _bs = [(a[0] - mid[0]) * -ny + (a[1] - mid[1]) * nx for a in brook]
             _sides = {1 if ((q[0] - mid[0]) * -ny + (q[1] - mid[1]) * nx) > 0 else -1 for q in _bp for a, b in zip(brook, brook[1:], strict=False) if seg_dist(q[0], q[1], a, b) < dep * 2.0}
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
-            score -= 3.0 * crossed + (1.5 if len(_sides) > 1 else 0.0)
+            score -= 3.0 * crossed
+            if len(_sides) > 1:
+                # A DIVIDED BAND IS REFUSED, not discounted. Scoring it down was the first cut and it left one
+                # homestead of fifteen on the far bank with no crossing anywhere on the brook, every lane, both
+                # wells and the notice board on the near one - the seat that wins on wind and slope can still be
+                # the one the water runs through. Two passes: the divided margins are struck out, and only if
+                # EVERY margin is divided does the scored form decide, so a hamlet the brook runs across
+                # whatever it does still gets seated rather than raising.
+                divided.append((score, mid, (nx, ny)))
+                continue
         if best is None or score > best[0]:
             best = (score, mid, (nx, ny))
+    if best is None and divided:
+        best = max(divided, key=lambda t: t[0])  # every margin is divided: the best of them, rather than no seat at all
     if best is None:
         raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
     _, anchor, out = best

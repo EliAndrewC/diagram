@@ -19,7 +19,6 @@ from .consts import (
     BROOK_FAN_TRIM,
     BROOK_FRAME_MARGIN,
     BROOK_SKIRT,
-    BROOK_SLEW,
     BROOK_TAP_RUN,
     BROOK_WANDER,
     BROOK_WANDER_STEP,
@@ -492,9 +491,19 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     lx, ly = out[-1]
     edge = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
     span = max(120.0, min(edge)) + 260.0
-    heading = unit(lx - out[-2][0], ly - out[-2][1]) if len(out) > 1 else (dx, dy)
+    # the heading the exit starts on is the course's own over its LAST FEW stations, and never one that has
+    # stopped descending: a single segment's bearing can point back up the slope where the last station was held
+    # against the frame bound, and the exit then folded the course back on itself (131 and 119 degrees, the last
+    # two corners left on the pool)
+    _back = out[max(0, len(out) - 4)]
+    heading = unit(lx - _back[0], ly - _back[1]) if len(out) > 1 else (dx, dy)
+    if heading[0] * dx + heading[1] * dy <= 0.15:
+        heading = (dx, dy)
     px_, py_ = lx, ly
-    for f, blend in ((0.3, 0.25), (0.32, 0.6), (0.38, 1.0)):
+    # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
+    # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
+    # the last four vertices), and the part that leaves the sheet is the one place a straight run costs nothing.
+    for f, blend in ((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0)):
         hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
         px_, py_ = px_ + hx * span * f, py_ + hy * span * f
         out.append((px_, py_))
@@ -509,12 +518,24 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     # the brook turns just below the tap is the sharpest on the course and the one a reader looks straight at,
     # and anchoring on the tap cuts it while leaving the stride below the tap on the fall, which is what makes
     # the head race's offtake angle the angle the record states
-    mid, keep_tail = [sluice, *out[:-3]], out[-3:]  # the exit legs run free; cutting them against the box folded them
+    u_end = lx * dx + ly * dy  # the last station: past it the course is leaving and owes the box nothing
+    mid, keep_tail = [sluice, *out[:-1]], out[-1:]  # everything but the final off-frame point is cut, exits included
     cut: Poly = []
     for a, b in zip(mid, mid[1:], strict=False):
-        for t in (0.25, 0.75):
+        # the cut is a DISTANCE from each end, not a fraction of the segment: at a fraction, a vertex whose
+        # other arm is short is barely rounded at all, which left the two structural turns at the head as
+        # mitres while the meandered middle came out smooth
+        leg = math.hypot(b[0] - a[0], b[1] - a[1]) or 1.0
+        d = min(0.3, 45.0 / leg)
+        for t in (d, 1.0 - d):
             qx, qy = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
             cu, cv = qx * dx + qy * dy, qx * px + qy * py
+            if cu > u_end:
+                # past the last station this is the reach that LEAVES, and holding it inside the frame box is
+                # what folded the exit back on itself - a 120 to 131 degree reversal on the two maps whose land
+                # falls on a diagonal, in the last four vertices of each
+                cut.append((qx, qy))
+                continue
             # a NARROW window here, unlike the stations': a cut point sits between two stations that have each
             # already been floored with the wide one, so all it owes is the crop at its own place - and the wide
             # window would push the points just below the tap out to the fan's edge before the fan begins,
@@ -551,7 +572,16 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
         mid = ((up[0] + sluice[0]) / 2 - math.sin(th) * 26, (up[1] + sluice[1]) / 2 + math.cos(th) * 26)
         near = (sluice[0] + math.cos(th) * 40, sluice[1] + math.sin(th) * 40)  # the last 40 px is the intake itself
         if not (crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope)):
-            return [up, mid, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
+            # the APPROACH wanders too. It was one ruled 420 ft line into the tap - 211 ft of it in frame, and
+            # the reviewer counted it among the third of the course with no meander at all; a brook that is a
+            # stream below its tap and a drawn line above it is not one brook.
+            wob = knob_rng(plan.spec.seed, "brook_approach")
+            legs = [up, mid]
+            for t in (0.45, 0.68, 0.86):
+                qx, qy = mid[0] + (sluice[0] - mid[0]) * t, mid[1] + (sluice[1] - mid[1]) * t
+                j = wob.uniform(-16.0, 16.0)
+                legs.append((qx - math.sin(th) * j, qy + math.cos(th) * j))
+            return [*legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
     up = (
         sluice[0] - dx * run,
         sluice[1] - dy * run,
@@ -944,10 +974,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
         f'x2="{sluice[0] + ax * half * t + hx * half_t:.1f}" y2="{sluice[1] + ay * half * t + hy * half_t:.1f}" stroke="#6E6A60" stroke-width="0.7"/>'
         for t in (-0.62, -0.2, 0.2, 0.62)
     )
-    lip = (
-        f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" '
-        f'stroke="#8FA6AE" stroke-width="1.6" stroke-linecap="round"/>'
-    )
+    lip = f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" stroke="#8FA6AE" stroke-width="1.6" stroke-linecap="round"/>'
     s.add(f'<polygon points="{pts}" fill="#9A9A90" stroke="#63645C" stroke-width="0.9" stroke-linejoin="round"/>{ticks}{lip}', cls="weir")
 
 
