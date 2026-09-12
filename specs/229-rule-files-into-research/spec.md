@@ -187,7 +187,7 @@ derives from the delta.
 
 ## Success criteria
 
-- **SC-001** `ls .claude/skills/diagram/settlements* ` finds nothing; a grep over the tree for the path forms
+- **SC-001** (FR-007) `ls .claude/skills/diagram/settlements* ` finds nothing; a grep over the tree for the path forms
   (`settlements/[a-z-]*\.md`, `settlements\.md`, `settlements/cities/`) AND for each retired file's bare
   basename (`archetypes.md`, `capitals.md`, `cities.md`, `defenses.md`, `fabric.md`, `fields.md`,
   `government.md`, `hinterland.md`, `homesteads.md`, `presentation.md`, `religion-and-death.md`,
@@ -195,18 +195,18 @@ derives from the delta.
   returns, once each hit is judged per reference under FR-007's collision rule, only files under `specs/`,
   `scripts/fixtures/`, the one frozen test fixture, `research/README.md` until the GM applies the offered
   correction, and the legitimate sibling links to `future-work/towns.md` and `future-work/cities.md`.
-- **SC-002** Every DECISION-RECORD item in the seven audit reports appears in `research.md`'s map with the anchor
+- **SC-002** (FR-002, FR-002a) Every DECISION-RECORD item in the seven audit reports appears in `research.md`'s map with the anchor
   that holds it, and every anchor resolves (`test_every_link_in_a_record_page_resolves` is the mechanical check;
   the map is the human one).
-- **SC-003** Every rule the audit lists under "B items the engine does NOT encode" appears on a research page
+- **SC-003** (FR-003, FR-006, FR-009) Every rule the audit lists under "B items the engine does NOT encode" appears on a research page
   inside a `<p class="spec">`, or in `research.md` with the reason it was dropped (a rule about a deleted
   mechanism with no map behavior behind it - the audit names some, such as the twin-detector's axes).
-- **SC-004** No research page states a number the engine contradicts for a scripted feature: every row of
+- **SC-004** (FR-001, FR-004) No research page states a number the engine contradicts for a scripted feature: every row of
   `research.md` R1 - the derived inventory FR-001 requires - is closed, and a spot check of every constant a
   specification paragraph names against `l7r/` finds no disagreement.
-- **SC-005** `make page-check` green; `make done` green; `quote-check`, `record-format` and (for new keys)
+- **SC-005** (FR-005, FR-008, FR-010) `make page-check` green; `make done` green; `quote-check`, `record-format` and (for new keys)
   `source-applicability` verdicts recorded per changed page in `tasks.md`.
-- **SC-006** The four new pages open from disk with their glossary and citations hover working, checked in a
+- **SC-006** (spec-wide) The four new pages open from disk with their glossary and citations hover working, checked in a
   browser once.
 
 ## Decisions Recorded

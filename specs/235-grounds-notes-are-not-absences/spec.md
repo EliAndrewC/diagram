@@ -187,17 +187,17 @@ the written argument there?
 
 ## Success criteria
 
-- **SC-001** Each of the eighteen ends in one of two recorded outcomes: reclassified as a grounds note with
+- **SC-001** (FR-001, FR-006) Each of the eighteen ends in one of two recorded outcomes: reclassified as a grounds note with
   its reason or reasons, or left an OPEN absence note. No footnote is deleted (FR-007). One is expected to
   convert and fourteen to stay; the three argued at their pages fall either way, and the written argument is
   the record of which.
-- **SC-002** No grounds note carries a claim about how a place was built, farmed, planted, governed or lived
+- **SC-002** (FR-003) No grounds note carries a claim about how a place was built, farmed, planted, governed or lived
   in, and none carries a sentence the record labels a guess about the physical world - checked by
   `record-format` over every changed page.
 - **SC-003** The census of FR-005 exists and runs, and is run TWICE ON THE SAME TREE, before and after this
   feature's changes, so its counts are judged over this feature's own delta. The global count cannot be used:
   feature 232 is converting absence notes to citations on the same files at the same time.
-- **SC-004** The two session-addressed sentences in FR-007 are no longer visible to a reader, and both
+- **SC-004** (FR-007) The two session-addressed sentences are no longer visible to a reader, and both
   footnotes are still present as open absence notes.
 - **SC-004a** All four surfaces in FR-008 know the grounds note: the constitution's Principle XII no longer
   says there are two footnote forms and carries the amendment's version bump; `research/CLAUDE.md` defines
@@ -209,12 +209,12 @@ the written argument there?
   once; and no existing note is reclassified under any reason in FR-002's BARRED SET - `this project's
   decision`, `a drawing convention`, `physical necessity` - under this feature.
 - **SC-004c** Every converted note keeps its recorded search in a comment (FR-001a); none is discarded.
-- **SC-004d** Every note converted under a reason FR-002 does not mark exemplified carries its written
+- **SC-004d** (FR-006, FR-009) Every note converted under a reason FR-002 does not mark exemplified carries its written
   argument at its own page, and so does `religion-and-death.html` fn-49 under whichever reason it converts,
   since FR-006 requires the argument there either way - checked by `record-format`.
-- **SC-005** Every settled absence note carries two dated passes, each naming the tools it used, the later
+- **SC-005** (FR-004) Every settled absence note carries two dated passes, each naming the tools it used, the later
   naming at least one the earlier lacked - all judgeable from the note itself.
-- **SC-006** `make page-check` green; `make done` green.
+- **SC-006** (spec-wide) `make page-check` green; `make done` green.
 
 ## Out of scope
 

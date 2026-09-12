@@ -116,20 +116,20 @@ equal their derivation, and no page states a count that is stale.
 
 ## Success criteria
 
-- **SC-001** All 162 notes are accounted for in `research.md` R1, one row each, with its final state.
-- **SC-002** Zero notes are deleted without becoming a citation; the count of absence notes falls only by
+- **SC-001** (FR-001) All 162 notes are accounted for in `research.md` R1, one row each, with its final state.
+- **SC-002** (FR-006) Zero notes are deleted without becoming a citation; the count of absence notes falls only by
   the number that became citations.
-- **SC-003** Every new registry key has both write-ups and a `source-applicability` verdict, and every
+- **SC-003** (FR-003) Every new registry key has both write-ups and a `source-applicability` verdict, and every
   old key whose claim was sourced or corrected has its "Not cited" and `Used for:` lines brought forward.
-- **SC-004** Every footnote this feature changed carries its own `quote-check` confirmation, recorded per
+- **SC-004** (FR-006) Every footnote this feature changed carries its own `quote-check` confirmation, recorded per
   footnote. A footnote without one does not land.
-- **SC-005** Every STILL ABSENT row in R1 carries its queries and its candidate pointers, and for EACH
+- **SC-005** (FR-002) Every STILL ABSENT row in R1 carries its queries and its candidate pointers, and for EACH
   pointer either a `source-reader` verdict or a written reason it was not attempted (FR-002). A row whose
   queries returned no pointer carries the query text itself. A row without these is not done.
-- **SC-006** `for-the-gm.md` exists and every entry names a specific document, not a topic.
-- **SC-007** Every CONTRADICTED row in R1 appears in `closing-report.md` with what the source says and
+- **SC-006** (FR-005) `for-the-gm.md` exists and every entry names a specific document, not a topic.
+- **SC-007** (FR-004, FR-005) Every CONTRADICTED row in R1 appears in `closing-report.md` with what the source says and
   what the map currently does, and its divergence is stated on the page itself.
-- **SC-008** `make done` green; `make page-check` green.
+- **SC-008** (FR-007) `make done` green; `make page-check` green.
 
 ## Out of scope, deliberately
 
