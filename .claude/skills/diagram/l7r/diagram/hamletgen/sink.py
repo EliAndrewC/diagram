@@ -208,6 +208,7 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
     dx, dy = plan.fall
     best: tuple[float, Pt] | None = None
     legs = list(zip(plan.brook, plan.brook[1:], strict=False))
+
     # THE TRUNK IS MEASURED ON THE CANVAS, NOT ALONG THE COURSE (feature 230, settlement-review passes 6 and 7).
     # `BROOK_JOIN_TRUNK` exists so a confluence is not drawn with nothing below it to read, and it counted ARC
     # LENGTH - which a brook may spend entirely off the sheet: pass 6 measured Sawada's junction with all 359 ft

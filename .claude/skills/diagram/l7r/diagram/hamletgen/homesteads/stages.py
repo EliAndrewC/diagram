@@ -94,6 +94,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             return False
         near = sorted(s.placed, key=lambda b: (float(b[0]) - x) ** 2 + (float(b[1]) - y) ** 2)[:8]
         mine = _bank_of(x, y)
+
         # BOTH TESTS MUST AGREE, and each alone was measured wrong. The SIDE of the nearest reach flips where the
         # course wraps the field's toe - two houses on one bank read as opposite sides - and refusing on that
         # alone seated 1 or 2 of 20. A CROSSING of the straight line between two houses is wrong the other way:

@@ -322,7 +322,10 @@ class FixtureSitingMixin:
         # that is actually nearest the chosen seat; the seat itself, its traffic and its verge are unchanged.
         _near = min(
             (
-                (seg_dist(x, y, (float(pp[k][0]), float(pp[k][1])), (float(pp[k + 1][0]), float(pp[k + 1][1]))), math.degrees(math.atan2(float(pp[k + 1][1]) - float(pp[k][1]), float(pp[k + 1][0]) - float(pp[k][0]))))
+                (
+                    seg_dist(x, y, (float(pp[k][0]), float(pp[k][1])), (float(pp[k + 1][0]), float(pp[k + 1][1]))),
+                    math.degrees(math.atan2(float(pp[k + 1][1]) - float(pp[k][1]), float(pp[k + 1][0]) - float(pp[k][0]))),
+                )
                 for _ln in (self.M.get("lanes") or [])
                 for pp in [_ln.get("pts") or []]
                 for k in range(len(pp) - 1)
