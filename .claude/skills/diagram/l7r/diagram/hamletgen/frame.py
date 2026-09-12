@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, title_pocket
@@ -144,7 +144,13 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
         else:  # no crop recorded (the frame test drives this stage with a stub) - fall back to the cloud
             hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
             hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
-        if not (hx0 - 30 <= spot[0] <= hx1 + 30 and hy0 - 30 <= spot[1] <= hy1 + 30):
+        # THE FOOTPRINT, NOT THE CENTER WITHIN 30 PX OF THE FRAME (settlement-review, feature 227). The slop
+        # admitted a board whose whole glyph is off the sheet: Sawada's stood 21 px above the view's top edge and
+        # was never re-seated, so the map shipped with no board and no caption drawn at all. A board is 12 x 5 ft
+        # and its caption reaches further, so the test insets by the footprint's own half-diagonal.
+        _fw, _fh = _board_footprint(s)
+        _inset = math.hypot(_fw, _fh) / 2
+        if not (hx0 + _inset <= spot[0] <= hx1 - _inset and hy0 + _inset <= spot[1] <= hy1 - _inset):
             board = s.M["kosatsuba"].pop()
             # ...AND ITS INK (feature 133 T48). Popping the record and the caption left the first
             # board's GLYPH in the top layer, so a map whose engine seat fell outside the cloud
@@ -177,6 +183,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
+            _seats: list[tuple[float, float, float, float]] = []  # (distance to the anchor, x, y, rot); the traffic is counted after the band narrows
+            _pxb = getattr(s, "px", None)
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
@@ -197,7 +205,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         _off = float(lane.get("w", 3)) / 2 + (_pxf(KOSATSUBA_VERGE_FT) if _pxf else KOSATSUBA_VERGE_FT) + _bh / 2
                         for side in (1.0, -1.0):
                             cx2, cy2 = mx + ux * _off * side, my + uy * _off * side
-                            if not (hx0 <= cx2 <= hx1 and hy0 <= cy2 <= hy1):
+                            if not (hx0 + _inset <= cx2 <= hx1 - _inset and hy0 + _inset <= cy2 <= hy1 - _inset):
                                 continue
                             # THE WAY IT FRONTS IS THE WAY IT IS NEAREST (T48): at a junction a verge
                             # of lane A can lie nearer lane B, and `kosatsuba_faces_the_road` measures
@@ -217,9 +225,22 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
                                 continue
                             # nearest the declared placement where there is one, else the busiest node
-                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else -sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
-                            if best is None or _rank < best[0]:
-                                best = (_rank, cx2, cy2, rot)
+                            _seats.append((math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else 0.0, cx2, cy2, rot))
+            # AN ANCHORED PLACEMENT CHOOSES THE GROUND, THE TRAFFIC CHOOSES THE SEAT ON IT - the rule
+            # `place_kosatsuba` states and applies, read here from the same constant rather than restated
+            # (settlement-review, feature 227). This loop ranked an anchored seat by its distance to the anchor
+            # ALONE, so as the clusters loosened the board walked out to whatever verge lay nearest the entrance
+            # and served nobody: four of five pool boards lost half their passing households, Sawada's ending
+            # 424 px past the cluster with two of nineteen within 250 ft.
+            if _seats:
+                if _anchor is not None:
+                    _near = min(q[0] for q in _seats)
+                    _band = _pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT
+                    _seats = [q for q in _seats if q[0] <= _near + _band] or _seats
+                # the traffic is counted only over the seats the band kept: a count per candidate cost seed 4's notice
+                # stage 1.1 s, and the engine's own order is the band first and the traffic second
+                _pick = max(_seats, key=lambda q: (sum(1 for h in hs if math.hypot(q[1] - h["x"], q[2] - h["y"]) < 260), -q[0]))
+                best = (0.0, _pick[1], _pick[2], _pick[3])
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:

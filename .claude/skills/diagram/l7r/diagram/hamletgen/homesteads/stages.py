@@ -7,7 +7,7 @@ import random
 
 from l7r.diagram.settlement import Settlement
 
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
 from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
@@ -331,6 +331,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 placed += 1
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
+    _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0
     # THE RANKS BEHIND THE FRONT ROW ARE PROPOSED BEHIND THE STANDING HOUSES (feature 227 FR-002/D8). The random cloud
     # deduped to a lattice (feature 226) relied on the placer's spiral to slide its seeds into a fit; the envelope-first
     # placer takes the seat it is given or makes one computed move, so the seats have to be RIGHT: each round offers,
@@ -340,11 +341,15 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # 14 of 16 and Inashiro strung along the paddy at 5.1 (rolled crescent, 1.9-4.2) on the deduped cloud.
     # The rescue (rounds five to seven) keeps the old cloud over a wider band, seeded a third of a pitch apart.
     _env = s._bundle_envelope(seat["cx"], seat["cy"], _house_max[0], _house_max[1], shed=True)
-    # one envelope's depth along the outward vector, plus its gap - and, where the ranks climb NORTH away from the
+    # one envelope's depth along the outward vector, plus THE ROOM A LANE NEEDS BETWEEN THE RANKS (`MIN_WEB_GAP`,
+    # both neighbors' clearance and the tread between them) - four pixels was the first figure and it left the pool's
+    # ranks abutting at a median 4 px, which no alley can thread: the web then could not reach the interior and
+    # cohort seed 39 stranded a farmhouse the re-roll could not save. A rank is separated from the rank in front by
+    # the lane that serves it. And, where the ranks climb NORTH away from the
     # field, the sun corridor a yard owes to its south (`SUN_CORRIDOR_FT`): the rank in front stands exactly there,
     # and at the bare depth every seat behind it was clear of the ground and refused by the parts' rules (cohort
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
-    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(4) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
+    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
     for attempt in range(7):
         if placed >= plan.spec.households:
             break
@@ -353,24 +358,41 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         _kept: list[Pt] = []
         _standing: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]
         if attempt < 4 and _standing:
-            # BEHIND EVERY STANDING HOUSE, not only the last rank's: a rank round that seats nothing (cohort seed 8 - two
-            # seats, both refused by the parts' rules) must not end the ranks, and a house whose back is already taken
-            # proposes a seat the dedupe below skips. A brick pattern: the even rounds offer the seats behind the
-            # midpoints of neighboring houses, the odd rounds the seats straight behind; both offer the seat one pitch
-            # beyond each end of the rank, so a cluster whose back is refused grows along the field instead.
-            _along = sorted(_standing, key=lambda q: (q[0] - seat["cx"]) * ax + (q[1] - seat["cy"]) * ay)
+            # A LATTICE MEASURED FROM THE ROW, NOT A STEP BEHIND WHOEVER STANDS IN FRONT (settlement-review, feature
+            # 227). Offering each seat one step behind a STANDING house compounds: rank 2 is measured from rank 1,
+            # which was measured from the row, and every refusal along the way shifts what follows it, so the cluster's
+            # centroid walks away from the field round by round and the ranks stop being ranks. Kuwabata's cluster
+            # ended 114 px off its polder and Sawada's resolved into eight pieces. The lateral positions still come
+            # from the houses that stand - the cluster is as wide as it is - but the DEPTH of round k is the row's own
+            # depth plus k steps, measured once from the seat, so a rank is where a rank should be and four rounds
+            # reach exactly four steps back. A brick: the even rounds offer the midpoints between neighbors, the odd
+            # rounds the seats straight behind.
+            _a_of = lambda q: (q[0] - seat["cx"]) * ax + (q[1] - seat["cy"]) * ay  # noqa: E731 - the band's two coordinates, used here only
+            _o_of = lambda q: (q[0] - seat["cx"]) * ox + (q[1] - seat["cy"]) * oy  # noqa: E731
+            _along = sorted(_standing, key=_a_of)
+            _row_out = min(_o_of(q) for q in (_row or _standing))  # the front row's own depth: `out` runs away from the field
+            _depth = _row_out + _rank_step * (attempt + 1)
+
+            def _seat_at(u: float, _d: float = _depth) -> Pt:
+                return (seat["cx"] + ax * u + ox * _d, seat["cy"] + ay * u + oy * _d)
+
+            _us = [_a_of(q) for q in _along]
             _ends = [(_along[0][0] - ax * BUNDLE_PITCH, _along[0][1] - ay * BUNDLE_PITCH), (_along[-1][0] + ax * BUNDLE_PITCH, _along[-1][1] + ay * BUNDLE_PITCH)]
             if attempt % 2 == 0:
-                _cands = [((p[0] + q[0]) / 2 + ox * _rank_step, (p[1] + q[1]) / 2 + oy * _rank_step) for p, q in zip(_along, _along[1:], strict=False)]
+                _cands = [_seat_at((p + q) / 2) for p, q in zip(_us, _us[1:], strict=False)]
                 # the brick's outer half-seats grow the rank along the field by half a pitch each: with the full-pitch
                 # ends, offered only when the back is refused (Mizuguchi's round strung to 4.5 with them in every round)
-                _ends += [
-                    (_along[0][0] - ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[0][1] - ay * BUNDLE_PITCH / 2 + oy * _rank_step),
-                    (_along[-1][0] + ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[-1][1] + ay * BUNDLE_PITCH / 2 + oy * _rank_step),
-                ]
+                _ends += [_seat_at(_us[0] - BUNDLE_PITCH / 2), _seat_at(_us[-1] + BUNDLE_PITCH / 2)]
             else:
-                _cands = [(hx + ox * _rank_step, hy + oy * _rank_step) for hx, hy in _along]
+                _cands = [_seat_at(u) for u in _us]
             _cands.sort(key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))  # center-out, as every proposer here
+            # FILL BEFORE YOU GROW (settlement-review, feature 227): a seat the front row could not take leaves a HOLE
+            # in the row, and the ranks - proposed behind the houses that did stand - carry the hole backward through
+            # the whole cluster. Inashiro shipped a 211 px gap in its row and read as three pieces (components
+            # [10, 4, 1] at a 165 px link) on a map whose form is nucleated. So the first rank round offers the
+            # midpoints of the row's own over-wide gaps AT THE ROW'S OWN DEPTH, ahead of anything behind it.
+            if attempt == 0:
+                _cands = [((p[0] + q[0]) / 2, (p[1] + q[1]) / 2) for p, q in zip(_along, _along[1:], strict=False) if math.dist(p, q) > BUNDLE_PITCH * 1.45] + _cands
         else:
             # THE RESCUE offers the along-the-field seats first - a pitch beyond each end of the standing rank, and the
             # brick's outer half-seats behind it - then the old cloud over the widened band; a quota the ranks could not
@@ -392,6 +414,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         for _sx4, _sy4 in _cands:
             if placed >= plan.spec.households:
                 break
+            # A PITCH IS A SPACING, NOT A RULING (settlement-review, feature 227: 11 of Mizuguchi's 12 houses fell in
+            # one 10 px bucket of nearest-neighbor distance, where the hand-packed maps spread over three). The seat is
+            # nudged along the band by up to a tenth of a pitch, from the map's own position hash - enough to break the
+            # modal spike, far too little to move a rank or to reopen a gap the round above just filled.
+            _jit = (s._hjit(_sx4, _sy4, 13.0) - 0.5) * BUNDLE_PITCH * 0.2
+            _sx4, _sy4 = _sx4 + ax * _jit, _sy4 + ay * _jit
             if not in_band((_sx4, _sy4)) and attempt >= 4:
                 continue
             if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * (0.5 if attempt < 4 else 0.3) for kx, ky in _kept) or any(

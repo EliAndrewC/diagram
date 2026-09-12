@@ -137,6 +137,21 @@ the feature's last task after rounds of feedback in the clone.
   binds within its band on the mosaic and just under it on the crescent and the elongated map; how far a rolled
   shape must bind is the GM's call at acceptance, the numbers being in R2.
 
+- **D9 What the review's second pass changed, and what it did not.** Four of its findings were mechanical and are
+  fixed: the notice board's frame test admitted a board up to 30 px OUTSIDE the view (Sawada's shipped 21 px above the
+  sheet, undrawn) and now insets by the board's own footprint; the stage's re-seat loop ranked an anchored board by its
+  distance to the anchor alone, where `place_kosatsuba` narrows to the anchor BAND and then takes the traffic - it
+  reads that rule from the same constant now; the garden's side had gone to 0 of 82 west, because a box the ground has
+  already cleared for every configuration leaves the fixed preference order deciding every time, so the doctrine's tier
+  (the sunny south strip before the walls) is kept and the hand within it is positional; and the ranks were measured a
+  step behind whoever stood in front, which compounds - each rank's DEPTH is now the row's own plus k steps, measured
+  once from the seat. Two were measured and left: the cluster reads as "fragmented" only on a CENTER-to-center link,
+  and this engine's own rule is that a gap verdict reads footprints - homestead to homestead the pool's median gap is
+  4 to 31 px, so the fabric is continuous and the houses are apart by exactly the yards and gardens between them; and
+  the board at an `entrance` seat reaches fewer households than the busiest stretch of the same lane BECAUSE that is
+  what an entrance seat is, a declared knob with its own research. Two are the GM's at acceptance (T07): Kuwabata's
+  cluster standing off its dike behind the bank, and the windbreak that cluster displaced.
+
 ## Review history
 
 - Round 1 (2026-09-12): CHANGES REQUIRED on three items - the GM's condition on the gardens ("as long as they are

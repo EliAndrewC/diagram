@@ -173,7 +173,15 @@ class PlacerMixin:
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1
             if not self._parts_fit(geom):
                 continue
-            score = (sum(self._garden_shaded(g) for g in geom["gardens"]), rank)  # fewest shaded beds first, then preference
+            # FEWEST SHADED BEDS, THEN THE DOCTRINE'S TIER, THEN THE MAP'S OWN HAND (feature 227, the review's
+            # second pass). `_NUC_SIDES` is (SE, SW, E, W): the sunny south strip before the walls is the researched
+            # preference and it is kept as the tier (rank // 2), but WITHIN a tier the left and the right are equally
+            # good and the choice is positional. It has to be: the envelope now clears the ground for every
+            # configuration before any is judged, so with nothing to break the tie the fixed order won every time and
+            # the west side went to 0 of 82 homesteads across the pool - in exactly the axis the GM asked to see vary
+            # (*"whether the garden is on the left or the right side or both"*).
+            _hand = (rank % 2) ^ (1 if self._hjit(cx, cy, 12.0) < 0.5 else 0)
+            score = (sum(self._garden_shaded(g) for g in geom["gardens"]), rank // 2, _hand)
             if best is None or score < best[0]:
                 best = (score, cx, cy, geom)
         if best is None:
