@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T183800Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "settlement-review already returned verdict pass on this exact manifest - byte-identical to the commit it read, every finding applied"
+}

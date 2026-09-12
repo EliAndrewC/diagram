@@ -25,6 +25,7 @@ comparing envelopes reports overlaps the reader cannot see while missing ones th
 from __future__ import annotations
 
 import math
+
 import pytest
 
 from l7r.diagram.overlap import matrix_extents, matrix_violations

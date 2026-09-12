@@ -13,15 +13,15 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       and have `duck_pen` delegate, so there is ONE body (feature 146 doctrine) and the seat test can
       build the arc a CANDIDATE seat would produce (`research.md` R6 implementation note).
       research: rendering
-- [ ] T03 `SLUICE_CLEAR_FT = 6.0` in `farm_fixtures.py` with its GUESS label and reasoning at the
+- [x] T03 `SLUICE_CLEAR_FT = 6.0` in `farm_fixtures.py` with its GUESS label and reasoning at the
       point of change (FR-002, one of the three required places).
       research: physical
-      - [ ] research pass - the record was searched by two `source-reader` agents; spacing along a
+      - [x] research pass - the record was searched by two `source-reader` agents; spacing along a
             dike is NOT-FOUND, FAO gives dike WIDTH only (`research.md` R2 C5, R3)
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
 - [x] T04 `pond_fixture_fits` holds every drawn part of a sty or pen clear of every
       `dikepond_sluices[]` stub by `SLUICE_CLEAR_FT` - the sty footprint, the pen's dry run, and the
       pen's fence arc (the open polyline). (FR-001, FR-002)
@@ -38,16 +38,16 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
 
 ## Phase 2 - the record
 
-- [ ] T07 `research/archetypes.html`: extend 'What stands on a dike-pond hamlet that a paddy hamlet
+- [x] T07 `research/archetypes.html`: extend 'What stands on a dike-pond hamlet that a paddy hamlet
       lacks?' with findings 1, 2, 5 and 7, and FIX its stale close - "neither is drawn" plus the
       resolved CANDIDATE comment, both contradicting the map since feature 150. (FR-005, FR-007, FR-011)
       research: physical
       - [x] research pass
       - [x] source-reader confirmed
       - [x] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T08 New section 'Does a pig sty have to stand back from the water, or from the pond's sluice?'
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+- [x] T08 New section 'Does a pig sty have to stand back from the water, or from the pond's sluice?'
       carrying findings 3, 4 and 6, with the 齊民要術 passage in English translation marked as one and
       the original as the anchor, and the inlet/outlet SILENCE as a labeled absence note - no key, no
       link, what was searched and when. (FR-005, FR-006)
@@ -55,17 +55,17 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       - [x] research pass
       - [x] source-reader confirmed
       - [x] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T09 `research/citations/archetypes.html`: the footnotes for every new assertion, each quoting
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+- [x] T09 `research/citations/archetypes.html`: the footnotes for every new assertion, each quoting
       the passage it rests on and linking a public page where the quote can be read; every new
       registry key gets its What-it-is / Why-it-applies write-ups in `SOURCES.html`. (FR-005, FR-009)
       research: physical
       - [x] research pass
       - [x] source-reader confirmed
       - [x] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
 - [x] T10 Pond figure (4.0 mu / 0.27 ha) carries its honest limit wherever it reaches a reader - the
       same ponds sit below the ISIS 0.4-0.6 ha band. (FR-005)
       research: rendering
@@ -82,8 +82,8 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
 - [x] T12 Regenerate Kuwabata; assert SC-001 (no drawn part overlaps a stub, all clear by the margin)
       and SC-002 (7 sties, 2 pens) on the new manifest.
       research: rendering
-- [ ] T13 `record-format` and `quote-check` over every changed research entry; `source-applicability`
+- [x] T13 `record-format` and `quote-check` over every changed research entry; `source-applicability`
       over every new registry key BEFORE its numbers reach a map or a rule. (FR-009)
       research: rendering
-- [ ] T14 `make done` green, paired with `settlement-review` on the regenerated map (FR-010).
+- [x] T14 `make done` green, paired with `settlement-review` on the regenerated map (FR-010).
       research: rendering
