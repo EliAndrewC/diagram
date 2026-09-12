@@ -21,7 +21,7 @@ that ought to be a work list is not one.
 The eighteen notes an earlier triage proposed for reclassification were read one by one against the pages
 ([`../232-absence-notes-researched/eighteen-verified.md`](../232-absence-notes-researched/eighteen-verified.md),
 corrected to this reading after a review went to the pages and found the first one still too generous).
-**The triage was wrong on seventeen of them.** The corrected picture, and the foundation of every factual
+**The triage was wrong on fourteen of them outright, and three more it called settled are not.** The corrected picture, and the foundation of every factual
 clause below:
 
 | | count | notes |
@@ -146,19 +146,38 @@ The footnotes near them - fn-17 and fn-18 - annotate the NEIGHBORING sentences, 
 about the world, so they remain open absence notes. An earlier draft of this spec would have deleted them
 with the sentences, removing two genuine research questions from the backlog.
 
-**FR-008 EVERY surface that states what a footnote may be is corrected - there are three, not one.** The GM
-asked what we can do in the FUTURE, and a vocabulary the checkers do not know is one the next session will be
-told is wrong.
+**FR-008 EVERY surface that states what a footnote may be is corrected - there are FOUR, and one is the
+constitution.** The GM asked what we can do in the FUTURE, and a vocabulary the checkers and the governing
+documents do not know is one the next session will be told is wrong. Two of these four were found only by
+review, which is why the list is now argued rather than asserted: the surfaces below are claimed to be
+exhaustive, and a round 4 sweep of the record's renderers, the registry tests, the derivation tests, the
+format test and the agent files found no fifth.
 
-1. `research/CLAUDE.md` says a footnote is one of exactly two forms and gives CITATION and ABSENCE. The
+1. **`.specify/memory/constitution.md`, Principle XII** ("CITE ONLY WHAT CAN BE READ") ends by saying
+   `tests/interactive/test_footnotes.py` "holds the two footnote forms". The constitution is the authority
+   that `research/CLAUDE.md` operationalizes, so a session reading only it is told the vocabulary has two
+   words. It gains the third. **This is an AMENDMENT, not upkeep**: a principle's obligation about what a
+   footnote may be is changing, so the constitution's version is bumped and the GM's words of 2026-09-12 are
+   recorded as the ruling behind it.
+2. **`research/CLAUDE.md`** says a footnote is one of exactly two forms and gives CITATION and ABSENCE. The
    grounds note, the closed list, which reasons are exemplified and the settled state land there, and that
    sentence is corrected.
-2. **`.claude/agents/quote-check.md`** tells that agent a footnote with no key and no link that does not read
-   `no publicly readable source (searched ...)` is an assertion with no usable citation. A grounds note has no
-   key and no link and does not read that, so `quote-check` - which this project runs on every new or changed
-   entry - would report every grounds note as a defect. Its absence-note rule gains the grounds note.
-3. **`tests/interactive/test_footnotes.py`'s `footnote_form()`**, the mechanical classifier, gains the kind so
-   that FR-009's "a note is one kind only" has something to classify against.
+3. **`tests/interactive/test_footnotes.py`** - BOTH the classifier and its consumer. `footnote_form()` gains
+   the kind, and `test_every_footnote_resolves_and_every_definition_quotes_a_registered_source`, which skips
+   an absence note and otherwise demands a registry-key link and a quotation, must ACCEPT a grounds note
+   owing no key, no link and no quotation. Without the second half the first grounds note fails the gate
+   whatever the classifier returns, and the requirement would be discovered as a red gate under SC-006.
+4. **`.claude/agents/quote-check.md`** tells that agent a footnote with no key and no link that does not read
+   `no publicly readable source (searched ...)` is an assertion with no usable citation. A grounds note is
+   exactly that shape, so quote-check - which this project runs on every changed entry - would report every
+   one as a defect. Its absence-note rule gains the grounds note.
+
+**And a fifth surface this feature may NOT touch.** `research/README.md` says a new entry "cites, or it says
+what was searched and not found", which is the same binary in the directory's own reader-facing index. **A
+README is the GM's to write (constitution XVII)**, and the authorization the GM gave on 2026-09-12 was for a
+specific correction already offered to them, not a standing one. So this feature OFFERS the replacement
+sentence in its closing report and does not apply it. If the GM reads that authorization as standing, it is
+a one-line change.
 
 **FR-009 The mechanical shape is checked, and the judgment is reviewed.** A test holds the form: every
 reason a grounds note names is one of the six; a settled note carries both dates and both passes' tools; a
@@ -180,15 +199,19 @@ the written argument there?
   feature 232 is converting absence notes to citations on the same files at the same time.
 - **SC-004** The two session-addressed sentences in FR-007 are no longer visible to a reader, and both
   footnotes are still present as open absence notes.
-- **SC-004a** All three surfaces in FR-008 know the grounds note: `research/CLAUDE.md` defines every form and
-  no longer says there are exactly two; `quote-check` does not report a grounds note as a missing citation;
-  and the mechanical classifier returns the new kind.
+- **SC-004a** All four surfaces in FR-008 know the grounds note: the constitution's Principle XII no longer
+  says there are two footnote forms and carries the amendment's version bump; `research/CLAUDE.md` defines
+  every form and no longer says there are exactly two; the mechanical classifier returns the new kind AND the
+  test that consumes it accepts a grounds note owing no key, link or quotation; and `quote-check` does not
+  report a grounds note as a missing citation. `research/README.md`'s replacement sentence is OFFERED in the
+  closing report and not applied.
 - **SC-004b** Every reason any grounds note names is one of the six in FR-002; no footnote is of two kinds at
   once; and no existing note is reclassified under any reason in FR-002's BARRED SET - `this project's
   decision`, `a drawing convention`, `physical necessity` - under this feature.
 - **SC-004c** Every converted note keeps its recorded search in a comment (FR-001a); none is discarded.
 - **SC-004d** Every note converted under a reason FR-002 does not mark exemplified carries its written
-  argument at its own page, checked by `record-format`.
+  argument at its own page, and so does `religion-and-death.html` fn-49 under whichever reason it converts,
+  since FR-006 requires the argument there either way - checked by `record-format`.
 - **SC-005** Every settled absence note carries two dated passes, each naming the tools it used, the later
   naming at least one the earlier lacked - all judgeable from the note itself.
 - **SC-006** `make page-check` green; `make done` green.
