@@ -325,3 +325,28 @@ The branch is proved by a unit test instead (`tests/hamletgen/test_sink.py`, the
 runs well inside the picture and refused on one carried outside it), and the third sink will appear on the first
 map whose outfall stands far enough inside the frame.
 
+## R8 The confluence, exhibited after all (2026-09-12)
+
+R7 recorded that no pool map draws the third sink. The eighth review pointed at the lever this feature had
+built and not pulled: `brook_side` was made pinnable in the same commit, with the stated purpose of letting the
+pool exhibit a sink a roll happens not to reach, and an implemented sink owes one exhibit the way a knob owes
+one map per value.
+
+MEASURED, per map, walking each brook at a 10 px stride against its own outfall:
+
+| map | rolled sink | the nearest brook point that has FALLEN below the outfall |
+|---|---|---|
+| Inashiro | pond | none - the brook is 1,049 ft away and 1,033 ft uphill |
+| Mizuguchi | pond | 55 ft away, 54 ft fallen (never consulted: it is a pond map) |
+| Kashikawa | off-frame | none on the rolled flank - the brook is 840 ft away and uphill |
+| Sawada | off-frame | 76 ft away and fallen, and refused: about 85 px of canvas below it against the 150 the rule asks |
+
+So Sawada cannot take it at either flank - its outfall stands at the canvas edge, which is the geometry, not the
+rule. Kashikawa can, on the flank it does not roll: pinned to `brook_side=-1` the brook passes the side the
+outfall is on, the collector reaches it, and the junction falls **123 ft inside the view with 347 ft of stream
+below it in the picture**. All twenty households still seat and the roll reports no failure. The pin carries its
+reason in the generator, as Sawada's `intake="open"` does.
+
+The pool therefore shows all three sinks again: the pond (Inashiro, Mizuguchi), the off-frame run (Sawada,
+Kuwabata) and the confluence (Kashikawa).
+

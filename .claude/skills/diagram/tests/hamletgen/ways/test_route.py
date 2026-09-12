@@ -158,4 +158,4 @@ def test_unjog_takes_the_knee_of_a_zigzag_whose_chord_is_blocked() -> None:
     path = [(0.0, 0.0), (50.0, 0.0), (58.0, 38.0), (110.0, 30.0)]
     out = _unjog(path, [wall], [], [], gap=0.5)  # a small explicit gap, so the fixture's geometry is the thing under test
     assert out[0] == (0.0, 0.0) and out[-1] == (110.0, 30.0)
-    assert len(out) < len(path), "the two step vertices give way to one knee" 
+    assert len(out) < len(path), "the two step vertices give way to one knee"

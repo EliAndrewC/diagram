@@ -59,11 +59,7 @@ def far_bank(x: float, y: float, brook: Sequence[Pt], placed: Sequence[Pt]) -> b
         return False
     near = sorted(placed, key=lambda b: (b[0] - x) ** 2 + (b[1] - y) ** 2)[:8]
     mine = bank_of(x, y, brook)
-    cut = sum(
-        1
-        for b in near
-        if bank_of(b[0], b[1], brook) != mine and any(seg_intersect(b, (x, y), brook[i], brook[i + 1]) is not None for i in range(len(brook) - 1))
-    )
+    cut = sum(1 for b in near if bank_of(b[0], b[1], brook) != mine and any(seg_intersect(b, (x, y), brook[i], brook[i + 1]) is not None for i in range(len(brook) - 1)))
     return cut * 2 > len(near)
 
 
