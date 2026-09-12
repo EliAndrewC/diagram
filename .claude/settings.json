@@ -186,6 +186,10 @@
           {
             "type": "command",
             "command": "/diagram/scripts/pair-hooks.sh pretool"
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/escalation-hooks.sh pretool"
           }
         ]
       }
@@ -222,6 +226,14 @@
             "type": "command",
             "command": "/diagram/scripts/finished-run-hooks.sh stop",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/escalation-hooks.sh stop"
           }
         ]
       }
