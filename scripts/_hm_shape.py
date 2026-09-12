@@ -31,6 +31,75 @@ def _strip_quotes(cmd: str) -> str:
     prevent. `python3 -c "import pytest; pytest.main()"` keeps its quote and stays blocked."""
     return re.sub(r"(?<!-c )(?<!-c\t)([\"'])(?:\\.|(?!\1).)*\1", r"\1\1", cmd, flags=re.S)
 
+# ---- A BACKTICK THAT WOULD RUN (feature 236, the GM's item 2) -----------------------------------
+#
+# `bash -n` cannot see this one, because it is VALID SYNTAX that runs: inside double quotes, and in
+# the body of an UNQUOTED heredoc, a backtick span is command substitution. The usual way one arrives
+# is a markdown code span written into prose - a commit message, an echo, a heredoc'd note - which is
+# exactly how the Makefile recipe-comment guard came to exist after `make test-full` ran itself from
+# inside a comment and recursed 914 levels. That guard covers Makefiles; this covers commands.
+#
+# It lives HERE, in the shape leaf, because it is the same question both callers ask - what does this
+# text literally do - and `_hm_make.recipe_comment_hazards` now asks it through this function rather
+# than keeping a second copy of the rule (feature 236 FR-004a).
+_QUOTED_HEREDOC = re.compile(r"<<-?\s*(?:'(\w+)'|\"(\w+)\"|\\(\w+))(.*?)^[ \t]*(?:\1|\2|\3)[ \t]*$", re.S | re.M)
+#: an UNQUOTED heredoc body is expanded like double-quoted text: a backtick span in it RUNS, and the
+#: quote characters in it are literal - an apostrophe there must not hide a later span
+_UNQUOTED_HEREDOC = re.compile(r"<<-?\s*([A-Za-z_]\w*)[^\n]*\n(.*?)^[ \t]*\1[ \t]*$", re.S | re.M)
+_BACKTICK_SPAN = re.compile(r"(?<!\\)`[^`\n]*(?<!\\)`")
+
+
+def executing_backticks(text: str, in_double: bool = False) -> list[str]:
+    """Every backtick span in `text` that bash would EXECUTE, in order.
+
+    The quote walk is the whole of it: a span inside single quotes or an ANSI-C `$'...'` string does
+    not run, nor does one in a heredoc whose delimiter is quoted any of the three ways (`<<'X'`,
+    `<<"X"`, `<<\\X`), nor does an escaped backtick open anything, nor does one after an unquoted `#`,
+    which begins a comment. A span in an unquoted heredoc body DOES run, and that body's quote
+    characters are literal text - the case a plain walker gets wrong, hiding a later span behind an
+    apostrophe.
+
+    `in_double=True` starts the walk inside a double-quoted string, which is what a Makefile recipe
+    comment's `: "..."` payload is.
+    """
+    spans: list[str] = []
+    text = _QUOTED_HEREDOC.sub(" ", text)
+
+    def _take(m: re.Match[str]) -> str:
+        spans.extend(_BACKTICK_SPAN.findall(m.group(2)))
+        return " "
+
+    text = _UNQUOTED_HEREDOC.sub(_take, text)
+    sq = ansi = esc = False
+    dq = in_double
+    i, n = 0, len(text)
+    while i < n:
+        ch = text[i]
+        if esc:
+            esc = False
+        elif ch == "\\" and not sq:
+            esc = True                       # a backslash is literal inside single quotes only
+        elif sq:
+            if ch == "'":
+                sq = ansi = False
+        elif ch == "'" and not dq:
+            sq, ansi = True, text[i - 1:i] == "$"
+        elif ch == '"':
+            dq = not dq
+        elif ch == "#" and not dq and (i == 0 or text[i - 1] in " \t\n;&|("):
+            j = text.find("\n", i)           # a comment runs to the end of the line and executes nothing
+            i = n if j < 0 else j
+        elif ch == "`":
+            j = i + 1
+            while j < n and not (text[j] == "`" and text[j - 1] != "\\"):
+                j += 1
+            if j < n:
+                spans.append(text[i:j + 1])
+                i = j
+        i += 1
+    return spans
+
+
 # ---- THE ONE WAIT THAT IS NOT A BUSY-WAIT (feature 165, the GM's ruling 2026-08-30) ------------
 #
 # `no-poll` refuses every loop containing `sleep`, and it is right about the foreground: that is the

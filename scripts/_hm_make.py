@@ -13,7 +13,7 @@ import re
 import sys
 
 from _hm_escape import escape_used
-from _hm_shape import _POS, _PY, _strip_heredocs, _strip_quotes
+from _hm_shape import _POS, _PY, _strip_heredocs, _strip_quotes, executing_backticks
 
 # a guard file, as the TARGET of a write - the filename adjacent to the operator that writes it
 # GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets (tests/rolls.py) is a guard on the shell route too, so a
@@ -557,14 +557,17 @@ def _wrapped(cmd: str, cwd: str = "") -> tuple[str | None, str]:
 # line runs). `\`` and `\$$(` are literal to the shell and pass - the Makefile's own `\$$(MAKE)`
 # mention is the worked example. A single-quoted comment (`: '...'`) cannot substitute and passes.
 _RECIPE_COMMENT = re.compile(r'^\t\s*@?\s*:\s+"((?:[^"\\]|\\.)*)"')
-_UNESCAPED_SUBST = re.compile(r"(?<!\\)`|(?<!\\)\$\$[({]")
+# GUARD_EDIT_OK: feature 236 - the BACKTICK half is now `_hm_shape.executing_backticks`, the same
+# walk the Bash guard uses, started inside a double quote because that is what this payload is. One
+# rule, one implementation: the two had no reason to be separate copies, and a copy drifts.
+_UNESCAPED_MAKE_SUBST = re.compile(r"(?<!\\)\$\$[({]")
 
 def recipe_comment_hazards(text: str) -> list[tuple[int, str]]:
     """(1-based line, the line) for every `: "..."` recipe comment whose string would RUN something."""
     out: list[tuple[int, str]] = []
     for n, line in enumerate(text.split("\n"), 1):
         m = _RECIPE_COMMENT.match(line)
-        if m and _UNESCAPED_SUBST.search(m.group(1)):
+        if m and (executing_backticks(m.group(1), in_double=True) or _UNESCAPED_MAKE_SUBST.search(m.group(1))):
             out.append((n, line))
     return out
 

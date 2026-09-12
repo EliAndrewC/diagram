@@ -1039,6 +1039,12 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 quick:           ## [tests] tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure   ALL=1
 ##  ALL=1  run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
+	: "GUARD_EDIT_OK: feature 236, the GM item 4 - the house-style rule, on the DELTA, as a PHASE." ; \
+	: "A PHASE and not a pytest test because quick selects tests by CHANGED CODE (testmon), and a scan" ; \
+	: "whose own code never changes would sit unexecuted through exactly the edits it exists to catch." ; \
+	: "It reads the hook own BRIT table, scans the delta plus every untracked file, and costs ~0.2 s." ; \
+	@python3 ../../../scripts/check-house-style-delta.py --selftest >/dev/null
+	@python3 ../../../scripts/check-house-style-delta.py ../../..
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
@@ -1221,6 +1227,12 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 # clause 12's expression count on FUNCTIONS, is still owed.
 	python3 ../../../scripts/check-file-scale.py --selftest
 	python3 ../../../scripts/check-file-scale.py ../../..
+	: "GUARD_EDIT_OK: feature 236, the GM item 5 - spec-lint, beside its two siblings and for the same" ; \
+	: "reason: a repo-wide static rule with a selftest that runs first, in the phase the gate runs FIRST" ; \
+	: "so a finding arrives before the map roll is paid for. It reads only the specs directories this" ; \
+	: "delta touches, so it costs nothing on a change that touches none."
+	python3 ../../../scripts/spec-lint.py --selftest
+	python3 ../../../scripts/spec-lint.py --delta ../../..
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \
