@@ -709,6 +709,12 @@ print()"
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
 	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
+# GUARD_EDIT_OK: feature 234 - the declared-silence carve-out is enumerated for the same reason clause 13's
+# is, one line above: a class entry may name no research section when the section is deliberately unwritten,
+# and a carve-out nobody can list is one nobody revisits.
+	@printf '\033[1mClass entries with no research section\033[0m (feature 234 - the declared-silence form)\n'
+	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, '../../../scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','../../../scripts/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
+	@printf '  A broken heading and a deliberate silence are told apart by this FORM, never by a non-match.\n\n'
 # GUARD_EDIT_OK: feature 197 - the audit gains the FEATURE-NUMBER LEDGER (spec FR-008): every claim `make claim`
 # made, newest last, read from the mirror's `.specify/feature-numbers.jsonl` (the mirror is a clone's grandparent;
 # from the mirror itself it is the toplevel). A ledger nobody reads is a file nobody notices is broken.
@@ -932,7 +938,8 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 	python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/page_browser \
 	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
 	  && python3 "$$root/scripts/gate-stamp.py" --write browser \
-	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n'
+	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
+	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/_entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/_entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
 # GUARD_EDIT_OK: feature 188 - `make tick` (the GM: "The idea of a make tick helper. does indeed seem good"): tick ONE
 # task in a feature's tasks.md from the command line, with its verify note, refusing rather than guessing when the

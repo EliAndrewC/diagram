@@ -52,3 +52,31 @@ def test_persimmon_is_one_crown_with_fruit_and_joins_the_tree_record():
     assert s.M["persimmons"] == [{"x": 200.0, "y": 200.0, "r": 9.0, "of": [180.0, 200.0]}]
     assert len(s.M["tree_crowns"]) == before + 3, "the crown is a tree: structures_clear_of_trees reads it"
     assert s.top[-1].count("#E07B22") == 4, "four fruit dots are the persimmon convention"
+
+
+def test_a_pond_fixture_will_not_stand_on_its_sluice():
+    """feature 233. Nobody builds a shed over the opening they have to reach to lift its boards - the
+    rule the engine's dike-top house placer already had ("never build over a sluice notch") and the
+    pond-stock placer did not, which is why three of Kuwabata's seven sties were drawn with a feed
+    culvert running through them."""
+    s = Settlement(W=400, H=400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["dikepond_sluices"] = [{"a": [100.0, 100.0], "b": [124.0, 100.0], "kind": "feed"}]
+    assert not s.pond_fixture_fits(105.0, 100.0, 0.0, "sty"), "the stub runs through the shed"
+    assert not s.pond_fixture_fits(105.0, 104.0, 0.0, "sty"), "clear of it, but inside the working margin"
+    assert s.pond_fixture_fits(105.0, 120.0, 0.0, "sty"), "a seat further along the same bank is fine"
+    # measured to the SEGMENT, not to an endpoint: a stub is 19-41 ft long on a real map
+    assert not s.pond_fixture_fits(124.0, 103.0, 0.0, "sty"), "over the middle of the stub, far from either anchor"
+
+
+def test_a_duck_pens_fence_arc_is_held_off_the_sluice_as_well_as_its_dry_run():
+    """feature 233: `duck_pens[]` has TWO drawn parts, and the fence reaching into the water was the
+    worst offender on the shipped map - 0 ft from a feed stub, crossing it, while its dry run stood
+    2.3 ft off. A seat that is fine for a sty can therefore be refused for a pen."""
+    s = Settlement(W=400, H=400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    water = [(100.0, 200.0)]
+    s.M["dikepond_sluices"] = [{"a": [90.0, 205.0], "b": [114.0, 205.0], "kind": "feed"}]
+    assert s.pond_fixture_fits(100.0, 150.0, 0.0, "sty"), "the shed's own footprint is nowhere near it"
+    assert not s.pond_fixture_fits(100.0, 150.0, 0.0, "pen", water=water), "but the pen's fence arc reaches the stub"
+    assert s.pond_fixture_fits(100.0, 150.0, 0.0, "pen"), "with no pond outline there is no arc to foul"
