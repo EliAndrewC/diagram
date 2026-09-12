@@ -101,14 +101,19 @@ a search finds a substitute for by luck.
 
 The water reader found one anyway: **`T/JSSLKX 002-2021`**, the Jiangsu Society for Water Resources
 guideline for the planning and design of small farmland water-conservancy works, an openly readable PDF
-whose own clause 9.1.6 declares it subordinate to GB 50288. It carries the numbers, and it closes EIGHT
-notes across three pages at once - the 1 m bank top, the 0.3 m bottom width stated explicitly as
+whose own clause 9.1.6 declares it subordinate to GB 50288. It closes EIGHT notes across three pages at once - the 1 m bank top, the 0.3 m bottom width stated explicitly as
 maintenance access, canals of every grade running on the high ground of their own command area with the
 mains along the contours and the laterals crossing them, and irrigation and drainage as two coordinated
 systems rather than one.
 
-**What this does NOT license.** A subordinate guideline is evidence of what the standard requires, not
-the standard's own text, so a footnote cites T/JSSLKX and says so. `water.html` fn-49 currently
+**What this does NOT license, and a correction to this section.** A subordinate guideline is evidence of
+what the standard requires, not the standard's own text, so a footnote cites T/JSSLKX and says so. And this
+section first said the guideline "carries the numbers" this project had been chasing, which is too broad:
+the second pass established that **it does not give canal widths by grade at all**, and that its only 1.0 m
+is a BANK-CREST width in a different clause - a coincidence of number that would read as a match and is not
+one. What it carries is the bank crest, the 0.3 m bottom width stated as maintenance access, the siting of
+canals by grade on the high ground of their own command area, and irrigation and drainage as two
+coordinated systems. The distribution lateral's width came from somewhere else entirely. `water.html` fn-49 currently
 attributes its 1 m figure to GB 50288 DIRECTLY, which nobody in this project has read; that attribution
 is corrected to the guideline, or marked second-hand.
 
