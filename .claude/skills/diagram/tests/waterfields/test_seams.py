@@ -484,21 +484,47 @@ def test_a_hairline_spur_is_a_needle_even_where_the_deduped_ring_hides_it() -> N
 
 def test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin() -> None:
     """The flooded tint is a random sample of the closing rank that the tint clauses can take back entirely -
-    the reference hamlet shipped no blue plot at all. When nothing survives, the largest compliant low basin
-    is tinted, taking no draw from R; when something survives, nothing is promoted."""
+    the reference hamlet shipped no blue plot at all. When nothing survives, the most BASIN-LIKE compliant low plot
+    is tinted, preferring one on the collector (`_D`, at y 1300), taking no draw from R; when something survives,
+    nothing is promoted."""
     from l7r.diagram.waterfields.palette import FLOODED
 
     # sized like the design cell (46 x 26-30 here): the pass plants the bare envelope with basins that size, and a
     # plot more than twice the median is demoted by the size clause, so an oversized fixture would test nothing
-    big, small = _rect(300, 300, 346, 330), _rect(500, 300, 540, 326)
-    plots = _close([{"poly": big, "fill": "#A6C398", "low": True}, {"poly": small, "fill": "#A6C398", "low": True}, {"poly": _rect(300, 700, 346, 730), "fill": "#A6C398"}])
+    far, on = _rect(300, 300, 346, 330), _rect(600, 1266, 640, 1292)
+    plots = _close([{"poly": far, "fill": "#A6C398", "low": True}, {"poly": on, "fill": "#A6C398", "low": True}, {"poly": _rect(300, 700, 346, 730), "fill": "#A6C398"}])
     flooded = [p for p in plots if p["fill"] == FLOODED]
     assert len(flooded) == 1, "exactly one basin is promoted when the sample left none"
-    assert Polygon(flooded[0]["poly"]).area > Polygon(small).area, "and it is the largest compliant one on the low ground"
-    assert flooded[0].get("low"), "never a plot off the low ground"
+    assert min(q[1] for q in flooded[0]["poly"]) > 1200, "and it is the one on the collector, as the carve's own blue always is"
+    assert flooded[0].get("low") or max(q[1] for q in flooded[0]["poly"]) >= 1300 - 0.25 * 46.0, "never a plot off the low ground: flagged low, or on the collector itself (a planted basin carries no flag)"
 
-    kept = _close([{"poly": big, "fill": "#A6C398", "low": True}, {"poly": small, "fill": FLOODED, "low": True}])
-    assert [Polygon(p["poly"]).area < Polygon(big).area for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
+    kept = _close([{"poly": far, "fill": "#A6C398", "low": True}, {"poly": on, "fill": FLOODED, "low": True}])
+    assert [min(q[1] for q in p["poly"]) > 1200 for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
+
+
+def test_a_triangle_never_wears_the_water_tint() -> None:
+    """The fill clause: a triangle's solidity is 1.0 and a capped wedge has no sharp vertex, so both passed every
+    earlier clause and read as little ponds (Sawada, Kashikawa). One that fills less than its rectangle is demoted,
+    and never promoted."""
+    from l7r.diagram.waterfields.palette import FLOODED
+
+    tri = [(600.0, 1292.0), (660.0, 1292.0), (600.0, 1250.0)]
+    plots = _close([{"poly": tri, "fill": FLOODED, "low": True}])
+    assert not any(p["fill"] == FLOODED and min(q[1] for q in p["poly"]) > 1240 and len(p["poly"]) == 3 for p in plots)
+
+
+def test_basin_rank_orders_on_the_collector_then_fill_then_size() -> None:
+    from shapely.geometry import LineString, Polygon
+
+    from l7r.diagram.waterfields.seams.close import _basin_rank
+
+    drain = LineString([(0.0, 100.0), (1000.0, 100.0)])
+    sq = Polygon(_rect(0, 60, 40, 98))
+    assert _basin_rank(sq, 1.0, 1520.0, drain, 48.0)[0] is False, "within a quarter plot of the drain is ON it"
+    assert _basin_rank(Polygon(_rect(0, 0, 40, 38)), 1.0, 1520.0, drain, 48.0)[0] is True
+    assert _basin_rank(sq, 0.9, 1520.0, drain, 48.0) > _basin_rank(sq, 1.0, 1520.0, drain, 48.0), "a fuller rectangle ranks first"
+    assert _basin_rank(sq, 1.0, 1520.0, None, 48.0)[0] is True, "no collector to be on"
+    assert _basin_rank(sq, 1.0, 0.0, drain, 48.0)[2] == 0.0, "no median, no size term"
 
 
 def test_a_repaired_crossing_ring_is_refused_when_its_raw_ring_is_a_needle() -> None:

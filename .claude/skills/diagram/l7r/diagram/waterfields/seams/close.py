@@ -5,7 +5,7 @@ import random
 from collections.abc import Callable
 from typing import Any
 
-from shapely.geometry import Polygon
+from shapely.geometry import LineString, Polygon
 from shapely.ops import unary_union
 
 from ..banks import (
@@ -15,6 +15,7 @@ from ..banks import (
     _TINT_MAX_AREA_RATIO,
     _TINT_MAX_ASPECT,
     _TINT_MIN_APEX,
+    _TINT_MIN_RECTANGULARITY,
     _TINT_MIN_SOLIDITY,
     _TOE_MIN_APEX,
     _TOE_MIN_AREA,
@@ -198,7 +199,8 @@ def close_seams(
     # four. Measured on the FINAL ring, after absorption, which is the only place the size exists.
     _areas = sorted(Polygon(_q["poly"]).buffer(0).area for _q in plots if len(_q.get("poly") or []) >= 3)
     _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
-    _keeps: list[tuple[float, dict[str, Any]]] = []
+    _keeps: list[tuple[tuple[bool, float, float], dict[str, Any]]] = []
+    _collector = LineString(dpts) if len(dpts) >= 2 else None
     for p in plots:
         # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
         # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
@@ -244,6 +246,7 @@ def close_seams(
         # reads as a channel of water rather than as a basin holding it (see `_TINT_MAX_ASPECT`).
         _mrr = _pg.minimum_rotated_rectangle if isinstance(_pg, Polygon) and not _pg.is_empty else None
         _asp = 1.0
+        _fill = (_pg.area / _mrr.area) if isinstance(_mrr, Polygon) and _mrr.area > 0.0 else 1.0
         if isinstance(_mrr, Polygon):
             _sides = [math.dist(_q, _r) for _q, _r in zip(list(_mrr.exterior.coords)[:-1], list(_mrr.exterior.coords)[1:], strict=True)]
             if len(_sides) >= 2 and min(_sides[0], _sides[1]) > 0.0:
@@ -254,12 +257,16 @@ def close_seams(
             or _psol < _TINT_MIN_SOLIDITY
             or _at_outfall
             or _asp > _TINT_MAX_ASPECT
+            or _fill < _TINT_MIN_RECTANGULARITY
             or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
         )
         if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
-        elif not _wrong and p.get("low") and _pg.area > 0.0:
-            _keeps.append((_pg.area, p))
+        elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _pg.distance(_collector) <= 0.25 * plot_across)):
+            # ...and a plot ON the collector is low ground whatever it records: `low` is set only on the plots the carve
+            # cut, so the basins this pass plants or `_comb_toe_and_hem` re-hems onto the drain's bank never carry it -
+            # measured on Mizuguchi, 49 of the 64 plots on the collector, while the 15 that did were the seam wedges
+            _keeps.append((_basin_rank(_pg, _fill, _median_plot, _collector, plot_across), p))
     # THE MAP MUST STILL EXHIBIT THE CLASS IT DECLARES (feature 230). The tint is a SAMPLE - a random
     # 45% of the closing rank, for texture - and every one of those draws can be taken back by the six
     # clauses above, which is how the reference hamlet came to paint no blue plot at all: of 90-odd
@@ -267,14 +274,30 @@ def close_seams(
     # feature and 72% at the size after it, so the map's whole wet-paddy exhibit was resting on one
     # survivor and any re-roll could take it. `flooded_plots` is the picture record the interactive
     # page's wet-paddy class reads, and a sheet that paints none has silently stopped exhibiting the
-    # class feature 159 created. So when the sample comes back empty, the LARGEST compliant basin on
+    # class feature 159 created. So when the sample comes back empty, the most BASIN-LIKE compliant plot on
     # the low ground is tinted - it passed every clause the random ones are judged by, so nothing is
-    # painted blue that could not have been painted blue by the draw. It takes NO draw from R (the
+    # painted blue that could not have been painted blue by the draw. (The first cut took the LARGEST, and
+    # settlement-review pass 10 measured what that key selects: whatever is pressed hardest against the size
+    # ceiling, which at a fan seam is the long irregular wedge - Mizuguchi's was 3.71 long and 23 ft back from
+    # the collector, where the carve's own rule is that a blue plot abuts the drain. See `_basin_rank`.) It takes NO draw from R (the
     # stream stays put, exactly as the demotion's indexed green does), so promoting one plot cannot
     # re-roll another, and on a roll whose sample survived this does nothing at all.
     if _keeps and not any(_p.get("fill") == FLOODED for _p in plots):
-        _keeps.sort(key=lambda _a: (-_a[0], round(_a[1]["poly"][0][0], 1), round(_a[1]["poly"][0][1], 1)))
+        _keeps.sort(key=lambda _a: (_a[0], round(_a[1]["poly"][0][0], 1), round(_a[1]["poly"][0][1], 1)))
         _keeps[0][1]["fill"] = FLOODED
+
+
+def _basin_rank(basin: Polygon, fill: float, median: float, collector: LineString | None, plot_across: float) -> tuple[bool, float, float]:
+    """How a compliant low plot ranks as THE flooded basin a map must exhibit - lower is better.
+
+    First, whether it lies ON the collector (within a quarter of a plot's width): the carve tints only the level whose bottom
+    edge is snapped to the drain's bank, because blue means the closing rank pooling before the outfall, and a promoted plot
+    owes the same reading. Then how far it falls short of filling its own rectangle, which is what a leveled basin looks
+    like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also its biggest.
+    """
+    on = collector is not None and basin.distance(collector) <= 0.25 * plot_across
+    size = abs(math.log(basin.area / median)) if median > 0.0 and basin.area > 0.0 else 0.0
+    return (not on, round(1.0 - fill, 4), round(size, 4))
 
 
 def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:

@@ -40,10 +40,12 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       - [x] Inashiro E1: the connector undrawn - five passes deleted a lane record and left its ink slot; `drop_lanes` + a behavioral and a static test; all five maps draw every lane exactly once
       - [x] Inashiro E2: the brook's +/-29 degree sawtooth - `_off_the_axes` kicked alternate legs a flat 11 px; now tilts just past the detector (median turn ~12 -> ~5.7)
       - [x] Inashiro E3 / Kashikawa E5 / Sawada N2 / Mizuguchi N2: the two ditch inks indistinguishable - DRAIN_HUE #7C9EB0 -> #5E7A76; the z-order audit reads the constants
-      - [ ] the FRAME-BOX sawtooth (Kashikawa E3, Mizuguchi's 68.7 at v26, Sawada's 46 degree notch): stations floored past the box by the skirt (34) while cut points are clamped to the box margin (8)
+      - [x] the FRAME-BOX sawtooth (Kashikawa E3, Mizuguchi's 68.7 at v26, Sawada's 46 degree notch): margin 44 + the frame reserving the brook beside the field; two levers refused on measurement (commit a7ca530d)
       - [ ] the tap corner, remaining 51-53 degrees (Sawada E1, Mizuguchi E3): over 200 ft the fork opens to 81-86 degrees
-      - [ ] the guaranteed flooded plot is a wedge (Mizuguchi E1, Kashikawa E4, Sawada E2): the promotion picks the LARGEST compliant plot; pick the most basin-like one that touches the collector
-      - [ ] paddy rings below 15 degrees on Kashikawa (E2: rings 358-361 retrace an edge, 723 a 55 ft spike tail) - the gate tests read only Inashiro and Kuwabata, so check every pool map
+      - [x] the guaranteed flooded plot is a wedge (Mizuguchi E1, Kashikawa E4, Sawada E2): a sixth tint clause (fill of the minimum rectangle >= 0.80; pool median 0.93) and the promotion ranked on-the-collector, then fill, then size; plots on the collector count as low. Every map's blue plot: 0.79-1.19x median, aspect 1.08-2.0, fill 0.85-1.00, 2.5-10.7 px from the drain
+      - [x] paddy rings below 15 degrees on Kashikawa (E2) - none on any of the five regenerated maps by the gate's own `pointed_ring` at 15 degrees; the gate tests read only Inashiro and Kuwabata, so a cheap all-manifest check is still owed (below)
+      - [ ] a gate test that reads every shipped pool manifest for sub-15 degree rings, not only the two the gate rolls
+      - [ ] FOUND, pre-existing on main: 20-49 pairs of paddy rings overlap per brook map (up to 482 sq px) - decide defect or layering, then fix or record
       - [ ] the weir drawn backwards on Kashikawa (E1): the head race mouth below the downstream face, the slant reversed
       - [ ] Mizuguchi E2: the drain doubles back to its pond in a 111.6 degree hairpin
       - [ ] Kuwabata E1: the polder's laterals carry both feed and drain sluices and are classed irrigation ditch - a research question (two-way canals) and a class
