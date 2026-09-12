@@ -81,18 +81,31 @@ markers (`<sup class="fn">`) and link attributes, then compare. That is aimed sq
 sweeps, which moved footnotes onto citations pages, turned session notes into comments, and re-pointed
 citations.
 
-Measured over every research-only commit since 2026-08-20:
+**The population, stated so it can be re-run.** Commits since 2026-08-20 that touch one of the six
+research pages a class `Entry:` actually names (`archetypes`, `fields`, `homesteads`, `urban-features`,
+`vegetation`, `water`) and that change no `interactive/classes/*.py` - the exemption that applies when a
+docstring moved in the same delta. **30 commits.** Each is judged at SECTION level, exactly as the key
+does: a commit fires when a section NAMED BY A CLASS ENTRY has its body changed, not when the file
+changed anywhere.
 
-| key | commits that fire |
+| key | of those 30 commits, fire |
 |---|---|
-| the section's BODY changed | **39 of 39** |
-| what a READER SEES changed | **38 of 39** |
+| the named section's BODY changed | **28** |
+| what a READER SEES in it changed (HTML comments, `<sup class="fn">` markers and link attributes stripped) | **27** |
 
-**It does not help.** One commit in thirty-nine is the entire saving, because those sweeps do touch
+**It does not help.** One commit in thirty is the entire saving, because those sweeps do touch
 reader-visible text - a session note turned into an HTML comment REMOVES a visible sentence, and the
 translation pass rewrites visible quotations. There is no mechanical key that separates "this section
 now says something different about the thing on the map" from "this section was maintained", because
 that separation is a judgment about meaning.
+
+**Reconciled with R2, whose 30-of-32 is a different count.** R2 replayed the ROUND-1 rule over a
+file-level population and reported how many commits it would flag; this is a section-level replay over
+the pages an entry names, with the docstring exemption applied. The two agree in the only way that
+matters - the key fires on nearly every research-only commit - and neither number should be quoted as
+the other. An earlier draft of this section said "39 of 39" and "38 of 39", which came from a file-level
+comparison over every research page and is not reproducible from the filter it described; those figures
+are withdrawn.
 
 **So the choice is the GM's binary, with narrowing eliminated: enforce it.** And the shape enforcement
 takes here is the one this repository already uses for every rule whose compliant action only a session
@@ -103,3 +116,33 @@ reason is recorded, and `make audit` can list every reason anyone ever gave.
 
 The cost is bounded by the same FINDING rule that was already in FR-013: a maintenance sweep naming 41
 classes is discharged by ONE recorded line, not 41 dispatches.
+
+## R6 - the agent's first dispatch caught a stale modal the session had just shipped (2026-09-12)
+
+SC-007 asks that `entry-drift`'s worked example be feature 233's own pair: the `PigSty` explanation
+before 233 rewrote it (expected DRIFTED) and after (expected IN-STEP). The run was given both and told
+explicitly not to let the expectation steer it.
+
+**Pair A: DRIFTED**, as expected - three items, including one the session had not noticed: the old
+`Why:` asserted *"a cane hamlet fed its pigs on bagasse"*, and the section records that specific claim
+as NOT FOUND (cane leaves and refinery waste are read; the pressed residue is not).
+
+**Pair B: DRIFTED, against the expectation, and it was right.** Feature 233's LAST commit (the
+settlement-review pass) deleted the sentence claiming the banks clear the 5 m floor and replaced it with
+the measured shortfall - the collar under the sheds is 2 to 5 m, and the map does NOT meet the one
+constructional number the record gives. That commit touched `dikepond.py` only for a two-line `What:`
+nitpick. So the modal was written against the SUPERSEDED text and shipped to main carrying a `Note:`
+that named dike widths as something the record supplies while omitting that the drawn strip is narrower
+than the width supplied - which is exactly the honest shortfall the section says a reader should be
+told. The Chinese-form finding had reached no modal at all.
+
+**This is the feature catching its own author, an hour after the work landed, on its first real use.**
+It is also the strongest argument in the spec for why the push REFUSES rather than reports: the session
+that wrote both the section and the modal, in the same feature, with four verification agents on it, did
+not notice. A printed line it could have scrolled past would not have been enough.
+
+Both are fixed in the `PigSty` entry. The run also flagged, without judging it, that `MulberryDike` tells
+a reader the dike is *"six to ten meters wide"* and that the width is READ - against the 2.0 m collar
+and 13.3 m water-to-water this project has now measured on the drawing. That pair is outside 233's delta
+and outside what `_entry_owed.py` would name (its section did not move), so it is a defect found while
+doing something else and is being judged by the same agent rather than guessed at.

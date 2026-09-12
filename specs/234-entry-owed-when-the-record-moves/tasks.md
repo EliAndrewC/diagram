@@ -18,9 +18,9 @@ record and the map's modals stay in step, not about how a place was built.
 - [x] T03 The report is actionable without further lookup: class key, research file and heading that
       moved, and the file and line of the docstring whose prose to re-read (FR-005).
       research: rendering
-- [x] T04 Wire it at the two decision points and NOWHERE else - `make page-check` and
-      `scripts/sync-with-main.sh` at push - asked fresh each time, never cached, never blocking
-      (FR-003, FR-004). The script's docstring enumerates them as feature 231's does.
+- [x] T04 Wire it at the two decision points and NOWHERE else - `make page-check`, where it REPORTS and
+      does not block, and `scripts/sync-with-main.sh` at push, where it REFUSES - asked fresh each time,
+      never cached (FR-003, FR-004). The script's docstring enumerates them as feature 231's does.
       research: rendering
 - [x] T05 `make done` is NOT a channel, and a comment at the point of change says why (FR-006): it
       short-circuits at `Makefile:122` on exactly this delta shape, so a report there would ship green
@@ -63,8 +63,9 @@ record and the map's modals stay in step, not about how a place was built.
       `dev/bypass-log/`; and plainly that `record-format` and `quote-check` are the changed research
       entry's own obligations and are NOT a check on any modal (FR-012, FR-014).
       research: rendering
-- [x] T13 A row in the root `CLAUDE.md` guard table saying the staleness half REPORTS and the heading
-      half GATES (FR-012).
+- [x] T13 A row in the root `CLAUDE.md` guard table: the staleness half REPORTS at `make page-check`
+      and REFUSES at the push with `ENTRY_DRIFT_OK` plus a reason; the heading half GATES at both with no
+      escape (FR-012).
       research: rendering
 
 ## Phase 5 - proving it works (FR-010, FR-011)
@@ -77,5 +78,11 @@ record and the map's modals stay in step, not about how a place was built.
 - [ ] T15 Non-vacuity for BOTH matching surfaces separately - `_entry_owed.py`'s by a gate test, the
       heading checker's by its `--selftest` at gate and push (FR-011, SC-006).
       research: rendering
-- [ ] T16 `make hooks-test`, `make done` and `make page-check` green (SC-013).
+- [ ] T16 The push REFUSES on an unresolved named pair; the same push with the prose rewritten
+      proceeds; the same push with `ENTRY_DRIFT_OK="<reason>"` proceeds and the reason lands in
+      `dev/bypass-log/` for `make audit`; a bare token is refused by the two-word, eight-character floor
+      every other escape uses. `ENTRY_DRIFT_OK` is classified in the derived token census, which fails
+      the gate on any unclassified one. (FR-004.2, SC-013)
+      research: rendering
+- [ ] T17 `make hooks-test`, `make done` and `make page-check` green (SC-014).
       research: rendering

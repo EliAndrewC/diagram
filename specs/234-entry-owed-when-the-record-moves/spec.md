@@ -1,7 +1,7 @@
 # Feature 234 - the modal entry owed when the record moves
 
 **Created**: 2026-09-12
-**Status**: ACCEPTED 2026-09-12, after five rounds of `spec-fidelity` (see Review history)
+**Status**: ACCEPTED and FAITHFUL 2026-09-12 after six rounds; AMENDED on the GM's ruling the same day and re-reviewed on a counter reset to zero (see Review history)
 **Input**: the GM's message, verbatim, in `request.md`
 
 ## Summary
@@ -19,16 +19,13 @@ are NOT the same kind of problem - which is the whole design:
    asserts only `"research/" in fc.entry`. `research/CLAUDE.md` already requires a rename to fix its
    inbound class entries, in prose, with nothing behind it. A broken heading is never correct work, so
    this can be GATED.
-2. **A modal whose prose has gone out of step with its section is a judgment about prose.** No
-   git-derived rule can decide it. This is REPORTED and never refused.
+2. **A modal whose prose has gone out of step with its section is a judgment about prose.** No git-derived rule can decide it, so no tool decides it: the report NAMES the pair at `make page-check`, the PUSH REFUSES until it is answered, and what answers it is the session's judgment - the prose rewritten, or one written reason.
 
-The round-1 draft of this spec proposed a push-time refusal for (2) and was withdrawn on measurement:
+The round-1 draft proposed a push-time refusal for (2) THAT NOTHING COULD DISCHARGE, and that was withdrawn on measurement:
 replayed over the repository's own history, that rule would have fired on **30 of the last 32**
 research-only commits, naming up to 41 classes at once, and every one of those 30 is a maintenance sweep
 of the record - citations, translations, HTML-comment conversions - that changes no obligation on any
-modal. `research.md` R2 carries the count. The root `CLAUDE.md` keeps a list of rules deliberately NOT
-enforced precisely because "a guard that fires on correct work teaches a session to bypass every guard",
-and this key would have earned its place on it.
+modal. `research.md` R2 carries the count. What ships instead is a refusal a WRITTEN REASON discharges - one reason may cover a whole sweep - which is how this repository enforces every rule whose compliant action only a session can supply. The GM settled the question on 2026-09-12: *"I don't believe that we should have any such thing as an unenforced doctrine."*
 
 ## Functional requirements
 
@@ -134,9 +131,7 @@ and into `interactive/classes/CLAUDE.md` where "Writing an entry" is documented:
 was written from moves, the session DISPATCHES `entry-drift` at that pair and then either rewrites the
 prose or records why it did not change - the record going to `dev/bypass-log/` as FR-013.1 specifies. The actor is named deliberately: an earlier draft said the
 session "re-reads" while FR-013 gave the job to an agent, which named two actors for one job and
-required neither. The root `CLAUDE.md` guard table MUST gain a row, that table being the
-enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS and
-the heading half GATES.
+required neither. The root `CLAUDE.md` guard table MUST gain a row, that table being the enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS at `make page-check` and REFUSES at the push, dischargeable by `ENTRY_DRIFT_OK` with a reason, and that the heading half GATES at both with no escape.
 
 **FR-013** The judgment - does this modal still say what its section says - MUST be performed by a
 subagent that actually performs it. `record-format` and `quote-check` do NOT: `record-format` reads a
@@ -161,12 +156,11 @@ believes checked the modal. Two things follow:
      what the session hands to `entry-drift` - and the report's printed line MUST say so in as many
      words, because that line is the only thing that runs on this delta shape.
 
-     **The timing is honest about itself.** The report does not block (FR-004), and `push_cmd` prints it
-     and then pushes in the same invocation (`sync-with-main.sh:348/352`), so the pairs are named by the
-     run that pushes and the dispatch, the rewrite or the recorded line FOLLOW as a further commit. This
-     feature does not claim otherwise. If surfacing at the end proves too late in practice, the lever is
-     round 2's recorded aside - making a research-page edit owe `make page-check` at push - and that
-     lever is the GM's, not this feature's, because it hangs a ~26 s target on every research edit.
+     **The timing is honest about itself.** The PUSH REFUSES (FR-004.2), so the dispatch, the rewrite or
+     the written reason happens BEFORE the push succeeds - not afterward. And because the GM declined
+     making a research edit owe `make page-check` (2026-09-12), the push is in practice not merely the
+     enforcing channel on this delta shape but the ONLY one that runs: a research-only edit reaches no
+     gate and no page-check unless a session runs one by hand.
 
      The dispatch is owed **per pair whose section's FINDING moved**, not per pair named. A maintenance
      sweep of the record - a footnote relocated, a session note turned into an HTML comment, a citation
@@ -237,9 +231,10 @@ heading checker's matching surface broken is refused by its `--selftest` rather 
 only one no criterion covered. Checkable at task time: `research/CLAUDE.md` and
 `interactive/classes/CLAUDE.md` each state what is owed when a section a class was written from moves
 (dispatch `entry-drift`, then rewrite or record to `dev/bypass-log/`); the root `CLAUDE.md` guard table
-carries a row saying the staleness half REPORTS and the heading half GATES; and both skill documents say
-plainly that `record-format` and `quote-check` are the changed research entry's own obligations and are
-NOT a check on any modal (FR-014).
+carries a row saying the staleness half REPORTS at `make page-check` and REFUSES at the push with
+`ENTRY_DRIFT_OK` plus a reason, while the heading half GATES at both with no escape; and both skill
+documents say plainly that `record-format` and `quote-check` are the changed research entry's own
+obligations and are NOT a check on any modal (FR-014).
 
 **SC-013** A push with an unresolved named pair is REFUSED; the same push with the pair's prose
 rewritten proceeds; and the same push with `ENTRY_DRIFT_OK="<reason>"` proceeds and the reason lands in
@@ -268,9 +263,7 @@ kept: such a table is exactly the stale literal that agrees with itself. git is 
 
 **D5 - the REPORT's page-check half has no escape token and needs none; its PUSH half has
 `ENTRY_DRIFT_OK`; the HEADING CHECK refuses and still has none, deliberately.**
-Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
-moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
-is nothing to escape. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
+Three answers now, not two. The report's `make page-check` half never refuses, so it needs no token. The report's PUSH half DOES refuse and carries `ENTRY_DRIFT_OK` with the standard reason floor, because the thing that discharges it is a judgment only the session has. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
 unlike `check-file-scale.py`'s `FILE_SIZE_OK`, which exists because a large file can be legitimate
 ordered data. A class entry pointing at a heading that does not exist has no legitimate form: the one
 case that looks like it - a section deliberately not written - is FR-008's declared silence, which is
@@ -320,21 +313,25 @@ lives. The two that do not work:
     rewriting prose would block correct work. The refusal that ships can be discharged by a recorded
     reason, which is the difference.
 
-*What it costs, in observable terms.* A session that ignores the report's printed line ships a stale
-modal, exactly as today. What changes is that it can no longer do so without being told - which is the
-GM's own complaint ("would you have done it?"), and is the difference between a silent gap and a
-declined prompt.
 
-*Why the round-3 design was worse than this.* It moved D1's declined cost from the refusal onto a
-checkbox without re-pricing it: on one of those 30 sweeps it would have demanded either 41 Opus
-dispatches to conclude that a footnote moved, or a box ticked without dispatching - which is the unwired
-agent round 3 existed to fix, wearing a tick.
 
-*Who chose.* This spec did - the session, on the measurements returned by rounds 3 and 4 of its own
-`spec-fidelity` review. **The GM has NOT ruled on it.** They asked for a fix to the project guidelines
-and were not asked whether "doctrine, unenforced" is an acceptable answer for the judgment half, which
-is a call they may want to make themselves. Recorded so a later reader knows this door is open rather
-than closed.
+
+
+*Who chose.* **The GM ruled**, on 2026-09-12, that the obligation must be enforced or must stop being
+called one. Between those two branches the SESSION chose enforcement, on R5's measurement; the shape it
+takes - refuse, take a written reason, record it - is the session's too.
+
+*The other branch the ruling offered, priced and DECLINED.* The GM's words leave two exits: *"something
+should either not be considered doctrinal or it should be enforced."* The exit not taken is to DROP the
+obligation - keep `_entry_owed.py` as information a session may read, delete the owed dispatch from both
+skill documents and the guard-table row, and let `entry-drift` be a tool rather than a duty. It has a
+real argument: the key fires on 28 of 30 research-only commits (R5), so nearly every such push will end
+in a written reason rather than a rewrite, and a discharge that is usually taken looks like a formality.
+It loses on what the GM actually asked. Their question was *"if I hadn't said that ... then would you
+have done it?"* - and under the dropped branch the answer stays no, because nothing would require the
+session to look. A reason that must be written is a moment where somebody looked; an unread report is
+not. The cost of being wrong here is one sentence per research push, and it is auditable afterward,
+which is what makes the wrongness discoverable.
 
 
 ## Out of scope

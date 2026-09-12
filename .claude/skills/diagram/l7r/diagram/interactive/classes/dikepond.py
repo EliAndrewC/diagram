@@ -195,11 +195,16 @@ class PigSty(Kind):
     rather than fouling it: the manure raises the plankton the fish eat. So the pigs are part of what feeds the
     fish the household cultivates. What the shed keeps clear of is the sluice itself - nobody builds over the
     opening they have to reach in order to lift its boards, and that is a matter of getting at the gate rather
-    than of keeping the water clean.
+    than of keeping the water clean. A pig penned on a pond dike is a CHINESE form; the Japanese record does
+    not carry it, so it belongs to this kind of hamlet and to no other on these maps.
 
     Note: GUESS: the practice is read, and so is the reason the shed sits at the water, but nothing read gives
     how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
     of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
+    And the one width it does give, a shed-carrying dike of five to ten meters, the drawn bank does not meet -
+    the planted collar under these sheds is two to five meters. That figure is a modern design requirement
+    rather than a measurement of any old dike, and no older one was found to judge the bank by, but a reader
+    measuring the collar should know it is snug.
 
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike

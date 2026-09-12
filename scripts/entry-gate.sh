@@ -41,7 +41,23 @@ if [ -n "${ENTRY_DRIFT_OK:-}" ]; then
     exit 1
   fi
   guard_log entry-gate escaped "$ENTRY_DRIFT_OK" entry-drift-ok
+  # AND to dev/bypass-log/, which is what `make audit` reads and what the spec promises a later reader
+  # (SC-013). The guard log is per-host and gitignored; a reason that ships with the push has to be in
+  # the repository, like every other bypass this project records.
+  BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
+  mkdir -p "$BL" 2>/dev/null || true
+  python3 - "$BL" "$ENTRY_DRIFT_OK" <<'PYBL' || true
+import json, os, pathlib, secrets, subprocess, sys, time
+bl, why = pathlib.Path(sys.argv[1]), sys.argv[2]
+head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
+stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+(bl / f"{stamp}-{secrets.token_hex(3)}.json").write_text(
+    json.dumps({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "target": "entry-gate", "commit": head, "why": why}, indent=2) + "\n",
+    encoding="utf-8",
+)
+PYBL
   printf 'entry-gate: BYPASSED - %s\n' "$ENTRY_DRIFT_OK"
+  printf '  recorded in dev/bypass-log/ - `make audit` lists it\n'
   exit 0
 fi
 
