@@ -170,3 +170,112 @@ def test_a_viewbox_at_a_different_scale_than_the_image_is_carried_too() -> None:
     before, after = _screens((2, 0, 4, 4), size=(4, 4))
     out = page_lit.attribute(before, after, red, {4: "paddy"}, IDENTITY, viewbox=(0.0, 0.0, 4.0, 4.0))
     assert out["paddy"] == (8, 8)  # 8 px of image per 4 units of map: the right half is still the right half
+
+
+# --- the driving half, without a browser ----------------------------------------------------------
+# A REAL page is `tests/full/interactive/page_browser/test_page_lit.py`; what a stub adds is the two
+# branches a real page cannot reach on demand - the tool opening a browser of its OWN, and the zoom
+# loop that has to WHEEL to get past the raster switch (a small page opens in vector mode already).
+
+
+class _Mouse:
+    def __init__(self, log: list[str]) -> None:
+        self.log = log
+
+    def move(self, x: float, y: float) -> None:
+        self.log.append(f"move {x},{y}")
+
+    def wheel(self, dx: float, dy: float) -> None:
+        self.log.append(f"wheel {dy}")
+
+
+class _FakePage:
+    """The page's side of the conversation: raster until it has been wheeled `switch_after` times."""
+
+    def __init__(self, log: list[str], switch_after: int = 2) -> None:
+        self.log, self.switch_after, self.shots = log, switch_after, 0
+        self.mouse = _Mouse(log)
+
+    def goto(self, url: str) -> None:
+        self.log.append("goto")
+
+    def wait_for_function(self, expr: str, timeout: int = 0) -> None:
+        self.log.append("ready")
+
+    def wait_for_timeout(self, ms: int) -> None:
+        pass
+
+    def evaluate(self, script: str, *args: Any) -> Any:
+        if "mode()" in script:
+            return "vector" if self.log.count("wheel -300") >= self.switch_after else "raster"
+        if "zoom()" in script:
+            return 3.25
+        if "getScreenCTM" in script:
+            return [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+        if "viewBox" in script:
+            return [0.0, 0.0, 40.0, 40.0]
+        if "highlight" in script:
+            self.log.append("lit" if args and args[0] else "cleared")
+        return None
+
+    def screenshot(self) -> bytes:
+        """A different image before and after the highlight - the left half changes."""
+        self.shots += 1
+        im = Image.new("RGB", (40, 40), (10, 10, 10))
+        if self.shots > 1:
+            for x in range(20):
+                for y in range(40):
+                    im.putpixel((x, y), (250, 250, 250))
+        buf = __import__("io").BytesIO()
+        im.save(buf, "PNG")
+        return buf.getvalue()
+
+    def close(self) -> None:
+        self.log.append("closed")
+
+
+class _FakeBrowser:
+    def __init__(self, page: _FakePage) -> None:
+        self.page = page
+
+    def new_page(self, **_kw: Any) -> _FakePage:
+        return self.page
+
+
+def _tiny_page(tmp_path: Any) -> str:
+    path = tmp_path / "tiny.html"
+    path.write_text(_page_text())
+    return str(path)
+
+
+def test_the_vector_path_wheels_until_the_page_is_past_the_raster_switch(tmp_path: Any) -> None:
+    log: list[str] = []
+    page = _FakePage(log, switch_after=2)
+    result = page_lit.measure(_tiny_page(tmp_path), "paddy", vector=True, browser=_FakeBrowser(page))
+    assert log.count("wheel -300") == 2 and result["mode"] == "vector"
+    assert log[-3:] == ["cleared", "lit", "closed"], log  # cleared before the first shot, then lit
+    assert result["classes"]["paddy"][0] > 0 and result["classes"]["fish pond"][0] == 0
+
+
+def test_a_page_already_past_the_switch_is_not_wheeled(tmp_path: Any) -> None:
+    log: list[str] = []
+    page_lit.measure(_tiny_page(tmp_path), "paddy", vector=True, browser=_FakeBrowser(_FakePage(log, switch_after=0)))
+    assert "wheel -300" not in log
+
+
+def test_the_tool_opens_a_browser_of_its_own_when_none_is_lent(tmp_path: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    """`measure` with no browser launches one, measures through it, and hands back the same result."""
+    import contextlib
+
+    log: list[str] = []
+    opened: list[str] = []
+
+    @contextlib.contextmanager
+    def _fake() -> Any:
+        opened.append("launched")
+        yield _FakeBrowser(_FakePage(log))
+
+    monkeypatch.setattr(page_lit, "_chromium", _fake)
+    out = tmp_path / "lit.png"
+    result = page_lit.measure(_tiny_page(tmp_path), "paddy", out=str(out))
+    assert opened == ["launched"] and result["zoom"] == 3.25 and out.is_file()
