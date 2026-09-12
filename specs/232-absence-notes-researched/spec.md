@@ -1,6 +1,6 @@
 # Feature 232 - every absence note gets a real research pass
 
-**Status**: DRAFT (spec-fidelity round 1 applied; awaiting round 2)
+**Status**: DRAFT (spec-fidelity rounds 1-2 applied; awaiting round 3)
 **Request**: [`request.md`](request.md), the GM's words verbatim, 2026-09-12.
 
 ## What the GM asked for
@@ -45,7 +45,9 @@ in `research.md` R1. Not a sample, and not the blocked 31 only. The unit of work
    this pass actually searched, replacing the older search. **This state has a floor; see FR-002.**
 3. **FOR THE GM** - a specific document is named, is probably readable by a person, and this session
    cannot open it. The note stays an absence note naming that document, and the document goes on the
-   list in FR-005.
+   list in FR-005. Its note is REWRITTEN with today's date and what this pass tried, for D3's reason:
+   a note whose whole value is the date and the attempt must not keep an older one after being searched
+   again.
 4. **CONTRADICTED** - a readable source says the opposite. See FR-004.
 
 **FR-002 STILL ABSENT IS EARNED, NEVER DECLARED.** The GM's words are *"do however much research you need
@@ -56,9 +58,12 @@ state 2 only when, and `research.md` R1 records for it:
 - the **searches actually run**, as query text, not as a description of searching;
 - the **candidate pointers those searches returned** - title, author and URL - or the explicit finding
   that they returned none;
-- and that **every candidate judged plausible was attempted THROUGH `source-reader`**, with its verdict.
-  A search summary is a pointer and never a source (constitution XII), so a candidate dismissed from a
-  snippet without a fetch does not count as attempted.
+- and, for **every candidate pointer**, either a `source-reader` verdict or **the recorded reason it was
+  not attempted**. A search summary is a pointer and never a source (constitution XII), so a candidate
+  dismissed from a snippet without a fetch does not count as attempted - it counts as dismissed, and the
+  dismissal is written down in one line where a later reader can disagree with it. The only route to
+  STILL ABSENT with no `source-reader` verdict at all is recorded queries that returned NO pointer, and
+  those queries are text a later reader can re-run.
 
 Everything a pass READS goes through the normal procedure in this order, nothing skipped because the
 feature is large: `source-reader` reads the page and returns the passage; the session writes the footnote
@@ -82,9 +87,13 @@ research pages hold the rule, and for a tier no generator draws yet they hold th
 
 What is NOT changed under this feature is what a generator DRAWS. That is an engine change: it moves
 maps, and it owes its own spec-kit feature, a settlement review and a gate. So where a corrected finding
-no longer matches what a map draws, the page **states the divergence in reader-facing text** - the record
-must never assert a rule the maps do not follow, and a page that quietly misdescribes its own map is the
-one failure constitution XII names. Each divergence is also a row in the closing report (FR-005).
+no longer matches what a map draws, the page **states the divergence as a fact the reader learns about
+the map**: what the map shows, and what the record now finds. It carries no feature number, no task id,
+no engine identifier and no promise of future work - all of which are the HTML-comment class (feature
+209) and would be rejected by `record-format` if they were visible. The record already speaks to this
+reader when a map departs from history, under `deviation` and `map drawing convention`; a divergence
+between the finding and the drawing is the same kind of sentence. Each is also a row in the closing
+report (FR-005).
 
 **FR-005 Two artifacts for the GM, named here so they cannot be forgotten.**
 
@@ -113,8 +122,9 @@ equal their derivation, and no page states a count that is stale.
   old key whose claim was sourced or corrected has its "Not cited" and `Used for:` lines brought forward.
 - **SC-004** Every footnote this feature changed carries its own `quote-check` confirmation, recorded per
   footnote. A footnote without one does not land.
-- **SC-005** Every STILL ABSENT row in R1 carries its queries, its candidate pointers and a
-  `source-reader` verdict per plausible candidate (FR-002). A row without them is not done.
+- **SC-005** Every STILL ABSENT row in R1 carries its queries and its candidate pointers, and for EACH
+  pointer either a `source-reader` verdict or a written reason it was not attempted (FR-002). A row whose
+  queries returned no pointer carries the query text itself. A row without these is not done.
 - **SC-006** `for-the-gm.md` exists and every entry names a specific document, not a topic.
 - **SC-007** Every CONTRADICTED row in R1 appears in `closing-report.md` with what the source says and
   what the map currently does, and its divergence is stated on the page itself.
