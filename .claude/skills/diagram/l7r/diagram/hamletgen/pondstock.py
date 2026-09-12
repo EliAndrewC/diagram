@@ -32,25 +32,30 @@ def _centroid(poly: list[Any]) -> Pt:
     return (sum(float(p[0]) for p in poly) / len(poly), sum(float(p[1]) for p in poly) / len(poly))
 
 
-def _bank_seat(parcel: list[Any], toward: Pt) -> tuple[Pt, float]:
-    """The seat on a parcel's bank nearest `toward`: the midpoint of the parcel edge facing it, pulled
-    in by half the bank so the fixture stands on the planted band, not on the canal at the edge.
-    Returns (center, rotation along the edge in degrees)."""
+def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
+    """EVERY seat on a parcel's bank, ranked by distance to `toward`: each the midpoint of a parcel
+    edge, pulled in by half the bank so the fixture stands on the planted band, not on the canal at the
+    edge. Each is (center, rotation along the edge in degrees).
+
+    RANKED, not just the nearest (feature 233). It used to return the single nearest edge, and the
+    caller skipped the whole pond when that seat did not fit - so adding the sluice clearance would
+    have moved fixtures between ponds, or lost them, rather than along the bank they belong on. The
+    caller now walks this list and takes the first seat that fits. On Kuwabata a seat 30-45 ft clear of
+    any sluice sits only 10-30 ft further from the houses than the one previously chosen, so the
+    household's walk barely changes (specs/233-pigsty-clear-of-the-sluice/research.md R1, R6).
+    """
     cx, cy = _centroid(parcel)
-    best: tuple[float, Pt, float] | None = None
+    seats: list[tuple[Pt, float]] = []
     n = len(parcel)
     for i in range(n):
         a, b = parcel[i], parcel[(i + 1) % n]
         mx, my = (float(a[0]) + float(b[0])) / 2, (float(a[1]) + float(b[1])) / 2
-        d = math.dist((mx, my), toward)
-        if best is None or d < best[0]:
-            rot = math.degrees(math.atan2(float(b[1]) - float(a[1]), float(b[0]) - float(a[0])))
-            best = (d, (mx, my), rot)
-    assert best is not None
-    (mx, my), rot = best[1], best[2]
-    vx, vy = cx - mx, cy - my
-    vl = math.hypot(vx, vy) or 1.0
-    return (mx + vx / vl * BANK_INSET_FT, my + vy / vl * BANK_INSET_FT), rot
+        rot = math.degrees(math.atan2(float(b[1]) - float(a[1]), float(b[0]) - float(a[0])))
+        vx, vy = cx - mx, cy - my
+        vl = math.hypot(vx, vy) or 1.0
+        seats.append(((mx + vx / vl * BANK_INSET_FT, my + vy / vl * BANK_INSET_FT), rot))
+    seats.sort(key=lambda s: math.dist(s[0], toward))
+    return seats
 
 
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
@@ -77,12 +82,16 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
                 break
             if i in taken:
                 continue
-            (x, y), rot = _bank_seat(ponds[i]["parcel"], hc)
-            if not s.pond_fixture_fits(x, y, rot, kind):
+            wpts = [(float(q[0]), float(q[1])) for q in ponds[i]["water"]]
+            # the nearest seat to the houses that FITS - not the nearest seat, take it or leave the
+            # pond (feature 233): a refused seat used to cost the pond its fixture entirely.
+            seat = next((((x, y), rot) for (x, y), rot in _bank_seats(ponds[i]["parcel"], hc) if s.pond_fixture_fits(x, y, rot, kind, water=wpts)), None)
+            if seat is None:
                 continue
+            (x, y), rot = seat
             taken.add(i)
             if kind == "sty":
                 s.pig_sty(x, y, rot=rot, pond=i)
             else:
-                s.duck_pen(x, y, rot=rot, pond=i, water=[(float(q[0]), float(q[1])) for q in ponds[i]["water"]])
+                s.duck_pen(x, y, rot=rot, pond=i, water=wpts)
             done += 1
