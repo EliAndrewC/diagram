@@ -352,8 +352,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     # opens with `live = [i for i in ... if len(ways[i]) >= 2]`, so a lane another sweep has already
     # emptied is not live, never enters `swept`, and is never deleted. It only removes husks it made
     # itself. Removed back-to-front so the earlier indices stay valid.
-    for i in sorted(gone, reverse=True):
-        del lanes[i]
+    s.drop_lanes(gone)  # record AND ink slot together - see `drop_lanes`
     return dropped
 
 
@@ -398,8 +397,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     # ...and its husk goes with it, for the reason spelled out in `_sweep_doubled_remnants`: this used
     # to say "hand it to the debris sweep", and that sweep's `live` filter cannot see a lane already
     # emptied, so the record simply shipped.
-    for i in sorted(emptied, reverse=True):
-        del lanes[i]
+    s.drop_lanes(emptied)  # record AND ink slot together - see `drop_lanes`
     return fixed
 
 
@@ -539,8 +537,7 @@ def _sweep_debris(s: Settlement) -> int:
     # AND THE HUSK GOES WITH THE INK, the rule feature 145 set on the orphan joiner's own drop: an
     # emptied `pts` leaves a record declaring a lane nothing draws, which every consumer then has to
     # special-case. Removed back-to-front so the earlier indices stay valid.
-    for i in sorted(swept, reverse=True):
-        del lanes[i]
+    s.drop_lanes(swept)  # record AND ink slot together - see `drop_lanes`
     if swept:
         s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + len(swept)
     return len(swept)

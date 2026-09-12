@@ -163,3 +163,26 @@ def test_a_board_with_no_compliant_verge_still_faces_the_way_a_reader_sees_it_by
     assert abs(abs(rot) - 90.0) < 1.0, f"the fallback board is turned to its nearest way, not left on the lane's bearing: {rot}"
     assert hg.frame._nearest_way_bearing(s, bx, by) is not None
     assert abs(by - 520.0) > 1.0, "it still stands on a verge rather than in the tread"
+
+
+def test_the_brook_beside_the_field_is_reserved_and_the_reach_leaving_the_map_is_not() -> None:
+    """`brook_beside_the_field`, settlement-review pass 10. The frame reserves the brook's stations abreast of the field
+    so the box `brook_skirt` holds them in can be as wide as the skirt, while the exit legs still trail off the sheet."""
+    from l7r.diagram.hamletgen.consts import BROOK_FRAME_MARGIN
+    from l7r.diagram.hamletgen.hinterland import brook_beside_the_field
+
+    class _M:
+        M = {
+            "fields": [{"outline": [(100.0, 100.0), (500.0, 100.0), (500.0, 600.0), (100.0, 600.0)]}],
+            "dry_plots": [{"poly": [(500.0, 100.0), (560.0, 100.0), (560.0, 160.0), (500.0, 160.0)]}],
+            "streams": [{"w": 6.0, "poly": [(60.0, 60.0), (60.0, 300.0), (560.0 + BROOK_FRAME_MARGIN - 1.0, 400.0), (60.0, 2000.0)]}],
+        }
+
+    got = brook_beside_the_field(_M())  # type: ignore[arg-type]
+    assert len(got) == 3, "the three stations abreast of the field and its hem, not the one leaving the map"
+    assert got[0] == (57.0, 57.0, 63.0, 63.0), "a box of the brook's own width round each"
+
+    class _Empty:
+        M = {"fields": [], "dry_plots": [], "streams": _M.M["streams"]}
+
+    assert brook_beside_the_field(_Empty()) == [], "no field, nothing to be beside"  # type: ignore[arg-type]

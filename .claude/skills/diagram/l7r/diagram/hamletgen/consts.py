@@ -524,7 +524,15 @@ BROOK_WANDER_STEP = 4.0
 # crop margin (`CROP_MARGIN`, 48) so that a station inside this box is inside the picture. On a map whose land
 # falls on a diagonal the first cut bounded the offset in the FALL's frame, which is not the frame the sheet is
 # cropped in, and 77% of the brook came out beyond the view in two pieces a reader cannot join.
-BROOK_FRAME_MARGIN = 8.0
+# WIDENED TO THE SKIRT PLUS THE WANDER (feature 230, settlement-review pass 10). At 8 px the margin was narrower than the
+# skirt the crop floor demands (34), so wherever the brook passed the crop that also bounds the box the two rules fought:
+# a station was floored 26 px past the box, the cut points between stations were clamped back into it, and the course
+# drew a V at every station - 68.7 degrees on Mizuguchi, a ruler-straight sawtooth 30 ft inside Kashikawa's frame. At
+# skirt + wander a station the floor puts outside the crop is always inside the box. What kept the course on the sheet
+# at 8 px is kept instead by the frame, which now reserves the brook's reach beside the field (`brook_beside_the_field`).
+# Two levers were measured first and refused: this margin alone (Kashikawa's brook left the view in two pieces, 2,435 ->
+# 1,520 px in view), and letting a cut point sit as far out as its nearer station (four pieces, 70 degree turns).
+BROOK_FRAME_MARGIN = 44.0
 # THE MOST A STATION MAY STEP ACROSS THE FALL before the step is led into over two, px. The clearance profile
 # jumps when a hem plot enters it, and an un-led jump draws a mitred elbow - 67 degrees on the reference
 # hamlet, against 0.3 to 18 degrees everywhere else on the same course. A stream bends; it does not turn a

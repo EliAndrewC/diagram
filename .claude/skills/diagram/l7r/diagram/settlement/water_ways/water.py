@@ -17,7 +17,12 @@ if TYPE_CHECKING:
 #: `frm` anchor for a channel - so class and color cannot disagree (the wet-paddy precedent, feature 159). A ditch
 #: stroke with no record at all (the pond's feeder curve) is an irrigation ditch: a feed into a reservoir is supply.
 SUPPLY_HUE = "#6C9CBE"
-DRAIN_HUE = "#7C9EB0"
+#: THE DRAIN IS DARKER AND SILTIER, not merely grayer (settlement-review, feature 230 pass 10). The first drain hue,
+#: #7C9EB0, rendered at (130,164,172) against the supply's (117,162,184): the classes were right in every record
+#: and indistinguishable on the page, so a reader could tell a drain only by where it lay. This one differs from the
+#: supply in both lightness and hue, and stays clear of the brook's bed (#9CB4C8) and the flooded tint (#93B7AC). A
+#: map drawing convention, not a finding: the record gives no color for either ditch.
+DRAIN_HUE = "#5E7A76"
 IRRIGATION_DITCH = "irrigation ditch"
 DRAINAGE_DITCH = "drainage ditch"
 

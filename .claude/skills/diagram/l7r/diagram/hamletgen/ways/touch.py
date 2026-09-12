@@ -391,8 +391,7 @@ def _touch_junctions(
                 # consumer that iterates them had to special-case it (a `pts[0]` would raise). This engine's own
                 # rule for the copse says it plainly: a map that declares a feature it did not draw is the defect.
                 # Removed back-to-front so the earlier indices stay valid; the count still goes to meta.
-                for _i in sorted(_dropped_idx, reverse=True):
-                    del lanes[_i]
+                s.drop_lanes(_dropped_idx)  # record AND ink slot together - see `drop_lanes`
                 s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + _dropped
                 joined = _dropped == len(orphans)
                 if joined:

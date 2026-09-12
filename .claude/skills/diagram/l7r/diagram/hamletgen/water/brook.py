@@ -106,7 +106,13 @@ def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0,
         (ax, ay), (bx, by) = out[i], out[i + 1]
         deg = math.degrees(math.atan2(by - ay, bx - ax)) % 90.0
         if min(deg, 90.0 - deg) < eps:
-            out[i + 1] = (bx + away[0] * nudge, by + away[1] * nudge)
+            # JUST ENOUGH TO CLEAR THE AXIS, never a fixed kick (settlement-review, feature 230 pass 10). A flat
+            # 11 px nudge on a reach that runs straight down a due-south fall flagged every other leg, moved its
+            # end 11 px out and left the next leg to come back: Inashiro's brook drew a +/-29 degree sawtooth,
+            # fourteen periods down the fan's west flank, x alternating 1370 / 1381. Tilting the leg to twice the
+            # detector's own angle clears it with a turn a reader cannot see, and `nudge` stays the ceiling.
+            step = min(nudge, math.hypot(bx - ax, by - ay) * math.tan(math.radians(2.0 * eps)))
+            out[i + 1] = (bx + away[0] * step, by + away[1] * step)
     return out
 
 

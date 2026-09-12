@@ -33,6 +33,22 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       - [x] source-reader confirmed - one Opus reader, 14 sources, verdicts per sub-question including the CONTRADICTED trio on Harie and the NOT-FOUND on what crosses a settlement's channel
       - [x] recorded and cited - research/water.html, "Does a hamlet stand on one bank of its stream, or around it?", with ten registry entries and footnotes 120-131
       - [x] quote-check confirmed - 11 footnotes, all READABLE; two DIFFERS corrected (the journal's full-width comma, the Chinese page's double quotes), a gloss naming a party the page does not carry removed, the kundoku mislabeled as classical Chinese fixed, the emphasis this project had added inside quotations taken out, and three PARTIAL assertions brought back to what the quotes grant
-      - [ ] source-applicability confirmed
+      - [x] source-applicability confirmed - all ten keys APPLICABLE-WITH-LIMITS; three wrong 'What it is' write-ups (two bylines, a lawsuit's dates) and seven missing limits corrected, including a scale claim that rested on a modern household count (commit b2c345fc)
       verify: the rule is labeled a GUESS at all three places it lives (spec D9, cluster.py at the point of change, future-work as the knob candidate the crossing machinery blocks). The public record page is the part still owed.
+- [ ] T07 settlement-review pass 10's findings, each fixed and verified on a regenerated pool (the reviews read the snapshot taken before the lane-ink, sawtooth-nudge and drain-hue fixes)
+      research: rendering
+      - [x] Inashiro E1: the connector undrawn - five passes deleted a lane record and left its ink slot; `drop_lanes` + a behavioral and a static test; all five maps draw every lane exactly once
+      - [x] Inashiro E2: the brook's +/-29 degree sawtooth - `_off_the_axes` kicked alternate legs a flat 11 px; now tilts just past the detector (median turn ~12 -> ~5.7)
+      - [x] Inashiro E3 / Kashikawa E5 / Sawada N2 / Mizuguchi N2: the two ditch inks indistinguishable - DRAIN_HUE #7C9EB0 -> #5E7A76; the z-order audit reads the constants
+      - [ ] the FRAME-BOX sawtooth (Kashikawa E3, Mizuguchi's 68.7 at v26, Sawada's 46 degree notch): stations floored past the box by the skirt (34) while cut points are clamped to the box margin (8)
+      - [ ] the tap corner, remaining 51-53 degrees (Sawada E1, Mizuguchi E3): over 200 ft the fork opens to 81-86 degrees
+      - [ ] the guaranteed flooded plot is a wedge (Mizuguchi E1, Kashikawa E4, Sawada E2): the promotion picks the LARGEST compliant plot; pick the most basin-like one that touches the collector
+      - [ ] paddy rings below 15 degrees on Kashikawa (E2: rings 358-361 retrace an edge, 723 a 55 ft spike tail) - the gate tests read only Inashiro and Kuwabata, so check every pool map
+      - [ ] the weir drawn backwards on Kashikawa (E1): the head race mouth below the downstream face, the slant reversed
+      - [ ] Mizuguchi E2: the drain doubles back to its pond in a 111.6 degree hairpin
+      - [ ] Kuwabata E1: the polder's laterals carry both feed and drain sluices and are classed irrigation ditch - a research question (two-way canals) and a class
+      - [ ] the Pond modal contradicts itself (Mizuguchi E5, Kuwabata E2): "a valley-head tameike ... above the fields" beside "On this map the pond is the field's drainage sink"
+      - [ ] notes: Kashikawa E6 (stale census, "the fork at the top is a brook and a ditch parting", the subject line), Mizuguchi E4 (no-sluice-glyph line, tameike/reservoir wording, census), Sawada E3 + N3 (census, the 75 ft)
+      - [ ] Inashiro Q1 windbreak tail up the east edge; N1 flooded-plot lip; N3 an undrawn channels[0] record; N4 a 4.8 ft field chain; Kuwabata N1-N4 lane web (a doubled road, a sliver wedge, a tight loop); Kuwabata E3 supply tapers reversed (also on main); Kashikawa N2 dangling bund stubs
+      - [ ] open research questions, recorded rather than guessed: the confluence reading as an offtake (Kashikawa Q1); a path to a house's back door (Sawada Q1, Mizuguchi Q2); a drainage pond with no outflow beside a brook (Mizuguchi Q1)
 

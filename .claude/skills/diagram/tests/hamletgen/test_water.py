@@ -431,3 +431,21 @@ def test_a_hem_plot_at_the_fans_head_yields_to_the_brook_rather_than_throwing_it
     low = [(u * dx + v * px, u * dy + v * py) for u, v in [(u + head_u - u_tap + 400.0, v - v_tap + reach + 60.0) for u, v in at]]
     assert hg.brook_skirt(plan, tap, 1, crop=[low]) != without, "crop down the fan still shapes the course"
     assert sharpest(with_hem) == sharpest(without)
+
+
+def test_a_leg_on_the_axis_is_tilted_just_off_it_not_kicked_into_a_sawtooth() -> None:
+    """`_off_the_axes`, settlement-review pass 10. A straight reach down a due-south fall had every other leg
+    kicked 11 px outward and drew a +/-29 degree sawtooth. The tilt is now just past the detector, so every leg
+    clears the axis and no vertex turns by more than a few degrees."""
+    from l7r.diagram.hamletgen.water.brook import _off_the_axes
+
+    straight = [(100.0, float(y)) for y in range(0, 1000, 44)]
+    out = _off_the_axes(straight, (-1.0, 0.0))
+    heads = [math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) for a, b in zip(out, out[1:], strict=False)]
+    assert all(min(h % 90.0, 90.0 - h % 90.0) >= 1.6 - 1e-9 or i % 2 for i, h in enumerate(heads)), "every flagged leg leaves the axis"
+    turns = [abs(((b - a) + 180.0) % 360.0 - 180.0) for a, b in zip(heads, heads[1:], strict=False)]
+    assert max(turns) < 8.0, f"no sawtooth: the sharpest turn is {max(turns):.1f} degrees"
+    assert all(q[0] <= 100.0 for q in out), "and the course only ever moves AWAY from the crop"
+    # a long leg is still capped at the old ceiling
+    far = _off_the_axes([(0.0, 0.0), (0.0, 5000.0)], (-1.0, 0.0))
+    assert far[1][0] == -11.0

@@ -11,7 +11,7 @@ from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
 
 from .consts import POLDER_ARCHETYPES
-from .hinterland import CROP_MARGIN, title_pocket
+from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
 from .plan import SitePlan
 from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
@@ -238,6 +238,7 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
         _cx, _cy = plan.confluence
         _t = BROOK_JOIN_TRUNK * 0.5  # half the trunk each way: the junction, and enough brook below it to read as one
         _extra.append((_cx - _t, _cy - _t, _cx + _t, _cy + _t))
+    _extra += brook_beside_the_field(s)  # ...and the brook's reach beside the field, which is picture, not a runner off the edge
     s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
     s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
     s.title(plan.spec.name, prefer=_pocket)

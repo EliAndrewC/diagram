@@ -204,8 +204,7 @@ def _drop_collapsed(s: Settlement) -> list[int]:
             ln["pts"] = []
             s.reink_lane(i)
             collapsed.append(i)
-    for i in sorted(collapsed, reverse=True):
-        del s.M["lanes"][i]
+    s.drop_lanes(collapsed)  # record AND ink slot together - see `drop_lanes`
     return collapsed
 
 
