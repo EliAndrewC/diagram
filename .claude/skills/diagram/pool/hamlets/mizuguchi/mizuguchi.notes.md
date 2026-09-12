@@ -584,7 +584,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - windbreak: **170** clumps drawn, **24** off the page
 - copse: **18** clumps drawn
 - farmhouses: **12**
-- farmstead fixtures: bath **3**, coop **6**, pit **4**, privy **9**, shrine **1**, woodpile **9**
+- farmstead fixtures: bath **4**, coop **10**, pit **5**, privy **10**, shrine **1**, woodpile **12**
 - notice board at **(791.8, 1957.1)**, **5** of 12 farmhouses within 250 ft
 <!-- /census -->
 

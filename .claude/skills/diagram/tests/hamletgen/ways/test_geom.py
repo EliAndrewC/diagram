@@ -40,9 +40,19 @@ def test_trim_to_service_pulls_an_end_back_to_what_it_serves() -> None:
     assert out[0] == (0.0, 0.0), "the end that meets a way is kept"
 
 
-def test_trim_to_service_never_trims_below_two_points() -> None:
+def test_a_run_that_serves_NOTHING_comes_back_too_short_to_draw() -> None:
+    """The honest answer for a way with nothing at either end: it is handed back under two points, for the
+    caller to drop, rather than rounded off to a two-point stub in the middle of a field.
+
+    This test used to assert the opposite - "never trims below two points" - and it was right about the
+    code path it reached, which was the looser private triple a caller got by passing no `end_reach`. Every
+    engine caller already asked the gate's bar and so already got this behavior; feature 227 deleted the
+    triple once nothing but this file could reach it, which made the walk unconditional and turned the old
+    assertion into a statement about dead code. Nothing that ships changed."""
     run = [(5000.0, 5000.0), (5100.0, 5000.0), (5200.0, 5000.0)]
-    assert len(hg.ways._trim_to_service(run, [], [])) == 2
+    assert len(hg.ways._trim_to_service(run, [], [])) < 2, "nothing is at either end, so there is no way to draw"
+    served = hg.ways._trim_to_service(run, [((5200.0, 4990.0), (5200.0, 5010.0))], [])
+    assert len(served) >= 2, "...but a run that meets a way at one end keeps a drawable tread"
 
 
 def test_route_goes_around_an_obstacle_rather_than_through_it() -> None:
@@ -115,12 +125,11 @@ def test_trim_keeps_a_straggler_end_standing_at_the_dooryard() -> None:
     """The placer and the check read the SAME body (`end_serves`), which is the whole of this fix: the
     trim used to measure houses by their centers at its own 90 ft bar while the gate measured centers at
     60, and neither could see the garden the tread had actually reached."""
-    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
 
     run = [(62.0, 0.0), (-40.0, 0.0), (-120.0, 0.0)]
     segs = [((-120.0, -20.0), (-120.0, 20.0))]
-    assert _trim_to_service(run, segs, [(160.0, 0.0)], end_reach=WAY_END_REACH_FT) != run, "with no steading it is trimmed"
-    assert _trim_to_service(run, segs, [(160.0, 0.0)], end_reach=WAY_END_REACH_FT, steadings=[_GARDEN]) == run
+    assert _trim_to_service(run, segs, [(160.0, 0.0)]) != run, "with no steading it is trimmed"
+    assert _trim_to_service(run, segs, [(160.0, 0.0)], steadings=[_GARDEN]) == run
 
 
 def test_steading_footprints_reads_the_built_ground_and_not_the_ground_cover() -> None:
@@ -142,7 +151,9 @@ def test_steading_footprints_reads_the_built_ground_and_not_the_ground_cover() -
 
 
 def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
-    """The spur's whole purpose is the crop, which is neither a house nor another lane."""
+    """The spur's whole purpose is the crop, which is neither a house nor another lane. At the gate's own bar
+    since feature 227, which is the only bar the trim has: the looser private triple this test used to reach
+    through `end_reach=None` was reachable from nothing that ships, and went."""
     field = [(400.0, 0.0), (600.0, 0.0), (600.0, 200.0), (400.0, 200.0)]
     run = [(0.0, 100.0), (200.0, 100.0), (395.0, 100.0)]
     assert _trim_to_service(run, [], [(0.0, 100.0)], [field]) == run
@@ -534,7 +545,7 @@ def test_trim_to_service_cuts_an_end_that_reaches_nothing() -> None:
 
     run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (500.0, 0.0)]
     houses = [(0.0, 20.0), (100.0, 20.0)]
-    out = hg.ways._trim_to_service(run, [], houses, end_reach=WAY_END_REACH_FT)
+    out = hg.ways._trim_to_service(run, [], houses)
     assert out[-1][0] <= 200.0, "the tail past the last house it serves is gone"
     assert min(math.dist(out[-1], h) for h in houses) <= WAY_END_REACH_FT
 
@@ -543,10 +554,10 @@ def test_trim_to_service_keeps_the_tail_that_is_a_houses_ONLY_way() -> None:
     """...but not at the price of stranding somebody. A house no other way reaches is passed as `keep`, and the
     run is then cut no further back than the point that still serves it - a dangling end is a blemish, an
     unreached farmhouse is a map that fails its own rule (cohort seed 39, when both were tightened together)."""
-    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT, WEB_REACH_FT
+    from l7r.diagram.hamletgen.consts import WEB_REACH_FT
 
     run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (500.0, 0.0)]
     houses = [(0.0, 20.0), (100.0, 20.0)]
     outlier = (260.0, 80.0)  # 85 ft from the run's (200, 0) vertex: past the end bar, inside the service reach
-    out = hg.ways._trim_to_service(run, [], houses, end_reach=WAY_END_REACH_FT, keep=[outlier])
+    out = hg.ways._trim_to_service(run, [], houses, keep=[outlier])
     assert math.dist(out[-1], outlier) <= WEB_REACH_FT, "the point that serves the outlier survived the cut"

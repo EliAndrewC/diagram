@@ -227,6 +227,81 @@ def _watch_steps(s: Settlement, steps: list[str]) -> Any:
             setattr(obj, leaf, original)
 
 
+_TAGGED = (("out", "out_cls"), ("top", "top_cls"), ("walls", "walls_cls"), ("toplabels", "toplabels_cls"))
+
+
+def features_between(s: Settlement, lo: dict[tuple[str, str], int], hi: dict[tuple[str, str], int]) -> list[str]:
+    """The FEATURE CLASSES whose ink appeared between two watermarks, in the page's own vocabulary.
+
+    THE PAGE MUST NAME EVERYTHING A READER CAN CLICK (GM 2026-09-12): *"anything that I can click on after
+    having it highlighted when I move my mouse over it on the HTML version of the map should be mentioned on
+    the page ... Otherwise, how can I hit control f and then find out where the privies are being laid out?"*
+    Measured when they asked: 29 of the 51 hoverable classes appeared nowhere on the page - privy, woodpile,
+    manure heap, persimmon, storage shed, wet paddy, the dike kinds, every crop but one - because the page's
+    words all came from stage and step docstrings and a docstring does not enumerate what its code happens to
+    draw.
+
+    So this is DERIVED FROM THE INK rather than written down: the class side-lists run parallel to the ink
+    layers, `ink_census` already turns a slice of them into counts per class, and the difference between two
+    watermarks is exactly what one stage or one step drew. A feature cannot be renamed, added or moved between
+    stages without this following it, and nothing has to be remembered."""
+    from l7r.diagram.interactive.page import ink_census
+
+    found: dict[str, int] = {}
+    for layer, tags in _TAGGED:
+        records, side = getattr(s, layer, None), getattr(s, tags, None)
+        if not isinstance(records, list) or not isinstance(side, list):
+            continue
+        a, b = lo.get(("attr", layer), 0), hi.get(("attr", layer), len(records))
+        n = min(b, len(records), len(side))
+        if n <= a:
+            continue
+        counts, _unclassed = ink_census(records[a:n], side[a:n])
+        for key, c in counts.items():
+            if key and key != "-":  # `"-"` is ink ruled NOT highlighted, so a reader cannot click it
+                found[key] = found.get(key, 0) + c
+    return sorted(found)
+
+
+def elsewhere_in_the_pool(named: set[str], skill: str) -> list[tuple[str, str]]:
+    """Every hoverable class this page has NOT named, paired with a shipped map that does draw it.
+
+    The stage lists are derived from ONE map's ink, so they can only name what that map has - and the pool
+    deliberately draws five different kinds of place, so fourteen classes were left unnamed by Inashiro's
+    roll: the dike kinds and their ponds belong to the polder, the grave island to Kashikawa, and a few are
+    features a given roll did not happen to place. The GM's rule is about what a READER can click
+    (2026-09-12): *"anything that I can click on after having it highlighted when I move my mouse over it on
+    the HTML version of the map should be mentioned on the page ... Otherwise, how can I hit control f and
+    then find out where the privies are being laid out?"* So a class no Inashiro roll draws is still named,
+    beside a map that has it, and a search finds it.
+
+    DERIVED, never listed: a class is present on a map when its key appears in that map's own interactive
+    page, which is the page that explains only the classes actually on it. Four classes are drawn by no
+    shipped map at all (alternate dike crops the polder's roll did not pick, and the field rock); they are
+    named as such rather than omitted, because a reader can still meet them in the vocabulary."""
+    import glob
+
+    where: dict[str, str] = {}
+    for page in sorted(glob.glob(os.path.join(skill, "pool", "hamlets", "*", "*.html"))):
+        try:
+            with open(page, encoding="utf-8") as fh:
+                body = fh.read()
+        except OSError:  # pragma: no cover - a page that cannot be read names nothing
+            continue
+        stem = os.path.basename(page)[: -len(".html")]
+        for key in _hoverable():
+            if key not in named and f'"{key}"' in body:
+                where.setdefault(key, stem)
+    return sorted((k, where.get(k, "")) for k in _hoverable() if k not in named)
+
+
+def _hoverable() -> list[str]:
+    """Every class a reader can hover and click on a map page - the interactive vocabulary's own roster."""
+    from l7r.diagram.interactive.classes import CLASSES
+
+    return sorted(CLASSES)
+
+
 def _ink_total(marks: dict[tuple[str, str], int]) -> int:
     """The ink a watermark stands at - the same five layers `_ink` counts, read off the watermark."""
     return sum(n for (kind, name), n in marks.items() if kind == "attr" and name in ("out", "top", "walls", "toplabels", "ground"))
@@ -341,7 +416,18 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
             # is generic rather than a special case for stage 1: any future metadata-only stage gets the
             # same treatment automatically, and a stage that stops drawing announces itself here rather
             # than turning quietly blank.
-            row: dict[str, Any] = {"i": i, "fn": stage.__name__, "title": title, "paras": paras, "steps": [], "img": None, "iw": 0, "ih": 0, "decided": []}
+            row: dict[str, Any] = {
+                "i": i,
+                "fn": stage.__name__,
+                "title": title,
+                "paras": paras,
+                "steps": [],
+                "img": None,
+                "iw": 0,
+                "ih": 0,
+                "decided": [],
+                "features": features_between(s, start, _watermark(s)),
+            }
             rows.append(row)
             # A COPY IS FINISHED, NOT THE LIVE SETTLEMENT: `finish` flushes deferred canopies, seats captions and
             # crops, all of which mutate. Snapshotting the real one would change the map the next stage sees, and the
@@ -368,13 +454,18 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
             # and the parent, which adds nothing after its last part, does not.
             at = _ink_total(start)
             plate_at: dict[str, dict[tuple[str, str], int]] = {}
+            _from: dict[str, dict[tuple[str, str], int]] = {}
+            _prev = start
             for path, mark in sorted(((p, m) for p, m in step_marks.items() if p in step_names), key=lambda kv: _ink_total(kv[1])):
                 if _ink_total(mark) > at:
-                    at, plate_at[path] = _ink_total(mark), mark
+                    at, plate_at[path], _from[path] = _ink_total(mark), mark, _prev
+                    _prev = mark
             for k, path in enumerate(step_names, 1):
                 name, sparas = step_doc(path)
-                entry: dict[str, Any] = {"name": name, "path": path, "paras": sparas, "img": None, "iw": 0, "ih": 0, "unrenderable": False}
+                entry: dict[str, Any] = {"name": name, "path": path, "paras": sparas, "img": None, "iw": 0, "ih": 0, "unrenderable": False, "features": []}
                 row["steps"].append(entry)
+                if path in plate_at:
+                    entry["features"] = features_between(s, _from[path], plate_at[path])
                 if steps_too and path in plate_at:
                     jobs.append((entry, plate_at.pop(path), f"{i:02d}-{k:02d}-{name.strip('_')}", None, 1500))
             _make_plates(s, jobs, out_dir, width)
@@ -466,6 +557,8 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         ".step p{margin:.35rem 0 0;font-size:.95rem}",
         ".step img{margin:.7rem 0 .2rem}",
         ".after{font:.8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim)}",
+        ".feats{margin:.5rem 0 .2rem;font-size:.92rem}",
+        ".fl{font:700 .72rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);display:block}",
         "img{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:3px;background:#fff}",
         ".noink{border:1px dashed var(--rule);border-radius:3px;padding:1rem 1.15rem;background:transparent}",
         ".noink .cap{font:700 .8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;",
@@ -493,10 +586,14 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
             f'<div class="hd"><span class="n">{r["i"]:02d}</span><span class="t">{escape(r["title"])}</span><span class="fn">{escape(r["fn"])}</span></div>',
             *(f'<p class="why">{escape(p)}</p>' for p in r["paras"]),
         ]
+        if r["features"]:
+            parts.append('<p class="feats"><span class="fl">Features this stage puts on the map</span> ' + escape(", ".join(r["features"])) + "</p>")
         if r["steps"]:
             parts.append(f'<details class="steps" open><summary>The algorithm, step by step ({len(r["steps"])})</summary>')
             for e in r["steps"]:
                 parts.append(f'<div class="step"><span class="sn">{escape(e["name"])}</span>' + "".join(f"<p>{escape(p)}</p>" for p in e["paras"]))
+                if e["features"]:
+                    parts.append('<p class="feats"><span class="fl">Draws</span> ' + escape(", ".join(e["features"])) + "</p>")
                 if e["img"]:
                     parts.append(f'<img src="{escape(e["img"])}" width="{e["iw"]}" height="{e["ih"]}" alt="after {escape(e["name"])}" loading="lazy">')
                     parts.append('<p class="after">the map after this step, and nothing later in the stage</p>')
@@ -520,6 +617,21 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
                 "</div></div>",
             ]
         parts.append("</section>")
+    # EVERY CLICKABLE THING IS NAMED SOMEWHERE ON THIS PAGE (GM 2026-09-12). The stage lists above name what
+    # this map draws; this names the rest, so a reader searching for any feature they can click finds it.
+    _named = {k for r in rows for k in r["features"]} | {k for r in rows for e in r["steps"] for k in e["features"]}
+    _rest = elsewhere_in_the_pool(_named, SKILL)
+    if _rest:
+        parts += [
+            '<section class="stage">',
+            '<div class="hd"><span class="t">Features this map does not have</span></div>',
+            f'<p class="why">The {len(_named)} features listed under the stages above are the ones {escape(spec.name)} actually draws, read from the ink '
+            "itself rather than from any list. The interactive map's vocabulary covers other kinds of place too, and those features are named here with a "
+            "shipped map that has them - so searching this page for anything you can click on a map will find it.</p>",
+            '<div class="kv">',
+            *(f'<div><span class="k">{escape(k)}</span><span class="v">{escape(m or "no shipped map draws it today")}</span></div>' for k, m in _rest),
+            "</div></section>",
+        ]
     parts.append("</div>")
     page = os.path.join(out_dir, "hamlet-placement.html")
     with open(page, "w") as fh:

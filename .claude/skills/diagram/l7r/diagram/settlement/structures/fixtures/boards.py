@@ -16,6 +16,7 @@ from ..._geom import (
     tilt_caption_seat,
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
+from ..captions import CAPTION_FEATURE_GAP as _CAP_FEATURE_GAP  # one figure for the caption's reading distance
 from ._helpers import CAPTION_LANE_FLOOR_FT, CAPTION_LANE_TARGET_FT, first_clear_seat, pick_caption_seat
 
 if TYPE_CHECKING:
@@ -356,6 +357,14 @@ class BoardsMixin:
                 (feature 141, "the GM's cut"). NOTHING in the gate measures a caption against a building
                 any more, so this probe is the only thing standing between a caption and a roof. The
                 restore-or-retire decision, with its census, is in `future-work/cross-cutting.md`."""
+                # A CAPTION OWES A ROOF A MARGIN, NOT MERELY NON-OVERLAP (settlement-review of Kuwabata,
+                # 2026-09-12). This probe refused a seat only where the quad actually LAPPED a feature, so a
+                # caption clearing a byre's top edge by 0.05 ft - one twentieth of a pixel, touching in the
+                # render - was a legal seat, and the words came to rest on that byre 34 ft from the board they
+                # name. A reader pairs the caption with the chest-shaped byre beneath it. Nothing else could
+                # catch it: the gate's `test_every_caption_hugs_what_it_names` measures the caption's
+                # AXIS-ALIGNED box against its referent, so a caption swung 76 degrees out of that box is
+                # invisible to it, and `labels_clear_of_other_buildings` was deleted in feature 141.
                 _quad = _cap_quad(_q)
                 _qx0, _qx1 = min(_c[0] for _c in _quad), max(_c[0] for _c in _quad)
                 _qy0, _qy1 = min(_c[1] for _c in _quad), max(_c[1] for _c in _quad)
@@ -364,7 +373,7 @@ class BoardsMixin:
                     _oy0, _oy1 = min(_c[1] for _c in _o), max(_c[1] for _c in _o)
                     if _qx1 < _ox0 or _ox1 < _qx0 or _qy1 < _oy0 or _oy1 < _qy0:
                         continue  # the prefilter: the caption's quad cannot possibly reach this one
-                    if poly_gap(_quad, _o) <= 0.0:
+                    if poly_gap(_quad, _o) <= _CAP_FEATURE_GAP:
                         return True
                 # ...AND NOT ACROSS A WAY FROM ITS SUBJECT: if the straight line from the board to the
                 # caption crosses a drawn lane, the reader has a way between the words and the thing.
@@ -375,8 +384,18 @@ class BoardsMixin:
                             return True
                 return False
 
+            def _feature_gap(_q: Pt) -> float:
+                """How far this seat's caption quad stands from the nearest solid feature, in px.
+
+                The same geometry `_blocked` judges, returned as a DISTANCE so the seat picker can choose the
+                least bad seat when every one of them is blocked instead of falling through to pure lane
+                clearance - which is how Kuwabata's caption came to rest 0.02 px off a byre, 38.7 ft from the
+                board it names (settlement-review, 2026-09-12)."""
+                _quad = _cap_quad(_q)
+                return min((poly_gap(_quad, _o) for _o in _fabric), default=1e9)
+
             def _pick(_seats: list[Pt]) -> Pt:
-                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
+                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked, _feature_gap)
 
             # ONE LADDER, BOTH BRANCHES (feature 157, second pass). The dense ranked ladder was built
             # inside the tilted branch and the LEVEL branch kept its own coarse candidate set - four

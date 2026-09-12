@@ -14,7 +14,6 @@ from ..consts import (
     CLUSTER_SPAN_FACTOR,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
-    WAY_END_REACH_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -175,7 +174,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             if len(arm) >= 2:
                 # the skeleton is drawn before anything serves the houses, so its ends are trimmed to the bar the gate
                 # asks of a lane end (feature 227: two of Inashiro's arms ended 81-97 ft from the nearest house)
-                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], end_reach=WAY_END_REACH_FT, steadings=steading_footprints(s.M))
+                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
             if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT:
                 arm = []
         arm = s.trim_off_marsh(arm)
@@ -256,7 +255,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         _kept = (
             _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
             if _ln.get("connector")
-            else _trim_to_service(_pts, _others, _final_houses, [list(envelope)], end_reach=WAY_END_REACH_FT, keep=_keep, steadings=_final_steadings)
+            else _trim_to_service(_pts, _others, _final_houses, [list(envelope)], keep=_keep, steadings=_final_steadings)
         )
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]

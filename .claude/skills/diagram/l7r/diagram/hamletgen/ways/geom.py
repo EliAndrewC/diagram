@@ -9,7 +9,6 @@ from l7r.diagram.settlement import edge_dist, point_in_poly, seg_closest, seg_di
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
-    SPUR_SETBACK,
     STEADING_ARRIVAL_FT,
     TRACK_FABRIC_GAP,
     WAY_END_REACH_FT,
@@ -292,31 +291,36 @@ def end_serves(
     return any(edge_dist(q[0], q[1], sp) <= STEADING_ARRIVAL_FT for sp in steadings)
 
 
-def _trim_to_service(
-    run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), end_reach: float | None = None, keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()
-) -> Poly:
+def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()) -> Poly:
     """Pull a run's ends back to the last point that actually serves something.
 
-    The gate asks of every internal lane end that it come within `WAY_END_REACH_FT` of another way, a
-    farmhouse or the field. A caller that draws a way BEFORE anything serves the houses - the cluster's
-    skeleton - passes that constant as `end_reach` and so cannot leave an end the gate will fail. The LATE
-    pass passes it too, and names in `keep` the houses no other way comes near: it runs after
-    `_serve_stragglers`, and trimming a run to 60 ft there used to take back the tail that was some
-    outlying steading's only way (cohort seed 39 stranded a farmhouse the moment the bar alone was applied
-    to both passes, which is why the bar alone is not what the late pass uses). A web lane's ends come out of the
-    clipper, which stops where the ground stops being walkable and has no opinion about whether anything
-    is there. Trimming BEFORE the ink
-    goes down is better than trimming after: `trim_lane_stubs` drops anything under its 71 ft floor,
-    which is the right rule for a skeleton arm and would delete the door paths this feature exists to
-    draw."""
+    ONE BAR, THE GATE'S, FOR EVERY CALLER. `WAY_END_REACH_FT` is what
+    `lanes_reach_something` asks of every internal lane end - within it of another way, a farmhouse or
+    the field - so that is what this trims to, and a caller cannot leave an end the gate will then fail.
+    There used to be an `end_reach` parameter whose absence meant a looser private triple (40 ft to a
+    way, 90 ft to a HOUSE CENTER, `SPUR_SETBACK + 4` to the field); feature 227 moved all four callers
+    onto the gate's figure one at a time, at which point the default was reachable only from this
+    module's own unit tests - a literal agreeing with a test and with nothing that ships, which is the
+    shape this project deletes rather than keeps (feature 174's rule for an unreachable line, and
+    `dev/lessons.md` on a stale literal that agrees with itself). Found by a settlement-review reading
+    the comments rather than the code, 2026-09-12.
 
-    # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way
-    # on the map whose whole purpose is served by something that is neither a house nor another lane.
-    # Without this the trim cut Mizuguchi's spur 32 ft short of the paddy - it removed the only part
-    # of the lane that did the job the lane was drawn for, and did so on the grounds that nothing was
-    # there. The setback matches `SPUR_SETBACK`: a path stops AT the bund, and the last few feet are
-    # the baulk, so "touching the envelope" means within that, not inside it.
-    _way, _house, _field = (end_reach, end_reach, end_reach) if end_reach is not None else (40.0, 90.0, SPUR_SETBACK + 4.0)
+    The ends that are NOT traded for the bar are named instead of excepted: `keep` carries the houses no
+    other way comes within `WEB_REACH_FT` of, because the late pass runs after `_serve_stragglers` and
+    trimming to the bar alone there took back the tail that was an outlying steading's only way (cohort
+    seed 39 stranded a farmhouse the moment both passes were tightened together).
+
+    A web lane's ends come out of the clipper, which stops where the ground stops being walkable and has
+    no opinion about whether anything is there. Trimming BEFORE the ink goes down is better than trimming
+    after: `trim_lane_stubs` drops anything under its 71 ft floor, which is the right rule for a skeleton
+    arm and would delete the door paths this feature exists to draw."""
+
+    # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
+    # the map whose whole purpose is served by something that is neither a house nor another lane. Without
+    # this clause the trim cut Mizuguchi's spur 32 ft short of the paddy - it removed the only part of the
+    # lane that did the job the lane was drawn for, on the grounds that nothing was there. The bar is the
+    # gate's, not a baulk distance: this comment used to say the setback matched `SPUR_SETBACK` so that
+    # "touching the envelope" meant within that, and no caller has asked for that figure since feature 227.
 
     def serves(q: Pt) -> bool:
         # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
@@ -327,31 +331,34 @@ def _trim_to_service(
         # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
         if any(math.dist(q, h) <= WEB_REACH_FT for h in keep):
             return True
-        return end_serves(q, segs, houses, fields, steadings, (_way, _house, _field))
+        return end_serves(q, segs, houses, fields, steadings)
 
     out = list(run)
     while len(out) > 2 and not serves(out[-1]):
         out.pop()
     while len(out) > 2 and not serves(out[0]):
         out.pop(0)
-    if end_reach is not None:
-        # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
-        # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
-        # Walk the end IN along its own last segment instead, four feet at a time, to the first point that serves.
-        # An arm no point of which serves reaches nothing at all and is handed back too short to draw, for the
-        # caller to drop - which is the honest answer for a way with nothing at either end.
-        for _ in range(2):
-            while len(out) >= 2 and not serves(out[-1]):
-                _a, _b = out[-2], out[-1]
-                _d = math.dist(_a, _b)
-                if _d <= 4.0:
-                    out.pop()
-                    continue
-                _t = (_d - 4.0) / _d
-                out[-1] = (_a[0] + (_b[0] - _a[0]) * _t, _a[1] + (_b[1] - _a[1]) * _t)
-            out.reverse()
-        if len(out) < 2 or not serves(out[0]) or not serves(out[-1]):
-            return list(out[:1])
+    # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
+    # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
+    # Walk the end IN along its own last segment instead, four feet at a time, to the first point that serves.
+    # An arm no point of which serves reaches nothing at all and is handed back too short to draw, for the
+    # caller to drop - which is the honest answer for a way with nothing at either end.
+    #
+    # UNCONDITIONAL SINCE FEATURE 227. This was guarded by `if end_reach is not None`, which is to say it ran
+    # for every caller that asked the gate's bar and not for the private default - and once all four callers
+    # asked the bar, the guard only ever read True. It is the same walk for every way on the map now.
+    for _ in range(2):
+        while len(out) >= 2 and not serves(out[-1]):
+            _a, _b = out[-2], out[-1]
+            _d = math.dist(_a, _b)
+            if _d <= 4.0:
+                out.pop()
+                continue
+            _t = (_d - 4.0) / _d
+            out[-1] = (_a[0] + (_b[0] - _a[0]) * _t, _a[1] + (_b[1] - _a[1]) * _t)
+        out.reverse()
+    if len(out) < 2 or not serves(out[0]) or not serves(out[-1]):
+        return list(out[:1])
     return out
 
 

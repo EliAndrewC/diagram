@@ -636,7 +636,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - windbreak: **263** clumps drawn, **39** off the page
 - copse: **246** clumps drawn
 - farmhouses: **19**
-- farmstead fixtures: bath **8**, coop **11**, pit **7**, privy **15**, woodpile **14**
+- farmstead fixtures: bath **8**, coop **14**, pit **8**, privy **18**, woodpile **19**
 - notice board at **(2048.1, 1949.7)**, **3** of 19 farmhouses within 250 ft
 <!-- /census -->
 
@@ -802,5 +802,48 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   8 rectangle tests per house against 163 under feature 226; the front row seated 7 and the ranks
   behind ran 3 rounds. The nearest house stands 60 px from the field outline with 6 within 165, and
   homestead to homestead the median gap is 20 px (worst 161) - the fabric is continuous, which a center-to-center
-  reading of the same cluster does not show. Drawn aspect 1.43 (round, honored); windbreak 249 clumps,
-  copse 235; 4 of 19 gardens split, sides {'E': 9, 'W': 9, 'S': 1}.
+  reading of the same cluster does not show. Drawn aspect 1.43 (round, honored); 4 of 19 gardens split,
+  sides {'E': 9, 'W': 9, 'S': 1}. The belt and copse clump counts are NOT typed here - they are in the
+  derived census block below, because this pair of numbers went stale within a day of being written and
+  this file's own census preamble says why ("Derived, never typed ... three settlement-review passes
+  running caught a hand-typed count describing a roll that no longer shipped"). A settlement-review caught
+  them stale a fourth time on 2026-09-12, against a census block the same commit had updated correctly.
+
+## 2026-09-12 (feature 227, D11): the lane ends judged against walls, and this map's dangling end gone
+
+  `lanes_reach_something` asks that every internal lane end come within `WAY_END_REACH_FT` (60 ft) of
+  another way, a farmhouse or the field, and it measured a farmhouse by its CENTER - 27 ft inside its own
+  front corner on a 46x28 ft house. Two trim callers had also kept looser private bars (40 ft to a way,
+  90 ft to a center). All of them ask the gate's figure now, and the rule gained a fourth clause at
+  `STEADING_ARRIVAL_FT` (12 ft): an end that near a steading's BUILT ground - house, byre, shed, threshing
+  yard, garden - has arrived. The commons and the homestead groves are deliberately outside that set,
+  since a tread stopping in them has stopped in a field.
+
+  THIS MAP SHIPPED ONE OF THE ENDS THE WORK WAS ABOUT, and it is gone: (2215.7, 2302.2), 68 ft from
+  anything. The whole eastern orphan-joiner group went with it. The web is 17 lanes and 2,582 ft of tread
+  down to 14 and 2,301, still ONE component at the 4 ft ink tolerance, with every one of the 19 houses
+  inside the 100 ft reach (worst 85.7 ft, unchanged) - the trim did not buy tidiness with a stranded
+  house. Six of the seven internal free ends now stop 5.0 to 16.3 ft from a garden fence, a threshing yard
+  or a house wall. Lane 13's 266 ft run gives the south-east outlier a door path ending 16.3 ft from its
+  wall, where it previously had a stub on the frontage. Trees standing over a tread fell from 13 to 4, all
+  four canopy rather than trunks: the retired lanes were the ones under the windbreak, and the grove
+  closed over them. Two fixtures appeared on ground a retired lane had crossed (house 12's privy and
+  manure pit).
+
+  OPEN, MEASURED, AND DELIBERATELY NOT FIXED HERE - lane 9's head at (1866.0, 2361.8). It is a 58 ft stub
+  off lane 1 that stops 27.7 ft from house 9's wall, 23.1 ft from that steading's woodpile, with nothing
+  in the gap: no crown, no fixture, no structure. It breaks no rule - it passes `lanes_reach_something` on
+  the house-center clause at 44.2 ft - and the settlement-review that found it said as much while arguing,
+  correctly, that the picture and the arrival doctrine disagree and the picture is what the GM sees. Why it
+  exists: without it house 9 stands 101.3 ft from the nearest tread, 1.3 ft outside the 100 ft reach rule,
+  so a straggler is drawn for it and then clipped at that steading's own outbuildings.
+
+  THE MECHANISM, because it is not where it looks: `_trim_to_service` walks an end inward only while the
+  end does NOT serve, and this one serves from the moment it is drawn (the 60 ft center clause is satisfied
+  44 ft out), so the walk never runs and the tread keeps whatever length the clip gave it. Making ends
+  ARRIVE rather than merely reach is therefore a PREFERENCE change in the straggler's approach, not a bug
+  fix: every door path on every map would run further in, which re-rolls the pool and wants its own cohort
+  measurement - and the last time both trim passes were tightened together a farmhouse was stranded
+  (cohort seed 39). That is why it is recorded here rather than done inside this feature, and the
+  implementation sketch is the reviewer's: let the straggler prefer an end within `STEADING_ARRIVAL_FT` of
+  its own steading's built ground when one is reachable, falling back to today's behavior when it is not.

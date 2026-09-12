@@ -12,7 +12,6 @@ from ..clearance import fabric_index
 from ..consts import (
     BUNDLE_PITCH,
     FOOTPATH_FABRIC_GAP,
-    WAY_END_REACH_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -65,7 +64,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     # `_serve_stragglers`, so a steading a shortened run stops serving still gets its own path afterwards (feature 227).
     # ...and a tread that stops at a steading's own dooryard has ARRIVED there, which is the fourth clause of
     # `end_serves` at its own tight distance (`steading_footprints`, feature 227 D11).
-    run = _trim_to_service(run, segs, houses, end_reach=WAY_END_REACH_FT, steadings=steading_footprints(s.M))
+    run = _trim_to_service(run, segs, houses, steadings=steading_footprints(s.M))
     if segs:
         # SHARING A CORRIDOR IS SHADOWING, whether the two lines are parallel or crossing. The test
         # was written against `MIN_WEB_GAP` (the room a lane needs to pass BETWEEN two steadings),
@@ -499,7 +498,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # dooryard was accepted at up to 90 ft from a center, which is past the 60 ft the gate asks of every
                     # internal end. That is how Kashikawa and Kuwabata shipped "dangling" straggler ends. Now it asks
                     # exactly what the check asks, and a house is measured at its wall, where a walker arrives.
-                    path = _trim_to_service(path, segs, [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])], end_reach=WAY_END_REACH_FT, steadings=_steadings)
+                    path = _trim_to_service(path, segs, [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])], steadings=_steadings)
                     # A DOOR PATH THAT REACHES NO WAY IS NOT DRAWN (feature 137 T03, 2026-08-28): cohort seed 22
                     # shipped a 4 ft straggler stub - the clip and the trim had eaten everything but the doorstep,
                     # and the orphan joiner could neither link it nor drop it (its house had no other way). A

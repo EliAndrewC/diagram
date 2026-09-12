@@ -371,3 +371,44 @@ def test_the_ladders_rung_SHORT_CIRCUITS_in_the_order_the_four_call_sites_relied
     assert calls == ["hug0", "hug1", "blocked1", "hug2", "blocked2", "clearance2"], calls
     assert "blocked0" not in calls, "a seat over the hug cap is never asked whether it is blocked"
     assert "clearance1" not in calls, "and a blocked seat is never measured - the expensive probe is last"
+
+
+def test_a_caption_seat_falls_back_to_the_LEAST_blocked_not_to_the_clearest_lane() -> None:
+    """When every seat is blocked the term used to be dropped entirely, and the choice fell through to pure
+    lane clearance - so a seat touching a roof scored as well as one standing clear of everything.
+
+    Kuwabata shipped exactly that: "notice board" came to rest 0.02 px off a byre and 38.7 ft from the board
+    it named, with every check in the tree green (settlement-review 2026-09-12). The fallback now degrades
+    along the axis the term is about, which is how far the caption stands from the nearest solid feature."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import pick_caption_seat
+
+    at = (0.0, 0.0)
+    touching, roomy = (10.0, 0.0), (0.0, 10.0)
+    seats = [touching, roomy]
+    gaps = {touching: 0.02, roomy: 3.5}
+    # the touching seat has the BETTER lane clearance, which is what the old fallback ranked on
+    lanes = {touching: 40.0, roomy: 9.0}
+    picked = pick_caption_seat(
+        seats,
+        at,
+        hug=lambda q: 1.0,
+        hug_cap=100.0,
+        box_clearance=lambda q: lanes[q],
+        lane_target=90.0,  # unreachable, so every seat takes the fallback path
+        blocked=lambda q: True,  # ...and every seat is blocked
+        gap=lambda q: gaps[q],
+    )
+    assert picked == roomy, "with nothing unblocked, the seat furthest from a roof wins"
+
+    # and the term still yields to an UNBLOCKED seat, which is the older rule it must not outrank
+    picked = pick_caption_seat(
+        seats,
+        at,
+        hug=lambda q: 1.0,
+        hug_cap=100.0,
+        box_clearance=lambda q: lanes[q],
+        lane_target=90.0,
+        blocked=lambda q: q == roomy,
+        gap=lambda q: gaps[q],
+    )
+    assert picked == touching, "an unblocked seat is taken even where the blocked one stands further off"

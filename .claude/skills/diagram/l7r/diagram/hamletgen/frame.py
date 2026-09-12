@@ -71,7 +71,8 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
 def stage_notice(s: Settlement, plan: SitePlan) -> None:
     """The notice board - the last FEATURE placed.
 
-    The kosatsuba is deliberately the last map feature, after even the crop and the title - only the label phase
+    The notice board (a `kosatsuba`, which is the word the engine's own identifiers use) is deliberately the
+    last map feature, after even the crop and the title - only the label phase
     follows it, and that phase places captions, not features - and the reason is about the settlement rather
     than about the drawing (GM 2026-08-29): "where you put the notice board on the map does depend on what other
     features already exist ... the real humans that live in the society that decide where the notice board will

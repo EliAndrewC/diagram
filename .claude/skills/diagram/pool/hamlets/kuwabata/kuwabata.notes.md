@@ -337,7 +337,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - windbreak: **110** clumps drawn, **43** off the page
 - copse: **51** clumps drawn
 - farmhouses: **16**
-- farmstead fixtures: bath **9**, coop **6**, pit **4**, privy **6**, woodpile **10**
+- farmstead fixtures: bath **9**, coop **9**, pit **6**, privy **9**, woodpile **12**
 - notice board at **(1976.9, 337.4)**, **8** of 16 farmhouses within 250 ft
 <!-- /census -->
 
@@ -539,8 +539,11 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   16 rectangle tests per house against 387 under feature 226; the front row seated 2 and the ranks
   behind ran 5 rounds. The nearest house stands 135 px from the field outline with 3 within 165, and
   homestead to homestead the median gap is 4 px (worst 19) - the fabric is continuous, which a center-to-center
-  reading of the same cluster does not show. Drawn aspect 1.86 (round, honored); windbreak 112 clumps,
-  copse 56; 2 of 16 gardens split, sides {'W': 6, 'E': 10}.
+  reading of the same cluster does not show. Drawn aspect 1.86 (round, honored); 2 of 16 gardens split,
+  sides {'W': 6, 'E': 10}. The belt and copse clump counts are NOT typed here - they are in the derived
+  census block above. A settlement-review caught this pair stale on 2026-09-12 (112 and 56 typed against a
+  shipped 110 and 51, one screen below the census preamble that warns about exactly this), which is the
+  fourth instance of the same recurrence in this file. A derived number is read, never restated.
 
 ## 2026-09-12 (feature 228): the crop dike's bank drawn as a ring - no placement change
 
@@ -558,3 +561,34 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   lights fell from 100% to 6.2%, all of it within the rim (the inner stroke, the crowns and the mottle leaning
   over the waterline), the bank 100% lit both ways; the picture differs from the shipped render in 0.14% of its
   pixels, every one within the pond's own stroke band, by at most 9 of 255 on a channel.
+
+## 2026-09-12 (feature 227): the board's caption rests 0.02 px off a byre - measured, three holes closed, the cause named
+
+  A settlement-review read this map's sheet and found the caption "notice board" resting on a BYRE, 34 ft from
+  the board it names: a reader pairs the words with the chest-shaped outbuilding under them. Measured with the
+  engine's own `label_quad` and `poly_gap`, not a hand-rolled rotation: **0.02 px** from the byre's quad, and
+  26.3 px from its own board. The other four pool maps sit at 2.35, 33.45, 45.56 and 52.58 px.
+
+  WHY NOTHING CAUGHT IT. Three separate tests were wrong in the same way - each asked for an OVERLAP where the
+  thing that matters is a DISTANCE - and all three are now fixed, with `CAPTION_FEATURE_GAP` (4 px, the reading
+  distance every other "these two inked things must read as separate" rule on the map uses):
+  the seat probe (`boards.py` `_blocked`), the seat picker's fallback when every seat is blocked (which chose on
+  lane clearance alone, so a seat touching a roof scored as well as one in the open), and `pull_caption_toward`,
+  which moves a caption half way toward its subject AFTER the seat is judged and refused the move only on
+  `rects_overlap`. The gate's own `test_every_caption_hugs_what_it_names` cannot see any of it: it measures the
+  caption's AXIS-ALIGNED box, and this caption is swung 76 degrees out of that box.
+
+  AND THE CAUSE IS NONE OF THE THREE, which is why the caption did not move when they were fixed. The board's
+  caption may only sit ALONG the board's own axis - above it, below it, or laterally - which is 30 candidate
+  seats at five standoffs, and on this map every one of them is blocked. 0.02 px is the BEST of the thirty. A
+  ring of 252 seats at arbitrary angles within the same hug cap has 214 with 4+ px of clearance and a best of
+  34.6 px, so clear ground is abundant; it simply is not on the board's axis. The board is standing in the one
+  place on its verge where its own caption has nowhere to go.
+
+  THE FIX IS THEREFORE THE BOARD'S SEAT, NOT THE CAPTION'S, and it is recorded rather than done: the siter
+  already scores the caption as part of the seat (GM 2026-07-27) but scores its LANE clearance and its hug, not
+  its clearance from the built fabric - so a board seat whose thirty caption seats are all blocked scores as
+  well as one with open ground on both sides. Adding that term moves boards on maps whose captions are fine
+  today, which re-rolls the pool and wants its own cohort measurement. Sketch: score each candidate BOARD seat
+  by the best `CAPTION_FEATURE_GAP` its own thirty caption seats can reach, and prefer a seat whose caption can
+  stand clear - the same "the caption is part of the seat" rule, extended to the term that was missing.
