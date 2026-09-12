@@ -810,3 +810,27 @@ def test_an_unknown_dike_crop_or_leftover_form_is_REFUSED_at_the_call() -> None:
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), dike_crop="kiwi")
     with pytest.raises(ValueError, match="leftover"):
         s.apply_land_use(net, "mulberry_fishpond", __import__("random").Random(1), leftover="fallow")
+
+
+def test_a_dike_pond_bank_is_a_ring_around_its_water():
+    """Feature 228 (GM 2026-09-12): hovering the mulberry dike lit the fish pond inside it, because the bank
+    was a filled disk under the pond and raster mode washes the lit class over the image. The bank is now
+    the ring between its outer edge and the water's - the perimeter dike's own band form - so the pond
+    shows through the hole: one path, the bank outline then the water outline, under the even-odd rule.
+    The pond's own path is unchanged."""
+    s = Settlement(2000, 2000, seed=1)
+    s.meta(field_archetype="mulberry_dike_fishpond")
+    plots = [{"poly": [(100.0, 100.0), (280.0, 100.0), (280.0, 260.0), (100.0, 260.0)], "low": True}]
+    s.apply_land_use({"plots": plots, "channels": []}, "mulberry_fishpond", random.Random(1), fraction=1.0, eligible="all")
+    banks = [t for t, c in zip(s.out, s.out_cls, strict=True) if c == "mulberry dike" and 'fill="#C2A772"' in t]
+    ponds = [t for t, c in zip(s.out, s.out_cls, strict=True) if c == "fish pond"]
+    assert len(banks) == 1 and len(ponds) == 1, (banks, ponds)
+    bank_d = re.search(r' d="([^"]*)"', banks[0]).group(1)
+    pond_d = re.search(r' d="([^"]*)"', ponds[0]).group(1)
+    assert 'fill-rule="evenodd"' in banks[0] and 'fill-rule' not in ponds[0]
+    assert pond_d.count("Z") == 1 and pond_d.startswith("M ") and pond_d.endswith("Z")
+    assert bank_d.count("Z") == 2 and bank_d.endswith(" " + pond_d), bank_d  # the hole IS the pond's outline
+    outer = bank_d[: -len(pond_d) - 1]
+    assert outer.startswith("M ") and outer.endswith("Z") and outer != pond_d
+    bank, water = s.M["dikeponds"][0]["bank"], s.M["dikeponds"][0]["water"]  # the records are untouched (FR-003)
+    assert min(x for x, _y in bank) < min(x for x, _y in water) and max(x for x, _y in bank) > max(x for x, _y in water)

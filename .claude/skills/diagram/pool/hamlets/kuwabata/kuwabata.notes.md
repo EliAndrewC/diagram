@@ -522,3 +522,17 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   5 of 16 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
   evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
   or tighter is a research question the record does not yet answer; no rule measures the spread today.
+
+## 2026-09-12 (feature 228): the crop dike's bank drawn as a ring - no placement change
+
+  The GM, on this map's interactive page: hovering the mulberry dike *"lights up not only the Mulberry Dyke
+  itself, but the fish ponds Inside each Mulberry dike, which is confusing"* - they asked for *"basically the same
+  behavior that we give to the perimeter dyke"*. Each pond's bank had been one filled path covering the whole
+  parcel with the pond painted over it; on the vector page the pond hid the disk, but raster mode (the opening
+  view) draws the lit class as a wash over the image, so the lit disk tinted all 26 dike groups' ponds gold.
+  The bank is now the ring between its outer edge and the water's outline, under the even-odd rule - the
+  perimeter dike's own band form (settlements/archetypes.md 'The bank is a ring'). Nothing placed moves: the
+  manifest is byte-identical (the two outlines come from the same draws in the same order), the crowns still clip
+  to the bank outline so the few that overhang the water's rim still light with the dike, and the ring's inner
+  stroke lies under the pond's own wider stroke. Measured on the regenerated page in raster mode with the dike
+  lit: every sampled pond-center pixel unchanged, every sampled bank pixel lit.
