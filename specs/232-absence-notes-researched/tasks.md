@@ -7,34 +7,34 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 - [x] T01 the work list built from the pages, one entry per note with its heading, its paragraph and what the last pass tried
       research: procedure
       verify: DONE. DONE. notes-worklist.md built from the pages, not by hand: 162 entries, one per note, each carrying the research heading it sits under, the whole paragraph with the footnote's position marked as [HERE], and what the last pass tried. Split into seven subject batches under batches/, 162 accounted for with none in two batches and none in none.
-- [ ] T02 water A (canals, ditches, sizing): the reader batch out, its report in `reader-reports.md`
+- [x] T02 water A (canals, ditches, sizing): the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). water A - canals, ditches and sizing: 37 notes, 21 CITED, 14 STILL ABSENT (8 of them budget-blocked), 1 FOR THE GM, 1 CONTRADICTED. The find of the pass: T/JSSLKX 002-2021, openly readable and subordinate to GB 50288 by its own clause, closing eight notes across three pages. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
-- [ ] T03 water B (moats, ponds, wetland, flow): the reader batch out, its report in `reader-reports.md`
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
+- [x] T03 water B (moats, ponds, wetland, flow): the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). water B - moats, ponds, wetland and flow: 19 notes, 11 CITED, 6 STILL ABSENT, 2 FOR THE GM, 3 CONTRADICTED. Found and read Ritter's Timber Bridges: a bearing seat is 10-24 inches, which cannot justify the record's 5-15 ft of landing. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
-- [ ] T04 funerary and temple: the reader batch out, its report in `reader-reports.md`
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
+- [x] T04 funerary and temple: the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). funerary and temple: 29 notes, 17 CITED, 11 STILL ABSENT, 1 FOR THE GM. A site the record called 403-refused returns 200 to a browser user agent and carries the exact sentence needed. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
-- [ ] T05 fields and crops: the reader batch out, its report in `reader-reports.md`
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
+- [x] T05 fields and crops: the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). fields and crops: 27 notes, 12 CITED, 7 STILL ABSENT, 5 NOT SEARCHED with their queries recorded, 2 FOR THE GM, 2 CONTRADICTED. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
-- [ ] T06 buildings and houses: the reader batch out, its report in `reader-reports.md`
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
+- [x] T06 buildings and houses: the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). buildings and houses: 20 notes, 11 CITED, 5 STILL ABSENT, 4 FOR THE GM. Relaunched after the first reader stalled; the replacement wrote its report incrementally. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
-- [ ] T07 trade works, defense and government: the reader batch out, its report in `reader-reports.md`
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
+- [x] T07 trade works, defense and government: the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). trades, defense and government: 16 notes, 10 CITED, 2 STILL ABSENT, 3 CONTRADICTED, no FOR THE GM - every blocked document was recovered by another route or proved genuinely closed. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
-- [ ] T08 vegetation, roads and the rest: the reader batch out, its report in `reader-reports.md`
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
+- [x] T08 vegetation, roads and the rest: the reader batch out, its report in `reader-reports.md`
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify: DONE. READING DONE (the task stays OPEN until its quote-check and source-applicability boxes are ticked in phase 3). vegetation, roads and the rest: 14 notes, 8 CITED, 3 STILL ABSENT, 2 FOR THE GM, 1 CONTRADICTED. Evidence per note in reader-reports/; research pass, source-reader and recorded-and-cited are the reading half - quote-check and source-applicability follow in phase 3 on what lands.
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. DONE. the reading landed and its phase-3 checks are complete: quote-check over every footnote this batch changed, and source-applicability over every new key it registered. Findings applied - the per-note verdicts are research.md R1, the quote-check census and the residue are in closing-report.md
 
 ## Phase 2 - what the session writes (FR-001, FR-003, FR-004, FR-006)
 
@@ -62,8 +62,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 - [x] T15 `source-applicability` on every new key, before its numbers stand in a page; findings applied
       research: procedure
       verify: DONE. DONE. four source-applicability agents over all 87 new keys plus the rewritten ones. No source NOT-APPLICABLE; two write-ups named the wrong document, one work was registered twice under two keys, and twenty entries were missing a limit. All applied - research.md R25 and the closing report
-- [ ] T16 `quote-check` on every changed footnote, per footnote; findings applied
+- [x] T16 `quote-check` on every changed footnote, per footnote; findings applied
       research: procedure
+      verify: DONE. DONE. six quote-check agents over every footnote on thirteen research pages and their citations pages, about 700 notes. Thirteen citations that do not support their assertion, one FALSE absence note, seven links pointing at the wrong page, three keys holding two documents each and cross-wired, eighteen normalized quotations and three keyed notes carrying no quotation - all applied. The census and the residue are in closing-report.md
 - [x] T17 `record-format` on every changed page; findings applied
       research: procedure
       verify: DONE. DONE. six agents over thirteen research pages and every citations page; about 130 edits applied, listed in the commit that landed them
@@ -76,5 +77,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 - [x] T20 `closing-report.md`: what changed, and every CONTRADICTED claim with what the source says and what the map does
       research: procedure
       verify: DONE. DONE. what changed, all fourteen CONTRADICTED claims with what the source says and what the map does, the twelve drifted modals, what the pass learned about its own fetcher, and the two rulings reserved for the GM
-- [ ] T21 `make page-check` green; `make done` green (detached); commit; `sync-with-main.sh done`
+- [x] T21 `make page-check` green; `make done` green (detached); commit; `sync-with-main.sh done`
       research: procedure
+      verify: DONE. DONE. make page-check GREEN (763 passed); make done GREEN - the full suite at 24,340 statements and 100% coverage, roll census green, every pool map rolled, and already-verified on the re-run since nothing the gate exercises changed after it. No settlement review owed: no pool manifest moved against main

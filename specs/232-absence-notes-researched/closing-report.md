@@ -115,6 +115,50 @@ The documents a person could fetch and this session could not are in [`for-the-g
 seventeen in all across the two passes, each named to the volume and page and each with the route that
 failed.
 
+## What the quote-check found, and what it cost to fix
+
+Six agents read every footnote on thirteen research pages and their citations pages - about 700 notes.
+The reading is the reason to keep paying for this check: it does not confirm work, it finds the places
+where a citation had quietly stopped meaning what it says.
+
+| what it found | how many | the worst instance |
+|---|---|---|
+| a citation that does NOT support its assertion | 13 | `cities/capitals` fn-103 quoted a passage saying Chang'an's plan was "an irregular rectangle ... twisted into the form of the Big Dipper", standing behind a bullet that lists it to prove Chinese cities are square |
+| a FALSE absence note | 1 | `vegetation` fn-89 said no page carries the pre-Meiji Izumo grove; the passage is on an article the same section cites three times, and the registry write-up already stated it |
+| a link pointing at the wrong page | 7 | `water` fn-47 pointed at a volume's table of contents - the whole true-size width ladder is priced against figures on chapter 4 |
+| ONE key holding TWO documents, cross-wired | 3 | `aburana-jawiki`: fn-1 quoted the Japanese article while linking the Chinese one, and fn-2 did the reverse |
+| a quotation silently normalized | 18 | two Japanese dictionary hedges cut off mid-sentence (とされている, とされるが確かではない), and an English passage Americanized inside its own 「」 with a comment asserting the page spelled it that way |
+| a keyed note carrying NO quotation | 3 | `urban-features` fn-42's whole gloss was "as stated" |
+
+All of them are fixed. Three keys are now two keys each, which is the same repair the registry needed
+for `sendai-igune-list`: **one key computes one link**, so a work that is really two documents strands
+whichever note quotes the other one.
+
+## The residue this feature does NOT close, named rather than absorbed
+
+Two things the quote-check found that are larger than this feature and are left standing, so that
+nobody has to rediscover them:
+
+**1. Unfootnoted assertions about the world.** The agents listed roughly 180 sentences across the
+thirteen pages that assert something about how a place was built, farmed, governed or lived in and
+carry no footnote at all - many of them marked `(unsourced)` inline, which is an honest label but not
+an absence note, and some marked nothing. They cluster: the torii-count distribution on
+`religion-and-death.html`, "Forest density and crown size" on `vegetation.html`, the tanning-yard
+section and the bell-and-drum tower on `urban-features.html`, and a run of nine dated, named,
+numbered claims in the class-scaling bullets of `cities/capitals.html`. This is a research pass of its
+own - the same shape as the one that just ran, and about the same size. It is NOT in this feature's
+scope, which the GM set as the absence NOTES.
+
+**2. Sources this container cannot reach, which a person probably can.** About sixty notes could not
+be verified because a host refused an automated fetch (403 from MDPI, ScienceDirect, Wiley, SAGE,
+Springer, Taylor and Francis, IDEALS, WaterAid, JPX), refused the connection outright
+(`jsszy.org.cn`, `knowledgebank.irri.org`, `jlrbszb.dajilin.com`), served a broken TLS chain
+(`egyankosh.ac.in`, `chinaknowledge.de`), or served a PDF whose text layer will not extract. Under the
+GM's own test - if a person can open it, it is public - none of these is a defect in the record, and
+the notes disclose the obstacle. But nobody has re-read them since, and two of them carry load-bearing
+figures: the offtake angles on `cities/river-cities.html` and the caravan inn's single story on
+`towns.html`, the one attested analogue that contradicts what the map draws.
+
 ## What is left open, honestly
 
 - **67 open absence notes.** Each carries its dated queries. They are the backlog, and feature 235 is what
