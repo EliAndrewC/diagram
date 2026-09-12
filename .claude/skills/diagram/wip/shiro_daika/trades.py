@@ -120,7 +120,7 @@ s.stables(673, 1915)
 s.well(700, 1940)  # pre-seeded: the yard's own-well dig path was putting one on the SW gate road
 s.block_polys.append([(521, 1896), (631, 1896), (631, 2004), (521, 2004)])
 s.placed.append((690, 1912, 150, 130))  # the SW yard's animal ground, east of the stables where the crescent rows press  # SW caravan yard (uniform doctrine) - likewise kept inside the wall
-s.street([(1850, 1688), (1850, 1852)], width=s.lw(10))  # the Benten sando's monzen lane (the hall faces its own lane - capitals.md)
+s.street([(1850, 1688), (1850, 1852)], width=s.lw(10))  # the Benten sando's monzen lane (the hall faces its own lane - research/cities/capitals.html)
 s.street([(950, 1482), (950, 1560)], width=s.lw(10))  # the Jurojin sando's monzen lane
 s.frontage([(950, 1492), (950, 1550)], ["shop"], width=6, spacing=26, setback=3, dense=True)  # the sando's own stalls
 s.frontage(

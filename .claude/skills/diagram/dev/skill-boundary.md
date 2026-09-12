@@ -31,13 +31,13 @@ Three findings drove it, in order of weight:
    boundary, not a skill boundary - and it is the boundary we already have.
 2. **The documentary split already exists.** `SKILL.md` is the shared index (palette, scale ladder,
    render pipeline, pool layout, the regression-fixture and review-agent doctrine, the `make`
-   ladder); `buildings.md` and `settlements.md` are separate indexes over `buildings/` and
-   `settlements/`, each topic file stating when to load it. The cost the GM actually feels - "I
+   ladder); `buildings.md` indexes `buildings/`, each topic file stating when to load it, and the Mode B
+   record is the research pages (feature 229 retired the `settlements/` rule files into them). The cost the GM actually feels - "I
    have to say which part of the skill I am working on" - is one word per request, and a second
    skill would cost the same word.
 3. **The asymmetry argues AGAINST splitting.** Mode B is a 28-generator parametric engine with a
    ~1,371-segment validator, CodeBuild, perf bookends and scope switches. Mode A is ~29
-   hand-authored SVGs, one placer, one geometry audit (`tools/pack_audit.py`) and three review
+   hand-authored SVGs, one placer, one geometry audit (`tools/pack_audit/`) and three review
    agents. A `buildings` skill would be a small skill owning a large repository's process
    (spec-kit for every engine change, the gate, the switches). Today Mode A borrows that machinery
    without having to carry it.
@@ -45,10 +45,10 @@ Three findings drove it, in order of weight:
 ## More hand-authored types do NOT change this
 
 Adding estates (or temples, keeps, battlefields) the way magistracies are done means, per type: a
-program entry in `buildings/programs.md`, a few checks in `pack_audit.py` and rows in
+program entry in `buildings/programs.md`, a few checks in `pack_audit/checks.py` and rows in
 `size-audit`'s anchor table, a pool directory with the `.svg/.png/.notes.md` triplet, and the same
-review agents before it ships. That grows `buildings/` the way `settlements/` grew from one file to
-thirteen - which `SKILL.md` already anticipates ("add `temples/`, `keeps/`, etc. as they appear").
+review agents before it ships. That grows `buildings/` the way the Mode B rule files once grew from one file to
+thirteen (before they retired into `research/`) - which `SKILL.md` already anticipates ("add `temples/`, `keeps/`, etc. as they appear").
 It does not touch the boundary. And every new Mode A type is ALSO a new Mode B glyph with a shared
 program (a city estate stands on a provincial-city map; a country estate on a village or town), so
 each addition strengthens finding 1 rather than weakening it. Building COUNT is not the trigger.

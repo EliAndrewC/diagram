@@ -41,7 +41,7 @@ class FuneraryGroundsMixin:
         attached to a temple, e.g. one serving an in-wall farm quarter) - exempt from the temple-precinct
         rule. organic=True draws an IRREGULAR earthen plot; organic=None (the default) DERIVES it from
         parish: every non-parish COMMON ground is organic, parish precinct plots stay ruled rectangles.
-        Historical grounding (researched 2026-07-23, written up in settlements.md 'shape of the common
+        Historical grounding (researched 2026-07-23, written up in research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common
         ground'): Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed
         temple yards - were unplotted and terrain-following, never surveyed; Song China's state pauper
         cemeteries (louzeyuan, 1104 on) WERE surveyed walled compounds with numbered rowed plots, so a
@@ -177,7 +177,7 @@ class FuneraryGroundsMixin:
         religious order stands outside the caste system, so handling the dead does not pollute its caste).
         A cleared, scorched ground with a raised stone pyre platform, a wisp of smoke, and a small roofed
         shelter for the rite. Records M['cremation_grounds']; blocks placement."""
-        # TO SCALE (GM 2026-07-19; anchors in settlements.md): a sanmai's cleared working core is
+        # TO SCALE (GM 2026-07-19; anchors in research/religion-and-death.html, the funerary-size entry): a sanmai's cleared working core is
         # 30-80 real ft for a village/town, ~80-160 ft for a provincial city (even metropolitan
         # Edo's Yoyogi crematory was only ~180 ft square); the pyre platform ~15x10 ft. The old
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.

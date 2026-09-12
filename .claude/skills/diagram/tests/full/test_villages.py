@@ -25,7 +25,7 @@ def test_village_passes_gate(gen):
     # spans plot_texture's small_irregular->large_block knobs (~0.036-0.0675) plus slop and, above all,
     # catches a regression back to the old hand-set ~0.13 ac (or the old field-wide terrace/ribbon bands).
     # The polder / dike-pond archetypes are DELIBERATELY larger (Buck's ~1 mu parcels, 0.4-0.6 ha ponds -
-    # true-scale per settlements.md line ~102), so they are excluded, not held to the leveled-cell target.
+    # true-scale per research/settlements.html, the scale entry), so they are excluded, not held to the leveled-cell target.
     with open(gen[: -len(".gen.py")] + ".json") as _fh:
         manifest = json.load(_fh)
     meta = manifest.get("meta", {})
@@ -34,5 +34,5 @@ def test_village_passes_gate(gen):
     if _valley or _hill_rice:
         cell = _typical_cell_acres(svg, meta.get("ftpx") or 2)
         assert cell is not None and 0.030 <= cell <= 0.072, (
-            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see settlements.md 'Paddy cell size')"
+            f"{os.path.basename(gen)}: typical paddy cell {cell:.3f} ac is outside the calibrated 0.030-0.072 band (see research/fields.html 'Plot sizes, pond sizing and acreage from population')"
         )

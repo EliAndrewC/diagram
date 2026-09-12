@@ -31,7 +31,7 @@ NOT_ENGINE = [
     S + "dev/perf-log/20260825T000000Z-130-start-x.json",
     S + "dev/loop.md",
     S + "future-work/something.md",
-    S + "settlements/water.md",
+    S + "research/water.html",
     S + "buildings/manor.md",
     S + "research/farms.md",
     S + "pool/hamlets/inashiro/inashiro.notes.md",

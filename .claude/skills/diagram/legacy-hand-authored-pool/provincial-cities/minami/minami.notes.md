@@ -146,7 +146,7 @@ identical source gives byte-identical output, verified. Before inheriting a clon
   The 2026-07-22 to-scale pass had converted the gate furniture's FOOTPRINTS to real feet and left
   the OFFSETS that position them as fixed pixels; `road_half` spent a `road_width` default that is a
   width in FEET as PIXELS. Now 30 ft clear with 15 ft piers, water gate 60 ft, all through `px()`.
-  Deliberately NO new check - see `settlements/cities/defenses.md` for why one could not catch it.
+  Deliberately NO new check - see `research/cities/defenses.html` for why one could not catch it.
 - **Five caption collisions**, four invisible to `no_label_overlaps`: its 2 px horizontal slack is
   sized for estimation error, and both the bold-serif and italic faces put ink outside the measured
   box. `oil press` x `Temple of Bishamon` (0.7 px), `Temple of Daikoku` x `graveyard` (a 2.0 px gap

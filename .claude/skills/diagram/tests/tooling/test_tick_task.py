@@ -26,7 +26,7 @@ Spec: [`spec.md`](spec.md).
       verify: DONE. it was done
 - [ ] T02 the second thing
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
       verify: `make quick` clean; the page reads right
       and this verify text wraps onto a second line
 - [ ] T02a the second-and-a-half thing
@@ -57,9 +57,34 @@ def test_T02_does_not_match_T02a_and_the_boxes_tick_on_request() -> None:
     assert "- [x] T02a the second-and-a-half thing\n      research: rendering\n      verify: DONE. done indeed\n" in new
     assert "- [ ] T02 the second thing" in new, "T02 untouched"
     boxed, _ = tt.tick(TASKS, "T02", "with the record", boxes=True)
-    assert tt.BOXES_TICKED in boxed and tt.BOXES not in boxed
+    assert "- [ ] research pass" not in boxed and "- [x] source-applicability confirmed" in boxed
     unboxed, _ = tt.tick(TASKS, "T02", "without the flag")
-    assert tt.BOXES in unboxed, "boxes stay open unless asked"
+    assert "- [ ] research pass" in unboxed, "boxes stay open unless asked"
+
+
+def test_the_boxes_are_matched_by_SHAPE_so_the_roster_may_grow() -> None:
+    """THE DEFECT THIS REPLACES (feature 229). Both the script and this test held the literal
+    three-box line of constitution v2.12.0, and the roster has been FIVE since features 194 and 211
+    added `quote-check confirmed` and `source-applicability confirmed`. The literal matched nothing, so
+    `make tick BOXES=1` reported a ticked task and ticked no box - silently, seven times, until the
+    gate's own rule caught it at the end. Matching by shape is what makes the next addition free."""
+    for line in (
+        "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited\n",
+        "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited\n",
+        "      - [ ] a  - [ ] b  - [ ] c  - [ ] d  - [ ] e  - [ ] f  - [ ] g\n",
+    ):
+        assert tt._is_boxes_line(line), line
+        assert "- [ ]" not in tt._tick_boxes(line)
+    for line in ("- [ ] T02 the second thing\n", "      research: physical\n", "      verify: DONE. a note\n"):
+        assert not tt._is_boxes_line(line), line
+        assert tt._tick_boxes(line) == line
+
+
+def test_asking_for_boxes_where_there_are_none_REFUSES_rather_than_doing_nothing() -> None:
+    """The silence was the whole defect: a no-op that reported success. T02a is a rendering task."""
+    with pytest.raises(SystemExit) as e:
+        tt.tick(TASKS, "T02a", "no boxes here", boxes=True)
+    assert "no research-box line" in str(e.value)
 
 
 def test_a_task_without_a_verify_line_gets_one_and_the_section_heading_is_not_swallowed() -> None:
@@ -96,7 +121,7 @@ def test_main_resolves_a_feature_by_number_or_name_and_refuses_ambiguity(tmp_pat
     assert tt.main(["188", "T03", "x"]) == 2, "two 188s -> ambiguous -> refused"
     assert tt.main(["188-beta", "T03", "x"]) == 2, "no tasks.md -> refused"
     assert tt.main(["only-two-args", "T03"]) == 2, "usage"
-    assert tt.main(["188-alpha", "T03", "boxes flag parsed", "--boxes"]) == 0
+    assert tt.main(["188-alpha", "T03", "boxes flag parsed"]) == 0  # T03 is a rendering task; --boxes on it refuses, proved above
     # `make tick` hands the note over in the environment, so backticks in it are never shell-expanded
     monkeypatch.setenv("TICK_NOTE", "the `_ENGINE_DIRS` tuple, quoted safely")
     assert tt.main(["188-alpha", "T04", "--note-from-env"]) == 0

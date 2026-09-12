@@ -8,7 +8,7 @@
 
 ## Compound programs
 
-Per-building-type specs: the required program every instance shares, the knobs that make instances differ, and staffing/sizing anchors. The research reasoning behind each program lives in the Historical grounding section below. (Planned next entries: samurai country estate, governor's compound, castle keep.)
+Per-building-type specs: the required program every instance shares, the knobs that make instances differ, and staffing/sizing anchors. The research reasoning behind each program lives on [`research/buildings.html`](../research/buildings.html). (Planned next entries: samurai country estate, governor's compound, castle keep.)
 
 ### Magistrate's manor (county magistracy)
 
@@ -29,7 +29,7 @@ The seat of a County Magistrate (Rank 5): a walled compound in the county town c
 - **A modest shrine** - every magistracy has one, Inari by default. Scale and dedication are the per-manor particular; Ochiba's full two-altar hall is the exception, justified by its priest-magistrate, not the norm - and even it stays subordinate in footprint to the residence (see the Hall shrine size ceiling).
 - **2-4 wells** distributed by use, and **latrines** - roughly one per functional zone (~3-4 total): the residence privy attached to the house, the rest against service walls near a gate (see Latrines and the rear service strip).
 - **Fire-water tubs** (~8-12) distributed across the fire-prone wooden buildings, weighted to the kitchen (2); the fireproof plaster kura carries none (see Fire-water tubs and the Fire discipline grounding).
-- **Notice board** just outside the main gate - verdicts, edicts, and bounties are posted there. This is the BENCH'S board (the court's output, read by those who come to it - litigants, petitioners, bounty hunters); the settlement's own kosatsuba is a DIFFERENT board on the town map, posting the state's standing law at the busiest public point (settlements.md "Notice board (kosatsuba)", GM 2026-07-24). Both existed at once.
+- **Notice board** just outside the main gate - verdicts, edicts, and bounties are posted there. This is the BENCH'S board (the court's output, read by those who come to it - litigants, petitioners, bounty hunters); the settlement's own kosatsuba is a DIFFERENT board on the town map, posting the state's standing law at the busiest public point (`research/urban-features.html`, the notice-board entry; GM 2026-07-24). Both existed at once.
 - **Practice ground** in the outer court beside the watch's lodging - swept patch + weapon rack + striking posts (see the Outer court vocabulary). The compound trains daily; only a city keeps a dojo (see grounding).
 - **Guest room** in the residence (or a small detached guest house at wealthy manors) for official visitors - lineage chancellors, Imperial inspectors, neighboring magistrates (the visitor-hospitality line in the magistrate's budget).
 

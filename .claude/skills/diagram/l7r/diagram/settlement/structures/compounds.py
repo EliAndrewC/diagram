@@ -62,7 +62,7 @@ class CompoundsMixin:
         `ink` recolors the walls and gate (recorded in the manifest): feature 020 uses it for the
         Imperial Magistrate's compound, which is FOREIGN SOVEREIGN ground and must not read as
         another domain office - the manor form, in its own ink, the way state violet marks the
-        ministries (settlements/capitals.md, "Compounds with no provincial equivalent")."""
+        ministries (research/cities/capitals.html, "What does a capital have that a provincial city has no version of?")."""
         hw, hh = w / 2, h / 2
         wall = ink or '#2D2A24'
         gg = max(self.px(gate_ft) / 2, 2.0)  # gate HALF-gap: real feet, floored so the opening stays visible

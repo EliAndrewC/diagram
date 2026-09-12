@@ -131,7 +131,7 @@
 
 | Decision | Class (accurate / deviation / guess) | Why | Recorded at |
 |---|---|---|---|
-| [e.g. footplanks over every ditch >= 2 ft] | [guess - the record is silent on whether a 2-shaku ditch was planked; the GM ruled] | [...] | [`research/water.html#...`, `settlements/water.md`, comment at `waterfields/frame.py:FOOTPLANK_MIN_FT`] |
+| [e.g. footplanks over every ditch >= 2 ft] | [guess - the record is silent on whether a 2-shaku ditch was planked; the GM ruled] | [...] | [`research/water.html#...` (the finding and, until a generator draws it, the specification), comment at `waterfields/frame.py:FOOTPLANK_MIN_FT`] |
 
 ## Assumptions
 

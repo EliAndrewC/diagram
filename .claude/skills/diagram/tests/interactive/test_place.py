@@ -132,7 +132,7 @@ def test_each_tier_explains_what_its_population_figure_COUNTS() -> None:
     2026-08-29). A hamlet's and a village's need no explaining - they are five to a drawn household.
 
     THE TOWN'S 1,200 IS ITS OWN (GM 2026-08-29, and settlement-review round 8 nailed down whose):
-    `settlements/towns.md` puts a town at ~238 households, ~156 of them farming and 82 not, and Ubame
+    `research/towns.html` puts a town at ~238 households, ~156 of them farming and 82 not, and Ubame
     draws exactly those 82. Its manifest's 590 is the DEPICTED slice the housing check keys on - the
     82 plus the 36 farmhouses that fit the sheet - while the tier's real figure counts all ~156
     farming households. Reading the 1,200 as the COUNTY's farmers would double-count against
@@ -386,7 +386,7 @@ def test_place_keys_names_exactly_what_the_card_reads() -> None:
 def test_the_card_names_the_households_when_the_arithmetic_would_not_work() -> None:
     """Feature 174, closing the one unreached statement in this module.
 
-    The comment at that branch records the reason (settlement-review 2026-08-29): `settlements.md`
+    The comment at that branch records the reason (settlement-review 2026-08-29): `research/settlements.html`
     permits ~0.7 houses per household at village scale, so a card reading "66 farmhouses, population
     ~350" invites a reader to divide and get 5.3. The households are named only when the two differ -
     both sides asserted, since a test of the naming alone would pass with the condition inverted.

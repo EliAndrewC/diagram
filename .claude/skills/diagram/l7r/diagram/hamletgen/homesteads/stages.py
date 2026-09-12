@@ -30,7 +30,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     """Seat every declared household, and KNOW whether it worked.
 
     `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households -
-    a to-scale map depicts essentially every household - so a hamlet that declares 15 and seats 12
+    a to-scale map depicts essentially every household (research/settlements.html "Is every household in a
+    hamlet actually drawn?") - so a hamlet that declares 15 and seats 12
     fails, and the authored maps deal with that by tuning a hand-written candidate loop until the
     number comes out. The script instead asks the placer, which is the only thing that actually knows
     whether a seat is free: it draws candidates from the rolled cluster shape and, if the quota is

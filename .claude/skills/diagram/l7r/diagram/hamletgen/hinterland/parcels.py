@@ -336,7 +336,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # THE COPPICE IS A HILLSIDE WOOD, SO A DOWN-SLOPE-DOMINANT SEAT LOSES TO A CROSS-SLOPE ONE
             # (settlement-review, Kashikawa 2026-08-18 round 2, and its research pass settled the
             # ruling this ledger item was waiting for). Three project files say woodland goes on the
-            # higher, farther ground - `settlements/vegetation.md`, `research/fields.html` and this
+            # higher, farther ground - `research/vegetation.html`, `research/fields.html` and this
             # function's own scorer comment - and Kashikawa drew both its stands downslope, one of them
             # 886 ft down and 75 ft off the reed marsh: a coppice walking onto the wet toe of the fan.
             # The scorer's additive `+0.35 * upslope` never binds, because a 90 px step toward the
@@ -398,9 +398,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 jy = y + (s._hjit(x, y, 72.0) - 0.5) * step
                 # ...and the size roll is wider than it was, for the reason recorded at `_ladder`:
                 # +/-15% of a shared rung left two maps' stands 1.8% apart. This is a DEGREE on a
-                # continuum (calibrated liberty), not a knob - `settlements/vegetation.md` already
-                # says coppice lots were "whatever odd corner the village spared", so a narrow roll
-                # was narrower than our own doctrine.
+                # continuum (calibrated liberty), not a knob - `research/vegetation.html` ("How is a
+                # coppice lot bounded?") treats a lot's size as whatever ground the village spared, not
+                # a surveyed figure, so a narrow roll was narrower than our own doctrine.
                 # TRY THE MIRRORED SIZE BEFORE FALLING BACK TO THE RUNG. Widening the roll upward
                 # made it WORSE at first, in a way only the artifact showed: a grown parcel often
                 # fails `_ok` (it is asking for ground the rung already fitted snugly), the ladder

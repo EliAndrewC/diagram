@@ -357,7 +357,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `settlements/presentation.md` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.

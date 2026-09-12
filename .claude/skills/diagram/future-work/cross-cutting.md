@@ -215,8 +215,8 @@ survives it:
   corrected the one in `fixtures.py::_blocked` because that comment was justifying code the feature
   was changing; the rest stand.)
 - **FOUR OPERATIVE DOCS, which is the half that matters most and which the first draft of this entry
-  missed** (settlement-review round 2): `settlements/presentation.md`, `settlements/cities.md`,
-  `dev/placement.md`, `dev/diagnostics.md`. `presentation.md` is the worst - it states the rule as a
+  missed** (settlement-review round 2): the presentation and cities rule files (both retired into `research/` by feature 229, which dropped
+  these passages), `dev/placement.md`, `dev/diagnostics.md`. The presentation rule file was the worst - it stated the rule as a
   LIVE GATE in three separate passages, including the normative paragraph beginning *"A label must
   also not sit on a feature it does NOT name (`labels_clear_of_other_buildings`, town + city
   scale)"* and the "Checks stay narrow" bullet that names it as the backstop justifying why no wider

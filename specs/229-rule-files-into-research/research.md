@@ -1,0 +1,404 @@
+# Research - 229 the rule files retire into the research pages
+
+The inventory the spec's success criteria are checked against. R2, R3, R4, R6 and R7 are filled from the
+writers' reports and the source-reader verdicts as the work lands.
+
+## R1 - the contradictions (FR-001), and what each resolves to
+
+| # | Where it disagrees | Truth it resolves to | Owner |
+|---|---|---|---|
+| 1 | head-race width: `research/water.html` and `water.md` say 5.0 ft; `waterfields/frame.py` has `HEAD_RACE_FT = 6.0` with the 2026-08-17 review's reason (`sqrt(4.5² + 4.0²)` so the top three tiers do not sit within 1 ft) | the page states 6.0 ft and the reason | session (T03) |
+| 2 | bell-and-drum tower: `research/urban-features.html` states the 36 ft / 30 ft finding and then "70 ft at city tier, ~60 ft at town tier" as the decision; the engine draws `px(36)`; `urban_fixtures.py:74` docstring says "county tier ~60-80 ft square" | the page's decision reads 36 / 30 ft; the docstring is corrected | session (T03, T29) |
+| 3 | mulberry bush density: `archetypes.md` "attested ~1 bush per 10-20 sq ft"; the page labels it a GUESS | the page's GUESS label; nothing on the page says attested | writer (T06) |
+| 4 | the Shunde township figure ("townships past 50% the same year") is struck on `research/archetypes.html` as traced to an uncited blog; `archetypes.md:42` still cites it as the evidence for `fraction` being a share of eligible ground | the `fraction` design is re-based on what the page supports (the county-wide ~4.6%); the struck claim is not revived | writer (T06) |
+| 5 | `defenses.md` states as fact three things `research/cities/defenses.html` marks GUESS or unsourced (guard and inspection stations facing each other; the 52x30 gate-tower footprint; Shen Kuo 矢石相及 and the Pingyao 50-60 m spacing); the throat setback ~110-135 ft vs the page's ~20-100 ft unsourced; mamian 62x40 vs ~65x40 | the page's labels; the specification paragraphs carry the labels, not the rule file's confidence | writer (T14) |
+| 6 | `fabric.md` grounds row-packing in "street frontage was taxed"; `research/cities/fabric.html` records that ja.wikipedia 京町家 disputes it | the row-packing specification moves without the tax rationale | writer (T15) |
+| 7 | houses per household: `settlements.md` says the gate wants ~0.7 occupied houses per household; `hamletgen/homesteads/stages.py:32` wants 0.85-1.05x; 16 of 17 pool manifests sit at 1.00, Hikari no Sato at 0.94; `interactive/place.py:198` mis-describes Hikari | `settlements.html` states the engine's rule; the "~70 households, at least 50 houses" GM quote is a floor, not a ratio | writer (T18); `place.py` comment (T29) |
+| 8 | the capital's extramural share: `capitals.md` "the wall encloses all 12,360 inhabitants"; the 2026-08-10 ruling on `research/cities/capitals.html` and `citybudget.py` put ~2.8% outside | nothing of the wrong statement moves | writer (T17) |
+| 9 | `capitals.md` lists `SAMURAI_INWALL_FRAC` as open and `C_YASHIKI`/`C_TERRACE` as proposed; the engine ships 0.85, 4150, 660, plus `C_PACKED_CAPITAL = 950` and `CIRC_FRAC_CAPITAL = 0.15` | the page speaks of settled figures | writer (T17) |
+| 10 | bamboo legibility floor: `vegetation.md` and `research/vegetation.html` say 20 ft; `hamletgen/hinterland/bamboo.py:24` has `BAMBOO_LEGIBLE_FT = 14.0` (the short axis) | the page states 14 ft on the short axis | writer (T07) |
+| 11 | the marsh wedge below the collector: `water.md` keeps "is nevertheless correct"; `research/water.html` marks that argument superseded | the superseded reasoning does not move | writer (T08) |
+| 12 | `research/cities/river-cities.html` says it is "the research behind the river, moat-junction and wharf rules" and contains no junction-angle content | the junction hydrology from `river-cities.md` lands there | writer (T16) |
+| 13 | `homesteads.md:50` lists "the yard is smaller than its farmhouse" as live; `homesteads.md:56`, the page and `yards.py` say the opposite (Kodaira's 231 sq m yard against a ~120 sq m minka) | nothing of the retired rule moves | writer (T04) |
+| 14 | `homesteads.md:107` derives the grove's N/W side as THE rule; the page says the record gives south-to-west (Tonami) and the side is a per-map default | the page's reading; the default is a map convention | writer (T04) |
+| 15 | byre share: `homesteads.md` fraction ~0.2; the shipped hamlet stage calls 0.22 with gap 60 | preserved by the engine; nothing on the page states 0.2 | writer (T04) |
+| 16 | `towns.md:62` `bscale ~0.82` (retired) and Hirameki's canvas `(2600, 1820)` (it is `(2600, 2000)`) | dropped as stale | writer (T12) |
+| 17 | `_TOUCH_GAP`: `ways.md` says 1 ft; `hamletgen/ways/geom.py:143` has 4.0 with the reason | preserved by the engine | writer (T09) |
+| 18 | `ways.md` widths given at "1px=2ft" beside the 1 ft/px re-read | the hamlet figures at 1 ft/px | writer (T09) |
+| 19 | `vegetation.md` "~1,800 sq ft per household" belt anchor vs the page's ~1-2 ha upper half of the HK band | the page's figure | writer (T07) |
+| 20 | `sizing.md` cites Chang in Skinner for the civic 5-15% share; `fabric.html` has the civic share unsourced | pending T26; until then the share is labeled as the page labels it | writer (T17) + T26 |
+| 21 | plot size stated three ways: `fields.md:62` ~0.19 acre at plot=46 "within the real parcel range"; `research/fields.html` "the maps draw ~0.1-0.15 acre"; `fields.md:15` the 0.05-acre leveled cell | the page reconciles them: the v1 `paddy_field` grain vs the water-first cell target, each named for what it is | writer (T05) |
+| 22 | `fields.md`'s two and `archetypes.md`'s seven deep links into the pages use single-hyphen anchors where the page ids carry `---` | moot on deletion; every NEW link a writer writes uses the page's real id (the gate's link test holds it) | writers |
+| 23 | `archetypes.md:52` gives the 0.4-0.6 ha pond and 6-10 m dike figures flatly; the page attaches them to a summary-only monograph and `hamletgen/consts.py:299-301` carries the caveat | the page's caveat stands; the specification paragraph carries it | writer (T06) |
+| 24 | kura share: `homesteads.md` ~30% (measured pool 28.4%); the page's only figure is Sugiura's 0.24 per household | the page says the 30% is a choice calibrated near Sugiura's 0.24, not a finding | writer (T04) |
+| 25 | `homesteads.md:103` puts a bamboo clump in each N/W grove arm as standard; the page labels the N/W bamboo strip a GUESS and notes Tonami's bamboo stands south | the page's GUESS label | writer (T04) |
+| 26 | `BURAKUMIN_SEAM_FT` is named as a constant in `urban-features.md:101` and exists in no `.py`; `tanning_yard_on_water` vs the roster's `tanning_yards_on_water` | the seam's 60 ft moves as a specification with no identifier; the check name does not move | writer (T13) |
+| 27 | `settlements.md:186-187` describes `_MATRIX_OUTSTANDING` as populated; `overlap/taxonomy.py:629-640` is empty ("ALL ELEVEN are now fixed") | nothing moves; stale | writer (T18) |
+| 28 | "gated off all fifteen keep-clear hazards at once" (`settlements.md:161`) has no mechanism since feature 166; `dev/placement.md:317-408` repeats the same claim in a surviving document | nothing moves; `dev/placement.md`'s passage is corrected under XIV (T28) | session (T28) |
+| 29 | `religion-and-death.md:46` describes `check_village.py` and its registry as live; the registry lives in `l7r/diagram/overlap/` | nothing of the location sentence moves | writer (T11) |
+| 30 | `water.md`'s KNOWN GAP proposes the per-field slope record as "the real fix" while the block above it says it was implemented; `capitals.md`'s STATUS lists capital checks as shipped and gated (none exists) | the gap entry moves as the accepted limitation only; the STATUS block does not move | writers (T08, T17) |
+| 31 | coppice cycle: `research/vegetation.html` says 15-20 years (satoyama) against 20-40 "by one review"; the `WoodlandCommons` explanation in `interactive/classes/greenery.py` says "a 10-30 year cycle" - a page-versus-map contradiction that outlives the deletion | the page's finding; the class explanation is corrected to it (a docstring, `make page-check`) | session (T29) |
+| 32 | the machiya eave gap: `research/cities/fabric.html` records an 18 ft median gap as a disclosed departure; `fabric.md`'s row doctrine states 3-6 ft with no mention of it | the row-packing specification carries the page's departure | writer (T15) |
+
+Owners of rows 1 and 2 moved from the session to the page's writer (T08, T13) so no page has two editors at once.
+
+Found during the sweep (added as the writers report): -
+
+## R2 - the decision map (FR-002, SC-002)
+
+Filled per page from the writers' reports: audit D item -> anchor.
+
+## R3 - the specification map (FR-003, SC-003)
+
+Filled per page: rule -> anchor, or dropped with the reason.
+
+## R4 - physical claims that moved (FR-005)
+
+A claim that moved off a rule file and onto a research page had to arrive CITED - the rule files named
+their sources in prose, with no quotation and often no link, and the record's contract is that a
+footnote quotes a passage and links a page where the passage can be read, or says plainly that no such
+page was found (constitution XII; features 194, 195, 202).
+
+**176 footnotes were written, and 108 of them are absence notes.** That ratio is the finding of this
+phase rather than a disappointment: well over half of what the rule files asserted about how a place was
+built turned out to rest on no page a reader can open. Every one of those claims is still asserted - the
+maps draw them - but the sentence now says so, and the registry entry records what was searched and when.
+
+| citations page | notes before | after | of which absence notes |
+|---|---|---|---|
+| `religion-and-death.html` | 37 | 84 | 32 |
+| `cities/fabric.html` | 16 | 40 | 15 |
+| `settlements.html` (new) | 0 | 19 | 0 |
+| `fields.html` | 78 | 88 | 16 |
+| `vegetation.html` | 80 | 92 | 12 |
+| `homesteads.html` | 88 | 99 | 12 |
+| `ways.html` (new) | 0 | 11 | 5 |
+| `cities/hinterland.html` | 5 | 12 | 7 |
+| `cities/defenses.html` | 12 | 18 | 6 |
+| `cities/river-cities.html` | 11 | 17 | 5 |
+| `archetypes.html` | 87 | 92 | 10 |
+| `water.html` | 69 | 74 | 15 |
+| `towns.html` | 20 | 24 | 4 |
+| `urban-features.html` | 82 | 85 | 13 |
+| `cities/government.html` | 34 | 37 | 4 |
+| `cities/sizing.html` (new) | 0 | 3 | 2 |
+| **total** | **619** | **795** | **108 added** |
+
+`presentation.html` is the deliberate zero: it records the map's DRAWING conventions - what a caption
+does, how a sheet is framed, what is never labeled - and a convention is this project's decision rather
+than a claim about the world, so it cites nothing and its citations page carries no note. That is why
+`tests/interactive/test_citations.py`'s non-vacuity rule had to be scoped to a page that actually carries
+a reference: a page with nothing to cite was failing a rule written for pages that do.
+
+The seven batches the tasks name, and where each landed:
+
+| batch | what moved | outcome |
+|---|---|---|
+| T20 Chinese settlement form | Knapp; north-versus-south village sizes; villages per 100 km2 | on `settlements.html` and `homesteads.html` |
+| T21 the degraded south-China commons past the grove | the open degraded cover beyond the village wood | on `vegetation.html`, labeled a guess as to degree |
+| T22 the swept-bend channel radius | Leopold and Wolman | on `water.html`, with the limit that a dug and maintained ditch's curve is the digger's, not a free channel's |
+| T23 bridges and lanes | the deck's landing, the lane vehicle, the plank bridge's name | the new `ways.html`, 11 notes, 5 of them absence notes |
+| T24 funerary | the district catchment, the swept ground, the size memo's five works, the temple neighborhood's economy, the water-mouth shrine | `religion-and-death.html`, which absorbed the largest share of the absence notes (32) |
+| T25 the fire-watch narrative and the guanxiang suburb | hinomi-yagura, Meireki, the jin'ya case, wanghuolou | `cities/fabric.html` and `cities/hinterland.html` |
+| T26 the junction hydrology and the sizing shares | an offtake and bedload, a confluence's merging angle, the civic and circulation shares | `cities/river-cities.html` and the new `cities/sizing.html` |
+
+All seven went through `source-reader` for the passages, `quote-check` twice for whether each quotation
+is on its page and supports its sentence, and `source-applicability` for whether the source belongs to
+this setting at all (R5). What those checks changed is recorded in R5 and R10.
+
+
+## R5 - new registry keys and their applicability verdicts
+
+Twenty-six keys were added to `SOURCES.html` by this feature's source pass, and all twenty-six went to
+the `source-applicability` agent before their numbers reached a page - the second of the two moments
+feature 211 requires. Fourteen came back with something to fix; the other twelve drew no finding, so
+their write-ups stand as written.
+
+| key | what the judgment changed |
+|---|---|
+| `stone-routes-enwiki` | INACCURATE: the write-up called them roads built to haul quarried stone. The stone is the road's SURFACE; the cargo is goods and building materials into Kyoto. Corrected, and the limits sentence with it, which rested on the same error. |
+| `kateisaien-jawiki` | INACCURATE and OVERSTATED: the write-up reduced the article to a naming entry and disclaimed "no area, no period and no count". The article gives two periods - the plot's origin traced to the Yayoi, and Edo-period plots inside warrior-class residences as well as farmers'. The history added; the limit now disclaims only the area and the count. |
+| `kofukuroman-sanmai` | INACCURATE and MISSING A LIMIT: "a Fukui prefectural folklore site" reads as published by the prefecture. It is one enthusiast's website about the prefecture, with no editorial review, and the grounds it photographs are twentieth-century survivals rather than sites dated to a premodern century. All three stated. |
+| `hansho-kotobank` | OVERSTATED: the write-up said the source runs the Edo-period and later usages together without dating them. It dates them - one dictionary places the fire-tower use in the Edo period, another carries a 1686 attestation. The limit is now a scope caveat: that 1686 attestation is of the CLOCK-bell sense, and the fire-alarm sense's earliest example on the page is 1706. Tertiary and Japan-only stand. |
+| `tnau-cattle-housing` | NOT-APPLICABLE for the use it was put to. Agreement between two modern normative housing standards is not independent corroboration of a premodern byre: both say what a keeper ought to provide, and both may be generous for the same reason. Also unsigned, with no references. The byre entry on `homesteads.html` was rewritten to claim only what one standard checked against another can support. |
+| `fao-farm-structures-cattle` | MISSING A LIMIT, and a figure wrong. The region (tropical Africa) belongs in the limits rather than only in the description, and the DIRECTION of the error matters: a modern welfare minimum is what a builder is told to provide, so using it as a target oversizes the shed. And the free-stall pair "3.0 m long by 1.2 m wide" took its two numbers from different columns of Table 10.3 - the manual gives the milking-cow stall as 2.2 by 1.2 m, and the 3.0 is a bedded-shed AREA in square metres. Corrected in the registry, in `citations/homesteads.html` fn-94 and in the research sentence; the 15 sq m conclusion is unaffected, since a smaller stall leaves more room. |
+| `watersa-junction-angle` | MISSING A LIMIT: the model holds a fixed tributary-to-main width and discharge ratio at flume scale, while a moat offtake's discharge relative to its river is smaller by orders of magnitude, so even the DIRECTION of the effect is not guaranteed to carry. |
+| `meander-enwiki` | MISSING A LIMIT: the sentence "which is physics and so is the same in any century or country" quietly justified the step the next sentence disowned. A meander radius is the curvature a FREE channel settles into by cutting its own bank; a dug and maintained ditch's curve is set by the digger and the field boundary. |
+| `lowtech-chinese-wheelbarrow` | MISSING A LIMIT: the article carries no width measurement at all - "scarcely wide enough for foot passengers and wheelbarrows" is qualitative - so "and therefore how wide we draw it" was removed from the claim; and Low-Tech Magazine is an advocacy publication with a thesis about pre-industrial transport. |
+| `shakkanho-jawiki` | MISSING A LIMIT: the tan was 360 bu before Hideyoshi's cadastral survey and 300 bu after, so a pre-1590s area in tan converted with this page comes out about a fifth too small. The tsubo is stable. |
+| `hinomi-yagura-jawiki` | MISSING A LIMIT: the article dates the ORIGIN to Edo-period Edo and the nationwide SPREAD to the early Showa era, so the spread cannot license a tower in a small premodern settlement. |
+| `omamori-enwiki` | MISSING A LIMIT: the article's own word is "sold", so "bestowed" is this record's gloss; and the conclusion that no third party sold charms at a gate is an argument from the article's SILENCE, which is now said. |
+| `tudigong-enwiki` | MISSING A LIMIT: the article's prose puts such shrines "beneath the main altar or below the house door" of temples and houses; the village gate is one photograph's caption. |
+| `cssn-citang-panyu` | MISSING A LIMIT: the author (朱光文) and the date are now named - the page's own date is 2019-11-27 in 人文岭南 no. 98, the 2022 date appearing only in the repost URL - and the article describes surviving buildings while dating the plaza practice to no period at all. |
+
+One EXISTING key was corrected in the same pass: `kasoba-jawiki`'s `Used for:` line claimed "almost every
+temple in Asakusa and Shitaya" where the passage supports the precinct crematoria of some twenty-odd
+temples in those two wards.
+
+## R6 - engine pointers re-pointed (D10)
+
+Every pointer in the engine that named a retired rule file now names a research page and the HEADING
+on it - the question a reader would ask, which is the anchor the reference modal links. These are
+comments, docstrings and the `Entry:` tags the interactive page parses at import, so by the
+docstring-stripped-AST rule they are not engine code for the route (the one exception that IS
+semantic is measured in R8: a pointer inside a permission REASON string literal in
+`overlap/taxonomy.py`, which is data the engine carries rather than a comment).
+
+**60 files under `l7r/` were touched.** Where the pointers now land, counted by target:
+
+| research page | pointers into it |
+|---|---|
+| `urban-features.html` | 23 |
+| `archetypes.html` | 22 |
+| `fields.html` | 18 |
+| `vegetation.html` | 13 |
+| `homesteads.html` | 12 |
+| `settlements.html` | 9 |
+| `religion-and-death.html` | 9 |
+| `cities/defenses.html` | 7 |
+| `ways.html` | 6 |
+| `water.html` | 6 |
+| `cities/government.html` | 6 |
+| `cities/capitals.html` | 5 |
+| `presentation.html` | 4 |
+| `cities/river-cities.html` | 4 |
+| `cities/sizing.html` | 2 |
+| `cities/fabric.html` | 1 |
+
+Three shapes the sweep had to handle, each of which a plain path grep misses:
+
+1. **A bare basename.** `capitals.md`, `government.md` and `settlements.md` appeared with no directory
+   in `wip/shiro_daika/*.py`, in `research/buildings.html` and in five notes files. The gate rule in
+   `tests/interactive/test_record.py` therefore judges a bare basename as a hit UNLESS it resolves,
+   from its own file's directory, to a file that still exists - which is what keeps
+   `future-work/towns.md` and `future-work/cities.md` legitimate.
+2. **A pointer that named a topic rather than a heading.** `settlements.md "TRADE WORKS"` had no
+   counterpart anchor until the migration wrote one, so each of these was re-aimed at the question
+   the new page asks, not merely at the page.
+3. **A pointer inside a string literal.** The overlap taxonomy's permission reasons are strings the
+   engine ships, so re-pointing one moves the engine key. That is the whole of why this feature lands
+   GATED rather than DIRECT; see R8.
+
+Verified by `tests/interactive/test_record.py` (47 tests green with
+`tests/tooling/test_docs_match_the_mechanism.py`): no tracked file names a retired rule file, by path
+or by bare basename, and every `research/*.html` path named anywhere under `l7r/` resolves to a file
+on disk.
+
+## R7 - stale content dropped, by rule file
+
+### R2/R3 - archetypes.html (T06, writer report 2026-09-12)
+
+Decisions: D1 withdrawn clustering check -> `#overlay-extent---a-calibrated-liberty-disclosed`; D2 perpendicular junction measure -> `#wet-rice-hydrology-has-no-crossings-to-draw`; D3 mosaic knob, no gate check -> `#grid-vs-mosaic---the-arrangement-differed-by-system`; D4 crown-density shortfall and D5 edge-grazing -> `#the-64-water-to-dike-ratio-and-coppiced-mulberry`; D6 additive vs subtractive and D7 the sixth pass -> NEW `#why-is-a-hand-piled-bund-never-straight---and-never-square-at-the-corners`; D8 split_gap -> NEW `#what-lies-between-two-parcels-and-how-wide-is-it`. Also the eligible/economic two-term rule added at the overlay-extent anchor (the page carried neither term).
+Specifications: contour terraces and ribbon valley (the two unscripted archetypes) under NEW `#what-does-rice-land-look-like-where-there-is-no-valley-floor-to-spread-across`. Not moved, preserved by the engine: the feature-150 dike-pond rules block (`hamletgen/consts.py:292-293,306`, `water.py:60,65`, `pondstock.py:56,68`, `frame.py:54`), the polder geometry (`waterfields/polder.py`, `fields/comb.py:90`), the terrain typing. Dropped: every named check (deleted mechanism).
+Physical pending (5, none named): the hill terrace as the standard hill form; the ribbon valley's chain of fields; the walking bund ~3 ft; corners slump and are walked across, runs paced and re-cut; a bund junction is the most-worked point. Each sentence says it rests on general reading.
+R1 rows applied: 3, 4, 22, 23. Glossary wanted: bund, mu, module (a polder's bay width), offtake, coppice (bund and coppice exist).
+
+### R2/R3 - settlements.html (T18, writer report 2026-09-12; NEW page)
+
+Decisions: S-D1 a village is its district -> `#which-district-and-county-does-this-settlement-belong-to`; S-D2 what a page states per tier -> `#what-does-the-page-beside-a-map-say-about-its-size`; S-D3, S-D4, S-D5 (the Hirameki waiver, premise-only waivers with the Minami counter-example, ordinary settlements first) -> `#when-is-a-settlement-allowed-to-break-a-rule`; S-D6 the scale ladder and 4 px floor -> `#how-far-is-it-across-this-map-the-scale-tier-by-tier` (derivation linked on `buildings.html`); C-D1 ASK THESE THREE -> `#what-must-a-map-be-told-that-its-own-ground-cannot-settle`; the provincial city's caste canon -> `#who-lives-in-a-provincial-city` and `#what-are-the-five-kinds-of-settlement-and-how-big-is-each`.
+Specifications (9): the five tier bands incl. the village band; dwellings x 5 (`#how-many-inhabitants-does-a-maps-house-count-stand-for`); the 0.85-1.05 seat band (`#is-every-household-in-a-hamlet-actually-drawn`); what a card states; district and county; the ladder; the three intake facts; waivers; the city caste mix.
+Dropped: the validator block, the four-leg suite, the regression-fixture requirement, the fifteen-hazards and `_MATRIX_OUTSTANDING` paragraphs (R1 27, 28), the architecture section, the workflow, the section-forwarding table, the waiver mechanism, the ring and top-up recipes, the map-notes format (lives in `interactive/CLAUDE.md`), the servant-interleave technique; knobs nothing reads: `target_houses`, `torii_expected`, `shrine_on_hill`, `fallow_implies_abandoned`, `monastery_fortunes`, `gate_market`, `population_tol`, `theater_stage`, `fire_tower`, `granary`, `flophouses`, `walled`, `clan=`'s two dedications.
+Physical pending: none (setting canon, GM rulings, project measurements). R1 rows applied: 7, 27, 28. Found: city `bscale` stated two ways in the retired index (~0.33 vs ~0.5; neither moved); `place.py:198`'s 0.7 comment (corrected by the session). Glossary wanted: headman, village district, Fortune, Great Clan, tax-free plot.
+
+### R2/R3 - vegetation.html (T07)
+
+Decisions: D1, D2 -> NEW `#does-a-shelter-belt-wrap-the-settlement-no---it-stands-on-one-or-two-windward-sides` (the GM's ruling verbatim, both reasons, five belt arcs); D3, D4 -> NEW `#why-does-the-belt-run-off-the-edge-of-the-sheet-and-why-is-the-bare-stretch-there-not-a-hole` (also the earlier off-page-gap ruling, the Kuwabata measurement, the reverted skip, the open second half); D5 already on `homesteads.html#the-gardens-sun-and-how-far-the-windbreak-shades` (linked, not duplicated); D6 -> NEW `#how-does-a-flat-map-show-that-the-ground-slopes`; D7 -> NEW `#what-are-the-villages-three-groves---the-windbreak-belt-the-water-mouth-cluster-and-the-dooryard-copse` (the heading the map's copse class points at); D8 -> the existing marsh-margin entry; D9 -> NEW `#why-is-the-hillside-past-the-grove-open-scrub-rather-than-more-forest` (FN-PENDING; a guess as to degree).
+Specifications (7): three groves + what stays open; belt depth 80-120 ft and set-back; one or two windward sides / absent flank not a gap / 30 ft bar; a large edge feature crosses the frame; grove-to-commons toposequence with exemptions, no commons on wet crop, continuous ring; no dry scrub inside a marsh; no contours or hillshade. Not moved: five dead guarantee names over live geometry (`stands.py:172-175`, `keepouts.py:95-102`); the three bamboo checks (the rules are the bamboo entry's text); the 0.40 canopy floor (`belt.py:22,146`); the 150 px shelter rule (`belt.py`, no stated tier).
+Physical pending (11): named keys `coggins-minor-2018`, `forests-2020`, `honda-1915-via-miura-2019`, `igune-jawiki`, `purdue-ncr191`, `yashikirin-jawiki` (three of these carry only a `Used for:` line and need write-ups + applicability before citation); none named: communal grove taboo protection; the leafy village fruit list; the degraded hills; terraces a steep-slope feature; wet rice needs water in and out.
+R1 rows applied: 10, 19. Found: `hamletgen/hinterland/parcels.py:401` attributes a quotation to the rule file that never existed there ("whatever odd corner the village spared") - reworded by the session. Glossary wanted: copse, water-mouth (English of shuikou), masson pine, China fir, hachure.
+
+### R2/R3 - ways.html (T09; NEW page)
+
+Decisions: D1 -> `#is-the-bridge-where-the-road-actually-crosses-the-water`; D2, D3 -> `#what-is-a-plank-bridge-and-what-is-it-for`; D4 -> `#where-does-a-villages-freight-go-onto-the-water---but-not-onto-a-canal` (setting-canon); D5 -> `#what-vehicle-used-a-village-lane-and-where-could-the-lane-run`; the landing tightening (GM 2026-08-09) -> `#how-far-past-the-bank-does-a-bridge-land`; lanes off the dry plots with the accepted limitation and the connector off wet ground -> the lane anchor; the shuimen mount -> the bridge anchor.
+Specifications (7): deck landing; lane form, widths 3/5/6 ft as a convention, corridor, off row crops, stops at the paddy; connector off the edge, unlabeled, off wet ground; standalone plank siting; plank never on a farmhouse; boat landing, no canal by default; a way over water carries a bridge on its crossing. Not moved: `LANDING_FT`, the corner floors, `PLANK_ABUTMENT`, `PLANK_BANK_REACH`, `PLANK_VILLAGE_REACH` (`_geom/ways.py:21-31`), `_TOUCH_GAP` 4.0 (R1 17), `WEB_CLEARANCE`/`LANE_CLEARANCE`, `FOOTPLANK_MIN_FT` (on `water.html`), the lane-network rules (on `homesteads.html`), draw order, `worn=False`.
+Physical pending (10): bridge landing 5-15 ft with scour/bearing (none named); China's narrow paths (Low-Tech Magazine), the wheelbarrow's load, Japan's carts near-absent (none), 大八車 confined by law (ja.wikipedia), the 2.7 m stone route (Wikipedia "Stone routes"), trunk roads ~9 m / 4-7 m / 2 ken (MLIT road history), stone-slab causeways vs Japan's highways-only paving (none); itabashi vs dobashi (none); Ming bulk goods by boat (none).
+R1 rows applied: 17, 18; found and converted: `plank_w=2.0` / `+6 px` were 1 px = 2 ft figures. Defect for the session (XIV): `_geom/ways.py:16-18` says the plank values are duplicated in the deleted `check_village.py`. Glossary wanted: itabashi, dobashi, daihachiguruma, abutment, scour, baulk.
+
+### R4 - source-reader batch 3 (lanes, bridges, fields; 2026-09-12)
+
+| claim | named source | verdict | landed as |
+|---|---|---|---|
+| bridge lands 5-15 ft past the water; scour and bearing length | none | NOT-FOUND (three engineering PDFs unreadable or 404) | ABSENCE note; the band stays a guess |
+| 大八車 confined by law to Edo, Owari and Sunpu | ja.wikipedia 大八車 | READ 「大八車の使用は幕府により制限され、江戸、尾張（名古屋）、駿府（静岡）に限られていた」 | footnote, NEW key `daihachiguruma-jawiki` |
+| 2.7 m / 9 shaku stone cart route, 90 cm ox track | en.wikipedia Stone routes | READ "A stone route was typically 2.7 meters (9 shaku) wide ... a 90 cm (3 shaku) wide center for the bulls to walk" | footnote, NEW key `stone-routes-enwiki` |
+| China's "narrow paths, scarcely wide enough for foot passengers and wheelbarrows"; cart tracks only on the Eastern plains | Low-Tech Magazine, The Chinese wheelbarrow | READ (three passages; Hommel 1937 and Needham as its own sources); the page says "Eastern", not "northern/eastern" | footnote, NEW key `lowtech-chinese-wheelbarrow`; the page's "eastern" |
+| no numeric village-lane width in any language | the 2026-08-27 pass | NOT-FOUND, consistent | the absence stands as the finding |
+| 板橋 a plank bridge; 土橋 an earthen deck | none | READ kotobank 「板で作ってある橋」; ja.wikipedia 土橋 (logs surfaced with trodden earth; plank bridges 「重要な少数に限られ」 in Edo); the faggots/gravel/turf detail on neither page | footnotes, NEW keys `itabashi-kotobank`, `dobashi-jawiki`; the extra detail dropped |
+| swept bend ~2-3 channel widths; erode outside, deposit inside | "Leopold and Wolman" | READ en.wikipedia Meander "This radius is 2-3 times the channel width" - credited to Leopold and Langbein 1966, not Wolman | footnote, NEW key `meander-enwiki`; the page says Leopold and Langbein |
+| south China's hills stripped over a millennium; "a monotonous succession of hills..." | "FAO forest-rehabilitation" (no key) | NOT-FOUND (the quoted phrase on no page; ScienceDirect 403) | ABSENCE note; the quotation marks removed; a guess as to degree |
+| Knapp: villages "planted like islands among the fields"; North China villages exceed 100 households, some 1,000+; Middle-Lower Yangzi 30-60 households, 200-500 villages per 100 km²; dispersed form in "heavily dissected mountain areas, in both south and north China" | Knapp 1992 | READ - but the only online copies are unauthorized scans (pdfcoffee, dokumen.pub); "1,000+ households" was the tail of Knapp's range; "Sichuan-type" is not Knapp's attribution (his Sichuan figure is the Chengdu plain at 1,000+ villages per 100 km²) | ABSENCE note naming the book (this project links no unauthorized scan); the page says "more than a hundred, some over a thousand" and drops "Sichuan-type" |
+| an ox needs ~6-8 m² of stall | none | NOT-FOUND as written; FAO Farm structures: 2.5-3 m² shade per animal, a 3.0 x 1.2 m stall; TNAU: 3.5 m² covered + 7.0 m² open (modern cattle standards) | recast: ~3.5 m² covered per animal plus manger and passage, cited; NEW keys `fao-farm-structures-cattle`, `tnau-cattle-housing`, with a modern-standards limit |
+| dooryard garden 10-140 m² | none | NOT-FOUND (ja.wikipedia 家庭菜園 describes the 屋敷畑, names no area); units READ ja.wikipedia 尺貫法 (1坪 ≒ 3.305785 m², 1畝 = 30坪 ≒ 99.17 m²) | ABSENCE note for the band (a guess); footnote for the units, NEW key `shakkanho-jawiki`; 屋敷畑 named with NEW key `kateisaien-jawiki` |
+
+### R2/R3 - presentation.html (T10; NEW page)
+
+Decisions: D1, D2 -> `#how-is-the-map-framed-and-why-is-there-so-little-bare-ground-around-the-edge`; D3-D7 -> `#may-one-outlying-feature-make-the-whole-map-bigger`; D8-D10 -> `#where-does-a-caption-sit-and-why-is-it-never-left-floating-in-bare-ground`; D11 -> `#why-does-a-caption-tilt-with-the-thing-it-names`; also the no-legend / no-compass / scale-bar rulings -> `#why-is-there-no-legend-no-compass-and-no-caption-on-the-obvious`; one caption per district -> `#what-does-a-town-or-a-city-map-label-and-what-may-a-label-cover`; the wrap ruling -> `#why-does-a-caption-sometimes-break-across-two-lines`; half the air (provisional) -> the caption-seat anchor.
+Specifications (14): all thirteen unencoded label and crop rules except the crop advisory family (DROPPED: a generation-time diagnostic that prints a hint and never fails, no map property), plus the city framing from `cities.md` and the outlier declaration. Not moved: the rim-join rule (water's), the swept bend (water's), the windbreak crop rulings (homesteads', linked), the call sequences (C); preserved by the engine: `crop_to_content`/`vis_bbox`, the ladder constants, `crop_city` margin, `aligned_tilt`, `_caption_lines`, `pull_caption_toward`.
+Physical pending: none. Reconciliation: the city frame stated at the settled 35 px default, the hand-sized allowances in a comment. Glossary wanted: gate market, frontage. Two figures given at hamlet scale with the village figure beside (210 px dead margin, 130 px bleed - tier unstated in the rule file).
+
+### R2/R3 - homesteads.html (T04)
+
+Decisions: D1 -> NEW `#does-the-villages-name-say-where-it-stands`; D2 -> `#the-threshing-yards-sun-and-how-far-a-farmhouse-shades` (closing paragraph); D3, D12 -> NEW `#what-makes-the-headmans-house-different`; D4 -> NEW `#why-is-there-a-crescent-pond-in-front-of-some-villages-and-why-is-it-labeled`; D5 -> `#may-a-byre-stand-beside-a-wellhead` (the two forms and their roll, positively); D6 -> `#does-a-hamlet-have-to-be-nucleated-at-all` (dispersed subsection); D7 -> NEW `#how-tightly-does-a-nucleated-village-pack`; D8 -> `#why-does-one-village-look-nothing-like-the-next` (third paragraph); D9 -> NEW `#which-farmhouses-have-a-storehouse`; D10 -> `#the-gardens-sun-and-how-far-the-windbreak-shades`; D11 -> NEW `#how-big-was-a-dooryard-garden`.
+Specifications (9): garden band; byre footprint (16 by 11 ft, ~15 m², the engine's - the rule file's "31x21 ft = 16 m²" was arithmetically impossible, a 1 px = 2 ft residue) -> NEW `#how-big-is-a-draft-animal-byre-and-what-stands-in-it`; storehouse share and wall; farmhouse proportions -> NEW `#why-is-a-farmhouse-longer-than-it-is-deep`; dispersed sizing caveat; the village knob catalog (village tier); the compactness floor (village tier); the crescent pond's drawing and keep-out; name-informed seating. Not moved: byre share (R1 15), field adjacency 165 px, wealth tiers, grove side/prevalence/merging (engine), the retired yard rule (R1 13), every F and C unit.
+Physical pending (7, none named): the garden band and the Chinese dooryard comparison; the ox stall ~2 by 3 m; the north-China courtyard's animal wing; a kura's contents for a headman; the minka-bay reasoning and the 1.3-2.5:1 band; the 条里 / 草市 grounding; the geomantic doctrine of the half-moon pond. NOT written (correctly): the settlement-form numbers - Knapp is unregistered and unread; the session writes them from source-reader batch 3 as an absence-noted paragraph.
+R1 rows applied: 13, 14, 15, 24, 25. Found: the rule file said both "the headman always has a kura" and "the headman carries no kura" - resolved to the engine (`houses.py:721` forces it). Glossary wanted: saien, se, banyuetang, caoshi.
+
+### R2/R3 - fields.html (T05)
+
+Decisions: D1 -> `#what-is-the-farmland-around-a-town-or-a-city-made-of` (the two rejected fillers named, still in the engine, no map calls them); D2 -> `#where-do-the-samurai-estates-sit-when-the-paddy-has-the-near-ring`; D3 -> NEW h3 `#why-the-bund-shows-at-all-in-high-summer-and-why-it-is-drawn-dark-red-brown` (a map drawing convention); D4 -> `#why-ruled-rows-waited-for-meiji`; D5 -> `#how-wide-is-a-drain-where-it-starts---as-narrow-as-the-ditches-that-feed-it`; D6 -> `#why-does-the-drain-run-across-the-slope-instead-of-down-it`; D7 -> `#why-is-every-rice-plot-the-same-green`; D8 -> `#why-are-the-dry-plots-beside-a-canal-square-to-the-canal`; D9 -> `#why-do-neighboring-dry-plots-run-their-furrows-different-ways`; D10 -> the existing bund-bean entry improved in place (the two declined greens); D11 -> `#bunds-are-shared-and-the-fabric-is-continuous`; D12 -> `#does-the-lowest-bund-of-a-paddy-run-with-the-drain-or-across-it`.
+Specifications (6): a field runs off a town map's edge; near-ring cultivated floors 12% city / 28% town within ~800 ft (calibrated); fan heads planted, at most a fifth bare (calibrated); estates >=1, capital-facing, ~600 ft apart, no driveway; the tax-free glebe 2-3 plots in vermillion (village); dry-parcel mean under 0.25 acre. Dropped: `field_outline_matches_planting`, `population_consistent_with_housing` (manifest bookkeeping, not map behavior), `comb_fans_record_their_design_cell` (a recording requirement).
+Physical pending (10): summer bunds greening over (`nougyoudoboku-keihan` named); hills of 2-6 seedlings at 20-30 cm; one transplanting schedule per village; a hoe-width ditch bottom; contour drain meeting a stream near square; the lowest bund IS the collector's top-of-bank; von Thünen rings; a dense near-city plain ~70-75% paddy and 1.5-2 farming households per ha; a dry field surveyed to the canal; ridge-along-contour a steep-slope measure.
+R1 rows applied: 21 (the leveled cell ~0.05 acre vs the older parcel grain 0.10/0.19, all inside the page's 0.02-0.25 band), 22. Found: "people" in demographic prose corrected to "inhabitants". Glossary wanted: glebe, von Thünen, ridge and furrow, drawdown.
+
+### R2/R3 - water.html (T08)
+
+Decisions: D1 -> NEW `#where-two-watercourses-meet-how-is-the-junction-drawn`; D2, D3, D7, D8, D9, D10 -> NEW `#which-way-does-the-water-run-and-how-does-a-map-say-so`; D4, D5, D6 -> NEW `#does-a-moat-have-a-current`; D11, D12, D13 -> NEW `#what-ground-is-too-wet-to-build-on`; D14 -> folded into `#the-wet-toe-is-as-wide-as-the-fan-not-as-wide-as-the-valley` (the superseded wedge argument did not move); D15 -> `#water-width-ladder---the-real-world-tiers`; the discharge-end record -> NEW `#where-does-a-fields-drain-let-its-water-go`; the swept bend (from presentation.md) -> NEW `#why-does-every-ditch-turn-on-a-curve`.
+Specifications (7): a level canal declares a level (town/city); moat-junction grading (town/city); a fed closed moat drains (city); the defensive wet belt (town/city); sacred and funerary ground off marsh (hamlet); dwellings above the field drain (hamlet); a channel is a no-build corridor judged on the footprint (town/city). Not moved: per-field drainage slope, `wells_off_the_wet_toe` placement, upstream-first authoring (C), the superseded wedge argument (R1 11), the implemented "real fix" (R1 30).
+Physical pending (4): a cargo canal cut at the level of the water it joins; a well wants a water table under dry ground; a sharp corner scours and silts; alluvial channels bend at 2-3 widths (Leopold and Wolman named - the reader found the readable page credits Leopold and Langbein).
+R1 rows applied: 1 (6.0 ft with the engine's reason and a pointer to the drawn-width-is-rank entry), 11, 30. Glossary wanted: culvert, confluence, tributary, meander, causeway, windlass, curb (of a well), aqueduct, revetted, head-race (hyphenated variant).
+
+### R2/R3 - towns.html (T12)
+
+Decisions: D1 -> NEW `#why-is-the-magistrates-manor-drawn-as-a-plain-walled-box`; D2, D3 -> NEW `#which-way-does-a-shelter-belt-lie-and-does-its-compass-bearing-matter`; D4 -> NEW `#how-is-a-town-farmstead-laid-out`; D5 -> NEW `#does-a-town-keep-a-fire-watch-tower`; D6 -> NEW `#who-lives-in-a-town-and-in-how-many-houses`; D7 -> NEW `#where-does-a-magistrates-manor-stand-and-which-way-does-its-gate-face`; D8 -> `#a-street-is-access-infrastructure-for-the-buildings-it-serves`.
+Specifications (16): streets and the axis (the axis kept the page's GUESS); the census and the wealth minority; zoning (35 ft gap, storefront-parallel homes 15-74 ft, 92 ft setback, burakumin quarter); the flophouse; the caravan inn (150 / 75 / 115 ft); the theater (260 ft, open side to the hall); the fire tower (walled only, commoner quarter, last); the gate market (4-8, floor 3, 420 ft); the street rule (130 ft, fronts not near, fence breaks frontage); the rampart (>=5 sections, CoV >= 0.25, 46 ft corridor; 280/140 ft hug); the manor box; the manor gate; the farmstead; the windbreak band; the field grain (58 ft plots on 52-72 ft rows). Preserved by the engine: awning/sign convention (`urban.py:86-95`), the granary default (`civic.py:99`), roads off both edges, the hugging band for scripted tiers. Dropped: exhibit descriptions, the flush-drawing recipe, the `rot` table, the call recipes (C); `bscale` and the canvas (R1 16); the check roster (F).
+Physical pending (4, none named): a merchant lives over or behind the shop; the two-story caravan inn with stable and open ground; an open town's field gaps as fire breaks; south as the formal orientation.
+R1 row 16 applied. Found: the Tango bare approach was 150 px on a CITY sheet -> ~450 ft; the 4 samurai families / 5-10 houses reconciled by the barracked platoon. Glossary wanted: kagura.
+
+### R2/R3 - urban-features.html (T13)
+
+Decisions: D1-D5 -> `#the-notice-board-kosatsuba---siting-is-a-traffic-decision` (five paragraphs); D6, D7, D8 -> `#tanning-yards---hides-come-from-fallen-draft-stock-and-water-is-the-gate`; D9 -> `#kiln-works---a-kiln-is-not-a-tile-kiln-and-the-potters-live-at-it`; D10, D11, D12 -> `#stable-yards---beaten-earth-hitching-rails-and-watering-by-relay`; D13 -> `#caste-geography-and-status-zoning`; D14 -> `#refining-forges-smelting-goes-to-the-fuel-refining-comes-to-the-town`; D15 -> NEW `#how-do-you-get-through-a-packed-commoner-quarter---and-why-is-the-path-not-a-street`.
+Specifications (10): the city board set, facing and verge bands; the justice works' distances, sizes and ordering (with the 86-of-118 radial failure); trade-works scoping and opt-ins; the fire/nuisance ladder 6/30/60/120 ft; the tanning yard's seven clauses; stable-yard clearances (72 ft heap-to-rail, 40 ft trough-to-well, 255 ft berth); rural well target and reaches; city well density, coverage and size band; the burakumin seam 60 ft; footpaths. Preserved by the engine: farm-belt wells (`wells.py:66`), no well in paddy water, the 11 px marker floor, merchant storehouses, the trade glyph programs. Written though encoded, because the page lacked both rule and why: the bathhouse formula, the execution-ground tier sizes.
+Physical pending (3): Edo's ~523 bathhouses for ~1.1 million in 1808; packed-earth footpaths; the outcast hamlet at the village edge or across its stream.
+R1 rows applied: 2 (the tower's decision 36 / 30 ft), 26. Found: "until re-rolled at unlock" dropped (the scope lock is retired).
+
+### R2/R3 - cities/defenses.html and cities/government.html (T14)
+
+Decisions: D6 -> defenses `#does-the-city-wall-close-a-full-ring---and-why-so-few-gates`; D7 -> defenses `#how-wide-is-the-opening-a-road-passes-through`; D8 -> defenses `#where-does-a-neighborhood-fence-stop-when-it-reaches-the-rampart`; D14 -> government `#which-way-does-a-ward-gate-face`; D15 -> government `#where-does-the-gate-watch-stand`; D16 -> government `#martial-training-is-an-urban-institution` (already there; the roll-wins clause, the countryside not counted, and the two disclosed departures added).
+Specifications: defenses 11 (ring + gates, the moat, the throat 30 / 15 / 60 ft, the real footprints, gate furniture and the gate tower, the three tiers, the rectangular-never-round doctrine and the patrol road as new anchors, the fence end); government 9 (government siting and the yamen at 3x with 1,440 / 255 / 42 ft spacings, the small-shrine floor and torii approach, samurai housing sizing, the ward's gates and interior rule, kido squaring, the guard box, the martial hall and rolled dojos, the barred kinds). Preserved by the engine: the martial-hall and dojo sizes (`castle_civic.py:360-395, 470-480`), the kido's true-parts keep-clear (`kido.py:199-205`). Dropped: call ordering, check names, per-map reflow history.
+Physical pending (9, none named): the wengcheng as sortie point; karamete-mon / umon / shuimen; the 66 ft moat; Ming gate tunnels (Nanjing ~23 ft, Xi'an ~20 ft); round-vs-rectangular towers and Xi'an's roundel; the follow-the-wall street; the yamen at the crossing with bureaus on the avenues; wayside shrines between temples; the walled-ward system's 30-80 ha wards.
+R1 row 5 applied in full (the page's GUESS and unsourced labels on every contested figure; mamian ~65 by 40 ft). Found: the ring-road corridor is `width/2 + 21` px in the engine (63 ft), not the rule file's +17; the moat width `px(66)`; the rule file's "62x40 px" for the mamian read px where it meant feet. Glossary wanted: umon, postern, sally port, parapet, koraimon, curtain wall.
+
+### R2/R3 - cities/fabric.html (T15)
+
+Decisions: D9 -> NEW `#why-are-there-only-one-or-two-walled-merchant-compounds-in-a-city-of-three-thousand`; D10 -> NEW `#where-may-a-merchants-compound-wall-stand-on-dry-private-ground`; D11 -> NEW `#which-way-does-a-city-houses-door-face-and-how-deep-do-the-rows-stack`; D12 -> NEW `#how-many-cheap-lodging-houses-did-a-city-hold` (a GUESS, both declined options named); D13 -> NEW `#why-is-there-no-firebreak-on-these-maps`.
+Specifications (17): the Imperial road and its label; the commercial ribbon (1 per 390 ft, 1 storefront per 25-30 inhabitants); a burakumin quarter inside the walls; the grid in three paragraphs (lining 420/175 ft, the 0.8-footprint step, near-miss 6-90 ft, stub 9-150 ft, aligned lanes 37 deg / 240 ft, the corner T rule; layering and lane-under-wall); frontage (255 ft band, wealth bands as setting canon, 1.3x spread, `laborer_large` 6-20%) and alleys (1 uniquely served dwelling per 90 ft, one lane per block, no cut-off cluster of 30+ within 285 ft); civic counts (5 kura, the caravan cluster 1,020 ft with 225 ft open ground, the theater by a temple); fire towers (>=2, commoner quarter, 690 ft dispersal, district centering, placed last); no firebreak; the terraces (55% touching, 6 ft median, 3-6 ft eave gap, idobata every second row) INTO `#urban-commoners-built-in-continuous-street-walls` with the 18 ft departure. The fire-watch narrative -> NEW `#how-did-a-dense-wooden-city-watch-for-fire` (8 FN-PENDING). Dropped: the `skip`-identity gotcha, `s.bound`, the seat-vetting procedure, `meta(fire_tower=False)`, the weaker street tolerance (superseded), the two-registry recording, the deferred capital column.
+Physical pending (18, none named): listed in the writer's report; the fire narrative's eight are the ones source-reader batch 2 read.
+R1 rows applied: 6, 32. Found: the merchant arithmetic stated two incompatible ways in the rule file (12 = 2% of ~600 households = 8% of ~150 merchant households; reconciled on the page). Glossary wanted: hansho, machi-bikeshi, shobodan, hatago, ura-nagaya, ura-dana, Meireki.
+
+### R2/R3 - cities/hinterland.html and cities/river-cities.html (T16)
+
+Decisions: D2, D4 -> hinterland NEW `#why-is-a-city-ringed-by-farmland-on-every-side`; D3 -> hinterland NEW `#does-the-moat-feed-the-fields-or-do-the-fields-drain-into-it`; D17 -> hinterland `#gentry-estates-are-dispersed-not-clustered-at-the-wall` (into the existing section); D18 -> hinterland NEW `#does-a-city-farm-inside-its-walls`; the gate-market floor 3 -> 6 -> hinterland NEW `#what-stands-outside-a-city-gate`; D19, D20 -> river-cities NEW `#which-way-does-an-offtake-leave-a-river-and-why` (the junction hydrology as the finding, R1 12); one mouth on the river -> river-cities NEW `#does-a-citys-canal-open-its-own-mouth-on-the-river`.
+Specifications: hinterland 9 (estates: count, dispersion, size spread, gate mix; the ring floor and water chain, comb parameters, 7 farmhouses per 1,000 px of edge outside; moat irrigation and the in-wall drain; the gate market; in-wall ring density 16 per 1,000 px and the vegetable bed); river-cities 4 (the river-side vocabulary and the three shared rules under `#most-provincial-cities-sit-on-a-river`; the junction tilts; the single navigation mouth). Preserved by the engine: `farmland_ring`'s rationale (`canals.py:108`), the tilt hydrology (`moat.py:20-45`), the footprint-aware cropland rule (`core.py:198`). Dropped: the check lists, the render order (C), the call recipes and hooks, "Nagahara is DONE".
+Physical pending (9, none named): the wettest ground below a collector; ten to forty structures at a busy gate; garden ground fed from wells and night soil inside a walled seat; a fan's hand; the 55 ft bed; junction angle as the control on merging; an aligned offtake swallowing bedload; classical headworks near square; a river moat kept full by stage.
+R1 row 12 applied. Found: the sediment argument ran in opposite directions in the two rule files; resolved toward the river-cities reading (the ruled one). Kept: the clan-patron-fortune temple rule as setting canon in the river page's shared-rules spec (say it once - the government writer did not restate it). At risk, flagged: the hinterland rule file's estate bullet carried "all temples stand inside the walls and clear of the wall stroke and moat", a defenses/fabric rule - the session adds it to the defenses page's specification. Glossary wanted: bedload, stage (of a river), sally gate, flophouse.
+
+### R4 - source-reader batch 1 (funerary claims, 2026-09-12)
+
+| claim | named source | verdict | landed as |
+|---|---|---|---|
+| village shrine footprint band 275 / 490 / 600 / 1,000+ m² | none | NOT-FOUND (Jinja Honcho gives styles, no dimensions) | ABSENCE note; the band a calibration on the drawn villages |
+| amulets, incense and lamp oil as temple-direct sales, "annual oil-lamp and incense income" | none | NOT-FOUND (modern journalism only; AAS 403) | ABSENCE note; the phrase's quotation marks removed |
+| omamori bestowed for an offering, never wholesaled; no third-party shop | none | CONTRADICTED in part (en.wikipedia Omamori: "available for sale"; factory manufacture and store versions - both MODERN); the donation framing READ | footnote for the offering framing, NEW key `omamori-enwiki`; "never wholesaled" and "no third-party shop" softened to the premodern claim with an absence note |
+| food and drink the bulk of the gate-town commerce; meibutsu souvenirs | none | READ ja.wikipedia 門前町 - with the caveat that eating houses and souvenir shops are the RAILWAY-era composition, the premodern trade being inns (旅籠) | footnote, NEW key `monzenmachi-jawiki`; the page says inns first, food and souvenirs later |
+| funeral trades cluster by the graveyard; joss paper and paper effigies | none | READ en.wikipedia Qingming for the goods burned at the tomb; NOT-FOUND for the shop cluster | footnote for the demand side, NEW key `qingming-enwiki`; the cluster an absence note |
+| fortune-tellers at the gate; temple-artisan families | none | NOT-FOUND | ABSENCE note |
+| samurai gate 9-12 ft; yamen gatehouse 18-24 ft | Edo hatamoto schedules; none | NOT-FOUND (`jta-nagayamon`, ja.wikipedia 長屋門, `henan-neixiang` carry no dimension) | ABSENCE notes; the widths a guess |
+| walls 1.5-2 ft thick | none | CONTRADICTED (`kojodan-dobei`: tsuijibei 1 m, neribei ~30 cm - castle walls) | the page states the bracket (about 1 ft to 3.3 ft, castle figures) and labels the drawn 1.5-2 ft a guess |
+| sanmai cleared core 30-80 / 80-160 ft; a 15x10 ft pyre platform | the Fukui sanmai survey | NOT-FOUND for the core; CONTRADICTED on the platform (ja.wikipedia 火葬場: a trench one size larger than a coffin; the Edo roofed form a 4-6 tatami hut) | footnotes for the trench and the hut, NEW keys `kasoba-jawiki`, `kofukuroman-sanmai`; the platform re-cast; the core band a guess |
+| Yoyogi crematory ~900 tsubo | Shinpen Musashi Fudoki-ko | READ through 東京博善's history page quoting the gazetteer (title misprinted there) | footnote, NEW key `tokyohakuzen-yoyogi` (a company history quoting the gazetteer - stated) |
+| muenzuka 10-30 ft; Mimizuka ~50 ft base; Kozukappara's dead made no mound | none | NOT-FOUND for the base (en.wikipedia gives "nine-meter-high"); READ Kozukappara: 200,000+ dead (not 100k+), the site 108 x 54 m, no mound mentioned | footnote for Kozukappara, existing key `kozukappara-jawiki`; the page says 200,000; the mound sizes a guess |
+| ~10-20 sq ft per packed urn-grave | Tanigawa JJRS 1992 | READ in part (grave pits 65 cm to 2.4 m major axis; no per-grave area or density; the 22.5 x 41.5 m figure is the trench) | footnote for the pit sizes, NEW key `tanigawa-1992`; the per-grave area a reconstruction from them |
+| Chinese full-body burial ~4-6x; Buck's ~2% of farm area under graves | Buck 1929-33 | NOT-FOUND (archive.org lending copy; no readable page) | ABSENCE notes |
+| Umeda-haka ~15-17 sq ft per body | none | NOT-FOUND (Osaka Museum: 1,700+ burials, no area; a search figure implied ~4 sq ft) | the cross-check removed; footnote for the burial count only if kept, NEW key `osaka-umedahaka` |
+| shuraku bochi at 12-15-household hamlets; minashi bochi | none | READ "at the edge of the hamlet" (Fukui); 村落墓地 a real category (ja.wikipedia 墓地); the figures and the 1948 grandfathering NOT-FOUND | footnotes, NEW keys `kofukuroman-sanmai`, `bochi-jawiki`; the household figure and the law an absence note |
+| ryobosei: the corpse in the ume-baka, the stone at the center | none | READ ja.wikipedia 両墓制 (Kinki-concentrated; the ume-baka in remote mountain forest) | footnote, NEW key `ryobosei-jawiki`; the regional hedge kept |
+| keidai swept, raked gravel; the sando kept clear | none | READ in part (`sando-jawiki`: tamajari purifies the ground); the keidai surface and the maintenance NOT-FOUND | footnote for the gravel; the rest an absence note |
+| a hard swept plaza before the earth-god shrine or ancestral hall | none | READ in part (中国社会科学网 on Panyu ancestral halls: plaza and pond at the front, for assembly and ceremony; no grain-drying, market or opera; not the earth-god shrine) | footnote, NEW key `cssn-citang-panyu`; the ancestral hall only |
+| graves on marginal ground; tomb-sweeping clears a collar | none | READ in part (Qingming "sweep the tombs"; 両墓制's remote forest); the collar distance NOT-FOUND | footnotes; the collar a convention |
+| chinju no mori a deliberately preserved grove around the precinct | none | READ ja.wikipedia 鎮守の森 「設定・維持されている」 | footnote, NEW key `chinju-no-mori-jawiki` |
+| the earth-god shrine at the entrance, at the water-mouth | none | READ in part (en.wikipedia Tudigong: a shrine within Tai Wai's entrance gate; `fengshui-woodland-enwiki`: shuikou = the village's exit, a named grove class); the quoted sentence on no page; no page joins shrine to shuikou | footnotes for the two halves, NEW key `tudigong-enwiki`; the quotation marks removed; the join labeled a reconstruction |
+
+### R4 - source-reader batch 2 (fire, gates, junctions, sizing; 2026-09-12)
+
+| claim | named source | verdict | landed as |
+|---|---|---|---|
+| Edo the city of fires; Meireki 1657 ~100,000 dead | none | READ `fires-in-edo-enwiki` ("up to 107,000") | footnote; the page says "up to" |
+| the hinomi-yagura with a hansho struck in a cadence saying how near | none | READ ja.wikipedia 火の見櫓 + kotobank 半鐘 (near fire a continuous peal, fewer strokes as it is farther) | footnotes, NEW keys `hinomi-yagura-jawiki`, `hansho-kotobank`; "tall braced-timber" unsupported, dropped |
+| the freestanding tower a Meiji-and-later institution | none | CONTRADICTED (火の見櫓: developed from Edo-period Edo with the fire system; nationwide by early Showa) | the page states the Edo origin and the Showa diffusion; the open-country claim narrowed to what the page says |
+| Takayama Jin'ya preserves its fire-prevention water system | none | NOT-FOUND (an excavated pond trace; survival by never having burned; the grain kura attested) | the sentence re-cast: the only surviving jin'ya, its earthen grain storehouse attested (`takayama-jinya-city`), no fire system claimed |
+| machi-bikeshi as a peace-era Tokugawa institution, self-governing | none | READ ja.wikipedia 町火消 (Kyoho 1717-1720; iroha 48 companies; UNDER the town magistrate's command, costs borne by each block) | footnote, NEW key `machibikeshi-jawiki`; the magistrate-commanded fact stated |
+| Song wanghuolou in Kaifeng and Hangzhou; nothing in market towns | none | READ 東京夢華錄 卷三 for Kaifeng (brick-built, 100+ soldiers below); Hangzhou and the market-town absence NOT-FOUND | footnote for Kaifeng, NEW key `dongjing-menghualu-wikisource` (the primary, beside the registered essay); Hangzhou dropped; the absence an absence note |
+| an open town's field gaps as fire breaks | none | NOT-FOUND | ABSENCE note; a reconstruction |
+| guan-xiang 10-40 structures per gate | none | NOT-FOUND for the count; READ `chang-morphology-walled-capitals` p. 99 for the pattern (suburbs at the gates on the long-distance routes, before the walls filled) | footnote for the pattern; the count a guess with an absence note |
+| junction angle controls confluence merging | none | READ in part (Water SA: a larger junction angle grows the separation zone and bed shear - a confluence in a bend) | footnote, NEW key `watersa-junction-angle`, with the bend limit stated |
+| natural tributaries curve to join pointing downstream | none | NOT-FOUND | ABSENCE note |
+| an aligned offtake swallows bedload; classical headworks near square | none | NOT-FOUND (five hosts spent; a search summary put the sediment minimum at ~50 degrees, and the 90-120 degree rule is to the WEIR axis) | ABSENCE note; the page states the hazard: the field's own literature may put the minimum at an intermediate angle |
+| the Suzhou pattern's single navigation entrance | Suzhou | NOT-FOUND (Pan Gate is itself a water gate through the wall; Chang: Lower Yangtze cities had water gates equal to land gates) | the page says the canals communicate with the moat (READ `pan-gate-enwiki`) and states the one-mouth reading as this project's decision, not the norm |
+| civic share ~10%, 5-15%, per Chang in Skinner | Chang | NOT-FOUND (the chapter states no percentage; it gives the civic INVENTORY and its centrality) | the attribution removed; the share a calibration; footnote for the inventory |
+| 25-30% of the enclosure unbuilt; Quanzhou 1945; Suzhou farmland | Chang implied | NOT-FOUND (the only intramural percentage in the chapter is Tsinan's lake at one-fifth); the mechanisms READ (rank-sized walls; intramural agriculture as siege insurance, pp. 94-95) | footnotes for the mechanisms; the 25-30% and both examples become an absence note; "flood refuge" belongs to the wall (p. 79) |
+| Pingyao's "4 big streets, 8 small streets, 72 lanes"; circulation 10-20% | none | READ zh.wikipedia 平遥古城 for the slogan; the envelope unstated by any source | footnote, NEW key `pingyao-gucheng-zhwiki`; the 7% a map measurement; the envelope an absence note |
+
+### R2/R3 - religion-and-death.html (T11)
+
+Decisions: D1 -> NEW `#how-much-ground-does-a-village-burial-ground-need-and-whose-dead-lie-in-it` (written first; `research/archetypes.html` re-pointed to it); D2 -> NEW `#is-the-ground-around-a-shrine-or-a-grave-swept-clear-of-scrub`; D3 -> NEW `#why-does-that-swept-ground-have-a-ragged-edge`; D4 -> NEW `#how-large-are-the-gates-walls-and-funerary-features-drawn`; D5 -> NEW `#what-kind-of-shops-stand-at-a-temple-gate`; D6 -> NEW `#where-does-a-village-put-its-shrine-and-how-big-is-it`; D7, D9 -> inside `#torii-spacing---two-regimes-and-nothing-in-between`; D8, D11 (initiates) -> NEW `#who-lives-inside-a-city-temples-walls-and-who-lives-outside-them`; D10 -> inside `#torii-are-votive-donations---the-count-records-patronage`; D11 (festival) -> NEW `#does-the-temple-forecourt-do-anything-the-map-cannot-show`.
+Specifications (12), each tier-marked: clergy housing; the lay-house band; the open forecourt; the village shrine's footprint and siting; the collars ~115/60/60 ft (village); drawn-irregular reserved-rectangular; one ground of 0.12-0.38 acre (village); graveyard-beside-temple reaches, the 1.3x exterior ratio (NEW `#does-a-graveyard-stand-beside-its-temple-or-its-shrine`); the water ladder (NEW `#how-far-from-water-does-a-burial-ground-lie`); crematory / ossuary / mausoleum siting (NEW `#where-do-the-crematory-the-ossuary-and-the-clan-mausoleum-stand`); the size memo's figures; ONE tier schedule replacing four duplicates (NEW `#what-religious-and-funerary-features-does-each-size-of-settlement-carry`). Preserved by the engine: the torii roll (`shrines.py:176-191`, `TORII_WEIGHTS`), the 0.90-clump clearing (`stands.py:130-136`), the hall-off-the-lane rule, the patron pairs and temple exceptions (`taxonomy.py:705-707`). Dropped: the location sentence (R1 29), the call orders, the ~30 check names.
+Physical pending (24): listed in the writer's report; source-reader batch 1 read them.
+Found: the page asserted a deliberate 76-120 ft gradient for the innermost arch that the GM's 2026-07-27 threshold ruling had overturned - resolved toward the ruling (the OUTERMOST arch and the courtyard). Glossary wanted: shuraku bochi, minashi bochi, ryobosei, tudi miao, chinju no mori, haka-mairi, Qingming, meibutsu, omamori, ofuda, stupa. Defect reported and fixed by the session: `SOURCES.html`'s `meiji-jingu-jawiki` write-up repeated a clause.
+
+### R2/R3 - cities/sizing.html (NEW) and cities/capitals.html (T17)
+
+Decisions: D5 -> sizing `#how-big-is-a-citys-wall-for-the-population-inside-it` / `#does-the-map-draw-a-house-for-every-household-the-figure-promises`; D21, D22 -> capitals NEW `#why-is-the-castle-drawn-blank-inside`; D23 -> capitals NEW `#does-a-scorpion-capital-look-different-from-a-crane-one`; D24 -> capitals NEW `#why-is-a-chancellors-compound-smaller-than-his-rank`; D25 already at `#how-much-of-a-capital-lives-outside-the-walls`; the agricultural district draws nothing of its own (GM 2026-07-22) -> sizing `#how-densely-is-a-quarter-built-and-what-counts-as-empty-ground`; the inventory -> capitals NEW `#what-stands-inside-the-castle-and-what-must-stand-outside-it`; the capital-only compounds -> capitals NEW `#what-does-a-capital-have-that-a-provincial-city-has-no-version-of`; the inversions and multiplied counts -> capitals NEW `#which-provincial-rules-turn-upside-down-in-a-capital-and-what-simply-multiplies`.
+Specifications: sizing 6 (the budget ring with +8%/-5%; the exact population with the counting and caste-ceiling traps; quarters tile the interior 85/5/3; the density band ~1.5-11 dwellings/acre with the ~450 ft dead-zone rule; the 70% civic-open tolerance and one-fifth reserve cap; the dead-ground rule ~0.83 acre / 60 ft); capitals 7. Preserved by the engine: the budget model and every constant (`citybudget.py:50,51,65,115,133,140,145,188,201,213,407,423`). Dropped: the capacity tool and its four verdicts, the ASCII map, the Nagahara walkthrough (F); Tango's quarter layout (C).
+Physical pending (2): the civic share (Chang named; source-reader batch 2 found no percentage in the chapter); a temple neighborhood crowded not quiet (none named).
+R1 rows applied: 8, 9 (0.85 settled; `C_PACKED_CAPITAL` and `CIRC_FRAC_CAPITAL` stated), 20, 30. Found: the Tango dead-ground pocket's three figures did not reconcile (230x95 px at 3 ft/px is ~690 x 285 ft, not 600 x 330; the dead core ~1.3 acres) - resolved toward the pixel figures; a stale "proposed" on the Emperor's-granary seat corrected; the terrace anchor's depth disagrees between the page (24 ft, footnote 35) and `citybudget.py:203` (21 ft; only 21 reproduces the 378 sq ft) - for the session to settle. Glossary wanted: inkyo, drill ground, warren.
+
+## R8 - the delta's route, measured (2026-09-12)
+
+The plan expected this feature to land DIRECT: every engine edit is a comment or a docstring, and `ci/delta.py`
+compares each changed `.py` by the docstring-stripped AST the gate keys on. Measured against the merge base
+(`b87b88aa`), **59 engine files were touched and exactly ONE changed semantically**:
+`l7r/diagram/overlap/taxonomy.py`, whose permission reason for the notice board against a lane corridor is a
+STRING LITERAL carrying the pointer. Re-aiming that pointer at `research/urban-features.html` rewrites the
+string, so the AST differs and the engine key moves
+(`c66b02e1...` -> `2dab2b7f...`).
+
+The pointer is right where it now points, so the string stays and the feature takes the GATED route. Nothing
+about the work changes: FR-010 already owed a green `make done`, which is what the gated route demands. Recorded
+because the expectation was wrong in a way worth knowing: **a pointer inside a string literal is engine content,
+while the same pointer in a comment or a docstring is not** - and this repository carries a few of each.
+
+Main also moved during the feature (228 and 230 landed), so the clone merges before the gate runs.
+
+## R9 - why no settlement-review is owed (the pairing guard, 2026-09-12)
+
+`scripts/pair-hooks.sh` reported a half-open pairing after a local `make test-file` recorded a green
+verification. A settlement-review is owed when a Mode B map changes; this feature draws no map. The proof is R8:
+one semantic engine change, a permission REASON string, which no placer reads and no manifest records. No
+`.gen.py`, no pool artifact and no manifest is touched, and the pool is not regenerated. The gate run therefore
+carries `PAIR_OK` with that reason.
+
+**And while this feature was being implemented, feature 231 landed on main and made that argument the
+guard's own.** The GM ruled on 2026-09-12 that *"if there are no changes to the actual way that the
+settlement is laid out, then we should not need to re review the settlement"*, so `scripts/_review_owed.py`
+now names every map whose MANIFEST differs from the merge base, asked fresh at each decision point. This
+feature changes no manifest, so with 231 merged the guard should name no map, run the gate as typed, stay
+quiet at the stop branch and record the automatic waiver with its own reason. The `PAIR_OK` above stays
+written down as the reasoning; whether the guard still asks for it is now a fact about the merge rather than
+about this delta, and the gate run's records say which happened.
+
+
+## R10 - defects found in passing, and fixed here (constitution XIV)
+
+None of these belong to the migration. Each was found while doing it, and Principle XIV fixes a defect
+where it is found rather than filing it.
+
+| defect | how it was found | what it was | fixed |
+|---|---|---|---|
+| **A generator rolled twice in one gate** | the gate's roll census failed on Kuwabata after main's feature 228 moved its cache key | fifteen gate readers of a shipped map take a per-generator lock through `tests/gate/_pool.py`, but the pool sweep called `gencache.gate_obtain` DIRECTLY and so took none. Invisible while the cache is warm; on a cold cache the sweep and the lateral test each regenerate the same map | every reader of a shipped generator now goes through one locked helper, `_pool.obtain_full` |
+| **The free stall was a third too long** | the `source-applicability` agent re-read the FAO manual | the registry gave a free stall as "3.0 m long by 1.2 m wide". Table 10.3 gives the milking-cow stall as 2.2 by 1.2 m; the 3.0 is a bedded-shed AREA in square metres, from a different column of the same row. Two numbers taken from two columns, and the unit changed with them | corrected in the registry, in `citations/homesteads.html` fn-94 and in the research sentence. The 15 sq m shed conclusion is unaffected: a smaller stall leaves more room |
+| **Four nested HTML comments** | a structural scan of every research page | an earlier edit wrapped a phrase that already carried a comment. HTML comments do not nest, so the inner `-->` closed the outer one and the reader saw a stray ` -->` - in the registry, and on the three citations pages derived from it | each collapsed to ONE well-formed comment; the derived pages clear when `make citations` runs |
+| **Four paragraphs opening with a literal dash** | the `record-format` pass on `water.html` | leftovers of a list that lost its `<ul>`, plus three `</p>` closers swallowed inside a long comment, so the section's paragraph structure was wrong in the reader's page | restored as proper paragraphs; every research page now balances |
+| **The commonest word in the field vocabulary had no tooltip** | adding the glossary terms | the matcher builds its alternation from each entry's `variants` only - the top-level KEY is a label, never a pattern - so the bare word "comb", written alone on five pages, matched nothing | the bare form added as a variant |
+| **Two terms owned by two entries each** | the same pass | `water-mouth` was a variant of both `shuikou` and `water-mouth`, and `windlass` of both `lulu` and `windlass`, so which definition a reader got depended on table order | one home per term; the merged definition names the other sense |
+| **`make tick BOXES=1` ticked nothing, and said it had** | the gate's own rule, on seven tasks at once | `scripts/tick-task.py` matched the research-box line by its LITERAL TEXT - the three boxes of constitution v2.12.0 - and the roster has been five since features 194 and 211 added `quote-check confirmed` and `source-applicability confirmed`. The literal matched nothing, so the flag reported a ticked task and ticked no box. `tests/tooling/test_tick_task.py` held the SAME stale literal in its fixture, so the test and the script agreed with each other and neither agreed with the constitution | the line is matched by SHAPE (an indented line of two or more checkboxes), which is roster-independent; asking for boxes where there are none now REFUSES instead of doing nothing; the test is written around the property, with the three-box, five-box and seven-box forms all ticking |
+

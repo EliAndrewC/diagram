@@ -95,7 +95,7 @@ def paddy_wet_rings(M: Manifest) -> list[Poly]:
 #
 # The builders below are the ONE definition of each glyph's drawn extent, shared by the placement
 # in `_stable_yard` and by the `wells_troughs_rails_clear_of_each_other` check that gates it - the
-# placement-and-check-read-the-same-data doctrine (see settlements.md "PLANK BRIDGES"): change what
+# placement-and-check-read-the-same-data doctrine (see research/ways.html 'What is a plank bridge, and what is it for?'): change what
 # gets drawn and both sides move together instead of drifting into disagreement. `grow` inflates a
 # quad by the placement's slack; the CHECK always passes 0, so a map that only just satisfies the
 # check was in fact placed with room to spare.

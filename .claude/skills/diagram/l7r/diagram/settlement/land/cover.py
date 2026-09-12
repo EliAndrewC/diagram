@@ -48,7 +48,7 @@ class GroundCoverMixin:
         poorer ground so it is VISUALLY DISTINCT from the dense, dark, closed-canopy village grove - this is a
         COMMONS (not anyone's field), non-arable. WHY (south China's hills were stripped for fuel/timber over a
         millennium - open pine + grass + erosion; the protected grove is the green EXCEPTION; the back slope
-        also carried the graves + dry hill-crops): settlements.md 'Village windbreak' / back-slope land use. Recorded
+        also carried the graves + dry hill-crops): research/vegetation.html 'What are the village's three groves' / 'Why is the hillside past the grove open scrub rather than more forest?'. Recorded
         in M['commons']. `role` picks the glyph (woodland / pasture / commons); `avoid` is a list of KEEP-OUT
         polygons (e.g. the hamlet cluster) the scatter stays out of, so ground-cover never creeps onto them."""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
@@ -349,7 +349,7 @@ class GroundCoverMixin:
         (the toe side) AND orients the marsh itself: the toe is a CONTOUR BAND perpendicular to the fall, so it
         rotates with the map like every other feature (see the comment at the marsh block); the scrub ring is
         radial. A comb-FAN field leaves the opposite bbox corner open -> the gen fills it (scrub +
-        woodland patches). See settlements.md 'Hinterland (water-flow-keyed)'."""
+        woodland patches). See research/vegetation.html 'Why is the hillside past the grove open scrub rather than more forest?'."""
         if down_deg is None:
             down_deg = self.M.get("meta", {}).get("down_deg", 90)
         polys = self.field_polys
@@ -483,7 +483,7 @@ class GroundCoverMixin:
         The verge's OUTLINE is ORGANIC (irregular bays carved into the padded rectangle), never the
         rectangle itself (GM 2026-07-23): swept ground is PRODUCED by tending - brooms, feet, the sando's
         traffic - radiating from the feature, and its edge sits wherever the tending peters out into the
-        scrub; a surveyed straight line belongs to walls and paddy bunds, never to clearage (settlements.md
+        scrub; a surveyed straight line belongs to walls and paddy bunds, never to clearage (research/religion-and-death.html, the swept-ground entry
         'Swept ground around sacred + funerary features'). The bays are INWARD-ONLY, so the blob always
         stays INSIDE the old padded rect: a collar is a maintenance CLAIM, and making it irregular means
         the sweeping falls short of the surveyed ideal - it never annexes ground (an outward lobe could

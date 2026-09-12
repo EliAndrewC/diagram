@@ -6,8 +6,8 @@ declared square footage. This module gives provincial cities theirs - the SPACE 
 declared population and program it enumerates the full building inventory, costs it at calibrated
 DRAWN-footprint gross ground costs (packed rows vs spaced compounds), adds the fixed civic
 program, water, reserves, and a circulation fraction, and DERIVES the wall from the total. The
-wall is the output of the budget, never a guess to iterate on: `city_wall_matches_budget` in
-check_village.py then holds the drawn map to the promise recorded in `meta.budget`.
+wall is the output of the budget, never a guess to iterate on; the drawn map is held to the promise
+recorded in `meta.budget` (research/cities/sizing.html holds the rule and its grounding).
 
 CALIBRATION (specs/009-city-area-budget/research.md, measured 2026-07 from the shipped pool):
 every constant below carries its measured/researched basis inline. The two anchors: shipped
@@ -33,7 +33,8 @@ HOUSEHOLD = 5.0  # humans per family - budgets.md convention used across the ski
 # Family share by caste for a provincial city - budgets.md "Provincial city" caste table
 # (600 families at pop 3,000: servants 120 / laborers 240 / merchants 150 / burakumin 30 /
 # samurai 60; ZERO farmers - city farmland is worked from surrounding villages, unless an
-# agricultural district deliberately overrides that assumption).
+# agricultural district deliberately overrides that assumption). The canon and the caste-starvation
+# failure behind treating the mix as a rule: research/settlements.html "Who lives in a provincial city?".
 CASTE_FAMILY_FRAC: dict[str, float] = {"servants": 0.20, "laborers": 0.40, "merchants": 0.25, "burakumin": 0.05, "samurai": 0.10}
 PACKED_CASTES = ("servants", "laborers", "merchants", "burakumin")  # row-housing castes (party walls)
 
@@ -82,7 +83,7 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # the first draft oversized): a ~36 ft platform (Pingyao's Market Tower, ATTESTED 133.4 m^2
     # plan ~ 38 ft square - these towers dominate by height, not plan) = 12 px + its clear block.
     ("bell-and-drum tower", 1, 250.0),
-    # Trade works (GM 2026-07-24, settlements.md "TRADE WORKS"): the trades whose premises outgrow
+    # Trade works (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"): the trades whose premises outgrow
     # the shop glyph. The brewery is the big one (vat hall + shopfront + kura + well, ~32x20 px
     # drawn + margins); the dye yard, oil press, pawnshop court, and 1-2 bathhouses (the sento
     # count rolls from the population band, s.bathhouses) together add ~1,100-1,350 px^2 drawn -
@@ -90,8 +91,8 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # forge (GM 2026-07-25) adds ~120 px^2 more (a 28x38 ft shed-plus-apron is 9.3x12.7 px at
     # ftpx=3), so the line is 1,500. Kilns and lumber yards sit OUTSIDE the walls and cost no
     # interior.
-    # Martial training (GM 2026-07-25; settlements.md "Historical grounding: martial training in a
-    # provincial city"). The state PROVINCIAL MARTIAL HALL is a 130x100 ft walled compound (hall +
+    # Martial training (GM 2026-07-25; research/cities/government.html "Martial training is an urban
+    # institution"). The state PROVINCIAL MARTIAL HALL is a 130x100 ft walled compound (hall +
     # sensei's house + a 100 ft archery lane) = 43.3x33.3 px at 3 ft/px = 1,442 px^2; the PRIVATE
     # dojos are 76x44 ft lots = 372 px^2 each, and the line carries the 2-roll figure so a rolled
     # second dojo never starves. 1,442 + 2x372 ~ 2,200.
@@ -106,7 +107,7 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
 MINISTRIES_LABEL = "six provincial ministries"
 
 #: Default temple program - the two great complexes the CIVIC_PROGRAM row used to hard-code.
-#: Tango-measured; see settlements/cities/sizing.md and research/religion-and-death.html.
+#: Tango-measured; see research/cities/sizing.html and research/religion-and-death.html.
 #: NOTE the CIVIC_PROGRAM convention: every row's third field is the row TOTAL, not a per-unit
 #: cost (the six ministries are 7,980 px^2 for all six). The retired temple row read
 #: ("temple precincts", 2, 16_250.0) - 16,250 for BOTH precincts - so the per-precinct figure is
@@ -117,7 +118,7 @@ TEMPLE_PRECINCT_PX2 = 8_125.0
 
 #: Adept-monk households per precinct. The default 2.5 x 2 precincts = the 5 households the old
 #: hard-coded line carried. A FOX precinct runs much higher (research/religion-and-death.html
-#: finding 3): only its three Bonds are celibate and the rest of its clergy are hereditary
+#: "Temples as economic institutions with hereditary householder clergy"): only its three Bonds are celibate and the rest of its clergy are hereditary
 #: householders living out among the laity, so its families are drawn as ordinary houses around
 #: the compound rather than implied inside it.
 MONK_HOUSES_PER_PRECINCT = 2.5
@@ -154,12 +155,13 @@ POP_MIN, POP_MAX = 2000, 4000
 # executes zero new branches and its byte-identity is structural rather than merely tested. The
 # tiers also differ in inventory STRUCTURE - three samurai housing types against one, a castle
 # line, no agricultural district - so a shared function would be mostly branching anyway.
-# Every number here is settled and recorded in settlements/capitals.md + research/cities/capitals.html.
+# Every number here is settled and recorded in research/cities/capitals.html.
 
 #: Canonical capital population: the settled 12,000 of budgets.md's Capital city table plus the
 #: ~360 relocated non-working samurai (the schooling-and-retirement cohort). The ~45 foreign
 #: Imperial samurai are NOT in this figure - they are housed inside the Imperial Magistrate's
-#: compound, which is a civic line rather than a housing line.
+#: compound, which is a civic line rather than a housing line. The tier bands: research/settlements.html
+#: "What are the five kinds of settlement, and how big is each?".
 CAPITAL_POP = 12_360
 CAPITAL_POP_MIN, CAPITAL_POP_MAX = 9_000, 16_000
 
@@ -463,7 +465,7 @@ def plan_city(program: CityProgram, canvas: tuple[float, float] | None = None) -
         if label == MINISTRIES_LABEL:
             lines.append(temple_line)
     # Adept-monk housing (GM 2026-07-24): each temple precinct keeps ordinary homes in its
-    # neighborhood for the married adepts among its monks (temple-density canon, settlements.md
+    # neighborhood for the married adepts among its monks (temple-density canon, research/religion-and-death.html 'Temples as economic institutions with hereditary householder clergy'
     # "City temples"). Clergy are not a lay caste, so these households ride OUTSIDE the caste
     # table's 600 families - a small civic-adjacent line at packed gross cost. The count scales
     # with the precinct count because a city's clergy housing is a property of its temples, not a

@@ -43,8 +43,36 @@
 set -uo pipefail
 
 CLONE_ROOT=""
-find_root() { # the clone this command is about: the cwd's git root
-  CLONE_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+find_root() { # find_root [payload] - THIS SESSION'S CLONE; the cwd's git root only when nothing resolves
+  # GUARD_EDIT_OK: feature 231 - THE GUARD READ THE MIRROR (GM 2026-09-12). On feature 228 the session's
+  # shell stood in /diagram, so this guard keyed the MIRROR's tree, read and wrote the mirror's
+  # pairing-state.json, found no gate for the clone's content and refused the review `make verify` had
+  # just asked for; at turn end, the shell moved by then, it read the clone and fired half-open. The
+  # answer is feature 204's: the session's clone from the same resolver the main-tree guard uses (the
+  # claim map, then the transcript's last rename, then the sessions json; a subagent resolves to its
+  # parent's clone). The cwd stays as the fallback for a payload that names no session.
+  local resolved=""
+  if [ -n "${1:-}" ]; then
+    resolved="$(printf '%s' "$1" | "$PAIR_HERE/clone-sync-hooks.sh" resolve 2>/dev/null | tail -1 || true)"
+  fi
+  if [ -n "$resolved" ] && [ -e "$resolved/.git" ]; then
+    CLONE_ROOT="$resolved"
+  else
+    CLONE_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+  fi
+}
+
+review_owed_names() { # the maps whose manifest moved against main, space-separated ("" = no review owed)
+  # GUARD_EDIT_OK: feature 231 - the ONE scripted answer (GM 2026-09-12: "the thing that determines whether
+  # a settlement review is necessary is probably some kind of scripted check"), asked FRESH at every
+  # decision point because the gate's own pool phase can move a manifest between its start and the turn's end.
+  python3 "$PAIR_HERE/_review_owed.py" --root "$CLONE_ROOT" 2>/dev/null | tr '\n' ' ' | sed 's/ $//'
+}
+review_owed_why() { python3 "$PAIR_HERE/_review_owed.py" --root "$CLONE_ROOT" --why 2>/dev/null; }
+review_snapshot() { # review_snapshot <map>... -> the snapshot lines (feature 231: taken wherever a review is found owed)
+  local mirror=""
+  case "$CLONE_ROOT" in */.clones/*) mirror="${CLONE_ROOT%%/.clones/*}" ;; esac
+  python3 "$PAIR_HERE/_review_snapshot.py" --root "$CLONE_ROOT" ${mirror:+--mirror "$mirror"} "$@" 2>/dev/null | tr '\n' ' '
 }
 
 # GUARD_EDIT_OK: feature 164 - this guard now REWRITES the gate into the paired command, so it needs
@@ -177,7 +205,8 @@ print(t)
 pretool() {
   local payload tool cmd dir prompt key
   payload="$(cat)"
-  find_root
+  INPUT="$payload"   # GUARD_EDIT_OK: feature 231 - the firing log resolves the session's name from INPUT
+  find_root "$payload"
   [ -n "$CLONE_ROOT" ] || exit 0
   tool="$(printf '%s' "$payload" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("tool_name",""))' 2>/dev/null)"
   cmd="$(printf '%s' "$payload" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("tool_input",{}).get("command",""))' 2>/dev/null)"
@@ -216,6 +245,28 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
       [ -n "$key" ] && write_pairing "$(pairing_file)" waived_key "$key"   # ...and the stop branch honors it
       exit 0
     fi   # GUARD_EDIT_OK: feature 169 - closing the `if` that replaced this branch's `case`/`esac`
+    # GUARD_EDIT_OK: feature 231 - NO LAYOUT CHANGE, NO REVIEW (GM 2026-09-12: "if there are no changes to
+    # the actual way that the settlement is laid out, then we should not need to re review the settlement").
+    # The gate runs as typed - no rewrite to verify, no review owed - when no pool manifest moved against
+    # main. Nothing is recorded here: the stop branch asks again after the gate, which may have moved one.
+    if [ -z "$(review_owed_names)" ]; then
+      [ -n "$key" ] && write_pairing "$(pairing_file)" gate_key "$key"
+      guard_log pair permitted "$cmd" review-not-owed
+      # GUARD_EDIT_OK: feature 231 - no escaped quotes inside this single-quoted program: the shell keeps the
+      # backslashes and python then refuses the line (the suite caught it). The reason arrives as an env var.
+      PAIR_WHY="$(review_owed_why)" python3 -c '
+import json, os
+why = os.environ["PAIR_WHY"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "additionalContext": (
+        "NO SETTLEMENT-REVIEW OWED: " + why + " (feature 231). The gate runs alone - no pool manifest moved, "
+        "so a review would re-judge ink that has not changed. A glyph or page change with the same manifest is "
+        "the GM to look at rather than the agent: hand the map back and say what moved. The waiver is recorded "
+        "at turn end. If this gate MOVES a manifest, the review becomes owed and the stop hook says so."),
+}}))'
+      exit 0
+    fi
     if review_pending "$dir" || review_recorded "$key"; then
       [ -n "$key" ] && write_pairing "$(pairing_file)" gate_key "$key"
       exit 0
@@ -261,16 +312,23 @@ print(json.dumps({"hookSpecificOutput": {
     # a turn may not end on the gate green with no review dispatched.
     [ -n "$key" ] && write_pairing "$(pairing_file)" gate_key "$key"
     guard_log pair permitted "$cmd" review-owed
-    maps="$(git -C "$CLONE_ROOT" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*/*.json' '.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' ' | sed 's/ $//')"
+    # GUARD_EDIT_OK: feature 231 - the maps from the one scripted answer (it used to be a HEAD~1 diff, which
+    # saw only the last commit), and the reviewer's snapshot TAKEN HERE for the gate shapes verify cannot
+    # take (GM 2026-09-12: "it should not be on you to remember to do that").
+    maps="$(review_owed_names)"
+    snap="$(review_snapshot $maps)"
     bg="$(printf '%s' "$payload" | python3 -c 'import json,sys; print("yes" if (json.load(sys.stdin).get("tool_input") or {}).get("run_in_background") else "")' 2>/dev/null)"
     detached=""
     case " $(printf '%s' "$cmd" | tr '\n' ' ') " in
       *" nohup "*|*" setsid "*|*"& "*|*"&) "*|*"&;"*) detached=yes ;;
     esac
     [ -n "$bg" ] && detached=yes
-    printf '%s' "$payload" | PAIR_MAPS="${maps:-the delta}" PAIR_KEY="${key:0:12}" PAIR_DETACHED="$detached" python3 -c '
+    # GUARD_EDIT_OK: feature 231 - the permit's context names the snapshot directories the reviewer reads
+    printf '%s' "$payload" | PAIR_MAPS="${maps:-the delta}" PAIR_KEY="${key:0:12}" PAIR_DETACHED="$detached" PAIR_SNAP="$snap" python3 -c '
 import json, os, sys
 maps, key, detached = os.environ["PAIR_MAPS"], os.environ["PAIR_KEY"], os.environ["PAIR_DETACHED"]
+snap = os.environ["PAIR_SNAP"].strip()
+maps = f"{maps} - review the SNAPSHOT, the gate evicts the pool renders: {snap}" if snap else maps
 how = ("This run is detached, so it returns now and the review overlaps the gate."
        if detached else
        "This gate runs in the FOREGROUND, so you read this only when it returns and the review will "
@@ -292,7 +350,9 @@ print(json.dumps({"hookSpecificOutput": {
   if [ "$tool" = "Agent" ] && { [ "$atype" = "settlement-review" ] || [ "$atype" = "building-review" ]; }; then
     # GUARD_EDIT_OK: feature 168 - the escape is recorded as well as logged to the bypass log; the two
     # answer different questions (that one carries the REASON, this one makes the RATE computable).
-    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; exit 0;; esac
+    # GUARD_EDIT_OK: feature 231 - AN ESCAPED REVIEW IS STILL A REVIEW: it records review_key as the normal
+    # branch does, so the stop branch does not fire half-open on a review that actually ran (feature 228).
+    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; [ -n "$key" ] && write_pairing "$(pairing_file)" review_key "$key"; exit 0;; esac
     if gate_running_or_fresh "$key"; then
       [ -n "$key" ] && write_pairing "$(pairing_file)" review_key "$key"
       exit 0
@@ -311,7 +371,8 @@ print(json.dumps({"hookSpecificOutput": {
 stop() {
   local payload dir key
   payload="$(cat)"
-  find_root
+  INPUT="$payload"   # GUARD_EDIT_OK: feature 231 - the firing log resolves the session's name from INPUT
+  find_root "$payload"
   [ -n "$CLONE_ROOT" ] || exit 0
   key="$(engine_key)"
   dir="$(printf '%s' "$payload" | python3 -c '
@@ -326,6 +387,15 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   review_recorded "$key" && exit 0
   review_pending "$dir" && exit 0
   review_waived "$key" && exit 0
+  # GUARD_EDIT_OK: feature 231 - NO LAYOUT CHANGE, NO REVIEW, asked again AFTER the gate (its pool phase may
+  # have moved a manifest): nothing moved -> the automatic waiver is recorded against this content, with its
+  # reason, once, so make audit can count how often a review was waived by the script rather than a person.
+  if [ -z "$(review_owed_names)" ]; then
+    write_pairing "$(pairing_file)" waived_key "$key"
+    write_pairing "$(pairing_file)" waived_why "$(review_owed_why)"
+    guard_log pair permitted "stop" review-not-owed
+    exit 0
+  fi
   [ "$(read_field "$(pairing_file)" stop_told)" = "$key" ] && exit 0   # once per content, never a loop
   write_pairing "$(pairing_file)" stop_told "$key"
   printf 'PAIRING HALF-OPEN: the gate went green on this content and no settlement-review looked at it.\n' >&2

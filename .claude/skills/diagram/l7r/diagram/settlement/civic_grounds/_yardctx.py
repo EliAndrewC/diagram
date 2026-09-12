@@ -86,7 +86,7 @@ class _YardCtx:
         # heap-center-to-rail-line distance, measured against this candidate's drawn segment
         self.prior_heaps = [(h_["x"], h_["y"]) for yd_ in s.M.get("stable_yards", []) or [] for h_ in yd_.get("dung_heaps", []) or []]
         # WELLS, TROUGHS, AND HITCHING POSTS NEVER OVERLAP ONE ANOTHER (GM 2026-07-25; the full
-        # reasoning sits with the quad builders at the top of this module and in settlements.md
+        # reasoning sits with the quad builders at the top of this module and in research/urban-features.html 'Stable yards - beaten earth, hitching rails and watering by relay'
         # 'Stable yard'). Each of the three is placed at a different moment, so every stage tests
         # the DRAWN extents of whatever already exists: a rail avoids every wellhead on the map,
         # the trough cluster avoids the rails, and the dug-your-own wellhead avoids both. Prior

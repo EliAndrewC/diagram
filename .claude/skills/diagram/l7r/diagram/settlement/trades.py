@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class TradesMixin:
-    # ---- TRADE WORKS (GM 2026-07-24; grounding in settlements.md "TRADE WORKS"): the trades whose
+    # ---- TRADE WORKS (GM 2026-07-24; grounding in research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"): the trades whose
     # real premises outgrow the generic shop glyph - big attached works, yards, and outbuildings
     # that visibly show at map scale. Each records a first-class manifest entry (overlap-checked)
     # and blocks placement; sizes are TRUE feet via self.px. The long tail of trades (tofu,
@@ -76,7 +76,7 @@ class TradesMixin:
 
     def brewery(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "brewery") -> None:  # type: ignore[misc]
         """A SAKE/MISO/SOY BREWERY compound - the biggest trade premises in a provincial seat
-        (settlements.md "TRADE WORKS": a minimal sakagura is a 60-120 ft vat hall BEHIND a normal
+        (research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why": a minimal sakagura is a 60-120 ft vat hall BEHIND a normal
         shopfront, 3-8x the shophouse footprint, very often the town's largest commercial building;
         1-2 per seat of ~3,000; brewers were town elite, sited IN town on good well water). Drawn
         as the long gabled VAT HALL (ridge + fermentation-vat circles + a masonry chimney), the
@@ -171,7 +171,7 @@ class TradesMixin:
     def pawnshop(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "pawnshop") -> None:  # type: ignore[misc]
         """A PAWNSHOP (shichiya): an ordinary shopfront whose tell is STORAGE - pledges are bulky,
         so the broker keeps 2-3 fireproof kura in a walled rear court (the existing kura glyph
-        multiplied, per settlements.md "TRADE WORKS"). Records M['pawnshops'] (city_has_pawnshop)."""
+        multiplied, per research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"). Records M['pawnshops'] (city_has_pawnshop)."""
         sw_, sh_ = self.px(48) / 2, self.px(32) / 2
         kw_, kh_ = self.px(20) / 2, self.px(14) / 2
         ch_ = kh_ * 2 + 4.5  # the rear court's depth
@@ -233,7 +233,7 @@ class TradesMixin:
 
     def farrier(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "farrier") -> None:  # type: ignore[misc]
         """A FARRIER's shoeing forge - the one hoof-care premises that earns its own footprint
-        (grounding: settlements.md "TRADE WORKS", the FARRIERY sub-entry).
+        (grounding: research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why", the FARRIERY sub-entry).
 
         Rokugan shoes horses in IRON where Edo Japan used woven straw, for two reasons that are
         both already in the GM's canon: continental ore makes iron a normal industrial good (the
@@ -306,7 +306,7 @@ class TradesMixin:
         households that work it. `rot` lays the kiln's UPSLOPE axis along local +x, so the stoke
         mouth is at local -x and the chimney at local +x.
 
-        Historical grounding (the "why" - see settlements/urban-features.md "KILN WORKS", full
+        Historical grounding (the "why" - see research/urban-features.html "KILN WORKS", full
         record in research/urban-features.html). Two GM questions on 2026-07-27 drove the whole
         feature: *"would whoever works the kiln also live next to it?"* and *"why is it
         specifically a tile kiln and not just a kiln?"*
@@ -461,7 +461,7 @@ class TradesMixin:
         `rot` lays the yard's ROAD SIDE against local -y, the same convention the tanning yard uses
         for its water side: a charcoal yard is a CART frontage, and every bale crosses one edge.
 
-        Historical grounding (the "why" - see settlements/urban-features.md "CHARCOAL YARDS"):
+        Historical grounding (the "why" - see research/urban-features.html "CHARCOAL YARDS"):
           - CHINA FIRST. Charcoal was an industrial input at state scale: Song iron-smelting
             households were government-regulated with support that explicitly included charcoal
             supplies, and a large Ming ironworks is recorded with 200 charcoal producers alongside
@@ -534,7 +534,7 @@ class TradesMixin:
         """A REFINING FORGE - an okaji 大鍛冶, where pig iron smelted out at the fuel is worked into
         wrought bar. `rot` lays the OPEN WORKING FRONT toward local +y.
 
-        Historical grounding (the "why" - see settlements/urban-features.md "REFINING FORGES"):
+        Historical grounding (the "why" - see research/urban-features.html "REFINING FORGES"):
           - CHINA FIRST. Ming ironworks converted blast-furnace pig to wrought iron by FINING,
             Chinese chao 炒, "stir-frying": an OPEN fire under a forced blast, fuelled with charcoal,
             into which wood, charcoal and broken cast iron were charged and then stirred with an iron
@@ -710,7 +710,7 @@ class TradesMixin:
         strands the far end of the rank inland. `tanning_yard_square_to_its_water` holds this to
         within 15 deg of any course whose bank lies inside the ~20 ft on-water reach.
 
-        Historical grounding (the "why" - see settlements.md "TANNING YARDS"):
+        Historical grounding (the "why" - see research/urban-features.html "Tanning yards - hides come from fallen draft stock, and water is the gate"):
           - Hides come from FALLEN DRAFT STOCK, not butchery: the kawata held carcass rights over a
             defined territory (danna-ba), so a county town's burakumin work the whole county's dead
             oxen and horses. l7r.md agrees - daimyo push surplus horses onto farms as draft animals,

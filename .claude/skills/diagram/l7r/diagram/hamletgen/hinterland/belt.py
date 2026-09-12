@@ -133,6 +133,8 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         # have its DRAWN clumps average back onto the cluster's own line, which is what
         # `village_windbreak_on_windward_side` measures (Kashikawa: polygon centroid +137, drawn
         # centroid -5). The extra 12 px comes out of the 150 px embrace budget and leaves plenty.
+        # The 36..146 px band is the belt's 80-120 ft depth (research/vegetation.html "What are the
+        # village's three groves" - a belt reads as a wall of trees only at that depth).
         near = [rag((ccx + wx * (u + 36.0 + _sun_off + back) + px * v, ccy + wy * (u + 36.0 + _sun_off + back) + py * v)) for v, u in cols]
         far = [rag((ccx + wx * (u + 146.0 + _sun_off + back) + px * v, ccy + wy * (u + 146.0 + _sun_off + back) + py * v)) for v, u in reversed(cols)]
         return near + far

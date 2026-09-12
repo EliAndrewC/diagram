@@ -10,7 +10,7 @@ comments) are in git history with that script; what they recorded that still hol
 **wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
 every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
 around it. The END STATE is deliberately the exception; the scattered overlay is the norm
-(research/archetypes.html "The three overlay values"). Reading this map as typical would be the
+(research/archetypes.html "The three overlays a village may carry"). Reading this map as typical would be the
 mistake it is here to make visible.
 
 ## Map notes
@@ -68,7 +68,7 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
 
 ## What the GM's audit added (feature 150 T40-T48, 2026-08-28)
 
-See `settlements/archetypes.md` "The scripted dike-pond hamlet - the rules" and
+See `research/archetypes.html` "The scripted dike-pond hamlet - the rules" and
 `specs/150-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
 (forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
@@ -531,7 +531,7 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   parcel with the pond painted over it; on the vector page the pond hid the disk, but raster mode (the opening
   view) draws the lit class as a wash over the image, so the lit disk tinted all 26 dike groups' ponds gold.
   The bank is now the ring between its outer edge and the water's outline, under the even-odd rule - the
-  perimeter dike's own band form (settlements/archetypes.md 'The bank is a ring'). Nothing placed moves: the
+  perimeter dike's own band form (research/archetypes.html "The 6:4 water-to-dike ratio and coppiced mulberry" 'The bank is a ring'). Nothing placed moves: the
   manifest is byte-identical (the two outlines come from the same draws in the same order), the crowns and the
   earth mottle still clip to the bank outline, so the few that lean over the water's rim still light with the
   dike, and the ring's inner stroke lies under the pond's own wider stroke. Measured on the page in raster mode

@@ -5,7 +5,7 @@ the other way round. The generator lays the irrigation skeleton first - one pond
 head-race, supply canals along the HIGH margins, delivery ditches dropping downhill - and
 the paddy plots are carved BETWEEN those lines, so the map cannot help but communicate the
 hydrology. The old approach (draw a field blob, decorate it with water) reads as random no
-matter how it is tuned; see settlements.md 'Water-first fields v2' for the full grounding.
+matter how it is tuned; see research/fields.html 'Where does a field's water come from, and how is it shared out?' for the full grounding.
 
 ENGINE: every plot-column boundary is a warp THREAD marched downhill in lockstep fall-steps,
 clamped so threads can never cross and never pinch closer than one plot width (GAP). The

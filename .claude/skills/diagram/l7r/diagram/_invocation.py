@@ -223,6 +223,8 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
     "l7r.diagram.tools.glossary_asset": ("glossary", "cheap"),  # feature 209: the record's derived glossary asset
     "l7r.diagram.tools.citations_asset": ("citations", "cheap"),  # feature 211: the citations pages' derived scripts and works sections
+    "l7r.diagram.tools.page_lit": ("page-lit", "expensive"),  # feature 231: it opens a browser on the page
+    "l7r.diagram.tools.picture_diff": ("picture-diff", "cheap"),  # feature 231: two renders, and resvg for an SVG argument
 }
 
 

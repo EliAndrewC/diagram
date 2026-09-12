@@ -37,6 +37,19 @@ only defects needing **judgment** come to a subagent. So:
 | are the caste counts in band | does the caste **geography** make sense |
 | is there a label | does the label say something **non-obvious** |
 
+## WHEN YOU ARE DISPATCHED AT ALL (feature 231, GM 2026-09-12)
+
+A settlement-review is owed when a pool map's LAYOUT moved - which is scripted, not remembered:
+`scripts/_review_owed.py` names every map whose manifest differs from the merge base with main, and
+`make verify` and the pair guard ask it. A change that moves no manifest - a glyph redrawn, a page's
+highlighting, a stylesheet - is not dispatched to you at all, because you would be re-judging ink that
+has not changed; the GM looks at that themselves, faster than you can. The motivating case: feature 228
+changed one path's `d` so a lit dike stopped tinting the pond inside it, its manifest was byte-identical,
+and the review took 18.7 of the feature's 32 minutes to confirm what the diff already knew.
+
+So if you are reading this, a manifest moved. Review what moved and what it moved, and say in one line
+which sweeps you skipped.
+
 ## Inputs
 
 The main agent passes you a subject name and its pool folder. Paths are under
@@ -46,10 +59,38 @@ The main agent passes you a subject name and its pool folder. Paths are under
 - `pool/<type>/<subject>.json` - the manifest: every feature's real recorded geometry
 - `pool/<type>/<subject>.gen.py` - the spec, its docstring, and the author's reasoning in comments
 - `pool/<type>/<subject>.notes.md` - design notes and the **Review log** of settled/overruled findings. **Every pool subject has one** since 2026-08-08, so a MISSING notes file is itself a finding, not a normal state. Read its "Settled by the GM" section first and do not re-raise anything in it
-- `settlements.md` + the `settlements/` topic files the subject calls for (`towns.md`, `cities.md`, `urban-features.md`, `water.md`, `fields.md`, `homesteads.md`, `vegetation.md`, `religion-and-death.md`)
+- the research pages under `research/` the subject calls for - since feature 229 the record holds each topic's finding, the decision it drove and, for a tier no generator draws yet, the specification a map follows (`settlements.html` for the tiers; then `towns.html`, `cities/*.html`, `urban-features.html`, `water.html`, `fields.html`, `homesteads.html`, `vegetation.html`, `religion-and-death.html`, `ways.html`, `presentation.html`)
 - `SKILL.md` - shared conventions: labeling rules, the to-scale doctrine, the stroke convention
 
 If the notes file is missing, say so prominently and review anyway, flagging that intent is unknown.
+
+**REVIEW THE SNAPSHOT WHEN ONE IS NAMED.** The dispatch may hand you
+`<clone>/.git/review-snapshot/<map>/clone/` and `.../main/` - the changed map's `.json`, `.svg`, `.png`,
+`.html` and `.notes.md` from both sides, copied before the gate started (feature 231). Use them: the
+gate's roll cache EVICTS a pool map's standing `.png` and `.html` while it regenerates the map, so the
+artifacts under `pool/` can vanish from under you mid-review - which happened on feature 228, and cost
+that reviewer minutes of waiting and a re-render. A file the clone did not have is named in the snapshot
+line rather than silently absent.
+
+## Tooling: the measurements you do NOT write a script for (feature 231)
+
+Two questions came up so often that the tools exist; run them from the skill root rather than building a
+pixel pipeline per pass (on feature 228 the session wrote one four times and this agent then wrote a
+better one, at eight minutes of its own).
+
+- **What does lighting this class actually light?** `make page-lit MAP=<map.html> CLASS="<key>" [VECTOR=1]
+  [OUT=lit.png]` opens the page, lights the class through the page's own API, and reports for EVERY class
+  on screen the share of its pixels that changed - attributed through the page's class id map. Raster
+  mode at the opening view by default (what a reader meets), `VECTOR=1` past the raster switch. The
+  answer to "does hovering the dike also light the pond" is one line of its table.
+- **What moved between two renders?** `make picture-diff A=<render> B=<render> [PAGE=<the new .html>]`
+  reports the share of differing pixels, the largest channel delta, the bounding box, and - with `PAGE` -
+  which class's ink each differing pixel lies on. An `.svg` argument is rendered by the engine's own
+  rasterizer at the other's width. "0.09% of pixels, all of it on the fish pond and the mulberry dike"
+  is a sentence you can write from one run.
+
+Both MEASURE and neither judges (feature 193's ruling, below): they print shares, you decide whether a
+share is antialiasing, a convention or a defect.
 
 ## Tooling: parsing the scatter yourself
 
@@ -123,7 +164,7 @@ so a combined run just serializes them. Say so in your output if you were handed
    classify the ground under it by PIXEL COLOR (Y's own fill/tint, not Y's recorded polygon), and
    count - of the glyph FAMILIES the complaint names (the GM said "small pine trees and such": pines,
    brush; a family the recorded doctrine explicitly admits, such as grass grading into reeds per
-   `settlements/vegetation.md`, is counted separately and reported, not charged). Any count above a
+   `research/vegetation.html`, is counted separately and reported, not charged). Any count above a
    handful is needs-work. There is no audit verdict to weigh against it any more (feature 193): the
    adjudicator encoded the AUTHOR'S allowances - a feather band, a keep-out inset - and the author's
    allowance is precisely what is under review, which is why it was retired rather than consulted.
@@ -179,7 +220,7 @@ containment or count - never form. For each such feature, state the intended for
   compass ANGLE is not a rule: measured across the whole pool (2026-07-27), the approved belts run
   33-49 degrees off the ideal across-wind axis, and the belt once reported as wrong-facing (Ubame)
   was 31 degrees off - better aligned than every approved map but two. A belt follows the cluster's
-  windward fringe; the wind chooses the side, not the bearing. See `settlements/towns.md`.
+  windward fringe; the wind chooses the side, not the bearing. See `research/towns.html`.
 
 ### Agreement with a Mode A sheet of the same place
 

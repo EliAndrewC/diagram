@@ -33,7 +33,7 @@ def test_cemetery_common_ground_defaults_organic():
 
 
 def test_caravan_scale_yard_gets_three_troughs_beside_the_nearest_well():
-    # the watering point (settlements.md 'Stable yard' watering): a caravan-scale ground (r >= 76)
+    # the watering point (research/urban-features.html 'Stable yards - beaten earth, hitching rails and watering by relay' ('Stable yard' watering): a caravan-scale ground (r >= 76)
     # draws 3 troughs, and the cluster HUGS the recorded well - a bucket-pour from the wellhead
     # (GM 2026-07-23: "otherwise you'd have to carry the water a long way"), even a well past the rim
     s = _crop_settlement()

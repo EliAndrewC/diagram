@@ -58,7 +58,7 @@ option A (keep, with documented reasoning) was selected.
   for travelers who reach a shut gate) **plus at least one inside** the walls in a humble quarter
   (laborer/agrarian, never by temple/merchant/samurai/burakumin). In practice Tango and Nagahara
   (2 gates each) each carry **4 flophouses: 2 inside + 2 outside** (one outside per gate).
-- Stated rationale in `settlements.md`: the outside-gate flophouse serves **late arrivals who miss
+- Stated rationale in the settlements rule file (retired into `research/` by feature 229): the outside-gate flophouse serves **late arrivals who miss
   the dusk gate-closing**; the inn + stables + yard sit inside for secure overnight animal holding.
 
 The GM's own framing, verbatim: *"a flophouse outside the city walls for late arrivals and inside

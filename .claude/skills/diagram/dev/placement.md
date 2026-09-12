@@ -332,24 +332,24 @@ to do.
 **One registry, and everything follows from it.** A new footprint feature goes in
 `_OVERLAP_STRUCTS` (`l7r/diagram/overlap/taxonomy.py`) - or, if it is MEANT to overlap something, in
 `_OVERLAP_EXEMPT` with the reason. You cannot forget: `every_feature_classified_for_overlap` fires
-when a generator emits a feature key nobody classified. Membership alone then gates the feature off
-**fifteen hazards** - the wall, the moat, the road, streets and alleys, streams, channels, the
-cargo canal, the pond, manor walls, religious halls, gate furniture, torii arches, the ring road,
-every other solid structure, and the 14px government-office standoff - because every one of those
-checks builds its footprints from the registry via `solid_structs(M)`.
+when a generator emits a feature key nobody classified. Membership alone then governs the feature
+against EVERYTHING on the map, because the registry gives it an overlap CLASS (`SOLID`, `GROUND`,
+`WATER`, `WAY`, `ANNEX`, `COVER` - `OVERLAP_CLASS` in the same module) and the class matrix, forbidden
+by default with every permission carrying its reason (`_MATRIX_PERMISSIVE` and its siblings), decides
+every pair; `matrix_violations()` in `l7r/diagram/overlap/matrix.py` is the one place that judgment is
+made. There is no per-hazard check list to keep in step any more: the fifteen-hazard battery and the
+`solid_structs(M)` footprint builder it read went with the check battery in feature 166.
 
-**The failure mode this replaced.** The `no_structure_on_*` battery was always registry-driven, but
-a handful of keep-clear checks predated it and hand-listed their own keys. A feature could be
-correctly classified, correctly cleared of all thirteen battery hazards, and still sit on the ring
-road - because `ring_road_kept_clear` was reading eight keys nobody had updated. A check that never
-sees your feature looks exactly like a check that passes, so this was invisible until the GM looked
-at a rendered map. Four such checks now read `solid_structs(M)`: `ring_road_kept_clear`,
-`city_government_offices_dont_abut`, `city_wells_in_block_interiors`, and the merchant-estate
-court test.
+**The failure mode this replaced.** The old `no_structure_on_*` battery was registry-driven, but a
+handful of keep-clear checks predated it and hand-listed their own keys. A feature could be correctly
+classified, cleared of every battery hazard, and still sit on the ring road - because one check was
+reading eight keys nobody had updated. A check that never sees your feature looks exactly like a check
+that passes, so this was invisible until the GM looked at a rendered map. The matrix closes that
+class: a pair the registry does not permit fails whichever feature is newer, with no list to forget.
 
-**The ratchet.** `tests/gate/test_no_feature_overlaps.py` asserts the matrix on both archetypes, and `tests/settlement/test_homestead_parts.py` censuses the roster; the older `test_every_solid_struct_is_gated_off_every_hazard` planted one
-instance of EVERY registered key squarely on EVERY hazard and demands the hazard's check fire. If a
-keep-clear check ever falls back to a hand list, that test names both the key and the hazard.
+**The ratchet.** `tests/gate/test_no_feature_overlaps.py` asserts the matrix on the shipped maps, and
+`tests/settlement/test_homestead_parts.py` censuses the roster. A new feature with no class fails the
+classification guard before it ever reaches the matrix.
 Verified to have teeth: reverting `ring_road_kept_clear` to its old list fails it with 21 keys
 listed. **Adding a hazard row to `_HAZARDS` extends the contract to every existing feature at
 once** - that is the cheap way to answer the next "should not overlap with X".

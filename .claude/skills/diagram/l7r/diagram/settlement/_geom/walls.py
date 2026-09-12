@@ -16,7 +16,7 @@ from .base import Manifest, Poly, Pt
 from .overlap import _rect_ring
 from .primitives import seg_dist, segments_cross
 
-# TORII AVENUE PITCH (GM 2026-07-25, after a research pass - see settlements.md 'Torii'). Rokugan's
+# TORII AVENUE PITCH (GM 2026-07-25, after a research pass - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'). Rokugan's
 # sando is the 1/3/7 SET of formal gateways, NOT a Fushimi-style donation row: donation rows are a
 # designated-site special case here (Shinden Togashi, the Temple of Amaterasu, the Ki Rin Shrine and
 # their like), so NEITHER real-world spacing regime is the model. The research found only two: a
@@ -49,7 +49,8 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
 # absent - samurai households' live-in domestics lodge inside the ward, and the city gens interleave
 # them on purpose. So is monk_house: a temple may legitimately stand inside the ward (Tango's
 # Bishamon precinct - the warrior fortune beside the garrison quarter) and its clergy row belongs
-# with its temple, held to it by the temple-neighborhood checks.
+# with its temple, held to it by the temple-neighborhood checks. The zoning rule this encodes:
+# research/cities/government.html "Samurai and commoner ground were zoned apart by law".
 WARD_BARRED_KINDS = frozenset({"laborer", "laborer_large", "merchant", "merchant_house", "merchant_large", "burakumin", "shop", "inn"})
 
 

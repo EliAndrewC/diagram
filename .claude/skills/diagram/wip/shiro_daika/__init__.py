@@ -32,7 +32,7 @@ that runs down to the Imperial road's south gate. That is the jokamachi rule: th
 passes the castle's FRONT, "to indicate the glory of the ruler". Its interior is BLANK and stays
 blank - see Settlement.castle's docstring for the sync argument.
 
-THE GRAIN IS IN TWO PLACES FOR TWO REASONS (settlements/capitals.md): the siege stock is inside
+THE GRAIN IS IN TWO PLACES FOR TWO REASONS (research/cities/capitals.html): the siege stock is inside
 the castle (implied, never drawn); the working stipend-and-transhipment rice is the domain
 granary at the wharf. The EMPEROR'S granaries are separate again - they face brigands, not
 besiegers - and this map exercises imperial_granary_seat="wharf" (grain moves by boat).

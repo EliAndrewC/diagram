@@ -43,7 +43,7 @@ s.meta(
     # design wind (fire season, steadiest flow); nuisance trades sit in the lee-and-
     # downstream arc (S-SW riverward, below the wharf).
     wind_from="northwest",
-    # INTERIOR WARD GATES: OFF for Shiro Daika (GM 2026-08-10). The doctrine (capitals.md:
+    # INTERIOR WARD GATES: OFF for Shiro Daika (GM 2026-08-10). The doctrine (research/cities/capitals.html:
     # kido at the block and lane mouths, no continuous ward fence) stands and the knob stays
     # for other cities - but the mesh this map derived wandered mid-street and read as neither
     # a wall nor a gate, so the capital ships without interior gates until the placement rule

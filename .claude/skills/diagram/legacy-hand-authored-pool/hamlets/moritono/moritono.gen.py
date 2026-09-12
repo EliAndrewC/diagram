@@ -213,7 +213,7 @@ s.hinterland()
 #   2. DEEP enough for several clump rows. At ~30 ft the old band held ONE row of crowns; the belt wants
 #      ~80-120 ft so the canopies overlap into a wall. Sized here to ~0.5 ha of footprint, in the band the
 #      other 16-household hamlets sit in (Enokida 0.45 ha, Kuwabata 0.39) and under the research figure
-#      for a modest back grove (<1 ha - settlements.md 'Village windbreak'). village_windbreak_scales_
+#      for a modest back grove (<1 ha - research/vegetation.html 'What are the village's three groves' ('Village windbreak'). village_windbreak_scales_
 #      with_cluster now gates this: canopy area >= 0.40x the roof area it shelters.
 # The two communal WELLS stand inside the band and carve their own clearings out of it (village_grove
 # keeps canopy off a wellhead), which is how a real draw-point sits in a back grove.
@@ -254,7 +254,7 @@ print(f"footbridges: {n_bridges}")
 
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=30)

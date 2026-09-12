@@ -68,7 +68,7 @@ def test_the_temple_line_keeps_its_place_in_the_civic_sequence():
 @pytest.mark.tiers("city")
 def test_a_fox_eight_precinct_program_prices_eight_precincts_and_scales_the_clergy_line():
     """Minami's program: eight modest precincts, each well under the 8,125 px^2 default, with
-    hereditary temple families living OUT (research/religion-and-death.html finding 3)."""
+    hereditary temple families living OUT (research/religion-and-death.html "Temples as economic institutions with hereditary householder clergy")."""
     b = plan_city(_prog(population=2360, river=True, temple_precincts=8, temple_precinct_px2=3_400.0, monk_houses_per_precinct=6.0))
     temple = _line(b, "temple precincts")
     assert temple.count == 8

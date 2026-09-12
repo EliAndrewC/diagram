@@ -24,7 +24,7 @@ from .frame import Poly, Pt
 # villages (~0.13 ac, over Bray's ceiling) and cities (~0.08 ac, at it) ran large and are pulled down.
 # The population/household invariant is untouched: this subdivides the SAME field envelope into more,
 # smaller cells - total paddy area, farmhouse rings, and the household count are all unchanged. See
-# settlements.md 'Paddy cell size'.
+# research/fields.html 'Plot sizes, pond sizing and acreage from population'.
 PADDY_CELL_ACRES = 0.05
 
 
@@ -65,7 +65,7 @@ BUND = '#C2A772'
 # is deliberately mixed: the color is honest for SPRING (fresh azenuri mud); by high summer -
 # the season the paddy surfaces depict - real bunds green over with grass and azemame and all
 # but vanish, so a dark visible bund network is a stylization that keeps the field structure
-# readable. See settlements.md 'Paddy plot grain'.
+# readable. See research/fields.html 'Paddy plots - irregular patchwork and why the grid is anachronistic'.
 AZE = '#6E4520'
 AZE_FT = 1.5  # drawn aze width in real feet; convert at the map's ftpx, floored for raster visibility
 
@@ -100,7 +100,7 @@ BEAN_GREEN = '#2F6B35'  # azemame (bund soybeans) - the beaded-bund accent. Deep
 # The dead-straight, sharp-cornered cell is the machine-cut signature of 20th-century consolidation
 # (Japan's 1963 hojo seibi), the same anachronism `polder_parcels_vary` and `polder_edges_wander`
 # already guard at the fabric and block scale - this is that same rule at the level of the single
-# parcel outline. Teeth: `polder_parcels_are_organic`. See settlements.md 'Polder fifth pass'.
+# parcel outline. Teeth: `polder_parcels_are_organic`. See research/archetypes.html 'Polder fifth pass'.
 def organic_parcel(
     poly: Poly,
     rng: random.Random,

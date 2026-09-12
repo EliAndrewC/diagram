@@ -143,7 +143,7 @@ class LandUseMixin:
         take = min(len(elig), max(2, round(len(elig) * fraction)))
         chosen = self._pick_overlay_plots(elig, take, clustered=(overlay == "mulberry_fishpond" and eligible != "all"), rng=rng)
         # LEFTOVERS of a WHOLESALE conversion read as STANDING RICE, not as bare outlines (GM 2026-07-23;
-        # settlements.md 'Polder fourth pass'). Under eligible="all" the base polder drew every parcel as a
+        # research/archetypes.html 'The 6:4 water-to-dike ratio and coppiced mulberry'). Under eligible="all" the base polder drew every parcel as a
         # flat bund-outlined rectangle, so the few unconverted plots floated as tan outlines around ground
         # indistinguishable from the floor green (and a FLOODED leftover read as "a pond with no dike").
         # Repaint them as textured paddy - the transplant mottle is what distinguishes crop from floor -
@@ -321,11 +321,11 @@ class LandUseMixin:
             # 桑基魚塘: a raised MULBERRY DIKE (基, planted) surrounds an inset fish POND (塘, water) whose
             # dug corners are ROUNDED - an earthen pond erodes to a rounded outline, never the poured-
             # concrete right angle a premodern village had no way to make (GM 2026-07-22, issues 3 + 5).
-            # Fourth pass (GM 2026-07-23, settlements.md 'Polder fourth pass'): the dike draws as PLANTED
+            # Fourth pass (GM 2026-07-23, research/archetypes.html 'The 6:4 water-to-dike ratio and coppiced mulberry'): the dike draws as PLANTED
             # GROUND, not a flat green band - the perimeter dike's own treatment (mottled earthen bank)
             # carrying two planted ROWS of coppiced mulberry crowns (_mulberry_rows). Its corners ease
             # with small erosion fillets but the dike KEEPS its rectangular character - straight dikes
-            # are attested (see settlements.md 'Polder mosaic'). The bank sits at the TRUE parcel line
+            # are attested (see research/archetypes.html 'Polder mosaic'). The bank sits at the TRUE parcel line
             # (inset 0), because the canal at its toe bounds it: an early +5 px expansion put banks over
             # the wavering laterals in 72 places on Kuwabata (mulberry_banks_clear_of_channels caught
             # it). The base parcel's tan bund stroke is erased by a floor-color UNDERLAY instead - the
@@ -337,7 +337,7 @@ class LandUseMixin:
             _sc = 1.0 + 2.5 / max(1.0, _dm)
             cover = " ".join(f"{cx + (x - cx) * _sc:.1f},{cy + (y - cy) * _sc:.1f}" for x, y in p["poly"])
             self.add(f'<polygon points="{cover}" fill="#A6C398"/>', cls="paddy")  # the bund-erasing cover is field floor
-            # THE CANAL AT THE TOE BOUNDS THE BANK (settlements.md 'Mulberry bushes keep clear of the
+            # THE CANAL AT THE TOE BOUNDS THE BANK (research/archetypes.html 'The 6:4 water-to-dike ratio and coppiced mulberry' ('Mulberry bushes keep clear of the
             # canals'): where a mosaic-bent lateral rides INSIDE the parcel line (Kuwabata: two west-edge
             # ponds, up to 3.6 px), the whole pond unit is DUG BACK - shrunk about its centroid until the
             # bank clears the canal by >= 1 px - rather than drawing bank earth over open water. The
@@ -368,7 +368,7 @@ class LandUseMixin:
             # then the water outline under the even-odd rule, so the fill stops at the pond's edge as the perimeter
             # dike's band stops at the polder. On the vector page the pond painted over a filled disk hid the
             # difference; raster mode draws the lit class as a wash OVER the image (page.css, feature 201), and the
-            # lit disk tinted every pond gold. Map drawing convention (settlements/archetypes.md 'The bank is a
+            # lit disk tinted every pond gold. Map drawing convention (research/archetypes.html "The 6:4 water-to-dike ratio and coppiced mulberry" 'The bank is a
             # ring'). The two outlines come from the same draws in the same order as before, the crowns AND the
             # earth mottle still clip to `bd` ALONE (a bush or a patch may lean over the water - do not hand them
             # the ring; measured on Kuwabata, 6% of the water area at the rim still lights), the ring's inner stroke
@@ -399,7 +399,7 @@ class LandUseMixin:
         # point (water runs down OUT of it at its downhill corner). Each connects to the nearest channel OR
         # neighbor pond that lies in the right fall direction, so the whole dike-pond net runs in series
         # down the slope from the high intake to the low outfall. Drawn as `<line>` culverts (the channel
-        # z-order audit ignores them). Validated by dikeponds_fed_and_drained; see settlements.md.
+        # z-order audit ignores them). See research/archetypes.html 'A dike-pond is fed and drained through sluice gates'.
         dd = float(self.M["meta"].get("down_deg", 90))
         _dx, _dy = math.cos(math.radians(dd)), math.sin(math.radians(dd))
 
@@ -462,7 +462,7 @@ class LandUseMixin:
     def _mulberry_rows(self: Settlement, poly: Sequence[Pt], bank_d: str, cx: float, cy: float, rng: random.Random, channels: Sequence[tuple[Pt, Pt]] | None = None, crop: str = "mulberry") -> None:  # type: ignore[misc]
         """The 桑基 (mulberry-dike) half of a dike-pond unit rendered as what it is: PLANTED ground. Sparse
         earth mottle (patch-repairs, the perimeter dike's look) under two planted ROWS of coppiced mulberry
-        crowns. TRUE SCALE (settlements.md 'Polder fourth pass'): silkworm mulberry was coppiced into low
+        crowns. TRUE SCALE (research/archetypes.html 'The 6:4 water-to-dike ratio and coppiced mulberry'): silkworm mulberry was coppiced into low
         bushes with ~4-6 ft crowns in dense rows (~1 bush per 10-20 sq ft - hundreds per pond), so at
         1 px = 1 ft honest "actual trees" ARE a packed dot band; the crowns here are r 2.2-3.6 px at ~6 px
         in-row spacing (the loose end of the attested 3-5 ft, for pixel separation), never inflated glyphs.

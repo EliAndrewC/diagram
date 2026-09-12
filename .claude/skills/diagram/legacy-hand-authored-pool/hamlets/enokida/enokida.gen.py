@@ -42,11 +42,11 @@ s.draw_comb_field(net, "enokida-polder", {"kind": "pond", "pond": (_nw[0] + 44, 
 
 # the PERIMETER DIKE - the defining polder feature, an irregular hand-piled EARTHWORK BAND following the
 # natural water edge in organic non-square bends (fish-scale polder 鱼鳞圩; see s.perimeter_dike +
-# settlements.md 'Perimeter dike'). Drawn HERE (before the village) so it sits UNDER the east-side houses.
+# research/archetypes.html 'The perimeter dike followed the natural water edge'). Drawn HERE (before the village) so it sits UNDER the east-side houses.
 _env = net["envelope"]
 s.perimeter_dike(_env, seed=SEED ^ 0x6D, gaps=net["dike_sluices"])
 
-# the WATERWARD FRINGE (GM 2026-07-24, settlements.md 'Polder siting Q&A'): Enokida is a landward-MARGIN
+# the WATERWARD FRINGE (GM 2026-07-24, research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'): Enokida is a landward-MARGIN
 # polder - the village sits on the naturally dry shore to the EAST, but outside the dike on the WEST is the
 # fluctuating wet wild the polder was reclaimed from (reed marsh / mudflat at low stage, sheet water at
 # flood), and the SOUTH toe is already wet (the auto toe marsh at the outfall side). The waterside strip
@@ -64,7 +64,7 @@ _ex = max(p[0] for p in _env)
 _fcy = sum(p[1] for p in _env) / len(_env)
 CX, CY = _ex + 150, _fcy + 20
 # reserve a WINDWARD GAP over the northern third of the cluster so the NW windbreak has room east of the
-# dike while the south houses still hug the field (same rationale as Kuwabata; settlements.md 'Polder ring canal')
+# dike while the south houses still hug the field (same rationale as Kuwabata; research/archetypes.html 'Polder ring canal')
 _dike_e0 = max(p[0] for p in s.M["dikes"][0]["outline"])
 s.block_polys.append([(_dike_e0, CY - 300), (_dike_e0 + 96, CY - 300), (_dike_e0 + 96, CY - 70), (_dike_e0, CY - 70)])
 s.lane_skeleton("spine", CX, CY, 150, 300, clearance=34)
@@ -97,7 +97,7 @@ if s.M.get("field_ditches"):
 s.hinterland(interior_fill=False)  # a polder is a SOLID block - no interior voids to clothe
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=44)

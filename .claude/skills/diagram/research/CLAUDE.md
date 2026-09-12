@@ -289,3 +289,35 @@ not the record.
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
 [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md), "The references modal
 lists QUESTIONS".
+
+## The record is the ONE home per topic - the rule files retired into it (GM 2026-09-12, feature 229)
+
+The `settlements/*.md` rule files were written to tell a session how to hand-place features. Once the hamlet
+tier was scripted the GM asked whether they still earned their place, and an audit of every pair found each
+rule file to be, by bytes, mostly text already on its research page, already in the engine with its reasoning,
+or describing the validator feature 166 deleted - with a thin layer of decision record and specification that
+existed nowhere else. The GM: *"if there are ... explanations in the markdown versions of the files that explain
+what we are doing, and the research is explaining why, then that would best be combined just into the research
+files"*, and, on the tiers nothing scripts yet, *"moving those into the research pages as well is the right
+move ... those specifications will move into the scripted generators once those exist."* So since 2026-09-12:
+
+- **A research page holds, per question, three things**: the finding, the decision it drove (the GM's ruling
+  with its date and words, the alternatives declined, a fix tried and reverted with its measurement), and - for
+  a rule no generator yet encodes - the **specification** the future generator must satisfy.
+- **A specification is `<p class="spec">`, opening `<strong>The rule the map follows:</strong>`**, one per rule
+  or tight family, under the question whose finding grounds it. It speaks in the reader's terms - real feet at
+  the tier's scale (hamlet and town 1 ft per px, village 2, city and capital 3), the pixel figure in a comment
+  beside it - names no engine identifier or check in its visible text, and where the rule has no finding behind
+  it says so: a convention chosen so the feature reads at map scale, a calibration against the drawn exhibits,
+  or a guess. The class attribute is how the feature that scripts a tier finds every rule it owes and nothing
+  else; when the generator encodes a rule with its reasoning at the point of change, the paragraph is retired.
+- **A rule the engine already encodes with its reasoning is not written a second time.** The page keeps the
+  finding and the decision; the number lives in the code. Where the code's comment lacked the why the rule file
+  carried, the why moved onto the page and the comment points at the anchor.
+- **Nothing in the tree names a retired rule file.** `tests/interactive/test_record.py` holds it - by path and by
+  bare basename, judged per reference - with the same exemptions as the converted-Markdown rule (`specs/`, the
+  guard replay corpus, `README.md`) plus the frozen pre-189 class fixture. The four pages this brought into
+  being are `settlements.html` (the tiers, what a page states, waivers), `ways.html`, `presentation.html` (the
+  drawing conventions, which say they are conventions) and `cities/sizing.html`.
+- The inventory of what moved where - every decision, every specification, every finding that only a rule
+  file carried, the contradictions resolved on the way - is `specs/229-rule-files-into-research/research.md`.
