@@ -32,8 +32,7 @@ valuable, and I don't see anything there that I want to change either."*
 each edit is its own write: an anchor matching zero or more than one time is REPORTED and SKIPPED, and
 every other edit in the batch still lands. It MUST print one line per edit saying which.
 
-**FR-002** Anchors MUST match whitespace-insensitively. Three of the five anchor misses the prior session
-recorded were an anchor spanning a line wrap (`research.md` R7), so exact matching would leave the
+**FR-002** Anchors MUST match whitespace-insensitively. Four of the six anchor misses the prior session recorded were an anchor spanning a line wrap (`research.md` R7), so exact matching would leave the
 commonest miss in place.
 
 **FR-003** The root `CLAUDE.md` MUST name `_patch.py` beside its "Edit files with `Edit`" rule, which it
@@ -47,18 +46,25 @@ Plain `bash -n` is not enough: the tool runs a command through `eval` one line a
 enabled on one line governs the next, and `bash -n` with defaults refuses `shopt -s extglob` followed by
 `!(x)` while the tool runs it (`research.md` R6).
 
-**FR-004a** A Bash command carrying an unescaped backtick inside a double-quoted string MUST raise
-`additionalContext`, at exit 0, naming that it EXECUTES and suggesting `$(...)` or single quotes. This is
-the case the GM named - *"putting backticks in a place that they do not belong"* - and `bash -n` cannot
-see it, because it is valid syntax that runs (`research.md` R8). It MUST NOT refuse: `"today is
-`date`"` is deliberate substitution, so a refusal would fire on correct work. The detector SHOULD reuse
-`_hm_make.py recipe_comment_hazards`, which already finds this hazard in Makefiles.
+**FR-004a** A Bash command carrying an unescaped backtick span that bash would EXECUTE - inside a
+double-quoted string, or in the body of an UNQUOTED heredoc (`<<EOF`) - MUST be REFUSED, naming `$(...)`
+and single quotes as the fix. This is the case the GM named, in their words: *"putting backticks in a
+place that they do not belong ... have a hook detect that and then reject it early"*. `bash -n` cannot see
+it, because it is valid syntax that runs. Detection MUST walk shell quote state, so a backtick inside
+single quotes or a QUOTED heredoc body (`<<'EOF'`), which does not execute, is not refused. Measured over
+16,686 commands: 42 such spans, every one a markdown code span written into prose and none a deliberate
+substitution (`research.md` R8) - so the refusal fires on no correct work in the record, and this project
+writes deliberate substitution as `$(...)`. The detector SHOULD share its quote walk with `_hm_make.py
+recipe_comment_hazards`.
 
 **FR-005** A `git commit` MUST be REFUSED, naming the `-F -` heredoc form, when any `-m` message contains
 a double quote or a newline, or when `-m` is given more than once. This is item 3's literal ban on `-m`
-for multi-line messages. It is a refusal and not a rewrite because the motivating failure parses cleanly
-into a WRONG message - the inner quote closed the string - and a rewrite would faithfully preserve the
-wrong message (`research.md` R2 row 3). A single `-m` with no quote and no newline is untouched.
+for multi-line messages. It is a refusal and not a rewrite because the misquoted `-m` class parses cleanly
+into a WRONG message - an inner quote closes the string early - so a rewrite would faithfully preserve the
+wrong message. (The instance on record was in fact refused by `bash -n`, but only because a later `(`
+happened to fall outside the prematurely closed quote; `research.md` R2 row 3. The ban does not rely on
+that accident.) The refusal names the quoted-delimiter form `git commit -F - <<'EOF'`, whose body is
+literal - an unquoted `<<EOF` would execute any backtick in the message (FR-004a). A single `-m` with no quote and no newline is untouched.
 
 **FR-006** A commit whose trailers carry a co-author key with an address other than
 `noreply@anthropic.com` MUST be refused, naming the expected form. The key MUST match case-insensitively
@@ -80,7 +86,7 @@ Search-command segments MUST be dropped as `_hookmatch.py` already drops them.
 **FR-008** A check in `make quick` MUST scan the DELTA - lines added or changed against the merge base,
 **and every untracked file** - and fail naming file and line. Untracked files are named because the
 motivating failures were new files written through heredocs, which `git diff` against a base does not
-show. Not the whole tree: 146 pre-existing hits are ledgered in `research.md` R4.
+show. It MUST read the house-style hook's own word table (`BRIT` in `scripts/house-style-hooks.sh`), so the hook, the check and the ledger agree on one list. Not the whole tree: 161 pre-existing lines are ledgered in `research.md` R4.
 
 **FR-008a** Exemptions MUST be judged from the whole FILE, not the changed line: a line inside a multi-line
 `<blockquote>`, a 「」 quotation or a `SOURCE` block carries no opening marker of its own. It MUST carry
@@ -94,6 +100,11 @@ must not become a spelling sweep of every moved line (D7).
 
 **FR-008c** It MUST be a `make quick` PHASE rather than a pytest test: `make quick` is testmon-selected,
 and a scan whose own code never changes would sit unexecuted through the edits it exists to catch.
+
+**FR-009a** `.specify/templates/tasks-template.md` MUST carry an "American spellings, hyphens only"
+checklist line, because the GM asked for it in advance as well as checked after: *"we can have that as a
+checklist item in advance as well as having an automated check for it"*. FR-008 is the check; this is the
+checklist.
 
 **FR-009** The root `CLAUDE.md` MUST record the tension beneath FR-007: it says edit with `Edit`, while a
 session run under an instruction preferring Bash loses that guard.
@@ -156,10 +167,11 @@ second is reported, and the file carries both; an anchor spanning a line wrap ma
 **SC-002** (FR-004) The 238-command corpus of `research.md` R6 replayed through the hook refuses exactly
 the two commands that failed at run time and nothing else, and the `shopt -s extglob` then `!(x)` case
 passes.
-**SC-003** (FR-004a) `echo "use `make quick` first"` warns naming the execution; the same text in single
-quotes does not.
+**SC-003** (FR-004a) `echo "use `make quick` first"` is refused naming `$(...)`; so is a backtick span in
+an unquoted `<<EOF` body; the same text in single quotes, and in a quoted `<<'EOF'` body, is not.
 **SC-004** (FR-005) A `-m` message containing a double quote is refused; one containing a newline is
-refused; two `-m` flags are refused; a single plain `-m` is untouched.
+refused; two `-m` flags are refused; each refusal names `git commit -F - <<'EOF'`; a single plain `-m`
+is untouched.
 **SC-005** (FR-006) A message carrying both `Co-Authored-By:` with the expected address and a
 `Claude-Session:` line passes; a `co-authored-by:` key with another address is refused; another address
 supplied through `--trailer` is refused; so is one in a file given to `-F`.
@@ -167,7 +179,7 @@ supplied through `--trailer` is refused; so is one in a file given to `-F`.
 or a backtick span does not; `git grep -n "centre"` does not.
 **SC-007** (FR-008, FR-008a, FR-008b, FR-008c) The phase fails on a British spelling in a changed line and
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
-the delta; does not fail on a line merely moved; does not fail on the 146 ledgered hits; and runs on a
+the delta; does not fail on a line merely moved; does not fail on the 161 ledgered lines; and runs on a
 delta that changes no Python.
 **SC-008** (FR-010, FR-010a, FR-010c, FR-011) Each of the four checks fails on a constructed fixture; a
 withdrawn figure narrated in Decisions recorded does not fail check 2, and one standing in a file outside
@@ -177,6 +189,7 @@ passes; the lint runs at gate and push over the touched `specs/` directories.
 **SC-010** (FR-012, FR-013, FR-014) The agent file documents VERIFY mode, and a review task generated from
 the template for any round after the first names the changed passages and asks for a full reading of
 those alone.
+**SC-014** (FR-009a) The tasks template carries the "American spellings, hyphens only" checklist line.
 **SC-011** (FR-003, FR-009) The root `CLAUDE.md` names `_patch.py` beside the `Edit` rule and records the
 Edit-versus-Bash tension.
 **SC-012** (spec-wide) Every check is proven to FIRE by removing its mechanism and watching a test go red.
@@ -201,8 +214,10 @@ the tool runs; it holds for the parse FR-004 specifies. The replay of 238 real c
 positive (`research.md` R6).
 
 **D4 - `-m` with a quote or newline is refused, not rewritten.** Item 3 says "banning". A rewrite was
-drafted twice and dropped both times: the failure it targets parses into the wrong message, so any
-rewrite preserves the wrong message exactly.
+drafted twice and dropped both times: the misquoted class parses into the wrong message, so any rewrite
+preserves the wrong message exactly. An earlier draft also claimed the motivating commit "parses
+cleanly"; it was in fact caught by `bash -n` - by the accident of a later `(` (`research.md` R2 row 3) -
+which is exactly why the ban stands on its own rather than on that parse.
 
 **D5 - the withdrawn-figure check is kept, scoped to `specs/`, with its limit recorded.** An earlier draft
 dropped it, and the review of this spec ruled that a narrowing no one approved: item 5 names the check,
@@ -211,9 +226,11 @@ findings. What it cannot reach is text outside `specs/`, where feature 234's fiv
 (`research.md` R5). Reaching that means a tree-wide scan, a different mechanism than the `spec-lint`
 approved.
 
-**D6 - a backtick inside double quotes WARNS rather than refusing.** It is the case the GM named and
-`bash -n` misses (`research.md` R8), but it is sometimes deliberate command substitution, so a refusal
-would fire on correct work.
+**D6 - an executing backtick is REFUSED.** An earlier draft only warned, on the reason that a backtick in
+double quotes is sometimes deliberate command substitution. That reason was never measured, and the
+measurement contradicts it: 42 executing spans across 16,686 commands, zero deliberate (`research.md` R8).
+A warning at exit 0 lets the command run anyway - including `cd /diagram` and `git init --bare`, both in
+the record - so it makes no single mistake cheaper, and the GM asked that it be rejected early.
 
 **D7 - a moved line is not in the delta.** A file split forced by the 1,000-line gate moves lines without
 authoring them; counting them would make every split a spelling sweep. A line whose content changed is in
@@ -222,7 +239,7 @@ the delta and owes the fix.
 ## Out of scope
 
 - The research record and the agents that read it; the GM ruled it valuable as it stands.
-- The 146 pre-existing British spellings, ledgered by area in `research.md` R4 under Principle XIII.
+- The 161 pre-existing lines of British spelling, ledgered by area in `research.md` R4 under Principle XIII.
 - Reducing review rounds by lowering the bar: this removes rounds by making their cheap findings
   impossible, never by asking the reviewer for less.
 

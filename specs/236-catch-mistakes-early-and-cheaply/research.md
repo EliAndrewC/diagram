@@ -44,7 +44,7 @@ could have caught it.
 |---|---|---|
 | 1 | Three patch scripts aborted on a cosmetic anchor and DISCARDED substantive edits alongside it (once silently losing seven good edits) | **YES** - the scripts accumulated substitutions in memory and wrote at the end, so any assert discarded everything. A helper that writes per edit makes the failure impossible |
 | 2 | `sed -i 's/...GM's ruling.../'` - an apostrophe inside a single-quoted expression | **YES** - `bash -n` reports it as a syntax error in milliseconds, before the round trip |
-| 3 | `git commit -m "...said \"the pond's own center\"..."` - inner double quotes ended the string, producing a cascade of bogus pathspecs | **PARTLY** - it is VALID bash doing the wrong thing, so `bash -n` cannot see it; banning `-m` for multi-line messages in favor of `-F -` kills the class |
+| 3 | `git commit -m "...said \"the pond's own center\"..."` - inner double quotes ended the string, producing a cascade of bogus pathspecs | **PARTLY, and only by accident** - the misquoted `-m` class parses cleanly unless a LATER character happens to break it. This instance was refused by `bash -n` (R6) only because the `(` in a later trailer's `(1M context)` fell outside the prematurely closed quote. Remove that `(` and it parses. Banning `-m` for quote- or newline-carrying messages kills the class rather than relying on the accident |
 | 4 | A placeholder address (`duplicate@anthropic.com`) landed in a `Co-Authored-By` trailer from a shell fallback branch that was never meant to run | **YES** - the expected attribution line is known and exact |
 | 5 | Every British spelling introduced this session went unchecked | **YES, and the hole is already known** - see R3 |
 | 6 | A commit landed on a red `page-check` | **YES but DECLINED** - mid-task commits on red are legitimate and sacred here, so a guard would fire on correct work, which is this project's stated bar for not building one |
@@ -71,8 +71,7 @@ the second lost the first's guard.
 
 ## R4 - the tree is not clean, so a tree-wide style check cannot be the design (measured 2026-09-12)
 
-The GM asked for the British-spelling check "in, for example, our quick tests". Measured before specifying
-it: `git grep` over tracked files excluding `.clones/`, on the common British forms, returns **146 hits**.
+The GM asked for the British-spelling check "in, for example, our quick tests". Measured before specifying it, with the house-style hook's OWN word table - the 44 words of `BRIT` in `scripts/house-style-hooks.sh`, so the check and this ledger read the same list - `git grep -nIE` over tracked files excluding `.clones/` and this feature's directory returns **161 lines in 72 files**. (An earlier draft said 146, from an ad-hoc list it never recorded; the root `CLAUDE.md` table gives a different count again. The figure is only reproducible against a named list, which is why it is now the hook's.)
 They are spread across engine comments, docs, test names, `scripts/fixtures/`, a Makefile comment and four
 research citations pages - and the citations hits are inside 「」 quotations, where the house-style rule
 explicitly exempts them.
@@ -102,10 +101,10 @@ over tracked files excluding `.clones/` and this feature's own directory:
 
 A sweep of them is its own work and wants the GM.
 
-Zero of the 146 are in `specs/*/request.md`, which is the one place Principle V forbids touching - checked,
+Zero of the 161 are in `specs/*/request.md` (re-checked against the hook's table), which is the one place Principle V forbids touching - checked,
 because a check that corrected the GM's own words would be worse than no check.
 
-## R5 - the `WITHDRAWN:` rule, priced and DROPPED from this feature
+## R5 - the withdrawn-figure check, and why it cannot reach outside `specs/`
 
 The failure it aimed at is real and documented: feature 234's withdrawn measurement survived in five
 shipped places. But the rule as first specified fails in both directions, and the review of this spec
@@ -118,9 +117,7 @@ demonstrated both against feature 234 itself:
   least six places outside the withdrawing line - in decision records and review history, which is exactly
   the behavior this project requires of a decision that was reversed.
 
-A rule that would reach the real surface has to scan the whole tree, which is a broadening beyond the
-`spec-lint` the GM approved. **Dropped from feature 236 and recorded here** with the measurement, so the
-next session inherits the finding rather than the idea.
+**So the check is KEPT, redesigned, and bounded** (spec D5, FR-010 check 2). The two faults are fixes to the first design, not reasons to deliver nothing: narration is exempted by SECTION (Decisions recorded and Review history exist to narrate a reversal), and the marked text must be at least twelve characters and contain a letter, so a bare number cannot be banned. What it still cannot reach is text outside `specs/` - where all five of feature 234's survivals were. Reaching that is a tree-wide scan, a different mechanism from the `spec-lint` approved, and that limit is recorded rather than solved.
 
 
 ## R6 - `bash -n` replayed over every command this project actually ran (measured 2026-09-12)
@@ -153,7 +150,7 @@ is added to it by hand.
 
 ## R7 - how anchor misses actually happen (measured 2026-09-12)
 
-The prior session recorded **5** patch anchor misses. Read against the fix each one needed:
+The prior session recorded **6** patch anchor misses. Read against the fix each one needed:
 
 | anchor | what was wrong | fixed by |
 |---|---|---|
@@ -162,8 +159,9 @@ The prior session recorded **5** patch anchor misses. Read against the fix each 
 | "the declined widening, without the draft" | the sentence was split across lines | splitting the edit at the wrap |
 | "three worst sties stand 0.13, 0.03 and 0.08..." | the text had already been changed | a new anchor |
 | "D6's open door (doctrine-unenforced..." | the text was never there | dropping the edit |
+| "(see the Review history, round 4 of `settlement-review`..." | spanned a line wrap ("round 4 / of `settlement-review`") | whitespace-insensitive matching |
 
-**Three of five were line wraps.** That is the measurement behind whitespace-insensitive anchors, and it is
+**Four of six were line wraps.** That is the measurement behind whitespace-insensitive anchors, and it is
 also why the mid-session fix was the regex matcher every later patch used.
 
 ## R8 - backticks that PARSE and RUN (measured 2026-09-12)
@@ -183,5 +181,17 @@ exactly how this project's Makefile recipe-comment guard came to exist, after a 
 `make test-full` from inside `make test-full` and recursed 914 levels. That guard (`_hm_make.py
 recipe_comment_hazards`) covers Makefiles only.
 
-This form is NOT always wrong - `"today is `date`"` is deliberate substitution - so it cannot simply be
-refused without firing on correct work. It can be WARNED on for free.
+**Measured, and the measurement settles refuse-versus-warn.** Across the 60 most recent transcripts,
+16,686 Bash commands were walked character by character tracking shell quote state - so a backtick inside
+SINGLE quotes, which does not execute, is not counted, and a quoted heredoc body (`<<'X'`) is skipped as
+literal. **42 backtick spans sat inside double quotes and would have executed.** Every one readable is a
+markdown code span written into prose - `finish`, `targets()`, `## Map notes`, `close_seams` - and
+several would have done real damage had they run: `cd /diagram` enters main's tree, `git init --bare`,
+`sync-in`, `find`. **None was deliberate command substitution.** (A first pass with a one-line regex
+counted 135, because it matched backticks inside single quotes straddled by stray double quotes; that
+figure is wrong by construction and is not used.)
+
+So an earlier draft's reason for only warning - that `"today is `date`"` is sometimes deliberate - is
+contradicted by the data: zero of 42. And this project writes deliberate substitution as `$(...)`. The
+check REFUSES, naming `$(...)` and single quotes as the fix, which is the GM's own word: *"reject it
+early"*. A backtick in an UNQUOTED heredoc body (`<<EOF`) executes the same way and is caught the same way.
