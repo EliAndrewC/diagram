@@ -282,7 +282,7 @@ WEST_SUN_FT = 50.0
 # `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
-# overlay, which is what it is historically too (research/archetypes.html "The three overlay values":
+# overlay, which is what it is historically too (research/archetypes.html "The three overlays a village may carry":
 # the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
 # of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
@@ -324,7 +324,7 @@ POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
-# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks".
+# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks?".
 MANURE_FORMS = ("heap", "pit")
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
 # settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).

@@ -340,6 +340,9 @@ window.RECORD_GLOSSARY = [
   "term": "machiya",
   "variants": [
    "kyo-machiya",
+   "shop-house",
+   "shophouses",
+   "shophouse",
    "machiya"
   ],
   "def": "A townhouse: a merchant's or artisan's house on a narrow street frontage and a deep lot, shop at the front and living quarters behind."
@@ -1188,8 +1191,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "shuikou",
   "variants": [
-   "water mouth",
-   "water-mouth",
    "shuikou"
   ],
   "def": "The water mouth: the fengshui grove at a Chinese village's entrance, where its stream flows out of the village."
@@ -1312,6 +1313,7 @@ window.RECORD_GLOSSARY = [
    "post stations",
    "post station",
    "post towns",
+   "yi network",
    "post town",
    "shukuba",
    "yizhan",
@@ -1873,7 +1875,8 @@ window.RECORD_GLOSSARY = [
   "term": "revetment",
   "variants": [
    "revetments",
-   "revetment"
+   "revetment",
+   "revetted"
   ],
   "def": "A bank faced with stone or timber to hold it against the water."
  },
@@ -1976,7 +1979,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "lulu",
   "variants": [
-   "windlass",
    "lulu"
   ],
   "def": "A windlass on a frame over a well, the usual water-lifting gear of north China."
@@ -2364,11 +2366,15 @@ window.RECORD_GLOSSARY = [
   "term": "comb",
   "variants": [
    "comb layout",
+   "field combs",
    "comb field",
+   "field comb",
    "comb maps",
    "comb net",
    "comb fan",
-   "comb map"
+   "comb map",
+   "combs",
+   "comb"
   ],
   "def": "The fan-shaped field layout these maps draw: a head race forking into a canal along each margin, with delivery ditches running down between the columns of paddy like a comb's teeth."
  },
@@ -3320,6 +3326,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "water duty",
   "variants": [
+   "irrigation duty",
    "duty of water",
    "water duty",
    "true duty"
@@ -3690,9 +3697,10 @@ window.RECORD_GLOSSARY = [
  {
   "term": "water-mouth",
   "variants": [
-   "water-mouth"
+   "water-mouth",
+   "water mouth"
   ],
-  "def": "The low point where a village's stream and track leave the valley - the place a grove is planted to hold the water in."
+  "def": "The low point where a village's stream and track leave the valley, and the grove planted there to hold the water in - the shuikou of a Chinese village."
  },
  {
   "term": "masson pine",
@@ -3959,5 +3967,246 @@ window.RECORD_GLOSSARY = [
    "omamori"
   ],
   "def": "An amulet bestowed by a shrine or temple in return for an offering."
+ },
+ {
+  "term": "glyph",
+  "variants": [
+   "glyphs",
+   "glyph"
+  ],
+  "def": "The mark a map draws to stand for a feature - a shape chosen so the thing reads at map scale, which is not always the shape the thing has."
+ },
+ {
+  "term": "hachure",
+  "variants": [
+   "hachures",
+   "hachure"
+  ],
+  "def": "Short lines drawn down a slope on an old map to show how steep it is, in place of contour lines."
+ },
+ {
+  "term": "coefficient of variation",
+  "variants": [
+   "coefficient of variation"
+  ],
+  "def": "A measure of how unequal a set of lengths is - their spread divided by their average - so a quarter means they typically differ from the average by about a quarter of it."
+ },
+ {
+  "term": "Tohoku",
+  "variants": [
+   "Tohoku",
+   "Tōhoku",
+   "Nanbu"
+  ],
+  "def": "The cold, snowy northeast of Japan's main island: the country of the igune homestead grove, where the stable often stands under the dwelling's own roof."
+ },
+ {
+  "term": "sigma",
+  "variants": [
+   "sigma"
+  ],
+  "def": "The width of a lognormal spread: the larger it is, the further the biggest and smallest cases run from the median."
+ },
+ {
+  "term": "Rokugan",
+  "variants": [
+   "Rokugani",
+   "Rokugan"
+  ],
+  "def": "The empire these maps are drawn for: the Legend of the Five Rings world the campaign is set in."
+ },
+ {
+  "term": "tanglao",
+  "variants": [
+   "tanglao",
+   "塘泺"
+  ],
+  "def": "The belt of ponds and marsh the Northern Song dug across the Hebei frontier from 989, as ground cavalry could not cross."
+ },
+ {
+  "term": "EUNIS",
+  "variants": [
+   "EUNIS"
+  ],
+  "def": "The European habitat classification, which names the layers of a woodland edge."
+ },
+ {
+  "term": "daikon",
+  "variants": [
+   "daikon"
+  ],
+  "def": "The long white radish, a staple of the household's winter vegetable bed."
+ },
+ {
+  "term": "extramural",
+  "variants": [
+   "extramural"
+  ],
+  "def": "Outside the walls - a suburb, a temple or a market quarter standing beyond a town's wall rather than within it."
+ },
+ {
+  "term": "tamajari",
+  "variants": [
+   "tamajari"
+  ],
+  "def": "The gravel spread over a shrine's approach, laid to purify the ground it covers."
+ },
+ {
+  "term": "stupa",
+  "variants": [
+   "stupas",
+   "stupa"
+  ],
+  "def": "A stone memorial tower raised over relics or ashes - the marker over a communal grave, or the ancestral markers of a clan crypt."
+ },
+ {
+  "term": "ear mound",
+  "variants": [
+   "ear mound",
+   "mimizuka"
+  ],
+  "def": "The monumental Kyoto mound heaped over war trophies, cited only as the upper bound on how large a heaped mound ran."
+ },
+ {
+  "term": "Bon",
+  "variants": [
+   "Obon",
+   "Bon"
+  ],
+  "def": "The midsummer festival of the returning dead, when a household visits and tends its grave."
+ },
+ {
+  "term": "Jodo",
+  "variants": [
+   "Jōdo",
+   "Jodo"
+  ],
+  "def": "The Pure Land school of Japanese Buddhism, the largest parish network of the Edo period."
+ },
+ {
+  "term": "nunosarashi",
+  "variants": [
+   "nunosarashi"
+  ],
+  "def": "Cloth-bleaching: rinsing dyed bolts in open running water, which is the dyer's reason for river or channel frontage."
+ },
+ {
+  "term": "cursus publicus",
+  "variants": [
+   "cursus publicus"
+  ],
+  "def": "The Roman state's courier and transport relay network, its stations a day's travel apart."
+ },
+ {
+  "term": "hipposandal",
+  "variants": [
+   "hipposandals",
+   "hipposandal"
+  ],
+  "def": "A Roman iron hoof boot strapped to a horse's foot rather than nailed to it."
+ },
+ {
+  "term": "yam",
+  "variants": [
+   "Mongol Yam",
+   "Yam"
+  ],
+  "def": "The Mongol empire's horse-relay post system, by which a rider changed mounts and rode on."
+ },
+ {
+  "term": "zaofang",
+  "variants": [
+   "zaofang"
+  ],
+  "def": "The Chinese brewery: the vat hall and yard where grain liquor was made."
+ },
+ {
+  "term": "kane-yaku-sen",
+  "variants": [
+   "kane-yaku-sen"
+  ],
+  "def": "The bell fee: the monthly copper charge on every household reckoned to be within earshot of a licensed time bell."
+ },
+ {
+  "term": "dBA",
+  "variants": [
+   "dBA"
+  ],
+  "def": "A-weighted decibels - loudness measured the way a human ear weights it."
+ },
+ {
+  "term": "Qingming Shanghe Tu",
+  "variants": [
+   "Qingming Shanghe Tu",
+   "清明上河図"
+  ],
+  "def": "The Song handscroll Along the River During the Qingming Festival, the fullest surviving picture of a Chinese city's street life."
+ },
+ {
+  "term": "solidity",
+  "variants": [
+   "solidity"
+  ],
+  "def": "How much of its own convex outline a shape fills: the measure of how deeply a parcel is bitten into, 1.0 being a shape with no notch at all."
+ },
+ {
+  "term": "design cell",
+  "variants": [
+   "design cell"
+  ],
+  "def": "The size of leveled basin a field is laid out to, and the size every plot in that field is measured against."
+ },
+ {
+  "term": "umon",
+  "variants": [
+   "umon"
+  ],
+  "def": "A walled-up postern: a small gate through a Japanese wall, kept blocked except when it is wanted."
+ },
+ {
+  "term": "curtain",
+  "variants": [
+   "curtain wall",
+   "curtain"
+  ],
+  "def": "The stretch of wall between two towers - the plain face an attacker meets, covered by the towers to either side."
+ },
+ {
+  "term": "ura-dana",
+  "variants": [
+   "ura-dana"
+  ],
+  "def": "The back shop: a row house behind the street frontage, its one door opening on the back lane."
+ },
+ {
+  "term": "river stage",
+  "variants": [
+   "river stage",
+   "flood stage",
+   "low stage"
+  ],
+  "def": "The height of a river's water surface, which rises and falls through the year by many feet."
+ },
+ {
+  "term": "bed shear stress",
+  "variants": [
+   "bed shear stress"
+  ],
+  "def": "The drag the flow exerts on a channel's bed, which is what scours it."
+ },
+ {
+  "term": "Keicho",
+  "variants": [
+   "Keicho-era",
+   "Keicho"
+  ],
+  "def": "The Japanese era 1596 to 1615, at the founding of the shogunate."
+ },
+ {
+  "term": "Mengxi Bitan",
+  "variants": [
+   "Mengxi Bitan"
+  ],
+  "def": "Shen Kuo's 11th-century Dream Pool Essays, a Song notebook of technical observation."
  }
 ];

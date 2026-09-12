@@ -10,7 +10,7 @@ the segregated burakumin neighborhood, and a small guan-xiang gate-market lie ou
 surrounding farmers retreat inside during a raid. The hill's steep back defends the north
 flank; the Imperial chrysanthemum field abuts the inside of the west rampart.
 
-WATER (the water-first comb doctrine, research/fields.html 'Water-first v2 - pond distribution and the three layout modes'; this replaced
+WATER (the water-first comb doctrine, research/fields.html 'Where does a field's water come from, and how is it shared out?'; this replaced
 the retired legacy paddy_field quilts this map originally used): the land falls SOUTH
 (downhill="south" / down_deg=90), and every field is a build_comb fan with a real source and
 a real sink:

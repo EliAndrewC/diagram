@@ -106,8 +106,8 @@ The taper RULE is Tabayashi's; the taper's SHAPE is what this entry examines.</p
   gathers tail-water the same way in reverse. Uniform shedding over a run is Q linear in the fraction
   traveled.</li>
 </ul>
-<p><em>The decision it drove.</em> <code>w(t) = sqrt(w0^2 + (w1^2 - w0^2) * t)</code> - the width SQUARED interpolates
-linearly, because the width squared is what tracks the discharge.<!-- One shared rule serves every place the
+<p><em>The decision it drove.</em> The width SQUARED interpolates
+linearly along the run<!-- w(t) = sqrt(w0^2 + (w1^2 - w0^2) * t) -->, because the width squared is what tracks the discharge.<!-- One shared rule serves every place the
 engine needs a channel's local width - the drawn stroke and the clearance the bunds keep from the bank
 alike - so a second formula can never lay a bund inside the water. --></p>
 <!-- One shared helper, taper_w, because seven call sites needed the local width and every one of them had re-derived the straight line separately; the bund bank-clearance the gate reads is one of them, so two formulas here would draw a bund inside the water. -->
@@ -208,7 +208,7 @@ then hand over to something that is not a channel at all.</p>
 <li><strong>The finest tier is far below our visibility floor.</strong> The ladder above puts a field ditch at ~0.3 m -
   about <strong>1 ft, i.e. one pixel at hamlet scale</strong> and a third of a pixel at city scale. The tier we
   actually stop at, ~1 m / ~3 ft, is the <em>distribution lateral</em>, and drawing one grade finer would put
-  the stroke below the sanctioned ~2.5 px minimum-visibility floor and collapse the hierarchy the
+  the stroke below the sanctioned minimum-visibility floor - about 2.5 ft at hamlet scale<!-- ~2.5 px --> - and collapse the hierarchy the
   water-width ladder exists to keep legible.</li>
 <li><strong>And in a PRE-MODERN system the last tier is frequently not a channel at all.</strong> Before land
   consolidation, Japanese paddy was watered 田越し灌漑 (<em>tagoshi kangai</em>) - plot-to-plot: water enters
@@ -340,10 +340,10 @@ the minimum channel width, 1.5 px<!-- MIN_CHANNEL_PX; "the single scale-dependen
 its true width or the floor, whichever is larger. The coarser the sheet, the more of the ladder
 collapses onto that floor. This is the honest form of the minimum-visibility convention the water-width
 ladder already sanctions - a floor on the finest tier.</p>
-<p><em>Measured on Inashiro (1 ft/px).</em> Head-race 6.0 px; canal A 4.5;
-delivery ditches 2.5 at the head and 1.5 at the tail; drain outfall 5.5. The
+<p><em>Measured on Inashiro, which draws at a foot to the pixel.</em> Head-race 6.0 ft; canal A 4.5;
+delivery ditches 2.5 at the head and 1.5 at the tail; drain outfall 5.5.<!-- the same figures in sheet pixels --> The
 paddy fabric dominates the sheet and the water reads as a fine engineered net over it, rather than
-as blue ropes laid across the crop. The hierarchy survives the narrowing (6.0 &gt; 4.5 &gt; 4.0 &gt; 2.5 &gt; 1.5,
+as blue ropes laid across the crop. The hierarchy survives the narrowing (6.0 &gt; 4.5 &gt; 4.0 &gt; 2.5 &gt; 1.5 ft,
 a 4:1 span) because the floor sits below the finest tier rather than on top of it.</p>
 <!-- What it changed: head-race 14 -> 6.0 px; canal A 12.4 -> 4.5; delivery ditches 8.0 -> 2.5 at the head and 3.0 -> 1.5 at the tail; drain outfall 12.0 -> 5.5 -->
 <p><em>The departure we are taking knowingly.</em> The floor is a real, if small, inflation of the finest tier
@@ -370,16 +370,16 @@ at the takeoff, and a mid-block sub-ditch at 0.75 of the delivery it branches of
 The cap only bites low in the tree, where the parent has already dwindled - at the first offtake the
 delivery keeps its full tier.<!-- _canal_ft is now the single definition of a canal's width profile, read both by the drawing pass and by the thread constructor that sizes the delivery, because the previous arrangement had that profile written out in one place and nowhere in the other. --></p>
 <p><em>What was deliberately NOT done.</em> Deriving the delivery's width from the flow the parent sheds at that
-offtake - <code>sqrt(w_before^2 - w_after^2)</code> - is the physically exact version and was rejected: it is
+offtake<!-- sqrt(w_before^2 - w_after^2) --> is the physically exact version and was rejected: it is
 conservation at junctions by another name, which the 2026-08-16 ruling forbids, and it makes a
 delivery's width depend on how steeply its parent happens to taper there. The cap is the weaker and
 sufficient guarantee. Measured on Inashiro: <strong>zero inversions</strong>, every delivery head
-(1.8-2.5 px) below its parent's local width (2.2-4.5 px).<!-- measured from the SVG's per-piece stroke widths rather than from the manifest's declarations --></p>
+(1.8-2.5 ft) below its parent's local width (2.2-4.5 ft).<!-- the same figures in sheet pixels, Inashiro drawing at 1 ft/px; measured from the SVG's per-piece stroke widths rather than from the manifest's declarations --></p>
 <p><em>One asymmetry, and it was measured rather than chosen.</em> A delivery is capped against its canal's
 LOCAL width; a mid-block SUB-ditch is capped against its parent delivery's <strong>HEAD</strong>. Sizing the sub
 against the local width too is worse: at true scale a delivery is
-~2.2 ft a third of the way down, so 0.75 of that is 1.64 ft, which against the 1.5 px visibility
-floor leaves a sub-ditch <strong>0.14 px of room to taper in</strong>. The taper rule (a tail under 0.85 of the
+~2.2 ft a third of the way down, so 0.75 of that is 1.64 ft, which against the visibility floor -
+1.5 ft at hamlet scale<!-- 1.5 px --> - leaves a sub-ditch <strong>0.14 ft of room to taper in</strong><!-- 0.14 px -->. The taper rule (a tail under 0.85 of the
 head) rejected it on <strong>22 of 24</strong> test maps, and rightly - a ditch that cannot taper should
 not be drawn claiming to.<!-- "22 of 24 cohort maps"; delivery_ditches_taper (w_tail < 0.85 * w). So the docs were corrected to match the code rather than the reverse. --></p>
 <h2 id="what-drawing-at-true-size-left-open">What drawing at TRUE SIZE left open</h2>
@@ -421,8 +421,8 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
   ever wanted, is NOT a wider clearance - a wider one frees ground that re-packs something else (not the guard's floor: those costs are priced in the comment above). It is to CHAMFER
   the offending corner in a repair pass after the boundary points are placed: measure true
   perpendicular distance to the nearest stroke and cut the corner back along its own two edges, which
-  frees a few square feet rather than a whole cell and therefore cannot move anything else. -->
-- <strong>The taper is SUB-PERCEPTUAL at true scale - RULED ON, not merely noticed.</strong> The GM looked at the
+  frees a few square feet rather than a whole cell and therefore cannot move anything else. --></p>
+<p><strong>The taper is SUB-PERCEPTUAL at true scale - RULED ON, not merely noticed.</strong> The GM looked at the
   finished map and asked the right question: <em>"Is that getting narrower as it goes down into the
   fields, or along the edge at the top, though? It doesn't visually look like it is."</em> It is not.
   What matters here is the GRADIENT, not the ratio, and the two had been quietly conflated:</p>
@@ -432,37 +432,37 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
 <th>stroke</th>
 <th>run</th>
 <th>width</th>
-<th>px lost per 100 px</th>
+<th>ft lost per 100 ft<!-- px lost per 100 px; Inashiro draws at a foot to the pixel --></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>canal A (the top edge)</td>
-<td>1,504 px</td>
+<td>1,504 ft</td>
 <td>4.5 -&gt; 1.5</td>
 <td><strong>0.20</strong></td>
 </tr>
 <tr>
 <td>delivery ditch (down into the fields)</td>
-<td>~500 px</td>
+<td>~500 ft</td>
 <td>2.5 -&gt; 1.5</td>
 <td><strong>0.20</strong></td>
 </tr>
 <tr>
 <td>canal B (short west arm)</td>
-<td>343 px</td>
+<td>343 ft</td>
 <td>4.0 -&gt; 1.5</td>
 <td>0.73</td>
 </tr>
 <tr>
 <td><em>a delivery drawn ~3x oversize</em></td>
-<td>540 px</td>
+<td>540 ft</td>
 <td>8.0 -&gt; 3.0</td>
 <td><em>0.93</em></td>
 </tr>
 </tbody>
 </table>
-<p>So a delivery sheds ONE PIXEL over five hundred, and canal A three over fifteen hundred. The ink is
+<p>So a delivery sheds ONE FOOT of width over five hundred, and canal A three over fifteen hundred. The ink is
   monotone and the head-to-tail ratio is honest, so the two ENDS of a canal differ plainly side by
   side - but there is no gradient to follow along a stroke, and canal B is the only one that reads,
   because it is short. Canal A's gradient is identical to a delivery's; only its total drop is larger.</p>
@@ -475,8 +475,8 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
   <strong>x1.5</strong> (delivery 3.75 -&gt; 1.8, gradient 0.39) and <strong>x2</strong> (5.0 -&gt; 2.4, gradient 0.52), each a single
   documented multiplier preserving every relative size. <strong>The GM chose true size.</strong> Recorded here so
   a future reader meets a deliberate trade rather than an apparent bug.<!-- do not re-inflate the net to
-  make the taper show, and do not write doctrine promising a reader they will see it -->
-- <strong>A plank is laid only over water you cannot stride across.</strong> A plank bridge is a real object a household builds and
+  make the taper show, and do not write doctrine promising a reader they will see it --></p>
+<p><strong>A plank is laid only over water you cannot stride across.</strong> A plank bridge is a real object a household builds and
   maintains, and nobody builds one over something they step over.<!-- FIXED 2026-08-17. The rule had been about LENGTH alone - any ditch over ~140 px got a plank about midway - which was harmless while the net was oversize and absurd at true size: eight of Inashiro's fifteen bridges decked water 1.7-2.3 ft wide, with 3-4 ft abutments each side. The geometry had tracked the narrowing correctly (spans fell 18.4 -> 10.5 px, nothing short or floating); it was the FEATURE's justification that did not travel. --></p>
 <p>The line is judged on the ditch's WIDEST point (a run wide at its head and a thread at its tail is worth
   a crossing somewhere, and the plank is seated where the water is wide enough for one).<!-- "and the placer slides to find where), and the placer PREFERS wide seats rather than
@@ -504,7 +504,7 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
   general shape: when a placer has constraints its checker cannot model, a hard refusal on a shared
   rule will always find the gap between them - make the shared rule a PREFERENCE on the placer's side
   and tighten the checker's own question instead. -->
-<p>- <strong>RULED 2026-08-26 (GM): the line is 2.0 ft.</strong><!-- feature 133 T11; the line moved from 3.0 ft to 2.0 ft --> The GM asked
+<p><strong>RULED 2026-08-26 (GM): the line is 2.0 ft.</strong><!-- feature 133 T11; the line moved from 3.0 ft to 2.0 ft --> The GM asked
   of the reference hamlet: <em>"I think there should probably be plank bridges over the irrigated
   channels in a few places. Right? Or are these too narrow for that? They don't look too narrow. Is
   it intentional that they're missing or an oversight?"</em><!-- It was intentional - the 2026-08-17 line above - but the 3.0 ft figure was a session's reading of "a stride", never researched and never put to the GM. --> The research pass (web, Japanese and English, six queries): the traditional
@@ -521,15 +521,15 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
   The three branch planks sit at the TAIL of each branch's qualifying run, 160-250 ft below the head,
   each on a bund crossing mid-field - accepted, since a head seat would stand ~120 ft from the canal
   plank at the junction. The parallel pair at x~2225/2240 has one branch planked and its twin 12 ft
-  away not, the price of two deliveries running 5-25 ft apart for 300 ft. And at 2.7 px against
-  3.0-3.7 px, the unplanked 1.8 ft branches are indistinguishable from the planked ones on the page:
-  the map shows some branches with a crossing and some without.<!-- Review record (settlement-review, pass): the tail seating is because n is counted over the qualifying run while the slot's base is still mid-ditch, and the wide-first sort takes the qualifying seat nearest it. The width under a seat is taper_w (square-root taper); the review's linear read gave 1.95 ft for one seat that the authoritative taper puts at or above 2.0 - so that is the measurement to use, not w -> w_tail interpolated linearly. The parallel pair is pre-existing geometry, not worth a rule. -->
-- <strong>ACCEPTED (not fixed) 2026-08-17: the visibility floor lands exactly on the paddy bund's stroke
-  width.</strong> The channel floor is 1.5 px and the bund at hamlet grain is also 1.5, so the finest water tier
+  away not, the price of two deliveries running 5-25 ft apart for 300 ft. And at 2.7 ft of drawn width against
+  3.0-3.7<!-- 2.7 px against 3.0-3.7 px at 1 ft/px -->, the unplanked 1.8 ft branches are indistinguishable from the planked ones on the page:
+  the map shows some branches with a crossing and some without.<!-- Review record (settlement-review, pass): the tail seating is because n is counted over the qualifying run while the slot's base is still mid-ditch, and the wide-first sort takes the qualifying seat nearest it. The width under a seat is taper_w (square-root taper); the review's linear read gave 1.95 ft for one seat that the authoritative taper puts at or above 2.0 - so that is the measurement to use, not w -> w_tail interpolated linearly. The parallel pair is pre-existing geometry, not worth a rule. --></p>
+<p><strong>ACCEPTED (not fixed) 2026-08-17: the visibility floor lands exactly on the paddy bund's stroke
+  width.</strong> The channel floor is 1.5 ft at hamlet grain and the bund is also 1.5<!-- 1.5 px each -->, so the finest water tier
   is drawn at precisely the width of the field boundaries it runs among, separated only by hue.
-  <strong>A floor of 1.2 was tried and rejected</strong>: the floor is not cosmetic - it also sets the clearance
+  <strong>A floor of 1.2 ft was tried and rejected</strong><!-- 1.2 px -->: the floor is not cosmetic - it also sets the clearance
   the bunds keep from a supply channel, so lowering it moves every bund that hems a supply stroke and
-  re-welds the plot seams. <strong>A floor of 1.2 broke the paddy seams of two of twenty-four test maps
+  re-welds the plot seams. <strong>A floor of 1.2 ft broke the paddy seams of two of twenty-four test maps
   that hold at 1.5.</strong> A cosmetic ambiguity does not buy two broken maps.<!-- "Against the 24-seed cohort, 1.2 broke the paddy seams of two maps (22/24 -> 20/24) that pass at 1.5."; MIN_CHANNEL_PX is 1.5 and aze_w at hamlet grain is also 1.5; 1.2 was implemented and reverted: the constant feeds supply_bank_clearance, and close_seams then welds a different set of scraps; isolated by reverting that one line against the 24-seed cohort, 1.2 costs seeds 19 and 22 to paddy_plot_seams_shared --></p>
 <p><!-- The lever, if it is ever worth closing, is the OTHER side. -->The bund width is 1.5 ft by its own research<!-- AZE_FT --> (a
   plain aze ran ~1-2 ft),<sup class="fn"><a id="fnref-50" href="citations/water.html#fn-50">50</a></sup> so there is room to take the BUND to ~1.3 and leave the water alone - which
@@ -600,8 +600,7 @@ that one is curve-fitting rather than terrain: two of Nagahara's own three comb 
 100 and 95 degrees, southward, so a map-level east bearing contradicts the map's own geometry.
 <em>What was accepted:</em> the two largest maps stay unjudged on slope rather than carry a fictitious single
 bearing. <em>What it costs:</em> three rules that run on every village never run on either city.
-<em>The alternative declined:</em> adopting the 350 to turn them green. The GM has this to decide (raised
-2026-07-24).</p>
+<em>The alternative declined:</em> adopting the 350 to turn them green.<!-- The GM has this to decide (raised 2026-07-24). --></p>
 <p><em>The one watercourse with no downstream direction to declare.</em> A cargo canal is cut at the level of
 the water it joins, which is what lets a barge be poled BOTH ways along it: its gradient is nil, a water
 gate holds it at river level, and a dead-end dock basin has no through-flow at all. Giving such a cut a
@@ -620,7 +619,7 @@ not a drain. No map carries contour lines or any other topographic marking.</p>
 <p>Off the map, into a brook, or into a drainage pond - and WHICH END of the collector it leaves by is the
 question, because that is what says whether the water is running the right way. Each field carries its own
 fall and each drain is judged against its own field; but reading the discharge end off the geometry kept
-giving the wrong answer, and the four ways it did are recorded here so none is tried again.</p>
+giving the wrong answer, and the four ways it did are recorded here.<!-- so none is tried again --></p>
 <p><em>The decision (the GM's ruling of 2026-07-25): every discharge channel NAMES the field it drains.</em>
 A collector then matches its own discharge channels exactly, and nothing is inferred from position. The
 four positional shortcuts that were tried first, each failed by a real map: matching by PROXIMITY -
@@ -638,16 +637,16 @@ the bottom of the sheet at BOTH ends. So every end carrying evidence of a discha
 brook alongside, the frame edge - is gathered, and the LOWEST of them is taken as the outfall. The rule
 then has teeth only on the case that matters: when EVERY piece of evidence puts the discharge at the
 drain's HIGH end, the water is running backwards.</p>
-<p><em>An outfall at the sheet's edge must be at the DOWNHILL edge.</em> Nearness to the frame was being read
-as evidence of a discharge on its own, and one city fan has its HEAD about 84 ft from the top of the
+<p><em>An outfall at the sheet's edge must be at the DOWNHILL edge.</em> Nearness to an edge is evidence of a
+discharge only when that edge is downhill. One city fan has its HEAD about 84 ft from the top of the
 frame<!-- 28 px at 3 ft/px, provincial-city scale --> - inside the 96 ft tolerance<!-- 32 px at 3 ft/px -->,
-and on the UPSLOPE side - so the high end was called an outfall and the water was then reported as running
-backwards. Nearness to an edge is evidence of a discharge only when that edge is downhill. Nearness to a
-STREAM remains evidence on its own, since a brook is a real sink wherever it lies.</p>
+and on the UPSLOPE side - so nearness alone would call that high end an outfall and report the water as
+running backwards. Nearness to a STREAM is evidence on its own, since a brook is a real sink wherever it
+lies.</p>
 <p><em>A mirrored fan stamps the fall of the DRAWN geometry.</em> Where a fan is laid out by negating the
 land's fall, building the comb and mirroring the points back, the two negations cancel and the fall that
 was actually drawn is the original value. Stamping the negated working figure instead put one city fan 90
-degrees out. Any future mirrored fan records the figure it started from, not the one it worked in.</p>
+degrees out.<!-- Any future mirrored fan records the figure it started from, not the one it worked in. --></p>
 <p><em>And a TRIMMED in-wall drain is not a contour collector.</em> A drainage ditch inside a city wall is cut
 off short of the patrol ring and dropped through a gate into an underground culvert, so what survives of
 it on the page is only the last leg to that outfall: one such drain is two points and about 400 ft long
@@ -693,18 +692,9 @@ to 93 degrees, because the tee had been built purely radially; and beyond those,
 back to enter at 146 degrees and two more arriving at 124 and 98. After the regrade every offtake sits at
 47 to 48 degrees and every drain between 14 and 60. The two junctions that were already correct moved 15
 ft<!-- 5 px at 3 ft/px -->.</p>
-<p><em>ONE direction model, not three</em> (the GM's ruling of 2026-07-25). The recorded flow began as a THIRD
-parallel model beside two older ones, and two sources of truth for one fact is how drift starts. All three
-were converged onto the recorded one, and the audit that forced it turned up two more silent skips of the
-same shape as the defect that prompted it. Two slope rules were conditioned on a legacy declaration that
-only 2 of 17 maps ever made, so fifteen maps - both provincial cities among them - skipped both of them
-while the result stayed green. And the moat's current was being re-derived from the first stream whose end
-touched the ring, snapped to a cardinal: fragile twice over, because on a river-cut city both the feeder
-and the outfall touch the ring, so the answer depended on draw order, and because it needed a stream END
-within about 105 ft of the ring<!-- 35 px at 3 ft/px -->, which Nagahara's river - whose ends run off the
-sheet, the moat's ends meeting IT - never satisfies, so it never ran on Nagahara at all. A third read
-increasing distance along a river as "downstream", hard-coding an authoring convention instead of asserting
-it. All of them now read the one recorded inlet and outlet; every map runs them, and all pass.</p>
+<p><em>ONE direction model</em> (the GM's ruling of 2026-07-25). A moat records an inlet and an outlet, and
+every rule about its current reads those two points - never a direction worked out again from the geometry
+alongside them, because two sources of truth for one fact is how drift starts.</p>
 <p><em>Why the current is deliberately SNAPPED TO A CARDINAL, and not measured precisely.</em> Modeling the
 ring exactly - taking the ring's tangent at each tap, in the direction of travel along that tap's own arc -
 was built, and it is the physically correct picture of the water. It was rejected because it makes the
@@ -797,8 +787,8 @@ landforms say so.</p>
   valley wall to valley wall.</li>
 </ul>
 <p><em>The decision:</em> the toe band takes its cross-slope extent from the CULTIVATED extent (the fan's plots
-plus the dry hem) with a 90 px shoulder each side for the seepage spreading a little past the
-watered ground, clamped to the canvas. The shoulder is the same 90 px the band already used for its
+plus the dry hem) with a 90 ft shoulder each side<!-- 90 px at 1 ft/px --> for the seepage spreading a little past the
+watered ground, clamped to the canvas. The shoulder is the same 90 ft the band already used for its
 uphill overlap.<!-- so it is not a new magic number; Settlement.toe_band; the shoulder is pad --></p>
 <p><em>The departure we are taking knowingly:</em> a real spring line is an ARC following the fan's toe, and
 ours is a straight contour band with square lateral ends. Curving it would be more faithful; the
@@ -852,7 +842,7 @@ bog. The case that produced the rule: a split village's shrine and its graveyard
 wet toe below the fields, and were moved to the dry ground beside the western block.</p>
 <p><em>And no wellhead is sunk in the bog.</em> A map review on 2026-08-12 found a hamlet's south-eastern well
 standing among the drawn reeds, about 50 ft from the drainage pond. You do not dig a draw-well in standing
-surface water: a well wants a water table beneath dry ground you can stand a curb and a windlass on (this
+surface water: a well wants a water table beneath dry ground you can stand a well rim and a windlass on (this
 rests on general reading; no source is cited)<sup class="fn"><a id="fnref-71" href="citations/water.html#fn-71">71</a></sup>. The cause was DRAW ORDER
 rather than siting - wells are placed early and the reed toe is drawn late, so the reeds simply appeared
 around a well sited before they existed - and the fix was to make the wet band answerable in advance, so a
@@ -876,8 +866,8 @@ drawn collector is not a contour - it descends along its length to reach the pon
 descent that is itself a legibility exaggeration of a very gentle real fall (see <a href="#the-wet-toe-is-as-wide-as-the-fan-not-as-wide-as-the-valley">The
 wet toe is as wide as the FAN</a>). The refuted story is that a rectangular field implies a drain running
 across the slope: measured on the drawn maps, a collector's height spread is 269 ft on Akagahara, 340 ft on
-Kikuta and 352 ft on Hoshigaoka<!-- 269 / 340 / 352 px at 1 ft/px -->. It is not a cross-slope line, and
-the claim is not to be repeated. So the rule flags a dwelling only within the drain's OWN cross-slope span,
+Kikuta and 352 ft on Hoshigaoka<!-- 269 / 340 / 352 px at 1 ft/px -->. It is not a cross-slope
+line.<!-- and the claim is not to be repeated --> So the rule flags a dwelling only within the drain's OWN cross-slope span,
 projected onto the declared fall.</p>
 <p><em>And it is scoped to DISPERSED settlements, which was measured rather than assumed.</em> Each strewn
 farm is sited individually and must individually stand on dry ground; a NUCLEATED cluster is placed as one
@@ -944,9 +934,7 @@ the pond's own fill last among them, then every SHEEN. So overlapping beds read 
 water - a crossing, or a feeder running into a moat, reads as a real confluence rather than as two lines
 laid over each other; a pond's rim lies under every bed that reaches it, so the shore opens exactly at each
 mouth; and because the pond's fill is painted last among the beds, it covers the small overshoot a feeder's
-rounded end makes inside the rim. Before this there were TWO blocks, an early one and a late one for the
-in-field ditch net, each with its own transparency group, so wherever a ditch met a brook two groups
-stacked into a darker seam and one course's sheen rode over another's bed.</p>
+rounded end makes inside the rim.</p>
 <p><em>The label.</em> This is <strong>a map drawing convention</strong> and nothing more. It changes how the ink is
 composited and never where any water lies, and it applies to every map at every tier. The village lanes
 took the same route on the same day, drawing through one shared ground block so that a junction reads as a

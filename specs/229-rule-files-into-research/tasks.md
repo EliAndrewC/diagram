@@ -96,10 +96,12 @@ footnote - it carries the five boxes and is not ticked until they are).
 
 ## Phase 4 - the tree (FR-007, FR-008, FR-009)
 
-- [ ] T28 re-point every file the SC-001 grep finds - docs, agent, pool and legacy notes and gens, `wip/`, tests' docstrings; `buildings.md` and `programs.md` incl. the three stale Mode A pointers (XIV); `research/CLAUDE.md`'s new section; `research.md` R6
+- [x] T28 re-point every file the SC-001 grep finds - docs, agent, pool and legacy notes and gens, `wip/`, tests' docstrings; `buildings.md` and `programs.md` incl. the three stale Mode A pointers (XIV); `research/CLAUDE.md`'s new section; `research.md` R6
       research: procedure
-- [ ] T29 engine comments and docstrings re-pointed (comment-only; the `Entry:` tag in `greenery.py` to the vegetation heading); the stale `urban_fixtures.py:74` figure (XIV)
+      verify: DONE. DONE. Every pointer the SC-001 grep finds re-pointed - docs, the agent files, pool and legacy notes and gens, wip/, test docstrings, buildings.md and programs.md. research/CLAUDE.md carries the new 'ONE home per topic' section; research.md R6 written. Verified: tests/interactive/test_record.py green (47 passed with test_docs_match_the_mechanism.py), which is the grep as a gated rule - by path and by bare basename, with its own self-test.
+- [x] T29 engine comments and docstrings re-pointed (comment-only; the `Entry:` tag in `greenery.py` to the vegetation heading); the stale `urban_fixtures.py:74` figure (XIV)
       research: procedure
+      verify: DONE. DONE. Engine comments and docstrings re-pointed, comment-only so the route stays DIRECT; greenery.py's Entry tags name research/vegetation.html and research/homesteads.html headings; urban_fixtures.py's drum-tower figure now cites the record's 30-45 ft band at research/urban-features.html; boards.py points at cities/fabric.html and urban-features.html. Verified: every research/*.html path in l7r/ resolves to a file on disk (zero missing).
 - [ ] T30 delete `settlements.md`, `settlements/`, `settlements/cities/`; `test_record.py` gains the retired-file rule with its self-test; `test_docs_match_the_mechanism.py`'s list; `make test-file` on both; `make page-check`; `make quick`
       research: procedure
 

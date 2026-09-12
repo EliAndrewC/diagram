@@ -10,7 +10,7 @@ comments) are in git history with that script; what they recorded that still hol
 **wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
 every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
 around it. The END STATE is deliberately the exception; the scattered overlay is the norm
-(research/archetypes.html "The three overlay values"). Reading this map as typical would be the
+(research/archetypes.html "The three overlays a village may carry"). Reading this map as typical would be the
 mistake it is here to make visible.
 
 ## Map notes

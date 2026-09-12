@@ -20,7 +20,7 @@ Target ~75-90 acres of paddy on the 240-acre frame (1px = 2ft).
 POND SIZING: sole-storage rule of thumb ~2,000-2,500 m3 per irrigated ha (typical depth
 2-4 m); a stream-fed pond refilling 1-2x a season runs comfortably at ~1,200-1,500 m3/ha.
 31.8 ha of paddy -> ~1.5 ha of pond surface (rx=145, ry=92 px) at ~3 m depth ~ 47,000 m3
-~ 1,470 m3/ha + the feeder stream. See research/fields.html 'Water-first v2 - pond distribution and the three layout modes' for the grounding.
+~ 1,470 m3/ha + the feeder stream. See research/fields.html 'Where does a field's water come from, and how is it shared out?' for the grounding.
 """
 import os
 import sys

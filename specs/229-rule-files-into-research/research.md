@@ -59,7 +59,80 @@ Filled per page: rule -> anchor, or dropped with the reason.
 
 ## R5 - new registry keys and their applicability verdicts
 
+Twenty-six keys were added to `SOURCES.html` by this feature's source pass, and all twenty-six went to
+the `source-applicability` agent before their numbers reached a page - the second of the two moments
+feature 211 requires. Fourteen came back with something to fix; the other twelve drew no finding, so
+their write-ups stand as written.
+
+| key | what the judgment changed |
+|---|---|
+| `stone-routes-enwiki` | INACCURATE: the write-up called them roads built to haul quarried stone. The stone is the road's SURFACE; the cargo is goods and building materials into Kyoto. Corrected, and the limits sentence with it, which rested on the same error. |
+| `kateisaien-jawiki` | INACCURATE and OVERSTATED: the write-up reduced the article to a naming entry and disclaimed "no area, no period and no count". The article gives two periods - the plot's origin traced to the Yayoi, and Edo-period plots inside warrior-class residences as well as farmers'. The history added; the limit now disclaims only the area and the count. |
+| `kofukuroman-sanmai` | INACCURATE and MISSING A LIMIT: "a Fukui prefectural folklore site" reads as published by the prefecture. It is one enthusiast's website about the prefecture, with no editorial review, and the grounds it photographs are twentieth-century survivals rather than sites dated to a premodern century. All three stated. |
+| `hansho-kotobank` | OVERSTATED: the write-up said the source runs the Edo-period and later usages together without dating them. It dates them - one dictionary places the fire-tower use in the Edo period, another carries a 1686 attestation. The limit is now a scope caveat: that 1686 attestation is of the CLOCK-bell sense, and the fire-alarm sense's earliest example on the page is 1706. Tertiary and Japan-only stand. |
+| `tnau-cattle-housing` | NOT-APPLICABLE for the use it was put to. Agreement between two modern normative housing standards is not independent corroboration of a premodern byre: both say what a keeper ought to provide, and both may be generous for the same reason. Also unsigned, with no references. The byre entry on `homesteads.html` was rewritten to claim only what one standard checked against another can support. |
+| `fao-farm-structures-cattle` | MISSING A LIMIT, and a figure wrong. The region (tropical Africa) belongs in the limits rather than only in the description, and the DIRECTION of the error matters: a modern welfare minimum is what a builder is told to provide, so using it as a target oversizes the shed. And the free-stall pair "3.0 m long by 1.2 m wide" took its two numbers from different columns of Table 10.3 - the manual gives the milking-cow stall as 2.2 by 1.2 m, and the 3.0 is a bedded-shed AREA in square metres. Corrected in the registry, in `citations/homesteads.html` fn-94 and in the research sentence; the 15 sq m conclusion is unaffected, since a smaller stall leaves more room. |
+| `watersa-junction-angle` | MISSING A LIMIT: the model holds a fixed tributary-to-main width and discharge ratio at flume scale, while a moat offtake's discharge relative to its river is smaller by orders of magnitude, so even the DIRECTION of the effect is not guaranteed to carry. |
+| `meander-enwiki` | MISSING A LIMIT: the sentence "which is physics and so is the same in any century or country" quietly justified the step the next sentence disowned. A meander radius is the curvature a FREE channel settles into by cutting its own bank; a dug and maintained ditch's curve is set by the digger and the field boundary. |
+| `lowtech-chinese-wheelbarrow` | MISSING A LIMIT: the article carries no width measurement at all - "scarcely wide enough for foot passengers and wheelbarrows" is qualitative - so "and therefore how wide we draw it" was removed from the claim; and Low-Tech Magazine is an advocacy publication with a thesis about pre-industrial transport. |
+| `shakkanho-jawiki` | MISSING A LIMIT: the tan was 360 bu before Hideyoshi's cadastral survey and 300 bu after, so a pre-1590s area in tan converted with this page comes out about a fifth too small. The tsubo is stable. |
+| `hinomi-yagura-jawiki` | MISSING A LIMIT: the article dates the ORIGIN to Edo-period Edo and the nationwide SPREAD to the early Showa era, so the spread cannot license a tower in a small premodern settlement. |
+| `omamori-enwiki` | MISSING A LIMIT: the article's own word is "sold", so "bestowed" is this record's gloss; and the conclusion that no third party sold charms at a gate is an argument from the article's SILENCE, which is now said. |
+| `tudigong-enwiki` | MISSING A LIMIT: the article's prose puts such shrines "beneath the main altar or below the house door" of temples and houses; the village gate is one photograph's caption. |
+| `cssn-citang-panyu` | MISSING A LIMIT: the author (朱光文) and the date are now named - the page's own date is 2019-11-27 in 人文岭南 no. 98, the 2022 date appearing only in the repost URL - and the article describes surviving buildings while dating the plaza practice to no period at all. |
+
+One EXISTING key was corrected in the same pass: `kasoba-jawiki`'s `Used for:` line claimed "almost every
+temple in Asakusa and Shitaya" where the passage supports the precinct crematoria of some twenty-odd
+temples in those two wards.
+
 ## R6 - engine pointers re-pointed (D10)
+
+Every pointer in the engine that named a retired rule file now names a research page and the HEADING
+on it - the question a reader would ask, which is the anchor the reference modal links. These are
+comments, docstrings and the `Entry:` tags the interactive page parses at import, so by the
+docstring-stripped-AST rule they are not engine code for the route (the one exception that IS
+semantic is measured in R8: a pointer inside a permission REASON string literal in
+`overlap/taxonomy.py`, which is data the engine carries rather than a comment).
+
+**60 files under `l7r/` were touched.** Where the pointers now land, counted by target:
+
+| research page | pointers into it |
+|---|---|
+| `urban-features.html` | 23 |
+| `archetypes.html` | 22 |
+| `fields.html` | 18 |
+| `vegetation.html` | 13 |
+| `homesteads.html` | 12 |
+| `settlements.html` | 9 |
+| `religion-and-death.html` | 9 |
+| `cities/defenses.html` | 7 |
+| `ways.html` | 6 |
+| `water.html` | 6 |
+| `cities/government.html` | 6 |
+| `cities/capitals.html` | 5 |
+| `presentation.html` | 4 |
+| `cities/river-cities.html` | 4 |
+| `cities/sizing.html` | 2 |
+| `cities/fabric.html` | 1 |
+
+Three shapes the sweep had to handle, each of which a plain path grep misses:
+
+1. **A bare basename.** `capitals.md`, `government.md` and `settlements.md` appeared with no directory
+   in `wip/shiro_daika/*.py`, in `research/buildings.html` and in five notes files. The gate rule in
+   `tests/interactive/test_record.py` therefore judges a bare basename as a hit UNLESS it resolves,
+   from its own file's directory, to a file that still exists - which is what keeps
+   `future-work/towns.md` and `future-work/cities.md` legitimate.
+2. **A pointer that named a topic rather than a heading.** `settlements.md "TRADE WORKS"` had no
+   counterpart anchor until the migration wrote one, so each of these was re-aimed at the question
+   the new page asks, not merely at the page.
+3. **A pointer inside a string literal.** The overlap taxonomy's permission reasons are strings the
+   engine ships, so re-pointing one moves the engine key. That is the whole of why this feature lands
+   GATED rather than DIRECT; see R8.
+
+Verified by `tests/interactive/test_record.py` (47 tests green with
+`tests/tooling/test_docs_match_the_mechanism.py`): no tracked file names a retired rule file, by path
+or by bare basename, and every `research/*.html` path named anywhere under `l7r/` resolves to a file
+on disk.
 
 ## R7 - stale content dropped, by rule file
 
@@ -253,3 +326,28 @@ verification. A settlement-review is owed when a Mode B map changes; this featur
 one semantic engine change, a permission REASON string, which no placer reads and no manifest records. No
 `.gen.py`, no pool artifact and no manifest is touched, and the pool is not regenerated. The gate run therefore
 carries `PAIR_OK` with that reason.
+
+**And while this feature was being implemented, feature 231 landed on main and made that argument the
+guard's own.** The GM ruled on 2026-09-12 that *"if there are no changes to the actual way that the
+settlement is laid out, then we should not need to re review the settlement"*, so `scripts/_review_owed.py`
+now names every map whose MANIFEST differs from the merge base, asked fresh at each decision point. This
+feature changes no manifest, so with 231 merged the guard should name no map, run the gate as typed, stay
+quiet at the stop branch and record the automatic waiver with its own reason. The `PAIR_OK` above stays
+written down as the reasoning; whether the guard still asks for it is now a fact about the merge rather than
+about this delta, and the gate run's records say which happened.
+
+
+## R10 - defects found in passing, and fixed here (constitution XIV)
+
+None of these belong to the migration. Each was found while doing it, and Principle XIV fixes a defect
+where it is found rather than filing it.
+
+| defect | how it was found | what it was | fixed |
+|---|---|---|---|
+| **A generator rolled twice in one gate** | the gate's roll census failed on Kuwabata after main's feature 228 moved its cache key | fifteen gate readers of a shipped map take a per-generator lock through `tests/gate/_pool.py`, but the pool sweep called `gencache.gate_obtain` DIRECTLY and so took none. Invisible while the cache is warm; on a cold cache the sweep and the lateral test each regenerate the same map | every reader of a shipped generator now goes through one locked helper, `_pool.obtain_full` |
+| **The free stall was a third too long** | the `source-applicability` agent re-read the FAO manual | the registry gave a free stall as "3.0 m long by 1.2 m wide". Table 10.3 gives the milking-cow stall as 2.2 by 1.2 m; the 3.0 is a bedded-shed AREA in square metres, from a different column of the same row. Two numbers taken from two columns, and the unit changed with them | corrected in the registry, in `citations/homesteads.html` fn-94 and in the research sentence. The 15 sq m shed conclusion is unaffected: a smaller stall leaves more room |
+| **Four nested HTML comments** | a structural scan of every research page | an earlier edit wrapped a phrase that already carried a comment. HTML comments do not nest, so the inner `-->` closed the outer one and the reader saw a stray ` -->` - in the registry, and on the three citations pages derived from it | each collapsed to ONE well-formed comment; the derived pages clear when `make citations` runs |
+| **Four paragraphs opening with a literal dash** | the `record-format` pass on `water.html` | leftovers of a list that lost its `<ul>`, plus three `</p>` closers swallowed inside a long comment, so the section's paragraph structure was wrong in the reader's page | restored as proper paragraphs; every research page now balances |
+| **The commonest word in the field vocabulary had no tooltip** | adding the glossary terms | the matcher builds its alternation from each entry's `variants` only - the top-level KEY is a label, never a pattern - so the bare word "comb", written alone on five pages, matched nothing | the bare form added as a variant |
+| **Two terms owned by two entries each** | the same pass | `water-mouth` was a variant of both `shuikou` and `water-mouth`, and `windlass` of both `lulu` and `windlass`, so which definition a reader got depended on table order | one home per term; the merged definition names the other sense |
+

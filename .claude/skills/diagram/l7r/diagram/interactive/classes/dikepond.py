@@ -32,7 +32,7 @@ class FishPond(Kind):
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
     Label: accurate
     Sources: isis-dykepond, ruddle-zhong-1988, fao-ac241e, gmrb-2024-sangji
-    Entry: research/archetypes.html - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'
+    Entry: research/archetypes.html - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'
     """
 
     key = 'fish pond'
@@ -60,7 +60,7 @@ class MulberryDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'
+    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted'
     """
 
     key = 'mulberry dike'
@@ -109,7 +109,7 @@ class SugarcaneDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is sugarcane, and its cane rows
     Label: accurate
     Sources: gd-gazetteer-sangji, isis-dykepond, ruddle-zhong-1988, dili360-2005-sangji
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'sugarcane dike'
@@ -132,7 +132,7 @@ class BananaDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps
     Label: accurate
     Sources: gd-gazetteer-sangji, dili360-2005-sangji
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'banana dike'
@@ -154,7 +154,7 @@ class FruitDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
     Label: accurate
     Sources: gd-gazetteer-sangji, dili360-2005-sangji
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'fruit dike'
@@ -178,7 +178,7 @@ class VegetableGround(Kind):
     Covers: an unconverted parcel of a wholly converted dike-pond block, on a hamlet whose `meta.leftover` is vegetables
     Label: accurate
     Sources: fei-1939, gd-gazetteer-sangji
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'vegetable ground'
@@ -200,7 +200,7 @@ class PigSty(Kind):
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
     Label: guess
     Sources: fao-ac264e, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'pig sty'
@@ -221,7 +221,7 @@ class DuckPen(Kind):
     Covers: every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner
     Label: guess
     Sources: fao-ac264e, isis-dykepond
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'duck pen'
@@ -244,7 +244,7 @@ class FryPond(Kind):
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels
     Label: guess
     Sources: miles-2003, cssn-sangyuanwei, isis-dykepond
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'fry pond'
@@ -269,7 +269,7 @@ class ManurePit(Kind):
     Covers: a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap
     Label: accurate
     Sources: fei-1939, sugiura-1973-fuzoku
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'
+    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'manure pit'
@@ -320,7 +320,7 @@ class PerimeterDike(Kind):
     Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
     Label: accurate
     Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'
+    Entry: research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted'
     """
 
     key = 'perimeter dike'

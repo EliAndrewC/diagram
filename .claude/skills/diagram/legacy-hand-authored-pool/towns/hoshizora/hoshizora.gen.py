@@ -10,7 +10,7 @@ buildings along the Imperial Road, the Magistrate's walled manor + samurai house
 the segregated burakumin neighborhood NE, a theater stage by the monastery, barns ringed by hayfield/grazing
 pasture SE, and a small forest. Unwalled.
 
-WATER (the water-first comb doctrine, research/fields.html 'Water-first v2 - pond distribution and the three layout modes'): the
+WATER (the water-first comb doctrine, research/fields.html 'Where does a field's water come from, and how is it shared out?'): the
 stream is the valley watercourse, crossing the map NE -> SW roughly parallel to the
 Imperial Road; the land falls with it (downhill/down_deg = 115, SSW - high NE corner,
 low SW corner). The farm zone is a single build_comb fan WEDGED between the stream
