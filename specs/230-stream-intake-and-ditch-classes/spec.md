@@ -243,6 +243,19 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   defects, so neither rule is absolute: a roll that comes up short and was steered by the brook is rolled again
   with the brook ignored at the seat, and kept only if it seats MORE. Which way a map came down is recorded on
   it (`meta.seat_divided`). Measurements and the per-seed mechanism: research R5.
+
+  **The rule is labeled a GUESS - this project's own placement decision, not a finding** (constitution XII;
+  the research pass is R6). The record was asked and answered by SCALE: against a river a settlement stands on
+  one bank (Harie on the Ado's left bank, Hagikura's far bank named "the facing mountain", the Tenryu's villages
+  named 川東 and 川西), but against the settlement's OWN small channel the record shows the water running through
+  the middle of the place - Harie's Okawa flows through the center of the district, its channels are "channels
+  inside the settlement", and one flows "alongside the house". The maps' brook is seven feet wide, which is the
+  second kind. **Declined, and why:** letting a way cross the brook on a deck, so a hamlet may straddle its water
+  as Harie does, is not a change to this feature's water but to the crossing machinery - the stream is registered
+  only as a keep-out, so the router never routes across it and `bridges()` decks only a crossing that already
+  exists (pass 4 measured 0 bridges on 2,000 ft of water with a homestead stranded on the far bank). It is
+  recorded in `future-work/farming-communities.md` as the knob candidate it is: two forms are attested, and the
+  day a way can cross a brook, which side a hamlet builds on is a knob to roll rather than a rule to keep.
 - **D10 A rejected re-roll is no longer the manifest the report carries.** Found while diagnosing D9's
   shortfall and older than this feature: `generate`'s re-roll loop relied on the kept attempt rolling last,
   which holds only when an `out_base` lets it re-emit the keeper - and a cohort passes none, so the report's

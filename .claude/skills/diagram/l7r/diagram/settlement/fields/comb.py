@@ -201,12 +201,22 @@ class CombMixin:
         # own seeded rng, so the move ripples no stream), then every bead inside the source pond
         # or a pocket pond is dropped BEFORE drawing and recording, so dots and manifest agree.
         self._paddy_features(net)
-        self._comb_draw_beads(net, source)
         sluice = net["channels"][0]["pts"][0]
         pond_rec = self._comb_draw_source(net, source, sluice)
         self._comb_draw_ditches(net)
-        self._comb_record_field(net, name)
         self._comb_record_ditches(net, name)
+        # ...AND THE DITCHES ARE RECORDED BEFORE THE FIELD IS (feature 230). The field record carries the bead
+        # POINTS, so a bead dropped after it is dropped from the picture and not from the manifest - which is
+        # the drift `bunds_and_dikes` exists to catch, and which is how a bead under a drain's wide tail came
+        # to be recorded on a map that does not draw it. The drop reads the ditch records, so they go first.
+        self._comb_drop_drowned_beads(net, source)
+        self._comb_record_field(net, name)
+        # THE BEADS GO LAST OF THE FIELD'S INK, because the thing they have to keep out of does not exist until
+        # the line above (feature 230). A drawing method sees only what is in `self.M` when it runs, and the
+        # bead pass ran BEFORE the ditches were recorded, so its water test had nothing to read and a bead sat
+        # under a drain's wide tail on the reference hamlet. Drawn here it clears the pond, the pocket ponds and
+        # every recorded ditch alike; nothing is painted over, because a bead that would be is dropped first.
+        self._comb_draw_beads(net)
         # a hairline SOURCE -> field feed carrying the topology (winds a little into the paddy interior). It
         # STARTS at the source (the pond center, or the sluice for a stream) so channel_source_anchored /
         # pond_connected_to_field see it, and carries a gentle perpendicular KINK so channel_winds_gently passes.
@@ -308,9 +318,16 @@ class CombMixin:
                 # see the paint cannot judge it (the azemame water-honesty precedent).
                 self.M.setdefault("flooded_plots", []).append(_centroid(p["poly"]))
 
-    def _comb_draw_beads(self: Settlement, net: dict[str, Any], source: dict[str, Any]) -> None:  # type: ignore[misc]
-        """Drop every azemame bead that pond paint would bury, then draw the rest - so dots and manifest agree."""
-        from l7r.diagram.waterfields import BEAN_GREEN
+    def _comb_drop_drowned_beads(self: Settlement, net: dict[str, Any], source: dict[str, Any]) -> None:  # type: ignore[misc]
+        """Drop every azemame bead that water would bury - pond paint or a ditch's own stroke - then draw the
+        rest, so the dots and the manifest agree.
+
+        THE DITCH HALF IS THE TAIL'S WIDTH, NOT THE HEAD'S (feature 230). A drain collector is recorded with
+        `w` at its head and `w_tail` where it leaves, and it is painted as a taper between them - so a bead
+        sitting 2.2 ft off a ditch recorded at 1.5 ft was still under ink, because that ditch ends at 5.5.
+        Measured on the reference hamlet the day the brook moved the field under it. The painter's own widest
+        figure is what the bead has to clear, which is the same figure `bunds_and_dikes` judges it by: a check
+        and the code it checks must read the SAME number, or the map and the rule drift apart quietly."""
 
         _bw: list[tuple[float, float, float, float]] = []
         if source.get("kind") == "pond":
@@ -319,6 +336,15 @@ class CombMixin:
         _bw += [(fp["x"], fp["y"], fp["rx"] + 3.0, fp["ry"] + 3.0) for fp in self.M.get("field_ponds") or []]
         if _bw:
             net["bund_beans"] = [q for q in net["bund_beans"] if all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw)]
+        _water = [([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0) for d in (self.M.get("field_ditches") or []) if len(d.get("poly") or ()) >= 2]
+        _water += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (self.M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
+        if _water:
+            net["bund_beans"] = [q for q in net["bund_beans"] if all(min(seg_dist(q[0], q[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1)) >= half for poly, half in _water)]
+
+    def _comb_draw_beads(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
+        """Draw what survived `_comb_drop_drowned_beads` - the ink, after the record it agrees with."""
+        from l7r.diagram.waterfields import BEAN_GREEN
+
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
         self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
 

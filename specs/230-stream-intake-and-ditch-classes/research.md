@@ -252,3 +252,50 @@ scratch directory - so a rejected re-roll was the manifest the report carried, a
 count off exactly that manifest. The verdict lines were the kept roll's and the numbers beside them the rejected
 roll's. It predates this feature and is fixed here (constitution XIV).
 
+## R6 One bank or both? The record answers by SCALE (2026-09-12)
+
+The spec review's amendment round would not let D9's seat rule stand unlabeled, and it was right: "a hamlet does
+not straddle its own brook" is a claim about how a place was built, and nothing in the record had been asked.
+A `source-reader` pass asked it. The finding is not the one the rule assumed.
+
+**Against a RIVER, one bank is what the record shows.** Harie in Shiga "lies on the LEFT BANK of the alluvial fan
+at the lower reaches of the Ado River" (translated from the Japanese; 針江 生水の郷, harie-syozu.jp). Imazato's
+study of Hagikura in Nagano describes a hamlet on a river terrace whose own folk names carry the arrangement -
+the hill behind is the Urayama, the "back mountain", and the hill ACROSS the river is the Mukoyama, the "facing
+mountain", which is hillside and not houses (『人文地理』51-5, 1999, pp. 436-439). And an Edo lawsuit over the
+Tenryu names its parties by their side of the water, 川東の村々 and 川西の島田村, with the boundary running
+wherever the main current ran (平沢清人『村境は不思議だ』, an MLIT river-office booklet, p. 20).
+
+**Against the settlement's OWN small channel, the record shows the opposite, and says so plainly.** The SAME
+Harie page that puts the village on one bank of the river says "the Harie Okawa flows through roughly the CENTER
+of the district"; the settlement's channels are 集落内の水路, channels INSIDE the settlement, and a magazine
+account of the kabata describes "the channel that flows ALONGSIDE THE HOUSE". Harie with its neighboring
+Shimofuri is a national Important Cultural Landscape, so this is not an oddity.
+
+**So the two are not rival claims about one thing - they are claims about watercourses of two different sizes,
+and the maps' brook is the SMALL kind.** Seven feet wide, tapped by the hamlet it passes. On the record's own
+division that is the kind a settlement is shown standing around, not beside.
+
+**What the fengshui siting literature adds, with its scope stated.** The 四神相応 formulation wants "flowing
+water on the LEFT" of the site, and the Chinese village-siting studies describe streams that 绕村而过 - flow
+around and past the village - with Shanggantang's ideal stated as 三面环山，一面临水, "mountains on three sides,
+water on ONE side". None of it contemplates a site divided by its water. The limit to carry: this is
+capital- and residence-siting doctrine and village-landscape scholarship, not a rule anyone states for a farming
+hamlet's brook.
+
+**NOT FOUND, searched 2026-09-12**: no readable page says in words that dwellings at Harie face its channels
+from both banks, nor what crosses them - the Agency for Cultural Affairs selection text, which would be the
+authority, renders an empty 解説文 at both official database URLs and the Takashima city page returns 404. And
+nothing was found naming a plank bridge, ford or stepping stones inside a settlement's own channel, ordinary or
+remarkable. The trap the pass avoided is worth recording: 線状集落 is defined as buildings "lined up on BOTH
+SIDES OF A SINGLE STREET", and the both-sides there is a STREET, not a watercourse.
+
+**What this does to the rule.** D9's refusal is NOT the attested form for a brook at this scale, so it is
+labeled as this project's own placement decision. It stands for a reason the record does not supply and the
+engine does: a hamlet seated astride the brook is one the maps cannot draw a crossing for - the stream is
+registered only as a keep-out, so the router never routes across it and `bridges()` decks only a crossing that
+already exists (pass 4's measurement: 0 bridges on 2,000 ft of water with a homestead on the far bank). The
+straddling form is therefore recorded as DECLINED-FOR-NOW rather than unsupported, and as the knob candidate it
+is: two forms are attested at the two scales, and the day a way can cross a brook, which side a hamlet builds on
+is a knob to roll rather than a rule to keep.
+

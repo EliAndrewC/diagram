@@ -199,6 +199,18 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             score -= 3.0 * crossed
             plan.seat_brook_steered += crossed > 0.0 or len(_sides) > 1
             if len(_sides) > 1:
+                # THIS IS A GUESS, AND IT IS THIS PROJECT'S OWN (constitution XII; the pass is specs/230 R6).
+                # The record was asked and answers by SCALE: against a RIVER a settlement stands on one bank
+                # (Harie sits on the Ado's left bank, Hagikura names the far bank "the facing mountain", the
+                # Tenryu's villages are 川東 and 川西), but against a settlement's OWN small channel the water
+                # runs through the middle of the place - Harie's Okawa flows through the center of the district
+                # and one of its channels runs alongside the house. A seven-foot brook is the second kind, so
+                # the rule below is NOT what the record shows; it is what this engine can draw. A hamlet seated
+                # astride the brook is one no way can cross: the stream is a keep-out, the router never routes
+                # over it, and `bridges()` decks only a crossing that already exists (0 bridges on 2,000 ft of
+                # water with a homestead stranded across it, settlement-review pass 4). The straddling form is
+                # the knob candidate in `future-work/farming-communities.md`, for the day a way can cross.
+                #
                 # A DIVIDED BAND IS REFUSED, not discounted. Scoring it down was the first cut and it left one
                 # homestead of fifteen on the far bank with no crossing anywhere on the brook, every lane, both
                 # wells and the notice board on the near one - the seat that wins on wind and slope can still be

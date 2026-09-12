@@ -29,10 +29,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       verify:
 - [ ] T06 FR-006 the seat rule and its shortfall re-roll - the research pass on whether a hamlet stood on ONE bank of its stream or on both with a crossing, the label that follows from it, and the declined alternative recorded
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
+      - [x] research pass - specs/230 research R6: the record answers by SCALE (one bank of a river, through the middle of the settlement's own channel), so the rule is this project's own guess and is labeled one
+      - [x] source-reader confirmed - one Opus reader, 14 sources, verdicts per sub-question including the CONTRADICTED trio on Harie and the NOT-FOUND on what crosses a settlement's channel
+      - [ ] recorded and cited - R6 carries the finding and the quotes; the reader-facing section on research/water.html and the registry entries for its new keys are NOT written
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
-      verify:
+      verify: the rule is labeled a GUESS at all three places it lives (spec D9, cluster.py at the point of change, future-work as the knob candidate the crossing machinery blocks). The public record page is the part still owed.
 

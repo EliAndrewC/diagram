@@ -2230,3 +2230,40 @@ really ends, which is the question this file has carried since feature 128 and w
 evidence for. SKETCH: aim the spur at the nearest point of the CULTIVATED ground rather than of the paddy (the
 hem is worked ground and a path to it is a path to the field), and let it stop at the hem's own edge; then ask
 whether the last stretch between the hem and the wet plots is a path at all or the bunds themselves.
+
+## One bank or both - a KNOB the crossing machinery blocks (researched 2026-09-12, feature 230)
+
+RESEARCHED, not silent (specs/230 research R6): the record shows BOTH forms, divided by the size of the water.
+Against a river a settlement stands on one bank; against its own small channel the water runs through the middle
+of the place, which Harie in Shiga does under a national Important Cultural Landscape designation - its Okawa
+"flows through roughly the center of the district", its channels are "channels inside the settlement", and one
+runs "alongside the house". The maps' brook is seven feet wide, the second kind. Under the knob doctrine that is
+a KNOB - which side a hamlet builds on, rolled per settlement - and the maps instead keep a rule.
+
+WHY THE KNOB IS NOT BUILT, measured: a hamlet seated astride the brook is one no way can cross. The stream is
+registered only as a keep-out (`site_boundary.water` and a 30 px corridor), so the router treats it as ground to
+avoid and `bridges()` decks only a crossing that already exists - settlement-review pass 4 measured the result,
+0 bridges on 2,000 ft of water with a full homestead stranded on the far bank and every lane, both wells and the
+notice board on the near one. Nothing can put a deck there today.
+
+SKETCH: let a WAY cross a watercourse at the cost of a deck. The router needs a crossing cost rather than a
+veto (a segment may cross a stream if it crosses square-ish and a deck can be drawn at the crossing), and
+`stage_crossings` already decks a way that crosses water, so the second half exists. Then `seat_cluster`'s
+strike-out becomes a knob value: one bank, or both banks with a crossing. The measurements to hold it to are in
+specs/230 R4 and R5.
+
+## A tree stands in a path on the reference hamlet (measured 2026-09-12, feature 230)
+
+MEASURED: three tree trunks at (2303, 786), (2343, 789) and (2488, 795) stand 3.1, 4.2 and 3.1 ft from the
+centerline of Inashiro's straggler footpath, and `groves_clear_of_lanes` fails at its 4.0 ft bar. The trees are
+recorded through `_record_crowns`, so they are a grove or stand drawn at the homestead stages - BEFORE the lane
+web - and the footpath was routed past them afterwards. Raising the ground-cover scatter's corridor buffer from
+3 to 4 ft (`land/cover.py`, done, and worth keeping: a check and the code it checks must read the same figure)
+does not touch them, because the woodland commons is not what planted them.
+
+MECHANISM: the straggler router's obstacle set is `_homestead_polys`, which carries footprints and yards. A
+recorded CROWN is not a polygon and is not in it, so a footpath may be drawn through a tree that was already
+standing. SKETCH: give the footpath's obstacle set the recorded crowns (`M["tree_crowns"]` is a flat x, y, r
+run and a circle is the cheapest obstacle there is), or refuse a straggler whose drawn tread passes within the
+rule's own 4.0 ft of one. Deferred rather than taken because the obstacle set is shared by every way the web
+draws, so widening it moves lanes on every map and owes its own cohort and review.

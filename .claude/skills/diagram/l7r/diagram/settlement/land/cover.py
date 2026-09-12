@@ -108,8 +108,13 @@ class GroundCoverMixin:
             pond = self.M.get("pond")
             halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts)
             corridors = self._corridor_buffers(
-                3 * bs
-            )  # lanes AND town streets AND the road: every trodden/maintained tread stays bare (the old skip knew only lanes, so scrub drew on the Imperial Road bed - GM 2026-07-21, Hoshizora)
+                4 * bs
+            )  # lanes AND town streets AND the road: every trodden/maintained tread stays bare (the old skip knew only lanes, so scrub drew on the Imperial Road bed - GM 2026-07-21, Hoshizora).
+            # FOUR, BECAUSE THAT IS THE FIGURE THE RULE READS (feature 230). `groves_clear_of_lanes` forbids a
+            # TRUNK within 4.0 ft of a lane's centerline, and this buffer was 3 - so a tree could be planted
+            # 3.1 ft from a 3 ft footpath, off the tread and inside the rule, and the gate was right to say
+            # so. A check and the code it checks must read the same number or they drift apart quietly; the
+            # cost is one more foot of bare verge along every tread, which is what a walked path has anyway.
             # PRE-BOX every static keep-out ONCE (see boxed_hit): _sparse below runs per SCATTER POINT,
             # and these lists do not change while a region scatters
             # INDEXED (2026-08-04): boxing alone dropped the cost per keep-out but still VISITED every

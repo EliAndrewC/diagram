@@ -392,6 +392,18 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # a path the clip left too short, or no path at all. Where a field path should END is the open question
     # (`future-work/farming-communities.md`), and this is the measurement it will be answered from.
     s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
+    # ...AND A SPUR THAT NO LONGER REACHES THE WEB IS NOT DRAWN. The clip takes the spur out of the crop and off
+    # the marsh from BOTH ends, so what survives can be a length of path in the middle of open ground: on the
+    # reference hamlet it came back 111 ft long, 152 ft from the nearest lane and 72 ft from the field, joining
+    # nothing to nothing - a second lane "network" of one fragment, which is a worse thing to draw than no path
+    # at all and which the gate's own one-network rule catches. So the survivor is drawn only while its head is
+    # still on the fabric it forked from; otherwise the LENGTH stands as the record and `field_spur_head_ft`
+    # says how far short it fell. That is the shortfall reported rather than swallowed - the thing the fifth
+    # review pass asked for - and it is not the same as the sweep silently dropping it, which is what made the
+    # reference hamlet's missing path invisible in the first place.
+    # Whether it SURVIVES is decided later and elsewhere: nothing is on the map to attach to at this point in
+    # the stage - not the connector, which is drawn below this, and not the web, which is two stages away - so
+    # the spur is drawn on its own length and the sweeps judge it against the finished network (`sweeps.py`).
     if _spur_ft > 20.0:
         s.lane(_thread_the_fabric(s, plan, _spur_pts), width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
 

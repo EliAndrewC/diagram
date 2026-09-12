@@ -11,7 +11,7 @@ names the unit tests consume, which a star import would drop.
 
 | file | look here when |
 |---|---|
-| `frame.py` | STAGE 1 - the sluice, the fall and the canvas the field is fitted into (`stage_water_frame`) |
+| `skeleton.py` | STAGE 1 - the sluice, the fall and the canvas the field is fitted into (`stage_water_frame`) |
 | `fit.py` | the field comes out the wrong SIZE, or a fan is refused as illegal: the acreage search (`fit_field`, `_fit_at_aspect`, `_predict_k`), `head_sluice`, and the two predicates that disqualify a fan before its acreage is scored (`tail_dangles`, `net_bends_acutely`) |
 | `brook.py` | the stream's own COURSE, its intake or the weir glyph (feature 230): `brook_skirt` and its four helpers - the crop's true cross-section (`_crop_edge`), the reflecting wander (`_wander`), the frame bound in MAP coordinates (`_v_within`) and the axis backstop (`_off_the_axes`) - plus `feed_brook` and `draw_intake` |
 | `comb.py` | STAGE 2 itself: the fitted comb drawn, the head race taken off the brook's bank at the offtake angle, the intake set on it (`stage_field`). Named `comb` rather than `field` because `field` is already a public name in `driver` (dataclasses) and the surface guard fails on a clash |

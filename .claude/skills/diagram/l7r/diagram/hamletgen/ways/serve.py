@@ -150,6 +150,20 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     return True
 
 
+def _arrives(path: Poly, house: Pt, reach: float = 58.0) -> bool:
+    """Does this footpath actually GET to the house it was drawn for?
+
+    A path that stops short serves nobody and is a line ending in open ground - which is what
+    `lanes_reach_something` says in the gate ("an end that meets no other way, no house and no field is a
+    line that stops in open ground"), at a 60 ft bar. Measured on the reference hamlet: a 100 ft straggler
+    whose near end touched the web and whose far end stopped 60.1 ft from the house it was routed to - one
+    tenth of a foot outside the rule, and serving nothing at either end. The honest fallback is the one the
+    block below already takes for a fouling path: the house goes unserved and the roll says so in words, which
+    a reader can act on, rather than a tread drawn to nowhere. The margin is under the gate's own figure on
+    purpose - a path that only just arrives is a path that stops being one when anything downstream trims it."""
+    return any(math.dist(q, house) <= reach for q in path)
+
+
 def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> None:
     """A FOOTPATH TO THE OUTLYING STEADING, for the few houses the web's regular cuts cannot reach.
 
@@ -548,11 +562,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
+                    if not _arrives(path, c):
+                        continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None:
+            if not _served and _folded is not None and _arrives(_folded, c):
                 _draw_web(s, _folded, 3, houses=[c])
                 added += 1
                 _served = True

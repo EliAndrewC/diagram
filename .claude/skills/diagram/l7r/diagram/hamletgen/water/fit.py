@@ -117,21 +117,21 @@ def _fit_at_aspect(
     pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
     _trim_a = BROOK_FAN_TRIM if plan.brook_side < 0 else 1.0
     _trim_b = BROOK_FAN_TRIM if plan.brook_side > 0 else 1.0
-    # THE TRIM IS A SHAPE CHANGE, AND THE SIZE SEARCH MUST NOT MEET IT AS A SIZE CHANGE (feature 230).
-    # Cutting one flank's canal to `BROOK_FAN_TRIM` takes about (1 - trim) / 2 of the fan's area with it, so
-    # at the same `k` a trimmed fan draws ~14% fewer acres - and the bracket's own ceiling comes down with it.
-    # Measured before this line existed: seeds near the acreage ceiling SATURATED at every aspect (the largest
-    # fan the bracket allows still short of the target), so the search spent two carves proving it at each
-    # aspect and then re-ran the best one unprobed - 15 carves on cohort seed 25 against 3 on the same seed
-    # before the feature, and +14.0% on the whole perf cohort. Scaling the bracket by the area the trim
-    # removes puts the search back where it was: `k` still means "the fan that lands the target", the trim
-    # still cuts the brook's flank away, and the acreage solve still makes it up on the other flank and down
-    # the fall - it simply no longer has to discover that it must.
-    # (Exactly one flank is always trimmed - `BROOK_FLANKS` is (1, -1) and the brook takes one of them - so the
-    # compensation is unconditional rather than a branch nothing could reach.)
-    _comp = math.sqrt(2.0 / (1.0 + BROOK_FAN_TRIM))
-    lo, hi = lo * _comp, hi * _comp
-    k = _comp
+    # A LEVER THAT WAS MEASURED AND DECLINED (feature 230). Cutting one flank's canal to `BROOK_FAN_TRIM`
+    # takes about (1 - trim) / 2 of the fan's area with it, so at the same `k` a trimmed fan draws ~14% fewer
+    # acres and the bracket's own ceiling comes down with it: seeds near the acreage ceiling SATURATE at every
+    # aspect, the search spends two carves proving it at each and then re-runs the best unprobed - 15 carves on
+    # cohort seed 25 against 3 on the same seed before the feature, and +14.0% on the whole perf cohort.
+    #
+    # Scaling the bracket by the area the trim removes (`lo, hi, k *= sqrt(2 / (1 + BROOK_FAN_TRIM))`) fixes the
+    # arithmetic exactly and was MEASURED: the cohort went from +14.0% to -3.6%, faster than the code before the
+    # feature. It is not taken, because it changes the size every map is fitted at, and the gate measured what
+    # that cost on the reference hamlet alone: an azemame bead left standing on water, a footbridge over a dry
+    # plot, a basin tapering to 1 of 623 below 15 degrees, and no flooded plot painted at all, so the sheet lost
+    # the wet-paddy class it exists to exhibit. Four defects bought 18 points of performance on a feature whose
+    # own maps had already moved twice; the slowdown is real, explained, and left for the GM's sign-off, which
+    # is whose call a band-3 increase is. Anyone taking this lever again owes those four maps their fixes first.
+    k = 1.0
     for _ in range(rounds):
         k = min(max(k, lo + 1e-3), hi - 1e-3)
         carve = carve_comb(

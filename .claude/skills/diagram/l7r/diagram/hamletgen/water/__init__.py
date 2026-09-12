@@ -7,7 +7,7 @@ the star imports below (clause 14 - a re-export `__init__` is derived, never a m
 
 | file | look here when |
 |---|---|
-| `frame.py` | the sluice, the fall or the canvas is wrong - STAGE 1, `stage_water_frame` |
+| `skeleton.py` | the sluice, the fall or the canvas is wrong - STAGE 1, `stage_water_frame` |
 | `fit.py` | the field comes out the wrong SIZE, or a fan is refused as illegal - the acreage search (`fit_field`, `_fit_at_aspect`, `_predict_k`), the head sluice, and the two predicates that disqualify a fan (`tail_dangles`, `net_bends_acutely`) |
 | `brook.py` | the stream's own COURSE, its intake, or the weir glyph - feature 230's `brook_skirt`, `feed_brook`, `draw_intake` and the four helpers that keep the course off the crop and inside the frame |
 | `comb.py` | STAGE 2 itself: the fitted comb drawn, the head race taken off the brook's bank, the intake set on it |
@@ -23,5 +23,5 @@ from .fit import *  # noqa: F403
 # block `hamletgen/__init__.py` keeps, constitution X clause 14).
 from .fit import _fit_at_aspect as _fit_at_aspect  # noqa: E402
 from .fit import _predict_k as _predict_k  # noqa: E402
-from .frame import *  # noqa: F403
 from .polder import *  # noqa: F403
+from .skeleton import *  # noqa: F403

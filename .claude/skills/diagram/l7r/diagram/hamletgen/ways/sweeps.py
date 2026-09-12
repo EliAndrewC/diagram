@@ -515,16 +515,24 @@ def _sweep_debris(s: Settlement) -> int:
 
     swept: list[int] = []
     for i in live:
-        # THE FIELD'S ONLY WAY IS KEPT, exactly as a house's is. Both sweeps ask whether every HOUSE a
-        # fragment serves is served by something else; the field spur serves no house at all, so once
-        # feature 230's seater moved a cluster to the far margin and the spur came out short, the sweep
-        # took the hamlet's whole path to its rice and the map recorded a dropped fragment and nothing else.
-        if lanes[i].get("connector") or lanes[i].get("spur") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
+        # THE FIELD SPUR IS SWEPT LIKE ANYTHING ELSE THAT JOINS NOTHING - and the map SAYS SO (feature 230).
+        # Both sweeps ask whether every HOUSE a fragment serves is served elsewhere, and the spur serves no
+        # house, so it answers yes vacuously; exempting it outright was the first cut and it was worse, because
+        # a spur whose clipped head no longer reaches the fabric is drawn as a length of lane in open ground -
+        # measured on the reference hamlet at 111 ft long, 152 ft from the nearest lane and 72 ft from the
+        # field, which is a second lane "network" of one fragment and a thing no reader can make sense of.
+        # A spur that MEETS the web is attached, so `comp[i] not in alone` already keeps it. What was really
+        # missing was the record: the length the clip left is on every map (`meta.field_spur_ft`) and a spur
+        # swept here says so (`meta.field_spur_swept`), so a hamlet with no drawn way to its rice is a fact
+        # the manifest states rather than one a reviewer has to notice.
+        if lanes[i].get("connector") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
             continue
         mine = list(zip(ways[i], ways[i][1:], strict=False))
         others = [sg for j in live if j != i for sg in zip(ways[j], ways[j][1:], strict=False)]
         if not others or any(_near(h, mine) <= _SERVE_FT < _near(h, others) for h in houses):
             continue
+        if lanes[i].get("spur"):
+            s.M["meta"]["field_spur_swept"] = "isolated - the clip left no head on the fabric"
         lanes[i]["pts"] = []
         s.reink_lane(i)
         swept.append(i)
