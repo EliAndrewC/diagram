@@ -318,15 +318,17 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
     Earlier plots are the ones cut because later ones are the ones painted on top."""
     # INDEXED, per constitution X clause 15: a running union of every later plot grows to the whole field and each plot
     # would be tested against all of it. The rings are indexed ONCE and each plot unions only the later rings its box meets.
-    geoms = [Polygon(q.get("poly") or []).buffer(0) if len(q.get("poly") or []) >= 3 else None for q in plots]
-    live = [k for k, gk in enumerate(geoms) if gk is not None and not gk.is_empty]
-    tree = STRtree([geoms[k] for k in live])
+    shapes: list[tuple[int, Polygon]] = []
+    for k, q in enumerate(plots):
+        ring = q.get("poly") or []
+        gk = Polygon(ring).buffer(0) if len(ring) >= 3 else None
+        if isinstance(gk, Polygon) and not gk.is_empty:
+            shapes.append((k, gk))
+    tree = STRtree([gk for _k, gk in shapes])
     drop: list[int] = []
-    for i in range(len(plots) - 1, -1, -1):
-        g = geoms[i]
-        if g is None or g.is_empty:
-            continue
-        later = [geoms[live[int(n)]] for n in tree.query(g) if live[int(n)] > i and geoms[live[int(n)]].intersects(g)]
+    for k, g in reversed(shapes):
+        i = k
+        later = [shapes[int(n)][1] for n in tree.query(g) if shapes[int(n)][0] > i and shapes[int(n)][1].intersects(g)]
         if later:
             vis = g.difference(unary_union(later))
             if vis.area < g.area - 1.0:
