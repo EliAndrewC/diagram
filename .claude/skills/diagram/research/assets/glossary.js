@@ -4201,5 +4201,63 @@ window.RECORD_GLOSSARY = [
    "Mengxi Bitan"
   ],
   "def": "Shen Kuo's 11th-century Dream Pool Essays, a Song notebook of technical observation."
+ },
+ {
+  "term": "plankton",
+  "variants": [
+   "plankton"
+  ],
+  "def": "The tiny drifting life of a pond, plant and animal both, which manured water grows in quantity and the fish eat."
+ },
+ {
+  "term": "phytoplankton",
+  "variants": [
+   "phytoplankton"
+  ],
+  "def": "The plant half of plankton: microscopic algae that multiply in fertilized water and are the first food a manured pond grows."
+ },
+ {
+  "term": "zooplankton",
+  "variants": [
+   "zooplankton"
+  ],
+  "def": "The animal half of plankton: minute drifting animals that feed on algae and bacteria and are in turn eaten by the fish."
+ },
+ {
+  "term": "detritus",
+  "variants": [
+   "detritus"
+  ],
+  "def": "The decaying matter that settles on a pond's bottom, colonized by bacteria - the third way a pond's manure becomes fish food."
+ },
+ {
+  "term": "anaerobic",
+  "variants": [
+   "anaerobic"
+  ],
+  "def": "Without oxygen: water or mud in which the oxygen has been used up, where fish cannot feed and waste rots foul."
+ },
+ {
+  "term": "pannage",
+  "variants": [
+   "pannage"
+  ],
+  "def": "Turning pigs loose in woodland to feed themselves on fallen acorns and nuts, instead of penning and feeding them."
+ },
+ {
+  "term": "Pearl delta",
+  "variants": [
+   "Pearl River delta",
+   "Pearl delta",
+   "Pearl-delta"
+  ],
+  "def": "The Pearl River delta of southern China: the low, water-cut country where the mulberry-dike fishpond was worked at its largest scale."
+ },
+ {
+  "term": "interlinear commentary",
+  "variants": [
+   "interlinear commentary"
+  ],
+  "def": "Notes written between the lines of an original text - in the Qimin Yaoshu, the treatise's own explanations of its own instructions, kept inside the quotation."
  }
 ];
