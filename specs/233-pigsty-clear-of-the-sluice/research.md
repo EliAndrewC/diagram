@@ -252,7 +252,7 @@ midpoints pulled 5.5 ft toward the parcel centroid) and ranked by distance to th
 | quantity | measured |
 |---|---|
 | far bank, over the first choice | **155.6 to 320.0 ft** |
-| the bound's own allowance (pond center less nearest seat) | **60.5 to 157.2 ft** per pond |
+| the bound's own allowance (pond PARCEL center less nearest seat) | **60.5 to 157.2 ft** per pond |
 | cost of the ACCEPTED seat over the first choice | **+0 to +21.2 ft** |
 | slack on the accepted seat, inside the bound | **57.3 ft** at its tightest |
 

@@ -269,6 +269,26 @@ it is labeled as one rather than dressed as history. No research pass is owed fo
 
 ## Review history
 
+**Amendment rounds 4 and 5** (`spec-fidelity`, 2026-09-12). Round 4 found that the previous round's fix
+had replaced a false claim with a worse one: rather than add the fourth R7 pointer, the session had
+written that it could not exist "because no test in the tree cites a `specs/` path" - and 34 test files
+do, two in exactly that form, with `tests/test_rolls.py` a gate test that REQUIRES such a pointer and
+asserts the file exists. The pointer is in the gate test docstring now, both sentences are true as
+stated, and R7 carries a postscript naming the fault: a justification invented in place of a one-line
+fix. T15, the sixth place naming the bound, also still said "center" where five said PARCEL.
+
+**Round 5: FAITHFUL.** Verified against the files and the manifest rather than against the claims - all
+four R7 pointers present, every operative statement of the bound saying PARCEL and matching
+`_centroid(ponds[i]["parcel"])`, the four figures re-derived exactly (155.6-320.0, 60.5-157.2, +0 to
++21.2, 57.3), the shipped map measured at 8.47 ft worst clearance with 7 sties and 2 pens, the spelling
+and dash sweep clean across 25 changed files, no contradiction, no unfalsifiable requirement, no
+self-exception, and every clause of the request carried. Its one aside - an unqualified "pond center" in
+an R7 table label - is taken here rather than left, which is the lesson this feature spent four rounds
+learning.
+
+**Status: ACCEPTED, FAITHFUL**, initially after four rounds and again after five amendment rounds
+following implementation.
+
 **AMENDED AFTER ACCEPTANCE, 2026-09-12** (the counter resets to zero for a post-acceptance amendment,
 GM 2026-09-12). The feature was implemented, and `settlement-review` returned **PASS** on the
 regenerated map - 7 sties and 2 pens held, minimum clearance over every drawn part 0.0 -> 8.47 ft, and
