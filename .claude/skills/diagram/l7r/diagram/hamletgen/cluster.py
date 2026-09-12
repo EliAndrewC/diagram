@@ -52,7 +52,7 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
-def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = ()) -> dict[str, Any]:
+def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Poly = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
     背山面水, "back to the hill, face the water": a farming settlement stands with its back to the
@@ -183,6 +183,20 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
             hem = min(min(seg_dist(mid[0], mid[1], p[i], p[(i + 1) % len(p)]) for i in range(len(p))) for p in dry_plots)
             score -= 1.6 * max(0.0, 1.0 - hem / (2.0 * dep))
             score -= 2.5 * back_fouled(mid, (nx, ny), dep, dry_plots)
+        # ...AND MINUS THE BROOK THROUGH THE BAND (feature 230). Since the brook stopped ending at the intake
+        # and began running on past the fan, a margin can have a stream down the middle of it - and a cluster
+        # seated there is a cluster in two halves: `settlement-review` measured two homesteads, their byre,
+        # two threshing yards and their gardens on the far bank, with every lane, both wells and the notice
+        # board on the near one, and a lane drawn walking into the water. The brook is drawn two stages before
+        # this one, so the seat can simply see it. Scored, not refused: a band the brook merely clips at one
+        # end should lose to the next margin along, while a hamlet whose every margin is crossed still gets
+        # seated - the same shape as the wet-ground foul above, and it reads the band's own sample points.
+        if brook:
+            _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
+            _bs = [(a[0] - mid[0]) * -ny + (a[1] - mid[1]) * nx for a in brook]
+            _sides = {1 if ((q[0] - mid[0]) * -ny + (q[1] - mid[1]) * nx) > 0 else -1 for q in _bp for a, b in zip(brook, brook[1:], strict=False) if seg_dist(q[0], q[1], a, b) < dep * 2.0}
+            crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
+            score -= 3.0 * crossed + (1.5 if len(_sides) > 1 else 0.0)
         if best is None or score > best[0]:
             best = (score, mid, (nx, ny))
     if best is None:

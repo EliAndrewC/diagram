@@ -16,7 +16,10 @@ from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, crosses_poly, net_acres, po
 from l7r.diagram.waterfields import CombCarve, build_polder, carve_comb, clean_polder_parcels, finish_comb
 
 from .consts import (
+    BROOK_FAN_TRIM,
+    BROOK_FRAME_MARGIN,
     BROOK_SKIRT,
+    BROOK_SLEW,
     BROOK_TAP_RUN,
     BROOK_WANDER,
     BROOK_WANDER_STEP,
@@ -199,6 +202,8 @@ def _fit_at_aspect(
     # of the old loop holds: monotone narrowing, termination at `rounds`, the best legal net kept.
     # Measured on the reference (seed 4): 4 carves -> 2; the cohort's worst field seeds 7 -> 2-3.
     pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
+    _trim_a = BROOK_FAN_TRIM if plan.brook_side < 0 else 1.0
+    _trim_b = BROOK_FAN_TRIM if plan.brook_side > 0 else 1.0
     k = 1.0
     for _ in range(rounds):
         k = min(max(k, lo + 1e-3), hi - 1e-3)
@@ -209,8 +214,10 @@ def _fit_at_aspect(
             seed,
             down_deg=plan.down_deg,
             field_fall=REF_FIELD_FALL * k / aspect,
-            canal_a_len=(REF_CANAL_A[0] * k * aspect, REF_CANAL_A[1] * k * aspect),
-            canal_b_len=(REF_CANAL_B[0] * k * aspect, REF_CANAL_B[1] * k * aspect),
+            # the fan is cut AWAY from the brook's flank (`BROOK_FAN_TRIM`): canal A hems the -1 side, canal B
+            # the +1 side, so whichever of them faces the brook is the one that stops short of it
+            canal_a_len=(REF_CANAL_A[0] * k * aspect * _trim_a, REF_CANAL_A[1] * k * aspect * _trim_a),
+            canal_b_len=(REF_CANAL_B[0] * k * aspect * _trim_b, REF_CANAL_B[1] * k * aspect * _trim_b),
             offtakes_a=plan.offtakes_a,
             offtakes_b=plan.offtakes_b,
             plot_across=plot_across,
@@ -364,6 +371,45 @@ def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
     return nxt, swing
 
 
+def _crop_edge(segs: Sequence[tuple[Pt, Pt]], u: float, window: float, floor: float) -> float:
+    """How far ACROSS the fall the cultivated ground reaches at this point down it - a cross-section, not a
+    bounding box.
+
+    Two cuts got this wrong before it, and both are the same mistake at different scales. Taking each ring's
+    greatest width made the brook jump the fan's whole half-width the moment it left the tap, a 72 to 85 degree
+    elbow that `settlement-review` read as a canal jog cut round the plots. Taking the greatest width of any
+    ring lying ABREAST of the station was no better, because the field envelope is one ring lying abreast of
+    every station: the brook was pushed out to the fan's shoulder for its whole length, 400 to 600 ft from
+    ground it was supposed to be skirting at 34. A fan is narrow at its head and broad at its foot, and the
+    course has to be able to see that. So every edge that CROSSES this station's line is cut there, and the
+    vertices inside a window either side are taken as they stand - the window covering the reach to the next
+    station, so nothing that sticks out between two stations is missed by both."""
+    best = floor
+    for (ua, va), (ub, vb) in segs:
+        if abs(ua - u) <= window:
+            best = max(best, va)
+        if (ua - u) * (ub - u) <= 0 and ua != ub:
+            best = max(best, va + (vb - va) * (u - ua) / (ub - ua))
+    return best
+
+
+def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[float, float, float, float]) -> float:
+    """The largest offset at or below `want` that keeps the station inside `box`, never below `floor`.
+
+    The station is `u * d + v * p`, so each side of the box is one linear bound on `v`; the tightest of the
+    four caps it. The floor is the crop clearance and wins outright: a course held inside the picture at the
+    price of running through the rice would be the wrong trade, and the two only disagree where the field
+    itself reaches the box, which the margin is sized to prevent."""
+    hi = want
+    for coord, lo_b, hi_b in ((0, box[0], box[2]), (1, box[1], box[3])):
+        base, slope = u * d[coord], p[coord]
+        if abs(slope) < 1e-9:
+            continue
+        a, b = (lo_b - base) / slope, (hi_b - base) / slope
+        hi = min(hi, max(a, b))
+    return max(floor, hi)
+
+
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0) -> Poly:
     """No segment of a drawn watercourse lies along a screen axis.
 
@@ -382,62 +428,106 @@ def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0)
     return out
 
 
-def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = (), skirt: float = BROOK_SKIRT, steps: int = 12) -> Poly:
+def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = (), skirt: float = BROOK_SKIRT, steps: int = 16) -> Poly:
     """The brook's course BELOW the intake: past the cultivated ground on one flank, then off the frame.
 
     A stream is tapped, not consumed - the intake takes what the field needs and the brook carries the rest
     on down (research/water.html, "Where does the brook stop being a brook and become the ditch"). So the
-    course below the intake has one job: pass the crop without touching it. It is built in the fall's own
-    frame - `u` along the fall, `v` across it on the chosen flank - by walking down the fan and holding `v`
-    outside the outermost cultivated ground seen so far, plus a skirt.
+    course below the intake has one job: pass the crop without touching it, and be a stream while it does.
 
-    THE PROFILE IS BUILT FROM EVERY CULTIVATED RING, not from the paddy envelope alone. The first cut used
-    the envelope, and `settlement-review` measured the result: on Sawada the brook crossed 15 of 25 dry hem
-    plots and ran 1,456 ft with plough ink on both banks, because the hem is laid OUTSIDE the envelope. The
-    delta's whole claim is that the field was cut around a brook that was already there, and a brook drawn
-    across the plots says the opposite. The supply canals go into the profile for the same reason, one step
-    weaker: they mark the margin the brook must stay outside of.
+    It is built in the fall's own frame - `u` along the fall, `v` across it on the chosen flank - by walking
+    down the fan and holding `v` outside the outermost cultivated ground seen so far, plus a skirt. Four
+    things shape it, and every one of them is a review finding rather than a preference:
 
-    AND THE OFFSET WANDERS. Held at the floor it produced a course that decayed onto a constant and then ran
-    1,284 ft on an exact bearing - a ruled line through a reed marsh, the appearance the GM rejected on this
-    map in 2026-08-26 - and, on the flank a supply canal hems, 1,360 ft parallel to that canal at a mean 32.5
-    ft, which is the two-water-lines catch again. The walk is seeded from the map, so two maps differ and one
-    map is stable; its steps never take the course back inside the profile, so the brook still cannot touch
-    the crop however the fan's outline wanders."""
+    THE PROFILE IS PER RING, over every cultivated ring. The first cut cleared the paddy ENVELOPE and the dry
+    hem is laid outside it: 15 of 25 hem plots crossed on one map, 1,456 ft of brook with plough ink on both
+    banks. The supply canals go in too, one step weaker - they mark the margin the brook stays outside of.
+    And a ring enters the profile by the `u` its BODY starts at, not by each vertex's own `u`, because a
+    plot's outermost corner can lie far downslope of the ground it covers.
+
+    THE OFFSET WANDERS, on a seeded reflecting walk. Held at the floor it decayed onto a constant and drew
+    1,284 ft at exactly 90.000 degrees - the ruled line the GM rejected on this map by name - and ran 1,360 ft
+    parallel to the canal hemming that margin, which is the two-water-lines catch in another place.
+
+    A STEP ACROSS THE FALL IS LED INTO. The profile jumps when a plot enters it, and an un-led jump is a
+    mitred elbow: 67 degrees against 0.3-18 everywhere else, plainly cut to walk the water round two plots.
+
+    AND IT STAYS ON THE SHEET. The picture is cropped to its content and a stream is not content, so a course
+    that strays wide of the field strays off the picture - 77% of it on a diagonal fall, in two pieces, with
+    the confluence 123 ft beyond the edge. The stations are held inside the field's bounds grown by
+    `BROOK_FRAME_MARGIN`, and the course leaves the frame from the last one that fits."""
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
     rings = [[(v[0] * dx + v[1] * dy, v[0] * px + v[1] * py) for v in ring] for ring in [list(plan.envelope), *[list(c) for c in crop]] if ring]
-    # PER RING, not per vertex: a hem plot's outermost corner can lie far downslope of the ground its body
-    # covers, and a profile keyed on each vertex's own `u` then clears the plot at neither station - which is
-    # how a brook vertex ended up 16 ft inside a barley plot with the per-vertex profile in place.
-    spans = [(min(u for u, _ in r), max(v for _, v in r)) for r in rings]
+    segs = [(a, b) for r in rings for a, b in zip(r, r[1:] + r[:1], strict=False)]
     u0, v0 = sluice[0] * dx + sluice[1] * dy, sluice[0] * px + sluice[1] * py
     umax = max(u for r in rings for u, _ in r)
+    # THE BOUND IS IN MAP COORDINATES, because the view is (the sheet is cropped to an axis-aligned box round
+    # its content, and a stream is not content). Bounding the lateral offset in the FALL's frame was the first
+    # cut and on a diagonal fall it let the course leave the picture and come back: 77% of one brook outside
+    # the view in two pieces a reader cannot join. `_v_within` returns the largest offset that keeps the
+    # station inside the field's own bounds grown by the margin - never less than the crop clearance, which
+    # wins if the two ever disagree.
+    xs = [q[0] for ring in [list(plan.envelope), *[list(c) for c in crop]] for q in ring]
+    ys = [q[1] for ring in [list(plan.envelope), *[list(c) for c in crop]] for q in ring]
+    box = (min(xs) - BROOK_FRAME_MARGIN, min(ys) - BROOK_FRAME_MARGIN, max(xs) + BROOK_FRAME_MARGIN, max(ys) + BROOK_FRAME_MARGIN)
     rng = knob_rng(plan.spec.seed, "brook_wander")
     swing = 1 if rng.random() < 0.5 else -1
     # the tap's own stride: the brook runs on down the fall before it bends away, so the head race's offtake
     # angle is measured off a heading the brook is actually on
     out: Poly = [(sluice[0] + dx * BROOK_TAP_RUN, sluice[1] + dy * BROOK_TAP_RUN)]
-    stray = BROOK_WANDER / 2.0
-    stride = (umax - u0 - BROOK_TAP_RUN) / steps
+    stray, stride = BROOK_WANDER / 2.0, (umax - u0 - BROOK_TAP_RUN) / steps
+    prev_v = v0 + skirt
     for i in range(1, steps + 1):
         u = u0 + BROOK_TAP_RUN + stride * i
         stray, swing = _wander(rng, stray, swing)
-        # the offset clears everything up to the NEXT station, not to this one: a plot whose outermost
-        # corner falls BETWEEN two stations is otherwise cleared by neither, and the segment clips it
-        v = max([v0] + [vmax for ulo, vmax in spans if ulo <= u + stride + 40.0]) + skirt + stray
+        floor = _crop_edge(segs, u, stride + 40.0, v0) + skirt
+        v = _v_within(u, floor, floor + stray, (dx, dy), (px, py), box)
         out.append((u * dx + v * px, u * dy + v * py))
-    # ...and off the frame from there, still wandering, the run measured along the fall from the last station
+        prev_v = v
+    # ...and off the frame from the last station, still wandering, the run measured along the fall from there.
+    # THE FIRST EXIT LEG KEEPS THE COURSE'S OWN HEADING and only then turns onto the fall: driving it straight
+    # downhill from a station that is well out to the side puts a corner exactly where the brook should be
+    # running off the sheet (121 degrees on one map, and the sharpest thing on it).
     lx, ly = out[-1]
-    spans = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
-    span = max(120.0, min(spans)) + 260.0
-    base = lx * px + ly * py
-    for f in (0.3, 0.62, 1.0):
-        stray, swing = _wander(rng, stray, swing)
-        u = (lx * dx + ly * dy) + span * f
-        v = base + stray
-        out.append((u * dx + v * px, u * dy + v * py))
-    return _off_the_axes(out, (px, py))
+    edge = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
+    span = max(120.0, min(edge)) + 260.0
+    heading = unit(lx - out[-2][0], ly - out[-2][1]) if len(out) > 1 else (dx, dy)
+    px_, py_ = lx, ly
+    for f, blend in ((0.3, 0.25), (0.32, 0.6), (0.38, 1.0)):
+        hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
+        px_, py_ = px_ + hx * span * f, py_ + hy * span * f
+        out.append((px_, py_))
+
+    # THE CORNERS ARE CUT, not led into. Inserting lead stations per step was the first answer and it made the
+    # thing it was meant to prevent: short jogs between long legs, 16 turns past 70 degrees on one map and a
+    # median vertex of 34 against its siblings' 2 to 24 - a staircase rather than a meander. One corner-cutting
+    # pass over the stations replaces each of them with two points a quarter in from either side, so a vertex
+    # becomes two bends of about half the turn; each cut point is re-floored against the crop at its own place
+    # down the fall, so a rounded course cannot round its way into the rice.
+    # the TAP is the cut's leading anchor and is dropped from the result (`feed_brook` supplies it): the corner
+    # the brook turns just below the tap is the sharpest on the course and the one a reader looks straight at,
+    # and anchoring on the tap cuts it while leaving the stride below the tap on the fall, which is what makes
+    # the head race's offtake angle the angle the record states
+    mid, keep_tail = [sluice, *out[:-3]], out[-3:]  # the exit legs run free; cutting them against the box folded them
+    cut: Poly = []
+    for a, b in zip(mid, mid[1:], strict=False):
+        for t in (0.25, 0.75):
+            qx, qy = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
+            cu, cv = qx * dx + qy * dy, qx * px + qy * py
+            # a NARROW window here, unlike the stations': a cut point sits between two stations that have each
+            # already been floored with the wide one, so all it owes is the crop at its own place - and the wide
+            # window would push the points just below the tap out to the fan's edge before the fan begins,
+            # which swings the brook off the fall and takes the head race's offtake angle with it
+            # ...and NO tap baseline. The stations floor on `v0` so that the course starts outside the intake's
+            # own line; a cut point must not, or every point between the tap and the first station is pushed a
+            # skirt's width sideways and the brook leaves the tap on a bearing that is not the fall - which is
+            # the bearing the head race's offtake angle is measured against.
+            cfloor = _crop_edge(segs, cu, 12.0, -1e9) + skirt
+            cv = _v_within(cu, cfloor, max(cfloor, cv), (dx, dy), (px, py), box)
+            cut.append((cu * dx + cv * px, cu * dy + cv * py))
+    cut.append(mid[-1])
+    return _off_the_axes([*cut, *keep_tail], (px, py))
 
 
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
@@ -779,11 +869,12 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     # water source for the gate.
     # EVERY cultivated ring, and the supply canals with them: the brook passes outside all of it, not
     # merely outside the paddy envelope (`brook_skirt`, and the review that measured the hem crossings).
-    plan.brook = feed_brook(
-        plan,
-        sluice,
-        [[(float(x), float(y)) for x, y in p["poly"]] for p in net["plots"] + net["dry_plots"]] + [[(float(x), float(y)) for x, y in c["pts"]] for c in net["channels"]],
-    )
+    # EVERY cultivated RING - the paddies and the dry hem alike, the hem being laid outside the envelope the
+    # first cut cleared. NOT the supply canals: a canal is one polyline spanning the whole fan, so a profile
+    # that asks which rings lie abreast of a station gets the field's widest point at every station from it,
+    # and the brook is pushed out to the fan's shoulder for its whole length (measured: offsets of 400-600 ft
+    # against a 34 ft skirt). The canals run inside the plots they water, so clearing the plots clears them.
+    plan.brook = feed_brook(plan, sluice, [[(float(x), float(y)) for x, y in p["poly"]] for p in net["plots"] + net["dry_plots"]])
     s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": plan.brook})
     draw_intake(s, plan, sluice)
     # THE PARTS OF A DITCH THAT RUN OUTSIDE THE CROP become no-build corridors.
@@ -841,10 +932,23 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
             "poly": [[round(x, 1), round(y, 1)] for x, y in poly],
         }
     )
-    s.add(
-        '<polygon points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in poly) + '" fill="#8C7C63" stroke="#5F5340" stroke-width="0.8" stroke-linejoin="round"/>',
-        cls="weir",
+    # A WEIR IS NOT A BRIDGE, and it was drawn as one: the same brown oblique bar as the nine footbridges on
+    # the reference hamlet's own sheet, which `settlement-review` read as "the crossing" - actively misleading,
+    # since it is the only bar over the brook. So the glyph says what a weir does instead. Stone gray rather
+    # than timber brown, because the bar is crib-work packed with stone and the map's timber decks are brown;
+    # the crib's own baulks ticked across it, which a plank deck's single stripe cannot be mistaken for; and a
+    # lip along the upstream face, the one thing a weir has and a bridge cannot - it holds water back.
+    pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
+    ticks = "".join(
+        f'<line x1="{sluice[0] + ax * half * t - hx * half_t:.1f}" y1="{sluice[1] + ay * half * t - hy * half_t:.1f}" '
+        f'x2="{sluice[0] + ax * half * t + hx * half_t:.1f}" y2="{sluice[1] + ay * half * t + hy * half_t:.1f}" stroke="#6E6A60" stroke-width="0.7"/>'
+        for t in (-0.62, -0.2, 0.2, 0.62)
     )
+    lip = (
+        f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" '
+        f'stroke="#8FA6AE" stroke-width="1.6" stroke-linecap="round"/>'
+    )
+    s.add(f'<polygon points="{pts}" fill="#9A9A90" stroke="#63645C" stroke-width="0.9" stroke-linejoin="round"/>{ticks}{lip}', cls="weir")
 
 
 # ---- the polder's flanks (feature 150) --------------------------------------------------------------

@@ -181,7 +181,9 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
     monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
     monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
-    plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0, head_deg=55.0, head_lead=105.0)
+    plan = SimpleNamespace(
+        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
+    )
     net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
     per_aspect = {}
     for a, _k in carves:
@@ -292,7 +294,8 @@ def test_the_brook_skirts_the_fan_without_turning_back_into_it() -> None:
     course = hg.brook_skirt(plan, (700.0, 300.0), 1)
     lat = [q[0] * px + q[1] * py for q in course]
     floor = max(v[0] * px + v[1] * py for v in plan.envelope) + hg.BROOK_SKIRT
-    assert all(v >= floor - 1e-6 for v in lat[1:]), "the wander never takes the course back inside the crop's own extent"
+    abreast = [v for q, v in zip(course, lat, strict=False) if min(w[1] for w in plan.envelope) <= q[1] <= max(w[1] for w in plan.envelope)]
+    assert all(v >= floor - 1e-6 for v in abreast), "every point abreast of the crop clears it by the skirt"
     assert all(not hg.point_in_poly(q[0], q[1], plan.envelope) for q in course), "no vertex inside the crop"
     assert course[-1][1] > plan.H, "and it leaves the frame downslope"
     bearings = [round(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])), 3) for a, b in zip(course, course[1:], strict=False)]

@@ -154,3 +154,34 @@ search gained one degree of freedom (`pond_seat`: sways of 0.9 and 1.8 of the lo
 the straight seat still winning whenever it is clear) and the pond came back. And the first clearance test
 held the pond a circle of its LONG radius from the brook, half again the pond across its short axis; it is
 the pond's own ellipse plus a rim's margin now.
+
+## R4 The course, after three review passes (2026-09-12)
+
+`settlement-review` read the maps three times and its findings drove the whole of the brook's geometry. What the
+course is, in the end: a walk down the fall in the fall's own frame, each station held outside the crop's
+CROSS-SECTION at that point by a skirt, wandering on a seeded reflecting walk, bounded to the field's own extent
+so it stays on the sheet, corner-cut once so a vertex becomes two bends, and running free of the bound only in
+the legs that leave the frame. Beside it, two changes that are not the course at all: the fan's supply canal is
+trimmed on the brook's flank, so the field is cut away from the stream; and the cluster seater scores a seat down
+when the brook would cross the band, so the hamlet stands on one side of its own water.
+
+The measurements, pool-wide, against what each pass found:
+
+| | pass 1 | pass 2 | pass 3 | now |
+|---|---|---|---|---|
+| brook vertices in cultivated ground | 15 of 25 plots on one map | 1 | 1 | **0 on every map** |
+| the course, in the cropped view | - | 2 to 7 pieces | 1 to 3 pieces | **1 piece on every map** |
+| sharpest turn | 67 deg round a 300 ft straight | 83 deg | 83 to 100 deg | **52, 63, 53 deg; 121 on Kashikawa** |
+| median turn | - | 9 to 34 deg | 13 to 34 deg | **2, 11, 12, 17 deg** |
+| turns past 70 deg | - | up to 16 on one map | up to 16 | **0 on three maps, 2 on Kashikawa** |
+| the offtake angle a reader measures | 64 and 46 deg | 64 and 46 | 35 | **35 on every map, the record's own figure** |
+| homesteads across the water from their lanes | - | 2, no crossing | 1, no crossing | **0** |
+
+**What is left, measured and accepted.** Kashikawa keeps one 121 degree corner at (2480, 1766), where the course
+meets the frame's own edge and slides along it; its next turn, 83 degrees, is off the view. Every other turn on
+that map is 2 degrees. The cause is the bound that keeps the course on the sheet: on a map whose land falls on a
+diagonal the bound is a box in the sheet's frame and the course runs across it, so where the two meet the course
+must turn. Two ways out were priced and neither is this feature's: loosen the bound, which puts part of the course
+back outside the picture (the defect pass 3 measured at 67% on Sawada); or bound the course in the frame's own
+axes from the start, which is a different construction and would move every map again. The corner is recorded here
+rather than left for a reader to find.

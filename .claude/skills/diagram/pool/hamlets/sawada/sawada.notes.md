@@ -661,8 +661,8 @@ gardens, wells, byres, sheds, fields, water, marsh, commons and the frame are by
 crowns bury lane tread on four lanes here - **lane 7 at 63.2%** of its whole 68.5 ft, lane 1 at 28.2%,
 lane 0 at 7.7%, lane 2 at 2.7%, by pixel count rather than by record. None of the eight offending crowns
 is one this delta added. The mechanism is precise: `groves_clear_of_lanes` tests each recorded clump
-CENTRE at the grove's single nominal radius, while the drawn crowns scatter a median 8.1 ft off their
-centres with radii from 6.1 to 16.5 ft - so the lane-1 offender reaches 23.8 ft where the check models
+CENTER at the grove's single nominal radius, while the drawn crowns scatter a median 8.1 ft off their
+centers with radii from 6.1 to 16.5 ft - so the lane-1 offender reaches 23.8 ft where the check models
 11.0, a 12.8 ft blind spot. `scatter_audit` cannot see it either: its keep-out families are water,
 crop, marsh and grove, with no way or corridor family at all. The fix is to walk `M["tree_crowns"]` -
 the discs the engine actually recorded and drew - against the corridors, instead of the clump seeds.
@@ -799,4 +799,4 @@ downstream and reaches the division point over a distance the fan gives it. The 
 top is a brook and a ditch parting, which is what was actually there.
 
 What stands at the tap is rolled, because the record attests two forms and prefers neither.
-This map is the pinned one: `intake="open"`, the brook tapped straight off its bank with nothing built across the water. All five pool seeds happened to roll the weir and a knob owes one map per value, so the value is declared in the generator rather than left to the draw. The foot changed too, and by measurement: the brook passes 82 ft from the collector's outfall, and the drain now runs to it and joins it at a confluence - what a village's drainage did, and an end to two watercourses leaving the map side by side.
+This map is the pinned one: `intake="open"`, the brook tapped straight off its bank with nothing built across the water. All five pool seeds happened to roll the weir and a knob owes one map per value, so the value is declared in the generator rather than left to the draw. The foot changed too, and by measurement: the brook passes 75 ft from the collector's outfall, and the drain now runs to it and joins it at a confluence - what a village's drainage did, and an end to two watercourses leaving the map side by side.

@@ -103,6 +103,9 @@ CONSUMED_PUBLIC = [
     "cohort_specs",  # feature 166: tests/gate/test_cohort_lane_rules.py rolls the gate cohort by its own specs
     "connector_track",
     "BROOK_JOIN_DESCENT",
+    "BROOK_SLEW",
+    "BROOK_FAN_TRIM",
+    "BROOK_FRAME_MARGIN",
     "BROOK_SKIRT",
     "BROOK_WANDER_STEP",
     "BROOK_WANDER",
