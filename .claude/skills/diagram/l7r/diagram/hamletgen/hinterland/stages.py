@@ -15,12 +15,31 @@ from .parcels import CROP_MARGIN, open_ground_patches
 
 
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
-    """The non-arable ground: reed marsh at the wet toe, cut-over scrub everywhere else.
+    """The marsh, then scrub and rough grazing.
+
+    Ground cover fills what is left, so it runs after everything it must avoid; it reads the drawn features as
+    obstacles rather than reserving anything from them. Three moves, in order: the reed marsh at the wet toe,
+    its inner edge following the fan's foot along the collector (T30); then the coppice patches are SCANNED (not
+    yet drawn) and the shelter belt is computed, both from the houses as they stand; then the scrub is scattered
+    with every wood as a soft keep-out - brush and pine stop at a wood's line and at the marsh, grass grades
+    into them over one shared feather (T12, T34, T35). The floor of a worked village wood was kept clear, so no
+    scrub stands under its crowns.
+
+    The non-arable ground: reed marsh at the wet toe, cut-over scrub everywhere else.
 
     One engine call, because the engine already knows the doctrine (China-first: the south-China rice
     hills were stripped for fuel and timber over centuries, so the DOMINANT cover past the fields is
     scrub, not forest). It runs after the structures so the scatter skips them, and before the woods
-    so the woodland patches draw on top of the scrub they stand in."""
+    so the woodland patches draw on top of the scrub they stand in.
+
+    Steps:
+        l7r.diagram.hamletgen.hinterland.belt.belt_polygon
+        l7r.diagram.hamletgen.hinterland.frame.scatter_frame
+        l7r.diagram.settlement.Settlement.hinterland
+        l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures
+        l7r.diagram.hamletgen.homesteads.bamboo.household_bamboo
+        l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats
+    """
     # THE BELT IS COMPUTED HERE, two stages before it is drawn, so the scrub can keep out of it
     # (T34): the belt derives from the houses alone, which are final by now, and `stage_woodland`
     # recomputes the same polygon. Woody scatter stops at the belt's line; grass grades into it.
@@ -46,9 +65,22 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
-    """The bamboo stands, drawn on the seats `stage_hinterland` scanned (T47). After the belt, so the
+    """The bamboo stands.
+
+    A take-yabu is a clonal thicket with a hard edge - a stand, not a seasoning - and a culm is inches across,
+    so at this scale bamboo is drawn as a STAND-LEVEL glyph: the stand's position and extent to scale, the marks
+    inside symbolic (the convention of Japan's own topographic legend, which gives bamboo its own symbol beside
+    broadleaf and conifer). Seated by the previous stage on the cluster's shady side or at the field margin's
+    shady end, per the `bamboo` knob; drawn here, after the belt, over scrub that already kept out of it. Before
+    this stage existed bamboo was 20% of the belt's crowns, one six-foot culm at a time, and invisible.
+
+    The bamboo stands, drawn on the seats `stage_hinterland` scanned (T47). After the belt, so the
     stand-level glyph lies over the scrub that already kept out of it; `meta.bamboo` records the roll
-    so the gate can hold "declared and drawn"."""
+    so the gate can hold "declared and drawn".
+
+    Steps:
+        l7r.diagram.settlement.Settlement.bamboo_stand
+    """
     s.M["meta"]["bamboo"] = plan.bamboo
     s.M["bamboo_stands"] = []  # the pending seat-time records (T49) are replaced by the drawn ones
     for role, ring in zip(plan.bamboo_roles, plan.bamboo_polys, strict=True):
@@ -56,14 +88,26 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_woodland(s: Settlement, plan: SitePlan) -> None:
-    """A few managed-woodland patches on the high, far ground - the green EXCEPTION to the scrub.
+    """The woodland commons.
+
+    Managed coppice on ground nothing else wanted, drawn on the parcels the previous stage scanned - so the
+    scrub has already kept out of them. Each parcel is an irregular ring inside the reach its keep-outs were
+    tested at, never a rectangle (T36): an iriai wood was bounded by ridge, stream and path, and governed by
+    rules rather than parcel lines.
+
+    A few managed-woodland patches on the high, far ground - the green EXCEPTION to the scrub.
 
     The windbreak belt is COMPUTED here, before the scan, and only DRAWN in the next stage. That
     split exists because the two woods must not merge: `woodland_clear_of_grove` requires a coppice
     patch to keep off every clump of the fengshui grove, or the two read as one indistinct green
     mass. The scan therefore has to know where the belt is going, but the belt has to be DRAWN late
     so its per-crown filter sees every structure already standing (the engine's DRAW ORDER rule).
-    Computing early and drawing late satisfies both."""
+    Computing early and drawing late satisfies both.
+
+    Steps:
+        l7r.diagram.hamletgen.hinterland.belt.belt_polygon
+        l7r.diagram.settlement.Settlement.commons
+    """
     plan.belt = belt_polygon(s, plan)
     # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out
     # of them; the scan needs the marsh drawn and nothing this stage adds. Drawn here, over open ground.
@@ -72,7 +116,13 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
-    """The communal fengshui belt behind the cluster, shaped to the houses that actually landed.
+    """The shelter belt.
+
+    Sited from the wind and the cluster it shelters, so it needs the cluster finished. Its canopy is deferred to
+    the flush at the end - drawn here it would be painted over by nothing, but its crowns must be filtered
+    against every structure, and not all of them exist yet.
+
+    The communal fengshui belt behind the cluster, shaped to the houses that actually landed.
 
     A nucleated settlement shelters behind ONE grove rather than per-house belts, and the belt must
     do two things the gate measures: stand on the WINDWARD side of the house centroid, and EMBRACE
@@ -83,7 +133,12 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     leafy gaps among the homes.
 
     Drawn LATE, after the ground cover and the woods, so its per-crown filter sees every structure
-    already standing and no tree is drawn on a roof."""
+    already standing and no tree is drawn on a roof.
+
+    Steps:
+        l7r.diagram.hamletgen.hinterland.frame.title_pocket
+        l7r.diagram.settlement.Settlement.village_grove
+    """
     if not plan.belt:
         return
     # ...DENTED AROUND THE TITLE'S POCKET. `stage_woodland` reserves blank ground for the map's name

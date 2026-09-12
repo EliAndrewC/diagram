@@ -39,10 +39,22 @@ def _board_footprint(s: Settlement) -> tuple[float, float]:
 
 
 def stage_crossings(s: Settlement, plan: SitePlan) -> None:
-    """Bridges where a way crosses water, and plank footbridges over the long irrigation ditches.
+    """Planks and decks.
+
+    Every way that crosses water gets its deck HERE, which is why the earlier way stages are free to cross a
+    ditch: the crossing is legal because this stage will deck it.
+
+    Bridges where a way crosses water, and plank footbridges over the long irrigation ditches.
 
     After every way and every watercourse, because a crossing added later leaves an unbridged one -
-    the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it."""
+    the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it.
+
+    Steps:
+        l7r.diagram.settlement.Settlement.bridges
+        l7r.diagram.settlement.Settlement.channel_footbridges
+        l7r.diagram.settlement.Settlement.dike_gates
+        l7r.diagram.hamletgen.water.polder_crossing_caps
+    """
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
@@ -57,7 +69,26 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_notice(s: Settlement, plan: SitePlan) -> None:
-    """The official notice board, on a lane verge at the busiest node.
+    """The notice board - the last FEATURE placed.
+
+    The kosatsuba is deliberately the last map feature, after even the crop and the title - only the label phase
+    follows it, and that phase places captions, not features - and the reason is about the settlement rather
+    than about the drawing (GM 2026-08-29): "where you put the notice board on the map does depend on what other
+    features already exist ... the real humans that live in the society that decide where the notice board will
+    go will look around at the things which already exist and then decide where to put the notice board. They
+    may even decide to move a notice board which has already been placed." Every other stage either reserves
+    ground or grows into it; the board does neither. It is a 12 x 5 ft plank a village drives in beside a way
+    once the village is there, so it is the one feature that should see the whole map before it chooses. It
+    stands ON a way - on the verge, a few feet off the tread (feature 133 T13), because a kosatsu is read where
+    people pass - and WHICH way, and where along it, is a per-settlement knob rolled from the map's own seed
+    over the placements the record attests and the map can site (feature 154). Placing it last also fixed a
+    defect by construction: sited among the trees it used to claim a ~55 ft cleared disc, and an entrance seat
+    on a windward fringe punched a 40 ft hole in the shelter belt that nothing replanted. No feature is placed
+    after the board now, so it displaces nothing - and the GM's ruling is that it never should have: "humans
+    would not need to clear any amount of space in order to put up a notice board at the side of a path." It may
+    stand under a canopy at the wood's edge.
+
+    The official notice board, on a lane verge at the busiest node.
 
     EVERY settlement tier posts the state's standing law, hamlets included - the ofuregaki circulars
     reached the peasantry through this board, read out by the one required-literate person (a
@@ -76,7 +107,16 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     already exist and then decide where to put the notice board. They may even decide to move a notice
     board which has already been placed." Every other stage reserves ground or grows into it; a plank
     driven in beside a way does neither, so it is the one feature that should see the whole map first -
-    and nothing is placed after it for it to displace."""
+    and nothing is placed after it for it to displace.
+
+    Steps:
+        l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor
+        l7r.diagram.hamletgen.frame._board_footprint
+        l7r.diagram.hamletgen.frame._nearest_way_bearing
+        l7r.diagram.settlement.Settlement.fixture_clear_of_water
+        l7r.diagram.settlement.Settlement.place_kosatsuba
+        l7r.diagram.settlement.Settlement.kosatsuba
+    """
     spot = s.place_kosatsuba()
     # ...AND IT MUST STAND WHERE THE FRAME WILL KEEP IT. `place_kosatsuba` maximizes passing traffic
     # (dwellings within ~260 px) along the whole way network, and a lane ARM that runs past the
@@ -202,10 +242,21 @@ def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
 
 
 def stage_frame(s: Settlement, plan: SitePlan) -> None:
-    """The crop, then the title.
+    """Crop, title, scalebar.
+
+    The canvas is deliberately generous and is cropped to content only now. Erring large is cheap - unused
+    canvas is thrown away - while erring small silently mis-shapes the field.
+
+    The crop, then the title.
 
     In that order: the title searches the FRAMED window for blank space to sit in, so the frame has
-    to exist first."""
+    to exist first.
+
+    Steps:
+        l7r.diagram.hamletgen.hinterland.frame.title_pocket
+        l7r.diagram.settlement.Settlement.crop_to_content
+        l7r.diagram.settlement.Settlement.title
+    """
     # The margin leaves the TITLE somewhere to stand: `title()` scans the framed window for a box
     # that clears every feature and falls back to a corner overlap when the map is too full, which
     # `title_clear_of_features` then fails. But it is bounded above as well as below - `crop_hugs_
@@ -220,7 +271,20 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_labels(s: Settlement, plan: SitePlan) -> None:
-    """THE LABEL PHASE - the last stage of a hamlet, after every map feature is on the sheet.
+    """The labels - the final phase, after the last feature.
+
+    Every caption on the map is placed here, against the finished sheet, and nothing comes after it (feature
+    157, GM 2026-08-29): "add a phase at the very end of every settlement creation process, which is putting
+    down the labels for things. Thus, after the final map feature is added, which on a hamlet is the notice
+    board, there is a final phase in which we add labels for whatever map features get labels. This is because
+    how we place labels will always depend on what else is on the map." No feature draws its own caption any
+    more: a stage that wants one queues it (`label()`), and this stage drains the queue
+    (`Settlement.place_labels`) once every feature a caption might have to avoid exists. It draws no feature and
+    reserves no ground, so it can only ever be last - the same argument that put the notice board after the
+    frame, taken one step further. The plate is the previous one with its captions on, which on a hamlet is
+    exactly what the stage is.
+
+    THE LABEL PHASE - the last stage of a hamlet, after every map feature is on the sheet.
 
     GM 2026-08-29 (feature 157): *"add a phase at the very end of every settlement creation process,
     which is putting down the labels for things. Thus, after the final map feature is added, which on
@@ -235,5 +299,9 @@ def stage_labels(s: Settlement, plan: SitePlan) -> None:
     thing it does. Whichever runs first drains the queue; the other is a no-op.
 
     `plan` is unused, and stays in the signature because `STAGES` is a list of `(s, plan)` callables -
-    the pipeline's contract, not this stage's need."""
+    the pipeline's contract, not this stage's need.
+
+    Steps:
+        l7r.diagram.settlement.Settlement.place_labels
+    """
     s.place_labels()

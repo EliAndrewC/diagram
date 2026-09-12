@@ -210,6 +210,41 @@ def _drop_collapsed(s: Settlement) -> list[int]:
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:
+    """The lanes the settlement wore.
+
+    Every ENDOGENOUS way - the cluster's spine and the web of alleys off it - drawn now because only now is
+    there a settlement to derive them from. Both are fitted to where the houses actually landed rather than to
+    where the seat band predicted they would land, which is the distinction that matters: the spine used to be
+    sized on the band while the houses spread wider than it, so it could not be guaranteed to reach them. Laid
+    first, these lanes competed for ground with the very houses they exist to serve - measured, the four pool
+    clusters' long axes grew 15-97%, sprawl no check measures. They also run after the byres and wells, not
+    merely after the houses; between the two, their corridors reserved courtyard ground and exiled fixtures up
+    to 210 ft. A DISPERSED hamlet draws nothing here at all, because it has no internal network - its farmsteads
+    stand in their own holdings and the connector is the only way on the map. The web is then READ AS SHAPES
+    before the stage ends (feature 133 T31/T32): every near-junction is closed so the lanes are one network in
+    ink rather than by tolerance, each junction is made once, ends within a few paces meet at one node, and
+    every lane is string-pulled and cleared of hairpins and zigzags - a worn path minimizes its turns, and a
+    bend sits at a plot corner.
+
+    Steps:
+        l7r.diagram.hamletgen.ways.fabric._margin_frame
+        l7r.diagram.hamletgen.ways.web._lay_skeleton
+        l7r.diagram.settlement._knobs.web_cuts
+        l7r.diagram.hamletgen.ways.web._reachable_runs
+        l7r.diagram.hamletgen.ways.serve._lay_web_lane
+        l7r.diagram.hamletgen.ways.sweeps._join_orphan_ways
+        l7r.diagram.hamletgen.ways.sweeps._bridge_collinear_breaks
+        l7r.diagram.hamletgen.ways.serve._serve_stragglers
+        l7r.diagram.hamletgen.ways.touch._touch_junctions
+        l7r.diagram.hamletgen.ways.smooth._smooth_web
+        l7r.diagram.hamletgen.ways.web._drop_collapsed
+        l7r.diagram.hamletgen.ways.sweeps._sweep_debris
+        l7r.diagram.hamletgen.ways.sweeps._drop_end_nubs
+        l7r.diagram.hamletgen.ways.sweeps._sweep_steading_fouls
+        l7r.diagram.hamletgen.ways.sweeps._sweep_doubled_remnants
+        l7r.diagram.hamletgen.ways.sweeps._keep_the_route_wide
+        l7r.diagram.settlement.Settlement.trim_lane_stubs
+    """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
 

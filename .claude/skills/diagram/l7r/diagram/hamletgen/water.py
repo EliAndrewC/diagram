@@ -21,12 +21,25 @@ from .plan import SitePlan, _roll
 
 
 def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
-    """Settle the drainage bearing and the land's fall BEFORE anything is placed.
+    """The bearing and the fall.
+
+    THIS STAGE DRAWS NOTHING, and that is the whole point of it. The generator's first act is to settle two
+    numbers - which way the water runs, and which way the land falls - and write them into the map's metadata.
+    Which end of the fan is the head, which margin the cluster may stand on, which way the drain runs, where the
+    marsh is allowed to be: every one of those is decided downstream of these values, and none of it is ink yet.
+    The water SKELETON is drawn in the next stage, by the same call that lays the paddy.
+
+    Settle the drainage bearing and the land's fall BEFORE anything is placed.
 
     This is first because the skill says it is first, at every tier: "before a single feature is
     placed, decide the map's drainage bearing and, separately, the land's fall". Everything
     downstream reads them - which end of the fan is the head, which margin the cluster can stand on,
-    which way the drain runs, where the marsh is allowed to be."""
+    which way the drain runs, where the marsh is allowed to be.
+
+    Steps:
+        l7r.diagram.hamletgen.plan.plan_site
+        l7r.diagram.settlement.Settlement.pin_knob
+    """
     # THE MAP DECLARES THAT A SCRIPT MADE IT (GM 2026-08-13). Rules that the scripted path adopts
     # ahead of the hand-authored pool are gated on this tag, so a legacy map keeps its present
     # packing and starts obeying the new rule the moment it is CONVERTED - the migration enforces
@@ -616,11 +629,31 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
 
 
 def stage_field(s: Settlement, plan: SitePlan) -> None:
-    """Lay the irrigation skeleton and carve the paddies between its threads.
+    """The water skeleton and the paddy.
+
+    The field is SOLVED for a real acreage rather than drawn to a pixel size, and it is laid before any built
+    thing exists. That is the ordering decision with the longest reach on the whole map: the settlement
+    afterwards takes whatever margin the field leaves it. Where that margin curves, the cluster has to curve
+    with it. This is also where WATER first becomes ink - the intake, the head race and the field ditches arrive
+    in the same call that lays the plots (`build_comb` returns the canals and the plots together), which is why
+    there is no plate showing water alone: splitting the stage to manufacture one was priced and declined,
+    because STAGES is the generator's design and a page does not get to reorder it.
+
+    Lay the irrigation skeleton and carve the paddies between its threads.
 
     Second, because the water is first and the field is grown AROUND the water (the water-first
     inversion `waterfields.py` exists for). The head sluice comes from `head_sluice`, which puts the
-    intake at the field's high head - gravity, not a knob."""
+    intake at the field's high head - gravity, not a knob.
+
+    Steps:
+        l7r.diagram.hamletgen.water.fit_field
+        l7r.diagram.sitegen.geom.net_acres
+        l7r.diagram.hamletgen.water.head_sluice
+        l7r.diagram.hamletgen.water.feed_brook
+        l7r.diagram.settlement.Settlement.draw_comb_field
+        l7r.diagram.hamletgen.water.stage_polder
+        l7r.diagram.settlement.Settlement.plot_texture
+    """
     if plan.field_archetype in POLDER_ARCHETYPES:
         stage_polder(s, plan)
         return
@@ -776,7 +809,16 @@ def dike_face(pts: Sequence[Pt], flank: str, lo: float, hi: float, bins: int = 3
 
 
 def stage_waterward(s: Settlement, plan: SitePlan) -> None:
-    """The reed fringe along every water-facing flank of a polder dike, and its declaration.
+    """A polder’s waterward fringe.
+
+    The reed strips outside the dike, on the flanks that face the water (feature 150). It needs the SEAT - which
+    flank is landward is a fact about where the village stands - and it RESERVES ground, so it runs here rather
+    than in the hinterland with the rest of the wild cover: laid there, it was drawn over a connector that had
+    already been routed through it; laid before the houses and the track, both treat it as the wet ground it is.
+    A valley hamlet such as this one draws nothing here, which is why the plate is a card: the stage decides for
+    a polder and is silent everywhere else.
+
+    The reed fringe along every water-facing flank of a polder dike, and its declaration.
 
     Its own stage since feature 150 - `STAGES` position 5, after the seat and BEFORE the houses and the
     track, because the strip RESERVES wet ground both must avoid (laid in the hinterland it was drawn
@@ -798,7 +840,13 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     leaves a dry apron in front of it - clipping the rectangle to the dike's extreme instead was tried
     and showed one up to 40 px wide wherever the ring wanders inward from its outermost point. `marsh()`
     keeps the scatter off the band itself and off every pond bank in the same change: the strip is the
-    REGION, the keep-out is the guarantee - the two halves of one rule."""
+    REGION, the keep-out is the guarantee - the two halves of one rule.
+
+    Steps:
+        l7r.diagram.hamletgen.water.waterward_flanks
+        l7r.diagram.hamletgen.water.dike_face
+        l7r.diagram.settlement.Settlement.marsh
+    """
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return
     pts = [p for dk in s.M["dikes"] for p in dk.get("outline", [])]

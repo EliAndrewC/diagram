@@ -182,7 +182,15 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
 
 
 def stage_seat(s: Settlement, plan: SitePlan) -> None:
-    """Decide WHERE the settlement sits. Draws nothing at all.
+    """Where the settlement will sit.
+
+    The seat band: which stretch of the field margin the cluster will occupy, with its back to the high ground
+    and its face to the water. NOTHING IS DRAWN HERE - this stage decides a place and reserves no ground at all,
+    which is why it can run before the houses without constraining them. It used to be the front half of a stage
+    that also drew the connector and the field spur, and separating the two is what let every lane move after
+    the farmhouses.
+
+    Decide WHERE the settlement sits. Draws nothing at all.
 
     THIS IS THE HALF THAT HAS TO RUN FIRST, and separating it is the whole of feature 128. The old
     `stage_ways` did two unrelated jobs in one pass: it SEATED the cluster - `seat_cluster` sets
@@ -194,6 +202,11 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     Split, the dependency and the drawing go to opposite sides of the houses. Nothing here calls
     `s.lane`, and `tests/hamletgen/test_ways.py` asserts it: no lane and no corridor may exist when
     this returns.
+
+    Steps:
+        l7r.diagram.hamletgen.cluster.seat_cluster
+        l7r.diagram.sitegen.geom.crop_polys
+        l7r.diagram.settlement.Settlement.toe_band
     """
     drain = None
     for ditch in s.M.get("field_ditches", []):
@@ -242,7 +255,15 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:
-    """The connector out to the road and the spur to the field - drawn AFTER the houses.
+    """The connector and the field spur.
+
+    The track out to the off-map road, and the path to the fields - drawn NOW, after the farmhouses, because a
+    lane drawn earlier takes ground the houses then cannot have. That is true whatever the lane represents: a
+    road may well predate a settlement in the world, but this generator does not inherit a road, it DRAWS one,
+    and drawing it first reserves a no-build corridor the placer then refuses seats against. Both tracks now
+    start from the settlement as it actually stands rather than from where it was predicted to go.
+
+    The connector out to the road and the spur to the field - drawn AFTER the houses.
 
     THE GM, stating the whole feature (2026-08-24): *"We are reordering the procedural layout of the
     hamlet generation so that farmhouses are rendered after the fields and water, but before any
@@ -265,6 +286,16 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     **Both branches.** The polder path returns early with its own connector; a fix applied only to
     the valley path would leave polder hamlets reserving ground, and the reference hamlet is a valley
     map so it would not notice.
+
+    Steps:
+        l7r.diagram.hamletgen.ways.track.connector_track
+        l7r.diagram.hamletgen.ways.track._cluster_gateway
+        l7r.diagram.hamletgen.ways.track._thread_the_fabric
+        l7r.diagram.hamletgen.cluster._fork_spur
+        l7r.diagram.hamletgen.ways.clearance.route_around
+        l7r.diagram.hamletgen.ways.clearance.clip_to_clear
+        l7r.diagram.settlement.Settlement.trim_off_marsh
+        l7r.diagram.settlement.Settlement.lane
     """
     seat = plan.seat
     ax, ay = seat["along"]

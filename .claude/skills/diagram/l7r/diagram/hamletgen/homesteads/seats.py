@@ -7,15 +7,19 @@ from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement.houses import HOUSE_PADDY_GAP_FT
 from l7r.diagram.sitegen.geom import unit
 
 from ..consts import BUNDLE_PITCH, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_FRONTAGE_STANDOFF, Pt
 from ..plan import SitePlan
 
+STANDOFF_SLACK_PX = 3.0  # the +/-5 degree rake's reach past the axis-aligned box (2 px on the long side) and a pixel of margin
+DEFAULT_HOUSE = (46.0 * 1.35, 28.0 * 1.10)  # the LARGEST nucleated house `_try_place_bundle` rolls, in px at 1 px = 1 ft; the stage passes the map's own
+
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
 
 
-def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = ()) -> list[Pt]:
+def front_row(plan: SitePlan, count: int, standoff: float | None = 46.0, chains: Any = (), house: tuple[float, float] | None = None, extra: float = 0.0) -> list[Pt]:
     """Seats for the row of homesteads that FRONTS the field, offset from the field OUTLINE itself.
 
     Offsetting from the cluster band's straight near face is not the same thing and is not good
@@ -29,10 +33,10 @@ def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = 
     # in two on the hem, which the pre-test now refuses before the placer is asked) was unreachable and, under feature 174, deleted
     # rather than kept for a caller that no longer exists. `count` is kept in the signature for the callers' sake; the
     # chain walk samples at the pitch and caps at 64, as the walk did.
-    return _front_row_from_chains(plan, standoff, chains)
+    return _front_row_from_chains(plan, standoff, chains, house, extra)
 
 
-def _front_row_from_chains(plan: SitePlan, standoff: float, chains: Any) -> list[Pt]:
+def _front_row_from_chains(plan: SitePlan, standoff: float | None, chains: Any, house: tuple[float, float] | None = None, extra: float = 0.0) -> list[Pt]:
     """The front row offset from the SITE BOUNDARY's chains (feature 226 FR-003): the paddy's facing chains, each
     chord pushed out by its keep-out, so a seat offset from them by `standoff` along the chord's outward normal is
     the right distance from the paddy by construction; the hem, the marsh and the pond are refused at the PRE-TEST
@@ -50,11 +54,19 @@ def _front_row_from_chains(plan: SitePlan, standoff: float, chains: Any) -> list
             seg = math.hypot(b[0] - a[0], b[1] - a[1])
             if seg <= 1e-9:
                 continue
+            # THE STANDOFF IS COMPUTED, NOT STEPPED TO (feature 227 FR-002): `standoff=None` puts the seat where the house
+            # will stand - the wall rule's distance from the chord (`HOUSE_PADDY_GAP_FT` + 1), the tilt's slack, and the
+            # house's half-extent along this chord's normal at the LARGEST size the roll can take - so the placer's old
+            # 2 px slide toward the paddy has nothing to do. A numeric standoff is a rung of the ladder behind it.
+            # `extra` is the second rung: the yard's depth and its gap, for a chord the YARD faces (the paddy south of the house)
+            off = (
+                standoff if standoff is not None else HOUSE_PADDY_GAP_FT + 1.0 + STANDOFF_SLACK_PX + (abs(n[0]) * (house or DEFAULT_HOUSE)[0] / 2 + abs(n[1]) * (house or DEFAULT_HOUSE)[1] / 2) + extra
+            )
             t = carry
             while t <= seg:
                 px, py = a[0] + (b[0] - a[0]) * t / seg, a[1] + (b[1] - a[1]) * t / seg
                 if abs((px - seat["anchor"][0]) * ax + (py - seat["anchor"][1]) * ay) <= reach:
-                    out.append((px + n[0] * standoff, py + n[1] * standoff))
+                    out.append((px + n[0] * off, py + n[1] * off))
                 t += BUNDLE_PITCH
             carry = t - seg
     if len(out) > 64:

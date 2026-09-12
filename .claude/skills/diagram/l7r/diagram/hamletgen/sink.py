@@ -113,7 +113,13 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
 
 
 def stage_sink(s: Settlement, plan: SitePlan) -> None:
-    """The tameike the field drains into - DERIVED from the drain, never placed by hand.
+    """Where the runoff goes.
+
+    The tail drain and its pond or off-map outfall. It runs with the water rather than with the ground cover
+    because the pond is a HARD feature - houses, lanes and trees all have to avoid it, so it must exist before
+    any of them are seated.
+
+    The tameike the field drains into - DERIVED from the drain, never placed by hand.
 
     A reservoir below the fields is sited by one fact: it must sit clear of the paddies and low
     enough that the drain reaches it downhill. So it goes a fixed set-back DOWNSLOPE of the drain's
@@ -122,7 +128,19 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     more water into a bigger pond.
 
     `water_sink="offmap"` draws nothing here - the drain's brook (kept in `stage_field`) already
-    carries the runoff off the frame, which is what most valleys do and what the GM's brief allows."""
+    carries the runoff off the frame, which is what most valleys do and what the GM's brief allows.
+
+    Steps:
+        l7r.diagram.hamletgen.sink.drain_outfall
+        l7r.diagram.hamletgen.sink.drain_heading
+        l7r.diagram.hamletgen.sink.pond_setback
+        l7r.diagram.hamletgen.sink.pond_clear_of_crop
+        l7r.diagram.settlement.Settlement.pond
+        l7r.diagram.settlement.Settlement.field_channel
+        l7r.diagram.settlement.land.wet.pond_fringe_ring
+        l7r.diagram.settlement.Settlement.marsh
+        l7r.diagram.settlement.Settlement.stream
+    """
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:

@@ -115,83 +115,75 @@ class PlacerMixin:
         p = self._nearest_field_point(cx, cy)
         return math.hypot(cx - p[0], cy - p[1]) if p else float("inf")
 
-    def _slide_nuc(self: Settlement, cx: float, cy: float, hw: float, hh: float, target_fn: Any, keep_field: bool = False) -> Pt:  # type: ignore[misc]
-        """Shove a nucleated bundle toward target_fn as far as SOME garden side still fits - the tight-pack
-        step (the garden side is re-chosen at the final spot, so the slide only needs one side to work).
-        With keep_field, a move is ALSO rejected if it would drift the bundle FURTHER from the paddy than
-        where it started: so the neighbor-pack runs ALONG the field edge (tangentially) and never pulls the
-        cluster off the paddy - the village glues its field side to the paddy and builds outward in rows."""
-        fd_cap: Any = self._field_dist(cx, cy) + 3 if keep_field else None
-        for _ in range(80):
-            tgt = target_fn(cx, cy)
-            if tgt is None:
-                break
-            dx, dy = tgt[0] - cx, tgt[1] - cy
-            dist = math.hypot(dx, dy)
-            if dist < 1.5:
-                break
-            ncx, ncy = cx + dx / dist * 2.0, cy + dy / dist * 2.0
-            if keep_field and self._field_dist(ncx, ncy) > fd_cap:
-                break
-            if self._fits_any_side(ncx, ncy, hw, hh):
-                cx, cy = ncx, ncy
-            else:
-                break
-        return cx, cy
-
     def _place_bundle_nucleated(self: Settlement, x: float, y: float, hw: float, hh: float, shed: bool = False) -> Any:  # type: ignore[misc]
-        """Nucleated placement: find the nearest spot where SOME garden side fits, pack it hard against the
-        field bund then its neighbors, then pick the garden side that is UNSHADED and sunniest. The compact
-        (grove-less) bundle lets the cluster nucleate; the adaptive garden gives sun + variety. `shed` reserves
-        a north kura in every candidate bundle so a neighbor never lands on it."""
+        """Nucleated placement, THE ENVELOPE FIRST (feature 227, GM 2026-09-12: *"I thought that what we were doing
+        when we were placing homesteads was essentially drawing a rectangle around what would be within the homestead.
+        And then once we definitely have enough space, we decide things like whether the garden is on the left or the
+        right side or both, and whether or not there is an attached shed"*).
+
+        ONE rectangle is tested before anything else about a configuration: its envelope - the box around the house
+        at its rolled size, the yard south of it, the garden on that side, the kura north when the household has one
+        (`_bundle_geom`'s bbox) - against the site boundary at its nine points and against the placed boxes
+        (`_envelope_blocked`). Only when the envelope fits are the parts inside it judged - the rules that read the
+        PARTS, asked once at that spot (`_parts_fit`: the wall rule against the paddy, the eave gap, the tread, the sun
+        corridors) - and among the configurations that fit, the sun rules choose (fewest shaded beds, then the
+        preference order: the sunny south corners, then the walls). The ground is not asked again for a part: every
+        part lies inside a box the ground already admitted. Four configurations at most, one rectangle each.
+
+        WHAT THIS REPLACES, measured (specs/227 research R1): a spiral of up to 73 offsets with the full battery at
+        each, then two 2 px slides - toward the paddy and along the neighbors - re-running the battery at every
+        step: 26-60 positions and 100-220 rectangles per call, 70-85% of them on calls that failed outright because
+        a house-sized pre-test had passed a seat the whole homestead could not use. The slide had no recorded
+        reason (commit ed0e884e): it stepped because the stop was whichever of eight rules fired first. Now the
+        seat arrives at its standoff and its pitch (`_front_row_from_chains`), and the one move a call may make is
+        COMPUTED: an envelope overlapping exactly one placed box is shifted once by the measured overlap, away from
+        that neighbor, and tested once more (the GM: *"measuring the distance to the neighbor and then moving
+        however much the correct amount is"*). Anything else is refused and the proposer offers the next seat."""
         self._seat_search["placer_calls"] += 1
-        # SIX RINGS, NOT FIFTEEN (feature 226 FR-003): the spiral was compensating for wrong guesses - 24 of Inashiro's 39
-        # proposed seats failed every one of 181 offsets. A seat is pre-tested against the site boundary before the
-        # placer is asked now, so a right guess needs a little adjustment for its yard, garden and neighbors, not a
-        # search. `_spiral_rings` is 6 (73 offsets against 181); the stage's last rescue round, run only while the quota
-        # is short, sets 15 - the old reach - so a toy hamlet that once seated its tenth household by a long slide still does.
-        offsets = [(0, 0)]
-        for r in range(5, 5 + 5 * int(getattr(self, "_spiral_rings", 6)), 5):
-            for k in range(12):
-                a = k * math.pi / 6
-                offsets.append((round(r * math.cos(a)), round(r * math.sin(a))))
-        start: Pt | None = None
-        for nx, ny in offsets:
-            if self._fits_any_side(x + nx, y + ny, hw, hh, shed):
-                start = (x + nx, y + ny)
-                break
-        if start is None:
-            return None
-        cx, cy = start
-        cx, cy = self._slide_nuc(cx, cy, hw, hh, self._nearest_field_point)  # hug the paddy edge
-        cx, cy = self._slide_nuc(
-            cx,
-            cy,
-            hw,
-            hh,
-            self._nearest_placed_point,  # then pack ALONG it (never off it),
-            keep_field=True,
-        )  # so the cluster glues to the paddy
-        # THE AVOID TEST APPLIES TO WHERE THE BUNDLE ENDS UP, not to the seat it started from. The
-        # slides move it: a seat well clear of forbidden ground slides straight back onto it, and a
-        # re-roll that forbids that ground then seats the same house in the same spot round after
-        # round. Measured on cohort seed 5 - the retry converged 2 unreached houses -> 1 and then
-        # stalled at (1130, 858) for three consecutive rounds, re-seating the identical point each
-        # time while that point was in the avoid list.
         _avoid = getattr(self, "_avoid_seats", None)
-        if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
-            return None
+        # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
+        # open ground of most seats - every configuration's box fits inside it and no other rectangle is tested; the
+        # parts alone decide the side. Where the union is refused, each configuration's OWN box is tried in turn (the
+        # sun-preferred side first): the union alone over-refused on tight ground - the pockets between a dike mosaic's
+        # ponds hold a one-sided homestead and not the both-sided box (Kuwabata 11 of 16) - and the GM's rectangle is the
+        # one the homestead will occupy, garden on the left OR the right, not both at once. At most five rectangles.
+        self._seat_search["positions"] += 1
+        _union_clear = self._envelope_blocked(self._bundle_envelope(x, y, hw, hh, shed)) is None
         best: Any = None
         for rank, side in enumerate(self._NUC_SIDES):
+            cx, cy = x, y
             geom = self._bundle_geom(cx, cy, hw, hh, side, shed)
-            if not self._bundle_fits(geom):
+            hit = None
+            if not _union_clear:
+                self._seat_search["positions"] += 1
+                hit = self._envelope_blocked(geom["bbox"])
+            if isinstance(hit, tuple):
+                # THE ONE COMPUTED MOVE: the overlap with that neighbor's box on each axis, plus the 2 px the placed-box
+                # test keeps; move along the axis that needs the smaller push, away from the neighbor's center
+                env = geom["bbox"]
+                px, py, pw, ph = hit[0], hit[1], hit[2], hit[3]
+                ox = (env[2] + pw) / 2 + 2.0 - abs(env[0] - px)
+                oy = (env[3] + ph) / 2 + 2.0 - abs(env[1] - py)
+                if ox <= oy:
+                    cx += ox if env[0] >= px else -ox
+                else:
+                    cy += oy if env[1] >= py else -oy
+                geom = self._bundle_geom(cx, cy, hw, hh, side, shed)
+                self._seat_search["positions"] += 1
+                hit = self._envelope_blocked(geom["bbox"])
+            if hit is not None:
+                continue
+            if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
+                continue
+            self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1
+            if not self._parts_fit(geom):
                 continue
             score = (sum(self._garden_shaded(g) for g in geom["gardens"]), rank)  # fewest shaded beds first, then preference
             if best is None or score < best[0]:
-                best = (score, geom)
+                best = (score, cx, cy, geom)
         if best is None:
             return None
-        return cx, cy, best[1]
+        return best[1], best[2], best[3]
 
     def _solve_homestead(self: Settlement, rec: Any) -> Any:  # type: ignore[misc]
         """Find the best position for a farmhouse so its WHOLE homestead fits - threshing yard + dooryard
