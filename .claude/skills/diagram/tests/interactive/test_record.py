@@ -144,11 +144,13 @@ _RETIRED_STEMS = (
 _RETIRED_PATHS = {f"{_SKILL}/{stem}.md" for stem in _RETIRED_STEMS}
 _RETIRED_BASENAMES = {stem.rsplit("/", 1)[-1] + ".md" for stem in _RETIRED_STEMS}
 #: Recorded history, never a pointer: the guard replay corpus and the frozen pre-189 class fixture keep the
-#: tokens they were recorded with; `research/README.md` is the GM's (constitution XVII) and keeps its table until
-#: the GM applies the correction offered in specs/229.
+#: tokens they were recorded with. `research/README.md` WAS exempt here and no longer is - it is the GM's
+#: to write (constitution XVII), it named fourteen retired files, and the GM authorized the correction in
+#: their own words on 2026-09-12 ("I authorize you to fix the research readme"), so it is now held to the
+#: same rule as everything else.
 _RETIRED_EXEMPT_PREFIXES = ("specs/", "scripts/fixtures/")
 #: and this file itself, which necessarily names them: it is where the rule and its own self-test live.
-_RETIRED_EXEMPT_FILES = {f"{_SKILL}/research/README.md", f"{_SKILL}/tests/fixtures/classes_before_189.json", f"{_SKILL}/tests/interactive/test_record.py"}
+_RETIRED_EXEMPT_FILES = {f"{_SKILL}/tests/fixtures/classes_before_189.json", f"{_SKILL}/tests/interactive/test_record.py"}
 
 
 def _normalize(base: pathlib.PurePosixPath, token: str) -> str:

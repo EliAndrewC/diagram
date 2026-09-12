@@ -40,9 +40,20 @@ _UNIT_ALT = "|".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True
 _FIGURE = re.compile(rf"(?<![\w.])\d[\d,]*(?:\.\d+)?\s*(?:{_UNIT_ALT})(?![\w-])")
 _POINTER = re.compile(r"\bR\d+\b|research\.md")
 _ID = re.compile(r"\b(FR|SC)-(\d{3}[a-z]?)\b")
-_DEF = re.compile(r"^\*\*(FR|SC)-(\d{3}[a-z]?)\*\*", re.M)
+# GUARD_EDIT_OK: the pattern recognized only `**FR-001**`, the id bolded alone, and five of the nine
+# specs in this repository write `**FR-001 Its title.**` instead - three of them already on main. On
+# those the linter saw NO requirements at all, so check 4 reported every id their tasks.md cites as
+# undefined (46 findings on a correct tree, blocking every push) and check 3 silently checked nothing,
+# which is the worse half. The id is still the first thing in the bold span; a title may follow it, the
+# span may wrap a line, and the declaration may be a list item - all three shapes are in the record.
+_DEF = re.compile(r"^(?:[-*+]\s+)?\*\*(FR|SC)-(\d{3}[a-z]?)(?=\*\*|[ .:])[^*]*\*\*", re.M)
 _HEADING = re.compile(r"^##+\s+(.*?)\s*$", re.M)
 _WITHDRAWN = re.compile(r"WITHDRAWN:\s*(.+?)\s*$", re.M)
+
+def _def_id(m: re.Match[str]) -> str:
+    """The id a `_DEF` match declares - `**FR-001**` and `**FR-001 Its title.**` alike."""
+    return f"{m.group(1)}-{m.group(2)}"
+
 
 FIGURE_SECTIONS = ("summary", "functional requirements", "success criteria", "decisions recorded")
 NARRATING_SECTIONS = ("decisions recorded", "review history")
@@ -115,14 +126,14 @@ def check_withdrawn(spec_dir: pathlib.Path, specs_root: pathlib.Path) -> list[st
 def check_orphans(spec: pathlib.Path) -> list[str]:
     """Check 3 - a requirement no criterion covers, or a criterion covering nothing."""
     text = spec.read_text()
-    frs = {m.group(0)[2:-2] for m in _DEF.finditer(text) if m.group(1) == "FR"}
+    frs = {_def_id(m) for m in _DEF.finditer(text) if m.group(1) == "FR"}
     bad, covered = [], set()
     for name, start, body in sections(text):
         if not name.startswith("success criteria"):
             continue
         line = start
         for para in body.split("\n\n"):
-            for sc in re.finditer(r"^\*\*(SC-\d{3}[a-z]?)\*\*(.*)$", para, re.M):
+            for sc in re.finditer(r"^(?:[-*+]\s+)?\*\*(SC-\d{3}[a-z]?)(?=\*\*|[ .:])[^*]*\*\*(.*)$", para, re.M):
                 named = {f"{k}-{v}" for k, v in _ID.findall(sc.group(2)) if k == "FR"}
                 covered |= named
                 if not named and "(spec-wide)" not in sc.group(2):
@@ -130,14 +141,14 @@ def check_orphans(spec: pathlib.Path) -> list[str]:
                     bad.append(f"{spec}:{n}: {sc.group(1)} names no FR and is not marked `(spec-wide)`")
             line += para.count("\n") + 2
     for fr in sorted(frs - covered):
-        n = next(m.start() for m in _DEF.finditer(text) if m.group(0)[2:-2] == fr)
+        n = next(m.start() for m in _DEF.finditer(text) if _def_id(m) == fr)
         bad.append(f"{spec}:{text[:n].count(chr(10)) + 1}: {fr} is named by no success criterion")
     return bad
 
 
 def check_stale_tasks(spec: pathlib.Path, tasks: pathlib.Path) -> list[str]:
     """Check 4 - a task list citing an id the spec does not have."""
-    have = {m.group(0)[2:-2] for m in _DEF.finditer(spec.read_text())}
+    have = {_def_id(m) for m in _DEF.finditer(spec.read_text())}
     body, bad = tasks.read_text(), []
     for m in _ID.finditer(body):
         if m.group(0) not in have:
@@ -198,6 +209,22 @@ def selftest() -> None:
                 "## Review history\n\nRound 1 said 6.7 m and we withdrew it.\n")
         (d / "spec.md").write_text(good)
         assert lint(d) == [], lint(d)
+        # a requirement declared as `**FR-001 Its title.**` is the same declaration
+        titled = good.replace("**FR-001** A thing.", "**FR-001 A thing.** With a title in the bold span.")
+        (d / "spec.md").write_text(titled)
+        assert lint(d) == [], lint(d)
+        (d / "spec.md").write_text(titled.replace("**SC-001** (FR-001, FR-001a) Both hold.", "**SC-001** (FR-001) One holds."))
+        assert any("FR-001a is named by no success criterion" in x for x in lint(d)), "the titled form must still be checked for orphans"
+        (d / "spec.md").write_text(good)
+        # a declaration may be a LIST ITEM and its bold span may wrap a line
+        listed = good.replace("**SC-001** (FR-001, FR-001a) Both hold.", "- **SC-001 Both hold.** (FR-001, FR-001a)")
+        listed = listed.replace("**SC-002** (spec-wide) The gate is green.", "- **SC-002** (spec-wide) The gate is green.")
+        (d / "spec.md").write_text(listed)
+        assert lint(d) == [], lint(d)
+        wrapped = good.replace("**FR-001a** Another.", "**FR-001a A title that\nwraps a line.** Another.")
+        (d / "spec.md").write_text(wrapped)
+        assert lint(d) == [], lint(d)
+        (d / "spec.md").write_text(good)
         # 1: a figure with no pointer
         (d / "spec.md").write_text(good.replace("It took 91 min, measured in `research.md` R1.", "It took 91 min."))
         assert any("no pointer" in x for x in lint(d)), lint(d)
