@@ -42,9 +42,9 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       lacks?' with findings 1, 2, 5 and 7, and FIX its stale close - "neither is drawn" plus the
       resolved CANDIDATE comment, both contradicting the map since feature 150. (FR-005, FR-007, FR-011)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
 - [ ] T08 New section 'Does a pig sty have to stand back from the water, or from the pond's sluice?'
@@ -52,27 +52,27 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       the original as the anchor, and the inlet/outlet SILENCE as a labeled absence note - no key, no
       link, what was searched and when. (FR-005, FR-006)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
 - [ ] T09 `research/citations/archetypes.html`: the footnotes for every new assertion, each quoting
       the passage it rests on and linking a public page where the quote can be read; every new
       registry key gets its What-it-is / Why-it-applies write-ups in `SOURCES.html`. (FR-005, FR-009)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
-- [ ] T10 Pond figure (4.0 mu / 0.27 ha) carries its honest limit wherever it reaches a reader - the
+- [x] T10 Pond figure (4.0 mu / 0.27 ha) carries its honest limit wherever it reaches a reader - the
       same ponds sit below the ISIS 0.4-0.6 ha band. (FR-005)
       research: rendering
 
 ## Phase 3 - the modals
 
-- [ ] T11 Rewrite the `PigSty` and `DuckPen` docstrings in `interactive/classes/dikepond.py` against
+- [x] T11 Rewrite the `PigSty` and `DuckPen` docstrings in `interactive/classes/dikepond.py` against
       the record as it now stands, with `Sources:` and `Entry:` naming what the new text was written
       from. NEITHER may offer a water-quality reason for the fixture's position (FR-008, D2).
       research: rendering
