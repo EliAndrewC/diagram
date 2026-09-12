@@ -211,10 +211,16 @@ the heading checker's turns its `--selftest` red at BOTH the gate and the push -
 quiet pass.
 
 **SC-007** `.claude/agents/entry-drift.md` exists, pins `model: opus`, passes
-`tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature
-233's own pair, run and recorded there: the `PigSty` modal against the section 233 rewrites, which must
-come back DRIFTED before 233's docstring rewrite and IN-STEP after it. A new agent whose first real
-dispatch is the case that motivated it is the cheapest honest proof it does anything.
+`tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature 233's own pair: the `PigSty` modal
+against the sections 233 rewrote, judged BEFORE and AFTER that rewrite, with both verdicts recorded in
+`research.md` R6 and every finding acted on. A new agent whose first real dispatch is the case that
+motivated it is the cheapest honest proof it does anything.
+
+**The expected answer was DRIFTED then IN-STEP, and the run did not give it** - the AFTER pair came back
+DRIFTED too, because 233's last commit superseded the text the modal had been written against and
+touched the modal only for a two-line nitpick. That is the criterion being MET rather than missed: what
+it asks is that the agent be run on the real pair and discriminate, not that it return a verdict chosen
+in advance. The findings were fixed and the pair re-judged; R6 carries all three runs.
 
 <!-- SC-008 was the task-checkbox criterion, deleted in round 4 with the checkbox it proved; the
      numbers below are not renumbered because the Review history references them. -->
@@ -277,9 +283,7 @@ then it is not a doctrine. something should either not be considered doctrinal o
 enforced."* So it is enforced - the push refuses until a named pair is resolved or a reason is recorded
 (FR-004.2).
 
-*Why not a quieter key instead.* The narrowing was measured before enforcement was chosen: firing only
-on what a reader SEES, rather than on any change to the section's body, takes 39 of 39 research-only
-commits down to 38 of 39 (`research.md` R5). One commit in thirty-nine. There is no mechanical key that
+*Why not a quieter key instead.* The narrowing was measured before enforcement was chosen: firing only on what a reader SEES, rather than on any change to the section's body, takes 28 of 30 research-only commits down to 27 of 30 (`research.md` R5). One commit in thirty. There is no mechanical key that
 separates "this section now says something different" from "this section was maintained", because that
 is a judgment about meaning - which is why the compliant action is a written judgment rather than a
 tool's verdict.
@@ -290,8 +294,7 @@ line under the FINDING rule in FR-013.1, so the cost is one sentence per sweep r
 
 *Alternatives priced and DECLINED.* A task checkbox (round 3): rejected on measurement - the enforcer
 reads only a `tasks.md`'s text and a feature number, so a delta-derived condition is not expressible in
-it, and it would not run on this delta shape anyway. A narrowed key (above): rejected, one commit in
-thirty-nine. A silent obligation with no mechanism (this entry's previous content): rejected by the GM.
+it, and it would not run on this delta shape anyway. A narrowed key (above): rejected, one commit in thirty. A silent obligation with no mechanism (this entry's previous content): rejected by the GM.
 
 *Superseded content, kept because the reasoning still bounds the design.* Nothing enforces that a session
 hands a named pair to `entry-drift` BEYOND the recorded reason - the guard cannot tell a real judgment
@@ -347,6 +350,33 @@ which is what makes the wrongness discoverable.
   its own work, wants the GM's call, and is not begun here.
 
 ## Review history
+
+**AMENDED ON THE GM'S RULING, 2026-09-12** (the counter resets to zero for a post-acceptance amendment).
+The GM answered both questions the accepted spec had left open: a research edit does NOT owe
+`make page-check` at push, and *"I don't believe that we should have any such thing as an unenforced
+doctrine. If it is unenforced, then it is not a doctrine. something should either not be considered
+doctrinal or it should be enforced."* The first is declined outright and recorded under "Out of scope".
+The second struck D6's whole shape, so narrowing the key was measured first (R5: 28 of 30 down to 27 of
+30 - dead) and enforcement chosen: the push refuses, discharged by a rewrite or a recorded reason.
+
+**Amendment round 1** (`spec-fidelity`): CHANGES REQUIRED, nine items, all taken. R5 was not
+reproducible and conflicted with R2 - re-measured at SECTION level over a stated population, with the
+old file-level "39 of 39" withdrawn. D6 priced only one of the ruling's two branches - it now prices
+dropping the obligation, and says why it loses (under it the answer to *"would you have done it?"* stays
+no, because nothing would require anyone to look). D6 also still carried three pre-ruling paragraphs,
+one of which said the GM had not ruled. FR-013.1's timing paragraph, the Summary's two stale claims,
+D5's body against its own heading, and the FR-012/SC-012 guard-table wording were all corrected, and
+`tasks.md` would otherwise have implemented the withdrawn design.
+
+**Amendment round 2** (`spec-fidelity`, against the SHIPPED code): CHANGES REQUIRED, five items, all
+taken. It re-ran R5's measurement itself and reproduced 30/28/27 exactly, noting the filter needed
+`--no-merges` stated. The severe one: `scripts/_entry_owed.py`'s own docstring still described the
+withdrawn design - *"it never blocks ... there is no escape token ... the GM has not ruled"* - the exact
+sentence the ruling struck, reinstalled in the file a future session reads first. The withdrawn figures
+also survived in five shipped places including both skill guidelines and the guard-table row, four of
+them citing the R5 section that withdraws them. SC-009 was unmet (the pre-authorization was held by
+inspection, which is what SC-009 forbids - now a test). SC-007 asserted an outcome R6 records did not
+happen. And this history had no amendment entry while the Status line pointed at one.
 
 **Round 6** (`spec-fidelity`, 2026-09-12): **FAITHFUL.** All four round-5 items confirmed resolved in
 substance, not in appearance, and the load-bearing claims re-verified in source rather than taken from

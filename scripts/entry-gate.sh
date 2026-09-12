@@ -11,7 +11,7 @@
 # that: *"I don't believe that we should have any such thing as an unenforced doctrine. If it is
 # unenforced, then it is not a doctrine. something should either not be considered doctrinal or it should
 # be enforced."* Narrowing the key was priced first and is dead - firing only on what a READER SEES takes
-# 39 of 39 research-only commits to 38 of 39 (specs/234-entry-owed-when-the-record-moves/research.md R5).
+# 28 of 30 research-only commits to 27 of 30 (specs/234-entry-owed-when-the-record-moves/research.md R5).
 # There is no mechanical key that separates "this section now says something different" from "this
 # section was maintained", because that is a judgment about meaning.
 #

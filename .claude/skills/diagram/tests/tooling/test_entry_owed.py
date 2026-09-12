@@ -114,3 +114,21 @@ def test_the_push_escape_demands_a_real_reason(token: str):
 def test_a_real_reason_clears_the_floor():
     p = subprocess.run([sys.executable, str(REPO / "scripts/_hm_escape.py"), "reason-ok"], input="a maintenance sweep moved no finding", capture_output=True, text=True)
     assert p.returncode == 0
+
+
+def test_the_judgment_agent_is_pre_authorized():
+    """SC-009. Without this the mandate loses to the default system prompt's "do not call the Agent tool
+    unless the user asked", which sits ABOVE CLAUDE.md - the documented 2026-07-27 failure in which three
+    city maps shipped unreviewed. It was held by inspection until this test existed, which is the very
+    thing SC-009 forbids."""
+    text = (REPO / "container-scripts/append-system-prompt.md").read_text(encoding="utf-8")
+    authorized = {m.strip("`") for m in __import__("re").findall(r"`[a-z-]+`", text.split("invoke it with the Agent tool")[0])}
+    assert "entry-drift" in authorized, f"entry-drift is not in the pre-authorized list: {sorted(authorized)}"
+    assert (REPO / ".claude/agents/entry-drift.md").is_file(), "pre-authorized but the agent file is missing"
+
+
+def test_the_agent_pins_opus_like_every_subagent_check():
+    """GM 2026-09-07 - and `tests/test_agent_models.py` holds the whole tree to it; this asserts the one
+    file this feature adds, so a failure here names the feature rather than the roster."""
+    text = (REPO / ".claude/agents/entry-drift.md").read_text(encoding="utf-8")
+    assert "\nmodel: opus\n" in text, "entry-drift must pin model: opus"

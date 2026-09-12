@@ -88,8 +88,7 @@ line, `ENTRY_DRIFT_OK="<what moved, and why no modal is now wrong>"`, which `mak
 It is enforced rather than expected, on the GM's ruling: *"I don't believe that we should have any such
 thing as an unenforced doctrine. If it is unenforced, then it is not a doctrine. something should either
 not be considered doctrinal or it should be enforced."* Narrowing the key so it would fire less was
-priced first and does not work - firing only on what a reader SEES takes 39 of 39 research-only commits
-to 38 of 39 (`specs/234-entry-owed-when-the-record-moves/research.md` R5), because separating "this
+priced first and does not work - firing only on what a reader SEES takes 28 of 30 research-only commits to 27 of 30 (`specs/234-entry-owed-when-the-record-moves/research.md` R5), because separating "this
 section now says something different" from "this section was maintained" is a judgment about meaning.
 
 **`record-format` and `quote-check` are NOT this check.** They read a research ENTRY - whether a reader

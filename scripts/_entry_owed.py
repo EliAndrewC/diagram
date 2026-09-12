@@ -9,17 +9,21 @@ been. What a modal says about a feature IS the docstring of its `Kind` class (fe
 a research section the class names in its `Entry:` tag - and nothing noticed when that section's content
 moved underneath it. The prose and the record simply agreed with themselves, separately.
 
-WHAT IT REPORTS, AND WHAT IT DOES NOT. A class is named when the research section its `Entry:` points at
-had its BODY changed in this delta AND the class's own EXPLANATION PROSE did not. It is a REPORT: it
-never blocks, at either decision point, and there is no escape token because there is nothing to escape.
-The reason is measured rather than felt - `specs/234-entry-owed-when-the-record-moves/research.md` R2
-replayed the same key over this repository's history and it fires on 30 of the last 32 research-only
-commits, up to 41 classes at once, every one of them a maintenance sweep of the record (footnotes moved
-onto citations pages, session notes turned into comments, the translation pass) that changes no
-obligation on any modal. The root CLAUDE.md keeps rules off the enforced list for exactly that, so this
-one names and does not refuse. What is owed on a named pair is doctrine: dispatch `entry-drift`, then
-rewrite the prose or record why not to `dev/bypass-log/` (spec D6, which also records that the GM has
-not ruled on the absence of a mechanism).
+WHAT IT REPORTS. A class is named when the research section its `Entry:` points at had its BODY changed
+in this delta AND the class's own EXPLANATION PROSE did not.
+
+WHAT HAPPENS TO A NAMED PAIR, AND WHY IT IS NOT MERELY REPORTED. `make page-check` prints the list and
+does not block; the PUSH REFUSES (`scripts/entry-gate.sh`) until each pair is answered - the
+`entry-drift` agent dispatched and the prose rewritten, or one `ENTRY_DRIFT_OK="<reason>"` recorded to
+`dev/bypass-log/`, which may cover a whole maintenance sweep. An earlier draft made this a report with no
+mechanism, on the measurement that the key fires on nearly every research-only commit; the GM struck
+that shape on 2026-09-12: *"I don't believe that we should have any such thing as an unenforced
+doctrine. If it is unenforced, then it is not a doctrine. something should either not be considered
+doctrinal or it should be enforced."* Narrowing the key was priced first and is dead - firing only on
+what a READER SEES takes 28 of 30 research-only commits to 27 of 30
+(`specs/234-entry-owed-when-the-record-moves/research.md` R5), because separating "this section now says
+something different" from "this section was maintained" is a judgment about meaning. So the session
+supplies the judgment in writing, and it is auditable.
 
 THE PROSE HALF IS DERIVED, NEVER RESTATED. "Explanation prose" is `_TAGS` less `_DATA_TAGS`, asked of
 the engine, so a tag added or moved there cannot leave this script quietly checking the wrong thing. The

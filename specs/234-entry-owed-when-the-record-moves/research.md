@@ -81,8 +81,8 @@ markers (`<sup class="fn">`) and link attributes, then compare. That is aimed sq
 sweeps, which moved footnotes onto citations pages, turned session notes into comments, and re-pointed
 citations.
 
-**The population, stated so it can be re-run.** Commits since 2026-08-20 that touch one of the six
-research pages a class `Entry:` actually names (`archetypes`, `fields`, `homesteads`, `urban-features`,
+**The population, stated so it can be re-run.** Commits (`--no-merges`; a merge yields 34/32/31 and is not an edit anyone made) since 2026-08-20 that
+touch one of the six research pages a class `Entry:` actually names (`archetypes`, `fields`, `homesteads`, `urban-features`,
 `vegetation`, `water`) and that change no `interactive/classes/*.py` - the exemption that applies when a
 docstring moved in the same delta. **30 commits.** Each is judged at SECTION level, exactly as the key
 does: a commit fires when a section NAMED BY A CLASS ENTRY has its body changed, not when the file
