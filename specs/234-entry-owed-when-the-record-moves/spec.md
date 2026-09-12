@@ -1,7 +1,7 @@
 # Feature 234 - the modal entry owed when the record moves
 
 **Created**: 2026-09-12
-**Status**: ACCEPTED and FAITHFUL 2026-09-12 after six rounds; AMENDED on the GM's ruling the same day and re-reviewed on a counter reset to zero (see Review history)
+**Status**: ACCEPTED and FAITHFUL 2026-09-12 after six rounds; AMENDED on the GM's ruling the same day and re-reviewed over five amendment rounds to a second FAITHFUL (see Review history)
 **Input**: the GM's message, verbatim, in `request.md`
 
 ## Summary
@@ -353,9 +353,11 @@ GM ruling of 2026-08-28 that `kuwabata.notes.md` asserted the modals carried and
 all, `DuckPen` silent about the same collar, and the `crop-vs-perimeter` sibling text repeating the same
 width to every reader of four more classes. Five defects, none of which `_entry_owed.py` would have
 named - all of the sections involved were wrong in the same direction as the modals, or had not moved at
-all. They were found by this feature's OWN `entry-drift` dispatch, which flagged `MulberryDike` while
-judging a different pair and then judged it DRIFTED when asked, reading feature 233's measurements
-against the two texts rather than only comparing the texts. `research.md` R6 and R7 have the detail.
+all. Four were found by this feature's OWN `entry-drift` dispatch, which flagged `MulberryDike` while judging
+a different pair and then judged it DRIFTED when asked, reading feature 233's measurements against the
+two texts rather than only comparing the texts; the fifth, the sibling text, by the review of this
+feature - a sibling text is neither a class's explanation nor a section, so it is outside what the agent
+is given. `research.md` R6 and R7 have the detail.
 
 *What was declined.* A mechanical key that compares the RECORD against the DRAWING - there is none: the
 record's claims are prose and the drawing's are geometry, and the only thing that has ever connected
@@ -396,6 +398,16 @@ no, because nothing would require anyone to look). D6 also still carried three p
 one of which said the GM had not ruled. FR-013.1's timing paragraph, the Summary's two stale claims,
 D5's body against its own heading, and the FR-012/SC-012 guard-table wording were all corrected, and
 `tasks.md` would otherwise have implemented the withdrawn design.
+
+**Amendment round 5: FAITHFUL.** The spec specifies what the GM asked and what they ruled, adds nothing
+they did not ask for, and the shipped code matches it - verified in source rather than from this history.
+Two things were owed while landing, neither a fidelity change and both done in the same commit: D7's
+closing said all FIVE defects came from this feature's `entry-drift` dispatch when the fifth, a sibling
+text, came from the review (and a sibling text is outside what the agent is given); and the "two of our
+own figures that do not reconcile" item in R9 was being DUCKED rather than deferred - it needs only the
+manifest, it sits in a sentence this feature edited, and "it predates this feature" is the Principle XIII
+reach the root CLAUDE.md forbids by name. Measured and fixed: water 80% of the parcels, banks 20%, mean
+bank 5,643 sq ft, which now compose.
 
 **Amendment round 3** (`spec-fidelity`): all five round-2 items confirmed resolved and the shipped code
 verified against the spec line by line; ONE required change - R7's limit was recorded in research only

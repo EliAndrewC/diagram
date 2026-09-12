@@ -240,10 +240,14 @@ fix** (the deferral is a deliverable, not a shrug - CLAUDE.md Principle XIV):
   and Japan's 1963 hojo seibi 30 x 100 m standard.
 - **fn-83 UNVERIFIED** - `dfz.gd.gov.cn` did not answer within 300 s on one attempt. Not a paywall and
   not a refusal; another session on another network may read it.
-- **Two of our own figures that do not reconcile**: "water is 76% of each parcel (bank 24%)" against
-  "each pond's ~6,300 sq ft bank" - 24% of a 160 x 320 ft parcel is ~12,300 sq ft, while 6,300 is what a
-  ~7 ft collar round that pond comes to. The 6,300 agrees with the new single-collar reading and the 24%
-  does not. Both are measurements of our own drawing, so neither owes a citation; they owe each other.
+**NOT deferred - FIXED, because it was being ducked.** Two of our own figures did not reconcile: "water
+is 76% of each parcel (bank 24%)" against "each pond's ~6,300 sq ft bank". The review of this feature
+named the reason plainly: it needs no source, no GM and no reading, only the manifest, and it sits in a
+sentence THIS feature edited - so Principle XIV puts it in this work, and "it predates this feature" is
+the Principle XIII reach the root CLAUDE.md forbids by name. Measured over all 26 parcels as totals, so
+the share and the area compose: water **80%** of the parcels, banks **20%**, mean bank **5,643 sq ft**
+(0.13 ac) - and 20% of the mean parcel is 5,643, which is the check the old pair failed. Both figures
+corrected on the page.
 
 Every one of these is in the sections this feature touched but none is drift this feature caused. They
 are named here so the next session inherits a list rather than a suspicion.
