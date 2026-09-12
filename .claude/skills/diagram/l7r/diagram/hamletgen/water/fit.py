@@ -117,20 +117,23 @@ def _fit_at_aspect(
     pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
     _trim_a = BROOK_FAN_TRIM if plan.brook_side < 0 else 1.0
     _trim_b = BROOK_FAN_TRIM if plan.brook_side > 0 else 1.0
-    # A LEVER THAT WAS MEASURED AND DECLINED (feature 230). Cutting one flank's canal to `BROOK_FAN_TRIM`
-    # takes about (1 - trim) / 2 of the fan's area with it, so at the same `k` a trimmed fan draws ~14% fewer
-    # acres and the bracket's own ceiling comes down with it: seeds near the acreage ceiling SATURATE at every
-    # aspect, the search spends two carves proving it at each and then re-runs the best unprobed - 15 carves on
-    # cohort seed 25 against 3 on the same seed before the feature, and +14.0% on the whole perf cohort.
+    # THE SLOWDOWN THIS FEATURE CARRIES, ITS CAUSE, AND THE LEVER THAT IS NOT PULLED (feature 230).
+    # Cutting one flank's canal to `BROOK_FAN_TRIM` takes about (1 - trim) / 2 of the fan's area with it, so at
+    # the same `k` a trimmed fan draws ~14% fewer acres and the bracket's ceiling comes down with it: seeds near
+    # the acreage ceiling SATURATE at every aspect, the search spends two carves proving it at each, then re-runs
+    # the best unprobed - 15 carves on cohort seed 25 against 3 before the feature.
     #
-    # Scaling the bracket by the area the trim removes (`lo, hi, k *= sqrt(2 / (1 + BROOK_FAN_TRIM))`) fixes the
-    # arithmetic exactly and was MEASURED: the cohort went from +14.0% to -3.6%, faster than the code before the
-    # feature. It is not taken, because it changes the size every map is fitted at, and the gate measured what
-    # that cost on the reference hamlet alone: an azemame bead left standing on water, a footbridge over a dry
-    # plot, a basin tapering to 1 of 623 below 15 degrees, and no flooded plot painted at all, so the sheet lost
-    # the wet-paddy class it exists to exhibit. Four defects bought 18 points of performance on a feature whose
-    # own maps had already moved twice; the slowdown is real, explained, and left for the GM's sign-off, which
-    # is whose call a band-3 increase is. Anyone taking this lever again owes those four maps their fixes first.
+    # MEASURED ALTERNATELY with a detached worktree at the pre-feature commit, so the same machine load fell on
+    # both (the GM asked whether the box was simply busy; it was not): baseline 27.9 / 28.3 / 28.4 s against this
+    # feature's 35.6 / 36.3 s, about +27%, three rounds each, interleaved.
+    #
+    # THE LEVER: scaling the bracket by the area the trim removes (`lo, hi, k *= sqrt(2 / (1 + BROOK_FAN_TRIM))`)
+    # is exact arithmetic rather than a tuning knob, and it MEASURED -3.6% - faster than the code before the
+    # feature. It is not taken, because it changes the size every fan is fitted at, and the gate measured what
+    # that costs at the fan's toe: one basin of 618 tapering below the 15 degree needle bar, and no flooded plot
+    # painted at all on the reference roll, so the sheet loses the wet-paddy class it exists to exhibit. Both are
+    # the closing rank coming out in slivers at the larger size. The fan's toe geometry is what a future feature
+    # must fix first; until it does, the honest trade is the slower search and the sound field.
     k = 1.0
     for _ in range(rounds):
         k = min(max(k, lo + 1e-3), hi - 1e-3)

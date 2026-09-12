@@ -206,7 +206,19 @@ def test_no_tree_is_planted_in_a_path(lanes) -> None:
     """`groves_clear_of_lanes`. You do not plant a tree in a path. Canopy OVER a way is fine and expected -
     a woodland path is a path under trees (GM 2026-08-29) - so what is measured is the TRUNK position, not
     the crown's reach. That distinction is the whole rule: an earlier form of it read the crown and would
-    have forbidden the shaded lane the GM asked for."""
+    have forbidden the shaded lane the GM asked for.
+
+    ON THE TREAD, NOT NEAR IT - and the difference was a made-up number for three weeks (GM 2026-09-12: *"In
+    real life, I have seen many footpaths that are within four feet of a tree trunk. So why is that a problem?
+    ... is that just a number that was made up in the middle of implementation without any actual basis?"* It
+    was). The rule's own grounding, written when it was first made, is that "a lane/street/road is bare trodden
+    earth - you do not plant trees ON it", and the original check measured exactly that: `seg_dist < half + r`,
+    the corridor's OWN half-width. Feature 166 lifted the rule out of the retired battery and rewrote the
+    distance as a flat 4.0 ft from the centerline, which on a 3 ft footpath demands 2.5 ft of bare ground BEYOND
+    the tread - a clearance nothing in the record asks for and no placer implements, so the gate failed a map
+    whose trees stood 3.1 ft off a footpath's centerline, which is to say 1.6 ft clear of the path itself.
+    The width is read from the lane again. A trunk inside the tread is a tree standing in the path; a trunk
+    beside it is what a path looks like."""
     M, ways = lanes
     # `tree_crowns` is one FLAT list of x, y, r, x, y, r ... - the trunk is the first two of each triple
     # and the crown's REACH is the third. Reading the third here is exactly the mistake the rule warns
@@ -215,7 +227,14 @@ def test_no_tree_is_planted_in_a_path(lanes) -> None:
     assert len(flat) % 3 == 0, "tree_crowns is not a flat list of (x, y, r) triples - the trunk read below would be nonsense"
     trunks = [(flat[i], flat[i + 1]) for i in range(0, len(flat), 3)]
     assert trunks, "the roll drew no tree, so this rule would judge nothing"
-    on_path = [(round(x), round(y)) for x, y in trunks if min(_min_dist((x, y), p) for p in ways) < 4.0]
+    # the lane's own half-width, as the rule was first written - `w` is the drawn tread, defaulted as the
+    # engine defaults it, and a trunk is judged against the path it would stand in rather than against a figure
+    halves = [float(ln.get("w", 6)) / 2.0 for ln in (M.get("lanes") or [])]
+    on_path = [
+        (round(x), round(y))
+        for x, y in trunks
+        if any(_min_dist((x, y), p) < halves[i] for i, p in enumerate(ways) if len(p) >= 2 and i < len(halves))
+    ]
     assert not on_path, f"tree trunk(s) stand ON a lane at {on_path[:4]}"
 
 

@@ -67,11 +67,12 @@ class DrainageDitch(Kind):
     Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
     collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
     consolidation the water that left a village's paddies went on down to the river, or to the next field, to
-    be used again below. The collector is drawn wider at its outfall than the head race that fed the same
-    ground, because it carries storm water and the season's drawdown as well as the irrigation duty.
+    be used again below. The collector widens as it goes - a thread where it starts between the last
+    plots, its full width where it leaves the field - because every plot it passes adds that plot's drawdown to
+    what it is already carrying.
 
-    Note: The collector's form, its separation from the supply net and its tail wider than the head race are
-    read; the sink its run reaches is the map's declared water sink.
+    Note: The collector's form, its separation from the supply net and its widening run are read; the sink its
+    run reaches is the map's declared water sink.
 
     Caveat: the sink its run reaches is the map's declared water sink
 

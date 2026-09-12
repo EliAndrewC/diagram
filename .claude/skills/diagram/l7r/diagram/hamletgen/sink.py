@@ -204,12 +204,31 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
     dx, dy = plan.fall
     best: tuple[float, Pt] | None = None
     legs = list(zip(plan.brook, plan.brook[1:], strict=False))
-    below = [sum(math.hypot(d[0] - c[0], d[1] - c[1]) for c, d in legs[k + 1 :]) for k in range(len(legs))]
+    # THE TRUNK IS MEASURED IN THE PICTURE, NOT ALONG THE COURSE (feature 230, settlement-review pass 6).
+    # `BROOK_JOIN_TRUNK` exists so a confluence is not drawn at the frame's edge with nothing below it to read,
+    # and it was measured as ARC LENGTH - which a brook can spend entirely off the sheet. Sawada's join came out
+    # 6 ft inside the view of a 2,091 ft-wide picture with all 359 ft of its joined trunk outside the canvas, so
+    # the rule's own defect was available to it. The frame is not decided until `stage_frame`, four stages later,
+    # but its floor is: the crop always contains the field, and the scatter's own predicted frame (feature 224)
+    # grows the crop boxes by 48 + 120. So the trunk is counted only where it lies inside the field's box grown
+    # by that margin - a conservative reading of the picture, which is the safe direction for a rule that exists
+    # to keep a junction ON the sheet.
+    _fx = [q[0] for q in plan.envelope] or [0.0, float(plan.W)]
+    _fy = [q[1] for q in plan.envelope] or [0.0, float(plan.H)]
+    _pic = (min(_fx) - 168.0, min(_fy) - 168.0, max(_fx) + 168.0, max(_fy) + 168.0)
+
+    def _seen(c: Pt, d: Pt) -> float:
+        """How much of the leg c->d lies inside the predicted picture, sampled at the walk's own stride."""
+        n = max(1, int(math.hypot(d[0] - c[0], d[1] - c[1]) / stride))
+        inside = sum(1 for i in range(n + 1) if _pic[0] <= c[0] + (d[0] - c[0]) * i / n <= _pic[2] and _pic[1] <= c[1] + (d[1] - c[1]) * i / n <= _pic[3])
+        return math.hypot(d[0] - c[0], d[1] - c[1]) * inside / (n + 1)
+
+    below = [sum(_seen(c, d) for c, d in legs[k + 1 :]) for k in range(len(legs))]
     for k, (a, b) in enumerate(legs):
         run = math.hypot(b[0] - a[0], b[1] - a[1])
         for i in range(int(run / stride) + 1):
             t = min(1.0, i * stride / run) if run else 0.0
-            if below[k] + run * (1.0 - t) < BROOK_JOIN_TRUNK:
+            if below[k] + _seen((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), b) < BROOK_JOIN_TRUNK:
                 continue  # the join would sit at the frame's edge with no trunk to read
             q = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
             d = math.hypot(q[0] - out[0], q[1] - out[1])

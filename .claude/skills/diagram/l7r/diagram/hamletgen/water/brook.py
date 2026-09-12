@@ -83,7 +83,7 @@ def _v_within(u: float, floor: float, want: float, d: Pt, p: Pt, box: tuple[floa
     return max(floor, hi)
 
 
-def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0) -> Poly:
+def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:
     """No segment of a drawn watercourse lies along a screen axis.
 
     The GM's own words on this map (2026-08-26): a course that "appears to run exactly east to west parallel
@@ -91,9 +91,18 @@ def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0)
     that is the cause; this is the backstop for the coincidence, since a fall on a diagonal can still put one
     segment of an honest walk on the horizontal. The nudge moves the segment's far end AWAY from the crop -
     `away` is the flank's own outward normal - and never across it: nudging along the segment's own normal
-    was the first cut and it can push the vertex INWARD, which is how one ended up inside a barley plot."""
+    was the first cut and it can push the vertex INWARD, which is how one ended up inside a barley plot.
+
+    `hold` exempts the leading segments - the TAP RUN. That stride is not a coincidence to be broken up: it is
+    the structural line that makes the head race's offtake angle the angle the record states, and on a map whose
+    land falls due east or due south it lies on a screen axis by construction. Nudging it moved Mizuguchi's
+    brook 11 ft off the fall 49 ft below its own intake, so the race left at 87 degrees off the brook's heading
+    where the record says 35. A deliberate line and an accidental one look the same to this function, so the
+    caller says which is which."""
     out = list(course)
     for i in range(len(out) - 1):
+        if i < hold:
+            continue  # the tap run - see below
         (ax, ay), (bx, by) = out[i], out[i + 1]
         deg = math.degrees(math.atan2(by - ay, bx - ax)) % 90.0
         if min(deg, 90.0 - deg) < eps:
@@ -216,11 +225,24 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
             # own line; a cut point must not, or every point between the tap and the first station is pushed a
             # skirt's width sideways and the brook leaves the tap on a bearing that is not the fall - which is
             # the bearing the head race's offtake angle is measured against.
+            if cu <= u0 + BROOK_TAP_RUN:
+                # THE TAP RUN IS NOT FLOORED AT ALL, and that is the whole of what makes the offtake angle
+                # true. The note above says a cut point must not take the tap's baseline; the floor itself is
+                # the other half of the same hazard - where the crop comes close to the intake, flooring pushes
+                # the points inside the first stride out by a skirt's width and the brook leaves the tap on a
+                # bearing that is not the fall. Measured on Mizuguchi: the course left the intake at 281
+                # degrees against a fall of 0, so the head race's recorded 35 degree offtake was drawn at 114
+                # degrees off the brook's downstream heading - pointing upstream, with the dug ditch reading as
+                # the continuation and the brook as the branch, which is the GM's original complaint in new
+                # clothes. The crop that came close is what yields: `_comb_draw_hem` drops any hem plot the
+                # brook's own band crosses, so holding this line puts no plough under water.
+                cut.append((qx, qy))
+                continue
             cfloor = _crop_edge(segs, cu, 12.0, -1e9) + skirt
             cv = _v_within(cu, cfloor, max(cfloor, cv), (dx, dy), (px, py), box)
             cut.append((cu * dx + cv * px, cu * dy + cv * py))
     cut.append(mid[-1])
-    return _off_the_axes([*cut, *keep_tail], (px, py))
+    return _off_the_axes([*cut, *keep_tail], (px, py), hold=2)  # the tap run: two cut points on the fall, and the segment that leaves it
 
 
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:

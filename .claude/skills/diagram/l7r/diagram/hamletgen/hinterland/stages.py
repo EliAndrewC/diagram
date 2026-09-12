@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from l7r.diagram.settlement import Settlement
 
 from ..homesteads import farmstead_fixtures, household_bamboo
@@ -160,7 +162,24 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # reporting Sawada's copse drawn INSIDE the belt - which is the second form happening by accident,
     # unrecorded, on a map that had rolled the first. Rolled per settlement from the map's own seed, so
     # two hamlets differ at a glance, which is the point of a knob rather than a house style.
-    _box = [(min(xs) - pad, min(ys) - pad), (max(xs) + pad, min(ys) - pad), (max(xs) + pad, max(ys) + pad), (min(xs) - pad, max(ys) + pad)]
+    # THE CLUSTER'S OWN FOOTPRINT, NOT ITS BOUNDING BOX (feature 230, settlement-review pass 6). A hamlet
+    # seated on a diagonal margin is a RIBBON - Inashiro's is 969 x 231 ft - and its axis-aligned box is
+    # 617 x 875, most of which is the empty bay beside it. Scattering "among the houses" over that box put 86%
+    # of the copse's clumps more than 90 ft from any house and tripled the wood to 12.4 acres, so the sheet read
+    # as a house row with a wood tucked against its side rather than as houses threaded through trees. The seat
+    # already carries the frame the cluster was laid in; measure the cloud in THAT frame and the ground is the
+    # settlement's own shape. (The windbreak beside it has always used its oriented footprint.)
+    _al = cast("tuple[float, float]", plan.seat.get("along", (1.0, 0.0))) if plan.seat else (1.0, 0.0)
+    _ou = cast("tuple[float, float]", plan.seat.get("out", (0.0, 1.0))) if plan.seat else (0.0, 1.0)
+    _as = [x * _al[0] + y * _al[1] for x, y in zip(xs, ys, strict=False)]
+    _os = [x * _ou[0] + y * _ou[1] for x, y in zip(xs, ys, strict=False)]
+    _a0, _a1, _o0, _o1 = min(_as) - pad, max(_as) + pad, min(_os) - pad, max(_os) + pad
+    _box = [
+        (_a0 * _al[0] + _o0 * _ou[0], _a0 * _al[1] + _o0 * _ou[1]),
+        (_a1 * _al[0] + _o0 * _ou[0], _a1 * _al[1] + _o0 * _ou[1]),
+        (_a1 * _al[0] + _o1 * _ou[0], _a1 * _al[1] + _o1 * _ou[1]),
+        (_a0 * _al[0] + _o1 * _ou[0], _a0 * _al[1] + _o1 * _ou[1]),
+    ]
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]

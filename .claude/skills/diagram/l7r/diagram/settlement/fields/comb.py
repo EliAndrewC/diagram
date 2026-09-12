@@ -189,7 +189,7 @@ class CombMixin:
         # imperfect tessellation never shows the parchment background as bare "white" gaps (research.md D5).
         self.comb_base_fill(net, name)
 
-        self._comb_draw_hem(net)
+        self._comb_draw_hem(net, source)
         self._comb_draw_paddies(net)
         self.bund_junctions(net["plots"], name)
         # WATER-HONEST BEADS, the draw-site half (GM 2026-08-15: "fix the water-buried beads so
@@ -238,8 +238,9 @@ class CombMixin:
             self._pending_block = None
         return cast("list[Pt]", net["envelope"])
 
-    def _comb_draw_hem(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
-        """Draw the dry upslope hem, skipping any plot that falls on an earlier fan's rice or on standing water."""
+    def _comb_draw_hem(self: Settlement, net: dict[str, Any], source: dict[str, Any] | None = None) -> None:  # type: ignore[misc]
+        """Draw the dry upslope hem, skipping any plot that falls on an earlier fan's rice or on standing water -
+        including the brook the field is being cut around, which `source` carries and the manifest does not yet."""
         from l7r.diagram.waterfields import hem_on_paddy
 
         # a fan's hem is generated blind to the OTHER fans on a multi-fan map, so drop any hem plot
@@ -260,6 +261,15 @@ class CombMixin:
                 if _wpl:
                     _wet.append((_wpl, float(_wr.get("w") or _wdw) / 2))
         _wpond = self.M.get("pond")
+        # ...AND THE BROOK THIS FIELD IS BEING FITTED AROUND, which is not in `M["streams"]` yet (feature 230).
+        # The source hands its own course in, and the hem is drawn before the source is - so reading the
+        # manifest alone made the hem blind to the one watercourse the field was cut around, and
+        # `settlement-review` measured 34 ft of Mizuguchi's brook drawn across a soy plot's corner with the
+        # water ink over the plough boundary. The geometry is in hand; take it from the caller rather than from
+        # a record that does not exist yet.
+        _src_brook = (source or {}).get("stream") if isinstance(source, dict) else None
+        if _src_brook and len(_src_brook) >= 2:
+            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2))
 
         def _hem_on_water(poly: Poly) -> bool:
             return hem_on_water(poly, _wet, _wpond)
