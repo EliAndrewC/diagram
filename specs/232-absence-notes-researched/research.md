@@ -14,7 +14,7 @@ table of these numbers was wrong three times while this feature ran, which is wh
 |---|---|---|---|
 | `archetypes.html` | fn-81 | **CITED** | `tian-dike-pond` |
 | `archetypes.html` | fn-82 | **CITED** | `chi-2024-dike-pond-commons` |
-| `archetypes.html` | fn-84 | **CITED**, renumbered | `isis-dykepond` at fn-37 - the note said the Ruddle and Zhong monograph has no readable copy; the ISIS page that carries its figures does, so the parenthetical went and the roster entry became a citation |
+| `archetypes.html` | fn-84 | **CITED, renumbered** | `isis-dykepond` at fn-37 - the note said the Ruddle and Zhong monograph has no readable copy; the ISIS page that carries its figures does, so the parenthetical went and the roster entry became a citation |
 | `archetypes.html` | fn-87 | **STILL ABSENT** | see below |
 | `archetypes.html` | fn-88 | **STILL ABSENT** | see below |
 | `archetypes.html` | fn-89 | **STILL ABSENT** | see below |
@@ -59,11 +59,11 @@ table of these numbers was wrong three times while this feature ran, which is wh
 | `cities/hinterland.html` | fn-11 | **STILL ABSENT** | see below |
 | `cities/hinterland.html` | fn-12 | **CITED** | `chinese-city-wall-enwiki` |
 | `cities/river-cities.html` | fn-14 | **STILL ABSENT** | see below |
-| `cities/river-cities.html` | fn-15 | **CITED** | `egyankosh-silt-control` |
-| `cities/river-cities.html` | fn-16 | **CITED** | `egyankosh-silt-control` |
+| `cities/river-cities.html` | fn-15 | **CITED** | `ignou-silt-control` |
+| `cities/river-cities.html` | fn-16 | **CITED** | `ignou-silt-control` |
 | `cities/river-cities.html` | fn-17 | **STILL ABSENT** | see below |
 | `cities/river-cities.html` | fn-18 | **STILL ABSENT** | see below |
-| `cities/sizing.html` | fn-2 | **GROUNDS** | no source is owed: measured on our own maps back |
+| `cities/sizing.html` | fn-2 | **GROUNDS** | no source is owed: measured on our own maps |
 | `cities/sizing.html` | fn-3 | **STILL ABSENT** | see below |
 | `fields.html` | fn-25 | **CITED** | `jsslkx-002-2021` |
 | `fields.html` | fn-33 | **CITED** | `king-forty-centuries` |
