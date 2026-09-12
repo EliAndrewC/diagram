@@ -321,3 +321,35 @@ move ... those specifications will move into the scripted generators once those 
   drawing conventions, which say they are conventions) and `cities/sizing.html`.
 - The inventory of what moved where - every decision, every specification, every finding that only a rule
   file carried, the contradictions resolved on the way - is `specs/229-rule-files-into-research/research.md`.
+
+## When a section a modal was written FROM moves (GM 2026-09-12, feature 234)
+
+What a map's modal says about a feature IS the docstring of its `Kind` class
+(`interactive/classes/`, feature 189), written FROM a research section the class names in its `Entry:`
+tag. Nothing used to notice when that section's content moved underneath it, and the GM asked the
+question that closed the gap - told to update the pigsty write-up, *"if I hadn't said that ... then
+would you have done it?"*
+
+**What is owed.** `scripts/_entry_owed.py` names every class whose section's BODY changed while its own
+explanation prose did not. `make page-check` prints that list and does not block. **The push REFUSES**
+until each named pair is answered: dispatch the `entry-drift` agent at it, rewrite the prose it calls
+DRIFTED - or, where the sections moved without any FINDING moving, discharge the lot with one recorded
+line, `ENTRY_DRIFT_OK="<what moved, and why no modal is now wrong>"`, which `make audit` lists.
+
+It is enforced rather than expected, on the GM's ruling: *"I don't believe that we should have any such
+thing as an unenforced doctrine. If it is unenforced, then it is not a doctrine. something should either
+not be considered doctrinal or it should be enforced."* Narrowing the key so it would fire less was
+priced first and does not work - firing only on what a reader SEES takes 39 of 39 research-only commits
+to 38 of 39 (`specs/234-entry-owed-when-the-record-moves/research.md` R5), because separating "this
+section now says something different" from "this section was maintained" is a judgment about meaning.
+
+**`record-format` and `quote-check` are NOT this check.** They read a research ENTRY - whether a reader
+would understand it, whether its quotations are on the page and support what they are attached to.
+Neither of them ever opens a `Kind` docstring, so neither can tell you a modal has gone stale. They are
+the changed research entry's own standing obligations and a green pass from either says nothing about
+any modal.
+
+**And a renamed heading owes its inbound links** - the rule this file already stated, now checked:
+`scripts/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
+section. A section deliberately not written is written in the declared form
+`research/<file>.html (no dedicated entry - recorded as silent)`, which `make audit` enumerates.

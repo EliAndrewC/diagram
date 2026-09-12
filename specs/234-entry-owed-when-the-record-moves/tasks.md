@@ -58,12 +58,12 @@ record and the map's modals stay in step, not about how a place was built.
 
 ## Phase 4 - the guidelines the GM asked for (FR-012, FR-014, SC-012)
 
-- [ ] T12 `research/CLAUDE.md` and `interactive/classes/CLAUDE.md`: what is owed when a section a class
+- [x] T12 `research/CLAUDE.md` and `interactive/classes/CLAUDE.md`: what is owed when a section a class
       was written from moves - dispatch `entry-drift`, then rewrite the prose or record why not to
       `dev/bypass-log/`; and plainly that `record-format` and `quote-check` are the changed research
       entry's own obligations and are NOT a check on any modal (FR-012, FR-014).
       research: rendering
-- [ ] T13 A row in the root `CLAUDE.md` guard table saying the staleness half REPORTS and the heading
+- [x] T13 A row in the root `CLAUDE.md` guard table saying the staleness half REPORTS and the heading
       half GATES (FR-012).
       research: rendering
 
