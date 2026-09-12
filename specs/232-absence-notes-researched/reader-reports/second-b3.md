@@ -58,13 +58,17 @@ a browser reads these pages.**
 ### Source
 
 Donald B. Wagner, "Iron production in three Ming texts: *Tie ye zhi*, *Guangdong
-xinyu*, and *Tian gong kai wu*", web version, <https://donwagner.dk/MingFe/MingFe.html>
-(the published version is in *Studies on ancient Chinese scientific and technical
-texts*, ed. Hans Ulrich Vogel et al., Zhengzhou: Elephant Press, 2006, pp. 172-188;
-the author's web edition is the freely readable one).
+xinyu*, and *Tian gong kai wu*", the author's web version at
+<https://donwagner.dk/MingFe/MingFe.html>. Wagner's own publication list gives the
+printed version as pp. 172-188 in *Studies on ancient Chinese scientific and
+technical texts: Proceedings of the 3rd ISACBRST, March 31 - April 3, 2003,
+Tübingen, Germany*, ed. Hans Ulrich Vogel, Christine Moll-Murata and Gao Xuan,
+Zhengzhou: Elephant Press, 2006. The web edition is the freely readable one and is
+what was read here.
 
-Wagner is the author of *Science and Civilisation in China*, vol. 5 part 11:
-*Ferrous metallurgy* (Cambridge, 2008), so this is the authority on the question.
+Wagner is the author of *Science and civilisation in China*, vol. 5: *Chemistry
+and chemical technology*, part 11: *Ferrous metallurgy* (Cambridge University
+Press, 2008, 512 pp.), so this is the authority on the question.
 
 ### Assertion 1 - Ming ironworks converted pig iron to wrought iron by fining, Chinese *chao* 炒, literally "stir-frying"
 
@@ -155,9 +159,14 @@ The Han half is carried by Wagner twice. From the Ming texts paper:
 > Variations of this process, generally called chao 炒, 'stir-frying', have traditionally been used all over China, and seem also to have been used as early as the Han period (Wagner 2001: 80-84).
 
 and from Donald B. Wagner, "Technology as seen through the case of ferrous
-metallurgy in Han China", web version, <https://donwagner.dk/EncIt/EncIt.html>
-(published in *Storia della scienza*, vol. II, Rome: Istituto della Enciclopedia
-Italiana, 2001), under the heading "Fining hearths":
+metallurgy in Han China", the author's web version at
+<https://donwagner.dk/EncIt/EncIt.html>, under the heading "Fining hearths". (Per
+Wagner's publication list this English text is the original; what was PUBLISHED is
+an Italian translation of it by Fabrizio Pregadio, "Aspetti tecnologici: La
+metallurgia del ferro", in *Storia della Scienza*, vol. II: *Cina, India,
+Americhe*, ed. Karine Chemla with Francesca Bray, Fu Daiwie, Huang Yi-Long and
+Georges Métailié, Roma: Istituto della Enciclopedia Italiana, 2001. So the web page
+is the English text's only public form, and it is the one quoted.)
 
 > In the traditional Chinese iron industry in recent centuries the usual method of converting the high-carbon cast iron from the blast furnace to low-carbon wrought iron was by the fining process (Wagner 1997), and this method seems also to have been used in the Han period. The remains of a number of small hearths, believed to be fining hearths, have been found at several Han ironworks sites.
 

@@ -1,5 +1,11 @@
 # The 51 open notes, triaged (feature 232)
 
+> **SUPERSEDED IN PART, 2026-09-12.** Class A below was built from an extraction heuristic rather than from
+> the pages, and it is wrong on thirteen of its eighteen rows. The corrected classification, read off the
+> record itself, is [`eighteen-verified.md`](eighteen-verified.md): five owe no citation, one is arguable,
+> and twelve are genuine open absences. Classes B and C have not been re-verified the same way and should be
+> treated with the same suspicion until they are.
+
 *The GM's question, 2026-09-12: are these things that need a citation, things we should try harder on, or
 things so basic they do not need one? Every open note is in exactly one of three classes below.*
 
