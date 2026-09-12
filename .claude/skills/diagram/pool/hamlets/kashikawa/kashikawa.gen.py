@@ -20,8 +20,8 @@ sinks and the one the research turned on - before modern consolidation a village
 watercourse to be taken up by the district below - and an implemented sink owes one map that exhibits it, the
 way a knob owes one map per value. Sawada was tried first and cannot take it at any flank: its outfall stands
 at the canvas edge, so the brook has about 85 px left below the junction against the 150 the rule asks
-(specs/230 research R7). Measured here: the junction falls 123 ft inside the view with the brook running on
-below it.
+(specs/230 research R7). Measured here, on the view box: the junction falls 123 ft inside the view with 177 ft of the
+brook visible below it.
 """
 
 import os

@@ -841,4 +841,19 @@ downstream and reaches the division point over a distance the fan gives it. The 
 top is a brook and a ditch parting, which is what was actually there.
 
 What stands at the tap is rolled, because the record attests two forms and prefers neither.
-This map rolled the **weir**. Its runoff leaves the frame, and that run is now a drainage ditch drawn at the collector's tail width rather than an eight-pixel brook of its own - the same thing the pond maps draw, which is what the GM asked to have made consistent.
+This map rolled the **weir**.
+
+**Its runoff does not leave the frame - it goes back to the brook.** This is the pool's one map of the third
+drain sink, the CONFLUENCE: before modern consolidation a village's drainage returned to the watercourse to be
+taken up by the ground below, and a sink the engine implements owes one map that shows it. Kashikawa's seed rolls
+the brook onto the flank away from the drain's outfall, where the drain would leave the frame on its own, so the
+generator pins `brook_side=-1`: the brook passes the outfall's side, the collector (a drainage ditch, widening
+toward its mouth) runs to it, and the two join 123 ft inside the top edge of the view with 177 ft of the brook
+visible below the junction. Sawada was tried first and cannot take it at either flank - its outfall stands at the
+canvas edge, with about 85 px of brook left below a junction against the 150 the rule asks. Every household still
+seats on the first roll.
+
+What the sheet does not yet settle: at fit zoom the junction can read as a second offtake leaving the brook
+rather than a drain returning to it, because the drain arrives near-square and the brook does not widen below it
+(drawn width is rank, not discharge, by the record's own ruling). That is open, with its measurement, in the
+feature's research record.

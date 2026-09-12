@@ -398,3 +398,36 @@ def test_the_exit_leg_turns_onto_the_fall_when_the_course_is_heading_across_it()
     assert len(course) > 4
     # the fall is due south on this plan, so the course must end further down the map than it starts
     assert course[-1][1] > course[0][1], "the brook leaves down the fall"
+
+
+def test_a_hem_plot_at_the_fans_head_yields_to_the_brook_rather_than_throwing_it_sideways() -> None:
+    """`brook_skirt`, settlement-review pass 9. A dry hem plot laid round the fork reaches up beside the intake,
+    and floored against it the brook's first corner below the weir came out at 72-78 degrees on every brook map.
+    Crop reaching within one skirt of the fan's head is left out of the profile - `_comb_draw_hem` drops any hem
+    plot the brook's band then crosses - while crop further down the fan is still skirted as before."""
+    plan = a_plan()
+    dx, dy = plan.fall
+    px, py = -dy, dx
+    head_u = min(v[0] * dx + v[1] * dy for v in plan.envelope)
+    tap = (700.0, 300.0)
+    u_tap, v_tap = tap[0] * dx + tap[1] * dy, tap[0] * px + tap[1] * py
+    # a hem plot beside the tap, well out on the brook's flank and starting above the fan's head
+    at = [(u_tap + 60.0, v_tap + 90.0), (u_tap + 110.0, v_tap + 90.0), (u_tap + 110.0, v_tap + 130.0), (u_tap + 60.0, v_tap + 130.0)]
+    hem = [(u * dx + v * px, u * dy + v * py) for u, v in at]
+    assert min(u for u, _ in at) < head_u + hg.BROOK_SKIRT, "the fixture reaches within a skirt of the fan's head"
+
+    def sharpest(course: list[tuple[float, float]]) -> float:
+        worst = 0.0
+        for a, b, c in zip(course, course[1:], course[2:], strict=False):
+            h1, h2 = math.atan2(b[1] - a[1], b[0] - a[0]), math.atan2(c[1] - b[1], c[0] - b[0])
+            worst = max(worst, abs((math.degrees(h2 - h1) + 180.0) % 360.0 - 180.0))
+        return worst
+
+    with_hem = hg.brook_skirt(plan, tap, 1, crop=[hem])
+    without = hg.brook_skirt(plan, tap, 1)
+    assert with_hem == without, "the hem plot at the head does not move the course at all"
+    # ...and the same plot moved well down the fan IS skirted, so the rule is about where it stands, not what it is
+    reach = max(w[0] * px + w[1] * py for w in plan.envelope)  # out past the envelope's own reach, or it is already cleared
+    low = [(u * dx + v * px, u * dy + v * py) for u, v in [(u + head_u - u_tap + 400.0, v - v_tap + reach + 60.0) for u, v in at]]
+    assert hg.brook_skirt(plan, tap, 1, crop=[low]) != without, "crop down the fan still shapes the course"
+    assert sharpest(with_hem) == sharpest(without)

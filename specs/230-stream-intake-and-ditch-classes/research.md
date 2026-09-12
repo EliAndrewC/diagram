@@ -343,10 +343,49 @@ MEASURED, per map, walking each brook at a 10 px stride against its own outfall:
 
 So Sawada cannot take it at either flank - its outfall stands at the canvas edge, which is the geometry, not the
 rule. Kashikawa can, on the flank it does not roll: pinned to `brook_side=-1` the brook passes the side the
-outfall is on, the collector reaches it, and the junction falls **123 ft inside the view with 347 ft of stream
-below it in the picture**. All twenty households still seat and the roll reports no failure. The pin carries its
+outfall is on, the collector reaches it, and the junction falls **123 ft inside the view with 177 ft of stream
+visible below it** (measured on the view box after the fan re-fit; the figure first written here was 347 ft, which
+was the raw length of the leg from the junction to the brook's next vertex - 55% of it off the sheet, the same
+arc-length measure `sink.py` retired two passes earlier; settlement-review pass 9 caught it). All twenty
+households still seat and the roll reports no failure. The pin carries its
 reason in the generator, as Sawada's `intake="open"` does.
 
 The pool therefore shows all three sinks again: the pond (Inashiro, Mizuguchi), the off-frame run (Sawada,
 Kuwabata) and the confluence (Kashikawa).
 
+
+## R9 The fan re-sized, and the corner below the weir (2026-09-12)
+
+**The speed lever, taken.** `perf-audit` returned band 1 `inconsistent` and band 2 `not-justified`: it measured
+the declined lever (`lo, hi, k` scaled by `sqrt(2 / (1 + BROOK_FAN_TRIM))`) at 26.8 / 26.3 s against an
+interleaved baseline of 28.2 / 28.2 s, faster than before the feature where the shipped code was +22%. The reason
+recorded for declining it was false. Measured A/B on identical code, the flooded sample's sliver demotion rate is
+64 of 90 without the scaling and 66 of 92 with it - the size is not the cause. The two gate failures at the larger
+size were defects it landed on: `_unjog`'s apex guards judged only the deduped ring while the gate reads the
+recorded one (a 0.2 degree hairline spur shipped), and the map's whole wet-paddy exhibit rested on one surviving
+random draw at either size. Both fixed; with them the clone's own pool, before this pass, had shipped Kashikawa and
+Mizuguchi with no flooded plot at all, and now every map has one.
+
+**settlement-review pass 9** ran one agent per map; four were killed by an account rate limit before reporting and
+only Kashikawa's returned (needs-work, 3 errors, 1 questionable):
+
+1. *The sharpest corner on every brook map is 49 ft below the weir* - 72.4 / 77.9 / 71.9 / 51.9 degrees against
+   medians of 10-15. Two levers measured first did nothing: narrowing the first station's look-ahead window
+   (71-73, unchanged) and a longer head race (moved it on two maps, 88 degrees on Sawada). Instrumented, the cause
+   was a dry hem plot laid round the fork and reaching up beside the intake (to 72 px below the tap, 104 px out on
+   the brook's flank on Kashikawa; starting 4 px below the fork on Mizuguchi): the corner-cut point past the tap
+   run was floored against it and thrown 138 px sideways in 33, while the fan's own plots do not begin until
+   ~120 px down. Crop reaching within one skirt of the fan's head now yields to the brook, as the tap run's crop
+   already did. Result: **41.0 / 52.8 / 52.7 / 51.6 degrees**, one dry plot of ~20 given up on two maps, every
+   household seated on the first roll, the brook 14-26 px clear of every crop ring, 99 of 99 gate tests green. The
+   ~52 degrees left is the fan's own divergence at its head.
+2. *The recorded 347 ft of visible trunk below the confluence* was the raw length of one leg, 55% off the sheet.
+   Re-measured on the view box: 177 ft (R8, the generator's docstring and the notes corrected).
+3. *Kashikawa's notes never mentioned the confluence*, and their last sentence said its runoff leaves the frame.
+   Rewritten.
+
+**Open, with its measurement: the confluence can read as a fork.** The drain arrives at 71 degrees to the brook's
+downstream heading, 5.5 ft wide against the trunk's 6.5, tapering narrower away from the brook - the silhouette of
+an offtake, which is what the same map draws at the intake. The reviewer's lever is to align the drain's last leg
+with the brook's downstream heading; whether a field drain's return is swept downstream is a research question the
+record has not asked (`city/moat.py` asserts it without a citation), so it is not changed on a guess.

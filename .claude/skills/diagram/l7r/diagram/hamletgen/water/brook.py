@@ -141,6 +141,23 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     dx, dy = plan.fall
     px, py = -dy * side, dx * side
     rings = [[(v[0] * dx + v[1] * dy, v[0] * px + v[1] * py) for v in ring] for ring in [list(plan.envelope), *[list(c) for c in crop]] if ring]
+    # CROP AT THE FAN'S HEAD YIELDS TO THE BROOK - it does not floor it (feature 230, settlement-review pass 9).
+    # Every brook map shipped its sharpest corner 49 ft below the weir: 72.4, 77.9, 71.9 and 51.9 degrees against
+    # medians of 10 to 15, a spike pointing at the field in the one place a reader looks. Instrumented, the course
+    # was not skirting the fan at all - the fan's plots do not begin until ~120 px down the fall - but a DRY HEM
+    # plot laid round the fork, reaching up beside the intake itself (to 72 px below the tap and 104 px out on
+    # the brook's flank on Kashikawa, 4 px below the fork on Mizuguchi). Floored against it, the corner-cut point
+    # just past the tap run was thrown 138 px sideways in 33. The rule this module already keeps for the tap run
+    # says what should happen instead: the crop that came close is what yields, and `_comb_draw_hem` drops any hem
+    # plot the brook's band crosses. So a crop ring whose body reaches within one skirt of the fan's head is left
+    # out of the profile. Measured: the corner falls to 41, 53, 53 and 52 degrees, one dry plot of ~20 gives way
+    # on two maps, and every map keeps its households and its clearance from the crop.
+    #
+    # Two levers were measured first and did nothing: narrowing the first station's look-ahead window (71-73
+    # degrees, unchanged), and a longer head race (the corner moved on two maps and grew to 88 on Sawada). What is
+    # left at ~52 degrees is the fan's own divergence at its head, which `BROOK_FAN_TRIM` exists to ease.
+    _head_u = min(u for u, _ in rings[0])
+    rings = [rings[0], *[r for r in rings[1:] if min(u for u, _ in r) >= _head_u + skirt]]
     segs = [(a, b) for r in rings for a, b in zip(r, r[1:] + r[:1], strict=False)]
     u0, v0 = sluice[0] * dx + sluice[1] * dy, sluice[0] * px + sluice[1] * py
     umax = max(u for r in rings for u, _ in r)
