@@ -10,13 +10,7 @@ undrained valley toe begins.
 
 **Subject**: ~19 households, land falling to the northwest, and the largest of the four combs.
 
-**What it is here to show**: the OTHER water sink. Sawada has no pond. Its collector runs on past
-the last paddy as a brook and leaves the frame, to join a stream or another farm's ditch somewhere
-the map does not have to care about - which is what most real valleys do, and which the GM's brief
-named as the equally-ordinary alternative to a tameike. The brook's LENGTH is derived from the
-distance to the canvas edge along the fall, not from a constant: `draw_comb_field`'s own brook runs
-a fixed 520 px, which is a number tuned against the canvases the authored maps happened to use and
-stops in open ground on a wider one.
+**What it is here to show**: the OTHER water sink. Sawada has no pond. Its collector runs on past the last paddy as a dug drainage ditch and joins the brook that passes the field's foot - a confluence the map draws, and what a village's drainage did before modern consolidation separated supply from drain (feature 230). Until then the runoff left the frame on its own, beside that same brook.
 
 Below the drain, the un-reclaimed toe is reed marsh - the `hinterland` scatter's contour band, on
 the low side where the gate requires it.
@@ -785,3 +779,24 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   1 of 19 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
   evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
   or tighter is a research question the record does not yet answer; no rule measures the spread today. The board's caption crosses eight windbreak crowns now (two copse crowns before) - legible on its halo at full resolution, and the same open item Mizuguchi's feature-220 entry carries, not a new one.
+
+
+## The brook is tapped, and runs on (feature 230, 2026-09-12)
+
+The GM, looking at the reference hamlet: the map "looks kind of strange at the top where the stream just
+kind of becomes a field ditch, and that seems to happen at kind of an arbitrary point ... with no notable
+feature or even bend in the stream". It did: the brook ended at the intake and the head race carried on
+from it down the same straight line, ninety feet above the fork, because two constants said so and nothing
+else did.
+
+The research says a stream is TAPPED and keeps its course. Both traditions name the same works in the same
+order - the weir, the intake mouth, the settling reach, the division works - and both say the water that is
+not taken goes on: half-river closures were the common old Japanese form, an *araizeki* passes water over
+its crest at all times, and Dujiangyan and Lingqu divide their rivers in stated proportions rather than
+taking them. So the brook here comes down off the high ground, is tapped at the field's head, and runs on
+past the fan down one flank to leave the map; the head race leaves its bank at an acute angle pointing
+downstream and reaches the division point over a distance the fan gives it. The fork a reader sees at the
+top is a brook and a ditch parting, which is what was actually there.
+
+What stands at the tap is rolled, because the record attests two forms and prefers neither.
+This map is the pinned one: `intake="open"`, the brook tapped straight off its bank with nothing built across the water. All five pool seeds happened to roll the weir and a knob owes one map per value, so the value is declared in the generator rather than left to the draw. The foot changed too, and by measurement: the brook passes 82 ft from the collector's outfall, and the drain now runs to it and joins it at a confluence - what a village's drainage did, and an end to two watercourses leaving the map side by side.

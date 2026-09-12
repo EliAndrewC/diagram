@@ -6,6 +6,7 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
+import random
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -14,7 +15,27 @@ from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
 from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, crosses_poly, net_acres, poly_area, unit
 from l7r.diagram.waterfields import CombCarve, build_polder, carve_comb, clean_polder_parcels, finish_comb
 
-from .consts import BROOK_SKIRT, DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, WATERWARD_DEPTH, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT, Poly, Pt
+from .consts import (
+    BROOK_SKIRT,
+    BROOK_TAP_RUN,
+    BROOK_WANDER,
+    BROOK_WANDER_STEP,
+    DIKEPOND_CONVERSION,
+    FAN_ASPECTS,
+    GRAIN,
+    POLDER_ARCHETYPES,
+    POLDER_FABRIC,
+    POND_LAYOUT_MOSAIC,
+    REF_CANAL_A,
+    REF_CANAL_B,
+    REF_FIELD_FALL,
+    WATERWARD_DEPTH,
+    WEIR_HALF_FT,
+    WEIR_SKEW_DEG,
+    WEIR_THICK_FT,
+    Poly,
+    Pt,
+)
 from .plan import SitePlan, _roll
 
 # ---- STAGE 1: the water frame -------------------------------------------------------------------
@@ -327,36 +348,99 @@ def net_bends_acutely(net: Mapping[str, Any]) -> bool:
     return False
 
 
-def brook_skirt(plan: SitePlan, sluice: Pt, side: int, skirt: float = BROOK_SKIRT, steps: int = 8) -> Poly:
-    """The brook's course BELOW the intake: past the fan on one flank, then off the frame.
+def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
+    """One step of the brook's lateral walk: (how far outside the skirt floor, which way it is going).
 
-    A stream is tapped, not consumed - the intake takes what the field needs and the brook carries the
-    rest on down (research/water.html, "Where does the brook stop being a brook and become the ditch").
-    So the course below the intake has one job: pass the crop without touching it. It is built in the
-    fall's own frame - `u` along the fall, `v` across it on the chosen flank - by walking down the fan
-    and holding `v` at the outermost crop seen so far plus a skirt. Two properties come from that shape
-    rather than from a search: `v` never decreases, so the brook cannot turn back into the fan and every
-    bend is obtuse; and at each step it lies outside the widest crop at or above that step, so no vertex
-    can fall inside the envelope however the fan's outline wanders."""
-    dx, dy = plan.fall
-    px, py = -dy * side, dx * side
-    u0, v0 = sluice[0] * dx + sluice[1] * dy, sluice[0] * px + sluice[1] * py
-    uv = [(v[0] * dx + v[1] * dy, v[0] * px + v[1] * py) for v in plan.envelope]
-    umax = max(u for u, _ in uv)
-    out: Poly = []
-    for i in range(1, steps + 1):
-        u = u0 + (umax - u0) * i / steps
-        v = max([v0] + [vv for uu, vv in uv if uu <= u + 40.0]) + skirt
-        out.append((u * dx + v * px, u * dy + v * py))
-    lx, ly = out[-1]
-    # ...and off the frame from there, the run measured along the fall from THIS point rather than pinned
-    spans = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
-    span = max(120.0, min(spans)) + 260.0
-    out.append((lx + dx * span, ly + dy * span))
+    A REFLECTING walk with a floor on the step, not a clamped one. Clamped, the walk saturates at an end and
+    stands still there - which draws exactly the ruled segment the wander exists to prevent, and a segment
+    that stands still on a map whose fall is due south is a line at 90.000 degrees. Reflecting off the ends
+    and stepping at least `BROOK_WANDER_STEP / 4` keeps every station's offset different from the last, so
+    no two consecutive vertices can share a bearing and none can lie on an axis."""
+    step = rng.uniform(BROOK_WANDER_STEP / 4.0, BROOK_WANDER_STEP) * swing
+    nxt = stray + step
+    if not 0.0 <= nxt <= BROOK_WANDER:
+        swing = -swing
+        nxt = min(BROOK_WANDER, max(0.0, stray - step))
+    return nxt, swing
+
+
+def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0) -> Poly:
+    """No segment of a drawn watercourse lies along a screen axis.
+
+    The GM's own words on this map (2026-08-26): a course that "appears to run exactly east to west parallel
+    to the edge of the map ... makes it look like a mistake". The wander makes a held offset impossible and
+    that is the cause; this is the backstop for the coincidence, since a fall on a diagonal can still put one
+    segment of an honest walk on the horizontal. The nudge moves the segment's far end AWAY from the crop -
+    `away` is the flank's own outward normal - and never across it: nudging along the segment's own normal
+    was the first cut and it can push the vertex INWARD, which is how one ended up inside a barley plot."""
+    out = list(course)
+    for i in range(len(out) - 1):
+        (ax, ay), (bx, by) = out[i], out[i + 1]
+        deg = math.degrees(math.atan2(by - ay, bx - ax)) % 90.0
+        if min(deg, 90.0 - deg) < eps:
+            out[i + 1] = (bx + away[0] * nudge, by + away[1] * nudge)
     return out
 
 
-def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
+def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = (), skirt: float = BROOK_SKIRT, steps: int = 12) -> Poly:
+    """The brook's course BELOW the intake: past the cultivated ground on one flank, then off the frame.
+
+    A stream is tapped, not consumed - the intake takes what the field needs and the brook carries the rest
+    on down (research/water.html, "Where does the brook stop being a brook and become the ditch"). So the
+    course below the intake has one job: pass the crop without touching it. It is built in the fall's own
+    frame - `u` along the fall, `v` across it on the chosen flank - by walking down the fan and holding `v`
+    outside the outermost cultivated ground seen so far, plus a skirt.
+
+    THE PROFILE IS BUILT FROM EVERY CULTIVATED RING, not from the paddy envelope alone. The first cut used
+    the envelope, and `settlement-review` measured the result: on Sawada the brook crossed 15 of 25 dry hem
+    plots and ran 1,456 ft with plough ink on both banks, because the hem is laid OUTSIDE the envelope. The
+    delta's whole claim is that the field was cut around a brook that was already there, and a brook drawn
+    across the plots says the opposite. The supply canals go into the profile for the same reason, one step
+    weaker: they mark the margin the brook must stay outside of.
+
+    AND THE OFFSET WANDERS. Held at the floor it produced a course that decayed onto a constant and then ran
+    1,284 ft on an exact bearing - a ruled line through a reed marsh, the appearance the GM rejected on this
+    map in 2026-08-26 - and, on the flank a supply canal hems, 1,360 ft parallel to that canal at a mean 32.5
+    ft, which is the two-water-lines catch again. The walk is seeded from the map, so two maps differ and one
+    map is stable; its steps never take the course back inside the profile, so the brook still cannot touch
+    the crop however the fan's outline wanders."""
+    dx, dy = plan.fall
+    px, py = -dy * side, dx * side
+    rings = [[(v[0] * dx + v[1] * dy, v[0] * px + v[1] * py) for v in ring] for ring in [list(plan.envelope), *[list(c) for c in crop]] if ring]
+    # PER RING, not per vertex: a hem plot's outermost corner can lie far downslope of the ground its body
+    # covers, and a profile keyed on each vertex's own `u` then clears the plot at neither station - which is
+    # how a brook vertex ended up 16 ft inside a barley plot with the per-vertex profile in place.
+    spans = [(min(u for u, _ in r), max(v for _, v in r)) for r in rings]
+    u0, v0 = sluice[0] * dx + sluice[1] * dy, sluice[0] * px + sluice[1] * py
+    umax = max(u for r in rings for u, _ in r)
+    rng = knob_rng(plan.spec.seed, "brook_wander")
+    swing = 1 if rng.random() < 0.5 else -1
+    # the tap's own stride: the brook runs on down the fall before it bends away, so the head race's offtake
+    # angle is measured off a heading the brook is actually on
+    out: Poly = [(sluice[0] + dx * BROOK_TAP_RUN, sluice[1] + dy * BROOK_TAP_RUN)]
+    stray = BROOK_WANDER / 2.0
+    stride = (umax - u0 - BROOK_TAP_RUN) / steps
+    for i in range(1, steps + 1):
+        u = u0 + BROOK_TAP_RUN + stride * i
+        stray, swing = _wander(rng, stray, swing)
+        # the offset clears everything up to the NEXT station, not to this one: a plot whose outermost
+        # corner falls BETWEEN two stations is otherwise cleared by neither, and the segment clips it
+        v = max([v0] + [vmax for ulo, vmax in spans if ulo <= u + stride + 40.0]) + skirt + stray
+        out.append((u * dx + v * px, u * dy + v * py))
+    # ...and off the frame from there, still wandering, the run measured along the fall from the last station
+    lx, ly = out[-1]
+    spans = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
+    span = max(120.0, min(spans)) + 260.0
+    base = lx * px + ly * py
+    for f in (0.3, 0.62, 1.0):
+        stray, swing = _wander(rng, stray, swing)
+        u = (lx * dx + ly * dy) + span * f
+        v = base + stray
+        out.append((u * dx + v * px, u * dy + v * py))
+    return _off_the_axes(out, (px, py))
+
+
+def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
     """The brook: down off the high ground to the intake, and ON PAST the fan to leave the map.
 
     Until feature 230 it ended AT the sluice and "became" the head race there - a handover with no
@@ -377,7 +461,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         mid = ((up[0] + sluice[0]) / 2 - math.sin(th) * 26, (up[1] + sluice[1]) / 2 + math.cos(th) * 26)
         near = (sluice[0] + math.cos(th) * 40, sluice[1] + math.sin(th) * 40)  # the last 40 px is the intake itself
         if not (crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope)):
-            return [up, mid, sluice, *brook_skirt(plan, sluice, plan.brook_side)]
+            return [up, mid, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
     up = (
         sluice[0] - dx * run,
         sluice[1] - dy * run,
@@ -386,7 +470,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         up,
         ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26),
         sluice,
-        *brook_skirt(plan, sluice, plan.brook_side),
+        *brook_skirt(plan, sluice, plan.brook_side, crop),
     ]  # pragma: no cover - the same unreachable fallback, one line down [174: KEPT, not deletable - part of that same terminal return]
 
 
@@ -693,7 +777,13 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     # STREAM ending AT the sluice, where it becomes the head-race - it does not run on over the
     # paddies. `draw_comb_field` then records the hairline topology channel that grounds the field's
     # water source for the gate.
-    plan.brook = feed_brook(plan, sluice)
+    # EVERY cultivated ring, and the supply canals with them: the brook passes outside all of it, not
+    # merely outside the paddy envelope (`brook_skirt`, and the review that measured the hem crossings).
+    plan.brook = feed_brook(
+        plan,
+        sluice,
+        [[(float(x), float(y)) for x, y in p["poly"]] for p in net["plots"] + net["dry_plots"]] + [[(float(x), float(y)) for x, y in c["pts"]] for c in net["channels"]],
+    )
     s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": plan.brook})
     draw_intake(s, plan, sluice)
     # THE PARTS OF A DITCH THAT RUN OUTSIDE THE CROP become no-build corridors.
@@ -742,7 +832,14 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
         (sluice[0] + ax * half - hx * half_t, sluice[1] + ay * half - hy * half_t),
     ]
     s.M.setdefault("weirs", []).append(
-        {"x": round(sluice[0], 1), "y": round(sluice[1], 1), "len": round(2 * half, 1), "w": round(2 * half_t, 1), "deg": round(math.degrees(ang) % 180.0, 1), "poly": [[round(x, 1), round(y, 1)] for x, y in poly]}
+        {
+            "x": round(sluice[0], 1),
+            "y": round(sluice[1], 1),
+            "len": round(2 * half, 1),
+            "w": round(2 * half_t, 1),
+            "deg": round(math.degrees(ang) % 180.0, 1),
+            "poly": [[round(x, 1), round(y, 1)] for x, y in poly],
+        }
     )
     s.add(
         '<polygon points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in poly) + '" fill="#8C7C63" stroke="#5F5340" stroke-width="0.8" stroke-linejoin="round"/>',

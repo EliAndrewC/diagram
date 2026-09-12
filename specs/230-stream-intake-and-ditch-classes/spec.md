@@ -206,6 +206,16 @@ Three things the GM asked for on the reference hamlet, all at the head and the f
   through the same code. The city fans are frozen exhibits or moat-fed and take the class split alone, on the
   next regeneration if ever.
 
+- **D6 What the first review sent back, and what each answer was** (`settlement-review`, needs-work, seven errors; the ledger row carries the finding). The brook's course now reads EVERY cultivated ring - the paddy envelope, the dry hem plots and the supply canals - because the hem is laid outside the envelope and clearing the envelope alone put 1,456 ft of Sawada's brook between plough furrows; the profile is per RING rather than per vertex, since a plot's outermost corner can lie far downslope of the ground its body covers. The offset WANDERS on a seeded reflecting walk (`BROOK_WANDER`, `_wander`) instead of being held at the floor: held, it draws the ruled line the GM rejected on Inashiro by name in August and runs parallel to whatever canal hems that margin, which is the Ikegami two-water-lines catch in a new place. `_off_the_axes` is the backstop for the coincidence a diagonal fall can still produce, nudging away from the crop and never across the heading. The brook runs on down the FALL for its first stride below the tap (`BROOK_TAP_RUN`) so that the offtake angle the record states is the angle the reader sees - measured 64 and 46 degrees before it, because the rule is an angle off the brook's own heading and the code took it off the land's fall. The confluence must leave a trunk below it (`BROOK_JOIN_TRUNK`) after Sawada's landed 4.5 ft inside the frame. And a straggler footpath is routed against the STREAMS (`stream_segs`, the deck-needing subset that helper was split out for) after one crossed the new brook at 1.9 degrees with no deck; the empty list at that call site was right about ditches and became wrong the day the brook stopped ending at the intake.
+- **D7 The angle at which the drain MEETS the brook is emergent, and labeled so.** The record's canal-junction rule governs an offtake LEAVING its parent (30 to 45 degrees, pointing downstream); the pass did not ask what angle water ARRIVING at a watercourse was cut to, and the reviewer's reading - that a made outfall may have been turned downstream while a natural tributary was not, which would make it a knob - is a research question this feature does not answer. The confluence's angle is whatever the geometry gives, and the record says so rather than implying a rule.
+
+- **D8 Two questions the review raised and this feature does not answer**, both recorded rather than
+  quietly settled. (1) Whether a made drain's mouth was turned downstream like a canal offtake, which would
+  make the mouth angle a knob (D7). (2) Whether a 5.5 ft collector should carry watercourse ink or ditch ink
+  where it meets a brook: at the confluence the two arms differ by about twenty units of color and a reader
+  cannot tell which is the stream. That is a map-convention question and the palette is shared by every map,
+  so it is the GM's to rule rather than this delta's to change.
+
 ## Out of scope
 
 - The drain's outfall and the pond's set-back: neither moves. The drain's continuation changes in class, record

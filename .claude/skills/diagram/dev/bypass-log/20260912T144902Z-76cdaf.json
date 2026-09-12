@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T144902Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review over this exact pool snapshot is already running in the background from the previous turn, dispatched beside the first gate run - this is the same content re-gated after a duplicate test definition was removed"
+}

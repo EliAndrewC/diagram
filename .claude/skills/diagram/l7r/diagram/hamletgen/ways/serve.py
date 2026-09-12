@@ -25,6 +25,7 @@ from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading,
 from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _PATH_DIRECTNESS
+from .checks import stream_segs
 
 
 def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], belts: Sequence[Poly] = (), houses: Sequence[Pt] = ()) -> bool:
@@ -320,7 +321,15 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 #
                 # So the lattice is not what strands these houses, and 4x the generation time buys
                 # nothing. What does strand them is recorded with the reach residue.
-                routed = _route(door, tgt, hard, passable, [], gap=FOOTPATH_FABRIC_GAP)
+                # ...A DITCH, THOUGH - NOT A BROOK AT A SLANT (feature 230). The empty list above is
+                # right about ditches and was wrong about streams the moment the brook stopped ending at
+                # the intake and began running down a flank of the fan: `settlement-review` measured a
+                # straggler footpath on Inashiro crossing the brook at 1.9 degrees with no deck, having
+                # run 80 ft up the channel first. `stream_segs` is exactly this distinction - the water
+                # that needs a DECK rather than a plank - and it is the whole list a blanket veto got
+                # wrong (41/48 -> 26/48 on the cohort, recorded in that helper). A footpath may still
+                # cross any ditch, and may still cross the brook; it may not cross the brook at a slant.
+                routed = _route(door, tgt, hard, passable, stream_segs(s), gap=FOOTPATH_FABRIC_GAP)
                 if routed:
                     cands.append(routed)
                 # THE BEND IS A FRACTION OF THE RUN, not a fixed number of feet. Offsets of 40, 80

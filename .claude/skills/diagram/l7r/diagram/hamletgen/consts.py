@@ -497,9 +497,21 @@ HEAD_RACE_LEAD = (80.0, 105.0, 130.0)
 # 45 instead of 90" - and clean mountain water is the case the angled offtake is allowed for (a
 # silt-laden river takes the right angle instead).
 OFFTAKE_DEG = 35.0
-# HOW FAR OUTSIDE THE CROP the continuing brook runs as it passes the fan's flank, px. Wide enough that
-# neither the paddy's own bund nor the brook's no-build corridor touches the planted ground.
+# HOW FAR OUTSIDE THE CROP the continuing brook runs as it passes the fan's flank, px - the FLOOR of the
+# offset, wide enough that neither the paddy's own bund nor the brook's no-build corridor touches the
+# planted ground. `BROOK_WANDER` is how far outside that floor the course strays, a seeded walk rather than
+# a held offset: a brook that asymptotes onto a fixed offset draws a ruled line, which is a thing the GM has
+# already rejected on this very map ("appears to run exactly east to west parallel to the edge of the map.
+# that makes it look like a mistake", 2026-08-26) - and a held offset also runs PARALLEL to whatever supply
+# canal hems that margin, which is the two-overlapping-water-lines catch in a new place. The walk's step is
+# what breaks both; its amplitude is a drawing judgment, not a researched figure.
 BROOK_SKIRT = 34.0
+BROOK_WANDER = 70.0
+BROOK_WANDER_STEP = 26.0
+# THE TAP'S OWN FIRST STRIDE, px: the brook runs on along the fall before it bends away to its flank, so
+# that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
+# DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
+BROOK_TAP_RUN = 70.0
 # THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar of stone-packed timber crib across the brook,
 # running diagonally upstream from the intake mouth as the old ones did. Half-length and thickness in feet.
 # The full closure is a MAP DRAWING CONVENTION - half-river closures were the common old form and at a 7 ft

@@ -291,16 +291,20 @@ def test_the_brook_skirts_the_fan_without_turning_back_into_it() -> None:
     px, py = -dy, dx
     course = hg.brook_skirt(plan, (700.0, 300.0), 1)
     lat = [q[0] * px + q[1] * py for q in course]
-    assert lat == sorted(lat), "the brook never turns back toward the fan"
+    floor = max(v[0] * px + v[1] * py for v in plan.envelope) + hg.BROOK_SKIRT
+    assert all(v >= floor - 1e-6 for v in lat[1:]), "the wander never takes the course back inside the crop's own extent"
     assert all(not hg.point_in_poly(q[0], q[1], plan.envelope) for q in course), "no vertex inside the crop"
     assert course[-1][1] > plan.H, "and it leaves the frame downslope"
+    bearings = [round(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])), 3) for a, b in zip(course, course[1:], strict=False)]
+    assert len(set(bearings[1:])) > 3, "the course wanders - a held offset draws the ruled line the GM rejected"
 
 
 def test_the_brook_takes_the_flank_it_is_rolled_onto() -> None:
-    """The two values of `brook_side` put the course on the two sides of the fall axis."""
+    """The two values of `brook_side` put the course on the two sides of the fall axis - past the tap's own
+    stride, which runs straight down the fall on either roll so the head race's offtake angle is true."""
     plan = a_plan()
-    one = hg.brook_skirt(plan, (700.0, 300.0), 1)
-    other = hg.brook_skirt(plan, (700.0, 300.0), -1)
+    one = hg.brook_skirt(plan, (700.0, 300.0), 1)[1:]  # [1:] drops the tap's own stride, which runs down the fall on either roll
+    other = hg.brook_skirt(plan, (700.0, 300.0), -1)[1:]
     assert max(q[0] for q in one) < 700.0 < min(q[0] for q in other), "the two rolls put the brook on the two sides of the fall axis"
 
 
@@ -317,6 +321,11 @@ def test_the_head_race_leaves_the_brook_at_the_offtake_angle_away_from_it() -> N
     hr = next(c for c in net["channels"] if c["role"] == "main")["pts"]
     assert math.hypot(hr[-1][0] - 700.0, hr[-1][1] - 300.0) == pytest.approx(plan.head_lead, abs=0.5)
     assert math.degrees(math.atan2(hr[-1][1] - 300.0, hr[-1][0] - 700.0)) == pytest.approx(plan.head_deg, abs=0.5)
+    # ...and the angle the reader sees is the record's rule, because the brook is still on the fall where
+    # the race leaves it: `settlement-review` measured 64 and 46 degrees when the course bent at the tap
+    course = hg.brook_skirt(plan, (700.0, 300.0), plan.brook_side)
+    below = math.degrees(math.atan2(course[0][1] - 300.0, course[0][0] - 700.0))
+    assert abs(((plan.head_deg - below + 180.0) % 360.0) - 180.0) == pytest.approx(hg.OFFTAKE_DEG, abs=0.5)
 
 
 def test_the_default_head_race_is_the_shape_every_other_caller_draws() -> None:

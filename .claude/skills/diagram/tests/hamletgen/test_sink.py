@@ -141,15 +141,6 @@ def test_a_brook_abreast_of_the_outfall_is_joined_a_little_way_down_it() -> None
     assert join is not None and join[1] == pytest.approx(1050.0 + hg.BROOK_JOIN_DESCENT, abs=10.0)
 
 
-def test_a_brook_abreast_of_the_outfall_is_joined_a_little_way_down_it() -> None:
-    """The nearest point on a brook running down the flank is LEVEL with the outfall, and taking it sent
-    Sawada's drain off the frame beside its own brook. The join is the nearest point that has fallen."""
-    plan = a_plan()
-    plan.brook = [(1130.0, 400.0), (1130.0, 1600.0)]  # abreast of the outfall, then on downslope
-    join = hg.brook_join(plan, (1050.0, 1050.0))
-    assert join is not None and join[1] == pytest.approx(1050.0 + hg.BROOK_JOIN_DESCENT, abs=10.0)
-
-
 def test_a_brook_that_passes_uphill_of_the_outfall_is_no_sink() -> None:
     """Water does not run up to its confluence: a brook whose nearest point is upslope is refused, and
     the runoff leaves the frame as it did before."""
@@ -169,3 +160,14 @@ def test_a_brook_out_of_reach_is_no_sink() -> None:
     plan = a_plan()
     plan.brook = [(4000.0, 1100.0), (4000.0, 1600.0)]
     assert hg.brook_join(plan, (1050.0, 1050.0)) is None
+
+
+def test_the_outfalls_own_crop_edge_is_exempt_but_a_ditch_through_the_rice_is_not() -> None:
+    """`_through_the_crop`. The outfall stands ON the field's edge, so the first strides of any route from
+    it are on the crop's own ground - the exemption the gate makes for a brook's leading vertices. Past
+    `BROOK_JOIN_LEAD` of the run the route is a ditch driven through the rice and is refused."""
+    plan = a_plan()  # the square crop, x 400-1000, y 400-1000
+    from l7r.diagram.hamletgen.sink import _through_the_crop
+
+    assert not _through_the_crop(plan, (1000.0, 700.0), (1120.0, 760.0)), "leaving the crop at once is the outfall's own edge"
+    assert _through_the_crop(plan, (450.0, 700.0), (1120.0, 760.0)), "most of this run is inside the rice"

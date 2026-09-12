@@ -821,3 +821,24 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   3 of 20 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
   evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
   or tighter is a research question the record does not yet answer; no rule measures the spread today. The water-carry figure above is the discarded first cut's: the SHIPPED map's worst well carry is 215 ft, better than the 242 before this feature.
+
+
+## The brook is tapped, and runs on (feature 230, 2026-09-12)
+
+The GM, looking at the reference hamlet: the map "looks kind of strange at the top where the stream just
+kind of becomes a field ditch, and that seems to happen at kind of an arbitrary point ... with no notable
+feature or even bend in the stream". It did: the brook ended at the intake and the head race carried on
+from it down the same straight line, ninety feet above the fork, because two constants said so and nothing
+else did.
+
+The research says a stream is TAPPED and keeps its course. Both traditions name the same works in the same
+order - the weir, the intake mouth, the settling reach, the division works - and both say the water that is
+not taken goes on: half-river closures were the common old Japanese form, an *araizeki* passes water over
+its crest at all times, and Dujiangyan and Lingqu divide their rivers in stated proportions rather than
+taking them. So the brook here comes down off the high ground, is tapped at the field's head, and runs on
+past the fan down one flank to leave the map; the head race leaves its bank at an acute angle pointing
+downstream and reaches the division point over a distance the fan gives it. The fork a reader sees at the
+top is a brook and a ditch parting, which is what was actually there.
+
+What stands at the tap is rolled, because the record attests two forms and prefers neither.
+This map rolled the **weir**. Its runoff leaves the frame, and that run is now a drainage ditch drawn at the collector's tail width rather than an eight-pixel brook of its own - the same thing the pond maps draw, which is what the GM asked to have made consistent.

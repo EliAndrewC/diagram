@@ -145,17 +145,43 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
             # pond across its short axis, and it cost Mizuguchi's tameike its seat - the stage fell back to
             # draining off the frame and the map lost the reservoir it is named for. A brook running past a
             # reservoir's shoulder is a normal thing to draw; a brook through the water is not.
-            clear = all(((seg_closest(cx, cy, a, b)[0] - cx) / (prx + 12.0)) ** 2 + ((seg_closest(cx, cy, a, b)[1] - cy) / (pry + 12.0)) ** 2 > 1.0 for a, b in zip(plan.brook, plan.brook[1:], strict=False))
+            clear = all(
+                ((seg_closest(cx, cy, a, b)[0] - cx) / (prx + 12.0)) ** 2 + ((seg_closest(cx, cy, a, b)[1] - cy) / (pry + 12.0)) ** 2 > 1.0 for a, b in zip(plan.brook, plan.brook[1:], strict=False)
+            )
         if clear:
             return d + 12.0
         d += step
     return limit
 
 
+#: How much BROOK must remain below the confluence, px. A junction drawn at the frame's edge is not a
+#: junction a reader can see - `settlement-review` measured Sawada's joined trunk at 4.5 ft before the crop
+#: cut it, two lines leaving the map at one point rather than a tributary entering a stream. A road running
+#: off the frame implies more beyond; a junction implies nothing.
+BROOK_JOIN_TRUNK = 150.0
+#: How much of the run from the outfall to the confluence may lie inside the crop before the route is
+#: refused. The outfall is AT the field's edge and a comb's envelope bows out around its own collector, so
+#: the first strides of any route from it are legitimately on the crop's own ground - which is why the gate
+#: trims a brook's leading vertices before it judges one (`streams_avoid_fields`). Anything past this is a
+#: ditch driven through the rice.
+BROOK_JOIN_LEAD = 0.3
 #: How far the confluence must have FALLEN below the outfall, px. A drain runs downhill into the brook it
 #: joins, and a junction level with the outfall is neither a fall nor a join; a stride of the collector's
 #: own tail width is enough to read as one on the sheet.
 BROOK_JOIN_DESCENT = 20.0
+
+
+def _through_the_crop(plan: SitePlan, out: Pt, q: Pt) -> bool:
+    """Would a ditch from the outfall to `q` run through the rice - past the crop edge the outfall stands on?
+
+    Lifted out of `brook_join` so the exemption can be tested on a square (feature 146's rule). The route
+    is walked from the outfall until it is clear of the envelope; leaving within `BROOK_JOIN_LEAD` of the
+    run is the field's own edge and is exempt, and the rest of the route is judged in full."""
+    lead = next((t / 20.0 for t in range(21) if not point_in_poly(out[0] + (q[0] - out[0]) * t / 20.0, out[1] + (q[1] - out[1]) * t / 20.0, plan.envelope)), 1.0)
+    if lead > BROOK_JOIN_LEAD:
+        return True
+    frm = (out[0] + (q[0] - out[0]) * lead, out[1] + (q[1] - out[1]) * lead)
+    return crosses_poly(frm, q, plan.envelope)
 
 
 def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10.0) -> Pt | None:
@@ -177,15 +203,19 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
     meeting."""
     dx, dy = plan.fall
     best: tuple[float, Pt] | None = None
-    for a, b in zip(plan.brook, plan.brook[1:], strict=False):
+    legs = list(zip(plan.brook, plan.brook[1:], strict=False))
+    below = [sum(math.hypot(d[0] - c[0], d[1] - c[1]) for c, d in legs[k + 1 :]) for k in range(len(legs))]
+    for k, (a, b) in enumerate(legs):
         run = math.hypot(b[0] - a[0], b[1] - a[1])
         for i in range(int(run / stride) + 1):
             t = min(1.0, i * stride / run) if run else 0.0
+            if below[k] + run * (1.0 - t) < BROOK_JOIN_TRUNK:
+                continue  # the join would sit at the frame's edge with no trunk to read
             q = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
             d = math.hypot(q[0] - out[0], q[1] - out[1])
             if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT:
                 continue
-            if crosses_poly(out, q, plan.envelope):
+            if _through_the_crop(plan, out, q):
                 continue
             if best is None or d < best[0]:
                 best = (d, q)

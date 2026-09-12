@@ -539,3 +539,13 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   lights fell from 100% to 6.2%, all of it within the rim (the inner stroke, the crowns and the mottle leaning
   over the waterline), the bank 100% lit both ways; the picture differs from the shipped render in 0.14% of its
   pixels, every one within the pond's own stroke band, by at most 9 of 255 on a channel.
+
+
+## The two ditch classes, and no brook to tap (feature 230, 2026-09-12)
+
+This hamlet is the polder: its water comes from a reservoir, not from a brook, so nothing at its head
+changed. Two things did. The ditches that feed the paddies and the one that drains them are two classes on
+the page now - `irrigation ditch` and `drainage ditch` - where one class and one explanation covered both,
+and the explanation was written entirely about supply. And the run that carries this map's runoff off the
+frame is drawn and recorded as a drainage ditch at the collector's own width, like every other map's, where
+before it was an eight-pixel stream: the same thing wearing two labels on two maps was what the GM caught.

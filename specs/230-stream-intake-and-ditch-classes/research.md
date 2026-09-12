@@ -115,6 +115,42 @@ reader's report follows the Japan reader's below when it lands. Passages are as 
 
 **Outcome on FR-004's ladder: (a) with (c) inside it.** The stream continues past the intake (a, decisive); the intake form is a knob between the bare bank intake and the weir (c, two attested forms); the head race's length is derived from the geometry with the record's silence on the distance labeled; the whole-capture reading is declined with its passages.
 
-## R3 The maps before and after
+## R3 The maps before and after (2026-09-12)
 
-Pending.
+The pool, rolled through the finished feature. "Brook before" is the length of the feed brook as the
+generator drew it until now - a fixed 420 px run ending at the intake; "after" is the whole course, down
+off the high ground, past the intake and on down one flank of the fan to the frame. The head race was a
+hardcoded 90 px straight down the fall on every comb map; it is now the rolled lead on the rolled bearing.
+Kuwabata is the polder: pond-fed, no brook, and its 775 ft "head race" is the perimeter ring's own trunk,
+untouched by this feature.
+
+| map | intake | flank | brook before (ft) | brook after (ft) | head race (ft) | the drain's sink | irrigation-ditch marks | drainage-ditch marks | weir |
+|---|---|---|---|---|---|---|---|---|---|
+| Inashiro | weir | +1 | 423 | 3,223 | 105 | pond | 154 | 16 | 1 |
+| Kashikawa | weir | +1 | 423 | 3,263 | 105 | off the frame | 200 | 10 | 1 |
+| Kuwabata | weir | -1 | 0 | 0 | 775 | off the frame | 327 | 2 | 0 |
+| Mizuguchi | weir | -1 | 423 | 3,256 | 105 | pond | 155 | 9 | 1 |
+| Sawada | open | -1 | 423 | 2,830 | 130 | the passing brook | 164 | 17 | 0 |
+
+**All three sinks are on the sheet**, which the spec's own reviewer doubted would happen: two maps drain to
+a tameike, one off the frame, and Sawada to the brook that passes 82 ft from its outfall. That last one took
+two corrections, both worth keeping. The first: the nearest point on a brook running down the flank is
+LEVEL with the outfall - Sawada's was 79.7 px away and 4.4 px UPHILL - so a test for "downslope" refused the
+join and sent the drain off the frame on its own, two watercourses leaving the map side by side, which is
+the overlap the GM caught on the first Ikegami draft in another place. The join is now the nearest point
+that has FALLEN (`BROOK_JOIN_DESCENT`, 20 px). The second: the outfall stands ON the crop's edge and a
+comb's envelope bows out around its own collector, so a crossing test from it reported the route running
+through the rice on every candidate; the route is exempt over the lead it takes to leave the envelope, the
+same exemption the gate makes for a brook's leading vertices, and refused past `BROOK_JOIN_LEAD` of the run.
+
+**Both knob values are on the sheet, and one is pinned.** The roll is even - 477 weirs in 1,000 seeds,
+measured - but all five pool seeds landed on the weir, so Sawada declares `intake="open"` in its generator,
+recorded there with this measurement. A knob owes one map per value.
+
+**Two things this feature had to give back.** Mizuguchi lost the tameike it is named for on the first
+sweep: the brook now runs down the flank the reservoir wanted, the set-back walk is straight downslope, and
+the pond was pushed past the canvas into the clamp, which falls back to draining off the frame. The seat
+search gained one degree of freedom (`pond_seat`: sways of 0.9 and 1.8 of the long radius, nearest first,
+the straight seat still winning whenever it is clear) and the pond came back. And the first clearance test
+held the pond a circle of its LONG radius from the brook, half again the pond across its short axis; it is
+the pond's own ellipse plus a rim's margin now.
