@@ -340,20 +340,22 @@ which is what makes the wrongness discoverable.
 **D7 - A RECORD AND A MODAL THAT ARE WRONG TOGETHER ARE INVISIBLE TO THIS FEATURE - an ACCEPTED
 LIMITATION.**
 
-*What was accepted.* The report keys on the SECTION MOVING. If a research section and the modal written
-from it are wrong in the same direction, nothing here names the pair: `_entry_owed.py` never sees it
-because the section did not move, and the `entry-drift` contract cannot catch it either, because that
-contract compares a modal against its section and the two agree. Both halves of this design are blind to
-it.
+*What was accepted.* The MECHANICAL half is blind to it. `_entry_owed.py` keys on the SECTION MOVING, so
+if a research section and the modal written from it are wrong in the same direction, the report never
+names the pair - the section did not move. A strict section-versus-modal reading returns IN-STEP for the
+same reason: the two agree. What the record shows DOES catch it is the agent given the measurements
+alongside the two texts, which is how the case below was found.
 
-*What it costs, in observable terms - measured on this feature's own first day.* `MulberryDike` told
-every reader of a dike-pond map that the bank is "six to ten meters wide", on a class labeled
-**accurate**, against a planted collar measured at 2.0 m. Behind it: feature 233's withdrawn 22 ft
-arithmetic still alive in two `archetypes.html` paragraphs, a GM ruling of 2026-08-28 that
-`kuwabata.notes.md` asserted the modals carried and that reached no modal at all, and `DuckPen` silent
-about the same collar. All four were found by a person with a ruler an hour after this feature shipped -
-not by this feature, which would have returned IN-STEP on a strict reading of the sections that modal
-names. `research.md` R7 has the detail.
+*What it costs, in observable terms.* `MulberryDike` told every reader of a dike-pond map that the bank
+is "six to ten meters wide", on a class labeled **accurate**, against a planted collar measured at 2.0 m.
+Behind it: feature 233's withdrawn 22 ft arithmetic still alive in two `archetypes.html` paragraphs, a
+GM ruling of 2026-08-28 that `kuwabata.notes.md` asserted the modals carried and that reached no modal at
+all, `DuckPen` silent about the same collar, and the `crop-vs-perimeter` sibling text repeating the same
+width to every reader of four more classes. Five defects, none of which `_entry_owed.py` would have
+named - all of the sections involved were wrong in the same direction as the modals, or had not moved at
+all. They were found by this feature's OWN `entry-drift` dispatch, which flagged `MulberryDike` while
+judging a different pair and then judged it DRIFTED when asked, reading feature 233's measurements
+against the two texts rather than only comparing the texts. `research.md` R6 and R7 have the detail.
 
 *What was declined.* A mechanical key that compares the RECORD against the DRAWING - there is none: the
 record's claims are prose and the drawing's are geometry, and the only thing that has ever connected
@@ -431,8 +433,7 @@ items confirmed resolved; four small closing edits required, all taken, and the 
 explicitly as "(a) small and closing ... Do not escalate to the GM on account of this verdict."
 (1) D6 carried three of the four elements this project requires of an accepted-limitation record and was
 missing WHO CHOSE - which here is not bookkeeping, because "doctrine, unenforced" for the judgment half
-is a call the GM may want to make. D6 now says the session chose it on the review's own measurements and
-that the GM has not ruled, so the door reads as open.
+is a call the GM may want to make. D6 now says the session chose it on the review's own measurements and that the GM has not ruled, so the door reads as open - SUPERSEDED that same day by the GM's ruling; see the amendment entry above.
 (2) FR-013.1 claimed the pairs are handed to the agent "before the work lands". False, and contradicted
 by round 2's own recorded aside: the report does not block and `push_cmd` prints then pushes in one
 invocation, so the dispatch follows as a further commit. Stated honestly now, with the `page-check`-at-

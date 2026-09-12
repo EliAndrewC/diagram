@@ -157,7 +157,8 @@ to its FLOOR for a map like this, and the modal quotes the whole range - and lef
 **And it judged `MulberryDike`, which its predecessor had flagged and declined: DRIFTED.** That entry
 told a reader the dike is *"six to ten meters wide"* and that the width is READ, on a class labeled
 accurate - against a planted collar measured at 2.0 m and 13.3 m from one pond's water to the next with
-a canal in between. Three defects in landed work, all fixed here:
+a canal in between. Four defects in landed work, all fixed here (a fifth, the `crop-vs-perimeter` sibling text carrying the
+same width to four more classes, was found by the review of this feature and fixed with them):
 
 1. **Feature 233's withdrawn arithmetic was still alive in the record.** Two paragraphs of
    `archetypes.html` still carried the 22 ft / 6.5 m figure - *"the shared 22 ft dikes"* and *"mulberry
@@ -178,3 +179,29 @@ The lesson for this feature: `_entry_owed.py` would NOT have named `MulberryDike
 move. The report catches a record that moved under a modal; it cannot catch a record and a modal that
 are wrong together. That is what a reader with a ruler catches, and what an agent asked to judge a pair
 catches when it reads the measurements rather than only the two texts.
+
+## R8 - the feature firing on its own author, in real time (2026-09-12)
+
+Correcting the withdrawn 22 ft figure in the 6:4 section made `_entry_owed.py` name a pair: **fish pond**.
+That is the first time the report fired on work being done rather than on history, and the obligation was
+discharged the way the guidelines say - `entry-drift` dispatched, verdict **DRIFTED**, prose rewritten.
+
+What it found had nothing to do with the 22 ft figure, and everything to do with feature 233:
+
+- `FishPond` told every reader *"The ponds here are 0.4 to 0.6 hectare oblongs, the size the surveys of
+  the traditional landscape record."* Measured over all 26 parcels: median drawn water **0.269 ha**, max
+  **0.329 ha** - **not one pond on the map reaches 0.4**. Feature 233 had put the honest figure into the
+  record (*"about 4 mu of water each as drawn ... below the 0.4 to 0.6 hectares reported for the delta at
+  second hand, because a hamlet's ponds are small"*) and left the modal saying the opposite.
+- Its `Note:` and `Caveat:` asserted the sizes were TAKEN from those surveys - the wrong provenance for a
+  figure that is a hamlet's own - and disclosed neither that the band is second hand nor that its source
+  monograph has no publicly readable copy.
+- The GM's 2026-08-28 ruling says the contested 6:4 ORDER is disclosed *"on every pond and bank"*. The
+  bank carried it after R7; the pond did not.
+- And the record contradicted itself on its own drawing: one paragraph said the ponds are *"a little
+  under half a hectare"* (160 x 320 ft read as all water) against a measured parcel of 0.327 ha.
+
+All fixed. **The lesson is the one D7 states**: none of this was drift the report could see - the pond's
+sections had not moved, and a strict section-versus-modal reading would have passed the first two items
+because the record's OTHER paragraph agreed with the modal. What found it was the agent, asked to judge a
+pair, reading the manifest rather than only the two texts.

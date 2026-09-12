@@ -18,15 +18,20 @@ class FishPond(Kind):
     Why: A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil
     raises the dike, so the landscape was made cell by cell by the households that farmed it, over
     centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low,
-    and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are 0.4 to 0.6
-    hectare oblongs, the size the surveys of the traditional landscape record.
+    and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are about 4 mu of water each - a
+    little over a quarter of a hectare, SMALLER than the 0.4 to 0.6 hectares the surveys of the traditional
+    landscape report, because this is a hamlet and a hamlet's ponds are small.
 
-    Note: The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional
-    landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state
-    of a normally scattered system.
+    Note: The form and the loop are read. The pond sizes drawn here are a hamlet's own, deliberately below the
+    band those surveys report - and that band is 20th-century rather than Ming or Qing, and reaches this
+    record only at second hand, through a summary of a monograph with no publicly readable copy. The ratio
+    behind the split is contested in its ORDER too: the classic prescription survives as six parts dike to
+    four parts pond as well as the reverse, so the water-heavy reading drawn here is a regional one,
+    disclosed. And the whole-block conversion drawn here is the rare end state of a normally scattered
+    system.
 
-    Caveat: the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents,
-    and the whole-block conversion drawn here is the rare end state of a normally scattered system.
+    Caveat: that band is 20th-century rather than Ming or Qing, and reaches this
+    record only at second hand, through a summary of a monograph with no publicly readable copy.
 
     Name: fish pond
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
