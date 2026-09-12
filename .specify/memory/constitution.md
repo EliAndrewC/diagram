@@ -1,7 +1,12 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.23.0 → 2.24.0
+Version change: 2.24.0 → 2.25.0
+
+Version 2.25.0 (amended 2026-09-12, feature 226): Principle XVI's five-round cap is the spec's INITIAL acceptance;
+an amendment made after a FAITHFUL verdict - mid-implementation or later - is re-reviewed on a counter reset to
+zero, the GM's ruling when feature 226 reached eight rounds (four and a FAITHFUL fifth before implementation, three
+on text amended when the implemented design changed under measurement). MINOR.
 
 Version 2.24.0 (amended 2026-09-08, feature 218): Principle X gains clause 15, "An overlap check within a map
 is performed in its efficient form" - the geometry that does not change during a scan is indexed once and each
@@ -1830,6 +1835,19 @@ question room while still ending an argument that is going nowhere. The GM asked
 the new number be watched: if features start hitting five, the cap is not the problem
 and the way specs are being drafted is.
 
+**The five rounds are the spec's INITIAL acceptance; an amendment resets the counter
+to zero** (v2.25.0, GM 2026-09-12, on feature 226 reaching eight rounds: *"That is
+intended for the initial creation of the spec ... it is completely fine to go past
+five rounds because what you're really doing is you're resetting the counter every
+time you make a change ... once the spec is accepted, then we set the counter to zero
+the next time that any changes are made mid implementation or later"*). A spec that was
+FAITHFUL and is then amended - because the implemented design departed from it under
+measurement, because a review found a record item, or later still - is re-reviewed
+against the GM's request with five fresh rounds from the amendment, and the amendment
+rounds are numbered as their own series in the Review history. The persistent
+misunderstanding the cap ends is one the initial rounds could not locate; text written
+to record what implementation found is a different thing being reviewed.
+
 **A scope-expansion finding is an ordinary finding.** "This spec does more than was
 asked" goes through the same revise-and-re-review loop as anything else; it is not a
 special case and it does not short-circuit the rounds. It becomes a stop only the way
@@ -2228,4 +2246,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.24.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-08
+**Version**: 2.25.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-12

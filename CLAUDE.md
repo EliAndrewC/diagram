@@ -126,7 +126,7 @@ This project uses spec-driven development governed by [`.specify/memory/constitu
   going nowhere, NOT to cut off a review still finding new, smaller things each round -
   which is what it did on feature 169, where round 3's only item was one more missed
   token in a hand-written list. **Watch the new number**: if features start hitting
-  five, the drafting is the problem, not the cap. The
+  five, the drafting is the problem, not the cap. **THE CAP COUNTS THE INITIAL REVIEW ONLY** (the GM (2026-09-12): *"we should probably clarify the five round cap on reviews. That is intended for the initial creation of the spec ... it is completely fine to go past five rounds because what you're really doing is you're resetting the counter every time you make a change ... once the spec is accepted, then we set the counter to zero the next time that any changes are made mid implementation or later"*): the five rounds are the spec's first acceptance; a spec amended AFTER it was accepted - mid-implementation, because the design changed under measurement, or later - is re-reviewed on a counter reset to zero, five rounds again from the amendment. Feature 226 is the case: four rounds and a FAITHFUL fifth before implementation, then three more on the text amended when its one-blob design became two outlines - which is not the persistent misunderstanding the cap exists to end. The
   motivating case is feature 126's FR-003, which said "farmhouses before lanes EXCEPT
   the connector and the field spur" when the GM had said "farmhouses before lanes".
 - **One constitution for the whole repo, deliberately** (GM 2026-08-15): spec-kit's Constitution
