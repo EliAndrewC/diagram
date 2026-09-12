@@ -1,4 +1,7 @@
-# The `research/README.md` correction, offered to the GM (feature 229)
+# The `research/README.md` correction, offered to the GM (feature 229) - APPLIED
+
+*The GM authorized it on 2026-09-12: "I authorize you to fix the research readme." Applied that day, with the
+Mode A paragraph written to their ruling of the same message. The text below is what was offered.*
 
 A README is the GM's to write (constitution XVII, NON-NEGOTIABLE): *"If a README is factually wrong, say so and
 offer the correction rather than making it ... a genuine exception is the GM's to make."* The GM's words on
