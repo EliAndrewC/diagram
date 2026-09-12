@@ -40,9 +40,9 @@ class FishPond(Kind):
 
 class MulberryDike(Kind):
     """
-    What: The raised earthen dike around a fish pond, six to ten meters wide, piled from the pond's own dredged
-    mud and planted with coppiced mulberry - low bushes stripped for leaf several times a year to feed
-    silkworms.
+    What: The raised earthen dike around a fish pond, piled from the pond's own dredged mud and planted with
+    coppiced mulberry - low bushes stripped for leaf several times a year to feed silkworms. Drawn here as a
+    planted collar about seven feet wide around each pond, with a canal running between neighbors.
 
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
@@ -50,11 +50,19 @@ class MulberryDike(Kind):
     much dike starves the fish. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
     sericulture districts that planting was mulberry.
 
-    Note: The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one
-    bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.
+    Note: The ratio and the planting are read. The WIDTH is where the drawing parts company with the record: the
+    traditional figure is a dike of six to ten meters, and the collar drawn around each pond is about two - the
+    ground from one pond's water to the next is thirteen meters, but a canal runs down the middle of it, so it
+    is not one bank. The traditional figure also reaches us only at second hand. And the ratio's ORDER is
+    contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
+    and some districts kept seven to three - so the six-water-to-four-dike drawn here is a regional reading
+    disclosed rather than the only one. So: the collar drawn around each pond is about two meters where the
+    traditional figure is a dike of six to ten, and the coppice density the crowns are drawn at (one bush per
+    ten to twenty square feet) was not re-found and stays on the re-sourcing queue.
 
-    Caveat: the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found
-    and stays on the re-sourcing queue.
+    Caveat: the collar drawn around each pond is about two meters where the traditional figure is a dike of six to
+    ten, and the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not
+    re-found and stays on the re-sourcing queue.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
@@ -224,7 +232,8 @@ class DuckPen(Kind):
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
     among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
-    pig shed's do. The fence keeps off the culvert for the plain reason that a fence across the opening a pond
+    pig shed's do. The dry run stands on the same planted collar a pig shed does - about two meters, where the
+    one width the record gives for a dike carrying an animal shed is five to ten. The fence keeps off the culvert for the plain reason that a fence across the opening a pond
     is filled and drained through would be in the way of working it.
 
     Note: GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is

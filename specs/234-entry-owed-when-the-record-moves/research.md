@@ -146,3 +146,35 @@ a reader the dike is *"six to ten meters wide"* and that the width is READ - aga
 and 13.3 m water-to-water this project has now measured on the drawing. That pair is outside 233's delta
 and outside what `_entry_owed.py` would name (its section did not move), so it is a defect found while
 doing something else and is being judged by the same agent rather than guessed at.
+
+## R7 - the re-run, and what it found beyond its own pair (2026-09-12)
+
+The `PigSty` pair was re-judged after the two findings in R6 were fixed: **IN-STEP**, with both fixes
+checked against the sections' own wording rather than accepted because they answered a predecessor. The
+run noted one place the modal is less precise than the section - the section narrows the 5-10 m standard
+to its FLOOR for a map like this, and the modal quotes the whole range - and left it as an observation.
+
+**And it judged `MulberryDike`, which its predecessor had flagged and declined: DRIFTED.** That entry
+told a reader the dike is *"six to ten meters wide"* and that the width is READ, on a class labeled
+accurate - against a planted collar measured at 2.0 m and 13.3 m from one pond's water to the next with
+a canal in between. Three defects in landed work, all fixed here:
+
+1. **Feature 233's withdrawn arithmetic was still alive in the record.** Two paragraphs of
+   `archetypes.html` still carried the 22 ft / 6.5 m figure - *"the shared 22 ft dikes"* and *"mulberry
+   banks about 22 ft wide"* - which 233's own amendment had established measures nothing (one pond's two
+   opposite collars added together, a strip that exists nowhere on the map). The correction had reached
+   the pig-sty section and stopped there. **This is why the section-versus-modal comparison alone was not
+   enough**: a strict reading of the two sections `MulberryDike` names would have returned IN-STEP,
+   because the sections were wrong in the same direction as the modal.
+2. **A GM ruling recorded as implemented was not.** The 6:4 ratio's ORDER is contested, and the GM ruled
+   (2026-08-28) that Kuwabata's six-water-to-four-dike is a disclosed regional reading, with
+   `kuwabata.notes.md` asserting *"the interactive map's modal for this map's ponds and banks carries
+   that sentence"*. It carried it nowhere: a grep of every class found the disclosure in no modal at all.
+   It is in `MulberryDike`'s `Note:` now, so the notes' claim is true.
+3. **`DuckPen` stood on the same collar and said nothing about it.** Its dry run sits on the same 2 m
+   the record says should be 5-10 for a shed-carrying dike. Added.
+
+The lesson for this feature: `_entry_owed.py` would NOT have named `MulberryDike` - its sections did not
+move. The report catches a record that moved under a modal; it cannot catch a record and a modal that
+are wrong together. That is what a reader with a ruler catches, and what an agent asked to judge a pair
+catches when it reads the measurements rather than only the two texts.
