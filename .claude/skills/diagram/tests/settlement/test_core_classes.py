@@ -110,6 +110,9 @@ def test_a_ditchs_hue_and_its_class_are_read_from_one_field() -> None:
     assert ditch_style("drain") == (DRAIN_HUE, "drainage ditch")
     for role in ("main", "branch", "lateral", None):
         assert ditch_style(role) == (SUPPLY_HUE, "irrigation ditch")
+        assert ditch_style(role, "polder_grid") == (SUPPLY_HUE, "irrigation ditch"), "a rice polder's laterals only supply"
+        assert ditch_style(role, "mulberry_dike_fishpond") == (SUPPLY_HUE, "pond canal"), "a dike-pond's canals carry water both ways"
+    assert ditch_style("drain", "mulberry_dike_fishpond") == (DRAIN_HUE, "drainage ditch"), "its ring drain is still a drain"
     assert channel_class({"kind": "drain"}) == "drainage ditch"
     for frm in ({"kind": "pond"}, {"kind": "stream"}, {"kind": "field"}, {"kind": "moat"}, {}, None):
         assert channel_class(frm) == "irrigation ditch"

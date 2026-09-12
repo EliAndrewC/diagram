@@ -24,7 +24,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     "field ditch": ("irrigation ditch", "drainage ditch"),  # feature 230, GM 2026-09-12: the two ends of the field are two questions
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
-ADDED_SINCE_189: tuple[str, ...] = ("weir",)  # feature 230: what stands where the head race leaves the brook
+ADDED_SINCE_189: tuple[str, ...] = ("weir", "pond canal")  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 
 def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present() -> None:

@@ -407,7 +407,7 @@ class CombMixin:
         # order (widest-first) is unchanged and byte-identical; only the polder ring re-sorts.
         _ring_last = {"feeder", "drain", "e_toe", "w_toe"}
         for c in sorted(net["channels"], key=lambda c: (c.get("seg") in _ring_last, -c["w"])):
-            col, cls = ditch_style(c["role"])  # ONE read of the role decides both the hue and the hover class (feature 230)
+            col, cls = ditch_style(c["role"], self.M["meta"].get("field_archetype"))  # ONE read decides both the hue and the hover class (feature 230)
             self.field_channel(c["pts"], col, c["w"], c.get("w_tail", c["w"]), late=True, cls=cls)
         if net["brook"]:
             # the drain-outfall brook shoots STRAIGHT downhill off-map (a fan field's own wiggly brook can

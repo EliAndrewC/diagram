@@ -25,11 +25,22 @@ SUPPLY_HUE = "#6C9CBE"
 DRAIN_HUE = "#5E7A76"
 IRRIGATION_DITCH = "irrigation ditch"
 DRAINAGE_DITCH = "drainage ditch"
+#: A DIKE-POND'S CANALS ARE NEITHER (settlement-review, feature 230 pass 10). On Kuwabata 25 of the 26 pond DRAIN sluices open
+#: onto the six laterals that also carry 22 FEED sluices, and a reader hovering one was told it "brings water TO the paddies".
+#: The record already says what they are: "the channels do not irrigate the ponds paddy-style; they are the
+#: conveyance-and-drainage network the ponds exchange water with" (research/archetypes.html, 'A dike-pond is fed and drained
+#: through sluice gates'). So on that archetype every non-drain ditch is one class; the ring drain stays a drainage ditch, and
+#: a rice polder's laterals, which do only supply, stay irrigation ditches.
+POND_CANAL = "pond canal"
+DIKE_POND_ARCHETYPE = "mulberry_dike_fishpond"
 
 
-def ditch_style(role: str | None) -> tuple[str, str]:
-    """(color, class) for a field-ditch record by its role: the drain's pair, or the supply's."""
-    return (DRAIN_HUE, DRAINAGE_DITCH) if role == "drain" else (SUPPLY_HUE, IRRIGATION_DITCH)
+def ditch_style(role: str | None, archetype: str | None = None) -> tuple[str, str]:
+    """(color, class) for a field-ditch record by its role, and on a dike-pond field by its archetype: the drain's pair, the
+    dike-pond canal's, or the supply's."""
+    if role == "drain":
+        return (DRAIN_HUE, DRAINAGE_DITCH)
+    return (SUPPLY_HUE, POND_CANAL) if archetype == DIKE_POND_ARCHETYPE else (SUPPLY_HUE, IRRIGATION_DITCH)
 
 
 def channel_class(frm: Any) -> str:

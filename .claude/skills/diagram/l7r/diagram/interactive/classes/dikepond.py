@@ -79,6 +79,32 @@ class MulberryDike(Kind):
     key = 'mulberry dike'
 
 
+class PondCanal(Kind):
+    """
+    What: The canals of a dike-pond settlement: the main that carries water in from the reservoir and the laterals
+    between the rows of ponds, which every pond both takes water from and lets water out into.
+
+    Why: A dike-pond is not a sealed basin and its canals are not a paddy's supply net. Each pond is joined to the
+    canal network through gates in its dike, taking water in at its high side and letting it out at its low side, so
+    the same canal carries water to one pond and away from the next - the network the whole system exchanges water
+    with, running in series from the high intake to the low outfall. Only the ring drain round the block, which takes
+    everything to the outfall, carries water one way.
+
+    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is read; which pond's gate
+    opens onto which canal is the engine's inlet-high, outlet-low rule, not a surveyed plan.
+
+    Caveat: which pond's gate opens onto which canal is the engine's inlet-high, outlet-low rule, not a surveyed plan.
+
+    Name: pond canal
+    Covers: `field_ditches` whose role is not `drain` on a dike-pond field - the main from the reservoir and the laterals between the ponds
+    Label: accurate
+    Sources: fao-x6708e, cssn-sangyuanwei, cssn-jiangnan-weitian
+    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates'
+    """
+
+    key = 'pond canal'
+
+
 class PondSluice(Kind):
     """
     What: A protected opening in a pond's dike, closed with wooden boards to set the water level and pulled to

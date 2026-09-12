@@ -49,7 +49,7 @@ class IrrigationDitch(Kind):
     Caveat: the head race's length from the intake to the fork follows the fan's geometry, the record giving no distance
 
     Name: irrigation ditch
-    Covers: `field_ditches` whose role is not `drain`, and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
+    Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
     Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
@@ -115,14 +115,22 @@ class Weir(Kind):
 
 class Pond(Kind):
     """
-    What: An irrigation reservoir - a valley-head tameike behind an earthen dike, sitting above the fields it
-    waters.
+    What: A pond of held water behind an earthen bank. It plays one of two parts, and the map shows which by where
+    it lies: above the fields and feeding them, it is the reservoir their water is drawn from; at the field's
+    low foot, fed by the drainage ditch, it is where the water leaving the paddies is gathered.
 
-    Why: A tameike is built by dividing off a valley mouth with a dike, at an elevation above the paddies it
-    serves, with ONE outlet: an inclined intake feeding a bottom conduit through the dam. The spillway is
-    for floods, never for distribution. On this map the pond is the field's drainage sink, at its low foot.
+    Why: The reservoir is the tameike of the record - built by dividing off a valley mouth with a dike, at an
+    elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through
+    the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
+    that has passed through the plots, because before modern consolidation that water was used again below
+    rather than thrown away.
 
-    Note: Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).
+    Note: The reservoir's form, siting and single outlet are read (Tabayashi 1986, the Kagawa tameike documents);
+    a pond at the field's foot is the water sink the map declares, and its bank and outlet are not drawn from a
+    surveyed example.
+
+    Caveat: a pond at the field's foot is the water sink the map declares, and its bank and outlet are not drawn from
+    a surveyed example.
 
     Name: pond
     Covers: `pond` - the tameike

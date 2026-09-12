@@ -58,6 +58,7 @@ SPEC_CLASSES = [
     # ditch that drains them are different questions with different records behind them)
     "irrigation ditch",
     "drainage ditch",
+    "pond canal",
     "pond",
     "field pond",
     "field rock",
@@ -250,7 +251,11 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     its head race's length is derived from the fan, the record giving no distance, and the drainage ditch
     that its sink is the map's declared one."""
     bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
-    assert bare == {"marsh", "pond", "bund", "notice board", "windbreak"}
+    # `pond` LEFT the list on 2026-09-12 (feature 230, settlement-review pass 10): its explanation said "an irrigation
+    # reservoir above the fields" and then "on this map the pond is the field's drainage sink", on every map. Rewritten
+    # to cover both parts a pond plays, it now discloses that a pond at the field's foot is the map's declared sink with
+    # no surveyed bank or outlet behind it.
+    assert bare == {"marsh", "bund", "notice board", "windbreak"}
 
 
 def test_slug_is_a_css_token() -> None:
