@@ -94,6 +94,34 @@ rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.jso
 print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
 check "the refusal is recorded with its own rule" yes "$(has "$RULES" "'blocked', 'run-still-going'")"
 
+# GUARD_EDIT_OK: GM 2026-09-12 - THE THIRD RULE: a waiter spinning on a DEAD PRODUCER. The GM found three in
+# their own status line, re-grepping every 15 s for EIGHT HOURS on logs from the OOM-killed runs of that
+# morning - the same incident that produced the proof-of-life clause, whose waiters predate it. Two census
+# attempts by this session missed them: at any instant the visible process is the loop's own 15 s `sleep`, so
+# filtering by process AGE cannot see the loop and filtering by NAME sees only `sleep`.
+echo "--- 7. a waiter spinning on a dead producer is reported (GM 2026-09-12) ---"
+DEAD=$T/deadlog.txt; echo stub > "$DEAD"; touch -d "2 hours ago" "$DEAD"
+check "no waiter, nothing reported" "" "$("$HOOK" stale)"
+setsid nohup bash -c "until grep -q NEVER_APPEARS $DEAD; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+sleep 2
+check "the spinning waiter is found, with the file it watches" yes "$(has "$("$HOOK" stale)" "$DEAD")"
+OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$CLONE" | "$HOOK" stop 2>&1)
+check "...and it is reported at turn end" yes "$(has "$OUT" 'SPINNING ON A DEAD PRODUCER')"
+check "...with what to do about it" yes "$(has "$OUT" 'stop the loop by its pid')"
+check "it REPORTS rather than blocks (the loop is harmless; not knowing is not)" 0 "$(printf '{"session_id":"t","cwd":"%s"}' "$CLONE" | "$HOOK" stop >/dev/null 2>&1; echo $?)"
+# a waiter whose producer is ALIVE must not be reported
+LIVEF=$T/livelog.txt; : > "$LIVEF"
+setsid nohup bash -c "exec 9>>$LIVEF; until grep -q NEVER_APPEARS $LIVEF; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+sleep 2
+check "a waiter whose file is still held open is NOT reported" no "$(has "$("$HOOK" stale)" "$LIVEF")"
+for p in $("$HOOK" stale | cut -d' ' -f1); do kill -TERM "$p" 2>/dev/null; done
+pkill -f "NEVER_APPEARS" 2>/dev/null
+RULES2=$(python3 -c "
+import collections, glob, json, os
+rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
+print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
+check "the report records with its own rule" yes "$(has "$RULES2" "waiter-on-a-dead-producer")"
+
 echo "-----"
 printf 'test-finished-run-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
 [ "$FAIL" = 0 ] || exit 1

@@ -49,6 +49,7 @@
 #   check <clone>  one-shot for any clone, marking nothing (the suite uses this)
 #   seen <clone>   mark everything currently finished as surfaced (the suite uses this)
 #   live <clone>   print one line per live make run in that clone (the suite and `make audit` use this)
+#   stale          print one line per waiter loop whose producer is dead (the suite uses this)
 set -uo pipefail
 MODE=${1:-}
 FR_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -76,6 +77,57 @@ for d in glob.glob("/proc/[0-9]*"):
     # the TARGET is the first bare word after the make binary - what a session would wait on
     target = next((a for a in argv[1:] if a and not a.startswith("-") and "=" not in a), "")
     print(f"{d.rsplit('/', 1)[-1]} {target or 'make'}")
+PY
+}
+
+stale_waiters() { # stale_waiters -> "<pid> <file>" per waiter loop whose producer is dead
+  # THE THIRD RULE (GM 2026-09-12, who found three of these in their own status line after this session had
+  # twice reported that nothing was running). A waiter is a loop watching a file; when the thing writing that
+  # file dies, the loop spins forever. Three had been re-grepping every 15 s for EIGHT HOURS on logs from the
+  # `make placement-stages` runs the OOM killer ended that morning - the same incident that produced the
+  # proof-of-life clause, whose waiters predate it and so never got one.
+  #
+  # WHY NOTHING SAW THEM, which is the part worth keeping: at any instant the visible process is the loop's
+  # own `sleep`, which lives 15 seconds, so a census that filters by process AGE cannot see the loop and a
+  # census that filters by command NAME sees only `sleep`. The reliable question is asked of every process's
+  # cmdline, and then of the file it names - exactly what `_writer-alive.sh` answers.
+  #
+  # SELF-MATCH IS EXCLUDED BY PID, not by pattern: this hook's own process tree carries the words `until grep`
+  # in the command that searches for them, which is the 2026-07-25 trap in its purest form.
+  # THE HELPER'S PATH IS PASSED IN, not derived: this python reads from STDIN, so `__file__` is not the script
+  # and `os.path.abspath` resolved it against the CWD - which made the probe look for the helper in whatever
+  # directory the hook happened to run from (caught by its own first real test, 2026-09-12).
+  python3 - "$$" "$FR_HERE" <<'PY'
+import glob, os, re, subprocess, sys
+
+mine, here = int(sys.argv[1]), sys.argv[2]
+alive = os.path.join(here, "_writer-alive.sh")
+ancestry = set()
+pid = mine
+while pid > 1:                      # this hook, its shell, and everything above: never reported
+    ancestry.add(pid)
+    try:
+        pid = int(open(f"/proc/{pid}/stat").read().rsplit(") ", 1)[1].split()[1])
+    except (OSError, IndexError, ValueError):
+        break
+for d in glob.glob("/proc/[0-9]*"):
+    p = int(d.rsplit("/", 1)[-1])
+    if p in ancestry:
+        continue
+    try:
+        cmd = open(f"{d}/cmdline").read().replace("\0", " ")
+    except OSError:
+        continue
+    if not re.search(r"\b(until|while)\b.*\bgrep\b", cmd) or "sleep" not in cmd:
+        continue
+    # the file it watches: the last path-shaped operand in the loop's condition
+    paths = re.findall(r"(?:/[\w.-]+)+\.\w+", cmd)
+    for f in dict.fromkeys(paths):
+        if not os.path.exists(f):
+            continue
+        if subprocess.run([alive, f], capture_output=True).returncode != 0:
+            print(f"{p} {f}")
+            break
 PY
 }
 
@@ -149,10 +201,25 @@ except Exception: pass' 2>/dev/null)
         exit 2
       fi
       rm -f "$CLONE/.git/live-run.told" 2>/dev/null || true   # nothing live: the next run starts clean
+      # ...AND A WAITER WHOSE PRODUCER IS DEAD IS REPORTED, NEVER LEFT SPINNING (the third rule; see
+      # `stale_waiters`). It REPORTS rather than blocks: the loop is harmless in itself, the session simply has
+      # to know it will never end - and it is what the GM sees in their own status line, reported as running.
+      STALE=$(stale_waiters 2>/dev/null)
+      if [ -n "$STALE" ]; then
+        printf 'A WAITER IS SPINNING ON A DEAD PRODUCER - it will never finish on its own:\n'
+        printf '%s\n' "$STALE" | sed 's/^/  pid /'
+        printf 'Nothing is writing that file any more. Read what it DOES have, then stop the loop by its pid.\n'
+        printf 'These show in the GM status line as running shells, which is how three of them went unnoticed\n'
+        printf 'for eight hours on 2026-09-12 while this session twice reported that nothing was running.\n'
+        # shellcheck source=/dev/null
+        . "$FR_HERE/_guardlog.sh"
+        guard_log finished-run reminded "$STALE" waiter-on-a-dead-producer
+      fi
     fi
     exit 0 ;;
   check) report "${2:?clone}" nomark; exit 0 ;;
   seen)  report "${2:?clone}" mark >/dev/null; exit 0 ;;
   live)  live_runs "${2:?clone}"; exit 0 ;;
+  stale) stale_waiters; exit 0 ;;
   *) echo "usage: $0 prompt|stop|check <clone>|seen <clone>|live <clone>" >&2; exit 2 ;;
 esac
