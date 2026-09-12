@@ -315,6 +315,32 @@ frontage of a compound that deliberately sits where nobody goes. So "by the road
 silent on the very thing the feature is for, and a traffic-sited feature can be parked in a quiet
 corner with the gate fully green. That is the gap you are here to close.
 
+**FIRST READ THE FEATURE'S OWN DECLARED OBJECTIVE, AND JUDGE IT AGAINST THAT** (GM 2026-09-12: *"I
+thought that the notice board was simply supposed to be in a place where everyone would end up seeing
+it. Often, and I think even typically, at the entrance to the settlement, like, at a place where the
+village lane connects to the settlement, which is a path that everyone would walk in order to leave the
+settlement. So why are we even measuring how close it is to most of the buildings? That seems like the
+wrong thing to measure."*). A dwelling count within 250 ft answers ONE objective - standing where the
+feet are densest - and several of these features are deliberately sited by a different one. The map says
+which: `meta.kosatsuba_seat` is `center`, `entrance` or the official's gate, rolled per settlement from
+the record's attested forms, and the engine drops its own traffic floor under an anchored seat on
+purpose (`siting.py`: *"the traffic floor applies only where traffic is the objective. Keeping it under
+an anchored placement would drag the board back toward the busy node the anchor just declined"*).
+
+So:
+
+- **`center`**: the dwelling count IS the test. Use it.
+- **`entrance`**: the test is whether EVERYONE PASSES - does the board stand on the one way in and out,
+  so that every departure walks by it? Answer that, in words, from the drawing. A dwelling count here
+  measures the objective the seat declined, and reporting it as a shortfall asks the map to be two
+  things at once. Report the count only as context, never as a finding, and never rank the seat against
+  "the busiest stretch of the same way".
+- **a seat the manifest does not declare** (a well, a punishment ground, a stage): traffic, as below.
+
+A feature whose drawn position does not serve its OWN declared objective is still an error - an
+`entrance` board that stands where a second track also leaves, or 200 ft short of the junction everyone
+actually turns at, has failed the thing it was sited for.
+
 For **each** traffic-sited feature, judge the position against the map's own busiest ground:
 
 - **Where does this settlement's traffic actually concentrate?** Name it first, from the drawing: the
@@ -396,8 +422,10 @@ FEATURE-OR-SLACK SWEEP (every named open area and every ground-cover polygon):
 TRAFFIC-SITING SWEEP (every feature that exists to be PASSED - notice board, punishment ground,
 gate market, theater stage, public wells):
 - this map's busiest ground is <where, and what makes it busy>
-- <each feature>: sited at <where, in words> -> <n> dwellings/businesses within ~250 ft, against
-  <n> at the busiest stretch of the same way -> ON THE TRAFFIC ok | QUIET CORNER (error)
+- <each feature>: declared objective <from the manifest, or "traffic"> -> sited at <where, in words>
+  -> judged against THAT objective: for traffic, <n> dwellings/businesses within ~250 ft against <n> at
+  the busiest stretch of the same way; for an entrance seat, does every departure pass it, yes or no
+  -> SERVES ITS OBJECTIVE ok | QUIET CORNER (error, traffic seats only) | WRONG FOR ITS OWN SEAT (error)
 
 NUISANCE-AXIS SWEEP:
 - declared wind (windward=) -> downwind is <dir>; declared water (water_flow/down_deg) -> downstream is <dir>
