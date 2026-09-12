@@ -3644,5 +3644,22 @@ window.RECORD_GLOSSARY = [
    "koebune"
   ],
   "def": "The barge that carried night soil out of a city to the farming villages, where a canal or river allowed it."
+ },
+ {
+  "term": "intake",
+  "variants": [
+   "intake mouth",
+   "intakes",
+   "intake"
+  ],
+  "def": "The opening on a stream's bank where an irrigation channel takes its water - the head of the channel, and the point where the dug ditch begins."
+ },
+ {
+  "term": "gabion",
+  "variants": [
+   "gabions",
+   "gabion"
+  ],
+  "def": "A basket of woven bamboo or wicker packed with stones, used to build a weir or armor a bank."
  }
 ];
