@@ -130,6 +130,11 @@ HOUSE_STYLE = [
     # a session scratchpad is outside the project (2026-09-06: three reader agents had verbatim page text in
     # /tmp result files rewritten and each worked around the guard)
     ("a file under /tmp is not project content", edit("/tmp/claude-1000/x/scratchpad/result.json", new="{\"t\": \"the col\u006fur\"}"), "ok"),
+    # feature 236 - A FIXTURE IS A VERBATIM RECORD: `scripts/fixtures/` holds corpora of commands that
+    # really ran, several of them house-style sweeps, and correcting one falsifies the measurement it
+    # reproduces. The exemption is in the hook AND in the delta check; this is the hook half, which the
+    # amendment review noticed had no case of its own and would have been lost silently.
+    ("a recorded command corpus", write("/r/scripts/fixtures/corpus.json", "{\"command\": \"sed -i s/cent\u0072e/center/ docs/a.md\"}"), "ok"),
 ]
 
 
