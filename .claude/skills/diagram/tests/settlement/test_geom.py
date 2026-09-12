@@ -735,3 +735,28 @@ def test_box_obstacles_on_a_real_manifest_is_the_scan_the_title_made() -> None:
     assert not s._box_clear(420, 220, 480, 250, obs), "a box inside the grove is not clear"
     assert s._box_clear(420, 220, 480, 250, s._title_obstacles(cover_ok=True)), "...unless cover is allowed - the rung feature 137 documented"
     assert len(obs.rects) == 2, "the house and the label, each once (the label used to be filed twice)"
+
+
+def test_poly_seg_dist_returns_zero_when_the_two_actually_meet():
+    """feature 233. The ZERO is the whole point: this feature's first two measurements of a shed with a
+    culvert running through it came back 0.13 ft, because they sampled the footprint's boundary and took
+    the nearest sample with no intersection test. A clearance predicate built that way passes the very
+    map it was written to fix, so the zero is asserted here rather than assumed."""
+    from l7r.diagram.settlement._geom.overlap import rot_rect
+    from l7r.diagram.settlement._geom.primitives import poly_seg_dist
+
+    box = rot_rect(0.0, 0.0, 8.0, 6.0, 0.0)
+    assert poly_seg_dist(box, (-10.0, 0.0), (10.0, 0.0)) == 0.0, "a stub driven THROUGH the footprint"
+    assert poly_seg_dist(box, (-1.0, 0.0), (1.0, 0.0)) == 0.0, "a stub wholly INSIDE it crosses no edge"
+    assert abs(poly_seg_dist(box, (-10.0, 10.0), (10.0, 10.0)) - 7.0) < 1e-9, "a clear gap is the gap"
+    assert abs(poly_seg_dist(box, (20.0, 0.0), (30.0, 0.0)) - 16.0) < 1e-9, "and measured to the nearer END of the stub"
+
+
+def test_poly_seg_dist_does_not_close_an_open_polyline():
+    """feature 233: a duck pen's `wet` record is a FENCE - an open six-point polyline - not a region.
+    Closing it behind our back would make a stub ending inside the fenced corner read as an overlap."""
+    from l7r.diagram.settlement._geom.primitives import poly_seg_dist
+
+    chain = [(-5.0, -5.0), (5.0, -5.0), (5.0, 5.0), (-5.0, 5.0)]
+    assert poly_seg_dist(chain, (-1.0, 0.0), (1.0, 0.0), closed=False) == 4.0, "an open chain encloses nothing"
+    assert poly_seg_dist(chain, (-1.0, 0.0), (1.0, 0.0), closed=True) == 0.0, "the closed ring does"

@@ -31,7 +31,7 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       research: rendering
       VERIFIED on the regenerated map: 7/7 sties, 2/2 pens (SC-002); worst clearance over every drawn
       part 8.47 ft against the 6 ft margin, no violations (SC-001). The R6 simulation predicted 8.5.
-- [ ] T06 Tests: the clearance fires when removed (SC-003); the distance returns 0 on a stub driven
+- [x] T06 Tests: the clearance fires when removed (SC-003); the distance returns 0 on a stub driven
       through a footprint, on one wholly inside, and does not close an open polyline (SC-006);
       counts hold (SC-002).
       research: rendering
@@ -79,7 +79,7 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
 
 ## Phase 4 - verification
 
-- [ ] T12 Regenerate Kuwabata; assert SC-001 (no drawn part overlaps a stub, all clear by the margin)
+- [x] T12 Regenerate Kuwabata; assert SC-001 (no drawn part overlaps a stub, all clear by the margin)
       and SC-002 (7 sties, 2 pens) on the new manifest.
       research: rendering
 - [ ] T13 `record-format` and `quote-check` over every changed research entry; `source-applicability`
