@@ -1,6 +1,6 @@
 # Feature 231 - review only when the layout moved
 
-**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 2 of 5; round 1 CHANGES REQUIRED on FR-002's dispatch clause, its aside on FR-005 taken). Gate green; the trigger's own verdict on this feature is `no pool manifest moved against origin/main`, so it owes no settlement-review - which is the feature working.
+**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 2 of 5; round 1 CHANGES REQUIRED on FR-002's dispatch clause, its aside on FR-005 taken). AMENDED 2026-09-12 with FR-009 (the fallback disclosed), FAITHFUL at round 1 on a counter reset by the GM's own ruling. The trigger's verdict on this feature is `no pool manifest moved against origin/main`, so it owes no settlement-review - which is the feature working.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - where feature 228's 32 minutes went, why the pair guard
 read the mirror, what "the layout moved" is in this repository's own terms, and what the reviewer
@@ -45,6 +45,14 @@ tools, with `make` targets, replace the scratch scripts.
   and the verification record are all read from that tree. And a `settlement-review` dispatched with
   `PAIR_OK` in its prompt is still a review: the escape branch records `review_key` as the normal
   branch does, beside the bypass it already logs.
+- **FR-009 A fallback onto main's tree is DISCLOSED, never silent** (the amendment; the GM's words in
+  [`request.md`](request.md)). When the resolver answers nothing - an unnamed session, or a clone claimed
+  but never created - the guard still falls back to the shell's own git root, because a guard that cannot
+  resolve a clone must not refuse everything. When that fallback lands on MAIN's tree, every branch of the
+  guard that already speaks - the gate permitted with no review owed, the gate permitted with one owed, the
+  rewrite into `make verify`, the review refusal, the half-open stop - carries one added line saying the
+  verdict was judged against the mirror because this session's clone could not be resolved, and what to do
+  about it. A resolved clone adds nothing, and no branch that is silent today starts speaking.
 - **FR-005 The snapshot is automatic, on every gate shape.** Wherever a review is found owed at gate
   time - `make verify` itself, and the pair guard on every gate shape it rewrites or permits (a plain
   `make done` becoming `make verify`, a detached gate, `make maps`, `FULL=1`) - the changed maps are
