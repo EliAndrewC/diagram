@@ -7,6 +7,7 @@ from typing import Any
 
 from shapely.geometry import LineString, Polygon
 from shapely.ops import unary_union
+from shapely.strtree import STRtree
 
 from ..banks import (
     _GATE_MIN_APEX,
@@ -315,17 +316,19 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
     not change. A detached remainder smaller than the rest, and a whole plot left too small to be a basin or pointed to
     a needle, return their ground to the bare pocket this pass exists to plant or weld, exactly as a carved scrap does.
     Earlier plots are the ones cut because later ones are the ones painted on top."""
-    cover: Any = None
+    # INDEXED, per constitution X clause 15: a running union of every later plot grows to the whole field and each plot
+    # would be tested against all of it. The rings are indexed ONCE and each plot unions only the later rings its box meets.
+    geoms = [Polygon(q.get("poly") or []).buffer(0) if len(q.get("poly") or []) >= 3 else None for q in plots]
+    live = [k for k, gk in enumerate(geoms) if gk is not None and not gk.is_empty]
+    tree = STRtree([geoms[k] for k in live])
     drop: list[int] = []
     for i in range(len(plots) - 1, -1, -1):
-        ring = plots[i].get("poly") or []
-        if len(ring) < 3:
+        g = geoms[i]
+        if g is None or g.is_empty:
             continue
-        g = Polygon(ring).buffer(0)
-        if g.is_empty:
-            continue
-        if cover is not None and cover.intersects(g):
-            vis = g.difference(cover)
+        later = [geoms[live[int(n)]] for n in tree.query(g) if live[int(n)] > i and geoms[live[int(n)]].intersects(g)]
+        if later:
+            vis = g.difference(unary_union(later))
             if vis.area < g.area - 1.0:
                 parts = sorted(_parts(vis), key=lambda q: -q.area)
                 best = _ring(parts[0]) if parts else []
@@ -333,7 +336,6 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
                     drop.append(i)
                 else:
                     plots[i]["poly"] = best
-        cover = g if cover is None else cover.union(g)
     for i in sorted(drop, reverse=True):
         del plots[i]
 
