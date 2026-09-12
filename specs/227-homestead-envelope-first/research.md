@@ -60,9 +60,16 @@ change. Cohort seed 39 then stranded a farmhouse because the ranks abutted at fo
 them - the rank step leaves `MIN_WEB_GAP` now, and the cohort is 48 of 48.
 
 **The bookends** (`make perf LABEL=227-start` in a worktree at origin/main, `227-end` at the landing): total 29.4 ->
-23.9 s (-18.7%), seeds 25/39/47 9-44% faster, seed 4 +8.1% (band 1) - the board's stage, which now re-seats a board
-the old test wrongly passed. Explained with `make perf-explain`; the `perf-audit` agent's confirmation is in
-dev/perf-log/.
+22.6 s (-23.1%), every seed faster (4 -12.9%, 25 -45.7%, 39 -18.0%, 47 -8.9%), band 0, nothing owed.
+
+A first `227-end` was taken one commit EARLY and read band 1 on seed 4 (+8.1%, the notice stage +1.1 s). The
+explanation written for it credited the board's new frame test - and the `perf-audit` agent refused it as
+INCONSISTENT on the ground that the diff between the two bookends is docstrings only: the footprint inset and the
+band-then-traffic reordering both land in the commit AFTER the measured end state, so the explanation credited a fix
+that postdated its own measurement, and the 1.1 s it described was the per-candidate traffic count that the same
+commit removed. Re-taken at the reviewed commit the pair is band 0. The lesson is the agent's: a bookend binds to a
+commit, so take the end one AFTER the last change it is meant to measure - and a band explained by a fix that is not
+in the measured range is not explained at all.
 
 The gardens BEFORE (the pool at feature 226's landing, the bed forms read from each house's `geom.gardens`: two beds
 on opposite walls = flanking, one above the other = stacked, side by side otherwise):

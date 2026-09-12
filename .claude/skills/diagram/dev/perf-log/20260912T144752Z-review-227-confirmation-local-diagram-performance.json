@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "b87b88aa",
+    "label": "227-start",
+    "utc": "20260912T130720Z"
+  },
+  "binding": "452e16099e8dac8961b78ea2169e77b14c0e4d16722c79d67cdf6e09621324d9",
+  "end": {
+    "commit": "22abafb5",
+    "label": "227-end",
+    "utc": "20260912T143828Z"
+  },
+  "environment": "local",
+  "feature": "227-homestead-envelope-first",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "008f34b2-3392-461d-bd88-fbb348290e9f",
+    "utc": "20260912T144752Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -43.5,
+      "39": -21.3,
+      "4": 8.1,
+      "47": -8.9
+    },
+    "total_pct": -18.7
+  },
+  "note": "The notice stage did grow on seed 4 (0.35 -> 1.45 s, which is the whole +0.5 s), but the named cause is NOT in the measured range b87b88aa..22abafb5: frame.py changes only its docstrings there and still tests the board's CENTRE against the view plus 30 px. The footprint inset and the band-then-traffic order both land in c27c2771, AFTER this end bookend, and the second of them is what REMOVED the 1.1 s (its own comment says so). At 22abafb5 the trigger is the envelope-first placer moving seed 4's layout, so the OLD re-seat loop - per-candidate traffic count included - runs where it used to return at once. Re-measured at HEAD: seed 4 rolls 5.3 s total with notice 0.30 s, so the bound -18.7% / +8.1% describe code the clone no longer has. Take the end bookend again at the reviewed commit and write the explanation against that delta.",
+  "verdict": "inconsistent"
+}
