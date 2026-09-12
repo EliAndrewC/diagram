@@ -117,24 +117,26 @@ def _fit_at_aspect(
     pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
     _trim_a = BROOK_FAN_TRIM if plan.brook_side < 0 else 1.0
     _trim_b = BROOK_FAN_TRIM if plan.brook_side > 0 else 1.0
-    # THE SLOWDOWN THIS FEATURE CARRIES, ITS CAUSE, AND THE LEVER THAT IS NOT PULLED (feature 230).
-    # Cutting one flank's canal to `BROOK_FAN_TRIM` takes about (1 - trim) / 2 of the fan's area with it, so at
-    # the same `k` a trimmed fan draws ~14% fewer acres and the bracket's ceiling comes down with it: seeds near
-    # the acreage ceiling SATURATE at every aspect, the search spends two carves proving it at each, then re-runs
-    # the best unprobed - 15 carves on cohort seed 25 against 3 before the feature.
+    # THE FAN IS SIZED FOR THE FLANK THE BROOK TAKES (feature 230). Cutting one flank's canal to `BROOK_FAN_TRIM`
+    # takes about (1 - trim) / 2 of the fan's area with it, so at the same `k` a trimmed fan draws ~14% fewer acres
+    # and the whole bracket sits too low: seeds near the acreage ceiling SATURATED at every aspect, the search spent
+    # two carves proving it at each and then re-ran the best unprobed - 15 carves on cohort seed 25 against 3 before
+    # the feature, and +22% on the perf bookends, measured alternately against a detached worktree so machine load
+    # fell on both. Scaling the bracket and the first guess by the area the trim removes is exact arithmetic, not a
+    # tuning knob: it puts the search back where it was before the trim, and measured it is FASTER than the code
+    # before the feature (perf-audit: 26.8 / 26.3 s against an interleaved 28.2 / 28.2 s).
     #
-    # MEASURED ALTERNATELY with a detached worktree at the pre-feature commit, so the same machine load fell on
-    # both (the GM asked whether the box was simply busy; it was not): baseline 27.9 / 28.3 / 28.4 s against this
-    # feature's 35.6 / 36.3 s, about +27%, three rounds each, interleaved.
-    #
-    # THE LEVER: scaling the bracket by the area the trim removes (`lo, hi, k *= sqrt(2 / (1 + BROOK_FAN_TRIM))`)
-    # is exact arithmetic rather than a tuning knob, and it MEASURED -3.6% - faster than the code before the
-    # feature. It is not taken, because it changes the size every fan is fitted at, and the gate measured what
-    # that costs at the fan's toe: one basin of 618 tapering below the 15 degree needle bar, and no flooded plot
-    # painted at all on the reference roll, so the sheet loses the wet-paddy class it exists to exhibit. Both are
-    # the closing rank coming out in slivers at the larger size. The fan's toe geometry is what a future feature
-    # must fix first; until it does, the honest trade is the slower search and the sound field.
-    k = 1.0
+    # IT WAS FIRST DECLINED ON A WRONG DIAGNOSIS, recorded so the next session does not re-derive it. The larger fan
+    # tripped two gate rules on the reference hamlet - a basin tapering below 15 degrees and no flooded plot painted
+    # at all - and this comment blamed the closing rank "coming out in slivers at the larger size". Measured A/B on
+    # the same code, the sliver demotion rate of the blue sample is 64 of 90 without the scaling and 66 of 92 with
+    # it: the size is not the cause. Both were defects the new size merely landed on. The needle was a hairline spur
+    # `_unjog`'s guards could not see, because they judged only the deduped ring while the gate reads the ring as
+    # recorded (`_is_a_needle` in waterfields/seams/plots.py). The missing blue was a sample the map's exhibit rested
+    # on one survivor of, whichever size was drawn (the promotion at the end of `close_seams`).
+    _lever = math.sqrt(2.0 / (1.0 + BROOK_FAN_TRIM)) if (_trim_a < 1.0 or _trim_b < 1.0) else 1.0
+    lo, hi = lo * _lever, hi * _lever
+    k = 1.0 * _lever
     for _ in range(rounds):
         k = min(max(k, lo + 1e-3), hi - 1e-3)
         carve = carve_comb(

@@ -198,6 +198,7 @@ def close_seams(
     # four. Measured on the FINAL ring, after absorption, which is the only place the size exists.
     _areas = sorted(Polygon(_q["poly"]).buffer(0).area for _q in plots if len(_q.get("poly") or []) >= 3)
     _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
+    _keeps: list[tuple[float, dict[str, Any]]] = []
     for p in plots:
         # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
         # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
@@ -247,15 +248,33 @@ def close_seams(
             _sides = [math.dist(_q, _r) for _q, _r in zip(list(_mrr.exterior.coords)[:-1], list(_mrr.exterior.coords)[1:], strict=True)]
             if len(_sides) >= 2 and min(_sides[0], _sides[1]) > 0.0:
                 _asp = max(_sides[0], _sides[1]) / min(_sides[0], _sides[1])
-        if p.get("fill") == FLOODED and (
+        _wrong = (
             pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX)
             or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
             or _psol < _TINT_MIN_SOLIDITY
             or _at_outfall
             or _asp > _TINT_MAX_ASPECT
             or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
-        ):
+        )
+        if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
+        elif not _wrong and p.get("low") and _pg.area > 0.0:
+            _keeps.append((_pg.area, p))
+    # THE MAP MUST STILL EXHIBIT THE CLASS IT DECLARES (feature 230). The tint is a SAMPLE - a random
+    # 45% of the closing rank, for texture - and every one of those draws can be taken back by the six
+    # clauses above, which is how the reference hamlet came to paint no blue plot at all: of 90-odd
+    # blue draws across the size search, 71% were demoted as slivers at the size shipped BEFORE this
+    # feature and 72% at the size after it, so the map's whole wet-paddy exhibit was resting on one
+    # survivor and any re-roll could take it. `flooded_plots` is the picture record the interactive
+    # page's wet-paddy class reads, and a sheet that paints none has silently stopped exhibiting the
+    # class feature 159 created. So when the sample comes back empty, the LARGEST compliant basin on
+    # the low ground is tinted - it passed every clause the random ones are judged by, so nothing is
+    # painted blue that could not have been painted blue by the draw. It takes NO draw from R (the
+    # stream stays put, exactly as the demotion's indexed green does), so promoting one plot cannot
+    # re-roll another, and on a roll whose sample survived this does nothing at all.
+    if _keeps and not any(_p.get("fill") == FLOODED for _p in plots):
+        _keeps.sort(key=lambda _a: (-_a[0], round(_a[1]["poly"][0][0], 1), round(_a[1]["poly"][0][1], 1)))
+        _keeps[0][1]["fill"] = FLOODED
 
 
 def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:
@@ -275,6 +294,6 @@ def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -
         # the ground returns to the bare pocket below, which is this pass's standing answer for a
         # scrap. Judged at the GATE's own threshold, since a repair is not a placement choice.
         _cand = _ring(max(_fixed, key=lambda q: q.area))
-        if len(_cand) >= 3 and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
+        if len(_cand) >= 3 and not pointed_ring(_cand, _GATE_MIN_APEX) and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
             _p["poly"] = _cand
     plots[:] = [_p for _p in plots if len(_p["poly"]) >= 3 and Polygon([(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]).is_valid]

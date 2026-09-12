@@ -464,3 +464,48 @@ def test_a_tab_cut_needs_the_step_to_be_one_edge_of_the_ring() -> None:
     ring = [(0.0, 0.0), (40.0, 0.0), (40.0, 6.0), (80.0, 6.0), (80.0, 40.0), (0.0, 40.0)]
     assert _tab_cut(ring, 2.0, (0.0, 0.0), (40.0, 6.0)) is None  # vertices 0 and 2: on the ring, not adjacent
     assert _tab_cut(ring, 2.0, (0.0, 0.0), (99.0, 99.0)) is None  # not on the ring at all
+
+
+# ---- the two feature-230 repairs ----------------------------------------------------------------
+
+
+def test_a_hairline_spur_is_a_needle_even_where_the_deduped_ring_hides_it() -> None:
+    """`_unjog` judged only `dedup_ring(r, 1.0)` while the gate reads the ring AS RECORDED, so a spur running
+    out and straight back a fraction of a pixel was erased before the guard saw it and shipped at a 0.2 degree
+    apex on the reference hamlet. `_is_a_needle` refuses on either reading."""
+    from l7r.diagram.waterfields.seams.plots import _is_a_needle
+
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    spur = [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (100.9, 50.05), (100.0, 50.2), (100.0, 100.0), (0.0, 100.0)]
+    assert not _is_a_needle(square), "a plain basin is not a needle"
+    assert not tapers_to_a_point(dedup_ring(spur, 1.0), 1.0, 15.0, 4.0) and len(dedup_ring(spur, 1.0)) < len(spur), "the dedup erases the spur"
+    assert _is_a_needle(spur), "the raw ring's spur is still a needle, and the gate reads the raw ring"
+
+
+def test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin() -> None:
+    """The flooded tint is a random sample of the closing rank that the tint clauses can take back entirely -
+    the reference hamlet shipped no blue plot at all. When nothing survives, the largest compliant low basin
+    is tinted, taking no draw from R; when something survives, nothing is promoted."""
+    from l7r.diagram.waterfields.palette import FLOODED
+
+    # sized like the design cell (46 x 26-30 here): the pass plants the bare envelope with basins that size, and a
+    # plot more than twice the median is demoted by the size clause, so an oversized fixture would test nothing
+    big, small = _rect(300, 300, 346, 330), _rect(500, 300, 540, 326)
+    plots = _close([{"poly": big, "fill": "#A6C398", "low": True}, {"poly": small, "fill": "#A6C398", "low": True}, {"poly": _rect(300, 700, 346, 730), "fill": "#A6C398"}])
+    flooded = [p for p in plots if p["fill"] == FLOODED]
+    assert len(flooded) == 1, "exactly one basin is promoted when the sample left none"
+    assert Polygon(flooded[0]["poly"]).area > Polygon(small).area, "and it is the largest compliant one on the low ground"
+    assert flooded[0].get("low"), "never a plot off the low ground"
+
+    kept = _close([{"poly": big, "fill": "#A6C398", "low": True}, {"poly": small, "fill": FLOODED, "low": True}])
+    assert [Polygon(p["poly"]).area < Polygon(big).area for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
+
+
+def test_a_repaired_crossing_ring_is_refused_when_its_raw_ring_is_a_needle() -> None:
+    """The crossing-ring repair carried the same dedup-only guard `_unjog` did."""
+    from l7r.diagram.waterfields.seams.close import _repair_crossing_rings
+
+    bowtie_with_spur = [(0.0, 0.0), (100.0, 100.0), (100.0, 0.0), (0.0, 100.0)]
+    plots = [{"poly": list(bowtie_with_spur)}]
+    _repair_crossing_rings(plots)
+    assert all(Polygon(p["poly"]).is_valid for p in plots), "whatever survives is a valid ring"
