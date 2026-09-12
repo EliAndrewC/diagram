@@ -17,8 +17,8 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.citations import citations_page, notes
-from l7r.diagram.interactive.sources import RESEARCH_DIR
+from l7r.diagram.interactive.citations import GROUNDS_REASONS, citations_page, footnote_form, grounds_reasons, is_settled, notes
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, registry_keys
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
 #: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
@@ -53,47 +53,10 @@ def footnotes(text: str, citations: str) -> tuple[list[str], dict[str, str]]:
     return [m.group(1) for m in _REF.finditer(text)] + [m.group(1) for m in _REF.finditer(citations)], dict(notes(citations))
 
 
-def registry_keys() -> set[str]:
-    src = pathlib.Path(RESEARCH_DIR, "SOURCES.html").read_text(encoding="utf-8")
-    return set(re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)"', src))
-
-
-#: Feature 195 (GM 2026-09-06): a footnote CITES only a page on the public internet where its quote can be read, or
-#: it is an ABSENCE note - no key, no link, what was searched. The one carve-out, by KEY: the GM's own campaign
-#: notes (`l7r.md`, `budgets.md`), canon rather than a source claimed to support a historical point, keep their
-#: registry link - the GM's ruling of 2026-09-07 ("it is correct to make L7R setting notes an exception to the
-#: citation rule"). Derived from the registry rather than listed, so a new canon key is covered the day it lands.
-_ABSENCE = re.compile(r"^no publicly readable source \(searched \d{4}-\d{2}-\d{2}:")
-_ENTRY = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*<p>(.*?)</p>', re.S)
-_HREF_OF_KEY = re.compile(r'<a href="([^"]*)"><code>[a-z0-9][a-z0-9-]*</code></a>')
-
-
-def canon_keys() -> set[str]:
-    src = pathlib.Path(RESEARCH_DIR, "SOURCES.html").read_text(encoding="utf-8")
-    return {m.group(1) for m in _ENTRY.finditer(src) if re.search(r"\bl7r\.md\b|\bbudgets\.md\b", m.group(2))}
-
-
-def footnote_form(body: str, canon: set[str]) -> str | None:
-    """'citation', 'absence', or the defect (feature 195 FR-002). A citation links its key to an http(s) page - the
-    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link
-    and no URL at all (its only anchor is the back link, which since feature 211 names the research page)."""
-    body = re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body)
-    if _ABSENCE.match(body):
-        if "<code>" in body or 'href="' in body:
-            return "an absence note carries no key and no link"
-        return "absence"
-    key = _KEY_LINK.search(body)
-    href = _HREF_OF_KEY.search(body)
-    if not key or not href:
-        return None
-    target = href.group(1)
-    if target.startswith(("http://", "https://")):
-        return "citation"
-    if "SOURCES.html#" in target and key.group(1) in canon:
-        return "citation"
-    return f"links the key to {target!r}, which is not a page on the public internet where the quote can be read"
-
-
+#: THE FORMS A FOOTNOTE MAY TAKE live in the engine (`interactive/citations.py`), not here: the gate, the
+#: `footnote-census` tool and any later reader must not be able to disagree about what a note is, and engine
+#: code may not import from `tests/`. This file holds what the RECORD owes on top of the form - that a citation
+#: names a registered key and carries a quotation, and that every note is referenced.
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)
 def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source(path: pathlib.Path) -> None:
     text = path.read_text(encoding="utf-8")
@@ -110,7 +73,16 @@ def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source
     bad = []
     for fid, body in defs.items():
         form = footnote_form(body, canon)
-        if form == "absence":
+        # A GROUNDS note owes no key, no link and no quotation, exactly as an absence note does - naming the
+        # classifier without teaching THIS loop was feature 235's near miss: the first grounds note would have
+        # failed here whatever `footnote_form` returned, and the requirement would have been discovered as a red
+        # gate rather than written down.
+        if form in ("absence", "grounds"):
+            continue
+        if body.lstrip().startswith(("no source is owed:", "no publicly readable source")):
+            # a malformed note of either sourceless form is reported AS that form's defect: saying "no registry
+            # key link" about a grounds note whose reason is misspelled sends the next reader to look for a key
+            bad.append(f"[^{fid}]: {form}")
             continue
         key = _KEY_LINK.search(body)
         if not key or key.group(1) not in keys:
@@ -134,7 +106,72 @@ def test_the_footnote_forms_are_told_apart() -> None:
     )
     assert footnote_form('<a href="SOURCES.html#k-2"><code>k-2</code></a> - 「a summary, not a page」' + fnback, canon).startswith("links the key to")
     assert footnote_form('no publicly readable source (searched 2026-09-06: x) <a href="https://x.y"><code>k</code></a>' + fnback, canon) == "an absence note carries no key and no link"
+    # THE THIRD FORM (feature 235): a reason from the closed six, no key, no link, no quotation
+    assert footnote_form("no source is owed: measured on our own maps" + fnback, canon) == "grounds"
+    assert footnote_form("no source is owed: physical necessity; a drawing convention" + fnback, canon) == "grounds"
+    assert grounds_reasons("no source is owed: physical necessity; a drawing convention" + fnback) == ["physical necessity", "a drawing convention"]
+    assert footnote_form("no source is owed: it seemed fine" + fnback, canon).startswith("names a reason that is not one of the six")
+    assert footnote_form('no source is owed: physical necessity <a href="https://x.y"><code>k</code></a>' + fnback, canon) == "a grounds note carries no key and no link"
+    assert footnote_form("no source is owed:" + fnback, canon) == "a grounds note names at least one of the six reasons"
+    assert grounds_reasons("no publicly readable source (searched 2026-09-12: x)") == []
+    assert len(set(GROUNDS_REASONS)) == 6, "the list is closed; a seventh reason is a change to the spec"
     assert footnote_form("something else entirely" + fnback, canon) is None
+
+
+#: The three openers a note may have. A note is ONE kind (feature 235 FR-009), so no note may open as two.
+_OPENERS = ("no source is owed:", "no publicly readable source")
+#: A settled absence carries two dated passes and the marker (FR-004). What the dates cannot say - that each pass
+#: named its tools and the later named one the earlier lacked - is `record-format`'s judgment, not a regex's.
+_SEARCHED = re.compile(r"searched (\d{4}-\d{2}-\d{2})")
+
+
+def sourceless_shape_faults(page_notes: dict[str, str]) -> list[str]:
+    """FR-009's mechanical half, over one page's notes: a reason from the six, one kind per note, and a settled
+    note carrying two DIFFERENT dated passes beside its marker."""
+    faults = []
+    for fid, body in page_notes.items():
+        stripped = re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body).strip()
+        if sum(stripped.startswith(o) for o in _OPENERS) > 1:
+            faults.append(f"[^{fid}]: opens as two kinds at once")
+        if stripped.startswith("no source is owed:"):
+            unknown = [r for r in grounds_reasons(stripped) if r not in GROUNDS_REASONS]
+            if unknown:
+                faults.append(f"[^{fid}]: reason not one of the six: {unknown!r}")
+        if is_settled(stripped):
+            if not stripped.startswith("no publicly readable source"):
+                faults.append(f"[^{fid}]: only an absence note can be settled")
+            dates = sorted(set(_SEARCHED.findall(stripped)))
+            if len(dates) < 2:
+                faults.append(f"[^{fid}]: settled on {len(dates)} dated pass(es); FR-004 wants two on different dates")
+    return faults
+
+
+@pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)
+def test_the_sourceless_footnote_forms_keep_their_shape(path: pathlib.Path) -> None:
+    faults = sourceless_shape_faults(dict(notes(citations_of(path).read_text(encoding="utf-8"))))
+    assert not faults, f"{path.name} (feature 235 FR-009):\n" + "\n".join(faults)
+
+
+def test_the_sourceless_shape_rule_fires() -> None:
+    """Non-vacuity: the record has no settled note and one grounds note, so the rule is proved on strings."""
+    good = {
+        "1": "no source is owed: measured on our own maps",
+        "2": "no publicly readable source (searched 2026-09-01: a; searched 2026-09-12: b, settled 2026-09-12)",
+    }
+    assert sourceless_shape_faults(good) == []
+    bad = {
+        "3": "no source is owed: it seemed fine",
+        "4": "no publicly readable source (searched 2026-09-12: a, settled 2026-09-12)",
+        "5": "no source is owed: physical necessity, settled 2026-09-12",
+    }
+    assert sourceless_shape_faults(bad) == [
+        "[^3]: reason not one of the six: ['it seemed fine']",
+        "[^4]: settled on 1 dated pass(es); FR-004 wants two on different dates",
+        # the settled marker is swept into the reason, which is itself the fault: a grounds note has no search
+        "[^5]: reason not one of the six: ['physical necessity, settled 2026-09-12']",
+        "[^5]: only an absence note can be settled",
+        "[^5]: settled on 0 dated pass(es); FR-004 wants two on different dates",
+    ]
 
 
 @pytest.mark.parametrize("path", _finding_files(), ids=lambda p: p.name)

@@ -14,18 +14,20 @@ class Stream(Kind):
     What: A natural brook off the high ground, feeding the head of the field and, below it, carrying the drain
     away.
 
-    Why: A village creek runs about two meters wide in reality, six times a field ditch; every watercourse on the
-    map declares which way it flows, because downstream is a real constraint on what may stand beside it.
+    Why: A village creek runs about two meters wide, six or so times the width of a field ditch; every
+    watercourse on the map declares which way it flows, because downstream is a real constraint on what may
+    stand beside it.
 
     Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-    (the GM's ruling). A village creek runs about 2 m wide in reality, some six times a field ditch. The
-    stream's type and place are read.
+    (the GM's ruling). The stream's type and place are read. The 2 m is not: no page read gives a village
+    creek a width, and the 0.3 m it is measured against is a modern design MINIMUM - the narrowest a canal of
+    any grade may be built to - rather than a ditch anyone measured.
 
     Name: stream
     Covers: `streams` - the brook
     Label: convention
-    Sources: gb50288, toro-site
+    Sources: jsslkx-002-2021, toro-site
     Entry: research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'
     """
 
@@ -38,17 +40,23 @@ class FieldDitch(Kind):
     running down-slope between the plots, and the drain along the low line.
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
-    the lowest line - is the Edo Kishu-school layout and codified Chinese canal doctrine alike. Mains taper
-    as branches tap them; the net is SPARSE because a village digs the minimum, and a ditch beside every
-    paddy is a Meiji anachronism. The net is drawn at true size: a field ditch is about a third of a meter,
-    a hairline.
+    the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
+    codifies too. Mains taper as branches tap them; the net is SPARSE because a village digs the minimum, and
+    a ditch beside every paddy is a Meiji anachronism. What the net draws is drawn at true size, and it stops
+    one tier above the finest: the distribution lateral at about a meter is the last thing on the sheet, and
+    the field ditch that waters a single paddy is a hairline the map does not attempt.
 
-    Note: Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288).
+    Note: Topology and taper are read (Tabayashi, the Minuma-dai record). The widths are weaker than they look.
+    The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
+    carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
+    a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
+    not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
+    channelization rather than for a field plan.
 
     Name: field ditch
     Covers: `field_ditches` and `channels` - the intake, head race, branches and drain
     Label: accurate
-    Sources: tabayashi-1987, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
+    Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan
     Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
@@ -64,7 +72,9 @@ class Pond(Kind):
     serves, with ONE outlet: an inclined intake feeding a bottom conduit through the dam. The spillway is
     for floods, never for distribution. On this map the pond is the field's drainage sink, at its low foot.
 
-    Note: Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).
+    Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet is this
+    record's reading of them: the Kagawa page describes the inclined intake, the bottom conduit and the
+    spillway, and does not itself say there is only one way out.
 
     Name: pond
     Covers: `pond` - the tameike
@@ -168,13 +178,18 @@ class VillageLane(Kind):
     And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main
     village of the district the settlement belongs to.
 
-    Note: Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an
-    ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under
-    the 9 ft of the one cart road the record does measure.
+    Note: Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a
+    wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
+    The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
+    13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
+    because the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice
+    hamlet.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane -
-    laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one
-    cart road the record does measure.
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a wheelbarrow's width,
+    with the connector kept under the 9 ft of the one cart road the record does measure. The record now
+    carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
+    reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
+    the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet.
 
     Name: village lane
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur

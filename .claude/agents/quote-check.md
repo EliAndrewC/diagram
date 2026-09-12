@@ -31,6 +31,18 @@ page for the assertions and the citations page for the notes. `research/SOURCES.
 key and no link that reads `no publicly readable source (searched ...)` is an ABSENCE note - report it as such and
 check nothing for it.
 
+**A THIRD FORM SINCE FEATURE 235 (GM 2026-09-12): the GROUNDS note.** A footnote with no key and no link that
+reads `no source is owed: <reason>` is a GROUNDS note - a sentence with nothing to find, because it is a number
+measured off this project's own drawings, a choice it made, a drawing convention, a necessity of definition or
+physics, or a statement that the record is silent. **Report it as such and check nothing for it**, exactly as for
+an absence note. It is NOT an assertion with a missing citation and must never be reported as one.
+
+What you SHOULD report about a grounds note is the one thing it may not do: carry a claim about how a place was
+built, farmed, planted, governed or lived in, or a sentence the record itself labels a GUESS about the physical
+world. Those owe a citation or an absence note however they are dressed, and a grounds note on one of them is
+exactly the failure the form was created to prevent - a research question relabelled as a decision, leaving the
+backlog while the record gets less honest.
+
 ## Procedure
 
 1. `Read` the file (or section). List every footnote reference in reading order with the sentence it is attached

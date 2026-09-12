@@ -162,9 +162,10 @@ re-read the GM said should not happen.
 
 **SC-001** (FR-001, FR-002) Over three edits whose second anchor misses, the first and third land, the
 second is reported, and the file carries both; an anchor spanning a line wrap matches.
-**SC-002** (FR-004) The 238-command corpus of `research.md` R6 replayed through the hook refuses exactly
-the two commands that failed at run time and nothing else, and the `shopt -s extglob` then `!(x)` case
-passes.
+**SC-002** (FR-004) The 238-command corpus of `research.md` R6 replayed through the hook is refused by
+the PARSE rule on exactly the two commands that failed at run time and nothing else, and the
+`shopt -s extglob` then `!(x)` case passes. (The `-m` ban refuses 23 of the same corpus - FR-005's
+rule, and its own measurement rather than a cost: `research.md` R9.)
 **SC-003** (FR-004a) `echo "use `make quick` first"` is refused naming `$(...)`; so is a backtick span in
 an unquoted `<<EOF` body; the same text in single quotes, and in a quoted `<<'EOF'` body, is not.
 **SC-004** (FR-005) A `-m` message containing a double quote is refused; one containing a newline is
@@ -234,6 +235,15 @@ the record - so it makes no single mistake cheaper, and the GM asked that it be 
 authoring them; counting them would make every split a spelling sweep. A line whose content changed is in
 the delta and owes the fix.
 
+**D8 - `scripts/fixtures/` is exempt from the house-style rules, in the check AND in the hook.** Found
+by running the check over this feature's own work (`research.md` R9): all 43 of its findings were
+inside the frozen 238-command corpus, because several of those commands were house-style sweeps and
+carry the words by necessity. A fixture is a VERBATIM RECORD of what ran; correcting one would falsify
+it and break the measurement it reproduces, which is the same ground as the GM's ruling that a
+quotation keeps its own characters. The alternative priced and rejected: encoding the words in the
+corpus, which would make the replay no longer a replay. This is an addition to the exemption set
+FR-008a inherits from the hook, made after the spec was accepted and recorded here for the GM.
+
 ## Out of scope
 
 - The research record and the agents that read it; the GM ruled it valuable as it stands.
@@ -242,6 +252,17 @@ the delta and owes the fix.
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment round 1** (`spec-fidelity`, MODE 3 VERIFY - the mode this feature adds, used on itself):
+the counter reset to zero for a post-acceptance amendment, D8 (`scripts/fixtures/` exempt from the
+house-style rules) judged LEGITIMATE, and ONE contradiction the amendment introduced: R9's table
+reports 23 corpus commands refused by the `-m` ban, which falsified SC-002's "and nothing else" read
+of the whole hook. SC-002 now says which RULE that clause is about. The reviewer re-ran the
+measurements rather than trusting them - 43 findings without the exemption, all 43 in the one corpus
+file, 0 with it - and checked the seam the class carries: all three files under `scripts/fixtures/`
+are verbatim command corpora replayed by suites, so the directory-wide form is the right width. Its
+aside, taken: the hook half of D8 had no case of its own, so a widening or a loss of it would have
+gone unnoticed.
 
 **Round 5** (`spec-fidelity`, changed text + contradiction scan): **FAITHFUL**, with four small record
 fixes taken before implementation. R4 carried a stale paragraph beside its replacement; R8 still said

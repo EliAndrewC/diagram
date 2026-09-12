@@ -501,6 +501,13 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 glossary:       ## [docs] write research/assets/glossary.js from interactive/glossary.py - the ONE glossary the map's modals and the record's pages share (feature 209)   CHECK=1: exit 1 if stale
 	$(RUN).tools.glossary_asset $(if $(CHECK),--check,)
 
+# GUARD_EDIT_OK: feature 235 - ADDING AN OPERATION, `footnote-census`. Nothing in this project counted the
+# record's footnotes; `notes-census` above counts MAP FEATURES and is unrelated. Every footnote figure quoted
+# while feature 232 ran was assembled by hand and three of those tables were wrong, which is why the GM asked
+# for a count that separates problems from non-problems rather than a habit of counting them together.
+footnote-census: ## [docs] count the record's footnotes by kind - cited, grounds, ABSENT, settled. The ABSENT column is the backlog and the only one anybody has to act on (feature 235)
+	$(RUN).tools.footnote_census
+
 # GUARD_EDIT_OK: feature 211 - a new operation, `citations`: the citations pages' derived scripts and works sections.
 citations:      ## [docs] write each research page's citations script (research/citations/<name>.js) and the works section at the top of its citations page, from the page's notes and SOURCES.html (feature 211)   CHECK=1: exit 1 if stale or a cited key has no write-up
 	$(RUN).tools.citations_asset $(if $(CHECK),--check,)
@@ -1039,6 +1046,15 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 quick:           ## [tests] tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure   ALL=1
 ##  ALL=1  run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)
 	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
+	: "GUARD_EDIT_OK: feature 236, the GM item 4 - the house-style rule, on the DELTA, as a PHASE." ; \
+	: "A PHASE and not a pytest test because quick selects tests by CHANGED CODE (testmon), and a scan" ; \
+	: "whose own code never changes would sit unexecuted through exactly the edits it exists to catch." ; \
+	: "It reads the hook own BRIT table, scans the delta plus every untracked file, and costs ~0.2 s." ; \
+	: "(GUARD_EDIT_OK: this comment block ends WITHOUT a trailing backslash - a continued line makes the"; \
+	: " next line part of the same shell command, where a leading @ is not make syntax but a command"; \
+	: " named @python3, which is what the first version of this phase did.)"
+	@python3 ../../../scripts/check-house-style-delta.py --selftest >/dev/null
+	@python3 ../../../scripts/check-house-style-delta.py ../../..
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
@@ -1221,6 +1237,12 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 # clause 12's expression count on FUNCTIONS, is still owed.
 	python3 ../../../scripts/check-file-scale.py --selftest
 	python3 ../../../scripts/check-file-scale.py ../../..
+	: "GUARD_EDIT_OK: feature 236, the GM item 5 - spec-lint, beside its two siblings and for the same" ; \
+	: "reason: a repo-wide static rule with a selftest that runs first, in the phase the gate runs FIRST" ; \
+	: "so a finding arrives before the map roll is paid for. It reads only the specs directories this" ; \
+	: "delta touches, so it costs nothing on a change that touches none."
+	python3 ../../../scripts/spec-lint.py --selftest
+	python3 ../../../scripts/spec-lint.py --delta ../../..
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \

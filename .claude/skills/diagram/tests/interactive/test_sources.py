@@ -13,7 +13,7 @@ import re
 
 from l7r.diagram.interactive.citations import citations_page
 from l7r.diagram.interactive.citations import research_pages as _record_pages
-from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES, _sections, citation_lines, link_target, not_read, research_questions, research_sources, section_sources
+from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES, _sections, citation_lines, link_target, not_read, registry_entries, research_questions, research_sources, section_sources
 
 
 def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
@@ -124,3 +124,34 @@ def test_the_classifier_reads_the_citation_line_and_the_read_marker_governs() ->
     assert link_target("k", "ja.wikipedia 塀 (https://ja.wikipedia.org/wiki/塀_(城郭); READ)", "") == "https://ja.wikipedia.org/wiki/塀_(城郭)", "balanced parens kept"
     assert link_target("k", "Paper X (https://a.b/c; SUMMARY-ONLY)", "../") == "../SOURCES.html#k"
     assert link_target("k", "Nothing with a URL at all", "") == "SOURCES.html#k"
+
+
+#: The markers `sources.not_read` reads, in the exact case it reads them. A guard that matches a literal cannot
+#: fire on a different case, and one that silently does not fire is worse than no guard: `sendai-igune-list`'s
+#: citation line carried `summary-only 2026-09-06` and classified as READ the whole time it did, which is how a
+#: footnote comes to link a page its passage cannot be read on. So no CITATION LINE - the text `not_read`
+#: actually reads, comments included - may spell a marker in a case the classifier cannot see. Write it as the
+#: classifier reads it, or take it out as stale. Prose elsewhere in the file may discuss the concept freely.
+CLASSIFIER_MARKERS = ("SUMMARY-ONLY", "URL: none")
+
+
+def marker_case_faults(lines: dict[str, str]) -> list[str]:
+    """Every citation line that spells a classifier marker in a case `not_read` would miss."""
+    faults = []
+    for key, line in sorted(lines.items()):
+        for marker in CLASSIFIER_MARKERS:
+            for m in re.finditer(re.escape(marker), line, re.I):
+                if m.group(0) != marker:
+                    faults.append(f"{key}: {m.group(0)!r} - the classifier reads {marker!r}")
+    return faults
+
+
+def test_no_classifier_marker_hides_in_a_case_the_classifier_cannot_see() -> None:
+    faults = marker_case_faults({k: e["line"] for k, e in registry_entries().items()})
+    assert not faults, "a marker on a citation line that the classifier would miss:\n" + "\n".join(faults[:10])
+
+
+def test_the_marker_case_rule_fires() -> None:
+    assert marker_case_faults({"k": "a line, summary-only 2026-09-06, and another"}) == ["k: 'summary-only' - the classifier reads 'SUMMARY-ONLY'"]
+    assert marker_case_faults({"k": "url: none - the work is a book"}) == ["k: 'url: none' - the classifier reads 'URL: none'"]
+    assert marker_case_faults({"k": "SUMMARY-ONLY; URL: none"}) == []

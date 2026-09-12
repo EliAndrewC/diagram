@@ -131,7 +131,7 @@ point in including a reference if it is not being quoted."* So the citation form
 ## A citation LINKS to a page where its quote can be READ - or there is no citation (GM 2026-09-06, feature 195)
 
 The GM: *"If we are linking to online sources whose content which is quotable from public sources does not support our claims then we should not cite it. For example, even if a given source is "known" to support a point we are making, if we are not able to simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a page on the public internet where that quote can be read, then we should NOT be claiming that the source supports us."* Two halves, both or neither: the quoted passage that backs the assertion, and a link to a page on
-the public internet where that passage can be read. So a footnote is one of exactly two forms:
+the public internet where that passage can be read. So a footnote is one of THREE forms:
 
 - **CITATION**: `<a href="https://..."><code>key</code></a> - 「passage」 (gloss)`, the link an `http(s)` page on which the
   passage can be read - the paper's public PDF rather than its abstract page, the full-text view rather than a library
@@ -140,7 +140,25 @@ the public internet where that passage can be read. So a footnote is one of exac
 - **ABSENCE**: `no publicly readable source (searched YYYY-MM-DD: what was tried; the passage the record carried came from
   the registry entry key, which is no longer cited)` - no key link (not even a bare `<code>` one), no URL. The assertion stands, honestly
   labeled as resting on nothing a reader can check (constitution XII: an unlabeled guess is the one failure); the
-  registry entry stays as the record of the search, marked *Not cited*.
+  registry entry stays as the record of the search, marked *Not cited*. An absence note that has been searched to
+  exhaustion - **two independent passes on different dates, each naming the tools it used, the second naming one the
+  first lacked** - may carry `settled DATE` beside its search and leave the backlog; it re-opens on anything that
+  changes what can be read. Settling is never obligatory, and a note left open costs nothing but an honest number:
+  feature 232's second pass found readable sources for 90 of 162 notes a first pass had called absent.
+
+- **GROUNDS**: `no source is owed: <reason>` - no key, no link, no passage, because there is nothing to find
+  (GM 2026-09-12, feature 235: an absence note *"implies that there is a action that we need to take"*, and a
+  sentence that owes no action was being counted in the category that means one). The reason comes from a CLOSED
+  list of six - `measured on our own maps`, `the record's own silence`, `follows from the definitions`,
+  `physical necessity`, `a drawing convention`, `this project's decision` - and a note may name more than one where
+  a sentence rests on more than one. **Two things it may never carry**: a claim about how a place was built,
+  farmed, planted, governed or lived in, and a sentence the record labels a GUESS about the physical world. Both
+  owe a citation or an absence note however they are dressed, and that prohibition is the whole guard - without it
+  a hard research question can be relabelled a decision and the backlog flatters itself. Only two of the six are
+  exemplified in today's record; the rest are vocabulary for the future, and using one on an existing note takes a
+  written argument at that note's page. Where a note converts FROM an absence note, its recorded search is kept in
+  an HTML comment: a reader owed no source has no use for it, and it is the evidence the question was asked before
+  the note left the backlog.
 
 The one exception, by KEY, RULED by the GM (2026-09-07: *"it is correct to make L7R setting notes an exception to the citation rule, so that should indeed be a documented exception"*): the GM's own campaign notes (`l7r.md`, `budgets.md`; today `l7r-median-domain`) are canon,
 not a source claimed to support a historical point - they keep their registry link. Nothing else is carved out: not a

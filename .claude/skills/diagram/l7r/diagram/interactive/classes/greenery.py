@@ -38,7 +38,7 @@ class SharedBambooGrove(Kind):
     What: A bamboo thicket held by the hamlet at the field margin, cut like a coppice.
 
     Why: The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own
-    at the village edge, harvested under the village's rules. The two forms are two knobs, not a choice.
+    at the village edge, harvested under the village's rules. The record supports both, so a map rolls each rather than the project picking one.
 
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
     strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn

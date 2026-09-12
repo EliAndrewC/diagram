@@ -350,8 +350,11 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kura",
   "variants": [
+   "onkura",
    "kura",
-   "dozo"
+   "dozo",
+   "Dozō",
+   "御蔵"
   ],
   "def": "A storehouse with thick plastered earthen walls, built to keep grain and goods through a fire that takes the wooden buildings around it."
  },
@@ -532,7 +535,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kichin-yado",
   "variants": [
-   "kichin-yado"
+   "kichin-yado",
+   "flophouses",
+   "flophouse"
   ],
   "def": "A cheap communal lodging in a town, the 'firewood-fee inn': a traveler slept on straw under a roof for a small fee toward the fire."
  },
@@ -1087,6 +1092,7 @@ window.RECORD_GLOSSARY = [
  {
   "term": "cadastre",
   "variants": [
+   "cadastral register",
    "cadastral survey",
    "cadastres",
    "cadastre"
@@ -1242,9 +1248,7 @@ window.RECORD_GLOSSARY = [
   "term": "lineage village",
   "variants": [
    "lineage villages",
-   "lineage village",
-   "lineages",
-   "lineage"
+   "lineage village"
   ],
   "def": "A village of one clan descended from a common ancestor - the settlement form of south China; the great ones hold forests of tens of hectares."
  },
@@ -1543,6 +1547,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kido",
   "variants": [
+   "ward gates",
+   "ward gate",
    "kido"
   ],
   "def": "A ward gate on a Japanese town street, shut at night to seal one block from the next; every tenement row and lane had its own."
@@ -1564,6 +1570,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "lifang",
   "variants": [
+   "walled ward",
+   "curfew ward",
    "lifang"
   ],
   "def": "The walled residential ward of a Tang Chinese city, its gates opened and closed by officials to the morning and evening drums; torn down under the Song."
@@ -1595,7 +1603,7 @@ window.RECORD_GLOSSARY = [
   "variants": [
    "kashi"
   ],
-  "def": "A Japanese riverbank landing: a public quay, often specialized by cargo, with the warehouses, wholesalers and markets along the top of the bank."
+  "def": "A Japanese riverbank landing: a public quay, often specialized by cargo, with the warehouses, wholesalers and markets along the top of the bank. (The same romanization also names the evergreen kashi oaks; in a list of trees that is the sense.)"
  },
  {
   "term": "gangi",
@@ -1656,7 +1664,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "ote-suji",
   "variants": [
-   "ote-suji"
+   "ote-suji",
+   "otesuji",
+   "otedori"
   ],
   "def": "The ceremonial approach avenue from a castle town into the castle's front gate, with the offices of state flanking it."
  },
@@ -1971,6 +1981,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "jiegao",
   "variants": [
+   "well-sweep",
+   "well sweep",
    "shadoof",
    "jiegao"
   ],
@@ -3338,7 +3350,7 @@ window.RECORD_GLOSSARY = [
   "variants": [
    "sill"
   ],
-  "def": "The bottom edge of an opening in a bund: an intake's sill sits just above the field surface, an outlet's a little below."
+  "def": "The bottom edge of an opening in a bund: an intake's sill sits just above the field surface, an outlet's a little below. The word also names the level bearing course an abutment presents to the beam that lands on it."
  },
  {
   "term": "catchment",
@@ -3520,6 +3532,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "ring dike",
   "variants": [
+   "ring levee",
+   "ring-levee",
    "ring-dike",
    "ring dike"
   ],
@@ -4279,5 +4293,330 @@ window.RECORD_GLOSSARY = [
    "canal corridor"
   ],
   "def": "The strip a canal takes between two parcels: the water with the bank margins along it, counted as neither pond nor dike."
+ },
+ {
+  "term": "lineage",
+  "variants": [
+   "lineages",
+   "lineage"
+  ],
+  "def": "A descent group sharing one ancestor - in south China the kin group that holds land in common, keeps an ancestral hall and gives its village its name."
+ },
+ {
+  "term": "fetch",
+  "variants": [
+   "fetch"
+  ],
+  "def": "The open run a wind crosses before it meets a barrier; the longer and smoother the fetch, the harder the wind arrives."
+ },
+ {
+  "term": "fillet",
+  "variants": [
+   "fillets",
+   "fillet"
+  ],
+  "def": "The wedge of earth piled into the inside of an angle, which turns a sharp corner of a bund into a curve."
+ },
+ {
+  "term": "inverted siphon",
+  "variants": [
+   "inverted siphons",
+   "inverted siphon",
+   "fusekoshi"
+  ],
+  "def": "A channel carried in a closed conduit UNDER a river or another watercourse, dropping and rising again by gravity instead of being bridged over it."
+ },
+ {
+  "term": "Sus",
+  "variants": [
+   "Sus"
+  ],
+  "def": "The pig genus; Sus bones in an excavation report are the bones of pigs, wild or domestic."
+ },
+ {
+  "term": "suid",
+  "variants": [
+   "suids",
+   "suid"
+  ],
+  "def": "A member of the pig family, wild or domestic."
+ },
+ {
+  "term": "fingerling",
+  "variants": [
+   "fingerlings",
+   "fingerling"
+  ],
+  "def": "A young fish part-grown, held in a nursery pond before it is stocked into the pond it will be fattened in."
+ },
+ {
+  "term": "grow-out pond",
+  "variants": [
+   "grow-out ponds",
+   "grow-out pond",
+   "grow-out"
+  ],
+  "def": "The pond a fish is fattened to size in, as against the small nursery pond it is reared in first."
+ },
+ {
+  "term": "zhang",
+  "variants": [
+   "zhang"
+  ],
+  "def": "A Chinese length of about 3.3 meters, ten chi."
+ },
+ {
+  "term": "riparian",
+  "variants": [
+   "riparian"
+  ],
+  "def": "Of the riverbank; riparian transport is carriage by river and canal rather than by road."
+ },
+ {
+  "term": "hata-ei",
+  "variants": [
+   "hata-ei",
+   "畑永法"
+  ],
+  "def": "The Kanto rule under which the tax on dry fields was paid in coin rather than in grain."
+ },
+ {
+  "term": "shoin",
+  "variants": [
+   "shoin-zukuri",
+   "shoinzukuri",
+   "shoin"
+  ],
+  "def": "The formal study with its alcove, shelves and window; and by extension the warrior household's formal residential style built around it."
+ },
+ {
+  "term": "shugenja",
+  "variants": [
+   "shugenja"
+  ],
+  "def": "A mountain ascetic of the Shugendo orders; at Kumano these men were half-monk and half-layman, and sold talismans, amulets and souvenirs to the pilgrims they guided."
+ },
+ {
+  "term": "oshi",
+  "variants": [
+   "oshi"
+  ],
+  "def": "A pilgrimage agent attached to a great shrine, who recruited worshippers in the provinces, lodged them and guided them to it."
+ },
+ {
+  "term": "Kannon",
+  "variants": [
+   "Kannon"
+  ],
+  "def": "The bodhisattva of compassion; an image of Kannon commonly stands over a grave mound or beside a memorial stupa."
+ },
+ {
+  "term": "tsuijibei",
+  "variants": [
+   "tsuijibei"
+  ],
+  "def": "A rammed-earth wall pounded up in layers inside timber forms - a meter thick and three high on a castle - the heavier of the two Japanese earthen walls, against the frameless neribei."
+ },
+ {
+  "term": "fen",
+  "variants": [
+   "fen"
+  ],
+  "def": "A Chinese land unit, a tenth of a mu: about 67 square meters."
+ },
+ {
+  "term": "go",
+  "variants": [
+   "go"
+  ],
+  "def": "A tenth of a tsubo, about a third of a square meter - the fraction a surveyed site area is given to."
+ },
+ {
+  "term": "zokibayashi",
+  "variants": [
+   "zokibayashi"
+  ],
+  "def": "The scrub wood at the far end of a new-field household's strip, grown and cut for that household's own fuel."
+ },
+ {
+  "term": "asunaro",
+  "variants": [
+   "asunaro"
+  ],
+  "def": "Hiba arborvitae, a cypress-family timber tree of the Hokuriku homestead grove; called ate on the Noto peninsula."
+ },
+ {
+  "term": "Three Officials",
+  "variants": [
+   "Three Officials",
+   "sanguan"
+  ],
+  "def": "The Daoist Officials of Heaven, Earth and Water, whose temples a Chinese county gazetteer filed among Altars and Shrines rather than among the Buddhist and Daoist houses."
+ },
+ {
+  "term": "hari-ma",
+  "variants": [
+   "hari-ma",
+   "梁間"
+  ],
+  "def": "The span between a building's beams - its depth, as against keta-yuki, the length along the ridge."
+ },
+ {
+  "term": "distributary",
+  "variants": [
+   "distributaries",
+   "distributary"
+  ],
+  "def": "A channel that leaves a parent canal to carry part of its water onward, as against an intake taken off a river."
+ },
+ {
+  "term": "headworks",
+  "variants": [
+   "headworks"
+  ],
+  "def": "The works at the head of a canal where it takes its water from a river: the weir that holds the level and the gated mouth beside it."
+ },
+ {
+  "term": "regulator",
+  "variants": [
+   "regulators",
+   "regulator"
+  ],
+  "def": "The gated structure at a canal's mouth that decides how much water passes into it."
+ },
+ {
+  "term": "sward",
+  "variants": [
+   "sward"
+  ],
+  "def": "Unbroken grass, mown or grazed, with nothing built on it."
+ },
+ {
+  "term": "glulam",
+  "variants": [
+   "glulam"
+  ],
+  "def": "Glued laminated timber: a modern structural beam built up from bonded layers, stronger and longer-spanning than a sawn one."
+ },
+ {
+  "term": "strip footing",
+  "variants": [
+   "strip footings",
+   "strip footing"
+  ],
+  "def": "A shallow continuous pad laid near the surface under a wall or a bridge abutment, instead of a foundation sunk deep."
+ },
+ {
+  "term": "gabion",
+  "variants": [
+   "gabions",
+   "gabion"
+  ],
+  "def": "A wire cage packed with stone, laid along a bank to armor it against the current."
+ },
+ {
+  "term": "artesian",
+  "variants": [
+   "artesian"
+  ],
+  "def": "Of a well: one whose water rises to the surface under its own pressure and runs without lifting, so its overflow has to go somewhere."
+ },
+ {
+  "term": "chronosequence",
+  "variants": [
+   "chronosequence"
+  ],
+  "def": "A set of sites of different ages read as one sequence in time - fields abandoned five, fifteen and more years ago standing in for the history of one field."
+ },
+ {
+  "term": "assize",
+  "variants": [
+   "autumn assize",
+   "assize"
+  ],
+  "def": "A court's periodic sitting to review cases; the Qing autumn assize decided each year which death sentences would be carried out."
+ },
+ {
+  "term": "furigana",
+  "variants": [
+   "furigana"
+  ],
+  "def": "The small kana printed beside a Chinese character in Japanese text to give its reading."
+ },
+ {
+  "term": "ryo",
+  "variants": [
+   "ryo"
+  ],
+  "def": "The gold coin of Edo Japan, the largest unit of its money, far above the copper mon."
+ },
+ {
+  "term": "Shokuho period",
+  "variants": [
+   "Shokuho period",
+   "Shokuho"
+  ],
+  "def": "The Oda-Toyotomi decades at the end of the sixteenth century, between the age of civil wars and the Tokugawa peace, when the first great castle towns were laid out."
+ },
+ {
+  "term": "Toro",
+  "variants": [
+   "Toro site",
+   "Toro"
+  ],
+  "def": "The excavated wet-rice village of the Yayoi period in Shizuoka, whose canal banks and paddy bunds were faced with the same driven sheet boards."
+ },
+ {
+  "term": "Hakone barrier",
+  "variants": [
+   "Hakone barrier"
+  ],
+  "def": "The barrier station on the Tokaido at Hakone, the most famous of the highway checkpoints where travelers and their goods were inspected."
+ },
+ {
+  "term": "edge-runner mill",
+  "variants": [
+   "edge-runner mill",
+   "edge-runner"
+  ],
+  "def": "A mill whose heavy stone wheel is rolled on its edge around a circular track, crushing the seed under it; the oil presser's is turned by an ox."
+ },
+ {
+  "term": "Echinochloa crus-galli",
+  "variants": [
+   "Echinochloa crus-galli",
+   "Echinochloa"
+  ],
+  "def": "Barnyard grass: the coarse annual weed of wet ground, first to take an abandoned paddy."
+ },
+ {
+  "term": "Bidens tripartita",
+  "variants": [
+   "Bidens tripartita",
+   "Bidens"
+  ],
+  "def": "Three-lobe beggarticks: an annual of wet waste ground, among the first plants back on an abandoned paddy."
+ },
+ {
+  "term": "Polygonum thunbergii",
+  "variants": [
+   "Polygonum thunbergii",
+   "Polygonum"
+  ],
+  "def": "Thunberg's smartweed: the trailing annual that follows the first weeds on an abandoned paddy, before the sedges take over."
+ },
+ {
+  "term": "tatemachi",
+  "variants": [
+   "tatemachi"
+  ],
+  "def": "The principal street of a castle town: the one the front entrances of the townhouse and samurai plots range along, running from the castle's main gate."
+ },
+ {
+  "term": "Nihonbashi",
+  "variants": [
+   "Nihonbashi"
+  ],
+  "def": "The bridge at the center of Edo where the five highways began and from which road distances were measured; the site of the shogunate's principal notice board."
  }
 ];

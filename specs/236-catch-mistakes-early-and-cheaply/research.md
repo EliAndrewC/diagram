@@ -215,3 +215,41 @@ So an earlier draft's reason for only warning - that `"today is `date`"` is some
 contradicted by the data: zero under every walker. And this project writes deliberate substitution as `$(...)`. The
 check REFUSES, naming `$(...)` and single quotes as the fix, which is the GM's own word: *"reject it
 early"*. A backtick in an UNQUOTED heredoc body (`<<EOF`) executes the same way and is caught the same way.
+
+## R9 - what the implementation itself measured (2026-09-12)
+
+Three numbers came out of building the six checks rather than out of the record, and each is
+reproducible by a command this feature ships.
+
+**The frozen corpus, replayed through the hook** (`scripts/fixtures/bash-parse-corpus-2026-09.json`,
+re-run by `scripts/test-shell-check-hooks.sh` on every gate, so these are the suite's own assertions
+rather than a note):
+
+| rule | of the 238 commands |
+|---|---|
+| refused by the PARSE | 2 - both of which had also failed at run time |
+| parse false positives | 0 |
+| refused by the `-m` ban | **23** |
+| refused by the backtick rule | 0 |
+| refused by the co-author rule | 0 |
+
+The 23 are the finding worth keeping: nearly a tenth of one session's commands carried a `-m` message
+with a newline or a nested quote in it, which is item 3's whole subject and had never been counted.
+The backtick rule's zero on this corpus is consistent with R8 - the 74 executing spans are spread over
+16,767 commands and 60 transcripts, so a 238-command window is expected to hold none.
+
+**Every mechanism proved to fire.** Each of the thirteen was broken in place, its own suite run, and
+the tree restored: per-edit writes, whitespace-insensitive anchors, the parse's own options, the
+executing backtick, the `-m` ban, the co-author address, whole-file exemptions, moved lines, untracked
+files, and each of `spec-lint`'s four checks. 13 of 13 went red.
+
+**A backtick after an unquoted `#` does not run, and the guard does not refuse it.** The measurement
+walker of R8 counts such a span (its one disclosed over-count); the GUARD walks comments and skips
+them, because refusing `ls  # see \`make quick\`` would be a guard firing on correct work. The finding
+R8 rests on is unaffected: a comment cannot hold a deliberate substitution either.
+
+**The delta check found a class of file that must keep its British spellings.** Its first run over
+this feature's own work named 43 hits, every one of them inside the frozen command corpus - several of
+those 238 commands were house-style sweeps, so they carry the words by necessity. A fixture is a
+verbatim record: correcting one would falsify it and break the measurement it reproduces. So
+`scripts/fixtures/` is exempt in the check AND in the hook (spec D8).

@@ -1,26 +1,35 @@
 # Research: the historical basis behind the /diagram rules
 
-*Every rule in the [`../settlements/`](../settlements/) and [`../buildings.md`](../buildings.md) docs that came out of historical research has its finding recorded here - what the research found, the decision it drove, and any deliberate departure from literal reality. The rule files stay operational; this tree is where the reasoning lives, and where citations and deeper historical context get added as they accumulate.*
+*Every rule about how a place was built, farmed or lived in has its finding recorded here - what the
+research found, the decision it drove, and any deliberate departure from literal reality. Since feature
+229 (GM 2026-09-12) the pages hold the RULE as well: for a scripted tier the number lives in the engine
+at its point of change and the page carries the finding and the decision; for a tier no generator draws
+yet the page also carries the specification a map follows, marked `class="spec"` and written in real
+feet, which moves into the generator when one is written.*
 
-**Load a research file when you are CHANGING a rule, questioning one, or adding to the record** - never merely to draw a map. Rules link in by stable `#anchor`.
+*Mode A is deliberately NOT like that (GM 2026-09-12: "the original set of markdown rules being separate
+from research continues to make sense for the diagrams that we are generating by hand"). A compound plan
+is placed by a person rather than by a generator, so [`../buildings.md`](../buildings.md) stays
+operational and [`buildings.html`](buildings.html) carries only its reasoning.*
 
-| Research file | Grounds the rules in |
+**Load the page for the topic you are changing or questioning** - and, for a hand-authored tier, to
+draw. A scripted hamlet needs none of it to run. Pointers link in by stable `#anchor`.
+
+| Research file | What it records |
 |---|---|
-| [`archetypes.html`](archetypes.html) | [`../settlements/archetypes.md`](../settlements/archetypes.md) |
-| [`buildings.html`](buildings.html) | [`../buildings.md`](../buildings.md) |
-| [`cities/capitals.html`](cities/capitals.html) | [`../settlements/capitals.md`](../settlements/capitals.md) |
-| [`cities/defenses.html`](cities/defenses.html) | [`../settlements/cities/defenses.md`](../settlements/cities/defenses.md) |
-| [`cities/fabric.html`](cities/fabric.html) | [`../settlements/cities/fabric.md`](../settlements/cities/fabric.md) |
-| [`cities/government.html`](cities/government.html) | [`../settlements/cities/government.md`](../settlements/cities/government.md) |
-| [`cities/hinterland.html`](cities/hinterland.html) | [`../settlements/cities/hinterland.md`](../settlements/cities/hinterland.md) |
-| [`cities/river-cities.html`](cities/river-cities.html) | [`../settlements/cities/river-cities.md`](../settlements/cities/river-cities.md) |
-| [`fields.html`](fields.html) | [`../settlements/fields.md`](../settlements/fields.md) |
-| [`homesteads.html`](homesteads.html) | [`../settlements/homesteads.md`](../settlements/homesteads.md) |
-| [`religion-and-death.html`](religion-and-death.html) | [`../settlements/religion-and-death.md`](../settlements/religion-and-death.md) |
-| [`towns.html`](towns.html) | [`../settlements/towns.md`](../settlements/towns.md) |
-| [`urban-features.html`](urban-features.html) | [`../settlements/urban-features.md`](../settlements/urban-features.md) |
-| [`vegetation.html`](vegetation.html) | [`../settlements/vegetation.md`](../settlements/vegetation.md) |
-| [`water.html`](water.html) | [`../settlements/water.md`](../settlements/water.md) |
+| [`settlements.html`](settlements.html) | the five tiers: what each is, what a map's page states about it, the facts a map is told at intake, and when a rule may be waived |
+| [`archetypes.html`](archetypes.html) | the field archetypes - polder, dike-pond, contour terraces, ribbon valley - and the land-use overlays |
+| [`buildings.html`](buildings.html) | Mode A: the reasoning behind the compound and building plans, whose rules stay in [`../buildings.md`](../buildings.md) |
+| [`cities/`](cities/) | the city tier: [`capitals.html`](cities/capitals.html), [`defenses.html`](cities/defenses.html), [`fabric.html`](cities/fabric.html), [`government.html`](cities/government.html), [`hinterland.html`](cities/hinterland.html), [`river-cities.html`](cities/river-cities.html), [`sizing.html`](cities/sizing.html) |
+| [`fields.html`](fields.html) | cultivated ground: the comb fan, plots, crops, in-field features, the near ring |
+| [`homesteads.html`](homesteads.html) | farmhouses and their appurtenances, groves, settlement form |
+| [`presentation.html`](presentation.html) | the map's drawing conventions: labels, captions, framing and cropping |
+| [`religion-and-death.html`](religion-and-death.html) | shrines, temples, graveyards and the funerary features |
+| [`towns.html`](towns.html) | the town tier |
+| [`urban-features.html`](urban-features.html) | the vocabulary a town and a city share: boards, justice works, trades, wells, stable yards |
+| [`vegetation.html`](vegetation.html) | the shelter belt, groves, commons, scrub and bamboo |
+| [`water.html`](water.html) | flow, channels, moats and wetland |
+| [`ways.html`](ways.html) | roads, lanes, bridges and planks |
 
 ## Every entry carries one of three labels (GM 2026-08-26, constitution XII)
 
