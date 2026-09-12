@@ -300,3 +300,100 @@ wrong, and they are different from each other:
 None of the three is an argument against the absence-note rule. All three are arguments for it: every one
 of these was found because feature 195 forced the claim to say what stood behind it, which made a list of
 exactly the sentences worth re-reading.
+
+
+## R18 - what the GM's fetch settled, and the two that were outages rather than blocks
+
+The GM worked the list the same day. Four papers and one municipal text are now in
+`/host-l7r-repo/academic-sources/`. Three results, and the second and third matter beyond this feature.
+
+**1. Two of the six "one browser visit" cases were SITE OUTAGES, not bot walls.** The GM's own browser
+gets an error from `sitereports.nabunken.go.jp` and a timeout from `gf.cabr-fire.com`. So the HTTP 429
+and the HTTP 000 this project recorded were the sites being down, not this container being refused.
+Both go back on the list to be retried later rather than into the record as refusals - an outage is a
+fact about a Tuesday, not about what the public can read, and an absence note that called it a refusal
+would be wrong in the same direction as all the others this feature has corrected.
+
+**2. The "genuinely closed" four are confirmed closed by a person.** The GM could not get Miles 2003 or
+any of the others in that section for free. That is the outcome the Unpaywall check predicted, which is
+worth recording: of the twelve, the three recovery routes correctly separated what a person could get
+from what they could not, on every single item. The list did not waste the GM's time on anything
+except the two outages, which nothing could have predicted.
+
+**3. The Kodaira text arrived, and it cannot be quoted under this project's own rule.** See R19.
+
+## R19 - a source that answers the question and cannot be cited for it
+
+The GM supplied the Kodaira city history's homestead-grove text, which no fetcher could reach behind
+its page-image viewer. It is *a Google Translate rendering*, supplied as such, of a page whose Japanese
+original this project does not have; the three page images beside it are the figures, not the text.
+
+**Feature 202's rule cannot be met.** A foreign passage is quoted in English translation, marked as one,
+with the translator named and **the original following as the checker's anchor**. There is no original
+here to anchor, and the translator is a machine. `quote-check` could not verify a single character.
+
+**And the translation is demonstrably unreliable on exactly the thing it was fetched for - numbers.** It
+renders frontages as "12 or 13 ken (approximately 36-36 meters)", "30 ken (approximately 36 meters)" and
+"45 ken (approximately 35-36 meters)". Those cannot all be right: a ken is about 1.82 m, so they should
+read roughly 22-24 m, 55 m and 82 m. The machine has flattened three different figures onto one wrong
+number. No figure from this text can stand in the record.
+
+**What it settles anyway, and it is not nothing.** The question asked was whether the record's 70 tsubo
+work-yard figure comes from this city history and what it measured. **It does not appear in the text at
+all.** What the text gives is *"The space including this residential area and yard appears to have been
+at least 500 tsubo"* - the house plot AND its yard together, an order of magnitude larger and a
+different thing. So the 70 tsubo attribution is a misattribution, which is the R12 family again, and the
+band's upper anchor rests on nothing this source says.
+
+The qualitative content is rich and probably sound - the yard as the threshing floor beaten hard, the
+outbuildings enumerated, the bamboo grove and the east-west waterway behind them, holly hedges between
+neighbors, and **every house having a persimmon tree**, which speaks directly to a sentence the record
+labels a guess. But it is qualitative content read through a machine, so what it can support is a
+statement that such a description exists, not a quotation.
+
+**What is asked of the GM**, and it is small: the ORIGINAL Japanese of that page, if the viewer will
+give it. With the original, the good half of this becomes citable under the ordinary rule.
+
+
+## R20 - the four the GM fetched, written into the record
+
+All four are in, with their footnotes, their registry write-ups and the sentences each one changed.
+`make citations` and `make page-check` green. Three of the four changed what the page SAYS, not only what
+it cites, which is the ratio this whole feature keeps producing.
+
+**`urban-features.html` fn-74, the kabu-ido cap - the tension shrank.** The record said the finding "cuts
+mildly against" our liberty of drawing two to three times the attested well count. Read whole, it bears on
+it much less. The wells capped are ARTESIAN IRRIGATION wells, and the grievance is not scarce water but
+free flow waterlogging the paddy of the villages DOWNHILL - which a draw-well in a house yard cannot do.
+It is one ring levee on one plain, the literature values it as a pioneering case rather than a typical
+one, and it runs 1812 to the 1930s. The liberty stands and is still a liberty; what the record may no
+longer say is that the historical pressure was generally toward fewer wells. One smaller correction: the
+"fee" runs the other way - the well users PAY their own inspectors a ryo a year, and no permit charge
+appears in the agreement at all.
+
+**`homesteads.html` fn-32, the back lane - the evidence was for something else.** The record cited a
+Manchu village as showing rear-access ground behind the housing lots. The paper's own finding is that the
+ground behind those lots was opened by a state resettlement in about 1968, and that the older row is
+courtyard joined to courtyard along the street, which argues AGAINST a back lane rather than for one. The
+footnote is re-aimed at what the paper does carry: a village of that kind has two or three east-west
+streets, supplemental lanes crossing them, and blind alleys of 2 to 4 m reaching the lots. So a lane web is
+not a purely European shape - but a lane serving the REAR of a row is not attested there, and the page now
+says so.
+
+**`archetypes.html` fn-81, the dike-pond mosaic - the attribution was simply wrong.** The description had
+been attributed to a paper that does not contain it. It is the opening of Tian 2019's English abstract,
+near-verbatim, and the record's short form dropped the word doing the work: the article says "mosaic-like
+CONSTRUCTED ponds", and its point is that the made and the natural are hard to tell apart, not that pond
+edges are indistinct. Quoted properly now, with the Chinese as the anchor.
+
+**`urban-features.html` fn-64, the linear border - cited in full, and it repaired two neighbors.** The
+paper says what the record said it says. It also supplies the Nanbu-Date mounds from a peer-reviewed source
+rather than an encyclopedia, and with a correction - the two domains AGREED in 1642, with no shogunal role
+mentioned, where the record said the shogunate re-confirmed it - and it supplies the shogunate's Genroku
+instruction that borders be depicted unambiguously on the map, which retires an "(unsourced: ...)"
+parenthesis the page was carrying. Both page sentences are corrected. Re-pointing fn-65 and fn-66
+themselves at this paper is a small follow-on left for the systematic pass.
+
+Two bibliographic corrections the registry now carries: the author is **Mukoyama**, not Koyama as every
+earlier pass had it; and the file carries no Creative Commons statement, so the registry asserts no licence
+for it even though the open-access indexes report one.
