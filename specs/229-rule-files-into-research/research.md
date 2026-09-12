@@ -228,3 +228,28 @@ Decisions: D5 -> sizing `#how-big-is-a-citys-wall-for-the-population-inside-it` 
 Specifications: sizing 6 (the budget ring with +8%/-5%; the exact population with the counting and caste-ceiling traps; quarters tile the interior 85/5/3; the density band ~1.5-11 dwellings/acre with the ~450 ft dead-zone rule; the 70% civic-open tolerance and one-fifth reserve cap; the dead-ground rule ~0.83 acre / 60 ft); capitals 7. Preserved by the engine: the budget model and every constant (`citybudget.py:50,51,65,115,133,140,145,188,201,213,407,423`). Dropped: the capacity tool and its four verdicts, the ASCII map, the Nagahara walkthrough (F); Tango's quarter layout (C).
 Physical pending (2): the civic share (Chang named; source-reader batch 2 found no percentage in the chapter); a temple neighborhood crowded not quiet (none named).
 R1 rows applied: 8, 9 (0.85 settled; `C_PACKED_CAPITAL` and `CIRC_FRAC_CAPITAL` stated), 20, 30. Found: the Tango dead-ground pocket's three figures did not reconcile (230x95 px at 3 ft/px is ~690 x 285 ft, not 600 x 330; the dead core ~1.3 acres) - resolved toward the pixel figures; a stale "proposed" on the Emperor's-granary seat corrected; the terrace anchor's depth disagrees between the page (24 ft, footnote 35) and `citybudget.py:203` (21 ft; only 21 reproduces the 378 sq ft) - for the session to settle. Glossary wanted: inkyo, drill ground, warren.
+
+## R8 - the delta's route, measured (2026-09-12)
+
+The plan expected this feature to land DIRECT: every engine edit is a comment or a docstring, and `ci/delta.py`
+compares each changed `.py` by the docstring-stripped AST the gate keys on. Measured against the merge base
+(`b87b88aa`), **59 engine files were touched and exactly ONE changed semantically**:
+`l7r/diagram/overlap/taxonomy.py`, whose permission reason for the notice board against a lane corridor is a
+STRING LITERAL carrying the pointer. Re-aiming that pointer at `research/urban-features.html` rewrites the
+string, so the AST differs and the engine key moves
+(`c66b02e1...` -> `2dab2b7f...`).
+
+The pointer is right where it now points, so the string stays and the feature takes the GATED route. Nothing
+about the work changes: FR-010 already owed a green `make done`, which is what the gated route demands. Recorded
+because the expectation was wrong in a way worth knowing: **a pointer inside a string literal is engine content,
+while the same pointer in a comment or a docstring is not** - and this repository carries a few of each.
+
+Main also moved during the feature (228 and 230 landed), so the clone merges before the gate runs.
+
+## R9 - why no settlement-review is owed (the pairing guard, 2026-09-12)
+
+`scripts/pair-hooks.sh` reported a half-open pairing after a local `make test-file` recorded a green
+verification. A settlement-review is owed when a Mode B map changes; this feature draws no map. The proof is R8:
+one semantic engine change, a permission REASON string, which no placer reads and no manifest records. No
+`.gen.py`, no pool artifact and no manifest is touched, and the pool is not regenerated. The gate run therefore
+carries `PAIR_OK` with that reason.
