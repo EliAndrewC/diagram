@@ -369,8 +369,9 @@ class LandUseMixin:
             # dike's band stops at the polder. On the vector page the pond painted over a filled disk hid the
             # difference; raster mode draws the lit class as a wash OVER the image (page.css, feature 201), and the
             # lit disk tinted every pond gold. Map drawing convention (settlements/archetypes.md 'The bank is a
-            # ring'). The two outlines come from the same draws in the same order as before, the crowns still clip
-            # to `bd` ALONE (a crown may overhang the water - do not hand them the ring), the ring's inner stroke
+            # ring'). The two outlines come from the same draws in the same order as before, the crowns AND the
+            # earth mottle still clip to `bd` ALONE (a bush or a patch may lean over the water - do not hand them
+            # the ring; measured on Kuwabata, 6% of the water area at the rim still lights), the ring's inner stroke
             # lies under the pond's own wider, later stroke, and the `dikeponds` records do not move.
             self.add(f'<path d="{bd} {wd}" fill-rule="evenodd" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls=DIKE_CROP_CLASS[dike_crop])
             self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")

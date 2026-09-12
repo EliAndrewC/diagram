@@ -1,6 +1,6 @@
 # Feature 228 - the crop dike lights as a ring
 
-**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5) - implementing. Its aside is taken in the delivery note: the crowns overhanging the water's rim still light with the dike (their clip is unchanged by design).
+**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 1 of 5); `settlement-review` pass on Kuwabata (water pixels lighting with the dike 100% -> 6.2%, all within the rim; the picture within antialiasing of the shipped render); gate green (151 s). Its aside is taken in the delivery note: the crowns overhanging the water's rim still light with the dike (their clip is unchanged by design).
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - why the pond lights (the dike is a filled disk under the
 raster wash) and why the perimeter dike does not (it is a band with a hole).
