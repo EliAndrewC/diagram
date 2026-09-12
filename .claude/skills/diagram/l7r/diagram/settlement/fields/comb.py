@@ -620,6 +620,13 @@ class CombMixin:
             # the drawn run does not already reach it. On every comb map the run starts on the head,
             # the distance is ~0, and nothing is inserted: the pool is byte-identical.
             _ch_poly = [[round(start[0], 1), round(start[1], 1)], [round(midx, 1), round(midy, 1)], [round(din[0], 1), round(din[1], 1)]]
+            if not pond_rec:
+                # THE RECORD TRACES THE HEAD RACE THAT IS DRAWN (settlement-review, feature 230 pass 10). Before the brook was
+                # tapped this bowed line WAS the drawn feed; since the head race is carved at its offtake angle (`hr`, the
+                # net's own first channel) the bow traced a course 50 px from any ink, and the site boundary kept houses off
+                # water that was not there. Sluice, the race's own vertices to the fork, then the step into the field that
+                # anchors the topology.
+                _ch_poly = [[round(start[0], 1), round(start[1], 1)], *[[round(float(q[0]), 1), round(float(q[1]), 1)] for q in hr[1:]], [round(din[0], 1), round(din[1], 1)]]
             _fk = (float(fork[0]), float(fork[1]))
             _fk_d = min(seg_dist(_fk[0], _fk[1], (_ch_poly[_i][0], _ch_poly[_i][1]), (_ch_poly[_i + 1][0], _ch_poly[_i + 1][1])) for _i in range(len(_ch_poly) - 1))
             # `join_head` is passed by the POLDER path and by nothing else. Conditioning this on
