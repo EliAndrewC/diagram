@@ -155,7 +155,7 @@ _JOIN_FT = 4.0
 than this are one network, and a footpath further off joins nothing."""
 
 
-def _ends_worth_walking_to(path: Poly, house: Pt, segs: Sequence[tuple[Pt, Pt]], crops: Sequence[Poly], reach: float = 58.0) -> bool:
+def _ends_worth_walking_to(s: Settlement, path: Poly, house: Pt, segs: Sequence[tuple[Pt, Pt]], crops: Sequence[Poly], reach: float = 58.0) -> bool:
     """Does each end of this footpath front something - the house it serves, the network, or the field?
 
     THE GATE'S OWN TEST, ASKED WHERE THE PATH IS DRAWN (`lanes_reach_something`: an end that meets no other way,
@@ -175,7 +175,14 @@ def _ends_worth_walking_to(path: Poly, house: Pt, segs: Sequence[tuple[Pt, Pt]],
             return True
         if any(seg_dist(q[0], q[1], a, b) <= reach for a, b in segs):
             return True
-        return any(seg_dist(q[0], q[1], r[i], r[(i + 1) % len(r)]) <= reach for r in crops if len(r) >= 3 for i in range(len(r)))
+        if any(seg_dist(q[0], q[1], r[i], r[(i + 1) % len(r)]) <= reach for r in crops if len(r) >= 3 for i in range(len(r))):
+            return True
+        # ...AND A WELLHEAD OR THE NOTICE BOARD IS WORTH WALKING TO (settlement-review pass 8). The gate's own
+        # rule lists a house, a way and the field, and a tread from a lane corner to the public well fronts none
+        # of the three: Inashiro's is legal today only because a farmhouse edge happens to fall 54 ft from its
+        # end. A well is as good a reason to have worn a path as a field is, and so is the board the edicts are
+        # posted on - both are places the whole hamlet goes.
+        return any(math.dist(q, (float(r["x"]), float(r["y"]))) <= reach for k in ("wells", "kosatsuba") for r in (s.M.get(k) or []))
 
     # ...AND IT MUST JOIN THE NETWORK AT ONE END. A footpath is routed to a point ON the web, and the clip that
     # keeps it out of the steadings can take that end off it - leaving a tread that fronts a house at one end and
@@ -585,13 +592,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
-                    if not _ends_worth_walking_to(path, c, segs, crop_polys(s)):
+                    if not _ends_worth_walking_to(s, path, c, segs, crop_polys(s)):
                         continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None and _ends_worth_walking_to(_folded, c, segs, crop_polys(s)):
+            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, crop_polys(s)):
                 _draw_web(s, _folded, 3, houses=[c])
                 added += 1
                 _served = True

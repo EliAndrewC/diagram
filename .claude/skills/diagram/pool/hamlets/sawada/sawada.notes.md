@@ -10,7 +10,7 @@ undrained valley toe begins.
 
 **Subject**: ~19 households, land falling to the northwest, and the largest of the four combs.
 
-**What it is here to show**: the OTHER water sink. Sawada has no pond. Its collector runs on past the last paddy as a dug drainage ditch and joins the brook that passes the field's foot - a confluence the map draws, and what a village's drainage did before modern consolidation separated supply from drain (feature 230). Until then the runoff left the frame on its own, beside that same brook.
+**What it is here to show**: the OTHER water sink. Sawada has no pond. Its collector runs on past the last paddy as a dug drainage ditch and leaves the frame beside the brook that passes the field's foot. It does not reach it: the junction that sink was written for cannot be drawn on this map, because the outfall stands at the canvas edge and below the one point on the brook that has fallen past it there is too little stream left on the sheet for a reader to see a confluence at all (specs/230 research R7). What the map shows instead is the older picture - a village's drainage leaving its own way, which is what a hamlet with no pond did before modern consolidation separated supply from drain (feature 230).
 
 Below the drain, the un-reclaimed toe is reed marsh - the `hinterland` scatter's contour band, on
 the low side where the gate requires it.
@@ -799,4 +799,4 @@ downstream and reaches the division point over a distance the fan gives it. The 
 top is a brook and a ditch parting, which is what was actually there.
 
 What stands at the tap is rolled, because the record attests two forms and prefers neither.
-This map is the pinned one: `intake="open"`, the brook tapped straight off its bank with nothing built across the water. All five pool seeds happened to roll the weir and a knob owes one map per value, so the value is declared in the generator rather than left to the draw. The foot changed too, and by measurement: the brook passes 75 ft from the collector's outfall, and the drain now runs to it and joins it at a confluence - what a village's drainage did, and an end to two watercourses leaving the map side by side.
+This map is the pinned one: `intake="open"`, the brook tapped straight off its bank with nothing built across the water. All five pool seeds happened to roll the weir and a knob owes one map per value, so the value is declared in the generator rather than left to the draw. The foot changed too, and by measurement: the brook passes 75 ft from the collector's outfall, and the drain still runs off the frame beside it. The junction is refused, and by measurement: below the one candidate that has fallen past the outfall the brook has about 85 px left on the canvas against the 150 the rule asks, so a confluence drawn there would be a junction with no stream under it. The two watercourses therefore leave this sheet side by side - the picture that sink exists to end, and cannot end here.

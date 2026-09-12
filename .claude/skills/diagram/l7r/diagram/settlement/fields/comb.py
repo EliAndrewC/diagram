@@ -265,7 +265,7 @@ class CombMixin:
         # The source hands its own course in, and the hem is drawn before the source is - so reading the
         # manifest alone made the hem blind to the one watercourse the field was cut around, and
         # `settlement-review` measured 34 ft of Mizuguchi's brook drawn across a soy plot's corner with the
-        # water ink over the plough boundary. The geometry is in hand; take it from the caller rather than from
+        # water ink over the plow boundary. The geometry is in hand; take it from the caller rather than from
         # a record that does not exist yet.
         _src_brook = (source or {}).get("stream") if isinstance(source, dict) else None
         if _src_brook and len(_src_brook) >= 2:

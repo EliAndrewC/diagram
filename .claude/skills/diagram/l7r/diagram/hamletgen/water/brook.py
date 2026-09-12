@@ -122,7 +122,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     things shape it, and every one of them is a review finding rather than a preference:
 
     THE PROFILE IS PER RING, over every cultivated ring. The first cut cleared the paddy ENVELOPE and the dry
-    hem is laid outside it: 15 of 25 hem plots crossed on one map, 1,456 ft of brook with plough ink on both
+    hem is laid outside it: 15 of 25 hem plots crossed on one map, 1,456 ft of brook with plow ink on both
     banks. The supply canals go in too, one step weaker - they mark the margin the brook stays outside of.
     And a ring enters the profile by the `u` its BODY starts at, not by each vertex's own `u`, because a
     plot's outermost corner can lie far downslope of the ground it covers.
@@ -177,9 +177,11 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     # against the frame bound, and the exit then folded the course back on itself (131 and 119 degrees, the last
     # two corners left on the pool)
     _back = out[max(0, len(out) - 4)]
-    heading = unit(lx - _back[0], ly - _back[1]) if len(out) > 1 else (dx, dy)
-    if heading[0] * dx + heading[1] * dy <= 0.15:
-        heading = (dx, dy)
+    # the course's own heading, unless it has stopped going downhill - a tail that runs across the fall or back
+    # up it has no heading worth keeping, and the exit takes the fall directly (one expression, so the fall case
+    # is not a branch that only a particular crop shape can reach)
+    _h = unit(lx - _back[0], ly - _back[1]) if len(out) > 1 else (dx, dy)
+    heading = _h if _h[0] * dx + _h[1] * dy > 0.15 else (dx, dy)
     px_, py_ = lx, ly
     # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
     # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
@@ -235,7 +237,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
                 # degrees off the brook's downstream heading - pointing upstream, with the dug ditch reading as
                 # the continuation and the brook as the branch, which is the GM's original complaint in new
                 # clothes. The crop that came close is what yields: `_comb_draw_hem` drops any hem plot the
-                # brook's own band crosses, so holding this line puts no plough under water.
+                # brook's own band crosses, so holding this line puts no plow under water.
                 cut.append((qx, qy))
                 continue
             cfloor = _crop_edge(segs, cu, 12.0, -1e9) + skirt

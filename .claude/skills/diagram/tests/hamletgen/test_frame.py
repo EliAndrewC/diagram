@@ -84,3 +84,35 @@ def test_stage_notice_reseats_a_board_the_frame_would_lose(monkeypatch):
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert not any(len(lb) > 5 and lb[5] == "notice board" for lb in s.M["labels"]), "orphan caption left behind"
     assert len(s.M["kosatsuba"]) == 1, "old board not popped"
+
+
+def test_the_confluence_reserves_its_own_room_in_the_crop(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 230, settlement-review passes 6 and 7. Where the drain meets the passing brook, that junction is a
+    FEATURE - the thing the third sink exists to show - and the crop ignores watercourses because they are
+    runners that trail off the edge, so one was drawn 7.4 ft outside the sheet with none of its trunk in view.
+    Predicting the frame back in `stage_sink` cannot work: the frame is decided here. The junction reserves
+    itself instead, the way the title pocket does."""
+    from l7r.diagram.hamletgen import frame as fr
+
+    from ._builders import a_plan
+
+    calls: list[list[tuple[float, float, float, float]]] = []
+
+    class _Crop:
+        M = {"meta": {}, "houses": [], "lanes": [], "kosatsuba": []}
+
+        def crop_to_content(self, margin=30, extra=()):  # type: ignore[no-untyped-def]
+            calls.append(list(extra))
+
+        def title(self, *_a, **_k):  # type: ignore[no-untyped-def]
+            pass
+
+    plan = a_plan()
+    plan.title_pocket_outside = False
+    plan.confluence = (1200.0, 900.0)
+    monkeypatch.setattr(fr, "title_pocket", lambda _s, _p: (0.0, 0.0, 10.0, 10.0))  # the pocket is exercised where it lives
+    fr.stage_frame(_Crop(), plan)  # type: ignore[arg-type]
+    assert calls and calls[0], "the junction is reserved as content"
+    x0, y0, x1, y1 = calls[0][0]
+    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centred on the junction"
+    assert (x1 - x0) >= fr.BROOK_JOIN_TRUNK, "with a trunk's length of room around it"

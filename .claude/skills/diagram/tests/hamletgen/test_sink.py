@@ -200,9 +200,10 @@ def test_a_confluence_is_refused_when_the_run_to_it_crosses_the_crop() -> None:
     from l7r.diagram.hamletgen import sink
 
     plan = a_plan()  # the square field at x 400-1000, y 400-1000, falling due south
-    plan.brook = [(700.0, 1100.0), (700.0, 1500.0), (700.0, 1900.0)]
-    out = (700.0, 300.0)  # ABOVE the field: every route to the brook crosses the rice
-    assert sink.brook_join(plan, out) is None
+    # the brook runs down THROUGH the field and on past it, and the outfall stands high inside the rice: every
+    # candidate within reach has fallen, so what refuses them is the run - straight down the planted ground
+    plan.brook = [(700.0, 800.0), (700.0, 1600.0)]
+    assert sink.brook_join(plan, (700.0, 450.0)) is None
 
 
 def test_the_pond_set_back_gives_up_past_its_limit() -> None:
@@ -216,3 +217,24 @@ def test_the_pond_set_back_gives_up_past_its_limit() -> None:
     plan.envelope = [(0.0, 0.0), (3000.0, 0.0), (3000.0, 3000.0), (0.0, 3000.0)]  # crop over the whole canvas
     back, sway = sink.pond_seat(plan, (1500.0, 1500.0), 120.0, 90.0)
     assert back > POND_SETBACK_LIMIT and sway == 0.0
+
+
+def test_the_drain_runs_to_the_brook_and_records_the_junction_for_the_frame(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`stage_sink`'s confluence branch, driven directly. Where `brook_join` names a junction the drain is drawn
+    to it with a bow rather than a ruled connector, and the junction is RECORDED on the plan so `stage_frame` can
+    reserve it as content - which is how a junction stays on the sheet (research R7; no pool map's geometry takes
+    this sink today, so the branch is proved here rather than on a map)."""
+    plan = a_plan()
+    plan.water_sink = "offmap"
+    plan.brook = [(760.0, 900.0), (760.0, 1200.0), (760.0, 1600.0), (760.0, 2000.0)]
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    drawn: list[tuple[list[tuple[float, float]], str]] = []
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (700.0, 1010.0))
+    monkeypatch.setattr(hg.sink, "drain_run", lambda s_, pts, to: drawn.append(([(round(p[0], 1), round(p[1], 1)) for p in pts], to)))
+    hg.sink.stage_sink(s, plan)
+    assert plan.confluence is not None, "the junction is recorded for the frame to reserve"
+    assert drawn and drawn[0][1] == "stream", "and the run is drawn to the stream"
+    pts = drawn[0][0]
+    assert len(pts) == 3 and pts[-1] == (round(plan.confluence[0], 1), round(plan.confluence[1], 1))
+    mid = pts[1]
+    assert mid != ((pts[0][0] + pts[2][0]) / 2, (pts[0][1] + pts[2][1]) / 2), "the run bows - dug earth, not a ruled connector"
