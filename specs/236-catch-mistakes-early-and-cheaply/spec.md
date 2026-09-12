@@ -169,8 +169,9 @@ or a backtick span does not; `git grep -n "centre"` does not.
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
 the delta; does not fail on a line merely moved; does not fail on the 146 ledgered hits; and runs on a
 delta that changes no Python.
-**SC-008** (FR-010, FR-010a, FR-011) Each of the four checks fails on a constructed fixture; a withdrawn
-figure narrated in Decisions recorded does not fail check 2; a freshly claimed spec with no `tasks.md`
+**SC-008** (FR-010, FR-010a, FR-010c, FR-011) Each of the four checks fails on a constructed fixture; a
+withdrawn figure narrated in Decisions recorded does not fail check 2, and one standing in a file outside
+`specs/` is not reached by it; a freshly claimed spec with no `tasks.md`
 passes; the lint runs at gate and push over the touched `specs/` directories.
 **SC-009** (FR-010b) This spec passes checks 1 and 3.
 **SC-010** (FR-012, FR-013, FR-014) The agent file documents VERIFY mode, and a review task generated from
