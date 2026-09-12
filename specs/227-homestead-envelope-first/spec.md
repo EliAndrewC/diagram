@@ -1,6 +1,6 @@
 # Feature 227 - the homestead's envelope first, and the placement page generated from the code
 
-**Status**: IN PROGRESS 2026-09-12. `spec-fidelity` round 1 CHANGES REQUIRED (three items), round 2 FAITHFUL; amended during implementation (the per-configuration fallback, D8, SC-1's measure) - re-reviewed from a fresh count per the GM's 2026-09-12 ruling.
+**Status**: IN PROGRESS 2026-09-12. `spec-fidelity` round 1 CHANGES REQUIRED (three items), round 2 FAITHFUL; amended during implementation (the per-configuration fallback, D8, SC-1's measure) - re-reviewed from a fresh count per the GM's 2026-09-12 ruling: amendment round 1 CHANGES REQUIRED (the bound), round 2 FAITHFUL.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 where a placer call's
 positions come from today, R2 the after. **Predecessors**: 226 (the site boundary and the seats proposed from
 it - the ground is asked once; this feature is the placer's search), 134/207 (the placement-stages page and its
@@ -93,10 +93,10 @@ the feature's last task after rounds of feedback in the clone.
   had no recorded reason (commit ed0e884e, "more map WIP"): it stepped because the stop is whichever of eight
   rules fires first, and stepping avoided computing the clearance to each. With the seat at its standoff and the
   pitch, neither has work; the one computed move (FR-002) is the neighbor overlap.
-- **D2 The envelope is the LARGEST configuration.** A first cut of 226's pre-test used the largest house and
-  refused seats the placer could take with a smaller one; here the envelope is built from the house the roll WILL
-  take (the size is rolled before the seat is tested, not after), so the envelope never refuses what the parts
-  could use, and the parts never need ground the envelope did not clear.
+- **D2 The envelope is built from the house the roll WILL take.** A first cut of 226's pre-test used the largest
+  house and refused seats the placer could take with a smaller one; here the size is rolled before the seat is
+  tested, not after, so the box tested is the box the homestead will occupy - the union of its configurations
+  first, then (FR-001) each configuration's own - and the parts never need ground their box did not clear.
 - **D3 Steps are declared in the docstring, not by a decorator.** The GM named "the documentation, the
   docstrings, the stages" as the source; a `Steps:` list in the stage's own docstring is readable in the file
   by a person and by the generator alike, and a name that stops resolving fails the gate.
@@ -115,8 +115,10 @@ the feature's last task after rounds of feedback in the clone.
 - **D8 The seats behind the front row come from the standing houses, and the row's share from the shape.** With
   no spiral to slide a seed into a fit, the random cloud deduped to a pitch lattice seated Kuwabata 14 of 16 and
   strung Inashiro along the paddy at a drawn aspect of 5.1 on a rolled crescent (the row filled every seat it was
-  offered and "one rank's worth of the band" was the whole quota). So each round proposes, behind every house of
-  the rank before it, the seat one envelope's depth further from the field, in a brick pattern; and the front row
+  offered and "one rank's worth of the band" was the whole quota). So each round proposes, behind every standing
+  house, the seat one envelope's depth further from the field - plus a 4 px gap and, where the ranks climb north
+  away from the field, the sun corridor a yard owes to its south (cohort seed 8: at the bare depth every clear seat
+  failed the parts' rules) - in a brick pattern, with a seat one pitch beyond each end of the rank; and the front row
   takes about sqrt(N x A) houses for a quota N and a rolled aspect band whose two ends sum to A - measured: the
   ranks stand an envelope's depth apart on an arc and the drawn aspect is read on the houses' own axis, so seven in
   Inashiro's row drew 1.66, ten drew 1.84 (crescent 1.9-4.2), six in Kuwabata's 1.71 (round 1.0-2.0). The knob
@@ -137,3 +139,6 @@ the feature's last task after rounds of feedback in the clone.
 - Amendment round 1 (2026-09-12, fresh count per the GM's ruling): the per-configuration fallback and D8 FAITHFUL;
   CHANGES REQUIRED on the bound - nine rectangles per seat (the union, then a box and a computed move's re-test per
   configuration), the move per configuration. Applied.
+- Amendment round 2 (2026-09-12): FAITHFUL. Asides kept for the landing: FR-002/D8's "one envelope's depth" is that depth
+  plus a 4 px gap and, where the ranks climb north, the yard's sun corridor; the count of configurations (four) is
+  named in one place.

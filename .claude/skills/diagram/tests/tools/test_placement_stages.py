@@ -15,8 +15,8 @@ The stage list is stubbed: the point is the page's logic, and rolling eighteen r
 an HTML writer would cost minutes per run.
 
 ALSO, from feature 176 (landed on main while this feature was in flight, and merged here rather than
-either side being dropped): the page is written from `NOTES`, and a stage added to `STAGES` without a
-note renders "(no note yet)" with nothing red. The GM, 2026-09-02: *"I think the hamlet placement
+either side being dropped): the page was written from a notes roster, and a stage added to `STAGES` without a
+note rendered "(no note yet)" with nothing red - feature 227 made the docstrings the source and the gate the check. The GM, 2026-09-02: *"I think the hamlet placement
 order HTML file is outdated. For example, it does not mention anything about adding labels being its
 own final step."* It did not, because `stage_labels` had no entry - so the roster of notes is held to
 the roster of stages in BOTH directions, below.
@@ -34,7 +34,6 @@ import pytest
 from l7r.diagram.hamletgen import HamletSpec
 from l7r.diagram.hamletgen.driver import STAGES
 from l7r.diagram.tools import placement_stages as ps
-from l7r.diagram.tools.placement_stages import NOTES
 
 pytestmark = [pytest.mark.tooling, pytest.mark.renders]  # the plates ARE renders: the tool writes a PNG per stage on purpose (feature 213 FR-006)
 
@@ -51,6 +50,8 @@ def test_ink_counts_records_across_all_four_layers_not_pixels() -> None:
     s.out.append("<rect/>")
     s.toplabels.append("<text/>")
     assert ps._ink(s) == base + 2, "every layer counts, not just the main one"
+    s.lane([(10.0, 10.0), (90.0, 10.0)], width=5)
+    assert ps._ink(s) > base + 2, "...and a deferred way counts as ink the moment it is laid (the web stage draws nothing else)"
 
 
 def test_decisions_reads_the_maps_metadata_as_it_stands() -> None:
@@ -147,16 +148,16 @@ def test_a_stage_that_USED_to_draw_and_no_longer_does_leaves_no_orphan_at_its_ow
     assert not (tmp_path / "01-stage_draws.png").exists()
 
 
-def test_a_stage_with_no_NOTES_entry_says_so_on_the_page(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """The page is documentation; a stage nobody has written up must ASK for the note rather than
-    render an empty cell that reads as "nothing to say about this one"."""
+def test_a_stage_with_no_docstring_says_so_on_the_page(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The page is documentation; a stage nobody has written up must ASK for the docstring rather than
+    render an empty cell that reads as "nothing to say about this one" (feature 227: the docstring is the source)."""
 
-    def stage_unknown_to_notes(_s: Any, _plan: Any) -> None:
+    def stage_unknown(_s: Any, _plan: Any) -> None:
         return None
 
-    _stub_stages(monkeypatch, stage_unknown_to_notes)
+    _stub_stages(monkeypatch, stage_unknown)
     html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
-    assert "no note yet" in html and "add one" in html.lower()
+    assert "no docstring" in html and "Steps:" in html
 
 
 def test_main_writes_the_page_where_it_is_told_and_reports_the_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -177,21 +178,61 @@ def test_the_skill_root_is_put_on_sys_path_when_it_is_not_already_there(monkeypa
     assert Path(reloaded.SKILL).resolve() in [Path(p).resolve() for p in sys.path]
 
 
-# ---- feature 176: the NOTES roster is held to the STAGES roster, both ways ---------------------
+# ---- feature 176, then 227: every stage explains itself in its docstring and declares its steps ------
 
 
-def test_every_stage_has_a_note():
-    missing = [stage.__name__ for stage in STAGES if stage.__name__ not in NOTES]
-    assert missing == [], f"stages the placement page would render as '(no note yet)': {missing}"
+def test_every_stage_explains_itself_and_declares_its_steps() -> None:
+    """Feature 227 FR-004 (GM 2026-09-12: the page "generated based on the documentation, the docstrings, the stages"):
+    EVERY stage in `STAGES` has a docstring with a purpose paragraph and a `Steps:` section naming the functions that
+    are its algorithm; every name resolves to a function or method with a docstring of its own. A stage that explains
+    nothing, or a step that does, fails the gate - the page cannot go quietly stale."""
+    for stage in STAGES:
+        title, paras, steps = ps.stage_doc(stage)
+        assert "no docstring" not in title, f"{stage.__name__} has no docstring"
+        assert steps, f"{stage.__name__} declares no Steps:"
+        for path in steps:
+            name, sparas = ps.step_doc(path)
+            assert name == path.rsplit(".", 1)[-1] and sparas and "no docstring" not in sparas[0], f"{stage.__name__} step {path} has no docstring"
 
 
-def test_every_note_names_a_stage():
-    stages = {stage.__name__ for stage in STAGES}
-    orphans = sorted(set(NOTES) - stages)
-    assert orphans == [], f"notes for stages that no longer exist: {orphans}"
+def test_stage_doc_reads_the_title_the_paragraphs_and_the_steps() -> None:
+    def stage_toy(_s: Any, _plan: Any) -> None:
+        """The toy stage.
+
+        A paragraph about it,
+        wrapped over two lines.
+
+        Steps:
+            l7r.diagram.hamletgen.plan.plan_site
+            l7r.diagram.settlement.Settlement.try_place
+        """
+
+    title, paras, steps = ps.stage_doc(stage_toy)
+    assert title == "The toy stage" and paras == ["A paragraph about it, wrapped over two lines."]
+    assert steps == ["l7r.diagram.hamletgen.plan.plan_site", "l7r.diagram.settlement.Settlement.try_place"]
+    assert ps.resolve_step(steps[1]).__name__ == "try_place", "a method resolves through its class"
+    with pytest.raises(ImportError):
+        ps.resolve_step("no.such.module.here")
+    assert ps.step_doc("l7r.diagram.tools.placement_stages._ink")[0] == "_ink"
 
 
-def test_every_note_has_a_title_and_a_why():
-    for name, (title, why) in NOTES.items():
-        assert title.strip() and why.strip(), name
-        assert "(no note yet)" not in title, name
+def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 227 D4: the one new picture - the stage whose run RECORDS `site_boundary` gets that boundary drawn
+    over its plate (chords, rings, corridors), mapped through the finished copy's view; other plates do not."""
+    seen: list[Any] = []
+
+    def fake_plate(snap: Any, out_dir: str, stem: str, width: int, overlay: Any = None) -> tuple[str, int, int]:
+        seen.append((stem, overlay))
+        return (stem + ".png", 10, 10)
+
+    def stage_draws(s: Any, _plan: Any) -> None:
+        s.out.append("<rect/>")
+
+    def stage_bounds(s: Any, _plan: Any) -> None:
+        s.M["site_boundary"] = {"chords": [[[0, 0], [1, 0], [0, -1]]], "rings": [], "holes": [], "water": [], "corridors": []}
+        s.out.append("<rect/>")
+
+    monkeypatch.setattr(ps, "_plate", fake_plate)
+    _stub_stages(monkeypatch, stage_draws, stage_bounds, stage_draws)
+    ps.build_page(str(tmp_path), 200, _SPEC)
+    assert [o is not None for _stem, o in seen] == [False, True, False]
