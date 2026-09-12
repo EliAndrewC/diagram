@@ -470,3 +470,41 @@ trap; SVG 16.4 -> 9.4 MB, each resvg pass ~1 s faster); the page picture a JPEG 
 cover fallback dead, and `make map PROFILE=1` had printed nothing since 213. What is left is the list above
 minus those four: the bamboo seat scan, the wells key, the router, `drop_offmap` (or not emitting the off-map
 scatter), and `RASTER_R`.
+
+## The homesteads stage, counted (2026-09-12, session `diagram-performance`, at the GM's request)
+
+The GM, looking at the placement-stages page: *"at the point where we lay out the homesteads, the map is mostly
+empty ... We should be able to draw a series of line segments separating the farm field from the place where we
+are laying out our homesteads. And then the only thing that we need to do is make sure that the homesteads are on
+the correct side of the line and that they do not overlap with each other."* The stage costs 1.0 / 2.3 / 2.3 s
+real on Inashiro / Kuwabata / Sawada (15 / 16 / 19 houses). cProfile of the gen child, counts PER HOUSE:
+
+| per house | inashiro | kuwabata | sawada |
+|---|---|---|---|
+| candidate seats proposed (`try_place`) | 3 | 10 | 2 |
+| positions tested (`_fits_any_side`) | 419 | 1,686 | 363 |
+| rectangles tested (`_rect_blocked`) | 1,090 | 2,755 | 848 |
+| chord side tests (`chain_violated`) | 7,778 | 13,075 | 6,424 |
+| hard-ground scans (`_hard_clear`, bbox over every hard polygon) | 1,234 | 2,090 | 1,006 |
+| rotated-corner gap tests against standing houses (`poly_gap`) | 396 | 802 | 283 |
+| segment distances (`seg_dist`, whole gen) | 73,000 | 66,000 | 99,000 |
+| point-in-polygon (whole gen) | 29,000 | 23,000 | 25,000 |
+
+What a rectangle is tested against: `block_polys` (EVERY dry hem plot, appended by `comb.py`, plus the pond's
+box, plus Kuwabata's dike-pond mosaic), the field's chords (feature 140 - five points per rect, so the chords are
+already what the GM describes, but built from the PADDY outline only), the water courses (2-3, bbox-pruned), and
+the hard ground (`_hard_clear`: every dry plot AGAIN, every marsh, and every field-ditch segment as its own quad -
+29 + 114 + 2 polygons on Inashiro, by bbox per rect). Then the standing houses by rotated-corner gap, the sun
+corridors, the treads, and `_wall_on_the_bund` (the chords again, per corner). So the hem is compared against
+twice per rectangle and the ditches inside the paddy once, for a rectangle that the chords already keep off the
+paddy.
+
+Why so many positions: `_place_bundle_nucleated` spirals through up to 181 offsets (15 rings x 12) from each
+proposed seat, running the FULL battery at every offset, and 24 of Inashiro's 39 proposed seats fail every
+offset - 181 full tests each for nothing. Kuwabata proposes 157 seats for 16 houses.
+
+What the stage actually has to establish: the house side of the cultivated ground (chords from the paddy AND
+the hem, which would retire the plot-by-plot and ditch-by-ditch scans), clear of the few things outside it (the
+marsh, the pond, the stream and the feeder), clear of the bundles already standing (their boxes, and the eave
+gap only for the nearest), and the yards' and gardens' sun. Cheapest test first - the house center against the
+chords and the placed boxes - would also dispose of most of the spiral's offsets in microseconds.
