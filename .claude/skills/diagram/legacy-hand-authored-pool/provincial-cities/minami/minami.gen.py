@@ -21,7 +21,7 @@ city's shared burial grounds and the other five declare graveyard=False. See
 research/religion-and-death.html; the exception is declared via meta(temple_exception="fox_structure").
 
 THE RIVER RUNS DOWN THE WEST FLANK - the mirror of Nagahara, which sits on the Hayakawa's west bank
-downstream in Crab lands. Same river, same name end to end (settlements/water.md's one-name rule),
+downstream in Crab lands. Same river, same name end to end (research/water.html's one-name rule),
 flowing north -> south out of the Kitsune Mori toward the Crab. The moat covers the three landward
 faces and taps the river above and below; the cargo canal shares the moat's downstream mouth.
 

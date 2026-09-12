@@ -129,7 +129,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # belt's position is its meaning; only its leaves needed containing.
     # The frame ITSELF, with no inset: `village_grove` skips only a clump lying WHOLLY outside it, so
     # the belt still clips at the page edge the way every other soft cover does (and the way
-    # `settlements/presentation.md` requires) and only ink nobody can see is dropped. An inset was
+    # `research/presentation.html` requires) and only ink nobody can see is dropped. An inset was
     # tried first and cost Sawada 46% of its canopy - see the comment at the skip.
     # ...AND THE WINDWARD EDGE FOLLOWS THE BELT'S OWN FACE (GM 2026-08-26, feature 133 T10). The
     # frame now includes the belt's inner face plus CROP_MARGIN (`crop_boxes`, "windbreak face"),

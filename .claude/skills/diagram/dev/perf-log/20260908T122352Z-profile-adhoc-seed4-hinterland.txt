@@ -1,0 +1,36 @@
+perf-profile seed 4 stage hinterland: 25.9s under cProfile (the stages before it took 7.7s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260908T122352Z-seed4-hinterland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         63190072 function calls (62882302 primitive calls) in 25.789 seconds
+
+   Ordered by: cumulative time
+   List reduced from 246 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   25.868   25.868 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py:17(stage_hinterland)
+        2    0.006    0.003   24.574   12.287 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:281(hinterland)
+        1    0.216    0.216   19.284   19.284 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:182(marsh)
+    27383    0.238    0.000   18.942    0.001 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/land/wet.py:264(_sparse)
+   141142    3.094    0.000   18.841    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/keepouts.py:56(_on_watercourse)
+    20964    1.271    0.000    7.998    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/keepouts.py:28(_watercourse_segs)
+  6695322    1.497    0.000    7.134    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/keepouts.py:69(<genexpr>)
+  3782526    1.976    0.000    6.303    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+   230604    1.393    0.000    5.966    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/banks.py:20(taper_pieces)
+        5    0.734    0.147    5.282    1.056 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:34(commons)
+   134877    1.150    0.000    3.989    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/land/cover.py:134(_sparse)
+  3782526    2.705    0.000    3.734    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+   230604    1.306    0.000    2.337    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/banks.py:11(polyline_cum)
+  3207492    1.458    0.000    2.179    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/frame.py:149(taper_w)
+  1026152    1.214    0.000    1.535    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:232(near)
+3880511/3572745    0.624    0.000    1.277    0.000 {built-in method builtins.min}
+  7040204    0.904    0.000    0.924    0.000 {built-in method builtins.max}
+  6770828    0.870    0.000    0.870    0.000 {method 'append' of 'list' objects}
+   155187    0.126    0.000    0.845    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:297(edge_within)
+        1    0.003    0.003    0.717    0.717 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:101(open_ground_patches)
+     2565    0.012    0.000    0.709    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:276(_ok)
+     1907    0.039    0.000    0.626    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py:556(_clear_gap)
+  3229780    0.617    0.000    0.617    0.000 {built-in method math.dist}
+  3796698    0.595    0.000    0.595    0.000 {built-in method math.hypot}
+   589362    0.368    0.000    0.572    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:322(boxed_ring_hit)
+
+

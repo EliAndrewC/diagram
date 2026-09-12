@@ -81,7 +81,7 @@ class WallsMixin:
             edge=f'<path d="{dd}" fill="none" stroke="#B49A66" stroke-width="{width}" opacity="0.85" stroke-linejoin="round"/>',
             bed=f'<path d="{dd}" fill="none" stroke="#D9C8A0" stroke-width="{width - 6}" opacity="1" stroke-linejoin="round"/>',
         )
-        self.corridors.append((loop, width / 2 + 21))  # buildings keep WELL off the ring road (even a large/rotated footprint's corner stays off its bed)
+        self.corridors.append((loop, width / 2 + 21))  # buildings keep WELL off the ring road (even a large/rotated footprint's corner stays off its bed; research/cities/defenses.html "How far inside the wall does the patrol road run, and what may stand on it?")
         self.M["ring_road"] = [[round(x, 1), round(y, 1)] for x, y in loop]
         self.M["ring_road_width"] = width
         return ring
@@ -95,7 +95,7 @@ class WallsMixin:
         runs along the wall and the depth projects across it (the caller berm-nudges so the outer part sits
         on the berm, not in the moat). A GATE tower (chenglou) passes a smaller ~52 x 30 ft. Strokes keep
         their legibility floor (the stroke convention); the footprint takes no license. Records
-        M['wall_towers'] (w = along, h = deep) and reserves a no-build block. See settlements.md grounding."""
+        M['wall_towers'] (w = along, h = deep) and reserves a no-build block. See research/cities/defenses.html 'Gate structures - real footprints'."""
         al, dp = self.px(along_ft), self.px(deep_ft)
         tb = self.px(min(34, along_ft * 0.55))  # the enemy-tower building on the spur (~30-40 ft, inset)
         z = self.add_top(
@@ -233,7 +233,7 @@ class WallsMixin:
         # is forced single-file, and the gate passage is that one chokepoint in the whole wall -
         # set the station back along the wall and arrivals disperse into the streets before ever
         # reaching it, defeating its purpose. So each sits ~20-100 ft inside the opening, right at
-        # the roadway, NOT a few hundred feet along the wall. See settlements.md 'Historical
+        # the roadway, NOT a few hundred feet along the wall. See research/cities/defenses.html ('Historical
         # grounding'. Each is WALKED a SHORT arc to its own flank (so it picks up the wall's LOCAL
         # tangent and sits SQUARE to the wall, the ring road running lengthwise through it) then
         # pulled in radially to the ring road centerline - the two end up just off either verge of
@@ -247,7 +247,7 @@ class WallsMixin:
         # a guardhouse drawn bigger than a temple): footprints in REAL FEET via px(). A gate guard duty
         # room is a small 1-3 bay building (~34x20 ft, upper end of the 15-35 ft attested range); a gate
         # inspection hall (sekisho/lijin bansho) ~44x22 ft. Strokes keep their legibility floor (the
-        # stroke convention, SKILL.md 'to scale'); the footprint takes no license. See settlements.md
+        # stroke convention, SKILL.md 'to scale'); the footprint takes no license. See research/cities/defenses.html
         # 'Historical grounding' for the anchors.
         for kind, west_side, fw_ft, fh_ft, fill in (("guardhouse", gh_west, 34, 20, "#C9A57A"), ("inspection", not gh_west, 44, 22, "#D8C49A")):
             fw, fh = self.px(fw_ft), self.px(fh_ft)
@@ -501,7 +501,8 @@ class WallsMixin:
         ring = list(pts) + [pts[0]]
         # the rampart renders in the WALL layer (over the ground lanes - a street running into the wall
         # passes UNDER it) with a GENUINE gap at each gate, so the road shows through the opening
-        # TRUE SCALE for the gate THROAT (GM 2026-07-27, closing bookend on Minami). The 2026-07-22
+        # TRUE SCALE for the gate THROAT (GM 2026-07-27, closing bookend on Minami; research/cities/defenses.html
+        # "How wide is the opening a road passes through?" holds the 228 ft units bug and why no check was added). The 2026-07-22
         # pass converted the gate furniture's FOOTPRINTS to real feet but left the OFFSETS that
         # POSITION them as fixed pixels, so at a city's 1 px = 3 ft everything stood three times too
         # far apart: the wall opened a 2*38 = 76 px = 228 ft hole, the piers stood +-35 px = +-105 ft

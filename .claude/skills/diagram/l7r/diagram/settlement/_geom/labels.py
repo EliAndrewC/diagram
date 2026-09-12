@@ -17,7 +17,7 @@ from typing import Any
 from .base import Poly, Pt
 
 # ---- LABEL STANDOFF LADDER (GM 2026-07-26) ----------------------------------------------------
-# The label doctrine was "empty ground wins" (see settlements/presentation.md), scored by
+# The label doctrine was "empty ground wins" (see research/presentation.html), scored by
 # `_label_hits` - a COUNT of the footprints a candidate box would cover. Overlaps were the only
 # term, so every clear candidate tied at zero and the winner fell out of generation order: a
 # caption could float 50+px out in bare ground and score exactly as well as one tucked against the

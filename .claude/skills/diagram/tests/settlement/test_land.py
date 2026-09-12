@@ -370,7 +370,7 @@ def test_near_ring_paddy_places_off_edge_basins_recorded_as_paddy_fields():
 
 
 def test_dike_top_houses_seats_a_single_file_on_the_crest():
-    # GM 2026-07-24 (settlements.md 'Polder siting Q&A'): the ISLET-polder settlement form - houses in
+    # GM 2026-07-24 (research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'): the ISLET-polder settlement form - houses in
     # single file ON the dike crest, each on a widened-crest platform, tagged on_dike in the manifest.
 
     s = Settlement(1400, 1400, seed=5)
@@ -416,7 +416,7 @@ def test_farmsteads_keep_dike_top_houses():
 
 
 def test_marsh_waterside_role():
-    # the un-reclaimed wet wild outside a polder dike (settlements.md 'Polder siting Q&A'): a valid
+    # the un-reclaimed wet wild outside a polder dike (research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'): a valid
     # role, recorded like any marsh; an unknown role still raises.
     s = Settlement(1400, 1400, seed=5)
     s.meta(name="WS", scale="hamlet", ftpx=1, toscale=True)

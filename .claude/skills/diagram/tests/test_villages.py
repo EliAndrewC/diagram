@@ -263,7 +263,7 @@ def _channels_under_plots(svgpath):
 def _typical_cell_acres(svgpath, ftpx):
     """Real-feet area of the TYPICAL leveled paddy cell (a bund-stroked plot polygon), taking the mean
     of the 45th-75th percentile band (the regular interior cells, above the edge wedges). Pins the
-    ~0.05-acre paddy calibration (GM 2026-07-22, see settlements.md 'Paddy cell size'). SVG-measured,
+    ~0.05-acre paddy calibration (GM 2026-07-22, see research/fields.html 'Plot sizes, pond sizing and acreage from population'). SVG-measured,
     not a manifest gate, because villages do not record plot_polys - same tier as the ditch z-order audit."""
     import re
     import statistics

@@ -3,8 +3,8 @@
 WHY THIS EXISTS, and it is not a style rule. Feature 174 spent SIX consecutive `spec-fidelity`
 rounds on one failure: an item settled in the spec while a sentence asserting the old state stood in
 a document a session reads before acting. Every round found real instances by hand and every round
-missed others. Two of them were not merely stale but ACTIVELY WRONG - `CLAUDE.md` and `settlements.md`
-each told a reader the floor is `fail_under = 100` in `[tool.coverage.report]`, and a session acting
+missed others. Two of them were not merely stale but ACTIVELY WRONG - `CLAUDE.md` and the settlements index
+(a rule file since retired into `research/`) each told a reader the floor is `fail_under = 100` in `[tool.coverage.report]`, and a session acting
 on that would put it where `pytest-cov` reads it: the global floor would then fire on every partial
 run (`make test-file`, and `make quick`, which the GM exempted) and the deliberate ordering - the
 floor runs LAST, so a run's own failures are reported before the coverage table - would be destroyed.
@@ -37,8 +37,6 @@ OPERATIVE = [
     ROOT / "docs/efficiency-tooling.md",
     SKILL / "CLAUDE.md",
     SKILL / "SKILL.md",
-    SKILL / "settlements.md",
-    SKILL / "settlements/fields.md",
     SKILL / "tests/CLAUDE.md",
     SKILL / "dev/gate.md",
     SKILL / "migration-plan.md",

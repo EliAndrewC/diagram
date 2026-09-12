@@ -58,7 +58,7 @@ class UrbanBuildingMixin:
             # household (`of`), never a freestanding cottage. Barring the commoner kinds alone just
             # handed their ground to the servant packs, and a servant glyph IS a laborer glyph with
             # a 4 ft trim - so the ward came back reading MORE commoner, not less (GM 2026-08-02).
-            # Placed via servant_ranges(); see settlements/cities/government.md and its research.
+            # Placed via servant_ranges(); see research/cities/government.html and its research.
             if kind == "servant" and of is None:
                 return False
         fill, edge = self.URBAN.get(kind, self.URBAN["shop"])[:2]

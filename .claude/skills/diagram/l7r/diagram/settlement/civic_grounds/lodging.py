@@ -153,7 +153,7 @@ class LodgingMixin:
             # way and footprint it can SEE, but a stables placed early could not see the streets
             # drawn after it - so a heap landed on a later street (Nagahara wharf yard). Yards now
             # draw at crop time (flush_stable_yards, auto-run by crop_city), when the map is
-            # complete - the same-data-as-the-checks doctrine (settlements.md, PLANK BRIDGES).
+            # complete - the same-data-as-the-checks doctrine (research/ways.html 'What is a plank bridge, and what is it for?').
             self._pending_yards.append((x, y, w, h, 72.0, None))
 
     def animal_ground(self: Settlement, cx: float, cy: float, r: float = 68.0, label: Any = None) -> None:  # type: ignore[misc]

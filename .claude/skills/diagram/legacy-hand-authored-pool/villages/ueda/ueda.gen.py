@@ -168,7 +168,7 @@ s.M["channels"].append({"poly": [[round(SLUICE[0], 1), round(SLUICE[1], 1)],
 # ===== STAGE 2: the NUCLEATED CLUSTER. Ueda = "UPPER PADDY" - the village's paddies are the UPPER (upslope)
 # ones, so the dwellings sit DOWNSLOPE of them, facing up-valley toward the fields. On the NE-high slope that
 # puts the cluster on the LOWER (SW) flank, hugging the field's SW-west edge, well above the marsh; the bulk of
-# the paddy rises above it to the NE. (Name-informed siting - see settlements.md.) =====
+# the paddy rises above it to the NE. (Name-informed siting - see research/homesteads.html 'Does the village's name say where it stands?'.) =====
 _rng = random.Random(SEED + 1)
 CX, CY = 790, 1030                   # cluster center on the LOWER/SW flank, downslope of the upper paddies
 
@@ -228,7 +228,7 @@ s.shrine_well(_minx + 30, _maxy + 58)
 # ===== STAGE 3a: the VILLAGE WINDBREAK (fengshui 风水林) - a COMMUNAL grove. The cluster hugs the field on its
 # E, so the OPEN face is E and the DENSE wood sits on the W BACK (belt), wrapping the NW/SW corners; a water-
 # mouth cluster guards the low SW exit (where the connector leaves + water drains to the marsh); a copse
-# scatter fills the gaps among the houses. See settlements.md 'Village windbreak'. =====
+# scatter fills the gaps among the houses. See research/vegetation.html 'What are the village's three groves' ('Village windbreak'. =====
 
 
 def _rag(pts, amp=13):
@@ -274,7 +274,7 @@ s.village_grove(_scatter, role="copse", dense=False)
 
 # ===== STAGE 3b: the SATOYAMA GRAZING MARGINS - the "empty" DRY high edges are un-terraced grass/scrub hill-
 # grazing (role='grazing', exempt from commons_beyond_the_windbreak), filling a CONTINUOUS ring around the
-# cultivated valley (settlements.md 'Village windbreak'; gated by margins_form_continuous_ring).
+# cultivated valley (research/vegetation.html 'What are the village's three groves' ('Village windbreak'; gated by margins_form_continuous_ring).
 # The GRAVEYARD (stage 4d, below) is placed AFTER these bands, so its tended grave collar must be RESERVED
 # before the scatter runs or the scrub dots the swept ground among the markers (scatter only skips clearings
 # that already exist - scatter_respects_swept_clearings; this map shipped with exactly that defect once).
@@ -308,12 +308,12 @@ print(f"footbridges: {n_bridges}")
 # so the burial ground is the shrine's churchyard - village_graveyard_by_shrine). It sits in the clear ground
 # SW of the water-mouth shrine, off the sacred hall + torii (cemetery_clear_of_shrine), south of the grove and
 # north of the marsh, well clear of the far-E field. An organic (unsurveyed) earthen plot; no label.
-s.cemetery(_wmx - 100, _wmy + 130, 60, 46, parish=False, organic=True)  # resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 120x92 ft at 2 ft/px - see settlements.md 'District catchment'
+s.cemetery(_wmx - 100, _wmy + 130, 60, 46, parish=False, organic=True)  # resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 120x92 ft at 2 ft/px - see research/religion-and-death.html 'District catchment'
 
 # CROP the frame to the placed content (the title then drops into the framed space).
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=30)

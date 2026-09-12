@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 class StableYardMixin:
     def _stable_yard(self: Settlement, sx: float, sy: float, sw: float, sh: float, r: float = 72.0) -> None:  # type: ignore[misc]
         """Draw the working YARD around a gate stables (GM 2026-07-22): the open ground where wagon-trains
-        park, oxen are unyoked and tethered, teamsters wait between stages. Research (settlements.md 'Stable
+        park, oxen are unyoked and tethered, teamsters wait between stages. Research (research/urban-features.html 'Stable yards - beaten earth, hitching rails and watering by relay' ('Stable
         yard'): a beaten-earth forecourt - NO grass (trampled hard, animals hay-fed not grazed) - and NOT a
         fenced paddock (the least authentic option); its edges are the wall + flanking buildings, its "in
         active use" signal is carts, animals tethered at a hitching rail, and littered ground (the Qingming
@@ -143,7 +143,7 @@ class StableYardMixin:
             seated += 1
 
     def _yard_watering(self: Settlement, ctx: _YardCtx) -> None:  # type: ignore[misc]
-        # the WATERING POINT (GM 2026-07-23, researched - settlements.md 'Stable yard' watering
+        # the WATERING POINT (GM 2026-07-23, researched - research/urban-features.html 'Stable yards - beaten earth, hitching rails and watering by relay' ('Stable yard' watering
         # paragraph): a working ox drinks ~10 gal/day, a buffalo more, so a wagon-train needs
         # 300-600 gal in one or two big sessions - one small trough is functionally undersized.
         # The historical form is 2-3 long troughs (~8-15 ft, ~2 ft of edge per drinking head)

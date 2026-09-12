@@ -68,7 +68,7 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
 
 ## What the GM's audit added (feature 150 T40-T48, 2026-08-28)
 
-See `settlements/archetypes.md` "The scripted dike-pond hamlet - the rules" and
+See `research/archetypes.html` "The scripted dike-pond hamlet - the rules" and
 `specs/150-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
 (forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds

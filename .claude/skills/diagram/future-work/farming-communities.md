@@ -69,7 +69,7 @@ floor is a RESEARCH question (Principle XII) and the placement change is its own
 Mizuguchi is a 335 ft "copse" drawn as three saplings 300 ft apart. Inashiro's is one clump. Pre-128
 Mizuguchi held 12 over 550 x 287 ft.
 
-**THE MECHANISM.** The copse fills the OPEN gaps among the houses (`settlements/vegetation.md`), and
+**THE MECHANISM.** The copse fills the OPEN gaps among the houses (`research/vegetation.html`), and
 it is seated after the windbreak, whose canopy is a keep-out. Feature 128 packed the clusters tighter -
 that is the whole point of it, Inashiro's long axis went 603 -> 462 ft - so there is less gap ground,
 and a blocked clump in a sparse grove is dropped rather than relocated. The delta did not introduce
@@ -1194,7 +1194,7 @@ two hamlets differ.
 ### B. Kashikawa's woodland sits DOWNSLOPE, against doctrine stated in three places
 
 Measured against the cluster centroid with the map's own fall vector: parcel 1 is 505 ft downslope,
-parcel 2 is 887 ft downslope and stands 75 ft from the reed marsh. `settlements/vegetation.md` says
+parcel 2 is 887 ft downslope and stands 75 ft from the reed marsh. `research/vegetation.html` says
 woodland goes "on the higher / farther ground", `research/fields.html` says "satoyama crowns the hills
 above", and `hinterland.py`'s own comment says "the back slope behind the houses". The scorer is
 `-hypot(dist_to_cluster) + 0.35 * upslope`, so a 90 px step toward the cluster outbids 257 px of
@@ -1321,7 +1321,7 @@ from outside the delta rather than part of it (which is the reviewer working as 
 
 **The measurement.** Byre 0 sits at (1047.8, 989.5) - 70 ft past the westernmost house, INSIDE the
 shelter belt, 29.3 ft from the nearest grove clump with 45 tree crowns within 40 ft - and reaches
-**2 of 15 households within 200 ft**, against 5 for byre 1 and 6 for byre 2. `settlements/homesteads.md`
+**2 of 15 households within 200 ft**, against 5 for byre 1 and 6 for byre 2. `research/homesteads.html`
 puts a shared draft-animal byre "in the COURTYARDS among the homesteads", and the 2026-08-18 pass
 added a borrow-coverage term to stop the maximin spread picking isolated seats. On this roll the
 spread term still wins at one seat of three. The notes ledger a version of this from an earlier roll
@@ -1601,7 +1601,7 @@ seams. The sourced record is decisive on the mechanism:
     ... an unploughed grass balk" (How-to History) - a boundary form that only exists between PARALLEL
     strips.
   - the East Asian record does not overturn it: contour ridging is the documented STEEP-SLOPE measure
-    (FAO Nishi-Awa), which `fields.md` already declines to apply on a gentle hem, and fragmented
+    (FAO Nishi-Awa), which `research/fields.html` already declines to apply on a gentle hem, and fragmented
     smallholdings make per-parcel choice more available - but shared slope, a shared outfall and a shared
     parcel shape still push neighbors toward agreement. The East Asian record is SILENT on the angle
     field specifically.
@@ -1652,7 +1652,7 @@ pool: 9 for 66 farmhouses - inashiro 3/15 (20.0%), sawada 5/19 (26.3%), kashikaw
      position that decided is not the position recorded. Nothing in the artifact can reproduce it.
 
 **THE FIX, verified and then reverted.** Add an avalanche integer hash and key the roll on the household
-COUNT (which `settlements/homesteads.md` already names as the alternative, and which makes the decision
+COUNT (which `research/homesteads.html` already names as the alternative, and which makes the decision
 reproducible from the manifest):
 
     @staticmethod

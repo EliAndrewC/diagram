@@ -34,7 +34,7 @@ name="Yatsuda", scale="hamlet", ftpx=1, toscale=True, households=16, down_deg=90
 s._nucleated = True
 
 # n_bands=48 steps the valley floor down in ~42 ft cross-bunds, and each band splits across the width into
-# ~0.05-acre leveled cells (build_ribbon + settlements.md 'Paddy cell size'). ftpx=1 (a 1 ft/px hamlet).
+# ~0.05-acre leveled cells (build_ribbon + research/fields.html 'Plot sizes, pond sizing and acreage from population'). ftpx=1 (a 1 ft/px hamlet).
 net = build_ribbon(W, H, TOP, SEED, down_deg=90, length=2000, width=300, n_bands=48, ftpx=1)
 s.field_polys.append([(round(x, 1), round(y, 1)) for x, y in net["envelope"]])
 s.meta(dry_furrows_vary=False)
@@ -77,7 +77,7 @@ if s.M.get("field_ditches"):
 s.hinterland()  # a narrow ribbon leaves plenty of dry valley-side ground to clothe
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=44)

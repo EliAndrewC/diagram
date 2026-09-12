@@ -1,0 +1,36 @@
+perf-profile seed 4 stage field: 10.8s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260908T122405Z-seed4-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         16054460 function calls (15974966 primitive calls) in 10.758 seconds
+
+   Ordered by: cumulative time
+   List reduced from 434 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   10.808   10.808 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:586(stage_field)
+        1    0.000    0.000   10.698   10.698 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:89(fit_field)
+        1    0.002    0.002   10.698   10.698 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/water.py:139(_fit_at_aspect)
+        4    0.003    0.001   10.680    2.670 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:37(build_comb)
+        4    0.082    0.020    7.154    1.788 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/seams/close.py:36(close_seams)
+   536303    1.019    0.000    4.778    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+210169/145107    0.211    0.000    3.350    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        4    0.017    0.004    2.841    0.710 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/seams/plots.py:126(_unjog)
+        4    0.000    0.000    2.829    0.707 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:575(_carve)
+      155    0.133    0.001    2.764    0.018 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/seams/plots.py:216(_trade)
+       24    0.001    0.000    2.496    0.104 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:386(_carve_sector)
+       20    0.032    0.002    2.305    0.115 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:201(_sector_body_rows)
+      364    0.098    0.000    1.761    0.005 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/seams/pockets.py:229(_absorb)
+    86259    1.079    0.000    1.691    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/banks.py:103(supply_bank_clearance)
+    38574    0.132    0.000    1.575    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:462(buffer)
+    34881    0.069    0.000    1.389    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/polygon.py:227(__new__)
+     2557    0.002    0.000    1.367    0.001 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:486(in_supply)
+     2576    0.091    0.000    1.366    0.001 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:100(_quad_in_supply)
+   267604    0.200    0.000    1.180    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:374(bounds)
+    38574    0.810    0.000    1.036    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/constructive.py:136(buffer)
+    34881    0.167    0.000    0.843    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/polygon.py:61(__new__)
+    14248    0.058    0.000    0.794    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:442(edge)
+    27757    0.022    0.000    0.626    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:749(is_valid)
+    27757    0.193    0.000    0.538    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/predicates.py:429(is_valid)
+   267604    0.466    0.000    0.466    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/measurement.py:84(bounds)
+
+

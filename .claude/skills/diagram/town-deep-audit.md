@@ -4,7 +4,7 @@
 
 
 A granular audit of the two town-scale pool maps against (a) the project's own documented
-research (budgets.md, settlements.md, buildings.md, the gens' docstrings) and (b) fresh
+research (budgets.md, the settlements rule file, buildings.md, the gens' docstrings) and (b) fresh
 historical research on Edo-period county-seat-class towns (jin'ya/daikansho seats, zaigomachi,
 shukuba) with Ming/Qing market towns as the China cross-check. Requested by the GM 2026-07-24.
 Companion to `town-checks-audit.md` (which audited the CHECK suite; this audits the MAPS and
@@ -19,7 +19,7 @@ county-town features we neither draw nor document as omitted (kosatsuba first am
 
 ## 1. Population audit
 
-Model (documented, settlements.md "Population is DWELLINGS x ~5" + both gen docstrings):
+Model (documented, the settlements rule file "Population is DWELLINGS x ~5" + both gen docstrings):
 the ~1,200 county population is a budgets.md-derived 238 households; town maps declare the
 DEPICTED population (dwellings x 5) because most of the ~156 farm households sit off-map;
 non-farmer castes are drawn at their FULL documented counts - so the GM's audit question
@@ -60,11 +60,11 @@ Sizes WITH a recorded research anchor - all check out against independent refere
   1 acre for a quiet interior seat and 1.8 for a walled border town with garrison are right.
   Interior program is separately grounded in buildings.md (Harima worked example). PASS.
 - **Monastery halls: Bishamon 132x86 / 150x98 ft, Benten relic 60x40 ft** - large for a real
-  county-town temple, but the L7R temple canon (settlements.md: "L7R deliberately over-sizes -
+  county-town temple, but the L7R temple canon (the settlements rule file: "L7R deliberately over-sizes -
   every city temple is a major complex", clergy at 2-5x historical density) is exactly the
   documented deviation that covers it, and the little Benten hall shows the small tier exists.
   PASS as documented Rokugan convention. (Minor doc gap: town-tier monk COUNTS are never
-  stated; cities get 15-30/complex, capitals 50+. Worth one line in settlements.md someday.)
+  stated; cities get 15-30/complex, capitals 50+. Worth one line in the settlements rule file someday.)
 - **Fire tower frame 26 ft square** - a real hinomi-yagura base is nearer 12-15 ft; the
   legibility license ("a single tower stands in for the whole watch") plausibly covers 2x on
   a location-marker feature. PASS with note.
@@ -163,13 +163,13 @@ session to annotate (or trim) with its own knowledge of which numbers are load-b
 
 ## 6. Internal inconsistencies
 
-1. **Servant convention contradicts the gate band and both maps.** settlements.md's modeling
+1. **Servant convention contradicts the gate band and both maps.** the settlements rule file's modeling
    convention says only the ~5 "miscellaneous" servant households stand alone ("the rest
    aren't drawn" - they live inside employer compounds), but `town_caste_count[servant]`
    demands 9-17 and the maps draw 16 (Hoshizora) / 13 (Hirameki) - the FULL budgets.md
    servant count as standalone cottages. One of the three must move: either the doctrine
    text is stale (band + maps are the intent) or the maps over-draw servants ~3x.
-2. **Stale bscale paragraph.** settlements.md "Town scale != village scale" still instructs
+2. **Stale bscale paragraph.** the settlements rule file "Town scale != village scale" still instructs
    `s.bscale ~= 0.82` and cites Hirameki as `Settlement(2600, 1820, ...)`; the scale-ladder
    pass retired 0.82 (bscale = 1/ftpx = 1.0 at town scale; the modernized bullet elsewhere in
    the same file says the old values "are gone") and Hirameki's canvas is (2600, 2000).
@@ -228,14 +228,14 @@ Considered and REJECTED (recorded so they are not re-litigated):
    ~60 ft of a road/street), `meta(kosatsuba=False)` opt-out. Placement follows the follow-up
    research: the TOWN board is a traffic institution (highway frontage / main street by the
    gate), distinct from the manor-gate board (Mode A) which posts the bench's output - the
-   two-board split is documented in settlements.md "Notice board (kosatsuba)" and cross-noted
+   two-board split is documented in the settlements rule file "Notice board (kosatsuba)" and cross-noted
    in buildings.md. Hoshizora: SW road frontage at the theater/flophouse arrival node;
    Hirameki: main street just inside the front gate. **Follow-up [DONE 2026-07-24]**: at the
    coarse tiers the glyph became a LOCATION MARKER (floored at 11 px on the long axis, aspect
    preserved, manifest keeping true feet in `w`/`h` and the drawn box in `vw`/`vh`) - the true
    frame's 4x1.7 px at city grain was invisible in practice, which is how Nagahara looked like
    it had 2 boards when it had 3. Towns and hamlets (1 ft/px) are unaffected.
-2. **Record the URBAN size table's whys** in settlements.md (the one undocumented size
+2. **Record the URBAN size table's whys** in the settlements rule file (the one undocumented size
    table), and decide the merchant frontage question: either accept wide-shallow shophouse
    glyphs as a legibility convention (document it), or move toward narrower/deeper frontage
    (which also tightens the street-gap finding in section 3 for free).

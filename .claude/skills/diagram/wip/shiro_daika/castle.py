@@ -123,7 +123,7 @@ s.bridges()
 # files of three, the House Chancellery and the domain school continuing the same axis south of
 # the kagi-no-te bend. Both anchor traditions converge on exactly this form - Beijing's Six
 # Ministries lined the Corridor of a Thousand Steps outside Chengtianmen, and a jokamachi's
-# offices spilled out of the ninomaru into the town (settlements/capitals.md, "The government
+# offices spilled out of the ninomaru into the town (research/cities/capitals.html, "The government
 # ward"). Default ministry compound: 224x148 ft, the researched provincial size - a domain
 # ministry is the same bureau of clerks and archives at a bigger desk.
 # the files sit a ~21 ft setback off the avenue's edge - corridor frontage, not detached
@@ -182,7 +182,7 @@ lineage_manor(1660, 385, 70, 54, "seki", "south")
 # abbots - the head houses of domain-wide orders, dedicated to the Scorpion patrons Benten and
 # Jurojin - stand in the fabric; the remaining temples BELT the inner face of the rampart as the
 # teramachi rim, part of the defenses, rather than gathering in one quarter
-# (settlements/capitals.md, "Placements that change").
+# (research/cities/capitals.html, "Placements that change").
 # Benten, the PRIMARY sovereign temple, is pinned to the full 7-arch avenue (torii_count=7,
 # Nagahara's donation-row stride): the per-temple roll gave the primary a 3-arch stub while its
 # co-sovereign rolled 7, which read the declared hierarchy inverted (settlement-review 2026-08-09).

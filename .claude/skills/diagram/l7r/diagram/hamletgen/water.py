@@ -835,7 +835,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
 
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
-    """Where plank crossings go on a polder's ring canal (research 2026-07-22, settlements.md
+    """Where plank crossings go on a polder's ring canal (research 2026-07-22, research/archetypes.html
     'Polder ring canal'): people cross to the fields where they LIVE and then walk the bund network,
     so crossings CLUSTER on the settlement-side toe collector, are sparse on the interior laterals,
     and there are NONE on the unsettled feeder, the far toe or the drain. `build_polder` names the

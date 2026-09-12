@@ -12,8 +12,8 @@
 <body>
 <main>
 <h1 id="water-the-research-behind-the-flow-channel-and-wetland-rules">Water: the research behind the flow, channel and wetland rules</h1>
-<p><em>The research behind the <a href="../settlements/water.md">water rules</a> - the flow, channel and wetland rules the maps are drawn by. Every entry: what the research found, the decision it drove, and any deliberate departure from literal reality.</em></p>
-<!-- For a session: the rules themselves are in ../settlements/water.md; findings, anchors and disclosed departures live here so the rule file stays operational, and this file is where citations and deeper historical context get added as they accumulate. Load this file when you are changing a water rule, a width, or a check threshold - or you want the historical basis before overriding one; not needed to simply DRAW water from the rules file. Anchors are stable - rules link to them by #slug. -->
+<p><em>The findings behind the water on these maps - the flow, the channels, the moats and the wetlands - the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>
+<!-- For a session: this page is the whole record for water (moved from the retired rule file, 2026-09-12) - the findings, the decisions they drove, the disclosed departures, and the specification paragraphs for the tiers no generator draws yet. Load it when you are changing a water rule, a width or a threshold, or you want the grounding before overriding one. Anchors are stable: the maps, the engine and the class explanations link to them by #slug. -->
 <hr>
 <h2 id="water-width-ladder---the-real-world-tiers">Water-width ladder - the real-world tiers</h2>
 <!-- Grounds: irrigation_channels_hairline, watercourses_wider_than_ditches, moat_is_heaviest_watercourse, moat_dwarfs_ditches -->
@@ -71,6 +71,21 @@
 </tbody>
 </table>
 <p>Anchors: headwater streams cluster near ~0.32 m; Himeji's moats average ~20 m (max 34.5 m); Osaka's outer moat is ~70-90 m (unsourced); <em>tameike</em> reservoirs run ~3-26 ha (~150-600 m across) (unsourced). A field ditch is <strong>~1/300 of the 1-cho (~100 m) paddy it feeds<sup class="fn"><a id="fnref-2" href="citations/water.html#fn-2">2</a></sup></strong> - at true scale a hairline, essentially invisible.</p>
+<p><em>The stroke convention, and what it is not (the GM's ruling of 2026-07-21).</em> Watercourses on these
+maps are LINEWORK, and the ladder above spans about 250 to 1 in true width - about 1,700 to 1 once a
+reservoir is counted. That cannot be drawn on one sheet without the finest ditch disappearing: a 1 ft
+ditch at provincial-city scale is a third of a pixel. So the thin end is drawn true-width-or-floored - the
+field ditch parks at a minimum-visibility floor rather than at its true hairline - while the honesty
+anchors on the LARGER features, which draw true: a city moat is drawn at its real 66 ft, the low end of
+the provincial-seat band in the table above. <strong>That floor is a sanctioned minimum visibility and
+never a size license.</strong> What always survives it is the ORDERING and the coarse steps: a hairline
+ditch at the floor (about 2.5 ft on a hamlet sheet<!-- ~2.5 px at 1 ft/px -->), a pond feeder at roughly
+twice that, a village creek at roughly three and a half times it, a stream feeding a moat drawn as wide as
+the moat itself - the water that enters has to be carried - and the city moat heaviest of everything on
+the sheet. A pond is areal: it is drawn as a polygon at the scale of the paddies beside it and never sits
+on the line-width ladder at all; what sits on the ladder is its outlet. A map drawing convention,
+disclosed - and what is held is the ordering and the size of the gaps between tiers rather than any exact
+width, so the ladder can never collapse back into one undifferentiated blue line.</p>
 <h2 id="a-channel-taper-is-a-square-root-not-a-straight-line">A channel taper is a SQUARE ROOT, not a straight line</h2>
 <!-- Grounds: waterfields.taper_w, and every consumer of a local channel width - field_channel's drawn stroke, drain_bank_clearance / supply_bank_clearance (shared with the gate), _drain_bank, close_seams' water buffer, the carve's bund-burial filter, _watercourse_segs' keep-out corridor -->
 <!-- Evidence: attested, derived -->
@@ -277,7 +292,7 @@ tiers. The result, in true feet:</p>
 <tbody>
 <tr>
 <td>head-race (whole fan, above the fork)</td>
-<td>5.0</td>
+<td>6.0</td>
 <td>small main</td>
 </tr>
 <tr>
@@ -302,6 +317,18 @@ tiers. The result, in true feet:</p>
 </tr>
 </tbody>
 </table>
+<p><em>Where the head-race sits on that ladder, and why it is 6.0 ft rather than 5.0.</em> A fan of this size
+  lands its trunk between the lateral and the small-main tiers, which is a band rather than a point, and
+  the first figure taken from it was 5.0 ft. At 5.0 the top THREE tiers sat within a foot of each other,
+  so the one junction where the hierarchy most wants to read - the division point where the trunk forks
+  into its two arms - was where it read least. The trunk carries both arms, and under the width-goes-as-
+  the-square-root-of-discharge law this record already adopts, a trunk carrying a 4.5 ft arm and a 4.0 ft
+  arm is the root of the sum of their squares: 6.0 ft. That is TIER SELECTION within the attested band,
+  using the law as a sanity check on where the trunk sits - not conservation at junctions, which is
+  separately ruled against (<a href="#drawn-width-is-rank-not-discharge---junctions-do-not-conserve-it">drawn
+  width is RANK, not discharge</a>: never chain drawn widths down from the source). It also has a real
+  referent: a sluice-fed head-race genuinely is wider and slower than the water feeding it, ponding above
+  the weir.</p>
 <p>The drain's tail is WIDER than the head-race that watered the same ground, and that is right rather
   than sloppy: a collector is sized for drawdown plus storm runoff, not for the irrigation duty, so it
   passes appreciably more water than the supply ever delivered (unsourced).</p>
@@ -313,12 +340,12 @@ the minimum channel width, 1.5 px<!-- MIN_CHANNEL_PX; "the single scale-dependen
 its true width or the floor, whichever is larger. The coarser the sheet, the more of the ladder
 collapses onto that floor. This is the honest form of the minimum-visibility convention the water-width
 ladder already sanctions - a floor on the finest tier.</p>
-<p><em>Measured on Inashiro (1 ft/px).</em> Head-race 5.0 px; canal A 4.5;
+<p><em>Measured on Inashiro (1 ft/px).</em> Head-race 6.0 px; canal A 4.5;
 delivery ditches 2.5 at the head and 1.5 at the tail; drain outfall 5.5. The
 paddy fabric dominates the sheet and the water reads as a fine engineered net over it, rather than
-as blue ropes laid across the crop. The hierarchy survives the narrowing (5.0 &gt; 4.5 &gt; 4.0 &gt; 2.5 &gt; 1.5,
-a ~3.3:1 span) because the floor sits below the finest tier rather than on top of it.</p>
-<!-- What it changed: head-race 14 -> 5.0 px; canal A 12.4 -> 4.5; delivery ditches 8.0 -> 2.5 at the head and 3.0 -> 1.5 at the tail; drain outfall 12.0 -> 5.5 -->
+as blue ropes laid across the crop. The hierarchy survives the narrowing (6.0 &gt; 4.5 &gt; 4.0 &gt; 2.5 &gt; 1.5,
+a 4:1 span) because the floor sits below the finest tier rather than on top of it.</p>
+<!-- What it changed: head-race 14 -> 6.0 px; canal A 12.4 -> 4.5; delivery ditches 8.0 -> 2.5 at the head and 3.0 -> 1.5 at the tail; drain outfall 12.0 -> 5.5 -->
 <p><em>The departure we are taking knowingly.</em> The floor is a real, if small, inflation of the finest tier
 at hamlet scale: a 1.2 ft delivery tail draws at 1.5 px rather than 1.2. The GM sanctioned ~2 px at the
 narrowest point; 1.5 was chosen instead precisely so the finest tier still SHOWS a taper rather than
@@ -507,6 +534,194 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
 <p><!-- The lever, if it is ever worth closing, is the OTHER side. -->The bund width is 1.5 ft by its own research<!-- AZE_FT --> (a
   plain aze ran ~1-2 ft),<sup class="fn"><a id="fnref-50" href="citations/water.html#fn-50">50</a></sup> so there is room to take the BUND to ~1.3 and leave the water alone - which
   changes a stroke width and touches no clearance at all.<!-- Not attempted here. --></p>
+<h2 id="which-way-does-the-water-run-and-how-does-a-map-say-so">Which way does the water run, and how does a map say so?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired water rule file, "WATER FLOW - every map declares a DRAINAGE BEARING" -->
+<!-- Grounds: the map-level land fall and drainage bearing every generator declares, the direction each watercourse carries, and the two angle rules that compare them -->
+<!-- Evidence: researched (the GM's rulings of 2026-07-24 and 2026-07-25; this project's measurement of the drawn pool) -->
+<p><strong>Sources:</strong> the GM's rulings of 2026-07-24 and 2026-07-25; this project's measurement of the drawn pool</p>
+<p>Not from the picture. <strong>These maps carry no topographic markings at all, deliberately</strong> (the GM's
+ruling of 2026-07-25): they already hold a great deal of visual detail, and contour lines would add
+clutter faster than they add understanding. So the terrain exists nowhere on the sheet. It exists only in
+two figures declared for every map - the LAND'S FALL, the direction the ground slopes, and the DRAINAGE
+BEARING, the direction the water leaves - plus a direction carried by each watercourse. That is exactly
+why those declarations are mandatory rather than optional: they are the only place the terrain exists at
+all, and a reader cannot catch by eye what the data does not say. The omission is a map drawing
+convention, disclosed here because a reader may reasonably wonder where the hills are.</p>
+<p><em>What the declarations are FOR: verisimilitude, not uniformity</em> (the GM's ruling of 2026-07-25, and
+the standard every later map is held to). The goal is that a map reads like a real place of the kind that
+actually existed - not that its water all points one way. A map is never flattened into a single flow
+direction, because real landscapes are not, for two separate reasons. <strong>Local topography</strong> rises
+and falls at small scale, so neighboring fields legitimately drain different ways: Tango's fans span 210
+degrees between them, and the farms round its moat differ by their own ground - some drain INTO the moat,
+others have paddies FED BY it. And <strong>most of these works are artificial</strong>: a ditch dug ALONG a
+slope rather than down it is precisely what is built to intercept downhill water and keep it out of
+somewhere, which is why the drainage standard quoted in <a href="#the-wet-toe-is-as-wide-as-the-fan-not-as-wide-as-the-valley">The
+wet toe is as wide as the FAN</a> puts a field-toe interceptor drain nearly along the contours. A
+contour-hugging channel is engineering with a purpose, not an error.</p>
+<p><em>The one hard rule, and the anti-pattern it exists to kill.</em> Water never gains elevation. The GM's
+named objection to the published maps of the game this setting is built on is <strong>a river drawn
+running parallel to a mountain range along its base</strong> - it looks superb and it is impossible. Water at
+the foot of a slope runs ALONG the valley that slope drains into, descending as it goes; a course that
+hugs a contour without descending is a canal, and a canal needs an engineered gradient and a reason to
+exist. So a watercourse running across the fall rather than down it is perfectly allowed - but the reason
+has to be sayable, and it is recorded: a collector gathering runoff along the low margin, an interception
+ditch protecting something, a navigation cut held at level. A course with no descent and no purpose is the
+mistake.</p>
+<p><em>Two figures, not one, because slope and flow genuinely differ.</em> The fall is the LAND'S; the drainage
+bearing is where the WATER leaves, and a valley floor runs across the fall of the valley sides it lies
+between, so the two diverge by design. Hoshizora's ground slopes south-southwest at 115 degrees while its
+valley stream runs 145; Hikari no Sato has a drain 88 degrees off its map's fall. Deriving the flow from
+the slope would force every stream straight down the fall line, which is wrong for exactly the
+valley-floor and contour-drain cases the pool already contains.</p>
+<p><em>How far the two may diverge: up to, but never reaching, a right angle.</em> A dug contour canal is laid
+nearly along the contours, deviating only enough to keep a working gradient - so a divergence approaching
+90 degrees is the defining property of a dug channel rather than a defect. What is impossible is 90
+degrees or more, which would give the water a net UPHILL component. The bound is therefore a strict "under
+90" and not a tighter tolerance. <strong>A tighter one was drafted and declined</strong>: an earlier version of
+this rule proposed plus or minus 60 degrees, which would have condemned legitimate contour works. The
+widest real divergences in the drawn pool are 60 degrees (a map's bearing against its fall) and 69 (one
+course against its map's bearing), so nothing drawn comes near the bound.</p>
+<p><em>The LIMIT of both angle rules, measured and ACCEPTED.</em> Each of them compares a local fact - one map's
+fall, one course's heading - against a SINGLE map-level bearing, and confluence geometry can legitimately
+break that. A bank settlement whose land falls perpendicular into a trunk river that runs along it has a
+fall and a drainage bearing 90 degrees apart or more with nothing wrong anywhere, and Nagahara is exactly
+that shape. The rules are kept anyway, because the defect they actually catch is a REVERSED direction - a
+180-degree error, which no legitimate geometry produces - and because no drawn map comes near the bound.
+<em>What that costs:</em> a future bank-sited map can trip one of them while being entirely correct.
+<em>The alternative declined:</em> loosening or dropping the bound, which would give up the reversed-direction
+catch that is the whole of their value. If a bank map ever does trip one, the bearing model is revisited;
+the map is not "fixed".</p>
+<p><em>A known gap, ACCEPTED rather than closed: the two provincial cities declare no land fall.</em> They
+declare a drainage bearing like every other map, and no fall, and that is deliberate - so every rule about
+drainage slope, which is conditioned on a declared fall, has never run on either city. Declaring a bearing
+turns all of them on and both cities fail. A sweep of every bearing at 10-degree steps found NO satisfying
+value for Tango and EXACTLY ONE for Nagahara - 350 degrees, the land falling east into the river - and
+that one is curve-fitting rather than terrain: two of Nagahara's own three comb fields declare falls of
+100 and 95 degrees, southward, so a map-level east bearing contradicts the map's own geometry.
+<em>What was accepted:</em> the two largest maps stay unjudged on slope rather than carry a fictitious single
+bearing. <em>What it costs:</em> three rules that run on every village never run on either city.
+<em>The alternative declined:</em> adopting the 350 to turn them green. The GM has this to decide (raised
+2026-07-24).</p>
+<p><em>The one watercourse with no downstream direction to declare.</em> A cargo canal is cut at the level of
+the water it joins, which is what lets a barge be poled BOTH ways along it: its gradient is nil, a water
+gate holds it at river level, and a dead-end dock basin has no through-flow at all. Giving such a cut a
+downstream bearing would be a fiction (this rests on general reading; no source is cited)<!-- FN-PENDING: none named -->.</p>
+<p class="spec"><strong>The rule the map follows:</strong> <em>Town and city tier, where no generator draws the
+settlement yet.</em> Every map declares its land fall and its drainage bearing, and every watercourse on it
+declares which way its water runs; a moat declares an inlet and an outlet instead (below). A navigable
+canal declares that it is held at a LEVEL, and the drainage-bearing rule then skips it - Nagahara's canal
+runs 187 degrees against that map's 90-degree bearing and is correct, because it is a navigation cut and
+not a drain. No map carries contour lines or any other topographic marking.</p>
+<h2 id="where-does-a-fields-drain-let-its-water-go">Where does a field's drain let its water go?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired water rule file, "DRAINAGE SLOPE IS PER-FIELD, NOT PER-MAP" -->
+<!-- Grounds: the discharge-end attribution on a collector, the trimmed-drain exemption, and the fall a mirrored fan stamps -->
+<!-- Evidence: researched (the GM's ruling of 2026-07-25; this project's measurements across the drawn pool) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-25; this project's measurements of the drawn pool</p>
+<p>Off the map, into a brook, or into a drainage pond - and WHICH END of the collector it leaves by is the
+question, because that is what says whether the water is running the right way. Each field carries its own
+fall and each drain is judged against its own field; but reading the discharge end off the geometry kept
+giving the wrong answer, and the four ways it did are recorded here so none is tried again.</p>
+<p><em>The decision (the GM's ruling of 2026-07-25): every discharge channel NAMES the field it drains.</em>
+A collector then matches its own discharge channels exactly, and nothing is inferred from position. The
+four positional shortcuts that were tried first, each failed by a real map: matching by PROXIMITY -
+Hirameki carries seven such channels and several of them sit on top of a DIFFERENT field's drain; keying
+on the channel's first point - misread six of Tango's ten drains; keying on its last point - broke
+Hirameki, because which end of a discharge channel touches the drain varies from map to map; and taking a
+fixed tail length off the drain itself - on a two-point drain that overshoots the drain's whole span and
+hands back the entire drain.</p>
+<p><em>Read the SINK end, then pool all the evidence and take the LOWEST.</em> A discharge may leave from a
+point partway along a collector - one map's west drain runs off the map edge from the middle of its run -
+so the informative end of a discharge channel is its sink: whichever of its two ends lies farther from the
+drain, falling back to the last point when both lie on it. And a collector legitimately has SEVERAL sinks:
+that same west drain also tees a relief culvert back to the stream at its far end, and another runs off
+the bottom of the sheet at BOTH ends. So every end carrying evidence of a discharge - a named channel, a
+brook alongside, the frame edge - is gathered, and the LOWEST of them is taken as the outfall. The rule
+then has teeth only on the case that matters: when EVERY piece of evidence puts the discharge at the
+drain's HIGH end, the water is running backwards.</p>
+<p><em>An outfall at the sheet's edge must be at the DOWNHILL edge.</em> Nearness to the frame was being read
+as evidence of a discharge on its own, and one city fan has its HEAD about 84 ft from the top of the
+frame<!-- 28 px at 3 ft/px, provincial-city scale --> - inside the 96 ft tolerance<!-- 32 px at 3 ft/px -->,
+and on the UPSLOPE side - so the high end was called an outfall and the water was then reported as running
+backwards. Nearness to an edge is evidence of a discharge only when that edge is downhill. Nearness to a
+STREAM remains evidence on its own, since a brook is a real sink wherever it lies.</p>
+<p><em>A mirrored fan stamps the fall of the DRAWN geometry.</em> Where a fan is laid out by negating the
+land's fall, building the comb and mirroring the points back, the two negations cancel and the fall that
+was actually drawn is the original value. Stamping the negated working figure instead put one city fan 90
+degrees out. Any future mirrored fan records the figure it started from, not the one it worked in.</p>
+<p><em>And a TRIMMED in-wall drain is not a contour collector.</em> A drainage ditch inside a city wall is cut
+off short of the patrol ring and dropped through a gate into an underground culvert, so what survives of
+it on the page is only the last leg to that outfall: one such drain is two points and about 400 ft long
+where every untrimmed drain on the same map runs 480 to 690 ft<!-- 134 px, and 159-231 px, at 3 ft/px -->.
+Judging that stub's bearing against "a collector runs along the contour" is a category error, so a drain
+that was trimmed records the fact and is exempt from that rule.</p>
+<h2 id="does-a-moat-have-a-current">Does a moat have a current?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired water rule file, "A MOAT JUNCTION IS SWEPT WITH THE CURRENT" and "ONE DIRECTION MODEL, NOT THREE" -->
+<!-- Grounds: the recorded inlet and outlet of a ring moat, the swept rim attachment, and the coarse cardinal test on an irrigation offtake -->
+<!-- Evidence: researched (the GM's catch of 2026-07-25; this project's measurements of the two drawn provincial cities) -->
+<p><strong>Sources:</strong> the GM's catch of 2026-07-25; the junction-angle finding at <a href="#canal-junction-angles---an-offtake-leaves-pointing-downstream">Canal junction angles</a>; this project's measurements of the two drawn provincial cities</p>
+<p>Yes - but not one current. A ring has no upstream end: water enters at one point and leaves at another,
+and it travels BOTH ways round the circuit to get there. So a moat records an INLET and an OUTLET rather
+than a bearing, and "downstream of a moated city" is reasoned from those two points. An open, river-cut
+moat derives them for itself, because its two junction feet ARE the inlet and the outlet; a closed ring
+declares them, because the ring is dug before its feeder and its outfall exist.</p>
+<p><em>Where a channel meets the ring, the junction is SWEPT with the current</em> (the GM caught it by eye,
+2026-07-25). An offtake leaves the moat pointing downstream and a tributary joins it pointing downstream:
+its heading AT the junction must carry a downstream component. A square tap sheds sediment into its own
+mouth, and on the page it says nothing at all about which way the water runs. The angle finding behind it
+is <a href="#canal-junction-angles---an-offtake-leaves-pointing-downstream">Canal junction angles</a>.</p>
+<p><em>Four things making it work taught, each measured, and each a trap worth keeping.</em></p>
+<ul>
+<li><strong>Measure the LOCAL segment, not the channel's net vector.</strong> The net vector is near arbitrary
+  for an offtake that leaves the ring roughly perpendicular - which is why the coarse cardinal test below
+  stays a separate and deliberately different question.</li>
+<li><strong>Use the AVERAGED vertex tangent.</strong> The tangent at a vertex of a ring is the chord between its
+  two NEIGHBORS. Taking the forward segment alone tilts every reading by about half the vertex's turn
+  angle - 8 to 9 degrees on these rings, consistently in one direction - which was enough to make every
+  square tap look upstream-facing and sent a whole diagnosis down the wrong path.</li>
+<li><strong>Move only the MOAT-SIDE end.</strong> The attachment walks along the rim - upstream for an offtake,
+  downstream for an arriving drain - until the throat is swept enough; the sluice does not move, so the
+  field it feeds does not shift. Walk by ARC LENGTH and not by vertex: one vertex step is about 420 ft
+  against a throat of about 90 ft<!-- 140 px and 30 px at 3 ft/px -->, which overshoots into a channel
+  running nearly parallel to the rim.</li>
+<li><strong>Cap the arriving walk</strong> at about 270 ft<!-- 90 px at 3 ft/px -->. Wander further and a
+  culvert's far end lands nearer the drain's OTHER endpoint, flipping the outfall attribution that
+  <a href="#where-does-a-fields-drain-let-its-water-go">the drain's discharge end</a> depends on - which is
+  exactly what one city's north fan did.</li>
+</ul>
+<p><em>What it caught.</em> All five of Tango's offtakes and all four of Nagahara's met the ring square, at 86
+to 93 degrees, because the tee had been built purely radially; and beyond those, one drain culvert doubling
+back to enter at 146 degrees and two more arriving at 124 and 98. After the regrade every offtake sits at
+47 to 48 degrees and every drain between 14 and 60. The two junctions that were already correct moved 15
+ft<!-- 5 px at 3 ft/px -->.</p>
+<p><em>ONE direction model, not three</em> (the GM's ruling of 2026-07-25). The recorded flow began as a THIRD
+parallel model beside two older ones, and two sources of truth for one fact is how drift starts. All three
+were converged onto the recorded one, and the audit that forced it turned up two more silent skips of the
+same shape as the defect that prompted it. Two slope rules were conditioned on a legacy declaration that
+only 2 of 17 maps ever made, so fifteen maps - both provincial cities among them - skipped both of them
+while the result stayed green. And the moat's current was being re-derived from the first stream whose end
+touched the ring, snapped to a cardinal: fragile twice over, because on a river-cut city both the feeder
+and the outfall touch the ring, so the answer depended on draw order, and because it needed a stream END
+within about 105 ft of the ring<!-- 35 px at 3 ft/px -->, which Nagahara's river - whose ends run off the
+sheet, the moat's ends meeting IT - never satisfies, so it never ran on Nagahara at all. A third read
+increasing distance along a river as "downstream", hard-coding an authoring convention instead of asserting
+it. All of them now read the one recorded inlet and outlet; every map runs them, and all pass.</p>
+<p><em>Why the current is deliberately SNAPPED TO A CARDINAL, and not measured precisely.</em> Modeling the
+ring exactly - taking the ring's tangent at each tap, in the direction of travel along that tap's own arc -
+was built, and it is the physically correct picture of the water. It was rejected because it makes the
+question meaningless. An irrigation offtake leaves the ring roughly PERPENDICULAR, so its component along a
+precisely measured tangent is near arbitrary: the exact version flagged one of Tango's taps and two of
+Nagahara's while sparing their neighbors on nothing more than which side of the tap the field happened to
+sit. The coarse hemisphere is what makes the test mean "the field is not back upstream". So the coarse form
+is kept on purpose; the fine version measures the wrong quantity. A map drawing convention in the honest
+sense - a simplification chosen because the precise measurement answers a different question.</p>
+<p class="spec"><strong>The rule the map follows:</strong> <em>Town and city tier, where no generator draws the
+settlement yet.</em> A ring moat records an inlet and an outlet, never a single direction; an open,
+river-cut moat takes them from its two junctions with the river. Where a channel meets the moat, the
+channel's heading AT the junction carries a downstream component - an offtake leaving, a drain arriving -
+and a tap that meets the ring square is regraded by walking its MOAT-SIDE attachment along the rim by arc
+length until the throat is swept; the sluice and the field it feeds do not move. Separately and coarsely,
+an irrigation offtake must not leave the ring from a point back upstream of the ground it waters, judged
+against the current snapped to a cardinal.</p>
 <h2 id="a-fed-closed-moat-must-drain---the-physics-and-the-precedent">A fed closed moat must drain - the physics and the precedent</h2>
 <!-- Grounds: city_moat_has_outfall; Tango's SE outfall stream -->
 <!-- Evidence: reconstruction (physics) -->
@@ -519,6 +734,15 @@ measured.<!-- and each carries the sketch its fix would follow --></p><!-- it di
 <p><em>What the research found (China first: Beijing's gated water-passes + the Forbidden City moat; Japan agreeing: Edo/Matsue jokamachi moats).<sup class="fn"><a id="fnref-9" href="citations/water.html#fn-9">9</a></sup></em> Flow-through was the standard, engineered deliberately. <strong>Beijing</strong> admitted water through gated wall passes, branched it into through-city rivers, and discharged SE to the Tonghui/Grand Canal; the <strong>Forbidden City</strong> moat is fed from the Jade Spring and "flows in from the NORTHWEST and discharges to the SE" - inlet one corner, outfall the diagonal. Flushing mattered for sanitation (a stagnant moat stank and bred summer fevers; the remedy was flow-through + annual dredging), for <strong>storm drainage</strong> (a city moat doubled as the flood sluice - a drain with no outfall is not a drain), for a fire-water reserve, and for irrigation offtake. The pond-like look is legitimately achieved by an <strong>overflow weir/sluice</strong> that holds a set level and sheds only the surplus (Beijing's gated behavior) - placid surface, real outlet underneath. A closed moat with a live feeder and no outlet is historically wrong.</p>
 </li>
 </ul>
+<p class="spec"><strong>The rule the map follows:</strong> <em>City tier, where no generator draws the settlement
+yet.</em> A closed ring moat that is FED must also drain. A second off-map stream leaves the ring on the
+face opposite the feeder, so the current flushes the circuit corner to corner - the Forbidden City
+arrangement described above - and it is drawn as wide as the feeder, because the water that comes in has
+to go out. The outfall leaves by the LOW, downstream rim. Irrigation taps to the farms around the city are
+a legitimate seasonal SECONDARY offtake and never a substitute for it: a 21 ft summer tap cannot balance a
+66 ft year-round feeder<!-- 7 px and 22 px at 3 ft/px, provincial-city scale -->. A moat with no feeder at
+all - spring- or rain-filled - needs no outfall, having no inflow to shed; and a river-cut open moat
+already has one, since it taps the river upstream and returns to it downstream.</p>
 <h2 id="the-diverted-stream-moat-is-a-historical-type">The diverted-stream moat is a historical type</h2>
 <!-- Grounds: Tango's stream-fed ring -->
 <!-- Evidence: attested (Edo), researched (the Forbidden City flush - SUMMARY-ONLY) -->
@@ -597,13 +821,88 @@ wet edge run TOGETHER, and our collector's drawn grade is a legibility exaggerat
 inherit that fiction). <em>The decision on the wet edge:</em> the toe band's inner edge is sampled across the slope - at
 each station the shoulder above the LOCAL lowest crop point, smoothed over three stations - so the reeds
 begin at the fan's foot everywhere along the collector.<!-- (Inashiro: 57-89 px above the drain on every
-station, the reeds tucked under the crop by the paddy skip) --><!-- toe_band, pad. The earlier note in settlements/water.md that the wedge "is nevertheless correct" because the ground sits at rice height is superseded: that argument took the drawn 20-degree grade for a real one. --></p>
+station, the reeds tucked under the crop by the paddy skip) --><!-- toe_band, pad. The earlier argument that the dry wedge below the collector's upper reach "is nevertheless correct" because the ground sits at rice height is superseded: it took the drawn 20-degree grade for a real one. --></p>
+<p><em>Two ways the wet edge is set, and the rule for choosing between them.</em> Some maps in the pool draw
+their toe by hand, with literal coordinates, and deliberately claim a generous region that OVERLAPS the
+crop - the reeds then fill up to the field's true low edge whatever its shape, because the scatter skips
+any point standing on a paddy. Kikuta's hand-drawn marsh reaches well above its entire collector, so it
+claims ground at rice height as wet, and that is invisible only because of the skip. A computed toe takes
+its inner edge from the cultivated extent instead. <strong>Neither is a rule to copy by its method: decide
+by what the ground IS, not by which path drew it.</strong><!-- Recorded because two geometric theories about
+the difference were invented and offered before anyone read the generators, where the answer was sitting in
+a comment. --></p>
 <p><em>What it means on the maps:</em> dry ground appears at both lateral ends of every toe<!-- (Ikegami's runs x 402-1799
 on a 1900 px canvas) -->, and with it every settlement keeps a downslope exit: Ikegami's and Akagahara's roads run
 south over ground that is dry for their whole length, while Moritono's, whose fall is west and whose straight
 track would run down the wet side, keeps its diverted course.</p>
 <!-- What it changed: Ikegami's toe used to run -120 to 2020. Two connectors that had been turned out sideways purely because the old band left no legal southern route - Ikegami's and Akagahara's - were restored to their original routes, which are dry for their whole length under the researched width. Moritono's re-route stands: its fall is west, and its original track ran down the wet side. -->
 <!-- The section's second, prose sources line, folded into the roster at its head (its footnotes 19 and 59 now sit on the body assertions they support): 扇状地 (Japanese Wikipedia) on 扇頂/扇央/扇端 and the 扇端 spring line; MLIT land-classification teaching material "扇状地と人々の暮らし" (mlit-senjochi-kurashi); Woods, Westbrook et al., "Hydrologic interactions between an alluvial fan and a slope wetland" (Wetlands, 2006; woods-westbrook-2006) on slope wetlands at fan perimeters; the Tedori River alluvial fan groundwater studies (Paddy and Water Environment; tedori-fan-pwe, not cited) on paddy-field seepage as a recharge source; 後背湿地 / 自然堤防 (Japanese Wikipedia, GSI; kohai-shicchi-jawiki, shizen-teibo-jawiki) on backswamp formation and land use. -->
+<h2 id="what-ground-is-too-wet-to-build-on">What ground is too wet to build on?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired water rule file, "A marsh is UNBUILDABLE", "AND NO WELLHEAD IS SUNK IN THE BOG", "DWELLINGS keep OFF the wet low TOE" -->
+<!-- Grounds: the no-build keep-out a drawn marsh registers; the dry-ground test a wellhead is sited against; the toe band and the drain's cross-slope span -->
+<!-- Evidence: researched (the GM's rulings of 2026-07; a map review of 2026-08-12; this project's measurements of the drawn hamlets) -->
+<p><strong>Sources:</strong> the GM's rulings of 2026-07; the map review of 2026-08-12; this project's measurements of the drawn hamlets; the wetland finding at <a href="#marsh---wet-rice-is-reclaimed-from-wetland">Marsh - wet rice is reclaimed FROM wetland</a></p>
+<p>The bog, and the water itself. A marsh on these maps is <strong>unbuildable ground</strong>, and the first
+thing that means is that nothing SACRED or funerary stands on it. The GM, 2026-07: <em>"no one would ever
+put a graveyard - or a shrine - in a marsh"</em>. You do not raise a hall or dig graves in a bog. So a drawn
+marsh registers its own footprint as ground nothing may be built on - collision-placed features, houses,
+wells and byres alike, keep off it - and a hand-sited shrine or churchyard goes on dry ground, the spur or
+the high ground. A pond's reed FRINGE is exempt: it is a water margin wherever the pond lies, not a valley
+bog. The case that produced the rule: a split village's shrine and its graveyard first landed on the broad
+wet toe below the fields, and were moved to the dry ground beside the western block.</p>
+<p><em>And no wellhead is sunk in the bog.</em> A map review on 2026-08-12 found a hamlet's south-eastern well
+standing among the drawn reeds, about 50 ft from the drainage pond. You do not dig a draw-well in standing
+surface water: a well wants a water table beneath dry ground you can stand a curb and a windlass on (this
+rests on general reading; no source is cited)<!-- FN-PENDING: none named -->. The cause was DRAW ORDER
+rather than siting - wells are placed early and the reed toe is drawn late, so the reeds simply appeared
+around a well sited before they existed - and the fix was to make the wet band answerable in advance, so a
+well can be asked about it at the moment it is placed.</p>
+<p><em>Two traps in measuring it, both paid for and recorded.</em> First, the test is against ground below the
+crop's LOWEST point, not against the drawn marsh polygon. The wet band deliberately begins about 90 ft
+ABOVE the crop's low edge<!-- 90 px at 1 ft/px --> so the reeds tuck under the field, so its uphill lip
+overlaps farmed and built ground that carries no reeds at all - and testing the polygon would refuse every
+wellhead standing on that lip. Second, the rule is scoped to hamlet and village, because towns and cities
+draw no toe marsh at all: shipped unscoped, it cost the provincial city six farmhouse wells by reserving
+dry city ground as imaginary bog.</p>
+<p><em>Dwellings keep off the wet low toe below the drain, for the same reason.</em> The GM, 2026-07:
+<em>"would there be farmhouses below the drainage ditch if south of it is marshland?"</em> A field drains to
+its lowest edge, and the ground downslope of that collector - reed marsh, or low reclaimed paddy, or the
+drainage pond itself - is the wettest in the valley. It is not always marsh; but whatever it is, it is wet,
+so no farmhouse sits there.</p>
+<p><em>"Below the drain" is not the same as "low ground", and one story that sounded right was refuted by
+measurement.</em> The terrain is modeled as a tilted plane, so height depends only on position along the
+fall: the wet toe is a band across the slope and its upper boundary is a CONTOUR, not the ditch. And the
+drawn collector is not a contour - it descends along its length to reach the pond it empties into, a
+descent that is itself a legibility exaggeration of a very gentle real fall (see <a href="#the-wet-toe-is-as-wide-as-the-fan-not-as-wide-as-the-valley">The
+wet toe is as wide as the FAN</a>). The refuted story is that a rectangular field implies a drain running
+across the slope: measured on the drawn maps, a collector's height spread is 269 ft on Akagahara, 340 ft on
+Kikuta and 352 ft on Hoshigaoka<!-- 269 / 340 / 352 px at 1 ft/px -->. It is not a cross-slope line, and
+the claim is not to be repeated. So the rule flags a dwelling only within the drain's OWN cross-slope span,
+projected onto the declared fall.</p>
+<p><em>And it is scoped to DISPERSED settlements, which was measured rather than assumed.</em> Each strewn
+farm is sited individually and must individually stand on dry ground; a NUCLEATED cluster is placed as one
+unit and is governed by its own rule. A tight cluster beside a DIAGONAL drain reads as "downslope of the
+drain line" without standing in any wet toe at all, which is what the unscoped rule fired on at Ueda, whose
+west-margin cluster sits south-west of a north-west to south-east drain. A farm off to the SIDE, past the
+drain's ends, is a legitimate flank homestead and is not flagged; only the central toe below the drain
+is.</p>
+<p class="spec"><strong>The rule the map follows:</strong> <em>Hamlet tier.</em> No sacred or funerary ground
+stands on marsh: no shrine, temple hall, cemetery or mausoleum, and not by any part of its footprint - a
+clipped corner is as wrong as a center. A pond's reed fringe does not count as marsh for this. A shrine or
+churchyard that has nowhere dry inside the settlement goes onto the spur or the high ground outside it.</p>
+<p class="spec"><strong>The rule the map follows:</strong> <em>Hamlet tier.</em> No dwelling stands on the wet
+toe below a field's drain. The ground judged is what lies downslope of the collector along the declared
+fall and within the collector's own cross-slope span; a farmstead out past the drain's ends, on a dry
+flank, is not on the toe and stands there legitimately. The rule applies where farmsteads are strewn
+individually across the ground, not to a nucleated cluster placed as one block, and it needs both a
+declared fall and a drawn drain to mean anything.</p>
+<p class="spec"><strong>The rule the map follows:</strong> <em>Town and city tier, where no generator draws the
+settlement yet.</em> A channel is a no-build corridor: nothing is built within about 33 ft of its
+centerline<!-- ~33 px at 1 ft/px, the corridor the hamlet generator reserves -->, which is the width
+calibrated to keep a farmhouse's whole FOOTPRINT off the water rather than merely its center - a hamlet
+farmhouse's half-diagonal is about 26 ft - and at a coarser tier the corridor is whatever keeps the largest
+neighboring footprint clear. The test is on the footprint: a corner clipping a channel is a failure, which
+is how one village once shipped farmhouses standing on its field-to-field channels.</p>
 <h2 id="no-toe-marsh-at-towncity-scale---the-drainage-investment-gradient">No toe marsh at town/city scale - the drainage-investment gradient</h2>
 <!-- Grounds: village/hamlet gens draw a toe marsh; town/city gens draw none -->
 <!-- Evidence: attested (yatsu, shitsuden, Hibiya), reconstruction (the investment gradient) -->
@@ -614,11 +913,64 @@ track would run down the wet side, keeps its diverted course.</p>
 <!-- Evidence: attested -->
 <p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/高松城_(備中国)"><code>bitchu-takamatsu-jawiki</code></a>; the Song Hebei <em>tanglao</em> (塘泺) pond-and-marsh belt (He Chengju, 988-989) is unsourced here</p><!-- the Song belt was located (fx361.com 北宋前期河北路塘泺探析; 163.com) but not read this pass - leftover -->
 <p><em>What the research found:</em> the Northern Song built an artificial marsh-and-pond belt across the northern Hebei frontier (from 989, He Chengju's lake chain) specifically as anti-cavalry terrain; Japanese <em>numajiro</em> "marsh castles" (Bitchu Takamatsu, besieged by water 1582) used surrounding marsh as their primary defense;<sup class="fn"><a id="fnref-24" href="citations/water.html#fn-24">24</a></sup> and flooded paddies around castle towns functioned as a de facto glacis. The constant: peri-urban wetness that survives is PURPOSED - so a defensive belt is military ground, not waste.</p>
+<p class="spec"><strong>The rule the map follows:</strong> <em>Town and city tier, where no generator draws the
+settlement yet; no drawn map carries one.</em> A defensive wet belt is hand-placed OUTSIDE the wall
+circuit, hugging the perimeter: it begins at the moat's outer bank or the foot of the wall and stays within
+about 180 ft of the wall or moat line<!-- ~60 px at 3 ft/px: the moat plus a patrol berm -->, because a bog
+detached from the fortification defends nothing, and it may be drawn only on a map that HAS a wall or a
+moat. It does not follow the valley toe - it follows the circuit wherever the wall runs - so the rule that
+puts marsh on low ground does not apply to it. An approach road crossing it is a CAUSEWAY and keeps a bare
+tread, since few and constricted approaches are the belt's whole military purpose. It is unbuildable
+ground exactly like the valley-toe marsh, sacred and funerary siting included.</p>
 <h2 id="canal-junction-angles---an-offtake-leaves-pointing-downstream">Canal junction angles - an offtake leaves pointing downstream</h2>
 <!-- Grounds: moat_junctions_swept_with_the_current, settlement.moat_swept_tap, city_moat_junction_angles -->
 <!-- Evidence: attested (engineering), researched -->
 <p><strong>Sources:</strong> none with a readable page - the figures are a GUESS; the footnote records what was searched</p><!-- SUMMARY-ONLY; the FAO structures manual (fao.org/docrep/pdf/010/ai586e/ai586e02.pdf) not fetched - leftover -->
 <p>Canal practice: an offtake leaves its parent at an ACUTE angle pointing downstream - studied optimum 15-45 deg,<!-- "best alignment 0 deg separating out in transition" - the record's own words, unreadable as written; the quote below carries the finding --> explicitly "30 or 45 <strong>instead of 90<sup class="fn"><a id="fnref-25" href="citations/water.html#fn-25">25</a></sup></strong>"</p>
+<h2 id="where-two-watercourses-meet-how-is-the-junction-drawn">Where two watercourses meet, how is the junction drawn?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired water rule file, "ONE WATER BLOCK, EVERY WATERCOURSE IN IT" -->
+<!-- Grounds: every watercourse deferring into a single compositing block at finish time, rims below beds below sheens, the pond's fill last among the beds -->
+<!-- Evidence: convention (a map drawing convention; nothing physical) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-08-28</p>
+<p>As ONE body of water, with no seam. Water on these maps is drawn semi-transparent, so two strokes laid
+down independently double up where they cross and leave a darker patch exactly at the junction - and a
+pond's dark shore rim drew a hard border straight across the mouth of every channel feeding it. The GM,
+2026-08-28: <em>"when a stream meets a irrigated channel or where an irrigated channel or a ditch meets a
+pond ... it clearly looks like one is rendered on top of the other ... water just flows"</em>, and the pond's
+rim <em>"should not be present at the place of their intersection"</em>.</p>
+<p><em>The decision.</em> Every watercourse on a map composites in ONE block, at the latest position any of
+them needs. Bottom to top: every pond RIM first, then every BED in a single shared transparency group with
+the pond's own fill last among them, then every SHEEN. So overlapping beds read as one continuous body of
+water - a crossing, or a feeder running into a moat, reads as a real confluence rather than as two lines
+laid over each other; a pond's rim lies under every bed that reaches it, so the shore opens exactly at each
+mouth; and because the pond's fill is painted last among the beds, it covers the small overshoot a feeder's
+rounded end makes inside the rim. Before this there were TWO blocks, an early one and a late one for the
+in-field ditch net, each with its own transparency group, so wherever a ditch met a brook two groups
+stacked into a darker seam and one course's sheen rode over another's bed.</p>
+<p><em>The label.</em> This is <strong>a map drawing convention</strong> and nothing more. It changes how the ink is
+composited and never where any water lies, and it applies to every map at every tier. The village lanes
+took the same route on the same day, drawing through one shared ground block so that a junction reads as a
+single tread instead of one lane's shoulder crossing the other's.</p>
+<h2 id="why-does-every-ditch-turn-on-a-curve">Why does every ditch turn on a curve?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired presentation rule file, "Water turns on a SWEPT BEND, never a mitred corner" (GM 2026-07-25) -->
+<!-- Grounds: the fillet radius applied to a watercourse polyline's own vertices, and the rounding of the seam between two tapering records of one run -->
+<!-- Evidence: researched (the GM's ruling of 2026-07-25); the radius rests on a named but so far uncited work -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-25; the published meander geometry behind the radius is named below and is not cited to any page a reader can check</p>
+<p>Because water turns on a SWEPT BEND and never on a mitered corner. A hand-dug earthen ditch that changes
+direction does it on a sweep: a sharp corner scours on the outside and silts on the inside until the water
+has rounded it anyway, and the crew that maintains the ditch re-digs the bend rather than the corner (this
+rests on general reading; no source is cited)<!-- FN-PENDING: none named -->. Sharp corners belong to
+MASONRY - a stone-lined aqueduct, a sluice box, a revetted canal - and nothing at these scales is lined, so
+nothing on these maps shows one. Revisit only if a literal aqueduct is ever drawn.</p>
+<p><em>How wide the sweep is.</em> The radius is about <strong>2.5 channel widths</strong>, capped at 35% of either
+adjacent leg. Alluvial channels bend at roughly two to three channel widths, which is the meander geometry
+the figure is taken from<!-- FN-PENDING: Leopold and Wolman, meander geometry (named in the retired rule file; no title, year or URL given) -->, and a dug farm ditch is no tighter - so the bend SCALES with the
+ditch instead of being a fixed drawing quirk. A fat head-race sweeps wide and a thin lateral turns tight,
+both at the same real ratio, at every map scale. The cap stops two neighboring bends from eating the leg
+between them.</p>
+<p><em>What is deliberately NOT rounded.</em> An OFFTAKE, where a branch leaves a main: a notch cut in the bank
+is a junction, not a bend, and the main is not turning there. And a turn under about 8 degrees, which has
+no visible elbow and would only gain points from being rounded.</p>
 <h2 id="irrigation-topology---one-pond-outlet-that-branches">Irrigation topology - one pond outlet that branches</h2>
 <!-- Grounds: the channel() layout; Kikuta's OUTLET -->
 <!-- Evidence: attested -->

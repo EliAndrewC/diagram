@@ -1,0 +1,36 @@
+perf-profile seed 4 stage windbreak: 23.9s under cProfile (the stages before it took 15.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260908T122316Z-seed4-windbreak.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         66928952 function calls (60596260 primitive calls) in 23.916 seconds
+
+   Ordered by: cumulative time
+   List reduced from 101 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   23.916   23.916 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py:69(stage_windbreak)
+        2    0.507    0.253   23.915   11.958 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:75(village_grove)
+    37490    0.319    0.000   18.499    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:197(_hard_blocked)
+   936709    0.699    0.000   16.005    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:101(edge_dist)
+8124836/1792144    2.283    0.000   15.343    0.000 {built-in method builtins.min}
+  7269401    3.243    0.000   13.944    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:102(<genexpr>)
+  7187347    3.620    0.000   11.580    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+   936700    0.641    0.000   11.022    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:203(<genexpr>)
+  7187347    4.887    0.000    6.857    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+    74980    0.043    0.000    6.595    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:202(<genexpr>)
+    37606    0.823    0.000    2.204    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:215(_local_blocked)
+    33853    0.115    0.000    1.573    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:208(_lane_blocked)
+   663700    0.336    0.000    1.458    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:213(<genexpr>)
+  7199367    1.105    0.000    1.105    0.000 {built-in method math.hypot}
+  1000309    0.931    0.000    1.033    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:29(point_in_poly)
+  7263566    0.964    0.000    0.964    0.000 {built-in method builtins.max}
+  2909390    0.863    0.000    0.863    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:467(<genexpr>)
+  8688340    0.841    0.000    0.841    0.000 {built-in method builtins.len}
+  2254096    0.572    0.000    0.572    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:220(<genexpr>)
+   262276    0.144    0.000    0.545    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:205(<genexpr>)
+  1271230    0.334    0.000    0.454    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:221(<genexpr>)
+  1264893    0.233    0.000    0.233    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:225(<genexpr>)
+      138    0.005    0.000    0.147    0.001 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:228(_reseat)
+      229    0.014    0.000    0.142    0.001 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py:166(_draw_grove)
+   710220    0.122    0.000    0.123    0.000 /diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py:222(<genexpr>)
+
+

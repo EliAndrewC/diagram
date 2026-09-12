@@ -10,7 +10,7 @@ buildings along the Imperial Road, the Magistrate's walled manor + samurai house
 the segregated burakumin neighborhood NE, a theater stage by the monastery, barns ringed by hayfield/grazing
 pasture SE, and a small forest. Unwalled.
 
-WATER (the water-first comb doctrine, settlements.md "Water-first fields v2"): the
+WATER (the water-first comb doctrine, research/fields.html 'Water-first v2 - pond distribution and the three layout modes'): the
 stream is the valley watercourse, crossing the map NE -> SW roughly parallel to the
 Imperial Road; the land falls with it (downhill/down_deg = 115, SSW - high NE corner,
 low SW corner). The farm zone is a single build_comb fan WEDGED between the stream
@@ -307,7 +307,7 @@ s.merchant_storehouses(6)
 
 s._nucleated = True  # town-fringe farms pack in tight mutually-sheltering rows (the NUCLEATED
 # homestead bundle: house + south threshing yard + adaptive sunny garden + reserved north kura;
-# no per-farm grove - a nucleus shelters itself, per settlements.md 'Settlement form')
+# no per-farm grove - a nucleus shelters itself, per research/homesteads.html 'Does a hamlet have to be nucleated at all?')
 
 # funerary ground BEHIND the monastery, placed BEFORE the farm rings (the to-scale homestead
 # bundles reserve yard+garden+grove footprints, so the graveyard must already be an obstacle
@@ -330,7 +330,7 @@ s.block_polys.append([(72 + 136 * math.cos(a), 815 + 136 * math.sin(a)) for a in
 # see a rotated corner - one farm kept packing into a shop's swung corner (no_structure_overlaps)
 s.block_polys.append([(615, 855), (835, 855), (835, 940), (615, 940)])
 # ...and the SEGREGATION COLLAR around the burakumin quarter: 60 ft of open ground on every side,
-# the band `burakumin_quarter_segregated` demands (settlements.md "The burakumin quarter"). This
+# the band `burakumin_quarter_segregated` demands (research/urban-features.html "Caste geography and status zoning"). This
 # started life as a thin strip on the south side only - a bundle packed there stood hard against
 # the quarter's door row (city_house_doors_unblocked) - and the farm ring then closed in on the
 # other three sides instead, leaving eight farmhouses inside the seam and one 5 ft from a hut. The
@@ -372,7 +372,7 @@ s.tanning_yard(1934, 868, rot=43, pits=4, water="ditch")  # off the hoshizora-ne
 s.block_polys.append([(1934 + 155 * math.cos(a), 868 + 155 * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]])
 
 # ---- the EXECUTION GROUND, on the Imperial Road where it leaves the county NE (feature 015;
-# settlements.md "Execution ground"). Sited by the road and by the direction pollution runs, not by
+# research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"). Sited by the road and by the direction pollution runs, not by
 # distance: Hoshizora's burakumin quarter is the NE pack at (1725-2005, 395-600), so the outcast
 # side of this town is its northeast, and the ground lies past it on the highway out. The boundary
 # stone stands first, at the bend by (1900,170) - the dosojin marks where the road leaves clean
@@ -554,9 +554,9 @@ s.village_grove([(1600, 620), (1740, 645), (1735, 935), (1620, 925)], role="cops
 # its natural breaks, and a real unwalled county seat (a jin'ya/daikansho town) kept fire
 # bells, stored water, and fireproof kura instead - the freestanding rural watch tower is a
 # Meiji-and-later institution. The kura on the manor, headman, and merchant houses carry the
-# fire story here. WHY: settlements.md "Fire towers".
+# fire story here. WHY: research/cities/fabric.html "How did a dense wooden city watch for fire?".
 
-# ===== THE OFFICIAL NOTICE BOARD (kosatsuba) - AUTO-SITED on the traffic (settlements.md
+# ===== THE OFFICIAL NOTICE BOARD (kosatsuba) - AUTO-SITED on the traffic (research/urban-features.html 'The notice board (kosatsuba)'
 # "Notice board"). It used to be hand-placed at (400,930), the SW arrival stretch shared by the
 # flophouse, theater ground and monastery approach, on the reasoning that the packed merchant
 # frontage upstream had no clear verge and the arrival stretch was the honest second best. The
@@ -572,7 +572,7 @@ _kb = s.place_kosatsuba()
 assert _kb, "no frontage verge with room for the notice board"
 
 # ===== THE PUNISHMENT GROUND - the cangue frame, flogging post, and kneeling stone on the same
-# SW arrival stretch (feature 015; settlements.md "Punishment spot"). Its governing variable is
+# SW arrival stretch (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"). Its governing variable is
 # foot traffic, which is why it lands here rather than at the market: the packed merchant frontage
 # upstream has no clear verge (the same finding that sited the notice board), and this stretch is
 # where the manor's approach, the theater ground, and the monastery path all meet the highway - the

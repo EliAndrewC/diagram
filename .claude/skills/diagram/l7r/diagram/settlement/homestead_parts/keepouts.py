@@ -30,7 +30,7 @@ class KeepoutsMixin:
         channels, and the comb laterals' drawn truth (M['drawn_channels'] - added 2026-08-16, GM,
         Inashiro: grass tufts stood ON the head-race, because the scatter knew only the hairline
         topology record in M['channels'], w 2.5, while the drawn lateral ran ~14 wide on its own
-        filleted post-clip polyline - the "same manifest source" trap, settlements.md 'PLANK
+        filleted post-clip polyline - the "same manifest source" trap, research/ways.html 'What is a plank bridge, and what is it for?' ('PLANK
         BRIDGES'). A tapered lateral is split by `waterfields.taper_pieces` - ONE piece per SEGMENT
         at its arc-correct width, the very same call `field_channel` inks it with, so the corridor
         and the stroke it protects cannot disagree. Factored so the per-point test (_on_watercourse) and the
@@ -99,7 +99,7 @@ class KeepoutsMixin:
     # deliberate exception (settlement-review, 2026-08-16): a blade is 2.4-4.2*bs px, so at the
     # coarser tiers a tip can lean up to a few real feet over the margin line - accepted, because
     # grass leaning over a bund is real; bases and tall-glyph reach are what the rule enforces.
-    # Full grounding: settlements/vegetation.md "Scrub stands off the crops".
+    # Full grounding: research/vegetation.html "The crop margin - scrub stands 6 ft off every field edge".
     _BANK_MARGIN_FT = 6.0
     # CUT-BANK MARGIN (GM 2026-08-16, Inashiro second pass: tufts seeded in the 10-16 ft berm
     # strip between the dry hem plots and the supply channels - legal under the drawn-width water
@@ -228,7 +228,7 @@ class KeepoutsMixin:
         """Record drawn canopy crowns as a flat [x, y, r, ...] run in M['tree_crowns'] - the manifest
         record of EVERY tree this map draws, which is what structures_clear_of_trees / wells_clear_of_trees
         test. Flat rather than per-tree dicts because a to-scale map draws thousands of them (see
-        settlements.md, 'No tree is drawn on a roof')."""
+        research/vegetation.html, the canopy rules)."""
         for x, y, r in crowns:
             self.M["tree_crowns"] += [round(x, 1), round(y, 1), round(r, 1)]
 

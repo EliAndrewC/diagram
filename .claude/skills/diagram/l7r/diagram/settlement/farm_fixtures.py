@@ -5,7 +5,7 @@ Sugiura 1973 counted 4.4 roofed outbuildings per Tōhoku farm household and the 
 kura) - the T52 pass listed the rest, and the GM chose these. Every one is drawn at TRUE size
 (feedback: to-scale modes never inflate); the only legibility liberty is a bold stroke, and the
 persimmon's fruit dots and the shrine's vermilion are RENDERING conventions, recorded as such in
-settlements/homesteads.md "Farmstead fixtures". Research and sources: research/homesteads.html
+research/homesteads.html "Farmstead fixtures". Research and sources: research/homesteads.html
 "The farmstead's fixtures". The PLACER is the scripted generator's (hamletgen/homesteads.py
 `farmstead_fixtures`); this mixin only draws and records.
 """
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 # (GUESS within the ken module). coop: a ground-level enclosure (Qimin Yaoshu 養雞), square in the
 # Ming find (size GUESS). shrine: the one measured hokora is a 40 cm stone (READ); at 3 ft the GM could
 # not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
-# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in settlements/homesteads.md).
+# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/homesteads.html).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}

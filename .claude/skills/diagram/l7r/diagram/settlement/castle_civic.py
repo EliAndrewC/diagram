@@ -60,7 +60,7 @@ class CastleCivicMixin:
         the match. The two would drift silently and the map would end up asserting something the
         compound plan contradicts. In the GM's words: "I'd rather nothing be shown than the WRONG
         thing be shown." An empty court asserts nothing and can never be wrong. The same doctrine
-        governs `manor` and `governor_mansion`; see settlements/capitals.md, "WHY blank".
+        governs `manor` and `governor_mansion`; see research/cities/capitals.html, "Why is the castle drawn blank inside?".
 
         WHAT IS DRAWN, AND WHY THE KEEP IS NOT AMONG IT. A castle reads as a castle from its WORKS,
         never from its keep: at a capital's 3 ft/px a tenshu footprint is just another building box
@@ -327,7 +327,7 @@ class CastleCivicMixin:
     # striking posts) and split on COLOR: state violet, the same family as the ministries, vs the
     # ordinary building tan of a private establishment in a residential quarter.
     DOJO_SAMURAI_FRAC = 0.10  # a provincial city is ~10% samurai (budgets.md: ~300 of ~3,000)
-    DOJO_PER_SAMURAI = 200  # GM formula 2026-07-25: 1 private dojo per 200 samurai + a remainder roll
+    DOJO_PER_SAMURAI = 200  # GM formula 2026-07-25: 1 private dojo per 200 samurai + a remainder roll (research/cities/government.html "Martial training is an urban institution" - the roll wins over the rough read)
 
     def _dojo_hall(self: Settlement, g: list[str], x0: float, y0: float, w: float, h: float, fill: str, edge: str, head: str) -> None:  # type: ignore[misc]
         """The shared DOJO HALL glyph: a long rectangle with a plank-floor grain running lengthwise
@@ -353,7 +353,7 @@ class CastleCivicMixin:
     def martial_hall(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "martial hall", label_below: bool | None = None, label_xy: Pt | None = None) -> None:  # type: ignore[misc]
         """The PROVINCIAL MARTIAL HALL - the state training institution, one per provincial city.
 
-        REAL FEET (the sizes are researched, not chosen for legibility - see settlements.md
+        REAL FEET (the sizes are researched, not chosen for legibility - see research/cities/government.html 'Martial training is an urban institution'
         "Historical grounding: martial training in a provincial city"). The compound is sized to its
         PROGRAM rather than rounded up: the lane sets the width and the hall-plus-lane sets the
         depth, and everything else is circulation.

@@ -46,7 +46,7 @@ The main agent passes you a subject name and its pool folder. Paths are under
 - `pool/<type>/<subject>.json` - the manifest: every feature's real recorded geometry
 - `pool/<type>/<subject>.gen.py` - the spec, its docstring, and the author's reasoning in comments
 - `pool/<type>/<subject>.notes.md` - design notes and the **Review log** of settled/overruled findings. **Every pool subject has one** since 2026-08-08, so a MISSING notes file is itself a finding, not a normal state. Read its "Settled by the GM" section first and do not re-raise anything in it
-- `settlements.md` + the `settlements/` topic files the subject calls for (`towns.md`, `cities.md`, `urban-features.md`, `water.md`, `fields.md`, `homesteads.md`, `vegetation.md`, `religion-and-death.md`)
+- the research pages under `research/` the subject calls for - since feature 229 the record holds each topic's finding, the decision it drove and, for a tier no generator draws yet, the specification a map follows (`settlements.html` for the tiers; then `towns.html`, `cities/*.html`, `urban-features.html`, `water.html`, `fields.html`, `homesteads.html`, `vegetation.html`, `religion-and-death.html`, `ways.html`, `presentation.html`)
 - `SKILL.md` - shared conventions: labeling rules, the to-scale doctrine, the stroke convention
 
 If the notes file is missing, say so prominently and review anyway, flagging that intent is unknown.
@@ -123,7 +123,7 @@ so a combined run just serializes them. Say so in your output if you were handed
    classify the ground under it by PIXEL COLOR (Y's own fill/tint, not Y's recorded polygon), and
    count - of the glyph FAMILIES the complaint names (the GM said "small pine trees and such": pines,
    brush; a family the recorded doctrine explicitly admits, such as grass grading into reeds per
-   `settlements/vegetation.md`, is counted separately and reported, not charged). Any count above a
+   `research/vegetation.html`, is counted separately and reported, not charged). Any count above a
    handful is needs-work. There is no audit verdict to weigh against it any more (feature 193): the
    adjudicator encoded the AUTHOR'S allowances - a feather band, a keep-out inset - and the author's
    allowance is precisely what is under review, which is why it was retired rather than consulted.
@@ -179,7 +179,7 @@ containment or count - never form. For each such feature, state the intended for
   compass ANGLE is not a rule: measured across the whole pool (2026-07-27), the approved belts run
   33-49 degrees off the ideal across-wind axis, and the belt once reported as wrong-facing (Ubame)
   was 31 degrees off - better aligned than every approved map but two. A belt follows the cluster's
-  windward fringe; the wind chooses the side, not the bearing. See `settlements/towns.md`.
+  windward fringe; the wind chooses the side, not the bearing. See `research/towns.html`.
 
 ### Agreement with a Mode A sheet of the same place
 

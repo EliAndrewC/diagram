@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 _BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill closes what that check reads.
 # THE NUMBER IS OURS; THE DIRECTION OF THE RULE IS THE RECORD'S (GM ruling 2026-08-29, "do whatever was
-# historically true", research in settlements/vegetation.md). No source reached - Chinese or Japanese,
+# historically true", research/vegetation.html "Does a shelter belt wrap the settlement?"). No source reached - Chinese or Japanese,
 # historical or agronomic - gives a WIDTH for an opening in a shelter belt, so 30 ft is a rendering
 # convention and is labelled one. What IS sourced is that a belt occupies one or two sides and is planted
 # along them, that its ABSENT flank is not a gap (Honda 1915 defines yashikirin as the west and north

@@ -7,7 +7,7 @@ Prompted by the water/farmstead/windbreak fix rounds on Hoshizora + Hirameki: ev
 those GM catches was a rule the validator did not enforce at town scale. **STATUS 2026-07-21:
 ALL HIGH + MEDIUM items below are IMPLEMENTED (GM directive), plus the windbreak-embrace
 composition check via the form-aware adjacency metric** - see the check names in brackets and
-settlements.md for the calibration whys. The remaining unautomated composition rule is label
+the settlements rule file for the calibration whys. The remaining unautomated composition rule is label
 restraint (review-by-eye). Inventory basis: 347 distinct checks in
 `check_village/` - ~242 ungated, ~40 city-only, ~50 town-inclusive, ~15 village/hamlet-only.
 
@@ -22,7 +22,7 @@ defect class (yards off-south, groves over kuras, houses lapping paddies). Later
 day: `scrub_clear_of_urban_fabric` (town/city) + the engine's 30 ft urban-clearance halo -
 scrub polys must trace the outskirts, never the built-up fabric (GM catch on Hoshizora's
 "generous polys" scattering scrub through the streets and wellhead aprons; see
-settlements.md's urban-clearance-halo bullet).
+the settlements rule file's urban-clearance-halo bullet).
 
 ## HIGH priority - adapt an existing city check or close an obvious doctrine hole
 
@@ -37,7 +37,7 @@ settlements.md's urban-clearance-halo bullet).
    ENCLOSED contiguous core; an unwalled seat is drawn at detached village grain with field-gap
    breaks, and real unwalled administrative seats (jin'ya/daikansho towns) kept fire bells,
    stored water, and fireproof kura, not watch towers - the freestanding rural tower is
-   Meiji-and-later. Hoshizora's tower removed; full grounding in settlements.md "Fire towers".
+   Meiji-and-later. Hoshizora's tower removed; full grounding in the settlements rule file "Fire towers".
 3. **[DONE `town_monasteries_have_graveyards`]** (graveyard=False opt-out; Hirameki's relic Benten monastery opted out). Both current
    towns carry parish grounds by hand; nothing requires the next one to. Adoption: none.
 4. **[DONE `burakumin_quarter_segregated`]** (towns only - calibration showed city ward seams run ~10px, so cities need quarter-level treatment). The quarter is doctrine
@@ -64,7 +64,7 @@ settlements.md's urban-clearance-halo bullet).
    The satoyama bare-margin rule does not run at towns; Hoshizora carries sizable bare tan
    stretches that a village would fail on. Real generator work (a town `hinterland()` pass).
    The absence of a village-style toe MARSH at towns/cities is deliberate and now has recorded
-   historical grounding - see settlements.md 'Towns and CITIES have NO toe marsh' (the
+   historical grounding - see the settlements rule file 'Towns and CITIES have NO toe marsh' (the
    drainage-investment gradient) and 'Defensive marshland' (the one sanctioned urban marsh,
    `role="defense"`, held ready for a future map).
 10. **[DONE `town_samurai_housing_varied`]** (>= 1 samurai_large among a small majority; both towns place pinned larges). Towns check
@@ -78,7 +78,7 @@ settlements.md's urban-clearance-halo bullet).
 - **[DONE `village_windbreak_embraces_cluster`]** - automated after all via the form-aware adjacency metric (a substantial >= 12-clump belt within 150px of a farmhouse; real-forest maps exempt). The original distance-fraction metric remains unusable - the
   windward-canopy-within-R metric was calibrated across every nucleated map and cannot
   separate approved forms from bad ones (Kikuta's approved ribbon belt scores 4-18%).
-  Documented in settlements.md with the calibration numbers; automating needs a form-aware
+  Documented in the settlements rule file with the calibration numbers; automating needs a form-aware
   belt-to-cluster-hull metric (own work item).
 - **Label restraint** (don't label the obvious) - existing rule-of-thumb + review pass.
 

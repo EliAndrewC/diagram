@@ -63,7 +63,9 @@ def build_polder(
       ~110 ft module hits this: whole bay ~1.9 mu, halves ~0.9 mu, thirds ~0.6 mu, rare merges ~3.7 mu.
       `gap` default (1.5, 4.0): between-row gaps 3 px (~1 m walking bund, attested 20-50 cm + stroke) and
       8 px column corridors carrying the 3.2 px lateral (a bang 浜 field ditch + spoil banks, ~2.4 m).
-      A GAP IS ONLY AS WIDE AS WHAT RUNS IN IT (`split_gap`, GM 2026-07-24): `gap[1]` is the width of a
+      A GAP IS ONLY AS WIDE AS WHAT RUNS IN IT (`split_gap`, GM 2026-07-24; research/archetypes.html "What lies
+      between two parcels, and how wide is it?"; `mosaic` and `line_wander` are grounded there too, under
+      "Grid vs mosaic" and "Why is a hand-piled bund never straight"): `gap[1]` is the width of a
       DITCH corridor, so it belongs only on the module column lines, where a lateral actually runs. The
       lines INSIDE a bay - where a holding was split into side-by-side strips - carry no ditch, just a
       walking bund, so they take `split_gap` (default `gap[0]`, the same 3 ft the row-edge bunds get).
@@ -170,7 +172,7 @@ def _polder_lattice(
     # overall tilt (the dikes are not axis-perfect); the sines are the topology-following bends. Because
     # EVERY point - envelope, parcels, ring canal, laterals, and the dike that follows the envelope - is
     # placed through grid(), the whole polder warps as ONE coherent piece and each field edge stays parallel
-    # to its dike section (research 2026-07-22, settlements.md 'Polder edge wander'). Phases come from a
+    # to its dike section (research 2026-07-22, research/archetypes.html 'Polder edge wander'). Phases come from a
     # SEPARATE rng so the main draw stream (and every edge_wander=0 map) stays byte-identical.
     Rw = random.Random(seed ^ 0x5EED)
     ac = af = cell * 0.9 * edge_wander  # cross / fall wander amplitude (~a module at edge_wander ~ 1)
@@ -196,7 +198,7 @@ def _polder_lattice(
     # surrounds the field"): the trunk distribution+collection channel runs a ring on the INSIDE toe of the
     # perimeter dike, on the field side - outside the dike is the wild lake/creek the dike holds back, so no
     # channel runs out there, and water crosses the dike ONLY at gated sluices (斗门) at the inlet + outfall
-    # (research 2026-07-22, settlements.md 'Polder ring canal'). So the parcel lattice is inset to
+    # (research 2026-07-22, research/archetypes.html 'Polder ring canal'). So the parcel lattice is inset to
     # [ring, span-ring] on BOTH axes and the ring canal runs in the margins just inside the dike; the
     # envelope keeps the full span (the dike's inner face sits on it).
     J = 6.0
@@ -213,7 +215,7 @@ def _polder_lattice(
     # but the Pearl-delta 桑基魚塘 dike-pond accreted household-by-household (挖塘培基) into a MOSAIC of varied
     # ponds fitted around MEANDERING interior creeks - scholarship describes the historical landscape as
     # "mosaic-like constructed ponds with meandering natural river systems, [with] the boundary between
-    # constructed and natural blurred" (research 2026-07-22; settlements.md 'Polder mosaic vs grid'). `mosaic`
+    # constructed and natural blurred" (research 2026-07-22; research/archetypes.html 'Polder mosaic vs grid'). `mosaic`
     # (0 = the clean surveyed grid, the default) displaces the INTERIOR bund-node lattice by a smooth
     # CORRELATED field, tapered to 0 at the pinned perimeter so the envelope + dike stay put: neighboring
     # nodes move together, so the lattice lines stay continuous but BEND - the interior laterals become

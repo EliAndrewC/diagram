@@ -12,9 +12,9 @@
 <body>
 <main>
 <h1 id="fields-the-research-behind-the-paddy-plot-and-crop-rules">Fields: the research behind the paddy, plot and crop rules</h1>
-<p><em>The research behind the field rules: what was found, the decision it drove, and any deliberate departure from literal reality.</em></p>
-<!-- The research behind the rules in ../settlements/fields.md. Findings, anchors and disclosed departures live here so the rule file stays operational; this file is where citations and deeper historical context get added as they accumulate. -->
-<!-- Load this file when: you are changing a field rule, a plot size, a crop ratio or a check threshold - or you want the historical basis before overriding one. Not needed to simply DRAW a field from the rules file. -->
+<p><em>The findings behind the paddies, plots and crops on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>
+<!-- The decisions and the specification paragraphs below were moved in from the retired rule file; this page is the one place they live now. -->
+<!-- Load this page when: you are changing a field rule, a plot size, a crop ratio or a threshold - or you want the historical basis before overriding one. -->
 <!-- Every entry: what the research found, the decision it drove, and any deliberate departure from literal reality. Anchors are stable - rules link to them by #slug. -->
 <hr>
 <h2 id="in-field-features---flat-flooded-paddy-hosts-obstacles-least">In-field features - flat flooded paddy hosts obstacles least</h2>
@@ -66,6 +66,17 @@ ground between two basins is bare floor.<!-- which is the gapless-fan rule's bus
 rather than planted, matching the fan toe's existing thickness rule - a
 needle basin cannot be leveled or bunded at any sane cost.</p>
 <!-- (2) is paddy_fan_gapless's rule; (3) the thickness rule is _TOE_MIN_THICKNESS -->
+<p><em>What the lap costs when the drawn basins are added up (GM 2026-08-17).</em> The shallow lap has a
+consequence worth stating, because it decides how the drawn field may be measured. A basin that
+paints over part of its neighbor paints out the bund it covers, so the list of basin outlines a map
+records is a paint-order STACK rather than a partition: the outlines overlap, and simply adding them
+up double-counts the lapped ground by 0.4-2.5% (measured across the scripted hamlets and a
+48-seed cohort).<!-- plot_rings, recorded in draw order; the contract is in settlement/fields/comb.py::_comb_record_field --> The decision is to keep the record honest about the INK and to dissolve it -
+the later outline winning - before anything computes acreage, per-field yield or basin-to-basin
+adjacency, with the over-count held under 4% so it cannot grow unnoticed. Two alternatives were
+declined: trimming each outline back to the part of it that stays visible, which would make the
+record disagree with what is actually drawn, and recording both a drawn outline and a true one,
+which doubles the record for a figure nothing on the map reads.</p>
 <h3 id="a-bund-runs-on-or-it-turns-for-a-reason---it-does-not-step-sideways-and-carry-on">A bund runs on, or it turns for a reason - it does not step sideways and carry on</h3>
 <!-- Grounds: waterfields/banks.py::jog_steps; waterfields/seams.py::_seam_cuts, _unjog -->
 <!-- Evidence: follows from the aze's construction and maintenance, above; the kochi seiri framing at the head of this section -->
@@ -271,6 +282,30 @@ the number of sides but the SIZE, with triangularity as its symptom, because a c
 plot lattice at the fan's boundary is the shape a fragment naturally takes.</p>
 <p><em>The bund's cross-section.</em> The bund page gives a standard trapezoid of 30 cm height and 30 cm TOP width on 1:1 slopes,<sup class="fn"><a id="fnref-8" href="citations/fields.html#fn-8">8</a></sup> i.e. about 1 ft high and ~3 ft at the base - the entry's "1-2 ft wide, ~1 ft high" reads as a top-to-base span and is consistent; cold regions run ~50 cm top / ~40 cm high. Nothing read supports a bund a meter high.</p>
 <!-- re-sourcing note, 2026-08-28, feature 143 -->
+<h3 id="why-the-bund-shows-at-all-in-high-summer-and-why-it-is-drawn-dark-red-brown">Why the bund shows at all in high summer, and why it is drawn dark red-brown</h3>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "Bund stroke - dark red-brown at near-TRUE width" -->
+<!-- Grounds: AZE and aze_w(ftpx) in waterfields/palette.py; the BUND area fill -->
+<!-- Evidence: liberty (the color pick), and a map drawing convention (the bund being visible at all in the depicted season) -->
+<p><strong>Sources:</strong> the bund's own dimensions, from the cross-section above; the GM's color ruling of 2026-07-24, made on a rendered ladder of five candidates.</p>
+<p>The bund is drawn at near-true width - about 1.5 ft of ridge at whatever scale the map uses, with a
+half-pixel floor so the line survives rasterizing.<!-- AZE_FT = 1.5; the floor still depicts ~1.5 ft on the city sheet --> The
+stroke it is drawn in was chosen deliberately. An earlier pale tan depicted 4-5 ft - an
+<em>azemichi</em>, a walking bund, on EVERY boundary - and read as an orange lattice dominating the
+green. The GM picked a red-leaning dark mud brown from a five-color ladder rendered on one village,
+over a lighter chestnut that stays more nameably brown at hairline width: a line that dark blends
+toward black against the rice green at map view, and the GM preferred that weight.<!-- AZE = '#6E4520'; the declined chestnut was '#7A5230' --> The pale tan
+survives as the exposed-earth AREA fill for true-width earthworks - perimeter dikes, dike-top house
+pads, dike-pond banks - where the ground really is bare earth several feet across. A terrace lip
+takes the dark color but keeps a wider stroke, because a riser face has real projected width where a
+flat bund does not.</p>
+<p><em>The disclosed departure - a map drawing convention.</em> That color is honest for SPRING, when the
+ridge is fresh wet <em>azenuri</em> plaster. By high summer, which is the growth stage the paddy
+surfaces depict, a real bund greens over with grass and bund beans and very nearly disappears into
+the field.<!-- FN-PENDING: nougyoudoboku-keihan, which names fodder grass grown on the bund top --> So a
+visible bund network at that season is a stylization, kept because it is what carries the plot
+structure to the eye; the honest summer alternative is green on green, which erases the field's
+whole fabric. It is a rendering choice and is deliberately left unchecked, the plot geometry being
+checked instead.</p>
 <h2 id="how-deep-the-water-actually-stands-and-why-a-single-number-is-the-wrong-shape">How deep the water actually stands, and why a single number is the wrong shape</h2>
 <!-- Grounds: the paddy class's what and caveat; the aze finding above; check_village/segments_04a (no wellhead in a paddy) -->
 <!-- Evidence: researched, MODERN - every figure below is contemporary Japanese extension guidance; no pre-modern number was found -->
@@ -330,6 +365,37 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.</p>
 <ul>
 <li><em>WHY rows waited for Meiji when row planting is ancient (GM 2026-07-23 - the idea was never the bottleneck, the economics were).</em> Dry-crop rows are FREE: the seed goes into a plowed furrow, and the furrow IS the row. Wet rice is TRANSPLANTED into a puddled flooded sheet with no furrows and no guide lines, so rows must be PURCHASED - marked ropes or a rolled gridding frame,<sup class="fn"><a id="fnref-15" href="citations/fields.html#fn-15">15</a></sup> plus every planter aligning to them - and the bill lands in the year's tightest labor window (the whole village transplants in days, on a shared water schedule). And for centuries the purchase bought nothing: rows pay when a tool travels BETWEEN them (the ancient dry-field hoe/cultivator), but nothing could travel between rows in a flooded paddy - weeding was by hand and foot either way. What changed in Meiji was the arrival of the between-rows tool for mud: the hand-pushed ROTARY PADDY WEEDER, which only works on plants ruled in both directions - so <em>seijoue</em> + marking frame + rotary weeder spread as ONE package,<sup class="fn"><a id="fnref-16" href="citations/fields.html#fn-16">16</a></sup> pushed by state extension hard enough that police sometimes stood over farmers to enforce straight lines ("saber farming"), itself evidence the private payoff was marginal before the full package. Traditional transplanting was 乱雑植え, "disorderly planting", not evenly spaced<sup class="fn"><a id="fnref-76" href="citations/fields.html#fn-76">76</a></sup>, and only became evenly spaced once row planting arrived - which is exactly what the sparse unruled shoot-mottle renders.</li>
 </ul>
+<p><em>How dense that mottle is drawn - and a decision deliberately left unmade.</em> Traditional
+transplanting set hills, clumps of two to six seedlings, at roughly 20-30 cm centers, which is about
+one hill per square foot (this rests on general reading; no source is cited).<!-- FN-PENDING: none named --> So even on
+the hamlet sheet, drawn at one foot to the pixel, one dot per plant would be one dot per pixel: a
+solid fill, not a texture. Any mottle that can be drawn at all is therefore a SAMPLE of the
+planting, and how coarse a sample is a drawing choice rather than a finding. The parcels of rice
+left between a polder's fish ponds, where the crop has to read distinctly against the water, took a denser one at
+the GM's choice: centers about 4.5 ft apart with alternate rows half-offset, about 1.5 ft of jitter
+on each and roughly a tenth of them dropped, so the shoots land irregularly with no ruled row or
+column anywhere.<!-- _paddy_surface(pitch=4.5); the polder hamlet is drawn at 1 ft/px --> The comb maps keep the
+original sparse random scatter. Whether to bring the denser sample to the ordinary comb paddies is a
+decision deliberately LEFT UNMADE: nothing in the record decides between them, both are honest
+samples of the same irregular planting, and the change would move the surface of every comb map at
+once.</p>
+<h2 id="why-is-every-rice-plot-the-same-green">Why is every rice plot the same green?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "Crop + COLOR - the paddy body is UNIFORM" -->
+<!-- Grounds: RICE_GREENS collapsed to a single value in waterfields/palette.py; the FLOODED and RIPE shades -->
+<!-- Evidence: reconstruction (the single stage), and the GM's decision on what a color is allowed to mean -->
+<p><strong>Sources:</strong> the GM's decision that a color difference on a map must mean something; this project's reading of a shared irrigation turn and exchanged labor.</p>
+<p>A village transplants TOGETHER - the water is released on one schedule and the labor is exchanged
+between households - so at any moment its basins are largely at a single growth stage, with only a
+minor spread from early and late varieties (this rests on general reading; no source is
+cited).<!-- FN-PENDING: none named --> The body of the paddy is therefore ONE green. An earlier plot-to-plot
+shade jitter denoted nothing at all and was removed; the bund network and the footpath dots carry
+the field's structure instead.</p>
+<p>What remains is that every color on cultivated ground MEANS something. A blue-green basin is one of
+the low plots sitting on the drain collector, pooling before the outfall (the entry on <a href="#the-wettest-plots-are-their-own-kind-of-ground---shitsuden-and-why-they-read-blue">the wettest plots</a>
+below); a gold one is early ripening, where a map uses it at all; and a plot on the upslope margin
+drawn in its own color with its own furrow direction is a dry crop. So a reader can trust the
+palette: uniform green is the one rice crop at the one stage, and a different color is a real
+difference in the ground rather than decoration.<!-- the greens list is kept at its old length so the RNG stream is consumed identically and the geometry does not move --></p>
 <h2 id="water-first-v2---pond-distribution-and-the-three-layout-modes">Water-first v2 - pond, distribution and the three layout modes</h2>
 <!-- Grounds: waterfields.py; build_comb / build_terraces / build_ribbon -->
 <!-- Evidence: attested, corroborated -->
@@ -344,6 +410,94 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.</p>
 </ul>
 </li>
 </ul>
+<h2 id="how-wide-is-a-drain-where-it-starts---as-narrow-as-the-ditches-that-feed-it">How wide is a drain where it starts - as narrow as the ditches that feed it</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "A collector STARTS as a thread" -->
+<!-- Grounds: the head width of every gathering drain, w = 1.5 * grain in build_comb / build_terraces / build_ribbon -->
+<!-- Evidence: reconstruction; the two derivations below are this project's own -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-25; the taper finding in 'Water-first v2' above, of which this is the mirror.</p>
+<p>A gathering drain is the supply side run backwards. The delivery ditches taper to a thread as they
+give up their water to the basins, so the collector that receives them has to BEGIN as a thread and
+earn its full width downstream at the outfall, where it finally carries the whole fan's runoff. The
+GM ruled on 2026-07-25 that the head be drawn as narrow as a delivery tail - about 1.5 ft across -
+rather than as a ditch already several feet wide, which is what it had been.<!-- w = 1.5 * grain at the head -->
+</p>
+<p>Two independent arguments land on the same figure, which is why it is not a compromise between
+them. <em>Hydraulically</em>, the head of a collector drains the toe of ONE basin - a tenth of a
+hectare, a fraction of a liter a second even under a storm drawdown - so the flow buys it no width
+at all. <em>Practically</em>, a ditch that is cleaned out by hand every year needs a bottom a hoe fits
+into, call it a foot, and side slopes that stand up, which puts about 1.5 ft across the top; a
+channel narrower than that is not a maintained ditch but the seasonal furrow re-cut at each
+drawdown (this rests on general reading; no source is cited).<!-- FN-PENDING: none named --> So the floor is a
+real one, and it sits exactly where the supply side already ends.</p>
+<p>Two channels are exempt on purpose, both of them because they do not gather along a run: a polder's
+ring canal holds one section the whole way round, because it is the trunk that rings the block and
+is fed from every side rather than accumulating along a run; and a supply canal's own head is set by
+the ground it commands.</p>
+<h2 id="why-does-the-drain-run-across-the-slope-instead-of-down-it">Why does the drain run across the slope instead of down it?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "A drainage collector runs CROSS-slope" -->
+<!-- Grounds: drain_runs_cross_slope, drain_flows_downhill, drainage_discharges_downhill, drainage_junction_smooth; hamletgen/sink.py -->
+<!-- Evidence: reconstruction; the declined rule and the declined readability fixes are decisions -->
+<p><strong>Sources:</strong> this project's reading of how a cascade fan drains; the rules and the declined alternatives below are its own decisions.</p>
+<p>It looks wrong at a glance and it is right. The drain (<em>akusui</em>) crosses the field's low
+margin roughly PERPENDICULAR to the fall, because it is a collector: it has to gather runoff from
+every cascade column, and a drain that ran straight downhill would follow one column and collect
+nothing. A contour drain meeting a valley stream at about a right angle is ordinary side drainage
+(this rests on general reading; no source is cited).<!-- FN-PENDING: none named --> On a map whose land falls
+diagonally the effect is stronger still: on a sheet high to the northwest the outfall sits toward
+the east, which is downhill, and also up the page, where an eye expects the high ground to be. The
+water is not running uphill; the page is.</p>
+<p><em>The rule that was DECLINED.</em> No rule forcing a drain to run within so many degrees of the
+slant was added, and that is a decision rather than an oversight: such a rule would ban the very
+collectors that are historically right. What is pinned instead are the three things that are
+actually constrained - the collector runs roughly across the fall rather than along it, more than
+about fifty degrees off it; the end that discharges is the lower-ground end, never uphill of the
+head; and the brook that takes the water away heads downhill. Together those say "a collector
+crosses the slope, and the water only ever moves downhill", which is the true constraint, while the
+angle rule would have said something false.</p>
+<p><em>Two readability fixes priced and declined, and the one adopted.</em> If the perception still
+misleads, the answer is to fix the READING and not the hydrology. Slope cues drawn as contour lines
+were declined as awkward on a map already dense with line work, and flow arrows inside the channels
+were declined because the channels are drawn too thin to carry one. What was adopted is cheaper: the
+brook CURVES out of the collector's exit heading over its first few steps, so the junction reads as
+the collector turning down the valley into the stream instead of meeting it at a hard corner. The
+turn is held under 65 degrees, each heading averaged over about 40 ft of its own line so that a
+short jittery segment cannot fool the measure.<!-- 40 px at 1 ft/px on the hamlet sheet; the 65 deg sits clear of a real gentle bend (<30) and catches a right angle (~90) --></p>
+<h2 id="does-the-lowest-bund-of-a-paddy-run-with-the-drain-or-across-it">Does the lowest bund of a paddy run with the drain or across it?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "The field hems onto the collector's BANK" -->
+<!-- Grounds: the hem pass and the drain set-back in waterfields/carve.py; _drain_bank; bank_chord; paddy_bunds_clear_the_collector -->
+<!-- Evidence: reconstruction (the physical fact), GM report 2026-08-08 -->
+<p><strong>Sources:</strong> the GM's report of 2026-08-08 on a town map; the bund's construction, from 'Bunds are SHARED' above.</p>
+<p>The GM, reading a town sheet on 2026-08-08: <em>"the dark brown earthen bunds appear to overlap with
+the drainage ditch instead of aligning with it. I would expect the earthen bunds bordering the ditch
+to be at the same angle as it."</em> That was a real construction error being read correctly, not a
+stray plot.</p>
+<p><em>The physical fact the drawing has to honor.</em> A paddy's lowest bund IS the collector's
+top-of-bank. The two abut and cannot interpenetrate: the bund is what holds the water in and the
+ditch is what takes it away, so a bund drawn across the collector is a basin with its wall standing
+in the drain (this rests on general reading; no source is cited).<!-- FN-PENDING: none named --> The field's
+drain-side edge is therefore a single line running WITH the ditch, with the column bunds meeting it
+end-on at the fall angle.</p>
+<p><em>Two independent causes, both in the carve.</em> The hem pass laid its plots on the CONTOUR while
+the collector is fitted at up to about nineteen degrees to it, so across a 26 ft plot the bund
+drifted some 9 ft relative to the ditch: it began above the collector and ended below it, every
+time.<!-- 26 px and ~9 px at 1 ft/px; the fit is f = a + b*u with b clamped to 0.35 --> On the map's west fan the hem covered 14 of
+the 31 plots along that edge, against 4 from the closing rank, so this WAS the field's edge, and it
+read as a sawtooth with brown ticks poking out into bare ground. The hem now samples the drain at
+both of its own bounds and runs both of its edges parallel to what the ditch does between them.
+Separately, the set-back from the drain was a flat figure blind to the collector WIDENING
+downstream, so even a correctly angled bund was drawn inside the ditch's stroke over the lower half
+of its run; the set-back is now half the ditch's drawn width at that point plus half a bund, so the
+two abut instead of overlapping.</p>
+<p><em>And one residue accepted.</em> The collector's line wanders on purpose - about 6 ft of node
+jitter at 120-170 ft spacing<!-- +-6 px at 120-170 px, 1 ft/px -->- so successive stretches differ by a few degrees. A
+paddy basin has STRAIGHT sides and cannot chase that, and a bund pinned only at its two ends cuts
+the corner at every bend and lands in the water. So a bund is lifted to clear the highest point of
+the bank across its own span, which is also what a farmer laying a straight bund against a crooked
+ditch would do. The visible consequence, accepted: a bund can sit a few degrees off its LOCAL
+stretch of drain - about nine on one pocket - while clearing it everywhere. It is also why the map
+is judged on POSITION rather than angle. A correct straight bund and a wrongly contour-laid one
+occupy the same band of angles on a gently fitted drain, so an angle threshold would have to be
+either toothless or wrong.</p>
 <h2 id="plot-sizes-pond-sizing-and-acreage-from-population">Plot sizes, pond sizing and acreage from population</h2>
 <!-- Grounds: the v2 carve targets -->
 <!-- Evidence: interpolated -->
@@ -351,13 +505,25 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.</p>
 <!-- the "~45%" was an undisclosed midpoint, now disclosed; the four unread figures - leftover -->
 <ul>
 <li>
-<p><strong>Plots</strong>: pre-modern 0.02-0.25 acre, irregular; the maps draw ~0.1-0.15 acre,<!-- "the engine carves" --> ~9 scattered plots per household (the ~9 is unsourced) (fragmented holdings were normal).<sup class="fn"><a id="fnref-29" href="citations/fields.html#fn-29">29</a></sup> STRAIGHT rectangular channels/plots are post-1900 consolidation (the Tedori fan's ditches were only straightened in the early 1900s)<sup class="fn"><a id="fnref-30" href="citations/fields.html#fn-30">30</a></sup> - the organic waver is period-correct.<!-- do not "clean it up" --></p>
+<p><strong>Plots</strong>: pre-modern 0.02-0.25 acre, irregular, about 9 scattered plots per household (the ~9 is unsourced) (fragmented holdings were normal).<sup class="fn"><a id="fnref-29" href="citations/fields.html#fn-29">29</a></sup> STRAIGHT rectangular channels/plots are post-1900 consolidation (the Tedori fan's ditches were only straightened in the early 1900s)<sup class="fn"><a id="fnref-30" href="citations/fields.html#fn-30">30</a></sup> - the organic waver is period-correct.<!-- do not "clean it up" --></p>
+<p><em>Which figure is which, because two different things get called a plot.</em> A leveled, diked
+CELL is one basin that has to hold water at an even depth, and that is physically small: the maps
+target about 0.05 acre for it (roughly 200 m2, a 47 ft square), derived from real feet at whatever
+scale the sheet is drawn to, so a basin is the same real size on a hamlet map and on a city
+map.<!-- PADDY_CELL_ACRES; paddy_grain(ftpx) derives the grain from the target --> The older drawing, still used by
+the maps that have not been rebuilt on the water-first engine, subdivides a field recursively to a
+PARCEL grain instead - about 0.10 acre at the finer setting the villages use, about 0.19 acre at its
+default.<!-- plot=34 -> ~435 m2; plot=46 -> ~785 m2, in settlement/fields/paddy.py --> All three figures sit inside the
+0.02-0.25 acre band above, and neither grain is a legibility inflation: the coarser one is a parcel,
+which a holding really was, and the finer one is the cell the water-first engine derives. A parcel
+subdivides into several cells on any slope, which is why the cell sits below the surveyed-parcel
+figures.</p>
 </li>
 <li>
 <p><strong>Pond sizing (the rule)</strong>: sole-storage tameike run ~2,000-2,500 m3 of storage per irrigated ha (typical depth 2-4 m); a STREAM-FED pond refilling 1-2x a season is comfortable at ~1,200-1,500 m3/ha. Hoshigaoka: 31.8 ha of paddy -&gt; ~1.5 ha pond surface<!-- rx=145, ry=92 px at 1px=2ft --> ~ 47,000 m3 at ~3 m ~ 1,470 m3/ha + feeder stream. Pond area is kept proportional to command area.<!-- The first draft's 0.84 ha pond (~790 m3/ha) was honestly undersized - keep pond area proportional to command area. --></p>
 </li>
 <li>
-<p><strong>Acreage from population (the sizing rule)</strong>: a person eats ~1 koku/yr;<sup class="fn"><a id="fnref-31" href="citations/fields.html#fn-31">31</a></sup> pre-modern yield ~1.3 koku/tan; coarse grain fills part of the diet while ~45% of rice goes to tax<sup class="fn"><a id="fnref-32" href="citations/fields.html#fn-32">32</a></sup> -&gt; ~0.8-1.0 tan gross paddy per person -&gt; 350 people ~ 280-350 tan = <strong>69-86 acres</strong> (+ dry margins later). Kikuta lands at ~79 acres / ~600 plots.</p>
+<p><strong>Acreage from population (the sizing rule)</strong>: a person eats ~1 koku/yr;<sup class="fn"><a id="fnref-31" href="citations/fields.html#fn-31">31</a></sup> pre-modern yield ~1.3 koku/tan; coarse grain fills part of the diet while ~45% of rice goes to tax<sup class="fn"><a id="fnref-32" href="citations/fields.html#fn-32">32</a></sup> -&gt; ~0.8-1.0 tan gross paddy per person -&gt; 350 inhabitants ~ 280-350 tan = <strong>69-86 acres</strong> (+ dry margins later). Kikuta lands at ~79 acres / ~600 plots.</p>
 </li>
 </ul>
 <h2 id="tract-sizes---no-settlement-class-cap">Tract sizes - no settlement-class cap</h2>
@@ -381,12 +547,145 @@ plot lattice at the fan's boundary is the shape a fragment naturally takes.</p>
 <!-- the check is town_has_field_off_edge. Landed 2026-08-03: the ring placer's road-severed filter + farmsteads_reach_their_fields_unsevered (hoshizora's lone south-of-road farmhouse is gone), and Tango's four offenders (fn1/fn2/fs1 as off-view slices, nw1 as the in-wall exemption). Pending with the town recompositions (the floor check itself waits in ../pending-enclosed-fan-floor.md): the three towns' fans, the town combs' paddy_grain/grain=2 lineage move, and with it the bund-vs-drain stroke fix (the 1 ft/px bund and drain rendered at equal ~1.5 px weight because the town gens passed grain=1 where the engine's docstring calls for grain = 2/ftpx). -->
 </li>
 </ul>
+<h2 id="what-is-the-farmland-around-a-town-or-a-city-made-of">What is the farmland around a town or a city made of?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "NEAR-RING PADDY IS COMB FIELDS ONLY" and "Near-ring farmland density" -->
+<!-- Grounds: none yet - no scripted generator draws a town or a city; the two near-ring tilers in settlement/land/nearring.py are called by no map -->
+<!-- Evidence: reconstruction (the gradient), GM ruling 2026-07-23 (what the near ring is made of), liberty (the density floors, calibrated on our own maps) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-23; the marketing-community and county-seat material in <a href="#tract-sizes---no-settlement-class-cap">Tract sizes</a> above; this project's measurements of its own drawn town and city maps.</p>
+<p><em>What the reasoning found.</em> A market town or county seat sits in the middle of its best land,
+and the ring worked hardest is the one closest in, the labor-limited fallow retreating to the far
+margins (this rests on general reading; no source is cited).<!-- FN-PENDING: none named - the von Thuenen intensity gradient --> The
+tempting alternative - a few paddy clusters in a sea of scrub right up to the gate - has that
+gradient exactly upside down. What a town map shows is a SAMPLE, though: the far countryside is
+implied off the sheet, and coverage of the near ring need not be total, since in the GM's words
+<em>"the presumption is that there's more we don't see"</em>.</p>
+<p><em>The decision it drove (GM 2026-07-23).</em> The farmland around a town or a city is drawn
+EXCLUSIVELY with the same real irrigation works as a village's: a sluice tapped on a real source, a
+head-race forking into supply canals, flooded basins cascading downhill, a dry hem on the upslope
+margin, a drain, and farmhouses ringed alongside. The near ring is the settlement embedded in those
+fans, and the open ground between them reads as pasture and commons and as the head of paddy country
+carrying on past the frame.</p>
+<p><em>Two fillers REJECTED, recorded so they are never reinvented.</em> Before that ruling the near ring
+had twice been filled with something cheaper: once as a quilt of dry and garden tiles, once as
+gridded paddy basins with no waterworks of their own. Both drew the near ring as something other
+than comb fans, which is precisely what the ruling forbids, and an old, higher density floor was
+calibrated with the quilt in place and would have forced it back. Both tilers are still present in
+the engine, each with a docstring arguing for it, and NO map calls either one; none should.<!-- settlement/land/nearring.py: near_ring_cropland (the 013 quilt) and near_ring_paddy (the 014 basins) -->
+</p>
+<p class="spec"><strong>The rule the map follows:</strong> on a TOWN map at least one field runs OFF the map
+edge. A partial field at the margin is what says "more farmland beyond", and a town that shows only
+enclosed fans claims to show all of its hinterland, which no town sheet can. A field running off the
+edge is exempt from the rules that want a field ringed with farmhouses and tied to a water source,
+because its houses and its water are off the map too.</p>
+<p class="spec"><strong>The rule the map follows:</strong> the near ring reads PACKED, not sampled away to
+bare scrub. Within about 800 ft of the rampart of a walled CITY at least 12% of the ground is
+cultivated, and on a TOWN at least 28%; the sample is taken in the map's own space rather than in
+whatever the frame happens to show, so widening or tightening the frame cannot change the answer.
+Both figures are calibrated against our own drawn maps - a bare city ring measured about 7% and a
+five-fan town about 31% - rather than derived from a source. The look they aim at is a dense
+wet-rice near-city plain, roughly 70-75% paddy with the rest bunds, ditches, lanes and farmsteads,
+at about 1.5-2 farming households per hectare of paddy (this rests on general reading; no source is
+cited).<!-- FN-PENDING: none named; the near-ring figures came in with the 2026-07-23 pass --></p>
+<p class="spec"><strong>The rule the map follows:</strong> on a CITY map the head of a fan is planted, not
+left bare - the ground along the supply canals and the triangle between the two arms at the
+head-race fork. That ground sits at or above its own canals, so gravity cannot command rice onto it,
+and it is exactly the well-drained high ground that <a href="#where-dry-hatake-crops-go---the-topographic-catena">dry crops</a>
+take: barley, millet and buckwheat beside the head-race. No more than a fifth of the ground sampled
+along the main channels may read as bare parchment. The one-fifth ceiling is calibrated against the
+drawn maps, which ran about 25% before the heads were quilted and 13-16% after, not derived from a
+source.</p>
+<h2 id="where-do-the-samurai-estates-sit-when-the-paddy-has-the-near-ring">Where do the samurai estates sit when the paddy has the near ring?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "PADDY-FIRST samurai estates" -->
+<!-- Grounds: none yet - no scripted generator draws a city; the estate placement is hand-authored per map -->
+<!-- Evidence: setting-canon (who holds the land), GM ruling (driveways) -->
+<p><strong>Sources:</strong> the GM's setting notes on land tenure and the samurai country estate; the GM's ruling on approach lanes.</p>
+<p>The fans claim the near ring BEFORE any country estate is placed, and the gentry keep the pockets
+left over - most of their estates stand farther out in the rural district, off the sheet altogether.
+This rests on the GM's setting notes rather than on the historical record. It means a city map
+showing as few as ONE estate, even one whose grounds run off the frame, is the honest signal rather
+than an omission; a ring of estates crowding the wall would be the error.</p>
+<p><em>The decision: estate DRIVEWAYS are not drawn.</em> The GM ruled them out because the long worn
+approach lanes read on the sheet as fat roads laid across the countryside, and the drawing already
+held that an approach lane is not a thing drawn at this scale. The manors therefore stand as clean
+walled compounds with their approaches implied off the map.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a CITY map shows at least one samurai estate; one
+of them cut by the frame edge is legitimate and says its land continues beyond. Estates cluster on
+the side of the map that faces the capital, stand at least about 600 ft apart so they never read as
+a row, and vary in size.<!-- >= 200 px at 3 ft/px, city tier; the capital-facing test takes both half-planes of the diagonal --> No
+estate is drawn with a driveway.</p>
+<h2 id="which-plots-belong-to-the-temple---the-tax-free-glebe">Which plots belong to the temple - the tax-free glebe</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "Strip-allocation (usufruct)" and "Tax-free plots are OPTIONAL" -->
+<!-- Grounds: none yet - the taxfree argument to the v1 paddy drawing is all that survives; no scripted map marks glebe -->
+<!-- Evidence: setting-canon -->
+<p><strong>Sources:</strong> the GM's setting notes on village headmen and the allocation of the common fields; the drawing choice below is this project's, made on a rendered comparison.</p>
+<p>A village's common fields are doled out by the headman in non-contiguous strips held in usufruct, so
+a household's holding is scattered rather than blocked - which is the same fragmentation the
+attested plot sizes above show from the other direction. The religious figure's allocation is
+tax-free and law-bounded to about two households' worth. This rests on the GM's setting notes rather
+than on the historical record.</p>
+<p><em>The drawing choice, and the one declined.</em> Where a map marks the tax-free plots they are
+tinted vermillion and outlined: high contrast against the greens, and the shrine's own sacred color.
+A thin gold outline was tried first and declined - it blended into the tan bunds and was hard to
+pick out at map view.</p>
+<p class="spec"><strong>The rule the map follows:</strong> marking the tax-free plots is OPTIONAL. A village
+map that marks none is correct and complete. A map that marks them marks two or three, scattered
+non-contiguously across the common fields rather than blocked together, in vermillion - and if it
+marks any, it marks that many, because the allocation is bounded by law and a larger one would say
+something about the temple that the setting does not.</p>
 <h2 id="where-dry-hatake-crops-go---the-topographic-catena">Where dry (hatake) crops go - the topographic catena</h2>
 <!-- Grounds: the dry_band knob -->
 <!-- Evidence: researched -->
 <p><strong>Sources:</strong> <a href="https://en.wikipedia.org/wiki/Satoyama"><code>satoyama-enwiki</code></a> (the mosaic and the foothill-to-flat border zone). The Takeuchi-school catena sentence ("large middle river terraces... large areas of crop fields and small areas of paddy") is a GUESS - no readable page supports it (the mekongwatch PDF could not be read).</p>
 <!-- find the Takeuchi paper itself - leftover -->
 <p>WHERE dry crops go: wet-rice villages sort by a topographic CATENA - irrigated paddy holds the flat valley bottom / plain; DRY fields (hatake) take the HIGHER, well-drained ground<sup class="fn"><a id="fnref-37" href="citations/fields.html#fn-37">37</a></sup> the water cannot command (river terraces, natural levees / micro-highs threading the plain, alluvial-fan edges, lower slopes, AND the slightly-raised ground the homesteads sit on); coppice woodland (satoyama) crowns the hills above.<!-- Sources: satoyama land-use literature ("wet-rice in the plains and valley bottoms... satoyama woodlands/grasslands for dry-field crops" - unsourced; "large middle river terraces... large areas of crop fields and small areas of paddy"); Kanto-plain historical-GIS land-use studies. --> So dry fields are NOT one neat strip - historically they sit in SEVERAL positions, above all AROUND the houses ("each family has some paddy and some hatake", the household's dry plots near its home).</p>
+<h2 id="why-are-the-dry-plots-beside-a-canal-square-to-the-canal">Why are the dry plots beside a canal square to the canal?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "Dry (hatake) plots are RECTANGLES laid out AGAINST THE CANAL" -->
+<!-- Grounds: _dry_fields in waterfields/carve.py - tiled by arc length along the canal polyline, offset perpendicular to the local tangent -->
+<!-- Evidence: GM ruling 2026-07; the parcel-size ceiling is calibrated, not enforced -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07; <a href="https://archive.org/details/landutilizationi0000buck">Buck</a>'s surveys for the size of a dry parcel; this project's measurement of its own maps.</p>
+<p>A dry field bordering a supply canal is surveyed TO the canal: one edge runs along it and the other
+stands perpendicular to it, running upslope, so the plots come out as clean rectangles (this rests
+on general reading; no source is cited).<!-- FN-PENDING: none named --> The drawing had built them in the paddy's
+own frame instead - columns down the fall, rows on the contour - and since a head-race commonly runs
+diagonally to the fall, every plot came out sheared into a parallelogram.</p>
+<p><em>The first fix, REJECTED.</em> A first attempt merely softened that lean while STILL orienting the
+plots to the paddy, and the GM turned it down correctly: the plots take their orientation from the
+CANAL, not from the rice. The plots are now tiled by arc length along the canal's own line and each
+is built as a rectangle offset perpendicular to the local tangent, so neighbors abut continuously
+along the canal, nothing is sheared or stepped, and only the outer upslope edge is ragged. That the
+strips therefore run near-horizontal along one map's head-race and near-vertical along another's is
+the point, not an inconsistency. They stay on the dry side throughout, both edges upslope of the
+canal behind a thin berm, and where a map carries more than one fan a hem plot that would lap onto a
+neighboring fan's rice is dropped: dry crops on flooded ground contradict the whole reason the hem
+is where it is.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a dry parcel is a smallholder's strip, and the
+map-wide MEAN dry parcel stays under 0.25 acre. The attested mean Chinese dry parcel is near one
+<em>mu</em>, about 0.17 acre, and the drawn village strips land at 0.16-0.17 with the hamlet's
+garden-scale strips at about 0.04. The tiling is in real feet at every scale - roughly 92 ft across
+a parcel and 72 ft down a row at the village grain - so a dry cell is never drawn dwarfing the rice
+basins beside it, which is what happens when a pixel figure is carried unscaled onto a coarser
+sheet.<!-- 46 px x 36 px at the 2 ft/px tuning grain, scaled by grain; unscaled at 3 ft/px they doubled to ~0.34-0.38 acre --></p>
+<h2 id="why-do-neighboring-dry-plots-run-their-furrows-different-ways">Why do neighboring dry plots run their furrows different ways?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "Dry-field FURROWS vary PER PLOT" -->
+<!-- Grounds: the furrow angle in waterfields/carve.py, chosen into the widest gap between already-placed neighbors; furrow_spread -->
+<!-- Evidence: reconstruction; the first rationale was wrong and the GM caught it -->
+<p><strong>Sources:</strong> the fragmented-holdings finding in 'Plot sizes' above; the GM's catch of 2026-07.</p>
+<p>Dry crops are ridge-and-furrow row-cultivated, unlike the flooded sheet of a paddy, so a dry plot
+shows rows and the direction of those rows is a visible choice. The first version ran EVERY plot's
+furrows along the contour, on the reasoning that a ridge laid along the contour dams the rain and
+checks runoff. That reasoning belongs to a STEEP slope: it is an erosion measure, not a general
+rule, and on a gentle valley margin it is not forced (this rests on general reading; no source is
+cited).<!-- FN-PENDING: none named --> The GM caught what it cost - every plot's rows came out identical, so
+adjacent family strips were indistinguishable from one another.</p>
+<p>The accurate look on gentle ground is the patchwork quilt. Holdings were fragmented, each household
+working several small non-contiguous plots, so neighboring strips were plowed to their own
+orientations. Each dry plot now takes a furrow angle up to about 63 degrees either side of the
+contour, never straight downslope, chosen by dropping it into the WIDEST gap between the angles of
+the neighbors already placed - which guarantees a real separation from each of them rather than
+hoping for one; no two adjacent dry plots run within about six degrees of each other, an angle being
+compared as an undirected line. A genuinely steep or terraced village is drawn the other way, by
+declaring a narrow spread so the rows converge back onto the contour, where the erosion-control
+reading is the correct one.</p>
 <h2 id="the-wettest-plots-are-their-own-kind-of-ground---shitsuden-and-why-they-read-blue">The wettest plots are their own kind of ground - shitsuden, and why they read blue</h2>
 <!-- Grounds: the wet paddy interactive class (feature 159); the FLOODED tint in waterfields/carve.py, polder.py, hill.py -->
 <!-- Evidence: researched (the category and its penalties are READ; the siting is an inference, said so below) -->
@@ -462,8 +761,10 @@ contradicted by 'Nitrogen - a flooded paddy makes its own' above).</p>
 in a single row on the bund, in a deep pine green
 chosen so the beads read against the pale rice; real foliage is medium green, and the bead is drawn
 darker than the plant. The plant is a knee-to-waist-high bush (50-125 cm);<sup class="fn"><a id="fnref-41" href="citations/fields.html#fn-41">41</a></sup> the bead says only where
-it stands. The GM chose the color on 2026-08-15 because the old olive
-read as neither rice nor bund.</p>
+it stands. The GM chose the color on 2026-08-15 from a rendered ladder of three candidates, because
+the old olive sat between the rice green and the bund brown and vanished at map zoom; the two
+darker candidates on the ladder were declined with it, a hunter green that grayed out and a forest
+green that read as black against the near-black bund stroke.<!-- olive '#7C9A4E'; declined hunter '#355E3B' and forest '#1F4A28' --></p>
 <!-- the bead is r="1.4" px at one foot per pixel; the green is #2F6B35; waterfields/palette.py records why the color was chosen -->
 <h2 id="free-lore-hooks-and-the-sources">Free lore hooks, and the sources</h2>
 <!-- Grounds: /law, /calendar, village detail -->

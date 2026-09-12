@@ -30,7 +30,7 @@ class FieldFeaturesMixin:
         while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen."""
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
-            # NOT the heftier natural-stream weight (see the water-width ladder in settlements.md).
+            # NOT the heftier natural-stream weight (see the water-width ladder in research/water.html).
             self._water(f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="5"/>', {}, cls="field ditch")
         self._water(
             f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#9CB4C8"/>',  # FILL -> shared bed group (topmost bed)

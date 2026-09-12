@@ -691,7 +691,7 @@ class HousesMixin:
         # its ~6:1 room (the fix for groves never reaching target under end-reconciliation). Dimensions are in
         # FEET, drawn at this map's ftpx (village 2 ft/px, hamlet 1): the plain house is the 46x28 ft 8:5 minka
         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
-        # settlements.md 'To-scale villages'.
+        # research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('How far is it across this map? The scale, tier by tier'.
         if size is not None:  # explicit footprint in FEET (e.g. a larger headman)
             wf, hw, hh = 1.0, self.px(size[0]), self.px(size[1])
         elif getattr(self, "_nucleated", False):
@@ -804,7 +804,7 @@ class HousesMixin:
                 # The old form spread wide (x1.15 lateral) with the horns curved hard back, so the placer -
                 # which pulls every house to hug the paddy and packs ALONG it - strung them into a wide, hollow
                 # arc that stranded the horns far from the crops (Kikuta: 55 houses over a hull filled ~20%, NE
-                # horn ~400px from any field; see village_cluster_compact / settlements.md 'Cluster compactness').
+                # horn ~400px from any field; see village_cluster_compact / research/homesteads.html 'How tightly does a nucleated village pack?').
                 # WIDTH is what the placer amplifies, so keep the lateral reach narrow (a nucleated village is a
                 # deep blob, not a wide ribbon) and let the depth carry the frontage, with a gentle concave bow.
                 t = rng.uniform(-1.0, 1.0)
@@ -886,7 +886,7 @@ class HousesMixin:
         SIZED IN REAL FEET at ftpx >= 2 (GM 2026-07-22): for a village or provincial city each `plot_size`
         picks a real-feet CELL-AREA target (acres) and an aspect, and `waterfields.paddy_grain` converts that to
         px at THIS map's `ftpx` - so the paddy grain is the same real size at every scale (see
-        waterfields.PADDY_CELL_ACRES / settlements.md 'Paddy cell size'). The targets bracket the calibrated
+        waterfields.PADDY_CELL_ACRES / research/fields.html 'Plot sizes, pond sizing and acreage from population'). The targets bracket the calibrated
         norm: `small_irregular` below it, `medium` at it, `large_block` above, `strip` at the norm's area but
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
         roll_village) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM

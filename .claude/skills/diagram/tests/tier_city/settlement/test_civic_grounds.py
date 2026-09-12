@@ -36,7 +36,7 @@ def test_granary_append_records_a_list_for_a_capital_with_two_granaries():
 
 
 def test_a_cremation_ground_is_sized_by_TIER_not_by_a_fixed_pixel_glyph() -> None:
-    """GM 2026-07-19, anchors in settlements.md: a sanmai's cleared working core is 30-80 real ft for
+    """GM 2026-07-19, anchors in research/religion-and-death.html, the funerary-size entry: a sanmai's cleared working core is 30-80 real ft for
     a village or town and ~80-160 ft for a provincial city - even metropolitan Edo's Yoyogi crematory
     was only ~180 ft square. The old glyph was FIXED-PIXEL (116x80 px) and silently TRIPLED at city
     scale, which is the defect this branch exists to prevent.
@@ -117,7 +117,7 @@ def test_a_wall_running_ALONG_a_ward_fence_is_re_stamped_over_it() -> None:
 
 
 def test_a_burial_ground_DERIVES_its_shape_from_whether_it_is_a_parish_plot() -> None:
-    """Researched 2026-07-23, written up in settlements.md 'shape of the common ground'.
+    """Researched 2026-07-23, written up in research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common ground'.
 
     Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed temple
     yards - were unplotted and TERRAIN-FOLLOWING, never surveyed. Song China's state pauper

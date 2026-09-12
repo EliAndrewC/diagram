@@ -56,7 +56,7 @@ in the pool has one and why this one is captioned to say which kind it is. See u
 
 Full grounding, with the China-first research and the one disclosed divergence (Ubame follows the
 Japanese two-site tatara/okaji split, not the Chinese adjacent-hearth arrangement, because dispersed
-fuel forces two sites): specs/107-ubame-town/research.md and settlements/urban-features.md.
+fuel forces two sites): specs/107-ubame-town/research.md and research/urban-features.html.
 """
 
 import math
@@ -569,7 +569,7 @@ s.village_grove([(1180, 640), (1300, 660), (1285, 780), (1165, 762)], role="cops
 # ===== FIRE DEFENSE: deliberately NO fire-watch tower. The hinomi-yagura belongs to a dense ENCLOSED
 # wooden core; an unwalled county seat at detached village grain has field-gaps for natural breaks,
 # and a real jin'ya town kept fire bells, stored water and fireproof kura instead. Same call as
-# Hoshizora. WHY: settlements/towns.md "Fire towers".
+# Hoshizora. WHY: research/towns.html "Fire towers".
 
 # ===== THE NOTICE BOARD (kosatsuba) and THE PUNISHMENT GROUND, both AUTO-SITED. These two are
 # siblings: each is placed by FOOT TRAFFIC, so each wants the engine's own verge probe rather than a

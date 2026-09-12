@@ -146,7 +146,7 @@ The house itself did not move; the settlement grew toward it.
 
 **The way-access is ACCEPTED, deliberately.** It still stands 385 ft from any lane against 41-70 ft
 for its neighbors, and that is correct rather than an oversight: a lane must NOT run through the
-flooded paddy (`settlements/ways.md`), and people cross into the fields on foot **along the bunds**.
+flooded paddy (`research/ways.html`), and people cross into the fields on foot **along the bunds**.
 An edge farmstead standing at the paddy margin is reached the same way every field worker reaches
 the same ground. Drawing a lane out to it would put a no-build corridor across the crop to serve one
 household - the opposite of the rule.
@@ -318,7 +318,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `settlements/presentation.md` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -564,7 +564,7 @@ first version of this entry invented.
 
 **OPEN QUESTION this raises, for a research pass rather than a ruling: should a 4 ft planning margin
 bind inside a 10.7 ft interstice between two homesteads?** The gap sits between one house's garden and
-another's threshing yard - the interstitial courtyard ground `settlements/homesteads.md` already
+another's threshing yard - the interstitial courtyard ground `research/homesteads.html` already
 describes as shared, where byres and wells stand. A 3 ft footpath passing ~3.9 ft from a garden bed
 and ~3.9 ft from a work yard is not obviously a violation of anything physical; it is the ENGINE's
 margin that refuses it. What the record would have to show is attested in-cluster path widths and the

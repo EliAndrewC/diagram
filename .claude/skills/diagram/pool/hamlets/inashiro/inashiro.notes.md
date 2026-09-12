@@ -898,7 +898,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `settlements/presentation.md` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -1037,7 +1037,7 @@ their local channel. The 2026-08-16 marsh-seated crownless parcel failure is abs
 **THE RIPPLE - three defects the review found in ink this delta moved past, none of them caused by it:**
 
 1. **The copse is drawn INSIDE the windbreak.** `village_groves[1]` (role `copse`, 11 clumps) is
-   documented as the greenery filling the OPEN gaps among the houses, and `settlements/vegetation.md`
+   documented as the greenery filling the OPEN gaps among the houses, and `research/vegetation.html`
    says outright that the copse, not the belt, fills the inner gaps. Measured clump-to-nearest-belt-clump
    distance: 9, 8, 6, 4, 6, 4, 11, 9, 26, 30, 83 ft - **10 of 11 inside the belt's own 14 ft canopy**.
    The copse spans x 1096-1188 while the houses span 1108-1331, so every clump landed on the belt's
@@ -1390,7 +1390,7 @@ strips in the fabric re-threaded the whole web and broke it (a 5 ft gap the 4 ft
 link a garden corner blocks); seating the strips AFTER the web and the board instead - where
 `_strip_blocked` keeps them 6 ft off every lane - restored T48's web exactly and fit all eight
 strips with a second offset per side. `lanes_clear_of_bamboo` holds it. T50: the lane widths were
-re-read (settlements/ways.md): the FORM is read - carts confined by law to three cities, China's
+re-read (research/ways.html): the FORM is read - carts confined by law to three cities, China's
 network built for foot, pole and wheelbarrow - and no source anywhere gives a numeric width for an
 ordinary village lane; the drawn 3 / 5 / 6 ft are drawing conventions inside the read bounds
 (under the 9 ft ox-cart stone route), labeled so.
