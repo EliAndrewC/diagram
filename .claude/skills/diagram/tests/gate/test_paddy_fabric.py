@@ -27,7 +27,9 @@ found thing is well formed.
 
 from __future__ import annotations
 
+import glob
 import math
+import os
 
 import pytest
 
@@ -247,3 +249,23 @@ def test_every_recorded_plot_ring_is_a_simple_polygon(fan) -> None:
     assert rings, "no plot rings on the fan"
     crossing = [i for i, r in enumerate(rings) if len(r) >= 3 and not shapely.Polygon([(float(a), float(b)) for a, b in r]).is_valid]
     assert not crossing, f"self-crossing plot rings as recorded: {crossing[:6]}"
+
+
+_POOL_HAMLETS = sorted(glob.glob(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "pool", "hamlets", "*", "*.json")))
+
+
+@pytest.mark.parametrize("manifest", _POOL_HAMLETS, ids=os.path.basename)
+def test_no_shipped_hamlet_has_a_basin_tapering_to_a_point(manifest: str) -> None:
+    """`paddy_plots_are_workable_basins` over EVERY shipped hamlet's manifest, not only the two the gate rolls
+    (settlement-review, feature 230 pass 10). The fixture above reads the reference and Kuwabata, so a needle on
+    Kashikawa - rings retracing their own edge at 0.9 degrees - reached a review before any test. Reading a manifest
+    costs no roll."""
+    import json
+
+    with open(manifest, encoding="utf-8") as fh:
+        M = json.load(fh)
+    fields = [f for f in M.get("fields") or [] if f.get("plot_rings")]
+    if not fields:
+        pytest.skip("no paddy field on this map")
+    needles = [(f.get("name"), i) for f in fields for i, r in enumerate(f["plot_rings"]) if len(r) >= 3 and pointed_ring([(float(a), float(b)) for a, b in r], NEEDLE_DEG)]
+    assert not needles, f"{len(needles)} basin(s) taper below {NEEDLE_DEG} deg: {needles[:5]}"
