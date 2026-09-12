@@ -107,10 +107,15 @@ not read it as one.
 that constructs a delta and asserts the script names the class. The matching MUST be by SHAPE rather
 than against a hardcoded literal that would drift with its target.
 
-**FR-011** Restating the project's "a stale literal agrees with itself" note as a testable obligation: a
-test MUST fail if the script's matching surface matches NOTHING - so a check that has silently stopped
-matching (a renamed tag, a changed docstring format, a moved research directory) cannot pass by being
-vacuously quiet.
+**FR-011** Restating the project's "a stale literal agrees with itself" note as a testable obligation.
+This feature ships TWO matching surfaces with two different non-vacuity mechanisms, and each MUST be
+covered separately or one can stop matching quietly:
+  1. **`_entry_owed.py`'s** surface (the `Entry:` tags, the section bodies, the explanation-prose tags) -
+     a GATE test MUST fail if it matches nothing.
+  2. **The heading checker's** surface - its `--selftest`, run at the gate AND at the push per FR-007,
+     MUST fail if it matches nothing.
+A renamed tag, a changed docstring format or a moved research directory must turn one of these red
+rather than producing a silent all-clear.
 
 ### The guidelines the GM asked for
 
@@ -142,11 +147,15 @@ and never decides a rule. `model: opus` like every subagent check (GM 2026-09-07
 **It MUST be wired, or it is worse than nothing.** An agent nothing dispatches is a third thing everyone
 believes checked the modal. Two things follow:
 
-  1. **A decision point.** The classes `_entry_owed.py` names ARE what the session hands to
-     `entry-drift`, before the work lands. The obligation is pinned the way `quote-check confirmed` and
-     `source-applicability confirmed` are - a task checkbox the gate enforces
-     (`tests/test_task_research_boxes.py`, which already holds `QUOTE_BOX` and `APPLICABILITY_BOX`) -
-     so a feature whose delta moves a section under a named class cannot tick its task without it.
+  1. **A decision point.** The classes `_entry_owed.py` names at the PUSH decision point (FR-003.2) ARE
+     what the session hands to `entry-drift`, before the work lands - and the report's printed line MUST
+     say so in as many words, because that line is the only thing that runs on this delta shape.
+
+     The dispatch is owed **per pair whose section's FINDING moved**, not per pair named. A maintenance
+     sweep of the record - a footnote relocated, a session note turned into an HTML comment, a citation
+     re-pointed, a passage translated - changes no finding and is discharged by one recorded line
+     saying so, not by an agent per class. This is not a loophole; it is the same measurement D1 rests
+     on, applied consistently (see D6).
   2. **Pre-authorization.** `entry-drift` MUST be added to the nine agents enumerated in
      `container-scripts/append-system-prompt.md`. Without it the mandate loses to the default system
      prompt's "do not call the Agent tool unless the user asked", which sits ABOVE `CLAUDE.md` - the
@@ -178,18 +187,15 @@ does not swallow the rule.
 
 **SC-005** A delta touching only research sections no class entry names produces no report.
 
-**SC-006** Deleting the script's matching surface turns FR-011's test red rather than producing a quiet
-pass.
+**SC-006** Deleting `_entry_owed.py`'s matching surface turns FR-011.1's gate test red, and breaking
+the heading checker's turns its `--selftest` red at BOTH the gate and the push - neither produces a
+quiet pass.
 
 **SC-007** `.claude/agents/entry-drift.md` exists, pins `model: opus`, passes
 `tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature
 233's own pair, run and recorded there: the `PigSty` modal against the section 233 rewrites, which must
 come back DRIFTED before 233's docstring rewrite and IN-STEP after it. A new agent whose first real
 dispatch is the case that motivated it is the cheapest honest proof it does anything.
-
-**SC-008** A task whose delta moves a research section under a class the report names cannot be ticked
-without its `entry-drift confirmed` box, proven by `tests/test_task_research_boxes.py` going red on a
-task file that lacks it.
 
 **SC-009** `container-scripts/append-system-prompt.md` names `entry-drift` among the pre-authorized
 agents, asserted by a test rather than by inspection.
@@ -218,6 +224,32 @@ it is still the right unit for the report, which should name the section a reade
 **D4 - content-derived, never a stored hash.** No table of "this entry was current as of this text" is
 kept: such a table is exactly the stale literal that agrees with itself. git is the record.
 
+**D6 - the dispatch obligation is DOCTRINE, not mechanism - an ACCEPTED LIMITATION.** Nothing enforces
+that a session hands a named pair to `entry-drift`. That is deliberate, and it is the shape of the whole
+feature rather than a gap in it.
+
+*Why no mechanism.* The condition is "the report named a pair", which is delta-derived and known only to
+`_entry_owed.py` at push. Two enforcers were priced and both fail:
+  - **A task checkbox** beside `quote-check confirmed` (the round-3 design). REJECTED on measurement:
+    `tests/test_task_research_boxes.py` reads exactly two inputs, the text of a `tasks.md` and the
+    feature number from its directory name - no delta, no git, no class index - so the condition is not
+    expressible in it. And its enforcement would not run on the motivating delta anyway: `make done`
+    short-circuits at `Makefile:122` on a research-plus-docstring delta, and `make page-check`
+    (`Makefile:926`) runs only `tests/interactive` and the browser page tests, not that test. A checkbox
+    that cannot be conditioned is always owed or never owed.
+  - **A refusal at push**, where the evaluator does run. REJECTED for D1's reason, unchanged: the key
+    fires on 30 of the last 32 research-only commits, up to 41 classes at once (`research.md` R2).
+
+*What it costs, in observable terms.* A session that ignores the report's printed line ships a stale
+modal, exactly as today. What changes is that it can no longer do so without being told - which is the
+GM's own complaint ("would you have done it?"), and is the difference between a silent gap and a
+declined prompt.
+
+*Why the round-3 design was worse than this.* It moved D1's declined cost from the refusal onto a
+checkbox without re-pricing it: on one of those 30 sweeps it would have demanded either 41 Opus
+dispatches to conclude that a footnote moved, or a box ticked without dispatching - which is the unwired
+agent round 3 existed to fix, wearing a tick.
+
 **D5 - the REPORT has no escape token; the HEADING CHECK refuses and still has none, deliberately.**
 Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
 moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
@@ -238,6 +270,31 @@ symmetry.
   its own work, wants the GM's call, and is not begun here.
 
 ## Review history
+
+**Round 4** (`spec-fidelity`, 2026-09-12): round-3 items (2)-(5) verified resolved in source. Item (1),
+the wiring, was resolved **in appearance only**, and the fix is a CUT rather than more machinery.
+Three findings, all taken.
+(1) The gate-enforced task checkbox could not work. `research_box_violations(text, feature)` reads the
+text of a `tasks.md` and a feature number and nothing else - no delta, no git, no class index - so a
+delta-derived condition is not expressible in it; SC-008 gave it away by proving the rule textually. And
+its enforcement would not have run on the motivating delta regardless: `make done` short-circuits at
+`Makefile:122`, and `make page-check` (`Makefile:926`) does not run that test. The reviewer noted this
+was the THIRD appearance of one blind spot - round 1 found it in the report's gate channel, round 2 in
+FR-007's gate-only enforcement, and round 3's own fix reintroduced it in the checkbox.
+(2) Worse, the checkbox hung a MANDATORY obligation on the very key D1 withdrew on measurement: on one
+of R2's 30 sweeps it would have demanded 41 Opus dispatches to conclude a footnote had moved, or a tick
+without a dispatch. Not a literal contradiction with FR-004, but a purpose-level one.
+The checkbox and SC-008 are DELETED. The dispatch is owed per pair whose section's FINDING moved, said
+in the report's own printed line, and the obligation is recorded as doctrine in a new D6 with both
+rejected enforcers priced and the cost of having none stated plainly.
+(3) FR-011 said "the script's matching surface" in a spec with two scripts and two different
+non-vacuity mechanisms; both are now named separately, with SC-006 covering each.
+The reviewer ruled the design sound and told the session NOT to escalate: "the design (gate the
+decidable half, report the judgment half, route the judgment to an agent) is right and rounds 1-3 got it
+there." It also flagged the heading half (FR-007-FR-009) as the severable piece if the GM ever wants
+this smaller - prophylactic against a defect that does not exist, honestly labeled as such by FR-009,
+and in scope because `request.md` records that the GM was told about the broken-heading silence in the
+same turn they answered.
 
 **Round 3** (`spec-fidelity`, 2026-09-12): FR-007's push placement verified in the source and CLOSED
 (`push_cmd` runs `check-file-scale.py` unconditionally at lines 229/236, upstream of the route decision
