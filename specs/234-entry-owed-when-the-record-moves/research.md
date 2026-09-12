@@ -220,8 +220,12 @@ Three findings caused by this feature's own correction, all fixed:
 3. **The new figures leaned on a paragraph's opening frame** rather than saying where they came from.
    Section A's comparable sentence says "measured on the Kuwabata map"; this one does now too.
 
-And a roster mismatch, mechanical: fn-36 quotes `sdlib-shunde-jitang` and `gmrb-2024-sangji` and neither
-was on the section's `Sources:` line, so the modal's works list omitted two works the section quotes.
+And a roster mismatch: `sdlib-shunde-jitang` is quoted by a footnote in the 6:4 section and was not on
+that section's `Sources:` line, so the modal's works list omitted it. Added. `gmrb-2024-sangji` is quoted
+in the same NOTE but the checker does not count it as quoted FROM that section, so it is left off rather
+than forced on - a roster key that the section's own footnotes do not carry is the thing the check
+exists to catch, and guessing at the attribution to satisfy it would be the wrong repair. Recorded for
+the next session with the observation that made it visible.
 
 **DEFERRED, with the measurement, because they predate this feature and are a backfill rather than a
 fix** (the deferral is a deliverable, not a shrug - CLAUDE.md Principle XIV):
