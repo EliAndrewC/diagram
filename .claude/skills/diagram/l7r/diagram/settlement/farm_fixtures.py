@@ -17,6 +17,8 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from ._geom import Pt
+from ._geom.overlap import rot_rect
+from ._geom.primitives import poly_seg_dist
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -134,10 +136,44 @@ class FarmFixturesMixin:
 STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
 PEN_FT = (10.0, 6.0)  # the fenced DRY RUN of a duck pen on the dike; its WET RUN is a fenced corner of the pond
 PEN_WET_FT = 12.0  # how far the wet-run fence reaches into the water from the bank
+# NOBODY BUILDS OVER THE SLUICE NOTCH (feature 233). Room for a person to stand at the gate and lift
+# its boards - a sluice being "a protected opening in the pond dike that can be easily closed with
+# wooden boards to regulate water level" (fao-x6708e) - so about two paces. A GUESS: two source-reader
+# passes found the record silent on any spacing along a dike (FAO gives dike WIDTH only, 5-10 m for a
+# dike carrying a pigsty), so this is a degree along a continuum with nothing to measure it against,
+# not a choice between two attested forms. It costs nothing here: every fixture places at every margin
+# from 0 to 12 ft (specs/233-pigsty-clear-of-the-sluice/research.md R6). The reason the sheds move at
+# all is CONSTRUCTIONAL, never sanitary - the manure reaching the pond is the whole dike-pond loop, and
+# the record is SILENT on a sty's position relative to an inlet; see research/archetypes.html
+# "Does a pig sty have to stand back from the water, or from the pond's sluice?".
+SLUICE_CLEAR_FT = 6.0
+
+
+def pen_wet_arc(cx: float, cy: float, w: float, reach: float, water: Sequence[Pt]) -> list[Pt]:
+    """A duck pen's WET RUN: the fence arc from the bank into the water, toward the pond's nearest
+    water point. Empty when the pond has no outline.
+
+    LIFTED to module level by feature 233 (the feature-146 doctrine: an inner function that is hard to
+    test gets lifted, and there is ONE body). The seat test needs the arc a CANDIDATE seat WOULD
+    produce - the arc is a function of the seat and the pond's outline - so a test that reused a placed
+    pen's recorded arc would be checking the old fence against a new seat. `duck_pen` delegates here.
+    """
+    if not water:
+        return []
+    wx, wy = min(water, key=lambda q: math.dist(q, (cx, cy)))
+    vx, vy = wx - cx, wy - cy
+    vl = math.hypot(vx, vy) or 1.0
+    ux, uy = vx / vl, vy / vl
+    px_, py_ = -uy, ux
+    arc: list[Pt] = [(cx + ux * (vl - 1) + px_ * w / 2, cy + uy * (vl - 1) + py_ * w / 2)]
+    for k in range(1, 6):
+        ang = math.pi * (k / 5)
+        arc.append((cx + ux * (vl - 1 + reach * math.sin(ang) * 0.9) + px_ * (w / 2) * math.cos(ang), cy + uy * (vl - 1 + reach * math.sin(ang) * 0.9) + py_ * (w / 2) * math.cos(ang)))
+    return arc
 
 
 class PondStockMixin:
-    def pond_fixture_fits(self: Settlement, cx: float, cy: float, rot: float, kind: str) -> bool:  # type: ignore[misc]
+    def pond_fixture_fits(self: Settlement, cx: float, cy: float, rot: float, kind: str, water: Sequence[Pt] = ()) -> bool:  # type: ignore[misc]
         """Room for a sty or a pen at this bank seat: clear of every placed footprint, every recorded
         pond-stock fixture, and the plank crossings; the bank itself is field ground, which the
         registries hold no structure off - that is what the seat is FOR."""
@@ -148,6 +184,22 @@ class PondStockMixin:
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
                     return False
+        # AND CLEAR OF THE SLUICE (feature 233). EVERY drawn part: the shed or dry-run footprint, and
+        # for a pen the fence arc too - which is the part that was worst on the shipped map, its fence
+        # drawn straight across a feed cut. Measured to the stub SEGMENT and zero on an overlap
+        # (`poly_seg_dist`): a stub runs 19-41 ft, so its endpoint alone understates the distance, and
+        # a measure that cannot return zero scored a shed with the culvert through it at 0.13 ft.
+        parts: list[tuple[Sequence[Pt], bool]] = [(rot_rect(cx, cy, w, h, rot), True)]
+        if kind != "sty":
+            arc = pen_wet_arc(cx, cy, w, self.px(PEN_WET_FT), water)
+            if arc:
+                parts.append((arc, False))
+        clear = self.px(SLUICE_CLEAR_FT)
+        for sl in self.M.get("dikepond_sluices", []):
+            a = (float(sl["a"][0]), float(sl["a"][1]))
+            b = (float(sl["b"][0]), float(sl["b"][1]))
+            if any(poly_seg_dist(list(poly), a, b, closed) < clear for poly, closed in parts):
+                return False
         return True
 
     def pig_sty(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None) -> None:  # type: ignore[misc]
@@ -183,18 +235,8 @@ class PondStockMixin:
         ]
         # the WET RUN: a fence arc from the bank into the water toward the pond's nearest water point
         wet: list[list[float]] = []
-        if water:
-            wx, wy = min(water, key=lambda q: math.dist(q, (cx, cy)))
-            vx, vy = wx - cx, wy - cy
-            vl = math.hypot(vx, vy) or 1.0
-            ux, uy = vx / vl, vy / vl
-            reach = self.px(PEN_WET_FT)
-            px_, py_ = -uy, ux
-            arc = [(cx + ux * (vl - 1) + px_ * w / 2, cy + uy * (vl - 1) + py_ * w / 2)]
-            for k in range(1, 6):
-                t = k / 5
-                ang = math.pi * t
-                arc.append((cx + ux * (vl - 1 + reach * math.sin(ang) * 0.9) + px_ * (w / 2) * math.cos(ang), cy + uy * (vl - 1 + reach * math.sin(ang) * 0.9) + py_ * (w / 2) * math.cos(ang)))
+        arc = pen_wet_arc(cx, cy, w, self.px(PEN_WET_FT), water)
+        if arc:
             pts = " ".join(f"{a:.1f},{b:.1f}" for a, b in arc)
             g.append(f'<polyline points="{pts}" fill="none" stroke="{fence}" stroke-width="0.9" stroke-dasharray="1.6,1.2"/>')
             wet = [[round(a, 1), round(b, 1)] for a, b in arc]

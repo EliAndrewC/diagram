@@ -98,6 +98,31 @@ def seg_intersect(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     return (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
 
 
+def poly_seg_dist(poly: Poly, a: Pt, b: Pt, closed: bool = True) -> float:
+    """Least distance between the segment `a`-`b` and a polygon (or an open polyline, `closed=False`),
+    ZERO when the two actually MEET - the segment crossing an edge, or lying wholly inside a closed
+    polygon.
+
+    THE ZERO IS THE POINT (feature 233). A distance that cannot return zero reports an overlap as a
+    narrow gap, and that is not hypothetical: this defect's first two measurements scored a shed with a
+    culvert running through it at 0.13 ft, because they sampled the footprint's boundary and took the
+    nearest sample with no intersection test. A clearance predicate built that way would have passed
+    the very map it was written to fix. `specs/233-pigsty-clear-of-the-sluice/research.md` R1 records
+    both measurements and how each understated; `measure_geom.py` beside it is the checked reference.
+    """
+    n = len(poly)
+    best = math.inf
+    for i in range(n if closed else n - 1):
+        p, q = poly[i], poly[(i + 1) % n]
+        if segments_cross(p, q, a, b):
+            return 0.0
+        best = min(best, seg_dist(a[0], a[1], p, q), seg_dist(b[0], b[1], p, q), seg_dist(p[0], p[1], a, b), seg_dist(q[0], q[1], a, b))
+    # a segment wholly inside a closed polygon crosses no edge, so `segments_cross` alone cannot see it
+    if closed and (point_in_poly(a[0], a[1], poly) or point_in_poly(b[0], b[1], poly)):
+        return 0.0
+    return best
+
+
 def edge_dist(px: float, py: float, poly: Poly) -> float:
     return min(seg_dist(px, py, poly[i], poly[(i + 1) % len(poly)]) for i in range(len(poly)))
 

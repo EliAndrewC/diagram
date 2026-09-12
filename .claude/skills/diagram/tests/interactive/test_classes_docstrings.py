@@ -35,7 +35,16 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     pointing at 'Why dikes were planted at all', a heading that does not exist, so the resolver matched
     nothing and two classes showed no question at all. The rule when you rename a heading: sweep every
     pointer, then re-point these snapshot strings in the same change, and expect the gate, since this
-    pins a class attribute. Every other field here stays pinned permanently."""
+    pins a class attribute.
+
+    AND `sources` MOVES WITH IT WHEN AN ENTRY IS REWRITTEN FROM NEW RESEARCH (feature 233). This
+    docstring said "every other field here stays pinned permanently", which cannot hold: a class's
+    `Sources:` names the keys its explanation was written FROM, so an entry rewritten against new
+    findings whose sources it does not name is simply miscited. Feature 233 rewrote the `pig sty` and
+    `duck pen` explanations against a new research section and both gained keys; the snapshot moved with
+    them. The pin that matters is unchanged - `label`, `name` and `covers` still never move, and a
+    `sources` change is only legitimate as part of a rewrite of the prose it supports. Two fields have
+    ever moved; do not read this as license for a third."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     assert sorted(before) == sorted(CLASSES) and len(CLASSES) == 51
     for key, was in before.items():
