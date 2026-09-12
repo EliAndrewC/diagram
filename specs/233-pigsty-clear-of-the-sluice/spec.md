@@ -69,13 +69,20 @@ Dispatched as two `source-reader` agents, 2026-09-12. Full verdict tables live i
 
 ## Functional requirements
 
-**FR-001** A pig sty's drawn footprint MUST NOT overlap a drawn pond sluice stub
-(`dikepond_sluices[]`), and neither MUST a duck pen's dry run. This is a requirement about two glyphs
+**FR-001** No drawn part of a pig sty or a duck pen MUST overlap a drawn pond sluice stub
+(`dikepond_sluices[]`). For a duck pen that means the dry run on the bank **and its WET RUN** - the
+fenced arc into the water that `duck_pens[].wet` records. This is a requirement about two glyphs
 occupying one piece of ground, and it needs no historical number.
 
+The wet run is named explicitly because it is the worst offender on the shipped map and the easiest to
+overlook: duck pen 1 stands 2.3 ft from a feed stub by its dry run and **0.19 ft** by its wet fence -
+the fence is drawn across the inlet cut. A fence across your own intake is not a thing anyone builds,
+and nothing about the dike-pond loop excuses it.
+
 **FR-002** On top of FR-001 the fixture MUST stand clear of the sluice stub by a working margin of
-**6 ft**, measured from the fixture's drawn footprint to the nearest point of the stub (a segment, not
-its anchor - the stub is ~24 ft long and the anchor alone understates the overlap). The reason is that
+**6 ft**, measured from EVERY drawn part of the fixture - a sty's footprint, a pen's dry run and its wet
+run alike - to the nearest point of the stub (a segment, not its anchor: the stub is ~24 ft long and the
+anchor alone understates the overlap badly, as `research.md` R1 now records). The reason is that
 someone has to stand at the gate and lift its boards, the sluice being "a protected opening in the pond
 dike that can be easily closed with wooden boards to regulate water level"; 6 ft is about two paces,
 room for one person and the board they are drawing.
@@ -97,15 +104,18 @@ could reduce their number. The seat selection MUST instead rank the parcel's edg
 house cluster and take the nearest one that fits.
 
 **FR-004** The sty and pen counts on a given seed MUST NOT fall as a result of FR-001 to FR-003.
-Measured on Kuwabata, a seat 30-45 ft clear of any sluice exists on all four affected ponds only 10-30
-ft further from the houses than the seat now chosen, so the fixtures move a short distance rather than
-disappearing.
+Simulated on Kuwabata with the wet run included in the clearance (`research.md` R6): 7/7 sties and 2/2
+pens place at every margin from 0 to 12 ft, the worst achieved clearance at 6 ft being 8.5 ft. The
+fixtures move a short distance rather than disappearing, and the wet run costs nothing.
 
 **FR-005** The research record MUST carry findings 1 to 7 above, each as an assertion with a footnote
 quoting the passage it rests on, linked to a public page where the quote can be read, the notes living
 on `research/citations/archetypes.html` beside the page. The foreign-language passages (finding 3's
 齊民要術, and any Japanese passage) are quoted in English translation, marked as translations, with the
-original following as the checker's anchor.
+original following as the checker's anchor. Where finding 1's pond figure (4.0 mu / 0.27 ha) is written
+on a reader-facing page it MUST carry its honest limit - the same ponds sit below the ISIS 0.4-0.6 ha
+band - the obligation being repeated here from "Out of scope" because this is the requirement whose
+implementer actually writes that number down.
 
 They land on **`research/archetypes.html`**, the one page in the record covering this archetype and the
 page `PigSty.Entry:` already names. Findings 1, 2, 5 and 7 extend the EXISTING section 'What stands on a
@@ -158,8 +168,11 @@ paired with the gate.
 
 ## Success criteria
 
-**SC-001** On Kuwabata, no `pig_sties[]` or `duck_pens[]` footprint overlaps a `dikepond_sluices[]`
-stub, and every one stands at least the FR-002 margin clear of it.
+**SC-001** On Kuwabata, no drawn part of any `pig_sties[]` or `duck_pens[]` record - a sty's footprint,
+a pen's dry run, a pen's `wet` polygon - overlaps a `dikepond_sluices[]` stub, and every one of those
+parts stands at least the FR-002 margin clear of the nearest stub SEGMENT. Measured as shipped, the
+three worst sties stand 0.13, 0.03 and 0.08 ft clear and duck pen 1's wet fence 0.19 ft, so the
+criterion is not vacuous.
 
 **SC-002** Kuwabata still carries 7 sties and 2 duck pens.
 
@@ -214,6 +227,21 @@ attested feature of the system the map is modeled on. The record states the prov
 - The guardrail that would have made FR-008 happen without the GM asking is feature 234.
 
 ## Review history
+
+**Round 2** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, one item, taken. FR-001 covered a
+duck pen's DRY RUN only, while FR-002 and SC-001 said "the fixture" and "footprint" without qualifying
+which part - and `duck_pens[]` carries two drawn parts. The reviewer measured what that ambiguity hides:
+duck pen 1's wet fence stands 0.19 ft from a feed stub against its dry run's 2.3 ft, so the map's worst
+duck-pen offender was the part FR-001 excluded, and the two readings of the spec produce different maps
+on this seed. Resolved by INCLUDING the wet run rather than documenting its exclusion: a fence across
+one's own intake is indefensible, and R6 re-simulated with the wet run shows it costs nothing (7/7 and
+2/2 at every margin, 8.5 ft worst at 6 ft). The reviewer's aside on the pond-area figure is also taken -
+the obligation now sits inside FR-005 as well as under "Out of scope", where an implementer would not
+have looked for it. Its second aside corrected `research.md` R1: the 6/7/8/12 ft figures there were
+ANCHOR distances and read as more comfortable than the map is; R1 now leads with the true
+footprint-to-segment clearances (0.13, 0.03, 0.08, 3.04 ft).
+The reviewer independently re-verified round 1's three fixes, the 6 ft against R6, and FR-011's quoted
+passage against `archetypes.html:141`.
 
 **Round 1** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, three of them, all taken.
 (1) FR-002 required a margin the spec never stated, making SC-001 unverifiable - the value is now 6 ft

@@ -9,13 +9,22 @@ Read from `pool/hamlets/kuwabata/kuwabata.json`; the hamlet tier is 1 px = 1 ft.
 | pig sties | 7 (`meta.pond_stock.sties`), on 26 dike ponds, 16 houses |
 | duck pens | 2 |
 | sty footprint | 8 x 6 ft (`STY_FT`) |
-| sty to nearest sluice ANCHOR | 6, 7, 8, 12, 43, 71, 133 ft |
-| duck pen to nearest sluice anchor | 12, 18 ft |
-| sluice stub length | ~24 ft (`dikepond_sluices[]` a-to-b) |
+| **sty footprint to nearest stub SEGMENT** | **0.13, 0.03, 0.08, 3.04**, 31.07, 64.99, 128.73 ft |
+| sty CENTER to nearest stub anchor | 6, 7, 8, 12, 43, 71, 133 ft |
+| duck pen DRY run to nearest stub segment | 2.32, 10.70 ft |
+| duck pen WET run to nearest stub segment | **0.19**, 12.91 ft |
+| sluice stub length | ~24 ft (`dikepond_sluices[]` a-to-b; min 19.1, max 41.2) |
 | pond water area | median 28,920 sq ft = 4.03 mu = 0.27 ha |
 | shared dike width | median 21 ft = 6.5 m (parcel bbox less water bbox, both axes, all 26 ponds) |
 
 Kuwabata is the ONLY map in either pool tree carrying pig sties.
+
+**MEASURE TO THE SEGMENT, NOT THE ANCHOR.** The first pass of this table gave sty distances from the
+fixture's CENTER to the sluice's pond-side ANCHOR - 6, 7, 8, 12 ft - which reads as a near miss. The
+honest figure is the drawn footprint to the nearest point of the stub, which is a 24 ft SEGMENT: three
+sties stand 0.13, 0.03 and 0.08 ft clear. They are not near the culvert, they are on it. Caught by
+spec-fidelity round 2; recorded because the same understatement is available to anyone who measures a
+long thin feature by one of its endpoints.
 
 **The mechanism, read from the code rather than inferred.** `pondstock._bank_seat` returns the midpoint
 of the parcel edge nearest the house cluster, pulled in by `BANK_INSET_FT` = 5.5. `fields/landuse.py`
@@ -182,6 +191,20 @@ Every fixture places at every margin tried, so FR-004 costs nothing on this map,
 chosen on its own merits rather than against a placement budget. The flat 13.1 ft across 4-8 ft says the
 binding seat is the same one throughout - the rule is not scraping against its limit, which is what a
 number rising in lockstep with the margin would have shown.
+
+**Re-run with the duck pen's WET RUN included** (spec-fidelity round 2 - the first run tested the dry
+footprint only, and the wet fence is the map's worst offender at 0.19 ft):
+
+| working margin | pens | sties | worst clearance achieved |
+|---|---|---|---|
+| 0 ft | 2/2 | 7/7 | 0.0 ft |
+| 4 ft | 2/2 | 7/7 | 8.5 ft |
+| 6 ft | 2/2 | 7/7 | 8.5 ft |
+| 8 ft | 2/2 | 7/7 | 8.5 ft |
+| 12 ft | 2/2 | 7/7 | 12.6 ft |
+
+So covering the wet run costs nothing either, and the choice to include it (spec FR-001) is free rather
+than a trade.
 
 This does NOT prove the rule is free on an unrolled seed; it proves it is free on the one map that has
 the feature today, which is the map the GM is looking at. A seed whose ponds are smaller could refuse a
