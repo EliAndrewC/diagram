@@ -787,3 +787,18 @@ def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
                         if "lanes" in text and "_lane_ink" not in text:
                             offenders.append(f"{path.relative_to(root)}:{node.lineno} del {text}")
     assert not offenders, "delete lane records through `drop_lanes`, which removes the ink slot too: " + "; ".join(offenders)
+
+
+def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_kept():
+    """`drop_lanes`, settlement-review feature 230 pass 11: two passes recorded their own drop of the field spur and the
+    rest did not, so a hamlet lost its only path to the rice with nothing in the manifest to say so."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(100, 100), (300, 100)], width=4)
+    s.lane([(500, 500), (600, 500)], width=5, spur=True)
+    s.drop_lanes([1])
+    assert "dropped" in s.M["meta"]["field_spur_swept"], "a silent drop is recorded"
+    s.lane([(500, 700), (600, 700)], width=5, spur=True)
+    s.M["meta"]["field_spur_swept"] = "isolated - the pass's own words"
+    s.drop_lanes([1])
+    assert s.M["meta"]["field_spur_swept"] == "isolated - the pass's own words", "a pass that said why keeps its own reason"

@@ -116,6 +116,11 @@ class LanesMixin:
         and the last lane inked twice. Every check that reads the manifest was green, because the manifest still
         held the connector. `trim_lane_stubs` below always rebuilt both lists together; this is that rule, once."""
         gone = sorted(set(idxs), reverse=True)
+        if any(self.M["lanes"][i].get("spur") for i in gone):
+            # THE FIELD SPUR NEVER GOES SILENTLY, whichever pass drops it (settlement-review, feature 230 pass 11): two passes
+            # recorded their own drop of it and the others did not, so the reference hamlet lost its only path to the rice with
+            # nothing in the manifest to say so. A pass that already said why keeps its own words.
+            self.M["meta"].setdefault("field_spur_swept", "dropped by a later pass - collapsed, or serving nothing the web does not")
         for i in gone:
             self.M["lanes"][i]["pts"] = []
             self.reink_lane(i)

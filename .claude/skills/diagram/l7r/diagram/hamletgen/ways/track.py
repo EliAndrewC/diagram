@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import cast
 
-from l7r.diagram.settlement import Settlement, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
@@ -22,10 +22,13 @@ from ..consts import (
 )
 from ..plan import SitePlan
 from .checks import drawn_water_segs, path_violations
-from .clearance import clip_to_clear, route_around
+from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
-from .geom import polyline_len, push_clear_of_fabric, push_out_of
+from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
 from .route import _route
+
+# how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
+SPUR_REACH_FT = 60.0
 
 
 def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) -> Pt:
@@ -405,7 +408,21 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # the stage - not the connector, which is drawn below this, and not the web, which is two stages away - so
     # the spur is drawn on its own length and the sweeps judge it against the finished network (`sweeps.py`).
     if _spur_ft > 20.0:
-        s.lane(_thread_the_fabric(s, plan, _spur_pts), width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
+        # ...AND NEVER DRAWN AS AN OUT-AND-BACK (settlement-review, feature 230 pass 11). Threading the clipped spur round
+        # the steadings can fold it back on itself: the reference hamlet's ran 90 ft toward the field and straight back to
+        # within 14 px of where it began, the smoothing pass then rightly cut that hairpin away, and the hamlet's only path
+        # to its rice disappeared with no record. Keeping the arm toward the field was tried first and was wrong: that arm
+        # stopped 60.6 ft short of the field, where the marsh the path may not cross lies between, so it was a lane ending
+        # in open ground (`lanes_reach_something`). A folded spur is drawn only when its outward arm still reaches the
+        # field; otherwise the map says why it has no path to its rice.
+        _drawn_spur = _thread_the_fabric(s, plan, _spur_pts)
+        _fold = next((k for k in range(1, len(_drawn_spur) - 1) if _turn_deg(_drawn_spur[k - 1], _drawn_spur[k], _drawn_spur[k + 1]) >= _HAIRPIN_DEG), None)
+        if _fold is not None:
+            _drawn_spur = _drawn_spur[: _fold + 1]
+        if _fold is None or edge_dist(_drawn_spur[-1][0], _drawn_spur[-1][1], plan.envelope) <= SPUR_REACH_FT:
+            s.lane(_drawn_spur, width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
+        else:
+            s.M["meta"]["field_spur_swept"] = "folded back short of the field - the ground between is marsh a path may not cross"
 
     # the CONNECTOR, out to the frame
     # ...and the gate the connector starts FROM must itself be out of the crop. The skeleton's

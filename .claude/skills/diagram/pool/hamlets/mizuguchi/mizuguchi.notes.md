@@ -5,10 +5,10 @@
 [`inashiro.notes.md`](inashiro.notes.md) for the head-to-head with the authored Ikegami.*
 
 **Kanji triangle**: 水 *mizu* "water" + 口 *kuchi/guchi* "mouth". Mizuguchi, "the water mouth" - the
-intake itself, the sluice where the brook is turned into the head-race. A hamlet named for the one
+intake itself, where the brook's water is let into the head race. A hamlet named for the one
 piece of engineering that makes it possible.
 
-**Subject**: the smallest of the four - ~12 households on land falling due EAST, so its head sluice
+**Subject**: the smallest of the four - ~12 households on land falling due EAST, so its intake
 stands on the western margin and the comb fans away from it across the map.
 
 **What it is here to show**: that the pipeline is not oriented. Every stage works in the fall frame,
@@ -569,7 +569,7 @@ bamboo/soybean fix still holds at 87.4 ft.
 - **The 6 -> 3 -> 6 ft neck at (931.6,1777.8) moved the wrong way**, 11.2 -> 12.6 ft between the two 6 ft
   caps. Already this map's recorded open item; reporting only that the delta lengthened it.
 - **`make overlap-audit` is RED on `ink-water`**: one marsh glint at (1829,425) printed on the drawn
-  tameike's northern rim. Pre-existing (no water, marsh or pond record differs from main) and invisible
+  drainage pond's northern rim. Pre-existing (no water, marsh or pond record differs from main) and invisible
   to the gate, which reads records where this is ink.
 
 

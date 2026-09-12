@@ -626,7 +626,10 @@ class CombMixin:
                 # net's own first channel) the bow traced a course 50 px from any ink, and the site boundary kept houses off
                 # water that was not there. Sluice, the race's own vertices to the fork, then the step into the field that
                 # anchors the topology.
-                _ch_poly = [[round(start[0], 1), round(start[1], 1)], *[[round(float(q[0]), 1), round(float(q[1]), 1)] for q in hr[1:]], [round(din[0], 1), round(din[1], 1)]]
+                _ch_poly = [[round(start[0], 1), round(start[1], 1)], *[[round(float(q[0]), 1), round(float(q[1]), 1)] for q in hr[1:]]]
+                # ...and it ENDS AT THE FORK, where the drawn race ends. An extra step into the field was kept to anchor the topology,
+                # and it was a record of water that is not there - a 70 ft tail past the ink on the reference hamlet and Sawada
+                # (pass 11); nothing reads the channel's field end as more than the field it names.
             _fk = (float(fork[0]), float(fork[1]))
             _fk_d = min(seg_dist(_fk[0], _fk[1], (_ch_poly[_i][0], _ch_poly[_i][1]), (_ch_poly[_i + 1][0], _ch_poly[_i + 1][1])) for _i in range(len(_ch_poly) - 1))
             # `join_head` is passed by the POLDER path and by nothing else. Conditioning this on
