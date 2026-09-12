@@ -520,3 +520,18 @@ def test_parts_fit_refuses_a_house_whose_wall_stands_on_the_bund() -> None:
     assert s._parts_fit(on_the_bund) is False
     clear = s._bundle_geom(500.0, 300.0, 46.0, 28.0, "W")
     assert s._parts_fit(clear) is True
+
+
+def test_bundle_side_fits_refuses_a_bundle_outside_the_bounding_ring() -> None:
+    """The dispersed path's side test (the town's and the village's placer): a bundle whose box reaches outside the
+    settlement's bounding ring - a walled town - is refused before any ground test."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    s.bound = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (0.0, 300.0)]
+    assert s._bundle_side_fits(s._bundle_geom(500.0, 500.0, 46.0, 28.0, "E")) is False
+    assert s._bundle_side_fits(s._bundle_geom(150.0, 120.0, 46.0, 28.0, "E")) is True
+    s.bound = None
+    assert s._bundle_side_fits(s._bundle_geom(20.0, 500.0, 46.0, 28.0, "E")) is False, "...and one whose box reaches past the canvas margin"
+    assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "E")) is False, "...and one whose east garden bed lies on the paddy at x = 640"
+    assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")) is True, "the same house with its garden on the west wall"

@@ -34,7 +34,8 @@ fires first and stepping avoided computing the clearance to each.
 | windbreak clumps / copse clumps | 163 / 82 | 219 / 119 | 34 / 95 | 172 / 32 | 231 / 202 |
 | gardens: houses / with a garden / one bed / flanking / stacked / side by side | 15 / 15 / 12 / 2 / 0 / 1 | 20 / 20 / 17 / 3 / 0 / 0 | 16 / 16 / 13 / 2 / 1 / 0 | 12 / 12 / 11 / 1 / 0 / 0 | 19 / 19 / 16 / 1 / 0 / 2 |
 
-Two counters, named apart (the review's nitpick): ENVELOPE TESTS are the rectangles the placer asks per call - the
+Two counters, named apart (the review's nitpick) - and one cost outside both: the front row's ground push asks the
+boundary once per front seat at proposal time, before any placer call, and is not in `meta.seat_search`. ENVELOPE TESTS are the rectangles the placer asks per call - the
 union, then each configuration's own box and its one move - at most nine, 4.5-5.1 measured; RECTANGLE TESTS per house
 count every rectangle any test asked, the proposer's ground push included, and are the figure to set against 226's
 113-387. A placer call is a fixed handful of rectangles now against 26 to 60 positions of the full battery before (R1),

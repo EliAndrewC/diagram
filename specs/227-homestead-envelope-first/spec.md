@@ -160,3 +160,6 @@ the feature's last task after rounds of feedback in the clone.
   ends offered in every round strung Inashiro to 5.0 and Mizuguchi to 4.9, the half-seats alone to 4.5). Re-reviewed from a
   fresh count: round 1 CHANGES REQUIRED on D1 and D8 still stating the replaced behavior (applied, with the rescue's
   along-the-field seats and the push's footpath room).
+- Amendment round 2 after the review (2026-09-12): FAITHFUL - the footpath's room is part of the one move's amount, the
+  rescue's ordering an ordering inside a path the spec already had. Asides kept: FR-002 names the room in prose where
+  the code names `WEB_FABRIC_GAP * 2 + 6`; the proposer's push asks the boundary outside `meta.seat_search` (R2 says so).

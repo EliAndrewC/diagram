@@ -406,11 +406,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # THE BACK IS REFUSED: only then does the cluster grow ALONG the field - the seat one pitch beyond each end of
             # the rank (offered with the rest, the ends strung Inashiro's crescent to 5.0 and Mizuguchi's round to 4.9)
             for _sx4, _sy4 in _ends:
-                if placed >= plan.spec.households:
-                    break
                 if any(math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])):
                     continue
-                if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
+                if placed < plan.spec.households and _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
                     placed += 1
                     _cloud_placed += 1
     # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
