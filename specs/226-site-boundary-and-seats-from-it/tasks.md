@@ -14,5 +14,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T04 FR-003 seats from the chains, the pre-test, the bounded spiral, `meta.seat_search`
       research: rendering
       verify: DONE. front_row from the chains at the pitch (the envelope walk retired), the pre-test before try_place, the six-ring spiral with three rescue rounds while the quota is short, the re-roll's salted lattice, meta.seat_search with rounds; candidates per house 1.6-7.0 and placer calls 1.1-1.8 on the pool against 3-10 proposals per house before; Kuwabata 157 proposals -> 112 pre-tested candidates for 16 houses
-- [ ] T05 FR-004/FR-005: the pool, the cohort, R2, `make done`, the settlement-review, spec IMPLEMENTED, land
+- [x] T05 FR-004/FR-005: the pool, the cohort, R2, `make done`, the settlement-review, spec IMPLEMENTED, land
       research: rendering
+      verify: DONE. pool re-seated (make maps 5/5 regenerated, every quota on the first roll, rounds 2-4); make cohort N=48 48/48 with households_seated reported; R2 written; make done green 2026-09-12 (72 s, 100% coverage); settlement-review needs-work (E1-E3 fixed) then pass x5 on the second pass; perf band 1 explained + confirmed by perf-audit; spec IMPLEMENTED

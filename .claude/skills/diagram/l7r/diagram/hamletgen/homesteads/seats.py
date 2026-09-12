@@ -26,17 +26,18 @@ def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = 
     the way a real one does, rather than ruling a straight line across a curved margin."""
     # THE ENVELOPE WALK IS RETIRED (feature 226, at the gate's coverage floor): every hamlet builds a site boundary
     # before this runs, so the row is always offset from its chains; the walk along the paddy's own outline (one seat
-    # in two on the hem, which the chains exclude by construction) was unreachable and, under feature 174, deleted
+    # in two on the hem, which the pre-test now refuses before the placer is asked) was unreachable and, under feature 174, deleted
     # rather than kept for a caller that no longer exists. `count` is kept in the signature for the callers' sake; the
     # chain walk samples at the pitch and caps at 64, as the walk did.
     return _front_row_from_chains(plan, standoff, chains)
 
 
 def _front_row_from_chains(plan: SitePlan, standoff: float, chains: Any) -> list[Pt]:
-    """The front row offset from the SITE BOUNDARY's chains rather than the paddy envelope (feature 226 FR-003):
-    the chains are the house side of the whole blob - the hem, the marsh, the pond and the no-build ground
-    included - so a seat offset from them by `standoff` along the chord's outward normal stands on buildable
-    ground by construction, where a seat offset from the paddy's own outline landed on the hem one time in two.
+    """The front row offset from the SITE BOUNDARY's chains (feature 226 FR-003): the paddy's facing chains, each
+    chord pushed out by its keep-out, so a seat offset from them by `standoff` along the chord's outward normal is
+    the right distance from the paddy by construction; the hem, the marsh and the pond are refused at the PRE-TEST
+    (`_site_blocks_rect` against the containment outline), where the paddy-envelope walk this replaces landed a
+    seat on the hem one time in two and left the placer to discover it.
     Sampled at one bundle pitch along the chains (the honest spacing, as `front_row` argues), confined to the
     stretch the cluster fronts (the rolled shape's wrap, as there), ordered center-out (as there), at most 64."""
     seat = plan.seat

@@ -1,6 +1,6 @@
 # Feature 226 - the site boundary, and the seats proposed from it
 
-**Status**: IN PROGRESS 2026-09-12. `spec-fidelity` round 1: CHANGES REQUIRED (the boundary derived from every geometry the retired tests read, test by test; the guesses counted where the GM counted them, the cloud's throws reduced; the page struck from the record's purpose). rounds 2-4 the pads, the points and the allowance, the size bound; round 5 FAITHFUL.
+**Status**: IMPLEMENTED 2026-09-12. `spec-fidelity` rounds 1-4 CHANGES REQUIRED, round 5 FAITHFUL; rounds 6-8 on the text amended after implementation (record items, each applied; see Review history - eight rounds is past the GM's cap and is reported to them). `make done` green (72 s); the 48-seed cohort 48/48 with the shortfall check; settlement-review needs-work then PASS x5 on the second pass; perf band 1 explained and confirmed. SC-1 (0.25 s) is MISSED on three of five maps (0.26 / 0.38 / 0.58 s against 1.0-2.3 before), stated in R2; SC-2 and SC-3 met.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the per-house counts
 before (from the profile), R2 the after. **Predecessors**: 140 (the paddy's outline as a few facing chords -
 the same idea, for the paddy alone), 126 (houses before lanes), 137/150 (the placer's rules as they stand), 224
@@ -38,13 +38,15 @@ that boundary rather than guessed and spiraled toward it, so few proposals fail.
   chains was the first cut and is refused: a dike mosaic's far chords refused the ground between its ponds, and
   Kuwabata seated 11 of 16 households. The LINE members stay lines, as two corridor sets each
   with the points and clearance its test applies today: the water obstacles (`_water_obstacles`: the channels,
-  the field ditches, the streams) at their half-width plus 5, tested at the rectangle's corners and center as
-  `_rect_on_water` does; the registered corridors (`self.corridors`, whatever registered them) at their registered
+  the field ditches, the streams) at their half-width plus 5 - `_rect_on_water`'s clearance - asked at the SAME nine
+  points as the chains and the outline, the edge midpoints standing in for that test's edge-crossing arm; the registered corridors (`self.corridors`, whatever registered them) at their registered
   clearance, tested at the rectangle's CENTER only as `_near_corridor` does - a footprint test of that clearance
   was tried and reverted (Nagahara's well, Hoshizora's punishment ground; `_house_on_a_tread`'s docstring) and is
-  not retried here. The field ditches' quads that `_hard_ground` also builds do NOT enter the blob: they are the
-  same lines the water obstacles hold at a wider clearance, and a line in the blob would make a finger whose
-  facing chord refuses the ground behind it. A corridor segment lying wholly inside the blob is dropped. Both sets
+  not retried here. The field ditches' quads that `_hard_ground` also builds do NOT enter the containment outline: they are
+  the same lines the water obstacles hold at a wider clearance. A corridor segment is DROPPED when the cultivated
+  ground covers it - the field polygons, whose ground the chains refuse, together with the containment outline,
+  grown by that segment's own clearance - so the drop rests on the chains refusing the ground inside the paddy, and
+  it is the whole of the saving: 86-119 water segments per map before the cover test, 0-5 after (R2). Both sets
   are set on the settlement (`_site_chains`, `_site_corridors`) and recorded in the manifest (`site_boundary`) for
   the gate's checks and FR-005's measurement only - no page element, hit region or modal text. **The boundary is
   a relatively small number of line segments** - the GM's own measure of the trade - in the part that IS segments:
@@ -61,7 +63,8 @@ that boundary rather than guessed and spiraled toward it, so few proposals fail.
   - `_rect_blocked` -> `_field_blocks_rect` (corners and center against the paddy's chains, gap 0): ABSORBED into
     the site CHAINS - the same facing chains over the paddy's outline, asked by side at nine points;
   - `_rect_blocked` -> `_rect_on_water` (corners and center by segment distance at half-width + 5, and edge
-    crossings): ABSORBED into the water corridor set at the same points and clearance;
+    crossings): ABSORBED into the water corridor set at the same clearance, asked at the nine points - the corners
+    and center as before, the edge midpoints for the edge-crossing arm;
   - `_rect_blocked` -> `_hard_clear` (the rect inflated by the +/-5 degree tilt, then overlap at pad 0): ABSORBED -
     the hard ground's polygons are in the containment outline grown by that allowance; its ditch quads are the
     water corridors;
@@ -96,7 +99,7 @@ that boundary rather than guessed and spiraled toward it, so few proposals fail.
   bounded to six rings (30 px), with the old fifteen-ring spiral run in RESCUE rounds only while the quota is still
   short after the lattice's four rounds - three of them, each over a wider band, the lattice held against the standing
   houses only (a rescue spends guesses on purpose). There is no pool conditional: MEASURED, no pool hamlet reaches the
-  rescue rounds (`meta.seat_search.rounds` per map, R2), one cohort seed of 48 does - seed 25, which seats 14 of 20
+  rescue rounds (`meta.seat_search.rounds` 2-4 per map, R2), one cohort seed of 48 does - seed 25, which seats 14 of 20
   without them once the reed-marsh toe is in the boundary - and a toy hamlet's tenth household needed the long slide. A re-roll after a stranded farmhouse draws its lattice at a new phase (the draw salted by the count of
   forbidden seats), so the retry seats elsewhere as the random cloud's retries did by themselves.
 - **FR-004 The invariants are what verify it.** The gate's placement tests (`households_consistent`,
@@ -117,7 +120,7 @@ that boundary rather than guessed and spiraled toward it, so few proposals fail.
   case carries its own measured number, not a bound: cohort seed 25 - the one seed of 48 that reaches the rescue
   rounds - seats 20 of 20 at 13.4 candidates and 98 positions per house over six rounds (R2), against 12.4
   candidates and 1,566 positions on the same seed under the old cloud; `meta.seat_search.rounds` records how many
-  rounds a roll needed, so a map that reached the rescue is never silent.
+  rounds a roll needed (2-4 on the pool), so a map that reached the rescue is never silent.
 - SC-3 Every pool map seats its declared households within the gate's band; the 48-map cohort passes; no
   farmhouse stands off the connected way network on the pool.
 
@@ -131,8 +134,9 @@ that boundary rather than guessed and spiraled toward it, so few proposals fail.
   set-back and tested every rectangle at gap 0 (a rule change for the yard, the gardens and the grove); the
   second tested the registered corridors at the corners (a reverted experiment) and dropped `_hard_clear`'s tilt
   allowance. Both caught by the spec review. Each member enters the blob at its own pad, the hard ground grown
-  by the tilt allowance, each corridor set keeps its own points and clearance, the rectangle is asked at nine
-  points so nothing thinner than half a side slips between corners, and the house's wall rule stays its own test.
+  by the tilt allowance, each corridor set keeps its own clearance and the registered set keeps the center only (the water set is
+  asked at the nine points), the rectangle is asked at nine points so nothing thinner than half a side slips
+  between corners, and the house's wall rule stays its own test.
   The boundary changes how the ground is asked, not what it answers - to within the pixel the fixed tilt
   allowance differs from the per-rectangle inflation it replaces - with the one exception recorded in D7.
 - **D3 The band stays as the shape, the random seeds do not.** The rolled cluster shapes (crescent, round,
@@ -198,6 +202,10 @@ that boundary rather than guessed and spiraled toward it, so few proposals fail.
   asked two ways; five record items - the two forms and the refused cut, the size clause counting the rings, FR-002's
   field row into the chains, FR-003's front row from the paddy's chains with the exclusions at the pre-test, FR-005
   reporting the rings. Applied. Aside kept: SC-1's 0.25 s is missed on three of five maps and the Status says so.
-  The seventh round is past the GM's five-round cap; rounds 6 and 7 were on text amended AFTER the FAITHFUL round 5
+  Round 8 (2026-09-12): the five items resolved; three record items left from before the rewrite - the corridor-drop
+  clause reasoning from the one blob and claiming strict containment where the built test is the cultivated ground
+  grown by the segment's clearance, the water set's points (nine, not corners and center), and `seats.py`'s docstring
+  still calling the chains the whole blob. Applied; no ninth round, on the reviewer's own instruction and the cap.
+  The seventh and eighth rounds are past the GM's five-round cap; rounds 6 and 7 were on text amended AFTER the FAITHFUL round 5
   to record what implementation measured, each returning new and smaller record items - the case the cap's own note
   names as not the argument it exists to end. Reported to the GM with the feature.

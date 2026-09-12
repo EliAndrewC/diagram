@@ -813,3 +813,11 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   in kind: the worst water carry (242 -> 484 ft on the first cut; the floor is 760 and its docstring calls
   itself a habitability floor, not a comfort standard - whether a stretched cluster wants a fourth well is a
   research question, not this feature's), and the copse's clump count following the house-cloud bbox.
+
+  The review's second pass (pass on all five) measured two pool-wide movements this entry records with their
+  numbers: the cluster packed LOOSER - the median nearest-neighbor house spacing here 81 -> 92 ft, because the back
+  ranks come from a lattice at the bundle pitch (100 ft, a homestead's own ground) rather than a random cloud a
+  spiral could squeeze tighter; and the two-bed garden share (position-seeded, ~1 in 4 declared) re-rolled to
+  3 of 20 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
+  evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
+  or tighter is a research question the record does not yet answer; no rule measures the spread today. The water-carry figure above is the discarded first cut's: the SHIPPED map's worst well carry is 215 ft, better than the 242 before this feature.

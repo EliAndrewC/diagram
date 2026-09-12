@@ -26,7 +26,7 @@ corners. 24 of Inashiro's 39 proposed seats failed every one of the spiral's 181
 | placer calls | 1.5 | 1.5 | 1.8 | 1.1 | 1.3 |
 | positions the fit test saw | 55 | 62 | 105 | 28 | 46 |
 | rectangles judged | 194 | 220 | 387 | 113 | 163 |
-| lattice rounds (`rounds`; over 4 = the rescue ran) | 4 | 4 | 4 | 4 | 4 |
+| lattice rounds (`rounds`; over 4 = the rescue ran) | 4 | 3 | 4 | 2 | 2 |
 | stage_homesteads, s (after 225: 1.0 / 1.3 / 2.3 / 0.8 / 1.0) | 0.25 | 0.38 | 0.58 | 0.14 | 0.26 |
 | regen, s (after 225: 8.7 / 10.6 / 7.5 / 5.9 / 10.5) | 8.1 | 9.4 | 7.4 | 6.0 | 10.6 |
 
@@ -45,7 +45,7 @@ SC-1 (under 0.25 s) is met on Mizuguchi and Inashiro and missed on Kashikawa (0.
 met on every pool map, its 2 placer calls too, and its positions (the spiral's offsets included) are 28-105 - the
 six-ring spiral is 30 px of offsets per placer call, and a seat the placer refuses outright still walks them.
 
-**The quota-short path, measured (SC-2's second case).** No pool map reaches the rescue rounds (`rounds` 4 on all
+**The quota-short path, measured (SC-2's second case).** No pool map reaches the rescue rounds (`rounds` 2-4 on the
 five). Of the 48 cohort seeds one does: seed 25 (crescent, T, 20 households, fall 225), whose crescent has the
 reed-marsh toe across its wet half - 14 of 20 seated without the rescue once the toe was in the boundary, 20 of 20
 with it, at 13.4 candidates and 98 positions per house over six rounds on the kept roll (`meta.seat_search`:
@@ -70,3 +70,11 @@ front rank fronts the paddy by more (houses within 165 px: 10 -> 12, 15 -> 16, 8
 Kuwabata's lone outlier farmhouse is gone; the `_hard_clear` sweep fix alone moves a rectangle's verdict by a few
 tenths of a pixel; the belt re-rolled on every map for its 39 ft southern strip (Kashikawa's beds shaded from the
 south 7 of 22 -> 0; main had 2 of 26).
+
+**The review's second pass (pass on all five)** re-measured the three errors fixed (0 beds or yards with a belt clump
+within 39 ft south on any map, against 25 hits on 7 plots and 6 on 3 at the first cut and 4 on 2 and 11 on 3 on
+main - the defect was on the shipped maps; 0 footprints in the toe by footprint and by pixel; every notes claim
+checked against the manifests) and measured two pool-wide movements now recorded in every map's entry: the
+clusters packed looser (median nearest-neighbor spacing up 1-11 ft, the lattice's pitch against the cloud's
+squeeze; no rule measures the spread) and the two-bed garden share 24 -> 13 of 82 (position-seeded; ~2 sd low;
+nothing counts it). Both are research questions, recorded, not acted on here.

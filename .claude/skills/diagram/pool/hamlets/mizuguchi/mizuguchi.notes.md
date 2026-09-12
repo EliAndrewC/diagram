@@ -680,3 +680,11 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   records bringing it 3.44 -> 2.40, and `consts.py` records that the lane skeleton dominates the shape at this
   tier - a direction of travel, not a new failure). The boundary is 8 chords, three rings, 5 water and 3
   corridor segments; 0 footprints in the toe (house 5 clipped it by 0.4 px on the first cut).
+
+  The review's second pass (pass on all five) measured two pool-wide movements this entry records with their
+  numbers: the cluster packed LOOSER - the median nearest-neighbor house spacing here 72 -> 83 ft, because the back
+  ranks come from a lattice at the bundle pitch (100 ft, a homestead's own ground) rather than a random cloud a
+  spiral could squeeze tighter; and the two-bed garden share (position-seeded, ~1 in 4 declared) re-rolled to
+  2 of 12 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
+  evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
+  or tighter is a research question the record does not yet answer; no rule measures the spread today. The rolled shrine fixture (position-seeded) did not re-roll on the new seats; nothing claims one.

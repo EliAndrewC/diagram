@@ -1633,3 +1633,11 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   first pass found byre 2 standing 28 px into the toe polygon (the ink clean - the marsh keeps its halo): the
   toe is hard ground for every placer now and the byre moved. The re-pack cost the byre service a little
   (worst house-to-byre 170 -> 223 px) and every other invariant held: 0 overlaps, 0 shaded yards or beds.
+
+  The review's second pass (pass on all five) measured two pool-wide movements this entry records with their
+  numbers: the cluster packed LOOSER - the median nearest-neighbor house spacing here 83 -> 91 ft, because the back
+  ranks come from a lattice at the bundle pitch (100 ft, a homestead's own ground) rather than a random cloud a
+  spiral could squeeze tighter; and the two-bed garden share (position-seeded, ~1 in 4 declared) re-rolled to
+  2 of 15 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
+  evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
+  or tighter is a research question the record does not yet answer; no rule measures the spread today.

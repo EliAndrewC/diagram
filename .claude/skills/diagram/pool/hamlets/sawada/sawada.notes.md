@@ -777,3 +777,11 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   shape stays unhonored at 2.81 drawn (2.73 before); 14 houses within 165 px of the paddy against 11. The
   boundary is 7 chords, three rings, 5 water and 3 corridor segments. The review read it as a wash against
   the old layout - slightly looser, the same place - with every invariant held.
+
+  The review's second pass (pass on all five) measured two pool-wide movements this entry records with their
+  numbers: the cluster packed LOOSER - the median nearest-neighbor house spacing here 82 -> 90 ft, because the back
+  ranks come from a lattice at the bundle pitch (100 ft, a homestead's own ground) rather than a random cloud a
+  spiral could squeeze tighter; and the two-bed garden share (position-seeded, ~1 in 4 declared) re-rolled to
+  1 of 19 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
+  evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
+  or tighter is a research question the record does not yet answer; no rule measures the spread today. The board's caption crosses eight windbreak crowns now (two copse crowns before) - legible on its halo at full resolution, and the same open item Mizuguchi's feature-220 entry carries, not a new one.

@@ -514,3 +514,11 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   worst byre walk 404 -> 170 px and the worst water carry 339 -> 212. The round shape stays unhonored (2.51
   drawn against a band of 1.0-2.0; it was 3.69). The boundary is 7 chords, one ring with one hole, and no
   corridor segment: the mosaic's water is all inside the outline.
+
+  The review's second pass (pass on all five) measured two pool-wide movements this entry records with their
+  numbers: the cluster packed LOOSER - the median nearest-neighbor house spacing here 78 -> 79 ft, because the back
+  ranks come from a lattice at the bundle pitch (100 ft, a homestead's own ground) rather than a random cloud a
+  spiral could squeeze tighter; and the two-bed garden share (position-seeded, ~1 in 4 declared) re-rolled to
+  5 of 16 here, 13 of 82 pool-wide against 24 of 82 before - about two standard deviations low, chance on this
+  evidence, and nothing in the gate counts it. Whether a nucleated hamlet's house spacing is the homestead pitch
+  or tighter is a research question the record does not yet answer; no rule measures the spread today.
