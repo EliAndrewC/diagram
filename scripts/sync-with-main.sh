@@ -234,6 +234,13 @@ push_cmd() {
   python3 "$ROOT/scripts/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/check-stale-dirs.py before pushing"
   python3 "$ROOT/scripts/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
   python3 "$ROOT/scripts/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
+  # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
+  # the same reason the three above do: the delta that breaks either is a research-page edit touching
+  # no Python, which takes the DIRECT route and runs no gate at all, so a gate-only check would surface
+  # the breakage as an inherited red on the next session's unrelated work. Selftest first, same reason.
+  python3 "$ROOT/scripts/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/check-entry-headings.py before pushing"
+  python3 "$ROOT/scripts/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
+  "$ROOT/scripts/entry-gate.sh" || exit 1
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
   # clause says this procedure "does not run to completion on a red or regressed state" - which was
   # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session

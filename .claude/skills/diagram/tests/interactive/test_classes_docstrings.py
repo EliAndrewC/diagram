@@ -43,8 +43,13 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     findings whose sources it does not name is simply miscited. Feature 233 rewrote the `pig sty` and
     `duck pen` explanations against a new research section and both gained keys; the snapshot moved with
     them. The pin that matters is unchanged - `label`, `name` and `covers` still never move, and a
-    `sources` change is only legitimate as part of a rewrite of the prose it supports. Two fields have
-    ever moved; do not read this as license for a third."""
+    `sources` change is only legitimate as part of a rewrite of the prose it supports. Two fields have ever moved this way; a THIRD moved once, for the same
+    reason and under the same bar: a SIBLING TEXT carrying a factual claim the record has since
+    contradicted (feature 234 - `crop-vs-perimeter` told a reader a crop dike is "six to ten meters of
+    dredged mud" where the drawn collar measures 2.0 m, the same error the `MulberryDike` entry carried).
+    A sibling text is reader-facing prose like an explanation, so a correction to it moves the snapshot
+    exactly as a rewritten `What:` does. What still never moves is `label`, `name` and `covers`, and none
+    of the three is license for a fourth."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     assert sorted(before) == sorted(CLASSES) and len(CLASSES) == 51
     for key, was in before.items():

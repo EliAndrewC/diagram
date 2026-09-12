@@ -18,15 +18,20 @@ class FishPond(Kind):
     Why: A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil
     raises the dike, so the landscape was made cell by cell by the households that farmed it, over
     centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low,
-    and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are 0.4 to 0.6
-    hectare oblongs, the size the surveys of the traditional landscape record.
+    and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are about 4 mu of water each - a
+    little over a quarter of a hectare, SMALLER than the 0.4 to 0.6 hectares the surveys of the traditional
+    landscape report, because this is a hamlet and a hamlet's ponds are small.
 
-    Note: The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional
-    landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state
-    of a normally scattered system.
+    Note: The form and the loop are read. The pond sizes drawn here are a hamlet's own, deliberately below the
+    band those surveys report - and that band is 20th-century rather than Ming or Qing, and reaches this
+    record only at second hand, through a summary of a monograph with no publicly readable copy. The ratio
+    behind the split is contested in its ORDER too: the classic prescription survives as six parts dike to
+    four parts pond as well as the reverse, so the water-heavy reading drawn here is a regional one,
+    disclosed. And the whole-block conversion drawn here is the rare end state of a normally scattered
+    system.
 
-    Caveat: the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents,
-    and the whole-block conversion drawn here is the rare end state of a normally scattered system.
+    Caveat: that band is 20th-century rather than Ming or Qing, and reaches this
+    record only at second hand, through a summary of a monograph with no publicly readable copy.
 
     Name: fish pond
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
@@ -40,9 +45,9 @@ class FishPond(Kind):
 
 class MulberryDike(Kind):
     """
-    What: The raised earthen dike around a fish pond, six to ten meters wide, piled from the pond's own dredged
-    mud and planted with coppiced mulberry - low bushes stripped for leaf several times a year to feed
-    silkworms.
+    What: The raised earthen dike around a fish pond, piled from the pond's own dredged mud and planted with
+    coppiced mulberry - low bushes stripped for leaf several times a year to feed silkworms. Drawn here as a
+    planted collar about seven feet wide around each pond, with a canal running between neighbors.
 
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
@@ -50,11 +55,19 @@ class MulberryDike(Kind):
     much dike starves the fish. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
     sericulture districts that planting was mulberry.
 
-    Note: The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one
-    bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.
+    Note: The ratio and the planting are read. The WIDTH is where the drawing parts company with the record: the
+    traditional figure is a dike of six to ten meters, and the collar drawn around each pond is about two - the
+    ground from one pond's water to the next is thirteen meters, but a canal runs down the middle of it, so it
+    is not one bank. The traditional figure also reaches us only at second hand. And the ratio's ORDER is
+    contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
+    and some districts kept seven to three - so the six-water-to-four-dike drawn here is a regional reading
+    disclosed rather than the only one. So: the collar drawn around each pond is about two meters where the
+    traditional figure is a dike of six to ten, and the coppice density the crowns are drawn at (one bush per
+    ten to twenty square feet) was not re-found and stays on the re-sourcing queue.
 
-    Caveat: the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found
-    and stays on the re-sourcing queue.
+    Caveat: the collar drawn around each pond is about two meters where the traditional figure is a dike of six to
+    ten, and the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not
+    re-found and stays on the re-sourcing queue.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
@@ -195,11 +208,16 @@ class PigSty(Kind):
     rather than fouling it: the manure raises the plankton the fish eat. So the pigs are part of what feeds the
     fish the household cultivates. What the shed keeps clear of is the sluice itself - nobody builds over the
     opening they have to reach in order to lift its boards, and that is a matter of getting at the gate rather
-    than of keeping the water clean.
+    than of keeping the water clean. A pig penned on a pond dike is a CHINESE form; the Japanese record does
+    not carry it, so it belongs to this kind of hamlet and to no other on these maps.
 
     Note: GUESS: the practice is read, and so is the reason the shed sits at the water, but nothing read gives
     how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
     of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
+    And the one width it does give, a shed-carrying dike of five to ten meters, the drawn bank does not meet -
+    the planted collar under these sheds is two to five meters. That figure is a modern design requirement
+    rather than a measurement of any old dike, and no older one was found to judge the bank by, but a reader
+    measuring the collar should know it is snug.
 
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
@@ -219,7 +237,8 @@ class DuckPen(Kind):
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
     among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
-    pig shed's do. The fence keeps off the culvert for the plain reason that a fence across the opening a pond
+    pig shed's do. The dry run stands on the same planted collar a pig shed does - about two meters, where the
+    one width the record gives for a dike carrying an animal shed is five to ten. The fence keeps off the culvert for the plain reason that a fence across the opening a pond
     is filled and drained through would be in the way of working it.
 
     Note: GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is

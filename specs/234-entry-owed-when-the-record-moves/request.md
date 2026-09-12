@@ -12,3 +12,13 @@ The measurement that prompted it, reported to the GM in the same turn: a class m
 tag naming a `research/` file (enforced at import), but nothing checks that the heading it names
 RESOLVES - a broken heading returns an empty question list from `research_questions()` silently - and
 nothing at all ties a modal's prose to the content of the research section it was written from.
+
+2026-09-12, ruling on the two questions this feature left open:
+
+> A research edit should not owe a make page check at push. And I don't believe that we should have any
+> such thing as an unenforced doctrine. If it is unenforced, then it is not a doctrine. something should
+> either not be considered doctrinal or it should be enforced.
+
+The first declines round 2's aside outright. The second strikes D6's whole shape: the spec had accepted
+that nothing enforces the `entry-drift` dispatch and called the obligation doctrine, which the GM rules
+is not a category that exists. So the choice is binary - enforce it, or stop calling it an obligation.
