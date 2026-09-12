@@ -53,10 +53,20 @@ docstring as feature 231 enumerates its three:
   1. `make page-check` - the target a research-page-plus-docstring delta actually owes;
   2. `scripts/sync-with-main.sh` at push time.
 
-**FR-004** At BOTH decision points the answer MUST be REPORTED and MUST NOT block - not at the gate,
-not at the push, and with no escape token, because **the REPORT never refuses**. Naming a pair costs a
-session one line of reading; refusing on it would spend a round trip on work that is correct 30 times in
-32. (This says nothing about FR-007, which does refuse; see D5.)
+**FR-004** (rewritten on the GM's 2026-09-12 ruling) The two decision points differ, and deliberately:
+
+  1. **`make page-check` REPORTS and does not block.** Teaching where it is free is this project's own
+     ladder, and a session mid-work has not finished the edit the report is about.
+  2. **The PUSH REFUSES.** Nothing lands while a named pair is unresolved. The session either rewrites
+     the modal's prose, or records a reason - one entry in `dev/bypass-log/`, which may cover a whole
+     maintenance sweep - and the push then proceeds. The escape token is `ENTRY_DRIFT_OK="<reason>"`,
+     carried through the same `escape_reason` floor as every other escape in this repository (two
+     words, eight characters) and recorded so `make audit` lists it.
+
+This IS the enforcement the GM's ruling requires, and it is the shape this repository already uses for
+every rule whose compliant action only a session can supply - `guard-write`, `guard-file`,
+`FILE_SIZE_OK`, `PAIR_OK`: the guard refuses, the session supplies the judgment no tool has, in writing,
+and the reason is auditable afterward. What was declined is a SILENT obligation, not a costly one.
 
 **FR-005** The report MUST be actionable without further lookup: per class, the class key, the research
 file and heading that moved, and the file and line of the docstring whose prose to re-read.
@@ -231,11 +241,17 @@ carries a row saying the staleness half REPORTS and the heading half GATES; and 
 plainly that `record-format` and `quote-check` are the changed research entry's own obligations and are
 NOT a check on any modal (FR-014).
 
-**SC-013** `make hooks-test` green, `make done` green, `make page-check` green.
+**SC-013** A push with an unresolved named pair is REFUSED; the same push with the pair's prose
+rewritten proceeds; and the same push with `ENTRY_DRIFT_OK="<reason>"` proceeds and the reason lands in
+`dev/bypass-log/` where `make audit` lists it. A bare token with no reason is refused by the same
+two-word, eight-character floor every other escape uses.
+
+**SC-014** `make hooks-test` green, `make done` green, `make page-check` green.
 
 ## Decisions recorded
 
-**D1 - REPORT, never refuse.** The round-1 design refused at push. Withdrawn on the measurement in
+**D1 - REPORT at the gate, REFUSE at the push (amended 2026-09-12).** The round-1 design refused at push
+with no way to discharge the refusal, and was withdrawn on the measurement in
 `research.md` R2: 30 of 32, up to 41 classes at a time, all correct work. Recorded here rather than
 silently dropped, because the next session to notice this seam will have the same idea.
 
@@ -250,7 +266,8 @@ it is still the right unit for the report, which should name the section a reade
 **D4 - content-derived, never a stored hash.** No table of "this entry was current as of this text" is
 kept: such a table is exactly the stale literal that agrees with itself. git is the record.
 
-**D5 - the REPORT has no escape token; the HEADING CHECK refuses and still has none, deliberately.**
+**D5 - the REPORT's page-check half has no escape token and needs none; its PUSH half has
+`ENTRY_DRIFT_OK`; the HEADING CHECK refuses and still has none, deliberately.**
 Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
 moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
 is nothing to escape. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
@@ -260,12 +277,37 @@ case that looks like it - a section deliberately not written - is FR-008's decla
 an in-band recognized VALUE and not an escape. Recorded so a later session does not add one for
 symmetry.
 
-**D6 - the dispatch obligation is DOCTRINE, not mechanism - an ACCEPTED LIMITATION.** Nothing enforces
-that a session hands a named pair to `entry-drift`. That is deliberate, and it is the shape of the whole
-feature rather than a gap in it.
+**D6 - the obligation is ENFORCED AT THE PUSH (GM's ruling, 2026-09-12).** This entry previously
+accepted that nothing enforced the dispatch and called the obligation doctrine. The GM struck that:
+*"I don't believe that we should have any such thing as an unenforced doctrine. If it is unenforced,
+then it is not a doctrine. something should either not be considered doctrinal or it should be
+enforced."* So it is enforced - the push refuses until a named pair is resolved or a reason is recorded
+(FR-004.2).
 
-*Why no mechanism.* The condition is "the report named a pair", which is delta-derived and known only to
-`_entry_owed.py` at push. Two enforcers were priced and both fail:
+*Why not a quieter key instead.* The narrowing was measured before enforcement was chosen: firing only
+on what a reader SEES, rather than on any change to the section's body, takes 39 of 39 research-only
+commits down to 38 of 39 (`research.md` R5). One commit in thirty-nine. There is no mechanical key that
+separates "this section now says something different" from "this section was maintained", because that
+is a judgment about meaning - which is why the compliant action is a written judgment rather than a
+tool's verdict.
+
+*What it costs, in observable terms.* Every research-only push now carries one obligation: resolve the
+named pairs or write one line. A maintenance sweep naming 41 classes is discharged by a single recorded
+line under the FINDING rule in FR-013.1, so the cost is one sentence per sweep rather than 41 dispatches.
+
+*Alternatives priced and DECLINED.* A task checkbox (round 3): rejected on measurement - the enforcer
+reads only a `tasks.md`'s text and a feature number, so a delta-derived condition is not expressible in
+it, and it would not run on this delta shape anyway. A narrowed key (above): rejected, one commit in
+thirty-nine. A silent obligation with no mechanism (this entry's previous content): rejected by the GM.
+
+*Superseded content, kept because the reasoning still bounds the design.* Nothing enforces that a session
+hands a named pair to `entry-drift` BEYOND the recorded reason - the guard cannot tell a real judgment
+from a hollow one, only that one was made and by whom. That residue is the same as every other escape in
+this repository and is audited the same way.
+
+*The enforcer, and the two that were priced and failed before it.* The condition is "the report named a
+pair", delta-derived and known only to `_entry_owed.py` - which runs at push, where the refusal now
+lives. The two that do not work:
   - **A task checkbox** beside `quote-check confirmed` (the round-3 design). REJECTED on measurement:
     `tests/test_task_research_boxes.py` reads exactly two inputs, the text of a `tasks.md` and the
     feature number from its directory name - no delta, no git, no class index - so the condition is not
@@ -273,8 +315,10 @@ feature rather than a gap in it.
     short-circuits at `Makefile:122` on a research-plus-docstring delta, and `make page-check`
     (`Makefile:926`) runs only `tests/interactive` and the browser page tests, not that test. A checkbox
     that cannot be conditioned is always owed or never owed.
-  - **A refusal at push**, where the evaluator does run. REJECTED for D1's reason, unchanged: the key
-    fires on 30 of the last 32 research-only commits, up to 41 classes at once (`research.md` R2).
+    - **A refusal at push with no way to discharge it** - which is what D1 rejected, and still rejects:
+    the key fires on nearly every research-only commit, so a refusal that could only be satisfied by
+    rewriting prose would block correct work. The refusal that ships can be discharged by a recorded
+    reason, which is the difference.
 
 *What it costs, in observable terms.* A session that ignores the report's printed line ships a stale
 modal, exactly as today. What changes is that it can no longer do so without being told - which is the
@@ -296,6 +340,9 @@ than closed.
 ## Out of scope
 
 - Judging whether a rewritten modal entry is GOOD - that is `record-format` and `quote-check`.
+- Making a research-page edit owe `make page-check` at push. Round 2 recorded it as a lever and the GM
+  DECLINED it on 2026-09-12: *"A research edit should not owe a make page check at push."* So the report
+  reaches a research-only delta at the push and nowhere earlier, which is where the refusal lives anyway.
 - Backfilling entries currently out of step with their sections. The check is DELTA-based against the
   merge base and cannot surface historic drift at all; the first run's delta is feature 233's edits, so
   it will name what 233 touched and nothing else. An empty result is therefore NOT evidence that the 51
