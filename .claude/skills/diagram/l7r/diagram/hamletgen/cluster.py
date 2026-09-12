@@ -189,10 +189,13 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
     _, anchor, out = best
     along = (-out[1], out[0])
-    # THE BAND'S NEAR EDGE HUGS THE FIELD. The standoff is the front row's own depth and no more:
-    # `field_ringed` wants at least five farmhouses within 165 px of the field outline, and every
-    # pixel of standoff comes off that count twice over, because the band is seeded across its whole
-    # depth rather than packed against its near face. At 34 px of standoff three cohort maps rang
+    # THE BAND'S NEAR EDGE HUGS THE FIELD. The standoff is the front row's own depth and no more, and
+    # the measurement below is why - not a check, which is the correction this comment needed
+    # (2026-09-12): it used to cite `field_ringed` (retired, feature 141), five farmhouses within 165 px of the outline, which
+    # feature 141 retired. Nothing enforces a MAXIMUM house-to-field distance today and the research
+    # gives only a 6 ft minimum. What stands is the drawing: every pixel of standoff costs the front row
+    # twice over, because the band is seeded across its whole depth rather than packed against its near
+    # face, and a hamlet whose houses sit back off their own crop does not read as a farming hamlet. At 34 px of standoff three cohort maps rang
     # their field with four houses; at 12 the same maps ring it comfortably, and the front row still
     # fronts the paddy across its lane rather than standing in the rice.
     cx = anchor[0] + out[0] * (dep + 12.0)

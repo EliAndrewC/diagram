@@ -114,13 +114,13 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
     # THE FRONT ROW GOES DOWN FIRST, along the band's field-facing face. A cluster seeded only by
     # its SHAPE fills its whole depth evenly, and on a small hamlet that can leave the field ringed
-    # by four houses where `field_ringed` wants five - the map then reads as a settlement that
+    # by four houses where `field_ringed` (retired, feature 141) wants five - the map then reads as a settlement that
     # happens to be near a paddy rather than one that works it. Seating a row against the margin
     # first is also just what a farming hamlet looks like: the houses front the field they farm, and
     # the back rows fill in behind them.
     # (no quota guard here: the row is capped at 8 seats and the tier's floor is 10 households, so
     # the front row alone can never meet the ask)
-    # TWO passes at two standoffs. `field_ringed` wants five farmhouses within 165 px of the field
+    # TWO passes at two standoffs. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline, and a single row of eight candidates at one standoff can land four when the near
     # ground is awkward - the placer refuses a bundle that laps a bund or a ditch, and every refusal
     # is a house that ends up in the back rows instead. Offering the same row again a little further
@@ -160,14 +160,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     def in_band(q: Pt) -> bool:
         return math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]) <= bound
 
-    # THREE standoffs, not two. `field_ringed` wants five farmhouses within 165 px of the field
+    # THREE standoffs, not two. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline and the placer refuses any bundle that laps a bund or a ditch, so a single ring of
     # candidates can land four on awkward ground. Each extra pass is free when the earlier one
     # filled the row.
     # The FRONT ROW is allowed a little further out than the rest - a house hugging the field is
-    # part of the settlement wherever the band's nominal circle happens to fall, and `field_ringed`
+    # part of the settlement wherever the band's nominal circle happens to fall, and `field_ringed` (retired, feature 141)
     # wants five of them within 165 px of the outline.
-    # Standoffs run out to 150 px, which is still inside `field_ringed`'s 165 px band. The near
+    # Standoffs run out to 150 px, which is still inside `field_ringed` (retired, feature 141)'s 165 px band. The near
     # ground is often the busiest on the map - crop up to the bund, the collector's out-of-crop
     # stretches with their corridors, the field spur - so a row that stops at 92 px can land four
     # houses where five are wanted while perfectly good ground sits at 120. A farmhouse 150 px from
@@ -188,14 +188,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # long, and homesteads in it stand a bundle pitch apart, so `2 * lat / pitch` is how many fit in
     # the rank that fronts the field. Everything past that is a household the flanking and cloud
     # passes should seat BEHIND, which is what makes a nucleus a nucleus. Floored at 6 so
-    # `field_ringed` (five farmhouses within 165 px of a big field's outline) can always be met by
+    # `field_ringed` (retired, feature 141) (five farmhouses within 165 px of a big field's outline) can always be met by
     # the row alone - the defect this row exists to prevent.
     # THE ROW'S SHARE FOLLOWS THE ROLLED SHAPE (feature 227): under the envelope-first placer the row fills every seat it
     # is offered, and "one rank's worth of the band" (2 * lat / pitch) is the whole quota on a long margin - Inashiro
     # strung all 15 along the paddy at a drawn aspect of 5.07 against a rolled crescent's 1.9-4.2. A cluster of N
     # houses drawn at aspect A is about sqrt(N * A) houses long, so that many front the field and the lattice seats the
     # rest behind them, and the shape knob binds where the band alone could not. The middle of the shape's band is
-    # the aspect aimed at; the floor of 6 keeps `field_ringed` reachable by the row alone, as before.
+    # the aspect aimed at; the floor of 6 keeps `field_ringed` (retired, feature 141) reachable by the row alone, as before.
     _lo_a, _hi_a = CLUSTER_DRAWN_ASPECT.get(plan.cluster_shape or "crescent", (1.9, 4.2))
     # ...times two, MEASURED: the ranks stand an envelope's depth apart (about 1.2 pitches) along an ARC, and the drawn
     # aspect is read on the house centers' own axis, so a block of L by N/L houses reads about half of L*L/N - seven
@@ -211,7 +211,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # houses past 150, a whole seven-farmstead lobe fronting nothing, and a 252 ft lane spur with no
     # house within 96 ft anywhere. That is the defect the frontage pass's own comment below records
     # curing ("a median house-to-lane distance of 94 ft ... with one lane dead-ending in open
-    # ground"), returned by a different route - and no gate check can see it, because `field_ringed`
+    # ground"), returned by a different route - and no gate check can see it, because `field_ringed` (retired, feature 141)
     # is satisfied by exactly the seats that cause it.
     #
     # A CAP, NOT A LADDER - the difference was MEASURED, because the ladder is the shape every other

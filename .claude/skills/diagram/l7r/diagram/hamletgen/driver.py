@@ -472,7 +472,7 @@ COHORT_BASELINE: dict[int, frozenset[str]] = {
     # PIN ... Blocking" case `baseline_verdict` below exists to catch, unnoticed because the 24-seed
     # cohort runs only under FULL and the idle runs, not at the ordinary gate.
     #
-    # Seed 22 pinned `field_ringed` until feature 141 retired that check (the GM's cut).
+    # Seed 22 pinned `field_ringed` (retired, feature 141) until feature 141 retired that check (the GM's cut).
 }
 COHORT_BASELINE_SIZE = 24  # the pin describes exactly `--batch 24` from seed 1
 

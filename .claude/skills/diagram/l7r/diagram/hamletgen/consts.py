@@ -698,20 +698,24 @@ LANE_WEBS = ("alleys", "back_lane")
 # is individually inside the norms; it is the FREQUENCY that is flattened, which is the liberty a
 # DEGREE-along-a-continuum may take. Weighting to true frequency would make two of the three forms
 # vanishingly rare, untested by the cohort, and pointless to have built.
-# HOW FAR A NON-NUCLEATED FARMHOUSE MAY STAND FROM ITS FIELD, in px.
+# HOW FAR A NON-NUCLEATED FARMHOUSE MAY STAND FROM ITS FIELD - A RETIRED FIGURE, KEPT AS A RECORD.
 #
-# MIRRORS THE GATE, deliberately and by the same number. `all_houses_field_adjacent` (segment 0232)
-# has two branches: a NUCLEATED cluster is allowed `ADJ + 2 * span` - the cluster's own diameter of
-# slack, because a nucleus legitimately has a back rank - while every other form gets a flat `ADJ`
-# of 165 px with no allowance at all. That asymmetry is right, and it is the research rather than
-# the checker talking: a Tonami farmstead stands in the MIDDLE of its own holding, and a row
-# village's fields lie directly behind each house, so neither form has a back rank to excuse.
+# `FIELD_ADJ_PX = 165.0` stood here with twelve lines of rationale and ZERO consumers (found 2026-09-12
+# by an escalation-check pass over a writeup that cited it). It mirrored `all_houses_field_adjacent` (retired, feature 166)
+# (segment 0232), which died with the check battery in feature 166, and its sibling `field_ringed` (retired, feature 141) went
+# in feature 141 on the GM's own cut. A live constant nothing reads is worse than no constant: a reader
+# calibrates against it believing a check enforces it, which is what five comments in the placers had
+# done. The figure is deleted; what was worth keeping is the MEASUREMENT and the research behind it.
 #
-# The placer needs the same figure because it is the placer that decides. Left to the cloud pass,
-# dispersed and linear maps put houses a median 164 and 208 px out (against the baseline's 144 and
-# 145) and failed the check - which was the generator being wrong about the form, not the check
-# being wrong about the map.
-FIELD_ADJ_PX = 165.0
+# THE RESEARCH, which is still the operative thing: a Tonami farmstead stands in the MIDDLE of its own
+# holding and a row village's fields lie directly behind each house, so neither form has a back rank to
+# excuse - where a nucleated cluster legitimately does (`research/homesteads.html`, "How close does a
+# farmhouse stand to the paddy?", which gives a 6 ft MINIMUM and no maximum at all).
+#
+# THE MEASUREMENT, for whoever switches the non-nucleated forms on: left to the cloud pass, dispersed
+# and linear maps put houses a median 164 and 208 px from the field against a nucleated baseline's 144
+# and 145. That is the generator being wrong about the FORM, not a map being too far from its crop, and
+# it is the number to re-derive a standoff from rather than a bar to re-impose.
 
 # ROLLED TO NUCLEATED ONLY, FOR NOW - and the weights above are what to restore, not to re-derive.
 #

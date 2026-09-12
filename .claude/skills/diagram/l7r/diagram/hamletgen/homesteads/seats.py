@@ -32,8 +32,9 @@ def front_row(
 
     Offsetting from the cluster band's straight near face is not the same thing and is not good
     enough: the outline curves away from the band, so a row laid along the face can sit 32 px from
-    the field at its middle and 300 px from it at its ends, and `field_ringed` (five farmhouses
-    within 165 px of the outline) then fails on a map whose cluster is plainly beside its paddy.
+    the field at its middle and 300 px from it at its ends - a front row that is 300 px off its own crop
+    at the ends on a map whose cluster is plainly beside its paddy. (This paragraph used to rest that on
+    `field_ringed` (retired, feature 141), a check feature 141 retired; the geometry is the reason, and it did not need one.)
     Following the outline also draws better - a farming hamlet's front row bends with the field edge
     the way a real one does, rather than ruling a straight line across a curved margin."""
     # THE ENVELOPE WALK IS RETIRED (feature 226, at the gate's coverage floor): every hamlet builds a site boundary

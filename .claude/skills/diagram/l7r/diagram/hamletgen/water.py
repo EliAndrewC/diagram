@@ -699,7 +699,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     # past the envelope onto open margin, where the placer is otherwise free to seat a homestead
     # squarely on the water (`no_structure_on_channel`). Only those stretches are reserved:
     # blanketing the whole ditch net costs the field its ring of farmhouses, because a comb's
-    # deliveries run right along the margin the front row wants (`field_ringed`, three maps).
+    # deliveries run right along the margin the front row wants (`field_ringed` (retired, feature 141), three maps).
     #
     # And it goes AFTER `draw_comb_field`, which is where `M['field_ditches']` is written. Placed
     # before it, the loop had nothing to iterate and reserved nothing at all - silently, since an
