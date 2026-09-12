@@ -18,11 +18,11 @@ record and the map's modals stay in step, not about how a place was built.
 - [x] T03 The report is actionable without further lookup: class key, research file and heading that
       moved, and the file and line of the docstring whose prose to re-read (FR-005).
       research: rendering
-- [ ] T04 Wire it at the two decision points and NOWHERE else - `make page-check` and
+- [x] T04 Wire it at the two decision points and NOWHERE else - `make page-check` and
       `scripts/sync-with-main.sh` at push - asked fresh each time, never cached, never blocking
       (FR-003, FR-004). The script's docstring enumerates them as feature 231's does.
       research: rendering
-- [ ] T05 `make done` is NOT a channel, and a comment at the point of change says why (FR-006): it
+- [x] T05 `make done` is NOT a channel, and a comment at the point of change says why (FR-006): it
       short-circuits at `Makefile:122` on exactly this delta shape, so a report there would ship green
       and never print.
       research: rendering
@@ -32,24 +32,24 @@ record and the map's modals stay in step, not about how a place was built.
 
 ## Phase 2 - the gated half (FR-007 to FR-009)
 
-- [ ] T06 A class's `Entry:` heading MUST resolve to at least one research question - a gate test
+- [x] T06 A class's `Entry:` heading MUST resolve to at least one research question - a gate test
       naming the class that fails, AND the push-time check in `sync-with-main.sh` beside
       `check-file-scale.py`, because a research-page-only delta owes no gate (FR-007).
       research: rendering
-- [ ] T07 The push-time call runs the checker's `--selftest` first and dies if it fails, as all three
+- [x] T07 The push-time call runs the checker's `--selftest` first and dies if it fails, as all three
       siblings at that call site do (FR-007, FR-011.2).
       research: rendering
-- [ ] T08 The declared-silence form (`fallow`) stays legal and is recognized EXPLICITLY, not by a
+- [x] T08 The declared-silence form (`fallow`) stays legal and is recognized EXPLICITLY, not by a
       non-match (FR-008), and `make audit` enumerates every entry taking it (SC-011).
       research: rendering
 
 ## Phase 3 - the judgment (FR-013, FR-014)
 
-- [ ] T09 `.claude/agents/entry-drift.md`: given a class's explanation prose and the current text of the
+- [x] T09 `.claude/agents/entry-drift.md`: given a class's explanation prose and the current text of the
       section its `Entry:` names, report IN-STEP / DRIFTED / CANNOT-TELL. `model: opus`. Verification,
       never judgment about the map; it never edits.
       research: rendering
-- [ ] T10 Pre-authorize it in `container-scripts/append-system-prompt.md` (FR-013.2) - without this the
+- [x] T10 Pre-authorize it in `container-scripts/append-system-prompt.md` (FR-013.2) - without this the
       default system prompt outranks the mandate, which is the documented 2026-07-27 failure.
       research: rendering
 - [ ] T11 Its first real dispatch is feature 233's own pair, run and recorded: the `PigSty` modal
