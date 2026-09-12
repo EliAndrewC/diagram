@@ -44,7 +44,7 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     `duck pen` explanations against a new research section and both gained keys; the snapshot moved with
     them. The pin that matters is unchanged - `label`, `name` and `covers` still never move, and a
     `sources` change is only legitimate as part of a rewrite of the prose it supports. Two fields have
-    ever moved; do not read this as licence for a third."""
+    ever moved; do not read this as license for a third."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     assert sorted(before) == sorted(CLASSES) and len(CLASSES) == 51
     for key, was in before.items():

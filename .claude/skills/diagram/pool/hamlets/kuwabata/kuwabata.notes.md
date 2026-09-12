@@ -570,7 +570,7 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   The accept is BOUNDED (settlement-review): ranking alone left the whole perimeter available, and this
   map's nine fixture-carrying ponds put the far bank 155.6 to 320.0 ft further from the houses than the
   first choice - a shed there would read as belonging to no household. A seat may not be further from
-  the house cluster than the pond's own center is. It refuses nothing drawn here (the accepted seats
+  the house cluster than the pond's own PARCEL center is (the figures: `specs/233-pigsty-clear-of-the-sluice/research.md` R7). It refuses nothing drawn here (the accepted seats
   cost +0 to +21.2 ft, and the tightest sits 57.3 ft inside the bound), and it is geometric rather than
   a tuned distance.
 

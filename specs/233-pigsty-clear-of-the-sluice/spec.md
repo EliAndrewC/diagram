@@ -49,7 +49,7 @@ Dispatched as two `source-reader` agents, 2026-09-12. Full verdict tables live i
    when too much manure flows into the pond." The handles are quantities and dates: more than 30 pigs
    is too much for direct flow; 20-40 kg/mu/day; 100-150 m3 of pond per pig; no manuring after
    mid-October. The one source that speaks to WHERE the manure enters - FAO's consultancy report on
-   the Chinese lead centre - keeps the shed on the dike and moves the MANURE: "manure distribution
+   the Regional Lead Centre in China, by its own name - keeps the shed on the dike and moves the MANURE: "manure distribution
    techniques generally need to be employed to avoid the development of anaerobic conditions in the
    pond adjacent to the livestock quarters", by bucket, channel or sprinkler.
 5. **A dike carrying a pigsty is wider.** FAO ch. 10: "the width of the dikes between fish ponds and
@@ -106,12 +106,11 @@ the whole pond when that seat fails, so adding a clearance would silently move s
 could reduce their number. The seat selection MUST instead rank the parcel's edges by distance to the
 house cluster and take the nearest one that fits.
 
-**FR-012** (added after acceptance) A candidate seat MUST be refused if it is further from the house
-cluster than its pond's own center. Ranking alone (FR-003) leaves the accept set the WHOLE pond
+**FR-012** (added after acceptance) A candidate seat MUST be refused if it is further from the house cluster than its pond's own PARCEL center. (The parcel, not the water: a pond record carries both, the two differ by 0.3 to 1.3 ft against accepted slacks of 56.5 to 152.8 ft so nothing on this map turns on it, and an ambiguity that agrees today can diverge on a re-rolled seed - the same shape as the fence arc in FR-001.) Ranking alone (FR-003) leaves the accept set the WHOLE pond
 perimeter: on the nine ponds that carry a fixture, the far bank runs 155.6 to 320.0 ft further from the houses than the first choice, a shed there would read as belonging to no household, and neither the placer nor the gate would say so. The bound is GEOMETRIC rather than a tuned distance - no number to
 justify and none to drift - and it keeps a fixture on the side of the water its households are on.
 
-It may refuse seats, so FR-004 and SC-002 bound it in turn. Measured on the reference map: the accepted seats cost +0 to +21.2 ft over the first choice, the bound's own allowance runs 60.5 to 157.2 ft per pond, and the TIGHTEST accepted seat sits 57.3 ft inside it - so it refuses nothing drawn today and the manifest is byte-identical with it in place.
+It may refuse seats, so FR-004 and SC-002 bound it in turn. Measured on the reference map: the accepted seats cost +0 to +21.2 ft over the first choice, the bound's own allowance runs 60.5 to 157.2 ft per pond, and the TIGHTEST accepted seat sits 57.3 ft inside it - so it refuses nothing drawn today and the manifest is byte-identical with it in place. The derivation is `research.md` R7.
 
 **FR-004** The sty and pen counts on a given seed MUST NOT fall as a result of FR-001, FR-002, FR-003 or FR-012. (FR-012 was added after acceptance and this range was hand-enumerated before it existed; a refusal the counts requirement does not cover is exactly the failure FR-003 was written to prevent.)
 Simulated on Kuwabata with the wet run included in the clearance (`research.md` R6): 7/7 sties and 2/2
@@ -251,7 +250,7 @@ measures the collar against the FAO band finds it short, so the record says so b
 a rule it had never cited" - on arithmetic that measured nothing. `settlement-review` caught it.
 
 **D7 - the seat bound is a LEGIBILITY judgment, not a research finding.** FR-012 refuses a seat past the
-pond's center because a shed on the far bank reads as belonging to no household. Nothing in the record
+pond's center because a shed on the far bank reads as belonging to no household. The center it measures from is the pond's PARCEL centroid, which is what the placer and the gate test use. Nothing in the record
 says where on a pond's perimeter a shed stood; this is a judgment about what the map communicates, and
 it is labeled as one rather than dressed as history. No research pass is owed for it.
 
@@ -291,8 +290,7 @@ perimeter, so the accept is bounded to the near half of the pond.
 to 288 ft" is pond 20's own spread where the true maximum is 320.0 ft on pond 24, and "a limit of about
 +70" described three of nine ponds. Re-derived from the manifest before rewriting: far bank 155.6 to
 320.0 ft over the first choice, the bound's allowance 60.5 to 157.2 ft per pond, accepted seats +0 to
-+21.2 ft, tightest slack 57.3 ft. All four places that carried the wrong figures now carry these and
-point at the new `research.md` R7 - which also records that this was the THIRD time a figure was written
++21.2 ft, tightest slack 57.3 ft. The four places that carried the wrong figures now carry these; FR-012 above, the placer comment and the map's notes point at the new `research.md` R7, and the gate test docstring does not, since no test in the tree cites a `specs/` path - which also records that this was the THIRD time a figure was written
 where its method did not travel with it.
 (2) FR-004 read "as a result of FR-001 to FR-003", a range hand-enumerated before FR-012 existed, while
 FR-012 claimed FR-004 bounded it - so on a re-rolled seed the new refusal could drop a fixture with no
@@ -310,8 +308,7 @@ Also taken: a `centre` identifier in the new gate test, which the house-style ru
 **Round 4** (`spec-fidelity`, 2026-09-12): every corrected number verified INDEPENDENTLY - the reviewer
 built its own geometry rather than reusing `measure_geom.py` and reproduced all four zeros, the three
 chords, the crossing point and the seven larger clearances exactly. Four items, all taken, and all of
-them one fault in new places: a measured figure written into the record without the method that produced
-it travelling alongside.
+them one fault in new places: a measured figure written into the record without the method that produced it traveling alongside.
 (1) `research.md` stated a MUST on this feature's shipped code - that any distance must return 0 on
 intersection and be selftested - and NO requirement or criterion carried it, so it bound nothing. That
 is now SC-006, which exists precisely because this feature's acceptance numbers were twice produced by a

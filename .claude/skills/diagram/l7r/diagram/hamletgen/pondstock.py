@@ -90,7 +90,7 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
             # fixture the far bank runs 155.6 to 320.0 ft further from the houses than the first
             # choice - a shed that took one would read as belonging to no household, and nothing in
             # the placer or the gate would say so. The bound is geometric rather than a tuned distance: a seat may not be further
-            # from the house cluster than the pond's own center is, which keeps the fixture on the
+            # from the house cluster than the pond's own PARCEL center is (`_centroid(parcel)` below), which keeps the fixture on the
             # side of the water the households are on. Measured on the reference map: the accepted seats
             # cost +0 to +21.2 ft over the first choice and the tightest sits 57.3 ft inside the
             # bound (whose own allowance is 60.5-157.2 ft per pond), so this refuses nothing drawn

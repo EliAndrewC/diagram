@@ -16,7 +16,7 @@ Read from `pool/hamlets/kuwabata/kuwabata.json`; the hamlet tier is 1 px = 1 ft.
 | sluice stub length | median 26.5 ft, mean 28.0, min 19.1, max 41.2 (feed-only median 27.7); the pond-5 stub, the motivating case, is 23.9 |
 | pond water area | median 28,920 sq ft = 4.03 mu = 0.27 ha |
 | pond collar (water edge -> parcel edge) | median 6.7 ft = 2.0 m (min 3.2, max 9.4) |
-| shared dike (water edge -> the neighbour's water edge, 68 adjacent pairs) | median 43.6 ft = 13.3 m |
+| shared dike (water edge -> the neighbor's water edge, 68 adjacent pairs) | median 43.6 ft = 13.3 m |
 | the strip a sty actually stands in | 8.5-15.3 ft = 2.6-4.7 m |
 
 Kuwabata is the ONLY map in either pool tree carrying pig sties.
@@ -265,5 +265,4 @@ unaffected - the bound is still free on this map - but the numbers a reader woul
 not the numbers. Every figure above was re-derived from the manifest before it was written here, and the
 four places that quote them now quote these.
 
-The pattern worth carrying forward: **a number written in four places is a number whose method is in
-none of them.** R1 and R6 exist so the derivation travels; these four now point here.
+The pattern worth carrying forward: **a number written in four places is a number whose method is in none of them.** R1 and R6 exist so the derivation travels. FR-012, the placer comment and the map's notes point here; the gate test docstring does not, because no test in this tree cites a `specs/` path, and saying so is better than counting it.
