@@ -263,6 +263,16 @@
       "drainage ditch",
       "pond",
       "Where the map's water sink is a pond at the field's foot, the drainage ditch brings the used water down to it and the pond holds it. The run from the collector's outfall to the shore is the collector's last few strides, drawn at its full width, and the pond's fill paints over the mouth."
+    ],
+    [
+      "weir",
+      "stream",
+      "The weir is built; the stream is not. A bar of stone-packed timber crib lies across the brook at the intake, raising its surface a little so the head race can take water at the height the field needs - and the brook itself goes on over the crest and down the valley, the same water it was above."
+    ],
+    [
+      "weir",
+      "irrigation ditch",
+      "The weir holds the water up; the irrigation ditch carries it away to the paddies. The bar lies across the brook, and the head race - the first of the ditches - leaves the bank at the same point, at an angle pointing downstream."
     ]
   ]
 }

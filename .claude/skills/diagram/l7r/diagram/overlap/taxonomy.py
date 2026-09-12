@@ -171,6 +171,7 @@ _OVERLAP_EXEMPT = {
     "kido": "a ward gate sits ON the ward fence at the point a lane passes through it",
     "inspection_stations": "an inspection post sited AT the city gate, part of the gate complex (overlaps the gate furniture)",
     "water_gates": "the shuimen arch stands ON the city wall over its canal - intentional, like the kido on its fence",
+    "weirs": "the bar across the brook at the intake sits ON the water by definition - a weir IS a structure in a stream, and the head race leaves the bank at the same point (feature 230)",
     "sluice_gates": "the field-channel intake/outfall board sits ON its channel at a water-to-water handoff (moat/river tap -> comb canal, drain -> culvert) - the control structure IS the junction",
     "jetties": "planked mooring fingers running out over the river water, like bridge decks",
     "log_booms": "a cabled chain of floating logs holding rafted timber against the bank - it FLOATS on the river, so overlapping the water is the whole point, exactly as a jetty deck does",
@@ -287,6 +288,7 @@ _LABEL_BY_KIND = ("buildings",)
 
 _LABEL_EXEMPT = {
     "districts": "a declared district is a REGION overlay like a quarter - it draws nothing, so there is nothing under it for a caption to bury",
+    "weirs": "a bar five feet thick across a seven-foot brook, at the field's head where no caption is drawn - there is no room under it to bury and nothing captions it",
     "precincts": "a reservation region, never drawn - the halls inside it are the drawn features",
     "borders": "a jurisdictional line has no footprint to protect - there is nothing under it to be buried by a caption, and its own caption is drawn in the top layer so no ground feature can paint over it",
     # CORRECTED 2026-08-18: this said "an ANNEX abutting its own farmhouse (draft_byres places it
@@ -419,7 +421,7 @@ OVERLAP_CLASS: dict[str, str] = {
     #   docks               a landing stands at the waterline by definition
     #   gate_structs        the guard station and tower ARE the gate complex, standing on wall and road
     #   log_booms           a cabled log pen floats ON the river it holds timber in
-    **{k: "FIXTURE" for k in ("bridges", "kido", "water_gates", "sluice_gates", "inspection_stations", "jetties", "wall_towers", "docks", "gate_structs", "log_booms")},
+    **{k: "FIXTURE" for k in ("bridges", "kido", "water_gates", "sluice_gates", "weirs", "inspection_stations", "jetties", "wall_towers", "docks", "gate_structs", "log_booms")},
     # RECORD - bookkeeping geometry that duplicates ground already classified elsewhere, or an
     # in-field flourish drawn ON the paddy by design (feature 012). Never tested.
     #   drawn_channels  a z-order record of the drawn field-channel strokes; the ground it covers is
@@ -475,6 +477,7 @@ _FIXTURE_MOUNTS: dict[str, frozenset[str]] = {
     "jetties": frozenset({"WATER"}),  # planked mooring fingers run out OVER the river
     "log_booms": frozenset({"WATER"}),  # a cabled log pen floats ON the river it holds timber in
     "sluice_gates": frozenset({"WATER"}),  # the intake/outfall board IS the water-to-water junction
+    "weirs": frozenset({"WATER"}),  # a weir is a bar built ACROSS a stream - the water is what it stands in
     "water_gates": frozenset(
         {"WATER", "wall"}
     ),  # the shuimen arch stands over its canal AND on the city wall - the wall IS a matrix feature now (classified SOLID for feature 017), so the mount it always had must be stated
@@ -667,6 +670,7 @@ _MX_FIXTURE_BOX: dict[str, Any] = {
     "bridges": lambda o: (float(o["span"]), float(o["w"])),  # the deck: span along the way, deck width across
     "jetties": lambda o: (float(o["len"]), 6.4),  # the planked finger, at the width the glyph draws
     "sluice_gates": lambda o: (11.0, 11.0),  # the board and its cheeks - a small square control structure
+    "weirs": lambda o: (float(o["len"]), float(o["w"])),  # the oblique bar: its length across the brook, its thickness along it
 }
 
 _MX_LINE_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 1.5, "canals": 14.0, "town_streets": 20.0, "alleys": 6.0, "lanes": 6.0, "roads": 26.0, "towpaths": 2.4, "aqueducts": 4.0, "quays": 3.4}

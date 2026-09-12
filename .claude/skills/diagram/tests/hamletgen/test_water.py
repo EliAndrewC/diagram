@@ -181,7 +181,7 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
     monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
     monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
-    plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0)
+    plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0, head_deg=55.0, head_lead=105.0)
     net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
     per_aspect = {}
     for a, _k in carves:
@@ -277,3 +277,87 @@ def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tole
     net = water.fit_polder(plan, 12)
     assert built == [25], "one candidate, within tolerance: the bisection stops there"
     assert net["rows"] == 25
+
+
+# ---- the intake, and the brook that runs on past it (feature 230) --------------------------------
+
+
+def test_the_brook_skirts_the_fan_without_turning_back_into_it() -> None:
+    """`brook_skirt`. The course below the intake holds its offset at the outermost crop seen so far,
+    so two properties hold by construction rather than by search: the offset never decreases, and no
+    vertex lands inside the field. The square fixture is the crop; the intake sits above its head."""
+    plan = a_plan()
+    dx, dy = plan.fall
+    px, py = -dy, dx
+    course = hg.brook_skirt(plan, (700.0, 300.0), 1)
+    lat = [q[0] * px + q[1] * py for q in course]
+    assert lat == sorted(lat), "the brook never turns back toward the fan"
+    assert all(not hg.point_in_poly(q[0], q[1], plan.envelope) for q in course), "no vertex inside the crop"
+    assert course[-1][1] > plan.H, "and it leaves the frame downslope"
+
+
+def test_the_brook_takes_the_flank_it_is_rolled_onto() -> None:
+    """The two values of `brook_side` put the course on the two sides of the fall axis."""
+    plan = a_plan()
+    one = hg.brook_skirt(plan, (700.0, 300.0), 1)
+    other = hg.brook_skirt(plan, (700.0, 300.0), -1)
+    assert max(q[0] for q in one) < 700.0 < min(q[0] for q in other), "the two rolls put the brook on the two sides of the fall axis"
+
+
+def test_the_head_race_leaves_the_brook_at_the_offtake_angle_away_from_it() -> None:
+    """The race turns off the fall by `OFFTAKE_DEG`, on the side the brook did NOT take - so the two
+    never run alongside one another, which is the overlap the GM caught on the first Ikegami draft."""
+    for side in (1, -1):
+        plan = a_plan()
+        plan.brook_side = side
+        assert plan.head_deg == pytest.approx(plan.down_deg - side * hg.OFFTAKE_DEG)
+    plan = a_plan()
+    plan.brook_side = 1
+    net = wf.carve_comb(plan.W, plan.H, (700.0, 300.0), 3, down_deg=plan.down_deg, head_deg=plan.head_deg, head_len=plan.head_lead).net
+    hr = next(c for c in net["channels"] if c["role"] == "main")["pts"]
+    assert math.hypot(hr[-1][0] - 700.0, hr[-1][1] - 300.0) == pytest.approx(plan.head_lead, abs=0.5)
+    assert math.degrees(math.atan2(hr[-1][1] - 300.0, hr[-1][0] - 700.0)) == pytest.approx(plan.head_deg, abs=0.5)
+
+
+def test_the_default_head_race_is_the_shape_every_other_caller_draws() -> None:
+    """No bearing and no length given: 90 px straight down the fall, which is what a pond's outlet and
+    a city fan's moat tap have always drawn and what those callers still get."""
+    net = wf.carve_comb(2000.0, 2000.0, (700.0, 300.0), 3, down_deg=90.0).net
+    hr = next(c for c in net["channels"] if c["role"] == "main")["pts"]
+    assert hr[0] == (700.0, 300.0) and hr[-1] == pytest.approx((700.0, 390.0))
+
+
+def test_a_weir_hamlet_draws_an_oblique_bar_across_the_brook_and_an_open_one_draws_nothing() -> None:
+    """`draw_intake`. The bar is recorded and drawn only when the roll gave a weir; it lies across the
+    brook's heading, skewed upstream, at the true size the constants declare."""
+    for form, drawn in (("weir", 1), ("open", 0)):
+        plan = a_plan()
+        plan.intake = form
+        plan.brook = [(700.0, 100.0), (700.0, 300.0), (760.0, 460.0)]
+        s = Settlement(int(plan.W), int(plan.H))
+        hg.draw_intake(s, plan, (700.0, 300.0))
+        assert len(s.M.get("weirs", [])) == drawn
+        assert sum(1 for t in s.out_cls if t == "weir") == drawn
+    rec = s.M["weirs"][0] if False else None
+    plan = a_plan()
+    plan.intake = "weir"
+    plan.brook = [(700.0, 100.0), (700.0, 300.0), (700.0, 600.0)]
+    s = Settlement(int(plan.W), int(plan.H))
+    hg.draw_intake(s, plan, (700.0, 300.0))
+    rec = s.M["weirs"][0]
+    assert rec["len"] == pytest.approx(2 * hg.WEIR_HALF_FT) and rec["w"] == pytest.approx(hg.WEIR_THICK_FT)
+    # the brook here runs due south, so a bar square across it would lie east-west (0 deg); the skew
+    # tilts it upstream by WEIR_SKEW_DEG
+    assert rec["deg"] == pytest.approx((90.0 + 90.0 + hg.WEIR_SKEW_DEG) % 180.0, abs=0.5)
+
+
+def test_the_weir_bar_is_placed_off_the_fall_when_the_intake_is_not_on_the_brook() -> None:
+    """The brook is normally the course the intake sits on, so the bar reads its local heading from it.
+    A caller that hands an intake the course does not contain falls back to the land's fall, which is
+    the brook's own direction anyway - the guard is against an index error, not against a wrong angle."""
+    plan = a_plan()
+    plan.intake = "weir"
+    plan.brook = [(100.0, 100.0), (100.0, 900.0)]
+    s = Settlement(int(plan.W), int(plan.H))
+    hg.draw_intake(s, plan, (700.0, 300.0))
+    assert len(s.M["weirs"]) == 1

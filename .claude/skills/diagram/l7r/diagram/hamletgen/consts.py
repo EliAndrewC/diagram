@@ -473,6 +473,42 @@ REF_CANAL_B = (680.0, 800.0)
 # shallow one.
 FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 
+# THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
+# research/water.html "Where does the brook stop being a brook and become the ditch"). A brook does not
+# turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
+# hamlet's brook now passes the fan's head and runs on down one flank to the frame.
+#
+# THE INTAKE'S FORM IS A KNOB because the record attests two and prefers neither: in old Japan "in many
+# cases no intake weir was built at all - water was taken naturally", and where the level would not serve
+# a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
+# proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
+INTAKE_FORMS = ("weir", "open")
+# WHICH FLANK the brook passes the fan on - rolled, because nothing in the record prefers a side and two
+# maps that differ here read as two places. The head race leaves the brook toward the OTHER side, so the
+# race and the brook never run along one another (the GM's first Ikegami catch, kept).
+BROOK_FLANKS = (1, -1)
+# HOW FAR THE HEAD RACE RUNS from the intake to the division point, in feet, rolled per map. No source
+# read gives a distance - the Japanese standards treat it as a site variable in the head-loss computation
+# and Tabayashi says only that the small canals run "for short distances" - so the BAND is a guess; what
+# is derived is the shape, a race that leaves the bank at the intake and reaches the fork.
+HEAD_RACE_LEAD = (80.0, 105.0, 130.0)
+# THE ANGLE THE HEAD RACE LEAVES THE BROOK AT, degrees off the brook's own downstream heading. An offtake
+# leaves its parent pointing downstream at an acute angle - the record's own canal-junction rule, "30 or
+# 45 instead of 90" - and clean mountain water is the case the angled offtake is allowed for (a
+# silt-laden river takes the right angle instead).
+OFFTAKE_DEG = 35.0
+# HOW FAR OUTSIDE THE CROP the continuing brook runs as it passes the fan's flank, px. Wide enough that
+# neither the paddy's own bund nor the brook's no-build corridor touches the planted ground.
+BROOK_SKIRT = 34.0
+# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar of stone-packed timber crib across the brook,
+# running diagonally upstream from the intake mouth as the old ones did. Half-length and thickness in feet.
+# The full closure is a MAP DRAWING CONVENTION - half-river closures were the common old form and at a 7 ft
+# brook a half-bar is a pixel or two - and the thickness is a GUESS: no source read gives a village weir's
+# cross-section (the histories' dimensions are river weirs', hundreds of meters long).
+WEIR_HALF_FT = 7.0
+WEIR_THICK_FT = 5.0
+WEIR_SKEW_DEG = 30.0
+
 # DELIVERY-DITCH DENSITY by household count. A comb's offtakes are how many delivery ditches drop
 # off the supply canal; too many on a small fan waters the same ground twice (build_comb drops the
 # redundant near-pairs itself, so an over-dense request is silently thinned - which is worse than

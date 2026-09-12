@@ -14,6 +14,7 @@ from l7r.diagram.settlement import knob_rng
 
 from .consts import (
     BAMBOO_FORMS,
+    BROOK_FLANKS,
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
@@ -23,12 +24,15 @@ from .consts import (
     FIELD_ARCHETYPES,
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
+    HEAD_RACE_LEAD,
     HOUSEHOLD_BAND,
+    INTAKE_FORMS,
     KOSATSUBA_SITINGS,
     LANE_SKELETONS,
     LANE_WEBS,
     LEFTOVER_FORMS,
     MANURE_FORMS,
+    OFFTAKE_DEG,
     OFFTAKE_LADDER,
     PLOT_SIZES,
     POLDER_ARCHETYPES,
@@ -69,6 +73,7 @@ class HamletSpec:
     windward: str | None = None
     # The rolled knobs, pinnable.
     water_sink: str | None = None
+    intake: str | None = None  # the intake's form at the brook: weir | open (feature 230; `INTAKE_FORMS`)
     cluster_shape: str | None = None
     lane_skeleton: str | None = None
     lane_web: str | None = None
@@ -149,6 +154,9 @@ class SitePlan:
     grain_drift: int
     woodland_patches: int
     fan_aspect: float
+    intake: str  # weir | open (feature 230, `INTAKE_FORMS`) - what stands where the head race leaves the brook
+    brook_side: int  # +1 / -1: which flank of the fan the brook passes on, the head race leaving toward the other
+    head_lead: float  # px from the intake to the division point, rolled within `HEAD_RACE_LEAD`
     target_acres: float
     W: int
     H: int
@@ -161,6 +169,7 @@ class SitePlan:
     envelope: Poly = field(default_factory=list)
     sink_pond: tuple[float, float, float, float] | None = None
     sink_brook: Poly = field(default_factory=list)
+    brook: Poly = field(default_factory=list)  # the feed brook's whole course, past the fan to the frame (feature 230)
     watercourses: list[tuple[Pt, Pt]] = field(default_factory=list)
     belt: Poly = field(default_factory=list)
     # The coppice patches, scanned in `stage_hinterland` BEFORE the scrub is scattered so the scrub
@@ -182,6 +191,16 @@ class SitePlan:
     def fall(self) -> Pt:
         """Unit vector pointing DOWNHILL, in screen coordinates."""
         return (math.cos(math.radians(self.down_deg)), math.sin(math.radians(self.down_deg)))
+
+    @property
+    def head_deg(self) -> float:
+        """The bearing the head race leaves the intake on (feature 230).
+
+        An offtake leaves its parent pointing downstream at an acute angle, so the race turns off the
+        brook's own downstream heading - which is the land's fall, the brook running downhill - by the
+        offtake angle, and it turns AWAY from the flank the brook takes, so that the two never run
+        alongside one another."""
+        return self.down_deg - self.brook_side * OFFTAKE_DEG
 
     @property
     def wind(self) -> Pt:
@@ -285,6 +304,9 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),
         fan_aspect=float(_roll(spec.seed, "fan_aspect", FAN_ASPECTS)),
+        intake=spec.intake or str(_roll(spec.seed, "intake", INTAKE_FORMS)),
+        brook_side=int(_roll(spec.seed, "brook_side", BROOK_FLANKS)),
+        head_lead=float(_roll(spec.seed, "head_lead", HEAD_RACE_LEAD)),
         target_acres=target_acres,
         W=W,
         H=H,

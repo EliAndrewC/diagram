@@ -11,10 +11,10 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
-from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, crosses_poly, net_acres, poly_area
+from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, crosses_poly, net_acres, poly_area, unit
 from l7r.diagram.waterfields import CombCarve, build_polder, carve_comb, clean_polder_parcels, finish_comb
 
-from .consts import DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, WATERWARD_DEPTH, Poly, Pt
+from .consts import BROOK_SKIRT, DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, WATERWARD_DEPTH, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT, Poly, Pt
 from .plan import SitePlan, _roll
 
 # ---- STAGE 1: the water frame -------------------------------------------------------------------
@@ -54,6 +54,10 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         nucleated=plan.settlement_form == "nucleated",
         field_footbridges=True,
         water_kind="stream",
+        # WHAT STANDS AT THE INTAKE, and which flank the brook passes on (feature 230): both rolled, both
+        # recorded, so the page and the tests read the map's own answer rather than re-deriving it.
+        intake=plan.intake,
+        brook_side=plan.brook_side,
         # NO WORK YARDS ON A NO-RICE HAMLET (feature 150, GM 2026-08-28): the threshing yard is a rice
         # feature; the dike-pond archetype sells silk and fish and buys grain in. Declared here so the
         # bundle omits the yard (`_bundle_geom`) and `harvest_yards_present` stands aside.
@@ -192,6 +196,8 @@ def _fit_at_aspect(
             row_step=row_step,
             grain_drift=plan.grain_drift,
             grain=GRAIN,
+            head_deg=plan.head_deg,  # the race leaves the brook's bank at the offtake angle (feature 230), not straight down the fall
+            head_len=plan.head_lead,
             supply_banks=True,  # bunds hem onto the supply strokes' banks (GM 2026-08-15); scripted tier only, see paddy_bunds_clear_the_supply_channels
         )
         net = carve.net  # the two keys the scorers read: the carved plots and the channels
@@ -321,15 +327,48 @@ def net_bends_acutely(net: Mapping[str, Any]) -> bool:
     return False
 
 
-def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
-    """The brook coming down off the high ground to the intake, steered clear of the rice.
+def brook_skirt(plan: SitePlan, sluice: Pt, side: int, skirt: float = BROOK_SKIRT, steps: int = 8) -> Poly:
+    """The brook's course BELOW the intake: past the fan on one flank, then off the frame.
 
-    It ends AT the sluice, where it becomes the head-race - it does not run on over the paddies. The
-    sluice sits on the field's head margin, so the LAST stretch is legitimately against the crop and
-    is not tested; everything upstream of it is, because a fan's head can carry a lobe out to one
-    side and a brook coming straight down the fall line then clips it (`streams_avoid_fields`, which
-    is right to object - a stream does not run through a flooded paddy). Bearings are tried outward
-    from straight-upslope, so the brook stays as close to the fall line as the field allows."""
+    A stream is tapped, not consumed - the intake takes what the field needs and the brook carries the
+    rest on down (research/water.html, "Where does the brook stop being a brook and become the ditch").
+    So the course below the intake has one job: pass the crop without touching it. It is built in the
+    fall's own frame - `u` along the fall, `v` across it on the chosen flank - by walking down the fan
+    and holding `v` at the outermost crop seen so far plus a skirt. Two properties come from that shape
+    rather than from a search: `v` never decreases, so the brook cannot turn back into the fan and every
+    bend is obtuse; and at each step it lies outside the widest crop at or above that step, so no vertex
+    can fall inside the envelope however the fan's outline wanders."""
+    dx, dy = plan.fall
+    px, py = -dy * side, dx * side
+    u0, v0 = sluice[0] * dx + sluice[1] * dy, sluice[0] * px + sluice[1] * py
+    uv = [(v[0] * dx + v[1] * dy, v[0] * px + v[1] * py) for v in plan.envelope]
+    umax = max(u for u, _ in uv)
+    out: Poly = []
+    for i in range(1, steps + 1):
+        u = u0 + (umax - u0) * i / steps
+        v = max([v0] + [vv for uu, vv in uv if uu <= u + 40.0]) + skirt
+        out.append((u * dx + v * px, u * dy + v * py))
+    lx, ly = out[-1]
+    # ...and off the frame from there, the run measured along the fall from THIS point rather than pinned
+    spans = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
+    span = max(120.0, min(spans)) + 260.0
+    out.append((lx + dx * span, ly + dy * span))
+    return out
+
+
+def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
+    """The brook: down off the high ground to the intake, and ON PAST the fan to leave the map.
+
+    Until feature 230 it ended AT the sluice and "became" the head race there - a handover with no
+    feature at an arbitrary point, which is what the GM asked about. The record answers that a brook is
+    tapped at an intake on one bank and keeps its own course below it, so the course has two halves: the
+    approach, searched here as it always was, and `brook_skirt`'s passage down one flank.
+
+    THE APPROACH is steered clear of the rice: a fan's head can carry a lobe out to one side and a brook
+    coming straight down the fall line then clips it (`streams_avoid_fields`, which is right to object -
+    a stream does not run through a flooded paddy). Bearings are tried outward from straight-upslope, so
+    the brook stays as close to the fall line as the field allows. The last 40 px into the intake is
+    legitimately against the crop and is not tested."""
     dx, dy = plan.fall
     base = math.degrees(math.atan2(-dy, -dx))  # upslope
     for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
@@ -338,7 +377,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         mid = ((up[0] + sluice[0]) / 2 - math.sin(th) * 26, (up[1] + sluice[1]) / 2 + math.cos(th) * 26)
         near = (sluice[0] + math.cos(th) * 40, sluice[1] + math.sin(th) * 40)  # the last 40 px is the intake itself
         if not (crosses_poly(up, mid, plan.envelope) or crosses_poly(mid, near, plan.envelope)):
-            return [up, mid, sluice]
+            return [up, mid, sluice, *brook_skirt(plan, sluice, plan.brook_side)]
     up = (
         sluice[0] - dx * run,
         sluice[1] - dy * run,
@@ -347,6 +386,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         up,
         ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26),
         sluice,
+        *brook_skirt(plan, sluice, plan.brook_side),
     ]  # pragma: no cover - the same unreachable fallback, one line down [174: KEPT, not deletable - part of that same terminal return]
 
 
@@ -653,7 +693,9 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     # STREAM ending AT the sluice, where it becomes the head-race - it does not run on over the
     # paddies. `draw_comb_field` then records the hairline topology channel that grounds the field's
     # water source for the gate.
-    s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": feed_brook(plan, sluice)})
+    plan.brook = feed_brook(plan, sluice)
+    s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": plan.brook})
+    draw_intake(s, plan, sluice)
     # THE PARTS OF A DITCH THAT RUN OUTSIDE THE CROP become no-build corridors.
     #
     # `s.field_channel` registers none of its own, and inside the field envelope it does not need
@@ -671,6 +713,41 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         outside = [(a, b) for a, b in zip(run, run[1:], strict=False) if not point_in_poly((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, plan.envelope)]
         for a, b in outside:
             s.corridors.append(([a, b], 30.0))
+
+
+def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
+    """What stands where the head race leaves the brook - a WEIR, or nothing at all.
+
+    The record attests both and gives no proportion, so `plan.intake` is rolled per map
+    (research/water.html, "Where does the brook stop being a brook and become the ditch"). On an `open`
+    hamlet the point is marked by the junction itself: the brook runs straight on and the race leaves its
+    bank at an acute angle, which is a fork a reader can see. On a `weir` hamlet a bar of stone-packed
+    timber crib crosses the brook, set OBLIQUE - the old weirs ran diagonally upstream from the intake
+    mouth, damming the shallow riffle and standing clear of the flood's fastest water.
+
+    Two disclosed liberties, both in the entry: the bar is drawn as a FULL closure of the brook, a map
+    drawing convention, because a half-river closure - the common old form - is a pixel or two at a 7 ft
+    brook; and its thickness is a guess, the histories giving cross-sections only for river weirs."""
+    if plan.intake != "weir":
+        return
+    nxt = next((q for q in plan.brook[plan.brook.index(sluice) + 1 :]), None) if sluice in plan.brook else None
+    hx, hy = unit(nxt[0] - sluice[0], nxt[1] - sluice[1]) if nxt else plan.fall
+    ang = math.atan2(hy, hx) + math.radians(90.0 + WEIR_SKEW_DEG)
+    ax, ay = math.cos(ang), math.sin(ang)
+    half, half_t = WEIR_HALF_FT / plan.ftpx, WEIR_THICK_FT / plan.ftpx / 2.0
+    poly = [
+        (sluice[0] + ax * half + hx * half_t, sluice[1] + ay * half + hy * half_t),
+        (sluice[0] - ax * half + hx * half_t, sluice[1] - ay * half + hy * half_t),
+        (sluice[0] - ax * half - hx * half_t, sluice[1] - ay * half - hy * half_t),
+        (sluice[0] + ax * half - hx * half_t, sluice[1] + ay * half - hy * half_t),
+    ]
+    s.M.setdefault("weirs", []).append(
+        {"x": round(sluice[0], 1), "y": round(sluice[1], 1), "len": round(2 * half, 1), "w": round(2 * half_t, 1), "deg": round(math.degrees(ang) % 180.0, 1), "poly": [[round(x, 1), round(y, 1)] for x, y in poly]}
+    )
+    s.add(
+        '<polygon points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in poly) + '" fill="#8C7C63" stroke="#5F5340" stroke-width="0.8" stroke-linejoin="round"/>',
+        cls="weir",
+    )
 
 
 # ---- the polder's flanks (feature 150) --------------------------------------------------------------

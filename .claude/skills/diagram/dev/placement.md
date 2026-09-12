@@ -41,7 +41,7 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | # | stage | what it puts on the map |
 |---|---|---|
 | 1 | `stage_water_frame` | **nothing - it draws no ink at all.** Settles the drainage bearing and the land's fall and writes twelve values to `meta`; every later stage reads them |
-| 2 | `stage_field` | the water skeleton AND the paddy - `build_comb` returns canals and plots from one call, so intake, head race and field ditches arrive here, not in stage 1 |
+| 2 | `stage_field` | the water skeleton AND the paddy - `build_comb` returns canals and plots from one call, so intake, head race and field ditches arrive here, not in stage 1. Since feature 230 the BROOK is drawn here too and runs on past the fan down one flank (`brook_skirt`), and the intake's weir - when the roll gave one - is drawn over it (`draw_intake`); everything placed later must keep off that course, which the corridor `s.stream` registers is what does it |
 | 3 | `stage_sink` | tail drain, pond or off-map outfall |
 | 4 | `stage_seat` | **nothing.** Decides WHERE the settlement sits (`plan.seat`), which `stage_homesteads` depends on. One half of what used to be `stage_ways`; the other half is stage 7 |
 | 5 | `stage_waterward` | a polder's WATERWARD reed fringe (feature 150): the strips outside the dike on the flanks that face the water, derived from the seat - laid BEFORE the houses and the track because it reserves wet ground both must avoid (laid in the hinterland it was drawn over an already-routed connector). No ink on a valley hamlet |

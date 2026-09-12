@@ -23,6 +23,8 @@ SNAPSHOT = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "classes_b
 SINCE_189: dict[str, tuple[str, ...]] = {
     "field ditch": ("irrigation ditch", "drainage ditch"),  # feature 230, GM 2026-09-12: the two ends of the field are two questions
 }
+#: Kinds the map draws that the snapshot's registry did not have at all.
+ADDED_SINCE_189: tuple[str, ...] = ("weir",)  # feature 230: what stands where the head race leaves the brook
 
 
 def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present() -> None:
@@ -34,10 +36,10 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     prose edit is exactly what feature 189 exists to make cheap: pinning it would fail `make page-check`
     on every reworded explanation. Here they are only required to be present."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
-    successors = {s for succ in SINCE_189.values() for s in succ}
-    assert set(SINCE_189) <= set(before) and not (successors & set(before)), "the table names snapshot keys and NEW keys only"
-    assert sorted(set(before) - set(SINCE_189) | successors) == sorted(CLASSES)
-    assert len(CLASSES) == 51 - len(SINCE_189) + len(successors)
+    added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
+    assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"
+    assert sorted(set(before) - set(SINCE_189) | added) == sorted(CLASSES)
+    assert len(CLASSES) == 51 - len(SINCE_189) + len(added)
     for key, was in before.items():
         if key in SINCE_189:
             continue  # retired; its successors are new entries with their own data, judged by test_classes.py

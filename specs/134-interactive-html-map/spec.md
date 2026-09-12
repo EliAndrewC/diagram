@@ -277,14 +277,16 @@ hover/click checks for the classes it contains.
   | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden; soy |
   | soy | dry plots under soybean as a field crop (`dry_plots[crop=soy]`) - added at implementation: the palette rolls four dry crops and the reference hamlet happened to draw three; cohort seeds 41-44 all draw it | millet; buckwheat; barley; paddy; fallow; garden; bund beans |
   | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley; soy |
-  | stream | the brook | field ditch; pond |
-  | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream; pond |
-  | pond | the tameike | stream; field ditch; marsh; field pond |
+  | stream | the brook | irrigation ditch; drainage ditch; pond |
+  | weir | the bar across the brook at a `weir` hamlet's intake (`weirs`) - added by feature 230, the intake's form being rolled | stream; irrigation ditch |
+  | irrigation ditch | the head race, the supply canals and the delivery ditches (`field_ditches` not `drain`, `channels` not from a drain) - feature 230 split the one `field ditch` row in two | stream; pond; drainage ditch |
+  | drainage ditch | the collector and its run to the pond, the brook or the frame (`field_ditches` role `drain`, `channels` from a drain) - feature 230 | stream; pond; irrigation ditch |
+  | pond | the tameike | stream; irrigation ditch; drainage ditch; marsh; field pond |
   | field pond | the small open-water pocket sunk into one low paddy (`field_ponds`) - added at implementation: the reference hamlet draws one and the table did not name it, so it is listed here for the GM to overrule by name | pond; paddy |
   | fish pond | the dug water of every dike-pond parcel (`dikeponds[]`) - added by feature 150 (Kuwabata, the first scripted mulberry-dike fish-pond hamlet), listed here for the GM to overrule by name | pond; paddy |
   | mulberry dike | the planted bank ring of every dike-pond parcel and its coppiced crowns - feature 150 | bund; windbreak |
-  | pond sluice | the cut in a pond's dike to the canal (`dikepond_sluices`) - feature 150 | field ditch |
-  | perimeter dike | the polder's enclosing earthwork band (`dikes[]`) - feature 150 | bund; field ditch |
+  | pond sluice | the cut in a pond's dike to the canal (`dikepond_sluices`) - feature 150 | irrigation ditch |
+  | perimeter dike | the polder's enclosing earthwork band (`dikes[]`) - feature 150 | bund; irrigation ditch |
   | fry pond | a dike-pond parcel designated a fry nursery (`dikeponds[].kind = fry`) - feature 150, the GM's audit A5 | fish pond |
   | manure pit | the manure fixture in its pit form (`farm_fixtures[].form = pit`) - feature 150, audit A2 | manure heap |
   | sluice gate | the boards in a perimeter dike's cut (`sluice_gates[]`) - feature 150, audit A7 | pond sluice |

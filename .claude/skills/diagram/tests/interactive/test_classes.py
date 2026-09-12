@@ -51,6 +51,9 @@ SPEC_CLASSES = [
     "soy",
     "fallow",
     "stream",
+    # the bar across the brook at a `weir` hamlet's intake (feature 230; the form is rolled, so a map may
+    # have none - the class is present on the page only when the map drew one)
+    "weir",
     # the one `field ditch` became two (feature 230, GM 2026-09-12: the ditches that feed the paddies and the
     # ditch that drains them are different questions with different records behind them)
     "irrigation ditch",
@@ -122,7 +125,9 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     """Feature 183 (GM 2026-09-05): a deviation is the SETTING differing from history; a map drawing
     convention is a glyph scaled or colored for the eye. Six of the seven old deviations were the second."""
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == ["grave island"]
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "well"]
+    # `weir` joined them on 2026-09-12 (feature 230): the bar is drawn closing the brook bank to bank
+    # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "weir", "well"]
     beans = CLASSES["bund beans"].label_note
     assert beans.startswith("we have rendered the bund beans as") and "50 to 125 cm" in beans and "medium-green" in beans and "not found" in beans
     well = CLASSES["well"].label_note

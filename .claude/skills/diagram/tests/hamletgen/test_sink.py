@@ -117,3 +117,55 @@ def test_a_pond_the_canvas_cannot_hold_falls_back_to_draining_OFF_MAP(monkeypatc
     assert plan.water_sink == "offmap", "a pond the canvas cannot hold must fall back to the off-map brook"
     assert reentered == ["offmap"], "and the stage re-enters itself once, as an off-map map, to cut the brook"
     assert not s.M.get("ponds"), "and no pond may be drawn"
+
+
+# ---- the third sink: the drain reaching the brook that passes (feature 230) -----------------------
+
+
+def test_the_drain_joins_the_passing_brook_when_one_runs_within_reach_downslope() -> None:
+    """`brook_join`. Before modern consolidation a village's drainage went back to the watercourse to be
+    taken up below, so where the field's own brook passes near the collector's outfall the drain runs
+    to it. The candidate must lie downslope and be reachable without crossing the crop."""
+    plan = a_plan()  # falls due south, the square crop at x 400-1000, y 400-1000
+    plan.brook = [(1200.0, 1100.0), (1200.0, 1600.0)]
+    join = hg.brook_join(plan, (1050.0, 1050.0))
+    assert join is not None and join[0] == pytest.approx(1200.0) and join[1] >= 1050.0 + hg.BROOK_JOIN_DESCENT
+
+
+def test_a_brook_abreast_of_the_outfall_is_joined_a_little_way_down_it() -> None:
+    """The nearest point on a brook running down the flank is LEVEL with the outfall, and taking it sent
+    Sawada's drain off the frame beside its own brook. The join is the nearest point that has FALLEN."""
+    plan = a_plan()
+    plan.brook = [(1130.0, 400.0), (1130.0, 1600.0)]  # abreast of the outfall, then on downslope
+    join = hg.brook_join(plan, (1050.0, 1050.0))
+    assert join is not None and join[1] == pytest.approx(1050.0 + hg.BROOK_JOIN_DESCENT, abs=10.0)
+
+
+def test_a_brook_abreast_of_the_outfall_is_joined_a_little_way_down_it() -> None:
+    """The nearest point on a brook running down the flank is LEVEL with the outfall, and taking it sent
+    Sawada's drain off the frame beside its own brook. The join is the nearest point that has fallen."""
+    plan = a_plan()
+    plan.brook = [(1130.0, 400.0), (1130.0, 1600.0)]  # abreast of the outfall, then on downslope
+    join = hg.brook_join(plan, (1050.0, 1050.0))
+    assert join is not None and join[1] == pytest.approx(1050.0 + hg.BROOK_JOIN_DESCENT, abs=10.0)
+
+
+def test_a_brook_that_passes_uphill_of_the_outfall_is_no_sink() -> None:
+    """Water does not run up to its confluence: a brook whose nearest point is upslope is refused, and
+    the runoff leaves the frame as it did before."""
+    plan = a_plan()
+    plan.brook = [(1200.0, 100.0), (1205.0, 200.0)]
+    assert hg.brook_join(plan, (1050.0, 1050.0)) is None
+
+
+def test_a_brook_beyond_the_crop_is_not_reached_across_it() -> None:
+    """A ditch does not run through the rice to find its confluence."""
+    plan = a_plan()
+    plan.brook = [(200.0, 900.0), (200.0, 1600.0)]  # on the far side of the square from the outfall
+    assert hg.brook_join(plan, (1050.0, 700.0)) is None
+
+
+def test_a_brook_out_of_reach_is_no_sink() -> None:
+    plan = a_plan()
+    plan.brook = [(4000.0, 1100.0), (4000.0, 1600.0)]
+    assert hg.brook_join(plan, (1050.0, 1050.0)) is None

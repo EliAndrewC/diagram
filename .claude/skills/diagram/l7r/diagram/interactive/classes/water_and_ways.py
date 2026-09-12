@@ -85,6 +85,32 @@ class DrainageDitch(Kind):
     key = "drainage ditch"
 
 
+class Weir(Kind):
+    """
+    What: A low bar of stone-packed timber crib thrown across the brook at the intake, set at a slant so
+    that it runs diagonally upstream from the point where the head race leaves the bank.
+
+    Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
+    at the height the field needs, and the rest goes on over the crest and down the valley. The slant is
+    the old builders' answer to floods: it dams the shallow riffle, keeps the bar out of the fastest
+    water, and spreads the overflow along a longer crest so less of it breaks. Not every hamlet has one -
+    where the brook ran high enough the water was simply led off the bank, and this map's roll decided.
+
+    Note: we have drawn the weir closing the brook bank to bank, in order to make it visible on the map at
+    this scale; half-river closures were the common old form, and across a brook 7 ft wide a half-bar would
+    be a line a pixel or two long. Its materials and its slant are read; the 5 ft thickness it is drawn at
+    is a guess, the engineering histories giving cross-sections only for weirs on real rivers.
+
+    Name: weir
+    Covers: `weirs` - the bar across the brook at a weir hamlet's intake
+    Label: convention
+    Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18
+    Entry: research/water.html - 'Where does the brook stop being a brook and become the ditch'
+    """
+
+    key = "weir"
+
+
 class Pond(Kind):
     """
     What: An irrigation reservoir - a valley-head tameike behind an earthen dike, sitting above the fields it

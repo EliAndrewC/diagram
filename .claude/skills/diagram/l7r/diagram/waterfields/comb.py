@@ -109,6 +109,8 @@ def carve_comb(
     grain_drift: float = 0.0,
     grain: float = 1.0,
     supply_banks: bool = False,
+    head_deg: float | None = None,
+    head_len: float = 90.0,
 ) -> CombCarve:
     """The CARVE half of `build_comb` (feature 220): everything up to the planted plots and the
     envelope, before the seams are closed - what `fit_field`'s search measures. Returns a
@@ -119,7 +121,7 @@ def carve_comb(
     DOWN = F.down
     channels: list[dict[str, Any]] = []
 
-    fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels)
+    fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels, head_deg, head_len)
     threads, bc, spawns = _comb_threads(R, F, DOWN, fork, a_pts, canal_b_len, offtakes_a, offtakes_b, plot_across)
     # ---- the lockstep march (no thread may cross another or pinch under GAP)
     _comb_march(R, F, DOWN, threads, spawns, W, H, field_fall)
@@ -456,15 +458,35 @@ def _mk_thread(
 
 
 def _comb_skeleton(
-    R: random.Random, F: _Frame, DOWN: float, sluice: Pt, canal_a_len: tuple[float, float], canal_b_len: tuple[float, float], W: float, H: float, grain: float, channels: list[dict[str, Any]]
+    R: random.Random,
+    F: _Frame,
+    DOWN: float,
+    sluice: Pt,
+    canal_a_len: tuple[float, float],
+    canal_b_len: tuple[float, float],
+    W: float,
+    H: float,
+    grain: float,
+    channels: list[dict[str, Any]],
+    head_deg: float | None = None,
+    head_len: float = 90.0,
 ) -> tuple[Pt, Poly]:
     """The water skeleton's head: head-race to the division point, then canal A's dug polyline
-    (canal B's is drawn and discarded - its RNG draw is part of the frozen stream)."""
-    # head-race: sluice -> the division point (bunsuiguchi), straight down the fall.
+    (canal B's is drawn and discarded - its RNG draw is part of the frozen stream).
+
+    `head_deg` is the bearing the head race LEAVES THE INTAKE on and `head_len` how far it runs to the
+    division point. Both are the caller's since feature 230: a scripted hamlet's brook keeps its own
+    course past the fan, and the race leaves its bank at an acute angle pointing downstream (the
+    record's offtake rule) over a distance derived from the fan rather than pinned. The default -
+    no bearing, 90 px - is the shape every other caller has drawn since this builder was written:
+    straight down the fall from a sluice, which is right for a pond's outlet and for a city fan
+    tapping a moat, neither of which has a brook to leave."""
+    # head-race: the intake -> the division point (bunsuiguchi), on the caller's bearing or down the fall.
     # Every width below goes through `chan_px`, which converts a TRUE width in feet to pixels at
     # this map's scale (and floors it at the visibility minimum) - so the net is to scale, and the
     # same real channel is the same real size on every sheet that draws it.
-    hr = [sluice, (sluice[0] + 45 * F.d[0], sluice[1] + 45 * F.d[1]), (sluice[0] + 90 * F.d[0], sluice[1] + 90 * F.d[1])]
+    hd = F.d if head_deg is None else (math.cos(math.radians(head_deg)), math.sin(math.radians(head_deg)))
+    hr = [sluice, (sluice[0] + head_len / 2 * hd[0], sluice[1] + head_len / 2 * hd[1]), (sluice[0] + head_len * hd[0], sluice[1] + head_len * hd[1])]
     channels.append({"pts": hr, "w": chan_px(HEAD_RACE_FT, grain), "role": "main"})
     fork = hr[-1]
 

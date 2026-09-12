@@ -98,3 +98,18 @@ def test_the_frame_is_ruled_not_highlighted(tmp_path: os.PathLike[str]) -> None:
         m = json.load(fh)
     assert m["unclassed_ink"] == [], "the sheet, the placard, the name and the scale bar all carry the ruling"
     assert m["ink_classes"]["-"] >= 5
+
+
+def test_a_ditchs_hue_and_its_class_are_read_from_one_field() -> None:
+    """Feature 230: the comb's emit loop picks the collector's grayer blue from the record's `role`, and
+    the hover class is picked from the same read, so the two cannot disagree (the wet-paddy precedent).
+    A channel is classed by where it comes FROM, and the rule is total - a shape the pool does not draw
+    today still lands on one of the two."""
+    from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, SUPPLY_HUE, channel_class, ditch_style
+
+    assert ditch_style("drain") == (DRAIN_HUE, "drainage ditch")
+    for role in ("main", "branch", "lateral", None):
+        assert ditch_style(role) == (SUPPLY_HUE, "irrigation ditch")
+    assert channel_class({"kind": "drain"}) == "drainage ditch"
+    for frm in ({"kind": "pond"}, {"kind": "stream"}, {"kind": "field"}, {"kind": "moat"}, {}, None):
+        assert channel_class(frm) == "irrigation ditch"

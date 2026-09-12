@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.settlement import Settlement, point_in_poly
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
 from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
@@ -139,9 +139,77 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
         if clear:
             clear = not any(((v[0] - cx) / prx) ** 2 + ((v[1] - cy) / pry) ** 2 <= 1.0 for v in env)
         if clear:
+            # ...and clear of the BROOK, which since feature 230 runs on down one flank of the fan and can
+            # pass exactly where the reservoir wants to stand. Measured against the pond's OWN ellipse plus a
+            # rim's margin, never a circle of its long radius: at 116 x 74 px that circle is half again the
+            # pond across its short axis, and it cost Mizuguchi's tameike its seat - the stage fell back to
+            # draining off the frame and the map lost the reservoir it is named for. A brook running past a
+            # reservoir's shoulder is a normal thing to draw; a brook through the water is not.
+            clear = all(((seg_closest(cx, cy, a, b)[0] - cx) / (prx + 12.0)) ** 2 + ((seg_closest(cx, cy, a, b)[1] - cy) / (pry + 12.0)) ** 2 > 1.0 for a, b in zip(plan.brook, plan.brook[1:], strict=False))
+        if clear:
             return d + 12.0
         d += step
     return limit
+
+
+#: How far the confluence must have FALLEN below the outfall, px. A drain runs downhill into the brook it
+#: joins, and a junction level with the outfall is neither a fall nor a join; a stride of the collector's
+#: own tail width is enough to read as one on the sheet.
+BROOK_JOIN_DESCENT = 20.0
+
+
+def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10.0) -> Pt | None:
+    """Where the collector meets the brook that passes the field, or None if it does not pass near.
+
+    The third sink, and the researched one (feature 230): before modern consolidation a village's
+    drainage went back to the watercourse to be taken up by the district below, so where the brook the
+    field is fed from runs on within reach of the collector's outfall, the drain runs to it and joins it
+    at a confluence. The candidate must lie downslope, be within reach, and be reachable without crossing
+    the crop; without one the runoff leaves the frame as before.
+
+    THE NEAREST POINT ON THE BROOK IS THE WRONG CANDIDATE, and taking it is what hid this sink on the two
+    maps that most wanted it. A brook running down the flank passes ABREAST of the outfall, so its closest
+    point is level with it or a few feet above - Sawada's was 80 px away and 4 px uphill - and a test for
+    "downslope" then refuses the join and sends the drain off the frame on its own, two watercourses
+    leaving the map side by side. So the brook is walked at a stride and only the points that have
+    genuinely fallen are considered; the nearest of THOSE is the confluence, a little way down the brook
+    from where it passes. `BROOK_JOIN_DESCENT` is what makes the junction a junction rather than a level
+    meeting."""
+    dx, dy = plan.fall
+    best: tuple[float, Pt] | None = None
+    for a, b in zip(plan.brook, plan.brook[1:], strict=False):
+        run = math.hypot(b[0] - a[0], b[1] - a[1])
+        for i in range(int(run / stride) + 1):
+            t = min(1.0, i * stride / run) if run else 0.0
+            q = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            d = math.hypot(q[0] - out[0], q[1] - out[1])
+            if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT:
+                continue
+            if crosses_poly(out, q, plan.envelope):
+                continue
+            if best is None or d < best[0]:
+                best = (d, q)
+    return best[1] if best else None
+
+
+def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float) -> tuple[float, float]:
+    """(how far downslope, how far across the fall) the reservoir must stand to clear the crop AND the
+    brook - the set-back search with one more degree of freedom.
+
+    The walk downslope alone was enough while the brook stopped at the intake. Since feature 230 it runs
+    on down one flank of the fan, and on a map whose flank is the drain's own side the two want the same
+    ground: Mizuguchi's tameike - the reservoir the place is named for - was pushed past the canvas and
+    the stage fell back to draining off the frame, losing a feature its spec had declared. Stepping the
+    pond ACROSS the fall is the cheaper move and the truer one: a valley's reservoir sits in whatever
+    pocket the ground offers below the fields, not on a plumb line under the outfall. The sways are
+    tried nearest-first and the straight seat still wins whenever it is clear, so every map whose pond
+    already had room keeps the seat it had."""
+    for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
+        moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
+        back = pond_setback(plan, moved, prx, pry)
+        if back <= POND_SETBACK_LIMIT:
+            return back, sway
+    return POND_SETBACK_LIMIT + 1.0, 0.0
 
 
 def stage_sink(s: Settlement, plan: SitePlan) -> None:
@@ -166,6 +234,15 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         # derived per bearing below - the distance from the junction to the canvas edge along the
         # heading actually taken - because a fixed length only works on the canvas it was tuned for,
         # and a length derived for the FALL is wrong for any other bearing the search tries.
+        # THE BROOK FIRST. Where the field's own brook passes within reach of the outfall, the drain joins
+        # it rather than running its own way off the map - what a village's drainage did (`brook_join`).
+        join = brook_join(plan, out)
+        if join is not None:
+            bow = min(10.0, 0.08 * math.hypot(join[0] - out[0], join[1] - out[1]))  # dug earth, not a ruled connector; proportional keeps the turn obtuse at any length
+            mid_j = ((out[0] + join[0]) / 2 - dy * bow, (out[1] + join[1]) / 2 + dx * bow)
+            drain_run(s, [out, mid_j, join], "stream")
+            plan.sink_brook = [out, mid_j, join]
+            return
         heading = drain_heading(s, name) or (dx, dy)
         # THE ROUTE IS CHOSEN AS A WHOLE - junction and exit together.
         #
@@ -290,7 +367,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # others, which is exactly the failure mode the project's "derive, don't pin" rule names. So the
     # pond walks DOWNSLOPE from the outfall until its rim is genuinely clear, and stops at the first
     # position that is - the nearest legal seat, so the ditch between field and pond stays a ditch.
-    back = pond_setback(plan, out, prx, pry)
+    back, sway = pond_seat(plan, out, prx, pry)
     if back > POND_SETBACK_LIMIT:
         # NO ROOM FOR A RESERVOIR HERE, so the field drains off the frame instead.
         #
@@ -304,7 +381,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         plan.water_sink = "offmap"  # pragma: no cover - the pond-to-offmap fallback; no cohort fan currently needs a tameike further than the limit
         stage_sink(s, plan)  # pragma: no cover - the pond-to-offmap fallback; no cohort fan currently needs a tameike further than the limit
         return  # pragma: no cover - the pond-to-offmap fallback; no cohort fan currently needs a tameike further than the limit
-    pcx, pcy = out[0] + dx * back, out[1] + dy * back
+    pcx, pcy = out[0] + dx * back - dy * sway, out[1] + dy * back + dx * sway
     clamped = (max(prx + 20.0, min(plan.W - prx - 20.0, pcx)), max(pry + 20.0, min(plan.H - pry - 20.0, pcy)))
     if math.hypot(clamped[0] - pcx, clamped[1] - pcy) > 1.0 or not pond_clear_of_crop(plan, clamped, prx, pry):
         # THE CLAMP UNDOES THE SOLVE, so a clamped pond is no pond. `pond_setback` walks the tameike
