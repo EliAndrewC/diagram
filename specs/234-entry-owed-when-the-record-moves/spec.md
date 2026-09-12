@@ -397,6 +397,28 @@ one of which said the GM had not ruled. FR-013.1's timing paragraph, the Summary
 D5's body against its own heading, and the FR-012/SC-012 guard-table wording were all corrected, and
 `tasks.md` would otherwise have implemented the withdrawn design.
 
+**Amendment round 3** (`spec-fidelity`): all five round-2 items confirmed resolved and the shipped code
+verified against the spec line by line; ONE required change - R7's limit was recorded in research only
+and belongs in the spec as an accepted limitation. It is **D7**.
+
+**Amendment round 4** (`spec-fidelity`): five items, all taken. D7 misattributed its own discovery -
+it said the defects were found "by a person with a ruler ... not by this feature" when R6/R7 record that
+this feature's OWN `entry-drift` dispatch flagged them; the correction matters because the wrong version
+would tell a future session the agent cannot be used that way, which is the one lever that worked. A
+fifth defect of the same class was still reader-facing (`crop-vs-perimeter` telling four more classes the
+crop dike is "six to ten meters"). This feature had written the record's own correction history into a
+reader's page, which the doctrine forbids - in the feature about records going stale. No `record-format`
+or `quote-check` pass had been dispatched on the entry this feature changed. And round 3's non-blocking
+item had never been applied, because the patch carrying it aborted on an unrelated anchor.
+
+Both verification passes then ran. `record-format` confirmed the correction history was gone, and found
+that the correction had left a dangling negation ("so that is not one bank", arguing with an antecedent
+this feature had removed) plus five older sentences narrating the record's own past; all fixed.
+`quote-check` found that the same correction had falsified a downstream claim - the traditional figures
+were "carried as the band the drawing sits inside", true of the withdrawn 6.7 m and of neither
+replacement - and that the sentence stating "dikes of 6-10 m" carried no footnote while the record held
+its evidence. Both fixed; `research.md` R9 records what is deferred with its measurement.
+
 **Amendment round 2** (`spec-fidelity`, against the SHIPPED code): CHANGES REQUIRED, five items, all
 taken. It re-ran R5's measurement itself and reproduced 30/28/27 exactly, noting the filter needed
 `--no-merges` stated. The severe one: `scripts/_entry_owed.py`'s own docstring still described the
