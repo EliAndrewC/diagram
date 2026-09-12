@@ -389,3 +389,50 @@ downstream heading, 5.5 ft wide against the trunk's 6.5, tapering narrower away 
 an offtake, which is what the same map draws at the intake. The reviewer's lever is to align the drain's last leg
 with the brook's downstream heading; whether a field drain's return is swept downstream is a research question the
 record has not asked (`city/moat.py` asserts it without a citation), so it is not changed on a guess.
+
+## R10 settlement-review pass 10, and what each finding turned out to be (2026-09-12)
+
+Three agents, one per map pair, all needs-work. Each finding was measured before it was changed, and several turned
+out to have a different cause from the one proposed.
+
+- **The undrawn connector (Inashiro)** - five passes in `hamletgen.ways` deleted a lane record and left its ink
+  slot, so every later lane was re-inked into its predecessor's slot. Latent since features 145/155; surfaced when
+  this feature's field spur became record 0 and was swept. `Settlement.drop_lanes`; a static AST test fires on all
+  five original sites.
+- **The brook's sawtooth (Inashiro)** - not the wander: `_off_the_axes` kicked alternate legs of a straight
+  due-south reach a flat 11 px. It now tilts just past its own detector.
+- **V spikes where the brook passes the crop (Kashikawa, Mizuguchi, Sawada)** - the frame box's margin (8 px) was
+  narrower than the skirt (34), so stations sat outside the box and cut points were clamped back in. Two levers
+  refused on measurement (the margin alone put Kashikawa's brook in view in two pieces; cut points held to their
+  nearer station made four pieces and 70 degree turns). Margin 44 with the frame reserving the brook beside the
+  field: one piece in view on every map, medians 4-5.5 degrees.
+- **Indistinguishable ditch inks (all brook maps)** - DRAIN_HUE #7C9EB0 -> #5E7A76.
+- **Flooded plots reading as ponds or wedges (three maps)** - a triangle's solidity is 1.0 and a capped wedge has no
+  sharp vertex, so no clause saw them; a sixth clause asks a blue plot to fill 0.80 of its minimum rectangle (pool
+  median 0.93). The guaranteed plot was the LARGEST compliant one; it is now the most basin-like one on the collector,
+  and a plot on the collector counts as low (49 of Mizuguchi's 64 there never carried the flag).
+- **The weir drawn backwards (Kashikawa)** - centered on the mouth and skewed without regard to the intake bank; now
+  a pixel below the mouth, slanting up from the intake bank.
+- **Mizuguchi's 111.6 degree drain hairpin** - the pond, correctly stepped across the fall by the brook, lay behind
+  the collector's heading. `pond_run` leads a run to a pond more than 100 degrees off round a cubic (sharpest bend 37).
+  A 60 degree threshold was tried first and bent every ordinary cross-fall outfall, moving Inashiro's lane web.
+- **Kuwabata's canals classed irrigation** - not an open question: research/archetypes.html already records them as
+  the conveyance-and-drainage network the ponds exchange water with. A `pond canal` class on that archetype.
+- **The Pond modal contradicting its map** - rewritten to name both parts a pond plays.
+- **Paddy rings below 15 degrees on Kashikawa** - not reproducible by the gate's own predicate on either the recorded
+  rings or the drawn polygons, on the reviewed snapshot or since; the one sub-15 degree polygon on the sheet is the
+  fan's base floor fill, which is not a basin. A check over every shipped hamlet now holds the rule regardless.
+- **Found while measuring, pre-existing on main**: `_carve` returns basins that claim the same ground (49 pairs, up
+  to 1,290 sq px on Sawada). The renderer paints the later one on top, so the earlier one's bund pokes out as notches
+  and stubs. `_visible_parts` cuts each to what shows: 0-2 pairs on every brook map.
+
+**Open, with their measurements, and not changed on a guess:**
+- The corner below the tap, 41-53 degrees on the four brook maps (down from 72-78): the fan's own divergence at its
+  head, which `BROOK_FAN_TRIM` exists to ease. Over 200 ft the brook and the race part at 81-86 degrees.
+- Kashikawa's confluence can read as a second offtake (R9).
+- Footpaths that end at a house's back wall (Sawada, Mizuguchi): whether a village path served the rear door
+  (sedo) is a research question; the house glyph draws only the front door.
+- A drainage pond with no outflow 67 ft from a passing brook (Mizuguchi): whether a pond gathering paddy drainage
+  was built with an overflow to the stream.
+- Inashiro's windbreak running one crown wide up the east frame edge, facing no house.
+- Kuwabata's supply tapers drawn backwards, and the fan floor polygon's invisible zero-degree spike - both also on main.
