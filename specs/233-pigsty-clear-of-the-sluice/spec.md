@@ -73,10 +73,22 @@ Dispatched as two `source-reader` agents, 2026-09-12. Full verdict tables live i
 (`dikepond_sluices[]`), and neither MUST a duck pen's dry run. This is a requirement about two glyphs
 occupying one piece of ground, and it needs no historical number.
 
-**FR-002** On top of FR-001 the fixture MUST stand clear of the sluice by a working margin - room for
-a person to reach the gate and lift its boards, the sluice being "a protected opening in the pond dike
-that can be easily closed with wooden boards". The margin is a GUESS (the record is silent on any
-spacing along a dike; FAO gives dike WIDTH only) and is labeled one wherever it is stated.
+**FR-002** On top of FR-001 the fixture MUST stand clear of the sluice stub by a working margin of
+**6 ft**, measured from the fixture's drawn footprint to the nearest point of the stub (a segment, not
+its anchor - the stub is ~24 ft long and the anchor alone understates the overlap). The reason is that
+someone has to stand at the gate and lift its boards, the sluice being "a protected opening in the pond
+dike that can be easily closed with wooden boards to regulate water level"; 6 ft is about two paces,
+room for one person and the board they are drawing.
+
+The 6 ft is a **GUESS**. The record was searched by two readers and is silent on any spacing along a
+dike - FAO gives dike WIDTH only (finding 5) - so this is a degree along a continuum with nothing to
+measure it against, not a choice between two attested forms, and therefore not a knob. It MUST be
+labeled a guess in all three places it appears: the research entry (FR-005), the point of change in
+`pondstock.py` / `farm_fixtures.py`, and the `PigSty` and `DuckPen` class entries (FR-008).
+
+The value is chosen on its own merits and not against a placement budget, because there is no budget
+pressure: `research.md` R6 simulated the rule at 0, 4, 6, 8 and 12 ft and every fixture places at every
+one of them.
 
 **FR-003** A pond whose nearest bank seat is refused MUST NOT lose its fixture to another pond.
 `_bank_seat` currently returns the single edge nearest the house cluster and `stage_pond_stock` skips
@@ -90,9 +102,23 @@ ft further from the houses than the seat now chosen, so the fixtures move a shor
 disappearing.
 
 **FR-005** The research record MUST carry findings 1 to 7 above, each as an assertion with a footnote
-quoting the passage it rests on, linked to a public page where the quote can be read, on the citations
-page beside the research page. The foreign-language passages are quoted in English translation, marked
-as translations, with the original following as the anchor.
+quoting the passage it rests on, linked to a public page where the quote can be read, the notes living
+on `research/citations/archetypes.html` beside the page. The foreign-language passages (finding 3's
+齊民要術, and any Japanese passage) are quoted in English translation, marked as translations, with the
+original following as the checker's anchor.
+
+They land on **`research/archetypes.html`**, the one page in the record covering this archetype and the
+page `PigSty.Entry:` already names. Findings 1, 2, 5 and 7 extend the EXISTING section 'What stands on a
+dike-pond hamlet that a paddy hamlet lacks?' (see FR-011, which that section needs anyway). Findings 3,
+4 and 6 - the treatise, the hazard, and the silence - open a NEW section, because they answer a question
+that section does not ask. Its heading MUST be phrased as the question a reader would ask standing at
+the map, which the GM's own wording nearly supplies:
+
+> Does a pig sty have to stand back from the water, or from the pond's sluice?
+
+Its anchor is derived from that text by `interactive/sources.py` `github_anchor` and is STABLE from the
+moment it lands - a later rename owes its inbound links, which after FR-008 include the `Entry:` tags of
+`PigSty` and `DuckPen`.
 
 **FR-006** The inlet/outlet silence (finding 6) MUST be recorded as a labeled ABSENCE note - what was
 searched, by whom, and when - carrying no key and no link, and MUST NOT be written as a finding.
@@ -105,6 +131,23 @@ rewritten against the record as it stands after FR-005 to FR-007, since those do
 modal text every map with the feature shows. Their `Sources:` and `Entry:` tags MUST name the sections
 and keys the new text was written from. This is what the GM asked for by "make sure that you update the
 relevant HTML pages ... for any map with a pigsty feature".
+
+Neither entry MAY offer a water-quality reason for the fixture's position (D2). The clearance is
+constructional; saying otherwise would assert a finding the record does not carry, and finding 6 is a
+silence. This clause is repeated from D2 deliberately, because FR-008 is the requirement whose
+implementer actually writes that prose.
+
+**FR-011** The existing section 'What stands on a dike-pond hamlet that a paddy hamlet lacks?' MUST be
+brought into agreement with what the map draws. Its "Pigs and ducks ON the pond dikes" item currently
+ends *"A pig sty on a pond dike and a duck pen at a pond corner are both attested forms, then, though
+how common they were before the modern period is unquantified; neither is drawn."* followed by an HTML
+comment marking both as a CANDIDATE awaiting "the GM's call". Both ARE drawn - the GM called it in
+feature 150 - and `PigSty.Entry:` sends the reader of every sty modal to that sentence. The stale clause
+and the resolved CANDIDATE comment MUST go, and the section MUST say what the map now does. The
+unquantified-prevalence half stays true and stays.
+
+This is inside the GM's *"make sure that you update the relevant HTML pages"*, and it is the defect this
+feature found while doing something else (Principle XIV).
 
 **FR-009** Every new registry key MUST be judged by `source-applicability` before its numbers, claims
 or details reach a map or a rule, and the changed entries MUST pass `quote-check` and `record-format`
@@ -163,10 +206,25 @@ attested feature of the system the map is modeled on. The record states the prov
 - The FAO ch. 7 direct-flow shed against the ch. 10 septic-tank shed is a candidate KNOB (two attested
   forms) and is NOT built here: ch. 10 reads as modern design guidance, and the question of whether it
   describes a premodern form wants `source-applicability` on its own. Noted in `research.md`.
-- Pond area (0.27 ha drawn against the ISIS 0.4-0.6 ha band) is untouched; it is the hamlet tier's
-  business and predates this feature.
+- Pond area is untouched as a DRAWN quantity; it is the hamlet tier's business and predates this
+  feature. But finding 1 rests on the drawn ponds measuring 4.0 mu to satisfy FAO's "less than 8 mu"
+  condition, and the same ponds sit below the ISIS 0.4-0.6 ha band at 0.27 ha. Where that figure reaches
+  a reader-facing page it MUST carry that limit; a number may be out of scope to CHANGE and still be in
+  scope to state honestly.
 - The guardrail that would have made FR-008 happen without the GM asking is feature 234.
 
 ## Review history
 
-(to be filled by the `spec-fidelity` rounds)
+**Round 1** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, three of them, all taken.
+(1) FR-002 required a margin the spec never stated, making SC-001 unverifiable - the value is now 6 ft
+with its reason, its GUESS label and the three places it is stated. (2) FR-005 said only "the citations
+page beside the research page" - it now names `research/archetypes.html`, which findings extend the
+existing section, which open a new one, and the new heading's text. (3) The reviewer found, outside
+anything the session had looked at, that the section `PigSty.Entry:` points at ENDS with "neither is
+drawn" and an unresolved CANDIDATE comment, while the map has drawn both since feature 150 - the record
+contradicts the map on the very sentence the modal cites. That is now FR-011.
+Both asides also taken: D2's prohibition is repeated into FR-008 where the prose is written, and the
+pond-area figure must carry its honest limit wherever it reaches a reader.
+The reviewer independently verified the spec's measurements against the manifest and the engine
+(sty-to-sluice 5.6 / 6.8 / 8.0 / 11.7 ft, the eight registries `pond_fixture_fits` iterates,
+`dikes.py:304-305`'s sluice-notch skip, Kuwabata as the only map with sties).
