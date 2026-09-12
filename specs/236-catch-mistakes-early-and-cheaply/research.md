@@ -83,8 +83,24 @@ this push adds or changes - which is also the only scope that would have caught 
 it, since every one of them was new text.
 
 **The pre-existing set is LEDGERED, not fixed** (Principle XIII: a pre-existing failure stays ledgered and
-is not fixed under someone else's feature). `research.md` is where it is listed by area; a sweep of it is
-its own work and wants the GM.
+is not fixed under someone else's feature). By area - files carrying one or more hits, from `git grep -l`
+over tracked files excluding `.clones/` and this feature's own directory:
+
+| area | files |
+|---|---|
+| `.claude/skills/diagram/tests` | 22 |
+| `specs` | 18 |
+| `scripts` | 6 |
+| `.claude/skills/diagram/research` (the hits are inside 「」 quotations - exempt) | 5 |
+| `.claude/skills/diagram/l7r` | 4 |
+| `.specify` | 2 |
+| `.claude/skills/diagram/pool` | 2 |
+| `.claude/skills/diagram/future-work` | 2 |
+| `.claude/skills/diagram/dev` | 2 |
+| `.claude/skills/diagram/legacy-hand-authored-pool` | 1 |
+| `.claude/skills/diagram/Makefile` | 1 |
+
+A sweep of them is its own work and wants the GM.
 
 Zero of the 146 are in `specs/*/request.md`, which is the one place Principle V forbids touching - checked,
 because a check that corrected the GM's own words would be worse than no check.
@@ -105,3 +121,67 @@ demonstrated both against feature 234 itself:
 A rule that would reach the real surface has to scan the whole tree, which is a broadening beyond the
 `spec-lint` the GM approved. **Dropped from feature 236 and recorded here** with the measurement, so the
 next session inherits the finding rather than the idea.
+
+
+## R6 - `bash -n` replayed over every command this project actually ran (measured 2026-09-12)
+
+The prior session's transcript holds **238 Bash commands** that the tool executed. Each was replayed
+through `bash -n` and, where it was refused, checked against the tool result it had actually produced:
+
+| | count |
+|---|---|
+| commands replayed | 238 |
+| refused by `bash -n` | **2** |
+| of those, ALSO failed with a syntax error at run time | **2** |
+| false positives | **0** |
+
+So on the real corpus the check refuses exactly the commands that failed, and nothing that worked. Both
+refusals would have saved the round trip their failure cost.
+
+**The corpus does not contain every correct shape, and the review of this spec found one it lacks.** The
+Bash tool runs bash 5.3 through `eval`, one line at a time, so `shopt -s extglob` on one line enables
+`!(x)` on the next; `bash -n` parses the whole text first with extglob off and refuses it:
+
+| | result |
+|---|---|
+| `bash -n` over `shopt -s extglob` then `ls !(x)` | **REFUSE** (a false positive) |
+| `bash -O extglob -n` over the same text | pass |
+
+So the check must parse with the options the tool's shell can enable, not with bash's defaults. A zero on
+the replay is necessary and not sufficient; the replay corpus is the regression test and the extglob case
+is added to it by hand.
+
+## R7 - how anchor misses actually happen (measured 2026-09-12)
+
+The prior session recorded **5** patch anchor misses. Read against the fix each one needed:
+
+| anchor | what was wrong | fixed by |
+|---|---|---|
+| "sections and keys the new text was written from..." | spanned a line wrap | whitespace-insensitive matching |
+| "Any distance function this feature ships MUST return 0" | spanned a line wrap | whitespace-insensitive matching |
+| "the declined widening, without the draft" | the sentence was split across lines | splitting the edit at the wrap |
+| "three worst sties stand 0.13, 0.03 and 0.08..." | the text had already been changed | a new anchor |
+| "D6's open door (doctrine-unenforced..." | the text was never there | dropping the edit |
+
+**Three of five were line wraps.** That is the measurement behind whitespace-insensitive anchors, and it is
+also why the mid-session fix was the regex matcher every later patch used.
+
+## R8 - backticks that PARSE and RUN (measured 2026-09-12)
+
+The GM asked specifically about *"putting backticks in a place that they do not belong"* and *"some kind
+of issue with commands that you are running involving backticks, which is knowable through static
+analysis to be something that we don't want to do"*. `bash -n` cannot see the dangerous form, because it
+is valid syntax:
+
+| command | `bash -n` | at run time |
+|---|---|---|
+| `echo "use `make quick` first"` | **pass** | **runs `make quick`** |
+
+Backticks inside double quotes are command substitution. The usual way they arrive in a session's command
+is as a markdown code span written into prose - a commit message, an echo, a heredoc'd note - which is
+exactly how this project's Makefile recipe-comment guard came to exist, after a comment executed
+`make test-full` from inside `make test-full` and recursed 914 levels. That guard (`_hm_make.py
+recipe_comment_hazards`) covers Makefiles only.
+
+This form is NOT always wrong - `"today is `date`"` is deliberate substitution - so it cannot simply be
+refused without firing on correct work. It can be WARNED on for free.
