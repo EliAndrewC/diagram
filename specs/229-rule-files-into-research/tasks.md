@@ -70,46 +70,57 @@ footnote - it carries the five boxes and is not ticked until they are).
 
 ## Phase 3 - the research pass on physical claims that move (FR-005)
 
-- [ ] T20 Chinese settlement form: Knapp; North vs South China village sizes; villages per 100 km² (from `homesteads.md`)
+- [x] T20 Chinese settlement form: Knapp; North vs South China village sizes; villages per 100 km² (from `homesteads.md`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T21 the degraded south-China commons past the grove (from `vegetation.md`)
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. Chinese settlement form - Knapp, the north-south village sizes and the villages-per-100-km2 figure landed on settlements.html and homesteads.html. research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T21 the degraded south-China commons past the grove (from `vegetation.md`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T22 the swept-bend channel radius, Leopold and Wolman (from `presentation.md`, landing on `water.html`)
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. the degraded south-China commons past the grove landed on vegetation.html, labeled a guess as to degree. research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T22 the swept-bend channel radius, Leopold and Wolman (from `presentation.md`, landing on `water.html`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T23 bridges and lanes: the deck's landing (scour, bearing length), the lane vehicle (wheelbarrow, porter; the 2026-08-27 reads), the plank bridge's name (from `ways.md`)
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. the swept-bend radius (Leopold and Wolman) landed on water.html, with the limit that a dug and maintained ditch's curve is the digger's rather than a free channel's. research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T23 bridges and lanes: the deck's landing (scour, bearing length), the lane vehicle (wheelbarrow, porter; the 2026-08-27 reads), the plank bridge's name (from `ways.md`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T24 funerary: the district catchment (Buck; danka; ryobosei), the swept ground (keidai, sando), the size memo's five named works, the temple neighborhood's economy, the village shrine at the water-mouth (from `religion-and-death.md`)
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. bridges and lanes landed on the new ways.html - 11 notes, 5 of them absence notes. research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T24 funerary: the district catchment (Buck; danka; ryobosei), the swept ground (keidai, sando), the size memo's five named works, the temple neighborhood's economy, the village shrine at the water-mouth (from `religion-and-death.md`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T25 the fire-watch narrative (hinomi-yagura, Meireki, the jin'ya case, wanghuolou) and the guan-xiang suburb's 10-40 structures (from `fabric.md`, `towns.md`, `hinterland.md`)
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. funerary landed on religion-and-death.html, which took the largest share of the absence notes (32 of 108). research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T25 the fire-watch narrative (hinomi-yagura, Meireki, the jin'ya case, wanghuolou) and the guan-xiang suburb's 10-40 structures (from `fabric.md`, `towns.md`, `hinterland.md`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T26 the junction hydrology (an offtake and bedload; a confluence's merging angle) and the sizing model's civic and circulation shares (from `river-cities.md`, `sizing.md`)
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. the fire-watch narrative and the guanxiang suburb landed on cities/fabric.html and cities/hinterland.html. research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T26 the junction hydrology (an offtake and bedload; a confluence's merging angle) and the sizing model's civic and circulation shares (from `river-cities.md`, `sizing.md`)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-- [ ] T27 every `FN-PENDING` resolved to a footnote or an absence note; new keys' write-ups in `SOURCES.html`; `make citations`; `make glossary` with the writers' terms; `research.md` R4, R5
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. the junction hydrology and the sizing shares landed on cities/river-cities.html and the new cities/sizing.html. research pass from source-reader-reports.md; source-reader, quote-check (twice) and source-applicability all run; recorded and cited - the census is research.md R4, the source verdicts R5.
+- [x] T27 every `FN-PENDING` resolved to a footnote or an absence note; new keys' write-ups in `SOURCES.html`; `make citations`; `make glossary` with the writers' terms; `research.md` R4, R5
       research: rendering
+      verify: DONE. Zero FN-PENDING marks remain anywhere in research/. 26 new registry keys carry both write-ups. make citations wrote 14 files; make glossary wrote 557 terms (32 added, 5 widened, haka-mairi removed when the quote-check pass dropped the claim that used it). research.md R4 (the 176 notes, 108 of them absence notes, per page) and R5 (the 26 applicability verdicts) written.
 
 ## Phase 4 - the tree (FR-007, FR-008, FR-009)
 
 - [x] T28 re-point every file the SC-001 grep finds - docs, agent, pool and legacy notes and gens, `wip/`, tests' docstrings; `buildings.md` and `programs.md` incl. the three stale Mode A pointers (XIV); `research/CLAUDE.md`'s new section; `research.md` R6
       research: procedure
-      verify: DONE. DONE. Every pointer the SC-001 grep finds re-pointed - docs, the agent files, pool and legacy notes and gens, wip/, test docstrings, buildings.md and programs.md. research/CLAUDE.md carries the new 'ONE home per topic' section; research.md R6 written. Verified: tests/interactive/test_record.py green (47 passed with test_docs_match_the_mechanism.py), which is the grep as a gated rule - by path and by bare basename, with its own self-test.
+      verify: DONE. Every pointer the SC-001 grep finds re-pointed - docs, the agent files, pool and legacy notes and gens, wip/, test docstrings, buildings.md and programs.md. research/CLAUDE.md carries the new 'ONE home per topic' section; research.md R6 written. Verified: tests/interactive/test_record.py green (47 passed with test_docs_match_the_mechanism.py), which is the grep as a gated rule - by path and by bare basename, with its own self-test.
 - [x] T29 engine comments and docstrings re-pointed (comment-only; the `Entry:` tag in `greenery.py` to the vegetation heading); the stale `urban_fixtures.py:74` figure (XIV)
       research: procedure
-      verify: DONE. DONE. Engine comments and docstrings re-pointed, comment-only so the route stays DIRECT; greenery.py's Entry tags name research/vegetation.html and research/homesteads.html headings; urban_fixtures.py's drum-tower figure now cites the record's 30-45 ft band at research/urban-features.html; boards.py points at cities/fabric.html and urban-features.html. Verified: every research/*.html path in l7r/ resolves to a file on disk (zero missing).
-- [ ] T30 delete `settlements.md`, `settlements/`, `settlements/cities/`; `test_record.py` gains the retired-file rule with its self-test; `test_docs_match_the_mechanism.py`'s list; `make test-file` on both; `make page-check`; `make quick`
+      verify: DONE. Engine comments and docstrings re-pointed, comment-only so the route stays DIRECT; greenery.py's Entry tags name research/vegetation.html and research/homesteads.html headings; urban_fixtures.py's drum-tower figure now cites the record's 30-45 ft band at research/urban-features.html; boards.py points at cities/fabric.html and urban-features.html. Verified: every research/*.html path in l7r/ resolves to a file on disk (zero missing).
+- [x] T30 delete `settlements.md`, `settlements/`, `settlements/cities/`; `test_record.py` gains the retired-file rule with its self-test; `test_docs_match_the_mechanism.py`'s list; `make test-file` on both; `make page-check`; `make quick`
       research: procedure
+      verify: DONE. settlements.md and both settlements/ directories deleted (19 files). test_record.py carries the retired-file rule with its self-test, judged per reference by path and by bare basename; test_docs_match_the_mechanism.py's OPERATIVE list updated. Verified: make test-file on both green (47 passed), make page-check GREEN (741 passed, page and browser stamps written), make quick green warm in 3.94 s - the first run after the merge failed the runtime ratchet on a cold testmon cache only.
 
 ## Phase 5 - verification and landing (FR-010)
 
-- [ ] T31 `quote-check` + `record-format` on every changed and new page (one pair per page, background); findings resolved; verdicts recorded here per page
+- [x] T31 `quote-check` + `record-format` on every changed and new page (one pair per page, background); findings resolved; verdicts recorded here per page
       research: procedure
-- [ ] T32 the four new pages opened in a browser from disk: glossary hover, citations hover, links (SC-006)
+      verify: DONE. quote-check run twice over the cited pages and record-format over all seventeen; every finding applied. quote-check round 2: fn-47 grove filed under the wrong type, fn-56 a welded span, fn-58 two dropped parentheticals, fn-59 re-read and pinned, fn-46 and fn-74 PARTIAL, fn-63 a lending scan linked where the sentence said nothing readable carried the figure, 8 fabric absence notes whose label lived only in the note, 7 unlabeled assertions. record-format: 26 vocabulary, 43 session notes, 14 document-history items on the city and topic pages; 16, 19 and 15 on the rest. Six defects fixed in passing - research.md R10.
+- [x] T32 the four new pages opened in a browser from disk: glossary hover, citations hover, links (SC-006)
       research: rendering
+      verify: DONE. The four new pages opened from disk in headless Chromium: settlements.html 28 glossary spans / 19 footnote refs, ways.html 40 / 11, presentation.html 21 / 0 (it records drawing conventions, so it cites nothing by design), cities/sizing.html 18 / 3. A glossary tooltip and a footnote note both appear on hover on every page that has one; every relative link resolves; no console or page errors.
 - [ ] T33 `make done` green (detached); commit; `sync-with-main.sh done`; the closing report with the README correction text, the Mode A rulings question, and any claim left a guess
       research: procedure

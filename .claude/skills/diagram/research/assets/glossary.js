@@ -3941,13 +3941,6 @@ window.RECORD_GLOSSARY = [
   "def": "The grove kept standing around a tutelary shrine - preserved rather than cleared."
  },
  {
-  "term": "haka-mairi",
-  "variants": [
-   "haka-mairi"
-  ],
-  "def": "The Japanese custom of visiting and tending a family grave, which clears the weeds from it."
- },
- {
   "term": "Qingming",
   "variants": [
    "Qingming"

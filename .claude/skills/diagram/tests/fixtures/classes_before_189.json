@@ -2,7 +2,7 @@
  "banana dike": {
   "caveat": "the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.",
   "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "banana dike",
   "label": "accurate",
   "label_note": "The type is read; the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.",
@@ -155,7 +155,7 @@
  "duck pen": {
   "caveat": "",
   "covers": "every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "duck pen",
   "label": "guess",
   "label_note": "GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it.",
@@ -210,7 +210,7 @@
  "field ditch": {
   "caveat": "",
   "covers": "`field_ditches` and `channels` - the intake, head race, branches and drain",
-  "entry": "research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'",
+  "entry": "research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'",
   "key": "field ditch",
   "label": "accurate",
   "label_note": "Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288).",
@@ -268,7 +268,7 @@
  "fish pond": {
   "caveat": "the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
   "covers": "the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike",
-  "entry": "research/archetypes.html - 'The three overlay values', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'",
+  "entry": "research/archetypes.html - 'The three overlays a village may carry', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates'",
   "key": "fish pond",
   "label": "accurate",
   "label_note": "The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
@@ -301,7 +301,7 @@
  "fruit dike": {
   "caveat": "the tree spacing is an orchard convention, not a measured dike.",
   "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "fruit dike",
   "label": "accurate",
   "label_note": "The type is read; the tree spacing is an orchard convention, not a measured dike.",
@@ -319,7 +319,7 @@
  "fry pond": {
   "caveat": "",
   "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "fry pond",
   "label": "guess",
   "label_note": "GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.",
@@ -447,7 +447,7 @@
  "manure pit": {
   "caveat": "the drawn 3.5 ft mouth is a size the record does not give.",
   "covers": "a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "manure pit",
   "label": "accurate",
   "label_note": "The form and its place behind the house are read (Fei 1939); the drawn 3.5 ft mouth is a size the record does not give.",
@@ -509,7 +509,7 @@
  "mulberry dike": {
   "caveat": "the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
   "covers": "the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it",
-  "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted at all'",
+  "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted'",
   "key": "mulberry dike",
   "label": "accurate",
   "label_note": "The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
@@ -573,7 +573,7 @@
  "perimeter dike": {
   "caveat": "the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
   "covers": "the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices",
-  "entry": "research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted at all'",
+  "entry": "research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted'",
   "key": "perimeter dike",
   "label": "accurate",
   "label_note": "Full enclosure, the organic outline and the planting are read; the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
@@ -613,7 +613,7 @@
  "pig sty": {
   "caveat": "",
   "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond dike",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "pig sty",
   "label": "guess",
   "label_note": "GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.",
@@ -630,7 +630,7 @@
  "pond": {
   "caveat": "",
   "covers": "`pond` - the tameike",
-  "entry": "research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'",
+  "entry": "research/fields.html - 'Where does a field's water come from, and how is it shared out?'",
   "key": "pond",
   "label": "accurate",
   "label_note": "Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).",
@@ -802,7 +802,7 @@
  "sugarcane dike": {
   "caveat": "the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.",
   "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is sugarcane, and its cane rows",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "sugarcane dike",
   "label": "accurate",
   "label_note": "The type and the loop are read; the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.",
@@ -839,7 +839,7 @@
  "vegetable ground": {
   "caveat": "nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.",
   "covers": "an unconverted parcel of a wholly converted dike-pond block, on a hamlet whose `meta.leftover` is vegetables",
-  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks - the audit'",
+  "entry": "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
   "key": "vegetable ground",
   "label": "accurate",
   "label_note": "The absence of rice and the vegetable ground are read; nothing says WHICH parcels carried them, so they take whatever the crop dikes and the ponds leave over.",

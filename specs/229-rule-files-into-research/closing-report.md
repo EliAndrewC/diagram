@@ -34,11 +34,46 @@ specifications onto `research/buildings.html`, `buildings.md` left as the vocabu
 from - or does a mode a person draws by hand keep one operative document on purpose? This feature did
 not decide it, because the GM did not ask about Mode A.
 
-## 3. What is still a guess
+## 3. What the record still does not know
 
-(filled in from the pages' own labels once the record-format and quote-check passes have landed)
+Two numbers are worth naming, because they are different things and the second is the larger one.
+
+**Claims labeled a GUESS: 113 mentions across 18 pages**, and the migration added two of them, both on
+the new `ways.html`:
+
+- **How far past the bank a bridge lands.** The reasoning is sound - scour undercuts the bank, the
+  footing must sit back from it, the seat needs timber to bear on - but no page a reader can open gives
+  either figure for a bridge this size. The band reasoned to is 5 to 15 real feet of deck a side; the
+  maps draw 10 ft, the middle of it.
+- **The trunk highway's width.** About 9 m, narrowing to 4 to 7 m in the mountains and to 2 ken at the
+  Hakone barrier. The figures are widely repeated and no page carrying them could be read.
+
+**Claims with no readable source at all: 108.** This is the bigger number and it is the honest finding
+of the whole migration. The rule files named their sources in prose, with no quotation and usually no
+link; holding each to the record's contract - quote a passage and link a page where it can be read, or
+say plainly that neither was found - turned 108 of the 176 new footnotes into ABSENCE notes. Well over
+half of what the rule files asserted about how a place was built rests on nothing a reader can open.
+
+Nothing was deleted for it. The maps draw these features and the record still asserts them; what
+changed is that each sentence now says what stands behind it, and each registry entry records what was
+searched and when. The per-page census is `research.md` R4.
+
+One source was judged NOT applicable to the use it was put to, and the page was rewritten: two modern
+cattle-housing standards agreeing with each other is not independent corroboration of a premodern byre,
+because both say what a keeper ought to provide and both may be generous for the same reason.
 
 ## 4. What the feature did
 
-(filled in at the end: the nineteen files deleted, the four pages created, the specifications carried
-over, the sources judged, and the route the delta takes)
+- **Nineteen rule files deleted** - `settlements.md`, eleven topic files and six city files.
+- **Four research pages created** - `settlements.html`, `ways.html`, `presentation.html` and
+  `cities/sizing.html` - and thirteen rewritten.
+- **The specification moved onto the page** for every tier no generator draws yet, marked
+  `class="spec"` and written in real feet, so it moves into the generator when one is written.
+- **Every pointer re-aimed**: 60 engine files, plus docs, agent files, pool and legacy notes, `wip/`
+  and test docstrings. A gate rule now fails on any reference to a retired file, by path or by bare
+  basename, judged per reference.
+- **176 footnotes written** (108 absence notes), **26 sources registered and judged**, **32 glossary
+  terms added**.
+- **Six defects fixed in passing** (`research.md` R10), the two that matter being a gate that could roll
+  the same map twice on a cold cache, and a cited stall measurement that had taken its two numbers from
+  two different columns of one table row.

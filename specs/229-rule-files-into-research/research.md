@@ -54,8 +54,58 @@ Filled per page: rule -> anchor, or dropped with the reason.
 
 ## R4 - physical claims that moved (FR-005)
 
-| Claim | Named source | source-reader verdict | Landed as |
+A claim that moved off a rule file and onto a research page had to arrive CITED - the rule files named
+their sources in prose, with no quotation and often no link, and the record's contract is that a
+footnote quotes a passage and links a page where the passage can be read, or says plainly that no such
+page was found (constitution XII; features 194, 195, 202).
+
+**176 footnotes were written, and 108 of them are absence notes.** That ratio is the finding of this
+phase rather than a disappointment: well over half of what the rule files asserted about how a place was
+built turned out to rest on no page a reader can open. Every one of those claims is still asserted - the
+maps draw them - but the sentence now says so, and the registry entry records what was searched and when.
+
+| citations page | notes before | after | of which absence notes |
 |---|---|---|---|
+| `religion-and-death.html` | 37 | 84 | 32 |
+| `cities/fabric.html` | 16 | 40 | 15 |
+| `settlements.html` (new) | 0 | 19 | 0 |
+| `fields.html` | 78 | 88 | 16 |
+| `vegetation.html` | 80 | 92 | 12 |
+| `homesteads.html` | 88 | 99 | 12 |
+| `ways.html` (new) | 0 | 11 | 5 |
+| `cities/hinterland.html` | 5 | 12 | 7 |
+| `cities/defenses.html` | 12 | 18 | 6 |
+| `cities/river-cities.html` | 11 | 17 | 5 |
+| `archetypes.html` | 87 | 92 | 10 |
+| `water.html` | 69 | 74 | 15 |
+| `towns.html` | 20 | 24 | 4 |
+| `urban-features.html` | 82 | 85 | 13 |
+| `cities/government.html` | 34 | 37 | 4 |
+| `cities/sizing.html` (new) | 0 | 3 | 2 |
+| **total** | **619** | **795** | **108 added** |
+
+`presentation.html` is the deliberate zero: it records the map's DRAWING conventions - what a caption
+does, how a sheet is framed, what is never labeled - and a convention is this project's decision rather
+than a claim about the world, so it cites nothing and its citations page carries no note. That is why
+`tests/interactive/test_citations.py`'s non-vacuity rule had to be scoped to a page that actually carries
+a reference: a page with nothing to cite was failing a rule written for pages that do.
+
+The seven batches the tasks name, and where each landed:
+
+| batch | what moved | outcome |
+|---|---|---|
+| T20 Chinese settlement form | Knapp; north-versus-south village sizes; villages per 100 km2 | on `settlements.html` and `homesteads.html` |
+| T21 the degraded south-China commons past the grove | the open degraded cover beyond the village wood | on `vegetation.html`, labeled a guess as to degree |
+| T22 the swept-bend channel radius | Leopold and Wolman | on `water.html`, with the limit that a dug and maintained ditch's curve is the digger's, not a free channel's |
+| T23 bridges and lanes | the deck's landing, the lane vehicle, the plank bridge's name | the new `ways.html`, 11 notes, 5 of them absence notes |
+| T24 funerary | the district catchment, the swept ground, the size memo's five works, the temple neighborhood's economy, the water-mouth shrine | `religion-and-death.html`, which absorbed the largest share of the absence notes (32) |
+| T25 the fire-watch narrative and the guanxiang suburb | hinomi-yagura, Meireki, the jin'ya case, wanghuolou | `cities/fabric.html` and `cities/hinterland.html` |
+| T26 the junction hydrology and the sizing shares | an offtake and bedload, a confluence's merging angle, the civic and circulation shares | `cities/river-cities.html` and the new `cities/sizing.html` |
+
+All seven went through `source-reader` for the passages, `quote-check` twice for whether each quotation
+is on its page and supports its sentence, and `source-applicability` for whether the source belongs to
+this setting at all (R5). What those checks changed is recorded in R5 and R10.
+
 
 ## R5 - new registry keys and their applicability verdicts
 
@@ -350,4 +400,5 @@ where it is found rather than filing it.
 | **Four paragraphs opening with a literal dash** | the `record-format` pass on `water.html` | leftovers of a list that lost its `<ul>`, plus three `</p>` closers swallowed inside a long comment, so the section's paragraph structure was wrong in the reader's page | restored as proper paragraphs; every research page now balances |
 | **The commonest word in the field vocabulary had no tooltip** | adding the glossary terms | the matcher builds its alternation from each entry's `variants` only - the top-level KEY is a label, never a pattern - so the bare word "comb", written alone on five pages, matched nothing | the bare form added as a variant |
 | **Two terms owned by two entries each** | the same pass | `water-mouth` was a variant of both `shuikou` and `water-mouth`, and `windlass` of both `lulu` and `windlass`, so which definition a reader got depended on table order | one home per term; the merged definition names the other sense |
+| **`make tick BOXES=1` ticked nothing, and said it had** | the gate's own rule, on seven tasks at once | `scripts/tick-task.py` matched the research-box line by its LITERAL TEXT - the three boxes of constitution v2.12.0 - and the roster has been five since features 194 and 211 added `quote-check confirmed` and `source-applicability confirmed`. The literal matched nothing, so the flag reported a ticked task and ticked no box. `tests/tooling/test_tick_task.py` held the SAME stale literal in its fixture, so the test and the script agreed with each other and neither agreed with the constitution | the line is matched by SHAPE (an indented line of two or more checkboxes), which is roster-independent; asking for boxes where there are none now REFUSES instead of doing nothing; the test is written around the property, with the three-box, five-box and seven-box forms all ticking |
 
