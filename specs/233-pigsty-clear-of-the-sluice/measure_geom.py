@@ -28,3 +28,22 @@ def poly_seg(poly, a, b, closed=True):
 def rect(cx,cy,w,h,rot):
     th=math.radians(rot); cs,sn=math.cos(th),math.sin(th)
     return [(cx+x*cs-y*sn, cy+x*sn+y*cs) for x,y in ((-w/2,-h/2),(w/2,-h/2),(w/2,h/2),(-w/2,h/2))]
+
+
+def selftest() -> None:
+    """The three cases the record claims for this file. A distance that cannot return 0 on an
+    intersection is what produced the wrong clearances in rounds 2 and 3 of this feature's review;
+    these asserts are what stop that measure being written a fourth time."""
+    r = rect(0, 0, 8, 6, 0)
+    assert poly_seg(r, (-10, 0), (10, 0)) == 0.0, "a stub driven THROUGH the footprint must be 0"
+    assert poly_seg(r, (-1, 0), (1, 0)) == 0.0, "a stub wholly INSIDE the footprint must be 0"
+    assert abs(poly_seg(r, (-10, 10), (10, 10)) - 7.0) < 1e-9, "a clear gap must be the gap"
+    # an OPEN polyline must not be closed behind our back: the same segment is 0 against the ring
+    chain = [(-5.0, -5.0), (5.0, -5.0), (5.0, 5.0), (-5.0, 5.0)]
+    assert poly_seg(chain, (-1, 0), (1, 0), closed=False) == 4.0, "an open chain does not enclose"
+    assert poly_seg(chain, (-1, 0), (1, 0), closed=True) == 0.0, "...but the closed ring does"
+    print("measure_geom selftest ok")
+
+
+if __name__ == "__main__":
+    selftest()

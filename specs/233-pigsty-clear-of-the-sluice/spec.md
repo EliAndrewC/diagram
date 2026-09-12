@@ -1,7 +1,7 @@
 # Feature 233 - the pig sty clear of the sluice, and the dike-pond stock recorded
 
 **Created**: 2026-09-12
-**Status**: Draft
+**Status**: ACCEPTED 2026-09-12, after four rounds of `spec-fidelity` (see Review history)
 **Input**: the GM's two messages, verbatim, in `request.md`
 
 ## Summary
@@ -234,6 +234,26 @@ attested feature of the system the map is modeled on. The record states the prov
 - The guardrail that would have made FR-008 happen without the GM asking is feature 234.
 
 ## Review history
+
+**Round 4** (`spec-fidelity`, 2026-09-12): every corrected number verified INDEPENDENTLY - the reviewer
+built its own geometry rather than reusing `measure_geom.py` and reproduced all four zeros, the three
+chords, the crossing point and the seven larger clearances exactly. Four items, all taken, and all of
+them one fault in new places: a measured figure written into the record without the method that produced
+it travelling alongside.
+(1) `research.md` stated a MUST on this feature's shipped code - that any distance must return 0 on
+intersection and be selftested - and NO requirement or criterion carried it, so it bound nothing. That
+is now SC-006, which exists precisely because this feature's acceptance numbers were twice produced by a
+measure that could not return zero; without it SC-001 could be verified by that measure a third time, in
+the test meant to prove it.
+(2) `measure_geom.py` was committed as the record of how this was measured and contained no selftest -
+three places asserted one. It carries the asserts now and runs them as `__main__`. (The reviewer
+confirmed the function itself is sound: 300,000 random trials against shapely, max error 1.1e-14, zero
+disagreements on the zero/nonzero verdict, containment and the open-polyline case both correct.)
+(3) R6's first table and its analysis read as live while standing above the block that corrects them,
+and the round-2 history entry still called the superseded figures "the true clearances". Both marked.
+(4) "~24 ft" was never a statistic of the artifact: over 52 stubs the median is 26.5 and the mean 28.0;
+23.9 is the pond-5 stub, the motivating case. Stated as measured wherever it is quoted.
+**Status: accepted.** No persistent misunderstanding; the reviewer explicitly would not escalate.
 
 **Round 3** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, two items, both taken; round 2's
 fix confirmed carried into all three places with no fourth place disagreeing, and the scope re-walked
