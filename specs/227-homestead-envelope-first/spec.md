@@ -1,6 +1,6 @@
 # Feature 227 - the homestead's envelope first, and the placement page generated from the code
 
-**Status**: IN PROGRESS 2026-09-12. `spec-fidelity` round 1 CHANGES REQUIRED (three items), round 2 FAITHFUL; amended during implementation (the per-configuration fallback, D8, SC-1's measure) - re-reviewed from a fresh count per the GM's 2026-09-12 ruling: amendment round 1 CHANGES REQUIRED (the bound), round 2 FAITHFUL.
+**Status**: IN PROGRESS 2026-09-12. AMENDED 2026-09-12 for the GM's fourth message - the tooling fix for the waiter that outlived its run (FR-009), the deferred lane-end defect fixed rather than deferred (FR-008, D11, D10 and D4 rewritten), a plate after every step that laid ink (FR-007), and the renders the acceptance depends on (FR-006). `spec-fidelity` round 1 CHANGES REQUIRED (three items), round 2 FAITHFUL; amended during implementation (the per-configuration fallback, D8, SC-1's measure) - re-reviewed from a fresh count per the GM's 2026-09-12 ruling: amendment round 1 CHANGES REQUIRED (the bound), round 2 FAITHFUL.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 where a placer call's
 positions come from today, R2 the after. **Predecessors**: 226 (the site boundary and the seats proposed from
 it - the ground is asked once; this feature is the placer's search), 134/207 (the placement-stages page and its
@@ -8,7 +8,10 @@ notes as data), 162 (`make docs` - the Makefile explanation derived from the Mak
 
 ## Summary
 
-Two things the GM asked for on the feature-226 numbers. First, the placer: a call today judges 26 to 60
+FIVE things, over four of the GM's messages. The first two came from the feature-226 numbers; the last three from
+their message of 2026-09-12 after they read the page and went looking for the maps - a tooling fix so that a wait on
+a detached run cannot outlive the run (FR-009), the lane-end defect this feature had deferred, fixed test-first
+(FR-008), and a plate after every step that put something on the map (FR-007). The first two: First, the placer: a call today judges 26 to 60
 positions and 100 to 220 rectangles for one seat because it tests the HOUSE's box before the placer and the
 WHOLE homestead inside it, walking a spiral of offsets and two 2 px slides with the full battery at each. The GM's
 model is the right one: draw the rectangle the homestead will occupy, know there is space for it, and only then
@@ -67,17 +70,71 @@ the feature's last task after rounds of feedback in the clone.
   way. A stage without a docstring, a stage with no `Steps:` section, a step without a docstring, or a `Steps:`
   name that does not resolve FAILS `tests/tools/test_placement_stages.py` at the gate (`stage_web` has no
   docstring today; it gets one). `placement_stages_notes.json` is retired and its prose moved
-  into the stage docstrings it described. Plates stay one per stage that lays ink, none per step; the homesteads
+  into the stage docstrings it described. The homesteads
   stage's plate also draws the site boundary it was seated against (the chords, the outline rings, the corridors)
   over the map, since that boundary is the thing the GM asked about and no plate shows it. The page carries a
   short lede saying how it is generated and from what.
+- **FR-007 A plate after every STEP that put something on the map** (the GM on the page, 2026-09-12: *"how much work
+  would it be to show a new image for literally every stage at which it would be possible to render an image that has
+  actual content? ... The very first image that we see has a stream, an irrigated ditch, dry cropfields, earthen bunds,
+  field ponds, wet paddies, and a drainage ditch. That's an awful lot. And the algorithm walks us through the step by
+  step seven part algorithm. So To what extent could we show what the map looks like after each of those parts?"*).
+  Each step a stage declares gets its own plate, under its own prose, showing the map as it stood when that step
+  finished and nothing later - so the field stage is seven pictures rather than one, and the homesteads stage shows
+  the row appearing before the ranks. A step that drew nothing gets no plate and the page says in words that it
+  measured or decided rather than drew: the GM named that case themselves (*"sometimes like the entire 'The bearing
+  and the fall' phase There are literally no map visible features or changes"*). A step is watched by WRAPPING it for
+  the duration of its stage - there is no moment between two of a stage's internal calls that the walk can reach from
+  outside - and the plate is made after the stage from a copy wound back to where that step's ink ended; the wrap is
+  undone on the way out, so no map is ever rolled through a patched engine. The two places the rewind is an
+  approximation (a record rewritten in place later in the same stage, a deferred ground-cover group flushed at finish)
+  are recorded at the code, and neither can show a feature from a LATER stage.
+- **FR-008 The lane end rule reads what a walker arrives at, and the placer and the check read ONE body**
+  (the GM, 2026-09-12: *"before you fix that, I would like you to fix the defect rather than deferring it. Presumably
+  in a test driven development sort of way where we will know that it is fixed and that we will be unlikely to regress
+  in the future"* - D11, deferred earlier in this feature and now fixed). `lanes_reach_something` asks that every
+  internal lane end come within `WAY_END_REACH_FT` of another way, a farmhouse or the field, and it measures a
+  farmhouse by its CENTER - so a straggler footpath clipped at the garden fence of the one steading it was drawn for
+  read as a tread ending in grass. The rule gains a fourth clause at its own much tighter distance
+  (`STEADING_ARRIVAL_FT`, derived from the clip's own margin and step): an end standing that near a steading's built
+  ground - its house, byre, shed, threshing yard or garden - has ARRIVED there. Ground cover is not a destination: the
+  grazing commons and the homestead groves are what the ground is, and an end that stops in them is the thing the rule
+  exists to catch. The three 60 ft clauses are untouched, so the only ends this admits are ends at a dooryard. The
+  clause lives in ONE body (`end_serves`) that the placer's trim and the gate's check both call. TWO callers that kept
+  the loose default - 40 ft to a way, 90 ft to a house CENTER - ask the gate's bar now: the straggler pass's own trim,
+  which is where the two shipped ends were accepted, and the LATE web tidy-up pass, which runs after the stragglers.
+  The late pass takes the bar WITH A STATED EXCEPTION, because tightening it alone stranded a farmhouse (cohort seed
+  39): a point that still comes within `WEB_REACH_FT` of a house no other way reaches counts as serving however far it
+  is from anything else, measured to that house's center, which is what `farmhouses_reach_a_way` measures. The reason
+  is an ordering of harms rather than a convenience - a dangling end is a blemish on the drawing, an unreached
+  farmhouse breaks the map's own rule - and the set of such houses is computed per lane at that point, not assumed.
+  The check gets a reader on EVERY shipped hamlet, off the committed manifests, not on the reference roll alone.
+- **FR-009 A wait on a detached run checks that the run is still alive, and the tooling makes it so**
+  (the GM, 2026-09-12: *"hooks which reject a command are a last resort, and it is far better to take a hook that does
+  the wrong thing and then automatically convert it to a different command, which is the correct version of the
+  command. For example, if you are waiting on output to appear somewhere, but not checking to see whether the process
+  that is supposed to generate that output is still alive, then when possible, the hook should add the second proof of
+  life check to what is being waited for"*, and *"simply telling you to set a watch properly next time is bad
+  engineering practice because that's just another version of making you remember to do something"*). `no-poll-hooks.sh`
+  ADDS the proof-of-life clause to a permitted file-watching wait that has none, naming the file the loop itself
+  watches and asking the kernel - not a process pattern, which is the self-match trap the same guard exists for -
+  whether anything still holds that file open and when it was last written; and a wait that ALREADY carries such a
+  clause stops being refused as a busy-wait, which it was, measured on the shape the fix produces. The boundary the GM
+  closed in feature 165 does not move: a liveness clause can only end a loop sooner, a condition must still read a
+  real file, and a loop on a process or a network call is refused exactly as before.
 - **FR-005 Re-plated automatically.** The page is regenerated by the same landing procedure that regenerates
   the pool's renders (`render-sync`, feature 187's fingerprint): when the engine content changed, main's copy is
   re-plated; a docstring edit re-plates it too (a docstring is content the page shows, so the fingerprint for the
   page hashes the stage modules' text, not their docstring-stripped AST). `make placement-stages` remains the
   by-hand route. The page stays generated, never committed.
-- **FR-006 The GM accepts the page.** The feature's last task is the GM's acceptance of the page in the clone,
-  after rounds of their suggestions; the feature lands only then.
+- **FR-006 The GM accepts the page, with the maps in front of them.** The feature's last task is the GM's acceptance
+  of the page in the clone, after rounds of their suggestions; the feature lands only then. The acceptance is offered
+  only with the COMPLETE set of renders present: every map in the clone's pool carries its `.png` and its `.html`,
+  checked rather than assumed. The GM asked for that in the same breath as the page (*"I don't seem to be able to see
+  actual PNG and HTML versions of many of the maps ... I would be able to judge the things that you are asking me to
+  judge If I was able to see more of the maps ... I'd like to look at it before giving my signoff"*), and the renders
+  are gitignored artifacts that a killed or skipped run simply leaves missing - which is how two of them came to be
+  absent when the GM went to look.
 
 ## Success criteria
 
@@ -91,7 +148,15 @@ the feature's last task after rounds of feedback in the clone.
   layouts.
 - SC-3 Every stage on the page declares its steps and every step's prose came from its docstring; the gate fails
   otherwise; the page is regenerated by the landing.
-- SC-4 The GM's acceptance (T07).
+- SC-5 Every step that laid ink on the reference roll has its own plate on the page, in the stage's own order, and
+  a step that laid none has none; the landing's re-plate cost and the page's size are measured and recorded (R5). The
+  size is RECORDED, never a bar: a plate the GM asked for is not dropped to make the directory smaller.
+- SC-6 No lane end on any shipped hamlet reaches nothing, judged by the placer's own predicate over every committed
+  manifest (the two that did - Kashikawa and Kuwabata - pass because the treads arrive at a garden, not because the
+  bar moved); the arrival distance is tighter than the reach bar, proved by a test; the 48-seed cohort still passes.
+- SC-7 The guard adds the liveness clause to every permitted file wait that lacks one, permits the shape that has
+  one, and still refuses a process or network wait - each proved by a case in `scripts/test-no-poll-hooks.sh`.
+- SC-4 The GM's acceptance (T07), offered with every pool map's `.png` and `.html` present in the clone, listed.
 
 ## Decisions Recorded
 
@@ -109,13 +174,17 @@ the feature's last task after rounds of feedback in the clone.
 - **D3 Steps are declared in the docstring, not by a decorator.** The GM named "the documentation, the
   docstrings, the stages" as the source; a `Steps:` list in the stage's own docstring is readable in the file
   by a person and by the generator alike, and a name that stops resolving fails the gate.
-- **D4 Plates per stage, none per step; the boundary drawn on the homesteads plate.** The GM: *"I don't know
-  whether it makes sense for there to even be images at every stage."* A step is prose; a stage that lays ink
-  keeps its plate; the one new picture is the boundary, because it is what this line of work is about and no
-  plate shows it. How many plates the page carries - more, or fewer than one per ink-laying stage - is the GM's
-  call at acceptance; this version keeps today's one-per-ink-stage set plus the boundary overlay.
-- **D5 Re-plated at landing, like the pool.** The page costs a roll of Inashiro eighteen times with plates, so
-  it is not regenerated on every edit; it is regenerated where the pool's renders are, by the fingerprint.
+- **D4 RESOLVED: a plate after every step that laid ink.** This decision first read *"plates per stage, none per
+  step"*, on the GM's own doubt (*"I don't know whether it makes sense for there to even be images at every
+  stage"*) and with the question left to them at acceptance. They answered it in the other direction on
+  2026-09-12, having seen the page: *"how much work would it be to show a new image for literally every stage at
+  which it would be possible to render an image that has actual content? ... I would really like to see that."* So
+  FR-007 supersedes the per-stage-only form, a step that laid ink gets its own plate, and a step that laid none is
+  explained in words - which is the other half of what they said (*"sometimes like the entire 'The bearing and the
+  fall' phase There are literally no map visible features"*). The boundary overlay on the homesteads plate stays.
+- **D5 Re-plated at landing, like the pool.** The page costs a roll of Inashiro and a plate for every stage and
+  every step that drew - 37 of them, measured in R5 - so it is not regenerated on every edit; it is regenerated
+  where the pool's renders are, by the fingerprint.
 - **D6 Maps move; the packing is accepted.** The GM: *"I'm fine with the clusters packing looser. And I don't
   really have any particular preference about two bed garden proportions. as long as they are there and there's
   some variety."* No target for either; the review judges the invariants.
@@ -157,24 +226,46 @@ the feature's last task after rounds of feedback in the clone.
   or the field - so an end that fell in the 60-90 band was trimmed to a position the gate then failed, and the trim's
   own docstring still quoted the older pair. The drift had been there since the check was tightened and only bit when
   this feature's re-pack put two of Inashiro's skeleton arms at 81-97 ft. `WAY_END_REACH_FT` is the one constant now
-  and the gate test imports it. It is passed by the caller that draws a way BEFORE anything serves the houses - the
-  cluster's skeleton - and NOT by the late pass, which runs after `_serve_stragglers`: trimming to 60 ft there takes
-  back the tail that was an outlying steading's only way, and cohort seed 39 stranded a farmhouse the moment both
-  were tightened together. The web's own lanes trim to the bar at DRAW time (`_lay_web_lane`), which is before the
-  stragglers and so carries no such risk - and that is where the dangling ends actually were: they carry the role of
-  the pass before them, which is what made them read as skeleton arms.
-- **D11 DEFERRED with its measurement: a straggler path that does not reach the way it was drawn to.** Two remain in
-  the pool - Kashikawa at 63 px from anything and Kuwabata at 68, against the 60 px bar; main ships one of the same
-  kind (Sawada, 68). The mechanism: `_serve_stragglers` routes from the house to a target ON the network and then
-  clips the tread, so a clip that cuts the far end leaves a path that connects nothing - and because the stub is
-  itself a lane, `farmhouses_reach_a_way` then passes on the house it was drawn for, which is the same "a web that
-  does not join up is not a web" defect `_lay_web_lane`'s join rule exists for, at the straggler. The sketch: refuse
-  to draw a straggler whose drawn tread ends further than `WAY_END_REACH_FT` from the network, and let the house go
-  genuinely unserved so the driver's re-roll can move it. It is deferred rather than done because refusing those
-  paths turns a cosmetic stub into a re-roll trigger, which wants its own cohort measurement; the gate does not see
-  it because this rule is judged on the reference roll alone.
+  and the gate test imports it. Every caller passes it now, and the CARVE-OUT THIS DECISION FIRST RECORDED IS
+  REPLACED: it read that the late pass, which runs after `_serve_stragglers`, would NOT take the bar, because trimming
+  to 60 ft there takes back the tail that was an outlying steading's only way and cohort seed 39 stranded a farmhouse
+  the moment both were tightened together. The late pass takes the bar, and the stranding case is named instead of
+  traded away - `keep`, the houses no other way comes within `WEB_REACH_FT` of, which a point may still serve at any
+  distance (FR-008). The web's own lanes trim to the bar at DRAW time (`_lay_web_lane`), before the stragglers. The
+  two ends that shipped were not skeleton arms at all, as this decision first supposed from their recorded role: they
+  carry the role of the pass before them, and D11 has what they actually were.
+- **D12 The plate's copy is taken inside the worker, which is what makes sixty plates affordable.** The walk held one
+  deep copy of the part-built settlement per plate until it ended - the shape that took this process to 1.6 GB
+  (feature 208) and that the OOM killer ended on 2026-09-12 (R4), and it would have been sixty copies rather than
+  fourteen. The copy and the rewind happen in the plate worker now, so the peak is the pool's width; measured, 37
+  plates cost less wall clock than 14 did (R5). It is recorded here because it is both the enabler of FR-007 and half
+  the answer to the GM's *"Killed by what?"*.
+- **D11 FIXED, and the mechanism was not what the deferral said it was.** The deferral recorded two straggler ends
+  (Kashikawa 63 px from anything, Kuwabata 68, against the 60 px bar; main ships Sawada at 68) and named the mechanism
+  as a clip cutting the far end off the network. Measured when the GM asked for the fix: it is the HOUSE end, and it
+  is not in open ground at all. Kashikawa's stands 7.8 px from the garden of the one steading its path was drawn for,
+  17 from a byre and 32 from the farmhouse's wall; Kuwabata's 6.9 px from a garden and 47 from a wall - the treads
+  stop at the dooryard, which is where the clip leaves them (`clear_runs` cuts at the fabric margin, and the
+  steading's own yard is in the obstacle set by design: *"the lane ends AT the yard, and the yard is private ground
+  the household crosses on foot"*). What was wrong was the MEASUREMENT: a 46x28 ft farmhouse carries 27 ft of itself
+  between its center and its front corner, so both the check and the trim overstated every distance by most of the
+  slack the rule has. FR-008 is the fix. The first cut - read the footprint at the 60 ft bar - was tried and REJECTED
+  the same afternoon by measurement: it passed the two stragglers and also let three of Inashiro's skeleton arms keep
+  ends 56-60 ft from the nearest wall, which is a tread stopping in open ground, so arrival became its own clause at
+  its own distance. The re-roll moved the maps, which the GM permits for a rule that holds (2026-09-08), and it
+  LENGTHENED one Inashiro arm that now stops 8 px from a byre - a tread worn to the byre door, which the center
+  reading had been trimming off.
 
 ## Review history
+
+- **The amendment of 2026-09-12** (the GM's fourth message), reviewed from a fresh count per their ruling that the
+  cap resets on a mid-implementation change: round 1 CHANGES REQUIRED - D4 still stated the per-stage-only plate
+  decision the GM had just replaced, FR-008 claimed every caller asked the gate's bar when the late pass carries the
+  `keep` exception and D10 still denied that pass took the bar at all, the renders had no requirement because the
+  sweep had already produced them (*"a statement about today's disk, not a specification"*), and the Summary and
+  Status described a feature half this size; two asides (SC-5's size must never become a reason to drop a plate the
+  GM asked for, and the worker-side copy deserved a decision line - D12). All six applied. Round 2 FAITHFUL, with
+  two asides taken here too: D5's plate count refreshed, and this entry.
 
 - Round 1 (2026-09-12): CHANGES REQUIRED on three items - the GM's condition on the gardens ("as long as they are
   there and there's some variety") was quoted in D6 and carried by no requirement; the `Steps:` declaration was

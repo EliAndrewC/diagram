@@ -19,7 +19,7 @@ run() {  # feed a Bash command through the hook, return its exit code
 }
 
 check() { # label, expected(ok|blocked), command
-  run "$3"; local rc=$?
+  run "$3" >/dev/null; local rc=$?
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
@@ -100,7 +100,7 @@ bgrun() {  # feed a Bash command with run_in_background set, return the exit cod
     | "$HOOK" pretool 2>/tmp/np.err
 }
 bgcheck() { # label, expected, command, background(1|0)
-  bgrun "$3" "$4"; local rc=$?
+  bgrun "$3" "$4" >/dev/null; local rc=$?
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
@@ -183,6 +183,83 @@ fi
 check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep -f "[m]ake done" >/dev/null; do sleep 5; done  # POLL_OK: a run detached by another session'
 rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "make done"; pgrep -f "make quick"' '[m]ake quick'
 rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' '[m]ake done'
+
+# GUARD_EDIT_OK: feature 227 (GM 2026-09-12) - THE WAIT GETS A PROOF OF LIFE, and the shape that already
+# carries one stops being refused. The incident: a detached `make placement-stages` finished its work and was
+# then killed before it could flush stdout - by the kernel's OOM killer, 36 firings in this container - and
+# the waiter sat on a pattern that was never going to be printed. The GM: *"the hook should add the second
+# proof of life check to what is being waited for"*, because *"simply telling you to set a watch properly next
+# time is bad engineering practice."*
+echo "6. the proof of life (feature 227)"
+bgrewritten() { # label, command, background(1|0), the text the corrected command must contain
+  local out; out=$(bgrun "$2" "$3" 2>/dev/null)
+  local got; got=$(printf '%s' "$out" | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass' 2>/dev/null)
+  case "$got" in
+    *"$4"*) echo "  ok      $1"; PASS=$((PASS+1)) ;;
+    *) echo "  FAIL    $1 (got '${got:-<nothing>}', wanted '$4')"; FAIL=$((FAIL+1)) ;;
+  esac
+}
+untouched() { # label, command, background(1|0) - permitted with NO rewrite at all
+  local out; out=$(bgrun "$2" "$3" 2>/dev/null); local rc=$?
+  if [ "$rc" -eq 0 ] && ! printf '%s' "$out" | grep -q updatedInput; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (rc=$rc, out='${out:-<nothing>}')"; FAIL=$((FAIL+1))
+  fi
+}
+bgrewritten "a backgrounded log watch gains the liveness clause" \
+  'until grep -qE "^wrote |Error|Traceback" /tmp/stages.log; do sleep 15; done; tail -5 /tmp/stages.log' 1 '_writer-alive.sh "/tmp/stages.log"'
+bgrewritten "...an UNTIL loop gets it negated, so the wait ends when the writer is gone" \
+  'until grep -q DONE /tmp/a.log; do sleep 5; done' 1 '|| ! '
+bgrewritten "...a WHILE loop gets it ANDed, for the same reason in the other direction" \
+  'while [ ! -s /tmp/a.log ]; do sleep 5; done' 1 '&& '
+bgrewritten "the variable form names the variable, which expands when the loop runs" \
+  'until grep -qE "passed|failed" $S/gate.log; do sleep 10; done' 1 '_writer-alive.sh "$S/gate.log"'
+bgrewritten "a foreground one is backgrounded AND proofed in one rewrite" \
+  'until grep -q x /tmp/a.log; do sleep 5; done' 0 '_writer-alive.sh'
+# THE SHAPE THIS GUARD SHOULD BE PRODUCING WAS THE SHAPE IT REFUSED. Measured 2026-09-12: this exact command,
+# a log watch that also asks whether the producer is alive, was BLOCKED as a busy-wait, because every part of
+# a condition had to be one of the three file forms. A liveness clause can only end the loop sooner.
+untouched "a wait that already asks whether its producer is alive is permitted, unchanged" \
+  'until grep -q "^EXIT=" $S/maps.log || ! pgrep -f "ma[p]s227b" > /dev/null; do sleep 15; done; tail -6 $S/maps.log' 1
+untouched "...the same, through the helper itself (idempotent: the hook does not re-proof its own rewrite)" \
+  'until grep -q DONE /tmp/a.log || ! /diagram/scripts/_writer-alive.sh "/tmp/a.log"; do sleep 5; done' 1
+untouched "...and the kill -0 form" 'until grep -q DONE /tmp/a.log || ! kill -0 $PID; do sleep 5; done' 1
+# GUARD_EDIT_OK: feature 227 - the log's whole name may be a VARIABLE (`grep -qE "pat" $G`), which the path operand
+# did not admit; caught by the guard refusing a correct waiter on a detached gate's log on 2026-09-12.
+bgrewritten "a log named entirely by a variable is a file wait, and is proofed" \
+  'until grep -qE "passed|failed" $G; do sleep 20; done' 1 '_writer-alive.sh "$G"'
+bgcheck "...but a grep with nothing to read (stdin) is not a file wait" blocked 'until grep -q $PAT; do sleep 5; done' 1
+bgcheck "a loop with ONLY a liveness test is still a process wait, and refused" blocked \
+  'until ! pgrep -f "[m]ake done"; do sleep 5; done' 1
+bgcheck "a liveness test beside a NETWORK call is still refused" blocked \
+  'until curl -sf https://h/x || ! pgrep -f "[m]ake done"; do sleep 5; done' 1
+
+echo "6b. _writer-alive.sh answers from the file, not from a pattern"
+alive() { # label, expected(alive|dead), args...
+  local lbl="$1" want="$2"; shift 2
+  "$HERE/_writer-alive.sh" "$@" >/dev/null 2>&1; local rc=$?
+  if { [ "$want" = alive ] && [ "$rc" -eq 0 ]; } || { [ "$want" = dead ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $lbl"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $lbl (expected $want, rc=$rc)"; FAIL=$((FAIL+1))
+  fi
+}
+WA_DIR=$(mktemp -d)
+alive "nothing named: no claim either way" alive
+alive "a file that does not exist yet: the producer is starting" alive "$WA_DIR/not-yet.log"
+: > "$WA_DIR/fresh.log"
+alive "a file just written: alive on the staleness belt" alive "$WA_DIR/fresh.log"
+touch -d "2 hours ago" "$WA_DIR/fresh.log"
+alive "...unheld and long unwritten: the producer is gone" dead "$WA_DIR/fresh.log"
+# a process holding it open says ALIVE even when the file has not been written for ages - this is the branch
+# that answers for every detached run in this repository, since `cmd > log` holds that descriptor throughout
+( exec 9>>"$WA_DIR/fresh.log"; "$HERE/_writer-alive.sh" "$WA_DIR/fresh.log" >/dev/null 2>&1 ) && \
+  { echo "  ok      a process holding it open: alive"; PASS=$((PASS+1)); } || \
+  { echo "  FAIL    a process holding it open should read alive"; FAIL=$((FAIL+1)); }
+rm -rf "$WA_DIR"
 
 echo
 echo "no-poll-hooks: $PASS passed, $FAIL failed"

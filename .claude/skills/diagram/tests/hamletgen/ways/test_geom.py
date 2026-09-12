@@ -1,5 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
+import math
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -80,6 +82,63 @@ def test_nearest_seg_returns_the_distance_AND_the_segment_it_belongs_to() -> Non
     assert round(d, 6) == 10.0
     assert sg == segs[0]
     assert _nearest_seg((0.0, 0.0), []) == (float("inf"), None)
+
+
+# ---- the dooryard a tread arrives at (feature 227 D11) --------------------------------------------
+
+_GARDEN = [(70.0, -30.0), (130.0, -30.0), (130.0, 30.0), (70.0, 30.0)]
+"""A steading's kitchen garden, 60 ft square, with its west fence at x=70."""
+
+
+def test_end_serves_counts_ARRIVING_AT_A_STEADING() -> None:
+    """A TREAD THAT STOPS AT THE DOORYARD HAS ARRIVED (feature 227 D11). Both pool maps that failed
+    `lanes_reach_something` were this: a straggler footpath clipped at the garden fence of the one
+    steading it was drawn for - 7.8 and 6.9 ft off it - and then measured 63 and 76 ft to a house
+    CENTER, which is inside the house and not where anybody walks to."""
+    end = (62.0, 0.0)
+    assert not hg.ways.end_serves(end, (), [(160.0, 0.0)]), "the house center is 98 ft away: not served by the center rule"
+    assert hg.ways.end_serves(end, (), [(160.0, 0.0)], steadings=[_GARDEN]), "...but it stands 8 ft from that steading's garden"
+
+
+def test_arrival_is_a_TIGHT_distance_not_the_reach_bar() -> None:
+    """And the reason it is its own constant. Measuring the footprint at `WAY_END_REACH_FT` instead would
+    have passed three of Inashiro's skeleton arms with ends 56-60 ft from the nearest wall, which is a
+    tread stopping in open ground - measured the same afternoon the two stragglers were fixed."""
+    from l7r.diagram.hamletgen.consts import STEADING_ARRIVAL_FT, WAY_END_REACH_FT
+
+    assert STEADING_ARRIVAL_FT < WAY_END_REACH_FT
+    off = (70.0 - STEADING_ARRIVAL_FT - 8.0, 0.0)
+    assert not hg.ways.end_serves(off, (), [(400.0, 400.0)], steadings=[_GARDEN])
+
+
+def test_trim_keeps_a_straggler_end_standing_at_the_dooryard() -> None:
+    """The placer and the check read the SAME body (`end_serves`), which is the whole of this fix: the
+    trim used to measure houses by their centers at its own 90 ft bar while the gate measured centers at
+    60, and neither could see the garden the tread had actually reached."""
+    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
+
+    run = [(62.0, 0.0), (-40.0, 0.0), (-120.0, 0.0)]
+    segs = [((-120.0, -20.0), (-120.0, 20.0))]
+    assert _trim_to_service(run, segs, [(160.0, 0.0)], end_reach=WAY_END_REACH_FT) != run, "with no steading it is trimmed"
+    assert _trim_to_service(run, segs, [(160.0, 0.0)], end_reach=WAY_END_REACH_FT, steadings=[_GARDEN]) == run
+
+
+def test_steading_footprints_reads_the_built_ground_and_not_the_ground_cover() -> None:
+    """The commons and the homestead groves are what the ground IS, not something built on it - a lane
+    crosses them, so a tread that stops 29 ft into the commons has stopped in a field."""
+    M = {
+        "houses": [{"x": 0.0, "y": 0.0, "w": 46.0, "h": 28.0}],
+        "byres": [{"x": 200.0, "y": 0.0, "w": 20.0, "h": 14.0}],
+        "farm_sheds": [{"x": 300.0, "y": 0.0, "w": 16.0, "h": 12.0}],
+        "threshing_yards": [{"poly": [[0.0, 40.0], [40.0, 40.0], [40.0, 80.0]]}],
+        "gardens": [{"poly": [[0.0, 100.0], [40.0, 100.0], [40.0, 140.0]]}],
+        "commons": [{"poly": [[500.0, 500.0], [900.0, 500.0], [900.0, 900.0]]}],
+        "village_groves": [{"poly": [[50.0, 500.0], [90.0, 500.0], [90.0, 540.0]]}],
+        "wells": [{"x": 10.0, "y": 10.0}],  # no footprint recorded: it contributes nothing rather than raising
+    }
+    rings = hg.ways.steading_footprints(M)
+    assert len(rings) == 5, f"house, byre, shed, yard, garden - and nothing else; got {len(rings)}"
+    assert hg.ways.steading_footprints({}) == []
 
 
 def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
@@ -466,3 +525,28 @@ def test_shadowing_lane_asks_whether_a_lane_goes_anywhere() -> None:
     assert hg.ways.shadowing_lane([(100.0, 0.0), (100.0, 120.0)], [parent], 30.0) is None
     assert hg.ways.shadowing_lane([(0.0, 0.0)], [parent], 30.0) is None  # nothing is a lane
     assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [[(0.0, 0.0)]], 30.0) is None  # nor is the other one
+
+
+def test_trim_to_service_cuts_an_end_that_reaches_nothing() -> None:
+    """Feature 227 D11: no pass may leave a lane's end in open ground - the bar is the gate's own
+    `WAY_END_REACH_FT`, and a run whose tail runs 300 ft past the last house it serves is cut back to it."""
+    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
+
+    run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (500.0, 0.0)]
+    houses = [(0.0, 20.0), (100.0, 20.0)]
+    out = hg.ways._trim_to_service(run, [], houses, end_reach=WAY_END_REACH_FT)
+    assert out[-1][0] <= 200.0, "the tail past the last house it serves is gone"
+    assert min(math.dist(out[-1], h) for h in houses) <= WAY_END_REACH_FT
+
+
+def test_trim_to_service_keeps_the_tail_that_is_a_houses_ONLY_way() -> None:
+    """...but not at the price of stranding somebody. A house no other way reaches is passed as `keep`, and the
+    run is then cut no further back than the point that still serves it - a dangling end is a blemish, an
+    unreached farmhouse is a map that fails its own rule (cohort seed 39, when both were tightened together)."""
+    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT, WEB_REACH_FT
+
+    run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (500.0, 0.0)]
+    houses = [(0.0, 20.0), (100.0, 20.0)]
+    outlier = (260.0, 80.0)  # 85 ft from the run's (200, 0) vertex: past the end bar, inside the service reach
+    out = hg.ways._trim_to_service(run, [], houses, end_reach=WAY_END_REACH_FT, keep=[outlier])
+    assert math.dist(out[-1], outlier) <= WEB_REACH_FT, "the point that serves the outlier survived the cut"

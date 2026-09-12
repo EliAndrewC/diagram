@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 from l7r.diagram.settlement import edge_dist, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
     SPUR_SETBACK,
+    STEADING_ARRIVAL_FT,
     TRACK_FABRIC_GAP,
+    WAY_END_REACH_FT,
+    WEB_REACH_FT,
     Poly,
     Pt,
 )
@@ -232,15 +235,75 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     return None
 
 
-def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), end_reach: float | None = None) -> Poly:
+def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
+    """Every piece of a steading's own BUILT ground, as the shapes a lane end can arrive at.
+
+    The farm buildings as rectangles - houses, byres, field sheds, the three keys
+    `lanes_do_not_break_mid_run` already treats as solid - and the steading's plots as their recorded
+    rings: the threshing yard and the kitchen garden, which are the dooryard a path is worn to.
+
+    GROUND COVER IS NOT A DESTINATION, and the distinction is the one `_serve_stragglers` already
+    draws in prose: the grazing commons and the homestead groves are what the ground IS, not things
+    built on it, and a lane crosses them. A tread that stops 29 ft into the commons has stopped in a
+    field, which is what this rule exists to catch, so they are not in this set.
+
+    Axis-aligned for the rectangles, like every other solid the lane rules read: a farmhouse's `rot`
+    turns its roof, and a rotated quad would move these distances by less than the 4 ft step the
+    clip walks in."""
+    out: list[Poly] = []
+    for key in ("houses", "byres", "farm_sheds"):
+        for r in M.get(key) or []:  # type: ignore[union-attr]
+            if all(k in r for k in ("x", "y", "w", "h")):
+                x, y, hw, hh = float(r["x"]), float(r["y"]), float(r["w"]) / 2.0, float(r["h"]) / 2.0
+                out.append([(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)])
+    for key in ("threshing_yards", "gardens"):
+        for r in M.get(key) or []:  # type: ignore[union-attr]
+            ring = r.get("poly") or r.get("outline") or ()
+            if len(ring) >= 3:
+                out.append([(float(a), float(b)) for a, b in ring])
+    return out
+
+
+def end_serves(
+    q: Pt,
+    segs: Sequence[tuple[Pt, Pt]] = (),
+    houses: Sequence[Pt] = (),
+    fields: Sequence[Poly] = (),
+    steadings: Sequence[Poly] = (),
+    bars: tuple[float, float, float] = (WAY_END_REACH_FT, WAY_END_REACH_FT, WAY_END_REACH_FT),
+) -> bool:
+    """Does a lane END reach something worth walking to - another way, a farmhouse, the field, or the
+    built ground of a steading it has arrived at?
+
+    ONE BODY, READ BY THE PLACER AND BY THE CHECK, which is this skill's standing rule about a rule and
+    its verdict ("placement and its check must read the SAME source"). They had drifted twice over:
+    `_trim_to_service` measured ways at 40 ft and house centers at 90 while the gate asked 60 of all
+    three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
+    tread that had arrived at a garden fence - the fourth clause here, at `STEADING_ARRIVAL_FT`, which
+    is its own distance for the reason that constant records. `bars` exists for the one caller that
+    wants its own three figures: a field spur stops at the baulk, not at the crop."""
+    _way, _house, _field = bars
+    if any(seg_dist(q[0], q[1], a, b) <= _way for a, b in segs):
+        return True
+    if any(math.dist(q, h) <= _house for h in houses):
+        return True
+    if any(edge_dist(q[0], q[1], f) <= _field for f in fields):
+        return True
+    return any(edge_dist(q[0], q[1], sp) <= STEADING_ARRIVAL_FT for sp in steadings)
+
+
+def _trim_to_service(
+    run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), end_reach: float | None = None, keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()
+) -> Poly:
     """Pull a run's ends back to the last point that actually serves something.
 
     The gate asks of every internal lane end that it come within `WAY_END_REACH_FT` of another way, a
     farmhouse or the field. A caller that draws a way BEFORE anything serves the houses - the cluster's
-    skeleton - passes that constant as `end_reach` and so cannot leave an end the gate will fail. The
-    late pass keeps the service bar instead, and deliberately: it runs after `_serve_stragglers`, and
-    trimming a run to 60 ft there takes back the tail that was some outlying steading's only way (cohort
-    seed 39 stranded a farmhouse the moment this was applied to both). A web lane's ends come out of the
+    skeleton - passes that constant as `end_reach` and so cannot leave an end the gate will fail. The LATE
+    pass passes it too, and names in `keep` the houses no other way comes near: it runs after
+    `_serve_stragglers`, and trimming a run to 60 ft there used to take back the tail that was some
+    outlying steading's only way (cohort seed 39 stranded a farmhouse the moment the bar alone was applied
+    to both passes, which is why the bar alone is not what the late pass uses). A web lane's ends come out of the
     clipper, which stops where the ground stops being walkable and has no opinion about whether anything
     is there. Trimming BEFORE the ink
     goes down is better than trimming after: `trim_lane_stubs` drops anything under its 71 ft floor,
@@ -256,11 +319,15 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     _way, _house, _field = (end_reach, end_reach, end_reach) if end_reach is not None else (40.0, 90.0, SPUR_SETBACK + 4.0)
 
     def serves(q: Pt) -> bool:
-        if any(seg_dist(q[0], q[1], a, b) <= _way for a, b in segs) if segs else False:
+        # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
+        # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them counts
+        # as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
+        # farmhouse breaks the map's own rule, and tightening both at once stranded cohort seed 39. It is measured
+        # to the house's CENTER because that is what `farmhouses_reach_a_way` - the rule being protected here -
+        # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
+        if any(math.dist(q, h) <= WEB_REACH_FT for h in keep):
             return True
-        if any(math.dist(q, h) <= _house for h in houses):
-            return True
-        return any(edge_dist(q[0], q[1], f) <= _field for f in fields)
+        return end_serves(q, segs, houses, fields, steadings, (_way, _house, _field))
 
     out = list(run)
     while len(out) > 2 and not serves(out[-1]):

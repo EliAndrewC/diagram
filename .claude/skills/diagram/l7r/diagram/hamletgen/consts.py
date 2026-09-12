@@ -216,6 +216,26 @@ band was trimmed to a position the gate then failed, and nothing said so until a
 pair of numbers, which is how the drift survived: the check had been tightened and the placer had not. The bar itself
 is the check's - a path exists because somebody had a reason to walk to its end."""
 
+STEADING_ARRIVAL_FT = 12.0
+"""How near a lane end must stand to a steading's own built ground - house, byre, shed, threshing yard or garden -
+to count as having ARRIVED there rather than as stopping in the open (feature 227 D11, 2026-09-12).
+
+WHY A SECOND, MUCH TIGHTER FIGURE rather than measuring the footprint at `WAY_END_REACH_FT`. The end rule asks that
+a path reach something worth walking to, and it measures a farmhouse by its CENTER - which is where the house is, not
+where a walker arrives. A 46x28 ft farmhouse carries 27 ft of itself between its center and its front corner, so two
+straggler footpaths that stop AT a steading's garden fence measured 63 and 76 ft to a center they never go to and read
+as treads ending in grass (Kashikawa, Kuwabata). Reading the footprint at 60 ft instead fixes those two and loosens the
+rule everywhere else by most of a house: measured the same afternoon, it let three of Inashiro's skeleton arms keep ends
+56-60 ft from the nearest wall, which IS a tread stopping in open ground. So arrival is its own clause at its own
+distance, and the three 60 ft clauses are untouched.
+
+12 ft is DERIVED from the clip, not chosen. A tread is cut `WEB_FABRIC_GAP` (7 ft) clear of a plot it runs beside, or
+`FOOTPATH_FABRIC_GAP` (4) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
+reaches a boundary records its last point 7-11 ft off it and cannot record it nearer. Measured: the two straggler ends
+at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
+of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else."""
+
+
 # How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
 # `farmhouses_reach_a_way` check, which held it as `_LANE_JOIN`). Its recorded why, carried verbatim from
 # the check because it is the reason the number is 40 and not something else: it is the same figure

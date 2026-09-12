@@ -20,5 +20,16 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T06 FR-005 the landing re-plates the page; R2; `make done`; the settlement-review
       research: rendering
       verify: DONE. render_cache.replate_page re-plates the page from the landing's render step when the engine fingerprint moves (a docstring moves it - the fingerprint is over bytes), with its test; R2 written from the final pool; make done green 2026-09-12 (56 s, 100% coverage); make cohort N=48 48/48; settlement-review two passes then a verification pass - PASS, all five fixes landed, no invariant broken; perf band 0 after the bookend was re-taken at the reviewed commit
+- [x] T08 FR-008 the lane-end rule fixed test-first, with a reader on every shipped hamlet
+      research: rendering
+      verify: DONE. the lane-end rule fixed test-first: the red tests (end_serves reads arrival at a steading, arrival is tighter than the reach bar, the trim keeps a tread at the dooryard) then one shared body end_serves + steading_footprints, STEADING_ARRIVAL_FT derived from the clip, the straggler trim and the late web pass on the gate's bar with keep; a pool-wide reader over every committed manifest; all five maps clean by the placer's own predicate, cohort 48/48, R3 written
+- [x] T09 FR-009 the guard adds the proof of life, and stops refusing the wait that has one
+      research: rendering
+      verify: DONE. no-poll adds the proof-of-life clause to a permitted file wait (scripts/_writer-alive.sh, the kernel's open-file table and the mtime, never a process pattern) and stops refusing a wait that carries one; the output-file rule made per-part so the feature-165 boundary does not move; 74/74 in scripts/test-no-poll-hooks.sh including the helper's four answers and the shape that was refused on 2026-09-12; R4 written with oom_kill 36
+- [x] T10 FR-007 a plate after every step that laid ink, with its cost measured
+      research: rendering
+      verify: DONE. a plate after every step that laid ink: 23 step plates beside the 14 stage plates, decided in the order the ink landed (the field's hem, paddies, source and ditches in turn), the deep copy moved into the plate worker so 37 plates cost less wall clock than 14 did (R5: 38 s, 6.0 MB); one step plate is unrenderable and the page says why
+- [ ] T11 the amended spec re-reviewed, the pool and the cohort re-run, `make done`, the settlement-review
+      research: rendering
 - [ ] T07 FR-006 the GM's acceptance of the page after their rounds in the clone
       research: rendering

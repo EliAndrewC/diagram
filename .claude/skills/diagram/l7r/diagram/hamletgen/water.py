@@ -651,6 +651,11 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.water.head_sluice
         l7r.diagram.hamletgen.water.feed_brook
         l7r.diagram.settlement.Settlement.draw_comb_field
+        l7r.diagram.settlement.Settlement._comb_draw_hem
+        l7r.diagram.settlement.Settlement._comb_draw_paddies
+        l7r.diagram.settlement.Settlement._comb_draw_beads
+        l7r.diagram.settlement.Settlement._comb_draw_source
+        l7r.diagram.settlement.Settlement._comb_draw_ditches
         l7r.diagram.hamletgen.water.stage_polder
         l7r.diagram.settlement.Settlement.plot_texture
     """

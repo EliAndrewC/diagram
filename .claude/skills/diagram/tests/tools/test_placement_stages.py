@@ -161,7 +161,7 @@ def test_a_stage_with_no_docstring_says_so_on_the_page(tmp_path: Path, monkeypat
 
 
 def test_main_writes_the_page_where_it_is_told_and_reports_the_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
-    monkeypatch.setattr(ps, "build_page", lambda out, width, spec: f"{out}/hamlet-placement.html")
+    monkeypatch.setattr(ps, "build_page", lambda out, width, spec, steps_too=True: f"{out}/hamlet-placement.html")
     assert ps.main(["--out", str(tmp_path), "--width", "700"]) == 0
     assert "wrote" in capsys.readouterr().out
 
@@ -221,7 +221,7 @@ def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path:
     over its plate (chords, rings, corridors), mapped through the finished copy's view; other plates do not."""
     seen: list[Any] = []
 
-    def fake_plate(snap: Any, out_dir: str, stem: str, width: int, overlay: Any = None) -> tuple[str, int, int]:
+    def fake_plate(snap: Any, out_dir: str, stem: str, width: int, overlay: Any = None, render_w: int = 2600) -> tuple[str, int, int]:
         seen.append((stem, overlay))
         return (stem + ".png", 10, 10)
 
@@ -278,9 +278,159 @@ def test_the_page_renders_each_stages_steps_and_the_homesteads_legend(tmp_path: 
         """
         s.out.append("<rect/>")
 
-    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None: (stem + ".png", 10, 10))
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (stem + ".png", 10, 10))
     _stub_stages(monkeypatch, stage_homesteads)
     html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
     assert html.count('<div class="step">') == 2 and "step by step (2)" in html
     assert "_ink" in html and "How many SVG records" in html, "the step is shown in its own docstring's words"
     assert "Drawn over this plate" in html, "the homesteads legend"
+
+
+# ---- the plate after every step (feature 227 FR-007) ----------------------------------------------
+
+
+def _drawing_stage() -> Any:
+    """A stub stage whose docstring declares two ENGINE steps - one that draws, one that only measures.
+
+    The steps are engine names rather than this module's own functions on purpose: under the full run the test
+    package can be imported twice under two names, so patching the copy `resolve_step` finds watches a function
+    the stage does not call - which is exactly how this test passed alone and failed at the gate."""
+
+    def stage_two_steps(s: Any, _plan: Any) -> None:
+        """Draws with one step and measures with the other.
+
+        Steps:
+            l7r.diagram.settlement.Settlement.add
+            l7r.diagram.hamletgen.ways.geom.polyline_len
+        """
+        from l7r.diagram.hamletgen.ways.geom import polyline_len
+
+        s.add('<rect x="10" y="10" width="50" height="50" fill="#333"/>')
+        polyline_len([(0.0, 0.0), (10.0, 0.0)])
+
+    return stage_two_steps
+
+
+def test_a_step_that_DREW_gets_its_own_plate_and_one_that_only_measured_does_not(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The GM's refinement, 2026-09-12: a plate *"for literally every stage at which it would be possible to render
+    an image that has actual content"*, and nothing where there is none - they named the no-content case themselves
+    (*"the entire 'The bearing and the fall' phase There are literally no map visible features"*)."""
+    _stub_stages(monkeypatch, _drawing_stage())
+    html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
+    plates = sorted(p.name for p in tmp_path.glob("*.png"))
+    assert plates == ["01-01-add.png", "01-stage_two_steps.png"], plates
+    assert 'src="01-01-add.png"' in html and "the map after this step" in html
+    assert "polyline_len" in html, "the step that drew nothing is still explained in words"
+
+
+def test_the_step_plates_can_be_turned_off(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _stub_stages(monkeypatch, _drawing_stage())
+    ps.build_page(str(tmp_path), 200, _SPEC, steps_too=False)
+    assert sorted(p.name for p in tmp_path.glob("*.png")) == ["01-stage_two_steps.png"]
+
+
+def test_a_step_plate_this_run_did_not_write_is_pruned_too(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The sweep keeps what the page REFERENCES. Built from the stage rows alone it deleted every step plate the
+    moment after it was rendered - measured on the first real run of this feature."""
+    (tmp_path / "01-09-gone_step.png").write_bytes(b"stale")
+    _stub_stages(monkeypatch, _drawing_stage())
+    ps.build_page(str(tmp_path), 200, _SPEC)
+    assert not (tmp_path / "01-09-gone_step.png").exists()
+    assert (tmp_path / "01-01-add.png").exists(), "...and the one this run wrote survives the sweep"
+
+
+def test_a_watermark_rewinds_a_copy_to_where_a_step_left_it() -> None:
+    """Drawing here is append-only, which is what makes the rewind exact - and the DEFERRED stores are wound back
+    with the ink, because each of their entries holds the index of the slot it reserved in `out` and `finish` writes
+    through it (the first real run crashed in `flush_blade_groups` with an IndexError on exactly that)."""
+    import copy
+
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.add("<rect/>")
+    mark = ps._watermark(s)
+    assert ps._ink_total(mark) == ps._ink(s), "the watermark stands where the ink count does"
+    s.add("<circle/>")
+    s._blade_groups.append((len(s.out) - 1, "#333", []))
+    snap = copy.deepcopy(s)
+    ps._rewind(snap, mark)
+    assert len(snap.out) == len(s.out) - 1 and len(snap.out_cls) == len(snap.out), "the layer and its class side-list move together"
+    assert snap._blade_groups == [], "the deferred group whose slot no longer exists is gone"
+
+
+def test_a_step_is_watched_wherever_its_name_is_bound_and_the_wrap_is_undone() -> None:
+    """A step imported by name into another engine module binds a second reference, and patching only the defining
+    module would watch a function nobody calls. The wrap is undone on the way out, so no map is ever rolled through
+    a patched engine."""
+    from l7r.diagram.hamletgen import ways
+    from l7r.diagram.hamletgen.ways import geom
+
+    points, target = ps._bind_points("l7r.diagram.hamletgen.ways.geom.polyline_len")
+    assert (geom, "polyline_len") in points and (ways, "polyline_len") in points, points
+    assert target is geom.polyline_len
+
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    with ps._watch_steps(s, ["l7r.diagram.hamletgen.ways.geom.polyline_len"]) as marks:
+        assert geom.polyline_len([(0.0, 0.0), (3.0, 4.0)]) == 5.0, "the wrapper returns what the step returns"
+        assert "l7r.diagram.hamletgen.ways.geom.polyline_len" in marks
+    assert geom.polyline_len is target and ways.polyline_len is target, "and the engine is put back"
+
+
+def test_a_step_plate_that_will_not_render_is_reported_and_the_page_says_why(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """The rewind reconstructs a moment INSIDE a stage rather than one the engine ever finished at, so a step that
+    draws into what the step before it left can leave a document the renderer refuses - one of the field's five
+    parts does. The page then loses one picture and says so, and "no plate" keeps meaning "drew nothing". A STAGE
+    plate that will not render still fails the run: that IS a moment the engine passes through."""
+    import subprocess
+
+    real = ps._plate
+
+    def sometimes(snap: Any, out_dir: str, stem: str, width: int, overlay: Any = None, render_w: int = 2600) -> tuple[str, int, int]:
+        if "-01-" in stem:
+            raise subprocess.CalledProcessError(1, ["resvg"])
+        return real(snap, out_dir, stem, width, overlay, render_w)
+
+    monkeypatch.setattr(ps, "_plate", sometimes)
+    _stub_stages(monkeypatch, _drawing_stage())
+    html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
+    assert "NO PLATE for step 01-01-add" in capsys.readouterr().out
+    assert "not a document the renderer will read" in html
+    assert 'src="01-01-add.png"' not in html
+
+
+def test_a_STAGE_plate_that_will_not_render_stops_the_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    import subprocess
+
+    def never(snap: Any, out_dir: str, stem: str, width: int, overlay: Any = None, render_w: int = 2600) -> tuple[str, int, int]:
+        raise subprocess.CalledProcessError(1, ["resvg"])
+
+    monkeypatch.setattr(ps, "_plate", never)
+    _stub_stages(monkeypatch, _drawing_stage())
+    with pytest.raises(subprocess.CalledProcessError):
+        ps.build_page(str(tmp_path), 200, _SPEC, steps_too=False)
+
+
+def test_balancing_closes_a_group_the_rewind_cut_open_and_skips_a_layer_that_is_not_a_list() -> None:
+    """A stage opens a `<g>` in one record and closes it in another, so a watermark between the two leaves a prefix
+    resvg refuses outright - measured on the beads step of the field stage. The class side-list gets the same number
+    of entries, because the page writer reads the two in step."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.add('<g stroke="#333">')
+    s.add('<rect x="1" y="1" width="2" height="2"/>')
+    ps._balance_groups(s)
+    assert s.out[-1] == "</g>" and len(s.out_cls) == len(s.out), "the group is closed and the side-list keeps step"
+    ps._balance_groups(s)
+    assert s.out.count("</g>") == 1, "idempotent: a balanced prefix is left alone"
+
+    class _NotLists:
+        out = None
+        top = None
+        walls = None
+        toplabels = None
+
+    ps._balance_groups(_NotLists())  # type: ignore[arg-type]  # a layer that is not a list contributes nothing

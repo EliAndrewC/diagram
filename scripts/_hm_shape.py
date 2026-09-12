@@ -50,9 +50,113 @@ _GREP_PATH = re.compile(r"(?:^|\s)grep\b[^|;<>]*\s(?:\$\{?\w+\}?)?(?:(?:~?[\w.-]
 # ...and the path may carry a shell-variable prefix (`$S/gate.log`), which is how the record writes
 # it - a variable in front of a path operand is still a path operand (feature 212)
 
+# GUARD_EDIT_OK: feature 227 - ...AND THE WHOLE PATH MAY BE A VARIABLE. `grep -qE "pat" $G` is the same wait with
+# the log's name held in a variable, and it was refused: the operand above has to END in path text, which `$G`
+# has none of. Caught the way the other two were, by the guard refusing a correct command (2026-09-12, a waiter on
+# a detached gate's log). A bare variable qualifies only as the LAST of at least two operands, so `grep -q $PAT`
+# with nothing to read - which waits on stdin - is not admitted by it.
+_GREP_VAR = re.compile(r"(?:^|\s)grep\b[^|;<>]*?\s(?!-)\S+\s(?:\$\{?\w+\}?)\s*$", re.M)
+
 _IN_REDIR = re.compile(r"<\s*(?:\./|/|~/)?[\w./-]+")
 
-_LOOP_HEAD = re.compile(r"\b(?:until|while)\b(.*?)(?:;\s*do\b|\bdo\b)", re.S)
+_LOOP_HEAD = re.compile(r"\b(?P<kw>until|while)\b(?P<cond>.*?)(?:;\s*do\b|\bdo\b)", re.S)
+
+# ---- AND THE PROOF OF LIFE, which is what makes a file wait safe (feature 227, GM 2026-09-12) ----
+#
+# GUARD_EDIT_OK: feature 227 - a wait on a file asks whether the WRITER is still there. A loop that waits
+# for a pattern in a log and never asks whether the thing writing that log is alive waits forever when it
+# is not: measured at 51 minutes on a detached `make` run that had finished its work and was then killed
+# before it could flush stdout, by the kernel's OOM killer, which has fired 36 times in this container
+# (`oom_kill 36` in /proc/vmstat). The pattern the loop waited for was never going to be printed.
+#
+# The GM's ruling is the tooling principle this project already works by - *"if you are waiting on output to
+# appear somewhere, but not checking to see whether the process that is supposed to generate that output is
+# still alive, then when possible, the hook should add the second proof of life check to what is being
+# waited for"*, because *"simply telling you to set a watch properly next time is bad engineering practice
+# ... that's just another version of making you remember to do something."* So this module does two things:
+#
+#   - a LIVENESS TEST IS A QUALIFYING PART of a file-watching condition. It was not, and the guard therefore
+#     REFUSED the very shape it should be producing: `until grep -q EXIT= $S/maps.log || ! pgrep -f
+#     "ma[p]s" >/dev/null; do sleep 15; done` was blocked as a busy-wait on 2026-09-12. A liveness clause can
+#     only make a loop end SOONER, never later, so admitting one is not the "permit whenever backgrounded"
+#     bypass the GM declined in feature 165 - and a condition still has to carry at least one real file form,
+#     so a bare process wait stays refused exactly as before.
+#   - `proof_of_life` ADDS the clause where there is none, naming the file the loop itself is watching.
+#     `_writer-alive.sh` answers from the kernel's open-file table rather than from a process pattern, which
+#     is the 2026-07-25 self-match trap this guard's other half exists for.
+_PROOF_OF_LIFE = re.compile(r"(?:^|\s)!?\s*(?:\S*/)?(?:pgrep|pkill|_writer-alive\.sh)\b|(?:^|\s)!?\s*kill\s+-0\b|(?:^|\s)!?\s*ps\s+-p\b")
+
+# writing to /dev/null is not producing a file, and a liveness clause carries `>/dev/null` as a matter of
+# course - without this the `>` test below would disqualify every condition the hook had just corrected
+_NULL_OUT = re.compile(r"\s1?>\s*/dev/null")
+
+# the operand to hand the helper: the LAST path-shaped word in the condition, which is the file being watched
+# in every form the boundary permits (`grep -q PAT <path>`, `[ -s <path> ]`, `< <path>`)
+_PATH_OPERAND = re.compile(r"(?:\$\{?\w+\}?)(?:(?:~?[\w.-]*/)+[\w.-]+|[\w.-]+\.[\w-]+)?|(?:(?:~?[\w.-]*/)+[\w.-]+|[\w.-]+\.[\w-]+)")
+
+
+def _cond_grammar(cond: str) -> str | None:
+    """The condition as the GRAMMAR tests should read it - quoted text neutralized and discarded stderr
+    dropped - or None when it carries a command substitution, which nothing legitimate hides in quotes.
+
+    Shared by `file_watching_loop` and `proof_of_life` so the question "is this the permitted shape?" and the
+    question "where do I add the liveness clause?" cannot answer differently."""
+    if "$(" in cond or "`" in cond:
+        return None
+    return _STDERR_NULL.sub(" ", _QUOTED.sub(lambda m: re.sub(r"[|<>;&]", "", m.group(0)[1:-1]), cond))
+
+
+def _part_kind(part: str) -> str:
+    """What one `&&`/`||`-joined part of a condition IS: `"file"` (one of the three permitted file reads),
+    `"alive"` (a liveness test), or `""` - which disqualifies the whole loop.
+
+    THE OUTPUT-FILE RULE IS PER PART, and deliberately (feature 227). It is the GM's from feature 165 - the
+    clause that stops `>/dev/null` on any condition at all from becoming a general bypass - and it was
+    written over the whole condition, which is why a wait that ALSO asked whether its producer was alive got
+    refused: a liveness test silences its own stdout as a matter of course (`! pgrep -f "[m]ake" >/dev/null`).
+    So a redirect is forgiven on a liveness part and on nothing else: `until grep -q x /tmp/a.log >/dev/null`
+    is refused today exactly as it was, and `until curl ... > /tmp/out` never qualified on any other ground
+    either."""
+    alive = bool(_PROOF_OF_LIFE.search(part))
+    if alive:
+        part = _NULL_OUT.sub(" ", part)
+    if _SINGLE_PIPE.search(part) or ">" in part:
+        return ""
+    if _FILE_TEST.search(part) or _GREP_PATH.search(part) or _GREP_VAR.search(part) or _IN_REDIR.search(part):
+        return "file"
+    return "alive" if alive else ""
+
+
+def _watches_a_file(cond: str) -> str | None:
+    """The neutralized condition when it is the permitted file-watching shape, else None.
+
+    Every part must qualify and at least one must actually READ A FILE, so a loop whose only clause is a
+    liveness test is a process wait and is refused exactly as it always was."""
+    c = _cond_grammar(cond)
+    if c is None:
+        return None
+    kinds = [_part_kind(p) for p in _JOIN.split(c)]
+    return c if kinds and "" not in kinds and "file" in kinds else None
+
+
+def proof_of_life(cmd: str, helper: str) -> str | None:
+    """`cmd` with a proof-of-life clause added to every file-watching loop that lacks one, or None when
+    there is nothing to add (no qualifying loop, or each already asks).
+
+    The clause is ANDed for a `while` loop and `||`-negated for an `until` one, because the two loop while
+    opposite things are true and the wait must end in both when the writer is gone."""
+    out, shift, added = cmd, 0, False
+    for m in _LOOP_HEAD.finditer(cmd):
+        c = _watches_a_file(m.group("cond"))
+        if c is None or _PROOF_OF_LIFE.search(c):
+            continue
+        paths = _PATH_OPERAND.findall(c)
+        if not paths:
+            continue
+        clause = f' || ! {helper} "{paths[-1]}"' if m.group("kw") == "until" else f' && {helper} "{paths[-1]}"'
+        at = m.end("cond") + shift
+        out, shift, added = out[:at] + clause + out[at:], shift + len(clause), True
+    return out if added else None
 
 def file_watching_wait(payload: dict) -> bool:
     """Is this the ONE wait shape the GM permitted - backgrounded, and watching a file?
@@ -89,23 +193,15 @@ def file_watching_loop(cmd: str) -> bool:
     when EVERY part is one of the three forms. The boundary itself is the GM's from feature 165:
     an output file, a substitution, a real pipeline, a process or network test all still fail it.
     """
-    heads = _LOOP_HEAD.findall(cmd)
+    heads = [m.group("cond") for m in _LOOP_HEAD.finditer(cmd)]
     if not heads:
         return False
-    for cond in heads:
-        # a substitution cannot hide inside quotes legitimately, so it is tested on the RAW condition
-        if "$(" in cond or "`" in cond:
-            return False
-        # a `|`, `>` or `;` INSIDE a quoted string is regex or message text, not shell grammar - it is
-        # dropped from the copy the grammar tests read, while the rest of the quoted text (a path)
-        # stays so `grep -q x "$S/gate.log"` still reads as a wait on a file
-        c = _STDERR_NULL.sub(" ", _QUOTED.sub(lambda m: re.sub(r"[|<>;&]", "", m.group(0)[1:-1]), cond))
-        if _SINGLE_PIPE.search(c) or ">" in c:
-            return False
-        for part in _JOIN.split(c):
-            if not (_FILE_TEST.search(part) or _GREP_PATH.search(part) or _IN_REDIR.search(part)):
-                return False
-    return True
+    # GUARD_EDIT_OK: feature 227 - A LIVENESS CLAUSE IS A QUALIFYING PART, and a condition must still carry
+    # at least one real FILE form. Every part had to be one of the three file forms, so the correct shape - a
+    # file wait that also asks whether its producer is alive - was refused as a busy-wait. The reading lives in
+    # `_watches_a_file` / `_part_kind` now, shared with `proof_of_life` so the shape test and the rewrite
+    # cannot answer differently; the boundary itself is unmoved, part by part.
+    return all(_watches_a_file(cond) is not None for cond in heads)
 
 # The bracket trick, APPLIED rather than recommended: `no-poll` refuses a literal process-matching
 # pattern because it matches the searching shell itself, then names the fix in prose. The fix is
@@ -159,6 +255,12 @@ if __name__ == "__main__":
         # backgrounded rather than refused)
         if file_watching_loop(CMD):
             print("yes")
+    elif mode == "proof":
+        # GUARD_EDIT_OK: feature 227 - the liveness clause, added to the wait that lacks one. Argument 2 is
+        # the helper's absolute path, resolved by the calling hook from its own location.
+        _with = proof_of_life(CMD, sys.argv[2] if len(sys.argv) > 2 else "_writer-alive.sh")
+        if _with:
+            print(_with)
     elif mode == "bracket":
         out = bracket_pattern(CMD)
         if out:

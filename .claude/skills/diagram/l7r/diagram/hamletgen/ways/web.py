@@ -25,7 +25,7 @@ from ..plan import SitePlan
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
-from .geom import _trim_to_service, polyline_len
+from .geom import _trim_to_service, polyline_len, steading_footprints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
@@ -175,7 +175,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             if len(arm) >= 2:
                 # the skeleton is drawn before anything serves the houses, so its ends are trimmed to the bar the gate
                 # asks of a lane end (feature 227: two of Inashiro's arms ended 81-97 ft from the nearest house)
-                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], end_reach=WAY_END_REACH_FT)
+                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], end_reach=WAY_END_REACH_FT, steadings=steading_footprints(s.M))
             if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT:
                 arm = []
         arm = s.trim_off_marsh(arm)
@@ -464,6 +464,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # laid before the houses, and running it here eats the footpaths the straggler pass just drew -
     # measured once at 43/48 -> 9/48.
     _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    _final_steadings = steading_footprints(s.M)  # a tread that stops at a dooryard has arrived there (feature 227 D11)
     _W, _H = float(s.M["meta"].get("W", s.W)), float(s.M["meta"].get("H", s.H))
 
     def _inside(q: Pt) -> bool:
@@ -487,7 +488,17 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             if _o is not _ln and len(_o.get("pts") or []) >= 2
             for sg in zip([(float(x), float(y)) for x, y in _o["pts"]], [(float(x), float(y)) for x, y in _o["pts"]][1:], strict=False)
         ]
-        _kept = _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now) if _ln.get("connector") else _trim_to_service(_pts, _others, _final_houses, [list(plan.envelope)])
+        # THE LATE PASS HOLDS THE GATE'S OWN BAR (feature 227 D11). It used to keep the loose 90 ft house
+        # bar, and so could pull an end back to a point 63-68 px from anything - past the 60 px
+        # `WAY_END_REACH_FT` the gate asks of every internal end - which is how a map that refused a
+        # straggler path at draw time shipped a dangling end anyway. The houses this lane is the ONLY way to
+        # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
+        _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
+        _kept = (
+            _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
+            if _ln.get("connector")
+            else _trim_to_service(_pts, _others, _final_houses, [list(plan.envelope)], end_reach=WAY_END_REACH_FT, keep=_keep, steadings=_final_steadings)
+        )
         if len(_kept) >= 2 and polyline_len(_kept) >= _WEB_MIN_FT and _kept != _pts:
             _ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in _kept]
             # AND THE INK WITH IT - see `Settlement.reink_lane`. Shortening the record alone left the

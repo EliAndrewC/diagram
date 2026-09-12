@@ -24,11 +24,15 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import contextlib
 import copy
+import functools
 import importlib
 import inspect
 import io
 import os
+import re
+import subprocess
 import sys
 from contextlib import redirect_stdout
 from html import escape
@@ -92,6 +96,142 @@ def step_doc(path: str) -> tuple[str, list[str]]:
     return (path.rsplit(".", 1)[-1], paras)
 
 
+# THE PLATE AFTER EVERY STEP, not only after every stage (feature 227, GM 2026-09-12: *"how much work would it
+# be to show a new image for literally every stage at which it would be possible to render an image that has actual
+# content? ... The very first image that we see has a stream, an irrigated ditch, dry cropfields, earthen bunds, field
+# ponds, wet paddies, and a drainage ditch. That's an awful lot. And the algorithm walks us through the step by step
+# seven part algorithm. So To what extent could we show what the map looks like after each of those parts?"*).
+#
+# HOW, AND WHAT IT COSTS TO BE HONEST ABOUT IT. A step is a function the stage calls, often many times, and there is no
+# moment the walk can reach between two of them from outside. So each step is WRAPPED for the duration of its stage and
+# records a WATERMARK - the length of every append-only record list on the settlement and in its manifest - after each
+# call, keeping the last. The plates are then made after the stage, from one copy per plate wound back to that
+# watermark: the records a step had not yet appended are deleted, and what is left is the map as it stood when that
+# step finished. Drawing here is append-only, which is what makes the rewind exact.
+#
+# TWO PLACES IT IS AN APPROXIMATION, stated rather than discovered later. A record REWRITTEN in place after its step
+# (`reink_lane`, which shortens a lane and redraws its ink) shows its later geometry on the earlier plate; and a
+# DEFERRED group - the blade and scatter buckets a ground-cover stage fills and `finish` flushes - is flushed in full,
+# so a step plate inside `stage_hinterland` or `stage_windbreak` can carry cover its step had not drawn yet. Both are
+# confined to the stage in hand, and neither can show a feature from a LATER stage, which is the property the page is
+# read for.
+_RECORD_ATTRS = (
+    "out",
+    "out_cls",
+    "top",
+    "top_cls",
+    "walls",
+    "walls_cls",
+    "toplabels",
+    "toplabels_cls",
+    "ground",
+    # ...AND THE DEFERRED STORES, because each entry holds the INDEX of the slot it reserved in `out` and `finish`
+    # writes through it: a rewind that truncated `out` and kept the groups appended after it crashed on the first
+    # step plate of the hinterland (`IndexError` in `flush_blade_groups`). Truncating them by the same watermark is
+    # exactly right - a group reserved BEFORE the step still points inside the rewound list.
+    "_blade_groups",
+    "_mark_groups",
+    "_pending_stands",
+    "_pending_yards",
+    "_pending_farmsteads",
+    "_captions",
+    "_label_queue",
+    "_lane_ink",
+    "_scatter_frames",
+)
+
+
+def _watermark(s: Settlement) -> dict[tuple[str, str], int]:
+    """Where every append-only record list stands right now - the four ink layers with their class side-lists, the
+    deferred ground, and every list in the manifest. The side-lists are in here because they are PARALLEL to their
+    layer: winding `out` back without `out_cls` hands the page writer a class list that no longer lines up."""
+    marks: dict[tuple[str, str], int] = {("attr", n): len(getattr(s, n)) for n in _RECORD_ATTRS if isinstance(getattr(s, n, None), list)}
+    marks.update({("M", k): len(v) for k, v in s.M.items() if isinstance(v, list)})
+    return marks
+
+
+def _rewind(snap: Settlement, marks: dict[tuple[str, str], int]) -> None:
+    """Wind a COPY back to a watermark, in place: everything appended after it is deleted."""
+    for (kind, name), n in marks.items():
+        lst = getattr(snap, name, None) if kind == "attr" else snap.M.get(name)
+        if isinstance(lst, list) and len(lst) > n:
+            del lst[n:]
+
+
+_OPEN_G = re.compile(r"<g\b[^>]*(?<!/)>")
+
+
+def _balance_groups(snap: Settlement) -> None:
+    """Close any SVG group the rewind cut OPEN, so the plate is a document resvg will read.
+
+    A stage opens a `<g>` in one record and closes it in another - the deferred scatter buckets and the
+    feature groups both do - so a watermark that falls between the two leaves the prefix unbalanced, and
+    resvg refuses the file outright (measured on the beads step of the field stage, which is drawn inside
+    the paddies' group). Closing the open groups is exact for a well-formed prefix. The class side-list
+    gets the same number of entries, tagged as ruled-but-not-highlighted, because it is PARALLEL to the
+    layer and the page writer reads them in step."""
+    for layer, tags in (("out", "out_cls"), ("top", "top_cls"), ("walls", "walls_cls"), ("toplabels", "toplabels_cls")):
+        records = getattr(snap, layer, None)
+        if not isinstance(records, list):
+            continue
+        depth = sum(len(_OPEN_G.findall(r)) - r.count("</g>") for r in records if isinstance(r, str))
+        if depth > 0:
+            records.extend(["</g>"] * depth)
+            side = getattr(snap, tags, None)
+            if isinstance(side, list):
+                side.extend(["-"] * depth)
+
+
+def _bind_points(path: str) -> tuple[list[tuple[Any, str]], Any]:
+    """Everywhere a step's name is BOUND, and the object it is bound to.
+
+    Its defining owner - a module, or a class for a method - and every other engine module that imported it by name,
+    because `from .seats import front_row` binds a second reference and patching only the first would watch a
+    function nobody calls. Swept over `l7r.diagram` alone: a name bound outside the engine is not a step."""
+    parts = path.split(".")
+    leaf = parts[-1]
+    owner = resolve_step(".".join(parts[:-1]))
+    target = getattr(owner, leaf)
+    points = [(owner, leaf)]
+    points += [(mod, leaf) for name, mod in list(sys.modules.items()) if name.startswith("l7r.diagram") and mod is not owner and getattr(mod, leaf, None) is target]
+    return points, target
+
+
+@contextlib.contextmanager
+def _watch_steps(s: Settlement, steps: list[str]) -> Any:
+    """Wrap each of a stage's steps for the duration of the stage; yields `name -> watermark after its last call`.
+
+    A step that cannot be resolved or bound is skipped here and reported by the page as having no plate - the roster
+    test is what fails the gate on a name that does not resolve, so this does not need to raise as well."""
+    marks: dict[str, dict[tuple[str, str], int]] = {}
+    restore: list[tuple[Any, str, Any]] = []
+    for path in steps:
+        try:
+            points, target = _bind_points(path)
+        except AttributeError, ImportError:  # pragma: no cover - the roster test fails the gate on such a name
+            continue
+
+        def wrapper(*a: Any, _path: str = path, _target: Any = target, **k: Any) -> Any:
+            out = _target(*a, **k)
+            marks[_path] = _watermark(s)
+            return out
+
+        functools.update_wrapper(wrapper, target)
+        for obj, leaf in points:
+            restore.append((obj, leaf, getattr(obj, leaf)))
+            setattr(obj, leaf, wrapper)
+    try:
+        yield marks
+    finally:
+        for obj, leaf, original in reversed(restore):
+            setattr(obj, leaf, original)
+
+
+def _ink_total(marks: dict[tuple[str, str], int]) -> int:
+    """The ink a watermark stands at - the same five layers `_ink` counts, read off the watermark."""
+    return sum(n for (kind, name), n in marks.items() if kind == "attr" and name in ("out", "top", "walls", "toplabels", "ground"))
+
+
 def _ink(s: Settlement) -> int:
     """How many SVG records the settlement has emitted so far, across the four ink layers and the deferred ground.
 
@@ -108,7 +248,7 @@ def _decisions(s: Settlement) -> dict[str, object]:
     return dict(s.M["meta"])
 
 
-def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[str, Any] | None = None) -> tuple[str, int, int]:
+def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[str, Any] | None = None, render_w: int = 2600) -> tuple[str, int, int]:
     """Finish a COPY of the part-built settlement and scale its render down to a page plate.
 
     `overlay` (feature 227): the site boundary the homesteads were seated against - its chords, outline rings and
@@ -125,7 +265,7 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
     with redirect_stdout(io.StringIO()):
         snap.finish(base, render=False)
     env_w = os.environ.get("DIAGRAM_PNG_WIDTH")
-    snap.render_png(base, int(env_w) if env_w else 2600)
+    snap.render_png(base, int(env_w) if env_w else render_w)
     png = base + ".png"
     with Image.open(png) as im:
         w, h = im.size
@@ -161,7 +301,7 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
     return os.path.basename(png), size[0], size[1]
 
 
-def build_page(out_dir: str, width: int, spec: HamletSpec) -> str:
+def build_page(out_dir: str, width: int, spec: HamletSpec, steps_too: bool = True) -> str:
     """Roll `spec` one stage at a time, writing a plate per stage and an index page. Returns the path."""
     os.makedirs(out_dir, exist_ok=True)
     plan = plan_site(spec)
@@ -171,24 +311,26 @@ def build_page(out_dir: str, width: int, spec: HamletSpec) -> str:
     # puts the canvas W/H into `meta`, and starting empty made stage 1's card claim credit for two
     # values the constructor set. A no-ink card must show what THAT stage decided and nothing else.
     known: dict[str, object] = _decisions(s)
-    _walk(s, plan, out_dir, width, rows, known)
+    _walk(s, plan, out_dir, width, rows, known, steps_too)
     return _write_page(out_dir, rows, spec)
 
 
-def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[dict[str, Any]], known: dict[str, object]) -> None:
+def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[dict[str, Any]], known: dict[str, object], steps_too: bool = True) -> None:
     """The stage loop of `build_page`, lifted out so the roll scope wraps exactly the loop (feature 210)."""
     # THE WALK-THROUGH IS A ROLL (feature 210): the whole stage loop sits in one `roll_scope`, so the memo
     # is cleared and the heap trimmed when the page is built, as after any roll. Not per stage: the memo
     # serves across stages within a roll, and a plate is a copy finished mid-roll.
-    pending: list[tuple[int, Settlement, str, dict[str, Any] | None]] = []
     with roll_scope(plan.spec):
         for i, stage in enumerate(STAGES, 1):
             before = _ink(s)
             had_boundary = "site_boundary" in s.M
-            with redirect_stdout(io.StringIO()):
+            title, paras, step_names = stage_doc(stage)
+            start = _watermark(s)
+            # THE STEPS ARE WATCHED WHILE THE STAGE RUNS, and only while it runs: the patches are undone on the way
+            # out, so nothing the next stage calls is wrapped and no map is ever rolled through a patched engine.
+            with redirect_stdout(io.StringIO()), _watch_steps(s, step_names) as step_marks:
                 stage(s, plan)
             drew = _ink(s) - before
-            title, paras, steps = stage_doc(stage)
             stem = f"{i:02d}-{stage.__name__}"
             now = _decisions(s)
             # A STAGE THAT LAYS NO INK GETS A CARD, NOT A PLATE (GM, 2026-08-23: *"the water skeleton,
@@ -199,28 +341,86 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
             # is generic rather than a special case for stage 1: any future metadata-only stage gets the
             # same treatment automatically, and a stage that stops drawing announces itself here rather
             # than turning quietly blank.
-            row: dict[str, Any] = {"i": i, "fn": stage.__name__, "title": title, "paras": paras, "steps": [step_doc(p) for p in steps], "img": None, "iw": 0, "ih": 0, "decided": []}
+            row: dict[str, Any] = {"i": i, "fn": stage.__name__, "title": title, "paras": paras, "steps": [], "img": None, "iw": 0, "ih": 0, "decided": []}
+            rows.append(row)
+            # A COPY IS FINISHED, NOT THE LIVE SETTLEMENT: `finish` flushes deferred canopies, seats captions and
+            # crops, all of which mutate. Snapshotting the real one would change the map the next stage sees, and the
+            # page would document a build nobody runs. The copy is taken INSIDE the worker (feature 227), because
+            # holding one per plate until the end of the walk is how this process reached 1.6 GB with fourteen plates
+            # and would have been sixty: at most `max_workers` copies are alive at once now.
+            jobs: list[tuple[Any, dict[tuple[str, str], int] | None, str, dict[str, Any] | None, int]] = []
             if drew:
-                # A COPY IS FINISHED, NOT THE LIVE SETTLEMENT: `finish` flushes deferred canopies, seats
-                # captions and crops, all of which mutate. Snapshotting the real one would change the map
-                # the next stage sees, and the page would document a build nobody runs. The copies are
-                # rendered TOGETHER after the walk (feature 227): eighteen resvg renders in a thread pool
-                # rather than one after another, so a landing that re-plates the page waits a fraction.
                 overlay = dict(s.M["site_boundary"]) if not had_boundary and "site_boundary" in s.M else None
-                pending.append((len(rows), copy.deepcopy(s), stem, overlay))
+                jobs.append((row, None, stem, overlay, 2600))
             else:
                 row["decided"] = [(k, str(v)) for k, v in now.items() if known.get(k) != v]
                 stale = os.path.join(out_dir, stem + ".png")
                 if os.path.isfile(stale):
                     os.remove(stale)  # a stage that used to draw and no longer does leaves no orphan plate
+            # ...AND A PLATE AFTER EVERY STEP THAT ADDED INK (the GM's refinement). In the docstring's order, skipping
+            # a step that was never called and one whose ink total has not moved past the last plate - a scan, a
+            # predicate or a pre-test has nothing to show, and the page says so in words instead.
+            # WHICH STEPS GET A PLATE IS DECIDED IN THE ORDER THE INK LANDED, not in the order the steps are
+            # declared. A step that CONTAINS others finishes after them - `draw_comb_field` returns once the hem,
+            # the paddies, the beads, the source and the ditches are all drawn - so walking the declared order
+            # plated the parent and then skipped all five of its parts as "no new ink", which is the opposite of
+            # the progression the GM asked to see. Sorted by where each step's ink ended, the parts plate in turn
+            # and the parent, which adds nothing after its last part, does not.
+            at = _ink_total(start)
+            plate_at: dict[str, dict[tuple[str, str], int]] = {}
+            for path, mark in sorted(((p, m) for p, m in step_marks.items() if p in step_names), key=lambda kv: _ink_total(kv[1])):
+                if _ink_total(mark) > at:
+                    at, plate_at[path] = _ink_total(mark), mark
+            for k, path in enumerate(step_names, 1):
+                name, sparas = step_doc(path)
+                entry: dict[str, Any] = {"name": name, "path": path, "paras": sparas, "img": None, "iw": 0, "ih": 0, "unrenderable": False}
+                row["steps"].append(entry)
+                if steps_too and path in plate_at:
+                    jobs.append((entry, plate_at.pop(path), f"{i:02d}-{k:02d}-{name.strip('_')}", None, 1500))
+            _make_plates(s, jobs, out_dir, width)
             known = now
-            rows.append(row)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=min(4, max(1, len(pending)))) as ex:
-        plated = list(ex.map(lambda item: (item[0], _plate(item[1], out_dir, item[2], width, item[3])), pending))
-    for idx, (img, iw, ih) in plated:
-        rows[idx].update(img=img, iw=iw, ih=ih)
     for row in rows:
-        print(f"  {row['i']:>2}. {row['fn']:<22} -> {row['img'] or f'(no ink - {len(row['decided'])} values decided)'}")
+        shown = sum(1 for e in row["steps"] if e["img"])
+        print(f"  {row['i']:>2}. {row['fn']:<22} -> {row['img'] or f'(no ink - {len(row['decided'])} values decided)'}" + (f"  + {shown} step plate(s)" if shown else ""))
+
+
+def _make_plates(s: Settlement, jobs: list[Any], out_dir: str, width: int) -> None:
+    """Render one stage's plates - its own and its steps' - and hang each result on the row that asked for it.
+
+    The copy and the rewind happen in the worker, so the peak is `max_workers` settlements rather than all of them.
+    A step plate is rendered at a smaller size than a stage plate: it answers "what appeared", not "read the map"."""
+    if not jobs:
+        return
+
+    def one(job: Any) -> tuple[Any, tuple[str, int, int]]:
+        target, mark, stem, overlay, render_w = job
+        snap = copy.deepcopy(s)
+        if mark is not None:
+            _rewind(snap, mark)
+            _balance_groups(snap)
+        return target, _plate(snap, out_dir, stem, width if render_w > 2000 else max(520, width // 2), overlay, render_w)
+
+    # A STEP PLATE THAT WILL NOT RENDER IS REPORTED AND DROPPED; A STAGE PLATE IS NOT. The rewind is exact for a
+    # well-formed prefix and `_balance_groups` closes the one way it is not, but it reconstructs a moment inside a
+    # stage rather than a moment the engine ever finished at, so a future stage could hand it something resvg
+    # refuses - and the page, which is documentation, should then lose one picture and say so rather than fail. A
+    # STAGE plate is a moment the engine really passes through: if that will not render, something is broken and
+    # the run must stop.
+    def guarded(job: Any) -> tuple[Any, tuple[str, int, int] | None]:
+        try:
+            return one(job)
+        except (subprocess.CalledProcessError, ValueError, IndexError, KeyError) as exc:
+            if job[1] is None:
+                raise
+            print(f"  NO PLATE for step {job[2]} - the part-built map would not render ({type(exc).__name__})")
+            job[0]["unrenderable"] = True
+            return job[0], None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(4, len(jobs))) as ex:
+        for target, made in ex.map(guarded, jobs):
+            if made is not None:
+                img, iw, ih = made
+                target.update(img=img, iw=iw, ih=ih)
 
 
 def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> str:
@@ -232,7 +432,9 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
     # leaving seven orphans in a COMMITTED directory, `04-stage_ways.png` among them. An orphan here is
     # worse than clutter: the page is how the GM reads the build order, and a leftover plate showing
     # lanes before houses is a picture of the very thing the feature removed.
-    keep = {r["img"] for r in rows if r["img"]} | {"hamlet-placement.html"}
+    # ...AND THE STEP PLATES THIS RUN WROTE (feature 227): the sweep keeps what the page REFERENCES, so a set
+    # built from the stage rows alone deleted every per-step plate the moment after it was rendered.
+    keep = {r["img"] for r in rows if r["img"]} | {e["img"] for r in rows for e in r["steps"] if e["img"]} | {"hamlet-placement.html"}
     for name in sorted(os.listdir(out_dir)):
         if name not in keep and name.endswith(".png"):
             os.remove(os.path.join(out_dir, name))
@@ -262,6 +464,8 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         ".step .sn{font:700 .95rem/1.3 ui-monospace,SFMono-Regular,Menlo,monospace}",
         ".step .sp{font:.85rem/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim);margin-left:.5rem}",
         ".step p{margin:.35rem 0 0;font-size:.95rem}",
+        ".step img{margin:.7rem 0 .2rem}",
+        ".after{font:.8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim)}",
         "img{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:3px;background:#fff}",
         ".noink{border:1px dashed var(--rule);border-radius:3px;padding:1rem 1.15rem;background:transparent}",
         ".noink .cap{font:700 .8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;",
@@ -277,7 +481,9 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         f'<p class="lede">{escape(spec.name)}, rolled one stage at a time. Each plate is the map as it stands '
         f"after that stage and nothing later - the same build (the driver's first roll), snapshotted {len(STAGES)} times. "
         "Every word on this page is read from the code: a stage's explanation is its docstring, and the steps under it "
-        "are the functions the docstring names as its algorithm, each shown in its own words - so the page is as current "
+        "are the functions the docstring names as its algorithm, each shown in its own words, with its OWN plate wherever "
+        "that step put something on the map - so a stage is not one picture of fifteen decisions. A step with no plate "
+        "drew nothing: it measured, scanned or decided. The page is as current "
         "as the code, and the gate fails a stage that explains nothing. Read <code>dev/placement.md</code> for the rules "
         "across stages. Regenerated by <code>make placement-stages</code>, and by every landing that changes the engine.</p>",
     ]
@@ -289,8 +495,15 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
         ]
         if r["steps"]:
             parts.append(f'<details class="steps" open><summary>The algorithm, step by step ({len(r["steps"])})</summary>')
-            for name, paras in r["steps"]:
-                parts.append(f'<div class="step"><span class="sn">{escape(name)}</span>' + "".join(f"<p>{escape(p)}</p>" for p in paras) + "</div>")
+            for e in r["steps"]:
+                parts.append(f'<div class="step"><span class="sn">{escape(e["name"])}</span>' + "".join(f"<p>{escape(p)}</p>" for p in e["paras"]))
+                if e["img"]:
+                    parts.append(f'<img src="{escape(e["img"])}" width="{e["iw"]}" height="{e["ih"]}" alt="after {escape(e["name"])}" loading="lazy">')
+                    parts.append('<p class="after">the map after this step, and nothing later in the stage</p>')
+                elif e["unrenderable"]:
+                    # HONEST ABOUT THE ONE PLATE IT CANNOT MAKE, so "no plate" keeps meaning "drew nothing".
+                    parts.append('<p class="after">no plate: this step draws INTO what the step before it left, so the map part-way through it is not a document the renderer will read</p>')
+                parts.append("</div>")
             parts.append("</details>")
         if r["img"]:
             parts.append(f'<img src="{escape(r["img"])}" width="{r["iw"]}" height="{r["ih"]}" alt="{escape(r["title"])}" loading="lazy">')
@@ -318,9 +531,13 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default=os.path.join(SKILL, "dev", "placement-stages"))
     ap.add_argument("--width", type=int, default=1100, help="plate width in px (default 1100)")
+    # THE STEP PLATES ARE THE PAGE'S POINT AND ITS COST, so they can be turned off for a run that only wants the
+    # stage walk (a landing's re-plate passes nothing, so it gets them: the GM reads this page, and a page that is
+    # cheap to make and does not show what was asked for is not cheaper, it is useless).
+    ap.add_argument("--no-steps", dest="steps", action="store_false", help="stage plates only - skip the per-step plates")
     a = ap.parse_args(argv)
     spec = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
-    page = build_page(a.out, a.width, spec)
+    page = build_page(a.out, a.width, spec, a.steps)
     print(f"\nwrote {page}")
     return 0
 
