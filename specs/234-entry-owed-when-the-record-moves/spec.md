@@ -1,7 +1,7 @@
 # Feature 234 - the modal entry owed when the record moves
 
 **Created**: 2026-09-12
-**Status**: Draft (round 2 - the round-1 design was withdrawn, see Review history)
+**Status**: ACCEPTED 2026-09-12, after five rounds of `spec-fidelity` (see Review history)
 **Input**: the GM's message, verbatim, in `request.md`
 
 ## Summary
@@ -122,7 +122,7 @@ rather than producing a silent all-clear.
 **FR-012** The rule MUST be written into `research/CLAUDE.md` beside the prose rule it gives teeth to,
 and into `interactive/classes/CLAUDE.md` where "Writing an entry" is documented: when a section a class
 was written from moves, the session DISPATCHES `entry-drift` at that pair and then either rewrites the
-prose or records why it did not change. The actor is named deliberately: an earlier draft said the
+prose or records why it did not change - the record going to `dev/bypass-log/` as FR-013.1 specifies. The actor is named deliberately: an earlier draft said the
 session "re-reads" while FR-013 gave the job to an agent, which named two actors for one job and
 required neither. The root `CLAUDE.md` guard table MUST gain a row, that table being the
 enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS and
@@ -148,14 +148,29 @@ and never decides a rule. `model: opus` like every subagent check (GM 2026-09-07
 believes checked the modal. Two things follow:
 
   1. **A decision point.** The classes `_entry_owed.py` names at the PUSH decision point (FR-003.2) ARE
-     what the session hands to `entry-drift`, before the work lands - and the report's printed line MUST
-     say so in as many words, because that line is the only thing that runs on this delta shape.
+     what the session hands to `entry-drift` - and the report's printed line MUST say so in as many
+     words, because that line is the only thing that runs on this delta shape.
+
+     **The timing is honest about itself.** The report does not block (FR-004), and `push_cmd` prints it
+     and then pushes in the same invocation (`sync-with-main.sh:348/352`), so the pairs are named by the
+     run that pushes and the dispatch, the rewrite or the recorded line FOLLOW as a further commit. This
+     feature does not claim otherwise. If surfacing at the end proves too late in practice, the lever is
+     round 2's recorded aside - making a research-page edit owe `make page-check` at push - and that
+     lever is the GM's, not this feature's, because it hangs a ~26 s target on every research edit.
 
      The dispatch is owed **per pair whose section's FINDING moved**, not per pair named. A maintenance
      sweep of the record - a footnote relocated, a session note turned into an HTML comment, a citation
-     re-pointed, a passage translated - changes no finding and is discharged by one recorded line
-     saying so, not by an agent per class. This is not a loophole; it is the same measurement D1 rests
-     on, applied consistently (see D6).
+     re-pointed, a passage translated - changes no finding and is discharged by one recorded line, not
+     by an agent per class. This is not a loophole; it is the same measurement D1 rests on, applied
+     consistently (see D6).
+
+     **That line goes in `dev/bypass-log/`**, beside the project's other recorded waivers, one entry per
+     decision with the class key, the section, and the verdict or the reason - so `make audit`
+     enumerates it like everything else there. A destination is not optional: D6's whole cost argument
+     is that a session can no longer pass a stale modal WITHOUT BEING TOLD, and that is unobservable
+     afterwards - to a later session or to the GM asking "was this pair judged?" - unless the answer
+     lands somewhere findable. A feature whose subject is that an unseen obligation does not happen is
+     the wrong place to leave a record homeless.
   2. **Pre-authorization.** `entry-drift` MUST be added to the nine agents enumerated in
      `container-scripts/append-system-prompt.md`. Without it the mandate loses to the default system
      prompt's "do not call the Agent tool unless the user asked", which sits ABOVE `CLAUDE.md` - the
@@ -208,7 +223,15 @@ heading checker's matching surface broken is refused by its `--selftest` rather 
 
 **SC-011** `make audit` enumerates every entry taking FR-008's declared-silence form.
 
-**SC-012** `make hooks-test` green, `make done` green, `make page-check` green.
+**SC-012** The guidelines say the thing - the deliverable the GM literally asked for, and until now the
+only one no criterion covered. Checkable at task time: `research/CLAUDE.md` and
+`interactive/classes/CLAUDE.md` each state what is owed when a section a class was written from moves
+(dispatch `entry-drift`, then rewrite or record to `dev/bypass-log/`); the root `CLAUDE.md` guard table
+carries a row saying the staleness half REPORTS and the heading half GATES; and both skill documents say
+plainly that `record-format` and `quote-check` are the changed research entry's own obligations and are
+NOT a check on any modal (FR-014).
+
+**SC-013** `make hooks-test` green, `make done` green, `make page-check` green.
 
 ## Decisions recorded
 
@@ -263,6 +286,12 @@ checkbox without re-pricing it: on one of those 30 sweeps it would have demanded
 dispatches to conclude that a footnote moved, or a box ticked without dispatching - which is the unwired
 agent round 3 existed to fix, wearing a tick.
 
+*Who chose.* This spec did - the session, on the measurements returned by rounds 3 and 4 of its own
+`spec-fidelity` review. **The GM has NOT ruled on it.** They asked for a fix to the project guidelines
+and were not asked whether "doctrine, unenforced" is an acceptable answer for the judgment half, which
+is a call they may want to make themselves. Recorded so a later reader knows this door is open rather
+than closed.
+
 
 ## Out of scope
 
@@ -274,6 +303,30 @@ agent round 3 existed to fix, wearing a tick.
   its own work, wants the GM's call, and is not begun here.
 
 ## Review history
+
+**Round 5** (`spec-fidelity`, 2026-09-12): the final round under the five-round cap. All three round-4
+items confirmed resolved; four small closing edits required, all taken, and the reviewer classified them
+explicitly as "(a) small and closing ... Do not escalate to the GM on account of this verdict."
+(1) D6 carried three of the four elements this project requires of an accepted-limitation record and was
+missing WHO CHOSE - which here is not bookkeeping, because "doctrine, unenforced" for the judgment half
+is a call the GM may want to make. D6 now says the session chose it on the review's own measurements and
+that the GM has not ruled, so the door reads as open.
+(2) FR-013.1 claimed the pairs are handed to the agent "before the work lands". False, and contradicted
+by round 2's own recorded aside: the report does not block and `push_cmd` prints then pushes in one
+invocation, so the dispatch follows as a further commit. Stated honestly now, with the `page-check`-at-
+push lever named as the GM's to pull if end-of-work surfacing proves too late.
+(3) FR-012 and FR-013.1 both required the session to RECORD something and neither said where - leaving
+the one trace D6's cost argument depends on unobservable. Both now name `dev/bypass-log/`, which
+`make audit` already enumerates.
+(4) The guidelines - the deliverable the GM literally asked for - were the only thing in the spec no
+success criterion verified, while lesser items had two. SC-012 covers FR-012 and FR-014.
+The reviewer independently verified `_TAGS` less `_DATA_TAGS`, the three selftest siblings, the
+`SKIP_ONLY_AREAS` skip, what `page-check` runs, the nine pre-authorized agents, `fallow`'s declared
+silence and `test_an_entry_is_complete`'s single assertion. It ruled the heading half SHIP rather than
+cut: it is the decidable half, never correct work, the cheapest thing here to gate, and cutting it would
+leave a `research/CLAUDE.md` rule with nothing behind it.
+**Status: accepted.** Five rounds, each finding new and smaller items; no round reopened an earlier
+decision. Implementation may begin.
 
 **Round 4** (`spec-fidelity`, 2026-09-12): round-3 items (2)-(5) verified resolved in source. Item (1),
 the wiring, was resolved **in appearance only**, and the fix is a CUT rather than more machinery.
