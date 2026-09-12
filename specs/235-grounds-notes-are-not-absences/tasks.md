@@ -51,8 +51,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 - [x] T13 the census run AFTER, and the delta stated with its three numbers (SC-003)
       research: procedure
       verify: DONE. DONE. the AFTER census on the same tree: 969 cited, 1 GROUNDS, 83 ABSENT, 0 settled, against 969 / 0 / 84 / 0 before. The delta is this feature's own: one note left the backlog because it owes no source, and no note left it any other way
-- [ ] T14 `make citations`; `make page-check` green
+- [x] T14 `make citations`; `make page-check` green
       research: procedure
+      verify: DONE. DONE. make citations and make glossary run and committed; make page-check GREEN (763 passed, the page and browser stamps written). The entry-drift report names 28 class/section pairs the record-format sweep disturbed - all of them the maintenance case the check exists to distinguish from a moved finding, since the sweep moved session-facing text into comments and rewrote history phrasing without changing what any section finds. The twelve pairs where a FINDING had moved were reviewed by entry-drift agents and rewritten under feature 232
 - [x] T15 the closing report: what changed, the census delta, and the `research/README.md` correction OFFERED not applied
       research: procedure
       verify: DONE. DONE. closing-report.md written: what shipped, the census delta (969/0/84/0 -> 969/1/83/0), the honest headline that the record contained one instance of the defect rather than eighteen, the two sentences moved into comments with both footnotes kept, and THREE research/README.md corrections OFFERED and not applied - the binary this feature replaced, the SUMMARY-ONLY label feature 195 retired, and a pointer to SOURCES.md, a file that no longer exists and that no test catches because the retired-Markdown sweep exempts the README by name
