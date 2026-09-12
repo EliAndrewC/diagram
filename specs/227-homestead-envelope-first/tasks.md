@@ -14,9 +14,11 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T04 FR-003 the counts; the pool; the cohort
       research: rendering
       verify: DONE. meta.seat_search counts positions (rectangles), parts, front, rounds; the pool re-rolled 5/5 with every quota on the first roll (rects per house 16-37 against 113-387); make cohort N=48 48/48 with households_seated; R2 written
-- [ ] T05 FR-004 the page from the docstrings and the declared steps, the boundary on the homesteads plate, the notes retired, the tests
+- [x] T05 FR-004 the page from the docstrings and the declared steps, the boundary on the homesteads plate, the notes retired, the tests
       research: rendering
-- [ ] T06 FR-005 the landing re-plates the page; R2; `make done`; the settlement-review
+      verify: DONE. tools/placement_stages.py writes the page from each stage's DOCSTRING and the functions its Steps: section names (93 step cards over 18 stages), the notes JSON retired into the docstrings it described, the site boundary drawn over the homesteads plate, the plates rendered in parallel, the web's deferred ways counted as ink; tests/tools/test_placement_stages.py holds every stage to a docstring and a resolvable Steps list
+- [x] T06 FR-005 the landing re-plates the page; R2; `make done`; the settlement-review
       research: rendering
+      verify: DONE. render_cache.replate_page re-plates the page from the landing's render step when the engine fingerprint moves (a docstring moves it - the fingerprint is over bytes), with its test; R2 written from the final pool; make done green 2026-09-12 (56 s, 100% coverage); make cohort N=48 48/48; settlement-review two passes then a verification pass - PASS, all five fixes landed, no invariant broken; perf band 0 after the bookend was re-taken at the reviewed commit
 - [ ] T07 FR-006 the GM's acceptance of the page after their rounds in the clone
       research: rendering
