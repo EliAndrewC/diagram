@@ -53,3 +53,41 @@ And the scope ruling:
 
 The research record is explicitly NOT a target: *"I agree that the research record was valuable, and I
 don't see anything there that I want to change either."*
+
+---
+
+## The six, as the session put them to the GM
+
+Recorded here because "Please do all 6" is not checkable against a list that lives only in a transcript.
+This is the SESSION'S message, not the GM's words; the GM's block above is verbatim and untouched.
+
+> **1. `scripts/_patch.py` — one shared edit helper.** My three aborted patches all had the same design
+> flaw: substitutions accumulate in memory, `write_text` happens at the end, so a *cosmetic* anchor miss
+> discards *substantive* edits. A helper that writes per edit and reports per edit makes that failure
+> impossible. Biggest win, pure tooling.
+>
+> **2. `bash -n` precheck in a PreToolUse hook.** My `sed` failure was a syntax error bash caught at
+> runtime, after the round trip. `bash -n` catches it in milliseconds, before. Cheap, exact, no false
+> positives on valid commands.
+>
+> **3. Commit messages via `-F -` heredoc, enforced.** My `git commit -m "…\"quoted\"…"` didn't fail as a
+> syntax error — it parsed as *valid* bash doing the wrong thing, producing a cascade of bogus pathspecs.
+> `bash -n` can't catch that; banning `-m` for multi-line messages kills the class. The `Co-Authored-By`
+> check rides along free and would have caught the placeholder address.
+>
+> **4. House-style over Bash writes** — either extend the hook to Bash payloads, or a `make quick` test
+> scanning the tree for British spellings outside quoted spans. You suggested the latter; I'd do both,
+> since the hook *corrects* while the test only *reports*.
+>
+> **5. `spec-lint`.** Every numeric claim traceable to a research section; no figure surviving after its
+> source withdraws it; every FR referenced by an SC; no stale `tasks.md`. Six of today's twenty rounds
+> died on exactly these.
+>
+> **6. Narrowed re-review, encoded in the task.** Not a constitution sentence — a `tasks.md` shape: a
+> re-review task *names the items*, and the reviewer is told to verify those plus scan only for
+> contradictions introduced by the fix.
+
+And, offered alongside them and recommended for skipping - so NOT one of the six the GM approved:
+
+> **What I'd skip.** A guard on committing a red tree. Mid-task commits on red are legitimate and sacred
+> here; a guard would fire on correct work, which is the bar this project sets for not building one.
