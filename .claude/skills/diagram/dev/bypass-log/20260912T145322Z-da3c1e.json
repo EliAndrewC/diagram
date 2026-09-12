@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T145322Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map changed: feature 229 is documentation and the record; the only semantic engine change is a permission REASON string in the overlap taxonomy (specs/229 research.md R8/R9)"
+}

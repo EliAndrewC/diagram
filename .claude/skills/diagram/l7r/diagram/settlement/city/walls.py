@@ -81,7 +81,9 @@ class WallsMixin:
             edge=f'<path d="{dd}" fill="none" stroke="#B49A66" stroke-width="{width}" opacity="0.85" stroke-linejoin="round"/>',
             bed=f'<path d="{dd}" fill="none" stroke="#D9C8A0" stroke-width="{width - 6}" opacity="1" stroke-linejoin="round"/>',
         )
-        self.corridors.append((loop, width / 2 + 21))  # buildings keep WELL off the ring road (even a large/rotated footprint's corner stays off its bed; research/cities/defenses.html "How far inside the wall does the patrol road run, and what may stand on it?")
+        self.corridors.append(
+            (loop, width / 2 + 21)
+        )  # buildings keep WELL off the ring road (even a large/rotated footprint's corner stays off its bed; research/cities/defenses.html "How far inside the wall does the patrol road run, and what may stand on it?")
         self.M["ring_road"] = [[round(x, 1), round(y, 1)] for x, y in loop]
         self.M["ring_road_width"] = width
         return ring

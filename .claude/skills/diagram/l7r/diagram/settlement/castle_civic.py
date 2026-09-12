@@ -327,7 +327,9 @@ class CastleCivicMixin:
     # striking posts) and split on COLOR: state violet, the same family as the ministries, vs the
     # ordinary building tan of a private establishment in a residential quarter.
     DOJO_SAMURAI_FRAC = 0.10  # a provincial city is ~10% samurai (budgets.md: ~300 of ~3,000)
-    DOJO_PER_SAMURAI = 200  # GM formula 2026-07-25: 1 private dojo per 200 samurai + a remainder roll (research/cities/government.html "Martial training is an urban institution" - the roll wins over the rough read)
+    DOJO_PER_SAMURAI = (
+        200  # GM formula 2026-07-25: 1 private dojo per 200 samurai + a remainder roll (research/cities/government.html "Martial training is an urban institution" - the roll wins over the rough read)
+    )
 
     def _dojo_hall(self: Settlement, g: list[str], x0: float, y0: float, w: float, h: float, fill: str, edge: str, head: str) -> None:  # type: ignore[misc]
         """The shared DOJO HALL glyph: a long rectangle with a plank-floor grain running lengthwise

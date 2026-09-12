@@ -368,7 +368,7 @@ class LandUseMixin:
             # then the water outline under the even-odd rule, so the fill stops at the pond's edge as the perimeter
             # dike's band stops at the polder. On the vector page the pond painted over a filled disk hid the
             # difference; raster mode draws the lit class as a wash OVER the image (page.css, feature 201), and the
-            # lit disk tinted every pond gold. Map drawing convention (settlements/archetypes.md 'The bank is a
+            # lit disk tinted every pond gold. Map drawing convention (research/archetypes.html "The 6:4 water-to-dike ratio and coppiced mulberry" 'The bank is a
             # ring'). The two outlines come from the same draws in the same order as before, the crowns AND the
             # earth mottle still clip to `bd` ALONE (a bush or a patch may lean over the water - do not hand them
             # the ring; measured on Kuwabata, 6% of the water area at the rim still lights), the ring's inner stroke
