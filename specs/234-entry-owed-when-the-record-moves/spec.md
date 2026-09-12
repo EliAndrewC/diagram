@@ -337,6 +337,33 @@ not. The cost of being wrong here is one sentence per research push, and it is a
 which is what makes the wrongness discoverable.
 
 
+**D7 - A RECORD AND A MODAL THAT ARE WRONG TOGETHER ARE INVISIBLE TO THIS FEATURE - an ACCEPTED
+LIMITATION.**
+
+*What was accepted.* The report keys on the SECTION MOVING. If a research section and the modal written
+from it are wrong in the same direction, nothing here names the pair: `_entry_owed.py` never sees it
+because the section did not move, and the `entry-drift` contract cannot catch it either, because that
+contract compares a modal against its section and the two agree. Both halves of this design are blind to
+it.
+
+*What it costs, in observable terms - measured on this feature's own first day.* `MulberryDike` told
+every reader of a dike-pond map that the bank is "six to ten meters wide", on a class labeled
+**accurate**, against a planted collar measured at 2.0 m. Behind it: feature 233's withdrawn 22 ft
+arithmetic still alive in two `archetypes.html` paragraphs, a GM ruling of 2026-08-28 that
+`kuwabata.notes.md` asserted the modals carried and that reached no modal at all, and `DuckPen` silent
+about the same collar. All four were found by a person with a ruler an hour after this feature shipped -
+not by this feature, which would have returned IN-STEP on a strict reading of the sections that modal
+names. `research.md` R7 has the detail.
+
+*What was declined.* A mechanical key that compares the RECORD against the DRAWING - there is none: the
+record's claims are prose and the drawing's are geometry, and the only thing that has ever connected
+them here is someone measuring. And a sweep of all 51 entries against their own measurements, which is
+its own work, wants the GM, and is not begun here.
+
+*Who chose.* The session, on R7's measurement. Recorded because the "Out of scope" bullet below covers
+only HISTORIC drift between a modal and its section, and a reader who met a stale modal the push let
+through would otherwise read it as a bug in `_entry_owed.py` rather than as the gap this entry names.
+
 ## Out of scope
 
 - Judging whether a rewritten modal entry is GOOD - that is `record-format` and `quote-check`.
