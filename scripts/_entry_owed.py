@@ -136,6 +136,29 @@ def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001
     return moved
 
 
+def named_pairs(
+    moved: set[str],
+    anchors: dict[str, set[str]],
+    now: dict[str, str],
+    was: dict[str, str],
+    at: dict[str, str] | None = None,
+) -> list[str]:
+    """THE DECISION, over plain dicts - lifted out of `owed()` so it can be tested without a git
+    repository, an engine import or a research page (the feature-146 doctrine: an inner step that is
+    hard to reach gets lifted, and the test then passes dicts and tuples).
+
+    A class is named when a section its entry points at MOVED and its own explanation prose did NOT.
+    A class absent from `was` is new in this delta and is never named - there is no older prose for a
+    section to have drifted from.
+    """
+    out: list[str] = []
+    for key in sorted(anchors):
+        hit = sorted(anchors[key] & moved)
+        if hit and key in was and was[key] == now.get(key):
+            out.append(f"{key} - {' '.join(hit)} - prose at {(at or {}).get(key, CLASSES)}")
+    return out
+
+
 def owed(root: Path) -> tuple[str, list[str]]:
     """(the base's description, one `key - what moved - where the prose lives` line per named class)."""
     base, desc = base_of(root)
@@ -158,12 +181,8 @@ def owed(root: Path) -> tuple[str, list[str]]:
             was |= classes_in(old_text, _base)
     from l7r.diagram.interactive.classes import CLASSES as REGISTRY
 
-    out: list[str] = []
-    for key, fc in sorted(REGISTRY.items()):
-        hit = sorted({q["url"].rsplit("/", 1)[-1] for q in sources.research_questions(fc.entry)} & moved)
-        if hit and key in was and was[key] == now.get(key):
-            out.append(f"{key} - {' '.join(hit)} - prose at {at.get(key, CLASSES)}")
-    return desc, out
+    anchors = {key: {q["url"].rsplit("/", 1)[-1] for q in sources.research_questions(fc.entry)} for key, fc in REGISTRY.items()}
+    return desc, named_pairs(moved, anchors, now, was, at)
 
 
 def ruling(desc: str, lines: Sequence[str]) -> str:

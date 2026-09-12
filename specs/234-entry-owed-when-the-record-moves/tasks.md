@@ -52,7 +52,7 @@ record and the map's modals stay in step, not about how a place was built.
 - [x] T10 Pre-authorize it in `container-scripts/append-system-prompt.md` (FR-013.2) - without this the
       default system prompt outranks the mandate, which is the documented 2026-07-27 failure.
       research: rendering
-- [ ] T11 Its first real dispatch is feature 233's own pair, run and recorded: the `PigSty` modal
+- [x] T11 Its first real dispatch is feature 233's own pair, run and recorded: the `PigSty` modal
       against the section 233 rewrote, DRIFTED before the docstring rewrite and IN-STEP after (SC-007).
       research: rendering
 
@@ -70,19 +70,22 @@ record and the map's modals stay in step, not about how a place was built.
 
 ## Phase 5 - proving it works (FR-010, FR-011)
 
-- [ ] T14 Both checks proven to FIRE, by shape rather than against a hardcoded literal: a constructed
+- [x] T14 Both checks proven to FIRE, by shape rather than against a hardcoded literal: a constructed
       delta names the class (SC-001), the prose-vs-tag distinction holds (SC-002), a broken heading
       turns the gate red AND is refused at push on a research-only delta (SC-003, SC-010), the declared
       silence does not swallow the rule (SC-004), an unnamed section produces no report (SC-005).
       research: rendering
-- [ ] T15 Non-vacuity for BOTH matching surfaces separately - `_entry_owed.py`'s by a gate test, the
+- [x] T15 Non-vacuity for BOTH matching surfaces separately - `_entry_owed.py`'s by a gate test, the
       heading checker's by its `--selftest` at gate and push (FR-011, SC-006).
       research: rendering
-- [ ] T16 The push REFUSES on an unresolved named pair; the same push with the prose rewritten
+- [x] T16 The push REFUSES on an unresolved named pair; the same push with the prose rewritten
       proceeds; the same push with `ENTRY_DRIFT_OK="<reason>"` proceeds and the reason lands in
       `dev/bypass-log/` for `make audit`; a bare token is refused by the two-word, eight-character floor
       every other escape uses. `ENTRY_DRIFT_OK` is classified in the derived token census, which fails
       the gate on any unclassified one. (FR-004.2, SC-013)
       research: rendering
+      PROVEN TO FIRE: neutering the prose/data derivation and the declared-silence pattern fails 4 of
+      the 13 tests; restoring gives 13 green. End to end, the guard refuses an unresolved pair, refuses
+      a bare token, discharges on a reason and records it, and goes quiet when the page is restored.
 - [ ] T17 `make hooks-test`, `make done` and `make page-check` green (SC-014).
       research: rendering
