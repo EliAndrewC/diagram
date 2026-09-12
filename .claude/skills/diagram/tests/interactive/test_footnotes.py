@@ -73,11 +73,45 @@ def canon_keys() -> set[str]:
     return {m.group(1) for m in _ENTRY.finditer(src) if re.search(r"\bl7r\.md\b|\bbudgets\.md\b", m.group(2))}
 
 
+#: THE SIX REASONS A GROUNDS NOTE MAY NAME (feature 235, GM 2026-09-12). Closed on purpose: free text would make
+#: the new kind a place to put anything inconvenient, which is how a category meant to denote problems stops
+#: denoting them. Adding a seventh is a change to the spec, not a judgment at writing time.
+GROUNDS_REASONS = (
+    "measured on our own maps",
+    "the record's own silence",
+    "follows from the definitions",
+    "physical necessity",
+    "a drawing convention",
+    "this project's decision",
+)
+_GROUNDS = re.compile(r"^no source is owed:\s*(.+?)\s*(?:<!--|$)", re.S)
+
+
+def grounds_reasons(body: str) -> list[str]:
+    """The reasons a grounds note names, in order. A note may name several where a sentence rests on several."""
+    m = _GROUNDS.match(re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body).strip())
+    if not m:
+        return []
+    return [r.strip() for r in re.split(r";|,(?=\s*(?:%s))" % "|".join(map(re.escape, GROUNDS_REASONS)), m.group(1)) if r.strip()]
+
+
 def footnote_form(body: str, canon: set[str]) -> str | None:
-    """'citation', 'absence', or the defect (feature 195 FR-002). A citation links its key to an http(s) page - the
-    registry is not a page where a quote can be read - unless the key is canon; an absence note carries no key link
-    and no URL at all (its only anchor is the back link, which since feature 211 names the research page)."""
+    """'citation', 'absence', 'grounds', or the defect (feature 195 FR-002; feature 235 added the third form).
+    A citation links its key to an http(s) page - the registry is not a page where a quote can be read - unless the
+    key is canon; an absence note carries no key link and no URL at all (its only anchor is the back link, which
+    since feature 211 names the research page); a GROUNDS note reads `no source is owed: <reason>` and says there is
+    nothing to find, so like an absence note it owes no key, no link and no quotation."""
     body = re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body)
+    if _GROUNDS.match(body.strip()):
+        if "<code>" in body or 'href="' in body:
+            return "a grounds note carries no key and no link"
+        named = grounds_reasons(body)
+        unknown = [r for r in named if r not in GROUNDS_REASONS]
+        if unknown:
+            return f"names a reason that is not one of the six: {unknown!r}"
+        if not named:
+            return "a grounds note names at least one of the six reasons"
+        return "grounds"
     if _ABSENCE.match(body):
         if "<code>" in body or 'href="' in body:
             return "an absence note carries no key and no link"
@@ -110,7 +144,11 @@ def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source
     bad = []
     for fid, body in defs.items():
         form = footnote_form(body, canon)
-        if form == "absence":
+        # A GROUNDS note owes no key, no link and no quotation, exactly as an absence note does - naming the
+        # classifier without teaching THIS loop was feature 235's near miss: the first grounds note would have
+        # failed here whatever `footnote_form` returned, and the requirement would have been discovered as a red
+        # gate rather than written down.
+        if form in ("absence", "grounds"):
             continue
         key = _KEY_LINK.search(body)
         if not key or key.group(1) not in keys:

@@ -1,7 +1,7 @@
 # Feature 235 - a claim with nothing to find is not an absence
 
-**Status**: DRAFT (rewritten against the verified record; the GM reset the review counter on 2026-09-12,
-and rounds 1-3 of that count are applied)
+**Status**: ACCEPTED (rewritten against the verified record; the GM reset the review counter on 2026-09-12,
+and rounds 1-5 of that count are applied; `spec-fidelity` FAITHFUL at round 5)
 **Request**: [`request.md`](request.md), the GM's words verbatim, 2026-09-12.
 
 ## The defect
@@ -157,8 +157,8 @@ format test and the agent files found no fifth.
    `tests/interactive/test_footnotes.py` "holds the two footnote forms". The constitution is the authority
    that `research/CLAUDE.md` operationalizes, so a session reading only it is told the vocabulary has two
    words. It gains the third. **This is an AMENDMENT, not upkeep**: a principle's obligation about what a
-   footnote may be is changing, so the constitution's version is bumped and the GM's words of 2026-09-12 are
-   recorded as the ruling behind it.
+   footnote may be is changing, so the constitution's version is bumped - a MINOR, by its own policy, since an existing
+   principle is materially expanded - and the GM's words of 2026-09-12 are recorded as the ruling behind it.
 2. **`research/CLAUDE.md`** says a footnote is one of exactly two forms and gives CITATION and ABSENCE. The
    grounds note, the closed list, which reasons are exemplified and the settled state land there, and that
    sentence is corrected.

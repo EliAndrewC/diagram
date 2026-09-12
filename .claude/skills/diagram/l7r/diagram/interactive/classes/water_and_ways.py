@@ -168,13 +168,17 @@ class VillageLane(Kind):
     And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main
     village of the district the settlement belongs to.
 
-    Note: Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an
-    ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under
-    the 9 ft of the one cart road the record does measure.
+    Note: Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a
+    wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
+    The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
+    13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
+    because the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice
+    hamlet.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane -
-    laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one
-    cart road the record does measure.
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a wheelbarrow's width,
+    with the connector kept under the 9 ft of the one cart road the record does measure. The one measured
+    figure the record has for such a way - blind alleys of 2 to 4 m reaching the house lots of a surveyed
+    village - is a twentieth-century dry-plain village in the north, and the map draws below it.
 
     Name: village lane
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur

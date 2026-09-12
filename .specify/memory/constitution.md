@@ -1547,7 +1547,7 @@ stays as the record of the search - but nothing is cited. The one exception is t
 point, quoted in full in their footnote and linked to their registry entry (`URL: none`) - the GM's ruling, 2026-09-07:
 *"it is correct to make L7R setting notes an exception to the citation rule, so that should indeed be a documented exception"*. The `quote-check` agent
 returns READABLE / NOT-READABLE per footnote and a NOT-READABLE footnote does not land as a citation;
-`tests/interactive/test_footnotes.py` holds the two footnote forms.
+`tests/interactive/test_footnotes.py` holds the footnote forms. **There are THREE** (GM 2026-09-12, feature 235: *"what can we do in the future to not label things like decisions that we have made as 'absent'? ... something being 'absent' implies that there is a action that we need to take ... if we're counting things that are not actually problems in a category that is meant to denote problems, then we're just gonna keep getting confused"*). A CITATION quotes a passage and links a page where it can be read. An ABSENCE note says no readable source was found, and it means WORK IS OWED - it is the backlog, and only it. A **GROUNDS note** (`no source is owed: <reason>`) is for a sentence with nothing to find: a number measured off this project's own drawings, a choice it made, a drawing convention, a necessity of definition or physics, or a statement that the record is silent. Its reason comes from a closed list, and it may **never** carry a claim about how a place was built, farmed, planted, governed or lived in, nor a sentence the record labels a guess about the physical world - those owe a citation or an absence note however they are dressed. An absence note searched to exhaustion by two dated passes may be marked `settled` and leave the backlog, and re-opens on anything that changes what can be read.
 
 **QUOTE THE TRANSLATION** (v2.21.0, GM 2026-09-07, feature 202): *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"* A passage in another language is quoted in
 English translation - 「English translation」 (translated from the Japanese by this project; original: 「原文」) - the note naming the language and the
@@ -2246,4 +2246,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.25.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-12
+**Version**: 2.26.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-12
