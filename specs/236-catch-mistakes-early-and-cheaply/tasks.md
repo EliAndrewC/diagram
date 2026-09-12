@@ -150,7 +150,7 @@ scan, and the Review history records which.
       (SC-012) - recorded here, per check, as it is done.
       research: rendering
       verify: DONE. 13 of 13 mechanisms broken one at a time and each watched go RED, then restored; the script and its table are in the commit message
-- [ ] T24 `make hooks-test`, `make quick`, `make done` and `make page-check` green (SC-013); push
+- [x] T24 `make hooks-test`, `make quick`, `make done` and `make page-check` green (SC-013); push
       through `scripts/sync-with-main.sh done`.
       research: rendering
-      verify: the whole diff re-read for convention misses before the gate, not after it
+      verify: DONE. make hooks-test (22 suites), make quick (3,432 tests), make done (whole suite, every pool map, all three coverage floors, roll census green) and make page-check all green; amendment rounds 1 and 2 recorded, round 2 FAITHFUL

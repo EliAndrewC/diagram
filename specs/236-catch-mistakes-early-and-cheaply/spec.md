@@ -264,7 +264,6 @@ are verbatim command corpora replayed by suites, so the directory-wide form is t
 aside, taken: the hook half of D8 had no case of its own, so a widening or a loss of it would have
 gone unnoticed.
 
-
 **Round 5** (`spec-fidelity`, changed text + contradiction scan): **FAITHFUL**, with four small record
 fixes taken before implementation. R4 carried a stale paragraph beside its replacement; R8 still said
 "zero of 42" where the finding is zero under every walker; the committed walker hid a backtick behind an
