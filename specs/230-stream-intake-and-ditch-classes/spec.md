@@ -9,7 +9,9 @@ ladder and the fork (research/water.html, "Drawn width is RANK" and "The head-ra
 
 ## Summary
 
-Three things the GM asked for on the reference hamlet, all at the head and the foot of the comb field:
+Three things the GM asked for on the reference hamlet, all at the head and the foot of the comb field - and one
+consequence of the third that reaches past the field: once the brook runs on down the fan's flank instead of
+ending at the intake, the settlement is seated clear of it (FR-006).
 
 1. **The one `field ditch` class becomes two.** The ditches that FEED the paddies (the intake, the head race,
    the supply canals, the delivery ditches) and the ditches that DRAIN them (the collector along the low line
@@ -145,6 +147,18 @@ Three things the GM asked for on the reference hamlet, all at the head and the f
   stream through its crop, strands its brook, or loses households to the brook's corridor (the cohort audit's
   shortfall report).
 
+- **FR-006 The brook's new course changes where the cluster may be seated, and that may not cost the map a
+  household.** Because FR-004's brook runs on down a flank of the field instead of ending at the intake, a field
+  margin can have a stream through it. `seat_cluster` therefore scores a margin down in proportion to how near
+  the brook runs to the band, and STRIKES OUT a margin the brook DIVIDES, the scored form deciding only when
+  every margin is divided - so a hamlet the brook crosses whatever it does is still seated. On the reference
+  hamlet this moves the whole cluster - the fifteen houses, both wells, the three byres, the lane web, the
+  notice board, the windbreak and the copse - to the other margin, while the field, its ditches and the tameike
+  stay where they are. The rule may not cost a household: where a roll seats fewer households than its spec
+  declares AND the brook steered its seat - by either half of the rule, the strike-out or the proximity penalty
+  - the map is rolled again with the brook ignored at the seat, and that roll is kept only if it seats MORE.
+  Which way each map came down is recorded on it (`meta.seat_divided`).
+
 ## Success criteria
 
 - **SC-1** On Inashiro's page, hovering the collector lights the drain and its outfall run and nothing of the
@@ -164,6 +178,9 @@ Three things the GM asked for on the reference hamlet, all at the head and the f
 - **SC-4** The head race and the intake on every comb pool map follow a recorded, footnoted finding - or a GUESS
   the record labels and the GM has been told about - and the physical task's five boxes are ticked with their
   verdicts.
+- **SC-6** Across the 48-seed cohort every seed seats every household its spec declares - the pre-feature
+  baseline of 48 of 48 restored, not approached - and no pool map or cohort seed leaves a homestead across the
+  brook from the lanes, wells and board that serve it. Inashiro's notes record that the cluster moved, and why.
 - **SC-5** `make done` green; `settlement-review` PASS on every pool map it reads; no regression against the
   detached-worktree baseline; the perf band explained and confirmed if one is reached.
 
@@ -216,11 +233,31 @@ Three things the GM asked for on the reference hamlet, all at the head and the f
   cannot tell which is the stream. That is a map-convention question and the palette is shared by every map,
   so it is the GM's to rule rather than this delta's to change.
 
+- **D9 A hamlet does not straddle its own brook - and that rule may not cost it a household.** The brook runs
+  past the fan now, so a field margin can have a stream down the middle of it; the fourth and fifth review
+  passes measured what a cluster seated there looks like (a homestead, its byre, two threshing yards and their
+  gardens on the far bank, every lane and both wells on the near one, no deck anywhere on 2,000 ft of water).
+  So `seat_cluster` scores a margin down when the brook runs near the band and strikes it out when the brook
+  divides the band. The 48-seed cohort then measured the other side of it against the pre-feature baseline -
+  48/48 became 46/48 - because the ground the brook rules out is ground the houses had. Both outcomes are
+  defects, so neither rule is absolute: a roll that comes up short and was steered by the brook is rolled again
+  with the brook ignored at the seat, and kept only if it seats MORE. Which way a map came down is recorded on
+  it (`meta.seat_divided`). Measurements and the per-seed mechanism: research R5.
+- **D10 A rejected re-roll is no longer the manifest the report carries.** Found while diagnosing D9's
+  shortfall and older than this feature: `generate`'s re-roll loop relied on the kept attempt rolling last,
+  which holds only when an `out_base` lets it re-emit the keeper - and a cohort passes none, so the report's
+  manifest could be a roll the loop had just rejected, while its verdict lines were the kept roll's. The
+  cohort audit reads the seated count off that manifest. The keeper is snapshotted and restored instead
+  (constitution XIV: a defect found in the course of other work is fixed in that work).
+
 ## Out of scope
 
 - The drain's outfall and the pond's set-back: neither moves. The drain's continuation changes in class, record
   kind and drawn width, and in one way in its route - a run that reached the frame may end at the passing brook
   instead (FR-002); nothing else about where the drain runs changes.
+- The settlement's seat is NOT out of scope: FR-006 moves it, and only for the brook. Nothing else about where
+  the settlement stands changes - the band's size, its shape knob, the wind and slope scoring and every other
+  hard rule are as they were.
 - The legacy hand-authored pool, which is frozen and never regenerated.
 - The page's speed, and any change to the hit-box mechanics beyond the two new rows.
 

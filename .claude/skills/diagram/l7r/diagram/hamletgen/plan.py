@@ -186,6 +186,14 @@ class SitePlan:
     title_pocket_outside: bool = False  # the reservation lies OUTSIDE the content and the crop must take it in (hamletgen.stage_frame)
     placed: int = 0
     acres: float = 0.0
+    # THE BROOK'S SAY IN THE SEAT (feature 230). `seat_cluster` scores a field margin down when the
+    # brook runs near the band and strikes it out entirely when the brook DIVIDES the band, because a
+    # cluster seated there stands in two halves with no crossing between them. Both can cost a
+    # household - the ground the brook rules out is ground the houses had - so neither is the last
+    # word: a roll counts the margins the brook steered it away from, and `generate` rolls again with
+    # the brook ignored at the seat when the map came up short, keeping whichever roll seats more.
+    seat_ignores_brook: bool = False
+    seat_brook_steered: int = 0
 
     @property
     def fall(self) -> Pt:

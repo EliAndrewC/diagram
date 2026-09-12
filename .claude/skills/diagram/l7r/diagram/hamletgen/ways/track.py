@@ -224,6 +224,10 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it
     )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
+    # WHICH SIDE OF THE BROOK RULE THIS MAP CAME DOWN ON (feature 230): true when the seat stands on a
+    # margin the brook divides, which happens only when every margin does, or when refusing them cost the
+    # map a household and `generate` rolled it again with them allowed.
+    s.M["meta"]["seat_divided"] = bool(seat.get("divided"))
     # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
     #
     # The wind is derived from the slope (cold air drains off the high ground) and the cluster is

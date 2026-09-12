@@ -52,7 +52,7 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     return hit / total
 
 
-def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Poly = ()) -> dict[str, Any]:
+def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
     背山面水, "back to the hill, face the water": a farming settlement stands with its back to the
@@ -192,12 +192,12 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # this one, so the seat can simply see it. Scored, not refused: a band the brook merely clips at one
         # end should lose to the next margin along, while a hamlet whose every margin is crossed still gets
         # seated - the same shape as the wet-ground foul above, and it reads the band's own sample points.
-        if brook:
+        if brook and not plan.seat_ignores_brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
-            _bs = [(a[0] - mid[0]) * -ny + (a[1] - mid[1]) * nx for a in brook]
             _sides = {1 if ((q[0] - mid[0]) * -ny + (q[1] - mid[1]) * nx) > 0 else -1 for q in _bp for a, b in zip(brook, brook[1:], strict=False) if seg_dist(q[0], q[1], a, b) < dep * 2.0}
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)
             score -= 3.0 * crossed
+            plan.seat_brook_steered += crossed > 0.0 or len(_sides) > 1
             if len(_sides) > 1:
                 # A DIVIDED BAND IS REFUSED, not discounted. Scoring it down was the first cut and it left one
                 # homestead of fifteen on the far bank with no crossing anywhere on the brook, every lane, both
@@ -205,6 +205,17 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
                 # the one the water runs through. Two passes: the divided margins are struck out, and only if
                 # EVERY margin is divided does the scored form decide, so a hamlet the brook runs across
                 # whatever it does still gets seated rather than raising.
+                #
+                # ...AND NEITHER THE STRIKE-OUT NOR THE PENALTY MAY COST A HOUSEHOLD (cohort seeds 15 and 22,
+                # measured against the pre-feature baseline: 48/48 became 46/48). The ground the brook rules out
+                # is ground the houses had, and the two seeds failed by the two different halves of this rule -
+                # seed 15 on the strike-out (the best margin left held 15 of 16) and seed 22 on the PENALTY
+                # alone, its band never struck out at all, merely scored below a tighter margin across the map
+                # that held 8 of 10. So both halves are counted as the brook steering the seat, and `generate`
+                # rolls the map again with the brook ignored HERE when the first roll came up short, keeping that
+                # roll only if it seats more. A hamlet that loses a household is the worse map - the household is
+                # missing from it - while one the water divides is merely awkward; and which way a map came down
+                # is recorded on it (`meta.seat_divided`) rather than decided silently either way.
                 divided.append((score, mid, (nx, ny)))
                 continue
         if best is None or score > best[0]:
@@ -223,7 +234,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     # fronts the paddy across its lane rather than standing in the rice.
     cx = anchor[0] + out[0] * (dep + 12.0)
     cy = anchor[1] + out[1] * (dep + 12.0)
-    return {"cx": cx, "cy": cy, "along": along, "out": out, "lat": lat, "dep": dep, "anchor": anchor}
+    return {"cx": cx, "cy": cy, "along": along, "out": out, "lat": lat, "dep": dep, "anchor": anchor, "divided": any(anchor == d[1] for d in divided)}
 
 
 def _arm_hit(a: Poly, b: Poly) -> Pt | None:

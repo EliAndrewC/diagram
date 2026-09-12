@@ -54,7 +54,7 @@ Three invariants the split does NOT touch:
 | `hinterland/` | STAGE 7 - the ground between everything. a PACKAGE with its own [`CLAUDE.md`](hinterland/CLAUDE.md) index since feature 173. Read that first, then load one of: `frame.py` (`content_box`, `title_pocket`), `parcels.py` (`open_ground_patches` and its fit tests), `bamboo.py` (`bamboo_blocked`, `bamboo_seats`), `belt.py` (`belt_polygon`), `stages.py` (the four stage entry points) |
 | `pondstock.py` | STAGE 6b (feature 150 A3/A4) - `stage_pond_stock`: a dike-pond hamlet's pig sties and duck pens on the ponds nearest the houses (`STY_SHARE` / `PEN_SHARE` are GUESS bands; the glyphs live in `settlement/farm_fixtures.py` `PondStockMixin`) |
 | `frame.py` | THE CLOSING STAGES - `stage_crossings`, `stage_frame` (crop-to-content and the title), `stage_notice` (the kosatsuba, the last map FEATURE - feature 154), and `stage_labels` (the LABEL PHASE, the last stage of all - feature 157: every caption is seated here, against the finished map, because *"how we place labels will always depend on what else is on the map"*) |
-| `driver.py` | the pipeline and everything that drives it (and, since feature 133 T33, WHICH ROLL a map is: `generate` re-rolls a map that strands a farmhouse, and every manifest carries `meta.roll_attempt` / `meta.roll_after`, every report line `attempt N (re-rolled after: ...)` - a re-rolled map has a different connector and web, and on T31 attempt four was read as a session's own fix for most of a task): the `STAGES` tuple, `Report`, `build`, `generate` (which finishes AND gates in-process), `cohort` (fanned out across processes since 2026-08-16 - `generate` IS the worker; `jobs=1` forces serial, which is what in-gate callers want) and `main`. `default_jobs` - the one cpus-minus-2 rule, reused by `cohort_audit.py` - moved to [`../sitegen/jobs.py`](../sitegen/CLAUDE.md) and is imported back in here, so `hamletgen.default_jobs` still resolves |
+| `driver.py` | the pipeline and everything that drives it - including the two RE-ROLLS, which are the only places a map is rolled more than once: a map that strands a farmhouse is re-rolled with that ground forbidden (feature 133 T33), and a map that seats fewer households than it declared, on a seat the brook steered, is re-rolled with the brook ignored at the seat and kept only if it seats more (feature 230; `plan.seat_brook_steered`, `meta.seat_divided`). Both keep the BETTER roll and both snapshot it, because the report's manifest is what a cohort reads. (And, since feature 133 T33, WHICH ROLL a map is: `generate` re-rolls a map that strands a farmhouse, and every manifest carries `meta.roll_attempt` / `meta.roll_after`, every report line `attempt N (re-rolled after: ...)` - a re-rolled map has a different connector and web, and on T31 attempt four was read as a session's own fix for most of a task): the `STAGES` tuple, `Report`, `build`, `generate` (which finishes AND gates in-process), `cohort` (fanned out across processes since 2026-08-16 - `generate` IS the worker; `jobs=1` forces serial, which is what in-gate callers want) and `main`. `default_jobs` - the one cpus-minus-2 rule, reused by `cohort_audit.py` - moved to [`../sitegen/jobs.py`](../sitegen/CLAUDE.md) and is imported back in here, so `hamletgen.default_jobs` still resolves |
 
 ## Adding a stage
 
@@ -96,6 +96,12 @@ Two ways to get a green you have not earned, both of which have bitten inside on
 
 **So: reproduce with the same entry point.** If the gate found it, call `cohort(..., first_seed=41)`;
 if `cohort_audit` found it, call `generate()` on the same spec and gate the finished manifest.
+
+**One seed of a cohort is `make cohort N=1 SEED=<n>`** (feature 230). `cohort_audit` has always taken a first
+seed and the target never exposed it, so reproducing seed 15's failure meant re-rolling all 48 - which is the
+opposite of what the paragraph above asks for. The spec a cohort member is rolled from is
+`HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=10 + (seed * 7) % 11)`, so `make hamlet ARGS="--name
+Audit-15 --seed 15 --households 16 --out <path> --no-render"` gives you the same map with a manifest to read.
 
 ## Verifying a change
 

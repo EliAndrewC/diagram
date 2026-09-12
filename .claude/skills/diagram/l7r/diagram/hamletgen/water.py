@@ -203,7 +203,19 @@ def _fit_at_aspect(
     pts: list[tuple[float, float]] = []  # (k, acres) of every carve so far, for the power-law step
     _trim_a = BROOK_FAN_TRIM if plan.brook_side < 0 else 1.0
     _trim_b = BROOK_FAN_TRIM if plan.brook_side > 0 else 1.0
-    k = 1.0
+    # THE TRIM IS A SHAPE CHANGE, AND THE SIZE SEARCH MUST NOT MEET IT AS A SIZE CHANGE (feature 230).
+    # Cutting one flank's canal to `BROOK_FAN_TRIM` takes about (1 - trim) / 2 of the fan's area with it, so
+    # at the same `k` a trimmed fan draws ~14% fewer acres - and the bracket's own ceiling comes down with it.
+    # Measured before this line existed: seeds near the acreage ceiling SATURATED at every aspect (the largest
+    # fan the bracket allows still short of the target), so the search spent two carves proving it at each
+    # aspect and then re-ran the best one unprobed - 15 carves on cohort seed 25 against 3 on the same seed
+    # before the feature, and +14.0% on the whole perf cohort. Scaling the bracket by the area the trim
+    # removes puts the search back where it was: `k` still means "the fan that lands the target", the trim
+    # still cuts the brook's flank away, and the acreage solve still makes it up on the other flank and down
+    # the fall - it simply no longer has to discover that it must.
+    _comp = math.sqrt(2.0 / (1.0 + BROOK_FAN_TRIM)) if (_trim_a < 1.0 or _trim_b < 1.0) else 1.0
+    lo, hi = lo * _comp, hi * _comp
+    k = _comp
     for _ in range(rounds):
         k = min(max(k, lo + 1e-3), hi - 1e-3)
         carve = carve_comb(
@@ -476,14 +488,12 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     # angle is measured off a heading the brook is actually on
     out: Poly = [(sluice[0] + dx * BROOK_TAP_RUN, sluice[1] + dy * BROOK_TAP_RUN)]
     stray, stride = BROOK_WANDER / 2.0, (umax - u0 - BROOK_TAP_RUN) / steps
-    prev_v = v0 + skirt
     for i in range(1, steps + 1):
         u = u0 + BROOK_TAP_RUN + stride * i
         stray, swing = _wander(rng, stray, swing)
         floor = _crop_edge(segs, u, stride + 40.0, v0) + skirt
         v = _v_within(u, floor, floor + stray, (dx, dy), (px, py), box)
         out.append((u * dx + v * px, u * dy + v * py))
-        prev_v = v
     # ...and off the frame from the last station, still wandering, the run measured along the fall from there.
     # THE FIRST EXIT LEG KEEPS THE COURSE'S OWN HEADING and only then turns onto the fall: driving it straight
     # downhill from a station that is well out to the side puts a corner exactly where the brook should be

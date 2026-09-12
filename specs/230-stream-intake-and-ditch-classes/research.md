@@ -155,9 +155,9 @@ the straight seat still winning whenever it is clear) and the pond came back. An
 held the pond a circle of its LONG radius from the brook, half again the pond across its short axis; it is
 the pond's own ellipse plus a rim's margin now.
 
-## R4 The course, after three review passes (2026-09-12)
+## R4 The course, after five review passes (2026-09-12)
 
-`settlement-review` read the maps three times and its findings drove the whole of the brook's geometry. What the
+`settlement-review` read the maps five times and its findings drove the whole of the brook's geometry. What the
 course is, in the end: a walk down the fall in the fall's own frame, each station held outside the crop's
 CROSS-SECTION at that point by a skirt, wandering on a seeded reflecting walk, bounded to the field's own extent
 so it stays on the sheet, corner-cut once so a vertex becomes two bends, and running free of the bound only in
@@ -171,8 +171,8 @@ The measurements, pool-wide, against what each pass found:
 |---|---|---|---|---|
 | brook vertices in cultivated ground | 15 of 25 plots on one map | 1 | 1 | **0 on every map** |
 | the course, in the cropped view | - | 2 to 7 pieces | 1 to 3 pieces | **1 piece on every map** |
-| sharpest turn | 67 deg round a 300 ft straight | 83 deg | 83 to 100 deg | **52, 63, 53 deg; 121 on Kashikawa** |
-| median turn | - | 9 to 34 deg | 13 to 34 deg | **2, 11, 12, 17 deg** |
+| sharpest turn | 67 deg round a 300 ft straight | 83 deg | 83 to 100 deg | **49.3, 48.6, 51.9 deg; 104.5 on Kashikawa** |
+| median turn | - | 9 to 34 deg | 13 to 34 deg | **4.1, 9.1, 13.4, 15.4 deg** |
 | turns past 70 deg | - | up to 16 on one map | up to 16 | **0 on three maps, 2 on Kashikawa** |
 | the offtake angle a reader measures | 64 and 46 deg | 64 and 46 | 35 | **35 on every map, the record's own figure** |
 | homesteads across the water from their lanes | - | 2, no crossing | 1, no crossing | **0** |
@@ -186,11 +186,69 @@ fraction of the leg, so a turn whose other arm is short is rounded too; the appr
 the rest; and the reach that leaves the frame is exempt from the bound that keeps the rest on the sheet, since
 holding a leaving course inside the picture is what folded it back on itself.
 
-**What is left, measured and accepted.** Kashikawa keeps one turn of 105 degrees where its course meets the frame
-bound and slides along it; every other turn on that map is 4 degrees, and the three other maps' sharpest are 49,
-49 and 52. The cause is the bound itself: on a map whose land falls on a diagonal the bound is a box in the
+**What is left, measured and accepted.** Kashikawa keeps one turn of 104.5 degrees where its course meets the frame
+bound and slides along it; that map's median turn is 4.1 degrees, and the three other maps' sharpest are 49.3,
+48.6 and 51.9. The cause is the bound itself: on a map whose land falls on a diagonal the bound is a box in the
 sheet's own axes and the course runs across it, so where they meet the course must turn. Two ways out were priced
 and neither belongs to this feature: loosen the bound, which puts part of the course back outside the picture -
 the defect measured at 67% of one brook in three pieces - or build the course in the frame's axes from the start,
 which is a different construction and would move every map again. It is recorded here rather than left for a
 reader to find.
+
+**The last two passes found nothing more about the course, and two things about what stands beside it.** Pass 4
+asked for the seat and the corner cut, both above; pass 5 read the result and said Kashikawa's remaining turn was
+acceptable as drawn. What it found instead was that Inashiro had no drawn way to its rice at all. The spur to the
+field is the one lane fragment that serves no HOUSE, and both orphan sweeps ask whether every house a fragment
+serves is served elsewhere - so a fragment serving only the field answers yes vacuously and is dropped. The spur
+is flagged now and kept exactly as a house's only way is, and the length the clip leaves is recorded on every map
+whether the spur is drawn or not (`meta.field_spur_ft`), which is how three maps with no path to their own rice
+became visible rather than staying silent (measured and deferred in `future-work/farming-communities.md`). Pass 5's
+other finding is the page's, not the map's: lighting a watercourse repaints the footbridge and the weir that cross
+it, measured and deferred in `future-work/cross-cutting.md` against feature 201's own priced-and-declined fix.
+
+The course as it stands, measured on the four comb maps the day the feature landed:
+
+| map | brook vertices in cultivated ground | pieces in the cropped view | sharpest turn | median turn | turns past 70 deg |
+|---|---|---|---|---|---|
+| Inashiro | 0 | 1 | 49.3 | 15.4 | 0 |
+| Kashikawa | 0 | 1 | 104.5 | 4.1 | 2 |
+| Mizuguchi | 0 | 1 | 48.6 | 13.4 | 0 |
+| Sawada | 0 | 1 | 51.9 | 9.1 | 0 |
+
+## R5 What the seat rule cost, and what it costs now (2026-09-12)
+
+The fourth review pass was answered by seating the hamlet on ONE bank of its brook - `seat_cluster` scores a
+margin down when the brook runs near the band and strikes the margin out entirely when the brook DIVIDES it.
+That answered the review and was never measured against a cohort until this task, which is where the price
+showed up.
+
+BASELINE, taken in a detached worktree at the pre-feature commit (`git worktree add --detach /tmp/base230
+7f4113a3`), same command, same 48 seeds:
+
+| | seeds passing the whole gate | the residue |
+|---|---|---|
+| before feature 230 | 48 of 48 | - |
+| with the seat rule as pass 4 left it | 46 of 48 | seed 15 seated 15 of 16, seed 22 seated 8 of 10 |
+| with the shortfall re-roll | 48 of 48 | - |
+
+The two seeds failed by the two DIFFERENT halves of one rule, which is why the first fix only half worked.
+Seed 15 failed on the strike-out: the best undivided margin left to it held fifteen bundles where sixteen were
+declared (reproduced with `make cohort N=1 SEED=15`, which this task added to the target so a cohort member can
+be re-rolled without a 48-seed sweep). Seed 22's band was never struck out at all - the brook merely ran near it,
+the 3.0 crossing penalty scored it below a margin clear across the map, and that margin held eight of ten. So a
+rule stated as "the settlement does not straddle its stream" was also, unstated, "the settlement may lose a
+household to avoid its stream".
+
+THE RESOLUTION, and why it is not a preference: both readings are defects the GM would see. A hamlet in two
+halves with no crossing was measured by two review passes; a hamlet missing a household is missing a household.
+Neither can be waived, so the MAP decides - a roll that comes up short and whose seat the brook steered is rolled
+again with the brook ignored at the seat, and that roll is kept only if it seats more (`generate`; the counting
+is `plan.seat_brook_steered`, the outcome `meta.seat_divided` on every map). Across the pool and the 48-seed
+cohort the second roll is needed by two maps and by neither pool hamlet, so the rule holds everywhere it can.
+
+FOUND ON THE WAY, and fixed with it: the re-roll loop handed back the LAST roll's manifest rather than the kept
+one. The re-emit that corrects this needs an `out_base`, and a cohort passes none - every member finishes into a
+scratch directory - so a rejected re-roll was the manifest the report carried, and `cohort_audit` reads the seated
+count off exactly that manifest. The verdict lines were the kept roll's and the numbers beside them the rejected
+roll's. It predates this feature and is fixed here (constitution XIV).
+

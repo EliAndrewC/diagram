@@ -392,10 +392,16 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
-cohort:         ## [maps] roll N seeds and report every failure      N=48
-##  N=<seeds>  how many seeds to roll (default: 48)
+# GUARD_EDIT_OK: a NEW OPERATION, nothing loosened - `cohort_audit` has taken `--seed` (the FIRST seed)
+# since it was written, and the target never exposed it, so the one thing the hamletgen index tells a
+# session to do after a cohort failure - "reproduce with the same entry point" - could not be done for
+# any seed but 1 without a 48-seed sweep. Feature 230 needed exactly that for the two seeds its cohort
+# failed on. The reference-settlement gate above it is untouched.
+cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=<first seed>]
+##  N=<seeds>   how many seeds to roll (default: 48)
+##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
 	$(REF_FIRST)
-	$(RUN).tools.cohort_audit --count $(or $(N),48)
+	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),)
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -
