@@ -125,7 +125,7 @@ def test_the_tool_launches_its_own_browser_when_none_is_lent(tmp_path: Any, monk
     class _PW:
         chromium = types.SimpleNamespace(launch=lambda: _Browser())
 
-        def __enter__(self) -> "_PW":
+        def __enter__(self) -> _PW:
             return self
 
         def __exit__(self, *_a: object) -> None:
