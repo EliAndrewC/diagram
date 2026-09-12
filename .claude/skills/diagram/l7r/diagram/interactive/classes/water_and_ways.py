@@ -119,18 +119,18 @@ class Pond(Kind):
     it lies: above the fields and feeding them, it is the reservoir their water is drawn from; at the field's
     low foot, fed by the drainage ditch, it is where the water leaving the paddies is gathered.
 
-    Why: The reservoir is the tameike of the record - built by dividing off a valley mouth with a dike, at an
+    Why: The reservoir is the Japanese tameike - built by dividing off a valley mouth with a dike, at an
     elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through
     the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
     that has passed through the plots, because before modern consolidation that water was used again below
     rather than thrown away.
 
-    Note: The reservoir's form, siting and single outlet are read (Tabayashi 1986, the Kagawa tameike documents);
-    a pond at the field's foot is the water sink the map declares, and its bank and outlet are not drawn from a
-    surveyed example.
+    Note: The reservoir's form, siting and single outlet are documented (Tabayashi 1987, the Kagawa tameike documents);
+    a pond at the field's foot is where this map chooses to gather the water leaving its fields, and its bank and
+    outlet are not drawn from a surveyed example.
 
-    Caveat: a pond at the field's foot is the water sink the map declares, and its bank and outlet are not drawn from
-    a surveyed example.
+    Caveat: a pond at the field's foot is where this map chooses to gather the water leaving its fields, and its bank and
+    outlet are not drawn from a surveyed example.
 
     Name: pond
     Covers: `pond` - the tameike

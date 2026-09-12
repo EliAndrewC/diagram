@@ -4417,5 +4417,23 @@ window.RECORD_GLOSSARY = [
    "sand sluice"
   ],
   "def": "The gate beside an intake through which the sand that settles there is flushed back down the stream."
+ },
+ {
+  "term": "four gods",
+  "variants": [
+   "four-gods formulation",
+   "shijin soo",
+   "shijin-soo",
+   "four gods"
+  ],
+  "def": "The East Asian siting formula that names a good site by four guardian beasts of the directions: flowing water on the left (the Azure Dragon), a long road on the right (the White Tiger), a pond in front (the Vermilion Bird) and hills behind (the Black Tortoise)."
+ },
+ {
+  "term": "Important Cultural Landscape",
+  "variants": [
+   "Important Cultural Landscapes",
+   "Important Cultural Landscape"
+  ],
+  "def": "A national designation in Japan given to a whole area rather than to one building; Harie's spring-water district was selected as one together with neighboring Shimofuri."
  }
 ];

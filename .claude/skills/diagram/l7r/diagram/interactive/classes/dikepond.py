@@ -81,19 +81,21 @@ class MulberryDike(Kind):
 
 class PondCanal(Kind):
     """
-    What: The canals of a dike-pond settlement: the main that carries water in from the reservoir and the laterals
+    What: The canals of a dike-pond settlement: the main canal that carries water in from the reservoir and the laterals
     between the rows of ponds, which every pond both takes water from and lets water out into.
 
     Why: A dike-pond is not a sealed basin and its canals are not a paddy's supply net. Each pond is joined to the
     canal network through gates in its dike, taking water in at its high side and letting it out at its low side, so
     the same canal carries water to one pond and away from the next - the network the whole system exchanges water
-    with, running in series from the high intake to the low outfall. Only the ring drain round the block, which takes
+    with, running in series from the high intake to the low outfall. Only the ring drain around the block, which takes
     everything to the outfall, carries water one way.
 
-    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is read; which pond's gate
-    opens onto which canal is the engine's inlet-high, outlet-low rule, not a surveyed plan.
+    Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; which pond's
+    gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its low side - not a
+    surveyed plan.
 
-    Caveat: which pond's gate opens onto which canal is the engine's inlet-high, outlet-low rule, not a surveyed plan.
+    Caveat: which pond's gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its
+    low side - not a surveyed plan.
 
     Name: pond canal
     Covers: `field_ditches` whose role is not `drain` on a dike-pond field - the main from the reservoir and the laterals between the ponds
@@ -114,11 +116,11 @@ class PondSluice(Kind):
     each pond taking water in at its high side and letting it out at its low side. The stub drawn here is
     the cut in the dike; the boards themselves are a few inches wide and are not drawn at this scale.
 
-    Note: The sluice's form is read from the FAO pond-construction manual; its position on each pond is the
-    engine's inlet-high, outlet-low rule from the record, not a surveyed plan.
+    Note: The sluice's form is documented in the FAO pond-construction manual; its position on each pond follows the
+    record's rule - water in on the pond's high side, out on its low side - not a surveyed plan.
 
-    Caveat: its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed
-    plan.
+    Caveat: its position on each pond follows the record's rule - water in on the pond's high side, out on its low side - not a
+    surveyed plan.
 
     Name: pond sluice
     Covers: the short channel stubs of `dikepond_sluices` - where each pond's dike is cut to the canal
