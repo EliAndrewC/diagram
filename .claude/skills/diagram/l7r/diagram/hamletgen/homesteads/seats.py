@@ -15,7 +15,7 @@ from ..plan import SitePlan
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
 
 
-def front_row(plan: SitePlan, count: int, standoff: float = 46.0) -> list[Pt]:
+def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = None) -> list[Pt]:
     """Seats for the row of homesteads that FRONTS the field, offset from the field OUTLINE itself.
 
     Offsetting from the cluster band's straight near face is not the same thing and is not good
@@ -24,9 +24,11 @@ def front_row(plan: SitePlan, count: int, standoff: float = 46.0) -> list[Pt]:
     within 165 px of the outline) then fails on a map whose cluster is plainly beside its paddy.
     Following the outline also draws better - a farming hamlet's front row bends with the field edge
     the way a real one does, rather than ruling a straight line across a curved margin."""
+    seat = plan.seat
+    if chains:
+        return _front_row_from_chains(plan, standoff, chains)  # feature 226: from the site boundary, not the paddy envelope
     env = plan.envelope
     cen = centroid(env)
-    seat = plan.seat
     ax, ay = seat["along"]
     # the stretch of outline this cluster fronts: everything within the band's lateral reach
     # The row spans 1.6x the band's own length along the outline. Confined to `lat` exactly, all its
@@ -80,6 +82,36 @@ def front_row(plan: SitePlan, count: int, standoff: float = 46.0) -> list[Pt]:
     # households` break stops it before it reaches the far ends - which is exactly what
     # `lane_frontage` already does ("ordered from the cluster's center outward, so the lanes fill
     # from their busy end"), and a nucleated hamlet grows the same way, outward from its middle.
+    return sorted(out, key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))
+
+
+def _front_row_from_chains(plan: SitePlan, standoff: float, chains: Any) -> list[Pt]:
+    """The front row offset from the SITE BOUNDARY's chains rather than the paddy envelope (feature 226 FR-003):
+    the chains are the house side of the whole blob - the hem, the marsh, the pond and the no-build ground
+    included - so a seat offset from them by `standoff` along the chord's outward normal stands on buildable
+    ground by construction, where a seat offset from the paddy's own outline landed on the hem one time in two.
+    Sampled at one bundle pitch along the chains (the honest spacing, as `front_row` argues), confined to the
+    stretch the cluster fronts (the rolled shape's wrap, as there), ordered center-out (as there), at most 64."""
+    seat = plan.seat
+    ax, ay = seat["along"]
+    reach = seat["lat"] * CLUSTER_ROW_SPAN.get(plan.cluster_shape or "crescent", CLUSTER_SPAN_FACTOR)
+    out: list[Pt] = []
+    for chain in chains:
+        carry = 0.0
+        for a, b, n in chain:
+            seg = math.hypot(b[0] - a[0], b[1] - a[1])
+            if seg <= 1e-9:
+                continue
+            t = carry
+            while t <= seg:
+                px, py = a[0] + (b[0] - a[0]) * t / seg, a[1] + (b[1] - a[1]) * t / seg
+                if abs((px - seat["anchor"][0]) * ax + (py - seat["anchor"][1]) * ay) <= reach:
+                    out.append((px + n[0] * standoff, py + n[1] * standoff))
+                t += BUNDLE_PITCH
+            carry = t - seg
+    if len(out) > 64:
+        step = len(out) / 64.0
+        out = [out[int(i * step)] for i in range(64)]
     return sorted(out, key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))
 
 

@@ -9,6 +9,7 @@ from l7r.diagram.settlement import Settlement
 
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, SUN_CORRIDOR_FT, WEST_SUN_FT, Pt
 from ..plan import SitePlan
+from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
@@ -49,6 +50,23 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # the two sun rules are one decision, made at the same place, for the same reason.
     s.west_sun_lane(WEST_SUN_FT)
     seat = plan.seat
+    # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
+    # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
+    install_site_boundary(s, plan)
+    s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0}
+    _hw0, _hh0 = (
+        s.px(46) * 0.85,
+        s.px(28) * 0.85,
+    )  # the SMALLEST house the placer may roll: the pre-test must never refuse a seat the placer could take (a first cut used the largest and seated 7 of 10 on a toy)
+
+    def _pretest(x: float, y: float) -> bool:
+        """A candidate's cheap refusal before the placer is asked (feature 226 FR-003): a house-sized box on the house
+        side of the chains and clear of the corridors, and clear of every placed bundle's box. Counted as a candidate."""
+        s._seat_search["candidates"] += 1
+        if s._site_blocks_rect((x, y, _hw0, _hh0)):
+            return False
+        return all(not (abs(x - px) < (_hw0 + pw) / 2 and abs(y - py) < (_hh0 + ph) / 2) for px, py, pw, ph, *_ in s.placed)
+
     ax, ay = seat["along"]
     ox, oy = seat["out"]
     rng = random.Random((plan.spec.seed * 2654435761) & 0xFFFFFFFF)
@@ -163,7 +181,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     for standoff in (46.0, 56.0, 66.0, 78.0, 92.0, 110.0, 130.0, 150.0):
         if placed >= front_cap:
             break
-        for fx, fy in front_row(plan, min(plan.spec.households, 12), standoff=standoff):
+        for fx, fy in front_row(plan, min(plan.spec.households, 12), standoff=standoff, chains=s._site_chains):
             if placed >= front_cap:
                 break
             # NO LANE TEST HERE ANY MORE (feature 126). This used to read
@@ -175,7 +193,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # settlement's shape depend on a way that has not been decided yet, which is the exact
             # inversion this feature exists to remove: a farmhouse is sited by the FIELD it works
             # and the ground it can stand on, and the lane is worn afterwards between the houses.
-            if math.hypot(fx - seat["cx"], fy - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, fx, fy) and s.try_place(fx, fy, "plain"):
+            if math.hypot(fx - seat["cx"], fy - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, fx, fy) and _pretest(fx, fy) and s.try_place(fx, fy, "plain"):
                 placed += 1
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
     # cluster seeded only by its shape leaves them running across empty middle: the review of the
@@ -216,15 +234,26 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         for lx, ly in lane_frontage(s, seat, connector=True):
             if placed >= plan.spec.households:
                 break
-            if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and s.try_place(lx, ly, "plain"):
+            if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
                 placed += 1
     _cloud_placed = 0
-    for attempt in range(4):
+    for attempt in range(5):
         if placed >= plan.spec.households:
             break
+        # THE LAST ROUND IS THE RESCUE (feature 226): the quota is still short after four rounds of the lattice, so the
+        # fifth re-walks the band with the placer's old fifteen-ring spiral - the reach that seated a toy hamlet's tenth
+        # household by a long slide. Never run while the quota is met, so the counted guesses stay small on every pool map.
+        s._spiral_rings = 15 if attempt == 4 else 6
         # each round widens the band a little (and reaches a little further back from the field)
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
-        want = plan.spec.households * 6 + 30
+        # A JITTERED LATTICE OVER THE BAND (feature 226 FR-003, D3). The band the rolled cluster shape describes is kept -
+        # `cluster_seeds` still shapes the draw - but a seed within 0.8 of a bundle pitch of one already kept or of a house
+        # standing is the same guess again and is not tested: the survivors are a Poisson-disk lattice over the band, about
+        # the band's area over a pitch squared, and only THEY are candidates. (A first cut also shrank the draw to
+        # `households * 2 + 6`; the back ranks thinned, every cluster shape came out unhonored and two maps re-rolled on
+        # stranded farmhouses - the dedupe is the lever, not the draw.) The seed's jitter is the map's own rng.
+        want = plan.spec.households * 6 + 30  # the draw is as it was; the lattice below is what keeps the GUESSES few
+        _kept: list[Pt] = []
         for lx, ly in s.cluster_seeds(plan.cluster_shape, 0.0, 0.0, wlat, wdep, want, rng, record=False):
             if placed >= plan.spec.households:
                 break
@@ -238,7 +267,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # and thin out behind.
             ly = -wdep + (ly + wdep) * 0.75
             _sx4, _sy4 = seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly
-            if _seat_allowed(s, _sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
+            if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * 0.8 for kx, ky in _kept) or any(math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])):
+                continue  # the lattice: a seed too near one kept or one standing is the same guess again
+            _kept.append((_sx4, _sy4))
+            if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
                 placed += 1
                 _cloud_placed += 1
     # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
@@ -299,6 +331,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     else:
         s.M["meta"]["cluster_shape_unhonored"] = plan.cluster_shape
     s.M["meta"]["cluster_aspect_drawn"] = round(_drawn, 2)
+    s._spiral_rings = 6
+    s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
+    s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
+    s._site_corridors = None
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
     # cluster-seeds cloud never ran, and the rolled cluster_shape knob went unhonored with no

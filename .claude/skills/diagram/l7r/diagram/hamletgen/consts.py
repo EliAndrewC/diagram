@@ -559,7 +559,9 @@ and printed in every cohort-audit header, and it fed exactly one thing: `cluster
 pass, which runs only for households the front rows do not seat. Census: on all 48 cohort seeds and
 all four pool hamlets the rows plus lane frontage seat EVERY house, the cloud never runs, and
 `meta.cluster_shape` is stamped on none of them - so round, elongated and crescent all drew the
-same 3:1 band. A peer session found it while retracting a result that had blamed the knob for a
+same 3:1 band. (History, as of 2026-08-19. The front row was capped to one rank that same week, and
+since then the cloud seats the ranks behind on four of the five pool hamlets - `meta.cluster_seeding` reads
+"cloud" there; since feature 226 it proposes a pitch lattice over the band rather than random throws.) A peer session found it while retracting a result that had blamed the knob for a
 placement failure; the knob could not have caused anything, because nothing read it.
 
 The band is where the shape has to bind, because the band is what the front rows are seated along.

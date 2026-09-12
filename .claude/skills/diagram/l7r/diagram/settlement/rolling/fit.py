@@ -156,11 +156,30 @@ class BundleFitMixin:
                     return True
         return False
 
+    def _site_blocks_rect(self: Settlement, rect: Any) -> bool:  # type: ignore[misc]
+        """THE BOUNDARY PATH (feature 226, GM 2026-09-12: "a relatively small number of line segments that you were
+        checking"): the five ground scans `_rect_blocked` makes below, answered by one outline computed once
+        (`hamletgen/homesteads/boundary.py`). The rectangle is asked at NINE points - its corners, its edge midpoints
+        and its center - against the site chains at gap 0 (so a member thinner than half a side cannot pass between two
+        corners, which covers `_rect_hits`' edge-crossing arm) and against the water corridors at their clearance; its
+        center alone against the registered corridors, as `_near_corridor` asks. Exact at the pads every rectangle is
+        held to today (spec FR-002)."""
+        self._seat_search["rects"] += 1
+        cx, cy, w, h = rect
+        x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
+        pts = ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy))
+        chains, corr = self._site_chains, self._site_corridors
+        if any(chain_violated(px, py, chains, 0.0) for px, py in pts):
+            return True
+        return bool(corr.hit_points(pts) or corr.hit_center(cx, cy))
+
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,
         irrigation lines, and (only when `fields=True`, i.e. the SOLID house/yard/garden) the flooded
         paddies. The GROVE (fields=False) may HUG a paddy bund, so it is tested against everything BUT the
         fields and the water lines."""
+        if self._site_chains is not None:
+            return self._site_blocks_rect(rect)  # feature 226: the one outline instead of the five scans below
         if self._rect_hits(rect, self.block_polys):
             return True
         if fields and self._field_blocks_rect(rect):
@@ -372,7 +391,7 @@ class BundleFitMixin:
         # the settlement form became a rolled knob only DISPERSED maps grew per-house groves and the
         # scripted tier never rolled one. With the knob live, every linear and dispersed hamlet
         # planted yashikirin across the connector and the field spur - both of which are drawn
-        # BEFORE the houses - and `groves_clear_of_lanes` reported it correctly.
+        # BEFORE the houses - and `groves_clear_of_lanes` reported it correctly. (History: so it was when this was written; since feature 126 the houses come first and no tread exists at seat time on a hamlet.)
         if "grove_n" in geom and any(self._house_on_a_tread(geom[k]) for k in ("grove_n", "grove_w")):
             return False
         if not self._sun_corridor_ok(geom):
@@ -429,6 +448,7 @@ class BundleFitMixin:
         return False
 
     def _fits_any_side(self: Settlement, cx: float, cy: float, hw: float, hh: float, shed: bool = False) -> bool:  # type: ignore[misc]
+        self._seat_search["positions"] += 1
         # The house/yard/kura/sun checks are the same for every garden side, so test that common half ONCE -
         # if it fails, no side can fit - then test only each side's garden (+ the bbox it grows). Identical
         # result to any(_bundle_fits(...) for side), but far fewer collision tests on the failing steps that

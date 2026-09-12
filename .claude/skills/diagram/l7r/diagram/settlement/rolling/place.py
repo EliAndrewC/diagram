@@ -144,8 +144,14 @@ class PlacerMixin:
         field bund then its neighbors, then pick the garden side that is UNSHADED and sunniest. The compact
         (grove-less) bundle lets the cluster nucleate; the adaptive garden gives sun + variety. `shed` reserves
         a north kura in every candidate bundle so a neighbor never lands on it."""
+        self._seat_search["placer_calls"] += 1
+        # SIX RINGS, NOT FIFTEEN (feature 226 FR-003): the spiral was compensating for wrong guesses - 24 of Inashiro's 39
+        # proposed seats failed every one of 181 offsets. A seat is pre-tested against the site boundary before the
+        # placer is asked now, so a right guess needs a little adjustment for its yard, garden and neighbors, not a
+        # search. `_spiral_rings` is 6 (73 offsets against 181); the stage's last rescue round, run only while the quota
+        # is short, sets 15 - the old reach - so a toy hamlet that once seated its tenth household by a long slide still does.
         offsets = [(0, 0)]
-        for r in range(5, 80, 5):
+        for r in range(5, 5 + 5 * int(getattr(self, "_spiral_rings", 6)), 5):
             for k in range(12):
                 a = k * math.pi / 6
                 offsets.append((round(r * math.cos(a)), round(r * math.sin(a))))

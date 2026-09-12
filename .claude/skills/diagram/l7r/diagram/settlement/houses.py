@@ -252,8 +252,11 @@ class HousesMixin:
         # the swept extent closes that gap; without it a steading clears at placement and laps a hem
         # plot once tilted, which is exactly one of the defects the overlap matrix kept reporting.
         _th = math.radians(5.0)
-        w = w * math.cos(_th) + h * math.sin(_th)
-        h = w * math.sin(_th) + h * math.cos(_th)
+        # BOTH AXES FROM THE ORIGINAL SIDES (feature 226, a spec-fidelity aside): this inflated `h` from the already-swept
+        # `w`, so one axis was wider than the tilt's extent; `w0` keeps the sweep what it claims to be.
+        w0 = w
+        w = w0 * math.cos(_th) + h * math.sin(_th)
+        h = w0 * math.sin(_th) + h * math.cos(_th)
         fp = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
         fx0, fy0, fx1, fy1 = x - w / 2, y - h / 2, x + w / 2, y + h / 2
         for hp, (hx0, hy0, hx1, hy1) in zip(hard, self._poly_bboxes(hard), strict=False):

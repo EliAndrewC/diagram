@@ -84,6 +84,12 @@ class Settlement(
         # the frame the scatter may predict (feature 224): a throw outside it is skipped before the keep-out test; each frame
         # used is kept so `finish()` can record whether the view stayed inside the tightest of them
         self._scatter_frame: tuple[float, float, float, float] | None = None
+        # the site boundary the homestead stage installs (feature 226): the chains of the one outline that separates the buildable
+        # ground from everything, and the corridor grid; None outside a hamlet's homestead stage, where the fit test runs its old path
+        self._site_chains: Any = None
+        self._site_corridors: Any = None
+        self._seat_search: dict[str, int] = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0}  # the guesses counted (feature 226 FR-003)
+        self._spiral_rings: int = 6  # the placer's spiral, in 5 px rings (feature 226): 6 normally, 15 in the homestead stage's rescue round
         self._scatter_frames: list[tuple[tuple[float, float, float, float], tuple[float, float, float, float]]] = []  # (the frame, the parcel's box) per scatter that threw within one
         self._pending_stands: list[
             tuple[Poly, int, bool, str | None]
