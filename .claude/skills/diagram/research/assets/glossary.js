@@ -3434,7 +3434,10 @@ window.RECORD_GLOSSARY = [
   "term": "Lower Yangzi",
   "variants": [
    "Lower Yangtze",
-   "Lower Yangzi"
+   "Lower Yangzi",
+   "Jiangnan",
+   "Lake Tai",
+   "Taihu"
   ],
   "def": "The rich rice-and-silk country of the lower Yangtze around Lake Tai and Suzhou - the Jiangnan of the record's Chinese sources."
  },
@@ -4259,5 +4262,22 @@ window.RECORD_GLOSSARY = [
    "interlinear commentary"
   ],
   "def": "Notes written between the lines of an original text - in the Qimin Yaoshu, the treatise's own explanations of its own instructions, kept inside the quotation."
+ },
+ {
+  "term": "planted collar",
+  "variants": [
+   "planted collar",
+   "collars",
+   "collar"
+  ],
+  "def": "The planted band of dike ringing one fish pond - the ground between its water and the edge of its parcel, carrying the mulberry."
+ },
+ {
+  "term": "canal corridor",
+  "variants": [
+   "canal corridors",
+   "canal corridor"
+  ],
+  "def": "The strip a canal takes between two parcels: the water with the bank margins along it, counted as neither pond nor dike."
  }
 ];
