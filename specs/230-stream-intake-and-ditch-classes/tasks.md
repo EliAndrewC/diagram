@@ -46,8 +46,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       - [x] paddy rings below 15 degrees on Kashikawa (E2) - none on any of the five regenerated maps by the gate's own `pointed_ring` at 15 degrees; the gate tests read only Inashiro and Kuwabata, so a cheap all-manifest check is still owed (below)
       - [ ] a gate test that reads every shipped pool manifest for sub-15 degree rings, not only the two the gate rolls
       - [ ] FOUND, pre-existing on main: 20-49 pairs of paddy rings overlap per brook map (up to 482 sq px) - decide defect or layering, then fix or record
-      - [ ] the weir drawn backwards on Kashikawa (E1): the head race mouth below the downstream face, the slant reversed
-      - [ ] Mizuguchi E2: the drain doubles back to its pond in a 111.6 degree hairpin
+      - [x] the weir drawn backwards on Kashikawa (E1): set a pixel below the mouth, slanting up from the intake bank (found from the race's bearing); intake-bank end 5.5-7.0 px below the mouth on both weir maps
+      - [x] Mizuguchi E2: the drain doubles back to its pond in a 111.6 degree hairpin - `pond_run` leads a run to a pond more than 100 degrees off the collector's heading round a cubic; sharpest bend 37 degrees; a pond straight downslope keeps the ordinary run (a 60 degree cut bent Inashiro's too and broke its lane web)
       - [ ] Kuwabata E1: the polder's laterals carry both feed and drain sluices and are classed irrigation ditch - a research question (two-way canals) and a class
       - [ ] the Pond modal contradicts itself (Mizuguchi E5, Kuwabata E2): "a valley-head tameike ... above the fields" beside "On this map the pond is the field's drainage sink"
       - [ ] notes: Kashikawa E6 (stale census, "the fork at the top is a brook and a ditch parting", the subject line), Mizuguchi E4 (no-sluice-glyph line, tameike/reservoir wording, census), Sawada E3 + N3 (census, the 75 ft)

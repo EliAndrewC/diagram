@@ -243,6 +243,45 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
     return best[1] if best else None
 
 
+def pond_run(out: Pt, heading: Pt, pond: Pt, fall: Pt) -> Poly:
+    """The drainage ditch from the collector's outfall to the pond's center.
+
+    ON THE LINE WHEN THE POND IS AHEAD, bowed slightly off it so it reads as dug earth rather than a ruled connector
+    (`channel_winds_gently`), the bow proportional because a fixed 10 px bow on a short run is an acute hairpin
+    (`water_channels_obtuse_turns`).
+
+    LED ROUND WHEN IT IS NOT (settlement-review, feature 230 pass 10). Since the brook runs on down one flank, `pond_seat`
+    may step the pond across the fall to a pocket beside the outfall rather than ahead of it - which is right - and a
+    straight run to it then doubles back on the collector: Mizuguchi's turned 111.6 degrees at the field's tip, an
+    inverted V. So where the pond lies more than 100 degrees off the collector's own heading the run leaves ALONG that
+    heading and curves round to the pond, spreading the same turn over a dozen gentle bends.
+    """
+    tx, ty = pond[0] - out[0], pond[1] - out[1]
+    dist = math.hypot(tx, ty)
+    hn = math.hypot(heading[0], heading[1]) or 1.0
+    cos_off = (tx * heading[0] + ty * heading[1]) / ((dist or 1.0) * hn)
+    # 100 degrees, not 60: a collector runs ALONG the field's low edge, across the fall, so a pond straight downslope of
+    # the outfall is already about 90 degrees off its heading - the ordinary outfall, a corner every pond map draws and no
+    # review has faulted. A 60 degree cut bent that one too and moved Inashiro's lane web; the defect is a pond BEHIND it.
+    if cos_off >= math.cos(math.radians(100.0)):
+        bow = min(10.0, 0.08 * dist)
+        return [out, ((out[0] + pond[0]) / 2 - fall[1] * bow, (out[1] + pond[1]) / 2 + fall[0] * bow), pond]
+    # A CUBIC, leaving along the heading and arriving along the chord, sampled at twelfths. A quadratic sampled at quarters
+    # was the first cut and crowded the turn into one bend (66.9 degrees on Mizuguchi); the whole turn is fixed by where
+    # the pond is, so what can be chosen is how evenly it is spread. Measured on Mizuguchi's own coordinates, handles of
+    # 0.6 of the distance at twelfths hold every bend at 36 degrees or less on legs of 10 px or more.
+    k = 0.6 * dist
+    c1 = (out[0] + heading[0] / hn * k, out[1] + heading[1] / hn * k)
+    c2 = (pond[0] - tx / (dist or 1.0) * k * 0.5, pond[1] - ty / (dist or 1.0) * k * 0.5)
+    return [
+        (
+            (1 - u) ** 3 * out[0] + 3 * (1 - u) ** 2 * u * c1[0] + 3 * (1 - u) * u * u * c2[0] + u**3 * pond[0],
+            (1 - u) ** 3 * out[1] + 3 * (1 - u) ** 2 * u * c1[1] + 3 * (1 - u) * u * u * c2[1] + u**3 * pond[1],
+        )
+        for u in [n / 12.0 for n in range(13)]
+    ]
+
+
 def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float) -> tuple[float, float]:
     """(how far downslope, how far across the fall) the reservoir must stand to clear the crop AND the
     brook - the set-back search with one more degree of freedom.
@@ -453,10 +492,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # water block, not the late one: the pond's fill has to paint OVER the ditch's mouth where it
     # overshoots the rim, and a late stroke composites above the fill instead
     # (`pond_fill_covers_channel_mouths`).
-    bow = min(10.0, 0.08 * math.hypot(pcx - out[0], pcy - out[1]))  # a fixed 10 px bow on a SHORT run is an
-    # acute hairpin (`water_channels_obtuse_turns`); proportional keeps the turn obtuse at any length
-    mid = ((out[0] + pcx) / 2 - dy * bow, (out[1] + pcy) / 2 + dx * bow)
-    ditch: Poly = [out, mid, (pcx, pcy)]
+    ditch = pond_run(out, drain_heading(s, name) or (dx, dy), (pcx, pcy), (dx, dy))
     # WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last few strides into the
     # tameike, so it carries everything the collector carries - and it used to be drawn at a flat
     # 2.5 px whatever the drain arrived at. Harmless while the net was 5-6x oversize (12.0 -> 2.5

@@ -238,3 +238,22 @@ def test_the_drain_runs_to_the_brook_and_records_the_junction_for_the_frame(monk
     assert len(pts) == 3 and pts[-1] == (round(plan.confluence[0], 1), round(plan.confluence[1], 1))
     mid = pts[1]
     assert mid != ((pts[0][0] + pts[2][0]) / 2, (pts[0][1] + pts[2][1]) / 2), "the run bows - dug earth, not a ruled connector"
+
+
+def test_a_pond_behind_the_collector_is_reached_by_a_curve_not_a_hairpin() -> None:
+    """`pond_run`, settlement-review pass 10. A pond straight downslope of an outfall on a collector running across the
+    fall keeps the ordinary bowed run; a pond BEHIND the collector's heading - Mizuguchi's, stepped across the fall by
+    the brook - is led round along the heading instead of doubling back 111 degrees in one corner."""
+    import math
+
+    from l7r.diagram.hamletgen.sink import pond_run
+
+    def worst(pl: list[tuple[float, float]]) -> float:
+        return max(abs((math.degrees(math.atan2(c[1] - b[1], c[0] - b[0]) - math.atan2(b[1] - a[1], b[0] - a[0])) + 180.0) % 360.0 - 180.0) for a, b, c in zip(pl, pl[1:], pl[2:], strict=False))
+
+    ahead = pond_run((100.0, 100.0), (1.0, 0.0), (100.0, 250.0), (0.0, 1.0))
+    assert len(ahead) == 3 and ahead[-1] == (100.0, 250.0), "downslope of a cross-fall collector: the ordinary three-point run"
+    prev = (1596.0, 902.0)
+    behind = pond_run((1647.0, 771.0), (51.0, -131.0), (1771.0, 864.0), (1.0, 0.0))
+    assert behind[0] == (1647.0, 771.0) and behind[-1] == pytest.approx((1771.0, 864.0))
+    assert worst([prev, *behind]) <= 40.0, "the turn is spread over gentle bends, not one hairpin"
