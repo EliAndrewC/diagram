@@ -186,8 +186,8 @@ class VegetableGround(Kind):
 
 class PigSty(Kind):
     """
-    What: A simple pig shed built on the dike of a fish pond, its pen railed at the water's edge so the pigs'
-    manure runs straight into the pond. It stands a few feet clear of the short culvert that feeds or drains
+    What: A simple pig shed built on the dike of a fish pond, a railed yard beside it along the bank, so the
+    pigs' manure runs straight into the water. It stands a few feet clear of the short culvert that feeds or drains
     its pond, on the bank nearest the houses.
 
     Why: The shed is at the water on purpose - that is the whole arrangement, not an accident of crowding. A pig

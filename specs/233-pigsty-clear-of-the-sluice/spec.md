@@ -54,8 +54,9 @@ Dispatched as two `source-reader` agents, 2026-09-12. Full verdict tables live i
    pond adjacent to the livestock quarters", by bucket, channel or sprinkler.
 5. **A dike carrying a pigsty is wider.** FAO ch. 10: "the width of the dikes between fish ponds and
    inflow and outflow canals should be kept within 5 m; the width of the dikes for pigsties, cow sheds
-   piping, or traffic should range from 5 to 10 m." Kuwabata's shared dikes measure 6.5 m, so the map
-   already satisfies a rule it had never cited.
+   piping, or traffic should range from 5 to 10 m." Measured against the drawing the map does NOT satisfy
+   it - the collar a sty stands on is 2 to 5 m - and the record says so (see the Review history, round 4
+   of `settlement-review`, and `research.md` R1).
 6. **THE SILENCE.** Four FAO manuals, the ISIS dike-pond summary, and the Chinese and Japanese
    material carry nothing relating a shed's or a pen's position on the dike to the pond's inlet,
    outlet, sluice or drainage gate - for it or against it. Two readers searched independently and both

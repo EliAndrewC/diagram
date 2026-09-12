@@ -40,9 +40,8 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
     RANKED, not just the nearest (feature 233). It used to return the single nearest edge, and the
     caller skipped the whole pond when that seat did not fit - so adding the sluice clearance would
     have moved fixtures between ponds, or lost them, rather than along the bank they belong on. The
-    caller now walks this list and takes the first seat that fits. On Kuwabata a seat 30-45 ft clear of
-    any sluice sits only 10-30 ft further from the houses than the one previously chosen, so the
-    household's walk barely changes (specs/233-pigsty-clear-of-the-sluice/research.md R1, R6).
+    caller walks this list and takes the first seat that fits, and BOUNDS how far down it it may go -
+    see `stage_pond_stock`. This function ranks; it does not decide what is acceptable.
     """
     cx, cy = _centroid(parcel)
     seats: list[tuple[Pt, float]] = []
@@ -85,7 +84,17 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
             wpts = [(float(q[0]), float(q[1])) for q in ponds[i]["water"]]
             # the nearest seat to the houses that FITS - not the nearest seat, take it or leave the
             # pond (feature 233): a refused seat used to cost the pond its fixture entirely.
-            seat = next((((x, y), rot) for (x, y), rot in _bank_seats(ponds[i]["parcel"], hc) if s.pond_fixture_fits(x, y, rot, kind, water=wpts)), None)
+            #
+            # BOUNDED TO THE NEAR HALF OF THE POND (feature 233, settlement-review). Ranking alone
+            # leaves the accept set the WHOLE perimeter, and on this map's own geometry the far bank
+            # is up to 288 ft further from the houses than the first choice - a shed that took one
+            # would read as belonging to no household, and nothing in the placer or the gate would
+            # say so. The bound is geometric rather than a tuned distance: a seat may not be further
+            # from the house cluster than the pond's own center is, which keeps the fixture on the
+            # side of the water the households are on. On the reference map the accepted seats cost
+            # +0 to +21 ft against a limit of about +70, so this refuses nothing that is drawn today.
+            reach = math.dist(_centroid(ponds[i]["parcel"]), hc)
+            seat = next((((x, y), rot) for (x, y), rot in _bank_seats(ponds[i]["parcel"], hc) if math.dist((x, y), hc) <= reach and s.pond_fixture_fits(x, y, rot, kind, water=wpts)), None)
             if seat is None:
                 continue
             (x, y), rot = seat

@@ -15,7 +15,9 @@ Read from `pool/hamlets/kuwabata/kuwabata.json`; the hamlet tier is 1 px = 1 ft.
 | duck pen FENCE ARC to nearest stub segment | **0** (crosses at 2404.8, 796.5), 12.91 ft |
 | sluice stub length | median 26.5 ft, mean 28.0, min 19.1, max 41.2 (feed-only median 27.7); the pond-5 stub, the motivating case, is 23.9 |
 | pond water area | median 28,920 sq ft = 4.03 mu = 0.27 ha |
-| shared dike width | median 21 ft = 6.5 m (parcel bbox less water bbox, both axes, all 26 ponds) |
+| pond collar (water edge -> parcel edge) | median 6.7 ft = 2.0 m (min 3.2, max 9.4) |
+| shared dike (water edge -> the neighbour's water edge, 68 adjacent pairs) | median 43.6 ft = 13.3 m |
+| the strip a sty actually stands in | 8.5-15.3 ft = 2.6-4.7 m |
 
 Kuwabata is the ONLY map in either pool tree carrying pig sties.
 
