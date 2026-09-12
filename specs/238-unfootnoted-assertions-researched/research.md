@@ -84,3 +84,56 @@ which is the condition the GM set, so the second story goes unless a reading act
 Recording it the other way round - making the GM's ruling wait on a research question the session
 thought of - is re-setting the GM's own trigger, which `spec-fidelity` refused in round 1 of this spec's
 review.
+
+### R2a - what the reading found, 2026-09-12
+
+A `source-reader` was asked four questions. The short answer is that the premise the GM's ruling rested
+on has moved: there are now **two attested analogues pointing opposite ways**, and the Japanese one - the
+setting's first model - is two-story.
+
+**A two-story post-station inn IS attested.** 大旅籠柏屋 (the Ō-hatago Kashibaya), the preserved hatago of
+Okabe-juku on the Tōkaidō, built around 1836 and a registered tangible cultural property since 1998, is
+described in its own infobox as 「木造2階建、瓦葺」 - "wooden, two stories, tile-roofed" (translated from the
+Japanese by this project). Its second floor is 「客間として使用された空間」 - "a space that was used as guest
+rooms". Source: Japanese Wikipedia 大旅籠柏屋.
+
+**But "commonly" is not attested.** No page read says hatago were usually two-story. The nearest general
+statement cuts the other way: Seki-juku's surviving townhouses are 「二階建・中二階建・平屋建」 - "two-story,
+half-second-story and single-story" - "making for a varied townscape". And the encyclopedia entry on the
+hatago-ya classes them by SIZE (large, medium, small), not by stories; the 本陣 article lists what a
+hatago was forbidden - a front gate, a shikidai entrance, a raised-dais room - and **names no story
+restriction**, which is a real if negative finding.
+
+**The inns that actually served drivers say nothing either way.** 馬宿 (umayado), 木賃宿 (kichin-yado) and
+問屋場 (toiyaba) are defined on four pages with their clientele and their rates - the 1611 ordinance fixed
+the kichin charge at three mon for a person and six for a horse - and not one states a story count. One
+passage is worth keeping for a different reason: a dictionary usage example gives 「表は旅人宿で、裏には大きい
+厩があって馬宿もする」 - "the front is a travelers' inn, and at the back there is a large stable, so it also
+does umayado business" - which is exactly the arrangement our town maps draw, inn in front and stable
+behind.
+
+**The Chinese side gained a second account but not a second story reading.** Chinese Wikipedia 大车店
+describes the twenty-to-a-kang dormitory and the basket shop-sign and never uses 平房, 二层 or 楼. So
+`towns.html` fn-25 - the Jilin Daily's 「院里清一色平房」 - remains the only story reading on the Chinese
+side, and it is NOT overturned.
+
+**What this means for the ruling.** The GM's condition was *"if our attested analog reads it as a single
+story"*. When they wrote it, the record had one analogue and it read single-story. It now has two, and
+they disagree: a Manchurian cart inn that is single-story, and a surviving Japanese highway inn that is
+two-story. Two things follow, and only the first is this session's to do.
+
+1. **One sentence on `towns.html` is now false and is corrected under FR-006.** It says "The second story
+   is the one part of the drawn inn the record does not bear out". The record does bear it out, from
+   Okabe-juku. The page carries that citation instead.
+2. **The form itself is a question the session may not settle alone.** Constitution Principle XII's own
+   ladder says two supportable answers become a KNOB rolled per settlement, never a choice - which would
+   mean the story count varies by town. But the GM has already ruled on this specific drawing, and
+   reaching for the knob doctrine to keep a form they called a mistake is exactly the shape Principle XVI
+   forbids a session to approve for itself. So it goes to an independent adjudication first, and to the
+   GM with the evidence either way.
+
+**One caution on the reading.** The agent's own WebSearch budget was exhausted at its first query, so
+every page it reached was a guessed URL. It names three cultural-property listings that would probably
+settle the "commonly" question - Narai's 中村邸, Toyokawa's 大橋屋, Kameyama's 玉屋 - and one host that
+refused it, `www.aichi-c.ed.jp`, which was Wikipedia's cited source on 大橋屋 and may carry that
+building's story count. Those are in the GM's download list.

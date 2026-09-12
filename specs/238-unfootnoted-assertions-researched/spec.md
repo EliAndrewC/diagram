@@ -1,6 +1,6 @@
 # Feature 238 - the unfootnoted assertions, researched
 
-**Status:** DRAFT (awaiting `spec-fidelity`)
+**Status:** FAITHFUL (`spec-fidelity`, round 2 of 2, 2026-09-12) - IMPLEMENTING
 
 ## Summary
 
@@ -42,7 +42,8 @@ absence notes now constitute.
   under `reader-reports/`.
 
 - **FR-002 Every entry in the inventory is classified into exactly one of four dispositions**, recorded
-  in `research.md` R1 with the page, the section and the sentence:
+  in `research.md` R3 - the inventory proper, R1 being the paragraph census that sizes it - with the page,
+  the section and the sentence:
   - `CITE` - it asserts something about the world and a source must be sought.
   - `GROUNDS` - no source is owed, for one of feature 235's six closed-list reasons (measured on our own
     maps; the record's own silence; follows from the definitions; physical necessity; a drawing
@@ -110,9 +111,9 @@ absence notes now constitute.
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002) Every one of the nineteen research pages has been read by a `quote-check`
-  agent, and `research.md` R1 accounts for every sentence those agents named, each with one of the four
+  agent, and `research.md` R3 accounts for every sentence those agents named, each with one of the four
   dispositions.
-- **SC-002** (FR-004) No sentence classified `CITE` or `GROUNDS` in R1 is left without a footnote of the
+- **SC-002** (FR-004) No sentence classified `CITE` or `GROUNDS` in R3 is left without a footnote of the
   matching form; `tests/interactive/test_footnotes.py` is green, and the footnote census tool reports the
   new notes in their classes.
 - **SC-003** (FR-003, FR-006) Every new citation carries a verbatim quotation from a page whose URL is in
