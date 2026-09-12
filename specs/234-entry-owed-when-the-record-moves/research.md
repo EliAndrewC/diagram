@@ -205,3 +205,41 @@ All fixed. **The lesson is the one D7 states**: none of this was drift the repor
 sections had not moved, and a strict section-versus-modal reading would have passed the first two items
 because the record's OTHER paragraph agreed with the modal. What found it was the agent, asked to judge a
 pair, reading the manifest rather than only the two texts.
+
+## R9 - what quote-check found, and what is DEFERRED with its measurement (2026-09-12)
+
+Three findings caused by this feature's own correction, all fixed:
+
+1. **A downstream claim the correction falsified.** The section said the traditional figures are "carried
+   as the band the drawing sits inside". That was true of the withdrawn 22 ft (6.7 m, inside 6-10 m) and
+   is true of neither replacement: the drawn collar is 2.0 m, BELOW the band, and the water-to-water
+   span is 13.3 m, ABOVE it - because that span is two collars and a canal rather than one dike. The
+   sentence now says which half sits inside and which does not, and why.
+2. **The sentence stating "dikes of 6-10 m" carried no footnote at all** while the record already held
+   its evidence. It is fn-110 now, `isis-dykepond`, with the second-hand gloss the figure owes.
+3. **The new figures leaned on a paragraph's opening frame** rather than saying where they came from.
+   Section A's comparable sentence says "measured on the Kuwabata map"; this one does now too.
+
+And a roster mismatch, mechanical: fn-36 quotes `sdlib-shunde-jitang` and `gmrb-2024-sangji` and neither
+was on the section's `Sources:` line, so the modal's works list omitted two works the section quotes.
+
+**DEFERRED, with the measurement, because they predate this feature and are a backfill rather than a
+fix** (the deferral is a deliverable, not a shrug - CLAUDE.md Principle XIV):
+
+- **Four PARTIAL footnotes**, each granting less than the sentence it hangs on: fn-33 (attests 7:3 as an
+  alternative ratio but says nothing DISTRICTWISE), fn-35 (grants the fish half of "too much water
+  starves the silkworms and too much dike starves the fish", not the silkworm half), fn-38 (grants that
+  mulberry is mostly bushes, not the COPPICING the sentence turns on), fn-13 (grants dig-the-pond-pile-
+  the-dike, not the household-by-household unit its conclusion rests on).
+- **Five external claims carrying no footnote and no label**: one bush per 10-20 sq ft; leaf stripped
+  several times a year; leaf-stripped coppice barely fruits; mid-Qing Jiangnan farms averaging ~10 mu;
+  and Japan's 1963 hojo seibi 30 x 100 m standard.
+- **fn-83 UNVERIFIED** - `dfz.gd.gov.cn` did not answer within 300 s on one attempt. Not a paywall and
+  not a refusal; another session on another network may read it.
+- **Two of our own figures that do not reconcile**: "water is 76% of each parcel (bank 24%)" against
+  "each pond's ~6,300 sq ft bank" - 24% of a 160 x 320 ft parcel is ~12,300 sq ft, while 6,300 is what a
+  ~7 ft collar round that pond comes to. The 6,300 agrees with the new single-collar reading and the 24%
+  does not. Both are measurements of our own drawing, so neither owes a citation; they owe each other.
+
+Every one of these is in the sections this feature touched but none is drift this feature caused. They
+are named here so the next session inherits a list rather than a suspicion.
