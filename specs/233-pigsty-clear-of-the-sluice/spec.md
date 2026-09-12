@@ -70,18 +70,21 @@ Dispatched as two `source-reader` agents, 2026-09-12. Full verdict tables live i
 ## Functional requirements
 
 **FR-001** No drawn part of a pig sty or a duck pen MUST overlap a drawn pond sluice stub
-(`dikepond_sluices[]`). For a duck pen that means the dry run on the bank **and its WET RUN** - the
-fenced arc into the water that `duck_pens[].wet` records. This is a requirement about two glyphs
+(`dikepond_sluices[]`). For a duck pen that means the dry run on the bank **and its FENCE ARC** - the open
+six-point polyline `duck_pens[].wet`, which is a fence and not a closed region. That exact phrase is
+used in FR-002 and SC-001 too: on today's map "the arc" and "the water it encloses" give the same
+answer, but on a re-rolled seed a stub ending inside the fenced corner without crossing the fence is an
+overlap under one reading and clear under the other. This is a requirement about two glyphs
 occupying one piece of ground, and it needs no historical number.
 
 The wet run is named explicitly because it is the worst offender on the shipped map and the easiest to
-overlook: duck pen 1 stands 2.3 ft from a feed stub by its dry run and **0.19 ft** by its wet fence -
-the fence is drawn across the inlet cut. A fence across your own intake is not a thing anyone builds,
-and nothing about the dike-pond loop excuses it.
+overlook: duck pen 1 stands 2.3 ft from a feed stub by its dry run, and its fence arc **CROSSES that stub**, at
+(2404.8, 796.5) - clearance 0 ft, an overlap rather than a narrow gap. A fence across your own intake is
+not a thing anyone builds, and nothing about the dike-pond loop excuses it.
 
 **FR-002** On top of FR-001 the fixture MUST stand clear of the sluice stub by a working margin of
-**6 ft**, measured from EVERY drawn part of the fixture - a sty's footprint, a pen's dry run and its wet
-run alike - to the nearest point of the stub (a segment, not its anchor: the stub is ~24 ft long and the
+**6 ft**, measured from EVERY drawn part of the fixture - a sty's footprint, a pen's dry run and its
+fence arc (the open polyline `duck_pens[].wet`) alike - to the nearest point of the stub (a segment, not its anchor: the stub is ~24 ft long and the
 anchor alone understates the overlap badly, as `research.md` R1 now records). The reason is that
 someone has to stand at the gate and lift its boards, the sluice being "a protected opening in the pond
 dike that can be easily closed with wooden boards to regulate water level"; 6 ft is about two paces,
@@ -169,10 +172,14 @@ paired with the gate.
 ## Success criteria
 
 **SC-001** On Kuwabata, no drawn part of any `pig_sties[]` or `duck_pens[]` record - a sty's footprint,
-a pen's dry run, a pen's `wet` polygon - overlaps a `dikepond_sluices[]` stub, and every one of those
-parts stands at least the FR-002 margin clear of the nearest stub SEGMENT. Measured as shipped, the
-three worst sties stand 0.13, 0.03 and 0.08 ft clear and duck pen 1's wet fence 0.19 ft, so the
-criterion is not vacuous.
+a pen's dry run, a pen's fence arc (the open polyline `duck_pens[].wet`) - overlaps a
+`dikepond_sluices[]` stub, and every one of those parts stands at least the FR-002 margin clear of the
+nearest stub SEGMENT.
+
+Measured as shipped with an intersection-aware distance, the criterion is not vacuous and the true state
+is worse than a gap: on ponds 5, 12 and 24 a feed stub passes THROUGH the sty's footprint (clearance
+0 ft; the chord lying inside the shed is 3.62, 2.56 and 0.06 ft), and duck pen 1's fence arc crosses its
+feed stub. Three sheds have a culvert running through them and one fence is drawn across an inlet.
 
 **SC-002** Kuwabata still carries 7 sties and 2 duck pens.
 
@@ -227,6 +234,28 @@ attested feature of the system the map is modeled on. The record states the prov
 - The guardrail that would have made FR-008 happen without the GM asking is feature 234.
 
 ## Review history
+
+**Round 3** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, two items, both taken; round 2's
+fix confirmed carried into all three places with no fourth place disagreeing, and the scope re-walked
+clause by clause against the request with no accretion found.
+(1) **The clearances the spec quoted were wrong, and wrong in the direction that made the map look
+better than it is.** The session's measure sampled each footprint's boundary at 8 points per edge and
+took the nearest sample, with NO segment-intersection test - so an actual overlap was reported as a
+sub-foot gap. The reviewer reproduced those exact figures from that method, which is how the method was
+identified. True state: ponds 5, 12 and 24 have a feed stub passing through the sty footprint and duck
+pen 1's fence arc crosses its stub - four clearances of 0, not 0.13 / 0.03 / 0.08 / 0.19. FR-001 had
+been asserting a positive clearance and a crossing in the same sentence. All figures replaced from a
+run whose distance returns 0 on intersection and which is selftested against a stub driven through a
+rect; `research.md` R6 re-run on the corrected measure, and its placement result is UNCHANGED (7/7
+sties, 2/2 pens at every margin, 8.5 ft worst at 6 ft), which is what the reviewer predicted, the old
+approximation having erred toward accepting.
+(2) FR-001 called the wet run "the fenced arc" while SC-001 called it "a pen's `wet` polygon", and
+`duck_pens[].wet` is an OPEN polyline - two readings that agree on today's map and diverge on a
+re-rolled seed where a stub ends inside the fenced corner without crossing the fence. One phrase now,
+used in all three places.
+The reviewer independently re-verified the pond area (4.03 mu / 0.269 ha), the dike width (6.52 m), the
+`fao-x6708e` sluice quotation behind FR-002's reason, FR-005's anchor, FR-011's stale sentence, and that
+the wet arc is reproducible from a candidate seat - confirming FR-003 is implementable.
 
 **Round 2** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, one item, taken. FR-001 covered a
 duck pen's DRY RUN only, while FR-002 and SC-001 said "the fixture" and "footprint" without qualifying

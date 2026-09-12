@@ -9,22 +9,33 @@ Read from `pool/hamlets/kuwabata/kuwabata.json`; the hamlet tier is 1 px = 1 ft.
 | pig sties | 7 (`meta.pond_stock.sties`), on 26 dike ponds, 16 houses |
 | duck pens | 2 |
 | sty footprint | 8 x 6 ft (`STY_FT`) |
-| **sty footprint to nearest stub SEGMENT** | **0.13, 0.03, 0.08, 3.04**, 31.07, 64.99, 128.73 ft |
-| sty CENTER to nearest stub anchor | 6, 7, 8, 12, 43, 71, 133 ft |
+| **sty footprint to nearest stub SEGMENT** | **0, 0, 0**, 3.04, 31.07, 64.99, 128.73 ft |
+| ... of which, the stub's chord INSIDE the footprint | 3.62, 2.56, 0.06 ft |
 | duck pen DRY run to nearest stub segment | 2.32, 10.70 ft |
-| duck pen WET run to nearest stub segment | **0.19**, 12.91 ft |
+| duck pen FENCE ARC to nearest stub segment | **0** (crosses at 2404.8, 796.5), 12.91 ft |
 | sluice stub length | ~24 ft (`dikepond_sluices[]` a-to-b; min 19.1, max 41.2) |
 | pond water area | median 28,920 sq ft = 4.03 mu = 0.27 ha |
 | shared dike width | median 21 ft = 6.5 m (parcel bbox less water bbox, both axes, all 26 ponds) |
 
 Kuwabata is the ONLY map in either pool tree carrying pig sties.
 
-**MEASURE TO THE SEGMENT, NOT THE ANCHOR.** The first pass of this table gave sty distances from the
-fixture's CENTER to the sluice's pond-side ANCHOR - 6, 7, 8, 12 ft - which reads as a near miss. The
-honest figure is the drawn footprint to the nearest point of the stub, which is a 24 ft SEGMENT: three
-sties stand 0.13, 0.03 and 0.08 ft clear. They are not near the culvert, they are on it. Caught by
-spec-fidelity round 2; recorded because the same understatement is available to anyone who measures a
-long thin feature by one of its endpoints.
+**TWO WAYS THIS TABLE WAS WRONG, BOTH UNDERSTATING THE SAME WAY.** Recorded because both traps are
+available to anyone measuring a thin feature against a small one.
+
+*First pass* gave the fixture's CENTER to the stub's pond-side ANCHOR - 6, 7, 8, 12 ft - which reads as
+a near miss. A stub is a ~24 ft SEGMENT, so measuring it by one endpoint overstates every distance to
+it. Caught by spec-fidelity round 2.
+
+*Second pass* measured the drawn footprint to the segment, but by SAMPLING the footprint boundary at 8
+points per edge and taking the nearest sample, with **no segment-intersection test** - and a measure
+built that way cannot return zero. It reported an overlap as a sub-foot gap: 0.13, 0.03, 0.08 for the
+three sties and 0.188 for the pen's fence. Caught by spec-fidelity round 3, which reproduced those exact
+numbers from the method, which is how the method was identified.
+
+The true figures are in the table above and they are not near misses: on three ponds the feed stub
+passes THROUGH the shed, and the duck pen's fence crosses its stub. Any distance function this feature
+ships MUST return 0 on intersection and MUST be selftested against a stub driven through a rect -
+otherwise SC-001's no-overlap clause would score today's crossing shed as 0.13 ft and pass it.
 
 **The mechanism, read from the code rather than inferred.** `pondstock._bank_seat` returns the midpoint
 of the parcel edge nearest the house cluster, pulled in by `BANK_INSET_FT` = 5.5. `fields/landuse.py`
@@ -192,8 +203,10 @@ chosen on its own merits rather than against a placement budget. The flat 13.1 f
 binding seat is the same one throughout - the rule is not scraping against its limit, which is what a
 number rising in lockstep with the margin would have shown.
 
-**Re-run with the duck pen's WET RUN included** (spec-fidelity round 2 - the first run tested the dry
-footprint only, and the wet fence is the map's worst offender at 0.19 ft):
+**Re-run with the duck pen's FENCE ARC included, on a corrected distance** (spec-fidelity rounds 2 and
+3 - the first run tested the dry footprint only, and the second used the sampled measure described in
+R1). The distance now returns 0 on intersection and is selftested against a stub driven through a rect,
+a stub wholly inside one, and a clear gap:
 
 | working margin | pens | sties | worst clearance achieved |
 |---|---|---|---|
@@ -203,8 +216,18 @@ footprint only, and the wet fence is the map's worst offender at 0.19 ft):
 | 8 ft | 2/2 | 7/7 | 8.5 ft |
 | 12 ft | 2/2 | 7/7 | 12.6 ft |
 
-So covering the wet run costs nothing either, and the choice to include it (spec FR-001) is free rather
-than a trade.
+So covering the fence arc costs nothing either, and the choice to include it (spec FR-001) is free
+rather than a trade. **The corrected measure did not move this result** - the same 7/7, 2/2 and 8.5 ft
+as the sampled run produced - because the sampled measure erred toward ACCEPTING by at most its ~1 ft
+sample spacing, and the seats these margins choose are clear by far more than that. It moved the
+as-shipped figures in R1, not the placement conclusion.
+
+**Implementation note for FR-003** (spec-fidelity round 3, needing no requirement because SC-001
+backstops it on the manifest): the fence arc is a function of the SEAT and the pond's water outline, so
+a ranked-seat test must build the arc each candidate seat WOULD produce rather than reusing the shipped
+one. Reimplementing `duck_pen`'s loop (`PEN_WET_FT` 12.0, half-width 5, five steps of `pi*t`,
+`sin(ang)*0.9`) reproduces both shipped `wet` polylines to within manifest rounding, so this is
+straightforward - but a seat test that forgets it would check the old arc against a new seat.
 
 This does NOT prove the rule is free on an unrolled seed; it proves it is free on the one map that has
 the feature today, which is the map the GM is looking at. A seed whose ponds are smaller could refuse a
