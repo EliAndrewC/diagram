@@ -53,10 +53,10 @@ docstring as feature 231 enumerates its three:
   1. `make page-check` - the target a research-page-plus-docstring delta actually owes;
   2. `scripts/sync-with-main.sh` at push time.
 
-**FR-004** At BOTH decision points the answer MUST be REPORTED and MUST NOT block. Not at the gate, not
-at the push, not with an escape token - there is nothing to escape, because nothing refuses. Naming a
-pair costs a session one line of reading; refusing on it would spend a round trip on work that is
-correct 30 times in 32.
+**FR-004** At BOTH decision points the answer MUST be REPORTED and MUST NOT block - not at the gate,
+not at the push, and with no escape token, because **the REPORT never refuses**. Naming a pair costs a
+session one line of reading; refusing on it would spend a round trip on work that is correct 30 times in
+32. (This says nothing about FR-007, which does refuse; see D5.)
 
 **FR-005** The report MUST be actionable without further lookup: per class, the class key, the research
 file and heading that moved, and the file and line of the docstring whose prose to re-read.
@@ -81,7 +81,14 @@ research-page-only delta owes NOTHING: `gate-stamp.py`'s `SKIP_ONLY_AREAS` is `{
 `page` area covers only `interactive/assets/*` and `classes/*.py`. So the delta shape that BREAKS a
 heading - by construction a research edit touching no Python, which is also R2's 30-of-32 shape - runs
 no gate, no `make page-check` and no push obligation. A gate-only check would surface the breakage as an
-inherited red on the NEXT session's unrelated engine change. This is exactly the reasoning FR-006 and
+inherited red on the NEXT session's unrelated engine change.
+
+**And the push-time call MUST run the checker's own `--selftest` first and die if it fails**, as all
+three of its siblings at that call site do (`sync-with-main.sh` lines 222, 229, 234), for the reason
+stated there: a checker that cannot prove it still bites is the failure mode that motivated it. FR-011's
+non-vacuity test is a GATE test, and this requirement's whole argument is that the breaking delta runs no
+gate - so the one push where this check stands alone is precisely the one where nothing else proves the
+matching surface still matches. This is exactly the reasoning FR-006 and
 `research.md` R3 apply to the report, and the round-2 review caught that the spec had not applied it to
 its own other half.
 
@@ -109,8 +116,10 @@ vacuously quiet.
 
 **FR-012** The rule MUST be written into `research/CLAUDE.md` beside the prose rule it gives teeth to,
 and into `interactive/classes/CLAUDE.md` where "Writing an entry" is documented: when a section a class
-was written from moves, the session re-reads that modal against it and either rewrites the prose or
-records why it did not change. The root `CLAUDE.md` guard table MUST gain a row, that table being the
+was written from moves, the session DISPATCHES `entry-drift` at that pair and then either rewrites the
+prose or records why it did not change. The actor is named deliberately: an earlier draft said the
+session "re-reads" while FR-013 gave the job to an agent, which named two actors for one job and
+required neither. The root `CLAUDE.md` guard table MUST gain a row, that table being the
 enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS and
 the heading half GATES.
 
@@ -129,6 +138,20 @@ modal the section no longer supports, or the finding the section now carries tha
 or **CANNOT-TELL** (with what it would need). Verification, not judgment about the map: it never edits
 and never decides a rule. `model: opus` like every subagent check (GM 2026-09-07), which
 `tests/test_agent_models.py` enforces.
+
+**It MUST be wired, or it is worse than nothing.** An agent nothing dispatches is a third thing everyone
+believes checked the modal. Two things follow:
+
+  1. **A decision point.** The classes `_entry_owed.py` names ARE what the session hands to
+     `entry-drift`, before the work lands. The obligation is pinned the way `quote-check confirmed` and
+     `source-applicability confirmed` are - a task checkbox the gate enforces
+     (`tests/test_task_research_boxes.py`, which already holds `QUOTE_BOX` and `APPLICABILITY_BOX`) -
+     so a feature whose delta moves a section under a named class cannot tick its task without it.
+  2. **Pre-authorization.** `entry-drift` MUST be added to the nine agents enumerated in
+     `container-scripts/append-system-prompt.md`. Without it the mandate loses to the default system
+     prompt's "do not call the Agent tool unless the user asked", which sits ABOVE `CLAUDE.md` - the
+     documented 2026-07-27 failure in which three city maps shipped unreviewed - and the first session
+     to meet a named pair will correctly decline to dispatch it.
 
 **FR-014** The guidelines written by FR-012 MUST state plainly that `record-format` and `quote-check`
 are the changed RESEARCH ENTRY's own standing obligations and are NOT a check on any modal, so that a
@@ -158,13 +181,25 @@ does not swallow the rule.
 **SC-006** Deleting the script's matching surface turns FR-011's test red rather than producing a quiet
 pass.
 
-**SC-008** `.claude/agents/entry-drift.md` exists, pins `model: opus`, passes
+**SC-007** `.claude/agents/entry-drift.md` exists, pins `model: opus`, passes
 `tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature
 233's own pair, run and recorded there: the `PigSty` modal against the section 233 rewrites, which must
 come back DRIFTED before 233's docstring rewrite and IN-STEP after it. A new agent whose first real
 dispatch is the case that motivated it is the cheapest honest proof it does anything.
 
-**SC-007** `make hooks-test` green, `make done` green, `make page-check` green.
+**SC-008** A task whose delta moves a research section under a class the report names cannot be ticked
+without its `entry-drift confirmed` box, proven by `tests/test_task_research_boxes.py` going red on a
+task file that lacks it.
+
+**SC-009** `container-scripts/append-system-prompt.md` names `entry-drift` among the pre-authorized
+agents, asserted by a test rather than by inspection.
+
+**SC-010** A push whose only change is a renamed research heading is REFUSED, and a push made with the
+heading checker's matching surface broken is refused by its `--selftest` rather than passing quietly.
+
+**SC-011** `make audit` enumerates every entry taking FR-008's declared-silence form.
+
+**SC-012** `make hooks-test` green, `make done` green, `make page-check` green.
 
 ## Decisions recorded
 
@@ -183,8 +218,15 @@ it is still the right unit for the report, which should name the section a reade
 **D4 - content-derived, never a stored hash.** No table of "this entry was current as of this text" is
 kept: such a table is exactly the stale literal that agrees with itself. git is the record.
 
-**D5 - no escape token.** Nothing refuses, so nothing needs escaping. Stated because every other guard
-in this repository has one and its absence would otherwise read as an oversight.
+**D5 - the REPORT has no escape token; the HEADING CHECK refuses and still has none, deliberately.**
+Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
+moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
+is nothing to escape. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
+unlike `check-file-scale.py`'s `FILE_SIZE_OK`, which exists because a large file can be legitimate
+ordered data. A class entry pointing at a heading that does not exist has no legitimate form: the one
+case that looks like it - a section deliberately not written - is FR-008's declared silence, which is
+an in-band recognized VALUE and not an escape. Recorded so a later session does not add one for
+symmetry.
 
 ## Out of scope
 
@@ -196,6 +238,28 @@ in this repository has one and its absence would otherwise read as an oversight.
   its own work, wants the GM's call, and is not begun here.
 
 ## Review history
+
+**Round 3** (`spec-fidelity`, 2026-09-12): FR-007's push placement verified in the source and CLOSED
+(`push_cmd` runs `check-file-scale.py` unconditionally at lines 229/236, upstream of the route decision
+at ~330, so BOTH routes run it on a whole-tree scan). Four required changes, all taken, three of them
+consequences of round 2's own fixes.
+(1) `entry-drift` was specified but WIRED TO NOTHING - no decision point, and FR-012 assigned the same
+judgment to the session, so the spec named two actors for one job and required neither. The agent could
+have shipped, never been dispatched, and every criterion still passed. The reviewer's phrase is the one
+worth keeping: an unwired agent is worse than no agent, because it is a third thing everyone believes
+checked the modal. Now pinned as a task checkbox the gate enforces, with FR-012's actor corrected.
+(2) `entry-drift` was not pre-authorized in `container-scripts/append-system-prompt.md`, so the default
+system prompt's "do not call the Agent tool unless the user asked" would have outranked it - the
+documented 2026-07-27 failure - and the first session to meet a named pair would have correctly declined
+to dispatch it.
+(3) D5 said "nothing refuses, so nothing needs escaping", which round 2's own FR-007 refusal made false.
+Split into two halves with the reason each way.
+(4) FR-011's non-vacuity proof is a GATE test while FR-007's argument is that the breaking delta runs no
+gate - so on the one push where the heading check stands alone, nothing proved it still bites. The
+push-time call now runs a `--selftest` first, as all three of its siblings do.
+Also taken, from the reviewer's aside: FR-008's declared-silence carve-out is enumerated by `make audit`
+(SC-011), on the project's own reasoning that a carve-out nobody can enumerate is one nobody revisits.
+Round 3 of five; the reviewer noted the findings are converging and told the session NOT to escalate.
 
 **Round 2** (`spec-fidelity`, 2026-09-12): all nine round-1 items confirmed addressed in substance, and
 two NEW required changes, both taken.
