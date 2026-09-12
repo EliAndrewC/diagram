@@ -25,3 +25,19 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
       green; land GATED
       research: rendering
       verify: DONE. SC-001: feature 228's shape replayed in the guard suite - with no manifest moved the gate runs as typed, is not rewritten, carries the NO SETTLEMENT-REVIEW OWED context and the stop branch is quiet with the waiver recorded (42 passed). SC-002: a moved manifest owes the review again, in the same suite. SC-003: a payload standing in the mirror records the clone's pairing state and never the mirror's. SC-004 measured on the real Kuwabata: `make page-lit CLASS="mulberry dike"` reports the dike 99.7% lit, the fish pond 3.1%, the fry pond 5.3%, the vegetable ground, lanes, windbreak and scrub 0.0%; `make picture-diff` of the pre-228 geometry against the shipped one reports 0.088% of pixels differing, max delta 10/255, and 100% of it on the fish pond, the mulberry dike, the pond sluice and the fry pond - nothing off those classes. SC-005: `make hooks-test` green (3 suites, 18 unchanged) and `make done` green (the first two runs failed on the operations registry and on page_lit's two driving branches - both fixed and committed). Landing GATED (LOCAL-GATED).
+
+## The amendment (GM 2026-09-12, after the feature landed)
+
+- [x] T08 the fallback onto main's tree disclosed on every branch that speaks (FR-009); one shared
+      string; the suite's section 9
+      research: rendering
+      verify: DONE. spec-fidelity FAITHFUL at round 1 on the amendment (the counter reset by the GM's
+      2026-09-12 ruling), and its aside taken - ONE `fallback_note` rather than five wordings, asserted by
+      the suite. test-pair-hooks.sh 51 passed: a clone claimed but never created falls back and the gate
+      branch, the review refusal and the half-open stop each disclose it, the context stays valid JSON, a
+      resolved clone adds nothing, a branch that is silent today still says nothing, and the string appears
+      once. `make hooks-test` green (3 suites, 18 unchanged); the guard-log, hook-deps and corpus
+      derivations green (181 passed). Two shell facts recorded at the point of change: an apostrophe inside
+      a single-quoted python block closes the shell's quoting, and the mirror fixture needed a manifest
+      before the stop branch could reach its half-open message at all
+

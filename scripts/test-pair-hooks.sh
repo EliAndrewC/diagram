@@ -194,5 +194,33 @@ printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AFTER_ESC=$?
 check "...so the stop branch does not fire half-open on it" '[ "$AFTER_ESC" -eq 0 ]'
 
+
+# --- 9. A FALLBACK ONTO MAIN'S TREE IS DISCLOSED, NEVER SILENT (feature 231's amendment, GM 2026-09-12) --
+# GUARD_EDIT_OK: feature 231's amendment - the residual the resolver leaves. An unnamed session, or a clone
+# claimed but never created, resolves to nothing; the cwd's git root is still used (a guard that cannot
+# resolve a clone must not refuse everything), and when that lands on MAIN's tree every branch that speaks
+# says so in ONE shared string. A resolved clone adds nothing, and no silent branch starts speaking.
+GHOST=$(printf '{"tool_name":"Bash","tool_input":{"command":"make done FULL=1"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+printf '%s' "$MIRROR/.clones/never-created" > "$MIRROR/.clones/.session-clones/ghost"
+moved
+note_says() { ( cd "$MIRROR" && printf '%s' "$1" | CLONE_MAIN="$MIRROR" "$HOOK" "${2:-pretool}" 2>&1 ); }
+check "a claimed-but-uncreated clone falls back and the gate branch DISCLOSES it" 'note_says "$GHOST" | grep -q "could not be resolved"'
+check "...and says the verdict was judged against main" 'note_says "$GHOST" | grep -q "judged against MAIN"'
+check "...and names the remedy" 'note_says "$GHOST" | grep -q "rename"'
+check "...and the context is still valid JSON" 'note_says "$GHOST" | python3 -c "import json,sys; json.load(sys.stdin)"'
+GHOSTREV=$(printf '{"tool_name":"Agent","tool_input":{"subagent_type":"settlement-review","prompt":"review it"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+rm -f "$MIRROR/.git/pairing-state.json" "$MIRROR/.git/verification-state.json"
+check "the review refusal discloses it too" 'note_says "$GHOSTREV" | grep -q "could not be resolved"'
+printf '{"engine_key":"%s"}' "$KEY" > "$MIRROR/.git/verification-state.json"
+mkdir -p "$MIRROR/.claude/skills/diagram/pool/hamlets/m"
+printf '{"meta":{"name":"m"}}' > "$MIRROR/.claude/skills/diagram/pool/hamlets/m/m.json"   # a manifest, so a review IS owed there
+printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$MIRROR/.claude/skills/diagram/Makefile"
+GHOSTSTOP=$(printf '{"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+check "the half-open stop discloses it too" 'note_says "$GHOSTSTOP" stop | grep -q "could not be resolved"'
+check "a RESOLVED clone adds nothing" '! run_pretool "$GATE_FULL" | grep -q "could not be resolved"'
+QUIET_ONE=$(printf '{"tool_name":"Bash","tool_input":{"command":"make quick"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+check "...and a branch that says nothing today still says nothing" '[ -z "$(note_says "$QUIET_ONE")" ]'
+check "the disclosure is ONE string, not five copies" '[ "$(grep -c "could not be resolved" "$(dirname "$HOOK")/pair-hooks.sh")" -eq 1 ]'
+
 printf '\ntest-pair-hooks: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

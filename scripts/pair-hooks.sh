@@ -52,14 +52,31 @@ find_root() { # find_root [payload] - THIS SESSION'S CLONE; the cwd's git root o
   # claim map, then the transcript's last rename, then the sessions json; a subagent resolves to its
   # parent's clone). The cwd stays as the fallback for a payload that names no session.
   local resolved=""
+  FELL_BACK_TO_MAIN=""
   if [ -n "${1:-}" ]; then
     resolved="$(printf '%s' "$1" | "$PAIR_HERE/clone-sync-hooks.sh" resolve 2>/dev/null | tail -1 || true)"
   fi
   if [ -n "$resolved" ] && [ -e "$resolved/.git" ]; then
     CLONE_ROOT="$resolved"
-  else
-    CLONE_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+    return 0
   fi
+  # GUARD_EDIT_OK: feature 231's amendment (GM 2026-09-12) - A FALLBACK ONTO MAIN'S TREE IS DISCLOSED,
+  # NEVER SILENT. The resolver answers nothing for an unnamed session, or for a clone claimed but never
+  # created; the cwd's git root is then still used, because a guard that cannot resolve a clone must not
+  # refuse everything. But when that lands on MAIN's tree, this guard is judging the mirror's content - the
+  # exact misreading that refused feature 228's review and then fired half-open on it - so every branch
+  # that speaks says so. A clone (a path under `.clones/`) is the normal case and adds nothing.
+  CLONE_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+  case "$CLONE_ROOT" in
+    "" | */.clones/*) ;;
+    *) [ -d "$CLONE_ROOT/.clones" ] && FELL_BACK_TO_MAIN=1 ;;
+  esac
+}
+
+#: ONE string, so the five disclosures cannot drift apart (the amendment's spec review, 2026-09-12)
+fallback_note() {
+  [ -n "${FELL_BACK_TO_MAIN:-}" ] || return 0
+  printf 'NOTE: this session'"'"'s clone could not be resolved (an unnamed session, or a clone claimed but never created), so this verdict was judged against MAIN'"'"'s tree, where the shell is standing - not against your work. Ask the GM to /rename this session, or run from your clone, and the pairing will read the right tree.'
 }
 
 review_owed_names() { # the maps whose manifest moved against main, space-separated ("" = no review owed)
@@ -254,17 +271,23 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
       guard_log pair permitted "$cmd" review-not-owed
       # GUARD_EDIT_OK: feature 231 - no escaped quotes inside this single-quoted program: the shell keeps the
       # backslashes and python then refuses the line (the suite caught it). The reason arrives as an env var.
-      PAIR_WHY="$(review_owed_why)" python3 -c '
+      # GUARD_EDIT_OK: feature 231's amendment - this branch carries the fallback disclosure, and an
+      # APOSTROPHE inside the single-quoted program below closes it (the suite caught that too), so no
+      # comment inside these python blocks carries one.
+      PAIR_WHY="$(review_owed_why)" PAIR_NOTE="$(fallback_note)" python3 -c '
 import json, os
-why = os.environ["PAIR_WHY"]
+why, note = os.environ["PAIR_WHY"], os.environ.get("PAIR_NOTE", "")
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "additionalContext": (
         "NO SETTLEMENT-REVIEW OWED: " + why + " (feature 231). The gate runs alone - no pool manifest moved, "
         "so a review would re-judge ink that has not changed. A glyph or page change with the same manifest is "
         "the GM to look at rather than the agent: hand the map back and say what moved. The waiver is recorded "
-        "at turn end. If this gate MOVES a manifest, the review becomes owed and the stop hook says so."),
+        "at turn end. If this gate MOVES a manifest, the review becomes owed and the stop hook says so."
+        + (" " + note if note else "")),
 }}))'
+      # GUARD_EDIT_OK: feature 231's amendment - the marker moved out of the python block, where an
+      # apostrophe would close the shell's own quoting
       exit 0
     fi
     if review_pending "$dir" || review_recorded "$key"; then
@@ -282,10 +305,12 @@ print(json.dumps({"hookSpecificOutput": {
     PAIRED=$(printf '%s' "$payload" | "$PAIR_HERE/_hm_make.py" as-paired 2>/dev/null || true)
     if [ -n "$PAIRED" ]; then
       guard_log pair rewrote "$cmd"
-      printf '%s' "$payload" | REWRITTEN="$PAIRED" python3 -c '
+      # GUARD_EDIT_OK: feature 231's amendment - this branch carries the fallback disclosure
+      printf '%s' "$payload" | REWRITTEN="$PAIRED" PAIR_NOTE="$(fallback_note)" python3 -c '
 import json, os, sys
 payload = json.load(sys.stdin).get("tool_input", {})
 payload["command"] = os.environ["REWRITTEN"]
+note = os.environ.get("PAIR_NOTE", "")
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "updatedInput": payload,
@@ -294,8 +319,9 @@ print(json.dumps({"hookSpecificOutput": {
         "DISPATCH THE settlement-review IN THIS SAME TURN - verify prints which maps changed and "
         "then runs the gate in the background, so the review is not sitting on the critical path. "
         "If no review is owed for this delta, re-issue with PAIR_OK=\"<why>\" and the reason is "
-        "logged."),
+        "logged." + (" " + note if note else "")),
 }}))'
+      # GUARD_EDIT_OK: feature 231's amendment - the fallback disclosure on the rewrite branch
       exit 0
     fi
     # GUARD_EDIT_OK: feature 212 - EVERY OTHER SHAPE IS RECORDED AND PERMITTED, NOT REFUSED (GM
@@ -324,7 +350,8 @@ print(json.dumps({"hookSpecificOutput": {
     esac
     [ -n "$bg" ] && detached=yes
     # GUARD_EDIT_OK: feature 231 - the permit's context names the snapshot directories the reviewer reads
-    printf '%s' "$payload" | PAIR_MAPS="${maps:-the delta}" PAIR_KEY="${key:0:12}" PAIR_DETACHED="$detached" PAIR_SNAP="$snap" python3 -c '
+    # GUARD_EDIT_OK: feature 231's amendment - this branch carries the fallback disclosure
+    printf '%s' "$payload" | PAIR_MAPS="${maps:-the delta}" PAIR_KEY="${key:0:12}" PAIR_DETACHED="$detached" PAIR_SNAP="$snap" PAIR_NOTE="$(fallback_note)" python3 -c '
 import json, os, sys
 maps, key, detached = os.environ["PAIR_MAPS"], os.environ["PAIR_KEY"], os.environ["PAIR_DETACHED"]
 snap = os.environ["PAIR_SNAP"].strip()
@@ -342,8 +369,10 @@ print(json.dumps({"hookSpecificOutput": {
         f"settlement-review run TOGETHER (GM 2026-08-29). DISPATCH NOW, in the same turn: "
         f"settlement-review over {maps}. {how} A turn may not end with this gate green and no review "
         f"dispatched. One-sided case (docs, tests, a guard script)? Say so: "
-        f"PAIR_OK=\"<why this needs no review>\" <command> - the reason lands in dev/bypass-log/."),
+        f"PAIR_OK=\"<why this needs no review>\" <command> - the reason lands in dev/bypass-log/."
+        + (" " + os.environ["PAIR_NOTE"] if os.environ.get("PAIR_NOTE") else "")),
 }}))'
+    # GUARD_EDIT_OK: feature 231's amendment - the fallback disclosure on the permit branch
     exit 0
   fi
 
@@ -362,6 +391,7 @@ print(json.dumps({"hookSpecificOutput": {
     printf 'record matches it, so the review would be adjudicating a map the suite has not checked.\n\n' >&2
     printf '    make verify        # starts the gate, then dispatch the review in the same turn\n\n' >&2
     printf 'Deliberately one-sided? Put PAIR_OK and the reason in the dispatch prompt.\n' >&2
+    note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2   # GUARD_EDIT_OK: 231's amendment
     guard_log pair blocked "$atype" review-without-gate   # GUARD_EDIT_OK: feature 168
     exit 2
   fi
@@ -400,6 +430,7 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   write_pairing "$(pairing_file)" stop_told "$key"
   printf 'PAIRING HALF-OPEN: the gate went green on this content and no settlement-review looked at it.\n' >&2
   printf 'Dispatch one now, or record why it is not owed: PAIR_OK="<reason>" on your next gate run.\n' >&2
+  note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2   # GUARD_EDIT_OK: 231's amendment
   guard_log pair blocked "stop" half-open-pairing   # GUARD_EDIT_OK: feature 168
   exit 2
 }
