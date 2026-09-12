@@ -1,7 +1,7 @@
 # Feature 236 - catch mistakes early and cheaply
 
 **Created**: 2026-09-12
-**Status**: Draft
+**Status**: FAITHFUL (spec-fidelity round 5, 2026-09-12)
 **Input**: the GM's request, verbatim, in `request.md`, with the six items as the session put them
 
 ## Summary
@@ -187,11 +187,11 @@ passes; the lint runs at gate and push over the touched `specs/` directories.
 **SC-010** (FR-012, FR-013, FR-014) The agent file documents VERIFY mode, and a review task generated from
 the template for any round after the first names the changed passages and asks for a full reading of
 those alone.
-**SC-014** (FR-009a) The tasks template carries the "American spellings, hyphens only" checklist line.
 **SC-011** (FR-003, FR-009) The root `CLAUDE.md` names `_patch.py` beside the `Edit` rule and records the
 Edit-versus-Bash tension.
 **SC-012** (spec-wide) Every check is proven to FIRE by removing its mechanism and watching a test go red.
 **SC-013** (spec-wide) `make hooks-test`, `make quick`, `make done` and `make page-check` are green.
+**SC-014** (FR-009a) The tasks template carries the "American spellings, hyphens only" checklist line.
 
 ## Decisions recorded
 
@@ -242,6 +242,13 @@ the delta and owes the fix.
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Round 5** (`spec-fidelity`, changed text + contradiction scan): **FAITHFUL**, with four small record
+fixes taken before implementation. R4 carried a stale paragraph beside its replacement; R8 still said
+"zero of 42" where the finding is zero under every walker; the committed walker hid a backtick behind an
+apostrophe inside an unquoted heredoc body - the exact case FR-004a names - so the walker now reads such a
+body separately and its selftest pins it, with a bare backtick; and R8's count now says when it was taken,
+over a window that moves.
 
 **Round 4** (`spec-fidelity`, changed text + contradiction scan): all seven round-3 items confirmed
 resolved; two more, both the recurring class of a figure written without its method. (1) R4's count was

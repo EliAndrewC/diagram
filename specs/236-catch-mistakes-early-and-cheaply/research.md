@@ -116,9 +116,6 @@ than no check.
 
 A sweep of them is its own work and wants the GM.
 
-Zero of the 161 are in `specs/*/request.md` (re-checked against the hook's table), which is the one place Principle V forbids touching - checked,
-because a check that corrected the GM's own words would be worse than no check.
-
 ## R5 - the withdrawn-figure check, and why it cannot reach outside `specs/`
 
 The failure it aimed at is real and documented: feature 234's withdrawn measurement survived in five
@@ -202,7 +199,11 @@ the finding.** Round 3's walker counted 18 executing spans, this spec's first co
 contexts only), round 4's rough walker about 100, and the walker now COMMITTED beside this file as the
 record - `measure_backticks.py`, whose `selftest()` pins every rule it applies (single and ANSI-C quotes do
 not execute; a heredoc delimiter quoted any of three ways makes its body literal; an escaped backtick opens
-nothing; bare and double-quoted contexts both execute) - counts **73 over 16,748 commands**. Run it with
+nothing; bare and double-quoted contexts both execute; every span in an UNQUOTED heredoc body executes,
+and an apostrophe there is literal text rather than a quote) - counted **73 over 16,748 commands** on
+2026-09-12. The window is the 60 most RECENT transcripts, so the count moves as sessions run: the same
+day it read 74 over 16,767 after the unquoted-body fix. Its one disclosed over-count is a backtick inside a
+`#` comment, which does not run but cannot be a deliberate substitution either. Run it with
 `python3 specs/236-catch-mistakes-early-and-cheaply/measure_backticks.py`.
 
 **What holds under all four walkers is that NONE is a deliberate command substitution.** Every span the
@@ -211,6 +212,6 @@ committed walker lists is a markdown code span or an identifier written into pro
 `cd /diagram` enters main's tree, `git init --bare`, `find`. Not one is a `date`-style substitution.
 
 So an earlier draft's reason for only warning - that `"today is `date`"` is sometimes deliberate - is
-contradicted by the data: zero of 42. And this project writes deliberate substitution as `$(...)`. The
+contradicted by the data: zero under every walker. And this project writes deliberate substitution as `$(...)`. The
 check REFUSES, naming `$(...)` and single quotes as the fix, which is the GM's own word: *"reject it
 early"*. A backtick in an UNQUOTED heredoc body (`<<EOF`) executes the same way and is caught the same way.
