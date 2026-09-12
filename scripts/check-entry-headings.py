@@ -39,6 +39,16 @@ SILENT = re.compile(r"\(no dedicated entry\s*-\s*recorded as silent\)", re.I)
 
 
 def _load(root: Path):  # noqa: ANN202
+    """The engine's registry and resolver, or None when this repository has no diagram skill.
+
+    A repository without the skill has no class entries, so there is nothing for this check to be
+    right or wrong about - that is a no-op, not a failure. The distinction matters because this runs
+    at PUSH time against whatever tree it is given, including the fixture repositories
+    `scripts/test-sync-with-main.sh` builds, which are a bare main and a clone and nothing else. A
+    skill directory that EXISTS but will not import is a different thing and still raises.
+    """
+    if not (root / SKILL / "l7r").is_dir():
+        return None
     skill = str(root / SKILL)
     if skill not in sys.path:
         sys.path.insert(0, skill)
@@ -50,7 +60,10 @@ def _load(root: Path):  # noqa: ANN202
 
 def broken(root: Path) -> list[str]:
     """Every class whose `Entry:` resolves to no research question and is not a declared silence."""
-    classes, research_questions = _load(root)
+    loaded = _load(root)
+    if loaded is None:
+        return []
+    classes, research_questions = loaded
     bad = []
     for key, fc in sorted(classes.items()):
         if SILENT.search(fc.entry):
@@ -65,13 +78,19 @@ def selftest() -> int:
     of its siblings at the push call site run one. Fires on a heading that does not exist; stays quiet on
     a real one; and does NOT let the declared-silence form swallow a broken heading."""
     root = Path(__file__).resolve().parent.parent
-    _classes, research_questions = _load(root)
     real = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
-    assert research_questions(real), "the checker cannot see a heading that exists - its matching surface is dead"
-    assert not research_questions("research/archetypes.html - 'A heading that does not exist at all'"), "a broken heading must resolve to nothing"
+    # the FORM half always runs: telling a declared silence from a broken heading is this file's own
+    # logic and owes nothing to the engine
     assert SILENT.search("research/fields.html (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"
     assert not SILENT.search(real), "a real entry must not read as a declared silence"
     assert not SILENT.search("research/fields.html - 'A heading that does not exist at all'"), "a broken heading must not read as a declared silence"
+    loaded = _load(root)
+    if loaded is None:
+        print("check-entry-headings selftest ok (form only - no diagram skill in this tree to resolve against)")
+        return 0
+    _classes, research_questions = loaded
+    assert research_questions(real), "the checker cannot see a heading that exists - its matching surface is dead"
+    assert not research_questions("research/archetypes.html - 'A heading that does not exist at all'"), "a broken heading must resolve to nothing"
     print("check-entry-headings selftest ok")
     return 0
 
