@@ -186,21 +186,26 @@ class VegetableGround(Kind):
 
 class PigSty(Kind):
     """
-    What: A simple pig shed built on the dike of a fish pond, its pen railed at the water's edge so the pigs'
-    manure runs straight into the pond.
+    What: A simple pig shed built on the dike of a fish pond, a railed yard beside it along the bank, so the
+    pigs' manure runs straight into the water. It stands a few feet clear of the short culvert that feeds or drains
+    its pond, on the bank nearest the houses.
 
-    Why: The dike-pond loop fed its fish with more than silkworm waste: pigs, chickens and ducks were reared on
-    the dikes to manure the ponds, and a cane hamlet fed its pigs on bagasse. The shed stands on the pond
-    nearest the houses.
+    Why: The shed is at the water on purpose - that is the whole arrangement, not an accident of crowding. A pig
+    shed is built on a pond dike so the excrement is flushed directly into the pond, where it feeds the water
+    rather than fouling it: the manure raises the plankton the fish eat. So the pigs are part of what feeds the
+    fish the household cultivates. What the shed keeps clear of is the sluice itself - nobody builds over the
+    opening they have to reach in order to lift its boards, and that is a matter of getting at the gate rather
+    than of keeping the water clean.
 
-    Note: GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many
-    households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.
+    Note: GUESS: the practice is read, and so is the reason the shed sits at the water, but nothing read gives
+    how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
+    of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
 
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
     Label: guess
-    Sources: fao-ac264e, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Sources: fao-ac264e, fao-ac264e-ch9, fao-y1187e, qimin-yaoshu-yangzhu, isis-dykepond, ruddle-zhong-1988
+    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'pig sty'
@@ -209,19 +214,23 @@ class PigSty(Kind):
 class DuckPen(Kind):
     """
     What: A duck pen on a fish pond: a fenced run on the dike with the duck house in it, and a fenced corner of
-    the water where the birds swim - their droppings feed the fish.
+    the water where the birds swim - their droppings feed the fish. Both the dry run and the fence reaching into
+    the water stand clear of the pond's own culvert.
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
-    among the stock the dike-pond loop kept to manure its ponds.
+    among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
+    pig shed's do. The fence keeps off the culvert for the plain reason that a fence across the opening a pond
+    is filled and drained through would be in the way of working it.
 
     Note: GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is
-    the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it.
+    the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it. The clearance at
+    the culvert is a guess as well; nothing read gives a spacing along a dike.
 
     Name: duck pen
     Covers: every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner
     Label: guess
-    Sources: fao-ac264e, isis-dykepond
-    Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
+    Sources: fao-ac264e, fao-ac264e-ch9, isis-dykepond
+    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 
     key = 'duck pen'

@@ -592,3 +592,51 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   today, which re-rolls the pool and wants its own cohort measurement. Sketch: score each candidate BOARD seat
   by the best `CAPTION_FEATURE_GAP` its own thirty caption seats can reach, and prefer a seat whose caption can
   stand clear - the same "the caption is part of the seat" rule, extended to the term that was missing.
+
+## 2026-09-12 (feature 233): the pond stock held clear of the sluices - the layout moved
+
+  The GM, looking at this map, asked whether the pig sties would stand as close to the pond sluices as
+  they did, and whether the runoff harms the fish in a pond cultivated for fishing. Two source-reader
+  passes answered the second question and declined the premise behind it: a pig shed on a fish-pond dike
+  is built there so the waste reaches the water, the manure raising the plankton the fish eat, and the
+  oldest siting instruction anyone has for a pig pen - the *Qimin Yaoshu*, about 540 AD - says the place
+  is *not* disliked for being filthy. What can go wrong is a rate and a concentration, never a distance.
+  And on the sluice itself the record came back SILENT, from both readers independently.
+
+  So nothing was moved back from the water. What was wrong was narrower: three of the seven sties had a
+  feed culvert drawn straight THROUGH the shed, and the pond-1 duck pen's fence arc crossed one - all
+  four at 0.0 ft, an overlap rather than a gap. The cause was a gap in the placer, not a roll:
+  `pond_fixture_fits` held a fixture off eight registries and off nothing in the water system, while the
+  engine's own dike-top house placer had skipped a sluice notch since feature 150. Every drawn part -
+  the sty footprint, the pen's dry run, and the pen's fence arc - now stands 6 ft clear of every stub,
+  measured to the stub SEGMENT and returning zero on an overlap. The reason is constructional and the
+  record says so: nobody builds over the opening they must reach to lift its boards.
+
+  Five of the nine fixtures moved. Counts held at 7 sties and 2 pens, on the same ponds, because
+  `_bank_seats` now ranks the parcel's edges and the placer takes the nearest that FITS - the old code
+  took the single nearest seat or skipped the pond, so any clearance would have moved fixtures between
+  ponds or lost them. Minimum clearance over every drawn part: 0.0 -> 8.47 ft. The sheds did not retreat
+  from the water doing it; the review measured five center-to-waterline distances that all got SHORTER
+  (5.6 -> 3.9, 7.5 -> 6.2, 6.7 -> 4.6, 11.5 -> 10.2, 6.5 -> 3.8 ft), and the walk from the houses grew
+  by +0 to +9 ft for the sties and +24 ft for the one pen.
+
+  The accept is BOUNDED (settlement-review): ranking alone left the whole perimeter available, and this
+  map's nine fixture-carrying ponds put the far bank 155.6 to 320.0 ft further from the houses than the
+  first choice - a shed there would read as belonging to no household. A seat may not be further from
+  the house cluster than the pond's own PARCEL center is (the figures: `specs/233-pigsty-clear-of-the-sluice/research.md` R7). It refuses nothing drawn here (the accepted seats
+  cost +0 to +21.2 ft, and the tightest sits 57.3 ft inside the bound), and it is geometric rather than
+  a tuned distance.
+
+  Two things the review corrected in the record rather than the drawing. The claim that the banks are
+  "about 6.5 m" measured nothing: that figure was one pond's two opposite collars added together. The
+  collar a sty actually stands on is 2.0 m median (2.6-4.7 m under the sheds), the ground between one
+  pond's water and the next is 13.3 m with a canal down the middle of it, and the modern standard for a
+  shed-carrying dike is 5 m - so the drawn collar is SNUG by that standard, which the record now states
+  instead of claiming a comfortable fit. And the duck pens had been a near-symmetric pair on facing
+  north banks, reading as decoration; pond 1's is down the east bank now and they read as two
+  households'.
+
+  Left alone, both pre-existing and both noted by the review: `pig1` and `pig4` sit skewed at a dike
+  elbow (36.2 and 16.1 degrees off the local bank run), because a seat is an edge MIDPOINT and a
+  mosaic parcel's corner-cutting segment belongs to neither adjoining run; and three sheds have one
+  corner 0.3-0.8 ft outside their parcel polygon, sub-foot and invisible at any zoom.
