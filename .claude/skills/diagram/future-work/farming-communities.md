@@ -818,7 +818,7 @@ acted on it, which is its own small lesson.
 
 ## 2e. `plot_regularity` is recorded as though rolled and is a literal
 (2026-08-19, from the Kashikawa review.) `meta.plot_regularity` reads like a rolled knob and the comb
-path passes the literal `"organic"` (`hamletgen/water.py`), so it can never vary. Alongside it, all
+path passes the literal `"organic"` (`hamletgen/water/comb.py`), so it can never vary. Alongside it, all
 four scripted hamlets record `plot_size: medium` (a 2-in-4 weight, so 4/4 is about a 6% draw),
 `field_archetype: valley_paddy` (documented - polder is opt-in) and `cluster_seeding: frontage`
 (derived, not rolled). None of that is wrong; what is wrong is that a reader meets four `meta` lines

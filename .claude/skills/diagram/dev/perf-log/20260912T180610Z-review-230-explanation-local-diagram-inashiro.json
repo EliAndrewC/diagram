@@ -1,0 +1,332 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "3335cc23609116e057360f2b9ba935db0bc871ea1fab6ad154e6e2eb3cf8a069",
+  "end": {
+    "commit": "b3747fda",
+    "label": "230-end",
+    "utc": "20260912T180457Z"
+  },
+  "environment": "local",
+  "explanation": "Feature 230 moves the settlement, and a moved settlement is a different amount of work. TOTAL is -3.6% (27.9s -> 26.9s), so the feature is net FASTER than the code it replaces once the size search stopped meeting the fan's brook-side trim as a size change (that fix alone took cohort seed 25's field stage from 15 carves to 3, and the cohort total from +14.0% to -3.6%). Two seeds are still slower and both are map differences rather than new per-candidate scans. Seed 4 (+16.4%, the reference hamlet): its cluster now stands on the other margin of the fan, because the brook runs down the flank it used to stand on (FR-006), and that margin's shape asks the lane web for 66 routes where the old one asked 35 - measured under cProfile, web 1.58s to 6.19s, fouled() 80,265 calls to 472,244, all of them through the existing PointGrid and edge_within indexes rather than a fresh scan. The brook itself adds one 47-segment watercourse to the fabric every route already tests against. Seed 39 (+8.3%): field +0.4s, appurtenances +0.2s, windbreak +0.2s - the same shape, a fan trimmed on one flank and a cluster seated elsewhere, spread thin. Nothing here is a scan of geometry that does not change during the scan; the indexes constitution X clause 15 asks for are the ones being called, more times, because there are more links to place.",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260912T180610Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "seeds": {
+      "25": -23.2,
+      "39": 8.3,
+      "4": 16.4,
+      "47": -7.9
+    },
+    "total_pct": -3.6
+  },
+  "render": "perf bands [local]: 230-end vs 230-start -> band 2\n  seed   4   +16.4%; grew: web +1.0s, track +0.2s, crossings +0.1s\n  seed  25   -23.2%\n  seed  39    +8.3%; grew: field +0.4s, appurtenances +0.2s, windbreak +0.2s\n  seed  47    -7.9%\n  TOTAL       -3.6%\n  crossed: seed 4 +16.4% > 10%\n  owes: band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.19,
+        0.44
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.34,
+        0.35
+      ],
+      "field": [
+        1.7,
+        2.09
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.67,
+        0.54
+      ],
+      "homesteads": [
+        0.25,
+        0.24
+      ],
+      "labels": [
+        0.02,
+        0.03
+      ],
+      "notice": [
+        0.36,
+        0.38
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.08
+      ],
+      "sink": [
+        0.01,
+        0.03
+      ],
+      "track": [
+        1.26,
+        1.17
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        2.72,
+        0.37
+      ],
+      "windbreak": [
+        0.65,
+        0.55
+      ],
+      "woodland": [
+        0.01,
+        0.01
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.24,
+        0.45
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.4,
+        0.34
+      ],
+      "field": [
+        1.57,
+        1.98
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.64,
+        0.55
+      ],
+      "homesteads": [
+        0.23,
+        0.25
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.7,
+        0.53
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.08
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.15,
+        1.12
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.58,
+        0.58
+      ],
+      "windbreak": [
+        0.44,
+        0.6
+      ],
+      "woodland": [
+        0.03,
+        0.01
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.51,
+        0.35
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.33,
+        0.45
+      ],
+      "field": [
+        1.94,
+        2.0
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.62,
+        0.52
+      ],
+      "homesteads": [
+        0.25,
+        0.32
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.33,
+        0.28
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.06
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.05,
+        1.25
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.45,
+        1.49
+      ],
+      "windbreak": [
+        0.52,
+        0.34
+      ],
+      "woodland": [
+        0.03,
+        0.01
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.11,
+        0.12
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.31,
+        0.41
+      ],
+      "field": [
+        4.51,
+        2.78
+      ],
+      "frame": [
+        0.01,
+        0.0
+      ],
+      "hinterland": [
+        0.42,
+        0.49
+      ],
+      "homesteads": [
+        0.2,
+        0.3
+      ],
+      "labels": [
+        0.01,
+        0.04
+      ],
+      "notice": [
+        0.17,
+        0.32
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.07
+      ],
+      "sink": [
+        0.0,
+        0.03
+      ],
+      "track": [
+        0.99,
+        1.49
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.31,
+        0.39
+      ],
+      "windbreak": [
+        0.54,
+        0.59
+      ],
+      "woodland": [
+        0.0,
+        0.01
+      ]
+    }
+  },
+  "verdict": "pending"
+}

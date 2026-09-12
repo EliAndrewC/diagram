@@ -1,4 +1,4 @@
-"""Unit tests for the water frame and the field it shapes (`hamletgen/water.py`), plus the waterfields frame math it stands on.
+"""Unit tests for the water frame and the field it shapes (`hamletgen/water/`), plus the waterfields frame math it stands on.
 
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
@@ -161,7 +161,7 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     aspect lands the target the best one is searched again without the probe."""
     from types import SimpleNamespace
 
-    from l7r.diagram.hamletgen import water as w
+    from l7r.diagram.hamletgen.water import fit as w  # the DEFINING submodule: `water` is a package since feature 230, and patching it reaches nothing the search bound
 
     carves: list[tuple[float, float]] = []
 
@@ -273,9 +273,9 @@ def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tole
         built.append(kw["rows"])
         return {"envelope": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], "rows": kw["rows"]}
 
-    monkeypatch.setattr(water, "build_polder", fake_build)
-    monkeypatch.setattr(water, "net_acres", lambda net, ftpx: plan.target_acres)
-    monkeypatch.setattr(water, "clean_polder_parcels", lambda net: net)  # the winner's parcel cleanup: the stub has no parcels to clean
+    monkeypatch.setattr(water.polder, "build_polder", fake_build)  # the DEFINING submodule (feature 230 made `water` a package)
+    monkeypatch.setattr(water.polder, "net_acres", lambda net, ftpx: plan.target_acres)
+    monkeypatch.setattr(water.polder, "clean_polder_parcels", lambda net: net)  # the winner's parcel cleanup: the stub has no parcels to clean
     net = water.fit_polder(plan, 12)
     assert built == [25], "one candidate, within tolerance: the bisection stops there"
     assert net["rows"] == 25

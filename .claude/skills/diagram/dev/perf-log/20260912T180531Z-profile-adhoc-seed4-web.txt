@@ -1,0 +1,36 @@
+perf-profile seed 4 stage web: 6.2s under cProfile (the stages before it took 7.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260912T180531Z-seed4-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         6656777 function calls (6612168 primitive calls) in 6.188 seconds
+
+   Ordered by: cumulative time
+   List reduced from 273 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    6.195    6.195 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py:212(stage_web)
+       66    0.478    0.007    5.328    0.081 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:20(_route)
+   472244    0.906    0.000    4.435    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:159(fouled)
+        3    0.002    0.001    3.511    1.170 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py:99(_touch_junctions)
+   323807    0.408    0.000    2.009    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:322(edge_within)
+        4    0.001    0.000    1.870    0.467 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py:23(_detour_links)
+        4    0.001    0.000    1.460    0.365 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py:74(_fine_lattice_links)
+        1    0.005    0.005    1.459    1.459 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py:153(_serve_stragglers)
+   323807    0.803    0.000    0.993    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:257(near)
+        2    0.001    0.000    0.836    0.418 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py:205(_join_orphan_ways)
+   481717    0.719    0.000    0.818    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:312(inside)
+   270155    0.262    0.000    0.814    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+   472244    0.563    0.000    0.702    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:152(candidates)
+      278    0.001    0.000    0.615    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:78(fabric_index)
+       29    0.114    0.004    0.501    0.017 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:98(__init__)
+   272308    0.344    0.000    0.479    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+      191    0.017    0.000    0.443    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py:344(clear_runs)
+  1468032    0.420    0.000    0.420    0.000 {method 'get' of 'dict' objects}
+     3966    0.141    0.000    0.306    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:293(__init__)
+383839/339262    0.121    0.000    0.289    0.000 {built-in method builtins.min}
+       86    0.001    0.000    0.211    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py:21(_clear_link)
+       11    0.021    0.002    0.171    0.016 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py:402(_crosses_fabric)
+        1    0.000    0.000    0.135    0.135 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py:35(_lay_skeleton)
+     3291    0.002    0.000    0.130    0.000 {built-in method builtins.next}
+   459111    0.125    0.000    0.125    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:61(to_pt)
+
+

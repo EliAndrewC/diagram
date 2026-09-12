@@ -287,3 +287,17 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   the condition, the record and the class below the junction, the inert UNLESS removed, and Out of scope says the
   one way the route changes. FR-005's cohort made unconditional and given the one-map-per-value duty.
 - Round 5 (2026-09-12): FAITHFUL. The reviewer's aside - once every comb map's brook runs down its flank, the off-frame drain sink may be reached only by Kuwabata's polder; confirm at the pool sweep which comb map, if any, still exercises it, or record that none does - is carried to T05.
+- Amendment round 1 (2026-09-12, the counter reset to zero on the post-acceptance decisions D6-D10, per the GM's
+  ruling of the same day): CHANGES REQUIRED, five items. D9 and D10 were judged INSIDE the request - a brook that
+  runs from off-map to off-map is the geometry accepted FR-004 creates, so seating the cluster clear of it is what
+  paying for that costs rather than a widening, and D10 is Principle XIV applied to a defect found while
+  diagnosing D9. What was wrong was that the delivered behavior lived only in a decision paragraph: (1) no
+  requirement stated the seat rule - now FR-006; (2) no success criterion measured it - now SC-6; (3) D9 asserted a
+  physical proposition ("a hamlet does not straddle its own brook") with no Principle XII label and no declined
+  alternative, and the task carrying it was classified `rendering` so it owed no research boxes - a research pass
+  is running and the label follows it, in D9, in Inashiro's notes and at the point of change alike; (4) the rule
+  moved into its own `research: physical` task, T06, with the five boxes; (5) the Summary and Out of scope
+  described a smaller feature than the one built - both corrected. The reviewer's aside is recorded as a question
+  for a later feature: the record may show villages on both banks with a crossing, which under the knob doctrine
+  would make one bank versus two a KNOB rather than a rule.
+

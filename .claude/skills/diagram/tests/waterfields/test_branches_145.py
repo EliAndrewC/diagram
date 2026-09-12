@@ -76,7 +76,7 @@ def _comb(**over):
 def test_a_sector_too_short_to_hold_a_row_plants_nothing_rather_than_a_degenerate_one() -> None:
     """A row that straddles the spawn point has zero width and never plants, and a sector shorter than
     24 grain units cannot hold one at all. Both arms return an empty sector rather than a strip of
-    nothing - the acreage bisection in `hamletgen/water.py` reads the result and moves on."""
+    nothing - the acreage bisection in `hamletgen/water/fit.py` reads the result and moves on."""
     assert _comb()["plots"], "the reference-shaped fan carves"
     tiny = _comb(field_fall=60.0, canal_a_len=(120.0, 60.0), canal_b_len=(120.0, 60.0))
     assert tiny["plots"] == [], "there is no room for a single row"
