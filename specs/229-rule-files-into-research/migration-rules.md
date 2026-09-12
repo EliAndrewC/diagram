@@ -20,6 +20,10 @@ Move, from the audit's classes:
   cost and the alternatives declined, a fix tried and reverted with its measurement, a project-goal rationale.
 - **B rules the engine does NOT encode** (the audit's "B items the engine does not encode" list, and for the
   unscripted tiers nearly every B unit): written as SPECIFICATION paragraphs (below).
+- **A finding or research narrative the page does NOT carry** (the audit marks some "B (research content,
+  misfiled)" or "unmigrated research"; a knob's value-space grounding; a historical account the rule file tells
+  and the page does not): written as the entry's FINDING, under the physical-claim rule below. This is the GM's
+  central case - the why must not be lost with the file.
 - **The "why" a hamlet-tier rule carried that the engine's comment lacks** (the audit says which; the session's
   `research.md` collects them): written onto the page as the decision's grounds. The number itself stays in the
   engine; you say in the report which engine site should point at your anchor.
