@@ -39,3 +39,46 @@ One behavior changed on the way, deliberately: `GROUNDS` captures its reason wit
 a note reading `no source is owed:` with nothing after it is reported as a grounds note missing its
 reason instead of falling through to the generic "matches no form". The branch that says so was
 unreachable before.
+
+## R3 - the census AFTER, and what the delta means
+
+`make footnote-census` on the same tree, after every note this feature touched:
+
+| | cited | grounds | ABSENT | settled |
+|---|---|---|---|---|
+| before | 969 | 0 | 84 | 0 |
+| after | 969 | **1** | **83** | 0 |
+
+One note left the backlog, and it left it by being reclassified as owing no source. Nothing else moved:
+no note was deleted, no absence became a citation under this feature, and the settled state shipped with
+no instance, exactly as the spec said it would.
+
+**The number this feature was written to produce is the ONE.** The GM's complaint was that a category
+meant to denote problems was counting things that are not problems, and the honest answer turned out to
+be that today's record contains almost none of that: of eighteen notes a triage proposed for
+reclassification, one converts, and seventeen are genuine research questions that stay in the backlog.
+That is a smaller fix than the triage promised and a truer one, and the mechanism is what matters going
+forward - the next session that meets a sentence with nothing to find now has a word for it, a closed
+list of six reasons, four checkers that know the form, and a census that counts it separately.
+
+## R4 - the arguments the three arguable notes lost, and why each is written at its own note
+
+FR-006 said three notes are argued at their pages and convert only if the argument holds. All three were
+argued and all three REFUSED, each argument left in an HTML comment at the note so the next reader meets
+it rather than re-litigating:
+
+- **`fields.html` fn-85** - `follows from the definitions`. Only the second half of the sentence is
+  definitional (a bund across a drain dams it). The opening identity - a paddy's lowest bund IS the
+  collector's top-of-bank - is contingent: this record's own `berm` entry draws a strip between a canal
+  and the nearest plot, so the two need not be the same earth. FR-003's first clause bars it, and a
+  land-consolidation standard could settle it, so it belongs in the backlog. An independent
+  `record-format` read of the page reached the same verdict and added the berm evidence.
+- **`religion-and-death.html` fn-78** - `the record's own silence`. The clause reports a reading, which
+  is what an absence note already says, and the sentence around it asserts something about the world.
+  Exhausting the search would make it a SETTLED absence under FR-004, not a grounds note.
+- **`religion-and-death.html` fn-49** - the section's own `Sources:` line credits the GM's ruling of
+  2026-07-21 on the footprint band, so what the band rests on is `this project's decision`, which
+  FR-002's barred set forbids here; and the paragraph is the rule the map FOLLOWS, so the figures were
+  chosen and then drawn rather than read off a drawing - the distinction that kept fn-57 open. The
+  independent read found a third and stronger ground the argument had missed: the band is a size for a
+  real building at a tier drawn to true scale, so FR-003's first clause bars it whatever the reason.

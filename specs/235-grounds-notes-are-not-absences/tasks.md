@@ -43,15 +43,18 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 
 ## Phase 4 - verification and landing
 
-- [ ] T11 `record-format` on every changed page, including its new duty on the grounds notes; findings applied
+- [x] T11 `record-format` on every changed page, including its new duty on the grounds notes; findings applied
       research: procedure
+      verify: DONE. DONE. six record-format agents read every page and every citations page this feature and 232 changed. Their findings are applied: about 130 edits taking sheet-pixel figures, fetch verdicts, engine vocabulary and the document's own history out of the reader's text; 43 glossary terms added and two rows that were firing the WRONG definition fixed; three write-ups that ended mid-sentence repaired; a checker's NOTE removed from inside a quotation. Every one of them read cities/sizing fn-2, the record's only grounds note, and none reported it as carrying a claim about the world or a labeled guess
 - [ ] T12 `quote-check` on every changed page, confirming it no longer reports a grounds note as a defect
       research: procedure
-- [ ] T13 the census run AFTER, and the delta stated with its three numbers (SC-003)
+- [x] T13 the census run AFTER, and the delta stated with its three numbers (SC-003)
       research: procedure
+      verify: DONE. DONE. the AFTER census on the same tree: 969 cited, 1 GROUNDS, 83 ABSENT, 0 settled, against 969 / 0 / 84 / 0 before. The delta is this feature's own: one note left the backlog because it owes no source, and no note left it any other way
 - [ ] T14 `make citations`; `make page-check` green
       research: procedure
-- [ ] T15 the closing report: what changed, the census delta, and the `research/README.md` correction OFFERED not applied
+- [x] T15 the closing report: what changed, the census delta, and the `research/README.md` correction OFFERED not applied
       research: procedure
+      verify: DONE. DONE. closing-report.md written: what shipped, the census delta (969/0/84/0 -> 969/1/83/0), the honest headline that the record contained one instance of the defect rather than eighteen, the two sentences moved into comments with both footnotes kept, and THREE research/README.md corrections OFFERED and not applied - the binary this feature replaced, the SUMMARY-ONLY label feature 195 retired, and a pointer to SOURCES.md, a file that no longer exists and that no test catches because the retired-Markdown sweep exempts the README by name
 - [ ] T16 `make done` green (detached); commit; `sync-with-main.sh done`
       research: procedure
