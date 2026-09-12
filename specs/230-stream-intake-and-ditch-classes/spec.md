@@ -173,8 +173,10 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   through a small table of the keys retired and added since the snapshot (`field ditch` -> `irrigation ditch`,
   `drainage ditch`), so the 51-class proof still holds for every key the snapshot has and the count moves with
   the table rather than by hand.
-- **SC-3** Sawada's, Kashikawa's and Kuwabata's off-frame drain runs and Inashiro's and Mizuguchi's pond runs
-  carry the same class and the same record kind.
+- **SC-3** Every drain's continuation carries the same class and the same record kind whichever sink it
+  reaches - the off-frame runs (Sawada, Kashikawa, Kuwabata) and the pond runs (Inashiro, Mizuguchi) alike. The
+  third sink, the confluence, is implemented and unit-tested but drawn by no pool map: the two maps that could
+  take it have their outfall too near the canvas edge for a junction to carry a visible trunk (research R7).
 - **SC-4** The head race and the intake on every comb pool map follow a recorded, footnoted finding - or a GUESS
   the record labels and the GM has been told about - and the physical task's five boxes are ticked with their
   verdicts.

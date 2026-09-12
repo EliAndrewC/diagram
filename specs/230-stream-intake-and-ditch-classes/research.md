@@ -299,3 +299,29 @@ straddling form is therefore recorded as DECLINED-FOR-NOW rather than unsupporte
 is: two forms are attested at the two scales, and the day a way can cross a brook, which side a hamlet builds on
 is a knob to roll rather than a rule to keep.
 
+## R7 The confluence, and why no pool map draws one (2026-09-12)
+
+FR-002's third sink - the drain joining the brook that passes the field - is implemented, and after review pass 7
+no pool map takes it. That is a measurement rather than a retreat, and it is worth writing down before someone
+reads the spec and goes looking for the junction.
+
+The rule a confluence has to pass is the reach, a real descent below the outfall, a route that does not cross the
+crop, and `BROOK_JOIN_TRUNK` of brook running on below the junction. Passes 6 and 7 both found the LAST of those
+being met by brook that no reader could see: the trunk was counted as ARC LENGTH, and Sawada's junction came out
+7.4 ft outside the sheet with all 359 ft of its trunk off the canvas. The trunk is counted on the canvas now, and
+the junction reserves itself as CONTENT so the crop cannot leave it out (`plan.confluence`, `stage_frame`) - the
+same mechanism the title pocket uses, and the right one, because the frame is decided in `stage_frame` and
+nowhere else. Two attempts to predict the frame back in `stage_sink` are recorded at the point of change; the
+second refused every confluence the generator can draw, which is how the prediction was shown to be unworkable.
+
+MEASURED on Sawada, the map whose brief this sink was written for: one candidate passes the reach, the descent
+and the crop - and the brook has **33 ft** of canvas left below it against the 150 ft the rule asks. Pinning the
+other flank (`brook_side`, made pinnable for the experiment) gives no candidate at all. The geometry is the
+reason: the drain's outfall stands at the field's low corner, which on these two maps is near the canvas edge,
+and a brook that leaves the map there cannot carry a visible trunk below the junction. So both maps take the
+off-frame sink, which is honest, and the pool exhibits two of the three sinks.
+
+The branch is proved by a unit test instead (`tests/hamletgen/test_sink.py`, the confluence taken on a brook that
+runs well inside the picture and refused on one carried outside it), and the third sink will appear on the first
+map whose outfall stands far enough inside the frame.
+

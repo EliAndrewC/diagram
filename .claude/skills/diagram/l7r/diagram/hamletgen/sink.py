@@ -158,6 +158,10 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
 #: junction a reader can see - `settlement-review` measured Sawada's joined trunk at 4.5 ft before the crop
 #: cut it, two lines leaving the map at one point rather than a tributary entering a stream. A road running
 #: off the frame implies more beyond; a junction implies nothing.
+CROP_MARGIN_PX = 48.0
+#: The margin `crop_to_content` adds around the hard content it crops to - so the field's box grown by it is a
+#: box the finished picture cannot fail to show, which is what a junction needs to be judged against.
+
 BROOK_JOIN_TRUNK = 150.0
 #: How much of the run from the outfall to the confluence may lie inside the crop before the route is
 #: refused. The outfall is AT the field's edge and a comb's envelope bows out around its own collector, so
@@ -204,23 +208,20 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
     dx, dy = plan.fall
     best: tuple[float, Pt] | None = None
     legs = list(zip(plan.brook, plan.brook[1:], strict=False))
-    # THE TRUNK IS MEASURED IN THE PICTURE, NOT ALONG THE COURSE (feature 230, settlement-review pass 6).
-    # `BROOK_JOIN_TRUNK` exists so a confluence is not drawn at the frame's edge with nothing below it to read,
-    # and it was measured as ARC LENGTH - which a brook can spend entirely off the sheet. Sawada's join came out
-    # 6 ft inside the view of a 2,091 ft-wide picture with all 359 ft of its joined trunk outside the canvas, so
-    # the rule's own defect was available to it. The frame is not decided until `stage_frame`, four stages later,
-    # but its floor is: the crop always contains the field, and the scatter's own predicted frame (feature 224)
-    # grows the crop boxes by 48 + 120. So the trunk is counted only where it lies inside the field's box grown
-    # by that margin - a conservative reading of the picture, which is the safe direction for a rule that exists
-    # to keep a junction ON the sheet.
-    _fx = [q[0] for q in plan.envelope] or [0.0, float(plan.W)]
-    _fy = [q[1] for q in plan.envelope] or [0.0, float(plan.H)]
-    _pic = (min(_fx) - 168.0, min(_fy) - 168.0, max(_fx) + 168.0, max(_fy) + 168.0)
-
+    # THE TRUNK IS MEASURED ON THE CANVAS, NOT ALONG THE COURSE (feature 230, settlement-review passes 6 and 7).
+    # `BROOK_JOIN_TRUNK` exists so a confluence is not drawn with nothing below it to read, and it counted ARC
+    # LENGTH - which a brook may spend entirely off the sheet: pass 6 measured Sawada's junction with all 359 ft
+    # of its trunk outside the canvas. Two attempts to predict the PICTURE here were both wrong, and the second
+    # is the instructive one: the crop's guaranteed box is the field's own extent plus the crop margin, the brook
+    # runs OUTSIDE the field by a skirt's width by design, and the drain's outfall stands at the field's low
+    # corner - so no junction can be deep inside that box, and predicting it refused every confluence the
+    # generator can draw. The frame is not knowable here. What IS knowable is whether the brook runs on across
+    # the map below the junction, and that is what this asks; whether the junction is SHOWN is settled where the
+    # frame is settled, by `stage_frame` reserving it as content (`plan.confluence`).
     def _seen(c: Pt, d: Pt) -> float:
-        """How much of the leg c->d lies inside the predicted picture, sampled at the walk's own stride."""
+        """How much of the leg c->d lies on the CANVAS, sampled at the walk's own stride."""
         n = max(1, int(math.hypot(d[0] - c[0], d[1] - c[1]) / stride))
-        inside = sum(1 for i in range(n + 1) if _pic[0] <= c[0] + (d[0] - c[0]) * i / n <= _pic[2] and _pic[1] <= c[1] + (d[1] - c[1]) * i / n <= _pic[3])
+        inside = sum(1 for i in range(n + 1) if 0.0 <= c[0] + (d[0] - c[0]) * i / n <= plan.W and 0.0 <= c[1] + (d[1] - c[1]) * i / n <= plan.H)
         return math.hypot(d[0] - c[0], d[1] - c[1]) * inside / (n + 1)
 
     below = [sum(_seen(c, d) for c, d in legs[k + 1 :]) for k in range(len(legs))]
@@ -228,9 +229,9 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
         run = math.hypot(b[0] - a[0], b[1] - a[1])
         for i in range(int(run / stride) + 1):
             t = min(1.0, i * stride / run) if run else 0.0
-            if below[k] + _seen((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t), b) < BROOK_JOIN_TRUNK:
-                continue  # the join would sit at the frame's edge with no trunk to read
             q = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            if below[k] + _seen(q, b) < BROOK_JOIN_TRUNK:
+                continue  # the brook must run on below the junction far enough to read as a trunk
             d = math.hypot(q[0] - out[0], q[1] - out[1])
             if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT:
                 continue
@@ -291,6 +292,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
             mid_j = ((out[0] + join[0]) / 2 - dy * bow, (out[1] + join[1]) / 2 + dx * bow)
             drain_run(s, [out, mid_j, join], "stream")
             plan.sink_brook = [out, mid_j, join]
+            plan.confluence = join  # `stage_frame` reserves it: the junction is a feature, and the crop must show it
             return
         heading = drain_heading(s, name) or (dx, dy)
         # THE ROUTE IS CHOSEN AS A WHOLE - junction and exit together.

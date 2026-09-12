@@ -346,7 +346,11 @@ class CombMixin:
         _bw += [(fp["x"], fp["y"], fp["rx"] + 3.0, fp["ry"] + 3.0) for fp in self.M.get("field_ponds") or []]
         if _bw:
             net["bund_beans"] = [q for q in net["bund_beans"] if all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw)]
-        _water = [([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0) for d in (self.M.get("field_ditches") or []) if len(d.get("poly") or ()) >= 2]
+        _water = [
+            ([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0)
+            for d in (self.M.get("field_ditches") or [])
+            if len(d.get("poly") or ()) >= 2
+        ]
         _water += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (self.M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
         if _water:
             net["bund_beans"] = [q for q in net["bund_beans"] if all(min(seg_dist(q[0], q[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1)) >= half for poly, half in _water)]

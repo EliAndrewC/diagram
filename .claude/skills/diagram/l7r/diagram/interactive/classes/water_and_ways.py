@@ -67,12 +67,13 @@ class DrainageDitch(Kind):
     Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
     collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
     consolidation the water that left a village's paddies went on down to the river, or to the next field, to
-    be used again below. The collector widens as it goes - a thread where it starts between the last
-    plots, its full width where it leaves the field - because every plot it passes adds that plot's drawdown to
-    what it is already carrying.
+    be used again below. On a comb field the collector widens as it goes - a thread where it starts
+    between the last plots, its full width where it leaves the field - because every plot it passes adds that
+    plot's drawdown to what it is already carrying; a polder's ring drain instead carries the whole basin at one
+    rank from the start, and is drawn at one width.
 
-    Note: The collector's form, its separation from the supply net and its widening run are read; the sink its
-    run reaches is the map's declared water sink.
+    Note: The collector's form and its separation from the supply net are read; whether it widens along its run
+    follows the field it drains, and the sink its run reaches is the map's declared water sink.
 
     Caveat: the sink its run reaches is the map's declared water sink
 

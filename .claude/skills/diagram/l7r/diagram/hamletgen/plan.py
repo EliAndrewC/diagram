@@ -74,6 +74,7 @@ class HamletSpec:
     # The rolled knobs, pinnable.
     water_sink: str | None = None
     intake: str | None = None  # the intake's form at the brook: weir | open (feature 230; `INTAKE_FORMS`)
+    brook_side: int | None = None  # which flank the brook passes on: +1 / -1 (feature 230; `BROOK_FLANKS`), pinnable so the pool can exhibit a sink the roll happens not to reach
     cluster_shape: str | None = None
     lane_skeleton: str | None = None
     lane_web: str | None = None
@@ -115,6 +116,8 @@ class HamletSpec:
             )
         if self.windward is not None and self.windward not in WIND_VECTORS:
             raise ValueError(f"windward {self.windward!r} is not a compass quarter: {sorted(WIND_VECTORS)}")
+        if self.brook_side is not None and self.brook_side not in BROOK_FLANKS:
+            raise ValueError(f"brook_side {self.brook_side!r} must be one of {sorted(BROOK_FLANKS)} - the two flanks the brook may pass the fan on")
         if self.water_sink is not None and self.water_sink not in ("pond", "offmap"):
             raise ValueError(f"water_sink {self.water_sink!r} must be 'pond' (a tameike below the fields) or 'offmap' (the drain brook leaves the frame)")
 
@@ -194,6 +197,11 @@ class SitePlan:
     # the brook ignored at the seat when the map came up short, keeping whichever roll seats more.
     seat_ignores_brook: bool = False
     seat_brook_steered: int = 0
+    # WHERE THE DRAIN MEETS THE BROOK, when it does (feature 230). Set by `stage_sink`; read by `stage_frame`,
+    # which reserves it as content so the crop cannot leave the junction off the sheet. A confluence is the one
+    # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
+    # crop deliberately ignores runners, which is how one came to be drawn 7.4 ft outside the picture.
+    confluence: Pt | None = None
 
     @property
     def fall(self) -> Pt:
@@ -313,7 +321,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),
         fan_aspect=float(_roll(spec.seed, "fan_aspect", FAN_ASPECTS)),
         intake=spec.intake or str(_roll(spec.seed, "intake", INTAKE_FORMS)),
-        brook_side=int(_roll(spec.seed, "brook_side", BROOK_FLANKS)),
+        brook_side=spec.brook_side if spec.brook_side is not None else int(_roll(spec.seed, "brook_side", BROOK_FLANKS)),
         head_lead=float(_roll(spec.seed, "head_lead", HEAD_RACE_LEAD)),
         target_acres=target_acres,
         W=W,

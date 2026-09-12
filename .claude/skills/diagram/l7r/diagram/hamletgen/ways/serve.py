@@ -6,7 +6,7 @@ import math
 from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest, seg_dist
-from l7r.diagram.sitegen.geom import unit
+from l7r.diagram.sitegen.geom import crop_polys, unit
 
 from ..clearance import fabric_index
 from ..consts import (
@@ -150,18 +150,41 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     return True
 
 
-def _arrives(path: Poly, house: Pt, reach: float = 58.0) -> bool:
-    """Does this footpath actually GET to the house it was drawn for?
+_JOIN_FT = 4.0
+"""The INK tolerance the one-network rule uses (`tests/gate/test_lane_network.py` JOIN_TOL): two treads nearer
+than this are one network, and a footpath further off joins nothing."""
 
-    A path that stops short serves nobody and is a line ending in open ground - which is what
-    `lanes_reach_something` says in the gate ("an end that meets no other way, no house and no field is a
-    line that stops in open ground"), at a 60 ft bar. Measured on the reference hamlet: a 100 ft straggler
-    whose near end touched the web and whose far end stopped 60.1 ft from the house it was routed to - one
-    tenth of a foot outside the rule, and serving nothing at either end. The honest fallback is the one the
-    block below already takes for a fouling path: the house goes unserved and the roll says so in words, which
-    a reader can act on, rather than a tread drawn to nowhere. The margin is under the gate's own figure on
-    purpose - a path that only just arrives is a path that stops being one when anything downstream trims it."""
-    return any(math.dist(q, house) <= reach for q in path)
+
+def _ends_worth_walking_to(path: Poly, house: Pt, segs: Sequence[tuple[Pt, Pt]], crops: Sequence[Poly], reach: float = 58.0) -> bool:
+    """Does each end of this footpath front something - the house it serves, the network, or the field?
+
+    THE GATE'S OWN TEST, ASKED WHERE THE PATH IS DRAWN (`lanes_reach_something`: an end that meets no other way,
+    no house and no field is a line stopping in open ground, at a 60 ft bar). Two narrower rules were tried here
+    and each traded one defect for another. Drawing whatever the router returned left a 100 ft tread on the
+    reference hamlet whose far end stopped 60.1 ft from the house it was routed to and 94 ft from any way -
+    serving nothing at either end. Refusing every path that did not REACH its house was worse: on Kashikawa it
+    left three farmsteads with no way at all, because a path that stops within the gate's serve distance is a
+    path that serves, and throwing it away strands the household it was drawn for. So the bar is the gate's, and
+    it is the same at both ends: a path may stop short of its house if what it stops at is the field or the rest
+    of the network, and may not stop at nothing."""
+    if len(path) < 2:
+        return False
+
+    def _fronts(q: Pt) -> bool:
+        if math.dist(q, house) <= reach:
+            return True
+        if any(seg_dist(q[0], q[1], a, b) <= reach for a, b in segs):
+            return True
+        return any(seg_dist(q[0], q[1], r[i], r[(i + 1) % len(r)]) <= reach for r in crops if len(r) >= 3 for i in range(len(r)))
+
+    # ...AND IT MUST JOIN THE NETWORK AT ONE END. A footpath is routed to a point ON the web, and the clip that
+    # keeps it out of the steadings can take that end off it - leaving a tread that fronts a house at one end and
+    # the field at the other while touching no way at all. Two of Sawada's did exactly that, 175 ft and 137 ft,
+    # and `lanes_form_one_network` counted the map as three networks: you cannot walk to them. The houses they
+    # served were within reach of another lane anyway, which is why refusing them strands nobody - and where one
+    # would, the roll's own reach report says so and the ladder re-rolls.
+    joined = any(seg_dist(q[0], q[1], a, b) <= _JOIN_FT for q in (path[0], path[-1]) for a, b in segs)
+    return joined and _fronts(path[0]) and _fronts(path[-1])
 
 
 def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> None:
@@ -562,13 +585,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
-                    if not _arrives(path, c):
+                    if not _ends_worth_walking_to(path, c, segs, crop_polys(s)):
                         continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None and _arrives(_folded, c):
+            if not _served and _folded is not None and _ends_worth_walking_to(_folded, c, segs, crop_polys(s)):
                 _draw_web(s, _folded, 3, houses=[c])
                 added += 1
                 _served = True

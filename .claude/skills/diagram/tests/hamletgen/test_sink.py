@@ -171,3 +171,24 @@ def test_the_outfalls_own_crop_edge_is_exempt_but_a_ditch_through_the_rice_is_no
 
     assert not _through_the_crop(plan, (1000.0, 700.0), (1120.0, 760.0)), "leaving the crop at once is the outfall's own edge"
     assert _through_the_crop(plan, (450.0, 700.0), (1120.0, 760.0)), "most of this run is inside the rice"
+
+
+def test_a_confluence_is_taken_only_where_the_junction_is_in_the_picture() -> None:
+    """Feature 230, settlement-review passes 6 and 7. The drain joins the passing brook where one falls within
+    reach - but a junction drawn at or past the sheet's edge is not a junction a reader can see, and both of the
+    pool's brook-fed maps whose drain leaves the frame put their outfall near the canvas edge, where no visible
+    confluence exists. So the accepting branch is proved here rather than on a map: a brook running well inside
+    the field's own box, falling past the outfall with a long run below it, is joined; the same brook shifted so
+    that the junction lands outside the box the crop must contain is not."""
+    from l7r.diagram.hamletgen import sink
+
+    plan = a_plan()
+    out = (700.0, 1010.0)  # just below the square field's low edge
+    plan.brook = [(760.0, 900.0), (760.0, 1000.0), (760.0, 1100.0), (760.0, 1400.0), (760.0, 1700.0)]
+    joined = sink.brook_join(plan, out)
+    assert joined is not None, "a brook passing the outfall inside the picture, with a trunk below it, is joined"
+    assert 900.0 <= joined[1] <= 1700.0 and abs(joined[0] - 760.0) < 1e-6, "the junction stands on the brook"
+    assert (joined[1] - out[1]) > 0, "and below the outfall, not level with it"
+
+    plan.brook = [(760.0 + 4000.0, y) for _x, y in plan.brook]  # the same brook, carried far outside the picture
+    assert sink.brook_join(plan, out) is None, "a junction outside the box the crop must contain is refused"

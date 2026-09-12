@@ -306,8 +306,18 @@ def test_the_brook_takes_the_flank_it_is_rolled_onto() -> None:
     """The two values of `brook_side` put the course on the two sides of the fall axis - past the tap's own
     stride, which runs straight down the fall on either roll so the head race's offtake angle is true."""
     plan = a_plan()
-    one = hg.brook_skirt(plan, (700.0, 300.0), 1)[1:]  # [1:] drops the tap's own stride, which runs down the fall on either roll
-    other = hg.brook_skirt(plan, (700.0, 300.0), -1)[1:]
+    # THE TAP'S STRIDE IS TWO POINTS NOW, not one (feature 230): the corner cut splits it, and both points are
+    # held on the fall so the offtake angle the record states is the one a reader measures. Drop the whole
+    # stride - every leading vertex still on the fall axis - rather than a fixed count, so the test says what it
+    # means: PAST the tap, the two rolls are on opposite flanks.
+    def _past_the_tap(course):
+        i = 0
+        while i < len(course) and abs(course[i][0] - 700.0) < 0.5:
+            i += 1
+        return course[i:]
+
+    one = _past_the_tap(hg.brook_skirt(plan, (700.0, 300.0), 1))
+    other = _past_the_tap(hg.brook_skirt(plan, (700.0, 300.0), -1))
     assert max(q[0] for q in one) < 700.0 < min(q[0] for q in other), "the two rolls put the brook on the two sides of the fall axis"
 
 

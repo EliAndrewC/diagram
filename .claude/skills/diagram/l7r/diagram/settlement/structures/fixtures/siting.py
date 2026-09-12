@@ -314,6 +314,23 @@ class FixtureSitingMixin:
             return False
 
         _b, _s, x, y, rot, lab, _gap = max((c for c in cands if c[0] >= floor), key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
+        # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
+        # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
+        # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:
+        # measured on the reference hamlet at 9.5 ft, a straggler running 72 degrees across the lane the board
+        # was posted on, so the board stood side-on to the only way beside it. Take the bearing from the way
+        # that is actually nearest the chosen seat; the seat itself, its traffic and its verge are unchanged.
+        _near = min(
+            (
+                (seg_dist(x, y, (float(pp[k][0]), float(pp[k][1])), (float(pp[k + 1][0]), float(pp[k + 1][1]))), math.degrees(math.atan2(float(pp[k + 1][1]) - float(pp[k][1]), float(pp[k + 1][0]) - float(pp[k][0]))))
+                for _ln in (self.M.get("lanes") or [])
+                for pp in [_ln.get("pts") or []]
+                for k in range(len(pp) - 1)
+            ),
+            default=None,
+        )
+        if _near is not None:
+            rot = _near[1]
         # `lab` NO LONGER DECIDES THE CAPTION'S SIDE, and that was the last thing keeping two cohort
         # seeds notched. It is computed above by testing `label_seat_clear` at the DEFAULT distance
         # only - `y +/- h/2 + 11` - so it reports "below is blocked" for a board whose below seat is

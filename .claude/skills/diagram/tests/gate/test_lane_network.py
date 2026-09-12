@@ -230,11 +230,7 @@ def test_no_tree_is_planted_in_a_path(lanes) -> None:
     # the lane's own half-width, as the rule was first written - `w` is the drawn tread, defaulted as the
     # engine defaults it, and a trunk is judged against the path it would stand in rather than against a figure
     halves = [float(ln.get("w", 6)) / 2.0 for ln in (M.get("lanes") or [])]
-    on_path = [
-        (round(x), round(y))
-        for x, y in trunks
-        if any(_min_dist((x, y), p) < halves[i] for i, p in enumerate(ways) if len(p) >= 2 and i < len(halves))
-    ]
+    on_path = [(round(x), round(y)) for x, y in trunks if any(_min_dist((x, y), p) < halves[i] for i, p in enumerate(ways) if len(p) >= 2 and i < len(halves))]
     assert not on_path, f"tree trunk(s) stand ON a lane at {on_path[:4]}"
 
 

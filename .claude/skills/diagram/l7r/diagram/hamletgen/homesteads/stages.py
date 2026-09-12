@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 import random
 
-from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement import Settlement, seg_dist, seg_intersect
 
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, SUN_CORRIDOR_FT, WEST_SUN_FT, Pt
 from ..plan import SitePlan
@@ -60,11 +60,62 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         s.px(28) * 0.85,
     )  # the SMALLEST house the placer may roll: the pre-test must never refuse a seat the placer could take (a first cut used the largest and seated 7 of 10 on a toy)
 
+    # THE HAMLET'S OWN BANK, HOUSE BY HOUSE (feature 230, settlement-review pass 7). `seat_cluster` keeps the BAND
+    # off a margin the brook divides, and that is not the same as keeping every HOUSE on one bank: a band that
+    # merely grazes the water can still seat a farmstead across it. Kashikawa shipped exactly that - one house
+    # 52 ft beyond the brook from the other nineteen, 133 ft from the lane web, with no bridge anywhere on the
+    # water, which is the stranded homestead of pass 2 arriving by a different road. A candidate is on the far
+    # bank when the line from the cluster's own center to it crosses the brook; that is exact, needs no side
+    # convention, and costs one segment test against a course of fifty points.
+    _brook = [(float(q[0]), float(q[1])) for q in (plan.brook or ())]
+
+    def _bank_of(x: float, y: float) -> int:
+        """Which side of the brook a point stands on: the sign of its offset from the NEAREST reach of the course.
+
+        A CROSSING TEST IS NOT A SIDE TEST, and that mistake cost two rolls. Asking whether the line from one
+        house to another crosses the brook reads a curving course wrongly - the brook comes down one flank and
+        wraps the field's toe, so two houses on the same bank can have the water between them as the crow flies,
+        and every candidate after the first was refused (1 house of 15 seated on three maps). The side of the
+        nearest reach is local, so a bend cannot invert it."""
+        j = min(range(len(_brook) - 1), key=lambda i: seg_dist(x, y, _brook[i], _brook[i + 1]))
+        (ax, ay), (bx, by) = _brook[j], _brook[j + 1]
+        return 1 if (bx - ax) * (y - ay) - (by - ay) * (x - ax) >= 0 else -1
+
+    def _far_bank(x: float, y: float) -> bool:
+        """Is this candidate across the brook from the hamlet that is already there?
+
+        THE BANK IS DECIDED BY THE HOUSES, not by a point chosen in advance - both fixed hubs were tried and both
+        were wrong in their own direction. The band's CENTRE sits near the water where the brook grazes the band,
+        and on Kashikawa it fell on the far side, so the test inverted and let two of twenty across. The seat's
+        ANCHOR is on the field margin, with the brook running down that flank between the field and the band, so
+        on Inashiro it put the whole settlement on the wrong side of its own test. The houses already standing are
+        the hamlet's bank by definition; the first is free and the rest follow it."""
+        if not _brook or not s.placed:
+            return False
+        near = sorted(s.placed, key=lambda b: (float(b[0]) - x) ** 2 + (float(b[1]) - y) ** 2)[:8]
+        mine = _bank_of(x, y)
+        # BOTH TESTS MUST AGREE, and each alone was measured wrong. The SIDE of the nearest reach flips where the
+        # course wraps the field's toe - two houses on one bank read as opposite sides - and refusing on that
+        # alone seated 1 or 2 of 20. A CROSSING of the straight line between two houses is wrong the other way:
+        # a brook that bends around them both is crossed by a line that stays on one bank throughout. Together
+        # they name the case that is actually wrong - the water between two houses AND a different bank under
+        # each - which is Kashikawa's outlier, 52 ft beyond the brook from the other nineteen.
+        def _cut_off(b: object) -> bool:
+            bx, by = float(b[0]), float(b[1])  # type: ignore[index]
+            if _bank_of(bx, by) == mine:
+                return False
+            return any(seg_intersect((bx, by), (x, y), _brook[i], _brook[i + 1]) is not None for i in range(len(_brook) - 1))
+
+        return sum(1 for b in near if _cut_off(b)) * 2 > len(near)
+
     def _pretest(x: float, y: float) -> bool:
         """A candidate's cheap refusal before the placer is asked (feature 226 FR-003): a house-sized box on the house
-        side of the chains and clear of the corridors, and clear of every placed bundle's box. Counted as a candidate."""
+        side of the chains and clear of the corridors, clear of every placed bundle's box, and on the cluster's own
+        bank of the brook. Counted as a candidate."""
         s._seat_search["candidates"] += 1
         if s._site_blocks_rect((x, y, _hw0, _hh0)):
+            return False
+        if _brook and _far_bank(x, y):
             return False
         return all(not (abs(x - px) < (_hw0 + pw) / 2 and abs(y - py) < (_hh0 + ph) / 2) for px, py, pw, ph, *_ in s.placed)
 
