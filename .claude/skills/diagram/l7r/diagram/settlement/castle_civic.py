@@ -435,7 +435,7 @@ class CastleCivicMixin:
         the attested hanko band runs from Choshu's FIRST Meirinkan at 940 tsubo (0.31 ha, 1718)
         to Aizu's Nisshinkan at 2.65 ha and the rebuilt Meirinkan's 5 ha, so ~1 ha is a solid
         mid-band school for a ~200k-koku-class domain whose capital is the schooling magnet
-        (capitals.md) without claiming Nisshinkan's fame. Inside: civil lecture hall 76 x 44 ft
+        (research/cities/capitals.html) without claiming Nisshinkan's fame. Inside: civil lecture hall 76 x 44 ft
         (the LARGER wing - a hanko is first a school of letters); bugeijo 60 x 36 ft with kamiza
         and plank grain (the provincial hall's own 120-tatami floor); a 100 ft archery lane with
         azuchi along the south band (the kyudo 92 ft shot); the rest courts and circulation -

@@ -41,7 +41,7 @@ def test_the_record_s_pages_are_found_and_the_registry_and_citations_pages_are_n
     pages = research_pages()
     assert "homesteads.html" in pages and "cities/fabric.html" in pages
     assert "SOURCES.html" not in pages and not any(p.startswith("citations/") for p in pages)
-    assert len(pages) == 15, pages
+    assert len(pages) == 19, pages  # 15 pages until feature 229 added settlements, ways, presentation and cities/sizing
 
 
 def test_the_paths_beside_a_research_page() -> None:
@@ -78,7 +78,12 @@ def test_every_citations_page_carries_its_works_and_its_notes_in_that_order() ->
         text = _read(citations_page(page))
         assert 0 < text.find(WORKS_OPEN) < text.find(WORKS_CLOSE) < text.find('<section class="footnotes">'), page
         assert '<a href="' + "../" * citations_page(page).count("/") + page + '">' in text, f"{citations_page(page)}: links back to its research page"
-        assert notes(text), f"{citations_page(page)}: no notes (non-vacuity)"
+        # NON-VACUITY, and what it cannot ask of a page with nothing to cite (feature 229): a research page of
+        # map drawing conventions - `presentation.html` - rests on the GM's rulings and this project's own
+        # measurements, so it carries no reference and its citations page carries no note. A page that DOES
+        # reference something must have the note behind it.
+        if '<sup class="fn">' in _read(page):
+            assert notes(text), f"{citations_page(page)}: no notes (non-vacuity)"
 
 
 def test_the_works_section_names_every_cited_work_once_in_order_of_first_citation() -> None:

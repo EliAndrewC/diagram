@@ -598,7 +598,7 @@ class Settlement(
         "storehouses",
         "merchant_estates",
         # the KILN WORKS is a kept satellite too (GM 2026-07-27). It was excluded while it was a
-        # 28x18 ft mound whose caption was wider than it was - the note in presentation.md about
+        # 28x18 ft mound whose caption was wider than it was - the note in research/presentation.html about
         # Tango's frame being set by the words "tanning yard" is from that era. A works with its
         # own housing is now wider than any caption of it, and a kiln clipped at the frame would
         # read as "there is a kiln somewhere off that way", which is the one thing a satellite
