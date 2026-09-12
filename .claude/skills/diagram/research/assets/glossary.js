@@ -4434,6 +4434,6 @@ window.RECORD_GLOSSARY = [
    "Important Cultural Landscapes",
    "Important Cultural Landscape"
   ],
-  "def": "A national designation in Japan given to a whole area rather than to one building; Harie's spring-water district was selected as one together with neighboring Shimofuri."
+  "def": "A national designation in Japan given to a whole area rather than to one building; Harie's spring water was selected as one together with the neighboring Shimofuri district."
  }
 ];
