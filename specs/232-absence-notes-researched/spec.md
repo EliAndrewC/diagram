@@ -1,6 +1,6 @@
 # Feature 232 - every absence note gets a real research pass
 
-**Status**: DRAFT (spec-fidelity rounds 1-2 applied; awaiting round 3)
+**Status**: ACCEPTED - `spec-fidelity` FAITHFUL at round 3 (rounds 1 and 2 applied in full)
 **Request**: [`request.md`](request.md), the GM's words verbatim, 2026-09-12.
 
 ## What the GM asked for
@@ -89,8 +89,9 @@ What is NOT changed under this feature is what a generator DRAWS. That is an eng
 maps, and it owes its own spec-kit feature, a settlement review and a gate. So where a corrected finding
 no longer matches what a map draws, the page **states the divergence as a fact the reader learns about
 the map**: what the map shows, and what the record now finds. It carries no feature number, no task id,
-no engine identifier and no promise of future work - all of which are the HTML-comment class (feature
-209) and would be rejected by `record-format` if they were visible. The record already speaks to this
+and no engine identifier, which are the HTML-comment class (feature 209) and which `record-format`
+rejects in visible text; and no promise of future work, which is an instruction to a later session
+rather than something a reader of the map can use. The record already speaks to this
 reader when a map departs from history, under `deviation` and `map drawing convention`; a divergence
 between the finding and the drawing is the same kind of sentence. Each is also a row in the closing
 report (FR-005).
