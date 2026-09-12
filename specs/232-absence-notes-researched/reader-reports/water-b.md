@@ -64,7 +64,7 @@ article, and this container cannot reach the publisher's host at all.
 - Publisher: Higher Education Press
 - DOI: 10.15302/J-LAF-1-050004
 - Open-access status: Semantic Scholar reports `"status": "BRONZE"` - free to read at the
-  publisher, no licence stated. So a person with an ordinary browser should be able to open it.
+  publisher, no license stated. So a person with an ordinary browser should be able to open it.
 
 **URLs tried, and what blocked me**
 
@@ -617,7 +617,7 @@ loaded horse cart walks in half a day".
 
 I also read ja.wikipedia 「旅籠」 (https://ja.wikipedia.org/wiki/旅籠) to see whether the Japanese
 post-town inn would supply the second story instead. It does not: the article covers the hatago's
-grades, its food, its meshimori-onna and its guilds, and says nothing about storeys or stables.
+grades, its food, its meshimori-onna and its guilds, and says nothing about stories or stables.
 
 The honest repair is either to drop the second story, or to keep it as an explicit map drawing
 convention - a taller building so the inn reads from the road - and say that the one attested
@@ -1022,7 +1022,7 @@ artifact - a hand-dug, hand-lined, bucket-drawn village well - where the siting 
 out because contractors have to be told.
 
 **Source read (1)**: RWSSHP Resource Manual #3a, *Hand Dug Well Construction Manual*, Ethiopia
-Rural Water Supply, Sanitation and Hygiene Programme, 2007 (the PDF's own running head is
+`Rural Water Supply, Sanitation and Hygiene Programme`, 2007 (the PDF's own running head is
 "HDW & SD Construction Manual PTB 2007").
 URL read (public, HTTP 200, 336 KB):
 https://www.fhdesigns.com.au/wp-content/uploads/2023/01/Manual-3a-HDW-Construction.pdf

@@ -652,7 +652,7 @@ parenthesis the page was carrying. Both page sentences are corrected. Re-pointin
 themselves at this paper is a small follow-on left for the systematic pass.
 
 Two bibliographic corrections the registry now carries: the author is **Mukoyama**, not Koyama as every
-earlier pass had it; and the file carries no Creative Commons statement, so the registry asserts no licence
+earlier pass had it; and the file carries no Creative Commons statement, so the registry asserts no license
 for it even though the open-access indexes report one.
 
 

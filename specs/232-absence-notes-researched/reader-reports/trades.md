@@ -510,7 +510,7 @@ commentary beside Skinner's own words:
 Importance for Anthropology", Taiwan Journal of Anthropology 8(1): 27-45, 2010 (Institute of
 Ethnology, Academia Sinica), which I fetched and read:
 
-> In his empirical research using local gazetteers, Skinner had calculated that, on average, there were eighteen villages per market town, so each was modelled as having an exclusive primary (or “standard”) marketing area consisting of an inner ring of six villages and an outer ring of twelve.
+> In his empirical research using local gazetteers, Skinner had calculated that, on average, there were eighteen villages per market town, so each was modeled as having an exclusive primary (or “standard”) marketing area consisting of an inner ring of six villages and an outer ring of twelve.
 
 Consequence for the map rule, which is the reason this matters: `fields.html` uses the figure to
 argue that a market town is the center of a farmed hinterland. Fifty square kilometers is a
@@ -769,7 +769,7 @@ What was tried, in the coordinator's order:
 
 1. curl with a browser user agent against <https://www.tandfonline.com/doi/abs/10.1179/pma.1996.002> - HTTP 403, body a Cloudflare "Just a moment..." interstitial. WebFetch had already returned 403. A third route, the r.jina.ai reader proxy, also returned 403 for the same URL.
 2. Open-access check: Unpaywall (`https://api.unpaywall.org/v2/10.1179/pma.1996.002?email=unpaywall@impactstory.org`) returns `"is_oa": false, "oa_status": "closed", "has_repository_copy": false, "oa_locations": []`. OpenAlex agrees: `"is_oa": false, "oa_status": "closed", "any_repository_has_fulltext": false`. Semantic Scholar's record has the abstract elided at the publisher's request. So the ARTICLE is genuinely closed.
-3. Repository copy: the Northamptonshire Historic Environment Record holds only catalogue entries - <https://her.northamptonshire.gov.uk/Source/SNN62141> (the source record: an "Abstract/Summary" field with no abstract in it, the document held offline "in SMR temp store") and <https://her.northamptonshire.gov.uk/Event/ENN7244> (the 1983 excavation event, which cites a 1984 Current Archaeology note but carries no pit count). The Ingenta copy of the same article (<https://www.ingentaconnect.com/content/maney/pma/1996/00000030/00000001/art00002>) is also 403.
+3. Repository copy: the Northamptonshire Historic Environment Record holds only catalog entries - <https://her.northamptonshire.gov.uk/Source/SNN62141> (the source record: an "Abstract/Summary" field with no abstract in it, the document held offline "in SMR temp store") and <https://her.northamptonshire.gov.uk/Event/ENN7244> (the 1983 excavation event, which cites a 1984 Current Archaeology note but carries no pit count). The Ingenta copy of the same article (<https://www.ingentaconnect.com/content/maney/pma/1996/00000030/00000001/art00002>) is also 403.
 
 What IS public and what I read: the PUBLISHER'S ABSTRACT, which Taylor & Francis shows freely
 to a human browser at the doi.org/tandfonline URL above, and which OpenAlex republishes in its

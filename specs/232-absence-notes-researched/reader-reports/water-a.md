@@ -338,7 +338,7 @@ the TLS and OCR caveats there before quoting)
 
 Passage, verbatim as the PDF's text layer gives it:
 
-> The sediment withdrawal by the offtaking channel is also affected by the alignment of the offtaking channel as pointed out earlier. The alignment of the offtaking canal should be kept such that its centre line is at an angle of 60' to 80' to the centre line of the main canal in the direction of flow to prevent excess sediment being drawn into the offtaking canal.
+> The sediment withdrawal by the offtaking channel is also affected by the alignment of the offtaking channel as pointed out earlier. The alignment of the offtaking canal should be kept such that its center line is at an angle of 60' to 80' to the center line of the main canal in the direction of flow to prevent excess sediment being drawn into the offtaking canal.
 
 Second passage, same page, verbatim:
 
@@ -467,11 +467,11 @@ and, same page, verbatim:
 > もとの溜井（見沼）の縁辺に用水路、中央に排水路を設ける干拓方式もとられた。
 
 English translation by this agent: "A reclamation method was also adopted in which irrigation canals
-were placed on the margins of the former reservoir (Minuma) and a drainage channel in the centre."
+were placed on the margins of the former reservoir (Minuma) and a drainage channel in the center."
 
 **This settles the "the NAME less so" caveat in the record's own parenthesis**: a learned society
 page attaches 紀州流 to Isawa Yasobei AND to Minuma-dai in the same paragraph as a reclamation
-LAYOUT - margins for supply, centre for drainage - not only as a river-channelization method.
+LAYOUT - margins for supply, center for drainage - not only as a river-channelization method.
 
 `wiki.mbalib.com`, which blocked the last pass, was not retried: the standard above is better
 provenance than a wiki and carries the same doctrine.

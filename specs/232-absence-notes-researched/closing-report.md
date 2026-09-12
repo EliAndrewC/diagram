@@ -91,7 +91,7 @@ container's default request headers rather than about the public web. Three dist
 measured (`research.md` R5, R22):
 
 - a host that refuses the fetcher's default user agent and serves a browser one normally;
-- an article that is **open access by its own licence** and still answers 403 or a JavaScript challenge;
+- an article that is **open access by its own license** and still answers 403 or a JavaScript challenge;
 - an unfollowed redirect reported as a failure.
 
 The practical consequences are written up where a future pass will meet them: a 403 is evidence about the

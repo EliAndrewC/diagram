@@ -49,7 +49,7 @@ round that went to the files rather than trusting that reading gave **one**. So:
 - **fourteen** were confirmed as open absences, each carrying a comment naming which clause of FR-003
   keeps it there so the next reader does not re-open it.
 
-The labelling defect the GM identified is real and worth a mechanism. Today's record contains almost none
+The labeling defect the GM identified is real and worth a mechanism. Today's record contains almost none
 of it - which is itself the answer to "how many of these are actually problems". What the feature buys is
 the future: the next session that meets a sentence with nothing to find has a word for it.
 

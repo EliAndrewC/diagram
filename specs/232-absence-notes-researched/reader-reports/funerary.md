@@ -75,7 +75,7 @@ Translated: "The alley between one back-tenement building and the next was about
 wide (about 0.9 to 1.8 m)."
 
 **How it supports the claim.** The alley of an Edo back tenement carried a run of boards down
-its centre - so a plank surface in a back lane is attested, and the alley's width is given as
+its center - so a plank surface in a back lane is attested, and the alley's width is given as
 well. **What it does NOT support:** gravel. Nothing read gives a back alley a gravel surface;
 the one page that spoke to street surfacing put gravel on the Five Highways, not in a city's
 back lanes. The gravel half should stay an absence, or the sentence should narrow to planks.
@@ -587,7 +587,7 @@ What was tried, and what blocked it:
 1. **Internet Archive item `landutilizationi0000buck`** - <https://archive.org/details/landutilizationi0000buck>. A lending scan. Its full-text endpoint answers `{"error":"No hOCR or Abbyy file present"}`, so even the search-inside index does not exist for this item; reading it needs a logged-in borrow.
 2. **Internet Archive advanced search**, `q=graves AND "land utilization in china"` over the full-text index: `numFound: 0`. The figure is not reachable through any Archive text index.
 3. **HathiTrust catalog record 002351503** - <https://catalog.hathitrust.org/Record/002351503>. A 1937 US imprint is in copyright, so HathiTrust offers search-only, not full view.
-4. **curl with a desktop browser user agent** on the Archive item: returns the details page, not the book text - the restriction is the licence, not the fetcher.
+4. **curl with a desktop browser user agent** on the Archive item: returns the details page, not the book text - the restriction is the license, not the fetcher.
 5. Web search (`Buck "Land Utilization in China" percentage of farm land occupied by graves grave mounds 2 percent`) returned only catalog records, bookseller listings and 1938 reviews (Nature, *AJAE*, *Annals*, JSTOR), none of which quotes a grave-area figure.
 
 **What it would settle:** whether Buck's survey actually gives ~2% of farm area under graves,
@@ -741,7 +741,7 @@ A village-scale permanent one, verbatim:
 > 敷地は 42 坪で、建物は平家木造モルタル造であった。火葬炉は 1 基で燃料は薪を使用していた。
 
 Translated from the Japanese by this project: "The site was 42 tsubo, and the building was a
-single-storey wood-and-mortar structure. There was one cremation furnace and the fuel used was
+single-story wood-and-mortar structure. There was one cremation furnace and the fuel used was
 firewood."
 
 A smaller one, verbatim:
@@ -764,8 +764,8 @@ And the large urban one, verbatim:
 
 > 敷地は 600 坪（1,980 ㎡）、火葬室は木造平屋建 36 坪（118.8 ㎡）で、木造平屋建 12 坪（39.6 ㎡）の附属建物があった。
 
-Translated: "The site was 600 tsubo (1,980 m²), the cremation room a single-storey wooden
-building of 36 tsubo (118.8 m²), with an attached single-storey wooden building of 12 tsubo
+Translated: "The site was 600 tsubo (1,980 m²), the cremation room a single-story wooden
+building of 36 tsubo (118.8 m²), with an attached single-story wooden building of 12 tsubo
 (39.6 m²)."
 
 The volume also defines the open-air form the record describes, in its own glossary:
@@ -950,7 +950,7 @@ village's entrance and exit, a mountain pass, a crossroads, the foot of a bridge
 > 集落の境や村の中心、村内と村外の境界や道の辻、三叉路などに主に石碑や石像の形態で祀られる神で
 
 Translated: "A deity enshrined mainly in the form of a stone monument or stone image at a
-settlement's boundary or a village's centre, at the border between inside and outside the
+settlement's boundary or a village's center, at the border between inside and outside the
 village, at a road crossing, at a three-way junction and the like."
 
 > 村境、峠などの路傍にあって外来の疫病や悪霊を防ぐ神である

@@ -428,7 +428,7 @@ needs a search engine.
   https://journals.sagepub.com/doi/abs/10.1177/036319909502000302 and was given 403, and SAGE was
   NOT retried here under the one-attempt rule.
 - What blocked it: Unpaywall answers `is_oa: false`, `oa_status: "closed"`, no OA locations. The
-  403 was therefore not the fetcher - the article is closed by licence as well.
+  403 was therefore not the fetcher - the article is closed by license as well.
 - What it would settle: the mean household size of one Tohoku village rising "from about five to six
   persons" over 1760-1870, the nearest historical figure to the setting's canonical five.
 
@@ -652,7 +652,7 @@ and it is worth one clean attempt by the next reader: an archived capture of don
 
 ### `urban-features.html` fn-74
 
-**FOR THE GM** - with the unusual twist that the paper IS open access by licence and still cannot be
+**FOR THE GM** - with the unusual twist that the paper IS open access by license and still cannot be
 read by any fetcher available here.
 
 - Title: "The Kabu-ido system and factors affecting local groundwater extraction control: case study
@@ -660,7 +660,7 @@ read by any fetcher available here.
 - Year: 2022
 - Journal: *Water History*
 - DOI: 10.1007/s12685-022-00302-1
-- Licence: **CC-BY**, confirmed twice - Unpaywall
+- License: **CC-BY**, confirmed twice - Unpaywall
   (https://api.unpaywall.org/v2/10.1007/s12685-022-00302-1) answers `is_oa: true`, `oa_status:
   "hybrid"`, `license: "cc-by"`, and the Semantic Scholar graph API
   (https://api.semanticscholar.org/graph/v1/paper/DOI:10.1007/s12685-022-00302-1) answers

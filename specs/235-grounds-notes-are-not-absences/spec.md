@@ -39,7 +39,7 @@ read off a drawing. A number chosen and then drawn is not a number measured on o
 distinction is the one this spec kept missing.
 
 That the problem is a fraction of the size it looked does not make the fix wrong; it makes it smaller. The
-labelling defect the GM identified is real and worth a mechanism, and today's record turns out to contain
+labeling defect the GM identified is real and worth a mechanism, and today's record turns out to contain
 almost none of it - which is itself the answer to "how many of these are actually problems".
 
 ## The four states a footnote may be in, after this feature
@@ -111,7 +111,7 @@ can judge it from the note alone: **two independent passes on different dates, e
 used**, the second naming at least one the first did not have. A settled note re-opens on anything that
 changes what can be read - a new source, a new tool, the GM supplying a document.
 
-**The bar is a floor, not a licence, and this feature's own evidence says be slow to use it.** Feature 232's
+**The bar is a floor, not a license, and this feature's own evidence says be slow to use it.** Feature 232's
 second pass found readable sources for **90 of 162** notes a first pass had marked "no publicly readable
 source". Against that base rate a two-pass rule will settle notes a third pass would have resolved, so
 settling is never obligatory and a note left open costs nothing but an honest number. The threshold is this

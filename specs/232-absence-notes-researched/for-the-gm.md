@@ -12,14 +12,14 @@ record shows they were judged rather than forgotten.**
 
 ## A. One browser visit. Open access or free to read, stopped only by a bot wall.
 
-These are articles whose LICENCE permits anyone to read them. A JavaScript challenge or a TLS quirk stops
+These are articles whose LICENSE permits anyone to read them. A JavaScript challenge or a TLS quirk stops
 an automated client and does not stop a browser. Opening the page and saving the PDF settles each.
 
 ### A1. The kabu-ido paper - the highest-value item on this list
 
 - **"The Kabu-ido system and factors affecting local groundwater extraction control: case study of a
   customary groundwater management in Japan"**, *Water History*, 2022. DOI `10.1007/s12685-022-00302-1`.
-- **Licence CC-BY**, confirmed twice (Unpaywall `is_oa: true`, `license: cc-by`; Semantic Scholar the same).
+- **License CC-BY**, confirmed twice (Unpaywall `is_oa: true`, `license: cc-by`; Semantic Scholar the same).
 - PDF: `https://link.springer.com/content/pdf/10.1007/s12685-022-00302-1.pdf`
 - **Blocked by**: Springer returns HTTP 200 with a 3 KB HTML stub instead of the PDF, to every fetcher.
   No second location exists in OpenAlex, no Wayback capture of the PDF.
@@ -117,7 +117,7 @@ an automated client and does not stop a browser. Opening the page and saving the
 - Steven B. Miles, **"From Small Fry to Big Fish: Representing the Rise of Jiujiang Township, Nanhai
   County, 1395-1657"**, *Ming Studies*, 2003. DOI `10.1179/014703703788762953`.
 - Unpaywall: `is_oa: false`, `oa_status: closed`, **no open location of any kind**. Not a fetcher problem.
-- **Settles**: the whole of our claim that the delta's fry centre dates from the Ming.
+- **Settles**: the whole of our claim that the delta's fry center dates from the Ming.
 
 ### C2. The Mekong junction-angle paper - low value, listed for completeness
 

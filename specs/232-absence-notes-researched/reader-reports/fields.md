@@ -84,7 +84,7 @@ Notes 9 and 20 were searched, but in Japanese only; their untried English querie
 **Source.** F. H. King, *Farmers of Forty Centuries; or, Permanent Agriculture in China, Korea and
 Japan* (Madison, 1911), Project Gutenberg ebook 5350. Read in full as plain text at
 <https://www.gutenberg.org/cache/epub/5350/pg5350.txt> (reader-facing page:
-<https://www.gutenberg.org/ebooks/5350>). King was a US soil physicist who travelled China, Korea
+<https://www.gutenberg.org/ebooks/5350>). King was a US soil physicist who traveled China, Korea
 and Japan in 1909 and describes hand cultivation as he found it - primary observation of the
 practice, pre-mechanization.
 
@@ -334,7 +334,7 @@ own "rests on general reading; no source is cited" is the honest statement.
 
 ---
 
-## 7. `cities/fabric.html` fn-23 - the dusk ward gate is a Tang institution, relaxed well before the modelled period
+## 7. `cities/fabric.html` fn-23 - the dusk ward gate is a Tang institution, relaxed well before the modeled period
 
 **CITED, tertiary.**
 
