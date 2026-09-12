@@ -35,7 +35,13 @@ from l7r.diagram.hamletgen import HamletSpec
 from l7r.diagram.hamletgen.driver import STAGES
 from l7r.diagram.tools import placement_stages as ps
 
-pytestmark = [pytest.mark.tooling, pytest.mark.renders]  # the plates ARE renders: the tool writes a PNG per stage on purpose (feature 213 FR-006)
+# THE MARKERS ARE PER TEST NOW, because the file-level pair stopped being true (2026-09-12). It carried
+# `tooling` and `renders` for every test on the grounds that "the plates ARE renders" - and once the plates were
+# mocked, exactly ONE test in this file renders anything. The cost of the stale pair was not cosmetic: `tooling`
+# is deselected while the tooling stamp is fresh, so all 20 tests here vanished from a gate run and the coverage
+# floor then failed on code only they reach. A marker that silences a test is worth the same care as the test.
+# The one test that genuinely spawns a renderer carries `renders` itself, beside the `monkeypatch.delenv` that
+# lets it past `_census.refuse_render_in_a_test`.
 
 _SPEC = HamletSpec(name="Probe", seed=4, households=10, down_deg=90, water_sink="pond")
 
@@ -110,6 +116,11 @@ def test_a_stage_that_DRAWS_gets_a_plate_and_the_live_settlement_is_not_finished
         seen.append(ps._ink(s))
         s.add('<rect x="80" y="80" width="20" height="20" fill="#777"/>')
 
+    # MOCKED, LIKE EVERY OTHER TEST IN THIS FILE (GM 2026-09-12). These two rendered REAL PNGs at 55 and 23 MiB
+    # a test - the heaviest non-browser tests in the suite, found in the memory audit - to assert a thing about
+    # the WALK, not about the renderer. `_plate`'s own rendering is tested once, in
+    # `test_a_plate_draws_its_overlay_in_the_boundary_colors`, which is marked `renders` and clears the switch.
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (_touch(tmp_path, stem), 10, 10))
     _stub_stages(monkeypatch, stage_draws, stage_after)
     page = ps.build_page(str(tmp_path), 200, _SPEC)
     plates = sorted(p.name for p in tmp_path.glob("*.png"))
@@ -128,6 +139,7 @@ def test_a_plate_this_run_did_not_write_is_PRUNED(tmp_path: Path, monkeypatch: p
     def stage_draws(s: Any, _plan: Any) -> None:
         s.add('<rect x="10" y="10" width="50" height="50" fill="#333"/>')
 
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (_touch(tmp_path, stem), 10, 10))
     (tmp_path / "04-stage_ways.png").write_bytes(b"stale")
     _stub_stages(monkeypatch, stage_draws)
     ps.build_page(str(tmp_path), 200, _SPEC)
@@ -239,9 +251,13 @@ def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path:
     assert got == {"01-stage_draws": False, "02-stage_bounds": True, "03-stage_draws": False}
 
 
-def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path) -> None:
+@pytest.mark.renders  # the ONE test here that spawns a renderer (feature 213 FR-006; the roll census holds it to that)
+def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 227 D4: the site boundary drawn over the homesteads plate - the rings red, the chords blue, the
     corridors teal - mapped through the copy's view (the whole canvas on an uncropped mid-roll copy)."""
+    # THE ONE WAY THROUGH, and this test is what it is for: a test genuinely ABOUT rendering clears the switch
+    # and carries the `renders` marker, so `_census.refuse_render_in_a_test` lets it spawn resvg (GM 2026-09-12).
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER", raising=False)
     from PIL import Image
 
     from l7r.diagram.settlement import Settlement
@@ -311,10 +327,17 @@ def _drawing_stage() -> Any:
     return stage_two_steps
 
 
+def _touch(tmp_path: Path, stem: str) -> str:
+    """Write the byte a plate's presence is asserted on, without spending a renderer on it."""
+    (tmp_path / f"{stem}.png").write_bytes(b"\x89PNG stub")
+    return f"{stem}.png"
+
+
 def test_a_step_that_DREW_gets_its_own_plate_and_one_that_only_measured_does_not(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """The GM's refinement, 2026-09-12: a plate *"for literally every stage at which it would be possible to render
     an image that has actual content"*, and nothing where there is none - they named the no-content case themselves
     (*"the entire 'The bearing and the fall' phase There are literally no map visible features"*)."""
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (_touch(tmp_path, stem), 10, 10))
     _stub_stages(monkeypatch, _drawing_stage())
     html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
     plates = sorted(p.name for p in tmp_path.glob("*.png"))
@@ -324,6 +347,7 @@ def test_a_step_that_DREW_gets_its_own_plate_and_one_that_only_measured_does_not
 
 
 def test_the_step_plates_can_be_turned_off(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (_touch(tmp_path, stem), 10, 10))
     _stub_stages(monkeypatch, _drawing_stage())
     ps.build_page(str(tmp_path), 200, _SPEC, steps_too=False)
     assert sorted(p.name for p in tmp_path.glob("*.png")) == ["01-stage_two_steps.png"]
@@ -332,6 +356,7 @@ def test_the_step_plates_can_be_turned_off(tmp_path: Path, monkeypatch: pytest.M
 def test_a_step_plate_this_run_did_not_write_is_pruned_too(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """The sweep keeps what the page REFERENCES. Built from the stage rows alone it deleted every step plate the
     moment after it was rendered - measured on the first real run of this feature."""
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (_touch(tmp_path, stem), 10, 10))
     (tmp_path / "01-09-gone_step.png").write_bytes(b"stale")
     _stub_stages(monkeypatch, _drawing_stage())
     ps.build_page(str(tmp_path), 200, _SPEC)
@@ -386,12 +411,11 @@ def test_a_step_plate_that_will_not_render_is_reported_and_the_page_says_why(tmp
     plate that will not render still fails the run: that IS a moment the engine passes through."""
     import subprocess
 
-    real = ps._plate
-
     def sometimes(snap: Any, out_dir: str, stem: str, width: int, overlay: Any = None, render_w: int = 2600) -> tuple[str, int, int]:
+        """The step plate refuses; the stage plate succeeds - and neither spends a renderer to say so."""
         if "-01-" in stem:
             raise subprocess.CalledProcessError(1, ["resvg"])
-        return real(snap, out_dir, stem, width, overlay, render_w)
+        return _touch(tmp_path, stem), 10, 10
 
     monkeypatch.setattr(ps, "_plate", sometimes)
     _stub_stages(monkeypatch, _drawing_stage())
@@ -516,12 +540,27 @@ def test_the_page_names_the_features_a_stage_and_its_step_put_on_the_map(tmp_pat
     assert "<span class=\"fl\">Draws</span> farmhouse" in html, "the step names what it drew too"
 
 
-def test_the_closing_section_names_what_this_map_cannot_draw(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_closing_section_names_what_this_map_cannot_draw(tmp_path: Path) -> None:
     """One map's ink can only name what that map has, and the pool draws five kinds of place - so every other
-    clickable class is named beside a shipped map that has it, read from that map's own interactive page."""
+    clickable class is named beside a shipped map that has it, read from that map's own interactive page.
+
+    ON ITS OWN FIXTURE, NOT ON THE REAL POOL, and that is the point rather than tidiness: the gate rolls every
+    pool generator with rendering skipped and the cache then EVICTS the `.html` pages (the mechanism recorded in
+    specs/227 research R6), so a test that globs the real pool finds nothing during a gate run, the loop body
+    never executes, and the coverage floor fails on code that is perfectly fine. Measured exactly that way on
+    2026-09-12."""
     from l7r.diagram.interactive.classes import CLASSES
 
-    rest = ps.elsewhere_in_the_pool({"farmhouse"}, ps.SKILL)
-    assert rest and len(rest) == len(CLASSES) - 1, "everything but the one named class is accounted for"
-    assert all(isinstance(m, str) for _k, m in rest), "each carries a map name, or '' when no map draws it"
-    assert ps.elsewhere_in_the_pool(set(CLASSES), ps.SKILL) == [], "nothing is left when every class is named"
+    pool = tmp_path / "pool" / "hamlets"
+    (pool / "alpha").mkdir(parents=True)
+    (pool / "alpha" / "alpha.html").write_text('<div data-x=\'"byre"\'>a page that names the byre</div>')
+    (pool / "beta").mkdir(parents=True)
+    (pool / "beta" / "beta.html").write_text('<div>"byre" again, and "well" too</div>')
+
+    rest = dict(ps.elsewhere_in_the_pool({"farmhouse"}, str(tmp_path)))
+    assert len(rest) == len(CLASSES) - 1, "everything but the one named class is accounted for"
+    assert rest["byre"] == "alpha", "the FIRST map that draws it, in name order"
+    assert rest["well"] == "beta"
+    assert rest["privy"] == "", "a class no map here draws is named with no map rather than omitted"
+    assert ps.elsewhere_in_the_pool(set(CLASSES), str(tmp_path)) == [], "nothing is left when every class is named"
+    assert ps.elsewhere_in_the_pool({"farmhouse"}, str(tmp_path / "nothing-here")) != [], "a missing pool names everything"

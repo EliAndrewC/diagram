@@ -929,7 +929,8 @@ tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustiv
 # its target, and a one-minute check must not stand where a full gate is meant to.
 page-check:     ## [tests] the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
 	@: "GUARD_EDIT_OK: feature 206 - page-check always RUNS the browser package, so it earns the browser stamp too"; \
-	python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov tests/interactive tests/full/interactive/page_browser \
+	: "LOADGROUP, NOT WORKSTEAL, so the browser package's xdist_group binds and ONE Chromium serves both its modules (GM 2026-09-12; worksteal gave each module its own worker and so its own browser, ~335 MiB of the suite's peak)" ; \
+	python3 -m pytest -n $(XDIST_WORKERS) --dist loadgroup -q --no-cov tests/interactive tests/full/interactive/page_browser \
 	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
 	  && python3 "$$root/scripts/gate-stamp.py" --write browser \
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
@@ -1334,6 +1335,19 @@ REFERENCE_TIER = hamlet
 # cap is 10 GiB). The GM's "near 30 s" was not reached: 40 s, because past ten workers the suite's tail (a 5 s
 # glossary scan, a 3 s seating, the browser test) and each worker's ~0.2 s spawn-and-collect bound it, not the cores.
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
+# THE SCHEDULER IS A VARIABLE so the choice is MEASURED rather than argued (2026-09-12). `worksteal` has no
+# `xdist_group` support at all - checked in the installed xdist 3.8.0's own scheduler source, where the word does
+# not appear - so a group marker binds only under `loadgroup`, and the browser package needs its two modules on
+# ONE worker to share ONE Chromium (GM 2026-09-12: *"we should only ever start one chromium for a test run, and
+# that stuff should not be parallelized"*).
+DIST ?= loadgroup
+# LOADGROUP IS THE DEFAULT SINCE 2026-09-12, and the switch cost nothing: measured back to back on the same
+# green suite, worksteal 43 s at +1.72 GiB against loadgroup 44 s at +1.81 GiB - one second and 90 MiB apart,
+# which is noise between two runs. What it buys is the only thing that makes ONE Chromium possible: a session
+# fixture is per PROCESS, so the browser package's two modules have to land on one worker, and `xdist_group`
+# binds under loadgroup and is ignored outright by worksteal. The 2026-08-26 measurement that chose worksteal
+# (quick 27.5 s -> 22.0 s) stands for what it measured; the gate's suite has changed shape since - 3,700 mostly
+# short tests rather than a few long rolls - and on today's suite the schedulers are indistinguishable.
 XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 10 ] && echo "$(CPU_COUNT)" || echo 10))
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
@@ -1477,6 +1491,10 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 # --dist worksteal (GM 2026-08-26, the make quick profile): the default `load` scheduler hands each worker a
 # fixed slice up front, so on a suite whose tests range from 5 ms to 4 s the last worker finishes ~5 s after
 # the rest; worksteal lets idle workers take from busy ones. Measured on quick: 27.5 s -> 22.0 s wall.
+# DIST IS A VARIABLE so the choice can be MEASURED rather than argued (2026-09-12). `worksteal` has no
+# `xdist_group` support at all - checked in the installed xdist 3.8.0's own scheduler source, the word does not
+# appear - so a group marker binds only under `loadgroup`, and the browser package needs its two modules on ONE
+# worker to share ONE Chromium (GM 2026-09-12: "we should only ever start one chromium for a test run").
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
 	@: "GUARD_EDIT_OK: feature 207 - THE INCREMENTAL GATE. A floored run first asks the planner which tests a change can reach"; \
 	: " (l7r/diagram/ci/incremental.py, the argument in its docstring), runs with per-test coverage CONTEXTS and the selection"; \
@@ -1489,7 +1507,7 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	$(if $(COV_FLOORS),rm -f "$(ROLL_CENSUS)" "$(ROLL_CENSUS).renders";,) \
 	: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
-	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \

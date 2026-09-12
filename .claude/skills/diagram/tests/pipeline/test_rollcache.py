@@ -118,23 +118,32 @@ def test_a_roll_keyed_to_a_test_is_remade_when_that_test_changes(tmp_path, monke
 
 @pytest.mark.parametrize("var", [gencache.GATE_BYPASS, rollcache.FULL_ENV])
 def test_the_bypasses_produce_and_store_nothing(tmp_path, monkeypatch, var):
+    # A SUBJECT NAME PER PARAMETER, because the shared store is shared ACROSS WORKERS (2026-09-12). Both
+    # parameters used to roll `toy` and `shared-toy`, and `reset_shared()` clears the run store - but a
+    # CONCURRENT worker running the other parameter can re-write it between the reset and the assert, so the
+    # isolation held only while the scheduler happened to keep the two apart in time. It stopped holding the
+    # day the gate moved from `worksteal` to `loadgroup` (which runs a module's tests closer together), and the
+    # failure was the one `reset_shared`'s own docstring records from the last time this shape bit: the second
+    # parameter saw `BYPASS-SHARED-RUN` where it asserted `BYPASS`. A unique subject removes the collision
+    # instead of timing around it, and it is right under any scheduler.
+    _subj, _shared = f"toy-{var.lower()}", f"shared-toy-{var.lower()}"
     _, _, produce = _toy(tmp_path, monkeypatch)
     monkeypatch.setenv(var, "1")
     rollcache.reset_shared()
-    assert rollcache.obtain("toy", produce) == ({"value": 7}, "BYPASS")
-    assert rollcache.obtain("toy", produce) == ({"value": 7}, "BYPASS"), "sharing is OPT-IN: a plain caller always produces"
-    assert not Path(rollcache._entry("toy")).exists()
+    assert rollcache.obtain(_subj, produce) == ({"value": 7}, "BYPASS")
+    assert rollcache.obtain(_subj, produce) == ({"value": 7}, "BYPASS"), "sharing is OPT-IN: a plain caller always produces"
+    assert not Path(rollcache._entry(_subj)).exists()
 
     # ...AND A CALLER THAT OPTS IN DOES NOT ROLL TWICE (feature 147). The bypass exists so the coverage
     # floors watch real execution; one execution is all they can watch, and the 31 scripted fixtures share
     # two specs between them, so re-rolling per caller cost ~430 s of CPU to trace lines one roll traces.
-    assert rollcache.obtain("shared-toy", produce, share=True) == ({"value": 7}, "BYPASS")
-    again, how = rollcache.obtain("shared-toy", produce, share=True)
+    assert rollcache.obtain(_shared, produce, share=True) == ({"value": 7}, "BYPASS")
+    again, how = rollcache.obtain(_shared, produce, share=True)
     assert (again, how) == ({"value": 7}, "BYPASS-SHARED")
-    assert not Path(rollcache._entry("shared-toy")).exists(), "sharing still stores nothing on disk"
+    assert not Path(rollcache._entry(_shared)).exists(), "sharing still stores nothing on disk"
 
     monkeypatch.delenv(var)
-    assert rollcache.obtain("toy", produce)[1] == "MISS", "a bypassed roll left nothing behind to serve"
+    assert rollcache.obtain(_subj, produce)[1] == "MISS", "a bypassed roll left nothing behind to serve"
 
 
 # FEATURE 192 SPLIT THIS PROPERTY IN TWO, and the split is the feature. The parametrized test above

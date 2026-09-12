@@ -187,6 +187,20 @@ def drop_offmap(s: str, vb: Viewbox) -> str:
 def resvg_png(doc: str, *args: str) -> bytes | None:
     """`doc` rendered by resvg with `args`, as PNG bytes - or None when resvg is not on the host (the
     engine already refuses to render a map without it; here the page simply carries no raster)."""
+    from l7r.diagram import _census  # noqa: PLC0415 - render-time only
+
+    # THE SAME REFUSAL AS `render_png`'s, at the page's own renderer (GM 2026-09-12): a test that reaches here
+    # is about to spend a resvg and a PIL child on an image nothing will look at.
+    # the size asked for is whatever `--zoom`/`--width` the caller passed, times the document's own width for a
+    # zoom; a probe's 40x40 lands far below the bar and a real page's raster far above it
+    _px = 0.0
+    for _i, _a in enumerate(args):
+        if _a == "--width" and _i + 1 < len(args):
+            _px = max(_px, float(args[_i + 1]))
+        elif _a == "--zoom" and _i + 1 < len(args):
+            _m = re.search(r'width="([\d.]+)"', doc[:400])
+            _px = max(_px, float(args[_i + 1]) * (float(_m.group(1)) if _m else 1.0))
+    _census.refuse_render_in_a_test("the page's raster picture", _px)
     exe = shutil.which("resvg")
     if not exe:
         sys.stderr.write("warning: resvg not found (sudo apt-get install -y resvg fonts-dejavu-extra); the page carries no raster\n")
