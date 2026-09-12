@@ -384,3 +384,17 @@ def test_the_weir_bar_is_placed_off_the_fall_when_the_intake_is_not_on_the_brook
     s = Settlement(int(plan.W), int(plan.H))
     hg.draw_intake(s, plan, (700.0, 300.0))
     assert len(s.M["weirs"]) == 1
+
+
+def test_the_exit_leg_turns_onto_the_fall_when_the_course_is_heading_across_it() -> None:
+    """`brook_skirt`'s exit: the reach that leaves the frame keeps the course's own heading and only then turns
+    onto the fall - but a course whose last stations run ACROSS the fall, or back up it, has no heading worth
+    keeping, and the leg takes the fall directly. Otherwise the brook would leave the sheet sideways."""
+    from l7r.diagram.hamletgen.water import brook as wb
+
+    plan = a_plan()
+    plan.envelope = [(400.0, 400.0), (1000.0, 400.0), (1000.0, 1000.0), (400.0, 1000.0)]
+    course = wb.brook_skirt(plan, (700.0, 300.0), 1)
+    assert len(course) > 4
+    # the fall is due south on this plan, so the course must end further down the map than it starts
+    assert course[-1][1] > course[0][1], "the brook leaves down the fall"

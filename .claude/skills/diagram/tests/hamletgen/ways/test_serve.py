@@ -275,3 +275,34 @@ def test_a_web_lane_that_shadows_the_network_for_most_of_its_length_is_refused()
     beside = [(6.0, float(y)) for y in range(50, 355, 5)]  # 6 ft east of the way, its whole length
     assert hg.ways._lay_web_lane(s, beside, [], [], [], houses=ends) is False
     assert len(s.M["lanes"]) == 1, "nothing was drawn"
+
+
+def test_a_footpath_of_one_point_fronts_nothing() -> None:
+    """`_ends_worth_walking_to` is asked of whatever the router returned, and a route that collapsed to a single
+    point has no ends to judge - it is not a path, and drawing it would put a dot in a field."""
+    from l7r.diagram.hamletgen.ways.serve import _ends_worth_walking_to
+
+    assert not _ends_worth_walking_to([(10.0, 10.0)], (12.0, 12.0), [((0.0, 0.0), (20.0, 0.0))], [])
+
+
+def test_a_web_lane_shadowing_another_for_a_bundles_pitch_is_refused() -> None:
+    """`_lay_web_lane`'s second shadow clause. The fraction catches a short lane laid alongside another for all
+    of its length; this one catches a LONG lane that eventually diverges - its unbroken shadowed stretch is
+    capped at one bundle pitch, because a run that hugs an existing tread for that far is a doubled band
+    whichever way it ends up going."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (600.0, 0.0)]], houses=[(600.0, 1200.0)])
+    # a run that hugs the lane for its first 300 ft (well past a bundle pitch) and then leaves it, so the
+    # FRACTION clause passes (most of the run is clear) while the unbroken shadowed stretch does not
+    run = [(float(x), 2.0) for x in range(0, 320, 20)] + [(420.0, 400.0), (520.0, 900.0), (600.0, 1500.0), (640.0, 2100.0), (660.0, 2700.0), (680.0, 3300.0), (700.0, 3900.0), (720.0, 4500.0), (740.0, 5100.0), (760.0, 5700.0), (780.0, 6300.0), (800.0, 6900.0)]
+    assert not _serve._lay_web_lane(s, run, [], [], [], houses=[(600.0, 1200.0)])
+
+
+def test_a_footpath_end_may_front_the_field_it_serves() -> None:
+    """`_ends_worth_walking_to` takes the gate's own three answers - a house, a way, or the FIELD. The third is
+    the one a path to the rice ends at, and it is the reason the rule is not simply 'reaches its house'."""
+    from l7r.diagram.hamletgen.ways.serve import _ends_worth_walking_to
+
+    segs = [((0.0, 0.0), (100.0, 0.0))]
+    crop = [(500.0, 0.0), (700.0, 0.0), (700.0, 200.0), (500.0, 200.0)]
+    path = [(10.0, 0.0), (300.0, 0.0), (480.0, 0.0)]  # starts on the way, ends 20 ft off the crop's edge
+    assert _ends_worth_walking_to(path, (9000.0, 9000.0), segs, [crop])

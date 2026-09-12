@@ -192,3 +192,27 @@ def test_a_confluence_is_taken_only_where_the_junction_is_in_the_picture() -> No
 
     plan.brook = [(760.0 + 4000.0, y) for _x, y in plan.brook]  # the same brook, carried far outside the picture
     assert sink.brook_join(plan, out) is None, "a junction outside the box the crop must contain is refused"
+
+
+def test_a_confluence_is_refused_when_the_run_to_it_crosses_the_crop() -> None:
+    """A ditch does not run through the rice to find its confluence - the same rule the reach and the descent
+    stand beside. Exercised here because the pool's own maps reach their sinks another way."""
+    from l7r.diagram.hamletgen import sink
+
+    plan = a_plan()  # the square field at x 400-1000, y 400-1000, falling due south
+    plan.brook = [(700.0, 1100.0), (700.0, 1500.0), (700.0, 1900.0)]
+    out = (700.0, 300.0)  # ABOVE the field: every route to the brook crosses the rice
+    assert sink.brook_join(plan, out) is None
+
+
+def test_the_pond_set_back_gives_up_past_its_limit() -> None:
+    """`pond_seat` walks the reservoir downslope and across the fall to clear the crop and the brook. Where no
+    step inside the limit does, it says so with a distance past the limit rather than returning a seat that
+    does not clear - the caller then falls back to draining off the frame."""
+    from l7r.diagram.hamletgen import sink
+    from l7r.diagram.hamletgen.consts import POND_SETBACK_LIMIT
+
+    plan = a_plan()
+    plan.envelope = [(0.0, 0.0), (3000.0, 0.0), (3000.0, 3000.0), (0.0, 3000.0)]  # crop over the whole canvas
+    back, sway = sink.pond_seat(plan, (1500.0, 1500.0), 120.0, 90.0)
+    assert back > POND_SETBACK_LIMIT and sway == 0.0

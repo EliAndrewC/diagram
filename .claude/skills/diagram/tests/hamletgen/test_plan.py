@@ -270,3 +270,11 @@ def test_the_copse_and_kosatsuba_sitings_pin_and_refuse_a_value_the_generator_ca
         assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, kosatsuba_siting=value)).kosatsuba_siting == value
     with pytest.raises(ValueError, match="kosatsuba_siting"):
         hg.HamletSpec(name="X", seed=1, kosatsuba_siting="on_the_shrine")
+
+
+def test_a_brook_side_that_is_not_a_flank_is_refused() -> None:
+    """Feature 230: the flank the brook passes on is pinnable, so the pool can exhibit a sink a roll happens not
+    to reach - and a pin that is not one of the two flanks is a typo the spec should not carry into a roll."""
+    with pytest.raises(ValueError, match="brook_side"):
+        hg.HamletSpec(name="Bad", seed=1, households=10, brook_side=0)
+    assert hg.plan_site(hg.HamletSpec(name="Pinned", seed=1, households=10, brook_side=-1)).brook_side == -1
