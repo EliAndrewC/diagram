@@ -8,11 +8,26 @@ ROOT="$(git -C "$HERE" rev-parse --show-toplevel)"
 GATE="$HERE/entry-gate.sh"
 PAGE="$ROOT/.claude/skills/diagram/research/archetypes.html"
 BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
+# ISOLATE THE CENSUS (feature 169). A suite that drives a recording guard must write into a throwaway
+# log, or its fixtures land in the live guard census - the very numbers this project uses to decide
+# which guards are worth their cost. Feature 168 missed `test-review-gate.sh` exactly here, and 24 of
+# 113 live entries turned out to be that suite's fixtures within a day.
+GUARD_LOG_DIR="$(mktemp -d)"; export GUARD_LOG_DIR
+
 pass=0; fail=0
 ok() { if [ "$1" = "$2" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL %s: got %s want %s\n' "$3" "$1" "$2"; fi; }
 
 BAK="$(mktemp)"; cp "$PAGE" "$BAK"
-restore() { cp "$BAK" "$PAGE"; rm -f "$BAK"; }
+BL_BEFORE="$(find "$BL" -name '*.json' | wc -l)"
+restore() {
+  cp "$BAK" "$PAGE"; rm -f "$BAK"
+  rm -rf "$GUARD_LOG_DIR"
+  # any bypass-log entry this suite created goes too, however it exited - the log is a record of real
+  # bypasses and a test's fixtures have no business in it
+  while [ "$(find "$BL" -name '*.json' | wc -l)" -gt "$BL_BEFORE" ]; do
+    rm -f "$(find "$BL" -name '*.json' -print0 | xargs -0 ls -t | head -1)"
+  done
+}
 trap restore EXIT
 
 # 1. a clean tree is quiet - the guard must not fire on correct work

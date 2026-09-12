@@ -87,5 +87,5 @@ record and the map's modals stay in step, not about how a place was built.
       PROVEN TO FIRE: neutering the prose/data derivation and the declared-silence pattern fails 4 of
       the 13 tests; restoring gives 13 green. End to end, the guard refuses an unresolved pair, refuses
       a bare token, discharges on a reason and records it, and goes quiet when the page is restored.
-- [ ] T17 `make hooks-test`, `make done` and `make page-check` green (SC-014).
+- [x] T17 `make hooks-test`, `make done` and `make page-check` green (SC-014).
       research: rendering
