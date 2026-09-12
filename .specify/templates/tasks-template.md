@@ -45,6 +45,29 @@ description: "Task list template for feature implementation"
   because a documented requirement that relies on memory gets skipped; `tests/test_task_research_boxes.py`
   turns a ticked `physical` task with an unticked box red at the gate.
 
+- **Every task that writes prose or code carries the house-style line: `American spellings, hyphens
+  only`** (GM 2026-09-12, feature 236 item 4: *"we can have that as a checklist item in advance as
+  well as having an automated check for it"*). The automated half is a `make quick` phase that fails
+  on a British spelling in the DELTA (`scripts/check-house-style-delta.py`); this half is the
+  reminder that arrives BEFORE the writing, which is the cheaper of the two places to catch it. The
+  exceptions are the GM's own writing and a verbatim quotation of another source, which keep their
+  own characters.
+
+- **A REVIEW TASK NAMES ITS ROUND, ITS ITEMS, ITS CHANGED PASSAGES AND ITS MODE** (GM 2026-09-12,
+  feature 236 item 6: *"it would not be enough to simply mention in our spec hit constitution that
+  you should not do that. We would need the checklists in the tasks to be very explicit about the
+  fact that that is how this works."*). The FIRST review of a spec is a full reading; every later
+  round - including the first after an amendment - reads the changed text in full plus a
+  contradiction scan of the rest, and never re-reads unchanged text. So a review task is written:
+
+      - [ ] T0n `spec-fidelity` round <k>, MODE <2 = full reading | 3 = VERIFY>
+            items from round <k-1>: <the numbered items, or "none - first round">
+            changed since: <the passages this round must read in full>
+            research: rendering
+
+  A round whose task does not name its changed passages has not been given what MODE 3 needs, and
+  the agent is instructed to ask for the list rather than re-read the spec to find it.
+
 ## Path Conventions
 
 - **Single project**: `src/`, `tests/` at repository root

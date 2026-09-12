@@ -144,11 +144,21 @@
         ]
       },
       {
-        "matcher": "Edit|Write|NotebookEdit",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/house-style-hooks.sh pretool"
+            "command": "/diagram/scripts/shell-check-hooks.sh pretool  # GUARD_EDIT_OK: feature 236 - a NEW guard, not a relaxed one: a command that will not parse, an executing backtick, a -m that needs a heredoc, a co-author address that is not ours",
+            "timeout": 20
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/house-style-hooks.sh pretool  # GUARD_EDIT_OK: feature 236 - widened to Bash, where the writes this guard never saw were actually going"
           }
         ]
       },

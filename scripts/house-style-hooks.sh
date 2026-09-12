@@ -36,8 +36,19 @@ MODE="${1:-pretool}"
 [ "$MODE" = pretool ] || exit 0
 INPUT=$(cat)
 
+# GUARD_EDIT_OK: feature 236 - the scan itself now needs this directory (it shares `_hm_escape`'s
+# search-segment rule rather than writing a second copy of it), so the path is resolved BEFORE the
+# scan instead of only before the log.
+HS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export HS_HERE
+
 REPORT=$(printf '%s' "$INPUT" | python3 -c '
-import json, re, sys
+import json, os, re, sys   # GUARD_EDIT_OK: feature 236 - the scan reads Bash payloads too, and shares
+sys.path.insert(0, os.environ.get("HS_HERE", ""))   # `_hm_escape`s search-segment rule rather than copying it
+try:
+    from _hm_escape import drop_search_segments
+except Exception:                      # a guard never takes the session down with it
+    drop_search_segments = lambda s: s
 try:
     d = json.load(sys.stdin)
 except Exception:
@@ -45,16 +56,25 @@ except Exception:
 inp = d.get("tool_input", {}) or {}
 path = inp.get("file_path", "") or ""
 body = (inp.get("new_string") or "") + (inp.get("content") or "")
+is_bash = d.get("tool_name") == "Bash"
 
 # A BASH HEREDOC IS A WRITE TOO. This hook matched only the Edit/Write tools at first, so
 # `python3 - <<PY ... write_text(prose) ... PY` walked straight past it - and the author did exactly
 # that, minutes after shipping the guard, to write a spec. Same hole layer 3 had, same fix: look at
 # what the command actually writes. Only heredoc BODIES are inspected, because that is where prose
 # travels; a redirect of a single echo is not worth the false positives.
-if not body and d.get("tool_name") == "Bash":
+# GUARD_EDIT_OK: feature 236 (the GM item 4) - THE WHOLE BASH PAYLOAD, NOT ONLY ITS HEREDOC BODIES.
+# The heredoc rule above was already the second version of this hole; the third was measured on the
+# session that motivated feature 236, where British spellings reached the tree through Bash payloads
+# this hook never looked at (`research.md` R3). A command WRITES in more ways than a heredoc - an
+# `echo >>`, a `python3 -c` that calls write_text, a `sed -i` replacement - and the cheap, honest rule
+# is to read the payload. What that costs is a WARNING rather than a correction (spec D2): a Bash
+# payload is often itself the spelling fix (`sed -i \x27s/centre/center/g\x27`), and correcting it
+# would turn the fix into a no-op. The `make quick` phase is the half that fails.
+if is_bash:
     cmd = inp.get("command", "") or ""
-    bodies = re.findall(r"<<-?\s*[\x27\x22]?\w+[\x27\x22]?\n(.*?)\n\s*\w+\b", cmd, re.S)
-    body = "\n".join(bodies)
+    # what a command LOOKS FOR is not what it writes: `git grep -n "centre"` is correct work
+    body = drop_search_segments(cmd)
     # the target matters as much as the text: a heredoc writing the GM own words is exempt below,
     # so pick up any path the command mentions
     path = path or " ".join(re.findall(r"[\w./-]+\.(?:md|py|sh|toml|json)", cmd))
@@ -71,7 +91,18 @@ if "/host-l7r-repo" in path or path.endswith("l7r.md") or "gm-request.md" in pat
 # fires on correct work is one that gets worked around (CLAUDE.md, "deliberately NOT enforced").
 if path.startswith("/tmp/"):
     print(""); raise SystemExit
-if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|test_hooks_cases\.py)$", path):
+# GUARD_EDIT_OK: feature 236 - A FIXTURE IS A VERBATIM RECORD. `scripts/fixtures/` holds corpora of
+# commands that really ran (the guard-refusal replays, and 236 own 238-command parse corpus); several
+# of those commands were house-style sweeps and carry the words by necessity. Correcting one would
+# falsify the record and break the measurement it reproduces - the same ground as a quotation.
+if "/scripts/fixtures/" in "/" + path:
+    print(""); raise SystemExit
+# GUARD_EDIT_OK: feature 236 - two more files that must QUOTE the words to state the rule: the delta
+# check that reads the BRIT table out of this hook, and its suite. The hook corrected both as they
+# were typed, which is the same false positive the three names before them were added for. (No
+# apostrophe in this comment: the scan below is a single-quoted program, and one apostrophe ends it -
+# GUARD_EDIT_OK: the same trap feature 217 hit in guard-file-hooks, met again here.)
+if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|test_hooks_cases\.py|check-house-style-delta\.py|test_house_style_delta\.py|test_guard_firing_log\.py)$", path):  # GUARD_EDIT_OK: feature 236 - the census drives the guard with a REAL payload, which must carry a real British spelling or it proves nothing
     print(""); raise SystemExit
 # a SOURCE block inside the added text is the GM speaking; drop it before looking
 body = re.sub(r"<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->", " ", body, flags=re.S | re.I)
@@ -96,7 +127,11 @@ CODE = r"\x60{3}.*?\x60{3}|\x60[^\x60]*\x60"  # a code span, written by codepoin
 # the two HTML quotation elements anywhere; straight double quotes only in a prose file, where they quote -
 # in a .py or .sh they delimit a string, and the rule reaches code. The heredoc path list is joined by spaces.
 QUOTE = r"「[^」]*」|『[^』]*』|“[^”]*”|<q\b[^>]*>.*?</q>|<blockquote\b[^>]*>.*?</blockquote>"
-if re.search(r"\.(?:md|html|txt)(\s|$)", path):
+# GUARD_EDIT_OK: feature 236 FR-007a - "outside a quoted span" is the HOUSE-STYLE sense, never the
+# SHELL one. In a Bash payload a straight double quote is shell quoting, and under a `<<\x27PY\x27`
+# heredoc the whole payload is shell-quoted, so admitting that form here would let the exemption
+# swallow the rule the payload is being read for.
+if not is_bash and re.search(r"\.(?:md|html|txt)(\s|$)", path):
     QUOTE += r"|\x22[^\x22\n]*\x22"
 SPAN = re.compile(CODE + "|" + QUOTE, re.S)
 PAIRS = {
@@ -183,6 +218,24 @@ still_bad = "—" in leftover or "–" in leftover or any(
     re.search(rf"\b{w}\b", leftover, re.I) for w in BRIT
 )
 
+# GUARD_EDIT_OK: feature 236 FR-007 - A BASH PAYLOAD IS TOLD, NEVER REWRITTEN OR REFUSED. Telling
+# costs nothing (an additionalContext at exit 0 spends no model round trip), rewriting would break
+# the payload that is itself a spelling fix, and refusing would spend a round trip on something the
+# `make quick` phase fails on anyway. Spec D2 records the departure from item 4s "correct it" for
+# the GM to rule on.
+if is_bash:
+    print(json.dumps({"hookSpecificOutput": {
+        "hookEventName": "PreToolUse",
+        "additionalContext": (
+            "House style, in this command payload: " + ", ".join(hits[:6]) + ". CLAUDE.md is "
+            "project-wide - American spellings, hyphens only - and a write that travels through a "
+            "Bash payload owes the rule exactly as an Edit does. Not corrected for you, because a "
+            "payload is often itself the fix; a quotation of someone elses text keeps its own "
+            "characters. `make quick` fails on a British spelling in the delta, so it is cheaper "
+            "to fix now than at the gate."),
+    }}))
+    raise SystemExit
+
 if fixed_fields and notes and not still_bad and not GM_VERBATIM:
     payload = dict(inp)
     payload.update(fixed_fields)
@@ -204,11 +257,18 @@ print(" | ".join(hits[:6]) + (" [the GM own words - not corrected, only reported
 [ -z "$REPORT" ] && exit 0
 # GUARD_EDIT_OK: feature 164 - a JSON verdict is a CORRECTION to pass through, not a report to block on,
 # and either way the firing is recorded so `make audit` can price this guard like the others.
-HS_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$HS_HERE/_guardlog.sh"
 case "$REPORT" in
-  '{'*) guard_log house-style rewrote "$(guard_cmd)"; printf '%s\n' "$REPORT"; exit 0 ;;
+  # GUARD_EDIT_OK: feature 236 - there are TWO JSON verdicts now, and they are different branches for
+  # the audit: a CORRECTION applied to an edit, and a WARNING on a Bash payload that is left as typed.
+  '{'*)
+    if printf '%s' "$REPORT" | grep -q '"updatedInput"'; then
+      guard_log house-style rewrote "$(guard_cmd)" corrected-edit
+    else
+      guard_log house-style warned "$(guard_cmd)" bash-payload
+    fi
+    printf '%s\n' "$REPORT"; exit 0 ;;
 esac
 guard_log house-style blocked "$(guard_cmd)"
 

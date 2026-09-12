@@ -100,7 +100,15 @@ def escape_used(cmd: str, token: str) -> bool:
     counts as an escape: a trailing `# TOKEN: reason` comment, a bare word in a command, and a
     `TOKEN="reason"` assignment prefix - every form `CLAUDE.md` shows.
     """
-    clean = _FOR_IN.sub(" ", _strip_quotes(_strip_heredocs(cmd)))
+    return token in drop_search_segments(_FOR_IN.sub(" ", _strip_quotes(_strip_heredocs(cmd))))
+
+
+def drop_search_segments(clean: str) -> str:
+    """`clean` with every SEARCH segment's pattern removed - what a command LOOKS FOR is not what it
+    DOES. Lifted out of `escape_used` so the house-style scan of a Bash payload drops them the same
+    way (feature 236 FR-007a): `git grep -n "centre"` is a session looking for the word, not writing
+    it, and a guard that cannot tell the difference fires on correct work.
+    """
     kept = []
     for seg in re.split(r";|\|\||\||&&|\n", clean):
         words = [w for w in seg.split() if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=\S*", w)]
@@ -115,7 +123,7 @@ def escape_used(cmd: str, token: str) -> bool:
             kept.append(seg.split("#", 1)[1] if "#" in seg else "")
             continue
         kept.append(seg)
-    return token in " ".join(kept)
+    return " ".join(kept)
 
 
 # ---------------------------------------------------------------------------------------------

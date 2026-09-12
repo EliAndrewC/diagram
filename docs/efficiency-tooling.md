@@ -53,7 +53,7 @@ Measured: **48 of 314 recorded `make done` runs short-circuited entirely**, at 0
 
 ## 3. The command is refused, corrected, or answered before it runs
 
-Twelve `PreToolUse` guards; six of them are about efficiency. **Since features 164 and 165 the rule is
+Thirteen `PreToolUse` guards; seven of them are about efficiency. **Since features 164 and 165 the rule is
 that a refusal is the LAST resort**, because a refusal costs a model round trip - the exact thing it
 is trying to save. The ladder: REWRITE where the guard already knows the compliant command; TEACH FOR
 FREE where a block cannot be avoided but the lesson can arrive earlier; refuse only where the action
@@ -67,6 +67,16 @@ is destructive or the refusal is itself the content.
 | **`make-only-hooks`** | reaching an expensive path around `make`, where the cheap question cannot be asked first | refuses a bare interpreter or pytest and NAMES the target; **rewrites** a TARGETED bare pytest (files, a directory, a node id, `-k` -> `K=`, output flags dropped, the pipeline after it kept) into `make test-file FILE=... [K=...]` and an engine entry point a one-line `$(RUN).<module>` recipe wraps into that target, the table derived from the Makefile at hook time (feature 212); a refusal names the token that stopped the rewrite |
 | **`no-poll-hooks`** | burning wall clock watching a job the harness will notify you about | refuses a busy-wait; **corrects** a self-matching `pgrep` to the bracket form; **permits** a backgrounded loop whose condition reads a FILE (the `setsid --fork` shape). Escape `POLL_OK` - which permits the WAIT and nothing else: an escaped command's self-matching `pgrep` is still bracketed (GM 2026-09-08, after an escaped waiter looped for hours on a finished gate) |
 | **`pair-hooks`** | the independent review running AFTER the gate, adding its whole runtime to the wall clock - and running AT ALL when nothing about a settlement's layout moved (feature 231) | **rewrites** a lone `make done` into `make verify`; every other gate shape (`make maps`, a detached gate, `FULL=1`) is **recorded and permitted** with the DISPATCH NOW context - a detached run overlaps the review, a foreground run is told the review will follow it and how to overlap next time (feature 212, D7). Since feature 231 it first asks `scripts/_review_owed.py` whether any pool manifest moved against main: no map, no review - the gate runs as typed and the waiver is recorded; a map, and the snapshot is taken into `<clone>/.git/review-snapshot/` and named in the dispatch. Escape `PAIR_OK` |
+
+| **`shell-check-hooks`** (feature 236) | a command that cannot work being sent anyway: the failure costs the command, a model turn reading it, and a second attempt | refuses BEFORE the command runs, with the parser's own message, on four rules that each record separately - it does not PARSE (`bash -O extglob -n`, the options the tool's own shell can enable, because plain `bash -n` refuses work the tool runs); a backtick span bash would EXECUTE, which no parse can see because it is valid syntax; a `git commit -m` with a double quote, a newline or a second `-m`, naming `git commit -F - <<'EOF'`; and a co-author trailer addressed to anything but ours. Measured on 238 real commands: 2 parse refusals, both of which had also failed at run time, 0 false positives. Escape `SHELL_CHECK_OK` |
+
+**Two static checks joined the CHEAP phases in the same feature**, on the same reasoning one rung
+down: `scripts/check-house-style-delta.py` is a `make quick` phase (a British spelling in the delta or
+in an untracked file, which is where they were arriving once the corrector only saw `Edit`), and
+`scripts/spec-lint.py` runs in `static` and at push (a measured figure with no research pointer, a
+withdrawn figure still standing, an orphaned `FR-`/`SC-`, a stale task list). Both are cents against
+the thing they save: twenty `spec-fidelity` rounds over two features cost 91 minutes, and at least
+eight of those findings were mechanical.
 
 **Every guard's ESCAPE is an invocation too, since feature 169.** Every token matched in a COMMAND goes through
 `_hookmatch.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
