@@ -1662,3 +1662,19 @@ top is a brook and a ditch parting, which is what was actually there.
 
 What stands at the tap is rolled, because the record attests two forms and prefers neither.
 This map rolled the **weir**: an oblique bar of stone-packed timber crib across the brook, running diagonally upstream from the intake as the old ones did. Its runoff still goes to the tameike at the field's foot, and the run from the collector's outfall to the shore is a drainage ditch, drawn at the collector's own tail width.
+
+### The cluster crossed the map (feature 230, 2026-09-12)
+
+The brook now runs past the field, and a settlement does not stand astride its own stream: the seater refuses a
+field margin the brook divides. On this map that moved the whole hamlet from the west margin to the east - all
+fifteen houses, both wells, the three byres, the lane web, the notice board, the windbreak and the copse - while
+the field, its ditches and the tameike stayed exactly where they were. The map is worth reading against its own
+earlier renders for that reason: the settlement half is new, the farmed half is not.
+
+Two things were found by review while that settled. The seat was scored down rather than refused at first, which
+left one homestead on the far bank with no crossing anywhere on the brook - the seat that wins on wind and slope
+can still be the one the water runs through, so a divided margin is struck out now and the score decides only
+among the rest. And the path to the rice was being swept away as an orphan fragment: the sweeps ask whether every
+HOUSE a fragment serves is served by something else, and the field spur serves no house at all. It is flagged now
+and kept like a house's only way, and the length the clip leaves is recorded on every map (`meta.field_spur_ft`)
+whether the spur is drawn or not - which is how the three maps that currently have none became visible.

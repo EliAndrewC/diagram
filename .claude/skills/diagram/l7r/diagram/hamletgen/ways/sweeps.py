@@ -515,7 +515,11 @@ def _sweep_debris(s: Settlement) -> int:
 
     swept: list[int] = []
     for i in live:
-        if lanes[i].get("connector") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
+        # THE FIELD'S ONLY WAY IS KEPT, exactly as a house's is. Both sweeps ask whether every HOUSE a
+        # fragment serves is served by something else; the field spur serves no house at all, so once
+        # feature 230's seater moved a cluster to the far margin and the spur came out short, the sweep
+        # took the hamlet's whole path to its rice and the map recorded a dropped fragment and nothing else.
+        if lanes[i].get("connector") or lanes[i].get("spur") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
             continue
         mine = list(zip(ways[i], ways[i][1:], strict=False))
         others = [sg for j in live if j != i for sg in zip(ways[j], ways[j][1:], strict=False)]

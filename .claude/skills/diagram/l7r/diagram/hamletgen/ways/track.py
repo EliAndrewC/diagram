@@ -381,8 +381,15 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
-    if len(_spur_pts) >= 2 and sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) > 20.0:
-        s.lane(_thread_the_fabric(s, plan, _spur_pts), width=5, clearance=LANE_CLEARANCE, worn=True)
+    _spur_ft = sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) if len(_spur_pts) >= 2 else 0.0
+    # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230). The floor below is right - a 20 ft
+    # stub is not a path - but a spur that fails it vanished in silence, and a reviewer asking what the nearest
+    # way to the paddy was is how the reference hamlet turned out to have none. The number says which it was:
+    # a path the clip left too short, or no path at all. Where a field path should END is the open question
+    # (`future-work/farming-communities.md`), and this is the measurement it will be answered from.
+    s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
+    if _spur_ft > 20.0:
+        s.lane(_thread_the_fabric(s, plan, _spur_pts), width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
 
     # the CONNECTOR, out to the frame
     # ...and the gate the connector starts FROM must itself be out of the crop. The skeleton's

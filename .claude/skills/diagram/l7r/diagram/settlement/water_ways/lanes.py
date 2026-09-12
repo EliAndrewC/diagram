@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class LanesMixin:
-    def lane(self: Settlement, pts: Any, width: float = 16, clearance: float = 22, worn: bool = False, connector: bool = False) -> None:  # type: ignore[misc]
+    def lane(self: Settlement, pts: Any, width: float = 16, clearance: float = 22, worn: bool = False, connector: bool = False, spur: bool = False) -> None:  # type: ignore[misc]
         """A village lane or connecting path. `worn=True` draws it as UNPAVED TRODDEN EARTH: a NARROW
         single track (China moved rural goods by WHEELBARROW + shoulder-pole porter + packhorse, not wide
         cart roads, so two carts could not pass), packed dirt with soft worn shoulders and NO center
@@ -24,7 +24,7 @@ class LanesMixin:
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
         See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
-        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector}
+        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
         # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was

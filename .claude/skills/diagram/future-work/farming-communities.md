@@ -2214,3 +2214,19 @@ because it looks like verification. So the instance is ledgered here rather than
 **To close it:** roll the FULL cohort, read the belt on seed 45 against the real continuity predicate the
 belt placer uses, and either fix the placer or carry the seed as a strict xfail beside seed 43's in
 `tests/gate/test_cohort_lane_rules.py`'s successor.
+
+## Where a field path ENDS, and why three pool maps have none (measured 2026-09-12, feature 230)
+
+The spur from the cluster to the paddy is routed to the envelope's nearest vertex, clipped out of the crop and
+trimmed off the marsh, and drawn only if more than 20 ft survives. MEASURED on the pool the day feature 230
+landed (`meta.field_spur_ft`, recorded on every map from that day): Inashiro 125 ft and drawn; Kashikawa,
+Mizuguchi and Sawada **0.0 ft** - the clip leaves nothing at all, so those three hamlets have no drawn way to
+their own rice, and until the number was recorded nothing said so. Kuwabata is a polder and has no spur by design.
+
+MECHANISM: the dry hem is cultivated ground and sits between the cluster and the paddy on every comb map, so a
+spur aimed at the paddy's outline is clipped at the hem's edge and what remains is under the floor. The floor is
+right - a 20 ft stub is not a path - and the routing is what is wrong: the spur should end where a field path
+really ends, which is the question this file has carried since feature 128 and which the measurement above is the
+evidence for. SKETCH: aim the spur at the nearest point of the CULTIVATED ground rather than of the paddy (the
+hem is worked ground and a path to it is a path to the field), and let it stop at the hem's own edge; then ask
+whether the last stretch between the hem and the wet plots is a path at all or the bunds themselves.

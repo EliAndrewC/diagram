@@ -376,6 +376,8 @@ def _touch_junctions(
             _dropped = 0
             _dropped_idx: list[int] = []
             for i in orphans:
+                if lanes[i].get("spur"):
+                    continue  # the field's only way is kept like a house's (feature 230; see sweeps.py)
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
                 _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
                 if all(_near(h, _others) <= _SERVE_FT for h in _served):
