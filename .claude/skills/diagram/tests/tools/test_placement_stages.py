@@ -460,3 +460,68 @@ def test_every_clickable_class_is_named_somewhere_on_the_committed_page() -> Non
     text = _html.unescape(_re.sub(r"<[^>]+>", " ", page.read_text())).lower()
     missing = [k for k in sorted(CLASSES) if not any(f in text for f in (k, k + "s", k.rstrip("s"), k.replace(" ", "_")))]
     assert not missing, f"a reader can click these and the page never names them: {missing}"
+
+
+def test_features_between_reads_the_classes_whose_ink_appeared() -> None:
+    """The derivation the page's feature lists rest on: the class side-lists run parallel to the ink layers,
+    so the difference between two watermarks is what one stage or step drew. Ruled-but-not-highlighted ink
+    (`"-"`) is excluded, because a reader cannot click it - and a layer that is not a list contributes
+    nothing rather than raising."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=400, H=400, seed=1)
+    lo = ps._watermark(s)
+    s.add('<rect x="1" y="1" width="9" height="9" fill="#333"/>', cls="farmhouse")
+    s.add('<rect x="20" y="1" width="9" height="9" fill="#444"/>', cls="byre")
+    s.add('<rect x="40" y="1" width="9" height="9" fill="#555"/>', cls="-")
+    assert ps.features_between(s, lo, ps._watermark(s)) == ["byre", "farmhouse"], "sorted, and the '-' is left out"
+    assert ps.features_between(s, ps._watermark(s), ps._watermark(s)) == [], "no ink between two equal marks"
+
+    class _NoLayers:
+        M = {"meta": {}}
+        out = None
+        out_cls = None
+        top = None
+        top_cls = None
+        walls = None
+        walls_cls = None
+        toplabels = None
+        toplabels_cls = None
+
+    assert ps.features_between(_NoLayers(), {}, {}) == []  # type: ignore[arg-type]
+
+
+def _classed_stage() -> Any:
+    """A stub stage that draws CLASSED ink through a declared step, so the page prints both feature lines."""
+
+    def stage_classed(s: Any, _plan: Any) -> None:
+        """Draws one thing a reader can click.
+
+        Steps:
+            l7r.diagram.settlement.Settlement.add
+        """
+        s.add('<rect x="10" y="10" width="50" height="50" fill="#333"/>', cls="farmhouse")
+
+    return stage_classed
+
+
+def test_the_page_names_the_features_a_stage_and_its_step_put_on_the_map(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The GM's rule (2026-09-12): anything a reader can click must be findable on the page. The stage line and
+    the step line are both derived from the ink, so a feature cannot be renamed or moved between stages
+    without the page following it."""
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None, render_w=2600: (stem + ".png", 10, 10))
+    _stub_stages(monkeypatch, _classed_stage())
+    html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
+    assert "Features this stage puts on the map" in html and "farmhouse" in html
+    assert "<span class=\"fl\">Draws</span> farmhouse" in html, "the step names what it drew too"
+
+
+def test_the_closing_section_names_what_this_map_cannot_draw(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """One map's ink can only name what that map has, and the pool draws five kinds of place - so every other
+    clickable class is named beside a shipped map that has it, read from that map's own interactive page."""
+    from l7r.diagram.interactive.classes import CLASSES
+
+    rest = ps.elsewhere_in_the_pool({"farmhouse"}, ps.SKILL)
+    assert rest and len(rest) == len(CLASSES) - 1, "everything but the one named class is accounted for"
+    assert all(isinstance(m, str) for _k, m in rest), "each carries a map name, or '' when no map draws it"
+    assert ps.elsewhere_in_the_pool(set(CLASSES), ps.SKILL) == [], "nothing is left when every class is named"

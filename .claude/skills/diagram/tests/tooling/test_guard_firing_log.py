@@ -277,6 +277,12 @@ _ESCAPES = {
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
+    "RUN_OK": (
+        "not-an-escape",
+        "appears ONLY as a fixture string in scripts/test-finished-run-hooks.sh, which proves that a token in a "
+        "command cannot escape a Stop hook - a Stop payload carries no command, so there is nowhere to put one. "
+        "The live-run refusal's release is its once-per-run marker instead (GM 2026-09-12)",
+    ),
     "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
 }
 
