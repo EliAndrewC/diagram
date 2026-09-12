@@ -70,7 +70,7 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     Pig sties on the dikes and duck pens at the pond corners nearest the houses (dike-pond only).
 
     Steps:
-        l7r.diagram.hamletgen.pondstock._bank_seat
+        l7r.diagram.hamletgen.pondstock._bank_seats
         l7r.diagram.settlement.Settlement.pond_fixture_fits
         l7r.diagram.settlement.Settlement.pig_sty
         l7r.diagram.settlement.Settlement.duck_pen
