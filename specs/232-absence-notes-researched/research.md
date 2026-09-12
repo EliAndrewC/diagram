@@ -500,3 +500,43 @@ searx returned nothing usable, and Bing degrades a long query to its first word.
 time. Also worth keeping: a J-Stage scan's OCR layer renders な as 左, so every CJK quotation was confirmed
 against page images; a two-column Japanese PDF needs column cropping at the real page size from `pdfinfo`;
 and an `.xlsx` reads through `zipfile` and `xml.etree` when `pip` will not install a reader.
+
+
+## R24 - the second pass, batch B3 (institutional and technical): all six moved, four corrected
+
+The tooling really was the whole problem here. The authority on Chinese iron publishes openly, and his site
+sits behind a JavaScript proof-of-work check - a SHA-256 puzzle the reader solved in Python, after which the
+whole site read normally. That single obstacle had been costing this record a citation it could always have
+had.
+
+**Four corrections, and two of them retire a claim rather than source it.**
+
+- `urban-features.html` fn-62 **conflates two different processes**. Wagner separates the *chao* hearth - an
+  insulated pit, charcoal, forced blast - from Song Yingxing's *tang*, an open basin with no fuel and no
+  blast, of which he says "he describes a very different process, one which is very difficult to explain
+  technically." The entry elaborates them as one. And *wuchaoni* is "filthy wet loam", probably nitre-bed
+  material, not the mineral additive the entry calls it.
+- `cities/fabric.html` fn-17 says a merchant's wall marks legal standing and is **not something wealth can
+  buy**. For late Edo that is contradicted: the domains "issued the qualification indiscriminately ... in
+  exchange for monetary contributions". So it is a DEVIATION this project takes, not a finding, and the page
+  must say which.
+- `cities/fabric.html` fn-25's town-inn against city contrast has **no support at all**, and the Tokaido
+  evidence cuts slightly against it, since post stations ARE towns and the sources say they were swamped too.
+- `cities/hinterland.html` fn-11's 55 ft **is not a bed**. The *Qimin yaoshu* of about 540 gives the
+  hand-worked bed as two paces by one - roughly 5 by 10 ft - with the reason the entry had guessed at: larger
+  and the water cannot be spread evenly, and "one does not want a person's foot to go into it". So 55 ft is a
+  parcel of many beds, and the number changes. The same chapter sizes a market garden serving a city at 30
+  *mu* "backing onto the city wall", with ten wells.
+
+**A bonus outside the batch.** The Suzhou government page fetched for the water gate also gives measured
+dimensions for a *wengcheng*, which is an uncited claim in the same paragraph - and shows it is 平面略成方形,
+"roughly square in plan", which the record's "urn-shaped" does not survive.
+
+**One for the GM, and it may simply be wrong.** fn-62 names "the excavated smelting-and-fining site at
+Xuxiebian in Sichuan". It appears in neither Wagner work the reader could read in full, including a free
+Chinese translation searched character by character. Either the GM knows where it came from, or it should
+go; the Han claim survives without it on Wagner's own hedged wording and a tomb relief.
+
+**Tooling.** OpenAlex and the J-STAGE API are what actually found things, and `api.ctext.org` answers even
+though the site's web pages are behind Cloudflare. Yahoo Japan throttles after about eight queries. Every
+SearXNG instance tried, DuckDuckGo and Bing through curl are dead ends.
