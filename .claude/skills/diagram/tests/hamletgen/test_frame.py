@@ -84,3 +84,49 @@ def test_stage_notice_reseats_a_board_the_frame_would_lose(monkeypatch):
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     assert not any(len(lb) > 5 and lb[5] == "notice board" for lb in s.M["labels"]), "orphan caption left behind"
     assert len(s.M["kosatsuba"]) == 1, "old board not popped"
+
+
+def test_stage_notice_narrows_an_anchored_board_to_the_band_then_takes_the_traffic(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 227: an ANCHORED placement chooses the ground and the passing traffic chooses the seat on it - the rule
+    `place_kosatsuba` applies, which this stage had restated as distance-to-the-anchor alone, so the board walked out
+    to whatever verge lay nearest the entrance and served nobody. `frontage` anchors on the headman's house, which is
+    the cheapest anchored case to state; the seat nearest the anchor is deliberately NOT the seat most households
+    pass, so a loop that ranked by distance alone would fail this."""
+
+    class _StubS:
+        def __init__(self) -> None:
+            self.M = {
+                "meta": {"kosatsuba_seat": "frontage", "view": [0.0, 0.0, 820.0, 820.0]},  # the engine's seat falls outside it
+                # the headman anchors at (600, 300); the crowd is 60 px south of him, inside the 60 ft band
+                "houses": [{"x": 600.0, "y": 300.0, "role": "headman"}] + [{"x": x, "y": 360.0} for x in (560.0, 600.0, 640.0, 680.0)],
+                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
+                "labels": [],
+                "lanes": [{"pts": [(500.0, 330.0), (800.0, 330.0)]}],
+            }
+            self.top = ["", "", "the first board's glyph"]
+            self.TOPZ = 0
+            self.reseated: list[tuple[float, float, float]] = []
+
+        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
+            return (1000.0, 1000.0)  # outside the view: the re-seat loop runs
+
+        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
+            pass
+
+        def place_labels(self):  # type: ignore[no-untyped-def]
+            pass
+
+        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
+            return True
+
+        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
+            return True
+
+        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
+            self.reseated.append((x, y, rot))
+
+    s = _StubS()
+    hg.stage_notice(s, None)  # type: ignore[arg-type]
+    assert len(s.reseated) == 1
+    bx, _by, _rot = s.reseated[0]
+    assert 560.0 <= bx <= 700.0, "inside the anchor's band and over the households, not at the band's near edge"

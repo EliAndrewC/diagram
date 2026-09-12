@@ -232,12 +232,17 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     return None
 
 
-def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = ()) -> Poly:
+def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), end_reach: float | None = None) -> Poly:
     """Pull a run's ends back to the last point that actually serves something.
 
-    `lanes_reach_something` asks of every internal lane end that it reach another way within 40 ft or
-    a farmhouse within 90; a web lane's ends come out of the clipper, which stops where the ground
-    stops being walkable and has no opinion about whether anything is there. Trimming BEFORE the ink
+    The gate asks of every internal lane end that it come within `WAY_END_REACH_FT` of another way, a
+    farmhouse or the field. A caller that draws a way BEFORE anything serves the houses - the cluster's
+    skeleton - passes that constant as `end_reach` and so cannot leave an end the gate will fail. The
+    late pass keeps the service bar instead, and deliberately: it runs after `_serve_stragglers`, and
+    trimming a run to 60 ft there takes back the tail that was some outlying steading's only way (cohort
+    seed 39 stranded a farmhouse the moment this was applied to both). A web lane's ends come out of the
+    clipper, which stops where the ground stops being walkable and has no opinion about whether anything
+    is there. Trimming BEFORE the ink
     goes down is better than trimming after: `trim_lane_stubs` drops anything under its 71 ft floor,
     which is the right rule for a skeleton arm and would delete the door paths this feature exists to
     draw."""
@@ -248,18 +253,38 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     # of the lane that did the job the lane was drawn for, and did so on the grounds that nothing was
     # there. The setback matches `SPUR_SETBACK`: a path stops AT the bund, and the last few feet are
     # the baulk, so "touching the envelope" means within that, not inside it.
+    _way, _house, _field = (end_reach, end_reach, end_reach) if end_reach is not None else (40.0, 90.0, SPUR_SETBACK + 4.0)
+
     def serves(q: Pt) -> bool:
-        if any(seg_dist(q[0], q[1], a, b) <= 40.0 for a, b in segs) if segs else False:
+        if any(seg_dist(q[0], q[1], a, b) <= _way for a, b in segs) if segs else False:
             return True
-        if any(math.dist(q, h) <= 90.0 for h in houses):
+        if any(math.dist(q, h) <= _house for h in houses):
             return True
-        return any(edge_dist(q[0], q[1], f) <= SPUR_SETBACK + 4.0 for f in fields)
+        return any(edge_dist(q[0], q[1], f) <= _field for f in fields)
 
     out = list(run)
     while len(out) > 2 and not serves(out[-1]):
         out.pop()
     while len(out) > 2 and not serves(out[0]):
         out.pop(0)
+    if end_reach is not None:
+        # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
+        # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
+        # Walk the end IN along its own last segment instead, four feet at a time, to the first point that serves.
+        # An arm no point of which serves reaches nothing at all and is handed back too short to draw, for the
+        # caller to drop - which is the honest answer for a way with nothing at either end.
+        for _ in range(2):
+            while len(out) >= 2 and not serves(out[-1]):
+                _a, _b = out[-2], out[-1]
+                _d = math.dist(_a, _b)
+                if _d <= 4.0:
+                    out.pop()
+                    continue
+                _t = (_d - 4.0) / _d
+                out[-1] = (_a[0] + (_b[0] - _a[0]) * _t, _a[1] + (_b[1] - _a[1]) * _t)
+            out.reverse()
+        if len(out) < 2 or not serves(out[0]) or not serves(out[-1]):
+            return list(out[:1])
     return out
 
 

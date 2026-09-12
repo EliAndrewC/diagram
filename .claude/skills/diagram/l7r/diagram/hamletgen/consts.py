@@ -205,6 +205,17 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
 
+WAY_END_REACH_FT = 60.0
+"""How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.
+
+ONE NUMBER FOR THE PLACER AND THE CHECK, which is the whole reason it is a constant (feature 227). `_trim_to_service`
+pulled a run's ends back to the last point that reached a way within 40 ft or a HOUSE within 90, while
+`test_every_lane_end_reaches_something_worth_walking_to` asks 60 of all three - so a lane whose end fell in the 60-90
+band was trimmed to a position the gate then failed, and nothing said so until a re-packed cluster put one there
+(Inashiro's two skeleton arms, ends 81-97 ft from the nearest house). The trim's own docstring still quoted the older
+pair of numbers, which is how the drift survived: the check had been tightened and the placer had not. The bar itself
+is the check's - a path exists because somebody had a reason to walk to its end."""
+
 # How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
 # `farmhouses_reach_a_way` check, which held it as `_LANE_JOIN`). Its recorded why, carried verbatim from
 # the check because it is the reason the number is 40 and not something else: it is the same figure

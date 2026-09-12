@@ -362,3 +362,27 @@ def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
     stage_track(s, plan)
     spurs = [ln for ln in s.M["lanes"] if ln.get("w") == 5 and not ln.get("connector") and ln.get("worn")]
     assert spurs, "a worn width-5 way besides the connector: the spur to the field"
+
+
+def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> None:
+    """Feature 227 D8: the seats a pitch beyond each end of the rank are offered ONLY in a round that seated nothing
+    behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
+    40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
+    left; the houses past the front row's own count can therefore only have come from them."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    s, plan = _toy_hamlet(12)
+    ax, ay = plan.seat["along"]
+    ox, oy = plan.seat["out"]
+    cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
+    back = [
+        (cx + ox * 40 - ax * 5000, cy + oy * 40 - ay * 5000),
+        (cx + ox * 40 + ax * 5000, cy + oy * 40 + ay * 5000),
+        (cx + ox * 5000 + ax * 5000, cy + oy * 5000 + ay * 5000),
+        (cx + ox * 5000 - ax * 5000, cy + oy * 5000 - ay * 5000),
+    ]
+    s.block_polys.append(back)
+    stage_homesteads(s, plan)
+    ss = s.M["meta"]["seat_search"]
+    assert ss["rounds"] >= 1, "the ranks ran"
+    assert len(s.M["houses"]) > ss["front"], "the only seats left were the ends, and the cluster took them"

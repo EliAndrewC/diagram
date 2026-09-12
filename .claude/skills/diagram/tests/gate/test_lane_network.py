@@ -26,6 +26,7 @@ import os
 
 import pytest
 
+from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
 from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, _components
 from tests import rolls
 from tests.gate import _pool
@@ -148,7 +149,7 @@ def test_every_lane_end_reaches_something_worth_walking_to(lanes) -> None:
             near_way = min((_min_dist(end, o) for k, o in enumerate(ways) if k != i and len(o) >= 2), default=1e9)
             near_house = min((math.hypot(end[0] - h["x"], end[1] - h["y"]) for h in houses), default=1e9)
             near_field = min((_min_dist(end, o) for o in fields if len(o) >= 2), default=1e9)
-            if min(near_way, near_house, near_field) > 60.0:
+            if min(near_way, near_house, near_field) > WAY_END_REACH_FT:  # the placer trims to this same constant (feature 227)
                 dangling.append((round(end[0]), round(end[1])))
     assert not dangling, f"lane end(s) stop in open ground at {sorted(set(dangling))[:4]} - nothing wore that path"
 

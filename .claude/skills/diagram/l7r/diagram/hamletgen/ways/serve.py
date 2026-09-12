@@ -12,6 +12,7 @@ from ..clearance import fabric_index
 from ..consts import (
     BUNDLE_PITCH,
     FOOTPATH_FABRIC_GAP,
+    WAY_END_REACH_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -60,7 +61,10 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     # TRIM FIRST, JOIN SECOND. The join is computed from the run's ENDS, so trimming afterwards moves
     # the end out from under the link that was drawn to it - which left a 187 ft lane whose start
     # stood 178 ft from any way, the exact dangling tread `lanes_reach_something` exists to catch.
-    run = _trim_to_service(run, segs, houses)
+    # to the bar the GATE asks of a lane end, not the looser service reach: this runs at DRAW time, before
+    # `_serve_stragglers`, so a steading a shortened run stops serving still gets its own path afterwards (feature 227;
+    # the late pass after the stragglers keeps the service bar, and tightening that one stranded cohort seed 39)
+    run = _trim_to_service(run, segs, houses, end_reach=WAY_END_REACH_FT)
     if segs:
         # SHARING A CORRIDOR IS SHADOWING, whether the two lines are parallel or crossing. The test
         # was written against `MIN_WEB_GAP` (the room a lane needs to pass BETWEEN two steadings),

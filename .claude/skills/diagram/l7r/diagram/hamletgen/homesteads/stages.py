@@ -411,34 +411,34 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 ly = -wdep + (ly + wdep) * 0.75  # the cloud leans toward the field (feature 133)
                 _cands.append((seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly))
         _before_round = placed
-        for _sx4, _sy4 in _cands:
-            if placed >= plan.spec.households:
-                break
-            # A PITCH IS A SPACING, NOT A RULING (settlement-review, feature 227: 11 of Mizuguchi's 12 houses fell in
-            # one 10 px bucket of nearest-neighbor distance, where the hand-packed maps spread over three). The seat is
-            # nudged along the band by up to a tenth of a pitch, from the map's own position hash - enough to break the
-            # modal spike, far too little to move a rank or to reopen a gap the round above just filled.
-            _jit = (s._hjit(_sx4, _sy4, 13.0) - 0.5) * BUNDLE_PITCH * 0.2
-            _sx4, _sy4 = _sx4 + ax * _jit, _sy4 + ay * _jit
-            if not in_band((_sx4, _sy4)) and attempt >= 4:
-                continue
-            if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * (0.5 if attempt < 4 else 0.3) for kx, ky in _kept) or any(
-                math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])
-            ):
-                continue  # the same guess again
-            _kept.append((_sx4, _sy4))
-            if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
-                placed += 1
-                _cloud_placed += 1
-        if attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households:
-            # THE BACK IS REFUSED: only then does the cluster grow ALONG the field - the seat one pitch beyond each end of
-            # the rank (offered with the rest, the ends strung Inashiro's crescent to 5.0 and Mizuguchi's round to 4.9)
-            for _sx4, _sy4 in _ends:
-                if any(math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])):
+        # THE ENDS GO THROUGH THE SAME BODY (feature 227): they are offered only after a round that seated nothing
+        # behind - the cluster grows along the field only when its back is refused - but a second loop of its own
+        # meant a second copy of the dedupe and the jitter, which is how two rules drift apart.
+        _offered, _along_the_field = _cands, False
+        while True:
+            for _sx4, _sy4 in _offered:
+                if placed >= plan.spec.households:
+                    break
+                # A PITCH IS A SPACING, NOT A RULING (settlement-review, feature 227: 11 of Mizuguchi's 12 houses fell in
+                # one 10 px bucket of nearest-neighbor distance, where the hand-packed maps spread over three). The seat is
+                # nudged along the band by up to a tenth of a pitch, from the map's own position hash - enough to break the
+                # modal spike, far too little to move a rank or to reopen a gap the round above just filled.
+                _jit = (s._hjit(_sx4, _sy4, 13.0) - 0.5) * BUNDLE_PITCH * 0.2
+                _sx4, _sy4 = _sx4 + ax * _jit, _sy4 + ay * _jit
+                if not in_band((_sx4, _sy4)) and attempt >= 4:
                     continue
-                if placed < plan.spec.households and _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
+                if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * (0.5 if attempt < 4 else 0.3) for kx, ky in _kept) or any(
+                    math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])
+                ):
+                    continue  # the same guess again
+                _kept.append((_sx4, _sy4))
+                if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
                     placed += 1
                     _cloud_placed += 1
+            if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
+                break
+            _offered, _along_the_field = _ends, True
+
     # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
     # `cluster_seeds` used to stamp `meta.cluster_shape` on its first attempt, BEFORE it knew how
     # many seats it would win - which was harmless while the cloud either ran for the whole hamlet

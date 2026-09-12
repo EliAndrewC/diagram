@@ -149,8 +149,30 @@ the feature's last task after rounds of feedback in the clone.
   and this engine's own rule is that a gap verdict reads footprints - homestead to homestead the pool's median gap is
   4 to 31 px, so the fabric is continuous and the houses are apart by exactly the yards and gardens between them; and
   the board at an `entrance` seat reaches fewer households than the busiest stretch of the same lane BECAUSE that is
-  what an entrance seat is, a declared knob with its own research. Two are the GM's at acceptance (T07): Kuwabata's
-  cluster standing off its dike behind the bank, and the windbreak that cluster displaced.
+  what an entrance seat is, a declared knob with its own research (and the verification pass measured the board at or
+  above the best seat its own anchor band offers on all four anchored maps). Two are the GM's at acceptance (T07):
+  Kuwabata's cluster standing off its dike behind the bank, and the windbreak that cluster displaced.
+- **D10 One bar for a lane's end, found by a re-packed cluster (Principle XIV).** `_trim_to_service` pulled a run's
+  ends back to the last point within 40 ft of a way or 90 ft of a HOUSE, while the gate asks 60 ft of a way, a house
+  or the field - so an end that fell in the 60-90 band was trimmed to a position the gate then failed, and the trim's
+  own docstring still quoted the older pair. The drift had been there since the check was tightened and only bit when
+  this feature's re-pack put two of Inashiro's skeleton arms at 81-97 ft. `WAY_END_REACH_FT` is the one constant now
+  and the gate test imports it. It is passed by the caller that draws a way BEFORE anything serves the houses - the
+  cluster's skeleton - and NOT by the late pass, which runs after `_serve_stragglers`: trimming to 60 ft there takes
+  back the tail that was an outlying steading's only way, and cohort seed 39 stranded a farmhouse the moment both
+  were tightened together. The web's own lanes trim to the bar at DRAW time (`_lay_web_lane`), which is before the
+  stragglers and so carries no such risk - and that is where the dangling ends actually were: they carry the role of
+  the pass before them, which is what made them read as skeleton arms.
+- **D11 DEFERRED with its measurement: a straggler path that does not reach the way it was drawn to.** Two remain in
+  the pool - Kashikawa at 63 px from anything and Kuwabata at 68, against the 60 px bar; main ships one of the same
+  kind (Sawada, 68). The mechanism: `_serve_stragglers` routes from the house to a target ON the network and then
+  clips the tread, so a clip that cuts the far end leaves a path that connects nothing - and because the stub is
+  itself a lane, `farmhouses_reach_a_way` then passes on the house it was drawn for, which is the same "a web that
+  does not join up is not a web" defect `_lay_web_lane`'s join rule exists for, at the straggler. The sketch: refuse
+  to draw a straggler whose drawn tread ends further than `WAY_END_REACH_FT` from the network, and let the house go
+  genuinely unserved so the driver's re-roll can move it. It is deferred rather than done because refusing those
+  paths turns a cosmetic stub into a re-roll trigger, which wants its own cohort measurement; the gate does not see
+  it because this rule is judged on the reference roll alone.
 
 ## Review history
 

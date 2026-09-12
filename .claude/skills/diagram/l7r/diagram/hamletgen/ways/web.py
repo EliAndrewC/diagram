@@ -14,6 +14,7 @@ from ..consts import (
     CLUSTER_SPAN_FACTOR,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
+    WAY_END_REACH_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -172,7 +173,9 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             # of the cluster, because the lanes that would justify it are three passes away. The
             # houses it was derived from are already on the map, and they are what an arm exists for.
             if len(arm) >= 2:
-                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])])
+                # the skeleton is drawn before anything serves the houses, so its ends are trimmed to the bar the gate
+                # asks of a lane end (feature 227: two of Inashiro's arms ended 81-97 ft from the nearest house)
+                arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], end_reach=WAY_END_REACH_FT)
             if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT:
                 arm = []
         arm = s.trim_off_marsh(arm)
