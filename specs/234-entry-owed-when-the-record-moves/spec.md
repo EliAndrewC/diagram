@@ -304,6 +304,27 @@ than closed.
 
 ## Review history
 
+**Round 6** (`spec-fidelity`, 2026-09-12): **FAITHFUL.** All four round-5 items confirmed resolved in
+substance, not in appearance, and the load-bearing claims re-verified in source rather than taken from
+this history - the `_TAGS`/`_DATA_TAGS` split, the three selftested siblings at the push call site, that
+`push_cmd` prints and pushes in one function body, the `Makefile:115-122` short-circuit, what
+`page-check` runs, that `make audit` reads `dev/bypass-log/`, the nine pre-authorized agents, and
+`fallow`'s declared silence.
+
+On the question this feature could most easily have failed - whether D6 preserves the very behavior the
+GM complained about - the verdict is no: the spec delivers the guidelines fix AND a report that makes a
+stale pair impossible to miss silently, and declines the enforcement the GM did not ask for on the
+measurement that is this project's own stated reason for keeping a rule off the enforced list. The
+residual is stated as a cost in observable terms and flagged as the GM's call.
+
+**Why a sixth round exists, one past the cap.** No round returned the word FAITHFUL - each applied its
+changes and moved on - and the push gate reads for a recorded verdict, so this round was run to obtain
+one rather than to reopen the design. The reviewer's own reading: not the argument-going-nowhere the cap
+exists to end, since no round reopened a settled decision, each found new and smaller items, and the
+spec was made SMALLER twice on measurements. The overrun was flagged to the GM rather than absorbed.
+
+**Status: ACCEPTED, FAITHFUL.** Implementation may begin.
+
 **Round 5** (`spec-fidelity`, 2026-09-12): the final round under the five-round cap. All three round-4
 items confirmed resolved; four small closing edits required, all taken, and the reviewer classified them
 explicitly as "(a) small and closing ... Do not escalate to the GM on account of this verdict."

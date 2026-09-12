@@ -563,15 +563,16 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   `_bank_seats` now ranks the parcel's edges and the placer takes the nearest that FITS - the old code
   took the single nearest seat or skipped the pond, so any clearance would have moved fixtures between
   ponds or lost them. Minimum clearance over every drawn part: 0.0 -> 8.47 ft. The sheds did not retreat
-  from the water doing it; the review measured five centre-to-waterline distances that all got SHORTER
+  from the water doing it; the review measured five center-to-waterline distances that all got SHORTER
   (5.6 -> 3.9, 7.5 -> 6.2, 6.7 -> 4.6, 11.5 -> 10.2, 6.5 -> 3.8 ft), and the walk from the houses grew
   by +0 to +9 ft for the sties and +24 ft for the one pen.
 
   The accept is BOUNDED (settlement-review): ranking alone left the whole perimeter available, and this
-  map's geometry offers seats up to 288 ft further from the houses than the first choice - a shed there
-  would read as belonging to no household. A seat may not be further from the house cluster than the
-  pond's own centre is. It refuses nothing drawn here (the worst accepted seat is 57 ft inside the
-  limit), and it is geometric rather than a tuned distance.
+  map's nine fixture-carrying ponds put the far bank 155.6 to 320.0 ft further from the houses than the
+  first choice - a shed there would read as belonging to no household. A seat may not be further from
+  the house cluster than the pond's own center is. It refuses nothing drawn here (the accepted seats
+  cost +0 to +21.2 ft, and the tightest sits 57.3 ft inside the bound), and it is geometric rather than
+  a tuned distance.
 
   Two things the review corrected in the record rather than the drawing. The claim that the banks are
   "about 6.5 m" measured nothing: that figure was one pond's two opposite collars added together. The

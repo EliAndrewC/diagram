@@ -118,9 +118,9 @@ def test_no_pond_fixture_stands_on_its_ponds_sluice(polder) -> None:
 
 def test_every_pond_fixture_keeps_to_the_near_half_of_its_pond(polder) -> None:
     """feature 233, settlement-review. Ranking the bank seats without bounding the accept leaves the
-    whole perimeter available, and this map's own geometry offers seats up to 288 ft further from the
-    houses than the first choice - a shed on the far bank would read as belonging to no household, and
-    nothing else here would say so. The bound is geometric: no further from the house cluster than the
+    whole perimeter available, and on the nine ponds that carry a fixture the far bank runs 155.6 to
+    320.0 ft further from the houses than the first choice - a shed there would read as belonging to no
+    household, and nothing else here would say so. The bound is geometric: no further from the house cluster than the
     pond's own center."""
     _plan, M = polder
     houses = M["houses"]
@@ -129,5 +129,5 @@ def test_every_pond_fixture_keeps_to_the_near_half_of_its_pond(polder) -> None:
     for key in ("pig_sties", "duck_pens"):
         for f in M.get(key, []):
             par = ponds[f["pond"]]["parcel"]
-            centre = (sum(float(q[0]) for q in par) / len(par), sum(float(q[1]) for q in par) / len(par))
-            assert math.dist((f["x"], f["y"]), hc) <= math.dist(centre, hc), f"a {key[:-1]} sits on the far side of pond {f['pond']} from the houses"
+            center = (sum(float(q[0]) for q in par) / len(par), sum(float(q[1]) for q in par) / len(par))
+            assert math.dist((f["x"], f["y"]), hc) <= math.dist(center, hc), f"a {key[:-1]} sits on the far side of pond {f['pond']} from the houses"

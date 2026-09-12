@@ -36,6 +36,13 @@ Spec ACCEPTED 2026-09-12 after four `spec-fidelity` rounds. Every task is classi
       counts hold (SC-002).
       research: rendering
 
+- [x] T15 (added after acceptance, from `settlement-review`) Bound the seat accept to the near half of
+      the pond - a candidate refused if it is further from the house cluster than the pond's own center
+      (FR-012, D7). Gate test on the pool's own Kuwabata roll; adds no roll.
+      research: rendering
+      VERIFIED: refuses nothing drawn today (worst accepted seat 57 ft inside the limit), the manifest is
+      byte-identical, and the gate test fails if the bound is removed.
+
 ## Phase 2 - the record
 
 - [x] T07 `research/archetypes.html`: extend 'What stands on a dike-pond hamlet that a paddy hamlet

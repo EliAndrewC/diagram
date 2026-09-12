@@ -243,3 +243,27 @@ straightforward - but a seat test that forgets it would check the old arc agains
 This does NOT prove the rule is free on an unrolled seed; it proves it is free on the one map that has
 the feature today, which is the map the GM is looking at. A seed whose ponds are smaller could refuse a
 seat, and FR-003's ranked fallback is what keeps that from silently dropping the fixture to another pond.
+
+## R7 - the seat bound, measured (2026-09-12, after settlement-review asked for one)
+
+Over the nine ponds that carry a sty or a pen, with seats rebuilt by the engine's own rule (parcel edge
+midpoints pulled 5.5 ft toward the parcel centroid) and ranked by distance to the house cluster:
+
+| quantity | measured |
+|---|---|
+| far bank, over the first choice | **155.6 to 320.0 ft** |
+| the bound's own allowance (pond center less nearest seat) | **60.5 to 157.2 ft** per pond |
+| cost of the ACCEPTED seat over the first choice | **+0 to +21.2 ft** |
+| slack on the accepted seat, inside the bound | **57.3 ft** at its tightest |
+
+**THE SAME FAULT, A THIRD TIME.** R1 records two earlier versions of it - a distance measured to a
+stub's endpoint, then a distance from a measure that could not return zero. This round's was a third:
+FR-012, the placer comment, the gate test docstring and the map's notes all carried "up to 288 ft" and
+"a limit of about +70", and neither was a statistic of anything. 288.1 ft is pond 20's own spread and
+the true maximum is 320.0 on pond 24; the "+70" described three of the nine ponds. The argument was
+unaffected - the bound is still free on this map - but the numbers a reader would try to reproduce were
+not the numbers. Every figure above was re-derived from the manifest before it was written here, and the
+four places that quote them now quote these.
+
+The pattern worth carrying forward: **a number written in four places is a number whose method is in
+none of them.** R1 and R6 exist so the derivation travels; these four now point here.

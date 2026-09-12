@@ -1,7 +1,7 @@
 # Feature 233 - the pig sty clear of the sluice, and the dike-pond stock recorded
 
 **Created**: 2026-09-12
-**Status**: ACCEPTED 2026-09-12, after four rounds of `spec-fidelity` (see Review history)
+**Status**: ACCEPTED 2026-09-12 after four rounds of `spec-fidelity`; AMENDED after implementation and re-reviewed (see Review history)
 **Input**: the GM's two messages, verbatim, in `request.md`
 
 ## Summary
@@ -16,7 +16,7 @@ dike the shed stands relative to the pond's inlet or outlet - the question the G
 met by a silence.
 
 So this feature changes the map for a reason that is constructional rather than sanitary, and it says
-so. Four of Kuwabata's seven sties stand 6-12 ft from a feed-sluice anchor on a stub of 23.9 ft,
+so. Four of Kuwabata's seven sties stand 5.6 to 11.7 ft from a feed-sluice anchor on stubs of 23.9, 25.0, 25.2 and 27.9 ft,
 so an 8 x 6 ft shed is drawn across the inlet culvert. The cause is a gap in the placer, not a roll:
 `pond_fixture_fits` holds a sty off `houses`, `farm_sheds`, `byres`, `wells`, `kosatsuba`,
 `footbridges`, `pig_sties` and `duck_pens`, and off nothing in the water system - while the engine's
@@ -55,8 +55,7 @@ Dispatched as two `source-reader` agents, 2026-09-12. Full verdict tables live i
 5. **A dike carrying a pigsty is wider.** FAO ch. 10: "the width of the dikes between fish ponds and
    inflow and outflow canals should be kept within 5 m; the width of the dikes for pigsties, cow sheds
    piping, or traffic should range from 5 to 10 m." Measured against the drawing the map does NOT satisfy
-   it - the collar a sty stands on is 2 to 5 m - and the record says so (see the Review history, round 4
-   of `settlement-review`, and `research.md` R1).
+   it - the collar a sty stands on is 2 to 5 m - and the record says so (see the post-acceptance amendment entry in the Review history, and `research.md` R1).
 6. **THE SILENCE.** Four FAO manuals, the ISIS dike-pond summary, and the Chinese and Japanese
    material carry nothing relating a shed's or a pen's position on the dike to the pond's inlet,
    outlet, sluice or drainage gate - for it or against it. Two readers searched independently and both
@@ -107,7 +106,14 @@ the whole pond when that seat fails, so adding a clearance would silently move s
 could reduce their number. The seat selection MUST instead rank the parcel's edges by distance to the
 house cluster and take the nearest one that fits.
 
-**FR-004** The sty and pen counts on a given seed MUST NOT fall as a result of FR-001 to FR-003.
+**FR-012** (added after acceptance) A candidate seat MUST be refused if it is further from the house
+cluster than its pond's own center. Ranking alone (FR-003) leaves the accept set the WHOLE pond
+perimeter: on the nine ponds that carry a fixture, the far bank runs 155.6 to 320.0 ft further from the houses than the first choice, a shed there would read as belonging to no household, and neither the placer nor the gate would say so. The bound is GEOMETRIC rather than a tuned distance - no number to
+justify and none to drift - and it keeps a fixture on the side of the water its households are on.
+
+It may refuse seats, so FR-004 and SC-002 bound it in turn. Measured on the reference map: the accepted seats cost +0 to +21.2 ft over the first choice, the bound's own allowance runs 60.5 to 157.2 ft per pond, and the TIGHTEST accepted seat sits 57.3 ft inside it - so it refuses nothing drawn today and the manifest is byte-identical with it in place.
+
+**FR-004** The sty and pen counts on a given seed MUST NOT fall as a result of FR-001, FR-002, FR-003 or FR-012. (FR-012 was added after acceptance and this range was hand-enumerated before it existed; a refusal the counts requirement does not cover is exactly the failure FR-003 was written to prevent.)
 Simulated on Kuwabata with the wet run included in the clearance (`research.md` R6): 7/7 sties and 2/2
 pens place at every margin from 0 to 12 ft, the worst achieved clearance at 6 ft being 8.5 ft. The
 fixtures move a short distance rather than disappearing, and the wet run costs nothing.
@@ -228,6 +234,27 @@ priced and DECLINED: dropping pond stock from the archetype - rejected, it would
 attested feature of the system the map is modeled on. The record states the provenance instead
 (FR-007).
 
+**D6 - the drawn collar does NOT meet the modern floor, and that is ACCEPTED.** The dike-width rule
+(finding 5) asks 5 to 10 m of a dike carrying a pigsty. Measured on the map, the collar a sty stands on
+is 2.0 m median and 2.6-4.7 m under the sheds; the ground between one pond's water and the next is
+13.3 m, but a canal runs down the middle of it, so it is not one bank. The drawn collar is therefore
+SNUG by that standard, and the map is not changed to meet it.
+
+*Why it is accepted.* That figure is a design requirement for farms built in the 1980s, not a
+measurement of any premodern dike, and nothing read gives the width of an old one - so there is no
+historical number the map is failing, only a modern one it was never built to. *Alternative priced and
+DECLINED*: widening the collars, which means moving pond geometry on a shipped map to satisfy a
+requirement whose own source we have already discounted as modern. *What it costs*: a reader who
+measures the collar against the FAO band finds it short, so the record says so before they do.
+
+*How this became a decision*: the spec previously claimed the opposite - that the map "already satisfies
+a rule it had never cited" - on arithmetic that measured nothing. `settlement-review` caught it.
+
+**D7 - the seat bound is a LEGIBILITY judgment, not a research finding.** FR-012 refuses a seat past the
+pond's center because a shed on the far bank reads as belonging to no household. Nothing in the record
+says where on a pond's perimeter a shed stood; this is a judgment about what the map communicates, and
+it is labeled as one rather than dressed as history. No research pass is owed for it.
+
 ## Out of scope
 
 - The share of households keeping a sty stays a labeled GUESS; nothing read gives a premodern figure.
@@ -242,6 +269,43 @@ attested feature of the system the map is modeled on. The record states the prov
 - The guardrail that would have made FR-008 happen without the GM asking is feature 234.
 
 ## Review history
+
+**AMENDED AFTER ACCEPTANCE, 2026-09-12** (the counter resets to zero for a post-acceptance amendment,
+GM 2026-09-12). The feature was implemented, and `settlement-review` returned **PASS** on the
+regenerated map - 7 sties and 2 pens held, minimum clearance over every drawn part 0.0 -> 8.47 ft, and
+the five fixtures that moved ended up NEARER the water rather than further from it. It found both of its
+errors in the record rather than the drawing, and both are taken:
+(1) Finding 5 was wrong. "Kuwabata's shared dikes measure 6.5 m, so the map already satisfies a rule it
+had never cited" rested on arithmetic that measured nothing - one pond's two opposite collars summed, a
+strip that exists nowhere on the map. Re-derived independently: the collar is 2.0 m median, the sheds sit
+in 2.6-4.7 m, and the water-to-water ground is 13.3 m with a canal in it. The map does NOT meet the
+modern 5 m floor; finding 5, the research page and the new D6 all say so now. The error flattered, which
+is why it is recorded rather than quietly corrected.
+(2) `kuwabata.notes.md` carried no entry for a change that moved five of nine fixtures, while five
+features that changed nothing on the map each had one. It has one now.
+Its questionable finding is taken as FR-012 and D7: ranking the seats had left the accept set the whole
+perimeter, so the accept is bounded to the near half of the pond.
+
+**Amendment round 2** (`spec-fidelity`, 2026-09-12): CHANGES REQUIRED, three items, all taken.
+(1) FR-012's justifying figures were per-case numbers stated as bounds and one was simply wrong - "up
+to 288 ft" is pond 20's own spread where the true maximum is 320.0 ft on pond 24, and "a limit of about
++70" described three of nine ponds. Re-derived from the manifest before rewriting: far bank 155.6 to
+320.0 ft over the first choice, the bound's allowance 60.5 to 157.2 ft per pond, accepted seats +0 to
++21.2 ft, tightest slack 57.3 ft. All four places that carried the wrong figures now carry these and
+point at the new `research.md` R7 - which also records that this was the THIRD time a figure was written
+where its method did not travel with it.
+(2) FR-004 read "as a result of FR-001 to FR-003", a range hand-enumerated before FR-012 existed, while
+FR-012 claimed FR-004 bounded it - so on a re-rolled seed the new refusal could drop a fixture with no
+requirement forbidding it. FR-004 names FR-012 now.
+(3) Two British spellings in the map's notes prose, which the house-style rule covers.
+
+**Confirming round** (`spec-fidelity`, 2026-09-12) on the amended text: CHANGES REQUIRED, four items,
+all taken - the shipped bound was specified nowhere and FR-003 read as contradicted by the code (now
+FR-012, with its class in D7); this amendment entry did not exist and finding 5 pointed a reader at a
+round that said nothing about dike width; the 5 m non-compliance was asserted with no
+accepted-limitation entry (now D6); and the Summary still gave one pond's 23.9 ft stub as if it
+described all four - the same per-case-as-statistic fault an earlier round had corrected one file over.
+Also taken: a `centre` identifier in the new gate test, which the house-style rule covers.
 
 **Round 4** (`spec-fidelity`, 2026-09-12): every corrected number verified INDEPENDENTLY - the reviewer
 built its own geometry rather than reusing `measure_geom.py` and reproduced all four zeros, the three
