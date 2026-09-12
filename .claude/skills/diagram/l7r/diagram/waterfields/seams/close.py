@@ -76,6 +76,7 @@ def close_seams(
     # passes the ring's ground is simply gone, and the neighbor's wall is left standing alone -
     # 12 of 48 cohort seeds failed `paddy_plot_seams_shared` that way. Dropped HERE the ground is
     # just more bare pocket, and this pass reclaims it like any other.
+    _visible_parts(plots, cell_area(plot_across, row_step))
     _repair_crossing_rings(plots)
     keep = [Polygon(p["poly"]).buffer(0) for p in plots]
     field = Polygon(envelope).buffer(0)
@@ -298,6 +299,43 @@ def _basin_rank(basin: Polygon, fill: float, median: float, collector: LineStrin
     on = collector is not None and basin.distance(collector) <= 0.25 * plot_across
     size = abs(math.log(basin.area / median)) if median > 0.0 and basin.area > 0.0 else 0.0
     return (not on, round(1.0 - fill, 4), round(size, 4))
+
+
+def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
+    """Make the plots a PARTITION: cut each one back to the part of it no later plot covers.
+
+    THE CARVE HANDS THIS PASS OVERLAPPING BASINS, and the page hides it. Measured on Sawada, `_carve` returns 49 pairs of
+    plots that claim the same ground (up to 1,290 sq px) and `_comb_toe_and_hem` leaves 29 (up to 409); main's pool maps
+    carry the same 20-49 pairs. The renderer paints the plots in order, so what a reader sees is always the LATER plot,
+    and the earlier one's bund shows only where it pokes out - the stray notches and dangling bund stubs two reviews
+    flagged (settlement-review, feature 230 pass 10). The record meanwhile claims both, so every rule judging a basin's
+    size, shape or neighbors judged ground the map does not show.
+
+    So, walking back from the last plot, each is cut to its visible part - the record becomes the picture, which does
+    not change. A detached remainder smaller than the rest, and a whole plot left too small to be a basin or pointed to
+    a needle, return their ground to the bare pocket this pass exists to plant or weld, exactly as a carved scrap does.
+    Earlier plots are the ones cut because later ones are the ones painted on top."""
+    cover: Any = None
+    drop: list[int] = []
+    for i in range(len(plots) - 1, -1, -1):
+        ring = plots[i].get("poly") or []
+        if len(ring) < 3:
+            continue
+        g = Polygon(ring).buffer(0)
+        if g.is_empty:
+            continue
+        if cover is not None and cover.intersects(g):
+            vis = g.difference(cover)
+            if vis.area < g.area - 1.0:
+                parts = sorted(_parts(vis), key=lambda q: -q.area)
+                best = _ring(parts[0]) if parts else []
+                if not parts or parts[0].area < _TOE_MIN_AREA * cell or len(best) < 3 or pointed_ring(best, _TOE_MIN_APEX) or pointed_ring(dedup_ring(best, 1.0), _TOE_MIN_APEX):
+                    drop.append(i)
+                else:
+                    plots[i]["poly"] = best
+        cover = g if cover is None else cover.union(g)
+    for i in sorted(drop, reverse=True):
+        del plots[i]
 
 
 def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:

@@ -496,7 +496,9 @@ def test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin
     flooded = [p for p in plots if p["fill"] == FLOODED]
     assert len(flooded) == 1, "exactly one basin is promoted when the sample left none"
     assert min(q[1] for q in flooded[0]["poly"]) > 1200, "and it is the one on the collector, as the carve's own blue always is"
-    assert flooded[0].get("low") or max(q[1] for q in flooded[0]["poly"]) >= 1300 - 0.25 * 46.0, "never a plot off the low ground: flagged low, or on the collector itself (a planted basin carries no flag)"
+    assert flooded[0].get("low") or max(q[1] for q in flooded[0]["poly"]) >= 1300 - 0.25 * 46.0, (
+        "never a plot off the low ground: flagged low, or on the collector itself (a planted basin carries no flag)"
+    )
 
     kept = _close([{"poly": far, "fill": "#A6C398", "low": True}, {"poly": on, "fill": FLOODED, "low": True}])
     assert [min(q[1] for q in p["poly"]) > 1200 for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
@@ -535,3 +537,25 @@ def test_a_repaired_crossing_ring_is_refused_when_its_raw_ring_is_a_needle() -> 
     plots = [{"poly": list(bowtie_with_spur)}]
     _repair_crossing_rings(plots)
     assert all(Polygon(p["poly"]).is_valid for p in plots), "whatever survives is a valid ring"
+
+
+def test_overlapping_plots_become_a_partition_the_later_plot_winning() -> None:
+    """`_visible_parts`: the carve hands the seam pass basins that claim the same ground, and the renderer paints the
+    later one on top, so each earlier plot is cut back to what shows. A plot left too small or pointed is dropped (its
+    ground goes back to the bare pocket the pass plants), and a plot nothing overlaps is untouched."""
+    from l7r.diagram.waterfields.seams.close import _visible_parts
+
+    alone = {"poly": _rect(900, 900, 950, 930)}
+    under = {"poly": _rect(0, 0, 100, 40)}
+    over = {"poly": _rect(60, 0, 160, 40)}
+    buried = {"poly": _rect(200, 0, 240, 40)}
+    lid = {"poly": _rect(190, -5, 250, 45)}
+    stub = {"poly": [(5.0, 5.0), (6.0, 6.0)]}  # a record with no area is stepped over, not measured
+    plots = [stub, alone, under, over, buried, lid]
+    _visible_parts(plots, 46.0 * 28.0)
+    assert stub in plots
+    assert alone in plots and alone["poly"] == _rect(900, 900, 950, 930), "nothing overlaps it, nothing changes"
+    assert Polygon(under["poly"]).area == pytest.approx(60 * 40, abs=1.0), "the earlier plot keeps only the part the later one does not cover"
+    assert Polygon(over["poly"]).area == pytest.approx(100 * 40), "the later plot is what the page shows, and it keeps it all"
+    assert buried not in plots, "a plot wholly under a later one returns its ground to the pocket"
+    assert Polygon(under["poly"]).intersection(Polygon(over["poly"])).area < 1.0, "and the survivors no longer overlap"
