@@ -1,5 +1,14 @@
 # Review ledger - is each review subagent pulling its weight?
 
+**AND IT RECORDS WHAT WAS ESCALATED TO THE GM THAT SHOULD NOT HAVE BEEN** (GM 2026-09-12: *"if things
+are being escalated to me a lot which are not problems, then that sounds like we need some kind of
+process change to make it so that only things that actually need my input are raised to my
+attention"*). A row's last column says what was acted on; where the session instead put a finding to
+the GM, the row says whether the GM's answer was a ruling or a correction - because "am I
+over-escalating" has to be a total like every other question this ledger answers, not an impression.
+Three of feature 227's items went up as judgment calls and all three came back as corrections: two
+rested on no norm at all, and one had been settled by a measurement nobody re-ran.
+
 **The SESSION writes this, never the reviewer** (GM 2026-08-26: *"the reviewer itself should not be
 what logs its findings because you might disagree with the reviewer. And the log entry should
 indicate both what the findings were and whether they were actually acted upon"*). One row per

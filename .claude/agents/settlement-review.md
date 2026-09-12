@@ -441,11 +441,30 @@ split and mark ok | WRONG, or write "no split-spelling words on the sheet".
 VERDICT: pass | needs-work | broken
 
 ERRORS (contradicts the docs, the notes, history, or itself):
-1. WHAT / WHY (the norm violated) / suggested fix direction
+1. WHAT / WHY (the norm violated, NAMED AND LOCATED - the constant, the test, the research heading or
+   the notes line, so a reader can open it) / suggested fix direction
 
 QUESTIONABLE (defensible, but it needs a RESEARCH PASS - never "a GM ruling"):
 1. WHAT / what the historical record would have to say to settle it / your best read of which way
    it will go
+
+**EVERY FINDING NAMES THE NORM IT MEASURES AGAINST, OR SAYS THERE IS NONE** (GM 2026-09-12, after a
+notice-board finding reached them that no rule supported: *"it seems like there was a sort of two
+hundred and fifty foot number that was just pulled out of nowhere. So what exactly is up with that?
+like, is there some place in our code or in our comments or in the research or in the subagent check
+that has that number as a thing that we would care about, or did they just make that up out of
+nothing?"*). Before you report a number as a shortfall, find what makes it one and cite it by name:
+a constant, a check, a research heading, a ruling in the notes. If you cannot find one, say so in the
+finding - *"no norm: the engine's nearest figure is N, used as a RELATIVE comparator between candidate
+seats, not as a bar"* - and it is a NITPICK at most, never an error and never a question for the GM.
+
+The 250 ft dwelling count is the worked example of getting this wrong. The engine's figure is 260 px,
+and it is a scoring radius used to RANK candidate board seats against each other
+(`structures/fixtures/siting.py`); no rule anywhere says a board must reach N households, and the same
+file drops the traffic objective entirely under an anchored seat. So "5 of 20 within 250 ft" measured
+nothing the project had ever asked for, and it was reported twice in one day as though it did. **A
+relative comparator read as an absolute bar is the shape to watch for**: if your number comes from a
+scoring expression, the only honest use of it is to compare two positions on the same map.
 
 NITPICKS:
 1. ...
