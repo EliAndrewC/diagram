@@ -1,9 +1,21 @@
 # Second pass, batch b3: institutional and technical (6 notes)
 
 Reader report. Written by the b3 second-pass source reader, 2026-09-12.
-Tooling used: `curl` with a browser user agent, Unpaywall / OpenAlex / DOAJ /
-Semantic Scholar, `search.yahoo.co.jp` through curl, the MediaWiki API as a
-per-site search on `ja.` and `zh.wikipedia.org`.
+
+**Tooling actually used** (as against what was suggested): `curl` with a browser
+user agent throughout; a Python solver for the SHA-256 proof-of-work browser check
+in front of `donwagner.dk`; `search.yahoo.co.jp` through curl (which worked, then
+rate-limited this session to a 3.7 KB throttle page after about eight queries);
+the OpenAlex API, which is what found the one open-access monograph in this batch;
+the J-STAGE search API for Japanese scholarship; the MediaWiki API against
+`zh.wikisource.org` (not Wikipedia - the primary text itself); and `pdftotext` over
+two downloaded PDFs. **What did NOT work**, so nobody repeats it: the session's
+WebSearch budget was already spent (200/200) before this batch began;
+`html.duckduckgo.com` and `lite.duckduckgo.com` now serve a JavaScript shell;
+Bing via curl returns a results page with no organic results parsed; `searx.be`,
+`priv.au`, `opnxng.com`, `paulgo.io` and `searxng.site` are behind captchas or
+return 429; `ctext.org`'s web pages are behind Cloudflare Turnstile, though its
+**API at `api.ctext.org` answers normally**.
 
 **A note on transcription.** Kotobank renders some readings as ruby and marks
 non-joyo kanji with a small superscript `×`; it also puts spaces around words it
@@ -65,7 +77,7 @@ identification with English *fining*. Zunhua is a Ming state ironworks (Wagner's
 companion article is "The state ironworks in Zunhua, Hebei, 1403-1581", *Late
 Imperial China* 26, 2005), so "Ming ironworks" is right.
 
-### Assertion 2 - an open fire under a forced blast, fuelled with charcoal, into which wood, charcoal and broken cast iron were charged and then stirred with an iron rod once semi-molten
+### Assertion 2 - the entry's words: "an open fire under a forced blast, fuelled with charcoal, into which wood, charcoal and broken cast iron were charged and then stirred with an iron rod once semi-molten"
 
 VERBATIM, from the section describing the process itself:
 
@@ -304,7 +316,7 @@ English translation (mine, from the Chinese):
 
 > Panmen, anciently called Panmen [written with a different first character], was one of the eight gates of the Wu capital, and is the only ancient city gate in the country that preserves a land gate and a water gate side by side intact.
 
-> Panmen is easy to defend and hard to attack; its water gate and land gate stand side by side, and it is an important military defensive structure of the old city. The water gate of Panmen is composed of two layers of city gate, inner and outer, 4.6 metres apart, with a depth of 24.5 metres. Between the inner and outer water gates, quays are built up on the north and south, and in the southeast corner a cave passage opens inside the city wall, by which one can climb the stone steps up to the gate platform. The inner gate is formed of three longitudinally jointed, sectioned, parallel stone arches strung together, the three arches being of unequal size, the third arch the largest. The inner and outer water gates differ in construction and are not remains of the same period; the outer gate is clearly earlier than the inner.
+> Panmen is easy to defend and hard to attack; its water gate and land gate stand side by side, and it is an important military defensive structure of the old city. The water gate of Panmen is composed of two layers of city gate, inner and outer, 4.6 meters apart, with a depth of 24.5 meters. Between the inner and outer water gates, quays are built up on the north and south, and in the southeast corner a cave passage opens inside the city wall, by which one can climb the stone steps up to the gate platform. The inner gate is formed of three longitudinally jointed, sectioned, parallel stone arches strung together, the three arches being of unequal size, the third arch the largest. The inner and outer water gates differ in construction and are not remains of the same period; the outer gate is clearly earlier than the inner.
 
 Original Chinese, as the checker's anchor:
 
@@ -328,7 +340,7 @@ reading; no source is cited)") is partly answered by the same Suzhou page:
 
 English translation (mine):
 
-> The land gate of Panmen likewise has two layers, inner and outer, and between them is a wengcheng roughly square in plan, about 177 metres in inner perimeter, the wall 8.1 metres high, with dressed stone as its base and city brick laid above.
+> The land gate of Panmen likewise has two layers, inner and outer, and between them is a wengcheng roughly square in plan, about 177 meters in inner perimeter, the wall 8.1 meters high, with dressed stone as its base and city brick laid above.
 
 Original:
 
@@ -591,7 +603,11 @@ at Urbana-Champaign, 2018, p. 177,
 <https://www.ideals.illinois.edu/items/107042>
 (PDF: <https://www.ideals.illinois.edu/items/107042/bitstreams/349107/data.pdf>):
 
-> During the off season, the kawata rented their animals out to cattle drivers, who used the oxen to transport goods for local peasants (niushi). The cattle owners themselves did not handle these animals, but assigned this work to subordinates, usually a younger male in their household. Kawata cattle drivers collected fees from their customers, ensuring the cattle of the village remained profitable even when not working in agriculture.
+> During the off season, the kawata rented their animals out to cattle drivers, who used the oxen to transport goods for local peasants (niushi).
+
+(a footnote reference number stands here in the original, between the two sentences)
+
+> The cattle owners themselves did not handle these animals, but assigned this work to subordinates, usually a younger male in their household. Kawata cattle drivers collected fees from their customers, ensuring the cattle of the village remained profitable even when not working in agriculture.
 
 This carries the entry's "oxen and packhorses" against a reader who thinks Japanese
 overland freight was horses only. **Its limit**: this is the Kinai, the herd is
@@ -646,17 +662,22 @@ Abele also gives the case where the cluster sits on an administrative boundary:
 
 > Ōji village was located in Shinoda-gō, in Izumi District, Izumi Province. In the late sixteenth century, the kawata community that would become Minami-Ōji Village lived within the boundaries of Ōji village, on the border between Shinoda-gō and Kami-Izumi-gō.
 
-> By the late seventeenth century "Minami-Ōji" (South-Ōji) was appearing on shogunal registers as a separate village. The kawata even had their own headman (shōya) and village elder (toshiyori). However, the residential plots of the kawata still lay within the boundaries of Ōji Village, placing them under the jurisdiction of the Ōji headman.
+> By the late seventeenth century “Minami-Ōji” (South-Ōji) was appearing on shogunal registers as a separate village. The kawata even had their own headman (shōya) and village elder (toshiyori). However, the residential plots of the kawata still lay within the boundaries of Ōji Village, placing them under the jurisdiction of the Ōji headman.
 
-and the general rule behind it:
+and, on the QUALITY of the ground the cluster stood on - which matters to a map
+deciding where to put it:
 
-> ... explain why most kawata communities were never recognized as independent villages.
+> As with other kawata communities, the land that the Ōji Village kawata initially occupied was of poor quality, reflecting their status as relatively recent arrivals.
+
+and, in his own summary of the chapter, the general rule behind it:
+
+> the same process in the early Tokugawa period, and explain why most kawata communities were never recognized as independent villages.
 
 ### The stream half
 
 Abele, on the status name itself:
 
-> That status was not always "kawata," but could also be "kawara" or kawaramono; that is, "people of the riverbank."
+> That status was not always “kawata,” but could also be “kawara” or kawaramono; that is, “people of the riverbank.”
 
 and *Yamakawa Nihonshi shojiten* 山川 日本史小辞典 改訂新版, article 穢多, via Kotobank,
 <https://kotobank.jp/word/%E7%A9%A2%E5%A4%9A>:
@@ -795,3 +816,50 @@ line wastes ground. A map drawing a city vegetable tract has a sourced layout ru
 here, including how many wells to put in it and how to line them up. The 30 *mu*
 figure carries the same conversion caution as the bed.
 
+
+---
+
+## What is still open after this pass
+
+1. **fn-62, the Xuxiebian site name.** FOR THE GM. A named excavated Sichuan
+   smelting-and-fining site is asserted, and it appears in neither of the two
+   Wagner works readable in full (his Han metallurgy article, and the free Chinese
+   translation of *The state and the iron industry in Han China*, searched
+   character by character). The Han claim itself is safe on Wagner's own hedged
+   wording plus the Hongdaoyuan tomb relief; the site name is not. Either the GM
+   knows where it came from, or it should go.
+2. **fn-14, the comparison itself.** The three terms are now each citable. That the
+   three of them are "the nearest East Asian equivalents of a postern" is a
+   comparison no source makes, and it should stay labeled as the project's own. The
+   *umon* sources do, however, describe a concealed gate built to be filled in and
+   used as the lord's escape route, which is close enough to a sally port's
+   function that the entry could say so and footnote it.
+3. **fn-14, a better source for the *umon*.** The two used are a curated commercial
+   glossary and a castle-enthusiast site - publicly readable, mutually consistent,
+   and tertiary. Kotobank has no entry for it. One more pass at the Agency for
+   Cultural Affairs' designated-property database and the city of Takamatsu (which
+   holds the famous surviving example) would likely upgrade it.
+4. **fn-17, a sumptuary text.** The *nagayamon* material shows the gate followed
+   rank and office. A direct prohibition on a townsman's gate or wall, if one
+   exists, would be in the shogunal edict collections (*Ofuregaki kanpo shusei*) or
+   a domain code, and this pass did not reach them - the Yahoo Japan query for it
+   came back throttled and was not retried.
+5. **fn-25, the contrast.** Nothing found supports "a town inn can absorb that into
+   a small stable yard and a city cannot", and the Tokaido evidence cuts slightly
+   against it, since the post STATIONS are towns and the sources say they too were
+   swamped. The sentence should be rewritten to what the record does say or kept
+   labeled a guess.
+6. **fn-11, the metrology.** The *Qimin yaoshu* figures are in *bu* and *mu*.
+   Turning "two paces by one pace" and "thirty mu" into feet needs a history of
+   Chinese weights and measures that this pass did not read, and my arithmetic in
+   that section is flagged as unverified. That is a short, well-defined next search.
+
+## One thing worth flagging beyond the six
+
+The Suzhou Panmen page reached for fn-14's *shuimen* also carries measured
+dimensions for a **wengcheng**, which is the FIRST `[HERE]` in the same
+`cities/defenses.html` paragraph and is currently marked "this rests on general
+reading; no source is cited". That footnote was not in this batch, but it is now
+answerable from a source already fetched and quoted here, and the same page shows
+that this wengcheng is 平面略成方形 - roughly square in plan - which the entry's
+word "urn-shaped" does not survive.

@@ -591,7 +591,7 @@ the useful years are the early ones, before 圃場整備 regularized the bunds.
 |---|---|---|
 | average farm size China Qing dynasty hectares per farm household paddy plain Perkins agricultural development | search.brave.com (curl, HTTP 200, 245,584 bytes) | eight results, none a readable primary figure: three Wikipedia articles (*Agriculture in China*, *Economy of the Qing dynasty*, *History of agriculture in China*), a Britannica topic page, a Harvard Kennedy School CATALOG entry for Perkins, *Agricultural Development in China: 1368-1968* (the book itself, not readable), a University of Utah course PDF on modern Chinese agriculture, a PMC article on China's land-use change over 300 years, and a ResearchGate FIGURE page giving a **modern** 0.60 ha average. Not fetched: the encyclopedia articles are tertiary and this project cites an encyclopedia's own references rather than the article, the Harvard page is a catalog entry, and the modern 0.60 ha is the wrong century. **Perkins 1969 is the work that would answer this**, and it is not openly readable |
 | 耕地面積 畦畔 本地 割合 定義 農林水産省 耕地及び作付面積統計 | search.brave.com (curl, HTTP 200, 193,408 bytes) | eight results. FETCHED: <https://www.maff.go.jp/j/tokei/kouhyou/sakumotu/menseki/gaiyou/> (HTTP 200, 116,021 bytes), the survey's methodology page - it defines a 筆ポリゴン as 「けい畔等で区切られた現況一枚のほ場」 (English translation by this agent: "one field as it currently stands, bounded by bunds and the like") and states the survey's sampling design, but publishes no ratio. The e-Stat series above is the one row that carries the number, and it is JS-gated |
-| 耕地面積 畦畔 本地 割合 定義 農林水産省 耕地面積調査 | search.yahoo.co.jp (curl) | **rate-limited** - HTTP 200 with a 3,668-byte body carrying only a Yahoo help-centre link. Not retried (one attempt per host) |
+| 耕地面積 畦畔 本地 割合 定義 農林水産省 耕地面積調査 | search.yahoo.co.jp (curl) | **rate-limited** - HTTP 200 with a 3,668-byte body carrying only a Yahoo help-center link. Not retried (one attempt per host) |
 
 ---
 
@@ -644,7 +644,7 @@ disclosed guess and should not be quietly upgraded.
 
 **STILL ABSENT.** Three searches for the bend-siting rule in Chinese (取水口 / 凹岸 / 弯道 / 环流 /
 防沙 / 引水) were attempted and none returned usable results: `search.yahoo.co.jp` was rate-limited
-(3,669-byte help-centre body), `www.so.com` answered once with 376,757 bytes and then with an empty
+(3,669-byte help-center body), `www.so.com` answered once with 376,757 bytes and then with an empty
 body on the next request, and `search.brave.com` was rate-limited (73,894-byte body with no organic
 results). One attempt per host was taken and none retried.
 
@@ -689,3 +689,94 @@ studies, and the 「水堀の水位維持」 vocabulary. That was not searched t
 Japanese-language engine available had rate-limited by the time this note was reached.
 
 ---
+
+## Closing: what this pass produced
+
+### Verdicts, counted
+
+Of the 11: **3 CITED** (1, 3, 7), **3 CITED IN PART** (6, 9, and the engineered half of 11a),
+**5 STILL ABSENT** (2, 5, 8, 10, and 11b/11c/11d), **1 note that can simply be retired** (4).
+Nothing was CONTRADICTED.
+
+### New sources this pass introduces, which owe registry write-ups and a `source-applicability` read
+
+Per the constitution's fifth research box, each of these needs "What it is" / "Why it applies, and
+its limits" write-ups and a `source-applicability` verdict **before** its numbers reach a map or a
+rule. This agent's own limits notes are written into each entry above and are a starting draft, not
+a substitute.
+
+| proposed key | work | what it is asked for | the limit to argue |
+|---|---|---|---|
+| `conghua-2026-design` | 2026 年度广州市从化区高标准农田改造提升建设项目初步设计报告（评审稿）, Conghua District Bureau of Agriculture and Rural Affairs, June 2026 | canal widths by grade: 斗渠 1.0-1.2 m, 农渠 0.4-0.6 m (note 3) | a modern concrete- and masonry-lined district works schedule; what it fixes is the ladder's PROPORTIONS, not premodern materials |
+| `obata-1977-taue` | 小畑晃男, 「和歌山県における慣行田植法の地域性とその成立要因に関する研究」, 農作業研究 29: 24-29, 1977 | the hamlet-unit agreed transplanting schedule, the 20-30 household unit, the 7-10 day window (note 6) | one prefecture, surveyed 1975-76 for practice remembered as customary; the scan's OCR layer is unreliable and every quote here was read off the page image |
+| `tajima-2007-nightsoil` | Kayo Tajima, "The Marketing of Urban Human Waste in the Early Modern Edo/Tokyo Metropolitan Area", *Environnement Urbain / Urban Environment* 1, 2007 | the fertilizer-intensity gradient by distance from a castle town (note 7) | a CASTLE-TOWN gradient measured in fertilizer regime, not in cultivated share; a county seat is smaller, so the ri distances are an upper bound. Open access, but both hosts bot-gate a fetcher |
+| `confluence-enwiki` | English Wikipedia, "Confluence", §Engineering | the engineered junction cut sympathetic to the receiving flow (note 11a) | tertiary, and the passage is about CULVERTED watercourses; the article's own reference [10] is the better target |
+| `jsslkx-002-2021` (already registered) | T/JSSLKX 002-2021 | §7.4.1 the alignment maxim (note 10); §7.4.3/7.4.5/7.4.8/7.4.9 the orthogonal field grid (note 9); §9.3.7 and §9.4.3 as NEGATIVE findings (note 3) | already carried |
+
+### FOR THE GM
+
+- **GB 50288**, *Technical code for irrigation and drainage engineering*. Wanted for note 11(c) - the
+  siting of a headworks intake on a bend, and sediment exclusion - and it is the standard both
+  readable Chinese documents in this pass defer to by number. Neither of its two known online
+  locations serves the text: `https://www.antpedia.com/standard/7931413-1.html` answered HTTP 200
+  with an index/navigation shell only, and
+  `https://img.antpedia.com/standard/files/pdfs_ora/20200926/GB%2050288-2018.pdf` answered HTTP 403.
+  This pass found no third location. A purchased or library copy would close note 11(c) and would
+  firm up note 3.
+- **白井・成瀬 1983**, the study of 「ため池台帳」 for 受益面積 and scale that 森・三浦 2025 cites.
+  Wanted for note 5 - the command area of a village tank - which no national dataset carries. Not
+  obviously online.
+- **Perkins, *Agricultural Development in China: 1368-1968* (1969)**. Wanted for note 8 - farm
+  households per hectare in a premodern Chinese paddy plain. Only a Harvard Kennedy School catalog
+  entry surfaced.
+
+### Every host contacted, and what it answered
+
+One attempt per host, per the brief; where a host answered and a second file from it was clearly
+needed, that is noted.
+
+| host / URL | result |
+|---|---|
+| `https://api.unpaywall.org/v2/10.3390/f11121286` | 200, JSON; `is_oa: true`, four OA locations listed |
+| `https://www.mdpi.com/1999-4907/11/12/1286/pdf` | **403**, 410-byte HTML body (bot block, not a paywall) |
+| `https://u-ryukyu.repo.nii.ac.jp/records/2011293` | **406**, 558-byte body |
+| `http://jsszy.org.cn/UserFiles/file/20221103/20221103155002_6437.pdf` | 200, 622,748 bytes, read in full |
+| `http://nyncj.gz.gov.cn/attachment/8/8037/8037125/10854794.pdf` | 200, 23,291,315 bytes, text layer intact, read |
+| `http://xxgk.jccq.gov.cn/.../t20240914_2035112.shtml` | 200, 105,751 bytes; the 干支斗农毛 hierarchy explained with no dimensions |
+| `https://www.i-sis.org.uk/DykePondSystem.php` | 200, 28,576 bytes; the pond and dike figures verbatim, and Ruddle & Zhong as its reference [1] |
+| `https://www.maff.go.jp/j/nousin/bousai/.../gaiyou.html` | 200, 39,723 bytes; national pond count, no command area |
+| `https://www.maff.go.jp/j/nousin/bousai/.../tameiketoha_R8.pdf` | 200, 471,989 bytes; 148,345 ponds by prefecture, no command area |
+| `https://www.maff.go.jp/j/nousin/bousai/.../ichiran.html` | 200, 36,911 bytes; the nine dataset files located |
+| `https://www.maff.go.jp/j/nousin/bousai/.../tameike_ichiranR8_1.xlsx` | 200, 1,612,660 bytes; header read from the workbook XML - **no 受益面積 column** |
+| `https://www.maff.go.jp/j/tokei/kouhyou/sakumotu/menseki/gaiyou/` | 200, 116,021 bytes; methodology only, no bund ratio |
+| `https://www.soumu.go.jp/main_content/000953736.pdf` | 200, 512,969 bytes; 受益面積 appears only as a subsidy threshold |
+| `https://www.jstage.jst.go.jp/article/jsfwr1966/1977/29/1977_29_24/_pdf/-char/en` | 200, 834,972 bytes; read, and the quoted passages confirmed against the page images |
+| `https://www.jstage.jst.go.jp/article/jsidre/93/1/93_IV_1/_pdf/-char/ja` | 200, 1,434,706 bytes; read, names 白井・成瀬 1983 but gives no command area |
+| `http://www.knowledgebank.irri.org/ericeproduction/V.1_Pest_and_IPM_.htm` | 200, 16,924 bytes; a course outline, nothing on synchronous planting to quote |
+| `https://journals.openedition.org/eue/1039` | 200, 5,299 bytes - an **Anubis** anti-bot interstitial, not the article |
+| `https://www.erudit.org/en/journals/eue/2007-v1-eue3020/016245ar/` | 200, 7,806 bytes - "Making sure you're not a bot!" |
+| `https://web.pref.hyogo.lg.jp/nk11/tameikedetabase.html` | 200, 16,939 bytes; data behind an external GIS viewer, no 受益面積 on the page |
+| `https://en.wikipedia.org/wiki/Confluence` | 200, 272,040 bytes; read |
+| **search engines** | `search.yahoo.co.jp` answered three queries with real organic results and then rate-limited to a 3,668-byte help page; `search.brave.com` answered five and then rate-limited to 73,894 bytes; `www.bing.com` answered but degraded a long query to its first word; `lite.duckduckgo.com` and `html.duckduckgo.com` returned the homepage; `www.mojeek.com`, `www.ecosia.org` (403), `www.baidu.com`, `www.sogou.com`, `searx.be`, `search.disroot.org`, `yandex.com` returned nothing usable; `www.so.com` answered once and then returned an empty body. The OpenAlex API answered every query; the Semantic Scholar API returned empty results for all three (no key) |
+
+### Tooling notes for the next pass
+
+1. **`search.yahoo.co.jp` and `search.brave.com` both work through curl and both rate-limit hard** -
+   about three and five queries respectively before they start returning a stub body. Plan the
+   queries before spending them, and check the response SIZE: a 3.6 KB Yahoo body or a 74 KB Brave
+   body means blocked, not "no results".
+2. **A J-Stage scan's OCR layer lies.** `pdftotext` on the 1977 Wakayama paper rendered な as 左,
+   お as 夢 and あ as め. Confirm any CJK quote from a scanned PDF against
+   `pdftoppm -r 200 -png -x -y -W -H` output before transcribing it - and note that the journal's own
+   typesetting may be the odd thing (it really does print 「勢んな」).
+3. **A two-column Japanese PDF interleaves under `pdftotext -layout`.** Crop the columns with
+   `pdftotext -x <half width> -W <half width>`, and read the page size off `pdfinfo` first - guessing
+   A4 when the page is 487 x 731 pt silently mixes the columns back together.
+4. **An `.xlsx` can be read without `openpyxl`** (which `pip` refuses to install into this
+   environment): `zipfile` + `xml.etree` over `xl/worksheets/sheet1.xml` and `xl/sharedStrings.xml`
+   is a dozen lines and was enough to prove the tank register has no command-area column.
+5. **A Chinese district design report is a better source for built dimensions than a standard is.**
+   A standard states procedure and minima; a 初步设计报告 states what is actually being built, tier
+   by tier, with a works schedule. They are published openly on municipal `.gov.cn` sites and they
+   cite the national standard they follow, which is how note 3 got its number after two passes had
+   failed against the standards themselves.

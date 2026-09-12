@@ -448,3 +448,55 @@ treats a general engine as the fallback rather than the opening move.
 The highest-value host still uncracked is `adeac.jp`, which carries the full text of hundreds of Japanese
 municipal histories behind a viewer no fetcher renders. The GM's Kodaira material came from there by hand
 (R19), and a way in would open a whole literature this project keeps needing.
+
+
+## R23 - the second pass, batch B1 (on hand and agronomy): 5 closed, 1 retired, 2 corrected
+
+**The near-miss is the most instructive result in this whole feature.** `water.html` fn-48 wanted a
+distribution lateral's width, and the triage sent the reader to the Jiangsu guideline because that document
+had already closed eight notes. The guideline does NOT carry canal widths by grade - and its only 1.0 m is a
+**bank-crest** width in a different clause. A reader in a hurry would have matched the number, cited the
+clause and been wrong, with a quotation on the page to make it look right. This one recorded the negative
+instead and went and found a Guangzhou district design report that gives the lateral built at 1.0 and 1.2 m
+in a works schedule, a design clause and a table, and that cites the national standard by number - a
+readable application of the very standard the note originally wanted.
+
+**A note retired outright.** `archetypes.html` fn-84's parenthetical credits figures to a monograph that
+exists in no digital form. Every one of those figures is ALREADY quoted on the same page at fn-37, from a
+source confirmed live today. The note can go and nothing is lost, which is the cheapest possible close: the
+record already had the evidence and was pointing past it.
+
+**A source we already owned, unread far enough.** `vegetation.html` fn-4's passage was on page 3 of a paper
+the GM downloaded four days ago, in the study-site description an earlier pass never reached: *"most
+villages feature two fengshui forests on average"*. The same sentence carries a clause the entry quotes
+elsewhere, so one footnote closes two.
+
+**A premodern Japanese source for a claim that had none.** `fields.html` fn-86's intensity gradient is now
+carried by the Kōka Shunjū, via Tajima 2007: *"Within one ri [approximately 4 km] from Kanazawa in any
+direction they fertilize fields with urine and abundant manure. Within about three ri they use manure,
+rapeseed cake and dried sardine. Beyond four ri..."* The fallow clause in the same sentence is NOT supported
+by it and must say so.
+
+**Two corrections.**
+
+- `fields.html` fn-82 said a village transplants together BECAUSE labor is exchanged between households. The
+  survey confirms the agreed hamlet-wide schedule and the 7-10 day window, but in DIFFERENT zones: where
+  labor is exchanged the window runs past 20 days, and where it is 7-10 days the paper credits the preceding
+  crop's calendar and says communal work there is comparatively little. It also describes *yui* as working
+  BECAUSE dates differ. The observable claim survives and is now sourced; the causal clause must stop naming
+  labor exchange.
+- `water.html` fn-73 said a crew re-digs a bend rather than a corner. Nobody writes that down. What the
+  Jiangsu guideline does give is the standing alignment maxim - 「大弯就势，小弯取直」, follow the large bends
+  and straighten the small ones - which is the paragraph's own opening assertion said from the design side.
+  Two sourced statements replace one sourced and one not.
+
+**Three more for the GM**: GB 50288 itself again (both known URLs still a shell or a 403), 白井・成瀬 1983 for
+the tank command area, and Perkins 1969 for farm households per hectare.
+
+**Tooling, measured rather than assumed.** Yahoo Japan and Brave both work through curl and both rate-limit
+after roughly three and five queries, and the tell is the response SIZE rather than a status code - a 3.6 KB
+Yahoo body and a 74 KB Brave body are the refusals. DuckDuckGo, Mojeek, Baidu, Sogou, Ecosia, Yandex and
+searx returned nothing usable, and Bing degrades a long query to its first word. OpenAlex answered every
+time. Also worth keeping: a J-Stage scan's OCR layer renders な as 左, so every CJK quotation was confirmed
+against page images; a two-column Japanese PDF needs column cropping at the real page size from `pdfinfo`;
+and an `.xlsx` reads through `zipfile` and `xml.etree` when `pip` will not install a reader.
