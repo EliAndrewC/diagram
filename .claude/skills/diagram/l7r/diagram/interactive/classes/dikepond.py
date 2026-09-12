@@ -67,11 +67,13 @@ class MulberryDike(Kind):
     per ten to twenty - because at the honest step the crowns fuse into a solid green band and stop reading as
     bushes at all; the crown SIZES are drawn true, and only the density is a map drawing convention. And the
     dike is drawn as a RING, the band between the parcel's outer edge and the water's own outline, so hovering
-    a dike lights its bank and not the pond inside it.
+    a dike lights its bank and not the pond inside it. So: the collar drawn around each pond is about two
+    meters where the traditional figure is a dike of six to ten, and the crowns stand at one bush per
+    twenty-three square feet where the record's own guess is one per ten to twenty.
 
-    Caveat: the collar drawn around each pond is about two meters where the traditional figure is a dike of six
-    to ten, and the crowns are spaced at one bush per twenty-three square feet where the record's own guess is
-    one per ten to twenty, so that they read as separate plants rather than as a solid band.
+    Caveat: the collar drawn around each pond is about two
+    meters where the traditional figure is a dike of six to ten, and the crowns stand at one bush per
+    twenty-three square feet where the record's own guess is one per ten to twenty.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
@@ -120,8 +122,8 @@ class SugarcaneDike(Kind):
 
     Note: The type is read, and so is the loop as written above - the young leaves fed to fish and pigs, the old
     ones shading the vegetable ground, the refinery waste returned to the pond. The often-repeated version of
-    that loop, in which the pressed cane's bagasse goes to the pigs, is on no page read. The row pitch is a
-    drawing calibration from the plant's habit, not a Ming or Qing figure.
+    that loop, in which the pressed cane's bagasse goes to the pigs, is on no page read, and the row pitch is
+    a drawing calibration from the plant's habit, not a Ming or Qing figure.
 
     Caveat: the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.
 
@@ -147,7 +149,8 @@ class BananaDike(Kind):
     Note: The type is read; the clump pitch and crown size are a drawing calibration from the plant's habit, not a
     surveyed figure, and no page read gives the reason banana replaced another crop on a bank.
 
-    Caveat: the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.
+    Caveat: the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed
+    figure, and no page read gives the reason banana replaced another crop on a bank.
 
     Name: banana dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is banana, and its clumps
@@ -170,8 +173,8 @@ class FruitDike(Kind):
     Note: The type is read; WHICH fruit is not - no page read names a species for a fruit dike - and the tree
     spacing is an orchard convention, not a measured dike.
 
-    Caveat: which fruit the trees are is on no page read, and the tree spacing is an orchard convention rather
-    than a measured dike.
+    Caveat: no page read names a species for a fruit dike - and the tree spacing is an orchard convention, not
+    a measured dike.
 
     Name: fruit dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees

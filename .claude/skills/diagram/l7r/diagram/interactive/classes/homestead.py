@@ -25,9 +25,8 @@ class Farmhouse(Kind):
     read, so the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
     10 to 13 ft, well clear of it, close enough that the household works its own ground.
 
-    Caveat: the setback from the paddy is built from three parts, and two of them - the bund's width and the
-    eave overhang - rest on no page, so the 6 ft floor beneath it is a soft threshold rather than a measured
-    minimum.
+    Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
+    10 to 13 ft, well clear of it, close enough that the household works its own ground.
 
     Name: farmhouse
     Covers: `houses` - the dwelling of each household
@@ -80,8 +79,7 @@ class Byre(Kind):
     cold-country form and is deliberately not drawn. The animal's nearness to the HOUSE is read; its nearness
     to the wellhead is not on any page read, and neither is the commons siting itself.
 
-    Caveat: the attached stable wing (magariya) is a cold-country form and is deliberately not drawn, and the
-    byre's nearness to the wellhead is on no page read.
+    Caveat: the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.
 
     Name: byre
     Covers: `byres` - the draft-animal sheds

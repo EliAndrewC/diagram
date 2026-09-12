@@ -20,9 +20,9 @@ class Stream(Kind):
 
     Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-    (the GM's ruling). The stream's type and place are read. The two meters are not: no page read gives a
-    village creek a width, and the third of a meter it is measured against is a modern design MINIMUM - the
-    narrowest a canal of any grade may be built to - rather than a ditch anyone measured.
+    (the GM's ruling). The stream's type and place are read. The 2 m is not: no page read gives a village
+    creek a width, and the 0.3 m it is measured against is a modern design MINIMUM - the narrowest a canal of
+    any grade may be built to - rather than a ditch anyone measured.
 
     Name: stream
     Covers: `streams` - the brook
@@ -186,9 +186,10 @@ class VillageLane(Kind):
     hamlet.
 
     Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a wheelbarrow's width,
-    with the connector kept under the 9 ft of the one cart road the record does measure. The one measured
-    figure the record has for such a way - blind alleys of 2 to 4 m reaching the house lots of a surveyed
-    village - is a twentieth-century dry-plain village in the north, and the map draws below it.
+    with the connector kept under the 9 ft of the one cart road the record does measure. The record now
+    carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
+    reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
+    the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet.
 
     Name: village lane
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur
