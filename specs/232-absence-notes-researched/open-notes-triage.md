@@ -5,13 +5,13 @@ things so basic they do not need one? Every open note is in exactly one of three
 
 | class | count | what it means |
 |---|---|---|
-| **A - no citation is owed** | 17 | the sentence is this project's own decision, a drawing convention, a statement of what the record does NOT say, or a necessity that follows from the definitions. A source would not make it truer. What several of these DO owe is an honest label, and two owe a fix |
+| **A - no citation is owed** | 18 | the sentence is this project's own decision, a drawing convention, a statement of what the record does NOT say, or a necessity that follows from the definitions. A source would not make it truer. What several of these DO owe is an honest label, and two owe a fix |
 | **B - a citation is owed and should be findable** | 27 | a specific about how a place was built, farmed or used. The GM's line exactly: "we really do need a citation for anything about the specifics of how farming villages were laid out and what features they had" |
 | **C - a citation is owed and the record appears genuinely silent** | 7 | searched hard, twice, by two different passes. These are the honest guesses, and they stay labeled as guesses |
 
 ---
 
-## A - no citation is owed (17)
+## A - no citation is owed (18)
 
 **Our own decision or drawing convention.** A source cannot support a choice we made.
 
@@ -125,7 +125,7 @@ better tools, and two of them are named documents nobody can open.
 
 ## What this means for closing the record out
 
-The 51 are not 51 problems. **17 need a label or a small fix rather than a source**, and two of those are
+The 51 are not 51 problems (and three notes appear in two classes, so the class counts sum above the total). **18 need a label or a small fix rather than a source**, and two of those are
 record-format defects to move into comments. **7 are honest silences and should stay that way** - that is
 the absence-note rule working, and one of the seven turns out to be a contradiction to fix instead.
 
