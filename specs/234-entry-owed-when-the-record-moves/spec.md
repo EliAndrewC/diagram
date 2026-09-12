@@ -197,6 +197,9 @@ quiet pass.
 come back DRIFTED before 233's docstring rewrite and IN-STEP after it. A new agent whose first real
 dispatch is the case that motivated it is the cheapest honest proof it does anything.
 
+<!-- SC-008 was the task-checkbox criterion, deleted in round 4 with the checkbox it proved; the
+     numbers below are not renumbered because the Review history references them. -->
+
 **SC-009** `container-scripts/append-system-prompt.md` names `entry-drift` among the pre-authorized
 agents, asserted by a test rather than by inspection.
 
@@ -224,6 +227,16 @@ it is still the right unit for the report, which should name the section a reade
 **D4 - content-derived, never a stored hash.** No table of "this entry was current as of this text" is
 kept: such a table is exactly the stale literal that agrees with itself. git is the record.
 
+**D5 - the REPORT has no escape token; the HEADING CHECK refuses and still has none, deliberately.**
+Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
+moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
+is nothing to escape. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
+unlike `check-file-scale.py`'s `FILE_SIZE_OK`, which exists because a large file can be legitimate
+ordered data. A class entry pointing at a heading that does not exist has no legitimate form: the one
+case that looks like it - a section deliberately not written - is FR-008's declared silence, which is
+an in-band recognized VALUE and not an escape. Recorded so a later session does not add one for
+symmetry.
+
 **D6 - the dispatch obligation is DOCTRINE, not mechanism - an ACCEPTED LIMITATION.** Nothing enforces
 that a session hands a named pair to `entry-drift`. That is deliberate, and it is the shape of the whole
 feature rather than a gap in it.
@@ -250,15 +263,6 @@ checkbox without re-pricing it: on one of those 30 sweeps it would have demanded
 dispatches to conclude that a footnote moved, or a box ticked without dispatching - which is the unwired
 agent round 3 existed to fix, wearing a tick.
 
-**D5 - the REPORT has no escape token; the HEADING CHECK refuses and still has none, deliberately.**
-Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
-moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
-is nothing to escape. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
-unlike `check-file-scale.py`'s `FILE_SIZE_OK`, which exists because a large file can be legitimate
-ordered data. A class entry pointing at a heading that does not exist has no legitimate form: the one
-case that looks like it - a section deliberately not written - is FR-008's declared silence, which is
-an in-band recognized VALUE and not an escape. Recorded so a later session does not add one for
-symmetry.
 
 ## Out of scope
 
