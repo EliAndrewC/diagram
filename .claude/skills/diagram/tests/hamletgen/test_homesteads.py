@@ -333,9 +333,15 @@ def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds() -> None:
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
     s, plan = _toy_hamlet(20)
+    # the ground beyond 260 ft of the seat is no-build, so the ranks run out of room and the rescue's wider cloud
+    # throws seeds the band refuses
+    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+    s.block_polys.append([(cx_ - 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 260.0), (cx_ - 2000.0, cy_ - 260.0)])
+    s.block_polys.append([(cx_ - 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 2000.0), (cx_ - 2000.0, cy_ + 2000.0)])
     stage_homesteads(s, plan)
     ss = s.M["meta"]["seat_search"]
-    assert ss["rounds"] >= 5 or len(s.M["houses"]) == 20, "either the rescue ran or the ranks seated every household"
+    assert ss["rounds"] >= 5, "the rescue ran"
+    assert len(s.M["houses"]) < 20, "...and the quota stayed short: the ground, not the search, was the limit"
 
 
 def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:

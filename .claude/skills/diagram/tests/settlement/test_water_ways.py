@@ -735,10 +735,10 @@ def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_rec
     227 re-packed the clusters)."""
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["lanes"] = [
-        {"pts": [[100, 500], [900, 500]], "w": 4},
-        {"pts": [[500, 500], [500, 504]], "w": 4},  # a four-foot stub off the first
-    ]
-    s._lane_ink = [[], []]
+    s.lane([(100.0, 500.0), (900.0, 500.0)], width=4)
+    s.lane([(500.0, 500.0), (500.0, 504.0)], width=4)  # a four-foot stub off the first, with its own ink
+    stub_ink = list(s._lane_ink[1])
+    assert stub_ink and any(s.ground[z].get(part) for z in stub_ink for part in ("edge", "bed", "top"))
     s.trim_lane_stubs()
     assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == 1 and s.M["lanes"][0]["pts"][0] == [100, 500]
+    assert all(not s.ground[z].get(part) for z in stub_ink for part in ("edge", "bed", "top")), "the stub's ink emptied with its record"
