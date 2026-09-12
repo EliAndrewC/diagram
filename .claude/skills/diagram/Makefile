@@ -15,7 +15,7 @@
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
-	 notes-census glossary \
+	 notes-census glossary page-lit picture-diff \
 	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
 # GUARD_EDIT_OK: `tripwire` off .PHONY as well as losing its rule - a phony name with no recipe still
@@ -369,10 +369,18 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
-	@root=$$(git rev-parse --show-toplevel); \
-	  maps=$$(git -C "$$root" diff --name-only HEAD~1 HEAD -- '.claude/skills/diagram/pool/*/*/*.json' '.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.json' 2>/dev/null | sed 's#.*/##;s#\.json##' | tr '\n' ' '); \
-	  printf 'maps whose manifest changed: %s\n' "$${maps:-none}"; \
-	  printf '\n\033[1mDISPATCH NOW\033[0m, in the same turn: settlement-review over%s, then let this gate run beside it.\n' " $${maps:-the delta}"
+	@: "GUARD_EDIT_OK: feature 231 - verify DECIDES whether a review is owed (GM 2026-09-12: a scripted check, part of make verify, tells us whether any change should even trigger a review). The maps come from scripts/_review_owed.py - every manifest that moved against the merge base with origin/main, not the HEAD~1 diff that saw one commit - and when some did, the reviewer's snapshot is taken here, automatically, into the clone's .git/review-snapshot/ where the gate's cache never evicts it."; \
+	  root=$$(git rev-parse --show-toplevel); \
+	  maps=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
+	  why=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" --why); \
+	  if [ -z "$$maps" ]; then \
+	    printf '\n\033[1mNO SETTLEMENT-REVIEW OWED\033[0m: %s (feature 231). The gate runs alone; a glyph or page change with the same manifest is the GM'"'"'s to look at, and the waiver is recorded at turn end.\n' "$$why"; \
+	  else \
+	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
+	    snap=$$(python3 "$$root/scripts/_review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} $$maps); \
+	    printf 'maps whose layout moved: %s (%s)\n%s\n' "$$maps" "$$why" "$$snap"; \
+	    printf '\n\033[1mDISPATCH NOW\033[0m, in the same turn: settlement-review over %s - hand it the snapshot directories above, then let this gate run beside it.\n' "$$maps"; \
+	  fi
 	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
 	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
 
@@ -473,6 +481,18 @@ pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A
 ##  ARGS=<in.svg>  the Mode A compound SVG to measure
 	$(RUN).tools.pack_audit $(ARGS)
 
+
+page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
+##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch
+	@: "GUARD_EDIT_OK: feature 231 - two NEW read-only diagnostics the settlement-review needs, so it stops writing a scratch pixel-check script per pass (GM 2026-09-12)"; \
+	if [ -z "$(MAP)" ] || [ -z "$(CLASS)" ]; then printf 'make page-lit: MAP=<page.html> CLASS="<class key>" are required - e.g. make page-lit MAP=pool/hamlets/kuwabata/kuwabata.html CLASS="mulberry dike"\n' >&2; exit 2; fi
+	$(RUN).tools.page_lit "$(MAP)" "$(CLASS)" $(if $(VECTOR),--vector,) $(if $(OUT),--out "$(OUT)",)
+
+picture-diff:   ## [diagnostics] two renders compared: the differing share, the max delta, the bbox, and whose ink   A=<png|svg> B=<png|svg> [PAGE=<the new .html>]
+##  the reviewer's picture measurement (feature 231); an SVG argument is rendered by the engine's own rasterizer,
+##  and PAGE names the rendered page whose own id map says which class each differing pixel lies on
+	@if [ -z "$(A)" ] || [ -z "$(B)" ]; then printf 'make picture-diff: A=<render> B=<render> are required - e.g. make picture-diff A=main.png B=pool/hamlets/kuwabata/kuwabata.svg PAGE=pool/hamlets/kuwabata/kuwabata.html\n' >&2; exit 2; fi
+	$(RUN).tools.picture_diff "$(A)" "$(B)" $(if $(PAGE),--page "$(PAGE)",) $(if $(SVG),--svg "$(SVG)",)
 
 notes-census:   ## [diagnostics] refresh the derived counts inside each map's notes census block   M="pool/hamlets/*.json"
 ##  M=<glob>  which manifests to refresh (default: every manifest in both pool trees)

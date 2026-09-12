@@ -33,6 +33,23 @@ Same three rules apply to `building-review` and `backstory-review`.
 
 ## WHEN a review runs (GM 2026-08-26) - and it never blocks the GM's look
 
+**FIRST: is one owed at all? (feature 231, GM 2026-09-12)** *"if there are no changes to the actual way
+that the settlement is laid out, then we should not need to re review the settlement because we're just
+rereviewing things that have not changed."* The trigger is scripted - `scripts/_review_owed.py` names
+every pool map whose MANIFEST differs from the merge base with main (committed or not, both trees, a new
+map counted) - and it is the only place the question is answered: `make verify` asks it, the pair guard's
+gate branch asks it, the stop branch asks it again after the gate, because the gate's own pool phase can
+move a manifest. No map named means no review: the gate runs as typed, the waiver is recorded against
+that engine key with its reason (`make audit` counts them), and the map goes back to the GM, who reads
+one changed map faster than the agent does. A glyph-form change with an identical manifest is exactly
+that case - feature 228 spent 18.7 of its 32 minutes on one. If the automatic waiver ever fires on a
+delta the GM DOES think moved a layout, the manifest is the knob to revisit, not the trigger.
+
+**And the snapshot is taken for you.** Where a review is owed at gate time, the changed maps' files are
+copied from the clone and from main into `<clone>/.git/review-snapshot/<map>/{clone,main}/` before the
+gate starts, and the dispatch line names them - the gate's roll cache evicts a pool map's `.png` and
+`.html` mid-run, which cost feature 228's reviewer minutes of waiting and a re-render.
+
 The GM, after a task in which three serial `settlement-review` passes added ~10 minutes and the
 second of them passed a map the GM rejected on sight: *"iterating in a way that allows me to look at
 something more quickly will probably be more productive than having a built in independent

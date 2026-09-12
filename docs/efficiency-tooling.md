@@ -66,7 +66,7 @@ is destructive or the refusal is itself the content.
 | **`batching-hooks`** | many single-call turns - the dominant cost | a rolling window: 3 of the last 6 turns each a single quick read-only call blocks the next recon-shaped one. **Warns one turn early**, free. The bar re-arms higher after each firing and decays back |
 | **`make-only-hooks`** | reaching an expensive path around `make`, where the cheap question cannot be asked first | refuses a bare interpreter or pytest and NAMES the target; **rewrites** a TARGETED bare pytest (files, a directory, a node id, `-k` -> `K=`, output flags dropped, the pipeline after it kept) into `make test-file FILE=... [K=...]` and an engine entry point a one-line `$(RUN).<module>` recipe wraps into that target, the table derived from the Makefile at hook time (feature 212); a refusal names the token that stopped the rewrite |
 | **`no-poll-hooks`** | burning wall clock watching a job the harness will notify you about | refuses a busy-wait; **corrects** a self-matching `pgrep` to the bracket form; **permits** a backgrounded loop whose condition reads a FILE (the `setsid --fork` shape). Escape `POLL_OK` - which permits the WAIT and nothing else: an escaped command's self-matching `pgrep` is still bracketed (GM 2026-09-08, after an escaped waiter looped for hours on a finished gate) |
-| **`pair-hooks`** | the independent review running AFTER the gate, adding its whole runtime to the wall clock | **rewrites** a lone `make done` into `make verify`; every other gate shape (`make maps`, a detached gate, `FULL=1`) is **recorded and permitted** with the DISPATCH NOW context - a detached run overlaps the review, a foreground run is told the review will follow it and how to overlap next time (feature 212, D7). Escape `PAIR_OK` |
+| **`pair-hooks`** | the independent review running AFTER the gate, adding its whole runtime to the wall clock - and running AT ALL when nothing about a settlement's layout moved (feature 231) | **rewrites** a lone `make done` into `make verify`; every other gate shape (`make maps`, a detached gate, `FULL=1`) is **recorded and permitted** with the DISPATCH NOW context - a detached run overlaps the review, a foreground run is told the review will follow it and how to overlap next time (feature 212, D7). Since feature 231 it first asks `scripts/_review_owed.py` whether any pool manifest moved against main: no map, no review - the gate runs as typed and the waiver is recorded; a map, and the snapshot is taken into `<clone>/.git/review-snapshot/` and named in the dispatch. Escape `PAIR_OK` |
 
 **Every guard's ESCAPE is an invocation too, since feature 169.** Every token matched in a COMMAND goes through
 `_hookmatch.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
@@ -106,8 +106,9 @@ claim, fixed in feature 165.
 - **Background the final gate and never poll it**; act on the completion notification. Detach a long
   run with `setsid --fork` (plain `setsid` does not fork when it is not a process-group leader, so
   the run stays a child of the tool call and dies with it).
-- **`make verify`** starts the gate in the background AND prints the review to dispatch in the same
-  turn, so the two overlap instead of queueing.
+- **`make verify`** decides whether a settlement-review is owed (a pool manifest moved against main),
+  snapshots the changed maps for it, starts the gate in the background AND prints the review to dispatch
+  in the same turn, so the two overlap instead of queueing.
 - **Idle tests**: after 60-120 minutes of idle time (staggered per session, restarted on a laptop
   resume), the clone runs the whole gate detached and the verdict opens the next prompt. Once per
   idle, never on unchanged content, aborted the moment a prompt arrives.

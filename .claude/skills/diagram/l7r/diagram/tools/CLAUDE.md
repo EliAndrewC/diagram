@@ -28,6 +28,8 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` - a phase of `make test-full`, with no make route of its own |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
+| I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `page_lit` (`make page-lit`) |
+| Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` (`make picture-diff`) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
 Read that before extending one. The skill's [`../CLAUDE.md`](../../../CLAUDE.md) carries the operational
@@ -75,13 +77,20 @@ with the same shape:
 
 ## Coverage
 
-`pack_audit`, `site_justice` and `scatter_audit` are under the 100% rule - they are pure logic over
-a parsed artifact, and their verdicts ship. `cache_audit`, `cohort_audit`, `crop_map`, `timings`,
-`check_census`, `firing_census` and `make_regressions` are not: they are drivers whose whole behavior is
-subprocess orchestration or one-shot audits whose verdicts a person reads and acts on.
-The measured set is named module-by-module in `pyproject.toml` rather than by directory, so that
-boundary stays explicit instead of becoming a side effect of which folder a file lands in - a new
-tool dropped in here does not silently owe 100% coverage on the day it arrives.
+**Everything here owes 100%, the day it lands** (GM 2026-09-02, constitution Principle X clause 5:
+*"A new tool absolutely should silently owe one hundred percent coverage the day it lands ... For
+tools, for our settlement generation, for the automated checks on our hand drawn diagrams, for
+everything."*). The measured surface is DERIVED - `source = ["l7r"]` in `pyproject.toml` - so a
+module's duty follows from it being engine code, and the way to not owe coverage on something is to
+not ship it. This paragraph used to say the opposite, module by module, with the argument that a new
+tool must not silently owe the floor; the GM reversed that sentence verbatim and feature 174 removed
+the roster it described. A boundary that genuinely cannot be reached is argued at the point of
+change, like any other exclusion.
+
+What that means for a tool whose work is a SUBPROCESS or a BROWSER: the pure half is tested directly
+and the driving half is tested where it can be driven - `page_lit`'s attribution on arrays and its
+`measure` on the synthetic page the browser tests already open (`tests/full/interactive/page_browser/`),
+`picture_diff`'s arithmetic on synthetic images and its rendering through resvg on a 40x40 document.
 
 ## Known stale, recorded rather than quietly fixed
 
