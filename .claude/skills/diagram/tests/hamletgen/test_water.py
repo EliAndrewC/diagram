@@ -369,9 +369,16 @@ def test_a_weir_hamlet_draws_an_oblique_bar_across_the_brook_and_an_open_one_dra
     hg.draw_intake(s, plan, (700.0, 300.0))
     rec = s.M["weirs"][0]
     assert rec["len"] == pytest.approx(2 * hg.WEIR_HALF_FT) and rec["w"] == pytest.approx(hg.WEIR_THICK_FT)
-    # the brook here runs due south, so a bar square across it would lie east-west (0 deg); the skew
-    # tilts it upstream by WEIR_SKEW_DEG
-    assert rec["deg"] == pytest.approx((90.0 + 90.0 + hg.WEIR_SKEW_DEG) % 180.0, abs=0.5)
+    # the brook runs due south; the bar lies across it, off square by WEIR_SKEW_DEG
+    assert min(rec["deg"] % 180.0, 180.0 - rec["deg"] % 180.0) == pytest.approx(hg.WEIR_SKEW_DEG, abs=0.5)
+    # settlement-review pass 10: THE MOUTH IS ABOVE THE WEIR, and the bar climbs upstream away from the intake bank
+    ring = rec["poly"]
+    rx = math.cos(math.radians(plan.head_deg))
+    on_bank = [q for q in ring if (q[0] - 700.0) * rx > 0.0]
+    assert on_bank and min(q[1] for q in on_bank) > 300.0, "on the intake bank the bar is below the mouth, so the race draws from the raised pool"
+    bank_end = max(ring, key=lambda q: q[0] * (1 if rx > 0 else -1))
+    far_end = min(ring, key=lambda q: q[0] * (1 if rx > 0 else -1))
+    assert bank_end[1] > far_end[1], "the bar's end on the intake bank is its downstream end"
 
 
 def test_the_weir_bar_is_placed_off_the_fall_when_the_intake_is_not_on_the_brook() -> None:

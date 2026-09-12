@@ -330,19 +330,30 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
         return
     nxt = next((q for q in plan.brook[plan.brook.index(sluice) + 1 :]), None) if sluice in plan.brook else None
     hx, hy = unit(nxt[0] - sluice[0], nxt[1] - sluice[1]) if nxt else plan.fall
-    ang = math.atan2(hy, hx) + math.radians(90.0 + WEIR_SKEW_DEG)
-    ax, ay = math.cos(ang), math.sin(ang)
+    # THE WEIR STANDS BELOW THE MOUTH AND SLANTS UP FROM THE INTAKE BANK (settlement-review, feature 230 pass 10). The
+    # bar was centered ON the intake point and skewed by a fixed turn that ignored which bank the race leaves from, so on
+    # Kashikawa the head race took its water 0.6 ft below the downstream face - from the tailwater, not from the pool the
+    # weir raises - and the bar ran diagonally DOWNSTREAM from the intake bank, which steers the flow away from the
+    # intake. The sheet's own weir modal says the opposite, and so does the record: the bar runs diagonally upstream from
+    # the intake mouth. So the intake bank is found from the race's own bearing, the bar's end on that bank is its
+    # downstream end, and the whole bar is set just below the mouth.
+    rx, ry = math.cos(math.radians(plan.head_deg)), math.sin(math.radians(plan.head_deg))
+    nx, ny = (-hy, hx) if hx * ry - hy * rx >= 0.0 else (hy, -hx)  # the unit normal pointing to the intake bank
+    skew = math.tan(math.radians(WEIR_SKEW_DEG))
+    ax, ay = unit(-nx - hx * skew, -ny - hy * skew)  # from the intake bank's (downstream) end toward the far bank, upstream
+    ang = math.atan2(ay, ax)
     half, half_t = WEIR_HALF_FT / plan.ftpx, WEIR_THICK_FT / plan.ftpx / 2.0
+    cx, cy = sluice[0] + hx * (half_t + 1.0), sluice[1] + hy * (half_t + 1.0)  # the upstream face a pixel below the mouth
     poly = [
-        (sluice[0] + ax * half + hx * half_t, sluice[1] + ay * half + hy * half_t),
-        (sluice[0] - ax * half + hx * half_t, sluice[1] - ay * half + hy * half_t),
-        (sluice[0] - ax * half - hx * half_t, sluice[1] - ay * half - hy * half_t),
-        (sluice[0] + ax * half - hx * half_t, sluice[1] + ay * half - hy * half_t),
+        (cx + ax * half + hx * half_t, cy + ay * half + hy * half_t),
+        (cx - ax * half + hx * half_t, cy - ay * half + hy * half_t),
+        (cx - ax * half - hx * half_t, cy - ay * half - hy * half_t),
+        (cx + ax * half - hx * half_t, cy + ay * half - hy * half_t),
     ]
     s.M.setdefault("weirs", []).append(
         {
-            "x": round(sluice[0], 1),
-            "y": round(sluice[1], 1),
+            "x": round(cx, 1),
+            "y": round(cy, 1),
             "len": round(2 * half, 1),
             "w": round(2 * half_t, 1),
             "deg": round(math.degrees(ang) % 180.0, 1),
@@ -357,8 +368,8 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     # lip along the upstream face, the one thing a weir has and a bridge cannot - it holds water back.
     pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
     ticks = "".join(
-        f'<line x1="{sluice[0] + ax * half * t - hx * half_t:.1f}" y1="{sluice[1] + ay * half * t - hy * half_t:.1f}" '
-        f'x2="{sluice[0] + ax * half * t + hx * half_t:.1f}" y2="{sluice[1] + ay * half * t + hy * half_t:.1f}" stroke="#6E6A60" stroke-width="0.7"/>'
+        f'<line x1="{cx + ax * half * t - hx * half_t:.1f}" y1="{cy + ay * half * t - hy * half_t:.1f}" '
+        f'x2="{cx + ax * half * t + hx * half_t:.1f}" y2="{cy + ay * half * t + hy * half_t:.1f}" stroke="#6E6A60" stroke-width="0.7"/>'
         for t in (-0.62, -0.2, 0.2, 0.62)
     )
     lip = f'<line x1="{poly[3][0]:.1f}" y1="{poly[3][1]:.1f}" x2="{poly[2][0]:.1f}" y2="{poly[2][1]:.1f}" stroke="#8FA6AE" stroke-width="1.6" stroke-linecap="round"/>'
