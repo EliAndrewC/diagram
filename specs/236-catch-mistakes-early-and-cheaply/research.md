@@ -71,33 +71,48 @@ the second lost the first's guard.
 
 ## R4 - the tree is not clean, so a tree-wide style check cannot be the design (measured 2026-09-12)
 
-The GM asked for the British-spelling check "in, for example, our quick tests". Measured before specifying it, with the house-style hook's OWN word table - the 44 words of `BRIT` in `scripts/house-style-hooks.sh`, so the check and this ledger read the same list - `git grep -nIE` over tracked files excluding `.clones/` and this feature's directory returns **161 lines in 72 files**. (An earlier draft said 146, from an ad-hoc list it never recorded; the root `CLAUDE.md` table gives a different count again. The figure is only reproducible against a named list, which is why it is now the hook's.)
-They are spread across engine comments, docs, test names, `scripts/fixtures/`, a Makefile comment and four
-research citations pages - and the citations hits are inside 「」 quotations, where the house-style rule
-explicitly exempts them.
+The GM asked for the British-spelling check "in, for example, our quick tests". Measured before specifying it, matching EXACTLY the way the house-style hook matches: the 44 words of
+`BRIT` in `scripts/house-style-hooks.sh`, each word-bounded and CASE-INSENSITIVE - the hook tests
+`re.search(rf"\b{w}\b", visible, re.I)`, so `CENTRE` and `NEIGHBOUR` in an engine comment are hits. The
+command, flags included:
 
-**So a tree-wide check would fail on the day it landed**, and the feature would silently owe a 100-plus
-file correction sweep that the GM did not ask for. The check is therefore scoped to the DELTA - the lines
-this push adds or changes - which is also the only scope that would have caught the failures that motivate
-it, since every one of them was new text.
+```
+git grep -nIiE '\b(<the 44 words of BRIT, longest first, joined by |>)\b' -- . ':!.clones' ':!specs/236-*'
+```
+
+It returns **192 lines in 83 files**. (Earlier drafts said 146 from an ad-hoc list nobody recorded, then
+161 from a case-SENSITIVE run - neither matched what the hook matches, so "the hook, the check and the
+ledger agree on one list" was false while the list was shared and the matched set was not.)
+
+**So a tree-wide check would fail on the day it landed**, and the feature would silently owe a sweep of
+83 files that the GM did not ask for. The check is therefore scoped to the DELTA - the lines this push adds
+or changes - which is also the only scope that would have caught the failures that motivate it, since
+every one of them was new text.
 
 **The pre-existing set is LEDGERED, not fixed** (Principle XIII: a pre-existing failure stays ledgered and
-is not fixed under someone else's feature). By area - files carrying one or more hits, from `git grep -l`
-over tracked files excluding `.clones/` and this feature's own directory:
+is not fixed under someone else's feature). By area, from `git grep -lIiE` - the same pattern and the same
+exclusions - so this table and the count above come from one run:
 
 | area | files |
 |---|---|
-| `.claude/skills/diagram/tests` | 22 |
-| `specs` | 18 |
-| `scripts` | 6 |
-| `.claude/skills/diagram/research` (the hits are inside 「」 quotations - exempt) | 5 |
-| `.claude/skills/diagram/l7r` | 4 |
-| `.specify` | 2 |
-| `.claude/skills/diagram/pool` | 2 |
-| `.claude/skills/diagram/future-work` | 2 |
+| `.claude/skills/diagram/tests` | 25 |
+| `specs` | 24 |
+| `.claude/skills/diagram/l7r` | 7 |
+| `.claude/skills/diagram/research` (hits inside 「」 quotations - exempt) | 7 |
+| `scripts` | 5 |
+| `.claude/skills/diagram/legacy-hand-authored-pool` | 3 |
+| `.claude` | 2 |
 | `.claude/skills/diagram/dev` | 2 |
-| `.claude/skills/diagram/legacy-hand-authored-pool` | 1 |
-| `.claude/skills/diagram/Makefile` | 1 |
+| `.claude/skills/diagram/future-work` | 2 |
+| `.claude/skills/diagram/pool` | 2 |
+| `.specify` | 2 |
+| `CLAUDE.md` | 1 |
+| `docs` | 1 |
+| **total** | **83** |
+
+Zero of them are in `specs/*/request.md` under the same case-insensitive match, which is the one place
+Principle V forbids touching - checked, because a check that corrected the GM's own words would be worse
+than no check.
 
 A sweep of them is its own work and wants the GM.
 
@@ -181,15 +196,19 @@ exactly how this project's Makefile recipe-comment guard came to exist, after a 
 `make test-full` from inside `make test-full` and recursed 914 levels. That guard (`_hm_make.py
 recipe_comment_hazards`) covers Makefiles only.
 
-**Measured, and the measurement settles refuse-versus-warn.** Across the 60 most recent transcripts,
-16,686 Bash commands were walked character by character tracking shell quote state - so a backtick inside
-SINGLE quotes, which does not execute, is not counted, and a quoted heredoc body (`<<'X'`) is skipped as
-literal. **42 backtick spans sat inside double quotes and would have executed.** Every one readable is a
-markdown code span written into prose - `finish`, `targets()`, `## Map notes`, `close_seams` - and
-several would have done real damage had they run: `cd /diagram` enters main's tree, `git init --bare`,
-`sync-in`, `find`. **None was deliberate command substitution.** (A first pass with a one-line regex
-counted 135, because it matched backticks inside single quotes straddled by stray double quotes; that
-figure is wrong by construction and is not used.)
+**Measured, and the part of the measurement that holds settles refuse-versus-warn.** Across the 60 most recent transcripts,
+Bash commands were walked with a shell quote-state walker. **The COUNT depends on the walker, so it is not
+the finding.** Round 3's walker counted 18 executing spans, this spec's first counted 42 (double-quoted
+contexts only), round 4's rough walker about 100, and the walker now COMMITTED beside this file as the
+record - `measure_backticks.py`, whose `selftest()` pins every rule it applies (single and ANSI-C quotes do
+not execute; a heredoc delimiter quoted any of three ways makes its body literal; an escaped backtick opens
+nothing; bare and double-quoted contexts both execute) - counts **73 over 16,748 commands**. Run it with
+`python3 specs/236-catch-mistakes-early-and-cheaply/measure_backticks.py`.
+
+**What holds under all four walkers is that NONE is a deliberate command substitution.** Every span the
+committed walker lists is a markdown code span or an identifier written into prose - `## Map notes`,
+`close_seams`, `<name>.notes.md`, `[a-z0-9-]+` - and several would have done real damage had they run:
+`cd /diagram` enters main's tree, `git init --bare`, `find`. Not one is a `date`-style substitution.
 
 So an earlier draft's reason for only warning - that `"today is `date`"` is sometimes deliberate - is
 contradicted by the data: zero of 42. And this project writes deliberate substitution as `$(...)`. The

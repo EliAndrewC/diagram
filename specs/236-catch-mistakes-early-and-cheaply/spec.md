@@ -51,9 +51,7 @@ double-quoted string, or in the body of an UNQUOTED heredoc (`<<EOF`) - MUST be 
 and single quotes as the fix. This is the case the GM named, in their words: *"putting backticks in a
 place that they do not belong ... have a hook detect that and then reject it early"*. `bash -n` cannot see
 it, because it is valid syntax that runs. Detection MUST walk shell quote state, so a backtick inside
-single quotes or a QUOTED heredoc body (`<<'EOF'`), which does not execute, is not refused. Measured over
-16,686 commands: 42 such spans, every one a markdown code span written into prose and none a deliberate
-substitution (`research.md` R8) - so the refusal fires on no correct work in the record, and this project
+single quotes or a QUOTED heredoc body (`<<'EOF'`), which does not execute, is not refused. Measured over the 60 most recent transcripts, NONE of the executing spans was a deliberate substitution - every one a markdown code span written into prose - and that zero holds under all four walkers tried, whose counts differ (`research.md` R8); so the refusal fires on no correct work in the record, and this project
 writes deliberate substitution as `$(...)`. The detector SHOULD share its quote walk with `_hm_make.py
 recipe_comment_hazards`.
 
@@ -86,7 +84,7 @@ Search-command segments MUST be dropped as `_hookmatch.py` already drops them.
 **FR-008** A check in `make quick` MUST scan the DELTA - lines added or changed against the merge base,
 **and every untracked file** - and fail naming file and line. Untracked files are named because the
 motivating failures were new files written through heredocs, which `git diff` against a base does not
-show. It MUST read the house-style hook's own word table (`BRIT` in `scripts/house-style-hooks.sh`), so the hook, the check and the ledger agree on one list. Not the whole tree: 161 pre-existing lines are ledgered in `research.md` R4.
+show. It MUST read the house-style hook's own word table (`BRIT` in `scripts/house-style-hooks.sh`), so the hook, the check and the ledger agree on one list. It MUST match as the hook matches - word-bounded and case-insensitive. Not the whole tree: 192 pre-existing lines are ledgered in `research.md` R4.
 
 **FR-008a** Exemptions MUST be judged from the whole FILE, not the changed line: a line inside a multi-line
 `<blockquote>`, a 「」 quotation or a `SOURCE` block carries no opening marker of its own. It MUST carry
@@ -179,7 +177,7 @@ supplied through `--trailer` is refused; so is one in a file given to `-F`.
 or a backtick span does not; `git grep -n "centre"` does not.
 **SC-007** (FR-008, FR-008a, FR-008b, FR-008c) The phase fails on a British spelling in a changed line and
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
-the delta; does not fail on a line merely moved; does not fail on the 161 ledgered lines; and runs on a
+the delta; does not fail on a line merely moved; does not fail on the 192 ledgered lines; and runs on a
 delta that changes no Python.
 **SC-008** (FR-010, FR-010a, FR-010c, FR-011) Each of the four checks fails on a constructed fixture; a
 withdrawn figure narrated in Decisions recorded does not fail check 2, and one standing in a file outside
@@ -228,7 +226,7 @@ approved.
 
 **D6 - an executing backtick is REFUSED.** An earlier draft only warned, on the reason that a backtick in
 double quotes is sometimes deliberate command substitution. That reason was never measured, and the
-measurement contradicts it: 42 executing spans across 16,686 commands, zero deliberate (`research.md` R8).
+measurement contradicts it: across four walkers whose counts differ, zero executing spans were deliberate (`research.md` R8).
 A warning at exit 0 lets the command run anyway - including `cd /diagram` and `git init --bare`, both in
 the record - so it makes no single mistake cheaper, and the GM asked that it be rejected early.
 
@@ -239,11 +237,31 @@ the delta and owes the fix.
 ## Out of scope
 
 - The research record and the agents that read it; the GM ruled it valuable as it stands.
-- The 161 pre-existing lines of British spelling, ledgered by area in `research.md` R4 under Principle XIII.
+- The 192 pre-existing lines of British spelling, ledgered by area in `research.md` R4 under Principle XIII.
 - Reducing review rounds by lowering the bar: this removes rounds by making their cheap findings
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Round 4** (`spec-fidelity`, changed text + contradiction scan): all seven round-3 items confirmed
+resolved; two more, both the recurring class of a figure written without its method. (1) R4's count was
+case-SENSITIVE while the hook matches case-insensitively, so "the hook, the check and the ledger agree on
+one list" was false - the list was shared, the matched set was not - and its area table still held
+figures from an older run. Recounted the way the hook matches: 192 lines in 83 files, the exact command
+recorded, the table rebuilt from that one run. (2) R8's count depended on the walker: three walkers gave
+18, 42 and about 100. The walker is now committed as the record with a selftest pinning its rules (it
+counts 73), and FR-004a and D6 cite the finding that holds under every walker - zero deliberate - rather
+than a count none reproduces. The review also confirmed FR-004a's refusal is at the bar: a command that
+prints markdown with backticks through double quotes or an unquoted heredoc is not correct work, because
+bash runs the spans and corrupts the text.
+
+**Round 3** (`spec-fidelity`): CHANGES REQUIRED, seven items, all taken; the reviewer re-ran the
+measurements rather than trusting them and three were wrong. R7 had five anchor misses where the
+transcript holds six. R2 row 3 said `bash -n` cannot see the nested-quote commit, but that commit was one
+of `bash -n`'s two refusals - caught only because a later `(` fell outside a quote that had already
+closed. R5 still called the withdrawn-figure check DROPPED while D5 kept it. FR-004a warned on an
+unmeasured reason, and the measurement found no deliberate substitution at all, so it refuses. Also taken:
+backticks in unquoted heredoc bodies, the quoted `<<'EOF'` form, and the GM's checklist item as FR-009a.
 
 **Round 2** (`spec-fidelity`, full reading): CHANGES REQUIRED, fifteen items, all taken, and four
 measurements added to `research.md` rather than more assertion. The consequential ones: plain `bash -n`
