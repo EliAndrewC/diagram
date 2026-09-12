@@ -7,7 +7,7 @@ import random
 
 from l7r.diagram.settlement import Settlement
 
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, SUN_CORRIDOR_FT, WEST_SUN_FT, Pt
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
 from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
@@ -40,12 +40,13 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     corridors as segments. A candidate rectangle is judged at nine points against those and nothing else.
 
     The seats are proposed where a house can stand. The FRONT ROW walks the paddy's chords at the bundle pitch, each
-    seat at a computed standoff - the wall rule's distance plus the house's half-extent along that chord's normal -
-    and takes about the square root of (households times the rolled shape's aspect) houses, so a crescent fronts
-    the field with more of its houses than a round cluster does. The RANKS BEHIND are proposed behind every standing
-    house, one homestead's depth further from the field (and the yard's sun corridor where the ranks climb north),
-    in a brick pattern, with a seat one pitch beyond each end of the rank; a round that seats nothing does not end
-    the ranks. Only while the quota is still short after four rounds do the RESCUE rounds run: the old random cloud
+    seat at a computed standoff - the wall rule's distance plus the reach of the homestead's core (the house, its
+    yard, its kura) toward that chord - pushed once further where the boundary's outline lies beyond the chord (a
+    dike's bank), and takes about the square root of (households times the rolled shape's aspect) houses, so a
+    crescent fronts the field with more of its houses than a round cluster does. The RANKS BEHIND are proposed behind
+    every standing house, one homestead's depth further from the field (and the yard's sun corridor where the ranks
+    climb north), in a brick pattern; only when a round seats nothing behind does the cluster grow along the field,
+    by the seats a pitch beyond each end of the rank. Only while the quota is still short after four rounds do the RESCUE rounds run: the old random cloud
     over a wider band, seeded a third of a pitch apart, spending guesses on purpose. A re-roll after a stranded
     farmhouse draws a different cloud.
 
@@ -253,7 +254,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                         push = max(push, d - near)
         if push <= 0.0:
             return seat_
-        push += 2.0
+        # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
+        # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
+        # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
+        push += WEB_FABRIC_GAP * 2.0 + 6.0
         return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push)
 
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
@@ -368,9 +372,19 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 _cands = [(hx + ox * _rank_step, hy + oy * _rank_step) for hx, hy in _along]
             _cands.sort(key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))  # center-out, as every proposer here
         else:
+            # THE RESCUE offers the along-the-field seats first - a pitch beyond each end of the standing rank, and the
+            # brick's outer half-seats behind it - then the old cloud over the widened band; a quota the ranks could not
+            # seat (cohort seed 25: 19 of 20 once the ends left the ordinary rounds) is seated where the ground is
             _ends = []
-            want = plan.spec.households * 6 + 30
             _cands = []
+            if _standing:
+                _along = sorted(_standing, key=lambda q: (q[0] - seat["cx"]) * ax + (q[1] - seat["cy"]) * ay)
+                _cands = [(_along[0][0] - ax * BUNDLE_PITCH, _along[0][1] - ay * BUNDLE_PITCH), (_along[-1][0] + ax * BUNDLE_PITCH, _along[-1][1] + ay * BUNDLE_PITCH)]
+                _cands += [
+                    (_along[0][0] - ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[0][1] - ay * BUNDLE_PITCH / 2 + oy * _rank_step),
+                    (_along[-1][0] + ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[-1][1] + ay * BUNDLE_PITCH / 2 + oy * _rank_step),
+                ]
+            want = plan.spec.households * 6 + 30
             for lx, ly in s.cluster_seeds(plan.cluster_shape, 0.0, 0.0, wlat, wdep, want, rng, record=False):
                 ly = -wdep + (ly + wdep) * 0.75  # the cloud leans toward the field (feature 133)
                 _cands.append((seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly))

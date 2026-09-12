@@ -35,15 +35,22 @@ the feature's last task after rounds of feedback in the clone.
   the distribution of the bed splits (one bed, two flanking, stacked, side by side), and the feature reduces
   neither. The dispersed form (the town's and the village's bundle with its grove) keeps its path as it is.
 - **FR-002 The seat is where the house will stand, computed once.** The front row's standoff from a site chain is
-  the wall rule's distance (`HOUSE_PADDY_GAP_FT` + 1) plus the house's half-depth plus the tilt allowance, so the
-  slide toward the paddy has nothing to do; the row and the lattice stand at the bundle pitch, so the slide along
+  the wall rule's distance (`HOUSE_PADDY_GAP_FT` + 1) plus the tilt allowance plus the reach of the homestead's CORE -
+  the house, the yard south of it, the kura north - toward that chord along its normal (a paddy the yard faces gets
+  the yard's depth; the garden's side is chosen later, so it is not counted), so the slide toward the paddy has
+  nothing to do; and where the outline lies beyond the chord (a dike's bank, a pond's fringe) the seat is pushed ONCE
+  along the normal by the outline's measured reach past the homestead's near edge plus a footpath's room (a seat two
+  pixels off a dike's bank left no way a lane could pass, and the web stranded it) - the same computed move, against
+  the ground (Kuwabata's dike heads seated nobody without it and the cluster drifted 112 px off its polder); the row and the lattice stand at the bundle pitch, so the slide along
   the neighbors has nothing to do. A configuration's box that overlaps exactly one placed box is moved ONCE by the
   measured overlap, away from that neighbor (the GM: *"measuring the distance to the neighbor and then moving
   however much the correct amount is"*) and tested once more - at most one computed move per configuration, four
   per seat; any other refusal offers the next seat. The ranks
   BEHIND the front row are proposed behind the standing houses - each round offers the seat one envelope's depth
   further from the field behind every house of the rank before it, in a brick pattern (the odd ranks behind the
-  midpoints between neighbors) - because a placer that takes the seat it is given needs seats that fit by
+  midpoints between neighbors), and only when a round seats nothing behind does the cluster grow ALONG the field
+  (the seats a pitch beyond each end of the rank, and the brick's outer half-seats; the rescue rounds offer these
+  first, before their cloud - cohort seed 25 seated 19 of 20 without them) - because a placer that takes the seat it is given needs seats that fit by
   construction, which a random cloud deduped to a lattice does not give it (D8). The front row's share of the
   quota follows the rolled cluster shape (D8). The rescue rounds keep the old cloud over a wider band, seeded a
   third of a pitch apart; the fifteen-ring spiral they ran goes with the spiral.
@@ -92,7 +99,9 @@ the feature's last task after rounds of feedback in the clone.
   that fail outright because the house fit where the homestead did not; the rest the two 2 px slides. The slide
   had no recorded reason (commit ed0e884e, "more map WIP"): it stepped because the stop is whichever of eight
   rules fires first, and stepping avoided computing the clearance to each. With the seat at its standoff and the
-  pitch, neither has work; the one computed move (FR-002) is the neighbor overlap.
+  pitch, neither has work; there are two computed moves and no walk (FR-002) - the neighbor overlap inside the
+  placer, and the one push against the outline at proposal time where the buildable line lies beyond the crop's chord,
+  cleared by a footpath's room - each measured and applied once.
 - **D2 The envelope is built from the house the roll WILL take.** A first cut of 226's pre-test used the largest
   house and refused seats the placer could take with a smaller one; here the size is rolled before the seat is
   tested, not after, so the box tested is the box the homestead will occupy - the union of its configurations
@@ -118,7 +127,10 @@ the feature's last task after rounds of feedback in the clone.
   offered and "one rank's worth of the band" was the whole quota). So each round proposes, behind every standing
   house, the seat one envelope's depth further from the field - plus a 4 px gap and, where the ranks climb north
   away from the field, the sun corridor a yard owes to its south (cohort seed 8: at the bare depth every clear seat
-  failed the parts' rules) - in a brick pattern, with a seat one pitch beyond each end of the rank; and the front row
+  failed the parts' rules) - in a brick pattern; the seats a pitch beyond each end of the rank and the brick's outer
+  half-seats are offered only in a round that seated nothing behind, so the cluster grows along the field only when
+  its back is refused (offered every round they strung Inashiro's crescent to 5.0 and Mizuguchi's round to 4.9, the
+  half-seats alone to 4.5), and the rescue rounds offer those along-the-field seats first, before their cloud; and the front row
   takes about sqrt(N x A) houses for a quota N and a rolled aspect band whose two ends sum to A - measured: the
   ranks stand an envelope's depth apart on an arc and the drawn aspect is read on the houses' own axis, so seven in
   Inashiro's row drew 1.66, ten drew 1.84 (crescent 1.9-4.2), six in Kuwabata's 1.71 (round 1.0-2.0). The knob
@@ -142,3 +154,9 @@ the feature's last task after rounds of feedback in the clone.
 - Amendment round 2 (2026-09-12): FAITHFUL. Asides kept for the landing: FR-002/D8's "one envelope's depth" is that depth
   plus a 4 px gap and, where the ranks climb north, the yard's sun corridor; the count of configurations (four) is
   named in one place.
+- Amended after the settlement-review's first pass (2026-09-12): FR-002 gained the ground push, the core's reach and
+  the ends as the fallback (the review: Kuwabata's cluster 112 px off its polder with `front = 0`, its belt gone with
+  it; measured on the way: the union's garden stood every front house a garden's width off a paddy beside it, and the
+  ends offered in every round strung Inashiro to 5.0 and Mizuguchi to 4.9, the half-seats alone to 4.5). Re-reviewed from a
+  fresh count: round 1 CHANGES REQUIRED on D1 and D8 still stating the replaced behavior (applied, with the rescue's
+  along-the-field seats and the push's footpath room).
