@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-12T23:03:41Z",
+  "target": "entry-gate",
+  "commit": "636cc7ed",
+  "why": "a record-format maintenance sweep: the 28 pairs named are sections whose session-facing text moved into HTML comments and whose history phrasing was rewritten, with no finding moved. The twelve pairs where a FINDING did move were each read by an entry-drift agent and their modals rewritten under feature 232 (research.md R26)"
+}
