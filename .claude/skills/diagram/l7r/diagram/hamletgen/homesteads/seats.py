@@ -19,7 +19,15 @@ DEFAULT_HOUSE = (46.0 * 1.35, 28.0 * 1.10)  # the LARGEST nucleated house `_try_
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
 
 
-def front_row(plan: SitePlan, count: int, standoff: float | None = 46.0, chains: Any = (), house: tuple[float, float] | None = None, extra: float = 0.0) -> list[Pt]:
+def front_row(
+    plan: SitePlan,
+    count: int,
+    standoff: float | None = 46.0,
+    chains: Any = (),
+    house: tuple[float, float] | None = None,
+    envelope: tuple[float, float, float, float] | None = None,
+    with_normals: bool = False,
+) -> list[Any]:
     """Seats for the row of homesteads that FRONTS the field, offset from the field OUTLINE itself.
 
     Offsetting from the cluster band's straight near face is not the same thing and is not good
@@ -33,10 +41,12 @@ def front_row(plan: SitePlan, count: int, standoff: float | None = 46.0, chains:
     # in two on the hem, which the pre-test now refuses before the placer is asked) was unreachable and, under feature 174, deleted
     # rather than kept for a caller that no longer exists. `count` is kept in the signature for the callers' sake; the
     # chain walk samples at the pitch and caps at 64, as the walk did.
-    return _front_row_from_chains(plan, standoff, chains, house, extra)
+    return _front_row_from_chains(plan, standoff, chains, house, envelope, with_normals)
 
 
-def _front_row_from_chains(plan: SitePlan, standoff: float | None, chains: Any, house: tuple[float, float] | None = None, extra: float = 0.0) -> list[Pt]:
+def _front_row_from_chains(
+    plan: SitePlan, standoff: float | None, chains: Any, house: tuple[float, float] | None = None, envelope: tuple[float, float, float, float] | None = None, with_normals: bool = False
+) -> list[Any]:
     """The front row offset from the SITE BOUNDARY's chains (feature 226 FR-003): the paddy's facing chains, each
     chord pushed out by its keep-out, so a seat offset from them by `standoff` along the chord's outward normal is
     the right distance from the paddy by construction; the hem, the marsh and the pond are refused at the PRE-TEST
@@ -47,7 +57,7 @@ def _front_row_from_chains(plan: SitePlan, standoff: float | None, chains: Any, 
     seat = plan.seat
     ax, ay = seat["along"]
     reach = seat["lat"] * CLUSTER_ROW_SPAN.get(plan.cluster_shape or "crescent", CLUSTER_SPAN_FACTOR)
-    out: list[Pt] = []
+    out: list[tuple[Pt, Pt]] = []
     for chain in chains:
         carry = 0.0
         for a, b, n in chain:
@@ -56,23 +66,34 @@ def _front_row_from_chains(plan: SitePlan, standoff: float | None, chains: Any, 
                 continue
             # THE STANDOFF IS COMPUTED, NOT STEPPED TO (feature 227 FR-002): `standoff=None` puts the seat where the house
             # will stand - the wall rule's distance from the chord (`HOUSE_PADDY_GAP_FT` + 1), the tilt's slack, and the
-            # house's half-extent along this chord's normal at the LARGEST size the roll can take - so the placer's old
-            # 2 px slide toward the paddy has nothing to do. A numeric standoff is a rung of the ladder behind it.
-            # `extra` is the second rung: the yard's depth and its gap, for a chord the YARD faces (the paddy south of the house)
-            off = (
-                standoff if standoff is not None else HOUSE_PADDY_GAP_FT + 1.0 + STANDOFF_SLACK_PX + (abs(n[0]) * (house or DEFAULT_HOUSE)[0] / 2 + abs(n[1]) * (house or DEFAULT_HOUSE)[1] / 2) + extra
-            )
+            # HOMESTEAD's reach toward the chord along this chord's normal: the house's own half-extent, or, when the
+            # envelope is given, the whole homestead's (`(left, top, right, bottom)` about the house center at the largest
+            # size the roll can take) - so a paddy the YARD faces (the dike heads of Kuwabata: the threshing yard south of
+            # the house, the paddy south of the yard) gets the yard's depth too, not a rung of a ladder. A numeric standoff
+            # is a caller's own figure.
+            if standoff is not None:
+                off = standoff
+            else:
+                dx, dy = -n[0], -n[1]  # toward the chord
+                hw_, hh_ = house or DEFAULT_HOUSE
+                if envelope is not None:
+                    left, top, right, bottom = envelope
+                    reach_ = abs(dx) * (right if dx > 0 else -left) + abs(dy) * (bottom if dy > 0 else -top)
+                else:
+                    reach_ = abs(dx) * hw_ / 2 + abs(dy) * hh_ / 2
+                off = HOUSE_PADDY_GAP_FT + 1.0 + STANDOFF_SLACK_PX + reach_
             t = carry
             while t <= seg:
                 px, py = a[0] + (b[0] - a[0]) * t / seg, a[1] + (b[1] - a[1]) * t / seg
                 if abs((px - seat["anchor"][0]) * ax + (py - seat["anchor"][1]) * ay) <= reach:
-                    out.append((px + n[0] * off, py + n[1] * off))
+                    out.append(((px + n[0] * off, py + n[1] * off), (float(n[0]), float(n[1]))))
                 t += BUNDLE_PITCH
             carry = t - seg
     if len(out) > 64:
         step = len(out) / 64.0
         out = [out[int(i * step)] for i in range(64)]
-    return sorted(out, key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))
+    out.sort(key=lambda q: math.hypot(q[0][0] - seat["cx"], q[0][1] - seat["cy"]))
+    return out if with_normals else [q for q, _n in out]
 
 
 # `_FIELD_RING_FLOOR` and `_FRONT_ROW_LANE_CAP` lived here and are GONE (feature 126). They were the

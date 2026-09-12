@@ -199,6 +199,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # aspect is read on the house centers' own axis, so a block of L by N/L houses reads about half of L*L/N - seven
     # in Inashiro's row drew 1.66 on a rolled crescent (1.9-4.2), six in Kuwabata's 1.71 on a round (1.0-2.0).
     front_cap = min(plan.spec.households, max(6, round(math.sqrt(plan.spec.households * (_lo_a + _hi_a)))))
+
     # ...AND A FRONT-ROW SEAT MUST ALSO BE REACHABLE FROM A TRACK, not merely near the paddy
     # (settlement-review, Inashiro 2026-08-17 - the same review round as the rank cap above, which
     # is the OTHER half of this defect: that one bounds HOW MANY seats the row takes, this one bounds
@@ -225,18 +226,53 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # move inward; it loses its seats to the cloud, which sits further from the tracks still. The
     # row's reach past the band was never the defect - its blindness to the tracks was.
     #
-    # TWO RUNGS, BOTH COMPUTED (feature 227 FR-002), where a ladder of eight standoffs (46 to 150 px) stood: the house's
-    # own - the wall rule, the tilt's slack and the house's half-extent along the chord's normal - and, for a chord the
-    # YARD faces (the paddy south of the house), the same plus the yard's depth and its gap. The ladder's other rungs
-    # were a second rank built ten to twenty pixels at a time behind the first, which under the envelope-first placer
-    # (no spiral to slide the seats apart) was two hundred refused candidates per map and a cluster strung along the
-    # paddy whatever shape it rolled; the ranks behind the front row are the lattice's, below, at the pitch.
-    for extra in (0.0, _house_max[1] + s.px(3)):
-        if placed >= front_cap:
-            break
-        for fx, fy in front_row(plan, min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, extra=extra):
+    # ONE RUNG, COMPUTED (feature 227 FR-002), where a ladder of eight standoffs (46 to 150 px) stood: the seat is where
+    # the homestead stands - the wall rule, the tilt's slack, and the whole homestead's reach toward the chord (the
+    # union envelope at the largest house the roll can take: a paddy the yard faces gets the yard's depth, a paddy the
+    # kura faces the kura's). The ladder's other rungs were a second rank built ten to twenty pixels at a time behind
+    # the first, which under the envelope-first placer (no spiral to slide the seats apart) was two hundred refused
+    # candidates per map and a cluster strung along the paddy whatever shape it rolled; a rung of one house depth
+    # seated NOBODY on Kuwabata's dike heads (the yard faces the paddy there) and the cluster drifted 112 px off its
+    # field. The ranks behind the front row are proposed behind the standing houses, below.
+    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> Pt:
+        """The seat moved once along `n_` by the outline's reach past the homestead's near edge - zero when the box is clear."""
+        _bx = s_._bundle_envelope(seat_[0], seat_[1], house_[0], house_[1], shed=True)
+        _pts = [(_bx[0] + dx * _bx[2] / 2, _bx[1] + dy * _bx[3] / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
+        if s_._site_corridors is None or not s_._site_corridors.hit_points(_pts):
+            return seat_
+        lx, ly = -n_[1], n_[0]  # the lateral axis
+        half_lat = abs(lx) * _bx[2] / 2 + abs(ly) * _bx[3] / 2
+        near = _bx[0] * n_[0] + _bx[1] * n_[1] - (abs(n_[0]) * _bx[2] / 2 + abs(n_[1]) * _bx[3] / 2)  # the box's near edge along n
+        far = near + (abs(n_[0]) * _bx[2] + abs(n_[1]) * _bx[3])
+        push = 0.0
+        for ring in s_._site_corridors.ring_pts:
+            for x, y in ring:
+                if abs((x - _bx[0]) * lx + (y - _bx[1]) * ly) <= half_lat:
+                    d = x * n_[0] + y * n_[1]
+                    if near <= d <= far:
+                        push = max(push, d - near)
+        if push <= 0.0:
+            return seat_
+        push += 2.0
+        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push)
+
+    # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
+    # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
+    # off a paddy beside it by a garden's width, 81 px on Inashiro against the 60 the cluster is held to)
+    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True)
+    _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed")) if r is not None])
+    _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
+    for _rung in (0,):
+        for (fx, fy), _n in front_row(plan, min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True):
             if placed >= front_cap:
                 break
+            # THE ONE COMPUTED MOVE AGAINST THE GROUND (feature 227 FR-002, the GM's "measuring the distance ... and then
+            # moving however much the correct amount is", applied to the outline): the chord is the crop's edge, but the
+            # buildable line is the outline's - the dike's bank, a pond's fringe - which can lie tens of pixels beyond
+            # it (Kuwabata's dike heads: every front seat refused, the cluster 112 px off its polder). Where the seat's
+            # box is inside the outline, it is pushed once along the chord's normal by the outline's measured reach
+            # past the box's near edge, and offered there.
+            fx, fy = _ground_push(s, (fx, fy), _n, _house_max)
             # NO LANE TEST HERE ANY MORE (feature 126). This used to read
             # `_row_seats < _FIELD_RING_FLOOR or _lane_dist(...) <= _FRONT_ROW_LANE_CAP`, which
             # judged a front-row seat by how near it fell to a drawn lane. The internal lanes are
@@ -322,20 +358,23 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             _ends = [(_along[0][0] - ax * BUNDLE_PITCH, _along[0][1] - ay * BUNDLE_PITCH), (_along[-1][0] + ax * BUNDLE_PITCH, _along[-1][1] + ay * BUNDLE_PITCH)]
             if attempt % 2 == 0:
                 _cands = [((p[0] + q[0]) / 2 + ox * _rank_step, (p[1] + q[1]) / 2 + oy * _rank_step) for p, q in zip(_along, _along[1:], strict=False)]
-                _cands += [
+                # the brick's outer half-seats grow the rank along the field by half a pitch each: with the full-pitch
+                # ends, offered only when the back is refused (Mizuguchi's round strung to 4.5 with them in every round)
+                _ends += [
                     (_along[0][0] - ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[0][1] - ay * BUNDLE_PITCH / 2 + oy * _rank_step),
                     (_along[-1][0] + ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[-1][1] + ay * BUNDLE_PITCH / 2 + oy * _rank_step),
                 ]
             else:
                 _cands = [(hx + ox * _rank_step, hy + oy * _rank_step) for hx, hy in _along]
-            _cands += _ends
             _cands.sort(key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))  # center-out, as every proposer here
         else:
+            _ends = []
             want = plan.spec.households * 6 + 30
             _cands = []
             for lx, ly in s.cluster_seeds(plan.cluster_shape, 0.0, 0.0, wlat, wdep, want, rng, record=False):
                 ly = -wdep + (ly + wdep) * 0.75  # the cloud leans toward the field (feature 133)
                 _cands.append((seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly))
+        _before_round = placed
         for _sx4, _sy4 in _cands:
             if placed >= plan.spec.households:
                 break
@@ -349,6 +388,17 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
                 placed += 1
                 _cloud_placed += 1
+        if attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households:
+            # THE BACK IS REFUSED: only then does the cluster grow ALONG the field - the seat one pitch beyond each end of
+            # the rank (offered with the rest, the ends strung Inashiro's crescent to 5.0 and Mizuguchi's round to 4.9)
+            for _sx4, _sy4 in _ends:
+                if placed >= plan.spec.households:
+                    break
+                if any(math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])):
+                    continue
+                if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
+                    placed += 1
+                    _cloud_placed += 1
     # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
     # `cluster_seeds` used to stamp `meta.cluster_shape` on its first attempt, BEFORE it knew how
     # many seats it would win - which was harmless while the cloud either ran for the whole hamlet
