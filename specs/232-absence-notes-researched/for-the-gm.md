@@ -146,6 +146,71 @@ an automated client and does not stop a browser. Opening the page and saving the
 
 ---
 
+## Part 2 - what came of the first list, and what the second pass added
+
+*Written after you fetched what you could on 2026-09-12 and after three second-pass batches read the notes
+the first pass left open.*
+
+### What your fetch settled, and the two that were never blocks
+
+You saved everything reachable to `/host-l7r-repo/academic-sources/`, and four items came back as
+something other than a bot wall:
+
+- **`sitereports.nabunken.go.jp`** - the Nara site-report archive. You got a site-is-down error, so the
+  429 this session recorded was the host's own trouble and not a refusal aimed at an automated client.
+  The 1992 Gifu report behind it is still wanted; it is a matter of trying again another day.
+- **`gf.cabr-fire.com`** - times out for you too. Another outage rather than a block.
+- **Miles 2003** and the rest of the closed section - not free to read for you either, which is what
+  "genuinely closed" was meant to say. Those four are settled: they stay uncited, and the claims they
+  would have supported keep their absence notes.
+
+### New asks from the second pass
+
+Five documents, each named to the volume and page where one exists, each with the route that failed.
+
+1. **GB 50288, *Technical code for irrigation and drainage engineering*** (China). Both readable Chinese
+   documents in the water pass defer to it BY NUMBER, so it is the parent of two standards already in the
+   record. Wanted for the siting of a headworks intake on a bend and for sediment exclusion
+   (`cities/river-cities.html` fn-18c). `antpedia.com/standard/7931413-1.html` serves a navigation shell
+   with no text; its PDF mirror answers 403. No third location found. A purchased or library copy closes
+   one note and firms up another.
+2. **Hao Chunwen (郝春文), "The way of life of Dunhuang monks and nuns in the late Tang, Five Dynasties and
+   early Song"** - a PUBLIC PDF that no tool here can read:
+   `https://buddhist-art.arthistory.northwestern.edu/buddhistweb/essays/ho_chunwen9.PDF`. It downloads at
+   127 KB and its font declares a non-standard character collection, so every text extractor returns
+   nothing or mojibake. **A normal PDF viewer opens it.** It would settle whether a monastery's own oil
+   account is quotable for `religion-and-death.html` fn-38, which currently rests on a page that narrows
+   the claim from sale to donation.
+3. **Kinoshita Mitsuo (木下光生), "A basic study of early-modern funeral-goods dealers" (近世葬具業者の基礎的研究)**,
+   *The History of Osaka* no. 57 (2001), pp. 61-87. NCID AN0026826X, NDL id 5787865, CiNii
+   `https://cir.nii.ac.jp/crid/1521699230921906944`. Not online at all - a local historical society's
+   journal, bibliographic record only. A Japanese research library, or NDL's in-library digital
+   transmission, settles the Japanese half of `religion-and-death.html` fn-43.
+4. **Kobayashi Tsutomu (小林力), "The function and form of the yashikibatake in the Koto region"**,
+   *Human Culture: Bulletin of the School of Human Cultures, University of Shiga Prefecture* vol. 29
+   (2011), pp. 48-61. CiNii `https://cir.nii.ac.jp/crid/1520572359297949696`. The title is the question
+   `homesteads.html` fn-91 asks. The university repository answers **HTTP 406** to every request shape
+   tried, including full browser headers; university bulletins of this vintage are usually deposited
+   openly, so the PDF probably exists behind a request this reader could not produce.
+5. **Two older works, lower stakes.** 白井・成瀬 1983 on the ため池台帳 registers, for a village tank's
+   command area (no national dataset carries it); and Perkins, *Agricultural Development in China:
+   1368-1968* (1969), for farm households per hectare in a premodern paddy plain. Neither is obviously
+   online.
+
+### Two questions that are yours to rule on, not to fetch
+
+Neither of these is a document. Each is a claim the record makes that the reading could not support, where
+the next step is a decision rather than a search.
+
+- **The caravan inn's second story.** The record draws it two-story; the one attested analogue read in this
+  pass is single-story. Keep the two-story form as a deliberate deviation, or bring the drawing down.
+- **The Xuxiebian site name** (`urban-features.html` fn-62). A named excavated Sichuan smelting site is
+  asserted, and the authority on Han iron names it in neither of the two works of his that are readable in
+  full, searched character by character. Either you know where the name came from, or it should go - the
+  Han claim itself stands without it, on that author's own hedged wording plus the Hongdaoyuan tomb relief.
+
+---
+
 ## Where to put what you find
 
 `/host-l7r-repo/academic-sources/`, as usual. A filename naming the work is enough; this session reads

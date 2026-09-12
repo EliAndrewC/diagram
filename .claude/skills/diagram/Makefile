@@ -501,6 +501,13 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 glossary:       ## [docs] write research/assets/glossary.js from interactive/glossary.py - the ONE glossary the map's modals and the record's pages share (feature 209)   CHECK=1: exit 1 if stale
 	$(RUN).tools.glossary_asset $(if $(CHECK),--check,)
 
+# GUARD_EDIT_OK: feature 235 - ADDING AN OPERATION, `footnote-census`. Nothing in this project counted the
+# record's footnotes; `notes-census` above counts MAP FEATURES and is unrelated. Every footnote figure quoted
+# while feature 232 ran was assembled by hand and three of those tables were wrong, which is why the GM asked
+# for a count that separates problems from non-problems rather than a habit of counting them together.
+footnote-census: ## [docs] count the record's footnotes by kind - cited, grounds, ABSENT, settled. The ABSENT column is the backlog and the only one anybody has to act on (feature 235)
+	$(RUN).tools.footnote_census
+
 # GUARD_EDIT_OK: feature 211 - a new operation, `citations`: the citations pages' derived scripts and works sections.
 citations:      ## [docs] write each research page's citations script (research/citations/<name>.js) and the works section at the top of its citations page, from the page's notes and SOURCES.html (feature 211)   CHECK=1: exit 1 if stale or a cited key has no write-up
 	$(RUN).tools.citations_asset $(if $(CHECK),--check,)

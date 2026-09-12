@@ -58,16 +58,20 @@ class MulberryDike(Kind):
     Note: The ratio and the planting are read. The WIDTH is where the drawing parts company with the record: the
     traditional figure is a dike of six to ten meters, and the collar drawn around each pond is about two - the
     ground from one pond's water to the next is thirteen meters, but a canal runs down the middle of it, so it
-    is not one bank. The traditional figure also reaches us only at second hand. And the ratio's ORDER is
+    is not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
-    and some districts kept seven to three - so the six-water-to-four-dike drawn here is a regional reading
-    disclosed rather than the only one. So: the collar drawn around each pond is about two meters where the
-    traditional figure is a dike of six to ten, and the coppice density the crowns are drawn at (one bush per
-    ten to twenty square feet) was not re-found and stays on the re-sourcing queue.
+    and some districts kept seven to three - so the water-heavy reading drawn here is a regional one, disclosed
+    rather than the only one; measured on the map that draws them, water is 80% of the parcel ground and the
+    planted bank 20%, and about half the block once the canal corridors between the parcels count. The crowns
+    are drawn THINNER than the record's own guess - one bush per twenty-three square feet against a guessed one
+    per ten to twenty - because at the honest step the crowns fuse into a solid green band and stop reading as
+    bushes at all; the crown SIZES are drawn true, and only the density is a map drawing convention. And the
+    dike is drawn as a RING, the band between the parcel's outer edge and the water's own outline, so hovering
+    a dike lights its bank and not the pond inside it.
 
-    Caveat: the collar drawn around each pond is about two meters where the traditional figure is a dike of six to
-    ten, and the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not
-    re-found and stays on the re-sourcing queue.
+    Caveat: the collar drawn around each pond is about two meters where the traditional figure is a dike of six
+    to ten, and the crowns are spaced at one bush per twenty-three square feet where the record's own guess is
+    one per ten to twenty, so that they read as separate plants rather than as a solid band.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
@@ -107,14 +111,17 @@ class PondSluice(Kind):
 class SugarcaneDike(Kind):
     """
     What: The raised dike around a fish pond planted with sugar cane in close rows - the 蔗基魚塘 type of the
-    dike-pond system, where the cane's bagasse feeds the pigs whose manure feeds the fish.
+    dike-pond system, whose young leaves went to the fish and the pigs and whose refinery waste came back to the
+    pond as feed.
 
     Why: The dike-pond types succeeded one another across the delta: mulberry, then fruit, cane and vegetables as
     markets changed, and by the late 1980s cane dikes covered more of the district than mulberry. One hamlet
     is one type, so a cane hamlet rolls cane on every dike.
 
-    Note: The type and the loop are read; the row pitch is a drawing calibration from the plant's habit, not a
-    Ming or Qing figure.
+    Note: The type is read, and so is the loop as written above - the young leaves fed to fish and pigs, the old
+    ones shading the vegetable ground, the refinery waste returned to the pond. The often-repeated version of
+    that loop, in which the pressed cane's bagasse goes to the pigs, is on no page read. The row pitch is a
+    drawing calibration from the plant's habit, not a Ming or Qing figure.
 
     Caveat: the row pitch is a drawing calibration from the plant's habit, not a Ming or Qing figure.
 
@@ -133,11 +140,12 @@ class BananaDike(Kind):
     What: The raised dike around a fish pond planted with banana stools - the 蕉基魚塘 type, the 'banana groves and
     sea of cane' the geographers remembered of the old delta.
 
-    Why: Banana took the dikes where the silk market fell away; a type of the same system, drawn as a hamlet's
-    whole planting because the types succeeded one another rather than mixing on a dike.
+    Why: A type of the same system, drawn as a hamlet's whole planting because the types succeeded one another
+    rather than mixing on a dike. WHY banana took a dike is on no page read; what the accounts give is the type
+    itself, and the remembered banana groves and sea of cane of the old delta.
 
     Note: The type is read; the clump pitch and crown size are a drawing calibration from the plant's habit, not a
-    surveyed figure.
+    surveyed figure, and no page read gives the reason banana replaced another crop on a bank.
 
     Caveat: the clump pitch and crown size are a drawing calibration from the plant's habit, not a surveyed figure.
 
@@ -153,15 +161,17 @@ class BananaDike(Kind):
 
 class FruitDike(Kind):
     """
-    What: The raised dike around a fish pond planted with fruit trees - lychee, longan, citrus - the 果基魚塘 type,
-    the delta's older form before mulberry took the dikes.
+    What: The raised dike around a fish pond planted with fruit trees - the 果基魚塘 type of the dike-pond system.
 
-    Why: The fruit dike is the type the delta's own accounts put first, before mulberry displaced it; the
-    standard trees stand on the band's crest at an orchard's spacing.
+    Why: The dike-pond types succeeded one another across the delta, and the gazetteer office puts mulberry
+    first, with the fruit, cane and vegetable dikes following it as markets changed. One hamlet is one type, so
+    a fruit hamlet rolls fruit on every dike, and the trees stand on the band's crest at an orchard's spacing.
 
-    Note: The type is read; the tree spacing is an orchard convention, not a measured dike.
+    Note: The type is read; WHICH fruit is not - no page read names a species for a fruit dike - and the tree
+    spacing is an orchard convention, not a measured dike.
 
-    Caveat: the tree spacing is an orchard convention, not a measured dike.
+    Caveat: which fruit the trees are is on no page read, and the tree spacing is an orchard convention rather
+    than a measured dike.
 
     Name: fruit dike
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
@@ -208,8 +218,11 @@ class PigSty(Kind):
     rather than fouling it: the manure raises the plankton the fish eat. So the pigs are part of what feeds the
     fish the household cultivates. What the shed keeps clear of is the sluice itself - nobody builds over the
     opening they have to reach in order to lift its boards, and that is a matter of getting at the gate rather
-    than of keeping the water clean. A pig penned on a pond dike is a CHINESE form; the Japanese record does
-    not carry it, so it belongs to this kind of hamlet and to no other on these maps.
+    than of keeping the water clean. A pig penned on a pond DIKE is a Chinese form. Japan kept pigs - their
+    bones are excavated at the Satsuma domain's Edo residence, at Osaka castle, at Hakata and at Nagasaki
+    harbor, and the familiar account that the country did not is called an assumption under review by its most
+    recent scholarly treatment - but nothing read links a Japanese pig to a pond at all. So it is the FORM
+    rather than the animal that belongs to this kind of hamlet and to no other on these maps.
 
     Note: GUESS: the practice is read, and so is the reason the shed sits at the water, but nothing read gives
     how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
@@ -237,9 +250,11 @@ class DuckPen(Kind):
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
     among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
-    pig shed's do. The dry run stands on the same planted collar a pig shed does - about two meters, where the
-    one width the record gives for a dike carrying an animal shed is five to ten. The fence keeps off the culvert for the plain reason that a fence across the opening a pond
-    is filled and drained through would be in the way of working it.
+    pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where the
+    one width the record gives for a dike carrying an animal shed is five to ten, and that is a modern design
+    requirement whose ceiling is set by cart traffic and pipework a hand-piled dike never carried. The fence
+    keeps off the culvert for the plain reason that a fence across the opening a pond is filled and drained
+    through would be in the way of working it.
 
     Note: GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is
     the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it. The clearance at
@@ -260,18 +275,19 @@ class FryPond(Kind):
     What: A small nursery pond where carp fry are reared before they are stocked into the grow-out ponds - the
     hamlet's own hatchery corner of the dike-pond block.
 
-    Why: Fry were a trade of their own in the delta: Jiujiang township on the Xijiang rose on it from the Ming,
-    and the polder proverb has the men trading fry while the women feed the worms. A hamlet stocking its
-    ponds each year keeps a few small ponds for the fry; the smallest parcels of the block are read as
-    those.
+    Why: Fry were a trade of their own in the delta: a seventeenth-century account of Guangdong has the men
+    trading fish fry while the women feed and tend the silkworms. A hamlet stocking its ponds each year keeps
+    a few small ponds for the fry; the smallest parcels of the block are read as those.
 
-    Note: GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet
-    kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.
+    Note: GUESS: the fry trade and the nursery stage are read, but the naming of one township and the century the
+    trade rose in are not - the work that carried them is not readable anywhere - and nothing read gives how
+    many fry ponds a hamlet kept or which parcels, so the one-in-ten share and the choice of the smallest
+    parcels are the generator's.
 
     Name: fry pond
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels
     Label: guess
-    Sources: miles-2003, cssn-sangyuanwei, isis-dykepond
+    Sources: cssn-sangyuanwei, isis-dykepond
     Entry: research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'
     """
 

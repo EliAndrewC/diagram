@@ -16,14 +16,18 @@ class Farmhouse(Kind):
     alone, its own yashikirin sheltering it.
 
     Why: A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but
-    never on the bund. The lanes between farmsteads are trodden by the households already living there.
+    never on the bund. HOW that access is delivered is not settled: alleys cut off the spine, each household
+    having made its own way to the road, and a laid-out back lane serving a regular row are both attested, so
+    this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
 
-    Note: Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it
-    in feet - so it is set at the near end of what the read bounds allow, close enough that the household
-    works its own ground.
+    Note: Placement and form follow the read record. The setback from the paddy is stated in feet by no source:
+    it is built from a bund width that is a GUESS, an eave overhang that is unsourced and one part that is
+    read, so the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
+    10 to 13 ft, well clear of it, close enough that the household works its own ground.
 
-    Caveat: the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of
-    what the read bounds allow, close enough that the household works its own ground.
+    Caveat: the setback from the paddy is built from three parts, and two of them - the bund's width and the
+    eave overhang - rest on no page, so the 6 ft floor beneath it is a soft threshold rather than a measured
+    minimum.
 
     Name: farmhouse
     Covers: `houses` - the dwelling of each household
@@ -64,16 +68,20 @@ class StorageShed(Kind):
 class Byre(Kind):
     """
     What: An open-fronted shed for a household's ox or water buffalo - a roof carried on posts over a shaded
-    stall, standing among the homesteads.
+    stall, standing either inside its owner's yard or out on the ground the homesteads share.
 
     Why: Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house
-    and the well than a European barn would. Where a byre is shared it stands in a courtyard between the
-    homesteads it serves.
+    than a European barn would. Where the team is OWNED, the household houses it in its own homestead; where a
+    team is shared or hired it stands out among the homesteads, on the common ground, so that the borrowing
+    household can walk to it. Both are attested and neither dominates, so this map rolls between them per
+    settlement - which is also what lets two hamlets differ honestly.
 
     Note: The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a
-    cold-country form and is deliberately not drawn.
+    cold-country form and is deliberately not drawn. The animal's nearness to the HOUSE is read; its nearness
+    to the wellhead is not on any page read, and neither is the commons siting itself.
 
-    Caveat: the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.
+    Caveat: the attached stable wing (magariya) is a cold-country form and is deliberately not drawn, and the
+    byre's nearness to the wellhead is on no page read.
 
     Name: byre
     Covers: `byres` - the draft-animal sheds

@@ -136,3 +136,83 @@ def derive(page_rel: str, research_dir: str = RESEARCH_DIR) -> tuple[str, str, l
     page_notes = notes(page)
     block, missing = works_html(cited_keys(page_notes), registry_entries(research_dir), rel_to_research(crel))
     return script_js(page_rel, page_notes), with_works(page, block), missing
+
+
+# ---------------------------------------------------------------------------------------------
+# WHAT KIND OF NOTE IS THIS? (feature 195, GM 2026-09-06; the third form feature 235, GM 2026-09-12)
+#
+# One classifier, in the engine, because three readers ask the question and none of them may answer it
+# differently: the gate's `tests/interactive/test_footnotes.py`, the `footnote-census` tool, and any later
+# reader of the record. It lived in the test file until feature 235, which is where the census had to import
+# it from - a dependency the wrong way round (`tests/` is invisible to the generation cache and is not a
+# place engine code may import from).
+# ---------------------------------------------------------------------------------------------
+
+#: An ABSENCE note: no key, no link, what was searched and when. THE BACKLOG - the only kind that owes work.
+ABSENCE = re.compile(r"^no publicly readable source \(searched \d{4}-\d{2}-\d{2}:")
+#: An absence searched to exhaustion by two dated passes carries the marker beside its search (feature 235 FR-004).
+SETTLED = re.compile(r"settled \d{4}-\d{2}-\d{2}")
+#: THE SIX REASONS A GROUNDS NOTE MAY NAME (feature 235, GM 2026-09-12: *"if we're counting things that are not
+#: actually problems in a category that is meant to denote problems, then we're just gonna keep getting
+#: confused"*). Closed on purpose: free text would make the new kind a place to put anything inconvenient, which
+#: is how a category meant to denote problems stops denoting them. Adding a seventh is a change to the spec, not
+#: a judgment at writing time.
+GROUNDS_REASONS = (
+    "measured on our own maps",
+    "the record's own silence",
+    "follows from the definitions",
+    "physical necessity",
+    "a drawing convention",
+    "this project's decision",
+)
+#: The reason is captured with `*` rather than `+` so that a grounds note with NO reason is a grounds note
+#: with a defect the classifier can name, rather than an unrecognized note the reader has to work out.
+GROUNDS = re.compile(r"^no source is owed:\s*(.*?)\s*(?:<!--|$)", re.S)
+_HREF_OF_KEY = re.compile(r'<a href="([^"]*)"><code>[a-z0-9][a-z0-9-]*</code></a>')
+
+
+def grounds_reasons(body: str) -> list[str]:
+    """The reasons a grounds note names, in order. A note may name several where a sentence rests on several."""
+    m = GROUNDS.match(_BACK.sub("", body).strip())
+    if not m:
+        return []
+    split = r";|,(?=\s*(?:{}))".format("|".join(map(re.escape, GROUNDS_REASONS)))
+    return [r.strip() for r in re.split(split, m.group(1)) if r.strip()]
+
+
+def is_settled(body: str) -> bool:
+    """An absence note that two dated passes have searched to exhaustion (feature 235 FR-004)."""
+    return bool(SETTLED.search(body))
+
+
+def footnote_form(body: str, canon: set[str]) -> str | None:
+    """'citation', 'absence', 'grounds', or the defect (feature 195 FR-002; feature 235 added the third form).
+    A citation links its key to an http(s) page - the registry is not a page where a quote can be read - unless the
+    key is canon; an absence note carries no key link and no URL at all (its only anchor is the back link, which
+    since feature 211 names the research page); a GROUNDS note reads `no source is owed: <reason>` and says there is
+    nothing to find, so like an absence note it owes no key, no link and no quotation."""
+    body = _BACK.sub("", body)
+    if GROUNDS.match(body.strip()):
+        if "<code>" in body or 'href="' in body:
+            return "a grounds note carries no key and no link"
+        named = grounds_reasons(body)
+        unknown = [r for r in named if r not in GROUNDS_REASONS]
+        if unknown:
+            return f"names a reason that is not one of the six: {unknown!r}"
+        if not named:
+            return "a grounds note names at least one of the six reasons"
+        return "grounds"
+    if ABSENCE.match(body):
+        if "<code>" in body or 'href="' in body:
+            return "an absence note carries no key and no link"
+        return "absence"
+    key = _KEY_LINK.search(body)
+    href = _HREF_OF_KEY.search(body)
+    if not key or not href:
+        return None
+    target = href.group(1)
+    if target.startswith(("http://", "https://")):
+        return "citation"
+    if "SOURCES.html#" in target and key.group(1) in canon:
+        return "citation"
+    return f"links the key to {target!r}, which is not a page on the public internet where the quote can be read"

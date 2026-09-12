@@ -1,11 +1,189 @@
 # Feature 232 - research notes
 
-## R1 - the 162 notes and their verdicts
+## R1 - the 162 notes and where each of them ended
 
-*Filled in per batch as each reader returns; the machine inventory is [`inventory.json`](inventory.json)
-and the reader evidence is under [`reader-reports/`](reader-reports/). SC-001 is satisfied when every one
-of the 162 has a row here, and SC-005 when every STILL ABSENT row carries its queries, its candidate
-pointers and a verdict or a written dismissal for each.*
+*SC-001 wants a row per note and SC-005 wants each STILL ABSENT row's queries and pointers. Both are
+below, and neither is typed by hand: the table is DERIVED by reading each of the 162 notes named in
+[`inventory.json`](inventory.json) out of the citations page it lives on today and classifying it with the
+engine's own `footnote_form` - the same classifier the gate and `make footnote-census` use. A hand-built
+table of these numbers was wrong three times while this feature ran, which is why this one is not one.*
+
+### Every note, and what it is now
+
+| page | note | where it ended | key(s), or the reason |
+|---|---|---|---|
+| `archetypes.html` | fn-81 | **CITED** | `tian-dike-pond` |
+| `archetypes.html` | fn-82 | **CITED** | `chi-2024-dike-pond-commons` |
+| `archetypes.html` | fn-84 | **CITED**, renumbered | `isis-dykepond` at fn-37 - the note said the Ruddle and Zhong monograph has no readable copy; the ISIS page that carries its figures does, so the parenthetical went and the roster entry became a citation |
+| `archetypes.html` | fn-87 | **STILL ABSENT** | see below |
+| `archetypes.html` | fn-88 | **STILL ABSENT** | see below |
+| `archetypes.html` | fn-89 | **STILL ABSENT** | see below |
+| `archetypes.html` | fn-90 | **STILL ABSENT** | see below |
+| `archetypes.html` | fn-91 | **STILL ABSENT** | see below |
+| `archetypes.html` | fn-92 | **STILL ABSENT** | see below |
+| `archetypes.html` | fn-93 | **STILL ABSENT** | see below |
+| `buildings.html` | fn-47 | **STILL ABSENT** | see below |
+| `buildings.html` | fn-71 | **STILL ABSENT** | see below |
+| `cities/capitals.html` | fn-65 | **STILL ABSENT** | see below |
+| `cities/capitals.html` | fn-70 | **CITED** | `shichiya-kotobank` |
+| `cities/defenses.html` | fn-13 | **CITED** | `greatmingmilitary-fortification-gate` |
+| `cities/defenses.html` | fn-14 | **CITED** | `karamete-kotobank` |
+| `cities/defenses.html` | fn-15 | **CITED** | `xian-fortifications-enwiki` |
+| `cities/defenses.html` | fn-16 | **STILL ABSENT** | see below |
+| `cities/defenses.html` | fn-17 | **STILL ABSENT** | see below |
+| `cities/defenses.html` | fn-18 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-17 | **CITED** | `nagayamon-kotobank` |
+| `cities/fabric.html` | fn-18 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-19 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-20 | **CITED** | `townhouse-jawiki` |
+| `cities/fabric.html` | fn-22 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-23 | **CITED** | `song-society-enwiki` |
+| `cities/fabric.html` | fn-24 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-25 | **CITED** | `tokaido-qa-mlit` |
+| `cities/fabric.html` | fn-29 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-30 | **CITED** | `jishinban-jawiki` |
+| `cities/fabric.html` | fn-34 | **CITED** | `chinanews-ancient-firefighting` |
+| `cities/fabric.html` | fn-36 | **CITED** | `hinomi-yagura-kotobank` |
+| `cities/fabric.html` | fn-37 | **CITED** | `tokyo-archives-hirokoji` |
+| `cities/fabric.html` | fn-39 | **STILL ABSENT** | see below |
+| `cities/fabric.html` | fn-40 | **CITED** | `jinya-kotobank` |
+| `cities/government.html` | fn-22 | **STILL ABSENT** | see below |
+| `cities/government.html` | fn-35 | **CITED** | `subai-ancient-city-sites` |
+| `cities/government.html` | fn-36 | **CITED** | `akiba-jinja-jawiki` |
+| `cities/government.html` | fn-37 | **CITED** | `changan-enwiki` |
+| `cities/hinterland.html` | fn-4 | **CITED** | `madian-mosque-zhwiki` |
+| `cities/hinterland.html` | fn-6 | **CITED** | `shizen-teibo-jawiki` |
+| `cities/hinterland.html` | fn-8 | **CITED** | `madian-mosque-zhwiki` |
+| `cities/hinterland.html` | fn-9 | **CITED** | `king-forty-centuries` |
+| `cities/hinterland.html` | fn-10 | **STILL ABSENT** | see below |
+| `cities/hinterland.html` | fn-11 | **STILL ABSENT** | see below |
+| `cities/hinterland.html` | fn-12 | **CITED** | `chinese-city-wall-enwiki` |
+| `cities/river-cities.html` | fn-14 | **STILL ABSENT** | see below |
+| `cities/river-cities.html` | fn-15 | **CITED** | `egyankosh-silt-control` |
+| `cities/river-cities.html` | fn-16 | **CITED** | `egyankosh-silt-control` |
+| `cities/river-cities.html` | fn-17 | **STILL ABSENT** | see below |
+| `cities/river-cities.html` | fn-18 | **STILL ABSENT** | see below |
+| `cities/sizing.html` | fn-2 | **GROUNDS** | no source is owed: measured on our own maps back |
+| `cities/sizing.html` | fn-3 | **STILL ABSENT** | see below |
+| `fields.html` | fn-25 | **CITED** | `jsslkx-002-2021` |
+| `fields.html` | fn-33 | **CITED** | `king-forty-centuries` |
+| `fields.html` | fn-35 | **STILL ABSENT** | see below |
+| `fields.html` | fn-36 | **CITED** | `skinner-2002-etudes-rurales` |
+| `fields.html` | fn-47 | **CITED** | `jsslkx-002-2021` |
+| `fields.html` | fn-51 | **CITED** | `senmaida` |
+| `fields.html` | fn-80 | **CITED** | `nabunken-azemame`, `satoyama-levee-grassland` |
+| `fields.html` | fn-81 | **STILL ABSENT** | see below |
+| `fields.html` | fn-82 | **CITED** | `obata-1977-taue` |
+| `fields.html` | fn-83 | **CITED** | `jsslkx-002-2021` |
+| `fields.html` | fn-84 | **CITED** | `fao-drainage-systems` |
+| `fields.html` | fn-85 | **STILL ABSENT** | see below |
+| `fields.html` | fn-86 | **CITED** | `tajima-2007-night-soil` |
+| `fields.html` | fn-87 | **STILL ABSENT** | see below |
+| `fields.html` | fn-88 | **CITED** | `jsslkx-002-2021` |
+| `fields.html` | fn-89 | **CITED** | `fao-aina-ridging` |
+| `homesteads.html` | fn-7 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-16 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-32 | **CITED** | `ushijima-2020-manchu` |
+| `homesteads.html` | fn-36 | **CITED** | `ma-2024-desire-paths` |
+| `homesteads.html` | fn-41 | **CITED** | `irri-bund-summary` |
+| `homesteads.html` | fn-87 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-91 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-92 | **CITED** | `siheyuan-zhwiki` |
+| `homesteads.html` | fn-96 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-97 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-98 | **STILL ABSENT** | see below |
+| `homesteads.html` | fn-99 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-11 | **CITED** | `chinaknowledge-tang-econ` |
+| `religion-and-death.html` | fn-12 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-13 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-16 | **CITED** | `zhengyi-householder-priests` |
+| `religion-and-death.html` | fn-22 | **CITED** | `meiji-jingu-access` |
+| `religion-and-death.html` | fn-38 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-41 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-43 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-44 | **CITED** | `lin-2001-miaohui` |
+| `religion-and-death.html` | fn-45 | **CITED** | `lin-2001-miaohui` |
+| `religion-and-death.html` | fn-48 | **CITED** | `kejia-taiwan-zhwiki` |
+| `religion-and-death.html` | fn-49 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-50 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-52 | **CITED** | `weilongwu-zhwiki` |
+| `religion-and-death.html` | fn-54 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-57 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-61 | **CITED** | `ryobosei-jawiki` |
+| `religion-and-death.html` | fn-63 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-65 | **CITED** | `sumida-miyakodori-33-2` |
+| `religion-and-death.html` | fn-66 | **CITED** | `danka-terauke-encyclopedia` |
+| `religion-and-death.html` | fn-68 | **CITED** | `tokyo-kasoba-history` |
+| `religion-and-death.html` | fn-69 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-70 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-72 | **CITED** | `tokyo-kasoba-history` |
+| `religion-and-death.html` | fn-75 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-76 | **CITED** | `kyototuu-mimizuka` |
+| `religion-and-death.html` | fn-78 | **STILL ABSENT** | see below |
+| `religion-and-death.html` | fn-80 | **CITED** | `feng-yizhong-jiangnan` |
+| `religion-and-death.html` | fn-81 | **CITED** | `dosojin-jawiki` |
+| `religion-and-death.html` | fn-82 | **CITED** | `kotobank-monzenmachi` |
+| `religion-and-death.html` | fn-83 | **CITED** | `kotobank-miyage` |
+| `religion-and-death.html` | fn-84 | **CITED** | `shinagawa-kaizoji-muentou` |
+| `towns.html` | fn-21 | **CITED** | `kyoto-machiya-isan` |
+| `towns.html` | fn-22 | **CITED** | `dachedian-jilin-daily` |
+| `towns.html` | fn-23 | **STILL ABSENT** | see below |
+| `towns.html` | fn-24 | **CITED** | `neixiang-xianya-zhwiki` |
+| `urban-features.html` | fn-31 | **CITED** | `northampton-tannery-1996` |
+| `urban-features.html` | fn-48 | **CITED** | `kanazawa-jokamachi-study` |
+| `urban-features.html` | fn-59 | **STILL ABSENT** | see below |
+| `urban-features.html` | fn-62 | **CITED** | `wagner-ming-iron` |
+| `urban-features.html` | fn-64 | **CITED** | `mukoyama-linear-borders` |
+| `urban-features.html` | fn-68 | **CITED** | `yannopoulos-2015-water-lifting` |
+| `urban-features.html` | fn-69 | **CITED** | `yannopoulos-2015-water-lifting` |
+| `urban-features.html` | fn-73 | **CITED** | `endo-2013-kabu-ido` |
+| `urban-features.html` | fn-74 | **CITED** | `kabu-ido-commons` |
+| `urban-features.html` | fn-75 | **CITED** | `kosatsu-jawiki` |
+| `urban-features.html` | fn-83 | **STILL ABSENT** | see below |
+| `urban-features.html` | fn-84 | **STILL ABSENT** | see below |
+| `urban-features.html` | fn-85 | **CITED** | `abele-2018-kawata` |
+| `vegetation.html` | fn-4 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-6 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-22 | **CITED** | `haneishi-2011-kushiro-alder` |
+| `vegetation.html` | fn-23 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-83 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-84 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-87 | **CITED** | `irie-2020-igune` |
+| `vegetation.html` | fn-88 | **CITED** | `umca-windbreak-manual` |
+| `vegetation.html` | fn-89 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-90 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-91 | **STILL ABSENT** | see below |
+| `vegetation.html` | fn-92 | **STILL ABSENT** | see below |
+| `water.html` | fn-1 | **CITED** | `jsslkx-002-2021` |
+| `water.html` | fn-2 | **STILL ABSENT** | see below |
+| `water.html` | fn-16 | **CITED** | `aas-rice-technology` |
+| `water.html` | fn-17 | **CITED** | `cao-2019-abandoned-paddy` |
+| `water.html` | fn-18 | **CITED** | `aas-rice-technology` |
+| `water.html` | fn-25 | **CITED** | `ignou-silt-control` |
+| `water.html` | fn-28 | **CITED** | `jsslkx-002-2021` |
+| `water.html` | fn-29 | **CITED** | `jsslkx-002-2021` |
+| `water.html` | fn-30 | **CITED** | `jsslkx-002-2021` |
+| `water.html` | fn-38 | **CITED** | `shanghai-tudi-zhengli` |
+| `water.html` | fn-48 | **CITED** | `conghua-2026-design` |
+| `water.html` | fn-49 | **CITED** | `jsslkx-002-2021` |
+| `water.html` | fn-70 | **CITED** | `canal-enwiki` |
+| `water.html` | fn-71 | **CITED** | `rwsshp-hand-dug-well`, `wateraid-hand-dug-wells` |
+| `water.html` | fn-73 | **CITED** | `jsslkx-002-2021` |
+| `ways.html` | fn-1 | **CITED** | `ritter-timber-bridges` |
+| `ways.html` | fn-4 | **CITED** | `toyama-1988-road-undevelopment` |
+| `ways.html` | fn-7 | **CITED** | `ctie-michi-nazenaze` |
+| `ways.html` | fn-8 | **STILL ABSENT** | see below |
+| `ways.html` | fn-11 | **CITED** | `chinaknowledge-caoyun` |
+
+**Where the 162 ended: 94 CITED, 1 GROUNDS note, 67 STILL ABSENT.**
+
+### The batch-by-batch reading, as the readers reported it
+
+*The reading's own arithmetic, kept because it is what each reader was accountable for. It does not
+reconcile line for line with the table above and is not meant to: a note can be CITED and CONTRADICTED at
+once, a second pass moved notes a first pass left absent, and the table above is the record as it stands
+rather than the sum of the passes that made it. The authority for any one note is its section in
+[`reader-reports/`](reader-reports/).*
 
 | batch | notes | CITED | STILL ABSENT | NOT SEARCHED | FOR THE GM | CONTRADICTED |
 |---|---|---|---|---|---|---|
@@ -27,6 +205,80 @@ only its footnote** - the source carries half of what the record claims and not 
 but no gravel; the water mouth but not the earth god; grain drying but not the market or the opera; the
 sweet-seller on the highway rather than at the gate). Those are FR-004 corrections, not conversions, and
 each is written up with the limit named.
+
+### The 67 that are still absent, with the search each one records
+
+*Each note carries its own dated queries and what they returned - which pointers were tried, which host
+refused, which document was read and found not to say it. That text is quoted here from the notes
+themselves, so this list cannot drift from the record.*
+
+- **`archetypes.html` fn-87** - searched 2026-09-06: https://doi.org/10.1179/014703703788762953 (302 redirect to Taylor &amp; Francis, paywalled); the passage the record carried came from the registry entry miles-2003, which is no longer cited
+- **`archetypes.html` fn-88** - searched 2026-09-06: https://journals.sagepub.com/doi/abs/10.1177/036319909502000302 - 403 Forbidden
+- **`archetypes.html` fn-89** - searched 2026-09-12: no work is quoted on this page for the stepped hill terrace being the standard form wherever valley-bottom paddy is impossible; it rests on this project's general reading of the terraced rice landscapes of south China and mainland Southeast Asia, and no page was read for it
+- **`archetypes.html` fn-90** - searched 2026-09-12: no work is quoted on this page for a confined valley's rice running as a chain of small fields down the floor with the brook threading between them, and no page was read for it
+- **`archetypes.html` fn-91** - searched 2026-09-12: no work is quoted on this page for the walking bund between two parcels standing about three feet across, ridge and footpath together, and no page was read for it
+- **`archetypes.html` fn-92** - searched 2026-09-12: no work is quoted on this page for a mud corner slumping and being walked round, or for a paced run being re-cut a little differently each time it is split or re-plastered, and no page was read for them
+- **`archetypes.html` fn-93** - searched 2026-09-12: no work is quoted on this page for a bund junction being the most worked point in a field - four basins pushing water at it, the crossing foot traffic, the first place to slump and be re-piled - and no page was read for it
+- **`buildings.html` fn-47** - searched 2026-09-06: https://www.gujianchina.cn/news/show-5949.html - HTTP 520 (Cloudflare) error, no content served, on two separate attempts
+- **`buildings.html` fn-71** - searched 2026-09-06: https://www.city.takayama.lg.jp/kurashi/1000021/1000119/1000847/1000954/1000956.html - has the granary sentence but not the tsubo coverage figures; https://column.enakawakamiya.co.jp/gifu/takayama-jinya-highlights.html - not on page; https://shirobito.jp/castle/1717 - not on page
+- **`cities/capitals.html` fn-65** - searched 2026-09-12: the count of nine boat-entry canals at Edo was searched for and no readable page gives it. The pages reached carry the Nagoya canal instead - it is quoted at the note below - and one of them puts that canal's modern length at 16.2 km against the 6 km of the original cut, which is a different figure for a different thing
+- **`cities/defenses.html` fn-16** - searched 2026-09-12: the tunnels at Nanjing and at Xi'an are measured and quoted at the two notes below; for the koraimon of an Edo castle town no readable page gives a clear width
+- **`cities/defenses.html` fn-17** - searched 2026-09-12: the dictionary and encyclopedia pages for 櫓 catalog the word's senses - theater, sumo, fire lookout, siege engine - without giving a plan form, and no readable page states that yagura and tenshu are square or rectangular while the ishigaki batter is the curved element
+- **`cities/defenses.html` fn-18** - searched 2026-09-12: 順城街 was searched for as a type of street and every hit is a modern street carrying the name; the Beijing street article gives only the naming rule, that it lies beside the wall, and the Beijing and Xi'an wall articles give the 登城馬道, the ramp up onto the rampart, which is a different thing; no readable page says that a lap of ground was kept clear inside the wall for moving troops along it
+- **`cities/fabric.html` fn-18** - searched 2026-09-12: none was sought - the doctrine is the GM's, and the reasoning given for it, that a wall footed in water is undermined and that a quay is working ground, is this record's own. The searchable half, if it is ever wanted grounded, is the scour and undermining of masonry founded in a watercourse
+- **`cities/fabric.html` fn-19** - searched 2026-09-12: no query of its own was run for how a city house reached the ground it opened onto, so the claim rests on the GM's doctrine and on general reading rather than on a search that came back empty. The nearest thing met, in an American agronomist's 1911 account of a Japanese port city, has the dwellings behind a shop row reaching the street through the shops themselves, which is consistent with the rule without stating it
+- **`cities/fabric.html` fn-22** - searched 2026-09-12: what the gazetteers of late imperial China cover, and what they pass over, was searched for and nothing readable states the omission. A claim about a silence is rarely written down as one; the likelier route to it is the positive form, a study of Ming and Qing inns that says what sources survive and what they record
+- **`cities/fabric.html` fn-24** - searched 2026-09-12: no query of its own was run for how many lodging houses a settlement of this size held, so the counts stand as this record's own estimate, offered as one. What a search could add is a calibration - inns per head of population in a Ming or Qing county seat, or in an Edo post town - rather than a citation
+- **`cities/fabric.html` fn-29** - searched 2026-09-12: the Japanese fire-break ground, the hiyokechi, is well attested - open ground left vacant to stop a fire spreading from one building to the next, and a place to take refuge during one - but that is deliberately cleared ground in the shogunal capital. Nothing readable treats the incidental gaps between the holdings of an unwalled country town as doing the same work, so this is an attested mechanism applied to a settlement class the record does not discuss
+- **`cities/fabric.html` fn-39** - searched 2026-09-12: the pages read for the back-lane tenement give who rented in one and say nothing of what its lane was surfaced with, and no other page was found giving a back alley gravel or planks
+- **`cities/government.html` fn-22** - searched 2026-09-12: the Chinese encyclopedia that carries the Pingyao clerks' lodging of 1619 and the Neixiang west line refuses automated fetches and was not asked a second time, and no other readable page names either building
+- **`cities/hinterland.html` fn-10** - searched 2026-09-12: no query of its own was run for the handedness of an irrigation fan, so the claim rests on general reading rather than on a search that came back empty; the nearest thing read, a modern Chinese design guideline for small farmland waterworks, says only that field canals are set to fit the water-conservancy works, the cultivated plots, the roads and the natural boundaries, which is consistent with a fan taking whatever hand its pocket gives it and asserts no handedness
+- **`cities/hinterland.html` fn-11** - searched 2026-09-12: the treatise quoted above gives the hand-worked bed and the market garden's whole extent, and no readable page gives a width for a garden parcel of the size the map draws
+- **`cities/river-cities.html` fn-14** - searched 2026-09-12: the geomorphology article on drainage patterns gives a junction angle only for the rectangular pattern, and there a right angle, and the article on confluences treats the angle only where a watercourse is designed; the study that counts junction angles on a real large river - 284 of them on the Mekong - is not open access, and no repository copy, preprint or author manuscript is registered for it. Nothing read says that engineered drainage returns are cut to point downstream
+- **`cities/river-cities.html` fn-17** - searched 2026-09-12: no query of its own was run for a river moat being held full by the river's own stage rather than flushed through it, so the claim rests on general reading rather than on a search that came back empty
+- **`cities/river-cities.html` fn-18** - searched 2026-09-12: no work was found distinguishing a moat's demand for water level from a canal's demand for flow, and the confluence study cited above is about neither
+- **`cities/sizing.html` fn-3** - searched 2026-09-12: the claim entered the record with no source named, and this page's source pass found no readable page saying that the approach to a great temple carried the shops and inns that served it
+- **`fields.html` fn-35** - searched 2026-09-12: Japan's national tank register - the nine spreadsheets of the 農業用ため池データベース - records dam height, crest length, storage and full-pool surface area, and carries no command-area column at all, so the distribution cannot be computed from it; the ministry's summary pages give counts only, 148,345 ponds by prefecture and nothing on the land they water; the one command-area figure found, 2 ha, is a subsidy threshold rather than a typical size. The Kunisaki case is still the only one read - 50 ha over 5 systems - so 「tens of hectares, well under 200」 remains a GUESS
+- **`fields.html` fn-81** - searched 2026-09-12: no work is named for the size of a transplanted hill or for its spacing, and the reading pass of that date turned up none to quote
+- **`fields.html` fn-85** - searched 2026-09-12: no work is named for a paddy's lowest bund standing as the collector's top-of-bank, and the reading pass of that date turned up none to quote
+- **`fields.html` fn-87** - searched 2026-09-12: neither the paddy share of a dense near-city plain nor the farming households per hectare of paddy is stated on any page reached. The ministry's methodology page for the cultivated-area survey defines the split between the growing surface (本地) and the bunds (けい畔) but publishes no ratio; the long time series that does carry it renders its table through JavaScript and answers a data API only with a registered key, so no figure can be quoted from it. Two cautions for whoever reads it: the denominators differ - that series measures bunds against growing surface within cultivated land, while this record's remainder also holds lanes and farmsteads, which the survey excludes from cultivated land altogether - and its recent decades are post-consolidation. For the household density the work that would answer it is Perkins, <em>Agricultural Development in China: 1368-1968</em>, which is not openly readable
+- **`homesteads.html` fn-7** - searched 2026-09-12: the Tonami archive page carrying the 1987 Kashima survey was fetched with its Shift_JIS charset honored and read in full - it gives 1,542 trunks over 46 households, 735 of them cedar, 83 other species and 1 to 14 species a household, and no homestead of 200 trees or 31 species; the Tonami Kainyo Club's own explainer page carries no tree counts at all, and a ministry landscape case study none either; the figure reaches the record from a search summary, which is a pointer and never a source
+- **`homesteads.html` fn-16** - searched 2026-09-06: the Kodaira archive page loads a viewer shell with no article text
+- **`homesteads.html` fn-87** - searched 2026-09-06: the Wang and Ochiai 2022 paper was read in full and contains no leeward, downwind, odor or hygiene language - the claim rests on that absence
+- **`homesteads.html` fn-91** - searched 2026-09-12: the Japanese article on the household kitchen garden names the bed but gives no area, and no page was traced that measures a Japanese dooryard bed or a Chinese rice-south farmhouse's dooryard plot
+- **`homesteads.html` fn-96** - searched 2026-09-12: the sentence names none, and the source pass traced no page giving the headman's ledgers, land registers or waiting tax rice as what a kura holds
+- **`homesteads.html` fn-97** - searched 2026-09-12: the sentence names none, and the source pass traced no page giving a minka's proportions as a band of length to depth
+- **`homesteads.html` fn-98** - searched 2026-09-12: the sentence names none, and the source pass traced no page carrying the jori grid, the strip tenancy or the grass market as the groundings of these choices
+- **`homesteads.html` fn-99** - searched 2026-09-12: the sentence names none, and the source pass traced no page carrying the half-moon pond's doctrine - the still water that keeps a lineage's fortune, the half shape left room to grow, or the basin's practical uses
+- **`religion-and-death.html` fn-12** - searched 2026-09-06: https://doi.org/10.1080/23729988.2019.1639463 - redirects to https://www.tandfonline.com/doi/full/10.1080/23729988.2019.1639463 - 403 Forbidden (paywall)
+- **`religion-and-death.html` fn-13** - searched 2026-09-06: https://doi.org/10.1080/23729988.2019.1639463 - redirects to https://www.tandfonline.com/doi/full/10.1080/23729988.2019.1639463 - 403 Forbidden (paywall)
+- **`religion-and-death.html` fn-38** - searched 2026-09-12: a Chinese temple’s own accounts were searched for in Chinese and in English - studies of incense-oil money and of temple landholding, and the Dunhuang monastic receipts-and-disbursements registers, in which lamp oil is a standing line; the encyclopedia article on incense-oil money carries the practice and no figures, the two scholarly editions of the Dunhuang temple account documents exist in print only, and the one open essay on Dunhuang monastic life, Hao Chunwen’s study of the way of life of Dunhuang monks and nuns, downloads as a PDF whose font encoding yields no extractable text - a reader who can open it in an ordinary viewer would settle whether it quotes a monastery’s oil account
+- **`religion-and-death.html` fn-41** - searched 2026-09-12: the gate-town page read for the trades does not carry 名物 / meibutsu at all, so the word for the souvenir goods is this project's own
+- **`religion-and-death.html` fn-43** - searched 2026-09-12: Japanese and Chinese searches for funeral-goods dealers, coffin-makers and marker-cutters standing together beside a burial ground returned the encyclopedia article on paper-craft funeral effigies, which names the goods and no row of shops, and otherwise web fiction; the Japanese municipal-history archive most likely to carry such a street serves its pages into a viewer rather than as text, and could not be read. The one study of exactly this trade, Kinoshita Mitsuo’s basic study of early-modern funeral-goods dealers in the journal <em>The History of Osaka</em> 57 (2001), pp. 61-87, is in print only, and would answer the Japanese half for a reader with a research library
+- **`religion-and-death.html` fn-49** - searched 2026-09-12: the Japanese encyclopedia article on shrine architecture gives the styles and the relation of the parts - the worship hall is generally built larger than the main sanctuary - and no dimension for any of them; the article on the hokora gives a small hall with no resident priest and no size; a great urban shrine’s own precinct guide gives its torii’s dimensions and no hall’s. The one size-shaped statement found anywhere is relative, so the band stays this project’s calibration on the drawn maps
+- **`religion-and-death.html` fn-50** - searched 2026-09-12: the approach article carries the tamajari and its purifying sense and nothing on the precinct’s surface, its raking or its upkeep; the precinct article defines the ground as a legal and religious extent and carries none of tamajari, gravel, paving, white sand or sweeping; the pages that would speak to the sweeping are a present-day landscaping contractor’s column and a shrine’s own blog, neither of which can reach premodern practice
+- **`religion-and-death.html` fn-54** - searched 2026-09-12: the approach article carries the gravel and its purifying sense and no statement that the path or the ground under an arch was kept swept along its length; the nearest statement found is incidental and modern, a note that the fallen leaves gathered when one great shrine’s approach is swept are returned to its forest, which says nothing of the whole length or of the ground under a gate; every other candidate was a present-day blog or contractor column
+- **`religion-and-death.html` fn-57** - searched 2026-09-12: the two-grave article gives the burial ground’s siting, its markers and the carrying of earth from one grave to the other, and no distance; the excavation bulletin read for the density gives an area and a grave count and nothing on the ground kept clear around a grave; the archaeological survey of early-modern graves describes the grave pit and the marker, which is the scale below the one this asks about
+- **`religion-and-death.html` fn-63** - searched 2026-09-12: the farm survey is a three-volume book of 1937 with no DOI; the Internet Archive copy is a lending scan whose own full-text endpoint reports that no searchable text exists for it, a full-text search of the Archive for the title and the word graves returns nothing, the HathiTrust record offers search-only because the imprint is still in copyright, and the reviews and catalog records that are readable quote no grave-area figure. a library copy, or a borrow of that scan, would settle whether the survey gives about 2% and against which denominator - all farm area, cultivated area or crop area, which differ materially in it; volume I is the text and volume III the statistics
+- **`religion-and-death.html` fn-69** - searched 2026-09-12: the Japan Tourism Agency commentary on the nagaya-mon says 「The nagaya-mon was permitted for samurai of middle rank and above and contained living space.」 and 「On either side of the entrance gate are servants' quarters and a stable.」 and gives no width, and the Japanese encyclopedia article on the same gate gives no dimension either
+- **`religion-and-death.html` fn-70** - searched 2026-09-12: the Henan provincial government's page on the best-preserved county magistrate's office gives 「Covering 40 thousand square meters and boasting over 280 houses」 and 「In the middle is a 100-meter passage serving as the function of central axis」, and no gate dimension anywhere
+- **`religion-and-death.html` fn-75** - searched 2026-09-12: a Japanese encyclopedia search for the mound of the unconnected dead and the myriad-persons mound returned nothing about a pauper bone mound, the pages on the great Edo execution ground give its dead and its extent and no mound, and the excavation material gives grave pits rather than mounds; nothing read gives a pauper bone mound a diameter, a height or a footprint
+- **`religion-and-death.html` fn-78** - searched 2026-09-12: the fullest page on the execution ground was read and describes what was done there and the burial of the executed and of the unclaimed dead, and no mound of bones of any size; a temple listing covering the same ground gives the same founding narrative and no mound. This is a negative reading of the fullest account rather than a search that found nothing
+- **`towns.html` fn-23** - searched 2026-09-12: field gaps in an open town acting as natural fire breaks were searched for, and no public page states it
+- **`urban-features.html` fn-59** - searched 2026-09-12: the reference page on the koku that this assertion had been hung on reads perfectly well and says nothing whatever about charcoal or the charcoal bale - it is about the koku as a measure of capacity, the samurai stipend and the modern standardized weights of rice - so the pointer was wrong rather than unreachable, and no other page carrying the charcoal bale's want of a standard weight was traced
+- **`urban-features.html` fn-83** - searched 2026-09-12: no work was named for Edo's bathhouse count of about 523 for some 1.1 million residents in 1808, and the source pass found no public page carrying the figure
+- **`urban-features.html` fn-84** - searched 2026-09-12: no work was named for the packed-earth, single-track, unpaved footpath of a dense commoner quarter, and the source pass found none
+- **`vegetation.html` fn-4** - searched 2026-09-12: a Europe PMC full-text search for fengshui with "water mouth" or "shuikou" and forest returned nothing at all, a Crossref search for a measured shuikou grove area returned only false matches on "China", "village" and "forest area", and a Chinese-language search for a measured 水口林 surfaced only provincial pieces urging more planting; the Hong Kong Herbarium overview and the Pearl-delta transect study each measure the BACK grove and no water-mouth grove, so ~0.1-0.5 ha stays a GUESS bracketed by the Korean entrance-grove figures at notes 72 and 73
+- **`vegetation.html` fn-6** - searched 2026-09-07: the Forests 2020 paper collects no stem, canopy or understory data - 「The data collected are qualitative data except for the list of famous and ancient trees (or groves).」 - and no Hong Kong, mainland or English survey read on 2026-09-07 counts a Chinese grove's trees; the Pearl-delta density (note 2) and the Korean per-grove counts (note 73) bracket it, so the canopy-tree counts here are a GUESS
+- **`vegetation.html` fn-23** - searched 2026-09-06: the Springer article is behind an institutional login
+- **`vegetation.html` fn-83** - searched 2026-09-12: no work is quoted on this page for the single village-scale wood standing in place of a grove per house, for the taboo that protects it, or for those stands being the most mature forest left in the region, and no page was read for them
+- **`vegetation.html` fn-84** - searched 2026-09-12: no work is quoted on this page for the southern village's scattered bamboo and dooryard fruit - litchi, longan, persimmon, citrus, mulberry - or for villages effectively ringed in bamboo, and no page was read for them
+- **`vegetation.html` fn-89** - searched 2026-09-12: the encyclopedia article on the homestead grove is quoted on this page for the sides a grove stands on, but no passage on the Izumo hedge enclosing the whole house before Meiji is on the record, and no page was read for it
+- **`vegetation.html` fn-90** - searched 2026-09-12: three searches for the thousand-year stripping of southern China's hills and for a forest-rehabilitation account of what the slopes carry now; the wording the record had was found on no page, and ScienceDirect refused the fetch
+- **`vegetation.html` fn-91** - searched 2026-09-12: no work is quoted on this page for terraces appearing only where the slope is steep, or for a gently tilted valley floor showing no visible risers, and no page was read for them
+- **`vegetation.html` fn-92** - searched 2026-09-12: no work is quoted on this page for wet rice needing water in and water out, or for a drain leaving the low corner being an expected feature in its own right, and no page was read for them
+- **`water.html` fn-2** - searched 2026-09-06: https://www.antpedia.com/standard/7931413-1.html - 200, index/navigation page only (cookie-setting shell), carries no standard text; https://img.antpedia.com/standard/files/pdfs_ora/20200926/GB%2050288-2018.pdf - 403 Forbidden
+- **`ways.html` fn-8** - searched 2026-09-12: the sentence names none, and the source pass traced no page setting Chinese stone-slab causeways against Japanese highway paving
 
 ## R2 - the Grokipedia question, asked and answered (2026-09-12)
 
@@ -545,3 +797,89 @@ go; the Han claim survives without it on Wagner's own hedged wording and a tomb 
 **Tooling.** OpenAlex and the J-STAGE API are what actually found things, and `api.ctext.org` answers even
 though the site's web pages are behind Cloudflare. Yahoo Japan throttles after about eight queries. Every
 SearXNG instance tried, DuckDuckGo and Bing through curl are dead ends.
+
+## R25 - the writing pass: what changed on the pages, and what the registry cost
+
+The reading produced verdicts; five page writers then put them into the record, one subject each, and a
+sixth pass wrote the registry entries. This section records what the WRITING changed, because several of
+the corrections were only decided when a writer had to phrase the sentence.
+
+**The city tier, where the reading found the most to correct.**
+
+- The corner tower's ROUND form is now given its reason from the Song military manual rather than asserted:
+  a *dituan* corner tower is arc-shaped on purpose, 「in order to increase the difficulty of the enemy's
+  attack and to reduce the area exposed to attack」.
+- Nanjing's Zhonghua Gate tunnels measure 5.35, 4.97, 4.82 and 4.80 m - 16 to 18 ft - against the record's
+  23 ft. The gate-tunnel band is corrected and Xi'an's 6 m stays as the wide end.
+- The *wengcheng* is 平面略成方形, roughly square in plan. "Urn-shaped" does not survive the measured
+  description and is gone.
+- The fire tower is one per TEN *machi*, which is what `cities/capitals.html` already said;
+  `cities/fabric.html` had a different number and now agrees with it.
+- The *roji* is 0.9 to 1.8 m. The record's 12 ft was two things at once and is now written as both: a plain
+  error about the real alley, and a declared map drawing convention, because an alley drawn at true width
+  disappears on the sheet.
+- The merchant's wall is a **deviation**, not a finding. Late-Edo domains "issued the qualification
+  indiscriminately ... in exchange for monetary contributions", so a wall does not mark a standing that
+  wealth cannot buy, and the page says which of the four classes the rule is in.
+- The town-inn against city contrast is **withdrawn**. Nothing supports it and the post-station evidence
+  cuts against it.
+- `cities/hinterland.html` fn-12 is **reversed**: walls often enclosed farmland on purpose, so the sentence
+  now opens "Often, and on purpose" instead of treating farmland as the first thing left outside.
+- The 55 ft garden bed was never a bed. The *Qimin yaoshu* gives the hand-worked bed as two paces by one,
+  and 55 ft is a parcel of many of them.
+- The offtake angle is **split by junction type**: 30 to 45 degrees where a canal leaves a RIVER, near-square
+  where a distributary leaves a parent canal. The record had applied one rule to both.
+
+**The registry cost more than the pages.** About a hundred new keys were written across five writers, each
+key carrying its citation line with the URL its footnotes link, a comment recording how it was read, the two
+feature-211 write-ups and a `Used for:` line. Three things came out of that work that are worth keeping:
+
+- **A key's link and its registry citation line must agree**, because `link_target` reads the FIRST URL on
+  the line and a footnote that links anywhere else fails the gate silently until someone runs the test. Four
+  such mismatches were found sitting in the record before this feature, on `sendai-igune-list`,
+  `ma-2024-desire-paths`, `irri-bund-summary` and `chinaknowledge-tang-econ`.
+- **Two writers wanted the same key pointed at different editions** of one public-domain book. The registry
+  carries the HTML edition, which is the page a reader opens; the comment records that the text was read from
+  the plain-text edition.
+- **`SOURCES.html`'s section headings have drifted.** Every entry appended for weeks has landed under the
+  last `<h2>`, which is `Setting canon`. Nothing derived is affected - keys are addressed by id - but the
+  headings no longer describe what follows them, and that is worth a pass of its own.
+
+## R26 - the modals had drifted from the record, and the check that found it
+
+`scripts/_entry_owed.py` (feature 234) named **17** class/section pairs whose research section this pass had
+rewritten while the modal written from it had not moved. Five `entry-drift` agents read them. **Twelve of the
+seventeen had DRIFTED**, and the drift was not cosmetic: in several cases the modal now told a reader the
+opposite of what the record says.
+
+| modal | what the reader was being told, and what the record now says |
+|---|---|
+| `byre` | the modal paired SHARED byres with a courtyard; the record pairs a shared team with the COMMON ground among the homesteads and an owned team with its owner's own yard. The two forms are also a per-settlement knob now, which the modal did not mention |
+| `farmhouse` | the lane form is a knob between accretion alleys and a laid-out back lane; the modal stated the accretion form as the finding. Its caveat called the paddy setback DERIVED from read bounds, where the record now calls the bund width a GUESS - two of the setback's three parts rest on no page |
+| `mulberry dike` | the modal gave the drawn coppice density as one bush per 10-20 sq ft; the drawing is one per 23, a disclosed drawing convention. It implied the map follows the 6:4 prescription; the map draws 80% water per parcel. And the GM's 2026-09-12 ruling that a dike is drawn as a RING was in no modal |
+| `fruit dike` | the modal made fruit the delta's OLDER form, displaced by mulberry; the gazetteer office puts mulberry first and fruit after it. It also named lychee, longan and citrus, which no page read names |
+| `sugarcane dike` | the modal asserted the bagasse-to-pigs loop as fact; the record says that version was not found on any page and gives the loop that WAS - young leaves to fish and pigs, refinery waste back to the pond |
+| `banana dike` | "Banana took the dikes where the silk market fell away" - a cause no page read gives |
+| `duck pen` | the collar under an animal shed as "about two meters"; the record says two to five, and qualifies the 5-10 m figure as a modern requirement whose ceiling is cart traffic |
+| `pig sty` | "the Japanese record does not carry it" reads as "Japan had no pigs", which the record now explicitly denies - pig bones are excavated at four named sites. What has no Japanese counterpart is the FORM, a pen on a fish-pond dike |
+| `stream` | the ~2 m creek is unsourced and the 0.3 m it is measured against is a modern design MINIMUM, not a measured ditch; the modal stated both as plain fact |
+| `field ditch` | its `Note:` named GB 50288 among the sources the width is "read" from - the record records that standard as readable nowhere and does not cite it. The 0.3 m is a design floor, the Chinese doctrine comes from a 2021 provincial standard, and the map does not draw the field-ditch tier at all |
+| `pond` | Tabayashi **1986**, where the paper's own header gives 1987; and the "ONE outlet" is this record's reading rather than the page's statement |
+| `fry pond` | the Jiujiang township and the Ming date came from a work that is no longer readable and no longer cited, while the class still listed it as a source |
+
+`fish pond`, `marsh`, `footbridge`, `vegetable ground` and `manure pit` were IN-STEP. All twelve were rewritten
+here.
+
+**Two defects in the research pages themselves came out of the same pass**, and are fixed:
+
+- `archetypes.html` gave the drawn ratio as 80% water per parcel in one paragraph and 76% three paragraphs
+  later. Measured off the Kuwabata manifest: **80.4% of the parcel ground is water**, the per-parcel median is
+  **77.6%**, and the page now says 80% across the parcels with a 78% median parcel.
+- The same page's dike-crop bullet still called the crop roll a CANDIDATE for the GM's decision, with "none of
+  them a plant on any map yet", while `SugarcaneDike`, `BananaDike` and `FruitDike` are drawn classes keyed on
+  `meta.dike_crop`. The bullet now says what the map does.
+
+**The lesson, which is the same one as R12's.** A research pass that corrects the record leaves every modal
+written from that record saying the old thing, and nothing about the corrected page makes that visible. The
+`Entry:` tag plus `_entry_owed.py` plus a reader that judges finding-versus-maintenance is what turned twelve
+silent contradictions into a work list, and feature 234 shipped four days before this pass needed it.

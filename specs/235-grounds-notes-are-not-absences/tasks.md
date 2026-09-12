@@ -19,21 +19,27 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 
 ## Phase 2 - the census (FR-005)
 
-- [ ] T05 the footnote census: open absences, settled absences, grounds notes and citations, per page and in total, with a test that its numbers are the numbers in the files; 100% covered
+- [x] T05 the footnote census: open absences, settled absences, grounds notes and citations, per page and in total, with a test that its numbers are the numbers in the files; 100% covered
       research: procedure
-- [ ] T06 the census run and recorded BEFORE any note changes, on this tree (SC-003)
+      verify: DONE. DONE. the footnote census counts cited/grounds/ABSENT/settled per page and in total, sharing the ENGINE's classifier (moved out of the test file into interactive/citations.py + sources.py, research R2); tests/tools/test_footnote_census.py holds the four kinds apart, that every citations page is walked exactly once, that the total equals a second count taken from the raw files, and both report branches
+- [x] T06 the census run and recorded BEFORE any note changes, on this tree (SC-003)
       research: procedure
+      verify: DONE. DONE. the BEFORE census run and recorded in research.md R1 with its per-page table: 969 cited, 0 grounds, 84 ABSENT, 0 settled, taken before any note was converted
 
 ## Phase 3 - the notes (FR-006, FR-007)
 
-- [ ] T07 `cities/sizing.html` fn-2 converted to a grounds note under `measured on our own maps`, its search kept in a comment (FR-001a)
+- [x] T07 `cities/sizing.html` fn-2 converted to a grounds note under `measured on our own maps`, its search kept in a comment (FR-001a)
       research: rendering
-- [ ] T08 the three arguable notes argued at their own pages in writing - `fields.html` fn-85, `religion-and-death.html` fn-78 and fn-49 - each converting or staying on that argument
+      verify: DONE. DONE. cities/sizing.html fn-2 is a grounds note under 'measured on our own maps' - the 5-15% band is read off Tango's 9% and Minami's 15.5%, and the dated search that established there is nothing to find is kept in the comment beside the reason (FR-001a)
+- [x] T08 the three arguable notes argued at their own pages in writing - `fields.html` fn-85, `religion-and-death.html` fn-78 and fn-49 - each converting or staying on that argument
       research: rendering
-- [ ] T09 the fourteen confirmed as OPEN absence notes, thirteen under FR-003's first clause and fn-75 under its second
+      verify: DONE. DONE. all three argued at their own pages in an HTML comment at the note, and all three REFUSED: fields fn-85 (the identity of the lowest bund with the collector's top-of-bank is contingent, not definitional, and land-consolidation standards could settle it), religion-and-death fn-78 (a report of a reading is what an absence note already says; exhausting it would make it SETTLED, not grounds), fn-49 (the section credits the GM's ruling of 2026-07-21, so it rests on 'this project's decision', barred here; and the paragraph is the rule the map FOLLOWS, so the figures were chosen and then drawn)
+- [x] T09 the fourteen confirmed as OPEN absence notes, thirteen under FR-003's first clause and fn-75 under its second
       research: rendering
-- [ ] T10 the two session-addressed sentences moved into comments, both footnotes left in place as open absences
+      verify: DONE. DONE. all fourteen carry a comment at the note naming the clause that keeps them in the backlog - thirteen under FR-003's first clause, religion-and-death fn-75 under the second
+- [x] T10 the two session-addressed sentences moved into comments, both footnotes left in place as open absences
       research: rendering
+      verify: DONE. DONE. river-cities' 'Do not fix it' and defenses' 'which is why it is really a rule about what may NOT stand there' are HTML comments; the reader-facing half of the defenses sentence stays, and fn-17 and fn-18 are untouched open absence notes
 
 ## Phase 4 - verification and landing
 
