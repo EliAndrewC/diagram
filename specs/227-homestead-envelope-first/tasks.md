@@ -29,7 +29,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T10 FR-007 a plate after every step that laid ink, with its cost measured
       research: rendering
       verify: DONE. a plate after every step that laid ink: 23 step plates beside the 14 stage plates, decided in the order the ink landed (the field's hem, paddies, source and ditches in turn), the deep copy moved into the plate worker so 37 plates cost less wall clock than 14 did (R5: 38 s, 6.0 MB); one step plate is unrenderable and the page says why
-- [ ] T11 the amended spec re-reviewed, the pool and the cohort re-run, `make done`, the settlement-review
+- [x] T11 the amended spec re-reviewed, the pool and the cohort re-run, `make done`, the settlement-review
       research: rendering
+      verify: DONE. the amended spec re-reviewed (round 1 CHANGES REQUIRED on four items, round 2 FAITHFUL); pool re-rolled and clean by the placer's own predicate, cohort 48/48, make done green at 100% coverage, perf band 0 (-23.5%); settlement-review of both moved maps - Inashiro PASS on the lane delta with two notes errors fixed, Kashikawa PASS with no errors, its stale copse count fixed and its rule-level question measured over the pool and recorded
 - [ ] T07 FR-006 the GM's acceptance of the page after their rounds in the clone
       research: rendering
