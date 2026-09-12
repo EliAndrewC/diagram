@@ -48,8 +48,7 @@ Round 1 said 6.7 m and the measurement withdrew it.
 """
 
 
-def _feature(tmp_path: pathlib.Path, spec: str = GOOD, tasks: str = "- [ ] T01 the thing (FR-001)\n",
-             research: str | None = None) -> pathlib.Path:
+def _feature(tmp_path: pathlib.Path, spec: str = GOOD, tasks: str = "- [ ] T01 the thing (FR-001)\n", research: str | None = None) -> pathlib.Path:
     d = tmp_path / "specs" / "999-a-feature"
     d.mkdir(parents=True, exist_ok=True)
     (d / "spec.md").write_text(spec)
@@ -70,22 +69,19 @@ def test_check_1_a_measured_figure_with_no_pointer(tmp_path: pathlib.Path) -> No
 
 
 def test_check_1_leaves_a_count_with_no_unit_alone(tmp_path: pathlib.Path) -> None:
-    """"20 rounds" and "FR-001" are counts, not measurements - asking them for a method is noise."""
-    d = _feature(tmp_path, GOOD.replace("The gate took 91 min before this, measured in `research.md` R1.",
-                                        "Twenty rounds of review, and 8 of them mechanical."))
+    """ "20 rounds" and "FR-001" are counts, not measurements - asking them for a method is noise."""
+    d = _feature(tmp_path, GOOD.replace("The gate took 91 min before this, measured in `research.md` R1.", "Twenty rounds of review, and 8 of them mechanical."))
     assert lint.lint(d) == []
 
 
 def test_check_1_exempts_the_sections_that_narrate(tmp_path: pathlib.Path) -> None:
     """Review history exists to say what a round found, figures and all."""
-    d = _feature(tmp_path, GOOD.replace("Round 1 said 6.7 m and the measurement withdrew it.",
-                                        "Round 1 said 6.7 m, 22 ft and 91 min, all withdrawn."))
+    d = _feature(tmp_path, GOOD.replace("Round 1 said 6.7 m and the measurement withdrew it.", "Round 1 said 6.7 m, 22 ft and 91 min, all withdrawn."))
     assert lint.lint(d) == []
 
 
 def test_check_2_a_withdrawn_figure_still_standing(tmp_path: pathlib.Path) -> None:
-    d = _feature(tmp_path, GOOD.replace("**FR-001** A thing.", "**FR-001** Keep the 22 ft clearance."),
-                 research="WITHDRAWN: the 22 ft clearance\n")
+    d = _feature(tmp_path, GOOD.replace("**FR-001** A thing.", "**FR-001** Keep the 22 ft clearance."), research="WITHDRAWN: the 22 ft clearance\n")
     assert any("withdrawn text still standing" in x for x in lint.lint(d))
 
 
@@ -124,8 +120,7 @@ def test_check_3_reads_a_lettered_id_as_its_own(tmp_path: pathlib.Path) -> None:
 
 
 def test_check_3_a_criterion_that_names_nothing(tmp_path: pathlib.Path) -> None:
-    d = _feature(tmp_path, GOOD.replace("**SC-002** (spec-wide) The gate is green.",
-                                        "**SC-002** The gate is green."))
+    d = _feature(tmp_path, GOOD.replace("**SC-002** (spec-wide) The gate is green.", "**SC-002** The gate is green."))
     assert any("names no FR" in x for x in lint.lint(d))
 
 
@@ -136,8 +131,7 @@ def test_check_4_a_task_citing_an_id_the_spec_lost(tmp_path: pathlib.Path) -> No
 
 def test_a_freshly_claimed_spec_with_no_tasks_passes(tmp_path: pathlib.Path) -> None:
     """FR-010a: the number claim and the milestone push carry exactly this shape."""
-    d = _feature(tmp_path, "# Feature 999\n\n## Summary\n\nIt took 91 min.\n\n"
-                           "## Functional requirements\n\n**FR-001** A thing.\n", tasks=None)
+    d = _feature(tmp_path, "# Feature 999\n\n## Summary\n\nIt took 91 min.\n\n## Functional requirements\n\n**FR-001** A thing.\n", tasks=None)
     (d / "tasks.md").unlink(missing_ok=True)
     assert lint.lint(d) == []
 

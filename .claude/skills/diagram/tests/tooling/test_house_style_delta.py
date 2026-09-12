@@ -34,8 +34,7 @@ def _tree(tmp_path: pathlib.Path, base: dict[str, str]) -> pathlib.Path:
         p = root / name
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(body)
-    for args in (["init", "-q", "-b", "main"], ["config", "user.email", "x@y"], ["config", "user.name", "x"],
-                 ["add", "-A"], ["commit", "-qm", "base"]):
+    for args in (["init", "-q", "-b", "main"], ["config", "user.email", "x@y"], ["config", "user.name", "x"], ["add", "-A"], ["commit", "-qm", "base"]):
         subprocess.run(["git", "-C", str(root), *args], check=True)
     subprocess.run(["git", "-C", str(root), "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
     return root

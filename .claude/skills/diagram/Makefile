@@ -1043,6 +1043,9 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	: "A PHASE and not a pytest test because quick selects tests by CHANGED CODE (testmon), and a scan" ; \
 	: "whose own code never changes would sit unexecuted through exactly the edits it exists to catch." ; \
 	: "It reads the hook own BRIT table, scans the delta plus every untracked file, and costs ~0.2 s." ; \
+	: "(GUARD_EDIT_OK: this comment block ends WITHOUT a trailing backslash - a continued line makes the"; \
+	: " next line part of the same shell command, where a leading @ is not make syntax but a command"; \
+	: " named @python3, which is what the first version of this phase did.)"
 	@python3 ../../../scripts/check-house-style-delta.py --selftest >/dev/null
 	@python3 ../../../scripts/check-house-style-delta.py ../../..
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \

@@ -27,9 +27,7 @@ def test_a_missing_anchor_loses_only_its_own_edit(tmp_path: pathlib.Path) -> Non
     """SC-001: three edits, the second anchor gone; the first and third still land."""
     f = tmp_path / "spec.md"
     f.write_text("alpha one\nbeta two\ngamma three\n")
-    report, skipped = patch.apply_edits(
-        f, [("alpha one", "ALPHA"), ("a sentence somebody reflowed", "X"), ("gamma three", "GAMMA")]
-    )
+    report, skipped = patch.apply_edits(f, [("alpha one", "ALPHA"), ("a sentence somebody reflowed", "X"), ("gamma three", "GAMMA")])
     assert f.read_text() == "ALPHA\nbeta two\nGAMMA\n"
     assert skipped == 1
     assert [line.split(":")[0] for line in report] == ["applied", "SKIPPED (0 matches)", "applied"]
