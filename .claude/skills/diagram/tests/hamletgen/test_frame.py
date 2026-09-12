@@ -116,3 +116,50 @@ def test_the_confluence_reserves_its_own_room_in_the_crop(monkeypatch) -> None: 
     x0, y0, x1, y1 = calls[0][0]
     assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centred on the junction"
     assert (x1 - x0) >= fr.BROOK_JOIN_TRUNK, "with a trunk's length of room around it"
+
+
+def test_a_board_with_no_compliant_verge_still_faces_the_way_a_reader_sees_it_by() -> None:
+    """Feature 230. Every verge candidate can be refused by the 15-degree rule - a web straggler laid across
+    a main lane's verge leaves no seat that fronts one way alone - and the board still has to go somewhere.
+    The fallback takes the best-ranked verge and turns the board to its NEAREST way, which is the bearing the
+    gate judges it by; the old fallback re-posted the engine's own seat unturned and shipped a board 72
+    degrees side-on to the lane 9.5 ft from it."""
+
+    class _StubS:
+        def __init__(self) -> None:
+            self.M = {
+                "houses": [{"x": x, "y": y} for x in (500.0, 560.0, 620.0) for y in (460.0, 520.0, 580.0)],
+                "kosatsuba": [{"x": 900.0, "y": 100.0, "z": 2}],
+                "labels": [],
+                "lanes": [
+                    {"pts": [(554.0, 520.0), (566.0, 520.0)]},  # the only main lane, and a short one
+                    {"pts": [(560.0, 400.0), (560.0, 700.0)], "web": True},  # the straggler across its every verge
+                ],
+            }
+            self.top = ["", "", "the first board's glyph"]
+            self.TOPZ = 0
+            self.reseated: list[tuple[float, float, float]] = []
+
+        def place_kosatsuba(self) -> tuple[float, float]:
+            return (900.0, 100.0)  # outside the house cloud, so the frame would lose it
+
+        def discard_queued_label(self, kind: str) -> None:
+            pass
+
+        def _fits(self, x: float, y: float, w: float, h: float, corridors: bool = False) -> bool:
+            return True
+
+        def fixture_clear_of_water(self, x: float, y: float, half: float) -> bool:
+            return True
+
+        def kosatsuba(self, x: float, y: float, rot: float = 0.0) -> None:
+            self.reseated.append((x, y, rot))
+            self.M["kosatsuba"].append({"x": x, "y": y})
+
+    s = _StubS()
+    hg.stage_notice(s, None)  # type: ignore[arg-type]
+    assert len(s.reseated) == 1, "the board must still be posted when no verge fronts one way alone"
+    bx, by, rot = s.reseated[0]
+    assert abs(abs(rot) - 90.0) < 1.0, f"the fallback board is turned to its nearest way, not left on the lane's bearing: {rot}"
+    assert hg.frame._nearest_way_bearing(s, bx, by) is not None
+    assert abs(by - 520.0) > 1.0, "it still stands on a verge rather than in the tread"

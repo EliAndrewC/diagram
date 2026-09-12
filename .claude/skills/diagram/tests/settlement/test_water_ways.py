@@ -727,3 +727,19 @@ def test_trim_lane_stubs_leaves_a_lane_alone_when_both_its_ends_already_arrive()
     s._lane_ink = [[], [], []]
     s.trim_lane_stubs()
     assert s.M["lanes"][2]["pts"] == [[500, 300], [500, 700]], "the bar is untouched"
+
+
+def test_trim_lane_stubs_drops_a_lane_too_short_to_front_anybody():
+    """A lane shorter than one homestead's frontage fronts nobody by construction, so it is dropped
+    whole - record AND ink together, because a record removed while its ink stayed would leave a tread
+    drawn on the sheet that nothing on the map accounts for."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(100, 300), (900, 300)], width=4)
+    s.lane([(500, 300), (500, 340)], width=4)  # 40 ft: under _LANE_MIN_FT, and no trimming can rescue it
+    _ink = list(s._lane_ink[1])
+    assert any(s.ground[z].get("bed") for z in _ink), "the stub was inked before the sweep"
+    s.trim_lane_stubs()
+    assert len(s.M["lanes"]) == 1 and s.M["lanes"][0]["pts"][0] == [100.0, 300.0], "the stub's record is gone and the through lane is what is left"
+    assert len(s._lane_ink) == 1, "and its ink slot went with it, so the two lists stay aligned"
+    assert not any(s.ground[z].get(p) for z in _ink for p in ("edge", "bed", "top")), "its ink is erased"

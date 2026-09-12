@@ -26,13 +26,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
       verify: DONE. the brook is tapped at an intake and runs on past the fan down a rolled flank (brook_skirt); the head race leaves the bank at the record's offtake angle over a rolled lead; the intake's form is a knob (weir x4, open pinned on Sawada) with the oblique stone-crib bar drawn on a weir hamlet; the drain joins the passing brook where one falls within reach, else the pond or the frame - all three sinks exercised by the pool. Five settlement-review passes drove the geometry (ledger rows): sharpest turn 49.3/104.5/48.6/51.9 deg, median 4.1-15.4, no brook vertex in cultivated ground on any map, one connected piece in the view on every map, the offtake angle exactly the record's 35 deg
 - [ ] T05 FR-005 the pool, the cohort if the routing changed, `make verify` + settlement-review, the records (R3, the notes entries, the perf bookends), spec IMPLEMENTED, land
       research: rendering
-      verify:
+      verify: the pool regenerated and all five maps seat every household with no roll failure; eight settlement-review passes (ledger rows); the cohort restored to 48/48 against the pre-feature baseline; the perf bookends taken alternately with a detached worktree and the band-3 explanation recorded. OPEN: the perf-audit subagent's confirmation, and the GM's sign-off on the band-3 increase, which is theirs to give.
 - [ ] T06 FR-006 the seat rule and its shortfall re-roll - the research pass on whether a hamlet stood on ONE bank of its stream or on both with a crossing, the label that follows from it, and the declined alternative recorded
       research: physical
       - [x] research pass - specs/230 research R6: the record answers by SCALE (one bank of a river, through the middle of the settlement's own channel), so the rule is this project's own guess and is labeled one
       - [x] source-reader confirmed - one Opus reader, 14 sources, verdicts per sub-question including the CONTRADICTED trio on Harie and the NOT-FOUND on what crosses a settlement's channel
-      - [ ] recorded and cited - R6 carries the finding and the quotes; the reader-facing section on research/water.html and the registry entries for its new keys are NOT written
-      - [ ] quote-check confirmed
+      - [x] recorded and cited - research/water.html, "Does a hamlet stand on one bank of its stream, or around it?", with ten registry entries and footnotes 120-131
+      - [x] quote-check confirmed - 11 footnotes, all READABLE; two DIFFERS corrected (the journal's full-width comma, the Chinese page's double quotes), a gloss naming a party the page does not carry removed, the kundoku mislabeled as classical Chinese fixed, the emphasis this project had added inside quotations taken out, and three PARTIAL assertions brought back to what the quotes grant
       - [ ] source-applicability confirmed
       verify: the rule is labeled a GUESS at all three places it lives (spec D9, cluster.py at the point of change, future-work as the knob candidate the crossing machinery blocks). The public record page is the part still owed.
 

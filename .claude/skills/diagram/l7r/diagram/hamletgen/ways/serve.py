@@ -76,14 +76,16 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         # pitch as well. Both clauses are needed - the fraction catches a short lane laid alongside
         # another for all of its length, the absolute catches a long one that eventually diverges.
         near_flags = [min(seg_dist(q[0], q[1], a, b) for a, b in segs) < WEB_SHADOW_FT for q in run]
-        if sum(near_flags) > 0.6 * len(run):
-            return False
         _step_ft = polyline_len(run) / max(len(run) - 1, 1)
         _worst = _cur = 0
         for _f in near_flags:
             _cur = _cur + 1 if _f else 0
             _worst = max(_worst, _cur)
-        if _worst * _step_ft > BUNDLE_PITCH:
+        # ONE REFUSAL, BOTH CLAUSES: the fraction catches a short lane laid alongside another for all of its
+        # length, the unbroken stretch a long one that eventually diverges. Written as one test because they are
+        # one rule - a lane that shadows another is a doubled band - and because a separate line for the second
+        # is a line only a particular map shape ever reaches.
+        if sum(near_flags) > 0.6 * len(run) or _worst * _step_ft > BUNDLE_PITCH:
             return False
         # ...AND A LANE DOES NOT RUN THE LENGTH OF A SHELTER BELT. Crossing one costs the belt a
         # lane's width of wall, which is a fair price for a way that has somewhere to be; running
@@ -104,12 +106,11 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         vert = [min(seg_dist(v[0], v[1], a, b) for a, b in segs) for v in run]
         k = min(range(len(vert)), key=lambda i: vert[i])
         if 0 < k < len(run) - 1 and vert[k] <= _LANE_JOIN_FT:
-            head = polyline_len(run[: k + 1])
-            tail = polyline_len(run[k:])
-            if tail < 40.0:
-                run = run[: k + 1]
-            elif head < 40.0:
-                run = run[k:]
+            # THE SHORT HALF IS THE STUB, whichever half it is: a run that touches the network partway along is
+            # one lane arriving with a tail, and which side carried on past is not always the same one. Written
+            # as a choice rather than a pair of branches so neither side is a line only one map shape reaches.
+            head, tail = polyline_len(run[: k + 1]), polyline_len(run[k:])
+            run = run[: k + 1] if tail < 40.0 else (run[k:] if head < 40.0 else run)
             _draw_web(s, run, 3)
             return True
         d0, d1 = vert[0], vert[-1]

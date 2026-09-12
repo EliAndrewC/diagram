@@ -314,3 +314,56 @@ def test_a_break_already_walkable_round_through_two_other_lanes_is_not_bridged()
     assert len(near.M["lanes"]) == 6
     far = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], a, b, *walk(70.0)])  # walk 260 ft, over 2x: the hole is bridged
     assert hg.ways._bridge_collinear_breaks(far, [], [], []) == 1
+
+
+def test_a_doubled_remnant_that_is_the_only_tread_between_two_halves_is_kept() -> None:
+    """The doubled-band sweep drops a remnant that leaves one way and returns to it - unless dropping it would
+    cut the INK in two. `shadowing_lane` reads both ends at the 30 ft join figure while the one-network rule
+    reads 4 ft of ink, so a remnant can shadow its parent and still be the only tread a third lane hangs off.
+    Dropping those left Sawada, Kashikawa and Mizuguchi in two pieces (feature 220)."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(-400.0, -400.0), (-300.0, -400.0)],  # the connector, away from everything (index 0 is the connector)
+            [(0.0, 0.0), (400.0, 0.0)],  # the way the remnant leaves and returns to
+            [(100.0, 3.0), (300.0, 3.0)],  # the remnant: both ends within 30 ft of that way, its ink 3 ft off it
+            [(150.0, 5.0), (150.0, 200.0)],  # a lane 5 ft off the way - out of ink reach of it, in reach of the remnant
+        ],
+    )
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    sweeps._sweep_doubled_remnants(s)
+    assert [list(ln["pts"]) for ln in s.M["lanes"]] == before, "the remnant is kept: dropping it would island the third lane"
+
+
+def test_a_fragment_is_kept_when_a_house_it_serves_has_no_other_way() -> None:
+    """`_sweep_debris` drops a short fragment alone in its component - but never one that is a farmhouse's only
+    way. A stranded house is the worse failure, and `farmhouses_reach_a_way` should say so rather than the map
+    quietly losing the tread that served it."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (300.0, 0.0)], [(900.0, 900.0), (910.0, 910.0)]],  # the fragment is SHORT, or its length alone keeps it
+        houses=[(20.0, 30.0), (905.0, 905.0)],  # the second house is served ONLY by the far fragment
+    )
+    s.M.setdefault("meta", {})
+    sweeps._sweep_debris(s)
+    assert s.M["lanes"][1]["pts"], "the fragment stays: it is that farmhouse's only way"
+
+
+def test_a_swept_field_spur_says_so_on_the_map() -> None:
+    """`_sweep_debris` drops a short fragment that is alone in its component and whose houses are served
+    elsewhere. The FIELD SPUR serves no house at all, so it answers that question vacuously - and a hamlet that
+    loses its only path to its rice should say so rather than lose it silently, which is how the reference
+    hamlet's missing path went unnoticed for three review passes."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (300.0, 0.0)], [(900.0, 900.0), (910.0, 910.0)]],
+        houses=[(20.0, 30.0), (120.0, 30.0)],
+    )
+    s.M["lanes"][1]["spur"] = True
+    s.M.setdefault("meta", {})
+    sweeps._sweep_debris(s)
+    assert all(not ln["pts"] for ln in s.M["lanes"] if ln.get("spur")), "the isolated spur is swept like any other fragment that joins nothing"
+    assert "isolated" in (s.M["meta"].get("field_spur_swept") or ""), "and the map records that it was"
