@@ -68,3 +68,40 @@ to close."* House style still has it open.
 next session to rediscover: the root `CLAUDE.md` says to edit files with `Edit` rather than heredoc'd
 Python, while this session ran under an instruction preferring Bash wherever Bash can do the job. Following
 the second lost the first's guard.
+
+## R4 - the tree is not clean, so a tree-wide style check cannot be the design (measured 2026-09-12)
+
+The GM asked for the British-spelling check "in, for example, our quick tests". Measured before specifying
+it: `git grep` over tracked files excluding `.clones/`, on the common British forms, returns **146 hits**.
+They are spread across engine comments, docs, test names, `scripts/fixtures/`, a Makefile comment and four
+research citations pages - and the citations hits are inside 「」 quotations, where the house-style rule
+explicitly exempts them.
+
+**So a tree-wide check would fail on the day it landed**, and the feature would silently owe a 100-plus
+file correction sweep that the GM did not ask for. The check is therefore scoped to the DELTA - the lines
+this push adds or changes - which is also the only scope that would have caught the failures that motivate
+it, since every one of them was new text.
+
+**The pre-existing set is LEDGERED, not fixed** (Principle XIII: a pre-existing failure stays ledgered and
+is not fixed under someone else's feature). `research.md` is where it is listed by area; a sweep of it is
+its own work and wants the GM.
+
+Zero of the 146 are in `specs/*/request.md`, which is the one place Principle V forbids touching - checked,
+because a check that corrected the GM's own words would be worse than no check.
+
+## R5 - the `WITHDRAWN:` rule, priced and DROPPED from this feature
+
+The failure it aimed at is real and documented: feature 234's withdrawn measurement survived in five
+shipped places. But the rule as first specified fails in both directions, and the review of this spec
+demonstrated both against feature 234 itself:
+
+- **It would not have caught its own motivating case.** All five surviving places were OUTSIDE `specs/` -
+  two skill `CLAUDE.md` files, the root guard table, a script docstring, a research HTML page. A rule
+  confined to a feature's own spec directory does not reach any of them.
+- **It fires on correct work.** Feature 234's `spec.md` legitimately narrates "22 ft" and "6.7 m" in at
+  least six places outside the withdrawing line - in decision records and review history, which is exactly
+  the behavior this project requires of a decision that was reversed.
+
+A rule that would reach the real surface has to scan the whole tree, which is a broadening beyond the
+`spec-lint` the GM approved. **Dropped from feature 236 and recorded here** with the measurement, so the
+next session inherits the finding rather than the idea.
