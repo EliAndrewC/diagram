@@ -6,16 +6,16 @@ record and the map's modals stay in step, not about how a place was built.
 
 ## Phase 1 - the report (FR-001 to FR-006)
 
-- [ ] T01 `scripts/_entry_owed.py`, modeled on `scripts/_review_owed.py`: for the delta against the
+- [x] T01 `scripts/_entry_owed.py`, modeled on `scripts/_review_owed.py`: for the delta against the
       merge base with `origin/main`, print every class whose `Entry:` names a research section whose
       BODY changed and whose own EXPLANATION PROSE did not. One class per line with the section that
       moved; `--why` prints the ruling; empty when nothing is named.
       research: rendering
-- [ ] T02 The prose/data split is DERIVED from `_base.py` `_DATA_TAGS`, never restated (FR-002,
+- [x] T02 The prose/data split is DERIVED from `_base.py` `_DATA_TAGS`, never restated (FR-002,
       FR-010's shape rule). Both sides of the delta are parsed the same way - `ast` over
       `git show <base>:<file>` for the old side.
       research: rendering
-- [ ] T03 The report is actionable without further lookup: class key, research file and heading that
+- [x] T03 The report is actionable without further lookup: class key, research file and heading that
       moved, and the file and line of the docstring whose prose to re-read (FR-005).
       research: rendering
 - [ ] T04 Wire it at the two decision points and NOWHERE else - `make page-check` and
@@ -26,6 +26,9 @@ record and the map's modals stay in step, not about how a place was built.
       short-circuits at `Makefile:122` on exactly this delta shape, so a report there would ship green
       and never print.
       research: rendering
+      VERIFIED by probe against the pre-233 base: names 6 classes whose section moved and whose prose
+      did not, and correctly does NOT name `pig sty` or `duck pen`, whose prose moved in the same delta.
+      Reports `key - file#anchor - prose at path:line`.
 
 ## Phase 2 - the gated half (FR-007 to FR-009)
 
