@@ -17,12 +17,27 @@ from __future__ import annotations
 import re
 
 _QUOTED_HEREDOC = re.compile(r"<<-?\s*(?:'(\w+)'|\"(\w+)\"|\\(\w+)).*?^\s*(?:\1|\2|\3)\s*$", re.S | re.M)
+#: an UNQUOTED heredoc: a bare delimiter. Its body is expanded like double-quoted text, so a backtick span in
+#: it EXECUTES and the quote characters in it are literal - an apostrophe there must not hide a later span.
+_UNQUOTED_HEREDOC = re.compile(r"<<-?\s*([A-Za-z_]\w*)[^\n]*\n(.*?)^\s*\1\s*$", re.S | re.M)
+_SPAN = re.compile(r"(?<!\\)`[^`\n]*(?<!\\)`")
 
 
 def executing_backticks(cmd: str) -> list[str]:
-    """Every backtick span in `cmd` that bash would execute, in order."""
+    """Every backtick span in `cmd` that bash would execute, in order.
+
+    KNOWN OVER-COUNT, disclosed rather than hidden because it cannot flip the finding: a backtick inside a
+    `#` comment is counted though it does not run. The finding R8 rests on is that NO span is a deliberate
+    substitution, and a comment cannot contain one either.
+    """
     cmd = _QUOTED_HEREDOC.sub("", cmd)
     spans: list[str] = []
+    # unquoted heredoc bodies first: every span in them executes, and the quote walk below would mis-read
+    # their apostrophes as shell quotes (spec-fidelity round 5 found `cat <<EOF / it's `date` / EOF` hidden)
+    def _take(m: re.Match[str]) -> str:
+        spans.extend(_SPAN.findall(m.group(2)))
+        return ""
+    cmd = _UNQUOTED_HEREDOC.sub(_take, cmd)
     st: str | None = None  # None, "'", '"', or "$'"
     i, n = 0, len(cmd)
     while i < n:
@@ -70,6 +85,9 @@ def selftest() -> None:
     assert executing_backticks("cat <<'X'\nsee `make done`\nX") == [], "a quoted heredoc body is literal"
     assert executing_backticks('cat <<"X"\nsee `make done`\nX') == [], "a double-quoted delimiter is literal too"
     assert executing_backticks("cat <<\\X\nsee `make done`\nX") == [], "a backslashed delimiter is literal too"
+    assert executing_backticks("echo `date`") == ["`date`"], "a bare backtick executes"
+    assert executing_backticks("cat <<EOF\nsee `make done`\nEOF") == ["`make done`"], "an UNQUOTED heredoc body executes"
+    assert executing_backticks("cat <<EOF\nit's `date`\nEOF") == ["`date`"], "an apostrophe in an unquoted body does not hide a later span"
     print("measure_backticks selftest ok")
 
 
