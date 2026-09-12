@@ -58,6 +58,16 @@ CASES = [
     ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="x"), "blocked", "no-marker"),
     ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: fixing a guard that fires on correct work"), "escaped", "guard-edit-ok"),
     ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: why"), "blocked", "GUARD_EDIT_OK-no-reason"),
+    # feature 236: the four rules of the shell check, each recording its own - "shell-check fired 40
+    # times" cannot say which of them is carrying the cost, which is the whole point of the fourth field
+    ("shell-check", _payload(command="if true; then"), "blocked", "parse"),
+    ("shell-check", _payload(command='echo "use `make quick` first"'), "blocked", "executing-backtick"),
+    ("shell-check", _payload(command='git commit -m "one" -m "two"'), "blocked", "commit-dash-m"),
+    ("shell-check", _payload(command="git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'"), "blocked", "coauthor-address"),
+    ("shell-check", _payload(command='echo "a `span`"  # SHELL_CHECK_OK: quoting a transcript verbatim'), "escaped", "shell-check-ok"),
+    # feature 236: a Bash payload is TOLD, and the telling is recorded as its own branch - the audit
+    # must be able to tell a correction of an edit from a warning that changed nothing
+    ("house-style", _payload(command="echo 'the centre of it' >> docs/a.md"), "warned", "bash-payload"),
 ]
 
 
@@ -270,6 +280,10 @@ _ESCAPES = {
     "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
     "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
     "ENTRY_DRIFT_OK": ("environment", "read as ${ENTRY_DRIFT_OK:-} by scripts/entry-gate.sh, which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "SHELL_CHECK_OK": (
+        "command",
+        "routes through _hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",
+    ),
     "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
     "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
     "ESCALATION_OK": (

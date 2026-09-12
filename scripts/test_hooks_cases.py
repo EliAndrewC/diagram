@@ -17,6 +17,7 @@ own repair. The shared lesson has a name now: **a mention is not an invocation.*
 from __future__ import annotations
 
 import json
+import re
 import os
 import pathlib
 import tempfile
@@ -111,15 +112,122 @@ HOUSE_STYLE = [
     # A BASH HEREDOC IS A WRITE. The first version matched only the Edit/Write tools, and the author
     # walked straight past it minutes after shipping the guard by writing a spec with a python
     # heredoc. Same hole layer 3 had, and the same lesson: guard the ACTION, not one route to it.
-    ("prose written by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe colour is grey\nEOF"), "blocked"),
+    # ...and since feature 236 a Bash payload is TOLD rather than refused (spec D2): the payload is
+    # often itself the spelling fix, and `make quick` is the half that fails.
+    ("prose written by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe colour is grey\nEOF"), "warned:colour"),
     ("clean prose by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe color is gray\nEOF"), "ok"),
+    # THE WHOLE PAYLOAD, not only its heredoc bodies (feature 236 FR-007): the measured hole was a
+    # write that travelled by some other route through Bash
+    ("an echo append", cmd("echo 'the centre of it' >> docs/a.md"), "warned:centre"),
+    ("a sed replacement that INTRODUCES one", cmd("sed -i 's/center/centre/g' docs/a.md"), "warned:centre"),
+    # ...and the two shapes that must stay quiet, or the guard fires on correct work
+    ("searching for the word", cmd('git grep -n "centre" -- docs/'), "ok"),
+    ("a code span NAMING the word", cmd("echo 'the token `colour` is British' >> docs/a.md"), "ok"),
+    ("a prose quotation keeps its own characters", cmd("cat >> docs/a.md <<'EOF'\n「a plain colour sheath」\nEOF"), "ok"),
     # gm-request.md is a verbatim transcript of the GM speaking; correcting it defeats its purpose
     ("the GM's own words, by heredoc", cmd("cat > specs/128-x/gm-request.md <<'EOF'\nthey wrote colour\nEOF"), "ok"),
     ("merely GREPPING for one", cmd("grep -n colour docs/a.md"), "ok"),
     # a session scratchpad is outside the project (2026-09-06: three reader agents had verbatim page text in
     # /tmp result files rewritten and each worked around the guard)
     ("a file under /tmp is not project content", edit("/tmp/claude-1000/x/scratchpad/result.json", new="{\"t\": \"the col\u006fur\"}"), "ok"),
+    # feature 236 - A FIXTURE IS A VERBATIM RECORD: `scripts/fixtures/` holds corpora of commands that
+    # really ran, several of them house-style sweeps, and correcting one falsifies the measurement it
+    # reproduces. The exemption is in the hook AND in the delta check; this is the hook half, which the
+    # amendment review noticed had no case of its own and would have been lost silently.
+    ("a recorded command corpus", write("/r/scripts/fixtures/corpus.json", "{\"command\": \"sed -i s/cent\u0072e/center/ docs/a.md\"}"), "ok"),
 ]
+
+
+SHELL_CHECK = [
+    # (1) IT DOES NOT PARSE - and the parse uses the options the TOOL's shell can enable
+    ("an unfinished construct", cmd("if true; then"), "blocked"),
+    ("an unbalanced quote", cmd('echo "one; echo two'), "blocked"),
+    ("extglob enabled on one line and used on the next", cmd("shopt -s extglob\nls !(x)"), "ok"),
+    ("an ordinary fold", cmd("cd /diagram && git log --oneline -3 | cat"), "ok"),
+    # (2) A BACKTICK THAT WOULD RUN - valid syntax, so the parse cannot see it
+    ("a code span in double quotes", cmd('echo "use `make quick` first"'), "blocked"),
+    ("a code span in an UNQUOTED heredoc", cmd("cat > a.md <<EOF\nsee `make done`\nEOF"), "blocked"),
+    ("an apostrophe must not hide a later span", cmd("cat > a.md <<EOF\nit's `make done`\nEOF"), "blocked"),
+    ("the same text in single quotes", cmd("echo 'use `make quick` first'"), "ok"),
+    ("...and in a QUOTED heredoc", cmd("cat > a.md <<'EOF'\nsee `make done`\nEOF"), "ok"),
+    ("a deliberate substitution, written the project's way", cmd('echo "today is $(date)"'), "ok"),
+    ("an escaped backtick opens nothing", cmd('echo "a literal \\` here"'), "ok"),
+    ("a backtick after an unquoted # is a comment", cmd("ls -la  # see `make quick`"), "ok"),
+    # (3) `-m` FOR A MESSAGE THAT NEEDS A HEREDOC
+    ("a nested double quote", cmd('git commit -m "233: the pond\'s own "center" fixed"'), "blocked"),
+    ("two -m flags", cmd('git commit -m "subject" -m "body"'), "blocked"),
+    ("a newline inside -m", cmd('git commit -m "subject\n\nbody"'), "blocked"),
+    ("a plain one-line -m", cmd('git commit -m "236: the walker fix"'), "ok"),
+    ("a plain -am", cmd("git commit -am 'a plain message'"), "ok"),
+    ("the heredoc form this names", cmd("git commit -F - <<'EOF'\n236: x\n\nbody\nEOF"), "ok"),
+    ("another git verb is not judged", cmd('git log --grep "a "b" c" --oneline'), "ok"),
+    # (4) A CO-AUTHOR ADDRESS THAT IS NOT OURS - every route a trailer arrives by
+    ("the placeholder that reached main", cmd("git commit -F - <<'EOF'\nx\n\nCo-Authored-By: Claude <duplicate@anthropic.com>\nEOF"), "blocked"),
+    ("a lower-case key is the same key", cmd("git commit -F - <<'EOF'\nx\n\nco-authored-by: Someone <other@example.com>\nEOF"), "blocked"),
+    ("...and by --trailer", cmd("git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'"), "blocked"),
+    ("the expected address", cmd("git commit -F - <<'EOF'\nx\n\nCo-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>\nEOF"), "ok"),
+    ("another trailer beside it", cmd("git commit -F - <<'EOF'\nx\n\nClaude-Session: https://claude.ai/code/session_x\nEOF"), "ok"),
+    # the escape, and the reason floor on it
+    ("the documented escape", cmd("echo \"a `deliberate` span\"  # SHELL_CHECK_OK: quoting a transcript verbatim"), "ok"),
+    ("a bare escape token", cmd('echo "a `span`"  # SHELL_CHECK_OK'), "blocked"),
+]
+
+
+def corpus_replay() -> int:
+    """Every Bash command the motivating session ran, driven through the hook itself (SC-002).
+
+    This is the guard's false-positive rate, MEASURED rather than asserted, and it is the reason the
+    parse is `bash -O extglob -n` rather than `bash -n`: the corpus is what showed the check refuses
+    exactly the two commands that had also failed at run time, and the hand-added extglob case is what
+    showed a default parse refusing work the tool runs (`specs/236-.../research.md` R6).
+    """
+    import concurrent.futures
+
+    data = json.loads((HERE / "fixtures" / "bash-parse-corpus-2026-09.json").read_text())
+    expected, rows = data["expected"], data["commands"]
+    script = str(HERE / "shell-check-hooks.sh")
+    env = dict(os.environ, GUARD_LOG_DIR=str(LOGDIR))
+
+    def drive(row: dict) -> tuple[dict, str]:
+        proc = subprocess.run([script, "pretool"], input=cmd(row["command"]),
+                              capture_output=True, text=True, check=False, env=env)
+        if not proc.returncode:
+            return row, ""
+        m = re.search(r'rule "([a-z-]+)"', proc.stderr or "")
+        return row, (m.group(1) if m else "unknown")
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+        outcomes = list(pool.map(drive, rows))
+    by_rule: dict[str, list[dict]] = {}
+    for row, rule in outcomes:
+        if rule:
+            by_rule.setdefault(rule, []).append(row)
+    parse = by_rule.get("parse", [])
+    # A FALSE POSITIVE IS A PARSE REFUSAL OF A COMMAND THAT RAN. The other rules refusing a corpus
+    # command is not a false positive but the measurement of what they catch: every one of the
+    # `commit-dash-m` refusals below is a multi-line or misquoted `-m` message of exactly the kind
+    # item 3 bans, which is that ban's own evidence rather than a cost.
+    false_positives = [r["command"][:70] for r in parse if not r.get("runtime_syntax_error")]
+    n_real = len([r for r in rows if r.get("runtime_syntax_error")])
+    bad = 0
+    print("  the R6 corpus, replayed through the hook")
+    for label, got, want in (
+        ("commands replayed", len(rows) - 1, expected["commands"]),         # the extglob case is added by hand
+        ("refused by the PARSE", len(parse), expected["refused_by_the_check"]),
+        ("of those, real run-time failures", len(parse) - len(false_positives), expected["refused_that_also_failed_at_run_time"]),
+        ("parse false positives", len(false_positives), expected["false_positives"]),
+        ("run-time syntax errors in the corpus", n_real, expected["refused_that_also_failed_at_run_time"]),
+        ("caught by the -m ban", len(by_rule.get("commit-dash-m", [])), expected["refused_by_the_commit_ban"]),
+        ("caught by the backtick rule", len(by_rule.get("executing-backtick", [])), expected["refused_by_the_backtick_rule"]),
+        ("caught by the co-author rule", len(by_rule.get("coauthor-address", [])), expected["refused_by_the_coauthor_rule"]),
+        ("the hand-added extglob case refused", int(bool(rows[-1] in parse)), 0),
+    ):
+        ok = got == want
+        bad += 0 if ok else 1
+        print(f"  {'ok    ' if ok else 'FAIL  '} {label}: {got}" + ("" if ok else f" (expected {want})"))
+    if false_positives:
+        print("        " + "\n        ".join(false_positives[:5]))
+    return bad
 
 
 def source_block_cases(tmp: pathlib.Path) -> list[tuple[str, str, str]]:
@@ -164,13 +272,19 @@ def run(hook: str, cases: list[tuple[str, str, str]]) -> int:
         out = (proc.stdout or "").strip()
         if not proc.returncode and out.startswith("{"):
             try:
-                fixed = json.loads(out)["hookSpecificOutput"]["updatedInput"]
-                got = "rewritten:" + (fixed.get("new_string") or fixed.get("content") or fixed.get("command") or "")
+                spoke = json.loads(out)["hookSpecificOutput"]
+                fixed = spoke.get("updatedInput")
+                if fixed:
+                    got = "rewritten:" + (fixed.get("new_string") or fixed.get("content") or fixed.get("command") or "")
+                elif spoke.get("additionalContext"):
+                    # feature 236: a fourth verdict - the hook TELLS the session and the command runs
+                    # as typed. `warned:<word>` asks that the context name that word.
+                    got = "warned:" + spoke["additionalContext"]
             except Exception:
                 pass
-        ok = got == want
+        ok = got == want or (want.startswith("warned:") and got.startswith("warned:") and want[7:] in got)
         bad += 0 if ok else 1
-        print(f"  {'ok    ' if ok else 'FAIL  '} {label}" + ("" if ok else f"  (expected {want}, got {got})"))
+        print(f"  {'ok    ' if ok else 'FAIL  '} {label}" + ("" if ok else f"  (expected {want}, got {got[:120]})"))
     print(f"  {len(cases) - bad} passed, {bad} failed\n")
     return bad
 
@@ -184,11 +298,15 @@ def main() -> int:
             "repo-safety": REPO_SAFETY,
             "house-style": HOUSE_STYLE,
             "source-block": source_block_cases(tmp),
+            "shell-check": SHELL_CHECK,
         }
         if which not in tables:
             print(f"usage: {sys.argv[0]} <{'|'.join(tables)}>")
             return 2
-        return 1 if run(which, tables[which]) else 0
+        bad = run(which, tables[which])
+        if which == "shell-check":
+            bad += corpus_replay()          # the false-positive rate, measured on every run (SC-002)
+        return 1 if bad else 0
 
 
 if __name__ == "__main__":
