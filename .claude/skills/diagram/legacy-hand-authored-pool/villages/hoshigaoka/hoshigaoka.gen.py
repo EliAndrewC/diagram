@@ -20,7 +20,7 @@ Target ~75-90 acres of paddy on the 240-acre frame (1px = 2ft).
 POND SIZING: sole-storage rule of thumb ~2,000-2,500 m3 per irrigated ha (typical depth
 2-4 m); a stream-fed pond refilling 1-2x a season runs comfortably at ~1,200-1,500 m3/ha.
 31.8 ha of paddy -> ~1.5 ha of pond surface (rx=145, ry=92 px) at ~3 m depth ~ 47,000 m3
-~ 1,470 m3/ha + the feeder stream. See settlements.md 'Water-first fields v2' for the grounding.
+~ 1,470 m3/ha + the feeder stream. See research/fields.html 'Where does a field's water come from, and how is it shared out?' for the grounding.
 """
 import os
 import sys
@@ -36,7 +36,7 @@ from l7r.diagram.waterfields import AZE, BEAN_GREEN, aze_w, build_comb, paddy_gr
 # Paddy CELL grain calibrated to a real-feet target (~0.05 acre) at this map's 2 ft/px, replacing the old
 # hand-set build_comb defaults (48px plots -> ~0.13 acre real, over Bray's "large" ceiling). This subdivides
 # the SAME field into more, smaller cells: total paddy area, farmhouse rings, and the household count are
-# unchanged - only the bund grid gets finer. See waterfields.paddy_grain / settlements.md 'Paddy cell size'.
+# unchanged - only the bund grid gets finer. See waterfields.paddy_grain / research/fields.html 'Plot sizes, pond sizing and acreage from population'.
 PLOT_ACROSS, ROW_STEP = paddy_grain(2)
 
 W, H = 2420, 1560
@@ -144,7 +144,7 @@ s.reserve_clearing(178, 1030, 62, 44, 30)                 # the village graveyar
 # cultivation stops, and the un-reclaimed valley floor stays reed WETLAND (wet rice is diked OUT of marsh -
 # where reclamation ends, or the ground is too low/wet to manage, it reverts to marsh, NOT dry plain). A
 # generous SE region; s.marsh SKIPS any point on the paddy, so the reeds ABUT the field's low edge and only
-# fill the open ground beyond, feathering out and trailing off the SE map corner. See settlements.md 'Marsh'.
+# fill the open ground beyond, feathering out and trailing off the SE map corner. See research/vegetation.html 'Marsh'.
 s.marsh([(1080, 1240), (2210, 1240), (2210, 470), (1450, 560)])
 
 # the pond's FEEDER: a natural brook flowing IN from the map edge (water sources come from off-map, not
@@ -158,7 +158,7 @@ s.pond(pcx, pcy, prx, pry)
 # AROUND THE POND (the valley-head reservoir sits IN the hill catchment - satoyama). (a) a REEDY FRINGE at the
 # shallow shore (marsh role='pond_fringe' - a ring around the pond; s.marsh skips the open water + the dry
 # fields, so reeds only rim the shore). (b) CATCHMENT SCRUB behind/west of the pond - the cut-over hill that
-# feeds it (reuse the commons scrub: grass + brush + scraggly pine), bleeding off the NW corner. See settlements.md
+# feeds it (reuse the commons scrub: grass + brush + scraggly pine), bleeding off the NW corner. See research/vegetation.html
 # 'Marsh' + 'Village windbreak' (back-slope). Both drawn AFTER the pond so the reeds rim its edge.
 _ring = [(pcx + (prx + 58) * math.cos(a), pcy + (pry + 58) * math.sin(a)) for a in [i * math.pi / 8 for i in range(16)]]
 s.marsh(_ring, role="pond_fringe")
@@ -175,7 +175,7 @@ for c in sorted(net["channels"], key=lambda c: -c["w"]):
 # (water OUT, mirroring the pond's feeder = water IN). Only present when the field's low corner sits
 # INSIDE the frame; on Hoshigaoka the paddy runs to the E map edge, so the drain discharges off-map
 # directly (a brook from an edge-outfall would run back through the field). A field-extent pass that
-# bounds the paddy within the frame (see settlements.md) will bring the outfall in-frame and light the brook.
+# bounds the paddy within the frame (see research/fields.html) will bring the outfall in-frame and light the brook.
 if net["brook"]:
     s.stream(net["brook"], frm={"kind": "drain"}, to={"kind": "offmap"}, width=9)
 
@@ -254,7 +254,7 @@ print(f"byres: {len(n_byres)}")
 # (village_grove fills an organic polygon, skipping clumps on houses/yards/gardens/paddy): (1) the 后龙林
 # back-village BELT, a ragged crescent EMBRACING the high WEST edge + wrapping the NW/SW corners, nestled
 # against the cluster; (2) the 水口林 WATER-MOUTH cluster at the low SE exit; (3) a leafy SCATTER of bamboo /
-# fruit copses filling the open gaps among the houses. See settlements.md 'Village windbreak'.
+# fruit copses filling the open gaps among the houses. See research/vegetation.html 'What are the village's three groves' ('Village windbreak'.
 _hx = [h["x"] for h in s.M["houses"]]
 _hy = [h["y"] for h in s.M["houses"]]
 _minx, _maxx, _miny, _maxy = min(_hx), max(_hx), min(_hy), max(_hy)
@@ -293,7 +293,7 @@ _belt_outer = [(_ccx - 58, _maxy + 58), (_minx - 74, _maxy - 22), (_minx - 100, 
 # (NOT a wedge/rhombus): the E edge underlaps the grove back, the W edge is ragged and follows the same curve
 # out onto the far windward slope. The degraded, cut-over hill-ground (grass, brush, scraggly pines) - non-
 # arable grazing, visually open + sparse, distinct from the dense grove. Toposequence: village -> back-grove ->
-# fuel commons -> (off-map boundary). See settlements.md 'Village windbreak' / back-slope.
+# fuel commons -> (off-map boundary). See research/vegetation.html 'What are the village's three groves' / 'Why is the hillside past the grove open scrub rather than more forest?'.
 _arc = _interp(_belt_outer, 11)                       # densified grove-back curve (bottom -> top)
 _com_inner = [(x + 16, y) for x, y in _arc]           # underlap the grove back a touch (hidden under the canopy)
 _com_outer = [(max(16, x - _rng.uniform(96, 150)), y + _rng.uniform(-16, 16)) for x, y in _arc]   # ragged ~parallel W edge
@@ -384,7 +384,7 @@ print(f"footbridges: {n_bridges + 1}")
 #       front), below the fengshui grove and west of the paddy, down to the SW boundary. The graveyard +
 #       earth-god shrine sit ON this scrub (drawn later, on top): burial + kegare belong on the waste back-slope.
 # ORDER: this fill comes AFTER the farmhouses + groves (so it fills the gaps THEY leave) but BEFORE the
-# graveyard + shrine (so those sit ON the scrubland, not on bare tan). See settlements.md 'Village windbreak'.
+# graveyard + shrine (so those sit ON the scrubland, not on bare tan). See research/vegetation.html 'What are the village's three groves' ('Village windbreak'.
 # the NORTH band's top edge DIPS over x630-1470 (a shallow clearing / col in the ridge line) so the map TITLE
 # has a blank tan bay just right of the pond to sit in - the hills stand back a little at the valley mouth.
 s.commons([(630, 215), (930, 170), (1230, 150), (1470, 58), (2160, 58), (2160, 475),
@@ -406,7 +406,7 @@ s.commons([(1490, 95), (1770, 95), (1770, 162), (1490, 162)], role="woodland")  
 # VILLAGE GRAVEYARD on the SW BACK-SLOPE, placed BEFORE the crop so the frame always contains it (the
 # doctrine's set-apart rule; moved 2026-07-21 when the headman-kura repack shifted the cluster's west extent
 # and the tight crop clipped the fixed-coordinate plot). Siting rationale in the comment block below.
-s.cemetery(178, 1030, 62, 44, parish=False, organic=True)   # no label - the marker rows read as a graveyard; organic = an irregular earthen plot. Resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 124x88 ft - see settlements.md 'District catchment'
+s.cemetery(178, 1030, 62, 44, parish=False, organic=True)   # no label - the marker rows read as a graveyard; organic = an irregular earthen plot. Resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 124x88 ft - see research/religion-and-death.html 'District catchment'
 # VILLAGE SHRINE at the SE water-mouth entrance: the tutelary earth-god shrine (土地庙) guarding the feng-shui
 # entry point where the connector track leaves for the road. A small Shinto hall (~30x24 px ~ 275 m2 - a modest
 # earth-god hall, NOT a temple; kind='shrine' satisfies religious_matches_scale, graveyard=False keeps kegare at
@@ -419,7 +419,7 @@ s.shrine_hall(SHRINE[0], SHRINE[1], "", w=30, h=24, kind="shrine", primary=True,
 s.shrine_well(SHRINE[0], SHRINE[1])
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=30)
@@ -428,7 +428,7 @@ s.crop_to_content(margin=30)
 # the whole southward sando.) VILLAGE GRAVEYARD on the SW BACK-SLOPE (the s.cemetery() call above, pre-crop):
 # behind the village and well AWAY from the pond (graves foul the water source) and off the field/water front
 # (背山面水: the non-arable back side); a village plot (parish=False), >=120px from the shrine (kegare). See
-# settlements.md 'Village windbreak' / back-slope.
+# research/vegetation.html 'What are the village's three groves' / 'Why is the hillside past the grove open scrub rather than more forest?'.
 
 s.title("Hoshigaoka")   # title placed AFTER everything, so it finds blank space in the framed window
 s.finish(os.path.join(HERE, "hoshigaoka"))

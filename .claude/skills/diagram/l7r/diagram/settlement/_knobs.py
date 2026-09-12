@@ -380,7 +380,7 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
 TORII_WEIGHTS = {
     # TORII COUNT DISTRIBUTIONS (GM 2026-07-21): counts are NUMEROLOGICAL - 1, 3, or 7 only (7 is even
     # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
-    # the deeper the accumulated patronage (torii are DONATED votive gates - see settlements.md 'Torii'
+    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'
     # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
     # need - no capital-city maps exist yet.
     "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
@@ -442,7 +442,7 @@ def roll_merchant_estate_count(scale: str, rng: random.Random) -> int:
 # runs the sparser Xi'an spacing. Each tier maps to (effective arrow range in FEET, minimum towers that
 # must cover every wall point within that range). The historical grounding (侧射 flanking fire; Shen Kuo's
 # 11th-c. 矢石相及; Xi'an 120 m / Pingyao ~55 m mamian spacing at a ~60 m aimed-lethal bowshot) is in
-# settlements.md. Gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
+# research/cities/defenses.html 'Wall towers - the mamian system and bowshot ranges'. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
 WALL_DEFENSE = {
     # tier          (arrow_range_ft, min_towers)  placement spacing = range if min==2 else 2*range
     "siege": (197.0, 2),  # border / besieged city: aimed-lethal bowshot (60 m), >=2 towers EVERYWHERE (Pingyao-dense)
@@ -475,7 +475,7 @@ CITY_TIER_SCALES = ("city", "capital")
 
 def execution_ground_ft(scale: str) -> tuple[float, float]:
     """Tier footprint of an execution ground in REAL FEET, scaled down from the Suzugamori anchor
-    (74 x 16.2 m serving Edo) by execution volume - see settlements.md "Execution ground".
+    (74 x 16.2 m serving Edo) by execution volume - see research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside".
 
     SHARED DATA, deliberately: Settlement.execution_ground draws from this, and site_justice.py
     sizes its trial placements from it, so a tool proposing a seat can never disagree with the
@@ -527,7 +527,7 @@ EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
 # which, at the coarsest grain we draw (3 ft/px, so 133 px), the two grounds are unmistakably two
 # places. The automated check proved internal consistency and the number was still wrong; only
 # looking at the artifact could show that.
-# WHY (full): settlements.md "Execution ground".
+# WHY (full): research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside".
 
 KIDO_TOWER_KEEPCLEAR = 62.0
 # px of rampart kept tower-free around a `tower_skip` spot - where a ward FENCE meets the city wall

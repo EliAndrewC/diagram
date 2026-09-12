@@ -88,7 +88,8 @@ class CombMixin:
         self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in env]
 
     def bund_junctions(self: Settlement, plots: Sequence[Mapping[str, Any]], name: str) -> None:  # type: ignore[misc]
-        """Pile earth into every bund CROSSING (GM 2026-07-25). Same rule as the polder's organic parcels -
+        """Pile earth into every bund CROSSING (GM 2026-07-25; research/archetypes.html "Why is a hand-piled
+        bund never straight - and never square at the corners?"). Same rule as the polder's organic parcels -
         hand-piled mud has no sharp corners - but a SHARED-BARRIER field needs the opposite operation to
         express it. A polder's parcels are separate polygons with a real gap between them, so rounding is
         SUBTRACTIVE: each parcel gives up its corners and the bund, being the space between, just widens.

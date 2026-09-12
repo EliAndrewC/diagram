@@ -5,7 +5,7 @@ current method has changed.*
 
 **Load this file when:** you are deciding whether to extend, adopt, or abandon the scripted
 generation path, or you are about to work on [`hamletgen/`](l7r/diagram/hamletgen/). To DRAW a map today,
-ignore this file - [`SKILL.md`](SKILL.md) and [`settlements.md`](settlements.md) are unchanged and
+ignore this file - [`SKILL.md`](SKILL.md) and the research pages under [`research/`](research/) are unchanged and
 still describe the live method.
 
 ## The question

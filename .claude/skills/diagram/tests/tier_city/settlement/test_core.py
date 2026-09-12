@@ -54,7 +54,7 @@ def test_a_capital_declares_its_scale_and_takes_the_city_building_grain():
 @pytest.mark.tiers("capital", "city")
 def test_manor_ink_parameter_marks_foreign_sovereign_ground():
     """The Imperial Magistrate's compound is foreign sovereign ground and must not read as another
-    domain office: the manor form, in its own ink (settlements/capitals.md, 'Compounds with no
+    domain office: the manor form, in its own ink (research/cities/capitals.html, 'Compounds with no
     provincial equivalent')."""
     s1 = _cap020()
     s1.manor(700, 700, 240, 180, "Imperial Magistrate's Compound", gate_dir="west")

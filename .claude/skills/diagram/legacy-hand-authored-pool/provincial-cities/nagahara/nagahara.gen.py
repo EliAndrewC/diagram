@@ -9,7 +9,7 @@ city that let a river in was devastated seven times); instead the city stands ON
 river IS the water defense on its flank, and the dug moat covers the three landward faces,
 tapping the river upstream (NE) and returning downstream (SE) so the current flushes it; the
 junction feet tilt WITH the current (inlet near-square, outlet swept downstream - s.moat's
-default tilts; settlements.md "junction angles follow the current", GM 2026-07-24).
+default tilts; research/cities/river-cities.html "Which way does an offtake leave a river, and why?", GM 2026-07-24).
 
 NO IMPERIAL ROAD: the Imperial highway passes ~10 miles north. A NORTH ROAD leaves the north
 gate slanting slightly north-west to meet it (way off-map); the EAST ROAD crosses the Hayakawa
@@ -43,7 +43,7 @@ from l7r.diagram.waterfields import AZE, BEAN_GREEN, aze_w, build_comb, hem_on_p
 # Paddy CELL grain calibrated to a real-feet target (~0.05 acre) at this city's 3 ft/px (was hand-set 26px
 # -> ~0.08 acre, at Bray's "large" ceiling). Subdivides the same fans into finer cells; the ~3,000 urban
 # population and every dwelling count are untouched (a city's farmers are not in that figure). See
-# waterfields.paddy_grain / settlements.md 'Paddy cell size'.
+# waterfields.paddy_grain / research/fields.html 'Plot sizes, pond sizing and acreage from population'.
 PLOT_ACROSS, ROW_STEP = paddy_grain(3)
 
 s = Settlement(3200, 2700, seed=47)
@@ -165,12 +165,12 @@ ROAD = [
 s.road(ROAD)  # unlabeled: only Imperial roads get labels (SKILL.md labeling rules)
 # BELL-AND-DRUM TOWER (GM 2026-07-24): the walled seat's timekeeping/curfew tower at the SE
 # corner of the trunk road's bend - Nagahara's main crossing is the elbow where the north road
-# meets the river-gate road (settlements.md "The bell-and-drum tower"). Placed right after the
+# meets the river-gate road (research/urban-features.html "The bell-and-drum tower - one per walled seat"). Placed right after the
 # road so every later pack/frontage flows around its reserved block; clears the (1565,1394)
 # merchant estate's west wall (x1534).
 s.drum_tower(1500, 1362)
 
-# TRADE WORKS (GM 2026-07-24, settlements.md "TRADE WORKS"): placed
+# TRADE WORKS (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"): placed
 # early so every later pack/frontage flows around them. Nagahara is a RIVER PORT (meta
 # river_port=True): it keeps ALL of them, including the riverside lumber yard at the wharf.
 s.brewery(1568, 1075)  # NE quarter, clear of the x1605 street - the town's largest commercial building
@@ -197,7 +197,7 @@ s.bridge(2071, 1332, 4, RIVER_W + 26, 15)  # the Hayakawa bridge carries the thr
 # downstream river junction is the single navigation entrance - so the canal hands off at the
 # moat's outfall-arm corner (MOAT[1], the SE bend the arm springs from; self-correcting if the
 # wall ever resizes) and the moat carries boats the last reach to the river. Gated by
-# city_canal_shares_moat_mouth; see settlements.md river-cities "one mouth on the river, not two".
+# city_canal_shares_moat_mouth; see research/cities/river-cities.html "Does a city's canal open its own mouth on the river?" ("one mouth on the river, not two".
 # The approach leg enters the shuimen along the WALL'S NORMAL through the gate (GM 2026-08-09:
 # the old direct MOAT[1]->gate leg crossed the rampart 40px south of the gap - MOAT[1] is a
 # vertex BY INDEX, a past ring re-derivation moved it, and nothing compared the crossing to the
@@ -368,7 +368,7 @@ def comb_field(name, sluice, down_deg, seed, field_fall, canal_a, canal_b, offta
     for c in sorted(net["channels"], key=lambda c: -c["w"]):
         s.field_channel(
             c["pts"], '#7C9EB0' if c["role"] == "drain" else '#6C9CBE', c["w"], c.get("w_tail", c["w"]), late=True
-        )  # the LATE water block: the city's moat/river opens the shared block EARLY, which would composite the whole ditch net UNDER the plots (invisible network + parchment pinstripes on the uncovered corridors). Since the Hoshizora canals-under-paddies audit (GM 2026-07-21) the late block RE-ANCHORS at every call, so multi-fan maps stay correct too; see settlements.md's late-water bullet
+        )  # the LATE water block: the city's moat/river opens the shared block EARLY, which would composite the whole ditch net UNDER the plots (invisible network + parchment pinstripes on the uncovered corridors). Since the Hoshizora canals-under-paddies audit (GM 2026-07-21) the late block RE-ANCHORS at every call, so multi-fan maps stay correct too; see research/water.html's late-water bullet
     exs = [p[0] for p in env]
     eys = [p[1] for p in env]
     pvx = [v[0] for p in net["plots"] for v in p["poly"]]
@@ -489,7 +489,7 @@ for sx, sy in [
 ]:  # small wayside shrines (one is Suitengu, the river fortune) - clustered clear of the graveyards; the first sits E of the monzen roji at x1250 (it rode the lane's bed at its old 1258 seat)
     s.small_shrine(sx, sy)
 s.label(1292, 1299, "temple neighborhood", 9, italic=True, color="#6B2A18")
-# ADEPT-MONK HOUSING (GM 2026-07-24, settlements.md "City temples"): 2-3 ordinary homes per
+# ADEPT-MONK HOUSING (GM 2026-07-24, research/religion-and-death.html "Temples as economic institutions with hereditary householder clergy"): 2-3 ordinary homes per
 # complex for the married adepts among its 15-30 monks - drawn identical to laborer houses
 # (kind "monk_house" exists for the checks/budget/population math, not the eye). Placed before
 # the monzen pack so the warren flows around them.
@@ -915,7 +915,7 @@ s.label(1508, 806, "gate market", 9, italic=True, color="#5A4326")
 # samurai country estates: DISPERSED walled compounds across the Hayakawa to the NORTHEAST (toward
 # Otosan Uchi - a samurai builds his country seat on the capital-facing side), each a fortified country
 # seat on its OWN land, SPREAD APART and mostly OFF-MAP (miles out) - NOT a cluster (that belt is the
-# commercial suburb). They commute in over the bridge. See settlements.md 'Historical grounding'. Sizes
+# commercial suburb). They commute in over the bridge. See research/cities/defenses.html ('Historical grounding'. Sizes
 # + formal-gate direction vary; >= 200px apart (city_samurai_estates_dispersed), at most 3 shown.
 # PADDY FIRST (GM 2026-07-23, Tango-recipe): the river-fed fne1 fan claims the far bank's northern
 # ground; the gentry keep the leftover south half of the NE quadrant (capital_dir=northeast needs
@@ -1002,11 +1002,11 @@ s.ring(('poly', ENV_FNE1), 18, 40, ["plain"])
 # sit >= 20 + 140 = 160px off its centerline (water_setback caps at 140; cremation is exempt at 30).
 # The shrunk view pulled the river's centerline to x~2080-2083 here, so cemetery/ossuary sit at
 # x>=2290 - west corners ~2245, riverward margin ~162px - while their labels still end < x2391 (view edge)
-s.cemetery(2292, 1725, 90, 64, parish=False, label="common burial ground")  # parish=False -> ORGANIC Japan-style plot (settlements.md 'shape of the common ground')
+s.cemetery(2292, 1725, 90, 64, parish=False, label="common burial ground")  # parish=False -> ORGANIC Japan-style plot (research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common ground')
 s.cremation_ground(2296, 1804)
 s.ossuary(2290, 1650)
 
-# ---- the EXECUTION GROUND and its boundary stone (feature 015; settlements.md "Execution ground").
+# ---- the EXECUTION GROUND and its boundary stone (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside").
 # Sited by the way OUT and by the direction pollution runs, not by distance: the ground lies on the
 # south side, the same side as the burakumin quarter (the caste that performs every execution that
 # is not a samurai's), outside the moat and wall, clear of the farmland, and a good distance from the
@@ -1021,7 +1021,7 @@ s.ossuary(2290, 1650)
 # tighter for free. crop_not_held_open_by_one_feature does not catch this: it hunts a LONE outlier
 # (gap > 3x its own size) and here the outermost pair was the ground and its own caption.
 # label_xy: the default below-seat put the caption across the gate throat. That was invisible while the
-# throat was 228 ft wide (GM 2026-07-27, settlements/cities/defenses.md) - the piers stood so far apart
+# throat was 228 ft wide (GM 2026-07-27, research/cities/defenses.html) - the piers stood so far apart
 # the text fell in the gap between them; at the true 30 ft opening the caption sits ON a gatepost.
 s.boundary_marker(1952, 1308, label_xy=(2018, 1291))  # caption east of the rampart band - the stone keeps its verge (GM 2026-08-10)  # ON the road verge east of the bridge - the stone marks where the ROAD leaves clean ground, so it has to stand on it
 s.execution_ground(2244, 1502, rot=8)  # below-label restored 2026-07-27: label_above dated from when the kiln stood at (2210,1520), and with the works moved to the riverbank the below-seat clears it by 117 ft while the ABOVE seat put the caption's corner 12 ft from the trunk road's centerline - inside its bed, which labels_clear_of_other_buildings does not test (settlement-review)
@@ -1223,7 +1223,7 @@ s.place_wells((1094, 962, 1450, 1298), spacing=46, near=48)  # NW monzen, offset
 # worked. Fill the extramural band (inside the cropped view) with a quilt of dry/garden plots between
 # the paddy fans - no water needed. near_ring_cropland auto-skips everything inside the wall, the fans,
 # structures, estates, graves, the river, and the moat. Called last, after every structure + top-up.
-# Default near_ring_density "dense". WHY: settlements.md "Near-ring farmland density".
+# Default near_ring_density "dense". WHY: research/fields.html "What is the farmland around a town or a city made of?" ("Near-ring farmland density".
 # NEAR-RING PADDY IS COMB FIELDS ONLY (GM 2026-07-23, the Tango-recipe rollout). The ring's rice is
 # the MOAT_FARMS combs + the river-fed far-bank fan - real irrigation deltas, the same paddy form as
 # every village. REJECTED (recorded so it is never reinvented): the near_ring_cropland dry/garden tile
@@ -1325,7 +1325,7 @@ s.crop_city(west=100)  # the aggressive default (35px past the kept satellites: 
 s.title("Nagahara")
 
 # ===== THE OFFICIAL NOTICE BOARDS (kosatsuba) - a city draws the SET (GM 2026-07-24,
-# settlements.md "Notice board"): the PRINCIPAL board at the central market node plus one on
+# research/urban-features.html "The notice board (kosatsuba) - siting is a traffic decision"): the PRINCIPAL board at the central market node plus one on
 # every main gate's approach corridor (Edo: the Nihonbashi high-board + per-gate boards;
 # city_has_kosatsuba floors the count at gates + 1). Only ONE board carries the label -
 # whichever has room for it (GM: no particular board; the same one-label convention as the
@@ -1343,7 +1343,7 @@ s.kosatsuba(1874, 1317, rot=0, label=None)  # UNLABELED: at this seat the below-
 # in the east gate's 'guard / inspection stations' band at y1323-1332 (the band that forced
 # the north board's 2026-07-25 nudge) and the above-caption lands on a laborer house, so the
 # set's one label rides the market-bend principal instead ("whichever board has room for it";
-# an unlabeled board also fits the tight gate verges a labeled one cannot - urban-features.md)
+# an unlabeled board also fits the tight gate verges a labeled one cannot - research/urban-features.html)
 # ...the north road gate's board, UNLABELED, 51px inside the gate on the road verge,
 # aligned to the road's local ~72 deg bearing.
 s.kosatsuba(1492, 954, rot=72, label=None)  # nudged 10px up the wall (2026-07-25): the martial-hall budget line grew the derived ring 3px, the N-quarter pack reflowed, and a laborer_large came to rest under the board's old y961 seat. y951 then overshot into the gate's 'guard / inspection stations' caption band (y940-950), which only surfaced when the label check started reading the registry - y957 is the gap between the two
@@ -1367,7 +1367,7 @@ s.kosatsuba(1492, 1341, rot=0, label_xy=(1530, 1329))  # carries the set's one L
 # are solid shop frontage (probed 1495-1640), so the BOARD could not slide instead.
 
 # ===== THE PUNISHMENT GROUND - the cangue frame, flogging post, and kneeling stone at the town's
-# busiest public point (feature 015; settlements.md "Punishment spot"). A DISPLAY installation:
+# busiest public point (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"). A DISPLAY installation:
 # the crime rides on the cangue, so it draws no board of its own. Probed with open_seat after
 # the packs by place_punishment_spot, which scores street verges by traffic - the same probe
 # the notice board uses, because both institutions are sited by the same variable.

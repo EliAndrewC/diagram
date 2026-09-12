@@ -10,7 +10,7 @@ comments) are in git history with that script; what they recorded that still hol
 **wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
 every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
 around it. The END STATE is deliberately the exception; the scattered overlay is the norm
-(research/archetypes.html "The three overlay values"). Reading this map as typical would be the
+(research/archetypes.html "The three overlays a village may carry"). Reading this map as typical would be the
 mistake it is here to make visible.
 
 ## Map notes
@@ -68,7 +68,7 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
 
 ## What the GM's audit added (feature 150 T40-T48, 2026-08-28)
 
-See `settlements/archetypes.md` "The scripted dike-pond hamlet - the rules" and
+See `research/archetypes.html` "The scripted dike-pond hamlet - the rules" and
 `specs/150-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
 (forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
@@ -538,6 +538,23 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   On this map: 16 of 16 seated (roll attempt 1), 25 placer calls at 5.0 envelope tests each and
   16 rectangle tests per house against 387 under feature 226; the front row seated 2 and the ranks
   behind ran 5 rounds. The nearest house stands 135 px from the field outline with 3 within 165, and
-  homestead to homestead the median gap is 4 px (worst 19) - the fabric is continuous, which a centre-to-centre
+  homestead to homestead the median gap is 4 px (worst 19) - the fabric is continuous, which a center-to-center
   reading of the same cluster does not show. Drawn aspect 1.86 (round, honored); windbreak 112 clumps,
   copse 56; 2 of 16 gardens split, sides {'W': 6, 'E': 10}.
+
+## 2026-09-12 (feature 228): the crop dike's bank drawn as a ring - no placement change
+
+  The GM, on this map's interactive page: hovering the mulberry dike *"lights up not only the Mulberry Dyke
+  itself, but the fish ponds Inside each Mulberry dike, which is confusing"* - they asked for *"basically the same
+  behavior that we give to the perimeter dyke"*. Each pond's bank had been one filled path covering the whole
+  parcel with the pond painted over it; on the vector page the pond hid the disk, but raster mode (the opening
+  view) draws the lit class as a wash over the image, so the lit disk tinted all 26 dike groups' ponds gold.
+  The bank is now the ring between its outer edge and the water's outline, under the even-odd rule - the
+  perimeter dike's own band form (research/archetypes.html "The 6:4 water-to-dike ratio and coppiced mulberry" 'The bank is a ring'). Nothing placed moves: the
+  manifest is byte-identical (the two outlines come from the same draws in the same order), the crowns and the
+  earth mottle still clip to the bank outline, so the few that lean over the water's rim still light with the
+  dike, and the ring's inner stroke lies under the pond's own wider stroke. Measured on the page in raster mode
+  with the dike lit (settlement-review, by pixel area): the share of water pixels that change when the dike
+  lights fell from 100% to 6.2%, all of it within the rim (the inner stroke, the crowns and the mottle leaning
+  over the waterline), the bank 100% lit both ways; the picture differs from the shipped render in 0.14% of its
+  pixels, every one within the pond's own stroke band, by at most 9 of 255 on a channel.

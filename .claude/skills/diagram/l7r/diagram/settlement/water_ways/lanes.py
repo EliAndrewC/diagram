@@ -23,7 +23,7 @@ class LanesMixin:
         lane (the dispersed pool maps until they are rebuilt). `clearance` is the no-build corridor
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
-        See settlements.md 'Village lanes and connecting paths'."""
+        See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
         rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector}
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))

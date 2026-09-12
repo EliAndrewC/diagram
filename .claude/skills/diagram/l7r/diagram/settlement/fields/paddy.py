@@ -63,7 +63,7 @@ class PaddyMixin:
         inside the real 130-600 m2 basin band, and the default (46 -> ~785 m2 at 2 ft/px) is within
         the real parcel range (mean ~1 mu = ~600 m2, merged holdings larger) - no legibility
         inflation is in play, and the houses are true-scale too. The bund stroke draws at near-true
-        aze width for the map scale. See the "Paddy plot grain" entry in the settlements.md historical grounding."""
+        aze width for the map scale. See research/fields.html 'Paddy plots - irregular patchwork and why the grid is anachronistic'."""
         from l7r.diagram.waterfields import AZE, aze_w
 
         bund = aze_w(self.ftpx)  # near-true-scale aze stroke (~1.5 real ft; the why lives at waterfields.AZE)
@@ -89,7 +89,7 @@ class PaddyMixin:
         # together by piecemeal reclamation and inheritance - NOT the regular grid of modern (Meiji/Showa)
         # land consolidation. Build it by recursively splitting the field with straight, slightly-angled aze
         # (bund) lines that cut the LONG axis of each plot at a jittered fraction, down to the target grain
-        # (with size variation), so bunds meet at T-junctions like real cadastral paddy. See settlements.md.
+        # (with size variation), so bunds meet at T-junctions like real cadastral paddy. See research/fields.html 'Bunds are shared and the fabric is continuous'.
         _fillstate = random.getstate()  # ISOLATE the paddy fill RNG: the patchwork, crop
         random.seed(int(abs(x0) * 7 + abs(y0) * 13 + abs(x1) * 3 + len(name)))  # roll, growth stage and mottle
         plots = self._paddy_plots((ex0, ey0, ex1, ey1), plot)  # are decorative and must NOT shift
@@ -102,7 +102,7 @@ class PaddyMixin:
             cy = sum(q[1] for q in poly) / len(poly)
             # CROP MIX: an irrigated valley exists to grow RICE (~85% of the watered common). Dry upland crops
             # (barley/veg, soy) cluster on the MARGINS - the higher, harder-to-water rim - while the well-watered
-            # interior is all paddy. So dry/soy probability rises toward the field edge. See settlements.md 'Crop mix'.
+            # interior is all paddy. So dry/soy probability rises toward the field edge. See research/fields.html 'Why is every rice plot the same green?' ('Crop mix'.
             edge = max(0.0, 1.0 - edge_dist(cx, cy, smoothed) / (2.4 * plot))  # 1 at the rim, 0 deep interior
             r = random.random()
             dry_p, soy_p = 0.05 + 0.24 * edge, 0.03 + 0.11 * edge
@@ -110,7 +110,7 @@ class PaddyMixin:
             if crop == 'rice':
                 # a village transplants TOGETHER (shared water, exchanged labor), so its paddies are largely
                 # ONE stage - here high-summer green - with only minor spread (early/late rice varieties, the odd
-                # low flooded plot); NOT a rainbow of stages. See settlements.md 'Crop mix / paddy surface'.
+                # low flooded plot); NOT a rainbow of stages. See research/fields.html 'Why is every rice plot the same green?'.
                 st = random.random()
                 if st < 0.06:
                     fill, flooded = random.choice(FLOODED_SHADES), True
@@ -226,7 +226,7 @@ class PaddyMixin:
         """A WET paddy: a flooded, mottled sheet (irregular hand-transplanted shoots, plus a faint water sheen
         for a freshly-flooded plot) - NOT ruled rows. Premodern rice was transplanted irregularly; crisp
         checkrow planting (seijoue) is a Meiji improvement, so ruled rows on a paddy read as modern (the same
-        era-tell as the consolidation grid). See settlements.md 'Crop mix / paddy surface'.
+        era-tell as the consolidation grid). See research/fields.html 'Why is every rice plot the same green?'.
 
         Two mottle modes. Default (pitch=None): the sparse random scatter every comb map has always drawn
         (byte-stable). `pitch` (GM 2026-07-23, the polder-leftover repaint): a JITTERED GRID - dot centers
@@ -313,7 +313,7 @@ class PaddyMixin:
         FOLLOWS the water (rice hugging the ditches, dry upland crops where the network doesn't reach - wide-
         strip middles and the margins); the paddy is ~ONE green (a rice field, not a color mix). Records a
         feed channel (pond->field) and a drain channel (field->drain) so the checks see the supply. See
-        settlements.md 'Water-first fields'."""
+        research/fields.html 'Where does a field's water come from, and how is it shared out?'."""
         if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
             bbox = tuple(shape)
             outline = organic_bbox(bbox, amp)

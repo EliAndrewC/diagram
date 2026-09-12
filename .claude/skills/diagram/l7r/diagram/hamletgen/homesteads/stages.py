@@ -59,7 +59,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     rectangles, part layouts, the front row's share and the rounds - so the search is measured, never assumed.
 
     `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
-    depicts essentially every household - so a hamlet that declares 15 and seats 12 fails, and the stage records
+    depicts essentially every household (research/settlements.html "Is every household in a hamlet actually drawn?") -
+    so a hamlet that declares 15 and seats 12 fails, and the stage records
     the shortfall on the roll rather than re-rolling the whole map to fix a local one.
 
     Steps:

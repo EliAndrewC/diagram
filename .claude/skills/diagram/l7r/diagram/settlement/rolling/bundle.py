@@ -93,7 +93,7 @@ class BundleGeomMixin:
             # cannot nucleate at all). The windbreak becomes a VILLAGE-EDGE belt placed in the second
             # pass. The bundle is house + south yard + a garden on an ADAPTIVE sunny side (chosen by
             # the placer for fit + no shading), so it packs into a real nucleus and the gardens vary
-            # instead of all sitting east between houses. See settlements.md 'Settlement form'.
+            # instead of all sitting east between houses. See research/homesteads.html 'Does a hamlet have to be nucleated at all?'.
             # CAP the appurtenance dims so a big house (the headman) keeps an ORDINARY farm's yard/garden
             # (spanning ~its adjacent wall but not scaled up to the grand house - "not as tall / not as
             # wide"). A plain 23x14 house is well under these caps, so ordinary farms are unaffected.

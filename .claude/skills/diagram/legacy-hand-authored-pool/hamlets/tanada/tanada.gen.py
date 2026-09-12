@@ -30,7 +30,7 @@ name="Tanada", scale="hamlet", ftpx=1, toscale=True, households=14, down_deg=90,
 
 s._nucleated = True  # communal windbreak, no per-house groves
 # n_terraces=32 keeps each step shallow (~44 ft deep) so a cell reads WIDER than deep; each step is then split
-# along the contour into ~0.05-acre leveled cells (build_terraces + settlements.md 'Paddy cell size': a real
+# along the contour into ~0.05-acre leveled cells (build_terraces + research/fields.html 'Plot sizes, pond sizing and acreage from population': a real
 # terrace is a row of small paddies, Longsheng's largest is 0.62 mu / ~0.10 acre). ftpx=1 (a 1 ft/px hamlet).
 net = build_terraces(W, H, TOP, SEED, down_deg=90, n_terraces=32, cross_width=760, fall=1400, ftpx=1)
 s.field_polys.append([(round(x, 1), round(y, 1)) for x, y in net["envelope"]])
@@ -78,7 +78,7 @@ if s.M.get("field_ditches"):
 s.hinterland()
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=44)

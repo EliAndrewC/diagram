@@ -12,11 +12,8 @@
 <body>
 <main>
 <h1 id="domain-capitals-the-research-behind-the-castle-town-tier">Domain capitals: the research behind the castle-town tier</h1>
-<!--
-<p><em>The research behind the rules in <a href="../../settlements/capitals.md"><code>../../settlements/capitals.md</code></a>. Findings, anchors and disclosed departures live here so the rule file stays operational; this file is where citations and deeper historical context get added as they accumulate.</em></p>
-<p><strong>Load this file when:</strong> you are changing a capital-tier rule, questioning one, or adding to the record - never merely to draw a map.</p>
-<p>Every entry: what the research found, the decision it drove, and any deliberate departure from literal reality. Anchors are stable - rules link to them by <code>#slug</code>.</p>
--->
+<p><em>The findings behind the castle, the government avenue, the wards, the water and the wharf of a domain capital on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>
+<!-- the entries below also hold what the retired capital rule file uniquely carried; the tier's housing is unscripted, so the specification paragraphs are the only statement of what a capital's map draws -->
 <hr>
 <h2 id="at-the-capital-tier-japan-leads-and-china-is-the-tiebreaker">At the capital tier Japan leads and China is the tiebreaker</h2>
 <!-- Grounds: the whole tier - the castle, the rank-graded samurai rings, the teramachi rim, the ote-suji government avenue -->
@@ -103,10 +100,10 @@
 <ol>
 <li><strong>No continuous ward fence at capital scale.</strong> Replace it with kido at the block and lane mouths - a glyph the maps already draw,<!-- s.kido --> at a far higher count and a different placement rule.</li>
 <li><strong>Several samurai districts, separated by commoner strips on the thoroughfares</strong> - not one contiguous sealed quarter.</li>
-<li><strong>The walled compound does the sealing</strong>, which dovetails with <a href="../../settlements/capitals.md#rules-that-invert">the inverted no-manor-inside-the-wall rule</a>: a capital's senior retainers live in walled yashiki, and those walls ARE the boundary that a fence was standing in for.</li>
-<li><strong>The bell-and-drum tower acquires a documented job.</strong> We already draw one<!-- ../../settlements/urban-features.md -->; the curfew above is what it is FOR - it sounds the hour the gates close and the hour they open.</li>
+<li><strong>The walled compound does the sealing</strong>, which dovetails with <a href="#which-provincial-rules-turn-upside-down-in-a-capital-and-what-simply-multiplies">the inverted no-manor-inside-the-wall rule</a>: a capital's senior retainers live in walled yashiki, and those walls ARE the boundary that a fence was standing in for.</li>
+<li><strong>The bell-and-drum tower acquires a documented job.</strong> We already draw one; the curfew above is what it is FOR - it sounds the hour the gates close and the hour they open.</li>
 </ol>
-<p><strong>The honest tension, flagged rather than buried.</strong> The provincial tier currently seals its samurai/government quarter with a continuous palisade<!-- (a rule and its whole family of checks: city_samurai_ward_sealed) -->, justified<!-- in ../../settlements/cities/government.md --> by the same observation that the Tang <em>fang</em> system does not apply. This research says the continuous fence is more than history supports even there.<!-- That is a question for the provincial tier, not a defect to fix in passing - three shipped cities depend on those checks, and the capital can adopt the mesh without the provincial maps changing at all. Raise it with the GM separately. --></p>
+<p><strong>The honest tension, flagged rather than buried.</strong> The provincial tier currently seals its samurai/government quarter with a continuous palisade<!-- (a rule and its whole family of checks: city_samurai_ward_sealed) -->, justified by the same observation that the Tang <em>fang</em> system does not apply. This research says the continuous fence is more than history supports even there.<!-- That is a question for the provincial tier, not a defect to fix in passing - three shipped cities depend on those checks, and the capital can adopt the mesh without the provincial maps changing at all. Raise it with the GM separately. --></p>
 <h2 id="the-capitals-samurai-are-senior-heavy-which-inverts-the-provincial-housing-mix">The capital's samurai are SENIOR-heavy, which INVERTS the provincial housing mix</h2>
 <!-- Grounds: the capital's samurai housing variation; the (corrected) retainer-terrace expectation -->
 <!-- Evidence: setting-canon -->
@@ -213,10 +210,11 @@
 <p><strong>The walled samurai compound inside the wall.</strong><!-- C_YASHIKI --> The anchor is already in our own research: the Fukui archive's <strong>Suganuma plan</strong> (a 1,000-koku retainer, 1839) is a <strong>28 x 32.5 ken plot<sup class="fn"><a id="fnref-33" href="../citations/cities/capitals.html#fn-33">33</a></sup> = ~167 x 194 ft</strong>, about 0.30 ha<!-- 32,400 sq ft, which at 3 ft/px is 3,600 px^2 -->. That is a PLOT, so it already contains its own yard - the walled perimeter IS the boundary, so it carries far less shared-margin overhead than a detached house. Applying only a modest ~1.15x for street margin gives a walled samurai compound of about 0.35 ha (0.86 acre).<!-- walled samurai compound ~= 4,150 px^2 (C_YASHIKI) --></p>
 <p>Sanity checks against things we already draw: 1.7x an ordinary in-wall samurai house's gross (right for a chancellor against a bushi), 1.3x the drawn merchant-estate court (0.59 acre<!-- 2,852 px^2 --> - right for a chancellor against a very rich merchant), and comfortably under the extramural country manor (~1 acre<!-- ~4,900 px^2 -->), which has land a city plot does not.</p>
 <p><strong>The retainer terrace.</strong><!-- C_TERRACE --> The anchor is likewise ours already: <a href="https://online.bunka.go.jp/heritages/detail/144338">Shibata</a>'s Important Cultural Property (ICP) <em>ashigaru-nagaya</em> is <strong>8 households under one roof,<sup class="fn"><a id="fnref-34" href="../citations/cities/capitals.html#fn-34">34</a></sup> 143 x 24 ft (a depth of 7.3 m), 18 ft of frontage each<sup class="fn"><a id="fnref-35" href="../citations/cities/capitals.html#fn-35">35</a></sup></strong> = 378 sq ft per household<!-- = 42 px^2 -->. But that is the <em>lowest</em> stratum, and our retainer terrace houses <strong>Rank 1-4 samurai</strong> - poor, but a band reaching 16 koku at the top. It should therefore sit above the historical ashigaru unit and below the detached samurai house (2,322 sq ft drawn, which matches the <a href="https://www.matsue-bukeyashiki.jp/about/equipment.html">Matsue</a> mid-rank residence's ~220 m^2 almost exactly - unsourced). Taking ~990 sq ft drawn<!-- ~110 px^2 --> (just above our laborer row house at 891) at a row-housing gross-up gives a retainer terrace of about 5,900 sq ft gross (0.14 acre).<!-- retainer terrace ~= 660 px^2 (C_TERRACE) --></p>
-<p><strong>Confidence, stated honestly.</strong> Both SIZE anchors are attested and measured. The two DERIVED constants are interpolations, and <strong>the terrace figure is the softer of the two</strong> - it is bracketed by real numbers at both ends but its position between them is a judgment. The compound figure rests directly on a measured plan and is firmer.<!-- Both should be re-derived against the first capital's drawn map, exactly as the two provincial figures were back-predicted from Tango. C_TERRACE, C_YASHIKI, C_PACKED/C_SPACED --></p>
+<p><strong>Confidence, stated honestly.</strong> Both figures are settled and in use as the tier's ground costs; both SIZE anchors behind them are attested and measured. The two DERIVED constants are interpolations, and <strong>the terrace figure is the softer of the two</strong> - it is bracketed by real numbers at both ends but its position between them is a judgment. The compound figure rests directly on a measured plan and is firmer.<!-- Both should be re-derived against the first capital's drawn map, exactly as the two provincial figures were back-predicted from Tango. C_TERRACE, C_YASHIKI, C_PACKED/C_SPACED --></p>
 <p><strong>What it makes the wall.</strong> Pricing the capital inventory with these rows - 2,160 packed households, a samurai cohort split by rank into ~60 walled yashiki / ~160 detached / ~94 terraced, the ~50 ha castle<!-- ~598,000 px^2 -->, ~15 ha<!-- ~180,000 px^2 --> of expanded civic program, and the 7% circulation fraction - gives a required interior of <strong>~270 ha</strong><!-- ~3.2M px^2 --> and a derived ring<!-- rx 1,056 / ry 982 px --> of roughly <strong>1.2 x 1.1 miles across, a ~3.6 mile circuit</strong>.</p>
 <!-- Two consequences worth knowing before the feature starts: (1) The existing 3,200 x 2,700 canvas still fits it (it needs ~2,412 x 2,264 including the moat-and-margin clearance), so no canvas change is required. (2) The provincial planner refuses it outright. Its population band of 2,000-4,000 raises rather than clamping - correctly, since it says capitals are a future tier - so the capital tier needs its own band and its own caste table, not a widened provincial one. plan_city; POP_MIN, POP_MAX = 2000, 4000 -->
-<p><strong>One knob this exposes.</strong> The share of samurai housed inside the wall<!-- SAMURAI_INWALL_FRAC --> is 2/3 for a provincial city, the rest holding extramural estates they commute in from. A capital should run HIGHER - proximity to the daimyo's court is the whole point of the posting, and the walled yashiki is what makes staying in-wall attractive to exactly the senior cohort that would otherwise build outside. ~0.85 is my estimate; it is a guess, and it moves ~40 households of the priciest housing type.</p>
+<p><strong>And two of the provincial figures do not survive the tier.</strong> A capital's packed quarter is not a provincial city's packed quarter, and the difference is a decision as much as a measurement. The first capital drawn came out at about 0.28 acre<!-- 1,367 px^2 --> of gross ground per packed family - estates, works and dojos embedded in the quarters, generous courts - so pricing its rampart from the provincial 0.14 acre under-built the wall by some 40% and spilled more than half the cohort into suburbs the extramural ruling does not allow. The capital's packed household is therefore priced at about <strong>0.20 acre</strong><!-- C_PACKED_CAPITAL = 950 px^2 --> gross, a packed-tight target between the provincial figure and that first loose draw, and the drawn fabric has to MEET it rather than merely be measured against it. Circulation is the other one: a capital carries a street mesh, band lanes, block alleys, the ceremonial and rear approach systems and forty-odd compound halos, measured at about a fifth of the interior on that first draw and re-declared at <strong>15%</strong><!-- CIRC_FRAC_CAPITAL = 0.15 --> for the packed-tight fabric, against the provincial 7%. The two corrections nearly cancel, which is why the as-built rampart lands inside the wall check's tolerance of the corrected minimum.</p>
+<p><strong>One knob this exposes.</strong> The share of samurai housed inside the wall<!-- SAMURAI_INWALL_FRAC --> is 2/3 for a provincial city, the rest holding extramural estates they commute in from. A capital should run HIGHER - proximity to the daimyo's court is the whole point of the posting, and the walled yashiki is what makes staying in-wall attractive to exactly the senior cohort that would otherwise build outside. The tier is settled at <strong>0.85</strong> - an estimate rather than a measurement, and a first candidate for re-derivation against the first drawn capital, but a settled figure the budget spends: it moves about 40 households of the priciest housing type.</p>
 <h2 id="the-brokers-row-is-merchant-and-the-ministrys-cut-is-narrower-than-it-looks">The brokers' row is MERCHANT, and the ministry's cut is narrower than it looks</h2>
 <!-- Grounds: the wharf brokers' row; the entertainment district's siting -->
 <!-- Evidence: setting-canon (GM ruling), corroborated by the Edo pattern -->
@@ -239,14 +237,14 @@
 <li><strong>beside the Imperial Magistrate's compound</strong> - the official who oversees them is right there, which is the administratively obvious arrangement; or</li>
 <li><strong>on the water</strong> - granaries want the wharf, since grain arrives and leaves by boat.</li>
 </ul>
-<p>Proposed as a per-map choice between those two values<!-- a per-map knob: meta(imperial_granary_seat="magistrate" | "wharf") -->, with neither as a strong default. This is the same shape as the castle-seat choice<!-- the castle-seat knob -->: a genuine either/or that gives two capitals different skeletons for a documented reason rather than a die roll.</p>
+<p>It is a per-map choice between those two values<!-- a per-map knob: meta(imperial_granary_seat="magistrate" | "wharf") -->, with neither as a strong default. This is the same shape as the castle-seat choice<!-- the castle-seat knob -->: a genuine either/or that gives two capitals different skeletons for a documented reason rather than a die roll.</p>
 <h2 id="a-river-gets-a-towpath-not-a-road---and-they-are-not-the-same-feature">A river gets a TOWPATH, not a road - and they are not the same feature</h2>
 <!-- Grounds: the riverside way at a river capital; the wharf district's landward edge -->
 <!-- Evidence: attested, corroborated (by opposite reasoning in the two traditions) -->
 <p><strong>Sources:</strong> <a href="https://news.cgtn.com/news/3d3d674d7755444d33457a6333566d54/index.html"><code>shaoxing-towpath</code></a></p>
 <p>The GM asked (2026-08-08) whether a road would run along the river, or whether the river replaces it. <strong>Three different features get confused under "riverside road", and only two of them belong.</strong></p>
 <p><strong>1. A trunk road paralleling the river: NO.</strong> Water carried bulk far more cheaply than any cart, so a highway shadowing a navigable river is redundant - the river IS that route, and the road network exists to reach what the water does not. Japan makes the point at its sharpest: roads there did not follow rivers, and at the Oi-kawa on the Tokaido <strong>bridges and ferries were deliberately PROHIBITED</strong> so the river would serve as a checkpoint delaying an invader. A road meets a river to cross it, not to accompany it.</p>
-<p><strong>2. A TOWPATH on one bank: YES - and this is the real riverside way.</strong> The Chinese <strong><em>qiandao</em></strong> (纤道) is ancient and substantial: Shaoxing's, on the Eastern Zhejiang Canal, dates to <strong>815 CE</strong> and runs <strong>over 40 km</strong>; Marco Polo saw barges hauled along it by teams of horses. Its form is worth knowing because it is not road-shaped - it comes in two kinds, one on the<sup class="fn"><a id="fnref-37" href="../citations/cities/capitals.html#fn-37">37</a></sup> bank as expected, and one built <strong>out in the water parallel to the bank</strong>, slab stones laid on stone piers about half a metre above the surface.</p>
+<p><strong>2. A TOWPATH on one bank: YES - and this is the real riverside way.</strong> The Chinese <strong><em>qiandao</em></strong> (纤道) is ancient and substantial: Shaoxing's, on the Eastern Zhejiang Canal, dates to <strong>815 CE</strong> and runs <strong>over 40 km</strong>; Marco Polo saw barges hauled along it by teams of horses. Its form is worth knowing because it is not road-shaped - it comes in two kinds, one on the<sup class="fn"><a id="fnref-37" href="../citations/cities/capitals.html#fn-37">37</a></sup> bank as expected, and one built <strong>out in the water parallel to the bank</strong>, slab stones laid on stone piers about half a meter above the surface.</p>
 <p><strong>What determines it</strong>: upstream haulage. A towpath exists <em>because</em> of the boats, not instead of them - downstream traffic drifts, upstream traffic is pulled. So it <strong>supplements</strong> water transport, which is exactly the GM's intuition, and it is narrow, single-bank, and goes only where the boats go.</p>
 <p><strong>3. A quay street inside the city (河岸, <em>kashi</em>): YES, but it is wharf frontage, not a route.</strong> It serves the dock, the granary and the brokers' row; it belongs to the wharf district and is already in that program.</p>
 <p><strong>The decision.</strong> A river capital draws a <strong>towpath</strong> on the wharf's own bank - a narrow hauling path, drawn distinctly from a road (no roadbed, no dashed lane centerline), running to the wharf and no further - plus the quay frontage inside the wall. It does <strong>not</strong> draw a trunk road paralleling the river. The domain's overland roads leave in the directions the water does not serve, which for Shiro Daika is exactly what the GM's road list already says: east to the Fox lands and southwest into the domain, with the Imperial road running north-south.</p>
@@ -350,7 +348,7 @@ holds no archives of its own - it is a chamber, not a compound.</p>
 <p><strong>Decision:</strong> no House Chancellery compound on the map; the council chamber is part of
 the castle's implied goten, never drawn<!-- per the blank-castle doctrine -->.<!-- and a rule fires if a
 chancellery compound is drawn outside. --></p>
-<!-- the House Chancellery compound came OFF the map; the check inverted with it: capital_chancellery_meets_in_the_castle now fires if a chancellery compound is drawn outside; the inventory table in settlements/capitals.md moves the chancellery inside -->
+<!-- the House Chancellery compound came OFF the map; the check inverted with it: capital_chancellery_meets_in_the_castle now fires if a chancellery compound is drawn outside; the inventory entry below puts the chancellery inside -->
 <!-- Correction to the record (2026-08-28, feature 143) - CONTRADICTED on the anchor, rule unchanged, awaiting the GM: ja.wikipedia 評定所 places the Hyōjōsho outside Edo castle, at Tatsunokuchi (present Marunouchi) - across the moat from the Ōte gate, in the daimyo-mansion belt, not within the castle. The entry's "sat WITHIN Edo castle" was wrong as written; whether the capital's chancellery should therefore stand in the castle (the GM's ruling, which feature 020 implemented) or on the government avenue beside the castle (the Edo form) was the GM's call. Listed in the feature 143 ledger, section G. Resolved by the GM question of 2026-08-28 (feature 143 T20) - the Edo anchor replaced by the median domain. -->
 <p><strong>A median domain's council met in its castle (GM question, 2026-08-28).</strong> The GM asked whether a TYPICAL domain's council met inside or outside its castle, Edo being an unusual capital. A castle-holding han's 藩庁 stood<sup class="fn"><a id="fnref-47" href="../citations/cities/capitals.html#fn-47">47</a></sup> "城に" - at the castle - and a castle-less han's at its jin'ya (<a href="https://ja.wikipedia.org/wiki/%E8%97%A9%E5%BA%81"><code>hancho-jawiki</code></a>); the goten's public half is the 政庁<sup class="fn"><a id="fnref-48" href="../citations/cities/capitals.html#fn-48">48</a></sup> (<a href="https://ja.wikipedia.org/wiki/%E6%9C%AC%E4%B8%B8"><code>honmaru-jawiki</code></a>); at Kakegawa, ~51-59,000 koku - a median domain - the<sup class="fn"><a id="fnref-49" href="../citations/cities/capitals.html#fn-49">49</a></sup> "政務所である二ノ丸御殿" sat in the ninomaru (<a href="https://ja.wikipedia.org/wiki/%E6%8E%9B%E5%B7%9D%E5%9F%8E"><code>kakegawa-castle-jawiki</code></a>), and Kawagoe likewise used its ninomaru; the karō decided in council and lived near the castle<sup class="fn"><a id="fnref-50" href="../citations/cities/capitals.html#fn-50">50</a></sup> (<a href="https://ja.wikipedia.org/wiki/%E5%AE%B6%E8%80%81"><code>karo-jawiki</code></a>); a small domain's jin'ya held 居館 and 役所 in one compound<sup class="fn"><a id="fnref-51" href="../citations/cities/capitals.html#fn-51">51</a></sup> (<a href="https://ja.wikipedia.org/wiki/陣屋"><code>jinya-jawiki</code></a>). No page read puts a domain's administration in the town. So the capital's chancellery meeting IN the castle is the attested median form - in the ninomaru or honmaru goten, which ring varying by castle; Edo's Hyōjōsho, a bakufu judicial council outside the castle, is not the anchor.<!-- The map labels this accurate. class for the HTML modal: accurate --></p>
 <h2 id="moat-water-drawn-connections-outside-standing-water-inside---and-yes-it-scums">Moat water: drawn connections outside, standing water inside - and yes, it scums</h2>
@@ -419,7 +417,7 @@ glyph) or the capital equivalent of the provincial martial hall?</p>
 <p>Both, because that is what a hanko WAS: a school of LETTERS first, with a martial wing
 (bugeijo) on the same grounds<sup class="fn"><a id="fnref-53" href="../citations/cities/capitals.html#fn-53">53</a></sup> - Aizu's Nisshinkan, Mito's Kodokan and Kagoshima's Zoshikan all
 pair lecture halls with fencing floors and an archery range.<sup class="fn"><a id="fnref-54" href="../citations/cities/capitals.html#fn-54">54</a></sup> The provincial martial hall<!-- this
-engine already draws --> is exactly that martial wing at the tier below<!-- cities/government.md -->; the
+engine already draws --> is exactly that martial wing at the tier below<!-- government.html -->; the
 capital shows the whole institution. <strong>Decision:</strong> a dedicated hanko glyph - the
 martial-hall drawing<!-- the martial-hall vocabulary --> (state violet, dojo hall with kamiza, archery lane with azuchi) plus
 the larger civil lecture hall.</p>
@@ -442,7 +440,7 @@ because it has only a few and they serve street life; a capital has enough to sp
 defenses. The rim is the settled decision<!-- the capital rule file, "Placements that
 change" -->. A gathered temple quarter remains available if the GM prefers it.<!-- a one-session
 re-seat --></p>
-<!-- the settled feature 018 decision, settlements/capitals.md - recorded here at full length because the question deserved the reasoning, not a pointer; the checks do not currently care - say the word -->
+<!-- the settled feature 018 decision, recorded here at full length because the question deserved the reasoning, not a pointer; the checks do not currently care - say the word -->
 <h2 id="street-widths-the-ote-suji-is-a-grand-street-not-an-imperial-boulevard">Street widths: the ote-suji is a grand street, not an imperial boulevard</h2>
 <!-- Evidence: attested (5 ken), deviation (30 drawn for 29.5 - a rounding) -->
 <p><strong>Sources:</strong> <a href="https://ja.wikipedia.org/wiki/%E6%9C%B1%E9%9B%80%E5%A4%A7%E8%B7%AF"><code>suzaku-oji-jawiki</code></a> (82 m Heian-kyō, 147 m Chang'an - the entry's 84 / ~150 are rounded), <a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E6%B5%B7%E9%81%93"><code>tokaido-jawiki</code></a> (5 ken in 1604); Honchō-dōri at 13.8 m is on no page read (secondary pages give 9.9-11.8 m post-Meireki)</p>
@@ -506,7 +504,7 @@ failed and was fixed; the rest hold. --></p>
 <tr>
 <td>ministries</td>
 <td>224 x 148 ft each</td>
-<td>the provincial research - "a capital does not get a bigger yamen"<!-- cities/government.md; feature 018 --></td>
+<td>the provincial research - "a capital does not get a bigger yamen"<!-- government.html; feature 018 --></td>
 <td>HOLDS</td>
 </tr>
 <tr>
@@ -782,11 +780,11 @@ stage per granary-complex end rather than a picket line of piers.</p>
 <h2 id="ministry-offices-six-equal-compounds-the-same-size-the-province-builds---on-purpose">Ministry offices: six equal compounds, the SAME size the province builds - on purpose</h2>
 <!-- Evidence: setting-canon -->
 <p><strong>Sources:</strong> the GM's rank-law reading, and the provincial footprint from the government-quarter research (<a href="government.html">government.html</a>)</p>
-<!-- the recorded feature 018 decision; the provincial footprint in cities/government.md - nothing physical re-sourced -->
+<!-- the recorded feature 018 decision; the provincial footprint is on government.html -->
 <p><strong>The questions</strong> (GM 2026-08-09): are the capital's ministries larger than the provincial
 ones, and was the size researched? Why are all six identical - peer standing, or oversight?</p>
 <p><strong>They are NOT larger, and that is a recorded decision, not an accident.</strong><!-- feature 018 --> The 224 x
-148 ft compound is the researched provincial footprint (the provincial government-quarter rule<!-- cities/government.md -->), and the
+148 ft compound is the researched provincial footprint (the provincial government-quarter research<!-- government.html -->), and the
 civic-program research settled the tier rule: administrative ground grows by INSTITUTIONS
 ADDED, not by swelling the buildings - "a capital does not get a bigger yamen; it gets a
 castle, a chancellery, and a foreign magistrate." A ministry at any tier is a bureau of clerks
@@ -1114,6 +1112,191 @@ end - which is why such a feature reads unmotivated.</p>
 1873 shubiki proposal and the stench rationale; Kozukappara, Suzugamori, Jōkan-ji and Injō-ji
 coordinates measured against the Odoi line; <a href="https://up.codes/s/open-burning-and-recreational-fires">IFC §307 / NFPA 1</a> for the bonfire setback.</p>
 -->
+<h2 id="why-is-the-castle-drawn-blank-inside">Why is the castle drawn BLANK inside?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired capital rule file, "The castle" / "WHY blank: the sync argument" / "DECIDED AND ANSWERED - the experiment ran" -->
+<!-- Grounds: Settlement.castle and its baileys knob (default False); castle_civic.py cites this doctrine by name for manor and governor_mansion -->
+<!-- Evidence: setting-canon (the GM's ruling), liberty (the experiment's verdict is a judgment about this drawing vocabulary, not a historical finding) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-08-08 and the two renders made under it; nothing historical is asserted here</p>
+<p>The castle is drawn as an <em>enceinte</em> and nothing else: its rampart, its own moat and its gates, with bare ground inside. No <em>tenshu</em>, no <em>goten</em>, no granary, no armory, no barracks. That is the ruling rather than an omission, and the GM's reasoning for it generalizes past the castle to every compound this project draws as an implied interior - a governor's mansion, a magistrate's manor:</p>
+<blockquote>
+<p>I plan to also show a separate diagram for them. And if we fill in any details at all on the map, then the diagram will need to match and be kept in sync with the map, which will add a layer of difficulty... I'd rather nothing be shown than the WRONG thing be shown.</p>
+</blockquote>
+<p>Any interior detail on a settlement map becomes a CONSTRAINT on the compound's own sheet, which must then be drawn to match it - and a constraint nothing enforces, so the two drift apart quietly and the map ends up asserting something the compound's plan contradicts. An empty compound asserts nothing and can never be wrong. <strong>The cost of the blank is legibility; the cost of the detail is a contradiction nobody catches</strong>, and the blank wins until a real sync exists. A future cross-check - a compound sheet's own footprints projected onto the settlement map's compound - would let it relax, and the GM wants that eventually; until then, walls only.</p>
+<p>The ground is spent either way. A castle's ground is a declared program line of about 50 ha, inside a documented band of 50 to 230 ha, and the budget prices the WORKS rather than their contents - so a blank enceinte costs its city exactly what a fully drawn one would.</p>
+<p><strong>The one attempt the GM authorized, and what it settled.</strong> The GM allowed a single try at drawing the internal wards - <em>"let's make one attempt and if it doesn't work then we'll just remove them"</em> - and two renders were made. The first drew the wards concentric and sharing the castle's axes: it read as a <strong>bullseye</strong>, a target symbol rather than a fortress. The second fixed every obvious fault - the wards offset toward the far side from the main gate, so that an attacker crosses the whole works under fire; the wall weights graded; the gate court enlarged until it was actually visible - and it was a real improvement, and still nested rectangles. <strong>The finding, which is the part that generalizes: rectangles inside rectangles read as ABSTRACTION however they are arranged.</strong> What makes a castle read as a castle is irregular ward outlines, substantial water BETWEEN the wards, and corner <em>yagura</em> - and none of those survives being drawn walls-only at three feet to the pixel. So the internal works bought nothing and cost a second sheet to keep in step, and the blank rule holds on its own terms rather than by argument. The knob that would draw them stays, switched off: the finding is about this drawing vocabulary rather than a law, and a castle with genuinely irregular wards could reopen it.</p>
+<p><strong>One thing did survive the experiment</strong>: the <em>ishigaki</em> doubling on the outer enceinte - the battered stone rampart drawn as a doubled line, which reads as mass where a single stroke reads as a fence. That is the OUTER wall, so it adds no interior to keep in sync, and it is kept.</p>
+<p><strong>A caveat on how strong the verdict is.</strong> The blank castle was judged inside a blank city, where everything read as empty because nothing else had been drawn yet. Once the housing lands and the castle is the one large walled thing at the heart of a dense map, it will read considerably better than it did. If it still reads as a void THEN, that is the moment to reopen this - and the castle is deliberately the FIRST thing a capital draws, ahead of the city fabric, so that the call can be judged off an early render instead of at the end of a long build.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a capital's castle is drawn as its outer enceinte only - the rampart as a doubled line for its battered stone face, its own moat, and its two gates - with nothing inside it. No keep, no residence, no granary, no armory, no barracks, no well, no garden: not one structure stands on castle ground on a city map, and the same rule governs every compound whose interior is implied rather than drawn, the governor's mansion and the magistrate's manor included. The castle's ground is budgeted in full regardless.</p>
+<h2 id="what-stands-inside-the-castle-and-what-must-stand-outside-it">What stands inside the castle, and what must stand outside it?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired capital rule file, "The inventory: what is INSIDE vs OUTSIDE" -->
+<!-- Grounds: the capital civic program; imperial_granary_seat; capital_chancellery_meets_in_the_castle -->
+<!-- Evidence: setting-canon (the domain's institutions), corroborated (each siting is argued in its own entry above) -->
+<p><strong>Sources:</strong> the setting's own campaign and budget notes for the domain's institutions; the siting of each is argued in the entries above</p>
+<p>The point of the blank castle is that we still know what it holds - so the inventory is the record of that, and it doubles as the list of what a reader should expect NOT to find drawn on the map.</p>
+<table>
+<thead>
+<tr>
+<th>INSIDE the castle: implied, drawn only on its own sheet</th>
+<th>OUTSIDE: drawn in the city like any other feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>the <strong>tenshu</strong>, the keep</td>
+<td>the <strong>six domain ministries</strong> and their government ward, on the <em>ote-suji</em> approach avenue</td>
+</tr>
+<tr>
+<td>the <strong>goten</strong> - the daimyo's residence and audience halls</td>
+<td>the <strong>domain school</strong>, the <em>hanko</em>, with its martial wing</td>
+</tr>
+<tr>
+<td>the <strong>House Chancellery's council chamber</strong>, a room in the goten</td>
+<td>the <strong>domain granary</strong> holding the STIPEND and transshipment rice, at the wharf</td>
+</tr>
+<tr>
+<td>the <strong>domain granary's SIEGE stock</strong></td>
+<td>the <strong>brokers' row</strong> beside that granary, and the entertainment district next to it</td>
+</tr>
+<tr>
+<td>the <strong>armory</strong> and the <strong>treasury</strong></td>
+<td>the <strong>Imperial Magistrate's compound</strong>, foreign sovereign ground</td>
+</tr>
+<tr>
+<td>the <strong>castle guard's barracks</strong>, the daimyo's own retinue</td>
+<td>the <strong>Emperor's granaries</strong>, beside that compound or on the water</td>
+</tr>
+<tr>
+<td>the daimyo's <strong>stables</strong> and <strong>private gardens</strong></td>
+<td>the rolled <strong>private dojos</strong>, and the <strong>lineage compounds</strong> of every lineage but the ruling one</td>
+</tr>
+<tr>
+<td>the castle's own <strong>wells and cisterns</strong></td>
+<td>the <strong>two sovereign temples</strong> and the <em>teramachi</em> rim</td>
+</tr>
+<tr>
+<td></td>
+<td>the <strong>wharf</strong> with its dock, jetties, quay frontage and towpath</td>
+</tr>
+<tr>
+<td></td>
+<td>the <strong>aqueduct</strong>: intake, open canal and flume outside, draw-basins inside</td>
+</tr>
+<tr>
+<td></td>
+<td>all <strong>samurai districts</strong> - walled <em>yashiki</em>, detached houses, retainer terraces</td>
+</tr>
+<tr>
+<td></td>
+<td>all <strong>commoner machi</strong>, the markets, the road ribbon, the entertainment district</td>
+</tr>
+<tr>
+<td></td>
+<td>the <strong>bell-and-drum tower</strong>, the fire towers, the public wells</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>burakumin quarters</strong>, tanning yards, the execution ground</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>gate furniture</strong>, gate markets, flophouses, caravan clusters</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The one that matters most</strong>: the domain's rice appears TWICE, in two places, for two reasons - the siege stock inside the castle, the working stipend-and-transshipment rice down at the wharf. Drawing only one of them would misrepresent how the domain actually holds its grain.</p>
+<p class="spec"><strong>The rule the map follows:</strong> nothing in the left-hand column above appears on a capital's map, and everything in the right-hand column does. The two granaries are drawn as two separate features, the siege stock implied inside the castle and the stipend stores standing at the wharf; a chancellery drawn as a compound anywhere in the city is an error, because the council meets in the daimyo's residence.</p>
+<h2 id="what-does-a-capital-have-that-a-provincial-city-has-no-version-of">What does a capital have that a provincial city has no version of?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired capital rule file, "Compounds with no provincial equivalent" and "Shiro Daika's lineage compounds" -->
+<!-- Grounds: s.hanko, manor(ink=...) for the Imperial Magistrate, the lineages / ruling_lineage knobs and their band checks -->
+<!-- Evidence: setting-canon (every institution here comes from the campaign and budget notes), attested (the occupational trade wards) -->
+<p><strong>Sources:</strong> the setting's own campaign notes (the cosmopolitan lineages, the sovereign temples and their grand abbots, the witch hunters) and its budget notes (the Imperial Magistrate's line); the school, the Emperor's granaries and the chancellery are argued in their own entries above</p>
+<p>Nine things at this tier have no smaller version to scale down from. Four of them have entries of their own above - the domain school, the Emperor's granaries, the House Chancellery and the wharf granary complex - and the rest are here:</p>
+<ul>
+<li><strong>The Imperial Magistrate's compound.</strong> About 56 staff and a dozen of their families, funded in the setting's own budget notes at 700 koku a year for "manor maintenance, grounds, stable, fortified walls, ceremonial halls". It is FOREIGN SOVEREIGN GROUND and should read as such, in its own ink, the way state violet marks a martial hall.</li>
+<li><strong>Cosmopolitan lineage compounds.</strong> Named, labeled walled yashiki in the samurai wards: the setting's canon has cosmopolitan lineages based in their domain's capital. This is the tier's best flavor feature - eight named compounds are what make a map read as a SPECIFIC domain's seat rather than as a generic large city.</li>
+<li><strong>Retirement housing for the relocated elders</strong>, temple-adjacent - the <em>inkyo</em> households the tier's population figure includes and the provincial tier has no line for.</li>
+<li><strong>Sovereign temples with grand abbots.</strong> Not a scaled-up precinct but a different program: the head house of the domain's whole Order, with the abbot's residence, the Order's administration and its library.</li>
+<li><strong>A witch hunter's office</strong> - rolled rather than given, because the office was ordered for every capital and some of those orders were later rescinded.</li>
+<li><strong>Trade-named machi</strong> - the smiths' street, the drapers' street - from the occupational segregation the castle-town zoning attests. Cheap to draw and a high payoff in character.</li>
+</ul>
+<h3 id="why-is-a-chancellors-compound-smaller-than-his-rank">Why is a chancellor's compound smaller than his rank?</h3>
+<p>Because the compound reads how many of his lineage live in the capital, not how important he is. The house whose capital was worked out here carries nine lineages, more than most, and their weights are published numbers rather than inventions: a lineage holding a tenth or more of the domain's samurai usually takes a Chancellery seat, which gives six chancellors and leaves three houses below the line. One of the six is provincial rather than cosmopolitan - its seat is out in the province its name is attached to - and the GM ruled on 2026-08-08 that <strong>the chancellor still lives in the capital and still holds a lineage estate there</strong>, because a Chancellery seat is held in person. His compound is smaller only because most of his lineage lives out in that province.</p>
+<p>So the rule the correction establishes is that <strong>a compound's footprint tracks HOUSEHOLDS HOUSED, not rank</strong>: a provincial lineage in the capital is small-but-grand rather than absent. The result is four visibly different compound sizes, each tracking a published figure - the ruling lineage's seat IS the castle and needs no yashiki of its own; the cosmopolitan chancellors take the largest walled compounds after it; the provincial chancellor a markedly smaller estate; the houses below the Chancellery line modest ones. A full chancellor on a visibly smaller plot because his people are elsewhere is the kind of specific a generic city cannot fake.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a capital draws one labeled walled compound for each lineage of its ruling house except the ruling lineage itself, whose seat is the castle, and every one of them is labeled with its name. Their sizes are graded by the number of that lineage's households resident in the capital - not by the rank of its head - so a lineage seated out in the provinces still holds a compound here, and holds a smaller one.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a capital also draws, and a provincial city never does: the Imperial Magistrate's compound in its own ink as foreign sovereign ground; the Emperor's granaries outside the castle, beside that compound or at the wharf; the domain school on the government avenue; retirement housing for the relocated elders beside a temple; the two sovereign temples as head houses of the domain's Order, with an abbot's residence, administration and library rather than an enlarged precinct; a rolled witch hunter's office; and trade-named commoner wards, each named for the trade that fills it. It draws no chancellery compound at all.</p>
+<h2 id="does-a-scorpion-capital-look-different-from-a-crane-one">Does a Scorpion capital look different from a Crane one?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired capital rule file, "Settled defaults" -->
+<!-- Grounds: the tier has no clan branch anywhere; CLAN_FORTUNES picks the two sovereign temples' dedications -->
+<!-- Evidence: setting-canon -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-08-08; the setting's own campaign notes</p>
+<p>Not in its bones. The GM ruled on 2026-08-08 that clan identity changes <strong>labels only</strong>: <em>"all clans fundamentally have the same needs and the same shared material reality"</em>, so the tier's layout, program and proportions are clan-independent. What varies is dedications, names and the character of an individual city - a Scorpion seat's two sovereign temples are dedicated to that clan's patron fortunes, its lineage compounds carry that house's names, its trade wards are named for their trades - while the ring, the castle, the avenue, the wards and the caste proportions are the ones any other clan's capital would build. The map gains nothing from clan-specific layout rules, and the honest reason to say so out loud is that inventing them is the obvious thing to do and it would be wrong.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a capital's clan changes only names, dedications and labels - the patron fortunes of the two sovereign temples, the lineage names on the compounds, the flavor of the individual city. No layout rule, no count and no proportion varies by clan.</p>
+<h2 id="which-provincial-rules-turn-upside-down-in-a-capital-and-what-simply-multiplies">Which provincial rules turn upside down in a capital, and what simply multiplies?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired capital rule file, "Rules that INVERT" and "Counts that multiply" -->
+<!-- Grounds: CAPITAL_RANK_BANDS and the capital caste table; the counts below are encoded nowhere - the tier's housing is unscripted -->
+<!-- Evidence: setting-canon (the caste and rank tables), liberty (the counts are scaled from the provincial figures, not researched separately) -->
+<p><strong>Sources:</strong> the setting's own budget notes (the capital caste and rank tables); the housing-mix inversion is worked out in <a href="#the-capitals-samurai-are-senior-heavy-which-inverts-the-provincial-housing-mix">the entry on the senior-heavy cohort</a></p>
+<p><strong>Four provincial rules reverse.</strong> A provincial city's only walled samurai compound inside the wall is the governor's; here the karo, the councilors and the chancellors live in walled yashiki INSIDE the ring, which is both the defining texture of a castle town and the mechanism the lineage compounds need. The housing MIX reverses with the rank table: the capital is senior-heavy, so large houses and walled compounds are the majority of the samurai fabric and the retainer terraces are the minority texture rather than the dominant one. There is no governor at all - the ruler is the daimyo, in the castle - so the provincial rules that want a governor's mansion, and want it large, have no subject. And the wall holds no farmland: a capital walls its farms out, so the in-wall agricultural district a provincial city may declare is not available to it.</p>
+<p><strong>What simply multiplies</strong>, against the provincial figures:</p>
+<table>
+<thead>
+<tr>
+<th>feature</th>
+<th>provincial city</th>
+<th>capital</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gates</td>
+<td>2</td>
+<td>4 or more (the Imperial road through, the domain roads out)</td>
+</tr>
+<tr>
+<td>walled merchant estates</td>
+<td>rolled 1-3 of 12 rich families</td>
+<td>48 rich families, so roughly 4-8</td>
+</tr>
+<tr>
+<td>martial establishments</td>
+<td>1 state hall plus 1-2 rolled</td>
+<td>the domain school plus the SAME roll of one private hall per 200 resident samurai, about 7-8 - the tier gains an institution, not a denser roll</td>
+</tr>
+<tr>
+<td>fire towers</td>
+<td>2-3</td>
+<td>about 10-15: the watch radius is fixed, and the built area is some five times larger</td>
+</tr>
+<tr>
+<td>public wells</td>
+<td>87 drawn at Tango</td>
+<td>about 160-240, at the same one per 10-20 households</td>
+</tr>
+<tr>
+<td>theater stages</td>
+<td>1</td>
+<td>several, plus an entertainment district beside the brokers' row</td>
+</tr>
+<tr>
+<td>burakumin quarters</td>
+<td>1 inside the wall</td>
+<td>likely 2, with two tanning yards</td>
+</tr>
+<tr>
+<td>merchant kura</td>
+<td>5 or more</td>
+<td>about 20</td>
+</tr>
+<tr>
+<td>named machi</td>
+<td>not modeled</td>
+<td>dozens, each ward named for what fills it</td>
+</tr>
+</tbody>
+</table>
+<p>Everything that hangs on a GATE - the gate market, the flophouse outside it, the caravan cluster, the notice board, the inspection station - multiplies for free the moment gates are a count rather than a pair.</p>
+<p class="spec"><strong>The rule the map follows:</strong> inside a capital's wall, walled samurai compounds are ordinary and expected rather than forbidden, and senior housing is the MAJORITY of the samurai fabric with the retainer terraces the minority texture. A capital draws no governor's mansion and no in-wall agricultural district. The Imperial road always runs through, so the commercial ribbon that follows an Imperial road is never optional here.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a capital draws four gates or more, about 10-15 fire towers, 160-240 public wells at one per 10-20 households, several theater stages with an entertainment district, two burakumin quarters with two tanning yards, about 20 merchant kura, 4-8 walled merchant estates and dozens of named wards; and it repeats the full gate program - market, flophouse, caravan ground, notice board, inspection station - at every one of its gates. The counts are scaled from the provincial figures and from the areas and populations involved, not researched one by one.</p>
 <section class="citations"><p>The notes behind this page's footnotes - the passages quoted, and what each cited work is and why it counts - are on <a href="../citations/cities/capitals.html">its citations page</a>.</p></section>
 </main>
 </body>

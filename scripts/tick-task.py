@@ -26,8 +26,19 @@ import subprocess
 import sys
 from pathlib import Path
 
-BOXES = "- [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited"
-BOXES_TICKED = BOXES.replace("[ ]", "[x]")
+#: A RESEARCH-BOX LINE IS MATCHED BY SHAPE, NEVER BY ITS TEXT (feature 229). This held the literal
+#: three-box line of constitution v2.12.0 - `research pass`, `source-reader confirmed`, `recorded and
+#: cited` - and the roster has been FIVE since features 194 and 211 added `quote-check confirmed` and
+#: `source-applicability confirmed`. So the literal matched nothing, and `BOXES=1` reported a ticked
+#: task while ticking no box at all: silent, and the gate caught it only at the end, on seven tasks at
+#: once (`tests/test_task_research_boxes.py`). A boxes line is an INDENTED line carrying two or more
+#: checkboxes and no other structure, which stays true however many boxes the constitution grows.
+def _is_boxes_line(line: str) -> bool:
+    return line[:1].isspace() and line.count("- [") >= 2 and line.lstrip().startswith("- [")
+
+
+def _tick_boxes(line: str) -> str:
+    return line.replace("- [ ]", "- [x]") if _is_boxes_line(line) else line
 
 
 def repo_root(start: Path | None = None) -> Path:
@@ -85,7 +96,12 @@ def tick(text: str, task: str, note: str, boxes: bool = False) -> tuple[str, str
         block[verify_at] = f"{indent}verify: DONE. {note.strip()}\n"
     block.extend(trail)
     if boxes:
-        block = [ln.replace(BOXES, BOXES_TICKED) for ln in block]
+        ticked = [_tick_boxes(ln) for ln in block]
+        # AND IT SAYS SO WHEN IT DOES NOTHING. The failure this replaces was silent: asked to tick the
+        # boxes, the script found no line to tick and still reported the task ticked.
+        if ticked == block:
+            raise SystemExit(f"--boxes: no research-box line found in {block[0].strip()!r} - is this a `research: physical` task?")
+        block = ticked
     new = lines[:start] + block + lines[end:]
     return "".join(new), block[0].rstrip("\n")
 

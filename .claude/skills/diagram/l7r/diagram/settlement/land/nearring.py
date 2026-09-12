@@ -34,7 +34,7 @@ class NearRingMixin:
     ) -> int:
         """Fill the flat, CLEAR ground in `bbox` with channel-free DRY-FIELD + GARDEN cropland, so a
         well-sited town/city NEAR RING reads as PACKED farmland instead of bare scrub (feature 013,
-        settlements.md 'Near-ring farmland density'). A market town / county seat sits in the middle of
+        research/fields.html 'What is the farmland around a town or a city made of?'). A market town / county seat sits in the middle of
         its BEST land (site selection) and the near ring is the part worked HARDEST (the von Thünen
         intensity gradient); the labor-limited fallow lives at the FAR margins, not hugging the town. So
         the flat near ring is cropland, and the scrub retreats to the frame edge (`s.commons`) + the
@@ -179,7 +179,7 @@ class NearRingMixin:
 
     def near_ring_paddy(self: Settlement, bbox: tuple[float, float, float, float], *, seed: int = 0, cell_ft: float = 150.0, ring_farms: int = 0, avoid: Any = ()) -> int:  # type: ignore[misc]
         """Fill the flat, CLEAR near-ring ground in `bbox` with WET-RICE PADDY basins - the DOMINANT crop of a
-        wet-rice county seat's flat waterable near ring (feature 014, settlements.md 'Near-ring farmland density').
+        wet-rice county seat's flat waterable near ring (feature 014, research/fields.html 'What is the farmland around a town or a city made of?').
         A basin is placed ONLY where it can be LEGITIMATELY WATERED, so `fields_show_water_source` never fires:
         an outline vertex within ~18px of an `M['streams']` segment (the field bank abuts the stream, the stream
         NOT crossing the basin), OR in the pond's 1.0-1.10x ring, OR the basin runs OFF the map edge (exempt).

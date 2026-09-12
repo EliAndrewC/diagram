@@ -210,7 +210,7 @@ s.shrine_well(CX - 40, CY + 540)     # ablution well: pass the HALL CENTER - the
 # pocket BELOW the E block and to the LEFT of that block's toe marsh - not at the far SW. The SW placement was
 # the sole thing holding the S/W crop corner ~200px out over empty ground (the `crop_relocatable_singletons`
 # GROUP advisory flagged the shrine + its graveyard as one movable precinct); relocating the whole precinct
-# here lets the frame crop in to the fields. See settlements.md 'Crop advisory'.
+# here lets the frame crop in to the fields. See research/fields.html 'Why is every rice plot the same green?' ('Crop advisory'.
 BX, BY = 1600, 1180
 s.shrine_hall(BX, BY, "Shrine to Bishamon", "(still tended)", w=30, h=24, torii=None, torii_outlier=True)   # SPECIAL CASE (GM 2026-07-22): NO torii, though a proper hall usually keeps at least 1 - torii_outlier=True exempts it from torii_count_canonical's floor
 s.shrine_well(BX, BY)                 # ablution well: hall center in, ring search out (the legacy +85 offset only passed while the hall was oversized)
@@ -264,14 +264,14 @@ n_bridges = s.channel_footbridges(spacing=320)
 print(f"footbridges: {n_bridges}")
 
 # the village burial ground in the Bishamon shrine's churchyard, just N of the hall (moved with the precinct)
-s.cemetery(BX, BY - 110, 62, 42, parish=False, organic=True)  # resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 124x84 ft at 2 ft/px - see settlements.md 'District catchment'
+s.cemetery(BX, BY - 110, 62, 42, parish=False, organic=True)  # resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 124x84 ft at 2 ft/px - see research/religion-and-death.html 'District catchment'
 
 # BRIDGES carry every lane over the water it crosses (the connector track + spurs cross ditches/brooks)
 s.bridges()
 
 # THE OFFICIAL NOTICE BOARD (kosatsuba), auto-sited on a lane verge at the busiest node (GM
 # 2026-07-24: every settlement tier posts the state's standing law - the ofuregaki reached the
-# peasantry through this board via the settlement's literate reader; see settlements.md and
+# peasantry through this board via the settlement's literate reader; see research/urban-features.html 'The notice board (kosatsuba)' and
 # settlement.place_kosatsuba). Placed BEFORE the crop so the frame contains it.
 s.place_kosatsuba()
 s.crop_to_content(margin=30)

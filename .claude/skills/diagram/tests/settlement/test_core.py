@@ -361,7 +361,7 @@ def test_near_ring_paddy_skips_cells_over_the_orientation_cap():
 
 def test_settlement_form_dike_top_is_low_ground_gated():
     # dike_top stands ON a polder's perimeter dike, so the form needs the polder terrain (low reclaimed
-    # ground); anywhere else the typing rule rejects it (settlements.md 'Polder waterward fringe + dike-top housing').
+    # ground); anywhere else the typing rule rejects it (research/archetypes.html 'Polder waterward fringe + dike-top housing').
     dry = Settlement(1200, 1200, seed=1)
     dry.meta(name="Sd", scale="village", terrain="hill")
     dry.pin_knob("settlement_form", "dike_top")

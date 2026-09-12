@@ -28,6 +28,7 @@ import pytest
 
 from l7r.diagram.overlap import point_in_poly
 from l7r.diagram.pipeline import gencache, poolmaps
+from tests.gate import _pool
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # the skill root; the tests live one level down in tests/
 POOL = os.path.join(HERE, poolmaps.LIVE_TREE)
@@ -182,8 +183,13 @@ def _regen_and_gate(gen):
     this run, and the check battery below still judges whatever manifest was served. A miss
     regenerates in gencache's coverage-recording subprocess (with DIAGRAM_SKIP_RENDER inside -
     the gate reads the JSON manifest, never the PNG). The budget assert reads the CHILD-measured
-    CPU, so it applies exactly when generation actually ran."""
-    manifest, how, cpu_s = gencache.gate_obtain(gen)
+    CPU, so it applies exactly when generation actually ran.
+
+    THE OBTAIN GOES THROUGH `tests/gate/_pool.obtain_full`, NOT `gencache.gate_obtain` DIRECTLY, so
+    that the sweep takes the same per-gen lock every other reader of a shipped map takes: on a cold
+    cache the sweep and a gate test otherwise roll the same generator at once and the roll census
+    fails the gate (feature 229; measured on Kuwabata when feature 228 moved its key)."""
+    manifest, how, cpu_s = _pool.obtain_full(gen)
     if how == "REGENERATED":
         assert cpu_s is not None
         name = os.path.basename(gen)[: -len(".gen.py")]
@@ -263,7 +269,7 @@ def _channels_under_plots(svgpath):
 def _typical_cell_acres(svgpath, ftpx):
     """Real-feet area of the TYPICAL leveled paddy cell (a bund-stroked plot polygon), taking the mean
     of the 45th-75th percentile band (the regular interior cells, above the edge wedges). Pins the
-    ~0.05-acre paddy calibration (GM 2026-07-22, see settlements.md 'Paddy cell size'). SVG-measured,
+    ~0.05-acre paddy calibration (GM 2026-07-22, see research/fields.html 'Plot sizes, pond sizing and acreage from population'). SVG-measured,
     not a manifest gate, because villages do not record plot_polys - same tier as the ditch z-order audit."""
     import re
     import statistics

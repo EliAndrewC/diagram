@@ -100,7 +100,7 @@ class Copse(Kind):
     Covers: `village_groves[role=copse]`
     Label: accurate
     Sources: forests-2020
-    Entry: research/vegetation.html - 'The fengshui forest'; settlements/vegetation.md 'Village windbreak' (the three roles)
+    Entry: research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'
     """
 
     key = 'copse'
@@ -112,7 +112,7 @@ class WoodlandCommons(Kind):
     clear of leaf litter.
 
     Why: The village woods were iriai commons - customary common land held by the village and governed by its own
-    rules on who might cut, when, and how much - coppiced on a 10-30 year cycle for firewood, forage and the
+    rules on who might cut, when, and how much - coppiced on a 15-20 year cycle for firewood, forage and the
     leaf litter that fertilized the paddies. A cut wood lets sun reach the floor, so herbs grow there, not
     brush; the wood sits on the slope break above the fields, one part of the satoyama the community worked
     as a whole.

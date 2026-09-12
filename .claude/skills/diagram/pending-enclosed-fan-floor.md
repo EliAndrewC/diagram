@@ -3,7 +3,7 @@
 **Sources (feature 143, 2026-08-28):** a pending engine decision; the tract-floor finding it rests on is `research/fields.html` "Tract sizes - no settlement-class cap" (`buck-survey`, `li-bozhong-jiangnan`, `skinner-marketing`, `aric-land-history`, `mdpi-kunisaki`).
 
 
-**Why pending:** the rule is DECIDED (settlements/fields.md "Paddy TRACT size") and the check below
+**Why pending:** the rule is DECIDED (research/fields.html "Tract sizes - no settlement-class cap") and the check below
 is written and was unit-tested, but it fires on the three town maps (hoshizora-west 1.8 ac,
 ubame-west 2.1 ac, hirameki w1/e1/e2 1.1-2.5 ac), each of which needs a QUARTER-SCALE recomposition
 to comply - Hoshizora's stream/funerary wedge, Ubame's south quarter (crematory + flophouse +
@@ -29,7 +29,7 @@ the same day (`test_enclosed_fan_at_least_hamlet_grade_fires_on_a_small_enclosed
 `test_enclosed_fan_floor_exempts_the_in_wall_district`).
 
 ```python
-    # PADDY TRACT FLOOR (GM 2026-08-03; settlements/fields.md "Paddy TRACT size", research/fields.html
+    # PADDY TRACT FLOOR (GM 2026-08-03; research/fields.html "Tract sizes - no settlement-class cap"
     # "Tract sizes - no settlement-class cap"). A fan that is ENCLOSED in the rendered view reads as a
     # COMPLETE field system, and the smallest attested communal waterworks - a fan with a real weir,
     # canals, and drain collector - commands ~8 acres (hamlet grade). A fan running off the view edge
@@ -57,7 +57,7 @@ the same day (`test_enclosed_fan_at_least_hamlet_grade_fires_on_a_small_enclosed
         f"enclosed paddy tract(s) under the 8-acre communal-waterworks floor: {_small} - a fan fully inside "
         f"the view reads as a COMPLETE system, and nobody builds a weir + canal fork + collector for less "
         f"than hamlet-grade ground; grow the fan (>= 8 real acres) or run it off the view edge as a slice "
-        f"(settlements/fields.md 'Paddy TRACT size')",
+        f"(research/fields.html 'Tract sizes - no settlement-class cap')",
     )
 
 ```

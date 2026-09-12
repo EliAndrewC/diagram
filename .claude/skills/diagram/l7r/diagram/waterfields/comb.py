@@ -554,7 +554,7 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
     # By default the field grows downhill until the threads leave the map (fills the frame to the low
     # corner, then spills off it). `field_fall` CAPS the downhill depth instead, so the field is sized
     # to the population and BOUNDED within the frame - leaving a low-side margin for the drain's outfall
-    # + brook to discharge into open land (see settlements.md 'Field extent'). None = the old fill-to-edge.
+    # + brook to discharge into open land (see research/fields.html 'What is the farmland around a town or a city made of?'). None = the old fill-to-edge.
     f_stop = max(F.to_uf(0, 0)[1], F.to_uf(W, 0)[1], F.to_uf(0, H)[1], F.to_uf(W, H)[1]) + 300
     if field_fall is not None:
         f_stop = min(f_stop, f + field_fall)
@@ -845,7 +845,7 @@ def _comb_dry_and_beans(
     grain_drift: float,
 ) -> tuple[list[dict[str, Any]], float, Poly]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see settlements.md."""
+    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields.html 'What a bund bean actually looks like'."""
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.

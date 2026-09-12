@@ -48,7 +48,7 @@ slack check (claimed-open + unclaimed <= ~15% of interior) is an EARLY reconcili
 - run it, and re-derive the wall, BEFORE any fine iteration. Fine adjustments are downstream
 of the wall; the wall must never be adjusted after them. Implement as
 `capital_interior_slack_in_band` beside the packed-split check, and write the ordering into
-the capital-build sequence in `settlements/capitals.md`. (This is also the strongest single
+the capital-build sequence recorded on `research/cities/capitals.html`. (This is also the strongest single
 argument for the fabric-first ordering in #2: a wall wrapped around a grown fabric has the
 right slack by construction.)
 

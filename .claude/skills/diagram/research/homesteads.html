@@ -12,11 +12,11 @@
 <body>
 <main>
 <h1 id="homesteads-the-research-behind-the-farmhouse-yard-garden-and-grove-rules">Homesteads: the research behind the farmhouse, yard, garden and grove rules</h1>
-<p><em>The research behind <a href="../settlements/homesteads.md">the homestead rules</a>.</em></p>
-<!-- Findings, anchors and disclosed departures live here so the rule file stays operational; this file is where citations and deeper historical context get added as they accumulate. -->
-<!-- Load this file when: you are changing a homestead rule, a size or a prevalence - or you want the historical basis before overriding one. -->
+<p><em>The findings behind the farmhouses, work yards, gardens, groves and village forms on these maps, the
+decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>
+<!-- Several entries below were moved from the retired rule file; each carries a moved-from note of its own. -->
 <!-- Every entry: what the research found, the decision it drove, and any deliberate departure from literal reality. -->
-<!-- Anchors are stable - rules link to them by #slug. -->
+<!-- Anchors are stable - the maps and the engine link to them by #slug. -->
 <hr>
 <h2 id="homestead-groves-yashikirin---the-real-scale-and-prevalence">Homestead groves (yashikirin) - the real scale and prevalence</h2>
 <!-- Grounds: groves_on_windward_side, grove_prevalence, the size-adaptive L-belt -->
@@ -134,12 +134,24 @@ clump and shades further.</p>
 <p><em>The row pitch has the room.</em> Rows of homesteads are pitched 92 ft apart, while house depth (28) + yard
 depth (~26) + 39 ft of sun comes to ~93, so the spacing reserves the corridor; the corridor rule is
 what keeps a neighbor out of it.</p>
-<!-- BUNDLE_PITCH_FT is 92 ft. Before the corridor rule, the packer never aligned rows, so a neighbor dropped into the gap the pitch had set aside. Measured across the pool before the fix: a neighbor's wall commonly stood 2-8 ft south of a yard's edge, and on the dense nucleated maps that was most yards (Ueda 45 of 85 shaded at noon, Hoshigaoka 31 of 70, Ubame 21 of 36). The provincial cities were clear (0-1 each) because their farm belt is loose. -->
+<!-- BUNDLE_PITCH_FT is 92 ft. Before the corridor rule, the packer never aligned rows, so a neighbor dropped into the gap the pitch had set aside; the per-map counts are in the exemption paragraph below. -->
 <p><em>The departure we take knowingly:</em> the corridor is measured on the yard's own cross-slope span, as a
 rectangle, not as a true solar wedge that swings through the day; and real <em>yashiki</em> lots also
 resolved this by STAGGERING east-west rather than by spacing rows, which the map is free to do,
 since the rule forbids the shadow, not the neighbor.</p>
 <!-- which the placer is free to do since the corridor only forbids the shadow, not the neighbor. Sources: the 45-degree thatch pitch from the kayabuki literature (a steep pitch is required of thatch, hence the large loft); solar elevations computed for 38N at the 10th-month declination; minka ridge heights cross-checked against surviving farmhouses. -->
+<p><em>The hand-drawn maps are deliberately exempt, and the exemption cannot rot.</em> Every hand-authored
+clustered map on the sheet breaks this rule: 45 of 85 yards shaded at noon on Ueda, 31 of 70 on
+Hoshigaoka, 27 of 55 on Kikuta, 21 of 36 on Ubame, 19 of 44 on Hoshizora, and 3 to 10 on each of the
+hamlets, with a neighbor's wall commonly 2-8 ft off a yard's edge; the provincial cities are clear
+(0 or 1 each), because their farm belt is loose. Re-packing those maps by hand was judged the wrong
+trade by the GM on 2026-08-13 - it would move every feature on a finished exhibit to satisfy a rule
+written after it was drawn - so the rule binds a map the moment a generator draws it, and a
+hand-drawn map keeps its packing until it is converted to a generated one. The alternative that was
+priced and declined is a list of exempt maps, which somebody then has to prune; nothing is listed,
+and the rule simply arrives with the generator.<!-- gated on meta.generated_by, which only a generator script sets; the migration does the work -->
+The cost of accepting it is stated plainly: on those maps a yard that would be in shadow is drawn
+anyway.</p>
 <h2 id="the-gardens-sun-and-how-far-the-windbreak-shades">The garden's sun, and how far the windbreak shades</h2>
 <!-- researched 2026-08-25, feature 133 T10 -->
 <!-- Evidence: reconstruction (derived), attested (the belt's side - SUMMARY-ONLY) -->
@@ -159,6 +171,20 @@ every bed</strong>, both directions at placement. The bed is side-dependent (SE/
 would put in a shadow moves to the other flank.</p>
 <!-- so its half of the test refuses one SIDE rather than the whole seat -->
 <!-- gated by gardens_unshaded_by_neighbors on scripted maps; the bed's half of the test lives in _bundle_side_fits. Cost on Inashiro: none visible - all 15 households seat, beds now 41-242 ft clear. -->
+<p><em>And the morning sun, which a neighbor's grove takes.</em> The bed sits on a sheltered flank, and a
+neighbor's windward belt stands against that neighbor's west wall - which is to say just EAST of our
+bed, in the way of the rising sun. Morning light is what a kitchen bed lives on, and the fix is
+placement rather than felling a windbreak: the GM asked in 2026-07 to <em>"move it a bit south"</em>.
+Two things keep the east open. The communal copse keeps a sun lane to its east as well as to its
+south, so no clump of it is ever seated directly east of a bed; and once every homestead grove is
+drawn, an east-shaded bed is nudged a little south into open ground, so the trees fall to its
+northeast instead. It is a best effort and not a slot - most farms keep the plain east bed, and a bed
+hemmed in to the south by paddy, lane or neighbor stays where it is - so the rule is broken only
+where a clear southward shift existed and was not taken. Two things the move has to get right: it
+clears EVERY arm to its east in one step, because a short shift can slip a bed out of one arm's shade
+and straight into a taller arm just south of it; and it is measured against the footprints actually
+drawn, so a bed may drift into the margin of a neighbor's reserved ground but may never touch a drawn
+house, yard, bed or grove.<!-- the copse east lane and _relax_gardens_south; gardens_unshaded_from_east fires only on an avoidable case --></p>
 <p><em>The belt's height, from the record.</em> Searched: igune (Sendai/Osaki), kainyo (Tonami),
 tsuijimatsu (Izumo), Musashino yashikirin, Okinawa fukugi, Chinese fengshui woods. Found: the
 Sendai igune planting list classes sugi/keyaki/kuromatsu/hinoki as "tall trees" at <strong>&gt;= 15 m</strong>,
@@ -194,19 +220,52 @@ the frame. <strong>What is accepted</strong>: a belt kept at working height.
 <strong>Two rulings conflicted</strong> - a belt that stands off the plots (2026-08-25) and a frame that
 does not open for the belt (2026-07-20) - and the GM reconciled them the next day: <em>"treat the
 innermost edge of the windbreak forest as being something that is preserved"</em>. The belt's inner
-FACE sets the frame with the standard 48 px margin; the belt's depth still clips. Measured: the front row shows
-whole (48 px at the face), no clump is drawn wholly off-page, per-band visible canopy 5-48 px
+FACE sets the frame, standing off the page edge by the same margin every other feature gets<!-- the standard 48 px margin -->; the belt's
+depth still clips. Measured: the front row of clumps shows whole, its face clear of the edge by that full
+margin; no clump is drawn wholly off-page; and every band of the belt shows canopy, from a sliver to the
+margin's full width<!-- Measured: the front row shows whole (48 px at the face), no clump is drawn wholly off-page, per-band visible canopy 5-48 px -->
 (the thin bands are where the connector crosses the belt's line, a form matter, not the crop). <strong>What was priced and declined</strong>: letting
 the windbreak set the frame (reverses the 2026-07-20 ruling - the GM's to reopen, not a session's);
 a lane scaled to 15 m without moving the frame (measured: the belt is dropped). <strong>Who chose</strong>: this
 was settled on the measurement, and the GM on 2026-08-26 chose to open the frame at the face rather
 than shrink or raise the belt - 10 m stays as the record's measured working height.</p>
 <!-- Who chose: the session, on the measurement, and the GM on 2026-08-26 chose to open the frame at the face rather than shrink or raise the belt -->
-<!-- The 2026-07-20 ruling is settlements/presentation.md, gated by crop_hugs_content; the continuity check is village_windbreak_is_continuous (it went red at 75 ft); the face-sets-the-frame rule is windbreak_face / crop_boxes in settlements/presentation.md. Before the GM opened the frame at the face, what was accepted was a belt mostly OFF THE PAGE on the west - measured by settlement-review on the shipped render: visible canopy 0-40 px per band, median ~15 px, blank for ~90 ft (y 700-790, where the connector leaves) and 1-4 px for ~75 ft (y 1075-1150); 85% of the 81 clumps stood outside the view; village_windbreak_is_continuous was green because it reads geometry, not the page. The arithmetic said this was not tunable away: the frame stopped 48 px west of the westernmost hard feature and the lane kept clump centers 66 px west of the same plot, so on any row with a plot the belt's near canopy showed at most ~7 px. -->
+<!-- The 2026-07-20 ruling and the face-sets-the-frame rule (windbreak_face / crop_boxes) are in the presentation record; the 2026-07-20 one is gated by crop_hugs_content and the continuity check is village_windbreak_is_continuous (it went red at 75 ft). Before the GM opened the frame at the face, what was accepted was a belt mostly OFF THE PAGE on the west - measured by settlement-review on the shipped render: visible canopy 0-40 px per band, median ~15 px, blank for ~90 ft (y 700-790, where the connector leaves) and 1-4 px for ~75 ft (y 1075-1150); 85% of the 81 clumps stood outside the view; village_windbreak_is_continuous was green because it reads geometry, not the page. The arithmetic said this was not tunable away: the frame stopped 48 px west of the westernmost hard feature and the lane kept clump centers 66 px west of the same plot, so on any row with a plot the belt's near canopy showed at most ~7 px. -->
 <p><em>Departures taken knowingly:</em> the lane is a square, not a solar wedge that swings through the
-afternoon (the yard's south corridor takes the same shortcut); the 12 px stand-off of the belt's face
-is an average plot overhang, and the clump filter is the guarantee behind it.<!-- the 12 px is in belt_polygon --></p>
+afternoon (the yard's south corridor takes the same shortcut); the small stand-off the belt's face keeps
+from the plots<!-- 12 px, in belt_polygon --> is an average plot overhang, and the clump filter is the guarantee behind it.</p>
 <!-- Sources: Sendai City igune species list (city.sendai.jp; SOURCES.html#sendai-igune-list); Minami/Yonezawa/Okaze 2022, Osaki igune drone survey (J-STAGE, LES 38(2); SOURCES.html#minami-2022-igune); Tonami Scattered-Village Research Institute 1996 model homestead (URL not found 2026-09-06); Izumo tsuijimatsu (Kanto Gakuin column; SOURCES.html#kanto-gakuin-tsuijimatsu); ISA Arboriculture &amp; Urban Forestry 37(1) on fukugi (https://auf.isa-arbor.com/content/37/1/19); solar elevations computed for 38N. -->
+<h2 id="how-big-was-a-dooryard-garden">How big was a dooryard garden?</h2>
+<!-- moved from the retired rule file, "Size varies, and is held to a HISTORICAL AREA band" -->
+<!-- Grounds: the garden's base dimensions and the area band the homestead bundle rolls within -->
+<!-- Evidence: interpolated (the band); the GM's ruling (true size) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-21 that everything on these maps is drawn at its
+true size; this project's measurement of the drawn hamlets;
+<a href="https://ja.wikipedia.org/wiki/家庭菜園"><code>kateisaien-jawiki</code></a> (the name of the bed a
+household grows its own food on), <a href="https://ja.wikipedia.org/wiki/尺貫法"><code>shakkanho-jawiki</code></a>
+(the tsubo and the se in square meters); no work is cited for the area band</p>
+<p>The <em>saien</em> is the small intensive bed by the kitchen that feeds a household its daily greens -
+daikon, onions, beans, herbs - and nothing beyond them; the ground a Japanese household cultivates for
+its own consumption has its own name, the <em>yashikibatake</em>, the homestead
+field.<sup class="fn"><a id="fnref-89" href="citations/homesteads.html#fn-89">89</a></sup> Bulk vegetables
+and dry crops grew out in the household's own <em>hatake</em> dry fields, not here, which is why the bed
+is a matter of a few <em>tsubo</em> rather than of <em>tan</em>. The band the map holds a household's beds
+to is a few tsubo up to about 1.4 <em>se</em>, which is roughly <strong>10 to 140 sq m</strong> (one tsubo
+is about 3.31 sq m; one se is 30 tsubo, about 99 sq
+m).<sup class="fn"><a id="fnref-90" href="citations/homesteads.html#fn-90">90</a></sup> Below the band the
+bed reads as no garden at all, and above it as a field. The same reading holds on the Chinese side: a
+rice-south farmhouse's dooryard plot was the same small intensive kitchen bed, with the bulk growing out
+in the household's fields. (The band and the Chinese comparison are both GUESSES: the article that names
+the bed gives no area for it, and no readable page was found that gives one or that measures the Chinese
+plot.)<sup class="fn"><a id="fnref-91" href="citations/homesteads.html#fn-91">91</a></sup></p>
+<p>The band is a real quantity rather than a drawing habit because the bed is drawn at TRUE size at
+every tier, exactly as the house and the work yard are - the GM's ruling of 2026-07-21 that these maps
+draw things at the size they were. Nothing on a homestead is enlarged against the fields to make it
+read.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a household's garden is drawn at true size, and
+its beds TOGETHER are held to 10-140 sq m - a split plot is still one household's garden, so the beds
+are summed. The drawn hamlets land at about 35-115 sq m per household, centered near 55 sq m (about
+half a se), comfortably inside the band.</p>
 <h2 id="may-a-byre-stand-beside-a-wellhead">May a byre stand beside a wellhead?</h2>
 <!-- researched 2026-08-18 -->
 <!-- Evidence: attested (the stable wing), researched (the in-house well - not re-found) -->
@@ -222,7 +281,7 @@ corner of the earthen-floored <em>doma</em> or in a rear projection room" - i.e.
 building</strong>. A household's horse and a household's well were therefore separated by the width of a
 farmhouse, on the order of 20-40 ft, as a matter of course. This is also why these maps draw no
 European multi-stall barn.</p>
-<!-- This is also why our own doctrine draws no European multi-stall barn (see the draft-animals-live-in-the-house rule in ../settlements/homesteads.md, the homestead rules). -->
+<!-- This is also why these maps draw no European multi-stall barn; the byre-size question below carries the drawing consequence. -->
 <p><strong>China (the guiding star).</strong> Vernacular villages <strong>co-located the animal facilities with the
 latrine</strong> - cattle sheds, chicken houses and pigsties grouped with the privy - because both ends of
 that group feed the same manure economy that kept the soil fertile for four thousand years
@@ -240,7 +299,47 @@ A generator that separated byre from well would be drawing a modern sanitary int
 Rokugani village.</p>
 <p><strong>The decision, therefore:</strong> the beasts are watered at the well, and a byre near one is correct.
 A byre never overlaps the wellhead itself.</p>
+<p><strong>And a byre does not always stand against its own farmhouse.</strong> Both arrangements are
+attested, and neither is the correction of the other. A household that OWNS its team houses it in its
+own homestead - the <em>magariya</em>'s short arm IS the stable, and the north-China courtyard house
+ranges its animals along one wing (no source is cited for the Chinese
+half)<sup class="fn"><a id="fnref-92" href="citations/homesteads.html#fn-92">92</a></sup> - while a team that is SHARED or hired stands where the
+borrowing household can walk to it, on the common ground among the homesteads (this rests on general reading; no source is cited). Two supportable forms
+are rolled per settlement rather than settled once, which is also what lets two maps differ honestly:
+on a courtyard map the byres follow the wealthiest households and each stays within its owner's own
+yard, and on a commons map, the commoner of the two, they stand out among the homesteads where a
+borrower can reach one. A flat claim that a byre always abuts its farmhouse is not supported by the
+record and is not what the map draws.<!-- knob byre_form, 2026-08-18; courtyard_byres_annex_their_homestead measures the same span the placer spirals over --></p>
 <!-- The placer prevents an actual overlap with the wellhead's footprint, which is the only part that was ever a defect. Nothing was changed in the placer; _fits already prevented the overlap. Recorded so the next re-pack does not re-open it. -->
+<h2 id="how-big-is-a-draft-animal-byre-and-what-stands-in-it">How big is a draft-animal byre, and what stands in it?</h2>
+<!-- moved from the retired rule file, the DRAFT-ANIMAL BYRES sizing note -->
+<!-- Grounds: the byre shed footprint at the to-scale tiers -->
+<!-- Evidence: interpolated (the stall area); a map drawing decision (keeping the glyph small) -->
+<p><strong>Sources:</strong> <a href="https://www.fao.org/4/s1250e/s1250e11.htm"><code>fao-farm-structures-cattle</code></a>
+(shade and stall dimensions per animal) and
+<a href="https://agritech.tnau.ac.in/animal_husbandry/animhus_cb_housing_space.html"><code>tnau-cattle-housing</code></a>
+(covered and open space per adult beast), both modern cattle standards; this project's drawing decision</p>
+<p>Wet-rice plowing and puddling turn on an ox or a water buffalo (this rests on general reading; no source is cited), and the shed drawn for one is a
+single-bay open-fronted lean-to of about <strong>16 by 11 ft, some 15 sq m</strong>. That is the room one
+or two draft animals need and no more. Nothing that can be read measures a premodern byre: the only
+figures available are modern housing standards, and what a standard states is a generous minimum - the
+room a keeper today is told to provide for a modern beast - rather than the size of anything anyone
+built. One such standard, a design manual for the tropics, reckons a shade structure at 2.5
+to 3 sq m per animal<sup class="fn"><a id="fnref-93" href="citations/homesteads.html#fn-93">93</a></sup>
+and a single stall at 2.2 m by 1.2 m for a cow of 500 to 600 kg.<sup class="fn"><a id="fnref-94" href="citations/homesteads.html#fn-94">94</a></sup>
+Checked against a second - an Indian extension table allowing an adult beast 3.5 sq m under cover with
+7 sq m of open ground beside it and 60 to 75 cm
+of manger space<sup class="fn"><a id="fnref-95" href="citations/homesteads.html#fn-95">95</a></sup> - it comes out on the same
+order of size, which says the figure is a common one rather than one page's idea of it; both are modern
+recommendations, so their agreement cannot stand in for a measurement neither of them made. A 15 sq m shed
+holds one or two beasts by either allowance, with fodder and a passage beside them, and it is sized by
+that allowance rather than by anything attested. The size is doing a second job as well. Anything larger starts
+to read as a European multi-stall barn, and there are none on these maps, because the draft animal of
+an East Asian wet-rice farm lives under the farmhouse roof (the question above). A byre on the sheet
+is a shelter for a beast or two, kept visibly well under the farmhouse's own 120 sq m.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a byre is drawn as a small plank-roofed shed of
+about 16 by 11 ft with a dark stall mouth, distinct from the solid gray storehouse and from the
+dwellings, and it is kept small on purpose.</p>
 <h2 id="is-every-farmhouse-reached-by-a-lane-and-in-what-form">Is every farmhouse reached by a lane, and in what FORM?</h2>
 <!-- researched 2026-08-18 -->
 <p><strong>Answer: access is decisive (implement it); its FORM has two supportable shapes (make it a knob).</strong></p>
@@ -273,8 +372,8 @@ exactly the axis the project wants varied between maps rather than settled once.
 between the two forms per settlement.</p>
 <!-- and must choose between the two forms per settlement via a seeded knob. This is NOT a question to put to the GM - the research decided the part that was decidable and identified the part that is genuinely two-formed, and the two-formed part becomes variance. -->
 <p><strong>Sources:</strong> the lane-gridiron and semi-private-lateral findings are from the nucleated-village
-morphology literature; the back-lane framework from planned-village morphology (see
-<a href="SOURCES.html"><code>SOURCES.html</code></a>); rear-access in Manchu villages from <a href="SOURCES.html#ushijima-2020-manchu">Ushijima, "Spatial composition and
+morphology literature; the back-lane framework from planned-village morphology (the works are listed in
+the <a href="SOURCES.html">sources registry</a>); rear-access in Manchu villages from <a href="SOURCES.html#ushijima-2020-manchu">Ushijima, "Spatial composition and
 premise arrangement of traditional Manchu village in Northeast China", <em>Japan Architectural Review</em>
 (2020)</a> (a GUESS - no publicly readable source, searched 2026-09-06).<!-- Wiley, ResearchGate and DOAJ each refused the fetch, and the search summary describes the study's variables without stating the rear access; constitution Principle XII; the Ushijima pointer has been SUMMARY-ONLY since 2026-09-06, feature 190 --></p>
 <p><strong>The GM asked the question the other way round (2026-08-27).</strong> Looking at<!-- revisited 2026-08-27, feature 133 T31 -->
@@ -289,10 +388,10 @@ value, not a correction. (2) For a NUCLEATED cluster, which is what Inashiro rol
 decisive the other way: "every house in the nucleated village is accessible via the INTERCONNECTED
 system of narrow lanes and alleys" - the lanes are the point of compactness, and they are one
 network. So the research says the FORM on Inashiro is right: the lanes are one network, and a junction
-is where two treads MEET. Label: the interconnected web is
-ACCURATE for a nucleated cluster; a lane that runs along a garden fence to reach its junction is
-ACCURATE too (the plot fronts the lane; the 7 ft gap the map leaves between a lane and a garden fence is a
-drawing convenience, not a finding).</p>
+is where two treads MEET. A lane that runs along a garden fence to reach its junction belongs to that
+network too, because the plot fronts the lane; the 7 ft gap the map leaves between a lane and a garden
+fence is a drawing convenience, not a finding.</p>
+<!-- Classification: the interconnected web is ACCURATE for a nucleated cluster, and so is a lane that runs along a garden fence to reach its junction. -->
 <!-- the 7 ft fabric margin -->
 <!-- What the GM saw was the DRAWING being wrong: the web was connected only by tolerance (every pass treated an end within 30 ft of another way as joined) and disconnected in ink - nine lanes in six components, ends stopping 29 ft short where the fabric margin had clipped them beside a garden fence. That is the "scattered" look. The fix is in hamletgen/ways.py (_touch_junctions, _clear_touch) and the gate holds it (lanes_form_one_network). The 7 ft fabric margin is _TOUCH_GAP. -->
 <h2 id="how-does-a-village-lane-bend">How does a village lane bend?</h2>
@@ -325,9 +424,10 @@ Two lines of evidence, one from how paths form and one from how villages are lai
 <p><strong>The rule</strong>: pull every lane taut like a string<!-- string-pull every lane (a chord at the web's own margins, or at footprint margins when it only removes jogs within 6 ft of the old line); collapse ends within 25 ft of one another onto ONE node. hamletgen/ways.py _smooth_web, the last pass of stage_web; the gate's lanes_bend_like_paths --> (a straight chord within the lane
 network's own margins, or right up to the buildings' footprints when that only removes jogs within 6 ft
 of the old line); cut a hairpin's arm when it is under 40 ft; join ends within 25 ft of one another at
-ONE point; cut a tail that runs on past a crossing for under 40 ft; and make each junction once. Labels: the principle ACCURATE (a worn path
-minimizes its turns; a bend sits at a plot corner); 140 degrees / 50 degrees within 40 ft / 25 ft /
-6 ft are DRAWING thresholds chosen at the scale of a dozen paces, not findings.</p>
+ONE point; cut a tail that runs on past a crossing for under 40 ft; and make each junction once. The
+140-degree and 50-degree turn limits, and the 40 ft / 25 ft / 6 ft distances, are drawing thresholds
+chosen at the scale of a dozen paces rather than measured findings.</p>
+<!-- Classification: the principle is ACCURATE (a worn path minimizes its turns; a bend sits at a plot corner); the thresholds are DRAWING conventions. -->
 <!-- Sources (read): Wikipedia "Desire path" (https://en.wikipedia.org/wiki/Desire_path; citing Hampton and Cole 1988 for the fifteen-passage figure - footnote 37, which now stands on the fifteen-passage sentence above); 99% Invisible, "Least Resistance: How Desire Paths Can Lead to Better Design" (https://99percentinvisible.org/article/least-resistance-desire-paths-can-lead-better-design/). Pointers, not read (paywalled/403): Ma, Brandt, Seipel and Ma (2024), Environment and Planning B (SOURCES.html#ma-2024-desire-paths; agent-based desire paths; its abstract, read via ideas.repec.org, is about the agents' angle of VISION, not turning - the turn-minimization sentence is not from it); the 2025 Landscape and Urban Planning energy-based desire-path paper. The plot-corner geometry is the lane-access entry's. Corrected 2026-08-27 under T44 and the T45 spot-check. -->
 <h2 id="how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund">How close does a farmhouse stand to the paddy? Up against it - but never on the bund</h2>
 <!-- researched 2026-08-27, feature 133 T41 -->
@@ -365,10 +465,88 @@ drip line in the rice. 1.5 + ~1.5 + 3 ft is 6 ft, the floor a wall may never cro
 below the 10-13 ft the map draws, so nothing else on the map moves.</p>
 <!-- a MINIMUM below the 10-13 ft the placer draws, so nothing else on the map moves; the floor is tested at a house's four corners, never at its center. -->
 <!-- The touching house was not a rule but a measurement error: the 14 px field set-back was held from the seat's CENTER, so a house 28 ft deep seated 14 px off the paddy stood with its wall on the bund (the CENTER-vs-FOOTPRINT trap dev/placement.md names). Now _wall_on_the_bund tests the four corners in both seat paths (settlement/houses.py _fits, settlement/rolling/fit.py _bundle_common_fits), and the gate holds it (houses_clear_of_paddies, same constant). Inashiro after: 7.1 ft, one house moved 6 px, nothing else changed. -->
-<p>Labels: the levee's footpath role ACCURATE (read); the bund's width a GUESS (no readable page supports it);
-the 6 ft floor a DERIVED threshold - and a soft one, since two of its three parts are not read;
-"up against the edge" ACCURATE.</p>
+<p>The bund's width is a GUESS, since no readable page supports it, so the 6 ft floor is a soft
+threshold: two of its three parts are not read.</p>
+<!-- Classification: the levee's footpath role and "up against the edge" are ACCURATE; the bund's width is a GUESS, and the 6 ft floor a DERIVED threshold. -->
 <!-- Sources (read): "Earthworm species and density in semi-natural grasslands on rice paddy levees in Japanese satoyama", PMC 7538448 (https://pmc.ncbi.nlm.nih.gov/articles/PMC7538448/; levees built and kept for water retention and passage of people and tools; mown); Wikipedia "Paddy field" (https://en.wikipedia.org/wiki/Paddy_field; bunds ~10 cm high, Korea). Pointers, not read (403): ResearchGate "Scheme of bund, terrace, and field dimensions" (the 15-150 cm width); Britannica "Paddy". Corrected 2026-08-27 under the read-what-you-cite rule (T44): the first record cited the unread pages as if read. -->
+<h2 id="what-makes-the-headmans-house-different">What makes the headman's house different?</h2>
+<!-- moved from the retired rule file, "The headman is a FARMSTEAD, not an exception" and the headman bullet -->
+<!-- Grounds: the headman seat, its forced storehouse, and the plain glyph drawn at headman size -->
+<!-- Evidence: setting-canon (the office); interpolated (what the office needs stored) -->
+<p><strong>Sources:</strong> the GM's rulings of 2026-07-21; no work is cited for what the office kept in
+store</p>
+<p><strong>Its size, and almost nothing else.</strong> The GM ruled on 2026-07-21, on a map that had drawn
+the headman as a special case, that the headman's house is a FARMSTEAD and not an exception: the
+grandest house in the village gets its work yard and its dooryard garden like every other farm, and
+both are capped at an ordinary farm's sizes, because a big house does not mean a field-sized kitchen
+bed. On a scattered map the headman's homestead brings its grove too, where there is room for one.
+What makes the house read as the headman's is that it is plainly the largest - about 92 by 56 ft
+against a plain farmhouse's 46 by 28 - and not a different plan, a compound wall or a gate.</p>
+<p><strong>What the office does add is a storehouse.</strong> The village headman (<em>shoya</em>) is by
+definition among its most prosperous farmers, and the office needs fireproof storage in a way an
+ordinary farm does not: the village's tax ledgers, its land registers and the tax rice waiting for
+collection are exactly what a <em>kura</em> is for (this rests on general reading; no source is
+cited).<sup class="fn"><a id="fnref-96" href="citations/homesteads.html#fn-96">96</a></sup> So the headman
+always has one, where an ordinary
+farm carries one only sometimes (the question below). The GM ruled that on 2026-07-21; left on the
+ordinary roll, every headman on the sheet had come up bare, which is chance reading as
+doctrine.</p>
+<p><em>A map drawing convention, and the reason for it:</em> the headman's house is drawn as a plain
+farmhouse enlarged rather than with the large-house glyph, because that glyph carries a storeroom wing
+that stands outside the ground the homestead reserves and lands on a neighbor's work
+yard.<!-- the "big" kind's wing is not in the reserved footprint; the nucleated headman uses "plain" --></p>
+<h2 id="which-farmhouses-have-a-storehouse">Which farmhouses have a storehouse?</h2>
+<!-- moved from the retired rule file, the kura bullet and "Storehouses / sheds are a MINORITY" -->
+<!-- Grounds: the kura share, the wall it takes, and the reservation of its footprint in the bundle -->
+<!-- Evidence: attested (the wealth-marker reading); liberty (the share itself) -->
+<p><strong>Sources:</strong> the Miyagi survey quoted in the farmstead inventory below; this project's
+measurement of the drawn maps</p>
+<p><strong>A minority, and that is the whole point of it.</strong> A fireproof <em>kura</em> was expensive,
+so only well-off farmers and landlords had one, and it reads on the map as a wealth marker precisely
+because most farms lack one. A simpler <em>naya</em> outbuilding was commoner but still not on every
+plot: many households stored inside the farmhouse's own earth-floored <em>doma</em>, and the poorest
+households had little to store. The one counted figure the record here offers is a storehouse on 0.24
+of pre-1944 households in the Miyagi survey below (see
+<a href="#what-stood-on-a-farmstead---the-inventory-with-numbers">the farmstead inventory</a>).</p>
+<p><strong>The share the map draws is about 30%, and that is a calibrated choice rather than a
+finding.</strong> It sits just above the counted 0.24 - one district in one decade - and it is chosen
+so that a storehouse stays uncommon enough to mean something at a glance. Measured over the drawn
+maps, the realized share is 28.4%, 343 of 1,208 farmhouses.</p>
+<p><em>The roll is positional, and what that costs was accepted on 2026-08-17.</em> Whether a given farm
+has a storehouse is decided from where its house stands rather than from the order the houses were
+drawn in, so the same map drawn twice gives the same answer. The cost is that a re-packing which moves
+a house re-rolls its storehouse: one re-pack took a hamlet from 25% to 15% in a single roll, which
+read like storehouses disappearing. The arithmetic behind the roll is honest - measured at 0.2993 over
+200,000 positions - so what changed was which houses drew it. The declined alternative is keying the
+roll to a household number instead, which would hold across a re-packing; it was not taken, and it is
+the lever if that stability is ever actually wanted.</p>
+<p class="spec"><strong>The rule the map follows:</strong> about three farmhouses in ten carry a
+storehouse, drawn as an annex against the house wall rather than as a free-standing shed - on the WEST
+wall of a scattered farm, and on the shaded NORTH wall in a cluster, where the sunny walls belong to
+the garden and the north is the one side the garden never takes. The headman always carries one (the
+question above), and the storehouse's ground is reserved with the rest of the homestead, so a neighbor
+never lands on it.</p>
+<h2 id="why-is-a-farmhouse-longer-than-it-is-deep">Why is a farmhouse longer than it is deep?</h2>
+<!-- moved from the retired rule file, "Farmer wealth + homestead variation" -->
+<!-- Grounds: the nucleated footprint jitter and the aspect bar; the dispersed wealth tiers -->
+<!-- Evidence: interpolated (the bay reasoning and the band) -->
+<p><strong>Sources:</strong> no work is cited for the bay reasoning or the band; this project's drawing
+decision</p>
+<p>No two farmsteads were copies of one another, so the houses on a map vary - but they vary along
+their LENGTH and hardly at all across their DEPTH. A <em>minka</em> grew by adding bays to its long
+axis: another bay under the same ridge, an aisle down one side. It got longer, not much wider, and it
+never became a square or a four-to-one shed. So a clustered map varies a house's length by roughly
+0.85 to 1.35 of its base and its depth by only 0.90 to 1.10, and the proportions that come out stay
+inside the range a minka keeps, about 1.3 to 2.5 long to deep; past about 2.7 to 1 the house is drawn
+wrong rather than drawn differently. (This rests on general reading of minka plans; no source is cited
+for the band.)<sup class="fn"><a id="fnref-97" href="citations/homesteads.html#fn-97">97</a></sup></p>
+<p>A scattered map varies the same thing from the other end. There the whole homestead takes a wealth
+standing - poorer, ordinary or better-off - which scales the house and its grove together, so a richer
+farm reads bigger across the board. That scaling reaches what is DRAWN and not what is reserved, so it
+never moves a neighbor and never changes how many households fit on the map.</p>
+<p class="spec"><strong>The rule the map follows:</strong> farmhouses differ in size and in proportion
+within a modest range, and a farmhouse is never drawn squarer than about 1.3 to 1 or longer than about
+2.7 to 1. The largest house on the map is the headman's (the question above).</p>
 <h2 id="what-stood-on-a-farmstead---the-inventory-with-numbers">What stood on a farmstead - the inventory, with numbers</h2>
 <!-- researched 2026-08-27, feature 133 T52 -->
 <!-- Evidence: attested -->
@@ -412,8 +590,9 @@ counts 33 waterwheels on the whole Musashino plateau; kabata a spring-fed Shiga 
 communal village graveyard the Edo norm, the farmstead grave (屋敷墓) a Heian-Muromachi elite
 practice; chickens kept before Meiji mainly for time-telling and fighting, so a coop is uncertain.</p>
 <!-- What the map drew when this was written, vs the inventory. Drawn: the house (three sizes), ONE attached kura on some, the threshing yard, the garden, the household bamboo, the grove; hamlet: wells, byres, belt, coppice, board, planks, pond, marsh. NOT drawn, in order of the read mean count per household (each an upper bound on the share of households owning one): the privy (0.87 - near-universal, a 1-ken shed on the plot's back or side, and in China the muck cluster with the animal sheds, research above); the firewood stack/shed (0.76); the straw stack (0.68, seasonal in the yard); a second and third work building (naya 0.58 + work shed 0.55 + storage 0.48 against our one shed on some houses); the manure/compost heap (0.24); the bath shed (0.29); the chicken coop (0.16-0.28, uncertain for Edo); the well house over a private well (0.19); the persimmon in the yard (summary-only, "without exception"); the hasa frames in the fields (seasonal); the hamlet graveyard; a wayside jizo. Not owed: a gate, a mill, kabata, an in-house stable. This entry is the list the GM chose from; the choice is the fixtures entry below. -->
-<p>Labels: every number above ACCURATE for 1972 Miyagi and a GUIDE elsewhere (stated scope); the
+<p>Every number above is measured for 1972 Miyagi and is a GUIDE elsewhere, for the scope stated; the
 persimmon and the firewood placement are guesses, with no readable page behind them.</p>
+<!-- Classification: every number above is ACCURATE for 1972 Miyagi; the persimmon and the firewood placement are GUESSES. -->
 <!-- This entry is the list the GM chose from; the choice is recorded in the fixtures entry below. Sources (read): Sugiura 1973 (https://www.jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_article/-char/ja; JStage PDF, read pp. 145-152); ja.wikipedia 井戸, 稲架, 屋敷神; nakasendoway.com "Dosojin" (https://www.nakasendoway.com/dosojin/); Chiba Prefectural Museum, Boso-no-Mura headman farmstead page (https://www.chiba-muse.or.jp/MURA/facility/page-1521181891660/page-1521294570333/); JAANUS "yashikimon" (http://www.aisf.or.jp/~jaanus/deta/y/yashikimon.htm). Pointers, not read: MAFF (persimmon); the Chiba museum housing page (mojibake); kubota.co.jp / JA Hiroshima (waraguro); japaaan / ohgaki (goemon-buro); mizu.gr.jp (the 1788 waterwheel count); NDL reference desk (屋敷墓); ja.wikipedia 外便所 (the fetched text was Australian in scope). -->
 <h2 id="does-a-hamlet-have-to-be-nucleated-at-all">Does a hamlet have to be NUCLEATED at all?</h2>
 <!-- researched 2026-08-23 -->
@@ -445,6 +624,30 @@ signature is the road not taken.</p>
 <!-- Why this matters to the generator: our comb field IS an alluvial fan, and the engine already branches on per-house versus single shelter belts: a nucleated settlement shelters behind ONE grove rather than per-house belts, so the dispersed form's most visible signature is already the road not taken. hinterland.py: "A nucleated settlement shelters behind ONE grove rather than per-house belts" -->
 <p><strong>Consequence for the access rule</strong>: a dispersed hamlet has no interconnected lane network to be
 reached by. The rule in the entry above is a rule about nucleated settlements.</p>
+<p><strong>A scattered farm is measured against the rice that is DRAWN, not against the field the map
+claims.</strong> Every farm in a scattered settlement fronts its own fields, so each house has to stand
+within reach of one - and a field has two extents that can disagree. The water net claims a smoothed
+envelope; the planted plots stop where the drainage stops them, whatever the map asked for. The gap
+between the two is a tail of empty ground, invisible on the sheet and fully real to any distance
+measured from the envelope, so a farmstead hugging that tail reads as field-adjacent while standing
+well past the last rice. The GM saw the result on a hand-drawn hamlet in 2026-07 - <em>"a single line
+of farmhouses that stretches much further south than the rice paddies themselves do"</em>, <em>"there
+are still 3 farmhouses south of the paddies"</em> - and the cause was a claimed field about 180 ft
+longer than the comb could fill.<!-- Akagahara: a 181 px tail at 1 ft/px on a hamlet sheet; field_fall 1440 sized down to 1260 -->
+The answer was to size the claim to what is actually planted, not to nudge the farms. Two hand-drawn
+villages carry tails of about 420 ft<!-- Hoshigaoka and Kikuta, ~210 px at 2 ft/px, village tier --> and
+keep them on purpose: their houses are seated as one cluster and never ride the envelope, so a tail
+there changes nothing, and reshaping two finished fields to satisfy a rule that protects nothing on
+them would be churn. The general lesson is the part worth keeping: where a distance is measured to a
+derived outline, something has to pin that outline to what is drawn, or the measurement is only as
+honest as the geometry behind it.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a scattered settlement needs roughly TWICE the
+margin room per farm that a clustered one does - each homestead carries its own grove and keeps its
+own spacing, and the whole line is hugged to the field edge in single file - so a settlement declared
+at a clustered village's household count will not fit that many scattered farms in the same margin.
+Draw a scattered settlement on a roomier field, or declare fewer households; do not compress the
+homesteads to make them fit. This is a rule about fitting the drawing, not a finding about how far
+apart scattered farms stood.</p>
 <h3 id="linear-路村--row-village---supportable-but-the-weakest-of-the-three">LINEAR (路村 / row village) - supportable, but the weakest of the three</h3>
 <p>Settlements strung along a linear feature - a road, a riverbank, a valley floor - are a standard
 morphological category. The German <em>Reihendorf</em> is the best-documented type: one or two rows of
@@ -470,6 +673,128 @@ and <a href="https://www.plenus.co.jp/kome-academy/en/kome_library/culture/cultu
 the row-village form from <a href="https://en.wikipedia.org/wiki/Reihendorf">Reihendorf</a>; river- and
 road-following expansion in Chinese traditional villages from <a href="https://doi.org/10.3390/ijgi12080317">"Spatial Morphological Characteristics
 and Evolution of Traditional Villages in the Mountainous Area of Southwest Zhejiang"</a>.</p>
+<h2 id="why-does-one-village-look-nothing-like-the-next">Why does one village look nothing like the next?</h2>
+<!-- moved from the retired rule file, "Village variation knobs - the roll engine, the Family-A catalog, the twin-detector" -->
+<!-- Grounds: the village-tier variation knobs, their typing rules, and the settlement_form axis; a hamlet rolls none of these -->
+<!-- Evidence: attested (the siting and field-system grounding); liberty (the value spaces) -->
+<p><strong>Sources:</strong> the geomantic siting question below; this project's reading of the drawn
+villages; no work is cited for the field-system and market groundings</p>
+<p>Two villages fed by water running the same way used to come out nearly identical, down to where the
+headman lived, because the generator held one fixed value on every axis of the layout. A village is
+built now from a handful of choices rolled from the map's own seed, each carrying a rule about when
+that value is even possible, so that a combination comes out coherent instead of merely various. The
+choices are rolled independently rather than drawn as whole village "types": independent draws give
+the widest variety and make it natural to fix one thing by hand and roll the rest, and what keeps the
+result honest is the rule on each choice, not the bundle it came in.</p>
+<p><em>What each choice rests on.</em> WHERE the cluster sits: a village took whatever non-arable higher
+and drier ground lay beside its paddy, and "back to the hill, face the water" says which way it turns
+(the question below) - but which corner of a valley that is depends on the valley, so the high
+windward margin is one common case and not the only one. Its SHAPE followed the dry ground it had: a
+knoll gives a round blob, a levee a string, a field edge a crescent, two flanking patches a split
+village. Its LANES followed its site: a spine along a ridge, a T where a spur met the field track, a Y
+where two approaches merged, a cross at a small market node - the 草市 (<em>caoshi</em>, "grass
+market"), the informal periodic country market that grew up away from the walled towns - and a lane
+along the water in a stream village. Its WATER entered from wherever the catchment could deliver it
+above the fields, which is not always the same corner, and a small village often had a chain of little
+ponds rather than one reservoir. Its PLOTS took their size and their regularity from how the land had
+been divided: tiny hand-shaped plots in fields that grew up organically, rectilinear blocks where a
+survey had laid a grid over them (the 条里 <em>jori</em> system in Japan, the allotment remnants in
+China), long strips under strip tenancy. And the GRAIN of the paddy drifts off the fall line, because
+real valleys let it. (The field-system and market groundings rest on general reading; no source is
+cited for them.)<sup class="fn"><a id="fnref-98" href="citations/homesteads.html#fn-98">98</a></sup></p>
+<p><em>The biggest difference between two villages is the settlement's FORM.</em> When the drawn
+villages were audited for pairs that read as copies - pairs sharing a water direction, compared on
+eight coarse structural axes, which side and which kind rather than which pixel - the pairs that still
+looked like one place twice were the ones varying only the internal detail of a shared archetype. A
+pair could differ on four of the eight and still read the same, because a cross of lanes against a
+spine of lanes is a detail, while a ribbon against a blob is not. That is why the form of the
+settlement - clustered, strung along a line, scattered, or built on the water - was made an axis of
+its own and counts as the largest structural read there is. The GM's own eye confirmed the
+calibration: once one of the two villages was re-rolled as a ribbon along its field margin with a
+drifted field grain, against the other's clustered blob and its geomantic pond, they differed on five
+axes and read as two places.</p>
+<p class="spec"><strong>The rule the map follows (village tier):</strong> a village rolls its cluster's
+position and its shape, its lane skeleton, the position of its water source, its plot size and
+regularity, and the drift of its field grain from its own seed, and a map may fix any one of them by
+hand. A rolled value its own rule forbids is never drawn: a lane along the water needs water running
+ALONG the cluster; a split village needs room for two hamlets to read apart, so a hamlet never splits;
+a gridded plot pattern needs a surveyed field; an entry edge needs a stream and a pond corner needs a
+pond; and a water source below the fields it feeds is refused outright, because water does not run
+uphill. A hamlet rolls none of these.</p>
+<h2 id="how-tightly-does-a-nucleated-village-pack">How tightly does a nucleated village pack?</h2>
+<!-- moved from the retired rule file, "A nucleated cluster is a COMPACT FABRIC, not a wide hollow arc" -->
+<!-- Grounds: the village-tier compactness floor and the crescent seed's lateral reach -->
+<!-- Evidence: liberty (the floor, calibrated on the drawn villages) -->
+<p><strong>Sources:</strong> this project's measurement of the drawn villages</p>
+<p>A clustered village is a compact FABRIC and not a wide hollow arc, and one drawn village came out as
+the arc: a thin string of houses around an empty middle. The cause was not the shape the houses were
+seeded in - it was its WIDTH. The placer pulls every homestead in to hug the paddy edge and then packs
+it along that edge, so a wide seed cloud gets strung out by that pull while a narrow deep one packs
+into a blob. Narrowing the crescent's lateral reach and letting DEPTH carry the frontage fixed it:
+built coverage went from 0.20 to 0.31 and the cluster's span halved, from about 1,900 ft to about
+1,070 ft.<!-- Kikuta: 948 -> 533 px at 2 ft/px, village tier --></p>
+<p><em>The calibration, and an honest limit.</em> Coverage here means how much of the ground inside the
+houses' own outline is actually BUILT - houses, gardens, work yards and homestead groves. The
+pathological arc measures 0.20; the rolled villages that look right measure 0.28 to 0.31; the tightly
+hand-placed villages measure about 0.40. A floor of <strong>0.25</strong> sits clear below the healthy
+band and above the pathology, which is exactly what it is for: it catches the pathology, and it does
+not demand hand-placed density. The rolled placer tops out near 0.31, because hugging and packing
+along an edge is looser than a person seating houses one at a time, and that is accepted - a few
+back-row houses still stand about 700 ft from the crops, which reads as the honest back of a compact
+village rather than as a stranded arc.</p>
+<p class="spec"><strong>The rule the map follows (village tier):</strong> a clustered village of a dozen
+houses or more keeps at least a quarter of the ground inside its own outline built. A hamlet is
+legitimately loose and is not held to it, and neither is a cluster too small for the measure to mean
+anything.</p>
+<h2 id="why-is-there-a-crescent-pond-in-front-of-some-villages-and-why-is-it-labeled">Why is there a crescent pond in front of some villages, and why is it labeled?</h2>
+<!-- moved from the retired rule file, the crescent_pond entry in the focal catalog -->
+<!-- Grounds: the crescent pond glyph, its self-label, and the canopy keep-out over the whole disk -->
+<!-- Evidence: attested (the siting doctrine); the GM's ruling (the label and its wording) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-21; no work is cited for the pond's own doctrine</p>
+<p><strong>What it is.</strong> The half-moon pond (半月塘, <em>banyuetang</em>) dug at the front of a
+village is GEOMANTIC and not religious: no deity, no rites, nobody worships at it. It is cosmological
+engineering of the same kind as facing a house south. A well-sited village wants the hill behind it
+and water in front of it - 背山面水, <em>beishan mianshui</em> - and where the back half is the high
+ground with its grove, the front half is water; where no river obliges, the village DIGS it. Still
+water is held to gather and keep a lineage's fortune where running water carries it away, and the HALF
+shape is deliberate: a complete thing can only wane, so the shape leaves the lineage room to grow. The
+grove arc behind and the water arc in front cradle the settlement as one system. In practical terms it
+is the rain-fed runoff basin, deliberately NOT connected to the irrigation, and the village's fire
+water, its fish and duck water and its washing water, with the flat bank serving as the open forecourt
+where threshing and ceremony happen. The shrine is where religion happens; the pond is how a
+well-sited village is SHAPED. (This rests on general reading of geomantic village siting; no source is
+cited for it.)<sup class="fn"><a id="fnref-99" href="citations/homesteads.html#fn-99">99</a></sup></p>
+<p><strong>Why it carries a label when almost nothing else does.</strong> These maps do not label what a
+reader can see for themselves - no "gate", no "north", no naming of an ordinary road - and this pond is
+the one deliberate exception, ruled by the GM on 2026-07-21: the half-moon pond is culturally specific
+and reads as nothing but a pond-shaped pond to a reader who has not met one. "Geomantic pond" is the
+GM's own wording for the label, chosen over a religious one.</p>
+<p class="spec"><strong>The rule the map follows:</strong> where a village digs one, the pond is drawn as
+a half-disk at the front of the settlement with its flat bank toward the houses, that bank left open as
+the forecourt, and it labels itself "geomantic pond". No vegetation touches its water: the groves keep
+clear of the whole disk, and the scrub and reed scatter skips it as it skips any other water.</p>
+<h2 id="does-the-villages-name-say-where-it-stands">Does the village's name say where it stands?</h2>
+<!-- moved from the retired rule file, "Name-informed siting: read the village NAME" -->
+<!-- Grounds: none in the generator - the cue is read when a map is specified, not when one is rolled -->
+<!-- Evidence: setting-canon (the naming convention); liberty (the cue list) -->
+<p><strong>Sources:</strong> the GM's general rule of 2026-07</p>
+<p>A Rokugani place name usually says something about where the settlement sits relative to its fields,
+its water or its ground, and the GM made it a general rule in 2026-07 that the name is read BEFORE the
+settlement is seated: <em>"the map should be able to be read back into the name"</em>. The worked example
+is Ueda (上田, "upper paddy"), whose paddies are the upslope ones - so its dwellings stand DOWNSLOPE of
+them, facing up-valley toward the fields. On that map's northeast-high ground that puts the cluster on
+the LOWER, southwest flank with the bulk of the paddy rising above it, which is the opposite of the
+default reading, a village on the high flank.</p>
+<p>Other cues worth reading the same way: <em>shimo-</em> (下, lower) says the reverse of Ueda;
+<em>kawa-</em> or <em>-gawa</em> (川, river) puts the settlement hard by the watercourse; and
+<em>yama-</em> (山, mountain), <em>saka</em> (坂, slope), <em>hara</em> (原, plain or moor),
+<em>tani</em> or <em>-dani</em> (谷, valley floor), <em>sawa</em> (沢, a marshy stream), <em>hama</em>
+(浜, shore) and <em>-guchi</em> (口, a mouth or entrance or pass) each name the ground the place stands
+on. Where the name says nothing about the ground, the default holds.</p>
+<p class="spec"><strong>The rule the map follows:</strong> a settlement whose name names its ground is
+seated to match the name, and the default - a clustered village on the dry high flank, hugging its
+paddy - applies only where the name is neutral. No generator reads a name; this is a rule for whoever
+specifies the map.</p>
 <h2 id="does-a-dispersed-hamlets-outlying-farm-have-its-own-well-yes---and-the-question-was-never-the-gms">Does a DISPERSED hamlet's outlying farm have its own well? Yes - and the question was never the GM's</h2>
 <!-- Evidence: attested -->
 <p><strong>Sources:</strong> <a href="https://visit-toyama-japan.com/en/travel-inspiration/sankyoson"><code>visit-toyama-sankyoson</code></a>, <a href="https://www.mdpi.com/2076-3263/11/8/352"><code>mdpi-sho-fan-groundwater</code></a></p>
@@ -542,7 +867,7 @@ after Zhengzhou, size a GUESS; seated on the flank by the yard (GUESS - "in thei
 prefectural library</a>: 「in some cases every house has one, in others only certain old families do」 (translated from the Japanese by this project; original: 「各家にある場合と特定の旧家にだけある場合がある」) - in some places every house
 has one, in others only certain old families; <a href="https://ja.wikipedia.org/wiki/屋敷神">ja.wikipedia 屋敷神</a> states the same two
 patterns. Two forms would ordinarily be a knob; the GM ruled for this map: <em>"very<!-- constitution Principle XII; the ruling was T58 -->
-rare, but which is notable when it does appear"</em> - the old-families pattern; Sugiura's table puts the shrine outbuilding at 0.01 per household over all houses and at none among the pre-1944 ones (the 0.03 once read as the shrine sits in a neighboring shed column);<sup class="fn"><a id="fnref-73" href="citations/homesteads.html#fn-73">73</a></sup> drawn on
+rare, but which is notable when it does appear"</em> - the old-families pattern; Sugiura's table puts the shrine outbuilding at 0.01 per household over all houses and at none among the pre-1944 ones;<sup class="fn"><a id="fnref-73" href="citations/homesteads.html#fn-73">73</a></sup> drawn on
 3-8% of homesteads<!-- band 0.03-0.08 -->, and the count is CAPPED at the share so positional luck cannot make it common. The
 every-house pattern is the DECLINED alternative, recorded here for the knob a later tier may want.
 Corner: NE (the <em>kimon</em>, 鬼門) - 「in a corner of the house plot, especially at the kimon (the northeast corner), a small shrine of stone or wood, or with a straw roof」 (translated from the Japanese by this project; original: 「屋敷の一隅、特に鬼門（北東隅）に、石や木、わら屋根の祠」) (<a href="https://ja.wikipedia.org/wiki/屋敷神">ja.wikipedia</a>, <a href="https://minka-en.com/shisetsu/shisetsu_7/">minka-en<sup class="fn"><a id="fnref-74" href="citations/homesteads.html#fn-74">74</a></sup></a>, <a href="https://satologue.com/living/758">satologue<sup class="fn"><a id="fnref-83" href="citations/homesteads.html#fn-83">83</a></sup></a>);
@@ -652,8 +977,8 @@ privy moved to the sun side<sup class="fn"><a id="fnref-88" href="citations/home
 one it serves. Measured over the 13-map pool, <strong>6 of 66 privies and heaps</strong> stand nearer a neighbor's
 drawn FOOTPRINT than their own - the number that matters, because a reader compares against the drawn
 rectangle rather than against a recorded center point. (Measured center to center<!-- By center-to-center, the metric the placement code itself sorts on --> it is 4 of 66; the two figures disagree because a fixture can clear a distant
-house's center while standing against its wall. The worst case is Kashikawa's heap at (2194.1,
-2759.2): 32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center metric
+house's center while standing against its wall. The worst case is Kashikawa's heap:<!-- at (2194.1, 2759.2) -->
+32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center metric
 renders as a mild 46.7 against 33.0.) A reader attributes such a pit to the nearer house; the map's own record<!-- the manifest -->
 says otherwise, and only the interactive page resolves it on click.</p>
 <p><strong>This is an ACCEPTED limitation, and THREE priced alternatives were declined on measurement.</strong></p>

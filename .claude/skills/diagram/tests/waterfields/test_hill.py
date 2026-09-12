@@ -36,7 +36,7 @@ def _ribbon(**kw):
 
 
 def test_a_terrace_STEP_is_split_along_the_contour_into_many_small_cells() -> None:
-    """THE LEVELED-CELL PRINCIPLE, and the defect it fixed (GM 2026-07-22, settlements/fields.md).
+    """THE LEVELED-CELL PRINCIPLE, and the defect it fixed (GM 2026-07-22, research/fields.html).
 
     Both engines used to draw each terrace STEP as ONE plot spanning the full width - ~1.4 acres,
     far over the leveled-cell size a paddy can hold water at. Each step is split ALONG the contour

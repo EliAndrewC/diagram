@@ -32,7 +32,7 @@ class BoardsMixin:
         The watchman strikes the bell in a cadence that tells the town how near the fire is. Records
         M['fire_towers'] (an overlap-checked struct: it must stand clear of the wall, roads, and
         buildings) and reserves a small no-build block (it needs clear sightlines). Place it among the
-        laborer/merchant blocks. See the settlements.md 'Fire towers' historical grounding."""
+        laborer/merchant blocks. See the research/cities/fabric.html 'How did a dense wooden city watch for fire?' historical grounding."""
         if tw is None:
             tw = self.px(26)  # a real hinomi-yagura frame is ~26 ft square (town-calibrated glyph)
         h = tw / 2
@@ -71,11 +71,11 @@ class BoardsMixin:
         institution fails while the siting checks stay green (that is exactly how Nagahara's
         third board shipped, GM 2026-07-27). Hand placements must pass the fronted route's
         bearing; `place_kosatsuba` derives it. Held by `kosatsuba_faces_the_road`. Records M['kosatsuba'] (an overlap-checked
-        struct). WHY: settlements.md 'Notice board (kosatsuba)'. Place LAST, on a clear verge
+        struct). WHY: research/urban-features.html 'The notice board (kosatsuba) - siting is a traffic decision'. Place LAST, on a clear verge
         beside the road, like the fire tower.
 
         The DRAWN glyph is a LOCATION MARKER at the coarse tiers (GM call 2026-07-24, taking the
-        escape settlements.md documented): the true 12x5 ft frame draws 6x2.5 px at village grain
+        escape research/urban-features.html 'The notice board (kosatsuba)' documents): the true 12x5 ft frame draws 6x2.5 px at village grain
         and 4x1.7 px at city grain - at city scale, rotated upright, that is a 1.7 px sliver that
         reads as gate hardware, not a feature (Nagahara: two of its three boards were invisible
         until the GM went looking, and the one that read did so only by its label). So the glyph

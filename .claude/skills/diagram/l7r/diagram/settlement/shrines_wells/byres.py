@@ -221,7 +221,7 @@ class DraftByresMixin:
         # cluster's own principal axis, all four byres occupied the SW 143 ft of a 993 ft settlement
         # on Kashikawa (14%), 160 of 810 ft on Sawada (20%), and every map put them in one half.
         # These are SHARED sheds - the whole point is that a household too poor for its own team
-        # borrows or hires one (`settlements/homesteads.md`) - so a byre quarter at one end defeats
+        # borrows or hires one (`research/homesteads.html`) - so a byre quarter at one end defeats
         # the sharing the feature exists to depict, leaving most households several hundred feet from
         # the nearest.
         #
@@ -252,7 +252,7 @@ class DraftByresMixin:
                 # collapses to pure distance, so it picks the most ISOLATED homestead and the shed
                 # reads as that household's private one. That is the inverse of the doctrine: a byre
                 # is shared precisely so a household owning no team can borrow from a neighbor
-                # (settlements/homesteads.md), and the neighbor has to be there to borrow from.
+                # (research/homesteads.html), and the neighbor has to be there to borrow from.
                 # So: take the spread score, then among the candidates within a quarter of the best
                 # prefer the one with the most households in borrowing distance.
                 _best = max(min(math.hypot(q["x"] - bx, q["y"] - by) for bx, by in out) for q in _pool)

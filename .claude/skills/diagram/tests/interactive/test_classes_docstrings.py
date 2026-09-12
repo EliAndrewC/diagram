@@ -25,7 +25,17 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     (what, why, label_note, caveat) were proven equal to the snapshot field by field at the conversion
     commit (`d6d86346`, gate green 2026-09-05, 2,982 passed) - and are NOT pinned here, because a later
     prose edit is exactly what feature 189 exists to make cheap: pinning it would fail `make page-check`
-    on every reworded explanation. Here they are only required to be present."""
+    on every reworded explanation. Here they are only required to be present.
+
+    THE ONE DATA FIELD THAT LEGITIMATELY MOVES IS `entry`, AND THE SNAPSHOT IS UPDATED WITH IT
+    (feature 229). `entry` holds no value of its own: it NAMES a heading on a research page, and a
+    research heading is written as the question a reader would ask from the map, so renaming one to a
+    better question re-points every class that cites it. Thirteen moved when feature 229 renamed three
+    headings that were addressed to a session rather than to a reader; two of those thirteen had been
+    pointing at 'Why dikes were planted at all', a heading that does not exist, so the resolver matched
+    nothing and two classes showed no question at all. The rule when you rename a heading: sweep every
+    pointer, then re-point these snapshot strings in the same change, and expect the gate, since this
+    pins a class attribute. Every other field here stays pinned permanently."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     assert sorted(before) == sorted(CLASSES) and len(CLASSES) == 51
     for key, was in before.items():

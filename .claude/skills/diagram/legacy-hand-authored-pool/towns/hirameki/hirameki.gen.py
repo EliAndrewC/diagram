@@ -10,7 +10,7 @@ the segregated burakumin neighborhood, and a small guan-xiang gate-market lie ou
 surrounding farmers retreat inside during a raid. The hill's steep back defends the north
 flank; the Imperial chrysanthemum field abuts the inside of the west rampart.
 
-WATER (the water-first comb doctrine, settlements.md "Water-first fields v2"; this replaced
+WATER (the water-first comb doctrine, research/fields.html 'Where does a field's water come from, and how is it shared out?'; this replaced
 the retired legacy paddy_field quilts this map originally used): the land falls SOUTH
 (downhill="south" / down_deg=90), and every field is a build_comb fan with a real source and
 a real sink:
@@ -401,7 +401,7 @@ s.street(MAIN, width=28, main=True, label="main street")
 s.street(CROSS, width=22)
 # BELL-AND-DRUM TOWER (GM 2026-07-24): Hirameki is WALLED, so it keeps the timekeeping/curfew
 # tower of a walled seat - a town-tier 60 ft platform (the poorer end of the 60-80 ft county
-# band) at the NE corner of the main crossing (settlements.md "The bell-and-drum tower").
+# band) at the NE corner of the main crossing (research/urban-features.html "The bell-and-drum tower - one per walled seat").
 # Unwalled Hoshizora has no gates to close and is exempt: its time signal is the monastery bell.
 s.drum_tower(1352, 1325, tw=s.px(30))  # town tier: low end of the re-verified 30-45 ft county band (research 2026-07-24 second pass)
 
@@ -439,7 +439,7 @@ s.label(1030, 950, "samurai neighborhood", 11, italic=True)
 # engine change, because a grid scan's spots are RNG-coupled. An exact-count documented
 # feature gets FIXED coordinates; the fill=True street scan below flows around them). These
 # are the probed-stable verge spots flanking the main street south of the gate. The market is
-# TRAFFIC-scaled, not population-scaled (towns levy no import tariffs - settlements.md "gate
+# TRAFFIC-scaled, not population-scaled (towns levy no import tariffs - research/towns.html "The gate market exists for TRAFFIC, not taxes" ("gate
 # market"): 4 premises is the thin-but-honest end of the ~4-8 band for one trafficked gate -
 # the s1 paddy comb genuinely pinches every other road-front spot (the 1836/1888 grid rows
 # are all blocked). NO run-off-frame stalls: the truncation device needs a canvas larger than
@@ -465,7 +465,7 @@ s.label(800, 1560, "laborers' & servants' tenements", 9, italic=True, color="#5A
 
 # ---- OUTSIDE: the gate market (fixed above, before the street frontage), the segregated
 # burakumin neighborhood, farm rings
-# ===== THE OFFICIAL NOTICE BOARD (kosatsuba) - AUTO-SITED on the traffic (settlements.md
+# ===== THE OFFICIAL NOTICE BOARD (kosatsuba) - AUTO-SITED on the traffic (research/urban-features.html 'The notice board (kosatsuba)'
 # "Notice board"). It used to be hand-placed at (1330,1630), on the main street just inside the
 # front gate, on the reasoning that every arrival passes it. Arrivals do - but the town does
 # not: that seat had 10 structures within 250 ft against a peak of 29 further up the same
@@ -476,7 +476,7 @@ _kb = s.place_kosatsuba()
 assert _kb, "no frontage verge with room for the notice board"
 
 # ===== THE PUNISHMENT GROUND - the cangue frame, flogging post, and kneeling stone at the town's
-# busiest public point (feature 015; settlements.md "Punishment spot"). A DISPLAY installation:
+# busiest public point (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"). A DISPLAY installation:
 # the crime rides on the cangue, so it draws no board of its own. Probed with open_seat after
 # the packs by place_punishment_spot, which scores street verges by traffic - the same probe
 # the notice board uses, because both institutions are sited by the same variable.
@@ -500,13 +500,13 @@ s.merchant_storehouses(6)
 
 s._nucleated = True  # town-fringe farms pack in tight mutually-sheltering rows (the NUCLEATED
 # homestead bundle: house + south threshing yard + adaptive sunny garden + reserved north kura;
-# no per-farm grove - same conversion as Hoshizora, settlements.md 'Settlement form')
+# no per-farm grove - same conversion as Hoshizora, research/homesteads.html 'Does a hamlet have to be nucleated at all?')
 
 # funerary complex BEFORE the rings (bundle appurtenances reserve real footprints and must pack
 # around it): the intramural parish graveyard by the Bishamon monastery, the MAIN extramural
 # common burial ground, and the adjoining cremation ground (monk-run, burakumin assistants)
 s.cemetery(1840, 1160, 88, 62, label="graveyard", label_above=True)
-s.cemetery(2080, 1420, 120, 88, parish=False, label="common burial ground")  # parish=False -> ORGANIC Japan-style plot (settlements.md 'shape of the common ground')
+s.cemetery(2080, 1420, 120, 88, parish=False, label="common burial ground")  # parish=False -> ORGANIC Japan-style plot (research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common ground')
 # Moved out from (2100, 1513) on 2026-07-27: the 120 ft clearance this ground owes the dwellings
 # was being measured center to center, which read 111 ft as comfortable when the pyre was really
 # ~50 ft from a farmhouse wall. Now 184 ft to the nearest dwelling, edge to edge.
@@ -514,7 +514,7 @@ s.cremation_ground(2210, 1483)
 # the pauper ossuary mound (muenzuka) beside the cremation ground (town_has_ossuary)
 s.ossuary(2180, 1560)
 
-# ---- the EXECUTION GROUND and its boundary stone (feature 015; settlements.md "Execution ground").
+# ---- the EXECUTION GROUND and its boundary stone (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside").
 # Sited by the way OUT and by the direction pollution runs, not by distance: the ground lies on the
 # south side, the same side as the burakumin quarter (the caste that performs every execution that
 # is not a samurai's), outside the rampart, clear of the farmland, and a good distance from the
@@ -641,7 +641,7 @@ s.farm_wells()  # farm-belt wells: no farmstead >500 real ft from one, map-edge 
 s.village_grove([(30, 70), (165, 55), (185, 140), (160, 225), (60, 235), (28, 160)], role="windbreak")
 s.village_grove([(275, 60), (385, 70), (392, 200), (360, 280), (285, 265), (262, 150)], role="windbreak")
 # ...and the NESTLING bands: the doctrine belt "nestles against and EMBRACES the cluster"
-# (settlements.md) - each farm cluster gets a band hugging its windward (N/NW) fringe, wide
+# (research/towns.html 'Which way does a shelter belt lie?') - each farm cluster gets a band hugging its windward (N/NW) fringe, wide
 # enough to reach open ground so the clumps take (a band drawn only over the packed rows
 # thins to scatter). The corner masses above are the wood; these bands are the wind wall.
 s.village_grove([(238, 205), (396, 198), (398, 348), (240, 352)], role="windbreak")
@@ -674,7 +674,7 @@ s.village_grove([(2290, 1350), (2378, 1345), (2382, 1462), (2295, 1470)], role="
 # leaving a ~120 px outer band for the margin grazing-commons (the labor-limited fallow lives at the
 # FAR edge, not hugging the town). Called AFTER the farmsteads, wells, and windbreak groves so it skips
 # every structure's urban halo and the grove belts; default near_ring_density is "dense" (well-sited).
-# WHY: settlements.md "Near-ring farmland density".
+# WHY: research/fields.html "What is the farmland around a town or a city made of?" ("Near-ring farmland density".
 # NEAR-RING PADDY IS COMB FIELDS ONLY (GM 2026-07-23, the Tango-recipe rollout): Hirameki's rice is
 # its five build_comb fans. REJECTED (recorded so it is never reinvented): the near_ring_cropland
 # dry/garden tile quilt ("tons and tons of dry crop fields everywhere" - the 013 composition error).
@@ -683,7 +683,7 @@ s.village_grove([(2290, 1350), (2378, 1345), (2382, 1462), (2295, 1470)], role="
 # ===== FIRE DEFENSE: a watch-tower =====
 # Placed LAST, on a cleared seam the dense town already leaves between its building clusters - so it
 # perturbs nothing and stands on an ACTUAL gap. A FIRE-WATCH TOWER (hinomi-yagura, the magistrate's
-# bell-watch) stands in the tenement warren, watching its packed rooftops. WHY: settlements.md "Fire towers".
+# bell-watch) stands in the tenement warren, watching its packed rooftops. WHY: research/cities/fabric.html "How did a dense wooden city watch for fire?".
 s.fire_tower(1560, 1584, label="fire-watch tower")  # SE warren fringe inside the rampart - the manifest-scanned clearest seam (61px to the nearest roof, 32 to the wall)
 
 s.title("Hirameki")

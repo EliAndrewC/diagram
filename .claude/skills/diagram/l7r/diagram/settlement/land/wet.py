@@ -207,7 +207,7 @@ class WetGroundMixin:
         WATERWARD flanks (the fluctuating lake/creek/marsh the dike holds back - exempt from the low-ground rule
         because a polder floor sits BELOW the outside water level, so the wet fringe surrounds it regardless of the
         fall direction; `polder_waterward_flanks_wet` owns its placement, driven by `meta.waterward`). WHY:
-        settlements.md 'Marsh' + 'Defensive marshland' + 'Polder siting Q&A'. Recorded M['marshes']."""
+        research/water.html 'What ground is too wet to build on?' + 'Defensive marshland - the engineered wet belt' + research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
         # THE RECORD SAYS WHAT THE INK SAYS (feature 150 T54 residue, settlement-review 2026-08-29). The

@@ -97,7 +97,7 @@ _torii = [(round(BEN[0] + _ux * d), round(BEN[1] + _uy * d)) for d in range(34, 
 s.shrine_hall(BEN[0], BEN[1], "Shrine to Benten", "(Sister Baika's care)", w=44, h=30, kind="shrine", primary=True, torii=_torii, torii_count=7, graveyard=False)  # PINNED 7 (2026-07-24): Kikuta IS the pool's 7-torii flat-ground avenue exemplar (its dense senbon sando is GM-approved canon), so the per-temple roll is pinned rather than re-rolled
 s.shrine_well(round(BEN[0] - _uy * 46), round(BEN[1] + _ux * 46))  # the priestess's ablution well, beside the hall
 # the village burial ground shares the precinct but stands clear of the hall + the sando
-s.cemetery(round(BEN[0] + _ax * 96 - _uy * 104), round(BEN[1] + _ay * 96 + _ux * 104), 60, 44, parish=False, organic=True, label="village burial ground")  # resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 120x88 ft at 2 ft/px - see settlements.md 'District catchment'
+s.cemetery(round(BEN[0] + _ax * 96 - _uy * 104), round(BEN[1] + _ay * 96 + _ux * 104), 60, 44, parish=False, organic=True, label="village burial ground")  # resized 2026-07-23: the ground serves the WHOLE ~800-person district (village + ~6 hamlets' urns), ~0.15-0.30 acre -> 120x88 ft at 2 ft/px - see research/religion-and-death.html 'District catchment'
 
 s.hinterland()  # NOW lay the scrub + marsh - after the precinct's clearings are registered, so it reads swept around the shrine/torii/graves
 

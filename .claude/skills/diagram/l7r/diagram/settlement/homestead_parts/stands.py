@@ -75,7 +75,7 @@ class StandsMixin:
 
     def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None, face_margin: float | None = None) -> int:  # type: ignore[misc]
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
-        a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see settlements.md 'Village
+        a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
         windbreak'):
           - `windbreak` - the dense belt on the WINDWARD/high BACK edge (后龙林 back-village grove); the winter-
             monsoon wall and the LARGEST vegetation feature. Nestles against and EMBRACES the cluster.
@@ -154,8 +154,8 @@ class StandsMixin:
         # 9, 8, 6, 4, 6, 4, 11, 9, 26, 30 and 83 ft against a belt clump radius of 14 - **10 of 11
         # copse clumps inside the belt's own canopy**, spanning x 1096-1188 while the houses span
         # 1108-1331. So the dooryards east of the front rank got no greenery at all and a whole
-        # feature was invisible, while `settlements/vegetation.md` says outright that "the copse, not
-        # the belt, fills the inner gaps".
+        # feature was invisible, while `research/vegetation.html` ("What are the village's three groves")
+        # says outright that "the copse, not the belt, fills the inner gaps".
         #
         # Sum of the two canopy reaches, so neither stand's ink laps the other. This also protects the
         # reverse order (a belt seated after a copse) without needing to know which ran first, and it
@@ -336,7 +336,7 @@ class StandsMixin:
                     continue
                 # ...AND NOT WHOLLY OFF THE PAGE, when the caller gives a `within`. ONLY wholly - a
                 # clump whose crown merely CROSSES the frame edge is kept, and that is doctrine, not
-                # leniency: `settlements/presentation.md` (GM 2026-07-20) says the belt CLIPS at the
+                # leniency: `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the
                 # view edge and "a partially visible belt reads as 'the wood continues'", which is
                 # why `hard_features_within_frame` demands partial visibility of a village grove
                 # rather than containment. Only a clump with NO visible ink is waste.
@@ -411,7 +411,8 @@ class StandsMixin:
             for _ in range(6):  # a 94 ft gap needs three rounds; six is headroom, and it stops when nothing lands
                 _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
                 _added = 0
-                # A DEAD END, MEASURED AND REVERTED (2026-08-29, the acceptance re-check's ERROR 2).
+                # A DEAD END, MEASURED AND REVERTED (2026-08-29, the acceptance re-check's ERROR 2; the
+                # record: research/vegetation.html "Why does the belt run off the edge of the sheet?").
                 # The review read Kuwabata's belt as stopping before its polygon did, and the obvious
                 # repair was to bracket this run by the polygon's own across-wind extent so the END
                 # stretches were offered seats like any interior gap. Implemented and rolled: it bought

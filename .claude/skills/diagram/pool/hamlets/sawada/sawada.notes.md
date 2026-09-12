@@ -363,7 +363,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `settlements/presentation.md` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -801,6 +801,6 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   On this map: 19 of 19 seated (roll attempt 1), 25 placer calls at 3.1 envelope tests each and
   8 rectangle tests per house against 163 under feature 226; the front row seated 7 and the ranks
   behind ran 3 rounds. The nearest house stands 60 px from the field outline with 6 within 165, and
-  homestead to homestead the median gap is 20 px (worst 161) - the fabric is continuous, which a centre-to-centre
+  homestead to homestead the median gap is 20 px (worst 161) - the fabric is continuous, which a center-to-center
   reading of the same cluster does not show. Drawn aspect 1.43 (round, honored); windbreak 249 clumps,
   copse 235; 4 of 19 gardens split, sides {'E': 9, 'W': 9, 'S': 1}.

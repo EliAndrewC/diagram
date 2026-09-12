@@ -36,10 +36,24 @@ def gen_of(spec: hg.HamletSpec) -> str | None:
     return os.path.join(HERE, rel) if rel else None
 
 
+def obtain_full(gen: str) -> tuple[str, str, float | None]:
+    """`gate_obtain`'s own triple, taken under the run's per-gen lock.
+
+    EVERY READER OF A SHIPPED GENERATOR COMES THROUGH HERE, THE POOL SWEEP INCLUDED (feature 229).
+    The lock is what makes "a spec is rolled once per gate" true of a COLD cache: `gate_obtain`
+    regenerates on a miss, so two callers that reach it together each roll the same map and the
+    census fails the gate. The sweep (`tests/test_villages.py::_regen_and_gate`) used to call
+    `gencache.gate_obtain` directly and so took no lock, which is invisible while the cache is warm
+    and fires the moment a merge moves a generator's key - measured on Kuwabata after feature 228
+    landed, rolled twice in one run, by the sweep and by the lateral test.
+    """
+    with rollcache._share_lock(rollcache._run_share_path(("pool", gen))):
+        return gencache.gate_obtain(gen)
+
+
 def obtain(gen: str) -> str:
     """The pool map's manifest path, through the gen cache under the run's per-gen lock."""
-    with rollcache._share_lock(rollcache._run_share_path(("pool", gen))):
-        manifest, _how, _cpu = gencache.gate_obtain(gen)
+    manifest, _how, _cpu = obtain_full(gen)
     return manifest
 
 

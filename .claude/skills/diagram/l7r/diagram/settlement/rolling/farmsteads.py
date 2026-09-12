@@ -102,7 +102,7 @@ class FarmsteadFlushMixin:
         once every yashikirin is drawn, a garden left with a NEIGHBOR'S grove hard against its EAST loses the
         morning sun. Where there is open ground, nudge that garden a little SOUTH so the tree falls to its NE
         and the eastern sky opens - the GM's 'move it a bit south' remedy. Best-effort: a garden boxed in to the
-        south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See settlements.md 'gardens'."""
+        south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/homesteads.html 'The garden's sun, and how far the windbreak shades' ('gardens'."""
         step = 4 * self.bscale
 
         def footprints(exclude: int) -> list[Any]:

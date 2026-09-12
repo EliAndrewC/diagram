@@ -88,11 +88,11 @@ _OVERLAP_STRUCTS = (
     "drum_towers",
     "byres",
     "kosatsuba",
-    # the justice works (settlements.md "Punishment spot" / "Execution ground" / "Boundary marker")
+    # the justice works (research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside")
     "punishment_spots",
     "execution_grounds",
     "boundary_markers",
-    # the trade works (GM 2026-07-24, settlements.md "TRADE WORKS")
+    # the trade works (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why")
     "breweries",
     "dye_yards",
     "lumber_yards",
@@ -553,7 +553,7 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
     ): "a supply canal hugs the fan's HIGH DRY MARGIN by design (the comb doctrine), and the dry hem IS that margin - a plot may be crossed by the irrigation that serves it. A NATURAL watercourse is a different matter and stays forbidden: dry_plots x streams is the defect this whole feature was opened for",
     frozenset(
         {"kosatsuba", "lanes"}
-    ): "the notice board hugs the roadside BY DESIGN - place_kosatsuba deliberately bypasses the lane corridor's no-build clearance, which is a house setback, because a board that everyone passes is the whole institution (settlements/urban-features.md, 'Notice board')",
+    ): "the notice board hugs the roadside BY DESIGN - place_kosatsuba deliberately bypasses the lane corridor's no-build clearance, which is a house setback, because a board that everyone passes is the whole institution (research/urban-features.html, 'Notice board')",
     frozenset({"buildings", "merchant_estates"}): "a merchant estate is a walled COURT drawn around an inner building that is itself a checked struct",
     frozenset(
         {"wall", "flower_fields"}
@@ -693,7 +693,7 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
 
 # the 2 patron fortunes of each Great Clan - a town defaults to one monastery for each
 # The recognized justifications for a city carrying MORE than two major temples
-# (settlements/religion-and-death.md). A fixed vocabulary rather than free text: the doctrine
+# (research/religion-and-death.html). A fixed vocabulary rather than free text: the doctrine
 # enumerates the exceptions, so an unrecognized reason must FAIL rather than pass by virtue of
 # being non-empty - otherwise the declaration stops meaning anything and becomes a rubber stamp.
 #   large         - an especially large city

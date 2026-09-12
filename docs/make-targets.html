@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 59 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 61 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -66,6 +66,8 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make notes-census</td><td class=a><div class=ad><span class=an>M=&lt;glob&gt;</span><span class=aw>which manifests to refresh (default: every manifest in both pool trees)</span></div></td><td>refresh the derived counts inside each map&#x27;s notes census block</td></tr>
 <tr><td class=n>make pack-audit</td><td class=a><div class=ad><span class=an>ARGS=&lt;in.svg&gt;</span><span class=aw>the Mode A compound SVG to measure</span></div></td><td>empty space and geometry in a HAND-DRAWN Mode A compound SVG</td></tr>
+<tr><td class=n>make page-lit</td><td class=a>CLASS MAP OUT VECTOR</td><td>light ONE class on a map&#x27;s page and report which classes&#x27; pixels change</td></tr>
+<tr><td class=n>make picture-diff</td><td class=a>A B PAGE</td><td>two renders compared: the differing share, the max delta, the bbox, and whose ink</td></tr>
 <tr><td class=n>make why-placed</td><td class=a><div class=ad><span class=an>GEN=&lt;gen path&gt;</span><span class=aw>the map to ask about</span></div><div class=ad><span class=an>AT=x,y</span><span class=aw>what was PLACED at this point, and by which stage</span></div><div class=ad><span class=an>REFUSED=x,y</span><span class=aw>what was REFUSED here, and which rule refused it</span></div></td><td>who placed this, and what refused to</td></tr>
 </table></div>
 <h2>Performance</h2>

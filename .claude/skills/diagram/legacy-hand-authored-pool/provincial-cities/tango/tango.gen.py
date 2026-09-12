@@ -6,7 +6,7 @@ rampart sized to hug the ~600-household city (a wall encloses what it must defen
 unused ground inside), with the Imperial road as the N-S spine and a connected GRID of city
 streets dividing each quarter into blocks. Within a block the street-facing buildings front
 the streets and the bulk of the housing packs into TIGHT ROWS behind them (the row-packing
-doctrine - see settlements.md). The placement is bounded by the wall (s.bound), so the dense
+doctrine - see research/cities/sizing.html). The placement is bounded by the wall (s.bound), so the dense
 quarters fill the ring's shape to the rampart.
 
 TO SCALE at the GM's city scale, 1px = 3ft. The wall's semi-axes are 487x457px (~1,461 x
@@ -45,7 +45,7 @@ from l7r.diagram.waterfields import AZE, BEAN_GREEN, aze_w, build_comb, hem_on_p
 # Paddy CELL grain calibrated to a real-feet target (~0.05 acre) at this city's 3 ft/px (was hand-set 26px
 # -> ~0.08 acre, at Bray's "large" ceiling). Subdivides the same fans into finer cells; the ~3,000 urban
 # population and every dwelling count are untouched (a city's farmers are not in that figure). See
-# waterfields.paddy_grain / settlements.md 'Paddy cell size'.
+# waterfields.paddy_grain / research/fields.html 'Plot sizes, pond sizing and acreage from population'.
 PLOT_ACROSS, ROW_STEP = paddy_grain(3)
 
 s = Settlement(3200, 2700, seed=162)
@@ -186,12 +186,12 @@ s.stream(
 # through it, and Japanese castle towns fed moats by the same river diversions (Edo turned the
 # Hirakawa into its moat spiral). No trace of the stream's pre-diversion bed is drawn through
 # the city: after centuries of buildup the abandoned course is built over, so its absence is
-# realistic, not an omission. See settlements.md's moat-water bullet for the full grounding.
+# realistic, not an omission. See research/water.html 'Does a moat have a current?' for the full grounding.
 # ... and the moat DRAINS: an outfall leaves the LOW (SE, downstream - N is the high ground) rim
 # and runs off the map, diagonally opposite the NW feeder so the current flushes the ring corner-to-
 # corner (the Forbidden City NW-in / SE-out pattern). A stream-fed moat in a wet rice climate cannot
 # be a terminal pond - conservation of flow, the surplus MUST leave (evaporation + seepage cannot
-# absorb a live stream); see settlements.md's moat-water bullet. Threads S between the Imperial road
+# absorb a live stream); see research/water.html 'Does a moat have a current?'. Threads S between the Imperial road
 # (x1602) and the westernmost samurai estate (x~2061), off the S edge.
 _mse = min(MOAT, key=lambda p: (p[0] - 1879) ** 2 + (p[1] - 1732) ** 2)  # a moat vertex on the SE (low) rim
 s.stream(
@@ -233,7 +233,7 @@ s.flophouse(1574, 1620)
 s.inn(1574, 1655)
 s.stables(1574, 1687, rot=90)
 
-# TRADE WORKS (GM 2026-07-24, settlements.md "TRADE WORKS"): the
+# TRADE WORKS (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"): the
 # trades whose premises outgrow the shop glyph, placed BEFORE the frontages/packs so the quarters
 # flow around them. Tango is LANDLOCKED: no lumber yard (timber moves by water at scale), but the
 # dyer stays - dyeing needs rinsing water (here the NW pond), not bulk transport.
@@ -441,7 +441,7 @@ def comb_field(name, sluice, down_deg, seed, field_fall, canal_a, canal_b, offta
     for c in sorted(net["channels"], key=lambda c: -c["w"]):
         s.field_channel(
             c["pts"], '#7C9EB0' if c["role"] == "drain" else '#6C9CBE', c["w"], c.get("w_tail", c["w"]), late=True
-        )  # the LATE water block: the city's moat/river opens the shared block EARLY, which would composite the whole ditch net UNDER the plots (invisible network + parchment pinstripes on the uncovered corridors). Since the Hoshizora canals-under-paddies audit (GM 2026-07-21) the late block RE-ANCHORS at every call, so multi-fan maps stay correct too; see settlements.md's late-water bullet
+        )  # the LATE water block: the city's moat/river opens the shared block EARLY, which would composite the whole ditch net UNDER the plots (invisible network + parchment pinstripes on the uncovered corridors). Since the Hoshizora canals-under-paddies audit (GM 2026-07-21) the late block RE-ANCHORS at every call, so multi-fan maps stay correct too; see research/water.html's late-water bullet
     exs = [p[0] for p in env]
     eys = [p[1] for p in env]
     pvx = [v[0] for p in net["plots"] for v in p["poly"]]
@@ -528,7 +528,7 @@ VEG_CROPS = {"daikon": ("#9FB86B", "#83A050"), "greens": ("#8FAE62", "#75954C"),
 
 
 def veg_tract(name, bbox, seed):
-    """An in-wall kind="vegetable" GARDEN TRACT (settlements.md 'In-wall VEGETABLE tracts'):
+    """An in-wall kind="vegetable" GARDEN TRACT (research/cities/hinterland.html 'Does a city farm inside its walls?' ('In-wall VEGETABLE tracts'):
     intensively-worked well/night-soil-fed garden ground worked by the surrounding quarters -
     no channel, no farmstead ring (the checks exempt kind != "paddy"). Drawn as a quilt of
     small furrowed plots, each row-cultivated to its own heading like fragmented dry holdings."""
@@ -693,7 +693,7 @@ for fan in (
         if s.well_at(*c):
             break  # candidate fan: first clear spot wins (splits a 27-32-household draw-point)
 # BELL-AND-DRUM TOWER (GM 2026-07-24): the walled seat's timekeeping/curfew tower, at the NE
-# corner of the road x main-street crossing (settlements.md "The bell-and-drum tower"); placed
+# corner of the road x main-street crossing (research/urban-features.html "The bell-and-drum tower - one per walled seat"); placed
 # before the NE rowpacks so the terraces flow around its reserved block.
 s.drum_tower(1632, 1252)
 s.rowpack((1720, 1003, 2013, 1135), (["laborer"] * 3 + ["servant"]) * 60, court_every=3, fill=True)
@@ -763,7 +763,7 @@ s.label(1286, 1556, "temple neighborhood", 9, italic=True, color="#6B2A18")  # i
 s.block_polys.append(
     [(1204, 1534), (1306, 1534), (1306, 1554), (1204, 1554)]
 )  # the district label's own ground (true-size halls freed this band, and the SW frontage packed a merchant under the text, 2026-07-21)
-# ADEPT-MONK HOUSING (GM 2026-07-24, settlements.md "City temples"): 2-3 ordinary homes per
+# ADEPT-MONK HOUSING (GM 2026-07-24, research/religion-and-death.html "Temples as economic institutions with hereditary householder clergy"): 2-3 ordinary homes per
 # complex for the married adepts among its 15-30 monks - drawn identical to laborer houses
 # (kind "monk_house" exists for the checks/budget/population math, not the eye). Placed before
 # the SW frontages/packs so the merchant quarter flows around them.
@@ -1158,13 +1158,13 @@ s.label(1523, 1407, "road market", 9, italic=True, color="#5A4326")
 #  - the CREMATION GROUND + pauper OSSUARY mound outside the wall (monk-run, burakumin assistants)
 s.cemetery(
     2205, 871, 90, 64, parish=False, label="common burial ground"
-)  # parish=False -> ORGANIC Japan-style plot (settlements.md 'shape of the common ground'). Back inboard for the content crop (2026-07-23 second pass): the funerary anchors the frame, so it sits just past the fields, not at the old wide frame's edge
+)  # parish=False -> ORGANIC Japan-style plot (research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common ground'). Back inboard for the content crop (2026-07-23 second pass): the funerary anchors the frame, so it sits just past the fields, not at the old wide frame's edge
 s.cremation_ground(2205, 978, label_above=True)  # caption ABOVE the glyph: below it, the east end of the
 # default seat laps a public well at (2253.6, 997.1) - the well moved there when the paddy carve was
 # corrected (2026-08-08) and nothing else in this pocket has room to give (labels_clear_of_other_buildings)
 s.ossuary(2215, 760)
 
-# ---- the EXECUTION GROUND and its boundary stone (feature 015; settlements.md "Execution ground").
+# ---- the EXECUTION GROUND and its boundary stone (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside").
 # Sited by the way OUT and by the direction pollution runs, not by distance: the ground lies on the
 # north side, the same side as the burakumin quarter (the caste that performs every execution that
 # is not a samurai's), outside the moat and wall, clear of the farmland, and a good distance from the
@@ -1227,7 +1227,7 @@ s.farm_wells()  # farm-belt wells: no farmstead >500 real ft from one, map-edge 
 
 # ===== FIRE DEFENSE: watch-towers =====
 # ONE AMID EACH major commoner quarter, on the cleared seams the dense city leaves - placed
-# LAST so they perturb nothing. WHY: settlements.md "Fire towers".
+# LAST so they perturb nothing. WHY: research/cities/fabric.html "How did a dense wooden city watch for fire?".
 s.fire_tower(1527, 1697, label=None)  # south, amid the rooftops it watches - the ONLY spot the full-obstacle scan
 s.label(1527, 1674, "fire tower", 9, italic=True, color="#5A4326")  # ... left with label room (short text, placed ABOVE - the dense south has no 84px below-box anywhere)
 
@@ -1529,7 +1529,7 @@ s.crop_city(west=100, south=20)  # the aggressive default (35px past the kept sa
 s.title("Tango")
 
 # ===== THE OFFICIAL NOTICE BOARDS (kosatsuba) - a city draws the SET (GM 2026-07-24,
-# settlements.md "Notice board"): the PRINCIPAL board at the central market node plus one on
+# research/urban-features.html "The notice board (kosatsuba) - siting is a traffic decision"): the PRINCIPAL board at the central market node plus one on
 # every main gate's approach corridor (Edo: the Nihonbashi high-board + per-gate boards;
 # city_has_kosatsuba floors the count at gates + 1). Only ONE board carries the label -
 # whichever has room for it (GM: no particular board; the same one-label convention as the
@@ -1553,7 +1553,7 @@ s.kosatsuba(1588, 1760, rot=90, label=None)  # ...ON the ring-road verge, which 
 s.kosatsuba(1525, 1439, rot=0, label=None)
 
 # ===== THE PUNISHMENT GROUND - the cangue frame, flogging post, and kneeling stone at the town's
-# busiest public point (feature 015; settlements.md "Punishment spot"). A DISPLAY installation:
+# busiest public point (feature 015; research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"). A DISPLAY installation:
 # the crime rides on the cangue, so it draws no board of its own. Probed with open_seat after
 # the packs by place_punishment_spot, which scores street verges by traffic - the same probe
 # the notice board uses, because both institutions are sited by the same variable.

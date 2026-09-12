@@ -22,7 +22,7 @@ class JusticeGroundsMixin:
         town: a cangue frame, a flogging post, and a kneeling stone on a patch of tamped earth at the
         market or the magistracy frontage. ~30x12 ft, true size at every tier.
 
-        Historical grounding (the "why" - see settlements.md "Punishment spot"):
+        Historical grounding (the "why" - see research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"):
           - This is a DISPLAY installation, not a place of execution and not a courtroom. The Chinese
             evidence splits the two cleanly: the bamboo beating (chi / zhang) was a COURT act
             administered inside the yamen courtyard in front of the magistrate's bench - which in our
@@ -79,7 +79,7 @@ class JusticeGroundsMixin:
         `rot` lays the ground's ROAD SIDE (local -y, where the head-display stand faces) toward the
         road, the same convention the tanning yard uses for its water side.
 
-        Historical grounding (the "why" - see settlements.md "Execution ground"):
+        Historical grounding (the "why" - see research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"):
           - WHY A COUNTY SEAT HAS ONE AT ALL. China and Japan disagree here and the reconciliation is
             load-bearing. Japan monopolized executions at castle towns and pushed them outside the
             settlement for kegare (death pollution); village authority topped out at banishment. But
@@ -163,7 +163,7 @@ class JusticeGroundsMixin:
         """A DOSOJIN (sae no kami) stone at the settlement's ritual boundary - where the road leaves
         clean ground. Usually a paired male-female figure carved on one stone.
 
-        Historical grounding (the "why" - see settlements.md "Boundary marker"): dosojin stand at
+        Historical grounding (the "why" - see research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside"): dosojin stand at
         village boundaries, mountain passes, and crossroads, and the etymology is the point - `sae`
         means "to block", and the deity's job is to stop evil, pestilence, and POLLUTION from
         entering the settlement. That is what makes it structural rather than decorative here: it

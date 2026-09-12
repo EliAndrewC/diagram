@@ -94,7 +94,7 @@ exemption can outlive the map it was written for.
 
 **What this costs, and say it out loud when you use it:** the pool is knowingly inconsistent for as
 long as the migration takes, and the gate will not tell you which maps are behind. Record the
-measurement at the point of decision - the sun rule's entry in `settlements/homesteads.md` lists
+measurement at the point of decision - the sun rule's entry on `research/homesteads.html` lists
 every affected map and by how much - so a reader can see the size of the debt rather than discover
 it. Reach for this pattern when a rule is right but re-packing the pool is the wrong trade; do NOT
 reach for it to avoid fixing a map that is simply inconvenient, which is what waivers are for.
@@ -119,7 +119,7 @@ which stage, so **load the one stage you need rather than the whole engine**; th
 foldered by tier, not by method; `meta.generated_by` marks a scripted map). The hand-authored pool
 froze on 2026-08-16 (see "The legacy pool is FROZEN" above) - it is no longer held byte-identical,
 its gens are simply never re-run - and a session drawing anything but a `valley_paddy` hamlet
-still follows `settlements.md`.
+still follows the specifications on its tier's research page (`research/settlements.html` and the topic pages beside it).
 
 It found SIX things in shipped engine code. Five are fixed with the full pool sweep (the hem
 registry, the sweep's blind spot, the cluster-band pitch, the windbreak/well-grid derivations, the

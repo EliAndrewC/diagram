@@ -154,7 +154,7 @@ relay stables until there is fabric. Do not fix that by drawing the farrier; the
   grain-only look of the landing is the ground layer's emptiness - 021's brokers' row and
   warehouse frontage land on the bank top per the wharf-chain doctrine. Next battery: bridge
   decks now LAND - the GM's corner-at-the-water's-edge catch became engine and check law
-  (research in settlements/ways.md: the abutment sill stands BACK from the channel edge so
+  (research in research/ways.html: the abutment sill stands BACK from the channel edge so
   scour cannot undercut the bearing, so a carried deck runs LANDING_FT = 10 real ft of deck
   onto dry ground per side; bridges() solves the oblique span exactly, where the old flat
   +28px slack had left the east river deck landing 0.0 ft at its worst corner; the check
@@ -438,7 +438,7 @@ Recorded here rather than held in a session's head - this list is the contract.
    caption may not be the only thing holding the frame open.
 6. ~~**Samurai country estates**~~ **DONE 2026-08-11** - `capital_dir` corrected to northeast and
     the three walled country seats moved to the northeast approach; the standing question is now
-    recorded in `settlements/cities.md` ("ASK THESE THREE BEFORE DRAWING ANYTHING") alongside water
+    recorded in `research/settlements.html` ("ASK THESE THREE BEFORE DRAWING ANYTHING") alongside water
     flow and clan. **ONE CONTRADICTION LEFT FOR THE GM:** the Imperial road on this map leaves to
     the NORTHWEST, so if the capital is northeast the road should too. Not re-routed on my own -
     moving an Imperial road moves the gate markets, the relay stables and the farrier with it.
@@ -486,7 +486,7 @@ Recorded here rather than held in a session's head - this list is the contract.
     city is the DEFAULT.** Four fields across three flanks (south, west, a second southern bay,
     east) with 28 farmsteads. `city_is_ringed_by_farmland` holds the floor at 4+ fields / 3+ flanks,
     calibrated from the pool's own practice (Tango 11, Nagahara 7, Minami 6). The recipe and the two
-    numbers that cost the most iterations are in `settlements/cities.md`. The first field: One comb field on the open ground south
+    numbers that cost the most iterations are in `research/settlements.html`. The first field: One comb field on the open ground south
     of the rampart, tapped off the river's lower reach with the current (flow_deg 117.7), head gate
     at the tap and a second at the field, the fall running WITH the current so the drain returns
     downstream of its own intake, and the dry hem narrowed to clear the towpath. 155 plots. What is

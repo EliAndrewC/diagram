@@ -49,7 +49,7 @@ class FieldDitch(Kind):
     Covers: `field_ditches` and `channels` - the intake, head race, branches and drain
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
     key = 'field ditch'
@@ -70,7 +70,7 @@ class Pond(Kind):
     Covers: `pond` - the tameike
     Label: accurate
     Sources: tabayashi-1987, kagawa-tameike
-    Entry: research/fields.html - 'Water-first v2 - pond, distribution and the three layout modes'
+    Entry: research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
     key = 'pond'

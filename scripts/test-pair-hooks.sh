@@ -26,6 +26,15 @@ KEY=deadbeefcafe0000
 printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$SKILL/Makefile"   # the fixture's own key: the test never runs the engine
 cp "$WATCH" "$CLONE/scripts/agent-stall-hooks.sh"                        # the guard asks IT whether an agent is pending
 DIR="$TMP/proj/sid-1/subagents"
+# GUARD_EDIT_OK: feature 231 - THE TRIGGER IS SCRIPTED, so the fixture must say which world it is in. A
+# review is owed only when a pool manifest moved against main (GM 2026-09-12), and the two scripts that
+# decide it live beside the guard, so the fixture carries them and a moved manifest. `moved`/`unmoved`
+# switch the world between cases; every case below section 1 runs in the world it names.
+cp "$(dirname "$HOOK")/_review_owed.py" "$(dirname "$HOOK")/_review_snapshot.py" "$CLONE/scripts/"
+MAPDIR_F="$SKILL/pool/hamlets/testmap"
+moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; }
+unmoved() { rm -rf "$SKILL/pool"; }
+moved
 
 stdin_for() { printf '{"tool_name":"%s","tool_input":%s,"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$1" "$2" "$TMP/proj/sid-1.jsonl" "$CLONE"; }
 run_pretool() { ( cd "$CLONE" && printf '%s' "$1" | "$HOOK" pretool 2>&1 ); }
@@ -136,6 +145,82 @@ printf '{"waived_key":"deadbeefdeadbeef"}' > "$CLONE/.git/pairing-state.json"
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
 ( cd "$CLONE" && printf '%s' "$STOP2" | "$HOOK" stop >/dev/null 2>&1 ); OTHER=$?
 check "...but a waiver for OTHER content does not cover this one" '[ "$OTHER" -eq 2 ]'
+
+
+# --- 6. NO LAYOUT CHANGE, NO REVIEW (feature 231, GM 2026-09-12) -----------------------------------
+# GUARD_EDIT_OK: feature 231 - the new branch and its three properties: the gate runs as typed, the stop
+# branch stays quiet, and the waiver is RECORDED with its reason so `make audit` can count it. The
+# motivating case is feature 228: one path's `d`, a byte-identical manifest, 18.7 minutes of review.
+unmoved
+rm -f "$CLONE/.git/pairing-state.json" "$CLONE/.git/verification-state.json"
+check "with no manifest moved the gate runs as typed" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
+check "...and is NOT rewritten into make verify" '! run_pretool "$GATE" | grep -q "updatedInput"'
+check "...and the context says no review is owed" 'run_pretool "$GATE" | grep -q "NO SETTLEMENT-REVIEW OWED"'
+check "...and says why, in the words of the script" 'run_pretool "$GATE" | grep -q "no pool manifest moved"'
+check "...and the context is valid JSON - a quoting slip here is silent" 'run_pretool "$GATE" | python3 -c "import json,sys; json.load(sys.stdin)"'
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); QUIET=$?
+check "...and the stop branch does not fire half-open" '[ "$QUIET" -eq 0 ]'
+check "...having recorded the automatic waiver" 'grep -q "waived_key" "$CLONE/.git/pairing-state.json"'
+check "...with the reason it was waived for" 'grep -q "no pool manifest moved" "$CLONE/.git/pairing-state.json"'
+moved
+rm -f "$CLONE/.git/pairing-state.json"
+check "...while a MOVED manifest owes the review again" 'run_pretool "$GATE" | grep -q "updatedInput"'
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); OWED=$?
+check "...and the stop branch fires on it" '[ "$OWED" -eq 2 ]'
+
+# --- 7. the guard reads THIS SESSION'S CLONE, not the shell's tree (feature 231) -------------------
+# GUARD_EDIT_OK: feature 231 - the defect that cost feature 228 a refusal and a half-open stop: the
+# session's shell stood in the MIRROR, so the guard keyed and recorded the mirror's tree. The resolver is
+# feature 204's - the claim map, read from the payload's session_id - and the mirror's state stays clean.
+MIRROR="$TMP/mirror"; mkdir -p "$MIRROR/.clones/.session-clones"; (cd "$MIRROR" && git init -q)
+printf '%s' "$CLONE" > "$MIRROR/.clones/.session-clones/sid-1"
+rm -f "$CLONE/.git/pairing-state.json" "$MIRROR/.git/pairing-state.json"
+# `make done FULL=1`, because it is a shape the guard PERMITS and records - the plain gate is rewritten
+# into `make verify` and records nothing, which is not what this case is about.
+FROM_MIRROR=$(printf '{"tool_name":"Bash","tool_input":{"command":"make done FULL=1"},"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+CLONE_MAIN="$MIRROR" bash -c 'cd "$1" && printf "%s" "$2" | "$3" pretool >/dev/null 2>&1' _ "$MIRROR" "$FROM_MIRROR" "$HOOK"
+check "standing in the mirror, the gate records the pairing state of the CLONE" '[ -f "$CLONE/.git/pairing-state.json" ]'
+check "...and never that of the mirror" '[ ! -f "$MIRROR/.git/pairing-state.json" ]'
+
+# --- 8. an ESCAPED review is still a review (feature 231) ------------------------------------------
+# GUARD_EDIT_OK: feature 231 - the second half of feature 228's pairing incident: the escaped dispatch
+# logged a bypass and recorded nothing, so the stop branch fired half-open on a review that had run.
+rm -f "$CLONE/.git/pairing-state.json"
+ESCREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"PAIR_OK: the gate is running beside this - review the map"}')
+check "a review escaped with a reason runs" '[ "$(rc_pretool "$ESCREV")" -eq 0 ]'
+check "...and records itself as a review" 'grep -q "review_key" "$CLONE/.git/pairing-state.json"'
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AFTER_ESC=$?
+check "...so the stop branch does not fire half-open on it" '[ "$AFTER_ESC" -eq 0 ]'
+
+
+# --- 9. A FALLBACK ONTO MAIN'S TREE IS DISCLOSED, NEVER SILENT (feature 231's amendment, GM 2026-09-12) --
+# GUARD_EDIT_OK: feature 231's amendment - the residual the resolver leaves. An unnamed session, or a clone
+# claimed but never created, resolves to nothing; the cwd's git root is still used (a guard that cannot
+# resolve a clone must not refuse everything), and when that lands on MAIN's tree every branch that speaks
+# says so in ONE shared string. A resolved clone adds nothing, and no silent branch starts speaking.
+GHOST=$(printf '{"tool_name":"Bash","tool_input":{"command":"make done FULL=1"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+printf '%s' "$MIRROR/.clones/never-created" > "$MIRROR/.clones/.session-clones/ghost"
+moved
+note_says() { ( cd "$MIRROR" && printf '%s' "$1" | CLONE_MAIN="$MIRROR" "$HOOK" "${2:-pretool}" 2>&1 ); }
+check "a claimed-but-uncreated clone falls back and the gate branch DISCLOSES it" 'note_says "$GHOST" | grep -q "could not be resolved"'
+check "...and says the verdict was judged against main" 'note_says "$GHOST" | grep -q "judged against MAIN"'
+check "...and names the remedy" 'note_says "$GHOST" | grep -q "rename"'
+check "...and the context is still valid JSON" 'note_says "$GHOST" | python3 -c "import json,sys; json.load(sys.stdin)"'
+GHOSTREV=$(printf '{"tool_name":"Agent","tool_input":{"subagent_type":"settlement-review","prompt":"review it"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+rm -f "$MIRROR/.git/pairing-state.json" "$MIRROR/.git/verification-state.json"
+check "the review refusal discloses it too" 'note_says "$GHOSTREV" | grep -q "could not be resolved"'
+printf '{"engine_key":"%s"}' "$KEY" > "$MIRROR/.git/verification-state.json"
+mkdir -p "$MIRROR/.claude/skills/diagram/pool/hamlets/m"
+printf '{"meta":{"name":"m"}}' > "$MIRROR/.claude/skills/diagram/pool/hamlets/m/m.json"   # a manifest, so a review IS owed there
+printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$MIRROR/.claude/skills/diagram/Makefile"
+GHOSTSTOP=$(printf '{"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+check "the half-open stop discloses it too" 'note_says "$GHOSTSTOP" stop | grep -q "could not be resolved"'
+check "a RESOLVED clone adds nothing" '! run_pretool "$GATE_FULL" | grep -q "could not be resolved"'
+QUIET_ONE=$(printf '{"tool_name":"Bash","tool_input":{"command":"make quick"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
+check "...and a branch that says nothing today still says nothing" '[ -z "$(note_says "$QUIET_ONE")" ]'
+check "the disclosure is ONE string, not five copies" '[ "$(grep -c "could not be resolved" "$(dirname "$HOOK")/pair-hooks.sh")" -eq 1 ]'
 
 printf '\ntest-pair-hooks: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

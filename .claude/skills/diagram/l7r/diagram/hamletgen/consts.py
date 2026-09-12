@@ -109,7 +109,7 @@ WEB_CLEARANCE = 28.0
 # gap is at least this wide, so a lane is placed where one can actually be walked rather than driven
 # through a wall and left to the clipper to sort out. Three feet of tread plus a hand's breadth on
 # each side, doubled for the two neighbors: a person with a carrying pole, which is the traffic these
-# lanes were for (see settlements/ways.md - the vehicle to picture is the wheelbarrow and the
+# lanes were for (see research/ways.html - the vehicle to picture is the wheelbarrow and the
 # shoulder-pole porter, never a cart).
 #
 # NOTE ON WEB_CLEARANCE ABOVE, because the number moved twice and the reason changed with it. While
@@ -313,7 +313,7 @@ WEST_SUN_FT = 50.0
 # `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
-# overlay, which is what it is historically too (research/archetypes.html "The three overlay values":
+# overlay, which is what it is historically too (research/archetypes.html "The three overlays a village may carry":
 # the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
 # of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
@@ -355,7 +355,7 @@ POND_LAYOUTS = ("mosaic", "mosaic", "grid")
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
-# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks".
+# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks?".
 MANURE_FORMS = ("heap", "pit")
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
 # settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).
@@ -386,7 +386,7 @@ POND_LAYOUT_MOSAIC = 0.5
 # THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC
 # term over the ELIGIBLE set, and the archetype opts out of the topographic filter by name
 # (`eligible="all"`); 0.9 is the hand-authored Kuwabata's figure - "(almost) every former paddy cell"
-# - so a few leftover parcels still read as standing rice among the ponds (settlements.md 'Polder
+# - so a few leftover parcels still read as standing rice among the ponds (research/archetypes.html 'Polder
 # fourth pass': leftovers of a wholesale conversion are repainted as paddy, not left as outlines).
 # The exact share is a DEGREE along the attested continuum (Shunde: rice under one-tenth of the land
 # by c. 1900), a calibrated liberty rather than a measured number - recorded as such.
@@ -481,7 +481,7 @@ POND_SETBACK_LIMIT = 300.0
 # settlement-review) rather than an oversight - `build_comb`'s docstring carries the same account.
 GRAIN = 2.0
 
-# THE HAMLET BAND (settlements.md "Scale and density"): 10-20 households, 50-100 inhabitants. Below
+# THE HAMLET BAND (research/settlements.html "What are the five kinds of settlement, and how big is each?"): 10-20 households, 50-100 inhabitants. Below
 # 10 the place is an outlying farmstead or two rather than a hamlet; above ~20 it is a small village
 # and grows the features a hamlet must not have (a headman, a shrine, tax-free plots).
 HOUSEHOLD_BAND = (10, 20)

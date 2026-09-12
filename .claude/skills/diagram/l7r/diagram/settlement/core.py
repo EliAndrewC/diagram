@@ -191,7 +191,7 @@ class Settlement(
         # graves were kept clear of wild scrub in reality (raked gravel precinct; the tomb-swept grave
         # collar); the surrounding waste stays scrubby. So this clears a small verge around each, while a
         # shrine's deliberate fengshui/chinju-no-mori grove (a separate feature) is left untouched. See
-        # settlements.md 'Swept ground around sacred + funerary features'.
+        # research/religion-and-death.html (the swept-ground entry).
         self.clearings: list[Any] = []
         self._verge_centers: list[tuple[float, float]] = []  # one (x, y) per clearings entry - _clear_ground's same-center dedupe key
         self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws). Each cover entry and each
@@ -409,7 +409,8 @@ class Settlement(
 
     def meta(self: Settlement, **kw: Any) -> None:
         if "ftpx" in kw:
-            # The map's declared real scale in FEET PER PIXEL - the GM's ladder: hamlet/town 1,
+            # The map's declared real scale in FEET PER PIXEL - the GM's ladder (research/settlements.html
+            # "How far is it across this map? The scale, tier by tier"): hamlet/town 1,
             # village 2, provincial city 3 (the round numbers are deliberate; a human should be
             # able to read distances off the map). Buildings follow automatically via
             # bscale = 1/ftpx: the urban glyph library is calibrated at town scale (a 44x29px
@@ -603,7 +604,7 @@ class Settlement(
         "storehouses",
         "merchant_estates",
         # the KILN WORKS is a kept satellite too (GM 2026-07-27). It was excluded while it was a
-        # 28x18 ft mound whose caption was wider than it was - the note in presentation.md about
+        # 28x18 ft mound whose caption was wider than it was - the note in research/presentation.html about
         # Tango's frame being set by the words "tanning yard" is from that era. A works with its
         # own housing is now wider than any caption of it, and a kiln clipped at the frame would
         # read as "there is a kiln somewhere off that way", which is the one thing a satellite

@@ -123,7 +123,7 @@ s.bridges()
 # files of three, the House Chancellery and the domain school continuing the same axis south of
 # the kagi-no-te bend. Both anchor traditions converge on exactly this form - Beijing's Six
 # Ministries lined the Corridor of a Thousand Steps outside Chengtianmen, and a jokamachi's
-# offices spilled out of the ninomaru into the town (settlements/capitals.md, "The government
+# offices spilled out of the ninomaru into the town (research/cities/capitals.html, "The government
 # ward"). Default ministry compound: 224x148 ft, the researched provincial size - a domain
 # ministry is the same bureau of clerks and archives at a bigger desk.
 # the files sit a ~21 ft setback off the avenue's edge - corridor frontage, not detached
@@ -146,7 +146,7 @@ s.hanko(1482, 1658)  # ~1 ha compound (size audit 2026-08-09) - shifted east so 
 # state violet, so it reads as not-of-the-domain; gate west, facing the government ward it works
 # beside.
 # captioned as the INSTITUTION, not the officeholder (settlement-review 2026-08-09; Ubame's
-# sibling is "Magistrate's Manor" and capitals.md says "the Imperial Magistrate's compound")
+# sibling is "Magistrate's Manor" and research/cities/capitals.html says "the Imperial Magistrate's compound")
 # "Imperial Magistracy" - the institution, shortened so the caption fits INSIDE the court
 s.manor(1720, 1445, 100, 75, "Imperial Magistracy", gate_dir="west", ink="#274D3D", label_inside=True)
 
@@ -182,7 +182,7 @@ lineage_manor(1660, 385, 70, 54, "seki", "south")
 # abbots - the head houses of domain-wide orders, dedicated to the Scorpion patrons Benten and
 # Jurojin - stand in the fabric; the remaining temples BELT the inner face of the rampart as the
 # teramachi rim, part of the defenses, rather than gathering in one quarter
-# (settlements/capitals.md, "Placements that change").
+# (research/cities/capitals.html, "Placements that change").
 # Benten, the PRIMARY sovereign temple, is pinned to the full 7-arch avenue (torii_count=7,
 # Nagahara's donation-row stride): the per-temple roll gave the primary a 3-arch stub while its
 # co-sovereign rolled 7, which read the declared hierarchy inverted (settlement-review 2026-08-09).
@@ -192,7 +192,7 @@ s.shrine_hall(1850, 1620, "Temple of Benten", w=s.px(150), h=s.px(100), kind="te
 s.shrine_hall(950, 1620, "Temple of Jurojin", w=s.px(150), h=s.px(100), kind="temple", torii=[(950, 1583), (950, 1547)])
 # THE PRECINCT IS RESERVED EVEN THOUGH ONLY THE HALL IS DRAWN (settlement-review 2026-08-09): a
 # sovereign temple is a HEAD HOUSE - abbot's residence, order administration, library, the monks
-# living inside the precinct (capitals.md, "a different program, not a scaled precinct") - and
+# living inside the precinct (research/cities/capitals.html, "a different program, not a scaled precinct") - and
 # this is the ground-reserving feature, so the complex's ~390x300 ft ground is held NOW and
 # feature 021 draws it. Both registries, like the castle: block_polys is center-tested by the
 # packs, placed is distance-tested and stops a wide building overhanging the precinct.

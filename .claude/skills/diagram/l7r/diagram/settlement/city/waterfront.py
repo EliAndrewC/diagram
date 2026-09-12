@@ -92,7 +92,7 @@ class WaterfrontMixin:
         outside the wall, terminating at a city gate - and buried beyond it.
 
         THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/cities/
-        capitals.md, "The aqueduct is open outside the wall and buried inside it"). The East
+        research/cities/capitals.html, "The aqueduct is open outside the wall and buried inside it"). The East
         Asian vocabulary is Edo's Kanda and Tamagawa josui and Odawara's sosui: a gravity canal
         in a plain earth cut (the Kanda ran 43 km at grade), a buried pipe inside the town, and -
         only where water must CROSS water - a kakehi flume carried over on a bridge (Edo's

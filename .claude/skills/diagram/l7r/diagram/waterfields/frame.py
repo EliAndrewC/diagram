@@ -64,7 +64,7 @@ SUB_PARENT_FRAC = 0.75
 # terminal tier is 0.4 px, i.e. not a line at all. So a stroke is drawn at its true width or this
 # floor, whichever is larger - the coarser the sheet, the more of the ladder collapses onto it,
 # which is the honest form of the "minimum-visibility floor" the stroke convention in
-# `../../../settlements/water.md` already sanctions.
+# `../../../research/water.html` already sanctions.
 #
 # 1.5, AND 1.2 WAS TRIED AND REVERTED (2026-08-17) - the number is load-bearing on the carve, not
 # just on legibility. `settlement-review` noted that 1.5 COLLIDES with `aze_w`, which at hamlet grain
@@ -156,7 +156,7 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     Both halves of that are load-bearing, so neither is a free choice:
 
       - *Width goes as sqrt(Q).* This is the regime relation the water-width ladder in
-        `../../../settlements/water.md` has always asserted ("channel width scales with the square-root of
+        `../../../research/water.html` has always asserted ("channel width scales with the square-root of
         the command-area flow it carries"), and it is Lacey's canal result, P = 4.75 * sqrt(Q) - the
         standard design equation for exactly this kind of unlined earthen channel.
       - *Q runs linearly.* A delivery ditch sheds its water through a `mizuguchi` per plot into a row

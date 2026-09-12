@@ -101,7 +101,7 @@ class Kind:
 
 #: Keyed by `meta.scale`. Written from `l7r.md` (a hamlet "belongs to a village district and is
 #: overseen by a village headsman who lives in the main village and not in the hamlet"; "county towns
-#: are the lowest level at which samurai live") and from `settlements.md`'s tier rules.
+#: are the lowest level at which samurai live") and from `research/settlements.html`'s tier rules.
 _CONTENT = content("place.json")  # the card's wording is DATA (feature 207) - see content.py
 KINDS: dict[str, Kind] = {
     key: Kind(**{**fields, "what": fields["what"].format(HAMLETS_PER_DOMAIN=HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN=VILLAGES_PER_DOMAIN, HAMLET_SHARE=HAMLET_SHARE)})
@@ -195,9 +195,11 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
     population = kind.default_population or meta.get("population") or (PER_HOUSEHOLD * households if households else None)
     if population:
         # SAY THE HOUSEHOLDS WHERE THE ARITHMETIC WOULD NOT WORK (settlement-review, 2026-08-29).
-        # `settlements.md` permits ~0.7 houses per household at village scale, and Hikari no Sato uses
-        # it - 66 drawn against 70 households - so a card reading "66 farmhouses, population ~350"
-        # invites a reader to divide and get 5.3. Named only when the two differ, which is rare.
+        # A to-scale map depicts essentially every household - 0.85 to 1.05 occupied farmhouses per
+        # declared household (research/settlements.html "Is every household in a hamlet actually drawn?");
+        # sixteen of seventeen pool maps sit at 1.00 and Hikari no Sato at 0.94 - 66 drawn against 70
+        # households - so a card reading "66 farmhouses, population ~350" invites a reader to divide
+        # and get 5.3. Named only when the two differ, which is rare.
         if households and houses and households != houses and not kind.excludes_farms:
             parts.append(f"about {households} households, population ~{int(population):,}")
         else:

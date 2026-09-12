@@ -55,9 +55,10 @@ engine packages above - pool generators import them directly - and folding them 
 would rewrite six frozen generator scripts for no navigational gain.
 
 The prose reference (as opposed to the code) splits the same way: [`SKILL.md`](SKILL.md) is the
-usage-facing index, and it indexes [`settlements/`](settlements/) and [`buildings/`](buildings/)
-(the per-topic design doctrine) and [`research/`](research/) (the historical grounding). Read a
-skill index, then load only the topics the subject calls for.
+usage-facing index, and it indexes [`buildings/`](buildings/) (the Mode A design doctrine) and
+[`research/`](research/) (the record: for every Mode B topic the finding, the decision and - where
+no generator draws the feature yet - the specification; feature 229 retired the `settlements/` rule
+files into it). Read a skill index, then load only the topics the subject calls for.
 
 **Run the packaged modules as modules**, from this directory - `python3 -m l7r.diagram.pipeline.regen ...`,
 `python3 -m l7r.diagram.tools.why_placed ...`. Running a package module as a loose script path puts its own
@@ -90,7 +91,7 @@ those before you argue with a rule.
 | [`dev/skill-boundary.md`](dev/skill-boundary.md) | You are wondering whether building plans (Mode A) and settlement maps (Mode B) should be separate skills or packages, you are adding a new Mode A building type, or a Mode A `.gen.py` is about to appear - the 2026-08-27 decision to keep one skill, the prediction of what would change it (a generator, not a building count), and the order to split in when it does |
 
 [`future-work/`](future-work/CLAUDE.md) is the deferred-engineering backlog, split by map type on
-2026-08-24 - load `farming-communities.md` for hamlet/village work, `cities.md` for towns and above,
+2026-08-24 - load `future-work/farming-communities.md` for hamlet/village work, `future-work/cities.md` for towns and above,
 `compounds.md` for Mode A plans, `cross-cutting.md` for anything spanning tiers. Its own CLAUDE.md
 carries the rules that keep it from rotting back into one 3,453-line file.
 

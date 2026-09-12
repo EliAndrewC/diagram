@@ -79,7 +79,7 @@ class WaterBodiesMixin:
     def river(self: Settlement, pts: Any, width: float | None = None, flow: str = "forward") -> float:  # type: ignore[misc]
         """A RIVER - the trunk waterway a river-bank city sits on (most provincial cities do;
         the moat taps it upstream and returns downstream, and the river itself serves as the
-        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see settlements.md).
+        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/cities/river-cities.html 'Most provincial cities sit on a river').
         Drawn as a wide stream (off-map to off-map) and recorded in M['river'] so the checks
         that compare watercourse weights know this one legitimately outweighs the dug moat."""
         if width is None:
@@ -93,7 +93,7 @@ class WaterBodiesMixin:
         """frm/to are anchor dicts: {'kind':'pond'|'offmap'|'field','name':...}. `width` is the drawn
         bed: a field-level irrigation ditch is the THINNEST line on the map (in reality ~0.3 m, ~1/300
         of the 1-cho paddy it feeds), so it sits at the legibility floor (~2.5 px) - a hairline, clearly
-        finer than any natural watercourse. See the water-width ladder in settlements.md historical
+        finer than any natural watercourse. See the water-width ladder in research/water.html 'Water-width ladder - the real-world tiers', historical
         grounding. `pts` (optional): an explicit polyline used verbatim instead of the auto-winding -
         for culverts routed by hand (a drain outfall reaching its stream confluence, a field-to-field
         cascade connector) whose waypoints are load-bearing; drawing through THIS method (not a flat
