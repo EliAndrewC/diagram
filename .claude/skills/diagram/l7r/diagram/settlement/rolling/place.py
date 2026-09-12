@@ -110,11 +110,6 @@ class PlacerMixin:
 
     _NUC_SIDES = ("SE", "SW", "E", "W")  # garden-side preference: sunny south strip first, walls as fallback
 
-    def _field_dist(self: Settlement, cx: float, cy: float) -> float:  # type: ignore[misc]
-        """Distance from a point to the nearest paddy edge (inf if there are no fields)."""
-        p = self._nearest_field_point(cx, cy)
-        return math.hypot(cx - p[0], cy - p[1]) if p else float("inf")
-
     def _place_bundle_nucleated(self: Settlement, x: float, y: float, hw: float, hh: float, shed: bool = False) -> Any:  # type: ignore[misc]
         """Nucleated placement, THE ENVELOPE FIRST (feature 227, GM 2026-09-12: *"I thought that what we were doing
         when we were placing homesteads was essentially drawing a rectangle around what would be within the homestead.

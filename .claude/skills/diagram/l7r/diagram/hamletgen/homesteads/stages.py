@@ -29,25 +29,37 @@ so the honest value is no override at all."""
 def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     """The farmhouses.
 
-    Each bundle is seated against the field edge and packed toward its neighbors - and at this moment there is
-    NOT ONE LANE ANYWHERE ON THE MAP. That is the whole feature: the houses answer to the field, the water and
-    each other, and nothing else has taken ground before them. Every way on the finished map - the connector,
-    the field spur, the cluster's spine and the alleys - is laid after this plate and positioned from where
-    these houses actually landed.
+    Every household is seated here, and at this moment there is NOT ONE LANE ANYWHERE ON THE MAP: the houses
+    answer to the field, the water and each other, and nothing else has taken ground before them. Every way on the
+    finished map - the connector, the field spur, the cluster's spine and the alleys - is laid after this plate and
+    positioned from where these houses actually landed.
 
-    Seat every declared household, and KNOW whether it worked.
+    The ground is asked ONCE. Before the first seat, the site boundary is computed from everything the map holds:
+    the paddy's outline as a few facing chords, everything else - the hem, the marshes, the ponds, the reed toe that
+    will be drawn later, the no-build ground - as one outline with holes, and the water courses and registered
+    corridors as segments. A candidate rectangle is judged at nine points against those and nothing else.
 
-    `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households -
-    a to-scale map depicts essentially every household - so a hamlet that declares 15 and seats 12
-    fails, and the authored maps deal with that by tuning a hand-written candidate loop until the
-    number comes out. The script instead asks the placer, which is the only thing that actually knows
-    whether a seat is free: it draws candidates from the rolled cluster shape and, if the quota is
-    still short, GROWS the band and draws more, up to a cap.
+    The seats are proposed where a house can stand. The FRONT ROW walks the paddy's chords at the bundle pitch, each
+    seat at a computed standoff - the wall rule's distance plus the house's half-extent along that chord's normal -
+    and takes about the square root of (households times the rolled shape's aspect) houses, so a crescent fronts
+    the field with more of its houses than a round cluster does. The RANKS BEHIND are proposed behind every standing
+    house, one homestead's depth further from the field (and the yard's sun corridor where the ranks climb north),
+    in a brick pattern, with a seat one pitch beyond each end of the rank; a round that seats nothing does not end
+    the ranks. Only while the quota is still short after four rounds do the RESCUE rounds run: the old random cloud
+    over a wider band, seeded a third of a pitch apart, spending guesses on purpose. A re-roll after a stranded
+    farmhouse draws a different cloud.
 
-    Growing rather than re-rolling is deliberate. A retry with a different seed would re-roll the
-    whole map to fix a local shortfall - the expensive, whack-a-mole loop the skill's dev notes warn
-    about. Widening the band changes only the ground the candidates come from, so the houses already
-    seated stay exactly where they are and the map converges instead of churning.
+    Each seat is one placer call, and a call tests one rectangle first: the box around the homestead's
+    configurations, against the boundary and the placed boxes; where that is refused, each configuration's own box
+    in turn, with at most one computed move away from a single overlapping neighbor. The parts - the garden's side,
+    its beds, the kura - are laid inside a box the ground admitted, and the rules that read the parts (the wall rule,
+    the eave gap, the sun corridors) are asked once. No spiral of offsets, no sliding: a seat that does not fit is
+    refused and the next seat is offered. `meta.seat_search` counts every guess - candidates, placer calls,
+    rectangles, part layouts, the front row's share and the rounds - so the search is measured, never assumed.
+
+    `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
+    depicts essentially every household - so a hamlet that declares 15 and seats 12 fails, and the stage records
+    the shortfall on the roll rather than re-rolling the whole map to fix a local one.
 
     Steps:
         l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary

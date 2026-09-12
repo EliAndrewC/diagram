@@ -274,3 +274,85 @@ def test_a_trunk_on_a_stream_is_refused_by_the_water_arm_alone() -> None:
     s.M["dry_plots"] = [{"poly": [(650.0, 150.0), (750.0, 150.0), (750.0, 250.0), (650.0, 250.0)]}]
     assert _trunk_blocked(s, 700.0, 200.0, 20.0, [], [], None, []) is True
     assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, []) is False
+
+
+def test_the_shrine_budget_refuses_a_second_house_that_rolls_one(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`farmstead_fixtures`: the shrine share is a CEILING - "very rare, but notable" - so once the budget the share
+    allows is spent, a later house that rolls a shrine gets none, whatever its roll says."""
+    from l7r.diagram.hamletgen.homesteads import fixtures as fx
+    from l7r.diagram.settlement import Settlement
+
+    monkeypatch.setitem(fx.FIXTURE_BANDS, "shrine", (0.5, 0.5))
+    s = Settlement(W=1200, H=700, seed=7)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    passing = [(x, y) for x in range(150, 1100, 110) for y in (250.0, 400.0) if s._hjit(float(x), y, fx._SALT["shrine"]) < 0.5]
+    assert len(passing) >= 3
+    houses = [{"x": float(x), "y": float(y), "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"} for x, y in passing[:3]] + [
+        {"x": 1150.0, "y": 600.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}
+    ]
+    for h in houses:
+        s.M["houses"].append(dict(h))
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    fx.farmstead_fixtures(s, a_plan(), houses)
+    shrines = [r for r in s.M["farm_fixtures"] if r["kind"] == "shrine"]
+    assert len(shrines) == 2, "the share allows two of four; the third house that rolled one is refused"
+
+
+def _toy_hamlet(households: int, seed: int = 3):  # type: ignore[no-untyped-def]
+    """The linear toy's setup, for the stage's own branches: a square field, a seat band, the connector."""
+    plan = a_plan(households=households)
+    plan.seat = hg.seat_cluster(plan)
+    plan.settlement_form = "nucleated"
+    s = Settlement(1400, 1400, seed=seed)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=households, down_deg=90, water_flow=90, nucleated=True)
+    s.field_polys.append(list(plan.envelope))
+    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+    s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
+    return s, plan
+
+
+def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest() -> None:
+    """Feature 227 D8: the row takes about sqrt(N x A) houses - here fewer than the chain could seat - and stops;
+    the ranks behind seat the rest."""
+    from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    s, plan = _toy_hamlet(10)
+    plan.cluster_shape = "round"  # the tightest band: the row's share is the floor of six, fewer than the chain could seat
+    stage_homesteads(s, plan)
+    lo, hi = CLUSTER_DRAWN_ASPECT["round"]
+    cap = min(10, max(6, round(math.sqrt(10 * (lo + hi)))))
+    assert cap == 6
+    ss = s.M["meta"]["seat_search"]
+    assert len(s.M["houses"]) == 10 and ss["front"] == cap and ss["rounds"] >= 1
+
+
+def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds() -> None:
+    """The rescue rounds (five to seven) run only while the quota is short after four rounds of ranks; their cloud
+    seeds a wider band and skips the seeds outside it. Twenty households on the toy's square field is such a quota."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    s, plan = _toy_hamlet(20)
+    stage_homesteads(s, plan)
+    ss = s.M["meta"]["seat_search"]
+    assert ss["rounds"] >= 5 or len(s.M["houses"]) == 20, "either the rescue ran or the ranks seated every household"
+
+
+def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
+    """`stage_track`'s field spur is laid when the path from the cluster's edge to the field is longer than 20 ft; the
+    pool's clusters front the paddy at the wall rule now (feature 227), so no shipped map lays one - a cluster seated
+    three hundred feet back does."""
+    from l7r.diagram.hamletgen.ways import stage_track
+
+    s, plan = _toy_hamlet(10)
+    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
+    ox, oy = plan.seat["out"]
+    n = 0
+    for k in range(-2, 3):
+        ax, ay = plan.seat["along"]
+        if s.try_place(cx_ + ax * 110 * k + ox * 300, cy_ + ay * 110 * k + oy * 300, "plain"):
+            n += 1
+    assert n >= 3
+    stage_track(s, plan)
+    spurs = [ln for ln in s.M["lanes"] if ln.get("w") == 5 and not ln.get("connector") and ln.get("worn")]
+    assert spurs, "a worn width-5 way besides the connector: the spur to the field"

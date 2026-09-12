@@ -314,3 +314,18 @@ def test_a_break_already_walkable_round_through_two_other_lanes_is_not_bridged()
     assert len(near.M["lanes"]) == 6
     far = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], a, b, *walk(70.0)])  # walk 260 ft, over 2x: the hole is bridged
     assert hg.ways._bridge_collinear_breaks(far, [], [], []) == 1
+
+
+def test_a_doubled_remnant_that_alone_joins_two_parts_of_the_web_is_kept() -> None:
+    """`_sweep_doubled_remnants`' third clause: a lane that leaves a way and returns to it is dropped unless dropping
+    it would split the web - here the loop off the connector is what the branch lane hangs from. Without the branch
+    the same loop is dropped, which is the non-vacuity half."""
+    from l7r.diagram.hamletgen.ways import sweeps as _sw
+
+    from ._builders import _StubSettlement
+
+    loop = [(0.0, 0.0), (0.0, 100.0), (300.0, 100.0), (300.0, 0.0)]  # both ends on the connector: a doubled remnant
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (300.0, 0.0)], loop, [(150.0, 100.0), (150.0, 300.0)]])  # the branch hangs from the loop
+    assert _sw._sweep_doubled_remnants(s) == 0 and s.M["lanes"][1]["pts"] == [list(q) for q in loop]
+    alone = _StubSettlement(lanes=[[(0.0, 0.0), (300.0, 0.0)], loop])
+    assert _sw._sweep_doubled_remnants(alone) == 1 and len(alone.M["lanes"]) == 1, "the loop dropped, its record removed with its ink"

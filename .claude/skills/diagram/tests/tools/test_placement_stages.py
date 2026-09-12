@@ -235,4 +235,52 @@ def test_the_homesteads_plate_draws_the_site_boundary_it_appeared_with(tmp_path:
     monkeypatch.setattr(ps, "_plate", fake_plate)
     _stub_stages(monkeypatch, stage_draws, stage_bounds, stage_draws)
     ps.build_page(str(tmp_path), 200, _SPEC)
-    assert [o is not None for _stem, o in seen] == [False, True, False]
+    got = {stem: o is not None for stem, o in seen}  # the plates render in a thread pool: judge by stem, not by completion order
+    assert got == {"01-stage_draws": False, "02-stage_bounds": True, "03-stage_draws": False}
+
+
+def test_a_plate_draws_its_overlay_in_the_boundary_colors(tmp_path: Path) -> None:
+    """Feature 227 D4: the site boundary drawn over the homesteads plate - the rings red, the chords blue, the
+    corridors teal - mapped through the copy's view (the whole canvas on an uncropped mid-roll copy)."""
+    from PIL import Image
+
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(W=300, H=300, seed=1)
+    s.add("<rect/>", cls="-")  # tagged ink, as the engine adds it: the finish checks the side list against the stream
+    overlay = {
+        "chords": [[[20.0, 150.0], [280.0, 150.0], [0.0, -1.0]]],
+        "rings": [[[40.0, 40.0], [120.0, 40.0], [120.0, 120.0], [40.0, 120.0]]],
+        "holes": [],
+        "water": [[[20.0, 250.0], [280.0, 250.0], 5.0]],
+        "corridors": [],
+    }
+    img, iw, ih = ps._plate(s, str(tmp_path), "06-stage_homesteads", 300, overlay)
+    with Image.open(tmp_path / img) as im:
+        px = list(im.convert("RGB").getdata())
+    assert any(r > 150 and g < 90 and b < 90 for r, g, b in px), "a red ring"
+    assert any(b > 150 and r < 90 for r, g, b in px), "a blue chord"
+    assert any(g > 110 and b > 110 and r < 80 for r, g, b in px), "a teal corridor"
+
+
+def test_the_page_renders_each_stages_steps_and_the_homesteads_legend(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 227 FR-004: under every stage, the functions its `Steps:` names, each in its own words; the homesteads
+    plate carries the legend for the boundary drawn over it."""
+
+    def stage_homesteads(s: Any, _plan: Any) -> None:
+        """A toy homesteads stage.
+
+        It draws one rectangle.
+
+        Steps:
+            l7r.diagram.tools.placement_stages._ink
+            l7r.diagram.tools.placement_stages.stage_doc
+        """
+        s.out.append("<rect/>")
+
+    monkeypatch.setattr(ps, "_plate", lambda snap, out_dir, stem, width, overlay=None: (stem + ".png", 10, 10))
+    _stub_stages(monkeypatch, stage_homesteads)
+    html = Path(ps.build_page(str(tmp_path), 200, _SPEC)).read_text()
+    assert html.count('<div class="step">') == 2 and "step by step (2)" in html
+    assert "_ink" in html and "How many SVG records" in html, "the step is shown in its own docstring's words"
+    assert "Drawn over this plate" in html, "the homesteads legend"

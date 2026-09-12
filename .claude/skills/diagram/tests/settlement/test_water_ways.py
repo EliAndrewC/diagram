@@ -727,3 +727,18 @@ def test_trim_lane_stubs_leaves_a_lane_alone_when_both_its_ends_already_arrive()
     s._lane_ink = [[], [], []]
     s.trim_lane_stubs()
     assert s.M["lanes"][2]["pts"] == [[500, 300], [500, 700]], "the bar is untouched"
+
+
+def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_records_aligned():
+    """A lane the trim leaves shorter than `_LANE_MIN_FT` is dropped - its ink emptied and its record removed, the ink
+    list rebuilt beside the record list so their indices still agree (the pool stopped reaching this once feature
+    227 re-packed the clusters)."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [
+        {"pts": [[100, 500], [900, 500]], "w": 4},
+        {"pts": [[500, 500], [500, 504]], "w": 4},  # a four-foot stub off the first
+    ]
+    s._lane_ink = [[], []]
+    s.trim_lane_stubs()
+    assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == 1 and s.M["lanes"][0]["pts"][0] == [100, 500]

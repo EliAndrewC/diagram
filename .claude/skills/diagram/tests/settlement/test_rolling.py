@@ -308,8 +308,6 @@ _ROLLING_SURFACE = frozenset(
         "_farmsteads_bundle",
         "_farmsteads_legacy",
         "_field_adjacent",
-        "_field_dist",
-        "_fits_any_side",
         "_garden_beds",
         "_garden_beds_clear",
         "_garden_shaded",
@@ -510,3 +508,15 @@ def test_the_one_computed_move_clears_a_single_neighbor_by_the_measured_overlap(
     assert cx > 500.0 and cy == 500.0, "moved east, along the axis of the smaller overlap, away from the neighbor"
     assert s._envelope_blocked(geom["bbox"]) is None, "...by exactly enough to clear it"
     assert s._seat_search["placer_calls"] == 1 and s._seat_search["positions"] <= 9, "the union, then at most one rectangle and one move per configuration"
+
+
+def test_parts_fit_refuses_a_house_whose_wall_stands_on_the_bund() -> None:
+    """Feature 227: the parts' rules run once at the seat - the first of them the wall rule against the paddy,
+    which the envelope test (nine points at the chord's own keep-out) cannot stand in for."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()  # the paddy east of x = 640
+    on_the_bund = s._bundle_geom(630.0, 300.0, 46.0, 28.0, "W")  # the house's east wall 13 px into the paddy
+    assert s._parts_fit(on_the_bund) is False
+    clear = s._bundle_geom(500.0, 300.0, 46.0, 28.0, "W")
+    assert s._parts_fit(clear) is True

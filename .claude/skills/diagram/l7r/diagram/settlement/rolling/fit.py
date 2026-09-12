@@ -480,18 +480,3 @@ class BundleFitMixin:
             if hy > gy + gh / 2 - 3 and abs(hx - gx) < (hw + gw) / 2 and (hy - hh / 2) - (gy + gh / 2) < gh + 4:
                 return True
         return False
-
-    def _fits_any_side(self: Settlement, cx: float, cy: float, hw: float, hh: float, shed: bool = False) -> bool:  # type: ignore[misc]
-        self._seat_search["positions"] += 1
-        # The house/yard/kura/sun checks are the same for every garden side, so test that common half ONCE -
-        # if it fails, no side can fit - then test only each side's garden (+ the bbox it grows). Identical
-        # result to any(_bundle_fits(...) for side), but far fewer collision tests on the failing steps that
-        # dominate the pack. Safe because the fit path is RNG-free: building fewer geoms cannot shift placement.
-        g0 = self._bundle_geom(cx, cy, hw, hh, self._NUC_SIDES[0], shed)
-        if not self._bundle_common_fits(g0):
-            return False
-        for i, side in enumerate(self._NUC_SIDES):
-            geom = g0 if i == 0 else self._bundle_geom(cx, cy, hw, hh, side, shed)
-            if self._bundle_side_fits(geom):
-                return True
-        return False
