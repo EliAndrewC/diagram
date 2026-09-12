@@ -11,15 +11,14 @@ from ._base import Kind
 
 class Stream(Kind):
     """
-    What: A natural brook off the high ground, feeding the head of the field and, below it, carrying the drain
-    away.
+    What: A natural brook off the high ground, feeding the head of the field at an intake on its bank.
 
-    Why: A village creek runs about two meters wide in reality, six times a field ditch; every watercourse on the
+    Why: A village creek runs about two meters wide in reality, six times an irrigation ditch; every watercourse on the
     map declares which way it flows, because downstream is a real constraint on what may stand beside it.
 
     Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-    (the GM's ruling). A village creek runs about 2 m wide in reality, some six times a field ditch. The
+    (the GM's ruling). A village creek runs about 2 m wide in reality, some six times an irrigation ditch. The
     stream's type and place are read.
 
     Name: stream
@@ -32,27 +31,58 @@ class Stream(Kind):
     key = 'stream'
 
 
-class FieldDitch(Kind):
+class IrrigationDitch(Kind):
     """
-    What: The dug irrigation net: the intake from the stream, the head race along the high margin, the laterals
-    running down-slope between the plots, and the drain along the low line.
+    What: The dug channels that bring water TO the paddies: the head race that leaves the brook at its intake,
+    the two supply canals it forks into along the field's high margins, and the delivery ditches running
+    down-slope between the plots.
 
-    Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
-    the lowest line - is the Edo Kishu-school layout and codified Chinese canal doctrine alike. Mains taper
-    as branches tap them; the net is SPARSE because a village digs the minimum, and a ditch beside every
-    paddy is a Meiji anachronism. The net is drawn at true size: a field ditch is about a third of a meter,
-    a hairline.
+    Why: A canal commands only the ground below it, so the supply runs along the high margins and delivers
+    perpendicular down the slope - the layout of Edo-period Minuma-dai and of Chinese canal doctrine alike.
+    Mains taper as branches tap them; the net is SPARSE because a village digs the minimum, and a ditch
+    beside every paddy is a Meiji anachronism. The net is drawn at true size: a field ditch is about a third
+    of a meter, a hairline.
 
-    Note: Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288).
+    Note: Topology, taper and true-size width are read (Tabayashi, the Minuma-dai record, GB 50288); the head
+    race's length from the intake to the fork follows the fan's geometry, the record giving no distance.
 
-    Name: field ditch
-    Covers: `field_ditches` and `channels` - the intake, head race, branches and drain
+    Caveat: the head race's length from the intake to the fork follows the fan's geometry, the record giving no distance
+
+    Name: irrigation ditch
+    Covers: `field_ditches` whose role is not `drain`, and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, gb50288, nougyoudoboku-matsutan
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Water-first v2'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Water-first v2'
     """
 
-    key = 'field ditch'
+    key = "irrigation ditch"
+
+
+class DrainageDitch(Kind):
+    """
+    What: The dug channel that carries water AWAY from the paddies: the collector along the field's low line,
+    gathering what runs out of the basins, and its run onward - into the pond at the field's foot, into the
+    passing brook, or off the edge of the map.
+
+    Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
+    collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
+    consolidation the water that left a village's paddies went on down to the river, or to the next field, to
+    be used again below. The collector is drawn wider at its outfall than the head race that fed the same
+    ground, because it carries storm water and the season's drawdown as well as the irrigation duty.
+
+    Note: The collector's form, its separation from the supply net and its tail wider than the head race are
+    read; the sink its run reaches is the map's declared water sink.
+
+    Caveat: the sink its run reaches is the map's declared water sink
+
+    Name: drainage ditch
+    Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
+    Label: accurate
+    Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro
+    Entry: research/water.html - 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields.html - 'Water-first v2'
+    """
+
+    key = "drainage ditch"
 
 
 class Pond(Kind):

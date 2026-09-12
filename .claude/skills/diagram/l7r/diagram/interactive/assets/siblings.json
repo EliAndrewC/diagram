@@ -10,11 +10,6 @@
       "@pond-vs-polder-sluice"
     ],
     [
-      "field ditch",
-      "pond sluice",
-      "A field ditch carries water through the CROP - it is the paddy fabric's own plumbing, cut between the plots and crossed by a plank. A pond sluice is a gate in a dike: a cut closed with boards that lets one fish pond take water in at its high side and let it out at its low side. The ditch moves water along; the sluice decides whether it moves at all."
-    ],
-    [
       "mulberry dike",
       "perimeter dike",
       "@crop-vs-perimeter"
@@ -176,11 +171,6 @@
     ],
     [
       "stream",
-      "field ditch",
-      "The stream is a natural brook - about two meters across in reality, the widest water on a hamlet map short of the pond. A field ditch is dug: a hairline in reality (about a third of a meter, one three-hundredth of the paddy it waters), drawn at true size."
-    ],
-    [
-      "stream",
       "pond",
       "The stream is running water off the high ground; the pond is standing water held behind a dike, fed by the stream and let out through one outlet."
     ],
@@ -193,11 +183,6 @@
       "paddy",
       "field pond",
       "The paddy is the flooded rice basin; the field pond is a small pocket of open water sunk into one low plot, reed-fringed, drawn where the ground pools."
-    ],
-    [
-      "field ditch",
-      "pond",
-      "The ditches distribute the water; the pond stores it. One outlet leaves the pond and branches into the head race and the laterals - the smallest ditches were often counted as part of the paddy they serve."
     ],
     [
       "soy",
@@ -248,6 +233,36 @@
       "grave island",
       "field rock",
       "The grave island is made ground - a mound raised for the dead; the rock is ground that was never made - bedrock the terrace risers had to wrap around."
+    ],
+    [
+      "irrigation ditch",
+      "drainage ditch",
+      "The irrigation ditches bring the water in - the head race from the intake on the brook, the supply canals along the high margins, the delivery ditches down between the plots. The drainage ditch takes it away: one collector along the field's lowest line, wider at its outfall than the head race that fed the same ground, running on to the pond, the passing brook or the edge of the map."
+    ],
+    [
+      "irrigation ditch",
+      "pond sluice",
+      "An irrigation ditch carries water through the CROP - it is the paddy fabric's own plumbing, cut between the plots and crossed by a plank. A pond sluice is a gate in a dike: a cut closed with boards that lets one fish pond take water in at its high side and let it out at its low side. The ditch moves water along; the sluice decides whether it moves at all."
+    ],
+    [
+      "stream",
+      "irrigation ditch",
+      "The stream is a natural brook - about two meters across in reality, the widest water on a hamlet map short of the pond - and it runs on past the field. An irrigation ditch is dug, and begins where it leaves the brook's bank at the intake: a hairline in reality (about a third of a meter, one three-hundredth of the paddy it waters), drawn at true size."
+    ],
+    [
+      "stream",
+      "drainage ditch",
+      "The stream is a natural brook, wider than any ditch and older than the field, and it keeps its own course. The drainage ditch is dug along the field's lowest line to carry the used water away; where the brook passes near its outfall the ditch runs to the brook and joins it, the way a district's drainage went back to the river."
+    ],
+    [
+      "irrigation ditch",
+      "pond",
+      "The irrigation ditches distribute the water; a pond stores it. A source pond above its fields lets one outlet out, which becomes the head race and branches into the laterals - the smallest ditches were often counted as part of the paddy they serve."
+    ],
+    [
+      "drainage ditch",
+      "pond",
+      "Where the map's water sink is a pond at the field's foot, the drainage ditch brings the used water down to it and the pond holds it. The run from the collector's outfall to the shore is the collector's last few strides, drawn at its full width, and the pond's fill paints over the mouth."
     ]
   ]
 }

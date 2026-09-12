@@ -2,9 +2,9 @@
 
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 
-- [ ] T01 spec-fidelity review FAITHFUL; research R1
+- [x] T01 spec-fidelity review FAITHFUL; research R1
       research: rendering
-      verify:
+      verify: DONE. spec-fidelity rounds 1-4 CHANGES REQUIRED (Kuwabata's off-frame drain; SC-2's sweep; FR-004 (d); the pond feeder's record-less stroke; FR-004 recut to the finished research and FR-002's three sinks), round 5 FAITHFUL 2026-09-12; research R1 from the code and Inashiro's manifest
 - [ ] T02 FR-003 the research pass: where does a natural stream become an irrigation ditch, and what is a drain's outfall run; the record, the registry, the rule line, the pointers
       research: physical
       - [ ] research pass

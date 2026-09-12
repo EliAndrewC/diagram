@@ -22,6 +22,7 @@ from .._geom import (
 )
 from .._knobs import _centroid, _sharp_corners, _toward
 from ..land.wet import pond_fringe_ring
+from ..water_ways.water import ditch_style
 from .landuse import line_cuts
 
 if TYPE_CHECKING:
@@ -365,7 +366,8 @@ class CombMixin:
         # order (widest-first) is unchanged and byte-identical; only the polder ring re-sorts.
         _ring_last = {"feeder", "drain", "e_toe", "w_toe"}
         for c in sorted(net["channels"], key=lambda c: (c.get("seg") in _ring_last, -c["w"])):
-            self.field_channel(c["pts"], "#7C9EB0" if c["role"] == "drain" else "#6C9CBE", c["w"], c.get("w_tail", c["w"]), late=True)
+            col, cls = ditch_style(c["role"])  # ONE read of the role decides both the hue and the hover class (feature 230)
+            self.field_channel(c["pts"], col, c["w"], c.get("w_tail", c["w"]), late=True, cls=cls)
         if net["brook"]:
             # the drain-outfall brook shoots STRAIGHT downhill off-map (a fan field's own wiggly brook can
             # re-enter the paddy and trip streams_avoid_fields; a straight downhill exit never does)
@@ -378,7 +380,15 @@ class CombMixin:
             mid = (b0[0] + ex / el * 70, b0[1] + ey / el * 70)  # a short smooth continuation, THEN turn downhill
             # (first segment = drain direction -> smooth junction; then straight downhill AWAY from the field ->
             # clears a fan envelope's concave lobe without an acute turn, since the drain already runs downhill)
-            self.stream([b0, mid, (mid[0] + bdx * 520, mid[1] + bdy * 520)], frm={"kind": "drain"}, to={"kind": "offmap"}, width=8)
+            # A DRAINAGE DITCH, not a stream (feature 230): the collector's dug continuation, drawn at the
+            # collector's tail width with the drain's hue and class, recorded in `channels` like the pond run
+            # - the same stroke `hamletgen/sink.py` `drain_run` draws, so every sink carries one kind of thing.
+            _run = [b0, mid, (mid[0] + bdx * 520, mid[1] + bdy * 520)]
+            _dw = next((float(_c.get("w_tail", _c["w"])) for _c in net["channels"] if _c.get("role") == "drain"), 5.5)
+            col, cls = ditch_style("drain")
+            self.field_channel(_run, col, _dw, _dw, cls=cls)
+            self.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5})
+            self.corridors.append((list(_run), 33.0))
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
         """Assemble and append this fan's M['fields'] record: envelope, per-plot dims, drain-hem rings,

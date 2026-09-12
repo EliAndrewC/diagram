@@ -51,7 +51,10 @@ SPEC_CLASSES = [
     "soy",
     "fallow",
     "stream",
-    "field ditch",
+    # the one `field ditch` became two (feature 230, GM 2026-09-12: the ditches that feed the paddies and the
+    # ditch that drains them are different questions with different records behind them)
+    "irrigation ditch",
+    "drainage ditch",
     "pond",
     "field pond",
     "field rock",
@@ -236,9 +239,13 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     `paddy` LEFT the list on 2026-08-29 (feature 160). It now discloses that its water depths and the
     drying stages between them are MODERN extension figures with no pre-modern record behind them -
     a real liberty, and the reason the GM asked for the number to be confirmed or labeled. This
-    assertion is what made that a deliberate act rather than a quiet edit."""
+    assertion is what made that a deliberate act rather than a quiet edit.
+
+    `field ditch` LEFT the list on 2026-09-12 (feature 230) by splitting: the irrigation ditch discloses that
+    its head race's length is derived from the fan, the record giving no distance, and the drainage ditch
+    that its sink is the map's declared one."""
     bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
-    assert bare == {"marsh", "field ditch", "pond", "bund", "notice board", "windbreak"}
+    assert bare == {"marsh", "pond", "bund", "notice board", "windbreak"}
 
 
 def test_slug_is_a_css_token() -> None:
@@ -286,7 +293,8 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused() -> None:
 @pytest.mark.parametrize(
     ("a", "b"),
     [
-        ("pond sluice", "field ditch"),
+        ("pond sluice", "irrigation ditch"),
+        ("irrigation ditch", "drainage ditch"),
         ("pond sluice", "sluice gate"),
         ("mulberry dike", "perimeter dike"),
         ("sugarcane dike", "perimeter dike"),

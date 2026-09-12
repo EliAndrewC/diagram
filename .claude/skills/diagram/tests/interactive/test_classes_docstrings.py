@@ -16,6 +16,13 @@ from l7r.diagram.interactive.classes import CLASSES, FeatureClass, Kind, parse_e
 from l7r.diagram.interactive.classes._base import install_siblings
 
 SNAPSHOT = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "classes_before_189.json"
+#: The vocabulary since the snapshot: a key retired -> the keys that replaced it. The snapshot is the record of
+#: what the registry WAS before feature 189 and is never edited (spec 230 SC-2); the proof below carries forward
+#: through this table instead - every snapshot key is still registered or is retired here, every registered key is
+#: in the snapshot or is a successor here, and the count moves with the table rather than by hand.
+SINCE_189: dict[str, tuple[str, ...]] = {
+    "field ditch": ("irrigation ditch", "drainage ditch"),  # feature 230, GM 2026-09-12: the two ends of the field are two questions
+}
 
 
 def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present() -> None:
@@ -27,13 +34,23 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     prose edit is exactly what feature 189 exists to make cheap: pinning it would fail `make page-check`
     on every reworded explanation. Here they are only required to be present."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
-    assert sorted(before) == sorted(CLASSES) and len(CLASSES) == 51
+    successors = {s for succ in SINCE_189.values() for s in succ}
+    assert set(SINCE_189) <= set(before) and not (successors & set(before)), "the table names snapshot keys and NEW keys only"
+    assert sorted(set(before) - set(SINCE_189) | successors) == sorted(CLASSES)
+    assert len(CLASSES) == 51 - len(SINCE_189) + len(successors)
     for key, was in before.items():
+        if key in SINCE_189:
+            continue  # retired; its successors are new entries with their own data, judged by test_classes.py
         fc = CLASSES[key]
         for field in ("label", "name", "covers", "entry"):
             assert getattr(fc, field) == was[field], (key, field)
         assert tuple(fc.sources) == tuple(was["sources"]), key
-        assert fc.siblings == was["siblings"], key
+        # a sibling pair that named a retired key now names its successors (the text rewritten for each); every
+        # other pair is exactly the snapshot's
+        kept = {k: t for k, t in was["siblings"].items() if k not in SINCE_189}
+        assert {k: t for k, t in fc.siblings.items() if k in kept} == kept, key
+        for retired in set(was["siblings"]) & set(SINCE_189):
+            assert set(SINCE_189[retired]) & set(fc.siblings), (key, retired)
         assert fc.what and fc.why and fc.label_note, key
         if fc.caveat:
             assert fc.caveat in fc.label_note, key

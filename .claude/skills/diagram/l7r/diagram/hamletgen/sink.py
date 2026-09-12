@@ -9,6 +9,7 @@ import math
 
 from l7r.diagram.settlement import Settlement, point_in_poly
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
+from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 from l7r.diagram.waterfields import DRAIN_FT, chan_px
 
@@ -66,6 +67,37 @@ def drain_heading(s: Settlement, name: str, span: float = GATE_FLOW_SPAN) -> Pt 
             return unit(float(end[0]) - float(ref[0]), float(end[1]) - float(ref[1]))
 
 
+def drain_run(s: Settlement, pts: Poly, to: str) -> None:
+    """The collector's continuation past its outfall - a DRAINAGE DITCH whichever way the water goes.
+
+    Feature 230 (GM 2026-09-12): the run into the tameike was drawn by `field_channel` and the run off
+    the frame by `stream` at 8 px, so the same thing carried two classes and two record kinds on two
+    maps ("the inconsistency you mentioned"). The research settled what it is: before modern field
+    consolidation a village's drainage went field to field, or back into a shared channel, and returned
+    to the river to be taken up below (`research/water.html`, "Where does the water go once it has
+    watered the paddies") - a dug channel that reaches a watercourse, never a brook of its own. So every
+    sink draws the same stroke: the collector's tail width, the drain's hue, the drainage-ditch class.
+
+    WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last strides, so it carries everything
+    the collector carries - a flat 2.5 px stub at the pond mouth read as a pinch rather than a mouth on the
+    sheet's most visible water feature (`settlement-review`, at true scale). Derived from `DRAIN_FT[1]` so it
+    tracks any change to the ladder.
+
+    ...but the TOPOLOGY record stays at the hairline. `M["channels"]` is the connectivity graph the anchor
+    checks walk, and its widths are held in a hairline band on purpose (a natural watercourse must
+    out-measure a field ditch by a wide margin). The DRAWN truth lives in `M["drawn_channels"]`, which is
+    where `field_channel` records the widened stroke. Writing the drawn width into the topology record
+    instead fired two checks on 14 cohort maps apiece - measured, not guessed.
+
+    RESERVE IT AS A NO-BUILD CORRIDOR. `s.channel` and `s.stream` register one; `s.field_channel` does not -
+    fine for the comb's own ditches inside a blocked envelope, wrong for this one, which runs OUT of the field
+    across open margin where the placer is free to seat a homestead on it."""
+    outfall_w = chan_px(DRAIN_FT[1], GRAIN)
+    s.field_channel(pts, DRAIN_HUE, outfall_w, outfall_w, cls=DRAINAGE_DITCH)
+    s.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5})
+    s.corridors.append((list(pts), 33.0))
+
+
 def edge_run(plan: SitePlan, frm: Pt) -> float:
     """Distance from `frm` to the canvas edge along the fall - how far a watercourse has to run to
     leave the map from here."""
@@ -121,8 +153,8 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     the pond's center so the two are visibly joined. Both scale with the map: a bigger hamlet drains
     more water into a bigger pond.
 
-    `water_sink="offmap"` draws nothing here - the drain's brook (kept in `stage_field`) already
-    carries the runoff off the frame, which is what most valleys do and what the GM's brief allows."""
+    `water_sink="offmap"` draws the collector's continuation off the frame instead of a pond - a drainage
+    ditch like the pond run (`drain_run`), which is what most valleys do and what the GM's brief allows."""
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:
@@ -235,7 +267,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
             div = abs((bear - plan.water_flow + 180.0) % 360.0 - 180.0)
             bad += int(descent <= 0.0) + int(div >= 90.0)
             if bad == 0:
-                s.stream([out, mid, end], frm={"kind": "drain"}, to={"kind": "offmap"}, width=8)  # s.stream reserves its own corridor
+                drain_run(s, [out, mid, end], "offmap")
                 plan.sink_brook = [out, mid, end]
                 return
             if best is None or bad < best[0]:  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
@@ -243,9 +275,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         assert (
             best is not None
         )  # ...and if none is clean, the LEAST-BAD route, never an untested one  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
-        s.stream(
-            best[1], frm={"kind": "drain"}, to={"kind": "offmap"}, width=8
-        )  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
+        drain_run(s, best[1], "offmap")  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
         plan.sink_brook = list(best[1])  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
         return  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
     # Sized to the settlement: a tameike serving ~15 households reads at roughly Ikegami's 116x74 px
@@ -306,20 +336,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # called it a pinch rather than a mouth, on the sheet's most visible water feature. Derived from
     # `DRAIN_FT[1]` so it tracks any future change to the ladder - the standing derive-don't-pin
     # rule, which a literal here quietly broke.
-    outfall_w = chan_px(DRAIN_FT[1], GRAIN)
-    s.field_channel(ditch, "#7C9EB0", outfall_w, outfall_w)
-    # ...but the TOPOLOGY record stays at the hairline. `M["channels"]` is the connectivity graph the
-    # anchor checks walk, and its widths are held in a hairline band on purpose
-    # (`irrigation_channels_hairline`, `watercourses_wider_than_ditches` - a natural watercourse must
-    # out-measure a field ditch by a wide margin). The DRAWN truth lives in `M["drawn_channels"]`,
-    # which is where the widened stroke above is recorded. Writing the drawn width into the topology
-    # record instead fires both of those checks on 14 cohort maps apiece - measured, not guessed.
-    s.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in ditch], "frm": {"kind": "drain"}, "to": {"kind": "pond"}, "w": 2.5})
-    # RESERVE IT AS A NO-BUILD CORRIDOR. `s.channel` and `s.stream` register one; `s.field_channel`
-    # does not - which is fine for the comb's own ditches, because they run inside a field envelope
-    # that is blocked ground already, and wrong for this one, which runs OUT of the field across
-    # open margin where the placer is free to seat a homestead on it (`no_structure_on_channel`).
-    s.corridors.append((list(ditch), 33.0))
+    drain_run(s, ditch, "pond")
     # A reedy fringe rims the shore - the shallow margin of any standing water.
     ring: Poly = pond_fringe_ring(pcx, pcy, prx, pry, 44.0)  # the shared ring (feature 151); a tameike keeps a wider fringe than a comb's source pond
     s.marsh(ring, role="pond_fringe")

@@ -53,20 +53,20 @@ def test_deferred_blocks_carry_their_class_through_the_splice(tmp_path: os.PathL
     s = _settlement()
     s._ground(10.0, {}, "z", edge='<path d="M0,0 L1,1"/>', bed='<path d="M0,0 L1,1"/>', top='<path d="M0,0 L1,1"/>', cls="village lane")
     s._water('<path d="M0,0 L2,2"/>', {}, sheen='<path d="M0,0 L2,2"/>', cls="stream")
-    s._water('<path d="M3,3 L4,4"/>', {}, late=True, cls="field ditch")
+    s._water('<path d="M3,3 L4,4"/>', {}, late=True, cls="irrigation ditch")
     s.add(RECT, cls=Split("paddy", "bund"))
     base = os.path.join(str(tmp_path), "t")
     s.finish(base, render=False)
     with open(base + ".json") as fh:
         m = json.load(fh)
-    assert m["ink_classes"] == {"-": 1, "village lane": 3, "stream": 2, "field ditch": 1, "paddy": 1}
+    assert m["ink_classes"] == {"-": 1, "village lane": 3, "stream": 2, "irrigation ditch": 1, "paddy": 1}
     assert m["unclassed_ink"] == [] and m["unregistered_classes"] == []
     with open(base + ".svg") as fh:
         svg = fh.read()
     assert "data-k" not in svg and "f-village-lane" not in svg, "the class never enters the SVG (FR-010)"
     with open(base + ".html") as fh:
         page = fh.read()
-    assert page.count('data-k="village lane"') == 3 and 'data-k="stream"' in page and 'data-k="field ditch"' in page
+    assert page.count('data-k="village lane"') == 3 and 'data-k="stream"' in page and 'data-k="irrigation ditch"' in page
     assert 'data-k="paddy"' in page and 'data-k="bund"' in page
 
 

@@ -1,6 +1,6 @@
 # Feature 230 - the stream's intake, and the two ditch classes
 
-**Status**: DRAFT 2026-09-12 - `spec-fidelity` review pending.
+**Status**: ACCEPTED 2026-09-12 - `spec-fidelity` rounds 1-4 CHANGES REQUIRED (each applied, see Review history), round 5 FAITHFUL. Implementation in progress.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the state of the record
 before the pass, R2 the pass itself (what was searched, what was found, the verdicts), R3 the maps before and
 after. **Predecessors**: 134 (the class vocabulary), 159 (a class decided at one emit site from the fill about to
@@ -239,4 +239,4 @@ Three things the GM asked for on the reference hamlet, all at the head and the f
   Out of scope disagreed about the confluence; FR-002 now names three sinks (pond, the passing brook, the frame),
   the condition, the record and the class below the junction, the inert UNLESS removed, and Out of scope says the
   one way the route changes. FR-005's cohort made unconditional and given the one-map-per-value duty.
-- Round 5: pending.
+- Round 5 (2026-09-12): FAITHFUL. The reviewer's aside - once every comb map's brook runs down its flank, the off-frame drain sink may be reached only by Kuwabata's polder; confirm at the pool sweep which comb map, if any, still exercises it, or record that none does - is carried to T05.

@@ -11,6 +11,27 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+#: THE TWO DITCH HUES, AND THE CLASS THAT GOES WITH EACH (feature 230, GM 2026-09-12). The comb's emit loop paints
+#: the collector a grayer blue than the supply net, and since the GM asked that the two be two things a reader can
+#: hover, the CLASS is decided at the same site from the same field - the record's `role` for a field ditch, the
+#: `frm` anchor for a channel - so class and color cannot disagree (the wet-paddy precedent, feature 159). A ditch
+#: stroke with no record at all (the pond's feeder curve) is an irrigation ditch: a feed into a reservoir is supply.
+SUPPLY_HUE = "#6C9CBE"
+DRAIN_HUE = "#7C9EB0"
+IRRIGATION_DITCH = "irrigation ditch"
+DRAINAGE_DITCH = "drainage ditch"
+
+
+def ditch_style(role: str | None) -> tuple[str, str]:
+    """(color, class) for a field-ditch record by its role: the drain's pair, or the supply's."""
+    return (DRAIN_HUE, DRAINAGE_DITCH) if role == "drain" else (SUPPLY_HUE, IRRIGATION_DITCH)
+
+
+def channel_class(frm: Any) -> str:
+    """The class of a `channels` record by where it comes FROM: leaving a drain, it is drainage; else irrigation."""
+    return DRAINAGE_DITCH if isinstance(frm, dict) and frm.get("kind") == "drain" else IRRIGATION_DITCH
+
+
 class WaterBodiesMixin:
     def _flow_record(self: Settlement, rec: dict[str, Any], pts: Any, flow: str) -> None:  # type: ignore[misc]
         """Tag one watercourse record with its flow direction and the derived downstream bearing.
@@ -105,7 +126,7 @@ class WaterBodiesMixin:
         self.M["channels"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}"/>'  # a channel is a thin bed, no sheen
         clip = {"pts": [(x, y) for x, y in poly], "bed_t": bed_t, "sheen_t": None} if self._pond_anchored(frm, to) else None
-        self._water(bed_t.format(dd=dd), rec, clip=clip, cls="field ditch")
+        self._water(bed_t.format(dd=dd), rec, clip=clip, cls=channel_class(frm))
         # 33 px keeps even a plain farmhouse's FOOTPRINT (half-diagonal ~26) clear of the
         # channel, not just its center - 22 left corners clipping the channel (see
         # no_structure_on_channel). Matches the stream corridor's footprint-aware spacing.

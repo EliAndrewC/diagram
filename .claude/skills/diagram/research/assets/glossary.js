@@ -783,6 +783,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "tagoshi kangai",
   "variants": [
+   "field-to-field irrigation",
+   "field-to-field",
+   "field to field",
    "tagoshi kangai"
   ],
   "def": "Plot-to-plot irrigation: water enters the head paddy of a string and cascades through the bunds from one plot to the next, so the interior plots have no ditch of their own."
@@ -797,6 +800,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "bunsuiguchi",
   "variants": [
+   "division points",
+   "division point",
+   "division works",
    "bunsuiguchi"
   ],
   "def": "A division point: where a head race splits into the branch ditches that water each side of a field."
@@ -873,7 +879,9 @@ window.RECORD_GLOSSARY = [
   "term": "alluvial fan",
   "variants": [
    "alluvial fans",
-   "alluvial fan"
+   "alluvial fan",
+   "fan's head",
+   "fan head"
   ],
   "def": "The spread of gravel a stream lays down where it leaves the hills: a steep apex, a dry mid-fan where the water sinks into the gravel, and a spring line at its toe."
  },
@@ -972,7 +980,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "kochi seiri",
   "variants": [
+   "modern consolidation",
    "consolidated paddies",
+   "field consolidation",
    "land consolidation",
    "consolidated paddy",
    "land-readjustment",
@@ -3661,5 +3671,113 @@ window.RECORD_GLOSSARY = [
    "gabion"
   ],
   "def": "A basket of woven bamboo or wicker packed with stones, used to build a weir or armor a bank."
+ },
+ {
+  "term": "settling basin",
+  "variants": [
+   "settling basins",
+   "settling basin"
+  ],
+  "def": "The basin at the head of a canal, immediately below the intake mouth, where the water slows and drops the sand it carried in before it runs on to the fields."
+ },
+ {
+  "term": "head works",
+  "variants": [
+   "head works",
+   "head-works"
+  ],
+  "def": "The whole set of works where a canal takes its water from a stream - the weir, the intake mouth, the settling basin and the division works."
+ },
+ {
+  "term": "riffle",
+  "variants": [
+   "riffles",
+   "riffle"
+  ],
+  "def": "A shallow, quick stretch of a stream running over gravel - where an old slanting weir was thrown across, because the water there is shallow and out of the flood's fastest line."
+ },
+ {
+  "term": "ox-frame",
+  "variants": [
+   "ox-frames",
+   "ox-frame"
+  ],
+  "def": "A timber frame set in the stream bed and loaded with stone: one of the materials a weir was built of before modern times, used alone or with gabions and brushwood and covered over with earth and gravel."
+ },
+ {
+  "term": "Yayoi period",
+  "variants": [
+   "Yayoi period",
+   "Yayoi"
+  ],
+  "def": "The Japanese period more than two thousand years ago in which wet-rice farming and its first irrigation works appear, before the Kofun period."
+ },
+ {
+  "term": "base flow",
+  "variants": [
+   "base flow"
+  ],
+  "def": "The steady flow a stream keeps between rains; where it holds the water level high enough, a channel can be fed without any weir."
+ },
+ {
+  "term": "half-river closure",
+  "variants": [
+   "half-river closures",
+   "half-river closure"
+  ],
+  "def": "A weir built across only part of a stream's width, leaving the rest of the channel open - the common old Japanese form, against a bar that closes the water bank to bank."
+ },
+ {
+  "term": "oblique weir",
+  "variants": [
+   "oblique weirs",
+   "oblique weir"
+  ],
+  "def": "A weir set at a slant, running diagonally upstream from the intake mouth instead of square across the stream, so it dams the shallow riffle and stands clear of the flood's fastest water."
+ },
+ {
+  "term": "irrigation ditch",
+  "variants": [
+   "irrigation ditches",
+   "irrigation ditch"
+  ],
+  "def": "A dug channel that brings water to the paddies: the head race, the supply canals along the margins and the delivery ditches between the plots."
+ },
+ {
+  "term": "drainage ditch",
+  "variants": [
+   "drainage ditches",
+   "drainage ditch"
+  ],
+  "def": "A dug channel that takes water away from the paddies: the collector along the field's low line and its run onward to a watercourse."
+ },
+ {
+  "term": "fishway",
+  "variants": [
+   "fishways",
+   "fishway"
+  ],
+  "def": "A stepped or sloping passage built beside a weir so that fish can get past it - one of the works that go with an intake."
+ },
+ {
+  "term": "return flow",
+  "variants": [
+   "return flow"
+  ],
+  "def": "The water that runs out of one district's paddies and is taken up again by the district below, instead of being wasted."
+ },
+ {
+  "term": "FAO",
+  "variants": [
+   "FAO"
+  ],
+  "def": "The Food and Agriculture Organization of the United Nations, whose irrigation training manuals the record cites."
+ },
+ {
+  "term": "sand sluice",
+  "variants": [
+   "sand sluice"
+  ],
+  "def": "The gate beside an intake through which the sand that settles there is flushed back down the stream."
  }
 ];
