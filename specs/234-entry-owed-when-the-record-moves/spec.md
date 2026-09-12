@@ -1,7 +1,7 @@
 # Feature 234 - the modal entry owed when the record moves
 
 **Created**: 2026-09-12
-**Status**: ACCEPTED 2026-09-12, after five rounds of `spec-fidelity` (see Review history)
+**Status**: ACCEPTED and FAITHFUL 2026-09-12 after six rounds; AMENDED on the GM's ruling the same day and re-reviewed over five amendment rounds to a second FAITHFUL (see Review history)
 **Input**: the GM's message, verbatim, in `request.md`
 
 ## Summary
@@ -19,16 +19,13 @@ are NOT the same kind of problem - which is the whole design:
    asserts only `"research/" in fc.entry`. `research/CLAUDE.md` already requires a rename to fix its
    inbound class entries, in prose, with nothing behind it. A broken heading is never correct work, so
    this can be GATED.
-2. **A modal whose prose has gone out of step with its section is a judgment about prose.** No
-   git-derived rule can decide it. This is REPORTED and never refused.
+2. **A modal whose prose has gone out of step with its section is a judgment about prose.** No git-derived rule can decide it, so no tool decides it: the report NAMES the pair at `make page-check`, the PUSH REFUSES until it is answered, and what answers it is the session's judgment - the prose rewritten, or one written reason.
 
-The round-1 draft of this spec proposed a push-time refusal for (2) and was withdrawn on measurement:
+The round-1 draft proposed a push-time refusal for (2) THAT NOTHING COULD DISCHARGE, and that was withdrawn on measurement:
 replayed over the repository's own history, that rule would have fired on **30 of the last 32**
 research-only commits, naming up to 41 classes at once, and every one of those 30 is a maintenance sweep
 of the record - citations, translations, HTML-comment conversions - that changes no obligation on any
-modal. `research.md` R2 carries the count. The root `CLAUDE.md` keeps a list of rules deliberately NOT
-enforced precisely because "a guard that fires on correct work teaches a session to bypass every guard",
-and this key would have earned its place on it.
+modal. `research.md` R2 carries the count. What ships instead is a refusal a WRITTEN REASON discharges - one reason may cover a whole sweep - which is how this repository enforces every rule whose compliant action only a session can supply. The GM settled the question on 2026-09-12: *"I don't believe that we should have any such thing as an unenforced doctrine."*
 
 ## Functional requirements
 
@@ -53,10 +50,20 @@ docstring as feature 231 enumerates its three:
   1. `make page-check` - the target a research-page-plus-docstring delta actually owes;
   2. `scripts/sync-with-main.sh` at push time.
 
-**FR-004** At BOTH decision points the answer MUST be REPORTED and MUST NOT block - not at the gate,
-not at the push, and with no escape token, because **the REPORT never refuses**. Naming a pair costs a
-session one line of reading; refusing on it would spend a round trip on work that is correct 30 times in
-32. (This says nothing about FR-007, which does refuse; see D5.)
+**FR-004** (rewritten on the GM's 2026-09-12 ruling) The two decision points differ, and deliberately:
+
+  1. **`make page-check` REPORTS and does not block.** Teaching where it is free is this project's own
+     ladder, and a session mid-work has not finished the edit the report is about.
+  2. **The PUSH REFUSES.** Nothing lands while a named pair is unresolved. The session either rewrites
+     the modal's prose, or records a reason - one entry in `dev/bypass-log/`, which may cover a whole
+     maintenance sweep - and the push then proceeds. The escape token is `ENTRY_DRIFT_OK="<reason>"`,
+     carried through the same `escape_reason` floor as every other escape in this repository (two
+     words, eight characters) and recorded so `make audit` lists it.
+
+This IS the enforcement the GM's ruling requires, and it is the shape this repository already uses for
+every rule whose compliant action only a session can supply - `guard-write`, `guard-file`,
+`FILE_SIZE_OK`, `PAIR_OK`: the guard refuses, the session supplies the judgment no tool has, in writing,
+and the reason is auditable afterward. What was declined is a SILENT obligation, not a costly one.
 
 **FR-005** The report MUST be actionable without further lookup: per class, the class key, the research
 file and heading that moved, and the file and line of the docstring whose prose to re-read.
@@ -124,9 +131,7 @@ and into `interactive/classes/CLAUDE.md` where "Writing an entry" is documented:
 was written from moves, the session DISPATCHES `entry-drift` at that pair and then either rewrites the
 prose or records why it did not change - the record going to `dev/bypass-log/` as FR-013.1 specifies. The actor is named deliberately: an earlier draft said the
 session "re-reads" while FR-013 gave the job to an agent, which named two actors for one job and
-required neither. The root `CLAUDE.md` guard table MUST gain a row, that table being the
-enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS and
-the heading half GATES.
+required neither. The root `CLAUDE.md` guard table MUST gain a row, that table being the enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS at `make page-check` and REFUSES at the push, dischargeable by `ENTRY_DRIFT_OK` with a reason, and that the heading half GATES at both with no escape.
 
 **FR-013** The judgment - does this modal still say what its section says - MUST be performed by a
 subagent that actually performs it. `record-format` and `quote-check` do NOT: `record-format` reads a
@@ -151,12 +156,11 @@ believes checked the modal. Two things follow:
      what the session hands to `entry-drift` - and the report's printed line MUST say so in as many
      words, because that line is the only thing that runs on this delta shape.
 
-     **The timing is honest about itself.** The report does not block (FR-004), and `push_cmd` prints it
-     and then pushes in the same invocation (`sync-with-main.sh:348/352`), so the pairs are named by the
-     run that pushes and the dispatch, the rewrite or the recorded line FOLLOW as a further commit. This
-     feature does not claim otherwise. If surfacing at the end proves too late in practice, the lever is
-     round 2's recorded aside - making a research-page edit owe `make page-check` at push - and that
-     lever is the GM's, not this feature's, because it hangs a ~26 s target on every research edit.
+     **The timing is honest about itself.** The PUSH REFUSES (FR-004.2), so the dispatch, the rewrite or
+     the written reason happens BEFORE the push succeeds - not afterward. And because the GM declined
+     making a research edit owe `make page-check` (2026-09-12), the push is in practice not merely the
+     enforcing channel on this delta shape but the ONLY one that runs: a research-only edit reaches no
+     gate and no page-check unless a session runs one by hand.
 
      The dispatch is owed **per pair whose section's FINDING moved**, not per pair named. A maintenance
      sweep of the record - a footnote relocated, a session note turned into an HTML comment, a citation
@@ -207,10 +211,16 @@ the heading checker's turns its `--selftest` red at BOTH the gate and the push -
 quiet pass.
 
 **SC-007** `.claude/agents/entry-drift.md` exists, pins `model: opus`, passes
-`tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature
-233's own pair, run and recorded there: the `PigSty` modal against the section 233 rewrites, which must
-come back DRIFTED before 233's docstring rewrite and IN-STEP after it. A new agent whose first real
-dispatch is the case that motivated it is the cheapest honest proof it does anything.
+`tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature 233's own pair: the `PigSty` modal
+against the sections 233 rewrote, judged BEFORE and AFTER that rewrite, with both verdicts recorded in
+`research.md` R6 and every finding acted on. A new agent whose first real dispatch is the case that
+motivated it is the cheapest honest proof it does anything.
+
+**The expected answer was DRIFTED then IN-STEP, and the run did not give it** - the AFTER pair came back
+DRIFTED too, because 233's last commit superseded the text the modal had been written against and
+touched the modal only for a two-line nitpick. That is the criterion being MET rather than missed: what
+it asks is that the agent be run on the real pair and discriminate, not that it return a verdict chosen
+in advance. The findings were fixed and the pair re-judged; R6 carries all three runs.
 
 <!-- SC-008 was the task-checkbox criterion, deleted in round 4 with the checkbox it proved; the
      numbers below are not renumbered because the Review history references them. -->
@@ -227,15 +237,22 @@ heading checker's matching surface broken is refused by its `--selftest` rather 
 only one no criterion covered. Checkable at task time: `research/CLAUDE.md` and
 `interactive/classes/CLAUDE.md` each state what is owed when a section a class was written from moves
 (dispatch `entry-drift`, then rewrite or record to `dev/bypass-log/`); the root `CLAUDE.md` guard table
-carries a row saying the staleness half REPORTS and the heading half GATES; and both skill documents say
-plainly that `record-format` and `quote-check` are the changed research entry's own obligations and are
-NOT a check on any modal (FR-014).
+carries a row saying the staleness half REPORTS at `make page-check` and REFUSES at the push with
+`ENTRY_DRIFT_OK` plus a reason, while the heading half GATES at both with no escape; and both skill
+documents say plainly that `record-format` and `quote-check` are the changed research entry's own
+obligations and are NOT a check on any modal (FR-014).
 
-**SC-013** `make hooks-test` green, `make done` green, `make page-check` green.
+**SC-013** A push with an unresolved named pair is REFUSED; the same push with the pair's prose
+rewritten proceeds; and the same push with `ENTRY_DRIFT_OK="<reason>"` proceeds and the reason lands in
+`dev/bypass-log/` where `make audit` lists it. A bare token with no reason is refused by the same
+two-word, eight-character floor every other escape uses.
+
+**SC-014** `make hooks-test` green, `make done` green, `make page-check` green.
 
 ## Decisions recorded
 
-**D1 - REPORT, never refuse.** The round-1 design refused at push. Withdrawn on the measurement in
+**D1 - REPORT at the gate, REFUSE at the push (amended 2026-09-12).** The round-1 design refused at push
+with no way to discharge the refusal, and was withdrawn on the measurement in
 `research.md` R2: 30 of 32, up to 41 classes at a time, all correct work. Recorded here rather than
 silently dropped, because the next session to notice this seam will have the same idea.
 
@@ -250,22 +267,43 @@ it is still the right unit for the report, which should name the section a reade
 **D4 - content-derived, never a stored hash.** No table of "this entry was current as of this text" is
 kept: such a table is exactly the stale literal that agrees with itself. git is the record.
 
-**D5 - the REPORT has no escape token; the HEADING CHECK refuses and still has none, deliberately.**
-Two halves, two answers, stated separately because a single "nothing refuses" sentence was wrong the
-moment FR-007 grew a push-time refusal (round 3). The report (FR-001 to FR-006) never refuses, so there
-is nothing to escape. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
+**D5 - the REPORT's page-check half has no escape token and needs none; its PUSH half has
+`ENTRY_DRIFT_OK`; the HEADING CHECK refuses and still has none, deliberately.**
+Three answers now, not two. The report's `make page-check` half never refuses, so it needs no token. The report's PUSH half DOES refuse and carries `ENTRY_DRIFT_OK` with the standard reason floor, because the thing that discharges it is a judgment only the session has. FR-007 DOES refuse, at gate and at push, and carries no escape token even so -
 unlike `check-file-scale.py`'s `FILE_SIZE_OK`, which exists because a large file can be legitimate
 ordered data. A class entry pointing at a heading that does not exist has no legitimate form: the one
 case that looks like it - a section deliberately not written - is FR-008's declared silence, which is
 an in-band recognized VALUE and not an escape. Recorded so a later session does not add one for
 symmetry.
 
-**D6 - the dispatch obligation is DOCTRINE, not mechanism - an ACCEPTED LIMITATION.** Nothing enforces
-that a session hands a named pair to `entry-drift`. That is deliberate, and it is the shape of the whole
-feature rather than a gap in it.
+**D6 - the obligation is ENFORCED AT THE PUSH (GM's ruling, 2026-09-12).** This entry previously
+accepted that nothing enforced the dispatch and called the obligation doctrine. The GM struck that:
+*"I don't believe that we should have any such thing as an unenforced doctrine. If it is unenforced,
+then it is not a doctrine. something should either not be considered doctrinal or it should be
+enforced."* So it is enforced - the push refuses until a named pair is resolved or a reason is recorded
+(FR-004.2).
 
-*Why no mechanism.* The condition is "the report named a pair", which is delta-derived and known only to
-`_entry_owed.py` at push. Two enforcers were priced and both fail:
+*Why not a quieter key instead.* The narrowing was measured before enforcement was chosen: firing only on what a reader SEES, rather than on any change to the section's body, takes 28 of 30 research-only commits down to 27 of 30 (`research.md` R5). One commit in thirty. There is no mechanical key that
+separates "this section now says something different" from "this section was maintained", because that
+is a judgment about meaning - which is why the compliant action is a written judgment rather than a
+tool's verdict.
+
+*What it costs, in observable terms.* Every research-only push now carries one obligation: resolve the
+named pairs or write one line. A maintenance sweep naming 41 classes is discharged by a single recorded
+line under the FINDING rule in FR-013.1, so the cost is one sentence per sweep rather than 41 dispatches.
+
+*Alternatives priced and DECLINED.* A task checkbox (round 3): rejected on measurement - the enforcer
+reads only a `tasks.md`'s text and a feature number, so a delta-derived condition is not expressible in
+it, and it would not run on this delta shape anyway. A narrowed key (above): rejected, one commit in thirty. A silent obligation with no mechanism (this entry's previous content): rejected by the GM.
+
+*Superseded content, kept because the reasoning still bounds the design.* Nothing enforces that a session
+hands a named pair to `entry-drift` BEYOND the recorded reason - the guard cannot tell a real judgment
+from a hollow one, only that one was made and by whom. That residue is the same as every other escape in
+this repository and is audited the same way.
+
+*The enforcer, and the two that were priced and failed before it.* The condition is "the report named a
+pair", delta-derived and known only to `_entry_owed.py` - which runs at push, where the refusal now
+lives. The two that do not work:
   - **A task checkbox** beside `quote-check confirmed` (the round-3 design). REJECTED on measurement:
     `tests/test_task_research_boxes.py` reads exactly two inputs, the text of a `tasks.md` and the
     feature number from its directory name - no delta, no git, no class index - so the condition is not
@@ -273,29 +311,69 @@ feature rather than a gap in it.
     short-circuits at `Makefile:122` on a research-plus-docstring delta, and `make page-check`
     (`Makefile:926`) runs only `tests/interactive` and the browser page tests, not that test. A checkbox
     that cannot be conditioned is always owed or never owed.
-  - **A refusal at push**, where the evaluator does run. REJECTED for D1's reason, unchanged: the key
-    fires on 30 of the last 32 research-only commits, up to 41 classes at once (`research.md` R2).
+    - **A refusal at push with no way to discharge it** - which is what D1 rejected, and still rejects:
+    the key fires on nearly every research-only commit, so a refusal that could only be satisfied by
+    rewriting prose would block correct work. The refusal that ships can be discharged by a recorded
+    reason, which is the difference.
 
-*What it costs, in observable terms.* A session that ignores the report's printed line ships a stale
-modal, exactly as today. What changes is that it can no longer do so without being told - which is the
-GM's own complaint ("would you have done it?"), and is the difference between a silent gap and a
-declined prompt.
 
-*Why the round-3 design was worse than this.* It moved D1's declined cost from the refusal onto a
-checkbox without re-pricing it: on one of those 30 sweeps it would have demanded either 41 Opus
-dispatches to conclude that a footnote moved, or a box ticked without dispatching - which is the unwired
-agent round 3 existed to fix, wearing a tick.
 
-*Who chose.* This spec did - the session, on the measurements returned by rounds 3 and 4 of its own
-`spec-fidelity` review. **The GM has NOT ruled on it.** They asked for a fix to the project guidelines
-and were not asked whether "doctrine, unenforced" is an acceptable answer for the judgment half, which
-is a call they may want to make themselves. Recorded so a later reader knows this door is open rather
-than closed.
 
+
+*Who chose.* **The GM ruled**, on 2026-09-12, that the obligation must be enforced or must stop being
+called one. Between those two branches the SESSION chose enforcement, on R5's measurement; the shape it
+takes - refuse, take a written reason, record it - is the session's too.
+
+*The other branch the ruling offered, priced and DECLINED.* The GM's words leave two exits: *"something
+should either not be considered doctrinal or it should be enforced."* The exit not taken is to DROP the
+obligation - keep `_entry_owed.py` as information a session may read, delete the owed dispatch from both
+skill documents and the guard-table row, and let `entry-drift` be a tool rather than a duty. It has a
+real argument: the key fires on 28 of 30 research-only commits (R5), so nearly every such push will end
+in a written reason rather than a rewrite, and a discharge that is usually taken looks like a formality.
+It loses on what the GM actually asked. Their question was *"if I hadn't said that ... then would you
+have done it?"* - and under the dropped branch the answer stays no, because nothing would require the
+session to look. A reason that must be written is a moment where somebody looked; an unread report is
+not. The cost of being wrong here is one sentence per research push, and it is auditable afterward,
+which is what makes the wrongness discoverable.
+
+
+**D7 - A RECORD AND A MODAL THAT ARE WRONG TOGETHER ARE INVISIBLE TO THIS FEATURE - an ACCEPTED
+LIMITATION.**
+
+*What was accepted.* The MECHANICAL half is blind to it. `_entry_owed.py` keys on the SECTION MOVING, so
+if a research section and the modal written from it are wrong in the same direction, the report never
+names the pair - the section did not move. A strict section-versus-modal reading returns IN-STEP for the
+same reason: the two agree. What the record shows DOES catch it is the agent given the measurements
+alongside the two texts, which is how the case below was found.
+
+*What it costs, in observable terms.* `MulberryDike` told every reader of a dike-pond map that the bank
+is "six to ten meters wide", on a class labeled **accurate**, against a planted collar measured at 2.0 m.
+Behind it: feature 233's withdrawn 22 ft arithmetic still alive in two `archetypes.html` paragraphs, a
+GM ruling of 2026-08-28 that `kuwabata.notes.md` asserted the modals carried and that reached no modal at
+all, `DuckPen` silent about the same collar, and the `crop-vs-perimeter` sibling text repeating the same
+width to every reader of four more classes. Five defects, none of which `_entry_owed.py` would have
+named - all of the sections involved were wrong in the same direction as the modals, or had not moved at
+all. Four were found by this feature's OWN `entry-drift` dispatch, which flagged `MulberryDike` while judging
+a different pair and then judged it DRIFTED when asked, reading feature 233's measurements against the
+two texts rather than only comparing the texts; the fifth, the sibling text, by the review of this
+feature - a sibling text is neither a class's explanation nor a section, so it is outside what the agent
+is given. `research.md` R6 and R7 have the detail.
+
+*What was declined.* A mechanical key that compares the RECORD against the DRAWING - there is none: the
+record's claims are prose and the drawing's are geometry, and the only thing that has ever connected
+them here is someone measuring. And a sweep of all 51 entries against their own measurements, which is
+its own work, wants the GM, and is not begun here.
+
+*Who chose.* The session, on R7's measurement. Recorded because the "Out of scope" bullet below covers
+only HISTORIC drift between a modal and its section, and a reader who met a stale modal the push let
+through would otherwise read it as a bug in `_entry_owed.py` rather than as the gap this entry names.
 
 ## Out of scope
 
 - Judging whether a rewritten modal entry is GOOD - that is `record-format` and `quote-check`.
+- Making a research-page edit owe `make page-check` at push. Round 2 recorded it as a lever and the GM
+  DECLINED it on 2026-09-12: *"A research edit should not owe a make page check at push."* So the report
+  reaches a research-only delta at the push and nowhere earlier, which is where the refusal lives anyway.
 - Backfilling entries currently out of step with their sections. The check is DELTA-based against the
   merge base and cannot surface historic drift at all; the first run's delta is feature 233's edits, so
   it will name what 233 touched and nothing else. An empty result is therefore NOT evidence that the 51
@@ -303,6 +381,65 @@ than closed.
   its own work, wants the GM's call, and is not begun here.
 
 ## Review history
+
+**AMENDED ON THE GM'S RULING, 2026-09-12** (the counter resets to zero for a post-acceptance amendment).
+The GM answered both questions the accepted spec had left open: a research edit does NOT owe
+`make page-check` at push, and *"I don't believe that we should have any such thing as an unenforced
+doctrine. If it is unenforced, then it is not a doctrine. something should either not be considered
+doctrinal or it should be enforced."* The first is declined outright and recorded under "Out of scope".
+The second struck D6's whole shape, so narrowing the key was measured first (R5: 28 of 30 down to 27 of
+30 - dead) and enforcement chosen: the push refuses, discharged by a rewrite or a recorded reason.
+
+**Amendment round 1** (`spec-fidelity`): CHANGES REQUIRED, nine items, all taken. R5 was not
+reproducible and conflicted with R2 - re-measured at SECTION level over a stated population, with the
+old file-level "39 of 39" withdrawn. D6 priced only one of the ruling's two branches - it now prices
+dropping the obligation, and says why it loses (under it the answer to *"would you have done it?"* stays
+no, because nothing would require anyone to look). D6 also still carried three pre-ruling paragraphs,
+one of which said the GM had not ruled. FR-013.1's timing paragraph, the Summary's two stale claims,
+D5's body against its own heading, and the FR-012/SC-012 guard-table wording were all corrected, and
+`tasks.md` would otherwise have implemented the withdrawn design.
+
+**Amendment round 5: FAITHFUL.** The spec specifies what the GM asked and what they ruled, adds nothing
+they did not ask for, and the shipped code matches it - verified in source rather than from this history.
+Two things were owed while landing, neither a fidelity change and both done in the same commit: D7's
+closing said all FIVE defects came from this feature's `entry-drift` dispatch when the fifth, a sibling
+text, came from the review (and a sibling text is outside what the agent is given); and the "two of our
+own figures that do not reconcile" item in R9 was being DUCKED rather than deferred - it needs only the
+manifest, it sits in a sentence this feature edited, and "it predates this feature" is the Principle XIII
+reach the root CLAUDE.md forbids by name. Measured and fixed: water 80% of the parcels, banks 20%, mean
+bank 5,643 sq ft, which now compose.
+
+**Amendment round 3** (`spec-fidelity`): all five round-2 items confirmed resolved and the shipped code
+verified against the spec line by line; ONE required change - R7's limit was recorded in research only
+and belongs in the spec as an accepted limitation. It is **D7**.
+
+**Amendment round 4** (`spec-fidelity`): five items, all taken. D7 misattributed its own discovery -
+it said the defects were found "by a person with a ruler ... not by this feature" when R6/R7 record that
+this feature's OWN `entry-drift` dispatch flagged them; the correction matters because the wrong version
+would tell a future session the agent cannot be used that way, which is the one lever that worked. A
+fifth defect of the same class was still reader-facing (`crop-vs-perimeter` telling four more classes the
+crop dike is "six to ten meters"). This feature had written the record's own correction history into a
+reader's page, which the doctrine forbids - in the feature about records going stale. No `record-format`
+or `quote-check` pass had been dispatched on the entry this feature changed. And round 3's non-blocking
+item had never been applied, because the patch carrying it aborted on an unrelated anchor.
+
+Both verification passes then ran. `record-format` confirmed the correction history was gone, and found
+that the correction had left a dangling negation ("so that is not one bank", arguing with an antecedent
+this feature had removed) plus five older sentences narrating the record's own past; all fixed.
+`quote-check` found that the same correction had falsified a downstream claim - the traditional figures
+were "carried as the band the drawing sits inside", true of the withdrawn 6.7 m and of neither
+replacement - and that the sentence stating "dikes of 6-10 m" carried no footnote while the record held
+its evidence. Both fixed; `research.md` R9 records what is deferred with its measurement.
+
+**Amendment round 2** (`spec-fidelity`, against the SHIPPED code): CHANGES REQUIRED, five items, all
+taken. It re-ran R5's measurement itself and reproduced 30/28/27 exactly, noting the filter needed
+`--no-merges` stated. The severe one: `scripts/_entry_owed.py`'s own docstring still described the
+withdrawn design - *"it never blocks ... there is no escape token ... the GM has not ruled"* - the exact
+sentence the ruling struck, reinstalled in the file a future session reads first. The withdrawn figures
+also survived in five shipped places including both skill guidelines and the guard-table row, four of
+them citing the R5 section that withdraws them. SC-009 was unmet (the pre-authorization was held by
+inspection, which is what SC-009 forbids - now a test). SC-007 asserted an outcome R6 records did not
+happen. And this history had no amendment entry while the Status line pointed at one.
 
 **Round 6** (`spec-fidelity`, 2026-09-12): **FAITHFUL.** All four round-5 items confirmed resolved in
 substance, not in appearance, and the load-bearing claims re-verified in source rather than taken from
@@ -330,8 +467,7 @@ items confirmed resolved; four small closing edits required, all taken, and the 
 explicitly as "(a) small and closing ... Do not escalate to the GM on account of this verdict."
 (1) D6 carried three of the four elements this project requires of an accepted-limitation record and was
 missing WHO CHOSE - which here is not bookkeeping, because "doctrine, unenforced" for the judgment half
-is a call the GM may want to make. D6 now says the session chose it on the review's own measurements and
-that the GM has not ruled, so the door reads as open.
+is a call the GM may want to make. D6 now says the session chose it on the review's own measurements and that the GM has not ruled, so the door reads as open - SUPERSEDED that same day by the GM's ruling; see the amendment entry above.
 (2) FR-013.1 claimed the pairs are handed to the agent "before the work lands". False, and contradicted
 by round 2's own recorded aside: the report does not block and `push_cmd` prints then pushes in one
 invocation, so the dispatch follows as a further commit. Stated honestly now, with the `page-check`-at-
