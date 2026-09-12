@@ -16,7 +16,7 @@ dike the shed stands relative to the pond's inlet or outlet - the question the G
 met by a silence.
 
 So this feature changes the map for a reason that is constructional rather than sanitary, and it says
-so. Four of Kuwabata's seven sties stand 6-12 ft from a feed-sluice anchor on a stub only ~24 ft long,
+so. Four of Kuwabata's seven sties stand 6-12 ft from a feed-sluice anchor on a stub of 23.9 ft,
 so an 8 x 6 ft shed is drawn across the inlet culvert. The cause is a gap in the placer, not a roll:
 `pond_fixture_fits` holds a sty off `houses`, `farm_sheds`, `byres`, `wells`, `kosatsuba`,
 `footbridges`, `pig_sties` and `duck_pens`, and off nothing in the water system - while the engine's
@@ -84,7 +84,7 @@ not a thing anyone builds, and nothing about the dike-pond loop excuses it.
 
 **FR-002** On top of FR-001 the fixture MUST stand clear of the sluice stub by a working margin of
 **6 ft**, measured from EVERY drawn part of the fixture - a sty's footprint, a pen's dry run and its
-fence arc (the open polyline `duck_pens[].wet`) alike - to the nearest point of the stub (a segment, not its anchor: the stub is ~24 ft long and the
+fence arc (the open polyline `duck_pens[].wet`) alike - to the nearest point of the stub (a segment, not its anchor: a stub runs 19 to 41 ft, median 26.5, and the
 anchor alone understates the overlap badly, as `research.md` R1 now records). The reason is that
 someone has to stand at the gate and lift its boards, the sluice being "a protected opening in the pond
 dike that can be easily closed with wooden boards to regulate water level"; 6 ft is about two paces,
@@ -182,6 +182,13 @@ is worse than a gap: on ponds 5, 12 and 24 a feed stub passes THROUGH the sty's 
 feed stub. Three sheds have a culvert running through them and one fence is drawn across an inlet.
 
 **SC-002** Kuwabata still carries 7 sties and 2 duck pens.
+
+**SC-006** The distance used to verify SC-001, and ANY clearance predicate shipped in the placer,
+returns 0 when a stub intersects a drawn part or lies wholly inside one - proven by a case with a stub
+driven through a footprint, a case with a stub wholly inside one, and an open polyline that is not
+silently closed into a region. This criterion exists because this feature's own acceptance numbers were
+twice produced by a measure that could NOT return zero (`research.md` R1); without it, SC-001 could be
+verified by that same measure a third time, in the test meant to prove it.
 
 **SC-003** A test proves FR-001 fires: with the clearance removed, it goes red.
 
@@ -288,7 +295,8 @@ one's own intake is indefensible, and R6 re-simulated with the wet run shows it 
 the obligation now sits inside FR-005 as well as under "Out of scope", where an implementer would not
 have looked for it. Its second aside corrected `research.md` R1: the 6/7/8/12 ft figures there were
 ANCHOR distances and read as more comfortable than the map is; R1 now leads with the true
-footprint-to-segment clearances (0.13, 0.03, 0.08, 3.04 ft).
+footprint-to-segment clearances (0.13, 0.03, 0.08, 3.04 ft) - figures ROUND 3 then showed to be wrong
+in their turn: three of those four are 0. See the round-3 entry below.
 The reviewer independently re-verified round 1's three fixes, the 6 ft against R6, and FR-011's quoted
 passage against `archetypes.html:141`.
 

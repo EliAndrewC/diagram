@@ -13,7 +13,7 @@ Read from `pool/hamlets/kuwabata/kuwabata.json`; the hamlet tier is 1 px = 1 ft.
 | ... of which, the stub's chord INSIDE the footprint | 3.62, 2.56, 0.06 ft |
 | duck pen DRY run to nearest stub segment | 2.32, 10.70 ft |
 | duck pen FENCE ARC to nearest stub segment | **0** (crosses at 2404.8, 796.5), 12.91 ft |
-| sluice stub length | ~24 ft (`dikepond_sluices[]` a-to-b; min 19.1, max 41.2) |
+| sluice stub length | median 26.5 ft, mean 28.0, min 19.1, max 41.2 (feed-only median 27.7); the pond-5 stub, the motivating case, is 23.9 |
 | pond water area | median 28,920 sq ft = 4.03 mu = 0.27 ha |
 | shared dike width | median 21 ft = 6.5 m (parcel bbox less water bbox, both axes, all 26 ponds) |
 
@@ -23,7 +23,7 @@ Kuwabata is the ONLY map in either pool tree carrying pig sties.
 available to anyone measuring a thin feature against a small one.
 
 *First pass* gave the fixture's CENTER to the stub's pond-side ANCHOR - 6, 7, 8, 12 ft - which reads as
-a near miss. A stub is a ~24 ft SEGMENT, so measuring it by one endpoint overstates every distance to
+a near miss. A stub is a SEGMENT of 19-41 ft (median 26.5), so measuring it by one endpoint overstates every distance to
 it. Caught by spec-fidelity round 2.
 
 *Second pass* measured the drawn footprint to the segment, but by SAMPLING the footprint boundary at 8
@@ -33,9 +33,10 @@ three sties and 0.188 for the pen's fence. Caught by spec-fidelity round 3, whic
 numbers from the method, which is how the method was identified.
 
 The true figures are in the table above and they are not near misses: on three ponds the feed stub
-passes THROUGH the shed, and the duck pen's fence crosses its stub. Any distance function this feature
-ships MUST return 0 on intersection and MUST be selftested against a stub driven through a rect -
-otherwise SC-001's no-overlap clause would score today's crossing shed as 0.13 ft and pass it.
+passes THROUGH the shed, and the duck pen's fence crosses its stub. Any distance function this feature ships MUST return 0 on intersection and MUST be selftested against a
+stub driven through a rect - otherwise SC-001's no-overlap clause would score today's crossing shed as
+0.13 ft and pass it. That MUST is carried by **spec SC-006**; a rule stated only here would bind
+nothing, which spec-fidelity round 4 caught it doing.
 
 **The mechanism, read from the code rather than inferred.** `pondstock._bank_seat` returns the midpoint
 of the parcel edge nearest the house cluster, pulled in by `BANK_INSET_FT` = 5.5. `fields/landuse.py`
@@ -188,25 +189,33 @@ FR-004 promises no fixture is lost. Rather than discover that at the gate, the r
 against the shipped manifest: the placer's own pond order (grow-out ponds, nearest the house cluster
 first, pens before sties), each pond's parcel edges ranked by distance to the house cluster, each
 candidate seat tested against the true point-to-SEGMENT distance to every `dikepond_sluices[]` stub
-(not to its anchor - the stub is 24 ft long and the anchor alone understates the overlap).
+(not to its anchor - a stub runs 19-41 ft, median 26.5, and the anchor alone understates the overlap).
+
+**SUPERSEDED - kept only as the record of what was measured when.** This run tested the dry footprint
+alone and used the sampled distance R1 describes, so its clearance column is wrong throughout; the live
+figures are in the corrected run below.
 
 | working margin | pens | sties | worst clearance achieved |
 |---|---|---|---|
-| 0 ft (footprint only, FR-001 alone) | 2/2 | 7/7 | 5.5 ft |
-| 4 ft | 2/2 | 7/7 | 13.1 ft |
-| 6 ft | 2/2 | 7/7 | 13.1 ft |
-| 8 ft | 2/2 | 7/7 | 13.1 ft |
-| 12 ft | 2/2 | 7/7 | 17.1 ft |
+| 0 ft (footprint only, FR-001 alone) | 2/2 | 7/7 | ~~5.5 ft~~ |
+| 4 ft | 2/2 | 7/7 | ~~13.1 ft~~ |
+| 6 ft | 2/2 | 7/7 | ~~13.1 ft~~ |
+| 8 ft | 2/2 | 7/7 | ~~13.1 ft~~ |
+| 12 ft | 2/2 | 7/7 | ~~17.1 ft~~ |
 
-Every fixture places at every margin tried, so FR-004 costs nothing on this map, and the margin can be
-chosen on its own merits rather than against a placement budget. The flat 13.1 ft across 4-8 ft says the
-binding seat is the same one throughout - the rule is not scraping against its limit, which is what a
-number rising in lockstep with the margin would have shown.
+Every fixture PLACED at every margin tried, which is the one conclusion that survived the correction:
+FR-004 costs nothing on this map, and the margin can be chosen on its own merits rather than against a
+placement budget. (An earlier reading of the flat 13.1 ft column - that the binding seat is the same one
+throughout - rested on the superseded figures and is dropped; the corrected run's flat 8.5 ft supports
+the same point and is where it is now made.)
 
 **Re-run with the duck pen's FENCE ARC included, on a corrected distance** (spec-fidelity rounds 2 and
 3 - the first run tested the dry footprint only, and the second used the sampled measure described in
-R1). The distance now returns 0 on intersection and is selftested against a stub driven through a rect,
-a stub wholly inside one, and a clear gap:
+R1). The distance now returns 0 on intersection. It is `measure_geom.py`, committed beside this file, and it
+CARRIES its selftest (`python3 measure_geom.py`) rather than claiming one: a stub driven through a rect,
+a stub wholly inside one, a clear gap, and an open polyline that must not be silently closed into a
+region. Verified independently by spec-fidelity round 4 against shapely - 300,000 random trials, max
+absolute error 1.1e-14, zero disagreements on the zero/nonzero verdict:
 
 | working margin | pens | sties | worst clearance achieved |
 |---|---|---|---|
