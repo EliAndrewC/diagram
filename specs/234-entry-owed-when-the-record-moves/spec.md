@@ -68,10 +68,22 @@ the exact delta this feature exists for, shipping green and never printing once.
 
 ### The gated half
 
-**FR-007** A class's `Entry:` heading MUST resolve to at least one research question, enforced by a gate
-test naming the class that fails. This fires on exactly the thing it names and is never correct work,
-which is what qualifies it to be gated at all (the bar the root `CLAUDE.md` sets in its
-"Deliberately NOT enforced" note).
+**FR-007** A class's `Entry:` heading MUST resolve to at least one research question, enforced in
+**both** of the two places feature 173's file-size bar is enforced: a gate test naming the class that
+fails, AND the push-time check in `scripts/sync-with-main.sh` beside `check-file-scale.py` and
+`check-duplicate-defs.py`. This fires on exactly the thing it names and is never correct work, which is
+what qualifies it to be gated at all (the bar the root `CLAUDE.md` sets in its "Deliberately NOT
+enforced" note).
+
+**The gate alone would not do.** A heading breaks when a section in `research/*.html` is renamed, and a
+research-page-only delta owes NOTHING: `gate-stamp.py`'s `SKIP_ONLY_AREAS` is `{"browser"}` and its
+`--check` skips it with the comment "research and test edits owe no gate at push" (line 451), while the
+`page` area covers only `interactive/assets/*` and `classes/*.py`. So the delta shape that BREAKS a
+heading - by construction a research edit touching no Python, which is also R2's 30-of-32 shape - runs
+no gate, no `make page-check` and no push obligation. A gate-only check would surface the breakage as an
+inherited red on the NEXT session's unrelated engine change. This is exactly the reasoning FR-006 and
+`research.md` R3 apply to the report, and the round-2 review caught that the spec had not applied it to
+its own other half.
 
 **FR-008** A deliberately silent entry MUST stay legal in the form `fallow` already uses -
 `research/fields.html (no dedicated entry - recorded as silent)` - and MUST be recognized EXPLICITLY
@@ -102,10 +114,26 @@ records why it did not change. The root `CLAUDE.md` guard table MUST gain a row,
 enumeration of what is enforced and where - the row stating plainly that the staleness half REPORTS and
 the heading half GATES.
 
-**FR-013** The guideline MUST route the judgment where this project already routes judgment about
-reader-facing prose: to a subagent on Opus. A named pair is a reason to run `record-format` (and
-`quote-check` where the assertions moved) over the changed entry, which the standing rules already
-require of a changed research entry - the report's contribution is that the session KNOWS to.
+**FR-013** The judgment - does this modal still say what its section says - MUST be performed by a
+subagent that actually performs it. `record-format` and `quote-check` do NOT: `record-format` reads a
+RESEARCH ENTRY as its reader would ("You decide nothing about the map or the rule"), `quote-check`
+judges whether a quotation supports the assertion it hangs on, and neither one ever opens a `Kind`
+docstring. Naming them here would have required nothing that is not already required and pointed the
+session at a pass that comes back green without looking at the modal - which is the GM's own failure
+reinstalled one level up: everyone believes something checked it, nothing did. The round-2 review caught
+this, and it is recorded rather than quietly corrected because the draft's wording was persuasive.
+
+So this feature adds `.claude/agents/entry-drift.md`: given a class's EXPLANATION prose and the current
+text of the section its `Entry:` names, it reports **IN-STEP**, **DRIFTED** (naming the sentence of the
+modal the section no longer supports, or the finding the section now carries that the modal does not),
+or **CANNOT-TELL** (with what it would need). Verification, not judgment about the map: it never edits
+and never decides a rule. `model: opus` like every subagent check (GM 2026-09-07), which
+`tests/test_agent_models.py` enforces.
+
+**FR-014** The guidelines written by FR-012 MUST state plainly that `record-format` and `quote-check`
+are the changed RESEARCH ENTRY's own standing obligations and are NOT a check on any modal, so that a
+future reader of `research/CLAUDE.md` or `interactive/classes/CLAUDE.md` cannot mistake a green pass
+from either for one.
 
 ## Success criteria
 
@@ -117,7 +145,10 @@ tree will correctly say nothing.)
 **SC-002** Over the same fixture with the class's `What:`/`Why:` prose also changed, the script is
 silent; with only its `Entry:` tag changed, the script still names it (FR-002).
 
-**SC-003** Breaking any class's `Entry:` heading turns the gate red, naming the class.
+**SC-003** Breaking any class's `Entry:` heading turns the gate red, naming the class - AND a delta
+whose ONLY change is a renamed research heading is refused at push, by the session that renamed it. The
+second half is the one that matters and the one a gate-only check silently fails; a criterion that does
+not distinguish the two passes on an engine delta that happened to run the gate.
 
 **SC-004** Changing `fallow`'s declared silence into a broken heading turns the gate red - the carve-out
 does not swallow the rule.
@@ -126,6 +157,12 @@ does not swallow the rule.
 
 **SC-006** Deleting the script's matching surface turns FR-011's test red rather than producing a quiet
 pass.
+
+**SC-008** `.claude/agents/entry-drift.md` exists, pins `model: opus`, passes
+`tests/test_agent_models.py`, and its contract names the three verdicts. Its worked example is feature
+233's own pair, run and recorded there: the `PigSty` modal against the section 233 rewrites, which must
+come back DRIFTED before 233's docstring rewrite and IN-STEP after it. A new agent whose first real
+dispatch is the case that motivated it is the cheapest honest proof it does anything.
 
 **SC-007** `make hooks-test` green, `make done` green, `make page-check` green.
 
@@ -159,6 +196,29 @@ in this repository has one and its absence would otherwise read as an oversight.
   its own work, wants the GM's call, and is not begun here.
 
 ## Review history
+
+**Round 2** (`spec-fidelity`, 2026-09-12): all nine round-1 items confirmed addressed in substance, and
+two NEW required changes, both taken.
+(1) FR-007 gated the heading check at a target the breaking delta does not run - the spec made exactly
+this argument for the report in FR-006 and failed to apply it to its own other half. `gate-stamp.py`
+line 451 skips `research/` at push, so a renamed heading would have surfaced as an inherited red on the
+next session's unrelated work. FR-007 now enforces at the gate AND at push, and SC-003 pins the
+research-only delta, which the old criterion could not distinguish from an engine delta that happened to
+run the gate.
+(2) FR-013 routed the judgment to `record-format` and `quote-check`, neither of which reads a `Kind`
+docstring at all - so as drafted it required nothing new and pointed the session at a green pass that
+never looks at the modal. That is the GM's own failure one level up. Replaced with a real agent
+(`entry-drift`) that performs the comparison, plus FR-014 so the guidelines say plainly that the other
+two are not a check on a modal. SC-008 pins it to feature 233's own pair.
+The reviewer independently verified 0 of 51 broken entries, the `Makefile:122` short-circuit, and that
+FR-002's prose/data partition is the code's own (`_base.py` `_TAGS` less `_DATA_TAGS`), noting the
+partition should be DERIVED from `_DATA_TAGS` rather than restated - taken as part of FR-010's shape
+rule.
+**Its aside, recorded for the GM and NOT acted on**: the report's only channel that runs for the
+dominant delta shape is the push, so a pair is surfaced at the end of the work rather than during it. If
+that proves too late in practice, the lever is to make a research-page edit owe `make page-check` at
+push - a one-line change to `SKIP_ONLY_AREAS` semantics, and a COST decision (it would put a ~26 s
+target on every research edit), which is the GM's to make rather than this feature's.
 
 **Round 1** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, nine items. The central one killed
 the design: the reviewer replayed the proposed push-time refusal over the repository's own history and
