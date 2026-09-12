@@ -53,7 +53,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
     install_site_boundary(s, plan)
-    s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0}
+    s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
     _hw0, _hh0 = (
         s.px(46) * 0.85,
         s.px(28) * 0.85,
@@ -69,7 +69,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]
-    rng = random.Random((plan.spec.seed * 2654435761) & 0xFFFFFFFF)
+    # A RE-ROLL DRAWS A DIFFERENT LATTICE (feature 226, cohort seeds 11 and 25). `generate` re-rolls a map that stranded a
+    # farmhouse with that ground forbidden, and under the old random cloud the retry explored new pockets by itself; the
+    # lattice keeps the FIRST survivors of the same draw, so a retry that forbade one seat kept every other, and the
+    # stranded house came back a pitch away. The draw is salted by how many seats are forbidden - the first roll is
+    # unchanged, and each retry lays the lattice at a new phase.
+    rng = random.Random((plan.spec.seed * 2654435761 + 7919 * len(getattr(s, "_avoid_seats", None) or ())) & 0xFFFFFFFF)
     placed = 0
     lat, dep = seat["lat"], seat["dep"]
 
@@ -237,13 +242,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
                 placed += 1
     _cloud_placed = 0
-    for attempt in range(5):
+    for attempt in range(7):
         if placed >= plan.spec.households:
             break
-        # THE LAST ROUND IS THE RESCUE (feature 226): the quota is still short after four rounds of the lattice, so the
-        # fifth re-walks the band with the placer's old fifteen-ring spiral - the reach that seated a toy hamlet's tenth
-        # household by a long slide. Never run while the quota is met, so the counted guesses stay small on every pool map.
-        s._spiral_rings = 15 if attempt == 4 else 6
+        # THE LAST ROUNDS ARE THE RESCUE (feature 226): the quota is still short after four rounds of the lattice, so
+        # rounds five to seven re-walk a wider band with the placer's old fifteen-ring spiral - the reach that seated a toy
+        # hamlet's tenth household by a long slide, and the ground cohort seed 25 needs once the reed-marsh toe (in the
+        # boundary since the review of this feature) takes the wet half of its crescent: 14 of 20 seated without them.
+        # Never run while the quota is met, so the counted guesses stay small on every pool map.
+        s._spiral_rings = 15 if attempt >= 4 else 6
+        s._seat_search["rounds"] = attempt + 1  # the lattice rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
         # each round widens the band a little (and reaches a little further back from the field)
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
         # A JITTERED LATTICE OVER THE BAND (feature 226 FR-003, D3). The band the rolled cluster shape describes is kept -
@@ -267,7 +275,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # and thin out behind.
             ly = -wdep + (ly + wdep) * 0.75
             _sx4, _sy4 = seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly
-            if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * 0.8 for kx, ky in _kept) or any(math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])):
+            # (a rescue round keeps the lattice against the STANDING houses only: the guesses it spends are the point of it)
+            if (attempt < 4 and any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * 0.8 for kx, ky in _kept)) or any(
+                math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])
+            ):
                 continue  # the lattice: a seed too near one kept or one standing is the same guess again
             _kept.append((_sx4, _sy4))
             if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):

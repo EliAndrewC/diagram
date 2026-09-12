@@ -161,3 +161,11 @@ def test_existing_walk_ignores_a_heap_entry_a_better_route_has_already_beaten() 
     ways = [[a, b], [a, c], [c, b]]  # direct 100.0 against about 50.0 + 50.0 through c
     got = existing_walk(ways, a, b, 2.0)
     assert got is not None and got <= 100.0 + 1e-9, "the shortest of the two routes, never the stale one"
+
+
+def test_a_way_whose_first_stretch_has_no_length_carries_no_nub() -> None:
+    """A repeated vertex at either end gives a zero-length stretch, and a turn cannot be measured over
+    it: the nub test declines rather than divides by zero, and the way is left alone."""
+    ways = [[(0.0, 0.0), (0.0, 0.0), (10.0, 0.0)]]
+    assert hg.ways.drop_end_nubs(ways) == []
+    assert ways[0] == [(0.0, 0.0), (0.0, 0.0), (10.0, 0.0)]

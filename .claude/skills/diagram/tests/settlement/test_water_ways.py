@@ -712,3 +712,18 @@ def test_junction_floor_protects_a_crossing_and_ignores_a_fraying_neighbor() -> 
     assert junction_floor(lane, [{"pts": [(100.0, 400.0), (100.0, 500.0)]}], set(), 5.0, me=1) == 0.0
     # a degenerate record is skipped rather than crashing
     assert junction_floor(lane, [{"pts": [(100.0, 1.0)]}], set(), 5.0, me=1) == 0.0
+
+
+def test_trim_lane_stubs_leaves_a_lane_alone_when_both_its_ends_already_arrive():
+    """The bar of an H: both ends stand on a junction, nothing is pulled back, and the record is not
+    rewritten or re-inked - the equal-points branch that a re-roll of the pool stopped reaching."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["lanes"] = [
+        {"pts": [[100, 300], [900, 300]], "w": 4},
+        {"pts": [[100, 700], [900, 700]], "w": 4},
+        {"pts": [[500, 300], [500, 700]], "w": 4},  # the bar: both ends on the other two
+    ]
+    s._lane_ink = [[], [], []]
+    s.trim_lane_stubs()
+    assert s.M["lanes"][2]["pts"] == [[500, 300], [500, 700]], "the bar is untouched"

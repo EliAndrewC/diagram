@@ -508,3 +508,43 @@ the hem, which would retire the plot-by-plot and ditch-by-ditch scans), clear of
 marsh, the pond, the stream and the feeder), clear of the bundles already standing (their boxes, and the eave
 gap only for the nearest), and the yards' and gardens' sun. Cheapest test first - the house center against the
 chords and the placed boxes - would also dispose of most of the spiral's offsets in microseconds.
+
+## The site boundary: the ground asked once, the guesses counted (feature 226, 2026-09-12)
+
+The answer to the section above. `hamletgen/homesteads/boundary.py` computes the ground a homestead may stand on
+ONCE per roll: the paddy's facing chains (feature 140's, asked by side), one `unary_union` outline with holes of
+everything else - the hem plots, the hard ground grown by `_hard_clear`'s 2 px tilt allowance, the marshes, the dry
+plots, the keep-out ellipses as 24-gons, and the reed-marsh toe asked of `toe_band()` before it is drawn (registered
+as hard ground, so the byres, sheds and wells refuse it too) - asked by containment, and the water courses and
+registered corridors as segments at the clearance their old tests applied (a segment the cultivated ground covers is
+dropped: 86-119 -> 0-7 per map). `_site_blocks_rect` asks nine points per rectangle. Seats are proposed FROM it: the
+front row walks the chains at the bundle pitch; the cloud keeps its draw but dedupes to a 0.8-pitch lattice; every
+seat is pre-tested (the smallest house's box against the boundary and the placed boxes) before the placer is asked;
+the spiral is six rings, with three fifteen-ring rescue rounds only while the quota is short. `meta.seat_search`
+counts every guess. The pads and point sets of every retired test are kept (spec 226 D2).
+
+| per house (pool, first roll) | inashiro | kashikawa | kuwabata | mizuguchi | sawada |
+|---|---|---|---|---|---|
+| candidate seats (pre-tested) | 4.3 | 4.8 | 7.0 | 2.5 | 1.6 |
+| placer calls | 1.5 | 1.4 | 1.8 | 1.1 | 1.3 |
+| positions the fit test saw | 55 | 62 | 105 | 28 | 46 |
+| rectangles judged | 194 | 220 | 387 | 113 | 163 |
+| boundary: chords / rings (vertices) / water + corridor segments | 7 / 3 (667) / 5 + 3 | 10 / 3 (654) / 5 + 3 | 7 / 1 + 1 hole (230) / 0 | 8 / 3 (627) / 5 + 3 | 7 / 3 (657) / 5 + 3 |
+
+Against the table above: 419 / 1,686 positions per house on Inashiro / Kuwabata, and 157 proposals for Kuwabata's
+16 houses, are 55 / 105 positions and 112 pre-tested candidates (28 placer calls). The rings are OUTLINES of a few
+hundred vertices, not "a few segments" - the chords, water and corridors are 13-22 per map; the review of the
+feature asked that the record say so. The stage: 1.0 / 1.3 / 2.3 / 0.8 / 1.0 s after feature 225 -> see specs/226
+research R2 for the after (0.2-0.6 s on the first measurement).
+
+Three things the cohort taught, each a shape to remember:
+
+- **A lattice needs a fresh phase per retry.** `generate` re-rolls a stranded map with that ground forbidden; the old
+  random cloud explored new pockets by itself, the lattice kept the same survivors and re-seated the same pocket. The
+  draw is salted by the count of forbidden seats.
+- **A new hard member cuts capacity somewhere.** The toe band took cohort seed 25 from 20 households to 14; the
+  rescue rounds widen further and drop the lattice dedupe (a rescue spends guesses on purpose).
+- **Judge a re-roll on every count it can lose.** The accept rule kept a retry that stranded fewer houses but SEATED
+  fewer (14 -> 13); and the cohort audit reported strands but not shortfalls. Both fixed; probe `roll_placed` per
+  attempt when a seed looks odd.
+

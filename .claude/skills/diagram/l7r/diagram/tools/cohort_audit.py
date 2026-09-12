@@ -57,6 +57,14 @@ def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     if _breach:  # feature 224: the scatter's predicted frame was too small - a strip inside the view may hold no scatter
         report.fail_lines.append(f"FAIL scatter_frame_breach -> the view reaches {_breach} px past the predicted scatter frame (left, top, right, bottom)")
         report.failures.append("scatter_frame_breach")
+    # A ROLL THAT SEATS FEWER HOUSEHOLDS THAN IT DECLARED IS A FAILURE HERE TOO (feature 226): the roll's own verdict is
+    # the reach count, the pool's gate holds `households_consistent` over the shipped maps, and nothing in between - a
+    # cohort seed that quietly seated 13 of 20 read as a pass. The manifest carries `meta.roll_placed` since feature 215.
+    _meta = (getattr(report, "manifest", None) or {}).get("meta") or {}
+    _placed = _meta.get("roll_placed")
+    if _placed is not None and int(_placed) < households:
+        report.fail_lines.append(f"FAIL households_seated -> {int(_placed)} of {households} declared households seated")
+        report.failures.append("households_seated")
     plan = report.plan
     header = f"--- Audit-{seed:02d}  seed={seed} households={households} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
     return header, report.failures, report.fail_lines

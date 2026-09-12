@@ -351,6 +351,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     stale = False  # ...and whether the files on disk came from a later roll we then rejected
     attempt = kept_attempt = 1
     after: list[str] = []  # the checks that forced each re-roll, in order
+    _kept_placed = int(_s.M["meta"]["roll_placed"])  # the households the kept roll seated - a re-roll may not seat fewer
     for _ in range(4):
         # THE LOOP'S ENTRY IS THE PREDICATE TOO (feature 166 T03). It used to also require the gate to
         # have NAMED `farmhouses_reach_a_way`, which is the same dependency in the entry condition that
@@ -377,8 +378,12 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # Under this feature's architecture every other defect belongs to the placer that caused it and
         # is caught by that placer's own test, so a reach loop that optimizes reach is correct rather
         # than merely convenient.
-        if len(seats2) <= len(seats):
+        # ...AND A RE-ROLL THAT SEATS FEWER HOUSEHOLDS IS NOT A FIX (feature 226, cohort seed 25 under the toe-marsh
+        # boundary: attempt 1 seated 14 of 20 with two stranded, attempt 2 seated 13 with none, and the loop KEPT the
+        # second - a map that lost a household to reach the rest). The reach count decides, the seated count may not fall.
+        if len(seats2) <= len(seats) and int(_s2.M["meta"]["roll_placed"]) >= _kept_placed:
             failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, list(avoid), attempt
+            _kept_placed = int(_s2.M["meta"]["roll_placed"])
         else:
             stale = True
             break

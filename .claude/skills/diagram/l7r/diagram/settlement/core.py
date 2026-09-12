@@ -88,7 +88,7 @@ class Settlement(
         # ground from everything, and the corridor grid; None outside a hamlet's homestead stage, where the fit test runs its old path
         self._site_chains: Any = None
         self._site_corridors: Any = None
-        self._seat_search: dict[str, int] = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0}  # the guesses counted (feature 226 FR-003)
+        self._seat_search: dict[str, int] = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # the guesses counted (feature 226 FR-003)
         self._spiral_rings: int = 6  # the placer's spiral, in 5 px rings (feature 226): 6 normally, 15 in the homestead stage's rescue round
         self._scatter_frames: list[tuple[tuple[float, float, float, float], tuple[float, float, float, float]]] = []  # (the frame, the parcel's box) per scatter that threw within one
         self._pending_stands: list[

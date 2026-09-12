@@ -3,6 +3,8 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+from typing import Any
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -288,3 +290,39 @@ def test_the_report_line_names_a_scatter_frame_breach_and_is_silent_without_one(
     assert "BREACHED" not in quiet.line() and quiet.line().rstrip().endswith("OK")
     loud = Report(plan=plan, failures=[], path=None, manifest={"meta": {"scatter_frame_breach": [-261.3, 5.6, -120.2, -307.7]}})  # type: ignore[arg-type]
     assert "SCATTER FRAME BREACHED by [-261.3, 5.6, -120.2, -307.7] px" in loud.line()
+
+
+def _scripted_rolls(monkeypatch, script: dict[int, tuple[int, list[tuple[float, float]]]]) -> None:  # type: ignore[no-untyped-def]
+    """`build` and `unreached_houses` replaced by a script keyed on how many seats the roll was told to avoid:
+    (households seated, the stranded seats). The loop under test is `generate`'s own."""
+    from l7r.diagram.hamletgen import driver
+
+    class _S:
+        def __init__(self, stranded: list[tuple[float, float]]) -> None:
+            self.M: dict[str, Any] = {"meta": {}, "houses": [], "lanes": [], "_stranded": stranded}
+
+        def finish(self, out: str, render: bool = False) -> None:
+            pass
+
+    def fake_build(plan: Any, avoid: Any = ()) -> _S:
+        placed, stranded = script[len(avoid)]
+        plan.placed = placed
+        plan.acres = 1.0
+        return _S(stranded)
+
+    monkeypatch.setattr(driver, "build", fake_build)
+    monkeypatch.setattr(driver, "unreached_houses", lambda M: [(x, y, 120) for x, y in M["_stranded"]])
+
+
+@pytest.mark.rolls_map  # it calls `generate`, which the marker scan reads as a roll; `build` is scripted here, so nothing is actually rolled
+def test_a_re_roll_that_seats_fewer_households_is_not_kept(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 226 (cohort seed 25 under the toe-marsh boundary): the first roll seated 14 of 20 with two stranded, the
+    re-roll seated 13 with none, and the loop kept the second - a map that lost a household to reach the rest. The reach
+    count decides; the seated count may not fall. A re-roll that seats no fewer and strands no more is still kept."""
+    spec = hg.HamletSpec(name="Reroll", seed=5, households=20)
+    _scripted_rolls(monkeypatch, {0: (14, [(1.0, 1.0), (2.0, 2.0)]), 2: (13, [])})
+    rep = hg.generate(spec, out_base=None, render=False)
+    assert rep.attempt == 1 and rep.failures == ["farmhouses_reach_a_way[2]"], "the re-roll that seated fewer was rejected; the first roll is the map"
+    _scripted_rolls(monkeypatch, {0: (14, [(1.0, 1.0), (2.0, 2.0)]), 2: (14, [])})
+    rep = hg.generate(spec, out_base=None, render=False)
+    assert rep.attempt == 2 and rep.failures == [], "a re-roll that seats no fewer and strands none is kept"

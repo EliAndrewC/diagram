@@ -157,3 +157,17 @@ def test_roll_one_reports_a_scatter_frame_breach_the_manifest_records(monkeypatc
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
     _header, failures, lines = ca.roll_one((13, 13))
     assert failures == ["scatter_frame_breach"] and "5.6" in lines[-1]
+
+
+def test_roll_one_reports_a_household_shortfall_the_manifest_records(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 226: a roll that seated fewer households than its spec declared is a cohort failure - the roll's own
+    verdict counts stranded houses only, and a seed that seated 13 of 20 read as a pass."""
+    rep = _report([])
+    rep.manifest = {"meta": {"roll_placed": 13}}
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    _header, failures, lines = ca.roll_one((25, 20))
+    assert failures == ["households_seated"] and "13 of 20" in lines[-1]
+    rep2 = _report([])
+    rep2.manifest = {"meta": {"roll_placed": 20}}
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep2)
+    assert ca.roll_one((25, 20))[1] == []

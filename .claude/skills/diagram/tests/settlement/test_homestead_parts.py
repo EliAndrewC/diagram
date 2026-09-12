@@ -64,6 +64,23 @@ def test_village_grove_skips_clumps_in_a_yards_sun_corridor():
         assert not (abs(cx - 300) < 15 + r and se - r < cy < se + 22 + r)
 
 
+def test_village_grove_south_sun_strip_follows_the_declared_corridor():
+    """The belt's southern keep-out is 22 px by default and the generator's `sun_corridor` depth when one is declared
+    (39 ft on the scripted hamlets, the depth a farmhouse owes the same bed). The settlement-review of feature 226
+    measured the old contradiction: 7 of Kashikawa's 22 beds had a 10 m clump 24-38 ft south of them, no rule firing."""
+    poly = [(200, 380), (360, 380), (360, 560), (200, 560)]
+    s = _nuc_village()
+    s.M["threshing_yards"] = [{"x": 300, "y": 420, "w": 30, "h": 6}]
+    s.sun_corridor(39.0)
+    s.village_grove(poly, role="copse", dense=False)
+    vg = s.M["village_groves"][0]
+    r = vg["r"]
+    se = 420 + 3
+    assert vg["clumps"]
+    for cx, cy in vg["clumps"]:  # no clump's canopy within 39 ft south of the yard's edge (the strip is 39 + 2, a touch wider)
+        assert not (abs(cx - 300) < 15 + r and se - r < cy < se + 39 + r)
+
+
 def test_village_grove_keeps_the_windbreak_out_of_a_plots_west_sun_lane():
     """Feature 133 T10: with `west_sun_lane` on, a windbreak clump never stands in the lane (50 ft
     in the generator; any value here) west/southwest of a yard or bed; a copse is exempt, and the

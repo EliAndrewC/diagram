@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "c5c67f38",
+    "label": "226-start",
+    "utc": "20260912T055214Z"
+  },
+  "binding": "826a0aac22a9d71f733ab70ef09054048210a6b3ddae34f63a741cc67ce6e772",
+  "end": {
+    "commit": "976876a2",
+    "label": "226-end",
+    "utc": "20260912T062821Z"
+  },
+  "environment": "local",
+  "feature": "226-site-boundary-and-seats-from-it",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "008f34b2-3392-461d-bd88-fbb348290e9f",
+    "utc": "20260912T063659Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 8.0,
+      "39": 3.4,
+      "4": -3.2,
+      "47": -8.4
+    },
+    "total_pct": -0.4
+  },
+  "note": "Seed 25's +8.0% is stage_web 1.66 -> 2.74 s, the stage the delta shows growing and the only large term in the seed's +0.6 s; the diff touches no ways/web code (homesteads/boundary.py, seats.py, stages.py, rolling/fit.py, place.py, houses.py, core.py), so web can only have moved because the re-seated layout moved (spec D4), and re-measuring reproduces the bookend rows exactly - both trees re-roll seed 25 on farmhouses_reach_a_way, feature first roll web 2.76 s / homesteads 0.25 s then attempt 2 at 0.45 s (generate 14.6 s), main first roll 1.66 / 1.12 then attempt 4 (35.1 s), and _serve_stragglers documents the up-to-240-failed-routing-call bill per unreachable house, measured on seed 25 before; seed 39's +3.4% names notice 0.18 -> 0.68 and windbreak 0.27 -> 0.44, which are the two stages that grew; homesteads fell on all four seeds and the total is -0.4%.",
+  "verdict": "consistent"
+}

@@ -172,6 +172,12 @@ class StandsMixin:
         # ... and OUT of the SOUTHERN sun-corridor of every threshing yard + garden (a tree just south of them
         # blocks the drying/growing sun - +y is south). A touch wider than the check so it stays strictly clear.
         sun = [(o["x"], o["y"] + o["h"] / 2, o["w"] / 2 + cr + 2) for k in ("threshing_yards", "gardens") for o in self.M.get(k, [])]
+        # HOW DEEP THE SOUTHERN STRIP IS follows the generator's own sun corridor when it declares one (`_sun_corridor_ft`,
+        # 39 ft on the scripted hamlets - the depth a FARMHOUSE owes the same bed), else the 22 px this strip always was.
+        # The settlement-review of feature 226 (2026-09-12) measured the contradiction: the belt is the tallest thing on
+        # the map, the west lane it keeps is 50 ft, a house keeps 39 ft south, and this strip kept 22 - so 7 of
+        # Kashikawa's 22 beds had a 10 m clump 24-38 ft south of them with no rule firing.
+        _sun_depth = float(getattr(self, "_sun_corridor_ft", 22.0))
         # ... and OUT of the EASTERN sun-lane of every kitchen GARDEN: a tree just east blocks the MORNING sun
         # (the sun rises in the E; +x is east), so a garden on a house's lee/E side keeps clear sky to its east.
         # Entry = (garden east edge, garden cy, half-height + reach). See gardens_unshaded_from_east.
@@ -218,7 +224,7 @@ class StandsMixin:
             corridors=corr,
             circles=occ,
             displacers=occ_grove,
-            rects=[(sx - shw, se - cr - 2, sx + shw, se + 24 + cr) for sx, se, shw in sun]
+            rects=[(sx - shw, se - cr - 2, sx + shw, se + _sun_depth + 2 + cr) for sx, se, shw in sun]
             + [(ex - cr - 2, ey - ehh, ex + 24 + cr, ey + ehh) for ex, ey, ehh in east]
             + [(wx0 - wl - cr - 3, wy0 - cr - 1, wx0 + cr + 1, wy1 + wl + cr + 1) for wx0, wy0, wy1 in west],
         )

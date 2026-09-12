@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.sitegen.geom import centroid, unit
+from l7r.diagram.sitegen.geom import unit
 
 from ..consts import BUNDLE_PITCH, CLUSTER_ROW_SPAN, CLUSTER_SPAN_FACTOR, LANE_FRONTAGE_STANDOFF, Pt
 from ..plan import SitePlan
@@ -15,7 +15,7 @@ from ..plan import SitePlan
 # ---- STAGE 5: the homesteads --------------------------------------------------------------------
 
 
-def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = None) -> list[Pt]:
+def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = ()) -> list[Pt]:
     """Seats for the row of homesteads that FRONTS the field, offset from the field OUTLINE itself.
 
     Offsetting from the cluster band's straight near face is not the same thing and is not good
@@ -24,65 +24,12 @@ def front_row(plan: SitePlan, count: int, standoff: float = 46.0, chains: Any = 
     within 165 px of the outline) then fails on a map whose cluster is plainly beside its paddy.
     Following the outline also draws better - a farming hamlet's front row bends with the field edge
     the way a real one does, rather than ruling a straight line across a curved margin."""
-    seat = plan.seat
-    if chains:
-        return _front_row_from_chains(plan, standoff, chains)  # feature 226: from the site boundary, not the paddy envelope
-    env = plan.envelope
-    cen = centroid(env)
-    ax, ay = seat["along"]
-    # the stretch of outline this cluster fronts: everything within the band's lateral reach
-    # The row spans 1.6x the band's own length along the outline. Confined to `lat` exactly, all its
-    # candidates come off one short arc - and if that arc happens to be blocked (crop up to the bund,
-    # a delivery ditch's corridor, the field spur), the whole row is refused together and the field
-    # ends up ringed by four houses instead of five. Wrapping further round the field costs nothing:
-    # a seat too far along is dropped by the caller's own band test.
-    # The rolled shape governs how far the row wraps - see `CLUSTER_ROW_SPAN`. Without it the band
-    # aspect alone left an "elongated" map drawing 1.2:1, i.e. a declared knob that did not
-    # describe the sheet.
-    _rowspan = CLUSTER_ROW_SPAN.get(plan.cluster_shape or "crescent", CLUSTER_SPAN_FACTOR)
-    span = [(i, p) for i, p in enumerate(env) if abs((p[0] - seat["anchor"][0]) * ax + (p[1] - seat["anchor"][1]) * ay) <= seat["lat"] * _rowspan]
-    span.sort(key=lambda ip: (ip[1][0] - seat["anchor"][0]) * ax + (ip[1][1] - seat["anchor"][1]) * ay)
-    # SAMPLE BY DENSITY, NOT BY HOUSEHOLD COUNT (2026-08-17). `count` is what the caller still WANTS
-    # seated, but using it to space the candidates too made the row's resolution depend on the size
-    # of the village rather than on the length of the field edge it fronts - so a 10-household
-    # hamlet beside a 28-acre paddy got ten seats spread over a very long outline, several hundred
-    # px apart. The near margin is the busiest ground on the map (crop up to the bund, delivery
-    # ditches and their corridors, the field spur), so a coarse row loses most of its candidates to
-    # blocked ground and leaves the field ringed by three houses instead of five - which is cohort
-    # seed 22, where the front row placed 5 of 32 offers and only 3 finished inside `field_ringed`'s
-    # 165 px band.
-    #
-    # THE HONEST SPACING IS ONE BUNDLE PITCH: two homesteads cannot stand closer than that, so
-    # sampling finer wastes offers, and sampling coarser leaves gaps a blocked seat cannot recover
-    # from. Offering more costs nothing - a seat too far along is dropped by the caller's own band
-    # test, and the loop stops as soon as the households are seated. Measured across the cohort:
-    # seed 22 goes 3 -> 10 farmhouses within the band (and its gate clean), seed 1 goes 11 -> 15,
-    # seed 4 goes 15 -> 16, and no map loses ground. It is also how a farming hamlet really sits -
-    # the houses crowd the field they work.
-    _span_len = sum(math.dist(span[i][1], span[i + 1][1]) for i in range(len(span) - 1))
-    count = max(count, min(int(_span_len / BUNDLE_PITCH) + 1, 64))  # capped so a huge fan cannot make the row unbounded
-    out: list[Pt] = []
-    for k in range(count):
-        idx = span[min(len(span) - 1, round(k * (len(span) - 1) / max(1, count - 1)))][0]
-        a, b = env[idx], env[(idx + 1) % len(env)]
-        nx, ny = unit(-(b[1] - a[1]), b[0] - a[0])
-        if nx * (a[0] - cen[0]) + ny * (a[1] - cen[1]) < 0:
-            nx, ny = -nx, -ny
-        out.append((a[0] + nx * standoff, a[1] + ny * standoff))
-    # ORDER CENTER-OUT, so the row FILLS rather than SPREADS (settlement-review on Inashiro,
-    # 2026-08-17). Sampling by density fixed the starved row, but it also handed the placer a dense
-    # line of seats along the WHOLE reachable margin in span order, and the caller takes them until
-    # the households run out - so the row walked from one end of the arc to the other and the
-    # cluster stretched with it. Measured cost on Inashiro: width 569 -> 445 ft at unchanged length,
-    # elongation 3.79 -> 5.42 against 1.22 for the authored Ikegami on the identical brief, and two
-    # more households pushed past the end of the lane skeleton.
-    #
-    # Offering the same seats in a different ORDER fixes it without giving the density back: the
-    # busiest ground is the middle of the band, the row fills there first, and the `placed >=
-    # households` break stops it before it reaches the far ends - which is exactly what
-    # `lane_frontage` already does ("ordered from the cluster's center outward, so the lanes fill
-    # from their busy end"), and a nucleated hamlet grows the same way, outward from its middle.
-    return sorted(out, key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))
+    # THE ENVELOPE WALK IS RETIRED (feature 226, at the gate's coverage floor): every hamlet builds a site boundary
+    # before this runs, so the row is always offset from its chains; the walk along the paddy's own outline (one seat
+    # in two on the hem, which the chains exclude by construction) was unreachable and, under feature 174, deleted
+    # rather than kept for a caller that no longer exists. `count` is kept in the signature for the callers' sake; the
+    # chain walk samples at the pitch and caps at 64, as the walk did.
+    return _front_row_from_chains(plan, standoff, chains)
 
 
 def _front_row_from_chains(plan: SitePlan, standoff: float, chains: Any) -> list[Pt]:

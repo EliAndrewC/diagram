@@ -264,3 +264,14 @@ def test_a_footpaths_last_leg_is_routed_when_the_straight_link_is_refused(monkey
     assert len(s.M["lanes"]) > before, "the steading gets its footpath, by the routed tail"
     ends = [tuple(ln["pts"][-1]) for ln in s.M["lanes"][before:]] + [tuple(ln["pts"][0]) for ln in s.M["lanes"][before:]]
     assert any(abs(x) <= 6.0 for x, _y in ends), f"the routed tail must reach the way at x=0: {ends}"
+
+
+def test_a_web_lane_that_shadows_the_network_for_most_of_its_length_is_refused() -> None:
+    """A run lying within `WEB_SHADOW_FT` of an existing way for more than 60% of its points is the same
+    way again - a second tread beside the first - and is refused before any join is attempted. The pool
+    stopped reaching this branch when the homesteads re-seated (feature 226); the rule is unchanged."""
+    ends = [(6.0, 60.0), (6.0, 340.0)]
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=ends)
+    beside = [(6.0, float(y)) for y in range(50, 355, 5)]  # 6 ft east of the way, its whole length
+    assert hg.ways._lay_web_lane(s, beside, [], [], [], houses=ends) is False
+    assert len(s.M["lanes"]) == 1, "nothing was drawn"

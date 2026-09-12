@@ -27,7 +27,7 @@ def _site() -> Settlement:
 def test_the_boundary_is_a_few_chords_facing_the_seat_and_two_corridor_sets() -> None:
     s = _site()
     chains, (water, registered), (rings, holes) = site_boundary(s, (500.0, 150.0))  # the seat is north of the field
-    assert len(rings) == 3 and not holes, "the hem strip, the marsh and the pond are the others' outline; the paddy alone gives the chains"
+    assert len(rings) == 3 and not holes, "the hem strip, the marsh, and the pond with the toe band it lies in are the others' outline; the paddy alone gives the chains"
     chords = [c for ch in chains for c in ch]
     assert 1 <= len(chords) <= 30, len(chords)
     assert all(n[1] < 0 for _a, _b, n in chords if abs(n[1]) > 0.7), "the chords facing a northern seat have northward normals"
@@ -53,6 +53,26 @@ def test_the_boundary_path_refuses_the_hem_the_marsh_the_pond_the_stream_and_adm
     assert not s._site_blocks_rect((300.0, 150.0, 40.0, 28.0)), "open ground north of the hem, west of the stream"
     assert not s._rect_blocked((300.0, 150.0, 40.0, 28.0), fields=True) and s._rect_blocked((500.0, 290.0, 40.0, 28.0), fields=True), "_rect_blocked takes the boundary path"
     assert s._seat_search["rects"] >= 9
+
+
+def test_the_reed_marsh_toe_is_in_the_boundary_before_it_is_drawn() -> None:
+    """The settlement-review of this feature found three pool maps whose manifest put a farmhouse, a threshing floor and a
+    byre inside the toe-marsh polygon: `hinterland()` draws the toe after the houses, so `wet_polys` did not hold it at
+    seat time. The boundary asks `toe_band()` as the ways do. A seat WEST of a field whose fall is south: the ground west
+    of the paddy is on the house side of its chains, but the band below the crop's lowest point (its pad above it) is
+    the reeds' and is refused."""
+    from l7r.diagram.hamletgen.homesteads.boundary import install_site_boundary
+
+    s = Settlement(W=1000, H=1000, seed=3)
+    s.field_polys.append(SQUARE_FIELD)
+    s.M["meta"]["down_deg"] = 90  # downhill is +y, so the toe lies below the paddy
+    toe = s.toe_band()
+    assert toe and min(p[1] for p in toe) == 700.0 - 90.0, "the band's inner edge is the pad above the crop's lowest point"
+    plan = type("P", (), {"seat": {"cx": 150.0, "cy": 500.0}})()
+    install_site_boundary(s, plan)  # type: ignore[arg-type]
+    assert not s._site_blocks_rect((250.0, 500.0, 40.0, 28.0)), "open ground beside the paddy, uphill of the toe"
+    assert s._site_blocks_rect((250.0, 660.0, 40.0, 28.0)), "the same column in the toe band (the band is as wide as the crop plus its pad): refused before the reeds are drawn"
+    assert s._site_blocks_rect((250.0, 604.0, 40.0, 28.0)), "...and a house whose lower edge reaches the band's inner edge, grown by the tilt allowance"
 
 
 def test_a_member_thinner_than_half_a_side_is_still_caught_by_the_nine_points() -> None:
@@ -104,3 +124,26 @@ def test_the_ground_between_two_ponds_is_buildable_because_the_others_outline_ke
     assert not s._site_blocks_rect((500.0, 500.0, 40.0, 28.0)), "a house in the courtyard among the ponds"
     assert s._site_blocks_rect((400.0, 400.0, 40.0, 28.0)), "a house on a pond"
     assert s._site_blocks_rect((500.0, 780.0, 40.0, 28.0)), "a house on the field, by the paddy's own chains"
+
+
+def test_the_chain_walk_skips_a_zero_length_chord_and_caps_the_row_at_64() -> None:
+    """Two edges of the walk the pool never reaches: a chord whose ends coincide (a facing chain can carry one at a
+    corner) is stepped over, and a very long chain - here 9,000 px, 91 seats at the pitch - is thinned to 64 so a huge
+    fan cannot make the row unbounded (the old envelope walk's own cap, kept)."""
+    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
+    from l7r.diagram.hamletgen.homesteads.seats import front_row
+
+    plan = type("P", (), {"seat": {"cx": 4500.0, "cy": 100.0, "anchor": (4500.0, 300.0), "along": (1.0, 0.0), "lat": 10000.0}, "cluster_shape": "elongated"})()
+    chain = [((0.0, 300.0), (0.0, 300.0), (0.0, -1.0)), ((0.0, 300.0), (9000.0, 300.0), (0.0, -1.0))]
+    row = front_row(plan, 12, standoff=46.0, chains=[chain])  # type: ignore[arg-type]
+    assert len(row) == 64 and all(abs(y - (300.0 - 46.0)) < 1e-6 for _x, y in row)
+    xs = sorted(x for x, _y in row)
+    assert xs[0] == 0.0 and xs[-1] > 9000.0 - 2 * BUNDLE_PITCH, "the thinning keeps the whole span, not the first 64"
+
+
+def test_a_block_polygon_with_fewer_than_three_points_is_no_member() -> None:
+    s = Settlement(W=1000, H=1000, seed=2)
+    s.block_polys.append([(100.0, 100.0), (200.0, 100.0)])  # a degenerate registration
+    s.block_polys.append(SQUARE_FIELD)
+    _chains, _corr, (rings, holes) = site_boundary(s, (500.0, 150.0))
+    assert len(rings) == 1 and not holes, "the two-point polygon contributes nothing; the square is the outline"

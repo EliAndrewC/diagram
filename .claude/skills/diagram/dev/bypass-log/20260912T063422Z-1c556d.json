@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T063422Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review is already running over the snapshot pool-226b of this content; the first gate failed only on a test marker"
+}

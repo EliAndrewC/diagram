@@ -86,7 +86,7 @@ def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[A
         [list(s.hard_polys)[i] for i in range(len(s.hard_polys))]
         + [list(wp) for wp in s.wet_polys if len(wp) >= 3]
         + [[(v[0], v[1]) for v in d["poly"]] for d in (s.M.get("dry_plots", []) or []) if d.get("poly") and len(d["poly"]) >= 3]
-    )
+    )  # (the reed-marsh toe is among `hard_polys` by the time this runs - `install_site_boundary` registers it)
     for poly in hard_area:
         q = member(poly, TILT_ALLOWANCE_PX * s.bscale)
         if q is not None:
@@ -173,6 +173,16 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
     `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001)."""
     seat = (float(plan.seat["cx"]), float(plan.seat["cy"]))
+    # THE REED-MARSH TOE IS HARD GROUND FROM HERE ON, ASKED BEFORE IT IS DRAWN (settlement-review of this feature,
+    # 2026-09-12). `hinterland()` lays the toe marsh after the structures, so `wet_polys` does not hold it at seat time -
+    # and the review found three maps whose manifest put a farmhouse, a threshing floor and a byre inside the toe polygon
+    # (Kashikawa's house 10 wholly, 46 px deep). The ways already ask `toe_band()` for the same reason (`ways/track.py`,
+    # `ways/web.py`). Registered ONCE among `hard_polys` rather than added to the blob alone, so the boundary (which reads
+    # `hard_polys`) and every placer after this stage (`_hard_clear`: the byres, the sheds, the wells) refuse it alike -
+    # a first cut put it in the blob only, and Inashiro's byre 2 stood 28 px into the reeds.
+    _toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
+    if len(_toe) >= 3 and _toe not in s.hard_polys:
+        s.hard_polys.append(_toe)
     chains, corridors, outline = site_boundary(s, seat)
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)

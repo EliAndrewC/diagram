@@ -573,3 +573,20 @@ def test_avenue_along_answers_the_LAST_seat_when_there_is_no_segment_to_walk() -
     from l7r.diagram.settlement.shrines_wells.torii import avenue_along
 
     assert avenue_along([(7.0, 9.0)], [], 100.0) == (7.0, 9.0)
+
+
+def test_courtyard_annex_span_and_a_house_with_neither_side_wall_free():
+    """The courtyard form's two measured edges the re-seated pool no longer reaches: the span a byre may stand from
+    its owner (the house's longest half-extent, past the byre's half-depth, plus the search budget), and the seat
+    search declining when a neighbor abuts each side wall - the caller then falls back to the shared spiral."""
+    from l7r.diagram.settlement.shrines_wells.byres import COURTYARD_REACH, courtyard_annex_span
+
+    assert courtyard_annex_span(46.0, 28.0, 10.9) == 46.0 / 2 + 10.9 * 0.55 + COURTYARD_REACH
+    s = _crop_settlement()
+    owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}
+    s.M["houses"] = [
+        owner,
+        {"x": 300.0 - 40.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0},
+        {"x": 300.0 + 40.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0},
+    ]
+    assert s._courtyard_byre_seat(owner, 15.5, 10.5) is None
