@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T144952Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no pool manifest moved against main - this feature changes guards, tools and docs, and its own trigger reports no settlement whose layout moved"
+}

@@ -1,6 +1,6 @@
 # Feature 231 - review only when the layout moved
 
-**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5; round 1 CHANGES REQUIRED on FR-002's dispatch clause, its aside on FR-005 taken) - implementing.
+**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 2 of 5; round 1 CHANGES REQUIRED on FR-002's dispatch clause, its aside on FR-005 taken). Gate green; the trigger's own verdict on this feature is `no pool manifest moved against origin/main`, so it owes no settlement-review - which is the feature working.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - where feature 228's 32 minutes went, why the pair guard
 read the mirror, what "the layout moved" is in this repository's own terms, and what the reviewer
