@@ -74,7 +74,17 @@ inference, and only a counterfactual measurement settles an inference.
 
 This record first marked a quiet-threshold measurement OWED here, for a timing-record requirement of this
 feature's own. Spec-fidelity round 1 found that requirement to duplicate feature 239's FR-011c, and it was
-handed back to that session, so the threshold's single home is 239 and it is owed there. The corrected
-provenance of the observation that motivated it - contention moves a timing on this container, but the 2x
-that session first attributed to contention was mostly its own harness sampling three commands where its
-record claimed 560 - is kept here because it is why FR-009's `quantity` states the sample a figure measured.
+handed back to that session, so the threshold's single home is 239 and it is owed there.
+
+**There is no measured evidence of contention behind that rule, and this record no longer claims any.** The
+observation first cited here - the same command at 145 ms and then 303 ms an hour apart, the second while
+another session rolled a map - was corrected TWICE by the session that supplied it. Its in-process half was
+its own harness taking the first digit in argv as the sample size, so a run recorded as covering 560 commands
+timed three. Its spawned half, first said to stand as contention, was the same bug: 239's fifth review round
+re-ran that three-command sample on a quiet machine and got 317 ms. That session made four wrong attributions
+of one measurement before a re-run settled it. 239's FR-011c now keeps the load-average rule as a PRECAUTION
+for a shared container, with its threshold a guess that is owed - and this feature cites it only as that.
+
+What survives, and is why FR-009's `quantity` states the sample a figure measured: when a timing moves, the
+first thing to check is what the harness actually sampled, and a record that names its sample makes that
+check a read rather than an investigation.

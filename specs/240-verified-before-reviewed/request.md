@@ -29,9 +29,12 @@ carrying each figure's re-runnable command. Asked directly, that session's answe
 settlement-review half; 239 touches neither `.claude/agents/settlement-review.md` nor
 `scripts/pair-hooks.sh`; nothing of 239 is implemented yet, so whichever lands first sets the shape;
 build on `measurements.json` rather than defining a parallel format, and add fields if needed. Two
-warnings from its own rounds are carried into this feature's requirements: a timing taken while another
-session is rolling a map is corruption that looks like a result, and a recorded command that reads a
-corpus under `/tmp` is not recorded at all.
+warnings from its own rounds were carried into this feature's first draft: that a timing taken while
+another session is rolling a map is corruption that looks like a result, and that a recorded command
+reading a corpus under `/tmp` is not recorded at all. The second stands. The first was WITHDRAWN by that
+session after two re-runs showed its only evidence to be a sampling bug in its own harness, with no
+contention measured at all; the load-average rule survives in 239 as a precaution, not a finding, and
+`research.md` R4 records the correction.
 
 ## The split, as the peer session stated it in full (2026-09-13)
 
