@@ -315,6 +315,32 @@ frontage of a compound that deliberately sits where nobody goes. So "by the road
 silent on the very thing the feature is for, and a traffic-sited feature can be parked in a quiet
 corner with the gate fully green. That is the gap you are here to close.
 
+**FIRST READ THE FEATURE'S OWN DECLARED OBJECTIVE, AND JUDGE IT AGAINST THAT** (GM 2026-09-12: *"I
+thought that the notice board was simply supposed to be in a place where everyone would end up seeing
+it. Often, and I think even typically, at the entrance to the settlement, like, at a place where the
+village lane connects to the settlement, which is a path that everyone would walk in order to leave the
+settlement. So why are we even measuring how close it is to most of the buildings? That seems like the
+wrong thing to measure."*). A dwelling count within 250 ft answers ONE objective - standing where the
+feet are densest - and several of these features are deliberately sited by a different one. The map says
+which: `meta.kosatsuba_seat` is `center`, `entrance` or the official's gate, rolled per settlement from
+the record's attested forms, and the engine drops its own traffic floor under an anchored seat on
+purpose (`siting.py`: *"the traffic floor applies only where traffic is the objective. Keeping it under
+an anchored placement would drag the board back toward the busy node the anchor just declined"*).
+
+So:
+
+- **`center`**: the dwelling count IS the test. Use it.
+- **`entrance`**: the test is whether EVERYONE PASSES - does the board stand on the one way in and out,
+  so that every departure walks by it? Answer that, in words, from the drawing. A dwelling count here
+  measures the objective the seat declined, and reporting it as a shortfall asks the map to be two
+  things at once. Report the count only as context, never as a finding, and never rank the seat against
+  "the busiest stretch of the same way".
+- **a seat the manifest does not declare** (a well, a punishment ground, a stage): traffic, as below.
+
+A feature whose drawn position does not serve its OWN declared objective is still an error - an
+`entrance` board that stands where a second track also leaves, or 200 ft short of the junction everyone
+actually turns at, has failed the thing it was sited for.
+
 For **each** traffic-sited feature, judge the position against the map's own busiest ground:
 
 - **Where does this settlement's traffic actually concentrate?** Name it first, from the drawing: the
@@ -396,8 +422,10 @@ FEATURE-OR-SLACK SWEEP (every named open area and every ground-cover polygon):
 TRAFFIC-SITING SWEEP (every feature that exists to be PASSED - notice board, punishment ground,
 gate market, theater stage, public wells):
 - this map's busiest ground is <where, and what makes it busy>
-- <each feature>: sited at <where, in words> -> <n> dwellings/businesses within ~250 ft, against
-  <n> at the busiest stretch of the same way -> ON THE TRAFFIC ok | QUIET CORNER (error)
+- <each feature>: declared objective <from the manifest, or "traffic"> -> sited at <where, in words>
+  -> judged against THAT objective: for traffic, <n> dwellings/businesses within ~250 ft against <n> at
+  the busiest stretch of the same way; for an entrance seat, does every departure pass it, yes or no
+  -> SERVES ITS OBJECTIVE ok | QUIET CORNER (error, traffic seats only) | WRONG FOR ITS OWN SEAT (error)
 
 NUISANCE-AXIS SWEEP:
 - declared wind (windward=) -> downwind is <dir>; declared water (water_flow/down_deg) -> downstream is <dir>
@@ -413,11 +441,30 @@ split and mark ok | WRONG, or write "no split-spelling words on the sheet".
 VERDICT: pass | needs-work | broken
 
 ERRORS (contradicts the docs, the notes, history, or itself):
-1. WHAT / WHY (the norm violated) / suggested fix direction
+1. WHAT / WHY (the norm violated, NAMED AND LOCATED - the constant, the test, the research heading or
+   the notes line, so a reader can open it) / suggested fix direction
 
 QUESTIONABLE (defensible, but it needs a RESEARCH PASS - never "a GM ruling"):
 1. WHAT / what the historical record would have to say to settle it / your best read of which way
    it will go
+
+**EVERY FINDING NAMES THE NORM IT MEASURES AGAINST, OR SAYS THERE IS NONE** (GM 2026-09-12, after a
+notice-board finding reached them that no rule supported: *"it seems like there was a sort of two
+hundred and fifty foot number that was just pulled out of nowhere. So what exactly is up with that?
+like, is there some place in our code or in our comments or in the research or in the subagent check
+that has that number as a thing that we would care about, or did they just make that up out of
+nothing?"*). Before you report a number as a shortfall, find what makes it one and cite it by name:
+a constant, a check, a research heading, a ruling in the notes. If you cannot find one, say so in the
+finding - *"no norm: the engine's nearest figure is N, used as a RELATIVE comparator between candidate
+seats, not as a bar"* - and it is a NITPICK at most, never an error and never a question for the GM.
+
+The 250 ft dwelling count is the worked example of getting this wrong. The engine's figure is 260 px,
+and it is a scoring radius used to RANK candidate board seats against each other
+(`structures/fixtures/siting.py`); no rule anywhere says a board must reach N households, and the same
+file drops the traffic objective entirely under an anchored seat. So "5 of 20 within 250 ft" measured
+nothing the project had ever asked for, and it was reported twice in one day as though it did. **A
+relative comparator read as an absolute bar is the shape to watch for**: if your number comes from a
+scoring expression, the only honest use of it is to compare two positions on the same map.
 
 NITPICKS:
 1. ...

@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "dd8738d2",
+    "label": "237-start",
+    "utc": "20260912T235642Z"
+  },
+  "binding": "b3e054e23bafe8dd241ae10c3490ae36ab313bcc2c1d5a6fb4470c64d32e5dd1",
+  "end": {
+    "commit": "8dfc1332",
+    "label": "237-end",
+    "utc": "20260913T004254Z"
+  },
+  "environment": "local",
+  "feature": "237-lean-test-collection",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "008f34b2-3392-461d-bd88-fbb348290e9f",
+    "utc": "20260913T004514Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -4.0,
+      "39": -8.0,
+      "4": 1.8,
+      "47": -2.8
+    },
+    "total_pct": -3.1
+  },
+  "note": "seed 4 field is the only stage that grew (1.82 -> 1.88s, +0.06, positive on all four -end bookends) and stage_field is exactly where the diff defers shapely (waterfields/comb.py + seams/geoms,plots,pockets,close.py: module-level imports replaced by _load_shapely); a 0.14-0.24s one-time import dwarfs it, and the reverted inline sentinel left no per-call cost the data can see - seed 47 field, the heaviest geometry in the set, fell 4.63 -> 4.44s. Two figures in the text read high: the range is +0.06 to +0.10s (the fresh bookend is +0.06), and consistent-sign holds only among GROWING stages - seed 39 track (-0.12 to -0.14) and seed 47 field also keep a sign, both improvements.",
+  "verdict": "consistent"
+}

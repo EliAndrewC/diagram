@@ -3,14 +3,16 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 from l7r.diagram.settlement import edge_dist, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
-    SPUR_SETBACK,
+    STEADING_ARRIVAL_FT,
     TRACK_FABRIC_GAP,
+    WAY_END_REACH_FT,
+    WEB_REACH_FT,
     Poly,
     Pt,
 )
@@ -273,34 +275,131 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     return None
 
 
-def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = ()) -> Poly:
+def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
+    """Every piece of a steading's own BUILT ground, as the shapes a lane end can arrive at.
+
+    The farm buildings as rectangles - houses, byres, field sheds, the three keys
+    `lanes_do_not_break_mid_run` already treats as solid - and the steading's plots as their recorded
+    rings: the threshing yard and the kitchen garden, which are the dooryard a path is worn to.
+
+    GROUND COVER IS NOT A DESTINATION, and the distinction is the one `_serve_stragglers` already
+    draws in prose: the grazing commons and the homestead groves are what the ground IS, not things
+    built on it, and a lane crosses them. A tread that stops 29 ft into the commons has stopped in a
+    field, which is what this rule exists to catch, so they are not in this set.
+
+    Axis-aligned for the rectangles, like every other solid the lane rules read: a farmhouse's `rot`
+    turns its roof, and a rotated quad would move these distances by less than the 4 ft step the
+    clip walks in."""
+    out: list[Poly] = []
+    for key in ("houses", "byres", "farm_sheds"):
+        for r in M.get(key) or []:  # type: ignore[union-attr]
+            if all(k in r for k in ("x", "y", "w", "h")):
+                x, y, hw, hh = float(r["x"]), float(r["y"]), float(r["w"]) / 2.0, float(r["h"]) / 2.0
+                out.append([(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)])
+    for key in ("threshing_yards", "gardens"):
+        for r in M.get(key) or []:  # type: ignore[union-attr]
+            ring = r.get("poly") or r.get("outline") or ()
+            if len(ring) >= 3:
+                out.append([(float(a), float(b)) for a, b in ring])
+    return out
+
+
+def end_serves(
+    q: Pt,
+    segs: Sequence[tuple[Pt, Pt]] = (),
+    houses: Sequence[Pt] = (),
+    fields: Sequence[Poly] = (),
+    steadings: Sequence[Poly] = (),
+    bars: tuple[float, float, float] = (WAY_END_REACH_FT, WAY_END_REACH_FT, WAY_END_REACH_FT),
+) -> bool:
+    """Does a lane END reach something worth walking to - another way, a farmhouse, the field, or the
+    built ground of a steading it has arrived at?
+
+    ONE BODY, READ BY THE PLACER AND BY THE CHECK, which is this skill's standing rule about a rule and
+    its verdict ("placement and its check must read the SAME source"). They had drifted twice over:
+    `_trim_to_service` measured ways at 40 ft and house centers at 90 while the gate asked 60 of all
+    three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
+    tread that had arrived at a garden fence - the fourth clause here, at `STEADING_ARRIVAL_FT`, which
+    is its own distance for the reason that constant records. `bars` exists for the one caller that
+    wants its own three figures: a field spur stops at the baulk, not at the crop."""
+    _way, _house, _field = bars
+    if any(seg_dist(q[0], q[1], a, b) <= _way for a, b in segs):
+        return True
+    if any(math.dist(q, h) <= _house for h in houses):
+        return True
+    if any(edge_dist(q[0], q[1], f) <= _field for f in fields):
+        return True
+    return any(edge_dist(q[0], q[1], sp) <= STEADING_ARRIVAL_FT for sp in steadings)
+
+
+def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()) -> Poly:
     """Pull a run's ends back to the last point that actually serves something.
 
-    `lanes_reach_something` asks of every internal lane end that it reach another way within 40 ft or
-    a farmhouse within 90; a web lane's ends come out of the clipper, which stops where the ground
-    stops being walkable and has no opinion about whether anything is there. Trimming BEFORE the ink
-    goes down is better than trimming after: `trim_lane_stubs` drops anything under its 71 ft floor,
-    which is the right rule for a skeleton arm and would delete the door paths this feature exists to
-    draw."""
+    ONE BAR, THE GATE'S, FOR EVERY CALLER. `WAY_END_REACH_FT` is what
+    `lanes_reach_something` asks of every internal lane end - within it of another way, a farmhouse or
+    the field - so that is what this trims to, and a caller cannot leave an end the gate will then fail.
+    There used to be an `end_reach` parameter whose absence meant a looser private triple (40 ft to a
+    way, 90 ft to a HOUSE CENTER, `SPUR_SETBACK + 4` to the field); feature 227 moved all four callers
+    onto the gate's figure one at a time, at which point the default was reachable only from this
+    module's own unit tests - a literal agreeing with a test and with nothing that ships, which is the
+    shape this project deletes rather than keeps (feature 174's rule for an unreachable line, and
+    `dev/lessons.md` on a stale literal that agrees with itself). Found by a settlement-review reading
+    the comments rather than the code, 2026-09-12.
 
-    # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way
-    # on the map whose whole purpose is served by something that is neither a house nor another lane.
-    # Without this the trim cut Mizuguchi's spur 32 ft short of the paddy - it removed the only part
-    # of the lane that did the job the lane was drawn for, and did so on the grounds that nothing was
-    # there. The setback matches `SPUR_SETBACK`: a path stops AT the bund, and the last few feet are
-    # the baulk, so "touching the envelope" means within that, not inside it.
+    The ends that are NOT traded for the bar are named instead of excepted: `keep` carries the houses no
+    other way comes within `WEB_REACH_FT` of, because the late pass runs after `_serve_stragglers` and
+    trimming to the bar alone there took back the tail that was an outlying steading's only way (cohort
+    seed 39 stranded a farmhouse the moment both passes were tightened together).
+
+    A web lane's ends come out of the clipper, which stops where the ground stops being walkable and has
+    no opinion about whether anything is there. Trimming BEFORE the ink goes down is better than trimming
+    after: `trim_lane_stubs` drops anything under its 71 ft floor, which is the right rule for a skeleton
+    arm and would delete the door paths this feature exists to draw."""
+
+    # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
+    # the map whose whole purpose is served by something that is neither a house nor another lane. Without
+    # this clause the trim cut Mizuguchi's spur 32 ft short of the paddy - it removed the only part of the
+    # lane that did the job the lane was drawn for, on the grounds that nothing was there. The bar is the
+    # gate's, not a baulk distance: this comment used to say the setback matched `SPUR_SETBACK` so that
+    # "touching the envelope" meant within that, and no caller has asked for that figure since feature 227.
+
     def serves(q: Pt) -> bool:
-        if any(seg_dist(q[0], q[1], a, b) <= 40.0 for a, b in segs) if segs else False:
+        # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
+        # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them counts
+        # as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
+        # farmhouse breaks the map's own rule, and tightening both at once stranded cohort seed 39. It is measured
+        # to the house's CENTER because that is what `farmhouses_reach_a_way` - the rule being protected here -
+        # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
+        if any(math.dist(q, h) <= WEB_REACH_FT for h in keep):
             return True
-        if any(math.dist(q, h) <= 90.0 for h in houses):
-            return True
-        return any(edge_dist(q[0], q[1], f) <= SPUR_SETBACK + 4.0 for f in fields)
+        return end_serves(q, segs, houses, fields, steadings)
 
     out = list(run)
     while len(out) > 2 and not serves(out[-1]):
         out.pop()
     while len(out) > 2 and not serves(out[0]):
         out.pop(0)
+    # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
+    # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
+    # Walk the end IN along its own last segment instead, four feet at a time, to the first point that serves.
+    # An arm no point of which serves reaches nothing at all and is handed back too short to draw, for the
+    # caller to drop - which is the honest answer for a way with nothing at either end.
+    #
+    # UNCONDITIONAL SINCE FEATURE 227. This was guarded by `if end_reach is not None`, which is to say it ran
+    # for every caller that asked the gate's bar and not for the private default - and once all four callers
+    # asked the bar, the guard only ever read True. It is the same walk for every way on the map now.
+    for _ in range(2):
+        while len(out) >= 2 and not serves(out[-1]):
+            _a, _b = out[-2], out[-1]
+            _d = math.dist(_a, _b)
+            if _d <= 4.0:
+                out.pop()
+                continue
+            _t = (_d - 4.0) / _d
+            out[-1] = (_a[0] + (_b[0] - _a[0]) * _t, _a[1] + (_b[1] - _a[1]) * _t)
+        out.reverse()
+    if len(out) < 2 or not serves(out[0]) or not serves(out[-1]):
+        return list(out[:1])
     return out
 
 

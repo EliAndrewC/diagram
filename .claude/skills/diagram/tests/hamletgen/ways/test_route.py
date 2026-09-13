@@ -60,6 +60,15 @@ def test_unjog_takes_the_lattice_step_out_when_the_chord_is_clear() -> None:
     assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))
 
 
+def test_unjog_cuts_a_hairpin_straight_out_when_the_chord_is_clear() -> None:
+    """The other arm of the same rule: a turn past 140 degrees is a hairpin, and where the chord across it is clear
+    the vertex is DELETED rather than eased - the walk then steps back one so the join it just made is judged too."""
+    path = [(0.0, 0.0), (100.0, 0.0), (2.0, 3.0), (0.0, 60.0)]
+    out = hg.ways._unjog(path, [], [], [])
+    assert (100.0, 0.0) not in out and out[0] == (0.0, 0.0) and out[-1] == (0.0, 60.0)
+    assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))
+
+
 def test_unjog_keeps_the_jog_the_ground_forces() -> None:
     """A wall across the chord: the steps stay, because the chord would cross it."""
     wall = [(50.0, 2.0), (58.0, 2.0), (58.0, 5.0), (50.0, 5.0)]

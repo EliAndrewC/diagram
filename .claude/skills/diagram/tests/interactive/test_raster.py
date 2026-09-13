@@ -5,11 +5,15 @@ the engine, so the render is exercised for real rather than faked."""
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # annotations only; the runtime import sits in the tests that use it (feature 237)
+    from PIL import Image
+
 import io
 import re
 
 import pytest
-from PIL import Image
 
 from l7r.diagram.interactive import raster
 from l7r.diagram.interactive.raster import OFFMAP_MARGIN, PALETTE_STEP, class_keys, data_uri, drop_offmap, id_map, picture, resvg_png, viewbox_of
@@ -100,12 +104,16 @@ TINY = (
 
 
 def _png(data: bytes) -> Image.Image:
+    from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
 def test_the_picture_is_a_jpeg_at_r_px_per_map_px() -> None:
     """Feature 222 (GM 2026-09-11): the picture is a lossy JPEG - the farmhouse's own color to within the
     quantization, not exactly (the lossless WebP it replaces was exact; the note at `PICTURE_FORMAT`)."""
+    from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     data = picture(TINY, 2.0)
     assert data is not None
     im = Image.open(io.BytesIO(data))
@@ -214,6 +222,8 @@ def test_the_picture_child_matches_an_in_process_encode_and_a_failing_child_rais
     the same encoder, so its bytes are the in-process encode's bytes exactly; and a child that dies is an
     error with its stderr, never a picture that is not one. Since feature 222 the encode is the JPEG at
     `PICTURE_QUALITY` / `PICTURE_SUBSAMPLING`."""
+    from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     im = Image.new("RGBA", (24, 16), (0x8B, 0x73, 0x55, 255))
     im.putpixel((3, 4), (0, 120, 200, 255))
     src = io.BytesIO()

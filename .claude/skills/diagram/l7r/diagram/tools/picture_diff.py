@@ -24,13 +24,44 @@ import argparse
 import io
 import sys
 from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
-from PIL import Image
+if TYPE_CHECKING:  # the names for the type checker; `_load_arrays` binds the runtime ones
+    import numpy as np
+    from PIL import Image
 
 from l7r.diagram.interactive import raster
 from l7r.diagram.tools import page_lit
+
+_ARRAYS_LOADED = False
+
+
+def _load_arrays() -> None:
+    """Bind `numpy` and `PIL.Image` into this module, on first use rather than at import (feature 237).
+
+    WHY. `numpy` costs 17.9 MiB of resident memory and `PIL` another 2.3, and a module-level import here
+    made every one of the ten gate workers pay both merely to COLLECT this tool - a diagnostic that one
+    worker runs, from `make page-lit` or `make picture-diff`
+    (`specs/237-lean-test-collection/research.md` R9 and R10). It is the same deferral FR-010 made for
+    `shapely`. The GM asked for NUMPY in those terms on 2026-09-13 (*"the same thing for numpy which we
+    already did for shapely"*); `PIL` rides along on this session's judgment, because the two are adjacent
+    lines feeding the same functions here - disclosed in spec D9, at 2.3 MiB a worker against numpy's 17.9,
+    so it can be reversed on its own. The measurement is `research.md` R14: this is the larger half of the
+    two deferrals, because `shapely` pulls `numpy` in anyway wherever this tool is already loaded.
+
+    The names are bound into this module's globals ONCE, so every call site afterwards is the plain global
+    lookup it was before (spec D6); the sentinel makes a repeat call two bytecodes. The per-call cost is
+    irrelevant here in any case - nothing in this file runs per plot - but the form is the one the engine
+    already uses, and a second form would be a second thing to learn.
+    """
+    global _ARRAYS_LOADED, np, Image  # binding this module's own names is the point
+    if _ARRAYS_LOADED:
+        return
+    import numpy as np
+    from PIL import Image
+
+    _ARRAYS_LOADED = True
+
 
 #: a channel must move by MORE than this for a pixel to count as differing (see page_lit.THRESHOLD)
 THRESHOLD = 6
@@ -39,6 +70,7 @@ OFF_CLASS = "off any class"
 
 def load_from_text(svg_text: str, width: int | None = None) -> Image.Image:
     """An SVG already in memory, rendered by resvg - `load`'s body for a document that is not on disk."""
+    _load_arrays()
     size = ["--width", str(width)] if width else ["--zoom", "1"]
     png = raster.resvg_png(svg_text, *size, *raster.RESVG_FONT_ARGS)
     if png is None:
@@ -49,6 +81,7 @@ def load_from_text(svg_text: str, width: int | None = None) -> Image.Image:
 def load(path: str, width: int | None = None) -> Image.Image:
     """A render as an RGB image: a PNG as it is; an SVG rendered by resvg at `width` px (at 1 px per
     map px when no width is given), with the page's font mapping so text renders as on the page."""
+    _load_arrays()
     if not path.endswith(".svg"):
         return Image.open(path).convert("RGB")
     with open(path, encoding="utf-8") as fh:
@@ -57,6 +90,7 @@ def load(path: str, width: int | None = None) -> Image.Image:
 
 def diff_stats(a: Image.Image, b: Image.Image, threshold: int = THRESHOLD) -> dict[str, Any]:
     """pixels, differing, share, max_delta, bbox (x0, y0, x1, y1 inclusive, or None) and the boolean mask."""
+    _load_arrays()
     if a.size != b.size:
         raise ValueError(f"the renders differ in size: {a.size} against {b.size} - render the SVG at the other's width")
     a_ = np.asarray(a.convert("RGB")).astype(np.int64)
@@ -79,6 +113,7 @@ def id_map_of(svg_text: str) -> tuple[np.ndarray, dict[int, str]] | None:
     by the HTML target only - the drawn SVG is byte-identical to what it was before feature 134, on purpose
     - so handing this the map's own `.svg` yields an empty palette and attributes every differing pixel to
     nothing. That is what the first run against Kuwabata did. Use `id_map_of_page` for a rendered page."""
+    _load_arrays()
     keys = raster.class_keys(svg_text)
     if not keys:
         return None
@@ -91,6 +126,7 @@ def id_map_of(svg_text: str) -> tuple[np.ndarray, dict[int, str]] | None:
 
 def id_map_of_page(html: str) -> tuple[np.ndarray, dict[int, str]] | None:
     """The id map a rendered PAGE already carries, decoded - no second render. `None` when it carries none."""
+    _load_arrays()
     decoded = page_lit.decode_idmap(html)
     if decoded is None:
         return None
@@ -101,6 +137,7 @@ def id_map_of_page(html: str) -> tuple[np.ndarray, dict[int, str]] | None:
 def by_class(mask: np.ndarray, red: np.ndarray, palette: dict[int, str], scale: float) -> dict[str, int]:
     """{class key: differing pixels on its ink}, plus OFF_CLASS for the rest. `scale` is picture px per
     map px (the render's width over the id map's), so a picture pixel is read at its map coordinate."""
+    _load_arrays()
     ys, xs = np.nonzero(mask)
     mx = np.floor(xs / scale).astype(np.int64)
     my = np.floor(ys / scale).astype(np.int64)

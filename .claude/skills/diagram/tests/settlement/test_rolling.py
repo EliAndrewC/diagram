@@ -1,7 +1,6 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
 import math
-import random
 
 import pytest
 
@@ -13,13 +12,15 @@ def test_nucleated_cluster_is_grove_less_with_yards_and_gardens():
 
     s = _nuc_village()
     s.lane([(300, 180), (322, 620)], width=5, clearance=11, worn=True)  # the WORN (unpaved) lane branch
-    s.headman(560, 300)  # headman = a LARGER plain farmhouse
-    rng, n = random.Random(3), 1
-    for _ in range(80):
-        if n >= 14:
-            break
-        if s.try_place(500 + rng.uniform(-120, 120), 460 + rng.uniform(-200, 200), "plain"):
-            n += 1
+    assert s.headman(520, 300)  # headman = a LARGER plain farmhouse; its whole envelope (194 x 166) west of the paddy at x=640
+    # SEATS ON A LATTICE, as the generator proposes them (feature 227): the placer tests the homestead's whole envelope
+    # once and makes no spiral, so a random throw mostly lands on a standing bundle and is refused - the way to seat a
+    # cluster is to propose seats at the pitch, which is what `stage_homesteads` does.
+    n = 1
+    for gx in range(380, 640, 100):
+        for gy in range(200, 720, 90):
+            if n < 14 and s.try_place(gx, gy, "plain"):
+                n += 1
     drawn = s.farmsteads()
     assert drawn >= 10
     assert s.M["lanes"] and s.M["lanes"][0]["worn"] is True  # worn lane recorded
@@ -67,12 +68,6 @@ def test_rect_on_water_skips_a_degenerate_course_and_far_ones():
     ]  # real, but far from the probe rect
     assert s._water_obstacles() == [(s.M["streams"][1]["poly"], 9 / 2 + 5, (1500, 1300, 1500, 1400))]
     assert s._rect_on_water((400, 400, 24, 16)) is False  # far course bbox-rejected -> clear
-
-
-def test_slide_nuc_stops_when_already_at_target():
-    # a target function returning the current point -> distance 0 < 1.5 -> the immediate-break branch
-    s = _nuc_village()
-    assert s._slide_nuc(500, 500, 23, 14, lambda cx, cy: (cx, cy)) == (500, 500)
 
 
 def test_garden_shaded_detects_a_house_to_the_south():
@@ -313,8 +308,6 @@ _ROLLING_SURFACE = frozenset(
         "_farmsteads_bundle",
         "_farmsteads_legacy",
         "_field_adjacent",
-        "_field_dist",
-        "_fits_any_side",
         "_garden_beds",
         "_garden_beds_clear",
         "_garden_shaded",
@@ -333,7 +326,6 @@ _ROLLING_SURFACE = frozenset(
         "_rect_on_water",
         "_relax_gardens_south",
         "_slide",
-        "_slide_nuc",
         "_solve_homestead",
         "_sun_corridor_ok",
         "_water_obstacles",
@@ -459,14 +451,87 @@ def test_the_sun_corridor_clears_a_bundle_that_has_no_yard_of_its_own() -> None:
     assert off._sun_corridor_ok({"house": (400.0, 400.0, 46.0, 28.0)}) is True
 
 
-def test_a_nucleated_bundle_with_no_fitting_side_is_refused_after_the_slide() -> None:
-    """`_place_bundle_nucleated` (feature 220, the step-1 re-fit's coverage): a seat the first probe accepts can
-    still fit NO side once the two slides have moved it - the paddy hug, then the pack along the cluster - and
-    then there is no bundle to return. Asked with the three collaborators patched on the instance."""
+def test_a_nucleated_bundle_whose_envelope_fits_but_no_side_passes_the_parts_rules_is_refused() -> None:
+    """`_place_bundle_nucleated` (feature 227): the envelope stands clear, so the parts are laid out - and if no
+    garden side passes the rules that read the parts (the wall rule, the eave gap, the sun), there is no bundle
+    to return. Asked with the two collaborators patched on the instance."""
     from tests.settlement._builders import _nuc_village
 
     s = _nuc_village()
-    s._fits_any_side = lambda *a, **k: True  # type: ignore[method-assign]
-    s._slide_nuc = lambda cx, cy, hw, hh, fn, keep_field=False: (cx, cy)  # type: ignore[method-assign]
-    s._bundle_fits = lambda geom: False  # type: ignore[method-assign]
+    s._envelope_blocked = lambda env: None  # type: ignore[method-assign]
+    s._parts_fit = lambda geom: False  # type: ignore[method-assign]
     assert s._place_bundle_nucleated(300.0, 300.0, 23.0, 14.0) is None
+
+
+def test_the_envelope_is_the_box_around_every_garden_side() -> None:
+    """Feature 227 FR-001/D2: the envelope encloses the house, the yard, the kura and the garden on EITHER side -
+    the largest configuration the roll can take - so a part laid inside it never needs ground it did not clear."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    env = s._bundle_envelope(500.0, 500.0, 46.0, 28.0, shed=True)
+    for side in s._NUC_SIDES:
+        g = s._bundle_geom(500.0, 500.0, 46.0, 28.0, side, shed=True)
+        for rect in (g["house"], g["yard"], g["shed"], *g["gardens"]):
+            assert rect[0] - rect[2] / 2 >= env[0] - env[2] / 2 - 1e-6 and rect[0] + rect[2] / 2 <= env[0] + env[2] / 2 + 1e-6
+            assert rect[1] - rect[3] / 2 >= env[1] - env[3] / 2 - 1e-6 and rect[1] + rect[3] / 2 <= env[1] + env[3] / 2 + 1e-6
+    assert env[2] > 46.0 + 2 * 0.48 * 46.0 - 1e-6, "wider than the house plus a garden on both walls"
+
+
+def test_envelope_blocked_answers_clear_ground_one_neighbor_or_refused() -> None:
+    """Feature 227: None on clear ground, the ONE placed box that overlaps it on clear ground (so the placer can make its
+    single computed move), True when the ground refuses it or two boxes overlap it."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    s.placed = type(s.placed)([]) if hasattr(s.placed, "__iter__") else []
+    assert s._envelope_blocked((500.0, 500.0, 120.0, 90.0)) is None
+    s.placed.append((560.0, 500.0, 60.0, 40.0))
+    assert s._envelope_blocked((500.0, 500.0, 120.0, 90.0)) == (560.0, 500.0, 60.0, 40.0)
+    s.placed.append((440.0, 500.0, 60.0, 40.0))
+    assert s._envelope_blocked((500.0, 500.0, 120.0, 90.0)) is True, "two neighbors: no single move clears both"
+    assert s._envelope_blocked((30.0, 500.0, 120.0, 90.0)) is True, "off the canvas margin"
+
+
+def test_the_one_computed_move_clears_a_single_neighbor_by_the_measured_overlap() -> None:
+    """Feature 227 FR-002 (the GM: "measuring the distance to the neighbor and then moving however much the correct
+    amount is"): a seat whose envelope overlaps one placed box is shifted once by the overlap plus the 2 px margin,
+    along the axis that needs the smaller push, away from that neighbor - and seated there, clear of it."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    s._parts_fit = lambda geom: True  # type: ignore[method-assign]
+    s.placed.append((500.0 - 23.0 - 15.0, 500.0, 40.0, 20.0))  # a box on the house's own west wall: it overlaps every configuration's box
+    got = s._place_bundle_nucleated(500.0, 500.0, 46.0, 28.0)
+    assert got is not None
+    cx, cy, geom = got
+    assert cx > 500.0 and cy == 500.0, "moved east, along the axis of the smaller overlap, away from the neighbor"
+    assert s._envelope_blocked(geom["bbox"]) is None, "...by exactly enough to clear it"
+    assert s._seat_search["placer_calls"] == 1 and s._seat_search["positions"] <= 9, "the union, then at most one rectangle and one move per configuration"
+
+
+def test_parts_fit_refuses_a_house_whose_wall_stands_on_the_bund() -> None:
+    """Feature 227: the parts' rules run once at the seat - the first of them the wall rule against the paddy,
+    which the envelope test (nine points at the chord's own keep-out) cannot stand in for."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()  # the paddy east of x = 640
+    on_the_bund = s._bundle_geom(630.0, 300.0, 46.0, 28.0, "W")  # the house's east wall 13 px into the paddy
+    assert s._parts_fit(on_the_bund) is False
+    clear = s._bundle_geom(500.0, 300.0, 46.0, 28.0, "W")
+    assert s._parts_fit(clear) is True
+
+
+def test_bundle_side_fits_refuses_a_bundle_outside_the_bounding_ring() -> None:
+    """The dispersed path's side test (the town's and the village's placer): a bundle whose box reaches outside the
+    settlement's bounding ring - a walled town - is refused before any ground test."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    s.bound = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (0.0, 300.0)]
+    assert s._bundle_side_fits(s._bundle_geom(500.0, 500.0, 46.0, 28.0, "E")) is False
+    assert s._bundle_side_fits(s._bundle_geom(150.0, 120.0, 46.0, 28.0, "E")) is True
+    s.bound = None
+    assert s._bundle_side_fits(s._bundle_geom(20.0, 500.0, 46.0, 28.0, "E")) is False, "...and one whose box reaches past the canvas margin"
+    assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "E")) is False, "...and one whose east garden bed lies on the paddy at x = 640"
+    assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")) is True, "the same house with its garden on the west wall"

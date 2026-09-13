@@ -107,9 +107,26 @@ def _roll(weights: Sequence[tuple[str, float]], u: float) -> str:
 def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
     """Seat and draw the small fixtures of every farmstead. Returns the count placed.
 
-    Seated in `stage_hinterland` after the web and the board, like the household bamboo (T49): a
-    fixture hugs its house and is tested against every placed footprint, lane, paddy, marsh and pond
-    (`_strip_blocked`), so the web is never re-threaded and nothing is drawn on anything. Presence
+    Seated in `stage_hinterland` (stage 11) after the web, like the household bamboo (T49): a fixture hugs
+    its house and is tested against every placed footprint, lane, paddy, marsh and pond (`_strip_blocked`),
+    so the web is never re-threaded and nothing is drawn on anything.
+
+    THIS SENTENCE USED TO SAY "after the web and the board", AND THE BOARD IS STAGE 17 - four stages after
+    this one (the GM read it on the generated page, 2026-09-12, and it is wrong in the one direction that
+    matters: it claims this placer sees a feature it cannot). A docstring the page publishes is read by
+    somebody, so it is worth the same accuracy as a comment beside a branch.
+
+    AND THE ORDERING ITSELF IS QUESTIONED, by the GM in the same message: *"this farmstead fixtures
+    placement is happening as part of the hinterlands stage, which does not make any sense to me. Our
+    entire approach to homesteads is to place them and then determine what they have and then move on and
+    place more homesteads. So why would we move on to the next homestead that we are placing if we have not
+    placed all of the features on the previous homestead?"* The reason it is here is the lane web: a privy
+    that hugs a wall must keep off a tread, and at homestead time no tread exists, so seating the fixtures
+    early would mean either re-threading the web around them or drawing them on it. That is a REASON and not
+    necessarily the right design - deciding a homestead's whole contents at the homestead, and letting the
+    web thread around what is already there, is the other arrangement, and it is the one the rest of this
+    package follows. Recorded as an open question rather than answered here, because the measurement that
+    settles it is what the web does when the fixtures are already on the ground. Presence
     per house is positional (`_hjit`) against the hamlet's own share, which is rolled once per map
     inside the band above and declared in meta for the gate. Every seated fixture joins `s.placed`
     and `s.block_polys`, so the bamboo strips and the scrub keep off it."""
@@ -372,22 +389,47 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 corner = {"NW": (-(hw / 2 + off), -(hh / 2 + off)), "NE": (hw / 2 + off, -(hh / 2 + off)), "SW": (-(hw / 2 + off), hh / 2 + off)}
                 first = _roll(_SHRINE_CORNERS, u)
                 seats = [(*corner[first], w, d)] + [(*corner[k], w, d) for k, _ in _SHRINE_CORNERS if k != first]
-            for lx, ly, cw, ch in seats:
-                cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-                ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
-                if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
-                    continue
-                spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
-                s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=("pit" if kind == "manure" and plan.manure_form == "pit" else None))  # the rolled manure form (feature 150)
-                ring = [(cx - ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy + ext[1] / 2), (cx - ext[0] / 2, cy + ext[1] / 2)]
-                s.placed.append((cx, cy, ext[0], ext[1]))
-                s.block_polys.append(ring)
-                if kind == "privy":
-                    privy_at = (lx, ly)
-                elif kind == "shrine":
-                    shrines_left -= 1
-                count += 1
-                break
+            # THE SEATS, THEN THE SAME SEATS FURTHER OUT - and a MISS IS RECORDED (settlement-review of
+            # Kuwabata, 2026-09-12). This loop used to end without placing and without saying so when every
+            # seat was blocked, which is how a map came to draw 6 privies for 16 farmhouses against its own
+            # declared 0.851 share: a re-routed tread passed 5 and 8 ft from two steadings' privy seats, each
+            # inside the lane keep-out, and both records simply did not appear. Nothing in the tree could see
+            # it - the share is declared in `meta` and nothing compares the drawing to it.
+            #
+            # The outward rungs are STRICTLY ADDITIVE: a fixture that seats at its first choice never reaches
+            # them, so no map moves except where a fixture was previously dropped. Three rungs, at the wall
+            # gap again each time, which is how `clear_label_seat` and the board's own caption ladder ring
+            # outward for the same reason - the crowded ground is exactly where the thing has to stand.
+            _rungs = [(0.0, 0.0)] + [(px(8.0) * _k, px(8.0) * _k) for _k in (1, 2, 3)]
+            _seated = False
+            for _ox, _oy in _rungs:
+                if _seated:
+                    break
+                for lx, ly, cw, ch in seats:
+                    lx = lx + (_ox if lx >= 0 else -_ox)
+                    ly = ly + (_oy if ly >= 0 else -_oy)
+                    cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
+                    ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the raked rect's bbox
+                    if _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
+                        continue
+                    spin = 90.0 if (cw, ch) == (d, w) and w != d else 0.0  # a flank seat turns the glyph to lie ALONG the wall (review at T99: stacks stood end-on)
+                    s.farm_fixture(kind, cx, cy, rot=rot + spin, of=(hx, hy), form=("pit" if kind == "manure" and plan.manure_form == "pit" else None))  # the rolled manure form (feature 150)
+                    ring = [(cx - ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy - ext[1] / 2), (cx + ext[0] / 2, cy + ext[1] / 2), (cx - ext[0] / 2, cy + ext[1] / 2)]
+                    s.placed.append((cx, cy, ext[0], ext[1]))
+                    s.block_polys.append(ring)
+                    if kind == "privy":
+                        privy_at = (lx, ly)
+                    elif kind == "shrine":
+                        shrines_left -= 1
+                    count += 1
+                    _seated = True
+                    break
+            if not _seated:
+                # THE MISS IS RECORDED, so a drawing that departs from its own declared share cannot ship
+                # unremarked again. `meta.farm_fixtures_unseated` is what a reader and a check compare against
+                # `meta.farm_fixtures`; a silent drop is the thing that made the Kuwabata defect invisible.
+                _miss = s.M["meta"].setdefault("farm_fixtures_unseated", {})
+                _miss[kind] = int(_miss.get(kind, 0)) + 1
     return count
 
 

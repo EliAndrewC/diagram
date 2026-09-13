@@ -8,7 +8,7 @@ from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, seg_dist, seg_intersect
 
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, SUN_CORRIDOR_FT, WEST_SUN_FT, Pt
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
 from .boundary import install_site_boundary
 from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
@@ -64,20 +64,57 @@ def far_bank(x: float, y: float, brook: Sequence[Pt], placed: Sequence[Pt]) -> b
 
 
 def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
-    """Seat every declared household, and KNOW whether it worked.
+    """The farmhouses.
 
-    `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households -
-    a to-scale map depicts essentially every household (research/settlements.html "Is every household in a
-    hamlet actually drawn?") - so a hamlet that declares 15 and seats 12
-    fails, and the authored maps deal with that by tuning a hand-written candidate loop until the
-    number comes out. The script instead asks the placer, which is the only thing that actually knows
-    whether a seat is free: it draws candidates from the rolled cluster shape and, if the quota is
-    still short, GROWS the band and draws more, up to a cap.
+    Every household is seated here, and at this moment there is NOT ONE LANE ANYWHERE ON THE MAP: the houses
+    answer to the field, the water and each other, and nothing else has taken ground before them. Every way on the
+    finished map - the connector, the field spur, the cluster's spine and the alleys - is laid after this plate and
+    positioned from where these houses actually landed.
 
-    Growing rather than re-rolling is deliberate. A retry with a different seed would re-roll the
-    whole map to fix a local shortfall - the expensive, whack-a-mole loop the skill's dev notes warn
-    about. Widening the band changes only the ground the candidates come from, so the houses already
-    seated stay exactly where they are and the map converges instead of churning."""
+    The ground is asked ONCE. Before the first seat, the site boundary is computed from everything the map holds:
+    the paddy's outline as a few facing chords, everything else - the hem, the marshes, the ponds, the reed toe that
+    will be drawn later, the no-build ground - as one outline with holes, and the water courses and registered
+    corridors as segments. A candidate rectangle is judged at nine points against those and nothing else.
+
+    The seats are proposed where a house can stand. The FRONT ROW walks the paddy's chords at the bundle pitch, each
+    seat at a computed standoff - the wall rule's distance plus the reach of the homestead's core (the house, its
+    yard, its kura) toward that chord - pushed once further where the boundary's outline lies beyond the chord (a
+    dike's bank), and takes about the square root of (households times the rolled shape's aspect) houses, so a
+    crescent fronts the field with more of its houses than a round cluster does. The RANKS BEHIND are proposed behind
+    every standing house, one homestead's depth further from the field (and the yard's sun corridor where the ranks
+    climb north), in a brick pattern; only when a round seats nothing behind does the cluster grow along the field,
+    by the seats a pitch beyond each end of the rank. Only while the quota is still short after four rounds do the RESCUE rounds run: the old random cloud
+    over a wider band, seeded a third of a pitch apart, spending guesses on purpose. A re-roll after a stranded
+    farmhouse draws a different cloud.
+
+    Each seat is one placer call, and a call tests one rectangle first: the box around the homestead's
+    configurations, against the boundary and the placed boxes; where that is refused, each configuration's own box
+    in turn, with at most one computed move away from a single overlapping neighbor. The parts - the garden's side,
+    its beds, the kura - are laid inside a box the ground admitted, and the rules that read the parts (the wall rule,
+    the eave gap, the sun corridors) are asked once. No spiral of offsets, no sliding: a seat that does not fit is
+    refused and the next seat is offered. `meta.seat_search` counts every guess - candidates, placer calls,
+    rectangles, part layouts, the front row's share and the rounds - so the search is measured, never assumed.
+
+    `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
+    depicts essentially every household (research/settlements.html "Is every household in a hamlet actually drawn?") -
+    so a hamlet that declares 15 and seats 12 fails, and the stage records
+    the shortfall on the roll rather than re-rolling the whole map to fix a local one.
+
+    Steps:
+        l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary
+        l7r.diagram.hamletgen.homesteads.boundary.site_boundary
+        l7r.diagram.hamletgen.homesteads.seats.front_row
+        l7r.diagram.hamletgen.homesteads.seats._front_row_from_chains
+        l7r.diagram.hamletgen.homesteads.seats.lane_frontage
+        l7r.diagram.hamletgen.homesteads.seats._seat_allowed
+        l7r.diagram.settlement.Settlement.try_place
+        l7r.diagram.settlement.Settlement._place_bundle_nucleated
+        l7r.diagram.settlement.Settlement._bundle_envelope
+        l7r.diagram.settlement.Settlement._envelope_blocked
+        l7r.diagram.settlement.Settlement._parts_fit
+        l7r.diagram.settlement.Settlement.cluster_seeds
+        l7r.diagram.settlement.Settlement.farmsteads
+    """
     # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/homesteads.html, "The threshing
     # yard's sun"). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
@@ -92,10 +129,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
     install_site_boundary(s, plan)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
-    _hw0, _hh0 = (
-        s.px(46) * 0.85,
-        s.px(28) * 0.85,
-    )  # the SMALLEST house the placer may roll: the pre-test must never refuse a seat the placer could take (a first cut used the largest and seated 7 of 10 on a toy)
+    _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
 
     # THE HAMLET'S OWN BANK, HOUSE BY HOUSE (feature 230, settlement-review pass 7). `seat_cluster` keeps the BAND
     # off a margin the brook divides, and that is not the same as keeping every HOUSE on one bank: a band that
@@ -110,13 +144,18 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         return far_bank(x, y, _brook, [(float(b[0]), float(b[1])) for b in s.placed])
 
     def _pretest(x: float, y: float) -> bool:
-        """A candidate's cheap refusal before the placer is asked (feature 226 FR-003): a house-sized box on the house
-        side of the chains and clear of the corridors, clear of every placed bundle's box, and on the cluster's own
-        bank of the brook. Counted as a candidate."""
+        """Count a candidate (feature 226 FR-003). The cheap refusal that stood here - a house-sized box against the
+        boundary and the placed boxes - is the placer's own first test now (feature 227: the whole homestead's
+        ENVELOPE, `_envelope_blocked`). OPEN DEFECT (the 227/230 merge, 2026-09-13): with 230's far-bank rule as the only
+        refusal here, the reference cluster seats 195 px from its fields against the 60 px `cluster_abuts_fields` bar,
+        and 48 of 82 pool farmhouses stand beyond the engine's own `_field_adjacent` 165 px (settlement-review). The
+        fix is NOT to restore the box test - those locals are the envelope's now - it is to assert field adjacency on
+        the PLACED position and to score the envelope for it, which is the next piece of work on this feature.
+
+        THE BROOK'S FAR BANK STAYS HERE, though (feature 230). It is not a packing question the envelope can answer -
+        it is a site rule about which side of the water the cluster stands on - so it refuses before the placer."""
         s._seat_search["candidates"] += 1
-        if s._site_blocks_rect((x, y, _hw0, _hh0)) or _far_bank(x, y):
-            return False
-        return all(not (abs(x - px) < (_hw0 + pw) / 2 and abs(y - py) < (_hh0 + ph) / 2) for px, py, pw, ph, *_ in s.placed)
+        return not _far_bank(x, y)
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]
@@ -131,13 +170,13 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
     # THE FRONT ROW GOES DOWN FIRST, along the band's field-facing face. A cluster seeded only by
     # its SHAPE fills its whole depth evenly, and on a small hamlet that can leave the field ringed
-    # by four houses where `field_ringed` wants five - the map then reads as a settlement that
+    # by four houses where `field_ringed` (retired, feature 141) wants five - the map then reads as a settlement that
     # happens to be near a paddy rather than one that works it. Seating a row against the margin
     # first is also just what a farming hamlet looks like: the houses front the field they farm, and
     # the back rows fill in behind them.
     # (no quota guard here: the row is capped at 8 seats and the tier's floor is 10 households, so
     # the front row alone can never meet the ask)
-    # TWO passes at two standoffs. `field_ringed` wants five farmhouses within 165 px of the field
+    # TWO passes at two standoffs. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline, and a single row of eight candidates at one standoff can land four when the near
     # ground is awkward - the placer refuses a bundle that laps a bund or a ditch, and every refusal
     # is a house that ends up in the back rows instead. Offering the same row again a little further
@@ -177,14 +216,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     def in_band(q: Pt) -> bool:
         return math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]) <= bound
 
-    # THREE standoffs, not two. `field_ringed` wants five farmhouses within 165 px of the field
+    # THREE standoffs, not two. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline and the placer refuses any bundle that laps a bund or a ditch, so a single ring of
     # candidates can land four on awkward ground. Each extra pass is free when the earlier one
     # filled the row.
     # The FRONT ROW is allowed a little further out than the rest - a house hugging the field is
-    # part of the settlement wherever the band's nominal circle happens to fall, and `field_ringed`
+    # part of the settlement wherever the band's nominal circle happens to fall, and `field_ringed` (retired, feature 141)
     # wants five of them within 165 px of the outline.
-    # Standoffs run out to 150 px, which is still inside `field_ringed`'s 165 px band. The near
+    # Standoffs run out to 150 px, which is still inside `field_ringed` (retired, feature 141)'s 165 px band. The near
     # ground is often the busiest on the map - crop up to the bund, the collector's out-of-crop
     # stretches with their corridors, the field spur - so a row that stops at 92 px can land four
     # houses where five are wanted while perfectly good ground sits at 120. A farmhouse 150 px from
@@ -205,9 +244,20 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # long, and homesteads in it stand a bundle pitch apart, so `2 * lat / pitch` is how many fit in
     # the rank that fronts the field. Everything past that is a household the flanking and cloud
     # passes should seat BEHIND, which is what makes a nucleus a nucleus. Floored at 6 so
-    # `field_ringed` (five farmhouses within 165 px of a big field's outline) can always be met by
+    # `field_ringed` (retired, feature 141) (five farmhouses within 165 px of a big field's outline) can always be met by
     # the row alone - the defect this row exists to prevent.
-    front_cap = min(plan.spec.households, max(6, int(2 * lat / BUNDLE_PITCH)))
+    # THE ROW'S SHARE FOLLOWS THE ROLLED SHAPE (feature 227): under the envelope-first placer the row fills every seat it
+    # is offered, and "one rank's worth of the band" (2 * lat / pitch) is the whole quota on a long margin - Inashiro
+    # strung all 15 along the paddy at a drawn aspect of 5.07 against a rolled crescent's 1.9-4.2. A cluster of N
+    # houses drawn at aspect A is about sqrt(N * A) houses long, so that many front the field and the lattice seats the
+    # rest behind them, and the shape knob binds where the band alone could not. The middle of the shape's band is
+    # the aspect aimed at; the floor of 6 keeps `field_ringed` (retired, feature 141) reachable by the row alone, as before.
+    _lo_a, _hi_a = CLUSTER_DRAWN_ASPECT.get(plan.cluster_shape or "crescent", (1.9, 4.2))
+    # ...times two, MEASURED: the ranks stand an envelope's depth apart (about 1.2 pitches) along an ARC, and the drawn
+    # aspect is read on the house centers' own axis, so a block of L by N/L houses reads about half of L*L/N - seven
+    # in Inashiro's row drew 1.66 on a rolled crescent (1.9-4.2), six in Kuwabata's 1.71 on a round (1.0-2.0).
+    front_cap = min(plan.spec.households, max(6, round(math.sqrt(plan.spec.households * (_lo_a + _hi_a)))))
+
     # ...AND A FRONT-ROW SEAT MUST ALSO BE REACHABLE FROM A TRACK, not merely near the paddy
     # (settlement-review, Inashiro 2026-08-17 - the same review round as the rank cap above, which
     # is the OTHER half of this defect: that one bounds HOW MANY seats the row takes, this one bounds
@@ -217,7 +267,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # houses past 150, a whole seven-farmstead lobe fronting nothing, and a 252 ft lane spur with no
     # house within 96 ft anywhere. That is the defect the frontage pass's own comment below records
     # curing ("a median house-to-lane distance of 94 ft ... with one lane dead-ending in open
-    # ground"), returned by a different route - and no gate check can see it, because `field_ringed`
+    # ground"), returned by a different route - and no gate check can see it, because `field_ringed` (retired, feature 141)
     # is satisfied by exactly the seats that cause it.
     #
     # A CAP, NOT A LADDER - the difference was MEASURED, because the ladder is the shape every other
@@ -234,12 +284,56 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # move inward; it loses its seats to the cloud, which sits further from the tracks still. The
     # row's reach past the band was never the defect - its blindness to the tracks was.
     #
-    for standoff in (46.0, 56.0, 66.0, 78.0, 92.0, 110.0, 130.0, 150.0):
-        if placed >= front_cap:
-            break
-        for fx, fy in front_row(plan, min(plan.spec.households, 12), standoff=standoff, chains=s._site_chains):
+    # ONE RUNG, COMPUTED (feature 227 FR-002), where a ladder of eight standoffs (46 to 150 px) stood: the seat is where
+    # the homestead stands - the wall rule, the tilt's slack, and the whole homestead's reach toward the chord (the
+    # union envelope at the largest house the roll can take: a paddy the yard faces gets the yard's depth, a paddy the
+    # kura faces the kura's). The ladder's other rungs were a second rank built ten to twenty pixels at a time behind
+    # the first, which under the envelope-first placer (no spiral to slide the seats apart) was two hundred refused
+    # candidates per map and a cluster strung along the paddy whatever shape it rolled; a rung of one house depth
+    # seated NOBODY on Kuwabata's dike heads (the yard faces the paddy there) and the cluster drifted 112 px off its
+    # field. The ranks behind the front row are proposed behind the standing houses, below.
+    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> Pt:
+        """The seat moved once along `n_` by the outline's reach past the homestead's near edge - zero when the box is clear."""
+        _bx = s_._bundle_envelope(seat_[0], seat_[1], house_[0], house_[1], shed=True)
+        _pts = [(_bx[0] + dx * _bx[2] / 2, _bx[1] + dy * _bx[3] / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
+        if s_._site_corridors is None or not s_._site_corridors.hit_points(_pts):
+            return seat_
+        lx, ly = -n_[1], n_[0]  # the lateral axis
+        half_lat = abs(lx) * _bx[2] / 2 + abs(ly) * _bx[3] / 2
+        near = _bx[0] * n_[0] + _bx[1] * n_[1] - (abs(n_[0]) * _bx[2] / 2 + abs(n_[1]) * _bx[3] / 2)  # the box's near edge along n
+        far = near + (abs(n_[0]) * _bx[2] + abs(n_[1]) * _bx[3])
+        push = 0.0
+        for ring in s_._site_corridors.ring_pts:
+            for x, y in ring:
+                if abs((x - _bx[0]) * lx + (y - _bx[1]) * ly) <= half_lat:
+                    d = x * n_[0] + y * n_[1]
+                    if near <= d <= far:
+                        push = max(push, d - near)
+        if push <= 0.0:
+            return seat_
+        # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
+        # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
+        # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
+        push += WEB_FABRIC_GAP * 2.0 + 6.0
+        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push)
+
+    # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
+    # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
+    # off a paddy beside it by a garden's width, 81 px on Inashiro against the 60 the cluster is held to)
+    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True)
+    _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed")) if r is not None])
+    _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
+    for _rung in (0,):
+        for (fx, fy), _n in front_row(plan, min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True):
             if placed >= front_cap:
                 break
+            # THE ONE COMPUTED MOVE AGAINST THE GROUND (feature 227 FR-002, the GM's "measuring the distance ... and then
+            # moving however much the correct amount is", applied to the outline): the chord is the crop's edge, but the
+            # buildable line is the outline's - the dike's bank, a pond's fringe - which can lie tens of pixels beyond
+            # it (Kuwabata's dike heads: every front seat refused, the cluster 112 px off its polder). Where the seat's
+            # box is inside the outline, it is pushed once along the chord's normal by the outline's measured reach
+            # past the box's near edge, and offered there.
+            fx, fy = _ground_push(s, (fx, fy), _n, _house_max)
             # NO LANE TEST HERE ANY MORE (feature 126). This used to read
             # `_row_seats < _FIELD_RING_FLOOR or _lane_dist(...) <= _FRONT_ROW_LANE_CAP`, which
             # judged a front-row seat by how near it fell to a drawn lane. The internal lanes are
@@ -293,48 +387,115 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
                 placed += 1
     _cloud_placed = 0
+    s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
+    _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0
+    # THE RANKS BEHIND THE FRONT ROW ARE PROPOSED BEHIND THE STANDING HOUSES (feature 227 FR-002/D8). The random cloud
+    # deduped to a lattice (feature 226) relied on the placer's spiral to slide its seeds into a fit; the envelope-first
+    # placer takes the seat it is given or makes one computed move, so the seats have to be RIGHT: each round offers,
+    # behind every house of the rank before it, the seat one envelope's depth further from the field along the band's
+    # outward vector, and the staggered seat behind the midpoint of each neighboring pair (a brick pattern). A house
+    # seated there fits by construction unless the ground refuses it or the band ends. Measured before this: Kuwabata
+    # 14 of 16 and Inashiro strung along the paddy at 5.1 (rolled crescent, 1.9-4.2) on the deduped cloud.
+    # The rescue (rounds five to seven) keeps the old cloud over a wider band, seeded a third of a pitch apart.
+    _env = s._bundle_envelope(seat["cx"], seat["cy"], _house_max[0], _house_max[1], shed=True)
+    # one envelope's depth along the outward vector, plus THE ROOM A LANE NEEDS BETWEEN THE RANKS (`MIN_WEB_GAP`,
+    # both neighbors' clearance and the tread between them) - four pixels was the first figure and it left the pool's
+    # ranks abutting at a median 4 px, which no alley can thread: the web then could not reach the interior and
+    # cohort seed 39 stranded a farmhouse the re-roll could not save. A rank is separated from the rank in front by
+    # the lane that serves it. And, where the ranks climb NORTH away from the
+    # field, the sun corridor a yard owes to its south (`SUN_CORRIDOR_FT`): the rank in front stands exactly there,
+    # and at the bare depth every seat behind it was clear of the ground and refused by the parts' rules (cohort
+    # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
+    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
     for attempt in range(7):
         if placed >= plan.spec.households:
             break
-        # THE LAST ROUNDS ARE THE RESCUE (feature 226): the quota is still short after four rounds of the lattice, so
-        # rounds five to seven re-walk a wider band with the placer's old fifteen-ring spiral - the reach that seated a toy
-        # hamlet's tenth household by a long slide, and the ground cohort seed 25 needs once the reed-marsh toe (in the
-        # boundary since the review of this feature) takes the wet half of its crescent: 14 of 20 seated without them.
-        # Never run while the quota is met, so the counted guesses stay small on every pool map.
-        s._spiral_rings = 15 if attempt >= 4 else 6
-        s._seat_search["rounds"] = attempt + 1  # the lattice rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
-        # each round widens the band a little (and reaches a little further back from the field)
+        s._seat_search["rounds"] = attempt + 1  # the rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
-        # A JITTERED LATTICE OVER THE BAND (feature 226 FR-003, D3). The band the rolled cluster shape describes is kept -
-        # `cluster_seeds` still shapes the draw - but a seed within 0.8 of a bundle pitch of one already kept or of a house
-        # standing is the same guess again and is not tested: the survivors are a Poisson-disk lattice over the band, about
-        # the band's area over a pitch squared, and only THEY are candidates. (A first cut also shrank the draw to
-        # `households * 2 + 6`; the back ranks thinned, every cluster shape came out unhonored and two maps re-rolled on
-        # stranded farmhouses - the dedupe is the lever, not the draw.) The seed's jitter is the map's own rng.
-        want = plan.spec.households * 6 + 30  # the draw is as it was; the lattice below is what keeps the GUESSES few
         _kept: list[Pt] = []
-        for lx, ly in s.cluster_seeds(plan.cluster_shape, 0.0, 0.0, wlat, wdep, want, rng, record=False):
-            if placed >= plan.spec.households:
+        _standing: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]
+        if attempt < 4 and _standing:
+            # A LATTICE MEASURED FROM THE ROW, NOT A STEP BEHIND WHOEVER STANDS IN FRONT (settlement-review, feature
+            # 227). Offering each seat one step behind a STANDING house compounds: rank 2 is measured from rank 1,
+            # which was measured from the row, and every refusal along the way shifts what follows it, so the cluster's
+            # centroid walks away from the field round by round and the ranks stop being ranks. Kuwabata's cluster
+            # ended 114 px off its polder and Sawada's resolved into eight pieces. The lateral positions still come
+            # from the houses that stand - the cluster is as wide as it is - but the DEPTH of round k is the row's own
+            # depth plus k steps, measured once from the seat, so a rank is where a rank should be and four rounds
+            # reach exactly four steps back. A brick: the even rounds offer the midpoints between neighbors, the odd
+            # rounds the seats straight behind.
+            _a_of = lambda q: (q[0] - seat["cx"]) * ax + (q[1] - seat["cy"]) * ay  # noqa: E731 - the band's two coordinates, used here only
+            _o_of = lambda q: (q[0] - seat["cx"]) * ox + (q[1] - seat["cy"]) * oy  # noqa: E731
+            _along = sorted(_standing, key=_a_of)
+            _row_out = min(_o_of(q) for q in (_row or _standing))  # the front row's own depth: `out` runs away from the field
+            _depth = _row_out + _rank_step * (attempt + 1)
+
+            def _seat_at(u: float, _d: float = _depth) -> Pt:
+                return (seat["cx"] + ax * u + ox * _d, seat["cy"] + ay * u + oy * _d)
+
+            _us = [_a_of(q) for q in _along]
+            _ends = [(_along[0][0] - ax * BUNDLE_PITCH, _along[0][1] - ay * BUNDLE_PITCH), (_along[-1][0] + ax * BUNDLE_PITCH, _along[-1][1] + ay * BUNDLE_PITCH)]
+            if attempt % 2 == 0:
+                _cands = [_seat_at((p + q) / 2) for p, q in zip(_us, _us[1:], strict=False)]
+                # the brick's outer half-seats grow the rank along the field by half a pitch each: with the full-pitch
+                # ends, offered only when the back is refused (Mizuguchi's round strung to 4.5 with them in every round)
+                _ends += [_seat_at(_us[0] - BUNDLE_PITCH / 2), _seat_at(_us[-1] + BUNDLE_PITCH / 2)]
+            else:
+                _cands = [_seat_at(u) for u in _us]
+            _cands.sort(key=lambda q: math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]))  # center-out, as every proposer here
+            # FILL BEFORE YOU GROW (settlement-review, feature 227): a seat the front row could not take leaves a HOLE
+            # in the row, and the ranks - proposed behind the houses that did stand - carry the hole backward through
+            # the whole cluster. Inashiro shipped a 211 px gap in its row and read as three pieces (components
+            # [10, 4, 1] at a 165 px link) on a map whose form is nucleated. So the first rank round offers the
+            # midpoints of the row's own over-wide gaps AT THE ROW'S OWN DEPTH, ahead of anything behind it.
+            if attempt == 0:
+                _cands = [((p[0] + q[0]) / 2, (p[1] + q[1]) / 2) for p, q in zip(_along, _along[1:], strict=False) if math.dist(p, q) > BUNDLE_PITCH * 1.45] + _cands
+        else:
+            # THE RESCUE offers the along-the-field seats first - a pitch beyond each end of the standing rank, and the
+            # brick's outer half-seats behind it - then the old cloud over the widened band; a quota the ranks could not
+            # seat (cohort seed 25: 19 of 20 once the ends left the ordinary rounds) is seated where the ground is
+            _ends = []
+            _cands = []
+            if _standing:
+                _along = sorted(_standing, key=lambda q: (q[0] - seat["cx"]) * ax + (q[1] - seat["cy"]) * ay)
+                _cands = [(_along[0][0] - ax * BUNDLE_PITCH, _along[0][1] - ay * BUNDLE_PITCH), (_along[-1][0] + ax * BUNDLE_PITCH, _along[-1][1] + ay * BUNDLE_PITCH)]
+                _cands += [
+                    (_along[0][0] - ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[0][1] - ay * BUNDLE_PITCH / 2 + oy * _rank_step),
+                    (_along[-1][0] + ax * BUNDLE_PITCH / 2 + ox * _rank_step, _along[-1][1] + ay * BUNDLE_PITCH / 2 + oy * _rank_step),
+                ]
+            want = plan.spec.households * 6 + 30
+            for lx, ly in s.cluster_seeds(plan.cluster_shape, 0.0, 0.0, wlat, wdep, want, rng, record=False):
+                ly = -wdep + (ly + wdep) * 0.75  # the cloud leans toward the field (feature 133)
+                _cands.append((seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly))
+        _before_round = placed
+        # THE ENDS GO THROUGH THE SAME BODY (feature 227): they are offered only after a round that seated nothing
+        # behind - the cluster grows along the field only when its back is refused - but a second loop of its own
+        # meant a second copy of the dedupe and the jitter, which is how two rules drift apart.
+        _offered, _along_the_field = _cands, False
+        while True:
+            for _sx4, _sy4 in _offered:
+                if placed >= plan.spec.households:
+                    break
+                # A PITCH IS A SPACING, NOT A RULING (settlement-review, feature 227: 11 of Mizuguchi's 12 houses fell in
+                # one 10 px bucket of nearest-neighbor distance, where the hand-packed maps spread over three). The seat is
+                # nudged along the band by up to a tenth of a pitch, from the map's own position hash - enough to break the
+                # modal spike, far too little to move a rank or to reopen a gap the round above just filled.
+                _jit = (s._hjit(_sx4, _sy4, 13.0) - 0.5) * BUNDLE_PITCH * 0.2
+                _sx4, _sy4 = _sx4 + ax * _jit, _sy4 + ay * _jit
+                if not in_band((_sx4, _sy4)) and attempt >= 4:
+                    continue
+                if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * (0.5 if attempt < 4 else 0.3) for kx, ky in _kept) or any(
+                    math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])
+                ):
+                    continue  # the same guess again
+                _kept.append((_sx4, _sy4))
+                if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
+                    placed += 1
+                    _cloud_placed += 1
+            if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
                 break
-            # THE CLOUD LEANS TOWARD THE FIELD. `cluster_seeds` returns a shape symmetric about the
-            # band's middle, which spreads a hamlet's houses as far behind the settlement as in front
-            # of it - and the ground in FRONT is the ground that matters: `field_ringed` wants five
-            # farmhouses within 165 px of the outline, and on a map whose near margin is largely crop
-            # and ditch corridor only four of them land there. Compressing the away-from-field
-            # coordinate pulls the whole cloud a quarter closer without changing its shape or count,
-            # which is also how a farming hamlet really sits - the houses crowd the fields they work
-            # and thin out behind.
-            ly = -wdep + (ly + wdep) * 0.75
-            _sx4, _sy4 = seat["cx"] + ax * lx + ox * ly, seat["cy"] + ay * lx + oy * ly
-            # (a rescue round keeps the lattice against the STANDING houses only: the guesses it spends are the point of it)
-            if (attempt < 4 and any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * 0.8 for kx, ky in _kept)) or any(
-                math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])
-            ):
-                continue  # the lattice: a seed too near one kept or one standing is the same guess again
-            _kept.append((_sx4, _sy4))
-            if _seat_allowed(s, _sx4, _sy4) and _pretest(_sx4, _sy4) and s.try_place(_sx4, _sy4, "plain"):
-                placed += 1
-                _cloud_placed += 1
+            _offered, _along_the_field = _ends, True
+
     # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
     # `cluster_seeds` used to stamp `meta.cluster_shape` on its first attempt, BEFORE it knew how
     # many seats it would win - which was harmless while the cloud either ran for the whole hamlet
@@ -393,7 +554,6 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     else:
         s.M["meta"]["cluster_shape_unhonored"] = plan.cluster_shape
     s.M["meta"]["cluster_aspect_drawn"] = round(_drawn, 2)
-    s._spiral_rings = 6
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
@@ -421,12 +581,23 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
-    """Communal wells and shared draft byres, dropped into the courtyards the homesteads left.
+    """Yards, gardens, byres, wells, sheds.
+
+    The rest of each steading, plus the shared fixtures. Kept as its own stage after the houses because several
+    of them are sited RELATIVE to a house that must already exist - a threshing yard south of its own farmhouse,
+    a byre off the frontage, a well between steadings.
+
+    Communal wells and shared draft byres, dropped into the courtyards the homesteads left.
 
     AFTER the houses (they slot into the gaps the final layout produced, which is a thing only the
     finished layout knows) and BEFORE the grove (whose canopy then skips them). Both are sized off
     the houses that actually landed, not off the declared household count: a byre is roughly one per
-    four or five households, and the wells cover the cluster's real extent."""
+    four or five households, and the wells cover the cluster's real extent.
+
+    Steps:
+        l7r.diagram.hamletgen.homesteads.wells.place_wells
+        l7r.diagram.settlement.Settlement.draft_byres
+    """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
     s.draft_byres(fraction=0.22, gap=60)

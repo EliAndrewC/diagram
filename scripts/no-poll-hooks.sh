@@ -149,10 +149,6 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]
   # no OUTPUT redirection - without that last clause `until curl ... > /tmp/out` qualifies and
   # `>/dev/null` on any condition becomes the bypass the GM refused. `_hm_shape.py file-wait` holds
   # the decision, where it is unit-testable; a foreground loop never reaches it.
-  if [ "$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait 2>/dev/null)" = "yes" ]; then
-    guard_log no-poll permitted "$(guard_cmd)" detached-file-wait   # GUARD_EDIT_OK: feature 168, the rule slug
-    exit 0
-  fi
   # GUARD_EDIT_OK: feature 212 - THE FOREGROUND FORM OF THAT SAME WAIT IS BACKGROUNDED, NOT REFUSED.
   # The permitted shape is this command with `run_in_background` set - the harness's own single
   # completion notification - so a foreground loop that would qualify backgrounded is returned
@@ -160,21 +156,56 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]
   # session through hook context that we have done it"). The boundary does not move: the same
   # condition test (`_hm_shape.py file-wait-loop`), and a loop on a process or a network call is
   # refused below as before.
+  #
+  # GUARD_EDIT_OK: feature 227 (GM 2026-09-12) - ...AND THE WAIT GETS A PROOF OF LIFE. A permitted file
+  # wait that never asks whether the thing writing the file is still there waits forever when it is not:
+  # a detached `make` run finished its work, was killed by the kernel's OOM killer before it could flush
+  # stdout (36 firings in this container's /proc/vmstat), and the waiter sat on a pattern that was never
+  # going to be printed. The GM's rule for this tooling - *"if you are waiting on output to appear
+  # somewhere, but not checking to see whether the process that is supposed to generate that output is
+  # still alive, then when possible, the hook should add the second proof of life check to what is being
+  # waited for"*, because *"simply telling you to set a watch properly next time is bad engineering
+  # practice ... that's just another version of making you remember to do something."* So the clause is
+  # ADDED, naming the file the loop itself watches (`_hm_shape.py proof` -> `_writer-alive.sh`), and the
+  # permitted-and-already-complete wait is the only one that passes through silently.
   if [ "$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait-loop 2>/dev/null)" = "yes" ]; then
-    guard_log no-poll rewrote "$(guard_cmd)" backgrounded-file-wait
-    printf '%s' "$INPUT" | python3 -c '
-import json, sys
+    NP_PROOF=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" proof "$HERE/_writer-alive.sh" 2>/dev/null || true)
+    # inside this branch the condition already qualifies, so `file-wait` answers exactly one question:
+    # is it backgrounded?
+    NP_BG=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait 2>/dev/null)
+    if [ -z "$NP_PROOF" ] && [ "$NP_BG" = "yes" ]; then
+      guard_log no-poll permitted "$(guard_cmd)" detached-file-wait   # GUARD_EDIT_OK: feature 168, the rule slug
+      exit 0
+    fi
+    NP_RULE=proof-of-life
+    [ "$NP_BG" = "yes" ] || NP_RULE=backgrounded-file-wait
+    guard_log no-poll rewrote "$(guard_cmd)" "$NP_RULE"
+    printf '%s' "$INPUT" | NP_PROOF="$NP_PROOF" NP_BG="$NP_BG" python3 -c '
+import json, os, sys
 payload = json.load(sys.stdin).get("tool_input", {})
+proof, bg = os.environ.get("NP_PROOF") or "", os.environ.get("NP_BG") == "yes"
+if proof:
+    payload["command"] = proof
 payload["run_in_background"] = True
+said = []
+if not bg:
+    said.append(
+        "This file-watching wait was BACKGROUNDED for you (run_in_background): in the foreground it would "
+        "have held the whole turn at model-turn cost. Its output - including whatever follows the loop - "
+        "arrives as a completion notification, so spend the turn on the next thing.")
+if proof:
+    said.append(
+        "A PROOF-OF-LIFE check was added to the loop: `_writer-alive.sh <the file you are watching>`, which "
+        "asks the kernel whether anything still holds that file open and when it was last written. Without "
+        "it the wait outlives its producer - a detached run that is killed (this container OOM-kills them) "
+        "stops writing, the pattern never appears, and the loop runs until somebody notices. When the loop "
+        "ends, read what the log DOES have: if the helper printed a line, the run is gone and the log is "
+        "truncated, not finished.")
+said.append("A wait on a process or a network call is still refused.")
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "updatedInput": payload,
-    "additionalContext": (
-        "This file-watching wait was BACKGROUNDED for you (run_in_background): in the foreground it "
-        "would have held the whole turn at model-turn cost. Its output - including whatever follows "
-        "the loop - arrives as a completion notification; the turn is free meanwhile, so do the next "
-        "thing. If the pattern might never appear, give the loop a bound. Next time set "
-        "run_in_background yourself; a wait on a process or a network call is still refused."),
+    "additionalContext": " ".join(said),
 }}))'
     exit 0
   fi

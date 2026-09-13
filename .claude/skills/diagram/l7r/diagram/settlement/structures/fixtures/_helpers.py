@@ -67,6 +67,7 @@ def pick_caption_seat(
     box_clearance: Callable[[Pt], float],
     lane_target: float,
     blocked: Callable[[Pt], bool] | None = None,
+    gap: Callable[[Pt], float] | None = None,
 ) -> Pt:
     """The board's caption seat: the NEAREST seat that clears the ways by `lane_target`, and if none does,
     the legal seat that clears them best.
@@ -94,7 +95,13 @@ def pick_caption_seat(
     # the seats that already satisfy it, and drop away entirely when none of them is unblocked.
     clear = [q for q in legal if box_clearance(q) >= lane_target]
     _unblocked = [q for q in clear if not (blocked and blocked(q))]
-    clear = _unblocked or clear
+    # LEAST BAD, NOT ARBITRARY, WHEN EVERY SEAT IS BLOCKED (settlement-review of Kuwabata, 2026-09-12).
+    # Dropping the term entirely is right in that it never leaves a map captionless, and wrong in what it
+    # then chooses: Kuwabata's caption came to rest 0.02 px off a byre and 38.7 ft from the board it names,
+    # because with every seat blocked the choice fell through to pure lane clearance and a seat touching a
+    # roof scored as well as one in the open. `gap` is how far the caption's own quad stands from the
+    # nearest solid feature, so the fallback degrades along the axis the term is about.
+    clear = _unblocked or ([max(clear, key=gap)] if (gap and clear) else clear)
     if clear:
         ix = {id(q): i for i, q in enumerate(seats)}
         return min(clear, key=lambda q: (round((q[0] - at[0]) ** 2 + (q[1] - at[1]) ** 2, 3), ix[id(q)]))
@@ -110,6 +117,9 @@ def pick_caption_seat(
     # Same degradation as above, deliberately: prefer the unblocked seats, and drop the term entirely
     # when none of them is - never leave the map captionless for it.
     _legal_unblocked = [q for q in legal if not (blocked and blocked(q))]
+    if not _legal_unblocked and gap and legal:
+        # the same graceful degradation as above, on the path most boards take
+        return max(legal, key=gap)
     return max(_legal_unblocked or legal, key=box_clearance)
 
 

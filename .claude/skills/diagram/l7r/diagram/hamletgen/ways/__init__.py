@@ -50,11 +50,13 @@ from .geom import _stop_at_network as _stop_at_network
 from .geom import _trim_to_service as _trim_to_service
 from .geom import _turn_deg as _turn_deg
 from .geom import _unretrace as _unretrace
+from .geom import end_serves as end_serves
 from .geom import fabric_clearance as fabric_clearance
 from .geom import polyline_len as polyline_len
 from .geom import push_clear_of_fabric as push_clear_of_fabric
 from .geom import push_out_of as push_out_of
 from .geom import shadowing_lane as shadowing_lane
+from .geom import steading_footprints as steading_footprints
 from .route import _EASE_FT as _EASE_FT
 from .route import _EASE_STEPS as _EASE_STEPS
 from .route import _ease_corner as _ease_corner
@@ -86,5 +88,6 @@ from .track import stage_track as stage_track
 from .web import _lay_skeleton as _lay_skeleton
 from .web import _reachable_runs as _reachable_runs
 from .web import stage_web as stage_web
+from .web import tidy_lane_ends as tidy_lane_ends
 
 __all__ = [_n for _n, _v in sorted(globals().items()) if not _n.startswith("_") and not isinstance(_v, _types.ModuleType)]

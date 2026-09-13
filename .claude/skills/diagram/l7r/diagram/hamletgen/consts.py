@@ -205,6 +205,37 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
 
+WAY_END_REACH_FT = 60.0
+"""How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.
+
+ONE NUMBER FOR THE PLACER AND THE CHECK, which is the whole reason it is a constant (feature 227). `_trim_to_service`
+pulled a run's ends back to the last point that reached a way within 40 ft or a HOUSE within 90, while
+`test_every_lane_end_reaches_something_worth_walking_to` asks 60 of all three - so a lane whose end fell in the 60-90
+band was trimmed to a position the gate then failed, and nothing said so until a re-packed cluster put one there
+(Inashiro's two skeleton arms, ends 81-97 ft from the nearest house). The trim's own docstring still quoted the older
+pair of numbers, which is how the drift survived: the check had been tightened and the placer had not. The bar itself
+is the check's - a path exists because somebody had a reason to walk to its end."""
+
+STEADING_ARRIVAL_FT = 12.0
+"""How near a lane end must stand to a steading's own built ground - house, byre, shed, threshing yard or garden -
+to count as having ARRIVED there rather than as stopping in the open (feature 227 D11, 2026-09-12).
+
+WHY A SECOND, MUCH TIGHTER FIGURE rather than measuring the footprint at `WAY_END_REACH_FT`. The end rule asks that
+a path reach something worth walking to, and it measures a farmhouse by its CENTER - which is where the house is, not
+where a walker arrives. A 46x28 ft farmhouse carries 27 ft of itself between its center and its front corner, so two
+straggler footpaths that stop AT a steading's garden fence measured 63 and 76 ft to a center they never go to and read
+as treads ending in grass (Kashikawa, Kuwabata). Reading the footprint at 60 ft instead fixes those two and loosens the
+rule everywhere else by most of a house: measured the same afternoon, it let three of Inashiro's skeleton arms keep ends
+56-60 ft from the nearest wall, which IS a tread stopping in open ground. So arrival is its own clause at its own
+distance, and the three 60 ft clauses are untouched.
+
+12 ft is DERIVED from the clip, not chosen. A tread is cut `WEB_FABRIC_GAP` (7 ft) clear of a plot it runs beside, or
+`FOOTPATH_FABRIC_GAP` (4) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
+reaches a boundary records its last point 7-11 ft off it and cannot record it nearer. Measured: the two straggler ends
+at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
+of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else."""
+
+
 # How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
 # `farmhouses_reach_a_way` check, which held it as `_LANE_JOIN`). Its recorded why, carried verbatim from
 # the check because it is the reason the number is 40 and not something else: it is the same figure
@@ -752,20 +783,24 @@ LANE_WEBS = ("alleys", "back_lane")
 # is individually inside the norms; it is the FREQUENCY that is flattened, which is the liberty a
 # DEGREE-along-a-continuum may take. Weighting to true frequency would make two of the three forms
 # vanishingly rare, untested by the cohort, and pointless to have built.
-# HOW FAR A NON-NUCLEATED FARMHOUSE MAY STAND FROM ITS FIELD, in px.
+# HOW FAR A NON-NUCLEATED FARMHOUSE MAY STAND FROM ITS FIELD - A RETIRED FIGURE, KEPT AS A RECORD.
 #
-# MIRRORS THE GATE, deliberately and by the same number. `all_houses_field_adjacent` (segment 0232)
-# has two branches: a NUCLEATED cluster is allowed `ADJ + 2 * span` - the cluster's own diameter of
-# slack, because a nucleus legitimately has a back rank - while every other form gets a flat `ADJ`
-# of 165 px with no allowance at all. That asymmetry is right, and it is the research rather than
-# the checker talking: a Tonami farmstead stands in the MIDDLE of its own holding, and a row
-# village's fields lie directly behind each house, so neither form has a back rank to excuse.
+# `FIELD_ADJ_PX = 165.0` stood here with twelve lines of rationale and ZERO consumers (found 2026-09-12
+# by an escalation-check pass over a writeup that cited it). It mirrored `all_houses_field_adjacent` (retired, feature 166)
+# (segment 0232), which died with the check battery in feature 166, and its sibling `field_ringed` (retired, feature 141) went
+# in feature 141 on the GM's own cut. A live constant nothing reads is worse than no constant: a reader
+# calibrates against it believing a check enforces it, which is what five comments in the placers had
+# done. The figure is deleted; what was worth keeping is the MEASUREMENT and the research behind it.
 #
-# The placer needs the same figure because it is the placer that decides. Left to the cloud pass,
-# dispersed and linear maps put houses a median 164 and 208 px out (against the baseline's 144 and
-# 145) and failed the check - which was the generator being wrong about the form, not the check
-# being wrong about the map.
-FIELD_ADJ_PX = 165.0
+# THE RESEARCH, which is still the operative thing: a Tonami farmstead stands in the MIDDLE of its own
+# holding and a row village's fields lie directly behind each house, so neither form has a back rank to
+# excuse - where a nucleated cluster legitimately does (`research/homesteads.html`, "How close does a
+# farmhouse stand to the paddy?", which gives a 6 ft MINIMUM and no maximum at all).
+#
+# THE MEASUREMENT, for whoever switches the non-nucleated forms on: left to the cloud pass, dispersed
+# and linear maps put houses a median 164 and 208 px from the field against a nucleated baseline's 144
+# and 145. That is the generator being wrong about the FORM, not a map being too far from its crop, and
+# it is the number to re-derive a standoff from rather than a bar to re-impose.
 
 # ROLLED TO NUCLEATED ONLY, FOR NOW - and the weights above are what to restore, not to re-derive.
 #

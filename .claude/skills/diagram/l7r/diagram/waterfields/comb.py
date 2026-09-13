@@ -4,10 +4,11 @@ import math
 import random
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from shapely.geometry import Polygon
-from shapely.ops import unary_union
+if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
 
 from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
 from .carve import _bund_beans, _carve, _dry_fields
@@ -37,6 +38,30 @@ from .frame import (
 )
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
+
+_SHAPELY_LOADED = False
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
+    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
+    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
+    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
+    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
+    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
+    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
+    """
+    global _SHAPELY_LOADED, Polygon, unary_union  # binding this module's own names is the point
+    if _SHAPELY_LOADED:
+        return
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+
+    _SHAPELY_LOADED = True
 
 
 @dataclass
@@ -83,6 +108,7 @@ class CombCarve:
         overshot the target by that much. This asks the same three geometries the seam pass asks first
         (`field`, `_water`, `_outside_command`), so the estimate and the finish read one source; measured
         against the finished acreage at six sizes it was within 0.05%, at a fifteenth of the finish's cost."""
+        _load_shapely()
         field = Polygon(self.envelope).buffer(0)
         keep = [Polygon(p["poly"]).buffer(0) for p in self.plots if len(p["poly"]) >= 3]
         bare = field.difference(unary_union(keep)).difference(_water(self.channels, self.grain)).difference(_outside_command(self.F, self.a_pts, self.dpts, field, self.grain, self.drain_bank))

@@ -352,3 +352,41 @@ did not.
 The other half is the budget: an agent given "25-40 fetches" ran 50 and hung. Give a research agent
 10-15 fetches, or do the search pass in the session with parallel fetch calls and dispatch only the
 reading to `source-reader`, which is cheap and returns in minutes.
+
+## A wait can outlive the run it waits on (2026-09-12, feature 227, the GM asking "Killed by what?")
+
+The fourth control of the same kind as the one above, and the first to address the OTHER half of a wait: not
+"should you be waiting" but "is the thing you are waiting for still there".
+
+**What happened.** `make placement-stages` was detached; the session waited on its log with
+`until grep -qE "^wrote |Error|Traceback" $S/out.log; do sleep 15; done`. The run wrote all fourteen plates and the
+136 KB page by 15:16:18, produced no further output, and the wait ran until 16:07 - 51 minutes on a command that had
+finished its work.
+
+**Killed by what.** The kernel's OOM killer. `/proc/vmstat` reports `oom_kill 36` in this container, and the harness
+also reaps background tasks under memory pressure. The page builder held one deep copy of the part-built settlement
+per plate until the walk ended, which the gate's own memory sampler had already caught at 1.6 GB (feature 208). So a
+`make` run here does get killed, and it was killed between finishing its work and flushing the line the loop watched
+for. A waiter that assumes a process either prints its pattern or is still running waits forever on the third case.
+
+**What was done about it, which is the part worth copying.** The GM's ruling: *"simply telling you to set a watch
+properly next time is bad engineering practice because that's just another version of making you remember to do
+something ... if you are waiting on output to appear somewhere, but not checking to see whether the process that is
+supposed to generate that output is still alive, then when possible, the hook should add the second proof of life
+check to what is being waited for."* So:
+
+- `no-poll-hooks.sh` ADDS the clause to every permitted file-watching wait that lacks one - `_writer-alive.sh <the
+  file the loop watches>`, `||`-negated for an `until` loop and ANDed for a `while` one - in the same rewrite that
+  backgrounds a foreground wait. The helper asks the kernel's open-file table (`fuser`) and the file's mtime, never a
+  process pattern: a literal `pgrep -f` pattern matches the searching shell, which is the 2026-07-25 fault above.
+- The same guard stopped REFUSING the correct shape. A liveness clause was not one of the three permitted file forms,
+  so a wait that asked both questions was blocked as a busy-wait; so was a wait whose log was named by a bare
+  variable (`$G`). Both were measured the day the fix was written, on the session's own commands. A guard that
+  refuses what it should be producing is a guard defect, and in this repository that is the thing to fix rather than
+  the command.
+- And the page builder takes its copy inside the plate worker now, so the peak is the pool's width rather than the
+  plate count - 37 plates cost less wall clock than 14 did.
+
+The boundary the GM closed in feature 165 did not move: a liveness part can only end a loop SOONER, a condition must
+still read a real file, and the output-file rule is applied per PART, so `until grep -q x /tmp/a.log >/dev/null` is
+refused exactly as before.

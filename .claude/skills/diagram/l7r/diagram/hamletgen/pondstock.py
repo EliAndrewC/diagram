@@ -58,7 +58,23 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
 
 
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
-    """Pig sties on the dikes and duck pens at the pond corners nearest the houses (dike-pond only)."""
+    """Pig sties and duck pens on the ponds.
+
+    A dike-pond hamlet's livestock fixtures (feature 150 A3/A4): duck pens at the corners of the grow-out ponds
+    nearest the houses, pig sties on the dikes of the next nearest - pens first, because ducks are driven out to
+    the water and penned back every day while pigs are fed where they stand, so the pens take the shortest walk.
+    It runs after the appurtenances because each fixture is sited relative to the houses as placed, and before
+    the lane web because it reserves ground the web must thread around, like the byres and wells before it.
+    Nothing on a valley hamlet, hence the card.
+
+    Pig sties on the dikes and duck pens at the pond corners nearest the houses (dike-pond only).
+
+    Steps:
+        l7r.diagram.hamletgen.pondstock._bank_seats
+        l7r.diagram.settlement.Settlement.pond_fixture_fits
+        l7r.diagram.settlement.Settlement.pig_sty
+        l7r.diagram.settlement.Settlement.duck_pen
+    """
     ponds = s.M.get("dikeponds") or []
     houses = s.M.get("houses") or []
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not houses:

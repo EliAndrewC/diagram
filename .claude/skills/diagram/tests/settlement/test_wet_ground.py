@@ -152,6 +152,7 @@ def test_an_unbuildable_band_measures_zero_rather_than_propagating(monkeypatch) 
     def _boom(*_a, **_k):
         raise ValueError("invalid topology")
 
+    wet._load_shapely()  # feature 237: the name is bound on FIRST USE, so a module-global patch needs the loader to have run
     monkeypatch.setattr(wet, "ShapelyPolygon", _boom)
     assert wet._band_half_width(square, None, "toe") == 0.0
 
@@ -181,6 +182,7 @@ def test_an_unbuildable_clip_hands_the_polygon_straight_back(monkeypatch) -> Non
     def _boom(*_a, **_k):
         raise ValueError("invalid topology")
 
+    wet._load_shapely()  # feature 237: the name is bound on FIRST USE, so a module-global patch needs the loader to have run
     monkeypatch.setattr(wet, "ShapelyPolygon", _boom)
     assert wet._clipped_to_open_ground(poly, []) == poly
 

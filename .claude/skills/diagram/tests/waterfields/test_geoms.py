@@ -5,10 +5,22 @@ gate the passes compared by hand, including a basin the pass has replaced since 
 from __future__ import annotations
 
 import random
-
-from shapely.geometry import Polygon
+from typing import Any
 
 from l7r.diagram.waterfields.seams.geoms import GeomTree, PlotGeoms
+
+
+def Polygon(*args: Any, **kwargs: Any) -> Any:
+    """`shapely.geometry.Polygon`, imported on FIRST USE rather than at collection (feature 237, FR-007).
+
+    A module-level import here cost EVERY one of the ten gate workers 16.3 MiB - shapely plus the numpy it
+    drags in (`specs/237-lean-test-collection/research.md` R9) - to collect a file whose tests one worker
+    runs. The name is kept so no call site changes, and a test is not a per-plot path, so the import lookup
+    this adds per call is free in practice.
+    """
+    from shapely.geometry import Polygon as _Polygon
+
+    return _Polygon(*args, **kwargs)
 
 
 def _rings(rng: random.Random, n: int) -> list[list[tuple[float, float]]]:

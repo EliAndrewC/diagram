@@ -45,6 +45,10 @@ CASES = [
     ("make-only", _payload(command="python3 -m l7r.diagram.ci status"), "rewrote", "entry-point"),
     ("no-poll", _payload(command="until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"), "rewrote", "backgrounded-file-wait"),
     ("guard-file", _payload(_tool="Edit", file_path="/r/.claude/skills/diagram/Makefile", new_string='\t: "GUARD_EDIT_OK: `make done` in a recipe comment"'), "blocked", "recipe-comment-substitution"),
+    # feature 2026-09-12: a review's findings do not reach the GM unfiltered - the dispatch arms, the filter disarms
+    ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt="DELTA review of Inashiro"), "armed", "review-dispatched"),
+    ("escalation", _payload(_tool="Agent", subagent_type="escalation-check", prompt="my draft writeup"), "permitted", "filter-ran"),
+    ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt='review X ESCALATION_OK="a confirmation pass, nothing relayed"'), "escaped", "escalation-ok"),
     ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
     ("no-branch", _payload(command="git checkout -b side"), "blocked", "branch-creation"),
     ("no-branch", _payload(command="git checkout -b side  # NO_BRANCH_OK: a throwaway bisect"), "escaped", "no-branch-ok"),
@@ -285,6 +289,18 @@ _ESCAPES = {
     ),
     "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
     "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
+    "ESCALATION_OK": (
+        "command",
+        "matched in an agent PROMPT only (`case \"$prompt\"`), the same stated exclusion as PAIR_OK's "
+        "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
+        "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
+    ),
+    "RUN_OK": (
+        "not-an-escape",
+        "appears ONLY as a fixture string in scripts/test-finished-run-hooks.sh, which proves that a token in a "
+        "command cannot escape a Stop hook - a Stop payload carries no command, so there is nowhere to put one. "
+        "The live-run refusal's release is its once-per-run marker instead (GM 2026-09-12)",
+    ),
     "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
 }
 

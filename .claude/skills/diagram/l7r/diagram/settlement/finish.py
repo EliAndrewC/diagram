@@ -776,6 +776,10 @@ class FinishMixin:
         from l7r.diagram import _census  # noqa: PLC0415 - render-time only
 
         _census.record("render", what="png", base=os.path.basename(basepath))  # the gate refuses a render from a test not marked as one of rendering (feature 213)
+        # ...AND A TEST IS REFUSED HERE, NOT REPORTED AFTERWARDS (GM 2026-09-12). `finish()` consults
+        # `DIAGRAM_SKIP_RENDER` and skips; this method is reachable DIRECTLY and did not, which is how real
+        # renders kept getting back into the suite. See `_census.refuse_render_in_a_test`.
+        _census.refuse_render_in_a_test("a map PNG", float(width), os.path.basename(basepath))
         exe = shutil.which('resvg')
         if not exe:  # pragma: no cover - depends on the host toolchain, not on any code path
             sys.stderr.write(f'warning: resvg not found (sudo apt-get install -y resvg fonts-dejavu-extra); {basepath}.png not refreshed\n')

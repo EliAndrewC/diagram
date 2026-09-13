@@ -147,3 +147,15 @@ def test_a_block_polygon_with_fewer_than_three_points_is_no_member() -> None:
     s.block_polys.append(SQUARE_FIELD)
     _chains, _corr, (rings, holes) = site_boundary(s, (500.0, 150.0))
     assert len(rings) == 1 and not holes, "the two-point polygon contributes nothing; the square is the outline"
+
+
+def test_the_computed_standoff_without_an_envelope_is_the_house_alone() -> None:
+    """`standoff=None` with no envelope: the wall rule, the tilt's slack and the house's own half-extent along the
+    chord's normal (a caller that seats a bare house)."""
+    from l7r.diagram.hamletgen.homesteads.seats import DEFAULT_HOUSE, STANDOFF_SLACK_PX, front_row
+    from l7r.diagram.settlement.houses import HOUSE_PADDY_GAP_FT
+
+    plan = type("P", (), {"seat": {"cx": 500.0, "cy": 100.0, "anchor": (500.0, 300.0), "along": (1.0, 0.0), "lat": 1000.0}, "cluster_shape": "round"})()
+    chain = [((300.0, 300.0), (700.0, 300.0), (0.0, -1.0))]
+    row = front_row(plan, 12, standoff=None, chains=[chain])  # type: ignore[arg-type]
+    assert row and all(abs(y - (300.0 - (HOUSE_PADDY_GAP_FT + 1.0 + STANDOFF_SLACK_PX + DEFAULT_HOUSE[1] / 2))) < 1e-6 for _x, y in row)

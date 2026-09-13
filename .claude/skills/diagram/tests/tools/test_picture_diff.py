@@ -4,11 +4,14 @@ as `tests/interactive/test_raster.py` does."""
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # annotations only; the runtime import sits in the tests that use it (feature 237)
+    from PIL import Image
+
 from pathlib import Path
 
-import numpy as np
 import pytest
-from PIL import Image
 
 from l7r.diagram.tools import picture_diff as pd
 
@@ -27,6 +30,8 @@ TINY_B = TINY.replace('fill="#6C9CBE"', 'fill="#5C8CAE"')
 
 
 def _img(fill: tuple[int, int, int], size: tuple[int, int] = (8, 6)) -> Image.Image:
+    from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     return Image.new("RGB", size, fill)
 
 
@@ -93,6 +98,8 @@ def test_the_id_map_attributes_each_differing_pixel_to_the_class_it_lies_on() ->
 
 def test_a_pixel_outside_the_id_map_counts_as_off_any_class() -> None:
     """The renders may be larger than the id map (a picture at 2 px per map px); nothing off it is attributed."""
+    import numpy as np  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     mask = np.zeros((4, 4), dtype=bool)
     mask[3, 3] = True
     red = np.zeros((2, 2), dtype=np.int64)

@@ -20,6 +20,25 @@ from .._geom import (
 )
 
 # Ground cover and land parcels a caption may stand on - not blockers (see `label_blocker_quads`).
+CAPTION_FEATURE_GAP = 4.0
+"""How much bare ground a CAPTION owes any solid feature it is not naming, in px.
+
+Four feet, the figure every other "these two inked things must read as separate" rule on these maps uses
+(`_TOUCH_GAP` for a lane against a plot boundary, `FOOTPATH_FABRIC_GAP` for a tread against a fence). It is
+not a structural clearance - nothing collides - it is a READING distance: two inked things a hair apart are
+one object to a reader, and a caption that touches a roof names the roof.
+
+MEASURED, on Kuwabata, 2026-09-12 (settlement-review): "notice board" came to rest with its lower corner
+**0.02 px** above a byre's top edge and 38.7 ft from the board it names, and every check in the tree passed
+it. Three separate tests had to be wrong at once for that, and they were, all in the same way - each asked
+for an OVERLAP where the thing that matters is a DISTANCE: the seat probe (`boards.py` `_blocked`), the seat
+picker's fallback when every seat is blocked (`_helpers.pick_caption_seat`), and - the one that actually
+placed it - `pull_caption_toward`, which moves a caption half way toward its subject AFTER the seat has
+been judged and refused the move only on `rects_overlap`. A pull is the last thing that touches the
+position, so it is the one that had to hold the margin.
+"""
+
+
 LABEL_GROUND_KEYS = frozenset(
     {
         "commons",
@@ -132,7 +151,12 @@ class CaptionProbesMixin:
         pulled = (seat[0] + ux * gap * frac, seat[1] + uy * gap * frac)
         after = _block(*pulled)
         blockers = [q for q in self.label_blocker_quads() if q != subject] + [label_quad(lb) for lb in self.M["labels"] if len(lb) > 3]
-        if rects_overlap(after, subject) or any(rects_overlap(after, q) for q in blockers):
+        # A MARGIN, NOT MERELY NON-OVERLAP (settlement-review of Kuwabata, 2026-09-12 - see
+        # `CAPTION_FEATURE_GAP`). This refused the pull only where the moved block LAPPED something, so a pull
+        # that brought the words to 0.02 px off a byre was accepted and the caption read as naming the byre.
+        # The subject keeps the overlap test, because the pull is TOWARD it by construction and closing the
+        # last half-foot onto the thing being named is the point of the pull.
+        if rects_overlap(after, subject) or any(_gap(after, q) <= CAPTION_FEATURE_GAP for q in blockers):
             return seat
         # ...AND NOT ONTO A WAY (T48): `captions_clear_the_ways_they_stand_on` wants the caption's box
         # clear of every tread by its halo; a pull that lands it on a lane is refused like a footprint.

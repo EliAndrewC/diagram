@@ -15,8 +15,23 @@ if TYPE_CHECKING:
 
 class BundleFitMixin:
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
-        """A farmhouse must stay near the farmland (within the gate's ADJ=165), so a nudge cannot drift it
-        off into the urban core or the void."""
+        """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
+
+        THE NUMBER IS ARBITRARY AND THAT IS ALL RIGHT, as long as nobody reads it as a historical claim
+        (GM 2026-09-13, asking exactly that question of this line). The record gives a 6 ft MINIMUM - bund
+        plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
+        MAXIMUM at all (`research/homesteads.html`, "How close does a farmhouse stand to the paddy?"; the
+        retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
+        TOLERANCE in the other direction: a back-row house about 700 ft from the crops "reads as the honest
+        back of a compact village", and a hamlet "is legitimately loose and is not held to" the village
+        coverage floor at all. So 165 catches a house that has left the farmland; it does not describe how
+        far a farmer lives from the paddy, and a cluster standing further out than this is not thereby
+        wrong. It formerly cited "the gate's ADJ=165" - `all_houses_field_adjacent`, which died with the
+        check battery in feature 166, so the citation pointed at nothing for a fortnight.
+
+        Left at 165 deliberately: widening it would admit nudges the placer currently refuses and re-roll
+        the pool, which is a real cost for no gain, since nothing downstream reads the figure as a norm
+        once this docstring says it is not one."""
         return self._field_within(x, y, 165) if self.field_polys else True
 
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]
@@ -172,6 +187,40 @@ class BundleFitMixin:
         if any(chain_violated(px, py, chains, 0.0) for px, py in pts):
             return True
         return bool(corr.hit_points(pts) or corr.hit_center(cx, cy))
+
+    def _envelope_blocked(self: Settlement, env: Any) -> Any:  # type: ignore[misc]
+        """Is the homestead's ENVELOPE (feature 227) refused - and by what?
+
+        Returns None when the envelope stands clear; True when the ground refuses it (the canvas margin, the bounding
+        ring, the site boundary through `_rect_blocked` - the nine-point boundary test when one is installed, the
+        old battery otherwise) or when two or more placed boxes overlap it; and the ONE placed box `(cx, cy, w, h)`
+        when that box alone overlaps it on clear ground, so the placer can make its single computed move. The
+        placed-box margin is the 2 px `_bundle_side_fits` always kept."""
+        self._seat_search["rects"] += 1
+        cx, cy, w, h = env
+        if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:
+            return True
+        if self.bound and any(not point_in_poly(vx, vy, self.bound) for vx, vy in self._rect_corners(env)):
+            return True
+        if self._rect_blocked(env, fields=True):
+            return True
+        hits = [b for b in self.placed if abs(cx - b[0]) < (w + b[2]) / 2 + 2 and abs(cy - b[1]) < (h + b[3]) / 2 + 2]
+        if not hits:
+            return None
+        return (float(hits[0][0]), float(hits[0][1]), float(hits[0][2]), float(hits[0][3])) if len(hits) == 1 else True
+
+    def _parts_fit(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
+        (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
+        yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
+        house = geom["house"]
+        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], 0.0):
+            return False
+        if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house):
+            return False
+        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom):
+            return False
+        return bool(self._gardens_sun_ok(geom))
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,
@@ -444,20 +493,5 @@ class BundleFitMixin:
         for rec in self.M["houses"]:
             hx, hy, hw, hh = rec["x"], rec["y"], rec["w"], rec["h"]
             if hy > gy + gh / 2 - 3 and abs(hx - gx) < (hw + gw) / 2 and (hy - hh / 2) - (gy + gh / 2) < gh + 4:
-                return True
-        return False
-
-    def _fits_any_side(self: Settlement, cx: float, cy: float, hw: float, hh: float, shed: bool = False) -> bool:  # type: ignore[misc]
-        self._seat_search["positions"] += 1
-        # The house/yard/kura/sun checks are the same for every garden side, so test that common half ONCE -
-        # if it fails, no side can fit - then test only each side's garden (+ the bbox it grows). Identical
-        # result to any(_bundle_fits(...) for side), but far fewer collision tests on the failing steps that
-        # dominate the pack. Safe because the fit path is RNG-free: building fewer geoms cannot shift placement.
-        g0 = self._bundle_geom(cx, cy, hw, hh, self._NUC_SIDES[0], shed)
-        if not self._bundle_common_fits(g0):
-            return False
-        for i, side in enumerate(self._NUC_SIDES):
-            geom = g0 if i == 0 else self._bundle_geom(cx, cy, hw, hh, side, shed)
-            if self._bundle_side_fits(geom):
                 return True
         return False

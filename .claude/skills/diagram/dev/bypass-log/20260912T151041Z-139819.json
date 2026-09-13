@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T151041Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the verification settlement-review passed on this content; the delta since is three coverage tests"
+}

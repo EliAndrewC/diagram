@@ -220,6 +220,32 @@ def regen_pool(
     return skipped, ran, frozen
 
 
+PAGE_DIR = os.path.join("dev", "placement-stages")  # the stage-by-stage walk-through, generated and gitignored
+
+
+def replate_page(skill_dir: str, fingerprint: str, allow_main: bool = True) -> bool:
+    """Re-plate the placement walk-through page when the engine moved (feature 227 FR-005, GM 2026-09-12: the page
+    "auto updated ... much like the makefile explanation"). The page is written from the stage docstrings and the
+    steps they declare, and `engine_fingerprint` hashes every engine source as BYTES, so a docstring edit moves it as
+    an engine edit does; the stamp beside the page holds the fingerprint it was plated under, and a matching stamp
+    skips the roll. Returns True when the page was re-plated. Runs the tool as a module in a child, as the pool's
+    generators run, under the same main-tree allowance."""
+    page_dir = os.path.join(skill_dir, PAGE_DIR)
+    stamp = os.path.join(page_dir, ".stamp")
+    if os.path.isfile(stamp) and os.path.isfile(os.path.join(page_dir, "hamlet-placement.html")):
+        with open(stamp, encoding="utf-8") as fh:
+            if fh.read().strip() == fingerprint:
+                return False
+    env = dict(os.environ)
+    if allow_main:
+        env["GM_ASSISTANT_ALLOW_MAIN"] = "1"
+    subprocess.run([sys.executable, "-m", "l7r.diagram.tools.placement_stages", "--out", page_dir], cwd=skill_dir, env=env, check=True, stdout=subprocess.DEVNULL)
+    os.makedirs(page_dir, exist_ok=True)
+    with open(stamp, "w", encoding="utf-8") as fh:
+        fh.write(fingerprint + "\n")
+    return True
+
+
 def stale_flat_renders(skill_dir: str) -> list[str]:
     """Derived renders left at the PRE-FEATURE-161 flat path, `<tree>/<tier>/<map>.<ext>`.
 
@@ -274,7 +300,7 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"  WARNING: frozen map {os.path.relpath(gen, args.skill_dir)} is MISSING {', '.join(os.path.basename(p) for p in missing)} - "
                 f"a frozen exhibit's render cannot be faithfully regenerated once the engine has drifted, so it is NOT healed here; "
-                f"the frozen renders are committed (GM 2026-08-16), so restore the file with git checkout rather than re-running the gen"
+                f"a frozen exhibit's renders are NOT in git - they were removed and archived (.gitignore note 1), so restore from /host-l7r-repo/diagram-render-archive/ (MANIFEST.json carries a sha256 per file) rather than re-running the gen or reaching for git checkout"
             )
     for orphan in stale_flat_renders(args.skill_dir):
         print(
@@ -285,6 +311,9 @@ def main(argv: list[str] | None = None) -> int:
     # renders are refreshed - this is what keeps main's index.html current (GM 2026-08-15).
     index_path = pool_index.write_index(args.skill_dir)
     print(f"render-cache: index refreshed ({os.path.relpath(index_path, args.skill_dir)})")
+    if os.path.isfile(os.path.join(args.skill_dir, "l7r", "diagram", "tools", "placement_stages.py")):  # a tree with the page tool (a test fixture has none)
+        replated = replate_page(args.skill_dir, engine_fingerprint(args.skill_dir), allow_main=not args.no_allow_main)
+        print(f"render-cache: placement page {'re-plated' if replated else 'fresh'} ({PAGE_DIR}/hamlet-placement.html)")
     return 0
 
 

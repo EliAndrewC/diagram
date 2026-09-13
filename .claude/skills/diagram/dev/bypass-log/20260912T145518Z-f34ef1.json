@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T145518Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the focused verification pass is running over the snapshot pool-227c; the delta since is the lane-end bar shared between the placer and the gate"
+}

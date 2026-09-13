@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
@@ -40,10 +40,22 @@ def _board_footprint(s: Settlement) -> tuple[float, float]:
 
 
 def stage_crossings(s: Settlement, plan: SitePlan) -> None:
-    """Bridges where a way crosses water, and plank footbridges over the long irrigation ditches.
+    """Planks and decks.
+
+    Every way that crosses water gets its deck HERE, which is why the earlier way stages are free to cross a
+    ditch: the crossing is legal because this stage will deck it.
+
+    Bridges where a way crosses water, and plank footbridges over the long irrigation ditches.
 
     After every way and every watercourse, because a crossing added later leaves an unbridged one -
-    the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it."""
+    the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it.
+
+    Steps:
+        l7r.diagram.settlement.Settlement.bridges
+        l7r.diagram.settlement.Settlement.channel_footbridges
+        l7r.diagram.settlement.Settlement.dike_gates
+        l7r.diagram.hamletgen.water.polder_crossing_caps
+    """
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
@@ -58,7 +70,27 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_notice(s: Settlement, plan: SitePlan) -> None:
-    """The official notice board, on a lane verge at the busiest node.
+    """The notice board - the last FEATURE placed.
+
+    The notice board (a `kosatsuba`, which is the word the engine's own identifiers use) is deliberately the
+    last map feature, after even the crop and the title - only the label phase
+    follows it, and that phase places captions, not features - and the reason is about the settlement rather
+    than about the drawing (GM 2026-08-29): "where you put the notice board on the map does depend on what other
+    features already exist ... the real humans that live in the society that decide where the notice board will
+    go will look around at the things which already exist and then decide where to put the notice board. They
+    may even decide to move a notice board which has already been placed." Every other stage either reserves
+    ground or grows into it; the board does neither. It is a 12 x 5 ft plank a village drives in beside a way
+    once the village is there, so it is the one feature that should see the whole map before it chooses. It
+    stands ON a way - on the verge, a few feet off the tread (feature 133 T13), because a kosatsu is read where
+    people pass - and WHICH way, and where along it, is a per-settlement knob rolled from the map's own seed
+    over the placements the record attests and the map can site (feature 154). Placing it last also fixed a
+    defect by construction: sited among the trees it used to claim a ~55 ft cleared disc, and an entrance seat
+    on a windward fringe punched a 40 ft hole in the shelter belt that nothing replanted. No feature is placed
+    after the board now, so it displaces nothing - and the GM's ruling is that it never should have: "humans
+    would not need to clear any amount of space in order to put up a notice board at the side of a path." It may
+    stand under a canopy at the wood's edge.
+
+    The official notice board, on a lane verge at the busiest node.
 
     EVERY settlement tier posts the state's standing law, hamlets included - the ofuregaki circulars
     reached the peasantry through this board, read out by the one required-literate person (a
@@ -77,7 +109,16 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     already exist and then decide where to put the notice board. They may even decide to move a notice
     board which has already been placed." Every other stage reserves ground or grows into it; a plank
     driven in beside a way does neither, so it is the one feature that should see the whole map first -
-    and nothing is placed after it for it to displace."""
+    and nothing is placed after it for it to displace.
+
+    Steps:
+        l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor
+        l7r.diagram.hamletgen.frame._board_footprint
+        l7r.diagram.hamletgen.frame._nearest_way_bearing
+        l7r.diagram.settlement.Settlement.fixture_clear_of_water
+        l7r.diagram.settlement.Settlement.place_kosatsuba
+        l7r.diagram.settlement.Settlement.kosatsuba
+    """
     spot = s.place_kosatsuba()
     # ...AND IT MUST STAND WHERE THE FRAME WILL KEEP IT. `place_kosatsuba` maximizes passing traffic
     # (dwellings within ~260 px) along the whole way network, and a lane ARM that runs past the
@@ -105,7 +146,13 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
         else:  # no crop recorded (the frame test drives this stage with a stub) - fall back to the cloud
             hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
             hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
-        if not (hx0 - 30 <= spot[0] <= hx1 + 30 and hy0 - 30 <= spot[1] <= hy1 + 30):
+        # THE FOOTPRINT, NOT THE CENTER WITHIN 30 PX OF THE FRAME (settlement-review, feature 227). The slop
+        # admitted a board whose whole glyph is off the sheet: Sawada's stood 21 px above the view's top edge and
+        # was never re-seated, so the map shipped with no board and no caption drawn at all. A board is 12 x 5 ft
+        # and its caption reaches further, so the test insets by the footprint's own half-diagonal.
+        _fw, _fh = _board_footprint(s)
+        _inset = math.hypot(_fw, _fh) / 2
+        if not (hx0 + _inset <= spot[0] <= hx1 - _inset and hy0 + _inset <= spot[1] <= hy1 - _inset):
             board = s.M["kosatsuba"].pop()
             # ...AND ITS INK (feature 133 T48). Popping the record and the caption left the first
             # board's GLYPH in the top layer, so a map whose engine seat fell outside the cloud
@@ -138,6 +185,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
+            _seats: list[tuple[float, float, float, float]] = []  # (distance to the anchor, x, y, rot); the traffic is counted after the band narrows
+            _pxb = getattr(s, "px", None)
             _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
@@ -166,7 +215,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         _off = float(lane.get("w", 3)) / 2 + (_pxf(KOSATSUBA_VERGE_FT) if _pxf else KOSATSUBA_VERGE_FT) + _bh / 2
                         for side in (1.0, -1.0):
                             cx2, cy2 = mx + ux * _off * side, my + uy * _off * side
-                            if not (hx0 <= cx2 <= hx1 and hy0 <= cy2 <= hy1):
+                            if not (hx0 + _inset <= cx2 <= hx1 - _inset and hy0 + _inset <= cy2 <= hy1 - _inset):
                                 continue
                             # THE WAY IT FRONTS IS THE WAY IT IS NEAREST (T48): at a junction a verge
                             # of lane A can lie nearer lane B, and `kosatsuba_faces_the_road` measures
@@ -190,13 +239,34 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
                                 continue
                             # nearest the declared placement where there is one, else the busiest node
-                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else -sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
+                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else 0.0
                             if _off_way:
                                 if loose is None or _rank < loose[0]:
                                     loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
                                 continue
-                            if best is None or _rank < best[0]:
-                                best = (_rank, cx2, cy2, rot)
+                            _seats.append((_rank, cx2, cy2, rot))
+            # AN ANCHORED PLACEMENT CHOOSES THE GROUND, THE TRAFFIC CHOOSES THE SEAT ON IT - the rule
+            # `place_kosatsuba` states and applies, read here from the same constant rather than restated
+            # (settlement-review, feature 227). This loop ranked an anchored seat by its distance to the anchor
+            # ALONE, so as the clusters loosened the board walked out to whatever verge lay nearest the entrance
+            # and served nobody: four of five pool boards lost half their passing households, Sawada's ending
+            # 424 px past the cluster with two of nineteen within 250 ft.
+            #
+            # THE TWO RULES COMPOSE, and the order is what makes them safe (the 227/230 merge): feature 230's
+            # off-way and under-canopy test decides which verges are ELIGIBLE at all - a board facing across its
+            # own lane, or standing in the belt, is no seat - and only then does the band-and-traffic ranking
+            # below choose among what is left. Neither rule can override the other: an eligible seat is never
+            # picked for traffic it does not have, and a shaded verge never wins on traffic.
+            if _seats:
+                if _anchor is not None:
+                    _near = min(q[0] for q in _seats)
+                    _band = _pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT
+                    _seats = [q for q in _seats if q[0] <= _near + _band] or _seats
+                # the traffic is counted only over the seats the band kept: a count per candidate cost seed 4's notice
+                # stage 1.1 s, and the engine's own order is the band first and the traffic second
+                _pick = max(_seats, key=lambda q: (sum(1 for h in hs if math.hypot(q[1] - h["x"], q[2] - h["y"]) < 260), -q[0]))
+                best = (0.0, _pick[1], _pick[2], _pick[3])
+            # ...and a hamlet whose every verge lies under its own belt still gets a board (feature 230)
             if best is None and loose is not None:
                 _lb = _nearest_way_bearing(s, loose[1], loose[2])
                 best = (loose[0], loose[1], loose[2], _lb if _lb is not None else 0.0)
@@ -218,10 +288,21 @@ def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
 
 
 def stage_frame(s: Settlement, plan: SitePlan) -> None:
-    """The crop, then the title.
+    """Crop, title, scalebar.
+
+    The canvas is deliberately generous and is cropped to content only now. Erring large is cheap - unused
+    canvas is thrown away - while erring small silently mis-shapes the field.
+
+    The crop, then the title.
 
     In that order: the title searches the FRAMED window for blank space to sit in, so the frame has
-    to exist first."""
+    to exist first.
+
+    Steps:
+        l7r.diagram.hamletgen.hinterland.frame.title_pocket
+        l7r.diagram.settlement.Settlement.crop_to_content
+        l7r.diagram.settlement.Settlement.title
+    """
     # The margin leaves the TITLE somewhere to stand: `title()` scans the framed window for a box
     # that clears every feature and falls back to a corner overlap when the map is too full, which
     # `title_clear_of_features` then fails. But it is bounded above as well as below - `crop_hugs_
@@ -247,7 +328,20 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
 
 
 def stage_labels(s: Settlement, plan: SitePlan) -> None:
-    """THE LABEL PHASE - the last stage of a hamlet, after every map feature is on the sheet.
+    """The labels - the final phase, after the last feature.
+
+    Every caption on the map is placed here, against the finished sheet, and nothing comes after it (feature
+    157, GM 2026-08-29): "add a phase at the very end of every settlement creation process, which is putting
+    down the labels for things. Thus, after the final map feature is added, which on a hamlet is the notice
+    board, there is a final phase in which we add labels for whatever map features get labels. This is because
+    how we place labels will always depend on what else is on the map." No feature draws its own caption any
+    more: a stage that wants one queues it (`label()`), and this stage drains the queue
+    (`Settlement.place_labels`) once every feature a caption might have to avoid exists. It draws no feature and
+    reserves no ground, so it can only ever be last - the same argument that put the notice board after the
+    frame, taken one step further. The plate is the previous one with its captions on, which on a hamlet is
+    exactly what the stage is.
+
+    THE LABEL PHASE - the last stage of a hamlet, after every map feature is on the sheet.
 
     GM 2026-08-29 (feature 157): *"add a phase at the very end of every settlement creation process,
     which is putting down the labels for things. Thus, after the final map feature is added, which on
@@ -262,5 +356,9 @@ def stage_labels(s: Settlement, plan: SitePlan) -> None:
     thing it does. Whichever runs first drains the queue; the other is a no-op.
 
     `plan` is unused, and stays in the signature because `STAGES` is a list of `(s, plan)` callables -
-    the pipeline's contract, not this stage's need."""
+    the pipeline's contract, not this stage's need.
+
+    Steps:
+        l7r.diagram.settlement.Settlement.place_labels
+    """
     s.place_labels()
