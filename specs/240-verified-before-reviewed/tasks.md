@@ -52,6 +52,7 @@ built, farmed or lived in. The figures it rests on are in `research.md` R1 and R
 
 ## Phase 5 - proof and landing
 
-- [ ] T08 SC-002's fixture: feature 230's pass-13 dispatch with every figure removed is refused naming the
+- [x] T08 SC-002's fixture: feature 230's pass-13 dispatch with every figure removed is refused naming the
       pass-12 finding ids; SC-009 `make done` green and `make hooks-test` green; land.
       research: rendering
+      verify: DONE. DONE. SC-002: tests/tooling/test_review_prereq.py::test_feature_230s_pass_13_dispatch_is_refused_even_with_every_figure_removed refuses naming E2-board-in-belt and permits once a record with quantity and source verifies it; test-pair-hooks section 8b the same through the hook. SC-004 on Inashiro both ways, research R5 (0.19 s; found make map restoring render-less entries after a gate, fixed: make map now rolls such a hit uncached, proven - renders back, second run CACHED with them kept). make done green (25,505 statements, 100%; re-verified on the tree merged with main at 239), make hooks-test green (72/72 pair cases, review-gate 19/19), make quick clean.

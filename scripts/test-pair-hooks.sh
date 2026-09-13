@@ -35,10 +35,15 @@ MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `_review_prereq.py` first, so the fixture
 # carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`
 # exists) and a stub generation cache (current unless `<gen>.stale` exists), and a moved map is a WHOLE map.
-cp "$(dirname "$HOOK")/_review_prereq.py" "$(dirname "$HOOK")/spec-lint.py" "$(dirname "$HOOK")/_hookmatch.py" "$(dirname "$HOOK")"/_hm_*.py "$CLONE/scripts/"
+# GUARD_EDIT_OK: feature 240 - spec-lint imports `_spec_figures` since feature 239 (the figure pattern's one home)
+cp "$(dirname "$HOOK")/_review_prereq.py" "$(dirname "$HOOK")/spec-lint.py" "$(dirname "$HOOK")"/_spec_*.py "$(dirname "$HOOK")/_hookmatch.py" "$(dirname "$HOOK")"/_hm_*.py "$CLONE/scripts/"
 printf 'import pathlib, subprocess, sys\nroot = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip())\nsys.exit(0 if (root / ".git" / "stub-gate-green").exists() else 1)\n' > "$CLONE/scripts/gate-stamp.py"
 mkdir -p "$SKILL/l7r/diagram/pipeline"
 printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + ".stale")\n' > "$SKILL/l7r/diagram/pipeline/gencache.py"
+# GUARD_EDIT_OK: feature 240 - REGULAR packages, as the engine's are. Under `make hooks-test` the real skill is on
+# PYTHONPATH, and a regular `l7r.diagram` anywhere on the path wins over a namespace portion, so a stub without
+# `__init__.py` was shadowed by the real generation cache and 14 cases went red that passed when run by hand.
+: > "$SKILL/l7r/diagram/__init__.py"; : > "$SKILL/l7r/diagram/pipeline/__init__.py"
 moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; for ext in gen.py svg png html; do : > "$MAPDIR_F/testmap.$ext"; done; }
 unmoved() { rm -rf "$SKILL/pool"; }
 moved

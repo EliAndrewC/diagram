@@ -399,7 +399,8 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
 	if [ -f "$$s.json" ] && { [ ! -f "$$s.png" ] || [ ! -f "$$s.html" ]; }; then \
 	  echo "map: the cached entry carries no render (a gate filed it with rendering skipped) - rolling it uncached to draw one"; \
-	  $(RUN).pipeline.regen --no-cache "$$g"; \
+	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
+	  : "GUARD_EDIT_OK: RUN carries make s leading at-sign, which inside a shell line is a command name, so it is stripped here"; \
 	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
