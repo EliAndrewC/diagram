@@ -50,6 +50,47 @@ and the review took 18.7 of the feature's 32 minutes to confirm what the diff al
 So if you are reading this, a manifest moved. Review what moved and what it moved, and say in one line
 which sweeps you skipped.
 
+## FIRST STAGE - before you read any map (feature 240, GM 2026-09-13)
+
+The GM: *"procedures which rely on someone, whether it's a human or an LLM, remembering to do something are
+flawed, and we should have our tooling enforce this when possible."* A review round costs 7 to 25 minutes, and
+feature 230 spent its last rounds finding defects the previous round's fix had introduced - fixes sent out for
+review faster than they were verified. The pair guard now refuses a dispatch whose last findings have no record
+behind them; this stage is what that script cannot judge. Run it FIRST, before opening a PNG, a manifest or a
+research page. The clone is the directory the dispatch names (the one holding `.git/review-snapshot/`); run the
+`make` targets below from its `.claude/skills/diagram/`.
+
+1. **Is the paired gate still alive?** `make review-paired-gate` prints `green`, `running` or `red`. On `red`,
+   stop: write the verdict record (below) as NOT-REVIEWABLE naming the red gate, and return. A judgment of a
+   map the gate refused is not a review of anything that can ship.
+2. **Were the last findings verified by a source that can bear them?** Read the map's previous verdict,
+   `<clone>/.git/review-verdicts/<map>.json`, if there is one. For each finding it raised, find what disposes
+   of it: an entry in some `<clone>/specs/*/measurements.json` whose `verifies` is that finding's id and whose
+   `subject` is the map, or an `accepted` entry in `<clone>/.git/review-dispositions/<map>.json`. The script
+   has already decided that such a record EXISTS. You decide whether its `source` - what the measurement
+   actually read - can support the finding it claims to verify. When it cannot, return NOT-REVIEWABLE naming
+   the finding and the record, and nothing else.
+
+   **The worked example - the canopy (feature 230, pass 12 to pass 13).** A finding said the notice board
+   stood under the grove's canopy. The fix was measured against the grove's `clumps` - each clump's base point
+   and its nominal `r` - and recorded as clear. That record CANNOT verify the finding: the canopy the finding is
+   about is the drawn crowns, which are jittered off those bases and reach a median 16.3 ft further
+   (`specs/240-verified-before-reviewed/research.md` R2). A record whose `source` is the manifest's
+   `tree_crowns`, or the SVG's drawn ink, CAN verify it, and you proceed. The question is always the same: did
+   the measurement read the thing the finding is about, or a proxy for it?
+3. **Before each further map** (when the dispatch names more than one) **and immediately before you write
+   your verdict**, run `make review-paired-gate` again. The last read is the one that matters: a gate that was
+   green when you started and red when you finish makes your verdict NOT-REVIEWABLE - and `make review-verdict`
+   re-reads the gate itself and records it that way whatever you pass, so a red gate cannot close the pair.
+
+A NOT-REVIEWABLE return is not a review round and is not a finding against the map: the session records what
+you named and dispatches again. Keep it short - what is missing, and where.
+
+**You keep the right to measure independently.** Nothing in this stage asks you to trust a number you were
+handed. A record removes your need to REBUILD a harness to check a figure; it does not remove your distrust of
+the figure. The pass-13 reviewers re-derived the canopy clearance from scratch, which is how the proxy was
+caught, and that remains exactly what you are for: measure anything you doubt, from the artifact.
+
 ## Inputs
 
 The main agent passes you a subject name and its pool folder. Paths are under
@@ -388,6 +429,18 @@ counterpart. Hyphens only - no em-dashes or en-dashes. Read EVERY drawn string.
   beyond the map," not truncation.
 
 ## Output
+
+**YOUR LAST ACT IS THE VERDICT RECORD (feature 240 FR-001).** The pair of gate and review closes on this
+record, not on your dispatch, so a review that never writes one has not counted. Once the report below is
+complete - and after step 3 of the first stage - write each finding in your ERRORS and FLAGS sections to a JSON
+list of `{"id", "severity", "what"}` in a scratch file (ids `F1`, `F2`, ... in report order, the same ids your
+report uses), then, from the clone's `.claude/skills/diagram/`:
+
+    make review-verdict MAP=<map> VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> FINDINGS=<that file>
+
+`pass` is PASS; `needs-work` and `broken` are NEEDS-WORK; a first-stage stop is NOT-REVIEWABLE. The engine key
+is copied from the dispatch, never computed by you. Quote the line it prints at the end of your report. One
+record per map.
 
 Return a report in this form (raw findings, no preamble). ALL SWEEP sections are **MANDATORY** and
 come first - a report missing any is incomplete. Fill them **by enumeration**, not from memory: pull

@@ -449,15 +449,25 @@ def _outputs(gen: str) -> list[str]:
     return [stem + suffix for suffix in OUTPUT_SUFFIXES]
 
 
-def load(gen: str) -> bool:
-    """Restore this gen's outputs from cache if the key still matches. True on a hit."""
-    entry = _entry_dir(gen)
-    meta_path = os.path.join(entry, "meta.json")
+def is_current(gen: str) -> bool:
+    """Would this gen's cached entry be served as it stands? The key comparison `load()` makes, and nothing else.
+
+    ASKED BY A REVIEW'S PRECONDITION (feature 240 FR-005), which must not change the pool it asks about. `load()`
+    restores the cached outputs into place on a hit and DELETES an output the entry lacks, so calling it to find
+    out whether a map is current would rewrite the map under the review about to read it - the question would
+    change its own answer's subject. One body: `load()` asks this first."""
+    meta_path = os.path.join(_entry_dir(gen), "meta.json")
     if not os.path.isfile(meta_path):
         return False
     meta = json.loads(Path(meta_path).read_text())
-    if compute_key(gen, meta.get("deps")) != meta.get("key"):
+    return bool(compute_key(gen, meta.get("deps")) == meta.get("key"))
+
+
+def load(gen: str) -> bool:
+    """Restore this gen's outputs from cache if the key still matches. True on a hit."""
+    if not is_current(gen):
         return False
+    entry = _entry_dir(gen)
     for out in _outputs(gen):
         cached = os.path.join(entry, os.path.basename(out))
         if os.path.isfile(cached):

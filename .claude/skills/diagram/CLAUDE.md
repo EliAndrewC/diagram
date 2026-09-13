@@ -142,7 +142,7 @@ it is the tooling. With remote off, a paid run the tooling was about to start is
 | `make switches` | the iteration switch (feature 132): `remote on\|off`, with reason, who and when. The scope axis was retired in feature 185 | ~1 s |
 | `make ci-off REASON=...` / `ci-on` | **remote off**: nothing dispatches to CodeBuild, `ci-check`/`ci-image`/`FULL=1` refuse, the gated push lands on a green local `make done` (LOCAL-GATED). Commits the switch | ~1 s |
 | `make perf-report AGAINST=<NNN>-start` | the trend, then the **BAND** the newest pair reaches (feature 129): 1 over this environment's line (0.0% local, 2.0% codebuild), 2 >5% total / >10% seed, 3 >10% / >20% - per environment, both measurements | ~1 s |
-| `make perf-explain WHY="..."` / `perf-confirm` / `perf-audit` / `perf-signoff` | the review records a band owes; `perf-confirm` and `perf-audit` are the **`perf-audit` subagent's** (they decline without `AS=perf-audit`); `perf-signoff` is the GM's, at a terminal | ~1 s |
+| `make perf-explain WHY="..." CONTROL=<key>` (or `UNVERIFIED="..."`, logged) / `perf-confirm` / `perf-audit` / `perf-signoff` | the review records a band owes; `perf-confirm` and `perf-audit` are the **`perf-audit` subagent's** (they decline without `AS=perf-audit`); `perf-signoff` is the GM's, at a terminal | ~1 s |
 | `make perf-review` | does every environment's newest pair carry the records its band owes? The PUSH runs this | ~1 s |
 | `make perf-profile SEED=25 STAGE=web` | tier-2 evidence: cProfile of ONE stage of ONE seed (+225% on that stage); the derived table is committed, the raw `.prof` is not | ~3x the stage |
 
@@ -157,7 +157,7 @@ it as the cheap option, because it deselected two FILES and could not see that t
 rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers.py`.
 
 
-- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; an increase over that environment's band-1 line (0.0% local, 2.0% codebuild) on any seed or the total owes `make perf-explain WHY=...` from you and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
+- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; an increase over that environment's band-1 line (0.0% local, 2.0% codebuild) on any seed or the total owes `make perf-explain WHY=... CONTROL=<key>` from you - the key a recorded run with the attributed cause removed, or `UNVERIFIED="<why>"`, logged (feature 240: a profile says where time went, never why) - and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
 - Iterate on the ONE motivating map; run the full test bed exactly **once**, at the end. That final
   sweep is MANDATORY whenever shared engine code changed (`settlement/`, `overlap/`,
   `waterfields/`, a scripted engine).

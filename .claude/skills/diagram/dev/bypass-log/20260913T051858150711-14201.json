@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-13T05:18:58Z",
+  "target": "review-accept",
+  "commit": "bbd7a7c7",
+  "outcome": "permitted",
+  "why": "review-accept zz-probe E1: probe of the target's own logging"
+}
