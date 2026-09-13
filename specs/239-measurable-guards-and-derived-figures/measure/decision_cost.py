@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """What a guard decision costs spawned, and what the same decision costs called.
 
-    python3 specs/239-*/measure/decision_cost.py [N] [--record]
+    python3 specs/239-*/measure/decision_cost.py [N] [--record] [--repeat K]
 
 The house-style decision is a Python program inside a shell string, so it cannot be imported and a
 measurement has to spawn it. This harness measures that, and then measures the SAME program compiled
@@ -47,21 +47,39 @@ def spawned(cmds: list[str]) -> float:
 
 
 def in_process(cmds: list[str], program: str) -> float:
+    """Seconds per command with the program compiled once and executed per command.
+
+    THE PATH IS RESTORED AFTER EVERY EXECUTION. The program inserts its own directory into `sys.path`
+    each time it runs - free in a process that runs it once, and unbounded in a bench that runs it 560
+    times (the path reached 331 entries). A module with a function, which FR-001 makes of it, carries
+    no such per-process setup at all. What this restoration did NOT fix, because it was never the
+    cause: a seventeen-fold rise first blamed on it turned out to be another session rolling a map at
+    152% CPU, which a quiet re-run settled in one command. A bench on a shared container measures the
+    container too.
+    """
     code = compile(program, "<house-style>", "exec")
     os.environ["HS_HERE"] = str(ROOT / "scripts")
-    sys.path.insert(0, str(ROOT / "scripts"))
     began = time.time()
     for cmd in cmds:
         payload = json.dumps({"tool_name": "Bash", "tool_input": {"command": cmd}})
-        stdin, stdout = sys.stdin, sys.stdout
+        stdin, stdout, path = sys.stdin, sys.stdout, list(sys.path)
         sys.stdin, sys.stdout = io.StringIO(payload), io.StringIO()
         try:
             exec(code, {"__name__": "__main__"})
         except SystemExit:
             pass
         finally:
-            sys.stdin, sys.stdout = stdin, stdout
+            sys.stdin, sys.stdout, sys.path[:] = stdin, stdout, path
     return (time.time() - began) / len(cmds)
+
+
+def drift(values: list[float]) -> float:
+    """The spread of K measurements as a percentage of the smallest - what `varies: true` must tolerate.
+
+    A timing does not repeat exactly, and FR-011a needs the band to be a MEASURED number rather than a
+    sentence: this is the figure it rests on, recorded as a key like any other.
+    """
+    return (max(values) - min(values)) / min(values) * 100
 
 
 def bare(argv: list[str]) -> float:
@@ -71,7 +89,24 @@ def bare(argv: list[str]) -> float:
     return (time.time() - began) / 20
 
 
+QUIET = 2.0   # the 1-minute load average above which a timing on this container is not its own
+
+
 def record(entries: dict[str, dict]) -> None:
+    """Write the figures, refusing a TIMING measured while the container was busy.
+
+    A shared container measures itself: the same command gave 145 ms and 303 ms per spawn on the same
+    tree an hour apart, the second while another session rolled a map at 152% CPU. A number taken then
+    is not the guard's cost, and this project has already recorded one such figure as fact (feature
+    236's `2.2 s`). So the load average goes into the entry, and `--anyway` is the only way past.
+    """
+    load = os.getloadavg()[0]
+    timings = [k for k, e in entries.items() if e.get("varies")]
+    if timings and load > QUIET and "--anyway" not in sys.argv:
+        raise SystemExit(f"decision_cost: load average {load:.1f} is above {QUIET} - a timing measured "
+                         f"now is the container's, not the guard's. Wait, or pass --anyway to record it "
+                         f"with the load on the entry.")
+    entries = {k: ({**e, "load": round(load, 2)} if e.get("varies") else e) for k, e in entries.items()}
     now = datetime.date.today().isoformat()
     have = json.loads(MEASUREMENTS.read_text()) if MEASUREMENTS.is_file() else {}
     for key, entry in entries.items():
@@ -92,7 +127,10 @@ def main(argv: list[str]) -> int:
     n = next((int(a) for a in argv if a.isdigit()), len(window))
     cmds = sorted(window, key=len, reverse=True)[:n]
     program = inline_program(HOOK.read_text())
-    spawn_each, call_each = spawned(cmds), in_process(cmds, program)
+    repeat = int(argv[argv.index("--repeat") + 1]) if "--repeat" in argv else 1
+    runs = [(spawned(cmds), in_process(cmds, program)) for _ in range(repeat)]
+    spawn_each, call_each = runs[-1]
+    spread = max(drift([r[0] for r in runs]), drift([r[1] for r in runs])) if repeat > 1 else None
     py, sh = bare([sys.executable, "-c", "pass"]), bare(["bash", "-c", "true"])
     
     scope = "all" if len(cmds) == len(window) else f"the {len(cmds)} longest of"
@@ -102,8 +140,13 @@ def main(argv: list[str]) -> int:
     print(f"  a bare python3 spawn {py*1000:.0f} ms | a bare bash spawn {sh*1000:.0f} ms")
     print(f"  ratio {spawn_each/call_each:.0f}x; over the whole {len(window)}-command window "
           f"{spawn_each*len(window):.0f} s against {call_each*len(window):.1f} s")
+    if spread is not None:
+        print(f"  over {repeat} runs on an unchanged tree the timings spread by {spread:.1f}%")
     if "--record" in argv:
         record({
+            **({"timing-run-to-run-drift-pct": {"value": round(spread, 1), "unit": "%", "varies": True,
+                                               "note": f"the widest spread of {repeat} runs, unchanged tree"}}
+               if spread is not None else {}),
             "decision-spawned-ms": {"value": round(spawn_each * 1000), "unit": "ms", "varies": True,
                                     "note": f"the shipped hook, over {len(cmds)} frozen commands"},
             "decision-in-process-ms": {"value": round(call_each * 1000, 1), "unit": "ms", "varies": True,

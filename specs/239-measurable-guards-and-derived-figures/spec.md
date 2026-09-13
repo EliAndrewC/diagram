@@ -49,7 +49,7 @@ with the diff printed and empty.
 **FR-003** ONLY the house-style guard moves under this feature. The census found inline Python in 15
 guard scripts, 25 counting the test scripts, and its table of line counts is `research.md` R4 - the
 candidate list, written by a command rather than by hand; each later
-conversion is its own change with its own before/after diff. A sweep of fifteen guards in one feature
+conversion is its own change with its own before/after diff. A sweep of all fifteen in one feature
 would be fifteen chances to change a verdict silently.
 
 ### B. Measuring a guard is cheap (FR-004 to FR-007)
@@ -97,12 +97,14 @@ or a Review history entry (`research.md` R2), neither of which check 1 reads. A 
 history entry MAY carry a round label instead of a key - `on round N's own run` - because that section
 exists to record what a round measured at the time; a bare figure there fails.
 
-**FR-009c** A figure being NAMED rather than ASSERTED MUST NOT be asked for a key. `research.md` R2
-classifies findings and quotes one of them as "a `2.2 s` that was never measured" - a figure in a
-backtick span, inside a section that declares itself a classification. Check 5 MUST therefore skip a
-figure inside a backtick span, exactly as the house-style corrector does, and skip a section whose
-first paragraph declares itself a classification or a narration. Without this the check fires on the
-prose that records why the check exists.
+**FR-009c** A figure being NAMED rather than ASSERTED MUST NOT be asked for a key: check 5 MUST skip a
+figure inside a BACKTICK SPAN, exactly as the house-style corrector does. `research.md` R2 quotes one
+of the findings it classifies as "a `2.2 s` that was never measured", and that span is the whole of
+what the motivating case needs - R2's other figures carry no unit and were never figures under D4.
+An author-declared exemption - a section saying in prose that it narrates - MUST NOT be added: it has
+no decidable marker and any section could opt out of the check by writing a sentence. Where a whole
+section genuinely narrates, it is exempted BY HEADING, the way `spec-lint` already exempts Decisions
+recorded and Review history from check 1.
 
 **FR-010** A ONE-SHOT observation MUST stay legal, labeled with the date it was observed and the
 method, and check 5 MUST accept it. The class is NARROW: something no command can produce - a
@@ -114,11 +116,30 @@ correct work, which teaches sessions to bypass it; too wide and it permits what 
 **FR-011** `make figures` MUST re-run every recorded command in a feature's `measurements.json` and
 report any value that moved, in the manner of `make notes-census`.
 
-**FR-011a** A TIMING does not repeat exactly, so an entry MAY carry `varies: true`, and for such an
-entry `make figures` and check 5 MUST accept a value within a stated tolerance band rather than an
-equal one. Six of this feature's own thirteen first-recorded keys moved by 5-6% between two runs on an
-unchanged tree, so without this a clean tree could never be silent and the check would fire on correct
-work. A COUNT never carries it: 560 commands is 560.
+**FR-011a** A TIMING does not repeat exactly, so an entry MAY carry `varies` - and the band MUST be a
+number on the entry, not a judgment at check time: `varies: <fraction>`, defaulting to 0.10 when it is
+written as `true`. `make figures` and check 5 MUST accept a recorded value within that fraction of the
+re-measured one and report anything outside it. Without a band a clean tree could never be silent
+(`m:timing-run-to-run-drift-pct`); without a NUMBER, a session sets the band at check time and the
+check becomes unfalsifiable for every timing.
+
+**FR-011b** WHICH entries may carry it is decided by the UNIT, not by the author: an entry whose unit
+is a duration (`ms`, `s`, `min`, `h`), a percentage derived from durations, or a ratio (`x`) MAY carry
+`varies`; an entry whose unit counts things (`commands`, `files`, `lines`) MUST NOT, and `spec-lint`
+MUST refuse one that does. A count repeats exactly or the thing counted changed: 560 commands is 560.
+
+**FR-011c** A harness that records a TIMING MUST record the machine's one-minute load average on the
+entry, and MUST REFUSE to record while that load is above a stated quiet threshold unless explicitly
+overridden - in which case the load stands on the entry for a reader to judge. This container is
+shared: the same command on the same tree measured 145 ms and 303 ms an hour apart, the second while
+another session rolled a map at 152% CPU, and the first draft of this harness blamed that on its own
+code and wrote the wrong cause into a docstring. Feature 236 recorded exactly one such number as fact
+and it took a review round to retire it.
+
+**FR-011d** `make figures` REPORTS a moved timing; only a moved COUNT fails. No band survives
+contention - a contended re-run moves a timing by more than 2x - so a gate that failed on one would
+fail on correct work, which is how a guard teaches sessions to bypass it. The band of FR-011a is what
+separates "moved" from "the same figure again", not a pass/fail line for the push.
 
 ### D. A reviewer does not adjudicate a figure it cannot re-run (FR-012 to FR-014)
 
@@ -154,15 +175,18 @@ reproduces that change's verdict diff - the same commands, in the same direction
 **SC-005** (FR-007) A guard with no importable decision is refused by name.
 **SC-006** (FR-008, FR-009, FR-009a, FR-009b, FR-009c) A figure with no key fails `spec-lint`; a
 figure in `research.md` and one in a Review history entry are both reached, and a Review history
-figure labeled as that round's own run passes; a figure inside a backtick span in a section that
-declares itself a classification does not fail; `145` matches the recorded `m:decision-spawned-ms`
-and `7` matches a recorded 7.0; a key absent from
+figure labeled as that round's own run passes; a figure inside a BACKTICK SPAN does not fail while the
+same figure outside one does, and no prose declaration exempts a section; `145` matches the recorded
+`m:decision-spawned-ms` and `7` matches a recorded 7.0; a key absent from
 `measurements.json` fails; a recorded value that does not appear in its paragraph fails; the correct
 form passes - and this spec's own figures pass, as feature 236's FR-010b required of its author.
 **SC-007** (FR-010) A one-shot observation with its date and method passes; the same sentence without
 the label fails.
-**SC-008** (FR-011, FR-011a) `make figures` reports a value that moved and is silent when none did -
-including on a tree where every timing was re-measured, which is what `varies: true` is for.
+**SC-008** (FR-011, FR-011a, FR-011b, FR-011c, FR-011d) `make figures` is silent on a tree where every
+timing was re-measured within its band, REPORTS a timing outside it, and FAILS on a count that moved;
+`spec-lint` refuses a `varies` on an entry whose unit counts things; and a harness asked to record a
+timing while the load average is above its quiet threshold refuses, names the load, and records only
+when overridden - with the load on the entry.
 **SC-009** (FR-012, FR-013, FR-014) The agent file carries the NOT-REVIEWABLE contract and the license
 to measure independently; the tasks template's review task names the measurements file; a review
 dispatched against a spec whose figures carry no keys returns NOT-REVIEWABLE naming them.
@@ -172,8 +196,7 @@ dispatched against a spec whose figures carry no keys returns NOT-REVIEWABLE nam
 ## Decisions recorded
 
 **D1 - one guard converts, not fifteen.** The census (`research.md` R4) makes a sweep tempting and the
-sweep is exactly the wrong shape: each conversion owes a verdict diff over the window, and sixteen in
-one feature is sixteen chances to move a verdict unnoticed. House-style converts because it is the largest (275 lines, `m:house-style-program-lines`), the one
+sweep is exactly the wrong shape: each conversion owes a verdict diff over the window, and fifteen in one feature is fifteen chances to move a verdict unnoticed. House-style converts because it is the largest (275 lines, `m:house-style-program-lines`), the one
 that cost the measurement time, and the one whose quoted-string form has
 now broken twice on an apostrophe.
 
@@ -199,7 +222,7 @@ feature 236's amendment found three stale figures and two stale sentences, and n
 operative sections. Widening it to every number would fire on ids and counts, which is the false
 positive `spec-lint` was designed around in the first place.
 
-**D6 - the corpus is committed whole, at 2.7 MB.** The window is 560 commands and the ten largest are
+**D6 - the corpus is committed whole: 2.7 MB of command text, 3.0 MB as the JSON on disk.** The window is 560 commands and the ten largest are
 38-79 KB heredocs. Capping a command at 10,000 characters would keep 88% of them for 1.04 MB, and it
 was rejected: the largest commands are exactly the ones that exercise the range walk, and a bench that
 quietly drops them measures the easy half. The repository's `.git` is already 101 MB, so the price is
@@ -212,7 +235,8 @@ drift between rounds. Refreshing is a command a session runs on purpose, and the
 
 ## Out of scope
 
-- Converting the other fifteen inline-Python guards (D1); they are candidates with line counts.
+- Converting the other FOURTEEN inline-Python guards (D1) - the census counts fifteen including
+  house-style, which converts here; they are candidates with line counts in `research.md` R4.
 - The model-latency block of R1 (29.3 min): it is turn structure, which the batching guard already
   governs, and no mechanism here would move it.
 - The review rounds themselves. This feature makes their cheap findings impossible; it does not ask
@@ -245,3 +269,24 @@ stronger. The sharpest item was on the GM's own idea: D2 justified keeping one-s
 with "the session ran 208 minutes, which no command can re-run", which is false - this feature ships
 that command - and it admitted "a count over a window that has moved", which would have covered every
 disputed figure in the motivating incident. D2's class is now what no command can produce.
+
+**Round 3** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, four items, all taken, and two of them
+were the spec disagreeing with its own research table - D1's body and the Out of scope line still
+counted sixteen and fifteen where the census says fifteen including house-style, so fourteen remain.
+The other two were holes a session could drive through: FR-011a required a tolerance band without
+saying what it is or where it lives, so any later session could mark any entry `varies` and make check
+5 unfalsifiable for every timing (the band is a number on the entry now, with a default, and FR-011b
+decides by UNIT which entries may carry one); and FR-009c bundled the decidable backtick-span rule
+with an author-declared "this section narrates" exemption that has no marker and that any section
+could claim - the second is deleted, and a whole section that genuinely narrates is exempted by
+HEADING, the way `spec-lint` already exempts Decisions recorded from check 1. The round also priced
+the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB) and confirmed that
+building the corpus at spec stage is measurement data rather than implementation.
+
+**What round 3 set off, which is now FR-011c and FR-011d.** Answering its tolerance item meant
+measuring the run-to-run drift, and the measurement came back at 2x - which I first blamed on my own
+harness and wrote into a docstring as fact. It was another session rolling a map at 152% CPU; a quiet
+re-run settled it in one command and reproduced the original figures exactly. So a timing harness now
+records the load average on the entry and refuses to record above a quiet threshold, `make figures`
+reports a moved timing rather than failing on it, and only a moved COUNT fails. This is the second
+time in two days that this session has stated a timing the container produced rather than the code.

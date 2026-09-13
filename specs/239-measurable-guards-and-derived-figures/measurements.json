@@ -49,7 +49,7 @@
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
   "taken": "2026-09-13",
   "unit": "ms",
-  "value": 18,
+  "value": 20,
   "varies": true
  },
  "decision-in-process-ms": {
@@ -57,22 +57,22 @@
   "note": "the same program compiled once and executed per command",
   "taken": "2026-09-13",
   "unit": "ms",
-  "value": 7.0,
+  "value": 120.7,
   "varies": true
  },
  "decision-spawn-ratio": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
   "taken": "2026-09-13",
   "unit": "x",
-  "value": 21,
+  "value": 3,
   "varies": true
  },
  "decision-spawned-ms": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
-  "note": "the shipped hook, over 560 frozen commands",
+  "note": "the shipped hook, over 3 frozen commands",
   "taken": "2026-09-13",
   "unit": "ms",
-  "value": 145,
+  "value": 337,
   "varies": true
  },
  "frozen-window-commands": {
@@ -115,11 +115,19 @@
   "unit": "lines",
   "value": 275
  },
+ "timing-run-to-run-drift-pct": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "note": "the widest spread of 3 runs, unchanged tree",
+  "taken": "2026-09-13",
+  "unit": "%",
+  "value": 10.9,
+  "varies": true
+ },
  "window-in-process-s": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
   "taken": "2026-09-13",
   "unit": "s",
-  "value": 3.9,
+  "value": 67.6,
   "varies": true
  },
  "window-spawned-s": {
@@ -127,7 +135,7 @@
   "note": "the whole 560-command window",
   "taken": "2026-09-13",
   "unit": "s",
-  "value": 81,
+  "value": 189,
   "varies": true
  }
 }
