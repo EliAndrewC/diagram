@@ -94,6 +94,11 @@ faces, the whole window, and this paragraph is why it is not the largest of the 
 
 ## R4 - the corpus was never frozen, and the program cannot be imported (measured 2026-09-13)
 
+**The frozen corpus, and what it costs to keep.** `measure/freeze_window.py` froze the window into
+`scripts/fixtures/command-window-2026-09-13.json`: 560 commands (`m:frozen-window-commands`), 2.7 MB of
+command text and 3.0 MB as the JSON on disk. The ten largest commands are 38-79 KB heredocs; capping a
+command at 10,000 characters would keep 88% of them for 1.04 MB, which spec D6 prices and rejects.
+
 **Nothing froze the window.** Each of the nine passes re-read the transcripts to rebuild the same
 command list, and two of them ran against a prefilter this very hook had corrupted - its literal
 dashes were rewritten to hyphens as the file was saved, so it matched any command containing a spaced
