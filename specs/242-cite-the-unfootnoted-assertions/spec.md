@@ -148,8 +148,9 @@ engine work and has its own feature, so this one stays research-only and on the 
   order HIGH, MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW, absent a stated reason.
 - **SC-011** (FR-013) - no section's `Sources:` roster carries a disclosure that its own notes now
   carry.
-- **SC-012** (FR-014) - the feature's delta contains no `l7r/**/*.py` change, and both GM items appear
-  in the closing report as relayed questions.
+- **SC-012** (FR-014) - the feature's delta contains no `l7r/**/*.py` change, and neither settled item
+  is worked here: the caravan inn's form knob is feature 244's, and the Xuxiebian absence note stands
+  as the record already carries it.
 - **SC-013** (FR-011) - the 119 never-searched absence notes are worked and counted separately from
   the FR-001 list, and neither count is folded into the other in any report.
 - **SC-014** (spec-wide) - `make page-check` green and the push clean.
@@ -178,9 +179,8 @@ re-read the record"*, which a session could read as license to skip FR-007.
 
 **D3 - this feature is research-only and takes the DIRECT route.** Nothing in FR-001 to FR-013 touches
 `l7r/**/*.py` or a pool generator. FR-014 is what keeps it that way: the caravan-inn knob is the one
-inherited item that would be engine code, and it is relayed rather than built. If the GM asks for the
-knob, that is a separate feature with its own gate and pool sweep, or an amendment to this one whose
-route consequence is stated when it is made.
+inherited item that would be engine code, the GM ruled it a knob on 2026-09-13, and it is built in
+feature 244 with its own gate and pool sweep - not here.
 
 **D4 - the ordering is confidence, not corrected-wrongness.** Feature 238's draft proposed working the
 items the record states WRONGLY first. Nothing in the reports or in R6 marks an item as wrong rather
@@ -254,6 +254,12 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   widened from the bare items to every item, since the 29 is taken over all 695 and a stray tier on a
   marked item would corrupt a recorded figure just as quietly. The round-3 arithmetic carries its "on
   round 3's own run" label.
+- **Amendment (2026-09-13), counter reset.** The GM ruled D1 in scope and the inn a knob; D1 and FR-014
+  record it. **Amendment round 1, `spec-fidelity`: CHANGES REQUIRED** - the reword left three stale
+  sentences: SC-012 still asked for both items to be put to the GM as relayed questions, which FR-014
+  now denies and which is the unfiltered-escalation failure the GM's 2026-09-12 rule exists to stop;
+  T21 carried the same clause; D3 still argued from "if the GM asks for the knob". All three restated.
+- **Amendment round 2**: pending.
 - **Round 6 (2026-09-13), `spec-fidelity`: FAITHFUL.** The review re-derived the hedged census
   independently of the harness (695 blocks, 29 hedged, 28 bare, "caravan inn" in exactly one block, so
   the bound is 28 - 1 rather than an artifact of a phrase matching twice), confirmed `hedged-worklist-max`
