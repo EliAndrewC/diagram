@@ -336,7 +336,7 @@ the tree, where `make quick` fails on it in the delta - which is the half of ite
 the reason the hook half can afford to be cautious. So the exemption follows the resolvable targets.
 What it costs, stated rather than implied: a project write inside a command whose only resolvable
 targets are outside is not corrected by the hook. The alternative priced and rejected is the draft
-that produced the 19.
+that produced the 21.
 
 ## Out of scope
 
@@ -346,6 +346,18 @@ that produced the 19.
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment 2, round 5** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, two items, both
+one-line restatements of stale text, both applied - the superseded figure standing in a fourth place
+(D11's closing sentence), and `git commit` listed among the writes that yield an unresolvable target
+when the walk in fact resolves it to the repository, as FR-007c and the case table both say. The round
+confirmed every figure in the changed passages against its own replay, reproducing D11's 21 and 7, the
+27/8 upper bound and the 42 both-spellings to the command, and it re-confirmed that the counter's
+fifth round is reached. **This is where the five-round cap applies and the matter goes to the GM.**
+What it is NOT is the persistent misunderstanding the cap exists to end: the ruling is judged
+LEGITIMATE, its measurement is independently reproduced, the enforcing half of item 4 is untouched,
+and both remaining items were stale sentences rather than a disagreement about what was asked. The
+work stays in the clone until the GM rules.
 
 **Amendment 2, round 4** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, three items, all
 taken, none of them a change to what the hook DOES - a stale count, a figure that did not reproduce,
@@ -368,9 +380,10 @@ one argument while the call site passed two, so an unimportable `_hm_house` rais
 the wrapper turns a crash into silence - for EVERY command rather than for one exemption. The stub
 takes the arguments the call site passes now, and a case drives the hook with `_hm_house` broken on
 purpose. (2) R10's "none of them is wrong in either direction" was true only when judged by the hook's
-own target list, which is the circularity R10's own closing sentence warns about: judged plainly, 19
-commands whose every resolvable target was outside the project were being corrected, 4 of them the
-auto-memory index. That is D11, and the figures are in R10. (3) FR-007c had dropped the
+own target list, which is the circularity R10's own closing sentence warns about: judged plainly, this
+round measured 19 commands whose every resolvable target was outside the project being corrected, 4 of
+them the auto-memory index. That is D11; round 4 re-measured those two figures as 21 and 7, which is
+what R10 and D11 carry. (3) FR-007c had dropped the
 mention-fallback clause while the hook still carried the fallback, which decides 10 commands in the
 window - the clause is back, because the spec and the code must say the same thing. Also taken: SC-006
 now says the memory shapes hold when a program heredoc stands in the same command, and round 1's dash

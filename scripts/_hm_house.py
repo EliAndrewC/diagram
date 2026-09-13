@@ -107,8 +107,9 @@ def write_targets(cmd: str, cwd: str | None = None) -> list[str | None]:
     read as a redirect, and `git commit`, whose write lands in the repository rather than in a file.
 
     A `None` in the list is a write whose destination cannot be known, and it is NEVER outside: a
-    relative path with no cwd to resolve it against, a target behind a variable assigned in some
-    earlier command, and `git commit`, whose write lands in the repository rather than in a file.
+    relative path with no cwd to resolve it against, or a target behind a variable assigned in some
+    earlier command. (`git commit` is NOT one of these - the walk resolves it to the repository, as
+    the paragraph above says.)
 
     An interpreter reading its program from a heredoc deliberately produces NOTHING here, though it
     could write anywhere. That is spec D11, and it is a ruling rather than an oversight: an earlier
