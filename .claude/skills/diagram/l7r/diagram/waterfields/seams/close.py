@@ -385,6 +385,7 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
     shapes = [Polygon(q["poly"]).buffer(0) if len(q.get("poly") or []) >= 3 else Polygon() for q in plots]
     tree = STRtree(shapes)
     for _round in range(2):  # a trade can leave the taker a tail of its own; a second look sheds it
+        traded = False
         for i, g in enumerate(shapes):
             if g.is_empty:
                 continue
@@ -415,8 +416,11 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
                 if _long_tail(Polygon(gj).buffer(0)) or pointed_ring(gi, _GATE_MIN_APEX) or pointed_ring(gj, _GATE_MIN_APEX):
                     continue
                 plots[i]["poly"], plots[best]["poly"] = gi, gj
+                traded = True
                 shapes[i], shapes[best] = Polygon(gi).buffer(0), Polygon(gj).buffer(0)
                 g = shapes[i]
+        if not traded:
+            break
 
 
 def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:
