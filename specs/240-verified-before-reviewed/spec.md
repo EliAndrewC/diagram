@@ -292,3 +292,4 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   no longer held for a named snapshot, which stays refused as an older map until re-taken; it now says the copy the
   reviewer reads must be whole and current. Its aside taken too: the older-snapshot refusal names `make map GEN=...`
   in its second remedy, as FR-005 does.
+- **Amendment round 4, FAITHFUL.** Round 3's item resolved; nothing new introduced.
