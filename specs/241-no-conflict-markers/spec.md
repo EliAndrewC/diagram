@@ -26,8 +26,10 @@ route, which a state-based rule would not (R2, R3).
 ## Functional requirements
 
 - **FR-001 The refusal is on the triple.** A file counts as carrying a conflict when it holds a `<<<<<<<`
-  line, a later `=======` line and a later `>>>>>>>` line, each at the start of a line. Any one of them
-  alone is not a conflict: `=======` is an ordinary underline in this project's own Markdown, and a
+  line, then a later line that is EXACTLY `=======`, then a later `>>>>>>>` line - the open and close
+  markers at the start of their line, the middle one the whole of its own, because `======= foo` at column
+  zero is a heading rule in someone's Markdown and not something git writes. Any one of them alone is not a
+  conflict: `=======` is an ordinary underline in this project's own Markdown, and a
   session writing about merges types the others.
 - **FR-002 GIT says what the command would stage; the guard does not re-implement pathspecs.** For an
   `add`, the file list comes from `git add --dry-run --ignore-missing` run with the command's own
@@ -118,8 +120,8 @@ route, which a state-based rule would not (R2, R3).
 - **D2 - the triple, not any single marker.** `=======` alone is a Markdown underline and appears in this
   repository's own docs; `<<<<<<<` alone appears in prose about merges. Only the three in order are
   unambiguous.
-- **D3 - it refuses rather than fixing.** Feature 212's ladder asks whether the guard can supply the
-  compliant command. It cannot: the compliant command stages the files that are RESOLVED, and which those
+- **D3 - it refuses rather than fixing.** Feature 164's ladder, re-judged per branch by 212, asks whether
+  the guard can supply the compliant command. It cannot: the compliant command stages the files that are RESOLVED, and which those
   are is the session's knowledge. This is the same class as `make-only`'s `guard-write` (41 refusals) and
   `guard-file`'s no-marker branch (77) - the class feature 212 described as "the compliant form is an
   Edit carrying a REASON, which only the session has". It is not the largest refusal family in the

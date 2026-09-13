@@ -712,16 +712,22 @@ print()"
 # the checker's own scope, so the report and the gate can never again disagree about what is over.
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
 	@python3 ../../../scripts/check-file-scale.py --list ../../..
-# GUARD_EDIT_OK: feature 241 - the conflict-marker exemption is enumerated here for feature 173's own
-# reason: a whole-file carve-out nobody can list is one nobody revisits. A file declaring
-# `CONFLICT_MARKERS_OK: <reason>` is invisible to both the hook and the backstop, so the audit is the
-# only place a reader meets it.
-	@printf '\n\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
-	@python3 ../../../scripts/_hm_conflict.py --list ../../..
 	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
 	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
+# GUARD_EDIT_OK: feature 241 - the conflict-marker exemption is enumerated here for feature 173's own
+# reason: a whole-file carve-out nobody can list is one nobody revisits. A file declaring
+# `CONFLICT_MARKERS_OK: <reason>` is invisible to both the hook and the backstop, so the audit is the
+# only place a reader meets it. It stands AFTER clause 13's four explanation lines rather than between
+# them and their own listing, where its first draft sat - the reader then met "listed above with its
+# reason" pointing past a second list, which is its own little piece of drift (spec-fidelity, round 1
+# of the amended spec).
+	@printf '\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
+	@python3 ../../../scripts/_hm_conflict.py --list ../../..
+	@printf '  Declaring it makes the WHOLE file invisible to the hook and to the backstop, so a real\n'
+	@printf '  conflict committed into one of these is caught by nothing - which is why the reason must be\n'
+	@printf '  argued, must open its line, and is listed here with the file that claims it.\n\n'
 # GUARD_EDIT_OK: feature 234 - the declared-silence carve-out is enumerated for the same reason clause 13's
 # is, one line above: a class entry may name no research section when the section is deliberately unwritten,
 # and a carve-out nobody can list is one nobody revisits.

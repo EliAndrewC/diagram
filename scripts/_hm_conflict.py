@@ -22,9 +22,9 @@ exactly seven `=`, then seven `>`. Three properties follow from that and each on
 
 WHAT A COMMAND WOULD STAGE. Asked of GIT, never enumerated: `git add --dry-run` answers it exactly, for
 every form at once - `-A`, `.` (which is scoped to the CWD, not the tree), `-u`, a directory, a glob. The
-enumeration this replaced was wrong in four ways at once, and one of them would have made the guard fire on
-correct work (`git add .` in a clean subdirectory while a marker sat elsewhere), which is the failure the
-whole design exists to avoid.
+enumeration this replaced was wrong in two ways (the record is R4 of this feature's research): it missed the
+recorded incident's own command, and it would have fired on correct work - `git add .` in a clean
+subdirectory while a marker sat elsewhere - which is the failure the whole design exists to avoid.
 """
 
 from __future__ import annotations
@@ -257,7 +257,13 @@ def main(argv: list[str]) -> int:
         print(f"  {len(taken)} file(s) declare {EXEMPT[:-1]}" + (" - none" if not taken else ""))
         return 0
     if not argv or argv[0] != "--tracked":
-        print("usage: _hm_conflict.py [--selftest | --tracked <root>]   # --tracked exits 1 naming any tracked file with a conflict", file=sys.stderr)
+        print(
+            "usage: _hm_conflict.py [--selftest | --tracked <root> | --list <root>]\n"
+            "  --selftest  prove the detector fires (9+ content cases, 4 command shapes)\n"
+            "  --tracked   exit 1 naming any tracked file that carries a conflict\n"
+            f"  --list      name every tracked file declaring {EXEMPT[:-1]} (what `make audit` prints)",
+            file=sys.stderr,
+        )
         return 2
     root = argv[1] if len(argv) > 1 else "."
     files = tracked_files(root)
