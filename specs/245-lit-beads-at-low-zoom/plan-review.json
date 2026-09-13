@@ -1,32 +1,32 @@
 {
  "feature": "245-lit-beads-at-low-zoom",
- "plan_sha256": "73fad5a38f266b49539ad127b702cfa08f0a5b0e4d7932200ded1898d2d0c24b",
+ "plan_sha256": "62bca25e0a6367f9986dbf61e87f4e2744cfd5c8383a2e64dbcbca941e67ed0d",
  "reviewed": "2026-09-13",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "P1a-selector-element-set",
-   "summary": "The exemption rule matches :is(path, circle) where the wash rule it overrides matches :is(path, circle, ellipse, rect, polygon, polyline).",
+   "summary": "The exemption rule matches :is(path, circle) where the wash rule it overrides matches the wider filled-element set.",
    "class": "within",
-   "why": "FR-001 exempts 'the lit bund-beans class's filled shapes'. The class draws only <circle> elements (settlement/fields/comb.py _comb_draw_beads emits circles inside one g at 0.85), so path+circle covers every filled shape the class has; nothing that exists today keeps the wash. Noted as a seam rather than a finding: a future bund-beans shape of another element type would silently keep the wash, which D1 already says fails safe."
+   "why": "FR-001 exempts 'the lit bund-beans class's filled shapes'. The class draws circles only (settlement/fields/comb.py _comb_draw_beads), so path+circle covers every filled shape the class has today and nothing that exists keeps the wash. The seam - a future bund-beans shape of another element type silently keeping the wash - is the fail-safe direction spec D1 already chose."
   },
   {
    "id": "P1b-rule-order-and-fill-opacity-1",
    "summary": "The new rule is placed after the wash rule so it wins by order, and sets fill-opacity: 1.",
    "class": "within",
-   "why": "FR-001 asks for the vector page's fill opacity; the bead circles carry no fill-opacity attribute, so the vector page paints them at 1, and the constant matches. Placement is CSS mechanics the spec leaves to the implementation and it narrows nothing."
+   "why": "FR-001 asks for the vector page's fill opacity; the bead circles carry no fill-opacity attribute, so the vector page paints them at 1 and the constant matches. Cascade order is CSS mechanics the spec leaves to the implementation."
   },
   {
    "id": "P1c-hit-discs-by-fill-none",
-   "summary": "The hit discs are excluded by :not([fill=\"none\"]), the same test the wash uses, and the group's 0.85 opacity is not named.",
+   "summary": "The hit discs are excluded by :not([fill=\"none\"]), the same test the wash uses; the group's 0.85 opacity is not named by the rule.",
    "class": "within",
-   "why": "FR-001 requires the hit discs to stay unpainted and D2 requires the 0.85 group opacity to stay; the page writer emits hit shapes with fill=\"none\" (interactive/page.py), so the exclusion is exact."
+   "why": "FR-001 requires the hit discs to stay unpainted and D2 requires the 0.85 group opacity to stay; the page writer emits hit shapes with fill=\"none\", so the exclusion is exact and nothing narrows."
   },
   {
    "id": "P2-zoom-by-control-equals",
    "summary": "page_lit.measure's --vector loop presses Control+= through page.keyboard.press in place of mouse.move + mouse.wheel; ZOOM_STEPS stays as the cap; the docstring says the key and why not the wheel.",
    "class": "within",
-   "why": "FR-004 settles the key (Ctrl with the plus key) and the step cap; '=' is the unshifted plus key the page's own keydown handler reads (page.js: e.key === \"+\" || e.key === \"=\")."
+   "why": "FR-004 settles the key (Ctrl with the plus key) and the step cap; '=' is the unshifted plus key the page's own keydown handler reads."
   },
   {
    "id": "P3-fakepage-keyboard",
@@ -35,16 +35,16 @@
    "why": "FR-005's last clause asks the stub test to mirror the key presses."
   },
   {
-   "id": "P4-small-viewport-on-the-halves-page",
-   "summary": "The page-lit browser test measures the two-class halves page through a 100 by 100 viewport (measure's existing viewport argument); the first test asserts mode == raster, the vector test asserts mode == vector and zoom > 1.",
+   "id": "P4-halves-page-viewport-300",
+   "summary": "CHANGED since round 1: the page-lit browser test measures the two-class halves page through a 300 by 300 viewport rather than 100 by 100, because at 100 the page's fixed zoom buttons covered most of the lit half; the share test lights the paddy, the half the buttons do not touch; raster asserted, and the vector case asserts mode == vector and zoom > 1.",
    "class": "within",
-   "why": "FR-005 asks for a small viewport over the two-class synthetic map, raster asserted, vector reached and a zoom above the opening view; a 100 by 100 viewport over the 200-unit map opens below the raster switch (research R1)."
+   "why": "FR-005 asks for 'a small viewport over the two-class synthetic map' whose opening view is raster mode, raster asserted, and the --vector case asserting vector reached with a zoom above the opening view - it fixes no viewport number and names no class for the share test. Research R1 records that 300 by 300 still opens below the raster switch on that 200-unit map (screen scale 1.5 against the picture's 2 per map unit) and that one doubling reaches vector, so every clause of FR-005 is still carried; nothing is narrowed."
   },
   {
    "id": "P5-synthetic-bead-and-assertions",
-   "summary": "_driver._synthetic() gains one <circle r=\"1.4\" fill=\"#2F6B35\"/> tagged 'bund beans' on clear ground; the new test shrinks the viewport, presses fit, asserts data-mode raster, reads 0.45 on the lit paddy's rect and 1 on the lit bead circle, then restores the viewport and asserts both read 1.",
+   "summary": "_driver._synthetic() gains one <circle r=\"1.4\" fill=\"#2F6B35\"/> tagged 'bund beans' on clear ground; the new test shrinks the viewport, presses fit, asserts data-mode raster, reads the wash on the lit paddy's rect and full on the lit bead circle, then restores the viewport and asserts both full on the vector page.",
    "class": "within",
-   "why": "FR-005 asks for exactly this element and these assertions; the radius and color match the shipped bead (comb.py r=1.4, BEAN_GREEN), and restoring the viewport is a means of reaching the vector page that the spec leaves open."
+   "why": "FR-005 asks for exactly this element and these assertions; the radius and color match the shipped bead, and restoring the viewport is a means of reaching the vector page that the spec leaves open."
   },
   {
    "id": "P6-index-rows",
@@ -53,18 +53,23 @@
    "why": "FR-006 asks for both rows to say the new thing; the length is not specified."
   },
   {
-   "id": "P7-sc002-verified-with-page-lit",
-   "summary": "The plan's only named instrument for SC-002 (and SC-003) on the shipped Inashiro page is `make page-lit`: 'SC-002 and SC-003 replayed by hand on the shipped Inashiro page with `make page-lit`, recorded in tasks.md'. The R1 contact sheet re-taken on the shipped stylesheet - the instrument SC-002 names as deciding it - appears nowhere in the plan, and tasks.md T04 repeats the same wording.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The accepted spec's SC-002 says in terms that the contact sheet re-taken on the shipped stylesheet, with the GM's eye final, is what decides the criterion, and that `make page-lit` CANNOT decide it because a washed bead already moves past the tool's threshold. The GM's request is a visual one - the beads 'don't visible light up when highlighted while zoomed out ... the highlighting needs to be higher contrast' - so the only check that answers what was asked is the one that looks at the picture. Verifying by a tool the spec has already ruled incapable of the judgment would let the feature be called done with the GM's own question unanswered. It is not physically impossible (research R1 built the scratch Playwright contact sheet already and would be replayed on the shipped stylesheet), it is not implied anywhere in the GM's words, and applying the spec's own instrument defeats nothing. The plan's Design section must name the R1 contact sheet re-take on the shipped Inashiro page at its opening view as SC-002's check, with `make page-lit CLASS=\"bund beans\"` as the subordinate 'no other class moved' check, and tasks.md T04 must say the same."
+   "id": "P7-sc002-decided-by-the-contact-sheet",
+   "summary": "RESOLVED since round 1: the plan's last Design bullet and tasks.md T04 now say SC-002 is decided by the R1 contact sheet RE-TAKEN on the shipped Inashiro page at its opening view with the shipped stylesheet, looked at by the session and recorded in tasks.md with the GM's eye final on the map itself; `make page-lit CLASS=\"bund beans\"` is the subordinate check that no other class moved, stated as unable to decide the criterion because a washed bead already moves past its threshold; SC-003 is `make page-lit ... VECTOR=1` reporting mode: vector.",
+   "class": "within",
+   "why": "This is now the accepted spec's SC-002 and SC-003 in their own terms, including the spec's statement that the tool cannot decide SC-002, and it answers the GM's request on its own ground - the complaint is that the beads 'don't visible light up ... zoomed out', which only a look at the picture settles. tasks.md T04 carries the same wording, so nothing survives of the round-1 narrowing that named page-lit as the instrument for SC-002. The plan decides nothing here that the spec had not already settled."
   },
   {
    "id": "P8-regression-baseline",
-   "summary": "The Constitution Check takes the regression baseline to be a green `make done` recorded 8 hours before the feature started, rather than a fresh detached-worktree run.",
+   "summary": "The Constitution Check takes the regression baseline to be the green `make done` the run log records from before this feature started, rather than a fresh detached-worktree run; the round-1 '8 hours' figure was removed in this pass.",
    "class": "within",
-   "why": "Neither the request nor the spec settles which baseline run is used, and SC-005's requirement of a green `make done` and `make page-check` is untouched; this narrows nothing that was asked. Noted only because the figure carries no pointer to the run record."
+   "why": "Neither the request nor the accepted spec settles which baseline run is used, and SC-005's requirement of a green `make done` and a green `make page-check` is untouched, so this narrows nothing that was asked. The removal of the unsourced figure changes no decision; whether a run-log baseline satisfies Principle XIII is a gate question rather than a fidelity one."
+  },
+  {
+   "id": "P9-verification-split-and-route",
+   "summary": "Constitution Check: the asset half is proved by `make page-check` and the tool half by `make done` (page_lit.py is engine code); the delta routes GATED (LOCAL-GATED), with page.css owing page-check at push; no pool manifest moves, so no settlement-review is owed.",
+   "class": "within",
+   "why": "SC-005 states all of this in the accepted spec - page-check green for the stylesheet, done green for the tool, no manifest moved so no settlement-review, lands GATED. The plan restates rather than decides."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

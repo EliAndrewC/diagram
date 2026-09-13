@@ -1,6 +1,6 @@
 # Feature 245 - lit beads at low zoom
 
-**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5, 2026-09-13); its three asides taken in the same round (FR-003, D2, SC-002). Plan review pending.
+**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 1 of 5, 2026-09-13; its three asides taken in the same round: FR-003, D2, SC-002); the plan BLOCKED at round 1 (the plan named page-lit as SC-002's check where the spec names the contact sheet) and CLEAR at round 2. No pool manifest moved, so no settlement-review was owed (feature 231).
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the measurement of the lit bead under the wash and without it, and the page-lit tool's vector path.
 **Predecessors**: 134 (the highlight; the wheel scrolls, the keys zoom), 200 (raster mode), 201 (the 0.45 wash), 231 (`make page-lit`).
