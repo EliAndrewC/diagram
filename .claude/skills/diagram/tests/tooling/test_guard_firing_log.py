@@ -276,6 +276,13 @@ _ESCAPES = {
         "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
     ),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
+    "CONFLICT_MARKERS_OK": (
+        "command",
+        "feature 241: conflict-marker-hooks.sh reaches it through escape_or_refuse, so _hookmatch.py "
+        "escape anchors it as an invocation. It is ALSO a file-level marker, read from a file's first 40 "
+        "lines by _hm_conflict.has_conflict for the fixture or document that must SHOW a triple - the "
+        "FILE_SIZE_OK shape, where the marker in the text IS the escape and a 'mention' is the intended use",
+    ),
     "FILE_SIZE_OK": (
         "content",
         "feature 173: the justification header INSIDE an oversize file, read by scripts/check-file-scale.py from the file's first 40 lines - never matched in a command, so a mention in one escapes nothing. It carries its own reason floor (40 characters) rather than _hookmatch.py's eight",

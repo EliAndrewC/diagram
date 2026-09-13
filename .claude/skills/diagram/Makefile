@@ -716,6 +716,18 @@ print()"
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
 	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
+# GUARD_EDIT_OK: feature 241 - the conflict-marker exemption is enumerated here for feature 173's own
+# reason: a whole-file carve-out nobody can list is one nobody revisits. A file declaring
+# `CONFLICT_MARKERS_OK: <reason>` is invisible to both the hook and the backstop, so the audit is the
+# only place a reader meets it. It stands AFTER clause 13's four explanation lines rather than between
+# them and their own listing, where its first draft sat - the reader then met "listed above with its
+# reason" pointing past a second list, which is its own little piece of drift (spec-fidelity, round 1
+# of the amended spec).
+	@printf '\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
+	@python3 ../../../scripts/_hm_conflict.py --list ../../..
+	@printf '  Declaring it makes the WHOLE file invisible to the hook and to the backstop, so a real\n'
+	@printf '  conflict committed into one of these is caught by nothing - which is why the reason must be\n'
+	@printf '  argued, must open its line, and is listed here with the file that claims it.\n\n'
 # GUARD_EDIT_OK: feature 234 - the declared-silence carve-out is enumerated for the same reason clause 13's
 # is, one line above: a class entry may name no research section when the section is deliberately unwritten,
 # and a carve-out nobody can list is one nobody revisits.
@@ -1262,6 +1274,16 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	: "delta touches, so it costs nothing on a change that touches none."
 	python3 ../../../scripts/spec-lint.py --selftest
 	python3 ../../../scripts/spec-lint.py --delta ../../..
+	: "GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP, beside its two siblings and for the third" ; \
+	: " time the same reason: a repo-wide static rule belongs in the phase the gate runs FIRST, so a finding" ; \
+	: " arrives before the map roll is paid for. The hook refuses STAGING a conflict; this asks whether one is" ; \
+	: " already COMMITTED, which a hook cannot see - an escape, a git am, or a commit made outside the session." ; \
+	: " Twice on 2026-09-12/13 a merge was committed unresolved, once in 23 files, and the lint phase is where" ; \
+	: " the second one surfaced by accident. It scans every tracked file and costs about a second." ; \
+	: " GUARD_EDIT_OK: selftest FIRST, the rule every static check in this phase follows - a checker that" ; \
+	: " cannot fail is worth nothing, and this one is now trusted at the push as well."
+	python3 ../../../scripts/_hm_conflict.py --selftest
+	python3 ../../../scripts/_hm_conflict.py --tracked ../../..
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \
