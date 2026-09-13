@@ -90,10 +90,6 @@ def held_ranges(cmd: str) -> list[tuple[int, int, str]]:
     return held
 
 
-# an interpreter reading its PROGRAM from stdin or a heredoc: `python3 - <<'PY'`, `bash -s <<'SH'`
-_PROGRAM_ON_STDIN = re.compile(r"\b(?:python3?|bash|sh|node|perl|ruby)\s+(?:-\w+\s+)*-\s*(?:<<|\||;|$)")
-
-
 def write_targets(cmd: str, cwd: str | None = None) -> list[str | None]:
     """The paths a command WRITES - a redirect's target or a `tee` argument (GUARD_EDIT_OK).
 
@@ -119,10 +115,7 @@ def write_targets(cmd: str, cwd: str | None = None) -> list[str | None]:
     except Exception:                       # a guard never takes the session down with it
         return []
     home = os.path.expanduser("~")
-    out: list[str | None] = [t["path"] for t in walk(cmd, cwd, home, home)["targets"]]
-    if _PROGRAM_ON_STDIN.search(cmd):
-        out.append(None)
-    return out
+    return [t["path"] for t in walk(cmd, cwd, home, home)["targets"]]
 
 
 def plan(

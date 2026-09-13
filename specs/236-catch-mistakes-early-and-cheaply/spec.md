@@ -93,10 +93,12 @@ session state directory `~/.claude/projects/`, whose auto-memory index format is
 uses an em-dash (D10). The exemption MUST be decided by where the write LANDS, and the write targets
 MUST be read by the walk the main-tree guard already uses (`_hm_tree.walk`) rather than by a second
 one: variables assigned in the same command are expanded, heredoc BODIES are not scanned for
-redirects, and `git commit` writes to the repository rather than to a file. A destination that cannot
-be known is NEVER outside - which covers the interpreter reading its program from a heredoc, since a
-`write_text` into the pool can sit beside a `> /tmp/gate.log` redirect. A path the command merely
-MENTIONS decides nothing: reading the memory file while writing a project file names one of each.
+redirects, and `git commit` writes to the repository rather than to a file. A destination the walk
+cannot resolve - a relative path with no cwd, a target behind a variable assigned elsewhere - is NEVER
+outside. Where the command resolves NO write target at all, the fallback is every path it names; where
+it resolves one, a path merely MENTIONED decides nothing, because reading the memory file while
+writing a project file names one of each. A program heredoc that could write anywhere does not
+disqualify a command whose resolvable targets are all outside (D11).
 
 **FR-007a** "Outside a quoted span" means the house-style sense - a prose quotation (`「」`, curly or
 straight quotes, `<q>`, `<blockquote>`) or a backtick span naming a token - and NOT shell quoting: under a
@@ -214,9 +216,10 @@ alternation, a path token, a negated search, a prose quotation, a backtick span 
 `git grep -n "centre"` are untouched. A write to the auto-memory index under `~/.claude/projects/` is
 untouched IN THE SHAPES THE RECORD USES - the path literal, the path behind a variable assigned in the
 same command, a directory behind such a variable - and so is a `/tmp` heredoc whose body carries a
-line beginning `>`; while a command that writes project content is corrected even when a redirect goes
-outside: reading the memory file and writing a project file in one breath, a `write_text` in a program
-heredoc beside a `> /tmp/gate.log`, and a commit message beside one.
+line beginning `>`, and so is each of those when a program heredoc stands in the same command (D11);
+while a command that writes project content by a route the walk RESOLVES is corrected even when a
+redirect goes outside: reading the memory file and writing a project file in one breath, and a commit
+message beside a `> /tmp/gate.log`.
 **SC-007** (FR-008, FR-008a, FR-008b, FR-008c) The phase fails on a British spelling in a changed line and
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
 the delta; does not fail on a line merely moved; does not fail on the 192 ledgered lines; and runs on a
@@ -319,6 +322,20 @@ Its WIDTH is the part that needed fixing: judged by every path the command menti
 silenced the rule on a command that read the memory file and wrote a project file in one breath -
 found by the amendment review, and now decided by the write targets (FR-007c).
 
+**D11 - a program heredoc does not disqualify a command whose resolvable write targets are all outside
+the project, and the cost of that is named.** `python3 - <<'PY'` can write anywhere, so an earlier
+draft appended an unknowable destination for every such command and corrected it. Measured over the
+window, that rewrote 19 commands whose every resolvable target was outside - 4 of them the auto-memory
+index, whose em-dash is Claude Code's own format (`research.md` R10). **The two mistakes are not
+equal.** A correction that should not have happened silently rewrites someone else's text, and this
+project has paid for that twice - the reader agents whose verbatim page text was Americanized in
+2026-09-06, and the memory format here. A correction that did NOT happen leaves a British spelling in
+the tree, where `make quick` fails on it in the delta - which is the half of item 4 that enforces, and
+the reason the hook half can afford to be cautious. So the exemption follows the resolvable targets.
+What it costs, stated rather than implied: a project write inside a command whose only resolvable
+targets are outside is not corrected by the hook. The alternative priced and rejected is the draft
+that produced the 19.
+
 ## Out of scope
 
 - The research record and the agents that read it; the GM ruled it valuable as it stands.
@@ -327,6 +344,21 @@ found by the amendment review, and now decided by the write targets (FR-007c).
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment 2, round 3** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, five items, all
+taken, and the round confirmed round 2's split and verdict figures against its own replay. Three were
+mine to have got wrong. (1) The guard could be switched off entirely: the ImportError stub still took
+one argument while the call site passed two, so an unimportable `_hm_house` raised a TypeError - and
+the wrapper turns a crash into silence - for EVERY command rather than for one exemption. The stub
+takes the arguments the call site passes now, and a case drives the hook with `_hm_house` broken on
+purpose. (2) R10's "none of them is wrong in either direction" was true only when judged by the hook's
+own target list, which is the circularity R10's own closing sentence warns about: judged plainly, 19
+commands whose every resolvable target was outside the project were being corrected, 4 of them the
+auto-memory index. That is D11, and the figures are in R10. (3) FR-007c had dropped the
+mention-fallback clause while the hook still carried the fallback, which decides 10 commands in the
+window - the clause is back, because the spec and the code must say the same thing. Also taken: SC-006
+now says the memory shapes hold when a program heredoc stands in the same command, and round 1's dash
+figure is marked as its own run.
 
 **Amendment 2, round 2** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, three items, all
 taken; four of round 1's seven confirmed resolved against re-run measurements (the reviewer's own
@@ -354,7 +386,8 @@ written in any language, D10 because it instances an exemption the hook already 
 consequential items, each of which the reviewer MEASURED rather than inferred: (1) the replay's
 prefilter had its dashes flattened to hyphens by this very hook as the script was written, so R10's
 window counted commands carrying a spaced hyphen - re-run, and the figures restated from it; (2) the
-dash half of the ruling had therefore never been priced, and now is (201 of 545); (3) R10's "2.2 s"
+dash half of the ruling had therefore never been priced, and now is (201 of 545 on this round's own
+run; R10 carries the final figures); (3) R10's "2.2 s"
 did not reproduce - re-measured, the walk rewrite buys nothing on real commands and the 2.2 s was
 container contention, which R10 now says; (4) R10 and D9 called the warned class "fixes" when the
 predicate only sees both spellings, and the hook's own message asserted the same thing to the session

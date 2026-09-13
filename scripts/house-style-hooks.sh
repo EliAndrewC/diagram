@@ -52,7 +52,10 @@ except Exception:                      # a guard never takes the session down wi
 try:                                   # GUARD_EDIT_OK: feature 236 amendment 2 - what a command
     from _hm_house import write_targets   # WRITES decides the outside-the-project exemption
 except Exception:
-    write_targets = lambda s: []
+    # GUARD_EDIT_OK: the stub takes the arguments THE CALL SITE passes. Written to the one-argument shape
+    # while the call passed two, an import failure raised a TypeError instead of degrading - and the
+    # wrapper turns a crash into silence, so the whole guard was off rather than one exemption.
+    write_targets = lambda s, c=None: []
 try:
     d = json.load(sys.stdin)
 except Exception:

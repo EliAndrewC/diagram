@@ -151,8 +151,14 @@ HOUSE_STYLE = [
     ("a memory write behind a variable", cmd("M=/home/agent/.claude/projects/-diagram/memory/MEMORY.md; cat >> $M <<'EOF'\n- [A](b.md) — the colour\nEOF"), "ok"),
     ("a memory directory behind a variable", cmd("M=/home/agent/.claude/projects/-diagram/memory; cat > $M/project_x.md <<'EOF'\nthe colour of it\nEOF"), "ok"),
     ("a scratchpad heredoc whose body carries a quote line", cmd("cat > /tmp/claude-1000/x/b.md <<'EOF'\n> the colour, quoted from the page\nEOF"), "ok"),
-    ("a program writing project content beside a /tmp log", cmd("python3 - <<'PY' > /tmp/gate.log\np.write_text(\"the centre of it\")\nPY"),
-     "rewritten:python3 - <<'PY' > /tmp/gate.log\np.write_text(\"the center of it\")\nPY"),
+    # D11: a program heredoc can write anywhere, and where every target that CAN be resolved is
+    # outside the project the command is left alone. The two mistakes are not equal - a correction
+    # that should not have happened rewrites someone else's text silently, while one that did not
+    # happen leaves a spelling `make quick` fails on in the delta. Treating this as unknowable
+    # corrected 19 window commands whose every resolvable target was outside, 4 of them the memory.
+    ("a program heredoc beside a /tmp log", cmd("python3 - <<'PY' > /tmp/gate.log\np.write_text(\"the centre of it\")\nPY"), "ok"),
+    # ...but a commit message is not unknowable: the write lands in the repository, and `_hm_tree`
+    # says so, so this one is corrected even though its only redirect goes to /tmp.
     ("a commit message beside a /tmp log", cmd("git commit -m 'the centre of it' && make test-full > /tmp/g.log"),
      "rewritten:git commit -m 'the center of it' && make test-full > /tmp/g.log"),
     # ...and the two shapes that must stay quiet, or the guard fires on correct work
