@@ -375,8 +375,24 @@ class BoardsMixin:
                             return True
                 return False
 
+            def _across_a_way(_q: Pt) -> bool:
+                """Does the line from the board to this seat cross a drawn way?"""
+                for _ln in self.M.get("lanes") or []:
+                    _pp = [(float(_a), float(_b)) for _a, _b in (_ln.get("pts") or [])]
+                    for _u, _v in zip(_pp, _pp[1:], strict=False):
+                        if segments_cross((x, y), (_q[0], _q[1]), _u, _v):
+                            return True
+                return False
+
             def _pick(_seats: list[Pt]) -> Pt:
-                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
+                # ACROSS THE ROAD IS NOT A LAST RESORT, IT IS A REFUSAL (settlement-review, feature 230 pass 11). `_blocked`
+                # has always answered "or sit across a way from the board it names", but it is a CONSTRAINT inside the
+                # search, and when no seat satisfied everything the fallback took the best-scoring seat regardless: the
+                # reference hamlet's caption landed east of the connector with its board west of it, so at fit zoom
+                # "notice board" named the track. Seats on the board's own side are ranked first, and a crossing seat is
+                # considered only when the board has no other ground at all.
+                _near = [_s for _s in _seats if not _across_a_way(_s)]
+                return pick_caption_seat(_near or _seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
 
             # ONE LADDER, BOTH BRANCHES (feature 157, second pass). The dense ranked ladder was built
             # inside the tilted branch and the LEVEL branch kept its own coarse candidate set - four
