@@ -2,6 +2,13 @@
 // edit here: add or change a term in glossary.json and run `make glossary`; the gate fails while the two differ.
 window.RECORD_GLOSSARY = [
  {
+  "term": "Akiba",
+  "variants": [
+   "Akiba"
+  ],
+  "def": "The cult of the fire-quelling deity of Akiba, whose small neighborhood shrines were the most widely spread in Japan - often built of stone, because stone does not burn."
+ },
+ {
   "term": "Bidens tripartita",
   "variants": [
    "Bidens tripartita",
@@ -288,6 +295,13 @@ window.RECORD_GLOSSARY = [
    "Meiji"
   ],
   "def": "The era from 1868, when Japan modernized: its land consolidation, drainage works and row planting are the modern forms a pre-modern map must not show."
+ },
+ {
+  "term": "Meireki",
+  "variants": [
+   "Meireki"
+  ],
+  "def": "The Japanese era of 1655 to 1658. Its fire of 1657 was the worst in Edo's history."
  },
  {
   "term": "Mengxi Bitan",
@@ -765,6 +779,13 @@ window.RECORD_GLOSSARY = [
   "def": "The half-moon pond dug in front of a village, its flat bank toward the houses - a geomantic feature, not a religious one."
  },
  {
+  "term": "barbican",
+  "variants": [
+   "barbican"
+  ],
+  "def": "A walled outwork covering a gate. The European form's narrow neck keeps a mass of attackers from storming through, and by the same narrowness stops the defenders sallying out to meet them."
+ },
+ {
   "term": "baren",
   "variants": [
    "baren"
@@ -1028,6 +1049,14 @@ window.RECORD_GLOSSARY = [
    "center-pivot"
   ],
   "def": "The rotating sprinkler boom of modern American irrigated farming, which sweeps a circle of field."
+ },
+ {
+  "term": "chaoguan",
+  "variants": [
+   "chaoguan",
+   "鈔關"
+  ],
+  "def": "The Ming and Qing customs barriers, which stood at commodity centers and on the Grand Canal and the strategic routes rather than at a county seat's gates."
  },
  {
   "term": "chenghuangmiao",
@@ -1367,6 +1396,13 @@ window.RECORD_GLOSSARY = [
    "distributary"
   ],
   "def": "A channel that leaves a parent canal to carry part of its water onward, as against an intake taken off a river."
+ },
+ {
+  "term": "dituan",
+  "variants": [
+   "dituan"
+  ],
+  "def": "The Song corner tower, standing where a wall turns or at the angle of a barbican, made arc-shaped on purpose to reduce the face exposed to attack."
  },
  {
   "term": "dobashi",
@@ -2240,6 +2276,14 @@ window.RECORD_GLOSSARY = [
    "iriai"
   ],
   "def": "The customary common land of a Japanese village - woods, grass and scrub held by the village and governed by its own rules on who may cut, when, and how much."
+ },
+ {
+  "term": "iroha companies",
+  "variants": [
+   "iroha companies",
+   "iroha"
+  ],
+  "def": "Edo's townsman fire brigades, lettered by the syllables of the Japanese alphabet - forty-seven of them by 1720, about one to every twenty blocks."
  },
  {
   "term": "iroha-gumi",
@@ -3355,6 +3399,13 @@ window.RECORD_GLOSSARY = [
   "def": "The white-gravel court where a case was heard, the litigants kneeling below the magistrate's raised floor."
  },
  {
+  "term": "ossuary",
+  "variants": [
+   "ossuary"
+  ],
+  "def": "A place where the bones of the dead are kept together - here a low mound with one weathered stupa over the communal bones of the poor and the unclaimed."
+ },
+ {
   "term": "ote-mon",
   "variants": [
    "ote-mon",
@@ -3488,6 +3539,14 @@ window.RECORD_GLOSSARY = [
   "def": "Working the flooded paddy soil into a smooth, water-holding mud before transplanting - the peak of a paddy's water demand; a bund is puddled mud. In ironmaking the same word names a different thing: stirring molten pig iron under blast to work it into wrought iron."
  },
  {
+  "term": "qiandao",
+  "variants": [
+   "qiandao",
+   "纤道"
+  ],
+  "def": "A towpath: the built way along a canal or river bank from which barges were hauled upstream. Shaoxing's dates to 815 and runs over 40 km, part of it laid on stone piers out in the water."
+ },
+ {
   "term": "quay",
   "variants": [
    "quays",
@@ -3561,6 +3620,13 @@ window.RECORD_GLOSSARY = [
    "revetted"
   ],
   "def": "A bank faced with stone or timber to hold it against the water."
+ },
+ {
+  "term": "ri",
+  "variants": [
+   "ri"
+  ],
+  "def": "A Japanese league of about 2.4 miles, thirty-six cho."
  },
  {
   "term": "riffle",
@@ -3670,6 +3736,14 @@ window.RECORD_GLOSSARY = [
    "sakagura"
   ],
   "def": "A sake brewery: vat hall, koji room, steaming hearth, its own well and a rice storehouse behind a shopfront."
+ },
+ {
+  "term": "sally port",
+  "variants": [
+   "sally port",
+   "sally gate"
+  ],
+  "def": "A small gate in a fortification through which defenders go out to attack a besieger and come back in."
  },
  {
   "term": "salvage excavation",
@@ -3862,6 +3936,13 @@ window.RECORD_GLOSSARY = [
   "def": "The Pearl delta's outer, silt-built fields, as low and wet as the dike-pond zone but kept in rice."
  },
  {
+  "term": "shi",
+  "variants": [
+   "shi"
+  ],
+  "def": "A Chinese measure of grain, roughly a hundred liters - the unit tribute rice was counted in."
+ },
+ {
   "term": "shibai-goya",
   "variants": [
    "shibai-goya"
@@ -3988,6 +4069,13 @@ window.RECORD_GLOSSARY = [
    "sill"
   ],
   "def": "The bottom edge of an opening in a bund: an intake's sill sits just above the field surface, an outlet's a little below. The word also names the level bearing course an abutment presents to the beam that lands on it."
+ },
+ {
+  "term": "skimmer wall",
+  "variants": [
+   "skimmer wall"
+  ],
+  "def": "A wall set across an intake's mouth that holds back the floating matter and lets the cleaner water below it pass."
  },
  {
   "term": "sluice",
@@ -4397,6 +4485,15 @@ window.RECORD_GLOSSARY = [
   "def": "The 'rope place': a great rope stretched bank to bank to catch driven logs where a river leaves its gorge."
  },
  {
+  "term": "tudi miao",
+  "variants": [
+   "tudi miao",
+   "tudigong",
+   "土地庙"
+  ],
+  "def": "The earth-god's shrine: the small hall of a Chinese village's tutelary deity, kept at the village's entrance or inside a temple beneath the main altar."
+ },
+ {
   "term": "tulou",
   "variants": [
    "tulou"
@@ -4538,6 +4635,13 @@ window.RECORD_GLOSSARY = [
    "weitian"
   ],
   "def": "A Chinese polder: low ground by a river, lake or the sea enclosed by a dike that holds the water out, drained and farmed - from the air a chessboard of fields."
+ },
+ {
+  "term": "well-sweep",
+  "variants": [
+   "well-sweep"
+  ],
+  "def": "A counterweighted pole pivoted on a post beside a well, swung down to dip the bucket and up to raise it."
  },
  {
   "term": "wengcheng",

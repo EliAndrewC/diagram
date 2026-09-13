@@ -64,7 +64,13 @@ def test_the_lit_placard_keeps_its_name_readable(synthetic: Page) -> None:
     assert synthetic.hover_class(PLACE) == {PLACE: 2}, "the card and its name light together"
     card = synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{PLACE}\"] rect')).fill")
     name = synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{PLACE}\"] text')).fill")
-    assert card == "rgb(255, 200, 61)", f"the lit card is the highlight gold, got {card}"
+    # The gold arrives as `fill: var(--hl)`, so an unresolved `--hl` computes to the INHERITED fill - the
+    # card's own parchment, which is what a lit card that never lit would also read as. This failed once
+    # under a loaded page-check on 2026-09-13 and reproduced in none of seven runs after, so the next
+    # occurrence carries the property's resolved value and says which of the two it was.
+    hl = synthetic.js("() => getComputedStyle(document.documentElement).getPropertyValue('--hl').trim()")
+    assert card == "rgb(255, 200, 61)", f"the lit card is the highlight gold, got {card} (--hl resolved to {hl!r})"
+
     assert name == "rgb(45, 42, 36)", f"the name on the lit card is the map's ink, got {name}"
     synthetic.clear()
     assert synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{PLACE}\"] rect')).fill") == "rgb(247, 240, 220)", "and the card is its own parchment again"

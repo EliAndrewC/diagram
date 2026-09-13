@@ -1,4 +1,10 @@
 {
+ "Akiba": {
+  "def": "The cult of the fire-quelling deity of Akiba, whose small neighborhood shrines were the most widely spread in Japan - often built of stone, because stone does not burn.",
+  "variants": [
+   "Akiba"
+  ]
+ },
  "Bidens tripartita": {
   "def": "Three-lobe beggarticks: an annual of wet waste ground, among the first plants back on an abandoned paddy.",
   "variants": [
@@ -247,6 +253,12 @@
   "def": "The era from 1868, when Japan modernized: its land consolidation, drainage works and row planting are the modern forms a pre-modern map must not show.",
   "variants": [
    "Meiji"
+  ]
+ },
+ "Meireki": {
+  "def": "The Japanese era of 1655 to 1658. Its fire of 1657 was the worst in Edo's history.",
+  "variants": [
+   "Meireki"
   ]
  },
  "Mengxi Bitan": {
@@ -662,6 +674,12 @@
    "banyuetang"
   ]
  },
+ "barbican": {
+  "def": "A walled outwork covering a gate. The European form's narrow neck keeps a mass of attackers from storming through, and by the same narrowness stops the defenders sallying out to meet them.",
+  "variants": [
+   "barbican"
+  ]
+ },
  "baren": {
   "def": "The pad a woodblock printer rubs over the paper to lift the impression; its cover is woven from bamboo sheath.",
   "variants": [
@@ -891,6 +909,13 @@
   "def": "The rotating sprinkler boom of modern American irrigated farming, which sweeps a circle of field.",
   "variants": [
    "center-pivot"
+  ]
+ },
+ "chaoguan": {
+  "def": "The Ming and Qing customs barriers, which stood at commodity centers and on the Grand Canal and the strategic routes rather than at a county seat's gates.",
+  "variants": [
+   "chaoguan",
+   "鈔關"
   ]
  },
  "chenghuangmiao": {
@@ -1186,6 +1211,12 @@
   "variants": [
    "distributary",
    "distributaries"
+  ]
+ },
+ "dituan": {
+  "def": "The Song corner tower, standing where a wall turns or at the angle of a barbican, made arc-shaped on purpose to reduce the face exposed to attack.",
+  "variants": [
+   "dituan"
   ]
  },
  "dobashi": {
@@ -1945,6 +1976,13 @@
   "def": "The customary common land of a Japanese village - woods, grass and scrub held by the village and governed by its own rules on who may cut, when, and how much.",
   "variants": [
    "iriai"
+  ]
+ },
+ "iroha companies": {
+  "def": "Edo's townsman fire brigades, lettered by the syllables of the Japanese alphabet - forty-seven of them by 1720, about one to every twenty blocks.",
+  "variants": [
+   "iroha companies",
+   "iroha"
   ]
  },
  "iroha-gumi": {
@@ -2912,6 +2950,12 @@
    "shirasu"
   ]
  },
+ "ossuary": {
+  "def": "A place where the bones of the dead are kept together - here a low mound with one weathered stupa over the communal bones of the poor and the unclaimed.",
+  "variants": [
+   "ossuary"
+  ]
+ },
  "ote-mon": {
   "def": "A castle's front gate, at the head of the ceremonial approach; the rear gate (karamete-mon) is typically opposite it.",
   "variants": [
@@ -3028,6 +3072,13 @@
    "puddled"
   ]
  },
+ "qiandao": {
+  "def": "A towpath: the built way along a canal or river bank from which barges were hauled upstream. Shaoxing's dates to 815 and runs over 40 km, part of it laid on stone piers out in the water.",
+  "variants": [
+   "qiandao",
+   "纤道"
+  ]
+ },
  "quay": {
   "def": "A faced bank where boats tie up and unload.",
   "variants": [
@@ -3092,6 +3143,12 @@
    "revetments",
    "revetment",
    "revetted"
+  ]
+ },
+ "ri": {
+  "def": "A Japanese league of about 2.4 miles, thirty-six cho.",
+  "variants": [
+   "ri"
   ]
  },
  "riffle": {
@@ -3187,6 +3244,13 @@
   "def": "A sake brewery: vat hall, koji room, steaming hearth, its own well and a rice storehouse behind a shopfront.",
   "variants": [
    "sakagura"
+  ]
+ },
+ "sally port": {
+  "def": "A small gate in a fortification through which defenders go out to attack a besieger and come back in.",
+  "variants": [
+   "sally port",
+   "sally gate"
   ]
  },
  "salvage excavation": {
@@ -3353,6 +3417,12 @@
    "shatian"
   ]
  },
+ "shi": {
+  "def": "A Chinese measure of grain, roughly a hundred liters - the unit tribute rice was counted in.",
+  "variants": [
+   "shi"
+  ]
+ },
  "shibai-goya": {
   "def": "A playhouse shed: the boarded, temporary theater a touring troupe raised on shrine or temple ground, as against a city's licensed permanent theater.",
   "variants": [
@@ -3463,6 +3533,12 @@
   "def": "The bottom edge of an opening in a bund: an intake's sill sits just above the field surface, an outlet's a little below. The word also names the level bearing course an abutment presents to the beam that lands on it.",
   "variants": [
    "sill"
+  ]
+ },
+ "skimmer wall": {
+  "def": "A wall set across an intake's mouth that holds back the floating matter and lets the cleaner water below it pass.",
+  "variants": [
+   "skimmer wall"
   ]
  },
  "sluice": {
@@ -3817,6 +3893,14 @@
    "tsunaba"
   ]
  },
+ "tudi miao": {
+  "def": "The earth-god's shrine: the small hall of a Chinese village's tutelary deity, kept at the village's entrance or inside a temple beneath the main altar.",
+  "variants": [
+   "tudi miao",
+   "tudigong",
+   "土地庙"
+  ]
+ },
  "tulou": {
   "def": "The round or rectangular communal fortress-houses of the Hakka of south China, a clan under one roof.",
   "variants": [
@@ -3939,6 +4023,12 @@
   "variants": [
    "weitian",
    "wei-tian"
+  ]
+ },
+ "well-sweep": {
+  "def": "A counterweighted pole pivoted on a post beside a well, swung down to dip the bucket and up to raise it.",
+  "variants": [
+   "well-sweep"
   ]
  },
  "wengcheng": {
