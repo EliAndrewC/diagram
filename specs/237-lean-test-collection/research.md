@@ -371,3 +371,33 @@ The fix is local and explicit - the test calls `wet._load_shapely()` before patc
 it - and it is safe because the loader's sentinel means a later call from inside the placer returns without
 rebinding, so the patch survives. Worth knowing before deferring any other module-level import: every test
 that patches the deferred name needs the loader to have run, and the gate will not tell you which ones.
+
+## R14 - numpy was what held the whole-tree collection peak, and deferring it is the larger half
+
+R10 recorded an anomaly honestly rather than explaining it: every part of the whole-tree collection shrank
+and the PEAK did not move (922 MiB before, 923 after). R10 also named the suspect - three test modules
+still importing `numpy` at module level - without testing it. The GM asked for the numpy deferral on
+2026-09-13, and it settles the question:
+
+| collection only, ten workers | before the feature | after FR-007/FR-010 | after FR-011 (numpy, PIL) |
+|---|---|---|---|
+| whole tree | 922 MiB, 9.1 s | 923 MiB, 4.5 s | **840 MiB, 3.9 s** |
+| one tree (`tests/settlement`) | 602 MiB | 515 MiB | 516 MiB |
+| one module | 356 MiB | 366 MiB | 366 MiB |
+
+And per worker, measured the same way as R6: the engine baseline - pytest plus every engine module - falls
+from **57.6 MiB to 42.9 MiB**, because `numpy` (17.9) and `PIL` (2.3) no longer arrive with it.
+
+So the mechanism behind R10's anomaly was this: `tools/page_lit.py` and `tools/picture_diff.py` imported
+numpy at module level, `tests/tools/test_page_lit.py` and `test_picture_diff.py` imported those tools, and
+`tests/interactive/test_raster.py` imported PIL - so ANY run that collected the whole tree paid numpy
+regardless of what the geometry did. That is why deferring shapely alone moved the one-tree case and not the
+whole-tree case, and why the marginal shapely figure (R10) was 3.4 MiB where numpy arrived anyway against
+21.7 where it did not.
+
+The form differs between the engine and the tests, and the reason is worth keeping: `np` and `Image` are
+reached by ATTRIBUTE (`np.array`, `Image.open`), so the same-named-wrapper trick that let the waterfields
+test modules keep every `Polygon(...)` call site unchanged cannot work for them. The two tools get a module
+loader exactly like `_load_shapely`; the three test modules import inside the tests that use them, which is
+the right form for a body that runs once. Annotations are the one snag: `-> Image.Image` is evaluated
+outside the function body, so each test module keeps a `TYPE_CHECKING` import beside its lazy runtime one.

@@ -75,6 +75,15 @@ import, not data (R6).
   collecting `tests/tools` holds it regardless (`spec-fidelity` round 1, finding 5). Deferring numpy in
   those two tools is a further lever this feature does NOT take - the GM approved the shapely accessor,
   and the figure is recorded so they can price the rest.
+- **FR-011 `numpy` and `PIL` are imported by the worker that uses them, the same way** (the GM,
+  2026-09-13: *"I do indeed want you to do the same thing for numpy which we already did for shapely"*).
+  The two engine tools that hold them - `tools/page_lit.py` and `tools/picture_diff.py` - bind both through
+  one `_load_arrays()` per module, and the three test modules that import them at module level
+  (`tests/tools/test_page_lit.py`, `test_picture_diff.py`, `tests/interactive/test_raster.py`) import them
+  inside the tests that use them, because `np` and `Image` are reached by ATTRIBUTE and a same-named
+  wrapper cannot stand in for a module. The derived guard of FR-010 widens to all three libraries rather
+  than gaining a second copy. This is the lever FR-009 recorded as not taken, and it is the larger half:
+  it is what held the whole-tree collection peak at 922 MiB while every part of it shrank (R14).
 - **FR-010 `shapely` is imported by the worker that uses it, through one accessor per module.** The
   SEVEN engine modules that import it at module level - `settlement/land/wet.py`,
   `hamletgen/homesteads/boundary.py`, `waterfields/comb.py`, and `waterfields/seams/close.py`,
@@ -118,6 +127,9 @@ import, not data (R6).
 - **SC-007** (FR-003) A plan whose baseline projection is over `FULL_FRACTION` comes out `full` with NO
   paths, so the run collects the trees and records a baseline; and a restricted run never reports itself
   full, whatever its selection comes to.
+- **SC-008** (FR-011) After the whole engine is imported, `numpy` and `PIL` are absent from `sys.modules`
+  along with `shapely`, asked of the process; a whole-tree collection-only run at ten workers peaks BELOW
+  the 922 MiB R3 measured before this feature; and `make page-lit` and `make picture-diff` still work.
 - **SC-006** (FR-008, spec-wide) `make done` and `make hooks-test` green, `make quick` unchanged in
   scope, and `tests/tooling/test_worker_count.py` still pinning ten workers - the one item this
   feature is forbidden to move.

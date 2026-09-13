@@ -4,12 +4,15 @@ pair's changed pixels to the classes they lie on (feature 231). The browser half
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # annotations only; the runtime import sits in the tests that use it (feature 237)
+    from PIL import Image
+
 import types
 from typing import Any
 
-import numpy as np
 import pytest
-from PIL import Image
 
 from l7r.diagram.interactive.page import render_page
 from l7r.diagram.interactive.tags import ClsTag
@@ -33,6 +36,8 @@ def _page_text() -> str:
 
 def _screens(changed: tuple[int, int, int, int] | None = None, size: tuple[int, int] = (40, 40)) -> tuple[Image.Image, Image.Image]:
     """(before, after) - `after` differs inside the rectangle, which is given in screen pixels."""
+    from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     before = Image.new("RGB", size, (10, 10, 10))
     after = before.copy()
     if changed:
@@ -85,6 +90,8 @@ def test_the_screen_transform_is_inverted_rather_than_assumed() -> None:
 
 
 def test_a_change_under_the_threshold_is_not_a_lit_pixel() -> None:
+    from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     decoded = page_lit.decode_idmap(_page_text())
     assert decoded is not None
     red, palette, _step = decoded
@@ -145,6 +152,8 @@ def test_main_prints_the_report(monkeypatch: pytest.MonkeyPatch, capsys: pytest.
 
 def test_the_lut_tolerates_the_rounding_the_page_itself_tolerates() -> None:
     """`page.js keyAtPoint` accepts a red value within 1 of a palette entry; so does this."""
+    import numpy as np  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     red = np.array([[3, 4, 5, 7]], dtype=np.int64)
     before, after = _screens((0, 0, 4, 1), size=(4, 1))
     shares = page_lit.attribute(before, after, red, {4: "paddy"}, IDENTITY)
@@ -155,6 +164,8 @@ def test_the_id_map_is_read_at_the_viewbox_the_page_carries() -> None:
     """Feature 200 crops the page's viewBox to the drawn ink, so the id map is the VIEWBOX: a map
     coordinate is shifted by its origin before the image is asked. Without this every sample on
     Kuwabata's page (`viewBox="1792 326 955 1954"`) landed outside the image and every class read zero."""
+    import numpy as np  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     red = np.zeros((4, 4), dtype=np.int64)
     red[:, 2:] = 4  # the right half of the id map is the class
     before, after = _screens((2, 0, 4, 4), size=(4, 4))
@@ -165,6 +176,8 @@ def test_the_id_map_is_read_at_the_viewbox_the_page_carries() -> None:
 
 def test_a_viewbox_at_a_different_scale_than_the_image_is_carried_too() -> None:
     """The id map is rendered at 1 px per user unit today; the arithmetic does not assume it."""
+    import numpy as np  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
     red = np.zeros((8, 8), dtype=np.int64)
     red[:, 4:] = 4
     before, after = _screens((2, 0, 4, 4), size=(4, 4))
@@ -220,6 +233,8 @@ class _FakePage:
 
     def screenshot(self) -> bytes:
         """A different image before and after the highlight - the left half changes."""
+        from PIL import Image  # inside the test, not at module level: numpy is 17.9 MiB and PIL 2.3 on every gate worker (feature 237)
+
         self.shots += 1
         im = Image.new("RGB", (40, 40), (10, 10, 10))
         if self.shots > 1:

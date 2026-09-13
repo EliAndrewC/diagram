@@ -101,6 +101,21 @@ written.
       research: rendering
       verify: DONE. `over_the_fraction` + the planner's branch; `test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction` drives both sides through `plan()` itself, and `test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees` proves it end to end at the gate's level. Both module docstrings that still described the old flip are corrected; D8 states the projection's error in both directions.
 
+## Phase 4b - numpy and PIL (FR-011, added by the GM 2026-09-13)
+
+- [x] T15 `tools/page_lit.py` and `tools/picture_diff.py` bind `numpy` and `PIL.Image` through one
+      `_load_arrays()` each, the same form as `_load_shapely`; `tests/tools/test_page_lit.py`,
+      `test_picture_diff.py` and `tests/interactive/test_raster.py` import them inside the tests that use
+      them, since `np` and `Image` are reached by attribute and a same-named wrapper cannot stand in for a
+      module. Each of those three keeps a `TYPE_CHECKING` import for its annotations, which are evaluated
+      outside the function body (FR-011).
+      research: rendering
+      verify: DONE. 9 loader call sites in the two tools, 11 test functions importing where they use; ruff and pyrefly clean; 53 cases green in the three suites.
+- [x] T16 The FR-010 guard widens to all three libraries rather than gaining a second copy, and the
+      measurement is recorded whichever way it comes out (FR-011, SC-008).
+      research: rendering
+      verify: DONE. `HEAVY = ("shapely", "numpy", "PIL")` in the derived guard. MEASURED (research R14): the whole-tree collection peak 923 -> 840 MiB, which is the anomaly R10 recorded and could not explain, and the per-worker engine baseline 57.6 -> 42.9 MiB.
+
 ## Phase 5 - the verdict (FR-008, FR-009, SC-002, SC-006)
 
 - [x] T11 Measure: the collection-only peak at ten workers and a real incremental gate's peak, before
