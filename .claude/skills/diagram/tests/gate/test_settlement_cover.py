@@ -86,7 +86,15 @@ def woodland(rolled):
     import json
 
     for path in sorted((pathlib.Path(__file__).resolve().parents[2] / "pool" / "hamlets").glob("*/*.json")):
-        other = json.loads(path.read_text(encoding="utf-8"))
+        try:
+            other = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            # THE GATE REWRITES THESE WHILE WE READ THEM. The pool phase re-rolls every shipped map, so a
+            # manifest can be half-written at the moment this fixture opens it - which errored two of these
+            # tests on the run that introduced this fallback. Three of the five maps carry a woodland, so
+            # stepping over one mid-write still leaves the rules something to judge; if every candidate is
+            # unreadable the `pytest.fail` below says so rather than passing on nothing.
+            continue
         found = _woodland_of(other)
         if found:
             return other, found
