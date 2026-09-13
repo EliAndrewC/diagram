@@ -1,0 +1,70 @@
+{
+ "feature": "245-lit-beads-at-low-zoom",
+ "plan_sha256": "73fad5a38f266b49539ad127b702cfa08f0a5b0e4d7932200ded1898d2d0c24b",
+ "reviewed": "2026-09-13",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "P1a-selector-element-set",
+   "summary": "The exemption rule matches :is(path, circle) where the wash rule it overrides matches :is(path, circle, ellipse, rect, polygon, polyline).",
+   "class": "within",
+   "why": "FR-001 exempts 'the lit bund-beans class's filled shapes'. The class draws only <circle> elements (settlement/fields/comb.py _comb_draw_beads emits circles inside one g at 0.85), so path+circle covers every filled shape the class has; nothing that exists today keeps the wash. Noted as a seam rather than a finding: a future bund-beans shape of another element type would silently keep the wash, which D1 already says fails safe."
+  },
+  {
+   "id": "P1b-rule-order-and-fill-opacity-1",
+   "summary": "The new rule is placed after the wash rule so it wins by order, and sets fill-opacity: 1.",
+   "class": "within",
+   "why": "FR-001 asks for the vector page's fill opacity; the bead circles carry no fill-opacity attribute, so the vector page paints them at 1, and the constant matches. Placement is CSS mechanics the spec leaves to the implementation and it narrows nothing."
+  },
+  {
+   "id": "P1c-hit-discs-by-fill-none",
+   "summary": "The hit discs are excluded by :not([fill=\"none\"]), the same test the wash uses, and the group's 0.85 opacity is not named.",
+   "class": "within",
+   "why": "FR-001 requires the hit discs to stay unpainted and D2 requires the 0.85 group opacity to stay; the page writer emits hit shapes with fill=\"none\" (interactive/page.py), so the exclusion is exact."
+  },
+  {
+   "id": "P2-zoom-by-control-equals",
+   "summary": "page_lit.measure's --vector loop presses Control+= through page.keyboard.press in place of mouse.move + mouse.wheel; ZOOM_STEPS stays as the cap; the docstring says the key and why not the wheel.",
+   "class": "within",
+   "why": "FR-004 settles the key (Ctrl with the plus key) and the step cap; '=' is the unshifted plus key the page's own keydown handler reads (page.js: e.key === \"+\" || e.key === \"=\")."
+  },
+  {
+   "id": "P3-fakepage-keyboard",
+   "summary": "_FakePage gains a keyboard whose press logs; the two zoom-loop stub tests assert presses rather than wheel turns.",
+   "class": "within",
+   "why": "FR-005's last clause asks the stub test to mirror the key presses."
+  },
+  {
+   "id": "P4-small-viewport-on-the-halves-page",
+   "summary": "The page-lit browser test measures the two-class halves page through a 100 by 100 viewport (measure's existing viewport argument); the first test asserts mode == raster, the vector test asserts mode == vector and zoom > 1.",
+   "class": "within",
+   "why": "FR-005 asks for a small viewport over the two-class synthetic map, raster asserted, vector reached and a zoom above the opening view; a 100 by 100 viewport over the 200-unit map opens below the raster switch (research R1)."
+  },
+  {
+   "id": "P5-synthetic-bead-and-assertions",
+   "summary": "_driver._synthetic() gains one <circle r=\"1.4\" fill=\"#2F6B35\"/> tagged 'bund beans' on clear ground; the new test shrinks the viewport, presses fit, asserts data-mode raster, reads 0.45 on the lit paddy's rect and 1 on the lit bead circle, then restores the viewport and asserts both read 1.",
+   "class": "within",
+   "why": "FR-005 asks for exactly this element and these assertions; the radius and color match the shipped bead (comb.py r=1.4, BEAN_GREEN), and restoring the viewport is a means of reaching the vector page that the spec leaves open."
+  },
+  {
+   "id": "P6-index-rows",
+   "summary": "The interactive index's raster row and the tools index's page-lit row each gain one clause.",
+   "class": "within",
+   "why": "FR-006 asks for both rows to say the new thing; the length is not specified."
+  },
+  {
+   "id": "P7-sc002-verified-with-page-lit",
+   "summary": "The plan's only named instrument for SC-002 (and SC-003) on the shipped Inashiro page is `make page-lit`: 'SC-002 and SC-003 replayed by hand on the shipped Inashiro page with `make page-lit`, recorded in tasks.md'. The R1 contact sheet re-taken on the shipped stylesheet - the instrument SC-002 names as deciding it - appears nowhere in the plan, and tasks.md T04 repeats the same wording.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The accepted spec's SC-002 says in terms that the contact sheet re-taken on the shipped stylesheet, with the GM's eye final, is what decides the criterion, and that `make page-lit` CANNOT decide it because a washed bead already moves past the tool's threshold. The GM's request is a visual one - the beads 'don't visible light up when highlighted while zoomed out ... the highlighting needs to be higher contrast' - so the only check that answers what was asked is the one that looks at the picture. Verifying by a tool the spec has already ruled incapable of the judgment would let the feature be called done with the GM's own question unanswered. It is not physically impossible (research R1 built the scratch Playwright contact sheet already and would be replayed on the shipped stylesheet), it is not implied anywhere in the GM's words, and applying the spec's own instrument defeats nothing. The plan's Design section must name the R1 contact sheet re-take on the shipped Inashiro page at its opening view as SC-002's check, with `make page-lit CLASS=\"bund beans\"` as the subordinate 'no other class moved' check, and tasks.md T04 must say the same."
+  },
+  {
+   "id": "P8-regression-baseline",
+   "summary": "The Constitution Check takes the regression baseline to be a green `make done` recorded 8 hours before the feature started, rather than a fresh detached-worktree run.",
+   "class": "within",
+   "why": "Neither the request nor the spec settles which baseline run is used, and SC-005's requirement of a green `make done` and `make page-check` is untouched; this narrows nothing that was asked. Noted only because the figure carries no pointer to the run record."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

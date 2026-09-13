@@ -39,6 +39,8 @@ stroke is the GM's own (2026-08-28, the conifer's apex disc). Not pursued.
 turned the mouse wheel, and the page scrolls on the wheel by ruling (feature 134, GM 2026-08-28: *"I
 don't want scrolling to zoom"*); zoom is Ctrl and the plus or minus key, the buttons, or Ctrl+wheel. The
 browser test that covers the loop measures a 200-unit synthetic map in a 1400-wide viewport, which opens
-in vector mode already, so the loop never ran in a browser. A viewport of 100 by 100 over that map opens
-in raster mode (screen scale 0.5 against the picture's 2 per map unit) and three doublings reach vector,
-which is the page the fixed test measures.
+in vector mode already, so the loop never ran in a browser. A viewport of 300 by 300 over that map opens
+in raster mode (screen scale 1.5 against the picture's 2 per map unit) and one doubling reaches vector,
+which is the page the fixed test measures. A 100 by 100 viewport was tried first and the page's fixed zoom
+buttons covered most of the lit half, which read 43% changed; at 300 they cover a corner of the other half,
+and the share test lights the paddy, the half they do not touch.

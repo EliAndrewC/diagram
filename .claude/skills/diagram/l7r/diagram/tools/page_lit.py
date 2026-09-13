@@ -18,7 +18,7 @@ Run from the skill root:
     make page-lit MAP=pool/hamlets/kuwabata/kuwabata.html CLASS="mulberry dike" [VECTOR=1] [OUT=lit.png]
 
 Raster mode at the page's opening view by default (the view a reader meets); `--vector` zooms past the
-raster switch first, so the vector page is measured instead.
+raster switch first - with the page's own zoom key, Ctrl and plus - so the vector page is measured instead.
 """
 
 from __future__ import annotations
@@ -76,7 +76,7 @@ _STEP = re.compile(r'"step":\s*(\d+)')
 THRESHOLD = 6
 #: the opening viewport, the browser tests' size
 VIEWPORT = (1400, 1000)
-#: how many wheel steps `--vector` may take before giving up on reaching the vector page
+#: how many presses of the zoom key `--vector` may take before giving up on reaching the vector page
 ZOOM_STEPS = 24
 
 
@@ -180,11 +180,17 @@ def measure(html_path: str, key: str, vector: bool = False, browser: Any = None,
         page.goto("file://" + os.path.abspath(html_path))
         page.wait_for_function("window.l7rMap && window.l7rMap.rasterReady()", timeout=60000)
         if vector:
+            # THE PAGE'S OWN ZOOM KEY, NEVER THE WHEEL (feature 245). The first version turned the wheel, and the
+            # page SCROLLS on a wheel turn by the GM's ruling (page.js `onWheel`, 2026-08-28: "I don't want
+            # scrolling to zoom"), so `--vector` never left raster mode on a real map - measured on Inashiro,
+            # `VECTOR=1` reported `mode: raster`. Its browser test could not see that, because a 200-unit map
+            # in a 1400-wide viewport opens in vector mode already; it now opens in a viewport small enough to
+            # open in raster mode. Ctrl with the plus key is the one way of zooming feature 134 documents,
+            # about the viewport's center, so no pointer position is needed.
             for _ in range(ZOOM_STEPS):
                 if page.evaluate("window.l7rMap.mode()") == "vector":
                     break
-                page.mouse.move(viewport[0] / 2, viewport[1] / 2)
-                page.mouse.wheel(0, -300)
+                page.keyboard.press("Control+=")
                 page.wait_for_timeout(120)
         mode = page.evaluate("window.l7rMap.mode()")
         zoom = float(page.evaluate("window.l7rMap.zoom()"))

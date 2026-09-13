@@ -29,7 +29,7 @@ pytestmark = [
 
 
 def test_synthetic_page_mechanics(synthetic: Page) -> None:
-    present = ["farmhouse", "storage shed", "byre", "windbreak", "copse", "marsh", "paddy", "bund", "notice board", "village lane", "scrub and rough grazing"]
+    present = ["farmhouse", "storage shed", "byre", "windbreak", "copse", "marsh", "paddy", "bund", "bund beans", "notice board", "village lane", "scrub and rough grazing"]
     _mechanics(synthetic, present)
 
 
@@ -294,6 +294,39 @@ def test_glossary_terms_carry_their_definition_and_the_references_open_on_top(sy
     assert synthetic.js(shown) == {"refs": False, "explain": True, "visible": True, "shade": True}, "Escape closes only the references, and the writeup comes back"
     synthetic.page.keyboard.press("Escape")
     assert not synthetic.dialog()["open"]
+
+
+def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthetic: Page) -> None:
+    """Feature 245 (GM 2026-09-13: "the bund beans don't visible light up when highlighted while zoomed out ...
+    It's not an issue when zoomed in"). Raster mode is reached on the synthetic page by shrinking the viewport
+    until the fitted map is under the picture's scale - the 300-unit map in a 100-unit viewport is a third of a
+    screen pixel per map unit against the picture's two - and pressing fit; the viewport is restored after and
+    the vector page checked too. The paddy keeps feature 201's wash; the beads take none (page.css)."""
+    mode = "() => document.getElementById('map').getAttribute('data-mode')"
+    paddy = "() => getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity"
+    beads = "() => getComputedStyle(document.querySelector('g.f[data-k=\"bund beans\"] circle:not(.hit)')).fillOpacity"
+
+    def lit() -> tuple[str, str]:
+        synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
+        p = synthetic.js(paddy)
+        synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
+        b = synthetic.js(beads)
+        synthetic.clear()
+        return p, b
+
+    was = synthetic.page.viewport_size
+    synthetic.page.set_viewport_size({"width": 100, "height": 100})
+    try:
+        synthetic.js("() => window.l7rMap.fit()")
+        assert synthetic.js("() => window.l7rMap.rasterReady()"), "the synthetic page carries its picture and id map"
+        assert synthetic.settles("raster", lambda: synthetic.js(mode)) == "raster", "fitted in a 100-unit viewport the page is below the raster switch"
+        assert lit() == ("0.45", "1"), "raster mode: the lit paddy is a wash, the lit beads are solid"
+    finally:
+        synthetic.page.set_viewport_size(was)
+        synthetic.js("() => window.l7rMap.fitWidth()")
+    assert synthetic.settles("vector", lambda: synthetic.js(mode)) == "vector"
+    assert lit() == ("1", "1"), "the vector page is unchanged: solid gold for both"
+    assert synthetic.errors == [], synthetic.errors
 
 
 def test_a_glossary_tooltip_escapes_the_modal_and_stays_on_the_page(synthetic: Page) -> None:

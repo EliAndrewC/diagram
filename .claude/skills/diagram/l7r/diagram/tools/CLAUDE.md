@@ -28,7 +28,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` - a phase of `make test-full`, with no make route of its own |
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
-| I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `page_lit` (`make page-lit`) |
+| I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `page_lit` (`make page-lit`; `VECTOR=1` zooms past the raster switch with the page's own key - the wheel scrolls, feature 245) |
 | Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` (`make picture-diff`) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
@@ -89,7 +89,8 @@ change, like any other exclusion.
 
 What that means for a tool whose work is a SUBPROCESS or a BROWSER: the pure half is tested directly
 and the driving half is tested where it can be driven - `page_lit`'s attribution on arrays and its
-`measure` on the synthetic page the browser tests already open (`tests/full/interactive/page_browser/`),
+`measure` on the synthetic page the browser tests already open (`tests/full/interactive/page_browser/`, in a
+viewport small enough that the page opens in raster mode - feature 245),
 `picture_diff`'s arithmetic on synthetic images and its rendering through resvg on a 40x40 document.
 
 ## Known stale, recorded rather than quietly fixed

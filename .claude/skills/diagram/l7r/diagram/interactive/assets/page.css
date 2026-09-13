@@ -82,6 +82,19 @@ g.raster image { pointer-events: none; }
    placard's name inherits it. 0.45 was chosen by eye on one crop and not swept (spec D2): the GM's to move.
    Above the switch the vector page is unchanged: solid gold, the bunds drawn crisply above. */
 svg#map[data-mode="raster"] g.f.on :is(path, circle, ellipse, rect, polygon, polyline):not([fill="none"]) { fill-opacity: 0.45; }
+/* ...BUT THE BEADS ARE NOT WASHED (feature 245, GM 2026-09-13: "the bund beans don't visible light up when
+   highlighted while zoomed out ... It's not an issue when zoomed in"). The wash exists so that what is drawn
+   ABOVE a lit area shows through it; the beads ARE that ink - fill-only discs a few screen pixels across at the
+   opening view, drawn last on the field with nothing above them - so on them the wash only dims: measured on
+   Inashiro's opening view, a lit bead under the wash is an olive against its dark green, a contrast of 1.33
+   between the two states and no visible change on a dot that size; at full strength 1.75, and a clear gold run
+   along the bund on the contact sheet (specs/245 research.md R1). So the lit beads keep full fill opacity in
+   raster mode as on the vector page. The hit discs are fill="none" and excluded exactly as the wash excludes
+   them; the group's own 0.85 opacity is the bead's drawing and stays. Named by class, because nothing in the
+   markup separates a point mark from an area (spec D1: a positive roster of the washed classes fails open onto
+   the defect feature 201 fixed, and a derived token is an engine change for one class) - a second class
+   measured the same way is added to this selector. After the wash rule, so it wins. */
+svg#map[data-mode="raster"] g.f.on.f-bund-beans :is(path, circle):not([fill="none"]) { fill-opacity: 1; }
 /* The explanation is a NON-modal dialog over our own shade (see page.js `open`): a modal one makes
    the whole map inert and costs a full restyle of the 175,000-element tree per open and close. */
 #shade { position: fixed; inset: 0; background: rgba(45, 42, 36, 0.45); z-index: 9; }

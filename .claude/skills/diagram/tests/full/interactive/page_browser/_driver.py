@@ -144,6 +144,10 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     tags.append("notice board")
     strings.append('<path d="M20,150 L120,150" fill="none" stroke="#C9AE79" stroke-width="1.0"/>')  # a thin lane
     tags.append("village lane")
+    # one azemame bead as comb.py draws it - a fill-only disc in a group at the bead's own opacity - on clear
+    # ground between the notice board and the placard (feature 245: the lit beads take no raster-mode wash)
+    strings.append('<g opacity="0.85"><circle cx="120" cy="70" r="1.4" fill="#2F6B35"/></g>')
+    tags.append("bund beans")
     strings.append('<g stroke="#A7A860" stroke-width="0.8"><line x1="20" y1="180" x2="21" y2="184"/><line x1="30" y1="182" x2="31" y2="186"/></g>')  # two scrub blades in one corner
     tags.append("scrub and rough grazing")
     # the title placard the way finish.py emits it: the card, then the name over it, both `place`.
