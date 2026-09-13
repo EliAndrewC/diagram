@@ -32,5 +32,11 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T11 the amended spec re-reviewed, the pool and the cohort re-run, `make done`, the settlement-review
       research: rendering
       verify: DONE. the amended spec re-reviewed (round 1 CHANGES REQUIRED on four items, round 2 FAITHFUL); pool re-rolled and clean by the placer's own predicate, cohort 48/48, make done green at 100% coverage, perf band 0 (-23.5%); settlement-review of both moved maps - Inashiro PASS on the lane delta with two notes errors fixed, Kashikawa PASS with no errors, its stale copse count fixed and its rule-level question measured over the pool and recorded
-- [ ] T07 FR-006 the GM's acceptance of the page after their rounds in the clone
+- [x] T07 FR-006 the GM's acceptance of the page after their rounds in the clone
+      verify: ACCEPTED by the GM 2026-09-13, in their own words: "I also accept the Hamlet placement HTML
+      page that I believe was the last item in the spec hit feature that requires my explicit approval. So
+      you can go ahead and mark that off such that when you are done with your current round of work, then
+      it can all merge back into the main checkout." Offered with the complete render set present, as
+      FR-006 requires: every pool map carries its .png, the five hamlets their .html, and the page itself
+      re-plated from the current code (dev/placement-stages/hamlet-placement.html, 39 plates).
       research: rendering

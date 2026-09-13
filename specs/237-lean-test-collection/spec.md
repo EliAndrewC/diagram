@@ -1,6 +1,6 @@
 # Feature 237 - collect only what the run can execute
 
-**Status**: IMPLEMENTED. `spec-fidelity` FAITHFUL at round 3 of the initial acceptance (round 1 CHANGES REQUIRED on seven findings - the request record, FR-002's empty-list case, FR-010's count and its derived guard, FR-007 extended to the two test modules that import shapely, the marginal figure separated from the cumulative one, FR-008's criterion, and FR-010's bookend run with an increase made non-waiverable; round 2 CHANGES REQUIRED on five stale-text findings). AMENDED mid-implementation with D8, FR-003's second clause and SC-007, on a counter reset to zero by the GM's own ruling: round 1 CHANGES REQUIRED on five (D8's error direction, two docstrings, the criterion, the task), round 2 CHANGES REQUIRED on two more stale comments at the point of change. Verified: `make done` green at 400 MiB and 41.3 s (`research.md` R11), the pool byte-identical, and the perf bookends adjudicated by `perf-audit` (R12).
+**Status**: IMPLEMENTED. `spec-fidelity` FAITHFUL at round 3 of the initial acceptance (round 1 CHANGES REQUIRED on seven findings - the request record, FR-002's empty-list case, FR-010's count and its derived guard, FR-007 extended to the two test modules that import shapely, the marginal figure separated from the cumulative one, FR-008's criterion, and FR-010's bookend run with an increase made non-waiverable; round 2 CHANGES REQUIRED on five stale-text findings). AMENDED mid-implementation with D8, FR-003's second clause and SC-007, on a counter reset to zero by the GM's own ruling: round 1 CHANGES REQUIRED on five (D8's error direction, two docstrings, the criterion, the task), round 2 CHANGES REQUIRED on two more stale comments at the point of change. Verified: `make done` green at 400 MiB and 41.3 s (`research.md` R11), the pool byte-identical, and the perf bookends adjudicated by `perf-audit` (R12). AMENDED again 2026-09-13 with FR-011, SC-008 and D9 (numpy and PIL, the GM asking for numpy on this feature's own measurement), on a counter reset again: round 1 CHANGES REQUIRED on five - FR-009's contradiction, the four-item count in the Summary and D7, R10's stale closing claim, PIL disclosed as the session's own scope, and this line.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - why xdist workers must all collect the same thing, what
 collection costs here, the sharding experiment that failed, the data-as-Python hypothesis tested, and
@@ -18,7 +18,7 @@ upstream when someone tried to change it (R1). Arguments are the one lever xdist
 ids restrict collection BEFORE import, while `-k`, `-m` and `--deselect` filter after it, and every
 worker is handed the controller's argv verbatim so restricting it keeps the protocol satisfied.
 
-So this feature does four things: it restricts a gate's arguments to the modules its plan can reach, stops pinning the collected items, defers the import-time work that all ten workers pay and one worker needs, and imports `shapely` in the worker that uses it rather than in all ten. Two things it deliberately does not do: change the worker count (the GM's ruling, and it is already tuned by
+So this feature does five things: it restricts a gate's arguments to the modules its plan can reach, stops pinning the collected items, defers the import-time work that all ten workers pay and one worker needs, imports `shapely` in the worker that uses it rather than in all ten, and - added by the GM mid-implementation once the measurement was in - does the same for `numpy` in the two tools that hold it, which turned out to be the larger half (FR-011, R14). Two things it deliberately does not do: change the worker count (the GM's ruling, and it is already tuned by
 measurement), and shard the gate into concurrent runs - that was measured and came out 94 MiB WORSE,
 because the duplication is per worker and ten workers are ten copies whichever way they are grouped
 (R4).
@@ -72,9 +72,9 @@ import, not data (R6).
   `research.md` whichever way they come out - including if an item turns out not to pay. It records the
   MARGINAL shapely figure as well as the cumulative one: R9's 16.3 MiB is shapely plus the `numpy` it
   drags in, and `numpy` also arrives through `tools/page_lit.py` and `tools/picture_diff.py`, so any run
-  collecting `tests/tools` holds it regardless (`spec-fidelity` round 1, finding 5). Deferring numpy in
-  those two tools is a further lever this feature does NOT take - the GM approved the shapely accessor,
-  and the figure is recorded so they can price the rest.
+  collecting `tests/tools` holds it regardless (`spec-fidelity` round 1, finding 5). Deferring
+  numpy in those two tools was recorded here as a further lever this feature had NOT taken, with the figure
+  left for the GM to price; they asked for it on 2026-09-13 and FR-011 takes it.
 - **FR-011 `numpy` and `PIL` are imported by the worker that uses them, the same way** (the GM,
   2026-09-13: *"I do indeed want you to do the same thing for numpy which we already did for shapely"*).
   The two engine tools that hold them - `tools/page_lit.py` and `tools/picture_diff.py` - bind both through
@@ -160,7 +160,7 @@ import, not data (R6).
   and an `import` statement re-enters `__import__` on each call, so the lever that saves 16 MiB would
   have been paid back in a slower gate and slower maps. The accessor resolves once and is a local lookup
   from then on.
-- **D7 - the four items are one feature on purpose.** They share a single measurement (the PSS harness
+- **D7 - the four original items are one feature on purpose** (the fifth, FR-011, was added by the GM on the strength of this feature's own measurement, and belongs with them for the same reason).** They share a single measurement (the PSS harness
   in R3) and a single acceptance (the collection peak), and three of the four are meaningless to verify
   apart: a path restriction that does not defer the import-time work still pays R6's 13 MiB, and
   deferring imports without restricting the paths still collects everything. The GM asked for them
@@ -187,4 +187,15 @@ import, not data (R6).
   denominator moved with it, from `len(collected)` to `len(baseline_tests)`. Making the error
   one-directional by dropping deleted modules from `changed_test_modules` as well is a change to what flips
   the gate, so it is left for the GM to price rather than taken here.
-
+- **D9 - PIL was deferred alongside numpy, and that is the session's judgment rather than the GM's
+  request** (`spec-fidelity` on the FR-011 amendment, finding 4). The GM asked for numpy: *"do the same
+  thing for numpy which we already did for shapely"*. `PIL` is a separate library with its own cost, and it
+  is separable - `tests/interactive/test_raster.py` imported PIL and no numpy at all, so the "same import
+  block" argument that covers the other four files does not cover that one. What it is worth: **2.3 MiB a
+  worker**, against numpy's 17.9 (R9). What is NOT measured: the whole-tree collection figure with numpy
+  deferred and PIL left alone - R14's 840 MiB is both together, and the two were not separated, so anyone
+  reversing this should expect a few tens of megabytes back rather than reading 82 MiB as numpy's alone.
+  Why it was taken: in four of the five files the two imports are adjacent lines feeding the same functions,
+  the guard reads one list, and splitting them would leave a module half-deferred. It is disclosed here
+  rather than folded into the request so the GM can reverse it in one commit if they would rather only the
+  thing they asked for moved.

@@ -271,7 +271,8 @@ move, and its wall time halved. I do not have a confirmed mechanism for the peak
 the parts that compose it each shrank, and it is recorded as measured rather than explained away: three test
 modules still import numpy at module level (`tests/interactive/test_raster.py`,
 `tests/tools/test_page_lit.py`, `test_picture_diff.py`), which is 17.9 MiB a worker that a whole-tree
-collection pays regardless.
+collection pays regardless. **R14 tested that suspect and it was right** - the anomaly is closed, and a
+reader who stops here should not carry it away as open.
 
 Which is the feature's own argument, arrived at from the other side: the way to stop paying for the whole
 tree is to stop collecting the whole tree. One module's collection is 366 MiB against 923, and one tree's is
@@ -286,9 +287,10 @@ shapely is worth depends on whether numpy arrives anyway:
   import numpy at module level, so the marginal saving is about **3.4 MiB a worker**;
 - on a restricted run that collects neither, it is the whole **21.7 MiB a worker**.
 
-Which means the lever this feature did NOT take - deferring numpy in those two tools - is the larger half
-on a full gate, and it is recorded here for the GM to price rather than taken on a session's own judgment
-(the GM approved the shapely accessor).
+Which means the lever this feature had not taken AT THE TIME OF THIS MEASUREMENT - deferring numpy in those
+two tools - is the larger half on a full gate. It was recorded here for the GM to price rather than taken on
+a session's own judgment, and they asked for it the same day: **R14 takes it, and closes the anomaly this
+section leaves open.**
 
 ## R11 - the gate itself, which is the number that matters
 
@@ -387,6 +389,11 @@ still importing `numpy` at module level - without testing it. The GM asked for t
 
 And per worker, measured the same way as R6: the engine baseline - pytest plus every engine module - falls
 from **57.6 MiB to 42.9 MiB**, because `numpy` (17.9) and `PIL` (2.3) no longer arrive with it.
+
+One reconciliation a reader will otherwise try and fail to make: 20.2 MiB a worker times ten workers is not
+the 83 MiB the peak fell by, and nothing is wrong with either figure. The per-worker numbers are
+single-process RSS checkpoints (R3, R6); the peaks are summed PSS, which divides a shared library's pages
+among the processes mapping them. Ten workers importing the same numpy do not cost ten private copies of it.
 
 So the mechanism behind R10's anomaly was this: `tools/page_lit.py` and `tools/picture_diff.py` imported
 numpy at module level, `tests/tools/test_page_lit.py` and `test_picture_diff.py` imported those tools, and

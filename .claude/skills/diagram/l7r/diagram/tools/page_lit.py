@@ -48,8 +48,11 @@ def _load_arrays() -> None:
     made every one of the ten gate workers pay both merely to COLLECT this tool - a diagnostic that one
     worker runs, from `make page-lit` or `make picture-diff`
     (`specs/237-lean-test-collection/research.md` R9 and R10). It is the same deferral FR-010 made for
-    `shapely`, and the GM asked for it in the same terms on 2026-09-13; the marginal figure is the larger
-    half of the two, because `shapely` pulls `numpy` in anyway wherever this tool is already loaded.
+    `shapely`. The GM asked for NUMPY in those terms on 2026-09-13 (*"the same thing for numpy which we
+    already did for shapely"*); `PIL` rides along on this session's judgment, because the two are adjacent
+    lines feeding the same functions here - disclosed in spec D9, at 2.3 MiB a worker against numpy's 17.9,
+    so it can be reversed on its own. The measurement is `research.md` R14: this is the larger half of the
+    two deferrals, because `shapely` pulls `numpy` in anyway wherever this tool is already loaded.
 
     The names are bound into this module's globals ONCE, so every call site afterwards is the plain global
     lookup it was before (spec D6); the sentinel makes a repeat call two bytecodes. The per-call cost is
