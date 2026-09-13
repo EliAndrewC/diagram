@@ -369,3 +369,29 @@ session is told to exercise and the GM reads in the diff.
 
 **When to build it**: if a village-tier feature lands rows that the GM, reading the diff, judges should have been unit
 tests - that is the measurement that says the judgment layer is not holding.
+
+## A magistracy's hand-authored SVG is gitignored, so no clone can render it (found 2026-09-13, feature 237)
+
+**The measurement.** `make render-sync` in a clone ABORTS on the first magistracy: `python3
+hayakawa-magistracy.gen.py` exits 1 because `resvg` is handed an SVG that does not exist. Three of the five
+magistracies have no `.svg` in the clone at all (`hayakawa`, `ochiba`, `ubame`); main has
+`hayakawa-magistracy.svg` and its `.png`, and `git status` in main is clean - because the file is
+**gitignored**. `git ls-files | grep magistracies.*svg` returns nothing in either tree.
+
+**The mechanism, and why it is a defect rather than a quirk.** The gen's own docstring states the rule it
+breaks: *"Mode A magistracy plans are hand-authored svg SOURCE (tracked in git); only the png is derived."*
+The svg is source - it cannot be regenerated from anything - and it exists today only as an untracked file
+in one working tree. If that tree is lost, so is the drawing. Meanwhile `render-sync` is the target
+`sync-with-main.sh` runs on every landing, and it stops at the first of the three, so the magistracies after
+it in the walk never render either.
+
+**Why it was not fixed in feature 237.** The fix is a content decision about the GM's own hand-authored
+drawings, and there is a second-order choice inside it (track the svg, or drop the gens whose source is
+gone and render those maps by hand again). Constitution Principle V puts the GM's artifacts in their hands,
+and the files are not in this clone to commit even if the decision were made - they would have to be taken
+from main's working tree, which is the only copy.
+
+**The sketch, if the answer is "track them"**: un-ignore `pool/magistracies/*/*.svg`, copy the three from
+main's tree into a clone, commit them as source, and leave the `.png` derived exactly as the gens assume.
+The gens then work in every clone and `render-sync` stops aborting. One line of `.gitignore` plus three
+files.
