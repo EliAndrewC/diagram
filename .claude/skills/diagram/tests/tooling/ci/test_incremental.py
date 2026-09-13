@@ -513,3 +513,43 @@ def test_save_baseline_promotes_the_fixture_graph_beside_the_closures(tmp_path: 
     assert json.loads((bdir / incremental.TESTS).read_text(encoding="utf-8")) == {"t::a": []}
     assert json.loads((bdir / incremental.GRAPH).read_text(encoding="utf-8")) == {"rolled": ["report"]}
     assert not (bdir / (incremental.GRAPH + ".next")).exists(), "promoted, not copied"
+
+
+def test_a_deleted_test_module_never_reaches_pytests_arguments(tmp_path: Path) -> None:
+    """pytest resolves its positional arguments before any plugin loads, so a stale path exits 4 and takes
+    the gate with it. A removed module arrives by two routes: `changed()` reports it, and the baseline's
+    contexts still name its tests."""
+    skill = tmp_path / incremental.SKILL_PREFIX
+    (skill / "tests").mkdir(parents=True)
+    (skill / "tests" / "test_here.py").write_text("", encoding="utf-8")
+    assert incremental.existing(tmp_path, ["tests/test_here.py", "tests/test_gone.py"]) == ["tests/test_here.py"]
+    assert incremental.existing(tmp_path, []) == []
+
+
+def test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The decision D8 moved out of `selection.py`, driven through `plan()` itself.
+
+    One changed test module holding every baseline test: the projection reaches all of them, which is over
+    the fraction, so the plan carries NO paths and the gate keeps the trees. That is the only way to get a
+    fresh baseline, and it is unavailable to a run whose arguments were already narrowed.
+    """
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    skill = tmp_path / incremental.SKILL_PREFIX
+    (skill / "t").mkdir(parents=True)
+    (skill / "t" / "test_a.py").write_text("", encoding="utf-8")
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    before = {"engine": {"e/a.py": "1"}, "tests": {f"{incremental.SKILL_PREFIX}t/test_a.py": "1"}, "tooling": "T"}
+    now = {"engine": {"e/a.py": "1"}, "tests": {f"{incremental.SKILL_PREFIX}t/test_a.py": "2"}, "tooling": "T"}
+    (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
+    (bdir / incremental.COVERAGE_DB).write_bytes(b"")
+    (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_a.py::x{k}": [] for k in range(4)}), encoding="utf-8")
+    monkeypatch.setattr(incremental, "manifest", lambda root: now)
+    monkeypatch.setattr(incremental, "import_time_change", lambda *a: None)
+    monkeypatch.setattr(incremental, "contexts_touching", lambda *a: set())
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "full" and "fraction" in pl.reason and pl.paths == [], "a full run keeps the trees"
+    # and the other side: one changed module holding a small share of the baseline stays incremental, with paths
+    (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_{k}.py::x": [] for k in "abcdefghij"}), encoding="utf-8")
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "incremental" and pl.paths == ["t/test_a.py"], f"narrowed to the changed module, got {pl.paths}"

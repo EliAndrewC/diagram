@@ -222,3 +222,24 @@ memory back in time. So the deferral is ONE module-level lazy accessor per modul
 local lookup afterwards (the spec's FR-010 and D6), with the perf bookend as its acceptance: the local
 band-1 line is 0.0%, and for this item an increase is not waiverable - the offending site goes back to a
 module-level import.
+
+## R10 - what it cost before, measured the same way twice
+
+Every figure here is the sum of PSS over the run's own process tree, sampled at 0.4 s
+(`scratchpad/shard2.py`, `peak.py`), so a concurrent gate in another session cannot inflate it.
+
+**Before, on unmodified engine code**, with the specs-only delta that makes the planner say *"nothing the
+baseline exercised has changed"* - the case the gate meets most often and the one FR-002 exists for:
+
+| | peak | wall |
+|---|---|---|
+| `make test-full`, nothing to run | **3,124 MiB** | 66.0 s |
+
+It collected all 3,753 tests across ten workers, deselected every one of them, and then paid the merge and
+the floors. Collection alone is 922 MiB of that at ten workers (R3), and the rest is the coverage tracer
+and the floors' own data.
+
+**The pool is byte-identical.** `make maps` regenerated every shipped hamlet clean and `git status pool/`
+reports nothing: no manifest, no render and no page moved, which is the evidence that the shapely deferral
+(FR-010) changed the geometry in no way at all. It is also why this feature owes no `settlement-review`
+(feature 231's rule: a review is owed when a pool map's LAYOUT moved).

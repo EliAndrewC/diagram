@@ -257,6 +257,18 @@ def over_the_fraction(pl: Plan, closures: dict[str, list[str]]) -> int:
     return len(keep_set(pl.dump(), pl.baseline_tests, closures))
 
 
+def existing(root: Path, modules: list[str]) -> list[str]:
+    """Only the modules still on disk, because pytest dies on an argument that is not there.
+
+    A DELETED test module reaches the plan by two routes - `changed()` reports a removed file as a changed
+    one, and the baseline's contexts still name its tests - and pytest resolves its positional arguments
+    before any plugin loads, so a stale path would exit 4 ("file or directory not found") and take the gate
+    with it rather than running the tests that remain. Dropping it is right as well as safe: its tests no
+    longer exist, and `stale_tests` already drops their contexts from the merge.
+    """
+    return [m for m in modules if (root / SKILL_PREFIX / m).is_file()]
+
+
 def plan(root: Path, force_full: str | None = None) -> Plan:
     """Decide the mode before collection. Everything that needs the collected items is `selection.py`'s."""
     bdir = baseline_dir(root)
@@ -294,7 +306,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         affected_fixtures,
         baseline_tests,
         FULL_FRACTION,
-        reachable_modules(affected_tests, changed_modules, affected_fixtures, closures),
+        existing(root, reachable_modules(affected_tests, changed_modules, affected_fixtures, closures)),
     )
     reached = over_the_fraction(pl, closures)
     if reached > FULL_FRACTION * len(baseline_tests):
