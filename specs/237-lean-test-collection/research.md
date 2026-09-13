@@ -243,3 +243,24 @@ and the floors' own data.
 reports nothing: no manifest, no render and no page moved, which is the evidence that the shapely deferral
 (FR-010) changed the geometry in no way at all. It is also why this feature owes no `settlement-review`
 (feature 231's rule: a review is owed when a pool map's LAYOUT moved).
+
+**After, the same instrument.** A full run (the baseline-recording shape, which keeps the trees by
+design):
+
+| | peak | wall |
+|---|---|---|
+| `make test-full`, full run, before | 3,124 MiB | 66.0 s |
+| `make test-full`, full run, after | **2,897 MiB** | 48.2 s |
+
+**And the marginal shapely figure FR-009 asks for, which changes the emphasis.** Measured by import
+order in one process (`scratchpad/libs.py`): `numpy` first costs 17.91 MiB and `shapely` then adds only
+**3.39 MiB**; `shapely` first costs 21.71 MiB because it pulls numpy in with it. So what deferring
+shapely is worth depends on whether numpy arrives anyway:
+
+- on a run that collects `tests/tools` - every full gate - `tools/page_lit.py` and `tools/picture_diff.py`
+  import numpy at module level, so the marginal saving is about **3.4 MiB a worker**;
+- on a restricted run that collects neither, it is the whole **21.7 MiB a worker**.
+
+Which means the lever this feature did NOT take - deferring numpy in those two tools - is the larger half
+on a full gate, and it is recorded here for the GM to price rather than taken on a session's own judgment
+(the GM approved the shapely accessor).
