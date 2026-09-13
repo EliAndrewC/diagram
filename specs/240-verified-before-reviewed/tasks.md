@@ -27,11 +27,12 @@ built, farmed or lived in. The figures it rests on are in `research.md` R1 and R
 
 ## Phase 3 - the hooks
 
-- [ ] T04 `pair-hooks.sh` Agent branch: `REVIEW_PREREQ_OK` escape, the module's refusals, and no
+- [x] T04 `pair-hooks.sh` Agent branch: `REVIEW_PREREQ_OK` escape, the module's refusals, and no
       `review_key` at dispatch; `review_recorded()` reads verdict records (FR-002 to FR-006).
       `scripts/test-pair-hooks.sh` cases for each refusal, the escape, and a NOT-REVIEWABLE verdict leaving
       the pair open - each proven to fire by deleting its branch once.
       research: rendering
+      verify: DONE. DONE. pair-hooks.sh Agent branch: settlement-review asks _review_prereq.py check (gate green from gate-stamp.py --fresh diagram, prompt text from the payload), REVIEW_PREREQ_OK="<why>" escape refused bare and logged with a reason, review_dispatch_key written at dispatch instead of review_key, review_recorded() reads verdict records via _review_prereq.py recorded. test-pair-hooks.sh 70/70 (section 8 updated: an escaped review counts once its verdict is written; 8b new: FR-003 naming the finding, verified by a record, accepted; FR-004; FR-005 key moved and artifact missing; FR-006 and 239's one-shot label; the escape; NOT-REVIEWABLE and a PASS for other content leave the pair open, a PASS for this content closes it). Each proven to fire by mutation in a scratch copy: refusal deleted 5 red, recorded-always 17, reason unchecked 1, FR-003/004/005/006 deleted 1/1/2/1, NOT-REVIEWABLE counted 1.
 - [x] T05 `review-gate.sh`: refuse a changed map whose latest verdict is NOT-REVIEWABLE (FR-002); its suite.
       research: rendering
       verify: DONE. DONE. review-gate.sh reads <git-dir>/review-verdicts/<map>.json for each changed manifest whose notes were touched, and refuses one whose latest verdict is NOT-REVIEWABLE; no record keeps the notes rule. test-review-gate.sh 19/19, the new pair of cases (NOT-REVIEWABLE blocked with notes updated, PASS ok) proven to fire: with the verdict comparison broken the blocked case goes red.
