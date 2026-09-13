@@ -137,3 +137,80 @@ every page it reached was a guessed URL. It names three cultural-property listin
 settle the "commonly" question - Narai's 中村邸, Toyokawa's 大橋屋, Kameyama's 玉屋 - and one host that
 refused it, `www.aichi-c.ed.jp`, which was Wikipedia's cited source on 大橋屋 and may carry that
 building's story count. Those are in the GM's download list.
+
+### R2b - what `source-applicability` caught in this feature's own first citation (2026-09-13)
+
+APPLICABLE-WITH-LIMITS on `okabe-hatago-jawiki`, `What it is:` accurate, **limits MISSING three** - and the
+serious one is worth recording because it is precisely the failure this whole feature exists to correct,
+committed by the session while correcting it elsewhere.
+
+**The write-up asserted that a lodging house of this kind "took travelers on foot and by palanquin".**
+That is on no page read. 駕籠 and 徒歩 appear nowhere in the article, nor on the Okabe-juku page, and the
+encyclopedia entry on the hatago names its guests as samurai, common people and itinerant merchants -
+which is nearer the map's clientele, not further. It was the session's own inference, written flat as a
+fact, and it was **load-bearing**: it is the premise the disqualifying conclusion was drawn from. Worse,
+the record's own other sources cut against it - a Tokaido post station is organized around large numbers
+of horses, and this very inn's proprietors served as the officer who ran the relay of men and horses.
+
+The negative half was an argument from silence stated as fact. "It has no cart yard, no long stable, no
+feeding trough and no grooms' lean-to" asserts more than silence can carry: the article describes the
+surviving building's rooms and does not describe the plot as it stood. The conclusion survives; the
+invented fact does not. All three places now read that **nothing read describes** those fittings at a
+lodging house of that kind - the registry write-up, `towns.html`, and the footnote's comment.
+
+Two more, both applied. A parenthetical claiming "one post station's surviving frontages are recorded as
+a mixture of two-story, half-second-story and single-story" sat inside this key's write-up, where a
+reader would take it for something this article says; it is from a different page, carried no key, and is
+dropped - the clause it qualified, that nothing read says inns of this kind were usually two stories, is
+true and stands alone. And the limits paragraph now carries the two the reader needs: the building is
+**selected by its own survival** (大旅籠 is the great hatago of its town, its proprietors ran a pawnshop
+and held post-station office - the leading house of the street, not the ordinary one on it), and its date
+of about 1836 is the very end of the period this setting draws on. That second one matters for symmetry:
+the counterweight source is disclaimed in its own write-up for being a twentieth-century survival, so
+both sides of the open question now state their dates.
+
+Two wording slips also fixed: the building is a 再建, a rebuilding, and its date is inferred from an 1835
+cost record rather than documented; and it is a REGISTERED tangible cultural property, which the verb
+already said and the noun now does too.
+
+**The lesson is the feature's own.** An inference written flat, inside a limits paragraph, in a citation
+added by the pass whose subject is inferences written flat. The check that caught it is the fifth research
+box, and it earned its place here on the first source this feature registered.
+
+### R3a - what batch A added, and where the density actually is (2026-09-13)
+
+The three pages feature 232 named as clusters came back at 171 items, and the reader's own headline is
+that **232 named the right pages and not the worst sections on them**.
+
+- The torii-count distribution, named in the closing report, is **one** unfootnoted sentence.
+- "Forest density and crown size" on `vegetation.html` is a section with **zero footnotes anywhere in it**.
+- The tanning yard (19 items) and the bell-and-drum tower (10) are the two densest clusters on the three
+  pages, as named. The tower entry is **one paragraph carrying ten unfootnoted real-world claims**,
+  including every acoustic and audibility figure it rests on - decibel levels, a night noise floor, a
+  fee-radius in kilometers, a threshold past which one tower stops sufficing.
+- But `urban-features.html`'s "Trade works" section (16 items) and "Stable yards" (3 items, each a dense
+  run of measured figures) **are comparable and were not named**. So is the well research (5), whose base
+  rate - one to three communal wells for a village of seventy households - is what this project's whole
+  well liberty is measured against.
+
+`urban-features.html` alone carries **103 of the 695**, which is 15% of the record's whole exposure on one
+page. It is the page to work first.
+
+### R3b - the inventory, closed
+
+**695 items over 282 sections and 19 pages**, 223 of them carrying an inline marker. The four batches
+agree closely on the shape of what they found: roughly two thirds of the items carry no marker of any
+kind, and the confidence split across all four is about 60% HIGH.
+
+Two pages are `NOT AN ASSERTION` in bulk and need no work: `presentation.html` (zero items) and
+`settlements.html` (one, restating footnoted canon). That is the census's upper bound doing its job -
+84 unfootnoted paragraphs between them, none of which owes a source.
+
+**What the number means for the feature.** A `source-reader` pass on every `CITE` item is several times
+feature 232, which took a day of readers for 162 notes. FR-009's page-by-page batching is therefore not a
+convenience but the deliverable's shape: pages land finished, and FR-010 names whatever does not. The
+order is R3a's - `urban-features` first at 103 items, then `capitals` at 125, then the rest by density.
+
+**And the priority within a page is the second shape from R3, not the count.** An item whose section
+roster already admits the figure was never read is a defect the reader meets as a finding; an item nobody
+ever claimed a source for is a gap. The defects come first.
