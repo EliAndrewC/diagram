@@ -110,21 +110,37 @@ def plan(
                   if re.search(r"\b%s\b" % re.escape(w), cmd, re.I) and re.search(r"\b%s\b" % re.escape(a), cmd, re.I))
     if both:
         return cmd, [], both
-    held = [(m.start(), m.end(), "mention") for m in spans.finditer(cmd)] + held_ranges(cmd)
+    held = _merged([(m.start(), m.end(), "mention") for m in spans.finditer(cmd)] + held_ranges(cmd))
     warned, out, notes, last = [], [], [], 0
-    cuts = sorted({p for a, b, _ in held for p in (a, b)} | {0, len(cmd)})
-    for a, b in zip(cuts, cuts[1:]):
-        piece = cmd[a:b]
-        kinds = {k for s, e, k in held if s <= a and b <= e}
-        if not kinds:
+    for a, b, kind in held + [(len(cmd), len(cmd), "mention")]:
+        piece = cmd[last:a]
+        # THE HOOK RUNS ON EVERY BASH COMMAND, so the whole-table correction is only reached for a
+        # piece that has a word in it. Without this the walk cost seconds on a heredoc holding a page
+        # of prose - 44 word patterns over every gap between two held ranges, and a long command has
+        # hundreds of them - which is seconds added to every command a session runs.
+        if piece and words.search(piece):
             fixed, got = correct_plain(piece)
             out.append(fixed)
             notes += got
-            continue
-        if "warn" in kinds:                       # inside the sed shape a word is warned, whatever else it is
-            warned += [m.group(0) for m in words.finditer(piece)]
-        out.append(piece)
+        else:
+            out.append(piece)
+        if kind == "warn":                       # inside the fix shape a word is named, never corrected
+            warned += [m.group(0) for m in words.finditer(cmd[a:b])]
+        out.append(cmd[a:b])
+        last = b
     return "".join(out), list(dict.fromkeys(notes)), list(dict.fromkeys(w.lower() for w in warned))
+
+
+def _merged(held: list[tuple[int, int, str]]) -> list[tuple[int, int, str]]:
+    """The held ranges as one sorted, non-overlapping list; a range the sed shape covers stays `warn`."""
+    out: list[tuple[int, int, str]] = []
+    for a, b, kind in sorted(held):
+        if out and a <= out[-1][1]:
+            pa, pb, pkind = out[-1]
+            out[-1] = (pa, max(pb, b), "warn" if "warn" in (pkind, kind) else pkind)
+        else:
+            out.append((a, b, kind))
+    return out
 
 
 def _selftest() -> None:

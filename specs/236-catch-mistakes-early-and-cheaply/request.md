@@ -91,3 +91,19 @@ And, offered alongside them and recommended for skipping - so NOT one of the six
 
 > **What I'd skip.** A guard on committing a red tree. Mid-task commits on red are legitimate and sacred
 > here; a guard would fire on correct work, which is the bar this project sets for not building one.
+
+## The GM's ruling on the three things this feature left them (2026-09-13)
+
+Verbatim, as given, after the closing report named D2, D5 and D8:
+
+> Gotcha. Yes. I think that we could exempt that sed shape and otherwise correct in the hook rather
+> than warning. So, basically, we should warn when it is the sed shape, and for other shapes just
+> correct it.
+>
+> You should do the tree wide scan instead of leaving this half done.
+>
+> I agree that exempting the scripts fixtures from the house style is correct. But we do indeed need
+> the wording fix, it sounds like. So please make that.
+
+The third item was already applied before the push: the round-1 finding on SC-002 landed in
+`ee8b8ccc` and round 2 returned FAITHFUL. Nothing was owed for it but the report saying so.

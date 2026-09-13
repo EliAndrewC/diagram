@@ -254,15 +254,20 @@ if is_bash:
         }}))
         raise SystemExit
     if warned:
+        # GUARD_EDIT_OK: feature 236 amendment 2 - the REASON is the branch that produced the warning,
+        # never a guess. A command left as typed because it is the fix and one left as typed because
+        # it writes the GM own words are different facts, and a session told the wrong one will look
+        # for a sed expression that is not there.
+        why = ("this file records the GM speaking, and their words are reported, never corrected "
+               "(Principle V)" if GM_VERBATIM else
+               "this command is itself a spelling fix - the sed shape, or both spellings in one "
+               "command - and correcting it would replace a word with itself")
         print(json.dumps({"hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "additionalContext": (
                 "House style, in this command payload: " + ", ".join(warned[:6]) + ". Not corrected "
-                "for you: this command is a spelling fix (the sed shape, or both spellings in one "
-                "command), and correcting it would replace a word with itself. "
-                + ("The GM own words are reported, never corrected. " if GM_VERBATIM else "")
-                + "`make quick` fails on a British spelling in the delta, so it is cheaper to fix now "
-                "than at the gate."),
+                "for you: " + why + ". `make quick` fails on a British spelling in the delta, so it "
+                "is cheaper to fix now than at the gate."),
         }}))
     raise SystemExit
 

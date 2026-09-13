@@ -253,3 +253,55 @@ this feature's own work named 43 hits, every one of them inside the frozen comma
 those 238 commands were house-style sweeps, so they carry the words by necessity. A fixture is a
 verbatim record: correcting one would falsify it and break the measurement it reproduces. So
 `scripts/fixtures/` is exempt in the check AND in the hook (spec D8).
+
+## R10 - what correcting a Bash payload would rewrite (measured 2026-09-13)
+
+The GM ruled that the hook should correct a Bash payload and warn only on the sed shape (`request.md`,
+2026-09-13). A command is not an edit, so the ruling was priced before it was built:
+`measure_bash_corrections.py` replays every unique Bash command in the last fourteen days of
+transcripts - the session's own and its subagents' - through this hook, and the shapes below are what
+came back. The script is committed and re-runnable; `scripts/_hm_house.py` carries the rules it
+produced, each with a case in `scripts/test_hooks_cases.py`.
+
+**The window.** 7,069 unique commands carried a British spelling or a forbidden dash somewhere in
+their text. The hook as first shipped warned on **348** of them; the other 6,721 were already quiet,
+almost all of them searches its segment-dropper recognized.
+
+**What the shipped rules do with those 348:**
+
+| verdict | commands | what they are |
+|---|---|---|
+| corrected | 161 | prose the command writes - a heredoc into a test or a doc, a commit message, an `echo >>` |
+| reported, left as typed | 56 | the command is itself the fix |
+| silent | 88 | every hit is a word the command only NAMES |
+| silent | 21 | the write lands outside the project |
+
+(The four rows sum to 326: 22 commands the first pass warned on are silent under two rules at once,
+and the replay counts each command once, under the first rule that reached it.)
+
+**The fix shape is not only `sed`.** Of the 60 commands the first pass classified as a fix, **5** were
+written with `sed`; the other 55 were the same replacement written another way - a Python
+`t.replace(old, new)`, a `_patch.py` anchor beside its replacement, a table of pairs. Correcting any
+of them replaces a word with itself and the fix silently does nothing, which is the GM's own reason
+for exempting `sed`. So the implemented rule is the sed shape PLUS any command carrying both
+spellings of one word (spec D9). Disclosed cost: `sed` used to READ (`sed -n '104p' CLAUDE.md`) is
+warned rather than corrected, because the rule is the command the GM named rather than a judgment
+about what that command does.
+
+**Three classes the first draft would have broken, each found by reading the replay rather than by
+reasoning about it.**
+
+- **A sweep's own word list.** A set of quoted spellings in a Python heredoc is the tool that FINDS
+  violations; correcting it leaves a list of American spellings that matches nothing. A string whose
+  whole content is one word is now a mention, exactly as a backtick span is in prose.
+- **A search the segment-dropper did not recognize.** `! grep -qiE '<words>'` (the negation stands
+  where the command should be), a searcher inside `$(...)`, a regex alternation in any language, and
+  a dash inside a character class or a `$'...'` string. FR-007a's rule reaching the shapes it missed.
+- **The session state directory.** Writes to `~/.claude/projects/<project>/memory/` were being
+  corrected, and that index's own line format carries an em-dash. Outside the project, as `/tmp`
+  already was (spec D10).
+
+**The hook runs on every Bash command, so its own cost was measured.** The first walk was quadratic
+in held ranges and re-ran the whole word table over every gap between them: 2.2 s on a 14 KB heredoc,
+which is 2.2 s added to every command a session runs. Merging the ranges and skipping a gap with no
+word in it takes the walk to 0.022 s, and the whole hook - Python startup included - to 0.26 s.
