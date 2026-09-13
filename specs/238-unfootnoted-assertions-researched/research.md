@@ -177,6 +177,64 @@ already said and the noun now does too.
 added by the pass whose subject is inferences written flat. The check that caught it is the fifth research
 box, and it earned its place here on the first source this feature registered.
 
+## R3 - the inventory (2026-09-13)
+
+Four `quote-check` readers, one per batch, each asked for the one thing this feature needs: per section,
+every sentence that asserts something about how a place was built, farmed, planted, governed, traded in,
+worshipped in or lived in, and that carries no footnote. Their reports are kept verbatim under
+`reader-reports/`. **The reports are the evidence; the dispositions are this session's.**
+
+| batch | pages | sections read | items | with an inline marker |
+|---|---|---:|---:|---:|
+| A | religion-and-death, vegetation, urban-features | 53 | 171 | 34 |
+| B | the four `cities/` pages (capitals, fabric, government, defenses) | 72 | 203 | 59 inline + 12 roster-only |
+| C | water, fields, cities/river-cities, cities/hinterland, cities/sizing | 57 | 153 | 51 |
+| D | homesteads, buildings, archetypes, settlements, towns, ways, presentation | 100 | 168 | 67 |
+| **all** | **19 of 19 pages** | **282** | **695** | **223** |
+
+**The residue's estimate of "roughly 180 sentences" was low by about a factor of four.** R1 bounded the
+work at 864 unfootnoted paragraphs and floored it at 285 inline markers; 695 sits between them, which is
+what the bound and the floor were for. The estimate was not careless - it came from six agents reporting
+in passing while doing a different job, and a count made in passing is a count of what was noticed.
+
+### Four shapes the readers found, which matter more than any single item
+
+**1. The marker is narrower than the sentence it sits in.** `buildings.html`'s poverty-texture sentence
+carries "(both specifics unsourced)" while making three assertions; `homesteads.html`'s village-variation
+paragraph closes with a marker naming "the field-system and market groundings" while also asserting a
+siting rule, four site-to-form mappings and a water claim. **A reader counting markers undercounts**, and
+so did R1's floor of 285.
+
+**2. Roster-level disclosure hides from the reader.** In more than thirty places across the four reports
+the section's `Sources:` line admits a figure was never read while the sentence carrying it stands bare
+in the body - the Honcho-dori street width, Edo's ~67 km of buried mains, the 1,334 ft Toribeno distance,
+the south-facing-by-divination gate rule, the sluice's board-in-grooves mechanism, the eleven-figure
+Sugiura table, `fields.html`'s whole per-archetype in-field siting matrix, the samurai quarter's absent
+public wells, the one-well-per-10-to-20-households rate. The record's own rule is a footnote AT the
+assertion; an admission elsewhere on the page is honesty the reader never meets. **These are the items
+most likely to be mistaken for findings on a skim**, and they are the highest-value work in this feature.
+
+**3. Unfootnoted quotations.** A quotation with no source is a sharper failure than a paraphrase with no
+source, because quotation marks assert that someone specific said this. Eight across the four reports,
+including 「larger compounds separated by walls and gates」 and 「six rooms and three shifts」 on
+`capitals.html`; Injo-ji 「at the entrance of Rendaino」, with "explicitly described as" attributing it to
+nothing; Shen Kuo's 矢石相及 on `defenses.html`; and 「had to do with rainfall or natural underground
+sources」 on `urban-features.html`, whose own note says the phrase is not on the page it cites.
+
+**4. Two cross-page contradictions, both of the same kind** - one page states as a finding what another
+page records as unsupported:
+
+- **The Forbidden City's NW-in / SE-out flush.** `water.html` "A fed closed moat must drain" asserts it
+  inside a footnoted bullet; `water.html` "The diverted-stream moat is a historical type" says of the same
+  direction "no readable page supports the direction - a GUESS". Same page, two sections.
+- **The sealed samurai quarter.** `cities/government.html` states in the historical voice that a seat of
+  this size seals its samurai ground with an earthwork and palisade abutting the city wall;
+  `cities/capitals.html` records that "This research says the continuous fence is more than history
+  supports even there"; and `cities/defenses.html` then builds a second rule on top of the first.
+
+Both are FR-006 corrections. Neither is a reading failure - each is a page written at a different time
+from a different source, which is the failure mode a record of this size has by construction.
+
 ### R3a - what batch A added, and where the density actually is (2026-09-13)
 
 The three pages feature 232 named as clusters came back at 171 items, and the reader's own headline is

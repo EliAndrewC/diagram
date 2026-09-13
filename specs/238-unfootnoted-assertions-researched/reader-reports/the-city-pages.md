@@ -2,7 +2,8 @@
 
 *cities/capitals.html, cities/fabric.html, cities/government.html, cities/defenses.html.*
 *The agent's report as it came back, feature 238 FR-001. Nothing here is a decision - the*
-*dispositions are research.md R3.*
+*dispositions are research.md R3.* **One word was changed from the agent's text: a British spelling*
+*(`programme`) corrected to house style, which is project-wide. Nothing else was touched.**
 
 ---
 
@@ -392,7 +393,7 @@ Nothing owed - caste shares and rank bands are the GM's setting notes.
 10. "the boom runs roughly 1830-1860" - marker: roster-level, **"The \"boom of 1830-1860\" range is not on any page read; it is drawn from the three founding dates and late-Edo growth"** - a date range - **HIGH**.
 11. "sit in a city of a million (unsourced)" - marker: **"(unsourced)"** - a population figure - **HIGH**.
 12. "The Chinese anchor is starker: military examinations were held at county and prefectural level and candidates prepared at schools, but there was no dense network of private martial academies at a county seat - drill happened at garrison grounds (unsourced)." - marker: **"(unsourced)"** - institution, a negative claim - **HIGH**.
-13. "a real martial hall also had a changing room, an armory and a viewing platform." - no marker - built form, room programme - **HIGH**.
+13. "a real martial hall also had a changing room, an armory and a viewing platform." - no marker - built form, room program - **HIGH**.
 14. "nothing about a domain school's construction differed from a private hall's" - no marker - a no-difference claim about real construction - **MEDIUM**.
 
 ### 8. Servant housing in the samurai ward
