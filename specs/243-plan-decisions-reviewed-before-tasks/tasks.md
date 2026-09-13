@@ -48,7 +48,7 @@ spellings, hyphens only. No task is ticked before the gate and this plan's recor
       `test_tick_task.py`; every refusal broken in place and watched go red, then restored (SC-008).
       research: rendering
       verify: DONE. 12 of 12 refusals red when broken and restored (scratchpad mutate243.py), plus the push wiring red in the sync suite; test_tick_task updated for the gate
-- [ ] T10 `make hooks-test`, `make quick` and `make done` green; every tick of this feature made through
+- [x] T10 `make hooks-test`, `make quick` and `make done` green; every tick of this feature made through
       the gate after T01's record (SC-009).
       research: rendering
-      verify:
+      verify: DONE. make hooks-test green (24 suites, 5 re-run), make quick green, make done green FULL scope 3870 passed with the coverage floors; T01-T10 each ticked through the gate after the CLEAR record

@@ -106,8 +106,7 @@ def test_recording_declines_without_the_reviewer_and_refuses_what_it_cannot_trus
     with pytest.raises(ValueError, match="no plan.md"):
         gate.record(feature(tmp_path / "np", plan=None), current([]), "spec-fidelity")
     assert not (d / "plan-review.json").exists(), "a refusal writes nothing"
-    out = gate.record(d, {"plan_sha256": hashlib.sha256(PLAN).hexdigest(), "decisions": [NARROW_BAD]},
-                      "spec-fidelity", today="2026-09-13")
+    out = gate.record(d, {"plan_sha256": hashlib.sha256(PLAN).hexdigest(), "decisions": [NARROW_BAD]}, "spec-fidelity", today="2026-09-13")
     assert out["verdict"] == "BLOCKED" and out["reviewed"] == "2026-09-13" and out["declared"] == "spec-fidelity"
     assert gate.owed(d)[0] == "plan-review-blocked"
     gate.record(d, current([WITHIN]), "spec-fidelity")
@@ -150,9 +149,7 @@ def test_a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded(tmp_path
     assert gate.tick_permitted(d, tmp_path, None) == (True, "")
 
 
-def test_make_tick_refuses_and_writes_nothing_until_the_plan_is_reviewed(
-    tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
-) -> None:
+def test_make_tick_refuses_and_writes_nothing_until_the_plan_is_reviewed(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     d = feature(tmp_path)
     monkeypatch.setattr(tt, "repo_root", lambda start=None: tmp_path)
     monkeypatch.delenv("PLAN_REVIEW_OK", raising=False)
@@ -171,8 +168,7 @@ def test_make_tick_refuses_and_writes_nothing_until_the_plan_is_reviewed(
 
 
 def _git(root: pathlib.Path, *args: str) -> str:
-    return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@example.com", *args],
-                          check=True, capture_output=True, text=True).stdout.strip()
+    return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@example.com", *args], check=True, capture_output=True, text=True).stdout.strip()
 
 
 def test_the_push_judges_every_touched_feature_with_a_tick_at_HEAD(tmp_path: pathlib.Path) -> None:
