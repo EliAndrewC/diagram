@@ -32,3 +32,18 @@ build on `measurements.json` rather than defining a parallel format, and add fie
 warnings from its own rounds are carried into this feature's requirements: a timing taken while another
 session is rolling a map is corruption that looks like a result, and a recorded command that reads a
 corpus under `/tmp` is not recorded at all.
+
+## The split, as the peer session stated it in full (2026-09-13)
+
+Asked directly whether feature 239 touches any of the performance machinery, that session answered that
+it does not: `make perf-explain`, `make perf-audit`, `l7r/diagram/tools/perf_review.py` and
+`.claude/agents/perf-audit.md` are all this feature's. Its complete list of what 239 edits is
+`.claude/agents/spec-fidelity.md`, `.specify/templates/tasks-template.md`, `scripts/spec-lint.py` (a new
+check 5, keyed on check 1's existing `_FIGURE` and `_UNIT_ALT`, both unchanged), a new `make figures` and
+`make hookbench`, `scripts/house-style-hooks.sh` with `scripts/_hm_house.py`, and one fixture under
+`scripts/fixtures/` - nothing under perf, nothing in `settlement-review.md`, nothing in `pair-hooks.sh`.
+
+It accepted both handbacks (the timing-record rule is 239's FR-011c, where it now records that its own
+quiet threshold was chosen rather than measured; the run-from-repository rule is 239's `make figures`), and
+it will record this feature's finding-keyed trigger in 239 as a considered extension pointing at this
+feature's findings record, so that there is one findings format rather than two.

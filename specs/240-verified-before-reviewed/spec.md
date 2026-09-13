@@ -1,6 +1,6 @@
 # Feature 240 - a review round is not spent on an unverified fix
 
-**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 2 pending
+**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 2 in review
 **Request**: [`request.md`](request.md), the GM's words verbatim. **Research**: [`research.md`](research.md).
 **Peer**: feature 239 (`Diagram (Kuwabata)`) holds the same contract for `spec-fidelity` and spec figures.
 The split was agreed between the two sessions and is recorded in `request.md`; this feature touches none of
@@ -104,6 +104,10 @@ feature adds.** 239's entry carries `value`, `unit`, `command`, `taken`, and opt
 figures too; `source`, `subject` and `verifies` are this feature's. Every record this feature's own harness
 writes MUST pass 239's `make figures` re-run from a clean checkout, and timing records follow 239's
 FR-011c - both requirements are 239's to specify and enforce, and this feature is their consumer (D3).
+**Ordering, stated so it is not mistaken for enforcement:** nothing checks those two properties until 239
+implements `make figures`, and 239 is still in specification review. If this feature is implemented first,
+its records are written in the right shape and re-run by nothing until then; FR-003 still refuses a finding
+with NO record, which does not depend on 239 at all.
 
 ### E. An attribution names its counterfactual (FR-010)
 
@@ -160,9 +164,10 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   tasks template, the house-style guard, `make figures` (the re-run that proves a recorded command runs from
   a clean checkout) and FR-011c (a timing record's machine state and quiet threshold). This feature's own
   first draft specified the last two as requirements of its own; spec-fidelity round 1 found them to
-  duplicate 239, and they were handed back to that session rather than built twice. Whether 239 touches
-  `perf-explain`, `perf_review.py` or `perf-audit` was asked of that session directly; the answer is
-  recorded in `request.md`.
+  duplicate 239, and they were handed back to that session rather than built twice. Asked directly whether 239
+  touches `perf-explain`, `perf_review.py` or `perf-audit`, that session answered that it touches none of
+  the perf machinery, and gave its complete file list (`request.md`): nothing under perf, nothing in
+  `settlement-review.md`, nothing in `pair-hooks.sh`.
 - **D4 The figure detector is imported from `spec-lint.py`, not copied.** 239's check 5 keys on the same
   definition (239's D4), and that session has undertaken to announce any change to `_FIGURE` or `_UNIT_ALT`
   before it lands.
