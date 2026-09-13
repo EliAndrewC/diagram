@@ -11,7 +11,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 - **X**: no new module; `page_lit.py` keeps 100% through its stub tests and the browser test; every file
   stays under 1,000 lines.
 - **XIII**: no pool manifest moves, so no settlement-review is owed (feature 231) and no map re-rolls;
-  the baseline is the green `make done` recorded 8 hours before this feature started.
+  the baseline is the green `make done` the run log records from before this feature started.
 - **XIV**: the tool defect is fixed in this work (spec D5).
 - **XVI**: spec-fidelity before code; this plan reviewed (MODE 4) before any tick.
 - **Route**: `l7r/diagram/tools/page_lit.py` and the tests are in the delta, so GATED (LOCAL-GATED);
@@ -29,13 +29,19 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   the key and why not the wheel.
 - `tests/tools/test_page_lit.py`: `_FakePage` gains a `keyboard` whose `press` logs; the two zoom-loop
   tests assert presses, not wheel turns.
-- `tests/full/interactive/page_browser/test_page_lit.py`: the halves page measured through a 100 by 100
-  viewport (the `viewport` argument `measure` already takes) so its opening view is raster mode; the
-  first test asserts `mode == "raster"`, the vector test asserts `mode == "vector"` and `zoom > 1`.
+- `tests/full/interactive/page_browser/test_page_lit.py`: the halves page measured through a 300 by 300
+  viewport (the `viewport` argument `measure` already takes) so its opening view is raster mode, and
+  large enough that the page's fixed zoom buttons cover only a corner of it (a 100-unit viewport put
+  them over most of the lit half); the share test lights the paddy, the half the buttons do not touch,
+  and asserts `mode == "raster"`; the vector test asserts `mode == "vector"` and `zoom > 1`.
 - `tests/full/interactive/page_browser/_driver.py` `_synthetic()`: one `<circle r="1.4" fill="#2F6B35"/>`
   tagged `bund beans` on clear ground; `test_synthetic.py`: a test that shrinks the viewport, presses fit,
   asserts `data-mode="raster"`, lights the paddy and reads `fill-opacity` 0.45 on its rect, lights the
   beads and reads 1 on the circle, then restores the viewport and asserts both read 1 on the vector page.
 - `interactive/CLAUDE.md` raster row and `tools/CLAUDE.md` page-lit row: one clause each.
-- SC-002 and SC-003 replayed by hand on the shipped Inashiro page with `make page-lit`, recorded in
-  tasks.md.
+- SC-002 is decided by the R1 contact sheet RE-TAKEN on the shipped Inashiro page at its opening view
+  with the shipped stylesheet - the beads unlit and lit, side by side, gold rather than olive - looked at
+  by the session and recorded in tasks.md, the GM's eye final on the map itself; `make page-lit
+  CLASS="bund beans"` on the same page is the subordinate check that no other class moved (it cannot
+  decide the criterion: a washed bead already moves past its threshold). SC-003 is `make page-lit ...
+  VECTOR=1` on the same page reporting `mode: vector`, recorded in tasks.md.

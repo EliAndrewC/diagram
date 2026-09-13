@@ -42,5 +42,16 @@ browser test that covers the loop measures a 200-unit synthetic map in a 1400-wi
 in vector mode already, so the loop never ran in a browser. A viewport of 300 by 300 over that map opens
 in raster mode (screen scale 1.5 against the picture's 2 per map unit) and one doubling reaches vector,
 which is the page the fixed test measures. A 100 by 100 viewport was tried first and the page's fixed zoom
-buttons covered most of the lit half, which read 43% changed; at 300 they cover a corner of the other half,
-and the share test lights the paddy, the half they do not touch.
+buttons covered most of the lit half, which read 43% changed (observed 2026-09-13; method: the browser test's
+own run of `page_lit.measure` at that viewport); at 300 they cover a corner of the other half, and the share
+test lights the paddy, the half they do not touch.
+
+## R2. The shipped stylesheet, replayed on the shipped page
+
+(Observed 2026-09-13; method: the R1 script re-run with the clone's `page.css` inlined into a copy of the
+shipped Inashiro page in place of the old sheet, the same window, unlit and lit, before and after side by
+side; then `make page-lit` on that copy.) The contact sheet's after row shows the beads as a clear gold run
+along every beaded bund where the before row shows the same dots olive; `make page-lit CLASS="bund beans"`
+at the opening view reports the beads as the only class whose pixels moved and every other class at 0.0%,
+and with `VECTOR=1` it now reports `mode: vector` at 6.31x of fit where it reported `mode: raster` before
+the fix.
