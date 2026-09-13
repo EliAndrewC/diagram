@@ -392,7 +392,6 @@ PIL put back at module level in the two tools, the whole tree collects at **854 
 pair saves: **numpy is 69 MiB and PIL is 14** - which also says what reversing PIL alone would cost, since
 D9 records it as the session's judgment rather than the GM's request.
 
-
 And per worker, measured the same way as R6: the engine baseline - pytest plus every engine module - falls
 from **57.6 MiB to 42.9 MiB**, because `numpy` (17.9) and `PIL` (2.3) no longer arrive with it.
 
