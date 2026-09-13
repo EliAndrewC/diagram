@@ -1,0 +1,6 @@
+{
+  "utc": "20260913T032327Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no pool manifest moved since the pass-14 review - this delta is the corrected perf explanation, an STRtree rebuilt after a trade that changed no map, and a hoisted crop-ring list"
+}
