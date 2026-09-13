@@ -144,21 +144,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         return far_bank(x, y, _brook, [(float(b[0]), float(b[1])) for b in s.placed])
 
     def _pretest(x: float, y: float) -> bool:
-<<<<<<< HEAD
         """Count a candidate (feature 226 FR-003). The cheap refusal that stood here - a house-sized box against the
         boundary and the placed boxes - is the placer's own first test now (feature 227: the whole homestead's
-        ENVELOPE, `_envelope_blocked`), so nothing is asked twice and a seat the envelope refuses costs one rectangle."""
+        ENVELOPE, `_envelope_blocked`), so nothing is asked twice and a seat the envelope refuses costs one rectangle.
+
+        THE BROOK'S FAR BANK STAYS HERE, though (feature 230). It is not a packing question the envelope can answer -
+        it is a site rule about which side of the water the cluster stands on - so it refuses before the placer."""
         s._seat_search["candidates"] += 1
-        return True
-=======
-        """A candidate's cheap refusal before the placer is asked (feature 226 FR-003): a house-sized box on the house
-        side of the chains and clear of the corridors, clear of every placed bundle's box, and on the cluster's own
-        bank of the brook. Counted as a candidate."""
-        s._seat_search["candidates"] += 1
-        if s._site_blocks_rect((x, y, _hw0, _hh0)) or _far_bank(x, y):
-            return False
-        return all(not (abs(x - px) < (_hw0 + pw) / 2 and abs(y - py) < (_hh0 + ph) / 2) for px, py, pw, ph, *_ in s.placed)
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
+        return not _far_bank(x, y)
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]

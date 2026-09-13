@@ -332,25 +332,19 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     the pond's center so the two are visibly joined. Both scale with the map: a bigger hamlet drains
     more water into a bigger pond.
 
-<<<<<<< HEAD
-    `water_sink="offmap"` draws nothing here - the drain's brook (kept in `stage_field`) already
-    carries the runoff off the frame, which is what most valleys do and what the GM's brief allows.
+    `water_sink="offmap"` draws the collector's continuation off the frame instead of a pond - a drainage
+    ditch like the pond run (`drain_run`), which is what most valleys do and what the GM's brief allows.
 
     Steps:
         l7r.diagram.hamletgen.sink.drain_outfall
         l7r.diagram.hamletgen.sink.drain_heading
+        l7r.diagram.hamletgen.sink.drain_run
         l7r.diagram.hamletgen.sink.pond_setback
         l7r.diagram.hamletgen.sink.pond_clear_of_crop
         l7r.diagram.settlement.Settlement.pond
-        l7r.diagram.settlement.Settlement.field_channel
         l7r.diagram.settlement.land.wet.pond_fringe_ring
         l7r.diagram.settlement.Settlement.marsh
-        l7r.diagram.settlement.Settlement.stream
     """
-=======
-    `water_sink="offmap"` draws the collector's continuation off the frame instead of a pond - a drainage
-    ditch like the pond run (`drain_run`), which is what most valleys do and what the GM's brief allows."""
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:

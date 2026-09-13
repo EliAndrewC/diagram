@@ -385,20 +385,6 @@ class BoardsMixin:
                             return True
                 return False
 
-<<<<<<< HEAD
-            def _feature_gap(_q: Pt) -> float:
-                """How far this seat's caption quad stands from the nearest solid feature, in px.
-
-                The same geometry `_blocked` judges, returned as a DISTANCE so the seat picker can choose the
-                least bad seat when every one of them is blocked instead of falling through to pure lane
-                clearance - which is how Kuwabata's caption came to rest 0.02 px off a byre, 38.7 ft from the
-                board it names (settlement-review, 2026-09-12)."""
-                _quad = _cap_quad(_q)
-                return min((poly_gap(_quad, _o) for _o in _fabric), default=1e9)
-
-            def _pick(_seats: list[Pt]) -> Pt:
-                return pick_caption_seat(_seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked, _feature_gap)
-=======
             _canopy = canopy_index(self.M)  # built once for this caption's ladder - see `canopy_index`
 
             def _rung(_seats: list[Pt], _want: float) -> Pt | None:
@@ -422,6 +408,16 @@ class BoardsMixin:
                             return True
                 return False
 
+            def _feature_gap(_q: Pt) -> float:
+                """How far this seat's caption quad stands from the nearest solid feature, in px.
+
+                The same geometry `_blocked` judges, returned as a DISTANCE so the seat picker can choose the
+                least bad seat when every one of them is blocked instead of falling through to pure lane
+                clearance - which is how Kuwabata's caption came to rest 0.02 px off a byre, 38.7 ft from the
+                board it names (settlement-review, 2026-09-12)."""
+                _quad = _cap_quad(_q)
+                return min((poly_gap(_quad, _o) for _o in _fabric), default=1e9)
+
             def _pick(_seats: list[Pt]) -> Pt:
                 # ACROSS THE ROAD IS NOT A LAST RESORT, IT IS A REFUSAL (settlement-review, feature 230 pass 11). `_blocked`
                 # has always answered "or sit across a way from the board it names", but it is a CONSTRAINT inside the
@@ -438,8 +434,10 @@ class BoardsMixin:
                 # the same shape and the same place as the board's own: a seat clear of canopy wins where one exists, and
                 # a caption whose every candidate stands under trees is still seated.
                 _clear = [_s for _s in (_near or _seats) if not under_canopy(_canopy, _s[0], _s[1], max(_chw, 8.0))]
-                return pick_caption_seat(_clear or _near or _seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
+                # AND WHEN EVERY SEAT IS BLOCKED, THE LEAST BAD ONE (feature 227). The two preferences above narrow the
+                # field; `_feature_gap` decides among what is left, so a caption that must sit near solid ink sits as
+                # far from it as the ladder allows instead of falling through to pure lane clearance.
+                return pick_caption_seat(_clear or _near or _seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked, _feature_gap)
 
             # ONE LADDER, BOTH BRANCHES (feature 157, second pass). The dense ranked ladder was built
             # inside the tilted branch and the LEVEL branch kept its own coarse candidate set - four

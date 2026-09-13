@@ -7,15 +7,10 @@ import random
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-<<<<<<< HEAD
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
-    from shapely.geometry import Polygon
+    from shapely.geometry import LineString, Polygon
     from shapely.ops import unary_union
-=======
-from shapely.geometry import LineString, Polygon
-from shapely.ops import unary_union
-from shapely.strtree import STRtree
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
+    from shapely.strtree import STRtree
 
 from ..banks import (
     _GATE_MIN_APEX,
@@ -56,11 +51,12 @@ def _load_shapely() -> None:
     costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
     any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
     """
-    global _SHAPELY_LOADED, Polygon, unary_union  # binding this module's own names is the point
+    global _SHAPELY_LOADED, LineString, Polygon, STRtree, unary_union  # binding this module's own names is the point
     if _SHAPELY_LOADED:
         return
-    from shapely.geometry import Polygon
+    from shapely.geometry import LineString, Polygon
     from shapely.ops import unary_union
+    from shapely.strtree import STRtree
 
     _SHAPELY_LOADED = True
 
@@ -332,6 +328,7 @@ def _basin_rank(basin: Polygon, fill: float, median: float, collector: LineStrin
     owes the same reading. Then how far it falls short of filling its own rectangle, which is what a leveled basin looks
     like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also its biggest.
     """
+    _load_shapely()
     # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
     # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
     # the drain when a real length of its boundary runs along it - a quarter of a plot's width.
@@ -354,6 +351,7 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float, neck: float = 0.0) 
     not change. A detached remainder smaller than the rest, and a whole plot left too small to be a basin or pointed to
     a needle, return their ground to the bare pocket this pass exists to plant or weld, exactly as a carved scrap does.
     Earlier plots are the ones cut because later ones are the ones painted on top."""
+    _load_shapely()
     # INDEXED, per constitution X clause 15: a running union of every later plot grows to the whole field and each plot
     # would be tested against all of it. The rings are indexed ONCE and each plot unions only the later rings its box meets.
     shapes: list[tuple[int, Polygon]] = []
@@ -388,6 +386,7 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float, neck: float = 0.0) 
 
 def _span(shape: Any) -> float:
     """The long side of a piece's minimum rectangle - how far a tail runs."""
+    _load_shapely()
     mrr = shape.minimum_rotated_rectangle if not shape.is_empty else None
     if not isinstance(mrr, Polygon) or shape.area <= 20.0:
         return 0.0
@@ -404,6 +403,7 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
     what a morphological opening at half the floor (`neck`) removes; each tail at least `min_len` long is given to the
     plot it shares the most edge with, and the trade is kept only when both plots stay valid, simple, unpointed rings.
     Ground is conserved: what one plot loses the other gains."""
+    _load_shapely()
 
     def _may_have_a_tail(shape: Polygon) -> bool:
         """Cheap prefilter for the opening below (constitution X clause 15): a basin whose mean width - four times its

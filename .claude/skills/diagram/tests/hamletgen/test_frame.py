@@ -86,14 +86,6 @@ def test_stage_notice_reseats_a_board_the_frame_would_lose(monkeypatch):
     assert len(s.M["kosatsuba"]) == 1, "old board not popped"
 
 
-<<<<<<< HEAD
-def test_stage_notice_narrows_an_anchored_board_to_the_band_then_takes_the_traffic(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 227: an ANCHORED placement chooses the ground and the passing traffic chooses the seat on it - the rule
-    `place_kosatsuba` applies, which this stage had restated as distance-to-the-anchor alone, so the board walked out
-    to whatever verge lay nearest the entrance and served nobody. `frontage` anchors on the headman's house, which is
-    the cheapest anchored case to state; the seat nearest the anchor is deliberately NOT the seat most households
-    pass, so a loop that ranked by distance alone would fail this."""
-=======
 def test_the_confluence_reserves_its_own_room_in_the_crop(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """Feature 230, settlement-review passes 6 and 7. Where the drain meets the passing brook, that junction is a
     FEATURE - the thing the third sink exists to show - and the crop ignores watercourses because they are
@@ -132,19 +124,10 @@ def test_a_board_with_no_compliant_verge_still_faces_the_way_a_reader_sees_it_by
     The fallback takes the best-ranked verge and turns the board to its NEAREST way, which is the bearing the
     gate judges it by; the old fallback re-posted the engine's own seat unturned and shipped a board 72
     degrees side-on to the lane 9.5 ft from it."""
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
 
     class _StubS:
         def __init__(self) -> None:
             self.M = {
-<<<<<<< HEAD
-                "meta": {"kosatsuba_seat": "frontage", "view": [0.0, 0.0, 820.0, 820.0]},  # the engine's seat falls outside it
-                # the headman anchors at (600, 300); the crowd is 60 px south of him, inside the 60 ft band
-                "houses": [{"x": 600.0, "y": 300.0, "role": "headman"}] + [{"x": x, "y": 360.0} for x in (560.0, 600.0, 640.0, 680.0)],
-                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
-                "labels": [],
-                "lanes": [{"pts": [(500.0, 330.0), (800.0, 330.0)]}],
-=======
                 "houses": [{"x": x, "y": y} for x in (500.0, 560.0, 620.0) for y in (460.0, 520.0, 580.0)],
                 "kosatsuba": [{"x": 900.0, "y": 100.0, "z": 2}],
                 "labels": [],
@@ -152,37 +135,11 @@ def test_a_board_with_no_compliant_verge_still_faces_the_way_a_reader_sees_it_by
                     {"pts": [(554.0, 520.0), (566.0, 520.0)]},  # the only main lane, and a short one
                     {"pts": [(560.0, 400.0), (560.0, 700.0)], "web": True},  # the straggler across its every verge
                 ],
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
             }
             self.top = ["", "", "the first board's glyph"]
             self.TOPZ = 0
             self.reseated: list[tuple[float, float, float]] = []
 
-<<<<<<< HEAD
-        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
-            return (1000.0, 1000.0)  # outside the view: the re-seat loop runs
-
-        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
-            pass
-
-        def place_labels(self):  # type: ignore[no-untyped-def]
-            pass
-
-        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
-            return True
-
-        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
-            return True
-
-        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
-            self.reseated.append((x, y, rot))
-
-    s = _StubS()
-    hg.stage_notice(s, None)  # type: ignore[arg-type]
-    assert len(s.reseated) == 1
-    bx, _by, _rot = s.reseated[0]
-    assert 560.0 <= bx <= 700.0, "inside the anchor's band and over the households, not at the band's near edge"
-=======
         def place_kosatsuba(self) -> tuple[float, float]:
             return (900.0, 100.0)  # outside the house cloud, so the frame would lose it
 
@@ -229,4 +186,49 @@ def test_the_brook_beside_the_field_is_reserved_and_the_reach_leaving_the_map_is
         M = {"fields": [], "dry_plots": [], "streams": _M.M["streams"]}
 
     assert brook_beside_the_field(_Empty()) == [], "no field, nothing to be beside"  # type: ignore[arg-type]
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
+
+
+def test_stage_notice_narrows_an_anchored_board_to_the_band_then_takes_the_traffic(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 227: an ANCHORED placement chooses the ground and the passing traffic chooses the seat on it - the rule
+    `place_kosatsuba` applies, which this stage had restated as distance-to-the-anchor alone, so the board walked out
+    to whatever verge lay nearest the entrance and served nobody. `frontage` anchors on the headman's house, which is
+    the cheapest anchored case to state; the seat nearest the anchor is deliberately NOT the seat most households
+    pass, so a loop that ranked by distance alone would fail this."""
+
+    class _StubS:
+        def __init__(self) -> None:
+            self.M = {
+                "meta": {"kosatsuba_seat": "frontage", "view": [0.0, 0.0, 820.0, 820.0]},  # the engine's seat falls outside it
+                # the headman anchors at (600, 300); the crowd is 60 px south of him, inside the 60 ft band
+                "houses": [{"x": 600.0, "y": 300.0, "role": "headman"}] + [{"x": x, "y": 360.0} for x in (560.0, 600.0, 640.0, 680.0)],
+                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
+                "labels": [],
+                "lanes": [{"pts": [(500.0, 330.0), (800.0, 330.0)]}],
+            }
+            self.top = ["", "", "the first board's glyph"]
+            self.TOPZ = 0
+            self.reseated: list[tuple[float, float, float]] = []
+
+        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
+            return (1000.0, 1000.0)  # outside the view: the re-seat loop runs
+
+        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
+            pass
+
+        def place_labels(self):  # type: ignore[no-untyped-def]
+            pass
+
+        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
+            return True
+
+        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
+            return True
+
+        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
+            self.reseated.append((x, y, rot))
+
+    s = _StubS()
+    hg.stage_notice(s, None)  # type: ignore[arg-type]
+    assert len(s.reseated) == 1
+    bx, _by, _rot = s.reseated[0]
+    assert 560.0 <= bx <= 700.0, "inside the anchor's band and over the households, not at the band's near edge"

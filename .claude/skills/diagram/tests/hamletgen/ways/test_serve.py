@@ -277,7 +277,6 @@ def test_a_web_lane_that_shadows_the_network_for_most_of_its_length_is_refused()
     assert len(s.M["lanes"]) == 1, "nothing was drawn"
 
 
-<<<<<<< HEAD
 def test_a_web_lane_that_shadows_the_network_for_a_whole_pitch_is_refused_even_when_most_of_it_is_clear() -> None:
     """The second shadow rule: a run mostly in open ground still counts as the same way again when one CONTIGUOUS
     stretch of it, longer than a bundle pitch, lies within `WEB_SHADOW_FT` of the network."""
@@ -314,7 +313,8 @@ def test_the_late_pass_leaves_a_lane_whose_ends_both_serve() -> None:
     before = [list(q) for q in s.M["lanes"][-1]["pts"]]
     hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
     assert [list(q) for q in s.M["lanes"][-1]["pts"]] == before
-=======
+
+
 def test_a_footpath_of_one_point_fronts_nothing() -> None:
     """`_ends_worth_walking_to` is asked of whatever the router returned, and a route that collapsed to a single
     point has no ends to judge - it is not a path, and drawing it would put a dot in a field."""
@@ -357,4 +357,3 @@ def test_a_footpath_end_may_front_the_field_it_serves() -> None:
     crop = [(500.0, 0.0), (700.0, 0.0), (700.0, 200.0), (500.0, 200.0)]
     path = [(10.0, 0.0), (300.0, 0.0), (480.0, 0.0)]  # starts on the way, ends 20 ft off the crop's edge
     assert _ends_worth_walking_to(_StubSettlement(), path, (9000.0, 9000.0), segs, [crop])
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b

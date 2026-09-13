@@ -7,13 +7,8 @@ from __future__ import annotations
 
 import math
 
-<<<<<<< HEAD
-from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
-=======
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
@@ -190,12 +185,9 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
-<<<<<<< HEAD
             _seats: list[tuple[float, float, float, float]] = []  # (distance to the anchor, x, y, rot); the traffic is counted after the band narrows
             _pxb = getattr(s, "px", None)
-=======
             _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
@@ -247,14 +239,24 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
                                 continue
                             # nearest the declared placement where there is one, else the busiest node
-<<<<<<< HEAD
-                            _seats.append((math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else 0.0, cx2, cy2, rot))
+                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else 0.0
+                            if _off_way:
+                                if loose is None or _rank < loose[0]:
+                                    loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
+                                continue
+                            _seats.append((_rank, cx2, cy2, rot))
             # AN ANCHORED PLACEMENT CHOOSES THE GROUND, THE TRAFFIC CHOOSES THE SEAT ON IT - the rule
             # `place_kosatsuba` states and applies, read here from the same constant rather than restated
             # (settlement-review, feature 227). This loop ranked an anchored seat by its distance to the anchor
             # ALONE, so as the clusters loosened the board walked out to whatever verge lay nearest the entrance
             # and served nobody: four of five pool boards lost half their passing households, Sawada's ending
             # 424 px past the cluster with two of nineteen within 250 ft.
+            #
+            # THE TWO RULES COMPOSE, and the order is what makes them safe (the 227/230 merge): feature 230's
+            # off-way and under-canopy test decides which verges are ELIGIBLE at all - a board facing across its
+            # own lane, or standing in the belt, is no seat - and only then does the band-and-traffic ranking
+            # below choose among what is left. Neither rule can override the other: an eligible seat is never
+            # picked for traffic it does not have, and a shaded verge never wins on traffic.
             if _seats:
                 if _anchor is not None:
                     _near = min(q[0] for q in _seats)
@@ -264,18 +266,10 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                 # stage 1.1 s, and the engine's own order is the band first and the traffic second
                 _pick = max(_seats, key=lambda q: (sum(1 for h in hs if math.hypot(q[1] - h["x"], q[2] - h["y"]) < 260), -q[0]))
                 best = (0.0, _pick[1], _pick[2], _pick[3])
-=======
-                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else -sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
-                            if _off_way:
-                                if loose is None or _rank < loose[0]:
-                                    loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
-                                continue
-                            if best is None or _rank < best[0]:
-                                best = (_rank, cx2, cy2, rot)
+            # ...and a hamlet whose every verge lies under its own belt still gets a board (feature 230)
             if best is None and loose is not None:
                 _lb = _nearest_way_bearing(s, loose[1], loose[2])
                 best = (loose[0], loose[1], loose[2], _lb if _lb is not None else 0.0)
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:

@@ -729,7 +729,6 @@ def test_trim_lane_stubs_leaves_a_lane_alone_when_both_its_ends_already_arrive()
     assert s.M["lanes"][2]["pts"] == [[500, 300], [500, 700]], "the bar is untouched"
 
 
-<<<<<<< HEAD
 def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_records_aligned():
     """A lane the trim leaves shorter than `_LANE_MIN_FT` is dropped - its ink emptied and its record removed, the ink
     list rebuilt beside the record list so their indices still agree (the pool stopped reaching this once feature
@@ -743,7 +742,8 @@ def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_rec
     s.trim_lane_stubs()
     assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == 1 and s.M["lanes"][0]["pts"][0] == [100, 500]
     assert all(not s.ground[z].get(part) for z in stub_ink for part in ("edge", "bed", "top")), "the stub's ink emptied with its record"
-=======
+
+
 def test_trim_lane_stubs_drops_a_lane_too_short_to_front_anybody():
     """A lane shorter than one homestead's frontage fronts nobody by construction, so it is dropped
     whole - record AND ink together, because a record removed while its ink stayed would leave a tread
@@ -817,4 +817,3 @@ def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_k
     s.M["meta"]["field_spur_swept"] = "isolated - the pass's own words"
     s.drop_lanes([1])
     assert s.M["meta"]["field_spur_swept"] == "isolated - the pass's own words", "a pass that said why keeps its own reason"
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b

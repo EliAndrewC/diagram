@@ -370,7 +370,6 @@ session is told to exercise and the GM reads in the diff.
 **When to build it**: if a village-tier feature lands rows that the GM, reading the diff, judges should have been unit
 tests - that is the measurement that says the judgment layer is not holding.
 
-<<<<<<< HEAD
 ## Three magistracy SVGs have no generator, and the ignore rules say they do (found 2026-09-13, feature 237)
 
 **What is actually true, measured.** Of the five magistracies, **two generate their own svg** -
@@ -403,7 +402,6 @@ restored "with `git checkout`" because "the frozen renders are committed (GM 202
 deliberately so: `.gitignore` note 1 records that the frozen exhibits were removed from git and archived.
 The warning should point at `/host-l7r-repo/diagram-render-archive/` and its MANIFEST. `ueda` is not a
 defect - it is that decision working.
-=======
 ## Lighting a watercourse paints over the things that CROSS it (measured 2026-09-12, feature 230)
 
 MEASURED by the feature's fifth settlement-review pass with `make page-lit` on Inashiro's page:
@@ -432,4 +430,3 @@ elements per hover rather than feature 201's whole-class restacking - which is t
 223 ms figure does not transfer, and the first thing to measure if anyone picks this up. The
 alternative, splitting the water stroke geometrically where a fixture crosses it, is cheaper on the
 page and is REFUSED: it would change the SVG and the PNG, which spec 134 FR-010 forbids.
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b

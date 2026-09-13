@@ -316,7 +316,6 @@ def test_a_break_already_walkable_round_through_two_other_lanes_is_not_bridged()
     assert hg.ways._bridge_collinear_breaks(far, [], [], []) == 1
 
 
-<<<<<<< HEAD
 def test_a_doubled_remnant_that_alone_joins_two_parts_of_the_web_is_kept() -> None:
     """`_sweep_doubled_remnants`' third clause: a lane that leaves a way and returns to it is dropped unless dropping
     it would split the web - here the loop off the connector is what the branch lane hangs from. Without the branch
@@ -330,7 +329,8 @@ def test_a_doubled_remnant_that_alone_joins_two_parts_of_the_web_is_kept() -> No
     assert _sw._sweep_doubled_remnants(s) == 0 and s.M["lanes"][1]["pts"] == [list(q) for q in loop]
     alone = _StubSettlement(lanes=[[(0.0, 0.0), (300.0, 0.0)], loop])
     assert _sw._sweep_doubled_remnants(alone) == 1 and len(alone.M["lanes"]) == 1, "the loop dropped, its record removed with its ink"
-=======
+
+
 def test_a_doubled_remnant_that_is_the_only_tread_between_two_halves_is_kept() -> None:
     """The doubled-band sweep drops a remnant that leaves one way and returns to it - unless dropping it would
     cut the INK in two. `shadowing_lane` reads both ends at the 30 ft join figure while the one-network rule
@@ -467,4 +467,3 @@ def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
     before = [list(ln["pts"]) for ln in s.M["lanes"]]
     assert sweeps._sweep_dangling_ends(s) == 0, "nothing was changed, so nothing is counted as fixed"
     assert [ln["pts"] for ln in s.M["lanes"]] == before, "the farmhouse keeps its way, ragged end and all"
->>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b

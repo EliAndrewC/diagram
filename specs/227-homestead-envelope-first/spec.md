@@ -309,3 +309,26 @@ the feature's last task after rounds of feedback in the clone.
 - Amendment round 2 after the review (2026-09-12): FAITHFUL - the footpath's room is part of the one move's amount, the
   rescue's ordering an ordering inside a path the spec already had. Asides kept: FR-002 names the room in prose where
   the code names `WEB_FABRIC_GAP * 2 + 6`; the proposer's push asks the boundary outside `meta.seat_search` (R2 says so).
+- **D12 - the cluster's distance from its fields: WAIVED by the GM on the measurements** (2026-09-13,
+  Principle XIII's third exit). The independent `settlement-review` of the re-packed pool found, and the
+  session confirmed from the manifests, that every cluster moved off its field margin: house center to the
+  nearest field edge, main -> this feature, kuwabata 63/159 ft min/median with 11 of 16 within 200 ft ->
+  **135/422 ft with 3 of 16**; sawada 42/146, 15/19 -> 60/225, 7/19; mizuguchi 27/70, 12/12 -> 37/140, 8/12;
+  inashiro 41/129, 13/15 -> 44/182, 11/15; kashikawa 36/106, 17/20 -> 47/135, 15/20. The norm it runs against
+  is directional rather than numeric - `research/homesteads.html`, "the nucleated cluster stands on the field
+  margin with its face to the water" - and NO CHECK IS RED, because no maximum house-to-field distance exists
+  anywhere in the engine or the record (the only coded rule is a 6 ft minimum). It was raised as a regression
+  under XIII's "a measured rate that went down", with both exits priced: fix it by admitting the dike heads as
+  front-row chords (a re-roll of the pool and a second review, hours) or waive it. The GM waived it, having
+  been given the table above and the record's own 700 ft back-row tolerance: *"That all sounds fine, I don't
+  see any problems, so yes please land that in main."* What the waiver costs, stated so the next session does
+  not read it as correct-by-design: Kuwabata's median household walks 422 ft to the pond it feeds several times
+  a day, and the cluster covers 41% of its polder head where it covered 60%. The fix direction is recorded
+  above and is not foreclosed.
+- **D13 - Inashiro's caption sits under a copse crown, and lands that way.** The same review found the
+  caption 2.17 px from a coop with a crown clipping the "ce" of "notice" - text obscured, which is a defect
+  rather than a distance question (`CAPTION_FEATURE_GAP` is a seat-blocking predicate with a deliberate
+  least-bad-seat fallback, not a ship bar; the `escalation-check` filter corrected that framing). It lands
+  under the same waiver. The fix is the board-seat scoring already sketched in `kuwabata.notes.md`, which
+  becomes free the next time the pool re-rolls.
+
