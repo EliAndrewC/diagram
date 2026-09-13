@@ -708,3 +708,46 @@ the assertion as written could not tell them apart.
 `var(--hl, #FFC83D)` fallback would hide the mechanism rather than establish it. What the test lacked was
 the ability to say WHICH of the two happened, so it now reads the resolved `--hl` and puts it in the
 failure message. The next occurrence is a diagnosis instead of a second mystery.
+
+## R9 - the house-style guard corrupted a counting command again, and this time it is reproducible
+
+R6a records this hazard's first appearance: a peer session's house-style hook altered a counting grep
+under this feature, the peer landed a fix, and this feature's command became its regression case. **It
+happened again on 2026-09-13**, to the census that sizes feature 242, and the second instance is
+cleaner than the first because it reproduces on demand.
+
+**What happened.** The census splits each reader report into items on a pattern containing the report's
+own em-dash. The guard rewrote that dash to a hyphen inside the `re.split()` call, so the pattern
+matched nothing in three of the four reports; the run reported 39 items where the true count is 695.
+Nothing failed. The only reason it was caught is that three reports returning exactly zero is not a
+believable answer.
+
+**The mechanism, confirmed against the CURRENT code in the mirror** (not the copy in this clone, which
+is behind): calling `_hm_house.report` with a payload whose command is
+
+    parts = re.split(r'\n(?=\*\*R\d+\*\* <em dash> )', txt)
+
+returns `updatedInput` with the dash replaced, and an `additionalContext` reading *"What the command
+only NAMES was left as typed: a search pattern, a path, a code span..."* - which is the exemption this
+very payload should have taken. The dash is inside a raw-string regex literal in a heredoc: text the
+command MATCHES WITH, never text it writes. The guard's exemptions already cover a searcher's segment,
+a regex alternation and a dash in a character class; what they do not cover is a pattern passed to a
+regex function in an interpreter heredoc, which is how this project does every census it writes.
+
+**Why it is not fixed here, and what that costs.** The file is `scripts/_hm_house.py`, whose feature
+landed hours before this run and which a peer session is actively iterating on; an exemption change
+owes a verdict diff over the 560-command frozen window (`make hookbench GUARD=house-style`), a target
+that exists on main and not yet in this clone. Two sessions editing one guard concurrently is the
+collision the concurrency doctrine exists to prevent. So this is a deferral WITH its measurement,
+mechanism and sketch, as Principle XIV requires rather than a shrug.
+
+**The implementation sketch.** Treat a string literal that reaches a regex constructor as named rather
+than written: in the payload walk, when a quoted span is the argument of `re.<fn>(`, `grep -P`,
+`sed -E` or an equivalent, exempt it exactly as a searcher's segment is exempted today. The regression
+case is the command above; the bench says whether the exemption costs anything over the window.
+
+**The general lesson, which is the part worth keeping**: a guard that silently edits a command can turn
+a measurement into a plausible wrong number, and a plausible wrong number is worse than a crash. Every
+census this project writes should assert against something it already knows - this one refuses to
+report unless it reproduces all four of the reports' own stated totals, which is what would have caught
+the corruption on the first run instead of the third.

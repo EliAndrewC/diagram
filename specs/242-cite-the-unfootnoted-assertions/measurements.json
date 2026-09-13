@@ -1,0 +1,79 @@
+{
+ "absence-notes": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",
+  "note": "footnotes recording that no publicly readable source was found",
+  "taken": "2026-09-13",
+  "unit": "notes",
+  "value": 259
+ },
+ "absence-notes-never-searched": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",
+  "note": "absence notes whose text says no query was ever run for that assertion - backlog, not a failed hunt",
+  "taken": "2026-09-13",
+  "unit": "notes",
+  "value": 119
+ },
+ "citation-notes": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",
+  "note": "footnotes carrying a key link, a public page and a quoted passage",
+  "taken": "2026-09-13",
+  "unit": "notes",
+  "value": 994
+ },
+ "grounds-notes": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",
+  "note": "footnotes recording that no source is owed",
+  "taken": "2026-09-13",
+  "unit": "notes",
+  "value": 2
+ },
+ "inventory-items": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "every sentence the four readers named; reproduces each report's own stated total",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 695
+ },
+ "marker-classifier-disagreement": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "items this parser and the readers' own stated splits classify differently",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 10
+ },
+ "worklist-high": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the same, using this parser's marker classification - the wider bound",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 473
+ },
+ "worklist-high-confidence": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "of the parsed remainder, the readers' HIGH confidence share",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 222
+ },
+ "worklist-low": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the remainder using the readers' own marker counts, less the classes 238 closed by hand",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 463
+ },
+ "worklist-low-confidence": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the LOW share",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 41
+ },
+ "worklist-medium-confidence": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the MEDIUM share",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 231
+ }
+}
