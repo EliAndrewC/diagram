@@ -251,7 +251,7 @@ def over_the_fraction(pl: Plan, closures: dict[str, list[str]]) -> int:
 
     The decision used to be made after collection, in `selection.py`, where the real selection is known.
     Feature 237 moved it here because the gate now chooses pytest's ARGUMENTS from the plan: a run whose
-    arguments were narrowed cannot then decide to run everything.     Projecting over the baseline rather than over the collection errs in BOTH directions, and the two are safe for
+    arguments were narrowed cannot then decide to run everything. Projecting over the baseline rather than over the collection errs in BOTH directions, and the two are safe for
     DIFFERENT reasons (spec D8 states them in full). It UNDERCOUNTS by tests that are new - `keep_set`'s "not in the
     baseline" rule cannot fire when the collection it is given IS the baseline - and that is safe because a plan near
     the line then runs incrementally, which merges over the baseline rather than replacing it. It OVERCOUNTS by the
@@ -317,7 +317,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     )
     reached = over_the_fraction(pl, closures)
     if reached > pl.full_fraction * len(baseline_tests):
-        return Plan("full", f"{reached} of {len(baseline_tests)} baseline tests reached, over the {FULL_FRACTION:.0%} fraction - running everything and recording a baseline")
+        return Plan("full", f"{reached} of {len(baseline_tests)} baseline tests reached, over the {pl.full_fraction:.0%} fraction - running everything and recording a baseline")
     return pl
 
 

@@ -42,10 +42,10 @@ move); RECTANGLE TESTS per house count every rectangle any test asked and are th
 and no call walks.
 
 **Is the cluster one settlement? Read the FOOTPRINTS.** The review's second pass measured connected components on a
-165 px CENTRE link and read the pool as fragmented. This engine's own rule is that a gap verdict reads footprints
-and never centres (`dev/placement.md`, "CENTER vs FOOTPRINT"), and the houses are now separated by exactly the yards
+165 px CENTER link and read the pool as fragmented. This engine's own rule is that a gap verdict reads footprints
+and never centers (`dev/placement.md`, "CENTER vs FOOTPRINT"), and the houses are now separated by exactly the yards
 and gardens between them: homestead to homestead the median gap is 4 to 31 px. Kashikawa's is 8 px - the
-fabric is continuous. What the centre link was measuring is a rank standing one homestead's depth behind another,
+fabric is continuous. What the center link was measuring is a rank standing one homestead's depth behind another,
 which is what a rank IS.
 
 **The gardens.** Every homestead has one; 13 of 82 split into two beds, in three forms; the sides are

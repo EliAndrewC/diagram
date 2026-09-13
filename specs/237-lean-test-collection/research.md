@@ -357,3 +357,17 @@ unreachable. The coverage floor failed on precisely those lines, and in doing so
 behind them - `geoms.py`'s loader declared the sentinel and returned on it but never SET it, so the guard
 never engaged and its two import statements re-ran on every construction. Both are recorded at the point of
 change so the lever is not pulled again.
+
+## R13 - the trap a lazily bound name sets for a test, and which check caught it
+
+A name bound on FIRST USE does not exist as a module attribute until something uses it, so
+`monkeypatch.setattr(wet, "ShapelyPolygon", _boom)` raises `AttributeError` - unless some earlier test in
+the same worker happened to run the geometry first. Two tests in `tests/settlement/test_wet_ground.py` do
+exactly that patch, and the full gate **passed** while `make quick` **failed**: in the gate one worker had
+already loaded shapely, in quick's smaller selection none had. An order-dependent pass is worse than a clean
+failure, and it was the CHEAPER check that exposed it.
+
+The fix is local and explicit - the test calls `wet._load_shapely()` before patching, with the reason beside
+it - and it is safe because the loader's sentinel means a later call from inside the placer returns without
+rebinding, so the patch survives. Worth knowing before deferring any other module-level import: every test
+that patches the deferred name needs the loader to have run, and the gate will not tell you which ones.
