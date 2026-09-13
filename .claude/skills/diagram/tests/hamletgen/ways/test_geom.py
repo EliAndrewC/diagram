@@ -466,3 +466,11 @@ def test_shadowing_lane_asks_whether_a_lane_goes_anywhere() -> None:
     assert hg.ways.shadowing_lane([(100.0, 0.0), (100.0, 120.0)], [parent], 30.0) is None
     assert hg.ways.shadowing_lane([(0.0, 0.0)], [parent], 30.0) is None  # nothing is a lane
     assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [[(0.0, 0.0)]], 30.0) is None  # nor is the other one
+
+
+def test_shadow_share_of_a_one_point_lane_is_nothing() -> None:
+    """A record with a single point has no length to share, and the caller asks before it knows that -
+    `_sweep_doubled_remnants` walks every lane on the map, degenerate records included."""
+    from l7r.diagram.hamletgen.ways.geom import shadow_share
+
+    assert shadow_share([(10.0, 10.0)], [[(0.0, 0.0), (100.0, 0.0)]], 8.0) == 0.0

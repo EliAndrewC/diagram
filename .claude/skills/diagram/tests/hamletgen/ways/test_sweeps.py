@@ -401,3 +401,54 @@ def test_a_lane_whose_ends_already_reach_something_is_left_alone() -> None:
     before = [list(ln["pts"]) for ln in s.M["lanes"]]
     assert sweeps._sweep_dangling_ends(s) == 0
     assert [ln["pts"] for ln in s.M["lanes"]] == before
+
+
+def test_a_one_point_lane_record_is_not_a_lane_to_sweep() -> None:
+    """`_sweep_dangling_ends` reads every record on the map, and a pass above it can leave one with a single
+    point. There is no end to judge, so it is passed over rather than measured."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(50.0, 50.0)]], houses=[(60.0, 40.0)])
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    assert sweeps._sweep_dangling_ends(s) == 0
+    assert s.M["lanes"][1]["pts"] == [[50.0, 50.0]], "left exactly as it was found"
+
+
+def test_a_lane_that_dangles_at_its_HEAD_is_pulled_back_from_that_end() -> None:
+    """Both ends are judged, not just the last one: the passes above rewrite whichever end their own work
+    touched, so the vertex left in open ground is as often the first as the last."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(0.0, 0.0), (400.0, 0.0)],  # the connector, exempt
+            [(100.0, -400.0), (100.0, -200.0), (100.0, -10.0)],  # its HEAD is 400 ft from anything
+        ],
+        houses=[(100.0, -150.0)],  # ...while its middle passes a farmhouse, which is what the head is pulled back to
+    )
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    assert sweeps._sweep_dangling_ends(s) == 1
+    assert s.M["lanes"][1]["pts"] == [[100.0, -200.0], [100.0, -10.0]], "the head in open ground is given up; the tail reaches the connector"
+
+
+def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
+    """The stranding guard restores a lane whose loss would leave a farmhouse unserved, and then tries to
+    carry its dangling end to the nearest house. Where there is no house within reach of that end either,
+    there is nothing to carry it to - the lane stands as it was drawn rather than being pulled somewhere
+    arbitrary, and the record is left untouched (feature 230 pass 11)."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(0.0, 0.0), (400.0, 0.0)],  # the connector, 400 ft from the house below
+            [(100.0, -390.0), (100.0, -800.0)],  # the only way that serves it, running off into open ground
+        ],
+        houses=[(110.0, -400.0)],
+    )
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    assert sweeps._sweep_dangling_ends(s) == 0, "nothing was changed, so nothing is counted as fixed"
+    assert [ln["pts"] for ln in s.M["lanes"]] == before, "the farmhouse keeps its way, ragged end and all"

@@ -4,6 +4,8 @@ import math
 from typing import TYPE_CHECKING
 
 from ..._geom import (
+    Manifest,
+    PointGrid,
     Pt,
     nearest_way_bearing,
     point_in_poly,
@@ -17,6 +19,37 @@ from ._helpers import CAPTION_LANE_TARGET_FT, KOSATSUBA_ANCHOR_BAND_FT, KOSATSUB
 
 if TYPE_CHECKING:
     from ...core import Settlement
+
+
+def canopy_index(M: Manifest) -> PointGrid:
+    """Every village-grove clump on the map, filed so a seat probe can ask about trees once per candidate.
+
+    INDEXED, NOT SCANNED (constitution X clause 15): a hamlet's belt carries 200-250 clumps and the board's
+    verge probe tries thousands of seats, so the linear form is a million distance tests to place one plank.
+    The grid prunes and the caller's own circle test decides, so the verdict is the linear scan's."""
+    grid = PointGrid()
+    grid.extend(
+        [
+            (cx, cy, r, cx - r, cy - r, cx + r, cy + r)
+            for g in (M.get("village_groves") or [])
+            if isinstance(g, dict)
+            for r in [float(g.get("r") or 0.0)]
+            for cx, cy in [(float(c[0]), float(c[1])) for c in (g.get("clumps") or [])]
+        ]
+    )
+    return grid
+
+
+def under_canopy(grid: PointGrid, x: float, y: float, half: float) -> bool:
+    """Would a fixture of half-diagonal `half` seated here stand under a village grove's crowns?
+
+    A NOTICE BOARD IN A WOOD IS A NOTICE NOBODY READS (settlement-review, feature 230 pass 12, on two maps
+    independently). The board's caption has held a grove keep-out since 2026-08-16, and its GLYPH never has -
+    so the plank could be buried while its name floated clear, which is what shipped: on Mizuguchi the nearest
+    crown center stood 12.8 ft from the board with a 14 ft radius (10 clumps within 40 ft, 33 of 36 sample
+    points around the glyph canopy green), and on Sawada a crown center stood 1.8 ft from it. Both boards had
+    clear verge 18-30 ft away on the same lane; the seat search simply could not see the difference."""
+    return any(math.hypot(x - float(it[0]), y - float(it[1])) < float(it[2]) + half for it in grid.near(x, y, half))
 
 
 class FixtureSitingMixin:
@@ -186,7 +219,8 @@ class FixtureSitingMixin:
         kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
         _siting = str((self.M.get("meta") or {}).get("kosatsuba_siting") or "frontage")
         _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
-        cands: list[tuple[int, float, float, float, float, int | None, float]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge)
+        _canopy = canopy_index(self.M)  # built ONCE for the whole probe, not per seat - see `canopy_index`
+        cands: list[tuple[int, float, float, float, float, int | None, float, bool]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge, under the trees)
         for pts, _rw in routes:
             for i in range(len(pts) - 1):
                 (ax, ay), (bx, by) = pts[i], pts[i + 1]
@@ -228,7 +262,9 @@ class FixtureSitingMixin:
                                 # traffic and out to the quiet end of the road, which is how Ubame's
                                 # board came to stand across the bridge from its own town.
                                 lab = 0 if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes) else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes) else None)
-                                cands.append((busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2))  # last: the gap from tread edge to board edge
+                                cands.append(
+                                    (busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2, under_canopy(_canopy, x, y, math.hypot(w, h) / 2))
+                                )  # last two: the gap from tread edge to board edge, and whether trees stand over it
                             off += 5.0
         if not cands:
             return None
@@ -240,6 +276,17 @@ class FixtureSitingMixin:
             roadside = [c for c in cands if c[6] <= KOSATSUBA_VERGE_FT / ftpx + 1e-6]
             if roadside:
                 cands = roadside
+
+        # ...AND IN THE OPEN, WHERE THERE IS OPEN GROUND TO BE IN (settlement-review, feature 230 pass 12). The state's
+        # notice is the one fixture on a hamlet sheet that exists to be SEEN, and two of the five pool maps posted it
+        # under the windbreak - Sawada's with a crown center 1.8 ft away, Mizuguchi's with ten clumps inside 40 ft and
+        # clear verge 18-25 ft along the same lane. Written as a filter rather than a refusal, and in this position on
+        # purpose: it composes with the roadside rule above it exactly the way that one composes with the preferences
+        # below - a seat in the open wins where one exists, and a hamlet whose every verge lies under its own belt still
+        # gets a board rather than none.
+        _in_the_open = [c for c in cands if not c[7]]
+        if _in_the_open:
+            cands = _in_the_open
 
         # THE PLACEMENT IS A KNOB, NOT ONE OBJECTIVE (feature 154, GM 2026-08-29). The record attests
         # several sites for the board and this siter used to know one of them - the busiest node -
@@ -314,7 +361,7 @@ class FixtureSitingMixin:
                     return True
             return False
 
-        _b, _s, x, y, rot, lab, _gap = max((c for c in cands if c[0] >= floor), key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
+        _b, _s, x, y, rot, lab, _gap, _shaded = max((c for c in cands if c[0] >= floor), key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
         # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
         # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
         # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:

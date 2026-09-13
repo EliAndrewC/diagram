@@ -557,9 +557,11 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
                 # STOP SHORT OF THE HOUSE ITSELF: the rule asks that an end come within `_REACH_FT` of something, and a
                 # tread carried to the doorstep laps the farmhouse (`features_do_not_overlap`) and becomes the nearest way
                 # the notice board would face. Nine tenths of the reach is inside the rule and clear of the wall.
-                _f = max(0.0, (_td - 0.9 * _REACH_FT) / _td)
-                if _f <= 0.0:
-                    continue
+                # The fraction is always positive here and nothing guards it: this end reached NO house, which is what
+                # `_reaches` just said, so `_td` is past the whole reach and cannot be inside nine tenths of it. A
+                # `_f <= 0` guard stood here and was deleted rather than covered - it could not fire, and an unreachable
+                # branch reads to the next session as a case that happens (feature 174's rule: delete, never pragma).
+                _f = (_td - 0.9 * _REACH_FT) / _td
                 _q = (pts[_e][0] + (_tx - pts[_e][0]) * _f, pts[_e][1] + (_ty - pts[_e][1]) * _f)
                 pts = [*pts, _q] if _e == -1 else [_q, *pts]
             if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"]:

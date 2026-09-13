@@ -31,6 +31,32 @@ from .route import _route
 SPUR_REACH_FT = 60.0
 
 
+def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
+    """The field spur as it should be DRAWN, and the reason where it should not be.
+
+    A spur threaded round the steadings can FOLD BACK ON ITSELF (settlement-review, feature 230 pass 11):
+    the reference hamlet's ran 90 ft toward the field and straight back to within 14 px of where it began,
+    the smoothing pass then rightly cut that hairpin away, and the hamlet's only path to its rice
+    disappeared with no record of ever having been there. So the fold is cut here, before the map sees it.
+
+    Keeping the outward arm regardless was tried first and was wrong: on that map the arm stopped 60.6 ft
+    short of the field, with the marsh a path may not cross lying between, so it was a lane ending in open
+    ground (`lanes_reach_something`). A folded spur is drawn only while its outward arm still REACHES the
+    field; otherwise nothing is drawn and the caller records the returned reason, because a map with no
+    path to its rice should say so rather than quietly have none.
+
+    Lifted out of `stage_track` under the feature-146 doctrine: the decision is a question about a
+    polyline and an envelope, and inside the stage it could only be reached by rolling a whole hamlet
+    whose spur happens to fold."""
+    fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG), None)
+    if fold is None:
+        return pts, None
+    cut = pts[: fold + 1]
+    if edge_dist(cut[-1][0], cut[-1][1], envelope) <= SPUR_REACH_FT:
+        return cut, None
+    return cut, "folded back short of the field - the ground between is marsh a path may not cross"
+
+
 def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) -> Pt:
     """Where a track leaves the settlement - measured from the PLACED houses, not the predicted band.
 
@@ -415,14 +441,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # stopped 60.6 ft short of the field, where the marsh the path may not cross lies between, so it was a lane ending
         # in open ground (`lanes_reach_something`). A folded spur is drawn only when its outward arm still reaches the
         # field; otherwise the map says why it has no path to its rice.
-        _drawn_spur = _thread_the_fabric(s, plan, _spur_pts)
-        _fold = next((k for k in range(1, len(_drawn_spur) - 1) if _turn_deg(_drawn_spur[k - 1], _drawn_spur[k], _drawn_spur[k + 1]) >= _HAIRPIN_DEG), None)
-        if _fold is not None:
-            _drawn_spur = _drawn_spur[: _fold + 1]
-        if _fold is None or edge_dist(_drawn_spur[-1][0], _drawn_spur[-1][1], plan.envelope) <= SPUR_REACH_FT:
+        _drawn_spur, _swept = spur_cut_at_the_fold(_thread_the_fabric(s, plan, _spur_pts), plan.envelope)
+        if _swept is None:
             s.lane(_drawn_spur, width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
         else:
-            s.M["meta"]["field_spur_swept"] = "folded back short of the field - the ground between is marsh a path may not cross"
+            s.M["meta"]["field_spur_swept"] = _swept
 
     # the CONNECTOR, out to the frame
     # ...and the gate the connector starts FROM must itself be out of the crop. The skeleton's

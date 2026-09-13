@@ -256,7 +256,7 @@ district's ground. Drawn at 1 ft/px.
   tan ground (settlement-review 2026-08-29); worth a look if the fringe polygon is ever resized.
 - Three windbreak crowns stand ~1 radius onto the pond fringe's east edge (2022,612), (2028,618),
   (2034,660) - invisible at fit; the belt is laid after the fringe and does not read `wet_polys`.
-- The drain trunk is the engine's gray-blue drain palette (`#7C9EB0`) while the head canal and
+- The drain trunk is the engine's own drainage hue (`#4F7186`, a dark slate blue) while the head canal and
   laterals are the bright canal blue: a standing convention (drains vs supply), not the water
   block's layering; the reviewer read it as a tonal change at the ring's corners.
 

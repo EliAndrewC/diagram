@@ -17,12 +17,21 @@ if TYPE_CHECKING:
 #: `frm` anchor for a channel - so class and color cannot disagree (the wet-paddy precedent, feature 159). A ditch
 #: stroke with no record at all (the pond's feeder curve) is an irrigation ditch: a feed into a reservoir is supply.
 SUPPLY_HUE = "#6C9CBE"
-#: THE DRAIN IS DARKER AND SILTIER, not merely grayer (settlement-review, feature 230 pass 10). The first drain hue,
-#: #7C9EB0, rendered at (130,164,172) against the supply's (117,162,184): the classes were right in every record
-#: and indistinguishable on the page, so a reader could tell a drain only by where it lay. This one differs from the
-#: supply in both lightness and hue, and stays clear of the brook's bed (#9CB4C8) and the flooded tint (#93B7AC). A
-#: map drawing convention, not a finding: the record gives no color for either ditch.
-DRAIN_HUE = "#5E7A76"
+#: THE DRAIN IS DARKER AND SILTIER, not merely grayer (settlement-review, feature 230 pass 10) - AND IT IS STILL
+#: WATER (pass 12, where three reviewers of five said so independently). Three hues, and the middle one is why this
+#: comment is long. #7C9EB0 rendered at (130,164,172) against the supply's (117,162,184): the classes were right in
+#: every record and indistinguishable on the page, so a reader could tell a drain only by where it lay. #5E7A76 fixed
+#: that and overshot - at hue 171 it was the only watercourse on any sheet outside the 195-213 blue band, and running
+#: against the tan hinterland and the brown bund it hems for its whole length it read as a second boundary line
+#: rather than as water. Kashikawa is where that cost something: its confluence is the pool's one map of a drain
+#: RETURNING to its brook, and the junction read as the field's edge touching a stream - which leaves the GM's own
+#: "water just flows" ruling (research/water.html, 'Where two watercourses meet, how is the junction drawn?') intact
+#: in mechanism and gone in effect.
+#: So the separation the middle hue bought is KEPT on lightness and saturation and GIVEN BACK on hue: 203 degrees,
+#: value 0.53 against the supply's 0.75. It stands 76 RGB units from the supply (the rejected first hue stood 21),
+#: clear of the brook's bed (#9CB4C8) and of the flooded tint (#93B7AC) - and it is blue. A map drawing convention,
+#: not a finding: the record gives no color for either ditch.
+DRAIN_HUE = "#4F7186"
 IRRIGATION_DITCH = "irrigation ditch"
 DRAINAGE_DITCH = "drainage ditch"
 #: A DIKE-POND'S CANALS ARE NEITHER (settlement-review, feature 230 pass 10). On Kuwabata 25 of the 26 pond DRAIN sluices open

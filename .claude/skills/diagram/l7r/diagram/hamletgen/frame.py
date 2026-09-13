@@ -8,7 +8,7 @@ from __future__ import annotations
 import math
 
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
 
 from .consts import POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
@@ -138,6 +138,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
+            _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
@@ -172,7 +173,12 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             # the board against its NEAREST way - so a board aligned to A read 90
                             # degrees off B. Refuse a seat whose nearest way runs across this one.
                             _nb = _nearest_way_bearing(s, cx2, cy2)
-                            _off_way = _nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0
+                            # ...AND NOT UNDER THE VILLAGE'S OWN TREES (settlement-review, feature 230 pass 12). The same
+                            # rule `place_kosatsuba` now applies, in the same shape and for the same reason: a board in a
+                            # wood is a notice nobody reads, and this re-seat probes exactly the verges the belt covers.
+                            # A shaded seat is kept as a LOOSE candidate rather than refused, so a hamlet whose every
+                            # verge lies under its belt still gets a board.
+                            _off_way = (_nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0) or under_canopy(_canopy, cx2, cy2, math.hypot(_bw, _bh) / 2)
                             if not s._fits(cx2, cy2, _bw, _bh, corridors=False):
                                 continue
                             # ...AND NOT IN THE WATER. `_fits(corridors=False)` is required here - the
