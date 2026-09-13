@@ -81,3 +81,14 @@ feature is tooling about how figures are measured and recorded, not about how a 
       and `make done` green; push (SC-011).
       research: rendering
       verify: DONE. DONE. root CLAUDE.md rows for spec-lint check 5 and the lifted house-style decision; make hooks-test green (the sync suite regressed on bytecode written by the lint's selftest into the tree it pushes - fixed), make done green over the whole suite, docs/make-targets.html regenerated for the two new targets
+
+## After landing - the two scopings put to their Principle XVI checks
+
+- [x] T17 Plan P2's feature-number cutoff and check 5's `tasks.md` condition were each put to an
+      independent `spec-fidelity` MODE 1 check after they had shipped - the order the constitution
+      requires is the reverse - and each was ruled NOT LEGITIMATE. Both removed; the root `CLAUDE.md`
+      row corrected; the spec template's example figures moved into backtick spans; tests prove check 5
+      reaches an old feature and a draft with no tasks, that the empty number claim still passes, and
+      that the template does not trip it.
+      research: rendering
+      verify: DONE. both conditions removed from _spec_figures.check_measured_figures; 52 tooling tests green; spec-lint selftest and delta green

@@ -112,10 +112,10 @@
 
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
+- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under `2 minutes`"]
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-003**: [User satisfaction metric, e.g., "`90%` of users successfully complete primary task on first attempt"]
+- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by `50%`"]
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -131,7 +131,7 @@
 
 | Decision | Class (accurate / deviation / guess) | Why | Recorded at |
 |---|---|---|---|
-| [e.g. footplanks over every ditch >= 2 ft] | [guess - the record is silent on whether a 2-shaku ditch was planked; the GM ruled] | [...] | [`research/water.html#...` (the finding and, until a generator draws it, the specification), comment at `waterfields/frame.py:FOOTPLANK_MIN_FT`] |
+| [e.g. footplanks over every ditch >= `2 ft`] | [guess - the record is silent on whether a 2-shaku ditch was planked; the GM ruled] | [...] | [`research/water.html#...` (the finding and, until a generator draws it, the specification), comment at `waterfields/frame.py:FOOTPLANK_MIN_FT`] |
 
 ## Assumptions
 

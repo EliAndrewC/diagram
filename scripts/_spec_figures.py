@@ -22,8 +22,14 @@ THE RULES, each an FR of feature 239:
   FR-011b  `varies` belongs to a timing: an entry whose unit counts things may not carry it.
   FR-011e  A timing entry names its sample in `quantity`.
 
-WHICH SPECS (plan P2): features numbered 239 and later, and like checks 1, 3 and 4 only once a
-`tasks.md` exists. Read retroactively the rule would fail every earlier spec on its first edit.
+WHICH SPECS: every spec a delta touches, whatever its number. A cutoff at feature 239 shipped first and
+was ruled NOT LEGITIMATE by an independent Principle XVI check: the case that motivated this whole
+feature was feature 236's second amendment, below 239, so the cutoff exempted exactly the work the rule
+exists for - and new work could dodge it by amending an old feature instead of claiming a number. A second scoping - check 5 only once a `tasks.md` exists, by
+analogy with checks 1, 3 and 4 - was ruled NOT LEGITIMATE the same way: the number claim pushes an EMPTY
+directory, so the condition protected nothing there, and initial spec review happens BEFORE a tasks.md
+exists, so it switched the mechanical check off during exactly the rounds where figures reach a
+reviewer. A draft that cannot pass yet waits in the clone, where mid-task work is safe.
 """
 
 from __future__ import annotations
@@ -32,7 +38,7 @@ import json
 import pathlib
 import re
 
-FIRST_FEATURE = 239
+
 TIMING_UNITS = {"ms", "s", "min", "h", "%", "x"}
 # THE ONE DEFINITION OF A FIGURE (spec D4). spec-lint imports these three for check 1 and re-exports them
 # under the same names, so check 1, check 5 and feature 240's reviewer precondition - which imports
@@ -51,9 +57,17 @@ _OPERATIVE = ("summary", "functional requirements", "success criteria", "decisio
 _HEADING = re.compile(r"^(#{2,})\s+(.*?)\s*$", re.M)
 
 
-def feature_number(spec_dir: pathlib.Path) -> int:
-    m = re.match(r"(\d{3})-", spec_dir.name)
-    return int(m.group(1)) if m else 0
+#: the shapes of check 5's own messages - so a test of checks 1 to 4 can set them aside by what they SAY,
+#: from one list, rather than by moving its fixture out of check 5's reach
+CHECK5_MARKS = ("carries no `m:<key>`", "is not in measurements.json", "which this paragraph does not state",
+                "(FR-011b)", "(FR-011e)", "not valid JSON")
+
+
+def is_check5(message: str) -> bool:
+    return any(mark in message for mark in CHECK5_MARKS)
+
+
+
 
 
 def appears(value: float, paragraph: str) -> bool:
@@ -138,8 +152,7 @@ def check_entries(spec_dir: pathlib.Path, recorded: dict[str, dict]) -> list[str
 
 def check_measured_figures(spec_dir: pathlib.Path) -> list[str]:
     spec_dir = pathlib.Path(spec_dir)
-    if feature_number(spec_dir) < FIRST_FEATURE or not (spec_dir / "tasks.md").is_file():
-        return []
+    
     path = spec_dir / "measurements.json"
     try:
         recorded = json.loads(path.read_text()) if path.is_file() else {}
