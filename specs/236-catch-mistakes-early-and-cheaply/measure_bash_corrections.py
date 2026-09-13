@@ -23,7 +23,7 @@ import subprocess
 import sys
 import time
 
-HOOK = pathlib.Path(__file__).resolve().parents[2] / "scripts" / "house-style-hooks.sh"
+HOOK = pathlib.Path(__file__).resolve().parents[2] / "scripts" / "_hm_house.py"   # the word table lives in the decision since feature 239
 # The word list is READ from the hook, never typed here: the hook corrects a file as it is written, and
 # the first draft of this script had its own table turned American on the way in - which is exactly
 # the hazard this measurement prices. The dashes are `chr()` calls below for the same reason - the

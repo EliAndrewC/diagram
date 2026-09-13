@@ -23,7 +23,7 @@ import sys
 import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
-HOOK = ROOT / "scripts" / "house-style-hooks.sh"
+HOOK = ROOT / "scripts" / "_hm_house.py"   # the word table lives in the decision since feature 239
 DASHES = chr(0x2014) + chr(0x2013)
 
 

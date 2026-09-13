@@ -14,8 +14,8 @@ PHASE. Four properties, each of them a measurement or a ruling rather than a pre
   AND EVERY UNTRACKED FILE. The motivating failures were NEW files written through heredocs, and a
   diff against a merge base does not show a file git has never seen.
 
-  THE HOOK'S OWN WORD LIST, READ FROM THE HOOK. `BRIT` in `scripts/house-style-hooks.sh` is the one
-  list. A second copy here would drift, and the drift would be silent in the direction that lets a
+  THE HOOK'S OWN WORD LIST, IMPORTED FROM THE DECISION. `BRIT` in `scripts/_hm_house.py` is the one
+  list (it lived inside the hook's shell string until feature 239 made the decision a function). A second copy here would drift, and the drift would be silent in the direction that lets a
   word through - the failure mode this repository has already paid for twice (a stale literal agrees
   with itself).
 
@@ -44,7 +44,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 _EXEMPT_NAMES = re.compile(
     r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh"
     r"|test_hooks_cases\.py|check-house-style-delta\.py|test_house_style_delta\.py"
-    r"|test_guard_firing_log\.py|l7r\.md|gm-request\.md)$")
+    r"|test_guard_firing_log\.py|_hm_house\.py|l7r\.md|gm-request\.md)$")
 #: `scripts/fixtures/` holds VERBATIM RECORDS - the guard-refusal corpora, and this feature's own
 #: replay of 238 real commands. Several of those commands were house-style sweeps, so they carry the
 #: forbidden words by necessity; correcting one would falsify the record and break the measurement it
@@ -59,15 +59,27 @@ _SOURCE = r"<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->"
 _PROSE_STRAIGHT = r"\"[^\"\n]*\""
 
 
-def brit_words(hook: pathlib.Path | None = None) -> list[str]:
-    """The hook's own `BRIT` table, read from the hook (never copied)."""
-    text = (hook or (HERE / "house-style-hooks.sh")).read_text()
-    m = re.search(r"BRIT = \((.*?)\)\n", text, re.S)
-    if not m:
-        raise SystemExit("check-house-style-delta: the BRIT table has moved in house-style-hooks.sh - "
-                         "this check reads it from there on purpose, so fix the reader rather than "
-                         "copying the list")
-    return re.findall(r'"([a-z]+)"', m.group(1))
+def brit_words(source: pathlib.Path | None = None) -> list[str]:
+    """The hook's own `BRIT` table - IMPORTED from the decision module, never copied.
+
+    `source` reads a table out of a named file instead, which is how the loud-failure case is tested: a
+    reader that quietly returned an empty list would pass every check forever.
+    """
+    if source is None:
+        sys.path.insert(0, str(HERE))
+        try:
+            from _hm_house import BRIT
+        except ImportError as exc:
+            raise SystemExit(f"check-house-style-delta: cannot import the word table from _hm_house ({exc}) - "
+                             "fix the module rather than copying the list here") from exc
+        words = [w for w in BRIT if isinstance(w, str)]
+    else:
+        m = re.search(r"BRIT = \((.*?)\)\n", source.read_text(), re.S)
+        words = re.findall(r'"([a-z]+)"', m.group(1)) if m else []
+    if not words:
+        raise SystemExit("check-house-style-delta: the BRIT table has moved - this check reads the decision's "
+                         "own table on purpose, so fix the reader rather than copying the list")
+    return words
 
 
 def exempt_spans(text: str, path: str) -> list[tuple[int, int]]:
