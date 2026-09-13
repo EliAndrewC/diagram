@@ -8,7 +8,7 @@ neither file 239 touches, and builds on 239's `measurements.json` rather than a 
 
 ## Summary
 
-A `settlement-review` round costs 11 to 25 minutes of wall time. Feature 230 spent fourteen of them, and
+A `settlement-review` round costs 7 to 25 minutes of wall time (`research.md` R1). Feature 230 spent fourteen of them, and
 its last three rounds were largely spent finding defects the previous round's fix had introduced
 (`research.md` R1). The GM's ruling is that this cannot be fixed with instructions - *"procedures which
 rely on someone, whether it's a human or an LLM, remembering to do something are flawed"* - so the
@@ -16,7 +16,7 @@ tooling must either stop the dispatch or make the review exit in seconds.
 
 Both failures that motivated it are one shape: **a fix reasoned from a model and dispatched without being
 measured against the artifact**. The canopy keep-out measured grove clump bases with one nominal radius
-where the claim was about drawn crowns that reach a median 16.3 ft further; the perf explanation
+where the claim was about drawn crowns that reach a median 16.3 ft further (`research.md` R2); the perf explanation
 attributed a stage's growth to the map because the code was absent from a cumulative-time profile, which
 an A/B refuted in one measurement. Neither is catchable by a rule about EFFORT - the work was done - so
 every requirement here is about the RECORD a claim rests on: what was measured, with what command, over
@@ -38,7 +38,7 @@ exactly this when `regen` prints CACHED against REGENERATED, so the check is a k
 nothing. A map whose key has moved, or whose snapshot is missing the `.json`, `.svg`, `.png` or `.html`
 the reviewer needs, is named in the refusal with the command that fixes it (`make map GEN=...`).
 
-*Why this one first*: a reviewer reading a map that no longer exists produces a report in which nothing
+*Why this one first* (`research.md` R1, R3): a reviewer reading a map that no longer exists produces a report in which nothing
 looks wrong, which is worse than an unverified number. Feature 230's pass 12 ran that way - the roll cache
 evicted the renders mid-gate and three of five agents rasterized the SVG themselves to work around it.
 
@@ -66,7 +66,7 @@ measurements and re-dispatches.
 **FR-005 The judgment FR-004 makes is about the SOURCE, and the canopy case is its worked example.** A
 measurement record carries `quantity` (what was measured, in words) and `source` (the fields or the
 artifact bytes it read). A claim about what a reader SEES - a clearance, an overlap, a legibility - rests
-on a source that carries the drawn thing: `tree_crowns` and the SVG's own ink can support "the plank
+on a source that carries the drawn thing: `tree_crowns` and the SVG's own ink (`research.md` R2) can support "the plank
 stands clear of the canopy"; a grove's `clumps` with its nominal `r` cannot, because the drawn crowns are
 jittered off those bases and reach further. The agent is told to make that judgment and to exit when the
 answer is no; it is NOT asked to re-derive the number, which is what its rounds are for.
@@ -92,7 +92,7 @@ repository, and the harness MUST fail rather than record a figure it cannot re-d
 
 **FR-009 A TIMING record MUST carry the machine state it was taken on, and MUST refuse a noisy one.** The
 container runs several sessions at once: the same command on the same tree measured 145 ms and 303 ms an
-hour apart, the second while another session rolled a map. A timing harness records the one-minute load
+hour apart (`research.md` R4), the second while another session rolled a map. A timing harness records the one-minute load
 average and refuses to record above a quiet threshold, which this feature measures rather than guesses
 (`research.md`). Corruption that looks like a result is the failure mode being removed.
 
@@ -110,7 +110,7 @@ profile" is not evidence, and the command should not accept it as one.
 ## Success criteria
 
 - **SC-001** (FR-001) A `settlement-review` dispatch naming a map whose generation key has moved is
-  refused, in under two seconds, naming that map and `make map GEN=...`; the same dispatch is permitted
+  refused within the hook's own time budget, naming that map and `make map GEN=...`; the same dispatch is permitted
   once the map is regenerated. Proven on a real pool map, both ways.
 - **SC-002** (FR-002, FR-003) A dispatch prompt carrying a figure with no record is refused and the
   refusal NAMES that figure; with `REVIEW_PREREQ_OK="<reason>"` it is permitted and the reason lands in
