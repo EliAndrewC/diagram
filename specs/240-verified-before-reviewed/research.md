@@ -15,13 +15,16 @@ durations, not recalled. Span: claim at 09-12 13:27, landed at 09-13 03:45 - **1
 | rounds 13 and 14 | 02:24-02:56, ~32 m | the canopy proxy, the caption halo |
 | perf and landing | 03:09-03:45, ~36 m | bookends, two audits, the sign-off, the push |
 
-**Machine time was small**: 36 gates actually ran (short-circuits excluded) for 2,736 s, about 46 minutes;
-the nine green ones took 56 to 117 s each and the longest of any result 402 s (`m:230-gates-that-ran`,
+**Machine time was small**: feature 230's own gates actually ran 26 times (short-circuits excluded) for
+1,663 s, about 28 minutes; its four green ones took 56 to 67 s each and the longest of any result 381 s (`m:230-gates-that-ran`,
 `m:230-gate-total-s`, `m:230-green-gate-min-s`, `m:230-green-gate-max-s`, `m:230-gate-max-s` in
 `measurements.json`, all from `python3 specs/240-verified-before-reviewed/measure/gate_durations.py`). Add
-about 70 map regenerations at 6-10 s each and three perf runs: roughly an hour of fourteen. **An earlier
-version of this paragraph said 22 gates and 1,443 s** - that was the last 22 lines of a listing, not the
-span, and the committed harness is what found it. The rest is model turn latency and waiting on
+about 70 map regenerations at 6-10 s each and three perf runs: roughly an hour of fourteen. **Two earlier
+versions of this paragraph were wrong, in opposite directions.** The first said 22 gates and 1,443 s - the
+last 22 lines of a listing, not the span. The second said 36 gates and 2,736 s - the whole span of a run log
+that is committed and merged from main, so it held every session's gates; ten were other features'. The
+harness now selects each record by its own `commit` against feature 230's commits and the merges into its
+clone, and says so in the record's `source`. The rest is model turn latency and waiting on
 review agents - 22 dispatches, whose reported durations in the second half of the feature ran 415,728 ms
 to 1,525,589 ms (6.9 to 25.4 min) each.
 

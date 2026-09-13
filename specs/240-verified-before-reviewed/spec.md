@@ -1,6 +1,6 @@
 # Feature 240 - a review round is not spent on an unverified fix
 
-**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 2 CHANGES REQUIRED (all seven applied); round 3 pending
+**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 3 CHANGES REQUIRED (both applied); round 4 pending
 **Request**: [`request.md`](request.md), the GM's words verbatim. **Research**: [`research.md`](research.md).
 **Peer**: feature 239 (`Diagram (Kuwabata)`) holds the same contract for `spec-fidelity` and spec figures.
 The split was agreed between the two sessions and is recorded in `request.md`; this feature touches none of
@@ -60,8 +60,8 @@ requirement that holds whether or not the dispatch prompt quotes anything.
 review of a change keeps feature 151's overlap - the gate and the review start together and the review's
 wall time stays off the critical path. A dispatch covered by FR-003 is a review of FIXES, and the GM's own
 example is that it should be blocked when *"the unit tests, or some other makefile command"* has not been
-done: it is refused unless `make done` is green for the current engine key. A green gate took 56 to 117 s
-across the nine that ran in feature 230's span, and the round it protects took 7 to 25 minutes
+done: it is refused unless `make done` is green for the current engine key. A green gate took 56 to 67 s
+across the four of feature 230's own, and the round it protects took 7 to 25 minutes
 (`research.md` R1, measured by `measure/gate_durations.py`).
 
 **FR-005 A `settlement-review` dispatch MUST be refused when a map it names is not current with the
@@ -89,8 +89,10 @@ map deliberately left in a bad state (a negative fixture, a reproduction).
 Before reading any map, the agent reads the previous verdict's findings and the records that claim to
 verify them, together with any `accepted` dispositions (FR-003), and returns NOT-REVIEWABLE - naming the
 finding and the record, and nothing else - when a record's `source` cannot support the finding it claims
-to verify. It also reads its paired gate's recorded result before its first map and again between maps,
-and returns NOT-REVIEWABLE on a red gate (D6). The judgment is about the SOURCE, and the
+to verify. It also reads its paired gate's recorded result before its first map, between maps where it reviews more
+than one, and again immediately before writing its verdict, and records NOT-REVIEWABLE on a red gate - the
+last of those is the one that matters in the one-map-per-agent shape, because it stops a review of a red
+gate from counting under FR-002 (D6). The judgment is about the SOURCE, and the
 canopy case is the worked example the agent file carries: a finding that the notice board stands in the
 canopy is verified by a record reading `tree_crowns` or the SVG's drawn ink, and is NOT verified by one
 reading a grove's `clumps` with its nominal `r`, because the drawn crowns are jittered off those bases and
@@ -156,7 +158,9 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
 - **SC-006** (FR-007, FR-008) The agent file's first stage, given feature 230's canopy finding with a record
   whose `source` is the grove's clumps, returns NOT-REVIEWABLE naming that record; given a record whose
   `source` is `tree_crowns`, it proceeds; it instructs the agent to read its paired gate's result before its
-  first map and between maps and to return NOT-REVIEWABLE on red; and the file still states, in words a test
+  first map, between maps, and immediately before writing its verdict, and to record NOT-REVIEWABLE on red -
+  proven with a gate that is green at dispatch and red by verdict time, whose verdict is NOT-REVIEWABLE and
+  does not close the pair; and the file still states, in words a test
   finds, that the reviewer may measure independently.
 - **SC-007** (FR-009) Every record written for a `verifies` disposition carries `quantity`, `source`,
   `subject` and `verifies`, proven now. That this feature's `measurements.json` also passes 239's
@@ -195,15 +199,20 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
 - **D6 The overlap is kept for a first review and removed for a review of fixes - and a first review checks
   its own gate.** Feature 151 put the review beside a running gate to keep its wall time off the critical
   path, and for a first review that still holds; it is a standing GM ruling this request did not reopen. A
-  review of fixes is the round this feature is about, and a green gate before it took 56 to 117 s against a
+  review of fixes is the round this feature is about, and a green gate before it took 56 to 67 s against a
   round of 7 to 25 minutes (`research.md` R1). A first review whose paired gate goes RED is handled by the
   reviewer rather than a hook, because a hook cannot stop a running agent: FR-007's first stage reads the
   paired gate's recorded result before its first map and again between maps, and returns NOT-REVIEWABLE the
   moment it reads red. What still ships nothing broken is the gate stamp at push and the engine key moving
-  once the red is fixed - not FR-002, whose key a red gate does not move. **The residue, for the GM once the
-  implementation runs:** a first review still spends the wall time up to its next check - one map's worth at
-  most - before it sees a gate that went red after it started. Closing that would mean giving up feature
-  151's overlap for first reviews too, which is the GM's ruling to revisit, not this feature's.
+  once the red is fixed - not FR-002 alone, whose key a red gate does not move; so FR-007 also re-reads the
+  paired gate IMMEDIATELY BEFORE WRITING ITS VERDICT (FR-001's last act) and records NOT-REVIEWABLE on red,
+  which stops a review of a red gate from counting. **The residue, for the GM once the implementation
+  runs, stated as it actually is:** the agent file dispatches ONE MAP PER AGENT, so in practice there is no
+  "between maps" - only the check before the map and the one before the verdict run. A first review whose
+  paired gate goes red after dispatch therefore spends each agent's WHOLE round before it finds out; the
+  verdict-time check stops that round from counting, and saves none of its wall time. Closing the time cost
+  would mean giving up feature 151's overlap for first reviews too, which is the GM's ruling to revisit, not
+  this feature's.
 
 ## Review history
 
@@ -219,10 +228,22 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
 - **Round 2, CHANGES REQUIRED, seven items, all applied.** (1) The gate-duration figure was cited to R1, which
   did not hold it: measured by a committed harness from the gate's own run log, recorded in
   `measurements.json`, and in measuring it the harness found R1's own count wrong - it said 22 gates
-  totalling 1,443 s, a truncated sample, where the span holds 36 totalling 2,736 s. (2) D6 corrected: FR-002
+  totalling 1,443 s, a truncated listing. (2) D6 corrected: FR-002
   does not protect shipping on a red gate, the gate stamp does; and the reviewer now checks its own paired
   gate before its first map and between maps (FR-007), with the residue marked for the GM. (3) The
   `review-gate.sh` clause narrowed to refusing a NOT-REVIEWABLE latest verdict, keeping its present rule.
   (4) On `UNVERIFIED`, `perf-audit` runs the counterfactual itself before anything else, and the reason is
   logged. (5) An `accepted` disposition is logged and listed like any escape. (6) SC-007 split into what is
   provable now and what is owed once 239's `make figures` exists. (7) R3's stale requirement id corrected.
+- **Round 3, CHANGES REQUIRED, two items, both applied.** (1) The harness that corrected R1 measured the
+  WRONG SET: the run log is committed and merged from main, so a time window over it held every session's
+  gates, and ten of its thirty-six were features 229, 231, 232, 233 and 236's - including the 402 s run and
+  five of the nine green ones. It now selects each record by its own `commit` field against feature 230's
+  commits, closes the window at landing, and states both in `quantity` and `source`: feature 230's own gates
+  are 26, 1,663 s, the longest 381 s, four green at 56 to 67 s. The first re-selection counted 25; the one it
+  missed was a gate run at a merge INTO the 230 clone, and the selection now includes those. That is this
+  feature's own failure mode - correct arithmetic over the wrong quantity - arriving twice in the harness built
+  to record figures honestly, which is the best argument in this record for making the source a field.
+  (2) D6's residue restated: agents are dispatched one map apiece, so the between-maps check rarely runs, and
+  FR-007 now re-reads the paired gate immediately before writing its verdict so a review of a red gate does not
+  count; the time it spends is stated as unrecovered.
