@@ -138,4 +138,10 @@ farmhouse R1 points at.
   review upheld D4 and ruled D1 legitimate only as a fallback behind a real roll, which it now is. Also
   applied, from this feature's own R1: the umayado passage is a 1913 literary example cited for the
   word's sense, so FR-004 and D4 no longer say the stable is "attested" on it.
-- **Round 2**: pending.
+- **Round 2 (2026-09-13), `spec-fidelity`: FAITHFUL.** Every round-1 item verified against the code
+  rather than the spec's account of it - the registration at `_knobs.py:298`, the in-method resolve at
+  `byres.py:190`, the seven generator files, both sentences FR-004 retires found on the page. The
+  ruling's condition (opposing sources on STORIES) is established by fn-25 and fn-26, and R1's
+  softening of the umayado leg does not touch it. Two asides, neither a change: a test file is an
+  eighth caller of the glyph, and FR-002's `form:` parameter is a pin channel beside `pin_knob`, which
+  is within scope since no shipped caller passes one.
