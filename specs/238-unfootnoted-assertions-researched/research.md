@@ -324,3 +324,139 @@ newly saying no page gives a households-per-well ratio while the other still ass
 plainly that this was a question for the record's own checkers rather than a modal rewrite. It was right,
 and closing it is the third row of the table above. **An agent asked one question answered a different
 one correctly and stayed inside its brief**, which is worth recording as the behavior to want.
+
+## R5 - the GM's second download, read (2026-09-13)
+
+The GM fetched thirteen of the sixteen documents in Part 1 of `academic-sources/TO-DOWNLOAD.md` and
+reported the other three unavailable, which settles those: they stay uncited and their claims keep their
+absence notes. Four `source-reader` agents then read the copies against the exact claims resting on them.
+**Ten quotations came back verbatim and one load-bearing reading was confirmed. Seven defects came back
+with them**, and two of the seven change what an entry argues rather than how it is worded.
+
+### R5a - the two that change an argument
+
+**1. The Wagner workforce figures describe the opposite of what the record built on them.** The entry had
+read "200 charcoal producers alongside 200 furnace-tenders and 300 miners" and concluded that "the fuel
+workforce as large as the furnace workforce". The source says "more than 200 furnace tenders, 300 miners,
+and 200 'water-carriers' and charcoal producers" - one figure covering two occupations, against a furnace
+figure that is explicitly "more than" 200. The comparison does not survive. Worse, the record used that
+staffing as its picture of ONE concentrated state complex, and the same paragraph of the source rejects
+that reading: the authority calls it "a large firm which operated numerous ironworks scattered over a
+large area". The figures were leaned on in three places on the page; all three are rewritten.
+
+**2. The two-site arrangement is attested CHINESE practice, not a Japanese override.** The entry's
+"THE DISCLOSED DIVERGENCE" said the Chinese arrangement is one site - a fining basin a few feet from the
+blast-furnace outlet - and that our maps follow the Japanese two-site pattern instead. Both arrangements
+are in the same work. The single site is the seventeenth-century treatise's description; Guangdong's
+large-scale sector is the other, with "large firms operating numerous ironworks in the forested mountains
+of the province" and the pig iron shipped downriver to Foshan for conversion and casting. That is what
+these maps draw. The heading is now "WHY THE TWO SITES ARE NOT A DEPARTURE", and the section gained a
+sourced reason for the spacing as well: two charcoal blast furnaces are not normally put close together,
+because it doubles the load on the forest for little or no gain.
+
+### R5b - the five smaller defects, all fixed
+
+- **A quotation readable on no page the note points at.** `urban-features` fn-88 quoted "believed to be
+  fining hearths" of Han archaeology. That phrase is in neither Wagner document - both searched in full -
+  and comes from a third work this project does not hold. It failed the feature-195 condition outright and
+  is gone; the note now says the evidence is deferred to a book we have not read.
+- **A hearth described as open that the source calls insulated.** The record had fining as "an open fire
+  under a forced blast". The working hearth is "a small well-insulated hollow in the ground"; *open* is
+  the word the authority reserves for the basin he argues cannot work as described.
+- **A truncation with no ellipsis.** `fields` fn-10 began its quotation mid-sentence, dropping the
+  source's own reason for the practice - root soundness and the ground bearing capacity that lets a field
+  be walked. Restored.
+- **A quotation of a damaged text layer.** `cities/river-cities` fn-16 rendered the degree signs as
+  apostrophes, which is what a broken extraction produces and not what the page shows. A quotation has to
+  be findable by a reader opening the page, so it reads as the page does. (The `rl` for `a` stays: that
+  smudge is on the scanned page itself.)
+- **An inference presented as a quotation's content.** The same note's "so what enters is the cleaner
+  upper water" is in neither quoted sentence. The unit does say it, four pages later, and that passage is
+  now quoted instead of inferred.
+
+### R5c - what the reading CONFIRMED, which matters as much
+
+- **The staged paddy depth.** All six MAFF quotations verbatim, and the load-bearing reading confirmed on
+  two independent surfaces: 10 cm and 20 cm appear only as a cold contingency at two named growth stages,
+  conditioned in the text on 「気温が下がる恐れがある場合は」 and labeled 「低温障害対策」 in the document's own
+  chart. The only ordinary depths in ten pages are 3-4 cm and 2-3 cm. A record that had asserted a
+  maintained four-to-six-inch depth would have been contradicted by its own source.
+- **The offtake angles, and that the record is right to carry two bands.** The document really does
+  distinguish the river case (30 to 45 degrees, section 10.4) from the canal case (60 to 80 degrees,
+  section 10.6) in two separately headed sections, and it never reconciles them - so the record's line
+  that a drawn junction has to say which of the two it is was the only reading available.
+- **Xuxiebian is in neither Wagner work**, searched again in full against the downloaded copies, in
+  romanization and in characters. The only named Han ironworking site anywhere in either is Guxingzhen at
+  Zhengzhou in Henan - a link in a site map rather than a statement in the text, and not in Sichuan. The
+  absence note holds and now records the second search.
+
+### R5d - a reader's own quotation was wrong, and checking it is why we know
+
+The desire-paths reader reported the record's quotation as differing from the paper: it gave "the angular
+'choice'" where the record has "the angular weighted 'choice'". Extracting the text of the PDF directly
+shows the paper reads **"the angular weighted choice"** - the record was right and the agent dropped a
+word. This is the second time in two features that a checking agent's own factual claim has needed the
+same verification we give our own (feature 232's memory records the first, a date pair that appeared in
+no paper). **An agent's finding is a lead, not a verdict**, and the cost of confirming one is a minute
+against a wrong correction landing in the record.
+
+What the same reader got right, and it is the more important half: the turn preference the record cites
+is Hillier and Iida's 2005 result reported at second hand and hedged - pedestrians "are believed to have"
+those preferences - while the paper's own "Go straight!" rule is a **modeling assumption its agents were
+given**, not a finding, and its measured "angle" of 90-120 degrees is the agent's field of vision rather
+than a turn. The footnote had presented the agent rule as the paper following the same preference; it now
+says it is an input the model was built on.
+
+### R5e - the Korean grove figures, the outcast siting, and a source swap that lost a claim
+
+**The Korean grove mean was mis-scoped.** The registry read 10,375 m² as the mean of the 462-grove census.
+It is the paper's own 전국 평균 면적, but Table 3 is a table of eight PROVINCIAL means and 10,375 is their
+unweighted average - it weights a province with 37 groves equally with one holding 131. The per-grove
+mean of the census is the paper's own total over its own count, about 10,223 m². Both figures are now in
+the registry, with which is which. Two limits were also missing and are added: the 100 field-surveyed
+groves are a purposive selection with fixed provincial quotas rather than a sample of the 462, and their
+mean area of 17,253 m² is well above the census's, so they skew large; and **the paper names Japan
+nowhere**, in its text or in any of its twenty-five references, so reading a Korean maeulsup across to a
+Japanese homestead grove is entirely this project's step and now says so.
+
+**The outcast-quarter siting: what the dissertation gives, and what it does not.** It gives the
+separation (a distinct residential cluster inside the parent village's own territory), the attachment
+("nearly every kawata village in the Kinai ... attached to a nearby peasant community"), the poor ground,
+and a direction with a mechanism behind it - the community settled on the uncultivated land that was
+left, which in the case studied was the south end, confirmed by the informal name neighbors used for it.
+It gives **no distance in any unit, no watercourse and no wall**. So the record's reading of "across its
+stream" out of the name kawaramono is this project's own step, and the page now says so rather than
+leaving the etymology to look like a siting source.
+
+**A claim did not survive its own source swap.** The Daoist clergy rule rested on an unsigned portal page
+with no author and no references, which the registry itself had flagged for replacement. Three open works
+were read to replace it. Two of its three halves came through with better evidence - the married priest
+living at home is Lai's own sentence, and the hereditary office is Lagerwey's dated genealogies over
+sixteen generations, which demonstrate it rather than assert it. **The third half did not.** That marriage
+is REQUIRED to become a priest of the highest rank is supported by none of the three: the first treats
+ordination ranks at length and conditions none of them on marriage, the second discusses no clerical
+ranks at all, and the third is about the ranks of GODS rather than of priests - which is the trap, since
+matching its "rank" to the claim would be the same word meaning a different thing. The claim came from
+the portal page and it is deleted rather than re-cited.
+
+That is the honest shape of a source swap: it improves what it can support and it takes away what it
+cannot. **Two of three is a good outcome, and the third being gone is the point of doing it.** The portal
+page is now cited for nothing and its footnote is removed; Lagerwey's own tables also force a widening
+the record carries, since transmission there runs to an adopted son, a son-in-law or a disciple as
+readily as to a son.
+
+### R5f - what did NOT turn out to be a defect
+
+Two of the readers' flags did not survive checking, and both are worth recording, because the cost of
+checking them was minutes and the cost of acting on them would have been a wrong correction.
+
+- **The desire-paths quotation.** The reader reported the record quoting "the angular weighted 'choice'"
+  where the paper says "the angular 'choice'". Extracting the PDF's own text shows the paper reads
+  **angular weighted choice**. The record was right; the agent dropped a word.
+- **The outcast-village comparison.** A reader returned CONTRADICTED on "a kawata village lived nearer to
+  two neighboring villages than to the kawata of their own status" - correctly, because that is not what
+  the source says. But it is not what the RECORD says either: the page reads "the peasants of the village
+  lived nearer to two neighboring villages than to the kawata of their own", which is the source's
+  sentence. The reversed version was in the prompt this session wrote for the reader, not on the page.
+  **A badly paraphrased claim in a prompt produces a true finding about a false claim**, and the only
+  protection is reading the page before acting on the verdict.
