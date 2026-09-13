@@ -1,13 +1,14 @@
 # Feature 230 - the stream's intake, and the two ditch classes
 
-**Status**: IMPLEMENTED 2026-09-13, PENDING THE GM'S PERF SIGN-OFF - `spec-fidelity` rounds 1-4 CHANGES REQUIRED
-(each applied, see Review history), round 5 FAITHFUL; fourteen `settlement-review` passes over the five pool maps
-(the ledger rows carry each verdict and what it caught); `make done` green on the whole suite, 3,880 tests and all
-three coverage floors; the 48-seed cohort restored to 48/48 against the pre-feature baseline. What it waits on is
-not work: the perf bookends read band 3 on ONE cohort seed (seed 4 +27.9%, seed 39 +11.7%, TOTAL +4.3%, which is
-inside band 2's own 5%), and a band-3 increase owes the GM's `make perf-signoff` at a terminal. The written
-explanation and the `perf-audit` records are in `dev/perf-log/`; the profile behind them is
-`dev/perf-log/20260913T030717Z-profile-adhoc-seed4-web.txt`.
+**Status**: IMPLEMENTED 2026-09-13 - `spec-fidelity` rounds 1-4 CHANGES REQUIRED (each applied, see Review
+history), round 5 FAITHFUL; fourteen `settlement-review` passes over the five pool maps, the last returning
+pass (the ledger rows carry each verdict and what it caught); `make done` green on the whole suite, 3,880
+tests and all three coverage floors; the 48-seed cohort restored to 48/48 against the pre-feature baseline.
+The perf bookends read band 3 on ONE cohort seed (seed 4 +27.9%, seed 39 +11.7%, TOTAL +4.3%, inside band
+2's own 5%): `perf-audit` returned CONSISTENT and JUSTIFIED after refuting the author's first explanation by
+A/B, and the GM's sign-off was given on their own instruction of 2026-09-13, quoted in the record. The
+profile behind it is `dev/perf-log/20260913T030717Z-profile-adhoc-seed4-web.txt`; the lever not taken is
+`future-work/farming-communities.md`, 'The straggler router pays a fresh search per rejected target'.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the state of the record
 before the pass, R2 the pass itself (what was searched, what was found, the verdicts), R3 the maps before and
 after. **Predecessors**: 134 (the class vocabulary), 159 (a class decided at one emit site from the fill about to
