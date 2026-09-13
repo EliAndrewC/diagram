@@ -56,7 +56,7 @@ this session. So a gate phase scans every TRACKED file and fails, the way
 `tests/tooling/test_makefile_recipe_comments.py` backstops the recipe-comment guard. That is what turns
 incident 2 from "lint fails somewhere downstream" into a named, specific failure naming the files.
 
-## R4 - two things the first implementation got wrong, both found by its own review
+## R4 - three things the first implementation got wrong: two found by its review, one by its own audit listing
 
 Recorded because each was a plausible decision that a reader would otherwise make again.
 

@@ -1,13 +1,28 @@
 # Feature 241 - no conflict markers
 
-**Status**: IMPLEMENTED, pending the landing. **Review history**: the spec was reviewed before
-implementation; it was then AMENDED mid-implementation, when measurement showed the fence exemption wrong
-and the hand-rolled pathspec enumeration both missing the recorded incident and firing on correct work - so
-the counter reset to zero (the GM 2026-09-12: the five-round cap counts the initial acceptance only).
-Round 1 of the amended spec returned four changes - D3's ladder still miscited to 212, FR-001 looser than
-the code about the middle marker, a defect count in the detector's docstring that contradicted research
-R4, and the `make audit` section wired between feature 173's listing and its own explanation - all four
-applied, and round 2 is dispatched.
+**Status**: IMPLEMENTED, pending the landing.
+
+**Review history** - and the first thing in it is a departure from Principle XVI, stated rather than
+smoothed over. XVI says a spec is reviewed BEFORE implementation. Here the spec, the guard and the suite
+landed in one commit, the review ran against the implementation rather than ahead of it, and this file's
+own Status line still read `DRAFT - spec-fidelity not yet run` two commits later. That review earned its
+keep - it found that the guard would have missed the very command shape of the incident it was built for -
+but it ran in the wrong order, and nothing about the feature working excuses that.
+
+- **Round 1** (against the implementation): the guard's cheap filter demanded the literal substring
+  `git add`, so `git -C $CL add -A` skipped it entirely; the fenced-block exemption would have passed 7 of
+  the 23 files; five miscited precedents; `CONFLICT_MARKERS_OK` unclassified in the escape census.
+- **Round 2**: D3 still crediting 212 with feature 164's ladder; FR-001 looser than the code about the
+  middle marker; a defect count in the detector's docstring that research R4 contradicted; the `make audit`
+  section wired between feature 173's listing and that listing's own explanation.
+- **Round 3**: this history claiming a pre-implementation review that the commits do not show; R4's heading
+  naming two items over a list of three; `<reason>` used both as notation and as a literal the code
+  rejects.
+
+**No counter reset is claimed.** The GM's 2026-09-12 ruling resets the five-round count once a spec has
+been ACCEPTED, and this one never was - no round returned FAITHFUL. So the rounds above are the initial
+acceptance, three of five used, and if round 5 still returns changes this stops and goes to the GM.
+
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the two incidents measured, why the state-based rule is the
 wrong one, and what the backstop is for.
@@ -57,10 +72,11 @@ route, which a state-based rule would not (R2, R3).
   wherever the conflict falls, including inside a fenced block in a Markdown file, and 7 of the 23 files
   of the second incident were Markdown or HTML - an exemption for fenced text would have passed them. A
   file that must carry a real triple at column 0 - a fixture, a document explaining a conflict - declares
-  `CONFLICT_MARKERS_OK: <reason>` in its first 40 lines, the same file-level shape `FILE_SIZE_OK` takes,
-  and `make audit` lists every file taking it. **A MENTION of that marker is not a declaration**: it must
-  stand at the start of its line (modulo indentation and comment punctuation) and state a real reason, not
-  a `<reason>` placeholder - the detector's own docstring describes the marker, and under the first rule
+  `CONFLICT_MARKERS_OK:` followed by a REAL reason in its first 40 lines - the literal string `<reason>`
+  does not count, being what documentation writes where a reason goes - the same file-level shape
+  `FILE_SIZE_OK` takes, and `make audit` lists every file taking it. **A MENTION of that marker is not a
+  declaration**: it must stand at the start of its line (modulo indentation and comment punctuation) and
+  carry two words of actual reason - the detector's own docstring describes the marker, and under the first rule
   that exempted the detector from its own backstop (R4).
 - **FR-005 The escape says why.** `CONFLICT_MARKERS_OK="<reason>"`, matched as an INVOCATION through
   `_hookmatch.py escape` so a grep or a commit message quoting it does not escape anything (feature 169),
@@ -91,7 +107,8 @@ route, which a state-based rule would not (R2, R3).
 - **SC-002** (FR-001, FR-002, FR-004) The correct end of a merge is NOT refused: every file resolved,
   `git add -A` passes, and so does `git add .` in a clean subdirectory of a tree whose marker lies
   elsewhere; a file containing `=======` as a Markdown underline passes; a fenced triple is REFUSED and
-  passes only once its file declares `CONFLICT_MARKERS_OK: <reason>`.
+  passes only once its file declares `CONFLICT_MARKERS_OK:` with a real reason (the suite uses
+  "this doc must SHOW a conflict to explain one"); the placeholder form does not pass.
 - **SC-003** (FR-005) A bare `CONFLICT_MARKERS_OK` is refused; one with a reason permits and is recorded
   with its rule; `grep CONFLICT_MARKERS_OK` escapes nothing.
 - **SC-004** (FR-006) The scan fails on a tracked file carrying a triple and names it, and passes on the
