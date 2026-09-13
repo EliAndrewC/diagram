@@ -2284,7 +2284,7 @@ sample the cross-wind columns that actually contain a house (or a run of houses)
 column is empty, so a split cluster gets two belts or one belt that stops. That is a change to the windbreak's
 derivation with its own cohort sweep, not a clause bolted onto the clump filter.
 
-## The drain that reaches its pond round a hook (feature 230 pass 11, 2026-09-12)
+## The drain that reaches its pond round a hook (feature 230 pass 11, 2026-09-12) - CLOSED by pass 12
 
 **Measured**: on Mizuguchi the collector runs north-east to the field's tip and the pond lies south-east of that end,
 so the run leaves along the collector's heading and curves back - 121 ft of ditch to cross a 50 ft gap, its sharpest
@@ -2298,3 +2298,84 @@ point drains backwards to a mid-course outfall, which changes what `drain_headin
 measure; seating the pond on the collector's extended heading is what the brook already refuses. Both are engine changes
 beyond this feature, so the curve stands and the hook is recorded here with its numbers.
 
+
+**Closed 2026-09-13.** Pass 12 measured what pass 11's curve had actually produced - an inverted U climbing 26 ft
+further from the pond and topping out 53 ft past its far rim, 121 ft of ditch on an 87 ft chord, its apex 11 ft from
+the brook it does not join - and named the cause as the EXCURSION rather than the bends, which is why a per-bend
+tolerance could not see it. `pond_run`'s first handle now points along the bisector of the collector's heading and the
+chord to the pond instead of along the heading alone: 7% detour, sharpest bend 14.9 degrees, and no stride of the run
+further from the pond than the outfall is. The pond's seat is unchanged, so the alternatives priced above stay priced.
+
+## A garden may be seated on an in-field ditch (feature 230 pass 12, 2026-09-13)
+
+**Measured**: cutting the supply canals at the fork and at each offtake leaves a remainder wherever a cut lands near a
+piece's own end, and the remainder is drawn and recorded like any other channel - Inashiro shipped a 3.2 ft stroke of
+`main` carrying its own hover region, Mizuguchi a 21.9 ft one that stops under a blunt cap on the bare hem. Dropping a
+sub-stride piece is one line (`channels[:] = [c for c in channels if run_length(dedup(c["pts"])) >= 8.0]` in
+`waterfields/comb.py`, at the point the list is complete) and it was tried: the reference hamlet came back with a
+garden seated ON a branch ditch at (2593, 1724), which `features_do_not_overlap` fails.
+
+**Mechanism**: the channel list feeds the no-build corridors, and `hamletgen/water/comb.py` reserves only the stretches
+running OUTSIDE the field envelope - a delivery ditch's tail and the collector - because blanketing the whole net costs
+the field its ring of farmhouses (`field_ringed`, measured on three maps). So a garden is tested against nothing inside
+the envelope, and any ground freed near an in-field branch is available to it. The stub was merely holding that ground.
+
+**Sketch**: give the homestead BUNDLE the in-field channel keep-out the houses already carry - the bundle's own rect
+against the branch centerlines at half the drawn width plus the bund - then take the one-line stub drop above. It moves
+every map's packing, so it belongs to a feature that can re-roll the cohort and re-review all five maps.
+
+## What a reader takes for the river at the tap (feature 230 pass 12, 2026-09-13)
+
+**Measured** (Sawada): the head race leaves the brook at `#6C9CBE` (128,167,191) - darker and more saturated than the
+brook's own `#9CB4C8` (168,187,199) - and at 6.0 px against the brook's 7, so it is 86% of the trunk's width. At 9x the
+dug ditch reads as the principal watercourse and the stream as its bank shadow, and the race's stroke ends in a rounded
+cap laid ON the brook rather than opening out of its bank.
+
+**Why it is not simply a width fix**: both widths are the water-width ladder's own figures (`research/water.html`,
+"Water-width ladder"), drawn by RANK rather than by discharge, and the hues are the supply/brook pair every map uses.
+Changing either for this one junction would trade a junction-scale misread for a map-scale one.
+
+**Sketch**: leave the ladder alone and change the MOUTH - a short flare where the race meets the bank (the intake's own
+opening, which the record describes and the map does not draw), so the reader sees the ditch beginning AT the brook
+rather than crossing it. That is a new glyph and owes its own research pass on what an intake mouth looked like.
+
+## Two ways that meet where the material changes (feature 230 pass 12, 2026-09-13)
+
+**Measured** (Kuwabata, the polder ring): at the SE corner the e_toe pond canal ends at (2699.2, 2186.1) with a rounded
+cap at its 3.0 ft tail width while the drain trunk starts at (2702.2, 2185.6) at 5.0 - centerlines 2.5 ft apart, widths
+2 ft apart, and since feature 230 in two different inks. The SW corner is the same joint. The strokes overlap, so there
+is no gap; what a reader sees at 7x is a blue cap stuck on the end of a wider gray pipe.
+
+**Pre-existing geometry**: identical on main, where both strokes were near the same blue and the joint was invisible.
+The class split is what made it legible.
+
+**Sketch**: end the toe ON the drain's centerline rather than 3 ft short and 2.5 ft off, or taper the drain's head to
+the toe's width where they meet, the way the feeder/lateral junctions already read. Both are changes to the polder ring
+builder's corner, which every polder map draws.
+
+## The storehouse share is a positional roll, and a re-pack moves it (feature 230 pass 12, 2026-09-13)
+
+**Measured**: across this feature's re-packs the pool's storehouse share went from 28 of 82 farmhouses (34%) to 18 of
+82 (22%) - Kashikawa 6 of 20 to 1 of 20, Mizuguchi 4 of 12 to 0 of 12. Every house is `kind: plain`, so the drawing
+condition did not change: the positional roll simply re-rolled when the houses moved.
+
+**Already recorded, and what is new**: `research/homesteads.html` ("Which farmhouses have a storehouse?") records the
+positional roll, its p=0.2993, the realized 28.4% over 1,208 farmhouses, and the precedent that "one re-pack took a
+hamlet from 25% to 15% in a single roll". The magnitude is what is new - 5% and 0% are past that precedent, and the
+entry itself describes the kura as a wealth marker that reads only because most farms lack one.
+
+**The lever, already named in the record**: key the roll to a household NUMBER instead of a position, which holds
+across a re-packing. It was declined when written and is worth pricing again the next time the pool moves; the number
+to watch is the POOL share against 0.2993, not any one map.
+
+## The weir's root lands on the head race's mouth (feature 230 pass 12, 2026-09-13)
+
+**Measured** (Monte Carlo over the weir quad, identical on all three weir maps): 17% of the bar's area lies within the
+head race's 6 ft band, 58% over the brook, 25% on dry bank - so the bar's downstream third sits on the ditch's blue and
+reads at 6x as a gate closing the ditch. The `Weir` class docstring tells a reader the bar "runs diagonally upstream
+from the point where the head race leaves the bank", while the drawn root is 8 ft downstream of and 6 ft behind that
+point: a modal saying one thing and the ink showing another.
+
+**Sketch**: set the bar's near-bank root at the mouth's UPSTREAM lip rather than at the intake point, so the crib keys
+into the bank above the opening it holds water against - which is also what the docstring already claims. It moves the
+weir on three maps and owes a look at whether the mouth then reads as open.

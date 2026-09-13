@@ -469,3 +469,40 @@ sunburst wedges, the reversed polder tapers, the fan floor's invisible spike).
 reaches its pond round a hook. Both were measured, both have a named mechanism, and both are changes to a derivation
 (the belt's shape; the pond's seat) rather than clauses this feature can add honestly.
 
+
+## R12 - what pass 12 asked that this feature does not answer (2026-09-13)
+
+Five reviewers, one per pool map, raised twelve `questionable` items between them. Three are research
+questions about how a place was built, and they are recorded here rather than guessed at, per Principle XII.
+None of them blocks this feature: each is about a form the maps could ALSO take, not about a form they take
+wrongly.
+
+**Is a separated supply and drainage net one of two attested forms, or the only one?** Sawada's reviewer
+fetched and read ARIC's *History of Water Development in Japan*, which describes the Toro site (late Yayoi)
+with "a dual-purpose ditch for irrigation and drainage", states that "the system of dual-purpose channel has
+traditionally been used in regions of Japan", and dates deliberate separation to the Kishuryu school of the
+late Edo period. This feature's own R2 reading established the two CLASSES from the roles a channel plays,
+and that stands either way - a dual-purpose ditch is a ditch playing both roles, which is a third class
+rather than a refutation. What it puts in question is the NETWORK FORM every pool map now draws: five
+settlements, all with supply and drain fully separated. If the record supports both forms, that is a knob by
+Principle XII and two hamlets could honestly differ on it. Nothing here is cited yet: the passages are short
+fragments and owe a `source-reader` pass and a `source-applicability` judgment before any number or claim
+reaches a map.
+
+**Did a weir-less bank offtake carry any standing works?** `intake: open` is drawn as the absence of a weir,
+so a reader comparing Sawada to the four weir maps sees an omission rather than the second attested form.
+The searches run for R2 surfaced crescent stone weirs, *kawakura* log-and-mat frames and sand conduits, and
+nothing that settles the bare-bank case either way - so the record is not yet shown SILENT, it is
+under-searched. A village that takes water controls how much it takes, so the honest expectation is that
+something stood at a managed mouth; what it was is the question.
+
+**Were the two intake forms equally common?** The knob rolls evenly and the pool came up weir on four maps of
+five, which is unremarkable for an even knob on five seeds (about 19%). The question the record would have to
+settle is whether a built weir was the exception while the temporary brushwood-and-stone half-river closure
+was the vernacular - in which case the knob wants a weighting, and the weighting wants a source.
+
+**And two that are drawing conventions rather than research** (recorded so they are not re-raised as
+research): whether the intake should carry a caption on every map that has one, when the notice board carries
+the only caption on all five sheets; and whether "copse" is the right word for what `among_the_houses` draws,
+which is dooryard trees rather than a composed stand. The first is a captioning rule for the whole pool and
+belongs with the label phase; the second is a naming question about a knob value.
