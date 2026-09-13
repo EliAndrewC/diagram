@@ -303,9 +303,9 @@ GM named `sed`. A Python sweep's `t.replace("the centre of", "the center of")`, 
 and its replacement, and an `awk` substitution are the same command doing the same thing, and the
 GM's own reason - a correction would replace a word with itself and the fix would do nothing - applies
 to each without modification. The rule implemented is therefore: the sed shape, plus any command
-carrying BOTH spellings of one word. Measured: of the 59 commands the shipped rule reports, 9 carry a
-`sed` segment and 48 carry both spellings with no `sed` anywhere (`research.md` R10), so the literal
-reading would hand those 48 to the corrector - about half of them replacement pairs whose fix would
+carrying BOTH spellings of one word. Measured: of the 53 commands the shipped rule reports, 9 carry a
+`sed` segment and 42 carry both spellings with no `sed` anywhere (`research.md` R10), so the literal
+reading would hand those 42 to the corrector - about half of them replacement pairs whose fix would
 silently become a no-op. The predicate knows the SHAPE, not the intent: the other half are quotations,
 searches and prose naming both spellings, which are reported rather than corrected, and a real
 violation among them still fails `make quick` in the delta. This is a widening of what the GM said,
@@ -324,9 +324,11 @@ found by the amendment review, and now decided by the write targets (FR-007c).
 
 **D11 - a program heredoc does not disqualify a command whose resolvable write targets are all outside
 the project, and the cost of that is named.** `python3 - <<'PY'` can write anywhere, so an earlier
-draft appended an unknowable destination for every such command and corrected it. Measured over the
-window, that rewrote 19 commands whose every resolvable target was outside - 4 of them the auto-memory
-index, whose em-dash is Claude Code's own format (`research.md` R10). **The two mistakes are not
+draft appended an unknowable destination for every such command and acted on it. Measured by replaying
+that draft (the hook at `31ef2907^`) against the shipped one over the window: **21** commands whose
+every resolvable target was outside the project are silent now and were not - 15 of them corrected and
+6 reported - and **7** of the 21 write the auto-memory index, whose em-dash is Claude Code's own
+format (`research.md` R10). **The two mistakes are not
 equal.** A correction that should not have happened silently rewrites someone else's text, and this
 project has paid for that twice - the reader agents whose verbatim page text was Americanized in
 2026-09-06, and the memory format here. A correction that did NOT happen leaves a British spelling in
@@ -344,6 +346,20 @@ that produced the 19.
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment 2, round 4** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, three items, all
+taken, none of them a change to what the hook DOES - a stale count, a figure that did not reproduce,
+and a docstring describing a deleted rule. D11 was judged LEGITIMATE, on the test that matters: the
+outside-the-project exemption pre-dates this feature, D11 only decides which side the unresolvable
+case falls on, and the enforcing half of item 4 - the `make quick` delta phase - is untouched. The
+figure that did not reproduce is the one carrying D11's whole justification, and it is the second
+time this amendment has stated a number measured by the hook's own target list rather than plainly:
+re-measured here by replaying the pre-D11 hook (`31ef2907^`) against the shipped one over the window,
+**21** commands change (15 corrected, 6 reported, now silent) and **7** of them write the auto-memory
+index. The reviewer's independent run and this session's agree to the command. D9 was restated from
+the consolidated run (53 reported, 9 sed, 42 both spellings), and `_hm_house.write_targets`'s docstring
+no longer explains the rule D11 replaced - a reader repairing the "bug" it described would have undone
+D11.
 
 **Amendment 2, round 3** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, five items, all
 taken, and the round confirmed round 2's split and verdict figures against its own replay. Three were

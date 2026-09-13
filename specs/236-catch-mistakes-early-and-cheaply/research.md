@@ -325,9 +325,11 @@ were wrong and both passed their tests. Reading write targets out of the raw com
 verdicts for the worse - 7 writes outside the project newly corrected (the `M=<path>; cat >> $M` shape,
 and a heredoc body carrying a line that opens with `>`) and 4 project writes newly silenced (a
 `write_text` into the pool, two commit messages, each beside a `> /tmp/....log`). Appending an
-unknowable destination for every program heredoc then corrected **19** commands whose every resolvable
-target was outside, **4** of them the auto-memory index - the harm D10 exists to prevent (both figures
-measured by the amendment review over this window). With the targets read by `_hm_tree.walk` and D11's
+unknowable destination for every program heredoc then acted on **21** commands whose every resolvable
+target was outside - 15 corrected and 6 reported - **7** of them the auto-memory index, which is the
+harm D10 exists to prevent (measured by replaying that draft, the hook at `31ef2907^`, against the
+shipped one over this window; the first figure came from a round that judged by the hook's own target
+list and did not reproduce). With the targets read by `_hm_tree.walk` and D11's
 ruling in place, the same replay against the pre-exemption hook changes **52** verdicts and none is
 wrong in either direction: **0** outside-the-project writes newly acted on, **0** project writes newly
 silenced. What D11 leaves is an upper bound rather than a defect: **27** commands in the window are

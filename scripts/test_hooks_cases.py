@@ -154,8 +154,8 @@ HOUSE_STYLE = [
     # D11: a program heredoc can write anywhere, and where every target that CAN be resolved is
     # outside the project the command is left alone. The two mistakes are not equal - a correction
     # that should not have happened rewrites someone else's text silently, while one that did not
-    # happen leaves a spelling `make quick` fails on in the delta. Treating this as unknowable
-    # corrected 19 window commands whose every resolvable target was outside, 4 of them the memory.
+    # happen leaves a spelling `make quick` fails on in the delta. Treating this as unknowable acted on
+    # 21 window commands whose every resolvable target was outside, 7 of them the auto-memory index.
     ("a program heredoc beside a /tmp log", cmd("python3 - <<'PY' > /tmp/gate.log\np.write_text(\"the centre of it\")\nPY"), "ok"),
     # ...but a commit message is not unknowable: the write lands in the repository, and `_hm_tree`
     # says so, so this one is corrected even though its only redirect goes to /tmp.

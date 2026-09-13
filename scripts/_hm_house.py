@@ -106,9 +106,17 @@ def write_targets(cmd: str, cwd: str | None = None) -> list[str | None]:
     (`M=<path>; cat >> $M`, this project's own memory-write shape), a `> ` line inside a heredoc BODY
     read as a redirect, and `git commit`, whose write lands in the repository rather than in a file.
 
-    A `None` in the list is a write whose destination cannot be known, and it is never outside: an
-    interpreter reading its program from a heredoc can write anywhere, which is how a `write_text` into
-    the pool sat beside a `> /tmp/gate.log` redirect and took the exemption.
+    A `None` in the list is a write whose destination cannot be known, and it is NEVER outside: a
+    relative path with no cwd to resolve it against, a target behind a variable assigned in some
+    earlier command, and `git commit`, whose write lands in the repository rather than in a file.
+
+    An interpreter reading its program from a heredoc deliberately produces NOTHING here, though it
+    could write anywhere. That is spec D11, and it is a ruling rather than an oversight: an earlier
+    draft returned an unknowable destination for every such command, which corrected the auto-memory
+    index - whose em-dash is its own format - in commands whose every resolvable target was outside
+    the project. A correction that should not have happened rewrites someone else's text silently;
+    one that did not happen leaves a spelling `make quick` fails on in the delta. D11 carries what
+    that costs, measured.
     """
     try:
         from _hm_tree import walk
