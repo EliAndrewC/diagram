@@ -90,11 +90,18 @@ re-runs nowhere and is not a record; the refresh command MUST be runnable on a c
 repository, and the harness MUST fail rather than record a figure it cannot re-derive that way (feature
 239's own review round found this in its first `measurements.json`).
 
-**FR-009 A TIMING record MUST carry the machine state it was taken on, and MUST refuse a noisy one.** The
-container runs several sessions at once: the same command on the same tree measured 145 ms and 303 ms an
-hour apart (`research.md` R4), the second while another session rolled a map. A timing harness records the one-minute load
-average and refuses to record above a quiet threshold, which this feature measures rather than guesses
-(`research.md`). Corruption that looks like a result is the failure mode being removed.
+**FR-009 A TIMING record MUST carry the machine state it was taken on and the sample it actually took,
+and MUST refuse a noisy machine.** The container runs several sessions at once, and contention genuinely
+moves a timing here: feature 239 watched a spawned command go from 145 ms to 303 ms an hour apart, the
+second while another session rolled a map (`research.md` R4). So a timing harness records the one-minute
+load average and refuses to record above a quiet threshold, which this feature measures rather than
+guesses. But the same session's LARGER drift that night was not the machine at all - its harness took the
+first digit in its arguments as the sample size and timed three commands while its record said 560 - and
+it attributed the drift wrongly twice before a review found the sample. So the rule beside the load
+average is the one that would have made that a read rather than an investigation: **the record states the
+sample it measured** (how many, over what), in `quantity` (FR-007), and when a timing moves the sample is
+checked before the machine is blamed. Corruption that looks like a result is the failure mode being removed,
+from either cause.
 
 ### D. An attribution owes a counterfactual (FR-010)
 

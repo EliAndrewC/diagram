@@ -62,8 +62,16 @@ inference, and only a counterfactual measurement settles an inference.
 
 ## R4 - the quiet threshold FR-009 needs (OWED before implementation)
 
-Not yet measured. The motivating observation is feature 239's: 145 ms and 303 ms for the same command an
-hour apart, the second at 152% CPU from another session's map roll. The threshold is measured by sampling
+Not yet measured. The motivating observation is feature 239's, and its provenance was CORRECTED by that
+session after this record first cited it: a spawned command did go from 145 ms to 303 ms an hour apart, the
+second with another session rolling a map at 152% CPU, and that part stands as evidence that contention
+moves timings on this container. It is NOT evidence that contention alone produces a 2x: the larger part of
+that session's drift, an in-process figure moving from 7.0 ms to 121 ms, was its own harness taking the first
+digit in argv as the sample size, so `--repeat 3` timed three commands while the record said 560. That
+session attributed the drift wrongly twice (path growth, then contention) before a review round read the
+sample. Hence FR-009's second clause: a timing record states the sample it measured, so the check is a read.
+Feature 239's own threshold is `QUIET = 2.0`, chosen rather than measured by its own account; that session
+has said it will adopt whatever number this one measures. The threshold is measured by sampling
 the one-minute load average across a working day on this container and taking the level below which a
 fixed reference command's timing is stable; the number and the command that took it land here before the
 harness is written.
