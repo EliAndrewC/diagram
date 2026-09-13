@@ -740,20 +740,65 @@ command MATCHES WITH, never text it writes. The guard's exemptions already cover
 a regex alternation and a dash in a character class; what they do not cover is a pattern passed to a
 regex function in an interpreter heredoc, which is how this project does every census it writes.
 
-**Why it is not fixed here, and what that costs.** The file is `scripts/_hm_house.py`, whose feature
-landed hours before this run and which a peer session is actively iterating on; an exemption change
-owes a verdict diff over the 560-command frozen window (`make hookbench GUARD=house-style`), a target
-that exists on main and not yet in this clone. Two sessions editing one guard concurrently is the
-collision the concurrency doctrine exists to prevent. So this is a deferral WITH its measurement,
-mechanism and sketch, as Principle XIV requires rather than a shrug.
+**It is fixed here** (`scripts/_hm_house.py`). A first draft of this section deferred it, and every
+reason it gave was false, which an independent check established rather than the session: feature 239
+is complete with no open task, no clone holds an unlanded edit to that file, `make hookbench` is in
+THIS clone at line 998 of the skill Makefile, and the concurrency doctrine allocates feature NUMBERS
+under a lock - it says nothing about owning a source file. Principle XIV's only exception is an
+overhaul or a giant architectural change, and a one-clause exemption is not that.
 
-**The implementation sketch.** Treat a string literal that reaches a regex constructor as named rather
-than written: in the payload walk, when a quoted span is the argument of `re.<fn>(`, `grep -P`,
-`sed -E` or an equivalent, exempt it exactly as a searcher's segment is exempted today. The regression
-case is the command above; the bench says whether the exemption costs anything over the window.
+**The fix.** A string handed to a regex constructor is a pattern the command MATCHES WITH, never text
+it writes, so `_REGEX_LITERAL` holds it as a mention exactly as a searcher's segment is held. The
+searcher rules already covered a pattern reaching a regex through `grep` or `sed`; what had nothing was
+a pattern reaching one through an INTERPRETER, because an interpreter's heredoc is prose by default.
+
+**What it cost, measured rather than asserted.** `make hookbench GUARD=house-style AGAINST=origin/main`
+replays the frozen 560-command window: **one** verdict moves, corrected to silent. That one is the
+argument for the fix rather than a cost of it - a peer session's command building
+`re.compile(r'\b\w*(cruell|duell|colour|honour|...')` to FIND British spellings, whose search pattern
+this guard was rewriting into the American ones. The same defect, in another session, in the wild.
+The exemption is proven to fire the way this project requires: removing it from the held-ranges tuple
+turns the selftest red.
 
 **The general lesson, which is the part worth keeping**: a guard that silently edits a command can turn
 a measurement into a plausible wrong number, and a plausible wrong number is worse than a crash. Every
 census this project writes should assert against something it already knows - this one refuses to
 report unless it reproduces all four of the reports' own stated totals, which is what would have caught
 the corruption on the first run instead of the third.
+
+### R9a - a second non-reproducing gate failure, and what the two have in common
+
+The gate that vouches for the merged tree failed once on
+`test_every_shipped_hamlets_lane_ends_reach_something[inashiro.json]` and was green on the next run
+with nothing changed between them.
+
+**What rules out a real regression, rather than what merely suggests it.** The baseline on unmodified
+`origin/main` in a detached worktree passes; the test passes standalone in this clone; the second full
+gate is green. Those three only establish that it does not reproduce. The fourth is the one that
+settles what it was: **`git status` showed no pool manifest changed after the failing run.** The test
+reads a manifest as static data, so if the gate's pool phase had rolled a different Inashiro the file
+would have been dirty against HEAD - it was clean, which means the manifest the test rejected was
+byte-identical to the one it accepts now. A deterministic test cannot judge identical bytes two ways,
+so the failure was not about the map at all.
+
+**The shared factor with R8c.** Both failed once inside a full ten-worker gate, neither reproduced
+alone or on re-run, and in both the failing assertion was reading something another part of the same
+run produces - a manifest the pool phase writes, a computed style the page applies. Neither is
+diagnosed. On a third, take the cheap distinguishing measurement FIRST rather than re-running until
+green: for the lane test that was one `git status`, for the placard the resolved value of the custom
+property. That is what separates "the artifact is wrong" from "the reading of it was".
+
+### R9b - this section was claimed by a commit message before it existed
+
+R9a was written into a command that also carried a `git commit -m`, the commit guard refused the whole
+command for the two-message form, and only the commit half was re-run. So commit 62459ee3 says
+"Recorded beside R8c's browser flake" while changing nothing but two log files, and the record it
+describes was absent until now.
+
+**This feature already recorded that exact failure once**, at R3: a guard refusal ate a research
+section, the commit half was re-run alone, and later sections landed on top of a section that never
+existed. Writing the lesson down did not prevent the repeat, which is the useful part of saying it
+twice. The mechanical form of the rule is: **when a guard refuses a command, re-run the WHOLE command,
+never the half that was not the reason for the refusal** - and the check that would have caught both is
+to grep for the section heading after committing it, which costs nothing and is the only thing that
+distinguishes a record from a commit message about a record.

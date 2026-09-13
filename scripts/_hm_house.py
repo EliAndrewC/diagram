@@ -58,6 +58,18 @@ _PATH = re.compile(
     r"[\w.~$-]*/[\w./~$-]+|[\w-]+\.(?:md|py|sh|html|json|jsonl|txt|toml|js|css|ya?ml|csv)\b"
 )
 _SUBSTITUTION_SEARCH = re.compile(r"\$\(\s*(?:git\s+)?(?:%s)\b[^)]*\)" % "|".join(_SEARCHERS))
+# A STRING HANDED TO A REGEX CONSTRUCTOR is a pattern the command MATCHES WITH, never text it writes.
+# The searcher rules above cover a pattern that reaches a regex through `grep` or `sed`; a pattern that
+# reaches one through an interpreter had nothing, because an interpreter's heredoc is prose by default.
+# Measured cost of the gap (238 R9): the census sizing feature 242 split its input on `**Rn** <em dash>`,
+# the dash was corrected to a hyphen inside the `re.split` call, three of the four files then matched
+# NOTHING, and the run reported 39 items where the truth is 695 - with no error, and with the guard's own
+# message saying a search pattern had been left as typed.
+_REGEX_LITERAL = re.compile(
+    r"re\.(?:compile|search|match|fullmatch|split|sub|subn|findall|finditer)\(\s*"
+    r"""[rbuf]{0,2}(['\"])(?:\\.|(?!\1).)*\1""",
+    re.S,
+)
 
 
 _HEREDOC_BODY = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n(.*?)\n[ \t]*\2\b", re.S)
@@ -114,7 +126,8 @@ def held_ranges(cmd: str) -> list[tuple[int, int, str]]:
             held.append((a, b, "warn"))          # the GM's named shape
         elif head in _SEARCHERS:
             held.append((a, b, "mention"))
-    for pattern in (_SUBSTITUTION_SEARCH, _ALTERNATION, _DASH_CLASS, _DASH_LITERAL, _PATH, _QUOTED_TOKEN):
+    for pattern in (_SUBSTITUTION_SEARCH, _ALTERNATION, _DASH_CLASS, _DASH_LITERAL, _PATH,
+                    _QUOTED_TOKEN, _REGEX_LITERAL):
         held += [(m.start(), m.end(), "mention") for m in pattern.finditer(cmd)]
     return held
 
@@ -513,6 +526,12 @@ def _selftest() -> None:
     assert run("echo 'an alpha - here' >> a.md")[0] == "echo 'an alfa - here' >> a.md"
     assert run("python3 - <<'PY'\nWORDS = {'alpha', 'beta'}\nPY")[1] == []      # a word list is named
     assert run("python3 - <<'PY'\nt = \"the alpha of it\"\nPY")[1] == ["alpha -> alfa"]
+    # A PATTERN IS MATCHED WITH, NOT WRITTEN (238 R9). Both shapes the record actually used: a dash
+    # inside a regex literal, and a British spelling inside one - correcting either changes what the
+    # command FINDS while leaving it looking right.
+    assert run("python3 - <<'PY'\nparts = re.split(r'a \u2014 b', t)\nPY")[1] == []
+    assert run("python3 - <<'PY'\nm = re.finditer(r'the alpha of', t)\nPY")[1] == []
+    assert run("python3 - <<'PY'\nt = re.sub(r'x', 'the alpha of it', t)\nPY")[1] == ["alpha -> alfa"]
     print("_hm_house selftest ok")
 
 
