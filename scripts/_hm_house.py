@@ -90,7 +90,11 @@ def held_ranges(cmd: str) -> list[tuple[int, int, str]]:
     return held
 
 
-def write_targets(cmd: str) -> list[str]:
+# an interpreter reading its PROGRAM from stdin or a heredoc: `python3 - <<'PY'`, `bash -s <<'SH'`
+_PROGRAM_ON_STDIN = re.compile(r"\b(?:python3?|bash|sh|node|perl|ruby)\s+(?:-\w+\s+)*-\s*(?:<<|\||;|$)")
+
+
+def write_targets(cmd: str, cwd: str | None = None) -> list[str | None]:
     """The paths a command WRITES - a redirect's target or a `tee` argument (GUARD_EDIT_OK).
 
     The exemption for a path outside the project (`/tmp`, the session state directory) has to be
@@ -99,11 +103,26 @@ def write_targets(cmd: str) -> list[str]:
     and a command that reads the memory file and writes a project file in the same breath mentions one
     of each. Both cases are real - the amendment review found the second, its fix produced the first.
 
-    `sed -i` is deliberately not read here: its target is the last argument past a quoted expression,
-    and a sed command carrying a word is left as typed by the fix rule whatever this returns.
+    THE WALK IS `_hm_tree`'s, not a second one. The first version here read redirect targets out of the
+    raw text, and the amendment review measured what that costs over the real window: 7 writes outside
+    the project newly corrected and 4 project writes newly silenced. Every one was a shape `_hm_tree`
+    already handles for the main-tree guard - a target behind a variable assigned in the same command
+    (`M=<path>; cat >> $M`, this project's own memory-write shape), a `> ` line inside a heredoc BODY
+    read as a redirect, and `git commit`, whose write lands in the repository rather than in a file.
+
+    A `None` in the list is a write whose destination cannot be known, and it is never outside: an
+    interpreter reading its program from a heredoc can write anywhere, which is how a `write_text` into
+    the pool sat beside a `> /tmp/gate.log` redirect and took the exemption.
     """
-    out = re.findall(r"(?:^|\s)(?:>>?|\btee\b(?:\s+-a)?)\s*([\w./~$-]+)", cmd)
-    return [t for t in out if t not in ("-", "/dev/null", "/dev/stderr", "/dev/stdout")]
+    try:
+        from _hm_tree import walk
+    except Exception:                       # a guard never takes the session down with it
+        return []
+    home = os.path.expanduser("~")
+    out: list[str | None] = [t["path"] for t in walk(cmd, cwd, home, home)["targets"]]
+    if _PROGRAM_ON_STDIN.search(cmd):
+        out.append(None)
+    return out
 
 
 def plan(

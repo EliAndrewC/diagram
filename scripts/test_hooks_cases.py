@@ -145,6 +145,16 @@ HOUSE_STYLE = [
     ("a memory read beside a project write", cmd("grep -c x /home/agent/.claude/projects/-diagram/memory/MEMORY.md; cat > docs/x.md <<'EOF'\nthe colour of it\nEOF"),
      "rewritten:grep -c x /home/agent/.claude/projects/-diagram/memory/MEMORY.md; cat > docs/x.md <<'EOF'\nthe color of it\nEOF"),
     ("a scratchpad write", cmd("cat > /tmp/claude-1000/x/notes.md <<'EOF'\nthe colour of it\nEOF"), "ok"),
+    # ...and the WRITE TARGET is read the way `_hm_tree` reads one for the main-tree guard, because a
+    # scanner of the raw text got four shapes of the record wrong at once (amendment round 2, measured
+    # over the window: 7 outside-the-project writes newly corrected, 4 project writes newly silenced).
+    ("a memory write behind a variable", cmd("M=/home/agent/.claude/projects/-diagram/memory/MEMORY.md; cat >> $M <<'EOF'\n- [A](b.md) — the colour\nEOF"), "ok"),
+    ("a memory directory behind a variable", cmd("M=/home/agent/.claude/projects/-diagram/memory; cat > $M/project_x.md <<'EOF'\nthe colour of it\nEOF"), "ok"),
+    ("a scratchpad heredoc whose body carries a quote line", cmd("cat > /tmp/claude-1000/x/b.md <<'EOF'\n> the colour, quoted from the page\nEOF"), "ok"),
+    ("a program writing project content beside a /tmp log", cmd("python3 - <<'PY' > /tmp/gate.log\np.write_text(\"the centre of it\")\nPY"),
+     "rewritten:python3 - <<'PY' > /tmp/gate.log\np.write_text(\"the center of it\")\nPY"),
+    ("a commit message beside a /tmp log", cmd("git commit -m 'the centre of it' && make test-full > /tmp/g.log"),
+     "rewritten:git commit -m 'the center of it' && make test-full > /tmp/g.log"),
     # ...and the two shapes that must stay quiet, or the guard fires on correct work
     ("searching for the word", cmd('git grep -n "centre" -- docs/'), "ok"),
     ("a code span NAMING the word", cmd("echo 'the token `colour` is British' >> docs/a.md"), "ok"),

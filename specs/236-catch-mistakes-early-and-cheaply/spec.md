@@ -90,10 +90,13 @@ for is not what it writes, and correcting it breaks the command instead of the t
 
 **FR-007c** A path outside the project carries no house-style duty: `/tmp`, already exempt, and the
 session state directory `~/.claude/projects/`, whose auto-memory index format is Claude Code's own and
-uses an em-dash (D10). The exemption MUST be decided by where the write LANDS - the command's redirect
-and `tee` targets, falling back to every path it names when it redirects nowhere - and NOT by any path
-the command merely mentions: a command that reads the memory file and writes a project file names one
-of each, and a heredoc writing the memory index names relative files in its own body.
+uses an em-dash (D10). The exemption MUST be decided by where the write LANDS, and the write targets
+MUST be read by the walk the main-tree guard already uses (`_hm_tree.walk`) rather than by a second
+one: variables assigned in the same command are expanded, heredoc BODIES are not scanned for
+redirects, and `git commit` writes to the repository rather than to a file. A destination that cannot
+be known is NEVER outside - which covers the interpreter reading its program from a heredoc, since a
+`write_text` into the pool can sit beside a `> /tmp/gate.log` redirect. A path the command merely
+MENTIONS decides nothing: reading the memory file while writing a project file names one of each.
 
 **FR-007a** "Outside a quoted span" means the house-style sense - a prose quotation (`「」`, curly or
 straight quotes, `<q>`, `<blockquote>`) or a backtick span naming a token - and NOT shell quoting: under a
@@ -208,9 +211,12 @@ supplied through `--trailer` is refused; so is one in a file given to `-F`.
 an `echo >>` with it likewise; `sed -i 's/centre/center/g'`, a Python replacement pair and any command
 carrying both spellings are reported and left exactly as typed; a sweep's own word list, a regex
 alternation, a path token, a negated search, a prose quotation, a backtick span and
-`git grep -n "centre"` are untouched; a write to the auto-memory index under `~/.claude/projects/` is
-untouched, while a command that READS that file and writes a project file in the same breath is
-corrected.
+`git grep -n "centre"` are untouched. A write to the auto-memory index under `~/.claude/projects/` is
+untouched IN THE SHAPES THE RECORD USES - the path literal, the path behind a variable assigned in the
+same command, a directory behind such a variable - and so is a `/tmp` heredoc whose body carries a
+line beginning `>`; while a command that writes project content is corrected even when a redirect goes
+outside: reading the memory file and writing a project file in one breath, a `write_text` in a program
+heredoc beside a `> /tmp/gate.log`, and a commit message beside one.
 **SC-007** (FR-008, FR-008a, FR-008b, FR-008c) The phase fails on a British spelling in a changed line and
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
 the delta; does not fail on a line merely moved; does not fail on the 192 ledgered lines; and runs on a
@@ -294,9 +300,9 @@ GM named `sed`. A Python sweep's `t.replace("the centre of", "the center of")`, 
 and its replacement, and an `awk` substitution are the same command doing the same thing, and the
 GM's own reason - a correction would replace a word with itself and the fix would do nothing - applies
 to each without modification. The rule implemented is therefore: the sed shape, plus any command
-carrying BOTH spellings of one word. Measured: of the 55 commands the shipped rule reports, 9 carry a
-`sed` segment and 44 carry both spellings with no `sed` anywhere (`research.md` R10), so the literal
-reading would hand those 44 to the corrector - about half of them replacement pairs whose fix would
+carrying BOTH spellings of one word. Measured: of the 59 commands the shipped rule reports, 9 carry a
+`sed` segment and 48 carry both spellings with no `sed` anywhere (`research.md` R10), so the literal
+reading would hand those 48 to the corrector - about half of them replacement pairs whose fix would
 silently become a no-op. The predicate knows the SHAPE, not the intent: the other half are quotations,
 searches and prose naming both spellings, which are reported rather than corrected, and a real
 violation among them still fails `make quick` in the delta. This is a widening of what the GM said,
@@ -321,6 +327,25 @@ found by the amendment review, and now decided by the write targets (FR-007c).
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment 2, round 2** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, three items, all
+taken; four of round 1's seven confirmed resolved against re-run measurements (the reviewer's own
+replay reproduced R10's window, its dash count exactly, and the withdrawn 2.2 s), and the reviewer
+found round 1's fix for the exemption had introduced a worse defect than the one it fixed. Reading
+write targets out of the raw command text got four shapes of the record wrong at once, measured over
+the whole window: 7 writes outside the project newly CORRECTED - including the auto-memory in this
+project's own `M=<path>; cat >> $M` form, and a scratchpad heredoc whose body carries a line opening
+`>` - and 4 project writes newly SILENCED, where a `write_text` into the pool or a commit message sat
+beside a `> /tmp/....log` redirect. The fix is to stop deriving a second walk: `_hm_tree.walk` already
+expands a command's own variable assignments, strips heredoc bodies and knows `git commit` writes to
+the repository, and a destination it cannot resolve is never outside. Re-measured the way the reviewer
+set it: 47 verdicts change against the pre-fix hook and none is wrong in either direction. The other
+two items: SC-006 named the literal path where the record uses four shapes, and each is a case now;
+and the split of the reported commands was restated from the shipped hook (9 with a sed segment, 48
+both spellings alone, 2 the GM's `request.md`). One more defect fell out of the work rather than the
+review: `_outside(None)` raised, and the wrapper turns a crash into SILENCE, so the guard was off for
+every command whose target could not be resolved - the suite caught it, and the rule it violated was
+one this amendment had already written down.
 
 **Amendment 2, round 1** (`spec-fidelity`, MODE 3 VERIFY; the counter reset to zero for a
 post-acceptance amendment): **CHANGES REQUIRED**, seven items, all taken, and both exceptions judged

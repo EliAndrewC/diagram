@@ -102,10 +102,18 @@ if "/host-l7r-repo" in path or path.endswith("l7r.md") or "gm-request.md" in pat
 # payload names several at once, and testing the joined list silenced the rule on a command that read
 # the memory file and wrote a project file in the same breath (found by the amendment review).
 def _outside(one):
-    return one.startswith("/tmp/") or "/.claude/projects/" in one
+    # GUARD_EDIT_OK: a write whose destination cannot be known is NEVER outside - an unknown target
+    # arrives as None and must not exempt anything. It also must not raise: the wrapper turns a crash
+    # into silence, so a guard that throws is a guard that is off.
+    return bool(one) and (one.startswith("/tmp/") or "/.claude/projects/" in one)
 # GUARD_EDIT_OK: what the command WRITES decides it; the paths it merely MENTIONS are the fallback,
 # for a write that travels by no redirect at all (a `python3 -` heredoc calling write_text).
-_judged = (write_targets(inp.get("command", "") or "") if is_bash else []) or [p for p in path.split() if p]
+# GUARD_EDIT_OK: the cwd of the shell resolves a relative write target, so the exemption is judged on
+# where the write really lands rather than on whether the path happens to be absolute. (No apostrophe
+# in this comment: the scan is a single-quoted program, and one apostrophe ends it - the trap this
+# file already carries a note about, met again.)
+_judged = (write_targets(inp.get("command", "") or "", d.get("cwd") or None) if is_bash
+           else []) or [p for p in path.split() if p]
 if _judged and all(_outside(p) for p in _judged):
     print(""); raise SystemExit
 # GUARD_EDIT_OK: feature 236 - A FIXTURE IS A VERBATIM RECORD. `scripts/fixtures/` holds corpora of

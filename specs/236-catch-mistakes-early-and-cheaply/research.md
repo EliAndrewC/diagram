@@ -268,29 +268,33 @@ literally, they were corrected to hyphens by this very hook as the file was save
 prefilter match any command containing a spaced hyphen - an order of magnitude more commands, none of
 which it could act on. The word table is read out of the hook for the same reason.
 
-**The window.** 545 unique commands carried a British spelling or a forbidden dash: 344 a spelling,
-201 a dash alone.
+**The window** (as of 2026-09-13T01:36; it grows as sessions run, so a re-run will not reproduce these
+to the command). 551 unique commands carried a British spelling or a forbidden dash: 351 a spelling,
+200 a dash alone.
 
 | the hook's verdict | commands |
 |---|---|
-| corrected | 205 |
-| reported, left as typed | 55 |
-| silent - every hit is a word the command only NAMES, or the write lands outside the project | 285 |
+| corrected | 194 |
+| reported, left as typed | 59 |
+| silent - every hit is a word the command only NAMES, or the write lands outside the project | 298 |
 
-**What is reported rather than corrected, and what the rule actually knows.** Of the 55: **9** carry a
-`sed` segment - the shape the GM named - and **44** carry both spellings of one word with no `sed` in
-sight; 2 are writes of the GM's own verbatim `request.md`, which is reported by a rule older than this
-amendment. The implemented predicate is therefore "the sed shape, or both spellings of one word" (spec
-D9), and it is worth being exact about what that predicate can and cannot see: **it recognizes the
-SHAPE of a replacement pair, not the intent.** An independent replay in the amendment review found
-that about half of the both-carrying commands are replacement pairs; the rest are quotations of source
-text, searches, and prose that names both spellings - including, occasionally, a real violation, which
-is then reported rather than corrected and still fails `make quick` if it reaches the delta. The
-hook's message says which rule fired rather than asserting the command is a fix. Two other disclosed
-costs: `sed` used to READ (`sed -n '104p' CLAUDE.md`) is reported, because the rule is the command the
-GM named rather than a judgment about what that command does; and a narrower predicate - both
-spellings within one statement - would keep every measured replacement pair, but it would miss a
-Python sweep whose `old` and `new` are separate multi-line strings, so the wider one is kept.
+**What is reported rather than corrected, and what the rule actually knows.** Of the 59: **9** carry a
+`sed` segment - the shape the GM named - **48** carry both spellings of one word with no `sed` anywhere,
+and 2 are writes of the GM's own verbatim `request.md`, reported by a rule older than this amendment.
+Every one of the 9 carries both spellings as well, so the sed rule alone reports nothing in this
+window that the wider rule would not: the sed shape is the case the GM SAW, and the 48 are the same
+thing written in Python, in an `_patch.py` anchor pair, in a table of pairs.
+
+It is worth being exact about what the predicate can and cannot see: **it recognizes the SHAPE of a
+replacement pair, not the intent.** An independent replay in the amendment review found about half of
+the both-carrying commands to be replacement pairs; the rest are quotations of source text, searches,
+and prose that names both spellings - including, occasionally, a real violation, which is then
+reported rather than corrected and still fails `make quick` if it reaches the delta. The hook's
+message says which rule fired rather than asserting the command is a fix. Two other disclosed costs:
+`sed` used to READ (`sed -n '104p' CLAUDE.md`) is reported, because the rule is the command the GM
+named rather than a judgment about what that command does; and a narrower predicate - both spellings
+within one statement - would keep every measured replacement pair, but it would miss a Python sweep
+whose `old` and `new` are separate multi-line strings, so the wider one is kept.
 
 **Three classes the first draft would have broken, each found by reading the replay rather than by
 reasoning about it.**
@@ -308,7 +312,7 @@ reasoning about it.**
   file in one breath, and the first fix for that silenced nothing but corrected the memory write
   itself, because a heredoc writing the index names relative files in its own body.
 
-**What the hook costs, measured on the same 545 commands**: median **0.086 s**, p95 0.278 s, almost
+**What the hook costs, measured over the same 551 commands**: median **0.072 s**, p95 0.271 s, almost
 all of it Python startup. The range walk inside it was rewritten from a scan quadratic in held ranges
 to a linear one, and the honest figure for that rewrite is: **nothing measurable on real commands**
 (0.33 s against 0.31 s over the 60 longest commands the hook acts on) and 0.085 s against 0.035 s on
@@ -316,3 +320,15 @@ a synthetic command built to be dense in held ranges. The rewrite is kept becaus
 algorithm and its selftest pins it, NOT as a measured saving; the 2.2 s per command that prompted it
 was replay throughput while the container was running several test suites at once, which is a
 measurement of the container rather than of the walk.
+
+**The exemption was re-measured against the whole window rather than against its two cases.** Reading
+write targets out of the raw command text - the first fix for the round-1 finding - changed 11
+verdicts for the worse, and nothing in the suite saw it: 7 writes outside the project were newly
+corrected (6 into the auto-memory, 1 into a scratchpad, every one of them the `M=<path>; cat >> $M`
+shape or a heredoc body carrying a line that opens with `>`), and 4 project writes were newly silenced
+(a `write_text` into the pool and two commit messages, each beside a `> /tmp/....log` redirect). With
+the targets read by `_hm_tree.walk` instead, the same replay of the pre-fix hook against the shipped
+one changes **47** verdicts and **none of them is wrong in either direction**: 0 outside-the-project
+writes newly acted on, 0 project writes newly silenced. That comparison is the check to re-run if this
+exemption is ever touched again - a case file agreeing with the check that wrote it is this
+repository's own recorded failure mode.
