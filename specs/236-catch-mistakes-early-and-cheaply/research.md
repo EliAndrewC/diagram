@@ -253,3 +253,87 @@ this feature's own work named 43 hits, every one of them inside the frozen comma
 those 238 commands were house-style sweeps, so they carry the words by necessity. A fixture is a
 verbatim record: correcting one would falsify it and break the measurement it reproduces. So
 `scripts/fixtures/` is exempt in the check AND in the hook (spec D8).
+
+## R10 - what correcting a Bash payload would rewrite (measured 2026-09-13)
+
+The GM ruled that the hook should correct a Bash payload and warn only on the sed shape (`request.md`,
+2026-09-13). A command is not an edit, so the ruling was priced before it was built:
+`measure_bash_corrections.py` replays every unique Bash command in the last fourteen days of
+transcripts - the session's own and its subagents' - through this hook. The script is committed and
+re-runnable; `scripts/_hm_house.py` carries the rules it produced, each with a case in
+`scripts/test_hooks_cases.py`.
+
+**The prefilter writes its dashes by codepoint, and that is a finding rather than a detail.** Written
+literally, they were corrected to hyphens by this very hook as the file was saved, which made the
+prefilter match any command containing a spaced hyphen - an order of magnitude more commands, none of
+which it could act on. The word table is read out of the hook for the same reason.
+
+**The window** (as of 2026-09-13T02:16; it is a trailing fourteen days, so it sheds as well as grows
+and a re-run will not reproduce these to the command). 552 unique commands carried a British spelling
+or a forbidden dash: 352 a spelling, 200 a dash alone.
+
+| the hook's verdict | commands |
+|---|---|
+| corrected | 181 |
+| reported, left as typed | 53 |
+| silent - every hit is a word the command only NAMES, or the write lands outside the project | 318 |
+
+**What is reported rather than corrected, and what the rule actually knows.** Of the 53: **9** carry a
+`sed` segment - the shape the GM named - **42** carry both spellings of one word with no `sed`
+anywhere, and 2 are writes of the GM's own verbatim `request.md`, reported by a rule older than this
+amendment. The 42 are the same thing written in Python, in an `_patch.py` anchor pair, in a table of
+pairs.
+
+It is worth being exact about what the predicate can and cannot see: **it recognizes the SHAPE of a
+replacement pair, not the intent.** An independent replay in the amendment review found about half of
+the both-carrying commands to be replacement pairs; the rest are quotations of source text, searches,
+and prose that names both spellings - including, occasionally, a real violation, which is then
+reported rather than corrected and still fails `make quick` if it reaches the delta. The hook's
+message says which rule fired rather than asserting the command is a fix. Two other disclosed costs:
+`sed` used to READ (`sed -n '104p' CLAUDE.md`) is reported, because the rule is the command the GM
+named rather than a judgment about what that command does; and a narrower predicate - both spellings
+within one statement - would keep every measured replacement pair, but it would miss a Python sweep
+whose `old` and `new` are separate multi-line strings, so the wider one is kept.
+
+**Three classes the first draft would have broken, each found by reading the replay rather than by
+reasoning about it.**
+
+- **A sweep's own word list.** A set of quoted spellings in a Python heredoc is the tool that FINDS
+  violations; correcting it leaves a list of American spellings that matches nothing. A string whose
+  whole content is one word is now a mention, exactly as a backtick span is in prose.
+- **A search the segment-dropper did not recognize.** `! grep -qiE '<words>'` (the negation stands
+  where the command should be), a searcher inside `$(...)`, a regex alternation in any language, and
+  a dash inside a character class or a `$'...'` string. FR-007a's rule reaching the shapes it missed.
+- **The session state directory.** Writes to `~/.claude/projects/<project>/memory/` were being
+  corrected, and that index's own line format carries an em-dash. Outside the project, as `/tmp`
+  already was (spec D10) - and judged by the command's WRITE TARGETS: judged by every path a command
+  mentions, the exemption silenced the rule on a command that read the memory file and wrote a project
+  file in one breath, and the first fix for that silenced nothing but corrected the memory write
+  itself, because a heredoc writing the index names relative files in its own body.
+
+**What the hook costs, measured over the same 552 commands**: median **0.067 s**, p95 0.266 s, almost
+all of it Python startup. The range walk inside it was rewritten from a scan quadratic in held ranges
+to a linear one, and the honest figure for that rewrite is: **nothing measurable on real commands**
+(0.33 s against 0.31 s over the 60 longest commands the hook acts on) and 0.085 s against 0.035 s on
+a synthetic command built to be dense in held ranges. The rewrite is kept because it is the better
+algorithm and its selftest pins it, NOT as a measured saving; the 2.2 s per command that prompted it
+was replay throughput while the container was running several test suites at once, which is a
+measurement of the container rather than of the walk.
+
+**The exemption is measured against the whole window, never against its own cases.** Two drafts of it
+were wrong and both passed their tests. Reading write targets out of the raw command text changed 11
+verdicts for the worse - 7 writes outside the project newly corrected (the `M=<path>; cat >> $M` shape,
+and a heredoc body carrying a line that opens with `>`) and 4 project writes newly silenced (a
+`write_text` into the pool, two commit messages, each beside a `> /tmp/....log`). Appending an
+unknowable destination for every program heredoc then acted on **21** commands whose every resolvable
+target was outside - 15 corrected and 6 reported - **7** of them the auto-memory index, which is the
+harm D10 exists to prevent (measured by replaying that draft, the hook at `31ef2907^`, against the
+shipped one over this window; the first figure came from a round that judged by the hook's own target
+list and did not reproduce). With the targets read by `_hm_tree.walk` and D11's
+ruling in place, the same replay against the pre-exemption hook changes **52** verdicts and none is
+wrong in either direction: **0** outside-the-project writes newly acted on, **0** project writes newly
+silenced. What D11 leaves is an upper bound rather than a defect: **27** commands in the window are
+exempt while carrying a program heredoc that could in principle write anywhere, **8** of them writing
+the auto-memory (where the exemption is certainly right). That replay is the check to re-run if this
+exemption is ever touched again - a case file agreeing with the check that wrote it is this
+repository's own recorded failure mode.
