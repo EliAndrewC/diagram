@@ -189,7 +189,7 @@ Measured as cumulative RSS in one process (`scratchpad/libs.py`, `eng.py`), whic
 | bare interpreter | 9.4 | - |
 | `pytest` | 16.1 | third party |
 | `coverage` + `pytest-cov` | 9.9 | third party |
-| **`shapely`** (which pulls `numpy`) | **16.3** | third party, via 8 of our files |
+| **`shapely`** (which pulls `numpy`) | **16.3** | third party, via 9 of our files - 7 engine, 2 test |
 | `PIL` | 2.3 | third party, via 2 tools |
 | our 182 engine modules | 10.4 | ours |
 | our ~230 test modules | ~17-20 | ours, 13 of it R6's three items |
@@ -212,10 +212,13 @@ MiB, and `tools/page_lit.py` and `tools/picture_diff.py` import it at module lev
 `tests/tools` holds numpy regardless of what the geometry modules do. The MARGINAL shapely-only saving
 is therefore smaller than 16.3 and is measured rather than asserted (the spec's FR-009). Deferring
 numpy in those two tools is a further lever, recorded here and not taken: the GM approved the shapely
-accessor. A
-collection imports the module, so today all ten workers pay it whether or not they run a geometry test.
-Deferring those imports into the functions that use them would move the cost to the workers that
-execute that code - but every one of those sites is on a per-plot or per-seam path, so a naive `import`
-inside a hot function adds an `__import__` call per invocation. That is why it is NOT an FR here: it is
-reported to the GM with its number and its risk, and if it is taken it needs a single lazy accessor per
-module rather than an import statement in a loop, with the perf bookend as its acceptance condition.
+accessor.
+
+A collection imports the module, so before this feature all ten workers paid shapely whether or not they
+ran a geometry test. Deferring the import moves that cost to the workers that execute the code, and the
+FORM matters: every one of the seven engine sites is on a per-plot or per-seam path, so an `import`
+statement inside one of those functions would re-enter `__import__` on every invocation and pay the
+memory back in time. So the deferral is ONE module-level lazy accessor per module, resolved once and a
+local lookup afterwards (the spec's FR-010 and D6), with the perf bookend as its acceptance: the local
+band-1 line is 0.0%, and for this item an increase is not waiverable - the offending site goes back to a
+module-level import.

@@ -15,11 +15,30 @@ shapely tests that follow still decide - so the passes' verdicts, and the map, a
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from shapely import STRtree, box
-from shapely.geometry import Polygon
-from shapely.geometry.base import BaseGeometry
+if TYPE_CHECKING:  # the names for the type checker; the runtime ones are bound by `_load_shapely`
+    from shapely import STRtree, box
+    from shapely.geometry import Polygon
+    from shapely.geometry.base import BaseGeometry
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB - it pulls numpy with it - and a module-level import here made every
+    one of the ten gate workers pay that to COLLECT this package, whoever ran the geometry
+    (`specs/237-lean-test-collection/research.md` R9). Only the worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THAT USE IT. `geom()` and `near()` are called per plot and per
+    query, and an `import` statement re-enters `__import__` on every call. Binding the real names into the
+    module's globals once means every call site afterwards is the plain global lookup it was before, so the
+    deferral costs nothing in steady state (spec D6). Called from the constructors: neither class can be
+    used without one.
+    """
+    global STRtree, box, Polygon  # binding the module-level names is the point
+    from shapely import STRtree, box
+    from shapely.geometry import Polygon
 
 
 def _vertex_box(ring: Any) -> tuple[float, float, float, float]:
@@ -34,6 +53,7 @@ class PlotGeoms:
     __slots__ = ("_geom", "_ring", "_tree", "_tree_ids", "_tree_rings", "plots")
 
     def __init__(self, plots: list[dict[str, Any]]) -> None:
+        _load_shapely()
         self.plots = plots
         self._geom: dict[int, BaseGeometry] = {}
         self._ring: dict[int, Any] = {}
@@ -80,6 +100,7 @@ class GeomTree:
     __slots__ = ("_n", "_tree", "changed", "geoms")
 
     def __init__(self, geoms: list[Polygon]) -> None:
+        _load_shapely()
         self.geoms = geoms
         self._tree: STRtree | None = None
         self._n = -1

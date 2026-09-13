@@ -1,12 +1,15 @@
 """Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index."""
 
+from __future__ import annotations
+
 import math
 import random
 from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from shapely.geometry import Polygon
-from shapely.ops import unary_union
+if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
 
 from ..banks import (
     _GATE_MIN_APEX,
@@ -30,6 +33,31 @@ from .geoms import GeomTree
 from .plots import _plant, _unjog
 from .pockets import MIN_PLOT_SIDE, _absorb, _despike, _outside_command, _parts, _ring, _water
 
+_SHAPELY_LOADED = False
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
+    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
+    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
+    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
+    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
+    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
+    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
+    """
+    global _SHAPELY_LOADED, Polygon, unary_union  # binding this module's own names is the point
+    if _SHAPELY_LOADED:
+        return
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+
+    _SHAPELY_LOADED = True
+
+
 # past that the 'repair' is moving more ground than the step it retires, which is a land grab wearing a
 # repair's clothes. Feature 152 T18; the lever itself was recorded untried in future-work/farming-communities.md.
 
@@ -50,6 +78,7 @@ def close_seams(
     """Plant or absorb every scrap of bare ground the carve left inside the command area, so that
     each basin's bund is shared with whatever lies on the other side of it. Mutates `plots` in
     place: absorbed neighbors get a new `poly`, planted pockets are appended."""
+    _load_shapely()
     if not plots or len(envelope) < 3:
         return
     half = MIN_PLOT_SIDE * g / 2
@@ -262,6 +291,7 @@ def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -
     """Node every self-crossing ring into its largest valid part, and drop what cannot be rescued.
     `rounded`: judge and repair the ring as the manifest will record it (0.1 px), which is where a
     needle that is open unrounded closes on itself."""
+    _load_shapely()
     for _p in plots:
         ring = [(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]
         if len(ring) < 3 or Polygon(ring).is_valid:

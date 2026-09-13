@@ -40,10 +40,15 @@ import, not data (R6).
   SUPERSET of the modules `keep_set` will keep, by construction, and that property is tested rather
   than asserted in prose.
 - **FR-002 An incremental gate is given those paths as positional arguments**, and an EMPTY list collects nothing rather than everything. `make test-full` passes the derived list where it passes the trees today; a full run passes the trees exactly as now. Nothing else about the invocation changes - same worker count, same `--dist`, same ignores. The empty case is the one that matters most and is the easiest to get backwards: `plan()` returns an INCREMENTAL plan with no affected tests, fixtures or modules when nothing the baseline exercised has changed, so a fallback to the trees there would pay the whole 922 MiB collection (R3) in order to run nothing. The arguments in that case name a path that holds no tests, so the selection plugin still records its result, the existing empty-selection-is-green branch still fires, and the merge and the floors still run.
-- **FR-003 Deselection remains the authority on what runs.** The arguments restrict what is IMPORTED;
-  `keep_set` still decides which collected tests execute, unchanged. Two layers on purpose: if they
-  ever disagree the deselection wins, and because FR-001's set is a superset the disagreement can only
-  be in the safe direction.
+- **FR-003 Deselection remains the authority on what runs, and the FULL-RUN decision moves to the
+  planner.** The arguments restrict what is IMPORTED; `keep_set` still decides which collected tests
+  execute, unchanged. Two layers on purpose: if they ever disagree the deselection wins, and because
+  FR-001's set is a superset the disagreement can only be in the safe direction. What does NOT survive is
+  the post-collection flip: `selection.py` used to turn a run FULL when the selection came out over
+  `FULL_FRACTION`, and a process whose arguments were already narrowed cannot make that choice - a run
+  labeled full that collected a subset would skip the merge and judge the 100% floor over that subset
+  alone. So the planner makes it, before the arguments are chosen, by projecting the same four rules over
+  the baseline (D8).
 - **FR-004 The baseline is written only by a run that collected everything.** `selection.py` writes
   `tests.json.next` only when the run was not restricted; a restricted run leaves the previous
   `tests.json` in place, which `save_baseline` already does when the file is absent. Without this the
@@ -136,7 +141,7 @@ import, not data (R6).
 - **D5 - the worker count stays at ten** (FR-008), the GM's explicit instruction, against a measured
   trade of 1.14 GiB at eight workers and 45.2 s versus 1.39 GiB at ten and 40.3 s.
 - **D6 - one accessor per module, never an `import` in a hot function** (FR-010). Both forms defer the
-  cost; only one of them is free afterward. Every one of the eight sites is called per plot or per seam,
+  cost; only one of them is free afterward. Every one of the seven sites is called per plot or per seam,
   and an `import` statement re-enters `__import__` on each call, so the lever that saves 16 MiB would
   have been paid back in a slower gate and slower maps. The accessor resolves once and is a local lookup
   from then on.
@@ -145,3 +150,16 @@ import, not data (R6).
   apart: a path restriction that does not defer the import-time work still pays R6's 13 MiB, and
   deferring imports without restricting the paths still collects everything. The GM asked for them
   together.
+- **D8 - the fraction is decided before collection, not after it** (FR-003; AMENDED 2026-09-13, mid
+  implementation, on a review counter reset to zero by the GM's own ruling). This was not in the spec the
+  review accepted, and the code is what found it: the first implementation kept `selection.py`'s flip and
+  simply refused it on a restricted run, which left the knob dead on the only plan that could ever reach
+  it, and two existing tests went red saying so. The flip's purpose - "most of the suite is selected
+  anyway, so run everything and record a fresh baseline" - requires collecting everything, which is
+  precisely what the arguments have already foreclosed by then. So `incremental.over_the_fraction`
+  projects `keep_set`'s rules over the BASELINE and the planner returns a full plan (no paths) when the
+  projection is over the line. What this costs, stated rather than discovered later: the projection cannot
+  see tests that do not exist yet, so it UNDERCOUNTS by the new ones - which live in changed modules and
+  are few - and a plan near the line therefore runs incrementally instead of fully. That is the safe
+  direction: an incremental run merges over the baseline, a full run replaces it.
+

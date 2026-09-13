@@ -1525,11 +1525,18 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	: " disables a line's event after its first hit, which loses contexts, and the plugin re-arms the events at every context"; \
 	: " switch (selection.switch); the C tracer, pinned first, cost a full run 2.4x (spec D8, research R5/R6, 2026-09-07)."; \
 	$(if $(COV_FLOORS),python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
+	: "GUARD_EDIT_OK: feature 237 - COLLECT ONLY WHAT THIS RUN CAN REACH. An incremental plan names the test modules it" ; \
+	: " can reach and they become pytest's positional arguments, because arguments restrict the walk BEFORE import while" ; \
+	: " -k, -m and --deselect filter after it - every worker collected the whole tree to deselect most of it, at 92 MiB a" ; \
+	: " worker (specs/237 research R3). It is a SHELL variable and not a make one on purpose: this whole recipe is one" ; \
+	: " line, so a make-time expansion would run before the plan above exists. Empty means a FULL run, which keeps the" ; \
+	: " trees; an incremental plan that reaches nothing prints a path holding no tests, never the trees." ; \
+	$(if $(COV_FLOORS),paths=$$(python3 -m l7r.diagram.ci incremental paths 2>/dev/null);,) \
 	: "GUARD_EDIT_OK: feature 213 - a fresh census per run; the verdict reads it after the merge below" ; \
 	$(if $(COV_FLOORS),rm -f "$(ROLL_CENSUS)" "$(ROLL_CENSUS).renders";,) \
 	: "GUARD_EDIT_OK: feature 206 - the browser package is left out while its stamp is fresh (BROWSER_SKIP, defined with its why)"; \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
-	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT); fi; ec=$$?; \
+	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \

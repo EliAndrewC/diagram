@@ -274,27 +274,31 @@ def test_modifyitems_deselects_per_the_plan_and_writes_the_result_from_the_write
     assert [it.nodeid for it in items] == ["t/test_a.py::hit"] and cfg.deselected == [["t/test_a.py::cold"]]
     result = json.loads((tmp_path / incremental.RESULT).read_text(encoding="utf-8"))
     assert result["mode"] == "incremental" and result["selected"] == ["t/test_a.py::hit"] and result["collected"] == ["t/test_a.py::hit", "t/test_a.py::cold"]
-    nxt = json.loads((tmp_path / (incremental.TESTS + ".next")).read_text(encoding="utf-8"))
-    assert nxt == {"t/test_a.py::hit": ["tmp_path"], "t/test_a.py::cold": []}, "the deselected item is remembered too"
+    # feature 237, FR-004: an incremental plan narrowed pytest's own arguments, so this process saw a SUBSET
+    # of the tree and may not offer the next baseline. Promoting a partial `tests.json` would make the
+    # following plan treat every module this run never collected as new and select all of it.
+    assert not (tmp_path / (incremental.TESTS + ".next")).exists(), "a restricted run must not write the baseline"
+    assert not (tmp_path / (incremental.GRAPH + ".next")).exists()
 
 
-def test_modifyitems_over_the_fraction_runs_everything_and_a_worker_other_than_gw0_writes_nothing(tmp_path: Path) -> None:
-    pl = {
-        "mode": "incremental",
-        "reason": "many",
-        "affected_tests": ["t::a", "t::b"],
-        "affected_fixtures": [],
-        "changed_test_modules": [],
-        "baseline_tests": ["t::a", "t::b", "t::c"],
-        "full_fraction": 0.5,
-    }
-    items = [_Item("t::a"), _Item("t::b"), _Item("t::c")]
-    plugin = selection.GateSelection(tmp_path, pl, {})
+def test_only_gw0_writes_the_result_and_a_full_plan_writes_the_next_baseline(tmp_path: Path) -> None:
+    """The writer rule, and FR-004's other side: a FULL plan collected everything, so it may offer a baseline.
+
+    This test used to prove the post-collection FRACTION FLIP as well - a selection over `full_fraction`
+    became a FULL run here. Feature 237 moved that decision into the planner
+    (`incremental.over_the_fraction`), because the gate now chooses pytest's arguments from the plan and a
+    process whose arguments were narrowed cannot decide to run everything; the planner's own test below
+    proves it.
+    """
+    items = [_Item("t::a"), _Item("t::b", ("rolled",))]
+    plugin = selection.GateSelection(tmp_path, {"mode": "full", "reason": "no baseline"}, {})
     plugin.pytest_collection_modifyitems(_Session(), _Config(None, worker="gw3"), items)  # type: ignore[arg-type]
-    assert len(items) == 3 and not (tmp_path / incremental.RESULT).exists(), "gw3 is not the writer"
+    assert len(items) == 2 and not (tmp_path / incremental.RESULT).exists(), "gw3 is not the writer"
     plugin.pytest_collection_modifyitems(_Session(), _Config(None, worker="gw0"), items)  # type: ignore[arg-type]
     result = json.loads((tmp_path / incremental.RESULT).read_text(encoding="utf-8"))
-    assert result["mode"] == "full" and "fraction" in result["reason"] and len(result["selected"]) == 3
+    assert result["mode"] == "full" and len(result["selected"]) == 2
+    assert json.loads((tmp_path / (incremental.TESTS + ".next")).read_text(encoding="utf-8")) == {"t::a": [], "t::b": ["rolled"]}
+    assert (tmp_path / (incremental.GRAPH + ".next")).exists(), "the graph is offered beside the closures (FR-005)"
 
 
 def test_an_empty_selection_turns_no_tests_ran_into_a_green_run(tmp_path: Path) -> None:
@@ -353,7 +357,11 @@ def test_the_shim_delegates_only_under_the_env(monkeypatch: pytest.MonkeyPatch, 
     gate_plugin.pytest_configure(cfg)
     s = _Session()
     gate_plugin.pytest_collection_modifyitems(s, cfg, [_Item("t::a")])
-    assert len(cfg.registered) == 1 and [it.nodeid for it in s._l7r_all_items] == ["t::a"]  # type: ignore[attr-defined]
+    # feature 237: what is remembered is the two DERIVED maps, never the items themselves - a pinned `Item`
+    # cannot be reclaimed after deselection, on any of the ten workers.
+    assert len(cfg.registered) == 1 and list(s._l7r_closures) == ["t::a"]  # type: ignore[attr-defined]
+    assert not hasattr(s, "_l7r_all_items"), "the items must not be pinned"
+    assert isinstance(s._l7r_graph, dict)  # type: ignore[attr-defined]
 
 
 # ---- the planner's remaining branches ------------------------------------------------------------------------------
@@ -429,3 +437,79 @@ def test_a_roster_change_plans_a_full_run(tmp_path: Path, monkeypatch: pytest.Mo
     monkeypatch.setattr(incremental, "manifest", lambda root: {**before, "tests": {**before["tests"], roster: "2"}})
     pl = incremental.plan(tmp_path)
     assert pl.mode == "full" and roster in pl.reason, pl
+
+
+# ---- feature 237: collect only what the run can reach --------------------------------------------------------------
+
+
+def test_reachable_modules_is_keep_sets_four_rules_projected_onto_modules() -> None:
+    """A SUPERSET of the modules `keep_set` keeps, or a test that should run is never collected."""
+    closures = {"t/test_a.py::one": ["rolled"], "t/test_b.py::two": ["tmp_path"], "t/test_c.py::three": []}
+    assert incremental.reachable_modules(["t/test_a.py::one"], [], [], closures) == ["t/test_a.py"]
+    assert incremental.reachable_modules([], ["t/test_new.py"], [], closures) == ["t/test_new.py"]
+    # a fixture's module comes in even though no test of it was named; `keep_set` reads the DIRECT list, so this does
+    assert incremental.reachable_modules([], [], ["rolled"], closures) == ["t/test_a.py"]
+    assert incremental.reachable_modules(["t/test_c.py::three"], ["t/test_b.py"], ["rolled"], closures) == ["t/test_a.py", "t/test_b.py", "t/test_c.py"]
+    assert incremental.reachable_modules([], [], [], closures) == [], "nothing reached is the empty list, not the tree"
+
+
+def test_reachable_modules_covers_every_module_keep_set_keeps() -> None:
+    """The superset property itself, over a plan with all three rules live at once."""
+    closures = {f"t/test_{k}.py::x": (["rolled"] if k == "d" else []) for k in "abcd"}
+    pl = {
+        "mode": "incremental",
+        "affected_tests": ["t/test_a.py::x"],
+        "affected_fixtures": ["rolled"],
+        "changed_test_modules": ["t/test_b.py"],
+        "baseline_tests": list(closures),
+    }
+    kept = selection.keep_set(pl, list(closures) + ["t/test_b.py::brand_new"], closures)
+    reached = set(incremental.reachable_modules(pl["affected_tests"], pl["changed_test_modules"], pl["affected_fixtures"], closures))
+    assert {n.split("::", 1)[0] for n in kept} <= reached, f"keep_set keeps a module the arguments would not collect: {kept}"
+
+
+def test_a_plan_over_the_fraction_runs_everything_instead_of_narrowing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The decision `selection.py` used to make after collection, made before the arguments are chosen."""
+    closures = {f"t/test_a.py::t{k}": [] for k in range(10)}
+    pl = incremental.Plan("incremental", "r", [], ["t/test_a.py"], [], [], list(closures), incremental.FULL_FRACTION, ["t/test_a.py"])
+    assert incremental.over_the_fraction(pl, closures) == 10, "every baseline test is in the one changed module"
+    two = {k: v for k, v in list(closures.items())[:2]}
+    small = incremental.Plan("incremental", "r", [], ["t/test_b.py"], [], [], list(closures), incremental.FULL_FRACTION, ["t/test_b.py"])
+    assert incremental.over_the_fraction(small, two) == 0, "a changed module no baseline test belongs to reaches nothing"
+
+
+def test_merge_graphs_unions_the_runs_edges_with_the_baselines() -> None:
+    """The marker-deselected and never-collected dependents are exactly what one graph alone is missing."""
+    assert selection.merge_graphs({"a": ["b"]}, {"a": ["c"], "d": ["e"]}) == {"a": ["b", "c"], "d": ["e"]}
+    assert selection.merge_graphs({}, {}) == {}
+    assert selection.merge_graphs({"a": ["b", "b"]}) == {"a": ["b"]}, "deduplicated"
+
+
+def test_main_paths_prints_the_modules_and_a_no_test_path_when_an_incremental_plan_reaches_nothing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    assert incremental.main(["paths"], tmp_path, tmp_path) == 0 and capsys.readouterr().out == "", "no plan: a full run, which keeps the trees"
+    (bdir / incremental.PLAN).write_text(json.dumps({"mode": "full", "reason": "no baseline"}), encoding="utf-8")
+    assert incremental.main(["paths"], tmp_path, tmp_path) == 0 and capsys.readouterr().out == ""
+    (bdir / incremental.PLAN).write_text(json.dumps({"mode": "incremental", "paths": ["tests/a/test_x.py", "tests/b"]}), encoding="utf-8")
+    assert incremental.main(["paths"], tmp_path, tmp_path) == 0 and capsys.readouterr().out.strip() == "tests/a/test_x.py tests/b"
+    (bdir / incremental.PLAN).write_text(json.dumps({"mode": "incremental", "paths": []}), encoding="utf-8")
+    assert incremental.main(["paths"], tmp_path, tmp_path) == 0
+    assert capsys.readouterr().out.strip() == incremental.NO_TESTS, "never the trees: that pays the whole collection to run nothing"
+
+
+def test_save_baseline_promotes_the_fixture_graph_beside_the_closures(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    bdir = tmp_path / "gb"
+    bdir.mkdir()
+    monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
+    monkeypatch.setattr(incremental, "manifest", lambda root: {"engine": {}})
+    (tmp_path / ".coverage").write_text("db", encoding="utf-8")
+    (bdir / (incremental.TESTS + ".next")).write_text(json.dumps({"t::a": []}), encoding="utf-8")
+    (bdir / (incremental.GRAPH + ".next")).write_text(json.dumps({"rolled": ["report"]}), encoding="utf-8")
+    incremental.save_baseline(tmp_path, tmp_path / ".coverage")
+    assert json.loads((bdir / incremental.TESTS).read_text(encoding="utf-8")) == {"t::a": []}
+    assert json.loads((bdir / incremental.GRAPH).read_text(encoding="utf-8")) == {"rolled": ["report"]}
+    assert not (bdir / (incremental.GRAPH + ".next")).exists(), "promoted, not copied"

@@ -1,6 +1,6 @@
 # Feature 237 - tasks
 
-Spec DRAFT; `spec-fidelity` round 1 dispatched before any implementation (constitution XVI). Every
+Spec IN IMPLEMENTATION: `spec-fidelity` round 1 CHANGES REQUIRED (seven findings, all taken), round 2 CHANGES REQUIRED (five stale-text findings, all taken), round 3 dispatched. No engine line was written before round 1 returned (constitution XVI). Every
 task is classified `research: rendering` or `research: physical`. **NOTHING here is physical**: this
 feature is about what a test run loads into memory, not about how a place was built, farmed or lived
 in. Every measurement it rests on is in `research.md` R1 to R9 and was taken before the spec was
@@ -89,8 +89,11 @@ written.
       `tests/tools` regardless (FR-009). Record every
       number in `research.md` whichever way it comes out, including an item that did not pay.
       research: rendering
-- [ ] T12 `make perf LABEL=237-end`, then `make perf-report AGAINST=237-start`: FR-010's acceptance.
-      A band of 1 or more means the `perf-audit` agent, not a session's own judgment. The `-start`
+- [ ] T12 `make perf LABEL=237-end`, then `make perf-report AGAINST=237-start`: FR-010's acceptance. An
+      increase on the total or on ANY seed is NOT waiverable for this item - the remedy is that the
+      offending site goes back to a module-level import and the remaining sites stand (FR-010). The
+      `perf-audit` agent is the DIAGNOSIS when a band of 1 or more is reported, never the exit: the item
+      was approved as a memory saving, and a slower map is not a trade the GM was offered. The `-start`
       bookend was taken on unmodified code before Phase 1 began.
       research: rendering
 - [ ] T13 `make done` green (the 100% floor over the merged coverage), `make hooks-test` green, the
