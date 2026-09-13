@@ -32,6 +32,7 @@ in `research.md` R1, both from this session's own record.
       content rather than on merge state (FR-008).
       research: rendering
       verify: DONE. In the table after feature 236's spec-lint row, carrying the departure from the approved state-based proposal (spec D1, Principle XVI) and what the content rule cannot see (D5).
-- [ ] T06 `spec-fidelity` on the AMENDED spec, then `make hooks-test` and `make done` green, then land
+- [x] T06 `spec-fidelity` on the AMENDED spec, then `make hooks-test` and `make done` green, then land
       - and the report to the GM states the departure from the proposal they approved (Principle XVI).
       research: rendering
+      verify: DONE. spec FAITHFUL at round 5 (the cap, used in full); make hooks-test green with the 28-case suite among them; make done green (already-verified - the delta carries no engine content); the house-style delta scan and spec-lint clean; both gate stamps fresh. Landing now, and the Principle XVI departure goes to the GM in the report.

@@ -1,6 +1,6 @@
 # Feature 241 - no conflict markers
 
-**Status**: IMPLEMENTED, pending the landing.
+**Status**: IMPLEMENTED; spec FAITHFUL at round 5.
 
 **Review history** - and the first thing in it is a departure from Principle XVI, stated rather than
 smoothed over. XVI says a spec is reviewed BEFORE implementation. Here the spec, the guard and the suite
@@ -19,9 +19,21 @@ but it ran in the wrong order, and nothing about the feature working excuses tha
   naming two items over a list of three; `<reason>` used both as notation and as a literal the code
   rejects.
 
-**No counter reset is claimed.** The GM's 2026-09-12 ruling resets the five-round count once a spec has
-been ACCEPTED, and this one never was - no round returned FAITHFUL. So the rounds above are the initial
-acceptance, three of five used, and if round 5 still returns changes this stops and goes to the GM.
+- **Round 4**: the spec's substance, requirements, success criteria and decisions ACCEPTED; two
+  contradictions left elsewhere by round 3's edits - `tasks.md` still claiming the counter reset the Review
+  history had just retired, and a tracked-file count on its third value inside one feature (the merge from
+  main moves it), now dropped in favor of the claim the task actually verifies.
+- **Round 5**: **FAITHFUL.** Every figure re-run rather than read, the exemption rule confirmed against
+  `declares_exemption()` in all four places that state it, and no absolute tracked-file count left anywhere
+  in the tree.
+
+**No counter reset was claimed.** The GM's 2026-09-12 ruling resets the five-round count once a spec has
+been ACCEPTED, and this one never was until round 5 - no earlier round returned FAITHFUL. So the five
+rounds above are the initial acceptance, all five used, which is the cap: a sixth would have stopped the
+feature and gone to the GM. What cost them is the drafting, and the diagnosis is the first paragraph - a
+spec reviewed AHEAD of its implementation is reviewed once, for what it says; a spec reviewed against a
+working implementation is reviewed twice over, for what it says and for whether the code still matches it,
+and rounds 2 to 5 were almost entirely the second kind.
 
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the two incidents measured, why the state-based rule is the
