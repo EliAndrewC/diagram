@@ -384,13 +384,14 @@ still importing `numpy` at module level - without testing it. The GM asked for t
 | collection only, ten workers | before the feature | after FR-007/FR-010 | after FR-011 (numpy, PIL) |
 |---|---|---|---|
 | whole tree | 922 MiB, 9.1 s | 923 MiB, 4.5 s | **840 MiB, 3.9 s** |
+| one tree (`tests/settlement`) | 602 MiB | 515 MiB | 516 MiB |
+| one module | 356 MiB | 366 MiB | 366 MiB |
 
 **And the two libraries separated, because D9 owes the GM PIL's share on its own.** With numpy deferred and
 PIL put back at module level in the two tools, the whole tree collects at **854 MiB**. So of the 83 MiB the
 pair saves: **numpy is 69 MiB and PIL is 14** - which also says what reversing PIL alone would cost, since
 D9 records it as the session's judgment rather than the GM's request.
-| one tree (`tests/settlement`) | 602 MiB | 515 MiB | 516 MiB |
-| one module | 356 MiB | 366 MiB | 366 MiB |
+
 
 And per worker, measured the same way as R6: the engine baseline - pytest plus every engine module - falls
 from **57.6 MiB to 42.9 MiB**, because `numpy` (17.9) and `PIL` (2.3) no longer arrive with it.
