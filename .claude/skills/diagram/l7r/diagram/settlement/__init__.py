@@ -48,6 +48,7 @@ from ._geom import lane_runs as lane_runs
 from ._geom import lane_through_gate as lane_through_gate
 from ._geom import linear_tilt as linear_tilt
 from ._geom import linear_tilt_full as linear_tilt_full
+from ._geom import nearest_way_bearing as nearest_way_bearing
 from ._geom import paddy_wet_rings as paddy_wet_rings
 from ._geom import point_in_poly as point_in_poly
 from ._geom import point_quad_dist as point_quad_dist
@@ -64,7 +65,6 @@ from ._geom import seg_dist as seg_dist
 from ._geom import seg_in_ellipse_core as seg_in_ellipse_core
 from ._geom import seg_intersect as seg_intersect
 from ._geom import segments_cross as segments_cross
-from ._geom import nearest_way_bearing as nearest_way_bearing
 from ._geom import street_runs as street_runs
 from ._geom import stroke_quads as stroke_quads
 from ._geom import tilt_caption_seat as tilt_caption_seat
