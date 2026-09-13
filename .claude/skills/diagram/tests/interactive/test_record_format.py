@@ -89,6 +89,28 @@ def test_the_committed_glossary_asset_is_the_derivation() -> None:
     assert all(term in committed for term in ("yashikirin", "kainyo", "sugi")), "the record's own vocabulary is in it (non-vacuity)"
 
 
+def _bounded_in(variant: str, text: str) -> bool:
+    """Whether `variant` stands in `text` as a word: not after a word character or an apostrophe, not before a word character.
+
+    The same bounded pattern as a whole-text `re.search`, tried only where `str.find` puts the substring. A pattern
+    opening with a lookbehind is attempted at EVERY position of the text, and over the whole record that was 12 ms a
+    variant and 8.9 of this test's 9.7 s (cProfile, 2026-09-13). `match(text, pos)` still sees the characters before
+    `pos`, so the lookbehind decides exactly as it did."""
+    pattern = re.compile(r"(?<![\w'])" + re.escape(variant) + r"(?![\w])")
+    at = text.find(variant)
+    while at != -1:
+        if pattern.match(text, at):
+            return True
+        at = text.find(variant, at + 1)
+    return False
+
+
+def test_bounded_in_reads_the_boundaries_as_the_pattern_did() -> None:
+    assert _bounded_in("koku", "the koku of rice") and _bounded_in("koku", "koku")
+    assert not _bounded_in("koku", "kokudaka") and not _bounded_in("koku", "o'koku") and not _bounded_in("koku", "xkoku")
+    assert _bounded_in("koku", "kokudaka and koku.")
+
+
 def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
     """The map's own test holds the modal half; this is the widened rule (spec FR-001): a term that no modal and no
     record page uses is dead weight, and a term the record uses in a code span only is not a tooltip anywhere."""
@@ -97,7 +119,7 @@ def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:
 
     in_modals = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
     record = " ".join(visible_text(_COMMENT.sub(" ", re.sub(r"<code>.*?</code>", " ", p.read_text(encoding="utf-8"), flags=re.S))) for p in _all_pages()).lower()
-    in_record = {term for term, (variants, _) in GLOSSARY.items() if any(re.search(r"(?<![\w'])" + re.escape(v.lower()) + r"(?![\w])", record) for v in variants)}
+    in_record = {term for term, (variants, _) in GLOSSARY.items() if any(_bounded_in(v.lower(), record) for v in variants)}
     unused = set(GLOSSARY) - in_modals - in_record
     assert not unused, f"glossary terms no modal and no record page uses: {sorted(unused)}"
     assert {"kainyo", "sugi", "koku"} <= in_record - in_modals, "record-only terms are what this test exists for (non-vacuity)"

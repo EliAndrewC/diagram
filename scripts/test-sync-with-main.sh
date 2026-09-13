@@ -141,7 +141,14 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "a later docs 
 ( cd "$D/main/.clones/c" && mkdir -p .specify && echo '{"feature_directory": "specs/140-x"}' > .specify/feature.json && echo more > note.md && git add -A && git commit -qm docs2 )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the pointer names a feature with open tasks -> refused even for docs" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n' > specs/140-x/tasks.md && git add -A && git commit -qm done )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: every task ticked -> the docs land" 0 $?
+# GUARD_EDIT_OK: feature 243 - a ticked feature now also owes its plan review at the push, so this finished
+# feature proves the plan gate is WIRED into the push (refused without the record) before it lands with one.
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: ticked tasks with no plan review -> refused (feature 243)" 1 $?
+expect_out "PLAN GATE"
+( cd "$D/main/.clones/c" && printf '# plan\n' > specs/140-x/plan.md \
+  && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
+  && git add -A && git commit -qm "the plan, reviewed" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: every task ticked and the plan reviewed -> the docs land" 0 $?
 ( cd "$D/main/.clones/c" && echo 'def a(): return 9' > .claude/skills/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"

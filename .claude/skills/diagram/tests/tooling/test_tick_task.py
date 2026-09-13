@@ -4,7 +4,9 @@ No `tooling` marker: it calls functions on strings and files, like `test_file_sc
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 import pathlib
 import sys
 
@@ -110,6 +112,10 @@ def test_main_resolves_a_feature_by_number_or_name_and_refuses_ambiguity(tmp_pat
     root = tmp_path
     (root / "specs" / "188-alpha").mkdir(parents=True)
     (root / "specs" / "188-alpha" / "tasks.md").write_text(TASKS, encoding="utf-8")
+    # feature 243: a tick needs the plan reviewed - this test is about resolution, so the review is current
+    plan = b"# plan\n"
+    (root / "specs" / "188-alpha" / "plan.md").write_bytes(plan)
+    (root / "specs" / "188-alpha" / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan).hexdigest(), "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
     monkeypatch.setattr(tt, "repo_root", lambda start=None: root)
     assert tt.main(["188", "T02", "by number"]) == 0
     out = capsys.readouterr().out

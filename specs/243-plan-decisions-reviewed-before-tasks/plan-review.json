@@ -1,0 +1,81 @@
+{
+ "feature": "243-plan-decisions-reviewed-before-tasks",
+ "plan_sha256": "11a0440cf9be6d0bbd4c6789651b473cec667c5a4eeaf2e28d2e1d5c92f6c529",
+ "reviewed": "2026-09-13",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Shape-1",
+   "summary": "One module _plan_gate.py holds every gate decision; tick-task.py, plan-gate.sh and make plan-verdict call it",
+   "class": "within",
+   "why": "Implementation structure for FR-001, FR-005 to FR-008; it narrows no requirement."
+  },
+  {
+   "id": "Shape-2",
+   "summary": "plan-gate.sh runs from sync-with-main.sh directly after review-gate.sh, escape first, on entry-gate.sh's shape",
+   "class": "within",
+   "why": "FR-007 says beside review-gate.sh and FR-008 requires the logged escape; the escape skips only what FR-008 already permits."
+  },
+  {
+   "id": "Shape-3",
+   "summary": "Around the pieces: agent-file mode, template first task, PLAN_REVIEW_OK in the escape census, a CLAUDE.md guard-table row, make docs",
+   "class": "within",
+   "why": "FR-009 and FR-010 directly; the census row and guard-table row are the project's standing obligations for a new escape and guard, not new scope."
+  },
+  {
+   "id": "P1",
+   "summary": "Digest is SHA-256 of plan.md bytes taken when the reviewer starts; make plan-verdict refuses a mismatched digest at record time",
+   "class": "within",
+   "why": "Applies FR-004's byte-identity at the moment of recording too; it only refuses more, never lets a stale review through."
+  },
+  {
+   "id": "P2",
+   "summary": "Verdict derived from rulings; input whose verdict disagrees, a narrowing without ruling, a within with ruling or an unknown class is refused; no decisions records CLEAR",
+   "class": "within",
+   "why": "FR-003 defines CLEAR/BLOCKED from the rulings and FR-002 gives rulings to narrowing decisions only; an empty list satisfies 'no narrowing decision ruled NOT LEGITIMATE'."
+  },
+  {
+   "id": "P3",
+   "summary": "plan-review.json fields: feature, plan_sha256, reviewed date, declared, decisions (id, summary, class, ruling for narrowing only, why), verdict",
+   "class": "within",
+   "why": "Carries every field FR-003 requires plus the declaration FR-006 records."
+  },
+  {
+   "id": "P4",
+   "summary": "A ticked task is a column-0 '- [x] ' line (either case); indented research boxes are not counted",
+   "class": "within",
+   "why": "tick-task.py writes and matches column-0 task lines, no tasks.md at this commit has an indented T-line (git grep: 0 files), and a research box is a sub-item of its task, so FR-007's 'ticked task' is read as written rather than narrowed."
+  },
+  {
+   "id": "P5",
+   "summary": "Push gate takes touched specs/NNN-*/ dirs from git diff --name-only <range> and reads tasks.md, plan.md, plan-review.json at HEAD via git show",
+   "class": "within",
+   "why": "FR-007 names review-gate.sh check 1's set, which is derived the same way (review-gate.sh line 49/70); HEAD is what the push lands."
+  },
+  {
+   "id": "P6",
+   "summary": "PLAN_REVIEW_OK read from the environment in both places, exported by make tick, reason floor via _hm_escape.py, logged to guard log and bypass-log; per-refusal rule slugs",
+   "class": "within",
+   "why": "FR-008's escape with required, logged reason; environment reading is the existing census class and makes a mention unable to escape."
+  },
+  {
+   "id": "P7",
+   "summary": "tests/tooling/test_plan_gate.py plus scripts/test-plan-gate.sh companion suite; every refusal mutation-proven",
+   "class": "within",
+   "why": "Serves SC-001 to SC-008; no requirement is narrowed."
+  },
+  {
+   "id": "P8",
+   "summary": "This plan is reviewed via prompt-given mode instructions while implementation proceeds; recorded through make plan-verdict once it exists; no task ticked before gate and record exist; re-reviewed if the plan changes",
+   "class": "within",
+   "why": "The gate governs ticking, not implementation, and SC-009 requires exactly that ticks follow the gate and this plan's review; no tick is exempted."
+  },
+  {
+   "id": "Constitution-check",
+   "summary": "XVI, XVIII, X clause 13 and escape doctrine restated as satisfied",
+   "class": "within",
+   "why": "States compliance; makes no decision that changes scope."
+  }
+ ],
+ "verdict": "CLEAR"
+}

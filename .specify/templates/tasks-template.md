@@ -75,6 +75,18 @@ description: "Task list template for feature implementation"
   A round whose task does not name its changed passages has not been given what MODE 3 needs, and
   the agent is instructed to ask for the list rather than re-read the spec to find it.
 
+- **THE FIRST TASK OF A FEATURE IS THE PLAN REVIEW** (feature 243, GM 2026-09-13: *"Yes please implement
+  the plan-stage gate as a feature"*). `make tick` refuses every tick, and the push refuses a feature with
+  a ticked task, while `plan.md` has no current CLEAR `plan-review.json` - so the step is written where it
+  is enforced. The reviewer is given `request.md` verbatim with `spec.md` and `plan.md`, finds the plan's
+  decisions itself, and rules on each one that narrows what was asked. Tick this task after the record
+  exists (the gate lets it through then); any later edit to `plan.md` owes a new review before the next
+  tick:
+
+      - [ ] T001 `spec-fidelity` PLAN REVIEW of plan.md, recorded with
+            `make plan-verdict F=NNN FILE=<json> AS=spec-fidelity` (the subagent runs it)
+            research: rendering
+
 ## Path Conventions
 
 - **Single project**: `src/`, `tests/` at repository root
@@ -124,9 +136,10 @@ never correctness.
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 `spec-fidelity` PLAN REVIEW of plan.md, recorded with `make plan-verdict` (feature 243 - always first)
+- [ ] T002 Create project structure per implementation plan
+- [ ] T003 Initialize [language] project with [framework] dependencies
+- [ ] T004 [P] Configure linting and formatting tools
 
 ---
 
