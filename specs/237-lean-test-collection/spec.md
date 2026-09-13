@@ -75,8 +75,10 @@ import, not data (R6).
   collecting `tests/tools` holds it regardless (`spec-fidelity` round 1, finding 5). Deferring
   numpy in those two tools was recorded here as a further lever this feature had NOT taken, with the figure
   left for the GM to price; they asked for it on 2026-09-13 and FR-011 takes it.
-- **FR-011 `numpy` and `PIL` are imported by the worker that uses them, the same way** (the GM,
-  2026-09-13: *"I do indeed want you to do the same thing for numpy which we already did for shapely"*).
+- **FR-011 `numpy` is imported by the worker that uses it, the same way - and `PIL` with it, on the
+  session's judgment rather than the GM's request** (the GM asked for numpy, 2026-09-13: *"I do indeed want
+  you to do the same thing for numpy which we already did for shapely"*; PIL rides along and **D9** states
+  what that was worth and how to reverse it).
   The two engine tools that hold them - `tools/page_lit.py` and `tools/picture_diff.py` - bind both through
   one `_load_arrays()` per module, and the three test modules that import them at module level
   (`tests/tools/test_page_lit.py`, `test_picture_diff.py`, `tests/interactive/test_raster.py`) import them
@@ -192,9 +194,10 @@ import, not data (R6).
   thing for numpy which we already did for shapely"*. `PIL` is a separate library with its own cost, and it
   is separable - `tests/interactive/test_raster.py` imported PIL and no numpy at all, so the "same import
   block" argument that covers the other four files does not cover that one. What it is worth: **2.3 MiB a
-  worker**, against numpy's 17.9 (R9). What is NOT measured: the whole-tree collection figure with numpy
-  deferred and PIL left alone - R14's 840 MiB is both together, and the two were not separated, so anyone
-  reversing this should expect a few tens of megabytes back rather than reading 82 MiB as numpy's alone.
+  worker**, against numpy's 17.9 (R9). What reversing it would cost, MEASURED after the review asked for the
+  figure rather than estimated: with numpy deferred and PIL put back at module level in the two tools, the
+  whole tree collects at 854 MiB against 840 with both deferred - so of the 83 MiB the pair saves, **numpy is
+  69 MiB and PIL is 14** (R14).
   Why it was taken: in four of the five files the two imports are adjacent lines feeding the same functions,
   the guard reads one list, and splitting them would leave a module half-deferred. It is disclosed here
   rather than folded into the request so the GM can reverse it in one commit if they would rather only the

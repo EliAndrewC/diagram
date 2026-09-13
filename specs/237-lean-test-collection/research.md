@@ -211,8 +211,8 @@ MiB, and `tools/page_lit.py` and `tools/picture_diff.py` import it at module lev
 `tests/tools/test_page_lit.py` and `test_picture_diff.py` import those, so any run collecting
 `tests/tools` holds numpy regardless of what the geometry modules do. The MARGINAL shapely-only saving
 is therefore smaller than 16.3 and is measured rather than asserted (the spec's FR-009). Deferring
-numpy in those two tools is a further lever, recorded here and not taken: the GM approved the shapely
-accessor.
+numpy in those two tools was a further lever this feature had not taken AT THE TIME OF THIS MEASUREMENT,
+recorded here for the GM to price; they asked for it on 2026-09-13 and FR-011 takes it (R14).
 
 A collection imports the module, so before this feature all ten workers paid shapely whether or not they
 ran a geometry test. Deferring the import moves that cost to the workers that execute the code, and the
@@ -384,6 +384,11 @@ still importing `numpy` at module level - without testing it. The GM asked for t
 | collection only, ten workers | before the feature | after FR-007/FR-010 | after FR-011 (numpy, PIL) |
 |---|---|---|---|
 | whole tree | 922 MiB, 9.1 s | 923 MiB, 4.5 s | **840 MiB, 3.9 s** |
+
+**And the two libraries separated, because D9 owes the GM PIL's share on its own.** With numpy deferred and
+PIL put back at module level in the two tools, the whole tree collects at **854 MiB**. So of the 83 MiB the
+pair saves: **numpy is 69 MiB and PIL is 14** - which also says what reversing PIL alone would cost, since
+D9 records it as the session's judgment rather than the GM's request.
 | one tree (`tests/settlement`) | 602 MiB | 515 MiB | 516 MiB |
 | one module | 356 MiB | 366 MiB | 366 MiB |
 

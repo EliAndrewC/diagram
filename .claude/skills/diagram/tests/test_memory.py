@@ -42,8 +42,9 @@ HEAVY = ("shapely", "numpy", "PIL")  # 21.7, 17.9 and 2.3 MiB a worker - the thr
 
 
 def test_no_engine_module_imports_a_heavy_library_at_import_time() -> None:
-    """The surface is DERIVED, never a list in a spec (feature 237, FR-010 for shapely; numpy and PIL added
-    at the GM's request on 2026-09-13, the same deferral for the two tools that hold them).
+    """The surface is DERIVED, never a list in a spec (feature 237, FR-010 for shapely; NUMPY added at the GM's
+    request on 2026-09-13, and PIL on the session's own judgment, which spec D9 discloses with its cost -
+    this guard is what forbids the import coming back, so the attribution belongs here too).
 
     `shapely` costs 16.3 MiB with the numpy it pulls in, and a module-level import made all ten gate workers
     pay it to COLLECT the package, whichever one ran the geometry. Each module that needs it binds the names
