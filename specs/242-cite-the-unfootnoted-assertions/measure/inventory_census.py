@@ -42,12 +42,19 @@ STATED_MARKED = {
 }
 
 #: Closed by feature 238 in a class OTHER than the marker conversion, so absent from the successor's
-#: list even though the items carry no marker (research.md R7 items 2, 3 and 5).
+#: list even though the items carry no marker: research.md R7 items 2, 3, 5 and 6.
+#:
+#: R7 item 4 - the twelve defects - is deliberately NOT here. Those were found in the SECOND reading,
+#: of material that already carried a footnote (a misread workforce figure, a quotation readable on no
+#: page the note pointed at, a damaged text layer), and the four inventory readers named only
+#: assertions carrying NO footnote. The two populations are therefore disjoint by construction. Where
+#: one defect did coincide with a report item the list below is short by that much, at most twelve.
 CLOSED_BARE = {
     "roster-hidden on urban-features": 9,
     "roster-hidden on buildings": 5,
     "sections disclosing with no footnote at all": 6,
     "settlements.html, restating footnoted canon": 1,
+    "the caravan inn (one bare item, homesteads report 148)": 1,
 }
 
 
@@ -76,9 +83,27 @@ def items(text: str) -> list[str]:
     return [b for b in out if re.search(r"\*\*(HIGH|MEDIUM|LOW)\b", b)]
 
 
+#: The readers hedged 29 of the 695 inventoried items with a compound label - 25 MEDIUM-HIGH and 4
+#: LOW-MEDIUM, of which 28 are on the bare work list (one MEDIUM-HIGH item carries a marker). Reading
+#: only the first word buckets every one of them a tier LOW, which would have FR-012's ordering meet 24
+#: of the listed items later than the reader meant. They are reported as their own tiers instead:
+#: rounding a deliberate hedge in either direction invents a judgment the reader declined to make.
+TIERS = ("HIGH", "MEDIUM-HIGH", "MEDIUM", "LOW-MEDIUM", "LOW")
+
+
 def confidence(block: str) -> str:
-    m = re.search(r"\*\*(HIGH|MEDIUM|LOW)\b", block)
-    return m.group(1) if m else "unlabeled"
+    m = re.search(r"\*\*(HIGH|MEDIUM|LOW)(-(?:HIGH|MEDIUM|LOW))?\b", block)
+    if not m:
+        return "unlabeled"
+    label = m.group(1) + (m.group(2) or "")
+    if label in TIERS:
+        return label
+    # "HIGH-MEDIUM" is the same hedge as "MEDIUM-HIGH"; name it once, strongest tier first. An
+    # unrecognized compound is RETURNED rather than coerced - main() fails on any tier outside TIERS,
+    # because a tier the printed composition does not iterate would otherwise vanish from every share
+    # it belongs to while the totals still looked right.
+    reversed_label = "-".join(reversed(label.split("-")))
+    return reversed_label if reversed_label in TIERS else label
 
 
 def carries_marker(block: str) -> bool:
@@ -124,11 +149,19 @@ def main() -> int:
     print()
     print(f"bare by the readers' own marker counts ({stated_marked} marked): {bare_stated}")
     print(f"bare by this parse ({marked} marked):                {bare_parsed}")
+    stray = sorted(t for t in bare_conf if t not in TIERS)
+    if stray:
+        print(f"UNRECOGNIZED confidence tier(s) {stray} - the printed composition would drop them")
+        return 1
+    if sum(bare_conf[t] for t in TIERS) != bare_parsed:
+        print(f"tier shares sum to {sum(bare_conf[t] for t in TIERS)}, not the {bare_parsed} bare items")
+        return 1
+
     print(f"closed by 238 in a non-marker class:                 {closed} "
           f"({', '.join(f'{k} {v}' for k, v in CLOSED_BARE.items())})")
     print(f"WORK LIST: {bare_stated - closed} to {bare_parsed - closed} items")
-    print(f"  of the parsed remainder, by the readers' confidence: "
-          f"HIGH {bare_conf['HIGH']}, MEDIUM {bare_conf['MEDIUM']}, LOW {bare_conf['LOW']}")
+    print("  of the parsed remainder, by the readers' own confidence tiers: "
+              + ", ".join(f"{t} {bare_conf[t]}" for t in TIERS))
 
     if "--record" in sys.argv:
         rec = json.loads(RECORD.read_text(encoding="utf-8")) if RECORD.exists() else {}
@@ -143,7 +176,11 @@ def main() -> int:
             "the same, using this parser's marker classification - the wider bound")
         put("worklist-high-confidence", bare_conf["HIGH"], "items",
             "of the parsed remainder, the readers' HIGH confidence share")
+        put("worklist-medium-high-confidence", bare_conf["MEDIUM-HIGH"], "items",
+            "the readers' hedged MEDIUM-HIGH share, reported as its own tier rather than rounded")
         put("worklist-medium-confidence", bare_conf["MEDIUM"], "items", "the MEDIUM share")
+        put("worklist-low-medium-confidence", bare_conf["LOW-MEDIUM"], "items",
+            "the readers' hedged LOW-MEDIUM share")
         put("worklist-low-confidence", bare_conf["LOW"], "items", "the LOW share")
         put("marker-classifier-disagreement", abs(marked - stated_marked), "items",
             "items this parser and the readers' own stated splits classify differently")

@@ -46,7 +46,7 @@
   "note": "the same, using this parser's marker classification - the wider bound",
   "taken": "2026-09-13",
   "unit": "items",
-  "value": 473
+  "value": 472
  },
  "worklist-high-confidence": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
@@ -60,20 +60,34 @@
   "note": "the remainder using the readers' own marker counts, less the classes 238 closed by hand",
   "taken": "2026-09-13",
   "unit": "items",
-  "value": 463
+  "value": 462
  },
  "worklist-low-confidence": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
   "note": "the LOW share",
   "taken": "2026-09-13",
   "unit": "items",
-  "value": 41
+  "value": 37
+ },
+ "worklist-low-medium-confidence": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the readers' hedged LOW-MEDIUM share",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 4
  },
  "worklist-medium-confidence": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
   "note": "the MEDIUM share",
   "taken": "2026-09-13",
   "unit": "items",
-  "value": 231
+  "value": 207
+ },
+ "worklist-medium-high-confidence": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the readers' hedged MEDIUM-HIGH share, reported as its own tier rather than rounded",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 24
  }
 }
