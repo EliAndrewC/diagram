@@ -195,6 +195,14 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         # 6.2 px of a dry plot beyond the fan's head, against the 34 px skirt, because straying outward can approach crop
         # that lies outside the fan. What would loosen it honestly is a course that does not follow the field's margin at a
         # fixed offset at all - `future-work/farming-communities.md`.
+        # ...and a THIRD measurement, from the other side (pass 12, which read Sawada's middle reach as "a ruled
+        # horizontal line carrying a 3-px square-wave jitter", and noticed that the DUG drain wanders more than the
+        # natural brook - the one cue that separates dug from natural, inverted). Widening the walk the other way -
+        # `BROOK_WANDER` 10 -> 18 on a longer step of 5, the frame margin opened to 52 to hold it - moves nothing:
+        # the straightest 12-vertex run over 200 ft came back 1,746 ft at 4.1 px of departure on Kashikawa against
+        # 1,745 ft at 3.4 before it, and Inashiro's got STRAIGHTER (4.9 -> 2.1). The reason is the line above rather
+        # than the amplitude: where the crop's floor binds, the walk is not what decides the offset at all, so a
+        # wider walk only moves the few stations where the field's own edge is already crooked.
         v = _v_within(u, floor, floor + stray, (dx, dy), (px, py), box)
         out.append((u * dx + v * px, u * dy + v * py))
     # ...and off the frame from the last station, still wandering, the run measured along the fall from there.
