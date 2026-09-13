@@ -300,7 +300,7 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"  WARNING: frozen map {os.path.relpath(gen, args.skill_dir)} is MISSING {', '.join(os.path.basename(p) for p in missing)} - "
                 f"a frozen exhibit's render cannot be faithfully regenerated once the engine has drifted, so it is NOT healed here; "
-                f"the frozen renders are committed (GM 2026-08-16), so restore the file with git checkout rather than re-running the gen"
+                f"a frozen exhibit's renders are NOT in git - they were removed and archived (.gitignore note 1), so restore from /host-l7r-repo/diagram-render-archive/ (MANIFEST.json carries a sha256 per file) rather than re-running the gen or reaching for git checkout"
             )
     for orphan in stale_flat_renders(args.skill_dir):
         print(

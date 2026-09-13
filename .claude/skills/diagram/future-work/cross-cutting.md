@@ -370,38 +370,35 @@ session is told to exercise and the GM reads in the diff.
 **When to build it**: if a village-tier feature lands rows that the GM, reading the diff, judges should have been unit
 tests - that is the measurement that says the judgment layer is not holding.
 
-## A magistracy's hand-authored SVG is gitignored, so no clone can render it (found 2026-09-13, feature 237)
+## Three magistracy SVGs have no generator, and the ignore rules say they do (found 2026-09-13, feature 237)
 
-**The measurement.** `make render-sync` in a clone ABORTS on the first magistracy: `python3
-hayakawa-magistracy.gen.py` exits 1 because `resvg` is handed an SVG that does not exist. Three of the five
-magistracies have no `.svg` in the clone at all (`hayakawa`, `ochiba`, `ubame`); main has
-`hayakawa-magistracy.svg` and its `.png`, and `git status` in main is clean - because the file is
-**gitignored**. `git ls-files | grep magistracies.*svg` returns nothing in either tree.
+**What is actually true, measured.** Of the five magistracies, **two generate their own svg** -
+`county-magistracy-example` and `ochiba-roundtrip-test` call `compound.place()` and `emit_svg()` and write
+it (0.17 s end to end, svg 6 KB) - and **three do not**: `hayakawa`, `ochiba-magistracy` and `ubame` have a
+`.gen.py` whose entire body is `resvg <svg> <png>`. Their svg is hand-authored source that nothing can
+rebuild. The size signature says the same thing: the two generated svgs are 5.7 and 6.3 KB, the three
+hand-drawn ones 35.6, 38.6 and 39.7 KB.
 
-**The mechanism, and why it is a defect rather than a quirk.** The gen's own docstring states the rule it
-breaks: *"Mode A magistracy plans are hand-authored svg SOURCE (tracked in git); only the png is derived."*
-The svg is source - it cannot be regenerated from anything - and it exists today only as an untracked file
-in one working tree. If that tree is lost, so is the drawing. Meanwhile `render-sync` is the target
-`sync-with-main.sh` runs on every landing, and it stops at the first of the three, so the magistracies after
-it in the walk never render either.
+**The ignore rules state the opposite.** `.gitignore`'s note 2 retires the Mode A exception on this:
+*"Measured 2026-09-03: all five HAVE a `.gen.py` and all five regenerate BYTE-FOR-BYTE (identical md5,
+empty git diff). The `.gen.py` is the source; the `.svg` is its output."* That measurement cannot mean what
+it says for the three: running their gens does not write an svg, so the file on disk was left untouched and
+the md5 compared each file with itself. An unchanged file is not a reproduced one.
 
-**Why it was not fixed in feature 237.** The fix is a content decision about the GM's own hand-authored
-drawings, and there is a second-order choice inside it (track the svg, or drop the gens whose source is
-gone and render those maps by hand again). Constitution Principle V puts the GM's artifacts in their hands,
-and the files are not in this clone to commit even if the decision were made - they would have to be taken
-from main's working tree, which is the only copy.
+**What it costs today.** `render-sync` exits 1 on the first of the three in any clone that lacks the file -
+which is every fresh clone, since the svg is neither tracked nor restored by any procedure - and the maps
+after it in the walk therefore never render either. Nothing is LOST: all three are in
+`/host-l7r-repo/diagram-render-archive/` with sha256s (83 files, 442 MB, verified present 2026-09-13), which
+is the second copy the ignore block promises.
 
-**The sketch, if the answer is "track them"**: un-ignore `pool/magistracies/*/*.svg`, copy the three from
-main's tree into a clone, commit them as source, and leave the `.png` derived exactly as the gens assume.
-The gens then work in every clone and `render-sync` stops aborting. One line of `.gitignore` plus three
-files.
+**The sketch.** Track the three (114 KB in total, which is three ten-thousandths of the 345.71 -> 38.68 MiB
+the purge won), correct note 2 to say two of five, and leave the two generated ones ignored. Their gen
+docstrings already claim the svg is "hand-authored svg SOURCE (tracked in git)" - which the change would
+make true rather than aspirational. The GM's call: it puts hand-drawn artifacts back in git, which is the
+decision the purge reversed.
 
-**The same defect, found in the frozen tree by the same run.** `render-sync` warns that
-`legacy-hand-authored-pool/villages/ueda/` is missing `ueda.svg` and `ueda.png`, and tells the reader to
-restore them with `git checkout` because *"the frozen renders are committed (GM 2026-08-16)"*. They are
-not: `git ls-files` finds neither in the clone OR in main, and both files sit untracked in main's working
-tree exactly as the magistracy svgs do. So the warning sends a reader to a command that cannot work, and a
-frozen exhibit - the class of artifact that by the GM's own 2026-08-16 ruling can never be faithfully
-regenerated once the engine has drifted - survives in one working tree only. Worth settling in the same
-pass and with the same question: track them, or accept that the exhibit is gone and say so where it is
-listed.
+**A separate, smaller thing found with it.** `render-sync` warns that a missing frozen render should be
+restored "with `git checkout`" because "the frozen renders are committed (GM 2026-08-16)". They are not, and
+deliberately so: `.gitignore` note 1 records that the frozen exhibits were removed from git and archived.
+The warning should point at `/host-l7r-repo/diagram-render-archive/` and its MANIFEST. `ueda` is not a
+defect - it is that decision working.
