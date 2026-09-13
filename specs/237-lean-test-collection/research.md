@@ -319,13 +319,37 @@ unmodified code (R3) and again after (R10) with the same instrument.
 | 237-end2 | +1.8% | -4.0% | -6.0% | +0.0% | -1.8% |
 | 237-end3 | +3.6% | +0.0% | -8.0% | -1.4% | -1.3% |
 
-The total is faster every time and one seed is consistently about +0.2 s, on `field` and `track`. **The
-cause is mechanical and measured, not inferred**: `import shapely.geometry, shapely.ops` costs 0.244 s,
-seed 4 is the FIRST seed the snapshot runs, and FR-010 moved that import out of module import time and into
-first use - so the first seed of a process now pays it inside its timed region. It is one-time per process
-rather than per map, which is exactly why seeds 25, 39 and 47 are flat or faster.
+A fourth `-end` taken at the final commit reads seed 4 +1.8%, seed 25 -4.0%, seed 39 -8.0%, seed 47 -2.8%,
+TOTAL **-3.1%**.
 
-One candidate was **ruled out by measurement rather than by argument**: the loader call inside the per-plot
-functions. Replacing the unconditional call with an inline sentinel check left seed 4 at +3.6%, unchanged -
-so the per-call cost is not visible in this data at all. The change was kept anyway, because a branch is
-cheaper than a call and the hot functions run per plot and per seam.
+The total is faster every time and ONE STAGE on ONE SEED is consistently slower. The `perf-audit` agent
+established the sharper form of this, and it is better evidence than the session's own: seed 4's `field` is
+the only stage anywhere whose delta keeps its SIGN across the bookends - 1.82 s -> 1.92 / 1.90 / 1.92, so
++0.08 to +0.10 s - while every other mover flips sign between runs, which is noise (seed 4's `track` went
+-0.01 / +0.02 / +0.05, so the session's first explanation named it wrongly and the record was corrected).
+Residual outside the stages is zero to within rounding, so the seed's rise IS that stage.
+
+**The cause is mechanical and measured, not inferred.** `field` is the paddy-fan stage - `waterfields/comb.py`
+and `seams/` - which is the geometry that loads shapely; the only other shapely-touching stage,
+`homesteads`, is 0.08 s and too small to hide it. A cold `import shapely.geometry, shapely.ops` measures
+0.14 s warm and 0.24 s cold on this machine, against an observed +0.09 s net of the same stage running 0.04
+to 0.14 s FASTER on the other three seeds. Seed 4 is the FIRST seed the snapshot runs
+(`perf_snapshot.DEFAULT_SEEDS = (4, 25, 39, 47)`, one process, no reordering), and FR-010 moved the import
+out of module import time and into first use - so the first seed of a process now pays it inside its timed
+region. One-time per process, not per map, which is exactly why the other three seeds are faster.
+
+Two candidates were **ruled out by measurement rather than by argument**, and the second was reverted.
+
+The per-call loader cost is invisible in this data. The audit found the decisive case: seed 47's `field` is
+4.63 s, the heaviest geometry in the set - the most plots, the most seams, the most `PlotGeoms` and
+`GeomTree` constructions - and it went DOWN on every bookend (-0.06 / -0.08 / -0.11). At the commit it
+audited, `geoms.py` was moreover calling its loader UNCONDITIONALLY on every construction, which is the
+strongest form of the cost, and it still could not be seen.
+
+So the inline sentinel at each call site - `if not _SHAPELY_LOADED: _load_shapely()`, to save the call
+itself - was REVERTED. It left the slow seed at +3.6%, unchanged, and it cost the 100% floor: with several
+call sites in a module, only the first one to run executes its `_load_shapely()` line and the rest are
+unreachable. The coverage floor failed on precisely those lines, and in doing so it found a real defect
+behind them - `geoms.py`'s loader declared the sentinel and returned on it but never SET it, so the guard
+never engaged and its two import statements re-ran on every construction. Both are recorded at the point of
+change so the lever is not pulled again.
