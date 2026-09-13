@@ -597,3 +597,41 @@ The general lesson is worth more than the incident: **a guard that edits a comma
 command MEASURES**, and it reports that it corrected the text rather than that it changed a result. Any
 count taken from a shell pipeline whose pattern carries a dash or a quoted alternation should be
 re-derived before it is written down.
+
+## R7 - the closed list: exactly what feature 238 worked (FR-013)
+
+The successor owns every item the four readers named that this list does not. It is a filter over the
+reports, not a reconciliation of counts against prose.
+
+**Closed by disposition, on every page.**
+
+1. **Every bare inline unsourced-class marker in body prose - 142 of them**, across `archetypes`,
+   `buildings`, `fields`, `homesteads`, `religion-and-death`, `towns`, `urban-features`, `vegetation`,
+   `water`, `ways`, and `cities/capitals`, `defenses`, `fabric`, `government`, `hinterland`,
+   `river-cities`. Each is now an absence note at its own assertion. **A reader-report item whose entry
+   quotes a marker is therefore closed**, and that is the largest single class.
+2. **The nine roster-hidden claims on `urban-features`** (R4's table) and **the five on `buildings`** -
+   the Joge plan and its shrines, the light-offender sentence, the west-as-death-direction gloss, the
+   staged arrival, and the site figure that brackets the Mode A scale.
+3. **The six sections that carried a roster disclosure and no footnote at all**: the lotus area share
+   (`archetypes`), the yamen predecessor-veneration practice (`buildings`), the no-subsumed-crown rule
+   (`vegetation`, a grounds note), and on `cities/capitals` the sluice duty cycle, the sluice mechanism
+   and Edo's moats blooming green.
+4. **Every defect the two readings surfaced** - R4a, R5a, R5b, R5e, R5g. Twelve corrections, of which
+   two changed what an entry argues.
+5. **Two whole pages**: `presentation.html` (zero items) and `settlements.html` (one, restating canon).
+6. **The caravan inn**, glyph and page (R2, R2a).
+
+**What the successor owns.** Everything else: the `CITE` items, each needing its own `source-reader`
+pass. R6's per-page remainder is the cross-check - `cities/capitals` 125, `urban-features` 94,
+`homesteads` 58, `buildings` 46, `water` 55, `fields` 47, `archetypes` 38, `religion-and-death` 39,
+`vegetation` 29, `cities/government` 27, `cities/defenses` 26, `cities/fabric` 25,
+`cities/river-cities` 22, `towns` 16, `cities/hinterland` 9, `ways` 8, `cities/sizing` 3 - **minus**
+whichever of them this list closed, since a marker conversion and a `CITE` disposition can name the same
+sentence. The reports are the authority on identity; these numbers are only a size.
+
+**One class deferred by VOLUME rather than by cheapness, and named because FR-012 requires it.** Fifty-one
+sections still carry a disclosure on their `Sources:` roster that is now redundant, the label having
+moved to a note at the assertion. Rewriting those roster lines to point at the notes is cosmetic - the
+reader already meets the honest label in the right place - and it is fifty-one edits with no change of
+meaning in any of them. It goes to the successor as tidying, not as a defect.
