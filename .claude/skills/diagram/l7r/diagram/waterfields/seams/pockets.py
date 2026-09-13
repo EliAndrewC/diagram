@@ -63,7 +63,8 @@ _SPIKE = 0.25
 
 def _parts(geom: BaseGeometry) -> list[Polygon]:
     """Simple polygons of `geom`, in a deterministic order (shapely does not promise one)."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     out = [g for g in getattr(geom, "geoms", [geom]) if isinstance(g, Polygon) and not g.is_empty and g.is_valid]
     return sorted(out, key=lambda g: (round(g.bounds[0], 1), round(g.bounds[1], 1)))
 
@@ -98,7 +99,8 @@ def _despike(geom: BaseGeometry) -> BaseGeometry:
     the honest answer is that this is a TIDYING step, so a geometry GEOS will not offset goes on
     un-tidied rather than taking the map down. Nothing downstream trusts it: every ring this pass
     records is round-tripped for validity before it is kept."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     cleaned = geom.buffer(0)
     if cleaned.is_empty:
         return cleaned
@@ -112,7 +114,8 @@ def _despike(geom: BaseGeometry) -> BaseGeometry:
 def _ring(poly: Polygon) -> Poly:
     """A plot ring as the manifest records it: 1dp, no repeated closing vertex, and no vertex
     that rounding has collapsed onto its predecessor (a boolean result carries plenty)."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     out: Poly = []
     for x, y in list(poly.exterior.coords)[:-1]:
         pt = (round(float(x), 1), round(float(y), 1))
@@ -136,7 +139,8 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
     exactly those notches - the ground looked bare to this pass and was water to the gate. The
     discs close them without the over-claim a round CAP would add past the head and tail, where
     `supply_bank_clearance` reports `past` and the stroke governs nothing anyway."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     strokes: list[BaseGeometry] = []
     for c in channels:
         pts = [(float(q[0]), float(q[1])) for q in c.get("pts") or []]
@@ -159,7 +163,8 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
 
 def _band(F: _Frame, us: list[float], fs: list[float], f_far: float) -> Polygon:
     """The region between the sampled curve f(u) and a constant fall far outside the fan."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     pts = [F.to_xy(u, f) for u, f in zip(us, fs, strict=True)]
     pts += [F.to_xy(us[-1], f_far), F.to_xy(us[0], f_far)]
     return Polygon(pts).buffer(0)
@@ -173,7 +178,8 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
     drawn water, so a low-u fork wedge still counts as commanded while the floating-diamond ground
     past the outfall does not. Where the canal does not reach a given u there is nothing upslope to
     exclude, so that sample falls back to a bound outside the fan entirely."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     x0, y0, x1, y1 = field.bounds
     corners = [F.to_uf(x0, y0), F.to_uf(x1, y0), F.to_uf(x1, y1), F.to_uf(x0, y1)]
     ulo, uhi = min(u for u, _ in corners), max(u for u, _ in corners)
@@ -232,7 +238,8 @@ def _open_to(pocket: Polygon, w: float) -> Polygon | None:
     for the same reasons: MITRE joins (a rounded opening arcs every convex corner and explodes the
     vertex count) and INTERSECTING the result back with the input (a mitred offset can push an
     acute corner outward, and this pass must only ever REMOVE ground)."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     try:
         opened = pocket.buffer(-w / 2, join_style="mitre", mitre_limit=2.0).buffer(w / 2, join_style="mitre", mitre_limit=2.0)
     except GEOSException:
@@ -268,7 +275,8 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     walls with a strip between them into the one wall a real aze is. The neighbor is chosen by
     SHARED BOUNDARY LENGTH rather than by distance or area: the basin whose wall actually forms
     most of this strip is the one whose farmer would have taken it in."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
     tree = tree or GeomTree(into)  # the pocket pass shares one across a round (feature 220); a lone call builds its own
     reach = pocket.buffer(0.4)
     ranked: list[tuple[float, int]] = []

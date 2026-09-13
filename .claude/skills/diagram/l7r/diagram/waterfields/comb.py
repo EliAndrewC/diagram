@@ -108,7 +108,8 @@ class CombCarve:
         overshot the target by that much. This asks the same three geometries the seam pass asks first
         (`field`, `_water`, `_outside_command`), so the estimate and the finish read one source; measured
         against the finished acreage at six sizes it was within 0.05%, at a fifteenth of the finish's cost."""
-        _load_shapely()
+        if not _SHAPELY_LOADED:
+            _load_shapely()
         field = Polygon(self.envelope).buffer(0)
         keep = [Polygon(p["poly"]).buffer(0) for p in self.plots if len(p["poly"]) >= 3]
         bare = field.difference(unary_union(keep)).difference(_water(self.channels, self.grain)).difference(_outside_command(self.F, self.a_pts, self.dpts, field, self.grain, self.drain_bank))

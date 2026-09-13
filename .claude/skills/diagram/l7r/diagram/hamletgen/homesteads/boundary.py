@@ -80,7 +80,8 @@ def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[A
     """`(chains, (water, registered), (rings, holes))` for the homestead stage, from every geometry the bundle's fit test reads
     (spec FR-001): the area members unioned and reduced to the chains facing `seat`; the water obstacles and the
     registered corridors as two sets of `(a, b, clearance)` segments, each asked the way its own test asks today."""
-    _load_shapely()
+    if not _SHAPELY_LOADED:
+        _load_shapely()
 
     def member(poly: Any, grow: float = 0.0) -> Polygon | None:
         if len(poly) < 3:

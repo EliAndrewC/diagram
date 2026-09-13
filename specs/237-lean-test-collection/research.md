@@ -289,3 +289,43 @@ shapely is worth depends on whether numpy arrives anyway:
 Which means the lever this feature did NOT take - deferring numpy in those two tools - is the larger half
 on a full gate, and it is recorded here for the GM to price rather than taken on a session's own judgment
 (the GM approved the shapely accessor).
+
+## R11 - the gate itself, which is the number that matters
+
+`make test-full` passes `INCREMENTAL=0` unless `FROM_DONE` is set, so the restriction only ever applies
+under `make done`. Measured there, on the cheapest real shape - a clone whose engine content the baseline
+already covers:
+
+| | peak | wall | what it did |
+|---|---|---|---|
+| `make done`, after | **400 MiB** | **41.3 s** | `gate: INCREMENTAL - nothing the baseline exercised has changed`, 0 of 0 tests, green |
+
+Four hundred megabytes is the WHOLE gate - lint, the type check, `hooks-test`, the selection, the merge,
+all three coverage floors and the roll census - against 923 MiB for the collection alone that the same
+shape used to pay before it ran anything. There is no before-measurement of this exact shape on the old
+code, and the reason is worth recording rather than papering over: the first "before" run was taken with
+`make test-full`, which forces a full run, so it measured the shape this feature helps least. The
+comparison that is sound is the one above against the collection-only figure, which was measured on
+unmodified code (R3) and again after (R10) with the same instrument.
+
+## R12 - the perf bookends, and the one seed that got slower
+
+`make perf LABEL=237-start` was taken on unmodified code before any of this landed; three independent
+`-end` bookends were taken afterwards on identical code:
+
+| | seed 4 | seed 25 | seed 39 | seed 47 | TOTAL |
+|---|---|---|---|---|---|
+| 237-end | +3.6% | -2.0% | -6.0% | -1.4% | -1.3% |
+| 237-end2 | +1.8% | -4.0% | -6.0% | +0.0% | -1.8% |
+| 237-end3 | +3.6% | +0.0% | -8.0% | -1.4% | -1.3% |
+
+The total is faster every time and one seed is consistently about +0.2 s, on `field` and `track`. **The
+cause is mechanical and measured, not inferred**: `import shapely.geometry, shapely.ops` costs 0.244 s,
+seed 4 is the FIRST seed the snapshot runs, and FR-010 moved that import out of module import time and into
+first use - so the first seed of a process now pays it inside its timed region. It is one-time per process
+rather than per map, which is exactly why seeds 25, 39 and 47 are flat or faster.
+
+One candidate was **ruled out by measurement rather than by argument**: the loader call inside the per-plot
+functions. Replacing the unconditional call with an inline sentinel check left seed 4 at +3.6%, unchanged -
+so the per-call cost is not visible in this data at all. The change was kept anyway, because a branch is
+cheaper than a call and the hot functions run per plot and per seam.

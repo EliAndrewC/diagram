@@ -23,6 +23,9 @@ if TYPE_CHECKING:  # the names for the type checker; the runtime ones are bound 
     from shapely.geometry.base import BaseGeometry
 
 
+_SHAPELY_LOADED = False
+
+
 def _load_shapely() -> None:
     """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
 
@@ -36,7 +39,9 @@ def _load_shapely() -> None:
     deferral costs nothing in steady state (spec D6). Called from the constructors: neither class can be
     used without one.
     """
-    global STRtree, box, Polygon  # binding the module-level names is the point
+    global _SHAPELY_LOADED, STRtree, box, Polygon  # binding the module-level names is the point
+    if _SHAPELY_LOADED:
+        return
     from shapely import STRtree, box
     from shapely.geometry import Polygon
 
@@ -53,7 +58,8 @@ class PlotGeoms:
     __slots__ = ("_geom", "_ring", "_tree", "_tree_ids", "_tree_rings", "plots")
 
     def __init__(self, plots: list[dict[str, Any]]) -> None:
-        _load_shapely()
+        if not _SHAPELY_LOADED:
+            _load_shapely()
         self.plots = plots
         self._geom: dict[int, BaseGeometry] = {}
         self._ring: dict[int, Any] = {}
@@ -100,7 +106,8 @@ class GeomTree:
     __slots__ = ("_n", "_tree", "changed", "geoms")
 
     def __init__(self, geoms: list[Polygon]) -> None:
-        _load_shapely()
+        if not _SHAPELY_LOADED:
+            _load_shapely()
         self.geoms = geoms
         self._tree: STRtree | None = None
         self._n = -1

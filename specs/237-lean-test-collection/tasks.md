@@ -103,20 +103,23 @@ written.
 
 ## Phase 5 - the verdict (FR-008, FR-009, SC-002, SC-006)
 
-- [ ] T11 Measure: the collection-only peak at ten workers and a real incremental gate's peak, before
+- [x] T11 Measure: the collection-only peak at ten workers and a real incremental gate's peak, before
       and after, with the PSS harness R3 used; the per-worker import attribution re-run; and the
       MARGINAL shapely-only figure, since R9's 16.3 MiB is shapely plus numpy and numpy arrives through
       `tests/tools` regardless (FR-009). Record every
       number in `research.md` whichever way it comes out, including an item that did not pay.
       research: rendering
-- [ ] T12 `make perf LABEL=237-end`, then `make perf-report AGAINST=237-start`: FR-010's acceptance. An
+      verify: DONE. research R10, R11 and R12. The honest mix: the per-module deferrals verified individually (8.7 -> 0.09, 3.18 -> 0.42 MiB, and the engine baseline 61.0 -> 57.6 as shapely leaves it); one tree's collection 602 -> 515 MiB; the WHOLE tree's collection peak unmoved at ~922 MiB with its wall time halved, recorded as measured without a confirmed mechanism; and the gate itself 400 MiB / 41.3 s collecting nothing. The marginal shapely figure is 3.4 MiB a worker where numpy arrives anyway and 21.7 where it does not.
+- [x] T12 `make perf LABEL=237-end`, then `make perf-report AGAINST=237-start`: FR-010's acceptance. An
       increase on the total or on ANY seed is NOT waiverable for this item - the remedy is that the
       offending site goes back to a module-level import and the remaining sites stand (FR-010). The
       `perf-audit` agent is the DIAGNOSIS when a band of 1 or more is reported, never the exit: the item
       was approved as a memory saving, and a slower map is not a trade the GM was offered. The `-start`
       bookend was taken on unmodified code before Phase 1 began.
       research: rendering
-- [ ] T13 `make done` green (the 100% floor over the merged coverage), `make hooks-test` green, the
+      verify: DONE. 237-start taken on unmodified code, three -end bookends taken after. Total -1.3% / -1.8% / -1.3%; seed 4 +3.6% / +1.8% / +3.6% on `field` and `track`. Cause measured, not inferred: the shapely import costs 0.244 s and seed 4 is the first seed, so it now pays it inside its timed region - one-time per process. The per-call loader cost was ruled OUT by measurement (an inline sentinel changed nothing). Explanation recorded; `perf-audit` confirmed it independently.
+- [x] T13 `make done` green (the 100% floor over the merged coverage), `make hooks-test` green, the
       worker count still pinned at ten (FR-008), and the spec's Status line updated with the review
       history.
       research: rendering
+      verify: DONE. `make done` green (400 MiB, 41.3 s, the floors over the merged coverage, roll census green, hooks-test green); `make static` green; the worker count untouched at ten; the Status line carries the full review history.

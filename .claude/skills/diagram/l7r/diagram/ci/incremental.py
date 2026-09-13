@@ -56,9 +56,12 @@ from typing import Any
 
 from l7r.diagram.ci import state
 
-#: Above this fraction of the collected suite the incremental run costs about what a full one does
-#: (collection, the reference roll and the floors are fixed costs) and gives up the baseline refresh - so the
-#: plugin runs everything and marks the run FULL. A knob with its reason; not a measured optimum (spec D3).
+#: Above this fraction of the BASELINE the incremental run costs about what a full one does (collection, the
+#: reference roll and the floors are fixed costs) and gives up the baseline refresh - so the PLANNER plans a
+#: full run. A knob with its reason; not a measured optimum (spec D3). It was a fraction of the COLLECTED
+#: suite, decided by the plugin after collection, until feature 237 moved the decision ahead of pytest's
+#: arguments (spec D8: a process given a few modules cannot choose to run everything, and a run labeled full
+#: that collected a subset would judge the floor over that subset alone).
 FULL_FRACTION = 0.6
 
 BASELINE_DIR = "gate-baseline"
@@ -215,7 +218,7 @@ class Plan:
     affected_tests: list[str] = field(default_factory=list)  # baseline nodeids whose own contexts touched a changed file
     affected_fixtures: list[str] = field(default_factory=list)  # fixture names whose context touched a changed file (direct)
     baseline_tests: list[str] = field(default_factory=list)
-    full_fraction: float = FULL_FRACTION  # the planner's knob; `over_the_fraction` applies it before the arguments are chosen
+    full_fraction: float = FULL_FRACTION  # the knob `plan()` compares the projection against, carried in the plan file so a run records the value it was judged by
     paths: list[str] = field(default_factory=list)  # the test modules this run may reach - pytest's positional arguments (feature 237, FR-001)
 
     def dump(self) -> dict[str, Any]:
@@ -248,10 +251,13 @@ def over_the_fraction(pl: Plan, closures: dict[str, list[str]]) -> int:
 
     The decision used to be made after collection, in `selection.py`, where the real selection is known.
     Feature 237 moved it here because the gate now chooses pytest's ARGUMENTS from the plan: a run whose
-    arguments were narrowed cannot then decide to run everything. Projecting over the baseline rather than
-    over the collection is the one thing lost, and it can only UNDERCOUNT - by the tests that are new, which
-    live in changed modules and are few - so a plan near the line runs incrementally instead of fully, which
-    is the safe direction: incremental runs merge over the baseline, full runs replace it.
+    arguments were narrowed cannot then decide to run everything.     Projecting over the baseline rather than over the collection errs in BOTH directions, and the two are safe for
+    DIFFERENT reasons (spec D8 states them in full). It UNDERCOUNTS by tests that are new - `keep_set`'s "not in the
+    baseline" rule cannot fire when the collection it is given IS the baseline - and that is safe because a plan near
+    the line then runs incrementally, which merges over the baseline rather than replacing it. It OVERCOUNTS by the
+    baseline tests of a module that has been DELETED, which `existing()` strips from the arguments but not from
+    `changed_test_modules`, so the module rule still counts them; that is safe for the other reason - a full run is
+    always correct, merely slower - and its cost is one full gate paid for tests nobody will collect.
     """
     from l7r.diagram.ci.selection import keep_set  # local: selection imports this module, so a top-level import is a cycle
 
@@ -310,7 +316,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         existing(root, reachable_modules(affected_tests, changed_modules, affected_fixtures, closures)),
     )
     reached = over_the_fraction(pl, closures)
-    if reached > FULL_FRACTION * len(baseline_tests):
+    if reached > pl.full_fraction * len(baseline_tests):
         return Plan("full", f"{reached} of {len(baseline_tests)} baseline tests reached, over the {FULL_FRACTION:.0%} fraction - running everything and recording a baseline")
     return pl
 
