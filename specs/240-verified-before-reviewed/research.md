@@ -92,19 +92,20 @@ check a read rather than an investigation.
 
 ## R5 - FR-005 on a real pool map, both ways (SC-004)
 
-`measure/fr005_probe.sh`, run 2026-09-13 in the clone directly after a green gate, when Inashiro's pool folder held
-no `.png` or `.html` and a whole snapshot from earlier that day stood in `.git/review-snapshot/inashiro/clone/`.
-A dispatch naming no snapshot was refused for the pool folder's missing renders (m:240-fr005-unnamed-rc 1); the same
-dispatch naming the snapshot was permitted (m:240-fr005-named-rc 0); with a trailing assignment appended to the
-generator the key moved and it was refused naming `make map GEN=pool/hamlets/inashiro/inashiro.gen.py`
-(m:240-fr005-key-moved-rc 1); restored, permitted. After `make map`, which rolled the render-less cache hit
-uncached, the dispatch naming no snapshot was permitted (m:240-fr005-after-map-rc 0). The slowest check took
-m:240-fr005-check-max-s 0.20 s, against SC-004's bound of 5.
+`measure/fr005_probe.py --record` sets up each state on Inashiro itself and restores it - the renders moved
+aside, its own snapshot written and aged, the generator edited, the prior snapshot put back. With the pool folder
+whole and no snapshot named the check permitted (m:240-fr005-whole-pool-rc 0); with the `.png` and `.html` moved
+aside as a gate leaves them, refused (m:240-fr005-pool-without-renders-rc 1); a whole snapshot of the current map,
+named, permitted (m:240-fr005-named-current-snapshot-rc 0); the same snapshot with its SVG differing from the
+pool's, named, refused as an older map (m:240-fr005-named-older-snapshot-rc 1); the generator edited so the key
+moves, refused naming `make map GEN=pool/hamlets/inashiro/inashiro.gen.py` (m:240-fr005-key-moved-rc 1); all
+restored, permitted (m:240-fr005-restored-rc 0). The slowest check took m:240-fr005-check-max-s 0.19 s, against
+SC-004's bound of 5.
 
 **The probe's first run found a defect it was not looking for.** Directly after a gate it refused Inashiro as
 missing `.png` and `.html` - correctly: the gate files its generation-cache entries with rendering skipped, and a
 hit on such an entry DELETES a standing render (`gencache.load`, deliberately, since a render the entry lacks is
 stale). All five hamlets in the clone were without their picture. The remedy the refusal named, `make map
 GEN=...`, answered CACHED and restored the render-less entry again. `make map` now rolls such a hit uncached,
-which draws both (the "after `make map`" line above). `make render-sync` also restores the clone's renders; it is
+which draws both - run on Inashiro directly after a gate (observed 2026-09-13, method: `make map` then a listing of the pool folder), the renders came back and a second `make map` answered CACHED with them kept. `make render-sync` also restores the clone's renders; it is
 labeled internal, so no refusal names it.

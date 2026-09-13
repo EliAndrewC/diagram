@@ -96,6 +96,10 @@ def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: p
     assert prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, names_it) == [], "a named, whole snapshot is a whole map for the reviewer"
     stale = prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, "review the map")
     assert stale and "pool folder lacks .png" in stale[0], "a whole STALE snapshot beside a render-less pool passes nothing when the dispatch names none"
+    (snap / "kuwabata.svg").write_text("the map before the fix")
+    older = prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, names_it)
+    assert older and "older map than the pool's" in older[0], "a named snapshot taken before the pool moved on is refused"
+    (snap / "kuwabata.svg").write_text("")
     (snap / "kuwabata.html").unlink()
     (m / "kuwabata.png").write_text("")
     named = prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, names_it)

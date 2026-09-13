@@ -72,9 +72,12 @@ engine, or the artifacts the reviewer will read are incomplete.** The generation
 map would re-roll (`pipeline/regen.py` returns CACHED or REGENERATED), so the check is a key comparison that
 rolls nothing. Completeness is judged WHERE THE REVIEWER READS: the review snapshot when the dispatch names one
 (`.git/review-snapshot/<map>/`), and the pool folder otherwise, each needing the `.json`, `.svg`, `.png` and
-`.html`. A map whose key has moved, or whose pool folder is incomplete, is named in the refusal with
-`make map GEN=...`; a named snapshot that is incomplete is refused with the two ways to a whole one - re-take it
-with `make verify`, or run `make map GEN=...` and dispatch against the pool folder without naming the snapshot.
+`.html`. And a named snapshot must be OF THE CURRENT MAP: it records no key of its own, so it is current when its
+manifest and SVG are byte-identical to the pool folder's, whose key the cache has just confirmed - a snapshot taken
+before a fix is not. A map whose key has moved, or whose pool folder is incomplete, is named in the refusal with
+`make map GEN=...`; a named snapshot that is incomplete or of an older map is refused with the two ways to a
+whole, current one - re-take it with `make verify`, or run `make map GEN=...` and dispatch against the pool
+folder without naming the snapshot.
 Feature 230's pass 12 ran against a snapshot whose renders the roll cache had evicted, and three of five agents
 rasterized the SVG themselves to work around it (`research.md` R1).
 
@@ -156,8 +159,9 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   overlap and is permitted beside a running gate.
 - **SC-004** (FR-005) A dispatch naming a map whose generation key has moved, or whose artifacts are incomplete
   where the reviewer will read them, is refused in under 5 seconds naming that map and its remedy, and permitted
-  once the map is regenerated. Proven on a real pool map, both ways, including a whole stale snapshot beside a
-  render-less pool folder refused when the dispatch names no snapshot and permitted when it names it.
+  once the map is regenerated. Proven on a real pool map, both ways, in states the harness sets up itself: a
+  render-less pool folder refused when the dispatch names no snapshot; a whole snapshot of the current map
+  permitted when named; a whole snapshot of an OLDER map (its SVG differing from the pool's) refused when named.
 - **SC-005** (FR-006) A figure outside a backtick span with no record and no one-shot label is refused and
   named; the same figure with a record or a dated one-shot label is permitted; the same figure inside a
   backtick span is skipped. `REVIEW_PREREQ_OK` with a reason permits all four refusals and is logged; a bare
@@ -222,10 +226,12 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   this feature's.
 - **D7 Amended during implementation (2026-09-13), three readings made concrete by measurement.**
   (a) FR-005's completeness is judged where the reviewer reads - the snapshot when the dispatch names one, the
-  pool folder otherwise. Measured on Inashiro after a green gate (`research.md` R5): the gate leaves every clone
-  pool map without its `.png` and `.html`, and snapshots stay on disk, so neither "the snapshot must be whole" (a
-  dispatch without `make verify` has none) nor "either place whole" (a stale whole snapshot passes a dispatch whose
-  reviewer reads the render-less pool folder - the pass-12 failure) says what FR-005 is for. And the remedy the
+  pool folder otherwise, and a named snapshot must also be of the current map - its manifest and SVG equal to the
+  pool's. Measured on Inashiro (`research.md` R5): a gate leaves every clone pool map without its `.png` and
+  `.html`, and snapshots stay on disk, so neither "the snapshot must be whole" (a dispatch without `make verify`
+  has none) nor "either place whole" (an old whole snapshot passes a dispatch whose reviewer reads the render-less
+  pool folder - the pass-12 failure) says what FR-005 is for; and without the currency clause a snapshot taken
+  before a fix passed once `make map` refreshed the pool, so the reviewer read the map without the fix. And the remedy the
   refusal names, `make map GEN=...`, restored the render-less cache entry; `make map` now rolls such a hit
   uncached, so the named remedy works. (b) A record verifies a finding (FR-003) only when it carries `quantity`
   and `source` as well as `verifies` and `subject`, because FR-007's first stage judges the `source` and a record
@@ -276,3 +282,8 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   carries D7(b)'s `quantity` and `source` itself. (3) Two one-shot labels in `research.md` began with a capital and
   did not match 239's pattern; lowered. (4) The Review history's round labels separated, rounds 3 and 4 citing
   their own keys.
+- **Amendment round 2, CHANGES REQUIRED, two items, both applied.** (1) A named snapshot was judged whole but not
+  current, so one taken before a fix passed once the pool was refreshed; FR-005, SC-004 and D7(a) now require it
+  to equal the pool's manifest and SVG, and the check does. (2) Two R5 figures did not come from their command,
+  which measured whatever state the clone was in and wrote nothing; the harness now sets up and restores every
+  state itself and records its own figures.

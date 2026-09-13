@@ -39,45 +39,61 @@
   "quantity": "longest of feature 230's gates that ran, of any result",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
- "240-fr005-check-max-s": {
-  "value": 0.2,
-  "unit": "s",
-  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
-  "taken": "2026-09-13",
-  "varies": true,
-  "quantity": "slowest of the probe's checks",
-  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
- },
- "240-fr005-unnamed-rc": {
-  "value": 1,
-  "unit": "exit code",
-  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
-  "taken": "2026-09-13",
-  "quantity": "dispatch naming no snapshot, pool folder without renders after a gate",
-  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
- },
- "240-fr005-named-rc": {
+ "240-fr005-whole-pool-rc": {
   "value": 0,
   "unit": "exit code",
-  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
   "taken": "2026-09-13",
-  "quantity": "the same dispatch naming the whole snapshot",
-  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
+  "quantity": "no snapshot named, pool folder whole and current",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-pool-without-renders-rc": {
+  "value": 1,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "no snapshot named, the pool's .png and .html moved aside as a gate leaves them",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-named-current-snapshot-rc": {
+  "value": 0,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "a whole snapshot of the current map named, pool without renders",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-named-older-snapshot-rc": {
+  "value": 1,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "a whole snapshot whose SVG differs from the pool's named",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
  },
  "240-fr005-key-moved-rc": {
   "value": 1,
   "unit": "exit code",
-  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
   "taken": "2026-09-13",
-  "quantity": "generator edited so the key moves, snapshot named",
-  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
+  "quantity": "the generator edited so its cache key moves, current snapshot named",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
  },
- "240-fr005-after-map-rc": {
+ "240-fr005-restored-rc": {
   "value": 0,
   "unit": "exit code",
-  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
   "taken": "2026-09-13",
-  "quantity": "dispatch naming no snapshot after make map drew the renders",
-  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
+  "quantity": "everything restored, no snapshot named",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-check-max-s": {
+  "value": 0.19,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "varies": true,
+  "quantity": "slowest of the probe's six checks",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
  }
 }

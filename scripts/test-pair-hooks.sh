@@ -256,9 +256,14 @@ rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
 # snapshot beside a render-less pool refuses a dispatch that names no snapshot, and a named whole one permits.
 mkdir -p "$CLONE/.git/review-snapshot/testmap/clone"
 for ext in json svg png html; do : > "$CLONE/.git/review-snapshot/testmap/clone/testmap.$ext"; done
+cp "$MAPDIR_F/testmap.json" "$MAPDIR_F/testmap.svg" "$CLONE/.git/review-snapshot/testmap/clone/"   # a snapshot OF the current map
 refused_for "a render-less pool is refused though a whole snapshot sits on disk, when the dispatch names none" "$REVIEW" "pool folder lacks .png"
 SNAPREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review testmap from .git/review-snapshot/testmap/clone/"}')
 check "...and permitted when the dispatch names that whole snapshot" '[ "$(rc_pretool "$SNAPREV")" -eq 0 ]'
+# GUARD_EDIT_OK: feature 240 amendment round 2 - a named snapshot of an OLDER map (taken before a fix) is refused
+printf 'before the fix' > "$CLONE/.git/review-snapshot/testmap/clone/testmap.svg"
+refused_for "...and refused when the snapshot it names is of an older map than the pool's" "$SNAPREV" "older map"
+: > "$CLONE/.git/review-snapshot/testmap/clone/testmap.svg"
 rm -f "$CLONE/.git/review-snapshot/testmap/clone/testmap.html"
 refused_for "...and refused when the snapshot it names is not whole" "$SNAPREV" "make verify"
 : > "$MAPDIR_F/testmap.png"

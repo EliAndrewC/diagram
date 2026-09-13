@@ -133,8 +133,20 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
         where = snapshots / name / "clone" if named else gen.parent
         missing = [ext for ext in ARTIFACTS if not (where / f"{name}{ext}").is_file()]
         rel = gen.relative_to(skill)
+        # GUARD_EDIT_OK: feature 240 FR-005 amendment round 2 - A NAMED SNAPSHOT MUST BE OF THE CURRENT MAP. Currency
+        # was asked only of the pool generator's key, so a snapshot taken before a fix passed once `make map` brought
+        # the pool up to date, and the reviewer read the map without the fix. The snapshot records no key of its own,
+        # so it is current when its manifest and SVG are byte-identical to the pool's, whose key is checked above.
+        older = named and not missing and any(
+            (where / f"{name}{ext}").read_bytes() != (gen.parent / f"{name}{ext}").read_bytes() for ext in (".json", ".svg") if (gen.parent / f"{name}{ext}").is_file()
+        )
         if not current(str(gen)):
             out.append(f"{name}: its generation key has moved - the map on disk is not what the engine draws now - `make map GEN={rel}`")
+        elif older:
+            out.append(
+                f"{name}: the review snapshot the dispatch names is of an older map than the pool's - re-take it (`make verify`), "
+                f"or dispatch against the pool folder without naming the snapshot"
+            )
         elif missing and named:
             out.append(
                 f"{name}: the review snapshot the dispatch names lacks {' '.join(missing)} - re-take it (`make verify`), or run "
