@@ -51,8 +51,9 @@ def declares_exemption(line: str) -> str:
     silently exempted itself, and a real triple in it would have been invisible to the backstop.
 
     So a declaration stands at the START of its line, modulo indentation and comment punctuation
-    (`#`, `*`, `:`, `-`, `//`), the way `FILE_SIZE_OK` is read; a placeholder reason (`<reason>`) is
-    documentation, not a declaration; and the reason floor is the project's two words.
+    (`#`, `*`, `:`, `-`, `//`), the way `FILE_SIZE_OK` is read; a reason OPENING WITH `<` is documentation
+    rather than a declaration (`<reason>` is the form a document writes, and nothing else starts a real one);
+    and the reason floor is the project's two words.
     """
     m = re.match(rf"^[\s#*:/;\-]*{re.escape(EXEMPT)}(.*)$", line)
     if not m:
@@ -259,7 +260,7 @@ def main(argv: list[str]) -> int:
     if not argv or argv[0] != "--tracked":
         print(
             "usage: _hm_conflict.py [--selftest | --tracked <root> | --list <root>]\n"
-            "  --selftest  prove the detector fires (9+ content cases, 4 command shapes)\n"
+            "  --selftest  prove the detector fires (the cases are counted by the run, never typed here)\n"
             "  --tracked   exit 1 naming any tracked file that carries a conflict\n"
             f"  --list      name every tracked file declaring {EXEMPT[:-1]} (what `make audit` prints)",
             file=sys.stderr,

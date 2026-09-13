@@ -72,8 +72,8 @@ route, which a state-based rule would not (R2, R3).
   wherever the conflict falls, including inside a fenced block in a Markdown file, and 7 of the 23 files
   of the second incident were Markdown or HTML - an exemption for fenced text would have passed them. A
   file that must carry a real triple at column 0 - a fixture, a document explaining a conflict - declares
-  `CONFLICT_MARKERS_OK:` followed by a REAL reason in its first 40 lines - the literal string `<reason>`
-  does not count, being what documentation writes where a reason goes - the same file-level shape
+  `CONFLICT_MARKERS_OK:` followed by a REAL reason in its first 40 lines - a reason opening with `<` does
+  not count, being what documentation writes where a reason goes (`<reason>` is its usual form) - the same file-level shape
   `FILE_SIZE_OK` takes, and `make audit` lists every file taking it. **A MENTION of that marker is not a
   declaration**: it must stand at the start of its line (modulo indentation and comment punctuation) and
   carry two words of actual reason - the detector's own docstring describes the marker, and under the first rule
