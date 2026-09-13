@@ -73,7 +73,15 @@ class StandsMixin:
         )
         return n
 
-    def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None, face_margin: float | None = None, reserved: tuple[float, float, float, float] | None = None) -> int:  # type: ignore[misc]
+    def village_grove(  # type: ignore[misc]
+        self: Settlement,
+        poly: Any,
+        role: str = "windbreak",
+        dense: bool = True,
+        within: tuple[float, float, float, float] | None = None,
+        face_margin: float | None = None,
+        reserved: tuple[float, float, float, float] | None = None,
+    ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
         windbreak'):

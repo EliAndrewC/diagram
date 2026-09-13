@@ -497,7 +497,9 @@ class FinishMixin:
         (feature 222); the linear scan this was is `_geom.box_clear_brute`, the oracle its tests hold it to."""
         return obs.clear(bx0, by0, bx1, by1)
 
-    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False, planned: Any = ()) -> Pt | None:  # type: ignore[misc]
+    def _blank_label_spot(  # type: ignore[misc]
+        self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False, planned: Any = ()
+    ) -> Pt | None:
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
         feature; returns its (x, y) top-left, or None if the map is too full. With `cover_ok` the belt, the
         bamboo and the woodland commons are not obstacles (the placard may sit on cover, never on a

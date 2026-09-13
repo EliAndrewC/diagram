@@ -17,6 +17,7 @@ from ..._geom import (
 )
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
 from ._helpers import CAPTION_LANE_FLOOR_FT, CAPTION_LANE_TARGET_FT, first_clear_seat, pick_caption_seat
+from .siting import canopy_index, under_canopy
 
 if TYPE_CHECKING:
     from ...core import Settlement
@@ -375,6 +376,20 @@ class BoardsMixin:
                             return True
                 return False
 
+            _canopy = canopy_index(self.M)  # built once for this caption's ladder - see `canopy_index`
+
+            def _rung(_seats: list[Pt], _want: float) -> Pt | None:
+                """One rung of the ladder, asked twice: once refusing seats under a canopy, then as it stands.
+
+                A caption may stand ON a grove - settled, and right: a name stands on a map the way it stands on
+                scrub or a paddy. What a reader should not see is the HALO, which is opaque, cutting a rectangular
+                notch out of a crown (settlement-review, feature 230 pass 13: a copse clump landed under this very
+                caption on Kuwabata and the halo took the bottom 7.5 ft of a 22 ft canopy across its whole width,
+                so the tree read as damaged). A preference rather than a constraint, and at the rung rather than
+                at the end of it, because the ladder's first answer is the one that ships."""
+                _shaded = [_s for _s in _seats if not under_canopy(_canopy, _s[0], _s[1], max(_chw, 8.0))]
+                return first_clear_seat(_shaded, _hug, _hug_cap, _blocked, _box_clearance, _want) or first_clear_seat(_seats, _hug, _hug_cap, _blocked, _box_clearance, _want)
+
             def _across_a_way(_q: Pt) -> bool:
                 """Does the line from the board to this seat cross a drawn way?"""
                 for _ln in self.M.get("lanes") or []:
@@ -392,7 +407,15 @@ class BoardsMixin:
                 # "notice board" named the track. Seats on the board's own side are ranked first, and a crossing seat is
                 # considered only when the board has no other ground at all.
                 _near = [_s for _s in _seats if not _across_a_way(_s)]
-                return pick_caption_seat(_near or _seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
+                # ...AND NOT WITH ITS HALO IN A TREE (settlement-review, feature 230 pass 13). A caption may stand ON a
+                # grove - that is settled, and right: a name stands on a map the way it stands on scrub or a paddy. What
+                # a reader should not see is the halo, which is opaque, cutting a rectangular notch out of a crown: on
+                # Kuwabata a copse clump landed under this very caption and the halo took the bottom 7.5 ft of a 22 ft
+                # canopy across its whole width, so the tree read as damaged. A PREFERENCE rather than a constraint, in
+                # the same shape and the same place as the board's own: a seat clear of canopy wins where one exists, and
+                # a caption whose every candidate stands under trees is still seated.
+                _clear = [_s for _s in (_near or _seats) if not under_canopy(_canopy, _s[0], _s[1], max(_chw, 8.0))]
+                return pick_caption_seat(_clear or _near or _seats, (x, y), _hug, _hug_cap, _box_clearance, _lane_target, _blocked)
 
             # ONE LADDER, BOTH BRANCHES (feature 157, second pass). The dense ranked ladder was built
             # inside the tilted branch and the LEVEL branch kept its own coarse candidate set - four
@@ -504,7 +527,7 @@ class BoardsMixin:
                 # no pool gen passes `label_above` to `kosatsuba()` - but the two branches now honor the
                 # caller's constraint the same way.
                 _tld = [_q for _, _q in _ranked if not label_above or _q[1] < y]
-                _seat = first_clear_seat(_tld, _hug, _hug_cap, _blocked, _box_clearance, _lane_target)
+                _seat = _rung(_tld, _lane_target)
                 if _seat is not None:
                     _lx, _ly = _seat
                 else:
@@ -531,7 +554,7 @@ class BoardsMixin:
                     # the floor is a narrow band of clearance that eight map geometries failed to
                     # hit, and the rung itself is unit-tested on the lifted function instead.
                     _floor = self.px(CAPTION_LANE_FLOOR_FT)
-                    _lx, _ly = first_clear_seat(_tld, _hug, _hug_cap, _blocked, _box_clearance, _floor) or _pick(_tilted)
+                    _lx, _ly = _rung(_tld, _floor) or _pick(_tilted)
             else:
                 # THE HALO MUST NOT NOTCH THE WAY THE BOARD STANDS ON (settlement-review on Inashiro,
                 # 2026-08-19). The caption is drawn with a 3 px background halo
@@ -600,10 +623,10 @@ class BoardsMixin:
                 # it is both stricter where it matters and honest about the ground a caption may use.
                 # It stays the filter on the coarse fallback below, where it always was.
                 _lvl = [_q for _, _q in _ranked if not label_above or _q[1] < y]
-                _seat = first_clear_seat(_lvl, _hug, _hug_cap, _blocked, _box_clearance, _lane_target)
+                _seat = _rung(_lvl, _lane_target)
                 if _seat is None:  # the same rung the tilted branch takes: give up the MARGIN, never the 2 ft the rule asks
                     _floor = self.px(CAPTION_LANE_FLOOR_FT)
-                    _seat = first_clear_seat(_lvl, _hug, _hug_cap, _blocked, _box_clearance, _floor)
+                    _seat = _rung(_lvl, _floor)
                 # ...and the same chain on this branch (feature 174): the rung, then the coarse
                 # search, then the plain default below or above the board.
                 _lx, _ly = _seat or (_pick(_ok) if _ok else ((x, y - hh - 11) if label_above else (x, y + hh + 11)))
