@@ -154,3 +154,49 @@ def test_every_map_rolling_test_carries_the_rolls_map_marker() -> None:
             if "rolls_map" not in decorated:
                 missing.append(f"{p.relative_to(TESTS)}::{node.name}")
     assert not missing, "these tests generate a settlement but carry no @pytest.mark.rolls_map, so `make quick` would run them and get slower without saying so:\n  " + "\n  ".join(missing)
+
+
+# ---- ONE CHROMIUM PER RUN (GM 2026-09-12), made true on 2026-09-13 ---------------------------------------------------
+#
+# The browser package shares ONE session-scoped Chromium only if every one of its tests lands on the same xdist
+# worker, and under `--dist loadgroup` that is what an `xdist_group` mark does. The mark had been written as a
+# `pytestmark` in the package's conftest.py, which applies to NOTHING - pytest reads module marks from the test
+# module itself - and the 2026-09-13 gate memory profile found the package's 21 tests on 8 workers, each with its
+# own Playwright driver and Chromium: 1.2 GiB of the gate's 3.2 GiB peak (dev/performance.md, "Where a gate's RAM
+# goes"). The mark lives in each test module's own `pytestmark` now, and this is what keeps it there. Read from the
+# AST, like every guard in this file: a mention in a docstring is not a mark.
+
+BROWSER_PACKAGE = TESTS / "full" / "interactive" / "page_browser"
+
+
+def _module_marks(tree: ast.Module) -> set[str]:
+    """The names marked by a module-level `pytestmark = pytest.mark.x` or `pytestmark = [pytest.mark.x, ...]`."""
+    marks: set[str] = set()
+    for node in tree.body:
+        if not isinstance(node, ast.Assign) or not any(isinstance(t, ast.Name) and t.id == "pytestmark" for t in node.targets):
+            continue
+        for sub in ast.walk(node.value):
+            if isinstance(sub, ast.Attribute) and isinstance(sub.value, ast.Attribute) and sub.value.attr == "mark":
+                marks.add(sub.attr)
+    return marks
+
+
+def test_every_browser_test_module_joins_the_one_chromium_group() -> None:
+    modules = sorted(BROWSER_PACKAGE.glob("test_*.py"))
+    assert modules, "the browser package has no test modules - has it moved?"
+    missing = [m.name for m in modules if "xdist_group" not in _module_marks(ast.parse(m.read_text(encoding="utf-8")))]
+    assert not missing, "these browser test modules carry no module-level xdist_group mark, so loadgroup will spread them over workers and each worker will start its own Chromium:\n  " + "\n  ".join(
+        missing
+    )
+
+
+def test_a_conftest_pytestmark_is_not_how_the_group_is_set() -> None:
+    """The form that silently failed: `pytestmark = ...` in the package's conftest. pytest never reads it."""
+    tree = ast.parse((BROWSER_PACKAGE / "conftest.py").read_text(encoding="utf-8"))
+    assert not _module_marks(tree), "conftest.py carries a pytestmark again - it applies to no test; put the mark in the test modules"
+
+
+def test_the_group_guard_reads_marks_not_prose() -> None:
+    assert _module_marks(ast.parse('pytestmark = [pytest.mark.renders, pytest.mark.xdist_group("chromium")]\n')) == {"renders", "xdist_group"}
+    assert _module_marks(ast.parse('pytestmark = pytest.mark.renders\n')) == {"renders"}
+    assert _module_marks(ast.parse('"""pytest.mark.xdist_group in a docstring"""\nx = 1\n')) == set()

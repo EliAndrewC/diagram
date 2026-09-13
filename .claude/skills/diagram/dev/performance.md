@@ -548,3 +548,81 @@ Three things the cohort taught, each a shape to remember:
   fewer (14 -> 13); and the cohort audit reported strands but not shortfalls. Both fixed; probe `roll_placed` per
   attempt when a seed looks odd.
 
+
+## Where a gate's RAM goes (profile, session `diagram-performance`, 2026-09-13, at the GM's request)
+
+The GM asked how much RAM `make done`'s tests use and how it breaks down - our tests, third-party libraries,
+the standard library, our engine code being imported. Three instruments, all in the session scratchpad and
+cheap to rebuild, and all three see the REAL gate rather than a model of it:
+
+- **a process-tree sampler**: every 0.4 s, `Pss`, `Rss` and `Anonymous` from `smaps_rollup` for every process
+  under the `make`, plus the cgroup's `memory.current` and `anon`/`file`. PSS divides shared pages among the
+  processes mapping them, so the sum over the tree is an honest total a concurrent gate cannot inflate;
+- **an import hook** in a `sitecustomize.py` on `PYTHONPATH` (active only with `MEMPROF_DIR` set), which wraps
+  every loader found on `sys.meta_path` so each `exec_module` is bracketed by `statm` and `smaps_rollup`
+  readings. A module's cost is EXCLUSIVE - its children's deltas subtracted - and is classed by its file:
+  stdlib, site-packages, `l7r/`, `tests/`; a stdlib module also records which class pulled it in;
+- **a pytest plugin** (discovered through a `pytest11` entry point in a `dist-info` beside it, so a child
+  pytest without the path simply loads nothing - the `-p memprof` form failed the fifteen `tests/tooling`
+  tests that spawn a gate of their own) sampling `statm` at 20 ms for a per-test peak, with RSS marks at
+  plugin load, session start, collection end and session end.
+
+**The whole gate, full test phase, browser package running (before the fix below).** Peak sum-PSS
+**3,210 MiB**, 54 s in, during the test phase; every other phase is small - `pyrefly` 164 MiB, the reference
+roll ~120, the hooks-test fan-out ~110 in total, `ruff` 20, and after pytest the coverage combine, the report
+and the hamlet floor under 40. The container went from 5.5 GiB to 8.7 of its 10 GiB cap, +2,962 MiB of `anon`,
+which is the sum-PSS figure seen from outside. At the peak:
+
+| process class | MiB | share | count |
+|---|---|---|---|
+| the ten gate workers | 1,268 | 40% | 10, median 124 MiB PSS each; life peaks median 123, max 235 |
+| Playwright drivers (node) | 751 | 23% | **8**, ~95 MiB each |
+| Chromium | 445 | 14% | 40 processes, five per browser |
+| sub-gates spawned by `tests/tooling` | 682 | 21% | 8 controllers + 12 two-worker gates alive at once (30 over the run, ~1.2 s each, ~33 MiB a controller) |
+| everything else | 64 | 2% | the real controller, the ci helpers, make |
+
+**The defect: eight browsers for a rule that said one.** The browser package's `xdist_group("chromium")` was a
+`pytestmark` in its conftest.py, and pytest reads module marks only from the TEST module - a conftest is on
+no test's node chain - so under `loadgroup` the 21 tests spread over 8 workers and each worker's
+session-scoped `browser` fixture launched its own driver and Chromium: **1.2 GiB, 37% of the peak**. The
+Makefile and the conftest had both stated the one-Chromium rule (GM 2026-09-12) and nothing measured it. A
+collection hook in the conftest was tried first and did NOT work under `make page-check`: a conftest named
+on the command line is an initial conftest, registered before xdist's `WorkerInteractor`, and pluggy calls
+the later registration first, so xdist had already read the marks (measured: 21 of 777 node ids already
+carried `@chromium` when the hook ran). The mark lives in each test module's own `pytestmark` now, beside
+`renders`, and `tests/test_markers.py` asserts it from the AST - on every module in the package, and that the
+conftest carries none. Measured after: ONE driver (141 MiB) and ONE Chromium (139 MiB over five processes);
+`make page-check` peaks at **968 MiB against 2,090**; the gate's test phase (`make test-full`, the package
+running) at **2,125 MiB against 3,210**. The module-level `playwright.sync_api` import moved into the
+fixture at the same time, so the nine workers that never run the group stop paying for it: a worker's
+imports fell from 93.1 to 81.7 MiB.
+
+**What one gate worker is made of** (median over the ten, exclusive import cost as RSS; every worker is
+its own copy - 25 of its 1,268 MiB were file-backed pages, the rest anonymous heap - so the import column is
+paid ten times over):
+
+| | MiB | of imports | what |
+|---|---|---|---|
+| interpreter at startup | 9.2 | - | |
+| third-party | 31.8 | 34% | numpy 7.6, pytest 6.4, playwright 5.3 (+ greenlet 1.6; both gone from nine workers now), PIL 3.0, shapely 2.9, coverage 2.5, pygments 1.1, execnet 0.7 |
+| our tests | 26.3 | 28% | `tests/tools` 7.3, `tests/tooling` 6.4, `tests/settlement` 4.2, `tests/hamletgen` 2.4 - 275 modules |
+| stdlib | 22.6 | 24% | 18.4 of it pulled in by third-party code, 2.8 by the interpreter and pytest's bootstrap, 0.7 by tests, 0.7 by the engine; hashlib with OpenSSL 4.4, asyncio 1.5, sqlite3 1.0, ssl 0.8, xml 0.7 |
+| our engine | 11.2 | 12% | 227 modules: settlement 3.6, interactive 2.0, hamletgen 1.8, ci 1.0, waterfields 0.8, tools 0.8 |
+| other | 1.2 | 1% | |
+| **imports in all** | **93.1** | | RSS 45 when the plugin loads, 48 at session start |
+| collection | +10 | | 3,894 items: RSS 108 at collection end |
+| the run itself | +41 | | RSS 149 at session end, median retained growth 45; run peak median 152 |
+
+The run-time growth is mostly coverage's per-context bookkeeping and pytest's own: against an untraced run of
+the same tree (`make test-file FILE=tests`, the quick-scope form, 3,055 items), a traced worker is +6 MiB at
+collection end and +14 at session end - roughly 150 MiB across ten workers, and the engine's import column is
++1.7 MiB under tracing. The test with the largest spike is the lit-screenshot test: the three `test_page_lit`
+browser tests each rise 180-200 MiB over their start in the one worker that runs them (numpy decoding the id
+map and PIL the screenshot), which is why that worker peaks at ~300 MiB against ~150 for the others; the
+largest outside the browser are the two pinned-knob rolling tests at 65-70 MiB.
+
+**What this says about the three categories the GM named.** Our own code is the SMALL part of a worker: the
+engine is 11 MiB and the tests 26, against 55 for third-party code and the stdlib it drags in. Where the gate's
+RAM actually goes is in COPIES and PROCESSES - ten workers each importing everything (feature 237's finding,
+still true), browsers launched per worker (fixed here), and the tooling tests' real sub-gates (a cost of
+testing the gate machinery with the gate machinery, 0.7 GiB at the peak; left as is, stated).

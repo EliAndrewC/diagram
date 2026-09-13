@@ -22,7 +22,10 @@ from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.sources import RESEARCH_PAGES
 from tests.full.interactive.page_browser._driver import Page, _mechanics
 
-pytestmark = pytest.mark.renders  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
+pytestmark = [
+    pytest.mark.renders,  # tests OF the page's raster / the plates: they render tiny synthetic pictures on purpose (feature 213)
+    pytest.mark.xdist_group("chromium"),  # ONE Chromium per run: the whole package on one worker (conftest.py says why)
+]
 
 
 def test_synthetic_page_mechanics(synthetic: Page) -> None:
