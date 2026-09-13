@@ -112,6 +112,17 @@ def test_quick_collects_only_the_quick_tree(fixture_skill: Path, monkeypatch: py
 
 
 @pytest.mark.tooling
+def _runs(recipe: str) -> str:
+    """The recipe's EXECUTED lines, without its `: "..."` comments.
+
+    The comments are prose and they name flags in order to explain them - feature 237's own comment says why
+    `--deselect` filters after collection where an argument restricts before it - and a guard that greps the
+    raw text therefore fires on a sentence rather than on a command. What these assertions are about is what
+    make would RUN, so that is what they are given.
+    """
+    return "\n".join(ln for ln in recipe.splitlines() if not ln.strip().startswith(': "'))
+
+
 def test_the_directory_decides_when_a_test_runs(fixture_skill: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """THE THREE TREES (feature 135, GM 2026-08-27: "the directory into which we added is the thing that inherently
     determines When and under what circumstance that test is run"). Quick collects `tests/` minus the tier, gate,
@@ -119,9 +130,9 @@ def test_the_directory_decides_when_a_test_runs(fixture_skill: Path, monkeypatch
     so with `L7R_TESTS_FULL=1`. Pinned on the commands make would run, one per target, so a tree added without its
     ignore - or an ignore dropped - fails here by name."""
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
-    quick = make(fixture_skill, "-n", "quick").stdout
-    gate = make(fixture_skill, "-n", "test").stdout
-    full = make(fixture_skill, "-n", "test-full").stdout
+    quick = _runs(make(fixture_skill, "-n", "quick").stdout)
+    gate = _runs(make(fixture_skill, "-n", "test").stdout)
+    full = _runs(make(fixture_skill, "-n", "test-full").stdout)
     assert "--ignore=tests/gate" in quick and "--ignore=tests/full" in quick
     assert "--ignore=tests/full" in gate and "--ignore=tests/gate" not in gate and "L7R_TESTS_FULL=1" not in gate
     assert "--ignore=tests/full" not in full and "--ignore=tests/gate" not in full and "L7R_TESTS_FULL=1" in full and "COV_FLOORS=1" in full

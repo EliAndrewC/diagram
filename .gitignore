@@ -51,16 +51,34 @@ __pycache__
 #    the way in (83 files, 440.8 MB, 83/83 matched on read-back). That archive is the only copy
 #    besides the GM's own backup. Do not treat a missing exhibit as a bug to regenerate; it cannot
 #    be regenerated, and it is not lost.
-# 2. THE MODE A EXCEPTION IS RETIRED. This block used to say a magistracy `.svg` "IS the source"
-#    because "a Mode A compound plan has no generator that draws it from data". Measured 2026-09-03:
-#    all five HAVE a `.gen.py` and all five regenerate BYTE-FOR-BYTE (identical md5, empty git diff).
-#    The `.gen.py` is the source; the `.svg` is its output, so it is ignored like every other render.
-#    `render_cache.is_cache_managed` asks `git check-ignore`, so it adapts to this on its own.
+# 2. THE MODE A EXCEPTION HOLDS FOR THREE OF THE FIVE, and the 2026-09-03 retirement of it was
+#    wrong. That note read: "all five HAVE a `.gen.py` and all five regenerate BYTE-FOR-BYTE
+#    (identical md5, empty git diff). The `.gen.py` is the source; the `.svg` is its output." Measured
+#    again 2026-09-13 (feature 237): TWO of the five generate their svg - `county-magistracy-example`
+#    and `ochiba-roundtrip-test` call `compound.place()` and `emit_svg()` and write it, 0.17 s end to
+#    end, 6 KB out - and THREE do not. `hayakawa`, `ochiba-magistracy` and `ubame` have a `.gen.py`
+#    whose entire body is `resvg <svg> <png>`: the svg is hand-drawn source and nothing rebuilds it.
+#    The byte-for-byte result could not have meant what it said for those three, because running
+#    their gens does not write an svg - the file on disk was left untouched and its md5 was compared
+#    with itself. An unchanged file is not a reproduced one.
+#
+#    So the three are UN-IGNORED below and tracked as the source they are, at 35.6 + 38.6 + 39.7 KB =
+#    114 KB, against the 345.71 -> 38.68 MiB the purge won. The cost of not tracking them was
+#    measured too: `render-sync` exits 1 on the first of the three in any clone that lacks the file -
+#    every fresh clone - so every map after it in the walk never renders either. The list is
+#    enumerated rather than derived ON PURPOSE: which plans are hand-drawn is a curation decision,
+#    and a new one is a deliberate line here rather than something a glob infers.
+#    `render_cache.is_cacheable` asks `git check-ignore` ("Mode A magistracy svgs are tracked source -
+#    never stamped, always regenerated"), so it follows this file and needs no edit of its own.
 #
 # The ONLY renders still tracked are `tests/fixtures/*-red.svg`: hand-broken by a person to prove a
 # check fires, with no generator anywhere. That is the whole exception list now.
 .claude/skills/diagram/pool/*/*/*.svg
 .claude/skills/diagram/pool/*/*/*.png
+# ...except the three hand-drawn Mode A plans, which no generator can rebuild (note 2 above)
+!.claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg
+!.claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg
+!.claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg
 .claude/skills/diagram/pool/*/*/*.html
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.svg
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.png

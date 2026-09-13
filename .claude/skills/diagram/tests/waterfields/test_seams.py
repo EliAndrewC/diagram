@@ -7,13 +7,27 @@ the fan - and no basin's wall stands a short way off another's across dry ground
 """
 
 import random
+from typing import Any
 
 import pytest
-from shapely.geometry import Polygon
 
 from l7r.diagram.waterfields.banks import _WELD_MIN_APEX, dedup_ring, jog_steps, jog_vertices, tapers_to_a_point
 from l7r.diagram.waterfields.frame import _Frame
 from l7r.diagram.waterfields.seams import MIN_PLOT_SIDE, _absorb, _despike, _min_apex, _open_to, _parts, _plant, _ring, _water, close_seams
+
+
+def Polygon(*args: Any, **kwargs: Any) -> Any:
+    """`shapely.geometry.Polygon`, imported on FIRST USE rather than at collection (feature 237, FR-007).
+
+    A module-level import here cost EVERY one of the ten gate workers 16.3 MiB - shapely plus the numpy it
+    drags in (`specs/237-lean-test-collection/research.md` R9) - to collect a file whose tests one worker
+    runs. `unary_union` was already imported inside the one helper that uses it; this is the same move for
+    the name the whole file uses. No call site changes, and a test is not a per-plot path.
+    """
+    from shapely.geometry import Polygon as _Polygon
+
+    return _Polygon(*args, **kwargs)
+
 
 GRAIN = 2.0
 HALF = MIN_PLOT_SIDE * GRAIN / 2  # 6 px: a pocket narrower than 12 px cannot hold a basin

@@ -319,20 +319,31 @@ def test_e_each_fallback_shape_forces_a_full_run(project: tuple[Path, Path], rel
     assert pl.mode == "full" and why in pl.reason, pl
 
 
-def test_e_over_the_fraction_the_plugin_runs_everything_and_marks_the_run_full(project: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch) -> None:
+def test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees(project: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch) -> None:
+    """Over the fraction, a full run - decided BEFORE the arguments are chosen (feature 237, D8).
+
+    Until feature 237 the plugin made this call after collection, where the real selection is known. It
+    cannot any more: the gate now narrows pytest's own arguments from the plan, and a process given a few
+    modules cannot decide to run everything - a run labeled full that collected a subset would skip the
+    merge and judge the 100% floor over that subset alone. So the planner projects the same rules over the
+    baseline and returns a plan with NO paths, which is what keeps the trees.
+    """
     root, skill = project
     baseline(root, skill)
     write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
-    monkeypatch.setattr(incremental, "FULL_FRACTION", 0.1)  # the knob travels in the plan, which is how the plugin (a subprocess) sees it
+    monkeypatch.setattr(incremental, "FULL_FRACTION", 0.1)
     bdir = incremental.baseline_dir(root)
     assert incremental.main(["plan"], root, skill) == 0
     pl = json.loads((bdir / incremental.PLAN).read_text(encoding="utf-8"))
-    assert pl["mode"] == "incremental" and pl["full_fraction"] == 0.1
+    assert pl["mode"] == "full" and "fraction" in pl["reason"], pl
+    assert pl.get("paths") in (None, []), "a full plan names no paths, so the gate passes the trees"
     proc = subprocess.run(PYTEST, cwd=skill, env=gate_env(bdir), capture_output=True, text=True)
     assert proc.returncode == 0, proc.stdout + proc.stderr
     result = json.loads((bdir / incremental.RESULT).read_text(encoding="utf-8"))
-    assert result["mode"] == "full" and "fraction" in result["reason"] and len(result["selected"]) == 8, result
+    assert result["mode"] == "full" and len(result["selected"]) == 8, result
     assert "8 passed" in proc.stdout
+    assert (bdir / (incremental.TESTS + ".next")).is_file(), "an unrestricted run may offer the next baseline"
+    assert (bdir / (incremental.GRAPH + ".next")).is_file(), "and its fixture graph beside it (FR-005)"
 
 
 def test_nothing_changed_selects_nothing_and_the_run_is_green_on_the_untouched_baseline(project: tuple[Path, Path]) -> None:
@@ -364,3 +375,31 @@ def test_mode_reports_the_run_that_happened(project: tuple[Path, Path], capsys: 
     capsys.readouterr()
     assert incremental.main(["mode"], root, skill) == 0 and capsys.readouterr().out.strip() == "full"
     assert incremental.main(["nonsense"], root, skill) == 2
+
+
+def test_the_plans_paths_shrink_what_pytest_COLLECTS_not_just_what_it_runs(project: tuple[Path, Path]) -> None:
+    """The feature's whole point, at the gate's own level (feature 237, FR-001/FR-002, SC-002).
+
+    Deselection runs a few tests out of a full collection; arguments make the collection itself smaller, and
+    only the second saves the memory - every worker imports every collected module. So this asserts on the
+    COLLECTED count, which is the thing that moved, and it passes the plan's paths exactly as the Makefile
+    does: read from `incremental paths` after the plan is written, as pytest's positional arguments.
+    """
+    root, skill = project
+    baseline(root, skill)
+    write(skill, "eng/polder.py", POLDER.replace('return "short"', 'return "short"  # edited'))
+    bdir = incremental.baseline_dir(root)
+    assert incremental.main(["plan"], root, skill) == 0
+    pl = json.loads((bdir / incremental.PLAN).read_text(encoding="utf-8"))
+    assert pl["mode"] == "incremental" and pl["paths"], f"the plan should narrow to the polder's tests: {pl}"
+
+    whole = subprocess.run(PYTEST, cwd=skill, env=gate_env(bdir), capture_output=True, text=True)
+    assert whole.returncode == 0, whole.stdout + whole.stderr
+    all_collected = len(json.loads((bdir / incremental.RESULT).read_text(encoding="utf-8"))["collected"])
+
+    narrowed = subprocess.run([*PYTEST[:-1], *pl["paths"]], cwd=skill, env=gate_env(bdir), capture_output=True, text=True)
+    assert narrowed.returncode == 0, narrowed.stdout + narrowed.stderr
+    result = json.loads((bdir / incremental.RESULT).read_text(encoding="utf-8"))
+    assert len(result["collected"]) < all_collected, f"the arguments did not shrink the collection: {len(result['collected'])} of {all_collected}"
+    assert result["selected"] == [n for n in result["collected"] if n in result["selected"]], "the same tests still run"
+    assert not (bdir / (incremental.TESTS + ".next")).is_file(), "and a restricted run offers no baseline (FR-004)"

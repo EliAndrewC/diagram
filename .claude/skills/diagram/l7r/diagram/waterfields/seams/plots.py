@@ -1,12 +1,15 @@
 """Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index."""
 
-import math
-from typing import Any
+from __future__ import annotations
 
-from shapely.errors import GEOSException
-from shapely.geometry import LineString, MultiPolygon, Polygon
-from shapely.geometry.base import BaseGeometry
-from shapely.ops import unary_union
+import math
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+    from shapely.errors import GEOSException
+    from shapely.geometry import LineString, MultiPolygon, Polygon
+    from shapely.geometry.base import BaseGeometry
+    from shapely.ops import unary_union
 
 from ..banks import (
     _GATE_MIN_APEX,
@@ -18,6 +21,31 @@ from ..banks import (
 from ..frame import Poly, Pt, _Frame
 from .geoms import PlotGeoms
 from .pockets import _despike, _parts, _ring
+
+_SHAPELY_LOADED = False
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
+    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
+    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
+    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
+    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
+    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
+    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
+    """
+    global _SHAPELY_LOADED, GEOSException, LineString, MultiPolygon, Polygon, unary_union  # binding this module's own names is the point
+    if _SHAPELY_LOADED:
+        return
+    from shapely.errors import GEOSException
+    from shapely.geometry import LineString, MultiPolygon, Polygon
+    from shapely.ops import unary_union
+
+    _SHAPELY_LOADED = True
 
 
 def _seam_cuts(lo: float, hi: float, want: float, marks: list[float]) -> list[float]:
@@ -65,6 +93,7 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
     them among their own siblings was tried first and left five toe wedges bare on Inashiro: a
     scrap whose only sibling refuses the union (the two meet at a point) had nowhere else to go,
     and stayed a doubled bund."""
+    _load_shapely()
     x0, y0, x1, y1 = pocket.bounds
     corners = [F.to_uf(x0, y0), F.to_uf(x1, y0), F.to_uf(x1, y1), F.to_uf(x0, y1)]
     ulo, uhi = min(u for u, _ in corners), max(u for u, _ in corners)
@@ -269,6 +298,7 @@ def _trade(
     of 580 steps**, more than every other refusal combined. The corner is a POLYGON; who it belongs to
     is a question about that polygon's boundary, and `_absorb` has answered the same question by
     shared boundary length since it was written."""
+    _load_shapely()
     cut = [q for q in plots[i]["poly"] if (round(q[0], 1), round(q[1], 1)) not in drop]
     if len(cut) < 3:
         return False

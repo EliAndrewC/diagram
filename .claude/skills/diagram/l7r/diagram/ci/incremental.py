@@ -36,8 +36,9 @@ accumulate between full runs, and a full run - a fallback, `INCREMENTAL=0`, `FUL
 compounds. Fallbacks to FULL, each because file-level selection cannot see the dependency: no baseline; a
 changed engine file that is not `.py` (a pool generator or manifest); a changed file under `tests/` that is
 not a test module (`conftest.py`, `_scope.py`, a helper, `fixtures/`); the tooling hash moved; an
-import-time line changed; or more than `FULL_FRACTION` of the suite selected (`selection.py` decides that
-one, after collection). It lives under the clone's git directory - per clone, never in the tree.
+import-time line changed; or more than `FULL_FRACTION` of the baseline reached, which the PLANNER decides
+before pytest's arguments are chosen (`over_the_fraction`, projected over the baseline; feature 237 D8 says
+why it cannot be decided after collection any more). It lives under the clone's git directory - per clone, never in the tree.
 """
 
 from __future__ import annotations
@@ -55,15 +56,26 @@ from typing import Any
 
 from l7r.diagram.ci import state
 
-#: Above this fraction of the collected suite the incremental run costs about what a full one does
-#: (collection, the reference roll and the floors are fixed costs) and gives up the baseline refresh - so the
-#: plugin runs everything and marks the run FULL. A knob with its reason; not a measured optimum (spec D3).
+#: Above this fraction of the BASELINE the incremental run costs about what a full one does (collection, the
+#: reference roll and the floors are fixed costs) and gives up the baseline refresh - so the PLANNER plans a
+#: full run. A knob with its reason; not a measured optimum (spec D3). It was a fraction of the COLLECTED
+#: suite, decided by the plugin after collection, until feature 237 moved the decision ahead of pytest's
+#: arguments (spec D8: a process given a few modules cannot choose to run everything, and a run labeled full
+#: that collected a subset would judge the floor over that subset alone).
 FULL_FRACTION = 0.6
 
 BASELINE_DIR = "gate-baseline"
 COVERAGE_DB = "coverage.db"
 MANIFEST = "manifest.json"
 TESTS = "tests.json"  # nodeid -> the fixture closure it requests; written by selection.py on the controller
+GRAPH = "fixtures.json"  # fixture id -> its dependents; kept BESIDE the baseline because a restricted run sees only part of it (feature 237, FR-005)
+# THE PATH A RESTRICTED RUN WITH NOTHING TO RUN IS GIVEN (feature 237, FR-002). An incremental plan can
+# legitimately reach nothing - "nothing the baseline exercised has changed" - and the wrong answer there is to
+# fall back to the trees, which pays the whole tree's collection (3.1 GiB measured, research R3/R10) to execute
+# zero tests. pytest refuses a path that does not exist before any plugin runs, so the path must be REAL and
+# hold no tests: `tests/__init__.py` collects nothing, the selection plugin still records its result, and the
+# empty-selection-is-green branch in `GateSelection.pytest_sessionfinish` still turns exit 5 into 0.
+NO_TESTS = "tests/__init__.py"
 PLAN = "plan.json"  # written by `plan`, read by selection.py
 RESULT = "result.json"  # written by selection.py after collection, read by `merge` / `save-baseline` / the Makefile
 TEST_MODULE = "test_"
@@ -206,10 +218,62 @@ class Plan:
     affected_tests: list[str] = field(default_factory=list)  # baseline nodeids whose own contexts touched a changed file
     affected_fixtures: list[str] = field(default_factory=list)  # fixture names whose context touched a changed file (direct)
     baseline_tests: list[str] = field(default_factory=list)
-    full_fraction: float = FULL_FRACTION  # travels in the plan so the plugin, a separate process, applies the planner's knob
+    full_fraction: float = FULL_FRACTION  # the knob `plan()` compares the projection against, carried in the plan file so a run records the value it was judged by
+    paths: list[str] = field(default_factory=list)  # the test modules this run may reach - pytest's positional arguments (feature 237, FR-001)
 
     def dump(self) -> dict[str, Any]:
         return self.__dict__
+
+
+def reachable_modules(affected_tests: list[str], changed_test_modules: list[str], affected_fixtures: list[str], closures: dict[str, list[str]]) -> list[str]:
+    """The test modules an incremental run can reach, derived from the PLAN's own inputs - nothing collected.
+
+    This is `keep_set`'s four rules projected onto modules, and it must be a SUPERSET of the modules
+    `keep_set` will keep, or a test that should run is never collected (feature 237, FR-001):
+
+      * a baseline test whose own context touched a changed file -> its module;
+      * a changed test module -> itself, which also covers every NEW test, because adding a test changes
+        its module and git therefore reports it;
+      * a baseline test whose fixture closure holds a directly affected fixture -> its module. `keep_set`
+        reads `affected_fixtures` directly rather than its transitive closure, so this does too.
+
+    Nothing circular: the closures come from `tests.json`, written by the last FULL run.
+    """
+    mods = {n.split("::", 1)[0] for n in affected_tests} | set(changed_test_modules)
+    if affected_fixtures:
+        wanted = set(affected_fixtures)
+        mods |= {nodeid.split("::", 1)[0] for nodeid, closure in closures.items() if wanted & set(closure)}
+    return sorted(mods)
+
+
+def over_the_fraction(pl: Plan, closures: dict[str, list[str]]) -> int:
+    """How many BASELINE tests this plan reaches - the projection the `FULL_FRACTION` decision is made on.
+
+    The decision used to be made after collection, in `selection.py`, where the real selection is known.
+    Feature 237 moved it here because the gate now chooses pytest's ARGUMENTS from the plan: a run whose
+    arguments were narrowed cannot then decide to run everything. Projecting over the baseline rather than over the collection errs in BOTH directions, and the two are safe for
+    DIFFERENT reasons (spec D8 states them in full). It UNDERCOUNTS by tests that are new - `keep_set`'s "not in the
+    baseline" rule cannot fire when the collection it is given IS the baseline - and that is safe because a plan near
+    the line then runs incrementally, which merges over the baseline rather than replacing it. It OVERCOUNTS by the
+    baseline tests of a module that has been DELETED, which `existing()` strips from the arguments but not from
+    `changed_test_modules`, so the module rule still counts them; that is safe for the other reason - a full run is
+    always correct, merely slower - and its cost is one full gate paid for tests nobody will collect.
+    """
+    from l7r.diagram.ci.selection import keep_set  # local: selection imports this module, so a top-level import is a cycle
+
+    return len(keep_set(pl.dump(), pl.baseline_tests, closures))
+
+
+def existing(root: Path, modules: list[str]) -> list[str]:
+    """Only the modules still on disk, because pytest dies on an argument that is not there.
+
+    A DELETED test module reaches the plan by two routes - `changed()` reports a removed file as a changed
+    one, and the baseline's contexts still name its tests - and pytest resolves its positional arguments
+    before any plugin loads, so a stale path would exit 4 ("file or directory not found") and take the gate
+    with it rather than running the tests that remain. Dropping it is right as well as safe: its tests no
+    longer exist, and `stale_tests` already drops their contexts from the merge.
+    """
+    return [m for m in modules if (root / SKILL_PREFIX / m).is_file()]
 
 
 def plan(root: Path, force_full: str | None = None) -> Plan:
@@ -229,25 +293,32 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     non_py = [p for p in ch.engine if not p.endswith(".py")]
     if non_py:
         return Plan("full", f"an engine file that is not Python changed: {non_py[0]}")
-    baseline_tests = sorted(json.loads(tests.read_text(encoding="utf-8")))
+    closures: dict[str, list[str]] = json.loads(tests.read_text(encoding="utf-8"))
+    baseline_tests = sorted(closures)
     if not ch.engine and not ch.test_modules:
-        return Plan("incremental", "nothing the baseline exercised has changed", [], [], [], [], baseline_tests, FULL_FRACTION)
+        return Plan("incremental", "nothing the baseline exercised has changed", [], [], [], [], baseline_tests, FULL_FRACTION, [])
     hit = import_time_change(root, db, before, ch)
     if hit:
         return Plan("full", f"a line executed at import time changed in {hit}")
     touched = contexts_touching(db, root, ch.engine)
     affected_tests = sorted({c.split("|", 1)[0] for c in touched if "|" in c and not c.startswith("fixture:")})
     affected_fixtures = sorted({c[len("fixture:") :].split("|", 1)[0] for c in touched if c.startswith("fixture:")})
-    return Plan(
+    changed_modules = [m[len(SKILL_PREFIX) :] for m in ch.test_modules]
+    pl = Plan(
         "incremental",
         f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed",
         list(ch.engine),
-        [m[len(SKILL_PREFIX) :] for m in ch.test_modules],
+        changed_modules,
         affected_tests,
         affected_fixtures,
         baseline_tests,
         FULL_FRACTION,
+        existing(root, reachable_modules(affected_tests, changed_modules, affected_fixtures, closures)),
     )
+    reached = over_the_fraction(pl, closures)
+    if reached > pl.full_fraction * len(baseline_tests):
+        return Plan("full", f"{reached} of {len(baseline_tests)} baseline tests reached, over the {pl.full_fraction:.0%} fraction - running everything and recording a baseline")
+    return pl
 
 
 # ---- the merge ------------------------------------------------------------------------------------------
@@ -303,7 +374,16 @@ def merge(root: Path, fresh: Path, out: Path) -> dict[str, Any]:
     tmp = out.with_suffix(".merging")
     shutil.copyfile(bdir / COVERAGE_DB, tmp)
     gone = stale_tests(pl["baseline_tests"], result["collected"], pl["changed_test_modules"])
-    fixtures = fixture_closure(pl["affected_fixtures"], result.get("fixture_dependents", {}))
+    # THE GRAPH IS THE BASELINE'S UNIONED WITH THIS RUN'S (feature 237, FR-005). This run's edges cover only
+    # what it collected, and a restricted run collects a few modules - so a fixture whose upstream changed
+    # would keep the stale contexts of every dependent defined elsewhere, and the floor would pass over them.
+    # The same hole was already open for any `--ignore`d tree (`FULL_TREE_IGNORE`, `BROWSER_SKIP`), so this
+    # fixes a defect that predates the restriction (Principle XIV).
+    from l7r.diagram.ci.selection import merge_graphs
+
+    gf = bdir / GRAPH
+    known = json.loads(gf.read_text(encoding="utf-8")) if gf.is_file() else {}
+    fixtures = fixture_closure(pl["affected_fixtures"], merge_graphs(known, result.get("fixture_dependents", {})))
     dead = set(result["selected"]) | gone
     drop = {c for c in all_contexts(tmp) if (c.split("|", 1)[0] in dead) or (c.startswith("fixture:") and c[len("fixture:") :] in fixtures)}
     prune(tmp, root, tuple(pl["changed_engine"]), drop)
@@ -338,9 +418,10 @@ def save_baseline(root: Path, fresh: Path) -> Path:
     bdir.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(fresh, bdir / COVERAGE_DB)
     (bdir / MANIFEST).write_text(json.dumps(manifest(root), indent=1), encoding="utf-8")
-    nxt = bdir / (TESTS + ".next")
-    if nxt.is_file():
-        os.replace(nxt, bdir / TESTS)
+    for name in (TESTS, GRAPH):
+        nxt = bdir / (name + ".next")
+        if nxt.is_file():
+            os.replace(nxt, bdir / name)
     return bdir
 
 
@@ -361,6 +442,13 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
             f"gate: {pl.mode.upper()} - {pl.reason}"
             + (f"; {len(pl.affected_tests)} test(s) and {len(pl.affected_fixtures)} fixture(s) touched the change" if pl.mode == "incremental" and pl.changed_engine else "")
         )
+        return 0
+    if cmd == "paths":  # the positional arguments pytest is given: the modules this run may reach (feature 237, FR-002)
+        pf = bdir / PLAN
+        pl = json.loads(pf.read_text(encoding="utf-8")) if pf.is_file() else {"mode": "full"}
+        if pl.get("mode") != "incremental":
+            return 0  # a full run is given the trees, exactly as before
+        print(" ".join(pl.get("paths") or [NO_TESTS]))
         return 0
     if cmd == "where":  # the baseline directory, for the Makefile's L7R_GATE_SELECT
         print(bdir)
@@ -390,5 +478,5 @@ def main(argv: list[str], root: Path, skill: Path) -> int:
         where = save_baseline(root, skill / ".coverage")
         print(f"gate: baseline saved under {where}")
         return 0
-    print("usage: incremental plan [full REASON] | where | mode | selected | merge | save-baseline", file=sys.stderr)
+    print("usage: incremental plan [full REASON] | paths | where | mode | selected | merge | save-baseline", file=sys.stderr)
     return 2

@@ -23,7 +23,17 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
 
     Second, because the water is first and the field is grown AROUND the water (the water-first
     inversion `waterfields.py` exists for). The head sluice comes from `head_sluice`, which puts the
-    intake at the field's high head - gravity, not a knob."""
+    intake at the field's high head - gravity, not a knob.
+
+    Steps:
+        l7r.diagram.hamletgen.water.comb.fit_field
+        l7r.diagram.sitegen.geom.net_acres
+        l7r.diagram.hamletgen.water.comb.head_sluice
+        l7r.diagram.hamletgen.water.brook.feed_brook
+        l7r.diagram.hamletgen.water.brook.draw_intake
+        l7r.diagram.settlement.Settlement.draw_comb_field
+        l7r.diagram.settlement.Settlement.plot_texture
+    """
     if plan.field_archetype in POLDER_ARCHETYPES:
         stage_polder(s, plan)
         return

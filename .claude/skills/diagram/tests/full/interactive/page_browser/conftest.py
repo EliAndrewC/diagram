@@ -28,7 +28,25 @@ from tests.full.interactive.page_browser._driver import Page, _synthetic
 playwright = pytest.importorskip("playwright.sync_api", reason="playwright is not installed (pip install -r requirements-dev.txt)")
 
 
-@pytest.fixture(scope="module")
+# ONE CHROMIUM PER RUN, AND IT IS NOT PARALLELIZED (GM 2026-09-12: *"we should only ever start one chromium for
+# a test run, and that stuff should not be parallelized until such time as we have way, way more tests than we do
+# now"*). Two things were needed for that, and the fixture's scope was only one of them:
+#
+#   - SESSION scope, not module. There are two test modules here, so a module-scoped browser is two browsers even
+#     on one worker.
+#   - ONE XDIST GROUP. Under `--dist worksteal` two modules go to two workers, and a session fixture is per
+#     PROCESS - so each worker built its own. Measured in the 2026-09-12 memory audit: those two workers peaked at
+#     332 and 336 MiB against 126-199 for every other worker, i.e. ~335 MiB of the suite's peak was the second
+#     Chromium. `xdist_group` puts both modules on the same worker (`--dist loadgroup`), which is the only way a
+#     session fixture can actually be shared.
+#
+# The cost of not parallelizing them is nothing to speak of: the package is two modules and a handful of tests on
+# a page of fifteen elements, under 9 s in total, and it is skipped entirely whenever nothing it reads has changed
+# (feature 206's `browser` stamp).
+pytestmark = pytest.mark.xdist_group("chromium")
+
+
+@pytest.fixture(scope="session")
 def browser() -> Iterator[Any]:
     with playwright.sync_playwright() as p:
         try:

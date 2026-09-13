@@ -378,3 +378,38 @@ def test_main_names_a_stale_flat_render_and_says_it_is_safe_to_delete(repo, caps
     assert rc.main(["--main-repo", repo_dir, "--skill-dir", skill]) == 0
     out = capsys.readouterr().out
     assert "ORPHAN" in out and "pool/villages/hoshi.svg" in out and "safe to delete" in out
+
+
+def test_replate_page_rolls_the_page_when_the_fingerprint_moved_and_skips_when_it_did_not(repo, monkeypatch):
+    """Feature 227 FR-005: the placement page is re-plated by the landing when the engine (docstrings included - the
+    fingerprint is over bytes) moved, and left alone when the stamp beside it holds the current fingerprint."""
+    import os
+
+    calls = []
+
+    def fake_run(cmd, **kw):
+        calls.append(cmd)
+        os.makedirs(os.path.join(repo, rc.PAGE_DIR), exist_ok=True)
+        with open(os.path.join(repo, rc.PAGE_DIR, "hamlet-placement.html"), "w") as fh:
+            fh.write("<title>x</title>")
+
+    _repo_dir, repo, _pool = repo  # the fixture's skill dir
+    monkeypatch.setattr(rc.subprocess, "run", fake_run)
+    assert rc.replate_page(repo, "fp-1") is True and len(calls) == 1 and calls[0][1:3] == ["-m", "l7r.diagram.tools.placement_stages"]
+    assert rc.replate_page(repo, "fp-1") is False and len(calls) == 1, "the stamp matches: no roll"
+    assert rc.replate_page(repo, "fp-2") is True and len(calls) == 2, "the engine moved: re-plated"
+
+
+def test_main_replates_the_placement_page_in_a_tree_that_carries_the_tool(repo, monkeypatch, capsys):
+    """Feature 227 FR-005: the landing's render step re-plates the walk-through page (a fixture without the tool
+    skips it, as the other main tests do)."""
+    import os
+
+    repo_dir, skill, _pool = repo
+    _make_gen(skill, "villages", "m")
+    os.makedirs(os.path.join(skill, "l7r", "diagram", "tools"), exist_ok=True)
+    with open(os.path.join(skill, "l7r", "diagram", "tools", "placement_stages.py"), "w") as fh:
+        fh.write("# the page tool\n")
+    monkeypatch.setattr(rc, "replate_page", lambda skill_dir, fingerprint, allow_main=True: True)
+    assert rc.main(["--main-repo", repo_dir, "--skill-dir", skill, "--jobs", "2"]) == 0
+    assert "placement page re-plated" in capsys.readouterr().out

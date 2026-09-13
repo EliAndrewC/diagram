@@ -74,6 +74,39 @@ reviewer, which runs multiple times on every pass."* So:
   why / MISSED-BY-REVIEWER). In the same commit that acts on the review. The first miss on record (T12 round 2: the mechanism measured, the picture not judged)
   became the agent's fit-zoom-first rule.
 
+## WHAT GOES TO THE GM, AND WHAT DOES NOT (GM 2026-09-12)
+
+The reviewers work. What failed on feature 227 was the step AFTER them: three of its findings went to
+the GM as judgment calls, and all three came back as corrections. The GM's own diagnosis is the rule:
+*"I'm trying to figure out why you keep escalating things to me that when I look at them don't seem
+like problems because it might be that I simply do not understand why they are problems. And, thus,
+I'm concerned that I will be ignoring something bad."* That last sentence is the real cost - an
+escalation that is not a problem teaches the GM to doubt their own reading of the ones that are.
+
+**The rule this broke already existed, in two places.** The agent's own output contract says
+QUESTIONABLE means *"it needs a RESEARCH PASS - never 'a GM ruling'"*, and constitution XII says a
+reviewer writing "this wants a one-line ruling" has identified a QUESTION, not delegated one. A
+QUESTIONABLE item is the session's to settle. Forwarding one is skipping the work.
+
+So before any finding reaches the GM, it passes three tests, in order:
+
+1. **Which norm does it violate, named and located?** A constant, a check, a research heading, a
+   ruling in the notes. No norm means no finding: the thing in front of you is how the map is, not
+   something wrong with it. Two of 227's three failed here - a board measured against a scoring
+   radius no rule uses as a bar, and a house-to-field distance against a maximum that does not exist.
+2. **Did you run the research pass, and is the record genuinely silent?** Not "could the GM rule on
+   this" - *has the record been asked*. One of 227's three had already been answered by a measurement
+   taken an hour earlier on an older layout, and re-running it on the shipped map closed it.
+3. **Does the GM's answer change what ships?** A number trending toward a bar it has not reached is a
+   line in the map's notes, not a question. "Worth knowing" is not an escalation.
+
+What IS the GM's: a genuine fork where the record supports two forms and the choice is taste or
+canon; a cost they alone can price; and the acceptance of a finished thing. Put those up plainly, say
+what you recommend, and say what you measured to get there.
+
+**Record the misses in the ledger** (`docs/review-ledger.md`), which gained a column for exactly this,
+so the escalation rate is a total rather than a feeling.
+
 ## A finding OUTSIDE the delta is still yours to fix
 
 Constitution **Principle XIV** (GM 2026-08-17). An independent reviewer pointed at a DELTA reliably

@@ -15,6 +15,8 @@ import importlib.util
 import pathlib
 import sys
 
+import pytest
+
 REPO = pathlib.Path(__file__).resolve().parents[5]
 _spec = importlib.util.spec_from_file_location("_patch", REPO / "scripts" / "_patch.py")
 assert _spec and _spec.loader
@@ -88,3 +90,17 @@ def test_an_anchor_is_matched_literally_apart_from_its_whitespace(tmp_path: path
 
 def test_selftest_passes() -> None:
     patch.selftest()
+
+
+def test_edits_may_arrive_as_objects_or_as_pairs(tmp_path: pathlib.Path) -> None:
+    """The object form used to unpack into its KEYS, so the tool searched for the word "anchor"."""
+    assert patch.read_edits([["a", "b"]]) == [("a", "b")]
+    assert patch.read_edits([{"anchor": "a", "replacement": "b"}]) == [("a", "b")]
+
+
+def test_an_edit_of_an_unknown_shape_is_refused_by_name() -> None:
+    """A shape it cannot read is named, never silently read as an anchor."""
+    for bad in ([{"from": "a", "to": "b"}], [["a", "b", "c"]], [{"anchor": "a"}], ["a"]):
+        with pytest.raises(SystemExit) as caught:
+            patch.read_edits(bad)
+        assert "_patch:" in str(caught.value), caught.value

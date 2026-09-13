@@ -23,7 +23,7 @@ from ..plan import SitePlan
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs
-from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len
+from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _PATH_DIRECTNESS
 
@@ -61,7 +61,11 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     # TRIM FIRST, JOIN SECOND. The join is computed from the run's ENDS, so trimming afterwards moves
     # the end out from under the link that was drawn to it - which left a 187 ft lane whose start
     # stood 178 ft from any way, the exact dangling tread `lanes_reach_something` exists to catch.
-    run = _trim_to_service(run, segs, houses)
+    # to the bar the GATE asks of a lane end, not the looser service reach: this runs at DRAW time, before
+    # `_serve_stragglers`, so a steading a shortened run stops serving still gets its own path afterwards (feature 227).
+    # ...and a tread that stops at a steading's own dooryard has ARRIVED there, which is the fourth clause of
+    # `end_serves` at its own tight distance (`steading_footprints`, feature 227 D11).
+    run = _trim_to_service(run, segs, houses, steadings=steading_footprints(s.M))
     if segs:
         # SHARING A CORRIDOR IS SHADOWING, whether the two lines are parallel or crossing. The test
         # was written against `MIN_WEB_GAP` (the room a lane needs to pass BETWEEN two steadings),
@@ -228,6 +232,7 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
     # Nothing in this pass plants or moves a crop, so one list serves every ask.
     _crops = crop_polys(s)
     _exhausted: dict[int, tuple[tuple[float, float], ...]] = {}
+    _steadings = steading_footprints(s.M)  # fixed for the whole pass: the fabric is drawn and the trim asks it per path
     for _pass in range(4):
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         segs = [(a, b) for ln in lanes for a, b in zip(ln, ln[1:], strict=False)]
@@ -547,7 +552,12 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                     # The path's own start can have been clipped away from the door, so it gets the
                     # same end-trim every web lane gets - a footpath that begins in bare grass is a
                     # dangling tread whatever drew it.
-                    path = _trim_to_service(path, segs, [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])])
+                    # AT THE GATE'S OWN BAR, AND AGAINST WALLS (feature 227 D11). This trim kept the loose default - ways at
+                    # 40 ft, house CENTERS at 90 - so a footpath whose doorstep end had been clipped back out of its own
+                    # dooryard was accepted at up to 90 ft from a center, which is past the 60 ft the gate asks of every
+                    # internal end. That is how Kashikawa and Kuwabata shipped "dangling" straggler ends. Now it asks
+                    # exactly what the check asks, and a house is measured at its wall, where a walker arrives.
+                    path = _trim_to_service(path, segs, [(float(q["x"]), float(q["y"])) for q in s.M.get("houses", [])], steadings=_steadings)
                     # A DOOR PATH THAT REACHES NO WAY IS NOT DRAWN (feature 137 T03, 2026-08-28): cohort seed 22
                     # shipped a 4 ft straggler stub - the clip and the trim had eaten everything but the doorstep,
                     # and the orphan joiner could neither link it nor drop it (its house had no other way). A

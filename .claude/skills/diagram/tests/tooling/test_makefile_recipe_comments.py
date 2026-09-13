@@ -35,7 +35,13 @@ def test_no_recipe_comment_in_the_repository_would_run() -> None:
     """Every Makefile in the repository (the clone's own tree, not the sibling clones)."""
     hm = _hm_make()
     # the CLONE is itself under .clones/, so the filter reads the path relative to the tree it scans
-    makefiles = [p for p in REPO.rglob("Makefile") if not {".clones", ".git"} & set(p.relative_to(REPO).parts)]
+    # ...AND NOT A TEMPORARY ONE ANOTHER TEST IS MID-WAY THROUGH CREATING (2026-09-12). This read every Makefile
+    # it globbed, and a sibling test's fixture writes `.tmp-invocation-pool/Makefile` and removes it again - so the
+    # glob listed a path that was gone by the time this opened it, and the test died with `FileNotFoundError`
+    # rather than returning a verdict. It surfaced the day the gate moved to the `loadgroup` scheduler, which runs
+    # a module's tests closer together in time, but the race was always there. A `.tmp-` directory is no more a
+    # repository Makefile than a clone's is, so it is excluded by the same rule rather than by catching the error.
+    makefiles = [p for p in REPO.rglob("Makefile") if not {".clones", ".git"} & set(p.relative_to(REPO).parts) and not any(part.startswith(".tmp-") for part in p.relative_to(REPO).parts)]
     assert SKILL / "Makefile" in makefiles
     bad = {str(p.relative_to(REPO)): hm.recipe_comment_hazards(p.read_text()) for p in makefiles}
     bad = {k: v for k, v in bad.items() if v}

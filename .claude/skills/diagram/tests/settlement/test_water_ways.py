@@ -729,6 +729,21 @@ def test_trim_lane_stubs_leaves_a_lane_alone_when_both_its_ends_already_arrive()
     assert s.M["lanes"][2]["pts"] == [[500, 300], [500, 700]], "the bar is untouched"
 
 
+def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_records_aligned():
+    """A lane the trim leaves shorter than `_LANE_MIN_FT` is dropped - its ink emptied and its record removed, the ink
+    list rebuilt beside the record list so their indices still agree (the pool stopped reaching this once feature
+    227 re-packed the clusters)."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(100.0, 500.0), (900.0, 500.0)], width=4)
+    s.lane([(500.0, 500.0), (500.0, 504.0)], width=4)  # a four-foot stub off the first, with its own ink
+    stub_ink = list(s._lane_ink[1])
+    assert stub_ink and any(s.ground[z].get(part) for z in stub_ink for part in ("edge", "bed", "top"))
+    s.trim_lane_stubs()
+    assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == 1 and s.M["lanes"][0]["pts"][0] == [100, 500]
+    assert all(not s.ground[z].get(part) for z in stub_ink for part in ("edge", "bed", "top")), "the stub's ink emptied with its record"
+
+
 def test_trim_lane_stubs_drops_a_lane_too_short_to_front_anybody():
     """A lane shorter than one homestead's frontage fronts nobody by construction, so it is dropped
     whole - record AND ink together, because a record removed while its ink stayed would leave a tread

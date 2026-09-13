@@ -24,9 +24,10 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
-from shapely.errors import GEOSException
-from shapely.geometry import Polygon as ShapelyPolygon
-from shapely.ops import unary_union
+if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+    from shapely.errors import GEOSException
+    from shapely.geometry import Polygon as ShapelyPolygon
+    from shapely.ops import unary_union
 
 # THE BLADES ARE WRITTEN AS MERGED PATHS (feature 222, GM 2026-09-11: "merging each blade group into one path"):
 # one <line> per blade made a hamlet's SVG 13-16 MB, 89% of it these two buckets, and resvg parsed every one of
@@ -39,6 +40,32 @@ from shapely.ops import unary_union
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
 from .._geom import KeepoutGrid, Pt, RingIndex, point_in_poly, seg_dist
+
+_SHAPELY_LOADED = False
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
+    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
+    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
+    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
+    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
+    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
+    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
+    """
+    global _SHAPELY_LOADED, GEOSException, ShapelyPolygon, unary_union  # binding this module's own names is the point
+    if _SHAPELY_LOADED:
+        return
+    from shapely.errors import GEOSException
+    from shapely.geometry import Polygon as ShapelyPolygon
+    from shapely.ops import unary_union
+
+    _SHAPELY_LOADED = True
+
 
 MARSH_TINT_R = 28.0  # the widest wet-tint circle's radius (x bscale) - also the keep-off a mound owes the tint (feature 150 T54)
 MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the same keep-off for the tufts
@@ -78,6 +105,7 @@ def _band_half_width(poly: Any, pond: Any, role: str) -> float:
     So the outline's own area/perimeter is the disc's radius - large - while the band the reeds may occupy
     is only the margin. Measuring the disc is what made the first attempt at this fix do nothing at all.
     """
+    _load_shapely()
     pts = [(float(a), float(b)) for a, b in poly]
     if len(pts) < 3:
         return 0.0
@@ -94,6 +122,7 @@ def _band_half_width(poly: Any, pond: Any, role: str) -> float:
 
 def _ellipse(pond: Any, n: int = 64) -> Any:
     """The open water as a polygon: `M['pond']` is (cx, cy, rx, ry)."""
+    _load_shapely()
     cx, cy, rx, ry = (float(v) for v in pond[:4])
     return ShapelyPolygon([(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)])
 
@@ -105,6 +134,7 @@ def _filled(ring: Any) -> Any:
     crosses itself does), so each part is re-made from its own exterior and the parts unioned. Filling is
     the point: subtracting a dike BAND left the ground it encloses standing, which is the bug this
     function's caller was written to fix."""
+    _load_shapely()
     g = ShapelyPolygon([(float(a), float(b)) for a, b in ring]).buffer(0)
     return unary_union([ShapelyPolygon(part.exterior) for part in getattr(g, "geoms", [g]) if part.geom_type == "Polygon" and not part.is_empty])
 
@@ -137,6 +167,7 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
     be kept; with the block filled, a second piece can only arise where a single `marsh()` call wraps the
     block on two flanks and is cut in half by it, and each flank is its own call. Falls back to the input
     whenever shapely returns nothing usable, so a degenerate outline cannot lose a feature."""
+    _load_shapely()
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
     rings += [list(f) for f in fields if len(f) >= 3]
     if not rings and not pond:

@@ -32,10 +32,41 @@ import os
 import re
 import sys
 from collections.abc import Iterator, Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
-from PIL import Image
+if TYPE_CHECKING:  # the names for the type checker; `_load_arrays` binds the runtime ones
+    import numpy as np
+    from PIL import Image
+
+_ARRAYS_LOADED = False
+
+
+def _load_arrays() -> None:
+    """Bind `numpy` and `PIL.Image` into this module, on first use rather than at import (feature 237).
+
+    WHY. `numpy` costs 17.9 MiB of resident memory and `PIL` another 2.3, and a module-level import here
+    made every one of the ten gate workers pay both merely to COLLECT this tool - a diagnostic that one
+    worker runs, from `make page-lit` or `make picture-diff`
+    (`specs/237-lean-test-collection/research.md` R9 and R10). It is the same deferral FR-010 made for
+    `shapely`. The GM asked for NUMPY in those terms on 2026-09-13 (*"the same thing for numpy which we
+    already did for shapely"*); `PIL` rides along on this session's judgment, because the two are adjacent
+    lines feeding the same functions here - disclosed in spec D9, at 2.3 MiB a worker against numpy's 17.9,
+    so it can be reversed on its own. The measurement is `research.md` R14: this is the larger half of the
+    two deferrals, because `shapely` pulls `numpy` in anyway wherever this tool is already loaded.
+
+    The names are bound into this module's globals ONCE, so every call site afterwards is the plain global
+    lookup it was before (spec D6); the sentinel makes a repeat call two bytecodes. The per-call cost is
+    irrelevant here in any case - nothing in this file runs per plot - but the form is the one the engine
+    already uses, and a second form would be a second thing to learn.
+    """
+    global _ARRAYS_LOADED, np, Image  # binding this module's own names is the point
+    if _ARRAYS_LOADED:
+        return
+    import numpy as np
+    from PIL import Image
+
+    _ARRAYS_LOADED = True
+
 
 _IDMAP = re.compile(r'"idmap":\s*"data:image/png;base64,([A-Za-z0-9+/=]+)"')
 _PALETTE = re.compile(r'"palette":\s*(\{[^{}]*\})')
@@ -52,6 +83,7 @@ ZOOM_STEPS = 24
 def decode_idmap(html: str) -> tuple[np.ndarray, dict[int, str], int] | None:
     """(the id map's red channel as an array, {red value: class key}, the palette step) from a page's
     text, or None when the page carries no id map (rendered without resvg)."""
+    _load_arrays()
     m, p, s = _IDMAP.search(html), _PALETTE.search(html), _STEP.search(html)
     if not (m and p and s):
         return None
@@ -80,6 +112,7 @@ def attribute(
     is shifted by its origin and scaled by the image's pixels per user unit before the id map is asked.
     Without it every sample lands outside the image and every class measures zero - which is exactly what
     the first cut reported on the first real page it was pointed at. `None` means the id map IS the map."""
+    _load_arrays()
     a_ = np.asarray(before.convert("RGB")).astype(np.int64)
     b_ = np.asarray(after.convert("RGB")).astype(np.int64)
     changed = np.abs(a_ - b_).max(axis=2) > threshold
@@ -133,6 +166,7 @@ def _chromium() -> Iterator[Any]:
 def measure(html_path: str, key: str, vector: bool = False, browser: Any = None, out: str | None = None, viewport: tuple[int, int] = VIEWPORT) -> dict[str, Any]:
     """Open the page, light `key`, and attribute what changed. `browser` is a Playwright browser to reuse;
     without one the tool launches its own. `out` saves the lit screenshot."""
+    _load_arrays()
     with open(html_path, encoding="utf-8") as fh:
         decoded = decode_idmap(fh.read())
     if decoded is None:

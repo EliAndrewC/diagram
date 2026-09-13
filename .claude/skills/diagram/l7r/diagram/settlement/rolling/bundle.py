@@ -48,6 +48,13 @@ class BundleGeomMixin:
             return [(gx - (gap + pw) / 2, gy, pw, gh), (gx + (gap + pw) / 2, gy, pw, gh)]
         return [(gx, gy, gw, gh)]  # reserved plot too small to split cleanly
 
+    def _bundle_envelope(self: Settlement, hx: float, hy: float, hw: float, hh: float, shed: bool = False) -> tuple[float, float, float, float]:  # type: ignore[misc]
+        """The homestead's ENVELOPE (feature 227): the box around the LARGEST configuration a nucleated bundle can
+        take at this seat - the union of the four garden sides' bundle boxes (house, yard, the garden on either
+        side, the kura when reserved). Tested once before any part is laid; a part laid inside it never needs
+        ground the envelope did not clear."""
+        return self._bbox_of([self._bundle_geom(hx, hy, hw, hh, side, shed)["bbox"] for side in self._NUC_SIDES])
+
     def _bundle_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str = "E", shed: bool = False) -> dict[str, Any]:  # type: ignore[misc]
         """The metric layout of one homestead BUNDLE around a house centered at (hx, hy). TWO forms:
         NUCLEATED (self._nucleated) = house + lee GARDEN (E) + south YARD only, compact so a cluster can

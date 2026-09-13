@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "dd8738d2",
+    "label": "237-start",
+    "utc": "20260912T235642Z"
+  },
+  "binding": "661210994911bb3cf2c5daffdb8e0ace16f514dc05ae78e6134421751c448784",
+  "end": {
+    "commit": "c30d92c3",
+    "label": "237-end",
+    "utc": "20260913T003227Z"
+  },
+  "environment": "local",
+  "feature": "237-lean-test-collection",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "008f34b2-3392-461d-bd88-fbb348290e9f",
+    "utc": "20260913T004139Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -2.0,
+      "39": -6.0,
+      "4": 3.6,
+      "47": -1.4
+    },
+    "total_pct": -1.3
+  },
+  "note": "seed 4 field is the only stage with a repeatable positive delta (+0.10/+0.08/+0.10 over three -end bookends; every other moved stage flips sign between them) and is the first stage to touch the deferred shapely binding, the residual outside the stages is zero, a cold shapely.geometry+ops measures 0.138-0.147s here (numpy 0.132s of it) against a +0.09s rise, the engine diff in those seven modules is the TYPE_CHECKING block plus loader plus call sites and no algorithmic line, and the per-call form is invisible: seed 47 field 4.63s, the heaviest geometry, fell 0.06-0.11s while geoms.py at this commit had no sentinel at all",
+  "verdict": "consistent"
+}

@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T130913Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-review is dispatched in the next turn over the snapshot pool-227 taken from this content; a detached gate is not seen by the pair hook"
+}

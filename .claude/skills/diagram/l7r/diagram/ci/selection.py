@@ -12,8 +12,10 @@ fixture closure touched a change. On the controller it also writes `tests.json` 
 and the fixture dependency graph, which the merge uses to drop the contexts of fixtures affected
 transitively. (2) SELECTION: when the plan says incremental, it keeps the affected tests, every test in a
 changed test module, and every test the baseline never saw, and deselects the rest - identically on the
-controller and every xdist worker, since the decision is a function of the same files. Above
-`FULL_FRACTION` it keeps everything and marks the run FULL, so the Makefile saves a baseline from it.
+controller and every xdist worker, since the decision is a function of the same files. It APPLIES the plan
+it is given and no longer overrides it: the `FULL_FRACTION` decision moved into the planner in feature 237,
+because the gate now narrows pytest's own arguments from the plan and a process given a few modules cannot
+then decide to run everything (spec D8).
 """
 
 from __future__ import annotations
@@ -98,22 +100,32 @@ class GateSelection:
     @pytest.hookimpl(trylast=True)
     def pytest_collection_modifyitems(self, session: pytest.Session, config: pytest.Config, items: list[pytest.Item]) -> None:
         pl = self.plan
+        # RESTRICTED: an incremental plan gave pytest its own module list, so this process collected a SUBSET
+        # of the tree on purpose (feature 237, FR-002), and nothing here may write a baseline from a partial
+        # view - neither `tests.json` nor the fixture graph (FR-004, FR-005).
+        #
+        # AND THE FRACTION MOVED. Until feature 237 this hook could flip a run to FULL after collection when
+        # the selection came out over `FULL_FRACTION` - run everything, record a baseline. That decision is
+        # not available to a process whose ARGUMENTS were already narrowed: a run labeled full that collected
+        # a subset would skip the merge and judge the 100% floor over that subset alone. So the planner makes
+        # it instead, before the arguments are chosen, by projecting the same four rules over the baseline
+        # (`incremental.plan`, `over_the_fraction`), and this hook simply applies the plan it is given.
+        restricted = pl["mode"] == "incremental"
         collected = [it.nodeid for it in items]
-        graph = fixture_graph(items)
+        graph = merge_graphs(getattr(session, "_l7r_graph", {}), fixture_graph(items))
         mode, selected, reason = pl["mode"], collected, pl.get("reason", "")
         if pl["mode"] == "incremental":
             keep = keep_set(pl, collected, self.closures)
-            fraction = float(pl.get("full_fraction", incremental.FULL_FRACTION))
-            if len(keep) > fraction * len(items):
-                mode, reason = "full", f"{len(keep)} of {len(items)} tests selected, over the {fraction:.0%} fraction - running everything and recording a baseline"
-            else:
-                selected = [n for n in collected if n in keep]
-                dropped = [it for it in items if it.nodeid not in keep]
-                items[:] = [it for it in items if it.nodeid in keep]
-                config.hook.pytest_deselected(items=dropped)
+            selected = [n for n in collected if n in keep]
+            dropped = [it for it in items if it.nodeid not in keep]
+            items[:] = [it for it in items if it.nodeid in keep]
+            config.hook.pytest_deselected(items=dropped)
         if _writer(config):
             self.bdir.mkdir(parents=True, exist_ok=True)
-            (self.bdir / (incremental.TESTS + ".next")).write_text(json.dumps({it.nodeid: fixture_ids(it) for it in _all_items(session, items)}, indent=0), encoding="utf-8")
+            if not restricted:  # only a run that collected the whole tree may offer the next baseline (FR-004)
+                closures = {**getattr(session, "_l7r_closures", {}), **{it.nodeid: fixture_ids(it) for it in items}}
+                (self.bdir / (incremental.TESTS + ".next")).write_text(json.dumps(closures, indent=0), encoding="utf-8")
+                (self.bdir / (incremental.GRAPH + ".next")).write_text(json.dumps(graph, indent=0), encoding="utf-8")
             (self.bdir / incremental.RESULT).write_text(
                 json.dumps({"mode": mode, "reason": reason, "selected": selected, "collected": collected, "fixture_dependents": graph}, indent=0), encoding="utf-8"
             )
@@ -134,10 +146,18 @@ class GateSelection:
             session.exitstatus = 0
 
 
-def _all_items(session: pytest.Session, kept: list[pytest.Item]) -> list[pytest.Item]:
-    """Every collected item, deselected ones included - the baseline's `tests.json` must know them all."""
-    seen = {it.nodeid for it in kept}
-    return kept + [it for it in getattr(session, "_l7r_all_items", []) if it.nodeid not in seen]
+def merge_graphs(*graphs: dict[str, list[str]]) -> dict[str, list[str]]:
+    """The union of several reverse-fixture-edge maps, each key's dependents deduplicated and sorted.
+
+    The run's own graph covers the items that reached the selection hook; the one `remember_all` kept
+    covers the marker-deselected ones as well, and `merge` needs both or a changed fixture's dependents
+    keep stale contexts (feature 237, FR-005).
+    """
+    out: dict[str, set[str]] = {}
+    for g in graphs:
+        for key, dependents in g.items():
+            out.setdefault(key, set()).update(dependents)
+    return {k: sorted(v) for k, v in sorted(out.items())}
 
 
 def _writer(config: pytest.Config) -> bool:
@@ -211,5 +231,19 @@ def configure(config: pytest.Config) -> None:
 
 def remember_all(session: pytest.Session, items: list[pytest.Item]) -> None:
     """`gate_plugin.pytest_collection_modifyitems`'s body, which runs before any deselection (ours or `-m`'s):
-    remember every collected item, so `tests.json` knows the deselected ones too."""
-    session._l7r_all_items = list(items)  # type: ignore[attr-defined]
+    remember what the BASELINE needs from every collected item - its fixture closure, and the reverse
+    fixture edges - so `tests.json` and `result.json` know the deselected ones too.
+
+    WHY THIS EXISTS AT ALL, which the code never said: `ROLL_DESELECT` and `TIER_SELECT` deselect by MARKER
+    even on a full run, and pytest's own mark hook runs before `GateSelection`'s, so the items list that
+    reaches the writer is already short of what the next plan's `baseline_tests` must hold. A test missing
+    from the baseline is treated as NEW by `keep_set`, so losing them would select every one of them on the
+    next gate.
+
+    WHY IT NO LONGER KEEPS THE ITEMS THEMSELVES (feature 237, FR-006): `list(items)` pinned every collected
+    `Item` - each with its `__dict__`, its `NodeKeywords`, its `Stash` and its eagerly built request - on
+    EVERY worker for the whole run, so nothing deselection freed could be reclaimed. These two derived maps
+    are all the baseline ever read from them.
+    """
+    session._l7r_closures = {it.nodeid: fixture_ids(it) for it in items}  # type: ignore[attr-defined]
+    session._l7r_graph = fixture_graph(items)  # type: ignore[attr-defined]

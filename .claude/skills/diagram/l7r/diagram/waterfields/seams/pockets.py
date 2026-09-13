@@ -1,13 +1,16 @@
 """Split from waterfields/seams.py by feature 173 - see this package's CLAUDE.md for the index."""
 
+from __future__ import annotations
+
 import math
 from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from shapely.errors import GEOSException
-from shapely.geometry import LineString, Point, Polygon
-from shapely.geometry.base import BaseGeometry
-from shapely.ops import unary_union
+if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+    from shapely.errors import GEOSException
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.geometry.base import BaseGeometry
+    from shapely.ops import unary_union
 
 from ..banks import (
     _GATE_MIN_APEX,
@@ -20,6 +23,38 @@ from ..banks import (
 )
 from ..frame import BANK_MARGIN, Poly, _f_at_u, _Frame, taper_w
 from .geoms import GeomTree
+
+_SHAPELY_LOADED = False
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
+    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
+    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
+    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
+    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
+    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
+    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
+
+    A MEASURED DEAD END, recorded so nobody pulls the lever again: checking the sentinel INLINE at each call
+    site - `if not _SHAPELY_LOADED: _load_shapely()`, to save the call itself - bought nothing measurable (the
+    bookend's slow seed stayed at +3.6%, because what it pays is the 0.244 s import, not the call) and cost the
+    100% floor, since with several call sites per module only the first one to run ever executes its
+    `_load_shapely()` line and the rest are unreachable.
+    """
+    global _SHAPELY_LOADED, GEOSException, LineString, Point, Polygon, unary_union  # binding this module's own names is the point
+    if _SHAPELY_LOADED:
+        return
+    from shapely.errors import GEOSException
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.ops import unary_union
+
+    _SHAPELY_LOADED = True
+
 
 # The carve's own "too narrow to plant" side (`_sector_body_rows` / `_sector_canal_closers` both
 # refuse an edge under 6 * grain), reused here so a pocket this pass plants is exactly a pocket the
@@ -34,6 +69,7 @@ _SPIKE = 0.25
 
 def _parts(geom: BaseGeometry) -> list[Polygon]:
     """Simple polygons of `geom`, in a deterministic order (shapely does not promise one)."""
+    _load_shapely()
     out = [g for g in getattr(geom, "geoms", [geom]) if isinstance(g, Polygon) and not g.is_empty and g.is_valid]
     return sorted(out, key=lambda g: (round(g.bounds[0], 1), round(g.bounds[1], 1)))
 
@@ -68,6 +104,7 @@ def _despike(geom: BaseGeometry) -> BaseGeometry:
     the honest answer is that this is a TIDYING step, so a geometry GEOS will not offset goes on
     un-tidied rather than taking the map down. Nothing downstream trusts it: every ring this pass
     records is round-tripped for validity before it is kept."""
+    _load_shapely()
     cleaned = geom.buffer(0)
     if cleaned.is_empty:
         return cleaned
@@ -81,6 +118,7 @@ def _despike(geom: BaseGeometry) -> BaseGeometry:
 def _ring(poly: Polygon) -> Poly:
     """A plot ring as the manifest records it: 1dp, no repeated closing vertex, and no vertex
     that rounding has collapsed onto its predecessor (a boolean result carries plenty)."""
+    _load_shapely()
     out: Poly = []
     for x, y in list(poly.exterior.coords)[:-1]:
         pt = (round(float(x), 1), round(float(y), 1))
@@ -104,6 +142,7 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
     exactly those notches - the ground looked bare to this pass and was water to the gate. The
     discs close them without the over-claim a round CAP would add past the head and tail, where
     `supply_bank_clearance` reports `past` and the stroke governs nothing anyway."""
+    _load_shapely()
     strokes: list[BaseGeometry] = []
     for c in channels:
         pts = [(float(q[0]), float(q[1])) for q in c.get("pts") or []]
@@ -126,6 +165,7 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
 
 def _band(F: _Frame, us: list[float], fs: list[float], f_far: float) -> Polygon:
     """The region between the sampled curve f(u) and a constant fall far outside the fan."""
+    _load_shapely()
     pts = [F.to_xy(u, f) for u, f in zip(us, fs, strict=True)]
     pts += [F.to_xy(us[-1], f_far), F.to_xy(us[0], f_far)]
     return Polygon(pts).buffer(0)
@@ -139,6 +179,7 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
     drawn water, so a low-u fork wedge still counts as commanded while the floating-diamond ground
     past the outfall does not. Where the canal does not reach a given u there is nothing upslope to
     exclude, so that sample falls back to a bound outside the fan entirely."""
+    _load_shapely()
     x0, y0, x1, y1 = field.bounds
     corners = [F.to_uf(x0, y0), F.to_uf(x1, y0), F.to_uf(x1, y1), F.to_uf(x0, y1)]
     ulo, uhi = min(u for u, _ in corners), max(u for u, _ in corners)
@@ -197,6 +238,7 @@ def _open_to(pocket: Polygon, w: float) -> Polygon | None:
     for the same reasons: MITRE joins (a rounded opening arcs every convex corner and explodes the
     vertex count) and INTERSECTING the result back with the input (a mitred offset can push an
     acute corner outward, and this pass must only ever REMOVE ground)."""
+    _load_shapely()
     try:
         opened = pocket.buffer(-w / 2, join_style="mitre", mitre_limit=2.0).buffer(w / 2, join_style="mitre", mitre_limit=2.0)
     except GEOSException:
@@ -232,6 +274,7 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
     walls with a strip between them into the one wall a real aze is. The neighbor is chosen by
     SHARED BOUNDARY LENGTH rather than by distance or area: the basin whose wall actually forms
     most of this strip is the one whose farmer would have taken it in."""
+    _load_shapely()
     tree = tree or GeomTree(into)  # the pocket pass shares one across a round (feature 220); a lone call builds its own
     reach = pocket.buffer(0.4)
     ranked: list[tuple[float, int]] = []

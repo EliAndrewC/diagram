@@ -22,8 +22,9 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING, Any
 
-from shapely.geometry import LineString, Polygon
-from shapely.ops import unary_union
+if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+    from shapely.geometry import LineString, Polygon
+    from shapely.ops import unary_union
 
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
@@ -32,6 +33,31 @@ if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
 
     from ..plan import SitePlan
+
+_SHAPELY_LOADED = False
+
+
+def _load_shapely() -> None:
+    """Bind shapely's names into this module, on first use rather than at import (feature 237, FR-010).
+
+    WHY. `import shapely` costs 16.3 MiB of resident memory - it pulls numpy in with it - and a module-level
+    import here made all ten gate workers pay that merely to COLLECT this package, whichever one of them ran
+    the geometry (`specs/237-lean-test-collection/research.md` R9). Only a worker that builds a map needs it.
+
+    WHY NOT AN `import` INSIDE THE FUNCTIONS THEMSELVES. Several of them run per plot, per seam or per
+    candidate, and an `import` statement re-enters `__import__` on every call. Binding the names into this
+    module's own globals ONCE leaves every call site the plain global lookup it already was, so the deferral
+    costs nothing in steady state (spec D6); the sentinel makes a repeat call two bytecodes. An increase on
+    any seed is not waiverable for this item - the bookends are `make perf LABEL=237-start|-end`.
+    """
+    global _SHAPELY_LOADED, LineString, Polygon, unary_union  # binding this module's own names is the point
+    if _SHAPELY_LOADED:
+        return
+    from shapely.geometry import LineString, Polygon
+    from shapely.ops import unary_union
+
+    _SHAPELY_LOADED = True
+
 
 #: a keep-out ellipse becomes this many-sided polygon in the union; 24 keeps a pond's outline within ~1% of its radius
 ELLIPSE_SIDES = 24
@@ -54,6 +80,7 @@ def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[A
     """`(chains, (water, registered), (rings, holes))` for the homestead stage, from every geometry the bundle's fit test reads
     (spec FR-001): the area members unioned and reduced to the chains facing `seat`; the water obstacles and the
     registered corridors as two sets of `(a, b, clearance)` segments, each asked the way its own test asks today."""
+    _load_shapely()
 
     def member(poly: Any, grow: float = 0.0) -> Polygon | None:
         if len(poly) < 3:
@@ -133,9 +160,10 @@ class SiteCorridors:
     its holes, or a ring vertex inside the rectangle (the `_rect_hits` arms); `hit_center` asks the REGISTERED set
     at one point (the center, as `_near_corridor`)."""
 
-    __slots__ = ("center", "full", "holes", "rings")
+    __slots__ = ("center", "full", "holes", "rings", "ring_pts")
 
     def __init__(self, corridors: tuple[list[Seg], list[Seg]], outline: tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]] | None = None, cell: float = 128.0) -> None:
+        self.ring_pts: list[list[tuple[float, float]]] = [list(r) for r in (outline[0] if outline else [])]  # the rings as points, for the front row's ground push (feature 227)
         water, registered = corridors
         rings, holes = outline if outline is not None else ([], [])
         self.full = PointGrid(cell)

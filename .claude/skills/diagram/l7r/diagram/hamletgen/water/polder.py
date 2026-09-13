@@ -68,7 +68,17 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     returns `build_comb`-compatible keys on purpose, so `draw_comb_field` draws either.
 
     The SOURCE is a header reservoir OUTSIDE the dike above the high corner, charged through a sluice
-    in the dike - not a brook running in over the crop, which is what a valley hamlet has."""
+    in the dike - not a brook running in over the crop, which is what a valley hamlet has.
+
+    Steps:
+        l7r.diagram.hamletgen.water.polder.fit_polder
+        l7r.diagram.sitegen.geom.net_acres
+        l7r.diagram.hamletgen.water.polder.walk_pond_uphill
+        l7r.diagram.settlement.Settlement.draw_comb_field
+        l7r.diagram.hamletgen.water.polder.dike_gaps_at_channels
+        l7r.diagram.settlement.Settlement.perimeter_dike
+        l7r.diagram.settlement.Settlement.apply_land_use
+    """
     # BOTH polder archetypes come through here (feature 150): the fabric table sets the module and
     # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
     # grid is drawn - see `POLDER_ARCHETYPES` in consts.py for why the dike-pond is a polder.
@@ -417,7 +427,13 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     leaves a dry apron in front of it - clipping the rectangle to the dike's extreme instead was tried
     and showed one up to 40 px wide wherever the ring wanders inward from its outermost point. `marsh()`
     keeps the scatter off the band itself and off every pond bank in the same change: the strip is the
-    REGION, the keep-out is the guarantee - the two halves of one rule."""
+    REGION, the keep-out is the guarantee - the two halves of one rule.
+
+    Steps:
+        l7r.diagram.hamletgen.water.polder.waterward_flanks
+        l7r.diagram.hamletgen.water.polder.dike_face
+        l7r.diagram.settlement.Settlement.marsh
+    """
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return
     pts = [p for dk in s.M["dikes"] for p in dk.get("outline", [])]

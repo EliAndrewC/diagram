@@ -5,8 +5,6 @@ from __future__ import annotations
 import io
 from pathlib import Path
 
-import coverage
-
 from l7r.diagram.tools import hamlet_floor as hf
 
 
@@ -52,6 +50,8 @@ def _measure(tmp_path: Path, body: str, call: str) -> tuple[str, str]:
     mod.write_text(body, encoding="utf-8")
     data = str(tmp_path / ".cov")
     ran = {"f(True)": [1, 2, 3], "f(True); f(False)": [1, 2, 3, 4]}[call]
+    import coverage  # inside the helper, not at module level: 4.2 MiB on every worker for one file (feature 237, FR-007)
+
     cd = coverage.CoverageData(basename=data)
     cd.add_lines({str(mod): ran})
     cd.write()

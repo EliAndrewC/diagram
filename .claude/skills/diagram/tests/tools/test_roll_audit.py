@@ -6,7 +6,6 @@ from __future__ import annotations
 import io
 from pathlib import Path
 
-import coverage
 import pytest
 
 from l7r.diagram.tools import roll_audit
@@ -18,6 +17,8 @@ ENGINE = "/repo/.claude/skills/diagram/l7r/diagram"
 
 def _db(tmp_path: Path) -> Path:
     path = tmp_path / ".coverage"
+    import coverage  # inside the test, not at module level: 4.2 MiB on every worker for two tests (feature 237, FR-007)
+
     data = coverage.CoverageData(basename=str(path))
     # two rolls: A reaches sink.py 1-2100 (2100 lines), B reaches sink.py 1-2000 plus water.py 1-50; a unit test covers water.py 1-10
     with_lines = [

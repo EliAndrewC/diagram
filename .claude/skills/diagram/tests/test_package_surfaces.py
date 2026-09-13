@@ -70,25 +70,41 @@ def _resolves(mod: object, module: str, name: str) -> bool:
     return True
 
 
-_IMPORTS = _from_imports()
+@pytest.fixture(scope="session")
+def imports() -> list[tuple[pathlib.Path, str, str]]:
+    """The census, computed on the worker that asks for it rather than at import (feature 237, FR-007).
+
+    It was `_IMPORTS = _from_imports()` at module level, which `ast.parse`s every `.py` in the skill -
+    MEASURED at 8.7 MiB of resident memory, on all ten workers, for a check one worker runs (`specs/237`
+    research R6). The parse frees its trees but the allocator keeps the arenas, so the cost lasted the
+    worker's life.
+    """
+    return _from_imports()
 
 
-def test_the_census_found_the_tree() -> None:
+def test_the_census_found_the_tree(imports: list[tuple[pathlib.Path, str, str]]) -> None:
     """A zero-result scan would make every assertion below vacuously true."""
-    assert len(_IMPORTS) > 300, f"only {len(_IMPORTS)} first-party from-imports found - wrong root?"
+    assert len(imports) > 300, f"only {len(imports)} first-party from-imports found - wrong root?"
 
 
-@pytest.mark.parametrize("module", sorted({m for _, m, _ in _IMPORTS}))
-def test_every_imported_name_resolves_on_its_module(module: str) -> None:
+def test_every_imported_name_resolves_on_its_module(imports: list[tuple[pathlib.Path, str, str]]) -> None:
     """The invariant a package split must preserve, checked against the live module.
 
-    Parametrized per module so a failure names the package whose surface narrowed, rather than
-    reporting one name out of several hundred.
+    ONE test over every module, reporting every offending module together. It was parametrized per
+    module - `@pytest.mark.parametrize("module", sorted({m for _, m, _ in _IMPORTS}))` - so that a
+    failure named the package whose surface narrowed; a fixture cannot drive `parametrize`, and the
+    census had to stop being module-level work (feature 237, FR-007). The diagnostic is kept by naming
+    every module and its missing names in the one assertion, which is this repository's own rule for a
+    gate that reports all failures together rather than the first.
     """
-    mod = importlib.import_module(module)
-    missing = sorted({name for _, m, name in _IMPORTS if m == module and not _resolves(mod, module, name)})
+    missing: dict[str, list[str]] = {}
+    for module in sorted({m for _, m, _ in imports}):
+        mod = importlib.import_module(module)
+        gone = sorted({name for _, m, name in imports if m == module and not _resolves(mod, module, name)})
+        if gone:
+            missing[module] = gone
     assert not missing, (
-        f"{module} does not expose {missing} - if this module recently became a PACKAGE, its "
-        f"__init__.py must re-export them (feature 173; the mover derives that list by grep and a "
-        f"grep is what missed _COMMONS_FLOOR_FT)"
+        f"these modules do not expose the names the tree imports from them: {missing} - if a module "
+        f"recently became a PACKAGE, its __init__.py must re-export them (feature 173; the mover "
+        f"derives that list by grep and a grep is what missed _COMMONS_FLOOR_FT)"
     )

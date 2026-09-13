@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T144928Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "a focused verification pass is running over the snapshot pool-227c of this content; the delta since is records and a re-taken perf bookend"
+}

@@ -277,6 +277,44 @@ def test_a_web_lane_that_shadows_the_network_for_most_of_its_length_is_refused()
     assert len(s.M["lanes"]) == 1, "nothing was drawn"
 
 
+def test_a_web_lane_that_shadows_the_network_for_a_whole_pitch_is_refused_even_when_most_of_it_is_clear() -> None:
+    """The second shadow rule: a run mostly in open ground still counts as the same way again when one CONTIGUOUS
+    stretch of it, longer than a bundle pitch, lies within `WEB_SHADOW_FT` of the network."""
+    ends = [(6.0, 5.0), (306.0, 150.0)]
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 150.0)]], houses=ends)
+    run = [(6.0, float(y)) for y in range(0, 155, 5)] + [(6.0 + 5.0 * k, 150.0) for k in range(1, 61)]  # 150 ft beside the way, then 300 ft away from it
+    assert hg.ways._lay_web_lane(s, run, [], [], [], houses=ends) is False
+    assert len(s.M["lanes"]) == 1
+
+
+# ---- the late tidy-up, lifted to module level (feature 227) ----------------------------------------
+
+
+def test_the_late_pass_pulls_back_an_end_that_still_reaches_nothing() -> None:
+    """`tidy_lane_ends` is the last pass over every lane end, after the stragglers. Its shortening branch had no
+    reader but the shipped rolls, and the moment the end rule learned to see a tread that had ARRIVED at a dooryard
+    no pool map needed shortening - so the safety net went untested while still being the thing that catches the
+    seed that needs it. Lifted out and driven here with a stub, per the GM's 2026-08-28 ruling on inner functions.
+
+    The run below leaves its west end 900 ft from the house, the field and every other way."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(60.0, 200.0)])
+    s.M["lanes"].append({"pts": [[-900.0, 200.0], [-100.0, 200.0], [20.0, 200.0]], "w": 3})
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    kept = [(float(x), float(y)) for x, y in s.M["lanes"][-1]["pts"]]
+    assert kept[0] != (-900.0, 200.0), "the 900 ft head into nothing is pulled back"
+    assert kept[-1] == (20.0, 200.0), "and the end that stands at the house is kept"
+
+
+def test_the_late_pass_leaves_a_lane_whose_ends_both_serve() -> None:
+    """It only ever SHORTENS, and it shortens nothing when there is nothing to shorten - which is the state every
+    shipped hamlet is in since the end rule started reading arrival."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(60.0, 200.0)])
+    s.M["lanes"].append({"pts": [[10.0, 200.0], [60.0, 240.0]], "w": 3})
+    before = [list(q) for q in s.M["lanes"][-1]["pts"]]
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert [list(q) for q in s.M["lanes"][-1]["pts"]] == before
+
+
 def test_a_footpath_of_one_point_fronts_nothing() -> None:
     """`_ends_worth_walking_to` is asked of whatever the router returned, and a route that collapsed to a single
     point has no ends to judge - it is not a path, and drawing it would put a dot in a field."""

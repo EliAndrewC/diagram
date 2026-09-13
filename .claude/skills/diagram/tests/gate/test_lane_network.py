@@ -26,7 +26,7 @@ import os
 
 import pytest
 
-from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, _components
+from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, _components, end_serves, steading_footprints
 from tests import rolls
 from tests.gate import _pool
 
@@ -74,6 +74,32 @@ def lanes(rolled):
     ways = [p for p in _ways(M) if len(p) >= 2]
     assert len(ways) >= 2, "the roll drew fewer than two lanes, so the network rules would judge nothing"
     return M, ways
+
+
+def _field_rings(M) -> list:
+    return [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
+
+
+def _dangling_ends(M, ways) -> list:
+    """Every internal lane end that reaches nothing, read through the PLACER'S OWN predicate.
+
+    `end_serves` is the body `_trim_to_service` trims with, which is what makes this a check on the
+    placer rather than a second opinion about it (the skill's standing rule: "placement and its check
+    must read the SAME source"). It had been a restatement, and it drifted twice - at the bar, which
+    feature 227 fixed with `WAY_END_REACH_FT`, and then at what ARRIVAL is: both sides measured a
+    farmhouse by its center and neither could see the garden fence a tread had actually stopped at,
+    which is what `STEADING_ARRIVAL_FT` answers."""
+    out = []
+    centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
+    steadings = steading_footprints(M)
+    for i, ln in enumerate(M.get("lanes") or []):
+        if ln.get("connector") or i >= len(ways) or len(ways[i]) < 2:
+            continue
+        others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
+        for end in (ways[i][0], ways[i][-1]):
+            if not end_serves(end, others, centers, _field_rings(M), steadings):
+                out.append((round(end[0]), round(end[1])))
+    return sorted(set(out))
 
 
 def test_every_lane_belongs_to_one_network(lanes) -> None:
@@ -134,23 +160,9 @@ def test_every_lane_end_reaches_something_worth_walking_to(lanes) -> None:
     no other way, no house and no field is a line that stops in open ground, and there is nothing at the
     end of it for anyone to have worn the path to."""
     M, ways = lanes
-    houses = M.get("houses") or []
-    fields = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
-    assert houses and any(len(o) >= 2 for o in fields), "the roll drew no house or no outlined field"
-    dangling = []
-    for i, ln in enumerate(M.get("lanes") or []):
-        if ln.get("connector"):
-            continue
-        p = ways[i] if i < len(ways) else []
-        if len(p) < 2:
-            continue
-        for end in (p[0], p[-1]):
-            near_way = min((_min_dist(end, o) for k, o in enumerate(ways) if k != i and len(o) >= 2), default=1e9)
-            near_house = min((math.hypot(end[0] - h["x"], end[1] - h["y"]) for h in houses), default=1e9)
-            near_field = min((_min_dist(end, o) for o in fields if len(o) >= 2), default=1e9)
-            if min(near_way, near_house, near_field) > 60.0:
-                dangling.append((round(end[0]), round(end[1])))
-    assert not dangling, f"lane end(s) stop in open ground at {sorted(set(dangling))[:4]} - nothing wore that path"
+    assert (M.get("houses") or []) and any(len(o) >= 2 for o in _field_rings(M)), "the roll drew no house or no outlined field"
+    dangling = _dangling_ends(M, ways)
+    assert not dangling, f"lane end(s) stop in open ground at {dangling[:4]} - nothing wore that path"
 
 
 def test_a_lane_does_not_break_mid_run(lanes) -> None:
@@ -251,3 +263,20 @@ def test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance(manife
         pytest.skip("fewer than two lanes")
     comp = _components(ways, _TOUCH_GAP)
     assert len(set(comp)) == 1, f"{os.path.basename(manifest)}: {len(set(comp))} lane networks at {_TOUCH_GAP} ft"
+
+
+@pytest.mark.parametrize("manifest", sorted(glob.glob(os.path.join(_POOL, "hamlets", "*", "*.json"))), ids=os.path.basename)
+def test_every_shipped_hamlets_lane_ends_reach_something(manifest: str) -> None:
+    """EVERY SHIPPED HAMLET, not only the reference roll (feature 227 D11). The rule had one reader, on
+    Inashiro, and two pool maps carried straggler ends it never looked at - which is the same blind spot
+    feature 220 found for the one-network rule, in the same place, for the same reason. Static data, so
+    asking it of every map costs no roll; and it is the guard against the regression this fix could
+    have, since what it reads is the placer's own predicate."""
+    with open(manifest) as fh:
+        M = json.load(fh)
+    ways = _ways(M)
+    if not any(len(p) >= 2 for p in ways):
+        pytest.skip("no drawn lane")
+    assert M.get("houses"), f"{os.path.basename(manifest)} records no house, so the end rule would judge nothing"
+    dangling = _dangling_ends(M, ways)
+    assert not dangling, f"{os.path.basename(manifest)}: lane end(s) reach nothing at {dangling[:4]}"

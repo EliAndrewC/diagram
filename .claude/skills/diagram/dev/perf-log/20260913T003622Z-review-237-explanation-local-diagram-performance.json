@@ -1,0 +1,332 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "dd8738d2",
+    "label": "237-start",
+    "utc": "20260912T235642Z"
+  },
+  "binding": "661210994911bb3cf2c5daffdb8e0ace16f514dc05ae78e6134421751c448784",
+  "end": {
+    "commit": "c30d92c3",
+    "label": "237-end",
+    "utc": "20260913T003227Z"
+  },
+  "environment": "local",
+  "explanation": "Feature 237 FR-010 makes shapely load on first use instead of at import, so the FIRST seed of a process now pays that import inside its timed region. Measured directly: importing shapely.geometry and shapely.ops costs 0.244s, which is the +0.2s seed 4 shows on field and track; seed 4 is the first seed snapshotted. It is ONE-TIME PER PROCESS, not per map - seeds 25, 39 and 47 read +0.0%, -8.0% and -1.4%, and the TOTAL is -1.3% faster across three independent -end bookends (seed 4 +3.6/+1.8/+3.6%, total -1.3/-1.8/-1.3%). The deferral's purpose is memory: shapely plus the numpy it pulls is 16-22 MiB per worker that all ten gate workers paid merely to collect the package. A loader call inside the per-plot functions was considered as the cause and RULED OUT by measurement - making the check an inline sentinel rather than a call left seed 4 unchanged at +3.6%.",
+  "feature": "237-lean-test-collection",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "008f34b2-3392-461d-bd88-fbb348290e9f",
+    "utc": "20260913T003622Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "seeds": {
+      "25": -2.0,
+      "39": -6.0,
+      "4": 3.6,
+      "47": -1.4
+    },
+    "total_pct": -1.3
+  },
+  "render": "perf bands [local]: 237-end vs 237-start -> band 1\n  seed   4    +3.6%; grew: field +0.1s\n  seed  25    -2.0%\n  seed  39    -6.0%\n  seed  47    -1.4%\n  TOTAL       -1.3%\n  owes: a written explanation (make perf-explain WHY=...) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.02,
+        0.02
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.36,
+        0.34
+      ],
+      "field": [
+        1.75,
+        1.71
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.6,
+        0.59
+      ],
+      "homesteads": [
+        0.1,
+        0.1
+      ],
+      "labels": [
+        0.02,
+        0.02
+      ],
+      "notice": [
+        0.16,
+        0.15
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.04
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.04,
+        1.02
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.46,
+        0.44
+      ],
+      "windbreak": [
+        0.39,
+        0.4
+      ],
+      "woodland": [
+        0.02,
+        0.02
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.14,
+        0.13
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.4,
+        0.4
+      ],
+      "field": [
+        1.67,
+        1.59
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.63,
+        0.6
+      ],
+      "homesteads": [
+        0.09,
+        0.08
+      ],
+      "labels": [
+        0.02,
+        0.02
+      ],
+      "notice": [
+        0.13,
+        0.13
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.05,
+        0.04
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        1.18,
+        1.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.52,
+        0.51
+      ],
+      "windbreak": [
+        0.14,
+        0.14
+      ],
+      "woodland": [
+        0.02,
+        0.02
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.06,
+        0.06
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.33,
+        0.33
+      ],
+      "field": [
+        1.82,
+        1.92
+      ],
+      "frame": [
+        0.03,
+        0.02
+      ],
+      "hinterland": [
+        0.61,
+        0.64
+      ],
+      "homesteads": [
+        0.08,
+        0.08
+      ],
+      "labels": [
+        0.07,
+        0.07
+      ],
+      "notice": [
+        0.32,
+        0.33
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.04
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.98,
+        0.97
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.81,
+        0.81
+      ],
+      "windbreak": [
+        0.46,
+        0.49
+      ],
+      "woodland": [
+        0.02,
+        0.03
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.02,
+        0.02
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.3,
+        0.3
+      ],
+      "field": [
+        4.63,
+        4.57
+      ],
+      "frame": [
+        0.0,
+        0.0
+      ],
+      "hinterland": [
+        0.41,
+        0.4
+      ],
+      "homesteads": [
+        0.09,
+        0.09
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.15,
+        0.15
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.04
+      ],
+      "sink": [
+        0.0,
+        0.0
+      ],
+      "track": [
+        0.98,
+        0.97
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.43,
+        0.44
+      ],
+      "windbreak": [
+        0.06,
+        0.06
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "verdict": "pending"
+}

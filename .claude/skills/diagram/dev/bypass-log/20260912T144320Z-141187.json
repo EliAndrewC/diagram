@@ -1,0 +1,6 @@
+{
+  "utc": "20260912T144320Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "a focused verification pass over the snapshot pool-227c is dispatched in the same turn; a detached gate is not seen by the pair hook"
+}

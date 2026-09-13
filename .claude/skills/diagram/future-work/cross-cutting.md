@@ -370,6 +370,38 @@ session is told to exercise and the GM reads in the diff.
 **When to build it**: if a village-tier feature lands rows that the GM, reading the diff, judges should have been unit
 tests - that is the measurement that says the judgment layer is not holding.
 
+## Three magistracy SVGs have no generator, and the ignore rules say they do (found 2026-09-13, feature 237)
+
+**What is actually true, measured.** Of the five magistracies, **two generate their own svg** -
+`county-magistracy-example` and `ochiba-roundtrip-test` call `compound.place()` and `emit_svg()` and write
+it (0.17 s end to end, svg 6 KB) - and **three do not**: `hayakawa`, `ochiba-magistracy` and `ubame` have a
+`.gen.py` whose entire body is `resvg <svg> <png>`. Their svg is hand-authored source that nothing can
+rebuild. The size signature says the same thing: the two generated svgs are 5.7 and 6.3 KB, the three
+hand-drawn ones 35.6, 38.6 and 39.7 KB.
+
+**The ignore rules state the opposite.** `.gitignore`'s note 2 retires the Mode A exception on this:
+*"Measured 2026-09-03: all five HAVE a `.gen.py` and all five regenerate BYTE-FOR-BYTE (identical md5,
+empty git diff). The `.gen.py` is the source; the `.svg` is its output."* That measurement cannot mean what
+it says for the three: running their gens does not write an svg, so the file on disk was left untouched and
+the md5 compared each file with itself. An unchanged file is not a reproduced one.
+
+**What it costs today.** `render-sync` exits 1 on the first of the three in any clone that lacks the file -
+which is every fresh clone, since the svg is neither tracked nor restored by any procedure - and the maps
+after it in the walk therefore never render either. Nothing is LOST: all three are in
+`/host-l7r-repo/diagram-render-archive/` with sha256s (83 files, 442 MB, verified present 2026-09-13), which
+is the second copy the ignore block promises.
+
+**The sketch.** Track the three (114 KB in total, which is three ten-thousandths of the 345.71 -> 38.68 MiB
+the purge won), correct note 2 to say two of five, and leave the two generated ones ignored. Their gen
+docstrings already claim the svg is "hand-authored svg SOURCE (tracked in git)" - which the change would
+make true rather than aspirational. The GM's call: it puts hand-drawn artifacts back in git, which is the
+decision the purge reversed.
+
+**A separate, smaller thing found with it.** `render-sync` warns that a missing frozen render should be
+restored "with `git checkout`" because "the frozen renders are committed (GM 2026-08-16)". They are not, and
+deliberately so: `.gitignore` note 1 records that the frozen exhibits were removed from git and archived.
+The warning should point at `/host-l7r-repo/diagram-render-archive/` and its MANIFEST. `ueda` is not a
+defect - it is that decision working.
 ## Lighting a watercourse paints over the things that CROSS it (measured 2026-09-12, feature 230)
 
 MEASURED by the feature's fifth settlement-review pass with `make page-lit` on Inashiro's page:
