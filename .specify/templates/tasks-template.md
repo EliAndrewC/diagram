@@ -63,7 +63,14 @@ description: "Task list template for feature implementation"
       - [ ] T0n `spec-fidelity` round <k>, MODE <2 = full reading | 3 = VERIFY>
             items from round <k-1>: <the numbered items, or "none - first round">
             changed since: <the passages this round must read in full>
+            figures: specs/NNN-slug/measurements.json - re-run with `make figures SPEC=specs/NNN-slug`
             research: rendering
+
+  A FIGURE REACHES A REVIEWER AS A RECORD, NOT AS TEXT (feature 239 FR-014, GM ruling 2026-09-13). The
+  `figures:` line names the measurements file and the command that re-runs it, so the reviewer is handed
+  the route rather than asked for it. A figure with no key, no one-shot label and no round label makes
+  the round `NOT-REVIEWABLE` - it is returned before the substance is read and does not consume a round.
+  Run `make quick` first: spec-lint check 5 finds the same thing for nothing.
 
   A round whose task does not name its changed passages has not been given what MODE 3 needs, and
   the agent is instructed to ask for the list rather than re-read the spec to find it.

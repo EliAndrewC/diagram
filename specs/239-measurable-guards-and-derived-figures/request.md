@@ -25,3 +25,10 @@ than judgments. The GM's reply:
 So: three items the session proposed and the GM approved, plus a fourth the GM proposed - and the
 fourth is put as a question ("maybe this isn't a good idea"), which this spec answers with the record
 rather than with a preference (`research.md` R2, R5).
+
+## The GM's ruling on the five-round escalation (2026-09-13)
+
+The spec reached its five-round cap with round 5's three items applied, and the session escalated with
+three options: accept it as it stands, run one more round, or change FR-011c. The GM, verbatim:
+
+> I accept the spec as it stands, so please proceed.

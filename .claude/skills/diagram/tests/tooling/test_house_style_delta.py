@@ -108,9 +108,9 @@ def test_a_fixture_is_a_verbatim_record(tmp_path: pathlib.Path) -> None:
 
 
 def test_the_word_list_is_the_hook_s_own(tmp_path: pathlib.Path) -> None:
-    """One list, read from the hook: a copy drifts, and silently in the permissive direction."""
+    """One list, the decision's own: a copy drifts, and silently in the permissive direction."""
     words = chk.brit_words()
-    hook = (REPO / "scripts" / "house-style-hooks.sh").read_text()
+    hook = (REPO / "scripts" / "_hm_house.py").read_text()
     for w in words:
         assert f'"{w}"' in hook
     assert len(words) > 40

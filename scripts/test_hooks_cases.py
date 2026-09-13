@@ -183,6 +183,9 @@ HOUSE_STYLE = [
     # really ran, several of them house-style sweeps, and correcting one falsifies the measurement it
     # reproduces. The exemption is in the hook AND in the delta check; this is the hook half, which the
     # amendment review noticed had no case of its own and would have been lost silently.
+    # feature 239: the decision module carries the word table itself, so an edit to it must never be
+    # corrected - the hook would otherwise Americanize its own list of what to correct
+    ("the decision module's own word table", edit("/r/scripts/_hm_house.py", new='PAIRS = {"colour": "color"}'), "ok"),
     ("a recorded command corpus", write("/r/scripts/fixtures/corpus.json", "{\"command\": \"sed -i s/cent\u0072e/center/ docs/a.md\"}"), "ok"),
 ]
 
