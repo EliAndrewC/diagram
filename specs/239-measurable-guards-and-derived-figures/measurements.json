@@ -1,0 +1,88 @@
+{
+ "amendment-guard-lines-added": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/change_size.py 06cb3c1c^ 49027b6b --record",
+  "note": "feature 236 amendment 2: the hook and its new module",
+  "taken": "2026-09-13",
+  "unit": "lines",
+  "value": 309
+ },
+ "amendment-scripts-lines-added": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/change_size.py 06cb3c1c^ 49027b6b --record",
+  "note": "the same window, all of scripts/",
+  "taken": "2026-09-13",
+  "unit": "lines",
+  "value": 455
+ },
+ "bare-python-spawn-ms": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "taken": "2026-09-13",
+  "unit": "ms",
+  "value": 19
+ },
+ "decision-in-process-ms": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "note": "the same program compiled once and executed per command",
+  "taken": "2026-09-13",
+  "unit": "ms",
+  "value": 6.2
+ },
+ "decision-spawn-ratio": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "taken": "2026-09-13",
+  "unit": "x",
+  "value": 37
+ },
+ "decision-spawned-ms": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "note": "the shipped hook, over 60 real commands",
+  "taken": "2026-09-13",
+  "unit": "ms",
+  "value": 231
+ },
+ "guards-with-inline-python": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "note": "non-test scripts/*.sh; the convention is in the harness docstring",
+  "taken": "2026-09-13",
+  "unit": "files",
+  "value": 15
+ },
+ "guards-with-inline-python-including-tests": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "taken": "2026-09-13",
+  "unit": "files",
+  "value": 25
+ },
+ "house-style-file-lines": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "taken": "2026-09-13",
+  "unit": "lines",
+  "value": 367
+ },
+ "house-style-program-lines": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "note": "of the file's whole length, below",
+  "taken": "2026-09-13",
+  "unit": "lines",
+  "value": 275
+ },
+ "largest-inline-program": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/guard_census.py --record",
+  "note": "in house-style-hooks.sh",
+  "taken": "2026-09-13",
+  "unit": "lines",
+  "value": 275
+ },
+ "window-in-process-s": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "taken": "2026-09-13",
+  "unit": "s",
+  "value": 3.5
+ },
+ "window-spawned-s": {
+  "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "note": "558 commands",
+  "taken": "2026-09-13",
+  "unit": "s",
+  "value": 129
+ }
+}

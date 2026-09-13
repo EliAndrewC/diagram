@@ -1,7 +1,8 @@
 # Feature 239 - research
 
-Everything here was measured on this repository, by a command that is committed beside it. Where a
-figure came out of a one-off harness, the harness is named and the run is dated.
+**Every figure below is either produced by a harness committed under `measure/` - named in its section,
+with the key it writes into `measurements.json` - or is a JUDGMENT over the review reports, which is
+said where it happens.** That distinction is this feature's own subject, so the page keeps it visibly.
 
 ## R1 - where 208 minutes went (measured 2026-09-13)
 
@@ -22,68 +23,108 @@ message as model latency, and reports the remainder as idle:
 | a foreground `sleep` on a background run | 6.0 | 2.9% | 1 |
 | edits, git, the push, everything else | 0.9 | 0.4% | 129 |
 
-The change itself was about 40 lines of code. **Two of the three largest blocks are tooling, not
-thinking**: the replays cost what they cost because nothing could evaluate a guard cheaply (R3), and
-because nothing froze the corpus, so each new question re-derived the whole window (R4). The third,
-the review rounds, is half tooling: R2 classifies what those rounds actually found.
+The change itself was **309 lines added and 18 removed** in the hook and the module it grew
+(`m:amendment-guard-lines-added`; 455 and 43 across all of `scripts/`,
+`m:amendment-scripts-lines-added`, from `measure/change_size.py`). **Two of the three largest blocks
+are tooling rather than thinking**: the replays cost what they cost because nothing could evaluate a
+guard cheaply (R3) and nothing froze the corpus (R4). The third, the review rounds, is half tooling -
+R2 classifies what they found.
 
-## R2 - what five review rounds found, classified (2026-09-13)
+## R2 - what five review rounds found, classified (a judgment, 2026-09-13)
 
-The twenty findings of the five `spec-fidelity` VERIFY rounds on feature 236's second amendment,
-read from the round reports in the session transcript and classified by what a fix required:
+**This is a classification, not a measurement**: the twenty findings of the five `spec-fidelity`
+VERIFY rounds on feature 236's second amendment, read from the round reports in this session's
+transcript (`~/.claude/projects/-diagram/de91c2c7-81d4-47af-b7e8-31fb61ee8c11.jsonl`) and sorted by
+what a fix required. An independent reviewer re-derived the same assignment from the same reports.
 
-| class | findings | what they were |
+**A FIGURE - stale, unreproducible, or measured one way and stated another (10).** Round 1: the window
+measured with a prefilter the hook had corrupted; the dash half never priced; a `2.2 s` that was never
+measured; the predicate's class label and its split counts. Round 2: the split stated 9/44/2 against a
+measured 9/42/4. Round 3: a residue figure judged by the hook's own output; `201 of 545` left
+standing. Round 4: D9's counts superseded; `19/4` not reproducing. Round 5: the same `19` surviving in
+a fourth place.
+
+**A DEFECT in the implementation (4).** The exemption judged by every path a command mentions; a
+suffix roster that dropped every `Makefile`; write targets read from raw text (11 verdicts wrong in
+the record); the import stub whose arity silenced the whole guard.
+
+**The spec and the code saying different things (3).** FR-007c dropping a clause the hook still used;
+SC-006 naming a literal path where the record used four shapes; a criterion true only of the cases its
+own tests exercised.
+
+**STALE TEXT a change falsified (3).** A docstring describing the deleted rule; two statements the
+amendment falsified; `git commit` listed among unresolvable targets.
+
+**Half the findings were arithmetic.** The four defects are what an independent reviewer is for - one
+would have shipped a guard that switched itself off silently. What the last two rounds found is worth
+stating exactly, because it is the case for section C and it is smaller than "nothing but arithmetic":
+**three figures and two stale sentences**, none of which changed the shipped behavior.
+
+## R3 - what a guard decision costs, spawned and called (measured 2026-09-13)
+
+`measure/decision_cost.py` lifts the hook's own Python program out of its shell string, times the
+shipped hook over the 60 longest real commands it acts on, and then times the SAME program compiled
+once and executed in process with its stdin redirected per command - which is what FR-001 makes
+permanent, and which is why the figure can be taken before the extraction exists.
+
+| | per command | key |
 |---|---|---|
-| **a FIGURE that was stale, unreproducible, or measured one way and stated another** | **10** | the window measured with a corrupted prefilter; the dash half never priced; a `2.2 s` that was never measured; the split stated 9/44/2 against a measured 9/42/4; a residue figure judged by the hook's own output; `201 of 545` left standing; D9's counts superseded; `19/4` not reproducing; the same `19` surviving in a fourth place |
-| a DEFECT in the implementation | 4 | the exemption judged by every path a command mentions; a suffix roster that dropped every `Makefile`; write targets read from raw text (11 verdicts wrong); the import stub whose arity silenced the whole guard |
-| the spec and the code saying different things | 3 | FR-007c dropping a clause the hook still used; SC-006 naming a literal path where the record used four shapes; a criterion true only of the cases its own tests exercised |
-| STALE TEXT a change falsified | 3 | a docstring describing the deleted rule; two statements the amendment falsified; `git commit` listed among unresolvable targets |
+| the hook as it runs today | **231 ms** | `m:decision-spawned-ms` |
+| the same program, compiled once, called in process | **6.2 ms** | `m:decision-in-process-ms` |
+| a bare `python3 -c pass` | 19 ms | `m:bare-python-spawn-ms` |
 
-**Half the review findings were arithmetic.** The four defects are what an independent reviewer is
-for - one of them would have shipped a guard that switched itself off silently. The ten figures are
-what a script can check, and they are the reason the rounds went to five: rounds 4 and 5 found
-nothing else at all.
-
-## R3 - what a guard decision costs, spawned and in process (measured 2026-09-13)
-
-Measured over the 60 longest real commands the house-style hook acts on, and over 20 bare spawns:
-
-| | per command |
-|---|---|
-| the hook as it runs today (bash wrapper + `python3 -c` + its imports and 44 regex compilations) | **164 ms** |
-| a bare `python3 -c pass` | 20 ms |
-| a bare `bash -c true` | 2 ms |
-| the same decision called IN PROCESS | **3.7 ms** |
-
-Over one 558-command window that is **92 s against 2.1 s**, a factor of 44, and the gap is not process
-startup: it is the hook rebuilding its whole world per command. Nine passes were needed while the
+That is **37x** (`m:decision-spawn-ratio`), and over a 558-command window **129 s against 3.5 s**
+(`m:window-spawned-s`, `m:window-in-process-s`). The cost is not process startup - a bare spawn is 19
+ms - it is the hook rebuilding its whole world per command. Nine passes were needed while the
 questions were being settled, which is where 78.9 minutes went.
 
 ## R4 - the corpus was never frozen, and the program cannot be imported (measured 2026-09-13)
 
-**Nothing froze the window.** Each of the nine passes re-read 1,034 transcripts (1,749 MB) to rebuild
-the same command list. The scan is only 8 s warm, so this is not the expensive half - but it is why
-every new question meant a fresh full pass rather than a query against a file.
+**Nothing froze the window.** Each of the nine passes re-read the transcripts to rebuild the same
+command list, and two of them ran against a prefilter this very hook had corrupted - its literal
+dashes were rewritten to hyphens as the file was saved, so it matched any command containing a spaced
+hyphen. The scan is only seconds warm, so this is not the expensive half; it is why every new question
+meant a fresh full pass rather than a query against a file.
 
-**The decision cannot be imported.** `scripts/house-style-hooks.sh` is 366 lines, **273** of them a
-Python program inside a single-quoted shell string. Nothing can `import` it, so a measurement must
-spawn it (R3) and a test can only drive it as a subprocess. The shape is not unique to this guard: a
-census of `scripts/*.sh` finds inline Python in **16** files, the largest being `repo-safety-hooks.sh`
-(88 lines) and `pair-hooks.sh` (67).
+**The decision cannot be imported.** `measure/guard_census.py` counts, for every `scripts/*.sh`, the
+lines strictly between the delimiters of each inline Python block (the convention is in its docstring,
+because the first hand count of this got two files wrong in both directions):
+
+| guard | program lines | blocks | file lines |
+|---|---|---|---|
+| `house-style-hooks.sh` | 275 | 1 | 367 |
+| `pair-hooks.sh` | 86 | 5 | 454 |
+| `repo-safety-hooks.sh` | 67 | 1 | 196 |
+| `no-poll-hooks.sh` | 48 | 2 | 218 |
+| `_guardlog.sh` | 40 | 1 | 141 |
+| `source-block-hooks.sh` | 35 | 1 | 116 |
+| `finished-run-hooks.sh` | 34 | 1 | 85 |
+| `make-only-hooks.sh` | 33 | 2 | 200 |
+| `readme-hooks.sh` | 23 | 1 | 91 |
+| `discard-hooks.sh` | 18 | 1 | 146 |
+| `gate-hooks.sh` | 13 | 1 | 174 |
+| `guard-file-hooks.sh` | 12 | 2 | 172 |
+| `agent-stall-hooks.sh` | 7 | 2 | 114 |
+| `sync-with-main.sh` | 5 | 1 | 440 |
+| `measure-hooks.sh` | 4 | 1 | 187 |
+
+**15** guard scripts carry one (`m:guards-with-inline-python`; **25** counting the test scripts,
+`m:guards-with-inline-python-including-tests`), and the house-style hook is by far the largest at
+**275** of its **367** lines (`m:house-style-program-lines`, `m:house-style-file-lines`).
 
 **And a quoted program has a failure mode of its own.** One apostrophe in a comment ends the string,
-and the guard then fails to parse - which the wrapper turns into silence. It happened **twice** in one
+the program then fails to parse, and the wrapper turns that into silence. It happened **twice** in one
 evening on this file, each time presenting as every case failing at once, and the file already carried
-a note warning about it from a previous incident.
+a warning about it from an earlier incident.
 
-## R5 - what a reviewer has to do to check a figure (2026-09-13)
+## R5 - what a reviewer has to do to check a figure (a judgment, 2026-09-13)
 
-In **four of the five rounds** the reviewer built its own replay harness to check the numbers it had
-been handed - its round-3 report names five scripts it wrote under its own scratchpad, and rounds 2, 4
-and 5 each re-derived the window the same way. That is the right instinct and it caught four stale
-figures, but it is rebuilt from scratch every round because the figures arrive as text in a document
-with no route back to the run that produced them.
+Read from the same round reports. In **every** round the reviewer measured rather than trusted, which
+is why the ten stale figures were caught. In **four of the five** it had to write the harness itself -
+its round-3 report names five scripts it wrote under its own scratchpad, and rounds 1, 2 and 5 each
+rebuilt a replay of the window. The exception is round 4, whose dispatch named the harness the session
+had by then written down: that report says it re-ran that script, and its verdict was that every
+figure reproduced "to the command".
 
-The one round where this was cheap is the one where the harness was committed: by round 4 the session
-had `final2.py` in the scratchpad and named it in the dispatch, and the reviewer re-ran it rather than
-rewriting it. Its verdict that round was that every figure reproduced "to the command".
+So the cost this feature removes is not the reviewer's scepticism - it is the reviewer rebuilding the
+same instrument four times because the figures arrived as text with no route back to the run.
