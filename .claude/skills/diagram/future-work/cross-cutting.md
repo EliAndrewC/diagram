@@ -395,3 +395,13 @@ from main's working tree, which is the only copy.
 main's tree into a clone, commit them as source, and leave the `.png` derived exactly as the gens assume.
 The gens then work in every clone and `render-sync` stops aborting. One line of `.gitignore` plus three
 files.
+
+**The same defect, found in the frozen tree by the same run.** `render-sync` warns that
+`legacy-hand-authored-pool/villages/ueda/` is missing `ueda.svg` and `ueda.png`, and tells the reader to
+restore them with `git checkout` because *"the frozen renders are committed (GM 2026-08-16)"*. They are
+not: `git ls-files` finds neither in the clone OR in main, and both files sit untracked in main's working
+tree exactly as the magistracy svgs do. So the warning sends a reader to a command that cannot work, and a
+frozen exhibit - the class of artifact that by the GM's own 2026-08-16 ruling can never be faithfully
+regenerated once the engine has drifted - survives in one working tree only. Worth settling in the same
+pass and with the same question: track them, or accept that the exhibit is gone and say so where it is
+listed.
