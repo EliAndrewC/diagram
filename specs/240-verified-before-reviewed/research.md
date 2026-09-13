@@ -46,10 +46,12 @@ inference, and only a counterfactual measurement settles an inference.
 
 ## R3 - the machinery each requirement builds on (read, not assumed)
 
-- **The dispatch intercept exists.** `scripts/pair-hooks.sh pretool` already runs on an Agent dispatch of
-  `settlement-review` and refuses one with no gate beside it (feature 151); it resolves this session's
-  clone and keeps a per-map snapshot under `<clone>/.git/review-snapshot/`. FR-001 and FR-002 add to that
-  branch rather than adding a hook.
+- **The dispatch intercept exists, and it counts a review at DISPATCH.** `scripts/pair-hooks.sh pretool`
+  already runs on an Agent dispatch of `settlement-review` and refuses one with no gate beside it (feature
+  151); it resolves this session's clone and keeps a per-map snapshot under `<clone>/.git/review-snapshot/`.
+  Read on 2026-09-13: that same branch writes `review_key` into the pairing file when the dispatch is
+  PERMITTED (the `write_pairing ... review_key "$key"` calls, including the `PAIR_OK` escape's), so the pair
+  is closed by the dispatch itself and not by anything the review returns. FR-002 moves that to a verdict.
 - **Map currency is already decided.** `pipeline/regen.py` returns CACHED or REGENERATED from the
   generation cache's key; no manifest carries an engine key of its own (checked on
   `pool/hamlets/inashiro/inashiro.json`, no `meta` field names one), so the check asks the cache.
@@ -60,18 +62,11 @@ inference, and only a counterfactual measurement settles an inference.
 - **The measurements format exists** in feature 239's clone as `specs/239-.../measurements.json`, written
   by four harnesses under `measure/`. That session calls it provisional.
 
-## R4 - the quiet threshold FR-009 needs (OWED before implementation)
+## R4 - the quiet threshold (RETIRED to feature 239)
 
-Not yet measured. The motivating observation is feature 239's, and its provenance was CORRECTED by that
-session after this record first cited it: a spawned command did go from 145 ms to 303 ms an hour apart, the
-second with another session rolling a map at 152% CPU, and that part stands as evidence that contention
-moves timings on this container. It is NOT evidence that contention alone produces a 2x: the larger part of
-that session's drift, an in-process figure moving from 7.0 ms to 121 ms, was its own harness taking the first
-digit in argv as the sample size, so `--repeat 3` timed three commands while the record said 560. That
-session attributed the drift wrongly twice (path growth, then contention) before a review round read the
-sample. Hence FR-009's second clause: a timing record states the sample it measured, so the check is a read.
-Feature 239's own threshold is `QUIET = 2.0`, chosen rather than measured by its own account; that session
-has said it will adopt whatever number this one measures. The threshold is measured by sampling
-the one-minute load average across a working day on this container and taking the level below which a
-fixed reference command's timing is stable; the number and the command that took it land here before the
-harness is written.
+This record first marked a quiet-threshold measurement OWED here, for a timing-record requirement of this
+feature's own. Spec-fidelity round 1 found that requirement to duplicate feature 239's FR-011c, and it was
+handed back to that session, so the threshold's single home is 239 and it is owed there. The corrected
+provenance of the observation that motivated it - contention moves a timing on this container, but the 2x
+that session first attributed to contention was mostly its own harness sampling three commands where its
+record claimed 560 - is kept here because it is why FR-009's `quantity` states the sample a figure measured.
