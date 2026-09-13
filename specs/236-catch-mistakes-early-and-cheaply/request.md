@@ -107,3 +107,10 @@ Verbatim, as given, after the closing report named D2, D5 and D8:
 
 The third item was already applied before the push: the round-1 finding on SC-002 landed in
 `ee8b8ccc` and round 2 returned FAITHFUL. Nothing was owed for it but the report saying so.
+
+## The GM's ruling on the five-round escalation (2026-09-13)
+
+The amendment reached the five-round cap with two stale sentences outstanding, both applied, and the
+session escalated rather than running a sixth round. The GM, verbatim:
+
+> My call is that you should go ahead and land it.

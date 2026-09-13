@@ -347,6 +347,10 @@ that produced the 21.
 
 ## Review history
 
+**Amendment 2, LANDED by the GM's ruling** (2026-09-13). The escalation the cap requires was put to
+the GM with what each round found, and they ruled: *"My call is that you should go ahead and land
+it."* Both of round 5's items were applied before the escalation, so what landed is the reviewed text.
+
 **Amendment 2, round 5** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, two items, both
 one-line restatements of stale text, both applied - the superseded figure standing in a fourth place
 (D11's closing sentence), and `git commit` listed among the writes that yield an unresolvable target
