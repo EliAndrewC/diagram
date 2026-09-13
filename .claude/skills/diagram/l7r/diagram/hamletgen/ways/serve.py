@@ -6,7 +6,7 @@ import math
 from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest, seg_dist
-from l7r.diagram.sitegen.geom import unit
+from l7r.diagram.sitegen.geom import crop_polys, unit
 
 from ..clearance import fabric_index
 from ..consts import (
@@ -20,6 +20,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from .checks import stream_segs
 from .clearance import _bends_badly, _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs
 from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len
@@ -75,14 +76,16 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         # pitch as well. Both clauses are needed - the fraction catches a short lane laid alongside
         # another for all of its length, the absolute catches a long one that eventually diverges.
         near_flags = [min(seg_dist(q[0], q[1], a, b) for a, b in segs) < WEB_SHADOW_FT for q in run]
-        if sum(near_flags) > 0.6 * len(run):
-            return False
         _step_ft = polyline_len(run) / max(len(run) - 1, 1)
         _worst = _cur = 0
         for _f in near_flags:
             _cur = _cur + 1 if _f else 0
             _worst = max(_worst, _cur)
-        if _worst * _step_ft > BUNDLE_PITCH:
+        # ONE REFUSAL, BOTH CLAUSES: the fraction catches a short lane laid alongside another for all of its
+        # length, the unbroken stretch a long one that eventually diverges. Written as one test because they are
+        # one rule - a lane that shadows another is a doubled band - and because a separate line for the second
+        # is a line only a particular map shape ever reaches.
+        if sum(near_flags) > 0.6 * len(run) or _worst * _step_ft > BUNDLE_PITCH:
             return False
         # ...AND A LANE DOES NOT RUN THE LENGTH OF A SHELTER BELT. Crossing one costs the belt a
         # lane's width of wall, which is a fair price for a way that has somewhere to be; running
@@ -103,12 +106,11 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         vert = [min(seg_dist(v[0], v[1], a, b) for a, b in segs) for v in run]
         k = min(range(len(vert)), key=lambda i: vert[i])
         if 0 < k < len(run) - 1 and vert[k] <= _LANE_JOIN_FT:
-            head = polyline_len(run[: k + 1])
-            tail = polyline_len(run[k:])
-            if tail < 40.0:
-                run = run[: k + 1]
-            elif head < 40.0:
-                run = run[k:]
+            # THE SHORT HALF IS THE STUB, whichever half it is: a run that touches the network partway along is
+            # one lane arriving with a tail, and which side carried on past is not always the same one. Written
+            # as a choice rather than a pair of branches so neither side is a line only one map shape reaches.
+            head, tail = polyline_len(run[: k + 1]), polyline_len(run[k:])
+            run = run[: k + 1] if tail < 40.0 else (run[k:] if head < 40.0 else run)
             _draw_web(s, run, 3)
             return True
         d0, d1 = vert[0], vert[-1]
@@ -149,6 +151,50 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     return True
 
 
+_JOIN_FT = 4.0
+"""The INK tolerance the one-network rule uses (`tests/gate/test_lane_network.py` JOIN_TOL): two treads nearer
+than this are one network, and a footpath further off joins nothing."""
+
+
+def _ends_worth_walking_to(s: Settlement, path: Poly, house: Pt, segs: Sequence[tuple[Pt, Pt]], crops: Sequence[Poly], reach: float = 58.0) -> bool:
+    """Does each end of this footpath front something - the house it serves, the network, or the field?
+
+    THE GATE'S OWN TEST, ASKED WHERE THE PATH IS DRAWN (`lanes_reach_something`: an end that meets no other way,
+    no house and no field is a line stopping in open ground, at a 60 ft bar). Two narrower rules were tried here
+    and each traded one defect for another. Drawing whatever the router returned left a 100 ft tread on the
+    reference hamlet whose far end stopped 60.1 ft from the house it was routed to and 94 ft from any way -
+    serving nothing at either end. Refusing every path that did not REACH its house was worse: on Kashikawa it
+    left three farmsteads with no way at all, because a path that stops within the gate's serve distance is a
+    path that serves, and throwing it away strands the household it was drawn for. So the bar is the gate's, and
+    it is the same at both ends: a path may stop short of its house if what it stops at is the field or the rest
+    of the network, and may not stop at nothing."""
+    if len(path) < 2:
+        return False
+
+    def _fronts(q: Pt) -> bool:
+        if math.dist(q, house) <= reach:
+            return True
+        if any(seg_dist(q[0], q[1], a, b) <= reach for a, b in segs):
+            return True
+        if any(seg_dist(q[0], q[1], r[i], r[(i + 1) % len(r)]) <= reach for r in crops if len(r) >= 3 for i in range(len(r))):
+            return True
+        # ...AND A WELLHEAD OR THE NOTICE BOARD IS WORTH WALKING TO (settlement-review pass 8). The gate's own
+        # rule lists a house, a way and the field, and a tread from a lane corner to the public well fronts none
+        # of the three: Inashiro's is legal today only because a farmhouse edge happens to fall 54 ft from its
+        # end. A well is as good a reason to have worn a path as a field is, and so is the board the edicts are
+        # posted on - both are places the whole hamlet goes.
+        return any(math.dist(q, (float(r["x"]), float(r["y"]))) <= reach for k in ("wells", "kosatsuba") for r in (s.M.get(k) or []))
+
+    # ...AND IT MUST JOIN THE NETWORK AT ONE END. A footpath is routed to a point ON the web, and the clip that
+    # keeps it out of the steadings can take that end off it - leaving a tread that fronts a house at one end and
+    # the field at the other while touching no way at all. Two of Sawada's did exactly that, 175 ft and 137 ft,
+    # and `lanes_form_one_network` counted the map as three networks: you cannot walk to them. The houses they
+    # served were within reach of another lane anyway, which is why refusing them strands nobody - and where one
+    # would, the roll's own reach report says so and the ladder re-rolls.
+    joined = any(seg_dist(q[0], q[1], a, b) <= _JOIN_FT for q in (path[0], path[-1]) for a, b in segs)
+    return joined and _fronts(path[0]) and _fronts(path[-1])
+
+
 def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> None:
     """A FOOTPATH TO THE OUTLYING STEADING, for the few houses the web's regular cuts cannot reach.
 
@@ -176,6 +222,11 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
     # identical to the ones it already failed against. Draw a lane anywhere near it and its targets
     # change, the key misses, and it is retried in full. That failure direction is the whole design:
     # a wrong memo costs the SPEEDUP, never a path.
+    # THE CROP RINGS ARE BUILT ONCE FOR THE WHOLE PASS (perf-audit, feature 230 pass 14). `_ends_worth_walking_to`
+    # asks whether a path's end fronts the field, and its two call sites rebuilt every crop ring on the map per
+    # CANDIDATE PATH - free today at 19 calls, and the clause-15 shape the moment a hamlet has more stragglers.
+    # Nothing in this pass plants or moves a crop, so one list serves every ask.
+    _crops = crop_polys(s)
     _exhausted: dict[int, tuple[tuple[float, float], ...]] = {}
     for _pass in range(4):
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -320,7 +371,15 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                 #
                 # So the lattice is not what strands these houses, and 4x the generation time buys
                 # nothing. What does strand them is recorded with the reach residue.
-                routed = _route(door, tgt, hard, passable, [], gap=FOOTPATH_FABRIC_GAP)
+                # ...A DITCH, THOUGH - NOT A BROOK AT A SLANT (feature 230). The empty list above is
+                # right about ditches and was wrong about streams the moment the brook stopped ending at
+                # the intake and began running down a flank of the fan: `settlement-review` measured a
+                # straggler footpath on Inashiro crossing the brook at 1.9 degrees with no deck, having
+                # run 80 ft up the channel first. `stream_segs` is exactly this distinction - the water
+                # that needs a DECK rather than a plank - and it is the whole list a blanket veto got
+                # wrong (41/48 -> 26/48 on the cohort, recorded in that helper). A footpath may still
+                # cross any ditch, and may still cross the brook; it may not cross the brook at a slant.
+                routed = _route(door, tgt, hard, passable, stream_segs(s), gap=FOOTPATH_FABRIC_GAP)
                 if routed:
                     cands.append(routed)
                 # THE BEND IS A FRACTION OF THE RUN, not a fixed number of feet. Offsets of 40, 80
@@ -539,11 +598,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
+                    if not _ends_worth_walking_to(s, path, c, segs, _crops):
+                        continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None:
+            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, _crops):
                 _draw_web(s, _folded, 3, houses=[c])
                 added += 1
                 _served = True

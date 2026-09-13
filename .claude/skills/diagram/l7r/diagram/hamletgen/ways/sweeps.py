@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from collections.abc import Sequence
 
-from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
+from l7r.diagram.settlement import Settlement, edge_dist, seg_closest, seg_dist
 
 from ..consts import (
     WEB_FABRIC_GAP,
@@ -15,7 +15,7 @@ from ..consts import (
 )
 from .clearance import _bends_badly, _clear_touch, drop_end_nubs, existing_walk, may_write
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _hits_a_steading
-from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadowing_lane
+from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadow_share, shadowing_lane
 from .route import _route
 
 # HOW FAR A FOOTPATH MAY WANDER, as a multiple of its own straight-line chord. A review measured
@@ -318,7 +318,9 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         if len(ways[i]) < 2 or ln.get("connector"):
             continue
         others = [w if k != i else [] for k, w in enumerate(ways)]
-        if shadowing_lane(ways[i], others, _LANE_JOIN_FT) is None:
+        # EITHER SHAPE OF THE SAME DEFECT (feature 230 pass 11): a lane that leaves a way and returns to it, or one that
+        # simply runs alongside another for most of its length. Both clauses below still decide whether it may go.
+        if shadowing_lane(ways[i], others, _LANE_JOIN_FT) is None and shadow_share(ways[i], others, _DOUBLED_GAP_FT) < _DOUBLED_SHARE:
             continue
         # THE STRANDING TEST READS THE CHECK'S OWN FIGURE, NOT THE JOIN TOLERANCE (feature 155).
         # Written first against `_LANE_JOIN_FT` (30), which is the "is this end ON that way" figure and
@@ -352,8 +354,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     # opens with `live = [i for i in ... if len(ways[i]) >= 2]`, so a lane another sweep has already
     # emptied is not live, never enters `swept`, and is never deleted. It only removes husks it made
     # itself. Removed back-to-front so the earlier indices stay valid.
-    for i in sorted(gone, reverse=True):
-        del lanes[i]
+    s.drop_lanes(gone)  # record AND ink slot together - see `drop_lanes`
     return dropped
 
 
@@ -398,8 +399,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     # ...and its husk goes with it, for the reason spelled out in `_sweep_doubled_remnants`: this used
     # to say "hand it to the debris sweep", and that sweep's `live` filter cannot see a lane already
     # emptied, so the record simply shipped.
-    for i in sorted(emptied, reverse=True):
-        del lanes[i]
+    s.drop_lanes(emptied)  # record AND ink slot together - see `drop_lanes`
     return fixed
 
 
@@ -484,6 +484,101 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
     return closed
 
 
+def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
+    """Pull back any lane end that reaches NOTHING, and empty what is left if pulling back cannot save it.
+
+    RUNS LAST, BESIDE THE OTHER FINISHING SWEEPS, for the reason they all do: the passes above rewrite ends. A link laid
+    to reach a piece another pass then drops, or a tail left by a trim, is an end in open ground - and
+    `lanes_reach_something` is the rule it breaks, on the gate, one map at a time (settlement-review, feature 230 passes 10
+    and 11: the same 5 ft link on the reference hamlet came back whenever the map moved, ending 73 ft from any way and 76
+    from any house). The rule's own figure is 60 ft to a way, a house or the field, so that is what is asked here; the
+    lane gives up its last vertex until an end passes, and a lane whittled under `_WEB_MIN_FT` is emptied for
+    `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design."""
+    lanes = s.M.get("lanes") or []
+    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (s.M.get("fields") or [])] or [list(f) for f in fields]
+    fixed, emptied = 0, []
+    for i, ln in enumerate(lanes):
+        if ln.get("connector"):
+            continue
+        pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
+        if len(pts) < 2:
+            continue
+        others = [
+            sg
+            for j, o in enumerate(lanes)
+            if j != i and len(o.get("pts") or []) >= 2
+            for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+        ]
+
+        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:
+            near_way = min((seg_dist(q[0], q[1], a, b) for a, b in _o), default=float("inf"))
+            near_house = min((math.dist(q, h) for h in houses), default=float("inf"))
+            near_field = min((edge_dist(q[0], q[1], r) for r in rings if len(r) >= 3), default=float("inf"))
+            return min(near_way, near_house, near_field) <= _REACH_FT
+
+        before = len(pts)
+        _mine = [(float(x), float(y)) for x, y in pts]
+        while len(pts) >= 2 and not _reaches(pts[-1]):
+            pts.pop()
+        while len(pts) >= 2 and not _reaches(pts[0]):
+            pts.pop(0)
+        if len(pts) == before:
+            continue
+        if len(pts) < 2 or polyline_len(pts) < _WEB_MIN_FT:
+            pts = []
+        # ...AND NEVER AT THE COST OF A HOUSE, the clause every other sweep here carries. Without it this pass drops a lane
+        # some farmhouse needs, `generate` re-rolls the whole map to serve it, and the roll costs what the re-roll costs:
+        # measured on the reference hamlet, attempt 1 became attempt 3 and its seed went +20.5% (feature 230 pass 11).
+        _served = [h for h in houses if min((seg_dist(h[0], h[1], a, b) for a, b in zip(_mine, _mine[1:], strict=False)), default=float("inf")) <= _SERVE_FT]
+        _rest = [
+            sg
+            for j, o in enumerate(lanes)
+            if j != i and len(o.get("pts") or []) >= 2
+            for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+        ]
+        _rest += list(zip(pts, pts[1:], strict=False))
+        if any(min((seg_dist(h[0], h[1], a, b) for a, b in _rest), default=float("inf")) > _SERVE_FT for h in _served):
+            # A FARMHOUSE WOULD LOSE ITS WAY, so the lane stays - and then its end must EARN its ink rather than stop in
+            # grass. The end is carried to the nearest thing worth walking to instead: the house it serves, or another way.
+            # Dropping it instead is what `generate` answers with a whole re-roll (the reference hamlet went to attempt 3
+            # and its seed +20.5%), and a re-roll is a heavy price for a tread that only needed to arrive somewhere.
+            pts = [(float(x), float(y)) for x, y in _mine]
+            for _e in (-1, 0):
+                if _reaches(pts[_e]):
+                    continue
+                _tx, _ty, _td = 0.0, 0.0, float("inf")
+                for _h in houses:
+                    _d = math.dist(pts[_e], _h)
+                    if _d < _td:
+                        _tx, _ty, _td = _h[0], _h[1], _d
+                if _td > 2.0 * _REACH_FT or _td <= 0.0:
+                    continue
+                # STOP SHORT OF THE HOUSE ITSELF: the rule asks that an end come within `_REACH_FT` of something, and a
+                # tread carried to the doorstep laps the farmhouse (`features_do_not_overlap`) and becomes the nearest way
+                # the notice board would face. Nine tenths of the reach is inside the rule and clear of the wall.
+                # The fraction is always positive here and nothing guards it: this end reached NO house, which is what
+                # `_reaches` just said, so `_td` is past the whole reach and cannot be inside nine tenths of it. A
+                # `_f <= 0` guard stood here and was deleted rather than covered - it could not fire, and an unreachable
+                # branch reads to the next session as a case that happens (feature 174's rule: delete, never pragma).
+                _f = (_td - 0.9 * _REACH_FT) / _td
+                _q = (pts[_e][0] + (_tx - pts[_e][0]) * _f, pts[_e][1] + (_ty - pts[_e][1]) * _f)
+                pts = [*pts, _q] if _e == -1 else [_q, *pts]
+            if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"]:
+                continue
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+            fixed += 1
+            continue
+        ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        s.reink_lane(i)
+        if not pts:
+            emptied.append(i)
+        fixed += 1
+    s.drop_lanes(emptied)  # record and ink together - see `drop_lanes`
+    return fixed
+
+
 def _sweep_debris(s: Settlement) -> int:
     """Drop a lane the passes have whittled below `_WEB_MIN_FT` and left standing on its own.
 
@@ -515,20 +610,31 @@ def _sweep_debris(s: Settlement) -> int:
 
     swept: list[int] = []
     for i in live:
+        # THE FIELD SPUR IS SWEPT LIKE ANYTHING ELSE THAT JOINS NOTHING - and the map SAYS SO (feature 230).
+        # Both sweeps ask whether every HOUSE a fragment serves is served elsewhere, and the spur serves no
+        # house, so it answers yes vacuously; exempting it outright was the first cut and it was worse, because
+        # a spur whose clipped head no longer reaches the fabric is drawn as a length of lane in open ground -
+        # measured on the reference hamlet at 111 ft long, 152 ft from the nearest lane and 72 ft from the
+        # field, which is a second lane "network" of one fragment and a thing no reader can make sense of.
+        # A spur that MEETS the web is attached, so `comp[i] not in alone` already keeps it. What was really
+        # missing was the record: the length the clip left is on every map (`meta.field_spur_ft`) and a spur
+        # swept here says so (`meta.field_spur_swept`), so a hamlet with no drawn way to its rice is a fact
+        # the manifest states rather than one a reviewer has to notice.
         if lanes[i].get("connector") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
             continue
         mine = list(zip(ways[i], ways[i][1:], strict=False))
         others = [sg for j in live if j != i for sg in zip(ways[j], ways[j][1:], strict=False)]
         if not others or any(_near(h, mine) <= _SERVE_FT < _near(h, others) for h in houses):
             continue
+        if lanes[i].get("spur"):
+            s.M["meta"]["field_spur_swept"] = "isolated - the clip left no head on the fabric"
         lanes[i]["pts"] = []
         s.reink_lane(i)
         swept.append(i)
     # AND THE HUSK GOES WITH THE INK, the rule feature 145 set on the orphan joiner's own drop: an
     # emptied `pts` leaves a record declaring a lane nothing draws, which every consumer then has to
     # special-case. Removed back-to-front so the earlier indices stay valid.
-    for i in sorted(swept, reverse=True):
-        del lanes[i]
+    s.drop_lanes(swept)  # record AND ink slot together - see `drop_lanes`
     if swept:
         s.M["meta"]["lane_fragments_dropped"] = s.M["meta"].get("lane_fragments_dropped", 0) + len(swept)
     return len(swept)
@@ -544,4 +650,7 @@ _FINE_CELL = 3.0
 # 6). So it plans at the ordinary fabric standard and buys its reach from the CELL alone:
 # `WEB_FABRIC_GAP + 3 * 0.71` = 9.1 ft against the 14.1 ft the coarse detour rung was asking, which
 # is what opened tripwire seed 27's corridor while keeping every lane off the steadings.
+_DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged band with a hairline down it
+_DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
+_REACH_FT = 60.0  # ft: `lanes_reach_something`'s own figure for an end - a way, a house or the field within this
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one

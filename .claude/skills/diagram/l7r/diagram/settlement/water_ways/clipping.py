@@ -210,8 +210,10 @@ class WaterClipMixin:
         that end onto the rim so it JOINS the open water instead of drawing its bed/sheen across it."""
         return any(a and a.get("kind") == "pond" for a in (frm, to))
 
-    def field_channel(self: Settlement, pts: Any, col: str, w0: float, w1: float, late: bool = False) -> None:  # type: ignore[misc]
-        """Draw a comb-net irrigation channel (from the waterfields engine) THROUGH the water block, so it
+    def field_channel(self: Settlement, pts: Any, col: str, w0: float, w1: float, late: bool = False, cls: str = "irrigation ditch") -> None:  # type: ignore[misc]
+        """Draw a comb-net ditch - an irrigation ditch by default, `cls="drainage ditch"` for the collector and
+        its run onward (feature 230: the class is decided by the caller from the record's role, the same field
+        that picks `col`, so class and color cannot disagree). Draw a comb-net irrigation channel (from the waterfields engine) THROUGH the water block, so it
         JOINS the pond + the other channels cleanly: its bed sits in the shared bed group (composited as one
         confluence, no dark seam), OVER the pond's rim edge (so its bed covers the rim where it meets the
         pond -> a clean gap, not the rim cutting across). `col` is the bed color (supply vs drain); the width
@@ -238,7 +240,7 @@ class WaterClipMixin:
         self.M.setdefault("drawn_channels", []).append(rec)  # ONE rec per call: flush writes bedz per piece, so the last (topmost) piece's z sticks
         if abs(w1 - w0) < 0.2:
             dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in pts)
-            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{w0:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late, cls="field ditch")
+            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{w0:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late, cls=cls)
             return
         from l7r.diagram.waterfields import taper_pieces  # local: the engine packages are peers, imported lazily
 
@@ -247,4 +249,4 @@ class WaterClipMixin:
         # with `_watercourse_segs`, so the drawn stroke and the corridor protecting it cannot drift.
         for piece, wk in taper_pieces(pts, w0, w1):
             dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in piece)
-            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{wk:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late, cls="field ditch")
+            self._water(f'<path d="{dd}" fill="none" stroke="{col}" stroke-width="{wk:.1f}" stroke-linejoin="round" stroke-linecap="round"/>', rec, late=late, cls=cls)

@@ -303,9 +303,12 @@ class FinishMixin:
         # where it goes; main's blank-then-cover scan (feature 137 T06) is the fallback beneath it.
         spot = None
         if prefer is not None:
-            _px, _py = prefer[0] + 6.0, prefer[1] + 6.0
-            if _px + bw <= prefer[2] and _py + bh <= prefer[3] and self._box_clear(_px, _py, _px + bw, _py + bh, self._title_obstacles()):
-                spot = (_px, _py)
+            # WITHIN the pocket, not only at its corner (settlement-review, feature 230 pass 12). The reservation is
+            # cut a little larger than the placard, and this took the top-left of it and gave up if anything at all
+            # stood there - so one byre seated in a corner of the pocket AFTER it was reserved sent the title out to
+            # the cover rung and onto the windbreak, with the rest of the reserved ground standing empty. The scan is
+            # the same one the fallback uses, bounded to the rectangle that was held for this.
+            spot = self._blank_label_spot(prefer[0], prefer[1], prefer[2] - prefer[0], prefer[3] - prefer[1], bw, bh, margin=2.0, step=8.0)
         if spot is None:
             spot = self._blank_label_spot(vx0, vy0, vw, vh, bw, bh) or self._blank_label_spot(
                 vx0, vy0, vw, vh, bw, bh, cover_ok=True
@@ -384,10 +387,17 @@ class FinishMixin:
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 17:.0f}" text-anchor="middle" font-size="12" fill="#3A2E1C">{bar_ft} ft</text>', cls="-")
         self.add_label(f'<text x="{(bx0 + bx1) / 2:.0f}" y="{by + 31:.0f}" text-anchor="middle" font-size="10" font-style="italic" fill="#5C4830">(1 px = {self.ftpx:g} ft)</text>', cls="-")
 
-    def _title_obstacles(self: Settlement, cover_ok: bool = False) -> BoxObstacles:  # type: ignore[misc]
+    def _title_obstacles(self: Settlement, cover_ok: bool = False, planned: Any = ()) -> BoxObstacles:  # type: ignore[misc]
         """Feature footprints a title must clear, indexed for box queries (feature 222) from (rects, polys, lines). Solid buildings/plots -> rects;
         the fields, groves, and commons -> polygons (so the title can sit in the empty corners around a diagonal
-        field); the pond -> a rect; water lines + lanes -> polylines (a title must not cross a road or stream)."""
+        field); the pond -> a rect; water lines + lanes -> polylines (a title must not cross a road or stream).
+
+        `planned` is ground a LATER stage will fill and that is not on the map yet - the windbreak's band while the
+        title's pocket is being RESERVED (settlement-review, feature 230 pass 12). Reserving blank ground that the
+        belt is about to be planted on is a reservation that costs the belt rather than the title: on Kuwabata it
+        took the pocket out of the belt's windward third and cut 34 of its 87 clumps, to hold ground that was empty
+        only because the trees had not been drawn yet. It is empty for the RESERVATION and not for the title's own
+        search, which runs after the belt and reads the clumps themselves."""
         rects: list[Any] = []
         polys: list[Any] = []
         lines: list[Any] = []
@@ -433,10 +443,22 @@ class FinishMixin:
         # parcels, with a dozen crown circles ghosting up through the title card: one of the map's
         # two woods two-thirds invisible, and the title reading as smudged. The grazing parcels stay
         # excluded, which is what keeps a title from having nowhere to sit.
+        polys += [[tuple(q) for q in ring] for ring in planned]
         _woodland = [c for c in self.M.get("commons", []) if c.get("role") == "woodland" and c.get("poly")]
-        _cover = [] if cover_ok else self.M.get("village_groves", []) + self.M.get("bamboo_stands", []) + _woodland
+        _cover = [] if cover_ok else self.M.get("bamboo_stands", []) + _woodland
         for o in _cover + self.M.get("marshes", []):
             polys.append([tuple(p) for p in o["poly"]])
+        # A GROVE BLOCKS WHERE ITS TREES ARE, NOT WHERE ITS OUTLINE IS (settlement-review, feature 230 pass 12).
+        # The belt was an obstacle by its recorded POLYGON, and that polygon is the band the clumps were seated
+        # in rather than the canopy they drew: a hamlet that holds a pocket of bare ground for its own name
+        # inside that band - which is exactly what `title_pocket` and the belt's dent arrange - had the title
+        # refuse its own reservation, fall through to the cover rung, and print over the belt somewhere else.
+        # Measured on Kuwabata: the placard hid 174 ft of a 440 ft belt and 28 of its clumps while the pocket it
+        # had reserved stood empty. The clumps ARE the ink, so they are what a title must miss.
+        if not cover_ok:
+            for g in self.M.get("village_groves", []):
+                _gr = float(g.get("r") or 0.0)
+                rects += [(float(c[0]) - _gr, float(c[1]) - _gr, float(c[0]) + _gr, float(c[1]) + _gr) for c in (g.get("clumps") or [])]
         # ...and the WELLS and the NOTICE BOARD (feature 150, settlement-review of Kuwabata: the placard sat on the
         # east public well, its glyph showing through the card's edge). Both are traffic-sited fixtures with no
         # w/h - a well records its drawn radius `vr`, the board its `w`/`h` - and neither was in the list above.
@@ -475,12 +497,14 @@ class FinishMixin:
         (feature 222); the linear scan this was is `_geom.box_clear_brute`, the oracle its tests hold it to."""
         return obs.clear(bx0, by0, bx1, by1)
 
-    def _blank_label_spot(self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False) -> Pt | None:  # type: ignore[misc]
+    def _blank_label_spot(  # type: ignore[misc]
+        self: Settlement, vx0: float, vy0: float, vw: float, vh: float, tw: float, th: float, margin: float = 22, step: float = 24, cover_ok: bool = False, planned: Any = ()
+    ) -> Pt | None:
         """Scan the window (top-to-bottom, left-to-right) for the first box of size (tw, th) that clears every
         feature; returns its (x, y) top-left, or None if the map is too full. With `cover_ok` the belt, the
         bamboo and the woodland commons are not obstacles (the placard may sit on cover, never on a
         building, a plot, a field, water, a lane or a label - `title_clear_of_features`, feature 137)."""
-        obs = self._title_obstacles(cover_ok=cover_ok)
+        obs = self._title_obstacles(cover_ok=cover_ok, planned=planned)
         y = vy0 + margin
         while y + th <= vy0 + vh - margin:
             x = vx0 + margin

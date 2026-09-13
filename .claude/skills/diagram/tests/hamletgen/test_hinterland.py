@@ -498,3 +498,22 @@ def test_the_scatter_pad_covers_the_widest_mark_the_scatter_throws() -> None:
 
     widest = max(MARSH_TINT_R, 14.0, 2.4, 4.6)  # the tint disc; a pine's tallest trunk; a brush dot; a glint's long radius (cover.py, wet.py)
     assert widest == MARSH_TINT_R and widest + 10.0 <= SCATTER_PAD, (widest, SCATTER_PAD)
+
+
+def test_a_belt_column_with_no_house_leans_on_its_neighbor_not_on_the_far_end_of_the_cluster() -> None:
+    """`fringe_profile`, settlement-review feature 230 pass 12. A column holding no house used to take the
+    whole cluster's windward-most house, which on a cluster lying DIAGONALLY to the wind is the far end of
+    the settlement: the reference hamlet's last column jumped 437 ft and drew a 430 ft file of trees out in
+    the grazing, sheltering nothing, while every adjacency check passed on the belt's other 222 clumps."""
+    from l7r.diagram.hamletgen.hinterland.belt import fringe_profile
+
+    # a cluster lying diagonally to the wind: u climbs with v, so the far end is 400 ft more windward
+    uv = [(float(i) * 40.0, float(i) * 100.0) for i in range(5)]
+    got = fringe_profile(uv, 6, 350.0, 200.0, 80.0, 1.0)
+    assert len(got) == 7
+    assert got[0][1] < got[-1][1], "the profile follows the fringe it samples rather than flattening it"
+    ends = [u for v, u in got if v > 400.0]
+    assert max(ends) <= 160.0 + 1e-6, "a column past the last house leans on the nearest column that has one, not on the far end"
+
+    # ...and with no houses anywhere, every column is the floor rather than an error
+    assert [u for _v, u in fringe_profile([], 3, 100.0, 0.0, 12.0, 1.0)] == [12.0, 12.0, 12.0, 12.0]

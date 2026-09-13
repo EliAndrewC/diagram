@@ -114,8 +114,11 @@ def test_the_runoff_leaves_the_outfall_downhill(rolled) -> None:
     dvec = _fall_vector(float(M["meta"]["down_deg"]))
     outfall = drains[0]["poly"][-1]
     sink = M.get("pond")
-    brooks = [st["poly"] for st in (M.get("streams") or []) if _poly_dist(outfall, st["poly"]) < 60.0]
-    assert sink or brooks, "the roll gave the outfall neither a pond nor a brook, so the discharge is unjudgeable"
+    # the continuation is a DRAINAGE DITCH in every sink since feature 230 - a `channels` record leaving the drain
+    # - and a natural brook near the outfall is judged too, should a map still draw one there
+    runs = [c["poly"] for c in (M.get("channels") or []) if (c.get("frm") or {}).get("kind") == "drain" and _poly_dist(outfall, c["poly"]) < 60.0]
+    brooks = runs + [st["poly"] for st in (M.get("streams") or []) if _poly_dist(outfall, st["poly"]) < 60.0]
+    assert sink or brooks, "the roll gave the outfall neither a pond nor a run onward, so the discharge is unjudgeable"
     if sink:
         along = (sink[0] - outfall[0]) * dvec[0] + (sink[1] - outfall[1]) * dvec[1]
         assert along > 0, f"the sink pond at {sink[:2]} sits uphill of the outfall {outfall}"

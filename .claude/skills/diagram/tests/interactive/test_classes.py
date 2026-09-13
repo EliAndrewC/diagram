@@ -51,7 +51,14 @@ SPEC_CLASSES = [
     "soy",
     "fallow",
     "stream",
-    "field ditch",
+    # the bar across the brook at a `weir` hamlet's intake (feature 230; the form is rolled, so a map may
+    # have none - the class is present on the page only when the map drew one)
+    "weir",
+    # the one `field ditch` became two (feature 230, GM 2026-09-12: the ditches that feed the paddies and the
+    # ditch that drains them are different questions with different records behind them)
+    "irrigation ditch",
+    "drainage ditch",
+    "pond canal",
     "pond",
     "field pond",
     "field rock",
@@ -119,7 +126,9 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     """Feature 183 (GM 2026-09-05): a deviation is the SETTING differing from history; a map drawing
     convention is a glyph scaled or colored for the eye. Six of the seven old deviations were the second."""
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == ["grave island"]
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "well"]
+    # `weir` joined them on 2026-09-12 (feature 230): the bar is drawn closing the brook bank to bank
+    # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "weir", "well"]
     beans = CLASSES["bund beans"].label_note
     assert beans.startswith("we have rendered the bund beans as") and "50 to 125 cm" in beans and "medium-green" in beans and "not found" in beans
     well = CLASSES["well"].label_note
@@ -236,9 +245,17 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     `paddy` LEFT the list on 2026-08-29 (feature 160). It now discloses that its water depths and the
     drying stages between them are MODERN extension figures with no pre-modern record behind them -
     a real liberty, and the reason the GM asked for the number to be confirmed or labeled. This
-    assertion is what made that a deliberate act rather than a quiet edit."""
+    assertion is what made that a deliberate act rather than a quiet edit.
+
+    `field ditch` LEFT the list on 2026-09-12 (feature 230) by splitting: the irrigation ditch discloses that
+    its head race's length is derived from the fan, the record giving no distance, and the drainage ditch
+    that its sink is the map's declared one."""
     bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
-    assert bare == {"marsh", "field ditch", "pond", "bund", "notice board", "windbreak"}
+    # `pond` LEFT the list on 2026-09-12 (feature 230, settlement-review pass 10): its explanation said "an irrigation
+    # reservoir above the fields" and then "on this map the pond is the field's drainage sink", on every map. Rewritten
+    # to cover both parts a pond plays, it now discloses that a pond at the field's foot is the map's declared sink with
+    # no surveyed bank or outlet behind it.
+    assert bare == {"marsh", "bund", "notice board", "windbreak"}
 
 
 def test_slug_is_a_css_token() -> None:
@@ -286,7 +303,8 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused() -> None:
 @pytest.mark.parametrize(
     ("a", "b"),
     [
-        ("pond sluice", "field ditch"),
+        ("pond sluice", "irrigation ditch"),
+        ("irrigation ditch", "drainage ditch"),
         ("pond sluice", "sluice gate"),
         ("mulberry dike", "perimeter dike"),
         ("sugarcane dike", "perimeter dike"),

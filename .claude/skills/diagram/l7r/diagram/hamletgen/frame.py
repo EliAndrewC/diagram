@@ -7,12 +7,13 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
+from l7r.diagram.settlement import Settlement, nearest_way_bearing
+from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, canopy_index, kosatsuba_anchor, under_canopy
 
 from .consts import POLDER_ARCHETYPES
-from .hinterland import CROP_MARGIN, title_pocket
+from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
 from .plan import SitePlan
+from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
 
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
@@ -137,9 +138,17 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
             # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
             _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
             _anchor = kosatsuba_anchor(s.M, _seat)
+            _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
             _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
             _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
             best: tuple[float, float, float, float] | None = None
+            # ...AND A SEAT TO FALL BACK ON THAT STILL FACES ITS WAY (feature 230). Every verge candidate can be
+            # refused by the 15-degree rule above - a hamlet whose web lays a straggler across every main-lane
+            # verge leaves nothing that fronts one way alone - and the old fallback re-posted the engine's own
+            # seat unturned, so the reference hamlet shipped a board 72 degrees side-on to the lane 9.5 ft from
+            # it. The rule the gate applies is that a board faces its NEAREST way, so the fallback takes that
+            # bearing: the seat is the best-ranked verge, and the board is turned to the way a reader sees it by.
+            loose: tuple[float, float, float] | None = None
             for lane in _ranked:
                 pts = lane["pts"]
                 for i in range(len(pts) - 1):
@@ -164,8 +173,12 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                             # the board against its NEAREST way - so a board aligned to A read 90
                             # degrees off B. Refuse a seat whose nearest way runs across this one.
                             _nb = _nearest_way_bearing(s, cx2, cy2)
-                            if _nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0:
-                                continue
+                            # ...AND NOT UNDER THE VILLAGE'S OWN TREES (settlement-review, feature 230 pass 12). The same
+                            # rule `place_kosatsuba` now applies, in the same shape and for the same reason: a board in a
+                            # wood is a notice nobody reads, and this re-seat probes exactly the verges the belt covers.
+                            # A shaded seat is kept as a LOOSE candidate rather than refused, so a hamlet whose every
+                            # verge lies under its belt still gets a board.
+                            _off_way = (_nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0) or under_canopy(_canopy, cx2, cy2, math.hypot(_bw, _bh) / 2)
                             if not s._fits(cx2, cy2, _bw, _bh, corridors=False):
                                 continue
                             # ...AND NOT IN THE WATER. `_fits(corridors=False)` is required here - the
@@ -178,8 +191,15 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                                 continue
                             # nearest the declared placement where there is one, else the busiest node
                             _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else -sum(1 for h in hs if math.hypot(cx2 - h["x"], cy2 - h["y"]) < 260)
+                            if _off_way:
+                                if loose is None or _rank < loose[0]:
+                                    loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
+                                continue
                             if best is None or _rank < best[0]:
                                 best = (_rank, cx2, cy2, rot)
+            if best is None and loose is not None:
+                _lb = _nearest_way_bearing(s, loose[1], loose[2])
+                best = (loose[0], loose[1], loose[2], _lb if _lb is not None else 0.0)
             if best is not None:
                 s.kosatsuba(best[1], best[2], rot=best[3])
             else:
@@ -189,16 +209,12 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
 
 
 def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
-    """The bearing (degrees) of the nearest lane segment to (x, y), or None with no lanes."""
-    best: tuple[float, float] | None = None
-    for ln in s.M.get("lanes") or []:
-        pts = ln.get("pts") or []
-        for k in range(len(pts) - 1):
-            a, b = (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))
-            d = seg_dist(x, y, a, b)
-            if best is None or d < best[0]:
-                best = (d, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])))
-    return None if best is None else best[1]
+    """The bearing (degrees) of the nearest lane segment to (x, y), or None with no lanes.
+
+    A thin reader over the engine's own `nearest_way_bearing`, which carries the tie-break a corner
+    seat needs: this used to be a third hand-rolled scan of the same segments, and the re-seat, the
+    siter and the check are the three readings of one question that must not be able to differ."""
+    return nearest_way_bearing(s.M, x, y)
 
 
 def stage_frame(s: Settlement, plan: SitePlan) -> None:
@@ -214,6 +230,17 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # air the frame will give the title.
     _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once, see hinterland.title_pocket
     _extra = [_pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
+    # ...AND THE CONFLUENCE, WITH A LENGTH OF ITS TRUNK (feature 230, settlement-review passes 6 and 7). Where the
+    # drain meets the passing brook, that junction is a FEATURE - the thing the third sink exists to show - and the
+    # crop ignores watercourses because they are runners that trail off the edge. So Sawada's was drawn 7.4 ft
+    # outside the sheet with none of its 359 ft of trunk in view. Predicting the frame back in `stage_sink` was
+    # tried twice and cannot work (the frame is decided here, not there); reserving the junction and a trunk's
+    # length around it is the engine's own mechanism for exactly this, the one the title pocket uses.
+    if plan.confluence is not None:
+        _cx, _cy = plan.confluence
+        _t = BROOK_JOIN_TRUNK * 0.5  # half the trunk each way: the junction, and enough brook below it to read as one
+        _extra.append((_cx - _t, _cy - _t, _cx + _t, _cy + _t))
+    _extra += brook_beside_the_field(s)  # ...and the brook's reach beside the field, which is picture, not a runner off the edge
     s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
     s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
     s.title(plan.spec.name, prefer=_pocket)

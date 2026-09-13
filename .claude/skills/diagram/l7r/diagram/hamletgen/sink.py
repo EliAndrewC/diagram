@@ -7,8 +7,9 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.settlement import Settlement, point_in_poly
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
+from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 from l7r.diagram.waterfields import DRAIN_FT, chan_px
 
@@ -66,6 +67,37 @@ def drain_heading(s: Settlement, name: str, span: float = GATE_FLOW_SPAN) -> Pt 
             return unit(float(end[0]) - float(ref[0]), float(end[1]) - float(ref[1]))
 
 
+def drain_run(s: Settlement, pts: Poly, to: str) -> None:
+    """The collector's continuation past its outfall - a DRAINAGE DITCH whichever way the water goes.
+
+    Feature 230 (GM 2026-09-12): the run into the tameike was drawn by `field_channel` and the run off
+    the frame by `stream` at 8 px, so the same thing carried two classes and two record kinds on two
+    maps ("the inconsistency you mentioned"). The research settled what it is: before modern field
+    consolidation a village's drainage went field to field, or back into a shared channel, and returned
+    to the river to be taken up below (`research/water.html`, "Where does the water go once it has
+    watered the paddies") - a dug channel that reaches a watercourse, never a brook of its own. So every
+    sink draws the same stroke: the collector's tail width, the drain's hue, the drainage-ditch class.
+
+    WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last strides, so it carries everything
+    the collector carries - a flat 2.5 px stub at the pond mouth read as a pinch rather than a mouth on the
+    sheet's most visible water feature (`settlement-review`, at true scale). Derived from `DRAIN_FT[1]` so it
+    tracks any change to the ladder.
+
+    ...but the TOPOLOGY record stays at the hairline. `M["channels"]` is the connectivity graph the anchor
+    checks walk, and its widths are held in a hairline band on purpose (a natural watercourse must
+    out-measure a field ditch by a wide margin). The DRAWN truth lives in `M["drawn_channels"]`, which is
+    where `field_channel` records the widened stroke. Writing the drawn width into the topology record
+    instead fired two checks on 14 cohort maps apiece - measured, not guessed.
+
+    RESERVE IT AS A NO-BUILD CORRIDOR. `s.channel` and `s.stream` register one; `s.field_channel` does not -
+    fine for the comb's own ditches inside a blocked envelope, wrong for this one, which runs OUT of the field
+    across open margin where the placer is free to seat a homestead on it."""
+    outfall_w = chan_px(DRAIN_FT[1], GRAIN)
+    s.field_channel(pts, DRAIN_HUE, outfall_w, outfall_w, cls=DRAINAGE_DITCH)
+    s.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5})
+    s.corridors.append((list(pts), 33.0))
+
+
 def edge_run(plan: SitePlan, frm: Pt) -> float:
     """Distance from `frm` to the canvas edge along the fall - how far a watercourse has to run to
     leave the map from here."""
@@ -107,9 +139,182 @@ def pond_setback(plan: SitePlan, out: Pt, prx: float, pry: float, step: float = 
         if clear:
             clear = not any(((v[0] - cx) / prx) ** 2 + ((v[1] - cy) / pry) ** 2 <= 1.0 for v in env)
         if clear:
+            # ...and clear of the BROOK, which since feature 230 runs on down one flank of the fan and can
+            # pass exactly where the reservoir wants to stand. Measured against the pond's OWN ellipse plus a
+            # rim's margin, never a circle of its long radius: at 116 x 74 px that circle is half again the
+            # pond across its short axis, and it cost Mizuguchi's tameike its seat - the stage fell back to
+            # draining off the frame and the map lost the reservoir it is named for. A brook running past a
+            # reservoir's shoulder is a normal thing to draw; a brook through the water is not.
+            clear = all(
+                ((seg_closest(cx, cy, a, b)[0] - cx) / (prx + 12.0)) ** 2 + ((seg_closest(cx, cy, a, b)[1] - cy) / (pry + 12.0)) ** 2 > 1.0 for a, b in zip(plan.brook, plan.brook[1:], strict=False)
+            )
+        if clear:
             return d + 12.0
         d += step
     return limit
+
+
+#: How much BROOK must remain below the confluence, px. A junction drawn at the frame's edge is not a
+#: junction a reader can see - `settlement-review` measured Sawada's joined trunk at 4.5 ft before the crop
+#: cut it, two lines leaving the map at one point rather than a tributary entering a stream. A road running
+#: off the frame implies more beyond; a junction implies nothing.
+CROP_MARGIN_PX = 48.0
+#: The margin `crop_to_content` adds around the hard content it crops to - so the field's box grown by it is a
+#: box the finished picture cannot fail to show, which is what a junction needs to be judged against.
+
+BROOK_JOIN_TRUNK = 150.0
+#: How much of the run from the outfall to the confluence may lie inside the crop before the route is
+#: refused. The outfall is AT the field's edge and a comb's envelope bows out around its own collector, so
+#: the first strides of any route from it are legitimately on the crop's own ground - which is why the gate
+#: trims a brook's leading vertices before it judges one (`streams_avoid_fields`). Anything past this is a
+#: ditch driven through the rice.
+BROOK_JOIN_LEAD = 0.3
+#: How far the confluence must have FALLEN below the outfall, px. A drain runs downhill into the brook it
+#: joins, and a junction level with the outfall is neither a fall nor a join; a stride of the collector's
+#: own tail width is enough to read as one on the sheet.
+BROOK_JOIN_DESCENT = 20.0
+
+
+def _through_the_crop(plan: SitePlan, out: Pt, q: Pt) -> bool:
+    """Would a ditch from the outfall to `q` run through the rice - past the crop edge the outfall stands on?
+
+    Lifted out of `brook_join` so the exemption can be tested on a square (feature 146's rule). The route
+    is walked from the outfall until it is clear of the envelope; leaving within `BROOK_JOIN_LEAD` of the
+    run is the field's own edge and is exempt, and the rest of the route is judged in full."""
+    lead = next((t / 20.0 for t in range(21) if not point_in_poly(out[0] + (q[0] - out[0]) * t / 20.0, out[1] + (q[1] - out[1]) * t / 20.0, plan.envelope)), 1.0)
+    if lead > BROOK_JOIN_LEAD:
+        return True
+    frm = (out[0] + (q[0] - out[0]) * lead, out[1] + (q[1] - out[1]) * lead)
+    return crosses_poly(frm, q, plan.envelope)
+
+
+def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10.0) -> Pt | None:
+    """Where the collector meets the brook that passes the field, or None if it does not pass near.
+
+    The third sink, and the researched one (feature 230): before modern consolidation a village's
+    drainage went back to the watercourse to be taken up by the district below, so where the brook the
+    field is fed from runs on within reach of the collector's outfall, the drain runs to it and joins it
+    at a confluence. The candidate must lie downslope, be within reach, and be reachable without crossing
+    the crop; without one the runoff leaves the frame as before.
+
+    THE NEAREST POINT ON THE BROOK IS THE WRONG CANDIDATE, and taking it is what hid this sink on the two
+    maps that most wanted it. A brook running down the flank passes ABREAST of the outfall, so its closest
+    point is level with it or a few feet above - Sawada's was 80 px away and 4 px uphill - and a test for
+    "downslope" then refuses the join and sends the drain off the frame on its own, two watercourses
+    leaving the map side by side. So the brook is walked at a stride and only the points that have
+    genuinely fallen are considered; the nearest of THOSE is the confluence, a little way down the brook
+    from where it passes. `BROOK_JOIN_DESCENT` is what makes the junction a junction rather than a level
+    meeting."""
+    dx, dy = plan.fall
+    best: tuple[float, Pt] | None = None
+    legs = list(zip(plan.brook, plan.brook[1:], strict=False))
+
+    # THE TRUNK IS MEASURED ON THE CANVAS, NOT ALONG THE COURSE (feature 230, settlement-review passes 6 and 7).
+    # `BROOK_JOIN_TRUNK` exists so a confluence is not drawn with nothing below it to read, and it counted ARC
+    # LENGTH - which a brook may spend entirely off the sheet: pass 6 measured Sawada's junction with all 359 ft
+    # of its trunk outside the canvas. Two attempts to predict the PICTURE here were both wrong, and the second
+    # is the instructive one: the crop's guaranteed box is the field's own extent plus the crop margin, the brook
+    # runs OUTSIDE the field by a skirt's width by design, and the drain's outfall stands at the field's low
+    # corner - so no junction can be deep inside that box, and predicting it refused every confluence the
+    # generator can draw. The frame is not knowable here. What IS knowable is whether the brook runs on across
+    # the map below the junction, and that is what this asks; whether the junction is SHOWN is settled where the
+    # frame is settled, by `stage_frame` reserving it as content (`plan.confluence`).
+    def _seen(c: Pt, d: Pt) -> float:
+        """How much of the leg c->d lies on the CANVAS, sampled at the walk's own stride."""
+        n = max(1, int(math.hypot(d[0] - c[0], d[1] - c[1]) / stride))
+        inside = sum(1 for i in range(n + 1) if 0.0 <= c[0] + (d[0] - c[0]) * i / n <= plan.W and 0.0 <= c[1] + (d[1] - c[1]) * i / n <= plan.H)
+        return math.hypot(d[0] - c[0], d[1] - c[1]) * inside / (n + 1)
+
+    below = [sum(_seen(c, d) for c, d in legs[k + 1 :]) for k in range(len(legs))]
+    for k, (a, b) in enumerate(legs):
+        run = math.hypot(b[0] - a[0], b[1] - a[1])
+        for i in range(int(run / stride) + 1):
+            t = min(1.0, i * stride / run) if run else 0.0
+            q = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            if below[k] + _seen(q, b) < BROOK_JOIN_TRUNK:
+                continue  # the brook must run on below the junction far enough to read as a trunk
+            d = math.hypot(q[0] - out[0], q[1] - out[1])
+            if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT:
+                continue
+            if _through_the_crop(plan, out, q):
+                continue
+            if best is None or d < best[0]:
+                best = (d, q)
+    return best[1] if best else None
+
+
+def pond_run(out: Pt, heading: Pt, pond: Pt, fall: Pt) -> Poly:
+    """The drainage ditch from the collector's outfall to the pond's center.
+
+    ON THE LINE WHEN THE POND IS AHEAD, bowed slightly off it so it reads as dug earth rather than a ruled connector
+    (`channel_winds_gently`), the bow proportional because a fixed 10 px bow on a short run is an acute hairpin
+    (`water_channels_obtuse_turns`).
+
+    LED ROUND WHEN IT IS NOT (settlement-review, feature 230 pass 10). Since the brook runs on down one flank, `pond_seat`
+    may step the pond across the fall to a pocket beside the outfall rather than ahead of it - which is right - and a
+    straight run to it then doubles back on the collector: Mizuguchi's turned 111.6 degrees at the field's tip, an
+    inverted V. So where the pond lies more than 100 degrees off the collector's own heading the run leaves ALONG that
+    heading and curves round to the pond, spreading the same turn over a dozen gentle bends.
+    """
+    tx, ty = pond[0] - out[0], pond[1] - out[1]
+    dist = math.hypot(tx, ty)
+    hn = math.hypot(heading[0], heading[1]) or 1.0
+    cos_off = (tx * heading[0] + ty * heading[1]) / ((dist or 1.0) * hn)
+    # 100 degrees, not 60: a collector runs ALONG the field's low edge, across the fall, so a pond straight downslope of
+    # the outfall is already about 90 degrees off its heading - the ordinary outfall, a corner every pond map draws and no
+    # review has faulted. A 60 degree cut bent that one too and moved Inashiro's lane web; the defect is a pond BEHIND it.
+    if cos_off >= math.cos(math.radians(100.0)):
+        bow = min(10.0, 0.08 * dist)
+        return [out, ((out[0] + pond[0]) / 2 - fall[1] * bow, (out[1] + pond[1]) / 2 + fall[0] * bow), pond]
+    # A CUBIC, leaving along the heading and arriving along the chord, sampled at twelfths. A quadratic sampled at quarters
+    # was the first cut and crowded the turn into one bend (66.9 degrees on Mizuguchi); the whole turn is fixed by where
+    # the pond is, so what can be chosen is how evenly it is spread. Measured on Mizuguchi's own coordinates, handles of
+    # 0.6 of the distance at twelfths hold every bend at 36 degrees or less on legs of 10 px or more.
+    # ...AND IT LEAVES ON THE BISECTOR, NOT ON THE HEADING (settlement-review, feature 230 pass 12). Pass 10's handle
+    # was thrown 0.6 of the distance ALONG the collector's heading, which is sound while the pond is somewhere ahead
+    # and absurd once it is behind: on Mizuguchi the pond lay 127 degrees round while the run left at 27, so the curve
+    # climbed 26 ft FURTHER from the pond, topped out 53 ft past its north rim and came back down - 121 ft of ditch on
+    # an 87 ft chord, an inverted U that reads as a handle rather than a watercourse, and whose apex passed 11 ft from
+    # the brook it does not join, posing a junction the map does not make. Every per-bend angle was inside tolerance,
+    # which is why nothing caught it: the defect is the EXCURSION, not the bends.
+    # So the first handle points along the BISECTOR of the heading and the chord. The run still leaves without a kink
+    # at the outfall - it keeps half of the heading - and it commits to the pond at once instead of overshooting it.
+    ux, uy = heading[0] / hn, heading[1] / hn
+    cxu, cyu = tx / (dist or 1.0), ty / (dist or 1.0)
+    bx, by = ux + cxu, uy + cyu
+    bn = math.hypot(bx, by)
+    if bn < 1e-9:  # the pond lies exactly back along the heading, so there is no bisector: leave on the chord
+        bx, by, bn = cxu, cyu, 1.0
+    k = 0.45 * dist
+    c1 = (out[0] + bx / bn * k, out[1] + by / bn * k)
+    c2 = (pond[0] - tx / (dist or 1.0) * k * 0.5, pond[1] - ty / (dist or 1.0) * k * 0.5)
+    return [
+        (
+            (1 - u) ** 3 * out[0] + 3 * (1 - u) ** 2 * u * c1[0] + 3 * (1 - u) * u * u * c2[0] + u**3 * pond[0],
+            (1 - u) ** 3 * out[1] + 3 * (1 - u) ** 2 * u * c1[1] + 3 * (1 - u) * u * u * c2[1] + u**3 * pond[1],
+        )
+        for u in [n / 12.0 for n in range(13)]
+    ]
+
+
+def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float) -> tuple[float, float]:
+    """(how far downslope, how far across the fall) the reservoir must stand to clear the crop AND the
+    brook - the set-back search with one more degree of freedom.
+
+    The walk downslope alone was enough while the brook stopped at the intake. Since feature 230 it runs
+    on down one flank of the fan, and on a map whose flank is the drain's own side the two want the same
+    ground: Mizuguchi's tameike - the reservoir the place is named for - was pushed past the canvas and
+    the stage fell back to draining off the frame, losing a feature its spec had declared. Stepping the
+    pond ACROSS the fall is the cheaper move and the truer one: a valley's reservoir sits in whatever
+    pocket the ground offers below the fields, not on a plumb line under the outfall. The sways are
+    tried nearest-first and the straight seat still wins whenever it is clear, so every map whose pond
+    already had room keeps the seat it had."""
+    for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
+        moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
+        back = pond_setback(plan, moved, prx, pry)
+        if back <= POND_SETBACK_LIMIT:
+            return back, sway
+    return POND_SETBACK_LIMIT + 1.0, 0.0
 
 
 def stage_sink(s: Settlement, plan: SitePlan) -> None:
@@ -121,8 +326,8 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     the pond's center so the two are visibly joined. Both scale with the map: a bigger hamlet drains
     more water into a bigger pond.
 
-    `water_sink="offmap"` draws nothing here - the drain's brook (kept in `stage_field`) already
-    carries the runoff off the frame, which is what most valleys do and what the GM's brief allows."""
+    `water_sink="offmap"` draws the collector's continuation off the frame instead of a pond - a drainage
+    ditch like the pond run (`drain_run`), which is what most valleys do and what the GM's brief allows."""
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:
@@ -134,6 +339,16 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         # derived per bearing below - the distance from the junction to the canvas edge along the
         # heading actually taken - because a fixed length only works on the canvas it was tuned for,
         # and a length derived for the FALL is wrong for any other bearing the search tries.
+        # THE BROOK FIRST. Where the field's own brook passes within reach of the outfall, the drain joins
+        # it rather than running its own way off the map - what a village's drainage did (`brook_join`).
+        join = brook_join(plan, out)
+        if join is not None:
+            bow = min(10.0, 0.08 * math.hypot(join[0] - out[0], join[1] - out[1]))  # dug earth, not a ruled connector; proportional keeps the turn obtuse at any length
+            mid_j = ((out[0] + join[0]) / 2 - dy * bow, (out[1] + join[1]) / 2 + dx * bow)
+            drain_run(s, [out, mid_j, join], "stream")
+            plan.sink_brook = [out, mid_j, join]
+            plan.confluence = join  # `stage_frame` reserves it: the junction is a feature, and the crop must show it
+            return
         heading = drain_heading(s, name) or (dx, dy)
         # THE ROUTE IS CHOSEN AS A WHOLE - junction and exit together.
         #
@@ -235,7 +450,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
             div = abs((bear - plan.water_flow + 180.0) % 360.0 - 180.0)
             bad += int(descent <= 0.0) + int(div >= 90.0)
             if bad == 0:
-                s.stream([out, mid, end], frm={"kind": "drain"}, to={"kind": "offmap"}, width=8)  # s.stream reserves its own corridor
+                drain_run(s, [out, mid, end], "offmap")
                 plan.sink_brook = [out, mid, end]
                 return
             if best is None or bad < best[0]:  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
@@ -243,9 +458,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         assert (
             best is not None
         )  # ...and if none is clean, the LEAST-BAD route, never an untested one  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
-        s.stream(
-            best[1], frm={"kind": "drain"}, to={"kind": "offmap"}, width=8
-        )  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
+        drain_run(s, best[1], "offmap")  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
         plan.sink_brook = list(best[1])  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
         return  # pragma: no cover - the least-bad brook route; no cohort fan currently blocks every bearing at every junction distance
     # Sized to the settlement: a tameike serving ~15 households reads at roughly Ikegami's 116x74 px
@@ -260,7 +473,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # others, which is exactly the failure mode the project's "derive, don't pin" rule names. So the
     # pond walks DOWNSLOPE from the outfall until its rim is genuinely clear, and stops at the first
     # position that is - the nearest legal seat, so the ditch between field and pond stays a ditch.
-    back = pond_setback(plan, out, prx, pry)
+    back, sway = pond_seat(plan, out, prx, pry)
     if back > POND_SETBACK_LIMIT:
         # NO ROOM FOR A RESERVOIR HERE, so the field drains off the frame instead.
         #
@@ -274,7 +487,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         plan.water_sink = "offmap"  # pragma: no cover - the pond-to-offmap fallback; no cohort fan currently needs a tameike further than the limit
         stage_sink(s, plan)  # pragma: no cover - the pond-to-offmap fallback; no cohort fan currently needs a tameike further than the limit
         return  # pragma: no cover - the pond-to-offmap fallback; no cohort fan currently needs a tameike further than the limit
-    pcx, pcy = out[0] + dx * back, out[1] + dy * back
+    pcx, pcy = out[0] + dx * back - dy * sway, out[1] + dy * back + dx * sway
     clamped = (max(prx + 20.0, min(plan.W - prx - 20.0, pcx)), max(pry + 20.0, min(plan.H - pry - 20.0, pcy)))
     if math.hypot(clamped[0] - pcx, clamped[1] - pcy) > 1.0 or not pond_clear_of_crop(plan, clamped, prx, pry):
         # THE CLAMP UNDOES THE SOLVE, so a clamped pond is no pond. `pond_setback` walks the tameike
@@ -294,10 +507,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # water block, not the late one: the pond's fill has to paint OVER the ditch's mouth where it
     # overshoots the rim, and a late stroke composites above the fill instead
     # (`pond_fill_covers_channel_mouths`).
-    bow = min(10.0, 0.08 * math.hypot(pcx - out[0], pcy - out[1]))  # a fixed 10 px bow on a SHORT run is an
-    # acute hairpin (`water_channels_obtuse_turns`); proportional keeps the turn obtuse at any length
-    mid = ((out[0] + pcx) / 2 - dy * bow, (out[1] + pcy) / 2 + dx * bow)
-    ditch: Poly = [out, mid, (pcx, pcy)]
+    ditch = pond_run(out, drain_heading(s, name) or (dx, dy), (pcx, pcy), (dx, dy))
     # WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last few strides into the
     # tameike, so it carries everything the collector carries - and it used to be drawn at a flat
     # 2.5 px whatever the drain arrived at. Harmless while the net was 5-6x oversize (12.0 -> 2.5
@@ -306,20 +516,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     # called it a pinch rather than a mouth, on the sheet's most visible water feature. Derived from
     # `DRAIN_FT[1]` so it tracks any future change to the ladder - the standing derive-don't-pin
     # rule, which a literal here quietly broke.
-    outfall_w = chan_px(DRAIN_FT[1], GRAIN)
-    s.field_channel(ditch, "#7C9EB0", outfall_w, outfall_w)
-    # ...but the TOPOLOGY record stays at the hairline. `M["channels"]` is the connectivity graph the
-    # anchor checks walk, and its widths are held in a hairline band on purpose
-    # (`irrigation_channels_hairline`, `watercourses_wider_than_ditches` - a natural watercourse must
-    # out-measure a field ditch by a wide margin). The DRAWN truth lives in `M["drawn_channels"]`,
-    # which is where the widened stroke above is recorded. Writing the drawn width into the topology
-    # record instead fires both of those checks on 14 cohort maps apiece - measured, not guessed.
-    s.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in ditch], "frm": {"kind": "drain"}, "to": {"kind": "pond"}, "w": 2.5})
-    # RESERVE IT AS A NO-BUILD CORRIDOR. `s.channel` and `s.stream` register one; `s.field_channel`
-    # does not - which is fine for the comb's own ditches, because they run inside a field envelope
-    # that is blocked ground already, and wrong for this one, which runs OUT of the field across
-    # open margin where the placer is free to seat a homestead on it (`no_structure_on_channel`).
-    s.corridors.append((list(ditch), 33.0))
+    drain_run(s, ditch, "pond")
     # A reedy fringe rims the shore - the shallow margin of any standing water.
     ring: Poly = pond_fringe_ring(pcx, pcy, prx, pry, 44.0)  # the shared ring (feature 151); a tameike keeps a wider fringe than a comb's source pond
     s.marsh(ring, role="pond_fringe")

@@ -111,3 +111,47 @@ def test_a_seat_centered_in_the_reed_fringe_is_refused_and_one_with_an_end_in_it
     corner = [(300.0, 200.0), (520.0, 200.0), (520.0, 395.0), (300.0, 395.0)]  # only the band's west end
     scored = hg.seat_cluster(plan, wet=[corner])
     assert scored["dep"] > 0  # a seat is still found; the foul is a score, not a refusal
+
+
+def test_a_margin_the_brook_divides_is_struck_out_and_the_strike_is_counted() -> None:
+    """Feature 230: the brook runs past the fan now, so a margin can have a stream down the middle of it -
+    and a cluster seated there stands in two halves with no crossing between them. The margin is struck
+    out rather than scored down, and the roll COUNTS the strike, because `generate` has to know the brook
+    steered this seat before it can judge whether that cost the map a household."""
+    plan = a_plan()
+    plain = hg.seat_cluster(plan)
+    assert plan.seat_brook_steered == 0, "no brook, no steer"
+    # a brook down the middle of the band the seater just chose, running across it
+    ax, ay = plain["along"]
+    brook = [(plain["cx"] - ax * 900.0, plain["cy"] - ay * 900.0), (plain["cx"] + ax * 900.0, plain["cy"] + ay * 900.0)]
+    moved = hg.seat_cluster(plan, brook=brook)
+    assert plan.seat_brook_steered > 0, "the brook had a say and the roll records it"
+    assert (moved["cx"], moved["cy"]) != (plain["cx"], plain["cy"]), "the divided margin is not the seat"
+    assert moved["divided"] is False, "and the one it took is not divided either"
+
+
+def test_the_brook_has_no_say_in_the_seat_when_the_map_came_up_short() -> None:
+    """Feature 230, the other half: the ground the brook rules out is ground the houses had, so when a roll
+    seats fewer households than declared `generate` rolls again with `seat_ignores_brook` set. Then the
+    penalty and the strike-out are both off and the seat is exactly the one a brook-free map would take -
+    which is what makes the second roll worth trying at all."""
+    plan = a_plan()
+    plain = hg.seat_cluster(plan)
+    ax, ay = plain["along"]
+    brook = [(plain["cx"] - ax * 900.0, plain["cy"] - ay * 900.0), (plain["cx"] + ax * 900.0, plain["cy"] + ay * 900.0)]
+    plan.seat_ignores_brook = True
+    plan.seat_brook_steered = 0
+    ignored = hg.seat_cluster(plan, brook=brook)
+    assert plan.seat_brook_steered == 0, "the brook is not consulted, so nothing is counted"
+    assert (ignored["cx"], ignored["cy"]) == (plain["cx"], plain["cy"])
+
+
+def test_every_margin_divided_still_seats_the_hamlet() -> None:
+    """A brook that divides every margin must not raise: the scored form decides among them, and the seat
+    reports that it stands on one (`meta.seat_divided` carries it onto the map)."""
+    plan = a_plan()
+    # a course that runs out through all four margins and back - one polyline, drawn as a cross
+    brook = [(-1300.0, 700.0), (2700.0, 700.0), (700.0, 700.0), (700.0, -1300.0), (700.0, 2700.0)]
+    seat = hg.seat_cluster(plan, brook=brook)
+    assert seat["divided"] is True
+    assert not hg.point_in_poly(seat["cx"], seat["cy"], SQUARE), "still outside the field"

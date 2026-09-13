@@ -216,3 +216,18 @@ def test_parse_bases_resolves_a_crowns_group_TRANSLATE_into_its_true_position() 
     svg = f'<circle cx="5" cy="7" r="9" fill="{fill}"/><g transform="translate(100,200)"><circle cx="5" cy="7" r="9" fill="{fill}"/></g>'
     crowns = sorted(sa.parse_bases(svg, families=("crown",))["crown"])
     assert crowns == [(5.0, 7.0), (105.0, 207.0)], "the untranslated crown keeps its own coordinates; the translated one is moved"
+
+
+def test_parse_bases_refuses_something_that_is_not_an_svg() -> None:
+    """Three settlement-reviews in one pass reported every family empty, and each had handed this function a
+    PATH instead of the file's text - a regex scan of a filename finds no blades and says so by returning
+    nothing. The doctrine points reviewers here so they do not hand-roll an SVG parse, so the failure has to
+    be loud rather than plausible."""
+    import pytest
+
+    from l7r.diagram.tools.scatter_audit import parse_bases
+
+    with pytest.raises(ValueError, match="PATH"):
+        parse_bases("pool/hamlets/sawada/sawada.svg")
+    assert parse_bases('<svg viewBox="0 0 10 10"></svg>') == {"blade": [], "dot": [], "pine": [], "crown": [], "reed": []}, "an SVG with no scatter really is empty"
+    assert parse_bases('<g stroke="#A7A860"><line x1="5" y1="6" x2="5" y2="1"/></g>')["blade"] == [(5.0, 6.0)], "a FRAGMENT is still a legitimate thing to scan"

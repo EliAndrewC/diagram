@@ -243,7 +243,7 @@ def test_slow_gen_budget_fires_and_the_override_silences_it(tmp_path, monkeypatc
 
 
 def _channels_under_plots(svgpath):
-    """SVG-level z-order audit: every field channel (the #6C9CBE supply / #7C9EB0 drain strokes)
+    """SVG-level z-order audit: every field channel (the SUPPLY_HUE / DRAIN_HUE strokes)
     must draw OVER the paddy plots it crosses. A channel whose midpoint lies inside a plot polygon
     that appears LATER in the document is painted over - the invisible-ditch-net defect (GM
     2026-07-21: Hoshizora's canals "rendering below the rice paddies"; also Hikari-no-sato's
@@ -258,7 +258,9 @@ def _channels_under_plots(svgpath):
     for m in re.finditer(r'<polygon points="([^"]+)" fill="#[0-9A-Fa-f]{6}" stroke="#[0-9A-Fa-f]{6}" stroke-width="2"', svg):
         plots.append((m.start(), [tuple(map(float, p.split(","))) for p in m.group(1).split()]))
     covered = []
-    for m in re.finditer(r'<path d="M([^"]+)" fill="none" stroke="#(?:6C9CBE|7C9EB0)"', svg):
+    from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, SUPPLY_HUE
+
+    for m in re.finditer(r'<path d="M([^"]+)" fill="none" stroke="(?:' + re.escape(SUPPLY_HUE) + '|' + re.escape(DRAIN_HUE) + ')"', svg):
         coords = [tuple(map(float, p.split(","))) for p in m.group(1).replace(" L", ";").split(";")]
         mid = coords[len(coords) // 2]
         if any(pos > m.start() and point_in_poly(mid[0], mid[1], pts) for pos, pts in plots):

@@ -76,11 +76,23 @@ NARRATING_SECTIONS = ("decisions recorded", "review history")
 
 
 def sections(text: str) -> list[tuple[str, int, str]]:
-    """(heading in lower case, 1-based line of the first body line, body) for each `##` section."""
-    out, marks = [], list(_HEADING.finditer(text))
+    # GUARD_EDIT_OK: feature 230 pass 13 - a SUB-heading used to end its own section. `##+` matched every
+    # level, so `### Measurable Outcomes` under `## Success Criteria` began a section named "measurable
+    # outcomes" and `check_orphans`, which reads only sections whose name starts "success criteria", saw NO
+    # criteria in that spec at all: feature 134 - which writes its eight SCs under exactly that sub-heading,
+    # the spec-kit template's own shape - was reported as having all seventeen requirements uncovered,
+    # including the two its criteria name in plain text. A check that silently examines nothing looks exactly
+    # like a check that passes, and here it looked like 25 findings on correct work, which is worse. A
+    # sub-heading now carries its parent's name in front of its own, so `startswith` reaches the whole
+    # subtree and the deeper name is still readable in a message.
+    out, marks, top = [], list(_HEADING.finditer(text)), ""
     for i, m in enumerate(marks):
+        level = len(m.group(0)) - len(m.group(0).lstrip("#"))
+        name = m.group(1).lower()
+        if level <= 2:
+            top = name
         end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
-        out.append((m.group(1).lower(), text[:m.end()].count("\n") + 1, text[m.end():end]))
+        out.append((name if level <= 2 or not top else f"{top} > {name}", text[:m.end()].count("\n") + 1, text[m.end():end]))
     return out
 
 
@@ -103,10 +115,21 @@ def check_figures(spec: pathlib.Path) -> list[str]:
 
 def _exempt_spans(text: str) -> list[tuple[int, int]]:
     """Character ranges of the sections that exist to narrate a reversal."""
+    # A SPAN RUNS TO THE NEXT HEADING OF THE SAME OR HIGHER LEVEL (feature 230 pass 13, the sibling of the
+    # sub-heading defect in `sections`): ended at the next heading of ANY level, a narrating section that
+    # carries sub-headings stops being narrated part-way through, and withdrawn text quoted below that point
+    # is reported as still standing.
     spans, marks = [], list(_HEADING.finditer(text))
     for i, m in enumerate(marks):
-        if any(m.group(1).lower().startswith(s) for s in NARRATING_SECTIONS):
-            spans.append((m.start(), marks[i + 1].start() if i + 1 < len(marks) else len(text)))
+        if not any(m.group(1).lower().startswith(s) for s in NARRATING_SECTIONS):
+            continue
+        level = len(m.group(0)) - len(m.group(0).lstrip("#"))
+        end = len(text)
+        for nxt in marks[i + 1:]:
+            if len(nxt.group(0)) - len(nxt.group(0).lstrip("#")) <= level:
+                end = nxt.start()
+                break
+        spans.append((m.start(), end))
     return spans
 
 

@@ -108,6 +108,34 @@ def street_runs(M: Manifest) -> list[list[Pt]]:
     return [[(float(p[0]), float(p[1])) for p in one]] if one else []
 
 
+def nearest_way_bearing(M: Manifest, x: float, y: float) -> float | None:
+    """The bearing (degrees) of the way nearest (x, y), or None where the map drew no way.
+
+    ONE BODY, because a notice board is TURNED by this and then JUDGED against it
+    (`kosatsuba_faces_the_road`, tests/gate/test_captions_and_boards.py). They were two hand-rolled
+    scans, and they agreed everywhere except the one place the answer is not unique: a seat beside a
+    lane's VERTEX is EXACTLY equidistant from both segments meeting there, so "the nearest segment"
+    is a tie, and a tie is decided by whatever the scan happens to do next. The siter took `min` over
+    `(distance, bearing)` tuples - which breaks the tie by the smaller number of DEGREES, a quantity
+    with no meaning on a map - while the check took the first segment in manifest order. Measured on
+    the reference hamlet: a board 9.0250 ft from both arms of a 5 ft lane's corner, turned to the arm
+    bearing 74.2 and judged against the arm bearing 138.7, and so reported 64 degrees side-on to a way
+    it was standing square to. Nothing was geometrically wrong with the board; the two readings of one
+    corner were.
+
+    So the tie-break is part of the rule rather than an accident of a loop, and it is stated here:
+    FIRST in manifest order wins. That is honest as well as shared - both arms of a corner are equally
+    the way the board stands beside, so a board turned to either one faces the traffic that reads it."""
+    best: tuple[float, float] | None = None
+    for pts in street_runs(M):
+        for k in range(len(pts) - 1):
+            a, b = pts[k], pts[k + 1]
+            d = seg_dist(x, y, a, b)
+            if best is None or d < best[0]:  # STRICT: a tie keeps the earlier segment (see above)
+                best = (d, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])))
+    return None if best is None else best[1]
+
+
 def lane_through_gate(M: Manifest, x: float, y: float, fence_deg: float) -> tuple[float, float] | None:
     """The traveled way a ward gate seated at (x, y) BARS, as (tangent degrees, bed half-width), or
     None if the gate stands in open fence with no lane through it. `fence_deg` is the local fence

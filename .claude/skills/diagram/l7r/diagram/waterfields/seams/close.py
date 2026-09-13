@@ -5,8 +5,9 @@ import random
 from collections.abc import Callable
 from typing import Any
 
-from shapely.geometry import Polygon
+from shapely.geometry import LineString, Polygon
 from shapely.ops import unary_union
+from shapely.strtree import STRtree
 
 from ..banks import (
     _GATE_MIN_APEX,
@@ -15,6 +16,7 @@ from ..banks import (
     _TINT_MAX_AREA_RATIO,
     _TINT_MAX_ASPECT,
     _TINT_MIN_APEX,
+    _TINT_MIN_RECTANGULARITY,
     _TINT_MIN_SOLIDITY,
     _TOE_MIN_APEX,
     _TOE_MIN_AREA,
@@ -75,6 +77,7 @@ def close_seams(
     # passes the ring's ground is simply gone, and the neighbor's wall is left standing alone -
     # 12 of 48 cohort seeds failed `paddy_plot_seams_shared` that way. Dropped HERE the ground is
     # just more bare pocket, and this pass reclaims it like any other.
+    _visible_parts(plots, cell_area(plot_across, row_step), 1.25 * g)
     _repair_crossing_rings(plots)
     keep = [Polygon(p["poly"]).buffer(0) for p in plots]
     field = Polygon(envelope).buffer(0)
@@ -170,6 +173,7 @@ def close_seams(
     # can revisit a vertex exactly once rounded. Two shipped that way on the reference hamlet (#29 and
     # #303, a 2 px needle each, ink-invisible under the bund stroke, and not a simple polygon for any
     # shape metric). This pass consumes no randomness, so the plot count and the RNG are untouched.
+    _shed_necks(plots, 1.25 * g, 15.0 * g)
     _repair_crossing_rings(plots, rounded=True)
     # A POINTED SLIVER MUST NOT WEAR THE WATER TINT - the same rule `_sector_closing_rank` applies
     # when it carves one, and for the same reason: a blue plot tapering to a needle reads as a tiny
@@ -198,6 +202,8 @@ def close_seams(
     # four. Measured on the FINAL ring, after absorption, which is the only place the size exists.
     _areas = sorted(Polygon(_q["poly"]).buffer(0).area for _q in plots if len(_q.get("poly") or []) >= 3)
     _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
+    _keeps: list[tuple[tuple[bool, float, float], dict[str, Any]]] = []
+    _collector = LineString(dpts) if len(dpts) >= 2 else None
     for p in plots:
         # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
         # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
@@ -243,19 +249,187 @@ def close_seams(
         # reads as a channel of water rather than as a basin holding it (see `_TINT_MAX_ASPECT`).
         _mrr = _pg.minimum_rotated_rectangle if isinstance(_pg, Polygon) and not _pg.is_empty else None
         _asp = 1.0
+        _fill = (_pg.area / _mrr.area) if isinstance(_mrr, Polygon) and _mrr.area > 0.0 else 1.0
         if isinstance(_mrr, Polygon):
             _sides = [math.dist(_q, _r) for _q, _r in zip(list(_mrr.exterior.coords)[:-1], list(_mrr.exterior.coords)[1:], strict=True)]
             if len(_sides) >= 2 and min(_sides[0], _sides[1]) > 0.0:
                 _asp = max(_sides[0], _sides[1]) / min(_sides[0], _sides[1])
-        if p.get("fill") == FLOODED and (
+        _wrong = (
             pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX)
             or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
             or _psol < _TINT_MIN_SOLIDITY
             or _at_outfall
             or _asp > _TINT_MAX_ASPECT
+            or _fill < _TINT_MIN_RECTANGULARITY
             or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
-        ):
+        )
+        if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
+        elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _pg.distance(_collector) <= 0.25 * plot_across)):
+            # ...and a plot ON the collector is low ground whatever it records: `low` is set only on the plots the carve
+            # cut, so the basins this pass plants or `_comb_toe_and_hem` re-hems onto the drain's bank never carry it -
+            # measured on Mizuguchi, 49 of the 64 plots on the collector, while the 15 that did were the seam wedges
+            _keeps.append((_basin_rank(_pg, _fill, _median_plot, _collector, plot_across), p))
+    # THE MAP MUST STILL EXHIBIT THE CLASS IT DECLARES (feature 230). The tint is a SAMPLE - a random
+    # 45% of the closing rank, for texture - and every one of those draws can be taken back by the six
+    # clauses above, which is how the reference hamlet came to paint no blue plot at all: of 90-odd
+    # blue draws across the size search, 71% were demoted as slivers at the size shipped BEFORE this
+    # feature and 72% at the size after it, so the map's whole wet-paddy exhibit was resting on one
+    # survivor and any re-roll could take it. `flooded_plots` is the picture record the interactive
+    # page's wet-paddy class reads, and a sheet that paints none has silently stopped exhibiting the
+    # class feature 159 created. So when the sample comes back empty, the most BASIN-LIKE compliant plot on
+    # the low ground is tinted - it passed every clause the random ones are judged by, so nothing is
+    # painted blue that could not have been painted blue by the draw. (The first cut took the LARGEST, and
+    # settlement-review pass 10 measured what that key selects: whatever is pressed hardest against the size
+    # ceiling, which at a fan seam is the long irregular wedge - Mizuguchi's was 3.71 long and 23 ft back from
+    # the collector, where the carve's own rule is that a blue plot abuts the drain. See `_basin_rank`.) It takes NO draw from R (the
+    # stream stays put, exactly as the demotion's indexed green does), so promoting one plot cannot
+    # re-roll another, and on a roll whose sample survived this does nothing at all.
+    if _keeps and not any(_p.get("fill") == FLOODED for _p in plots):
+        _keeps.sort(key=lambda _a: (_a[0], round(_a[1]["poly"][0][0], 1), round(_a[1]["poly"][0][1], 1)))
+        _keeps[0][1]["fill"] = FLOODED
+
+
+def _basin_rank(basin: Polygon, fill: float, median: float, collector: LineString | None, plot_across: float) -> tuple[bool, float, float]:
+    """How a compliant low plot ranks as THE flooded basin a map must exhibit - lower is better.
+
+    First, whether it lies ON the collector (within a quarter of a plot's width): the carve tints only the level whose bottom
+    edge is snapped to the drain's bank, because blue means the closing rank pooling before the outfall, and a promoted plot
+    owes the same reading. Then how far it falls short of filling its own rectangle, which is what a leveled basin looks
+    like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also its biggest.
+    """
+    # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
+    # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
+    # the drain when a real length of its boundary runs along it - a quarter of a plot's width.
+    on = collector is not None and basin.buffer(0.25 * plot_across).intersection(collector).length >= 0.25 * plot_across
+    size = abs(math.log(basin.area / median)) if median > 0.0 and basin.area > 0.0 else 0.0
+    return (not on, round(1.0 - fill, 4), round(size, 4))
+
+
+def _visible_parts(plots: list[dict[str, Any]], cell: float, neck: float = 0.0) -> None:
+    """Make the plots a PARTITION: cut each one back to the part of it no later plot covers.
+
+    THE CARVE HANDS THIS PASS OVERLAPPING BASINS, and the page hides it. Measured on Sawada, `_carve` returns 49 pairs of
+    plots that claim the same ground (up to 1,290 sq px) and `_comb_toe_and_hem` leaves 29 (up to 409); main's pool maps
+    carry the same 20-49 pairs. The renderer paints the plots in order, so what a reader sees is always the LATER plot,
+    and the earlier one's bund shows only where it pokes out - the stray notches and dangling bund stubs two reviews
+    flagged (settlement-review, feature 230 pass 10). The record meanwhile claims both, so every rule judging a basin's
+    size, shape or neighbors judged ground the map does not show.
+
+    So, walking back from the last plot, each is cut to its visible part - the record becomes the picture, which does
+    not change. A detached remainder smaller than the rest, and a whole plot left too small to be a basin or pointed to
+    a needle, return their ground to the bare pocket this pass exists to plant or weld, exactly as a carved scrap does.
+    Earlier plots are the ones cut because later ones are the ones painted on top."""
+    # INDEXED, per constitution X clause 15: a running union of every later plot grows to the whole field and each plot
+    # would be tested against all of it. The rings are indexed ONCE and each plot unions only the later rings its box meets.
+    shapes: list[tuple[int, Polygon]] = []
+    for k, q in enumerate(plots):
+        ring = q.get("poly") or []
+        gk = Polygon(ring).buffer(0) if len(ring) >= 3 else None
+        if isinstance(gk, Polygon) and not gk.is_empty:
+            shapes.append((k, gk))
+    tree = STRtree([gk for _k, gk in shapes])
+    drop: list[int] = []
+    for k, g in reversed(shapes):
+        i = k
+        later = [shapes[int(n)][1] for n in tree.query(g) if shapes[int(n)][0] > i and shapes[int(n)][1].intersects(g)]
+        if later:
+            vis = g.difference(unary_union(later))
+            if neck > 0.0:
+                # ...AND OPENED AT THE WIDTH FLOOR (settlement-review, feature 230 pass 11). Where two rings only partly
+                # overlapped, the cut leaves the earlier plot a thin tail along its neighbor - six on Kashikawa, 46 to 81 ft
+                # long and under 5 ft wide, none on main - which draws as a doubled bund. Opening at half the floor (`neck`,
+                # 2.5 ft) sheds the tail, and its ground goes back to the bare pocket like any other scrap.
+                vis = vis.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre").intersection(vis)
+            if vis.area < g.area - 1.0:
+                parts = sorted(_parts(vis), key=lambda q: -q.area)
+                best = _ring(parts[0]) if parts else []
+                if not parts or parts[0].area < _TOE_MIN_AREA * cell or len(best) < 3 or pointed_ring(best, _TOE_MIN_APEX) or pointed_ring(dedup_ring(best, 1.0), _TOE_MIN_APEX):
+                    drop.append(i)
+                else:
+                    plots[i]["poly"] = best
+    for i in sorted(drop, reverse=True):
+        del plots[i]
+
+
+def _span(shape: Any) -> float:
+    """The long side of a piece's minimum rectangle - how far a tail runs."""
+    mrr = shape.minimum_rotated_rectangle if not shape.is_empty else None
+    if not isinstance(mrr, Polygon) or shape.area <= 20.0:
+        return 0.0
+    c = list(mrr.exterior.coords)
+    return max(math.dist(c[0], c[1]), math.dist(c[1], c[2])) if len(c) >= 4 else 0.0
+
+
+def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> None:
+    """Hand a basin's thin tail to the neighbor it runs along, so two bunds a few feet apart become one.
+
+    A NECK IS A DOUBLED BUND (settlement-review, feature 230 pass 11). Fitting the fan at its true size carves some basins
+    with a long tail under the width floor running beside the next basin - five on Kashikawa, 46 to 81 ft long, none on
+    main at the old size - and on the page that is two bunds side by side with a sliver of paddy between. The tail is
+    what a morphological opening at half the floor (`neck`) removes; each tail at least `min_len` long is given to the
+    plot it shares the most edge with, and the trade is kept only when both plots stay valid, simple, unpointed rings.
+    Ground is conserved: what one plot loses the other gains."""
+
+    def _may_have_a_tail(shape: Polygon) -> bool:
+        """Cheap prefilter for the opening below (constitution X clause 15): a basin whose mean width - four times its
+        area over its perimeter - is comfortably past the floor has nothing thin to shed, and most basins are that."""
+        per = shape.length or 1.0
+        return (4.0 * shape.area / per) < 14.0 * neck
+
+    def _long_tail(shape: Polygon) -> bool:
+        if not _may_have_a_tail(shape):
+            return False
+        return any(_span(q) >= min_len for q in _parts(shape.difference(shape.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))))
+
+    shapes = [Polygon(q["poly"]).buffer(0) if len(q.get("poly") or []) >= 3 else Polygon() for q in plots]
+    tree = STRtree(shapes)
+    for _round in range(2):  # a trade can leave the taker a tail of its own; a second look sheds it
+        traded = False
+        for i, g in enumerate(shapes):
+            if g.is_empty:
+                continue
+            if not _may_have_a_tail(g):
+                continue
+            tails = g.difference(g.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))
+            for tail in _parts(tails):
+                if _span(tail) < min_len:
+                    continue
+                best, shared = -1, 0.0
+                for n in tree.query(tail.buffer(1.0)):
+                    j = int(n)
+                    if j == i or shapes[j].is_empty:
+                        continue
+                    s = shapes[j].buffer(1.0).intersection(tail.boundary).length
+                    if s > shared:
+                        best, shared = j, s
+                if best < 0:
+                    continue
+                kept = [q for q in _parts(g.difference(tail)) if q.area > 0.0]
+                grown = shapes[best].union(tail.buffer(0.05)).buffer(0)
+                if not kept or not isinstance(grown, Polygon) or grown.interiors:
+                    continue
+                body = max(kept, key=lambda q: q.area)
+                gi, gj = _ring(body), _ring(grown)
+                if len(gi) < 3 or len(gj) < 3 or not Polygon(gi).is_valid or not Polygon(gj).is_valid:
+                    continue
+                if _long_tail(Polygon(gj).buffer(0)) or pointed_ring(gi, _GATE_MIN_APEX) or pointed_ring(gj, _GATE_MIN_APEX):
+                    continue
+                plots[i]["poly"], plots[best]["poly"] = gi, gj
+                traded = True
+                shapes[i], shapes[best] = Polygon(gi).buffer(0), Polygon(gj).buffer(0)
+                g = shapes[i]
+                # ...AND THE INDEX IS REBUILT WITH THEM (perf-audit, feature 230 pass 14, reading this code for a
+                # different reason). `shapes` is mutated here and `tree` was built from it once, so for the rest of
+                # the round the query returned boxes for plots that had already given a tail away or taken one -
+                # while the exact test read `shapes[j]` live. The index is a PREFILTER, so a stale box can only
+                # return the wrong CANDIDATES: a neighbor that has since shrunk away from this tail is still
+                # offered, and one that has grown into it may be missed, which is the direction that loses a trade
+                # the pass exists to make. A fan carves 200-700 plots and a round trades a handful, so rebuilding
+                # on a trade costs a tree per trade and not per plot.
+                tree = STRtree(shapes)
+        if not traded:
+            break
 
 
 def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:
@@ -275,6 +449,6 @@ def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -
         # the ground returns to the bare pocket below, which is this pass's standing answer for a
         # scrap. Judged at the GATE's own threshold, since a repair is not a placement choice.
         _cand = _ring(max(_fixed, key=lambda q: q.area))
-        if len(_cand) >= 3 and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
+        if len(_cand) >= 3 and not pointed_ring(_cand, _GATE_MIN_APEX) and not pointed_ring(dedup_ring(_cand, 1.0), _GATE_MIN_APEX):
             _p["poly"] = _cand
     plots[:] = [_p for _p in plots if len(_p["poly"]) >= 3 and Polygon([(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]).is_valid]

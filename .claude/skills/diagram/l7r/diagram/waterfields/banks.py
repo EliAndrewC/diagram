@@ -454,6 +454,13 @@ _WELD_MIN_SOLIDITY = 0.85
 # a blue plot has to READ as a leveled basin; the same 0.85 demotes it to rice green, and the check
 # runs after the absorb pass because that is what reshaped it.
 _TINT_MIN_SOLIDITY = 0.85
+# ...and a FILL clause, for the one shape both the apex and the hull measures pass: the TRIANGLE (settlement-review, feature
+# 230 pass 10). A triangle's solidity is 1.0, and a wedge whose narrow end is capped by a short edge has no sharp vertex, so
+# Sawada shipped a notched triangle and Kashikawa a 67 x 24 ft wedge in blue, each reading as a little triangular pond - the
+# failure this whole family of clauses exists for. What separates them from a basin is how much of their own minimum
+# rectangle they fill: measured over all 2,653 basins on the four brook maps, the median is 0.93 and the first quartile
+# 0.85, while those two plots fill 0.55 and about 0.6. 0.80 leaves four in five basins free to take the tint.
+_TINT_MIN_RECTANGULARITY = 0.80
 # AND A BLUE PLOT MUST BE SHAPED LIKE A BASIN, NOT LIKE A CHANNEL (settlement-review, Inashiro
 # 2026-08-19). The three tests above all ask about a POINT - the apex, the truncated end, the lobe -
 # and a long parallel-sided WEDGE passes every one of them: Inashiro shipped two tinted plots at

@@ -84,6 +84,17 @@ def parse_bases(svg: str, families: tuple[str, ...] | None = None) -> dict[str, 
     reported 0 violations on a map that really had 5 crown bases inside the crop margin. A coverage
     guard that counts is blind to a family that sees the right NUMBER of things somewhere else; the
     guard is positional now, and this parser resolves the transform."""
+    # A PARSE OF SOMETHING THAT IS NOT MARKUP ANSWERS "NOTHING HERE", AND THAT ANSWER WAS BELIEVED (three
+    # settlement-reviews in one pass, feature 230 pass 12: each reported this function returning every family
+    # empty on "every current map I tried", one of them adding that a future reviewer "will hand-roll one too,
+    # or will believe the zero"). The files parse fine; what reached the function was the PATH rather than the
+    # text, and a regex scan of a 40-character filename legitimately finds no blades. This is the tool the
+    # review doctrine points reviewers at precisely so they do not hand-roll an SVG parse, so its failure mode
+    # has to be loud - the same shape as the crown fills that once parsed zero while reporting "crown checked".
+    # The test is markup, not a whole document: the unit tests here pass FRAGMENTS, and a fragment is a legitimate
+    # thing to scan. What no SVG lacks and no path has is a tag at all.
+    if "<" not in svg:
+        raise ValueError(f"parse_bases wants SVG TEXT and got {svg[:60]!r} - if that is a PATH, read it first (`Path(p).read_text()`)")
     fams: dict[str, list[Base]] = {"blade": [], "dot": [], "pine": [], "crown": [], "reed": []}
     want = set(families) if families else set(fams)  # `families` limits the parse to the ones asked for (a crown guard need not scan 220k blades)
     for group, fam in ((_BLADE_GROUP, "blade"), (_REED_GROUP, "reed")):

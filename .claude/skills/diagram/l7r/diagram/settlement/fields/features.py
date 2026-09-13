@@ -31,7 +31,9 @@ class FieldFeaturesMixin:
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
             # NOT the heftier natural-stream weight (see the water-width ladder in research/water.html).
-            self._water(f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="5"/>', {}, cls="field ditch")
+            self._water(
+                f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="5"/>', {}, cls="irrigation ditch"
+            )  # no record behind it: the feed INTO a reservoir is supply (spec 230 FR-001, the third clause)
         self._water(
             f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#9CB4C8"/>',  # FILL -> shared bed group (topmost bed)
             self.M.setdefault("pond_layer", {"late": False}),  # flush records the fill's bedz/sheenz here, and flips
@@ -201,9 +203,14 @@ class FieldFeaturesMixin:
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
         self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2"/>', cls="grave island")  # feature 134
         markers = ""
+        # THE STONES ARE STAGGERED AND UNEQUAL, NEVER A MATCHED PAIR (settlement-review, feature 230 pass 11). Two equal stones
+        # side by side in the upper half of an egg-shaped mound read, at every zoom, as a pair of eyes - a face on Mizuguchi's
+        # field. A family's grave markers are set one behind another as they were added, and differ in size, so each stone
+        # steps back and to one side of the last and none repeats the height of the first.
         for i in range(rng.randint(2, 3)):
-            mx = cx + (i - 1) * 6
-            markers += f'<rect x="{mx - 1.3:.1f}" y="{cy - 7:.1f}" width="2.6" height="7" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
+            mx = cx - 4.0 + i * 4.5
+            h = (8.0, 5.0, 6.5)[i]
+            markers += f'<rect x="{mx - 1.3:.1f}" y="{cy - 3.0 - i * 3.5 - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
         self.add(f'<g>{markers}</g>', cls="grave island")
         self.M.setdefault("field_graves", []).append({"x": round(cx, 1), "y": round(cy, 1)})
 

@@ -1,0 +1,36 @@
+perf-profile seed 39 stage labels: 0.1s under cProfile (the stages before it took 7.3s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260912T214408Z-seed39-labels.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         162535 function calls (162503 primitive calls) in 0.054 seconds
+
+   Ordered by: cumulative time
+   List reduced from 72 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.056    0.056 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/frame.py:246(stage_labels)
+        1    0.000    0.000    0.056    0.056 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:148(place_labels)
+        1    0.000    0.000    0.056    0.056 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py:111(_draw_board_caption)
+        1    0.000    0.000    0.043    0.043 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py:37(first_clear_seat)
+        1    0.000    0.000    0.043    0.043 {built-in method builtins.next}
+        2    0.000    0.000    0.043    0.022 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py:59(<genexpr>)
+       13    0.000    0.000    0.026    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/finish.py:195(_caption_lines)
+       11    0.001    0.000    0.026    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py:191(_box_clearance)
+       15    0.013    0.001    0.026    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:68(label_blocker_quads)
+       21    0.003    0.000    0.015    0.001 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py:337(_blocked)
+11372/11340    0.005    0.000    0.007    0.000 {built-in method builtins.min}
+    69185    0.007    0.000    0.007    0.000 {built-in method builtins.isinstance}
+     9129    0.004    0.000    0.006    0.000 {built-in method builtins.max}
+     9370    0.003    0.000    0.005    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:85(<genexpr>)
+        1    0.001    0.001    0.004    0.004 {built-in method builtins.sorted}
+        1    0.000    0.000    0.004    0.004 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:94(pull_caption_toward)
+       13    0.000    0.000    0.004    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/finish.py:217(_clear)
+     1405    0.001    0.000    0.004    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py:408(<genexpr>)
+     1196    0.000    0.000    0.004    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/finish.py:224(<genexpr>)
+     2191    0.001    0.000    0.004    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:51(seg_dist)
+     1297    0.002    0.000    0.004    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/overlap.py:192(rects_overlap)
+     1434    0.002    0.000    0.003    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/labels.py:171(tilt_caption_seat)
+     2191    0.002    0.000    0.002    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:42(seg_closest)
+        1    0.000    0.000    0.002    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/finish.py:123(label)
+       21    0.000    0.000    0.002    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py:327(_hug)
+
+

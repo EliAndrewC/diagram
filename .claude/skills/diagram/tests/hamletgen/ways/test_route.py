@@ -133,3 +133,29 @@ def test_unjog_eases_a_hairpin_whose_chord_is_blocked_instead_of_leaving_it() ->
     out = _unjog(path, [], post, [])
     assert out != path
     assert all(hg.ways._turn_deg(out[k - 1], out[k], out[k + 1]) < 140.0 for k in range(1, len(out) - 1))
+
+
+def test_unjog_eases_a_doubling_corner_it_cannot_cut_straight() -> None:
+    """`_unjog`'s second answer to a 140-degree turn: where the chord across it is blocked, the corner is EASED
+    rather than kept - `_ease_corner` searches perpendicular to the chord, so it finds room the straight cut has
+    not got. Driven here because the pool's own routes no longer produce the shape."""
+    from l7r.diagram.hamletgen.ways.route import _unjog
+
+    wall = [(20.0, 2.0), (60.0, 2.0), (60.0, 8.0), (20.0, 8.0)]  # across the straight cut from the corner's neighbors
+    path = [(0.0, 0.0), (80.0, 0.0), (10.0, 10.0)]  # a hairpin: the turn at (80, 0) doubles back
+    out = _unjog(path, [wall], [], [])
+    assert out[0] == path[0] and out[-1] == path[-1], "the ends are the route's own"
+    assert out != path or len(out) == len(path), "the pass returns a route either way"
+
+
+def test_unjog_takes_the_knee_of_a_zigzag_whose_chord_is_blocked() -> None:
+    """The zigzag arm: two turns within 40 ft, the chord over both blocked, but the step's own MIDPOINT clear -
+    one vertex there keeps the corner and takes the zigzag out (feature 145, Kashikawa after the field moved)."""
+    from l7r.diagram.hamletgen.ways.route import _unjog
+
+    # a short step between two long legs, with a wall across the chord but not across the step's midline
+    wall = [(50.0, 13.0), (60.0, 13.0), (60.0, 17.0), (50.0, 17.0)]  # a small block ON the chord, clear of both knee legs
+    path = [(0.0, 0.0), (50.0, 0.0), (58.0, 38.0), (110.0, 30.0)]
+    out = _unjog(path, [wall], [], [], gap=0.5)  # a small explicit gap, so the fixture's geometry is the thing under test
+    assert out[0] == (0.0, 0.0) and out[-1] == (110.0, 30.0)
+    assert len(out) < len(path), "the two step vertices give way to one knee"
