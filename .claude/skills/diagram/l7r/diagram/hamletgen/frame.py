@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.settlement import Settlement, seg_dist
+from l7r.diagram.settlement import Settlement, nearest_way_bearing
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_MARKER_MIN_PX, KOSATSUBA_VERGE_FT, kosatsuba_anchor
 
 from .consts import POLDER_ARCHETYPES
@@ -203,16 +203,12 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
 
 
 def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
-    """The bearing (degrees) of the nearest lane segment to (x, y), or None with no lanes."""
-    best: tuple[float, float] | None = None
-    for ln in s.M.get("lanes") or []:
-        pts = ln.get("pts") or []
-        for k in range(len(pts) - 1):
-            a, b = (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))
-            d = seg_dist(x, y, a, b)
-            if best is None or d < best[0]:
-                best = (d, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])))
-    return None if best is None else best[1]
+    """The bearing (degrees) of the nearest lane segment to (x, y), or None with no lanes.
+
+    A thin reader over the engine's own `nearest_way_bearing`, which carries the tie-break a corner
+    seat needs: this used to be a third hand-rolled scan of the same segments, and the re-seat, the
+    siter and the check are the three readings of one question that must not be able to differ."""
+    return nearest_way_bearing(s.M, x, y)
 
 
 def stage_frame(s: Settlement, plan: SitePlan) -> None:

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from ..._geom import (
     Pt,
+    nearest_way_bearing,
     point_in_poly,
     seg_dist,
     segments_cross,
@@ -320,20 +321,14 @@ class FixtureSitingMixin:
         # measured on the reference hamlet at 9.5 ft, a straggler running 72 degrees across the lane the board
         # was posted on, so the board stood side-on to the only way beside it. Take the bearing from the way
         # that is actually nearest the chosen seat; the seat itself, its traffic and its verge are unchanged.
-        _near = min(
-            (
-                (
-                    seg_dist(x, y, (float(pp[k][0]), float(pp[k][1])), (float(pp[k + 1][0]), float(pp[k + 1][1]))),
-                    math.degrees(math.atan2(float(pp[k + 1][1]) - float(pp[k][1]), float(pp[k + 1][0]) - float(pp[k][0]))),
-                )
-                for _ln in (self.M.get("lanes") or [])
-                for pp in [_ln.get("pts") or []]
-                for k in range(len(pp) - 1)
-            ),
-            default=None,
-        )
-        if _near is not None:
-            rot = _near[1]
+        # ...THROUGH THE SHARED READING OF "NEAREST" (feature 230). This computed its own, with a `min` over
+        # (distance, bearing) tuples, and at a lane's CORNER the two segments are exactly equidistant - so the
+        # siter broke that tie by the smaller bearing and the check broke it by manifest order, and the same
+        # board was square-on to its way and 64 degrees side-on to it depending on which one you asked. The
+        # tie-break belongs to the rule, so it lives with the rule: `_geom.ways.nearest_way_bearing`.
+        _nb = nearest_way_bearing(self.M, x, y)
+        if _nb is not None:
+            rot = _nb
         # `lab` NO LONGER DECIDES THE CAPTION'S SIDE, and that was the last thing keeping two cohort
         # seeds notched. It is computed above by testing `label_seat_clear` at the DEFAULT distance
         # only - `y +/- h/2 + 11` - so it reports "below is blocked" for a board whose below seat is

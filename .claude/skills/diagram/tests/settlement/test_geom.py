@@ -760,3 +760,22 @@ def test_poly_seg_dist_does_not_close_an_open_polyline():
     chain = [(-5.0, -5.0), (5.0, -5.0), (5.0, 5.0), (-5.0, 5.0)]
     assert poly_seg_dist(chain, (-1.0, 0.0), (1.0, 0.0), closed=False) == 4.0, "an open chain encloses nothing"
     assert poly_seg_dist(chain, (-1.0, 0.0), (1.0, 0.0), closed=True) == 0.0, "the closed ring does"
+
+
+def test_nearest_way_bearing_breaks_a_corner_tie_by_manifest_order() -> None:
+    """The tie is the whole reason this function exists. A seat beside a lane's VERTEX is EXACTLY
+    equidistant from both segments meeting there, so "the nearest segment" is not unique, and the
+    notice board was turned by one reading of that tie and judged against another - square-on by the
+    siter's arithmetic, 64 degrees side-on by the check's. First in manifest order wins, both here
+    and in `tests/gate/test_captions_and_boards.py`, which is what makes the two agree."""
+    from l7r.diagram.settlement import nearest_way_bearing
+
+    assert nearest_way_bearing({}, 0.0, 0.0) is None, "no way drawn is None, not a crash"
+    straight = {"lanes": [{"pts": [(0, 0), (100, 0)]}]}
+    assert nearest_way_bearing(straight, 50.0, 10.0) == 0.0
+    # a right-angled corner at (100, 0): the point off its bisector is equidistant from both arms
+    corner = {"lanes": [{"pts": [(0, 0), (100, 0), (100, 100)]}]}
+    assert nearest_way_bearing(corner, 110.0, -10.0) == 0.0, "the tie keeps the EARLIER arm"
+    assert round(nearest_way_bearing(corner, 150.0, 50.0) or 0.0, 1) == 90.0, "past the corner, the later arm alone"
+    # and the legacy singular key is a way like any other, because `street_runs` says so
+    assert round(nearest_way_bearing({"lane": [(0, 0), (0, 40)]}, 10.0, 20.0) or 0.0, 1) == 90.0

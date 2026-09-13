@@ -51,6 +51,11 @@ def shadow_share(pts: Poly, others: Sequence[Poly], gap: float, step: float = 5.
     for other in others:
         if len(other) < 2:
             continue
+        # A REMNANT IS THE SHORTER OF THE PAIR. Without this the test is symmetric and answers yes for the PARENT as well -
+        # a 200 ft remnant covers half of the 400 ft way it doubles - so the sweep dropped the way and kept the remnant
+        # (caught by `_sweep_doubled_remnants`'s own fixture, feature 230 pass 11).
+        if sum(math.dist(other[k], other[k + 1]) for k in range(len(other) - 1)) < total - 1e-9:
+            continue
         if max(q[0] for q in other) < x0 or min(q[0] for q in other) > x1 or max(q[1] for q in other) < y0 or min(q[1] for q in other) > y1:
             continue
         segs = list(zip(other, other[1:], strict=False))

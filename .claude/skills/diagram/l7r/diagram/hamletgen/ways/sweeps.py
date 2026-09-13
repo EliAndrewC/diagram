@@ -518,6 +518,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             return min(near_way, near_house, near_field) <= _REACH_FT
 
         before = len(pts)
+        _mine = [(float(x), float(y)) for x, y in pts]
         while len(pts) >= 2 and not _reaches(pts[-1]):
             pts.pop()
         while len(pts) >= 2 and not _reaches(pts[0]):
@@ -526,6 +527,47 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             continue
         if len(pts) < 2 or polyline_len(pts) < _WEB_MIN_FT:
             pts = []
+        # ...AND NEVER AT THE COST OF A HOUSE, the clause every other sweep here carries. Without it this pass drops a lane
+        # some farmhouse needs, `generate` re-rolls the whole map to serve it, and the roll costs what the re-roll costs:
+        # measured on the reference hamlet, attempt 1 became attempt 3 and its seed went +20.5% (feature 230 pass 11).
+        _served = [h for h in houses if min((seg_dist(h[0], h[1], a, b) for a, b in zip(_mine, _mine[1:], strict=False)), default=float("inf")) <= _SERVE_FT]
+        _rest = [
+            sg
+            for j, o in enumerate(lanes)
+            if j != i and len(o.get("pts") or []) >= 2
+            for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+        ]
+        _rest += list(zip(pts, pts[1:], strict=False))
+        if any(min((seg_dist(h[0], h[1], a, b) for a, b in _rest), default=float("inf")) > _SERVE_FT for h in _served):
+            # A FARMHOUSE WOULD LOSE ITS WAY, so the lane stays - and then its end must EARN its ink rather than stop in
+            # grass. The end is carried to the nearest thing worth walking to instead: the house it serves, or another way.
+            # Dropping it instead is what `generate` answers with a whole re-roll (the reference hamlet went to attempt 3
+            # and its seed +20.5%), and a re-roll is a heavy price for a tread that only needed to arrive somewhere.
+            pts = [(float(x), float(y)) for x, y in _mine]
+            for _e in (-1, 0):
+                if _reaches(pts[_e]):
+                    continue
+                _tx, _ty, _td = 0.0, 0.0, float("inf")
+                for _h in houses:
+                    _d = math.dist(pts[_e], _h)
+                    if _d < _td:
+                        _tx, _ty, _td = _h[0], _h[1], _d
+                if _td > 2.0 * _REACH_FT or _td <= 0.0:
+                    continue
+                # STOP SHORT OF THE HOUSE ITSELF: the rule asks that an end come within `_REACH_FT` of something, and a
+                # tread carried to the doorstep laps the farmhouse (`features_do_not_overlap`) and becomes the nearest way
+                # the notice board would face. Nine tenths of the reach is inside the rule and clear of the wall.
+                _f = max(0.0, (_td - 0.9 * _REACH_FT) / _td)
+                if _f <= 0.0:
+                    continue
+                _q = (pts[_e][0] + (_tx - pts[_e][0]) * _f, pts[_e][1] + (_ty - pts[_e][1]) * _f)
+                pts = [*pts, _q] if _e == -1 else [_q, *pts]
+            if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"]:
+                continue
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            s.reink_lane(i)
+            fixed += 1
+            continue
         ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
         s.reink_lane(i)
         if not pts:
