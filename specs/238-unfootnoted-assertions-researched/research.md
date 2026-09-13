@@ -635,3 +635,76 @@ sections still carry a disclosure on their `Sources:` roster that is now redunda
 moved to a note at the assertion. Rewriting those roster lines to point at the notes is cosmetic - the
 reader already meets the honest label in the right place - and it is fifty-one edits with no change of
 meaning in any of them. It goes to the successor as tidying, not as a defect.
+
+## R8 - what `record-format` found, reading the pages as a reader meets them (2026-09-13)
+
+The check was pointed at the conversion's own risk: whether moving 142 markers out of prose left any
+sentence reading as a flat assertion where a reader can no longer see a hedge without hovering. It read
+eight pages in full, four in part, and scanned four mechanically - and said so, which is what makes the
+rest of it usable.
+
+**The verdict on the risk itself: the conversion is sound, with ONE loss.** In most places the prose kept
+its visible hedge and gained a note, so the reader sees it twice - redundant, never a loss. The exception
+is `religion-and-death.html`'s very first assertion: two counts, the Edo parish temples and the Shaolin
+monks, stood as flat numbers with their disclosure one paragraph earlier in the `Sources:` line. That is
+the paragraph a "See references" click lands a reader on. **A hedge a reader has to go looking for is not
+a hedge**, and both now carry notes at their own sentences.
+
+**Three truncated passages, and none of them was this feature's doing.** The check found a sentence
+ending on a comma, one ending on the word "and", and a paragraph opening lowercase. Checked against
+`origin/main` before fixing: all three predate this work - an earlier edit had moved the tail of a
+sentence into an HTML comment and left the prose dangling, twice. They are fixed here under Principle
+XIV rather than left because they are somebody else's: the tail restored to visible text in both, the
+paragraph given back its capital.
+
+**Two duplicated clauses**, the same sentence stated twice in one paragraph - the signature of a
+replacement inserted without the original being removed. Both fixed.
+
+**Fourteen glossary terms added and one variant** - barbican, sally port, chaoguan, dituan, Meireki, the
+iroha companies, ri, Akiba, tudi miao, ossuary, well-sweep, skimmer wall, shi, qiandao, and `benjo` as a
+variant of the `kawaya` already there, since they are the same building. The glossary is 641 terms.
+
+**Three session notes still visible**, each removed: a "yet" addressed to a future session rather than a
+reader, a bare hostname doing no work in prose, and an instruction to whoever draws the next capital.
+
+### R8a - and one finding that did not survive checking
+
+The check reported four references on `archetypes.html` carrying no `id="fnref-N"`, and called the back
+links broken. They are not. Each of those four is a SECOND reference to a note whose id sits on its first
+occurrence, and an id has to be unique in a document - so the markup is correct and the back link
+resolves to the right place. **That is the third agent finding in this feature that did not survive being
+checked**, against a great many that did, and the ratio is the argument for both halves of the rule: run
+the checks, and read the page before acting on what they say.
+
+### R8b - what the check could not cover, stated because it stated it
+
+It read `fields`, `vegetation`, `water` and `buildings` mechanically rather than as a reader - artifact
+greps only. Those four came back clean on every mechanical shape, and their visible markers survive
+beside their new notes, so no hedge was lost there. But **their vocabulary is unjudged**, and a hedge
+dropped from a sentence that never carried a marker would not show in a grep. `water.html` at 1,100 lines
+and `fields.html` at 800 are the two the successor should send back through this check.
+
+### R8c - one browser test failed once and would not do it again
+
+The page check that followed the format work came back red on a single assertion - the lit place card read
+its own parchment, `rgb(247, 240, 220)`, where the highlight gold `rgb(255, 200, 61)` was expected - in a
+run of 776 at ten workers. **It has not happened since**: the whole check green twice, and the suite run
+six more times alone, 18 of 18 each time. Nothing in this feature's delta touches that page - the only
+interactive file it changed is `assets/glossary.json`, and the glossary paints no fill.
+
+**What the reading rules OUT.** The same test's earlier assertion passed, so the group genuinely carried
+the lit class when the fill was read; the class was not missing. There is no CSS transition on the
+property, and the driver loads the page with `wait_until="load"`, so neither an animation nor a pending
+stylesheet is the obvious cause. The two reads are separate round trips into the renderer, but both are
+synchronous evaluations.
+
+**What it is CONSISTENT with, stated as a candidate rather than a finding.** The gold is applied as
+`fill: var(--hl)`, and a custom property that fails to resolve makes the declaration invalid at computed-value
+time - the fill then INHERITS, and what it inherits from the placard's group is exactly the parchment the
+failure reported. So an unresolved `--hl` and a class that never lit produce the same observed value, and
+the assertion as written could not tell them apart.
+
+**What was done, and what was not.** No fix: seven runs could not reproduce it, and a speculative
+`var(--hl, #FFC83D)` fallback would hide the mechanism rather than establish it. What the test lacked was
+the ability to say WHICH of the two happened, so it now reads the resolved `--hl` and puts it in the
+failure message. The next occurrence is a diagnosis instead of a second mystery.

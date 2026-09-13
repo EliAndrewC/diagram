@@ -48,9 +48,10 @@ that DO need a reading were moved to the successor and removed from this file.
 
 ## Phase 3 - the checks the changed material owes (FR-007, FR-008)
 
-- [ ] T26 `record-format` over every changed page; findings applied
+- [x] T26 `record-format` over every changed page; findings applied
       research: rendering
-      verify:
+      verify: DONE. DONE. research.md R8. The conversion itself is sound - the visible hedge survived beside the new note nearly everywhere - with ONE loss, on the FIRST assertion of religion-and-death.html, where two counts stood flat with their disclosure a paragraph above; both carry notes now (fn-107, fn-108). Applied besides: three truncated passages restored (all three PRE-EXISTING on main, checked against origin/main before fixing, not conversion damage), two duplicated clauses, two doubled spaces, a stranded space, an empty paragraph, 143 superscripts moved after their punctuation, 14 glossary terms plus benjo as a kawaya variant (627 -> 641, make glossary run), three session notes dropped. One finding did NOT survive checking: four archetypes.html references reported as missing fnref ids are SECOND references to notes whose id sits on its first occurrence - an id must be unique, so the markup is correct and adding ids would break it. R8b names what the check could not cover: fields, vegetation, water and buildings were read mechanically, so their vocabulary is unjudged.
+
 - [x] T27 `source-applicability` over every new registry key; findings applied
       research: rendering
       verify: DONE. DONE. Three new registry keys this feature: okabe-hatago-jawiki, lai-2003-daoism-today, lagerwey-1988-taoist-lineages. All three judged APPLICABLE-WITH-LIMITS; ten write-up corrections applied, including a palanquin claim that was the session's own inference stated as fact, and a mirror link now disclosed as one with its DOI recorded.
@@ -77,6 +78,7 @@ that DO need a reading were moved to the successor and removed from this file.
 - [x] T32 the closing report: what the inventory came to, the contradictions corrected, and what is left open with the searches that failed
       research: rendering
       verify: DONE. DONE. closing-report.md: what shipped, the numbers, the two findings that changed an argument, the three defects the checks caught in this session's own work, what spec-fidelity refused and why, and what is left open - about 600 CITE items that were never searched rather than searched and failed, fifty-one redundant roster lines deferred by volume, and the two items only the GM can settle.
-- [ ] T33 `make page-check` green, `make done` green, the push clean
+- [x] T33 `make page-check` green, `make done` green, the push clean
       research: rendering
-      verify:
+      verify: DONE. DONE. page-check 776 passed; make done green in 153 s, coverage 100.00% over 25,477 statements with 0 missing and the roll census green. One browser assertion failed once mid-feature and reproduced in none of seven runs after - the whole check green twice and the suite alone six times; it is measured and made diagnosable in research.md R8c rather than patched blind. _review_owed.py names no map, so no settlement-review is owed: no pool manifest moved. The push carries one ENTRY_DRIFT_OK sweep reason for the 27 label-only modal pairs of T28.
+
