@@ -978,6 +978,11 @@ hookbench:      ## [project] replay the frozen command window through a guard de
 	@: "GUARD_EDIT_OK: feature 239 FR-005 - one process for the whole window where spawning the hook per command cost 80 s against 3.9 s" ; \
 	python3 "$$(git rev-parse --show-toplevel)/scripts/_hookbench.py" $(if $(REFRESH),--refresh,$(GUARD) $(if $(AGAINST),--against $(AGAINST),))
 
+figures:        ## [project] re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]
+##  a moved COUNT fails; a timing outside its band is reported and never fails; the file is restored after
+	@: "GUARD_EDIT_OK: feature 239 FR-011 - a figure is only as good as the command behind it, and this re-runs the command" ; \
+	python3 "$$(git rev-parse --show-toplevel)/scripts/figures.py" $(SPEC)
+
 claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
 ##  SLUG=<slug>          lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
 ##  RENUMBER=<specs/dir> instead of a slug: MOVE that existing directory to the next number (a deduplication, GM 2026-09-07)

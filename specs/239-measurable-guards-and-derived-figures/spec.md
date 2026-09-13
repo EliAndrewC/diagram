@@ -327,7 +327,7 @@ is a key in `measurements.json`. What they corrected: 15 guard scripts with inli
 lines added rather than "about 40" - understated sevenfold, in the direction that made the argument
 stronger. The sharpest item was on the GM's own idea: D2 justified keeping one-shot observations legal
 with "the session ran 208 minutes, which no command can re-run", which is false - this feature ships
-that command - and it admitted "a count over a window that has moved", which would have covered every
+that command (`m:amendment-wall-minutes`) - and it admitted "a count over a window that has moved", which would have covered every
 disputed figure in the motivating incident. D2's class is now what no command can produce.
 
 **Round 3** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, four items, all taken, and two of them
@@ -340,7 +340,7 @@ decides by UNIT which entries may carry one); and FR-009c bundled the decidable 
 with an author-declared "this section narrates" exemption that has no marker and that any section
 could claim - the second is deleted, and a whole section that genuinely narrates is exempted by
 HEADING, the way `spec-lint` already exempts Decisions recorded from check 1. The round also priced
-the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB) and confirmed that
+the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB, on round 3's own run) and confirmed that
 building the corpus at spec stage is measurement data rather than implementation.
 
 **What round 3 set off, which is now FR-011c to FR-011e.** Answering its tolerance item meant

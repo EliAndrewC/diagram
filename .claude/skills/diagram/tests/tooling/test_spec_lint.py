@@ -49,7 +49,9 @@ Round 1 said 6.7 m and the measurement withdrew it.
 
 
 def _feature(tmp_path: pathlib.Path, spec: str = GOOD, tasks: str = "- [ ] T01 the thing (FR-001)\n", research: str | None = None) -> pathlib.Path:
-    d = tmp_path / "specs" / "999-a-feature"
+    # numbered BELOW 239 on purpose: these fixtures exercise checks 1 to 4, and their figures are unkeyed by
+    # design - check 5 applies from feature 239 (plan P2) and carries its own fixtures further down
+    d = tmp_path / "specs" / "099-a-feature"
     d.mkdir(parents=True, exist_ok=True)
     (d / "spec.md").write_text(spec)
     if tasks is not None:
@@ -171,3 +173,134 @@ def test_this_feature_s_own_spec_passes_checks_1_and_3() -> None:
 
 def test_selftest_passes() -> None:
     lint.selftest()
+
+
+# ---- check 5 (feature 239): a measured figure is derived, not typed -------------------------------------
+
+import json as _json
+
+import pytest as _pytest
+
+_figs_spec = importlib.util.spec_from_file_location("_spec_figures", REPO / "scripts" / "_spec_figures.py")
+assert _figs_spec and _figs_spec.loader
+figs = importlib.util.module_from_spec(_figs_spec)
+_figs_spec.loader.exec_module(figs)
+
+_figs5 = importlib.util.spec_from_file_location("figures_cli", REPO / "scripts" / "figures.py")
+assert _figs5 and _figs5.loader
+figures_cli = importlib.util.module_from_spec(_figs5)
+_figs5.loader.exec_module(figures_cli)
+
+
+def _measured(tmp_path: pathlib.Path, spec_body: str, entries: dict, research: str | None = None, number: int = 239) -> pathlib.Path:
+    d = tmp_path / "specs" / f"{number}-a-feature"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "spec.md").write_text(spec_body)
+    (d / "tasks.md").write_text("- [ ] T01 the thing (FR-001)\n")
+    (d / "measurements.json").write_text(_json.dumps(entries))
+    if research is not None:
+        (d / "research.md").write_text(research)
+    return d
+
+
+_ENTRY = {"spawn": {"value": 144, "unit": "ms", "varies": True, "quantity": "560 commands", "command": "x"},
+          "window": {"value": 1034, "unit": "commands", "command": "x"},
+          "in-process": {"value": 7.0, "unit": "ms", "varies": True, "quantity": "560 commands", "command": "x"}}
+
+
+def test_check_5_a_figure_with_no_key_fails(tmp_path: pathlib.Path) -> None:
+    d = _measured(tmp_path, "## Summary\n\nIt costs 144 ms per command.\n", _ENTRY)
+    assert any("carries no `m:<key>`" in x for x in figs.check_measured_figures(d))
+
+
+def test_check_5_the_keyed_form_passes_and_matches_numerically(tmp_path: pathlib.Path) -> None:
+    """FR-009a: `1,034` matches 1034 and `7` matches a recorded 7.0 - never string containment."""
+    body = "## Summary\n\nIt costs 144 ms (`m:spawn`) against 7 ms (`m:in-process`) over 1,034 commands (`m:window`).\n"
+    assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY)) == []
+
+
+def test_check_5_a_key_whose_value_the_paragraph_does_not_state_fails(tmp_path: pathlib.Path) -> None:
+    d = _measured(tmp_path, "## Summary\n\nIt costs 160 ms (`m:spawn`).\n", _ENTRY)
+    assert any("records 144" in x for x in figs.check_measured_figures(d))
+
+
+def test_check_5_an_unknown_key_fails(tmp_path: pathlib.Path) -> None:
+    d = _measured(tmp_path, "## Summary\n\nIt costs 144 ms (`m:nowhere`).\n", _ENTRY)
+    assert any("not in measurements.json" in x for x in figs.check_measured_figures(d))
+
+
+def test_check_5_reaches_research_and_the_review_history(tmp_path: pathlib.Path) -> None:
+    """FR-009b: seven of ten stale figures stood exactly there."""
+    body = "## Summary\n\nNothing measured.\n\n## Review history\n\nRound 1 saw 145 ms.\n"
+    got = figs.check_measured_figures(_measured(tmp_path, body, _ENTRY, research="## R1\n\nIt took 81 s.\n"))
+    assert any("spec.md" in x for x in got) and any("research.md" in x for x in got)
+
+
+def test_check_5_a_round_label_passes_in_the_review_history_only(tmp_path: pathlib.Path) -> None:
+    body = "## Review history\n\nIt measured 145 ms on round 2's own run.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY)) == []
+    body = "## Summary\n\nIt measured 145 ms on round 2's own run.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY)) != []
+
+
+def test_check_5_a_backtick_span_is_named_not_asserted(tmp_path: pathlib.Path) -> None:
+    """FR-009c: the span skips the figure, and no prose declaration exempts one outside a span."""
+    ok = "## Summary\n\nThe old claim was `2.2 s` and it was never measured.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, ok, _ENTRY)) == []
+    bad = "## Summary\n\nThis section narrates. The old claim was 2.2 s.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, bad, _ENTRY)) != []
+
+
+def test_check_5_a_labeled_one_shot_passes(tmp_path: pathlib.Path) -> None:
+    """FR-010: something no command can produce, with its date and its method."""
+    ok = "## Summary\n\nThe container ran at 5 s per call (observed 2026-09-13; method: a stopwatch).\n"
+    assert figs.check_measured_figures(_measured(tmp_path, ok, _ENTRY)) == []
+    bad = "## Summary\n\nThe container ran at 5 s per call.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, bad, _ENTRY)) != []
+
+
+def test_check_5_a_heading_names_a_section(tmp_path: pathlib.Path) -> None:
+    body = "## Summary\n\n### Where 208 min went\n\nNothing else measured here.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY)) == []
+
+
+def test_check_5_applies_from_feature_239_and_only_with_tasks(tmp_path: pathlib.Path) -> None:
+    """Plan P2: read retroactively the rule would fail every earlier spec on its first edit."""
+    body = "## Summary\n\nIt costs 144 ms per command.\n"
+    assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY, number=238)) == []
+    d = _measured(tmp_path, body, _ENTRY, number=240)
+    (d / "tasks.md").unlink()
+    assert figs.check_measured_figures(d) == []
+
+
+def test_check_5_varies_on_a_count_and_a_timing_with_no_quantity_fail(tmp_path: pathlib.Path) -> None:
+    """FR-011b and FR-011e."""
+    entries = {"n": {"value": 560, "unit": "commands", "varies": True, "command": "x"},
+               "t": {"value": 144, "unit": "ms", "varies": True, "command": "x"}}
+    got = figs.check_measured_figures(_measured(tmp_path, "## Summary\n\nNothing.\n", entries))
+    assert any("counts things" in x for x in got) and any("no `quantity`" in x for x in got)
+
+
+def test_make_figures_fails_a_moved_count_and_reports_a_timing() -> None:
+    """FR-011d: only a moved COUNT fails; a timing outside its band is reported, never failed."""
+    recorded = {"n": {"value": 560, "unit": "commands"},
+                "t": {"value": 100.0, "unit": "ms", "varies": True},
+                "near": {"value": 100.0, "unit": "ms", "varies": 0.25}}
+    fresh = {"n": {"value": 561}, "t": {"value": 130.0}, "near": {"value": 120.0}}
+    failures, reports = figures_cli.compare(recorded, fresh)
+    assert len(failures) == 1 and "`n`" in failures[0]
+    assert len(reports) == 1 and "`t`" in reports[0]          # 30% > 10%; `near` is 20% inside its 25%
+
+
+def test_make_figures_restores_what_it_re_measures(tmp_path: pathlib.Path, monkeypatch: _pytest.MonkeyPatch) -> None:
+    """Plan P4: it reports, it never records - the original file comes back whatever the command wrote."""
+    d = tmp_path / "specs" / "239-x"
+    d.mkdir(parents=True)
+    path = d / "measurements.json"
+    script = tmp_path / "harness.py"
+    script.write_text(f"import json; p = {str(path)!r}; d = json.load(open(p)); d['n']['value'] = 999; json.dump(d, open(p, 'w'))\n")
+    original = _json.dumps({"n": {"value": 560, "unit": "commands", "command": f"python3 {script}"}})
+    path.write_text(original)
+    monkeypatch.setattr(figures_cli, "ROOT", tmp_path)
+    failures, _, _ = figures_cli.rerun(d)
+    assert failures and path.read_text() == original

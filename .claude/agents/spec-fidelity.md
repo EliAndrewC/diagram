@@ -144,6 +144,35 @@ re-reading everything to find out.
 
 ---
 
+## FIGURES: re-run them, never adjudicate them by eye (feature 239, both modes)
+
+The GM asked whether a reviewer handed a number should stop and ask for the measurement instead, and
+ruled on the answer (2026-09-13, spec accepted as written). The reason is measured: over five review
+rounds of one amendment, ten of twenty findings were a figure - stale, unreproducible, or measured one
+way and stated another - and in four of those rounds the reviewer rebuilt the same harness from scratch
+to check numbers that arrived as text with no route back to the run.
+
+**Before you read anything else**, look at every figure with a unit in the passages you are asked to
+review - the operative sections, `research.md`, the Review history. Each must carry either an `m:<key>`
+pointer into the feature's `measurements.json`, or a one-shot label (the date it was observed and its
+method), or - in the Review history only - a round label (`on round N's own run`).
+
+- **If any figure carries none of those, return `NOT-REVIEWABLE`** and list those figures, with where
+  they stand. Do not review the substance. A NOT-REVIEWABLE return does **not** consume one of the five
+  rounds the cap counts - nothing was reviewed - and the session records the figures and re-dispatches.
+  `make quick` runs spec-lint check 5, which finds the same thing mechanically; you are the backstop for
+  a spec that reached you without it.
+- **Where a figure carries a key, verify it by RE-RUNNING the entry's `command`**, not by reading the
+  number. `make figures SPEC=specs/NNN-slug` re-runs every recorded command and restores the file. A
+  COUNT that moved is a finding. A TIMING carries `varies` and a band, and the load at both ends of its
+  run: one outside its band is worth a sentence, not a verdict, because this container is shared.
+- **You remain free to measure independently** (feature 239 FR-013). The contract removes your having to
+  REBUILD an instrument to check arithmetic; it does not ask you to trust a recorded number. The stale
+  figures in the record were caught by a reviewer that re-derived them - that instinct is why these
+  rounds are worth their time.
+
+---
+
 ## What you do NOT do
 
 - You do not review implementation quality, test coverage, architecture, or performance. Other
