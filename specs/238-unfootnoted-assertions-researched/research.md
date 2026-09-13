@@ -207,7 +207,7 @@ so did R1's floor of 285.
 
 **2. Roster-level disclosure hides from the reader.** In more than thirty places across the four reports
 the section's `Sources:` line admits a figure was never read while the sentence carrying it stands bare
-in the body - the Honcho-dori street width, Edo's ~67 km of buried mains, the 1,334 ft Toribeno distance,
+in the body - the Honcho-dori street width, the length of Edo's buried mains, the Toribeno distance,
 the south-facing-by-divination gate rule, the sluice's board-in-grooves mechanism, the eleven-figure
 Sugiura table, `fields.html`'s whole per-archetype in-field siting matrix, the samurai quarter's absent
 public wells, the one-well-per-10-to-20-households rate. The record's own rule is a footnote AT the
@@ -251,14 +251,19 @@ that **232 named the right pages and not the worst sections on them**.
   rate - one to three communal wells for a village of seventy households - is what this project's whole
   well liberty is measured against.
 
-`urban-features.html` alone carries **103 of the 695**, which is 15% of the record's whole exposure on one
-page. It is the page to work first.
+`urban-features.html` alone carries **103 of the 695**, which is 14.8% of the record's whole exposure on
+one page (counted 2026-09-13 from the four reader reports by
+`specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py`). It is the page to work first.
 
 ### R3b - the inventory, closed
 
-**695 items over 282 sections and 19 pages**, 223 of them carrying an inline marker. The four batches
-agree closely on the shape of what they found: roughly two thirds of the items carry no marker of any
-kind, and the confidence split across all four is about 60% HIGH.
+**695 items over 282 sections and 19 pages**. The four batches agree closely on the shape of what they
+found, and the shape is worth stating precisely rather than roundly, because a later feature has to
+plan against it (counted 2026-09-13 from the four reader reports by
+`specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py`): **494 of the 695 carry no
+marker of any kind, seven in ten rather than the two thirds a first reading of these reports
+suggested**, and **390 are HIGH, 56% of the whole** - or 59.7% if the 25 items the readers hedged
+`MEDIUM-HIGH` are counted as HIGH, which is the ambiguity that hedged tier exists to keep visible.
 
 Two pages are `NOT AN ASSERTION` in bulk and need no work: `presentation.html` (zero items) and
 `settlements.html` (one, restating footnoted canon). That is the census's upper bound doing its job -
@@ -487,7 +492,7 @@ registry page already carries that disclosure for its own mirror; this one now d
 recorded as the fallback.
 
 **Three smaller ones on the genealogies.** One lineage traces over the provincial line to Fujian, not
-Guangdong, which the entry had folded into "Chaozhou country". The "fieldwork is of the 1980s" clause
+Guangdong, which the entry had folded into "Chaozhou country". The `fieldwork is of the 1980s` clause
 undersold the source in the record's own disfavor: the Qing evidence is documentary - written family
 registers and liturgical manuscripts copied in 1908, 1928 and 1932, with masters dated from the middle of
 the eighteenth century - which is why it is the right place to hang the hereditary claim rather than a
