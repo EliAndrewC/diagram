@@ -90,14 +90,15 @@ in the middle so that I will be able to make sure that I get to all of them."* E
 markdown link - an exact one where it exists, a Google-search link where it does not - and says what
 rests on it and what blocked the fetch.
 
-**FR-011 - the completion condition, and what is NAMED rather than absorbed.** The feature is complete
-when every item on the FR-001 list **and every item on the D1 list of 119 never-searched absence notes**
-carries one of FR-004's three forms, the two counted and reported separately so they never blur. What the pass cannot close is
-named in the closing report, and an item that was **searched and failed** is distinguished from one
-that was **never searched** - 238's own closing report warns that most of this remainder has never been
-searched and that a successor should not read it as a failed hunt. If the work proves too large to
-finish, the split is proposed to the GM with a count rather than taken unilaterally: *"a successor for
-the rest"* asked for the whole remainder.
+**FR-011 - the completion condition, and what is NAMED rather than absorbed.** The feature is
+complete when every item on the FR-001 list **and every item on the D1 list of 119 never-searched
+absence notes** carries one of FR-004's three forms, the two counted and reported separately so they
+never blur. What the pass cannot close is named in the closing report, and an item that was
+**searched and failed** is distinguished from one that was **never searched** - 238's own closing
+report warns that most of this remainder has never been searched and that a successor should not
+read it as a failed hunt. If the work proves too large to finish, the split is proposed to the GM
+with a count rather than taken unilaterally: *"a successor for the rest"* asked for the whole
+remainder.
 
 **FR-012 - the order of work is the readers' own confidence labels**, strongest first: HIGH,
 MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW. The readers rated the 494 parsed bare items HIGH 222,
@@ -105,9 +106,13 @@ MEDIUM-HIGH 24, MEDIUM 207, LOW-MEDIUM 4 and LOW 37 (`m:worklist-high-confidence
 `m:worklist-medium-high-confidence`, `m:worklist-medium-confidence`,
 `m:worklist-low-medium-confidence`, `m:worklist-low-confidence`; `research.md` R1) - the composition of
 the bare population BEFORE the twenty-two items R7 closes, so the five deliberately do not sum to
-FR-001's 462 to 472. **The two hedged tiers are reported rather than rounded**: the readers hedged 29 of the 695
-inventoried items on purpose, 28 of them on this list, and collapsing those into a neighbor would
-invent a judgment the readers declined to make.
+FR-001's 462 to 472. **The two hedged tiers are reported rather than rounded**: the readers hedged
+29 of the 695 inventoried items on purpose (`m:hedged-items`), 28 of them in the 494-item bare
+population this composition describes (`m:hedged-bare`), and at most 27 on the work list itself
+(`m:hedged-worklist-max`; `research.md` R1) - the caravan inn is MEDIUM-HIGH and is one of the
+twenty-two R7 closes, and it is the only closure the reports name, so the other twenty-one cannot be
+checked for hedges. Collapsing any of them into a neighboring tier would invent a judgment the
+readers declined to make.
 The reports carry the label per item and R6a records the splits, so the ordering applies to the list as
 it stands.
 
@@ -209,18 +214,21 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   upheld D1 as a defensible reading and offered a stronger ground for it, which D1 now takes. Both
   asides applied: the stray empty `reader-reports/` directory is removed.
 - **Round 3 (2026-09-13), `spec-fidelity`: FAITHFUL**, on a review that re-ran both harnesses, checked
-  every `m:` key against the fresh output, verified the arithmetic closes (222 + 231 + 41 = 494, less
-  R7's 22 = 472 = `m:worklist-high`) and independently confirmed the disjointness argument by reading
+  every `m:` key against the fresh output, verified the arithmetic closes (on round 3's own run,
+  222 + 231 + 41 = 494, less R7's 22 = 472) and independently confirmed the disjointness argument by
+  reading
   R7 class 4's five sources - every one of the twelve corrections is in footnoted material or a
   registry write-up, while the inventory names only assertions carrying no footnote.
-- **After acceptance (2026-09-13), one figure corrected, counter reset per the GM's 2026-09-12 rule.**
-  Round 3's closing aside supposed a single item carried a hyphenated confidence label; counting found
-  **29 of the 695 inventoried items** - 25 MEDIUM-HIGH and 4 LOW-MEDIUM, 28 of them on the work list -
-  every one of which the parser was bucketing a tier low, so FR-012's ordering would have met 24 listed
-  items later than the reader meant. The harness now reports the
-  readers' hedged labels as their own tiers instead of rounding them, and FR-012 states five tiers
-  rather than three. The work list itself does not move: the compound labels never affected which items
-  are on it, only the printed composition.
+- **After acceptance (2026-09-13), one figure corrected, counter reset per the GM's 2026-09-12
+  rule.** Round 3's closing aside supposed a single item carried a hyphenated confidence label;
+  counting found **29 of the 695 inventoried items** (`m:hedged-items`) - 25 MEDIUM-HIGH and 4
+  LOW-MEDIUM, 28 of them bare (`m:hedged-bare`) and at most 27 on the work list
+  (`m:hedged-worklist-max`) - every one of which the parser was bucketing a tier low, a MEDIUM-HIGH
+  into MEDIUM and a LOW-MEDIUM into LOW, so FR-012's ordering would have met all 28 of the bare ones
+  later than the readers meant. The harness now reports the readers' hedged labels as their own
+  tiers instead of rounding them, and FR-012 states five tiers rather than three. The work list
+  itself does not move: the compound labels never affected which items are on it, only the printed
+  composition.
 - **Round 4 (2026-09-13), `spec-fidelity`: CHANGES REQUIRED**, two items, on a review that re-ran the
   harness, confirmed the five tiers sum to 494 with the work list unmoved, and established that item
   selection could not have moved because `items()`' own label regex is byte-identical in the diff. Both
@@ -232,4 +240,16 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   to a name outside `TIERS`, which would have dropped such an item from every printed share while the
   totals still looked right; it now normalizes correctly, and the run FAILS on any tier outside `TIERS`
   or a composition that does not sum to the bare count, rather than printing a plausible wrong split.
-- **Round 5**: pending.
+- **Round 5 (2026-09-13), `spec-fidelity`: CHANGES REQUIRED**, three items. The first two were one
+  mistake made twice: "28 of them on this list" attached the BARE population's hedged count to the
+  work list, when the caravan inn is itself hedged, bare and one of the twenty-two closures, so at
+  most 27 are listed; and "met 24 listed items later" counted only the MEDIUM-HIGH tier while claiming
+  "every one of which", when reading the first word demoted the 4 LOW-MEDIUM items into LOW as well.
+  **The third item is why the first two survived a round that re-ran every other figure**: the hedged
+  counts lived only in prose, so no instrument produced them and `make figures` had nothing to check.
+  The harness derives and records all three now (`m:hedged-items`, `m:hedged-bare`,
+  `m:hedged-worklist-max`) and prints them beside the tier line, and its unrecognized-tier refusal was
+  widened from the bare items to every item, since the 29 is taken over all 695 and a stray tier on a
+  marked item would corrupt a recorded figure just as quietly. The round-3 arithmetic carries its "on
+  round 3's own run" label.
+- **Round 6**: pending.

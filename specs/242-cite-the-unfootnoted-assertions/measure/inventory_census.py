@@ -83,11 +83,12 @@ def items(text: str) -> list[str]:
     return [b for b in out if re.search(r"\*\*(HIGH|MEDIUM|LOW)\b", b)]
 
 
-#: The readers hedged 29 of the 695 inventoried items with a compound label - 25 MEDIUM-HIGH and 4
-#: LOW-MEDIUM, of which 28 are on the bare work list (one MEDIUM-HIGH item carries a marker). Reading
-#: only the first word buckets every one of them a tier LOW, which would have FR-012's ordering meet 24
-#: of the listed items later than the reader meant. They are reported as their own tiers instead:
-#: rounding a deliberate hedge in either direction invents a judgment the reader declined to make.
+#: The readers hedged some items with a compound label. Reading only the first word buckets every one
+#: of them a tier LOW - a MEDIUM-HIGH into MEDIUM, a LOW-MEDIUM into LOW - so FR-012's ordering would
+#: meet all of them later than the reader meant. They are reported as their own tiers instead: rounding
+#: a deliberate hedge in either direction invents a judgment the reader declined to make. Every hedged
+#: COUNT is derived below and recorded, because the first two attempts at stating them in prose were
+#: each wrong about which population they described, and no instrument was producing them to catch it.
 TIERS = ("HIGH", "MEDIUM-HIGH", "MEDIUM", "LOW-MEDIUM", "LOW")
 
 
@@ -119,13 +120,21 @@ def carries_marker(block: str) -> bool:
 def main() -> int:
     per_report = {}
     bare_conf: collections.Counter[str] = collections.Counter()
+    all_conf: collections.Counter[str] = collections.Counter()
     total = marked = 0
+    #: Of the items CLOSED_BARE subtracts, only the caravan inn is identifiable in the reports; the
+    #: other twenty-one are counts. So the hedged share of the work list can be bounded, not fixed.
+    hedged_and_closed = 0
     for path in sorted(REPORTS.glob("*.md")):
         blocks = items(path.read_text(encoding="utf-8"))
         m = sum(1 for b in blocks if carries_marker(b))
         for b in blocks:
+            tier = confidence(b)
+            all_conf[tier] += 1
             if not carries_marker(b):
-                bare_conf[confidence(b)] += 1
+                bare_conf[tier] += 1
+                if "caravan inn" in b.lower() and "-" in tier:
+                    hedged_and_closed += 1
         per_report[path.name] = {"items": len(blocks), "marked": m, "bare": len(blocks) - m}
         total += len(blocks)
         marked += m
@@ -149,7 +158,9 @@ def main() -> int:
     print()
     print(f"bare by the readers' own marker counts ({stated_marked} marked): {bare_stated}")
     print(f"bare by this parse ({marked} marked):                {bare_parsed}")
-    stray = sorted(t for t in bare_conf if t not in TIERS)
+    # Over EVERY item, not just the bare ones: the hedged total below is taken over all 695, so a
+    # stray tier on a marked item would corrupt a recorded figure just as silently.
+    stray = sorted(t for t in all_conf if t not in TIERS)
     if stray:
         print(f"UNRECOGNIZED confidence tier(s) {stray} - the printed composition would drop them")
         return 1
@@ -159,9 +170,14 @@ def main() -> int:
 
     print(f"closed by 238 in a non-marker class:                 {closed} "
           f"({', '.join(f'{k} {v}' for k, v in CLOSED_BARE.items())})")
+    hedged_all = sum(v for t, v in all_conf.items() if "-" in t)
+    hedged_bare = sum(v for t, v in bare_conf.items() if "-" in t)
     print(f"WORK LIST: {bare_stated - closed} to {bare_parsed - closed} items")
     print("  of the parsed remainder, by the readers' own confidence tiers: "
-              + ", ".join(f"{t} {bare_conf[t]}" for t in TIERS))
+          + ", ".join(f"{t} {bare_conf[t]}" for t in TIERS))
+    print(f"  hedged with a compound label: {hedged_all} of the {total} inventoried, "
+          f"{hedged_bare} of the {bare_parsed} bare, at most {hedged_bare - hedged_and_closed} "
+          f"on the work list (the caravan inn is hedged and is one of the {closed} closures)")
 
     if "--record" in sys.argv:
         rec = json.loads(RECORD.read_text(encoding="utf-8")) if RECORD.exists() else {}
@@ -184,6 +200,12 @@ def main() -> int:
         put("worklist-low-confidence", bare_conf["LOW"], "items", "the LOW share")
         put("marker-classifier-disagreement", abs(marked - stated_marked), "items",
             "items this parser and the readers' own stated splits classify differently")
+        put("hedged-items", hedged_all, "items",
+            "inventoried items the readers gave a compound confidence label, over all of them")
+        put("hedged-bare", hedged_bare, "items", "the hedged share of the bare population")
+        put("hedged-worklist-max", hedged_bare - hedged_and_closed, "items",
+            "an upper bound on the hedged share of the work list: only the caravan inn is "
+            "identifiable among the closures, so the other twenty-one cannot be checked for hedges")
         RECORD.write_text(json.dumps(rec, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         print(f"\nrecorded to {RECORD}")
     return 0

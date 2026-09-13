@@ -27,6 +27,27 @@
   "unit": "notes",
   "value": 2
  },
+ "hedged-bare": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "the hedged share of the bare population",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 28
+ },
+ "hedged-items": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "inventoried items the readers gave a compound confidence label, over all of them",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 29
+ },
+ "hedged-worklist-max": {
+  "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
+  "note": "an upper bound on the hedged share of the work list: only the caravan inn is identifiable among the closures, so the other twenty-one cannot be checked for hedges",
+  "taken": "2026-09-13",
+  "unit": "items",
+  "value": 27
+ },
  "inventory-items": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py --record",
   "note": "every sentence the four readers named; reproduces each report's own stated total",

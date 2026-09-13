@@ -23,12 +23,12 @@ shapes, and getting all four to their stated totals is what makes the marker spl
 all.
 
 **The answer: 462 to 472 items** (`m:worklist-low`, `m:worklist-high`), against the closing report's
-"about 600". The range is honest rather than decorative: the parser classifies 201 items as carrying a
-marker where the readers' own stated splits total 211, a disagreement of 10 (`m:marker-classifier-disagreement`),
-and the wider bound is the one to plan with. Twenty-two further items are closed in a class other than
-the marker conversion - the nine roster-hidden claims on `urban-features`, the five on `buildings`, the
-six sections that disclosed with no footnote at all, the one `settlements.html` item that restates
-footnoted canon, and the caravan inn.
+"about 600". The range is honest rather than decorative: the parser classifies 201 items as carrying
+a marker where the readers' own stated splits total 211, a disagreement of 10
+(`m:marker-classifier-disagreement`), and the wider bound is the one to plan with. Twenty-two
+further items are closed in a class other than the marker conversion - the nine roster-hidden claims
+on `urban-features`, the five on `buildings`, the six sections that disclosed with no footnote at
+all, the one `settlements.html` item that restates footnoted canon, and the caravan inn.
 
 **What the filter does NOT subtract, and why that is right.** R7's fourth class is the twelve defects,
 and they are absent from the subtraction on purpose. Those were found in the SECOND reading, of
@@ -53,15 +53,26 @@ not sum to the work list - the readers rated **222 HIGH, 24 MEDIUM-HIGH, 207 MED
 37 LOW** (`m:worklist-high-confidence`, `m:worklist-medium-high-confidence`,
 `m:worklist-medium-confidence`, `m:worklist-low-medium-confidence`, `m:worklist-low-confidence`).
 
-**The two hedged tiers are reported, not rounded.** The readers hedged 29 of the 695 inventoried items
-with a compound label, 28 of them on this list, and reading only the first word - as the first version
-of this parser did - buckets every one of them a tier low, which would have the ordering meet 24 listed
-items later than the reader meant. Collapsing a
+**The two hedged tiers are reported, not rounded.** The readers hedged 29 of the 695 inventoried
+items with a compound label (`m:hedged-items`), 28 of them in this bare population (`m:hedged-bare`)
+and at most 27 on the work list (`m:hedged-worklist-max`) - the caravan inn is itself MEDIUM-HIGH and
+bare and is one of the twenty-two R7 closes, and it is the only closure the reports name, so the
+other twenty-one cannot be checked for hedges. Reading only the first word - as the first version of
+this parser did - buckets every one of them a tier low, a MEDIUM-HIGH into MEDIUM and a LOW-MEDIUM
+into LOW, which would have the ordering meet all 28 of the bare ones later than the readers meant.
+
+**All three counts are DERIVED and recorded, and that is the lesson rather than a detail.** They were
+stated in prose twice and were wrong about their population both times, because the harness printed
+the tier shares and nothing else - so `make figures` had nothing to check, and two review rounds
+re-ran every other number without touching these. The harness computes them now, and its
+unrecognized-tier refusal covers every item rather than only the bare ones, since the 29 is taken
+over all 695. Collapsing a
 deliberate hedge into either neighbor invents a judgment the reader declined to make, so the compounds
 keep their own tiers. This moves no item on or off the work list; it only corrects what the split says.
 
-That ordering is the one this feature works in, and it replaces the ordering feature 238's draft proposed - "a
-claim the record states WRONGLY costs a reader more than one it states without support" - which cannot
+That ordering is the one this feature works in, and it replaces the ordering feature 238's draft
+proposed - "a claim the record states WRONGLY costs a reader more than one it states without
+support" - which cannot
 be applied, because nothing in the reports marks an item as wrong rather than unsupported. That class
 was found by READING, and this feature is told not to re-read.
 
