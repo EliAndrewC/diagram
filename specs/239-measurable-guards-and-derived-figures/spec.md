@@ -7,16 +7,21 @@
 ## Summary
 
 Feature 236's second amendment - a hook change of 309 added lines and 18 removed (`m:amendment-guard-lines-added`) - took 208 minutes, and a census of
-the session's own transcript says where (`research.md` R1): 78.9 min replaying a command window, 78.0
-min idle behind five review rounds, 29.3 min of model latency, 15.0 min of tests. The GM asked whether
+the session's own transcript says where (`research.md` R1): 78.9 min replaying a command window
+(`m:amendment-replay-minutes`), 78.0 min idle behind five review rounds (`m:amendment-idle-minutes`),
+29.3 min of model latency (`m:amendment-latency-minutes`), 15.0 min of tests
+(`m:amendment-test-minutes`). The GM asked whether
 more tooling would fix that. The record says yes for three of the four blocks, and names the reason
 in each case:
 
 - **A guard's decision cannot be called.** 275 of `house-style-hooks.sh`'s 367 lines are a Python
-  program inside a shell string, so measuring it costs a process per command - 231 ms against 6.2 ms
-  in process, 129 s against 3.5 s over one window (`research.md` R3).
-- **Nothing freezes the window.** Nine passes each rebuilt the same list from 1,034 transcripts, and
-  two of them ran against a prefilter this very hook had corrupted (`research.md` R4).
+  program inside a shell string (`m:house-style-program-lines`, `m:house-style-file-lines`), so
+  measuring it costs a process per command - 145 ms against 7.0 ms in process
+  (`m:decision-spawned-ms`, `m:decision-in-process-ms`), 81 s against 3.9 s over the frozen window
+  (`m:window-spawned-s`, `m:window-in-process-s`; `research.md` R3).
+- **Nothing freezes the window.** Nine passes each rebuilt the same list of 560 commands
+  (`m:frozen-window-commands`), and two ran against a prefilter this very hook had corrupted
+  (`research.md` R4).
 - **Half the review findings were arithmetic.** Ten of twenty were a figure stale, unreproducible, or
   measured one way and stated another, and the last two rounds found three figures and two stale
   sentences between them (`research.md` R2). The reviewer wrote its own harness in four of the five
@@ -50,13 +55,14 @@ would be fifteen chances to change a verdict silently.
 ### B. Measuring a guard is cheap (FR-004 to FR-007)
 
 **FR-004** A frozen corpus of real commands MUST live in `scripts/fixtures/`, built from the recent
-transcripts by a committed command and named with the date it was taken. Its prefilter MUST write its
+transcripts by a committed command and named with the date it was taken. It ships with this feature:
+560 commands (`m:frozen-window-commands`), 2.7 MB of text (D6). Its prefilter MUST write its
 dashes by codepoint, because the literal ones were corrected to hyphens by the hook as the script was
 saved, which inflated one window by an order of magnitude (`research.md` R4).
 
 **FR-005** `make hookbench GUARD=<name>` MUST replay that corpus through the guard's decision IN
-PROCESS and print the verdict counts. Over the measured window this is 3.5 s where the spawning form
-is 129 s (`research.md` R3).
+PROCESS and print the verdict counts. Over the frozen window this is 3.9 s where the spawning form is
+81 s (`m:window-in-process-s`, `m:window-spawned-s`; `research.md` R3).
 
 **FR-006** `make hookbench GUARD=<name> AGAINST=<git-ref>` MUST print the VERDICT DIFF against that
 ref - every command whose verdict changed, in both directions, with its targets. This is the check
@@ -64,7 +70,8 @@ feature 236's exemption owed and did not have: two drafts of it passed their own
 11 real verdicts for the worse.
 
 **FR-007** The bench MUST refuse a guard whose decision it cannot import, naming FR-001, rather than
-silently falling back to spawning - a fallback would make the 37x cost invisible again.
+silently falling back to spawning - a fallback would make the 21x cost invisible again
+(`m:decision-spawn-ratio`).
 
 ### C. A measured figure is derived, not typed (FR-008 to FR-011)
 
@@ -90,6 +97,13 @@ or a Review history entry (`research.md` R2), neither of which check 1 reads. A 
 history entry MAY carry a round label instead of a key - `on round N's own run` - because that section
 exists to record what a round measured at the time; a bare figure there fails.
 
+**FR-009c** A figure being NAMED rather than ASSERTED MUST NOT be asked for a key. `research.md` R2
+classifies findings and quotes one of them as "a `2.2 s` that was never measured" - a figure in a
+backtick span, inside a section that declares itself a classification. Check 5 MUST therefore skip a
+figure inside a backtick span, exactly as the house-style corrector does, and skip a section whose
+first paragraph declares itself a classification or a narration. Without this the check fires on the
+prose that records why the check exists.
+
 **FR-010** A ONE-SHOT observation MUST stay legal, labeled with the date it was observed and the
 method, and check 5 MUST accept it. The class is NARROW: something no command can produce - a
 container state, a wall-clock span with no transcript behind it. It is NOT a count over a moving
@@ -99,6 +113,12 @@ correct work, which teaches sessions to bypass it; too wide and it permits what 
 
 **FR-011** `make figures` MUST re-run every recorded command in a feature's `measurements.json` and
 report any value that moved, in the manner of `make notes-census`.
+
+**FR-011a** A TIMING does not repeat exactly, so an entry MAY carry `varies: true`, and for such an
+entry `make figures` and check 5 MUST accept a value within a stated tolerance band rather than an
+equal one. Six of this feature's own thirteen first-recorded keys moved by 5-6% between two runs on an
+unchanged tree, so without this a clean tree could never be silent and the check would fire on correct
+work. A COUNT never carries it: 560 commands is 560.
 
 ### D. A reviewer does not adjudicate a figure it cannot re-run (FR-012 to FR-014)
 
@@ -132,14 +152,17 @@ bench run over it completes in seconds rather than minutes, and the figure is re
 **SC-004** (FR-006) The bench, run against the commit before feature 236's exemption change,
 reproduces that change's verdict diff - the same commands, in the same directions.
 **SC-005** (FR-007) A guard with no importable decision is refused by name.
-**SC-006** (FR-008, FR-009, FR-009a, FR-009b) A figure with no key fails `spec-lint`; a figure in
-`research.md` and one in a Review history entry are both reached, and a Review history figure labeled
-as that round's own run passes; `1,034` matches a recorded 1034 and `164` a recorded 164.2; a key absent from
+**SC-006** (FR-008, FR-009, FR-009a, FR-009b, FR-009c) A figure with no key fails `spec-lint`; a
+figure in `research.md` and one in a Review history entry are both reached, and a Review history
+figure labeled as that round's own run passes; a figure inside a backtick span in a section that
+declares itself a classification does not fail; `145` matches the recorded `m:decision-spawned-ms`
+and `7` matches a recorded 7.0; a key absent from
 `measurements.json` fails; a recorded value that does not appear in its paragraph fails; the correct
 form passes - and this spec's own figures pass, as feature 236's FR-010b required of its author.
 **SC-007** (FR-010) A one-shot observation with its date and method passes; the same sentence without
 the label fails.
-**SC-008** (FR-011) `make figures` reports a value that moved and is silent when none did.
+**SC-008** (FR-011, FR-011a) `make figures` reports a value that moved and is silent when none did -
+including on a tree where every timing was re-measured, which is what `varies: true` is for.
 **SC-009** (FR-012, FR-013, FR-014) The agent file carries the NOT-REVIEWABLE contract and the license
 to measure independently; the tasks template's review task names the measurements file; a review
 dispatched against a spec whose figures carry no keys returns NOT-REVIEWABLE naming them.
@@ -148,10 +171,10 @@ dispatched against a spec whose figures carry no keys returns NOT-REVIEWABLE nam
 
 ## Decisions recorded
 
-**D1 - one guard converts, not sixteen.** The census (`research.md` R4) makes a sweep tempting and the
+**D1 - one guard converts, not fifteen.** The census (`research.md` R4) makes a sweep tempting and the
 sweep is exactly the wrong shape: each conversion owes a verdict diff over the window, and sixteen in
-one feature is sixteen chances to move a verdict unnoticed. House-style converts because it is the
-largest (273 lines), the one that cost the measurement time, and the one whose quoted-string form has
+one feature is sixteen chances to move a verdict unnoticed. House-style converts because it is the largest (275 lines, `m:house-style-program-lines`), the one
+that cost the measurement time, and the one whose quoted-string form has
 now broken twice on an apostrophe.
 
 **D2 - a one-shot observation stays legal, labeled - and the class is narrower than the first draft
@@ -176,6 +199,13 @@ feature 236's amendment found three stale figures and two stale sentences, and n
 operative sections. Widening it to every number would fire on ids and counts, which is the false
 positive `spec-lint` was designed around in the first place.
 
+**D6 - the corpus is committed whole, at 2.7 MB.** The window is 560 commands and the ten largest are
+38-79 KB heredocs. Capping a command at 10,000 characters would keep 88% of them for 1.04 MB, and it
+was rejected: the largest commands are exactly the ones that exercise the range walk, and a bench that
+quietly drops them measures the easy half. The repository's `.git` is already 101 MB, so the price is
+paid in a place that can afford it. (These figures are from `measure/freeze_window.py` and
+`m:frozen-window-commands`.)
+
 **D5 - the corpus is frozen with a date and refreshed deliberately.** A rolling window makes two runs
 disagree for reasons that have nothing to do with the code, which is what made feature 236's figures
 drift between rounds. Refreshing is a command a session runs on purpose, and the file name says when.
@@ -187,3 +217,31 @@ drift between rounds. Refreshing is a command a session runs on purpose, and the
   governs, and no mechanism here would move it.
 - The review rounds themselves. This feature makes their cheap findings impossible; it does not ask
   the reviewer for less.
+
+## Review history
+
+**Round 2** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, six items, all taken, and every one of
+them this spec failing to keep the rule it is writing. The two that mattered: R1's figures were
+reproducible and unkeyed while `time_census.py` could not record at all, so under this spec's own
+FR-010 they owed keys - the census takes `--record` now and R1 points at five; and `decision_cost.py`
+extrapolated from a TYPED constant (`window = 558`) over a corpus under `/tmp` that no committed
+command built, so its recorded figures could not be reproduced on a clean tree at all. FR-004's frozen
+corpus was therefore built early, and the harness reads it and derives the window size from it. That
+re-measurement moved the headline: 145 ms against 7.0 ms and **21x**, where the earlier sample said
+231 / 6.2 and 37x - and the reason is worth keeping, so R3 now records it: the ratio depends on the
+command mix, and the first sample was biased toward the short commands the guard acts on. Also taken:
+D1 still quoted the retired 273; SC-006 claimed this spec's own figures pass when only one paragraph
+carried a pointer; check 5 as specified would have fired on `research.md` R2, which NAMES figures it is
+classifying (FR-009c); and `make figures` had no tolerance for a timing, which cannot repeat exactly
+(FR-011a).
+
+**Round 1** (`spec-fidelity`, full reading): CHANGES REQUIRED, ten items, all taken, eight of them
+figures - in a spec whose subject is figures that restate themselves. The answer was to build the
+harnesses rather than retype the numbers: `measure/` carries four now, and every figure they produce
+is a key in `measurements.json`. What they corrected: 15 guard scripts with inline Python rather than
+16, house-style at 275 of 367 rather than 273 of 366, and the change this feature is about at 309
+lines added rather than "about 40" - understated sevenfold, in the direction that made the argument
+stronger. The sharpest item was on the GM's own idea: D2 justified keeping one-shot observations legal
+with "the session ran 208 minutes, which no command can re-run", which is false - this feature ships
+that command - and it admitted "a count over a window that has moved", which would have covered every
+disputed figure in the motivating incident. D2's class is now what no command can produce.

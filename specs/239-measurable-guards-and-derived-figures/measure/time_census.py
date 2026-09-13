@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Where a session's wall clock went, from its own transcript.
 
-    python3 specs/239-*/measure/time_census.py <session-id> [--from "text"] [--to "text"]
+    python3 specs/239-*/measure/time_census.py <session-id> [--from "text"] [--to "text"] [--record]
 
 Pairs every `tool_use` with its `tool_result` to get tool execution time, counts the gap from a
 result to the next assistant message as model turn latency, and reports what is left as idle - which
@@ -19,6 +19,8 @@ import json
 import pathlib
 import re
 import sys
+
+MEASUREMENTS = pathlib.Path(__file__).resolve().parent.parent / "measurements.json"
 
 BUCKETS = (
     ("the window replays", r"replay|final2|final\.py|residue|d11\.py|split\.py|diffverdict|measure_bash"),
@@ -111,6 +113,24 @@ def main(argv: list[str]) -> int:
         print(f"  {secs/60:6.1f} min  {secs/got['total']*100:4.1f}%  n={got['calls'][name]:3d}  {name}")
     print(f"  {got['latency']/60:6.1f} min  {got['latency']/got['total']*100:4.1f}%         model turn latency")
     print(f"  {got['idle']/60:6.1f} min  {got['idle']/got['total']*100:4.1f}%         idle (waiting on a background agent)")
+    if "--record" in argv:
+        # A SPAN WITH A TRANSCRIPT BEHIND IT IS NOT A ONE-SHOT (spec FR-010, D2): this command
+        # reproduces it, so it owes a key like any other figure.
+        cmd = ("python3 specs/239-measurable-guards-and-derived-figures/measure/time_census.py "
+               f"{session} --from \"{argv[argv.index('--from') + 1]}\" --to \"{argv[argv.index('--to') + 1]}\" --record")
+        keys = {
+            "amendment-wall-minutes": (round(got["total"] / 60), "min", "the GM ruling to the GM landing it"),
+            "amendment-replay-minutes": (round(got["spent"].get("Bash: the window replays", 0) / 60, 1), "min", ""),
+            "amendment-idle-minutes": (round(got["idle"] / 60, 1), "min", "waiting on the five review rounds"),
+            "amendment-latency-minutes": (round(got["latency"] / 60, 1), "min", ""),
+            "amendment-test-minutes": (round(got["spent"].get("Bash: tests and checks", 0) / 60, 1), "min", ""),
+        }
+        have = json.loads(MEASUREMENTS.read_text()) if MEASUREMENTS.is_file() else {}
+        for key, (value, unit, note) in keys.items():
+            have[key] = {"value": value, "unit": unit, "command": cmd,
+                         "taken": datetime.date.today().isoformat(), **({"note": note} if note else {})}
+        MEASUREMENTS.write_text(json.dumps(have, indent=1, sort_keys=True) + "\n")
+        print(f"recorded {len(keys)} figures in {MEASUREMENTS.name}")
     return 0
 
 

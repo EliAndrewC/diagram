@@ -6,8 +6,8 @@ said where it happens.** That distinction is this feature's own subject, so the 
 
 ## R1 - where 208 minutes went (measured 2026-09-13)
 
-The session that delivered feature 236's second amendment spent **208 minutes** between the GM's
-ruling and their instruction to land it. `measure/time_census.py` reads the session's own transcript,
+The session that delivered feature 236's second amendment spent **208 minutes**
+(`m:amendment-wall-minutes`) between the GM's ruling and their instruction to land it. `measure/time_census.py` reads the session's own transcript,
 pairs every `tool_use` with its `tool_result`, counts the gap from a result to the next assistant
 message as model latency, and reports the remainder as idle:
 
@@ -22,6 +22,10 @@ message as model latency, and reports the remainder as idle:
 | tests and checks | 15.0 | 7.2% | 44 |
 | a foreground `sleep` on a background run | 6.0 | 2.9% | 1 |
 | edits, git, the push, everything else | 0.9 | 0.4% | 129 |
+
+Keys for the four blocks the argument rests on: `m:amendment-replay-minutes`,
+`m:amendment-idle-minutes`, `m:amendment-latency-minutes`, `m:amendment-test-minutes`. The census
+takes `--record`, so these are re-derived rather than retyped.
 
 The change itself was **309 lines added and 18 removed** in the hook and the module it grew
 (`m:amendment-guard-lines-added`; 455 and 43 across all of `scripts/`,
@@ -67,16 +71,22 @@ shipped hook over the 60 longest real commands it acts on, and then times the SA
 once and executed in process with its stdin redirected per command - which is what FR-001 makes
 permanent, and which is why the figure can be taken before the extraction exists.
 
-| | per command | key |
+| over all 560 frozen commands | per command | key |
 |---|---|---|
-| the hook as it runs today | **231 ms** | `m:decision-spawned-ms` |
-| the same program, compiled once, called in process | **6.2 ms** | `m:decision-in-process-ms` |
-| a bare `python3 -c pass` | 19 ms | `m:bare-python-spawn-ms` |
+| the hook as it runs today | **145 ms** | `m:decision-spawned-ms` |
+| the same program, compiled once, called in process | **7.0 ms** | `m:decision-in-process-ms` |
+| a bare `python3 -c pass` | 18 ms | `m:bare-python-spawn-ms` |
 
-That is **37x** (`m:decision-spawn-ratio`), and over a 558-command window **129 s against 3.5 s**
-(`m:window-spawned-s`, `m:window-in-process-s`). The cost is not process startup - a bare spawn is 19
-ms - it is the hook rebuilding its whole world per command. Nine passes were needed while the
-questions were being settled, which is where 78.9 minutes went.
+That is **21x** (`m:decision-spawn-ratio`), and over the whole window **81 s against 3.9 s**
+(`m:window-spawned-s`, `m:window-in-process-s`, `m:frozen-window-commands`). The cost is not process
+startup - a bare spawn is 18 ms - it is the hook rebuilding its whole world per command. Nine passes
+were needed while the questions were being settled, which is where the replay time went.
+
+**The ratio depends on the command MIX, and the first measurement of it was taken on a biased
+sample.** Over the 60 LONGEST commands in the window the ratio is only 4x: a 79 KB heredoc gives the
+decision real work to do while the spawn overhead stays constant. Over a sample of the commands the
+guard ACTS on - short ones, mostly - it was 37x. The figure recorded is the one a bench actually
+faces, the whole window, and this paragraph is why it is not the largest of the three.
 
 ## R4 - the corpus was never frozen, and the program cannot be imported (measured 2026-09-13)
 
@@ -126,5 +136,5 @@ rebuilt a replay of the window. The exception is round 4, whose dispatch named t
 had by then written down: that report says it re-ran that script, and its verdict was that every
 figure reproduced "to the command".
 
-So the cost this feature removes is not the reviewer's scepticism - it is the reviewer rebuilding the
+So the cost this feature removes is not the reviewer's skepticism - it is the reviewer rebuilding the
 same instrument four times because the figures arrived as text with no route back to the run.
