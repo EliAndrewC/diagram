@@ -52,15 +52,45 @@ run "git add -A"
 [ "$RC" -eq 0 ] && ok "a resolved merge stages cleanly, MERGE_HEAD and all" || no "the correct end of a merge was refused" "(rc=$RC)"
 rm -f "$FIX/.git/MERGE_HEAD"
 
-echo "3. prose about a marker is not a marker"
-{ printf 'A doc about merges.\n\n```\n%s HEAD\nmine\n%s\ntheirs\n%s other\n```\n' "$O" "$M" "$X"
-  printf '\nAnd indented:\n\n    %s HEAD\n    %s\n    %s other\n' "$O" "$M" "$X"
-  printf '\nAnd inline: `%s` then `%s` then `%s`.\n' "$O" "$M" "$X"; } > "$FIX/about.md"
+echo "3. prose about a marker is not a marker - by COLUMN 0, not by a fence"
+printf 'A doc about merges. Inline: `%s` then `%s` then `%s`.\n' "$O" "$M" "$X" > "$FIX/about.md"
+printf 'Indented, as prose shows it:\n\n    %s HEAD\n    %s\n    %s other\n' "$O" "$M" "$X" >> "$FIX/about.md"
 run "git add -A"
-[ "$RC" -eq 0 ] && ok "a fenced, an indented and an inline example all pass" || no "prose was treated as a conflict" "(rc=$RC)"
-printf 'A heading\n%s\n\ntext\n' "$M" > "$FIX/heading.md"   # seven `=` as a Markdown underline
+[ "$RC" -eq 0 ] && ok "inline and indented examples pass - neither starts a line with a marker" || no "prose was treated as a conflict" "(rc=$RC)"
+printf 'A heading\n%s\n\ntext\n' "$M" > "$FIX/heading.md"
 run "git add -A"
 [ "$RC" -eq 0 ] && ok "a seven-character Markdown underline is not a conflict" || no "an underline fired the guard" "(rc=$RC)"
+# AND THE CASE A FENCE EXEMPTION WOULD HIDE: git writes its markers at column 0 wherever the conflict
+# falls, including inside a fenced block in a Markdown file - 7 of the 23 files of the 2026-09-13 incident
+# were Markdown or HTML. So a fenced triple IS flagged, and a file that must show one says so.
+printf 'Docs.\n\n```\n%s HEAD\nmine\n%s\ntheirs\n%s other\n```\n' "$O" "$M" "$X" > "$FIX/fenced.md"
+run "git add -A"
+[ "$RC" -eq 2 ] && ok "a triple at column 0 INSIDE a fence is still flagged (no fence exemption)" || no "a fenced triple passed - the exemption is back" "(rc=$RC)"
+printf 'CONFLICT_MARKERS_OK: this doc must SHOW a conflict to explain one\n\n```\n%s HEAD\nmine\n%s\ntheirs\n%s other\n```\n' "$O" "$M" "$X" > "$FIX/fenced.md"
+run "git add -A"
+[ "$RC" -eq 0 ] && ok "...and the file-level exemption with a reason lets that doc through" || no "the file-level exemption did not work" "(rc=$RC)"
+printf 'CONFLICT_MARKERS_OK: x\n\n%s HEAD\nmine\n%s\ntheirs\n%s other\n' "$O" "$M" "$X" > "$FIX/fenced.md"
+run "git add -A"
+[ "$RC" -eq 2 ] && ok "...but a one-word reason is not a reason" || no "a bare file-level exemption was honored" "(rc=$RC)"
+rm -f "$FIX/fenced.md"
+
+echo "3b. THE COMMAND SHAPES, asked of git rather than enumerated"
+printf 'base\n%s HEAD\na\n%s\nb\n%s o\n' "$O" "$M" "$X" > "$FIX/tracked.md"
+mkdir -p "$FIX/sub"; printf 'clean\n' > "$FIX/sub/ok.md"
+OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "CL=$FIX; git -C \$CL add -A" | ( cd /tmp && "$HOOK" pretool 2>&1 )); RC=$?
+[ "$RC" -eq 2 ] && ok "THE INCIDENT'S OWN SHAPE: CL=...; git -C \$CL add -A is blocked" || no "the incident's command shape walked through" "(rc=$RC)"
+OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "cd $FIX && git add -A" | ( cd /tmp && "$HOOK" pretool 2>&1 )); RC=$?
+[ "$RC" -eq 2 ] && ok "a cd into the tree is followed too" || no "cd was not followed" "(rc=$RC)"
+OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":"git add ."}}))' | ( cd "$FIX/sub" && "$HOOK" pretool 2>&1 )); RC=$?
+[ "$RC" -eq 0 ] && ok "CORRECT WORK: git add . in a clean subdirectory passes while a marker sits elsewhere" || no "git add . fired on correct work - the failure the whole design avoids" "(rc=$RC)"
+run "git add sub/"
+[ "$RC" -eq 0 ] && ok "a clean DIRECTORY pathspec passes" || no "a clean directory was blocked" "(rc=$RC)"
+run "git add ."
+[ "$RC" -eq 2 ] && ok "...and a directory pathspec that CONTAINS the conflict is blocked, not skipped" || no "a directory pathspec skipped the conflict" "(rc=$RC)"
+run "git add -u"
+[ "$RC" -eq 2 ] && ok "git add -u is judged" || no "add -u walked through" "(rc=$RC)"
+run 'git commit -m "a message mentioning tracked.md is not a pathspec"'
+[ "$RC" -eq 0 ] && ok "a -m message naming a file is not a pathspec" || no "a commit message was read as a path" "(rc=$RC)"
 
 echo "4. the escape"
 printf 'base\n%s HEAD\nmine\n%s\ntheirs\n%s other\n' "$O" "$M" "$X" > "$FIX/tracked.md"

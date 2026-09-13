@@ -712,6 +712,12 @@ print()"
 # the checker's own scope, so the report and the gate can never again disagree about what is over.
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
 	@python3 ../../../scripts/check-file-scale.py --list ../../..
+# GUARD_EDIT_OK: feature 241 - the conflict-marker exemption is enumerated here for feature 173's own
+# reason: a whole-file carve-out nobody can list is one nobody revisits. A file declaring
+# `CONFLICT_MARKERS_OK: <reason>` is invisible to both the hook and the backstop, so the audit is the
+# only place a reader meets it.
+	@printf '\n\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
+	@python3 ../../../scripts/_hm_conflict.py --list ../../..
 	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
@@ -1255,7 +1261,10 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	: " arrives before the map roll is paid for. The hook refuses STAGING a conflict; this asks whether one is" ; \
 	: " already COMMITTED, which a hook cannot see - an escape, a git am, or a commit made outside the session." ; \
 	: " Twice on 2026-09-12/13 a merge was committed unresolved, once in 23 files, and the lint phase is where" ; \
-	: " the second one surfaced by accident. It scans every tracked file and costs about a second."
+	: " the second one surfaced by accident. It scans every tracked file and costs about a second." ; \
+	: " GUARD_EDIT_OK: selftest FIRST, the rule every static check in this phase follows - a checker that" ; \
+	: " cannot fail is worth nothing, and this one is now trusted at the push as well."
+	python3 ../../../scripts/_hm_conflict.py --selftest
 	python3 ../../../scripts/_hm_conflict.py --tracked ../../..
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \

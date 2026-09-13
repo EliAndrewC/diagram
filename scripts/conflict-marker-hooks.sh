@@ -22,7 +22,9 @@
 # is the harm itself: a file holding the TRIPLE git leaves (seven `<`, a line of seven `=`, seven `>`) is
 # not stageable. A resolved merge has none, and `add -A` passes untouched.
 #
-# WHY IT REFUSES RATHER THAN FIXING (feature 212's ladder). The compliant command stages the files that
+# WHY IT REFUSES RATHER THAN FIXING (GUARD_EDIT_OK: feature 241, correcting a miscitation its own spec
+# review caught - the REWRITE / TEACH / REFUSE ladder is feature 164's; 212 was the second pass that
+# re-judged every refusal branch against it). The compliant command stages the files that
 # are RESOLVED, and which those are is the session's knowledge, not the guard's - the same reason
 # `make-only`'s guard-write and `guard-file`'s no-marker branch stayed refusals.
 #
@@ -46,54 +48,20 @@ CM_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$CM_HERE/_guardlog.sh"
 if escape_or_refuse conflict-marker CONFLICT_MARKERS_OK conflict-markers-ok "$CM_HERE"; then exit 0; fi
 
-case "$CMD" in *"git add"*|*"git commit"*) ;; *) exit 0 ;; esac
+# THE CHEAP BAIL-OUT MUST NOT BE NARROWER THAN THE PARSER. This read `*"git add"*|*"git commit"*`, and
+# `git -C $CL add -A` - the recorded shape of the 2026-09-13 incident itself - contains neither, so the
+# guard skipped the one command it was written for. A subcommand can stand anywhere after a global
+# option, so the filter asks only for `git` and a verb, and the parser decides.
+case "$CMD" in *git*) ;; *) exit 0 ;; esac
+case "$CMD" in *add*|*commit*) ;; *) exit 0 ;; esac
 
 BAD=$(printf '%s' "$CMD" | CM_CWD="$PWD" CM_HERE="$CM_HERE" python3 -c '
-import os, re, shlex, subprocess, sys
+import os, sys
 
 sys.path.insert(0, os.environ["CM_HERE"])
-from _hm_conflict import conflicted  # noqa: E402
+from _hm_conflict import conflicted, staged_by  # noqa: E402
 
-cmd = sys.stdin.read()
-paths: list[str] = []
-for piece in re.split(r"&&|\|\||;|\|", cmd):
-    try:
-        toks = shlex.split(piece, comments=True)
-    except ValueError:
-        toks = piece.split()
-    if "git" not in toks:
-        continue
-    rest = toks[toks.index("git") + 1 :]
-    repo = os.environ.get("CM_CWD", ".")
-    while rest and rest[0] in ("-C", "-c") and len(rest) >= 2:
-        if rest[0] == "-C":
-            repo = rest[1]
-        rest = rest[2:]
-    if not rest:
-        continue
-    sub, args = rest[0], rest[1:]
-    if sub not in ("add", "commit"):
-        continue
-
-    def _git(*a: str) -> list[str]:
-        r = subprocess.run(["git", "-C", repo, *a], capture_output=True, text=True, check=False)
-        return [ln for ln in r.stdout.splitlines() if ln]
-
-    named = [a for a in args if not a.startswith("-")]
-    if sub == "add":
-        whole = any(a in ("-A", "--all", ".", "-u", "--update") for a in args) or "." in named
-        if whole or not named:
-            # everything the tree would hand it: tracked changes plus untracked files
-            paths += [os.path.join(repo, p) for p in _git("diff", "--name-only")]
-            paths += [os.path.join(repo, p) for p in _git("ls-files", "-o", "--exclude-standard")]
-        else:
-            paths += [p if os.path.isabs(p) else os.path.join(repo, p) for p in named]
-    else:  # commit
-        if any(a in ("-a", "--all") for a in args) or any(a.startswith("-") and not a.startswith("--") and "a" in a[1:] for a in args):
-            paths += [os.path.join(repo, p) for p in _git("diff", "--name-only")]
-        paths += [os.path.join(repo, p) for p in _git("diff", "--cached", "--name-only")]
-
-print("\n".join(conflicted(sorted(set(paths)))))
+print("\n".join(conflicted(staged_by(sys.stdin.read(), os.environ.get("CM_CWD", ".")))))
 ' 2>/dev/null || true)
 
 [ -n "$BAD" ] || exit 0

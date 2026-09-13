@@ -248,6 +248,14 @@ push_cmd() {
   # construction, so the two pushes the root CLAUDE.md protects are untouched. Selftest first.
   python3 "$ROOT/scripts/spec-lint.py" --selftest >/dev/null || die "spec-lint selftest failed - the guard itself is broken; fix scripts/spec-lint.py before pushing"
   python3 "$ROOT/scripts/spec-lint.py" --delta "$ROOT" || die "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply"
+  # GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP runs here as well as in the gate's static
+  # phase, and of the six checks in this block it is the one with the strongest claim to the push: the
+  # delta that lands a marker is a MERGE, and a merge's own delta is whatever the two sides touched -
+  # frequently docs, tests and manifests, which take the DIRECT route and run no gate at all. That is
+  # exactly how 23 marker-carrying files reached a commit on 2026-09-13. The hook refuses STAGING one;
+  # this asks whether one is already committed, which no hook can see. Selftest first, same reason.
+  python3 "$ROOT/scripts/_hm_conflict.py" --selftest >/dev/null || die "_hm_conflict selftest failed - the guard itself is broken; fix scripts/_hm_conflict.py before pushing"
+  python3 "$ROOT/scripts/_hm_conflict.py" --tracked "$ROOT" || die "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241"
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
   # clause says this procedure "does not run to completion on a red or regressed state" - which was
   # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session
