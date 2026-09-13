@@ -92,7 +92,7 @@ def main(argv: list[str]) -> int:
         today = time.strftime("%Y-%m-%d")
         for key, quantity, rc, _secs, _out in rows:
             data[key] = {"value": rc, "unit": "exit code", "command": COMMAND, "taken": today, "quantity": quantity, "source": SOURCE}
-        data["240-fr005-check-max-s"] = {"value": round(max(r[3] for r in rows), 2), "unit": "s", "command": COMMAND, "taken": today, "varies": True, "quantity": "slowest of the probe's six checks", "source": SOURCE}
+        data["240-fr005-check-max-s"] = {"value": round(max(r[3] for r in rows), 2), "unit": "s", "command": COMMAND, "taken": today, "varies": 0.5, "quantity": "slowest of the probe's six checks, each a fresh interpreter importing the generation cache - sub-second, so half its value is the band, against a bound of 5 s", "source": SOURCE}
         MEASUREMENTS.write_text(json.dumps(data, indent=1) + "\n")
         print(f"recorded {len(rows) + 1} figures in {MEASUREMENTS.name}")
     return 0

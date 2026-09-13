@@ -92,8 +92,8 @@
   "unit": "s",
   "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
   "taken": "2026-09-13",
-  "varies": true,
-  "quantity": "slowest of the probe's six checks",
+  "varies": 0.5,
+  "quantity": "slowest of the probe's six checks, each a fresh interpreter importing the generation cache - sub-second, so half its value is the band, against a bound of 5 s",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
  }
 }
