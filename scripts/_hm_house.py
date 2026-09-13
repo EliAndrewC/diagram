@@ -90,6 +90,22 @@ def held_ranges(cmd: str) -> list[tuple[int, int, str]]:
     return held
 
 
+def write_targets(cmd: str) -> list[str]:
+    """The paths a command WRITES - a redirect's target or a `tee` argument (GUARD_EDIT_OK).
+
+    The exemption for a path outside the project (`/tmp`, the session state directory) has to be
+    decided by where the write LANDS. Reading every path the command mentions gets it wrong in both
+    directions: a heredoc writing the auto-memory index mentions relative file names in its own body,
+    and a command that reads the memory file and writes a project file in the same breath mentions one
+    of each. Both cases are real - the amendment review found the second, its fix produced the first.
+
+    `sed -i` is deliberately not read here: its target is the last argument past a quoted expression,
+    and a sed command carrying a word is left as typed by the fix rule whatever this returns.
+    """
+    out = re.findall(r"(?:^|\s)(?:>>?|\btee\b(?:\s+-a)?)\s*([\w./~$-]+)", cmd)
+    return [t for t in out if t not in ("-", "/dev/null", "/dev/stderr", "/dev/stdout")]
+
+
 def plan(
     cmd: str,
     pairs: dict[str, str],

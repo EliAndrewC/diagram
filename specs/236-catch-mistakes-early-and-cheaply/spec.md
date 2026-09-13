@@ -90,7 +90,10 @@ for is not what it writes, and correcting it breaks the command instead of the t
 
 **FR-007c** A path outside the project carries no house-style duty: `/tmp`, already exempt, and the
 session state directory `~/.claude/projects/`, whose auto-memory index format is Claude Code's own and
-uses an em-dash (D10).
+uses an em-dash (D10). The exemption MUST be decided by where the write LANDS - the command's redirect
+and `tee` targets, falling back to every path it names when it redirects nowhere - and NOT by any path
+the command merely mentions: a command that reads the memory file and writes a project file names one
+of each, and a heredoc writing the memory index names relative files in its own body.
 
 **FR-007a** "Outside a quoted span" means the house-style sense - a prose quotation (`「」`, curly or
 straight quotes, `<q>`, `<blockquote>`) or a backtick span naming a token - and NOT shell quoting: under a
@@ -155,7 +158,10 @@ instead of leaving this half done"*) - every tracked file and every untracked fi
 suffix - because all five of feature 234's survivals were outside `specs/` (`research.md` R5): two
 skill `CLAUDE.md` files, the root guard table, a script docstring and a research page. A VERBATIM
 RECORD is not a claim and is not scanned: `scripts/fixtures/` and `dev/*-log/` (D5). The narrating
-exemption applies wherever a Decisions recorded or Review history section stands.
+exemption applies wherever a Decisions recorded or Review history section stands. The scan MUST read a
+file whatever its extension - a `Makefile` states rules and figures here - and skip only what is
+binary: the always-binary extensions, the generated `.svg` renders, and any file whose first bytes
+carry a NUL.
 
 **FR-010d** The `WITHDRAWN:` marker MUST open a line, a list bullet aside. Unanchored, the sentence
 that DESCRIBES the marker declares one, which cost little while the scan read one directory and would
@@ -202,8 +208,9 @@ supplied through `--trailer` is refused; so is one in a file given to `-F`.
 an `echo >>` with it likewise; `sed -i 's/centre/center/g'`, a Python replacement pair and any command
 carrying both spellings are reported and left exactly as typed; a sweep's own word list, a regex
 alternation, a path token, a negated search, a prose quotation, a backtick span and
-`git grep -n "centre"` are untouched; so is a write to the auto-memory index under
-`~/.claude/projects/`.
+`git grep -n "centre"` are untouched; a write to the auto-memory index under `~/.claude/projects/` is
+untouched, while a command that READS that file and writes a project file in the same breath is
+corrected.
 **SC-007** (FR-008, FR-008a, FR-008b, FR-008c) The phase fails on a British spelling in a changed line and
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
 the delta; does not fail on a line merely moved; does not fail on the 192 ledgered lines; and runs on a
@@ -287,10 +294,14 @@ GM named `sed`. A Python sweep's `t.replace("the centre of", "the center of")`, 
 and its replacement, and an `awk` substitution are the same command doing the same thing, and the
 GM's own reason - a correction would replace a word with itself and the fix would do nothing - applies
 to each without modification. The rule implemented is therefore: the sed shape, plus any command
-carrying BOTH spellings of one word. Measured: of the real commands this hook warns on, 60 carry a
-fix shape and 5 of those are `sed` (`research.md` R10), so reading the ruling literally would leave
-55 fixes to be corrected into no-ops. This is a widening of what the GM said, decided after
-acceptance, and it went to `spec-fidelity` as an exception before it was kept.
+carrying BOTH spellings of one word. Measured: of the 55 commands the shipped rule reports, 9 carry a
+`sed` segment and 44 carry both spellings with no `sed` anywhere (`research.md` R10), so the literal
+reading would hand those 44 to the corrector - about half of them replacement pairs whose fix would
+silently become a no-op. The predicate knows the SHAPE, not the intent: the other half are quotations,
+searches and prose naming both spellings, which are reported rather than corrected, and a real
+violation among them still fails `make quick` in the delta. This is a widening of what the GM said,
+decided after acceptance, and it went to `spec-fidelity` as an exception before it was kept
+(LEGITIMATE, amendment round 1).
 
 **D10 - the session state directory is outside the project, as `/tmp` already was.** The hook's
 existing exemption says a file outside the project is not project content, and names `/tmp` because
@@ -298,6 +309,9 @@ that was the instance in front of it. `~/.claude/projects/<project>/memory/` is 
 exactly the same sense, and its index line format - `- [Title](file.md) — hook` - is Claude Code's own
 and carries an em-dash, so correcting a memory write rewrote the format of the file as it was written
 (`research.md` R10 found it in the replay). Also decided after acceptance and put to the reviewer.
+Its WIDTH is the part that needed fixing: judged by every path the command mentioned, the exemption
+silenced the rule on a command that read the memory file and wrote a project file in one breath -
+found by the amendment review, and now decided by the write targets (FR-007c).
 
 ## Out of scope
 
@@ -307,6 +321,24 @@ and carries an em-dash, so correcting a memory write rewrote the format of the f
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment 2, round 1** (`spec-fidelity`, MODE 3 VERIFY; the counter reset to zero for a
+post-acceptance amendment): **CHANGES REQUIRED**, seven items, all taken, and both exceptions judged
+**LEGITIMATE** - D9 because the GM's own stated reason applies unmodified to a replacement pair
+written in any language, D10 because it instances an exemption the hook already carries. The
+consequential items, each of which the reviewer MEASURED rather than inferred: (1) the replay's
+prefilter had its dashes flattened to hyphens by this very hook as the script was written, so R10's
+window counted commands carrying a spaced hyphen - re-run, and the figures restated from it; (2) the
+dash half of the ruling had therefore never been priced, and now is (201 of 545); (3) R10's "2.2 s"
+did not reproduce - re-measured, the walk rewrite buys nothing on real commands and the 2.2 s was
+container contention, which R10 now says; (4) R10 and D9 called the warned class "fixes" when the
+predicate only sees both spellings, and the hook's own message asserted the same thing to the session
+- both restated, and the message now names the rule that fired; (5) D10's exemption was judged by
+every path a command MENTIONS, which silenced the whole rule on a command that read the memory file
+and wrote a project file in one breath - it reads the write targets now (FR-007c); (6) the tree-wide
+scan was narrowed by an unstated suffix roster that dropped every `Makefile` - it reads any
+non-binary file now, extensionless included; (7) two statements the amendment falsified were still
+standing, in `check-house-style-delta.py` and in ticked task T11.
 
 **Amendment round 1** (`spec-fidelity`, MODE 3 VERIFY - the mode this feature adds, used on itself):
 the counter reset to zero for a post-acceptance amendment, D8 (`scripts/fixtures/` exempt from the

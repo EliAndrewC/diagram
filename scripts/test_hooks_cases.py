@@ -138,6 +138,13 @@ HOUSE_STYLE = [
     # THE SESSION STATE DIRECTORY IS OUTSIDE THE PROJECT, as `/tmp` is: the auto-memory's own index
     # line format uses an em-dash, and the correction was rewriting that format as it was written.
     ("the auto-memory index", cmd("cat >> /home/agent/.claude/projects/-diagram/memory/MEMORY.md <<'EOF'\n- [A](b.md) — the hook\nEOF"), "ok"),
+    # ...and the exemption is decided by where the write LANDS. Judging every path the command
+    # MENTIONS got this wrong in both directions: the case above mentions `b.md` in its own body, and
+    # the case below mentions the memory file while writing a project file. The amendment review found
+    # the second (the whole command went silent); its first fix produced the first.
+    ("a memory read beside a project write", cmd("grep -c x /home/agent/.claude/projects/-diagram/memory/MEMORY.md; cat > docs/x.md <<'EOF'\nthe colour of it\nEOF"),
+     "rewritten:grep -c x /home/agent/.claude/projects/-diagram/memory/MEMORY.md; cat > docs/x.md <<'EOF'\nthe color of it\nEOF"),
+    ("a scratchpad write", cmd("cat > /tmp/claude-1000/x/notes.md <<'EOF'\nthe colour of it\nEOF"), "ok"),
     # ...and the two shapes that must stay quiet, or the guard fires on correct work
     ("searching for the word", cmd('git grep -n "centre" -- docs/'), "ok"),
     ("a code span NAMING the word", cmd("echo 'the token `colour` is British' >> docs/a.md"), "ok"),

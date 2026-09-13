@@ -57,15 +57,19 @@ _WITHDRAWN = re.compile(r"^\s*(?:[-*+]\s+)?WITHDRAWN:\s*(.+?)\s*$", re.M)
 # A VERBATIM RECORD IS NOT A CLAIM. `scripts/fixtures/` holds corpora of commands that really ran and
 # `dev/*-log/` the records of runs that really happened; a withdrawn figure inside one is history, not
 # an assertion still standing. Same ground as the house-style rules' own fixture exemption (spec D8).
-_RECORDS = re.compile(r"(^|/)(scripts/fixtures|dev/[\w-]*log)/")
+_RECORDS = re.compile(r"(^|/)(scripts/fixtures|dev/[\w-]*-log)/")
 
 def _def_id(m: re.Match[str]) -> str:
     """The id a `_DEF` match declares - `**FR-001**` and `**FR-001 Its title.**` alike."""
     return f"{m.group(1)}-{m.group(2)}"
 
 
-# What the withdrawn-figure scan reads: the kinds of file this project states a claim in.
-TEXT_SUFFIXES = {".md", ".html", ".py", ".sh", ".txt", ".toml", ".json", ".js", ".css", ".yml", ".yaml"}
+# What the withdrawn-figure scan does NOT read: a binary is judged by its bytes below, and these are
+# the extensions that are always binary here, so the scan opens nothing it cannot use. An
+# EXTENSIONLESS file is read - `Makefile` is where this project writes operative prose and figures,
+# and a suffix roster that quietly dropped it was the amendment review's finding.
+BINARY_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".pdf", ".gif", ".ico", ".woff", ".woff2",
+                   ".ttf", ".zip", ".gz", ".prof", ".pyc", ".svg"}
 
 FIGURE_SECTIONS = ("summary", "functional requirements", "success criteria", "decisions recorded")
 NARRATING_SECTIONS = ("decisions recorded", "review history")
@@ -121,7 +125,8 @@ def scanned_files(tree_root: pathlib.Path) -> list[pathlib.Path]:
         names = []
     paths = [tree_root / n for n in names if n] if names else [
         p for p in tree_root.rglob("*") if p.is_file() and ".clones" not in p.parts]
-    return [p for p in paths if p.suffix in TEXT_SUFFIXES and not _RECORDS.search(str(p)) and p.is_file()]
+    return [p for p in paths if p.suffix.lower() not in BINARY_SUFFIXES
+            and not _RECORDS.search(str(p)) and p.is_file()]
 
 
 def check_withdrawn(spec_dir: pathlib.Path, specs_root: pathlib.Path,
@@ -148,17 +153,26 @@ def check_withdrawn(spec_dir: pathlib.Path, specs_root: pathlib.Path,
             continue
         marked.append((text, str(research), n))
     files = [p for p in scanned_files(tree_root) if p != research] if marked else []
-    for text, where, n in marked:
-        for path in files:
+    # ONE read per file, every marker asked of it - the scan reads the whole tree now, and reading it
+    # again per marker made the cost of a second `WITHDRAWN:` line the cost of the first.
+    for path in files:
+        try:
             body = path.read_text(errors="replace")
-            spans = _exempt_spans(body)
+        except OSError:
+            continue
+        if "\x00" in body[:8192]:              # a binary the extension did not announce
+            continue
+        spans = None
+        for text, where, n in marked:
             for hit in re.finditer(re.escape(text), body):
+                if spans is None:
+                    spans = _exempt_spans(body)
                 if any(a <= hit.start() < b for a, b in spans):
-                    continue                 # narrated in Decisions recorded or Review history
+                    continue                   # narrated in Decisions recorded or Review history
                 line = body[:hit.start()].count("\n") + 1
                 bad.append(f"{path}:{line}: withdrawn text still standing here - {where}:{n} marks "
                            f"{text!r} as superseded")
-    return bad
+    return sorted(bad)
 
 
 def check_orphans(spec: pathlib.Path) -> list[str]:

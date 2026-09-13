@@ -259,34 +259,38 @@ verbatim record: correcting one would falsify it and break the measurement it re
 The GM ruled that the hook should correct a Bash payload and warn only on the sed shape (`request.md`,
 2026-09-13). A command is not an edit, so the ruling was priced before it was built:
 `measure_bash_corrections.py` replays every unique Bash command in the last fourteen days of
-transcripts - the session's own and its subagents' - through this hook, and the shapes below are what
-came back. The script is committed and re-runnable; `scripts/_hm_house.py` carries the rules it
-produced, each with a case in `scripts/test_hooks_cases.py`.
+transcripts - the session's own and its subagents' - through this hook. The script is committed and
+re-runnable; `scripts/_hm_house.py` carries the rules it produced, each with a case in
+`scripts/test_hooks_cases.py`.
 
-**The window.** 7,069 unique commands carried a British spelling or a forbidden dash somewhere in
-their text. The hook as first shipped warned on **348** of them; the other 6,721 were already quiet,
-almost all of them searches its segment-dropper recognized.
+**The prefilter writes its dashes by codepoint, and that is a finding rather than a detail.** Written
+literally, they were corrected to hyphens by this very hook as the file was saved, which made the
+prefilter match any command containing a spaced hyphen - an order of magnitude more commands, none of
+which it could act on. The word table is read out of the hook for the same reason.
 
-**What the shipped rules do with those 348:**
+**The window.** 545 unique commands carried a British spelling or a forbidden dash: 344 a spelling,
+201 a dash alone.
 
-| verdict | commands | what they are |
-|---|---|---|
-| corrected | 161 | prose the command writes - a heredoc into a test or a doc, a commit message, an `echo >>` |
-| reported, left as typed | 56 | the command is itself the fix |
-| silent | 88 | every hit is a word the command only NAMES |
-| silent | 21 | the write lands outside the project |
+| the hook's verdict | commands |
+|---|---|
+| corrected | 205 |
+| reported, left as typed | 55 |
+| silent - every hit is a word the command only NAMES, or the write lands outside the project | 285 |
 
-(The four rows sum to 326: 22 commands the first pass warned on are silent under two rules at once,
-and the replay counts each command once, under the first rule that reached it.)
-
-**The fix shape is not only `sed`.** Of the 60 commands the first pass classified as a fix, **5** were
-written with `sed`; the other 55 were the same replacement written another way - a Python
-`t.replace(old, new)`, a `_patch.py` anchor beside its replacement, a table of pairs. Correcting any
-of them replaces a word with itself and the fix silently does nothing, which is the GM's own reason
-for exempting `sed`. So the implemented rule is the sed shape PLUS any command carrying both
-spellings of one word (spec D9). Disclosed cost: `sed` used to READ (`sed -n '104p' CLAUDE.md`) is
-warned rather than corrected, because the rule is the command the GM named rather than a judgment
-about what that command does.
+**What is reported rather than corrected, and what the rule actually knows.** Of the 55: **9** carry a
+`sed` segment - the shape the GM named - and **44** carry both spellings of one word with no `sed` in
+sight; 2 are writes of the GM's own verbatim `request.md`, which is reported by a rule older than this
+amendment. The implemented predicate is therefore "the sed shape, or both spellings of one word" (spec
+D9), and it is worth being exact about what that predicate can and cannot see: **it recognizes the
+SHAPE of a replacement pair, not the intent.** An independent replay in the amendment review found
+that about half of the both-carrying commands are replacement pairs; the rest are quotations of source
+text, searches, and prose that names both spellings - including, occasionally, a real violation, which
+is then reported rather than corrected and still fails `make quick` if it reaches the delta. The
+hook's message says which rule fired rather than asserting the command is a fix. Two other disclosed
+costs: `sed` used to READ (`sed -n '104p' CLAUDE.md`) is reported, because the rule is the command the
+GM named rather than a judgment about what that command does; and a narrower predicate - both
+spellings within one statement - would keep every measured replacement pair, but it would miss a
+Python sweep whose `old` and `new` are separate multi-line strings, so the wider one is kept.
 
 **Three classes the first draft would have broken, each found by reading the replay rather than by
 reasoning about it.**
@@ -299,9 +303,16 @@ reasoning about it.**
   a dash inside a character class or a `$'...'` string. FR-007a's rule reaching the shapes it missed.
 - **The session state directory.** Writes to `~/.claude/projects/<project>/memory/` were being
   corrected, and that index's own line format carries an em-dash. Outside the project, as `/tmp`
-  already was (spec D10).
+  already was (spec D10) - and judged by the command's WRITE TARGETS: judged by every path a command
+  mentions, the exemption silenced the rule on a command that read the memory file and wrote a project
+  file in one breath, and the first fix for that silenced nothing but corrected the memory write
+  itself, because a heredoc writing the index names relative files in its own body.
 
-**The hook runs on every Bash command, so its own cost was measured.** The first walk was quadratic
-in held ranges and re-ran the whole word table over every gap between them: 2.2 s on a 14 KB heredoc,
-which is 2.2 s added to every command a session runs. Merging the ranges and skipping a gap with no
-word in it takes the walk to 0.022 s, and the whole hook - Python startup included - to 0.26 s.
+**What the hook costs, measured on the same 545 commands**: median **0.086 s**, p95 0.278 s, almost
+all of it Python startup. The range walk inside it was rewritten from a scan quadratic in held ranges
+to a linear one, and the honest figure for that rewrite is: **nothing measurable on real commands**
+(0.33 s against 0.31 s over the 60 longest commands the hook acts on) and 0.085 s against 0.035 s on
+a synthetic command built to be dense in held ranges. The rewrite is kept because it is the better
+algorithm and its selftest pins it, NOT as a measured saving; the 2.2 s per command that prompted it
+was replay throughput while the container was running several test suites at once, which is a
+measurement of the container rather than of the walk.

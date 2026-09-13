@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """A British spelling in what THIS change wrote - failed at `make quick` (feature 236, item 4).
 
-The hook corrects an Edit and warns on a Bash payload, and neither can see a write that arrives some
-other way: a merge, a scripted sweep, a subagent, an editor. So the delta is scanned as a `make quick`
+The hook corrects an Edit, and since the GM's ruling of 2026-09-13 a Bash payload too - warning only
+where the command is itself the fix (spec D2, D9). Neither reaches a write that arrives some other
+way: a merge, a scripted sweep, a subagent, an editor. So the delta is scanned as a `make quick`
 PHASE. Four properties, each of them a measurement or a ruling rather than a preference:
 
   THE DELTA, NOT THE TREE. 192 pre-existing lines in 83 files carry one of these words

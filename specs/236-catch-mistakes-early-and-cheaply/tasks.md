@@ -80,6 +80,8 @@ scan, and the Review history records which.
       widened in `.claude/settings.json`.
       research: rendering
       verify: DONE. house-style hook reads the Bash payload, warns at exit 0, drops search segments, keeps prose quotations and code spans out
+      SUPERSEDED by T27: the GM ruled on D2 and the payload is CORRECTED now, the warning kept for
+      the command that is itself the fix.
 - [x] T12 `scripts/check-house-style-delta.py`: scan the DELTA against the merge base plus every
       UNTRACKED file, reading the hook's own `BRIT` table so hook, check and ledger cannot disagree;
       word-bounded and case-insensitive as the hook matches; `--selftest` first (FR-008).

@@ -102,11 +102,13 @@ def test_check_2_reaches_the_whole_tree(tmp_path: pathlib.Path) -> None:
     d = _feature(tmp_path, research="WITHDRAWN: the 22 ft clearance\n")
     (tmp_path / "specs" / "998-elsewhere").mkdir(parents=True)
     (tmp_path / "specs" / "998-elsewhere" / "spec.md").write_text("## Summary\n\nthe 22 ft clearance\n")
-    for name, body in (("docs/outside.md", "the 22 ft clearance\n"), ("CLAUDE.md", "a rule resting on the 22 ft clearance\n"), ("scripts/tool.py", '"""Keeps the 22 ft clearance."""\n')):
+    # the last is EXTENSIONLESS: a Makefile is where this project writes operative prose and figures,
+    # and a suffix roster quietly dropped it (the amendment review's finding)
+    for name, body in (("docs/outside.md", "the 22 ft clearance\n"), ("CLAUDE.md", "a rule resting on the 22 ft clearance\n"), ("scripts/tool.py", '"""Keeps the 22 ft clearance."""\n'), ("Makefile", '\t: "the 22 ft clearance"\n')):
         (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
         (tmp_path / name).write_text(body)
     got = lint.lint(d, tree_root=tmp_path)
-    for where in ("998-elsewhere", "outside.md", "CLAUDE.md", "tool.py"):
+    for where in ("998-elsewhere", "outside.md", "CLAUDE.md", "tool.py", "Makefile"):
         assert any(where in x for x in got), f"{where} carries withdrawn text and is not named: {got}"
 
 

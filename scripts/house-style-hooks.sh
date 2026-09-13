@@ -49,6 +49,10 @@ try:
     from _hm_escape import drop_search_segments
 except Exception:                      # a guard never takes the session down with it
     drop_search_segments = lambda s: s
+try:                                   # GUARD_EDIT_OK: feature 236 amendment 2 - what a command
+    from _hm_house import write_targets   # WRITES decides the outside-the-project exemption
+except Exception:
+    write_targets = lambda s: []
 try:
     d = json.load(sys.stdin)
 except Exception:
@@ -93,7 +97,16 @@ if "/host-l7r-repo" in path or path.endswith("l7r.md") or "gm-request.md" in pat
 # same way `/tmp` is. `~/.claude/projects/<proj>/memory/` is the auto-memory, whose index line format
 # is Claude Code own and uses an em-dash; the correction was rewriting that format as the index was
 # written. Measured on the real commands this hook would have rewritten (`research.md` R10).
-if path.startswith("/tmp/") or "/.claude/projects/" in path:
+# GUARD_EDIT_OK: feature 236 amendment 2, fixing a guard that went SILENT on work it governs - the
+# exemption is decided by where the write LANDS, never by one path the command mentions. A Bash
+# payload names several at once, and testing the joined list silenced the rule on a command that read
+# the memory file and wrote a project file in the same breath (found by the amendment review).
+def _outside(one):
+    return one.startswith("/tmp/") or "/.claude/projects/" in one
+# GUARD_EDIT_OK: what the command WRITES decides it; the paths it merely MENTIONS are the fallback,
+# for a write that travels by no redirect at all (a `python3 -` heredoc calling write_text).
+_judged = (write_targets(inp.get("command", "") or "") if is_bash else []) or [p for p in path.split() if p]
+if _judged and all(_outside(p) for p in _judged):
     print(""); raise SystemExit
 # GUARD_EDIT_OK: feature 236 - A FIXTURE IS A VERBATIM RECORD. `scripts/fixtures/` holds corpora of
 # commands that really ran (the guard-refusal replays, and 236 own 238-command parse corpus); several
@@ -258,10 +271,15 @@ if is_bash:
         # never a guess. A command left as typed because it is the fix and one left as typed because
         # it writes the GM own words are different facts, and a session told the wrong one will look
         # for a sed expression that is not there.
+        # GUARD_EDIT_OK: feature 236 amendment 2 - the message says what the RULE saw, not what the
+        # command is. "Both spellings in one command" is the shape a replacement pair takes, and it is
+        # also what a quotation, a search and a sentence naming both look like; telling a session its
+        # command "is a spelling fix" when it is a quotation is the guard asserting what it cannot see.
         why = ("this file records the GM speaking, and their words are reported, never corrected "
                "(Principle V)" if GM_VERBATIM else
-               "this command is itself a spelling fix - the sed shape, or both spellings in one "
-               "command - and correcting it would replace a word with itself")
+               "this command carries BOTH spellings of a word (or is the sed shape), which is how a "
+               "replacement pair looks - correcting it could replace a word with itself and make the "
+               "fix silently do nothing. If it is not a fix, the word is yours to correct")
         print(json.dumps({"hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "additionalContext": (

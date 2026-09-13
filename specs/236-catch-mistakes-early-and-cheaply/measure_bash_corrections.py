@@ -26,9 +26,12 @@ import time
 HOOK = pathlib.Path(__file__).resolve().parents[2] / "scripts" / "house-style-hooks.sh"
 # The word list is READ from the hook, never typed here: the hook corrects a file as it is written, and
 # the first draft of this script had its own table turned American on the way in - which is exactly
-# the hazard this measurement prices. The dashes are written by codepoint for the same reason.
+# the hazard this measurement prices. The dashes are `chr()` calls below for the same reason - the
+# first draft wrote them literally and the hook flattened them to hyphens, which made the prefilter
+# match any command containing a spaced hyphen and inflated the window it reported.
 BRIT = re.findall(r'"(\w+)"', re.search(r"BRIT = \((.*?)\)\n", HOOK.read_text(), re.S).group(1))
-WORD = re.compile(r"\b(" + "|".join(BRIT) + r")\b| - | - ", re.I)
+_DASHES = chr(0x2014) + chr(0x2013)   # written by chr(): a literal one here is corrected on the way in,
+WORD = re.compile(r"\b(" + "|".join(BRIT) + r")\b|[" + _DASHES + "]", re.I)   # which is what it did
 
 
 def commands(days: float):
