@@ -73,8 +73,32 @@ can arrive by: `-m`, `-F -`, `-F <file>` and `--trailer`. A message carrying oth
 
 ### C. House style where the writes actually go (item 4)
 
-**FR-007** A Bash command whose payload carries a British spelling or a forbidden dash MUST raise
-`additionalContext` naming the words, at exit 0. It MUST NOT rewrite the command (D2).
+**FR-007** A Bash command whose payload carries a British spelling or a forbidden dash MUST be
+CORRECTED - `updatedInput` carrying the corrected command, with an `additionalContext` naming what
+changed - EXCEPT where the command is itself a spelling fix, which is REPORTED at exit 0 and left
+exactly as typed (the GM 2026-09-12, ruling on D2: *"we should warn when it is the sed shape, and for
+other shapes just correct it"*). A fix is the sed shape the GM named - a segment whose command is
+`sed`, however it is reached (`xargs sed`, `find -exec sed`) - and a command carrying BOTH spellings
+of the same word, which is that shape written in another language (D9).
+
+**FR-007b** The correction MUST leave untouched what a command only NAMES rather than writes, and the
+classes are those measured on the real commands this hook had warned on (`research.md` R10): a
+searcher's segment wherever it stands (a leading `!`, a `$(...)`, a pipeline), a regex alternation, a
+character class or `$'...'` holding a dash, a string whose whole content is one word, and a path
+token. This is FR-007a's rule reaching the shapes it missed, not a new exemption: what a command looks
+for is not what it writes, and correcting it breaks the command instead of the text.
+
+**FR-007c** A path outside the project carries no house-style duty: `/tmp`, already exempt, and the
+session state directory `~/.claude/projects/`, whose auto-memory index format is Claude Code's own and
+uses an em-dash (D10). The exemption MUST be decided by where the write LANDS, and the write targets
+MUST be read by the walk the main-tree guard already uses (`_hm_tree.walk`) rather than by a second
+one: variables assigned in the same command are expanded, heredoc BODIES are not scanned for
+redirects, and `git commit` writes to the repository rather than to a file. A destination the walk
+cannot resolve - a relative path with no cwd, a target behind a variable assigned elsewhere - is NEVER
+outside. Where the command resolves NO write target at all, the fallback is every path it names; where
+it resolves one, a path merely MENTIONED decides nothing, because reading the memory file while
+writing a project file names one of each. A program heredoc that could write anywhere does not
+disqualify a command whose resolvable targets are all outside (D11).
 
 **FR-007a** "Outside a quoted span" means the house-style sense - a prose quotation (`「」`, curly or
 straight quotes, `<q>`, `<blockquote>`) or a backtick span naming a token - and NOT shell quoting: under a
@@ -134,8 +158,19 @@ milestone push.
 **FR-010b** This spec MUST itself pass checks 1 and 3. A rule its author's own document fails is either
 wrong or the document is.
 
-**FR-010c** Check 2 reaches only `specs/`. Feature 234's withdrawn measurement survived in five places
-outside it (`research.md` R5); that limit is recorded in D5 rather than solved here.
+**FR-010c** Check 2 MUST scan the WHOLE TREE (the GM 2026-09-12: *"You should do the tree wide scan
+instead of leaving this half done"*) - every tracked file and every untracked file git would keep, by
+suffix - because all five of feature 234's survivals were outside `specs/` (`research.md` R5): two
+skill `CLAUDE.md` files, the root guard table, a script docstring and a research page. A VERBATIM
+RECORD is not a claim and is not scanned: `scripts/fixtures/` and `dev/*-log/` (D5). The narrating
+exemption applies wherever a Decisions recorded or Review history section stands. The scan MUST read a
+file whatever its extension - a `Makefile` states rules and figures here - and skip only what is
+binary: the always-binary extensions, the generated `.svg` renders, and any file whose first bytes
+carry a NUL.
+
+**FR-010d** The `WITHDRAWN:` marker MUST open a line, a list bullet aside. Unanchored, the sentence
+that DESCRIBES the marker declares one, which cost little while the scan read one directory and would
+ban a phrase tree-wide now.
 
 **FR-011** `spec-lint` MUST run in the gate and at push beside `check-file-scale.py`, over every `specs/`
 directory the delta touches, with a `--selftest` first as its siblings have.
@@ -174,16 +209,27 @@ is untouched.
 **SC-005** (FR-006) A message carrying both `Co-Authored-By:` with the expected address and a
 `Claude-Session:` line passes; a `co-authored-by:` key with another address is refused; another address
 supplied through `--trailer` is refused; so is one in a file given to `-F`.
-**SC-006** (FR-007, FR-007a) A heredoc writing `centre` warns naming it; the word inside a prose quotation
-or a backtick span does not; `git grep -n "centre"` does not.
+**SC-006** (FR-007, FR-007a, FR-007b, FR-007c) A heredoc writing `centre` is CORRECTED to `center` and
+an `echo >>` with it likewise; `sed -i 's/centre/center/g'`, a Python replacement pair and any command
+carrying both spellings are reported and left exactly as typed; a sweep's own word list, a regex
+alternation, a path token, a negated search, a prose quotation, a backtick span and
+`git grep -n "centre"` are untouched. A write to the auto-memory index under `~/.claude/projects/` is
+untouched IN THE SHAPES THE RECORD USES - the path literal, the path behind a variable assigned in the
+same command, a directory behind such a variable - and so is a `/tmp` heredoc whose body carries a
+line beginning `>`, and so is each of those when a program heredoc stands in the same command (D11);
+while a command that writes project content by a route the walk RESOLVES is corrected even when a
+redirect goes outside: reading the memory file and writing a project file in one breath, and a commit
+message beside a `> /tmp/gate.log`.
 **SC-007** (FR-008, FR-008a, FR-008b, FR-008c) The phase fails on a British spelling in a changed line and
 in an untracked file; does not fail on one inside a multi-line `<blockquote>` whose opening tag is not in
 the delta; does not fail on a line merely moved; does not fail on the 192 ledgered lines; and runs on a
 delta that changes no Python.
-**SC-008** (FR-010, FR-010a, FR-010c, FR-011) Each of the four checks fails on a constructed fixture; a
-withdrawn figure narrated in Decisions recorded does not fail check 2, and one standing in a file outside
-`specs/` is not reached by it; a freshly claimed spec with no `tasks.md`
-passes; the lint runs at gate and push over the touched `specs/` directories.
+**SC-008** (FR-010, FR-010a, FR-010c, FR-010d, FR-011) Each of the four checks fails on a constructed
+fixture; a withdrawn figure narrated in Decisions recorded does not fail check 2, while one standing in
+a sibling spec, a `docs/*.md`, a `CLAUDE.md` and a script docstring each IS named; one inside
+`scripts/fixtures/` or `dev/*-log/` is not; a `WITHDRAWN:` that does not open a line declares no
+marker; a freshly claimed spec with no `tasks.md` passes; the lint runs at gate and push over the
+touched `specs/` directories.
 **SC-009** (FR-010b) This spec passes checks 1 and 3.
 **SC-010** (FR-012, FR-013, FR-014) The agent file documents VERIFY mode, and a review task generated from
 the template for any round after the first names the changed passages and asks for a full reading of
@@ -200,12 +246,15 @@ Edit-versus-Bash tension.
 recommended for skipping, so the GM's "all 6" does not cover it. Mid-task commits on red are protected
 here, so a guard would fire on correct work.
 
-**D2 - the house-style hook WARNS where item 4 said it would correct - a departure, flagged for the GM.**
-The session told the GM the hook *corrects*. It does not, for a concrete reason rather than a general
-cost: a Bash payload is often itself a spelling fix - `sed -i 's/centre/center/g'` - and correcting the
-payload would turn that fix into a no-op. The enforcement item 4 asked for is kept in full by the
-`make quick` phase, which fails; only the hook's half teaches instead of correcting. Raised with the GM
-once the work runs, not decided silently.
+**D2 - the hook CORRECTS a Bash payload, and warns only where the command is itself the fix.** The
+departure the first version flagged went back to the GM, who ruled (2026-09-12): *"I think that we
+could exempt that sed shape and otherwise correct in the hook rather than warning. So, basically, we
+should warn when it is the sed shape, and for other shapes just correct it."* So the hook corrects, and
+the sed shape is reported and left as typed. What that ruling COSTS was measured before it was built
+rather than assumed (`research.md` R10, FR-007b): a command is not an edit, and correcting a word the
+command only NAMES breaks a command that was right - a search would look for the other spelling, a
+sweep's word list would stop matching the violations it exists to find, a file name would stop naming
+a file. Those classes are held out and the rest is corrected.
 
 **D3 - `bash -n` refuses, parsing with the tool's options.** An earlier draft claimed that a command which
 cannot parse cannot do correct work. That is false for plain `bash -n`, which refuses an extglob pattern
@@ -218,12 +267,17 @@ preserves the wrong message exactly. An earlier draft also claimed the motivatin
 cleanly"; it was in fact caught by `bash -n` - by the accident of a later `(` (`research.md` R2 row 3) -
 which is exactly why the ban stands on its own rather than on that parse.
 
-**D5 - the withdrawn-figure check is kept, scoped to `specs/`, with its limit recorded.** An earlier draft
-dropped it, and the review of this spec ruled that a narrowing no one approved: item 5 names the check,
-and the spec directory has real cases - R1 counts "a superseded paragraph still standing" among the
-findings. What it cannot reach is text outside `specs/`, where feature 234's five survivals were
-(`research.md` R5). Reaching that means a tree-wide scan, a different mechanism than the `spec-lint`
-approved.
+**D5 - the withdrawn-figure check scans the WHOLE TREE.** An earlier draft dropped the check, and the
+review of this spec ruled that a narrowing no one approved; the version that shipped kept it but
+reached only `specs/`, and recorded that limit rather than solving it - with all five of feature 234's
+survivals sitting outside `specs/` (`research.md` R5), which is to say the check could not have caught
+the case that motivated it. The GM ruled on the recorded limit (2026-09-12): *"You should do the tree
+wide scan instead of leaving this half done."* The scan reads every tracked and every kept untracked
+text file; the ONE class held out is a VERBATIM RECORD - `scripts/fixtures/` and `dev/*-log/` - on the
+same ground as D8: a corpus of commands that really ran and a log of runs that really happened are
+history, not a claim still standing, and a scan that failed on them would ask a session to falsify the
+record. The alternative priced and rejected: exempting nothing, which makes every frozen corpus a
+blocker the moment a marker names a phrase it happens to carry.
 
 **D6 - an executing backtick is REFUSED.** An earlier draft only warned, on the reason that a backtick in
 double quotes is sometimes deliberate command substitution. That reason was never measured, and the
@@ -244,6 +298,46 @@ quotation keeps its own characters. The alternative priced and rejected: encodin
 corpus, which would make the replay no longer a replay. This is an addition to the exemption set
 FR-008a inherits from the hook, made after the spec was accepted and recorded here for the GM.
 
+**D9 - "the sed shape" is read as THE FIX, so a replacement pair in any language is warned too.** The
+GM named `sed`. A Python sweep's `t.replace("the centre of", "the center of")`, an `_patch.py` anchor
+and its replacement, and an `awk` substitution are the same command doing the same thing, and the
+GM's own reason - a correction would replace a word with itself and the fix would do nothing - applies
+to each without modification. The rule implemented is therefore: the sed shape, plus any command
+carrying BOTH spellings of one word. Measured: of the 53 commands the shipped rule reports, 9 carry a
+`sed` segment and 42 carry both spellings with no `sed` anywhere (`research.md` R10), so the literal
+reading would hand those 42 to the corrector - about half of them replacement pairs whose fix would
+silently become a no-op. The predicate knows the SHAPE, not the intent: the other half are quotations,
+searches and prose naming both spellings, which are reported rather than corrected, and a real
+violation among them still fails `make quick` in the delta. This is a widening of what the GM said,
+decided after acceptance, and it went to `spec-fidelity` as an exception before it was kept
+(LEGITIMATE, amendment round 1).
+
+**D10 - the session state directory is outside the project, as `/tmp` already was.** The hook's
+existing exemption says a file outside the project is not project content, and names `/tmp` because
+that was the instance in front of it. `~/.claude/projects/<project>/memory/` is outside the project in
+exactly the same sense, and its index line format - `- [Title](file.md) — hook` - is Claude Code's own
+and carries an em-dash, so correcting a memory write rewrote the format of the file as it was written
+(`research.md` R10 found it in the replay). Also decided after acceptance and put to the reviewer.
+Its WIDTH is the part that needed fixing: judged by every path the command mentioned, the exemption
+silenced the rule on a command that read the memory file and wrote a project file in one breath -
+found by the amendment review, and now decided by the write targets (FR-007c).
+
+**D11 - a program heredoc does not disqualify a command whose resolvable write targets are all outside
+the project, and the cost of that is named.** `python3 - <<'PY'` can write anywhere, so an earlier
+draft appended an unknowable destination for every such command and acted on it. Measured by replaying
+that draft (the hook at `31ef2907^`) against the shipped one over the window: **21** commands whose
+every resolvable target was outside the project are silent now and were not - 15 of them corrected and
+6 reported - and **7** of the 21 write the auto-memory index, whose em-dash is Claude Code's own
+format (`research.md` R10). **The two mistakes are not
+equal.** A correction that should not have happened silently rewrites someone else's text, and this
+project has paid for that twice - the reader agents whose verbatim page text was Americanized in
+2026-09-06, and the memory format here. A correction that did NOT happen leaves a British spelling in
+the tree, where `make quick` fails on it in the delta - which is the half of item 4 that enforces, and
+the reason the hook half can afford to be cautious. So the exemption follows the resolvable targets.
+What it costs, stated rather than implied: a project write inside a command whose only resolvable
+targets are outside is not corrected by the hook. The alternative priced and rejected is the draft
+that produced the 21.
+
 ## Out of scope
 
 - The research record and the agents that read it; the GM ruled it valuable as it stands.
@@ -252,6 +346,90 @@ FR-008a inherits from the hook, made after the spec was accepted and recorded he
   impossible, never by asking the reviewer for less.
 
 ## Review history
+
+**Amendment 2, LANDED by the GM's ruling** (2026-09-13). The escalation the cap requires was put to
+the GM with what each round found, and they ruled: *"My call is that you should go ahead and land
+it."* Both of round 5's items were applied before the escalation, so what landed is the reviewed text.
+
+**Amendment 2, round 5** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, two items, both
+one-line restatements of stale text, both applied - the superseded figure standing in a fourth place
+(D11's closing sentence), and `git commit` listed among the writes that yield an unresolvable target
+when the walk in fact resolves it to the repository, as FR-007c and the case table both say. The round
+confirmed every figure in the changed passages against its own replay, reproducing D11's 21 and 7, the
+27/8 upper bound and the 42 both-spellings to the command, and it re-confirmed that the counter's
+fifth round is reached. **This is where the five-round cap applies and the matter goes to the GM.**
+What it is NOT is the persistent misunderstanding the cap exists to end: the ruling is judged
+LEGITIMATE, its measurement is independently reproduced, the enforcing half of item 4 is untouched,
+and both remaining items were stale sentences rather than a disagreement about what was asked. The
+work stays in the clone until the GM rules.
+
+**Amendment 2, round 4** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, three items, all
+taken, none of them a change to what the hook DOES - a stale count, a figure that did not reproduce,
+and a docstring describing a deleted rule. D11 was judged LEGITIMATE, on the test that matters: the
+outside-the-project exemption pre-dates this feature, D11 only decides which side the unresolvable
+case falls on, and the enforcing half of item 4 - the `make quick` delta phase - is untouched. The
+figure that did not reproduce is the one carrying D11's whole justification, and it is the second
+time this amendment has stated a number measured by the hook's own target list rather than plainly:
+re-measured here by replaying the pre-D11 hook (`31ef2907^`) against the shipped one over the window,
+**21** commands change (15 corrected, 6 reported, now silent) and **7** of them write the auto-memory
+index. The reviewer's independent run and this session's agree to the command. D9 was restated from
+the consolidated run (53 reported, 9 sed, 42 both spellings), and `_hm_house.write_targets`'s docstring
+no longer explains the rule D11 replaced - a reader repairing the "bug" it described would have undone
+D11.
+
+**Amendment 2, round 3** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, five items, all
+taken, and the round confirmed round 2's split and verdict figures against its own replay. Three were
+mine to have got wrong. (1) The guard could be switched off entirely: the ImportError stub still took
+one argument while the call site passed two, so an unimportable `_hm_house` raised a TypeError - and
+the wrapper turns a crash into silence - for EVERY command rather than for one exemption. The stub
+takes the arguments the call site passes now, and a case drives the hook with `_hm_house` broken on
+purpose. (2) R10's "none of them is wrong in either direction" was true only when judged by the hook's
+own target list, which is the circularity R10's own closing sentence warns about: judged plainly, this
+round measured 19 commands whose every resolvable target was outside the project being corrected, 4 of
+them the auto-memory index. That is D11; round 4 re-measured those two figures as 21 and 7, which is
+what R10 and D11 carry. (3) FR-007c had dropped the
+mention-fallback clause while the hook still carried the fallback, which decides 10 commands in the
+window - the clause is back, because the spec and the code must say the same thing. Also taken: SC-006
+now says the memory shapes hold when a program heredoc stands in the same command, and round 1's dash
+figure is marked as its own run.
+
+**Amendment 2, round 2** (`spec-fidelity`, MODE 3 VERIFY): **CHANGES REQUIRED**, three items, all
+taken; four of round 1's seven confirmed resolved against re-run measurements (the reviewer's own
+replay reproduced R10's window, its dash count exactly, and the withdrawn 2.2 s), and the reviewer
+found round 1's fix for the exemption had introduced a worse defect than the one it fixed. Reading
+write targets out of the raw command text got four shapes of the record wrong at once, measured over
+the whole window: 7 writes outside the project newly CORRECTED - including the auto-memory in this
+project's own `M=<path>; cat >> $M` form, and a scratchpad heredoc whose body carries a line opening
+`>` - and 4 project writes newly SILENCED, where a `write_text` into the pool or a commit message sat
+beside a `> /tmp/....log` redirect. The fix is to stop deriving a second walk: `_hm_tree.walk` already
+expands a command's own variable assignments, strips heredoc bodies and knows `git commit` writes to
+the repository, and a destination it cannot resolve is never outside. Re-measured the way the reviewer
+set it: 47 verdicts change against the pre-fix hook and none is wrong in either direction. The other
+two items: SC-006 named the literal path where the record uses four shapes, and each is a case now;
+and the split of the reported commands was restated from the shipped hook (9 with a sed segment, 48
+both spellings alone, 2 the GM's `request.md`). One more defect fell out of the work rather than the
+review: `_outside(None)` raised, and the wrapper turns a crash into SILENCE, so the guard was off for
+every command whose target could not be resolved - the suite caught it, and the rule it violated was
+one this amendment had already written down.
+
+**Amendment 2, round 1** (`spec-fidelity`, MODE 3 VERIFY; the counter reset to zero for a
+post-acceptance amendment): **CHANGES REQUIRED**, seven items, all taken, and both exceptions judged
+**LEGITIMATE** - D9 because the GM's own stated reason applies unmodified to a replacement pair
+written in any language, D10 because it instances an exemption the hook already carries. The
+consequential items, each of which the reviewer MEASURED rather than inferred: (1) the replay's
+prefilter had its dashes flattened to hyphens by this very hook as the script was written, so R10's
+window counted commands carrying a spaced hyphen - re-run, and the figures restated from it; (2) the
+dash half of the ruling had therefore never been priced, and now is (201 of 545 on this round's own
+run; R10 carries the final figures); (3) R10's "2.2 s"
+did not reproduce - re-measured, the walk rewrite buys nothing on real commands and the 2.2 s was
+container contention, which R10 now says; (4) R10 and D9 called the warned class "fixes" when the
+predicate only sees both spellings, and the hook's own message asserted the same thing to the session
+- both restated, and the message now names the rule that fired; (5) D10's exemption was judged by
+every path a command MENTIONS, which silenced the whole rule on a command that read the memory file
+and wrote a project file in one breath - it reads the write targets now (FR-007c); (6) the tree-wide
+scan was narrowed by an unstated suffix roster that dropped every `Makefile` - it reads any
+non-binary file now, extensionless included; (7) two statements the amendment falsified were still
+standing, in `check-house-style-delta.py` and in ticked task T11.
 
 **Amendment round 1** (`spec-fidelity`, MODE 3 VERIFY - the mode this feature adds, used on itself):
 the counter reset to zero for a post-acceptance amendment, D8 (`scripts/fixtures/` exempt from the

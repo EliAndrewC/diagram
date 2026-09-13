@@ -11,12 +11,13 @@ finding those is a reviewer not spending the round on what only a reader can jud
        Success criteria or Decisions recorded that states a number with a UNIT must also point at the
        research - `R<k>` or `research.md`. A count with no unit ("20 rounds", "FR-001") is not a
        measurement and is not asked for one. Review history and Out of scope narrate, and are exempt.
-    2. A WITHDRAWN FIGURE STILL STANDING. `research.md` may mark superseded text `WITHDRAWN: <text>`;
-       that text may not then appear anywhere under `specs/` except in a Decisions recorded or Review
-       history section, which exist to narrate a reversal. The marked text must be at least twelve
-       characters and contain a letter, so a bare number can never be banned. What this CANNOT reach
-       is the rest of the tree, where feature 234's own withdrawn measurement survived in five places
-       (spec D5, `research.md` R5): reaching that is a different mechanism.
+    2. A WITHDRAWN FIGURE STILL STANDING. A `research.md` may mark superseded text with a line opening
+       `WITHDRAWN: <text>`; that text may not then appear ANYWHERE IN THE TREE except in a Decisions
+       recorded or Review history section, which exist to narrate a reversal, or in a verbatim record
+       (`scripts/fixtures/`, `dev/*-log/`), which is history rather than a claim. The marked text must
+       be at least twelve characters and contain a letter, so a bare number can never be banned. The
+       reach was `specs/` alone at first and every one of the five survivals that motivated the check
+       was outside it (spec D5, `research.md` R5).
     3. AN ORPHANED REQUIREMENT. Every `FR-` must be named by at least one success criterion, and every
        `SC-` must name an FR or declare itself `(spec-wide)`. An id is three digits and an optional
        lower-case letter, so `FR-007a` is its own id and not a mention of `FR-007`.
@@ -48,12 +49,27 @@ _ID = re.compile(r"\b(FR|SC)-(\d{3}[a-z]?)\b")
 # span may wrap a line, and the declaration may be a list item - all three shapes are in the record.
 _DEF = re.compile(r"^(?:[-*+]\s+)?\*\*(FR|SC)-(\d{3}[a-z]?)(?=\*\*|[ .:])[^*]*\*\*", re.M)
 _HEADING = re.compile(r"^##+\s+(.*?)\s*$", re.M)
-_WITHDRAWN = re.compile(r"WITHDRAWN:\s*(.+?)\s*$", re.M)
+# The marker OPENS a line (a list bullet may stand in front of it). Unanchored, the sentence that
+# DESCRIBES the marker - "a research.md may mark superseded text `WITHDRAWN: <text>`" - declared one,
+# which mattered little while the scan reached one directory and matters a great deal now that it
+# reaches the tree.
+_WITHDRAWN = re.compile(r"^\s*(?:[-*+]\s+)?WITHDRAWN:\s*(.+?)\s*$", re.M)
+# A VERBATIM RECORD IS NOT A CLAIM. `scripts/fixtures/` holds corpora of commands that really ran and
+# `dev/*-log/` the records of runs that really happened; a withdrawn figure inside one is history, not
+# an assertion still standing. Same ground as the house-style rules' own fixture exemption (spec D8).
+_RECORDS = re.compile(r"(^|/)(scripts/fixtures|dev/[\w-]*-log)/")
 
 def _def_id(m: re.Match[str]) -> str:
     """The id a `_DEF` match declares - `**FR-001**` and `**FR-001 Its title.**` alike."""
     return f"{m.group(1)}-{m.group(2)}"
 
+
+# What the withdrawn-figure scan does NOT read: a binary is judged by its bytes below, and these are
+# the extensions that are always binary here, so the scan opens nothing it cannot use. An
+# EXTENSIONLESS file is read - `Makefile` is where this project writes operative prose and figures,
+# and a suffix roster that quietly dropped it was the amendment review's finding.
+BINARY_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".pdf", ".gif", ".ico", ".woff", ".woff2",
+                   ".ttf", ".zip", ".gz", ".prof", ".pyc", ".svg"}
 
 FIGURE_SECTIONS = ("summary", "functional requirements", "success criteria", "decisions recorded")
 NARRATING_SECTIONS = ("decisions recorded", "review history")
@@ -117,11 +133,39 @@ def _exempt_spans(text: str) -> list[tuple[int, int]]:
     return spans
 
 
-def check_withdrawn(spec_dir: pathlib.Path, specs_root: pathlib.Path) -> list[str]:
-    """Check 2 - text this feature withdrew, still standing somewhere under `specs/`."""
+def scanned_files(tree_root: pathlib.Path) -> list[pathlib.Path]:
+    """Every text file in the tree a withdrawn figure could be standing in.
+
+    `git ls-files` plus the untracked files git would keep, so the scan sees a file written this
+    session and never descends into `.clones/` or a build artifact. Off a git tree - a test fixture -
+    it walks instead, which is the same set for a directory that has no ignores.
+    """
+    try:
+        out = subprocess.run(["git", "-C", str(tree_root), "ls-files", "--cached", "--others",
+                              "--exclude-standard"], capture_output=True, text=True, timeout=60)
+        names = out.stdout.split("\n") if out.returncode == 0 else []
+    except Exception:
+        names = []
+    paths = [tree_root / n for n in names if n] if names else [
+        p for p in tree_root.rglob("*") if p.is_file() and ".clones" not in p.parts]
+    return [p for p in paths if p.suffix.lower() not in BINARY_SUFFIXES
+            and not _RECORDS.search(str(p)) and p.is_file()]
+
+
+def check_withdrawn(spec_dir: pathlib.Path, specs_root: pathlib.Path,
+                    tree_root: pathlib.Path | None = None) -> list[str]:
+    """Check 2 - text this feature withdrew, still standing anywhere in the tree.
+
+    The reach is the WHOLE tree since feature 236's amendment (the GM 2026-09-12: *"You should do the
+    tree wide scan instead of leaving this half done"*). It was `specs/` alone at first, and the limit
+    was recorded rather than solved - while all five of the survivals that motivated the check were
+    outside `specs/`: two skill `CLAUDE.md` files, the root guard table, a script docstring and a
+    research page (spec D5, `research.md` R5).
+    """
     research = spec_dir / "research.md"
     if not research.is_file():
         return []
+    tree_root = tree_root or specs_root.parent
     bad, marked = [], []
     for m in _WITHDRAWN.finditer(research.read_text()):
         text = m.group(1).strip().strip("`\"'")
@@ -131,19 +175,27 @@ def check_withdrawn(spec_dir: pathlib.Path, specs_root: pathlib.Path) -> list[st
                        f"{text!r} would ban a bare figure from the whole record")
             continue
         marked.append((text, str(research), n))
-    for text, where, n in marked:
-        for path in sorted(specs_root.rglob("*.md")):
-            if path == research:
-                continue
+    files = [p for p in scanned_files(tree_root) if p != research] if marked else []
+    # ONE read per file, every marker asked of it - the scan reads the whole tree now, and reading it
+    # again per marker made the cost of a second `WITHDRAWN:` line the cost of the first.
+    for path in files:
+        try:
             body = path.read_text(errors="replace")
-            spans = _exempt_spans(body)
+        except OSError:
+            continue
+        if "\x00" in body[:8192]:              # a binary the extension did not announce
+            continue
+        spans = None
+        for text, where, n in marked:
             for hit in re.finditer(re.escape(text), body):
+                if spans is None:
+                    spans = _exempt_spans(body)
                 if any(a <= hit.start() < b for a, b in spans):
-                    continue                 # narrated in Decisions recorded or Review history
+                    continue                   # narrated in Decisions recorded or Review history
                 line = body[:hit.start()].count("\n") + 1
                 bad.append(f"{path}:{line}: withdrawn text still standing here - {where}:{n} marks "
                            f"{text!r} as superseded")
-    return bad
+    return sorted(bad)
 
 
 def check_orphans(spec: pathlib.Path) -> list[str]:
@@ -180,15 +232,20 @@ def check_stale_tasks(spec: pathlib.Path, tasks: pathlib.Path) -> list[str]:
     return bad
 
 
-def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None) -> list[str]:
-    """Every complaint about one `specs/NNN-*/` directory."""
+def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
+         tree_root: pathlib.Path | None = None) -> list[str]:
+    """Every complaint about one `specs/NNN-*/` directory.
+
+    `tree_root` is what check 2 scans - the repository, not the spec directory - and defaults to the
+    parent of `specs/`.
+    """
     spec_dir = pathlib.Path(spec_dir)
     specs_root = specs_root or spec_dir.parent
     spec = spec_dir / "spec.md"
     if not spec.is_file():
         return []
     tasks = spec_dir / "tasks.md"
-    bad = check_withdrawn(spec_dir, specs_root)      # check 2 needs no tasks.md
+    bad = check_withdrawn(spec_dir, specs_root, tree_root)   # check 2 needs no tasks.md
     if tasks.is_file():
         bad += check_figures(spec) + check_orphans(spec) + check_stale_tasks(spec, tasks)
     return bad
@@ -296,7 +353,7 @@ def main(argv: list[str]) -> int:
         return 0
     bad: list[str] = []
     for d in dirs:
-        bad += lint(d)
+        bad += lint(d, tree_root=pathlib.Path(dirs[0]).resolve().parents[1])
     if not bad:
         return 0
     print("\n".join(bad))
