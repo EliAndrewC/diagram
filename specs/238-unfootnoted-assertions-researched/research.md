@@ -753,10 +753,17 @@ searcher rules already covered a pattern reaching a regex through `grep` or `sed
 a pattern reaching one through an INTERPRETER, because an interpreter's heredoc is prose by default.
 
 **What it cost, measured rather than asserted.** `make hookbench GUARD=house-style AGAINST=origin/main`
-replays the frozen 560-command window: **one** verdict moves, corrected to silent. That one is the
-argument for the fix rather than a cost of it - a peer session's command building
+replays the frozen 560-command window: **one** verdict moves, corrected to silent. That one is the argument for the fix rather than a cost of it - a command building
 `re.compile(r'\b\w*(cruell|duell|colour|honour|...')` to FIND British spellings, whose search pattern
-this guard was rewriting into the American ones. The same defect, in another session, in the wild.
+this guard was rewriting into the American ones. The same defect, in the wild, in a census whose whole
+purpose the correction defeated.
+
+**Whose it was, since the obvious guess is wrong.** It ran in `/gm-assistant/.clones/repl-work/webapp`,
+so it belongs to a gm-assistant session and not to any of the four diagram sessions on this host - the
+diagram session nearest the guard was asked and had never run it. That session is not reachable from
+here, so the fix is landed and recorded and the affected run is named, which is as far as this feature
+can take it. Anyone re-reading that census's results should know they were taken while the guard was
+rewriting its pattern.
 The exemption is proven to fire the way this project requires: removing it from the held-ranges tuple
 turns the selftest red.
 
