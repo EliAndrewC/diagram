@@ -978,6 +978,16 @@ claim:          ## [project] claim the next spec-kit feature number under the ho
 	@: "GUARD_EDIT_OK: feature 197 - the slug follows '--' so a slug beginning with a hyphen is refused as a BAD SLUG, not misread as an option; RENUMBER passes the directory and no slug"; \
 	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
 
+review-accept:  ## [project] record a review finding as deliberately LEFT, with a reason - logged like an escape   MAP=<map> FINDING=<id> REASON="..."
+##  MAP=<map>        the pool map whose last settlement-review verdict raised the finding
+##  FINDING=<id>     the finding's id, as that verdict record names it
+##  REASON="..."     why it is left; at least two words and eight characters
+# GUARD_EDIT_OK: feature 240 FR-003, adding an operation - the one way to disposition a review finding WITHOUT
+# verifying it, so it writes the disposition and the bypass-log entry together and never one without the other:
+# an acceptance is an escape in all but name (spec-fidelity round 2), and `make audit` lists every
+# `dev/bypass-log/` entry, which is how an acceptance is counted rather than quietly standing in for a fix.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
+
 test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
 ##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run
 ##  K=<expr>      a pytest `-k` expression - a SUBSET, which owes a whole-file run before the gate

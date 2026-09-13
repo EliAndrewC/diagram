@@ -20,9 +20,10 @@ built, farmed or lived in. The figures it rests on are in `research.md` R1 and R
 
 ## Phase 2 - the records
 
-- [ ] T03 The verdict record shape and `make review-accept MAP= FINDING= REASON=` writing an `accepted`
+- [x] T03 The verdict record shape and `make review-accept MAP= FINDING= REASON=` writing an `accepted`
       disposition and its bypass-log entry (FR-001, FR-003); `make audit` lists the dispositions.
       research: rendering
+      verify: DONE. the verdict record shape (FR-001) lives in _review_prereq's readers and the agent file (T06); make review-accept MAP= FINDING= REASON= writes the accepted disposition AND the bypass-log entry make audit lists, never one without the other (&&). Exercised end to end: a reasoned acceptance wrote both; a one-word reason refused and wrote neither. The acceptance must name a finding the verdict actually raised; re-accepting replaces. 8/8 module tests
 
 ## Phase 3 - the hooks
 

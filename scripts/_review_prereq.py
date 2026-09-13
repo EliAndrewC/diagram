@@ -196,14 +196,43 @@ def _gencache_current() -> Callable[[str], bool]:
     return gencache.is_current
 
 
+def accept(clone: pathlib.Path, name: str, finding: str, reason: str) -> str | None:
+    """Record a finding deliberately left as it is (FR-003). Returns the refusal, or None when recorded.
+
+    AN ACCEPTANCE IS AN ESCAPE IN ALL BUT NAME (spec-fidelity round 2), so it is held to an escape's floor - a
+    reason of at least two words and eight characters - and its caller, `make review-accept`, writes the
+    bypass-log entry `make audit` lists. It must name a finding the map's last verdict actually raised: an
+    acceptance of an id nobody reported would be a record of nothing."""
+    if len(reason.split()) < 2 or len(reason.strip()) < 8:
+        return "an acceptance needs a REASON of at least two words and eight characters - it is what a later audit reads"
+    verdict = latest_verdict(clone, name)
+    raised = {str(f.get("id")) for f in (verdict or {}).get("findings", []) if isinstance(f, dict)}
+    if finding not in raised:
+        return f"{name}'s last verdict raised no finding {finding!r} (it raised: {', '.join(sorted(raised)) or 'none'})"
+    path = disposition_dir(clone) / f"{name}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rec = _read_json(path)
+    items = [i for i in (rec.get("accepted", []) if isinstance(rec, dict) else []) if isinstance(i, dict) and i.get("finding") != finding]
+    items.append({"finding": finding, "reason": reason.strip()})
+    path.write_text(json.dumps({"map": name, "accepted": items}, indent=1) + "\n")
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["check"])
+    ap.add_argument("command", choices=["check", "accept"])
     ap.add_argument("--clone", required=True)
     ap.add_argument("--maps", default="")
-    ap.add_argument("--prompt-file", required=True)
+    ap.add_argument("--prompt-file", default="")
     ap.add_argument("--gate-green", choices=["yes", "no"], default="no")
+    ap.add_argument("--map", default="")
+    ap.add_argument("--finding", default="")
+    ap.add_argument("--reason", default="")
     args = ap.parse_args(argv)
+    if args.command == "accept":
+        refused = accept(pathlib.Path(args.clone), args.map, args.finding, args.reason)
+        print(refused or f"accepted {args.finding} on {args.map}")
+        return 1 if refused else 0
     problems = check(pathlib.Path(args.clone), args.maps.split(), pathlib.Path(args.prompt_file).read_text(), args.gate_green == "yes", _gencache_current())
     for p in problems:
         print(p)

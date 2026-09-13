@@ -144,3 +144,17 @@ def test_the_cli_exits_nonzero_and_prints_each_reason(tmp_path: pathlib.Path, mo
     assert "166.6 ft" in capsys.readouterr().out
     prompt.write_text("Look at the outfall.")
     assert prereq.main(["check", "--clone", str(clone), "--maps", "mizuguchi", "--prompt-file", str(prompt)]) == 0
+
+
+def test_an_acceptance_needs_a_reason_and_a_real_finding_and_then_disposes_of_it(tmp_path: pathlib.Path) -> None:
+    """FR-003's `accepted` disposition, held to an escape's floor and to the findings the verdict actually raised."""
+    clone = _clone(tmp_path)
+    _verdict(clone, "kuwabata", "NEEDS-WORK", "E2-byre")
+    assert "REASON" in (prereq.accept(clone, "kuwabata", "E2-byre", "ok") or ""), "a bare token is refused"
+    assert "raised no finding" in (prereq.accept(clone, "kuwabata", "E9", "left as village_grove documents it") or ""), "an id nobody reported"
+    assert prereq.accept(clone, "kuwabata", "E2-byre", "crowns hug the eaves 2.2 ft off, as village_grove intends") is None
+    assert prereq.unverified_findings(clone, "kuwabata") == [], "and the finding is dispositioned"
+    assert prereq.accept(clone, "kuwabata", "E2-byre", "a second, revised reason for the same finding") is None
+    assert len(json.loads((clone / ".git" / "review-dispositions" / "kuwabata.json").read_text())["accepted"]) == 1, "re-accepting replaces, never duplicates"
+    assert prereq.main(["accept", "--clone", str(clone), "--map", "kuwabata", "--finding", "E2-byre", "--reason", "no"]) == 1
+    assert prereq.main(["accept", "--clone", str(clone), "--map", "kuwabata", "--finding", "E2-byre", "--reason", "still left, as documented"]) == 0
