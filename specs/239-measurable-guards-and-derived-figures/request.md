@@ -32,3 +32,12 @@ The spec reached its five-round cap with round 5's three items applied, and the 
 three options: accept it as it stands, run one more round, or change FR-011c. The GM, verbatim:
 
 > I accept the spec as it stands, so please proceed.
+
+## The GM's ruling on the cost to older specs (2026-09-13)
+
+Told that with no scoping, 134 of the 156 existing specs would owe keys or labels on their next edit,
+and offered a narrower form that checks only the paragraphs an edit changes, the GM, verbatim:
+
+> I'm not worried about older specs; we don't usually edit older specs so that's fine.
+
+So the narrower form is not built, and check 5 applies to every spec an edit touches.
