@@ -75,6 +75,54 @@ def owed(spec_dir: pathlib.Path) -> tuple[str, str] | None:
                  review.read_text(encoding="utf-8") if review.is_file() else None)
 
 
+# ---- the escape and the record of it (FR-008) ----------------------------------------------------------
+
+HERE = pathlib.Path(__file__).resolve().parent
+
+
+def guard_log(event: str, detail: str, rule: str) -> None:
+    """One entry in the guard census, through the same `_guardlog.sh` every shell guard uses."""
+    subprocess.run(["bash", "-c", '. "$1/_guardlog.sh"; guard_log plan-gate "$2" "$3" "$4"', "_", str(HERE),
+                    event, detail[:400], rule], capture_output=True)
+
+
+def reason_ok(reason: str) -> bool:
+    return subprocess.run([sys.executable, str(HERE / "_hm_escape.py"), "reason-ok"], input=reason,
+                          capture_output=True, text=True).returncode == 0
+
+
+def bypass_record(root: pathlib.Path, where: str, why: str) -> None:
+    """The reason ships with the push: `dev/bypass-log/` is in the repository and `make audit` lists it."""
+    log = root / ".claude" / "skills" / "diagram" / "dev" / "bypass-log"
+    if not log.parent.is_dir():
+        return
+    log.mkdir(exist_ok=True)
+    now = datetime.datetime.now(datetime.UTC)
+    head = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"], capture_output=True,
+                          text=True).stdout.strip()
+    (log / f"{now:%Y%m%dT%H%M%SZ}-{hashlib.sha256(why.encode()).hexdigest()[:6]}.json").write_text(
+        json.dumps({"utc": f"{now:%Y-%m-%dT%H:%M:%SZ}", "target": f"plan-gate {where}", "commit": head,
+                    "why": why}, indent=2) + "\n", encoding="utf-8")
+
+
+def tick_permitted(spec_dir: pathlib.Path, root: pathlib.Path, escape: str | None) -> tuple[bool, str]:
+    """FR-001/FR-005/FR-008 for `make tick`: (may tick, what to print)."""
+    verdict = owed(spec_dir)
+    if verdict is None:
+        return True, ""
+    rule, reason = verdict
+    if not escape:
+        guard_log("blocked", f"{spec_dir.name}: {reason}", rule)
+        return False, (f"tick: refused - {spec_dir.name}'s plan decisions have no current CLEAR review (feature 243).\n"
+                       f"  {reason}\n  A case that is genuinely exempt: PLAN_REVIEW_OK=\"<reason>\", which is recorded.")
+    if not reason_ok(escape):
+        guard_log("blocked", escape, "PLAN_REVIEW_OK-no-reason")
+        return False, "tick: PLAN_REVIEW_OK needs a REASON, not just a value - two words and eight characters."
+    guard_log("escaped", f"{spec_dir.name}: {escape}", "plan-review-ok")
+    bypass_record(root, f"tick {spec_dir.name}", escape)
+    return True, f"tick: plan gate BYPASSED - {escape} (recorded in dev/bypass-log/)"
+
+
 # ---- recording (FR-003, FR-006) ------------------------------------------------------------------------
 
 def derive_verdict(decisions: list[dict]) -> str:
@@ -142,6 +190,21 @@ def push_owed(root: pathlib.Path, rng: str, ref: str = "HEAD") -> list[tuple[str
     return out
 
 
+def resolve(feature: str, root: pathlib.Path | None = None) -> pathlib.Path | None:
+    """A spec directory from a path, a number (`243`) or a directory name - None when not exactly one."""
+    if pathlib.Path(feature).is_dir():
+        return pathlib.Path(feature)
+    if "/" in feature:  # a path that does not exist is not a feature name to glob for
+        return None
+    root = root or pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
+                                               text=True).stdout.strip())
+    exact = root / "specs" / feature
+    if exact.is_dir():
+        return exact
+    hits = sorted(p for p in (root / "specs").glob(f"{feature}-*") if p.is_dir())
+    return hits[0] if len(hits) == 1 else None
+
+
 def main(argv: list[str]) -> int:
     if argv[:1] == ["owed"] and len(argv) == 2:
         verdict = owed(pathlib.Path(argv[1]))
@@ -156,7 +219,10 @@ def main(argv: list[str]) -> int:
             print(f"{feature}\t{rule}\t{reason}")
         return 1 if found else 0
     if argv[:1] == ["record"] and len(argv) == 5 and argv[3] == "--as":
-        spec_dir, source = pathlib.Path(argv[1]), pathlib.Path(argv[2])
+        spec_dir, source = resolve(argv[1]), pathlib.Path(argv[2])
+        if spec_dir is None:
+            print(f"plan-verdict: no single specs/{argv[1]}* directory - F=<feature number or slug>", file=sys.stderr)
+            return 2
         try:
             out = record(spec_dir, json.loads(source.read_text(encoding="utf-8")), argv[4])
         except PermissionError as e:

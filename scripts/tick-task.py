@@ -125,6 +125,16 @@ def main(argv: list[str]) -> int:
     if not path.is_file():
         print(f"tick: {path} does not exist", file=sys.stderr)
         return 2
+    # A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED (feature 243). Asked before the task is
+    # even looked up, so a refused tick writes nothing; the push asks the same question of hand edits.
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import _plan_gate
+
+    permitted, message = _plan_gate.tick_permitted(d, root, os.environ.get("PLAN_REVIEW_OK"))
+    if message:
+        print(message, file=sys.stderr if not permitted else sys.stdout)
+    if not permitted:
+        return 2
     try:
         new, line = tick(path.read_text(encoding="utf-8"), task, note, boxes)
     except ValueError as e:

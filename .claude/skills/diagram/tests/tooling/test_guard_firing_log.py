@@ -289,7 +289,8 @@ _ESCAPES = {
     ),
     "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
     "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
-    "ENTRY_DRIFT_OK": ("environment", "read as ${ENTRY_DRIFT_OK:-} by scripts/entry-gate.sh, which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "PLAN_REVIEW_OK": ("environment", "read as ${PLAN_REVIEW_OK:-} by scripts/plan-gate.sh at push and from os.environ by _plan_gate.tick_permitted (make tick exports it), neither of which a mention can set; reason floor via _hm_escape.py reason-ok (feature 243)"),
+    "ENTRY_DRIFT_OK": ("environment","read as ${ENTRY_DRIFT_OK:-} by scripts/entry-gate.sh, which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
     "SHELL_CHECK_OK": (
         "command",
         "routes through _hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",

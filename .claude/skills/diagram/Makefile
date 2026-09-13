@@ -980,13 +980,23 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 # THE NOTE TRAVELS IN THE ENVIRONMENT, never interpolated into the recipe: a verify note quotes code in
 # backticks, and a backtick inside a make-expanded "$(NOTE)" is a shell command substitution - the first
 # real use ran `_ENGINE_DIRS` as a command. An exported variable reaches the script's environment verbatim.
+# GUARD_EDIT_OK: feature 243 - a tick is refused while the feature's plan has no current CLEAR review, and the
+# escape reaches the script the way the note does, through the environment; plan-verdict is the reviewer's record.
 tick: export TICK_NOTE = $(NOTE)
+tick: export PLAN_REVIEW_OK := $(PLAN_REVIEW_OK)
 tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [BOXES=1 ticks the research boxes]
 ##  F=<feature>  the feature number or slug - e.g. `188`
 ##  T=<task>     the task id - e.g. `T03`
 ##  NOTE=<text>  what was VERIFIED, which is what the tick is asserting
 ##  BOXES=1      also tick the three physical-research boxes (only legitimate on a `research: physical` task)
+##  PLAN_REVIEW_OK=<reason>  tick although the plan has no current CLEAR review (feature 243) - recorded
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/tick-task.py" "$(F)" "$(T)" --note-from-env $(if $(BOXES),--boxes,)
+
+plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity SUBAGENT runs this   F=243 FILE=<json> AS=spec-fidelity
+##  F=<feature>        the feature number or slug whose plan.md was reviewed
+##  FILE=<json>        the reviewer's JSON: plan_sha256, decisions, verdict (feature 243 plan P3)
+##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_plan_gate.py" record "$(F)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
 # GUARD_EDIT_OK: feature 197 - adding a new operation (`claim`); no existing guard changes.
 # FEATURE 197 (GM 2026-09-07): THE NUMBER COMES FROM HERE, NEVER FROM A SCAN BY HAND. Two sessions each read

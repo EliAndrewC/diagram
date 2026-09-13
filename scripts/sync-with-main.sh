@@ -329,6 +329,11 @@ push_cmd() {
   # were constitutional and unenforced, and both had already been skipped in practice. Checked here
   # because this is the moment work becomes everyone else's problem.
   "$(dirname "$0")/review-gate.sh" || exit 1
+  # GUARD_EDIT_OK: feature 243 - AND A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED. review-gate
+  # holds the spec; a plan is written after that verdict and nothing read it, so a narrowing reached ticked
+  # tasks and main unchecked (specs/243-*/research.md R1). `make tick` asks the same question, but a box can
+  # be ticked by hand, so the push is where it holds.
+  "$(dirname "$0")/plan-gate.sh" || exit 1
   # THE PERFORMANCE BANDS ARE ENFORCED HERE (feature 129, FR-001/FR-002/FR-009): the GM's words for
   # band 3 are "before it is committed back to main", so the push - not the gate - is where a
   # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names

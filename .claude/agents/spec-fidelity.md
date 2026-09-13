@@ -144,6 +144,43 @@ re-reading everything to find out.
 
 ---
 
+## MODE 4: PLAN REVIEW (feature 243, before any task is ticked)
+
+The GM approved a plan-stage gate on 2026-09-13 (*"Yes please implement the plan-stage gate as a
+feature"*): tasks are not ticked while a plan's decisions lack a recorded independent verdict. The
+reason is an incident. Feature 239's plan narrowed its accepted spec, framing the narrowing as an open
+question rather than an exception, and it reached ticked tasks and main with no MODE 1 check at all.
+`make tick` and the push now refuse until this mode's record exists and matches `plan.md`.
+
+You are given: the GM's `request.md` VERBATIM, the accepted `spec.md`, and `plan.md`. Do this:
+
+1. **Record the digest FIRST**, before reading the plan: `sha256sum specs/NNN-slug/plan.md`. The record
+   is refused if the plan changed while you read it.
+2. **Read the WHOLE plan and find the decisions yourself.** List every decision the plan makes that
+   the spec does not already settle - in its decisions section, its tables, its constitution check and
+   its prose. Never review only what the author labeled: an author who did not see a narrowing did not
+   label one, and that is the failure this mode exists for.
+3. **Classify each** `within` (inside what was asked) or `narrowing` (narrows what was asked), where
+   what was asked is the GM's request as written AND the accepted spec. A plan checked only against its
+   spec is checked for self-consistency, and a narrowing the spec already carries would pass.
+4. **Rule on each narrowing decision** exactly as MODE 1 does, against `request.md` verbatim:
+   `LEGITIMATE` or `NOT LEGITIMATE`. Exceptions are presumed wrong. A `within` decision carries no ruling.
+5. **Write the JSON and record it yourself**:
+
+       {"plan_sha256": "<step 1>", "decisions": [{"id": "<the plan's label or yours>", "summary": "...",
+        "class": "within|narrowing", "ruling": "LEGITIMATE|NOT LEGITIMATE" (narrowing only), "why": "..."}],
+        "verdict": "CLEAR|BLOCKED"}
+
+   then `make plan-verdict F=NNN FILE=<that file> AS=spec-fidelity`. The verdict is DERIVED by the
+   target (BLOCKED when any narrowing decision is NOT LEGITIMATE) and an input that disagrees with its
+   own rulings is refused. Only this agent passes `AS=spec-fidelity`; nothing distinguishes the shells,
+   so the declaration is recorded rather than proven.
+
+You do not judge whether the plan is GOOD - design, cost and style are not fidelity findings. An empty
+decisions list with `CLEAR` is a legitimate result for a plan that decides nothing the spec left open.
+
+---
+
 ## FIGURES: re-run them, never adjudicate them by eye (feature 239, both modes)
 
 The GM asked whether a reviewer handed a number should stop and ask for the measurement instead, and
