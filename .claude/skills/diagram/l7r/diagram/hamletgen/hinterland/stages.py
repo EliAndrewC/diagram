@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import cast
 
 from l7r.diagram.settlement import Settlement
@@ -186,3 +187,16 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
     s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan))  # the map's name has ground reserved; the copse honors it like the belt does
+    # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
+    # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
+    # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the
+    # settlement HAS interior gaps: Inashiro seats 10 clumps with every one inside the house cloud, while Kuwabata's
+    # single row on a dike head has no interior at all and gets 3. A reader - or a later check - reading the knob
+    # alone is told five maps did the same thing. These two numbers say what each one actually drew, and they
+    # claim nothing: a count and a distance, not a second label.
+    _cop = next((g for g in s.M.get("village_groves") or [] if g.get("role") == "copse"), None)
+    _hs = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    if _cop and _hs and _cop.get("clumps"):
+        _near = sorted(min(math.dist((float(c[0]), float(c[1])), h) for h in _hs) for c in _cop["clumps"])
+        s.M["meta"]["copse_clumps"] = len(_near)
+        s.M["meta"]["copse_house_ft"] = round(_near[len(_near) // 2] * float(s.M["meta"].get("ftpx") or 1), 1)
