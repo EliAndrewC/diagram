@@ -1,6 +1,6 @@
 # Feature 240 - a review round is not spent on an unverified fix
 
-**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 2 in review
+**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 2 CHANGES REQUIRED (all seven applied); round 3 pending
 **Request**: [`request.md`](request.md), the GM's words verbatim. **Research**: [`research.md`](research.md).
 **Peer**: feature 239 (`Diagram (Kuwabata)`) holds the same contract for `spec-fidelity` and spec figures.
 The split was agreed between the two sessions and is recorded in `request.md`; this feature touches none of
@@ -38,9 +38,12 @@ prose report is unchanged.
 **FR-002 A review MUST be counted when it reaches a PASS or NEEDS-WORK verdict for the current engine key,
 not when it is dispatched.** Today `scripts/pair-hooks.sh` writes `review_key` in its `pretool` branch,
 so a dispatched review counts as done whether it ran, returned NOT-REVIEWABLE, or never returned
-(`research.md` R3). The pair MUST close on a recorded verdict instead, and `scripts/review-gate.sh`'s
-review-before-ship requirement MUST read the same record. A NOT-REVIEWABLE verdict, a missing verdict, or
-a verdict for an engine key the tree has since moved past closes nothing.
+(`research.md` R3). The pair MUST close on a recorded verdict instead: a NOT-REVIEWABLE verdict, a missing verdict, or a verdict
+for an engine key the tree has since moved past closes nothing. `scripts/review-gate.sh` keeps its present
+rule - a changed pool manifest ships with its notes file changed beside it, escapable with
+`REVIEW_GATE_OK` - and additionally refuses a map whose MOST RECENT verdict record is NOT-REVIEWABLE. It is
+deliberately not widened to require a fresh PASS for every later engine edit, which the GM did not ask for
+and which would force a review round the request exists to save.
 
 ### B. The next dispatch is refused until each finding is verified (FR-003 to FR-006)
 
@@ -48,15 +51,18 @@ a verdict for an engine key the tree has since moved past closes nothing.
 refused unless every one of those findings is dispositioned.** A finding is dispositioned by exactly one of:
 a measurement record (FR-009) whose `verifies` field names the finding's id and whose `subject` is the map;
 or an `accepted` disposition carrying a reason of at least two words, for a finding deliberately left as it
-is. The refusal names every finding id that has neither, with the path its record would go in. This is the
+is. An `accepted` disposition is an escape in all but name, so it is treated as one: it is logged to
+`dev/bypass-log/` the way every other escape here is, listed by `make audit`, and passed to FR-007's first
+stage with the verifying records. The refusal names every finding id that has neither, with the path its record would go in. This is the
 requirement that holds whether or not the dispatch prompt quotes anything.
 
 **FR-004 A `settlement-review` dispatch that follows findings MUST NOT overlap an unfinished gate.** A first
 review of a change keeps feature 151's overlap - the gate and the review start together and the review's
 wall time stays off the critical path. A dispatch covered by FR-003 is a review of FIXES, and the GM's own
 example is that it should be blocked when *"the unit tests, or some other makefile command"* has not been
-done: it is refused unless `make done` is green for the current engine key. The gate is 1 to 6 minutes on
-this repository and the round it protects is 7 to 25 (`research.md` R1).
+done: it is refused unless `make done` is green for the current engine key. A green gate took 56 to 117 s
+across the nine that ran in feature 230's span, and the round it protects took 7 to 25 minutes
+(`research.md` R1, measured by `measure/gate_durations.py`).
 
 **FR-005 A `settlement-review` dispatch MUST be refused when a map it names is not current with the
 engine, or its review snapshot is incomplete.** The generation cache already decides whether a map would
@@ -81,8 +87,10 @@ map deliberately left in a bad state (a negative fixture, a reproduction).
 
 **FR-007 `.claude/agents/settlement-review.md` MUST carry a FIRST STAGE that can return NOT-REVIEWABLE.**
 Before reading any map, the agent reads the previous verdict's findings and the records that claim to
-verify them, and returns NOT-REVIEWABLE - naming the finding and the record, and nothing else - when a
-record's `source` cannot support the finding it claims to verify. The judgment is about the SOURCE, and the
+verify them, together with any `accepted` dispositions (FR-003), and returns NOT-REVIEWABLE - naming the
+finding and the record, and nothing else - when a record's `source` cannot support the finding it claims
+to verify. It also reads its paired gate's recorded result before its first map and again between maps,
+and returns NOT-REVIEWABLE on a red gate (D6). The judgment is about the SOURCE, and the
 canopy case is the worked example the agent file carries: a finding that the notice board stands in the
 canopy is verified by a record reading `tree_crowns` or the SVG's drawn ink, and is NOT verified by one
 reading a grove's `clumps` with its nominal `r`, because the drawn crowns are jittered off those bases and
@@ -115,8 +123,11 @@ with NO record, which does not depend on 239 at all.
 `perf-audit` MUST exit early when it is missing.** The command takes either `CONTROL=<measurement key>` - a
 recorded run of the same subject with the attributed cause removed or disabled - or
 `UNVERIFIED="<reason>"`, an explicit statement that the attribution was not tested, and refuses an
-explanation carrying neither. It never parses the explanation's prose (D1). The `perf-audit` agent's first
-stage returns NOT-REVIEWABLE when an explanation's `CONTROL` names no record, before any profiling. Feature
+explanation carrying neither. It never parses the explanation's prose (D1). An `UNVERIFIED` reason is logged
+and listed under the project's existing escape rules. The `perf-audit` agent's first stage returns
+NOT-REVIEWABLE when a `CONTROL` names no record, before any profiling; and on `UNVERIFIED` it runs the
+counterfactual ITSELF before any other work - the GM's *"numbers generated by the reviewer"* - returning
+NOT-REVIEWABLE if it cannot, so an untested attribution never reaches a full audit. Feature
 230's first explanation is the fixture: it attributed seed 4's web growth to the map on the evidence of a
 cumulative-time profile, and the audit's control run - the suspected rule forced to return True - measured
 4.70 s against 2.56 s against a 1.34 s baseline and refuted it (`research.md` R2).
@@ -124,12 +135,14 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002) A settlement-review run writes its verdict record; `pair-hooks` closes the
-  pair only on a PASS or NEEDS-WORK record for the current engine key and `review-gate.sh` reads the same
-  record; a dispatched review that returns NOT-REVIEWABLE, or that is stopped before it returns, leaves the
-  pair open and the ship requirement unmet. Proven with each of the three verdicts and with none.
+  pair only on a PASS or NEEDS-WORK record for the current engine key, and a dispatched review that returns
+  NOT-REVIEWABLE, or that is stopped before it returns, leaves the pair open. `review-gate.sh` refuses a
+  changed map whose most recent verdict is NOT-REVIEWABLE and still passes one whose notes file changed
+  beside it with no verdict record at all. Proven with each of the three verdicts and with none.
 - **SC-002** (FR-003) Feature 230's pass-13 dispatch, rewritten with every figure removed, is still refused,
   and the refusal names the pass-12 finding ids that have no verifying record; the same dispatch proceeds
-  once each finding has a `verifies` record or an `accepted` disposition.
+  once each finding has a `verifies` record or an `accepted` disposition, and each `accepted` disposition
+  lands an entry in `dev/bypass-log/` that `make audit` lists.
 - **SC-003** (FR-004) A dispatch following findings is refused while the gate for the current engine key is
   running or red and permitted once it is green; a first review with no prior findings keeps feature 151's
   overlap and is permitted beside a running gate.
@@ -142,13 +155,17 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   token is refused.
 - **SC-006** (FR-007, FR-008) The agent file's first stage, given feature 230's canopy finding with a record
   whose `source` is the grove's clumps, returns NOT-REVIEWABLE naming that record; given a record whose
-  `source` is `tree_crowns`, it proceeds; and the file still states, in words a test finds, that the reviewer
-  may measure independently.
-- **SC-007** (FR-009) This feature's own `measurements.json` passes 239's `make figures`, and every record
-  written for a `verifies` disposition carries `quantity`, `source`, `subject` and `verifies`.
+  `source` is `tree_crowns`, it proceeds; it instructs the agent to read its paired gate's result before its
+  first map and between maps and to return NOT-REVIEWABLE on red; and the file still states, in words a test
+  finds, that the reviewer may measure independently.
+- **SC-007** (FR-009) Every record written for a `verifies` disposition carries `quantity`, `source`,
+  `subject` and `verifies`, proven now. That this feature's `measurements.json` also passes 239's
+  `make figures` is OWED once 239 implements that command and is OUTSIDE this feature's completion: FR-009's
+  ordering note is why, and FR-003 does not depend on it.
 - **SC-008** (FR-010) `make perf-explain` refuses an explanation with neither `CONTROL` nor `UNVERIFIED`,
-  accepts each, and refuses a `CONTROL` naming no record; the `perf-audit` file's first stage returns
-  NOT-REVIEWABLE on a `CONTROL` naming no record.
+  accepts each, refuses a `CONTROL` naming no record, and logs an `UNVERIFIED` reason where `make audit`
+  lists it; the `perf-audit` file's first stage returns NOT-REVIEWABLE on a `CONTROL` naming no record, and
+  on `UNVERIFIED` instructs the agent to run the counterfactual itself before any other work.
 - **SC-009** (spec-wide) `make done` green; every guard this feature adds or changes has a suite proven to
   FIRE by deleting the guard and watching a test go red.
 
@@ -175,13 +192,18 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   Dispatch-time completion was sound while every dispatched review ran to a report. A review that can exit
   early makes it unsound: the early exit would otherwise count as the review a Mode B map owes, which is the
   exact hole the early exit exists to close.
-- **D6 The overlap is kept for a first review and removed for a review of fixes.** Feature 151 put the review
-  beside a running gate to keep its wall time off the critical path, and for a first review that still holds.
-  A review of fixes is the round this feature is about, and a green gate before it costs 1 to 6 minutes
-  against a round of 7 to 25. What remains un-enforced, stated so it is not mistaken for solved: a FIRST
-  review whose paired gate later goes red still runs to its end, because a hook cannot stop a running agent.
-  FR-002 makes its verdict count for nothing, which protects the ship requirement; the wall time it spent is
-  not recovered.
+- **D6 The overlap is kept for a first review and removed for a review of fixes - and a first review checks
+  its own gate.** Feature 151 put the review beside a running gate to keep its wall time off the critical
+  path, and for a first review that still holds; it is a standing GM ruling this request did not reopen. A
+  review of fixes is the round this feature is about, and a green gate before it took 56 to 117 s against a
+  round of 7 to 25 minutes (`research.md` R1). A first review whose paired gate goes RED is handled by the
+  reviewer rather than a hook, because a hook cannot stop a running agent: FR-007's first stage reads the
+  paired gate's recorded result before its first map and again between maps, and returns NOT-REVIEWABLE the
+  moment it reads red. What still ships nothing broken is the gate stamp at push and the engine key moving
+  once the red is fixed - not FR-002, whose key a red gate does not move. **The residue, for the GM once the
+  implementation runs:** a first review still spends the wall time up to its next check - one map's worth at
+  most - before it sees a gate that went red after it started. Closing that would mean giving up feature
+  151's overlap for first reviews too, which is the GM's ruling to revisit, not this feature's.
 
 ## Review history
 
@@ -194,3 +216,13 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   one-shot label and backtick skip (FR-006). (7) A NOT-REVIEWABLE return prevented from counting as a review
   (FR-002, D5), which the pair's dispatch-time `review_key` would otherwise have allowed. (8) The orphaned
   requirement named in a criterion (SC-006) and the time budget given a number (SC-004).
+- **Round 2, CHANGES REQUIRED, seven items, all applied.** (1) The gate-duration figure was cited to R1, which
+  did not hold it: measured by a committed harness from the gate's own run log, recorded in
+  `measurements.json`, and in measuring it the harness found R1's own count wrong - it said 22 gates
+  totalling 1,443 s, a truncated sample, where the span holds 36 totalling 2,736 s. (2) D6 corrected: FR-002
+  does not protect shipping on a red gate, the gate stamp does; and the reviewer now checks its own paired
+  gate before its first map and between maps (FR-007), with the residue marked for the GM. (3) The
+  `review-gate.sh` clause narrowed to refusing a NOT-REVIEWABLE latest verdict, keeping its present rule.
+  (4) On `UNVERIFIED`, `perf-audit` runs the counterfactual itself before anything else, and the reason is
+  logged. (5) An `accepted` disposition is logged and listed like any escape. (6) SC-007 split into what is
+  provable now and what is owed once 239's `make figures` exists. (7) R3's stale requirement id corrected.

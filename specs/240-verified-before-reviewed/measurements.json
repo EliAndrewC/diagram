@@ -1,0 +1,42 @@
+{
+ "m:230-gates-that-ran": {
+  "value": 36,
+  "unit": "gates",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "count of `make done` runs in feature 230's span that did not short-circuit",
+  "source": ".claude/skills/diagram/dev/run-log/*.json"
+ },
+ "m:230-gate-total-s": {
+  "value": 2736,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "sum of wall seconds over those runs",
+  "source": ".claude/skills/diagram/dev/run-log/*.json"
+ },
+ "m:230-green-gate-min-s": {
+  "value": 56.0,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "fastest GREEN gate in the span (the cost FR-004 adds before a review of fixes)",
+  "source": ".claude/skills/diagram/dev/run-log/*.json"
+ },
+ "m:230-green-gate-max-s": {
+  "value": 117.0,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "slowest GREEN gate in the span",
+  "source": ".claude/skills/diagram/dev/run-log/*.json"
+ },
+ "m:230-gate-max-s": {
+  "value": 402.0,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "longest gate that ran in the span, of any result",
+  "source": ".claude/skills/diagram/dev/run-log/*.json"
+ }
+}

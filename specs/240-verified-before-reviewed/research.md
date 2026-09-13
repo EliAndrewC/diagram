@@ -15,8 +15,13 @@ durations, not recalled. Span: claim at 09-12 13:27, landed at 09-13 03:45 - **1
 | rounds 13 and 14 | 02:24-02:56, ~32 m | the canopy proxy, the caption halo |
 | perf and landing | 03:09-03:45, ~36 m | bookends, two audits, the sign-off, the push |
 
-**Machine time was small**: 22 gate runs totalling 1,443 s (24 min), about 70 map regenerations at 6-10 s
-each, three perf runs. Roughly 40 minutes of fourteen hours. The rest is model turn latency and waiting on
+**Machine time was small**: 36 gates actually ran (short-circuits excluded) for 2,736 s, about 46 minutes;
+the nine green ones took 56 to 117 s each and the longest of any result 402 s (`m:230-gates-that-ran`,
+`m:230-gate-total-s`, `m:230-green-gate-min-s`, `m:230-green-gate-max-s`, `m:230-gate-max-s` in
+`measurements.json`, all from `python3 specs/240-verified-before-reviewed/measure/gate_durations.py`). Add
+about 70 map regenerations at 6-10 s each and three perf runs: roughly an hour of fourteen. **An earlier
+version of this paragraph said 22 gates and 1,443 s** - that was the last 22 lines of a listing, not the
+span, and the committed harness is what found it. The rest is model turn latency and waiting on
 review agents - 22 dispatches, whose reported durations in the second half of the feature ran 415,728 ms
 to 1,525,589 ms (6.9 to 25.4 min) each.
 
@@ -56,7 +61,7 @@ inference, and only a counterfactual measurement settles an inference.
   generation cache's key; no manifest carries an engine key of its own (checked on
   `pool/hamlets/inashiro/inashiro.json`, no `meta` field names one), so the check asks the cache.
 - **The figure detector exists.** `scripts/spec-lint.py` defines `_FIGURE` (a number with a unit from a
-  shared unit list) and `_POINTER`; FR-002 imports them rather than restating them.
+  shared unit list); FR-006 imports it rather than restating it.
 - **The perf command exists.** `make perf-explain WHY=...` writes a `review-NNN-explanation` record under
   `dev/perf-log/`; FR-010 is a precondition on that command.
 - **The measurements format exists** in feature 239's clone as `specs/239-.../measurements.json`, written
