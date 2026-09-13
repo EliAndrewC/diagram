@@ -32,7 +32,14 @@ DIR="$TMP/proj/sid-1/subagents"
 # switch the world between cases; every case below section 1 runs in the world it names.
 cp "$(dirname "$HOOK")/_review_owed.py" "$(dirname "$HOOK")/_review_snapshot.py" "$CLONE/scripts/"
 MAPDIR_F="$SKILL/pool/hamlets/testmap"
-moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; }
+# GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `_review_prereq.py` first, so the fixture
+# carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`
+# exists) and a stub generation cache (current unless `<gen>.stale` exists), and a moved map is a WHOLE map.
+cp "$(dirname "$HOOK")/_review_prereq.py" "$(dirname "$HOOK")/spec-lint.py" "$(dirname "$HOOK")/_hookmatch.py" "$(dirname "$HOOK")"/_hm_*.py "$CLONE/scripts/"
+printf 'import pathlib, subprocess, sys\nroot = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip())\nsys.exit(0 if (root / ".git" / "stub-gate-green").exists() else 1)\n' > "$CLONE/scripts/gate-stamp.py"
+mkdir -p "$SKILL/l7r/diagram/pipeline"
+printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + ".stale")\n' > "$SKILL/l7r/diagram/pipeline/gencache.py"
+moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; for ext in gen.py svg png html; do : > "$MAPDIR_F/testmap.$ext"; done; }
 unmoved() { rm -rf "$SKILL/pool"; }
 moved
 
@@ -189,10 +196,86 @@ check "...and never that of the mirror" '[ ! -f "$MIRROR/.git/pairing-state.json
 rm -f "$CLONE/.git/pairing-state.json"
 ESCREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"PAIR_OK: the gate is running beside this - review the map"}')
 check "a review escaped with a reason runs" '[ "$(rc_pretool "$ESCREV")" -eq 0 ]'
-check "...and records itself as a review" 'grep -q "review_key" "$CLONE/.git/pairing-state.json"'
+# GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews, and the review counts
+# at its VERDICT. What 231 fixed stays fixed: once that review writes its verdict, the stop branch is quiet.
+check "...and records the content it reviews" 'grep -q "review_dispatch_key" "$CLONE/.git/pairing-state.json"'
+check "...and no longer counts itself done at dispatch" '! grep -q "\"review_key\"" "$CLONE/.git/pairing-state.json"'
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+mkdir -p "$CLONE/.git/review-verdicts"
+printf '{"map":"testmap","engine_key":"%s","verdict":"PASS","findings":[]}' "$KEY" > "$CLONE/.git/review-verdicts/testmap.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AFTER_ESC=$?
-check "...so the stop branch does not fire half-open on it" '[ "$AFTER_ESC" -eq 0 ]'
+check "...so once its verdict is written the stop branch does not fire half-open on it" '[ "$AFTER_ESC" -eq 0 ]'
+rm -rf "$CLONE/.git/review-verdicts"
+
+
+# --- 8b. A REVIEW COUNTS AT ITS VERDICT, AND AN UNVERIFIED FIX BUYS NO ROUND (feature 240, GM 2026-09-13) --
+# GUARD_EDIT_OK: feature 240 FR-002 to FR-006 - "procedures which rely on someone ... remembering to do something
+# are flawed". The fixture carries the decision module, spec-lint (whose figure pattern it imports), a stub
+# gate stamp and a stub generation cache, so each world below is decided by a file the case writes.
+VERDICTS="$CLONE/.git/review-verdicts"
+verdict() { mkdir -p "$VERDICTS"; printf '{"map":"testmap","engine_key":"%s","verdict":"%s","findings":%s}' "${3:-$KEY}" "$1" "$2" > "$VERDICTS/testmap.json"; }
+reset_prereq() { rm -rf "$VERDICTS" "$CLONE/.git/review-dispositions" "$CLONE/specs" "$MAPDIR_F/testmap.gen.py.stale" "$CLONE/.git/stub-gate-green" "$CLONE/.git/pairing-state.json"; }
+refused_for() { # label, payload, text the refusal must carry
+  local out; out=$(run_pretool "$2"); local rc=$?
+  if [ "$rc" -eq 2 ] && printf '%s' "$out" | grep -q -- "$3"; then ok; else bad "$1 (rc=$rc: $out)"; fi
+}
+moved; reset_prereq
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+check "a first review of a current, complete map runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
+
+# FR-003: the motivating failure - the pass-13 dispatch, its figures removed, still owes pass 12's finding
+verdict NEEDS-WORK '[{"id":"F1","severity":"major","what":"canopy over the caption"}]'
+touch "$CLONE/.git/stub-gate-green"
+refused_for "a review after findings that nothing verifies is refused, naming the finding" "$REVIEW" "F1"
+# GUARD_EDIT_OK: feature 240 - every acting branch records under its own rule (feature 168)
+check "...and the refusal is recorded under its own rule" 'grep -rq "review-prerequisites-unmet" "$GUARD_LOG_ROOT"'
+mkdir -p "$CLONE/specs/240-x"
+printf '{"m:canopy-clear":{"value":0,"unit":"px","command":"make x","taken":"2026-09-13","verifies":"F1","subject":"testmap"}}' > "$CLONE/specs/240-x/measurements.json"
+check "...and runs once a record verifies that finding" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
+rm -rf "$CLONE/specs"
+( cd "$CLONE" && python3 scripts/_review_prereq.py accept --clone "$CLONE" --map testmap --finding F1 --reason "left on purpose for the fixture" >/dev/null )
+check "...or once the finding is ACCEPTED with a reason" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
+
+# FR-004: a review of fixes needs the gate green, not merely running
+rm -f "$CLONE/.git/stub-gate-green"
+refused_for "a review of fixes with the gate not green is refused" "$REVIEW" "FR-004"
+
+# FR-005: the map on disk must be what the engine draws now, and whole
+reset_prereq; touch "$MAPDIR_F/testmap.gen.py.stale"
+refused_for "a review of a map whose generation key moved is refused" "$REVIEW" "FR-005"
+rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
+refused_for "a review of a map missing an artifact is refused" "$REVIEW" "missing .png"
+: > "$MAPDIR_F/testmap.png"
+
+# FR-006: a quoted figure needs a record
+FIGREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"the caption now clears the canopy by 14 ft"}')
+refused_for "a dispatch quoting a figure with no record is refused" "$FIGREV" "FR-006"
+FIGOK=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"the caption now clears the canopy by 14 ft, observed 2026-09-13"}')
+check "...and runs with 239's dated one-shot label" '[ "$(rc_pretool "$FIGOK")" -eq 0 ]'
+
+# the escape: logged, and needing a reason
+BARE=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"REVIEW_PREREQ_OK=\"x\" the caption clears by 14 ft"}')
+refused_for "REVIEW_PREREQ_OK with no real reason is refused" "$BARE" "needs a REASON"
+ESC=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"REVIEW_PREREQ_OK=\"a negative fixture left bad on purpose\" the caption clears by 14 ft"}')
+check "REVIEW_PREREQ_OK with a reason runs the review" '[ "$(rc_pretool "$ESC")" -eq 0 ]'
+check "...and logs its reason for the audit" 'grep -rql "a negative fixture left bad on purpose" "$SKILL/dev/bypass-log"'
+check "...and the escape is recorded under its own rule" 'grep -rq "review-prereq-ok" "$GUARD_LOG_ROOT"'
+
+# FR-002: a NOT-REVIEWABLE verdict closes nothing; a PASS for this content closes the pair
+reset_prereq
+check "the review dispatch runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
+verdict NOT-REVIEWABLE '[]'
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); NR=$?
+check "a NOT-REVIEWABLE verdict leaves the pair OPEN" '[ "$NR" -eq 2 ]'
+rm -f "$CLONE/.git/pairing-state.json"
+verdict PASS '[]' feedfacefeedface
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); STALE=$?
+check "a PASS for OTHER content leaves it open too" '[ "$STALE" -eq 2 ]'
+rm -f "$CLONE/.git/pairing-state.json"
+verdict PASS '[]'
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); CLOSED=$?
+check "a PASS for this content closes it" '[ "$CLOSED" -eq 0 ]'
+reset_prereq
 
 
 # --- 9. A FALLBACK ONTO MAIN'S TREE IS DISCLOSED, NEVER SILENT (feature 231's amendment, GM 2026-09-12) --

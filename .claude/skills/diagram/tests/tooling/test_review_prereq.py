@@ -119,7 +119,19 @@ def test_feature_230s_pass_13_dispatch_is_refused_even_with_every_figure_removed
     problems = prereq.check(clone, ["sawada"], silent, gate_green=True, current=lambda g: True)
     assert any("E2-board-in-belt" in p and p.startswith("FR-003") for p in problems), problems
 
-    _records(clone, **{"m:sawada-board-canopy": {"value": 0.57, "unit": "ft", "verifies": "E2-board-in-belt", "subject": "sawada", "source": "tree_crowns", "quantity": "plank glyph edge to nearest drawn crown edge"}})
+    _records(
+        clone,
+        **{
+            "m:sawada-board-canopy": {
+                "value": 0.57,
+                "unit": "ft",
+                "verifies": "E2-board-in-belt",
+                "subject": "sawada",
+                "source": "tree_crowns",
+                "quantity": "plank glyph edge to nearest drawn crown edge",
+            }
+        },
+    )
     assert prereq.check(clone, ["sawada"], silent, gate_green=True, current=lambda g: True) == [], "recorded: it may go"
 
 
@@ -139,7 +151,7 @@ def test_the_cli_exits_nonzero_and_prints_each_reason(tmp_path: pathlib.Path, mo
     _pool_map(clone, "mizuguchi")
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("The outfall now takes 166.6 ft to reach the pond.")
-    monkeypatch.setattr(prereq, "_gencache_current", lambda: (lambda g: True))
+    monkeypatch.setattr(prereq, "_gencache_current", lambda: lambda g: True)
     assert prereq.main(["check", "--clone", str(clone), "--maps", "mizuguchi", "--prompt-file", str(prompt), "--gate-green", "yes"]) == 1
     assert "166.6 ft" in capsys.readouterr().out
     prompt.write_text("Look at the outfall.")
@@ -158,3 +170,45 @@ def test_an_acceptance_needs_a_reason_and_a_real_finding_and_then_disposes_of_it
     assert len(json.loads((clone / ".git" / "review-dispositions" / "kuwabata.json").read_text())["accepted"]) == 1, "re-accepting replaces, never duplicates"
     assert prereq.main(["accept", "--clone", str(clone), "--map", "kuwabata", "--finding", "E2-byre", "--reason", "no"]) == 1
     assert prereq.main(["accept", "--clone", str(clone), "--map", "kuwabata", "--finding", "E2-byre", "--reason", "still left, as documented"]) == 0
+
+
+def test_the_paired_gate_is_green_on_its_stamp_running_on_a_live_gate_target_and_red_otherwise(tmp_path: pathlib.Path) -> None:
+    clone = _clone(tmp_path)
+    assert prereq.gate_state(clone, fresh=lambda c: True, live=lambda c: []) == "green"
+    assert prereq.gate_state(clone, fresh=lambda c: False, live=lambda c: ["done"]) == "running"
+    # the reviewer's own `make review-paired-gate` is a live make in the clone too, and is not a gate
+    assert prereq.gate_state(clone, fresh=lambda c: False, live=lambda c: ["review-paired-gate"]) == "red"
+    assert prereq.gate_state(clone, fresh=lambda c: False, live=lambda c: []) == "red"
+
+
+def test_the_verdict_record_copies_the_dispatch_key_and_a_red_gate_makes_it_not_reviewable(tmp_path: pathlib.Path) -> None:
+    clone = _clone(tmp_path)
+    (clone / ".git" / "pairing-state.json").write_text(json.dumps({"review_dispatch_key": "abc123"}))
+    got, rec = prereq.write_verdict(clone, "m", "NEEDS-WORK", [{"severity": "error", "what": "canopy over the board"}], "green")
+    assert got == "NEEDS-WORK" and rec["engine_key"] == "abc123" and rec["findings"][0]["id"] == "F1"
+    assert prereq.recorded(clone, ["m"], "abc123") and not prereq.recorded(clone, ["m"], "other")
+    # SC-006: green at dispatch, red by verdict time - recorded NOT-REVIEWABLE, and the pair stays open
+    got, rec = prereq.write_verdict(clone, "m", "PASS", [], "red")
+    assert got == "NOT-REVIEWABLE" and rec["concluded"] == "PASS"
+    assert not prereq.recorded(clone, ["m"], "abc123")
+    try:
+        prereq.write_verdict(clone, "m", "LGTM", [], "green")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("an unknown verdict must not be recorded")
+
+
+def test_the_verdict_cli_reads_a_findings_file(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:
+    clone = _clone(tmp_path)
+    (clone / ".git" / "pairing-state.json").write_text(json.dumps({"review_dispatch_key": "k"}))
+    monkeypatch.setattr(prereq, "gate_state", lambda c: "green")
+    f = tmp_path / "findings.json"
+    f.write_text(json.dumps([{"id": "A", "severity": "flag", "what": "x"}]))
+    assert prereq.main(["verdict", "--clone", str(clone), "--map", "m", "--verdict", "NEEDS-WORK", "--findings-file", str(f)]) == 0
+    assert "recorded NEEDS-WORK for m" in capsys.readouterr().out
+    assert prereq.unverified_findings(clone, "m") == ["A"]
+    f.write_text("{}")
+    assert prereq.main(["verdict", "--clone", str(clone), "--map", "m", "--verdict", "PASS", "--findings-file", str(f)]) == 2
+    monkeypatch.setattr(prereq, "gate_state", lambda c: "red")
+    assert prereq.main(["gate-state", "--clone", str(clone)]) == 0 and capsys.readouterr().out.strip().endswith("red")

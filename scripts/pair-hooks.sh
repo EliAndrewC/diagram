@@ -155,10 +155,18 @@ review_pending() { # a settlement-review agent this session launched that has no
   return 1
 }
 
-review_recorded() { # a review already recorded for this exact content
-  local key="$1"
+review_recorded() { # a review that reached a PASS or NEEDS-WORK verdict for this exact content
+  # GUARD_EDIT_OK: feature 240 FR-002, fixing a guard that counts a review which never happened - A REVIEW IS
+  # COUNTED AT ITS VERDICT, NOT ITS DISPATCH. This read `review_key`, which the Agent branch wrote the moment a
+  # dispatch was PERMITTED, so a review counted as done whether it ran, returned NOT-REVIEWABLE, or never
+  # returned at all. Once a review can exit early, dispatch-time counting would let the early exit stand in for
+  # the review a map owes - the exact hole the early exit exists to close. The verdict records the agent writes
+  # are the answer now; a review still running keeps the stop branch quiet through `review_pending`, as before.
+  local key="$1" maps
   [ -n "$key" ] || return 1
-  [ "$(read_field "$(pairing_file)" review_key)" = "$key" ]
+  maps="$(review_owed_names)"
+  [ -n "$maps" ] || return 1
+  python3 "${CLONE_ROOT}/scripts/_review_prereq.py" recorded --clone "$CLONE_ROOT" --key "$key" --maps "$maps" >/dev/null 2>&1
 }
 
 review_waived() { # the gate ran with PAIR_OK against this exact content, so no review is owed for it
@@ -381,9 +389,51 @@ print(json.dumps({"hookSpecificOutput": {
     # answer different questions (that one carries the REASON, this one makes the RATE computable).
     # GUARD_EDIT_OK: feature 231 - AN ESCAPED REVIEW IS STILL A REVIEW: it records review_key as the normal
     # branch does, so the stop branch does not fire half-open on a review that actually ran (feature 228).
-    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; [ -n "$key" ] && write_pairing "$(pairing_file)" review_key "$key"; exit 0;; esac
+    # GUARD_EDIT_OK: feature 240 FR-003 to FR-006, adding a guard - A REVIEW ROUND IS NOT SPENT ON AN UNVERIFIED
+    # FIX (GM 2026-09-13: "procedures which rely on someone ... remembering to do something are flawed"). Before a
+    # settlement-review may start, `_review_prereq.py` asks the RECORD four things: every finding from the map's
+    # last verdict verified or accepted; a review of fixes behind a green gate; every map current and complete;
+    # every quoted figure backed. A refusal names what is missing. It runs BEFORE the no-gate rule and apart from
+    # PAIR_OK, which answers a different question (is a gate beside it) - one escape must not buy the other's
+    # bypass. Its own escape is REVIEW_PREREQ_OK="<why>", for a map left bad on purpose (a negative fixture, a
+    # reproduction). building-review is Mode A, which has no pool map for these questions to be about.
+    if [ "$atype" = "settlement-review" ] && [ -n "${CLONE_ROOT:-}" ] && [ -f "${CLONE_ROOT}/scripts/_review_prereq.py" ]; then
+      # GUARD_EDIT_OK: feature 240 - `$prompt` is the JSON dump of tool_input (quotes escaped, newlines as `\n`),
+      # so the prose the checks read is taken from the payload itself: a paragraph break must stay a break.
+      ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
+      case "$ptext" in
+        *REVIEW_PREREQ_OK=*)
+          why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"REVIEW_PREREQ_OK=\"([^\"]*)\"", sys.stdin.read()); print(m.group(1) if m else "")' 2>/dev/null)"
+          if [ -z "$why" ] || ! printf '%s' "$why" | python3 "${CLONE_ROOT}/scripts/_hookmatch.py" reason-ok >/dev/null 2>&1; then
+            printf '\n\033[1mBLOCKED: REVIEW_PREREQ_OK needs a REASON\033[0m (two words, eight characters, in quotes) - it is what a later audit reads.\n' >&2
+            guard_log pair blocked "$atype" review-prereq-no-reason
+            exit 2
+          fi
+          guard_log pair escaped "$atype" review-prereq-ok
+          log_bypass "REVIEW_PREREQ_OK: $why" "review prerequisites"
+          ;;
+        *)
+          pf="$(mktemp)"; printf '%s' "$ptext" > "$pf"  # GUARD_EDIT_OK: feature 240 - the prose, not its JSON dump
+          green=no
+          ( cd "${CLONE_ROOT}/.claude/skills/diagram" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 ) && green=yes
+          problems="$(python3 "${CLONE_ROOT}/scripts/_review_prereq.py" check --clone "$CLONE_ROOT" --maps "$(review_owed_names)" --prompt-file "$pf" --gate-green "$green" 2>&1)"
+          rc=$?; rm -f "$pf"
+          if [ "$rc" -ne 0 ]; then
+            printf '\n\033[1mBLOCKED: this settlement-review would spend its round on work that has not been verified.\033[0m\n' >&2
+            printf 'The review costs 7 to 25 minutes; each item below costs seconds to fix (feature 240):\n\n' >&2
+            printf '%s\n' "$problems" | sed 's/^/  - /' >&2
+            printf '\nDeliberately reviewing a map left in this state? Put REVIEW_PREREQ_OK="<why>" in the dispatch prompt.\n' >&2
+            guard_log pair blocked "$atype" review-prerequisites-unmet
+            exit 2
+          fi
+          ;;
+      esac
+    fi
+    # GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews, and no longer records the
+    # review as done: `review_recorded` reads the verdict. The agent copies this key into its verdict record.
+    [ -n "$key" ] && write_pairing "$(pairing_file)" review_dispatch_key "$key"
+    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; exit 0;; esac
     if gate_running_or_fresh "$key"; then
-      [ -n "$key" ] && write_pairing "$(pairing_file)" review_key "$key"
       exit 0
     fi
     printf '\n\033[1mBLOCKED: a settlement-review with no gate beside it.\033[0m\n' >&2

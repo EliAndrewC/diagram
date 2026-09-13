@@ -218,9 +218,82 @@ def accept(clone: pathlib.Path, name: str, finding: str, reason: str) -> str | N
     return None
 
 
+def recorded(clone: pathlib.Path, names: list[str], key: str) -> bool:
+    """Has every one of these maps a PASS or NEEDS-WORK verdict for THIS engine key? (FR-002)
+
+    The pair closes here, not at dispatch. A review that returned NOT-REVIEWABLE, returned nothing, or reviewed
+    content the tree has since moved past closes nothing - which is the whole point, because a review that can
+    exit early must not be able to count as the review a map owes. No maps named is not a recorded review: the
+    caller's own "nothing owed" branch decides that case, and answering yes here would short-circuit it."""
+    if not names or not key:
+        return False
+    for name in names:
+        verdict = latest_verdict(clone, name)
+        if not verdict or verdict["verdict"] == "NOT-REVIEWABLE" or str(verdict.get("engine_key", "")) != key:
+            return False
+    return True
+
+
+# ---- FR-001 and FR-007: the reviewer's two calls ----------------------------------------------------------------
+
+GATE_TARGETS = ("done", "verify", "maps", "test-full")
+
+
+def _fresh(clone: pathlib.Path) -> bool:
+    import subprocess  # noqa: PLC0415
+
+    run = subprocess.run([sys.executable, str(clone / "scripts" / "gate-stamp.py"), "--fresh", "diagram"], cwd=clone, capture_output=True)
+    return run.returncode == 0
+
+
+def _live_targets(clone: pathlib.Path) -> list[str]:
+    import subprocess  # noqa: PLC0415
+
+    run = subprocess.run(["bash", str(clone / "scripts" / "finished-run-hooks.sh"), "live", str(clone)], capture_output=True, text=True)
+    return [line.split()[-1] for line in run.stdout.splitlines() if line.strip()]
+
+
+def gate_state(clone: pathlib.Path, fresh: Callable[[pathlib.Path], bool] = _fresh, live: Callable[[pathlib.Path], list[str]] = _live_targets) -> str:
+    """The paired gate's state, as the reviewer reads it before its first map, between maps and before its verdict.
+
+    `green` - a green gate has seen exactly this engine content (`gate-stamp.py --fresh diagram`; never the
+    verification record, which is last-event-wins, so a green `make test-file` would read as a gate). `running` - a
+    gate target is live in this clone, by the kernel's cwd table rather than a process pattern. `red` - neither:
+    the gate this review was paired with finished without going green, or never ran for this content."""
+    if fresh(clone):
+        return "green"
+    return "running" if any(t in GATE_TARGETS for t in live(clone)) else "red"
+
+
+def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[dict], state: str) -> tuple[str, dict]:
+    """Write the map's verdict record, the review's last act (FR-001). Returns (what was recorded, the record).
+
+    The engine key is the one the DISPATCH recorded (`review_dispatch_key`), never one the agent computes - the review
+    is of the content it was sent, and the pair closes only if that is still the tree's content (FR-002). And the
+    gate's state is re-read HERE rather than trusted to the agent's memory (D6): a review whose paired gate is red
+    at verdict time is recorded NOT-REVIEWABLE whatever it concluded, because a judgment of a map the gate refused
+    must not close the pair. Its findings are kept on the record for the session to read."""
+    if verdict not in VERDICTS:
+        raise ValueError(f"verdict must be one of {', '.join(VERDICTS)}")
+    pairing = _read_json(clone / ".git" / "pairing-state.json")
+    key = str(pairing.get("review_dispatch_key", "")) if isinstance(pairing, dict) else ""
+    rec: dict = {"map": name, "engine_key": key, "verdict": verdict, "gate": state, "findings": findings}
+    if verdict != "NOT-REVIEWABLE" and state == "red":
+        rec.update(verdict="NOT-REVIEWABLE", concluded=verdict, why="the paired gate was red when the verdict was written")
+    for i, f in enumerate(findings, 1):
+        f.setdefault("id", f"F{i}")
+    path = verdict_dir(clone) / f"{name}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(rec, indent=1) + "\n")
+    return rec["verdict"], rec
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["check", "accept"])
+    ap.add_argument("command", choices=["check", "accept", "recorded", "gate-state", "verdict"])
+    ap.add_argument("--verdict", default="")
+    ap.add_argument("--findings-file", default="")
+    ap.add_argument("--key", default="")
     ap.add_argument("--clone", required=True)
     ap.add_argument("--maps", default="")
     ap.add_argument("--prompt-file", default="")
@@ -229,6 +302,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--finding", default="")
     ap.add_argument("--reason", default="")
     args = ap.parse_args(argv)
+    if args.command == "gate-state":
+        state = gate_state(pathlib.Path(args.clone))
+        print(state)
+        return 0  # the reviewer reads the WORD; a red gate is an answer, not an error in the command
+    if args.command == "verdict":
+        findings = _read_json(pathlib.Path(args.findings_file)) if args.findings_file else []
+        if not isinstance(findings, list):
+            print("--findings-file must hold a JSON list of {id, severity, what}")
+            return 2
+        clone = pathlib.Path(args.clone)
+        got, rec = write_verdict(clone, args.map, args.verdict, [f for f in findings if isinstance(f, dict)], gate_state(clone))
+        print(f"recorded {got} for {args.map} (engine key {rec['engine_key'] or 'NONE - no dispatch recorded'}, gate {rec['gate']})")
+        return 0
+    if args.command == "recorded":
+        return 0 if recorded(pathlib.Path(args.clone), args.maps.split(), args.key) else 1
     if args.command == "accept":
         refused = accept(pathlib.Path(args.clone), args.map, args.finding, args.reason)
         print(refused or f"accepted {args.finding} on {args.map}")

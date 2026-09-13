@@ -32,19 +32,22 @@ built, farmed or lived in. The figures it rests on are in `research.md` R1 and R
       `scripts/test-pair-hooks.sh` cases for each refusal, the escape, and a NOT-REVIEWABLE verdict leaving
       the pair open - each proven to fire by deleting its branch once.
       research: rendering
-- [ ] T05 `review-gate.sh`: refuse a changed map whose latest verdict is NOT-REVIEWABLE (FR-002); its suite.
+- [x] T05 `review-gate.sh`: refuse a changed map whose latest verdict is NOT-REVIEWABLE (FR-002); its suite.
       research: rendering
+      verify: DONE. DONE. review-gate.sh reads <git-dir>/review-verdicts/<map>.json for each changed manifest whose notes were touched, and refuses one whose latest verdict is NOT-REVIEWABLE; no record keeps the notes rule. test-review-gate.sh 19/19, the new pair of cases (NOT-REVIEWABLE blocked with notes updated, PASS ok) proven to fire: with the verdict comparison broken the blocked case goes red.
 
 ## Phase 4 - the agents
 
-- [ ] T06 `settlement-review.md`: the FIRST STAGE (findings, records, sources, the paired gate before the
+- [x] T06 `settlement-review.md`: the FIRST STAGE (findings, records, sources, the paired gate before the
       first map, between maps and before the verdict) and the VERDICT RECORD as the last act; the canopy case
       as the worked example; the right to measure kept (FR-007, FR-008). A static test finds each.
       research: rendering
-- [ ] T07 `perf_review.py explain --control / --unverified` and the Makefile's `CONTROL=` / `UNVERIFIED=`;
+      verify: DONE. DONE. settlement-review.md: FIRST STAGE before Inputs (make review-paired-gate before the first map, before each further map and immediately before the verdict; red is NOT-REVIEWABLE; last findings against measurements.json verifies/subject and review-dispositions; the record's source judged, canopy clumps vs tree_crowns as the worked example; the right to measure independently kept) and the VERDICT RECORD as the last act (make review-verdict, which copies review_dispatch_key and re-reads the gate itself, so red records NOT-REVIEWABLE whatever the agent passes). tests/test_settlement_review_contract.py finds each; with two phrases removed it went 2 red. Module: gate_state, write_verdict, 3 new tests (14 total).
+- [x] T07 `perf_review.py explain --control / --unverified` and the Makefile's `CONTROL=` / `UNVERIFIED=`;
       `perf-audit.md` first stage (NOT-REVIEWABLE on a control naming no record; on UNVERIFIED, run the
       counterfactual itself first) (FR-010). Tests, feature 230's first explanation as the negative fixture.
       research: rendering
+      verify: DONE. DONE. perf_review explain takes --control <key> (must name a specs/*/measurements.json record, carried on the explanation as control_record) or --unverified <reason> (two words, eight chars), exactly one; the Makefile passes CONTROL= / UNVERIFIED= and logs UNVERIFIED to dev/bypass-log only after a recorded explanation. perf-audit.md FIRST STAGE: NOT-REVIEWABLE on a control naming no record; on unverified, run the counterfactual itself first. Feature 230's first explanation is the negative fixture. test_perf_review 29/29 (3 new, proven to fire: with both refusals removed all 3 red); agent contract test finds the first stage.
 
 ## Phase 5 - proof and landing
 

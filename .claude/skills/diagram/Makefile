@@ -34,10 +34,15 @@
 # distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
 # AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
 PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
-perf-explain:   ## [performance] band 1, first half: the session's written cause     WHY="..." [ENV=local|codebuild]
+perf-explain:   ## [performance] band 1, first half: the session's written cause and its evidence     WHY="..." CONTROL=<key> | UNVERIFIED="..." [ENV=local|codebuild]
 ##  WHY=<text>           the session's written cause for a band-1 increase
+##  CONTROL=<key>        a measurements.json key: a recorded run of the same subject with the attributed cause removed
+##  UNVERIFIED=<text>    instead of CONTROL - why the attribution was not tested; logged like an escape
 ##  ENV=local|codebuild  which environment the increase was measured in (default: local)
-	@$(PERF_REVIEW) explain --why "$(WHY)" --environment "$(or $(ENV),local)"
+# GUARD_EDIT_OK: feature 240 FR-010 - an attribution names its counterfactual. The evidence is a STRUCTURED argument,
+# never parsed out of WHY, and an UNVERIFIED reason lands in dev/bypass-log/ where `make audit` lists it - only once
+# the explanation was actually recorded, so a refused one logs nothing.
+	@$(PERF_REVIEW) explain --why "$(WHY)" --control "$(CONTROL)" --unverified "$(UNVERIFIED)" --environment "$(or $(ENV),local)" $(if $(UNVERIFIED),&& $(LOGBYPASS) permitted "perf-explain UNVERIFIED: $(UNVERIFIED)",)
 perf-confirm:   ## [performance] {internal} band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
 ##  VERDICT=consistent|inconsistent  whether the written cause matches the recorded per-stage delta
 ##  AS=perf-audit                    who is recording - only the subagent may pass this, and nothing else distinguishes the shells
@@ -988,6 +993,20 @@ review-accept:  ## [project] record a review finding as deliberately LEFT, with 
 # an acceptance is an escape in all but name (spec-fidelity round 2), and `make audit` lists every
 # `dev/bypass-log/` entry, which is how an acceptance is counted rather than quietly standing in for a fix.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
+
+review-paired-gate:  ## [project] the settlement-review's paired gate - green, running or red (exit 1 on red)
+# GUARD_EDIT_OK: feature 240 FR-007, adding an operation - what the reviewer reads before its first map, between
+# maps and before its verdict. Green is the gate stamp for this engine content, never the last-event-wins
+# verification record; running is a gate target live in this clone, by cwd.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
+
+review-verdict:  ## [project] the settlement-review's LAST act - write the map's verdict record   MAP=<map> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
+##  MAP=<map>          the pool map reviewed
+##  VERDICT=<v>        PASS, NEEDS-WORK or NOT-REVIEWABLE
+##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
+# GUARD_EDIT_OK: feature 240 FR-001, adding an operation - the pair closes on this record, not on the dispatch. The
+# engine key is copied from the dispatch and the gate is re-read here, so a red gate records NOT-REVIEWABLE.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" verdict --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
 test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
 ##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run
