@@ -272,3 +272,55 @@ order is R3a's - `urban-features` first at 103 items, then `capitals` at 125, th
 **And the priority within a page is the second shape from R3, not the count.** An item whose section
 roster already admits the figure was never read is a defect the reader meets as a finding; an item nobody
 ever claimed a source for is a gap. The defects come first.
+
+## R4 - `urban-features.html`, the first page worked (2026-09-13)
+
+Nine items closed, all of them the second shape from R3: the section's `Sources:` roster already recorded
+that a figure had been searched for and not found, while the sentence carrying it stood bare in the body.
+No new research was needed for any of them - the search had been done and dated; the label was in a place
+the reader never looks. Each is now a note at its own assertion, and each roster line points at the notes
+instead of carrying the admission.
+
+| the claim | what it became |
+|---|---|
+| one well per ten to twenty households, in a commoner quarter | ABSENCE (searched 2026-08-28, 共同井戸 世帯数) |
+| the samurai quarter keeps NO public wells, drawing from private ones inside its compounds | ABSENCE (searched 2026-08-28, 武家屋敷 井戸) |
+| the same ratio again, in the sibling section, as ten to eighteen | ABSENCE, naming the duplication |
+| a walled city keeps a burakumin neighborhood inside, for its labor in a siege | **GROUNDS: this project's decision** |
+| a kido ward gate barred at night seals the samurai quarter | ABSENCE (searched 2026-09-13) |
+| the Kawagoe bell tower's base dimension | ABSENCE; the figure REMOVED, the height kept |
+| the Dingbian and Xingcheng tower plans | ABSENCE; both figures REMOVED |
+| an inspection station at every gate, and a caravan facility on the trade route | ABSENCE; the gate tariff and the granary restated as the setting's canon |
+| kiln workers living at the kiln | ABSENCE; the three arguments kept as reasoning |
+
+**Two of the nine did not get a note - they lost a number.** The Kawagoe base and the Dingbian and
+Xingcheng plans were figures no reader can check supporting a distinction that survives without them: the
+type contrast is carried by the Pingyao market tower, which IS quoted. A relabeled figure would have kept
+a precision the record cannot back. Where a number does work, it stays and is labeled; where it does not,
+it goes.
+
+**One GROUNDS note, written carefully.** The burakumin-quarter rule is a decision this project made for
+its own maps, and the siege-labor sentence beside it is the reasoning offered for the decision rather
+than a historical finding - which is the one thing that makes the form legitimate here. Feature 235's
+prohibition is quoted in the note's own comment, because a grounds note on a caste's siting is exactly
+the shape that would let a hard research question be relabelled a decision.
+
+### R4a - a citation that said more than its quote
+
+Not a roster case, and the only one of its kind found on this page. The text read *"Song Kaifeng ran 20+
+dedicated wanghuolou fire-lookout towers with a standing brigade"* with a footnote attached. The quoted
+passage behind it says something else: 「In every ward, at every three hundred paces, there is a military
+patrol post, and on high ground there is a fire-watch tower, with men on top keeping lookout and a
+hundred soldiers quartered below」. Per ward, not per city, and no count of towers anywhere in it. The
+roster had recorded that a citywide count was "not found in any page read" while the footnote sat on the
+sentence making one. The sentence now says what the source says.
+
+### R4b - what the entry-drift check found, which was not drift
+
+`make page-check` named one pair after the section changed - the `well` modal. The agent reported
+**IN-STEP**: the modal carries neither of the newly-hedged claims, and its numbers come from the sibling
+section, which was untouched. What it found instead was an inconsistency between the two sections - one
+newly saying no page gives a households-per-well ratio while the other still asserted one - and it said
+plainly that this was a question for the record's own checkers rather than a modal rewrite. It was right,
+and closing it is the third row of the table above. **An agent asked one question answered a different
+one correctly and stayed inside its brief**, which is worth recording as the behavior to want.
