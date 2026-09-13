@@ -324,10 +324,14 @@ TOTAL **-3.1%**.
 
 The total is faster every time and ONE STAGE on ONE SEED is consistently slower. The `perf-audit` agent
 established the sharper form of this, and it is better evidence than the session's own: seed 4's `field` is
-the only stage anywhere whose delta keeps its SIGN across the bookends - 1.82 s -> 1.92 / 1.90 / 1.92, so
-+0.08 to +0.10 s - while every other mover flips sign between runs, which is noise (seed 4's `track` went
--0.01 / +0.02 / +0.05, so the session's first explanation named it wrongly and the record was corrected).
-Residual outside the stages is zero to within rounding, so the seed's rise IS that stage.
+the only GROWING stage whose delta keeps its sign across the bookends - 1.82 s -> 1.92 / 1.90 / 1.92 / 1.88,
+so **+0.06 to +0.10 s** - while every other mover that grows flips sign between runs, which is noise (seed 4's
+`track` went -0.01 / +0.02 / +0.05, so the session's first explanation named it wrongly and the record was
+corrected). Two DECREASES hold their sign as well - seed 39's `track` at about -0.12 and seed 47's `field`
+from -0.06 to -0.19 - and both are improvements, so neither weakens the attribution of the one increase.
+Residual outside the stages is zero to within rounding, so the seed's rise IS that stage. The delta shrank
+from +0.10 to +0.06 when `geoms.py`'s sentinel was fixed, which is the direction that fix predicts: its two
+import statements had been re-entering `__import__` on every construction.
 
 **The cause is mechanical and measured, not inferred.** `field` is the paddy-fan stage - `waterfields/comb.py`
 and `seams/` - which is the geometry that loads shapely; the only other shapely-touching stage,
