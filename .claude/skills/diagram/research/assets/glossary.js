@@ -4870,5 +4870,13 @@ window.RECORD_GLOSSARY = [
    "okaji"
   ],
   "def": "The refining forge: the second stage of Japanese iron making, which turns the tatara's pig iron and low-carbon fractions into flat bars of forgeable iron. The okajiba is its building."
+ },
+ {
+  "term": "umayado",
+  "variants": [
+   "umayado",
+   "馬宿"
+  ],
+  "def": "a Japanese inn that took a traveling guest's own horse into its keeping, or an inn with the stabling to do so; the one picture the record has of such an inn puts the lodging in front and a large stable behind"
  }
 ];
