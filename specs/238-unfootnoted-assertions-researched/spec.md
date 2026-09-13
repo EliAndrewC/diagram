@@ -1,6 +1,16 @@
 # Feature 238 - the unfootnoted assertions, researched
 
-**Status:** FAITHFUL (`spec-fidelity`, round 2 of 2, 2026-09-12) - IMPLEMENTING
+**Status:** AMENDED 2026-09-13 on the GM's ruling, awaiting re-review (the counter resets on an amendment - GM 2026-09-12). Previously FAITHFUL (`spec-fidelity`, round 2 of 2, 2026-09-12).
+
+## The amendment (GM 2026-09-13)
+
+The inventory came in at **695 items**, about four times the residue's estimate. The GM, told that:
+
+> Yeah. It sounds as if we can probably take care of phase one, phase two, phase three. and phase four. However, I agree that there are quite a lot of open items, which will probably require a lot of work. So why don't we close out all of the low hanging fruit, which is to say the things that we think we can get done with just a few passes and not another really deep and extensive round of searching and such. and then we can close out this feature and open a successor for the rest.
+
+So this feature's scope narrows to **what can be finished without another deep search pass**, and the rest goes to a successor. What that line includes and excludes is FR-012 and FR-013 below; every other requirement stands as written, scoped to the work this feature actually does.
+
+The boundary is not a convenience. The inventory is the expensive thing and it is finished; classifying it is judgment over reports already in hand; and the defects the second reading surfaced are corrections to things the record states WRONGLY, which are worth more per hour than gaps it states honestly. What is left for the successor is the long tail: sentences that owe a source nobody has looked for yet, each needing its own reading.
 
 ## Summary
 
@@ -92,6 +102,10 @@ absence notes now constitute.
   sentence whose source exists only behind a wall, a claim nobody can settle - is listed in the closing
   report with what was searched, exactly as feature 232 named this residue rather than burying it.
 
+- **FR-012 This feature closes on every item that needs no new reading, wherever it sits - the cut is by ITEM, not by page.** It delivers, on ALL nineteen pages: the complete classified inventory (FR-002); every defect the readings of 2026-09-12 and 2026-09-13 surfaced, which is the class where the record states something WRONG rather than merely unsupported; **every item whose section `Sources:` roster already records a dated search while the assertion in the body stands bare** (R3's second shape - the search is done, only the label is in the wrong place, and R4 closed nine of them at zero research cost); **every item the inventory classifies `GROUNDS`, `COVERED` or `NOT AN ASSERTION`**, none of which needs a source sought at all; the caravan inn (FR-011); and the checks the changed material owes (FR-007, FR-008). **What is NOT worked here is an ITEM that requires a new `source-reader` pass**, whatever page it sits on. If the roster-disclosure or no-reading-needed classes turn out to be larger than a few passes, the excess is deferred by stated VOLUME and named in the closing report - never swept out by a page boundary.
+
+- **FR-013 What is left goes to a named successor, and the successor's work list is identified per ITEM.** `research.md` carries a closed list naming every item this feature worked, so the successor owns exactly the reader-report items that list does not name - a filter over the table rather than a reconciliation of counts against prose. The closing report names the successor's feature number and gives the per-page remainder as a cross-check on that list, not as the list itself. The successor does not re-read: R3, R6 and the four reader reports are its input, which is the whole reason the inventory is finished here rather than left half-built. **The page tasks this feature does not work are MOVED to the successor's `tasks.md` and removed from this one**, since a feature with an open task lands nothing.
+
 - **FR-011 The caravan inn's second story comes down, and the inn is not recorded as a deviation.** The
   GM ruled on 2026-09-12: *"The caravan in does not a deliberate deviation. So if the record draws it as
   two story, then that is simply a mistake. If our attested analog reads it as a single story."* Both
@@ -113,7 +127,7 @@ absence notes now constitute.
 - **SC-001** (FR-001, FR-002) Every one of the nineteen research pages has been read by a `quote-check`
   agent, and `research.md` R3 accounts for every sentence those agents named, each with one of the four
   dispositions.
-- **SC-002** (FR-004) No sentence classified `CITE` or `GROUNDS` in R3 is left without a footnote of the
+- **SC-002** (FR-004, FR-012) No sentence THIS FEATURE WORKS - the classes FR-012 puts in scope - is left without a footnote of the
   matching form; `tests/interactive/test_footnotes.py` is green, and the footnote census tool reports the
   new notes in their classes.
 - **SC-003** (FR-003, FR-006) Every new citation carries a verbatim quotation from a page whose URL is in
@@ -122,10 +136,13 @@ absence notes now constitute.
   the end, with a clickable link; nothing was inserted above an existing Part 4 entry.
 - **SC-005** (FR-007, FR-008) `record-format`, `quote-check` and `source-applicability` have run over the
   changed material and their findings are applied; no `entry-drift` pair is left unanswered at push.
-- **SC-006** (FR-009) `tasks.md` carries one task per research page, and no page's writing task is ticked
-  before that page's own inventory, reading, notes and checks are all done - so an interrupted run leaves
-  finished pages rather than a half-noted record.
-- **SC-007** (FR-010) The closing report names what is left open, with the searches that failed.
+- **SC-006** (FR-009, FR-013) `tasks.md` carries one task per research page this feature WORKS, and no such
+  task is ticked before that page's own inventory, reading, notes and checks are done; the tasks for pages
+  left to the successor are moved to it and removed here, so this feature can close at zero open tasks.
+- **SC-007** (FR-010) The closing report names what is left open. Where a search was made and failed it says
+  so; where the item was never searched - which is most of what remains - it says that instead, rather than
+  implying a hunt that never happened.
+- **SC-009** (FR-012, FR-013) `research.md` R3 carries a disposition for every item the four readers named; `presentation.html` and `settlements.html` are closed; every defect the two readings surfaced is corrected or recorded as declined; and the closing report names the successor and its per-page remainder.
 - **SC-008** (FR-011) No `2-story`, `upper-story` or `lower eave` remains in the `inn()` glyph, its
   docstring names a single-story inn, `towns.html` asserts a single-story caravan inn with no
   deviation label, and the reader's verdict on Japanese post-station inns is recorded in `research.md`
@@ -144,6 +161,8 @@ absence notes now constitute.
 - **D3 The four dispositions include `NOT AN ASSERTION` on purpose.** Feature 235 exists because
   labeling a non-problem as a problem makes the backlog meaningless. A sentence that makes no claim
   about the world is recorded as such and never becomes a note.
+- **D5 The GM named four phases; phase 2 is nineteen page tasks, and this is how much of it is taken.** The amending message opens "we can probably take care of phase one, phase two, phase three. and phase four" and then walks that back in its own next sentence - "However, I agree that there are quite a lot of open items, which will probably require a lot of work" - before giving the operative instruction, to close out the low hanging fruit and open a successor for the rest. So phase 2 is narrowed, and the narrowing is recorded here rather than performed silently, because the GM's two sentences pull in different directions and a session resolving that on its own is exactly what wants writing down. **What is taken from phase 2**: `presentation.html` and `settlements.html` entire, since the inventory closed them; and on every other page, every item needing no new reading - the roster-disclosure class, and everything classified `GROUNDS`, `COVERED` or `NOT AN ASSERTION`. **What is left**: the `CITE` items that need a source sought, which is the bulk of the 695 and the successor's whole job. An earlier draft of this amendment cut phase 2 down to only the two already-empty pages, which is the minimum reading of "all of the low hanging fruit" rather than the instruction; `spec-fidelity` refused it, on the ground that the GM cut by CHEAPNESS and the session had cut by PAGE because a page is the session's unit of work.
+
 - **D4 The caravan inn's fix is carried here rather than in its own feature.** It is four lines of a glyph
   and a sentence of prose; a feature of its own would spend a whole gate cycle on that. The price is that
   this feature's route becomes GATED, which is stated in the Summary and in FR-011 rather than left to be

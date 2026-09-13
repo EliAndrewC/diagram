@@ -4,21 +4,21 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research notes: [`resear
 
 ## Phase 1 - the inventory (FR-001, FR-002)
 
-- [ ] T01 the census that sizes the pass, from the pages rather than by hand
+- [x] T01 the census that sizes the pass, from the pages rather than by hand
       research: procedure
-      verify:
-- [ ] T02 `quote-check` batch A - `religion-and-death`, `vegetation`, `urban-features`: per section, every assertion carrying no footnote; report kept under `reader-reports/`
+      verify: DONE. DONE. research.md R1: every paragraph inside <main> on all 19 pages counted, and counted again for those carrying no footnote - 1,200 paragraphs, 864 with no footnote, 285 inline unsourced-class markers, per page. Derived from the pages, not by hand.
+- [x] T02 `quote-check` batch A - `religion-and-death`, `vegetation`, `urban-features`: per section, every assertion carrying no footnote; report kept under `reader-reports/`
       research: procedure
-      verify:
-- [ ] T03 `quote-check` batch B - `cities/capitals`, `cities/fabric`, `cities/government`, `cities/defenses`
+      verify: DONE. DONE. Report kept verbatim at reader-reports/religion-vegetation-and-urban-features.md - 53 sections, 171 items, 34 with an inline marker. It also found that feature 232 named the right pages and not the worst sections on them.
+- [x] T03 `quote-check` batch B - `cities/capitals`, `cities/fabric`, `cities/government`, `cities/defenses`
       research: procedure
-      verify:
-- [ ] T04 `quote-check` batch C - `water`, `fields`, `cities/river-cities`, `cities/hinterland`, `cities/sizing`
+      verify: DONE. DONE. reader-reports/the-city-pages.md - 72 sections, 203 items, 59 inline markers and 12 roster-only. Confirms the nine-claim run in the capitals class-scaling bullets that 232 flagged.
+- [x] T04 `quote-check` batch C - `water`, `fields`, `cities/river-cities`, `cities/hinterland`, `cities/sizing`
       research: procedure
-      verify:
-- [ ] T05 `quote-check` batch D - `homesteads`, `archetypes`, `buildings`, `settlements`, `towns`, `ways`, `presentation`
+      verify: DONE. DONE. reader-reports/water-fields-and-the-river-cities.md - 57 sections, 153 items, 51 with a marker. Named the wharf section (12 items, one footnote) as the thinnest-sourced on those pages.
+- [x] T05 `quote-check` batch D - `homesteads`, `archetypes`, `buildings`, `settlements`, `towns`, `ways`, `presentation`
       research: procedure
-      verify:
+      verify: DONE. DONE. reader-reports/homesteads-buildings-and-the-hamlet-pages.md - 100 sections, 168 items, 67 with a marker. presentation.html returned ZERO and settlements.html one, both as R1 predicted.
 - [ ] T06 the inventory built from those reports: every named sentence given one of the four dispositions, in `research.md` R3
       research: procedure
       verify:

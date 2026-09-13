@@ -495,3 +495,105 @@ weaker one. And the author is candid that those registers carry manifest errors 
 who descended from whom rather than whether the offices descended at all. All three are in the limits now,
 along with the honest form of what a handful of lineages can support: that the office DID descend in
 families, never a rate.
+
+## R6 - the inventory classified (2026-09-13, FR-002)
+
+The four readers named 695 sentences. This section gives every one of them a disposition, so that the
+successor works a list rather than re-reading nineteen pages.
+
+**The classification is a rule plus a named exception list, not 695 hand judgments**, and the rule is
+sound because of what the readers were asked. Their brief EXCLUDED, by name, anything about how our map
+is drawn, anything recording a decision this project made, and any framing or cross-reference. So the
+surviving population is already filtered to claims about the world: the default disposition for an item
+the readers reported is therefore `CITE`, and the interesting work is the exceptions.
+
+**The rule.**
+
+- An item the readers marked **HIGH** or **MEDIUM** (including MEDIUM-HIGH) is **`CITE`**. It asserts
+  something about how a place was built, farmed, governed or lived in, and a source must be sought.
+- An item marked **LOW** or **LOW-MEDIUM** is triaged individually, and every one of them is listed below.
+- Two pages are **`NOT AN ASSERTION`** in bulk on the readers' own verdicts: `presentation.html` (zero
+  items found in six sections; the page is about how the sheet is drawn and nothing else) and
+  `settlements.html` (one item, which restates footnoted setting canon from the section above it).
+
+| batch | HIGH | MEDIUM / MEDIUM-HIGH | LOW / LOW-MEDIUM | items |
+|---|---:|---:|---:|---:|
+| A - religion-and-death, vegetation, urban-features | 112 | 52 | 7 | 171 |
+| B - the four `cities/` pages | 118 | 71 | 14 | 203 |
+| C - water, fields, river-cities, hinterland, sizing | 62 | 65 | 26 | 153 |
+| D - homesteads, buildings, archetypes, towns, ways, settlements, presentation | 103 | 61 | 4 | 168 |
+| **total** | **395** | **249** | **51** | **695** |
+
+### The dispositions
+
+| disposition | count | what it means for the successor |
+|---|---:|---|
+| `CITE` | **631** | a source must be sought - the long tail, and the successor's whole job |
+| `GROUNDS` | 27 | no source is owed; a note in feature 235's form and no reading at all |
+| `COVERED` | 16 | a footnote elsewhere already supports it; a cross-reference, not a search |
+| `NOT AN ASSERTION` | 21 | nothing owed; two whole pages and a handful of stray lines |
+| **worked and CLOSED by this feature** | **21** | the nine roster-hidden claims on `urban-features` and the twelve defects the two readings surfaced |
+
+### The exceptions, enumerated
+
+**`GROUNDS` - no source is owed.** Every one of these is a sentence the readers themselves flagged as
+resting on this project's own reasoning, its own maps, or on physical necessity, and each is disclosed as
+such in the record's visible text already. They need a note in the closed-list form and nothing else.
+
+- *This project's decision*, self-disclosed at the sentence: the dredging half of the berm (`water`), the
+  record's own step from a river bend to a dug ditch, the record's own reading of where a windlass stands,
+  the record's own inference about a collector's meeting angle, the bund-against-a-crooked-ditch reading,
+  the parcel taking its frame from the canal, the splice behind the in-wall garden, the two-reckoning
+  arithmetic for a bed's size (`cities/hinterland`), and the record's own reading that a green bund
+  disappears into a green field (`fields`).
+- *Physical necessity*: a basin has to be watertight on the side facing its ditch or it drains into it.
+- *Measured on our own maps*: the metric restatement of our own drawn ditch widths.
+- *Follows from the definitions*, or an economics-of-construction argument the record makes in its own
+  voice: the marginal cost of one more terrace bench, nobody building a weir for two acres, a rampart's
+  cost scaling with its length, a city being the market of the land that feeds it, the road-driven suburb
+  forming where the traffic is.
+- *A drawing convention*: what makes a castle read as a castle on the sheet.
+
+**`COVERED` - a footnote already carries it.** Each is a sentence whose support exists, elsewhere, and the
+work is a cross-reference rather than a search: the interceptor-ditch practice (footnoted on the same page
+under a different question), the moat as storm drain (footnoted on `water`), the two open-reserve shares
+and the density claim on `cities/sizing` (all three pointed at `cities/fabric`), the field-margin value
+(`vegetation`), the shared transplanting schedule (footnoted two sections on), the `settlements` item, and
+the restatements in the `capitals` dimensional-audit table of figures footnoted earlier on that page.
+
+**`NOT AN ASSERTION`.** `presentation.html` entire, `settlements.html`'s single item, and a small number
+of lines the readers reported for completeness while saying they owe nothing.
+
+### What this leaves, per page, for the successor
+
+`urban-features` 94 of 103 remaining; `cities/capitals` 125; `homesteads` 58; `buildings` 46;
+`water` 55; `fields` 47; `archetypes` 38; `religion-and-death` 39; `vegetation` 29; `cities/government` 27;
+`cities/defenses` 26; `cities/fabric` 25; `cities/river-cities` 22; `towns` 16; `cities/hinterland` 9;
+`ways` 8; `cities/sizing` 3. `presentation` and `settlements` are closed.
+
+**The order the successor should take them in is not the count.** It is the second shape from R3: the
+items whose section roster already admits the figure was never read are DEFECTS a reader meets as
+findings, and they are cheap because the search is already done and dated. `urban-features` was worked
+that way and nine of its items closed without a single new search.
+
+### R6a - where R6's numbers come from, and a hook that altered a count (2026-09-13)
+
+**The confidence table above is the four readers' OWN stated splits**, taken from the summary section each
+of them wrote, not from any parse this session made of their prose. That matters because a peer session
+reported the same day that feature 236's house-style hook had silently rewritten one of this session's
+shell commands: it splits a Bash payload on `|` without respecting quotes, so the alternation inside a
+`grep -oE` pattern was cut into fragments, and an em-dash inside the pattern was "corrected" to a hyphen.
+The grep then searched for a character the pattern did not contain, and undercounted with no error.
+
+That command was used to inspect what label FORMS the reports use, and its output was never carried into
+R6. Checked rather than assumed: an independent parse, run inside a quoted heredoc with no shell pipeline
+and no em-dash, recovers 641 of the 695 labels - 366 HIGH, 228 MEDIUM or MEDIUM-HIGH, 47 LOW or
+LOW-MEDIUM. Every class is short by about the same proportion, which is label-format variance in prose
+written by four different agents rather than a disagreement with their arithmetic. **The readers' own
+totals stand as the table's source**, and the individual triage of the LOW items was extracted by a
+heredoc'd regex that contained no em-dash and so was never touched.
+
+The general lesson is worth more than the incident: **a guard that edits a command can change what the
+command MEASURES**, and it reports that it corrected the text rather than that it changed a result. Any
+count taken from a shell pipeline whose pattern carries a dash or a quoted alternation should be
+re-derived before it is written down.
