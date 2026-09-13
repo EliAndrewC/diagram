@@ -22,7 +22,6 @@ message as model latency, and reports the remainder as idle:
 | tests and checks | 15.0 | 7.2% | 44 |
 | a foreground `sleep` on a background run | 6.0 | 2.9% | 1 |
 | edits, git, the push, everything else | 0.9 | 0.4% | 129 |
-
 Keys for the four blocks the argument rests on: `m:amendment-replay-minutes`,
 `m:amendment-idle-minutes`, `m:amendment-latency-minutes`, `m:amendment-test-minutes`. The census
 takes `--record`, so these are re-derived rather than retyped.
@@ -77,7 +76,7 @@ permanent, and which is why the figure can be taken before the extraction exists
 | the same program, compiled once, called in process | **7.0 ms** | `m:decision-in-process-ms` |
 | a bare `python3 -c pass` | 19 ms | `m:bare-python-spawn-ms` |
 
-That is **21x** (`m:decision-spawn-ratio`), and over the whole window **80 s against 3.9 s**
+That is **21x** (`m:decision-spawn-ratio`), and over the whole 560-command window **80 s against 3.9 s**
 (`m:window-spawned-s`, `m:window-in-process-s`, `m:frozen-window-commands`). The cost is not process
 startup - a bare spawn is 19 ms (`m:bare-python-spawn-ms`) - it is the hook rebuilding its whole world per command. Nine passes
 were needed while the questions were being settled, which is where the replay time went.
@@ -93,6 +92,11 @@ guard ACTS on - short ones, mostly - it was 37x. The figure recorded is the one 
 faces, the whole window, and this paragraph is why it is not the largest of the three.
 
 ## R4 - the corpus was never frozen, and the program cannot be imported (measured 2026-09-13)
+
+**The frozen corpus, and what it costs to keep.** `measure/freeze_window.py` froze the window into
+`scripts/fixtures/command-window-2026-09-13.json`: 560 commands (`m:frozen-window-commands`), 2.7 MB of
+command text and 3.0 MB as the JSON on disk. The ten largest commands are 38-79 KB heredocs; capping a
+command at 10,000 characters would keep 88% of them for 1.04 MB, which spec D6 prices and rejects.
 
 **Nothing froze the window.** Each of the nine passes re-read the transcripts to rebuild the same
 command list, and two of them ran against a prefilter this very hook had corrupted - its literal
@@ -142,3 +146,20 @@ figure reproduced "to the command".
 
 So the cost this feature removes is not the reviewer's skepticism - it is the reviewer rebuilding the
 same instrument four times because the figures arrived as text with no route back to the run.
+
+## R6 - the bench against the change it was built to have checked (a judgment over one run, 2026-09-13)
+
+`make hookbench GUARD=house-style AGAINST=bf8149cc` replays the frozen window through today's decision
+and through the hook as it stood before feature 236's exemption work began. Of 560 commands, **65**
+verdicts change: 43 corrected to silent, 11 reported to silent, 8 silent to corrected, 3 silent to
+reported. The directions are the ones the exemption was built to produce - the corrections that stopped
+are writes into the auto-memory and scratchpads, and the ones that started are commands that write
+project content by a route the walk resolves, including two that write the memory index and a clone in
+the same breath, which the spec's FR-007c corrects on purpose.
+
+This is not a digit-for-digit reproduction of the 52 changed verdicts the exemption's own review
+recorded, and the reason is stated rather than papered over: that replay ran over an earlier, rolling
+window and against the code as it stood then, while this one runs over the frozen corpus and against a
+decision that has since gained the quote-aware segment split and D11. What the bench adds is that the
+comparison is now a command, where it was a harness written by hand in a scratchpad and rebuilt four
+times.

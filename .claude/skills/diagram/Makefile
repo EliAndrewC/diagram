@@ -983,6 +983,18 @@ tick:           ## [project] tick a task: F=188 T=T03 NOTE="what was verified" [
 # The tool reads every place a claim can be (main's tree, its fetched origin/main, EVERY clone's specs/, and its
 # own ledger) under one flock on the mirror, and creates the directory before it lets go. `tick`'s sibling: a
 # bookkeeping step that refuses rather than guesses. Refuses in the mirror itself; PEEK=1 looks without claiming.
+hookbench:      ## [project] replay the frozen command window through a guard decision, in process   GUARD=house-style [AGAINST=<ref>] | REFRESH=1
+##  GUARD=<name>         a guard whose decision is importable (feature 239 FR-001); others are refused by name
+##  AGAINST=<ref>        also print the verdict diff against the guard as it stood at <ref> - what an exemption change owes
+##  REFRESH=1            freeze a new dated window of real commands into scripts/fixtures/ instead
+	@: "GUARD_EDIT_OK: feature 239 FR-005 - one process for the whole window where spawning the hook per command cost 80 s against 3.9 s" ; \
+	python3 "$$(git rev-parse --show-toplevel)/scripts/_hookbench.py" $(if $(REFRESH),--refresh,$(GUARD) $(if $(AGAINST),--against $(AGAINST),))
+
+figures:        ## [project] re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]
+##  a moved COUNT fails; a timing outside its band is reported and never fails; the file is restored after
+	@: "GUARD_EDIT_OK: feature 239 FR-011 - a figure is only as good as the command behind it, and this re-runs the command" ; \
+	python3 "$$(git rev-parse --show-toplevel)/scripts/figures.py" $(SPEC)
+
 claim:          ## [project] claim the next spec-kit feature number under the host-wide lock   SLUG=kebab-slug | RENUMBER=specs/NNN-slug [PEEK=1: look, claim nothing]
 ##  SLUG=<slug>          lower-case kebab; the directory becomes specs/NNN-<slug>/ in THIS clone
 ##  RENUMBER=<specs/dir> instead of a slug: MOVE that existing directory to the next number (a deduplication, GM 2026-09-07)
