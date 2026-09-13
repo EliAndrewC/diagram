@@ -123,8 +123,7 @@ governed or lived in, which is what put it on the list.
       research: rendering
       verify:
 - [ ] T21 the closing report: what closed, and per unclosed item whether it was searched and failed or
-      never searched; the two items 238 left to the GM noted as settled and where (the inn's form knob in
-      feature 244, the Xuxiebian absence note as the record carries it)
+      never searched; both GM items relayed (the caravan-inn knob, the Xuxiebian site name)
       research: rendering
       verify:
 - [ ] T22 `make page-check` green, `make done` green, the push clean

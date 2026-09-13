@@ -120,10 +120,10 @@ it stands.
 as tidying: the honest label now sits at the assertion while the section's `Sources:` line still
 carries it too. Fifty-one edits, no change of meaning in any.
 
-**FR-014 - nothing here is engine code.** The two items 238 could not settle are both settled: the
-Xuxiebian site name is an absence the record already carries, and the caravan inn's story count was
-RULED a knob by the GM on 2026-09-13 (*"if there are opposing sources then it's a toggle"*) - which is
-engine work and has its own feature, so this one stays research-only and on the DIRECT route.
+**FR-014 - the two items only the GM can settle are RELAYED, not built here.** Whether the caravan
+inn's story count should become a knob, and the Xuxiebian site name, which a second full search of both
+Wagner works confirms is in neither. Building the knob would be engine code and would put this
+feature's delta on the GATED route; this feature does not build it.
 
 ## Success criteria
 
@@ -148,18 +148,15 @@ engine work and has its own feature, so this one stays research-only and on the 
   order HIGH, MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW, absent a stated reason.
 - **SC-011** (FR-013) - no section's `Sources:` roster carries a disclosure that its own notes now
   carry.
-- **SC-012** (FR-014) - the feature's delta contains no `l7r/**/*.py` change, and neither settled item
-  is worked here: the caravan inn's form knob is feature 244's, and the Xuxiebian absence note stands
-  as the record already carries it.
+- **SC-012** (FR-014) - the feature's delta contains no `l7r/**/*.py` change, and both GM items appear
+  in the closing report as relayed questions.
 - **SC-013** (FR-011) - the 119 never-searched absence notes are worked and counted separately from
   the FR-001 list, and neither count is folded into the other in any report.
 - **SC-014** (spec-wide) - `make page-check` green and the push clean.
 
 ## Decisions recorded
 
-**D1 - an absence note that records no search is IN scope - RULED by the GM, 2026-09-13:** *"I also agree
-that never-searched absence notes are in scope for 242."* The reasoning below is what the ruling was put
-to them with, kept because it is why the reading was proposed rather than the other. 119 of the record's 259 absence notes say
+**D1 - an absence note that records no search is IN scope.** 119 of the record's 259 absence notes say
 no query of its own was run (`m:absence-notes-never-searched`; `research.md` R2). The narrow reading
 would put them out of scope, because they carry a footnote and the GM's population was assertions that
 *"do not carry a footnote"* - and it was priced: it makes the feature about a quarter smaller and
@@ -179,8 +176,9 @@ re-read the record"*, which a session could read as license to skip FR-007.
 
 **D3 - this feature is research-only and takes the DIRECT route.** Nothing in FR-001 to FR-013 touches
 `l7r/**/*.py` or a pool generator. FR-014 is what keeps it that way: the caravan-inn knob is the one
-inherited item that would be engine code, the GM ruled it a knob on 2026-09-13, and it is built in
-feature 244 with its own gate and pool sweep - not here.
+inherited item that would be engine code, and it is relayed rather than built. If the GM asks for the
+knob, that is a separate feature with its own gate and pool sweep, or an amendment to this one whose
+route consequence is stated when it is made.
 
 **D4 - the ordering is confidence, not corrected-wrongness.** Feature 238's draft proposed working the
 items the record states WRONGLY first. Nothing in the reports or in R6 marks an item as wrong rather
@@ -263,11 +261,3 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   caravan inn is MEDIUM-HIGH **and bare**, the word that makes the 28 - 1 subtraction self-evident where
   the claim is made. That word changes no figure, no requirement and no scope, so it does not reopen the
   counter; the spec is accepted.
-- **Amendment (2026-09-13), counter reset.** The GM ruled D1 in scope and the inn a knob; D1 and FR-014
-  record it. **Amendment round 1, `spec-fidelity`: CHANGES REQUIRED** - the reword left three stale
-  sentences: SC-012 still asked for both items to be put to the GM as relayed questions, which FR-014
-  now denies and which is the unfiltered-escalation failure the GM's 2026-09-12 rule exists to stop;
-  T21 carried the same clause; D3 still argued from "if the GM asks for the knob". All three restated.
-- **Amendment round 2, `spec-fidelity`: FAITHFUL.** No requirement, criterion or task treats either
-  item as open for the GM; SC-012 verifies both halves of FR-014; the completion condition is
-  untouched. The spec stands accepted with the ruling recorded.
