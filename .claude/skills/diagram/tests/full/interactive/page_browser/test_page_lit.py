@@ -19,7 +19,10 @@ from l7r.diagram.interactive.page import render_page
 from l7r.diagram.interactive.tags import ClsTag
 from l7r.diagram.tools import page_lit
 
-pytestmark = pytest.mark.renders  # the page carries a rendered picture and id map (feature 213)
+pytestmark = [
+    pytest.mark.renders,  # the page carries a rendered picture and id map (feature 213)
+    pytest.mark.xdist_group("chromium"),  # ONE Chromium per run: the whole package on one worker (conftest.py says why)
+]
 
 #: a map of two classes, each a solid half - so a share is an exact number rather than a judgment
 STRINGS = [

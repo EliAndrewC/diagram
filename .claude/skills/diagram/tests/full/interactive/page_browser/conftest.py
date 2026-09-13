@@ -25,9 +25,6 @@ from l7r.diagram.interactive.page import render_page
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 from tests.full.interactive.page_browser._driver import Page, _synthetic
 
-playwright = pytest.importorskip("playwright.sync_api", reason="playwright is not installed (pip install -r requirements-dev.txt)")
-
-
 # ONE CHROMIUM PER RUN, AND IT IS NOT PARALLELIZED (GM 2026-09-12: *"we should only ever start one chromium for
 # a test run, and that stuff should not be parallelized until such time as we have way, way more tests than we do
 # now"*). Two things were needed for that, and the fixture's scope was only one of them:
@@ -43,11 +40,21 @@ playwright = pytest.importorskip("playwright.sync_api", reason="playwright is no
 # The cost of not parallelizing them is nothing to speak of: the package is two modules and a handful of tests on
 # a page of fifteen elements, under 9 s in total, and it is skipped entirely whenever nothing it reads has changed
 # (feature 206's `browser` stamp).
-pytestmark = pytest.mark.xdist_group("chromium")
+#
+# THE MARKER LIVES IN EACH TEST MODULE'S OWN `pytestmark`, NOT HERE. A `pytestmark` in a conftest applies to
+# nothing: pytest reads module marks from the TEST module, and a conftest is not on any test's node chain. The
+# 2026-09-13 gate memory profile (dev/performance.md, "Where a gate's RAM goes") found this package's 21 tests spread
+# over 8 of the 10 workers, each with its own Playwright driver (~95 MiB) and Chromium (~55 MiB over five processes) -
+# 1.2 GiB of the gate's 3.2 GiB peak, for a rule this file had stated since 2026-09-12. `tests/test_markers.py`
+# now asserts the mark on every module here, so the rule cannot silently lapse again.
 
 
 @pytest.fixture(scope="session")
 def browser() -> Iterator[Any]:
+    # Imported HERE, not at module level: every worker imports this conftest to collect the package, and
+    # `playwright.sync_api` with the greenlet and asyncio it drags in is ~7 MiB a worker (the same profile) - paid
+    # by the one worker that runs the group, instead of by ten.
+    playwright = pytest.importorskip("playwright.sync_api", reason="playwright is not installed (pip install -r requirements-dev.txt)")
     with playwright.sync_playwright() as p:
         try:
             b = p.chromium.launch()
