@@ -254,12 +254,6 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   widened from the bare items to every item, since the 29 is taken over all 695 and a stray tier on a
   marked item would corrupt a recorded figure just as quietly. The round-3 arithmetic carries its "on
   round 3's own run" label.
-- **Amendment (2026-09-13), counter reset.** The GM ruled D1 in scope and the inn a knob; D1 and FR-014
-  record it. **Amendment round 1, `spec-fidelity`: CHANGES REQUIRED** - the reword left three stale
-  sentences: SC-012 still asked for both items to be put to the GM as relayed questions, which FR-014
-  now denies and which is the unfiltered-escalation failure the GM's 2026-09-12 rule exists to stop;
-  T21 carried the same clause; D3 still argued from "if the GM asks for the knob". All three restated.
-- **Amendment round 2**: pending.
 - **Round 6 (2026-09-13), `spec-fidelity`: FAITHFUL.** The review re-derived the hedged census
   independently of the harness (695 blocks, 29 hedged, 28 bare, "caravan inn" in exactly one block, so
   the bound is 28 - 1 rather than an artifact of a phrase matching twice), confirmed `hedged-worklist-max`
@@ -269,3 +263,11 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   caravan inn is MEDIUM-HIGH **and bare**, the word that makes the 28 - 1 subtraction self-evident where
   the claim is made. That word changes no figure, no requirement and no scope, so it does not reopen the
   counter; the spec is accepted.
+- **Amendment (2026-09-13), counter reset.** The GM ruled D1 in scope and the inn a knob; D1 and FR-014
+  record it. **Amendment round 1, `spec-fidelity`: CHANGES REQUIRED** - the reword left three stale
+  sentences: SC-012 still asked for both items to be put to the GM as relayed questions, which FR-014
+  now denies and which is the unfiltered-escalation failure the GM's 2026-09-12 rule exists to stop;
+  T21 carried the same clause; D3 still argued from "if the GM asks for the knob". All three restated.
+- **Amendment round 2, `spec-fidelity`: FAITHFUL.** No requirement, criterion or task treats either
+  item as open for the GM; SC-012 verifies both halves of FR-014; the completion condition is
+  untouched. The spec stands accepted with the ruling recorded.
