@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from collections.abc import Sequence
 
-from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
+from l7r.diagram.settlement import Settlement, edge_dist, seg_closest, seg_dist
 
 from ..consts import (
     WEB_FABRIC_GAP,
@@ -482,6 +482,57 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
     return closed
 
 
+def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
+    """Pull back any lane end that reaches NOTHING, and empty what is left if pulling back cannot save it.
+
+    RUNS LAST, BESIDE THE OTHER FINISHING SWEEPS, for the reason they all do: the passes above rewrite ends. A link laid
+    to reach a piece another pass then drops, or a tail left by a trim, is an end in open ground - and
+    `lanes_reach_something` is the rule it breaks, on the gate, one map at a time (settlement-review, feature 230 passes 10
+    and 11: the same 5 ft link on the reference hamlet came back whenever the map moved, ending 73 ft from any way and 76
+    from any house). The rule's own figure is 60 ft to a way, a house or the field, so that is what is asked here; the
+    lane gives up its last vertex until an end passes, and a lane whittled under `_WEB_MIN_FT` is emptied for
+    `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design."""
+    lanes = s.M.get("lanes") or []
+    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
+    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (s.M.get("fields") or [])] or [list(f) for f in fields]
+    fixed, emptied = 0, []
+    for i, ln in enumerate(lanes):
+        if ln.get("connector"):
+            continue
+        pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
+        if len(pts) < 2:
+            continue
+        others = [
+            sg
+            for j, o in enumerate(lanes)
+            if j != i and len(o.get("pts") or []) >= 2
+            for sg in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
+        ]
+
+        def _reaches(q: Pt, _o: Sequence[tuple[Pt, Pt]] = others) -> bool:
+            near_way = min((seg_dist(q[0], q[1], a, b) for a, b in _o), default=float("inf"))
+            near_house = min((math.dist(q, h) for h in houses), default=float("inf"))
+            near_field = min((edge_dist(q[0], q[1], r) for r in rings if len(r) >= 3), default=float("inf"))
+            return min(near_way, near_house, near_field) <= _REACH_FT
+
+        before = len(pts)
+        while len(pts) >= 2 and not _reaches(pts[-1]):
+            pts.pop()
+        while len(pts) >= 2 and not _reaches(pts[0]):
+            pts.pop(0)
+        if len(pts) == before:
+            continue
+        if len(pts) < 2 or polyline_len(pts) < _WEB_MIN_FT:
+            pts = []
+        ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        s.reink_lane(i)
+        if not pts:
+            emptied.append(i)
+        fixed += 1
+    s.drop_lanes(emptied)  # record and ink together - see `drop_lanes`
+    return fixed
+
+
 def _sweep_debris(s: Settlement) -> int:
     """Drop a lane the passes have whittled below `_WEB_MIN_FT` and left standing on its own.
 
@@ -553,4 +604,5 @@ _FINE_CELL = 3.0
 # 6). So it plans at the ordinary fabric standard and buys its reach from the CELL alone:
 # `WEB_FABRIC_GAP + 3 * 0.71` = 9.1 ft against the 14.1 ft the coarse detour rung was asking, which
 # is what opened tripwire seed 27's corridor while keeping every lane off the steadings.
+_REACH_FT = 60.0  # ft: `lanes_reach_something`'s own figure for an end - a way, a house or the field within this
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one

@@ -588,11 +588,13 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   mosaic parcel's corner-cutting segment belongs to neither adjoining run; and three sheds have one
   corner 0.3-0.8 ft outside their parcel polygon, sub-foot and invisible at any zoom.
 
-## The two ditch classes, and no brook to tap (feature 230, 2026-09-12)
+## Its canals are pond canals, and no brook to tap (feature 230, 2026-09-12)
 
-This hamlet is the polder: its water comes from a reservoir, not from a brook, so nothing at its head
-changed. Two things did. The ditches that feed the paddies and the one that drains them are two classes on
-the page now - `irrigation ditch` and `drainage ditch` - where one class and one explanation covered both,
-and the explanation was written entirely about supply. And the run that carries this map's runoff off the
+This hamlet is the dike-pond: its water comes from a reservoir, not from a brook, so nothing at its head
+changed. Two things did. The field ditch that used to be one class is split on every map into the
+irrigation ditch and the drainage ditch - but on THIS map the canals between the ponds carry water both
+ways, each pond's gates feeding from one canal and draining into another, so they are neither: they are
+`pond canal`, the conveyance-and-drainage network the ponds exchange water with, and only the ring drain
+that takes everything to the outfall is a `drainage ditch`. And the run that carries this map's runoff off the
 frame is drawn and recorded as a drainage ditch at the collector's own width, like every other map's, where
 before it was an eight-pixel stream: the same thing wearing two labels on two maps was what the GM caught.

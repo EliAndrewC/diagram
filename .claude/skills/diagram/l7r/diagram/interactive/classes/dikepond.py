@@ -87,8 +87,9 @@ class PondCanal(Kind):
     Why: A dike-pond is not a sealed basin and its canals are not a paddy's supply net. Each pond is joined to the
     canal network through gates in its dike, taking water in at its high side and letting it out at its low side, so
     the same canal carries water to one pond and away from the next - the network the whole system exchanges water
-    with, running in series from the high intake to the low outfall. Only the ring drain around the block, which takes
-    everything to the outfall, carries water one way.
+    with, running in series from the high intake to the low outfall. Which way a given canal carries water depends on the
+    gates that open onto it - some take only feeds, some only drains, some both - and the ring drain around the block
+    takes everything to the outfall.
 
     Note: That the canals are a conveyance-and-drainage network the ponds exchange water with is documented; which pond's
     gate opens onto which canal follows this map's own rule - water in on each pond's high side, out on its low side - not a

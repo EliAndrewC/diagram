@@ -77,7 +77,7 @@ def close_seams(
     # passes the ring's ground is simply gone, and the neighbor's wall is left standing alone -
     # 12 of 48 cohort seeds failed `paddy_plot_seams_shared` that way. Dropped HERE the ground is
     # just more bare pocket, and this pass reclaims it like any other.
-    _visible_parts(plots, cell_area(plot_across, row_step))
+    _visible_parts(plots, cell_area(plot_across, row_step), 1.25 * g)
     _repair_crossing_rings(plots)
     keep = [Polygon(p["poly"]).buffer(0) for p in plots]
     field = Polygon(envelope).buffer(0)
@@ -173,6 +173,7 @@ def close_seams(
     # can revisit a vertex exactly once rounded. Two shipped that way on the reference hamlet (#29 and
     # #303, a 2 px needle each, ink-invisible under the bund stroke, and not a simple polygon for any
     # shape metric). This pass consumes no randomness, so the plot count and the RNG are untouched.
+    _shed_necks(plots, 1.25 * g, 15.0 * g)
     _repair_crossing_rings(plots, rounded=True)
     # A POINTED SLIVER MUST NOT WEAR THE WATER TINT - the same rule `_sector_closing_rank` applies
     # when it carves one, and for the same reason: a blue plot tapering to a needle reads as a tiny
@@ -302,7 +303,7 @@ def _basin_rank(basin: Polygon, fill: float, median: float, collector: LineStrin
     return (not on, round(1.0 - fill, 4), round(size, 4))
 
 
-def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
+def _visible_parts(plots: list[dict[str, Any]], cell: float, neck: float = 0.0) -> None:
     """Make the plots a PARTITION: cut each one back to the part of it no later plot covers.
 
     THE CARVE HANDS THIS PASS OVERLAPPING BASINS, and the page hides it. Measured on Sawada, `_carve` returns 49 pairs of
@@ -331,6 +332,12 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
         later = [shapes[int(n)][1] for n in tree.query(g) if shapes[int(n)][0] > i and shapes[int(n)][1].intersects(g)]
         if later:
             vis = g.difference(unary_union(later))
+            if neck > 0.0:
+                # ...AND OPENED AT THE WIDTH FLOOR (settlement-review, feature 230 pass 11). Where two rings only partly
+                # overlapped, the cut leaves the earlier plot a thin tail along its neighbor - six on Kashikawa, 46 to 81 ft
+                # long and under 5 ft wide, none on main - which draws as a doubled bund. Opening at half the floor (`neck`,
+                # 2.5 ft) sheds the tail, and its ground goes back to the bare pocket like any other scrap.
+                vis = vis.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre").intersection(vis)
             if vis.area < g.area - 1.0:
                 parts = sorted(_parts(vis), key=lambda q: -q.area)
                 best = _ring(parts[0]) if parts else []
@@ -340,6 +347,63 @@ def _visible_parts(plots: list[dict[str, Any]], cell: float) -> None:
                     plots[i]["poly"] = best
     for i in sorted(drop, reverse=True):
         del plots[i]
+
+
+def _span(shape: Any) -> float:
+    """The long side of a piece's minimum rectangle - how far a tail runs."""
+    mrr = shape.minimum_rotated_rectangle if not shape.is_empty else None
+    if not isinstance(mrr, Polygon) or shape.area <= 20.0:
+        return 0.0
+    c = list(mrr.exterior.coords)
+    return max(math.dist(c[0], c[1]), math.dist(c[1], c[2])) if len(c) >= 4 else 0.0
+
+
+def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> None:
+    """Hand a basin's thin tail to the neighbor it runs along, so two bunds a few feet apart become one.
+
+    A NECK IS A DOUBLED BUND (settlement-review, feature 230 pass 11). Fitting the fan at its true size carves some basins
+    with a long tail under the width floor running beside the next basin - five on Kashikawa, 46 to 81 ft long, none on
+    main at the old size - and on the page that is two bunds side by side with a sliver of paddy between. The tail is
+    what a morphological opening at half the floor (`neck`) removes; each tail at least `min_len` long is given to the
+    plot it shares the most edge with, and the trade is kept only when both plots stay valid, simple, unpointed rings.
+    Ground is conserved: what one plot loses the other gains."""
+
+    def _long_tail(shape: Polygon) -> bool:
+        return any(_span(q) >= min_len for q in _parts(shape.difference(shape.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))))
+
+    shapes = [Polygon(q["poly"]).buffer(0) if len(q.get("poly") or []) >= 3 else Polygon() for q in plots]
+    tree = STRtree(shapes)
+    for _round in range(2):  # a trade can leave the taker a tail of its own; a second look sheds it
+        for i, g in enumerate(shapes):
+            if g.is_empty:
+                continue
+            tails = g.difference(g.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))
+            for tail in _parts(tails):
+                if _span(tail) < min_len:
+                    continue
+                best, shared = -1, 0.0
+                for n in tree.query(tail.buffer(1.0)):
+                    j = int(n)
+                    if j == i or shapes[j].is_empty:
+                        continue
+                    s = shapes[j].buffer(1.0).intersection(tail.boundary).length
+                    if s > shared:
+                        best, shared = j, s
+                if best < 0:
+                    continue
+                kept = [q for q in _parts(g.difference(tail)) if q.area > 0.0]
+                grown = shapes[best].union(tail.buffer(0.05)).buffer(0)
+                if not kept or not isinstance(grown, Polygon) or grown.interiors:
+                    continue
+                body = max(kept, key=lambda q: q.area)
+                gi, gj = _ring(body), _ring(grown)
+                if len(gi) < 3 or len(gj) < 3 or not Polygon(gi).is_valid or not Polygon(gj).is_valid:
+                    continue
+                if _long_tail(Polygon(gj).buffer(0)) or pointed_ring(gi, _GATE_MIN_APEX) or pointed_ring(gj, _GATE_MIN_APEX):
+                    continue
+                plots[i]["poly"], plots[best]["poly"] = gi, gj
+                shapes[i], shapes[best] = Polygon(gi).buffer(0), Polygon(gj).buffer(0)
+                g = shapes[i]
 
 
 def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -> None:

@@ -367,3 +367,37 @@ def test_a_swept_field_spur_says_so_on_the_map() -> None:
     sweeps._sweep_debris(s)
     assert all(not ln["pts"] for ln in s.M["lanes"] if ln.get("spur")), "the isolated spur is swept like any other fragment that joins nothing"
     assert "isolated" in (s.M["meta"].get("field_spur_swept") or ""), "and the map records that it was"
+
+
+def test_a_lane_end_in_open_ground_is_pulled_back_to_something_or_dropped() -> None:
+    """`_sweep_dangling_ends`, settlement-review feature 230 passes 10 and 11. Every pass above it rewrites ends, so a link
+    laid to reach a piece another pass then drops is left stopping in open ground - which is what `lanes_reach_something`
+    fails on, one map at a time. The lane gives up its last vertex until an end reaches a way, a house or the field."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(0.0, 0.0), (400.0, 0.0)],  # the connector, and what the others must reach
+            [(100.0, 10.0), (100.0, 50.0), (100.0, 400.0)],  # its far end is 400 ft from anything: pulled back to the vertex that still reaches
+            [(300.0, 10.0), (900.0, 900.0)],  # nothing of it reaches anything once the far end goes: emptied and dropped
+        ],
+        houses=[(60.0, 40.0)],
+    )
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    assert sweeps._sweep_dangling_ends(s) == 2
+    kept = [ln["pts"] for ln in s.M["lanes"]]
+    assert kept[0] == [[0.0, 0.0], [400.0, 0.0]], "the connector is exempt - it leaves the map by design"
+    assert kept[1] == [[100.0, 10.0], [100.0, 50.0]], "the end in open ground is given up, the one that reaches is kept"
+    assert len(s.M["lanes"]) == 2, "and a lane that cannot be saved is dropped whole"
+
+
+def test_a_lane_whose_ends_already_reach_something_is_left_alone() -> None:
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(100.0, 10.0), (100.0, 90.0)]], houses=[(120.0, 120.0)])
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    assert sweeps._sweep_dangling_ends(s) == 0
+    assert [ln["pts"] for ln in s.M["lanes"]] == before

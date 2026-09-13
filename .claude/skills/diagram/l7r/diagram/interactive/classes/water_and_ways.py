@@ -126,11 +126,11 @@ class Pond(Kind):
     rather than thrown away.
 
     Note: The reservoir's form, siting and single outlet are documented (Tabayashi 1987, the Kagawa tameike documents);
-    a pond at the field's foot is where this map chooses to gather the water leaving its fields, and its bank and
-    outlet are not drawn from a surveyed example.
+    where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its
+    drainage, and the pond's bank and outlet are not drawn from a surveyed example.
 
-    Caveat: a pond at the field's foot is where this map chooses to gather the water leaving its fields, and its bank and
-    outlet are not drawn from a surveyed example.
+    Caveat: where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its
+    drainage, and the pond's bank and outlet are not drawn from a surveyed example.
 
     Name: pond
     Covers: `pond` - the tameike

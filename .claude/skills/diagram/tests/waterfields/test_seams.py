@@ -559,3 +559,23 @@ def test_overlapping_plots_become_a_partition_the_later_plot_winning() -> None:
     assert Polygon(over["poly"]).area == pytest.approx(100 * 40), "the later plot is what the page shows, and it keeps it all"
     assert buried not in plots, "a plot wholly under a later one returns its ground to the pocket"
     assert Polygon(under["poly"]).intersection(Polygon(over["poly"])).area < 1.0, "and the survivors no longer overlap"
+
+
+def test_a_thin_tail_is_handed_to_the_neighbor_it_runs_along() -> None:
+    """`_shed_necks`: a basin carved with a long tail under the width floor draws as two bunds a few feet apart. The tail
+    goes to the plot it shares the most edge with, and only when both come out valid, simple and unpointed."""
+    from l7r.diagram.waterfields.seams.close import _shed_necks
+
+    # a 60 x 40 basin with a 100 x 4 ft tail running along the neighbor above it
+    host = {"poly": [(0.0, 0.0), (160.0, 0.0), (160.0, 4.0), (60.0, 4.0), (60.0, 40.0), (0.0, 40.0)]}
+    along = {"poly": _rect(60, 4, 160, 44)}
+    plots = [{"poly": list(host["poly"])}, {"poly": list(along["poly"])}]
+    _shed_necks(plots, 1.25 * 2.0, 15.0 * 2.0)
+    got_host, got_along = Polygon(plots[0]["poly"]).buffer(0), Polygon(plots[1]["poly"]).buffer(0)
+    assert got_along.area > Polygon(along["poly"]).area, "the neighbor took the tail"
+    assert got_host.area < Polygon(host["poly"]).area, "and the tailed plot gave it up"
+    assert got_host.intersection(got_along).area < 1.0, "ground is conserved, not shared"
+
+    alone = [{"poly": list(host["poly"])}]  # nothing to give it to
+    _shed_necks(alone, 1.25 * 2.0, 15.0 * 2.0)
+    assert alone[0]["poly"] == host["poly"], "a tail with no neighbor is left where it is"
