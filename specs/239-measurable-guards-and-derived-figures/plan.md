@@ -27,13 +27,25 @@ to reproduce feature 236's exemption diff against a commit from before this feat
 importable (FR-007 refuses otherwise), while a historical BASELINE is spawned from a checkout of that
 ref - loudly, with the cost printed, never as a silent substitute for the guard under test.
 
-**P2 - check 5 applies to features numbered 239 and later.** The spec says a figure with a unit must
-carry a key; it does not say whether that reaches the 238 specs written before the rule existed.
-Read retroactively, the first edit to any old spec would fail on every figure it has ever stated - a
-sweep of the whole record nobody asked for, and a refusal on unrelated work. The alternatives priced:
-opting in by the presence of `measurements.json` (rejected - a new spec could dodge the check by not
-creating the file), and a ledger of every old figure (rejected - hundreds of entries recording a rule
-that did not exist). The feature number is decidable and cannot be dodged by a new spec.
+**P2 - OVERRULED: check 5 applies to every spec a delta touches, whatever its number.** The first
+version limited check 5 to features numbered 239 and later, reasoning that read retroactively the first
+edit to any of the 238 earlier specs would fail on every figure it has ever stated. That shipped before
+the independent Principle XVI check the constitution requires, and when the check ran it ruled the cutoff
+NOT LEGITIMATE on grounds that do not leave room for doubt: the case that motivated this entire feature
+was feature 236's second amendment - numbered below 239 - so the cutoff exempted exactly the work the
+rule exists for; amending an old spec is routine here; new work could dodge the check by amending an old
+feature instead of claiming a number; and the reviewer's NOT-REVIEWABLE contract has no such cutoff, so
+the lint and the reviewer disagreed. The cost of the literal rule - an old spec touched for an unrelated
+reason owes a key or a one-shot label for the figures check 5 reaches - is real and was put to the GM
+rather than decided here. The alternatives priced for the cutoff are kept on record: opting in by the
+presence of `measurements.json` (a new spec could dodge it) and a ledger of every old figure (hundreds of
+entries). A narrower form the check suggested - scoped to the paragraphs a delta adds or changes, the
+shape feature 236's house-style check takes - would be a different exception and needs its own ruling.
+**The `tasks.md` condition was overruled the same way**, by a second independent check: the number claim
+pushes an EMPTY directory, so the condition protected nothing there, and initial spec review happens
+before a tasks.md exists, so it switched the mechanical check off during exactly the rounds where
+figures reach a reviewer. Its follow-ons: the spec template's example figures sit in backtick spans, as
+figures named rather than asserted, so a draft still carrying template text does not fail.
 
 **P3 - a broken decision module warns rather than falling silent.** Feature 236's import-stub section
 proves the guard still ACTS when `_hm_house` cannot be imported. Once the decision lives in that module,

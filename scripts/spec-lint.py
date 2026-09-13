@@ -253,7 +253,7 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     if tasks.is_file():
         bad += check_figures(spec) + check_orphans(spec) + check_stale_tasks(spec, tasks)
     # CHECK 5 (feature 239): a measured figure is derived, not typed. Its own module, beside this one;
-    # it reads features 239 and later only (plan P2) and only once a tasks.md exists, like 1, 3 and 4.
+    # it reads every touched spec (the feature-239 cutoff was ruled NOT LEGITIMATE) once a tasks.md exists.
     bad += check_measured_figures(spec_dir)
     return bad
 
@@ -281,11 +281,17 @@ def touched_spec_dirs(root: pathlib.Path) -> list[pathlib.Path]:
 
 
 def selftest() -> None:
+    from _spec_figures import is_check5
+
+    def lint14(d: pathlib.Path) -> list[str]:
+        """Checks 1 to 4 alone: check 5 is proven in its own tests, and these fixtures are unkeyed by design."""
+        return [x for x in lint(d) if not is_check5(x)]
+
     import tempfile
 
     with tempfile.TemporaryDirectory() as td:
         specs = pathlib.Path(td) / "specs"
-        d = specs / "099-a-feature"   # below 239: this selftest covers checks 1-4, and check 5 applies from 239
+        d = specs / "999-a-feature"
         d.mkdir(parents=True)
         (d / "tasks.md").write_text("- [ ] T01 do the thing (FR-001)\n")
         good = ("# x\n\n## Summary\n\nIt took 91 min, measured in `research.md` R1.\n\n"
@@ -295,54 +301,54 @@ def selftest() -> None:
                 "## Decisions recorded\n\n**D1** We kept the 22 ft figure out of the rule (`research.md` R2).\n\n"
                 "## Review history\n\nRound 1 said 6.7 m and we withdrew it.\n")
         (d / "spec.md").write_text(good)
-        assert lint(d) == [], lint(d)
+        assert lint14(d) == [], lint14(d)
         # a requirement declared as `**FR-001 Its title.**` is the same declaration
         titled = good.replace("**FR-001** A thing.", "**FR-001 A thing.** With a title in the bold span.")
         (d / "spec.md").write_text(titled)
-        assert lint(d) == [], lint(d)
+        assert lint14(d) == [], lint14(d)
         (d / "spec.md").write_text(titled.replace("**SC-001** (FR-001, FR-001a) Both hold.", "**SC-001** (FR-001) One holds."))
-        assert any("FR-001a is named by no success criterion" in x for x in lint(d)), "the titled form must still be checked for orphans"
+        assert any("FR-001a is named by no success criterion" in x for x in lint14(d)), "the titled form must still be checked for orphans"
         (d / "spec.md").write_text(good)
         # a declaration may be a LIST ITEM and its bold span may wrap a line
         listed = good.replace("**SC-001** (FR-001, FR-001a) Both hold.", "- **SC-001 Both hold.** (FR-001, FR-001a)")
         listed = listed.replace("**SC-002** (spec-wide) The gate is green.", "- **SC-002** (spec-wide) The gate is green.")
         (d / "spec.md").write_text(listed)
-        assert lint(d) == [], lint(d)
+        assert lint14(d) == [], lint14(d)
         wrapped = good.replace("**FR-001a** Another.", "**FR-001a A title that\nwraps a line.** Another.")
         (d / "spec.md").write_text(wrapped)
-        assert lint(d) == [], lint(d)
+        assert lint14(d) == [], lint14(d)
         (d / "spec.md").write_text(good)
         # 1: a figure with no pointer
         (d / "spec.md").write_text(good.replace("It took 91 min, measured in `research.md` R1.", "It took 91 min."))
-        assert any("no pointer" in x for x in lint(d)), lint(d)
+        assert any("no pointer" in x for x in lint14(d)), lint14(d)
         # 1: a count with no unit is not a figure
         (d / "spec.md").write_text(good.replace("It took 91 min, measured in `research.md` R1.", "It took 20 rounds."))
-        assert lint(d) == [], lint(d)
+        assert lint14(d) == [], lint14(d)
         # 3: an FR no SC names, and an SC that names none
         (d / "spec.md").write_text(good.replace("**SC-001** (FR-001, FR-001a) Both hold.", "**SC-001** (FR-001) One holds."))
-        assert any("FR-001a is named by no success criterion" in x for x in lint(d)), lint(d)
+        assert any("FR-001a is named by no success criterion" in x for x in lint14(d)), lint14(d)
         (d / "spec.md").write_text(good.replace("**SC-002** (spec-wide) The gate is green.", "**SC-002** The gate is green."))
-        assert any("names no FR" in x for x in lint(d)), lint(d)
+        assert any("names no FR" in x for x in lint14(d)), lint14(d)
         # 4: a task citing an id that is gone
         (d / "spec.md").write_text(good)
         (d / "tasks.md").write_text("- [ ] T01 do the thing (FR-404)\n")
-        assert any("FR-404" in x for x in lint(d)), lint(d)
+        assert any("FR-404" in x for x in lint14(d)), lint14(d)
         (d / "tasks.md").write_text("- [ ] T01 do the thing (FR-001)\n")
         # 2: withdrawn text still standing, and the narrating sections that may carry it
         (d / "research.md").write_text("WITHDRAWN: the 22 ft figure\n")
         (d / "spec.md").write_text(good)
-        assert lint(d) == [], "Decisions recorded and Review history may narrate a reversal"
+        assert lint14(d) == [], "Decisions recorded and Review history may narrate a reversal"
         (d / "spec.md").write_text(good.replace("**FR-001** A thing.", "**FR-001** Keep the 22 ft figure."))
-        assert any("withdrawn text still standing" in x for x in lint(d)), lint(d)
+        assert any("withdrawn text still standing" in x for x in lint14(d)), lint14(d)
         # 2: a marker too short to be safe is itself the complaint
         (d / "research.md").write_text("WITHDRAWN: 22 ft\n")
         (d / "spec.md").write_text(good)
-        assert any("twelve characters" in x for x in lint(d)), lint(d)
+        assert any("twelve characters" in x for x in lint14(d)), lint14(d)
         # FR-010a: a freshly claimed spec, with no tasks.md, passes checks 1, 3 and 4
         (d / "research.md").unlink()
         (d / "tasks.md").unlink()
         (d / "spec.md").write_text("# x\n\n## Summary\n\nIt took 91 min.\n\n## Functional requirements\n\n**FR-001** A thing.\n")
-        assert lint(d) == [], lint(d)
+        assert lint14(d) == [], lint14(d)
     print("spec-lint selftest ok")
 
 
