@@ -1,6 +1,6 @@
 # Feature 230 - the stream's intake, and the two ditch classes
 
-**Status**: ACCEPTED 2026-09-12 - `spec-fidelity` rounds 1-4 CHANGES REQUIRED (each applied, see Review history), round 5 FAITHFUL. Implementation in progress.
+**Status**: ACCEPTED 2026-09-12 - `spec-fidelity` rounds 1-4 CHANGES REQUIRED (each applied, see Review history), round 5 FAITHFUL. Implementation in progress; the two classes, the tap and the three sinks are drawn and reviewed (passes 1-11).
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the state of the record
 before the pass, R2 the pass itself (what was searched, what was found, the verdicts), R3 the maps before and
 after. **Predecessors**: 134 (the class vocabulary), 159 (a class decided at one emit site from the fill about to
@@ -264,6 +264,18 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   manifest could be a roll the loop had just rejected, while its verdict lines were the kept roll's. The
   cohort audit reads the seated count off that manifest. The keeper is snapshotted and restored instead
   (constitution XIV: a defect found in the course of other work is fixed in that work).
+
+### D13 What the review passes changed beyond the two classes, and what they left open (2026-09-12/13)
+
+Eleven `settlement-review` passes drove this feature; passes 9-11 are recorded in `research.md` R9-R11 with the
+measurement behind each. Three of their findings were defects the feature had introduced and are fixed here (a lane's
+record deleted without its ink, so the reference hamlet's connector went undrawn; a field spur built as an out-and-back
+hairpin and lost in silence; a caption seated across the road from its board). Three were pre-existing and were fixed
+because they were found (the carve's overlapping plots, the grave glyph that read as a face, the weir drawn backwards).
+Several are recorded rather than changed, each with its numbers and a sketch in `future-work/farming-communities.md`:
+the brook's ruled reach where the field's margin is straight, the windbreak's far limb on a split cluster, and the drain
+that reaches its pond round a curve. The rule this feature keeps to throughout: a fix lands only when it is measured
+against the map, and a lever that cannot be measured to help is refused and written down.
 
 ## Out of scope
 
