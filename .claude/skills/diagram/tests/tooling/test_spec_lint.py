@@ -303,3 +303,11 @@ def test_make_figures_restores_what_it_re_measures(tmp_path: pathlib.Path, monke
     monkeypatch.setattr(figures_cli, "ROOT", tmp_path)
     failures, _, _ = figures_cli.rerun(d)
     assert failures and path.read_text() == original
+
+
+def test_there_is_one_definition_of_a_figure() -> None:
+    """Spec D4: check 1, check 5 and feature 240's importer read the SAME detector - a copy drifts silently."""
+    assert lint._FIGURE is figs._FIGURE or lint._FIGURE.pattern == figs._FIGURE.pattern
+    assert lint.UNITS == figs.UNITS
+    src = (REPO / "scripts" / "spec-lint.py").read_text()
+    assert "UNITS = (" not in src, "spec-lint defines its own unit roster again - import it from _spec_figures"

@@ -34,9 +34,13 @@ import re
 
 FIRST_FEATURE = 239
 TIMING_UNITS = {"ms", "s", "min", "h", "%", "x"}
-_UNITS = ("ft", "m", "km", "ha", "mu", "sq ft", "%", "ms", "s", "min", "minute", "minutes",
-          "h", "MB", "MiB", "GiB", "px")      # spec-lint check 1's own roster, D4: one definition of a figure
-_UNIT_ALT = "|".join(sorted((re.escape(u) for u in _UNITS), key=len, reverse=True))
+# THE ONE DEFINITION OF A FIGURE (spec D4). spec-lint imports these three for check 1 and re-exports them
+# under the same names, so check 1, check 5 and feature 240's reviewer precondition - which imports
+# `_FIGURE` from spec-lint - cannot drift apart. The first version of this module COPIED the roster under a
+# comment claiming one definition, which is the stale-literal shape this repository has paid for before.
+UNITS = ("ft", "m", "km", "ha", "mu", "sq ft", "%", "ms", "s", "min", "minute", "minutes",
+         "h", "MB", "MiB", "GiB", "px")
+_UNIT_ALT = "|".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True))
 _FIGURE = re.compile(rf"(?<![\w.])\d[\d,]*(?:\.\d+)?\s*(?:{_UNIT_ALT})(?![\w-])")
 _KEY = re.compile(r"\bm:([a-z0-9][a-z0-9-]*)")
 _SPAN = re.compile(r"`[^`\n]*`")
