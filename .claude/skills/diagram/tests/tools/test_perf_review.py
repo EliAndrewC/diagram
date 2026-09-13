@@ -381,17 +381,17 @@ def test_feature_230s_first_explanation_is_refused_without_its_counterfactual(lo
 
 def test_a_control_must_name_a_record_and_then_travels_with_the_explanation(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 0.5)
-    specs = _specs(tmp_path, **{"m:230-seed4-web-rule-forced-true-s": {"value": 2.56, "unit": "s", "command": "make map PROFILE=1", "taken": "2026-09-13"}})
+    specs = _specs(tmp_path, **{"230-seed4-web-rule-forced-true-s": {"value": 2.56, "unit": "s", "command": "make map PROFILE=1", "taken": "2026-09-13"}})
     assert run(log, "explain", "--why", "the ends rule provokes straggler routing", "--control", "m:no-such-run", "--specs-dir", str(specs)) == 2
     assert "names no record" in capsys.readouterr().err
     assert run(log, "explain", "--why", "the ends rule provokes straggler routing", "--control", "m:230-seed4-web-rule-forced-true-s", "--specs-dir", str(specs)) == 0
     rec = json.loads(next(log.glob("*-explanation-*.json")).read_text())
-    assert rec["control"] == "m:230-seed4-web-rule-forced-true-s" and rec["control_record"]["value"] == 2.56
+    assert rec["control"] == "m:230-seed4-web-rule-forced-true-s" and rec["control_record"]["key"] == "230-seed4-web-rule-forced-true-s" and rec["control_record"]["value"] == 2.56
 
 
 def test_unverified_needs_a_reason_and_not_both_kinds_of_evidence(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 0.5)
-    specs = _specs(tmp_path, **{"m:k": {"value": 1}}, **{"m:bad": "not a record"})
+    specs = _specs(tmp_path, **{"k": {"value": 1}}, **{"bad": "not a record"})
     assert run(log, "explain", "--why", "cause", "--unverified", "no", "--specs-dir", str(specs)) == 2
     assert "needs a REASON" in capsys.readouterr().err
     assert run(log, "explain", "--why", "cause", "--unverified", "no time to run it", "--control", "m:k", "--specs-dir", str(specs)) == 2

@@ -31,7 +31,9 @@ from collections.abc import Callable, Iterable
 VERDICTS = ("PASS", "NEEDS-WORK", "NOT-REVIEWABLE")
 ARTIFACTS = (".json", ".svg", ".png", ".html")
 _BACKTICKS = re.compile(r"`[^`\n]*`")
-_KEY = re.compile(r"\bm:[a-z0-9][a-z0-9-]*\b")
+# GUARD_EDIT_OK: feature 240 - 239's convention as it landed: a paragraph cites `m:<key>`, and measurements.json holds
+# the BARE key. The group is the key the file is looked up by; this read the prefixed form, which matched no record.
+_KEY = re.compile(r"\bm:([a-z0-9][a-z0-9-]*)\b")
 _ONE_SHOT = re.compile(r"\bobserved \d{4}-\d{2}-\d{2}\b")  # feature 239's dated one-shot label
 _NUMBER = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
 
@@ -170,7 +172,7 @@ def unresolved_figures(prompt: str, records: Iterable[dict]) -> list[str]:
     by_key = {str(r.get("key")): r for r in records}
     out = []
     for para in re.split(r"\n\s*\n", prompt):
-        if _ONE_SHOT.search(para):
+        if _ONE_SHOT.search(para) and "method" in para.lower():  # GUARD_EDIT_OK: 239's FR-010 as it landed - a date AND a method
             continue
         values = [_number(str(by_key[k].get("value"))) for k in _KEY.findall(para) if k in by_key]
         for m in figure.finditer(_BACKTICKS.sub(" ", para)):

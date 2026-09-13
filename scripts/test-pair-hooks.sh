@@ -262,7 +262,7 @@ check "...and permitted when its review snapshot is whole" '[ "$(rc_pretool "$RE
 # FR-006: a quoted figure needs a record
 FIGREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"the caption now clears the canopy by 14 ft"}')
 refused_for "a dispatch quoting a figure with no record is refused" "$FIGREV" "FR-006"
-FIGOK=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"the caption now clears the canopy by 14 ft, observed 2026-09-13"}')
+FIGOK=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"the caption now clears the canopy by 14 ft, observed 2026-09-13, method: the crown ring measured by hand"}')
 check "...and runs with 239's dated one-shot label" '[ "$(rc_pretool "$FIGOK")" -eq 0 ]'
 
 # the escape: logged, and needing a reason

@@ -83,6 +83,7 @@ def control_record(specs: Path, key: str) -> dict[str, Any] | None:
     1.34 s baseline and refuted it (`specs/240-verified-before-reviewed/research.md` R2). A profile says where
     time went, never why, so the evidence an explanation owes is a recorded run with the cause removed, named by
     its key. The prose is never parsed: the key either names a record or it does not."""
+    key = key.removeprefix("m:")  # cited as `m:<key>` (feature 239's convention); the file holds the bare key
     for path in sorted(specs.glob("*/measurements.json")):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))

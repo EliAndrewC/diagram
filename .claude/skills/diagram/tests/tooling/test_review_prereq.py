@@ -47,14 +47,14 @@ def test_a_finding_with_no_record_is_unverified_and_a_verifying_record_or_an_acc
     _verdict(clone, "sawada", "NEEDS-WORK", "E1", "E2", "E3")
     assert prereq.unverified_findings(clone, "sawada") == ["E1", "E2", "E3"], "nothing recorded: every finding is open"
 
-    _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "source": "tree_crowns"}})
+    _records(clone, **{"board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "source": "tree_crowns"}})
     assert prereq.unverified_findings(clone, "sawada") == ["E1", "E2", "E3"], "SC-007: a record with no `quantity` verifies nothing"
-    _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "quantity": "board to crown edge"}})
+    _records(clone, **{"board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "quantity": "board to crown edge"}})
     assert prereq.unverified_findings(clone, "sawada") == ["E1", "E2", "E3"], "SC-007: nor one with no `source` for the reviewer to judge"
-    _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "source": "tree_crowns", "quantity": "board to crown edge"}})
+    _records(clone, **{"board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "source": "tree_crowns", "quantity": "board to crown edge"}})
     assert prereq.unverified_findings(clone, "sawada") == ["E2", "E3"], "a record that verifies E1 for THIS map disposes of it"
 
-    _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "mizuguchi"}})
+    _records(clone, **{"board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "mizuguchi"}})
     assert "E1" in prereq.unverified_findings(clone, "sawada"), "a record about another map does not"
 
     d = clone / ".git" / "review-dispositions"
@@ -102,7 +102,7 @@ def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: p
 
 
 def test_a_quoted_figure_resolves_by_key_or_one_shot_label_and_a_named_one_is_skipped(tmp_path: pathlib.Path) -> None:
-    records = [{"key": "m:board-canopy", "value": 0.57, "unit": "ft"}]
+    records = [{"key": "board-canopy", "value": 0.57, "unit": "ft"}]
     assert prereq.unresolved_figures("The plank stands 6.6 ft clear of the nearest crown.", records) == ["6.6 ft"], "a guess"
     assert prereq.unresolved_figures("The plank stands 0.57 ft clear (`m:board-canopy`).", records) == [], "cited, and the value matches"
     assert prereq.unresolved_figures("The plank stands 6.6 ft clear (`m:board-canopy`).", records) == ["6.6 ft"], "cited, but the value does not"
@@ -135,7 +135,7 @@ def test_feature_230s_pass_13_dispatch_is_refused_even_with_every_figure_removed
     _records(
         clone,
         **{
-            "m:sawada-board-canopy": {
+            "sawada-board-canopy": {
                 "value": 0.57,
                 "unit": "ft",
                 "verifies": "E2-board-in-belt",
@@ -153,7 +153,7 @@ def test_a_review_of_fixes_needs_a_green_gate_and_a_first_review_does_not(tmp_pa
     _pool_map(clone, "inashiro")
     assert prereq.check(clone, ["inashiro"], "first look", gate_green=False, current=lambda g: True) == [], "a first review keeps feature 151's overlap"
     _verdict(clone, "inashiro", "NEEDS-WORK", "E1")
-    _records(clone, **{"m:x": {"value": 1, "unit": "ft", "verifies": "E1", "subject": "inashiro", "quantity": "gap", "source": "svg ink"}})
+    _records(clone, **{"x": {"value": 1, "unit": "ft", "verifies": "E1", "subject": "inashiro", "quantity": "gap", "source": "svg ink"}})
     problems = prereq.check(clone, ["inashiro"], "verify the fix", gate_green=False, current=lambda g: True)
     assert [p for p in problems if p.startswith("FR-004")], problems
     assert prereq.check(clone, ["inashiro"], "verify the fix", gate_green=True, current=lambda g: True) == []

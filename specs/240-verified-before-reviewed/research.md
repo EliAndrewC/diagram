@@ -3,7 +3,7 @@
 ## R1 - where feature 230's fourteen hours went
 
 Measured from the clone's commit timestamps, the gate run log and the review agents' own reported
-durations, not recalled. Span: claim at 09-12 13:27, landed at 09-13 03:45 - **14 h 18 m**, 92 commits.
+durations, not recalled (observed 2026-09-13; method: `git log` timestamps in the clone and the agents' reports). Span: claim at 09-12 13:27, landed at 09-13 03:45 - **14 h 18 m**, 92 commits.
 
 | phase | span | content |
 |---|---|---|
@@ -14,6 +14,7 @@ durations, not recalled. Span: claim at 09-12 13:27, landed at 09-13 03:45 - **1
 | round 12, five agents | 00:54-02:04, ~1 h 10 m | nine errors |
 | rounds 13 and 14 | 02:24-02:56, ~32 m | the canopy proxy, the caption halo |
 | perf and landing | 03:09-03:45, ~36 m | bookends, two audits, the sign-off, the push |
+| how measured | observed 2026-09-13 | method: commit timestamps and the review agents' reported durations |
 
 **Machine time was small**: feature 230's own gates actually ran 26 times (short-circuits excluded) for
 1,663 s, about 28 minutes; its four green ones took 56 to 67 s each and the longest of any result 381 s (`m:230-gates-that-ran`,
@@ -41,7 +42,7 @@ measured the drawn crowns (`tree_crowns`, 588 on Sawada) against those bases: a 
 median 16.3 ft and a p90 26.7 ft from its nearest clump base. Consequence: Sawada's board passed the probe
 by 0.09 ft while the drawn crown covered its center (-0.91 ft), and 44.4% of Mizuguchi's plank footprint was
 canopy pixels. The fix was correct arithmetic over the wrong quantity. A record naming its `source` as
-`clumps + r` would have let the reviewer see that in one line.
+`clumps + r` would have let the reviewer see that in one line. (Observed 2026-09-12 by pass 13's reviewers; method: drawn crowns and plank pixels measured from Sawada's and Mizuguchi's manifests and renders.)
 
 **The perf attribution.** The first explanation read seed 4's web-stage profile, saw none of the
 feature's new passes in the top 25 by cumulative time, and attributed the growth to the map. The
@@ -50,7 +51,7 @@ feature's new passes in the top 25 by cumulative time, and attributed the growth
 per-target loop, so each of its 10 rejections in 17 evaluations paid another Dijkstra on a lattice
 growing with the square of the span. The figures in the first explanation were all re-runnable - the
 profile file existed - so a rule about recorded figures would NOT have caught it. The defect was the
-inference, and only a counterfactual measurement settles an inference.
+inference, and only a counterfactual measurement settles an inference. (Observed 2026-09-13 by the perf-audit agent; method: the stage timed with the rule live and forced True.)
 
 ## R3 - the machinery each requirement builds on (read, not assumed)
 
@@ -83,7 +84,7 @@ its own harness taking the first digit in argv as the sample size, so a run reco
 timed three. Its spawned half, first said to stand as contention, was the same bug: 239's fifth review round
 re-ran that three-command sample on a quiet machine and got 317 ms. That session made four wrong attributions
 of one measurement before a re-run settled it. 239's FR-011c now keeps the load-average rule as a PRECAUTION
-for a shared container, with its threshold a guess that is owed - and this feature cites it only as that.
+for a shared container, with its threshold a guess that is owed - and this feature cites it only as that. (The timings were observed 2026-09-13 by the 239 session; method: its own harness, as corrected above.)
 
 What survives, and is why FR-009's `quantity` states the sample a figure measured: when a timing moves, the
 first thing to check is what the harness actually sampled, and a record that names its sample makes that

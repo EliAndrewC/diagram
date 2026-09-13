@@ -1,5 +1,5 @@
 {
- "m:230-gates-that-ran": {
+ "230-gates-that-ran": {
   "value": 26,
   "unit": "gates",
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
@@ -7,7 +7,7 @@
   "quantity": "count of feature 230's own `make done` runs that did not short-circuit, claim to landing",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
- "m:230-gate-total-s": {
+ "230-gate-total-s": {
   "value": 1663,
   "unit": "s",
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
@@ -15,7 +15,7 @@
   "quantity": "sum of wall seconds over those runs",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
- "m:230-green-gate-min-s": {
+ "230-green-gate-min-s": {
   "value": 56.0,
   "unit": "s",
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
@@ -23,7 +23,7 @@
   "quantity": "fastest of feature 230's green gates (the cost FR-004 adds before a review of fixes)",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
- "m:230-green-gate-max-s": {
+ "230-green-gate-max-s": {
   "value": 67.0,
   "unit": "s",
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
@@ -31,7 +31,7 @@
   "quantity": "slowest of feature 230's green gates",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
- "m:230-gate-max-s": {
+ "230-gate-max-s": {
   "value": 381.0,
   "unit": "s",
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
@@ -39,7 +39,7 @@
   "quantity": "longest of feature 230's gates that ran, of any result",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
- "m:240-fr005-current-rc": {
+ "240-fr005-current-rc": {
   "value": 0,
   "unit": "exit code",
   "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
@@ -47,7 +47,7 @@
   "quantity": "FR-005 check on Inashiro as it stands after a green gate and render-sync",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
  },
- "m:240-fr005-edited-rc": {
+ "240-fr005-edited-rc": {
   "value": 1,
   "unit": "exit code",
   "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
@@ -55,7 +55,7 @@
   "quantity": "FR-005 check on Inashiro with its generator edited so the key moves",
   "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
  },
- "m:240-fr005-check-max-s": {
+ "240-fr005-check-max-s": {
   "value": 0.19,
   "unit": "s",
   "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
