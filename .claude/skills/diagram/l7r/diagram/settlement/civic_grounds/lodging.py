@@ -93,8 +93,14 @@ class LodgingMixin:
         and guards of the wagon-trains. Recorded in M['buildings'] (kind 'inn', non-residential). It
         FRONTS the road, so `rot` tilts it to lie PARALLEL to a diagonal road with its noren entrance
         (the +y front) FACING the roadbed. Blocks placement - place BEFORE any nearby pack.
-        Real size ~66x48 ft (a large 2-story post-road inn), converted at the map's ftpx - as a
-        fixed-px glyph it read 2.5x too big on a city map."""
+        SINGLE-STORY, on the one attested analogue: the north-Chinese wagon inn, whose yard buildings
+        are described as uniformly single-story. The glyph carried an upper story until 2026-09-12 and
+        the record never bore it out. A two-story highway inn IS attested in Japan (the Okabe-juku
+        hatago), but a hatago has no cart yard and no long stable and is a different building; whether
+        it is the better analogue for this glyph is open, and the docstring's own former name for the
+        footprint - a post-road inn - is where that confusion came from.
+        Real size ~66x48 ft, converted at the map's ftpx - as a fixed-px glyph it read 2.5x too big on
+        a city map. The analogue counts nothing, so the footprint is ours and unattested."""
         if w is None:
             w, h = self.px(66), self.px(48)
         hw, hh = w / 2, h / 2
@@ -103,12 +109,13 @@ class LodgingMixin:
             f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.2f})">',
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{h:.1f}" rx="2" fill="#D9B98C" stroke="#5A3F1E" stroke-width="{max(2.2 * sf, 1.0):.1f}"/>',
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{11 * sf:.1f}" fill="#7A5A30"/>',  # roof ridge
-            f'<rect x="{-hw:.1f}" y="{hh - 4 * sf:.1f}" width="{w:.1f}" height="{4 * sf:.1f}" fill="#7A5A30" opacity="0.55"/>',
-        ]  # lower eave (2-story)
-        for i in range(3):  # upper-story lattice windows
+        ]
+        # Lattice windows in the one wall the glyph has. They sat under a second eave band at
+        # -hh + 14*sf and read as an upper story; the band is gone and they sit at mid-wall now.
+        for i in range(3):
             wx = -hw + w * (0.2 + 0.3 * i)
-            g.append(f'<rect x="{wx:.1f}" y="{-hh + 14 * sf:.1f}" width="{10 * sf:.1f}" height="{7 * sf:.1f}" fill="#9A7E4E" stroke="#5A3F1E" stroke-width="0.6"/>')
-            g.append(f'<line x1="{wx + 5 * sf:.1f}" y1="{-hh + 14 * sf:.1f}" x2="{wx + 5 * sf:.1f}" y2="{-hh + 21 * sf:.1f}" stroke="#D6C49A" stroke-width="0.6"/>')
+            g.append(f'<rect x="{wx:.1f}" y="{-1.5 * sf:.1f}" width="{10 * sf:.1f}" height="{7 * sf:.1f}" fill="#9A7E4E" stroke="#5A3F1E" stroke-width="0.6"/>')
+            g.append(f'<line x1="{wx + 5 * sf:.1f}" y1="{-1.5 * sf:.1f}" x2="{wx + 5 * sf:.1f}" y2="{5.5 * sf:.1f}" stroke="#D6C49A" stroke-width="0.6"/>')
         nx, nw = -w * 0.19, w * 0.38  # NOREN entrance curtain on the +y front
         g.append(f'<rect x="{nx:.1f}" y="{hh:.1f}" width="{nw:.1f}" height="{9 * sf:.1f}" rx="1" fill="#2E4A6B" stroke="#1E3450" stroke-width="0.6"/>')
         for k in (1, 2):
