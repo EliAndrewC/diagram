@@ -1,0 +1,147 @@
+# Feature 237 - collect only what the run can execute
+
+**Status**: IN IMPLEMENTATION. `spec-fidelity` round 1 CHANGES REQUIRED on seven findings, all taken: the request record completed (finding 1), FR-002's empty-list case (2), FR-010's count and its derived guard (3), FR-007 extended to the two test modules that import shapely (4), the marginal figure separated from the cumulative one (5), FR-008 given a criterion (6), and FR-010's bookend run named with an increase made non-waiverable (7). The GM's standing instruction is to take the feature from start to finish and land it.
+**Request**: [`request.md`](request.md) - the GM's words verbatim.
+**Research**: [`research.md`](research.md) - why xdist workers must all collect the same thing, what
+collection costs here, the sharding experiment that failed, the data-as-Python hypothesis tested, and
+where the test-module megabytes actually are.
+**Predecessors**: 207 (the incremental gate, the plan and the selection plugin), 206 (the browser skip,
+*"this is about saving memory, not saving time"*), 221 (the worker count measured at ten), 208 (the
+raster's memory spikes), 216/219 (the gate rolls only what the floor needs).
+
+## Summary
+
+A gate's collection costs 922 MiB at ten workers and is paid in full whether or not a test runs - 53% of
+the whole run's peak (R3). Every worker collects the entire tree because xdist dispatches work by
+integer index into a collection all workers must share, which is documented design and was refused
+upstream when someone tried to change it (R1). Arguments are the one lever xdist leaves: paths and node
+ids restrict collection BEFORE import, while `-k`, `-m` and `--deselect` filter after it, and every
+worker is handed the controller's argv verbatim so restricting it keeps the protocol satisfied.
+
+So this feature does four things: it restricts a gate's arguments to the modules its plan can reach, stops pinning the collected items, defers the import-time work that all ten workers pay and one worker needs, and imports `shapely` in the worker that uses it rather than in all ten. Two things it deliberately does not do: change the worker count (the GM's ruling, and it is already tuned by
+measurement), and shard the gate into concurrent runs - that was measured and came out 94 MiB WORSE,
+because the duplication is per worker and ten workers are ten copies whichever way they are grouped
+(R4).
+
+What it is NOT is the fix the GM expected, and the difference is recorded because it reverses an
+intuition: the test tree holds no large data written as Python. 2,513 KiB of source, of which 40 KiB is
+module-level literals and 9 KiB is eight-or-more-element literals inside functions; the map data is
+already rolled at run time or read from disk (R5). The mechanism the GM described - module-level work
+paid by every worker, better deferred until a test needs it - is real and worth about 13 MiB per worker,
+but its payload is one module parsing the whole tree's AST at import time and one heavyweight library
+import, not data (R6).
+
+## Functional requirements
+
+- **FR-001 The plan names the modules it can reach, derived without collecting.** `Plan` gains a
+  `paths` list: the modules of `affected_tests`, every entry of `changed_test_modules`, and the modules
+  of every baseline test whose fixture closure intersects `affected_fixtures` - the closures being in
+  `tests.json` already, so nothing is circular and no import is needed to compute it. The list is a
+  SUPERSET of the modules `keep_set` will keep, by construction, and that property is tested rather
+  than asserted in prose.
+- **FR-002 An incremental gate is given those paths as positional arguments**, and an EMPTY list collects nothing rather than everything. `make test-full` passes the derived list where it passes the trees today; a full run passes the trees exactly as now. Nothing else about the invocation changes - same worker count, same `--dist`, same ignores. The empty case is the one that matters most and is the easiest to get backwards: `plan()` returns an INCREMENTAL plan with no affected tests, fixtures or modules when nothing the baseline exercised has changed, so a fallback to the trees there would pay the whole 922 MiB collection (R3) in order to run nothing. The arguments in that case name a path that holds no tests, so the selection plugin still records its result, the existing empty-selection-is-green branch still fires, and the merge and the floors still run.
+- **FR-003 Deselection remains the authority on what runs.** The arguments restrict what is IMPORTED;
+  `keep_set` still decides which collected tests execute, unchanged. Two layers on purpose: if they
+  ever disagree the deselection wins, and because FR-001's set is a superset the disagreement can only
+  be in the safe direction.
+- **FR-004 The baseline is written only by a run that collected everything.** `selection.py` writes
+  `tests.json.next` only when the run was not restricted; a restricted run leaves the previous
+  `tests.json` in place, which `save_baseline` already does when the file is absent. Without this the
+  next plan would see every unselected module's tests as new and run almost all of them (R7).
+- **FR-005 The fixture graph survives a restricted run.** `fixture_dependents` is persisted in the
+  baseline by a full run and `merge` reads the baseline's graph unioned with this run's, so a changed
+  fixture's dependents in unselected modules still have their stale contexts dropped. This is the one
+  correctness defect a naive path restriction would introduce, and it is a coverage defect rather than
+  a selection one (R7).
+- **FR-006 No `Item` is pinned for the baseline's sake.** `remember_all` stores
+  `{nodeid: fixture_ids(it)}` and the graph edges instead of `list(items)`, and `_all_items` goes with
+  it. It exists because `ROLL_DESELECT` and `TIER_SELECT` deselect by marker even on a full run, so the
+  items list at write time is short of what the baseline needs - that reason is recorded at the point of
+  change, since the code does not currently say it.
+- **FR-007 Import-time work is deferred to the worker that needs it.** `tests/test_package_surfaces.py` computes its whole-tree AST census inside a session-scoped fixture rather than at module level (8.7 MiB, R6); `import coverage` moves inside the tests that use it in `tests/tools/test_hamlet_floor.py` and `test_roll_audit.py` (4.2 MiB, R6); and the module-level `from shapely.geometry import Polygon` in `tests/waterfields/test_geoms.py` and `tests/waterfields/test_seams.py` moves into the tests that use it, WITHOUT which FR-010 saves nothing on a full gate, because a run that collects `tests/waterfields` imports shapely into all ten workers whatever the engine does (`spec-fidelity` round 1, finding 4). `tests/soak/test_seatings.py` keeps its module-level `mock` import, with the
+  reason recorded: `norecursedirs` holds `soak` out of every ordinary run, so no gate pays it.
+- **FR-008 The worker count is untouched**, by the GM's ruling, and `tests/tooling/test_worker_count.py`
+  keeps pinning ten.
+- **FR-009 The change is measured, not asserted.** The collection peak and the gate peak are measured
+  before and after with the PSS harness this feature's research used, and the numbers are recorded in
+  `research.md` whichever way they come out - including if an item turns out not to pay. It records the
+  MARGINAL shapely figure as well as the cumulative one: R9's 16.3 MiB is shapely plus the `numpy` it
+  drags in, and `numpy` also arrives through `tools/page_lit.py` and `tools/picture_diff.py`, so any run
+  collecting `tests/tools` holds it regardless (`spec-fidelity` round 1, finding 5). Deferring numpy in
+  those two tools is a further lever this feature does NOT take - the GM approved the shapely accessor,
+  and the figure is recorded so they can price the rest.
+- **FR-010 `shapely` is imported by the worker that uses it, through one accessor per module.** The
+  SEVEN engine modules that import it at module level - `settlement/land/wet.py`,
+  `hamletgen/homesteads/boundary.py`, `waterfields/comb.py`, and `waterfields/seams/close.py`,
+  `geoms.py`, `plots.py`, `pockets.py` - each get ONE module-level lazy accessor that imports on first
+  use and caches what it needs; no `import` statement goes inside a function that runs per plot, per
+  seam or per candidate, because both forms defer the cost and only one of them is free afterwards (D6).
+  The SET IS DERIVED, not kept as a list here: a test fails on any module-level shapely import under
+  `l7r/` outside the accessor, because a hand-enumerated surface is the failure this repository has
+  already paid for in features 169, 185 and 190 - and a hand list is how this requirement first said
+  eight (`spec-fidelity` round 1, finding 3).
+  **Its acceptance is the perf bookend and an increase is NOT waiverable.** `make perf LABEL=237-start`
+  was taken on unmodified code before any of this landed; `make perf LABEL=237-end` and `make perf-report
+  AGAINST=237-start` run on the same machine with this feature's delta as the only change. The local
+  band-1 line is 0.0%, so any increase on the total or on any seed trips `perf_review.py --check` at
+  push. Under the standing ladder such an increase is dischargeable with a written explanation and a
+  `perf-audit` confirmation; for FR-010 it is not, because the item was approved as a memory saving and
+  a slower map is not a trade the GM was offered: the offending site keeps its module-level import and
+  the remaining sites stand (finding 7).
+
+## Success criteria
+
+- **SC-001** (FR-001, FR-003) On a corpus of recorded plans, the derived path set covers every module
+  `keep_set` keeps, and a plan whose `changed_test_modules` names a file that does not exist in the
+  baseline still collects it - a new test file is always reachable.
+- **SC-002** (FR-002, FR-009) An incremental gate over a narrow plan shows a collection peak below the
+  whole-tree figure in R3, measured the same way; the gate stays green and the 100% floor still passes
+  over the merged coverage.
+- **SC-003** (FR-004, FR-005) Two consecutive incremental gates: the second selects the same small set
+  as the first rather than near-everything (proving the baseline was not shrunk), and a fixture changed
+  in the first run has its dependents' contexts dropped even when those dependents live in modules the
+  run did not collect.
+- **SC-004** (FR-006, FR-007) The per-worker import measurement in R6 re-run: the three named items no
+  longer appear in it, and `tests/test_package_surfaces.py`'s own test still fails when a surface is
+  broken (the check is deferred, not weakened).
+- **SC-005** (FR-007, FR-010) `shapely` is absent from `sys.modules` after the whole engine is imported
+  and after a collection-only run of the full tree - asked of the PROCESS, not of the source - and
+  present the moment a geometry call is made; and `make perf-report AGAINST=237-start` reports no
+  increase on the total or on any seed. The first clause needs FR-007's two test modules as well as
+  FR-010's seven engine ones, which is why it names both: with the engine alone it would pass a
+  restricted run and fail every full gate.
+- **SC-006** (FR-008, spec-wide) `make done` and `make hooks-test` green, `make quick` unchanged in
+  scope, and `tests/tooling/test_worker_count.py` still pinning ten workers - the one item this
+  feature is forbidden to move.
+
+## Decisions Recorded
+
+- **D1 - paths, not a plugin.** Every sharding plugin in the ecosystem filters in
+  `pytest_collection_modifyitems` and therefore pays the whole collection (R2); the only mechanism that
+  skips the import is an argument, which is what home-assistant uses at scale. Declined with it:
+  `pytest-split`, `pytest-shard`, `pytest-test-groups`, `--dist each`, `--maxschedchunk`, per-worker
+  `--tx` environments, `pytest-run-parallel`, and waiting for upstream.
+- **D2 - concurrent shards measured and rejected** (R4): 1,836 MiB against 1,742 for one run. Recorded
+  because it was the GM's own stated worst case and because the reason generalizes - worker count, not
+  run count, is what multiplies the import.
+- **D3 - the baseline is a full run's to write.** The alternative, reconstructing the unselected
+  modules' entries from the previous `tests.json`, was declined: it would make the baseline a merge of
+  two runs' collections with no single run having ever seen the whole set, which is exactly the
+  property the plan's "is this test new" question depends on.
+- **D4 - the expected cause was absent, and that is recorded rather than quietly dropped** (R5, R6, R8).
+  The GM's hypothesis was that test modules hold map data as Python literals; the tree holds 40 KiB of
+  module-level literals in 2,513 KiB of source, and the maps come from rolls and from disk. The shape
+  of the fix they described was right and is FR-007; its payload is import-time computation and a
+  library import.
+- **D5 - the worker count stays at ten** (FR-008), the GM's explicit instruction, against a measured
+  trade of 1.14 GiB at eight workers and 45.2 s versus 1.39 GiB at ten and 40.3 s.
+- **D6 - one accessor per module, never an `import` in a hot function** (FR-010). Both forms defer the
+  cost; only one of them is free afterward. Every one of the eight sites is called per plot or per seam,
+  and an `import` statement re-enters `__import__` on each call, so the lever that saves 16 MiB would
+  have been paid back in a slower gate and slower maps. The accessor resolves once and is a local lookup
+  from then on.
+- **D7 - the four items are one feature on purpose.** They share a single measurement (the PSS harness
+  in R3) and a single acceptance (the collection peak), and three of the four are meaningless to verify
+  apart: a path restriction that does not defer the import-time work still pays R6's 13 MiB, and
+  deferring imports without restricting the paths still collects everything. The GM asked for them
+  together.
