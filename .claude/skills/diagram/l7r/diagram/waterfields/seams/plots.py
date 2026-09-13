@@ -93,8 +93,7 @@ def _plant(F: _Frame, pocket: Polygon, plot_across: float, row_step: tuple[float
     them among their own siblings was tried first and left five toe wedges bare on Inashiro: a
     scrap whose only sibling refuses the union (the two meet at a point) had nowhere else to go,
     and stayed a doubled bund."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     x0, y0, x1, y1 = pocket.bounds
     corners = [F.to_uf(x0, y0), F.to_uf(x1, y0), F.to_uf(x1, y1), F.to_uf(x0, y1)]
     ulo, uhi = min(u for u, _ in corners), max(u for u, _ in corners)
@@ -284,8 +283,7 @@ def _trade(
     of 580 steps**, more than every other refusal combined. The corner is a POLYGON; who it belongs to
     is a question about that polygon's boundary, and `_absorb` has answered the same question by
     shared boundary length since it was written."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     cut = [q for q in plots[i]["poly"] if (round(q[0], 1), round(q[1], 1)) not in drop]
     if len(cut) < 3:
         return False

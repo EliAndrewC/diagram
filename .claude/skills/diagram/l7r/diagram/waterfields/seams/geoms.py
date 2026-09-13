@@ -45,6 +45,8 @@ def _load_shapely() -> None:
     from shapely import STRtree, box
     from shapely.geometry import Polygon
 
+    _SHAPELY_LOADED = True
+
 
 def _vertex_box(ring: Any) -> tuple[float, float, float, float]:
     xs = [float(v[0]) for v in ring]
@@ -58,8 +60,7 @@ class PlotGeoms:
     __slots__ = ("_geom", "_ring", "_tree", "_tree_ids", "_tree_rings", "plots")
 
     def __init__(self, plots: list[dict[str, Any]]) -> None:
-        if not _SHAPELY_LOADED:
-            _load_shapely()
+        _load_shapely()
         self.plots = plots
         self._geom: dict[int, BaseGeometry] = {}
         self._ring: dict[int, Any] = {}
@@ -106,8 +107,7 @@ class GeomTree:
     __slots__ = ("_n", "_tree", "changed", "geoms")
 
     def __init__(self, geoms: list[Polygon]) -> None:
-        if not _SHAPELY_LOADED:
-            _load_shapely()
+        _load_shapely()
         self.geoms = geoms
         self._tree: STRtree | None = None
         self._n = -1

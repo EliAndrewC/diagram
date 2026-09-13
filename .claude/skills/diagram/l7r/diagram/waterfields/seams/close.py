@@ -78,8 +78,7 @@ def close_seams(
     """Plant or absorb every scrap of bare ground the carve left inside the command area, so that
     each basin's bund is shared with whatever lies on the other side of it. Mutates `plots` in
     place: absorbed neighbors get a new `poly`, planted pockets are appended."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     if not plots or len(envelope) < 3:
         return
     half = MIN_PLOT_SIDE * g / 2
@@ -292,8 +291,7 @@ def _repair_crossing_rings(plots: list[dict[str, Any]], rounded: bool = False) -
     """Node every self-crossing ring into its largest valid part, and drop what cannot be rescued.
     `rounded`: judge and repair the ring as the manifest will record it (0.1 px), which is where a
     needle that is open unrounded closes on itself."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     for _p in plots:
         ring = [(round(float(a), 1), round(float(b), 1)) for a, b in _p["poly"]] if rounded else _p["poly"]
         if len(ring) < 3 or Polygon(ring).is_valid:

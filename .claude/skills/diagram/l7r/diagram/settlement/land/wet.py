@@ -105,8 +105,7 @@ def _band_half_width(poly: Any, pond: Any, role: str) -> float:
     So the outline's own area/perimeter is the disc's radius - large - while the band the reeds may occupy
     is only the margin. Measuring the disc is what made the first attempt at this fix do nothing at all.
     """
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     pts = [(float(a), float(b)) for a, b in poly]
     if len(pts) < 3:
         return 0.0
@@ -123,8 +122,7 @@ def _band_half_width(poly: Any, pond: Any, role: str) -> float:
 
 def _ellipse(pond: Any, n: int = 64) -> Any:
     """The open water as a polygon: `M['pond']` is (cx, cy, rx, ry)."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     cx, cy, rx, ry = (float(v) for v in pond[:4])
     return ShapelyPolygon([(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)])
 
@@ -136,8 +134,7 @@ def _filled(ring: Any) -> Any:
     crosses itself does), so each part is re-made from its own exterior and the parts unioned. Filling is
     the point: subtracting a dike BAND left the ground it encloses standing, which is the bug this
     function's caller was written to fix."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     g = ShapelyPolygon([(float(a), float(b)) for a, b in ring]).buffer(0)
     return unary_union([ShapelyPolygon(part.exterior) for part in getattr(g, "geoms", [g]) if part.geom_type == "Polygon" and not part.is_empty])
 
@@ -170,8 +167,7 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
     be kept; with the block filled, a second piece can only arise where a single `marsh()` call wraps the
     block on two flanks and is cut in half by it, and each flank is its own call. Falls back to the input
     whenever shapely returns nothing usable, so a degenerate outline cannot lose a feature."""
-    if not _SHAPELY_LOADED:
-        _load_shapely()
+    _load_shapely()
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
     rings += [list(f) for f in fields if len(f) >= 3]
     if not rings and not pond:
