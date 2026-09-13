@@ -1,0 +1,75 @@
+{
+ "feature": "238-unfootnoted-assertions-researched",
+ "plan_sha256": "db407f4755a2fdf922b855671a61dba0739a4ccd4700385f5b357952d853e9d9",
+ "reviewed": "2026-09-13",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "phase1-subject-batches",
+   "summary": "The nineteen pages are read by quote-check agents in subject batches, their reports kept verbatim under reader-reports/, and the session builds R3 from them; nothing is written to a page in phase 1.",
+   "class": "within",
+   "why": "spec FR-001 puts the inventory in the agents' hands and requires the reports kept under reader-reports/; FR-002 makes R3 the inventory. Batching by subject is a working arrangement, not a change of what is delivered."
+  },
+  {
+   "id": "phase2-page-unit",
+   "summary": "Phase 2 is one task per page; a page is done when every sentence its inventory named carries a note or is recorded COVERED / NOT AN ASSERTION.",
+   "class": "within",
+   "why": "spec FR-009 requires the pass be worked page by page with one task per page in tasks.md, and SC-006 states the same completion bar."
+  },
+  {
+   "id": "phase2-ordering",
+   "summary": "Pages are worked cluster-pages first (religion-and-death, vegetation, urban-features, cities/capitals), then the rest by descending inline-marker count from R1.",
+   "class": "within",
+   "why": "Neither request.md nor the spec sets an order; an ordering removes nothing from scope. (Dead in fact - the GM's later amendment cut by item across all nineteen pages - but a plan that predates an amendment is not narrowing anything.)"
+  },
+  {
+   "id": "phase3-checks",
+   "summary": "record-format over every changed page, quote-check over every new footnote, source-applicability over every new key.",
+   "class": "within",
+   "why": "This is spec FR-007 verbatim, in the order it states."
+  },
+  {
+   "id": "phase4-inn-scheduled-last",
+   "summary": "The caravan-inn fix (FR-011) is scheduled last, independent of phases 1-3, so the gate runs once over everything.",
+   "class": "within",
+   "why": "spec FR-011 and D4 carry the fix and its GATED route; the plan schedules it without making it conditional on anything, which is what round 1 of the spec review required."
+  },
+  {
+   "id": "phase5-download-list-continuous",
+   "summary": "Part 4 of TO-DOWNLOAD.md is appended as documents are met - continuous, not a phase-5 job - and listed under phase 5 only so the closing report can confirm it happened.",
+   "class": "within",
+   "why": "spec FR-005 requires appending to the END of Part 4 as items are found; making it continuous is the faithful reading of the GM's 'as you do that pass, you can add onto the markdown file'."
+  },
+  {
+   "id": "coverage-no-new-tests-for-glyph",
+   "summary": "No new tests are written for the inn glyph: its lines are executed by the existing lodging tests, removing three removes no branch, and the 100% floor is verified at the gate rather than assumed.",
+   "class": "within",
+   "why": "Neither the request nor the spec says how coverage is met; the constitution's floor is enforced by the gate, which SC-008 already requires green. Nothing about the request is narrowed."
+  },
+  {
+   "id": "regressions-gate-is-the-measurement",
+   "summary": "The only engine change is the inn glyph and no live map draws an inn - the six generators that call s.inn() are all frozen legacy (towns ubame, hoshizora, hirameki; provincial cities tango, minami, nagahara) and no live pool map calls it - so the gate is the whole measurement, with no cohort or regeneration baseline beyond it.",
+   "class": "within",
+   "why": "Verified independently on this clone rather than taken from the plan: grep -rln '\\.inn(' pool/ returns nothing and legacy-hand-authored-pool/ returns exactly those six files (the only other callers in the tree are tests/settlement/test_civic_grounds.py and wip/shiro_daika/trades.py, neither a pool map). This is the corrected text of the edit under review; the conclusion it supports is unchanged and now rests on a true count. A verification arrangement, not a scope decision."
+  },
+  {
+   "id": "defects-found-are-fixed-here",
+   "summary": "Defects the reading pass turns up outside the unfootnoted sentences - a wrong number, a stale link, a drifted quotation - are fixed in this work, beyond FR-006's contradictions.",
+   "class": "within",
+   "why": "This widens what the feature repairs rather than narrowing it, and it is Principle XIV as it already binds. Nothing the GM asked for is excluded."
+  },
+  {
+   "id": "partial-landing-is-acceptable",
+   "summary": "If the real inventory is nearer R1's 864-paragraph bound than its 285-marker floor, pages land as they finish and an unfinished feature is a partial record improvement rather than nothing.",
+   "class": "within",
+   "why": "Not a carve-out from the request: spec FR-009 already lands the work in batches and FR-010 requires whatever the pass cannot close to be NAMED rather than absorbed, so an unfinished item leaves the record honest. The GM's own later amendment took this same shape."
+  },
+  {
+   "id": "agent-findings-are-checked",
+   "summary": "A reader verdict that contradicts the record gets the passage read before the page is changed; agent findings are checked, not applied.",
+   "class": "within",
+   "why": "spec FR-003 requires footnotes written from returned quotes and FR-006 requires a contradiction corrected and recorded; checking before changing serves both."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -68,7 +68,7 @@ that DO need a reading were moved to the successor and removed from this file.
 - [x] T30 the `inn()` glyph loses its second story and its docstring says so; `towns.html` states a single-story caravan inn with no deviation label
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
-      verify: DONE. DONE. The inn() glyph lost its lower-eave band and upper-story lattice windows; the three windows moved to mid-wall as the openings of the one wall it has. Docstring says single-story and names where the confusion came from. towns.html asserts a single-story caravan inn with no deviation label. No live map moves - the only callers are the frozen legacy towns.
+      verify: DONE. DONE. The inn() glyph lost its lower-eave band and upper-story lattice windows; the three windows moved to mid-wall as the openings of the one wall it has. Docstring says single-story and names where the confusion came from. towns.html asserts a single-story caravan inn with no deviation label. No live map moves - the six callers are all frozen legacy generators, three towns and three provincial cities, and no live pool map calls inn() at all.
 
 ## Phase 5 - closing (FR-005, FR-010)
 

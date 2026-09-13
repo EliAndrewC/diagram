@@ -14,7 +14,9 @@ Spec: [`spec.md`](spec.md). Research notes: [`research.md`](research.md).
   glyph's lines are executed by the existing lodging tests; removing three of them removes no branch, so
   the floor is met by the tests that already exist. Verified at the gate, not assumed.
 - **Principle XIII (no known regressions).** The only engine change is the inn glyph, and no LIVE map
-  draws an inn - the two towns that call `s.inn()` are in the frozen legacy pool (`research.md` R2). The
+  draws an inn - the six generators that call `s.inn()` are all in the frozen legacy pool, three towns
+  (ubame, hoshizora, hirameki) and three provincial cities (tango, minami, nagahara), and no live pool
+  map calls it at all (`research.md` R2). The
   gate is the measurement.
 - **Principle XIV (fix defects where you find them).** A reading pass over nineteen pages will turn up
   defects outside the unfootnoted sentences - a wrong number, a stale link, a quotation that drifted.

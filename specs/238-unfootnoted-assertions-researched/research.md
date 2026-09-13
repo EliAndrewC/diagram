@@ -71,8 +71,7 @@ The footnote behind it is `towns.html` fn-25, `dachedian-jilin-daily`, quoting ã
 
 **Where the drawing is.** `settlement/civic_grounds/lodging.py`, the `inn()` glyph: a lower eave band
 commented `(2-story)` and a row of three `upper-story lattice windows`, with a docstring calling the
-footprint "a large 2-story post-road inn". No LIVE map draws it - the two towns that call `s.inn()`,
-Hirameki and Ubame, are in `legacy-hand-authored-pool/`, which is frozen and never regenerated. So the
+footprint "a large 2-story post-road inn". No LIVE map draws it - the six generators that call `s.inn()` are all in `legacy-hand-authored-pool/`, three towns (Ubame, Hoshizora, Hirameki) and three provincial cities (Tango, Minami, Nagahara), and no map under `pool/` calls it at all, which is frozen and never regenerated. So the
 change moves no shipped map; it changes what the next town drawn will get.
 
 **The open question, which does NOT gate the fix.** The engine's own docstring says *post-road inn*,

@@ -109,3 +109,29 @@ The conversions moved 27 modal pairs. Every one is a label-only change: a marker
 arrived at the assertion, and **no finding moved in any of them**. None touches the sections where a
 finding DID move - the Wagner iron work, the Daoism source swap, the inn - because no modal is written
 from those. That is the case feature 234 provides one recorded sweep reason for, and it is taken.
+
+## What the plan review found, for whoever writes feature 242's plan
+
+The MODE 4 plan review of 2026-09-13 returned CLEAR - eleven decisions, none of them narrowing what the
+GM asked. Two things it turned up are worth carrying forward, and neither is a fidelity problem:
+
+**`plan.md`'s Phase 2 describes a pass that was never executed.** The plan predates the amendment - its
+only substantive commit is the original - and it still reads as the full nineteen-page sweep, ordered cluster-pages-first and
+then by descending inline-marker count. The amendment cut by ITEM across all nineteen pages instead, so
+what remains is the `CITE` tail rather than a page queue. `tasks.md` carries the amendment, `plan.md`
+does not, and it names neither FR-012 nor FR-013 nor a successor. **A successor that writes its own plan
+from this one would reconstruct a scope that was never worked** - it should start from R7's closed list
+and 242's own task file.
+
+**The wrong caller count for the inn glyph, in two places.** The plan's Principle XIII check said "the
+two towns that call `s.inn()`"; `research.md` R2, which is where the plan inherited it and what a
+successor actually reads, said the same and named the wrong two towns besides. There are six
+generators - towns Ubame, Hoshizora and Hirameki, provincial cities Tango, Minami and Nagahara - all
+frozen legacy, with no map under `pool/` calling it. The conclusion both drew was right and is
+unchanged: no live map moves. Both are corrected; fixing only the copy would have left the source to be
+inherited again.
+
+**And one gap rather than a carve-out**: FR-008, the `entry-drift` pairs, is scheduled in no phase of
+the plan. It was discharged anyway (T28, 27 pairs, one recorded sweep reason) because the push refuses
+without it, but a plan that relies on a push refusal to remember an obligation is relying on the wrong
+thing. 242's plan should schedule it.
