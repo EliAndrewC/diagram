@@ -1,0 +1,30 @@
+{
+ "high-share": {
+  "command": "python3 specs/238-unfootnoted-assertions-researched/measure/inventory_shares.py --record",
+  "note": "items the readers rated HIGH, as a share of all of them",
+  "taken": "2026-09-13",
+  "unit": "%",
+  "value": 56.1
+ },
+ "high-share-with-hedged": {
+  "command": "python3 specs/238-unfootnoted-assertions-researched/measure/inventory_shares.py --record",
+  "note": "the same counting the hedged MEDIUM-HIGH tier as HIGH - the upper reading, and why the hedge is reported rather than rounded",
+  "taken": "2026-09-13",
+  "unit": "%",
+  "value": 59.7
+ },
+ "unmarked-share": {
+  "command": "python3 specs/238-unfootnoted-assertions-researched/measure/inventory_shares.py --record",
+  "note": "items carrying no inline marker of any kind",
+  "taken": "2026-09-13",
+  "unit": "%",
+  "value": 71.1
+ },
+ "urban-features-share": {
+  "command": "python3 specs/238-unfootnoted-assertions-researched/measure/inventory_shares.py --record",
+  "note": "urban-features.html's 103 items as a share of all 695",
+  "taken": "2026-09-13",
+  "unit": "%",
+  "value": 14.8
+ }
+}

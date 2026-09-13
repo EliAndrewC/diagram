@@ -251,19 +251,20 @@ that **232 named the right pages and not the worst sections on them**.
   rate - one to three communal wells for a village of seventy households - is what this project's whole
   well liberty is measured against.
 
-`urban-features.html` alone carries **103 of the 695**, which is 14.8% of the record's whole exposure on
-one page (counted 2026-09-13 from the four reader reports by
-`specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py`). It is the page to work first.
+`urban-features.html` alone carries **103 of the 695**, which is 14.8% of the record's whole exposure
+on one page (`m:urban-features-share`). It is the page to work first.
 
 ### R3b - the inventory, closed
 
 **695 items over 282 sections and 19 pages**. The four batches agree closely on the shape of what they
 found, and the shape is worth stating precisely rather than roundly, because a later feature has to
-plan against it (counted 2026-09-13 from the four reader reports by
-`specs/242-cite-the-unfootnoted-assertions/measure/inventory_census.py`): **494 of the 695 carry no
-marker of any kind, seven in ten rather than the two thirds a first reading of these reports
-suggested**, and **390 are HIGH, 56% of the whole** - or 59.7% if the 25 items the readers hedged
-`MEDIUM-HIGH` are counted as HIGH, which is the ambiguity that hedged tier exists to keep visible.
+plan against it: **494 of the 695 carry no marker of any kind, 71.1% - seven in ten rather than the two
+thirds a first reading of these reports suggested** (`m:unmarked-share`), and **390 are HIGH, 56.1% of
+the whole** (`m:high-share`) - or 59.7% if the 25 items the readers hedged `MEDIUM-HIGH` are counted as
+HIGH (`m:high-share-with-hedged`), which is the ambiguity that hedged tier exists to keep visible.
+
+<!-- The harness is measure/inventory_shares.py; it loads feature 242's census by path rather than
+     copying its parser, so there is one thing to keep true. -->
 
 Two pages are `NOT AN ASSERTION` in bulk and need no work: `presentation.html` (zero items) and
 `settlements.html` (one, restating footnoted canon). That is the census's upper bound doing its job -
