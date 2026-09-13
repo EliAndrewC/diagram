@@ -1,6 +1,13 @@
 # Feature 230 - the stream's intake, and the two ditch classes
 
-**Status**: ACCEPTED 2026-09-12 - `spec-fidelity` rounds 1-4 CHANGES REQUIRED (each applied, see Review history), round 5 FAITHFUL. Implementation in progress; the two classes, the tap and the three sinks are drawn and reviewed (passes 1-11).
+**Status**: IMPLEMENTED 2026-09-13, PENDING THE GM'S PERF SIGN-OFF - `spec-fidelity` rounds 1-4 CHANGES REQUIRED
+(each applied, see Review history), round 5 FAITHFUL; fourteen `settlement-review` passes over the five pool maps
+(the ledger rows carry each verdict and what it caught); `make done` green on the whole suite, 3,880 tests and all
+three coverage floors; the 48-seed cohort restored to 48/48 against the pre-feature baseline. What it waits on is
+not work: the perf bookends read band 3 on ONE cohort seed (seed 4 +27.9%, seed 39 +11.7%, TOTAL +4.3%, which is
+inside band 2's own 5%), and a band-3 increase owes the GM's `make perf-signoff` at a terminal. The written
+explanation and the `perf-audit` records are in `dev/perf-log/`; the profile behind them is
+`dev/perf-log/20260913T030717Z-profile-adhoc-seed4-web.txt`.
 **Request**: [`request.md`](request.md). **Research**: [`research.md`](research.md) - R1 the state of the record
 before the pass, R2 the pass itself (what was searched, what was found, the verdicts), R3 the maps before and
 after. **Predecessors**: 134 (the class vocabulary), 159 (a class decided at one emit site from the fill about to
