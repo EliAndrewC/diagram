@@ -527,9 +527,17 @@ class CombMixin:
         self.M["fields"].append(_fld)
 
     def _comb_record_ditches(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
-        """Record one field_ditch per channel, carrying the trimmed and polder-side tags."""
+        """Record one field_ditch per channel, carrying the trimmed and polder-side tags.
+
+        A RECORD DOES NOT CARRY A POINT TWICE (settlement-review, feature 230 pass 12). The head race is traced to the
+        fork it ends at, and where the trace already stood there the fork was appended again - so three pool maps
+        shipped a ditch whose last two points are identical, and on two of them the whole record WAS that duplicate
+        plus a lead: Inashiro's was 3.2 ft of "main" and Mizuguchi's 21.9, each drawn as its own stroke, each a hover
+        region a reader could meet, each reading on the sheet as a blunt stub of ditch stopping in the bare hem. What
+        is dropped here is only ink nothing is losing: a run under a foot has no course to show."""
         for c in net["channels"]:
-            rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in c["pts"]], "role": c["role"], "field": name, "w": round(c["w"], 1), "w_tail": round(c.get("w_tail", c["w"]), 1)}
+            _pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
+            rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _pts], "role": c["role"], "field": name, "w": round(c["w"], 1), "w_tail": round(c.get("w_tail", c["w"]), 1)}
             if c.get("trimmed"):  # a TRIMMED in-wall drain is a conduit stub, not a contour collector
                 rec["trimmed"] = True
             if c.get("seg"):  # a polder ring-side tag (feeder/e_toe/w_toe/drain/lateral), so footbridge placement can be side-aware
