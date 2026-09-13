@@ -302,6 +302,12 @@ _ESCAPES = {
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
+    "REVIEW_PREREQ_OK": (
+        "command",
+        "matched in a settlement-review dispatch PROMPT only (`case \"$ptext\"`, the prompt's own text taken from the "
+        "payload), the same stated exclusion as PAIR_OK's agent branch - a prompt is prose with no command grammar; "
+        "its REVIEW_PREREQ_OK=\"reason\" form is refused without a reason and logged with one (feature 240)",
+    ),
     "RUN_OK": (
         "not-an-escape",
         "appears ONLY as a fixture string in scripts/test-finished-run-hooks.sh, which proves that a token in a "

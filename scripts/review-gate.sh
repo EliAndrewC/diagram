@@ -123,6 +123,19 @@ for man in $(printf '%s\n' "$changed" | grep -E '^\.claude/skills/diagram/(pool|
     printf 'a reliable reviewer of their own visual output. Log the pass in the notes file'"'"'s Review\n'
     printf 'section. On 2026-07-27 three city maps shipped unreviewed and nothing warned.\n'
     fail="$fail $(basename "$man")"
+    continue
+  fi
+  # GUARD_EDIT_OK: feature 240 FR-002 - A NOTES FILE TOUCHED IS NOT A REVIEW THAT HAPPENED. A settlement-review
+  # can now exit at its first stage with NOT-REVIEWABLE (the map was not ready to be judged), and a session could
+  # still log that pass in the notes file and satisfy the rule above. So the map's latest verdict record, which
+  # the agent writes as its last act, is read too: a map whose last word from a reviewer is "could not review
+  # this" does not ship on it. No record at all keeps today's rule - a map reviewed before the records existed.
+  verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$(basename "${man%.json}").json"
+  if [ -f "$verdict_rec" ] && python3 -c 'import json,sys; sys.exit(0 if json.load(open(sys.argv[1])).get("verdict") == "NOT-REVIEWABLE" else 1)' "$verdict_rec" 2>/dev/null; then
+    printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$(basename "$man")"
+    printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment of the map\n'
+    printf 'was made. Fix what that verdict names (%s) and dispatch the review again.\n' "$verdict_rec"
+    fail="$fail $(basename "$man")"
   fi
 done
 

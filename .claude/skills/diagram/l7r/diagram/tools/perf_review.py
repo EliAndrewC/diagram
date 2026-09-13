@@ -1,6 +1,6 @@
 """The review records (feature 129): explanation, confirmation, audit, sign-off - and `--check`.
 
-    python3 -m l7r.diagram.tools.perf_review explain --why "..."                 (the session)
+    python3 -m l7r.diagram.tools.perf_review explain --why "..." --control <key>   (the session; or --unverified "<reason>")
     python3 -m l7r.diagram.tools.perf_review confirm --verdict consistent --as perf-audit
     python3 -m l7r.diagram.tools.perf_review audit --verdict justified --necessary ... --commensurate ... --no-way-around ... --as perf-audit
     python3 -m l7r.diagram.tools.perf_review signoff --why "..." --as GM         (a terminal)
@@ -72,6 +72,26 @@ def _records(log_dir: Path) -> list[dict[str, Any]]:
             d["_file"] = fn.name
             out.append(d)
     return out
+
+
+def control_record(specs: Path, key: str) -> dict[str, Any] | None:
+    """The measurement record a `--control` names, from any feature's `measurements.json` - or None (feature 240 FR-010).
+
+    AN ATTRIBUTION NAMES ITS COUNTERFACTUAL. Feature 230's first explanation attributed seed 4's web growth to
+    the map, on the evidence of a cumulative-time profile in which none of the feature's new passes appeared; the
+    audit's control run - the suspected rule forced to return True - measured 4.70 s against 2.56 s against a
+    1.34 s baseline and refuted it (`specs/240-verified-before-reviewed/research.md` R2). A profile says where
+    time went, never why, so the evidence an explanation owes is a recorded run with the cause removed, named by
+    its key. The prose is never parsed: the key either names a record or it does not."""
+    key = key.removeprefix("m:")  # cited as `m:<key>` (feature 239's convention); the file holds the bare key
+    for path in sorted(specs.glob("*/measurements.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except OSError, ValueError:
+            continue
+        if isinstance(data, dict) and isinstance(data.get(key), dict):
+            return {**data[key], "key": key, "file": str(path)}
+    return None
 
 
 def feature_number(feature: str) -> str:
@@ -218,7 +238,7 @@ def check(log_dir: Path, feature: str) -> tuple[bool, str]:
         negative = [f"{r['kind']}={r['verdict']}" for r in recs if r.get("binding") == b and r.get("verdict") not in PASSING[str(r["kind"])]]
         need: list[str] = []
         if v.band >= 1 and not expl:
-            need.append("a written explanation (make perf-explain WHY=...)")
+            need.append("a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>)")
         if v.band >= 1 and "confirmation" not in have:
             need.append("a perf-audit confirmation (make perf-confirm VERDICT=consistent AS=perf-audit, by the subagent)")
         if v.band >= 2 and "audit" not in have:
@@ -245,6 +265,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--environment", default="local")
     ap.add_argument("--log-dir", default=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "dev", "perf-log"))
     ap.add_argument("--why", default="")
+    ap.add_argument("--control", default="")
+    ap.add_argument("--unverified", default="")
+    ap.add_argument("--specs-dir", default=str(Path(__file__).resolve().parents[6] / "specs"))
     ap.add_argument("--verdict", default="")
     ap.add_argument("--note", default="")
     ap.add_argument("--necessary", default="")
@@ -290,7 +313,26 @@ def main(argv: list[str] | None = None) -> int:
         if not a.why.strip():
             print("perf-review: explain needs WHY=<what caused the change> - a machine-written line is noticed, not explained (constitution VI)", file=sys.stderr)
             return 2
-        p = write(log_dir, a.feature, v, "explanation", "pending", "main", explanation=a.why, render=perf_bands.render(v), stage_delta={str(k): v2 for k, v2 in v.stage_delta.items()})
+        if bool(a.control.strip()) == bool(a.unverified.strip()):
+            print(
+                "perf-review: explain needs its EVIDENCE as well as its cause - CONTROL=<measurement key>, a recorded run of the same subject with the attributed cause removed, "
+                'or UNVERIFIED="<why it was not tested>", which is logged. One or the other, never both (feature 240 FR-010)',
+                file=sys.stderr,
+            )
+            return 2
+        evidence: dict[str, Any] = {}
+        if a.control.strip():
+            rec = control_record(Path(a.specs_dir), a.control.strip())
+            if rec is None:
+                print(f"perf-review: CONTROL={a.control.strip()} names no record in any specs/*/measurements.json - record the control run first", file=sys.stderr)
+                return 2
+            evidence = {"control": a.control.strip(), "control_record": rec}
+        else:
+            if len(a.unverified.split()) < 2 or len(a.unverified.strip()) < 8:
+                print("perf-review: UNVERIFIED needs a REASON - two words and eight characters; it is what a later audit reads", file=sys.stderr)
+                return 2
+            evidence = {"unverified": a.unverified.strip()}
+        p = write(log_dir, a.feature, v, "explanation", "pending", "main", explanation=a.why, render=perf_bands.render(v), stage_delta={str(k): v2 for k, v2 in v.stage_delta.items()}, **evidence)
         print(f"perf-review: explanation recorded in {p.name} (band {v.band}); now the perf-audit subagent confirms it")
         return 0
     if a.command == "signoff":

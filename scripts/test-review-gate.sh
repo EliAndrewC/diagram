@@ -137,6 +137,15 @@ git checkout -q main; git checkout -q work
 echo '{"v":3}' > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a map that has no notes file" f ok
 
+# GUARD_EDIT_OK: feature 240 FR-002 - a notes file touched is not a review that happened: a map whose latest
+# verdict record is NOT-REVIEWABLE is refused even with its notes updated, and a PASS lets it through.
+mkrepo nr withmap; echo '{"v":2}' > "$POOL/m.json"; echo "reviewed 2026-09-13" >> "$POOL/m.notes.md"
+git add -A; git commit -qm reroll-with-notes; mkdir -p .git/review-verdicts
+echo '{"map":"m","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .git/review-verdicts/m.json
+check "a re-rolled map whose last verdict is NOT-REVIEWABLE, notes updated or not" nr blocked
+echo '{"map":"m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/nr/.git/review-verdicts/m.json"
+check "...and the same map once a review returned PASS" nr ok
+
 mkrepo g; echo "# spec" > specs/900-x/spec.md; git add -A; git commit -qm s
 if ( cd "$T/g" && REVIEW_GATE_OK="superseded before implementation" "$GATE" main..HEAD >/dev/null 2>&1 ); then
   echo "  ok      the documented escape"; PASS=$((PASS+1))

@@ -43,7 +43,7 @@ def run(log: Path, *args: str, env: str = "local") -> int:
 
 def test_no_pair_means_nothing_to_review(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert run(log, "check") == 0 and "nothing to review" in capsys.readouterr().out
-    assert run(log, "explain", "--why", "x") == 2, "no pair: the bookends come first"
+    assert run(log, "explain", "--why", "x", "--unverified", "not measured in this fixture") == 2, "no pair: the bookends come first"
 
 
 def test_no_increase_owes_nothing(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -56,8 +56,8 @@ def test_band_1_FIRES_without_explanation_then_without_confirmation(log: Path, c
     assert run(log, "check") == 1
     out = capsys.readouterr()
     assert "MISSING: a written explanation" in out.out and "perf-audit confirmation" in out.out and "REFUSED" in out.err
-    assert run(log, "explain", "--why", "") == 2, "an empty explanation is noticed, not explained"
-    assert run(log, "explain", "--why", "seed 1 +0.5% is inside the 1.7% per-seed floor") == 0
+    assert run(log, "explain", "--why", "", "--unverified", "not measured in this fixture") == 2, "an empty explanation is noticed, not explained"
+    assert run(log, "explain", "--why", "seed 1 +0.5% is inside the 1.7% per-seed floor", "--unverified", "not measured in this fixture") == 0
     assert run(log, "check") == 1 and "MISSING: a perf-audit confirmation" in capsys.readouterr().out
     # the main session cannot confirm: the prompt, and DECLINED
     assert run(log, "confirm", "--verdict", "consistent") == 1
@@ -68,7 +68,7 @@ def test_band_1_FIRES_without_explanation_then_without_confirmation(log: Path, c
 
 def test_an_inconsistent_confirmation_does_not_pass(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 0.5)
-    run(log, "explain", "--why", "cause")
+    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
     assert run(log, "confirm", "--verdict", "inconsistent", "--as", "perf-audit") == 0
     assert run(log, "check") == 1 and "negative or inconclusive records do not count: confirmation=inconsistent" in capsys.readouterr().out
     assert run(log, "confirm", "--verdict", "maybe", "--as", "perf-audit") == 2
@@ -76,7 +76,7 @@ def test_an_inconsistent_confirmation_does_not_pass(log: Path, capsys: pytest.Ca
 
 def test_band_2_needs_the_audit_with_every_criterion(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 12.0)
-    run(log, "explain", "--why", "a new placement rule in web")
+    run(log, "explain", "--why", "a new placement rule in web", "--unverified", "not measured in this fixture")
     run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
     assert run(log, "check") == 1 and "escalated audit" in capsys.readouterr().out
     assert run(log, "audit", "--verdict", "justified", "--necessary", "yes", "--as", "perf-audit") == 2, "commensurate and no_way_around missing"
@@ -90,7 +90,7 @@ def test_band_2_needs_the_audit_with_every_criterion(log: Path, capsys: pytest.C
 @pytest.mark.parametrize("verdict", ["not-justified", "cannot-determine"])
 def test_a_negative_or_inconclusive_audit_does_not_pass(log: Path, verdict: str, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 12.0)
-    run(log, "explain", "--why", "cause")
+    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
     run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
     assert run(log, "audit", "--verdict", verdict, "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit") == 0
     assert run(log, "check") == 1 and f"audit={verdict}" in capsys.readouterr().out
@@ -98,7 +98,7 @@ def test_a_negative_or_inconclusive_audit_does_not_pass(log: Path, verdict: str,
 
 def test_band_3_needs_the_GMs_signoff_at_a_terminal(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 25.0)
-    run(log, "explain", "--why", "cause")
+    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
     run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
     run(log, "audit", "--verdict", "justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit")
     assert run(log, "check") == 1 and "GM's sign-off" in capsys.readouterr().out
@@ -113,7 +113,7 @@ def test_band_3_needs_the_GMs_signoff_at_a_terminal(log: Path, capsys: pytest.Ca
 
 def test_a_record_is_bound_to_the_numbers_and_the_commit(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 0.5)
-    run(log, "explain", "--why", "cause")
+    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
     run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
     assert run(log, "check") == 0
     # a NEWER -end with different numbers: every earlier record is stale, by name
@@ -122,7 +122,7 @@ def test_a_record_is_bound_to_the_numbers_and_the_commit(log: Path, capsys: pyte
     out = capsys.readouterr().out
     assert "stale records" in out and "review-129-confirmation" in out
     # a fresh explanation for the new numbers does NOT revive the old confirmation: it is bound to the old ones
-    assert run(log, "explain", "--why", "the new numbers") == 0
+    assert run(log, "explain", "--why", "the new numbers", "--unverified", "not measured in this fixture") == 0
     assert run(log, "check") == 1 and "MISSING: a perf-audit confirmation" in capsys.readouterr().out
 
 
@@ -135,7 +135,7 @@ def test_environments_are_checked_independently(log: Path, capsys: pytest.Captur
     assert run(log, "check") == 1
     out = capsys.readouterr().out
     assert "[codebuild]" in out and "MISSING" in out and "[local]" in out and "nothing owed" in out
-    assert run(log, "explain", "--why", "x", env="codebuild") == 0
+    assert run(log, "explain", "--why", "x", "--unverified", "not measured in this fixture", env="codebuild") == 0
     assert run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit", env="codebuild") == 0
     assert run(log, "check") == 0
     assert run(log, "show", env="codebuild") == 0 and "perf bands [codebuild]" in capsys.readouterr().out
@@ -153,7 +153,7 @@ def test_unreadable_files_are_skipped_and_the_clone_is_named(log: Path) -> None:
     (log / "broken.json").write_text("{", encoding="utf-8")
     (log / "20260825T000000Z-review-129-audit-x.json").write_text("{", encoding="utf-8")
     band(log, 0.5)
-    run(log, "explain", "--why", "cause")
+    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
     name = next(log.glob("*-review-129-explanation-*")).name
     assert name.endswith("-local-myclone.json")
     assert pr.feature_number("adhoc") == ""
@@ -351,3 +351,53 @@ def test_the_same_increase_lands_differently_per_environment(log: Path, capsys: 
     out = capsys.readouterr().out
     assert "[local]" in out and "MISSING" in out, "the quiet machine keeps the strict rule"
     assert "[codebuild]" in out and "nothing owed" in out, "the noisy one does not, at 5-of-6 false firings"
+
+
+# ---- feature 240 FR-010: an attribution names its counterfactual ------------------------------------------------
+
+# Feature 230's FIRST explanation, as it was recorded (dev/perf-log/20260913T030743Z-review-230-explanation-...):
+# the attribution the audit's control run refuted. It carried no control, and that is exactly what is refused now.
+F230_FIRST = (
+    "Band 3 on ONE cohort seed (4: +27.9%, 39: +11.7%; TOTAL +4.3%, inside band 2's 5%). Profiled rather than guessed: seed 4's "
+    "web stage spends 4.2s of 4.8s in _serve_stragglers -> _route -> fouled (426,249 calls), the footpath router. None of this "
+    "feature's new passes appears in the top 25. The cause is the map, not the code"
+)
+
+
+def _specs(tmp: Path, **entries: dict[str, Any]) -> Path:
+    d = tmp / "specs" / "230-x"
+    d.mkdir(parents=True)
+    (d / "measurements.json").write_text(json.dumps(entries), encoding="utf-8")
+    return tmp / "specs"
+
+
+def test_feature_230s_first_explanation_is_refused_without_its_counterfactual(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    band(log, 0.5)
+    specs = _specs(tmp_path)
+    assert run(log, "explain", "--why", F230_FIRST, "--specs-dir", str(specs)) == 2
+    assert "CONTROL=<measurement key>" in capsys.readouterr().err
+    assert run(log, "check") == 1, "a refused explanation recorded nothing"
+
+
+def test_a_control_must_name_a_record_and_then_travels_with_the_explanation(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    band(log, 0.5)
+    specs = _specs(tmp_path, **{"230-seed4-web-rule-forced-true-s": {"value": 2.56, "unit": "s", "command": "make map PROFILE=1", "taken": "2026-09-13"}})
+    assert run(log, "explain", "--why", "the ends rule provokes straggler routing", "--control", "m:no-such-run", "--specs-dir", str(specs)) == 2
+    assert "names no record" in capsys.readouterr().err
+    assert run(log, "explain", "--why", "the ends rule provokes straggler routing", "--control", "m:230-seed4-web-rule-forced-true-s", "--specs-dir", str(specs)) == 0
+    rec = json.loads(next(log.glob("*-explanation-*.json")).read_text())
+    assert rec["control"] == "m:230-seed4-web-rule-forced-true-s" and rec["control_record"]["key"] == "230-seed4-web-rule-forced-true-s" and rec["control_record"]["value"] == 2.56
+
+
+def test_unverified_needs_a_reason_and_not_both_kinds_of_evidence(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    band(log, 0.5)
+    specs = _specs(tmp_path, **{"k": {"value": 1}}, **{"bad": "not a record"})
+    assert run(log, "explain", "--why", "cause", "--unverified", "no", "--specs-dir", str(specs)) == 2
+    assert "needs a REASON" in capsys.readouterr().err
+    assert run(log, "explain", "--why", "cause", "--unverified", "no time to run it", "--control", "m:k", "--specs-dir", str(specs)) == 2
+    assert run(log, "explain", "--why", "cause", "--control", "m:bad", "--specs-dir", str(specs)) == 2, "a non-record entry is no record"
+    (specs / "230-x" / "measurements.json").write_text("{not json", encoding="utf-8")
+    assert pr.control_record(specs, "m:k") is None
+    assert run(log, "explain", "--why", "cause", "--unverified", "no time to run it", "--specs-dir", str(specs)) == 0
+    rec = json.loads(next(log.glob("*-explanation-*.json")).read_text())
+    assert rec["unverified"] == "no time to run it" and "control" not in rec

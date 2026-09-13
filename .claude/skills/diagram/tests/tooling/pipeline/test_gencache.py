@@ -309,3 +309,24 @@ def test_a_gate_regeneration_that_FAILS_raises_with_the_child_s_own_output(tmp_p
     except RuntimeError as e:
         assert "the generator exploded" in str(e), "the child's own output travels with the failure"
         assert "exit 1" in str(e)
+
+
+def test_is_current_answers_the_load_question_without_touching_a_file(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 240 FR-005. A review's precondition asks whether a map is current, and must not change the map it
+    asks about - `load()` copies outputs into place and deletes one the entry lacks, so it cannot be the question.
+    `is_current` is the key comparison alone: true for a matching entry, false for a moved key or no entry, and
+    in every case nothing on disk moves."""
+    monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "cache"))
+    gen = tmp_path / "m.gen.py"
+    gen.write_text("x = 1\n")
+    assert gencache.is_current(str(gen)) is False, "no entry at all is not current"
+    entry = tmp_path / "cache" / "m"
+    entry.mkdir(parents=True)
+    (entry / "m.json").write_bytes(b"{}")
+    (entry / "meta.json").write_text(json.dumps({"key": gencache.compute_key(str(gen), None), "outputs": ["m.json"]}))
+    stale_png = tmp_path / "m.png"
+    stale_png.write_bytes(b"the PREVIOUS roll's picture")
+    assert gencache.is_current(str(gen)) is True
+    assert stale_png.exists() and not (tmp_path / "m.json").exists(), "asking changed nothing - load() would have deleted the PNG and restored the JSON"
+    gen.write_text("x = 2\n")
+    assert gencache.is_current(str(gen)) is False, "a moved key is not current"

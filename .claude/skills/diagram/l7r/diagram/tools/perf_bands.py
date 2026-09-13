@@ -78,7 +78,7 @@ BAND3_SEED_PCT = 20.0
 
 OWES = {
     0: "nothing - no increase above this environment's band-1 line",
-    1: "a written explanation (make perf-explain WHY=...) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+    1: "a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
     2: "band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
     3: "bands 1 and 2, plus the GM's personal sign-off before the push (make perf-signoff, at a terminal)",
 }

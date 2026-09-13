@@ -1,0 +1,99 @@
+{
+ "230-gates-that-ran": {
+  "value": 26,
+  "unit": "gates",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "count of feature 230's own `make done` runs that did not short-circuit, claim to landing",
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
+ },
+ "230-gate-total-s": {
+  "value": 1663,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "sum of wall seconds over those runs",
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
+ },
+ "230-green-gate-min-s": {
+  "value": 56.0,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "fastest of feature 230's green gates (the cost FR-004 adds before a review of fixes)",
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
+ },
+ "230-green-gate-max-s": {
+  "value": 67.0,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "slowest of feature 230's green gates",
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
+ },
+ "230-gate-max-s": {
+  "value": 381.0,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
+  "taken": "2026-09-13",
+  "quantity": "longest of feature 230's gates that ran, of any result",
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
+ },
+ "240-fr005-whole-pool-rc": {
+  "value": 0,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "no snapshot named, pool folder whole and current",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-pool-without-renders-rc": {
+  "value": 1,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "no snapshot named, the pool's .png and .html moved aside as a gate leaves them",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-named-current-snapshot-rc": {
+  "value": 0,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "a whole snapshot of the current map named, pool without renders",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-named-older-snapshot-rc": {
+  "value": 1,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "a whole snapshot whose SVG differs from the pool's named",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-key-moved-rc": {
+  "value": 1,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "the generator edited so its cache key moves, current snapshot named",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-restored-rc": {
+  "value": 0,
+  "unit": "exit code",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "quantity": "everything restored, no snapshot named",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ },
+ "240-fr005-check-max-s": {
+  "value": 0.19,
+  "unit": "s",
+  "command": "python3 specs/240-verified-before-reviewed/measure/fr005_probe.py --record",
+  "taken": "2026-09-13",
+  "varies": 0.5,
+  "quantity": "slowest of the probe's six checks, each a fresh interpreter importing the generation cache - sub-second, so half its value is the band, against a bound of 5 s",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, in states this probe sets up and restores"
+ }
+}
