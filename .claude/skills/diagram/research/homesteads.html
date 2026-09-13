@@ -465,6 +465,24 @@ question is not one anyone measured - so the floor is DERIVED from three atteste
 </ul>
 <p><strong>Therefore</strong> a wall nearer than bund + path + eave stands with its roof over the levee path and its
 drip line in the rice. 1.5 + ~1.5 + 3 ft is 6 ft, the floor a wall may never cross - a MINIMUM below the 10-13 ft the map draws.</p>
+<!-- WHICH OF THE ENGINE'S NUMBERS ARE NORMS AND WHICH ARE RAILS (2026-09-13, the GM asking the question of
+     three of them at once: "is that sixty pixels actually based on anything?"). This entry states a 6 ft
+     MINIMUM and NO MAXIMUM, and the only figure it offers in the other direction is the village-tier
+     tolerance below - a back-row house about 700 ft from the crops reading as the honest back of a compact
+     village, on a tier whose own rule exempts hamlets. Everything numeric in the code about how FAR a
+     cluster may stand from its fields is therefore a RAIL, and each one now says so at its own definition:
+     `settlement/rolling/fit.py` `_field_adjacent` (165, a guard against a nudge drifting a house off the
+     farmland - it formerly cited `all_houses_field_adjacent`, deleted in feature 166) and
+     `tests/gate/test_cluster_and_homes.py` `ABUT_PX` (re-based from 60 to 700 here; the 60 had been measured
+     off our own reference roll, so it asserted that the engine still drew what it drew in August, and it
+     went red when a placer change moved a cluster 195 px out). The retirement record for `FIELD_ADJ_PX` in
+     `hamletgen/consts.py` already said the same thing and was written before any of this; it is the reason
+     the question could be answered from the record rather than re-researched.
+     What IS a norm here: the 6 ft minimum, gated by `houses_clear_of_paddies`, and the DIRECTIONAL 背山面水
+     seat, which is judged by the settlement-review reading the picture because it is qualitative. A cluster
+     standing further from its paddy than some pixel figure is not thereby wrong; a cluster that reads as
+     sitting beside its fields rather than on them is, and that is a judgment, not a threshold. -->
+<p></p>
 <!-- a MINIMUM below the 10-13 ft the placer draws, so nothing else on the map moves; the floor is tested at a house's four corners, never at its center. -->
 <!-- The touching house was not a rule but a measurement error: the 14 px field set-back was held from the seat's CENTER, so a house 28 ft deep seated 14 px off the paddy stood with its wall on the bund (the CENTER-vs-FOOTPRINT trap dev/placement.md names). Now _wall_on_the_bund tests the four corners in both seat paths (settlement/houses.py _fits, settlement/rolling/fit.py _bundle_common_fits), and the gate holds it (houses_clear_of_paddies, same constant). Inashiro after: 7.1 ft, one house moved 6 px, nothing else changed. -->
 <p>The bund's width is a GUESS, since no readable page supports it, so the 6 ft floor is a soft

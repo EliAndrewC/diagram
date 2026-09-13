@@ -30,10 +30,22 @@ from tests.gate import _pool
 
 SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
-ABUT_PX = 60.0
-"""How near the NEAREST house must come to a field before the cluster counts as abutting it. Measured on
-the reference roll: 33 px. The bar is the nearest house only - the far side of a cluster is legitimately
-a cluster-span back, which is what the second half of the rule allows for."""
+ABUT_PX = 700.0
+"""How near the NEAREST house must come to a field before the cluster counts as abutting its ground.
+
+RE-BASED ON THE RECORD, 2026-09-13, from 60 px. The 60 was measured off our own output - its own note read
+"Measured on the reference roll: 33 px" - so the bar tested that the engine still drew what it drew in
+August, and it failed the moment a placer change moved a cluster 195 px out. The GM put the question
+directly: is the number based on anything? It was not.
+
+What the record does give (`research/homesteads.html`, "How close does a farmhouse stand to the paddy?"):
+a 6 ft MINIMUM, derived from bund plus levee path plus eave overhang and gated by `houses_clear_of_paddies`,
+and NO MAXIMUM. The nearest thing to a maximum it states is a tolerance - a back-row house about 700 ft from
+the crops "reads as the honest back of a compact village rather than as a stranded arc" - and the same
+paragraph says a hamlet "is legitimately loose and is not held to" the village floor. 700 is therefore what
+this can honestly assert: a RAIL that catches a cluster which has left its fields altogether, not a
+statement about how tightly a hamlet hugs its paddy. The 背山面水 seat is a DIRECTIONAL norm and is judged by
+the settlement-review reading the picture, which is where a qualitative rule belongs."""
 
 MAX_ASPECT = 2.7
 """A minka lengthened by adding bays; past this it is a shed. Measured on the live pool the worst is

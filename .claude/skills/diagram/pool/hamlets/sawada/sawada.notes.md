@@ -888,3 +888,25 @@ top is a brook and a ditch parting, which is what was actually there.
 
 What stands at the tap is rolled, because the record attests two forms and prefers neither.
 This map is the pinned one: `intake="open"`, the brook tapped straight off its bank with nothing built across the water. All five pool seeds happened to roll the weir and a knob owes one map per value, so the value is declared in the generator rather than left to the draw. The foot changed too, and by measurement: the brook passes 53 ft from the collector's outfall, and the drain still runs off the frame beside it, its run coming within 13 ft of the brook's centerline before both leave the sheet. The junction is refused, and by measurement: below the one candidate that has fallen past the outfall the brook has about 85 px left on the canvas against the 150 the rule asks, so a confluence drawn there would be a junction with no stream under it. The two watercourses therefore leave this sheet side by side - the picture that sink exists to end, and cannot end here.
+
+### The board moved off the connector, and the two seating paths disagree (2026-09-13)
+
+The independent review measured this board at **(1729.4, 1732.4)** on lane 0 - `w=3`, `connector: false` -
+at the cluster's northern apex, serving **3 of 19 households within 250 ft** against 10 at the busiest
+stretch of any way. On main it stood on a **w=6 connector** with 6 within 250 ft.
+
+**The mechanism is a disagreement between the two seats, not the merge.** `place_kosatsuba` may seat a board
+on a connector, and it did. The RE-SEAT in `hamletgen/frame.py` - which fires when the engine's seat falls
+outside the house cloud, as it does here - builds its candidates from
+`[ln for ln in lanes if not ln.get("connector")]`, so a connector is not a seat it can return. The board
+therefore cannot land back where the siter put it, and takes the best non-connector verge instead.
+
+What moved with feature 230 is only WHICH non-connector verge: its belt rule took the board out of the
+windbreak (2.3 ft of crown clearance on main, 36.8 ft now), which is right. The traffic loss is the
+connector exclusion, which predates both features.
+
+**Not fixed here, and why.** Whether a connector may host the state's notice is a siting question with a
+research answer (a board stands where the traffic is, and a through-road carries the traffic), and changing
+it moves boards on every map that re-seats - which wants its own feature, its own cohort and its own review
+rather than a 4 a.m. edit. What is recorded is the measurement and the mechanism, so the next session does
+not have to find either.

@@ -15,8 +15,23 @@ if TYPE_CHECKING:
 
 class BundleFitMixin:
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
-        """A farmhouse must stay near the farmland (within the gate's ADJ=165), so a nudge cannot drift it
-        off into the urban core or the void."""
+        """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
+
+        THE NUMBER IS ARBITRARY AND THAT IS ALL RIGHT, as long as nobody reads it as a historical claim
+        (GM 2026-09-13, asking exactly that question of this line). The record gives a 6 ft MINIMUM - bund
+        plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
+        MAXIMUM at all (`research/homesteads.html`, "How close does a farmhouse stand to the paddy?"; the
+        retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
+        TOLERANCE in the other direction: a back-row house about 700 ft from the crops "reads as the honest
+        back of a compact village", and a hamlet "is legitimately loose and is not held to" the village
+        coverage floor at all. So 165 catches a house that has left the farmland; it does not describe how
+        far a farmer lives from the paddy, and a cluster standing further out than this is not thereby
+        wrong. It formerly cited "the gate's ADJ=165" - `all_houses_field_adjacent`, which died with the
+        check battery in feature 166, so the citation pointed at nothing for a fortnight.
+
+        Left at 165 deliberately: widening it would admit nudges the placer currently refuses and re-roll
+        the pool, which is a real cost for no gain, since nothing downstream reads the figure as a norm
+        once this docstring says it is not one."""
         return self._field_within(x, y, 165) if self.field_polys else True
 
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]

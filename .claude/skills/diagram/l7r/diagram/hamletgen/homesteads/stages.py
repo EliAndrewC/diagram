@@ -146,7 +146,11 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     def _pretest(x: float, y: float) -> bool:
         """Count a candidate (feature 226 FR-003). The cheap refusal that stood here - a house-sized box against the
         boundary and the placed boxes - is the placer's own first test now (feature 227: the whole homestead's
-        ENVELOPE, `_envelope_blocked`), so nothing is asked twice and a seat the envelope refuses costs one rectangle.
+        ENVELOPE, `_envelope_blocked`). OPEN DEFECT (the 227/230 merge, 2026-09-13): with 230's far-bank rule as the only
+        refusal here, the reference cluster seats 195 px from its fields against the 60 px `cluster_abuts_fields` bar,
+        and 48 of 82 pool farmhouses stand beyond the engine's own `_field_adjacent` 165 px (settlement-review). The
+        fix is NOT to restore the box test - those locals are the envelope's now - it is to assert field adjacency on
+        the PLACED position and to score the envelope for it, which is the next piece of work on this feature.
 
         THE BROOK'S FAR BANK STAYS HERE, though (feature 230). It is not a packing question the envelope can answer -
         it is a site rule about which side of the water the cluster stands on - so it refuses before the placer."""
