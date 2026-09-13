@@ -187,6 +187,14 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         u = u0 + BROOK_TAP_RUN + stride * i
         stray, swing = _wander(rng, stray, swing)
         floor = _crop_edge(segs, u, stride + 40.0, v0) + skirt
+        # THE COURSE BELOW THE TAP STILL READS RULED WHERE THE FIELD'S MARGIN IS STRAIGHT, and the two levers that would
+        # loosen it are refused on measurement (settlement-review, feature 230 pass 11: 2,124 px of Kashikawa's brook, 46%
+        # of its length, within 4 px of a straight line). Straying INWARD from the frame box when the box binds changed
+        # nothing - the course here is held by the crop's floor, not by the box. Widening the walk (`BROOK_WANDER` 10 -> 26)
+        # halves the ruled run to 1,116 px and costs the clearance the skirt exists to keep: Mizuguchi's brook came within
+        # 6.2 px of a dry plot beyond the fan's head, against the 34 px skirt, because straying outward can approach crop
+        # that lies outside the fan. What would loosen it honestly is a course that does not follow the field's margin at a
+        # fixed offset at all - `future-work/farming-communities.md`.
         v = _v_within(u, floor, floor + stray, (dx, dy), (px, py), box)
         out.append((u * dx + v * px, u * dy + v * py))
     # ...and off the frame from the last station, still wandering, the run measured along the fall from there.

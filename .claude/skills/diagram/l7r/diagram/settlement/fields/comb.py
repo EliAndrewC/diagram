@@ -269,7 +269,10 @@ class CombMixin:
         # a record that does not exist yet.
         _src_brook = (source or {}).get("stream") if isinstance(source, dict) else None
         if _src_brook and len(_src_brook) >= 2:
-            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2))
+            # ...with a BUND'S WIDTH of margin beyond the bank (settlement-review, feature 230 pass 11). At the bare half-width a
+            # hem plot 5.9 ft from Mizuguchi's centerline was kept, which leaves about half a foot between the water's bank and
+            # the plot's plow boundary - the crop stops at the bank, and a bund is the thing that stops it.
+            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2 + 3.0))
 
         def _hem_on_water(poly: Poly) -> bool:
             return hem_on_water(poly, _wet, _wpond)
