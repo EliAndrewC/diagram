@@ -467,3 +467,29 @@ def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
     before = [list(ln["pts"]) for ln in s.M["lanes"]]
     assert sweeps._sweep_dangling_ends(s) == 0, "nothing was changed, so nothing is counted as fixed"
     assert [ln["pts"] for ln in s.M["lanes"]] == before, "the farmhouse keeps its way, ragged end and all"
+
+
+def test_an_end_that_reaches_nothing_is_carried_to_nine_tenths_of_the_reach_of_the_house_it_serves() -> None:
+    """`_sweep_dangling_ends`' rescue arm: the lane must stay because a farmhouse would lose its way, so its
+    end is carried to the house instead of left in grass - and stops at nine tenths of the reach, clear of
+    the wall rather than on the doorstep.
+
+    A unit test because the pool stopped reaching it: the 227/230 merge re-packed the clusters and no shipped
+    map now leaves an end between one and two reaches of its house (feature 174 - bring it up BY TESTS).
+    """
+    import math
+
+    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
+    from l7r.diagram.hamletgen.ways import sweeps as _sw
+
+    from ._builders import _StubSettlement
+
+    # lane 0 is the connector (exempt, and far away); lane 1 runs past the one house it serves, both of its
+    # ends 90 ft off - past the 60 ft reach, inside twice it - so each end is pulled back to 54 ft.
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 100.0)], [(500.0, 590.0), (500.0, 410.0)]], houses=[(500.0, 500.0)])
+    assert _sw._sweep_dangling_ends(s) == 1, "the lane was fixed rather than dropped"
+    pts = s.M["lanes"][1]["pts"]
+    assert len(pts) == 4, "a vertex was added at each end"
+    for q in (pts[0], pts[-1]):
+        d = math.dist((q[0], q[1]), (500.0, 500.0))
+        assert abs(d - 0.9 * WAY_END_REACH_FT) < 1.0, f"an end stands {d:.1f} ft from the house, not nine tenths of the reach"

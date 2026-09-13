@@ -345,6 +345,23 @@ def test_byre_clear_of_all_but_refuses_the_paddy_and_a_neighbour_s_yard() -> Non
     assert s._byre_clear_of_all_but(120, 600, 40, 24, house) is True
 
 
+def test_byre_clear_of_all_but_refuses_another_households_placed_bundle() -> None:
+    """The third refusal: a bundle already PLACED that is not the owner's own.
+
+    `placed` holds the homestead envelopes the roller has seated, and the owner's own is skipped by
+    position - the arm belongs inside it. Any OTHER bundle overlapping the arm refuses the seat. The pool
+    stopped reaching this line when the 227/230 merge re-packed the clusters, so it is a unit test rather
+    than a map's incidental cover (feature 174: bring it up BY TESTS).
+    """
+    s = Settlement(1000, 1000, seed=1)
+    house = {"x": 300.0, "y": 300.0, "w": 50.0, "h": 30.0}
+    s.M["houses"].append(house)
+    s.placed.append((300.0, 300.0, 60.0, 40.0))  # the owner's own bundle, at the house - skipped
+    assert s._byre_clear_of_all_but(340, 300, 40, 24, house) is True, "the owner's own bundle does not refuse its arm"
+    s.placed.append((420.0, 300.0, 60.0, 40.0))  # a NEIGHBOR's bundle, overlapping the arm below
+    assert s._byre_clear_of_all_but(400, 300, 40, 24, house) is False, "a neighbor's placed bundle refuses it"
+
+
 def test_fringe_blocked_refuses_the_crop_and_the_open_water() -> None:
     """Feature 146: the wood's fringe grows on WASTE ground. Two of its refusal reasons - a fringe tree
     inside (or within its own radius of) a crop polygon, and one standing on a watercourse."""
