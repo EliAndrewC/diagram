@@ -1,6 +1,13 @@
 # Feature 241 - no conflict markers
 
-**Status**: DRAFT - `spec-fidelity` not yet run.
+**Status**: IMPLEMENTED, pending the landing. **Review history**: the spec was reviewed before
+implementation; it was then AMENDED mid-implementation, when measurement showed the fence exemption wrong
+and the hand-rolled pathspec enumeration both missing the recorded incident and firing on correct work - so
+the counter reset to zero (the GM 2026-09-12: the five-round cap counts the initial acceptance only).
+Round 1 of the amended spec returned four changes - D3's ladder still miscited to 212, FR-001 looser than
+the code about the middle marker, a defect count in the detector's docstring that contradicted research
+R4, and the `make audit` section wired between feature 173's listing and its own explanation - all four
+applied, and round 2 is dispatched.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the two incidents measured, why the state-based rule is the
 wrong one, and what the backstop is for.
@@ -110,13 +117,6 @@ route, which a state-based rule would not (R2, R3).
   The content rule is also strictly wider on the harm: it catches a marker from a `git am`, a patch
   script or a typo, which no merge-state rule sees.
 
-- **D5 - what the content rule cannot see, priced and accepted.** A conflict that leaves NO triple -
-  a binary file conflicted on both sides, or a delete/modify - is invisible to this guard, and that
-  half of the state rule is genuinely lost. It was not recovered by also refusing while an unmerged
-  path exists, because an unmerged path is exactly the state a correctly-resolved text file is in
-  until the `add` registers it: such a rule cannot distinguish the resolved file from the unresolved
-  one, which is the same defect as the state rule itself. The backstop (FR-006) is where a binary
-  conflict is caught instead, and a landing is what it catches it before.
 - **D2 - the triple, not any single marker.** `=======` alone is a Markdown underline and appears in this
   repository's own docs; `<<<<<<<` alone appears in prose about merges. Only the three in order are
   unambiguous.
@@ -133,3 +133,16 @@ route, which a state-based rule would not (R2, R3).
   written twice, which is feature 212's arrangement for the Makefile recipe-comment hazard
   (`_hm_make.py` behind both the guard and `tests/tooling/test_makefile_recipe_comments.py`); here
   `_hm_conflict.has_conflict` is behind both the hook and `--tracked`.
+- **D5 - what the content rule cannot see, priced and accepted.** A conflict that leaves NO triple -
+  a binary file conflicted on both sides, or a delete/modify - is invisible to this guard, and that
+  half of the state rule is genuinely lost. It was not recovered by also refusing while an unmerged
+  path exists, because an unmerged path is exactly the state a correctly-resolved text file is in
+  until the `add` registers it: such a rule cannot distinguish the resolved file from the unresolved
+  one, which is the same defect as the state rule itself. The backstop (FR-006) is where a binary
+  conflict is caught instead, and a landing is what it catches it before.
+
+  **One cheap recovery is available and deliberately NOT built under this number**, raised by
+  `spec-fidelity` on the amended spec: `git ls-files -u` reports exactly that class, so the hook could
+  add a REPORT - context, never a refusal - naming an unmerged path that carries no triple, which cannot
+  fire on correct work because it refuses nothing. It is more than the GM asked for, so it is recorded
+  here and put to them rather than added silently.

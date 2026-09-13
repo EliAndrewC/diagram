@@ -12,7 +12,7 @@ in `research.md` R1, both from this session's own record.
       markers BUILT so the file does not trip itself, and what a command would stage asked of git rather
       than enumerated (FR-001, FR-002, FR-004).
       research: rendering
-      verify: DONE. Runs over the whole tree: 3,045 tracked files, none flagged - including this feature's own spec, research and suite, all of which carry markers as examples. `--selftest` proves the detector fires: 9 content cases (the triple, a fenced triple, the lone underline, the indented example, out-of-order, the file marker with and without a reason, and past the head) and 4 command shapes.
+      verify: DONE. Runs over the whole tree: 3,047 tracked files, none flagged - including this feature's own spec, research and suite, all of which carry markers as examples. `--selftest` proves the detector fires: 12 content cases (the triple, a fenced triple, the lone underline and lone open marker, the indented example, out-of-order, the file marker as a bare line and as a comment, a one-word reason, a placeholder reason, a MENTION mid-sentence, and one past the head) and 4 command shapes.
 - [x] T02 `scripts/conflict-marker-hooks.sh` - refuses a `git add` / `git commit` that would stage a
       conflicted file, judging what each form would actually stage, naming the files, recording per rule
       and escaping through `_hookmatch.py` (FR-002, FR-003, FR-005).
@@ -23,7 +23,7 @@ in `research.md` R1, both from this session's own record.
       that is already COMMITTED, and the delta that lands one is a merge that often runs no gate (FR-006,
       R5).
       research: rendering
-      verify: DONE. Prints "conflict-markers: none in 3045 tracked file(s)"; the suite proves it FAILS on a committed conflict and names the file, and passes on this repository, whose spec, research and suite all discuss markers.
+      verify: DONE. Prints "conflict-markers: none in 3047 tracked file(s)"; the suite proves it FAILS on a committed conflict and names the file, and passes on this repository, whose spec, research and suite all discuss markers.
 - [x] T04 `scripts/test-conflict-marker-hooks.sh`, run by `make hooks-test` (FR-007).
       research: rendering
       verify: DONE. 28 cases, 0 failures: the two cases a state-based rule gets wrong (a RESOLVED merge's own `add -A` with MERGE_HEAD present, and `git add .` in a clean subdirectory while a marker sits elsewhere), the Markdown underline, the indented and inline examples, a FENCED triple flagged and then exempted by the file-level marker with a reason, the incident's own `CL=...; git -C $CL add -A`, a `cd` into the tree, `-u`, a clean directory pathspec, a commit message that names a file, the bare escape refused, and the grep that is not an escape.
