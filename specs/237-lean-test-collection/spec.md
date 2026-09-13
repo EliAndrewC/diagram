@@ -115,6 +115,9 @@ import, not data (R6).
   increase on the total or on any seed. The first clause needs FR-007's two test modules as well as
   FR-010's seven engine ones, which is why it names both: with the engine alone it would pass a
   restricted run and fail every full gate.
+- **SC-007** (FR-003) A plan whose baseline projection is over `FULL_FRACTION` comes out `full` with NO
+  paths, so the run collects the trees and records a baseline; and a restricted run never reports itself
+  full, whatever its selection comes to.
 - **SC-006** (FR-008, spec-wide) `make done` and `make hooks-test` green, `make quick` unchanged in
   scope, and `tests/tooling/test_worker_count.py` still pinning ten workers - the one item this
   feature is forbidden to move.
@@ -158,8 +161,18 @@ import, not data (R6).
   anyway, so run everything and record a fresh baseline" - requires collecting everything, which is
   precisely what the arguments have already foreclosed by then. So `incremental.over_the_fraction`
   projects `keep_set`'s rules over the BASELINE and the planner returns a full plan (no paths) when the
-  projection is over the line. What this costs, stated rather than discovered later: the projection cannot
-  see tests that do not exist yet, so it UNDERCOUNTS by the new ones - which live in changed modules and
-  are few - and a plan near the line therefore runs incrementally instead of fully. That is the safe
-  direction: an incremental run merges over the baseline, a full run replaces it.
+  projection is over the line. What this costs, stated rather than discovered later, and it errs in BOTH
+  directions. It UNDERCOUNTS by tests that do not exist yet: `over_the_fraction` passes the baseline as the
+  collection, so `keep_set`'s "not in the baseline" rule cannot fire, and a new test is invisible to the
+  projection though it is still collected and run (its module changed, so git reports it). A plan near the
+  line therefore runs incrementally instead of fully, which is safe because an incremental run merges over
+  the baseline while a full run replaces it. And it OVERCOUNTS by baseline tests that no longer exist:
+  `existing()` strips a deleted module from the ARGUMENTS but leaves it in `changed_test_modules`, so
+  `keep_set`'s module rule counts every one of its baseline tests as reached - retiring a large test module
+  can therefore flip the gate to a full run on tests nobody will collect. That is safe for a different
+  reason, and the difference matters to whoever meets it: not that incremental merges, but that a full run
+  is always CORRECT, merely slower - the cost is one full gate paid for tests that were retired. The
+  denominator moved with it, from `len(collected)` to `len(baseline_tests)`. Making the error
+  one-directional by dropping deleted modules from `changed_test_modules` as well is a change to what flips
+  the gate, so it is left for the GM to price rather than taken here.
 

@@ -36,8 +36,9 @@ accumulate between full runs, and a full run - a fallback, `INCREMENTAL=0`, `FUL
 compounds. Fallbacks to FULL, each because file-level selection cannot see the dependency: no baseline; a
 changed engine file that is not `.py` (a pool generator or manifest); a changed file under `tests/` that is
 not a test module (`conftest.py`, `_scope.py`, a helper, `fixtures/`); the tooling hash moved; an
-import-time line changed; or more than `FULL_FRACTION` of the suite selected (`selection.py` decides that
-one, after collection). It lives under the clone's git directory - per clone, never in the tree.
+import-time line changed; or more than `FULL_FRACTION` of the baseline reached, which the PLANNER decides
+before pytest's arguments are chosen (`over_the_fraction`, projected over the baseline; feature 237 D8 says
+why it cannot be decided after collection any more). It lives under the clone's git directory - per clone, never in the tree.
 """
 
 from __future__ import annotations

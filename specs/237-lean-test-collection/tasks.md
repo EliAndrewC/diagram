@@ -91,6 +91,16 @@ written.
       research: rendering
       verify: DONE. tests/test_memory.py: the DERIVED guard (no module-level shapely import under l7r/ outside a TYPE_CHECKING block) and a child-process probe - absent after the whole engine imports, present after one geometry call.
 
+## Phase 1b - the amendment the implementation forced (FR-003, D8, SC-007)
+
+- [x] T14 The `FULL_FRACTION` decision moves from `selection.py` (after collection) to the planner
+      (before the arguments are chosen): `incremental.over_the_fraction` projects `keep_set`'s rules over
+      the baseline and `plan()` returns a full plan with no paths when it is over the line. A process whose
+      arguments were narrowed cannot decide to run everything - a run labeled full that collected a subset
+      would skip the merge and judge the 100% floor over that subset alone (FR-003, D8).
+      research: rendering
+      verify: DONE. `over_the_fraction` + the planner's branch; `test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction` drives both sides through `plan()` itself, and `test_e_over_the_fraction_the_PLANNER_runs_everything_and_keeps_the_trees` proves it end to end at the gate's level. Both module docstrings that still described the old flip are corrected; D8 states the projection's error in both directions.
+
 ## Phase 5 - the verdict (FR-008, FR-009, SC-002, SC-006)
 
 - [ ] T11 Measure: the collection-only peak at ten workers and a real incremental gate's peak, before

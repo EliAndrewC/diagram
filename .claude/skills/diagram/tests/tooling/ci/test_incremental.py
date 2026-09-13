@@ -485,9 +485,7 @@ def test_merge_graphs_unions_the_runs_edges_with_the_baselines() -> None:
     assert selection.merge_graphs({"a": ["b", "b"]}) == {"a": ["b"]}, "deduplicated"
 
 
-def test_main_paths_prints_the_modules_and_a_no_test_path_when_an_incremental_plan_reaches_nothing(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
-) -> None:
+def test_main_paths_prints_the_modules_and_a_no_test_path_when_an_incremental_plan_reaches_nothing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     bdir = tmp_path / "gb"
     bdir.mkdir()
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)

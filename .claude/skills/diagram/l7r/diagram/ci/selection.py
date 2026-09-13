@@ -12,8 +12,10 @@ fixture closure touched a change. On the controller it also writes `tests.json` 
 and the fixture dependency graph, which the merge uses to drop the contexts of fixtures affected
 transitively. (2) SELECTION: when the plan says incremental, it keeps the affected tests, every test in a
 changed test module, and every test the baseline never saw, and deselects the rest - identically on the
-controller and every xdist worker, since the decision is a function of the same files. Above
-`FULL_FRACTION` it keeps everything and marks the run FULL, so the Makefile saves a baseline from it.
+controller and every xdist worker, since the decision is a function of the same files. It APPLIES the plan
+it is given and no longer overrides it: the `FULL_FRACTION` decision moved into the planner in feature 237,
+because the gate now narrows pytest's own arguments from the plan and a process given a few modules cannot
+then decide to run everything (spec D8).
 """
 
 from __future__ import annotations

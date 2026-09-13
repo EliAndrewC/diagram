@@ -228,29 +228,54 @@ module-level import.
 Every figure here is the sum of PSS over the run's own process tree, sampled at 0.4 s
 (`scratchpad/shard2.py`, `peak.py`), so a concurrent gate in another session cannot inflate it.
 
-**Before, on unmodified engine code**, with the specs-only delta that makes the planner say *"nothing the
-baseline exercised has changed"* - the case the gate meets most often and the one FR-002 exists for:
+**Before, on unmodified engine code.** `make test-full` passes `INCREMENTAL=0` unless `FROM_DONE` is set,
+so this is a FULL run and not the narrow case - the incremental path belongs to `make done`. Stated here
+because the first reading of this number assumed otherwise:
 
 | | peak | wall |
 |---|---|---|
-| `make test-full`, nothing to run | **3,124 MiB** | 66.0 s |
+| `make test-full` (a full run), before | 3,124 MiB | 66.0 s |
 
-It collected all 3,753 tests across ten workers, deselected every one of them, and then paid the merge and
-the floors. Collection alone is 922 MiB of that at ten workers (R3), and the rest is the coverage tracer
-and the floors' own data.
+It collected all 3,753 tests across ten workers and paid the coverage tracer and the floors. A full run is
+also the shape this feature helps LEAST, by construction: it collects everything on purpose, so only the
+deferred imports (FR-007, FR-010) can move it, never the restriction.
 
 **The pool is byte-identical.** `make maps` regenerated every shipped hamlet clean and `git status pool/`
 reports nothing: no manifest, no render and no page moved, which is the evidence that the shapely deferral
 (FR-010) changed the geometry in no way at all. It is also why this feature owes no `settlement-review`
 (feature 231's rule: a review is owed when a pool map's LAYOUT moved).
 
-**After, the same instrument.** A full run (the baseline-recording shape, which keeps the trees by
-design):
+**After, the same instrument.** Full run against full run, and a third full run at 3,169 MiB to show the
+spread - which is the point: at this scale the run-to-run variance is larger than what the deferred imports
+can save on a shape that collects everything anyway.
 
 | | peak | wall |
 |---|---|---|
-| `make test-full`, full run, before | 3,124 MiB | 66.0 s |
-| `make test-full`, full run, after | **2,897 MiB** | 48.2 s |
+| `make test-full` (full), before | 3,124 MiB | 66.0 s |
+| `make test-full` (full), after | 2,897 MiB | 48.2 s |
+| `make test-full` (full), after, again | 3,169 MiB | 48.8 s |
+
+**COLLECTION ONLY, which is the low-noise instrument** (a `-k` matching nothing, ten workers, identical
+before and after, sampled at 0.1 s and again at 0.4 s with the same answer):
+
+| scope | before | after |
+|---|---|---|
+| whole tree | 922 MiB, 9.1 s | **923 MiB, 4.5 s** |
+| one tree (`tests/settlement`) | 602 MiB | **515 MiB** |
+| one module | 356 MiB | 366 MiB |
+
+Two things to read honestly here. The per-module deferrals are VERIFIED individually, in a fresh process
+each: `tests/test_package_surfaces` 7.40 -> 0.09 MiB, `tests/tools/test_hamlet_floor` 3.18 -> 0.42 MiB, and
+the engine baseline itself 61.0 -> 57.6 MiB as shapely leaves it. But the whole-tree collection PEAK did not
+move, and its wall time halved. I do not have a confirmed mechanism for the peak holding at ~922 MiB while
+the parts that compose it each shrank, and it is recorded as measured rather than explained away: three test
+modules still import numpy at module level (`tests/interactive/test_raster.py`,
+`tests/tools/test_page_lit.py`, `test_picture_diff.py`), which is 17.9 MiB a worker that a whole-tree
+collection pays regardless.
+
+Which is the feature's own argument, arrived at from the other side: the way to stop paying for the whole
+tree is to stop collecting the whole tree. One module's collection is 366 MiB against 923, and one tree's is
+515 - so what an incremental gate pays is set by its REACH, which is exactly what FR-001 derives.
 
 **And the marginal shapely figure FR-009 asks for, which changes the emphasis.** Measured by import
 order in one process (`scratchpad/libs.py`): `numpy` first costs 17.91 MiB and `shapely` then adds only
