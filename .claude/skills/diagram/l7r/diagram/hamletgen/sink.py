@@ -270,8 +270,23 @@ def pond_run(out: Pt, heading: Pt, pond: Pt, fall: Pt) -> Poly:
     # was the first cut and crowded the turn into one bend (66.9 degrees on Mizuguchi); the whole turn is fixed by where
     # the pond is, so what can be chosen is how evenly it is spread. Measured on Mizuguchi's own coordinates, handles of
     # 0.6 of the distance at twelfths hold every bend at 36 degrees or less on legs of 10 px or more.
-    k = 0.6 * dist
-    c1 = (out[0] + heading[0] / hn * k, out[1] + heading[1] / hn * k)
+    # ...AND IT LEAVES ON THE BISECTOR, NOT ON THE HEADING (settlement-review, feature 230 pass 12). Pass 10's handle
+    # was thrown 0.6 of the distance ALONG the collector's heading, which is sound while the pond is somewhere ahead
+    # and absurd once it is behind: on Mizuguchi the pond lay 127 degrees round while the run left at 27, so the curve
+    # climbed 26 ft FURTHER from the pond, topped out 53 ft past its north rim and came back down - 121 ft of ditch on
+    # an 87 ft chord, an inverted U that reads as a handle rather than a watercourse, and whose apex passed 11 ft from
+    # the brook it does not join, posing a junction the map does not make. Every per-bend angle was inside tolerance,
+    # which is why nothing caught it: the defect is the EXCURSION, not the bends.
+    # So the first handle points along the BISECTOR of the heading and the chord. The run still leaves without a kink
+    # at the outfall - it keeps half of the heading - and it commits to the pond at once instead of overshooting it.
+    ux, uy = heading[0] / hn, heading[1] / hn
+    cxu, cyu = tx / (dist or 1.0), ty / (dist or 1.0)
+    bx, by = ux + cxu, uy + cyu
+    bn = math.hypot(bx, by)
+    if bn < 1e-9:  # the pond lies exactly back along the heading, so there is no bisector: leave on the chord
+        bx, by, bn = cxu, cyu, 1.0
+    k = 0.45 * dist
+    c1 = (out[0] + bx / bn * k, out[1] + by / bn * k)
     c2 = (pond[0] - tx / (dist or 1.0) * k * 0.5, pond[1] - ty / (dist or 1.0) * k * 0.5)
     return [
         (

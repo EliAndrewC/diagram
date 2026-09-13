@@ -256,4 +256,10 @@ def test_a_pond_behind_the_collector_is_reached_by_a_curve_not_a_hairpin() -> No
     prev = (1596.0, 902.0)
     behind = pond_run((1647.0, 771.0), (51.0, -131.0), (1771.0, 864.0), (1.0, 0.0))
     assert behind[0] == (1647.0, 771.0) and behind[-1] == pytest.approx((1771.0, 864.0))
-    assert worst([prev, *behind]) <= 40.0, "the turn is spread over gentle bends, not one hairpin"
+    assert worst([prev, *behind]) <= 60.0, "the turn is spread over gentle bends, not one hairpin"
+    # ...AND THE RUN NEVER CLIMBS AWAY FROM ITS OWN POND (pass 12). The bends were inside tolerance while the curve
+    # arched 26 ft further from the pond and 53 ft past its far rim, because a per-bend limit cannot see an
+    # excursion. The measure that catches it is monotone-ish approach: no point of the run stands further from the
+    # pond than its own outfall does. The larger turn at the junction above is what buys it, and it is still obtuse.
+    _d = [math.dist(q, (1771.0, 864.0)) for q in behind]
+    assert max(_d) <= _d[0] + 1e-6, "every stride of the run is nearer the pond than the outfall was"

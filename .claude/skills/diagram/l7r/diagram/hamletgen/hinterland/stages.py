@@ -146,7 +146,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
     else:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
-    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN)
+    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp)
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
     # ground because `stage_homesteads` now bounds every seat to the cluster band: over a cloud with
     # a strewn farmstead in it, this became a scatter across 1,446 x 1,244 px - a wood over the whole
@@ -185,4 +185,4 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _bx = [q[0] for q in _dented]
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
-    s.village_grove(_box, role="copse", dense=False)
+    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan))  # the map's name has ground reserved; the copse honors it like the belt does

@@ -725,16 +725,18 @@ def test_box_obstacles_on_a_real_manifest_is_the_scan_the_title_made() -> None:
     s = Settlement(W=600, H=400, seed=3)
     s.M["houses"] = [{"x": 100.0, "y": 100.0, "w": 40.0, "h": 30.0}]
     s.M["labels"] = [[300.0, 50.0, 360.0, 62.0, 5, "a label"]]
-    s.M["village_groves"] = [{"poly": [[400, 200], [500, 200], [500, 300], [400, 300]]}]
+    # a grove blocks where its TREES are (feature 230 pass 12), so the fixture carries the clumps the belt drew
+    s.M["village_groves"] = [{"poly": [[400, 200], [500, 200], [500, 300], [400, 300]], "r": 14.0, "clumps": [[440.0, 240.0], [470.0, 270.0]]}]
     s.M["lanes"] = [{"pts": [[0, 350], [600, 350]]}]
     obs = s._title_obstacles()
     rects, polys, lines = obs.rects, [ring for ring, *_ in obs.polys], [[(0.0, 350.0), (600.0, 350.0)]]
     for x in range(0, 600, 20):
         for y in range(0, 400, 20):
             assert s._box_clear(x, y, x + 60, y + 30, obs) is box_clear_brute(x, y, x + 60, y + 30, rects, polys, lines)
-    assert not s._box_clear(420, 220, 480, 250, obs), "a box inside the grove is not clear"
+    assert not s._box_clear(420, 220, 480, 250, obs), "a box over the grove's own crowns is not clear"
+    assert s._box_clear(402, 202, 424, 214, obs), "...while bare ground inside the same outline is - the pocket a hamlet holds for its name"
     assert s._box_clear(420, 220, 480, 250, s._title_obstacles(cover_ok=True)), "...unless cover is allowed - the rung feature 137 documented"
-    assert len(obs.rects) == 2, "the house and the label, each once (the label used to be filed twice)"
+    assert len(obs.rects) == 4, "the house, the label and the grove's two crowns, each once (the label used to be filed twice)"
 
 
 def test_poly_seg_dist_returns_zero_when_the_two_actually_meet():

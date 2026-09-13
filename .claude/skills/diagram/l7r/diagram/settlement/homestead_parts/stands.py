@@ -73,7 +73,7 @@ class StandsMixin:
         )
         return n
 
-    def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None, face_margin: float | None = None) -> int:  # type: ignore[misc]
+    def village_grove(self: Settlement, poly: Any, role: str = "windbreak", dense: bool = True, within: tuple[float, float, float, float] | None = None, face_margin: float | None = None, reserved: tuple[float, float, float, float] | None = None) -> int:  # type: ignore[misc]
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
         windbreak'):
@@ -226,7 +226,16 @@ class StandsMixin:
             displacers=occ_grove,
             rects=[(sx - shw, se - cr - 2, sx + shw, se + _sun_depth + 2 + cr) for sx, se, shw in sun]
             + [(ex - cr - 2, ey - ehh, ex + 24 + cr, ey + ehh) for ex, ey, ehh in east]
-            + [(wx0 - wl - cr - 3, wy0 - cr - 1, wx0 + cr + 1, wy1 + wl + cr + 1) for wx0, wy0, wy1 in west],
+            + [(wx0 - wl - cr - 3, wy0 - cr - 1, wx0 + cr + 1, wy1 + wl + cr + 1) for wx0, wy0, wy1 in west]
+            # ...AND OFF GROUND SOMETHING ELSE HAS RESERVED (settlement-review, feature 230 pass 12). `reserved`
+            # is a rectangle a later stage is holding - today the pocket the map's own NAME will stand in. The
+            # caller used to defend it by pushing the grove's polygon VERTICES out of the rectangle, which cannot
+            # work at the clump scale: an edge between two vertices outside the pocket still crosses it, and a
+            # crown is drawn 14 ft round a center that is itself outside. Measured on Kuwabata: 35 of 87 belt
+            # clumps had canopy inside the reserved pocket, the title's own search rejected the pocket it had
+            # reserved, and the placard fell to the cover rung and printed over 174 ft of the belt's windward
+            # end - the stretch sheltering the westernmost homesteads - hiding 28 of its clumps.
+            + ([(reserved[0] - cr, reserved[1] - cr, reserved[2] + cr, reserved[3] + cr)] if reserved else []),
         )
         # the clumps seated so far, filed as they land: the re-seat search keeps `step * 0.55` off the
         # ROUNDED clumps and the gap fill keeps half a crown off the unrounded seats, as each always did

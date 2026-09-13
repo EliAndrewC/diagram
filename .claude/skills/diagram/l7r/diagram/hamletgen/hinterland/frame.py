@@ -127,7 +127,8 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     # nothing, and the title still landed on the fallback corner. Reserving what is blank NOW works
     # because this runs after the water, the crops, the houses and the hinterland and before the
     # only two things left that could fill it (the coppice and the grove).
-    spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
+    _planned = [list(plan.belt)] if plan.belt else []  # the belt is not drawn yet; see `_title_obstacles(planned=...)`
+    spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h, planned=_planned)
     if spot is None:
         # A SMALLER POCKET BEFORE NONE (feature 150 T50 fallout, Kuwabata seed 21): with a sixteenth house
         # on the sheet's right flank the 300 x 190 reservation found no home, nothing was held back, the
@@ -135,7 +136,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         # that corner ON the grove (`title_clear_of_features`). The placard itself is ~195 x 106, so a
         # 210 x 120 pocket is still a real reservation; only when even that fails is nothing reserved.
         w, h = 210.0, 120.0
-        spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
+        spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h, planned=_planned)
     if spot is None:
         # THE SHEET HAS NO ROOM FOR ITS NAME (feature 150 T50 fallout, Kuwabata seed 21): with the cluster
         # seated clear of the reed fringe, the houses, the fringe and the connector left no blank box the
@@ -151,7 +152,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         _cx0, _cy0, _cx1, _cy1 = content_box(s, plan, pad=0.0)
         _bw = max(s._text_width(plan.spec.name, 30) + 4, 100.0) + 24 + 12  # the placard's own size (settlement.title) + 6 px each side
         _bh = 30 * 1.2 + 46 + 24 + 12
-        _obs = s._title_obstacles()
+        _obs = s._title_obstacles(planned=_planned)
         _tries: list[list[float]] = []
         # ...stepping outward up to 48 px per corner: the content box is the field's envelope, and a house
         # seated on its edge stands 14 px past it, so the first offset can land on a roof.
