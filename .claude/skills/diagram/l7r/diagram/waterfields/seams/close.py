@@ -419,6 +419,15 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
                 traded = True
                 shapes[i], shapes[best] = Polygon(gi).buffer(0), Polygon(gj).buffer(0)
                 g = shapes[i]
+                # ...AND THE INDEX IS REBUILT WITH THEM (perf-audit, feature 230 pass 14, reading this code for a
+                # different reason). `shapes` is mutated here and `tree` was built from it once, so for the rest of
+                # the round the query returned boxes for plots that had already given a tail away or taken one -
+                # while the exact test read `shapes[j]` live. The index is a PREFILTER, so a stale box can only
+                # return the wrong CANDIDATES: a neighbor that has since shrunk away from this tail is still
+                # offered, and one that has grown into it may be missed, which is the direction that loses a trade
+                # the pass exists to make. A fan carves 200-700 plots and a round trades a handful, so rebuilding
+                # on a trade costs a tree per trade and not per plot.
+                tree = STRtree(shapes)
         if not traded:
             break
 

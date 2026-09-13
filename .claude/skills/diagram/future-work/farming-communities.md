@@ -2379,3 +2379,31 @@ point: a modal saying one thing and the ink showing another.
 **Sketch**: set the bar's near-bank root at the mouth's UPSTREAM lip rather than at the intake point, so the crib keys
 into the bank above the opening it holds water against - which is also what the docstring already claims. It moves the
 weir on three maps and owes a look at whether the mouth then reads as open.
+
+## The straggler router pays a fresh search per rejected target (feature 230 pass 14, 2026-09-13)
+
+**Measured** (by the `perf-audit` agent, A/B at the bookend commit `4dba51ef`, seed 4's `web` stage under cProfile):
+with `_ends_worth_walking_to` live the stage is 4.70 s; with the rule forced to return True it is 2.56 s; the
+pre-feature baseline is 1.34 s. So about two thirds of this feature's web growth is that one rule - and the rule
+itself costs 0.010 s to evaluate over 17 calls. Route span went from a 53 ft median (sum 6,687 ft) to 151 ft
+(sum 18,442 ft), and `fouled` calls from 80,265 to 426,249.
+
+**Mechanism**: the rule sits at the BOTTOM of the per-target loop, after `_route` has built a path. Each of its
+10 rejections in 17 evaluations sends the loop to the next, farther target and pays another Dijkstra - and
+`_route`'s lattice is `pad = 0.75 * span`, so the cell count grows with the SQUARE of the span. A free predicate
+in the wrong place is invisible to a cumulative-time profile and still doubles the stage, which is exactly how
+this feature's first written explanation came to blame the map.
+
+**What the rule buys, so nobody removes it**: the gate's own `lanes_reach_something` and `lanes_form_one_network`,
+after measured defects - a 100 ft tread whose far end stopped 60.1 ft from the house it was routed to and 94 ft
+from any way, and two Sawada footpaths of 175 ft and 137 ft that left the map counting as three networks.
+
+**Sketch**: one multi-goal search per straggler house instead of one per target - a single Dijkstra from the
+house over a box covering the whole target list, which yields a path to every target at once and lets the
+accept/reject loop run over the results for free. The box is bigger than any single target's, so this is a
+trade of one large search for 78 growing ones; the audit's own framing is that it "keeps the rule exactly as
+written". A cheaper half-measure, also unmeasured: order the rule's clauses so the 4 ft `joined` test refuses
+first (3 of the 10 rejections fail it), which saves the two `_fronts` scans but not the re-route behind them.
+
+**Why it is not taken here**: it changes which paths the router finds on every hamlet, so it moves the pool and
+owes its own 48-seed cohort and its own review round. This feature has had fourteen.

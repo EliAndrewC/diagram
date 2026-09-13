@@ -222,6 +222,11 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
     # identical to the ones it already failed against. Draw a lane anywhere near it and its targets
     # change, the key misses, and it is retried in full. That failure direction is the whole design:
     # a wrong memo costs the SPEEDUP, never a path.
+    # THE CROP RINGS ARE BUILT ONCE FOR THE WHOLE PASS (perf-audit, feature 230 pass 14). `_ends_worth_walking_to`
+    # asks whether a path's end fronts the field, and its two call sites rebuilt every crop ring on the map per
+    # CANDIDATE PATH - free today at 19 calls, and the clause-15 shape the moment a hamlet has more stragglers.
+    # Nothing in this pass plants or moves a crop, so one list serves every ask.
+    _crops = crop_polys(s)
     _exhausted: dict[int, tuple[tuple[float, float], ...]] = {}
     for _pass in range(4):
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -593,13 +598,13 @@ def _serve_stragglers(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: l
                         if _folded is None or _bad < _folded_rank:
                             _folded, _folded_rank = path, _bad
                         continue
-                    if not _ends_worth_walking_to(s, path, c, segs, crop_polys(s)):
+                    if not _ends_worth_walking_to(s, path, c, segs, _crops):
                         continue
                     _draw_web(s, path, 3, houses=[c])
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, crop_polys(s)):
+            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, _crops):
                 _draw_web(s, _folded, 3, houses=[c])
                 added += 1
                 _served = True

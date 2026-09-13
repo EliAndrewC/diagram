@@ -1,0 +1,38 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "272c4c481aafb9e5961ad2b2069fa3260d53eb1ffb05fbf4e300864a3bec6b22",
+  "criteria": {
+    "commensurate": "Split, and the web half is not. The two field passes are commensurate: 0.404s profiled on seed 4, roughly 0.13s real, for a plot record that is a partition of what the page draws on every brook map. The web half is not: seed 4's web goes 0.45s to 1.75s real, +27.9% on the seed, which is the single measurement that puts this feature in band 3, and it buys the enforcement of a validity rule that costs 0.010s to evaluate. 10 rejections over 6 straggler houses each buy a fresh lattice search, and a route's cell count grows with the square of its span, so the spans went 6,687 ft to 18,442 ft and fouled calls 80,265 to 426,249. The price is paid in the search the rule triggers rather than in the functionality it delivers, which is what disproportionate means here.",
+    "necessary": "Partly, and the split is measurable. The FUNCTIONALITY is necessary and the diff shows it: _ends_worth_walking_to enforces the gate's own lanes_reach_something and lanes_form_one_network rules after measured defects (a 100 ft tread on the reference hamlet ending 60.1 ft from the house it served and 94 ft from any way; two Sawada footpaths of 175 ft and 137 ft that left the map counted as three networks), and _visible_parts plus _shed_necks fix _carve handing the page 20-49 overlapping paddy-ring pairs per brook map, up to 1,290 sq px, so the record claimed ground the picture never showed. Neither is cosmetic and both are asked for by the feature's own review passes 10 and 11. What is NOT necessary is the seconds. On seed 4's web stage the check itself costs 0.010s cumulative of a 4.70s profiled stage; the other 2.1s is re-routing that the rule provokes by where it sits in the loop, and that is an implementation choice, not the functionality.",
+    "no_way_around": "Not established, and not considered. The explanation prices exactly one alternative shape - is this a per-candidate scan wanting an index - and answers no; but the per-candidate scan here IS the route, re-run from the same door for up to 60 targets with the accept-or-reject decision taken only after each route has been built. Two cheaper shapes are open and unmeasured, and both keep the rule exactly as written. First, one multi-goal Dijkstra per straggler HOUSE over a single box, answering every candidate target at once, instead of 78 separate searches over boxes that grow with each farther target. Second, ordering the rule's own clauses so the cheap one refuses first: 3 of the 10 rejections fail the 4 ft joined test, which only the clip and the trim can break, and which needs no further routing to decide. Until one of those is measured, the +27.9% cannot be called unavoidable - and the A/B that isolates it is in this record, so the measurement is a short one."
+  },
+  "end": {
+    "commit": "4dba51ef",
+    "label": "230-end",
+    "utc": "20260913T030649Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260913T031800Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "seeds": {
+      "25": -15.9,
+      "39": 11.7,
+      "4": 27.9,
+      "47": 1.3
+    },
+    "total_pct": 4.3
+  },
+  "note": "Evidence: profiles taken in detached worktrees at 7f4113a3 and 4dba51ef under a quiet machine, dev/perf-log/20260913T030957Z-profile-adhoc-seed4-web.txt (baseline) against 20260913T030717Z and 20260913T031053Z (end), plus seed 4 and seed 39 field pairs and three instrumented runs counting stragglers, route spans and end-rule verdicts. The stream_segs hypothesis was tested and REFUTED: replacing stream_segs(s) with an empty list in the straggler router leaves fouled calls at 426,249 and the stage at 4.76s, identical. _visible_parts and _shed_necks are both indexed as constitution X clause 15 requires - one STRtree built once, queried per plot or per tail, with a mean-width prefilter ahead of the opening - so the field cost is not the clause-15 shape. One unrelated note for the session: _shed_necks never rebuilds its STRtree after a trade mutates shapes, so the tree's boxes go stale within a round; that is a correctness question, not a performance one.",
+  "verdict": "not-justified"
+}
