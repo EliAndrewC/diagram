@@ -119,14 +119,40 @@ def selftest() -> None:
     print("_patch selftest ok")
 
 
+def read_edits(data: object) -> list[tuple[str, str]]:
+    """The (anchor, replacement) pairs from the parsed payload, in either shape it arrives in.
+
+    A LIST OF PAIRS is the documented form. A list of OBJECTS keyed `anchor`/`replacement` is what a
+    caller writes when it is thinking in the names this file's own docstring uses - and the first
+    version unpacked those into the KEYS, so the tool searched each file for the literal text
+    "anchor", printed `SKIPPED (0 matches): anchor` once per edit, and changed nothing. That is
+    indistinguishable from a batch of stale anchors, which is the failure this tool exists to make
+    impossible: measured 2026-09-13, twelve edits reported as missed while the file was untouched.
+    Anything else is refused by name rather than guessed at.
+    """
+    out: list[tuple[str, str]] = []
+    for item in data if isinstance(data, list) else [data]:
+        if isinstance(item, dict):
+            if set(item) != {"anchor", "replacement"}:
+                raise SystemExit(f"_patch: an edit object carries exactly `anchor` and `replacement`: {item!r}")
+            out.append((item["anchor"], item["replacement"]))
+        elif isinstance(item, (list, tuple)) and len(item) == 2 and all(isinstance(x, str) for x in item):
+            out.append((item[0], item[1]))
+        else:
+            raise SystemExit(f"_patch: an edit is [anchor, replacement] or "
+                             f"{{\"anchor\": ..., \"replacement\": ...}}: {item!r}")
+    return out
+
+
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         selftest()
         raise SystemExit(0)
     if len(sys.argv) != 2:
-        print("usage: _patch.py <file>   # a JSON list of [anchor, replacement] pairs on stdin", file=sys.stderr)
+        print("usage: _patch.py <file>   # on stdin, a JSON list of [anchor, replacement] pairs "
+              "(or of {\"anchor\": ..., \"replacement\": ...} objects)", file=sys.stderr)
         raise SystemExit(2)
-    pairs = [(a, b) for a, b in json.load(sys.stdin)]
+    pairs = read_edits(json.load(sys.stdin))
     lines, n_skipped = apply_edits(sys.argv[1], pairs)
     print("\n".join(lines))
     raise SystemExit(1 if n_skipped else 0)

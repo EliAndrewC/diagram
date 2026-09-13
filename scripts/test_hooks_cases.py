@@ -135,6 +135,14 @@ HOUSE_STYLE = [
     ("a regex alternation", cmd("python3 -c \"re.compile(r'(colour|centre)')\""), "ok"),
     ("a path that carries the word in its name", cmd("cat docs/colour-notes.md"), "ok"),
     ("a negated search is still a search", cmd("! grep -qiE 'colour|centre' docs/a.md"), "ok"),
+    # A SEPARATOR INSIDE QUOTES IS NOT A SEPARATOR (feature 239, found in the guard log): a research
+    # session's `grep -oE '(HIGH|MEDIUM)|— \*\*'` was split on every `|`, its fragments stopped
+    # looking like a search, and the em-dash in the PATTERN was corrected to a hyphen - so the grep
+    # silently searched for the wrong character. The search is left exactly as typed now.
+    ("a quoted alternation holding a dash is one search", cmd("grep -oE '\\*\\*(HIGH|MEDIUM|LOW)\\*\\*|— \\*\\*(HIGH|LOW)' a.md"), "ok"),
+    ("the research session's exact sweep is not rewritten",
+     cmd("for f in *.md; do echo \"=== $f\"; grep -oE '\\*\\*(HIGH|MEDIUM|LOW)\\*\\*|— \\*\\*(HIGH|LOW)' \"$f\" | sed 's/[—*]//g' | sort; done"),
+     "warned:—"),
     # THE SESSION STATE DIRECTORY IS OUTSIDE THE PROJECT, as `/tmp` is: the auto-memory's own index
     # line format uses an em-dash, and the correction was rewriting that format as it was written.
     ("the auto-memory index", cmd("cat >> /home/agent/.claude/projects/-diagram/memory/MEMORY.md <<'EOF'\n- [A](b.md) — the hook\nEOF"), "ok"),
