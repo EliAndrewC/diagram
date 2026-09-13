@@ -371,7 +371,15 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
     plot it shares the most edge with, and the trade is kept only when both plots stay valid, simple, unpointed rings.
     Ground is conserved: what one plot loses the other gains."""
 
+    def _may_have_a_tail(shape: Polygon) -> bool:
+        """Cheap prefilter for the opening below (constitution X clause 15): a basin whose mean width - four times its
+        area over its perimeter - is comfortably past the floor has nothing thin to shed, and most basins are that."""
+        per = shape.length or 1.0
+        return (4.0 * shape.area / per) < 14.0 * neck
+
     def _long_tail(shape: Polygon) -> bool:
+        if not _may_have_a_tail(shape):
+            return False
         return any(_span(q) >= min_len for q in _parts(shape.difference(shape.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))))
 
     shapes = [Polygon(q["poly"]).buffer(0) if len(q.get("poly") or []) >= 3 else Polygon() for q in plots]
@@ -379,6 +387,8 @@ def _shed_necks(plots: list[dict[str, Any]], neck: float, min_len: float) -> Non
     for _round in range(2):  # a trade can leave the taker a tail of its own; a second look sheds it
         for i, g in enumerate(shapes):
             if g.is_empty:
+                continue
+            if not _may_have_a_tail(g):
                 continue
             tails = g.difference(g.buffer(-neck, join_style="mitre").buffer(neck, join_style="mitre"))
             for tail in _parts(tails):

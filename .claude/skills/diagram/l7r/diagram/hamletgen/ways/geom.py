@@ -44,8 +44,14 @@ def shadow_share(pts: Poly, others: Sequence[Poly], gap: float, step: float = 5.
         return 0.0
     total = sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1)) or 1.0
     best = 0.0
+    # THE BOX PRUNES, THE SAMPLING DECIDES (constitution X clause 15): a lane whose bounding box does not come within
+    # `gap` of this one cannot shadow it, and most lanes on a map are that.
+    x0, x1 = min(q[0] for q in pts) - gap, max(q[0] for q in pts) + gap
+    y0, y1 = min(q[1] for q in pts) - gap, max(q[1] for q in pts) + gap
     for other in others:
         if len(other) < 2:
+            continue
+        if max(q[0] for q in other) < x0 or min(q[0] for q in other) > x1 or max(q[1] for q in other) < y0 or min(q[1] for q in other) > y1:
             continue
         segs = list(zip(other, other[1:], strict=False))
         near, walked = 0.0, 0.0
