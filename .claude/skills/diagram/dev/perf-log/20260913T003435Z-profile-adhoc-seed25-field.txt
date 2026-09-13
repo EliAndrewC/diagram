@@ -1,0 +1,36 @@
+perf-profile seed 25 stage field: 5.1s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20260913T003435Z-seed25-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         8624173 function calls (8519266 primitive calls) in 5.059 seconds
+
+   Ordered by: cumulative time
+   List reduced from 501 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    5.070    5.070 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    4.717    4.717 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:30(fit_field)
+        1    0.002    0.002    2.979    2.979 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:93(_fit_at_aspect)
+        5    0.001    0.000    2.473    0.495 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:92(carve_comb)
+        5    0.000    0.000    2.072    0.414 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:576(_carve)
+        1    0.001    0.001    1.738    1.738 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:197(finish_comb)
+        1    0.021    0.021    1.665    1.665 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/seams/close.py:39(close_seams)
+       30    0.001    0.000    1.631    0.054 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:387(_carve_sector)
+       22    0.038    0.002    1.476    0.067 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:202(_sector_body_rows)
+   104605    0.229    0.000    1.439    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+67276/50038    0.066    0.000    1.301    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+    16685    0.065    0.000    0.725    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:443(edge)
+    90380    0.194    0.000    0.569    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/banks.py:193(clearance)
+    12903    0.042    0.000    0.529    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/geometry/base.py:462(buffer)
+     3095    0.002    0.000    0.524    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:487(in_supply)
+     3115    0.105    0.000    0.522    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:101(_quad_in_supply)
+        5    0.006    0.001    0.501    0.100 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:77(planted_area)
+    36894    0.032    0.000    0.487    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:129(_bnd)
+        5    0.001    0.000    0.436    0.087 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:499(_hem_pass)
+    36894    0.282    0.000    0.433    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/frame.py:254(_at_f)
+      725    0.050    0.000    0.431    0.001 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:516(inside_any)
+   420968    0.117    0.000    0.382    0.000 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/carve.py:517(<genexpr>)
+      227    0.008    0.000    0.376    0.002 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/seams/pockets.py:230(_absorb)
+        5    0.015    0.003    0.364    0.073 /diagram/.clones/diagram-inashiro/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:352(_comb_toe_and_hem)
+    12903    0.283    0.000    0.356    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/constructive.py:136(buffer)
+
+

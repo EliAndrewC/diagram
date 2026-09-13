@@ -18,6 +18,7 @@ from .bamboo import BAMBOO_THICKET_FT as BAMBOO_THICKET_FT
 from .bamboo import bamboo_blocked as bamboo_blocked
 from .bamboo import bamboo_seats as bamboo_seats
 from .belt import belt_polygon as belt_polygon
+from .frame import brook_beside_the_field as brook_beside_the_field
 from .frame import content_box as content_box
 from .frame import title_pocket as title_pocket
 from .parcels import _COMMONS_FLOOR_FT as _COMMONS_FLOOR_FT

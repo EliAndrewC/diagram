@@ -504,6 +504,91 @@ REF_CANAL_B = (680.0, 800.0)
 # shallow one.
 FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 
+# THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
+# research/water.html "Where does the brook stop being a brook and become the ditch"). A brook does not
+# turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
+# hamlet's brook now passes the fan's head and runs on down one flank to the frame.
+#
+# THE INTAKE'S FORM IS A KNOB because the record attests two and prefers neither: in old Japan "in many
+# cases no intake weir was built at all - water was taken naturally", and where the level would not serve
+# a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
+# proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
+INTAKE_FORMS = ("weir", "open")
+# WHICH FLANK the brook passes the fan on - DERIVED from the wind, not rolled. The cluster is seated on the
+# margin whose outward normal points into the wind (背山面水, back to the hill and face to the water), so the
+# brook takes the other flank and the settlement stands on one side of its own stream. Rolling it was the
+# first cut and `settlement-review` measured what it costs when the roll agrees with the seat: two
+# homesteads, their byre, two threshing yards and their gardens stranded across the water, every lane, both
+# wells and the notice board on the far bank, and a lane drawn walking into the stream. A hamlet's brook runs
+# past it, not through it. The roll survives only as the tie-break where the wind runs along the fall and
+# neither flank is the windward one.
+BROOK_FLANKS = (1, -1)
+# HOW FAR THE HEAD RACE RUNS from the intake to the division point, in feet, rolled per map. No source
+# read gives a distance - the Japanese standards treat it as a site variable in the head-loss computation
+# and Tabayashi says only that the small canals run "for short distances" - so the BAND is a guess; what
+# is derived is the shape, a race that leaves the bank at the intake and reaches the fork.
+HEAD_RACE_LEAD = (80.0, 105.0, 130.0)
+# THE ANGLE THE HEAD RACE LEAVES THE BROOK AT, degrees off the brook's own downstream heading. An offtake
+# leaves its parent pointing downstream at an acute angle - the record's own canal-junction rule, "30 or
+# 45 instead of 90" - and clean mountain water is the case the angled offtake is allowed for (a
+# silt-laden river takes the right angle instead).
+OFFTAKE_DEG = 35.0
+# HOW FAR OUTSIDE THE CROP the continuing brook runs as it passes the fan's flank, px - the FLOOR of the
+# offset, wide enough that neither the paddy's own bund nor the brook's no-build corridor touches the
+# planted ground. `BROOK_WANDER` is how far outside that floor the course strays, a seeded walk rather than
+# a held offset: a brook that asymptotes onto a fixed offset draws a ruled line, which is a thing the GM has
+# already rejected on this very map ("appears to run exactly east to west parallel to the edge of the map.
+# that makes it look like a mistake", 2026-08-26) - and a held offset also runs PARALLEL to whatever supply
+# canal hems that margin, which is the two-overlapping-water-lines catch in a new place. The walk's step is
+# what breaks both; its amplitude is a drawing judgment, not a researched figure.
+BROOK_SKIRT = 34.0
+# ...and how far outside THAT floor the course may stray. Small, and bounded by the frame rather than by
+# taste: the sheet is cropped to its hard content and a watercourse is deliberately not content (it "clips at
+# the edge, trailing off as more map this way" - `crop_to_content`), so a brook that strays more than the
+# crop's own margin runs outside the picture. It did: `settlement-review` measured a course drawn just beyond
+# the left edge for its whole length, reappearing at the bottom, which reads as two unrelated bits of water.
+# The course's variety comes from the field's own outline, which it now follows at this distance, and the walk
+# only keeps it off a ruled line.
+BROOK_WANDER = 10.0
+BROOK_WANDER_STEP = 4.0
+# HOW FAR PAST THE FIELD's own bounds a station may sit, px - the belt to the skirt's braces, and sized to the
+# crop margin (`CROP_MARGIN`, 48) so that a station inside this box is inside the picture. On a map whose land
+# falls on a diagonal the first cut bounded the offset in the FALL's frame, which is not the frame the sheet is
+# cropped in, and 77% of the brook came out beyond the view in two pieces a reader cannot join.
+# WIDENED TO THE SKIRT PLUS THE WANDER (feature 230, settlement-review pass 10). At 8 px the margin was narrower than the
+# skirt the crop floor demands (34), so wherever the brook passed the crop that also bounds the box the two rules fought:
+# a station was floored 26 px past the box, the cut points between stations were clamped back into it, and the course
+# drew a V at every station - 68.7 degrees on Mizuguchi, a ruler-straight sawtooth 30 ft inside Kashikawa's frame. At
+# skirt + wander a station the floor puts outside the crop is always inside the box. What kept the course on the sheet
+# at 8 px is kept instead by the frame, which now reserves the brook's reach beside the field (`brook_beside_the_field`).
+# Two levers were measured first and refused: this margin alone (Kashikawa's brook left the view in two pieces, 2,435 ->
+# 1,520 px in view), and letting a cut point sit as far out as its nearer station (four pieces, 70 degree turns).
+BROOK_FRAME_MARGIN = 44.0
+# THE MOST A STATION MAY STEP ACROSS THE FALL before the step is led into over two, px. The clearance profile
+# jumps when a hem plot enters it, and an un-led jump draws a mitred elbow - 67 degrees on the reference
+# hamlet, against 0.3 to 18 degrees everywhere else on the same course. A stream bends; it does not turn a
+# corner to get round a barley plot.
+BROOK_SLEW = 22.0
+# HOW MUCH SHORTER the fan's supply canal is on the brook's flank. The field is cut AROUND the stream, not the
+# stream around the field - and a comb built symmetrically about its own intake cannot leave room for the water
+# it is fed by: the fan's edge diverges from the tap at 42 and 58 degrees, so a brook keeping outside it has to
+# diverge faster still, which is not a course a stream takes. Trimming the canal on the brook's side leaves the
+# margin the brook runs in; the acreage solve makes it up on the other flank and down the fall, so the field is
+# the size the households need either way. The figure is a drawing judgment, not a researched one.
+BROOK_FAN_TRIM = 0.72
+# THE TAP'S OWN FIRST STRIDE, px: the brook runs on along the fall before it bends away to its flank, so
+# that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
+# DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
+BROOK_TAP_RUN = 70.0
+# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar of stone-packed timber crib across the brook,
+# running diagonally upstream from the intake mouth as the old ones did. Half-length and thickness in feet.
+# The full closure is a MAP DRAWING CONVENTION - half-river closures were the common old form and at a 7 ft
+# brook a half-bar is a pixel or two - and the thickness is a GUESS: no source read gives a village weir's
+# cross-section (the histories' dimensions are river weirs', hundreds of meters long).
+WEIR_HALF_FT = 7.0
+WEIR_THICK_FT = 5.0
+WEIR_SKEW_DEG = 30.0
+
 # DELIVERY-DITCH DENSITY by household count. A comb's offtakes are how many delivery ditches drop
 # off the supply canal; too many on a small fan waters the same ground twice (build_comb drops the
 # redundant near-pairs itself, so an over-dense request is silently thinned - which is worse than

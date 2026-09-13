@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "272c4c481aafb9e5961ad2b2069fa3260d53eb1ffb05fbf4e300864a3bec6b22",
+  "end": {
+    "commit": "4dba51ef",
+    "label": "230-end",
+    "utc": "20260913T030649Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "GM",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260913T034524Z"
+  },
+  "kind": "signoff",
+  "measurements": {
+    "seeds": {
+      "25": -15.9,
+      "39": 11.7,
+      "4": 27.9,
+      "47": 1.3
+    },
+    "total_pct": 4.3
+  },
+  "note": "Run by the session under a pseudo-terminal at the GM's explicit instruction, 2026-09-13, quoted here so the audit can tell a session's answer from the GM's own: 'You are authorized to run that perf-signoff command, so please do so and then land the feature in main.' THE NUMBERS: local 230-end vs 230-start at 4dba51ef - TOTAL +4.3% (27.9s to 29.1s), inside band 2's own 5% line; the band-3 crossing is ONE cohort seed, seed 4 at +27.9%, with seed 39 at +11.7%. The five shipped pool maps are not the slow seeds. THE CAUSE, A/B'd by the perf-audit agent rather than inferred by the author: two thirds of seed 4's web growth is the rule _ends_worth_walking_to, which costs 0.010s to evaluate and sits at the bottom of the per-target loop, so each of its 10 rejections in 17 evaluations pays another Dijkstra on a lattice growing with the square of the span - 4.70s live, 2.56s forced true, 1.34s baseline. WHAT IT BUYS: the gate's own lanes_reach_something and lanes_form_one_network, after two measured defects - a 100 ft tread whose far end stopped 60.1 ft from the house it was routed to and 94 ft from any way, and two Sawada footpaths of 175 and 137 ft that left the map counting as three networks. The field term is FR-004/FR-006's own substance: the brook running on past its intake pushes the first aspect out of legality, so the fan is carved seven times instead of three. THE VERDICTS: perf-audit returned band 1 CONSISTENT and band 2 JUSTIFIED, with two conditions this feature honors - the future-work entry stands as the deferral's receipt, and the router shape wants taking before the town tier, where spans and straggler counts are both larger. THE LEVER NOT TAKEN: one multi-goal search per straggler house instead of 78 over boxes that grow with each farther target, recorded with the audit's measurements in future-work/farming-communities.md, deferred because it changes which paths the router finds on every hamlet and owes its own 48-seed cohort and review round.",
+  "verdict": "signed"
+}

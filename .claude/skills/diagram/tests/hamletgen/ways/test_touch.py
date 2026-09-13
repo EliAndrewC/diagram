@@ -298,3 +298,18 @@ def test_a_short_gap_walled_on_both_lattices_is_left_for_the_orphan_rungs() -> N
     s = _StubSettlement(lanes=[main, piece])
     hg.ways._touch_junctions(s, [], [wall], [])
     assert s.M["lanes"][1]["pts"][-1] == [150.0, 30.0], "the walled end stays where it was"
+
+
+def test_an_isolated_field_spur_the_orphan_pass_drops_is_recorded_on_the_map() -> None:
+    """Feature 230. When the orphan pass cannot join a piece and no house depends on it, it is dropped - and when that
+    piece is the FIELD SPUR the map says so (`meta.field_spur_swept`), because a hamlet with no drawn way to its rice is
+    a fact the manifest should state rather than one a reviewer has to notice."""
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (0.0, 300.0)], [(4000.0, 4000.0), (4100.0, 4000.0)]],
+        houses=[(60.0, 150.0)],
+    )
+    s.M["lanes"][1]["spur"] = True
+    s.M.setdefault("meta", {"ftpx": 1})
+    hg.ways._touch_junctions(s, [], [], [], only_orphans=True)
+    assert "isolated" in (s.M["meta"].get("field_spur_swept") or ""), "the swept spur is recorded"
+    assert all(not ln.get("spur") for ln in s.M["lanes"]), "and its record is gone with it"

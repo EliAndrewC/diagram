@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "cd020f59a3ef26292ca8c2c653ff08f4e72a772d4ff6619ff04eb42b90f135da",
+  "end": {
+    "commit": "68725b50",
+    "label": "230-end",
+    "utc": "20260912T212101Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260912T215107Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 17.1,
+      "39": 26.7,
+      "4": 3.3,
+      "47": 38.2
+    },
+    "total_pct": 21.9
+  },
+  "note": "Both stated causes check out (seed 25 field 1.70->4.48 s with carve_comb 3->15 calls; seed 4/47 web via _route 35->66 and fouled 80,265->472,244), but the recorded delta ALSO grows the labels stage on the same two seeds the explanation diagnoses - 0.02->0.45 s on seed 39, 27% of that seed's +1.60 s, and 0.02->0.13 s on seed 25, reproducible across five runs at 68725b50 and 7e6172c2 - and the explanation and its seed-39 diagnosis are silent about it; the -end bookend is also three engine commits behind the tree that ships, where labels is back to 0.02 s while the total is unchanged (my interleaved re-measure of HEAD against the pre-feature worktree: 35.3 s vs 28.85 s, +22.4%), so re-taking -end on the shipping commit is what makes the two causes account for the whole delta.",
+  "verdict": "inconsistent"
+}

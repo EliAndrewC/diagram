@@ -184,6 +184,10 @@ def test_a_lane_the_smoothing_collapsed_is_emptied_reinked_and_deleted() -> None
         def reink_lane(self, i: int) -> None:
             self.reinked.append(i)
 
+        def drop_lanes(self, idxs: list[int]) -> None:
+            for i in sorted(set(idxs), reverse=True):
+                del self.M["lanes"][i]
+
     s = _S()
     assert _web._drop_collapsed(s) == [1, 2, 4]  # type: ignore[arg-type]
     assert s.reinked == [1, 2, 4], "each collapsed lane is reinked at its ORIGINAL index before any deletion"

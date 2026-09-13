@@ -117,3 +117,163 @@ def test_a_pond_the_canvas_cannot_hold_falls_back_to_draining_OFF_MAP(monkeypatc
     assert plan.water_sink == "offmap", "a pond the canvas cannot hold must fall back to the off-map brook"
     assert reentered == ["offmap"], "and the stage re-enters itself once, as an off-map map, to cut the brook"
     assert not s.M.get("ponds"), "and no pond may be drawn"
+
+
+# ---- the third sink: the drain reaching the brook that passes (feature 230) -----------------------
+
+
+def test_the_drain_joins_the_passing_brook_when_one_runs_within_reach_downslope() -> None:
+    """`brook_join`. Before modern consolidation a village's drainage went back to the watercourse to be
+    taken up below, so where the field's own brook passes near the collector's outfall the drain runs
+    to it. The candidate must lie downslope and be reachable without crossing the crop."""
+    plan = a_plan()  # falls due south, the square crop at x 400-1000, y 400-1000
+    plan.brook = [(1200.0, 1100.0), (1200.0, 1600.0)]
+    join = hg.brook_join(plan, (1050.0, 1050.0))
+    assert join is not None and join[0] == pytest.approx(1200.0) and join[1] >= 1050.0 + hg.BROOK_JOIN_DESCENT
+
+
+def test_a_brook_abreast_of_the_outfall_is_joined_a_little_way_down_it() -> None:
+    """The nearest point on a brook running down the flank is LEVEL with the outfall, and taking it sent
+    Sawada's drain off the frame beside its own brook. The join is the nearest point that has FALLEN."""
+    plan = a_plan()
+    plan.brook = [(1130.0, 400.0), (1130.0, 1600.0)]  # abreast of the outfall, then on downslope
+    join = hg.brook_join(plan, (1050.0, 1050.0))
+    assert join is not None and join[1] == pytest.approx(1050.0 + hg.BROOK_JOIN_DESCENT, abs=10.0)
+
+
+def test_a_brook_that_passes_uphill_of_the_outfall_is_no_sink() -> None:
+    """Water does not run up to its confluence: a brook whose nearest point is upslope is refused, and
+    the runoff leaves the frame as it did before."""
+    plan = a_plan()
+    plan.brook = [(1200.0, 100.0), (1205.0, 200.0)]
+    assert hg.brook_join(plan, (1050.0, 1050.0)) is None
+
+
+def test_a_brook_beyond_the_crop_is_not_reached_across_it() -> None:
+    """A ditch does not run through the rice to find its confluence."""
+    plan = a_plan()
+    plan.brook = [(200.0, 900.0), (200.0, 1600.0)]  # on the far side of the square from the outfall
+    assert hg.brook_join(plan, (1050.0, 700.0)) is None
+
+
+def test_a_brook_out_of_reach_is_no_sink() -> None:
+    plan = a_plan()
+    plan.brook = [(4000.0, 1100.0), (4000.0, 1600.0)]
+    assert hg.brook_join(plan, (1050.0, 1050.0)) is None
+
+
+def test_the_outfalls_own_crop_edge_is_exempt_but_a_ditch_through_the_rice_is_not() -> None:
+    """`_through_the_crop`. The outfall stands ON the field's edge, so the first strides of any route from
+    it are on the crop's own ground - the exemption the gate makes for a brook's leading vertices. Past
+    `BROOK_JOIN_LEAD` of the run the route is a ditch driven through the rice and is refused."""
+    plan = a_plan()  # the square crop, x 400-1000, y 400-1000
+    from l7r.diagram.hamletgen.sink import _through_the_crop
+
+    assert not _through_the_crop(plan, (1000.0, 700.0), (1120.0, 760.0)), "leaving the crop at once is the outfall's own edge"
+    assert _through_the_crop(plan, (450.0, 700.0), (1120.0, 760.0)), "most of this run is inside the rice"
+
+
+def test_a_confluence_is_taken_only_where_the_junction_is_in_the_picture() -> None:
+    """Feature 230, settlement-review passes 6 and 7. The drain joins the passing brook where one falls within
+    reach - but a junction drawn at or past the sheet's edge is not a junction a reader can see, and both of the
+    pool's brook-fed maps whose drain leaves the frame put their outfall near the canvas edge, where no visible
+    confluence exists. So the accepting branch is proved here rather than on a map: a brook running well inside
+    the field's own box, falling past the outfall with a long run below it, is joined; the same brook shifted so
+    that the junction lands outside the box the crop must contain is not."""
+    from l7r.diagram.hamletgen import sink
+
+    plan = a_plan()
+    out = (700.0, 1010.0)  # just below the square field's low edge
+    plan.brook = [(760.0, 900.0), (760.0, 1000.0), (760.0, 1100.0), (760.0, 1400.0), (760.0, 1700.0)]
+    joined = sink.brook_join(plan, out)
+    assert joined is not None, "a brook passing the outfall inside the picture, with a trunk below it, is joined"
+    assert 900.0 <= joined[1] <= 1700.0 and abs(joined[0] - 760.0) < 1e-6, "the junction stands on the brook"
+    assert (joined[1] - out[1]) > 0, "and below the outfall, not level with it"
+
+    plan.brook = [(760.0 + 4000.0, y) for _x, y in plan.brook]  # the same brook, carried far outside the picture
+    assert sink.brook_join(plan, out) is None, "a junction outside the box the crop must contain is refused"
+
+
+def test_a_confluence_is_refused_when_the_run_to_it_crosses_the_crop() -> None:
+    """A ditch does not run through the rice to find its confluence - the same rule the reach and the descent
+    stand beside. Exercised here because the pool's own maps reach their sinks another way."""
+    from l7r.diagram.hamletgen import sink
+
+    plan = a_plan()  # the square field at x 400-1000, y 400-1000, falling due south
+    # the brook runs down THROUGH the field and on past it, and the outfall stands high inside the rice: every
+    # candidate within reach has fallen, so what refuses them is the run - straight down the planted ground
+    plan.brook = [(700.0, 800.0), (700.0, 1600.0)]
+    assert sink.brook_join(plan, (700.0, 450.0)) is None
+
+
+def test_the_pond_set_back_gives_up_past_its_limit() -> None:
+    """`pond_seat` walks the reservoir downslope and across the fall to clear the crop and the brook. Where no
+    step inside the limit does, it says so with a distance past the limit rather than returning a seat that
+    does not clear - the caller then falls back to draining off the frame."""
+    from l7r.diagram.hamletgen import sink
+    from l7r.diagram.hamletgen.consts import POND_SETBACK_LIMIT
+
+    plan = a_plan()
+    plan.envelope = [(0.0, 0.0), (3000.0, 0.0), (3000.0, 3000.0), (0.0, 3000.0)]  # crop over the whole canvas
+    back, sway = sink.pond_seat(plan, (1500.0, 1500.0), 120.0, 90.0)
+    assert back > POND_SETBACK_LIMIT and sway == 0.0
+
+
+def test_the_drain_runs_to_the_brook_and_records_the_junction_for_the_frame(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`stage_sink`'s confluence branch, driven directly. Where `brook_join` names a junction the drain is drawn
+    to it with a bow rather than a ruled connector, and the junction is RECORDED on the plan so `stage_frame` can
+    reserve it as content - which is how a junction stays on the sheet (research R7; no pool map's geometry takes
+    this sink today, so the branch is proved here rather than on a map)."""
+    plan = a_plan()
+    plan.water_sink = "offmap"
+    plan.brook = [(760.0, 900.0), (760.0, 1200.0), (760.0, 1600.0), (760.0, 2000.0)]
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    drawn: list[tuple[list[tuple[float, float]], str]] = []
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (700.0, 1010.0))
+    monkeypatch.setattr(hg.sink, "drain_run", lambda s_, pts, to: drawn.append(([(round(p[0], 1), round(p[1], 1)) for p in pts], to)))
+    hg.sink.stage_sink(s, plan)
+    assert plan.confluence is not None, "the junction is recorded for the frame to reserve"
+    assert drawn and drawn[0][1] == "stream", "and the run is drawn to the stream"
+    pts = drawn[0][0]
+    assert len(pts) == 3 and pts[-1] == (round(plan.confluence[0], 1), round(plan.confluence[1], 1))
+    mid = pts[1]
+    assert mid != ((pts[0][0] + pts[2][0]) / 2, (pts[0][1] + pts[2][1]) / 2), "the run bows - dug earth, not a ruled connector"
+
+
+def test_a_pond_behind_the_collector_is_reached_by_a_curve_not_a_hairpin() -> None:
+    """`pond_run`, settlement-review pass 10. A pond straight downslope of an outfall on a collector running across the
+    fall keeps the ordinary bowed run; a pond BEHIND the collector's heading - Mizuguchi's, stepped across the fall by
+    the brook - is led round along the heading instead of doubling back 111 degrees in one corner."""
+    import math
+
+    from l7r.diagram.hamletgen.sink import pond_run
+
+    def worst(pl: list[tuple[float, float]]) -> float:
+        return max(abs((math.degrees(math.atan2(c[1] - b[1], c[0] - b[0]) - math.atan2(b[1] - a[1], b[0] - a[0])) + 180.0) % 360.0 - 180.0) for a, b, c in zip(pl, pl[1:], pl[2:], strict=False))
+
+    ahead = pond_run((100.0, 100.0), (1.0, 0.0), (100.0, 250.0), (0.0, 1.0))
+    assert len(ahead) == 3 and ahead[-1] == (100.0, 250.0), "downslope of a cross-fall collector: the ordinary three-point run"
+    prev = (1596.0, 902.0)
+    behind = pond_run((1647.0, 771.0), (51.0, -131.0), (1771.0, 864.0), (1.0, 0.0))
+    assert behind[0] == (1647.0, 771.0) and behind[-1] == pytest.approx((1771.0, 864.0))
+    assert worst([prev, *behind]) <= 60.0, "the turn is spread over gentle bends, not one hairpin"
+    # ...AND THE RUN NEVER CLIMBS AWAY FROM ITS OWN POND (pass 12). The bends were inside tolerance while the curve
+    # arched 26 ft further from the pond and 53 ft past its far rim, because a per-bend limit cannot see an
+    # excursion. The measure that catches it is monotone-ish approach: no point of the run stands further from the
+    # pond than its own outfall does. The larger turn at the junction above is what buys it, and it is still obtuse.
+    _d = [math.dist(q, (1771.0, 864.0)) for q in behind]
+    assert max(_d) <= _d[0] + 1e-6, "every stride of the run is nearer the pond than the outfall was"
+
+
+def test_a_pond_exactly_back_along_the_heading_has_no_bisector_to_leave_on() -> None:
+    """`pond_run`'s one degenerate case. The run leaves on the bisector of the collector's heading and the chord
+    to the pond; where the pond lies exactly BACK along that heading the two cancel, and there is no bisector to
+    take. The chord is what is left - the run simply turns round and goes to the pond."""
+    import math
+
+    from l7r.diagram.hamletgen.sink import pond_run
+
+    back = pond_run((100.0, 100.0), (1.0, 0.0), (0.0, 100.0), (0.0, 1.0))
+    assert back[0] == (100.0, 100.0) and back[-1] == (0.0, 100.0)
+    assert all(abs(q[1] - 100.0) < 1e-6 for q in back), "with no bisector the run lies on the chord itself"
+    assert all(math.dist(q, (0.0, 100.0)) <= math.dist(back[0], (0.0, 100.0)) + 1e-6 for q in back), "and never climbs away from the pond"

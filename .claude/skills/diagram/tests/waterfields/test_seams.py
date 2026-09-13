@@ -478,3 +478,135 @@ def test_a_tab_cut_needs_the_step_to_be_one_edge_of_the_ring() -> None:
     ring = [(0.0, 0.0), (40.0, 0.0), (40.0, 6.0), (80.0, 6.0), (80.0, 40.0), (0.0, 40.0)]
     assert _tab_cut(ring, 2.0, (0.0, 0.0), (40.0, 6.0)) is None  # vertices 0 and 2: on the ring, not adjacent
     assert _tab_cut(ring, 2.0, (0.0, 0.0), (99.0, 99.0)) is None  # not on the ring at all
+
+
+# ---- the two feature-230 repairs ----------------------------------------------------------------
+
+
+def test_a_hairline_spur_is_a_needle_even_where_the_deduped_ring_hides_it() -> None:
+    """`_unjog` judged only `dedup_ring(r, 1.0)` while the gate reads the ring AS RECORDED, so a spur running
+    out and straight back a fraction of a pixel was erased before the guard saw it and shipped at a 0.2 degree
+    apex on the reference hamlet. `_is_a_needle` refuses on either reading."""
+    from l7r.diagram.waterfields.seams.plots import _is_a_needle
+
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    spur = [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (100.9, 50.05), (100.0, 50.2), (100.0, 100.0), (0.0, 100.0)]
+    assert not _is_a_needle(square), "a plain basin is not a needle"
+    assert not tapers_to_a_point(dedup_ring(spur, 1.0), 1.0, 15.0, 4.0) and len(dedup_ring(spur, 1.0)) < len(spur), "the dedup erases the spur"
+    assert _is_a_needle(spur), "the raw ring's spur is still a needle, and the gate reads the raw ring"
+
+
+def test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin() -> None:
+    """The flooded tint is a random sample of the closing rank that the tint clauses can take back entirely -
+    the reference hamlet shipped no blue plot at all. When nothing survives, the most BASIN-LIKE compliant low plot
+    is tinted, preferring one on the collector (`_D`, at y 1300), taking no draw from R; when something survives,
+    nothing is promoted."""
+    from l7r.diagram.waterfields.palette import FLOODED
+
+    # sized like the design cell (46 x 26-30 here): the pass plants the bare envelope with basins that size, and a
+    # plot more than twice the median is demoted by the size clause, so an oversized fixture would test nothing
+    far, on = _rect(300, 300, 346, 330), _rect(600, 1266, 640, 1292)
+    plots = _close([{"poly": far, "fill": "#A6C398", "low": True}, {"poly": on, "fill": "#A6C398", "low": True}, {"poly": _rect(300, 700, 346, 730), "fill": "#A6C398"}])
+    flooded = [p for p in plots if p["fill"] == FLOODED]
+    assert len(flooded) == 1, "exactly one basin is promoted when the sample left none"
+    assert min(q[1] for q in flooded[0]["poly"]) > 1200, "and it is the one on the collector, as the carve's own blue always is"
+    assert flooded[0].get("low") or max(q[1] for q in flooded[0]["poly"]) >= 1300 - 0.25 * 46.0, (
+        "never a plot off the low ground: flagged low, or on the collector itself (a planted basin carries no flag)"
+    )
+
+    kept = _close([{"poly": far, "fill": "#A6C398", "low": True}, {"poly": on, "fill": FLOODED, "low": True}])
+    assert [min(q[1] for q in p["poly"]) > 1200 for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
+
+
+def test_a_triangle_never_wears_the_water_tint() -> None:
+    """The fill clause: a triangle's solidity is 1.0 and a capped wedge has no sharp vertex, so both passed every
+    earlier clause and read as little ponds (Sawada, Kashikawa). One that fills less than its rectangle is demoted,
+    and never promoted."""
+    from l7r.diagram.waterfields.palette import FLOODED
+
+    tri = [(600.0, 1292.0), (660.0, 1292.0), (600.0, 1250.0)]
+    plots = _close([{"poly": tri, "fill": FLOODED, "low": True}])
+    assert not any(p["fill"] == FLOODED and min(q[1] for q in p["poly"]) > 1240 and len(p["poly"]) == 3 for p in plots)
+
+
+def test_basin_rank_orders_on_the_collector_then_fill_then_size() -> None:
+    from shapely.geometry import LineString, Polygon
+
+    from l7r.diagram.waterfields.seams.close import _basin_rank
+
+    drain = LineString([(0.0, 100.0), (1000.0, 100.0)])
+    sq = Polygon(_rect(0, 60, 40, 98))
+    assert _basin_rank(sq, 1.0, 1520.0, drain, 48.0)[0] is False, "within a quarter plot of the drain is ON it"
+    assert _basin_rank(Polygon(_rect(0, 0, 40, 38)), 1.0, 1520.0, drain, 48.0)[0] is True
+    assert _basin_rank(sq, 0.9, 1520.0, drain, 48.0) > _basin_rank(sq, 1.0, 1520.0, drain, 48.0), "a fuller rectangle ranks first"
+    assert _basin_rank(sq, 1.0, 1520.0, None, 48.0)[0] is True, "no collector to be on"
+    assert _basin_rank(sq, 1.0, 0.0, drain, 48.0)[2] == 0.0, "no median, no size term"
+
+
+def test_a_repaired_crossing_ring_is_refused_when_its_raw_ring_is_a_needle() -> None:
+    """The crossing-ring repair carried the same dedup-only guard `_unjog` did."""
+    from l7r.diagram.waterfields.seams.close import _repair_crossing_rings
+
+    bowtie_with_spur = [(0.0, 0.0), (100.0, 100.0), (100.0, 0.0), (0.0, 100.0)]
+    plots = [{"poly": list(bowtie_with_spur)}]
+    _repair_crossing_rings(plots)
+    assert all(Polygon(p["poly"]).is_valid for p in plots), "whatever survives is a valid ring"
+
+
+def test_overlapping_plots_become_a_partition_the_later_plot_winning() -> None:
+    """`_visible_parts`: the carve hands the seam pass basins that claim the same ground, and the renderer paints the
+    later one on top, so each earlier plot is cut back to what shows. A plot left too small or pointed is dropped (its
+    ground goes back to the bare pocket the pass plants), and a plot nothing overlaps is untouched."""
+    from l7r.diagram.waterfields.seams.close import _visible_parts
+
+    alone = {"poly": _rect(900, 900, 950, 930)}
+    under = {"poly": _rect(0, 0, 100, 40)}
+    over = {"poly": _rect(60, 0, 160, 40)}
+    buried = {"poly": _rect(200, 0, 240, 40)}
+    lid = {"poly": _rect(190, -5, 250, 45)}
+    stub = {"poly": [(5.0, 5.0), (6.0, 6.0)]}  # a record with no area is stepped over, not measured
+    plots = [stub, alone, under, over, buried, lid]
+    _visible_parts(plots, 46.0 * 28.0)
+    assert stub in plots
+    assert alone in plots and alone["poly"] == _rect(900, 900, 950, 930), "nothing overlaps it, nothing changes"
+    assert Polygon(under["poly"]).area == pytest.approx(60 * 40, abs=1.0), "the earlier plot keeps only the part the later one does not cover"
+    assert Polygon(over["poly"]).area == pytest.approx(100 * 40), "the later plot is what the page shows, and it keeps it all"
+    assert buried not in plots, "a plot wholly under a later one returns its ground to the pocket"
+    assert Polygon(under["poly"]).intersection(Polygon(over["poly"])).area < 1.0, "and the survivors no longer overlap"
+
+
+def test_a_thin_tail_is_handed_to_the_neighbor_it_runs_along() -> None:
+    """`_shed_necks`: a basin carved with a long tail under the width floor draws as two bunds a few feet apart. The tail
+    goes to the plot it shares the most edge with, and only when both come out valid, simple and unpointed."""
+    from l7r.diagram.waterfields.seams.close import _shed_necks
+
+    # a 60 x 40 basin with a 100 x 4 ft tail running along the neighbor above it
+    host = {"poly": [(0.0, 0.0), (160.0, 0.0), (160.0, 4.0), (60.0, 4.0), (60.0, 40.0), (0.0, 40.0)]}
+    along = {"poly": _rect(60, 4, 160, 44)}
+    plots = [{"poly": list(host["poly"])}, {"poly": list(along["poly"])}]
+    _shed_necks(plots, 1.25 * 2.0, 15.0 * 2.0)
+    got_host, got_along = Polygon(plots[0]["poly"]).buffer(0), Polygon(plots[1]["poly"]).buffer(0)
+    assert got_along.area > Polygon(along["poly"]).area, "the neighbor took the tail"
+    assert got_host.area < Polygon(host["poly"]).area, "and the tailed plot gave it up"
+    assert got_host.intersection(got_along).area < 1.0, "ground is conserved, not shared"
+
+    alone = [{"poly": list(host["poly"])}]  # nothing to give it to
+    _shed_necks(alone, 1.25 * 2.0, 15.0 * 2.0)
+    assert alone[0]["poly"] == host["poly"], "a tail with no neighbor is left where it is"
+
+
+def test_shed_necks_passes_over_a_plot_with_no_polygon_and_a_tail_that_is_the_whole_plot() -> None:
+    """Two guards in `_shed_necks`, each of which the pool reaches only occasionally. A plot whose record carries
+    fewer than three points has no shape to shed from and is stepped over; and a sliver whose whole body IS its
+    tail cannot give it away, because what would be left of the giver is nothing at all - so the trade is refused
+    and both plots stand as they were."""
+    from l7r.diagram.waterfields.seams.close import _shed_necks
+
+    degenerate = {"poly": [(0.0, 0.0), (10.0, 0.0)]}
+    sliver = {"poly": _rect(0, 0, 4, 100)}  # 4 x 100: erodes to nothing, so the tail is the whole plot
+    neighbor = {"poly": _rect(4, 0, 104, 100)}
+    plots = [degenerate, {"poly": list(sliver["poly"])}, {"poly": list(neighbor["poly"])}]
+    _shed_necks(plots, 1.25 * 2.0, 15.0 * 2.0)
+    assert plots[0]["poly"] == degenerate["poly"], "a record with no shape is passed over"
+    assert plots[1]["poly"] == sliver["poly"], "a plot that IS its own tail keeps it - the giver would be left with nothing"
+    assert plots[2]["poly"] == neighbor["poly"], "so the neighbor takes nothing"

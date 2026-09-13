@@ -14,6 +14,8 @@ from ._helpers import kosatsuba_anchor as kosatsuba_anchor
 from ._helpers import pick_caption_seat as pick_caption_seat
 from .boards import BoardsMixin
 from .siting import FixtureSitingMixin
+from .siting import canopy_index as canopy_index
+from .siting import under_canopy as under_canopy
 
 
 class PublicFixturesMixin(

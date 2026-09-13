@@ -53,20 +53,20 @@ def test_deferred_blocks_carry_their_class_through_the_splice(tmp_path: os.PathL
     s = _settlement()
     s._ground(10.0, {}, "z", edge='<path d="M0,0 L1,1"/>', bed='<path d="M0,0 L1,1"/>', top='<path d="M0,0 L1,1"/>', cls="village lane")
     s._water('<path d="M0,0 L2,2"/>', {}, sheen='<path d="M0,0 L2,2"/>', cls="stream")
-    s._water('<path d="M3,3 L4,4"/>', {}, late=True, cls="field ditch")
+    s._water('<path d="M3,3 L4,4"/>', {}, late=True, cls="irrigation ditch")
     s.add(RECT, cls=Split("paddy", "bund"))
     base = os.path.join(str(tmp_path), "t")
     s.finish(base, render=False)
     with open(base + ".json") as fh:
         m = json.load(fh)
-    assert m["ink_classes"] == {"-": 1, "village lane": 3, "stream": 2, "field ditch": 1, "paddy": 1}
+    assert m["ink_classes"] == {"-": 1, "village lane": 3, "stream": 2, "irrigation ditch": 1, "paddy": 1}
     assert m["unclassed_ink"] == [] and m["unregistered_classes"] == []
     with open(base + ".svg") as fh:
         svg = fh.read()
     assert "data-k" not in svg and "f-village-lane" not in svg, "the class never enters the SVG (FR-010)"
     with open(base + ".html") as fh:
         page = fh.read()
-    assert page.count('data-k="village lane"') == 3 and 'data-k="stream"' in page and 'data-k="field ditch"' in page
+    assert page.count('data-k="village lane"') == 3 and 'data-k="stream"' in page and 'data-k="irrigation ditch"' in page
     assert 'data-k="paddy"' in page and 'data-k="bund"' in page
 
 
@@ -98,3 +98,21 @@ def test_the_frame_is_ruled_not_highlighted(tmp_path: os.PathLike[str]) -> None:
         m = json.load(fh)
     assert m["unclassed_ink"] == [], "the sheet, the placard, the name and the scale bar all carry the ruling"
     assert m["ink_classes"]["-"] >= 5
+
+
+def test_a_ditchs_hue_and_its_class_are_read_from_one_field() -> None:
+    """Feature 230: the comb's emit loop picks the collector's grayer blue from the record's `role`, and
+    the hover class is picked from the same read, so the two cannot disagree (the wet-paddy precedent).
+    A channel is classed by where it comes FROM, and the rule is total - a shape the pool does not draw
+    today still lands on one of the two."""
+    from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, SUPPLY_HUE, channel_class, ditch_style
+
+    assert ditch_style("drain") == (DRAIN_HUE, "drainage ditch")
+    for role in ("main", "branch", "lateral", None):
+        assert ditch_style(role) == (SUPPLY_HUE, "irrigation ditch")
+        assert ditch_style(role, "polder_grid") == (SUPPLY_HUE, "irrigation ditch"), "a rice polder's laterals only supply"
+        assert ditch_style(role, "mulberry_dike_fishpond") == (SUPPLY_HUE, "pond canal"), "a dike-pond's canals carry water both ways"
+    assert ditch_style("drain", "mulberry_dike_fishpond") == (DRAIN_HUE, "drainage ditch"), "its ring drain is still a drain"
+    assert channel_class({"kind": "drain"}) == "drainage ditch"
+    for frm in ({"kind": "pond"}, {"kind": "stream"}, {"kind": "field"}, {"kind": "moat"}, {}, None):
+        assert channel_class(frm) == "irrigation ditch"

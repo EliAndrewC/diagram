@@ -171,6 +171,21 @@ def _tab_cut(poly: Poly, g: float, rb: Pt, rc: Pt) -> set[Pt] | None:
     return None
 
 
+def _is_a_needle(ring: Poly) -> bool:
+    """Does this ring taper below the gate's bar - on EITHER the ring it records or the ring it merges to?
+
+    BOTH RINGS, the same rule `_sector_closing_rank` and the tint re-judge already apply, found a third
+    time here (feature 230). Every apex guard in `_unjog` tested `dedup_ring(r, 1.0)` alone, and
+    `paddy_plots_are_workable_basins` reads the ring AS RECORDED - so a hairline spur, a vertex pair
+    running out and straight back a fraction of a pixel, is erased by the dedup before the guard ever
+    sees it and survives into the manifest at an apex of 0.2 deg. The dedup is still needed for the
+    opposite case its own comment gives (a quad with a sub-pixel collapsed edge shows near-90 deg
+    corners while its merged triangle shows the needle), so the answer is not to swap one for the
+    other: a repair is refused when EITHER reading is a needle.
+    """
+    return pointed_ring(ring, _GATE_MIN_APEX) or pointed_ring(dedup_ring(ring, 1.0), _GATE_MIN_APEX)
+
+
 def _unjog(plots: list[dict[str, Any]], g: float, floor: float, water: BaseGeometry, outside: BaseGeometry) -> None:
     """Straighten a wall that still steps, by TRADING the corner between the two basins that share it.
 
@@ -327,7 +342,7 @@ def _trade(
             _seg = LineString([_va, _vb])
             if (not water.is_empty and _seg.intersects(water)) or (not outside.is_empty and _seg.intersects(outside)):
                 return False
-        if len(_new) < 3 or pointed_ring(dedup_ring(_new, 1.0), _GATE_MIN_APEX):
+        if len(_new) < 3 or _is_a_needle(_new):
             return False
         if gives:
             # EVERY BASIN ALONG THE CORNER IN TURN, best first - the same ladder `_absorb` runs, and
@@ -349,7 +364,7 @@ def _trade(
                 if not isinstance(grew, Polygon) or grew.interiors or grew.is_empty or grew.area < floor:
                     continue
                 gr = _ring(grew)
-                if len(gr) < 3 or not Polygon(gr).buffer(0).is_valid or pointed_ring(dedup_ring(gr, 1.0), _GATE_MIN_APEX):
+                if len(gr) < 3 or not Polygon(gr).buffer(0).is_valid or _is_a_needle(gr):
                     continue
                 rings = [(i, _new), (k, gr)]
                 break
@@ -385,7 +400,7 @@ def _trade(
                 if (
                     len(_gr) >= 3
                     and Polygon(_gr).buffer(0).is_valid
-                    and not pointed_ring(dedup_ring(_gr, 1.0), _GATE_MIN_APEX)
+                    and not _is_a_needle(_gr)
                     and jog_steps([(float(_a), float(_b)) for _a, _b in _gr], g) < jog_steps([(float(_a), float(_b)) for _a, _b in plots[i]["poly"]], g)
                 ):
                     traded, now, _new = _wide, _grown, _gr
@@ -398,7 +413,7 @@ def _trade(
                 if not isinstance(lost, Polygon) or lost.interiors or lost.is_empty or lost.area < floor:
                     return False
                 lr = _ring(lost)
-                if len(lr) < 3 or not Polygon(lr).buffer(0).is_valid or pointed_ring(dedup_ring(lr, 1.0), _GATE_MIN_APEX):
+                if len(lr) < 3 or not Polygon(lr).buffer(0).is_valid or _is_a_needle(lr):
                     return False
                 rings.append((k, lr))
     # SHAPELY DECIDING IT CANNOT ANSWER. Defensive, and not reachable from this engine's own geometry:

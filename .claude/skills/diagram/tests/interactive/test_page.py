@@ -439,7 +439,7 @@ def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
     bead = '<circle cx="10" cy="20" r="1.4" fill="#2F6B35"/>'
     assert 'r="8.4"' in wrap(bead, "bund beans")
     ditch = '<path d="M1,1 L9,9" fill="none" stroke="#6C9CBE" stroke-width="2.5"/>'
-    assert "stroke-width: 15.0px" in wrap(ditch, "field ditch")
+    assert "stroke-width: 15.0px" in wrap(ditch, "irrigation ditch")
     stream = '<path d="M1,1 L9,9" fill="none" stroke="#9CB4C8" stroke-width="7"/>'
     assert "stroke-width: 12.0px" in wrap(stream, "stream")
     lane = '<path d="M1,1 L9,9" fill="none" stroke="#C9AE79" stroke-width="5.0"/>'
@@ -608,7 +608,7 @@ def test_a_pond_sluice_gets_the_field_ditchs_widening() -> None:
     box comes out smaller in absolute terms and larger relative to the ink, which is the point."""
     from l7r.diagram.interactive.page import HIT_WIDEN
 
-    assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["field ditch"]
+    assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["irrigation ditch"]
     sluice = '<line x1="10" y1="10" x2="30" y2="10" stroke="#37637F" stroke-width="2.4"/>'
     out = hit_layer([sluice], ["pond sluice"])
     widths = [float(w) for w in re.findall(r'class="hit"[^>]*stroke-width: ([\d.]+)px', out)]
@@ -682,9 +682,9 @@ def test_only_the_lifted_class_leaves_its_own_group() -> None:
     sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
     assert frozenset({"pond sluice"}) == HIT_ON_TOP
     assert 'class="hit"' not in wrap(sluice, "pond sluice"), "the lifted class leaves nothing behind"
-    assert 'class="hit"' in wrap(ditch, "field ditch"), "every other widened class keeps its box inline"
-    layer = hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
-    assert 'data-k="pond sluice"' in layer and 'data-k="field ditch"' not in layer
+    assert 'class="hit"' in wrap(ditch, "irrigation ditch"), "every other widened class keeps its box inline"
+    layer = hit_layer([ditch, sluice], ["irrigation ditch", "pond sluice"])
+    assert 'data-k="pond sluice"' in layer and 'data-k="irrigation ditch"' not in layer
 
 
 def test_the_hit_layer_sits_above_the_ink_it_widens() -> None:
@@ -731,12 +731,12 @@ def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
 
     ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
     sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
-    lifted = pg.HIT_ON_TOP | {"field ditch"}
+    lifted = pg.HIT_ON_TOP | {"irrigation ditch"}
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr(pg, "HIT_ON_TOP", lifted)
-        mp.setattr(pg, "HIT_PRIORITY", ("field ditch",))  # the sluice is the forgotten one
-        out = pg.hit_layer([ditch, sluice], ["field ditch", "pond sluice"])
-    assert out.index('data-k="field ditch"') < out.index('data-k="pond sluice"'), out
+        mp.setattr(pg, "HIT_PRIORITY", ("irrigation ditch",))  # the sluice is the forgotten one
+        out = pg.hit_layer([ditch, sluice], ["irrigation ditch", "pond sluice"])
+    assert out.index('data-k="irrigation ditch"') < out.index('data-k="pond sluice"'), out
 
 
 def test_every_keep_clear_key_makes_its_holes() -> None:

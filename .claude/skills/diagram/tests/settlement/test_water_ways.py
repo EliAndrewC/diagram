@@ -729,6 +729,7 @@ def test_trim_lane_stubs_leaves_a_lane_alone_when_both_its_ends_already_arrive()
     assert s.M["lanes"][2]["pts"] == [[500, 300], [500, 700]], "the bar is untouched"
 
 
+<<<<<<< HEAD
 def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_records_aligned():
     """A lane the trim leaves shorter than `_LANE_MIN_FT` is dropped - its ink emptied and its record removed, the ink
     list rebuilt beside the record list so their indices still agree (the pool stopped reaching this once feature
@@ -742,3 +743,78 @@ def test_trim_lane_stubs_drops_a_lane_shorter_than_the_minimum_and_keeps_the_rec
     s.trim_lane_stubs()
     assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == 1 and s.M["lanes"][0]["pts"][0] == [100, 500]
     assert all(not s.ground[z].get(part) for z in stub_ink for part in ("edge", "bed", "top")), "the stub's ink emptied with its record"
+=======
+def test_trim_lane_stubs_drops_a_lane_too_short_to_front_anybody():
+    """A lane shorter than one homestead's frontage fronts nobody by construction, so it is dropped
+    whole - record AND ink together, because a record removed while its ink stayed would leave a tread
+    drawn on the sheet that nothing on the map accounts for."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(100, 300), (900, 300)], width=4)
+    s.lane([(500, 300), (500, 340)], width=4)  # 40 ft: under _LANE_MIN_FT, and no trimming can rescue it
+    _ink = list(s._lane_ink[1])
+    assert any(s.ground[z].get("bed") for z in _ink), "the stub was inked before the sweep"
+    s.trim_lane_stubs()
+    assert len(s.M["lanes"]) == 1 and s.M["lanes"][0]["pts"][0] == [100.0, 300.0], "the stub's record is gone and the through lane is what is left"
+    assert len(s._lane_ink) == 1, "and its ink slot went with it, so the two lists stay aligned"
+    assert not any(s.ground[z].get(p) for z in _ink for p in ("edge", "bed", "top")), "its ink is erased"
+
+
+def test_dropping_a_lane_that_is_not_the_last_keeps_every_other_lane_on_its_own_ink():
+    """`drop_lanes`, settlement-review feature 230 pass 10. Five passes deleted a lane's record and left its ink
+    slot, so every later lane was re-inked into its predecessor's slot: Inashiro shipped its connector undrawn,
+    a web lane at the connector's width, and a lane inked twice. Drop the FIRST of three and re-ink the rest:
+    each must still draw its own points, and the dropped lane must draw nothing."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(100, 100), (300, 100)], width=4)
+    s.lane([(100, 500), (900, 500)], width=6, connector=True)
+    s.lane([(500, 700), (500, 900)], width=3)
+    first_ink = list(s._lane_ink[0])
+    s.drop_lanes([0])
+    assert len(s.M["lanes"]) == len(s._lane_ink) == 2, "the record list and the ink list shrink together"
+    for i in range(len(s.M["lanes"])):
+        s.reink_lane(i)
+    drawn = [s.ground[z].get("bed", "") for z in (zz for slot in s._lane_ink for zz in slot)]
+    assert any("M100,500 L900,500" in d for d in drawn), "the connector still draws its own course"
+    assert any("M500,700 L500,900" in d for d in drawn), "and the last lane its own, not the one before it"
+    assert not any(s.ground[z].get(part) for z in first_ink for part in ("edge", "bed", "top")), "the dropped lane draws nothing"
+
+
+def test_no_pass_deletes_a_lane_record_without_its_ink_slot():
+    """The static half of the same rule: a `del` on the lane records anywhere but `drop_lanes` is the defect
+    returning, whatever the comment beside it says - five comments said 'the husk goes with the ink' over code
+    that took the husk and left the ink."""
+    import ast
+    import pathlib
+
+    root = pathlib.Path(__file__).resolve().parents[2] / "l7r" / "diagram"
+    offenders = []
+    for path in root.rglob("*.py"):
+        tree = ast.parse(path.read_text())
+        for fn in [n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]:
+            if fn.name == "drop_lanes":
+                continue
+            for node in ast.walk(fn):
+                if isinstance(node, ast.Delete):
+                    for target in node.targets:
+                        text = ast.unparse(target)
+                        if "lanes" in text and "_lane_ink" not in text:
+                            offenders.append(f"{path.relative_to(root)}:{node.lineno} del {text}")
+    assert not offenders, "delete lane records through `drop_lanes`, which removes the ink slot too: " + "; ".join(offenders)
+
+
+def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_kept():
+    """`drop_lanes`, settlement-review feature 230 pass 11: two passes recorded their own drop of the field spur and the
+    rest did not, so a hamlet lost its only path to the rice with nothing in the manifest to say so."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(100, 100), (300, 100)], width=4)
+    s.lane([(500, 500), (600, 500)], width=5, spur=True)
+    s.drop_lanes([1])
+    assert "dropped" in s.M["meta"]["field_spur_swept"], "a silent drop is recorded"
+    s.lane([(500, 700), (600, 700)], width=5, spur=True)
+    s.M["meta"]["field_spur_swept"] = "isolated - the pass's own words"
+    s.drop_lanes([1])
+    assert s.M["meta"]["field_spur_swept"] == "isolated - the pass's own words", "a pass that said why keeps its own reason"
+>>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b

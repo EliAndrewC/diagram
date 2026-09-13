@@ -538,6 +538,7 @@ def test_shadowing_lane_asks_whether_a_lane_goes_anywhere() -> None:
     assert hg.ways.shadowing_lane([(100.0, 6.6), (144.0, 6.6)], [[(0.0, 0.0)]], 30.0) is None  # nor is the other one
 
 
+<<<<<<< HEAD
 def test_trim_to_service_cuts_an_end_that_reaches_nothing() -> None:
     """Feature 227 D11: no pass may leave a lane's end in open ground - the bar is the gate's own
     `WAY_END_REACH_FT`, and a run whose tail runs 300 ft past the last house it serves is cut back to it."""
@@ -561,3 +562,11 @@ def test_trim_to_service_keeps_the_tail_that_is_a_houses_ONLY_way() -> None:
     outlier = (260.0, 80.0)  # 85 ft from the run's (200, 0) vertex: past the end bar, inside the service reach
     out = hg.ways._trim_to_service(run, [], houses, keep=[outlier])
     assert math.dist(out[-1], outlier) <= WEB_REACH_FT, "the point that serves the outlier survived the cut"
+=======
+def test_shadow_share_of_a_one_point_lane_is_nothing() -> None:
+    """A record with a single point has no length to share, and the caller asks before it knows that -
+    `_sweep_doubled_remnants` walks every lane on the map, degenerate records included."""
+    from l7r.diagram.hamletgen.ways.geom import shadow_share
+
+    assert shadow_share([(10.0, 10.0)], [[(0.0, 0.0), (100.0, 0.0)]], 8.0) == 0.0
+>>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b

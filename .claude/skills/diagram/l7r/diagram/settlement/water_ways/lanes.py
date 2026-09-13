@@ -2,6 +2,7 @@
 
 import math
 import re
+from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class LanesMixin:
-    def lane(self: Settlement, pts: Any, width: float = 16, clearance: float = 22, worn: bool = False, connector: bool = False) -> None:  # type: ignore[misc]
+    def lane(self: Settlement, pts: Any, width: float = 16, clearance: float = 22, worn: bool = False, connector: bool = False, spur: bool = False) -> None:  # type: ignore[misc]
         """A village lane or connecting path. `worn=True` draws it as UNPAVED TRODDEN EARTH: a NARROW
         single track (China moved rural goods by WHEELBARROW + shoulder-pole porter + packhorse, not wide
         cart roads, so two carts could not pass), packed dirt with soft worn shoulders and NO center
@@ -24,7 +25,7 @@ class LanesMixin:
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
         See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
-        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector}
+        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
         # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was
@@ -102,6 +103,30 @@ class LanesMixin:
             for part in ("edge", "bed", "top"):
                 if self.ground[z].get(part):
                     self.ground[z][part] = re.sub(r'd="M[^"]*"', f'd="{dd}"', self.ground[z][part], count=1)
+
+    def drop_lanes(self: Settlement, idxs: Iterable[int]) -> None:  # type: ignore[misc]
+        """Retire lanes `idxs`: blank each one's ink, then remove its record AND its ink slot, back to front.
+
+        THE RECORD LIST AND THE INK LIST ARE INDEXED TOGETHER, and a pass that deletes from one owns the other
+        (settlement-review, feature 230 pass 10). Five passes in `hamletgen.ways` removed a dropped lane's record
+        with `del lanes[i]` and left `_lane_ink[i]` in place, so every later lane was re-inked into its
+        predecessor's slot. It stayed latent while the dropped lane happened to be the last one; feature 230 made
+        the field spur a record drawn before the connector, swept it as an orphan, and Inashiro shipped with its
+        connector track - its only way off the map - not drawn at all, a web lane drawn at the connector's width,
+        and the last lane inked twice. Every check that reads the manifest was green, because the manifest still
+        held the connector. `trim_lane_stubs` below always rebuilt both lists together; this is that rule, once."""
+        gone = sorted(set(idxs), reverse=True)
+        if any(self.M["lanes"][i].get("spur") for i in gone):
+            # THE FIELD SPUR NEVER GOES SILENTLY, whichever pass drops it (settlement-review, feature 230 pass 11): two passes
+            # recorded their own drop of it and the others did not, so the reference hamlet lost its only path to the rice with
+            # nothing in the manifest to say so. A pass that already said why keeps its own words.
+            self.M["meta"].setdefault("field_spur_swept", "dropped by a later pass - collapsed, or serving nothing the web does not")
+        for i in gone:
+            self.M["lanes"][i]["pts"] = []
+            self.reink_lane(i)
+        for i in gone:
+            del self.M["lanes"][i]
+            del self._lane_ink[i]
 
     def trim_lane_stubs(self: Settlement, way_reach: float = 40.0, house_reach: float = 90.0, fan_spread: float = 60.0, fan_bearing: float = 25.0) -> int:  # type: ignore[misc]
         """Pull back any internal lane end that REACHES NOTHING. Returns how many ends were trimmed.

@@ -28,7 +28,7 @@ from .geom import _trim_to_service, polyline_len, steading_footprints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
 from .smooth import _STUB_REACH_FT, _smooth_web
-from .sweeps import _bridge_collinear_breaks, _drop_end_nubs, _join_orphan_ways, _keep_the_route_wide, _sweep_debris, _sweep_doubled_remnants, _sweep_steading_fouls
+from .sweeps import _bridge_collinear_breaks, _drop_end_nubs, _join_orphan_ways, _keep_the_route_wide, _sweep_dangling_ends, _sweep_debris, _sweep_doubled_remnants, _sweep_steading_fouls
 from .touch import _touch_junctions
 
 
@@ -206,8 +206,7 @@ def _drop_collapsed(s: Settlement) -> list[int]:
             ln["pts"] = []
             s.reink_lane(i)
             collapsed.append(i)
-    for i in sorted(collapsed, reverse=True):
-        del s.M["lanes"][i]
+    s.drop_lanes(collapsed)  # record AND ink slot together - see `drop_lanes`
     return collapsed
 
 
@@ -554,6 +553,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     _sweep_steading_fouls(s)  # a bridge is a lane too, and it gets the same last look
     _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
+    _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
     _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     s.M["meta"]["lane_web"] = plan.lane_web

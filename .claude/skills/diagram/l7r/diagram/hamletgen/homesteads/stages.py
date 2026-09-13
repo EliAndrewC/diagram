@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import math
 import random
+from collections.abc import Sequence
 
-from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement import Settlement, seg_dist, seg_intersect
 
 from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan
@@ -24,6 +25,42 @@ fit, and fixing that fixed the count. Measured afterwards on Sawada, the dispers
 19/19 households in 53.4s at the uniform 1.15, against 19/19 in 53.7s at 2.2 - no seats gained, no
 time lost, nothing bought. A wider search bound only permits sprawl the feature exists to prevent,
 so the honest value is no override at all."""
+
+
+def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
+    """Which side of the brook a point stands on: the sign of its offset from the NEAREST reach of the course.
+
+    A CROSSING TEST IS NOT A SIDE TEST, and that mistake cost two rolls. Asking whether the line from one house
+    to another crosses the brook reads a curving course wrongly - the brook comes down one flank and wraps the
+    field's toe, so two houses on the same bank can have the water between them as the crow flies, and every
+    candidate after the first was refused (1 house of 15 seated on three maps). The side of the nearest reach is
+    local, so a bend cannot invert it."""
+    j = min(range(len(brook) - 1), key=lambda i: seg_dist(x, y, brook[i], brook[i + 1]))
+    (ax, ay), (bx, by) = brook[j], brook[j + 1]
+    return 1 if (bx - ax) * (y - ay) - (by - ay) * (x - ax) >= 0 else -1
+
+
+def far_bank(x: float, y: float, brook: Sequence[Pt], placed: Sequence[Pt]) -> bool:
+    """Is this candidate across the brook from the hamlet that is already there?
+
+    THE BANK IS DECIDED BY THE HOUSES, not by a point chosen in advance - both fixed hubs were tried and both
+    were wrong in their own direction. The band's CENTER sits near the water where the brook grazes the band, and
+    on Kashikawa it fell on the far side, so the test inverted and let two of twenty across. The seat's ANCHOR is
+    on the field margin, with the brook running down that flank between the field and the band, so on Inashiro it
+    put the whole settlement on the wrong side of its own test. The houses already standing are the hamlet's bank
+    by definition; the first is free and the rest follow it.
+
+    BOTH TESTS MUST AGREE, and each alone was measured wrong. The SIDE of the nearest reach flips where the
+    course wraps the field's toe; a CROSSING of the straight line between two houses is wrong the other way, a
+    brook that bends around them both being crossed by a line that stays on one bank throughout. Together they
+    name the case that is actually wrong - the water between two houses AND a different bank under each - which
+    is Kashikawa's outlier, 52 ft beyond the brook from the other nineteen."""
+    if len(brook) < 2 or not placed:
+        return False
+    near = sorted(placed, key=lambda b: (b[0] - x) ** 2 + (b[1] - y) ** 2)[:8]
+    mine = bank_of(x, y, brook)
+    cut = sum(1 for b in near if bank_of(b[0], b[1], brook) != mine and any(seg_intersect(b, (x, y), brook[i], brook[i + 1]) is not None for i in range(len(brook) - 1)))
+    return cut * 2 > len(near)
 
 
 def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
@@ -94,12 +131,34 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
     _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
 
+    # THE HAMLET'S OWN BANK, HOUSE BY HOUSE (feature 230, settlement-review pass 7). `seat_cluster` keeps the BAND
+    # off a margin the brook divides, and that is not the same as keeping every HOUSE on one bank: a band that
+    # merely grazes the water can still seat a farmstead across it. Kashikawa shipped exactly that - one house
+    # 52 ft beyond the brook from the other nineteen, 133 ft from the lane web, with no bridge anywhere on the
+    # water, which is the stranded homestead of pass 2 arriving by a different road. A candidate is on the far
+    # bank when the line from the cluster's own center to it crosses the brook; that is exact, needs no side
+    # convention, and costs one segment test against a course of fifty points.
+    _brook = [(float(q[0]), float(q[1])) for q in (plan.brook or ())]
+
+    def _far_bank(x: float, y: float) -> bool:
+        return far_bank(x, y, _brook, [(float(b[0]), float(b[1])) for b in s.placed])
+
     def _pretest(x: float, y: float) -> bool:
+<<<<<<< HEAD
         """Count a candidate (feature 226 FR-003). The cheap refusal that stood here - a house-sized box against the
         boundary and the placed boxes - is the placer's own first test now (feature 227: the whole homestead's
         ENVELOPE, `_envelope_blocked`), so nothing is asked twice and a seat the envelope refuses costs one rectangle."""
         s._seat_search["candidates"] += 1
         return True
+=======
+        """A candidate's cheap refusal before the placer is asked (feature 226 FR-003): a house-sized box on the house
+        side of the chains and clear of the corridors, clear of every placed bundle's box, and on the cluster's own
+        bank of the brook. Counted as a candidate."""
+        s._seat_search["candidates"] += 1
+        if s._site_blocks_rect((x, y, _hw0, _hh0)) or _far_bank(x, y):
+            return False
+        return all(not (abs(x - px) < (_hw0 + pw) / 2 and abs(y - py) < (_hh0 + ph) / 2) for px, py, pw, ph, *_ in s.placed)
+>>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]

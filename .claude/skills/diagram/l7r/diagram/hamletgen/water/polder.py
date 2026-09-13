@@ -1,6 +1,7 @@
-"""STAGE 1-2: the water frame, and the field the water shapes.
+"""THE POLDER ARCHETYPES - the reclaimed block, its dike, its flanks and the reed fringe outside them.
 
-Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md.
+Split from `hamletgen/water.py` by feature 230 (constitution X clause 13); bodies verbatim.
+See `CLAUDE.md` in this directory.
 """
 
 from __future__ import annotations
@@ -11,9 +12,10 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
-from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, crosses_poly, net_acres, poly_area
-from l7r.diagram.waterfields import CombCarve, build_polder, carve_comb, clean_polder_parcels, finish_comb
+from l7r.diagram.sitegen.geom import net_acres, poly_area
+from l7r.diagram.waterfields import build_polder, clean_polder_parcels
 
+<<<<<<< HEAD:.claude/skills/diagram/l7r/diagram/hamletgen/water.py
 from .consts import DIKEPOND_CONVERSION, FAN_ASPECTS, GRAIN, POLDER_ARCHETYPES, POLDER_FABRIC, POND_LAYOUT_MOSAIC, REF_CANAL_A, REF_CANAL_B, REF_FIELD_FALL, WATERWARD_DEPTH, Poly, Pt
 from .plan import SitePlan, _roll
 
@@ -361,6 +363,18 @@ def feed_brook(plan: SitePlan, sluice: Pt, run: float = 420.0) -> Poly:
         ((up[0] + sluice[0]) / 2 + dy * 26, (up[1] + sluice[1]) / 2 - dx * 26),
         sluice,
     ]  # pragma: no cover - the same unreachable fallback, one line down [174: KEPT, not deletable - part of that same terminal return]
+=======
+from ..consts import (
+    DIKEPOND_CONVERSION,
+    POLDER_ARCHETYPES,
+    POLDER_FABRIC,
+    POND_LAYOUT_MOSAIC,
+    WATERWARD_DEPTH,
+    Poly,
+    Pt,
+)
+from ..plan import SitePlan
+>>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b:.claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py
 
 
 def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any], ux: float, uy: float, step: float = 12.0, limit: int = 60) -> tuple[float, float, float, float]:
@@ -628,6 +642,7 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     return best
 
 
+<<<<<<< HEAD:.claude/skills/diagram/l7r/diagram/hamletgen/water.py
 def stage_field(s: Settlement, plan: SitePlan) -> None:
     """The water skeleton and the paddy.
 
@@ -711,6 +726,8 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
             s.corridors.append(([a, b], 30.0))
 
 
+=======
+>>>>>>> 793a0012b28d6a422713591138c84b4b58ed590b:.claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py
 # ---- the polder's flanks (feature 150) --------------------------------------------------------------
 
 

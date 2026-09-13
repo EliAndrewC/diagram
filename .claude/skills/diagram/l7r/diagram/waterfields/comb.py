@@ -135,6 +135,8 @@ def carve_comb(
     grain_drift: float = 0.0,
     grain: float = 1.0,
     supply_banks: bool = False,
+    head_deg: float | None = None,
+    head_len: float = 90.0,
 ) -> CombCarve:
     """The CARVE half of `build_comb` (feature 220): everything up to the planted plots and the
     envelope, before the seams are closed - what `fit_field`'s search measures. Returns a
@@ -145,7 +147,7 @@ def carve_comb(
     DOWN = F.down
     channels: list[dict[str, Any]] = []
 
-    fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels)
+    fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels, head_deg, head_len)
     threads, bc, spawns = _comb_threads(R, F, DOWN, fork, a_pts, canal_b_len, offtakes_a, offtakes_b, plot_across)
     # ---- the lockstep march (no thread may cross another or pinch under GAP)
     _comb_march(R, F, DOWN, threads, spawns, W, H, field_fall)
@@ -155,6 +157,19 @@ def carve_comb(
     drain_bank = _drain_bank(F, dpts, grain)  # the ditch's own edge, the one line the field may not cross
     _comb_clip_and_cap(R, F, threads, dpts, drain_bank)
     _comb_canal_pieces(F, threads, bc, a_pts, offtakes_a, fork, grain, channels)
+    # A PIECE TOO SHORT TO BE A CHANNEL, AND WHY IT STAYS (settlement-review, feature 230 pass 12). Cutting the canals
+    # at the fork and at each offtake leaves a remainder wherever a cut lands near a piece's own end: Inashiro draws a
+    # 3.2 ft stroke of "main" with its own hover region and Mizuguchi a 21.9 ft one that stops under a blunt cap on
+    # the bare hem. Dropping them here - `channels[:] = [c for c in channels if run_length(dedup(c["pts"])) >= 8.0]` -
+    # is one line and was MEASURED, and it is not taken: the channel list feeds the no-build corridors, so removing a
+    # stub frees ground, the homestead packing takes it, and the reference hamlet came back with a garden seated ON a
+    # branch ditch at (2593, 1724) - `features_do_not_overlap`, a real defect in place of a cosmetic one.
+    # What that exposes is the actual bug, and it is a PLACER change rather than a channel one: a garden is tested
+    # against the ditch stretches that run OUTSIDE the field envelope (`hamletgen/water/comb.py` reserves those as
+    # corridors) and against nothing inside it, so any seat freed near an in-field branch is available to it. The fix
+    # is to give the homestead bundle the same in-field channel keep-out the houses already get, which moves every
+    # map's packing and belongs to a feature that can re-review all five. Recorded here so the cheap lever is not
+    # pulled again without the expensive half.
     # SWEEP THE BENDS BEFORE ANYTHING CLEARS GROUND AGAINST THEM (2026-08-17). This used to run
     # after `_carve`, which meant the carve hemmed its bunds onto UN-SWEPT channel centerlines and
     # the sweep then moved the drawn water sideways underneath them - so a bund the carve had
@@ -482,15 +497,35 @@ def _mk_thread(
 
 
 def _comb_skeleton(
-    R: random.Random, F: _Frame, DOWN: float, sluice: Pt, canal_a_len: tuple[float, float], canal_b_len: tuple[float, float], W: float, H: float, grain: float, channels: list[dict[str, Any]]
+    R: random.Random,
+    F: _Frame,
+    DOWN: float,
+    sluice: Pt,
+    canal_a_len: tuple[float, float],
+    canal_b_len: tuple[float, float],
+    W: float,
+    H: float,
+    grain: float,
+    channels: list[dict[str, Any]],
+    head_deg: float | None = None,
+    head_len: float = 90.0,
 ) -> tuple[Pt, Poly]:
     """The water skeleton's head: head-race to the division point, then canal A's dug polyline
-    (canal B's is drawn and discarded - its RNG draw is part of the frozen stream)."""
-    # head-race: sluice -> the division point (bunsuiguchi), straight down the fall.
+    (canal B's is drawn and discarded - its RNG draw is part of the frozen stream).
+
+    `head_deg` is the bearing the head race LEAVES THE INTAKE on and `head_len` how far it runs to the
+    division point. Both are the caller's since feature 230: a scripted hamlet's brook keeps its own
+    course past the fan, and the race leaves its bank at an acute angle pointing downstream (the
+    record's offtake rule) over a distance derived from the fan rather than pinned. The default -
+    no bearing, 90 px - is the shape every other caller has drawn since this builder was written:
+    straight down the fall from a sluice, which is right for a pond's outlet and for a city fan
+    tapping a moat, neither of which has a brook to leave."""
+    # head-race: the intake -> the division point (bunsuiguchi), on the caller's bearing or down the fall.
     # Every width below goes through `chan_px`, which converts a TRUE width in feet to pixels at
     # this map's scale (and floors it at the visibility minimum) - so the net is to scale, and the
     # same real channel is the same real size on every sheet that draws it.
-    hr = [sluice, (sluice[0] + 45 * F.d[0], sluice[1] + 45 * F.d[1]), (sluice[0] + 90 * F.d[0], sluice[1] + 90 * F.d[1])]
+    hd = F.d if head_deg is None else (math.cos(math.radians(head_deg)), math.sin(math.radians(head_deg)))
+    hr = [sluice, (sluice[0] + head_len / 2 * hd[0], sluice[1] + head_len / 2 * hd[1]), (sluice[0] + head_len * hd[0], sluice[1] + head_len * hd[1])]
     channels.append({"pts": hr, "w": chan_px(HEAD_RACE_FT, grain), "role": "main"})
     fork = hr[-1]
 

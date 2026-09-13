@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import cast
 
-from l7r.diagram.settlement import Settlement, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
@@ -22,10 +22,39 @@ from ..consts import (
 )
 from ..plan import SitePlan
 from .checks import drawn_water_segs, path_violations
-from .clearance import clip_to_clear, route_around
+from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
-from .geom import polyline_len, push_clear_of_fabric, push_out_of
+from .geom import _turn_deg, polyline_len, push_clear_of_fabric, push_out_of
 from .route import _route
+
+# how near the field a spur's end must stand to have reached it - `lanes_reach_something`'s own 60 ft for a lane end
+SPUR_REACH_FT = 60.0
+
+
+def spur_cut_at_the_fold(pts: Poly, envelope: Poly) -> tuple[Poly, str | None]:
+    """The field spur as it should be DRAWN, and the reason where it should not be.
+
+    A spur threaded round the steadings can FOLD BACK ON ITSELF (settlement-review, feature 230 pass 11):
+    the reference hamlet's ran 90 ft toward the field and straight back to within 14 px of where it began,
+    the smoothing pass then rightly cut that hairpin away, and the hamlet's only path to its rice
+    disappeared with no record of ever having been there. So the fold is cut here, before the map sees it.
+
+    Keeping the outward arm regardless was tried first and was wrong: on that map the arm stopped 60.6 ft
+    short of the field, with the marsh a path may not cross lying between, so it was a lane ending in open
+    ground (`lanes_reach_something`). A folded spur is drawn only while its outward arm still REACHES the
+    field; otherwise nothing is drawn and the caller records the returned reason, because a map with no
+    path to its rice should say so rather than quietly have none.
+
+    Lifted out of `stage_track` under the feature-146 doctrine: the decision is a question about a
+    polyline and an envelope, and inside the stage it could only be reached by rolling a whole hamlet
+    whose spur happens to fold."""
+    fold = next((k for k in range(1, len(pts) - 1) if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG), None)
+    if fold is None:
+        return pts, None
+    cut = pts[: fold + 1]
+    if edge_dist(cut[-1][0], cut[-1][1], envelope) <= SPUR_REACH_FT:
+        return cut, None
+    return cut, "folded back short of the field - the ground between is marsh a path may not cross"
 
 
 def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) -> Pt:
@@ -229,9 +258,18 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
     ] + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     seat = seat_cluster(
-        plan, dry_plots=crop_polys(s), drain=drain, toe=s.toe_band() or None, wet=[[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") == "pond_fringe"]
+        plan,
+        dry_plots=crop_polys(s),
+        drain=drain,
+        toe=s.toe_band() or None,
+        wet=[[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") == "pond_fringe"],
+        brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it
     )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
+    # WHICH SIDE OF THE BROOK RULE THIS MAP CAME DOWN ON (feature 230): true when the seat stands on a
+    # margin the brook divides, which happens only when every margin does, or when refusing them cost the
+    # map a household and `generate` rolled it again with them allowed.
+    s.M["meta"]["seat_divided"] = bool(seat.get("divided"))
     # THE SITE'S BACK IS THE WINDWARD SIDE, and where the two disagree the site wins.
     #
     # The wind is derived from the slope (cold air drains off the high ground) and the cluster is
@@ -407,8 +445,38 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
-    if len(_spur_pts) >= 2 and sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) > 20.0:
-        s.lane(_thread_the_fabric(s, plan, _spur_pts), width=5, clearance=LANE_CLEARANCE, worn=True)
+    _spur_ft = sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) if len(_spur_pts) >= 2 else 0.0
+    # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230). The floor below is right - a 20 ft
+    # stub is not a path - but a spur that fails it vanished in silence, and a reviewer asking what the nearest
+    # way to the paddy was is how the reference hamlet turned out to have none. The number says which it was:
+    # a path the clip left too short, or no path at all. Where a field path should END is the open question
+    # (`future-work/farming-communities.md`), and this is the measurement it will be answered from.
+    s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
+    # ...AND A SPUR THAT NO LONGER REACHES THE WEB IS NOT DRAWN. The clip takes the spur out of the crop and off
+    # the marsh from BOTH ends, so what survives can be a length of path in the middle of open ground: on the
+    # reference hamlet it came back 111 ft long, 152 ft from the nearest lane and 72 ft from the field, joining
+    # nothing to nothing - a second lane "network" of one fragment, which is a worse thing to draw than no path
+    # at all and which the gate's own one-network rule catches. So the survivor is drawn only while its head is
+    # still on the fabric it forked from; otherwise the LENGTH stands as the record and `field_spur_head_ft`
+    # says how far short it fell. That is the shortfall reported rather than swallowed - the thing the fifth
+    # review pass asked for - and it is not the same as the sweep silently dropping it, which is what made the
+    # reference hamlet's missing path invisible in the first place.
+    # Whether it SURVIVES is decided later and elsewhere: nothing is on the map to attach to at this point in
+    # the stage - not the connector, which is drawn below this, and not the web, which is two stages away - so
+    # the spur is drawn on its own length and the sweeps judge it against the finished network (`sweeps.py`).
+    if _spur_ft > 20.0:
+        # ...AND NEVER DRAWN AS AN OUT-AND-BACK (settlement-review, feature 230 pass 11). Threading the clipped spur round
+        # the steadings can fold it back on itself: the reference hamlet's ran 90 ft toward the field and straight back to
+        # within 14 px of where it began, the smoothing pass then rightly cut that hairpin away, and the hamlet's only path
+        # to its rice disappeared with no record. Keeping the arm toward the field was tried first and was wrong: that arm
+        # stopped 60.6 ft short of the field, where the marsh the path may not cross lies between, so it was a lane ending
+        # in open ground (`lanes_reach_something`). A folded spur is drawn only when its outward arm still reaches the
+        # field; otherwise the map says why it has no path to its rice.
+        _drawn_spur, _swept = spur_cut_at_the_fold(_thread_the_fabric(s, plan, _spur_pts), plan.envelope)
+        if _swept is None:
+            s.lane(_drawn_spur, width=5, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
+        else:
+            s.M["meta"]["field_spur_swept"] = _swept
 
     # the CONNECTOR, out to the frame
     # ...and the gate the connector starts FROM must itself be out of the crop. The skeleton's

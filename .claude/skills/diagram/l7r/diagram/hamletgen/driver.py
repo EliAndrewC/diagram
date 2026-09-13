@@ -352,6 +352,14 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     attempt = kept_attempt = 1
     after: list[str] = []  # the checks that forced each re-roll, in order
     _kept_placed = int(_s.M["meta"]["roll_placed"])  # the households the kept roll seated - a re-roll may not seat fewer
+    # THE REPORT MUST CARRY THE KEPT ROLL, NOT THE LAST ONE. `rolled`/`rolled_m` hold whichever roll ran most
+    # recently, on the argument that "the kept attempt rolls last" - true only when the re-emit below runs, and
+    # the re-emit needs an `out_base`. A COHORT passes none: every member finishes into a scratch directory and
+    # is thrown away, so a rejected re-roll was the manifest the report handed back, and `cohort_audit` reads
+    # `meta.roll_placed` off exactly that manifest (feature 215). The verdict lines were the kept roll's and the
+    # numbers beside them the rejected roll's. Snapshot the keeper instead, and restore it when nothing rewrote
+    # the files. Found while adding the shortfall re-roll below, which meets the same door.
+    _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
     for _ in range(4):
         # THE LOOP'S ENTRY IS THE PREDICATE TOO (feature 166 T03). It used to also require the gate to
         # have NAMED `farmhouses_reach_a_way`, which is the same dependency in the entry condition that
@@ -384,9 +392,35 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         if len(seats2) <= len(seats) and int(_s2.M["meta"]["roll_placed"]) >= _kept_placed:
             failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, list(avoid), attempt
             _kept_placed = int(_s2.M["meta"]["roll_placed"])
+            _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
         else:
             stale = True
             break
+    # THE BROOK'S SAY IN THE SEAT MAY NOT COST A HOUSE - EITHER A MISSING ONE OR AN UNREACHED ONE (feature 230).
+    # `seat_cluster` scores a field margin down when the brook runs near the band and strikes it out entirely when
+    # the brook divides the band, so that a hamlet does not stand astride its own stream - a defect
+    # `settlement-review` measured twice. The cohort then measured what that costs, against the pre-feature
+    # baseline of 48 of 48: seed 22 seated 8 of 10 on a margin the PENALTY alone had pushed it to, and seed 15
+    # seated all sixteen on the margin the strike-out left it and then could not reach one of them. Both are
+    # defects a reader sees, so neither rule wins outright and the map decides: roll it once more with the brook
+    # ignored at the seat, and keep that roll only if it is BETTER - more households seated, or as many with
+    # fewer of them stranded.
+    #
+    # IT RUNS AFTER THE REACH LOOP, NOT BEFORE IT, and that is a cost decision as much as a logical one: the loop
+    # above fixes most strandings by forbidding the ground, and a map it fixes must not pay for a second seat it
+    # does not need. So this fires only on a map that is still wrong when the cheaper ladder has finished.
+    if (_kept_placed < spec.households or seats) and int(rolled["plan"].seat_brook_steered) > 0 and not plan.seat_ignores_brook:
+        plan.seat_ignores_brook = True
+        attempt += 1
+        after = after + ["households_seated" if _kept_placed < spec.households else "farmhouses_reach_a_way"]
+        _s2, f2, seats2, lines2 = _roll((), out_base, attempt, after)
+        if (int(_s2.M["meta"]["roll_placed"]), -len(seats2)) > (_kept_placed, -len(seats)):
+            failures, seats, lines, kept, kept_attempt = f2, seats2, lines2, [], attempt
+            _kept_placed = int(_s2.M["meta"]["roll_placed"])
+            _keep_plan, _keep_m, stale = rolled["plan"], rolled_m["M"], False
+        else:
+            plan.seat_ignores_brook = False  # ignoring the brook was no better; the roll that stands is the one the loop kept
+            stale = True
     if stale and out_base is not None:
         # Generation is deterministic, so re-rolling the keeper's avoid list reproduces it exactly -
         # and it is the only way to put the KEPT map back on disk without finishing a Settlement
@@ -395,6 +429,8 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # is the same map with the same failures; taking the re-gate's answer instead would let a
         # second opinion overwrite the one that was actually chosen.
         _roll(kept, out_base, kept_attempt, after[: kept_attempt - 1])
+    elif stale:
+        rolled["plan"], rolled_m["M"] = _keep_plan, _keep_m  # no files to rewrite, so hand back the keeper itself
     return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1], manifest=rolled_m.get("M"))
 
 

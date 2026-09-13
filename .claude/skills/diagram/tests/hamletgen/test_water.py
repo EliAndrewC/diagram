@@ -1,4 +1,4 @@
-"""Unit tests for the water frame and the field it shapes (`hamletgen/water.py`), plus the waterfields frame math it stands on.
+"""Unit tests for the water frame and the field it shapes (`hamletgen/water/`), plus the waterfields frame math it stands on.
 
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
@@ -161,7 +161,7 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     aspect lands the target the best one is searched again without the probe."""
     from types import SimpleNamespace
 
-    from l7r.diagram.hamletgen import water as w
+    from l7r.diagram.hamletgen.water import fit as w  # the DEFINING submodule: `water` is a package since feature 230, and patching it reaches nothing the search bound
 
     carves: list[tuple[float, float]] = []
 
@@ -181,7 +181,9 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
     monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
     monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
-    plan = SimpleNamespace(W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0)
+    plan = SimpleNamespace(
+        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
+    )
     net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
     per_aspect = {}
     for a, _k in carves:
@@ -271,9 +273,186 @@ def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tole
         built.append(kw["rows"])
         return {"envelope": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], "rows": kw["rows"]}
 
-    monkeypatch.setattr(water, "build_polder", fake_build)
-    monkeypatch.setattr(water, "net_acres", lambda net, ftpx: plan.target_acres)
-    monkeypatch.setattr(water, "clean_polder_parcels", lambda net: net)  # the winner's parcel cleanup: the stub has no parcels to clean
+    monkeypatch.setattr(water.polder, "build_polder", fake_build)  # the DEFINING submodule (feature 230 made `water` a package)
+    monkeypatch.setattr(water.polder, "net_acres", lambda net, ftpx: plan.target_acres)
+    monkeypatch.setattr(water.polder, "clean_polder_parcels", lambda net: net)  # the winner's parcel cleanup: the stub has no parcels to clean
     net = water.fit_polder(plan, 12)
     assert built == [25], "one candidate, within tolerance: the bisection stops there"
     assert net["rows"] == 25
+
+
+# ---- the intake, and the brook that runs on past it (feature 230) --------------------------------
+
+
+def test_the_brook_skirts_the_fan_without_turning_back_into_it() -> None:
+    """`brook_skirt`. The course below the intake holds its offset at the outermost crop seen so far,
+    so two properties hold by construction rather than by search: the offset never decreases, and no
+    vertex lands inside the field. The square fixture is the crop; the intake sits above its head."""
+    plan = a_plan()
+    dx, dy = plan.fall
+    px, py = -dy, dx
+    course = hg.brook_skirt(plan, (700.0, 300.0), 1)
+    lat = [q[0] * px + q[1] * py for q in course]
+    floor = max(v[0] * px + v[1] * py for v in plan.envelope) + hg.BROOK_SKIRT
+    abreast = [v for q, v in zip(course, lat, strict=False) if min(w[1] for w in plan.envelope) <= q[1] <= max(w[1] for w in plan.envelope)]
+    assert all(v >= floor - 1e-6 for v in abreast), "every point abreast of the crop clears it by the skirt"
+    assert all(not hg.point_in_poly(q[0], q[1], plan.envelope) for q in course), "no vertex inside the crop"
+    assert course[-1][1] > plan.H, "and it leaves the frame downslope"
+    bearings = [round(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])), 3) for a, b in zip(course, course[1:], strict=False)]
+    assert len(set(bearings[1:])) > 3, "the course wanders - a held offset draws the ruled line the GM rejected"
+
+
+def test_the_brook_takes_the_flank_it_is_rolled_onto() -> None:
+    """The two values of `brook_side` put the course on the two sides of the fall axis - past the tap's own
+    stride, which runs straight down the fall on either roll so the head race's offtake angle is true."""
+    plan = a_plan()
+
+    # THE TAP'S STRIDE IS TWO POINTS NOW, not one (feature 230): the corner cut splits it, and both points are
+    # held on the fall so the offtake angle the record states is the one a reader measures. Drop the whole
+    # stride - every leading vertex still on the fall axis - rather than a fixed count, so the test says what it
+    # means: PAST the tap, the two rolls are on opposite flanks.
+    def _past_the_tap(course):
+        i = 0
+        while i < len(course) and abs(course[i][0] - 700.0) < 0.5:
+            i += 1
+        return course[i:]
+
+    one = _past_the_tap(hg.brook_skirt(plan, (700.0, 300.0), 1))
+    other = _past_the_tap(hg.brook_skirt(plan, (700.0, 300.0), -1))
+    assert max(q[0] for q in one) < 700.0 < min(q[0] for q in other), "the two rolls put the brook on the two sides of the fall axis"
+
+
+def test_the_head_race_leaves_the_brook_at_the_offtake_angle_away_from_it() -> None:
+    """The race turns off the fall by `OFFTAKE_DEG`, on the side the brook did NOT take - so the two
+    never run alongside one another, which is the overlap the GM caught on the first Ikegami draft."""
+    for side in (1, -1):
+        plan = a_plan()
+        plan.brook_side = side
+        assert plan.head_deg == pytest.approx(plan.down_deg - side * hg.OFFTAKE_DEG)
+    plan = a_plan()
+    plan.brook_side = 1
+    net = wf.carve_comb(plan.W, plan.H, (700.0, 300.0), 3, down_deg=plan.down_deg, head_deg=plan.head_deg, head_len=plan.head_lead).net
+    hr = next(c for c in net["channels"] if c["role"] == "main")["pts"]
+    assert math.hypot(hr[-1][0] - 700.0, hr[-1][1] - 300.0) == pytest.approx(plan.head_lead, abs=0.5)
+    assert math.degrees(math.atan2(hr[-1][1] - 300.0, hr[-1][0] - 700.0)) == pytest.approx(plan.head_deg, abs=0.5)
+    # ...and the angle the reader sees is the record's rule, because the brook is still on the fall where
+    # the race leaves it: `settlement-review` measured 64 and 46 degrees when the course bent at the tap
+    course = hg.brook_skirt(plan, (700.0, 300.0), plan.brook_side)
+    below = math.degrees(math.atan2(course[0][1] - 300.0, course[0][0] - 700.0))
+    assert abs(((plan.head_deg - below + 180.0) % 360.0) - 180.0) == pytest.approx(hg.OFFTAKE_DEG, abs=0.5)
+
+
+def test_the_default_head_race_is_the_shape_every_other_caller_draws() -> None:
+    """No bearing and no length given: 90 px straight down the fall, which is what a pond's outlet and
+    a city fan's moat tap have always drawn and what those callers still get."""
+    net = wf.carve_comb(2000.0, 2000.0, (700.0, 300.0), 3, down_deg=90.0).net
+    hr = next(c for c in net["channels"] if c["role"] == "main")["pts"]
+    assert hr[0] == (700.0, 300.0) and hr[-1] == pytest.approx((700.0, 390.0))
+
+
+def test_a_weir_hamlet_draws_an_oblique_bar_across_the_brook_and_an_open_one_draws_nothing() -> None:
+    """`draw_intake`. The bar is recorded and drawn only when the roll gave a weir; it lies across the
+    brook's heading, skewed upstream, at the true size the constants declare."""
+    for form, drawn in (("weir", 1), ("open", 0)):
+        plan = a_plan()
+        plan.intake = form
+        plan.brook = [(700.0, 100.0), (700.0, 300.0), (760.0, 460.0)]
+        s = Settlement(int(plan.W), int(plan.H))
+        hg.draw_intake(s, plan, (700.0, 300.0))
+        assert len(s.M.get("weirs", [])) == drawn
+        assert sum(1 for t in s.out_cls if t == "weir") == drawn
+    rec = s.M["weirs"][0] if False else None
+    plan = a_plan()
+    plan.intake = "weir"
+    plan.brook = [(700.0, 100.0), (700.0, 300.0), (700.0, 600.0)]
+    s = Settlement(int(plan.W), int(plan.H))
+    hg.draw_intake(s, plan, (700.0, 300.0))
+    rec = s.M["weirs"][0]
+    assert rec["len"] == pytest.approx(2 * hg.WEIR_HALF_FT) and rec["w"] == pytest.approx(hg.WEIR_THICK_FT)
+    # the brook runs due south; the bar lies across it, off square by WEIR_SKEW_DEG
+    assert min(rec["deg"] % 180.0, 180.0 - rec["deg"] % 180.0) == pytest.approx(hg.WEIR_SKEW_DEG, abs=0.5)
+    # settlement-review pass 10: THE MOUTH IS ABOVE THE WEIR, and the bar climbs upstream away from the intake bank
+    ring = rec["poly"]
+    rx = math.cos(math.radians(plan.head_deg))
+    on_bank = [q for q in ring if (q[0] - 700.0) * rx > 0.0]
+    assert on_bank and min(q[1] for q in on_bank) > 300.0, "on the intake bank the bar is below the mouth, so the race draws from the raised pool"
+    bank_end = max(ring, key=lambda q: q[0] * (1 if rx > 0 else -1))
+    far_end = min(ring, key=lambda q: q[0] * (1 if rx > 0 else -1))
+    assert bank_end[1] > far_end[1], "the bar's end on the intake bank is its downstream end"
+
+
+def test_the_weir_bar_is_placed_off_the_fall_when_the_intake_is_not_on_the_brook() -> None:
+    """The brook is normally the course the intake sits on, so the bar reads its local heading from it.
+    A caller that hands an intake the course does not contain falls back to the land's fall, which is
+    the brook's own direction anyway - the guard is against an index error, not against a wrong angle."""
+    plan = a_plan()
+    plan.intake = "weir"
+    plan.brook = [(100.0, 100.0), (100.0, 900.0)]
+    s = Settlement(int(plan.W), int(plan.H))
+    hg.draw_intake(s, plan, (700.0, 300.0))
+    assert len(s.M["weirs"]) == 1
+
+
+def test_the_exit_leg_turns_onto_the_fall_when_the_course_is_heading_across_it() -> None:
+    """`brook_skirt`'s exit: the reach that leaves the frame keeps the course's own heading and only then turns
+    onto the fall - but a course whose last stations run ACROSS the fall, or back up it, has no heading worth
+    keeping, and the leg takes the fall directly. Otherwise the brook would leave the sheet sideways."""
+    from l7r.diagram.hamletgen.water import brook as wb
+
+    plan = a_plan()
+    plan.envelope = [(400.0, 400.0), (1000.0, 400.0), (1000.0, 1000.0), (400.0, 1000.0)]
+    course = wb.brook_skirt(plan, (700.0, 300.0), 1)
+    assert len(course) > 4
+    # the fall is due south on this plan, so the course must end further down the map than it starts
+    assert course[-1][1] > course[0][1], "the brook leaves down the fall"
+
+
+def test_a_hem_plot_at_the_fans_head_yields_to_the_brook_rather_than_throwing_it_sideways() -> None:
+    """`brook_skirt`, settlement-review pass 9. A dry hem plot laid round the fork reaches up beside the intake,
+    and floored against it the brook's first corner below the weir came out at 72-78 degrees on every brook map.
+    Crop reaching within one skirt of the fan's head is left out of the profile - `_comb_draw_hem` drops any hem
+    plot the brook's band then crosses - while crop further down the fan is still skirted as before."""
+    plan = a_plan()
+    dx, dy = plan.fall
+    px, py = -dy, dx
+    head_u = min(v[0] * dx + v[1] * dy for v in plan.envelope)
+    tap = (700.0, 300.0)
+    u_tap, v_tap = tap[0] * dx + tap[1] * dy, tap[0] * px + tap[1] * py
+    # a hem plot beside the tap, well out on the brook's flank and starting above the fan's head
+    at = [(u_tap + 60.0, v_tap + 90.0), (u_tap + 110.0, v_tap + 90.0), (u_tap + 110.0, v_tap + 130.0), (u_tap + 60.0, v_tap + 130.0)]
+    hem = [(u * dx + v * px, u * dy + v * py) for u, v in at]
+    assert min(u for u, _ in at) < head_u + hg.BROOK_SKIRT, "the fixture reaches within a skirt of the fan's head"
+
+    def sharpest(course: list[tuple[float, float]]) -> float:
+        worst = 0.0
+        for a, b, c in zip(course, course[1:], course[2:], strict=False):
+            h1, h2 = math.atan2(b[1] - a[1], b[0] - a[0]), math.atan2(c[1] - b[1], c[0] - b[0])
+            worst = max(worst, abs((math.degrees(h2 - h1) + 180.0) % 360.0 - 180.0))
+        return worst
+
+    with_hem = hg.brook_skirt(plan, tap, 1, crop=[hem])
+    without = hg.brook_skirt(plan, tap, 1)
+    assert with_hem == without, "the hem plot at the head does not move the course at all"
+    # ...and the same plot moved well down the fan IS skirted, so the rule is about where it stands, not what it is
+    reach = max(w[0] * px + w[1] * py for w in plan.envelope)  # out past the envelope's own reach, or it is already cleared
+    low = [(u * dx + v * px, u * dy + v * py) for u, v in [(u + head_u - u_tap + 400.0, v - v_tap + reach + 60.0) for u, v in at]]
+    assert hg.brook_skirt(plan, tap, 1, crop=[low]) != without, "crop down the fan still shapes the course"
+    assert sharpest(with_hem) == sharpest(without)
+
+
+def test_a_leg_on_the_axis_is_tilted_just_off_it_not_kicked_into_a_sawtooth() -> None:
+    """`_off_the_axes`, settlement-review pass 10. A straight reach down a due-south fall had every other leg
+    kicked 11 px outward and drew a +/-29 degree sawtooth. The tilt is now just past the detector, so every leg
+    clears the axis and no vertex turns by more than a few degrees."""
+    from l7r.diagram.hamletgen.water.brook import _off_the_axes
+
+    straight = [(100.0, float(y)) for y in range(0, 1000, 44)]
+    out = _off_the_axes(straight, (-1.0, 0.0))
+    heads = [math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) for a, b in zip(out, out[1:], strict=False)]
+    assert all(min(h % 90.0, 90.0 - h % 90.0) >= 1.6 - 1e-9 or i % 2 for i, h in enumerate(heads)), "every flagged leg leaves the axis"
+    turns = [abs(((b - a) + 180.0) % 360.0 - 180.0) for a, b in zip(heads, heads[1:], strict=False)]
+    assert max(turns) < 8.0, f"no sawtooth: the sharpest turn is {max(turns):.1f} degrees"
+    assert all(q[0] <= 100.0 for q in out), "and the course only ever moves AWAY from the crop"
+    # a long leg is still capped at the old ceiling
+    far = _off_the_axes([(0.0, 0.0), (0.0, 5000.0)], (-1.0, 0.0))
+    assert far[1][0] == -11.0

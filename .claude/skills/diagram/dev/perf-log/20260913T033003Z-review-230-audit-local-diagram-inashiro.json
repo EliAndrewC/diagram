@@ -1,0 +1,38 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "272c4c481aafb9e5961ad2b2069fa3260d53eb1ffb05fbf4e300864a3bec6b22",
+  "criteria": {
+    "commensurate": "Yes at the total and at the feature; the one disproportionate sub-term is priced rather than waved past. TOTAL 27.9 -> 28.9 s, +3.6 percent on the current pair (+4.3 percent on 230-end at 4dba51ef, the pair the push reads) - about one second across four maps - bought with: field ditch split into irrigation and drainage with their own records and explanations, the drain's continuation carrying one class into every sink, a research-grounded stream-to-ditch intake whose form is a per-settlement knob (a new axis of the between-settlement variance the project exists to produce), the seat moved clear of the continuing brook with 48 of 48 cohort seeds still seating every household their spec declares, and the two lane defects above removed from every hamlet. None of that is cosmetic, which is the case the criterion exists to refuse. The sore term is seed 4, 6.1 -> 7.5 s (+23 percent; +27.9 percent on the recorded pair), and about two thirds of it - 0.85 to 0.9 s - is re-routing rather than the rule: roughly 3 percent of the 28.9 s cohort, on one seed, reproducible across six end-state runs (web 1.71 to 1.89 s against a 0.45 s baseline). For scale, the local line has come 97.3 s at 218-start to 27.9 s at 230-start over five features; this hands back one second of that.",
+    "necessary": "Yes for the work, and I state rather than blur that the COST is not intrinsic to it. The field growth is the feature's own substance: FR-004 and FR-006 run the brook on past the intake and down the fan's flank, so the first aspect falls out of legality-plus-tolerance and fit_field takes a second, carving seven fans instead of three - seed 39 field 1.57 -> 2.20 s, seed 4 field 1.94 -> 2.38 s - and feature 220 already fitted the field once, so there is no repeated fit left to remove. The web growth comes from _ends_worth_walking_to, added in settlement-review pass 7 (5303aee3) under Principle XIV against two MEASURED defects rather than a preference: a 100 ft tread on the reference hamlet whose far end stopped 60.1 ft from the house it served and 94 ft from any way, and two Sawada footpaths of 175 and 137 ft that left lanes_form_one_network counting the map as three networks. Both are the gate's own bars, and the narrower alternatives were tried and recorded as worse - refusing every path that did not reach its house stranded three Kashikawa farmsteads. What is NOT necessary is the SEARCHING the rule provokes: 10 rejections in 17 evaluations, each advancing the loop to a farther target and paying another Dijkstra whose lattice is pad = 0.75 times span and so grows with the square of it. That part buys nothing the same rule would not buy evaluated cheaply, and it is the part carried by criterion three.",
+    "no_way_around": "The cheaper ways that preserve the map were found and TAKEN; the one that remains is another feature's work, and it is now recorded with its measurements instead of being unconsidered - which is the difference from my not-justified verdict an hour ago. Both output-preserving levers were of dev/performance.md's classic shape and both landed at 335aecd0: crop_polys rebuilding every crop ring per CANDIDATE PATH (literally the per-candidate scan of geometry that does not change during the scan) is hoisted to once per pass, and _shed_necks rebuilds its STRtree after a trade mutates shapes - a correctness fix, the index having been stale for the rest of the round while the exact test read live shapes. Re-measured 29.1 -> 28.9 s, within noise, as I predicted when I named them. I re-read the field side and it is already indexed as clause 15 requires (one STRtree each for _visible_parts and _shed_necks, a mean-width prefilter ahead of the opening), and the stream_segs hypothesis was tested and refuted. The remaining lever - one multi-goal Dijkstra per straggler house over a box covering the whole target list, instead of 78 searches over boxes that grow with each farther target - is NOT of that shape: it changes which path the router finds on every hamlet, so it moves the pool and owes its own 48-seed cohort and its own review round, and this feature has had fourteen. It is written up with my A/B numbers, the mechanism, what the rule buys so nobody removes it, and both candidate shapes in future-work/farming-communities.md under 'The straggler router pays a fresh search per rejected target'. The half-measure named there - ordering the 4 ft joined clause first - saves the 0.010 s of predicate and not the re-route behind it, so it is not the answer either. Two conditions the GM should weigh at sign-off, since band 3 is theirs: this verdict rests on that entry surviving as the deferral's receipt, and the shape wants taking before the tier grows, because the cost scales with span and with straggler count and the town and city tiers have more of both."
+  },
+  "end": {
+    "commit": "4dba51ef",
+    "label": "230-end",
+    "utc": "20260913T030649Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260913T033003Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "seeds": {
+      "25": -15.9,
+      "39": 11.7,
+      "4": 27.9,
+      "47": 1.3
+    },
+    "total_pct": 4.3
+  },
+  "note": "",
+  "verdict": "justified"
+}

@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "272c4c481aafb9e5961ad2b2069fa3260d53eb1ffb05fbf4e300864a3bec6b22",
+  "end": {
+    "commit": "4dba51ef",
+    "label": "230-end",
+    "utc": "20260913T030649Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260913T031737Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -15.9,
+      "39": 11.7,
+      "4": 27.9,
+      "47": 1.3
+    },
+    "total_pct": 4.3
+  },
+  "note": "INCONSISTENT on both halves, by A/B at the bookend commit itself. seed 4 web: forcing _ends_worth_walking_to (serve.py, added by this feature) to always-True at 4dba51ef takes the stage from 4.70s and 4.79s to 2.56s and 2.66s profiled, against a 1.34s baseline at 7f4113a3. It rejects 10 of 17 routed candidates, and each rejection advances the target loop to a farther target and another Dijkstra, so route spans go from 6,687 ft over 36 calls to 18,442 ft over 78 and fouled calls from 80,265 to 426,249. The map is the minor term: stragglers 5 to 6, at comparable distances of 113-198 ft and 120-187 ft. The explanation infers absence of cause from absence from the top 25, but the check costs 0.010s in itself and about 2.1s in the routing it provokes. seed 39 field: _visible_parts plus _shed_necks are 0.176s of a +1.503s growth, and the growth is _fit_at_aspect going 1 call to 2 and carve_comb 3 to 7. Those two passes ARE the stated cause on seed 4 field, 0.404s of +0.740s, which is the one half of the explanation the data supports.",
+  "verdict": "inconsistent"
+}
