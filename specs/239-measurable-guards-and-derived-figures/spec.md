@@ -16,8 +16,8 @@ in each case:
 
 - **A guard's decision cannot be called.** 275 of `house-style-hooks.sh`'s 367 lines are a Python
   program inside a shell string (`m:house-style-program-lines`, `m:house-style-file-lines`), so
-  measuring it costs a process per command - 145 ms against 7.0 ms in process
-  (`m:decision-spawned-ms`, `m:decision-in-process-ms`), 81 s against 3.9 s over the frozen window
+  measuring it costs a process per command - 144 ms against 7.0 ms in process
+  (`m:decision-spawned-ms`, `m:decision-in-process-ms`), 80 s against 3.9 s over the frozen window
   (`m:window-spawned-s`, `m:window-in-process-s`; `research.md` R3).
 - **Nothing freezes the window.** Nine passes each rebuilt the same list of 560 commands
   (`m:frozen-window-commands`), and two ran against a prefilter this very hook had corrupted
@@ -62,7 +62,7 @@ saved, which inflated one window by an order of magnitude (`research.md` R4).
 
 **FR-005** `make hookbench GUARD=<name>` MUST replay that corpus through the guard's decision IN
 PROCESS and print the verdict counts. Over the frozen window this is 3.9 s where the spawning form is
-81 s (`m:window-in-process-s`, `m:window-spawned-s`; `research.md` R3).
+80 s (`m:window-in-process-s`, `m:window-spawned-s`; `research.md` R3).
 
 **FR-006** `make hookbench GUARD=<name> AGAINST=<git-ref>` MUST print the VERDICT DIFF against that
 ref - every command whose verdict changed, in both directions, with its targets. This is the check
@@ -78,8 +78,11 @@ silently falling back to spawning - a fallback would make the 21x cost invisible
 **FR-008** A feature's measured figures MUST live in `specs/NNN-*/measurements.json`, written by the
 harness rather than by hand. Each entry is named by a KEY - lower-case kebab, unique in the file -
 and carries the value, its unit, the command that produced it, the date it was taken, and optionally a
-note. A prose figure points at an entry by writing `m:<key>` in its own paragraph, the way a research
-pointer is written today.
+note - and optionally `quantity`, what was measured in words, including the sample it was taken over.
+A prose figure points at an entry by writing `m:<key>` in its own paragraph, the way a research
+pointer is written today. (`quantity` comes from feature 240, which found its own canopy failure was a
+right number for the wrong quantity; two of this feature's measurements failed the same way - a ratio
+taken over a biased sample, and an entry saying "over all 560 commands" that had sampled three.)
 
 **FR-009** `spec-lint` gains a fifth CHECK - a new check rather than an extension of check 1, because
 these checks are numbered and tested one at a time. A figure with a unit MUST carry an `m:<key>`
@@ -118,9 +121,11 @@ report any value that moved, in the manner of `make notes-census`.
 
 **FR-011a** A TIMING does not repeat exactly, so an entry MAY carry `varies` - and the band MUST be a
 number on the entry, not a judgment at check time: `varies: <fraction>`, defaulting to 0.10 when it is
-written as `true`. `make figures` and check 5 MUST accept a recorded value within that fraction of the
-re-measured one and report anything outside it. Without a band a clean tree could never be silent
-(`m:timing-run-to-run-drift-pct`); without a NUMBER, a session sets the band at check time and the
+written as `true`. `make figures` MUST accept a re-measured value within that fraction of the recorded
+one and report anything outside it. The band belongs to `make figures` ALONE: check 5 re-measures
+nothing, and a prose figure keeps FR-009a's rule - equal to the recorded value, or equal to it rounded
+to the decimals the prose shows - so a band can never let prose say one number for a recorded other. Without a band a clean tree could never be silent
+(`m:timing-run-to-run-drift-pct`, 3.4% quiet, inside the default); without a NUMBER, a session sets the band at check time and the
 check becomes unfalsifiable for every timing.
 
 **FR-011b** WHICH entries may carry it is decided by the UNIT, not by the author: an entry whose unit
@@ -130,15 +135,24 @@ MUST refuse one that does. A count repeats exactly or the thing counted changed:
 
 **FR-011c** A harness that records a TIMING MUST record the machine's one-minute load average on the
 entry, and MUST REFUSE to record while that load is above a stated quiet threshold unless explicitly
-overridden - in which case the load stands on the entry for a reader to judge. This container is
-shared: the same command on the same tree measured 145 ms and 303 ms an hour apart, the second while
-another session rolled a map at 152% CPU, and the first draft of this harness blamed that on its own
-code and wrote the wrong cause into a docstring. Feature 236 recorded exactly one such number as fact
-and it took a review round to retire it.
+overridden - in which case the load stands on the entry for a reader to judge. The threshold itself
+is a GUESS and is owed: the harness uses a one-minute load average of 2.0, chosen rather than measured,
+and this FR is its single home - feature 240 defers to it rather than keeping a second. The container is
+shared, and the evidence is a one-shot observation that no command can re-run: the spawned cost of
+the same guard on the same tree roughly doubled between two runs an hour apart while another session
+rolled a map (observed 2026-09-13; method, two runs of `measure/decision_cost.py`, the second
+contended). Feature 236 recorded exactly one such contaminated timing as fact, and it took a review
+round to retire it.
 
-**FR-011d** `make figures` REPORTS a moved timing; only a moved COUNT fails. No band survives
-contention - a contended re-run moves a timing by more than 2x - so a gate that failed on one would
-fail on correct work, which is how a guard teaches sessions to bypass it. The band of FR-011a is what
+**FR-011d** `make figures` REPORTS a moved timing; only a moved COUNT fails. No fixed band survives a
+contended re-run - FR-011c's observation roughly doubled a timing - so a gate that failed on one would
+fail on correct work, which is how a guard teaches sessions to bypass it.
+
+**FR-011e** A harness MUST record the SAMPLE it measured in the entry's `quantity`, and a harness's
+argument parsing MUST NOT let one option's value be read as another's. Both are the same failure
+observed in this feature's own record: `--repeat 3` was parsed as a sample size of three, the entry
+was written as if it covered the whole window, and three successive explanations of the resulting
+numbers - path growth, then contention - were wrong before a review found the sample in the note. The band of FR-011a is what
 separates "moved" from "the same figure again", not a pass/fail line for the push.
 
 ### D. A reviewer does not adjudicate a figure it cannot re-run (FR-012 to FR-014)
@@ -176,17 +190,18 @@ reproduces that change's verdict diff - the same commands, in the same direction
 **SC-006** (FR-008, FR-009, FR-009a, FR-009b, FR-009c) A figure with no key fails `spec-lint`; a
 figure in `research.md` and one in a Review history entry are both reached, and a Review history
 figure labeled as that round's own run passes; a figure inside a BACKTICK SPAN does not fail while the
-same figure outside one does, and no prose declaration exempts a section; `145` matches the recorded
+same figure outside one does, and no prose declaration exempts a section; `144` matches the recorded
 `m:decision-spawned-ms` and `7` matches a recorded 7.0; a key absent from
 `measurements.json` fails; a recorded value that does not appear in its paragraph fails; the correct
 form passes - and this spec's own figures pass, as feature 236's FR-010b required of its author.
 **SC-007** (FR-010) A one-shot observation with its date and method passes; the same sentence without
 the label fails.
-**SC-008** (FR-011, FR-011a, FR-011b, FR-011c, FR-011d) `make figures` is silent on a tree where every
+**SC-008** (FR-011, FR-011a, FR-011b, FR-011c, FR-011d, FR-011e) `make figures` is silent on a tree where every
 timing was re-measured within its band, REPORTS a timing outside it, and FAILS on a count that moved;
 `spec-lint` refuses a `varies` on an entry whose unit counts things; and a harness asked to record a
 timing while the load average is above its quiet threshold refuses, names the load, and records only
-when overridden - with the load on the entry.
+when overridden - with the load on the entry; every timing entry names its sample in `quantity`; and
+`--repeat 3` never sets the sample size.
 **SC-009** (FR-012, FR-013, FR-014) The agent file carries the NOT-REVIEWABLE contract and the license
 to measure independently; the tasks template's review task names the measurements file; a review
 dispatched against a spec whose figures carry no keys returns NOT-REVIEWABLE naming them.
@@ -222,6 +237,17 @@ feature 236's amendment found three stale figures and two stale sentences, and n
 operative sections. Widening it to every number would fire on ids and counts, which is the false
 positive `spec-lint` was designed around in the first place.
 
+**D7 - a review's CHANGES REQUIRED items are findings, and keying the contract on them is considered
+and deferred to feature 240's format.** Feature 240's review found that a rule keyed on figures IN A
+PROMPT is passed by leaving the numbers out. FR-012 has the same weakness in a weaker form: check 5 is
+keyed on figures in the document, where omitting a figure removes the claim itself, but a reviewer
+contract triggered by figures can still be dodged by writing fewer. The stronger trigger is the
+finding - every item a round required has a record verifying it was applied. It is not built here,
+because 240 is building a structured findings file for map reviews and a second format would split
+the mechanism; and it is not added on the last round of this spec's initial review, where it would
+land as an untested mechanism at the cap. When 240's format has been exercised, a spec round adopts
+it. (Provenance: feature 240, 2026-09-13.)
+
 **D6 - the corpus is committed whole: 2.7 MB of command text, 3.0 MB as the JSON on disk.** The window is 560 commands and the ten largest are
 38-79 KB heredocs. Capping a command at 10,000 characters would keep 88% of them for 1.04 MB, and it
 was rejected: the largest commands are exactly the ones that exercise the range walk, and a bench that
@@ -244,6 +270,21 @@ drift between rounds. Refreshing is a command a session runs on purpose, and the
 
 ## Review history
 
+**Round 4** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, four items, all taken, and FR-011c and
+FR-011d judged IN SCOPE - recording the load is part of "how they were generated", and the severity of
+a moved figure is FR-011 finally saying what it means. The round's main finding was the one this
+feature exists to end, standing in its own record: the drift runs had overwritten the headline entries,
+so the Summary, FR-005, FR-007, SC-006 and R3 all stated figures their own cited keys denied. Chasing
+that found the cause, and it was not the one I had written down: the harness read the `3` in
+`--repeat 3` as its sample size and timed the three longest heredocs, which the entries' own notes
+said. That is now FR-011e, and the harness records its sample in `quantity`. The run was repeated
+quietly and the figures reconciled to it (`m:decision-spawned-ms`, `m:timing-run-to-run-drift-pct`);
+its drift falls inside the default band, so FR-011a stands. Also taken: the band belongs to `make
+figures` alone, never to check 5, which keeps FR-009a's exact rule; FR-011c's evidence is labeled as
+the one-shot observation it is; and the load is recorded at both ends of a run, after a quiet start
+and a contended finish refused a clean measurement.
+
+
 **Round 2** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, six items, all taken, and every one of
 them this spec failing to keep the rule it is writing. The two that mattered: R1's figures were
 reproducible and unkeyed while `time_census.py` could not record at all, so under this spec's own
@@ -251,8 +292,8 @@ FR-010 they owed keys - the census takes `--record` now and R1 points at five; a
 extrapolated from a TYPED constant (`window = 558`) over a corpus under `/tmp` that no committed
 command built, so its recorded figures could not be reproduced on a clean tree at all. FR-004's frozen
 corpus was therefore built early, and the harness reads it and derives the window size from it. That
-re-measurement moved the headline: 145 ms against 7.0 ms and **21x**, where the earlier sample said
-231 / 6.2 and 37x - and the reason is worth keeping, so R3 now records it: the ratio depends on the
+re-measurement moved the headline - on round 2's own run - to 145 ms against 7.0 ms and **21x**, where
+the earlier sample said 231 / 6.2 and 37x - and the reason is worth keeping, so R3 now records it: the ratio depends on the
 command mix, and the first sample was biased toward the short commands the guard acts on. Also taken:
 D1 still quoted the retired 273; SC-006 claimed this spec's own figures pass when only one paragraph
 carried a pointer; check 5 as specified would have fired on `research.md` R2, which NAMES figures it is
@@ -283,10 +324,12 @@ HEADING, the way `spec-lint` already exempts Decisions recorded from check 1. Th
 the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB) and confirmed that
 building the corpus at spec stage is measurement data rather than implementation.
 
-**What round 3 set off, which is now FR-011c and FR-011d.** Answering its tolerance item meant
-measuring the run-to-run drift, and the measurement came back at 2x - which I first blamed on my own
-harness and wrote into a docstring as fact. It was another session rolling a map at 152% CPU; a quiet
-re-run settled it in one command and reproduced the original figures exactly. So a timing harness now
-records the load average on the entry and refuses to record above a quiet threshold, `make figures`
-reports a moved timing rather than failing on it, and only a moved COUNT fails. This is the second
-time in two days that this session has stated a timing the container produced rather than the code.
+**What round 3 set off, which is now FR-011c to FR-011e.** Answering its tolerance item meant
+measuring the run-to-run drift, and the runs came back roughly 2x off. I attributed that three times
+before the record showed the cause: first to the program growing `sys.path` (written into a docstring
+as fact), then to another session rolling a map (partly true - the spawned figure genuinely moved with
+the load), and it was mostly neither. The harness read the `3` in `--repeat 3` as its sample size and
+timed the three longest heredocs in the window; round 4 found "over 3 frozen commands" in the entry's
+own note. So the rules are three: a timing records the load and refuses above a quiet threshold
+(FR-011c), `make figures` reports a moved timing while only a moved count fails (FR-011d), and an
+entry records the sample it measured while no option's value can be read as another's (FR-011e).

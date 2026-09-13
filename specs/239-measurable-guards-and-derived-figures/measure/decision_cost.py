@@ -53,9 +53,9 @@ def in_process(cmds: list[str], program: str) -> float:
     each time it runs - free in a process that runs it once, and unbounded in a bench that runs it 560
     times (the path reached 331 entries). A module with a function, which FR-001 makes of it, carries
     no such per-process setup at all. What this restoration did NOT fix, because it was never the
-    cause: a seventeen-fold rise first blamed on it turned out to be another session rolling a map at
-    152% CPU, which a quiet re-run settled in one command. A bench on a shared container measures the
-    container too.
+    cause: a seventeen-fold rise in the in-process figure that was first blamed on it. That was the
+    argument parse in `main` sampling three commands instead of the whole window - see the comment
+    there - while the container's load, which was also real, moved only the spawned figure.
     """
     code = compile(program, "<house-style>", "exec")
     os.environ["HS_HERE"] = str(ROOT / "scripts")
@@ -92,7 +92,7 @@ def bare(argv: list[str]) -> float:
 QUIET = 2.0   # the 1-minute load average above which a timing on this container is not its own
 
 
-def record(entries: dict[str, dict]) -> None:
+def record(entries: dict[str, dict], load_start: float | None = None) -> None:
     """Write the figures, refusing a TIMING measured while the container was busy.
 
     A shared container measures itself: the same command gave 145 ms and 303 ms per spawn on the same
@@ -106,7 +106,12 @@ def record(entries: dict[str, dict]) -> None:
         raise SystemExit(f"decision_cost: load average {load:.1f} is above {QUIET} - a timing measured "
                          f"now is the container's, not the guard's. Wait, or pass --anyway to record it "
                          f"with the load on the entry.")
-    entries = {k: ({**e, "load": round(load, 2)} if e.get("varies") else e) for k, e in entries.items()}
+    # THE LOAD IS A SPAN, NOT A POINT: a five-minute run began at 1.9 and ended at 2.1, so a single
+    # reading at record time either passed a contended run or refused a quiet one. Both ends go on the
+    # entry, and the refusal above keeps judging the end, the stricter of the two for a run that ran long.
+    entries = {k: ({**e, "load": round(load, 2),
+                    **({"load_start": round(load_start, 2)} if load_start is not None else {})}
+                   if e.get("varies") else e) for k, e in entries.items()}
     now = datetime.date.today().isoformat()
     have = json.loads(MEASUREMENTS.read_text()) if MEASUREMENTS.is_file() else {}
     for key, entry in entries.items():
@@ -124,9 +129,16 @@ def main(argv: list[str]) -> int:
     # longest it is 4x (a long heredoc costs the decision real work and the spawn a constant), and over
     # a sample of the ones the guard ACTS on it was 37x. A bench replays everything, so that is what is
     # measured and recorded; `N` takes the longest N for a quick run and says so.
-    n = next((int(a) for a in argv if a.isdigit()), len(window))
+    # N is a POSITIONAL digit that is not the value of `--repeat`. The first version took the first digit
+    # anywhere in argv, so `--repeat 3` sampled THREE commands - the three longest heredocs in the window -
+    # and recorded a 2x ratio and 121 ms in process that were a property of that sample, not of the
+    # guard. That misreading, not container load and not path growth, was most of the 2x a review round
+    # found in measurements.json; the load was real, and explains the spawned figure moving, but not this.
+    skip = {argv.index("--repeat") + 1} if "--repeat" in argv else set()
+    n = next((int(a) for i, a in enumerate(argv) if a.isdigit() and i not in skip), len(window))
     cmds = sorted(window, key=len, reverse=True)[:n]
     program = inline_program(HOOK.read_text())
+    load_start = os.getloadavg()[0]
     repeat = int(argv[argv.index("--repeat") + 1]) if "--repeat" in argv else 1
     runs = [(spawned(cmds), in_process(cmds, program)) for _ in range(repeat)]
     spawn_each, call_each = runs[-1]
@@ -143,22 +155,29 @@ def main(argv: list[str]) -> int:
     if spread is not None:
         print(f"  over {repeat} runs on an unchanged tree the timings spread by {spread:.1f}%")
     if "--record" in argv:
+        # FR-011e: the SAMPLE goes on every timing entry, so an entry can never again say it covered the
+        # window while it measured three commands.
+        sample = (f"{len(cmds)} of the {len(window)} commands in {CORPUS.name}"
+                  + ("" if len(cmds) == len(window) else " (the longest)") + f", {repeat} run(s), the last recorded")
         record({
             **({"timing-run-to-run-drift-pct": {"value": round(spread, 1), "unit": "%", "varies": True,
-                                               "note": f"the widest spread of {repeat} runs, unchanged tree"}}
+                                               "quantity": f"widest spread across {repeat} runs as a percentage of the smallest; {sample}"}}
                if spread is not None else {}),
             "decision-spawned-ms": {"value": round(spawn_each * 1000), "unit": "ms", "varies": True,
-                                    "note": f"the shipped hook, over {len(cmds)} frozen commands"},
+                                    "quantity": f"wall time per command of the shipped hook, spawned; {sample}"},
             "decision-in-process-ms": {"value": round(call_each * 1000, 1), "unit": "ms", "varies": True,
-                                       "note": "the same program compiled once and executed per command"},
-            "decision-spawn-ratio": {"value": round(spawn_each / call_each), "unit": "x", "varies": True},
+                                       "quantity": f"wall time per command of the same program compiled once, in process; {sample}"},
+            "decision-spawn-ratio": {"value": round(spawn_each / call_each), "unit": "x", "varies": True,
+                                     "quantity": f"spawned over in-process wall time; {sample}"},
             "frozen-window-commands": {"value": len(window), "unit": "commands",
                                       "note": f"in {CORPUS.name}, built by measure/freeze_window.py"},
             "window-spawned-s": {"value": round(spawn_each * len(window)), "unit": "s", "varies": True,
-                                "note": f"the whole {len(window)}-command window"},
-            "window-in-process-s": {"value": round(call_each * len(window), 1), "unit": "s", "varies": True},
-            "bare-python-spawn-ms": {"value": round(py * 1000), "unit": "ms", "varies": True},
-        })
+                                "quantity": f"spawned per-command time times the window size; {sample}"},
+            "window-in-process-s": {"value": round(call_each * len(window), 1), "unit": "s", "varies": True,
+                                    "quantity": f"in-process per-command time times the window size; {sample}"},
+            "bare-python-spawn-ms": {"value": round(py * 1000), "unit": "ms", "varies": True,
+                                     "quantity": "wall time of `python3 -c pass`, mean of 20 spawns"},
+        }, load_start)
     return 0
 
 

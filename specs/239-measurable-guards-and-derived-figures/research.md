@@ -73,14 +73,18 @@ permanent, and which is why the figure can be taken before the extraction exists
 
 | over all 560 frozen commands | per command | key |
 |---|---|---|
-| the hook as it runs today | **145 ms** | `m:decision-spawned-ms` |
+| the hook as it runs today | **144 ms** | `m:decision-spawned-ms` |
 | the same program, compiled once, called in process | **7.0 ms** | `m:decision-in-process-ms` |
-| a bare `python3 -c pass` | 18 ms | `m:bare-python-spawn-ms` |
+| a bare `python3 -c pass` | 19 ms | `m:bare-python-spawn-ms` |
 
-That is **21x** (`m:decision-spawn-ratio`), and over the whole window **81 s against 3.9 s**
+That is **21x** (`m:decision-spawn-ratio`), and over the whole window **80 s against 3.9 s**
 (`m:window-spawned-s`, `m:window-in-process-s`, `m:frozen-window-commands`). The cost is not process
-startup - a bare spawn is 18 ms - it is the hook rebuilding its whole world per command. Nine passes
+startup - a bare spawn is 19 ms (`m:bare-python-spawn-ms`) - it is the hook rebuilding its whole world per command. Nine passes
 were needed while the questions were being settled, which is where the replay time went.
+
+Every timing entry carries the load average at both ends of its run and the sample it measured, and
+across three repeats on an unchanged tree the figures spread by 3.4% (`m:timing-run-to-run-drift-pct`) -
+inside the 0.10 default band FR-011a sets.
 
 **The ratio depends on the command MIX, and the first measurement of it was taken on a biased
 sample.** Over the 60 LONGEST commands in the window the ratio is only 4x: a 79 KB heredoc gives the

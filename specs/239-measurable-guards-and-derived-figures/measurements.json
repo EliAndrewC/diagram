@@ -47,32 +47,42 @@
  },
  "bare-python-spawn-ms": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "wall time of `python3 -c pass`, mean of 20 spawns",
   "taken": "2026-09-13",
   "unit": "ms",
-  "value": 20,
+  "value": 19,
   "varies": true
  },
  "decision-in-process-ms": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
-  "note": "the same program compiled once and executed per command",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "wall time per command of the same program compiled once, in process; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
   "taken": "2026-09-13",
   "unit": "ms",
-  "value": 120.7,
+  "value": 7.0,
   "varies": true
  },
  "decision-spawn-ratio": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "spawned over in-process wall time; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
   "taken": "2026-09-13",
   "unit": "x",
-  "value": 3,
+  "value": 21,
   "varies": true
  },
  "decision-spawned-ms": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
-  "note": "the shipped hook, over 3 frozen commands",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "wall time per command of the shipped hook, spawned; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
   "taken": "2026-09-13",
   "unit": "ms",
-  "value": 337,
+  "value": 144,
   "varies": true
  },
  "frozen-window-commands": {
@@ -117,25 +127,32 @@
  },
  "timing-run-to-run-drift-pct": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
-  "note": "the widest spread of 3 runs, unchanged tree",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "widest spread across 3 runs as a percentage of the smallest; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
   "taken": "2026-09-13",
   "unit": "%",
-  "value": 10.9,
+  "value": 3.4,
   "varies": true
  },
  "window-in-process-s": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "in-process per-command time times the window size; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
   "taken": "2026-09-13",
   "unit": "s",
-  "value": 67.6,
+  "value": 3.9,
   "varies": true
  },
  "window-spawned-s": {
   "command": "python3 specs/239-measurable-guards-and-derived-figures/measure/decision_cost.py --record",
-  "note": "the whole 560-command window",
+  "load": 2.52,
+  "load_start": 1.47,
+  "quantity": "spawned per-command time times the window size; 560 of the 560 commands in command-window-2026-09-13.json, 3 run(s), the last recorded",
   "taken": "2026-09-13",
   "unit": "s",
-  "value": 189,
+  "value": 80,
   "varies": true
  }
 }
