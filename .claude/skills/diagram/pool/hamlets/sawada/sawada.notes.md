@@ -847,3 +847,14 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   (cohort seed 39). That is why it is recorded here rather than done inside this feature, and the
   implementation sketch is the reviewer's: let the straggler prefer an end within `STEADING_ARRIVAL_FT` of
   its own steading's built ground when one is reachable, falling back to today's behavior when it is not.
+
+### The 58 ft stub, confirmed by the independent review (2026-09-13)
+
+The `settlement-review` of the feature-227 re-pack was asked directly whether lane 9's head at
+(1866.0, 2361.8) reads as a defect on the sheet, and it does: the spur leaves the lane, runs 58 ft and
+stops in bare parchment with 27.7 ft of empty ground to house 9's wall - no fence, no fixture, no crown in
+the gap, and it is the emptiness that makes it read as truncated rather than arrived. What makes it the
+outlier is its own sheet: **six of Sawada's seven other internal lane ends stop 5.0 to 16.3 ft from a fence
+or a wall and read correctly**, and Inashiro's byre arm (7.6 ft off the byre's north face) reads
+unmistakably as a track worn to the byre door. So the acceptance recorded above stands, and what is added
+here is the measured cost of it: one end in eight, visible at the zoom a reader uses on a cluster.
