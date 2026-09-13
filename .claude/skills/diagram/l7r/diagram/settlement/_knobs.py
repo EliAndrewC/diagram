@@ -297,6 +297,23 @@ register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # deg
 # `byres_stand_in_their_declared_form` gates the declaration and the courtyard form's geometry.
 register_knob(Knob("byre_form", ["detached_commons", "courtyard"], default="detached_commons"))
 
+# THE CARAVAN INN HAS TWO ATTESTED FORMS, OPPOSITE ON THE ONE QUESTION A MAP CAN SHOW - so it is a knob
+# rather than a ruling (Principle XII again; feature 244). `wagon` is the north-Chinese wagon inn, the
+# dachedian: a cart yard behind, a long stable with one feeding trough, a grooms' lean-to, and the
+# buildings in its yard uniformly SINGLE-STORY (research/towns.html fn-25). `hatago` is the Japanese
+# post-station inn: the preserved Okabe-juku hatago of c. 1836 is TWO stories, its upper floor the
+# guest rooms (fn-26). The GM ruled twice, a day apart, and the second ruling is the reason this row
+# exists: 2026-09-12, on one source, "if the record draws it as two story, then that is simply a
+# mistake. If our attested analog reads it as a single story"; 2026-09-13, told of the second analogue,
+# "I said the two-story form was simply a mistake because of the 1 source; I agree that if there are
+# opposing sources then it's a toggle." No bias between them: the record says nothing about how common
+# either was - "commonly two-story" is NOT attested for hatago, and one post town shows a mixed
+# streetscape (specs/238 research R2a) - so the roll is even until a source says otherwise. `wagon` is
+# the default because it is the no-pin, no-roll fallback and the analogue the frozen legacy towns were
+# drawn against; with the roll in place it decides no map's form on its own. `inn()` in
+# civic_grounds/lodging.py resolves it and declares it to meta, as `draft_byres` does with its form.
+register_knob(Knob("caravan_inn_form", ["wagon", "hatago"], default="wagon"))
+
 
 LANE_SKELETONS = ("spine", "T", "Y", "cross", "waterside")
 

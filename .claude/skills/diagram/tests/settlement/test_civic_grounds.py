@@ -680,3 +680,38 @@ def test_the_yard_keeps_only_the_footprints_that_could_REACH_it() -> None:
     ctx = _YardCtx(s, 500.0, 500.0, 72.0)
     assert len(ctx.keep) == 2, f"the far building is culled and the two near it are kept: {ctx.keep}"
     assert all(box[0] < 700.0 for box in ctx.keep), "and nothing from the far side of the sheet is in the list"
+
+
+# ---- The caravan inn's FORM is a knob (feature 244) ---------------------------------------------------
+
+
+def test_the_caravan_inn_form_is_pinned_by_the_caller_or_rolled_from_the_seed() -> None:
+    """Two attested analogues disagree on the one thing a map can show - the north-Chinese wagon inn is
+    single-story, the Japanese post-station inn two-story - so the form is a knob (the GM, 2026-09-13:
+    opposing sources make it a toggle). A caller may pin it; a caller that pins nothing gets the map's
+    roll; and the form is declared to meta and to the record so a check can hold the drawing to it."""
+    rows = {}
+    for form in ("wagon", "hatago"):
+        s = _town()
+        s.inn(500.0, 500.0, form=form)
+        assert s.M["buildings"][-1]["form"] == form
+        assert s.M["meta"]["caravan_inn_form"] == form, "the declaration a check reads"
+        rows[form] = "".join(s.out).count('fill="#9A7E4E"')  # one lattice window per rect of that fill
+    assert rows == {"wagon": 3, "hatago": 6}, f"one row of windows on the wagon inn, two on the hatago; got {rows}"
+    with pytest.raises(ValueError):
+        _town().inn(500.0, 500.0, form="ryokan")
+    # No pin: the roll, from the map's own seed, and both values occur across a handful of seeds -
+    # a knob one value of which never rolls is a ruling wearing a knob's name.
+    rolled = set()
+    for seed in range(1, 13):
+        s = Settlement(1000, 1000, seed=seed)
+        s.meta(name="T", scale="town")
+        s.inn(500.0, 500.0)
+        rolled.add(s.M["meta"]["caravan_inn_form"])
+        assert s.M["buildings"][-1]["form"] == s.M["meta"]["caravan_inn_form"]
+    assert rolled == {"wagon", "hatago"}, f"twelve seeds rolled only {rolled}"
+    # A map-level pin is honored by a caller that passes nothing, as for every other knob.
+    s = _town()
+    s.pin_knob("caravan_inn_form", "hatago")
+    s.inn(500.0, 500.0)
+    assert s.M["buildings"][-1]["form"] == "hatago"

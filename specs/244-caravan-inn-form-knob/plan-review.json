@@ -1,0 +1,57 @@
+{
+ "feature": "244-caravan-inn-form-knob",
+ "plan_sha256": "99399d63ea30235224503fd83cf74348facd43a9f51dc43e798164c8df3e9f85",
+ "reviewed": "2026-09-13",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "P-A",
+   "summary": "The hatago second story is drawn as the pre-2026-09-12 upper-story shape: an eave band plus an upper row of lattice windows.",
+   "class": "within",
+   "why": "Spec FR-002 asks only that hatago 'carries a second story that reads as one at map scale' and leaves the glyph's shape open; the eave-band-plus-upper-row form satisfies that and reduces nothing the request or spec asks for. The GM's 2026-09-12 ruling removed the upper story because the ONE analogue was single-story, and the 2026-09-13 ruling makes the two-story reading a knob VALUE, so restoring that drawing under the hatago value is the ruling applied, not an exception to it. Noted for accuracy only, not as a finding: the shape before 2026-09-12 was one window row raised under a second eave band, where the plan draws two rows; both read as a second story, so the spec's bar is met either way."
+  },
+  {
+   "id": "P-B",
+   "summary": "The knob's row in tests/settlement/test_knobs.py is conditional - added only if that file enumerates registered knobs, else phase 1's tests in test_civic_grounds.py are the whole of it.",
+   "class": "within",
+   "why": "Neither request.md nor spec.md names test_knobs.py or asks for a row in it; FR-007's required assertions (each form rendered on a pinned settlement, meta, the building record, the refusal, two unpinned seeds resolving differently) are all placed in phase 1 unconditionally. Checked in the tree: test_knobs.py enumerates a hardcoded Family-A list (test_family_a_knobs_are_registered_with_expected_value_spaces, KNOBS[name] by name), not the registry, so the condition resolves to no row and nothing the spec asks for is dropped. Coverage of the new lines is owed by the constitutional floor either way."
+  },
+  {
+   "id": "P-C",
+   "summary": "Phase 1 validates a passed form against the knob's value space rather than accepting any string.",
+   "class": "within",
+   "why": "Spec FR-002 states it in terms: 'a caller that passes a form pins it (any value outside the knob's is refused)', and SC-002 asserts 'with any other value raises'. This is the spec performed, not a decision the spec left open, and it narrows no caller the record names - none of the seven (or the test file) passes a form today."
+  },
+  {
+   "id": "P-D",
+   "summary": "The new tests live in tests/settlement/test_civic_grounds.py; the research pass of record is 238 R2/R2a plus 244 R1.",
+   "class": "within",
+   "why": "File placement is implementation, and the named research pass is the physical task's own first box pointing at the passes the spec cites (FR-001, FR-004). Nothing in the request or spec places these elsewhere."
+  },
+  {
+   "id": "P-E",
+   "summary": "The umayado passage is footnoted fn-30 from a new registry key `kotobank-umayado` (Seisenban Nihon Kokugo Daijiten s.v. 馬宿, at kotobank), with both write-ups, and `make citations` is re-run.",
+   "class": "within",
+   "why": "Spec FR-004 requires exactly that footnote from that kotobank entry at the strength research.md R1 bears, and FR-006 requires the one new registry key to be judged; the key's name and footnote number are naming, and `make citations` is the derived file the record-format rule requires."
+  },
+  {
+   "id": "P-F",
+   "summary": "Phase 3 runs source-applicability on the new key BEFORE its passage is relied on, then quote-check and record-format on the changed section, then _entry_owed.py.",
+   "class": "within",
+   "why": "FR-006 and SC-006 require these verdicts and require the new key judged before it is cited; SC-008 requires _entry_owed to name no unanswered pair. The ordering is the constitution's own (feature 211) and adds nothing."
+  },
+  {
+   "id": "P-G",
+   "summary": "Phase 4 states that this delta also carries feature 242's accepted amendment, which could not land alone.",
+   "class": "within",
+   "why": "This is a statement about what the clone already holds (242's spec amendment is committed in this clone) plus the push mechanics of landing it, not a decision about what 244 builds: it neither narrows the request's toggle nor changes any requirement of spec.md. Flagged to the caller as an operational hazard rather than a fidelity finding - specs/242's tasks.md currently has 22 open tasks and 0 ticked, and the push guard refuses a delta that touches an in-progress feature's spec unless the push is that feature's specs/ directory alone, which this delta (two engine files) is not."
+  },
+  {
+   "id": "P-H",
+   "summary": "Constitution check: no manifest moves because no live pool map draws an inn, and the frozen legacy renders are never regenerated.",
+   "class": "within",
+   "why": "Restates spec.md's own caller census and FR-007, both accepted FAITHFUL at round 2; it decides nothing further and asserts no exception."
+  }
+ ],
+ "verdict": "CLEAR"
+}

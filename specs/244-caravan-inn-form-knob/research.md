@@ -29,3 +29,29 @@ a later pass on this section should read.
 
 <!-- The reader's full report: two kotobank fetch prompts agreed character for character on sense ③ and
      the example; Weblio has the Daijisen senses and the Fukushima entry but not the Ōgai citation. -->
+
+## R2 - the roll has a home, and the plan's push has a tangle (2026-09-13)
+
+**The roll.** The first spec deferred it to a future town generator on the claim that a glyph has no
+seed. The spec review found the precedent three files away: `byre_form`, a two-value form knob
+registered with a default and resolved INSIDE its drawing method by `Settlement.resolve()` - pinned,
+else rolled from the map's seed, else the default - and declared to the manifest's `meta` so the gate
+can hold the drawing to it. `caravan_inn_form` takes that shape. Over seeds 1 to 12 the unpinned roll
+produces both values, which the test asserts, because a knob one value of which never rolls is a
+ruling wearing a knob's name.
+
+**The drawing.** `wagon` is the glyph as it stood after 2026-09-12. `hatago` draws an upper row of the
+lattice windows under the roof, the eave between the floors, and the ground-floor row above the noren.
+The plan review noted, accurately, that the pre-2026-09-12 shape was ONE raised row under a band that
+merely read as a second story; two rows and a band read as one without the reader having to infer it,
+which is what the spec asked for.
+
+**The push tangle.** This clone's delta carries 242's accepted amendment (its D1 ruling) beside 244's
+engine work, and 242 has twenty-two open tasks. The push refuses any delta that touches an in-progress
+feature's `specs/` unless it is that directory ALONE, so the combined delta cannot land in either order.
+The way through that rewrites no history: before 244's push, restore `specs/242` to main's state in a
+forward commit (the amendment stays in this clone's history); land 244; then re-apply the amendment
+from that commit and push it as 242's `specs/` alone. Three pushes' worth of mechanics for one
+sentence of the GM's - recorded so the next session that amends a spec while another feature is
+mid-flight in the same clone knows to commit the two on different days, or to push the amendment
+before opening the engine work.

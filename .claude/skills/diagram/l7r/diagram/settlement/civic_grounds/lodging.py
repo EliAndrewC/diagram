@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any
 from .._geom import (
     seg_dist,
 )
-from .._knobs import CITY_TIER_SCALES
+from .._knobs import CITY_TIER_SCALES, KNOBS
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -88,19 +88,32 @@ class LodgingMixin:
         if label:
             self.label(x, y0 + h + 19 if label_below else y0 - 10, label, 11, italic=True, color="#5A4A30")
 
-    def inn(self: Settlement, x: float, y: float, w: Any = None, h: Any = None, rot: float = 0) -> None:  # type: ignore[misc]
+    def inn(self: Settlement, x: float, y: float, w: Any = None, h: Any = None, rot: float = 0, form: str | None = None) -> None:  # type: ignore[misc]
         """A prominent caravan INN - larger and grander than a flophouse, lodging the merchants, drivers
         and guards of the wagon-trains. Recorded in M['buildings'] (kind 'inn', non-residential). It
         FRONTS the road, so `rot` tilts it to lie PARALLEL to a diagonal road with its noren entrance
         (the +y front) FACING the roadbed. Blocks placement - place BEFORE any nearby pack.
-        SINGLE-STORY, on the one attested analogue: the north-Chinese wagon inn, whose yard buildings
-        are described as uniformly single-story. The glyph carried an upper story until 2026-09-12 and
-        the record never bore it out. A two-story highway inn IS attested in Japan (the Okabe-juku
-        hatago), but a hatago has no cart yard and no long stable and is a different building; whether
-        it is the better analogue for this glyph is open, and the docstring's own former name for the
-        footprint - a post-road inn - is where that confusion came from.
+
+        ITS FORM IS A KNOB, `caravan_inn_form`, with two values drawn from two attested analogues that
+        disagree on the one thing a map can show (feature 244). `wagon` is the north-Chinese wagon inn,
+        whose yard buildings are described as uniformly SINGLE-STORY (research/towns.html fn-25).
+        `hatago` is the Japanese post-station inn - the preserved Okabe-juku hatago of c. 1836 is TWO
+        stories, its upper floor the guest rooms (fn-26). The GM ruled on 2026-09-12 that a second
+        story contradicted by the one attested analogue was a mistake, and on 2026-09-13, told of the
+        second analogue, that opposing sources make it a toggle. A caller that passes `form` pins it;
+        one that passes none gets the map's pin, else the roll from its seed, else the default `wagon` -
+        the default because it is the analogue the frozen legacy towns were drawn against, not because
+        it is preferred. Nothing read describes a cart yard or a feeding trough at a hatago, so a
+        hatago-form inn beside a town's cart yard is that much guess, and the research page says so.
+        The form is declared to meta and to the record, so a check can hold the drawing to it.
+
         Real size ~66x48 ft, converted at the map's ftpx - as a fixed-px glyph it read 2.5x too big on
-        a city map. The analogue counts nothing, so the footprint is ours and unattested."""
+        a city map. Neither analogue counts anything, so the footprint is ours and unattested."""
+        if form is None:
+            form = self.resolve("caravan_inn_form")
+        elif form not in KNOBS["caravan_inn_form"].value_space:
+            raise ValueError(f"caravan inn form {form!r} is not one of {KNOBS['caravan_inn_form'].value_space}")
+        self.M["meta"]["caravan_inn_form"] = form
         if w is None:
             w, h = self.px(66), self.px(48)
         hw, hh = w / 2, h / 2
@@ -110,19 +123,31 @@ class LodgingMixin:
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{h:.1f}" rx="2" fill="#D9B98C" stroke="#5A3F1E" stroke-width="{max(2.2 * sf, 1.0):.1f}"/>',
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{11 * sf:.1f}" fill="#7A5A30"/>',  # roof ridge
         ]
-        # Lattice windows in the one wall the glyph has. They sat under a second eave band at
-        # -hh + 14*sf and read as an upper story; the band is gone and they sit at mid-wall now.
-        for i in range(3):
-            wx = -hw + w * (0.2 + 0.3 * i)
-            g.append(f'<rect x="{wx:.1f}" y="{-1.5 * sf:.1f}" width="{10 * sf:.1f}" height="{7 * sf:.1f}" fill="#9A7E4E" stroke="#5A3F1E" stroke-width="0.6"/>')
-            g.append(f'<line x1="{wx + 5 * sf:.1f}" y1="{-1.5 * sf:.1f}" x2="{wx + 5 * sf:.1f}" y2="{5.5 * sf:.1f}" stroke="#D6C49A" stroke-width="0.6"/>')
+
+        def windows(top: float) -> None:
+            """One row of three lattice windows, their top edge at `top` from the glyph's center."""
+            for i in range(3):
+                wx = -hw + w * (0.2 + 0.3 * i)
+                g.append(f'<rect x="{wx:.1f}" y="{top:.1f}" width="{10 * sf:.1f}" height="{7 * sf:.1f}" fill="#9A7E4E" stroke="#5A3F1E" stroke-width="0.6"/>')
+                g.append(f'<line x1="{wx + 5 * sf:.1f}" y1="{top:.1f}" x2="{wx + 5 * sf:.1f}" y2="{top + 7 * sf:.1f}" stroke="#D6C49A" stroke-width="0.6"/>')
+
+        if form == "hatago":
+            # Two stories: an upper row of windows under the roof, the eave band between the floors
+            # (the second-story reading the glyph carried before 2026-09-12, now the correct drawing of
+            # its own analogue), and the ground-floor row above the noren.
+            windows(-hh + 13 * sf)
+            g.append(f'<rect x="{-hw:.1f}" y="{-hh + 21 * sf:.1f}" width="{w:.1f}" height="{3 * sf:.1f}" fill="#7A5A30"/>')  # inter-story eave
+            windows(-hh + 28 * sf)
+        else:
+            # One story: the windows sit at mid-wall, the one wall the glyph has.
+            windows(-1.5 * sf)
         nx, nw = -w * 0.19, w * 0.38  # NOREN entrance curtain on the +y front
         g.append(f'<rect x="{nx:.1f}" y="{hh:.1f}" width="{nw:.1f}" height="{9 * sf:.1f}" rx="1" fill="#2E4A6B" stroke="#1E3450" stroke-width="0.6"/>')
         for k in (1, 2):
             g.append(f'<line x1="{nx + nw * k / 3:.1f}" y1="{hh:.1f}" x2="{nx + nw * k / 3:.1f}" y2="{hh + 9 * sf:.1f}" stroke="#C9D4E0" stroke-width="0.7"/>')
         g.append('</g>')
         self.add(''.join(g))
-        self.M["buildings"].append({"x": x, "y": y, "w": w, "h": h, "kind": "inn", "rot": rot})
+        self.M["buildings"].append({"x": x, "y": y, "w": w, "h": h, "kind": "inn", "rot": rot, "form": form})
         self.placed.append((x, y, w, h))
         bm = 24
         self.block_polys.append([(x - hw - bm, y - hh - bm), (x + hw + bm, y - hh - bm), (x + hw + bm, y + hh + bm), (x - hw - bm, y + hh + bm)])
