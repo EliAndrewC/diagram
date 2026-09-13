@@ -5,7 +5,7 @@
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
   "taken": "2026-09-13",
   "quantity": "count of feature 230's own `make done` runs that did not short-circuit, claim to landing",
-  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits and the merges into its clone (git log)"
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
  "m:230-gate-total-s": {
   "value": 1663,
@@ -13,7 +13,7 @@
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
   "taken": "2026-09-13",
   "quantity": "sum of wall seconds over those runs",
-  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits and the merges into its clone (git log)"
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
  "m:230-green-gate-min-s": {
   "value": 56.0,
@@ -21,7 +21,7 @@
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
   "taken": "2026-09-13",
   "quantity": "fastest of feature 230's green gates (the cost FR-004 adds before a review of fixes)",
-  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits and the merges into its clone (git log)"
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
  "m:230-green-gate-max-s": {
   "value": 67.0,
@@ -29,7 +29,7 @@
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
   "taken": "2026-09-13",
   "quantity": "slowest of feature 230's green gates",
-  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits and the merges into its clone (git log)"
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  },
  "m:230-gate-max-s": {
   "value": 381.0,
@@ -37,6 +37,6 @@
   "command": "python3 specs/240-verified-before-reviewed/measure/gate_durations.py",
   "taken": "2026-09-13",
   "quantity": "longest of feature 230's gates that ran, of any result",
-  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits and the merges into its clone (git log)"
+  "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
  }
 }

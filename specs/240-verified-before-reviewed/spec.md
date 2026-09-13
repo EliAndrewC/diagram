@@ -1,6 +1,7 @@
 # Feature 240 - a review round is not spent on an unverified fix
 
-**Status**: DRAFT, spec-fidelity round 1 CHANGES REQUIRED (all eight applied, see Review history); round 3 CHANGES REQUIRED (both applied); round 4 pending
+**Status**: ACCEPTED 2026-09-13 - `spec-fidelity` rounds 1, 2 and 3 CHANGES REQUIRED (eight, seven and two items,
+all applied - see Review history), round 4 FAITHFUL. Implementation begins.
 **Request**: [`request.md`](request.md), the GM's words verbatim. **Research**: [`research.md`](research.md).
 **Peer**: feature 239 (`Diagram (Kuwabata)`) holds the same contract for `spec-fidelity` and spec figures.
 The split was agreed between the two sessions and is recorded in `request.md`; this feature touches none of
@@ -247,3 +248,6 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   (2) D6's residue restated: agents are dispatched one map apiece, so the between-maps check rarely runs, and
   FR-007 now re-reads the paired gate immediately before writing its verdict so a review of a red gate does not
   count; the time it spends is stated as unrecovered.
+- **Round 4, FAITHFUL.** It re-ran the harness, checked the 402 s record and both merge records by hand, and found the
+  figures agree in every place they are quoted. Its two minor notes are taken: the record's `source` now says exactly
+  which merges its pattern matches, and this status line names all four rounds.
