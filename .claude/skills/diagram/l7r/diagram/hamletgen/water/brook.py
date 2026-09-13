@@ -19,6 +19,7 @@ from ..consts import (
     BROOK_TAP_RUN,
     BROOK_WANDER,
     BROOK_WANDER_STEP,
+    OFFTAKE_DEG,
     WEIR_HALF_FT,
     WEIR_SKEW_DEG,
     WEIR_THICK_FT,
@@ -343,7 +344,12 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     ax, ay = unit(-nx - hx * skew, -ny - hy * skew)  # from the intake bank's (downstream) end toward the far bank, upstream
     ang = math.atan2(ay, ax)
     half, half_t = WEIR_HALF_FT / plan.ftpx, WEIR_THICK_FT / plan.ftpx / 2.0
-    cx, cy = sluice[0] + hx * (half_t + 1.0), sluice[1] + hy * (half_t + 1.0)  # the upstream face a pixel below the mouth
+    # ...AND CLEAR OF THE MOUTH ITSELF, not merely of the junction point (settlement-review, feature 230 pass 11). The race
+    # leaves at `OFFTAKE_DEG`, so its opening cuts the bank over `w / sin(offtake)` - about 10 ft at Kashikawa's 6 ft race -
+    # and a bar set a pixel below the junction stood IN that opening, with a third of the mouth in the tailwater. The bar
+    # clears half the opening as well as its own half-thickness.
+    _mouth = (float(plan.net["channels"][0].get("w", 6.0)) if plan.net and plan.net.get("channels") else 6.0) / max(math.sin(math.radians(OFFTAKE_DEG)), 0.2)
+    cx, cy = sluice[0] + hx * (half_t + _mouth / 2.0 + 1.0), sluice[1] + hy * (half_t + _mouth / 2.0 + 1.0)  # below the mouth, not in it
     poly = [
         (cx + ax * half + hx * half_t, cy + ay * half + hy * half_t),
         (cx - ax * half + hx * half_t, cy - ay * half + hy * half_t),

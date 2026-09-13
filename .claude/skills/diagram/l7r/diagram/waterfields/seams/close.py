@@ -298,7 +298,10 @@ def _basin_rank(basin: Polygon, fill: float, median: float, collector: LineStrin
     owes the same reading. Then how far it falls short of filling its own rectangle, which is what a leveled basin looks
     like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also its biggest.
     """
-    on = collector is not None and basin.distance(collector) <= 0.25 * plot_across
+    # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
+    # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
+    # the drain when a real length of its boundary runs along it - a quarter of a plot's width.
+    on = collector is not None and basin.buffer(0.25 * plot_across).intersection(collector).length >= 0.25 * plot_across
     size = abs(math.log(basin.area / median)) if median > 0.0 and basin.area > 0.0 else 0.0
     return (not on, round(1.0 - fill, 4), round(size, 4))
 

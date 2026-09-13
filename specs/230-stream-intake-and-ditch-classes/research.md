@@ -436,3 +436,31 @@ out to have a different cause from the one proposed.
   was built with an overflow to the stream.
 - Inashiro's windbreak running one crown wide up the east frame edge, facing no house.
 - Kuwabata's supply tapers drawn backwards, and the fan floor polygon's invisible zero-degree spike - both also on main.
+
+## R11 settlement-review pass 11 (2026-09-12)
+
+Every pass-10 fix verified on the maps. What pass 11 added, and what each turned out to be:
+
+- **Inashiro's field spur vanished** - built as a 90 ft out-and-back hairpin (threaded round the steadings, folded back to
+  within 14 px of its start), cut away by the smoothing pass and its husk dropped in silence. Keeping the arm toward the
+  field was tried and failed `lanes_reach_something` by 0.6 ft, because marsh a path may not cross lies between: the map
+  now says so instead. `drop_lanes` records any spur drop.
+- **The head-race record ran 70 ft past its ink** on two maps; it ends at the fork.
+- **A field grave read as a face** - two equal stones side by side in the upper half of an egg-shaped mound. Staggered and
+  unequal now.
+- **Thin necks along neighbors**: five on Kashikawa, three on Inashiro, none on main. Attributed by rolling the commit
+  before the partition: four of Kashikawa's five predate it, so they come from fitting the fan at its true size.
+  `_shed_necks` gives each tail to the plot it runs along.
+- **A lane end in open ground** that came back whenever the map moved: `_sweep_dangling_ends` pulls an end back to
+  something or drops the lane.
+- **Kuwabata's notes and two modals** still described the old classes and asserted a drainage sink on a reservoir map.
+- **Doubled lane runs**: Sawada carried one where main has none (75 ft of a 136 ft lane within 8 ft of its neighbor);
+  `shadow_share` makes that the second entry to the doubled-remnant sweep, while a lane merely leaving along the connector
+  and diverging (Mizuguchi, 22%) is not swept.
+
+**Still open, recorded rather than guessed:** the brook's course below the tap reads ruled on Kashikawa (it sits against
+the frame box, whose margin the skirt forced wide); Inashiro's windbreak limb up the east frame; the notice board's caption
+across the road; the weir standing in the head race's mouth rather than below it; Mizuguchi's drain still reaching its pond
+round a hook; the flooded plot touching the collector at a corner; and the pre-existing carve items main carries too (the
+sunburst wedges, the reversed polder tapers, the fan floor's invisible spike).
+

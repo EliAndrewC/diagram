@@ -15,7 +15,7 @@ from ..consts import (
 )
 from .clearance import _bends_badly, _clear_touch, drop_end_nubs, existing_walk, may_write
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _hits_a_steading
-from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadowing_lane
+from .geom import _TOUCH_GAP, _aim_off, _components, _net_reach, _reach, polyline_len, shadow_share, shadowing_lane
 from .route import _route
 
 # HOW FAR A FOOTPATH MAY WANDER, as a multiple of its own straight-line chord. A review measured
@@ -318,7 +318,9 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         if len(ways[i]) < 2 or ln.get("connector"):
             continue
         others = [w if k != i else [] for k, w in enumerate(ways)]
-        if shadowing_lane(ways[i], others, _LANE_JOIN_FT) is None:
+        # EITHER SHAPE OF THE SAME DEFECT (feature 230 pass 11): a lane that leaves a way and returns to it, or one that
+        # simply runs alongside another for most of its length. Both clauses below still decide whether it may go.
+        if shadowing_lane(ways[i], others, _LANE_JOIN_FT) is None and shadow_share(ways[i], others, _DOUBLED_GAP_FT) < _DOUBLED_SHARE:
             continue
         # THE STRANDING TEST READS THE CHECK'S OWN FIGURE, NOT THE JOIN TOLERANCE (feature 155).
         # Written first against `_LANE_JOIN_FT` (30), which is the "is this end ON that way" figure and
@@ -604,5 +606,7 @@ _FINE_CELL = 3.0
 # 6). So it plans at the ordinary fabric standard and buys its reach from the CELL alone:
 # `WEB_FABRIC_GAP + 3 * 0.71` = 9.1 ft against the 14.1 ft the coarse detour rung was asking, which
 # is what opened tripwire seed 27's corridor while keeping every lane off the steadings.
+_DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged band with a hairline down it
+_DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
 _REACH_FT = 60.0  # ft: `lanes_reach_something`'s own figure for an end - a way, a house or the field within this
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
