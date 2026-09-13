@@ -97,16 +97,36 @@ def test_check_2_refuses_a_marker_too_short_to_be_safe(tmp_path: pathlib.Path) -
     assert any("twelve characters" in x for x in lint.lint(d))
 
 
-def test_check_2_reaches_a_sibling_spec_but_not_the_rest_of_the_tree(tmp_path: pathlib.Path) -> None:
-    """FR-010c: `specs/` is the whole reach, and D5 records what that leaves out."""
+def test_check_2_reaches_the_whole_tree(tmp_path: pathlib.Path) -> None:
+    """FR-010c: the scan is tree-wide - all five survivals that motivated it were outside `specs/`."""
     d = _feature(tmp_path, research="WITHDRAWN: the 22 ft clearance\n")
     (tmp_path / "specs" / "998-elsewhere").mkdir(parents=True)
     (tmp_path / "specs" / "998-elsewhere" / "spec.md").write_text("## Summary\n\nthe 22 ft clearance\n")
-    (tmp_path / "docs").mkdir()
-    (tmp_path / "docs" / "outside.md").write_text("the 22 ft clearance\n")
-    got = lint.lint(d)
-    assert any("998-elsewhere" in x for x in got)
-    assert not any("outside.md" in x for x in got), "outside `specs/` is D5's recorded limit"
+    for name, body in (("docs/outside.md", "the 22 ft clearance\n"),
+                       ("CLAUDE.md", "a rule resting on the 22 ft clearance\n"),
+                       ("scripts/tool.py", '"""Keeps the 22 ft clearance."""\n')):
+        (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / name).write_text(body)
+    got = lint.lint(d, tree_root=tmp_path)
+    for where in ("998-elsewhere", "outside.md", "CLAUDE.md", "tool.py"):
+        assert any(where in x for x in got), f"{where} carries withdrawn text and is not named: {got}"
+
+
+def test_check_2_leaves_a_verbatim_record_alone(tmp_path: pathlib.Path) -> None:
+    """A frozen corpus and a run log are records of what happened, not claims still standing."""
+    d = _feature(tmp_path, research="WITHDRAWN: the 22 ft clearance\n")
+    for name in ("scripts/fixtures/corpus.json", "dev/run-log/a.json"):
+        (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / name).write_text('{"cmd": "the 22 ft clearance"}\n')
+    assert lint.lint(d, tree_root=tmp_path) == []
+
+
+def test_check_2_reads_the_marker_only_where_it_opens_a_line(tmp_path: pathlib.Path) -> None:
+    """The sentence DESCRIBING the marker must not declare one - the scan is tree-wide now."""
+    d = _feature(tmp_path, research="A `research.md` may mark text WITHDRAWN: <text> like this.\n")
+    (tmp_path / "docs").mkdir(exist_ok=True)
+    (tmp_path / "docs" / "outside.md").write_text("<text> like this.\n")
+    assert lint.lint(d, tree_root=tmp_path) == []
 
 
 def test_check_3_an_fr_no_criterion_names(tmp_path: pathlib.Path) -> None:

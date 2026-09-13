@@ -89,7 +89,11 @@ if "/host-l7r-repo" in path or path.endswith("l7r.md") or "gm-request.md" in pat
 # reader agents writing verbatim page text into /tmp/.../result.json each had their dashes and spellings
 # rewritten, each noticed only by diffing, and each worked around the guard with chr() escapes - a guard that
 # fires on correct work is one that gets worked around (CLAUDE.md, "deliberately NOT enforced").
-if path.startswith("/tmp/"):
+# GUARD_EDIT_OK: feature 236 amendment 2 - and the SESSION STATE directory is outside the project the
+# same way `/tmp` is. `~/.claude/projects/<proj>/memory/` is the auto-memory, whose index line format
+# is Claude Code own and uses an em-dash; the correction was rewriting that format as the index was
+# written. Measured on the real commands this hook would have rewritten (`research.md` R10).
+if path.startswith("/tmp/") or "/.claude/projects/" in path:
     print(""); raise SystemExit
 # GUARD_EDIT_OK: feature 236 - A FIXTURE IS A VERBATIM RECORD. `scripts/fixtures/` holds corpora of
 # commands that really ran (the guard-refusal replays, and 236 own 238-command parse corpus); several
@@ -203,7 +207,10 @@ if not hits:
     print(""); raise SystemExit
 
 # THE GM SPEAKING IS NEVER CORRECTED - only refused, so a person decides (Principle V).
-GM_VERBATIM = re.search(r"specs/[^/]+/request\.md$", path) or path.endswith("gm-request.md")
+# GUARD_EDIT_OK: feature 236 amendment 2 - a Bash payload names several paths at once, so the request
+# file is looked for ANYWHERE in the list rather than only at its end, or a command writing the GM own
+# words beside another path would be corrected.
+GM_VERBATIM = re.search(r"specs/[^/\s]+/request\.md", path) or "gm-request.md" in path
 
 # CAN THE WHOLE EDIT BE FIXED MECHANICALLY? Only then is it corrected; a violation the table cannot
 # reach keeps the refusal, because a partial correction would hide what is left.
@@ -218,22 +225,45 @@ still_bad = "—" in leftover or "–" in leftover or any(
     re.search(rf"\b{w}\b", leftover, re.I) for w in BRIT
 )
 
-# GUARD_EDIT_OK: feature 236 FR-007 - A BASH PAYLOAD IS TOLD, NEVER REWRITTEN OR REFUSED. Telling
-# costs nothing (an additionalContext at exit 0 spends no model round trip), rewriting would break
-# the payload that is itself a spelling fix, and refusing would spend a round trip on something the
-# `make quick` phase fails on anyway. Spec D2 records the departure from item 4s "correct it" for
-# the GM to rule on.
+# GUARD_EDIT_OK: feature 236 amendment 2 - A BASH PAYLOAD IS CORRECTED TOO, EXCEPT THE SED SHAPE (the
+# GM 2026-09-12, ruling on spec D2: *"we should warn when it is the sed shape, and for other shapes
+# just correct it"*). The first version only ever TOLD the session, because a payload is sometimes
+# itself the spelling fix; the GM kept that case and took the rest. What a command only NAMES - the
+# word it searches for, the file it reads, the old side of a replacement - is held out by `_hm_house`,
+# which prices each range against the real commands this hook warned on (`research.md` R10).
 if is_bash:
-    print(json.dumps({"hookSpecificOutput": {
-        "hookEventName": "PreToolUse",
-        "additionalContext": (
-            "House style, in this command payload: " + ", ".join(hits[:6]) + ". CLAUDE.md is "
-            "project-wide - American spellings, hyphens only - and a write that travels through a "
-            "Bash payload owes the rule exactly as an Edit does. Not corrected for you, because a "
-            "payload is often itself the fix; a quotation of someone elses text keeps its own "
-            "characters. `make quick` fails on a British spelling in the delta, so it is cheaper "
-            "to fix now than at the gate."),
-    }}))
+    try:
+        from _hm_house import plan as house_plan
+    except Exception:                      # a guard never takes the session down with it
+        house_plan = None
+    new_cmd, notes, warned = (house_plan(inp.get("command", "") or "", PAIRS, SPAN, _correct_plain)
+                              if house_plan and not GM_VERBATIM else (None, [], hits))
+    if new_cmd is not None and notes and new_cmd != (inp.get("command", "") or ""):
+        payload = dict(inp)
+        payload["command"] = new_cmd
+        print(json.dumps({"hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "updatedInput": payload,
+            "additionalContext": (
+                "House style was applied to this command for you (" + ", ".join(notes[:6]) + "). "
+                "A write that travels through a Bash payload owes CLAUDE.md exactly as an Edit does. "
+                "What the command only NAMES was left as typed: a search pattern, a path, a code span "
+                "and a quotation of someone elses text."
+                + (" Left as typed and NOT corrected, because this command carries both spellings and "
+                   "is therefore a fix: " + ", ".join(warned[:6]) + "." if warned else "")),
+        }}))
+        raise SystemExit
+    if warned:
+        print(json.dumps({"hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "additionalContext": (
+                "House style, in this command payload: " + ", ".join(warned[:6]) + ". Not corrected "
+                "for you: this command is a spelling fix (the sed shape, or both spellings in one "
+                "command), and correcting it would replace a word with itself. "
+                + ("The GM own words are reported, never corrected. " if GM_VERBATIM else "")
+                + "`make quick` fails on a British spelling in the delta, so it is cheaper to fix now "
+                "than at the gate."),
+        }}))
     raise SystemExit
 
 if fixed_fields and notes and not still_bad and not GM_VERBATIM:
@@ -263,8 +293,15 @@ case "$REPORT" in
   # GUARD_EDIT_OK: feature 236 - there are TWO JSON verdicts now, and they are different branches for
   # the audit: a CORRECTION applied to an edit, and a WARNING on a Bash payload that is left as typed.
   '{'*)
+    # GUARD_EDIT_OK: feature 236 amendment 2 - a correction now lands on a COMMAND as well as on an
+    # edit, and the two are different rules for the audit: the command half is the new one, and
+    # "is it correcting the right things" is a question about it alone.
     if printf '%s' "$REPORT" | grep -q '"updatedInput"'; then
-      guard_log house-style rewrote "$(guard_cmd)" corrected-edit
+      if printf '%s' "$REPORT" | grep -q '"command":'; then
+        guard_log house-style rewrote "$(guard_cmd)" corrected-command
+      else
+        guard_log house-style rewrote "$(guard_cmd)" corrected-edit
+      fi
     else
       guard_log house-style warned "$(guard_cmd)" bash-payload
     fi

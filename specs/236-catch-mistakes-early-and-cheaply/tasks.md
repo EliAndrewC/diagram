@@ -154,3 +154,42 @@ scan, and the Review history records which.
       through `scripts/sync-with-main.sh done`.
       research: rendering
       verify: DONE. make hooks-test (22 suites), make quick (3,432 tests), make done (whole suite, every pool map, all three coverage floors, roll census green) and make page-check all green; amendment rounds 1 and 2 recorded, round 2 FAITHFUL
+
+## Phase 7 - the amendment (the GM 2026-09-12, on D2 and D5)
+
+The GM ruled on the two things the first implementation left for them: the hook CORRECTS a Bash
+payload except where the command is itself the fix, and the withdrawn-figure check scans the whole
+tree. The counter resets to zero for a post-acceptance amendment (root `CLAUDE.md`, the five-round
+cap), so the changed passages go back through `spec-fidelity` in VERIFY mode.
+
+- [ ] T25 `specs/236-*/measure_bash_corrections.py` + `research.md` R10: replay every Bash command in
+      the recent transcripts that this hook warns on, through the hook, and classify each British word
+      by the shape it stands in - prose the command writes, the fix it applies, the pattern it searches
+      for, the path it names. A correction is priced BEFORE it is built, because a command is not an
+      edit and a wrong rewrite breaks work that was right (FR-007, FR-007b).
+      research: rendering
+      measure: the replay is the measurement, and it is re-runnable - the script is committed
+- [ ] T26 `scripts/_hm_house.py`: the ranges of a Bash command, each one `corrected`, `warned` or left
+      alone, with a selftest per class; the hook's word table and span pattern passed IN so there is
+      one of each (FR-007, FR-007b).
+      research: rendering
+- [ ] T27 `scripts/house-style-hooks.sh`: the Bash branch corrects through `_hm_house` and returns
+      `updatedInput`; the fix shape is reported at exit 0; `~/.claude/projects/` joins `/tmp` outside
+      the project; the GM's verbatim `request.md` is found anywhere in a command's path list; the
+      correction of a COMMAND records its own rule (FR-007, FR-007c, D9, D10).
+      research: rendering
+- [ ] T28 `scripts/spec-lint.py`: check 2 scans the whole tree - `git ls-files` plus kept untracked
+      files, by suffix, holding out `scripts/fixtures/` and `dev/*-log/` - and the `WITHDRAWN:` marker
+      must open a line (FR-010c, FR-010d, D5).
+      research: rendering
+- [ ] T29 The cases, in both directions: `scripts/test_hooks_cases.py` (corrected, warned, and every
+      NAMED shape quiet), `tests/tooling/test_spec_lint.py` (the tree-wide reach, the verbatim-record
+      exemption, the marker anchor) and `tests/tooling/test_guard_firing_log.py` (the new
+      `corrected-command` rule). Each proved to FIRE by breaking its mechanism (SC-006, SC-008,
+      SC-012).
+      research: rendering
+- [ ] T30 The record: spec D2, D5, D9, D10, FR-007b, FR-007c, FR-010c, FR-010d and their criteria; the
+      root `CLAUDE.md` rows; the `spec-lint` docstring. Then `spec-fidelity` in VERIFY mode on the
+      changed passages, with D9 and D10 put to it as exceptions to judge; then `make hooks-test`,
+      `make quick` and the push (SC-013).
+      research: rendering

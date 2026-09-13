@@ -114,12 +114,30 @@ HOUSE_STYLE = [
     # heredoc. Same hole layer 3 had, and the same lesson: guard the ACTION, not one route to it.
     # ...and since feature 236 a Bash payload is TOLD rather than refused (spec D2): the payload is
     # often itself the spelling fix, and `make quick` is the half that fails.
-    ("prose written by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe colour is grey\nEOF"), "warned:colour"),
+    # ...and since feature 236's amendment the payload is CORRECTED like an edit (the GM 2026-09-12:
+    # *"warn when it is the sed shape, and for other shapes just correct it"*). What the command only
+    # NAMES is held out by `_hm_house`: a search, a path, a quoted token, a code span, a quotation.
+    ("prose written by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe colour is grey\nEOF"),
+     "rewritten:cat > docs/a.md <<'EOF'\nthe color is gray\nEOF"),
     ("clean prose by heredoc", cmd("cat > docs/a.md <<'EOF'\nthe color is gray\nEOF"), "ok"),
     # THE WHOLE PAYLOAD, not only its heredoc bodies (feature 236 FR-007): the measured hole was a
     # write that travelled by some other route through Bash
-    ("an echo append", cmd("echo 'the centre of it' >> docs/a.md"), "warned:centre"),
+    ("an echo append", cmd("echo 'the centre of it' >> docs/a.md"),
+     "rewritten:echo 'the center of it' >> docs/a.md"),
+    # THE SED SHAPE IS THE GM'S OWN EXEMPTION, and a replacement pair written any other way is the
+    # same shape: correcting either would replace a word with itself and the fix would do nothing.
+    ("a sed fix is left exactly as typed", cmd("sed -i 's/centre/center/g' docs/a.md"), "warned:centre"),
     ("a sed replacement that INTRODUCES one", cmd("sed -i 's/center/centre/g' docs/a.md"), "warned:centre"),
+    ("a replacement pair in a Python sweep", cmd("python3 - <<'PY'\nt = t.replace(\"the centre of\", \"the center of\")\nPY"), "warned:centre"),
+    # ...and the shapes where the word is NAMED rather than written, each one measured on the real
+    # commands this hook had warned on (`specs/236-catch-mistakes-early-and-cheaply/research.md` R10)
+    ("a sweep's own word list", cmd("python3 - <<'PY'\nWORDS = {'colour', 'centre'}\nPY"), "ok"),
+    ("a regex alternation", cmd("python3 -c \"re.compile(r'(colour|centre)')\""), "ok"),
+    ("a path that carries the word in its name", cmd("cat docs/colour-notes.md"), "ok"),
+    ("a negated search is still a search", cmd("! grep -qiE 'colour|centre' docs/a.md"), "ok"),
+    # THE SESSION STATE DIRECTORY IS OUTSIDE THE PROJECT, as `/tmp` is: the auto-memory's own index
+    # line format uses an em-dash, and the correction was rewriting that format as it was written.
+    ("the auto-memory index", cmd("cat >> /home/agent/.claude/projects/-diagram/memory/MEMORY.md <<'EOF'\n- [A](b.md) — the hook\nEOF"), "ok"),
     # ...and the two shapes that must stay quiet, or the guard fires on correct work
     ("searching for the word", cmd('git grep -n "centre" -- docs/'), "ok"),
     ("a code span NAMING the word", cmd("echo 'the token `colour` is British' >> docs/a.md"), "ok"),
