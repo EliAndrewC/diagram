@@ -70,6 +70,13 @@ NOTICE=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null); RC=$?
 check "the turn below the bar is still allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one turn before the block"; FAIL=$((FAIL+1)); }
 printf '%s' "$NOTICE" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && { echo "  ok    ...as valid JSON"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice is not valid JSON"; FAIL=$((FAIL+1)); }
+# GUARD_EDIT_OK: ...AND IT IS RECORDED (2026-09-13). The notice fired correctly from the day it landed
+# and wrote nothing down, so the log held 700 batching entries, all of them `blocked`, and the GM's
+# question - does the one-turn-early notice actually prevent blocks? - had no answer in the record.
+# The census test cannot cover this branch: it drives each guard with ONE payload, and reaching the
+# notice needs a window of serial turns built up first, which only this suite does.
+grep -rlq "serial-recon-notice" "$GUARD_LOG_ROOT" && { echo "  ok    ...and the notice is recorded, under its own rule"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice left no record - the log cannot price it"; FAIL=$((FAIL+1)); }
+grep -rhq '"event": *"reminded"' "$GUARD_LOG_ROOT" 2>/dev/null || grep -rhq 'reminded' "$GUARD_LOG_ROOT" 2>/dev/null && { echo "  ok    ...as a reminder rather than a block"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice recorded itself as something other than a reminder"; FAIL=$((FAIL+1)); }
 teardown
 setup
 QUIET=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null)
