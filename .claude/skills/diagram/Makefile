@@ -1250,6 +1250,13 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	: "delta touches, so it costs nothing on a change that touches none."
 	python3 ../../../scripts/spec-lint.py --selftest
 	python3 ../../../scripts/spec-lint.py --delta ../../..
+	: "GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP, beside its two siblings and for the third" ; \
+	: " time the same reason: a repo-wide static rule belongs in the phase the gate runs FIRST, so a finding" ; \
+	: " arrives before the map roll is paid for. The hook refuses STAGING a conflict; this asks whether one is" ; \
+	: " already COMMITTED, which a hook cannot see - an escape, a git am, or a commit made outside the session." ; \
+	: " Twice on 2026-09-12/13 a merge was committed unresolved, once in 23 files, and the lint phase is where" ; \
+	: " the second one surfaced by accident. It scans every tracked file and costs about a second."
+	python3 ../../../scripts/_hm_conflict.py --tracked ../../..
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-13T05:20:59Z",
+  "target": "entry-gate",
+  "commit": "0219d1e1",
+  "why": "only an HTML COMMENT was added to homesteads.html - a session note recording which of the engine's distance numbers are RAILS and which are norms (feature 209 puts session-addressed content in comments). The reader-visible text of the whole page is byte-identical before and after: 80,790 characters both ways, verified by stripping comments and tags and comparing. No finding moved, so the farmhouse modal's prose is still in step with the section it was written from."
+}
