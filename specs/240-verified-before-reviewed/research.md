@@ -42,7 +42,7 @@ measured the drawn crowns (`tree_crowns`, 588 on Sawada) against those bases: a 
 median 16.3 ft and a p90 26.7 ft from its nearest clump base. Consequence: Sawada's board passed the probe
 by 0.09 ft while the drawn crown covered its center (-0.91 ft), and 44.4% of Mizuguchi's plank footprint was
 canopy pixels. The fix was correct arithmetic over the wrong quantity. A record naming its `source` as
-`clumps + r` would have let the reviewer see that in one line. (Observed 2026-09-12 by pass 13's reviewers; method: drawn crowns and plank pixels measured from Sawada's and Mizuguchi's manifests and renders.)
+`clumps + r` would have let the reviewer see that in one line. (observed 2026-09-12 by pass 13's reviewers; method: drawn crowns and plank pixels measured from Sawada's and Mizuguchi's manifests and renders.)
 
 **The perf attribution.** The first explanation read seed 4's web-stage profile, saw none of the
 feature's new passes in the top 25 by cumulative time, and attributed the growth to the map. The
@@ -51,7 +51,7 @@ feature's new passes in the top 25 by cumulative time, and attributed the growth
 per-target loop, so each of its 10 rejections in 17 evaluations paid another Dijkstra on a lattice
 growing with the square of the span. The figures in the first explanation were all re-runnable - the
 profile file existed - so a rule about recorded figures would NOT have caught it. The defect was the
-inference, and only a counterfactual measurement settles an inference. (Observed 2026-09-13 by the perf-audit agent; method: the stage timed with the rule live and forced True.)
+inference, and only a counterfactual measurement settles an inference. (observed 2026-09-13 by the perf-audit agent; method: the stage timed with the rule live and forced True.)
 
 ## R3 - the machinery each requirement builds on (read, not assumed)
 
