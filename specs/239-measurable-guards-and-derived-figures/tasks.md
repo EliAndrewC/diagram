@@ -77,6 +77,7 @@ feature is tooling about how figures are measured and recorded, not about how a 
 - [x] T15 Every mechanism proven to FIRE by breaking it and watching a test go red (SC-010).
       research: rendering
       verify: DONE. DONE. 14 of 14 mechanisms broken in place and each watched go red, then restored: check 5 x8, make figures x2, the bench x2, the quote-aware split, the load-failure warning
-- [ ] T16 Root `CLAUDE.md` rows for `spec-lint` and house-style updated; `make hooks-test`, `make quick`
+- [x] T16 Root `CLAUDE.md` rows for `spec-lint` and house-style updated; `make hooks-test`, `make quick`
       and `make done` green; push (SC-011).
       research: rendering
+      verify: DONE. DONE. root CLAUDE.md rows for spec-lint check 5 and the lifted house-style decision; make hooks-test green (the sync suite regressed on bytecode written by the lint's selftest into the tree it pushes - fixed), make done green over the whole suite, docs/make-targets.html regenerated for the two new targets

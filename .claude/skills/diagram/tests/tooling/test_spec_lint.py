@@ -11,8 +11,11 @@ No `tooling` marker: it writes small files in a tmp directory and calls function
 from __future__ import annotations
 
 import importlib.util
+import json as _json
 import pathlib
 import sys
+
+import pytest as _pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[5]
 _spec = importlib.util.spec_from_file_location("spec_lint", REPO / "scripts" / "spec-lint.py")
@@ -177,9 +180,6 @@ def test_selftest_passes() -> None:
 
 # ---- check 5 (feature 239): a measured figure is derived, not typed -------------------------------------
 
-import json as _json
-
-import pytest as _pytest
 
 _figs_spec = importlib.util.spec_from_file_location("_spec_figures", REPO / "scripts" / "_spec_figures.py")
 assert _figs_spec and _figs_spec.loader
@@ -203,9 +203,11 @@ def _measured(tmp_path: pathlib.Path, spec_body: str, entries: dict, research: s
     return d
 
 
-_ENTRY = {"spawn": {"value": 144, "unit": "ms", "varies": True, "quantity": "560 commands", "command": "x"},
-          "window": {"value": 1034, "unit": "commands", "command": "x"},
-          "in-process": {"value": 7.0, "unit": "ms", "varies": True, "quantity": "560 commands", "command": "x"}}
+_ENTRY = {
+    "spawn": {"value": 144, "unit": "ms", "varies": True, "quantity": "560 commands", "command": "x"},
+    "window": {"value": 1034, "unit": "commands", "command": "x"},
+    "in-process": {"value": 7.0, "unit": "ms", "varies": True, "quantity": "560 commands", "command": "x"},
+}
 
 
 def test_check_5_a_figure_with_no_key_fails(tmp_path: pathlib.Path) -> None:
@@ -275,21 +277,18 @@ def test_check_5_applies_from_feature_239_and_only_with_tasks(tmp_path: pathlib.
 
 def test_check_5_varies_on_a_count_and_a_timing_with_no_quantity_fail(tmp_path: pathlib.Path) -> None:
     """FR-011b and FR-011e."""
-    entries = {"n": {"value": 560, "unit": "commands", "varies": True, "command": "x"},
-               "t": {"value": 144, "unit": "ms", "varies": True, "command": "x"}}
+    entries = {"n": {"value": 560, "unit": "commands", "varies": True, "command": "x"}, "t": {"value": 144, "unit": "ms", "varies": True, "command": "x"}}
     got = figs.check_measured_figures(_measured(tmp_path, "## Summary\n\nNothing.\n", entries))
     assert any("counts things" in x for x in got) and any("no `quantity`" in x for x in got)
 
 
 def test_make_figures_fails_a_moved_count_and_reports_a_timing() -> None:
     """FR-011d: only a moved COUNT fails; a timing outside its band is reported, never failed."""
-    recorded = {"n": {"value": 560, "unit": "commands"},
-                "t": {"value": 100.0, "unit": "ms", "varies": True},
-                "near": {"value": 100.0, "unit": "ms", "varies": 0.25}}
+    recorded = {"n": {"value": 560, "unit": "commands"}, "t": {"value": 100.0, "unit": "ms", "varies": True}, "near": {"value": 100.0, "unit": "ms", "varies": 0.25}}
     fresh = {"n": {"value": 561}, "t": {"value": 130.0}, "near": {"value": 120.0}}
     failures, reports = figures_cli.compare(recorded, fresh)
     assert len(failures) == 1 and "`n`" in failures[0]
-    assert len(reports) == 1 and "`t`" in reports[0]          # 30% > 10%; `near` is 20% inside its 25%
+    assert len(reports) == 1 and "`t`" in reports[0]  # 30% > 10%; `near` is 20% inside its 25%
 
 
 def test_make_figures_restores_what_it_re_measures(tmp_path: pathlib.Path, monkeypatch: _pytest.MonkeyPatch) -> None:

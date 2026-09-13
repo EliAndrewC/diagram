@@ -251,6 +251,10 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     # CHECK 5 (feature 239): a measured figure is derived, not typed. Its own module, beside this one;
     # it reads features 239 and later only (plan P2) and only once a tasks.md exists, like 1, 3 and 4.
     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    # NO BYTECODE: the push runs this lint's selftest inside the tree it is about to push, and an import
+    # writes `scripts/__pycache__/` there. Where that directory is not ignored the push then refuses on
+    # "uncommitted changes" - found when the sync-with-main suite's fixture repository did exactly that.
+    sys.dont_write_bytecode = True
     from _spec_figures import check_measured_figures
     bad += check_measured_figures(spec_dir)
     return bad
