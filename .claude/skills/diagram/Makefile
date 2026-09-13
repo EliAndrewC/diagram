@@ -395,6 +395,12 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 ##  PROFILE=1       also print where the roll spent its time, stage by stage
 	$(REF_FIRST)
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
+	@: "GUARD_EDIT_OK: feature 240 FR-005 - a CACHED map may come back with no picture. The gate files its entries with rendering skipped, so a hit on one restores the manifest and DELETES the render (gencache.load, deliberately: a render the entry lacks is stale). make map then printed CACHED over a map with no .png and no .html, and the review precondition that names make map as its remedy could not be satisfied by it. So a hit that leaves a render missing is rolled again, uncached, which draws both."
+	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
+	if [ -f "$$s.json" ] && { [ ! -f "$$s.png" ] || [ ! -f "$$s.html" ]; }; then \
+	  echo "map: the cached entry carries no render (a gate filed it with rendering skipped) - rolling it uncached to draw one"; \
+	  $(RUN).pipeline.regen --no-cache "$$g"; \
+	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
 # GUARD_EDIT_OK: a NEW OPERATION, nothing loosened - `cohort_audit` has taken `--seed` (the FIRST seed)

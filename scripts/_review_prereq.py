@@ -89,7 +89,10 @@ def unverified_findings(clone: pathlib.Path, name: str, records: Iterable[dict] 
     if not verdict or verdict["verdict"] == "NOT-REVIEWABLE":
         return []
     recs = list(measurement_records(clone) if records is None else records)
-    verified = {str(r.get("verifies")) for r in recs if r.get("verifies") and r.get("subject") == name}
+    # GUARD_EDIT_OK: feature 240 FR-009 / SC-007 - a verifying record must say WHAT it measured and FROM WHAT: the
+    # reviewer's first stage judges the `source` against the finding (the canopy: `clumps` cannot verify a finding
+    # about drawn crowns), and a record with no source gives it nothing to judge, so it verifies nothing.
+    verified = {str(r.get("verifies")) for r in recs if r.get("verifies") and r.get("subject") == name and r.get("quantity") and r.get("source")}
     done = verified | accepted_ids(clone, name)
     return [str(f.get("id")) for f in verdict.get("findings", []) if isinstance(f, dict) and str(f.get("id")) not in done]
 
@@ -112,17 +115,25 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
 
     `current` is the generation cache's key comparison, injected so a test can decide it; the CLI passes
     `gencache.is_current`, which asks without restoring a file."""
+    # GUARD_EDIT_OK: feature 240 FR-005 - COMPLETE IN EITHER PLACE THE REVIEWER READS. The agent reads the review
+    # snapshot when the dispatch names one (feature 231: the gate evicts the pool's renders mid-run) and the pool
+    # folder otherwise, so a map passes when either holds all four artifacts. Requiring the POOL alone refused every
+    # review started beside a gate, which is exactly when the snapshot exists; requiring the snapshot alone refused a
+    # map made whole by `make map` after the snapshot was taken.
     out = []
+    snapshots = skill.parents[2] / ".git" / "review-snapshot"
     for name in names:
         gen = gen_of(skill, name)
         if gen is None:
             out.append(f"{name}: no pool generator by that name")
             continue
-        missing = [ext for ext in ARTIFACTS if not (gen.parent / f"{name}{ext}").is_file()]
+        places = (gen.parent, snapshots / name / "clone")
+        missing = min(([ext for ext in ARTIFACTS if not (d / f"{name}{ext}").is_file()] for d in places), key=len)
+        rel = gen.relative_to(skill)
         if not current(str(gen)):
-            out.append(f"{name}: its generation key has moved - the map on disk is not what the engine draws now")
+            out.append(f"{name}: its generation key has moved - the map on disk is not what the engine draws now - `make map GEN={rel}`")
         elif missing:
-            out.append(f"{name}: missing {' '.join(missing)} - a reviewer would read an incomplete map")
+            out.append(f"{name}: missing {' '.join(missing)} in both the pool and its review snapshot - a reviewer would read an incomplete map - `make map GEN={rel}`")
     return out
 
 
@@ -134,7 +145,13 @@ def _spec_lint() -> object:
     spec = importlib.util.spec_from_file_location("spec_lint_for_review", here / "spec-lint.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    # GUARD_EDIT_OK: feature 240 - loaded by path from a hook, so no `scripts/__pycache__/` is left in the tree: feature
+    # 239 measured its selftest's bytecode being pushed by sync-with-main's own fixture and failing that suite.
+    prior, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        sys.dont_write_bytecode = prior
     return mod
 
 
@@ -181,7 +198,7 @@ def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, 
             )
     if any(has_findings(clone, n) for n in names) and not gate_green:
         problems.append("FR-004 this is a review of FIXES, and the gate is not green for this engine key - run `make done` first")
-    problems += [f"FR-005 {p} - `make map GEN=...`" for p in stale_maps(skill, names, current)]
+    problems += [f"FR-005 {p}" for p in stale_maps(skill, names, current)]
     figures = unresolved_figures(prompt, records)
     if figures:
         problems.append(f"FR-006 figure(s) quoted with no record behind them: {'; '.join(figures)} - cite the `m:` key or record it")

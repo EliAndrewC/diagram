@@ -48,6 +48,10 @@ def test_a_finding_with_no_record_is_unverified_and_a_verifying_record_or_an_acc
     assert prereq.unverified_findings(clone, "sawada") == ["E1", "E2", "E3"], "nothing recorded: every finding is open"
 
     _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "source": "tree_crowns"}})
+    assert prereq.unverified_findings(clone, "sawada") == ["E1", "E2", "E3"], "SC-007: a record with no `quantity` verifies nothing"
+    _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "quantity": "board to crown edge"}})
+    assert prereq.unverified_findings(clone, "sawada") == ["E1", "E2", "E3"], "SC-007: nor one with no `source` for the reviewer to judge"
+    _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "sawada", "source": "tree_crowns", "quantity": "board to crown edge"}})
     assert prereq.unverified_findings(clone, "sawada") == ["E2", "E3"], "a record that verifies E1 for THIS map disposes of it"
 
     _records(clone, **{"m:board-canopy": {"value": 0.6, "unit": "ft", "verifies": "E1", "subject": "mizuguchi"}})
@@ -72,16 +76,25 @@ def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothin
 
 
 def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: pathlib.Path) -> None:
-    skill = tmp_path / "skill"
+    skill = tmp_path / ".claude" / "skills" / "diagram"
     m = skill / "pool" / "hamlets" / "kuwabata"
     m.mkdir(parents=True)
     (m / "kuwabata.gen.py").write_text("")
     for ext in (".json", ".svg", ".png", ".html"):
         (m / f"kuwabata{ext}").write_text("")
     assert prereq.stale_maps(skill, ["kuwabata"], lambda gen: True) == []
-    assert "generation key has moved" in prereq.stale_maps(skill, ["kuwabata"], lambda gen: False)[0]
+    moved = prereq.stale_maps(skill, ["kuwabata"], lambda gen: False)[0]
+    assert "generation key has moved" in moved and "`make map GEN=pool/hamlets/kuwabata/kuwabata.gen.py`" in moved
     (m / "kuwabata.png").unlink()
     assert "missing .png" in prereq.stale_maps(skill, ["kuwabata"], lambda gen: True)[0], "feature 230's pass 12: renders evicted"
+    # the gate evicts the pool's renders mid-run; a review beside it reads the snapshot taken before, which is whole
+    snap = tmp_path / ".git" / "review-snapshot" / "kuwabata" / "clone"
+    snap.mkdir(parents=True)
+    for ext in (".json", ".svg", ".png"):
+        (snap / f"kuwabata{ext}").write_text("")
+    assert "missing .png" in prereq.stale_maps(skill, ["kuwabata"], lambda gen: True)[0], "each place names what it lacks; the nearer-whole one is reported"
+    (snap / "kuwabata.html").write_text("")
+    assert prereq.stale_maps(skill, ["kuwabata"], lambda gen: True) == [], "a whole snapshot is a whole map for the reviewer"
     assert "no pool generator" in prereq.stale_maps(skill, ["nowhere"], lambda gen: True)[0]
 
 
@@ -140,7 +153,7 @@ def test_a_review_of_fixes_needs_a_green_gate_and_a_first_review_does_not(tmp_pa
     _pool_map(clone, "inashiro")
     assert prereq.check(clone, ["inashiro"], "first look", gate_green=False, current=lambda g: True) == [], "a first review keeps feature 151's overlap"
     _verdict(clone, "inashiro", "NEEDS-WORK", "E1")
-    _records(clone, **{"m:x": {"value": 1, "unit": "ft", "verifies": "E1", "subject": "inashiro"}})
+    _records(clone, **{"m:x": {"value": 1, "unit": "ft", "verifies": "E1", "subject": "inashiro", "quantity": "gap", "source": "svg ink"}})
     problems = prereq.check(clone, ["inashiro"], "verify the fix", gate_green=False, current=lambda g: True)
     assert [p for p in problems if p.startswith("FR-004")], problems
     assert prereq.check(clone, ["inashiro"], "verify the fix", gate_green=True, current=lambda g: True) == []

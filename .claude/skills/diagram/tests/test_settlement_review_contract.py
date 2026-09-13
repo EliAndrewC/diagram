@@ -58,5 +58,8 @@ def test_the_perf_audit_first_stage_exits_on_a_missing_control_and_runs_the_coun
     m = re.search(r"^## FIRST STAGE.*?(?=^## )", PERF_AUDIT, re.S | re.M)
     assert m and PERF_AUDIT.index("## FIRST STAGE") < PERF_AUDIT.index("## Band 1")
     stage = m.group(0)
+    recipe = re.search(r"^perf-explain:.*?(?=^perf-confirm:)", MAKEFILE, re.S | re.M)
+    assert recipe and '--control "$(CONTROL)" --unverified "$(UNVERIFIED)"' in recipe.group(0)
+    assert '$(if $(UNVERIFIED),&& $(LOGBYPASS) permitted "perf-explain UNVERIFIED: $(UNVERIFIED)",)' in recipe.group(0), "SC-008: an UNVERIFIED reason is logged where make audit lists it"
     for token in ("`control`", "names no\n  record", "`unverified`", "run the counterfactual\n  yourself, before any other work", "NOT-REVIEWABLE", "4.70 s", "R2"):
         assert token in stage, token

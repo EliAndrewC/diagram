@@ -38,5 +38,30 @@
   "taken": "2026-09-13",
   "quantity": "longest of feature 230's gates that ran, of any result",
   "source": "the committed run log .claude/skills/diagram/dev/run-log/*.json, each record selected by its own `commit` field against feature 230's commits: subjects starting '230' and merges whose subject says 'into (the) 230'. A default-message merge (1e349683, 'Merge branch main of ...') does not match that pattern; no gate ran at it, so no figure changes."
+ },
+ "m:240-fr005-current-rc": {
+  "value": 0,
+  "unit": "exit code",
+  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
+  "taken": "2026-09-13",
+  "quantity": "FR-005 check on Inashiro as it stands after a green gate and render-sync",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
+ },
+ "m:240-fr005-edited-rc": {
+  "value": 1,
+  "unit": "exit code",
+  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
+  "taken": "2026-09-13",
+  "quantity": "FR-005 check on Inashiro with its generator edited so the key moves",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
+ },
+ "m:240-fr005-check-max-s": {
+  "value": 0.19,
+  "unit": "s",
+  "command": "bash specs/240-verified-before-reviewed/measure/fr005_probe.sh",
+  "taken": "2026-09-13",
+  "varies": true,
+  "quantity": "slowest of the probe's three checks",
+  "source": "the exit code and wall time of scripts/_review_prereq.py check on pool map inashiro, printed by the probe"
  }
 }

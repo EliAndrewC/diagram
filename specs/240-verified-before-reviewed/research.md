@@ -88,3 +88,21 @@ for a shared container, with its threshold a guess that is owed - and this featu
 What survives, and is why FR-009's `quantity` states the sample a figure measured: when a timing moves, the
 first thing to check is what the harness actually sampled, and a record that names its sample makes that
 check a read rather than an investigation.
+
+## R5 - FR-005 on a real pool map, both ways (SC-004)
+
+`measure/fr005_probe.sh`, run 2026-09-13 in the clone after a green gate: the FR-005 check on Inashiro as
+it stood (`m:240-fr005-current-rc` 0), with a trailing assignment appended to its generator so the
+generation key moves (`m:240-fr005-edited-rc` 1, naming `make map GEN=pool/hamlets/inashiro/inashiro.gen.py`),
+and restored (0). The slowest of the three took `m:240-fr005-check-max-s` 0.19 s, against SC-004's bound of 5.
+
+**The first run of the probe found a defect it was not looking for.** It ran directly after a gate, and it
+refused Inashiro as missing `.png` and `.html` - correctly: the gate files its generation-cache entries with
+rendering skipped, and a hit on such an entry DELETES a standing render (`gencache.load`, deliberately, since
+a render the entry lacks is stale). All five hamlets in the clone had no picture. The refusal named
+`make map GEN=...` as its remedy, and that remedy did not work: `make map` answered CACHED and restored the
+render-less entry again. Two changes follow. `make map` now rolls a hit uncached when it leaves the map without
+its render, which draws both; and FR-005 accepts a map whose review SNAPSHOT is whole when its pool folder is
+not, because the snapshot is what the agent reads beside a gate (feature 231) and the pool folder alone would
+refuse every review started that way. `make render-sync` also restores the clone's renders, and was how this
+record's probe was re-run; it is labeled internal, so the refusal does not name it.

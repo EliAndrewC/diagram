@@ -230,7 +230,7 @@ refused_for "a review after findings that nothing verifies is refused, naming th
 # GUARD_EDIT_OK: feature 240 - every acting branch records under its own rule (feature 168)
 check "...and the refusal is recorded under its own rule" 'grep -rq "review-prerequisites-unmet" "$GUARD_LOG_ROOT"'
 mkdir -p "$CLONE/specs/240-x"
-printf '{"m:canopy-clear":{"value":0,"unit":"px","command":"make x","taken":"2026-09-13","verifies":"F1","subject":"testmap"}}' > "$CLONE/specs/240-x/measurements.json"
+printf '{"m:canopy-clear":{"value":0,"unit":"px","command":"make x","taken":"2026-09-13","verifies":"F1","subject":"testmap","quantity":"board to crown edge","source":"tree_crowns"}}' > "$CLONE/specs/240-x/measurements.json"
 check "...and runs once a record verifies that finding" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 rm -rf "$CLONE/specs"
 ( cd "$CLONE" && python3 scripts/_review_prereq.py accept --clone "$CLONE" --map testmap --finding F1 --reason "left on purpose for the fixture" >/dev/null )
@@ -244,7 +244,14 @@ refused_for "a review of fixes with the gate not green is refused" "$REVIEW" "FR
 reset_prereq; touch "$MAPDIR_F/testmap.gen.py.stale"
 refused_for "a review of a map whose generation key moved is refused" "$REVIEW" "FR-005"
 rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
-refused_for "a review of a map missing an artifact is refused" "$REVIEW" "missing .png"
+# GUARD_EDIT_OK: feature 240 FR-005 - the earlier gate cases took a whole snapshot, and a whole snapshot is a
+# whole map for the reviewer; so the refusal is proven with the render gone from BOTH places, then permitted
+# again from the snapshot alone.
+mv "$CLONE/.git/review-snapshot" "$TMP/snapshot-aside" 2>/dev/null
+refused_for "a review of a map missing an artifact in the pool and its snapshot is refused" "$REVIEW" "missing .png"
+mkdir -p "$CLONE/.git/review-snapshot/testmap/clone"
+for ext in json svg png html; do : > "$CLONE/.git/review-snapshot/testmap/clone/testmap.$ext"; done
+check "...and permitted when its review snapshot is whole" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 : > "$MAPDIR_F/testmap.png"
 
 # FR-006: a quoted figure needs a record
@@ -264,6 +271,11 @@ check "...and the escape is recorded under its own rule" 'grep -rq "review-prere
 # FR-002: a NOT-REVIEWABLE verdict closes nothing; a PASS for this content closes the pair
 reset_prereq
 check "the review dispatch runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
+# GUARD_EDIT_OK: feature 240 SC-001 - a review stopped before it returns writes no verdict, and closes nothing
+( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); NONE=$?
+check "a dispatched review with NO verdict written leaves the pair open" '[ "$NONE" -eq 2 ]'
+rm -f "$CLONE/.git/pairing-state.json"
+printf '{"review_dispatch_key":"%s"}' "$KEY" > "$CLONE/.git/pairing-state.json"
 verdict NOT-REVIEWABLE '[]'
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); NR=$?
 check "a NOT-REVIEWABLE verdict leaves the pair OPEN" '[ "$NR" -eq 2 ]'
