@@ -130,6 +130,21 @@ case "$MODE" in
     # it parses nothing, so the notice is a fixed string.
     if [ "$CALLS" -eq 1 ] && [ "$BG" -eq 0 ] && [ "$N" -eq "$((REARM - 1))" ] && is_recon_call; then
       printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE (one turn before this is refused): %s of the last %s turns each made a single quick read-only call. The next recon-shaped call on its own is blocked. Send the lookups you already know you need TOGETHER - parallel tool calls in one message, or one command folding several greps - and fold the ACTION you will take into the same command as the read. Nothing is refused yet."}}\n' "$N" "${#HIST}"
+      # GUARD_EDIT_OK: THE NOTICE RECORDS, which it never did (found 2026-09-13, when the GM asked
+      # whether the one-turn-early notice works and the answer had to be "the log cannot say"). The log
+      # held 700 batching entries and every one was `blocked`: feature 164 added this branch, feature
+      # 168 made every acting branch record, and this branch was written between them and missed - the
+      # block's own comment below says the rule slug "separates the block from the notice", so the
+      # record was intended and simply never called. Without it the one number that would price the
+      # notice - how often it arrives and a block does NOT follow - cannot be computed at all.
+      #
+      # The cost is one process on a branch as rare as the block itself: it fires only when the window
+      # holds exactly REARM-1 serial turns AND this call is recon-shaped, which is once per approach to
+      # the bar. The no-python rule above governs the path EVERY Read takes, and this is not it.
+      BH_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+      # shellcheck source=/dev/null
+      . "$BH_HERE/_guardlog.sh"
+      guard_log batching reminded "$N of the last ${#HIST} turns were single quick calls - one below the bar" serial-recon-notice
     fi
     if [ "$CALLS" -eq 1 ] && [ "$BG" -eq 0 ] && [ "$N" -ge "$REARM" ] && is_recon_call; then
       REARM=$((REARM * 2))
