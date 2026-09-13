@@ -22,21 +22,27 @@ if TYPE_CHECKING:
 
 
 def canopy_index(M: Manifest) -> PointGrid:
-    """Every village-grove clump on the map, filed so a seat probe can ask about trees once per candidate.
+    """Every DRAWN tree crown on the map, filed so a seat probe can ask about the canopy once per candidate.
 
-    INDEXED, NOT SCANNED (constitution X clause 15): a hamlet's belt carries 200-250 clumps and the board's
-    verge probe tries thousands of seats, so the linear form is a million distance tests to place one plank.
-    The grid prunes and the caller's own circle test decides, so the verdict is the linear scan's."""
+    THE CROWNS, NOT THE CLUMP BASES (settlement-review, feature 230 pass 13, on two maps independently). A grove
+    records its clumps as bare points plus one nominal radius, and the first cut of this index filed those - which
+    under-measures the ink by a wide margin, because a clump draws several overlapping crowns and each is jittered
+    off the base. Measured over Sawada's 588 crowns: a crown's edge stands a median 16.3 ft and a p90 26.7 ft from
+    its nearest clump base, against the 14 ft the nominal radius claims. So the board it was meant to keep in the
+    open passed by ONE INCH on Sawada while the crown drawn from that clump covered the board's own center, and on
+    Mizuguchi 44% of the plank's footprint was canopy pixels. `tree_crowns` is the flat (x, y, r) list the drawer
+    writes as it paints, so this asks exactly what a reader sees.
+
+    INDEXED, NOT SCANNED (constitution X clause 15): a hamlet draws 600-1,800 crowns and the board's verge probe
+    tries thousands of seats. The grid prunes and the caller's own circle test decides, so the verdict is the
+    linear scan's. The grove-clump fallback stays for a manifest with no crowns recorded - the six hand-built
+    fixtures, and any caller asking before the groves are drawn."""
+    flat = M.get("tree_crowns") or []
+    items = [(float(flat[i]), float(flat[i + 1]), float(flat[i + 2])) for i in range(0, len(flat) - 2, 3)]
+    if not items:
+        items = [(float(c[0]), float(c[1]), float(g.get("r") or 0.0)) for g in (M.get("village_groves") or []) if isinstance(g, dict) for c in (g.get("clumps") or [])]
     grid = PointGrid()
-    grid.extend(
-        [
-            (cx, cy, r, cx - r, cy - r, cx + r, cy + r)
-            for g in (M.get("village_groves") or [])
-            if isinstance(g, dict)
-            for r in [float(g.get("r") or 0.0)]
-            for cx, cy in [(float(c[0]), float(c[1])) for c in (g.get("clumps") or [])]
-        ]
-    )
+    grid.extend([(x, y, r, x - r, y - r, x + r, y + r) for x, y, r in items])
     return grid
 
 
@@ -277,17 +283,6 @@ class FixtureSitingMixin:
             if roadside:
                 cands = roadside
 
-        # ...AND IN THE OPEN, WHERE THERE IS OPEN GROUND TO BE IN (settlement-review, feature 230 pass 12). The state's
-        # notice is the one fixture on a hamlet sheet that exists to be SEEN, and two of the five pool maps posted it
-        # under the windbreak - Sawada's with a crown center 1.8 ft away, Mizuguchi's with ten clumps inside 40 ft and
-        # clear verge 18-25 ft along the same lane. Written as a filter rather than a refusal, and in this position on
-        # purpose: it composes with the roadside rule above it exactly the way that one composes with the preferences
-        # below - a seat in the open wins where one exists, and a hamlet whose every verge lies under its own belt still
-        # gets a board rather than none.
-        _in_the_open = [c for c in cands if not c[7]]
-        if _in_the_open:
-            cands = _in_the_open
-
         # THE PLACEMENT IS A KNOB, NOT ONE OBJECTIVE (feature 154, GM 2026-08-29). The record attests
         # several sites for the board and this siter used to know one of them - the busiest node -
         # so every hamlet answered the same way a question the record answers three ways, and Sawada's
@@ -361,7 +356,17 @@ class FixtureSitingMixin:
                     return True
             return False
 
-        _b, _s, x, y, rot, lab, _gap, _shaded = max((c for c in cands if c[0] >= floor), key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
+        # ...AND IN THE OPEN, BUT ONLY AMONG SEATS THAT ALREADY STAND ON THE TRAFFIC (settlement-review, feature 230
+        # passes 12 and 13). The state's notice is the one fixture on a hamlet sheet that exists to be SEEN, and two of
+        # five pool maps posted it under the windbreak. Pass 12 wrote the preference as a filter ABOVE the traffic
+        # floor, and the floor is computed from whatever survives it - so the canopy quietly outranked the traffic and
+        # the board walked out along the verge to where the trees end: Mizuguchi went from 9 of 12 farmhouses within
+        # 250 ft to 3, which is the Ubame failure this siter exists to prevent, arriving through its own fix. The
+        # preference belongs BELOW the floor, among the seats that already carry the traffic, which is where every
+        # other preference in this method sits.
+        _above_floor = [c for c in cands if c[0] >= floor]
+        _in_the_open = [c for c in _above_floor if not c[7]] or _above_floor
+        _b, _s, x, y, rot, lab, _gap, _shaded = max(_in_the_open, key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))
         # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
         # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
         # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:

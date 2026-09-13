@@ -77,7 +77,8 @@ ending at the intake, the settlement is seated clear of it (FR-006).
     the brook's bank and joins it at a confluence, the ditch stroke's stream clip making the mouth; the ditch is a
     drainage ditch to the junction and the brook below the junction stays a `stream`;
   - **off the frame** (`to.kind` is `offmap`; Sawada, Kashikawa and Kuwabata today, drawn by `stream` at 8 px and
-    recorded in `streams`) - kept for a drain the brook does not pass, now drawn and recorded as the other two are.
+    recorded in `streams`) - kept for a drain the brook does not pass, now drawn and recorded as the other two are (the
+    8 px is the water-width ladder's own stream rank, not a new measurement; research.md R2c).
   So the two sinks that disagreed today agree, the third is the researched one, and the `stream` class's explanation
   stops claiming the brook "carries the drain away". The outfall itself and the pond's set-back do not move; what
   changes about the route is only that a run which reached the frame may now end at the brook instead.
@@ -161,11 +162,11 @@ ending at the intake, the settlement is seated clear of it (FR-006).
 
 ## Success criteria
 
-- **SC-1** On Inashiro's page, hovering the collector lights the drain and its outfall run and nothing of the
+- **SC-001** (FR-001) On Inashiro's page, hovering the collector lights the drain and its outfall run and nothing of the
   supply net; hovering the head race lights the supply net and nothing of the drain. The two modals' texts are
   different: the irrigation ditch's says nothing about where the water goes, the drainage ditch's nothing about
   feeding the paddies.
-- **SC-2** The class KEY `field ditch` survives on no live surface the page or its registry tests read: the
+- **SC-002** (FR-001) The class KEY `field ditch` survives on no live surface the page or its registry tests read: the
   engine's emit sites and class registry, `page.py`'s hit rows, `assets/siblings.json`, the pool `.notes.md`
   feature blocks, the FR-007 table. Two things are deliberately NOT touched: the phrase's ordinary prose use (the
   width-ladder comments, "~70x a field ditch"), and `tests/fixtures/classes_before_189.json`, which is the record
@@ -173,17 +174,17 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   through a small table of the keys retired and added since the snapshot (`field ditch` -> `irrigation ditch`,
   `drainage ditch`), so the 51-class proof still holds for every key the snapshot has and the count moves with
   the table rather than by hand.
-- **SC-3** Every drain's continuation carries the same class and the same record kind whichever sink it
+- **SC-003** (FR-002) Every drain's continuation carries the same class and the same record kind whichever sink it
   reaches - the off-frame runs (Sawada, Kashikawa, Kuwabata) and the pond runs (Inashiro, Mizuguchi) alike. The
   third sink, the confluence, is implemented and unit-tested but drawn by no pool map: the two maps that could
   take it have their outfall too near the canvas edge for a junction to carry a visible trunk (research R7).
-- **SC-4** The head race and the intake on every comb pool map follow a recorded, footnoted finding - or a GUESS
+- **SC-004** (FR-003, FR-004) The head race and the intake on every comb pool map follow a recorded, footnoted finding - or a GUESS
   the record labels and the GM has been told about - and the physical task's five boxes are ticked with their
   verdicts.
-- **SC-6** Across the 48-seed cohort every seed seats every household its spec declares - the pre-feature
+- **SC-006** (FR-006) Across the 48-seed cohort every seed seats every household its spec declares - the pre-feature
   baseline of 48 of 48 restored, not approached - and no pool map or cohort seed leaves a homestead across the
   brook from the lanes, wells and board that serve it. Inashiro's notes record that the cluster moved, and why.
-- **SC-5** `make done` green; `settlement-review` PASS on every pool map it reads; no regression against the
+- **SC-005** (FR-005) `make done` green; `settlement-review` PASS on every pool map it reads; no regression against the
   detached-worktree baseline; the perf band explained and confirmed if one is reached.
 
 ## Decisions recorded
@@ -216,7 +217,7 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   the brook above the fields) - an even roll, the proportion a GUESS because the record gives none. Declined:
   whole capture of the brook (admitted by ICID's "part or all" and MAFF's drought passage, shown done nowhere -
   not a form the record shows, so not a knob value); the half-river closure as the drawn weir form (attested,
-  but at a 7 ft brook a half-bar is unreadable - the full oblique closure of Tatai is drawn, a map drawing
+  but at a 7 ft brook - the ladder's stream rank, research.md R2c - a half-bar is unreadable - the full oblique closure of Tatai is drawn, a map drawing
   convention recorded in the entry). The head race's length is DERIVED from where the brook passes the fan's head
   and where the fork stands; the record gives no distance ("short distances", Tabayashi), and the entry says so.
 - **D5 Scope is the live scripted hamlets.** FR-004 (the head) reaches the four comb hamlets whose brook meets
@@ -225,12 +226,12 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   through the same code. The city fans are frozen exhibits or moat-fed and take the class split alone, on the
   next regeneration if ever.
 
-- **D6 What the first review sent back, and what each answer was** (`settlement-review`, needs-work, seven errors; the ledger row carries the finding). The brook's course now reads EVERY cultivated ring - the paddy envelope, the dry hem plots and the supply canals - because the hem is laid outside the envelope and clearing the envelope alone put 1,456 ft of Sawada's brook between plough furrows; the profile is per RING rather than per vertex, since a plot's outermost corner can lie far downslope of the ground its body covers. The offset WANDERS on a seeded reflecting walk (`BROOK_WANDER`, `_wander`) instead of being held at the floor: held, it draws the ruled line the GM rejected on Inashiro by name in August and runs parallel to whatever canal hems that margin, which is the Ikegami two-water-lines catch in a new place. `_off_the_axes` is the backstop for the coincidence a diagonal fall can still produce, nudging away from the crop and never across the heading. The brook runs on down the FALL for its first stride below the tap (`BROOK_TAP_RUN`) so that the offtake angle the record states is the angle the reader sees - measured 64 and 46 degrees before it, because the rule is an angle off the brook's own heading and the code took it off the land's fall. The confluence must leave a trunk below it (`BROOK_JOIN_TRUNK`) after Sawada's landed 4.5 ft inside the frame. And a straggler footpath is routed against the STREAMS (`stream_segs`, the deck-needing subset that helper was split out for) after one crossed the new brook at 1.9 degrees with no deck; the empty list at that call site was right about ditches and became wrong the day the brook stopped ending at the intake.
+- **D6 What the first review sent back, and what each answer was** (`settlement-review`, needs-work, seven errors; the ledger row carries the finding). The brook's course now reads EVERY cultivated ring - the paddy envelope, the dry hem plots and the supply canals - because the hem is laid outside the envelope and clearing the envelope alone put 1,456 ft of Sawada's brook between plow furrows (measured on that map, research.md R6); the profile is per RING rather than per vertex, since a plot's outermost corner can lie far downslope of the ground its body covers. The offset WANDERS on a seeded reflecting walk (`BROOK_WANDER`, `_wander`) instead of being held at the floor: held, it draws the ruled line the GM rejected on Inashiro by name in August and runs parallel to whatever canal hems that margin, which is the Ikegami two-water-lines catch in a new place. `_off_the_axes` is the backstop for the coincidence a diagonal fall can still produce, nudging away from the crop and never across the heading. The brook runs on down the FALL for its first stride below the tap (`BROOK_TAP_RUN`) so that the offtake angle the record states is the angle the reader sees - measured 64 and 46 degrees before it, because the rule is an angle off the brook's own heading and the code took it off the land's fall. The confluence must leave a trunk below it (`BROOK_JOIN_TRUNK`) after Sawada's landed 4.5 ft inside the frame. And a straggler footpath is routed against the STREAMS (`stream_segs`, the deck-needing subset that helper was split out for) after one crossed the new brook at 1.9 degrees with no deck; the empty list at that call site was right about ditches and became wrong the day the brook stopped ending at the intake.
 - **D7 The angle at which the drain MEETS the brook is emergent, and labeled so.** The record's canal-junction rule governs an offtake LEAVING its parent (30 to 45 degrees, pointing downstream); the pass did not ask what angle water ARRIVING at a watercourse was cut to, and the reviewer's reading - that a made outfall may have been turned downstream while a natural tributary was not, which would make it a knob - is a research question this feature does not answer. The confluence's angle is whatever the geometry gives, and the record says so rather than implying a rule.
 
 - **D8 Two questions the review raised and this feature does not answer**, both recorded rather than
   quietly settled. (1) Whether a made drain's mouth was turned downstream like a canal offtake, which would
-  make the mouth angle a knob (D7). (2) Whether a 5.5 ft collector should carry watercourse ink or ditch ink
+  make the mouth angle a knob (D7). (2) Whether a 5.5 ft collector - the drain's tail width from the ladder, research.md R2c - should carry watercourse ink or ditch ink
   where it meets a brook: at the confluence the two arms differ by about twenty units of color and a reader
   cannot tell which is the stream. That is a map-convention question and the palette is shared by every map,
   so it is the GM's to rule rather than this delta's to change.

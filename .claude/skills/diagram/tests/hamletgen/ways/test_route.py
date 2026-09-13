@@ -141,7 +141,7 @@ def test_unjog_eases_a_doubling_corner_it_cannot_cut_straight() -> None:
     not got. Driven here because the pool's own routes no longer produce the shape."""
     from l7r.diagram.hamletgen.ways.route import _unjog
 
-    wall = [(20.0, 2.0), (60.0, 2.0), (60.0, 8.0), (20.0, 8.0)]  # across the straight cut from the corner's neighbours
+    wall = [(20.0, 2.0), (60.0, 2.0), (60.0, 8.0), (20.0, 8.0)]  # across the straight cut from the corner's neighbors
     path = [(0.0, 0.0), (80.0, 0.0), (10.0, 10.0)]  # a hairpin: the turn at (80, 0) doubles back
     out = _unjog(path, [wall], [], [])
     assert out[0] == path[0] and out[-1] == path[-1], "the ends are the route's own"

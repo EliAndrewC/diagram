@@ -114,7 +114,7 @@ def test_the_confluence_reserves_its_own_room_in_the_crop(monkeypatch) -> None: 
     fr.stage_frame(_Crop(), plan)  # type: ignore[arg-type]
     assert calls and calls[0], "the junction is reserved as content"
     x0, y0, x1, y1 = calls[0][0]
-    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centred on the junction"
+    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centered on the junction"
     assert (x1 - x0) >= fr.BROOK_JOIN_TRUNK, "with a trunk's length of room around it"
 
 
