@@ -109,8 +109,8 @@ the bare population BEFORE the twenty-two items R7 closes, so the five deliberat
 FR-001's 462 to 472. **The two hedged tiers are reported rather than rounded**: the readers hedged
 29 of the 695 inventoried items on purpose (`m:hedged-items`), 28 of them in the 494-item bare
 population this composition describes (`m:hedged-bare`), and at most 27 on the work list itself
-(`m:hedged-worklist-max`; `research.md` R1) - the caravan inn is MEDIUM-HIGH and is one of the
-twenty-two R7 closes, and it is the only closure the reports name, so the other twenty-one cannot be
+(`m:hedged-worklist-max`; `research.md` R1) - the caravan inn is MEDIUM-HIGH and bare and is one of
+the twenty-two R7 closes, and it is the only closure the reports name, so the other twenty-one cannot be
 checked for hedges. Collapsing any of them into a neighboring tier would invent a judgment the
 readers declined to make.
 The reports carry the label per item and R6a records the splits, so the ordering applies to the list as
@@ -252,4 +252,12 @@ the successor would defer them to nowhere, so FR-013 makes them work.
   widened from the bare items to every item, since the 29 is taken over all 695 and a stray tier on a
   marked item would corrupt a recorded figure just as quietly. The round-3 arithmetic carries its "on
   round 3's own run" label.
-- **Round 6**: pending.
+- **Round 6 (2026-09-13), `spec-fidelity`: FAITHFUL.** The review re-derived the hedged census
+  independently of the harness (695 blocks, 29 hedged, 28 bare, "caravan inn" in exactly one block, so
+  the bound is 28 - 1 rather than an artifact of a phrase matching twice), confirmed `hedged-worklist-max`
+  is stated as a bound everywhere and holds at both ends of the 462-472 range, and PROVED the widened
+  tier refusal fires by driving the harness with an injected stray tier on a marked item, on a bare item
+  and with an unlabeled item - exit 1 in all three. Its one aside is applied here: FR-012 now says the
+  caravan inn is MEDIUM-HIGH **and bare**, the word that makes the 28 - 1 subtraction self-evident where
+  the claim is made. That word changes no figure, no requirement and no scope, so it does not reopen the
+  counter; the spec is accepted.
