@@ -2267,3 +2267,34 @@ standing. SKETCH: give the footpath's obstacle set the recorded crowns (`M["tree
 run and a circle is the cheapest obstacle there is), or refuse a straggler whose drawn tread passes within the
 rule's own 4.0 ft of one. Deferred rather than taken because the obstacle set is shared by every way the web
 draws, so widening it moves lanes on every map and owes its own cohort and review.
+
+## The windbreak's far limb, where a cluster sits in two groups (feature 230 pass 11, 2026-09-12)
+
+**Measured**: on the reference hamlet 63 of the belt's 308 crowns stand more than 200 ft from any farmhouse and the
+furthest is 518 ft, against a maximum of 184 ft on Sawada, whose cluster is one group. `settlement-review` read the
+east limb - 34 crowns running one crown wide up the frame edge - as a strip of trees sheltering nothing.
+
+**Mechanism**: `belt_polygon` samples the near face across the wind and adds a 90 px shoulder past the outermost house
+at each end, which is right for one group of houses. Inashiro's cluster is two groups with open ground between them, so
+the span `v_hi - v_lo` covers both and the belt is drawn across the gap and past it.
+
+**Why it is not fixed here**: the obvious rule - drop a clump further than X from the nearest house - punches a hole in
+the middle of a belt whose cluster is split, which is a worse picture than the limb. The fix is to the belt's own shape:
+sample the cross-wind columns that actually contain a house (or a run of houses), and end the belt where its own
+column is empty, so a split cluster gets two belts or one belt that stops. That is a change to the windbreak's
+derivation with its own cohort sweep, not a clause bolted onto the clump filter.
+
+## The drain that reaches its pond round a hook (feature 230 pass 11, 2026-09-12)
+
+**Measured**: on Mizuguchi the collector runs north-east to the field's tip and the pond lies south-east of that end,
+so the run leaves along the collector's heading and curves back - 121 ft of ditch to cross a 50 ft gap, its sharpest
+bend 37 degrees (it was one 111.6 degree corner before `pond_run`).
+
+**Why the pond is there**: `pond_seat` steps the pond across the fall because the brook now holds the ground straight
+downslope; the straight seat is over `POND_SETBACK_LIMIT` once the brook is in the way.
+
+**Alternatives priced**: leaving the collector earlier, at the pond's own latitude, means the collector's tail past that
+point drains backwards to a mid-course outfall, which changes what `drain_heading` and `drainage_junction_smooth`
+measure; seating the pond on the collector's extended heading is what the brook already refuses. Both are engine changes
+beyond this feature, so the curve stands and the hook is recorded here with its numbers.
+

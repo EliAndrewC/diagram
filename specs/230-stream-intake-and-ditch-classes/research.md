@@ -464,3 +464,8 @@ across the road; the weir standing in the head race's mouth rather than below it
 round a hook; the flooded plot touching the collector at a corner; and the pre-existing carve items main carries too (the
 sunburst wedges, the reversed polder tapers, the fan floor's invisible spike).
 
+**Pass 11's remaining form items, recorded rather than changed** (the measurements and the sketches are in
+`future-work/farming-communities.md`): the windbreak's far limb where a cluster sits in two groups, and the drain that
+reaches its pond round a hook. Both were measured, both have a named mechanism, and both are changes to a derivation
+(the belt's shape; the pond's seat) rather than clauses this feature can add honestly.
+
