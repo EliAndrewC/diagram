@@ -55,7 +55,7 @@ def in_process(cmds: list[str], program: str) -> float:
     no such per-process setup at all. What this restoration did NOT fix, because it was never the
     cause: a seventeen-fold rise in the in-process figure that was first blamed on it. That was the
     argument parse in `main` sampling three commands instead of the whole window - see the comment
-    there - while the container's load, which was also real, moved only the spawned figure.
+    there. It explains the spawned figure's rise too: a review reproduced it on a quiet machine.
     """
     code = compile(program, "<house-style>", "exec")
     os.environ["HS_HERE"] = str(ROOT / "scripts")
@@ -95,10 +95,10 @@ QUIET = 2.0   # the 1-minute load average above which a timing on this container
 def record(entries: dict[str, dict], load_start: float | None = None) -> None:
     """Write the figures, refusing a TIMING measured while the container was busy.
 
-    A shared container measures itself: the same command gave 145 ms and 303 ms per spawn on the same
-    tree an hour apart, the second while another session rolled a map at 152% CPU. A number taken then
-    is not the guard's cost, and this project has already recorded one such figure as fact (feature
-    236's `2.2 s`). So the load average goes into the entry, and `--anyway` is the only way past.
+    A shared container can measure itself, and this is a PRECAUTION rather than a finding: no run in
+    this feature's record shows contention moving a timing (the pair once offered as evidence came from
+    a three-command sample - see `main`). But this project has already recorded one contaminated
+    figure as fact (feature 236's `2.2 s`), and a load on the entry costs nothing. So the load average goes into the entry, and `--anyway` is the only way past.
     """
     load = os.getloadavg()[0]
     timings = [k for k, e in entries.items() if e.get("varies")]

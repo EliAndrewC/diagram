@@ -125,7 +125,8 @@ written as `true`. `make figures` MUST accept a re-measured value within that fr
 one and report anything outside it. The band belongs to `make figures` ALONE: check 5 re-measures
 nothing, and a prose figure keeps FR-009a's rule - equal to the recorded value, or equal to it rounded
 to the decimals the prose shows - so a band can never let prose say one number for a recorded other. Without a band a clean tree could never be silent
-(`m:timing-run-to-run-drift-pct`, 3.4% quiet, inside the default); without a NUMBER, a session sets the band at check time and the
+(`m:timing-run-to-run-drift-pct`: 3.4%, inside the default, recorded under the FR-011c override at load
+1.47 to 2.52); without a NUMBER, a session sets the band at check time and the
 check becomes unfalsifiable for every timing.
 
 **FR-011b** WHICH entries may carry it is decided by the UNIT, not by the author: an entry whose unit
@@ -137,23 +138,22 @@ MUST refuse one that does. A count repeats exactly or the thing counted changed:
 entry, and MUST REFUSE to record while that load is above a stated quiet threshold unless explicitly
 overridden - in which case the load stands on the entry for a reader to judge. The threshold itself
 is a GUESS and is owed: the harness uses a one-minute load average of 2.0, chosen rather than measured,
-and this FR is its single home - feature 240 defers to it rather than keeping a second. The container is
-shared, and the evidence is a one-shot observation that no command can re-run: the spawned cost of
-the same guard on the same tree roughly doubled between two runs an hour apart while another session
-rolled a map (observed 2026-09-13; method, two runs of `measure/decision_cost.py`, the second
-contended). Feature 236 recorded exactly one such contaminated timing as fact, and it took a review
-round to retire it.
+and this FR is its single home - feature 240 defers to it rather than keeping a second. **The rule is a
+PRECAUTION, not a finding, and the record says so.** No measurement in this feature shows contention
+moving a timing: the doubling first offered as evidence came from the same three-command sampling bug
+FR-011e names, and a review reproduced it on a quiet machine. The container is shared, so the rule is
+kept; if evidence is wanted, it is owed as a keyed measurement, not an anecdote.
 
-**FR-011d** `make figures` REPORTS a moved timing; only a moved COUNT fails. No fixed band survives a
-contended re-run - FR-011c's observation roughly doubled a timing - so a gate that failed on one would
-fail on correct work, which is how a guard teaches sessions to bypass it.
+**FR-011d** `make figures` REPORTS a moved timing; only a moved COUNT fails. A timing is a property of the
+machine as well as the code, so a gate that failed on one would fail on correct work, which is how a
+guard teaches sessions to bypass it. The band of FR-011a is what separates "moved" from "the same
+figure again", not a pass/fail line for the push.
 
 **FR-011e** A harness MUST record the SAMPLE it measured in the entry's `quantity`, and a harness's
 argument parsing MUST NOT let one option's value be read as another's. Both are the same failure
 observed in this feature's own record: `--repeat 3` was parsed as a sample size of three, the entry
-was written as if it covered the whole window, and three successive explanations of the resulting
-numbers - path growth, then contention - were wrong before a review found the sample in the note. The band of FR-011a is what
-separates "moved" from "the same figure again", not a pass/fail line for the push.
+was written as if it covered the whole window, and two successive explanations of the resulting
+numbers - path growth, then contention - were wrong before a review found the sample in the note.
 
 ### D. A reviewer does not adjudicate a figure it cannot re-run (FR-012 to FR-014)
 
@@ -270,6 +270,20 @@ drift between rounds. Refreshing is a command a session runs on purpose, and the
 
 ## Review history
 
+**Round 5** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, three items, all applied, and the fifth
+round of the initial acceptance, so the spec goes to the GM rather than to a sixth. Round 4's figures
+were confirmed against a re-run. The consequential item was a FOURTH wrong attribution of one
+measurement: FR-011c rested on a spawned timing said to have doubled under contention, and the
+reviewer re-ran the three-command sample on a quiet machine and got the same figure - it was the
+sampling bug all along. FR-011c keeps its rule as a stated PRECAUTION with no evidence behind it,
+FR-011d gives its reason without a figure, and the history and both harness docstrings stop asserting
+the contradicted cause. Also applied: a drift called "quiet" was recorded under the override at load
+1.47 to 2.52, and now says so; and FR-011e had absorbed FR-011d's closing sentence and miscounted its
+own list. The reviewer's closing judgment, for the GM: every item in rounds 4 and 5 is a figure or a
+sentence failing the rule this spec writes, none concerns what the GM asked for, and item 1 was found
+only because the reviewer re-ran the harness - which is section D's argument, made on this spec.
+
+
 **Round 4** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, four items, all taken, and FR-011c and
 FR-011d judged IN SCOPE - recording the load is part of "how they were generated", and the severity of
 a moved figure is FR-011 finally saying what it means. The round's main finding was the one this
@@ -277,8 +291,8 @@ feature exists to end, standing in its own record: the drift runs had overwritte
 so the Summary, FR-005, FR-007, SC-006 and R3 all stated figures their own cited keys denied. Chasing
 that found the cause, and it was not the one I had written down: the harness read the `3` in
 `--repeat 3` as its sample size and timed the three longest heredocs, which the entries' own notes
-said. That is now FR-011e, and the harness records its sample in `quantity`. The run was repeated
-quietly and the figures reconciled to it (`m:decision-spawned-ms`, `m:timing-run-to-run-drift-pct`);
+said. That is now FR-011e, and the harness records its sample in `quantity`. The run was repeated under the FR-011c override at load 1.47 to 2.52, and the figures
+reconciled to it (`m:decision-spawned-ms`, `m:timing-run-to-run-drift-pct`);
 its drift falls inside the default band, so FR-011a stands. Also taken: the band belongs to `make
 figures` alone, never to check 5, which keeps FR-009a's exact rule; FR-011c's evidence is labeled as
 the one-shot observation it is; and the load is recorded at both ends of a run, after a quiet start
@@ -325,11 +339,12 @@ the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB) 
 building the corpus at spec stage is measurement data rather than implementation.
 
 **What round 3 set off, which is now FR-011c to FR-011e.** Answering its tolerance item meant
-measuring the run-to-run drift, and the runs came back roughly 2x off. I attributed that three times
-before the record showed the cause: first to the program growing `sys.path` (written into a docstring
-as fact), then to another session rolling a map (partly true - the spawned figure genuinely moved with
-the load), and it was mostly neither. The harness read the `3` in `--repeat 3` as its sample size and
-timed the three longest heredocs in the window; round 4 found "over 3 frozen commands" in the entry's
-own note. So the rules are three: a timing records the load and refuses above a quiet threshold
-(FR-011c), `make figures` reports a moved timing while only a moved count fails (FR-011d), and an
+measuring the run-to-run drift, and the runs came back far off. I attributed that three times
+before the record showed the cause: first to the program growing `sys.path`, written into a docstring
+as fact; then to another session rolling a map at the time; and finally, correctly, to the harness
+reading the `3` in `--repeat 3` as its sample size and timing the three longest heredocs in the window.
+Round 4 found "over 3 frozen commands" in the entries' own notes, and round 5 reproduced the figure the
+second explanation had blamed on contention, on a quiet machine. So the rules are three: a timing
+records the load and refuses above a threshold, kept as a precaution with no measured evidence behind
+it (FR-011c), `make figures` reports a moved timing while only a moved count fails (FR-011d), and an
 entry records the sample it measured while no option's value can be read as another's (FR-011e).

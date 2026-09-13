@@ -58,10 +58,37 @@ _PATH = re.compile(
 _SUBSTITUTION_SEARCH = re.compile(r"\$\(\s*(?:git\s+)?(?:%s)\b[^)]*\)" % "|".join(_SEARCHERS))
 
 
+_HEREDOC_BODY = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n(.*?)\n[ \t]*\2\b", re.S)
+_QUOTED_SPAN = re.compile(r"([\"'])(?:\\.|(?!\1).)*\1", re.S)
+
+
+def _masked(cmd: str) -> str:
+    """`cmd` with heredoc BODIES and the insides of quoted strings blanked, at the same length.
+
+    GUARD_EDIT_OK: feature 239, fixing a guard that altered a SEARCH in another session's command. A
+    separator inside quotes is not a separator: `grep -oE '(HIGH|MEDIUM)|— \\*\\*'` split on every `|`
+    became fragments that no longer began with `grep`, the em-dash in the pattern was "corrected" to a
+    spaced hyphen, and the grep silently searched for the wrong character (guard log, 2026-09-13
+    05:11 UTC, a research session's reader-reports sweep). Offsets survive the mask, so a segment's
+    range still indexes the ORIGINAL command.
+    """
+    chars = list(cmd)
+    for m in _HEREDOC_BODY.finditer(cmd):
+        chars[m.start(3):m.end(3)] = " " * (m.end(3) - m.start(3))
+    blanked = "".join(chars)
+    for m in _QUOTED_SPAN.finditer(blanked):
+        chars[m.start() + 1:m.end() - 1] = " " * (m.end() - m.start() - 2)
+    return "".join(chars)
+
+
 def _segments(cmd: str) -> list[tuple[int, int]]:
-    """(start, end) of each piece of a command between `;`, `&&`, `||`, `|` and newlines."""
+    """(start, end) of each piece of a command between `;`, `&&`, `||`, `|` and newlines.
+
+    Separators are found on the MASKED command, so neither a quoted `|` nor a line of a heredoc body
+    starts a segment of its own.
+    """
     out, start = [], 0
-    for m in re.finditer(r"&&|\|\||;|\||\n", cmd):
+    for m in re.finditer(r"&&|\|\||;|\||\n", _masked(cmd)):
         out.append((start, m.start()))
         start = m.end()
     out.append((start, len(cmd)))
