@@ -342,3 +342,25 @@ def test_there_is_one_definition_of_a_figure() -> None:
     assert lint.UNITS == figs.UNITS
     src = (REPO / "scripts" / "spec-lint.py").read_text()
     assert "UNITS = (" not in src, "spec-lint defines its own unit roster again - import it from _spec_figures"
+
+
+def test_check_5_a_one_shot_label_may_open_a_sentence(tmp_path: pathlib.Path) -> None:
+    """Found by feature 240's review: `(Observed ...)` was refused while `(observed ...)` passed."""
+    ok = "## Summary\n\nThe container ran at 5 s per call (Observed 2026-09-13; Method: a stopwatch).\n"
+    assert figs.check_measured_figures(_measured(tmp_path, ok, _ENTRY)) == []
+
+
+def test_make_figures_resolves_a_relative_spec_from_anywhere(tmp_path: pathlib.Path, monkeypatch: _pytest.MonkeyPatch) -> None:
+    """`make figures SPEC=specs/...` runs from the skill directory; the relative path must still be found."""
+    (tmp_path / "specs" / "240-x").mkdir(parents=True)
+    monkeypatch.setattr(figures_cli, "ROOT", tmp_path)
+    monkeypatch.chdir(tmp_path / "specs")
+    assert figures_cli.resolve("specs/240-x") == tmp_path / "specs" / "240-x"
+
+
+def test_make_figures_refuses_a_named_spec_it_cannot_re_run(tmp_path: pathlib.Path, monkeypatch: _pytest.MonkeyPatch, capsys: _pytest.CaptureFixture[str]) -> None:
+    """Found by feature 240's review: it exited 0 with nothing printed, which reads as every figure reproduced."""
+    (tmp_path / "specs" / "240-x").mkdir(parents=True)
+    monkeypatch.setattr(figures_cli, "ROOT", tmp_path)
+    assert figures_cli.main(["specs/240-x"]) == 1
+    assert "nothing was re-run" in capsys.readouterr().err

@@ -1,6 +1,7 @@
 # Feature 241 - no conflict markers
 
-**Status**: IMPLEMENTED; spec FAITHFUL at round 5.
+**Status**: LANDED on main as `2ad18f80`, spec FAITHFUL at round 5, and the departure in D1 APPROVED BY
+THE GM on 2026-09-13 (*"That's fine. I approve your implementation."*).
 
 **Review history** - and the first thing in it is a departure from Principle XVI, stated rather than
 smoothed over. XVI says a spec is reviewed BEFORE implementation. Here the spec, the guard and the suite
@@ -135,9 +136,11 @@ route, which a state-based rule would not (R2, R3).
   said yes to was the state one, in the session's own framing relayed to them: *"`add -A` is not wrong in
   general, but is never right while a merge is unresolved, and the state is exactly detectable"*. What is
   built instead refuses on CONTENT and never looks at `MERGE_HEAD`. That is a departure from an approved
-  design, so it is flagged here under Principle XVI rather than quietly resolved, it was put to
-  `spec-fidelity` with the GM's request verbatim, and it is raised with the GM in the same report that
-  says the feature works.
+  design, so it was flagged here under Principle XVI rather than quietly resolved, put to `spec-fidelity`
+  with the GM's request verbatim, and raised with the GM in the same report that said the feature works.
+  **They approved it on 2026-09-13** - *"That's fine. I approve your implementation."* - told what the
+  content rule cannot see and what the available recovery would cost. So the content rule is the GM's
+  decision now, not a session's carve-out, and the next reader need not reopen it.
 
   The reason for the departure: the state rule refuses the correct command. The end of every resolved
   merge is `git add -A` with `MERGE_HEAD` still present, so a state rule fires on the single most common

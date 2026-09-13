@@ -77,13 +77,29 @@ def rerun(spec_dir: pathlib.Path) -> tuple[list[str], list[str], list[str]]:
     return failures, reports, skipped
 
 
+def resolve(arg: str) -> pathlib.Path:
+    """A named spec directory, relative to the repository root when it does not exist where the shell stands.
+
+    `make figures SPEC=specs/NNN-slug` runs from the skill directory, so the relative path the reviewer
+    contract hands out resolved to nothing there - and the first version skipped it silently, exiting 0
+    with no line printed, so a reviewer believed figures were re-derived when none were (found by feature
+    240's review).
+    """
+    path = pathlib.Path(arg)
+    return path if path.is_absolute() or path.exists() else ROOT / path
+
+
 def main(argv: list[str]) -> int:
-    dirs = [pathlib.Path(a) for a in argv if not a.startswith("-")]
-    if not dirs:
-        dirs = sorted(p.parent for p in (ROOT / "specs").glob("*/measurements.json"))
+    named = [resolve(a) for a in argv if not a.startswith("-")]
+    dirs = named or sorted(p.parent for p in (ROOT / "specs").glob("*/measurements.json"))
     exit_code = 0
     for spec_dir in dirs:
         if not (spec_dir / "measurements.json").is_file():
+            # A NAMED spec with nothing to re-run is a refusal, never a silent pass: silence here reads as
+            # "every figure reproduced", which is the one message this command must never give falsely.
+            if named:
+                print(f"figures: {spec_dir} has no measurements.json - nothing was re-run", file=sys.stderr)
+                exit_code = 1
             continue
         failures, reports, skipped = rerun(spec_dir)
         print(f"{spec_dir.name}: {len(failures)} moved count(s), {len(reports)} timing(s) outside their band, "
