@@ -24,13 +24,21 @@ verdict, and nothing reads it. A gate keyed on `plan.md` reaches the first narro
 
 ## R2 - what existing plans look like (census, 2026-09-13)
 
-Across the 158 spec directories there are 112 `plan.md` files (`ls specs/*/plan.md | wc -l`). Their
-decisions take no common form: 21 carry a heading naming decisions
-(`grep -l -E '^#+ .*[Dd]ecision' specs/*/plan.md | wc -l`), 30 use the words exception, narrow or
-carve-out somewhere (`grep -l -i -E 'exception|narrow|carve-out' specs/*/plan.md | wc -l`), and exactly
-one labels its decisions with ids (`**P1 -`), feature 239's own. 43 spec directories have a `tasks.md`
-and no `plan.md` (for example 124, 139, 169, 170, 236, 241). This is supporting detail for D1, not its
-ground: the ground is R1.
+Every count is taken at commit `c8d4daab`, before this feature wrote a plan of its own, so the commands
+reproduce while this feature's own files keep landing (`R=c8d4daab`):
+
+- 159 spec directories (`git ls-tree -d --name-only $R specs/ | wc -l`);
+- 113 `plan.md` files (`git ls-tree -r --name-only $R specs/ | grep -c '^specs/[^/]*/plan\.md$'`);
+- 21 carry a heading naming decisions (`git grep -l -E '^#+ .*[Dd]ecision' $R -- 'specs/*/plan.md' | wc -l`);
+- 30 use the words exception, narrow or carve-out somewhere
+  (`git grep -l -i -E 'exception|narrow|carve-out' $R -- 'specs/*/plan.md' | wc -l`);
+- exactly one labels its decisions with ids (`git grep -l '^\*\*P1 -' $R -- 'specs/*/plan.md'`), feature
+  239's own;
+- 42 spec directories have a `tasks.md` and no `plan.md`
+  (`git ls-tree -r --name-only $R specs/ | awk -F/ '$3=="tasks.md"{t[$2]=1} $3=="plan.md"{p[$2]=1} END{n=0; for(k in t) if(!(k in p)) n++; print n}'`),
+  for example 124, 139, 169, 170, 236, 241.
+
+So plans record their decisions in no common form. This supports D1; it is not its ground, which is R1.
 
 ## R3 - the mechanisms a gate can reuse (2026-09-13)
 

@@ -1,7 +1,7 @@
 # Feature 243 - plan decisions are reviewed before tasks are ticked
 
 **Created**: 2026-09-13
-**Status**: DRAFT (round 1 CHANGES REQUIRED applied; round 2 next)
+**Status**: DRAFT (round 2 CHANGES REQUIRED applied; round 3 next)
 **Input**: the GM's request, verbatim, in `request.md`
 
 ## Summary
@@ -119,8 +119,11 @@ The plan review is written the same way.
   reads the plan. The second of feature 239's two narrowings was of that kind.
 - Older features. A push that touches an older feature with ticked tasks - all of them lack a
   `plan-review.json`, and many lack a `plan.md` - is refused until it is reviewed or escaped with a
-  reason. No feature-number cutoff and no exemption for a fully ticked feature is made: that scoping was
-  ruled NOT LEGITIMATE on feature 239. The GM accepted this kind of cost for older specs on 2026-09-13:
+  reason. No feature-number cutoff is made: that scoping was ruled NOT LEGITIMATE on feature 239
+  (`specs/239-*/tasks.md` T17). No exemption for a fully ticked feature is made either, on its own
+  ground: Principle XVI presumes an exception wrong, and feature 239 was fully ticked when its narrowings
+  were pushed, so that exemption would let through the incident this gate exists for (`research.md` R1).
+  The GM accepted this kind of cost for older specs on 2026-09-13:
   *"I'm not worried about older specs; we don't usually edit older specs so that's fine."*
   (`specs/239-*/request.md`).
 - Judging whether the plan is GOOD. The review rules on fidelity to what was asked, not on design quality.
@@ -132,3 +135,6 @@ The plan review is written the same way.
   R2 count restated with its command; R3's claim about `make tick` corrected, with D4 added; FR-007's
   scope defined and the older-features consequence stated; a feature with no `plan.md` (D5); the
   reviewer given `request.md` verbatim; the ground for FR-010 (D6).
+- Round 2 (MODE 3 VERIFY): CHANGES REQUIRED, 2 items. Applied: the R2 counts pinned to a commit so they
+  reproduce; the fully ticked exemption declined on its own ground rather than on 239's ruling, which
+  covered only the feature-number cutoff.
