@@ -1,7 +1,7 @@
 # Feature 239 - measurable guards, and figures that are derived
 
 **Created**: 2026-09-13
-**Status**: DRAFT (awaiting `spec-fidelity`)
+**Status**: ACCEPTED by the GM at the five-round cap (2026-09-13), round 5's items applied
 **Input**: the GM's request, verbatim, in `request.md`
 
 ## Summary
@@ -125,7 +125,7 @@ written as `true`. `make figures` MUST accept a re-measured value within that fr
 one and report anything outside it. The band belongs to `make figures` ALONE: check 5 re-measures
 nothing, and a prose figure keeps FR-009a's rule - equal to the recorded value, or equal to it rounded
 to the decimals the prose shows - so a band can never let prose say one number for a recorded other. Without a band a clean tree could never be silent
-(`m:timing-run-to-run-drift-pct`: 3.4%, inside the default, recorded under the FR-011c override at load
+(`m:timing-run-to-run-drift-pct`, `research.md` R3: 3.4%, inside the default, recorded under the FR-011c override at load
 1.47 to 2.52); without a NUMBER, a session sets the band at check time and the
 check becomes unfalsifiable for every timing.
 
@@ -219,7 +219,7 @@ now broken twice on an apostrophe.
 of this decision said.** The GM asked whether a reviewer should refuse figures given directly. Some
 figures genuinely cannot be re-run - a container state, a span with nothing recording it - and a rule
 with no room for those fires on correct work. But the first draft justified the class with "the
-session ran 208 minutes", and that example is FALSE: this feature ships the command that reproduces
+session ran 208 minutes" (`research.md` R1, `m:amendment-wall-minutes`), and that example is FALSE: this feature ships the command that reproduces
 it, which the review demonstrated by running it. The draft also admitted "a count over a window that
 has moved", which would have covered every disputed figure in the motivating incident - the thing the
 GM asked to stop. So the class is: no command can produce it. A count over a moving window is made
@@ -249,7 +249,7 @@ land as an untested mechanism at the cap. When 240's format has been exercised, 
 it. (Provenance: feature 240, 2026-09-13.)
 
 **D6 - the corpus is committed whole: 2.7 MB of command text, 3.0 MB as the JSON on disk.** The window is 560 commands and the ten largest are
-38-79 KB heredocs. Capping a command at 10,000 characters would keep 88% of them for 1.04 MB, and it
+38-79 KB heredocs (`research.md` R4). Capping a command at 10,000 characters would keep 88% of them for 1.04 MB, and it
 was rejected: the largest commands are exactly the ones that exercise the range walk, and a bench that
 quietly drops them measures the easy half. The repository's `.git` is already 101 MB, so the price is
 paid in a place that can afford it. (These figures are from `measure/freeze_window.py` and
@@ -269,6 +269,11 @@ drift between rounds. Refreshing is a command a session runs on purpose, and the
   the reviewer for less.
 
 ## Review history
+
+**ACCEPTED by the GM** (2026-09-13), at the five-round cap with round 5's three items applied: *"I
+accept the spec as it stands, so please proceed."* The contract shape of section D - NOT-REVIEWABLE
+returned before anything is read, not consuming a round - stands as written.
+
 
 **Round 5** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, three items, all applied, and the fifth
 round of the initial acceptance, so the spec goes to the GM rather than to a sixth. Round 4's figures
@@ -322,7 +327,7 @@ is a key in `measurements.json`. What they corrected: 15 guard scripts with inli
 lines added rather than "about 40" - understated sevenfold, in the direction that made the argument
 stronger. The sharpest item was on the GM's own idea: D2 justified keeping one-shot observations legal
 with "the session ran 208 minutes, which no command can re-run", which is false - this feature ships
-that command - and it admitted "a count over a window that has moved", which would have covered every
+that command (`m:amendment-wall-minutes`) - and it admitted "a count over a window that has moved", which would have covered every
 disputed figure in the motivating incident. D2's class is now what no command can produce.
 
 **Round 3** (`spec-fidelity`, MODE 3 VERIFY): CHANGES REQUIRED, four items, all taken, and two of them
@@ -335,7 +340,7 @@ decides by UNIT which entries may carry one); and FR-009c bundled the decidable 
 with an author-declared "this section narrates" exemption that has no marker and that any section
 could claim - the second is deleted, and a whole section that genuinely narrates is exempted by
 HEADING, the way `spec-lint` already exempts Decisions recorded from check 1. The round also priced
-the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB) and confirmed that
+the corpus decision to the digit (88% under a 10,000-character cap for 1.04 MB, on round 3's own run) and confirmed that
 building the corpus at spec stage is measurement data rather than implementation.
 
 **What round 3 set off, which is now FR-011c to FR-011e.** Answering its tolerance item meant

@@ -35,10 +35,14 @@ import re
 import subprocess
 import sys
 
-UNITS = ("ft", "m", "km", "ha", "mu", "sq ft", "%", "ms", "s", "min", "minute", "minutes",
-         "h", "MB", "MiB", "GiB", "px")
-_UNIT_ALT = "|".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True))
-_FIGURE = re.compile(rf"(?<![\w.])\d[\d,]*(?:\.\d+)?\s*(?:{_UNIT_ALT})(?![\w-])")
+# NO BYTECODE: the push runs this lint's selftest inside the tree it is about to push, and an import writes
+# `scripts/__pycache__/` there; where that is not ignored the push refuses on "uncommitted changes" - found
+# when the sync-with-main suite's fixture repository did exactly that.
+sys.dont_write_bytecode = True
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+# THE ONE DEFINITION OF A FIGURE lives beside check 5 and is re-exported here under its old names, which
+# feature 240 imports from this file. A second copy would drift silently (spec D4).
+from _spec_figures import _FIGURE, _UNIT_ALT, UNITS, check_measured_figures  # noqa: E402,F401
 _POINTER = re.compile(r"\bR\d+\b|research\.md")
 _ID = re.compile(r"\b(FR|SC)-(\d{3}[a-z]?)\b")
 # GUARD_EDIT_OK: the pattern recognized only `**FR-001**`, the id bolded alone, and five of the nine
@@ -248,6 +252,9 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     bad = check_withdrawn(spec_dir, specs_root, tree_root)   # check 2 needs no tasks.md
     if tasks.is_file():
         bad += check_figures(spec) + check_orphans(spec) + check_stale_tasks(spec, tasks)
+    # CHECK 5 (feature 239): a measured figure is derived, not typed. Its own module, beside this one;
+    # it reads features 239 and later only (plan P2) and only once a tasks.md exists, like 1, 3 and 4.
+    bad += check_measured_figures(spec_dir)
     return bad
 
 
@@ -278,7 +285,7 @@ def selftest() -> None:
 
     with tempfile.TemporaryDirectory() as td:
         specs = pathlib.Path(td) / "specs"
-        d = specs / "999-a-feature"
+        d = specs / "099-a-feature"   # below 239: this selftest covers checks 1-4, and check 5 applies from 239
         d.mkdir(parents=True)
         (d / "tasks.md").write_text("- [ ] T01 do the thing (FR-001)\n")
         good = ("# x\n\n## Summary\n\nIt took 91 min, measured in `research.md` R1.\n\n"

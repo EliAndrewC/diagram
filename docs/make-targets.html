@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 65 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 67 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -111,8 +111,10 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make commit-permitted</td><td class=a>&ndash;</td><td>commit the most recent bypass-log entry, which is how a paid FULL run is authorized</td></tr>
 <tr><td class=n>make docs</td><td class=a>&ndash;</td><td>regenerate docs/make-targets.html from this Makefile&#x27;s own `##` lines</td></tr>
 <tr><td class=n>make engine-key</td><td class=a><div class=ad><span class=an>REF=&lt;commit&gt;</span><span class=aw>which commit to key (default: HEAD)</span></div></td><td>the content hash the gate and the push key on</td></tr>
+<tr><td class=n>make figures</td><td class=a>SPEC</td><td>re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]</td></tr>
 <tr><td class=n>make guard-log</td><td class=a>EVENT FULL GUARD SINCE</td><td>the guard firings, listed - GUARD=&lt;name&gt; SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1</td></tr>
 <tr><td class=n>make help</td><td class=a>&ndash;</td><td>list every target with its one-line purpose</td></tr>
+<tr><td class=n>make hookbench</td><td class=a><div class=ad><span class=an>GUARD=&lt;name&gt;</span><span class=aw>a guard whose decision is importable (feature 239 FR-001); others are refused by name</span></div><div class=ad><span class=an>AGAINST=&lt;ref&gt;</span><span class=aw>also print the verdict diff against the guard as it stood at &lt;ref&gt; - what an exemption change owes</span></div><div class=ad><span class=an>REFRESH=1</span><span class=aw>freeze a new dated window of real commands into scripts/fixtures/ instead</span></div></td><td>replay the frozen command window through a guard decision, in process</td></tr>
 <tr><td class=n>make review-accept</td><td class=a><div class=ad><span class=an>MAP=&lt;map&gt;</span><span class=aw>the pool map whose last settlement-review verdict raised the finding</span></div><div class=ad><span class=an>FINDING=&lt;id&gt;</span><span class=aw>the finding&#x27;s id, as that verdict record names it</span></div><div class=ad><span class=an>REASON=&quot;...&quot;</span><span class=aw>why it is left; at least two words and eight characters</span></div></td><td>record a review finding as deliberately LEFT, with a reason - logged like an escape</td></tr>
 <tr><td class=n>make review-paired-gate</td><td class=a>&ndash;</td><td>the settlement-review&#x27;s paired gate - green, running or red (exit 1 on red)</td></tr>
 <tr><td class=n>make review-verdict</td><td class=a><div class=ad><span class=an>MAP=&lt;map&gt;</span><span class=aw>the pool map reviewed</span></div><div class=ad><span class=an>VERDICT=&lt;v&gt;</span><span class=aw>PASS, NEEDS-WORK or NOT-REVIEWABLE</span></div><div class=ad><span class=an>FINDINGS=&lt;file&gt;</span><span class=aw>a JSON list of {&quot;id&quot;, &quot;severity&quot;, &quot;what&quot;}; ids default to F1, F2, ...</span></div></td><td>the settlement-review&#x27;s LAST act - write the map&#x27;s verdict record</td></tr>
