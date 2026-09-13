@@ -292,6 +292,28 @@ def registry_entries(research_dir: str = RESEARCH_DIR) -> dict[str, dict[str, st
     return out
 
 
+#: A registry entry's key and its first paragraph - the citation line, which says what the work is.
+_ENTRY_HEAD = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*<p>(.*?)</p>', re.S)
+#: The GM's own campaign notes, named on a citation line. Canon rather than evidence, so a footnote citing one
+#: links the registry entry instead of a public page - the GM's ruling of 2026-09-07 ("it is correct to make L7R
+#: setting notes an exception to the citation rule"). DERIVED from the registry rather than listed, so a new
+#: canon key is covered the day it lands.
+_CANON_FILE = re.compile(r"\bl7r\.md\b|\bbudgets\.md\b")
+
+
+def registry_keys(research_dir: str = RESEARCH_DIR) -> set[str]:
+    """Every key the registry defines."""
+    with open(os.path.join(research_dir, "SOURCES.html"), encoding="utf-8") as fh:
+        return set(re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)"', fh.read()))
+
+
+def canon_keys(research_dir: str = RESEARCH_DIR) -> set[str]:
+    """The keys whose source is the GM's own campaign notes."""
+    with open(os.path.join(research_dir, "SOURCES.html"), encoding="utf-8") as fh:
+        src = fh.read()
+    return {m.group(1) for m in _ENTRY_HEAD.finditer(src) if _CANON_FILE.search(m.group(2))}
+
+
 def urls_of(text: str) -> list[str]:
     """Every URL a SOURCES.html entry carries (GM 2026-08-28: a source records where it can be read);
     the trailing punctuation a sentence leaves on a URL is trimmed."""

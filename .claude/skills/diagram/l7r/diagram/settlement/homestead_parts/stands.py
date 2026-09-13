@@ -429,10 +429,13 @@ class StandsMixin:
                     # FILL UP TO THE OBSTACLE FROM BOTH SIDES, not only at the midpoint. Where a lane
                     # crosses the belt the midpoint IS the lane, so a midpoint-only fill gives up and
                     # leaves the whole 40-50 ft hole - when what the record and the agronomy both want is
-                    # the wall resuming on each side of the crossing. Purdue NCR-191, on a windbreak that
-                    # must be crossed: an access gate is built "the same height and porosity as the rest
-                    # of the windbreak fence", never left as a bare opening, because "when high-velocity
-                    # air passes through a constriction, its velocity increases". So the gap is offered
+                    # the wall resuming on each side of the crossing. The agroforestry manual, on a windbreak that
+                    # must be crossed: a gap funnels the wind and the air downwind of it often moves FASTER
+                    # than over the open field, so a bare opening is a defect. (The record used to give the
+                    # remedy as rebuilding the crossing to the belt's own height and porosity, which is on no
+                    # page and would close the access; the attested remedy is to ANGLE the opening to the
+                    # prevailing wind. What this code does - resuming the wall each side of the crossing -
+                    # is unaffected.) So the gap is offered
                     # seats across its span and takes whichever the ground allows.
                     # ...AND ACROSS THE BELT'S DEPTH, not only along the straight line between the two
                     # clumps. `village_windbreak_is_continuous` walks COLUMNS of the belt's own span and

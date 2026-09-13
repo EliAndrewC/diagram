@@ -61,7 +61,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     dredged mud" where the drawn collar measures 2.0 m, the same error the `MulberryDike` entry carried).
     A sibling text is reader-facing prose like an explanation, so a correction to it moves the snapshot
     exactly as a rewritten `What:` does. What still never moves is `label`, `name` and `covers`, and none
-    of the three is license for a fourth."""
+    of the three is license for a fourth.
+
+    Feature 232 moved `sources` three more times, all under the same bar and all in the same direction -
+    a key the record stopped being able to cite. `stream` and `field ditch` had been written from the
+    Chinese national standard GB 50288, whose text is readable on no public page, and the pass found the
+    provincial standard that defers to it by number and IS served openly; `fry pond` lost the closed
+    article its township and its century came from. A class whose explanation rests on a key the record
+    no longer cites is miscited in the other direction, which is why these move rather than stay pinned."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

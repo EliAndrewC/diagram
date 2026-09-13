@@ -241,6 +241,13 @@ push_cmd() {
   python3 "$ROOT/scripts/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/check-entry-headings.py before pushing"
   python3 "$ROOT/scripts/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
   "$ROOT/scripts/entry-gate.sh" || exit 1
+  # GUARD_EDIT_OK: feature 236 - spec-lint runs HERE as well as at the gate, for the reason its four
+  # siblings above do: the delta it judges is a `specs/` edit that touches no Python, which takes the
+  # DIRECT route and runs no gate at all. It reads only the spec directories the delta touches, and a
+  # spec with no `tasks.md` (the number claim, the milestone push) passes three of its four checks by
+  # construction, so the two pushes the root CLAUDE.md protects are untouched. Selftest first.
+  python3 "$ROOT/scripts/spec-lint.py" --selftest >/dev/null || die "spec-lint selftest failed - the guard itself is broken; fix scripts/spec-lint.py before pushing"
+  python3 "$ROOT/scripts/spec-lint.py" --delta "$ROOT" || die "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply"
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
   # clause says this procedure "does not run to completion on a red or regressed state" - which was
   # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session

@@ -12,11 +12,13 @@ _BELT_GAP_FT = 30.0  # `village_windbreak_is_continuous`'s own bar - the fill cl
 # THE NUMBER IS OURS; THE DIRECTION OF THE RULE IS THE RECORD'S (GM ruling 2026-08-29, "do whatever was
 # historically true", research/vegetation.html "Does a shelter belt wrap the settlement?"). No source reached - Chinese or Japanese,
 # historical or agronomic - gives a WIDTH for an opening in a shelter belt, so 30 ft is a rendering
-# convention and is labelled one. What IS sourced is that a belt occupies one or two sides and is planted
+# convention and is labeled one. What IS sourced is that a belt occupies one or two sides and is planted
 # along them, that its ABSENT flank is not a gap (Honda 1915 defines yashikirin as the west and north
-# sides), and that a bare run inside the planted stretch is not attested and funnels wind (Purdue NCR-191:
-# an access crossing keeps the belt's own porosity rather than being left open). Hence: close holes WITHIN
-# the run, never wrap the settlement.
+# sides), and that a bare run inside the planted stretch is not attested and funnels wind (the agroforestry
+# manual: a gap concentrates the flow so that speeds downwind of it often exceed the open field's, and where
+# a lane must cut a belt it should cut it at an ANGLE to the prevailing wind - NOT, as this comment used to
+# say, by rebuilding the crossing to the belt's own porosity, which is on no page read). Hence: close holes
+# WITHIN the run, never wrap the settlement.
 
 
 def _belt_axis(pts: Sequence[tuple[float, float]]) -> tuple[float, float]:
