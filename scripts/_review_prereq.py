@@ -145,7 +145,7 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
         elif older:
             out.append(
                 f"{name}: the review snapshot the dispatch names is of an older map than the pool's - re-take it (`make verify`), "
-                f"or dispatch against the pool folder without naming the snapshot"
+                f"or run `make map GEN={rel}` and dispatch against the pool folder without naming the snapshot"
             )
         elif missing and named:
             out.append(

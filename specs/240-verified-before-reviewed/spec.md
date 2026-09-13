@@ -159,7 +159,8 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   overlap and is permitted beside a running gate.
 - **SC-004** (FR-005) A dispatch naming a map whose generation key has moved, or whose artifacts are incomplete
   where the reviewer will read them, is refused in under 5 seconds naming that map and its remedy, and permitted
-  once the map is regenerated. Proven on a real pool map, both ways, in states the harness sets up itself: a
+  once the map is regenerated and the copy the reviewer reads is whole and current: the pool folder, or a snapshot
+  re-taken after the regeneration. Proven on a real pool map, both ways, in states the harness sets up itself: a
   render-less pool folder refused when the dispatch names no snapshot; a whole snapshot of the current map
   permitted when named; a whole snapshot of an OLDER map (its SVG differing from the pool's) refused when named.
 - **SC-005** (FR-006) A figure outside a backtick span with no record and no one-shot label is refused and
@@ -287,3 +288,7 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   to equal the pool's manifest and SVG, and the check does. (2) Two R5 figures did not come from their command,
   which measured whatever state the clone was in and wrote nothing; the harness now sets up and restores every
   state itself and records its own figures.
+- **Amendment round 3, CHANGES REQUIRED, one item, applied.** SC-004's "permitted once the map is regenerated"
+  no longer held for a named snapshot, which stays refused as an older map until re-taken; it now says the copy the
+  reviewer reads must be whole and current. Its aside taken too: the older-snapshot refusal names `make map GEN=...`
+  in its second remedy, as FR-005 does.
