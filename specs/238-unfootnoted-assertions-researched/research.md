@@ -460,3 +460,38 @@ checking them was minutes and the cost of acting on them would have been a wrong
   sentence. The reversed version was in the prompt this session wrote for the reader, not on the page.
   **A badly paraphrased claim in a prompt produces a true finding about a false claim**, and the only
   protection is reading the page before acting on the verdict.
+
+### R5g - `source-applicability` on the two replacement sources (2026-09-13)
+
+Both APPLICABLE-WITH-LIMITS, both `What it is:` accurate, and **the deletion verified**: neither work
+conditions any ordination, rank or grade on marriage. The one residence requirement in either runs the
+other way - the monastic ordinands had to have lived in a monastery for three years. Nothing true was
+removed.
+
+Seven corrections to the write-ups, all applied.
+
+**The premodern half of the Daoism claim is a RELAY, and the limits said the opposite.** The write-up had
+hedged that the article "reaches this setting only as the surviving form of an older one". That
+understates it in one direction and misses a limit in the other. The author states the premodern married
+priesthood directly and in the past tense, so the record is not back-projecting on its own authority -
+but the sentence carries his own footnote to Schipper's <em>The Taoist Body</em>, and the state-pressure
+sentence beside it a footnote to Goossaert, and this project has read neither. So the historical claim
+arrives at one remove, and those two footnotes name exactly where a session should go to put it on its
+own feet. What IS the author's own is modern, and no proportion for any earlier century can come from it.
+
+**The article is read on a library mirror, and the record already knew to say so elsewhere.** The link is
+a subscription aggregator's old full-text feed left open on a German foundation's library server, not the
+publisher's edition - the kind of link that vanishes, at which point the quotation becomes unreadable and
+the note fails the feature-195 rule until it is re-pointed. The entry immediately above it on the same
+registry page already carries that disclosure for its own mirror; this one now does too, with the DOI
+recorded as the fallback.
+
+**Three smaller ones on the genealogies.** One lineage traces over the provincial line to Fujian, not
+Guangdong, which the entry had folded into "Chaozhou country". The "fieldwork is of the 1980s" clause
+undersold the source in the record's own disfavor: the Qing evidence is documentary - written family
+registers and liturgical manuscripts copied in 1908, 1928 and 1932, with masters dated from the middle of
+the eighteenth century - which is why it is the right place to hang the hereditary claim rather than a
+weaker one. And the author is candid that those registers carry manifest errors and gaps, which touches
+who descended from whom rather than whether the offices descended at all. All three are in the limits now,
+along with the honest form of what a handful of lineages can support: that the office DID descend in
+families, never a rate.
