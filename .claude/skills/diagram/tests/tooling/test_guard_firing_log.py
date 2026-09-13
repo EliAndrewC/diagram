@@ -63,7 +63,10 @@ CASES = [
     ("shell-check", _payload(command='echo "a `span`"  # SHELL_CHECK_OK: quoting a transcript verbatim'), "escaped", "shell-check-ok"),
     # feature 236: a Bash payload is TOLD, and the telling is recorded as its own branch - the audit
     # must be able to tell a correction of an edit from a warning that changed nothing
-    ("house-style", _payload(command="echo 'the centre of it' >> docs/a.md"), "warned", "bash-payload"),
+    ("house-style", _payload(command="sed -i 's/centre/center/g' docs/a.md"), "warned", "bash-payload"),
+    # feature 236 amendment 2: correcting a COMMAND is its own rule for the audit - "is it correcting
+    # the right things" is a question about this branch alone, not about the edit corrector.
+    ("house-style", _payload(command="echo 'the centre of it' >> docs/a.md"), "rewrote", "corrected-command"),
 ]
 
 

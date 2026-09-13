@@ -32,6 +32,47 @@ def _aim_off(prev: Pt, tip: Pt, target: Pt) -> float:
     return abs((out - aim + 180.0) % 360.0 - 180.0)
 
 
+def shadow_share(pts: Poly, others: Sequence[Poly], gap: float, step: float = 5.0) -> float:
+    """The greatest share of this lane's own length that runs within `gap` of ONE other way.
+
+    The structural test below asks whether a lane leaves a way and returns to it. This asks the other shape of the same
+    defect: a lane that runs ALONGSIDE another for most of itself, whatever its ends do - two treads with a hairline of
+    grass between them, which is what a reader sees. Measured on Sawada after feature 230 moved its web: 75 ft of a 136 ft
+    lane lay within 8 ft of the lane beside it, where main had no such pair; a lane merely leaving along the connector and
+    diverging (Mizuguchi, 22% of 344 ft) is not this and must not be swept."""
+    if len(pts) < 2:
+        return 0.0
+    total = sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1)) or 1.0
+    best = 0.0
+    # THE BOX PRUNES, THE SAMPLING DECIDES (constitution X clause 15): a lane whose bounding box does not come within
+    # `gap` of this one cannot shadow it, and most lanes on a map are that.
+    x0, x1 = min(q[0] for q in pts) - gap, max(q[0] for q in pts) + gap
+    y0, y1 = min(q[1] for q in pts) - gap, max(q[1] for q in pts) + gap
+    for other in others:
+        if len(other) < 2:
+            continue
+        # A REMNANT IS THE SHORTER OF THE PAIR. Without this the test is symmetric and answers yes for the PARENT as well -
+        # a 200 ft remnant covers half of the 400 ft way it doubles - so the sweep dropped the way and kept the remnant
+        # (caught by `_sweep_doubled_remnants`'s own fixture, feature 230 pass 11).
+        if sum(math.dist(other[k], other[k + 1]) for k in range(len(other) - 1)) < total - 1e-9:
+            continue
+        if max(q[0] for q in other) < x0 or min(q[0] for q in other) > x1 or max(q[1] for q in other) < y0 or min(q[1] for q in other) > y1:
+            continue
+        segs = list(zip(other, other[1:], strict=False))
+        near, walked = 0.0, 0.0
+        for k in range(len(pts) - 1):
+            leg = math.dist(pts[k], pts[k + 1])
+            n = max(1, int(leg / step))
+            for m in range(n):
+                f = (m + 0.5) / n
+                q = (pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f)
+                if min(seg_dist(q[0], q[1], a, b) for a, b in segs) <= gap:
+                    near += leg / n
+                walked += leg / n
+        best = max(best, near / total)
+    return best
+
+
 def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | None:
     """Index of a way that BOTH of this lane's ends stand on or beside, or None - "it goes nowhere".
 

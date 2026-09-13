@@ -7,9 +7,16 @@ the intake, the field's size, the cluster, the lanes, the connector track, the w
 windbreak - is derived from those by the pipeline. Nothing here is a coordinate.
 
 The brief: 19 households on land falling northwest (`down_deg=225`), the drain collector gathering
-the low edge and its brook running OFF THE MAP (`water_sink="offmap"`) - the no-tameike variant of
-the drainage story, with the reed-marsh toe beyond the collector. See `sawada.notes.md` for the
-kanji triangle and the review log.
+the low edge and its runoff leaving the map (`water_sink="offmap"`) - the no-tameike variant of the
+drainage story, with the reed-marsh toe beyond the collector. See `sawada.notes.md` for the kanji
+triangle and the review log.
+
+ONE DECLARED KNOB, and the reason it is declared (feature 230): `intake="open"` - the brook is
+tapped straight off its bank here, with nothing built across the water. The intake's form is rolled
+from the seed and the record attests both forms evenly, but all five pool seeds happened to roll the
+weir, and a knob owes one map per VALUE on the sheet. Pinning the value on the map whose water
+already leaves by the plainest route is how the pool shows the other one. Measured 2026-09-12: the
+roll is even over a thousand seeds (477 weirs), so this is the sample's luck, not a biased draw.
 """
 
 import os
@@ -20,5 +27,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Sawada", seed=6, households=19, down_deg=225, water_sink="offmap"), out_base=os.path.join(HERE, "sawada"))
+report = generate(HamletSpec(name="Sawada", seed=6, households=19, down_deg=225, water_sink="offmap", intake="open"), out_base=os.path.join(HERE, "sawada"))
 print(report.line())

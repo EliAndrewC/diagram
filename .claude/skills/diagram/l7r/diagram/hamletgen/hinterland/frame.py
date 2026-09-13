@@ -25,6 +25,35 @@ def content_box(s: Settlement, plan: SitePlan, pad: float = 0.0) -> tuple[float,
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
+def brook_beside_the_field(s: Settlement) -> list[tuple[float, float, float, float]]:
+    """The brook's stations beside the field, as crop content: a box of the brook's own width round each vertex that lies
+    within `BROOK_FRAME_MARGIN` of the field and its dry hem.
+
+    THE BROOK PASSING THE FIELD IS PART OF THE PICTURE (feature 230, settlement-review pass 10). The crop ignores
+    watercourses because a stream is a runner that trails off the edge, and that is still true of the reach leaving the
+    map - so only the stations abreast of the cultivated ground are reserved, and the exit legs are not. `brook_skirt`
+    holds every such station inside that same box, so the reservation grows the frame by at most the margin on the brook's
+    flank (about 45 px on the pool), and is what lets the margin be wide enough not to fight the skirt. ONE body, read by
+    `stage_frame` and by `scatter_frame`, because the scatter throws inside a PREDICTION of the frame and a reservation
+    one of them did not know about is a view past the prediction (`test_no_shipped_hamlet_breaches_its_scatter_frame`,
+    which is how this was found)."""
+    from ..consts import BROOK_FRAME_MARGIN  # noqa: PLC0415 - kept beside its one use
+
+    rings = [list(f.get("outline") or []) for f in s.M.get("fields") or []] + [list(d.get("poly") or []) for d in s.M.get("dry_plots") or []]
+    xs = [float(q[0]) for r in rings for q in r]
+    ys = [float(q[1]) for r in rings for q in r]
+    if not xs:
+        return []
+    m = BROOK_FRAME_MARGIN + 1.0  # the box `brook_skirt` holds its stations inside, and a pixel for the rounding
+    out: list[tuple[float, float, float, float]] = []
+    for st in s.M.get("streams") or []:
+        hw = float(st.get("w", 6)) / 2.0
+        for qx, qy in st.get("poly") or []:
+            if min(xs) - m <= qx <= max(xs) + m and min(ys) - m <= qy <= max(ys) + m:
+                out.append((qx - hw, qy - hw, qx + hw, qy + hw))
+    return out
+
+
 #: How far past the predicted frame the scatter still throws. 120 in feature 224 (D2), for a hard feature placed after the
 #: hinterland that lands outside everything known; 224's own R3 then enumerated every such placer and found none that grows
 #: the crop laterally (the pool's tightest side was the pad exactly, the prediction's non-pad part coinciding with the
@@ -58,6 +87,9 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     if plan.title_pocket is not None:
         xs += [plan.title_pocket[0], plan.title_pocket[2]]
         ys += [plan.title_pocket[1], plan.title_pocket[3]]
+    for b in brook_beside_the_field(s):  # the frame reserves it, so the prediction must too
+        xs += [b[0], b[2]]
+        ys += [b[1], b[3]]
     if not xs:
         return (0.0, 0.0, float(s.W), float(s.H))  # pragma: no cover - a hamlet has its field and houses by now [224: the empty case keeps the throw whole]
     grow = CROP_MARGIN + SCATTER_PAD
@@ -95,7 +127,8 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
     # nothing, and the title still landed on the fallback corner. Reserving what is blank NOW works
     # because this runs after the water, the crops, the houses and the hinterland and before the
     # only two things left that could fill it (the coppice and the grove).
-    spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
+    _planned = [list(plan.belt)] if plan.belt else []  # the belt is not drawn yet; see `_title_obstacles(planned=...)`
+    spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h, planned=_planned)
     if spot is None:
         # A SMALLER POCKET BEFORE NONE (feature 150 T50 fallout, Kuwabata seed 21): with a sixteenth house
         # on the sheet's right flank the 300 x 190 reservation found no home, nothing was held back, the
@@ -103,7 +136,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         # that corner ON the grove (`title_clear_of_features`). The placard itself is ~195 x 106, so a
         # 210 x 120 pocket is still a real reservation; only when even that fails is nothing reserved.
         w, h = 210.0, 120.0
-        spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h)
+        spot = s._blank_label_spot(x0, y0, x1 - x0, y1 - y0, w, h, planned=_planned)
     if spot is None:
         # THE SHEET HAS NO ROOM FOR ITS NAME (feature 150 T50 fallout, Kuwabata seed 21): with the cluster
         # seated clear of the reed fringe, the houses, the fringe and the connector left no blank box the
@@ -119,7 +152,7 @@ def title_pocket(s: Settlement, plan: SitePlan, w: float = 300.0, h: float = 190
         _cx0, _cy0, _cx1, _cy1 = content_box(s, plan, pad=0.0)
         _bw = max(s._text_width(plan.spec.name, 30) + 4, 100.0) + 24 + 12  # the placard's own size (settlement.title) + 6 px each side
         _bh = 30 * 1.2 + 46 + 24 + 12
-        _obs = s._title_obstacles()
+        _obs = s._title_obstacles(planned=_planned)
         _tries: list[list[float]] = []
         # ...stepping outward up to 48 px per corner: the content box is the field's envelope, and a house
         # seated on its edge stands 14 px past it, so the first offset can land on a roof.

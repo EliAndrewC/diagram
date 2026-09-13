@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import math
+from typing import cast
+
 from l7r.diagram.settlement import Settlement
 
 from ..homesteads import farmstead_fixtures, household_bamboo
@@ -144,7 +147,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
     else:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
-    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN)
+    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp)
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
     # ground because `stage_homesteads` now bounds every seat to the cluster band: over a cloud with
     # a strewn farmstead in it, this became a scatter across 1,446 x 1,244 px - a wood over the whole
@@ -160,10 +163,40 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # reporting Sawada's copse drawn INSIDE the belt - which is the second form happening by accident,
     # unrecorded, on a map that had rolled the first. Rolled per settlement from the map's own seed, so
     # two hamlets differ at a glance, which is the point of a knob rather than a house style.
-    _box = [(min(xs) - pad, min(ys) - pad), (max(xs) + pad, min(ys) - pad), (max(xs) + pad, max(ys) + pad), (min(xs) - pad, max(ys) + pad)]
+    # THE CLUSTER'S OWN FOOTPRINT, NOT ITS BOUNDING BOX (feature 230, settlement-review pass 6). A hamlet
+    # seated on a diagonal margin is a RIBBON - Inashiro's is 969 x 231 ft - and its axis-aligned box is
+    # 617 x 875, most of which is the empty bay beside it. Scattering "among the houses" over that box put 86%
+    # of the copse's clumps more than 90 ft from any house and tripled the wood to 12.4 acres, so the sheet read
+    # as a house row with a wood tucked against its side rather than as houses threaded through trees. The seat
+    # already carries the frame the cluster was laid in; measure the cloud in THAT frame and the ground is the
+    # settlement's own shape. (The windbreak beside it has always used its oriented footprint.)
+    _al = cast("tuple[float, float]", plan.seat.get("along", (1.0, 0.0))) if plan.seat else (1.0, 0.0)
+    _ou = cast("tuple[float, float]", plan.seat.get("out", (0.0, 1.0))) if plan.seat else (0.0, 1.0)
+    _as = [x * _al[0] + y * _al[1] for x, y in zip(xs, ys, strict=False)]
+    _os = [x * _ou[0] + y * _ou[1] for x, y in zip(xs, ys, strict=False)]
+    _a0, _a1, _o0, _o1 = min(_as) - pad, max(_as) + pad, min(_os) - pad, max(_os) + pad
+    _box = [
+        (_a0 * _al[0] + _o0 * _ou[0], _a0 * _al[1] + _o0 * _ou[1]),
+        (_a1 * _al[0] + _o0 * _ou[0], _a1 * _al[1] + _o0 * _ou[1]),
+        (_a1 * _al[0] + _o1 * _ou[0], _a1 * _al[1] + _o1 * _ou[1]),
+        (_a0 * _al[0] + _o1 * _ou[0], _a0 * _al[1] + _o1 * _ou[1]),
+    ]
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]
         _by = [q[1] for q in _dented]
         _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
-    s.village_grove(_box, role="copse", dense=False)
+    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan))  # the map's name has ground reserved; the copse honors it like the belt does
+    # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
+    # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
+    # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the
+    # settlement HAS interior gaps: Inashiro seats 10 clumps with every one inside the house cloud, while Kuwabata's
+    # single row on a dike head has no interior at all and gets 3. A reader - or a later check - reading the knob
+    # alone is told five maps did the same thing. These two numbers say what each one actually drew, and they
+    # claim nothing: a count and a distance, not a second label.
+    _cop = next((g for g in s.M.get("village_groves") or [] if g.get("role") == "copse"), None)
+    _hs = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    if _cop and _hs and _cop.get("clumps"):
+        _near = sorted(min(math.dist((float(c[0]), float(c[1])), h) for h in _hs) for c in _cop["clumps"])
+        s.M["meta"]["copse_clumps"] = len(_near)
+        s.M["meta"]["copse_house_ft"] = round(_near[len(_near) // 2] * float(s.M["meta"].get("ftpx") or 1), 1)

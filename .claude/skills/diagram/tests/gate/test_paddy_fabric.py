@@ -27,7 +27,9 @@ found thing is well formed.
 
 from __future__ import annotations
 
+import glob
 import math
+import os
 
 import pytest
 
@@ -247,3 +249,27 @@ def test_every_recorded_plot_ring_is_a_simple_polygon(fan) -> None:
     assert rings, "no plot rings on the fan"
     crossing = [i for i, r in enumerate(rings) if len(r) >= 3 and not shapely.Polygon([(float(a), float(b)) for a, b in r]).is_valid]
     assert not crossing, f"self-crossing plot rings as recorded: {crossing[:6]}"
+
+
+_POOL_HAMLET_GENS = sorted(glob.glob(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "pool", "hamlets", "*", "*.gen.py")))
+
+
+@pytest.mark.parametrize("gen", _POOL_HAMLET_GENS, ids=os.path.basename)
+def test_no_shipped_hamlet_has_a_basin_tapering_to_a_point(gen: str) -> None:
+    """`paddy_plots_are_workable_basins` over EVERY shipped hamlet's manifest, not only the two the gate rolls
+    (settlement-review, feature 230 pass 10). The fixture above reads the reference and Kuwabata, so a needle on
+    Kashikawa - rings retracing their own edge at 0.9 degrees - reached a review before any test. Reading a manifest
+    costs no roll when the cache is warm - and it is read THROUGH `_pool.obtain`, under the run's per-gen lock, like every
+    other reader of a shipped generator: read straight off disk, it once caught the gate's own roll of the reference mid-write
+    and parsed an empty file."""
+    import json
+
+    from tests.gate import _pool
+
+    with open(_pool.obtain(gen), encoding="utf-8") as fh:
+        M = json.load(fh)
+    fields = [f for f in M.get("fields") or [] if f.get("plot_rings")]
+    if not fields:
+        pytest.skip("no paddy field on this map")
+    needles = [(f.get("name"), i) for f in fields for i, r in enumerate(f["plot_rings"]) if len(r) >= 3 and pointed_ring([(float(a), float(b)) for a, b in r], NEEDLE_DEG)]
+    assert not needles, f"{len(needles)} basin(s) taper below {NEEDLE_DEG} deg: {needles[:5]}"

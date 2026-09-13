@@ -368,7 +368,9 @@ def merge_primitives(s: str) -> str:
 HIT_WIDEN: dict[str, tuple[float, float, float]] = {
     "bund": (8.0, 12.0, 6.0),
     "bund beans": (8.0, 12.0, 6.0),
-    "field ditch": (6.0, 9.0, 4.5),
+    "irrigation ditch": (6.0, 9.0, 4.5),
+    "drainage ditch": (6.0, 9.0, 4.5),  # the same thin line, the same box (feature 230 split the one class in two)
+    "pond canal": (6.0, 9.0, 4.5),  # the dike-pond's same thin line (feature 230 pass 10)
     #: the GM, 2026-08-29: "the pond sluices are really hard to click on ... a larger highlight box,
     #: similar to what we are doing with the field ditches". It is a 2.4 px line - thinner than a ditch -
     #: so the ditch's own factors give it a 14 px box, which is what "similar" buys at that width.
@@ -396,7 +398,7 @@ HIT_ON_TOP: frozenset[str] = frozenset({"pond sluice"})
 #: second one is a decision rather than a coincidence of dict order. A lifted class this list forgets
 #: sorts LAST rather than first - a class is lifted precisely because it must win, and the earlier
 #: version's `-1` fallback silently gave it the weakest place, the opposite of the rule stated here.
-HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans", "field ditch", "pond sluice")
+HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans", "irrigation ditch", "drainage ditch", "pond canal", "pond sluice")
 #: THE STRUCTURES A LIFTED BOX MUST NOT SWALLOW. `HIT_ON_TOP` puts a box above the ink, and the rule it
 #: is allowed under is that a box may beat empty ground and area fills but never another feature's drawn
 #: glyph. It broke that rule the moment it shipped: the sluice box took 88.4% of one pig sty's own

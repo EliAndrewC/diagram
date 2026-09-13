@@ -32,6 +32,10 @@ class _StubSettlement:
     def reink_lane(self, i):
         pass  # the stub has no ink; the record is what the helpers are tested on
 
+    def drop_lanes(self, idxs):
+        for i in sorted(set(idxs), reverse=True):
+            del self.M["lanes"][i]
+
 
 # ---- feature 146: the track's fallbacks, which no cohort seed has needed --------------------------------
 
@@ -91,6 +95,10 @@ class _StubWeb:
 
     def reink_lane(self, i: int) -> None:
         self.reinked.append(i)
+
+    def drop_lanes(self, idxs: list[int]):
+        for i in sorted(set(idxs), reverse=True):
+            del self.M["lanes"][i]
 
 
 def _hamlet_for_ways():

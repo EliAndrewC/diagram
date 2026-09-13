@@ -1,0 +1,38 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "cd020f59a3ef26292ca8c2c653ff08f4e72a772d4ff6619ff04eb42b90f135da",
+  "criteria": {
+    "commensurate": "Split, and only half passes. The web/track half is the brook actually being avoided by lanes - about +1.6 s on the worst seed for a course every map now draws truthfully - and is proportionate. The FIELD half buys the map nothing: it is a saturated acreage search re-proving that no size fits at any aspect, 15 carves against 3, +2.78 s on seed 25 and the single largest item in the whole delta, spent on carves that are thrown away.",
+    "necessary": "Yes for the work itself: the brook keeping its course below the intake is the research finding this feature exists to draw, and both costs are its direct consequences, not incidental code - the fan cut off the brook's flank (seed 25 field 1.70->4.48 s, carve_comb 3->15 calls, all three aspects tried where one sufficed) and a map-length watercourse the lane router must now avoid (seed 47 web 0.36->1.96 s, _route 35->66, fouled 80,265->472,244 on seed 4).",
+    "no_way_around": "It fails on measurement, not on principle. Clause 15 is satisfied - the growth is call count through indexes built once (fabric_index builds FELL 989->278; fouled and edge_within run on the memoized FabricIndex grid and per-ring RingIndex), so there is no unindexed per-candidate scan to fix. But a cheaper implementation exists and I measured it myself: the session's own declined lever (lo, hi, k *= sqrt(2/(1+BROOK_FAN_TRIM))) applied to HEAD in a detached worktree reads 26.8/26.3 s against an interleaved 28.2/28.2 s pre-feature baseline - 5.8% FASTER than the code before the feature and 25% faster than what is being shipped, with seed 47 field 4.7->2.8 s and its web 1.98->0.6 s, so the declared -3.6% is real and conservative. What blocks it is not physics but a deferred defect, the fan's toe throwing slivers at the larger size (one 618 sq ft basin under the 15 degree needle bar and no wet-paddy plot on the reference roll); Principle XIV asks that to be fixed inside this work rather than paid for in perpetuity at +21.9%."
+  },
+  "end": {
+    "commit": "68725b50",
+    "label": "230-end",
+    "utc": "20260912T212101Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260912T215120Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "seeds": {
+      "25": 17.1,
+      "39": 26.7,
+      "4": 3.3,
+      "47": 38.2
+    },
+    "total_pct": 21.9
+  },
+  "note": "Band 3 also crossed (total +21.9%, seeds 39 and 47 above 20%): the GM's own sign-off at a terminal is still owed and is not mine to grant.",
+  "verdict": "not-justified"
+}

@@ -14,6 +14,7 @@ from l7r.diagram.settlement import knob_rng
 
 from .consts import (
     BAMBOO_FORMS,
+    BROOK_FLANKS,
     CARDINAL_BEARINGS,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
@@ -23,12 +24,15 @@ from .consts import (
     FIELD_ARCHETYPES,
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
+    HEAD_RACE_LEAD,
     HOUSEHOLD_BAND,
+    INTAKE_FORMS,
     KOSATSUBA_SITINGS,
     LANE_SKELETONS,
     LANE_WEBS,
     LEFTOVER_FORMS,
     MANURE_FORMS,
+    OFFTAKE_DEG,
     OFFTAKE_LADDER,
     PLOT_SIZES,
     POLDER_ARCHETYPES,
@@ -69,6 +73,8 @@ class HamletSpec:
     windward: str | None = None
     # The rolled knobs, pinnable.
     water_sink: str | None = None
+    intake: str | None = None  # the intake's form at the brook: weir | open (feature 230; `INTAKE_FORMS`)
+    brook_side: int | None = None  # which flank the brook passes on: +1 / -1 (feature 230; `BROOK_FLANKS`), pinnable so the pool can exhibit a sink the roll happens not to reach
     cluster_shape: str | None = None
     lane_skeleton: str | None = None
     lane_web: str | None = None
@@ -110,6 +116,8 @@ class HamletSpec:
             )
         if self.windward is not None and self.windward not in WIND_VECTORS:
             raise ValueError(f"windward {self.windward!r} is not a compass quarter: {sorted(WIND_VECTORS)}")
+        if self.brook_side is not None and self.brook_side not in BROOK_FLANKS:
+            raise ValueError(f"brook_side {self.brook_side!r} must be one of {sorted(BROOK_FLANKS)} - the two flanks the brook may pass the fan on")
         if self.water_sink is not None and self.water_sink not in ("pond", "offmap"):
             raise ValueError(f"water_sink {self.water_sink!r} must be 'pond' (a tameike below the fields) or 'offmap' (the drain brook leaves the frame)")
 
@@ -149,6 +157,9 @@ class SitePlan:
     grain_drift: int
     woodland_patches: int
     fan_aspect: float
+    intake: str  # weir | open (feature 230, `INTAKE_FORMS`) - what stands where the head race leaves the brook
+    brook_side: int  # +1 / -1: which flank of the fan the brook passes on, the head race leaving toward the other
+    head_lead: float  # px from the intake to the division point, rolled within `HEAD_RACE_LEAD`
     target_acres: float
     W: int
     H: int
@@ -161,6 +172,7 @@ class SitePlan:
     envelope: Poly = field(default_factory=list)
     sink_pond: tuple[float, float, float, float] | None = None
     sink_brook: Poly = field(default_factory=list)
+    brook: Poly = field(default_factory=list)  # the feed brook's whole course, past the fan to the frame (feature 230)
     watercourses: list[tuple[Pt, Pt]] = field(default_factory=list)
     belt: Poly = field(default_factory=list)
     # The coppice patches, scanned in `stage_hinterland` BEFORE the scrub is scattered so the scrub
@@ -177,11 +189,34 @@ class SitePlan:
     title_pocket_outside: bool = False  # the reservation lies OUTSIDE the content and the crop must take it in (hamletgen.stage_frame)
     placed: int = 0
     acres: float = 0.0
+    # THE BROOK'S SAY IN THE SEAT (feature 230). `seat_cluster` scores a field margin down when the
+    # brook runs near the band and strikes it out entirely when the brook DIVIDES the band, because a
+    # cluster seated there stands in two halves with no crossing between them. Both can cost a
+    # household - the ground the brook rules out is ground the houses had - so neither is the last
+    # word: a roll counts the margins the brook steered it away from, and `generate` rolls again with
+    # the brook ignored at the seat when the map came up short, keeping whichever roll seats more.
+    seat_ignores_brook: bool = False
+    seat_brook_steered: int = 0
+    # WHERE THE DRAIN MEETS THE BROOK, when it does (feature 230). Set by `stage_sink`; read by `stage_frame`,
+    # which reserves it as content so the crop cannot leave the junction off the sheet. A confluence is the one
+    # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
+    # crop deliberately ignores runners, which is how one came to be drawn 7.4 ft outside the picture.
+    confluence: Pt | None = None
 
     @property
     def fall(self) -> Pt:
         """Unit vector pointing DOWNHILL, in screen coordinates."""
         return (math.cos(math.radians(self.down_deg)), math.sin(math.radians(self.down_deg)))
+
+    @property
+    def head_deg(self) -> float:
+        """The bearing the head race leaves the intake on (feature 230).
+
+        An offtake leaves its parent pointing downstream at an acute angle, so the race turns off the
+        brook's own downstream heading - which is the land's fall, the brook running downhill - by the
+        offtake angle, and it turns AWAY from the flank the brook takes, so that the two never run
+        alongside one another."""
+        return self.down_deg - self.brook_side * OFFTAKE_DEG
 
     @property
     def wind(self) -> Pt:
@@ -285,6 +320,9 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),
         fan_aspect=float(_roll(spec.seed, "fan_aspect", FAN_ASPECTS)),
+        intake=spec.intake or str(_roll(spec.seed, "intake", INTAKE_FORMS)),
+        brook_side=spec.brook_side if spec.brook_side is not None else int(_roll(spec.seed, "brook_side", BROOK_FLANKS)),
+        head_lead=float(_roll(spec.seed, "head_lead", HEAD_RACE_LEAD)),
         target_acres=target_acres,
         W=W,
         H=H,

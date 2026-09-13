@@ -326,3 +326,56 @@ def test_a_re_roll_that_seats_fewer_households_is_not_kept(monkeypatch) -> None:
     _scripted_rolls(monkeypatch, {0: (14, [(1.0, 1.0), (2.0, 2.0)]), 2: (14, [])})
     rep = hg.generate(spec, out_base=None, render=False)
     assert rep.attempt == 2 and rep.failures == [], "a re-roll that seats no fewer and strands none is kept"
+
+
+def _stub_stage(placed_plain: int, placed_ignoring: int, steered: int):  # type: ignore[no-untyped-def]
+    """A stand-in stage that seats a declared number of households and nothing else.
+
+    Lifted out of the two tests below rather than written as a closure in each (GM 2026-08-28): it takes the
+    two counts and the steer count as plain integers, so what each test is asking is legible in its own call."""
+
+    def stage(s, plan):  # type: ignore[no-untyped-def]
+        plan.seat_brook_steered = 0 if plan.seat_ignores_brook else steered
+        plan.placed = placed_ignoring if plan.seat_ignores_brook else placed_plain
+
+    return stage
+
+
+@pytest.mark.rolls_map  # it builds and finishes a Settlement twice (one stand-in stage, no render)
+def test_a_map_short_of_households_is_rolled_again_with_the_brook_ignored_at_the_seat(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 230: `seat_cluster` scores a margin down when the brook runs near the band and strikes it out
+    when the brook divides it - and the cohort measured what that costs, 48/48 becoming 46/48, seeds 15 and
+    22 seating short on the margin the brook left them. So a roll that comes up short and was steered by the
+    brook is rolled again with the brook ignored at the seat, and kept when it seats MORE."""
+    from l7r.diagram.hamletgen import driver
+
+    monkeypatch.setattr(driver, "STAGES", (_stub_stage(placed_plain=9, placed_ignoring=10, steered=2),))
+    rep = driver.generate(driver.HamletSpec(name="Short", seed=1, households=10), out_base=None, render=False)
+    assert rep.manifest is not None
+    assert rep.manifest["meta"]["roll_placed"] == 10, "the second roll seated the missing household"
+    assert rep.attempt == 2 and rep.rerolled_after == ["households_seated"]
+
+
+@pytest.mark.rolls_map  # the same two rolls, with the second one rejected
+def test_ignoring_the_brook_is_kept_only_when_it_seats_more(monkeypatch) -> None:
+    """The other branch, and the reason the re-roll is safe: a second roll that seats no more than the first is
+    thrown away, the brook keeps its say, and the REPORT goes back to the first roll's own manifest. That last
+    part is what a cohort reads - it passes no `out_base`, so nothing rewrites the files and the report is the
+    only record of what the map did."""
+    from l7r.diagram.hamletgen import driver
+
+    monkeypatch.setattr(driver, "STAGES", (_stub_stage(placed_plain=9, placed_ignoring=9, steered=2),))
+    rep = driver.generate(driver.HamletSpec(name="NoBetter", seed=1, households=10), out_base=None, render=False)
+    assert rep.manifest is not None
+    assert rep.manifest["meta"]["roll_placed"] == 9
+    assert rep.attempt == 1 and rep.rerolled_after == [], "the first roll is the one that stands"
+
+
+@pytest.mark.rolls_map  # one stand-in stage, one roll
+def test_a_map_that_seats_its_households_is_not_rolled_again(monkeypatch) -> None:
+    """The door stays shut on a map that is not short, however much the brook steered its seat."""
+    from l7r.diagram.hamletgen import driver
+
+    monkeypatch.setattr(driver, "STAGES", (_stub_stage(placed_plain=10, placed_ignoring=10, steered=5),))
+    rep = driver.generate(driver.HamletSpec(name="Full", seed=1, households=10), out_base=None, render=False)
+    assert rep.attempt == 1 and rep.rerolled_after == []

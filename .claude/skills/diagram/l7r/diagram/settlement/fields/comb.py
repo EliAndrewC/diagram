@@ -22,6 +22,7 @@ from .._geom import (
 )
 from .._knobs import _centroid, _sharp_corners, _toward
 from ..land.wet import pond_fringe_ring
+from ..water_ways.water import ditch_style
 from .landuse import line_cuts
 
 if TYPE_CHECKING:
@@ -188,7 +189,7 @@ class CombMixin:
         # imperfect tessellation never shows the parchment background as bare "white" gaps (research.md D5).
         self.comb_base_fill(net, name)
 
-        self._comb_draw_hem(net)
+        self._comb_draw_hem(net, source)
         self._comb_draw_paddies(net)
         self.bund_junctions(net["plots"], name)
         # WATER-HONEST BEADS, the draw-site half (GM 2026-08-15: "fix the water-buried beads so
@@ -200,12 +201,22 @@ class CombMixin:
         # own seeded rng, so the move ripples no stream), then every bead inside the source pond
         # or a pocket pond is dropped BEFORE drawing and recording, so dots and manifest agree.
         self._paddy_features(net)
-        self._comb_draw_beads(net, source)
         sluice = net["channels"][0]["pts"][0]
         pond_rec = self._comb_draw_source(net, source, sluice)
         self._comb_draw_ditches(net)
-        self._comb_record_field(net, name)
         self._comb_record_ditches(net, name)
+        # ...AND THE DITCHES ARE RECORDED BEFORE THE FIELD IS (feature 230). The field record carries the bead
+        # POINTS, so a bead dropped after it is dropped from the picture and not from the manifest - which is
+        # the drift `bunds_and_dikes` exists to catch, and which is how a bead under a drain's wide tail came
+        # to be recorded on a map that does not draw it. The drop reads the ditch records, so they go first.
+        self._comb_drop_drowned_beads(net, source)
+        self._comb_record_field(net, name)
+        # THE BEADS GO LAST OF THE FIELD'S INK, because the thing they have to keep out of does not exist until
+        # the line above (feature 230). A drawing method sees only what is in `self.M` when it runs, and the
+        # bead pass ran BEFORE the ditches were recorded, so its water test had nothing to read and a bead sat
+        # under a drain's wide tail on the reference hamlet. Drawn here it clears the pond, the pocket ponds and
+        # every recorded ditch alike; nothing is painted over, because a bead that would be is dropped first.
+        self._comb_draw_beads(net)
         # a hairline SOURCE -> field feed carrying the topology (winds a little into the paddy interior). It
         # STARTS at the source (the pond center, or the sluice for a stream) so channel_source_anchored /
         # pond_connected_to_field see it, and carries a gentle perpendicular KINK so channel_winds_gently passes.
@@ -227,8 +238,9 @@ class CombMixin:
             self._pending_block = None
         return cast("list[Pt]", net["envelope"])
 
-    def _comb_draw_hem(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
-        """Draw the dry upslope hem, skipping any plot that falls on an earlier fan's rice or on standing water."""
+    def _comb_draw_hem(self: Settlement, net: dict[str, Any], source: dict[str, Any] | None = None) -> None:  # type: ignore[misc]
+        """Draw the dry upslope hem, skipping any plot that falls on an earlier fan's rice or on standing water -
+        including the brook the field is being cut around, which `source` carries and the manifest does not yet."""
         from l7r.diagram.waterfields import hem_on_paddy
 
         # a fan's hem is generated blind to the OTHER fans on a multi-fan map, so drop any hem plot
@@ -249,6 +261,18 @@ class CombMixin:
                 if _wpl:
                     _wet.append((_wpl, float(_wr.get("w") or _wdw) / 2))
         _wpond = self.M.get("pond")
+        # ...AND THE BROOK THIS FIELD IS BEING FITTED AROUND, which is not in `M["streams"]` yet (feature 230).
+        # The source hands its own course in, and the hem is drawn before the source is - so reading the
+        # manifest alone made the hem blind to the one watercourse the field was cut around, and
+        # `settlement-review` measured 34 ft of Mizuguchi's brook drawn across a soy plot's corner with the
+        # water ink over the plow boundary. The geometry is in hand; take it from the caller rather than from
+        # a record that does not exist yet.
+        _src_brook = (source or {}).get("stream") if isinstance(source, dict) else None
+        if _src_brook and len(_src_brook) >= 2:
+            # ...with a BUND'S WIDTH of margin beyond the bank (settlement-review, feature 230 pass 11). At the bare half-width a
+            # hem plot 5.9 ft from Mizuguchi's centerline was kept, which leaves about half a foot between the water's bank and
+            # the plot's plow boundary - the crop stops at the bank, and a bund is the thing that stops it.
+            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2 + 3.0))
 
         def _hem_on_water(poly: Poly) -> bool:
             return hem_on_water(poly, _wet, _wpond)
@@ -307,9 +331,16 @@ class CombMixin:
                 # see the paint cannot judge it (the azemame water-honesty precedent).
                 self.M.setdefault("flooded_plots", []).append(_centroid(p["poly"]))
 
-    def _comb_draw_beads(self: Settlement, net: dict[str, Any], source: dict[str, Any]) -> None:  # type: ignore[misc]
-        """Drop every azemame bead that pond paint would bury, then draw the rest - so dots and manifest agree."""
-        from l7r.diagram.waterfields import BEAN_GREEN
+    def _comb_drop_drowned_beads(self: Settlement, net: dict[str, Any], source: dict[str, Any]) -> None:  # type: ignore[misc]
+        """Drop every azemame bead that water would bury - pond paint or a ditch's own stroke - then draw the
+        rest, so the dots and the manifest agree.
+
+        THE DITCH HALF IS THE TAIL'S WIDTH, NOT THE HEAD'S (feature 230). A drain collector is recorded with
+        `w` at its head and `w_tail` where it leaves, and it is painted as a taper between them - so a bead
+        sitting 2.2 ft off a ditch recorded at 1.5 ft was still under ink, because that ditch ends at 5.5.
+        Measured on the reference hamlet the day the brook moved the field under it. The painter's own widest
+        figure is what the bead has to clear, which is the same figure `bunds_and_dikes` judges it by: a check
+        and the code it checks must read the SAME number, or the map and the rule drift apart quietly."""
 
         _bw: list[tuple[float, float, float, float]] = []
         if source.get("kind") == "pond":
@@ -318,6 +349,19 @@ class CombMixin:
         _bw += [(fp["x"], fp["y"], fp["rx"] + 3.0, fp["ry"] + 3.0) for fp in self.M.get("field_ponds") or []]
         if _bw:
             net["bund_beans"] = [q for q in net["bund_beans"] if all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw)]
+        _water = [
+            ([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0)
+            for d in (self.M.get("field_ditches") or [])
+            if len(d.get("poly") or ()) >= 2
+        ]
+        _water += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (self.M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
+        if _water:
+            net["bund_beans"] = [q for q in net["bund_beans"] if all(min(seg_dist(q[0], q[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1)) >= half for poly, half in _water)]
+
+    def _comb_draw_beads(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
+        """Draw what survived `_comb_drop_drowned_beads` - the ink, after the record it agrees with."""
+        from l7r.diagram.waterfields import BEAN_GREEN
+
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
         self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
 
@@ -366,7 +410,8 @@ class CombMixin:
         # order (widest-first) is unchanged and byte-identical; only the polder ring re-sorts.
         _ring_last = {"feeder", "drain", "e_toe", "w_toe"}
         for c in sorted(net["channels"], key=lambda c: (c.get("seg") in _ring_last, -c["w"])):
-            self.field_channel(c["pts"], "#7C9EB0" if c["role"] == "drain" else "#6C9CBE", c["w"], c.get("w_tail", c["w"]), late=True)
+            col, cls = ditch_style(c["role"], self.M["meta"].get("field_archetype"))  # ONE read decides both the hue and the hover class (feature 230)
+            self.field_channel(c["pts"], col, c["w"], c.get("w_tail", c["w"]), late=True, cls=cls)
         if net["brook"]:
             # the drain-outfall brook shoots STRAIGHT downhill off-map (a fan field's own wiggly brook can
             # re-enter the paddy and trip streams_avoid_fields; a straight downhill exit never does)
@@ -379,7 +424,15 @@ class CombMixin:
             mid = (b0[0] + ex / el * 70, b0[1] + ey / el * 70)  # a short smooth continuation, THEN turn downhill
             # (first segment = drain direction -> smooth junction; then straight downhill AWAY from the field ->
             # clears a fan envelope's concave lobe without an acute turn, since the drain already runs downhill)
-            self.stream([b0, mid, (mid[0] + bdx * 520, mid[1] + bdy * 520)], frm={"kind": "drain"}, to={"kind": "offmap"}, width=8)
+            # A DRAINAGE DITCH, not a stream (feature 230): the collector's dug continuation, drawn at the
+            # collector's tail width with the drain's hue and class, recorded in `channels` like the pond run
+            # - the same stroke `hamletgen/sink.py` `drain_run` draws, so every sink carries one kind of thing.
+            _run = [b0, mid, (mid[0] + bdx * 520, mid[1] + bdy * 520)]
+            _dw = next((float(_c.get("w_tail", _c["w"])) for _c in net["channels"] if _c.get("role") == "drain"), 5.5)
+            col, cls = ditch_style("drain")
+            self.field_channel(_run, col, _dw, _dw, cls=cls)
+            self.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5})
+            self.corridors.append((list(_run), 33.0))
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
         """Assemble and append this fan's M['fields'] record: envelope, per-plot dims, drain-hem rings,
@@ -474,9 +527,17 @@ class CombMixin:
         self.M["fields"].append(_fld)
 
     def _comb_record_ditches(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
-        """Record one field_ditch per channel, carrying the trimmed and polder-side tags."""
+        """Record one field_ditch per channel, carrying the trimmed and polder-side tags.
+
+        A RECORD DOES NOT CARRY A POINT TWICE (settlement-review, feature 230 pass 12). The head race is traced to the
+        fork it ends at, and where the trace already stood there the fork was appended again - so three pool maps
+        shipped a ditch whose last two points are identical, and on two of them the whole record WAS that duplicate
+        plus a lead: Inashiro's was 3.2 ft of "main" and Mizuguchi's 21.9, each drawn as its own stroke, each a hover
+        region a reader could meet, each reading on the sheet as a blunt stub of ditch stopping in the bare hem. What
+        is dropped here is only ink nothing is losing: a run under a foot has no course to show."""
         for c in net["channels"]:
-            rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in c["pts"]], "role": c["role"], "field": name, "w": round(c["w"], 1), "w_tail": round(c.get("w_tail", c["w"]), 1)}
+            _pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
+            rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _pts], "role": c["role"], "field": name, "w": round(c["w"], 1), "w_tail": round(c.get("w_tail", c["w"]), 1)}
             if c.get("trimmed"):  # a TRIMMED in-wall drain is a conduit stub, not a contour collector
                 rec["trimmed"] = True
             if c.get("seg"):  # a polder ring-side tag (feeder/e_toe/w_toe/drain/lateral), so footbridge placement can be side-aware
@@ -570,6 +631,16 @@ class CombMixin:
             # the drawn run does not already reach it. On every comb map the run starts on the head,
             # the distance is ~0, and nothing is inserted: the pool is byte-identical.
             _ch_poly = [[round(start[0], 1), round(start[1], 1)], [round(midx, 1), round(midy, 1)], [round(din[0], 1), round(din[1], 1)]]
+            if not pond_rec:
+                # THE RECORD TRACES THE HEAD RACE THAT IS DRAWN (settlement-review, feature 230 pass 10). Before the brook was
+                # tapped this bowed line WAS the drawn feed; since the head race is carved at its offtake angle (`hr`, the
+                # net's own first channel) the bow traced a course 50 px from any ink, and the site boundary kept houses off
+                # water that was not there. Sluice, the race's own vertices to the fork, then the step into the field that
+                # anchors the topology.
+                _ch_poly = [[round(start[0], 1), round(start[1], 1)], *[[round(float(q[0]), 1), round(float(q[1]), 1)] for q in hr[1:]]]
+                # ...and it ENDS AT THE FORK, where the drawn race ends. An extra step into the field was kept to anchor the topology,
+                # and it was a record of water that is not there - a 70 ft tail past the ink on the reference hamlet and Sawada
+                # (pass 11); nothing reads the channel's field end as more than the field it names.
             _fk = (float(fork[0]), float(fork[1]))
             _fk_d = min(seg_dist(_fk[0], _fk[1], (_ch_poly[_i][0], _ch_poly[_i][1]), (_ch_poly[_i + 1][0], _ch_poly[_i + 1][1])) for _i in range(len(_ch_poly) - 1))
             # `join_head` is passed by the POLDER path and by nothing else. Conditioning this on

@@ -314,3 +314,141 @@ def test_a_break_already_walkable_round_through_two_other_lanes_is_not_bridged()
     assert len(near.M["lanes"]) == 6
     far = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 40.0)], a, b, *walk(70.0)])  # walk 260 ft, over 2x: the hole is bridged
     assert hg.ways._bridge_collinear_breaks(far, [], [], []) == 1
+
+
+def test_a_doubled_remnant_that_is_the_only_tread_between_two_halves_is_kept() -> None:
+    """The doubled-band sweep drops a remnant that leaves one way and returns to it - unless dropping it would
+    cut the INK in two. `shadowing_lane` reads both ends at the 30 ft join figure while the one-network rule
+    reads 4 ft of ink, so a remnant can shadow its parent and still be the only tread a third lane hangs off.
+    Dropping those left Sawada, Kashikawa and Mizuguchi in two pieces (feature 220)."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(-400.0, -400.0), (-300.0, -400.0)],  # the connector, away from everything (index 0 is the connector)
+            [(0.0, 0.0), (400.0, 0.0)],  # the way the remnant leaves and returns to
+            [(100.0, 3.0), (300.0, 3.0)],  # the remnant: both ends within 30 ft of that way, its ink 3 ft off it
+            [(150.0, 5.0), (150.0, 200.0)],  # a lane 5 ft off the way - out of ink reach of it, in reach of the remnant
+        ],
+    )
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    sweeps._sweep_doubled_remnants(s)
+    assert [list(ln["pts"]) for ln in s.M["lanes"]] == before, "the remnant is kept: dropping it would island the third lane"
+
+
+def test_a_fragment_is_kept_when_a_house_it_serves_has_no_other_way() -> None:
+    """`_sweep_debris` drops a short fragment alone in its component - but never one that is a farmhouse's only
+    way. A stranded house is the worse failure, and `farmhouses_reach_a_way` should say so rather than the map
+    quietly losing the tread that served it."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (300.0, 0.0)], [(900.0, 900.0), (910.0, 910.0)]],  # the fragment is SHORT, or its length alone keeps it
+        houses=[(20.0, 30.0), (905.0, 905.0)],  # the second house is served ONLY by the far fragment
+    )
+    s.M.setdefault("meta", {})
+    sweeps._sweep_debris(s)
+    assert s.M["lanes"][1]["pts"], "the fragment stays: it is that farmhouse's only way"
+
+
+def test_a_swept_field_spur_says_so_on_the_map() -> None:
+    """`_sweep_debris` drops a short fragment that is alone in its component and whose houses are served
+    elsewhere. The FIELD SPUR serves no house at all, so it answers that question vacuously - and a hamlet that
+    loses its only path to its rice should say so rather than lose it silently, which is how the reference
+    hamlet's missing path went unnoticed for three review passes."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[[(0.0, 0.0), (300.0, 0.0)], [(900.0, 900.0), (910.0, 910.0)]],
+        houses=[(20.0, 30.0), (120.0, 30.0)],
+    )
+    s.M["lanes"][1]["spur"] = True
+    s.M.setdefault("meta", {})
+    sweeps._sweep_debris(s)
+    assert all(not ln["pts"] for ln in s.M["lanes"] if ln.get("spur")), "the isolated spur is swept like any other fragment that joins nothing"
+    assert "isolated" in (s.M["meta"].get("field_spur_swept") or ""), "and the map records that it was"
+
+
+def test_a_lane_end_in_open_ground_is_pulled_back_to_something_or_dropped() -> None:
+    """`_sweep_dangling_ends`, settlement-review feature 230 passes 10 and 11. Every pass above it rewrites ends, so a link
+    laid to reach a piece another pass then drops is left stopping in open ground - which is what `lanes_reach_something`
+    fails on, one map at a time. The lane gives up its last vertex until an end reaches a way, a house or the field."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(0.0, 0.0), (400.0, 0.0)],  # the connector, and what the others must reach
+            [(100.0, 10.0), (100.0, 50.0), (100.0, 400.0)],  # its far end is 400 ft from anything: pulled back to the vertex that still reaches
+            [(300.0, 10.0), (900.0, 900.0)],  # nothing of it reaches anything once the far end goes: emptied and dropped
+        ],
+        houses=[(60.0, 40.0)],
+    )
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    assert sweeps._sweep_dangling_ends(s) == 2
+    kept = [ln["pts"] for ln in s.M["lanes"]]
+    assert kept[0] == [[0.0, 0.0], [400.0, 0.0]], "the connector is exempt - it leaves the map by design"
+    assert kept[1] == [[100.0, 10.0], [100.0, 50.0]], "the end in open ground is given up, the one that reaches is kept"
+    assert len(s.M["lanes"]) == 2, "and a lane that cannot be saved is dropped whole"
+
+
+def test_a_lane_whose_ends_already_reach_something_is_left_alone() -> None:
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(100.0, 10.0), (100.0, 90.0)]], houses=[(120.0, 120.0)])
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    assert sweeps._sweep_dangling_ends(s) == 0
+    assert [ln["pts"] for ln in s.M["lanes"]] == before
+
+
+def test_a_one_point_lane_record_is_not_a_lane_to_sweep() -> None:
+    """`_sweep_dangling_ends` reads every record on the map, and a pass above it can leave one with a single
+    point. There is no end to judge, so it is passed over rather than measured."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (400.0, 0.0)], [(50.0, 50.0)]], houses=[(60.0, 40.0)])
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    assert sweeps._sweep_dangling_ends(s) == 0
+    assert s.M["lanes"][1]["pts"] == [[50.0, 50.0]], "left exactly as it was found"
+
+
+def test_a_lane_that_dangles_at_its_HEAD_is_pulled_back_from_that_end() -> None:
+    """Both ends are judged, not just the last one: the passes above rewrite whichever end their own work
+    touched, so the vertex left in open ground is as often the first as the last."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(0.0, 0.0), (400.0, 0.0)],  # the connector, exempt
+            [(100.0, -400.0), (100.0, -200.0), (100.0, -10.0)],  # its HEAD is 400 ft from anything
+        ],
+        houses=[(100.0, -150.0)],  # ...while its middle passes a farmhouse, which is what the head is pulled back to
+    )
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    assert sweeps._sweep_dangling_ends(s) == 1
+    assert s.M["lanes"][1]["pts"] == [[100.0, -200.0], [100.0, -10.0]], "the head in open ground is given up; the tail reaches the connector"
+
+
+def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
+    """The stranding guard restores a lane whose loss would leave a farmhouse unserved, and then tries to
+    carry its dangling end to the nearest house. Where there is no house within reach of that end either,
+    there is nothing to carry it to - the lane stands as it was drawn rather than being pulled somewhere
+    arbitrary, and the record is left untouched (feature 230 pass 11)."""
+    from l7r.diagram.hamletgen.ways import sweeps
+
+    s = _StubSettlement(
+        lanes=[
+            [(0.0, 0.0), (400.0, 0.0)],  # the connector, 400 ft from the house below
+            [(100.0, -390.0), (100.0, -800.0)],  # the only way that serves it, running off into open ground
+        ],
+        houses=[(110.0, -400.0)],
+    )
+    s.M["fields"] = []
+    s.M.setdefault("meta", {})
+    before = [list(ln["pts"]) for ln in s.M["lanes"]]
+    assert sweeps._sweep_dangling_ends(s) == 0, "nothing was changed, so nothing is counted as fixed"
+    assert [ln["pts"] for ln in s.M["lanes"]] == before, "the farmhouse keeps its way, ragged end and all"

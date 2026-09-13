@@ -24,7 +24,7 @@ from l7r.diagram.settlement._geom.primitives import keepout_ring
 
 from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
 
-DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
+DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water/polder.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
 if TYPE_CHECKING:

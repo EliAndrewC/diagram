@@ -11,8 +11,7 @@ from ._base import Kind
 
 class Stream(Kind):
     """
-    What: A natural brook off the high ground, feeding the head of the field and, below it, carrying the drain
-    away.
+    What: A natural brook off the high ground, feeding the head of the field at an intake on its bank.
 
     Why: A village creek runs about two meters wide, six or so times the width of a field ditch; every
     watercourse on the map declares which way it flows, because downstream is a real constraint on what may
@@ -34,10 +33,11 @@ class Stream(Kind):
     key = 'stream'
 
 
-class FieldDitch(Kind):
+class IrrigationDitch(Kind):
     """
-    What: The dug irrigation net: the intake from the stream, the head race along the high margin, the laterals
-    running down-slope between the plots, and the drain along the low line.
+    What: The dug channels that bring water TO the paddies: the head race that leaves the brook at its intake,
+    the two supply canals it forks into along the field's high margins, and the delivery ditches running
+    down-slope between the plots.
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
     the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
@@ -51,30 +51,95 @@ class FieldDitch(Kind):
     carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
     a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
-    channelization rather than for a field plan.
+    channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
+    race's length from the intake to the fork follows the fan's geometry, the record giving no distance.
 
-    Name: field ditch
-    Covers: `field_ditches` and `channels` - the intake, head race, branches and drain
+    Caveat: the head race's length from the intake to the fork follows the fan's geometry, the record giving no distance
+
+    Name: irrigation ditch
+    Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
     """
 
-    key = 'field ditch'
+    key = "irrigation ditch"
+
+
+class DrainageDitch(Kind):
+    """
+    What: The dug channel that carries water AWAY from the paddies: the collector along the field's low line,
+    gathering what runs out of the basins, and its run onward - into the pond at the field's foot, into the
+    passing brook, or off the edge of the map.
+
+    Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
+    collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
+    consolidation the water that left a village's paddies went on down to the river, or to the next field, to
+    be used again below. On a comb field the collector widens as it goes - a thread where it starts
+    between the last plots, its full width where it leaves the field - because every plot it passes adds that
+    plot's drawdown to what it is already carrying; a polder's ring drain instead carries the whole basin at one
+    rank from the start, and is drawn at one width.
+
+    Note: The collector's form and its separation from the supply net are read; whether it widens along its run
+    follows the field it drains, and the sink its run reaches is the map's declared water sink.
+
+    Caveat: the sink its run reaches is the map's declared water sink
+
+    Name: drainage ditch
+    Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
+    Label: accurate
+    Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro
+    Entry: research/water.html - 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields.html - 'Water-first v2'
+    """
+
+    key = "drainage ditch"
+
+
+class Weir(Kind):
+    """
+    What: A low bar of stone-packed timber crib thrown across the brook at the intake, set at a slant so
+    that it runs diagonally upstream from the point where the head race leaves the bank.
+
+    Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
+    at the height the field needs, and the rest goes on over the crest and down the valley. The slant is
+    the old builders' answer to floods: it dams the shallow riffle, keeps the bar out of the fastest
+    water, and spreads the overflow along a longer crest so less of it breaks. Not every hamlet has one -
+    where the brook ran high enough the water was simply led off the bank, and this map's roll decided.
+
+    Note: we have drawn the weir closing the brook bank to bank, in order to make it visible on the map at
+    this scale; half-river closures were the common old form, and across a brook 7 ft wide a half-bar would
+    be a line a pixel or two long. Its materials and its slant are read; the 5 ft thickness it is drawn at
+    is a guess, the engineering histories giving cross-sections only for weirs on real rivers.
+
+    Name: weir
+    Covers: `weirs` - the bar across the brook at a weir hamlet's intake
+    Label: convention
+    Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18
+    Entry: research/water.html - 'Where does the brook stop being a brook and become the ditch'
+    """
+
+    key = "weir"
 
 
 class Pond(Kind):
     """
-    What: An irrigation reservoir - a valley-head tameike behind an earthen dike, sitting above the fields it
-    waters.
+    What: A pond of held water behind an earthen bank. It plays one of two parts, and the map shows which by where
+    it lies: above the fields and feeding them, it is the reservoir their water is drawn from; at the field's
+    low foot, fed by the drainage ditch, it is where the water leaving the paddies is gathered.
 
-    Why: A tameike is built by dividing off a valley mouth with a dike, at an elevation above the paddies it
-    serves, with ONE outlet: an inclined intake feeding a bottom conduit through the dam. The spillway is
-    for floods, never for distribution. On this map the pond is the field's drainage sink, at its low foot.
+    Why: The reservoir is the Japanese tameike - built by dividing off a valley mouth with a dike, at an
+    elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through
+    the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
+    that has passed through the plots, because before modern consolidation that water was used again below
+    rather than thrown away.
 
     Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents). The SINGLE outlet is this
     record's reading of them: the Kagawa page describes the inclined intake, the bottom conduit and the
-    spillway, and does not itself say there is only one way out.
+    spillway, and does not itself say there is only one way out. And where a pond is drawn at a field's foot to
+    gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and
+    outlet are not drawn from a surveyed example.
+
+    Caveat: where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and outlet are not drawn from a surveyed example.
 
     Name: pond
     Covers: `pond` - the tameike

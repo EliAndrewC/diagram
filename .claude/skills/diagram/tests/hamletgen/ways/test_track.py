@@ -3,6 +3,7 @@
 from l7r.diagram import hamletgen as hg
 
 from .._builders import SQUARE, a_plan
+from ._builders import _walled_settlement
 
 
 def test_the_connector_track_leaves_the_frame_without_crossing_the_crop() -> None:
@@ -17,3 +18,37 @@ def test_the_connector_track_leaves_the_frame_without_crossing_the_crop() -> Non
     track = hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE])
     assert hg.path_violations(track, [SQUARE], None, []) == 0, "no segment of the drawn track may cross the crop"
     assert not (0 <= track[-1][0] <= plan.W and 0 <= track[-1][1] <= plan.H)  # ends off the canvas
+
+
+def test_a_field_spur_that_folds_back_on_itself_is_cut_at_the_fold() -> None:
+    """`spur_cut_at_the_fold`. A spur threaded round the steadings can double back; the smoothing pass then
+    cuts the hairpin away and the hamlet's only path to its rice disappears with no record. So the fold is
+    cut here, and what is left is drawn only while it still reaches the field."""
+    from l7r.diagram.hamletgen.ways.track import spur_cut_at_the_fold
+
+    near = [(120.0, -50.0), (220.0, -50.0), (220.0, 50.0), (120.0, 50.0)]
+    straight = [(0.0, 0.0), (50.0, 0.0), (100.0, 0.0)]
+    assert spur_cut_at_the_fold(straight, near) == (straight, None), "a spur that does not fold is drawn as threaded"
+
+    folded = [(0.0, 0.0), (100.0, 0.0), (5.0, 3.0)]
+    assert spur_cut_at_the_fold(folded, near) == ([(0.0, 0.0), (100.0, 0.0)], None), "the outward arm reaches the field, so it is kept and drawn"
+
+    far = [(500.0, -50.0), (600.0, -50.0), (600.0, 50.0), (500.0, 50.0)]
+    cut, why = spur_cut_at_the_fold(folded, far)
+    assert cut == [(0.0, 0.0), (100.0, 0.0)]
+    assert why and "short of the field" in why, "the arm stops in open ground, so the map says why it has no path to its rice"
+
+
+def test_a_spur_cut_short_of_the_field_is_recorded_instead_of_drawn(monkeypatch) -> None:
+    """The other half of `spur_cut_at_the_fold`, at the stage that uses it: where the fold leaves the outward
+    arm short of the field, nothing is drawn and the map says why. A hamlet with no drawn way to its rice is a
+    fact the manifest should carry - the reference hamlet's went missing for three review passes because the
+    sweeps dropped it silently."""
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: ([], "folded back short of the field - the test's own reason"))
+    track.stage_track(s, plan)
+    assert "short of the field" in s.M["meta"].get("field_spur_swept", ""), "the map records why it has no path to its rice"
+    assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")], "and nothing is drawn for it"

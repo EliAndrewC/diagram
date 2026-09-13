@@ -3,12 +3,58 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
+
+
+def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_mid: float, u_floor: float, span_f: float) -> list[tuple[float, float]]:
+    """(v, u) of the cluster's windward fringe, sampled in columns ACROSS the wind.
+
+    `uv` is every house in wind coordinates - u along the wind, v across it - so a column is a slice of
+    the settlement at one v, and its u is how far windward the belt must stand to be in front of the
+    houses THERE. That is the whole of the belt's shape: the band follows this profile.
+
+    A COLUMN WITH NO HOUSE OF ITS OWN LEANS ON ITS NEAREST NEIGHBOR THAT HAS ONE (settlement-review,
+    feature 230 pass 12). It used to lean on the whole cluster's windward-most house, and on a cluster
+    lying square to the wind that is harmless - the fringe is level, so the global answer and the local
+    one agree. On a cluster lying DIAGONALLY to the wind they disagree by the length of the settlement:
+    measured on the reference hamlet after this feature re-seated its cluster (aspect 3.25 -> 5.01, the
+    wind N), column 8 held no house, took the global fringe 800 ft away across the wind, and threw the
+    belt's last column 437 ft north over 99 ft of x. Thirty-two clumps drew a 430 ft file of trees along
+    the frame's edge, 246-522 ft from the nearest farmhouse, sheltering nothing, and the belt read as a
+    check-mark rather than a wall. `village_windbreak_embraces_cluster` cannot see it: the belt's other
+    222 clumps are adjacent to the houses, so the limb that has left the settlement passes on their
+    adjacency.
+
+    Lifted out of `belt_polygon` under the feature-146 doctrine: the empty-column case is a question
+    about a list of points, and inside the closure it could only be reached by rolling a hamlet whose
+    cluster happens to lie diagonally to its wind."""
+    raw: list[tuple[float, float | None]] = []
+    for k in range(cols + 1):
+        v = v_mid + half * span_f * (-1.0 + 2.0 * k / cols)
+        width = half * span_f / cols + 40.0
+        near = [u for u, vv in uv if abs(vv - v) <= width]
+        # THE COLUMN CLEARS THE WINDWARD-MOST HOUSE IN ITS OWN NEIGHBORHOOD, not merely the ones directly
+        # in front of it. `near` is the houses within half a column of this v, so a steading sitting just
+        # outside that window - which a SPREAD cluster produces constantly - is not counted, the band is
+        # laid across it, and `village_grove` then correctly skips every clump that would fall on its
+        # house, yard, garden and shed. The belt ends up with a hole exactly one homestead wide.
+        #
+        # Measured on cohort seeds 33 and 37: the biggest hole in each belt has a whole steading inside it
+        # (house 57 ft from the hole center, threshing yard 38-41, gardens 10-46), and the holes are 78 and
+        # 84 ft - about one homestead across. Widening the window to a full column each side is what makes
+        # the band clear the fabric it is meant to shelter rather than straddle it.
+        wide = [u for u, vv in uv if abs(vv - v) <= width * 2.0]
+        raw.append((v, max(max(near or wide), u_floor) if (near or wide) else None))
+    known = {k: u for k, (_v, u) in enumerate(raw) if u is not None}
+    if not known:  # no column sees a house at all: the whole profile is the floor, which is the median house
+        return [(v, u_floor) for v, _u in raw]
+    return [(v, u if u is not None else known[min(known, key=lambda j: abs(j - k))]) for k, (v, u) in enumerate(raw)]
 
 
 def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
@@ -87,28 +133,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
 
     def profile(span_f: float) -> list[tuple[float, float]]:
         """(v, u) of the windward fringe, sampled in columns across the wind."""
-        cols: list[tuple[float, float]] = []
-        for k in range(COLS + 1):
-            v = v_mid + half * span_f * (-1.0 + 2.0 * k / COLS)
-            width = half * span_f / COLS + 40.0
-            near = [u for u, vv in uv if abs(vv - v) <= width]
-            if not near:  # a column with no house of its own leans on the whole cluster's fringe
-                near = [max(u for u, _v in uv) - 40.0]
-            # THE COLUMN CLEARS THE WINDWARD-MOST HOUSE IN ITS OWN NEIGHBORHOOD, not merely the
-            # ones directly in front of it. `near` is the houses within half a column of this v, so
-            # a steading sitting just outside that window - which a SPREAD cluster produces
-            # constantly - is not counted, the band is laid across it, and `village_grove` then
-            # correctly skips every clump that would fall on its house, yard, garden and shed. The
-            # belt ends up with a hole exactly one homestead wide.
-            #
-            # Measured on cohort seeds 33 and 37: the biggest hole in each belt has a whole
-            # steading inside it (house 57 ft from the hole center, threshing yard 38-41, gardens
-            # 10-46), and the holes are 78 and 84 ft - about one homestead across. Widening the
-            # window to a full column each side is what makes the band clear the fabric it is
-            # meant to shelter rather than straddle it.
-            _wide = [u for u, vv in uv if abs(vv - v) <= width * 2.0]
-            cols.append((v, max(max(near), max(_wide) if _wide else max(near), u_floor)))
-        return cols
+        return fringe_profile(uv, COLS, half, v_mid, u_floor, span_f)
 
     # ~110 px deep - a real wind wall, not a hedge. The 24 px stand-off is set by
     # `village_windbreak_embraces_cluster`, which wants a clump within 150 px of a farmhouse: the

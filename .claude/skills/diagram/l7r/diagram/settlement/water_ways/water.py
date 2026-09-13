@@ -11,6 +11,52 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+#: THE TWO DITCH HUES, AND THE CLASS THAT GOES WITH EACH (feature 230, GM 2026-09-12). The comb's emit loop paints
+#: the collector a grayer blue than the supply net, and since the GM asked that the two be two things a reader can
+#: hover, the CLASS is decided at the same site from the same field - the record's `role` for a field ditch, the
+#: `frm` anchor for a channel - so class and color cannot disagree (the wet-paddy precedent, feature 159). A ditch
+#: stroke with no record at all (the pond's feeder curve) is an irrigation ditch: a feed into a reservoir is supply.
+SUPPLY_HUE = "#6C9CBE"
+#: THE DRAIN IS DARKER AND SILTIER, not merely grayer (settlement-review, feature 230 pass 10) - AND IT IS STILL
+#: WATER (pass 12, where three reviewers of five said so independently). Three hues, and the middle one is why this
+#: comment is long. #7C9EB0 rendered at (130,164,172) against the supply's (117,162,184): the classes were right in
+#: every record and indistinguishable on the page, so a reader could tell a drain only by where it lay. #5E7A76 fixed
+#: that and overshot - at hue 171 it was the only watercourse on any sheet outside the 195-213 blue band, and running
+#: against the tan hinterland and the brown bund it hems for its whole length it read as a second boundary line
+#: rather than as water. Kashikawa is where that cost something: its confluence is the pool's one map of a drain
+#: RETURNING to its brook, and the junction read as the field's edge touching a stream - which leaves the GM's own
+#: "water just flows" ruling (research/water.html, 'Where two watercourses meet, how is the junction drawn?') intact
+#: in mechanism and gone in effect.
+#: So the separation the middle hue bought is KEPT on lightness and saturation and GIVEN BACK on hue: 203 degrees,
+#: value 0.53 against the supply's 0.75. It stands 76 RGB units from the supply (the rejected first hue stood 21),
+#: clear of the brook's bed (#9CB4C8) and of the flooded tint (#93B7AC) - and it is blue. A map drawing convention,
+#: not a finding: the record gives no color for either ditch.
+DRAIN_HUE = "#4F7186"
+IRRIGATION_DITCH = "irrigation ditch"
+DRAINAGE_DITCH = "drainage ditch"
+#: A DIKE-POND'S CANALS ARE NEITHER (settlement-review, feature 230 pass 10). On Kuwabata 25 of the 26 pond DRAIN sluices open
+#: onto the six laterals that also carry 22 FEED sluices, and a reader hovering one was told it "brings water TO the paddies".
+#: The record already says what they are: "the channels do not irrigate the ponds paddy-style; they are the
+#: conveyance-and-drainage network the ponds exchange water with" (research/archetypes.html, 'A dike-pond is fed and drained
+#: through sluice gates'). So on that archetype every non-drain ditch is one class; the ring drain stays a drainage ditch, and
+#: a rice polder's laterals, which do only supply, stay irrigation ditches.
+POND_CANAL = "pond canal"
+DIKE_POND_ARCHETYPE = "mulberry_dike_fishpond"
+
+
+def ditch_style(role: str | None, archetype: str | None = None) -> tuple[str, str]:
+    """(color, class) for a field-ditch record by its role, and on a dike-pond field by its archetype: the drain's pair, the
+    dike-pond canal's, or the supply's."""
+    if role == "drain":
+        return (DRAIN_HUE, DRAINAGE_DITCH)
+    return (SUPPLY_HUE, POND_CANAL) if archetype == DIKE_POND_ARCHETYPE else (SUPPLY_HUE, IRRIGATION_DITCH)
+
+
+def channel_class(frm: Any) -> str:
+    """The class of a `channels` record by where it comes FROM: leaving a drain, it is drainage; else irrigation."""
+    return DRAINAGE_DITCH if isinstance(frm, dict) and frm.get("kind") == "drain" else IRRIGATION_DITCH
+
+
 class WaterBodiesMixin:
     def _flow_record(self: Settlement, rec: dict[str, Any], pts: Any, flow: str) -> None:  # type: ignore[misc]
         """Tag one watercourse record with its flow direction and the derived downstream bearing.
@@ -105,7 +151,7 @@ class WaterBodiesMixin:
         self.M["channels"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}"/>'  # a channel is a thin bed, no sheen
         clip = {"pts": [(x, y) for x, y in poly], "bed_t": bed_t, "sheen_t": None} if self._pond_anchored(frm, to) else None
-        self._water(bed_t.format(dd=dd), rec, clip=clip, cls="field ditch")
+        self._water(bed_t.format(dd=dd), rec, clip=clip, cls=channel_class(frm))
         # 33 px keeps even a plain farmhouse's FOOTPRINT (half-diagonal ~26) clear of the
         # channel, not just its center - 22 left corners clipping the channel (see
         # no_structure_on_channel). Matches the stream corridor's footprint-aware spacing.

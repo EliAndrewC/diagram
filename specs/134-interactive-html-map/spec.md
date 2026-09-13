@@ -277,14 +277,16 @@ hover/click checks for the classes it contains.
   | barley | dry plots under barley | millet; buckwheat; paddy; fallow; garden; soy |
   | soy | dry plots under soybean as a field crop (`dry_plots[crop=soy]`) - added at implementation: the palette rolls four dry crops and the reference hamlet happened to draw three; cohort seeds 41-44 all draw it | millet; buckwheat; barley; paddy; fallow; garden; bund beans |
   | fallow | the fallow patches (when present) | paddy; millet; buckwheat; barley; soy |
-  | stream | the brook | field ditch; pond |
-  | field ditch | the intake, head race, branches and drain (`field_ditches`, `channels`) | stream; pond |
-  | pond | the tameike | stream; field ditch; marsh; field pond |
+  | stream | the brook | irrigation ditch; drainage ditch; pond |
+  | weir | the bar across the brook at a `weir` hamlet's intake (`weirs`) - added by feature 230, the intake's form being rolled | stream; irrigation ditch |
+  | irrigation ditch | the head race, the supply canals and the delivery ditches (`field_ditches` not `drain`, `channels` not from a drain) - feature 230 split the one `field ditch` row in two | stream; pond; drainage ditch |
+  | drainage ditch | the collector and its run to the pond, the brook or the frame (`field_ditches` role `drain`, `channels` from a drain) - feature 230 | stream; pond; irrigation ditch |
+  | pond | the tameike | stream; irrigation ditch; drainage ditch; marsh; field pond |
   | field pond | the small open-water pocket sunk into one low paddy (`field_ponds`) - added at implementation: the reference hamlet draws one and the table did not name it, so it is listed here for the GM to overrule by name | pond; paddy |
   | fish pond | the dug water of every dike-pond parcel (`dikeponds[]`) - added by feature 150 (Kuwabata, the first scripted mulberry-dike fish-pond hamlet), listed here for the GM to overrule by name | pond; paddy |
   | mulberry dike | the planted bank ring of every dike-pond parcel and its coppiced crowns - feature 150 | bund; windbreak |
-  | pond sluice | the cut in a pond's dike to the canal (`dikepond_sluices`) - feature 150 | field ditch |
-  | perimeter dike | the polder's enclosing earthwork band (`dikes[]`) - feature 150 | bund; field ditch |
+  | pond sluice | the cut in a pond's dike to the canal (`dikepond_sluices`) - feature 150 | irrigation ditch |
+  | perimeter dike | the polder's enclosing earthwork band (`dikes[]`) - feature 150 | bund; irrigation ditch |
   | fry pond | a dike-pond parcel designated a fry nursery (`dikeponds[].kind = fry`) - feature 150, the GM's audit A5 | fish pond |
   | manure pit | the manure fixture in its pit form (`farm_fixtures[].form = pit`) - feature 150, audit A2 | manure heap |
   | sluice gate | the boards in a perimeter dike's cut (`sluice_gates[]`) - feature 150, audit A7 | pond sluice |
@@ -405,23 +407,30 @@ hover/click checks for the classes it contains.
 
 ### Measurable Outcomes
 
-- **SC-001**: `inashiro.html` exists after `make reference`, opens in a headless browser from
+- **SC-001** (FR-001, FR-011): `inashiro.html` exists after `make reference`, opens in a headless browser from
   `file://` with zero console errors and zero network requests.
-- **SC-002**: for every class present on Inashiro, hovering one member highlights every member and
+- **SC-002** (FR-003, FR-004, FR-006): for every class present on Inashiro, hovering one member highlights every member and
   no non-member; the headless-browser test asserts this for all of them.
 - **SC-003**: for every sibling pair in FR-007 that is present on Inashiro, the clicked
   explanation names the sibling.
-- **SC-004**: on Inashiro's page, the highlighted state appears within 100 ms of the pointer
+- **SC-004** (FR-014): on Inashiro's page, the highlighted state appears within 100 ms (a responsiveness
+  bar this feature set for itself rather than a researched figure - no `research.md` claim stands behind it) of the pointer
   entering a class, measured in the headless browser; the page finishes loading in under 5 s.
-- **SC-005**: Inashiro's PNG and every other pool map's PNG are byte-identical before and after
+- **SC-005** (FR-010): Inashiro's PNG and every other pool map's PNG are byte-identical before and after
   the feature (FR-010), checked by hash.
 - **SC-006**: the unruled-ink check (FR-009) reports zero unruled elements on Inashiro, and a
   regression fixture with one deliberately unruled element makes it fail; an element on the
   not-highlighted list does not.
-- **SC-007**: every class explanation carries exactly one of the three labels and a sources line.
-- **SC-008**: the `.html` is written by the shared mechanism for any scripted hamlet run, proven
+- **SC-007** (FR-005, FR-008): every class explanation carries exactly one of the three labels and a sources line.
+- **SC-008** (FR-001, FR-011): the `.html` is written by the shared mechanism for any scripted hamlet run, proven
   on the reference hamlet; when scope unlocks, a second scripted hamlet's page passes the same
   browser test for the classes it contains (US6) - owed then, not a condition of this feature.
+- **SC-009** (FR-002, FR-012, FR-013, FR-015, FR-016, FR-017): the behaviors the GM asked for after the
+  first draft are verified in the browser suite on a synthetic page and on the reference hamlet's own -
+  every drawn feature ruled on, no page header, one way of zooming, a hit region for each thin or scattered
+  class, and the glossary, references and sibling links reachable from a modal. (Added 2026-09-13 while
+  feature 230 was working in this file: `spec-lint` reported these six requirements as named by no
+  criterion, which they were - the criteria above predate the check and stop at the first draft's scope.)
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

@@ -10,6 +10,18 @@ The brief: 20 households - the ceiling of the hamlet band - on land falling nort
 (`down_deg=315`), the collector's brook running off the map (`water_sink="offmap"`). It exists to
 show the pipeline at the top of the band, where the cluster, the well count and the paddy acreage
 are all at their largest. See `kashikawa.notes.md` for the kanji triangle and the review log.
+
+
+ONE DECLARED KNOB, and the reason it is declared (feature 230): `brook_side=-1` - the brook passes the fan on
+the flank the drain's outfall stands on, so the collector reaches it and the two join at a confluence the sheet
+shows. The flank is otherwise rolled, and this seed rolls the other one, which puts the brook uphill of the
+outfall and sends the drain off the frame on its own. The confluence is the third of the feature's three water
+sinks and the one the research turned on - before modern consolidation a village's drainage went back to the
+watercourse to be taken up by the district below - and an implemented sink owes one map that exhibits it, the
+way a knob owes one map per value. Sawada was tried first and cannot take it at any flank: its outfall stands
+at the canvas edge, so the brook has about 85 px left below the junction against the 150 the rule asks
+(specs/230 research R7). Measured here, on the view box: the junction falls 123 ft inside the view with 177 ft of the
+brook visible below it.
 """
 
 import os
@@ -20,5 +32,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap"), out_base=os.path.join(HERE, "kashikawa"))
+report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1), out_base=os.path.join(HERE, "kashikawa"))
 print(report.line())

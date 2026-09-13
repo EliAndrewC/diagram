@@ -818,7 +818,7 @@ acted on it, which is its own small lesson.
 
 ## 2e. `plot_regularity` is recorded as though rolled and is a literal
 (2026-08-19, from the Kashikawa review.) `meta.plot_regularity` reads like a rolled knob and the comb
-path passes the literal `"organic"` (`hamletgen/water.py`), so it can never vary. Alongside it, all
+path passes the literal `"organic"` (`hamletgen/water/comb.py`), so it can never vary. Alongside it, all
 four scripted hamlets record `plot_size: medium` (a 2-in-4 weight, so 4/4 is about a 6% draw),
 `field_archetype: valley_paddy` (documented - polder is opt-in) and `cluster_seeding: frontage`
 (derived, not rolled). None of that is wrong; what is wrong is that a reader meets four `meta` lines
@@ -2214,3 +2214,196 @@ because it looks like verification. So the instance is ledgered here rather than
 **To close it:** roll the FULL cohort, read the belt on seed 45 against the real continuity predicate the
 belt placer uses, and either fix the placer or carry the seed as a strict xfail beside seed 43's in
 `tests/gate/test_cohort_lane_rules.py`'s successor.
+
+## Where a field path ENDS, and why three pool maps have none (measured 2026-09-12, feature 230)
+
+The spur from the cluster to the paddy is routed to the envelope's nearest vertex, clipped out of the crop and
+trimmed off the marsh, and drawn only if more than 20 ft survives. MEASURED on the pool the day feature 230
+landed (`meta.field_spur_ft`, recorded on every map from that day): Inashiro 125 ft and drawn; Kashikawa,
+Mizuguchi and Sawada **0.0 ft** - the clip leaves nothing at all, so those three hamlets have no drawn way to
+their own rice, and until the number was recorded nothing said so. Kuwabata is a polder and has no spur by design.
+
+MECHANISM: the dry hem is cultivated ground and sits between the cluster and the paddy on every comb map, so a
+spur aimed at the paddy's outline is clipped at the hem's edge and what remains is under the floor. The floor is
+right - a 20 ft stub is not a path - and the routing is what is wrong: the spur should end where a field path
+really ends, which is the question this file has carried since feature 128 and which the measurement above is the
+evidence for. SKETCH: aim the spur at the nearest point of the CULTIVATED ground rather than of the paddy (the
+hem is worked ground and a path to it is a path to the field), and let it stop at the hem's own edge; then ask
+whether the last stretch between the hem and the wet plots is a path at all or the bunds themselves.
+
+## One bank or both - a KNOB the crossing machinery blocks (researched 2026-09-12, feature 230)
+
+RESEARCHED, not silent (specs/230 research R6): the record shows BOTH forms, divided by the size of the water.
+Against a river a settlement stands on one bank; against its own small channel the water runs through the middle
+of the place, which Harie in Shiga does under a national Important Cultural Landscape designation - its Okawa
+"flows through roughly the center of the district", its channels are "channels inside the settlement", and one
+runs "alongside the house". The maps' brook is seven feet wide, the second kind. Under the knob doctrine that is
+a KNOB - which side a hamlet builds on, rolled per settlement - and the maps instead keep a rule.
+
+WHY THE KNOB IS NOT BUILT, measured: a hamlet seated astride the brook is one no way can cross. The stream is
+registered only as a keep-out (`site_boundary.water` and a 30 px corridor), so the router treats it as ground to
+avoid and `bridges()` decks only a crossing that already exists - settlement-review pass 4 measured the result,
+0 bridges on 2,000 ft of water with a full homestead stranded on the far bank and every lane, both wells and the
+notice board on the near one. Nothing can put a deck there today.
+
+SKETCH: let a WAY cross a watercourse at the cost of a deck. The router needs a crossing cost rather than a
+veto (a segment may cross a stream if it crosses square-ish and a deck can be drawn at the crossing), and
+`stage_crossings` already decks a way that crosses water, so the second half exists. Then `seat_cluster`'s
+strike-out becomes a knob value: one bank, or both banks with a crossing. The measurements to hold it to are in
+specs/230 R4 and R5.
+
+## A tree stands in a path on the reference hamlet (measured 2026-09-12, feature 230)
+
+MEASURED: three tree trunks at (2303, 786), (2343, 789) and (2488, 795) stand 3.1, 4.2 and 3.1 ft from the
+centerline of Inashiro's straggler footpath, and `groves_clear_of_lanes` fails at its 4.0 ft bar. The trees are
+recorded through `_record_crowns`, so they are a grove or stand drawn at the homestead stages - BEFORE the lane
+web - and the footpath was routed past them afterwards. Raising the ground-cover scatter's corridor buffer from
+3 to 4 ft (`land/cover.py`, done, and worth keeping: a check and the code it checks must read the same figure)
+does not touch them, because the woodland commons is not what planted them.
+
+MECHANISM: the straggler router's obstacle set is `_homestead_polys`, which carries footprints and yards. A
+recorded CROWN is not a polygon and is not in it, so a footpath may be drawn through a tree that was already
+standing. SKETCH: give the footpath's obstacle set the recorded crowns (`M["tree_crowns"]` is a flat x, y, r
+run and a circle is the cheapest obstacle there is), or refuse a straggler whose drawn tread passes within the
+rule's own 4.0 ft of one. Deferred rather than taken because the obstacle set is shared by every way the web
+draws, so widening it moves lanes on every map and owes its own cohort and review.
+
+## The windbreak's far limb, where a cluster sits in two groups (feature 230 pass 11, 2026-09-12)
+
+**Measured**: on the reference hamlet 63 of the belt's 308 crowns stand more than 200 ft from any farmhouse and the
+furthest is 518 ft, against a maximum of 184 ft on Sawada, whose cluster is one group. `settlement-review` read the
+east limb - 34 crowns running one crown wide up the frame edge - as a strip of trees sheltering nothing.
+
+**Mechanism**: `belt_polygon` samples the near face across the wind and adds a 90 px shoulder past the outermost house
+at each end, which is right for one group of houses. Inashiro's cluster is two groups with open ground between them, so
+the span `v_hi - v_lo` covers both and the belt is drawn across the gap and past it.
+
+**Why it is not fixed here**: the obvious rule - drop a clump further than X from the nearest house - punches a hole in
+the middle of a belt whose cluster is split, which is a worse picture than the limb. The fix is to the belt's own shape:
+sample the cross-wind columns that actually contain a house (or a run of houses), and end the belt where its own
+column is empty, so a split cluster gets two belts or one belt that stops. That is a change to the windbreak's
+derivation with its own cohort sweep, not a clause bolted onto the clump filter.
+
+## The drain that reaches its pond round a hook (feature 230 pass 11, 2026-09-12) - CLOSED by pass 12
+
+**Measured**: on Mizuguchi the collector runs north-east to the field's tip and the pond lies south-east of that end,
+so the run leaves along the collector's heading and curves back - 121 ft of ditch to cross a 50 ft gap, its sharpest
+bend 37 degrees (it was one 111.6 degree corner before `pond_run`).
+
+**Why the pond is there**: `pond_seat` steps the pond across the fall because the brook now holds the ground straight
+downslope; the straight seat is over `POND_SETBACK_LIMIT` once the brook is in the way.
+
+**Alternatives priced**: leaving the collector earlier, at the pond's own latitude, means the collector's tail past that
+point drains backwards to a mid-course outfall, which changes what `drain_heading` and `drainage_junction_smooth`
+measure; seating the pond on the collector's extended heading is what the brook already refuses. Both are engine changes
+beyond this feature, so the curve stands and the hook is recorded here with its numbers.
+
+
+**Closed 2026-09-13.** Pass 12 measured what pass 11's curve had actually produced - an inverted U climbing 26 ft
+further from the pond and topping out 53 ft past its far rim, 121 ft of ditch on an 87 ft chord, its apex 11 ft from
+the brook it does not join - and named the cause as the EXCURSION rather than the bends, which is why a per-bend
+tolerance could not see it. `pond_run`'s first handle now points along the bisector of the collector's heading and the
+chord to the pond instead of along the heading alone: 7% detour, sharpest bend 14.9 degrees, and no stride of the run
+further from the pond than the outfall is. The pond's seat is unchanged, so the alternatives priced above stay priced.
+
+## A garden may be seated on an in-field ditch (feature 230 pass 12, 2026-09-13)
+
+**Measured**: cutting the supply canals at the fork and at each offtake leaves a remainder wherever a cut lands near a
+piece's own end, and the remainder is drawn and recorded like any other channel - Inashiro shipped a 3.2 ft stroke of
+`main` carrying its own hover region, Mizuguchi a 21.9 ft one that stops under a blunt cap on the bare hem. Dropping a
+sub-stride piece is one line (`channels[:] = [c for c in channels if run_length(dedup(c["pts"])) >= 8.0]` in
+`waterfields/comb.py`, at the point the list is complete) and it was tried: the reference hamlet came back with a
+garden seated ON a branch ditch at (2593, 1724), which `features_do_not_overlap` fails.
+
+**Mechanism**: the channel list feeds the no-build corridors, and `hamletgen/water/comb.py` reserves only the stretches
+running OUTSIDE the field envelope - a delivery ditch's tail and the collector - because blanketing the whole net costs
+the field its ring of farmhouses (`field_ringed`, measured on three maps). So a garden is tested against nothing inside
+the envelope, and any ground freed near an in-field branch is available to it. The stub was merely holding that ground.
+
+**Sketch**: give the homestead BUNDLE the in-field channel keep-out the houses already carry - the bundle's own rect
+against the branch centerlines at half the drawn width plus the bund - then take the one-line stub drop above. It moves
+every map's packing, so it belongs to a feature that can re-roll the cohort and re-review all five maps.
+
+## What a reader takes for the river at the tap (feature 230 pass 12, 2026-09-13)
+
+**Measured** (Sawada): the head race leaves the brook at `#6C9CBE` (128,167,191) - darker and more saturated than the
+brook's own `#9CB4C8` (168,187,199) - and at 6.0 px against the brook's 7, so it is 86% of the trunk's width. At 9x the
+dug ditch reads as the principal watercourse and the stream as its bank shadow, and the race's stroke ends in a rounded
+cap laid ON the brook rather than opening out of its bank.
+
+**Why it is not simply a width fix**: both widths are the water-width ladder's own figures (`research/water.html`,
+"Water-width ladder"), drawn by RANK rather than by discharge, and the hues are the supply/brook pair every map uses.
+Changing either for this one junction would trade a junction-scale misread for a map-scale one.
+
+**Sketch**: leave the ladder alone and change the MOUTH - a short flare where the race meets the bank (the intake's own
+opening, which the record describes and the map does not draw), so the reader sees the ditch beginning AT the brook
+rather than crossing it. That is a new glyph and owes its own research pass on what an intake mouth looked like.
+
+## Two ways that meet where the material changes (feature 230 pass 12, 2026-09-13)
+
+**Measured** (Kuwabata, the polder ring): at the SE corner the e_toe pond canal ends at (2699.2, 2186.1) with a rounded
+cap at its 3.0 ft tail width while the drain trunk starts at (2702.2, 2185.6) at 5.0 - centerlines 2.5 ft apart, widths
+2 ft apart, and since feature 230 in two different inks. The SW corner is the same joint. The strokes overlap, so there
+is no gap; what a reader sees at 7x is a blue cap stuck on the end of a wider gray pipe.
+
+**Pre-existing geometry**: identical on main, where both strokes were near the same blue and the joint was invisible.
+The class split is what made it legible.
+
+**Sketch**: end the toe ON the drain's centerline rather than 3 ft short and 2.5 ft off, or taper the drain's head to
+the toe's width where they meet, the way the feeder/lateral junctions already read. Both are changes to the polder ring
+builder's corner, which every polder map draws.
+
+## The storehouse share is a positional roll, and a re-pack moves it (feature 230 pass 12, 2026-09-13)
+
+**Measured**: across this feature's re-packs the pool's storehouse share went from 28 of 82 farmhouses (34%) to 18 of
+82 (22%) - Kashikawa 6 of 20 to 1 of 20, Mizuguchi 4 of 12 to 0 of 12. Every house is `kind: plain`, so the drawing
+condition did not change: the positional roll simply re-rolled when the houses moved.
+
+**Already recorded, and what is new**: `research/homesteads.html` ("Which farmhouses have a storehouse?") records the
+positional roll, its p=0.2993, the realized 28.4% over 1,208 farmhouses, and the precedent that "one re-pack took a
+hamlet from 25% to 15% in a single roll". The magnitude is what is new - 5% and 0% are past that precedent, and the
+entry itself describes the kura as a wealth marker that reads only because most farms lack one.
+
+**The lever, already named in the record**: key the roll to a household NUMBER instead of a position, which holds
+across a re-packing. It was declined when written and is worth pricing again the next time the pool moves; the number
+to watch is the POOL share against 0.2993, not any one map.
+
+## The weir's root lands on the head race's mouth (feature 230 pass 12, 2026-09-13)
+
+**Measured** (Monte Carlo over the weir quad, identical on all three weir maps): 17% of the bar's area lies within the
+head race's 6 ft band, 58% over the brook, 25% on dry bank - so the bar's downstream third sits on the ditch's blue and
+reads at 6x as a gate closing the ditch. The `Weir` class docstring tells a reader the bar "runs diagonally upstream
+from the point where the head race leaves the bank", while the drawn root is 8 ft downstream of and 6 ft behind that
+point: a modal saying one thing and the ink showing another.
+
+**Sketch**: set the bar's near-bank root at the mouth's UPSTREAM lip rather than at the intake point, so the crib keys
+into the bank above the opening it holds water against - which is also what the docstring already claims. It moves the
+weir on three maps and owes a look at whether the mouth then reads as open.
+
+## The straggler router pays a fresh search per rejected target (feature 230 pass 14, 2026-09-13)
+
+**Measured** (by the `perf-audit` agent, A/B at the bookend commit `4dba51ef`, seed 4's `web` stage under cProfile):
+with `_ends_worth_walking_to` live the stage is 4.70 s; with the rule forced to return True it is 2.56 s; the
+pre-feature baseline is 1.34 s. So about two thirds of this feature's web growth is that one rule - and the rule
+itself costs 0.010 s to evaluate over 17 calls. Route span went from a 53 ft median (sum 6,687 ft) to 151 ft
+(sum 18,442 ft), and `fouled` calls from 80,265 to 426,249.
+
+**Mechanism**: the rule sits at the BOTTOM of the per-target loop, after `_route` has built a path. Each of its
+10 rejections in 17 evaluations sends the loop to the next, farther target and pays another Dijkstra - and
+`_route`'s lattice is `pad = 0.75 * span`, so the cell count grows with the SQUARE of the span. A free predicate
+in the wrong place is invisible to a cumulative-time profile and still doubles the stage, which is exactly how
+this feature's first written explanation came to blame the map.
+
+**What the rule buys, so nobody removes it**: the gate's own `lanes_reach_something` and `lanes_form_one_network`,
+after measured defects - a 100 ft tread whose far end stopped 60.1 ft from the house it was routed to and 94 ft
+from any way, and two Sawada footpaths of 175 ft and 137 ft that left the map counting as three networks.
+
+**Sketch**: one multi-goal search per straggler house instead of one per target - a single Dijkstra from the
+house over a box covering the whole target list, which yields a path to every target at once and lets the
+accept/reject loop run over the results for free. The box is bigger than any single target's, so this is a
+trade of one large search for 78 growing ones; the audit's own framing is that it "keeps the rule exactly as
+written". A cheaper half-measure, also unmeasured: order the rule's clauses so the 4 ft `joined` test refuses
+first (3 of the 10 rejections fail it), which saves the two `_fronts` scans but not the re-route behind them.
+
+**Why it is not taken here**: it changes which paths the router finds on every hamlet, so it moves the pool and
+owes its own 48-seed cohort and its own review round. This feature has had fourteen.
