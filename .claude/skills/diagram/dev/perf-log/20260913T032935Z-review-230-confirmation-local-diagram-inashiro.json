@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "7f4113a3",
+    "label": "230-start",
+    "utc": "20260912T173655Z"
+  },
+  "binding": "272c4c481aafb9e5961ad2b2069fa3260d53eb1ffb05fbf4e300864a3bec6b22",
+  "end": {
+    "commit": "4dba51ef",
+    "label": "230-end",
+    "utc": "20260913T030649Z"
+  },
+  "environment": "local",
+  "feature": "230-stream-intake-and-ditch-classes",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "012f2cee-f151-40ba-a32a-01aa0e5da64a",
+    "utc": "20260913T032935Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": -15.9,
+      "39": 11.7,
+      "4": 27.9,
+      "47": 1.3
+    },
+    "total_pct": 4.3
+  },
+  "note": "CONSISTENT. The cause now names the stages the recorded delta shows growing, at sizes the diff and my own A/B support. seed 4 web 0.45 -> 1.75 s is the largest single term on the largest seed, and the explanation's two-thirds split is exactly what forcing _ends_worth_walking_to to return True at 4dba51ef measured: 4.70 s live, 2.56 s forced, 1.34 s baseline, with the map left as the minor term (stragglers 5 to 6 at comparable distances). seed 4 field 1.94 -> 2.38 s and seed 39 field 1.57 -> 2.20 s match the split it now gives - carve partition and necks 55 percent on seed 4, 12 percent on seed 39 with close_seams FASTER there and fit_field taking a second aspect and seven fans instead of three under FR-004's new fan siting. The first account's inference from absence in a top-25 cumulative table is disavowed in the record, which is the finding it was refuted on. The two items it says are taken are in the diff at 335aecd0: crop_polys hoisted out of the candidate loop in _serve_stragglers, and _shed_necks rebuilding its STRtree after a trade; re-measured 29.1 -> 28.9 s, the noise it predicted. One residue it is silent about, and it is immaterial: seed 47 track 0.99 -> 1.63 s is stable across six end-state runs, but that seed's field fell 4.51 -> 3.01 s on the same map and its total is +1.3 percent, inside the per-seed noise floor.",
+  "verdict": "consistent"
+}
