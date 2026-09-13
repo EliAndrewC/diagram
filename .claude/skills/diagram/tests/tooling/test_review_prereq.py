@@ -86,15 +86,20 @@ def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: p
     moved = prereq.stale_maps(skill, ["kuwabata"], lambda gen: False)[0]
     assert "generation key has moved" in moved and "`make map GEN=pool/hamlets/kuwabata/kuwabata.gen.py`" in moved
     (m / "kuwabata.png").unlink()
-    assert "missing .png" in prereq.stale_maps(skill, ["kuwabata"], lambda gen: True)[0], "feature 230's pass 12: renders evicted"
-    # the gate evicts the pool's renders mid-run; a review beside it reads the snapshot taken before, which is whole
+    assert "pool folder lacks .png" in prereq.stale_maps(skill, ["kuwabata"], lambda gen: True)[0], "feature 230's pass 12: renders evicted"
+    # the check reads where the reviewer will: the snapshot when the dispatch names it, the pool folder otherwise
     snap = tmp_path / ".git" / "review-snapshot" / "kuwabata" / "clone"
     snap.mkdir(parents=True)
-    for ext in (".json", ".svg", ".png"):
+    for ext in (".json", ".svg", ".png", ".html"):
         (snap / f"kuwabata{ext}").write_text("")
-    assert "missing .png" in prereq.stale_maps(skill, ["kuwabata"], lambda gen: True)[0], "each place names what it lacks; the nearer-whole one is reported"
-    (snap / "kuwabata.html").write_text("")
-    assert prereq.stale_maps(skill, ["kuwabata"], lambda gen: True) == [], "a whole snapshot is a whole map for the reviewer"
+    names_it = "review the map; its snapshot is .git/review-snapshot/kuwabata/clone/"
+    assert prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, names_it) == [], "a named, whole snapshot is a whole map for the reviewer"
+    stale = prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, "review the map")
+    assert stale and "pool folder lacks .png" in stale[0], "a whole STALE snapshot beside a render-less pool passes nothing when the dispatch names none"
+    (snap / "kuwabata.html").unlink()
+    (m / "kuwabata.png").write_text("")
+    named = prereq.stale_maps(skill, ["kuwabata"], lambda gen: True, names_it)
+    assert named and "snapshot the dispatch names lacks .html" in named[0] and "make verify" in named[0], "a named snapshot must itself be whole"
     assert "no pool generator" in prereq.stale_maps(skill, ["nowhere"], lambda gen: True)[0]
 
 

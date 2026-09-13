@@ -112,16 +112,16 @@ def gen_of(skill: pathlib.Path, name: str) -> pathlib.Path | None:
     return hits[0] if hits else None
 
 
-def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str], bool]) -> list[str]:
+def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str], bool], prompt: str = "") -> list[str]:
     """Each map whose generator's cache key has moved, or whose pool artifacts are not all there, with the reason.
 
     `current` is the generation cache's key comparison, injected so a test can decide it; the CLI passes
     `gencache.is_current`, which asks without restoring a file."""
-    # GUARD_EDIT_OK: feature 240 FR-005 - COMPLETE IN EITHER PLACE THE REVIEWER READS. The agent reads the review
-    # snapshot when the dispatch names one (feature 231: the gate evicts the pool's renders mid-run) and the pool
-    # folder otherwise, so a map passes when either holds all four artifacts. Requiring the POOL alone refused every
-    # review started beside a gate, which is exactly when the snapshot exists; requiring the snapshot alone refused a
-    # map made whole by `make map` after the snapshot was taken.
+    # GUARD_EDIT_OK: feature 240 FR-005 (amendment round 1) - COMPLETE WHERE THE REVIEWER WILL READ. The agent reads
+    # the review snapshot when the dispatch names one (feature 231: the gate evicts the pool's renders mid-run) and
+    # the pool folder otherwise, so the check reads that same place. "Either place whole" was tried first and let
+    # through the pass-12 failure it exists to stop: snapshots stay on disk, so a stale whole one passed a dispatch
+    # that named none while the agent read a pool folder with no renders.
     out = []
     snapshots = skill.parents[2] / ".git" / "review-snapshot"
     for name in names:
@@ -129,13 +129,19 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
         if gen is None:
             out.append(f"{name}: no pool generator by that name")
             continue
-        places = (gen.parent, snapshots / name / "clone")
-        missing = min(([ext for ext in ARTIFACTS if not (d / f"{name}{ext}").is_file()] for d in places), key=len)
+        named = f"review-snapshot/{name}" in prompt
+        where = snapshots / name / "clone" if named else gen.parent
+        missing = [ext for ext in ARTIFACTS if not (where / f"{name}{ext}").is_file()]
         rel = gen.relative_to(skill)
         if not current(str(gen)):
             out.append(f"{name}: its generation key has moved - the map on disk is not what the engine draws now - `make map GEN={rel}`")
+        elif missing and named:
+            out.append(
+                f"{name}: the review snapshot the dispatch names lacks {' '.join(missing)} - re-take it (`make verify`), or run "
+                f"`make map GEN={rel}` and dispatch against the pool folder without naming the snapshot"
+            )
         elif missing:
-            out.append(f"{name}: missing {' '.join(missing)} in both the pool and its review snapshot - a reviewer would read an incomplete map - `make map GEN={rel}`")
+            out.append(f"{name}: its pool folder lacks {' '.join(missing)} - a reviewer would read an incomplete map - `make map GEN={rel}`")
     return out
 
 
@@ -200,7 +206,7 @@ def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, 
             )
     if any(has_findings(clone, n) for n in names) and not gate_green:
         problems.append("FR-004 this is a review of FIXES, and the gate is not green for this engine key - run `make done` first")
-    problems += [f"FR-005 {p}" for p in stale_maps(skill, names, current)]
+    problems += [f"FR-005 {p}" for p in stale_maps(skill, names, current, prompt)]
     figures = unresolved_figures(prompt, records)
     if figures:
         problems.append(f"FR-006 figure(s) quoted with no record behind them: {'; '.join(figures)} - cite the `m:` key or record it")

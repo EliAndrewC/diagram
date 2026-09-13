@@ -252,11 +252,15 @@ rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
 # GUARD_EDIT_OK: feature 240 FR-005 - the earlier gate cases took a whole snapshot, and a whole snapshot is a
 # whole map for the reviewer; so the refusal is proven with the render gone from BOTH places, then permitted
 # again from the snapshot alone.
-mv "$CLONE/.git/review-snapshot" "$TMP/snapshot-aside" 2>/dev/null
-refused_for "a review of a map missing an artifact in the pool and its snapshot is refused" "$REVIEW" "missing .png"
+# GUARD_EDIT_OK: feature 240 FR-005 amendment round 1 - the check reads where the reviewer will: a whole STALE
+# snapshot beside a render-less pool refuses a dispatch that names no snapshot, and a named whole one permits.
 mkdir -p "$CLONE/.git/review-snapshot/testmap/clone"
 for ext in json svg png html; do : > "$CLONE/.git/review-snapshot/testmap/clone/testmap.$ext"; done
-check "...and permitted when its review snapshot is whole" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
+refused_for "a render-less pool is refused though a whole snapshot sits on disk, when the dispatch names none" "$REVIEW" "pool folder lacks .png"
+SNAPREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review testmap from .git/review-snapshot/testmap/clone/"}')
+check "...and permitted when the dispatch names that whole snapshot" '[ "$(rc_pretool "$SNAPREV")" -eq 0 ]'
+rm -f "$CLONE/.git/review-snapshot/testmap/clone/testmap.html"
+refused_for "...and refused when the snapshot it names is not whole" "$SNAPREV" "make verify"
 : > "$MAPDIR_F/testmap.png"
 
 # FR-006: a quoted figure needs a record

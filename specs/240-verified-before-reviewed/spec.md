@@ -50,7 +50,9 @@ and which would force a review round the request exists to save.
 
 **FR-003 A `settlement-review` dispatch for a map whose last recorded verdict carries findings MUST be
 refused unless every one of those findings is dispositioned.** A finding is dispositioned by exactly one of:
-a measurement record (FR-009) whose `verifies` field names the finding's id and whose `subject` is the map;
+a measurement record (FR-009) whose `verifies` field names the finding's id, whose `subject` is the map, and
+which carries its `quantity` and `source` - what was measured and from what, the two things FR-007's first stage
+judges (D7);
 or an `accepted` disposition carrying a reason of at least two words, for a finding deliberately left as it
 is. An `accepted` disposition is an escape in all but name, so it is treated as one: it is logged to
 `dev/bypass-log/` the way every other escape here is, listed by `make audit`, and passed to FR-007's first
@@ -66,12 +68,15 @@ across the four of feature 230's own (m:230-green-gate-min-s, m:230-green-gate-m
 took 7 to 25 minutes (`research.md` R1; the rounds observed 2026-09-13, method: the review agents' reported durations).
 
 **FR-005 A `settlement-review` dispatch MUST be refused when a map it names is not current with the
-engine, or its review snapshot is incomplete.** The generation cache already decides whether a map would
-re-roll (`pipeline/regen.py` returns CACHED or REGENERATED), so the check is a key comparison that rolls
-nothing. A map whose key has moved, or whose snapshot lacks the `.json`, `.svg`, `.png` or `.html` the
-reviewer reads, is named in the refusal with `make map GEN=...`. Feature 230's pass 12 ran against a
-snapshot whose renders the roll cache had evicted, and three of five agents rasterized the SVG themselves
-to work around it (`research.md` R1).
+engine, or the artifacts the reviewer will read are incomplete.** The generation cache already decides whether a
+map would re-roll (`pipeline/regen.py` returns CACHED or REGENERATED), so the check is a key comparison that
+rolls nothing. Completeness is judged WHERE THE REVIEWER READS: the review snapshot when the dispatch names one
+(`.git/review-snapshot/<map>/`), and the pool folder otherwise, each needing the `.json`, `.svg`, `.png` and
+`.html`. A map whose key has moved, or whose pool folder is incomplete, is named in the refusal with
+`make map GEN=...`; a named snapshot that is incomplete is refused with the two ways to a whole one - re-take it
+with `make verify`, or run `make map GEN=...` and dispatch against the pool folder without naming the snapshot.
+Feature 230's pass 12 ran against a snapshot whose renders the roll cache had evicted, and three of five agents
+rasterized the SVG themselves to work around it (`research.md` R1).
 
 **FR-006 A measured figure in a dispatch prompt MUST resolve to a record by feature 239's convention.** A
 figure - detected by `scripts/spec-lint.py`'s own `_FIGURE`, imported rather than restated - resolves by
@@ -149,9 +154,10 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
 - **SC-003** (FR-004) A dispatch following findings is refused while the gate for the current engine key is
   running or red and permitted once it is green; a first review with no prior findings keeps feature 151's
   overlap and is permitted beside a running gate.
-- **SC-004** (FR-005) A dispatch naming a map whose generation key has moved, or whose snapshot is missing
-  its render, is refused in under 5 seconds naming that map and `make map GEN=...`, and permitted once the
-  map is regenerated. Proven on a real pool map, both ways.
+- **SC-004** (FR-005) A dispatch naming a map whose generation key has moved, or whose artifacts are incomplete
+  where the reviewer will read them, is refused in under 5 seconds naming that map and its remedy, and permitted
+  once the map is regenerated. Proven on a real pool map, both ways, including a whole stale snapshot beside a
+  render-less pool folder refused when the dispatch names no snapshot and permitted when it names it.
 - **SC-005** (FR-006) A figure outside a backtick span with no record and no one-shot label is refused and
   named; the same figure with a record or a dated one-shot label is permitted; the same figure inside a
   backtick span is skipped. `REVIEW_PREREQ_OK` with a reason permits all four refusals and is logged; a bare
@@ -215,16 +221,17 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   would mean giving up feature 151's overlap for first reviews too, which is the GM's ruling to revisit, not
   this feature's.
 - **D7 Amended during implementation (2026-09-13), three readings made concrete by measurement.**
-  (a) FR-005's "review snapshot is incomplete": a map passes when EITHER its review snapshot or its pool folder
-  holds all four artifacts. Measured on Inashiro after a green gate (`research.md` R5): the gate leaves every
-  clone pool map without its `.png` and `.html`, so the pool folder alone refuses every review started beside a
-  gate, and a dispatch made without `make verify` has no snapshot at all, so the snapshot alone refuses every such
-  review. And the remedy the refusal names, `make map GEN=...`, restored the render-less cache entry; `make map`
-  now rolls such a hit uncached, so the named remedy works. (b) FR-009's record fields: a record verifies a
-  finding (FR-003) only when it carries `quantity` and `source` as well as `verifies` and `subject`, because
-  FR-007's first stage judges the `source` and a record without one gives it nothing to judge (SC-007). (c)
-  239's convention as it landed: `measurements.json` holds bare keys, a paragraph cites `m:<key>`, and a one-shot
-  label is a date AND a method; FR-006 and FR-010's `CONTROL` follow it.
+  (a) FR-005's completeness is judged where the reviewer reads - the snapshot when the dispatch names one, the
+  pool folder otherwise. Measured on Inashiro after a green gate (`research.md` R5): the gate leaves every clone
+  pool map without its `.png` and `.html`, and snapshots stay on disk, so neither "the snapshot must be whole" (a
+  dispatch without `make verify` has none) nor "either place whole" (a stale whole snapshot passes a dispatch whose
+  reviewer reads the render-less pool folder - the pass-12 failure) says what FR-005 is for. And the remedy the
+  refusal names, `make map GEN=...`, restored the render-less cache entry; `make map` now rolls such a hit
+  uncached, so the named remedy works. (b) A record verifies a finding (FR-003) only when it carries `quantity`
+  and `source` as well as `verifies` and `subject`, because FR-007's first stage judges the `source` and a record
+  without one gives it nothing to judge (SC-007). (c) 239's convention as it landed: `measurements.json` holds bare
+  keys, a paragraph cites `m:<key>`, and a one-shot label is a date AND a method; FR-006 and FR-010's `CONTROL`
+  follow it.
 
 ## Review history
 
@@ -252,7 +259,8 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
   gates, and ten of its thirty-six were features 229, 231, 232, 233 and 236's - including the 402 s run and
   five of the nine green ones. It now selects each record by its own `commit` field against feature 230's
   commits, closes the window at landing, and states both in `quantity` and `source`: feature 230's own gates
-  are 26, 1,663 s, the longest 381 s, four green at 56 to 67 s. The first re-selection counted 25; the one it
+  are 26, 1,663 s, the longest 381 s, four green at 56 to 67 s (m:230-gates-that-ran, m:230-gate-total-s, m:230-gate-max-s,
+  m:230-green-gate-min-s, m:230-green-gate-max-s; the 402 s run is another feature's, on round 3's own run). The first re-selection counted 25; the one it
   missed was a gate run at a merge INTO the 230 clone, and the selection now includes those. That is this
   feature's own failure mode - correct arithmetic over the wrong quantity - arriving twice in the harness built
   to record figures honestly, which is the best argument in this record for making the source a field.
@@ -262,3 +270,9 @@ cumulative-time profile, and the audit's control run - the suspected rule forced
 - **Round 4, FAITHFUL.** It re-ran the harness, checked the 402 s record and both merge records by hand, and found the
   figures agree in every place they are quoted. Its two minor notes are taken: the record's `source` now says exactly
   which merges its pattern matches, and this status line names all four rounds.
+- **Amendment round 1 (after acceptance; the counter reset), CHANGES REQUIRED, four items, all applied.** (1)
+  FR-005's completeness judged where the reviewer reads, not "either place whole", which passed a stale snapshot
+  beside a render-less pool folder; FR-005, SC-004 and D7(a) rewritten and the check changed to match. (2) FR-003
+  carries D7(b)'s `quantity` and `source` itself. (3) Two one-shot labels in `research.md` began with a capital and
+  did not match 239's pattern; lowered. (4) The Review history's round labels separated, rounds 3 and 4 citing
+  their own keys.
