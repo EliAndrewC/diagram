@@ -6,15 +6,17 @@ built, farmed or lived in. The figures it rests on are in `research.md` R1 and R
 
 ## Phase 1 - the decisions, importable
 
-- [ ] T01 `gencache.is_current(gen)`: the key comparison without `load()`'s copy, and `load()` calls it
+- [x] T01 `gencache.is_current(gen)`: the key comparison without `load()`'s copy, and `load()` calls it
       (FR-005). Unit test on a stub entry: current, moved, absent.
       research: rendering
-- [ ] T02 `scripts/_review_prereq.py`: `unverified_findings` (FR-003: a verdict's findings with no
+      verify: DONE. gencache.is_current: the key comparison load() makes, and nothing else; load() asks it first so there is one body. Test proves it answers current / moved / absent while a standing PNG load() would delete stays put and a JSON load() would restore stays absent. 0.18 s from the repo root
+- [x] T02 `scripts/_review_prereq.py`: `unverified_findings` (FR-003: a verdict's findings with no
       `verifies` record and no `accepted` disposition), `stale_maps` (FR-005: key moved or snapshot missing
       a file), `fix_review_without_green_gate` (FR-004), `unresolved_figures` (FR-006: `_FIGURE` imported
       from `spec-lint.py`, backtick spans skipped, a record's value or a dated one-shot label resolves it),
       and a `check` CLI printing the refusal. `tests/tooling/test_review_prereq.py`, each decision both ways.
       research: rendering
+      verify: DONE. scripts/_review_prereq.py: unverified_findings, has_findings, stale_maps, unresolved_figures (spec-lint's _FIGURE imported, backticks skipped, m: key or 239's dated one-shot label resolves), check and a CLI. tests/tooling/test_review_prereq.py 7/7, including SC-002 - feature 230's pass-13 dispatch with every figure removed is refused naming the finding. PROVEN TO FIRE: with the finding check deleted, 2 of 7 go red
 
 ## Phase 2 - the records
 
