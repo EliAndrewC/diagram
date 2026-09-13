@@ -55,3 +55,42 @@ from that commit and push it as 242's `specs/` alone. Three pushes' worth of mec
 sentence of the GM's - recorded so the next session that amends a spec while another feature is
 mid-flight in the same clone knows to commit the two on different days, or to push the amendment
 before opening the engine work.
+
+## R3 - what the checks found on the rewritten section (2026-09-13)
+
+**`quote-check`.** fn-30's two kotobank passages are VERBATIM on the page, ruby parentheticals
+included; the definition SUPPORTS the sentence it hangs on in full. Two PARTIALs, both applied: the
+sentence on the post-station inn generalized to the type where the note supports one building, so it
+now says the inn is *drawn* two-story *on its own analogue*; and the prose called the 1913 sentence the
+earliest example of the WORD where the page dates older senses to 1677 and 1682 - it is the earliest
+example of that SENSE, and says so now. The roster's "what a post-station inn does not have" claimed
+evidence from silence and now says silence.
+
+**The one unfootnoted assertion, and why it matters beyond this section.** The section's first
+sentence - a county seat sits on its trade route and keeps a caravan inn for it - carried no footnote,
+only a roster disclosure. That sentence is homesteads report item 148, and feature 242's work-list
+filter subtracts it as *"the caravan inn (one bare item ... closed by 238)"*. 238 closed the inn's
+story count; it never footnoted the premise. So the subtraction was true of the glyph and false of the
+sentence. It carries an absence note now (fn-31), in the never-searched form - no query of its own was
+run for it here, and a knob feature is not the place to invent one - which puts it where it belongs:
+in 242's D1 population, the never-searched notes the GM ruled in scope, rather than dropped between
+two features. 242's `hedged-worklist-max` bound still holds (a subtracted item stays subtracted; it
+returns as a D1 note instead of a bare sentence).
+
+**fn-22 and fn-25 came back NOT-READABLE**, the Jilin Daily host refusing an automated fetch on the
+HTTPS upgrade of a plain-HTTP link. The record's rule stands - public is the GM's test, not the
+container's - but a page served only over plain HTTP will fail this check every time it is run. Nothing
+changed here; noted so the next reader does not spend a round on it.
+
+**`record-format`.** Seven vocabulary items: `post-station` did not match the glossary's `post station`
+(a hyphen; five occurrences got no tooltip), fixed as a variant of `shukuba`; `wagon inn`, `Tokaido`,
+`knob` and `Taisho` added; `Minamiaizu` and `Sanuki` taken out of the write-up by rewording rather than
+defined, since the record says nothing about where either is. One session note in the new write-up -
+*"known and not yet read"*, a fetch state - moved into a comment with its substance kept visible. No
+history in the visible prose. Two things outside the brief it flagged and this feature fixed under
+Principle XIV: the `hatago` glossary definition described only the humble shophouse form and pulled
+against "Tokaido hatago", now widened; and the neighboring `okabe-hatago-jawiki` write-up narrated why
+the source was sought, which is document history, now cut.
+
+**One collision the glossary term caused.** The synthetic record page the browser tests run on used
+"knob" as filler text; wrapping it broke a hardcoded expectation. The filler word changed, not the term.

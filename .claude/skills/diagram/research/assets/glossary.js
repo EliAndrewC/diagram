@@ -2012,7 +2012,7 @@ window.RECORD_GLOSSARY = [
   "variants": [
    "hatago"
   ],
-  "def": "An ordinary household's inn - a shophouse whose back rooms took lodgers."
+  "def": "A Japanese inn for travelers on a highway or in a town: at its humblest an ordinary household's shophouse whose back rooms took lodgers, at its grandest a purpose-built post-station inn of two stories."
  },
  {
   "term": "hatake",
@@ -4039,7 +4039,9 @@ window.RECORD_GLOSSARY = [
   "term": "shukuba",
   "variants": [
    "post stations",
+   "post-stations",
    "post station",
+   "post-station",
    "post towns",
    "yi network",
    "post town",
@@ -4878,5 +4880,39 @@ window.RECORD_GLOSSARY = [
    "馬宿"
   ],
   "def": "a Japanese inn that took a traveling guest's own horse into its keeping, or an inn with the stabling to do so; the one picture the record has of such an inn puts the lodging in front and a large stable behind"
+ },
+ {
+  "term": "wagon inn",
+  "variants": [
+   "wagon inns",
+   "wagon inn",
+   "wagon-inn",
+   "dachedian"
+  ],
+  "def": "The north-Chinese roadside inn for carters and their animals: simple board and lodging at low cost on a main thoroughfare or in the belt around a city's outskirts, with open ground in the back yard for parking the carts, a long stable with a feeding trough and a tying rail, a grooms' lean-to and a well in the yard."
+ },
+ {
+  "term": "Tokaido",
+  "variants": [
+   "Tokaido",
+   "Tōkaidō"
+  ],
+  "def": "The great highway along Japan's east coast between the shogun's capital and Kyoto, its post towns - Okabe among them - strung with inns, transport offices and relay horses."
+ },
+ {
+  "term": "knob",
+  "variants": [
+   "knobs",
+   "knob"
+  ],
+  "def": "A setting the map varies from settlement to settlement: where the research supports more than one form, the map rolls between them from its own seed instead of the record choosing one for every map."
+ },
+ {
+  "term": "Taisho",
+  "variants": [
+   "Taisho",
+   "Taishō"
+  ],
+  "def": "The Japanese era between Meiji and Showa, 1912 to 1926 - modern Japan, by which time the railway had begun displacing packhorse traffic."
  }
 ];

@@ -90,7 +90,7 @@ RECORD_PAGE = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><tit
 <h2 id="homestead-groves-yashikirin">Homestead groves (yashikirin)</h2>
 <!-- Grounds: a comment the reader never sees; yashikirin -->
 <script>window.RECORD_CITATIONS = {{"fn-2": "<a href='https://example.invalid/'><code>b-key</code></a> - 「a derived note naming a tameike」"}};</script>
-<p>The kainyo of the Tonami plain is a stand of sugi,<sup class="fn"><a id="fnref-1" href="#fn-1">1</a></sup> and <code>yashikirin</code> is the knob.<sup class="fn"><a id="fnref-2" href="citations/record.html#fn-2">2</a></sup></p>
+<p>The kainyo of the Tonami plain is a stand of sugi,<sup class="fn"><a id="fnref-1" href="#fn-1">1</a></sup> and <code>yashikirin</code> is the name.<sup class="fn"><a id="fnref-2" href="citations/record.html#fn-2">2</a></sup></p>
 <section class="footnotes"><ol><li id="fn-1"><a href="https://example.invalid/"><code>a-key</code></a> - 「a quoted passage about a yashikirin」 <a class="fnback" href="#fnref-1">back</a></li></ol></section>
 </main></body></html>"""
 

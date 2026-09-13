@@ -1745,7 +1745,7 @@
   ]
  },
  "hatago": {
-  "def": "An ordinary household's inn - a shophouse whose back rooms took lodgers.",
+  "def": "A Japanese inn for travelers on a highway or in a town: at its humblest an ordinary household's shophouse whose back rooms took lodgers, at its grandest a purpose-built post-station inn of two stories.",
   "variants": [
    "hatago"
   ]
@@ -3507,14 +3507,16 @@
  "shukuba": {
   "def": "A post town on a highway, with its transport office, inns and relay horses strung along one street.",
   "variants": [
-   "shukuba",
-   "shuku",
-   "yizhan",
-   "post towns",
-   "post town",
-   "post stations",
    "post station",
-   "yi network"
+   "post stations",
+   "post town",
+   "post towns",
+   "post-station",
+   "post-stations",
+   "shuku",
+   "shukuba",
+   "yi network",
+   "yizhan"
   ]
  },
  "sigma": {
@@ -4233,6 +4235,36 @@
   "variants": [
    "umayado",
    "馬宿"
+  ]
+ },
+ "wagon inn": {
+  "def": "The north-Chinese roadside inn for carters and their animals: simple board and lodging at low cost on a main thoroughfare or in the belt around a city's outskirts, with open ground in the back yard for parking the carts, a long stable with a feeding trough and a tying rail, a grooms' lean-to and a well in the yard.",
+  "variants": [
+   "wagon inn",
+   "wagon inns",
+   "wagon-inn",
+   "dachedian"
+  ]
+ },
+ "Tokaido": {
+  "def": "The great highway along Japan's east coast between the shogun's capital and Kyoto, its post towns - Okabe among them - strung with inns, transport offices and relay horses.",
+  "variants": [
+   "Tokaido",
+   "Tōkaidō"
+  ]
+ },
+ "knob": {
+  "def": "A setting the map varies from settlement to settlement: where the research supports more than one form, the map rolls between them from its own seed instead of the record choosing one for every map.",
+  "variants": [
+   "knob",
+   "knobs"
+  ]
+ },
+ "Taisho": {
+  "def": "The Japanese era between Meiji and Showa, 1912 to 1926 - modern Japan, by which time the railway had begun displacing packhorse traffic.",
+  "variants": [
+   "Taisho",
+   "Taishō"
   ]
  }
 }
