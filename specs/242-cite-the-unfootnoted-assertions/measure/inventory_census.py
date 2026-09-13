@@ -92,6 +92,18 @@ def items(text: str) -> list[str]:
 TIERS = ("HIGH", "MEDIUM-HIGH", "MEDIUM", "LOW-MEDIUM", "LOW")
 
 
+def page_of(text: str, upto: int) -> str:
+    """The research page an item belongs to: the nearest `# ` heading above it that names an .html.
+
+    All four reports delimit pages this way and no other, though they disagree on everything else -
+    one writes an absolute path, one a bare filename, one appends a section count.
+    """
+    page = ""
+    for m in re.finditer(r"(?m)^#{1,3} .*?([A-Za-z0-9_/-]+\.html)", text[:upto]):
+        page = m.group(1).split("research/")[-1]
+    return page
+
+
 def confidence(block: str) -> str:
     m = re.search(r"\*\*(HIGH|MEDIUM|LOW)(-(?:HIGH|MEDIUM|LOW))?\b", block)
     if not m:
@@ -117,7 +129,25 @@ def carries_marker(block: str) -> bool:
     return "unsourced" in low or "is a guess" in low or "they are a guess" in low
 
 
+def per_page_bare() -> dict[str, int]:
+    """Bare items per research page - the shape feature 242's task file is written from."""
+    out: collections.Counter[str] = collections.Counter()
+    for path in sorted(REPORTS.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        for block in items(text):
+            if carries_marker(block):
+                continue
+            out[page_of(text, text.index(block[:120]))] += 1
+    return dict(out)
+
+
 def main() -> int:
+    if "--per-page" in sys.argv:
+        pages = per_page_bare()
+        for page, n in sorted(pages.items(), key=lambda kv: -kv[1]):
+            print(f"{n:5}  {page}")
+        print(f"{sum(pages.values()):5}  TOTAL")
+        return 0
     per_report = {}
     bare_conf: collections.Counter[str] = collections.Counter()
     all_conf: collections.Counter[str] = collections.Counter()
