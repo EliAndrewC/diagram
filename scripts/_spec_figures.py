@@ -52,7 +52,9 @@ _KEY = re.compile(r"\bm:([a-z0-9][a-z0-9-]*)")
 _SPAN = re.compile(r"`[^`\n]*`")
 _TOKEN = re.compile(r"(?<![\w.])\d[\d,]*(?:\.\d+)?")
 _ROUND_LABEL = re.compile(r"\b(?:round \d+|this round)'s own run\b", re.I)
-_ONE_SHOT = re.compile(r"\bobserved \d{4}-\d{2}-\d{2}\b")
+# case-INSENSITIVE: a label that opens a sentence - "(Observed 2026-09-12; method: ...)" - is the same label, and
+# the first version refused it (found by feature 240's review, which had to lower its own two labels)
+_ONE_SHOT = re.compile(r"\bobserved \d{4}-\d{2}-\d{2}\b", re.I)
 _OPERATIVE = ("summary", "functional requirements", "success criteria", "decisions recorded")
 _HEADING = re.compile(r"^(#{2,})\s+(.*?)\s*$", re.M)
 
