@@ -8,8 +8,8 @@ One module holds every decision the gate makes, and three thin callers use it:
 
 | piece | what it does |
 |---|---|
-| `scripts/_plan_gate.py` | `owed(spec_dir) -> str or None` (the reason a feature may not tick, or nothing); `ticked(tasks_text) -> int`; `derive_verdict(decisions)`; `record(spec_dir, review, declared)`; `touched_features(root, rng)`; a CLI with `owed`, `push <range>` and `record` |
-| `scripts/tick-task.py` | calls `owed()` on the resolved spec directory before `tick()`, and refuses with its reason (FR-001, FR-005) |
+| `scripts/_plan_gate.py` | `owed(spec_dir)` -> the (rule, reason) a feature may not tick for, or nothing; `ticked(tasks_text)`; `tick_permitted(spec_dir, root, escape)`, the whole tick-time decision including the escape; `derive_verdict(decisions)`; `record(spec_dir, review, declared)`; `touched_features(root, rng)` and `push_owed`; a CLI with `owed`, `push <range>` and `record` |
+| `scripts/tick-task.py` | calls `tick_permitted()` on the resolved spec directory before `tick()`, and refuses with its message (FR-001, FR-005, FR-008) |
 | `scripts/plan-gate.sh` | the push refusal, run by `sync-with-main.sh` directly after `review-gate.sh` (FR-007), on the shape of `entry-gate.sh`: escape first, reason floor, guard log and `dev/bypass-log/` entry, then `_plan_gate.py push` |
 | `make plan-verdict F=<feature> FILE=<json> AS=spec-fidelity` | writes `plan-review.json` from the reviewer's JSON, declining without `AS=spec-fidelity` (FR-006) |
 
@@ -61,10 +61,10 @@ creates. Every refusal is proven by mutation: break it, watch the test go red, r
 
 **P8 - this feature's own tasks.** The plan-review agent file edit does not reach an agent launched by
 type in the same session (the harness gotcha in `docs/spec-kit-and-reviews.md`), so this plan's review
-is dispatched with the mode's instructions in the prompt. The review runs on this plan before any code
-is written. Its JSON is recorded through `make plan-verdict` once that target exists, provided this plan
-has not changed; if it has, it is reviewed again. No task is ticked before the gate exists, so every
-tick passes through it (SC-009).
+is dispatched with the mode's instructions in the prompt. It runs on this plan once the spec is
+FAITHFUL, while implementation proceeds beside it. Its JSON is recorded through `make plan-verdict`
+once that target exists, provided this plan has not changed; if it has, it is reviewed again. No task
+is ticked before the gate and the record exist, so every tick passes through the gate (SC-009).
 
 ## Constitution check
 

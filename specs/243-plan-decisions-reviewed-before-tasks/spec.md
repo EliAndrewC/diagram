@@ -1,7 +1,7 @@
 # Feature 243 - plan decisions are reviewed before tasks are ticked
 
 **Created**: 2026-09-13
-**Status**: DRAFT (round 2 CHANGES REQUIRED applied; round 3 next)
+**Status**: FAITHFUL (round 3, MODE 3, 2026-09-13)
 **Input**: the GM's request, verbatim, in `request.md`
 
 ## Summary
@@ -138,3 +138,6 @@ The plan review is written the same way.
 - Round 2 (MODE 3 VERIFY): CHANGES REQUIRED, 2 items. Applied: the R2 counts pinned to a commit so they
   reproduce; the fully ticked exemption declined on its own ground rather than on 239's ruling, which
   covered only the feature-number cutoff.
+- Round 3 (MODE 3 VERIFY): FAITHFUL. Both items resolved; the R2 commands re-run at `c8d4daab`, and the
+  fully ticked ground checked against 239's history (no open task at the commit that landed the
+  narrowings).
