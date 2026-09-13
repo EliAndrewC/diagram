@@ -23,3 +23,10 @@ needs its own reading before a footnote can be written.
 found), R6 (the classification), R6a (why the counts come from the readers rather than a parse) and R7
 (what 238 closed, so you know what you own). **Do not re-read the nineteen pages.** The inventory exists
 so that this feature does not have to.
+
+## The GM's ruling on D1 (2026-09-13)
+
+Asked whether the 119 absence notes whose text says no query was ever run belong to this feature:
+
+> I also agree that never-searched absence notes are in scope for 242.
+

@@ -120,10 +120,10 @@ it stands.
 as tidying: the honest label now sits at the assertion while the section's `Sources:` line still
 carries it too. Fifty-one edits, no change of meaning in any.
 
-**FR-014 - the two items only the GM can settle are RELAYED, not built here.** Whether the caravan
-inn's story count should become a knob, and the Xuxiebian site name, which a second full search of both
-Wagner works confirms is in neither. Building the knob would be engine code and would put this
-feature's delta on the GATED route; this feature does not build it.
+**FR-014 - nothing here is engine code.** The two items 238 could not settle are both settled: the
+Xuxiebian site name is an absence the record already carries, and the caravan inn's story count was
+RULED a knob by the GM on 2026-09-13 (*"if there are opposing sources then it's a toggle"*) - which is
+engine work and has its own feature, so this one stays research-only and on the DIRECT route.
 
 ## Success criteria
 
@@ -156,7 +156,9 @@ feature's delta on the GATED route; this feature does not build it.
 
 ## Decisions recorded
 
-**D1 - an absence note that records no search is IN scope.** 119 of the record's 259 absence notes say
+**D1 - an absence note that records no search is IN scope - RULED by the GM, 2026-09-13:** *"I also agree
+that never-searched absence notes are in scope for 242."* The reasoning below is what the ruling was put
+to them with, kept because it is why the reading was proposed rather than the other. 119 of the record's 259 absence notes say
 no query of its own was run (`m:absence-notes-never-searched`; `research.md` R2). The narrow reading
 would put them out of scope, because they carry a footnote and the GM's population was assertions that
 *"do not carry a footnote"* - and it was priced: it makes the feature about a quarter smaller and
