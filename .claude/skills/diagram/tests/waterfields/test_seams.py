@@ -579,3 +579,20 @@ def test_a_thin_tail_is_handed_to_the_neighbor_it_runs_along() -> None:
     alone = [{"poly": list(host["poly"])}]  # nothing to give it to
     _shed_necks(alone, 1.25 * 2.0, 15.0 * 2.0)
     assert alone[0]["poly"] == host["poly"], "a tail with no neighbor is left where it is"
+
+
+def test_shed_necks_passes_over_a_plot_with_no_polygon_and_a_tail_that_is_the_whole_plot() -> None:
+    """Two guards in `_shed_necks`, each of which the pool reaches only occasionally. A plot whose record carries
+    fewer than three points has no shape to shed from and is stepped over; and a sliver whose whole body IS its
+    tail cannot give it away, because what would be left of the giver is nothing at all - so the trade is refused
+    and both plots stand as they were."""
+    from l7r.diagram.waterfields.seams.close import _shed_necks
+
+    degenerate = {"poly": [(0.0, 0.0), (10.0, 0.0)]}
+    sliver = {"poly": _rect(0, 0, 4, 100)}  # 4 x 100: erodes to nothing, so the tail is the whole plot
+    neighbor = {"poly": _rect(4, 0, 104, 100)}
+    plots = [degenerate, {"poly": list(sliver["poly"])}, {"poly": list(neighbor["poly"])}]
+    _shed_necks(plots, 1.25 * 2.0, 15.0 * 2.0)
+    assert plots[0]["poly"] == degenerate["poly"], "a record with no shape is passed over"
+    assert plots[1]["poly"] == sliver["poly"], "a plot that IS its own tail keeps it - the giver would be left with nothing"
+    assert plots[2]["poly"] == neighbor["poly"], "so the neighbor takes nothing"

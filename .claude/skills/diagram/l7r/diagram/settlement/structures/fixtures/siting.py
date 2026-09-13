@@ -364,6 +364,21 @@ class FixtureSitingMixin:
         # 250 ft to 3, which is the Ubame failure this siter exists to prevent, arriving through its own fix. The
         # preference belongs BELOW the floor, among the seats that already carry the traffic, which is where every
         # other preference in this method sits.
+        # THE CANOPY IS A FILTER OVER THE SEATS THAT PASS THE FLOOR, and the two other orderings were measured
+        # rather than argued (settlement-review, feature 230 passes 12 to 14). The state's notice is the one fixture
+        # on a hamlet sheet that exists to be SEEN, so a plank inside a crown is the worst outcome available; what
+        # the ordering decides is what it costs.
+        #   - canopy first, then the floor computed from what survives (pass 12): the count never gets a say, and on
+        #     Mizuguchi the board walked out along the verge to where the trees end - 3 of 12 farmhouses within
+        #     250 ft against a best of 10, which is the Ubame failure arriving through its own fix.
+        #   - the raw count first with the canopy as a tie-break (pass 14's ask): Mizuguchi takes 6 of 12 and the
+        #     plank lands 7.6 ft INSIDE a crown, because on that map every busiest seat is in the belt.
+        #   - the count within one dwelling of the best, then open ground: the same 6 and the same crown, because
+        #     the open seats on that map are further than one dwelling behind.
+        # So the filter stands, under the floor rather than over it - which is where every other preference in this
+        # method sits, and what keeps the anchored case honest (`floor` is 0.0 there on purpose). What it costs is
+        # recorded on the map itself: the census block states the board's own count, and `kosatsuba_seat` says
+        # which knob chose the ground.
         _above_floor = [c for c in cands if c[0] >= floor]
         _in_the_open = [c for c in _above_floor if not c[7]] or _above_floor
         _b, _s, x, y, rot, lab, _gap, _shaded = max(_in_the_open, key=lambda c: (_sitable(c[2], c[3], w / 2, h / 2), c[5] is not None, c[1]))

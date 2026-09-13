@@ -3,6 +3,7 @@
 from l7r.diagram import hamletgen as hg
 
 from .._builders import SQUARE, a_plan
+from ._builders import _walled_settlement
 
 
 def test_the_connector_track_leaves_the_frame_without_crossing_the_crop() -> None:
@@ -36,3 +37,18 @@ def test_a_field_spur_that_folds_back_on_itself_is_cut_at_the_fold() -> None:
     cut, why = spur_cut_at_the_fold(folded, far)
     assert cut == [(0.0, 0.0), (100.0, 0.0)]
     assert why and "short of the field" in why, "the arm stops in open ground, so the map says why it has no path to its rice"
+
+
+def test_a_spur_cut_short_of_the_field_is_recorded_instead_of_drawn(monkeypatch) -> None:
+    """The other half of `spur_cut_at_the_fold`, at the stage that uses it: where the fold leaves the outward
+    arm short of the field, nothing is drawn and the map says why. A hamlet with no drawn way to its rice is a
+    fact the manifest should carry - the reference hamlet's went missing for three review passes because the
+    sweeps dropped it silently."""
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: ([], "folded back short of the field - the test's own reason"))
+    track.stage_track(s, plan)
+    assert "short of the field" in s.M["meta"].get("field_spur_swept", ""), "the map records why it has no path to its rice"
+    assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")], "and nothing is drawn for it"

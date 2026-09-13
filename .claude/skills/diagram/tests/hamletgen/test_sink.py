@@ -263,3 +263,17 @@ def test_a_pond_behind_the_collector_is_reached_by_a_curve_not_a_hairpin() -> No
     # pond than its own outfall does. The larger turn at the junction above is what buys it, and it is still obtuse.
     _d = [math.dist(q, (1771.0, 864.0)) for q in behind]
     assert max(_d) <= _d[0] + 1e-6, "every stride of the run is nearer the pond than the outfall was"
+
+
+def test_a_pond_exactly_back_along_the_heading_has_no_bisector_to_leave_on() -> None:
+    """`pond_run`'s one degenerate case. The run leaves on the bisector of the collector's heading and the chord
+    to the pond; where the pond lies exactly BACK along that heading the two cancel, and there is no bisector to
+    take. The chord is what is left - the run simply turns round and goes to the pond."""
+    import math
+
+    from l7r.diagram.hamletgen.sink import pond_run
+
+    back = pond_run((100.0, 100.0), (1.0, 0.0), (0.0, 100.0), (0.0, 1.0))
+    assert back[0] == (100.0, 100.0) and back[-1] == (0.0, 100.0)
+    assert all(abs(q[1] - 100.0) < 1e-6 for q in back), "with no bisector the run lies on the chord itself"
+    assert all(math.dist(q, (0.0, 100.0)) <= math.dist(back[0], (0.0, 100.0)) + 1e-6 for q in back), "and never climbs away from the pond"

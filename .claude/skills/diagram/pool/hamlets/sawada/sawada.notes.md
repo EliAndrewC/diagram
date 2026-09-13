@@ -629,7 +629,7 @@ gray-green boundary line beside the brown bund it runs against. It is a dark sla
 thirds of the way from the supply in value.
 
 **The notice board came out of the belt**, where a crown center stood 1.8 ft from it and 58% of the ground within 8 ft
-of the plank was canopy. It sits 6.6 ft clear of the nearest crown, on the same entrance seat.
+of the plank was canopy. It stands clear of the drawn canopy - by 0.6 ft, which is a pass with no tolerance left and the tightest seat in the pool - on the same entrance seat. The earlier figure here said 6.6 ft, which was measured against the grove's clump BASES and its one nominal radius; a clump draws several jittered crowns, and pass 13 measured their edges a median 16.3 ft past the base, so the probe now reads the drawn crowns themselves.
 
 **What did not change, and why**: the brook's ruled middle reach. Widening the walk was measured a third time (wander
 10 -> 18 on a longer step, the frame margin opened to hold it) and moves the straightest 12-vertex run by under a pixel,

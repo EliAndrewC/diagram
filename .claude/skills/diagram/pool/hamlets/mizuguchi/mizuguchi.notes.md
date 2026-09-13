@@ -586,8 +586,9 @@ excursion. The handle points along the bisector of the heading and the chord now
 and no stride of the run stands further from the pond than the outfall does.
 
 **The notice board came out of the windbreak.** Ten clumps stood within 40 ft of it and the nearest crown center 12.8 ft
-away with a 14 ft radius, while clear verge lay 18-25 ft along the same lane. It stands 6.7 ft clear of the nearest
-crown now, on the same entrance ground the knob anchors it to.
+away with a 14 ft radius, while clear verge lay 18-25 ft along the same lane. It stands 7.7 ft clear of the drawn canopy now, on the same entrance ground the knob
+anchors it to. (The figure first written here, 6.7 ft, was measured against the grove's clump bases rather than the
+crowns drawn from them - pass 13's finding, and the reason the probe reads `tree_crowns`.)
 
 Derived, never typed. `make notes-census` rewrites the block below from the manifest and
 `tests/test_notes_census.py` fails when it disagrees with one. Three settlement-review passes running
