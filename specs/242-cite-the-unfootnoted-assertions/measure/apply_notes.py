@@ -132,6 +132,19 @@ def insertion_point(raw: str, sentence: str) -> int:
     return -1
 
 
+def locate_line(lines: list[str], sentence: str) -> int | None:
+    """The index of the one line whose visible text holds the sentence's last words, or None."""
+    words = norm(html.unescape(re.sub(r"<[^>]+>", "", sentence))).replace("...", " ").split()
+    for size in (6, 5, 4):
+        if len(words) < size:
+            continue
+        tail = " ".join(words[-size:]).rstrip('."\')')
+        hits = [i for i, ln in enumerate(lines) if tail in visible_map(ln)[0]]
+        if len(hits) == 1:
+            return hits[0]
+    return None
+
+
 def li_for(n: int, note: dict, back: str) -> str:
     form = note["form"]
     if form == "citation":
@@ -231,6 +244,16 @@ def main() -> int:
         a, b = block_span(lines, note["line"] - 1)
         li = "\n".join(lines[a : b + 1])
         at = insertion_point(li, note["sentence"])
+        if at < 0:
+            # THE LINE NUMBER IS A HINT, THE SENTENCE IS THE ANCHOR: a correction above may have joined or
+            # split a line since the work list was derived, so the sentence's own last words are searched
+            # for across the page and the block that holds them is used.
+            found = locate_line(lines, note["sentence"])
+            if found is not None and found != note["line"] - 1:
+                a, b = block_span(lines, found)
+                li = "\n".join(lines[a : b + 1])
+                at = insertion_point(li, note["sentence"])
+                report.append(f"RELOCATED line {note['line']} -> {found + 1}")
         if at < 0:
             report.append(f"NOT-PLACED fn-{n} line {note['line']}: {note['sentence'][:80]}")
             nmax -= 1
