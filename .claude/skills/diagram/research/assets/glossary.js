@@ -1230,13 +1230,6 @@ window.RECORD_GLOSSARY = [
   "def": "A Chinese inch of about 3.3 centimeters; ten to a chi."
  },
  {
-  "term": "cursus publicus",
-  "variants": [
-   "cursus publicus"
-  ],
-  "def": "The Roman state's courier and transport relay network, its stations a day's travel apart."
- },
- {
   "term": "curtain",
   "variants": [
    "curtain wall",
@@ -2493,13 +2486,6 @@ window.RECORD_GLOSSARY = [
    "kanden"
   ],
   "def": "Dry paddy: rice ground that drains, so that when the water is let out it dries to an ordinary dry field and can carry a winter crop before the next flooding."
- },
- {
-  "term": "kane-yaku-sen",
-  "variants": [
-   "kane-yaku-sen"
-  ],
-  "def": "The bell fee: the monthly copper charge on every household reckoned to be within earshot of a licensed time bell."
  },
  {
   "term": "kannushi",
