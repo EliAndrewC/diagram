@@ -232,3 +232,20 @@ Corrections the reading forced, page by page:
 Tooling defects found by the homesteads/water record-format pass and fixed in `apply_notes.py`: a wrapped roster's first line was rewritten as a closed paragraph (five homesteads rosters restored from the pre-pass commit); a footnote mark landed inside a decimal figure (the terminator regex now refuses a period between digits); the registry key's address is the entry's first link, as the tests read it. The absence notes' `searched` field must not carry its own `searched YYYY-MM-DD:` prefix (41 doubled dates removed).
 
 Download list: entries 93 to 140 appended for these three pages.
+
+## R10 - the remaining nine pages (2026-09-14)
+
+Two more waves of fetch-by-address readers (13 and 11 agents) closed the worklist: buildings 32 notes, vegetation 28, river-cities 24, defenses 22, towns 18, fabric 25, government 26, hinterland 11, ways 5. Every never-searched note on those pages was replaced in place. Registry entries added this stretch: about 120 (a census of `<h3 id=` additions since the homesteads/water commit gave 117 before towns and government).
+
+What the reading contradicted, and what the pages now say:
+
+- vegetation: neighboring canopies do NOT interlace (crown shyness), so the edge overlap is a drawing allowance; the Tonami homestead's bamboo stood on the SOUTH side with the storehouses; the pictorial hill is the oldest cartographic convention, not an estate-map one.
+- river-cities: the takasebune runs 30 to 89 ft in the records read, not 50-60 ft.
+- towns: the fire watch was the neighborhood's as much as the state's; the kichin-yado sold roof and fire, bedding rented extra; important cities walled in far more ground than they had built; farmland stood inside Chinese city walls.
+- fabric: machiya touched at the gable, the shared wall proper being the nagaya's; the flood function belongs to the walls, not the intramural fields; the chapter's open consumers are cultivation, ponds and parks.
+- government: the servants' changeover was the 5th of the 3rd month from the 1668 decree; the Chinese military examinations ran at provincial, metropolitan and palace level; the runners' banfang was a duty station, the shed and the town houses this page's reading.
+- defenses: Hakone's stations are the menbansho and mukaibansho within a fence; the flat-face argument credits the spur's length and projection.
+
+Tooling learned on these pages: a fragment of two words is tried (a parenthetical gloss closing a sentence); a registry address with balanced parentheses is read whole; a rewrite that spans a footnote mark keeps the mark (the matcher moves it to the end of the replacement); the tests want a Japanese or Chinese Wikipedia key's link in the unencoded kanji form when the registry has it so (toribeno, xian-wall, and the parenthesized 町屋 (商家)), which the apply tool cannot derive and the test reports.
+
+Download list: entries 141 to 224 appended for these pages. Checks dispatched: quote-check over the twelve newly noted pages in four agents, record-format in four, source-applicability over the 117 new keys in five batches.
