@@ -49,6 +49,13 @@ CASES = [
     ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt="DELTA review of Inashiro"), "armed", "review-dispatched"),
     ("escalation", _payload(_tool="Agent", subagent_type="escalation-check", prompt="my draft writeup"), "permitted", "filter-ran"),
     ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt='review X ESCALATION_OK="a confirmation pass, nothing relayed"'), "escaped", "escalation-ok"),
+    # feature 249 (GM 2026-09-14): a spec-fidelity round after the first reads the diff - the branches
+    # a bare payload can reach (the rewrite, the first snapshot and the history line need a clone with
+    # the feature present, which scripts/test-review-round-hooks.sh drives on a fixture)
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 2 review of specs/999-nowhere against request.md"), "permitted", "no-feature"),
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 4: PLAN REVIEW of specs/999-nowhere"), "permitted", "other-mode"),
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt='MODE 3 of specs/999-nowhere REVIEW_ROUND_OK="a restructured spec, read it whole"'), "escaped", "review-round-ok"),
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 3 of specs/999-nowhere REVIEW_ROUND_OK"), "blocked", "REVIEW_ROUND_OK-no-reason"),
     ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
     ("no-branch", _payload(command="git checkout -b side"), "blocked", "branch-creation"),
     ("no-branch", _payload(command="git checkout -b side  # NO_BRANCH_OK: a throwaway bisect"), "escaped", "no-branch-ok"),
@@ -305,6 +312,13 @@ _ESCAPES = {
         "matched in an agent PROMPT only (`case \"$prompt\"`), the same stated exclusion as PAIR_OK's "
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
+    ),
+    "REVIEW_ROUND_OK": (
+        "command",
+        "matched in a spec-fidelity dispatch PROMPT only (`TOKEN in prompt` in _hm_review_round.py, the prompt's "
+        "own text taken from the payload), the same stated exclusion as PAIR_OK's and ESCALATION_OK's agent "
+        "branches - a prompt is prose with no command grammar; its REVIEW_ROUND_OK=\"reason\" form is refused "
+        "without a reason and logged with one (feature 249)",
     ),
     "REVIEW_PREREQ_OK": (
         "command",

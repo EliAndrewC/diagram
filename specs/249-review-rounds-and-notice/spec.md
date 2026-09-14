@@ -1,6 +1,7 @@
 # Feature 249 - review rounds read the diff, and the batching notice speaks on any single call
 
-**Status:** accepted - FAITHFUL at round 3 (see Review history); implementation in progress.
+**Status:** implemented 2026-09-14 - FAITHFUL at round 3, plan CLEAR (see Review history); `make hooks-test`
+and `make quick` green; landed DIRECT.
 
 ## Summary
 

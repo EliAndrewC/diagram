@@ -83,6 +83,28 @@ QUIET=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null)
 printf '%s' "$QUIET" | grep -q "BATCHING NOTICE" && { echo "  FAIL  a notice on the first turn of all"; FAIL=$((FAIL+1)); } || { echo "  ok    a quiet session gets no notice"; PASS=$((PASS+1)); }
 teardown
 
+# GUARD_EDIT_OK: feature 249 (GM 2026-09-14) - THE NOTICE SPEAKS ON ANY SINGLE CALL, not only a bare
+# read. The history counts a folded single command as a serial turn (one round trip under the cheap
+# bound), but the notice carried the block's shape test, so a session reconning in folded commands
+# reached the bar with no notice and was blocked cold. The block keeps its shape test (case 3 below
+# still proves a folded command is never refused); only the notice is widened.
+echo "2c. the notice arrives on a FOLDED single call one turn below the bar (feature 249)"
+setup
+serial_turn; serial_turn                       # window "11" - one below the bar of 3
+sleep 0.35
+NOTICE=$("$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep -n a f; grep -n b g"}}' 2>/dev/null); RC=$?
+check "the folded call is allowed" ok $RC
+printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a folded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
+teardown
+echo "2d. ...and on a BACKGROUNDED single call (feature 249: the GM's 'any single call')"
+setup
+serial_turn; serial_turn
+sleep 0.35
+NOTICE=$("$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' 2>/dev/null); RC=$?
+check "the backgrounded call is allowed" ok $RC
+printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a backgrounded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
+teardown
+
 echo "3. a batched turn is never interrupted below the threshold"
 # NOTE the semantics this pins down: PreToolUse must decide on the FIRST call of a turn, when it
 # cannot yet know whether a second call is coming in the same message. So a batch that begins

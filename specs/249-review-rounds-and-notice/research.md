@@ -16,6 +16,16 @@ prompt asked for more than the rule, which is what the GM's *"instructions are n
 names, and why the fix is a rewrite of the dispatch by the tooling rather than a fourth copy of the
 sentence.
 
+## R1a - what the bounded form costs, on this feature's own review (one-shot, observed 2026-09-14)
+
+Method: the three rounds' usage lines, this session. Round 1 was the initial full reading (MODE 2):
+239 s, 8 tool uses, 159k tokens. Rounds 2 and 3 were dispatched by hand in the bounded form this
+feature builds - the previous items and the diff only: 109 s, 3 tool uses, 93k tokens; and 102 s,
+5 tool uses, 142k tokens. So a bounded round ran in under half the wall time of the full rounds of
+R1 (229 s and 160 s), and both found what they were sent for - round 2 caught the discriminator
+defect that its own prompt demonstrated. The token count of round 3 is the caution: a reviewer told
+to grep still reads every hit in full, so the bound is on the wall clock more than on the tokens.
+
 ## R2 - why the batching notice did not fire (one-shot, 2026-09-14, from the guard log and the state file)
 
 The batching guard records a turn as serial when it made ONE call that finished under the cheap bound,

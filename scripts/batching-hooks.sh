@@ -128,7 +128,17 @@ case "$MODE" in
     # block, the rolling window, the backoff and the shape test are untouched; this only speaks
     # earlier. No python: this hook fires on every Read/Grep/Glob and its startup cost is the reason
     # it parses nothing, so the notice is a fixed string.
-    if [ "$CALLS" -eq 1 ] && [ "$BG" -eq 0 ] && [ "$N" -eq "$((REARM - 1))" ] && is_recon_call; then
+    # GUARD_EDIT_OK: feature 249 (GM 2026-09-14) - THE NOTICE SPEAKS ON ANY SINGLE CALL. It used to
+    # carry the block's own shape test (`is_recon_call` and the backgrounded test), and the gap that
+    # left was measured on 2026-09-14: the history marks a turn serial by ROUND TRIP - one call, under
+    # the cheap bound, whatever its shape - so a session reconning in folded single commands filled the
+    # window exactly as the playbook asks, reached one below the bar while the arriving call had a `;`
+    # in it, got no notice, and was blocked cold on the next bare read. The notice is additionalContext
+    # on an ALLOWED call and costs no round trip, so there is no reason for it to be choosy: it fires
+    # on the first call of any turn at one below the bar. The BLOCK keeps both tests below - a folded
+    # or backgrounded command is never the right thing to refuse. The GM's words: "The fix is free ...
+    # it can drop the shape test and fire on any single call once the window is one below the bar."
+    if [ "$CALLS" -eq 1 ] && [ "$N" -eq "$((REARM - 1))" ]; then
       printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"BATCHING NOTICE (one turn before this is refused): %s of the last %s turns each made a single quick read-only call. The next recon-shaped call on its own is blocked. Send the lookups you already know you need TOGETHER - parallel tool calls in one message, or one command folding several greps - and fold the ACTION you will take into the same command as the read. Nothing is refused yet."}}\n' "$N" "${#HIST}"
       # GUARD_EDIT_OK: THE NOTICE RECORDS, which it never did (found 2026-09-13, when the GM asked
       # whether the one-turn-early notice works and the answer had to be "the log cannot say"). The log

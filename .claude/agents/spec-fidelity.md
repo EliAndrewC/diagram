@@ -117,7 +117,18 @@ the same session will not find it.
 **The first review of a spec is a full reading. Every later round is this mode** - including the
 first round after an amendment - and the reason is measured: 91 minutes of one feature went to 20
 review rounds, and a re-read of unchanged text is time the GM pays for twice. The GM's rule, in
-their own words: *"only rereviewing the new stuff"* (feature 236, item 6).
+their own words: *"only rereviewing the new stuff"* (feature 236, item 6), and again on 2026-09-14,
+asked whether a round confirming a verbatim application of the previous round's edits still owes a
+full fresh read: *"my thinking is no. I think that it is okay for subsequent rounds to essentially
+review the paragraphs that have changed or the items that have changed or what have you."*
+
+**Since feature 249 the TOOLING supplies this mode's material.** A `spec-fidelity` dispatch for a
+feature the guard has seen before arrives with a preamble the hook prepended
+(`scripts/review-round-hooks.sh`): the round number within the pass, the previous round's verdict
+verbatim from your own earlier transcript (or the spec's Review history, marked as the session's
+summary), and a unified diff of the feature directory since that round was dispatched. That preamble
+IS your reading list. A dispatch that carries none is the first reading of the spec (MODE 2), a plan
+review (MODE 4) or an exception check (MODE 1), which the hook passes untouched.
 
 You are given: the GM's request VERBATIM, the current `spec.md`, the items the previous round
 raised, and the passages that changed since it. Do three things, in this order:
@@ -129,10 +140,14 @@ raised, and the passages that changed since it. Do three things, in this order:
 2. **Read every added or changed passage IN FULL**, with the MODE 2 questions: does it implement
    what was asked, does it add anything unrequested, does it contradict the request, is it larger
    than what was asked.
-3. **Scan the rest for CONTRADICTIONS THOSE CHANGES INTRODUCE ONLY.** A requirement the change now
-   duplicates, an id it orphaned, a decision it reversed elsewhere, a figure the new text makes
-   false. This is a targeted scan, not a re-read: do not re-litigate unchanged text you already
-   accepted, and do not raise a finding you could have raised in round one.
+3. **Grep for the ids and terms the changed passages name, and read the hits IN FULL - nothing
+   else.** An FR, an SC, a decision id, a task id, a figure, a phrase the change altered: grep the
+   feature directory for each and read every passage a hit lands in, looking only for contradictions
+   THOSE CHANGES INTRODUCE - a requirement the change now duplicates, an id it orphaned, a decision it
+   reversed elsewhere, a figure the new text makes false. A passage no hit names is not read. This is
+   a bounded procedure, not a re-read (feature 249 - the old wording, "scan the rest", was read as a
+   license to open every file): do not re-litigate unchanged text you already accepted, and do not
+   raise a finding you could have raised in round one.
 
 The verdict is the same - `FAITHFUL` or `CHANGES REQUIRED` with a numbered list - and one more
 thing is owed: say which passages you read in full, so the record shows what the round covered.

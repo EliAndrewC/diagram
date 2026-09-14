@@ -1,0 +1,93 @@
+{
+ "feature": "249-review-rounds-and-notice",
+ "plan_sha256": "368b2723743faabd897e0cb20dc6c2c43e0f4590c559072bdcbe5c7ccf5cd65f",
+ "reviewed": "2026-09-14",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "CC-guard-files",
+   "summary": "Constitution Check declares batching-hooks.sh, its suite and the new hook to be GUARD files, so every edit carries GUARD_EDIT_OK with a reason.",
+   "class": "within",
+   "why": "The spec does not say this; it follows from existing project doctrine (the guard-file rule) and adds no restriction to what the GM asked for. It constrains the session's own editing, never the delivered behavior."
+  },
+  {
+   "id": "P2-shape",
+   "summary": "The new guard is bash plus one python block, built on the escalation-hooks.sh shape.",
+   "class": "within",
+   "why": "Implementation form. FR-002/FR-003 name the behavior and the Agent matcher; the spec leaves the file's construction open."
+  },
+  {
+   "id": "P2-featuredir-first-match",
+   "summary": "The feature directory is the FIRST specs/NNN-slug occurrence in the prompt.",
+   "class": "within",
+   "why": "FR-002 requires the prompt to name a feature directory but does not say which occurrence wins when several appear. Taking the first resolves an open detail and removes nothing the spec or the request asks for."
+  },
+  {
+   "id": "P2-state-layout",
+   "summary": "State is <clone>/.git/review-round/<dir>/ holding a snapshot/ directory and a round file.",
+   "class": "within",
+   "why": "FR-003 fixes the state path; how the round counter and the snapshot are stored inside it is left open, and a file holding the count is the mechanism FR-002's round number needs."
+  },
+  {
+   "id": "P2-snapshot-text-files",
+   "summary": "The first-dispatch snapshot copies the feature directory's TEXT files.",
+   "class": "within",
+   "why": "FR-003 says the guard copies the feature directory into its state without fixing what a copy includes. Nothing a reviewer can read in a prompt is excluded - a diff of a non-text file is not reviewable text, and a new non-text file still surfaces in diff -ru as present only in the dispatched directory - so neither FR-002's diff nor the request's 'diff of their application' is reduced."
+  },
+  {
+   "id": "P2-escape-first",
+   "summary": "The escape is tested FIRST, with the reason read by _hm_escape.py escape-reason on the prompt text; no reason is the standard refusal.",
+   "class": "within",
+   "why": "FR-004 states the escape, the substring match on a prompt and the reason floor; checking it first is the project's own guard-construction rule ('check the ESCAPE FIRST'), and _hm_escape.py is the existing leaf that owns escape reasons."
+  },
+  {
+   "id": "P2-verdict-recovery",
+   "summary": "The previous verdict is the NEWEST subagent transcript whose first record names the feature directory and whose last record's text carries FAITHFUL or CHANGES REQUIRED; otherwise the LAST Review history bullet, marked as a summary.",
+   "class": "within",
+   "why": "This is exactly the procedure research.md R3 records and FR-002/D3 require, with the selection rule (newest matching, last bullet) filling a detail the spec left open. The fallback stays marked as the session's summary, as FR-002 demands."
+  },
+  {
+   "id": "P2-additional-context-line",
+   "summary": "The rewrite branch also emits one line of additionalContext naming the round.",
+   "class": "within",
+   "why": "Additive rather than narrowing, free (context on an allowed call costs no round trip), and consistent with the project's rewrite-and-say-so pattern. It narrows neither the spec's rewrite nor the GM's 'I want this all to be automatic'."
+  },
+  {
+   "id": "P2-round-counter",
+   "summary": "The stored round is round+1, or 1 when the recovered previous verdict is FAITHFUL.",
+   "class": "within",
+   "why": "This is FR-002's pass rule (a pass restarts after a recovered FAITHFUL so an amendment's first round is round 1), expressed as the counter's update rule."
+  },
+  {
+   "id": "P3-preamble-structure",
+   "summary": "The preamble is a fixed heading (mode, round, feature), the rule in one sentence with the GM's date, the previous verdict under its own heading or the marked fallback, the diff under its own, then 'The session's prompt follows' and the prompt verbatim.",
+   "class": "within",
+   "why": "It carries every element FR-002 lists in the order FR-002 states, with the session's prompt last and unchanged (D6). The 'rule in one sentence' is the sketch of FR-002's MODE 3 instruction, which the FR continues to bind - the grep procedure and answering a whole-spec question from the diff rather than a re-read."
+  },
+  {
+   "id": "P4-fixture",
+   "summary": "The suite uses a fixture repo with specs/301-fixture/spec.md and a fake subagents directory holding one CHANGES REQUIRED transcript and one FAITHFUL transcript, with payloads whose transcript_path points at the fixture.",
+   "class": "within",
+   "why": "FR-006 names the cases; the fixture's construction is left open, and the two transcripts are what the verdict-recovery and pass-restart cases FR-006 lists require."
+  },
+  {
+   "id": "P5-census-rows",
+   "summary": "The firing-log census gains rows for the no-feature pass, a MODE 4 other-mode pass and the escape cases, and classifies REVIEW_ROUND_OK as a command escape with the ESCALATION_OK agent-prompt exclusion wording.",
+   "class": "within",
+   "why": "FR-006 asks for census rows for the guard's recorded branches plus the token classification, and the census is by construction a roster of representative payloads driven with a throwaway log and no clone (escalation carries three of its branches there today); the branches that need a clone, a snapshot and a transcript - rewrote, first-round, reminded - are asserted by the guard's own suite, which FR-006 also requires. Nothing the spec asks for is dropped."
+  },
+  {
+   "id": "P1-batching",
+   "summary": "The notice condition loses is_recon_call AND the background test; the block keeps both; suite cases 2c (folded command) and 2d (backgrounded) assert the notice.",
+   "class": "within",
+   "why": "Verbatim FR-001, D5, D7 and SC-001, which are themselves the GM's approved item 1 ('drop the shape test and fire on any single call ... the block keeps its shape test')."
+  },
+  {
+   "id": "P6-P7-record",
+   "summary": "MODE 3's opening and step 3 are restated per FR-005; the hook header, both CLAUDE.md rows, the docs/efficiency-tooling.md row and the settings entry are the record.",
+   "class": "within",
+   "why": "FR-005 and FR-007 state each of these; the plan adds nothing and omits nothing from them."
+  }
+ ],
+ "verdict": "CLEAR"
+}

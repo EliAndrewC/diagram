@@ -210,6 +210,10 @@
           {
             "type": "command",
             "command": "/diagram/scripts/escalation-hooks.sh pretool"
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/review-round-hooks.sh pretool"
           }
         ]
       }
