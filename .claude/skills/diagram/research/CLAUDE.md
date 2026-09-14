@@ -178,6 +178,27 @@ a reader. The Wiley Biological Flora page behind `packer-2017-phragmites` was co
 does NOT say is written down where the claim stands - the first six papers read this way (feature 195 T07) supported
 about half of what the record had attributed to them, and the rest is labeled GUESS now.
 
+**A source the GM is to fetch by hand goes on the download list, in the GM's format, appended at the END** (feature 242,
+GM 2026-09-14). Whenever a session has a source, page or document for the GM to look at or download - a `source-reader`
+that could not fetch a page a person can open, a `quote-check` NOT-READABLE, a dead link with a likely copy elsewhere, a
+paper only a library holds - it is saved in MARKDOWN in `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` (the GM's
+`l7r/academic-sources/`, mounted here), one entry per work, appended after the last entry of the current part and never
+inserted into the middle, so the GM can work down the list and know that everything above where they stopped is done.
+Each entry carries: a heading naming the work (author or publisher, title, and what it is about where the title does not
+say); a clickable link to **the URL the session believes the document lives at** - its best guess, kept even when the
+fetch failed there or the address could not be verified, because the GM's browser may succeed where the container did
+not; a clickable **Google-search link as the backup**, whose query is chosen so that the search uniquely identifies the
+resource (the title plus whatever it takes - author, host, a distinctive phrase, the file name - for the work to be the
+first result and no other work to match), URL-encoded so the link is live; **what rests on it** - which footnotes on which
+pages the record would lose if the work did not say what it is thought to say; and **what blocked the fetch, or why the
+item is on the list where nothing blocked it**. BOTH links on every entry, always: the GM (2026-09-14): *"I had you use the
+format in TO-DOWNLOAD.md where each source has a link to what you think the URL is and a link to the Google search as a
+backup where the Google search should uniquely identify the resource ... anytime you do have a source for me to look at,
+then it should be saved in markdown in this format since that is much easier for me to find things."* A wrong or dead
+direct link then costs them one extra click rather than a hunt. A list handed over only in a chat message is not saved.
+Nothing enforces this mechanically: the list lives in the GM's own checkout, outside this repository, so no gate here
+reads it - the rule stands here with its reason.
+
 Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
 resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
 quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus like every check agent - GM 2026-09-07, verification not
