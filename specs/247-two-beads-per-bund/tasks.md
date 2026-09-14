@@ -20,6 +20,7 @@ nothing physical behind it (the GM's own words in `request.md`).
       green with no entry-drift pair open
       research: rendering
       verify: DONE. research/fields.html convention paragraph and the BundBeans Note each say a stretch of bund that carries beads shows at least two, because one does not read as a row; make page-check green (778 passed, no modal's research section moved against origin/main); make glossary CHECK=1 and make citations CHECK=1 report nothing stale
-- [ ] T05 the maps: `make map` on Inashiro, `make maps` over the pool, R1's script counting zero
+- [x] T05 the maps: `make map` on Inashiro, `make maps` over the pool, R1's script counting zero
       single-bead runs (SC-001), `make verify` green with the settlement-review beside it; land GATED
       research: rendering
+      verify: DONE. make map on Inashiro then make maps over the pool, both clean; R1's script counts zero single-bead runs on all four bead-bearing manifests with run counts unchanged (research R4); the Inashiro render looked at fourfold - every run reads as separate dots on the bund, the closest pairs are two runs meeting at a corner; make verify: gate green (90 s) and settlement-review PASS on inashiro, kashikawa, mizuguchi, sawada (verdict records written); landing GATED

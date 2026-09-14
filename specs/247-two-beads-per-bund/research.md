@@ -75,8 +75,11 @@ by the R1 script over the regenerated manifests:
 | Sawada | 774 | 270 | 0 | 142 |
 
 The run count on every map is the one R1 counted, which is FR-002 holding: no bund gained beans and none
-lost them; each map has more beads because every one-bead edge now carries two, and fewer beads where a
-drop had thinned a run to one. Looked at on the Inashiro render at four times its size, the closest
+lost them; each map has more beads because every one-bead edge now carries two. The settlement-review
+measured the same delta the other way round - every single-bead position removed and two new beads in
+its place, no run lost - so every single on the shipped maps was a short edge and none a drop's
+leftover: the drop-whole branch of the rule fires on none of the four, and its evidence is the unit
+tests until a map exercises it. Looked at on the Inashiro render at four times its size, the closest
 distinct pairs of beads (the first under half a spacing apart) are two runs meeting at a plot corner,
 one on each edge, and every run on the crop reads as separate dots on the bund stroke. Beads at identical
 coordinates exist on every map - two plots that share an exactly coincident edge each lay a run on it -
