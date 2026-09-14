@@ -207,3 +207,14 @@ and what they changed are R6.
   the trough dimensions, the caravanserai's single well as a choice, the brewer's rate per seat, the well counts
   per village and per block, the kabu-ido case as a peculiarity, the assembly place and shrine precinct for a
   village board, the hamlet's senior farmer as reader.
+
+## R8 - the homesteads and water passes (2026-09-14, FR-005 to FR-007)
+
+- **Counts** (observed 2026-09-14; method: the worklists and the notes json applied): homesteads 45 items and 8
+  never-searched notes to six readers, 30 citations and 15 absence notes placed, 26 registry entries; water 42 items,
+  13 never-searched notes and five table rows to six readers, 28 citations, 21 absence notes and one grounds note,
+  24 registry entries. Both passes fetch-only; 25 further works on the download list (entries 68 to 92).
+- **Corrected in the prose**: the hulling yield `80%`; 散村 as sanson; Osaki's igune heights; the Kaga tenure
+  arrangement; the magariya's hearth-warmed stable; the privy from the floor-plan page itself; Himeji's moats by
+  circuit and Osaka's `90 m`; the Isawa fan's `20,000 ha`; the Yodo's renaming at a border; the marsh belt's year;
+  Beijing's moat inlet and outfall from the Chinese article.
