@@ -107,7 +107,7 @@ governed or lived in, which is what put it on the list.
 
 ## Phase 2 - the never-searched absence notes (FR-011, D1)
 
-- [ ] T18 the 119 absence notes whose text says no query of its own was run, searched and re-noted;
+- [ ] T18 the 120 absence notes whose text says no query of its own was run, searched and re-noted;
       counted and reported separately from the Phase 1 list so the two never blur
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited

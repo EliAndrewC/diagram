@@ -15,7 +15,12 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 - **XVI**: the spec is accepted (FAITHFUL, amended twice with FAITHFUL verdicts); this plan is reviewed
   in MODE 4 before any task is ticked.
 - **Route**: no engine code (FR-014) - `research/*.html`, `SOURCES.html`, `citations/`, the derived `.js`,
-  this feature's directory, and the GM's `TO-DOWNLOAD.md` outside the repository -> DIRECT.
+  this feature's directory, `.claude/skills/diagram/research/CLAUDE.md` and the root `CLAUDE.md` (FR-015),
+  and the GM's `TO-DOWNLOAD.md` outside the repository -> DIRECT.
+- **Order (FR-012, SC-010)**: the PAGE is the outer loop and the tier order runs inside it - a page's items
+  are finished, checked and committed together (FR-009), and `record-format` and `quote-check` read a page,
+  so a strict whole-list tier sweep would leave every page half-noted until the last tier; SC-010 admits
+  the departure with this stated reason.
 
 ## Design
 
@@ -37,9 +42,11 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   citations page in the CITATION form with the passage 「」 (a foreign-language passage in English
   translation marked as such with the original after), the `<sup class="fn">` at the sentence, the key
   added to the section's `Sources:` roster. For each NOT-FOUND: an ABSENCE note in the exact form
-  `no publicly readable source (searched 2026-MM-DD: <what was tried>)`. For a sentence that is a
-  drawing convention or this project's decision and carries no physical claim: a GROUNDS note from the
-  six reasons - never for a claim about how a place was built or lived in (FR-004). Each CONTRADICTED:
+  `no publicly readable source (searched 2026-MM-DD: <what was tried>)`. For a worked sentence that
+  carries NO claim about how a place was built, farmed, planted, governed or lived in and is not a labeled
+  guess about the physical world: a GROUNDS note naming one or more of FR-004's six reasons - measured on
+  our own maps, the record's own silence, follows from the definitions, physical necessity, a drawing
+  convention, this project's decision - and never for a sentence FR-004 bars from the form. Each CONTRADICTED:
   the sentence rewritten to the finding, the correction recorded in `research.md` (FR-006). New keys go
   to `source-applicability` in one dispatch per page before the page's commit (FR-007).
 - **P4 the checks per page**: `make citations`; `make test-file` over the three interactive test
@@ -58,3 +65,12 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 - **P8 the closing report** (T21) in `research.md`: per page what closed in each of the three forms,
   per unclosed item searched-and-failed or never-searched, the two settled items named, and the two
   counts (the FR-001 list and the D1 list) reported separately.
+- **P9 the guidelines carry the download list's format** (FR-015, T23): the paragraph "A page the
+  container cannot fetch is not thereby unreadable" in `.claude/skills/diagram/research/CLAUDE.md` gains
+  the rule - whenever a session has a source for the GM to look at or download, it is saved in markdown in
+  the FR-010 shape (the named heading, the guessed direct link, the uniquely identifying Google-search
+  link, what rests on it, what blocked the fetch), appended at the END of the standing list
+  (`/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`), never inserted or handed over only in a chat message -
+  with the GM's 2026-09-14 reason quoted and the plain statement that no gate here reads the list; the root
+  `CLAUDE.md`'s citation rule gains a pointer to it. Written before the first Part 4 entry is appended, so
+  this feature's own hand-over is the first under the rule.

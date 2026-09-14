@@ -4,21 +4,21 @@
   "note": "footnotes recording that no publicly readable source was found",
   "taken": "2026-09-13",
   "unit": "notes",
-  "value": 259
+  "value": 260
  },
  "absence-notes-never-searched": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",
   "note": "absence notes whose text says no query was ever run for that assertion - backlog, not a failed hunt",
   "taken": "2026-09-13",
   "unit": "notes",
-  "value": 119
+  "value": 120
  },
  "citation-notes": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",
   "note": "footnotes carrying a key link, a public page and a quoted passage",
   "taken": "2026-09-13",
   "unit": "notes",
-  "value": 994
+  "value": 995
  },
  "grounds-notes": {
   "command": "python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py --record",

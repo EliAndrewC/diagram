@@ -1,0 +1,84 @@
+{
+ "feature": "242-cite-the-unfootnoted-assertions",
+ "plan_sha256": "9e2b87913e2d442c6781b5f30e35b41a46cd88117fcc70b97a1eb3c1bee1f4fc",
+ "reviewed": "2026-09-14",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "P1-harness",
+   "summary": "The per-page work list is derived by a NEW harness, measure/worklist.py, which imports inventory_census.py's parsers (items, page_of, confidence, carries_marker) and locates each item's quoted sentence in the page HTML, printing a line number or NOT-LOCATED; an item it cannot locate is placed by hand from the reader's section heading.",
+   "class": "within",
+   "why": "FR-001 makes the list a derived filter over the four reader reports and SC-001 keeps the COUNT the census's; worklist.py re-uses that same filter for one page and adds only placement help, which the spec leaves open. No item enters or leaves the list by it."
+  },
+  {
+   "id": "P1-r7-skip",
+   "summary": "The twenty-two R7 closures are recognized WHEN MET - a sentence already carrying a <sup class=\"fn\">, or one of the named R7 items - and skipped with a note in research.md, rather than subtracted in advance.",
+   "class": "within",
+   "why": "FR-001 subtracts R7 classes 1, 2, 3, 5 and 6, and tasks.md already states that R7 does not say which page each closure sits on, so the per-page counts are upper bounds. Recognize-when-met is the only way to apply a subtraction whose members are not page-addressed; it removes nothing the spec keeps."
+  },
+  {
+   "id": "P1-P2-order",
+   "summary": "The page is the OUTER unit of work (P2 'one page at a time', P4 checks and the commit per page) and the readers' tier order runs INSIDE a page, so a MEDIUM item on an early page is worked while HIGH items on later pages are still open.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It narrows FR-012/SC-010's whole-list tier order to a within-page order, but the accepted spec's own words carry the exception: FR-009 requires a page's items to be finished, checked and committed together, which cannot co-exist with a strict global tier sweep, and SC-010 itself admits a departure 'absent a stated reason'. The reason is stated in tasks.md (record-format and quote-check read a PAGE, so the page is the unit of checking). Implied by the spec's own words rather than carved out; it should be stated in plan.md too, where the ordering decision is made."
+  },
+  {
+   "id": "P2-dispatch",
+   "summary": "The reading is dispatched as parallel background source-reader agents on Opus, eight to twelve claims each, one page at a time, each claim verbatim with its section heading and page; the agent returns READ with the passage, URL, title, author/publisher and date (the material for the registry write-ups), NOT-FOUND with what was searched, or CONTRADICTED with the quote.",
+   "class": "within",
+   "why": "FR-003 requires a source-reader pass before any note and the note written from its quotes; FR-005 requires both registry write-ups before a key is cited. Batch size, parallelism and the return fields are mechanics the spec leaves open, and the project's own doctrine already puts web reading in background agents."
+  },
+  {
+   "id": "P3-writing",
+   "summary": "The note-writing procedure per verdict: a registry key with the citation line and both write-ups for a new key, a <li id=\"fn-n\"> on the citations page in CITATION form with the passage in corner brackets (a foreign-language passage in English translation, marked, original after), the <sup class=\"fn\"> at the sentence, the key added to the section's Sources roster; the ABSENCE form verbatim as FR-004 states it; a CONTRADICTED sentence rewritten to the finding and recorded in research.md; new keys to source-applicability in one dispatch per page BEFORE that page's commit.",
+   "class": "within",
+   "why": "This is FR-004, FR-005, FR-006 and FR-007 performed. Batching the source-applicability dispatch per page is FR-007's 'before its numbers reach a map or a rule' met earlier than required, and sits inside FR-009's page batch."
+  },
+  {
+   "id": "P3-grounds",
+   "summary": "A GROUNDS note is written only 'for a sentence that is a drawing convention or this project's decision and carries no physical claim' - two of FR-004's six reasons named as the eligibility condition.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 states a CLOSED LIST OF SIX reasons - measured on our own maps, the record's own silence, follows from the definitions, physical necessity, a drawing convention, this project's decision - and bars a grounds note only where the sentence carries a claim about how a place was built, farmed, planted, governed or lived in, or is a labeled GUESS about the physical world. The 'carries no physical claim' half of the plan's condition is implied by FR-004 and by FR-001's population; naming only 'a drawing convention or this project's decision' as the eligible sentence class is not. It is not impossible to apply the six, the request says nothing that implies the cut, and the literal rule does not defeat the purpose - an item whose honest ground is 'follows from the definitions' or 'measured on our own maps' would be pushed into an absence note asserting a search that was never owed, which makes the record less true rather than more. Fix: state the eligibility as FR-004 does - any worked sentence that carries no physical claim and is not a labeled guess about the physical world - with the note's reason drawn from the six."
+  },
+  {
+   "id": "P4-checks",
+   "summary": "The per-page check set before that page's commit: make citations; make test-file over the three interactive test files; quote-check and record-format in parallel over the changed page and its citations page; scripts/_entry_owed.py for the pairs, each to entry-drift or one recorded ENTRY_DRIFT_OK for a sweep in which no finding moved.",
+   "class": "within",
+   "why": "FR-007, FR-008 and FR-009 name exactly these checks and this batching; SC-014's make page-check and T22's gate are not displaced by it - the plan adds a per-page pass, it does not substitute for the push-time one."
+  },
+  {
+   "id": "P5-download",
+   "summary": "The documents that could not be read go to TO-DOWNLOAD.md Part 4, appended at the END, each with the heading, the guessed direct link, the uniquely identifying Google-search link, what rests on it and what blocked the fetch.",
+   "class": "within",
+   "why": "FR-010's five parts and the GM's own placement and form conditions, restated without loss."
+  },
+  {
+   "id": "P6-absence",
+   "summary": "The 119 never-searched absence notes are listed by measure/note_census.py --list, worked in the same P2-P4 pipeline AFTER the Phase 1 pages, and counted separately in the closing report.",
+   "class": "within",
+   "why": "D1 puts them in scope and says they are worked after the FR-001 list; FR-011 and SC-013 require the two counts reported separately. Deriving the list from the harness at work time rather than from the recorded number is the right form - the recorded count has since moved (make figures on this review's own run: absence-notes 259 -> 260, absence-notes-never-searched 119 -> 120, citation-notes 994 -> 995)."
+  },
+  {
+   "id": "P7-rosters",
+   "summary": "Each of the fifty-one Sources lines carrying a disclosure a note now holds is rewritten to point at the note with no change of meaning, followed by make citations and the footnote tests.",
+   "class": "within",
+   "why": "FR-013 and D5 verbatim, including the 'no change of meaning' bar."
+  },
+  {
+   "id": "P8-report",
+   "summary": "The closing report in research.md: per page what closed in each of the three forms, per unclosed item searched-and-failed or never-searched, the two settled items named, and the two counts reported separately.",
+   "class": "within",
+   "why": "FR-011, SC-009, SC-012 and SC-013 performed."
+  },
+  {
+   "id": "ROUTE-FR015",
+   "summary": "The plan's delta is enumerated as research/*.html, SOURCES.html, citations/, the derived .js, this feature's directory and the GM's TO-DOWNLOAD.md outside the repository, and its Design section is P1 to P8. FR-015 - the project guidelines carrying the download-list format, in .claude/skills/diagram/research/CLAUDE.md with the root CLAUDE.md pointing at it - appears nowhere in the plan, and neither file is in the delta it names.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM asked for it in their own words on 2026-09-14 (request.md): 'Can you make sure that this feature also Updates the project guidelines to make it clear that in the future, anytime you do have a source for me to look at, then it should be saved in markdown in this format', and the spec carries it as FR-015 with SC-015 and task T23. Dropping it from the plan's work list and from its stated delta narrows the accepted spec and the request itself; it is the half of the 2026-09-14 amendment that outlives this feature, since FR-010 binds one feature and FR-015 is what makes the format hold 'in the future, anytime'. Nothing makes it impossible or redundant - the check the GM asked for found the format in neither place. Fix: add a step (P9, or a clause on P5) that writes the format into the 'A page the container cannot fetch is not thereby unreadable' paragraph of .claude/skills/diagram/research/CLAUDE.md with the GM's 2026-09-14 reason quoted and the root CLAUDE.md citation rule pointing at it, and add both files to the Route enumeration."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

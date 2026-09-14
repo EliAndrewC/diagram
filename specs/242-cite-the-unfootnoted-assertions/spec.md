@@ -19,7 +19,7 @@ BEFORE 238 converted 142 markers into absence notes, and R7 states that a reader
 marker is thereby closed. The work list is a FILTER over the four reader reports, derived by
 `measure/inventory_census.py`, never a number restated from prose.
 
-**A second class of 119 items** carries an absence note whose text says no query was ever run
+**A second class of 120 items** carries an absence note whose text says no query was ever run
 (`m:absence-notes-never-searched`; `research.md` R2). Those are backlog, not settled questions, and D1
 records why this feature owns them.
 
@@ -118,7 +118,7 @@ not retrofitted - and it is not the model to copy, because most of its entries c
 all, which is the omission this requirement exists to stop.
 
 **FR-011 - the completion condition, and what is NAMED rather than absorbed.** The feature is
-complete when every item on the FR-001 list **and every item on the D1 list of 119 never-searched
+complete when every item on the FR-001 list **and every item on the D1 list of 120 never-searched
 absence notes** carries one of FR-004's three forms, the two counted and reported separately so they
 never blur. What the pass cannot close is named in the closing report, and an item that was
 **searched and failed** is distinguished from one that was **never searched** - 238's own closing
@@ -200,7 +200,7 @@ engine work and has its own feature, so this one stays research-only and on the 
 - **SC-012** (FR-014) - the feature's delta contains no `l7r/**/*.py` change, and neither settled item
   is worked here: the caravan inn's form knob is feature 244's, and the Xuxiebian absence note stands
   as the record already carries it.
-- **SC-013** (FR-011) - the 119 never-searched absence notes are worked and counted separately from
+- **SC-013** (FR-011) - the 120 never-searched absence notes are worked and counted separately from
   the FR-001 list, and neither count is folded into the other in any report.
 - **SC-014** (spec-wide) - `make page-check` green and the push clean.
 
@@ -208,13 +208,13 @@ engine work and has its own feature, so this one stays research-only and on the 
 
 **D1 - an absence note that records no search is IN scope - RULED by the GM, 2026-09-13:** *"I also agree
 that never-searched absence notes are in scope for 242."* The reasoning below is what the ruling was put
-to them with, kept because it is why the reading was proposed rather than the other. 119 of the record's 259 absence notes say
+to them with, kept because it is why the reading was proposed rather than the other. 120 of the record's 260 absence notes say
 no query of its own was run (`m:absence-notes-never-searched`; `research.md` R2). The narrow reading
 would put them out of scope, because they carry a footnote and the GM's population was assertions that
 *"do not carry a footnote"* - and it was priced: it makes the feature about a quarter smaller and
 leaves 119 assertions permanently labeled unsearched with nothing scheduled to search them.
 The doctrine settles it: `research/CLAUDE.md` lets an absence note leave the backlog only by carrying
-`settled DATE` after **two independent passes on different dates**, and none of the 119 has had even
+`settled DATE` after **two independent passes on different dates**, and none of the 120 has had even
 one - each says in so many words that no query of its own was run. An unsettled absence note is
 backlog by definition, and feature 232's second pass found readable sources for 90 of 162 notes a
 first pass had called absent, so the expected yield is not small. They are worked after the FR-001
