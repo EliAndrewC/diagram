@@ -199,7 +199,7 @@ def main() -> int:
         body = re.sub(r"<!--.*?-->", "", m.group(1))
         # THE TESTS WANT THE ENTRY'S FIRST LINK (tests/interactive/test_sources.py): where the citation
         # paragraph links its title and then names another address in parentheses, the link wins.
-        u = re.search(r'href="(https?://[^"]+)"', body) or re.search(r"\((https?://[^\s)]+)", body)
+        u = re.search(r'href="(https?://[^"]+)"', body) or re.search(r"\((https?://\S+)\)", body)
         return u.group(1) if u else ""
 
     # AN EXISTING KEY LINKS WHERE ITS REGISTRY ENTRY LINKS (tests/interactive/test_sources.py): the
