@@ -106,14 +106,16 @@ resource."* So every entry is written in markdown as:
   so the link is live;
 - **what rests on it** - which footnotes on which pages the record would lose if the work did not say what
   it is thought to say;
-- **what blocked the fetch** - the host's answer to the container and, where known, what a browser will see.
+- **what blocked the fetch, or why the item is on the list where nothing blocked it** - the host's answer to
+  the container and, where known, what a browser will see; for a work the session never had an address for,
+  what was searched and why the work is thought to exist.
 
 **Both links are present on every entry.** The direct link is not dropped because it is unverified, and
 the search link is not dropped because the direct link looks certain: the two exist so that a wrong or
-dead address costs the GM one extra click rather than a hunt. This is the shape Part 1 of the file already
-carries; the one thing the requirement adds to it is that the backup is mandatory - three of Part 1's
-sixteen entries have no fallback, and a new entry may not omit one. Those three are already in the folder
-(the file's own STATUS table), so nothing is owed on them.
+dead address costs the GM one extra click rather than a hunt. The rule governs every entry this feature
+appends to Part 4 and every later hand-over (FR-015); Part 1 as it stands, already worked by the GM, is
+not retrofitted - and it is not the model to copy, because most of its entries carry no search link at
+all, which is the omission this requirement exists to stop.
 
 **FR-011 - the completion condition, and what is NAMED rather than absorbed.** The feature is
 complete when every item on the FR-001 list **and every item on the D1 list of 119 never-searched
@@ -157,10 +159,9 @@ possible copy elsewhere, or anything else - it is saved in markdown in the FR-01
 the guessed direct link, the uniquely identifying Google-search link, what rests on it, what blocked it),
 **appended at the END of the standing list** (`/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` today,
 mounted from the GM's `l7r/academic-sources/`), never inserted into its middle and never handed over only
-in a chat message. It records the GM's words as the why, the same as every other rule in that file.
-Nothing is enforced mechanically: the list lives outside this repository, in the GM's own checkout, so
-no gate here reads it; the rule stands as documented doctrine with its reason, which is the class the root
-`CLAUDE.md`'s "Deliberately NOT enforced" list is for, and it is stated there as such.
+in a chat message. It records the GM's words as the why, the same as every other rule in that file, and
+it says plainly that nothing enforces it mechanically: the list lives outside this repository, in the
+GM's own checkout, so no gate here reads it.
 
 **FR-014 - nothing here is engine code.** The two items 238 could not settle are both settled: the
 Xuxiebian site name is an absence the record already carries, and the caravan inn's story count was
@@ -189,7 +190,7 @@ engine work and has its own feature, so this one stays research-only and on the 
 - **SC-015** (FR-015) - `.claude/skills/diagram/research/CLAUDE.md` states the format in the paragraph
   that says the GM downloads what the container cannot fetch, names the list and its five parts, says the
   entry is appended at the end, and quotes the GM's 2026-09-14 reason; the root `CLAUDE.md` points at it
-  from its citation rule and lists it among the rules deliberately not enforced.
+  from its citation rule.
 - **SC-009** (FR-011) - the closing report states, per unclosed item, whether it was searched and
   failed or never searched.
 - **SC-010** (FR-012) - no item is worked while an item of a stronger tier is open, over the whole tier
@@ -225,7 +226,7 @@ exactly that and no more. The pages are still opened to place footnotes and are 
 `record-format` and `quote-check`. Stated because the draft this replaces said flatly *"It does not
 re-read the record"*, which a session could read as license to skip FR-007.
 
-**D3 - this feature is research-only and takes the DIRECT route.** Nothing in FR-001 to FR-013 touches
+**D3 - this feature is research-only and takes the DIRECT route.** Nothing in any requirement here touches
 `l7r/**/*.py` or a pool generator. FR-014 is what keeps it that way: the caravan-inn knob is the one
 inherited item that would be engine code, the GM ruled it a knob on 2026-09-13, and it is built in
 feature 244 with its own gate and pool sweep - not here.
@@ -253,9 +254,8 @@ click, and a search link alone makes them read results for a work the session al
 of. The alternatives priced: leaving the format in FR-010 alone (declined - a rule in one feature's spec
 binds one feature, and the GM asked for *"in the future, anytime"*), and putting it only in the root
 `CLAUDE.md` (declined - the operative home is the paragraph that already says the GM downloads, so a
-session reading how to handle an unreadable page meets the format in the same place). Why the three
-Part 1 entries without a fallback are not retrofitted: all three are already in the folder, so a fallback
-buys the GM nothing, and the GM asked for the rule going forward.
+session reading how to handle an unreadable page meets the format in the same place). Part 1 of the list
+is not retrofitted: the GM has already worked it, and they asked for the rule *"in the future"*.
 
 ## Review history
 
@@ -340,3 +340,11 @@ buys the GM nothing, and the GM asked for the rule going forward.
   format for the download list was in the guidelines or the feature; it was in neither (`request.md`).
   FR-010 restated to the both-links form, FR-015 added for the guidelines, SC-008 restated, SC-015 and
   D6 added, T20 restated and T23 added. Nothing else moved.
+  - **Amendment round 1 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, three items, all applied: the
+  count of Part 1 entries lacking a fallback was wrong and two of the entries it called downloaded are
+  marked closed in the file's own table, so the count is gone and the ground is the GM's own - the rule is
+  for the future - with Part 1 named as the shape NOT to copy (1); the rule's placement in the root
+  `CLAUDE.md`'s "Deliberately NOT enforced" list was unrequested and not what that list is for, removed
+  from FR-015, SC-015 and T23 (2); D3's enumeration stopped at FR-013 and now covers every requirement (3).
+  The fifth entry part is restated as "what blocked the fetch, or why the item is on the list", which is
+  what the file carries and what FR-015's wider trigger needs.

@@ -132,7 +132,7 @@ governed or lived in, which is what put it on the list.
 - [ ] T23 the project guidelines carry the download list's format (FR-015): the paragraph "A page the
       container cannot fetch is not thereby unreadable" in `.claude/skills/diagram/research/CLAUDE.md`
       states the shape, the list, append-at-the-end and the GM's 2026-09-14 reason; the root `CLAUDE.md`
-      citation rule points at it and its "Deliberately NOT enforced" list names it
+      citation rule points at it
       research: rendering
       verify:
 - [ ] T22 `make page-check` green, `make done` green, the push clean
