@@ -35,11 +35,10 @@ reader would not know either gets a glossary entry (`l7r/diagram/interactive/ass
 the two variants the reports named (`ochiba` firing on the manor named Ochiba; the hyphenated
 `fire-gap`) are resolved.
 
-**FR-004 - the record's history passages are moved into comments, and the citations-page defects the
-reports named are closed.** Every HISTORY finding the reports name that 242 did not already move - what a sentence used to say, a correction and its date, where a
+**FR-004 - the record's history passages are moved into comments.** Every HISTORY finding the reports
+name that 242 did not already move - what a sentence used to say, a correction and its date, where a
 pointer came from - becomes an HTML comment or is deleted, so nothing visible says what the record used
-to say (feature 209); and every citations-page DEFECT the reports named (dangling punctuation, a
-backticked bare key, a duplicated rendering) that survived 242's applied pass is fixed.
+to say (feature 209).
 
 **FR-005 - the registry's citation lines carry English titles.** The record-format reports found
 registry citation lines whose titles are given only in Japanese or Chinese; each carries an English
@@ -106,6 +105,10 @@ Python; nothing here touches `l7r/**/*.py` or a pool generator.
 
 - **Round 1 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, two items, both applied: SC-002 carried a
   "searched and failed" disjunct that would let a bare assertion pass (1); SC-001 named only two of the
-  four statuses the work list reports (2). Both asides applied too: FR-008 points at the download-list
-  heading, and FR-004 takes the citations-page defects the reports named, which 242's closing report lists
-  among what it leaves.
+  four statuses the work list reports (2). Its first aside applied: FR-008 points at the download-list
+  heading. Its second was not a change to this spec (a defect a reader sees is 242's, and whether any
+  survived is a question for the GM with 242's closing report); a first attempt at round 2 had widened
+  FR-004 to that class and was reversed on the review's finding.
+  - **Round 2 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, two items on that widening of FR-004 - scope
+  the GM's cut does not carry, contradicting D1, and with no success criterion - both applied by restoring
+  FR-004's round-1 text; the R12 bullet that had been added to fit it is withdrawn.

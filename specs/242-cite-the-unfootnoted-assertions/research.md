@@ -337,8 +337,6 @@ Nine more download-list entries (225 to 232) for the image-only PDFs, in the GM'
 - The registry citation lines whose titles are only in Japanese or Chinese (the record-format reports'
   count: roughly seventy in the feature-242 band).
 - The 32 unlocatable FR-001 items above (this session's addition to the cut, disclosed in D7).
-- Any citations-page defect the record-format reports named (dangling punctuation, a backticked bare
-  key, a duplicated rendering) that survived the applied pass.
 
 ### The entry-drift answer (D8)
 
