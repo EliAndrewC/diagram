@@ -22,8 +22,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   directory from one template (the map, both directories, the missing files, the engine key passed in
   with `--key`, the standing instructions); print the file's path on the map's line. `make verify` and
   the pair guard's permit branch print "N agents, one per map, in this same message" with the N paths.
-- `scripts/pair-hooks.sh`, Agent branch: `maps_named(prompt, owed)` (a python one-liner into a lifted
-  function in `_review_prereq.py`, `maps_named`, R5's rule) before the prerequisite check; two or more
+- `scripts/pair-hooks.sh`, Agent branch: `maps_named(prompt, all_pool_maps)` (a lifted function in
+  `_review_prereq.py`, R5's rule, the names from `_review_owed.pool_map_names(root)` - every map folder
+  of both trees) before the prerequisite check; two or more
   -> refuse, `guard_log pair blocked <atype> review-multi-map`, exit 2, no escape. One -> after the
   existing rules permit, `write_pairing` a `dispatched` map: `{map: {key, at}}`, `guard_log pair
   permitted <atype> review-dispatched`; when every owed map now has a dispatch at this key, compute the
@@ -35,10 +36,12 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   with `stop_missing_told`, rule `review-map-undispatched`, naming the maps and their `dispatch.md`.
 - `scripts/_review_owed.py`: `rendering_only(tasks_text) -> int | None` (the task count when every task
   is `research: rendering`, else None; the task regex from `tests/test_task_research_boxes.py`, copied
-  with a pointer - a test module cannot be imported by a guard); `active_feature(root)` reading
-  `.specify/feature.json`; `changed_maps` returns no names with the reason
-  `rendering-only feature <dir>: <n> task(s) all research: rendering, no settlement-review owed (feature 248)`
-  when the waiver holds. `--why` prints it; the `--maps` callers change nothing.
+  with a pointer - a test module cannot be imported by a guard); `active_features(root, base)` - the
+  pointer's directory plus every `specs/*/tasks.md` with an open box whose directory the delta against
+  the base touches (the derivation `sync-with-main.sh` makes for the in-progress rule, mirrored, with a
+  pointer each way); `pool_map_names(root)`; `changed_maps` returns no names with the reason
+  `rendering-only feature(s) <dirs>: <n> task(s) all research: rendering, no settlement-review owed (feature 248)`
+  when every derived feature is rendering-only. `--why` prints it; the `--maps` callers change nothing.
 - `scripts/review-gate.sh`, section 2: per changed manifest, read its verdict record; PASS/NEEDS-WORK at
   the pushed tree's engine key (`make -s engine-key REF=worktree` from the skill, computed once) ->
   pass; else if `_review_owed.py --why` reports the rendering waiver -> pass (recorded `escaped`-class

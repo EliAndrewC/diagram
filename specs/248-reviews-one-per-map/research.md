@@ -17,6 +17,17 @@ inashiro kashikawa mizuguchi sawada"* - and a session following it literally dis
 | layout (226, 227, 230) | 19 | every pass - 226's sun-strip contradiction on the shipped maps, 227's five defects invisible to a green gate, 230's fourteen rounds |
 | rendering or performance (222 to 225, 228, 245, 247) | 9 | none on a map; one delivered-artifact miss (222's pages shipped without their pictures) |
 
+**What the reviewer actually reads** (the GM: *"I thought we had some diff tools to look at the before and
+after"*). The contract on a DELTA is: confirm from the two snapshots' manifests what moved, then judge
+what the automated checks cannot - glyph legibility, the FORM of a feature, annotations, whether the
+delta disturbed anything else. The diff tools exist and the reviewer used them: `make picture-diff`
+(the two renders, the changed pixels attributed to classes), `make page-lit` (what lighting a class
+lights), and the manifest key-path diff. On feature 247 those three answered the question in the first
+minutes; the remaining time went on measurements past the diff (thirds placement, crowding at eight
+times, floating at ten times, on four maps in series) and on writing four verdict records. The tools do
+the before-and-after; the agent's minutes go on judging the after, which is the part a script cannot do
+and, on a rendering feature, the part the ledger shows finding nothing.
+
 So the review earns its time on a layout change and has caught nothing on a rendering one, which is the
 GM's question answered: *"whether we can skip it for features like this one specifically, i.e. changing a
 glyph rendering convention rather than tweaking actual map features"*.
@@ -65,9 +76,12 @@ class exactly - *"changing a glyph rendering convention rather than tweaking act
 to historical norms"* - so the waiver is a feature whose tasks are ALL `research: rendering`. A procedure
 feature that moves a manifest (a placer refactor, a performance lever) is NOT waived: it changed the
 layout by a mechanism nobody researched, which is the case the review exists for, and feature 226's
-first pass is the record of what a re-seating can do to shipped maps. The active feature is the one the
-clone's `.specify/feature.json` names (the pointer `sync-with-main.sh` already reads for the in-progress
-rule), and its `tasks.md` must exist and hold at least one task.
+first pass is the record of what a re-seating can do to shipped maps. The active features are DERIVED the way
+`sync-with-main.sh` derives the in-progress feature - the one `.specify/feature.json` names, and every
+`specs/NNN-*/tasks.md` with an open task that the delta against the merge base touches - because that
+rule exists so a check cannot be evaded by not setting the pointer, and a waiver removes a check. Every
+feature in the set must have a `tasks.md` with at least one task, all rendering; the set must be
+non-empty.
 
 ## R5. The maps a dispatch names
 

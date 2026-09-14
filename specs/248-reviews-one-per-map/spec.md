@@ -1,6 +1,6 @@
 # Feature 248 - reviews one per map
 
-**Status**: DRAFT - awaiting the spec-fidelity review.
+**Status**: DRAFT - round 1 returned two changes, both taken; awaiting round 2.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the serialized review's cost and the ledger's answer, where the push refusal's time went, what a hook can guarantee, the classification, how a dispatch names its maps.
 **Predecessors**: 151 (the paired gate), 231 (a review owed only when a layout moved), 240 (the verdict record, the prerequisite check), 246 (a run still going is not abandoned).
@@ -24,12 +24,14 @@ stated rather than promised (research R3, D4, D6).
 ## Functional requirements
 
 - **FR-001 A settlement-review dispatch asks for exactly one map.** The pair guard's Agent branch, before
-  the prerequisite check, counts the owed maps the dispatch names (R5: the snapshot directories
-  `review-snapshot/<map>` it names; when it names none, the owed maps whose names appear as words). More
-  than one is refused with exit 2 before the agent starts, naming the per-map prompt files of FR-002 and
-  saying to dispatch them as separate Agent calls in the same message. No escape token: a multi-map review
-  is never the right shape. A dispatch naming no owed map at all passes this rule (it is not a review of an
-  owed map) and meets the guard's other rules as today.
+  the prerequisite check, counts the maps the dispatch names against EVERY map of both pool trees (the
+  names `_review_owed.py` already globs), not against the owed set: the snapshot directories
+  `review-snapshot/<map>` it names; when it names none, the pool map names that appear as words (R5).
+  More than one is refused with exit 2 before the agent starts - whether or not those maps are owed, a
+  legacy map or a spot check included, since the shape serializes work that shares nothing in every
+  case - naming the per-map prompt files of FR-002 where the maps are owed and saying to dispatch them
+  as separate Agent calls in the same message. No escape token: a multi-map review is never the right
+  shape.
 - **FR-002 The tooling writes the prompts.** Wherever a review is found owed at gate time - `make verify`
   and the pair guard's permit branch - the snapshot script writes one dispatch prompt per owed map at
   `<clone>/.git/review-snapshot/<map>/dispatch.md`, carrying the map, its two snapshot directories and
@@ -50,10 +52,13 @@ stated rather than promised (research R3, D4, D6).
   `reviews-serialized` with the span. `make audit` shows both counts. Nothing is refused on it (R3: by the
   time it can be judged, the agents have run).
 - **FR-005 A rendering-only feature owes no settlement-review.** `_review_owed.py` reads the clone's
-  active feature - the one `.specify/feature.json` names - and when its `tasks.md` exists, holds at least
-  one task, and every task is classified `research: rendering`, reports no map owed, with a reason naming
-  the feature and its task count (R4). A feature with any `physical` or `procedure` task, no tasks, no
-  `tasks.md`, or no pointer owes a review exactly as today. Because every decision point already asks
+  active features the way the in-progress rule derives them (R4): the feature `.specify/feature.json`
+  names AND every `specs/NNN-*/tasks.md` with an open task that the delta against the merge base
+  touches. When that set is non-empty and EVERY feature in it has a `tasks.md` holding at least one task,
+  all classified `research: rendering`, it reports no map owed, with a reason naming each feature and its
+  task count. One feature in the set with a `physical` or `procedure` task, no tasks, or no `tasks.md`,
+  or an empty set (no pointer and no touched open task), owes a review exactly as today: a waiver takes
+  the conjunction, an obligation the union. Because every decision point already asks
   this one script (`make verify`, the pair guard's gate branch and stop branch, and FR-006's push gate),
   the waiver reaches all of them, is printed where the gate starts, and is recorded at turn end with
   its reason as feature 231's waiver is.
@@ -77,13 +82,13 @@ stated rather than promised (research R3, D4, D6).
 
 - **SC-001** (FR-001, FR-002): on a clone with two owed maps, a settlement-review dispatch naming both is
   refused before it starts and the refusal names two prompt files that exist; a dispatch of either file's
-  prompt is permitted.
+  prompt is permitted; a dispatch naming two pool maps neither of which is owed is refused too.
 - **SC-002** (FR-003, FR-004): the suite's stop case with one of two owed maps dispatched is refused once,
   naming the other; with both dispatched within the span it records `reviews-parallel`, and with the
   second dispatch a fixture-clock minute later, `reviews-serialized`.
-- **SC-003** (FR-005): on this clone with feature 247's task file as the active feature, `_review_owed.py`
+- **SC-003** (FR-005): on this clone with feature 247's task file as the one active feature, `_review_owed.py`
   reports no map owed with the rendering reason although four manifests differ from main; with feature
-  230's, it reports the four.
+  230's beside it in the derived set, it reports the four.
 - **SC-004** (FR-006): the review gate passes feature 247's four manifests on their PASS records at the
   landed engine key with no notes touch, refuses a manifest whose only record is NOT-REVIEWABLE, and
   refuses one with a PASS record at another engine key and no notes touch.
@@ -96,14 +101,19 @@ stated rather than promised (research R3, D4, D6).
 - **D1 - no escape on FR-001.** Every guard here takes a reasoned `_OK` except the ones whose action is
   never right (the force-push and history rules); a review of several maps in one agent is in that
   class - it serializes work that shares nothing and there is no case where that is wanted.
-- **D2 - the maps a dispatch names are its snapshot directories first, bare names second** (R5). A
-  bare-name rule alone would refuse a one-map prompt that mentions a neighbor for context; a
-  snapshot-only rule would let a prompt that names no snapshot review several maps by name. The prompt
-  files of FR-002 name one snapshot each, so a session dispatching from them never meets the second rule.
+- **D2 - the maps a dispatch names are its snapshot directories first, bare names second, counted
+  against every pool map** (R5; round 1, finding 1). A bare-name rule alone would refuse a one-map prompt
+  that mentions a neighbor for context; a snapshot-only rule would let a prompt that names no snapshot
+  review several maps by name; and counting only OWED maps would permit the very shape the GM named
+  for a legacy map or a spot check. The prompt files of FR-002 name one snapshot each, so a session
+  dispatching from them never meets the second rule.
 - **D3 - the waiver is rendering-only, literally** (R4). A `procedure` feature that moves a manifest
   changed the layout by a mechanism nobody researched, which is the case the review caught on 226 and
   227; the GM named the glyph-convention case and nothing wider. Widening to procedure is a separate
-  ruling, not taken here.
+  ruling, not taken here. What the waiver costs, accepted: the one thing a rendering-feature review
+  caught in the week (R1) was feature 222's delivered pages shipping without their pictures - an
+  artifact defect, not a map one - and a waived feature forgoes that class of catch; the GM reads the
+  map themselves, which is the 2026-08-29 ruling the waiver rests on.
 - **D4 - parallelism is recorded, never refused.** A hook cannot launch an agent or force several calls
   into one message; it can refuse the wrong shape and hold the turn open, and it can measure. The
   sixty-second span is a definition, not a measurement: parallel calls land within seconds, a sequential one is at
@@ -117,11 +127,13 @@ stated rather than promised (research R3, D4, D6).
   general-purpose agent handed a review prompt passes every Agent-typed guard (the escalation guard has
   the same gap today). Matching prompt content would be a mention test, which this project's guard rules
   forbid; the gap is stated in the contract and the doctrine rather than pretended closed.
-- **D7 - the active feature is the pointer, not the delta.** `sync-with-main.sh` derives the in-progress
-  feature from open tasks the delta touches OR the pointer; the waiver reads the pointer alone, because a
-  delta can touch several features' files (a sweep) and the classification is a property of the work the
-  session declares it is doing. A wrong pointer names a feature whose tasks the session is not doing,
-  and FR-005's reason prints the feature so the waiver is auditable.
+- **D7 - the waiver reads the DERIVED feature set, and takes the conjunction** (round 1, finding 2).
+  `sync-with-main.sh` derives the in-progress feature from the pointer OR any open task the delta touches,
+  precisely so it cannot be evaded by not setting the pointer; a waiver that read the pointer alone would
+  remove a check on a declaration, and a stale pointer (the features 115/116 case in CLAUDE.md) naming a
+  rendering feature while the delta carried layout work would ship a map unreviewed. So the waiver holds
+  only when every feature in the derived set is rendering-only, and FR-005's reason names each so the
+  waiver is auditable.
 
 ## Out of scope
 
@@ -132,4 +144,10 @@ stated rather than promised (research R3, D4, D6).
 
 ## Review history
 
-- (none yet)
+- **Round 1 (2026-09-14, MODE 2): CHANGES REQUIRED, two, both taken.** (1) FR-001 counted only owed
+  maps and let a two-map dispatch of unowed maps through - the shape the GM named, serialized the same
+  way; it now counts against every pool map (D2). (2) FR-005 read the pointer alone where the in-progress
+  rule derives the feature set so it cannot be evaded; a stale pointer would have shipped a map
+  unreviewed; the waiver now reads the derived set and takes the conjunction (D7). Both asides taken:
+  D3 records the waiver's accepted cost; what the reviewer reads is added to R1 and goes to the GM in
+  the closing report.
