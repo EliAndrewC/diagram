@@ -1,0 +1,105 @@
+{
+ "feature": "248-reviews-one-per-map",
+ "plan_sha256": "7ea83247415103d5d85b3b070010e25a94efcbd42a280d9b8cdc59e64fd40afc",
+ "reviewed": "2026-09-14",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "CC-review",
+   "summary": "This feature itself owes no settlement-review (tooling only, no manifest moves); _review_owed.py decides.",
+   "class": "within",
+   "why": "The request is about the review tooling; nothing on a map changes. Consistent with FR-005/231 and with the request's own subject."
+  },
+  {
+   "id": "CC-route",
+   "summary": "Verification is make hooks-test plus make quick; the gate is not re-keyed; lands DIRECT.",
+   "class": "within",
+   "why": "SC-005 says lands DIRECT (guard scripts and tooling tests, no engine code); nothing in the request asks for more."
+  },
+  {
+   "id": "CC-scale",
+   "summary": "New branches are added as functions inside pair-hooks.sh (503 lines) and test-pair-hooks.sh (335), no split; _review_owed.py gains one lifted function tested over plain text.",
+   "class": "within",
+   "why": "A file-shape choice inside the 1,000-line rule; the spec does not settle it and the request does not touch it."
+  },
+  {
+   "id": "D-dispatch-md",
+   "summary": "_review_snapshot.py writes dispatch.md per map from one template, the engine key passed in with --key, the path printed on the map's line; verify and the permit branch print N agents one per map in this same message.",
+   "class": "within",
+   "why": "Implements FR-002 exactly (the location, the contents, the N-files instruction); the request's 'make the correct thing happen automatically' is served, nothing narrowed."
+  },
+  {
+   "id": "D-maps-named",
+   "summary": "maps_named(prompt, all_pool_maps) lifted into _review_prereq.py; names from _review_owed.pool_map_names(root) over both pool trees; snapshot directories first, bare-name words second.",
+   "class": "within",
+   "why": "FR-001 and D2 verbatim: counted against EVERY pool map, not the owed set, which is what closes the shape the GM named for an unowed or legacy map."
+  },
+  {
+   "id": "D-multi-refusal",
+   "summary": "Two or more maps: refuse with exit 2 before the prerequisite check, rule review-multi-map, no escape token.",
+   "class": "within",
+   "why": "The GM: 'could we refuse a map review before it happens if the review asks for a review of more than 1 map?' - yes, and D1's no-escape is the spec's. Not a narrowing; it is the literal thing."
+  },
+  {
+   "id": "D-dispatched-record",
+   "summary": "One map: after the existing rules permit, write_pairing a dispatched record {map: {key, at}} and log review-dispatched.",
+   "class": "within",
+   "why": "FR-003's 'at each permitted settlement-review dispatch the guard records'. Implementer's note, not a finding: 'the existing rules permit' includes the PAIR_OK-in-prompt escape path, which exits before the gate check today - the record must be written on that path too or FR-003's dispatch-counting misses an escaped review."
+  },
+  {
+   "id": "D-parallel-entry",
+   "summary": "When every owed map has a dispatch at this key, compute the span and log reviews-parallel or reviews-serialized; never refuse.",
+   "class": "within",
+   "why": "FR-004 and D4; research R3 states why it cannot be forced. The GM asked for parallelization to be 'folded in'; the plan folds in what a hook can guarantee and measures the rest, which is the spec's stated shape."
+  },
+  {
+   "id": "D-stop-missing",
+   "summary": "Stop branch: missing set = owed minus recorded-at-key minus dispatched-at-key minus pending-agent-naming-it (transcript grep); placed after review_recorded and before the half-open refusal; quiet when review_pending holds and the set is empty; refused once per (key, sorted set) via stop_missing_told, rule review-map-undispatched, naming the maps and their dispatch.md.",
+   "class": "within",
+   "why": "FR-003 exactly; review_recorded is already all-maps (_review_prereq.recorded), so nothing short-circuits it. Implementer's note, not a narrowing: the plan's placement range admits a position BEFORE review_waived, and FR-003 says PAIR_OK on the gate clears the rule - the check must sit after review_waived (or honor waived_key inside), else a waived turn is refused for missing maps."
+  },
+  {
+   "id": "D-rendering-only",
+   "summary": "rendering_only(tasks_text) -> int|None, the task regex copied from tests/test_task_research_boxes.py with a pointer because a guard cannot import a test module.",
+   "class": "within",
+   "why": "A mechanism for FR-005; the classification vocabulary is the project's existing one (R4)."
+  },
+  {
+   "id": "D-active-features",
+   "summary": "active_features(root, base) = the pointer's directory plus every specs/*/tasks.md with an open box whose directory the delta against the base touches, mirroring sync-with-main.sh's in-progress derivation with a pointer each way.",
+   "class": "within",
+   "why": "FR-005 and D7 verbatim (the derived set, the conjunction). Not narrower than the spec or the request."
+  },
+  {
+   "id": "D-waiver-reason",
+   "summary": "changed_maps returns no names with the reason 'rendering-only feature(s) <dirs>: <n> task(s) all research: rendering, no settlement-review owed (feature 248)' when every derived feature is rendering-only; --why prints it; --maps callers unchanged.",
+   "class": "within",
+   "why": "FR-005's waiver, reaching every decision point through the one script. Implementer's note: 'every derived feature' must carry FR-005's non-empty condition (an empty set is vacuously all-rendering and FR-005/FR-008 say it OWES); the spec settles it, the plan's phrasing merely elides it."
+  },
+  {
+   "id": "D-review-gate",
+   "summary": "review-gate.sh section 2 per changed manifest: PASS/NEEDS-WORK at the pushed tree's engine key (make -s engine-key REF=worktree, once) passes; else the rendering waiver passes (recorded escaped-class review-waived-rendering); else no record at all plus a notes touch passes; else refuse naming which, rules map-stale-verdict / map-not-reviewable / map-no-review.",
+   "class": "within",
+   "why": "FR-006 and D5 exactly; the plan proves three refusals where the spec asked for two, which is wider, not narrower. Serves the GM's first message (the notes-touch redundancy was the 1.5 minutes)."
+  },
+  {
+   "id": "T-clock",
+   "summary": "The parallel/serialized proof uses an injected clock PAIR_NOW, honored in a fixture only.",
+   "class": "within",
+   "why": "SC-002's 'fixture-clock minute'; the seams-only-in-a-fixture pattern the idle-tests guard already uses."
+  },
+  {
+   "id": "T-hookdeps",
+   "summary": "_hookdeps unchanged because the suites already carry these scripts; the new rule slugs get rows in test_guard_firing_log.py.",
+   "class": "within",
+   "why": "FR-008's 'the firing-log census sees every new rule'; whether _hookdeps really needs no change is verified at implementation, not a fidelity matter."
+  },
+  {
+   "id": "Doc",
+   "summary": "settlement-review.md gains the one-map rule and the prompt files; CLAUDE.md's pair row the four rules and the waiver; dev/reviews.md the doctrine; review-ledger.md unchanged.",
+   "class": "within",
+   "why": "FR-007 verbatim, and the ledger row-per-pass stays by-hand as the spec's Out of scope says."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -78,7 +78,9 @@ feature that moves a manifest (a placer refactor, a performance lever) is NOT wa
 layout by a mechanism nobody researched, which is the case the review exists for, and feature 226's
 first pass is the record of what a re-seating can do to shipped maps. The active features are DERIVED the way
 `sync-with-main.sh` derives the in-progress feature - the one `.specify/feature.json` names, and every
-`specs/NNN-*/tasks.md` with an open task that the delta against the merge base touches - because that
+`specs/NNN-*/` the delta against the merge base touches that has a `tasks.md` (ticked or not: the
+in-progress rule wants OPEN boxes because it refuses an unfinished feature, and at push time there are
+none, so a waiver keyed on them would rest on the pointer alone where it decides a push) - because that
 rule exists so a check cannot be evaded by not setting the pointer, and a waiver removes a check. Every
 feature in the set must have a `tasks.md` with at least one task, all rendering; the set must be
 non-empty.

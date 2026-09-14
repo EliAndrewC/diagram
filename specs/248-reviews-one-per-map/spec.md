@@ -1,6 +1,6 @@
 # Feature 248 - reviews one per map
 
-**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5, 2026-09-14; rounds 1 and 2 CHANGES REQUIRED, all taken; rounds 3 and later ran on this session's model after the Opus weekly limit was reached mid-feature, by the session's decision, disclosed here). Round 3's aside - the refusal count - taken as an amendment, verified in round 4.
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5, 2026-09-14; rounds 1 and 2 CHANGES REQUIRED, all taken; rounds 3 and later ran on this session's model after the Opus weekly limit was reached mid-feature, by the session's decision, disclosed here). Round 3's aside taken as an amendment, FAITHFUL at round 4; the plan CLEAR (MODE 4, 16 decisions, none narrowing); the plan review's aside taken as a second amendment (FR-005's delta half at push time), awaiting round 5.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the serialized review's cost and the ledger's answer, where the push refusal's time went, what a hook can guarantee, the classification, how a dispatch names its maps.
 **Predecessors**: 151 (the paired gate), 231 (a review owed only when a layout moved), 240 (the verdict record, the prerequisite check), 246 (a run still going is not abandoned).
@@ -53,8 +53,9 @@ stated rather than promised (research R3, D4, D6).
   time it can be judged, the agents have run).
 - **FR-005 A rendering-only feature owes no settlement-review.** `_review_owed.py` reads the clone's
   active features the way the in-progress rule derives them (R4): the feature `.specify/feature.json`
-  names AND every `specs/NNN-*/tasks.md` with an open task that the delta against the merge base
-  touches. When that set is non-empty and EVERY feature in it has a `tasks.md` holding at least one task,
+  names AND every `specs/NNN-*/` directory the delta against the merge base touches whose `tasks.md`
+  exists - an open box or not, because at push time no box is open and the set would otherwise be the
+  pointer alone, the evadable form round 1 closed. When that set is non-empty and EVERY feature in it has a `tasks.md` holding at least one task,
   all classified `research: rendering`, it reports no map owed, with a reason naming each feature and its
   task count. One feature in the set with a `physical` or `procedure` task, no tasks, or no `tasks.md`,
   or an empty set (no pointer and no touched open task), owes a review exactly as today: a waiver takes
@@ -77,9 +78,9 @@ stated rather than promised (research R3, D4, D6).
   entries. `tests/tooling/test_review_owed.py` proves the classification waiver on fixture task files
   in every form: one active feature all rendering (waived); one physical task, one procedure task, no
   tasks, no `tasks.md` (each owed); the empty set - no pointer AND no touched open-task feature (owed);
-  and the derived pair - the pointer's feature rendering-only beside a delta-touched open-task feature
-  that is not (owed), and the same pair both rendering-only (waived) - so D7's conjunction is proved by
-  a fixture rather than by one clone's state. `scripts/test-review-gate.sh`
+  and the derived pair - the pointer's feature rendering-only beside a delta-touched feature that is
+  not, its boxes all ticked as at a push (owed), and the same pair both rendering-only (waived) - so
+  D7's conjunction is proved by a fixture rather than by one clone's state. `scripts/test-review-gate.sh`
   proves each of FR-006's three passes and three refusals. The firing-log census sees every new rule.
 
 ## Success criteria
@@ -95,8 +96,8 @@ stated rather than promised (research R3, D4, D6).
   230's beside it in the derived set, it reports the four.
 - **SC-004** (FR-006): the review gate passes feature 247's four manifests on their PASS records at the
   landed engine key with no notes touch, refuses a manifest whose only record is NOT-REVIEWABLE, refuses
-  one with a PASS record at another engine key and no notes touch, and refuses one with no record and no
-  notes touch.
+  one with a PASS record at another engine key whether or not its notes are touched (D5: a notes touch
+  never substitutes on a map that has a record), and refuses one with no record and no notes touch.
 - **SC-005** (FR-007, FR-008): the contract and CLAUDE.md say the rules; `make hooks-test` green; the
   firing-log census and the guard corpus green; lands DIRECT (guard scripts and tooling tests, no engine
   code).
@@ -138,7 +139,10 @@ stated rather than promised (research R3, D4, D6).
   remove a check on a declaration, and a stale pointer (the features 115/116 case in CLAUDE.md) naming a
   rendering feature while the delta carried layout work would ship a map unreviewed. So the waiver holds
   only when every feature in the derived set is rendering-only, and FR-005's reason names each so the
-  waiver is auditable.
+  waiver is auditable. The delta half is any touched feature's `tasks.md`, ticked or not (the plan
+  review's aside): the in-progress rule looks for OPEN boxes because it refuses an unfinished feature,
+  and at push time it has guaranteed there are none - so a waiver keyed on open boxes would rest on the
+  pointer alone exactly where it decides whether a map ships. Widening the set can only owe more.
 
 ## Out of scope
 
@@ -163,3 +167,8 @@ stated rather than promised (research R3, D4, D6).
 - **Round 3 (2026-09-14, MODE 3, on this session's model - the Opus attempt was terminated by the
   weekly rate limit): FAITHFUL.** Both round-2 lines resolved. Its aside taken as an amendment: FR-008
   and SC-004 now count FR-006's three refusals, as T06 does.
+- **Round 4 (2026-09-14, MODE 3, this session's model): FAITHFUL.** The count reconciled. Its aside on
+  SC-004 (a stale-key record plus a notes touch must refuse too) taken into SC-004. The plan review
+  (MODE 4, CLEAR) raised one aside on the spec: at push time no task is open, so the derived set's delta
+  half was empty and the waiver rested on the pointer alone; FR-005 now takes any touched feature's
+  `tasks.md`, ticked or not (D7).

@@ -37,9 +37,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 - `scripts/_review_owed.py`: `rendering_only(tasks_text) -> int | None` (the task count when every task
   is `research: rendering`, else None; the task regex from `tests/test_task_research_boxes.py`, copied
   with a pointer - a test module cannot be imported by a guard); `active_features(root, base)` - the
-  pointer's directory plus every `specs/*/tasks.md` with an open box whose directory the delta against
-  the base touches (the derivation `sync-with-main.sh` makes for the in-progress rule, mirrored, with a
-  pointer each way); `pool_map_names(root)`; `changed_maps` returns no names with the reason
+  pointer's directory plus every `specs/*/` directory the delta against the base touches that has a
+  `tasks.md`, ticked or not (the in-progress rule's derivation widened: at push no box is open); an empty
+  set OWES; `pool_map_names(root)`; `changed_maps` returns no names with the reason
   `rendering-only feature(s) <dirs>: <n> task(s) all research: rendering, no settlement-review owed (feature 248)`
   when every derived feature is rendering-only. `--why` prints it; the `--maps` callers change nothing.
 - `scripts/review-gate.sh`, section 2: per changed manifest, read its verdict record; PASS/NEEDS-WORK at
