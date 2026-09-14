@@ -24,117 +24,117 @@ their numbers.
 
 ## Phase 1 - the pages, heaviest first (FR-001 to FR-009)
 
-- [ ] T01 `cities/capitals.html` - at most 92 bare items, each searched and footnoted in one of the three forms
+- [x] T01 `cities/capitals.html` - at most 92 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on capitals footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T02 `urban-features.html` - at most 87 bare items, each searched and footnoted in one of the three forms
+- [x] T02 `urban-features.html` - at most 87 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on urban-features footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T03 `homesteads.html` - at most 45 bare items, each searched and footnoted in one of the three forms
+- [x] T03 `homesteads.html` - at most 45 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on homesteads footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T04 `water.html` - at most 42 bare items, each searched and footnoted in one of the three forms
+- [x] T04 `water.html` - at most 42 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on water footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T05 `fields.html` - at most 37 bare items, each searched and footnoted in one of the three forms
+- [x] T05 `fields.html` - at most 37 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on fields footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T06 `religion-and-death.html` - at most 33 bare items, each searched and footnoted in one of the three forms
+- [x] T06 `religion-and-death.html` - at most 33 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on religion-and-death footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T07 `archetypes.html` - at most 26 bare items, each searched and footnoted in one of the three forms
+- [x] T07 `archetypes.html` - at most 26 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on archetypes footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T08 `buildings.html` - at most 19 bare items, each searched and footnoted in one of the three forms
+- [x] T08 `buildings.html` - at most 19 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on buildings footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T09 `vegetation.html` - at most 19 bare items, each searched and footnoted in one of the three forms
+- [x] T09 `vegetation.html` - at most 19 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on vegetation footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T10 `cities/river-cities.html` - at most 18 bare items, each searched and footnoted in one of the three forms
+- [x] T10 `cities/river-cities.html` - at most 18 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on river-cities footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T11 `cities/defenses.html` - at most 17 bare items, each searched and footnoted in one of the three forms
+- [x] T11 `cities/defenses.html` - at most 17 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on defenses footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T12 `towns.html` - at most 14 bare items, each searched and footnoted in one of the three forms
+- [x] T12 `towns.html` - at most 14 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on towns footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T13 `cities/fabric.html` - at most 14 bare items, each searched and footnoted in one of the three forms
+- [x] T13 `cities/fabric.html` - at most 14 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on fabric footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T14 `cities/government.html` - at most 13 bare items, each searched and footnoted in one of the three forms
+- [x] T14 `cities/government.html` - at most 13 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on government footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T15 `cities/hinterland.html` - at most 6 bare items, each searched and footnoted in one of the three forms
+- [x] T15 `cities/hinterland.html` - at most 6 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on hinterland footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
-- [ ] T17 `ways.html` - at most 5 bare items, each searched and footnoted in one of the three forms
+- [x] T17 `ways.html` - at most 5 bare items, each searched and footnoted in one of the three forms
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. every bare item and never-searched note on ways footnoted from source-reader returns (research R5-R10); the record tests green; quote-check, record-format and source-applicability run over the page, their findings applied and the corrections confirmed by one scoped quote-check and one scoped record-format each (R12, commits 23ec945b and a64cdafd); worklist.py at sentence level reports no locatable bare item
 
 ## Phase 2 - the never-searched absence notes (FR-011, D1)
 
-- [ ] T18 the 120 absence notes whose text says no query of its own was run, searched and re-noted;
+- [x] T18 the 120 absence notes whose text says no query of its own was run, searched and re-noted;
       counted and reported separately from the Phase 1 list so the two never blur
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
+      - [x] research pass  - [x] source-reader confirmed  - [x] quote-check confirmed  - [x] source-applicability confirmed  - [x] recorded and cited
+      verify: DONE. note_census.py --list --json returns an empty list on the closing tree: 314 absence notes each with a real search, 0 never-searched (R12)
 
 ## Phase 3 - the tidying and the close (FR-010, FR-013, FR-014)
 
-- [ ] T19 the fifty-one redundant roster disclosures rewritten - the label now sits at the assertion
+- [x] T19 the fifty-one redundant roster disclosures rewritten - the label now sits at the assertion
       research: rendering
-      verify:
-- [ ] T20 `TO-DOWNLOAD.md` Part 4 carries every document this pass could not read, appended at the END,
+      verify: DONE. commits 541e1f57, 700933b0, 57d99559, 4688b32e; no roster carries a disclosure its own notes now carry (record tests green)
+- [x] T20 `TO-DOWNLOAD.md` Part 4 carries every document this pass could not read, appended at the END,
       each in the GM's format (FR-010): a named heading, the guessed direct link, a Google-search link
       whose query uniquely identifies the work, what rests on it and what blocked the fetch - both links
       on every entry
       research: rendering
-      verify:
-- [ ] T21 the closing report: what closed, and per unclosed item whether it was searched and failed or
+      verify: DONE. TO-DOWNLOAD.md Part 4 entries 93 to 232 appended at the end in the GM's format, both links on every entry
+- [x] T21 the closing report: what closed, and per unclosed item whether it was searched and failed or
       never searched; the two items 238 left to the GM noted as settled and where (the inn's form knob in
       feature 244, the Xuxiebian absence note as the record carries it); each class the GM's split
       deferred to feature 250 named with its count and where its items are listed (D7)
       research: rendering
-      verify:
-- [ ] T23 the project guidelines carry the download list's format (FR-015): the paragraph "A page the
+      verify: DONE. research.md R12 - the two counts kept apart, per unclosed item searched-and-failed or never-searched, the two settled items, each class deferred to feature 250 with its count and where its items are listed
+- [x] T23 the project guidelines carry the download list's format (FR-015): the paragraph "A page the
       container cannot fetch is not thereby unreadable" in `.claude/skills/diagram/research/CLAUDE.md`
       states the shape, the list, append-at-the-end and the GM's 2026-09-14 reason; the root `CLAUDE.md`
       citation rule points at it
       research: rendering
-      verify:
-- [ ] T22 `make page-check` green, `make done` green, the push clean
+      verify: DONE. commit cc540e8c: research/CLAUDE.md states the download list's format with the GM's 2026-09-14 reason; the root CLAUDE.md citation rule points at it (kept through the merge of main's pruning)
+- [x] T22 `make page-check` green, `make done` green, the push clean
       research: rendering
-      verify:
+      verify: DONE. make page-check green (778 passed); make done green in 72 s on the closing tree; the push follows on the DIRECT route with the D8 entry-drift waiver
