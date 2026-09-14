@@ -35,10 +35,11 @@ reader would not know either gets a glossary entry (`l7r/diagram/interactive/ass
 the two variants the reports named (`ochiba` firing on the manor named Ochiba; the hyphenated
 `fire-gap`) are resolved.
 
-**FR-004 - the record's history passages are moved into comments.** Every HISTORY finding the reports
-name that 242 did not already move - what a sentence used to say, a correction and its date, where a
+**FR-004 - the record's history passages are moved into comments, and the citations-page defects the
+reports named are closed.** Every HISTORY finding the reports name that 242 did not already move - what a sentence used to say, a correction and its date, where a
 pointer came from - becomes an HTML comment or is deleted, so nothing visible says what the record used
-to say (feature 209).
+to say (feature 209); and every citations-page DEFECT the reports named (dangling punctuation, a
+backticked bare key, a duplicated rendering) that survived 242's applied pass is fixed.
 
 **FR-005 - the registry's citation lines carry English titles.** The record-format reports found
 registry citation lines whose titles are given only in Japanese or Chinese; each carries an English
@@ -62,17 +63,19 @@ page, scoped to the changed notes and sections where the page was checked whole 
 
 **FR-008 - the documents that cannot be read go to the download list** in the GM's format, appended at
 the end of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` (the rule is in
-`.claude/skills/diagram/research/CLAUDE.md`, "A page the container cannot fetch is not thereby
-unreadable").
+`.claude/skills/diagram/research/CLAUDE.md`, "A source the GM is to fetch by hand goes on the download
+list, in the GM's format, appended at the END").
 
 **FR-009 - the closing report** states, per class above, what closed and what did not, and per unclosed
 item whether it was searched and failed or never searched.
 
 ## Success criteria
 
-- **SC-001** (FR-001) - `worklist.py cities/sizing.html` reports no LOCATED or NOT-LOCATED item.
+- **SC-001** (FR-001) - `worklist.py cities/sizing.html` reports no LOCATED, NOT-LOCATED, TOO-SHORT or AMBIGUOUS
+  item, or each such item is confirmed by hand as carrying its note, as FR-006 requires for 242's pages.
 - **SC-002** (FR-002) - every assertion listed at the end of the six quote-check reports carries one of
-  the three forms, or the closing report names it as searched and failed.
+  the three forms (an assertion for which no readable source is found carries an ABSENCE note; one that
+  is not a real-world assertion carries a GROUNDS note); FR-009's residue is never a way past this.
 - **SC-003** (FR-003) - no term the record-format reports named is without a glossary entry or a
   rewritten sentence; `make glossary` is green.
 - **SC-004** (FR-004) - a `record-format` pass over the changed pages reports no HISTORY item.
@@ -101,4 +104,8 @@ Python; nothing here touches `l7r/**/*.py` or a pool generator.
 
 ## Review history
 
-- none yet.
+- **Round 1 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, two items, both applied: SC-002 carried a
+  "searched and failed" disjunct that would let a bare assertion pass (1); SC-001 named only two of the
+  four statuses the work list reports (2). Both asides applied too: FR-008 points at the download-list
+  heading, and FR-004 takes the citations-page defects the reports named, which 242's closing report lists
+  among what it leaves.
