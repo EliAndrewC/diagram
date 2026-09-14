@@ -2,7 +2,7 @@
 
 ## R1. What the serialized review cost, and what the ledger says the review catches
 
-**This session's measurement** (observed 2026-09-14, from the session transcript's tool timestamps): feature
+**This session's measurement** (observed 2026-09-14; method: the session transcript's tool-use and tool-result timestamps, the Agent call's start to its completion notification): feature
 247's settlement-review was ONE agent dispatched over four maps, 45 tool uses, 655 s wall - 11 of the
 feature's 36 minutes, the largest single wait. The agent's own report opened with *"I was handed FOUR maps
 in one agent. Per my contract that should be four parallel agents - the sweeps share no work across maps,
@@ -23,7 +23,7 @@ glyph rendering convention rather than tweaking actual map features"*.
 
 ## R2. Where the push refusal's time went
 
-Every push-time check, timed on this clone (observed 2026-09-14, `date` around each script):
+Every push-time check, timed on this clone (observed 2026-09-14; method: `date +%s.%N` before and after each script, run once from the clone):
 duplicate-defs 0.98 s, the conflict-marker scan over 3,147 files 0.33 s, file-scale, entry headings,
 spec-lint, gate-stamp, entry-gate, plan-gate each under 0.15 s, review-gate 0.02 s. The refusal cost
 three model turns, not a check: the refusal, two reads to recall the notes-file format, and the push
@@ -52,7 +52,7 @@ is the only way to finish, and the census says whether it happened.
 **Can parallelism be detected?** The harness issues the tool calls of one assistant message together, so
 their dispatch times lie within seconds of each other; sequential dispatches are a model turn apart at
 least (tens of seconds, usually minutes, because the second waits on nothing but the session). A spread
-of the owed maps' dispatch times under 60 s is parallel; over it, serialized. Recorded, never refused -
+of the owed maps' dispatch times under sixty seconds is parallel (spec D4, a definition); over it, serialized. Recorded, never refused -
 by the time it can be judged the agents have run.
 
 ## R4. The task classification, and what "rendering-only" is

@@ -7,7 +7,7 @@
 
 ## Summary
 
-Feature 247 spent 11 of its 36 minutes on one settlement-review agent serialized over four maps, and
+Feature 247 spent eleven of its thirty-six minutes on one settlement-review agent serialized over four maps (research R1), and
 its push was refused once for a hand-written record of a review the reviewer had already recorded. The
 GM's ruling: a costly wrong shape is the tooling's to prevent, not the session's to remember - *"whatever
 the tooling is currently doing to kick off reviews should be modified to make the correct thing happen
@@ -46,7 +46,7 @@ stated rather than promised (research R3, D4, D6).
   they clear the half-open rule today, and the existing half-open rule stays for the case where no map
   was dispatched at all.
 - **FR-004 Parallelism is measured, not forced.** When the last owed map's dispatch is recorded, the guard
-  records one entry: `reviews-parallel` when the owed maps' dispatch times span under 60 s, otherwise
+  records one entry: `reviews-parallel` when the owed maps' dispatch times span under `PARALLEL_SPAN_S` (sixty seconds, a definition - D4), otherwise
   `reviews-serialized` with the span. `make audit` shows both counts. Nothing is refused on it (R3: by the
   time it can be judged, the agents have run).
 - **FR-005 A rendering-only feature owes no settlement-review.** `_review_owed.py` reads the clone's
@@ -105,8 +105,8 @@ stated rather than promised (research R3, D4, D6).
   227; the GM named the glyph-convention case and nothing wider. Widening to procedure is a separate
   ruling, not taken here.
 - **D4 - parallelism is recorded, never refused.** A hook cannot launch an agent or force several calls
-  into one message; it can refuse the wrong shape and hold the turn open, and it can measure. The 60 s
-  span is a definition, not a measurement: parallel calls land within seconds, a sequential one is at
+  into one message; it can refuse the wrong shape and hold the turn open, and it can measure. The
+  sixty-second span is a definition, not a measurement: parallel calls land within seconds, a sequential one is at
   least a model turn later.
 - **D5 - the notes touch survives only as the fallback for a map with no verdict record.** The
   reviewer's record is the one record (the GM: the redundancy is the cost); the legacy hand-authored
