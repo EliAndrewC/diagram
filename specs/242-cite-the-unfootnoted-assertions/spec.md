@@ -212,7 +212,7 @@ to them with, kept because it is why the reading was proposed rather than the ot
 no query of its own was run (`m:absence-notes-never-searched`; `research.md` R2). The narrow reading
 would put them out of scope, because they carry a footnote and the GM's population was assertions that
 *"do not carry a footnote"* - and it was priced: it makes the feature about a quarter smaller and
-leaves 119 assertions permanently labeled unsearched with nothing scheduled to search them.
+leaves 120 assertions permanently labeled unsearched with nothing scheduled to search them.
 The doctrine settles it: `research/CLAUDE.md` lets an absence note leave the backlog only by carrying
 `settled DATE` after **two independent passes on different dates**, and none of the 120 has had even
 one - each says in so many words that no query of its own was run. An unsettled absence note is
