@@ -1,7 +1,7 @@
 # Feature 250 - close the record checks
 
-**Status:** DRAFT, written 2026-09-14 by the session that closed feature 242, from that feature's handoff
-record and closing report. Not yet reviewed; `spec-fidelity` before implementation (constitution XVI).
+**Status:** accepted (FAITHFUL at round 3, 2026-09-14, see Review history). Written by the session that closed
+feature 242, from that feature's handoff record and closing report. Implementation not started.
 
 ## Summary
 
@@ -112,3 +112,5 @@ Python; nothing here touches `l7r/**/*.py` or a pool generator.
   - **Round 2 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, two items on that widening of FR-004 - scope
   the GM's cut does not carry, contradicting D1, and with no success criterion - both applied by restoring
   FR-004's round-1 text; the R12 bullet that had been added to fit it is withdrawn.
+  - **Round 3 (2026-09-14), `spec-fidelity`: FAITHFUL** - FR-004 verified at its round-1 text, R12's deferred
+  list back to five bullets, no criterion orphaned, nothing else moved.
