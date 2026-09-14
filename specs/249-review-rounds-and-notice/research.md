@@ -18,7 +18,8 @@ sentence.
 
 ## R1a - what the bounded form costs, on this feature's own review (one-shot, observed 2026-09-14)
 
-Method: the three rounds' usage lines, this session. Round 1 was the initial full reading (MODE 2):
+Observed 2026-09-14; method: the three rounds' usage lines, this session. Round 1 was the initial
+full reading (MODE 2):
 239 s, 8 tool uses, 159k tokens. Rounds 2 and 3 were dispatched by hand in the bounded form this
 feature builds - the previous items and the diff only: 109 s, 3 tool uses, 93k tokens; and 102 s,
 5 tool uses, 142k tokens. So a bounded round ran in under half the wall time of the full rounds of
