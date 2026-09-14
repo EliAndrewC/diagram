@@ -111,7 +111,9 @@ def insertion_point(raw: str, sentence: str) -> int:
         # mark, or the end of the paragraph), within a bound so a fragment in a list stays put.
         if end_vis < len(vis) and vis[end_vis] not in '.;:!?)"”」' and vis[end_vis - 1] not in '.;!?':
             # a terminator is also one followed at once by the digits of a mark already placed there
-            m2 = re.compile(r'[.;!?](?=["”」)]*(?:\s+[A-Z0-9(<「"“]|\d{1,3}(?!\d)|\s*$))').search(vis, end_vis, min(len(vis), end_vis + 300))
+            # ...but a period INSIDE a figure (2.5 cm, 0.87, 31.6%) is not one: the digit alternative needs
+            # a non-digit before the period, or the mark lands between the halves of a decimal.
+            m2 = re.compile(r'(?<!\d)[.;!?](?=["”」)]*\d{1,3}(?!\d))|[.;!?](?=["”」)]*(?:\s+[A-Z0-9(<「"“]|\s*$))').search(vis, end_vis, min(len(vis), end_vis + 300))
             if m2:
                 end_vis = m2.start()
         # advance past closing punctuation the reader may have dropped
@@ -208,16 +210,26 @@ def main() -> int:
     new_entries: list[str] = []
     report: list[str] = []
     def roster_add(line_no: int, key: str, url: str) -> None:
+        # THE ROSTER MAY WRAP. The first version read only the line that opens it, so a roster that ran on
+        # to a second line lost the rest of its first line and gained a `</p>` (five homesteads rosters,
+        # found by record-format on 2026-09-14): the whole paragraph is read, and the key is added on the
+        # line that closes it, or right after the label when the roster names no key yet.
         for j in range(line_no - 2, -1, -1):
             if "<p><strong>Sources:</strong>" in lines[j]:
-                if f"<code>{key}</code>" not in lines[j]:
-                    link = f'<a href="{url}"><code>{key}</code></a>'
-                    body = re.search(r"<p><strong>Sources:</strong>(.*?)</p>", lines[j], re.S)
-                    inner = body.group(1) if body else ""
-                    if "<code>" in inner:
-                        lines[j] = lines[j].replace("</p>", f", {link}</p>", 1)
-                    else:
-                        lines[j] = f"<p><strong>Sources:</strong> {link}; {inner.strip()}</p>"
+                k = j
+                while k < len(lines) and "</p>" not in lines[k]:
+                    k += 1
+                if k >= len(lines):
+                    report.append(f"UNCLOSED-ROSTER at line {j + 1}")
+                    return
+                para = "\n".join(lines[j : k + 1])
+                if f"<code>{key}</code>" in para:
+                    return
+                link = f'<a href="{url}"><code>{key}</code></a>'
+                if "<code>" in para:
+                    lines[k] = lines[k].replace("</p>", f", {link}</p>", 1)
+                else:
+                    lines[j] = lines[j].replace("<p><strong>Sources:</strong>", f"<p><strong>Sources:</strong> {link};", 1)
                 return
             if lines[j].lstrip().startswith(("<h3", "<h2")):
                 report.append(f"NO-ROSTER for {key} above line {line_no}")

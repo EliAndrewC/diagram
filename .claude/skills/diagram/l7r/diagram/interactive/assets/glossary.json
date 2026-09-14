@@ -4553,5 +4553,65 @@
       "Sue ware",
       "sueki"
     ]
+  },
+  "gassho": {
+    "def": "The steep thatched farmhouse roof of the Sho river valleys, whose king-post-free loft of two to four levels held the household's silkworms as well as keeping the snow off.",
+    "variants": [
+      "gassho",
+      "gassho-zukuri",
+      "gasshozukuri",
+      "合掌造り"
+    ]
+  },
+  "king post": {
+    "def": "The upright timber from a tie beam to the ridge of a roof; a roof framed without one leaves its loft clear.",
+    "variants": [
+      "king post",
+      "king posts",
+      "king-post"
+    ]
+  },
+  "burgage plot": {
+    "def": "The long narrow house plot of an English planned village or town, its short end on the street and a back lane at the far end.",
+    "variants": [
+      "burgage plot",
+      "burgage plots",
+      "burgage"
+    ]
+  },
+  "abreuvoir": {
+    "def": "A watering trough or basin at a settlement's water point, used by humans as well as by beasts.",
+    "variants": [
+      "abreuvoir",
+      "abreuvoirs"
+    ]
+  },
+  "Khitan": {
+    "def": "The horse-riding people of the Liao empire on the Northern Song's frontier, whose cavalry the Hebei pond-and-marsh belt was built against.",
+    "variants": [
+      "Khitan"
+    ]
+  },
+  "superelevation": {
+    "def": "The rise of the water surface on the outside of a bend, which can carry a fast flow over the bank.",
+    "variants": [
+      "superelevation",
+      "superelevates",
+      "superelevated"
+    ]
+  },
+  "backwater": {
+    "def": "The stretch of raised water surface upstream of a weir or a gate; it reaches back a finite distance and then returns to the channel's own depth.",
+    "variants": [
+      "backwater",
+      "backwaters"
+    ]
+  },
+  "fit zoom": {
+    "def": "The whole map shown at once on the screen - the view a reader opens the page in, as against a zoomed-in one.",
+    "variants": [
+      "fit zoom",
+      "fit-zoom"
+    ]
   }
 }

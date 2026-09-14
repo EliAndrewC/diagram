@@ -5244,5 +5244,73 @@ window.RECORD_GLOSSARY = [
    "sueki"
   ],
   "def": "The gray stoneware of ancient Japan, fired hard in a reducing kiln from the fifth century on; the ware of the Nara-period tile-and-pottery kilns."
+ },
+ {
+  "term": "gassho",
+  "variants": [
+   "gassho-zukuri",
+   "gasshozukuri",
+   "gassho",
+   "合掌造り"
+  ],
+  "def": "The steep thatched farmhouse roof of the Sho river valleys, whose king-post-free loft of two to four levels held the household's silkworms as well as keeping the snow off."
+ },
+ {
+  "term": "king post",
+  "variants": [
+   "king posts",
+   "king post",
+   "king-post"
+  ],
+  "def": "The upright timber from a tie beam to the ridge of a roof; a roof framed without one leaves its loft clear."
+ },
+ {
+  "term": "burgage plot",
+  "variants": [
+   "burgage plots",
+   "burgage plot",
+   "burgage"
+  ],
+  "def": "The long narrow house plot of an English planned village or town, its short end on the street and a back lane at the far end."
+ },
+ {
+  "term": "abreuvoir",
+  "variants": [
+   "abreuvoirs",
+   "abreuvoir"
+  ],
+  "def": "A watering trough or basin at a settlement's water point, used by humans as well as by beasts."
+ },
+ {
+  "term": "Khitan",
+  "variants": [
+   "Khitan"
+  ],
+  "def": "The horse-riding people of the Liao empire on the Northern Song's frontier, whose cavalry the Hebei pond-and-marsh belt was built against."
+ },
+ {
+  "term": "superelevation",
+  "variants": [
+   "superelevation",
+   "superelevates",
+   "superelevated"
+  ],
+  "def": "The rise of the water surface on the outside of a bend, which can carry a fast flow over the bank."
+ },
+ {
+  "term": "backwater",
+  "variants": [
+   "backwaters",
+   "backwater"
+  ],
+  "def": "The stretch of raised water surface upstream of a weir or a gate; it reaches back a finite distance and then returns to the channel's own depth."
+ },
+ {
+  "term": "fit zoom",
+  "variants": [
+   "fit zoom",
+   "fit-zoom"
+  ],
+  "def": "The whole map shown at once on the screen - the view a reader opens the page in, as against a zoomed-in one."
  }
 ];
