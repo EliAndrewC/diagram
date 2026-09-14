@@ -225,7 +225,7 @@ Eleven readers (fetch by address only; the search allowance stayed exhausted). N
 
 Corrections the reading forced, page by page:
 
-- fields: the alluvial-fan sentence had the landform backwards (a fan widens from its apex) and now speaks of the DRAWN fan; the terrace-bench economics contradicted the FAO page it cites (beds are made as wide as the slope allows to save labor); 1.3 koku/tan is the middle-grade kokumori, a tax rate; the 614 m2 mu is the 1915 law's Qing definition, not "Ming-Qing", and one mu is 0.15 acre at it (0.16 at the metric mu defined in 1930), not 0.17; the azemichi 2-5 ft against the one readable 300-600 mm crest; weeding "by hand and foot" reduced to hand and hand claw; the "shared water schedule" left as this page's reading against Obata's attribution to the preceding crop (and free valley water lengthening the window past twenty days); the "each family has some paddy and some hatake" quotation marks removed - the words are this page's.
+- fields: the alluvial-fan sentence had the landform backwards (a fan widens from its apex) and now speaks of the DRAWN fan; the terrace-bench economics contradicted the FAO page it cites (beds are made as wide as the slope allows to save labor); 1.3 koku/tan is the middle-grade kokumori, a tax rate; the 614 m2 mu is the 1915 law's Qing definition, not "Ming-Qing", and one mu is 0.15 acre at it (0.16 at the metric mu defined in 1930), not 0.17; the azemichi `2-5 ft` against the one readable `300-600 mm` crest; weeding "by hand and foot" reduced to hand and hand claw; the "shared water schedule" left as this page's reading against Obata's attribution to the preceding crop (and free valley water lengthening the window past twenty days); the "each family has some paddy and some hatake" quotation marks removed - the words are this page's.
 - religion-and-death: Kyoto ~80 temples replaced by kotobank's Sakai (~60 + ~50) and Akita (43, 1663); the wenmiao decree is Tang (630) and the Ming act Taizu's enfeoffment of city gods; Sanuki's kokubunji precinct 240 x 220 m is the small end (Shimotsuke 457 x 413); Osaka's seven graveyards attest CONSOLIDATION onto the rim, not fragmentation, and nothing on pits; the clan mausoleum rewritten from Zuihoden's page (outside the castle, facing the keep) with the inside-the-walls placement labeled this project's; the temple-fair renting rests on a 1991 compilation, the gazetteers are Qing and Republican; "100 generations" to "scores"; "rice grows submerged" to "stands in water".
 - archetypes: deep-water lotus is the page's "more than 40 cm" class (species to 2.5 m), the paddy's 5-9 cm optimum unread; hojo seibi's 30 a plot is 24 x 125 m, the 1963 and 30 x 100 m dropped; willow-fascine antiquity unread; the bare dike is the MODERN tell (concrete dropped); the "mosaic-like constructed ponds" quotation reduced to paraphrase; "coppice barely fruits" unread, the bush height from Morus (1.5-1.8 m); fry ponds corrected to the fry-fingerling-grow-out chain at 15-30 percent of pond area; the dike-width ceiling attributed to the FAO page's own pigsties, piping and traffic.
 
@@ -240,7 +240,7 @@ Two more waves of fetch-by-address readers (13 and 11 agents) closed the worklis
 What the reading contradicted, and what the pages now say:
 
 - vegetation: neighboring canopies do NOT interlace (crown shyness), so the edge overlap is a drawing allowance; the Tonami homestead's bamboo stood on the SOUTH side with the storehouses; the pictorial hill is the oldest cartographic convention, not an estate-map one.
-- river-cities: the takasebune runs 30 to 89 ft (a one-shot reading of the kotobank takasebune page, 2026-09-14) in the records read, not 50-60 ft.
+- river-cities: the takasebune runs 30 to 89 ft (observed 2026-09-14: a one-shot reading of the kotobank takasebune page) in the records read, not 50-60 ft.
 - towns: the fire watch was the neighborhood's as much as the state's; the kichin-yado sold roof and fire, bedding rented extra; important cities walled in far more ground than they had built; farmland stood inside Chinese city walls.
 - fabric: machiya touched at the gable, the shared wall proper being the nagaya's; the flood function belongs to the walls, not the intramural fields; the chapter's open consumers are cultivation, ponds and parks.
 - government: the servants' changeover was the 5th of the 3rd month from the 1668 decree; the Chinese military examinations ran at provincial, metropolitan and palace level; the runners' banfang was a duty station, the shed and the town houses this page's reading.
@@ -314,8 +314,7 @@ reports (233 notes, none NOT-READABLE) and four `record-format` reports were fil
 four editing forks over disjoint page groups and one over the registry (commit `23ec945b`): every
 NOT-ON-PAGE, DOES-NOT-SUPPORT, MISPLACED and DIFFERS verdict (the Shanghai moat passages re-pointed to
 zh.wikipedia 上海县城墙 under the new key `shanghai-xiancheng-chengqiang-zhwiki`, judged
-APPLICABLE-WITH-LIMITS by `source-applicability` and its write-up corrected from that verdict; the
-Tone boat's 27 m dropped as unsupported; the Tang ward-gate curfew scoped; twelve quotations made
+APPLICABLE-WITH-LIMITS by `source-applicability` and its write-up corrected from that verdict; the Tone boat's `27 m` dropped as unsupported; the Tang ward-gate curfew scoped; twelve quotations made
 verbatim; six marks moved to the sentence their passage supports, the vacated assertions given absence
 notes); the reader-visible defects (the nested comment leaking on `vegetation.html`, the missing `<p>` on
 `cities/hinterland.html`, the unmatched `</strong>` on `archetypes.html`, the broken roster on
@@ -347,7 +346,7 @@ stripped) and 175 WORDING-MOVED. `scripts/_entry_owed.py` named 52 modal pairs b
 the classification put 45 of them under a WORDING-MOVED section (three joined the list when the fork
 edits moved their sections); all 45 were dispatched to `entry-drift`, one agent per pair, each given the
 section's sentence-level prose diff. Verdicts: 33 IN-STEP, 12 DRIFTED - `byre` (the magariya's reason),
-`duck pen` and `pig sty` (the district's 20 m dikes and the manual's ceiling), `fry pond` (the fingerling
+`duck pen` and `pig sty` (the district's `20 m` dikes and the manual's ceiling), `fry pond` (the fingerling
 stage and the nursery share), `homestead bamboo` (the north-west strip withdrawn, the side rolled),
 `barley` and `soy` (the catena ordering is this record's reading), `farmhouse` (the read part of the
 setback is a watercourse extended to the paddy), `notice board` (the assembly place and the shrine
@@ -374,13 +373,13 @@ and 12 record-formats. No note was NOT-READABLE and no host refused. What they f
 comma had been added inside a quotation (removed); on `fields.html` a passage was attributed to the
 kotobank page when it is on the Seika page (its own link added); on `cities/river-cities.html` the
 Shanghai dredging anchor was a splice of two passages (re-anchored on the moat section's sentence, which
-also carries the silting) and the Tone boat's 27 m had been withdrawn although kotobank carries it
+also carries the silting) and the Tone boat's `27 m` had been withdrawn although kotobank carries it
 (restored); on `religion-and-death.html` the Akita count was paraphrased rather than quoted (quoted); on
 `homesteads.html` the privy's inline quotation 「背戸口や脇便所、戸口便所として独立した便所」 is on none of the
 three sinyoken pages (replaced by an absence disclosure, the privy modal rewritten to say which seats
 are read); on `archetypes.html` an inline original 「低洼易有洪患之处」 was on no cited page (replaced by the
 page's own words) and three new notes carried a cause or a stage their passage does not (scoped); on
-`cities/defenses.html` an elision was unmarked and the 6.4 km perimeter unquoted (marked, quoted); on
+`cities/defenses.html` an elision was unmarked and the `6.4 km` perimeter unquoted (marked, quoted); on
 `cities/government.html` a gloss claimed a sentence stood on a page it does not (rewritten), three
 list-row quotations carried a constructed prefix (removed), a truncation dropped its scoping clause
 (restored); on `cities/hinterland.html`, `cities/fabric.html`, `towns.html`, `ways.html` and

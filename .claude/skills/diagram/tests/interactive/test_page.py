@@ -458,8 +458,8 @@ def test_the_citations_come_from_the_research_entries() -> None:
 
 
 def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_four() -> None:
-    """Four entries the citation passes have left without keys, all of them on the in-field-features section of
-    `fields.html`, which no work read so far describes. `copse` and `windbreak` were uncited for a day: their
+    """One entry the citation passes have left without a key: `fallow`, whose section records a silence. The
+    in-field-features section of `fields.html` (field pond, field rock, grave island) was cited in feature 242. `copse` and `windbreak` were uncited for a day: their
     fengshui-forest entry rested on two MDPI papers mdpi.com would not serve to this container, until the GM
     downloaded them (2026-09-07) and the passages were read from the copies - the Fujian paper supports the
     two-groves-per-village figure and reads AGAINST the record's grove areas, which are labeled GUESS now.
@@ -470,7 +470,7 @@ def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_fo
     openly, so the ladder is cited from that and from an open design report. GB 50288 itself stays on the
     list of documents only a person could reach."""
     uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
-    assert uncited == ["fallow", "field pond", "field rock", "grave island"], "an entry without a cited key - see the docstring for the four known ones"
+    assert uncited == ["fallow"], "an entry without a cited key - see the docstring for the one known one"
     for k, fc in CLASSES.items():
         for key in research_sources(fc.entry):
             assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"

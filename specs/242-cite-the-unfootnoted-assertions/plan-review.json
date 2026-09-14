@@ -1,93 +1,123 @@
 {
  "feature": "242-cite-the-unfootnoted-assertions",
- "plan_sha256": "ffcbd7da5c6b19a9c8bc624be74f8777da087f166b715855902d4307e144a77c",
+ "plan_sha256": "bf5d248a21c60fa09fd6d41d68bc4583a1194f7478053300db52436bad716986",
  "reviewed": "2026-09-14",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "ROUTE",
-   "summary": "The delta is enumerated as research/*.html, SOURCES.html, citations/, the derived .js, this feature's directory, .claude/skills/diagram/research/CLAUDE.md and the root CLAUDE.md (FR-015), plus the GM's TO-DOWNLOAD.md outside the repository; no engine code, so the route is DIRECT.",
+   "summary": "The delta is enumerated (research/*.html, SOURCES.html, citations/, the derived .js, this feature's directory, the skill research CLAUDE.md and the root CLAUDE.md, plus the GM's TO-DOWNLOAD.md outside the repository) and the route is DIRECT because no engine code is touched.",
    "class": "within",
-   "why": "FR-014, D3 and SC-012 make the feature research-only and DIRECT; both CLAUDE.md files, which round 1 found missing, are now named, so the route enumeration matches the accepted spec's own work list (FR-015, SC-015, T23)."
+   "why": "FR-014, SC-012 and D3 settle this; the request says nothing about routes and nothing in the enumeration reaches l7r/**/*.py or a pool generator."
   },
   {
    "id": "ORDER-page-outer",
-   "summary": "The PAGE is the outer unit of work and the readers' tier order (HIGH, MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW) runs INSIDE a page, so a MEDIUM item on an early page is worked while HIGH items on later pages are still open. Stated in the Constitution Check 'Order (FR-012, SC-010)' bullet with its reason: a page's items are finished, checked and committed together (FR-009), and record-format and quote-check read a page.",
+   "summary": "The PAGE is the outer loop and the readers' tier order (HIGH, MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW) runs INSIDE a page, so a MEDIUM item on page 1 is worked before a HIGH item on page 5.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "It narrows FR-012/SC-010's whole-list tier order to a within-page order, but the accepted spec's own words carry it twice over. FR-009 requires a page's items to be finished, checked and committed together so an interrupted run leaves finished pages rather than a half-noted record - which a strict global tier sweep cannot co-exist with, since every page would sit half-noted until the last tier closed and neither quote-check nor record-format could read a page in that state. SC-010 itself admits a departure 'absent a stated reason', and the reason is now stated in plan.md as well as tasks.md. The GM's request says nothing about ordering, and the rule is not gutted: within every page the readers' five tiers still govern, and the heaviest pages come first. Implied by the spec's own words rather than carved out."
+   "why": "It narrows FR-012's literal whole-list tier order, but SC-010 as accepted admits the departure 'absent a stated reason' and the plan states the reason: record-format and quote-check read a PAGE (FR-007) and the work lands in per-page batches (FR-009), so a strict whole-list tier sweep would leave every page half-noted until the last tier, which is the state FR-009 exists to prevent. The GM's request says nothing about ordering, so nothing is carved out contrary to what was asked, and the purpose of FR-012 - meet the readers' strongest items first - survives inside every page."
   },
   {
    "id": "P1-harness",
-   "summary": "The per-page work list is derived by measure/worklist.py, which imports the census's parsers (items, page_of, confidence, carries_marker) so the list is the FR-001 filter applied to one page, ordered by tier, and locates each item's quoted sentence in the page HTML, printing a line number or NOT-LOCATED; an item it cannot locate is placed by hand from the reader's section heading.",
+   "summary": "The per-page work list is derived by measure/worklist.py, which imports the census's own parsers so the list is the FR-001 filter applied to one page, ordered by tier, with the quoted sentence located in the page HTML.",
    "class": "within",
-   "why": "FR-001 makes the list a derived filter over the four reader reports and SC-001 keeps the count the census's; worklist.py re-uses that filter for one page and adds only placement help, which the spec leaves open. No item enters or leaves the list by it."
+   "why": "FR-001 requires a derived list rather than a restated one; this is the derivation."
   },
   {
    "id": "P1-r7-skip",
-   "summary": "The twenty-two R7 closures are recognized WHEN MET - a sentence already carrying a <sup>, or one of the named R7 items - and skipped with a note in research.md, rather than subtracted in advance.",
+   "summary": "The twenty-two feature-238 R7 closures are recognized when met (a sentence already carrying a footnote mark, or one of the named R7 items) and skipped with a note in research.md.",
    "class": "within",
-   "why": "FR-001 subtracts R7 classes 1, 2, 3, 5 and 6, and R7 does not say which page each closure sits on, so tasks.md states each per-page count as an upper bound. Recognize-when-met is the only way to apply a subtraction whose members are not page-addressed; it removes nothing the spec keeps."
+   "why": "FR-001 subtracts exactly the R7 classes; skipping a closure when it is met is that subtraction performed."
+  },
+  {
+   "id": "P1-hand-placement",
+   "summary": "An item the harness cannot locate is placed by hand from the reader's section heading.",
+   "class": "within",
+   "why": "It adds work rather than removing it, so it narrows nothing. Noted as stale rather than as a narrowing: spec D7, added in the 2026-09-14 split amendment, now sends the 32 unlocatable items on the sixteen landed pages to feature 250 instead, and the plan's P1 was not restated to match. The deferral itself lives in the spec (D7 discloses it as the session's addition, not the GM's, and says it is raised to them with the closing report), so it is the spec track's to carry, not a decision this plan makes."
   },
   {
    "id": "P2-dispatch",
-   "summary": "The reading is dispatched as parallel background source-reader agents on Opus, eight to twelve claims each, one page at a time, each claim verbatim with its section heading and page; the agent returns READ with the verbatim passage, URL, title, author/publisher and date (the material for the registry write-ups), NOT-FOUND with what was searched, or CONTRADICTED with the quote; a stalled agent is relaunched with the failed host excluded.",
+   "summary": "The reading is dispatched as parallel background source-reader agents on Opus, eight to twelve claims each, one page at a time, each claim verbatim with its section heading, returning READ with the verbatim passage and the registry material, NOT-FOUND with what was searched, or CONTRADICTED with the quote.",
    "class": "within",
-   "why": "FR-003 requires a source-reader pass before any note and the note written from its quotes; FR-005 requires both registry write-ups before a key is cited. Batch size, parallelism and the return fields are mechanics the spec leaves open, and the project's own doctrine already puts web reading in background agents."
+   "why": "FR-003 requires a source-reader pass before any note is written and the note written from the returned quotes; this is the dispatch shape, and the project's own doctrine puts these agents in the background on Opus."
   },
   {
    "id": "P3-writing",
-   "summary": "The note-writing procedure per verdict: a registry key with the citation line and both write-ups for a new key; a <li id=\"fn-n\"> on the citations page in CITATION form with the passage in corner brackets (a foreign-language passage in English translation, marked, the original after); the <sup class=\"fn\"> at the sentence; the key added to the section's Sources roster; the ABSENCE form verbatim as FR-004 states it; a CONTRADICTED sentence rewritten to the finding and recorded in research.md; new keys to source-applicability in one dispatch per page BEFORE that page's commit.",
+   "summary": "Per verdict: a registry key with both write-ups for a new key, the note on the citations page in the citation form with the passage quoted (a foreign-language passage in English translation, marked, with the original after), the mark at the sentence, the key added to the section's roster; an absence note in FR-004's exact form for NOT-FOUND; the sentence rewritten and the correction recorded for CONTRADICTED; new keys to source-applicability before the page's commit.",
    "class": "within",
-   "why": "FR-004, FR-005, FR-006 and FR-007 performed. Batching the source-applicability dispatch per page meets FR-007's 'before its numbers reach a map or a rule' earlier than required and sits inside FR-009's page batch."
+   "why": "FR-004, FR-005, FR-006 and FR-007 each carry one clause of this, and the translation rule is the standing project rule rather than a new decision."
   },
   {
    "id": "P3-grounds",
-   "summary": "A GROUNDS note is written for a worked sentence that carries NO claim about how a place was built, farmed, planted, governed or lived in and is not a labeled guess about the physical world, naming one or more of FR-004's six reasons - measured on our own maps, the record's own silence, follows from the definitions, physical necessity, a drawing convention, this project's decision - and never for a sentence FR-004 bars from the form.",
+   "summary": "A GROUNDS note is written only for a worked sentence carrying no claim about how a place was built, farmed, planted, governed or lived in and not a labeled guess about the physical world, naming one or more of FR-004's six reasons, and never for a sentence FR-004 bars from the form.",
    "class": "within",
-   "why": "This is now FR-004's eligibility restated without loss: the closed list of six is quoted in full and the two prohibitions are carried verbatim. Round 1's narrowing (eligibility cut to two of the six reasons, which would have pushed an item whose honest ground is 'follows from the definitions' into an absence note asserting a search that was never owed) is gone."
+   "why": "It restates FR-004's closed list and both prohibitions without widening either."
   },
   {
    "id": "P4-checks",
-   "summary": "The per-page check set before that page's commit: make citations; make test-file over the three interactive test files; quote-check and record-format in parallel over the changed page and its citations page; scripts/_entry_owed.py for the pairs, each to entry-drift or one recorded ENTRY_DRIFT_OK for a sweep in which no finding moved.",
+   "summary": "The per-page check set before that page's commit: make citations; make test-file over the three interactive test files; quote-check and record-format in parallel over the changed page and its citations page; the entry-drift pairs from scripts/_entry_owed.py; then the commit.",
    "class": "within",
-   "why": "FR-007, FR-008 and FR-009 name exactly these checks and this batching; SC-014's make page-check and T22's gate are not displaced - the plan adds a per-page pass, it does not substitute for the push-time one."
+   "why": "FR-005, FR-007, FR-008 and FR-009 name each element; the batching per page is FR-009's own requirement."
   },
   {
    "id": "P5-download",
-   "summary": "The documents that could not be read go to TO-DOWNLOAD.md Part 4, appended at the END, each with the heading, the guessed direct link, the uniquely identifying Google-search link, what rests on it and what blocked the fetch.",
+   "summary": "Documents that could not be read go to TO-DOWNLOAD.md Part 4, appended at the END, each with the heading, the guessed direct link, the uniquely identifying Google-search link, what rests on it and what blocked the fetch.",
    "class": "within",
-   "why": "FR-010's five parts and the GM's own placement and form conditions, restated by reference to 'the GM's format (FR-010)', which is where the authoritative wording stands."
+   "why": "FR-010 as amended, and the GM's 2026-09-14 words in request.md, state exactly these five parts and the append-at-the-end placement."
   },
   {
    "id": "P6-absence",
-   "summary": "The never-searched absence notes are listed by measure/note_census.py --list, worked in the same P2-P4 pipeline AFTER the Phase 1 pages, and counted separately in the closing report; the plan states no count of its own.",
+   "summary": "The never-searched absence notes are listed by measure/note_census.py --list, worked in the same pipeline AFTER the Phase 1 pages, and counted separately in the closing report.",
    "class": "within",
-   "why": "D1 puts them in scope and says they are worked after the FR-001 list; FR-011 and SC-013 require the two counts reported separately. Deriving the list from the harness at work time rather than restating a number is the right form, and the stale 119 round 1 found is gone - measurements.json records 120 and make figures on this round's own run reports 0 moved counts."
+   "why": "The GM ruled the never-searched notes in scope (request.md, 2026-09-13); D1 places them after the FR-001 list and FR-011 with SC-013 require the two counts kept apart. The split did not remove them from the completion condition and the plan does not drop them."
   },
   {
    "id": "P7-rosters",
-   "summary": "Each of the fifty-one Sources lines carrying a disclosure a note now holds is rewritten to point at the note with no change of meaning, followed by make citations and the footnote tests.",
+   "summary": "Each of the fifty-one Sources lines carrying a disclosure a note now holds is rewritten to point at the note, with no change of meaning, followed by make citations and the footnote tests.",
    "class": "within",
-   "why": "FR-013 and D5 verbatim, including the 'no change of meaning' bar."
+   "why": "FR-013 and D5 make these work rather than a second deferral."
   },
   {
    "id": "P8-report",
    "summary": "The closing report in research.md: per page what closed in each of the three forms, per unclosed item searched-and-failed or never-searched, the two settled items named, and the two counts reported separately.",
    "class": "within",
-   "why": "FR-011, SC-009, SC-012 and SC-013 performed."
+   "why": "FR-011, SC-009 and SC-013 require each part."
   },
   {
    "id": "P9-guidelines",
-   "summary": "The 'A page the container cannot fetch is not thereby unreadable' paragraph in .claude/skills/diagram/research/CLAUDE.md gains the rule - a source for the GM is saved in markdown in the FR-010 shape (named heading, guessed direct link, uniquely identifying Google-search link, what rests on it, what blocked the fetch), appended at the END of the standing list, never inserted and never handed over only in a chat message - with the GM's 2026-09-14 reason quoted and the plain statement that no gate here reads the list; the root CLAUDE.md's citation rule gains a pointer.",
+   "summary": "The 'A page the container cannot fetch is not thereby unreadable' paragraph in the skill's research CLAUDE.md gains the download-list rule in the FR-010 shape with the GM's reason quoted and the plain statement that no gate here reads the list, and the root CLAUDE.md's citation rule gains a pointer.",
    "class": "within",
-   "why": "This is FR-015 and SC-015 performed, in the file and the paragraph the requirement names, with the pointer the requirement asks of the root CLAUDE.md. It is the half of the 2026-09-14 amendment the GM asked for in their own words ('Updates the project guidelines ... in the future, anytime you do have a source for me to look at'), and round 1's NOT LEGITIMATE finding - FR-015 absent from the plan entirely - is answered."
+   "why": "FR-015 and SC-015 name both files and every part; the GM asked for the guidelines to carry the format 'in the future, anytime'."
   },
   {
    "id": "P9-timing",
    "summary": "The guidelines paragraph is written BEFORE the first Part 4 entry is appended, so this feature's own hand-over is the first under the rule.",
    "class": "within",
-   "why": "The spec leaves the sequence open; FR-010 already binds this feature's own Part 4 entries to the same shape, so writing the rule first adds nothing and removes nothing. It widens rather than narrows what was asked."
+   "why": "An ordering inside work the spec already requires; it removes no obligation."
+  },
+  {
+   "id": "P10-apply-honesty",
+   "summary": "At the close, the check reports are applied where they bear on honesty - every quote-check NOT-ON-PAGE, DOES-NOT-SUPPORT, MISPLACED and DIFFERS verdict, every reader-visible defect and untranslated quotation the record-format reports name, the batch-1 applicability corrections - and the rest is named to feature 250.",
+   "class": "within",
+   "why": "The GM made this cut themselves on 2026-09-14 (request.md: 'this feature is too big ... with the rest deferred to a future feature', then 'Yes that does suit me, please do that'), and the cut they accepted names these four classes as applied and the cosmetic record-format findings as deferred. The plan's enumeration is that list item for item, so nothing is carved out contrary to what was asked; spec D7 and FR-011 carry the same cut."
+  },
+  {
+   "id": "P10-scoped-confirmation",
+   "summary": "The confirmation after the correction edits is one quote-check and one record-format per edited page, each given the changed notes and sections rather than the whole page, because the page was already checked whole.",
+   "class": "within",
+   "why": "The GM's accepted cut says 're-check once, scoped to the changed notes and sections' in those words, and the amended FR-007 carries it with the limit that a page checked whole for the first time is still checked whole. The plan states that limit's premise (the page was already checked whole), so it does not extend the scoping to an unchecked page."
+  },
+  {
+   "id": "P10-entry-drift-measurement",
+   "summary": "The entry-drift pairs are answered by measurement: measure/prose_moved.py classifies every moved section MARKS-ONLY or WORDING-MOVED, entry-drift is dispatched at every named pair with a WORDING-MOVED section and DRIFTED prose is rewritten, and the MARKS-ONLY pairs are discharged with one recorded ENTRY_DRIFT_OK citing the measurement.",
+   "class": "within",
+   "why": "The GM's accepted cut says 'answer the entry-drift pairs by measuring which sections' wording moved'; FR-008 already permits either a dispatch or one recorded waiver over a sweep in which no finding moved, and MARKS-ONLY is that condition measured rather than asserted. D8 and SC-016 carry it."
+  },
+  {
+   "id": "P10-sizing-deferred",
+   "summary": "cities/sizing.html is not footnoted here; T16 is removed from tasks.md and the page becomes feature 250's FR-001.",
+   "class": "within",
+   "why": "The sizing page is the first item on the GM's own accepted deferral list in request.md, and spec D7 and FR-011 name it. Deferring it is the ruling being carried out, not a carve-out against it."
   }
  ],
  "verdict": "CLEAR"

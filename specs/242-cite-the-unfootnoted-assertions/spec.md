@@ -218,16 +218,18 @@ engine work and has its own feature, so this one stays research-only and on the 
   order HIGH, MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW, absent a stated reason.
 - **SC-011** (FR-013) - no section's `Sources:` roster carries a disclosure that its own notes now
   carry.
-- **SC-012** (FR-014) - the feature's delta contains no `l7r/**/*.py` change, and neither settled item
-  is worked here: the caravan inn's form knob is feature 244's, and the Xuxiebian absence note stands
-  as the record already carries it.
+- **SC-012** (FR-014) - the feature's delta changes no engine behavior: the only `l7r/**/*.py` edits are
+  the `Kind` docstrings FR-008 rewrites (a modal's explanation, which the gate key strips and which
+  routes DIRECT) and the glossary data file; and neither settled item is worked here: the caravan inn's
+  form knob is feature 244's, and the Xuxiebian absence note stands as the record already carries it.
 - **SC-013** (FR-011) - the 120 never-searched absence notes are worked and counted separately from
   the FR-001 list, and neither count is folded into the other in any report.
 - **SC-014** (spec-wide) - `make page-check` green and the push clean.
 - **SC-016** (FR-011, FR-008) - feature 250's `spec.md` exists in the same delta and names every class
   FR-011 defers, each pointing at where its items are listed; and the entry-drift pairs are answered as
   D8 says - `entry-drift` dispatched at every named pair whose section's wording moved, the one recorded
-  waiver covering only pairs the measurement calls MARKS-ONLY.
+  waiver covering only the pairs the measurement calls MARKS-ONLY and the pairs the agent judged IN-STEP
+  (whose prose did not change, so the gate still names them).
 
 ## Decisions recorded
 
@@ -320,7 +322,8 @@ one changed what it says. `scripts/_entry_owed.py` cannot tell the two apart, so
 `Sources:` roster line, collapses whitespace, and compares the reader's prose against the merge base -
 MARKS-ONLY when identical, WORDING-MOVED otherwise. Every named pair with a WORDING-MOVED section is
 dispatched to `entry-drift` and the prose it calls DRIFTED is rewritten; the pairs whose sections are
-all MARKS-ONLY are discharged with one `ENTRY_DRIFT_OK` whose reason cites the run. The alternative
+all MARKS-ONLY, and the dispatched pairs the agent judged IN-STEP (their prose unchanged, so the gate
+still names them), are discharged with one `ENTRY_DRIFT_OK` whose reason cites the run. The alternative
 priced and declined: one waiver over every pair with the reason "footnotes only", which would have
 been false for most of them (`research.md` R12 carries the run's counts).
 

@@ -333,14 +333,17 @@ def test_a_glossary_tooltip_escapes_the_modal_and_stays_on_the_page(synthetic: P
     """Feature 182 (GM 2026-09-05): a definition box at the modal's edge "gets cut off, and the modal gains a
     horizontal scroll bar" - the box must be OUTSIDE the modal, free to cross the modal's edge, and inside
     the page. Run in a viewport narrow enough that a 22rem box at the rightmost defined word would cross
-    the window's edge, so the clamp is exercised rather than assumed; the viewport is restored after."""
+    the window's edge, so the clamp is exercised rather than assumed; the viewport is restored after. The
+    word is the rightmost defined term that is ON SCREEN: a modal taller than this viewport (the bund's,
+    since feature 242 lengthened its explanation) centers with its top above the window, and a term up
+    there cannot be hovered at all - which is the harness, not the clamp under test."""
     was = synthetic.page.viewport_size
     synthetic.page.set_viewport_size({"width": 420, "height": 640})
     try:
         synthetic.js("() => window.l7rMap.fit()")
         synthetic.open("bund")
         word = synthetic.js(
-            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); if (r.width && (!best || r.left > best.left)) best = { left: r.left, x: r.left + r.width / 2, y: r.top + r.height / 2, def: s.getAttribute('data-def') }; } return best; }"
+            "() => { let best = null; for (const s of document.querySelectorAll('#explain .gl')) { const r = s.getBoundingClientRect(); if (r.width && r.top >= 0 && r.bottom <= window.innerHeight && (!best || r.left > best.left)) best = { left: r.left, x: r.left + r.width / 2, y: r.top + r.height / 2, def: s.getAttribute('data-def') }; } return best; }"
         )
         assert word and word["def"], "the bund's explanation carries a defined term"
         synthetic.page.mouse.move(word["x"], word["y"])

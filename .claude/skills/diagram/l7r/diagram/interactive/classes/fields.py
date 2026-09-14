@@ -78,16 +78,16 @@ class WetPaddy(Kind):
 class Bund(Kind):
     """
     What: The aze: a puddled-mud ridge one to two feet wide and about a foot high between two basins, re-plastered
-    every spring so each paddy holds its water; the walking bunds ran wider - two to five feet in this record's
-    reading, the one measured figure being a modern consolidation crest of a foot or two. Where bunds cross,
+    every spring so each paddy holds its water; a wider walking bund ran between the plots, two to five feet across in this
+    record's reading. Where bunds cross,
     the earth is piled into a lumpy node - the most-worked point in a field.
 
     Why: A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting
     at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach
     the plots; the footplanks over the ditches serve that walking.
 
-    Note: Construction, the field bund's width and the shared-wall finding are read; the walking bund's width is
-    this record's reading; the drawn stroke is at true size.
+    Note: Construction, the field bund's width and the shared-wall finding are read; the walking bund's width
+    is this record's reading; the drawn stroke is at true size.
 
     Name: bund
     Covers: the stroke of every paddy plot and the piled junctions between them

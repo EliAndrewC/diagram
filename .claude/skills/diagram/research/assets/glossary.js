@@ -5217,7 +5217,7 @@ window.RECORD_GLOSSARY = [
    "coopers",
    "cooper"
   ],
-  "def": "A barrel and tub maker."
+  "def": "A craftsman who makes barrels, tubs and buckets from wooden staves."
  },
  {
   "term": "hot-shoeing",
