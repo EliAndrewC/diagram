@@ -382,9 +382,11 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	    printf '\n\033[1mNO SETTLEMENT-REVIEW OWED\033[0m: %s (feature 231). The gate runs alone; a glyph or page change with the same manifest is the GM'"'"'s to look at, and the waiver is recorded at turn end.\n' "$$why"; \
 	  else \
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
-	    snap=$$(python3 "$$root/scripts/_review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} $$maps); \
+	    : "GUARD_EDIT_OK: feature 248 - ONE AGENT PER MAP, and the tooling writes each prompt (GM 2026-09-14: whatever the tooling is doing to kick off reviews should make the correct thing happen automatically). The old one-line instruction naming every map was followed literally on feature 247 - one agent, four maps, serialized, 11 of 36 minutes - so the snapshot script now writes <map>/dispatch.md per map and the pair guard refuses a dispatch naming more than one."; \
+	    snap=$$(python3 "$$root/scripts/_review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
+	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'maps whose layout moved: %s (%s)\n%s\n' "$$maps" "$$why" "$$snap"; \
-	    printf '\n\033[1mDISPATCH NOW\033[0m, in the same turn: settlement-review over %s - hand it the snapshot directories above, then let this gate run beside it.\n' "$$maps"; \
+	    printf '\n\033[1mDISPATCH NOW, in this same message: %s settlement-review agent(s), ONE PER MAP\033[0m - each Agent call takes the contents of that map'"'"'s prompt file named above (.git/review-snapshot/<map>/dispatch.md). A dispatch naming more than one map is refused before it starts; a turn may not end while a map above has no review dispatched. Then let this gate run beside them.\n' "$$n"; \
 	  fi
 	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
 	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &

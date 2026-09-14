@@ -87,9 +87,85 @@ review_owed_names() { # the maps whose manifest moved against main, space-separa
 }
 review_owed_why() { python3 "$PAIR_HERE/_review_owed.py" --root "$CLONE_ROOT" --why 2>/dev/null; }
 review_snapshot() { # review_snapshot <map>... -> the snapshot lines (feature 231: taken wherever a review is found owed)
-  local mirror=""
+  local mirror="" k
   case "$CLONE_ROOT" in */.clones/*) mirror="${CLONE_ROOT%%/.clones/*}" ;; esac
-  python3 "$PAIR_HERE/_review_snapshot.py" --root "$CLONE_ROOT" ${mirror:+--mirror "$mirror"} "$@" 2>/dev/null | tr '\n' ' '
+  k="$(engine_key)"   # GUARD_EDIT_OK: feature 248 - the per-map dispatch prompt quotes the key it reviews
+  python3 "$PAIR_HERE/_review_snapshot.py" --root "$CLONE_ROOT" ${mirror:+--mirror "$mirror"} ${k:+--key "$k"} "$@" 2>/dev/null | tr '\n' ' '
+}
+
+# GUARD_EDIT_OK: feature 248 (GM 2026-09-14) - ONE MAP PER REVIEW AGENT, EVERY OWED MAP DISPATCHED, AND WHETHER
+# THEY RAN IN PARALLEL RECORDED. Feature 247's review was one agent over four maps, serialized: 11 of the
+# feature's 36 minutes. The reviewer's contract and dev/reviews.md both said "one map per agent" and were
+# disregarded, which is the GM's point: *"the point of the tooling is to make the correct thing happen
+# automatically without you or I needing to remember the precise ways to not get it subtly wrong in a costly
+# way"*. What a hook CAN do: refuse the wrong shape before the agent starts, hold the turn open until every
+# owed map has its own dispatch, and measure the rest. What it cannot: launch an agent, split one call into
+# several, or force several calls into one message - so parallelism is recorded, never refused (spec D4).
+PARALLEL_SPAN_S=60   # a definition, not a measurement: parallel calls land within seconds, a sequential one is a model turn later
+
+pair_now() { # the clock, injectable ONLY in a fixture (the seams-only-in-a-fixture rule every guard here follows)
+  case "$CLONE_ROOT" in
+    */test-*|*/tmp.*|/tmp/*) if [ -n "${PAIR_NOW:-}" ]; then printf '%s' "$PAIR_NOW"; return 0; fi ;;
+  esac
+  date +%s
+}
+
+maps_named_by() { # maps_named_by <prompt file> -> the pool maps the dispatch asks a review of (research R5), space-separated
+  python3 "$PAIR_HERE/_review_prereq.py" named --clone "$CLONE_ROOT" --prompt-file "$1" 2>/dev/null | tr '\n' ' ' | sed 's/ $//'
+}
+
+record_dispatch() { # record_dispatch <map> <key> -> "" or "parallel <span>" / "serialized <span>" when the last owed map was just dispatched at <key>
+  python3 - "$(pairing_file)" "$1" "$2" "$(pair_now)" "$PARALLEL_SPAN_S" $(review_owed_names) <<'PY' 2>/dev/null || true
+import json, pathlib, sys
+p, name, key, now, span_s, owed = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3], int(sys.argv[4]), int(sys.argv[5]), sys.argv[6:]
+try:
+    d = json.loads(p.read_text())
+except Exception:
+    d = {}
+disp = d.setdefault("dispatched", {})
+def complete():
+    return bool(owed) and all(isinstance(disp.get(m), dict) and disp[m].get("key") == key for m in owed)
+before = complete()
+disp[name] = {"key": key, "at": now}
+p.write_text(json.dumps(d, indent=2))
+if complete() and not before:
+    ats = [int(disp[m]["at"]) for m in owed]
+    span = max(ats) - min(ats)
+    print(("parallel" if span < span_s else "serialized") + f" {span}")
+PY
+}
+
+pending_maps() { # pending_maps <subagents dir> -> the maps a still-running settlement-review names, space-separated
+  local dir="$1" f aid
+  [ -n "$dir" ] && [ -d "$dir" ] || return 0
+  for f in "$dir"/agent-*.jsonl; do
+    [ -e "$f" ] || continue
+    grep -ql "settlement-review" "$f" 2>/dev/null || continue
+    aid="$(basename "$f" .jsonl)"; aid="${aid#agent-}"
+    bash "${CLONE_ROOT}/scripts/agent-stall-hooks.sh" pending "$dir" 2>/dev/null | grep -qx "$aid" || continue
+    head -n 1 "$f" > "$f.prompt.$$" 2>/dev/null && maps_named_by "$f.prompt.$$"; rm -f "$f.prompt.$$"
+    printf ' '
+  done
+}
+
+missing_maps() { # missing_maps <key> <subagents dir> -> the owed maps with no verdict at <key>, no dispatch at <key>, and no running review naming them
+  local key="$1" dir="$2"
+  python3 - "$(pairing_file)" "${CLONE_ROOT}/.git/review-verdicts" "$key" "$(pending_maps "$dir")" $(review_owed_names) <<'PY' 2>/dev/null || true
+import json, pathlib, sys
+pairing, verdicts, key, pending, owed = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3], set(sys.argv[4].split()), sys.argv[5:]
+try:
+    disp = json.loads(pairing.read_text()).get("dispatched", {}) or {}
+except Exception:
+    disp = {}
+def recorded(m):
+    try:
+        v = json.loads((verdicts / f"{m}.json").read_text())
+    except Exception:
+        return False
+    return v.get("verdict") in ("PASS", "NEEDS-WORK") and str(v.get("engine_key", "")) == key
+missing = [m for m in owed if not recorded(m) and not (isinstance(disp.get(m), dict) and disp[m].get("key") == key) and m not in pending]
+print(" ".join(missing))
+PY
 }
 
 # GUARD_EDIT_OK: feature 164 - this guard now REWRITES the gate into the paired command, so it needs
@@ -385,6 +461,28 @@ print(json.dumps({"hookSpecificOutput": {
   fi
 
   if [ "$tool" = "Agent" ] && { [ "$atype" = "settlement-review" ] || [ "$atype" = "building-review" ]; }; then
+    # GUARD_EDIT_OK: feature 248 FR-001 - A DISPATCH ASKS FOR EXACTLY ONE MAP, counted against every pool map
+    # (owed or not: a legacy map or a spot check serializes the same way), refused BEFORE the agent starts, with
+    # no escape token - a multi-map review is never the right shape. The refusal hands back the per-map prompt
+    # files `make verify` (or the permit branch below) wrote, one Agent call each, in the same message.
+    named=""
+    if [ "$atype" = "settlement-review" ]; then
+      nf="$(mktemp)"
+      printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' > "$nf" 2>/dev/null
+      named="$(maps_named_by "$nf")"; rm -f "$nf"
+      if [ "$(printf '%s\n' $named | grep -c .)" -gt 1 ]; then
+        printf '\n\033[1mBLOCKED: this settlement-review asks for %s maps in ONE agent - one map per agent, all in this same message.\033[0m\n' "$(printf '%s\n' $named | grep -c .)" >&2
+        printf 'The sweeps share no work across maps, so one agent serializes them (feature 247: four maps, 11 of 36 minutes).\n' >&2
+        printf 'Dispatch %s settlement-review agents now, one per map, each with the contents of its prompt file:\n' "$(printf '%s\n' $named | grep -c .)" >&2
+        for m in $named; do
+          pf="${CLONE_ROOT}/.git/review-snapshot/$m/dispatch.md"
+          if [ -f "$pf" ]; then printf '    %s\n' "$pf" >&2; else printf '    %s: no prompt file (not owed a review, or the snapshot was never taken - `make verify` writes it)\n' "$m" >&2; fi
+        done
+        printf 'There is no escape for this shape (feature 248 D1).\n' >&2
+        guard_log pair blocked "$atype" review-multi-map
+        exit 2
+      fi
+    fi
     # GUARD_EDIT_OK: feature 168 - the escape is recorded as well as logged to the bypass log; the two
     # answer different questions (that one carries the REASON, this one makes the RATE computable).
     # GUARD_EDIT_OK: feature 231 - AN ESCAPED REVIEW IS STILL A REVIEW: it records review_key as the normal
@@ -432,8 +530,25 @@ print(json.dumps({"hookSpecificOutput": {
     # GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews, and no longer records the
     # review as done: `review_recorded` reads the verdict. The agent copies this key into its verdict record.
     [ -n "$key" ] && write_pairing "$(pairing_file)" review_dispatch_key "$key"
-    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; exit 0;; esac
+    # GUARD_EDIT_OK: feature 248 FR-003/FR-004 - a PERMITTED one-map dispatch is recorded (the map, the key, the
+    # clock) on BOTH permitting paths, the escape included (the plan review's note: an escaped dispatch that
+    # recorded nothing would be counted missing at turn end), and when the last owed map is dispatched at this
+    # key the span of the dispatch times is recorded as parallel or serialized - measured, never refused.
+    dispatched_note() {
+      local m span
+      [ "$atype" = "settlement-review" ] && [ -n "$named" ] && [ -n "$key" ] || return 0
+      for m in $named; do
+        span="$(record_dispatch "$m" "$key")"
+        guard_log pair permitted "$atype:$m" review-dispatched
+        case "$span" in
+          parallel*)   guard_log pair permitted "$atype:${span#parallel }s" reviews-parallel ;;
+          serialized*) guard_log pair permitted "$atype:${span#serialized }s" reviews-serialized ;;
+        esac
+      done
+    }
+    case "$prompt" in *PAIR_OK*) guard_log pair escaped "$atype" pair-ok-review; log_bypass "named in the dispatch" "review alone"; dispatched_note; exit 0;; esac
     if gate_running_or_fresh "$key"; then
+      dispatched_note
       exit 0
     fi
     printf '\n\033[1mBLOCKED: a settlement-review with no gate beside it.\033[0m\n' >&2
@@ -465,7 +580,8 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
   # a gate ran green against this content, and nothing reviewed it
   [ "$(read_field "${CLONE_ROOT}/.git/verification-state.json" engine_key)" = "$key" ] || exit 0
   review_recorded "$key" && exit 0
-  review_pending "$dir" && exit 0
+  # GUARD_EDIT_OK: feature 248 FR-003 - "a review is pending" no longer keeps the turn open by itself: a running
+  # review of map A does not cover map B. The per-map question is asked below, after the waivers.
   review_waived "$key" && exit 0
   # GUARD_EDIT_OK: feature 231 - NO LAYOUT CHANGE, NO REVIEW, asked again AFTER the gate (its pool phase may
   # have moved a manifest): nothing moved -> the automatic waiver is recorded against this content, with its
@@ -475,6 +591,24 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
     write_pairing "$(pairing_file)" waived_why "$(review_owed_why)"
     guard_log pair permitted "stop" review-not-owed
     exit 0
+  fi
+  # GUARD_EDIT_OK: feature 248 FR-003 - EVERY OWED MAP, not "a review": a map with a verdict at this key, a
+  # dispatch recorded at this key, or a running review naming it is covered; the rest are MISSING. Nothing
+  # missing (reviews running or done for every map) -> quiet. Some missing while others are covered -> refused
+  # ONCE per (key, missing set), naming the maps and their prompt files. None covered at all -> the half-open
+  # refusal below, as before. Asked AFTER the waivers above, so a waived turn is never refused for missing maps.
+  missing="$(missing_maps "$key" "$dir")"
+  [ -z "$missing" ] && exit 0
+  if [ "$missing" != "$(review_owed_names)" ] || review_pending "$dir"; then
+    mkey="$key:$(printf '%s' "$missing" | tr ' ' ',')"
+    [ "$(read_field "$(pairing_file)" stop_missing_told)" = "$mkey" ] && exit 0   # once per (content, set), never a loop
+    write_pairing "$(pairing_file)" stop_missing_told "$mkey"
+    printf 'REVIEW MISSING FOR: %s - the gate is green on this content and these maps have no settlement-review dispatched, running or recorded.\n' "$missing" >&2
+    printf 'One agent per map (feature 248). Dispatch each now, in one message, with the contents of its prompt file:\n' >&2
+    for m in $missing; do printf '    %s/.git/review-snapshot/%s/dispatch.md\n' "$CLONE_ROOT" "$m" >&2; done
+    note="$(fallback_note)"; [ -n "$note" ] && printf '%s\n' "$note" >&2
+    guard_log pair blocked "stop:$missing" review-map-undispatched
+    exit 2
   fi
   [ "$(read_field "$(pairing_file)" stop_told)" = "$key" ] && exit 0   # once per content, never a loop
   write_pairing "$(pairing_file)" stop_told "$key"

@@ -23,11 +23,15 @@ POOL=".claude/skills/diagram/pool/hamlets/m"
 
 # A repo whose `main` already holds $2 (the pre-existing state), then a `work` branch to change on.
 mkrepo() {
-  rm -rf "$T/$1"; mkdir -p "$T/$1/$POOL" "$T/$1/specs/900-x"; cd "$T/$1" || return 1
+  rm -rf "$T/$1"; mkdir -p "$T/$1/$POOL" "$T/$1/specs/900-x" "$T/$1/.claude/skills/diagram"; cd "$T/$1" || return 1
   git init -q .; git config user.email t@t; git config user.name t
   echo base > seed.txt
+  # GUARD_EDIT_OK: feature 248 - the gate reads the pushed tree's ENGINE KEY (a stub target, never the engine) and
+  # asks _review_owed.py, which needs an origin/main to diff against; both are fixture state, like the map itself
+  printf 'engine-key:\n\t@printf k\n' > .claude/skills/diagram/Makefile
   [ "${2:-}" = withmap ] && { echo '{"v":1}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
+  git update-ref refs/remotes/origin/main main
 }
 
 check() { # label repo expected
@@ -145,6 +149,31 @@ echo '{"map":"m","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .
 check "a re-rolled map whose last verdict is NOT-REVIEWABLE, notes updated or not" nr blocked
 echo '{"map":"m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/nr/.git/review-verdicts/m.json"
 check "...and the same map once a review returned PASS" nr ok
+
+# GUARD_EDIT_OK: feature 248 FR-006 (GM 2026-09-14) - THE REVIEWER'S RECORD IS THE ONE RECORD. Three passes and three
+# refusals: a PASS/NEEDS-WORK record at the pushed tree's key ships with NO notes touch; the rendering-only waiver ships
+# a map with no record and no notes touch; a map with no record at all still ships on the notes touch; a record at a
+# STALE key refuses whether or not the notes are touched (D5); a NOT-REVIEWABLE record refuses (above); no record and
+# no notes touch refuses (case b above).
+echo
+echo "3. A MAP SHIPS ON ITS REVIEWER'S RECORD (feature 248)"
+mkrepo r1 withmap; echo '{"v":2}' > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
+echo '{"map":"m","engine_key":"k","verdict":"PASS","findings":[]}' > .git/review-verdicts/m.json
+check "a PASS record at this engine key, no notes touch" r1 ok
+echo '{"map":"m","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/.git/review-verdicts/m.json"
+check "...a NEEDS-WORK record at this key too (the findings are fixed under the same key)" r1 ok
+echo '{"map":"m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/.git/review-verdicts/m.json"
+check "a PASS record at ANOTHER key, no notes touch: refused" r1 blocked
+mkrepo r2 withmap; echo '{"v":2}' > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
+mkdir -p .git/review-verdicts; echo '{"map":"m","engine_key":"stale","verdict":"PASS","findings":[]}' > .git/review-verdicts/m.json
+check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked
+mkrepo r3 withmap; echo '{"v":2}' > "$POOL/m.json"; mkdir -p .specify specs/901-r
+printf -- '- [x] T01 the glyph\n      research: rendering\n- [x] T02 the note\n      research: rendering\n' > specs/901-r/tasks.md
+echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm reroll-rendering
+check "the rendering-only waiver: no record, no notes touch, every active task research: rendering" r3 ok
+printf -- '- [x] T01 the glyph\n      research: rendering\n- [x] T02 the placer\n      research: procedure\n' > "$T/r3/specs/901-r/tasks.md"
+( cd "$T/r3" && git add -A && git commit -qm procedure )
+check "...but one procedure task beside the rendering ones owes the review" r3 blocked
 
 mkrepo g; echo "# spec" > specs/900-x/spec.md; git add -A; git commit -qm s
 if ( cd "$T/g" && REVIEW_GATE_OK="superseded before implementation" "$GATE" main..HEAD >/dev/null 2>&1 ); then

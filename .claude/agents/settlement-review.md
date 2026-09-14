@@ -179,9 +179,15 @@ So the invoking agent states the scope, and you obey it:
   you skipped, so the reader knows what was not looked at. A skipped sweep that goes unmentioned
   reads as a sweep that passed.
 
-**One map per agent.** If several maps changed, the invoker should run one agent per map in
-parallel rather than handing several to a single agent - the sweeps do not share work across maps,
-so a combined run just serializes them. Say so in your output if you were handed more than one.
+**One map per agent - ENFORCED since feature 248 (GM 2026-09-14).** The sweeps share no work across
+maps, so one agent handed several serializes them (feature 247: four maps, 11 of 36 minutes, with this
+paragraph already saying so). The pair guard now refuses a dispatch that names more than one pool map
+before the agent starts, with no escape; `make verify` writes one prompt per owed map at
+`<clone>/.git/review-snapshot/<map>/dispatch.md`, and the session dispatches N agents in one message,
+each with one file's contents. A turn may not end while an owed map has no review dispatched, running
+or recorded; whether the dispatches ran in parallel is recorded in the guard log (`reviews-parallel` /
+`reviews-serialized`), never refused. If you were still handed more than one map - only possible
+through an agent type the guard does not key on - say so in your output and review the FIRST one.
 
 ## Protocol
 

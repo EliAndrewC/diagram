@@ -175,6 +175,20 @@ def _spec_lint() -> object:
     return mod
 
 
+def _owed_module() -> object:
+    """`_review_owed.py`, loaded by path like spec-lint above (feature 248: `pool_map_names` lives there)."""
+    here = pathlib.Path(__file__).resolve().parent
+    spec = importlib.util.spec_from_file_location("review_owed_for_prereq", here / "_review_owed.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    prior, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        sys.dont_write_bytecode = prior
+    return mod
+
+
 def _number(text: str) -> float | None:
     m = _NUMBER.search(text)
     return float(m.group(0).replace(",", "")) if m else None
@@ -201,6 +215,18 @@ def unresolved_figures(prompt: str, records: Iterable[dict]) -> list[str]:
 
 
 # ---- the check the hook runs -------------------------------------------------------------------------------
+
+
+def maps_named(prompt: str, pool_names: Iterable[str]) -> list[str]:
+    """The maps a dispatch asks a review of (feature 248 FR-001, research R5): the pool maps whose snapshot
+    directory `review-snapshot/<map>` the prompt names; when it names none, the pool maps whose name appears
+    as a word. The snapshot form wins when present, so a one-map prompt that mentions a neighbor for context
+    is one map; a prompt naming no snapshot is counted by name. Sorted, no duplicates."""
+    names = sorted(set(pool_names))
+    by_snapshot = [n for n in names if re.search(rf"review-snapshot/{re.escape(n)}(?![A-Za-z0-9_-])", prompt)]
+    if by_snapshot:
+        return by_snapshot
+    return [n for n in names if re.search(rf"(?<![A-Za-z0-9_-]){re.escape(n)}(?![A-Za-z0-9_-])", prompt, re.IGNORECASE)]
 
 
 def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, current: Callable[[str], bool]) -> list[str]:
@@ -327,7 +353,7 @@ def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[d
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["check", "accept", "recorded", "gate-state", "verdict"])
+    ap.add_argument("command", choices=["check", "accept", "recorded", "gate-state", "verdict", "named"])
     ap.add_argument("--verdict", default="")
     ap.add_argument("--findings-file", default="")
     ap.add_argument("--key", default="")
@@ -354,6 +380,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "recorded":
         return 0 if recorded(pathlib.Path(args.clone), args.maps.split(), args.key) else 1
+    if args.command == "named":
+        # GUARD_EDIT_OK: feature 248 FR-001 - the maps a dispatch asks a review of, one per line, counted against
+        # every pool map (`--maps` when given, else the clone's own pool trees); the guard refuses two or more
+        pool = args.maps.split() if args.maps else _owed_module().pool_map_names(pathlib.Path(args.clone))
+        for name in maps_named(pathlib.Path(args.prompt_file).read_text(), pool):
+            print(name)
+        return 0
     if args.command == "accept":
         refused = accept(pathlib.Path(args.clone), args.map, args.finding, args.reason)
         print(refused or f"accepted {args.finding} on {args.map}")

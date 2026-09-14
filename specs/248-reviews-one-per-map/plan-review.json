@@ -1,6 +1,6 @@
 {
  "feature": "248-reviews-one-per-map",
- "plan_sha256": "7ea83247415103d5d85b3b070010e25a94efcbd42a280d9b8cdc59e64fd40afc",
+ "plan_sha256": "c39761415cdbe250a2e6f9ca81270aec65bd24f15a0fa7c48b718497ca662ef8",
  "reviewed": "2026-09-14",
  "declared": "spec-fidelity",
  "decisions": [
@@ -50,7 +50,7 @@
    "id": "D-parallel-entry",
    "summary": "When every owed map has a dispatch at this key, compute the span and log reviews-parallel or reviews-serialized; never refuse.",
    "class": "within",
-   "why": "FR-004 and D4; research R3 states why it cannot be forced. The GM asked for parallelization to be 'folded in'; the plan folds in what a hook can guarantee and measures the rest, which is the spec's stated shape."
+   "why": "FR-004 and D4; research R3 states why it cannot be forced. The GM asked for parallelization to be folded in; the plan folds in what a hook can guarantee and measures the rest, which is the spec's stated shape."
   },
   {
    "id": "D-stop-missing",
@@ -66,21 +66,21 @@
   },
   {
    "id": "D-active-features",
-   "summary": "active_features(root, base) = the pointer's directory plus every specs/*/tasks.md with an open box whose directory the delta against the base touches, mirroring sync-with-main.sh's in-progress derivation with a pointer each way.",
+   "summary": "active_features(root, base) = the pointer's directory plus every specs/*/ directory the delta against the base touches that has a tasks.md, ticked or not (the in-progress rule's derivation widened: at push no box is open); an empty set OWES.",
    "class": "within",
-   "why": "FR-005 and D7 verbatim (the derived set, the conjunction). Not narrower than the spec or the request."
+   "why": "RE-REVIEWED THIS ROUND (the one changed passage; the digest moved from 7ea83247 to c3976141, confirmed by git diff 5764fd0a..18b3bd95, which touches only this bullet). Reviewer note: this review ran on the session's model rather than Opus, the Opus weekly limit having been reached, by the session's decision. Ruling: the bullet is the amended FR-005/D7 verbatim - the pointer's feature AND every delta-touched feature directory with a tasks.md, open box or not, conjunction for the waiver, empty set owes. Against the request: the GM asked to skip the review 'for features like this one specifically, i.e. changing a glyph rendering convention' and said 'Yes to both' to a waiver keyed on the task classification; the plan keys it on the classification of the feature set the project already derives for 'the feature this push is' (feature 133, derived not declared, so a pointer cannot evade it), and the widening can only OWE a review, never skip one the GM would have run - so it does not carve out any case the GM asked to have skipped, and it serves the GM's stated purpose that the tooling makes the correct thing happen without anyone remembering. The one cost, stated: a rendering-only feature whose delta also touches another feature's specs/ directory (a cross-feature docs edit) owes a review the GM's words alone would skip; that errs toward a review, not away from one. The empty-set-owes clause, an implementer's note in the previous record, is now in the plan's text and matches FR-005. Note: the spec's FR-005 amendment is concurrently under a MODE 3 verify round; this ruling is against the request and the amended text, and holds on either outcome of that round because the plan says what the amended text says."
   },
   {
    "id": "D-waiver-reason",
    "summary": "changed_maps returns no names with the reason 'rendering-only feature(s) <dirs>: <n> task(s) all research: rendering, no settlement-review owed (feature 248)' when every derived feature is rendering-only; --why prints it; --maps callers unchanged.",
    "class": "within",
-   "why": "FR-005's waiver, reaching every decision point through the one script. Implementer's note: 'every derived feature' must carry FR-005's non-empty condition (an empty set is vacuously all-rendering and FR-005/FR-008 say it OWES); the spec settles it, the plan's phrasing merely elides it."
+   "why": "FR-005's waiver, reaching every decision point through the one script. 'Every derived feature' now reads with the plan's own 'an empty set OWES' clause, so the previous record's implementer's note on the vacuous case is answered in the plan text."
   },
   {
    "id": "D-review-gate",
    "summary": "review-gate.sh section 2 per changed manifest: PASS/NEEDS-WORK at the pushed tree's engine key (make -s engine-key REF=worktree, once) passes; else the rendering waiver passes (recorded escaped-class review-waived-rendering); else no record at all plus a notes touch passes; else refuse naming which, rules map-stale-verdict / map-not-reviewable / map-no-review.",
    "class": "within",
-   "why": "FR-006 and D5 exactly; the plan proves three refusals where the spec asked for two, which is wider, not narrower. Serves the GM's first message (the notes-touch redundancy was the 1.5 minutes)."
+   "why": "FR-006 and D5 exactly; the three passes and three refusals match FR-008 and SC-004 as amended at round 3. Serves the GM's first message (the notes-touch redundancy was the 1.5 minutes). Implementer's note, not a finding: 'the pushed tree' is HEAD, and REF=worktree equals it only on a clean tree - the push procedure's own clean-tree requirement is what makes the two the same key."
   },
   {
    "id": "T-clock",

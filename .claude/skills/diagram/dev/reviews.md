@@ -19,8 +19,17 @@ Three rules, all of them free:
   re-pack moved, and whatever the change made incoherent - skipping the spelling/twin/nuisance/traffic
   sweeps and saying which it skipped. Reserve `FULL` for a new or heavily-rewritten map. A caption
   resize is a DELTA.
-- **One map per agent, launched in parallel.** The sweeps share no work across maps, so handing two
-  maps to one agent just serializes two audits behind one notification.
+- **One map per agent, launched in parallel - and since feature 248 (GM 2026-09-14) the tooling makes
+  it so.** The sweeps share no work across maps, so handing two maps to one agent just serializes two
+  audits behind one notification; this rule was here and in the reviewer's contract on 2026-09-14 and
+  was disregarded anyway (feature 247, 11 of 36 minutes), which is why it is enforced now: the pair
+  guard refuses a settlement-review dispatch naming more than one pool map (no escape), `make verify`
+  writes one prompt file per owed map, the stop hook holds the turn until every owed map is dispatched,
+  and the guard log records whether the dispatches shared a message. A feature whose every task is
+  `research: rendering` owes no settlement-review at all (`_review_owed.py`, the same script that
+  decides "did a layout move"): the week's ledger shows the review catching a defect on every layout
+  pass and nothing on a map for any rendering one. A changed map ships on its reviewer's verdict
+  record, not on a notes-file touch (review-gate.sh).
 - **Launch it the moment the motivating map's regen + gate is green - BEFORE your own visual
   pass**, the docs and the commit. Everything you do while it runs is free; everything after it is
   added on. Measured 2026-08-16 (the cut-bank fix): the review agent was the whole task's

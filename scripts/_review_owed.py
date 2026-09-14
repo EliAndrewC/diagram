@@ -22,14 +22,29 @@ ASKED FRESH, NEVER CACHED. Every decision point (the pair guard's gate branch, i
 runs this again, because the gate's own pool phase can move a manifest between the gate's start and the
 turn's end.
 
+A RENDERING-ONLY FEATURE OWES NO REVIEW (feature 248, GM 2026-09-14). The ledger for the week before shows
+the review catching a defect on every pass over a LAYOUT feature and nothing on a map for any rendering or
+performance one; the GM asked *"whether we can skip it for features like this one specifically, i.e.
+changing a glyph rendering convention rather than tweaking actual map features to comport to historical
+norms"*. Every task already carries the classification (`research: rendering | physical | procedure`), so
+the waiver keys on it: when EVERY active feature's tasks are all `research: rendering`, no map is owed and
+the reason names the features. The active features are DERIVED the way `sync-with-main.sh` derives the
+in-progress feature - the pointer in `.specify/feature.json` AND every `specs/NNN-*/tasks.md` with an open
+box that the delta against the merge base touches - because that rule exists so a check cannot be evaded
+by not setting the pointer, and a waiver REMOVES a check: it takes the conjunction where an obligation
+takes the union (spec D7). A `procedure` feature that moves a manifest changed the layout by a mechanism
+nobody researched, which is the case the review caught on features 226 and 227, so it is not waived (D3).
+
 Usage: _review_owed.py [--root DIR] [--why]
-  prints one map name per line (empty when nothing moved); `--why` prints the one-line ruling instead.
-  Exit 0 either way; 1 when DIR is not a git repository.
+  prints one map name per line (empty when nothing moved or the waiver holds); `--why` prints the one-line
+  ruling instead. Exit 0 either way; 1 when DIR is not a git repository.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
+import re
 import subprocess
 import sys
 from collections.abc import Sequence
@@ -72,8 +87,90 @@ def changed_maps(root: Path) -> tuple[str, list[str]]:
     return desc, sorted(names)
 
 
-def ruling(desc: str, names: Sequence[str]) -> str:
+def pool_map_names(root: Path) -> list[str]:
+    """Every map folder of both pool trees - the names a dispatch can ask a review of (feature 248 FR-001:
+    a multi-map dispatch is counted against ALL of them, owed or not)."""
+    names: set[str] = set()
+    for tree in TREES:
+        for d in (root / SKILL / tree).glob("*/*"):
+            if d.is_dir() and (d / f"{d.name}.json").is_file():
+                names.add(d.name)
+    return sorted(names)
+
+
+# GUARD_EDIT_OK: feature 248 - the task line as `tests/test_task_research_boxes.py` reads it (`- [ ] T01 ...` then
+# `research: <class>` in the entry), copied rather than imported because a guard cannot import a test module.
+_TASK = re.compile(r"^\s*- \[(?P<tick>[ x])\] (?P<id>T\d+)\b", re.M)
+_CLASS = re.compile(r"^\s*research:\s*(?P<cls>[a-z]+)\s*$", re.M)
+
+
+def rendering_only(tasks_text: str) -> int | None:
+    """The number of tasks when every task in a `tasks.md` is classified `research: rendering`; None when
+    there are no tasks, or any task carries another class or none."""
+    starts = list(_TASK.finditer(tasks_text))
+    if not starts:
+        return None
+    for k, m in enumerate(starts):
+        end = starts[k + 1].start() if k + 1 < len(starts) else len(tasks_text)
+        cls = _CLASS.search(tasks_text[m.start() : end])
+        if not cls or cls.group("cls") != "rendering":
+            return None
+    return len(starts)
+
+
+def active_features(root: Path, base: str) -> list[str]:
+    """The feature directories this delta is the work of, DERIVED as `sync-with-main.sh` derives the
+    in-progress feature and then WIDENED: the pointer in `.specify/feature.json`, plus every `specs/NNN-*/`
+    the delta against `base` touches (committed, staged or unstaged) that has a `tasks.md` - ticked or not.
+    The in-progress rule wants OPEN boxes because it refuses an unfinished feature; at push time it has
+    guaranteed there are none, so a waiver keyed on open boxes would rest on the pointer alone exactly
+    where it decides whether a map ships (spec D7, the plan review's aside). Relative paths, sorted; a
+    pointer naming a directory with no `tasks.md` is still listed (it is a feature the session declares,
+    and the waiver then refuses it)."""
+    found: set[str] = set()
+    try:
+        pointer = str(json.loads((root / ".specify" / "feature.json").read_text()).get("feature_directory", "")).rstrip("/")
+    except (OSError, ValueError):
+        pointer = ""
+    if pointer:
+        found.add(pointer)
+    touched = (_git(root, "diff", "--name-only", base, "--", "specs") or "") if base else ""
+    for path in touched.splitlines():
+        parts = Path(path).parts
+        if len(parts) >= 2 and parts[0] == "specs" and (root / "specs" / parts[1] / "tasks.md").is_file():
+            found.add(f"specs/{parts[1]}")
+    return sorted(found)
+
+
+def waiver(root: Path, base: str) -> str | None:
+    """The rendering-only waiver's reason when EVERY active feature is rendering-only, else None."""
+    features = active_features(root, base)
+    if not features:
+        return None
+    counts: list[str] = []
+    for f in features:
+        tasks = root / f / "tasks.md"
+        n = rendering_only(tasks.read_text()) if tasks.is_file() else None
+        if n is None:
+            return None
+        counts.append(f"{f} ({n} task{'s' if n != 1 else ''})")
+    return f"rendering-only feature(s) {', '.join(counts)} - every task research: rendering, no settlement-review owed (feature 248)"
+
+
+def owed(root: Path) -> tuple[str, list[str], str | None]:
+    """(the base's description, the maps owed a review, the waiver's reason when one held)."""
+    desc, names = changed_maps(root)
+    if not names:
+        return desc, names, None
+    base, _ = base_of(root)
+    why = waiver(root, base)
+    return desc, ([] if why else names), why
+
+
+def ruling(desc: str, names: Sequence[str], why: str | None = None) -> str:
     """The one-line answer a person or a guard message quotes."""
+    if why:
+        return why
     if not names:
         return f"no pool manifest moved against {desc}"
     return f"layout moved against {desc}: {' '.join(names)}"
@@ -88,9 +185,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not top:
         print(f"_review_owed: {args.root} is not a git repository", file=sys.stderr)
         return 1
-    desc, names = changed_maps(Path(top))
+    desc, names, why = owed(Path(top))
     if args.why:
-        print(ruling(desc, names))
+        print(ruling(desc, names, why))
     else:
         for name in names:
             print(name)

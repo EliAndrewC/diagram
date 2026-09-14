@@ -47,6 +47,7 @@ if [ -n "${REVIEW_GATE_OK:-}" ]; then
 fi
 
 changed=$(git diff --name-only "$RANGE" 2>/dev/null || true)
+rules=""   # GUARD_EDIT_OK: feature 248 - the map half's refusals, each named for the firing log
 [ -z "$changed" ] && exit 0
 fail=""
 
@@ -110,32 +111,61 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   fi
 done
 
-# --- 2. a re-rolled pool map has a review logged beside it ------------------------------------
+# --- 2. a re-rolled pool map ships on its reviewer's VERDICT RECORD ---------------------------------
 # BOTH TREES (feature 161). This is a PATTERN, not a walk: when the hand-authored maps moved to
 # legacy-hand-authored-pool/ a pattern anchored on `pool/` simply stopped matching them, with
 # nothing turning red - the guard would have quietly stopped covering the frozen tree.
-for man in $(printf '%s\n' "$changed" | grep -E '^\.claude/skills/diagram/(pool|legacy-hand-authored-pool)/.*\.json$' || true); do
+#
+# GUARD_EDIT_OK: feature 248 FR-006 (GM 2026-09-14) - THE REVIEWER'S RECORD IS THE ONE RECORD. Since feature
+# 240 the settlement-review writes `<clone>/.git/review-verdicts/<map>.json` as its last act, keyed on the
+# engine key it reviewed, and this gate still demanded the 2026-07-27 form beside it - the map's `.notes.md`
+# touched in the same push - so feature 247's landing was refused for a hand-written second record of a pass
+# the reviewer had already recorded. Three ways a changed map now ships, in order: a PASS or NEEDS-WORK record
+# at the engine key of the pushed tree; the rendering-only waiver (feature 248 FR-005, asked of the one
+# script that decides it); and - ONLY for a map with no record at all (the legacy tree, a map never reviewed
+# since the records existed) - the notes touch, as before. A NOT-REVIEWABLE record still refuses; a record at
+# a STALE key refuses whether or not the notes are touched (spec D5: a notes touch never substitutes on a map
+# that has a record). The refusal names which of the three the map lacks, and records under its own rule.
+map_changes=$(printf '%s\n' "$changed" | grep -E '^\.claude/skills/diagram/(pool|legacy-hand-authored-pool)/.*\.json$' || true)
+if [ -n "$map_changes" ]; then
+  tree_key="$( cd "$ROOT/.claude/skills/diagram" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
+  waiver="$(python3 "$RG_HERE/_review_owed.py" --root "$ROOT" --why 2>/dev/null || true)"
+  case "$waiver" in *"no settlement-review owed (feature 248)"*) ;; *) waiver="" ;; esac
+  [ -n "$waiver" ] && guard_log review-gate escaped "$waiver" review-waived-rendering
+fi
+for man in $map_changes; do
+  name="$(basename "${man%.json}")"
   notes="${man%.json}.notes.md"
-  [ -f "$notes" ] || continue          # a map with no notes file predates the convention
-  if ! printf '%s\n' "$changed" | grep -qxF "$notes"; then
-    printf '\n\033[1mREVIEW GATE: %s changed, but %s did not.\033[0m\n' "$(basename "$man")" "$(basename "$notes")"
-    printf 'A Mode B map gets an independent `settlement-review` before it ships - the author is not\n'
-    printf 'a reliable reviewer of their own visual output. Log the pass in the notes file'"'"'s Review\n'
-    printf 'section. On 2026-07-27 three city maps shipped unreviewed and nothing warned.\n'
-    fail="$fail $(basename "$man")"
+  verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$name.json"
+  if [ -f "$verdict_rec" ]; then
+    read -r verdict rec_key < <(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("verdict","") or "-", d.get("engine_key","") or "-")' "$verdict_rec" 2>/dev/null || echo "- -")
+    if [ "$verdict" = "NOT-REVIEWABLE" ]; then
+      printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$name"
+      printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment of the map\n'
+      printf 'was made. Fix what that verdict names (%s) and dispatch the review again.\n' "$verdict_rec"
+      fail="$fail $name"; rules="$rules map-not-reviewable"
+    elif [ -n "$tree_key" ] && [ "$rec_key" = "$tree_key" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
+      :   # the reviewer's record, at this content - the one record (feature 248)
+    elif [ -n "$waiver" ]; then
+      :   # a rendering-only feature: no review owed (feature 248 FR-005)
+    else
+      printf '\n\033[1mREVIEW GATE: %s has a %s verdict at engine key %s, but the tree being pushed is %s.\033[0m\n' "$name" "$verdict" "${rec_key:0:12}" "${tree_key:0:12}"
+      printf 'The map moved again after that review. A notes-file entry does not substitute for a review on a map\n'
+      printf 'that has a record (feature 248 D5): dispatch the settlement-review again (`make verify`), and it writes\n'
+      printf 'the record at this key as its last act.\n'
+      fail="$fail $name"; rules="$rules map-stale-verdict"
+    fi
     continue
   fi
-  # GUARD_EDIT_OK: feature 240 FR-002 - A NOTES FILE TOUCHED IS NOT A REVIEW THAT HAPPENED. A settlement-review
-  # can now exit at its first stage with NOT-REVIEWABLE (the map was not ready to be judged), and a session could
-  # still log that pass in the notes file and satisfy the rule above. So the map's latest verdict record, which
-  # the agent writes as its last act, is read too: a map whose last word from a reviewer is "could not review
-  # this" does not ship on it. No record at all keeps today's rule - a map reviewed before the records existed.
-  verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$(basename "${man%.json}").json"
-  if [ -f "$verdict_rec" ] && python3 -c 'import json,sys; sys.exit(0 if json.load(open(sys.argv[1])).get("verdict") == "NOT-REVIEWABLE" else 1)' "$verdict_rec" 2>/dev/null; then
-    printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$(basename "$man")"
-    printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment of the map\n'
-    printf 'was made. Fix what that verdict names (%s) and dispatch the review again.\n' "$verdict_rec"
-    fail="$fail $(basename "$man")"
+  [ -n "$waiver" ] && continue
+  [ -f "$notes" ] || continue          # a map with no notes file predates the convention
+  if ! printf '%s\n' "$changed" | grep -qxF "$notes"; then
+    printf '\n\033[1mREVIEW GATE: %s changed, but %s did not, and no reviewer has recorded a verdict on it.\033[0m\n' "$(basename "$man")" "$(basename "$notes")"
+    printf 'A Mode B map gets an independent `settlement-review` before it ships - the author is not\n'
+    printf 'a reliable reviewer of their own visual output. Dispatch it (`make verify` writes one prompt per\n'
+    printf 'map) and it records the verdict; a map with no record at all may still log the pass in the notes\n'
+    printf 'file'"'"'s Review section. On 2026-07-27 three city maps shipped unreviewed and nothing warned.\n'
+    fail="$fail $name"; rules="$rules map-no-review"
   fi
 done
 
@@ -144,11 +174,15 @@ if [ -n "$fail" ]; then
   printf 'If a case is genuinely exempt - a superseded spec, a mechanical sweep across every map -\n'
   printf 'set REVIEW_GATE_OK="<reason>" so the reason ships with the push.\n\n'
   # GUARD_EDIT_OK: feature 168 - the rule names WHICH half refused: an unreviewed spec, an unreviewed
-  # map, or both.
+  # map, or both. GUARD_EDIT_OK: feature 248 - the map half names which of its three refusals fired.
   case "$fail" in
-    *spec.md*json*|*json*spec.md*) guard_log review-gate blocked "$fail" spec-and-map ;;
-    *spec.md*)                     guard_log review-gate blocked "$fail" spec-no-verdict ;;
-    *)                             guard_log review-gate blocked "$fail" map-no-review ;;
+    *spec.md*)
+      case "$rules" in
+        *map-*) guard_log review-gate blocked "$fail" spec-and-map ;;
+        *)      guard_log review-gate blocked "$fail" spec-no-verdict ;;
+      esac ;;
+    *)
+      for rule in $(printf '%s\n' $rules | sort -u); do guard_log review-gate blocked "$fail" "$rule"; done ;;
   esac
   exit 1
 fi

@@ -212,3 +212,89 @@ def test_main_derives_the_mirror_from_the_clone_path(pair: tuple[Path, Path], ca
 def test_a_clone_outside_a_mirror_snapshots_its_own_side_only(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert snap.main(["--root", str(clone), "inashiro"]) == 0
     assert "main unavailable" in capsys.readouterr().out
+
+
+# ---- feature 248: the rendering-only waiver, on the DERIVED feature set -----------------------------------------
+
+
+def _feature(root: Path, name: str, classes: list[str], ticked: bool = True) -> Path:
+    d = root / "specs" / name
+    d.mkdir(parents=True, exist_ok=True)
+    box = "x" if ticked else " "
+    (d / "tasks.md").write_text("".join(f"- [{box}] T{i:02d} a task\n      research: {c}\n" for i, c in enumerate(classes, 1)))
+    return d
+
+
+def _point(root: Path, name: str) -> None:
+    (root / ".specify").mkdir(exist_ok=True)
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": f"specs/{name}"}))
+
+
+def test_rendering_only_reads_the_classification() -> None:
+    assert owed.rendering_only("- [x] T01 a\n      research: rendering\n- [ ] T02 b\n      research: rendering\n") == 2
+    assert owed.rendering_only("- [x] T01 a\n      research: rendering\n- [x] T02 b\n      research: physical\n") is None
+    assert owed.rendering_only("- [x] T01 a\n      research: rendering\n- [x] T02 b\n      research: procedure\n") is None
+    assert owed.rendering_only("- [x] T01 a\n") is None  # a task with no class is not rendering
+    assert owed.rendering_only("# no tasks\n") is None
+
+
+def test_a_rendering_only_feature_owes_no_review(clone: Path) -> None:
+    """The GM's own example: feature 247's tasks were all rendering; four manifests moved; no review owed."""
+    _feature(clone, "247-two-beads", ["rendering", "rendering", "rendering"])
+    _point(clone, "247-two-beads")
+    _map(clone, "pool", "inashiro", poly=2, renders=True)
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "beads")
+    desc, names, why = owed.owed(clone)
+    assert names == [] and why and "rendering-only" in why and "247-two-beads" in why and "3 tasks" in why
+    assert owed.ruling(desc, names, why) == why
+
+
+@pytest.mark.parametrize("classes", [["rendering", "physical"], ["rendering", "procedure"], []])
+def test_any_other_class_or_no_task_owes(clone: Path, classes: list[str]) -> None:
+    _feature(clone, "230-brook", classes)
+    _point(clone, "230-brook")
+    _map(clone, "pool", "inashiro", poly=2, renders=True)
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "moved")
+    _desc, names, why = owed.owed(clone)
+    assert names == ["inashiro"] and why is None
+
+
+def test_a_pointer_with_no_tasks_file_and_the_empty_set_both_owe(clone: Path) -> None:
+    _map(clone, "pool", "inashiro", poly=2, renders=True)
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "moved")
+    assert owed.owed(clone)[1] == ["inashiro"]  # the empty set: no pointer, no touched feature
+    (clone / "specs" / "249-x").mkdir(parents=True)
+    _point(clone, "249-x")
+    assert owed.owed(clone)[1] == ["inashiro"]  # a pointer naming a directory with no tasks.md
+
+
+def test_the_derived_pair_takes_the_conjunction(clone: Path) -> None:
+    """The pointer names a rendering-only feature; the delta ALSO touches a layout feature whose boxes are all
+    ticked, as at a push. The set is both, so the review is owed (spec D7); with both rendering-only, waived."""
+    _feature(clone, "247-two-beads", ["rendering"])
+    _point(clone, "247-two-beads")
+    _feature(clone, "230-brook", ["physical"], ticked=True)
+    _map(clone, "pool", "inashiro", poly=2, renders=True)
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "both")
+    assert sorted(owed.active_features(clone, owed.base_of(clone)[0])) == ["specs/230-brook", "specs/247-two-beads"]
+    assert owed.owed(clone)[1] == ["inashiro"]
+    _feature(clone, "230-brook", ["rendering"], ticked=True)
+    git(clone, "commit", "-qam", "reclassified")
+    _desc, names, why = owed.owed(clone)
+    assert names == [] and why and "230-brook" in why and "247-two-beads" in why
+
+
+def test_pool_map_names_lists_both_trees(clone: Path) -> None:
+    assert owed.pool_map_names(clone) == ["furu", "inashiro"]
+
+
+def test_a_dispatch_prompt_is_written_per_map(clone: Path) -> None:
+    _map(clone, "pool", "inashiro", poly=2, renders=True)
+    recs = snap.snapshot(clone, None, ["inashiro"], key="abc123")
+    text = Path(recs[0]["dispatch"]).read_text()
+    assert "ONE map: inashiro" in text and "abc123" in text and "review-snapshot/inashiro/clone" in text and "MAP=inashiro" in text
+    assert "prompt " in snap.describe(recs[0])
