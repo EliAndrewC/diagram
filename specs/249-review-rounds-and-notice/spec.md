@@ -1,6 +1,6 @@
 # Feature 249 - review rounds read the diff, and the batching notice speaks on any single call
 
-**Status:** specified; awaiting a FAITHFUL verdict (see Review history).
+**Status:** accepted - FAITHFUL at round 3 (see Review history); implementation in progress.
 
 ## Summary
 
@@ -165,11 +165,15 @@ The default is the spec review, which is the common dispatch and the one whose c
   with the shape test, as the GM's words say (2, D7, SC-001); the round number counts within a pass that
   restarts at a recovered FAITHFUL, per the GM's 2026-09-12 cap ruling (3, FR-002); R1's sum corrected,
   the agents' durations and the session's waits stated as the two different quantities they are (4).
-  - **Round 2 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, one item, applied: the discriminator had
+- **Round 2 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, one item, applied: the discriminator had
   no precedence, so a spec-review prompt mentioning "plan review" or "exception" - as a round's prompt
   does when it relays the previous items, and as round 2's own prompt did - would have been classed a
   plan review or an exception check and passed untouched; it now reads `MODE 2`/`MODE 3` first and keys
   the other two on the contract's heading forms, with the self-demonstrating case added to FR-006 and
   SC-003 (1, D8). Its aside is applied: D7 and D8 now follow D6. Round 2 was dispatched in the bounded
-  form this feature builds and read no file end to end. The departure from a context line to a
+  form this feature builds and read no file end to end.
+  - **Round 3 (2026-09-14), `spec-fidelity`: FAITHFUL**, on the diff alone: the item confirmed resolved on
+  all four counts, every changed passage read against the request, the grep hits scanned, no file read
+  end to end. Its aside is applied: round 2's entry had been indented as a child of round 1's, so round
+  1's closing sentence read as round 2's; the entries are siblings again. The departure from a context line to a
   rewrite was ruled FAITHFUL, a strengthening within the GM's own reason.
