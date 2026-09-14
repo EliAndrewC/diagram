@@ -12,7 +12,7 @@
 <body>
 <main>
 <h1 id="vegetation-and-terrain-the-research-behind-the-windbreak-commons-and-forest-rules">Vegetation and terrain: the research behind the windbreak, commons and forest rules</h1>
-<p><em>The findings behind the windbreaks, groves, commons and woods on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>
+<p><em>The findings behind the windbreaks, groves, commons and woods on these maps, the decisions they drove, and, where the map is drawn by hand, the rule it follows.</em></p>
 <!-- Everything the retired rule file carried that was not stale, a hand procedure, or a rule the engine holds with its own why was moved here on 2026-09-12. -->
 <!-- Load this file when: you are changing a vegetation rule, a grove size, a tree density or a threshold - or you want the historical basis before overriding one. -->
 <!-- Every entry: what the research found, the decision it drove, and any deliberate departure from literal reality. Anchors are stable - the maps and the class entries link to them by #slug. -->
@@ -42,7 +42,7 @@ ring, so the map draws them the same way:<sup class="fn"><a id="fnref-81" href="
 <ul>
 <li><strong>The back-village belt</strong> (后龙林) - the big one: a dense crescent embracing the high
 <strong>windward back</strong> of the cluster, nestled against the houses and wrapping the flanks.<sup class="fn"><a id="fnref-126" href="citations/vegetation.html#fn-126">126</a></sup> Where the
-high side is the windward side, and under 背山面水 it usually is, the back grove is also the wind wall.</li>
+high side is the windward side, and under beishan mianshui (背山面水) it usually is, the back grove is also the wind wall.</li>
 <li><strong>The water-mouth cluster</strong> (水口林) - a smaller, irregular stand of big old trees at the
 LOW entrance, where the stream and the track leave the valley, locking in the water and marking the way
 in.<sup class="fn"><a id="fnref-82" href="citations/vegetation.html#fn-82">82</a></sup></li>
@@ -69,13 +69,8 @@ drawn so the belt does not read as a planted line.<!-- Class: the three position
 against a wall - <em>directly next to</em> is correct and common, and a few inches of canopy over the
 eaves is fine - but a clump drawn ON a roof, a threshing yard or a garden reads wrong, because the map
 loses the building it exists to show.<sup class="fn"><a id="fnref-122" href="citations/vegetation.html#fn-122">122</a></sup> The keep-out therefore reserves each house, yard, garden, byre and
-shed by its own circumscribing radius plus the clump's FULL drawn radius. <em>A smaller reservation was
-tried and measured:</em> reserving only about seven tenths of that radius fell roughly fifteen percent of
-a clump short, and a blob's corner clipped a small farmhouse on one map.<!-- the old keep-out was well.r + 0.35*clump against a drawn 0.5*clump; found on Hikari --></p>
-<p><strong>The belt is DEEP, and its outline stands back off the houses.</strong> Both rules come from one
-post-mortem: a hamlet whose belt outline ran through its northern house row had most of the clumps it could
-have grown thrown away as landing on a building, and sixteen farmhouses ended up sheltered by eleven
-crowns. So the outline is set BACK off the homesteads - the copse, not the belt, is what fills the inner
+shed by its own circumscribing radius plus the clump's FULL drawn radius. <!-- A smaller reservation was tried and measured: reserving only about seven tenths of that radius fell roughly fifteen percent of a clump short, and a blob's corner clipped a small farmhouse on one map; the old keep-out was well.r + 0.35*clump against a drawn 0.5*clump; found on Hikari --></p>
+<p><strong>The belt is DEEP, and its outline stands back off the houses.</strong> <!-- Both rules come from one post-mortem: a hamlet whose belt outline ran through its northern house row had most of the clumps it could have grown thrown away as landing on a building, and sixteen farmhouses ended up sheltered by eleven crowns. --> The outline is set BACK off the homesteads - the copse, not the belt, is what fills the inner
 gaps - and the belt is drawn <strong>80-120 ft deep</strong>, which packs three or four rows of overlapping
 canopy; a 30 ft band holds one row and reads as scattered blobs rather than a wall. The belt's SIZE is the
 one-to-two-hectare figure of the entry above; the depth is what makes that size read as a wall.</p>
@@ -99,7 +94,7 @@ for landing on roofs; the gaps left between the houses are the copse's to fill. 
 <!-- moved from the retired rule file, 2026-09-12 -->
 <!-- Grounds: _BELT_GAP_FT in settlement/homestead_parts/_helpers.py; belt_polygon; WIND_TURNS in hamletgen/consts.py -->
 <!-- Evidence: attested (Honda's founding definition; the survey's separate patches); the 30 ft figure is ours -->
-<p><strong>Sources:</strong> <a href="https://jayna.usfca.edu/asia-pacific-perspectives/pdfs/1-coggins-minor-fengshui-forests.pdf"><code>coggins-minor-2018</code></a> (the separate patches at named topographic points), <a href="https://ja.wikipedia.org/wiki/屋敷林"><code>yashikirin-jawiki</code></a> (the homestead grove on the north and west sides), <a href="https://agriknowledge.affrc.go.jp/RN/2010935166.pdf"><code>irie-2020-igune</code></a> (the grove formed on the north or the west and lacking the south or the east, and kept that way for centuries), <a href="https://www.city.sendai.jp/ryokuchihozen/kurashi/shizen/midori/hyakunen/hozen.html"><code>sendai-igune-hozen</code></a> (the city's encircling definition of the word), <a href="https://centerforagroforestry.org/wp-content/uploads/2024/04/06_Windbreaks_TrainingManual_2024Master_0410_Digital-7.pdf"><code>umca-windbreak-manual</code></a> (what a gap does to the wind, and how a crossing that cannot be avoided is cut); the GM's rulings of 2026-08-29. No readable source was found for what the grove's open flank is used for, or for the Izumo hedge's full circuit before Meiji, <a href="https://ja.wikipedia.org/wiki/季節風"><code>kisetsufu-jawiki</code></a>, <a href="https://en.wikipedia.org/wiki/Katabatic_wind"><code>katabatic-wind-enwiki</code></a></p>
+<p><strong>Sources:</strong> <a href="https://jayna.usfca.edu/asia-pacific-perspectives/pdfs/1-coggins-minor-fengshui-forests.pdf"><code>coggins-minor-2018</code></a> (the separate patches at named topographic points), <a href="https://ja.wikipedia.org/wiki/屋敷林"><code>yashikirin-jawiki</code></a> (the homestead grove enclosing the whole house before Meiji, and on the north and west sides after), <a href="https://agriknowledge.affrc.go.jp/RN/2010935166.pdf"><code>irie-2020-igune</code></a> (the grove formed on the north or the west and lacking the south or the east, and kept that way for centuries), <a href="https://www.city.sendai.jp/ryokuchihozen/kurashi/shizen/midori/hyakunen/hozen.html"><code>sendai-igune-hozen</code></a> (the city's encircling definition of the word), <a href="https://centerforagroforestry.org/wp-content/uploads/2024/04/06_Windbreaks_TrainingManual_2024Master_0410_Digital-7.pdf"><code>umca-windbreak-manual</code></a> (what a gap does to the wind, and how a crossing that cannot be avoided is cut); the GM's rulings of 2026-08-29. No readable source was found for what the grove's open flank is used for, <a href="https://ja.wikipedia.org/wiki/季節風"><code>kisetsufu-jawiki</code></a>, <a href="https://en.wikipedia.org/wiki/Katabatic_wind"><code>katabatic-wind-enwiki</code></a></p>
 <p><strong>The ruling that opened the question</strong> (the GM, 2026-08-29): <em>"The actual ruling that I
 have on whether or not it is okay for a windbreak forest to have gaps is that we should just do whatever
 was historically true. If we believe that windbreak forests would have had such gaps based on our
@@ -138,7 +133,7 @@ holes.</p>
 <p><strong>A knob the record handed us, and the ruling that declined it.</strong> Both forms are reported of
 the Japanese homestead grove: the Izumo <em>tsuijimatsu</em> enclosed the entire circumference of the house
 before Meiji and was later reduced to a hook covering only the north and west sides as flood risk fell and
-building styles changed (this rests on general reading; no source is cited).<sup class="fn"><a id="fnref-89" href="citations/vegetation.html#fn-89">89</a></sup> Where the record supports two forms, the map ordinarily rolls between them from settlement to settlement rather than picking one. The GM ruled for the hook and against
+building styles changed.<sup class="fn"><a id="fnref-89" href="citations/vegetation.html#fn-89">89</a></sup> Where the record supports two forms, the map ordinarily rolls between them from settlement to settlement rather than picking one. The GM ruled for the hook and against
 the knob (2026-08-29): <em>"I think that having a north and west hook is what we want because that is where
 things ended up, and Rokugan has been around for a long time. So I think they would have ended up in the
 same place and for the same reason. It also communicates that wind tends to blow from the northwest to the
@@ -151,7 +146,7 @@ settlements is being told a real fact about the regional wind, and a per-settlem
 scramble that signal for variety's sake. This is the rare case where two supportable answers are answered
 with a ruling instead of a knob - not because the second form is unsupported, but because the first carries
 information the map is trying to convey. The full-ring form stays recorded here and undrawn.</p>
-<p><strong>Nothing had to change for the ruling, and that was checked rather than assumed.</strong> The
+<p>The
 regional-against-local rule the GM describes is already how the maps are built - northwest by default,
 because at the scale of a province that is the right answer, while any one map's windward quarter is its
 upslope bearing, cold air draining downhill making the high side and the windward side the same
@@ -178,8 +173,7 @@ reader already understands that a feature meeting the frame continues past it; t
 road, field and watercourse on these sheets relies on. So a belt whose planting runs off the sheet is sound
 and needs no repair, and a bare stretch beyond the frame is not a hole in anything the reader is shown.</p>
 <p><strong>Where the map is judged for holes, it is judged only where a reader can look.</strong> The belt's
-recorded footprint runs off the page as freely as its clumps do. Measured on the two maps that a widened
-reading first failed: on one, the footprint spans 747 ft along its own across-wind axis while the frame
+recorded footprint runs off the page as freely as its clumps do. Measured on two maps: on one, the footprint spans 747 ft along its own across-wind axis while the frame
 holds only the middle 537 ft of that, and the planting covers 596 ft that overruns the visible stretch at
 both ends; on the other, footprint 917 ft, frame 741 ft, planting 787 ft.<!-- Kuwabata polygon 693-1440, view 790-1327, planted 734-1330; Kashikawa -1121 to -204, view -945 to -204, planted -992 to -205; px at 1 ft/px --> On both, the planting
 covers every column a reader can see. The whole apparent gap was off-page, so the scan for holes is clipped
@@ -187,26 +181,16 @@ to the framed view - the same rule the planting already follows, where a clump w
 the frame is kept and one with no visible ink is waste.</p>
 <p><strong>The other repair was tried first and measured.</strong> Extending the PLANTING out to the ends of
 the belt's footprint, so the end stretches were offered seats like any interior gap, bought one clump on
-one map, at the page edge. It was reverted, because a
-belt that appears to stop short is usually a belt whose short end is off the page: measure that before
-reaching for the planting.</p>
-<p><strong>Why the test is asymmetric on purpose, and what that costs.</strong> The window is clipped to the
-page; the PLANTING is not, so an off-page clump still fills an on-page column. The symmetric form was priced - credit a clump only where its crown reaches the view. It fails one hamlet at a 60 ft bare run on the frame's bottom edge, and
+one map, at the page edge. It was reverted, because a belt that appears to stop short is usually a belt whose short end is off the page.<!-- measure that before reaching for the planting --></p>
+<p><strong>Why an off-page clump still counts, and what that costs.</strong> The window is clipped to the page; the PLANTING is not, so an off-page clump still fills an on-page column. The symmetric form was priced - credit a clump only where its crown reaches the view.<!-- the test's own form --> On one hamlet that form leaves a 60 ft bare run on the frame's bottom edge, and
 the ground underneath settles it - <strong>that visible ground is a homestead</strong>. One farmhouse, two
 threshing yards, two kitchen gardens and a persimmon stand within 90 ft of it, and a yard's southern sun
 corridor and a garden's eastern one are keep-outs the belt's seating is right to
-respect.<!-- Mizuguchi, x 1133-1183; 48 px of visible belt ground at y 1902-1950, nearest clumps y 1971-1983, crowns stopping 5 px short; 1 ft/px --> The symmetric form therefore
-demands canopy exactly where the generator is correct to refuse it. The reader loses nothing: the canopy in
+respect.<!-- Mizuguchi, x 1133-1183; 48 px of visible belt ground at y 1902-1950, nearest clumps y 1971-1983, crowns stopping 5 px short; 1 ft/px --> The symmetric form therefore demands canopy exactly where the map is right to refuse it. The reader loses nothing: the canopy in
 that gap is the copse, which is what a dooryard grove is for.</p>
-<p><strong>The limitation that was accepted, and the alternative that was priced.</strong> The guarantee is
-weaker than it looks - delete that hamlet's copse and the test still passes. <!-- Closing it would need the test to know the seating's own keep-outs, a second copy of the generator inside the gate; reopen it if a map ever ships a hole a reader can see. --> The cost of closing it was priced against one column at one page edge, and the weaker guarantee was accepted.</p>
-<p><strong>What is still open.</strong> The second half of the 2026-08-29 ruling - <em>"even though it
-sounds as if this might look a little different in situations in which there is discontinuity in the
-clumping of trees of a windbreak forest, that is still fine"</em> - read as covering ON-PAGE holes would
-relax the rule exactly where it has earned its keep: it exists because a wellhead seated inside a belt
-suppressed the clumps around it and took a 40 ft band from six clumps to one, and because a lane web
-crossed a belt and removed some 45 ft of wall. Both of those are discontinuity in the clumping. The ruling
-and the rule's purpose meet head-on there, so the rule stands as written until the GM says otherwise. One hamlet carries three bare runs of 40-50 ft in belt the reader can see - two wholly inside the drawn view and the third partly - so they are not an artifact of the belt running off the sheet.<!-- Kuwabata, across-wind t=950, 960 and 1300 against meta.view x 1678-2748, y 353-2281; 45 of its 92 clumps are off-page. Skipping off-view columns was implemented, measured and reverted: it cleared none of the three. --></p>
+<p><strong>The limitation that was accepted, and the alternative that was priced.</strong> The guarantee is weaker than it looks: the bare column at the page edge is excused by the copse that stands under it, and nothing holds the copse there.<!-- delete that hamlet's copse and the test still passes. Closing it would need the test to know the seating's own keep-outs, a second copy of the generator inside the gate; reopen it if a map ever ships a hole a reader can see. --> The cost of closing it was priced against one column at one page edge, and the weaker guarantee was accepted.</p>
+<p><strong>Where the ruling and the rule meet.</strong> The second half of the 2026-08-29 ruling - <em>"even though it sounds as if this might look a little different in situations in which there is discontinuity in the clumping of trees of a windbreak forest, that is still fine"</em> - read as covering ON-PAGE holes would relax the rule exactly where it has earned its keep: a wellhead seated inside a belt, or a lane crossing it, suppresses the clumps around it, and that is discontinuity in the clumping. The ruling and the rule's purpose meet head-on there, and the rule stands as written.</p>
+<!-- What is still open: the wellhead case took a 40 ft band from six clumps to one, and the lane web removed some 45 ft of wall. One hamlet (Kuwabata) carries three bare runs of 40-50 ft in belt the reader can see - two wholly inside the drawn view and the third partly - so they are not an artifact of the belt running off the sheet: across-wind t=950, 960 and 1300 against meta.view x 1678-2748, y 353-2281; 45 of its 92 clumps are off-page. Skipping off-view columns was implemented, measured and reverted: it cleared none of the three. The rule stands until the GM says otherwise. -->
 <p class="spec"><strong>The rule the map follows:</strong> a large area feature near the frame - a shelter
 belt, a grazing ground, a wood, a forest - CROSSES the frame rather than sitting wholly inside it, so the
 reader sees that it continues. Nothing beyond the frame is drawn, and nothing beyond the frame is counted
@@ -276,7 +260,7 @@ tree."</em></p>
 <!-- Measured on Inashiro before the rule: 298 of 1,728 drawn crowns wholly inside another crown (17%), 950 with their center more than halfway in. Nobody decided it: the wood lays trees on the 13 ft grid the density entry gives, jitters each by up to 42% of a step in x and y, and sizes crowns 0.75-1.4x the 8.5 ft mean radius - so two grid neighbors could land 2-3 ft apart and a 6 ft crown vanished under a 12 ft one; the belt's clumps pack tighter still and overlapped each other, and nothing tested a crown against the crowns already drawn. -->
 <p><strong>The rule.</strong> A crown is drawn only if its center is outside every crown already on the map AND
 no drawn crown's center lies inside it; two crowns closer than the sum of their radii may still overlap at the
-edge, a drawing allowance, since the pages read have fully stocked crowns holding a gap rather than interlacing.<sup class="fn"><a id="fnref-114" href="citations/vegetation.html#fn-114">114</a></sup> <!-- seated iff d >= max(r, r_other); overlap between that and r + r_other stays --> What is removed is the tree drawn wholly under a neighbor - in a real stand a suppressed understory stem, not part of the canopy layer the map draws.<sup class="fn"><a id="fnref-108" href="citations/vegetation.html#fn-108">108</a></sup><!-- Dominants seat first (largest crown first within a stand); across stands and clumps the map's recorded crowns are the seed, padded by two emergent radii. --> Measured on Inashiro: 787 crowns, 0 subsumed, 737 (94%) still touching a neighbor - the stand reads as closed
+edge, a drawing allowance, since the pages read have fully stocked crowns holding a gap rather than interlacing.<sup class="fn"><a id="fnref-114" href="citations/vegetation.html#fn-114">114</a></sup> <!-- seated iff d >= max(r, r_other); overlap between that and r + r_other stays --> What is removed is the tree drawn wholly under a neighbor: a crown wholly inside another's is not part of the canopy layer, and the canopy layer is what the map draws.<sup class="fn"><a id="fnref-108" href="citations/vegetation.html#fn-108">108</a></sup><!-- Dominants seat first (largest crown first within a stand); across stands and clumps the map's recorded crowns are the seed, padded by two emergent radii. --> Measured on Inashiro: 787 crowns, 0 subsumed, 737 (94%) still touching a neighbor - the stand reads as closed
 canopy at ~one crown per 13 ft grid cell, which is the density entry's own figure: a canopy has one tree per
 crown, at the density that entry gives.<!-- Class: accurate for the rule; the density unchanged from the entry above. --></p>
 <h2 id="the-crop-margin---scrub-stands-6-ft-off-every-field-edge">The crop margin - scrub stands 6 ft off every field edge</h2>
@@ -312,7 +296,7 @@ crown, at the density that entry gives.<!-- Class: accurate for the rule; the de
 <li><em>The decision.</em> Scrub stands 6 real feet off the drawn water edge of every irrigation course. <!-- The scrub scatter (every kind of it) stands its base points 6 real feet off the drawn water edge of every IRRIGATION course at its drawn (tapering) width, converted at the map's scale. the commons scatter (all roles); _BANK_MARGIN_FT = 6.0; M['channels'] and M['drawn_channels'] at their piece-tapered widths, converted at the map's ftpx --> The reasoning is the crop margin's, applied to the bank: a supply channel's bank is maintained ground - walked for sluice operation and bund upkeep,<sup class="fn"><a id="fnref-16" href="citations/vegetation.html#fn-16">16</a></sup> its grass scythed for fodder on the same rotation as the field margins (unsourced)<sup class="fn"><a id="fnref-17" href="citations/vegetation.html#fn-17">17</a></sup> - so woody scrub never establishes within a swath of the water. 6 ft = one scythe swath, the same figure as the crop margin. Between them the crop margin and the bank margin close any berm strip up to ~12 ft of bare ground, which covers every hem berm the comb builds (Inashiro's run 3-9 ft).</li>
 <li><em>Deliberate exclusions.</em> (1) STREAMS take no margin - a natural brook bank is vegetated to the water's edge, and a sterile halo along a brook would be wrong; only the engineered courses are maintained ground.<sup class="fn"><a id="fnref-113" href="citations/vegetation.html#fn-113">113</a></sup> <!-- the 2026-08-16 settlement-review pass explicitly praised the ABSENCE of a sterile halo on the banks --> (2) The reed marsh keeps its no-margin rule from the crop-margin entry - reeds ARE the water fringe. (3) Grass-tuft blade TIPS keep their few-feet lean allowance, exactly as at crop edges.</li>
 </ul>
-<h2 id="the-marsh-margin-reed--gt-sedgegrass--gt-dry-ground-woody-at-a-reed-edge-is-alder-or-willow-never-pine---accurate">The marsh margin: reed -&gt; sedge/grass -&gt; dry ground; woody at a reed edge is alder or willow, never pine - ACCURATE</h2>
+<h2 id="the-marsh-margin-reed--gt-sedgegrass--gt-dry-ground-woody-at-a-reed-edge-is-alder-or-willow-never-pine---accurate">The marsh margin: reed -&gt; sedge/grass -&gt; dry ground; woody at a reed edge is alder or willow, never pine</h2>
 <!-- researched 2026-08-26 -->
 <!-- Evidence: attested -->
 <p><strong>Sources:</strong> <a href="https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf"><code>mlit-vegetation-classes</code></a>, <a href="https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf"><code>hotes-wetland-diversity</code></a>, <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153972"><code>lou-2016-floodplain-zones</code></a>, <a href="https://www.conifers.org/pi/Pinus_densiflora.php"><code>gymnosperm-densiflora</code></a>, <a href="https://www.takao599museum.jp/treasures/selected/1419/?lang=en"><code>takao-densiflora</code></a>, <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2745.12797"><code>packer-2017-phragmites</code></a>, <a href="https://www.jstage.jst.go.jp/article/jscejhe/67/4/67_4_I_1357/_pdf/-char/ja"><code>haneishi-2011-kushiro-alder</code></a> (what the alder takes in a drying mire, and the standing water that holds it off); the managed-margin reasoning is this page's own</p>
@@ -332,8 +316,7 @@ old channels, where the groundwater lies below the surface and swings widely, th
 (<a href="https://www.jstage.jst.go.jp/article/jscejhe/67/4/67_4_I_1357/_pdf/-char/ja">Haneishi, Nakatsugawa and Kudo 2011, on groundwater and the spread of the alder in the Kushiro Mire</a>);
 a northern-Japan wetland classified into reed swamp, <em>Carex lyngbyei</em> marsh, and reed/<em>Calamagrostis</em>
 grassland with <em>Spiraea</em> shrubs<sup class="fn"><a id="fnref-23" href="citations/vegetation.html#fn-23">23</a></sup> (<a href="https://link.springer.com/article/10.1111/j.1440-1703.2004.00644.x">Otanoshike, Ecological Research 2004</a>);
-the national river-vegetation classification names ヨシ群落, マコモ群落 and タチヤナギ群落 as the
-low-wetland communities<sup class="fn"><a id="fnref-24" href="citations/vegetation.html#fn-24">24</a></sup> and ハンノキ林 as the eutrophic-mire woodland<sup class="fn"><a id="fnref-25" href="citations/vegetation.html#fn-25">25</a></sup><sup class="fn"><a id="fnref-66" href="citations/vegetation.html#fn-66">66</a></sup>
+the national river-vegetation classification names the reed, wild-rice and tachiyanagi-willow communities (ヨシ群落, マコモ群落, タチヤナギ群落) as the low-wetland communities<sup class="fn"><a id="fnref-24" href="citations/vegetation.html#fn-24">24</a></sup> and the alder woodland (ハンノキ林) as the eutrophic-mire woodland<sup class="fn"><a id="fnref-25" href="citations/vegetation.html#fn-25">25</a></sup><sup class="fn"><a id="fnref-66" href="citations/vegetation.html#fn-66">66</a></sup>
 (<a href="https://www.nilim.go.jp/lab/fbg/ksnkankyo/mizukokuweb/system/maegaki.files/shiryo2.pdf">MLIT river-environment vegetation classes</a>;
 <a href="https://www.airies.or.jp/attach.php/6a6f75726e616c5f31322d316a706e/save/0/0/12_1-04.pdf">Hotes, wetland ecosystem diversity</a>).
 Northeast-China floodplains show the same ladder: emergent <em>Carex</em> marsh streamside, meadow marsh
@@ -343,17 +326,16 @@ at intermediate flooding, <em>Calamagrostis</em> wet meadow on the terrace<sup c
 ridges, rocky slopes and well-drained poor soil, drought-tolerant,<sup class="fn"><a id="fnref-28" href="citations/vegetation.html#fn-28">28</a></sup> absent from wet lowland (unsourced)<sup class="fn"><a id="fnref-27" href="citations/vegetation.html#fn-27">27</a></sup>
 (<a href="https://www.conifers.org/pi/Pinus_densiflora.php">Gymnosperm Database</a>; <a href="https://www.takao599museum.jp/treasures/selected/1419/?lang=en">Mt. Takao museum</a>).</p>
 <p><strong>The decision it drives.</strong> (1) Pines and dry brush inside the reeds: unsupported in every source -
-the hard exclusion stands as ACCURATE. (2) Grass grading into the reeds over the margin: ACCURATE -
-it is the sedge / wet-meadow zone of the hydrosere, drawn with the commons' blade glyph. (3) Woody
+the hard exclusion stands.<!-- ACCURATE --> (2) Grass grading into the reeds over the margin:<!-- ACCURATE --> it is the sedge / wet-meadow zone of the hydrosere, drawn with the commons' blade glyph. (3) Woody
 plants DO stand at a reed margin in the natural state - but they are alder and willow, a wet
 woodland this map does not draw. <strong>The record supports two forms, so the map rolls between them rather than picking one:</strong> <!-- constitution Principle XII --> a managed toe (reeds and sedge cut for thatch and fodder, the margin kept open - the form
 drawn here) versus an alder-willow carr along the toe (a distinct wet-woodland glyph, deliberately unlike
 the dry scrub and the fengshui grove).<!-- a wet woodland the engine has no glyph for; Recorded as future work, not built here; when built, it is a per-settlement roll like every other knob. --> <em>Unsourced, and labeled so:</em> that Edo-period reed beds
-were mown (ヨシ刈り, 茅場) and that mowing is what kept the margin open - plausible, searched, not found.</p>
+were mown (reed cutting, ヨシ刈り, on thatch fields, 茅場) and that mowing is what kept the margin open - plausible, searched, not found.</p>
 <p><strong>The form the edge takes, and the two forms that failed on the way to it</strong> (the GM,
 2026-08-26: <em>"the marshland is not supposed to overlap with the scrubland rendering"</em>). Dry-ground
 scrub - brush discs, blades, pines - had been scattering through the reeds in the same pattern as outside
-them; on one hamlet only four scrub bases now stand inside its marshes, all of them on the band's own edge.<!-- 3,370 before the rule --> The first repair cut the scatter dead at the marsh's boundary, which exposed a ruled line
+them; on one hamlet only four scrub bases stand inside its marshes, all of them on the band's own edge.<!-- 3,370 before the rule --> The first repair cut the scatter dead at the marsh's boundary, which exposed a ruled line
 and a bare strip along the straight western edge of the toe, because the reeds themselves feather inset
 from that boundary. The second let every kind of scrub thin INTO the marsh across that feather; it closed
 the line, and left a seam of pines standing in the bog along some 1,600 ft of the northern edge, which the
@@ -391,8 +373,7 @@ more accurate. Two findings, one from land use and one from vegetation structure
 </ul>
 <p><strong>Rule</strong>: brush and pines are kept out of every village grove; grass blades thin into it over
 the same fade the marsh edge uses and are gone beyond it; the crowns are the grove. Inashiro draws 1,263
-grass blades, all within the fringe, and no brush or pines inside the belt. The coppice patches take the same rule - the coppice IS the worked wood, so every woodland commons keeps scrub out too - so
-every woodland commons keeps scrub out too.
+grass blades, all within the fringe, and no brush or pines inside the belt. The coppice patches take the same rule - the coppice IS the worked wood - so every woodland commons keeps scrub out too.
 <!-- Rule, in full: brush dots and pines are hard-excluded from every village-grove polygon; grass blades thin into it over the same feather the marsh edge uses (46 units) and are gone beyond it; crowns are the grove. Inashiro: 1,263 blades, all within the 46-unit fringe, no dots, no pines. The coppice patches take the same rule ... so every woodland commons is a soft keep-out too (the patches are scanned before the scrub is laid). Labels: the 46-unit feather a DRAWING convention. -->
 <!-- settlement/land/cover.py hinterland(soft_extra=) -> commons(soft=), the T12 marsh machinery reused; hamletgen/hinterland.py computes the belt two stages early so the scrub can see it; the placer holds the grove keep-out; the audit adjudicates the patches. Inashiro before: 2,688 blades, 158 dots, 11 pines inside the belt polygon; after: audit 0 violations. REVISITED the same day (T35): the first cut applied this to the windbreak only and left the coppice patches scattered through - the GM saw it at once. -->
 The fade itself is a <strong>map drawing convention</strong>
@@ -408,7 +389,7 @@ them.<sup class="fn"><a id="fnref-39" href="citations/vegetation.html#fn-39">39<
 <h2 id="how-is-a-coppice-lot-bounded-by-ridge-stream-and-path---never-by-a-page-axis">How is a coppice lot bounded? By ridge, stream and path - never by a page axis</h2>
 <!-- researched 2026-08-18, revisited 2026-08-27, feature 133 T36 -->
 <!-- Evidence: attested (iriai institutions), reconstruction (the boundary forms) -->
-<p><strong>Sources:</strong> <a href="https://thecommonsjournal.org/articles/10.18352/ijc.348"><code>ijc-yamaguni</code></a>, <a href="https://en.wikipedia.org/wiki/Satoyama"><code>satoyama-enwiki</code></a>, <a href="https://en.wikipedia.org/wiki/Kichijōji"><code>kichijoji-enwiki</code></a>; the "bounded by ridge, stream and path" sentence is on no page read; Totman's <em>The Green Archipelago</em> and the Indiana DLC paper have not been read</p>
+<p><strong>Sources:</strong> <a href="https://thecommonsjournal.org/articles/10.18352/ijc.348"><code>ijc-yamaguni</code></a>, <a href="https://en.wikipedia.org/wiki/Satoyama"><code>satoyama-enwiki</code></a>, <a href="https://en.wikipedia.org/wiki/Kichijōji"><code>kichijoji-enwiki</code></a>; the "bounded by ridge, stream and path" sentence is on no page read<!-- Totman's The Green Archipelago and the Indiana DLC paper have not been read --></p>
 <p>The GM: <em>"those coppice Patches. basically it looked like little squares ... I want to make sure that
 that is intentional and based on research rather than just happenstance because when we decided to
 draw patches of trees, we just kind of unthinkingly drew a square."</em> It was happenstance.</p>
@@ -418,9 +399,7 @@ how much<sup class="fn"><a id="fnref-40" href="citations/vegetation.html#fn-40">
 a cycle of every 15 to 20 years.<sup class="fn"><a id="fnref-68" href="citations/vegetation.html#fn-68">68</a></sup> <!-- the entry gave a 10-30 year cycle; corrected 2026-09-06, feature 194: the read record's cycle is every 15 to 20 years --> From <a href="https://thecommonsjournal.org/articles/10.18352/ijc.348">IJC, the Yamaguni district study</a>: "each of the 11
 villages in Yamaguni district has its own unique institutions for managing its customary common
 property forests",<sup class="fn"><a id="fnref-41" href="citations/vegetation.html#fn-41">41</a></sup> held by residents' associations with membership limited to qualifying
-residents<sup class="fn"><a id="fnref-107" href="citations/vegetation.html#fn-107">107</a></sup> - the management was a matter of RULES over a wood. UNSOURCED:
-the sentence that iriai boundaries were "described by ridge, stream and path",<sup class="fn"><a id="fnref-42" href="citations/vegetation.html#fn-42">42</a></sup> is NOT in that article and no source for it
-has been found; it stands as a claim of unknown provenance. <!-- found by the T46 read; the sentence was carried since the 2026-08-18 review pass and is repeated in hinterland.py --> What the read record does
+residents<sup class="fn"><a id="fnref-107" href="citations/vegetation.html#fn-107">107</a></sup> - the management was a matter of RULES over a wood. The sentence that iriai boundaries were "described by ridge, stream and path"<sup class="fn"><a id="fnref-42" href="citations/vegetation.html#fn-42">42</a></sup> is on no page read and stands as a claim of unknown provenance.<!-- found by the T46 read; the sentence was carried since the 2026-08-18 review pass and is repeated in hinterland.py --> What the read record does
 give: nothing in it describes a coppice lot laid out as a surveyed rectangle, and the coppice sits
 on the slope break above the paddy (the satoyama entries).<sup class="fn"><a id="fnref-43" href="citations/vegetation.html#fn-43">43</a></sup> So a managed wood
 is not evidence for a square - the GM's instinct was right.</p>
@@ -437,7 +416,7 @@ drawing convention</strong>, and the strip form is recorded as a second form and
 here.<!-- Labels: the irregular, feature-bounded outline ACCURATE. --></p>
 <!-- Rule, in full: a parcel is a 12-vertex ring inside the rolled ellipse, its radius wandering 0.80-1.00 of the ellipse's on two low harmonics seeded from the parcel's own position - smooth, because a wood's edge wanders rather than serrates - and never outside the reach the keep-outs were tested at. Area comes out ~85% of the ellipse's, so every size rule still bounds it from above. Labels: the irregular, feature-bounded outline ACCURATE; the ring's harmonic wobble and its 0.80 floor DRAWING conventions; the strip form a recorded knob-in-waiting. -->
 <p>The <a href="https://en.wikipedia.org/wiki/Kichijōji">Wikipedia "Kichijōji"</a> page gives the 1000 m strip grants and the dry fields.<!-- a founding year and the 1664 survey are not on it --><sup class="fn"><a id="fnref-47" href="citations/vegetation.html#fn-47">47</a></sup></p>
-<!-- Sources (read): International Journal of the Commons, "External impacts on traditional commons and present-day changes: a case study of iriai forests in Yamaguni district" (https://thecommonsjournal.org/articles/10.18352/ijc.348) (management by village institutions; NO boundary description); Wikipedia "Satoyama" (https://en.wikipedia.org/wiki/Satoyama); Wikipedia "Kichijōji" (https://en.wikipedia.org/wiki/Kichijōji) (the 1000 m strip grants and dry fields)<!-- the founding year and the 1664 survey are NOT on it -->. Pointers, not read: the Indiana DLC "Village Commons in Japan"; Totman, The Green Archipelago; Takeuchi et al., Satoyama (Springer). Unsourced: "described by ridge, stream and path". -->
+<!-- Sources (read): International Journal of the Commons, "External impacts on traditional commons and present-day changes: a case study of iriai forests in Yamaguni district" (https://thecommonsjournal.org/articles/10.18352/ijc.348) (management by village institutions; NO boundary description); Wikipedia "Satoyama" (https://en.wikipedia.org/wiki/Satoyama); Wikipedia "Kichijōji" (https://en.wikipedia.org/wiki/Kichijōji) (the 1000 m strip grants and dry fields; the founding year and the 1664 survey are NOT on it). Pointers, not read: the Indiana DLC "Village Commons in Japan"; Totman, The Green Archipelago; Takeuchi et al., Satoyama (Springer). Unsourced: "described by ridge, stream and path". -->
 <!-- the unsourced sentence dates from 2026-08-18; corrected 2026-08-27 under T44/T46 -->
 <h2 id="bamboo-how-common-where-it-stood-and-how-to-show-it">Bamboo: how common, where it stood, and how to show it</h2>
 <!-- researched 2026-08-27, feature 133 T42 - a question, not yet a rule -->
@@ -461,14 +440,11 @@ withstand temperatures around or below -18 to -20°C".<sup class="fn"><a id="fnr
 madake "Minimum Temp: 5°F (-15°C), Hardiness Zone: 7"<sup class="fn"><a id="fnref-20" href="citations/vegetation.html#fn-20">20</a></sup> (<a href="https://completebamboo.com/species_bamboo/Phyllostachys_bambusoides.html">completebamboo.com</a>), with other readable
 growers giving -18 to -23 C<sup class="fn"><a id="fnref-55" href="citations/vegetation.html#fn-55">55</a></sup> - a spread, not a number; and no read source says new SHOOTS take
 frost, only that "colder weather will likely cause frost damage to leaves and canes"<sup class="fn"><a id="fnref-21" href="citations/vegetation.html#fn-21">21</a></sup> (bambubatu),
-so the record says only "frost-tender at the margin". Unread, and carrying no weight here: that a typical Edo
-farmstead kept "a grove where they could harvest bamboo" (Kids Web Japan - no readable page, searched
-2026-08-27;<!-- the page and its archives all 403 --> no corroborating snippet found); the broader list
-of uses (Highlighting Japan). So: a lowland
+so the record says only "frost-tender at the margin". <!-- Unread, and carrying no weight here: that a typical Edo farmstead kept "a grove where they could harvest bamboo" (Kids Web Japan - no readable page, searched 2026-08-27; the page and its archives all 403; no corroborating snippet found); the broader list of uses (Highlighting Japan). --> So: a lowland
 paddy hamlet in a temperate province has bamboo as a matter of course, and a cold upland one may
-have none - that half is sourced. THAT is the axis of variance the project wants: two attested forms, varied from settlement to settlement.</p>
+have none - that half is sourced. Two attested forms, so the map varies it from settlement to settlement.</p>
 <!-- the growers' figures were read by the source-reader run (T45); the frost clause was softened; the Kids Web Japan and Highlighting Japan claims are SUMMARY-ONLY; the knob rule is constitution Principle XII -->
-<p><strong>Where it stood.</strong> Two places, both already in this record: (1) the homestead's own yard - on the Tonami plain the bamboo stood on the SOUTH side with the storehouses and fruit trees, its roots planted to hold the soil, so this page's earlier placing of it on the shady N/W service strip is on no page read (<a href="homesteads.html">the homestead research</a>); and the dooryard's "persimmon and bamboo" stand IN the
+<p><strong>Where it stood.</strong> Two places, both already in this record: (1) the homestead's own yard - on the Tonami plain the bamboo stood on the SOUTH side with the storehouses and fruit trees, its roots planted to hold the soil; the shady N/W service strip is on no page read (<a href="homesteads.html">the homestead research</a>); and the dooryard's "persimmon and bamboo" stand IN the
 sunlit yard;<sup class="fn"><a id="fnref-111" href="citations/vegetation.html#fn-111">111</a></sup> (2) the <em>take-yabu</em> (bamboo thicket) as its own stand at the village edge, harvested
 like a coppice. Bamboo was NOT scattered one culm at a time through a mixed wood: a stand is a
 clonal thicket, dense and monospecific, with a hard edge.<sup class="fn"><a id="fnref-110" href="citations/vegetation.html#fn-110">110</a></sup></p>
@@ -485,15 +461,13 @@ map scale.</p>
 proposed").</strong> A bamboo stand is drawn as a polygon whose position and extent are to scale, marked
 with paired culm strokes and a leafy fork in pale yellow-green; bamboo is not mixed into the windbreak
 or the dooryard copse; whether a hamlet has bamboo at all, and where, varies by settlement - at the
-cluster's shady side (drawn as its NORTH, the side the house shades; the record's "N/W strip" read
-that way), as a thicket at the field margin's shady end, or both; a stand narrower than 14 ft on its short
+cluster's shady side (drawn as its NORTH, the side the house shades), as a thicket at the field margin's shady end, or both; a stand narrower than 14 ft on its short
 axis is not drawn, and no stand overlaps a paddy.<!-- BAMBOO_LEGIBLE_FT = 14.0, the SHORT axis: a household strip is ~16 ft deep and reads -->
 <!-- As built, in full: The four points above: (1) a bamboo stand is a polygon whose position and extent are to scale, drawn with a stand-level glyph: paired culm strokes with a leafy fork on a 7 ft jittered grid, pale yellow-green, no fill. (2) Bamboo is not in the species mix of the windbreak or the dooryard copse. (3) The bamboo knob - none / homestead / thicket / both - is rolled per settlement; a seat is scanned for each form - the homestead stand on the cluster's shady side (drawn as its NORTH, the side the house shades; the record's "N/W strip" read that way), the thicket at the field margin's shady end - and the stands are drawn after the belt; the scrub keeps out of them. (4) A stand under 20 ft across is not drawn, and no stand overlaps a paddy. Inashiro rolled the homestead form: one stand of 46 x 29 ft and 25 marks north of the cluster. (That single communal homestead stand predates the per-farmstead strips below; Inashiro's manifest today carries three homestead strips of 22 x 16 ft and no 46 x 29 ft stand.) -->
 <!-- BUILT in feature 133 T47. (1) bamboo_stand (settlement/homestead_parts.py) records M['bamboo_stands']; the gate learns bamboo_stands in the overlap matrix. (2) _draw_grove: windbreak 20% -> 0, dooryard copse 45% -> 0. (3) The bamboo knob (settlement/_knobs.py; BAMBOO_FORMS in hamletgen/consts.py); hamletgen.bamboo_seats scans the seats; stage_bamboo draws them; the scrub keep-out is T34's soft keep-out. (4) The gate: bamboo_declared_and_drawn, bamboo_stands_legible (20 ft floor), bamboo_stands_clear_of_paddies; the overlap matrix and the caption groups know the record; the scatter audit treats a stand as a wood. Inashiro rolled homestead; 315 invisible culm glyphs became 0. -->
 The stand
 glyph is a <strong>map drawing convention</strong> - the marks are symbolic, the extent is not - and so are
-the stand sizes and the mark pitch;<!-- the sizes (48 x 34 and 84 x 58 ft) and the 7 ft mark pitch - design sizes the current Inashiro roll does not draw (its manifest carries 22 x 16 ft household strips) --> "north = the shady
-side" is a reading of the record's "N/W strip", recorded as a reading.<!-- Labels: bamboo's presence below the frost line and its two places ACCURATE (read). --></p>
+the stand sizes and the mark pitch;<!-- the sizes (48 x 34 and 84 x 58 ft) and the 7 ft mark pitch - design sizes the current Inashiro roll does not draw (its manifest carries 22 x 16 ft household strips) --> north is drawn as the shady side, the side the house shades - a reading, recorded as one.<!-- Labels: bamboo's presence below the frost line and its two places ACCURATE (read). --></p>
 <p><strong>Household bamboo, per farmstead - which side, and how common (the GM's question, 2026-08-27).</strong> The GM asked whether a farmstead's own bamboo always stood to the north-west and whether
 every farmstead had one.<!-- What could be read: --></p>
 <!-- REVISITED in feature 133 T48; a source-reader pass (27 fetches) -->
@@ -512,8 +486,7 @@ every farmstead had one.<!-- What could be read: --></p>
   building new houses as well as materials for various everyday tools";<sup class="fn"><a id="fnref-61" href="citations/vegetation.html#fn-61">61</a></sup> and <a href="https://tsuijimatsu.com/">tsuijimatsu.com</a>:
   「bamboo was an important material for everyday life」 (translated from the Japanese by this project; original: 「竹は日常生活の資材として重要なものでした」).<sup class="fn"><a id="fnref-62" href="citations/vegetation.html#fn-62">62</a></sup> Not found: any share of farmsteads keeping bamboo, and any
   source distinguishing household bamboo from the communal take-yabu by number. So the presence rate
-  is a GUESS - 0.6, "one of several secondary species" read as common but
-  not universal, set like the shed's - labeled as such. <!-- HOUSEHOLD_BAMBOO_PREVALENCE --></li>
+  is a GUESS: about three farmsteads in five keep a stand, "one of several secondary species" read as common but not universal - labeled as such.<!-- HOUSEHOLD_BAMBOO_PREVALENCE = 0.6, set like the shed's --></li>
 <li>As built: a 22 x 16 ft strip stands at a farmstead that has one, most often behind the house or
   beside the shed; on Inashiro 3 of 15 farmsteads keep one.</li>
 <!-- As built, in full: a 22 x 16 ft strip is seated per farmstead that rolls one, its side rolled (back 0.45 / shed side 0.30 / windward 0.15 / other flank 0.10), reserved with the sheds and gardens so the lanes and wells keep off it, and drawn with the stand glyph; the knob's homestead value means these strips, thicket the one communal stand, both both. Inashiro (rolled the homestead form): 3 of 15 farmsteads keep a strip, measured on the manifest 2026-09-12. The legibility floor is the short axis (14 ft). -->
