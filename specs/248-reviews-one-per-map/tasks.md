@@ -30,6 +30,7 @@ map.
       `test-review-gate.sh`; SC-004 measured on feature 247's landed records
       research: procedure
       verify: DONE. review-gate.sh section 2: a PASS/NEEDS-WORK record at the pushed tree's engine key ships with no notes touch; the rendering waiver ships; no record at all still ships on the notes touch; NOT-REVIEWABLE, a stale-key record (notes touched or not) and no-record-no-notes refuse, each under its own rule; test-review-gate.sh 25 passed with six new cases; SC-004 on this clone: feature 247's four PASS records carry d9d78cdcd834, the worktree key
-- [ ] T07 the record (FR-007) and the proof (FR-008): the contract, CLAUDE.md, `dev/reviews.md`; the
+- [x] T07 the record (FR-007) and the proof (FR-008): the contract, CLAUDE.md, `dev/reviews.md`; the
       firing-log rows; `make hooks-test` and `make quick` green; land DIRECT
       research: procedure
+      verify: DONE. settlement-review.md, dev/reviews.md and CLAUDE.md's pair row say the four rules and the waiver; the firing-log census green (the new rules review-multi-map, review-dispatched, reviews-parallel, reviews-serialized, review-map-undispatched, review-waived-rendering, map-not-reviewable, map-stale-verdict, map-no-review each recorded by a suite case); make hooks-test green (4 suites re-run, 20 unchanged); make quick green (502 passed); landing DIRECT
