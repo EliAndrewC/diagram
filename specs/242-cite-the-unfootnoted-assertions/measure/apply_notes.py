@@ -188,6 +188,22 @@ def main() -> int:
     ctext = cpath.read_text(encoding="utf-8")
     stext = (RESEARCH / "SOURCES.html").read_text(encoding="utf-8")
     nmax = max(int(x) for x in re.findall(r'<li id="fn-(\d+)"', ctext))
+
+    def registry_url(key: str) -> str:
+        m = re.search(rf'<h3 id="{re.escape(key)}"><code>{re.escape(key)}</code></h3>\n<p>(.*?)</p>', stext, re.S)
+        if not m:
+            return ""
+        u = re.search(r"\((https?://[^\s)]+)", re.sub(r"<!--.*?-->", "", m.group(1)))
+        return u.group(1) if u else ""
+
+    # AN EXISTING KEY LINKS WHERE ITS REGISTRY ENTRY LINKS (tests/interactive/test_sources.py): the
+    # reader may spell the same page percent-encoded where the registry has it in kanji, or the reverse.
+    for note in notes:
+        for src in [note] + list(note.get("extra", [])):
+            if src.get("key"):
+                u = registry_url(src["key"])
+                if u:
+                    src["url"] = u
     new_lis: list[str] = []
     new_entries: list[str] = []
     report: list[str] = []
