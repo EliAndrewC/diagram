@@ -1,6 +1,6 @@
 # Feature 248 - reviews one per map
 
-**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5, 2026-09-14; rounds 1 and 2 CHANGES REQUIRED, all taken; rounds 3 and later ran on this session's model after the Opus weekly limit was reached mid-feature, by the session's decision, disclosed here). Round 3's aside taken as an amendment, FAITHFUL at round 4; the plan CLEAR (MODE 4, 16 decisions, none narrowing); the plan review's aside taken as a second amendment (FR-005's delta half at push time), awaiting round 5.
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5, 2026-09-14; rounds 1 and 2 CHANGES REQUIRED, all taken; rounds 3 and later ran on this session's model after the Opus weekly limit was reached mid-feature, by the session's decision, disclosed here). Round 3's aside taken as an amendment, FAITHFUL at round 4; the plan CLEAR (MODE 4, 16 decisions, none narrowing); the plan review's aside taken as a second amendment (FR-005's delta half at push time), round 5 CHANGES REQUIRED on two sentences restating the old set, fixed; awaiting round 6; the plan re-reviewed on its amended text.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the serialized review's cost and the ledger's answer, where the push refusal's time went, what a hook can guarantee, the classification, how a dispatch names its maps.
 **Predecessors**: 151 (the paired gate), 231 (a review owed only when a layout moved), 240 (the verdict record, the prerequisite check), 246 (a run still going is not abandoned).
@@ -58,7 +58,7 @@ stated rather than promised (research R3, D4, D6).
   pointer alone, the evadable form round 1 closed. When that set is non-empty and EVERY feature in it has a `tasks.md` holding at least one task,
   all classified `research: rendering`, it reports no map owed, with a reason naming each feature and its
   task count. One feature in the set with a `physical` or `procedure` task, no tasks, or no `tasks.md`,
-  or an empty set (no pointer and no touched open task), owes a review exactly as today: a waiver takes
+  or an empty set (no pointer and no touched feature directory with a `tasks.md`), owes a review exactly as today: a waiver takes
   the conjunction, an obligation the union. Because every decision point already asks
   this one script (`make verify`, the pair guard's gate branch and stop branch, and FR-006's push gate),
   the waiver reaches all of them, is printed where the gate starts, and is recorded at turn end with
@@ -77,7 +77,7 @@ stated rather than promised (research R3, D4, D6).
   quiet when every map is dispatched or recorded, and refused once; the parallel and serialized
   entries. `tests/tooling/test_review_owed.py` proves the classification waiver on fixture task files
   in every form: one active feature all rendering (waived); one physical task, one procedure task, no
-  tasks, no `tasks.md` (each owed); the empty set - no pointer AND no touched open-task feature (owed);
+  tasks, no `tasks.md` (each owed); the empty set - no pointer AND no touched feature with a `tasks.md` (owed);
   and the derived pair - the pointer's feature rendering-only beside a delta-touched feature that is
   not, its boxes all ticked as at a push (owed), and the same pair both rendering-only (waived) - so
   D7's conjunction is proved by a fixture rather than by one clone's state. `scripts/test-review-gate.sh`
@@ -172,3 +172,7 @@ stated rather than promised (research R3, D4, D6).
   (MODE 4, CLEAR) raised one aside on the spec: at push time no task is open, so the derived set's delta
   half was empty and the waiver rested on the pointer alone; FR-005 now takes any touched feature's
   `tasks.md`, ticked or not (D7).
+- **Round 5 (2026-09-14, MODE 3, this session's model): CHANGES REQUIRED, two, both taken.** The
+  widening had left FR-005's obligation sentence and FR-008's empty-set proof form defining the set by
+  open tasks; both now say "a touched feature directory with a `tasks.md`". T05 said the same and is
+  fixed; the plan changed under its MODE 4 record and is re-reviewed.

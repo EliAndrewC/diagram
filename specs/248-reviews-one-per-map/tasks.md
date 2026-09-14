@@ -16,7 +16,8 @@ map.
       waiver; suite sections
       research: procedure
 - [ ] T05 the rendering waiver (FR-005): `rendering_only`, `active_features` (the DERIVED set - the pointer's
-      feature plus every open-task feature the delta touches - waived only when all are rendering), the
+      feature plus every feature directory with a `tasks.md` the delta touches, ticked or not - waived
+      only when all are rendering), the
       reason; `test_review_owed.py`;
       SC-003 measured on this clone against feature 247's and 230's task files
       research: procedure
