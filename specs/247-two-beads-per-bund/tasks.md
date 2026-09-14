@@ -6,11 +6,11 @@ nothing physical behind it (the GM's own words in `request.md`).
 - [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code; the plan
       reviewed (MODE 4) before any tick
       research: rendering
-- [ ] T02 `_bund_beans` lays runs of two or more (FR-001, FR-002, FR-003, FR-006): the candidate filter
-      after the shuffle, runs returned, `_bead_runs_kept`; the unit tests in `tests/settlement/test_core.py`
+- [ ] T02 `_bund_beans` lays runs of two or more (FR-001, FR-002, FR-003, FR-006): the thirds rule on a
+      short edge, the split-and-judge `_bead_runs`, runs returned; the unit tests in `tests/settlement/test_core.py`
       research: rendering
-- [ ] T03 the draw site drops a run whole and the record carries the run lengths (FR-001, FR-005, FR-006):
-      `_comb_drop_drowned_beads` over runs, `bund_bean_runs` in the net and the field record; the unit
+- [ ] T03 the draw site splits and judges its runs and the record keeps its shape (FR-001, FR-005, FR-006):
+      `_comb_drop_drowned_beads` over `bund_bean_runs` in the net, the flat list re-flattened; the unit
       tests in `tests/settlement/test_fields.py`; the gate test in `tests/gate/test_bunds_and_dikes.py`
       research: rendering
 - [ ] T04 the record (FR-004): the research convention paragraph and the modal Note; `make page-check`
