@@ -52,10 +52,36 @@ def visible_map(raw: str) -> tuple[str, list[int]]:
                 idx.append(i)
                 i = j + 1
                 continue
-        out.append(raw[i])
+        ch = " " if raw[i] in "\n\t\r" else raw[i]           # a wrap is whitespace to the sentence
+        if ch == " " and out and out[-1] == " ":           # ...and a wrap's indent is one space, like the reader's copy
+            i += 1
+            continue
+        out.append(ch)
         idx.append(i)
         i += 1
     return "".join(out), idx
+
+
+_BLOCK_OPEN = re.compile(r"^\s*<(p|li|td|th|h[1-6]|dd|dt|blockquote|figcaption)\b")
+_BLOCK_CLOSE = re.compile(r"</(p|li|td|th|h[1-6]|dd|dt|blockquote|figcaption)>\s*$")
+
+
+def block_span(lines: list[str], i: int) -> tuple[int, int]:
+    """(first, last) line indices of the wrapped HTML block that line i belongs to.
+
+    THE RECORD WRAPS ITS PARAGRAPHS. A sentence the reader quoted often runs over a line break, and
+    a note placed on one physical line lands mid-sentence; so the placement works on the whole block
+    - from the line that opens the element to the line that closes it - joined with its newlines kept,
+    which the visible map reads as spaces. Nothing is inserted across a newline, so the block keeps its
+    line count and every other note's line number stays valid.
+    """
+    a = i
+    while a > 0 and not _BLOCK_OPEN.match(lines[a]) and not _BLOCK_CLOSE.search(lines[a - 1]):
+        a -= 1
+    b = i
+    while b < len(lines) - 1 and not _BLOCK_CLOSE.search(lines[b]) and not _BLOCK_OPEN.match(lines[b + 1]):
+        b += 1
+    return a, b
 
 
 def norm(s: str) -> str:
@@ -84,13 +110,20 @@ def insertion_point(raw: str, sentence: str) -> int:
         # period, semicolon, question or exclamation mark followed by a space and a capital, a quote
         # mark, or the end of the paragraph), within a bound so a fragment in a list stays put.
         if end_vis < len(vis) and vis[end_vis] not in '.;:!?)"”」' and vis[end_vis - 1] not in '.;!?':
-            m2 = re.compile(r'[.;!?](?=["”」)]*(?:\s+[A-Z0-9(<「"“]|\s*$))').search(vis, end_vis, min(len(vis), end_vis + 300))
+            # a terminator is also one followed at once by the digits of a mark already placed there
+            m2 = re.compile(r'[.;!?](?=["”」)]*(?:\s+[A-Z0-9(<「"“]|\d{1,3}(?!\d)|\s*$))').search(vis, end_vis, min(len(vis), end_vis + 300))
             if m2:
                 end_vis = m2.start()
         # advance past closing punctuation the reader may have dropped
         while end_vis < len(vis) and vis[end_vis] in '.;:,)"”」':
             end_vis += 1
-        raw_i = idx[end_vis] if end_vis < len(idx) else len(raw)
+        # THE END OF THE LAST CONSUMED CHARACTER, never the start of the next visible one: the next visible
+        # character may sit inside a tag that follows the sentence (the digit of a footnote already placed,
+        # the first word of the next paragraph), and mapping to it put a mark outside its own element.
+        if end_vis == 0:
+            return -1
+        last = idx[end_vis - 1]
+        raw_i = raw.find(";", last) + 1 if raw[last] == "&" else last + 1
         # step past an immediately following closing inline tag
         m = re.match(r"(</(?:strong|em|code|q|a)>)+", raw[raw_i:])
         if m:
@@ -102,13 +135,20 @@ def insertion_point(raw: str, sentence: str) -> int:
 def li_for(n: int, note: dict, back: str) -> str:
     form = note["form"]
     if form == "citation":
-        q = note["quote"].strip()
+        q = (note.get("quote") or note.get("original") or "").strip()
         if note.get("translation"):
             body = f"「{note['translation'].strip()}」 (translated from the {note.get('language', 'original')} by this project; original: 「{note['original'].strip() if note.get('original') else q}」)"
         else:
             body = f"「{q}」"
         gloss = f" ({note['gloss'].strip()})" if note.get("gloss") else ""
-        text = f'<a href="{note["url"]}"><code>{note["key"]}</code></a> - {body}{gloss}'
+        text = f'<a href="{note["url"]}"><code>{note["key"]}</code></a> - {body}'
+        # A SENTENCE MAY REST ON TWO WORKS: a second key follows after "; " in the same note, the form
+        # fields.html fn-6 already uses, so one reference at the assertion carries both passages.
+        for x in note.get("extra", []):
+            xq = (x.get("quote") or x.get("original") or "").strip()
+            xb = f"「{x['translation'].strip()}」 (translated from the {x.get('language', 'original')} by this project; original: 「{x['original'].strip() if x.get('original') else xq}」)" if x.get("translation") else f"「{xq}」"
+            text += f'; <a href="{x["url"]}"><code>{x["key"]}</code></a> - {xb}'
+        text += gloss
     elif form == "absence":
         text = f"no publicly readable source (searched {note.get('date', TODAY)}: {note['searched'].strip()})"
     elif form == "grounds":
@@ -138,45 +178,73 @@ def main() -> int:
     new_lis: list[str] = []
     new_entries: list[str] = []
     report: list[str] = []
+    def roster_add(line_no: int, key: str, url: str) -> None:
+        for j in range(line_no - 2, -1, -1):
+            if "<p><strong>Sources:</strong>" in lines[j]:
+                if f"<code>{key}</code>" not in lines[j]:
+                    link = f'<a href="{url}"><code>{key}</code></a>'
+                    body = re.search(r"<p><strong>Sources:</strong>(.*?)</p>", lines[j], re.S)
+                    inner = body.group(1) if body else ""
+                    if "<code>" in inner:
+                        lines[j] = lines[j].replace("</p>", f", {link}</p>", 1)
+                    else:
+                        lines[j] = f"<p><strong>Sources:</strong> {link}; {inner.strip()}</p>"
+                return
+            if lines[j].lstrip().startswith(("<h3", "<h2")):
+                report.append(f"NO-ROSTER for {key} above line {line_no}")
+                return
+
+    def registry_add(note: dict) -> None:
+        nonlocal stext
+        for src in [note] + list(note.get("extra", [])):
+            reg = src.get("registry")
+            key = src.get("key")
+            if reg and key and f'<h3 id="{key}">' not in stext and not any(f'<h3 id="{key}">' in e for e in new_entries):
+                citation = re.sub(r"「([^」]*)」", r"<em>\1</em>", reg["citation"])   # a title, not a quotation
+                new_entries.append(
+                    f'<h3 id="{key}"><code>{key}</code></h3>\n'
+                    f'<p><!-- READ {TODAY} by a source-reader (feature 242) -->{citation}</p>\n'
+                    f'<p><em>What it is:</em> {reg["what"]}</p>\n'
+                    f'<p><em>Why it applies, and its limits:</em> {reg["why"]}</p>\n'
+                    f'<p><em>Used for:</em> {reg["used"]}</p>'
+                )
+
+    # AN EXISTING NOTE REWRITTEN IN PLACE (feature 242 T18): a never-searched absence note that the
+    # research pass has now answered keeps its number and its reference; only its body changes.
+    for note in [d for d in notes if d.get("fn")]:
+        fnn = int(note["fn"])
+        pat = re.compile(rf'<li id="fn-{fnn}">.*?</li>', re.S)
+        if not pat.search(ctext):
+            report.append(f"NO-SUCH-NOTE fn-{fnn}")
+            continue
+        ctext = pat.sub(lambda _m: li_for(fnn, note, back), ctext, count=1)
+        report.append(f"fn-{fnn} REPLACED as {note['form']}")
+        if note["form"] == "citation":
+            roster_add(note["line"], note["key"], note["url"])
+            for x in note.get("extra", []):
+                roster_add(note["line"], x["key"], x["url"])
+            registry_add(note)
+    notes = [d for d in notes if not d.get("fn")]
     for note in sorted(notes, key=lambda d: -d["line"]):  # bottom-up so line numbers stay valid
         nmax += 1
         n = nmax
-        li = lines[note["line"] - 1]
+        a, b = block_span(lines, note["line"] - 1)
+        li = "\n".join(lines[a : b + 1])
         at = insertion_point(li, note["sentence"])
         if at < 0:
             report.append(f"NOT-PLACED fn-{n} line {note['line']}: {note['sentence'][:80]}")
             nmax -= 1
             continue
         sup = f'<sup class="fn"><a id="fnref-{n}" href="{cite_href}#fn-{n}">{n}</a></sup>'
-        lines[note["line"] - 1] = li[:at] + sup + li[at:]
+        li = li[:at] + sup + li[at:]
+        lines[a : b + 1] = li.split("\n")
         new_lis.append(li_for(n, note, back))
-        report.append(f"fn-{n} {note['form']} line {note['line']} after ...{visible_map(li)[0][:0]}{li[max(0, at - 40):at][-40:]!r}")
+        report.append(f"fn-{n} {note['form']} line {note['line']} after {li[max(0, at - 44):at]!r}")
         if note["form"] == "citation":
-            key, url = note["key"], note["url"]
-            # the section's roster: the nearest Sources: line above
-            for j in range(note["line"] - 2, -1, -1):
-                if "<p><strong>Sources:</strong>" in lines[j]:
-                    if f"<code>{key}</code>" not in lines[j]:
-                        link = f'<a href="{url}"><code>{key}</code></a>'
-                        body = re.search(r"<p><strong>Sources:</strong>(.*?)</p>", lines[j], re.S)
-                        inner = body.group(1) if body else ""
-                        if "<code>" in inner:
-                            lines[j] = lines[j].replace("</p>", f", {link}</p>", 1) if lines[j].rstrip().endswith("</p>") else lines[j]
-                        else:
-                            lines[j] = f"<p><strong>Sources:</strong> {link}; {inner.strip()}</p>"
-                    break
-                if lines[j].lstrip().startswith("<h3") or lines[j].lstrip().startswith("<h2"):
-                    report.append(f"NO-ROSTER for {key} above line {note['line']}")
-                    break
-            reg = note.get("registry")
-            if reg and f'<h3 id="{key}">' not in stext and not any(f'<h3 id="{key}">' in e for e in new_entries):
-                new_entries.append(
-                    f'<h3 id="{key}"><code>{key}</code></h3>\n'
-                    f'<p><!-- READ {TODAY} by a source-reader (feature 242) -->{reg["citation"]}</p>\n'
-                    f'<p><em>What it is:</em> {reg["what"]}</p>\n'
-                    f'<p><em>Why it applies, and its limits:</em> {reg["why"]}</p>\n'
-                    f'<p><em>Used for:</em> {reg["used"]}</p>'
-                )
+            roster_add(note["line"], note["key"], note["url"])
+            for x in note.get("extra", []):
+                roster_add(note["line"], x["key"], x["url"])
+            registry_add(note)
     ctext = ctext.replace("</ol></section>", "\n".join(new_lis) + "\n</ol></section>", 1) if new_lis else ctext
     if new_entries:
         marker = '<h2 id="attested-instances-anchors-not-works">'
