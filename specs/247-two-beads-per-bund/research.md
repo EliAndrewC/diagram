@@ -3,7 +3,7 @@
 ## R1. Where a single bead comes from, and how many there are
 
 **The mechanism.** `waterfields/carve.py` `_bund_beans` picks, for each plot that rolls beans, one or two
-edges of its ring and lays a bead every `spacing` (9.5 px) along each, leaving the corners empty: an edge
+edges of its ring and lays a bead every `spacing` along each (the constant in `_bund_beans`' signature, read 2026-09-14), leaving the corners empty: an edge
 of length L carries `int(L / spacing) - 1` beads, so an edge between two and three spacings long carries
 exactly ONE and a shorter one none. A second route to a single bead is the drops: a bead buried by a
 later-painted plot, or under a ditch's, a channel's or a pond's water, is removed one bead at a time
