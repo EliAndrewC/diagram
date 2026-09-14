@@ -1,8 +1,8 @@
 # Feature 247 - two beads per bund
 
-**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5, 2026-09-14); FR-005 then widened to every shipped hamlet on the round-2 aside, awaiting its verify round.
+**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 2 of 5, 2026-09-14; round 3 FAITHFUL on the FR-005 amendment taken from round 2's aside); the plan CLEAR (MODE 4, round 1, 11 decisions). Every bead-bearing hamlet manifest moved, so the settlement-review ran beside the gate (`make verify`).
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
-**Research**: [`research.md`](research.md) - where a single bead comes from, the count on the shipped maps, the forms the rule could take.
+**Research**: [`research.md`](research.md) - where a single bead comes from, the count on the shipped maps, the forms the rule could take, the count after.
 **Predecessors**: the bead line (GM 2026-08-15, water-honest beads), 230 (the ditches recorded before the field), 245 (lit beads at low zoom).
 
 ## Summary

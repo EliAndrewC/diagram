@@ -61,3 +61,24 @@ The bead count per edge and the drop rule are computed after `R.shuffle(order)` 
 that follow it, which draw exactly as before, so every draw `_bund_beans` makes is the same draw on the
 same call; the drops run after all draws, as they already did. What moves on a map is the beads and
 nothing else (GM 2026-09-08: a map may move for a draw change anyway; here it does not need to).
+
+## R4. The regenerated maps, counted the same way
+
+Observed 2026-09-14 after the reference roll and the pool sweep (`make map`, then `make maps`, both clean),
+by the R1 script over the regenerated manifests:
+
+| map | beads | runs | runs of one bead | runs of two |
+|---|---|---|---|---|
+| Inashiro | 695 | 240 | 0 | 126 |
+| Kashikawa | 857 | 283 | 0 | 144 |
+| Mizuguchi | 452 | 151 | 0 | 72 |
+| Sawada | 774 | 270 | 0 | 142 |
+
+The run count on every map is the one R1 counted, which is FR-002 holding: no bund gained beans and none
+lost them; each map has more beads because every one-bead edge now carries two, and fewer beads where a
+drop had thinned a run to one. Looked at on the Inashiro render at four times its size, the closest
+distinct pairs of beads (the first under half a spacing apart) are two runs meeting at a plot corner,
+one on each edge, and every run on the crop reads as separate dots on the bund stroke. Beads at identical
+coordinates exist on every map - two plots that share an exactly coincident edge each lay a run on it -
+which the old laying did too and the spec puts out of scope; they draw as one bead and never as a lone
+one.
