@@ -79,16 +79,16 @@ was found by READING, and this feature is told not to re-read.
 ## R2 - the second class: an absence note that records no search (2026-09-13)
 
 `measure/note_census.py` counts what the record's footnotes are actually made of, over the nineteen
-citations pages: **994 citation notes, 259 absence notes and 2 grounds notes** (`m:citation-notes`,
+citations pages: **995 citation notes, 260 absence notes and 2 grounds notes** (`m:citation-notes`,
 `m:absence-notes`, `m:grounds-notes`).
 
-Of those 259 absence notes, **119 say in so many words that no query of its own was run**
-(`m:absence-notes-never-searched`), leaving 140 that record a real search. The 119 are 238's marker
+Of those 260 absence notes, **120 say in so many words that no query of its own was run**
+(`m:absence-notes-never-searched`), leaving 140 that record a real search. The 120 are 238's marker
 conversions where the marker recorded no reason: the label moved to the assertion honestly, but no
 hunt was ever made for it.
 
 **This matters because it decides the feature's size**, and the two readings differ by a quarter. On
-the narrow reading the work list is R1's 462 to 472 bare items and those 119 are done, because they
+the narrow reading the work list is R1's 462 to 472 bare items and those 120 are done, because they
 carry a footnote and the population the GM named was assertions that *"do not carry a footnote"*. On
 the wider reading they are backlog: `research/CLAUDE.md` says an absence note *"re-opens on anything
 that changes what can be read"*, and a note that was never searched has nothing to re-open FROM. The

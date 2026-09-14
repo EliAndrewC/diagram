@@ -1,7 +1,8 @@
 # Feature 242 - cite the unfootnoted assertions
 
-**Status:** AMENDED 2026-09-14 on the GM's ruling that split the feature (D7, D8, FR-011 restated, SC-016;
-`request.md`), counter reset - awaiting re-review. Previously accepted, including the 2026-09-14
+**Status:** accepted, including the 2026-09-14 amendment on the GM's ruling that split the feature (D7, D8,
+FR-007 and FR-011 restated, SC-016; `request.md`; FAITHFUL at amendment round 2, see Review history).
+Previously accepted, including the 2026-09-14
 amendment on the download list's format (FR-010, FR-015, D6; FAITHFUL at amendment round 2, see Review
 history). Implementation was fourteen page passes and thirteen check reports in when the split was made.
 
@@ -431,7 +432,11 @@ been false for most of them (`research.md` R12 carries the run's counts).
   scoped confirmation pass the GM accepted was in the plan and not the spec, so FR-007 now carries it in
   the request's words (1); the work list's LOCATED residue on the sixteen landed pages was being deferred
   by feature 250's FR-006 while neither FR-011 nor D7 named it - the line-level test that produced that
-  residue was replaced by a sentence-level one (`measure/worklist.py`, `sentence_status`), the residue
-  re-measured, and D7 names the class with the count, states that it was NOT part of the cut as put to
-  the GM, and it is raised to them with the closing report (2); the Review history's entry names the
+  residue was replaced by a sentence-level one (`measure/worklist.py`, `sentence_status`),   the residue re-measured, and D7 names the class with the count, states that it was NOT part of the cut as
+  put to the GM, and it is raised to them with the closing report (2); the Review history's entry names the
   plan's XVI lines (3).
+  - **Amendment round 2 (2026-09-14), `spec-fidelity`: FAITHFUL**, on a review that re-ran the work list
+  over all seventeen pages and reproduced R12's table exactly, compared the engine key at the worktree and
+  at the merge base and found them identical (SC-012 as restated is true, not asserted), and checked the
+  D8 arithmetic against R12 (52 named, 45 dispatched, 33 IN-STEP and 12 DRIFTED, the one waiver over 40).
+  Its aside is applied: R2's three prose counts now match their own recorded figures.
