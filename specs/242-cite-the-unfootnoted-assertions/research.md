@@ -96,3 +96,69 @@ spec takes the wider reading and records why, with the narrow one priced, as dec
 
 <!-- The census counts research/citations/*.html only. citations/<name>.js is DERIVED from the page by
      `make citations`, so a grep over both doubles every figure, which it did on the first attempt. -->
+
+## R5 - what the capitals pass found WRONG, and corrected (2026-09-14, FR-006)
+
+Eleven readers - ten over the 92 bare items and one over the page's 13 never-searched absence notes -
+returned, and the page was footnoted from their quotes in eight batches. Where a reading showed the
+record stated something wrong rather than merely unsupported, the sentence was rewritten to the finding
+(nothing in the entry says what it used to say; this is where that is recorded). The corrections, by
+the reader's item number (`measure/worklist.py cities/capitals.html` order at the time of reading):
+
+- **8** - "`~67 km` of buried conduit in Edo, feeding over 3,600 draw-wells" was the KANDA system's conduit
+  total alone; the Tamagawa adds `84.7 km`, and the one city-wide well count read runs to 8,000. The
+  sentence now gives both lengths and "thousands of draw-wells".
+- **14** - the Kaogongji's square capital was said to rest on "round heaven, square earth"; the one page
+  read on exactly that question (the record's own `thepaper-city-walls`) says the attribution has no
+  direct evidence and prefers constructional convenience. The heading and sentence now say so.
+- **18** - "Europe cured the corner by CURVING"; the keep article calls the corner's weakness theoretical
+  before the trebuchet and the crossbow and credits round plans to symbolism and earthworks. Restated.
+- **27** - Pingyao "stands NEAR the Fen, not on it" - both encyclopedias put it on the Fen's east bank, and
+  its south wall follows a river. The sentence and the paragraph's closing generalization were rewritten.
+- **35** - the field gates ran "under the village's rotation of water rights": the JSIDRE paper says
+  rotation is the DROUGHT regime and continuous supply the normal one. Restated, with the modern-practice
+  limit disclosed in the registry.
+- **48** - Hirosaki's tenshu "occupies `~0.6 ha`, about `1.2%` of the works": the park's own page gives a 5 by
+  `6 ken` plan, about `0.01 ha` - a fraction of a percent. The `50 ha` was also identified as the park's figure
+  (the original castle was `38.5 ha`).
+- **77** - "Song cities ran mass cremation through a small number of Buddhist crematoria": the Song record
+  as quoted by Wu Gou gives Southern Song Lin'an SEVERAL DOZEN, sixteen once demolished and fourteen
+  restored by edict. The sublinear reading now rests on the Japanese case alone, and the sentence says the
+  capital follows the Japanese form. **This is a two-forms question** (constitution XII): where the record
+  supports both concentration and dispersal, the map owes a knob rather than a choice - engine work, and
+  not this feature's (FR-014); it is named in the closing report for a successor beside the caravan inn.
+- **N8** - "Pingyao's county yamen runs 300+ rooms": every source reached says over two hundred.
+- **4, 5, 6, 7, 13** - five sentences carried quotation marks around words on no readable page ("larger
+  compounds separated by walls and gates", "excavated without timbering", "six rooms and three shifts",
+  the Marco Polo horses on the Shaoxing towpath, the drum-and-bell hours and the "40 lashes" framing of
+  the Qing curfew). Each was restated without the quotation, from what the pages do say (the Great Qing
+  Code's night-prohibition article, the estate walls of Edo's High City, the Tamagawa's open earth cut).
+- **Unsupported clauses dropped or scoped**, each the reader found on no page: the Marco Polo horses and
+  the towpath's "over `40 km`" (13; now the record's "close to a hundred li"); "the palace at the center"
+  in the Kaogongji (14); "strictly rectangular" for every government compound (15); the bailey layouts
+  "all polygonal-irregular" when the same article lists a circular type (16); the Grand Secretariat as a
+  "council-of-state" when the article says it was never a first-rank organ (20); "rivers most commonly"
+  and "wetlands" among moat sources, and Imabari's springs (21, 22); "small daimyo" for the whole residence
+  table (23); "largest real main halls" for a ceiling the eighth-century Daibutsuden breaches (24); the
+  towpath's `6.5 ft`, which was the pier span (25); "every example" of a boat-canal town (32); the "public"
+  quay and a timber kashi (33); Kawagoe "never dug a canal into town" (34); the Song and Ming registered
+  kiln households, "immediately beyond a gate" and "never scattered" (36); "a handful of muenbotoke sites"
+  and "no great mound" (37); Yamatokoriyama's late-16th-century founding and the toponym "across Japan"
+  (38); the weaving offices' "~7,000" (39); the Zuihoden "outside the town" (40); Liulichang as one of
+  "five official kilns", "`~3 km`", "and temples" (41); Okawachiyama "`~6 km` up a valley" (42); Injō-ji "ON
+  Hideyoshi's Odoi" and "explicitly described as the boundary" (43); Rendaino doing "all three jobs" (44);
+  "in every attested case" (45); the flank-siting rule as a rule (47); the kumi-yashiki housing "the lowest
+  samurai" when ashigaru stood below samurai status (52); Osaka and Nijo read as rectangles (57); the
+  tulou as "emergency forms from the empire's margins" (58); "every side drain" bridged (60); "sluiced leats
+  for supply and flushing" (66); a basin that "silts its mouth shut" (71); Varanasi's "`~100` pyres a day",
+  which the weak pages put anywhere from 90 to 300 (81); the "gigawatt plume" and the fire FRONT framing
+  (82); the louzeyuan "walled" when the page says fenced (83); "no jokamachi ever built" a continental
+  avenue (86); the Kitsuki hills' "temples" (N4); Beijing's moats "fed by the Tonghui", which is the
+  outfall (N10); Song wards surviving "only as name plaques" (N5).
+- **Two figures left standing but labeled UNVERIFIED in the prose**, because the only numbers in
+  circulation contradict them and no page could be read: the josui cut's `1-3 ken` (26) and the Shaoxing
+  towpath deck's half-meter (55). Both are on the GM's download list.
+
+**The three checks over the page** (quote-check, record-format, and source-applicability over the 112
+new registry keys in four batches) were dispatched together after the eighth batch landed; their verdicts
+and what they changed are R6.
