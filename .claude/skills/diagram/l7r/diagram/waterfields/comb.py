@@ -262,7 +262,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
     close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank)
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
 
-    dry_plots, dry_acres, bund_beans = _comb_dry_and_beans(R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift)
+    dry_plots, dry_acres, bund_bean_runs = _comb_dry_and_beans(R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift)
     # furrows_vary tells the checker whether to REQUIRE neighboring dry plots to differ in row direction: a
     # gentle-valley village spreads them (the patchwork quilt, default); a STEEP/terraced village narrows the
     # spread so the rows converge back onto the contour (ridge-along-contour erosion control) and no variation
@@ -290,7 +290,11 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         "acres": acres,
         "dry_plots": dry_plots,
         "dry_acres": dry_acres,
-        "bund_beans": bund_beans,
+        # THE RUNS ARE THE ENGINE'S OWN STRUCTURE, NEVER RECORDED (feature 247): the draw site drops beads
+        # under pond and recorded-ditch water per run and re-flattens; the manifest carries the flat list
+        # and the plot rings, from which the gate derives the runs (spec D3).
+        "bund_bean_runs": bund_bean_runs,
+        "bund_beans": [q for run in bund_bean_runs for q in run],
         "furrows_vary": furrow_spread >= 0.3,
     }
 
@@ -904,7 +908,7 @@ def _comb_dry_and_beans(
     grain: float,
     furrow_spread: float,
     grain_drift: float,
-) -> tuple[list[dict[str, Any]], float, Poly]:
+) -> tuple[list[dict[str, Any]], float, list[Poly]]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
     BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields.html 'What a bund bean actually looks like'."""
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
@@ -932,5 +936,4 @@ def _comb_dry_and_beans(
                 R, F, _bc_supply, W, H, dry_keepout, band=(dry_band[0] * 0.6, dry_band[1] * 0.6), g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes
             )  # thinner than the a-side hem: it only needs to cover the fork triangle, and a full-depth band crowds the farmhouse ring off the fan's visible edge
     dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * 4 / 43560
-    bund_beans = _bund_beans(R, plots, bean_frac, channels=channels)
-    return dry_plots, dry_acres, bund_beans
+    return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels)

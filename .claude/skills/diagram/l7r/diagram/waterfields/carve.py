@@ -875,10 +875,40 @@ def _dry_fields(
     return plots
 
 
-def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spacing: float = 9.5, tol: float = 1.0, channels: list[dict[str, Any]] | None = None) -> Poly:
+MIN_BEADS_PER_RUN = 2
+# A BEADED BUND SEGMENT SHOWS AT LEAST TWO BEADS (GM 2026-09-14, feature 247: "On any segment of earthen
+# bunds which has bund beans, I would like at least 2 glyphs. I currently see some segments with only 1
+# glyph."). A rendering convention only - the beans are sub-pixel and the beads stand for them - so the
+# number claims nothing physical; one bead does not read as a row of anything. The forms priced, and the
+# one taken, are in specs/247-two-beads-per-bund/research.md R2.
+
+
+def bead_runs(line: Poly, alive: Callable[[Pt], bool]) -> list[Poly]:
+    """Split one edge's line of beads at every bead `alive` rejects and keep each contiguous part of
+    MIN_BEADS_PER_RUN or more - the one place the two-bead rule lives, used by `_bund_beans` for the
+    plot-burial and ditch-net drops and by the draw site (settlement/fields/comb.py) for the pond and
+    recorded-ditch drops. A part left with a single bead loses it: nothing can be laid where the drop was
+    (that ground is painted over or under water), so on that segment the rule is met only by removal.
+    SPLIT rather than counted, because a dropped MIDDLE bead leaves one bead each side of a painted-over
+    stretch - two segments of one glyph each, which is exactly what the GM saw."""
+    runs: list[Poly] = []
+    part: Poly = []
+    for q in line:
+        if alive(q):
+            part.append(q)
+        elif part:
+            runs.append(part)
+            part = []
+    if part:
+        runs.append(part)
+    return [r for r in runs if len(r) >= MIN_BEADS_PER_RUN]
+
+
+def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spacing: float = 9.5, tol: float = 1.0, channels: list[dict[str, Any]] | None = None) -> list[Poly]:
     """AZEMAME (bund soybeans): sub-pixel at 1px=2ft, so drawn symbolically as a green BEAD
-    line along a fraction of the paddy bunds. Returns bead center points; the caller draws
-    small BEAN_GREEN dots. ~`frac` of plots carry beaded bunds (not every bund had beans).
+    line along a fraction of the paddy bunds. Returns bead RUNS - each a contiguous line of two or
+    more bead center points along one plot edge (`bead_runs`, feature 247); the caller draws small
+    BEAN_GREEN dots. ~`frac` of plots carry beaded bunds (not every bund had beans).
 
     A bead is DROPPED when a plot drawn LATER than its host buries it deeper than `tol` px
     (GM 2026-08-15, on Inashiro: green dots scattered mid-paddy). `_fill_wedges`' fillers
@@ -896,7 +926,7 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
     strokes draw LATE - over every plot and bead - so a bead within a stroke's local half-width
     (tapering w -> w_tail along the run) + tol is buried under water paint and dropped. Pond
     burial is filtered at the draw site (draw_comb_field), where the pond geometry lives."""
-    beans = []
+    runs: list[Poly] = []
     boxes = [(min(q[0] for q in p["poly"]), min(q[1] for q in p["poly"]), max(q[0] for q in p["poly"]), max(q[1] for q in p["poly"])) for p in plots]
 
     def buried(x: float, y: float, host: int) -> bool:
@@ -939,9 +969,15 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
             a = poly[ei]
             b = poly[(ei + 1) % len(poly)]
             nd = int(math.dist(a, b) / spacing)
-            for t in range(1, nd):
-                s = t / nd
-                bx, by = round(a[0] + s * (b[0] - a[0]), 1), round(a[1] + s * (b[1] - a[1]), 1)
-                if not buried(bx, by, pi) and not wet(bx, by):
-                    beans.append((bx, by))
-    return beans
+            # AN EDGE OF TWO TO THREE SPACINGS CARRIES TWO BEADS AT ITS THIRDS (feature 247). Laid at the
+            # spacing with the corners empty it carried exactly one - the single glyph the GM saw; under
+            # two spacings it carries none, as before, and at three or more the spacing is untouched. The
+            # other forms - lay nothing on a short edge (a visible loss of beaned bunds the GM did not ask
+            # for), or pass it over for a longer edge of the plot (beans on bunds that carry none) - are
+            # declined in research R2. The count is fixed AFTER the draws above and the drops below run
+            # after all draws, so the random stream is the same as before the rule (R3).
+            if nd == 2:
+                nd = 3
+            line = [(round(a[0] + t / nd * (b[0] - a[0]), 1), round(a[1] + t / nd * (b[1] - a[1]), 1)) for t in range(1, nd)]
+            runs += bead_runs(line, lambda q, pi=pi: not buried(q[0], q[1], pi) and not wet(q[0], q[1]))
+    return runs

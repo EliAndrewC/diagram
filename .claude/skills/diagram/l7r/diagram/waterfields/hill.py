@@ -134,6 +134,7 @@ def build_terraces(
         "dry_plots": [],
         "dry_acres": 0.0,
         "bund_beans": [],
+        "bund_bean_runs": [],
         "bund_lines": bund_lines,
         "furrows_vary": False,
         "sluice": (round(sluice[0], 1), round(sluice[1], 1)),
@@ -239,6 +240,7 @@ def build_ribbon(
         "dry_plots": [],
         "dry_acres": 0.0,
         "bund_beans": [],
+        "bund_bean_runs": [],
         "furrows_vary": False,
         "sluice": (round(sluice[0], 1), round(sluice[1], 1)),
     }

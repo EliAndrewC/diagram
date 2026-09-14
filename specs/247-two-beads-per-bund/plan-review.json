@@ -1,0 +1,75 @@
+{
+ "feature": "247-two-beads-per-bund",
+ "plan_sha256": "1ae1ff51cea9bc4214347911032943508ee166e72ede63401dc851978e36ad8a",
+ "reviewed": "2026-09-14",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "PD1",
+   "summary": "Verification path: make map on Inashiro, then make maps over the pool, then one backgrounded gate with the settlement-review dispatched beside it (make verify), because every bead-bearing hamlet manifest moves.",
+   "class": "within",
+   "why": "Spec SC-005 states this verification path word for word; constitution VI and the pair rule require it. The plan adds no extra map, tier or cohort."
+  },
+  {
+   "id": "PD2",
+   "summary": "No new module; the rule lives in a module-level helper `_bead_runs(beads, alive)` in carve.py with `MIN_BEADS_PER_RUN = 2`, a plain function over lists, used at both drop sites.",
+   "class": "within",
+   "why": "The GM's floor is 'at least 2 glyphs' and the constant is exactly 2. Lifting the predicate out of the closure so it can be tested with plain lists is the project's own feature-146 doctrine, and spec FR-005 asks for unit tests of the split-and-judge rule. carve.py is 947 lines and comb.py 936 (counted on this clone, 2026-09-14), so the helper keeps both under the 1,000-line gate the plan cites."
+  },
+  {
+   "id": "PD3",
+   "summary": "Short edge: `nd = int(dist / spacing)`; `nd == 2` becomes 3, so an edge of two to three spacings carries two beads at its thirds, an edge under two spacings still none, a longer edge unchanged.",
+   "class": "within",
+   "why": "Spec FR-002 and D1 settle the form. The plan's arithmetic is the spec's: today's `int(L/spacing) - 1` gives exactly one bead at nd == 2 (read in `_bund_beans`, carve.py line 878ff), and forcing nd to 3 puts two beads at t/3 and 2t/3. It raises a segment from one glyph to two - the literal request - and removes no beaned bund."
+  },
+  {
+   "id": "PD4",
+   "summary": "The survivors of each edge are split at every dropped position and each part of fewer than two beads is dropped; the same helper runs at the draw site after the pond and ditch tests.",
+   "class": "within",
+   "why": "Spec FR-001 and D2 define the segment as the contiguous run and require the rule to hold after every drop, naming the plot-burial and ditch-net drops in `_bund_beans` and the pond and recorded-ditch drops at the draw site. The plan covers both sites and no third exists (grep of `bund_beans` across the engine finds only these two filters)."
+  },
+  {
+   "id": "PD5",
+   "summary": "The runs are carried inside the engine net as a new key `bund_bean_runs`, with `bund_beans` kept as the flattened list; the field record and the manifest gain no field.",
+   "class": "within",
+   "why": "Spec D3 and FR-005 settle exactly this: a run structure inside the engine's net, never recorded, with the manifest unchanged in shape. The draw and the record continue to read one flat list."
+  },
+  {
+   "id": "PD6",
+   "summary": "The hill.py and polder.py nets gain an empty `bund_bean_runs` beside their empty `bund_beans`.",
+   "class": "within",
+   "why": "A net-shape consequence of PD5, not a change to those engines: hill.py (two sites) and polder.py (one) record `bund_beans: []` today and lay no beads, which is what the spec's out-of-scope line says about them. No bead behavior is added anywhere new, and the terrace and ribbon engines carry no such key at all."
+  },
+  {
+   "id": "PD7",
+   "summary": "At the draw site the pond test and the recorded-ditch/channel test become one predicate over a bead, applied per run.",
+   "class": "within",
+   "why": "A refactor with the same surviving set: the two filters are applied in sequence today (settlement/fields/comb.py `_comb_drop_drowned_beads`), and a bead survives both iff it survives their disjunction. FR-001 requires the run rule to be applied after those drops, which needs one alive-predicate to split on."
+  },
+  {
+   "id": "PD8",
+   "summary": "The gate test is parametrized over the shipped hamlet generators (`pool/hamlets/*/*.gen.py`), each manifest read through `_pool.obtain`, deriving segments from `plot_rings` + `bund_beans` by the R1 method; a map with no beads is skipped rather than passed.",
+   "class": "within",
+   "why": "Spec FR-005 (as amended on the round-2 aside) asks for the test over every shipped hamlet manifest through the gate's own pool reader, and SC-001 for the R1 count. `_pool.obtain_full` is the same lock and gen cache the pool sweep itself uses (tests/test_villages.py `_regen_and_gate`), so no roll is added and the roll census is untouched. The skip on a bead-less map (Kuwabata) narrows nothing: with no segments the assertion is vacuous either way, and the skip makes the absence visible."
+  },
+  {
+   "id": "PD9",
+   "summary": "The record: one sentence added to the `research/fields.html` convention paragraph and the same to the `BundBeans` class Note; `make glossary CHECK=1` and `make citations CHECK=1` confirm nothing stale.",
+   "class": "within",
+   "why": "Spec FR-004 and SC-003. The modal prose is rewritten in the same delta, which is what keeps an entry-drift pair from being left open; no finding, source or citation is added, matching the GM's 'no impact on e.g. our research and such'."
+  },
+  {
+   "id": "PD10",
+   "summary": "No research pass; the tasks are `research: rendering`.",
+   "class": "within",
+   "why": "The GM's own words: 'this is all only a rendering convention for how we represent the beans which are too small to be visible on the map ... has no impact on e.g. our research and such'. Spec D5 records it."
+  },
+  {
+   "id": "PD11",
+   "summary": "Route: the two engine modules, the hamlet manifests and the class docstring are engine content, so the push is GATED (LOCAL-GATED under `remote off`); the baseline is the last green `make done` in the run log.",
+   "class": "within",
+   "why": "Follows from the delta touching `l7r/**/*.py` and `pool/*.json`; constitution XIII's baseline rule. Not a scoping choice about what is built."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -24,7 +24,11 @@ check were asking one function the same question, and only the placer needs to.
 
 from __future__ import annotations
 
+import glob
+import inspect
+import json
 import math
+import os
 
 import pytest
 
@@ -202,6 +206,65 @@ def test_every_bund_bead_sits_on_visible_ground(comb) -> None:
     if pond:
         drowned += [(round(bx), round(by)) for bx, by in beads if ((bx - pond[0]) / pond[2]) ** 2 + ((by - pond[1]) / pond[3]) ** 2 <= 1.0]
     assert not drowned, f"{len(drowned)} azemame bead(s) sit on water rather than on visible bund: {drowned[:4]}"
+
+
+def _bead_segments(beads: list[tuple[float, float]], rings: list[list[list[float]]], spacing: float, tol: float = 0.75) -> list[int]:
+    """The sizes of the visible bead segments, derived from what the manifest records (feature 247 FR-005, the
+    method of its research R1): two beads are in one segment when they lie within one and a half spacings of
+    each other AND both sit on one recorded ring edge - so a run on a bund two rings share is one segment
+    whichever ring it is read against, two runs meeting at a corner are two, and the gap a dropped bead
+    leaves (two spacings) splits."""
+    edges = [((float(r[i][0]), float(r[i][1])), (float(r[(i + 1) % len(r)][0]), float(r[(i + 1) % len(r)][1]))) for r in rings for i in range(len(r))]
+    on = [{k for k, (a, b) in enumerate(edges) if _seg_dist(bx, by, a, b) <= tol} for bx, by in beads]
+    parent = list(range(len(beads)))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i in range(len(beads)):
+        for j in range(i + 1, len(beads)):
+            if math.dist(beads[i], beads[j]) <= 1.5 * spacing and on[i] & on[j]:
+                parent[find(i)] = find(j)
+    sizes: dict[int, int] = {}
+    for i in range(len(beads)):
+        sizes[find(i)] = sizes.get(find(i), 0) + 1
+    return sorted(sizes.values())
+
+
+def test_bead_segments_derivation_fires() -> None:
+    # the derivation must be SHOWN to see a single: a run of three with a dropped middle is two singles; a
+    # run on a bund two rings share is one segment; two runs meeting at a corner are two
+    ring_a = [[0.0, 0.0], [100.0, 0.0], [100.0, 100.0], [0.0, 100.0]]
+    ring_b = [[100.0, 0.0], [200.0, 0.0], [200.0, 100.0], [100.0, 100.0]]  # shares a's east edge
+    assert _bead_segments([(100.0, 30.0), (100.0, 39.5), (100.0, 49.0)], [ring_a, ring_b], 9.5) == [3]
+    assert _bead_segments([(100.0, 30.0), (100.0, 49.0)], [ring_a, ring_b], 9.5) == [1, 1]  # the middle bead dropped
+    assert _bead_segments([(90.5, 0.0), (100.0, 9.5)], [ring_a], 9.5) == [1, 1]  # a corner, one bead each side
+    assert _bead_segments([], [ring_a], 9.5) == []
+
+
+@pytest.mark.parametrize("gen", sorted(glob.glob(os.path.join(_pool.HERE, "pool", "hamlets", "*", "*.gen.py"))), ids=os.path.basename)
+def test_every_beaded_bund_segment_shows_at_least_two_beads(gen: str) -> None:
+    """THE TWO-BEAD RULE (feature 247, GM 2026-09-14: "On any segment of earthen bunds which has bund beans, I
+    would like at least 2 glyphs. I currently see some segments with only 1 glyph."). A rendering convention -
+    the beans are sub-pixel, the beads stand for them - held on every shipped hamlet, each read through the
+    pool reader so the sweep's one roll serves this test too. The segments are DERIVED from the bead list and
+    the plot rings the record already carries, never from a recorded run structure (spec D3), and the spacing
+    is read from the placer's own signature rather than restated here."""
+    from l7r.diagram.waterfields import _bund_beans
+
+    spacing = float(inspect.signature(_bund_beans).parameters["spacing"].default)
+    with open(_pool.obtain(gen)) as fh:
+        M = json.load(fh)
+    beaded = [f for f in (M.get("fields") or []) if f.get("bund_beans")]
+    if not beaded:
+        pytest.skip(f"{os.path.basename(gen)} lays no bund beads (a polder or a hill field), so the rule judges nothing")
+    for field in beaded:
+        beads = [(float(b[0]), float(b[1])) for b in field["bund_beans"]]
+        sizes = _bead_segments(beads, field["plot_rings"], spacing)
+        assert sizes and min(sizes) >= 2, f"{os.path.basename(gen)} {field.get('name')}: {sizes.count(1)} bund segment(s) show a single bead"
 
 
 def test_neighboring_dry_plots_are_ploughed_at_different_angles(comb) -> None:

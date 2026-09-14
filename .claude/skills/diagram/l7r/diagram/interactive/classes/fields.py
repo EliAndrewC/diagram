@@ -105,7 +105,8 @@ class BundBeans(Kind):
     same ground without touching the paddy. A share of the bunds is planted, rolled per map.
 
     Note: we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the
-    plant, in order to make them visible on the map at this scale against the pale rice. A soybean is an
+    plant, in order to make them visible on the map at this scale against the pale rice, and any stretch of
+    bund that carries them shows at least two, because a single bead does not read as a row. A soybean is an
     erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row
     along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund
     was not found, so the bead's width is not compared to it. The practice is attested.

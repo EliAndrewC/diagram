@@ -630,8 +630,8 @@ def test_bund_beans_drop_beads_buried_by_a_later_plot():
 
     host = {"poly": [(200.0, 200.0), (400.0, 200.0), (400.0, 400.0), (200.0, 400.0)]}
     filler = {"poly": [(340.0, 150.0), (500.0, 150.0), (500.0, 450.0), (340.0, 450.0)]}
-    alone = _bund_beans(_random.Random(0), [host], frac=1.0)
-    both = _bund_beans(_random.Random(0), [host, filler], frac=1.0)
+    alone = _flat(_bund_beans(_random.Random(0), [host], frac=1.0))
+    both = _flat(_bund_beans(_random.Random(0), [host, filler], frac=1.0))
     assert [b for b in alone if b[0] == 400.0 and 205 < b[1] < 395]  # host east edge WAS beaded
     assert not [b for b in both if b[0] == 400.0 and 205 < b[1] < 395]  # ...and dropped when buried
     assert [b for b in both if b not in alone]  # the filler's own beads survive
@@ -650,11 +650,75 @@ def test_bund_beans_drop_beads_under_the_ditch_net():
 
     host = {"poly": [(200.0, 200.0), (400.0, 200.0), (400.0, 400.0), (200.0, 400.0)]}
     chan = {"pts": [(400.0, 190.0), (400.0, 410.0)], "w": 8.0, "w_tail": 4.0}
-    alone = _bund_beans(_random.Random(0), [host], frac=1.0)
-    both = _bund_beans(_random.Random(0), [host], frac=1.0, channels=[chan, {"pts": [(0.0, 0.0)], "w": 4.0}])
+    alone = _flat(_bund_beans(_random.Random(0), [host], frac=1.0))
+    both = _flat(_bund_beans(_random.Random(0), [host], frac=1.0, channels=[chan, {"pts": [(0.0, 0.0)], "w": 4.0}]))
     assert [b for b in alone if b[0] == 400.0]  # the east edge was beaded
     assert not [b for b in both if b[0] == 400.0]  # ...and dropped under the stroke
     assert [b for b in both if b[0] != 400.0] == [b for b in alone if b[0] != 400.0]  # others untouched
+
+
+def _flat(runs):
+    return [q for run in runs for q in run]
+
+
+def test_bead_runs_split_at_a_drop_and_a_part_of_one_bead_goes():
+    # THE TWO-BEAD RULE (feature 247, GM 2026-09-14: at least two glyphs on any bund segment that has
+    # beans). A drop splits the line; each part is judged on its own; a part of one bead is dropped.
+    from l7r.diagram.waterfields import MIN_BEADS_PER_RUN, bead_runs
+
+    line = [(0.0, 0.0), (1.0, 0.0), (2.0, 0.0), (3.0, 0.0), (4.0, 0.0)]
+    assert MIN_BEADS_PER_RUN == 2
+    assert bead_runs(line, lambda q: True) == [line]
+    assert bead_runs(line, lambda q: q[0] != 2.0) == [line[:2], line[3:]]  # a middle drop: two parts of two
+    assert bead_runs(line, lambda q: q[0] != 1.0) == [line[2:]]  # the part of one bead at the head goes
+    assert bead_runs(line, lambda q: q[0] not in (0.0, 2.0)) == [line[3:]]  # (1,0) alone between two drops goes
+    assert bead_runs(line, lambda q: q[0] in (0.0, 2.0, 4.0)) == []  # three singles: nothing survives
+    assert bead_runs([], lambda q: True) == []
+
+
+def test_bund_beans_lay_two_at_the_thirds_of_a_short_edge_and_the_spacing_on_a_long_one():
+    # an edge of two to three spacings carried ONE bead at its middle (the single glyph the GM saw); it
+    # carries two at its thirds now. Under two spacings still none; three or more still at the spacing
+    # with the corners empty (feature 247 FR-002). Squares, so every edge a plot draws is the same case.
+    import random as _random
+
+    from l7r.diagram.waterfields import _bund_beans
+
+    def square(side):
+        return {"poly": [(100.0, 100.0), (100.0 + side, 100.0), (100.0 + side, 100.0 + side), (100.0, 100.0 + side)]}
+
+    spacing = 9.5
+    assert _bund_beans(_random.Random(1), [square(spacing * 1.9)], frac=1.0, spacing=spacing) == []
+    short = _bund_beans(_random.Random(1), [square(24.0)], frac=1.0, spacing=spacing)  # 2.5 spacings
+    assert short and all(len(run) == 2 for run in short)
+    for run in short:
+        along = [q[0] - 100.0 if q[1] in (100.0, 124.0) else q[1] - 100.0 for q in run]  # the distance along the edge the bead sits on
+        assert sorted(along) == [8.0, 16.0]  # the thirds of 24
+    long_ = _bund_beans(_random.Random(1), [square(38.0)], frac=1.0, spacing=spacing)  # 4 spacings: 3 beads at 9.5
+    assert long_ and all(len(run) == 3 for run in long_)
+    for run in long_:
+        assert pytest.approx(math.dist(run[0], run[1]), abs=0.11) == spacing
+
+
+def test_bund_beans_draw_the_same_random_numbers_as_before_the_two_bead_rule():
+    # FR-003 of feature 247: the bead count per edge and the drops are computed after the draws, so the
+    # stream is exactly the old function's - one random(), one shuffle and one randint per beaded plot -
+    # and nothing on a map moves but the beads.
+    import random as _random
+
+    from l7r.diagram.waterfields import _bund_beans
+
+    plots = [{"poly": [(x, y), (x + s, y), (x + s, y + s), (x, y + s)]} for x, y, s in ((100.0, 100.0, 24.0), (200.0, 100.0, 60.0), (300.0, 100.0, 15.0), (100.0, 300.0, 200.0))]
+    new = _random.Random(3)
+    _bund_beans(new, plots, frac=0.7)
+    old = _random.Random(3)
+    for p in plots:  # the draws the function made before feature 247, verbatim
+        if old.random() > 0.7:
+            continue
+        order = list(range(len(p["poly"])))
+        old.shuffle(order)
+        old.randint(1, 2)
+    assert new.getstate() == old.getstate()
 
 
 def test_supply_bank_clearance_is_past_at_the_strokes_exact_ends():

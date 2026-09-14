@@ -497,10 +497,13 @@ def test_draw_comb_field_drops_beads_in_pond_water():
     s.meta(name="Pw", scale="town", ftpx=1, down_deg=90)
     net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
     net["brook"] = []
-    net["bund_beans"] = [(700.0, 1000.0), (300.0, 300.0), (500.0, 180.0)]
+    # ...AND PER RUN (feature 247): a run's drowned head leaves a part of two, kept; a drowned MIDDLE
+    # splits a run into two singles, both dropped; the flat list is the kept runs flattened.
+    net["bund_bean_runs"] = [[(700.0, 1000.0), (500.0, 180.0), (520.0, 180.0)], [(100.0, 100.0), (300.0, 300.0), (120.0, 100.0)]]
     s.M["field_ponds"] = [{"x": 300.0, "y": 300.0, "rx": 20.0, "ry": 15.0}]
     s.draw_comb_field(net, "f1", {"kind": "pond", "pond": (700, 1000, 60, 40)})
-    assert s.M["fields"][-1]["bund_beans"] == [[500.0, 180.0]]
+    assert s.M["fields"][-1]["bund_beans"] == [[500.0, 180.0], [520.0, 180.0]]
+    assert net["bund_bean_runs"] == [[(500.0, 180.0), (520.0, 180.0)]] and net["bund_beans"] == [(500.0, 180.0), (520.0, 180.0)]
 
 
 # --- feature 112: the composed FieldsMixin surface -----------------------------------------------

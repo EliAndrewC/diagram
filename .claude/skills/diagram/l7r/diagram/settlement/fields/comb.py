@@ -340,23 +340,34 @@ class CombMixin:
         sitting 2.2 ft off a ditch recorded at 1.5 ft was still under ink, because that ditch ends at 5.5.
         Measured on the reference hamlet the day the brook moved the field under it. The painter's own widest
         figure is what the bead has to clear, which is the same figure `bunds_and_dikes` judges it by: a check
-        and the code it checks must read the SAME number, or the map and the rule drift apart quietly."""
+        and the code it checks must read the SAME number, or the map and the rule drift apart quietly.
+
+        THE DROP IS PER RUN, AND A RUN LEFT WITH ONE BEAD LOSES IT (feature 247, GM 2026-09-14: at least two
+        glyphs on any bund segment that has beans). The net's `bund_bean_runs` are `_bund_beans`' contiguous
+        lines; each is split where a bead drowns and judged part by part by `bead_runs`, the one place the
+        rule lives, and the flat `bund_beans` list the draw and the record read is re-flattened from what
+        survives, so the three - the runs, the dots and the manifest - agree."""
+        from l7r.diagram.waterfields import bead_runs
 
         _bw: list[tuple[float, float, float, float]] = []
         if source.get("kind") == "pond":
             _bwx, _bwy, _bwrx, _bwry = source["pond"]
             _bw.append((_bwx, _bwy, _bwrx + 3.0, _bwry + 3.0))  # +3: the rim stroke and a bead radius
         _bw += [(fp["x"], fp["y"], fp["rx"] + 3.0, fp["ry"] + 3.0) for fp in self.M.get("field_ponds") or []]
-        if _bw:
-            net["bund_beans"] = [q for q in net["bund_beans"] if all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw)]
         _water = [
             ([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0)
             for d in (self.M.get("field_ditches") or [])
             if len(d.get("poly") or ()) >= 2
         ]
         _water += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (self.M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
-        if _water:
-            net["bund_beans"] = [q for q in net["bund_beans"] if all(min(seg_dist(q[0], q[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1)) >= half for poly, half in _water)]
+
+        def _dry(q: tuple[float, float]) -> bool:
+            return all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw) and all(
+                min(seg_dist(q[0], q[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1)) >= half for poly, half in _water
+            )
+
+        net["bund_bean_runs"] = [part for run in net["bund_bean_runs"] for part in bead_runs(run, _dry)]
+        net["bund_beans"] = [q for run in net["bund_bean_runs"] for q in run]
 
     def _comb_draw_beads(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
         """Draw what survived `_comb_drop_drowned_beads` - the ink, after the record it agrees with."""

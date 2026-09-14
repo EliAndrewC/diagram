@@ -131,6 +131,7 @@ def build_polder(
         "dry_plots": [],
         "dry_acres": 0.0,
         "bund_beans": [],
+        "bund_bean_runs": [],
         "furrows_vary": False,
         "sluice": (round(sluice[0], 1), round(sluice[1], 1)),
         "dike_sluices": [(round(x, 1), round(y, 1)) for x, y in dike_sluices],

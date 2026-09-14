@@ -3,9 +3,10 @@
 Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering` - a glyph convention,
 nothing physical behind it (the GM's own words in `request.md`).
 
-- [ ] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code; the plan
+- [x] T01 spec-fidelity review of `spec.md` against `request.md` - FAITHFUL before any code; the plan
       reviewed (MODE 4) before any tick
       research: rendering
+      verify: DONE. spec-fidelity: round 1 NOT FAITHFUL (three changes taken), round 2 FAITHFUL, round 3 FAITHFUL on the FR-005 amendment; plan MODE 4 CLEAR at round 1 (11 decisions, none narrowing), plan-review.json recorded by the subagent
 - [ ] T02 `_bund_beans` lays runs of two or more (FR-001, FR-002, FR-003, FR-006): the thirds rule on a
       short edge, the split-and-judge `_bead_runs`, runs returned; the unit tests in `tests/settlement/test_core.py`
       research: rendering
