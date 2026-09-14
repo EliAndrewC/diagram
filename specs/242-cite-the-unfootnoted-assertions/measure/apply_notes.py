@@ -92,7 +92,8 @@ def insertion_point(raw: str, sentence: str) -> int:
     """Raw index just after the sentence's end (its last words, then punctuation and a closing inline tag)."""
     vis, idx = visible_map(raw)
     words = norm(html.unescape(re.sub(r"<[^>]+>", "", sentence))).replace("...", " ").split()
-    for size in (6, 5, 4, 3):
+    # a two-word fragment (a parenthetical gloss closing a sentence) is tried as itself; one word never is
+    for size in (6, 5, 4, 3, 2):
         if len(words) < size:
             continue
         tail = " ".join(words[-size:])
