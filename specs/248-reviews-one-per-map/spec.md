@@ -1,6 +1,6 @@
 # Feature 248 - reviews one per map
 
-**Status**: DRAFT - round 1 returned two changes, both taken; awaiting round 2.
+**Status**: DRAFT - rounds 1 and 2 returned changes, all taken; awaiting round 3.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the serialized review's cost and the ledger's answer, where the push refusal's time went, what a hook can guarantee, the classification, how a dispatch names its maps.
 **Predecessors**: 151 (the paired gate), 231 (a review owed only when a layout moved), 240 (the verdict record, the prerequisite check), 246 (a run still going is not abandoned).
@@ -75,7 +75,11 @@ stated rather than promised (research R3, D4, D6).
   refused and a one-map dispatch permitted; the stop rule refusing on an owed map with no dispatch,
   quiet when every map is dispatched or recorded, and refused once; the parallel and serialized
   entries. `tests/tooling/test_review_owed.py` proves the classification waiver on fixture task files
-  in every form (all rendering; one physical; one procedure; no tasks; no pointer). `scripts/test-review-gate.sh`
+  in every form: one active feature all rendering (waived); one physical task, one procedure task, no
+  tasks, no `tasks.md` (each owed); the empty set - no pointer AND no touched open-task feature (owed);
+  and the derived pair - the pointer's feature rendering-only beside a delta-touched open-task feature
+  that is not (owed), and the same pair both rendering-only (waived) - so D7's conjunction is proved by
+  a fixture rather than by one clone's state. `scripts/test-review-gate.sh`
   proves each of FR-006's three passes and both refusals. The firing-log census sees every new rule.
 
 ## Success criteria
@@ -151,3 +155,7 @@ stated rather than promised (research R3, D4, D6).
   unreviewed; the waiver now reads the derived set and takes the conjunction (D7). Both asides taken:
   D3 records the waiver's accepted cost; what the reviewer reads is added to R1 and goes to the GM in
   the closing report.
+- **Round 2 (2026-09-14, MODE 3): CHANGES REQUIRED, two, both taken.** Both items resolved; two lines
+  the amendment left stale: T05 still named the pointer-alone helper (now `active_features`, the derived
+  set), and FR-008's proof forms predated the derived set (the empty set restated, the derived pair added
+  in both directions).

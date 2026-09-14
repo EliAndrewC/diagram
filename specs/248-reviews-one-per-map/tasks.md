@@ -15,7 +15,9 @@ map.
 - [ ] T04 the stop rule (FR-003): the missing set, refused once, cleared by a dispatch, a verdict or a
       waiver; suite sections
       research: procedure
-- [ ] T05 the rendering waiver (FR-005): `rendering_only`, `active_feature`, the reason; `test_review_owed.py`;
+- [ ] T05 the rendering waiver (FR-005): `rendering_only`, `active_features` (the DERIVED set - the pointer's
+      feature plus every open-task feature the delta touches - waived only when all are rendering), the
+      reason; `test_review_owed.py`;
       SC-003 measured on this clone against feature 247's and 230's task files
       research: procedure
 - [ ] T06 the review gate on the verdict record (FR-006): the three passes and three refusals;
