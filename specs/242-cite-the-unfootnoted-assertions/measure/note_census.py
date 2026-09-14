@@ -8,7 +8,10 @@ can be read), and whether they are in this feature's scope is decision D1 of its
 Counts the `.html` pages ONLY. `citations/<name>.js` is DERIVED from the page by `make citations`,
 so a grep over both doubles every figure - which it did on the first attempt at this census.
 
-Usage: python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py [--record]
+Usage: python3 specs/242-cite-the-unfootnoted-assertions/measure/note_census.py [--record] [--list]
+
+`--list` (feature 242 T18) prints every never-searched absence note - citations page, note id, the
+research page and line its reference stands on, and the note's text - which is that task's work list.
 """
 
 from __future__ import annotations
@@ -31,7 +34,35 @@ FORMS = {
 }
 
 
+def never_searched() -> list[dict]:
+    """Every absence note whose text says no query of its own was run, with where its reference stands."""
+    out: list[dict] = []
+    research = ROOT.parent
+    for page in sorted(ROOT.rglob("*.html")):
+        text = page.read_text(encoding="utf-8")
+        rel = page.relative_to(ROOT).as_posix()
+        rpage = research / rel
+        rlines = rpage.read_text(encoding="utf-8").split("\n") if rpage.is_file() else []
+        for m in re.finditer(r'<li id="fn-(\d+)">(.*?)</li>', text, re.S):
+            body = m.group(2)
+            if not FORMS["absence-notes-never-searched"].search(body):
+                continue
+            n = m.group(1)
+            line = next((i + 1 for i, ln in enumerate(rlines) if f'id="fnref-{n}"' in ln), 0)
+            out.append({"page": rel, "fn": int(n), "line": line, "note": re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", body)).strip()})
+    return out
+
+
 def main() -> int:
+    if "--list" in sys.argv:
+        rows = never_searched()
+        if "--json" in sys.argv:
+            json.dump(rows, sys.stdout, ensure_ascii=False, indent=1)
+        else:
+            for r in rows:
+                print(f"{r['page']:32} fn-{r['fn']:<4} L{r['line']:<5} {r['note'][:150]}")
+            print(f"{len(rows)} never-searched absence notes")
+        return 0
     counts = dict.fromkeys(FORMS, 0)
     pages = sorted(ROOT.rglob("*.html"))
     for page in pages:
