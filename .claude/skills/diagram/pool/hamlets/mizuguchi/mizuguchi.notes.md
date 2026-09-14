@@ -742,3 +742,14 @@ top is a brook and a ditch parting, which is what was actually there.
 
 What stands at the tap is rolled, because the record attests two forms and prefers neither.
 This map rolled the **weir**, which suits the name: *mizuguchi* is the mouth where water enters a paddy. Its drainage pond nearly went: the brook now runs down the flank the pond wanted, and the first cut of the set-back walk - straight downslope, and holding the pond a circle of its long radius off the water - pushed it past the canvas, at which point the stage falls back to draining off the frame. The seat search can step ACROSS the fall now, and the clearance is the pond's own ellipse, so the pond kept its place. That pond is the field's drainage sink at its low foot, not a reservoir above it: the collector runs into it, and since the seat stepped it across the fall the run is led round a curve along the collector's own heading rather than doubling back.
+
+## 2026-09-14 - feature 247: two beads on every beaded bund (a glyph convention; the beads moved, nothing else)
+
+The GM asked for at least two bead glyphs on any stretch of bund that carries bund beans, having seen
+stretches with one. An edge of two to three bead spacings now carries two beads at its thirds instead of
+one at its middle, and a run that a drop leaves with a single bead loses it (`specs/247-two-beads-per-bund/`).
+The random stream is untouched: the manifest diff is the `bund_beans` list only. The independent
+`settlement-review` of the re-rolled map (2026-09-14, DELTA scope, all four bead-bearing hamlets in one
+dispatch) confirmed it from the two snapshots - every single-bead position removed and a pair laid in its
+place, run count unchanged, every new bead on the bund stroke, no pair crowding closer than the thirds of
+the shortest edge - and recorded PASS (`.git/review-verdicts/`).

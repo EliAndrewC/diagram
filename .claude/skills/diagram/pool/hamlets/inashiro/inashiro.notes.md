@@ -1747,3 +1747,14 @@ the second roll: it seats all fifteen on an undivided margin. And the path to th
 HOUSE a fragment serves is served by something else, and the field spur serves no house at all. It is flagged now
 and kept like a house's only way, and the length the clip leaves is recorded on every map (`meta.field_spur_ft`)
 whether the spur is drawn or not - which is how the three maps that currently have none became visible.
+
+## 2026-09-14 - feature 247: two beads on every beaded bund (a glyph convention; the beads moved, nothing else)
+
+The GM asked for at least two bead glyphs on any stretch of bund that carries bund beans, having seen
+stretches with one. An edge of two to three bead spacings now carries two beads at its thirds instead of
+one at its middle, and a run that a drop leaves with a single bead loses it (`specs/247-two-beads-per-bund/`).
+The random stream is untouched: the manifest diff is the `bund_beans` list only. The independent
+`settlement-review` of the re-rolled map (2026-09-14, DELTA scope, all four bead-bearing hamlets in one
+dispatch) confirmed it from the two snapshots - every single-bead position removed and a pair laid in its
+place, run count unchanged, every new bead on the bund stroke, no pair crowding closer than the thirds of
+the shortest edge - and recorded PASS (`.git/review-verdicts/`).

@@ -910,3 +910,14 @@ research answer (a board stands where the traffic is, and a through-road carries
 it moves boards on every map that re-seats - which wants its own feature, its own cohort and its own review
 rather than a 4 a.m. edit. What is recorded is the measurement and the mechanism, so the next session does
 not have to find either.
+
+## 2026-09-14 - feature 247: two beads on every beaded bund (a glyph convention; the beads moved, nothing else)
+
+The GM asked for at least two bead glyphs on any stretch of bund that carries bund beans, having seen
+stretches with one. An edge of two to three bead spacings now carries two beads at its thirds instead of
+one at its middle, and a run that a drop leaves with a single bead loses it (`specs/247-two-beads-per-bund/`).
+The random stream is untouched: the manifest diff is the `bund_beans` list only. The independent
+`settlement-review` of the re-rolled map (2026-09-14, DELTA scope, all four bead-bearing hamlets in one
+dispatch) confirmed it from the two snapshots - every single-bead position removed and a pair laid in its
+place, run count unchanged, every new bead on the bund stroke, no pair crowding closer than the thirds of
+the shortest edge - and recorded PASS (`.git/review-verdicts/`).
