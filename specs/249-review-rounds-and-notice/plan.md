@@ -20,8 +20,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   `;` - the notice is present and the call is allowed; case 2d: the same with `run_in_background: true`.
 - **P2 `review-round-hooks.sh pretool`** (bash + one python block, the `escalation-hooks.sh` shape):
   parse the payload (tool, subagent type, prompt, transcript path, session id, cwd); exit 0 unless
-  `spec-fidelity`; mode from the prompt's text - `MODE 4`, `plan review` or `plan.md` -> plan review,
-  `MODE 1` or `exception` -> exception check, else spec review; the first two log `permitted/other-mode`
+  `spec-fidelity`; mode from the prompt's text with precedence - `MODE 2` or `MODE 3` -> spec review
+  whatever else it says; else `MODE 4` or `PLAN REVIEW` -> plan review; else `MODE 1` or `EXCEPTION
+  CHECK` -> exception check; else spec review; the plan and exception modes log `permitted/other-mode`
   and exit 0 touching nothing; feature dir = first `specs/NNN-slug` in the prompt; clone = `clone-sync-hooks.sh
   resolve` on the payload, else `git rev-parse --show-toplevel` from the payload's cwd; state =
   `<clone>/.git/review-round/<dir>/` holding `snapshot/` and `round`. Escape first: `REVIEW_ROUND_OK`

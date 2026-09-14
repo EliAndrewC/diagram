@@ -50,9 +50,13 @@ passages must be supplied by hand this once, because the tooling has no earlier 
 not hold, passes untouched (`permitted`/`no-feature`). **A MODE 1 or MODE 4 dispatch passes untouched
 and neither takes nor refreshes the snapshot** (`permitted`/`other-mode`): a plan review must read the
 WHOLE plan and find its decisions itself (feature 243), and an exception check precedes the spec's
-initial reading, which MODE 3's own opening says is a full one. The discriminator is the prompt's text:
-a prompt that names `MODE 4`, `plan review` or `plan.md` is a plan review; one that names `MODE 1` or
-`exception` is an exception check; every other `spec-fidelity` dispatch is a spec review. The state is
+initial reading, which MODE 3's own opening says is a full one. The discriminator is the prompt's text,
+read with precedence: a prompt naming `MODE 2` or `MODE 3` is a spec review whatever other mode words it
+contains (a round's prompt relays the previous items, which may say "plan review" or "exception"); only
+in the absence of such a marker is it tested for a plan review, keyed on the contract's own heading form
+`MODE 4` or `PLAN REVIEW`, and then for an exception check, keyed on `MODE 1` or `EXCEPTION CHECK` - never
+on a bare `plan.md` or `exception`, which recur in correct spec-review prompts; anything else is a spec
+review. The state is
 `<clone>/.git/review-round/<NNN-slug>/`, beside the pair guard's `review-snapshot/`: never committed,
 never shared between sessions (R4).
 
@@ -77,7 +81,9 @@ carries the diff, names the round and ends with the session's prompt verbatim, a
 `rewrote`; the previous verdict is recovered from a fixture subagent transcript, and the Review history
 fallback is used when none matches; a spec with history and no snapshot gets the context line; a
 prompt naming no feature passes; a MODE 4 dispatch and a MODE 1 dispatch naming the feature pass
-untouched and leave the snapshot as it was; the escape passes with a reason and is refused without one;
+untouched and leave the snapshot as it was, and a spec-review dispatch whose prompt contains the words
+`exception`, `plan review` and `plan.md` while naming `MODE 3` is still rewritten; the escape passes
+with a reason and is refused without one;
 the snapshot advances so a third dispatch diffs against the second; a recovered FAITHFUL verdict starts
 the round count again at one. `scripts/test-batching-hooks.sh` gains the cases that a FOLDED single call
 and a BACKGROUNDED single call at one below the bar each receive the notice. The firing-log census
@@ -101,7 +107,8 @@ and this feature's directory; the route is DIRECT with the guard-script stamp fr
   report says it read the preamble's diff and the grep hits and names no file read end to end; failing
   that, the suite's second-dispatch case proves the rewrite.
 - **SC-003** (FR-003) - the suite's first-dispatch, history-without-snapshot, no-feature, MODE 4 and
-  MODE 1 cases pass, and the state directory is under the clone's `.git/`.
+  MODE 1 cases pass, the MODE 3 prompt that mentions the other modes' words is still rewritten, and the
+  state directory is under the clone's `.git/`.
 - **SC-004** (FR-004) - the suite's escape cases pass; the escape census classifies the token.
 - **SC-005** (FR-005) - MODE 3 step 3 names the grep procedure; the ruling is quoted; the contract says
   the preamble is the tooling's.
@@ -131,6 +138,11 @@ no reason, which every guard carries.
 own record says most early blocks landed on already-substantive calls before the shape test existed.
 Only the notice changes.
 
+**D6 - the reviewer is not asked to ignore the session's prompt, only to answer it from the diff.**
+A session may still ask a whole-spec question; the preamble says how to answer it without a re-read.
+Removing the session's text would lose the request quotation and the round's context that only the
+session has.
+
 **D7 - the notice drops the background exclusion with the shape test, on the GM's words.** The
 session's own draft kept "not backgrounded" on the notice. The reviewer pointed out that the hook itself
 treats backgrounding as part of the one shape judgment, and the GM approved "fire on any single call".
@@ -138,14 +150,12 @@ A notice on a backgrounded launch costs nothing and can only arrive earlier, so 
 from the notice and kept on the block.
 
 **D8 - the other two modes are told apart by the prompt's text, not by a new field.** The Agent tool
-carries no mode; the session's prompt names it (the contract's own headings are `MODE 1` to `MODE 4`,
-and a plan review names `plan.md`). A word test on the prompt is the only discriminator a hook has, and
-it defaults to the spec review, which is the common dispatch and the one whose cost was measured.
-
-**D6 - the reviewer is not asked to ignore the session's prompt, only to answer it from the diff.**
-A session may still ask a whole-spec question; the preamble says how to answer it without a re-read.
-Removing the session's text would lose the request quotation and the round's context that only the
-session has.
+carries no mode; the session's prompt names it, and the contract's own headings (`MODE 1: EXCEPTION
+CHECK` to `MODE 4: PLAN REVIEW`) are the forms a prompt copies. A word test on the prompt is the only
+discriminator a hook has. It reads with precedence and keys on the heading forms because round 2 of this
+feature's own review showed the bare-word form failing on itself: its prompt named `MODE 3` and also
+"plan review" and "exception" while relaying round 1's items, and would have been passed untouched.
+The default is the spec review, which is the common dispatch and the one whose cost was measured.
 
 ## Review history
 
@@ -154,5 +164,12 @@ session has.
   their suite cases named (1, FR-002, FR-003, FR-006, SC-003, D8); FR-001 drops the background exclusion
   with the shape test, as the GM's words say (2, D7, SC-001); the round number counts within a pass that
   restarts at a recovered FAITHFUL, per the GM's 2026-09-12 cap ruling (3, FR-002); R1's sum corrected,
-  the agents' durations and the session's waits stated as the two different quantities they are (4). The departure from a context line to a
+  the agents' durations and the session's waits stated as the two different quantities they are (4).
+  - **Round 2 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, one item, applied: the discriminator had
+  no precedence, so a spec-review prompt mentioning "plan review" or "exception" - as a round's prompt
+  does when it relays the previous items, and as round 2's own prompt did - would have been classed a
+  plan review or an exception check and passed untouched; it now reads `MODE 2`/`MODE 3` first and keys
+  the other two on the contract's heading forms, with the self-demonstrating case added to FR-006 and
+  SC-003 (1, D8). Its aside is applied: D7 and D8 now follow D6. Round 2 was dispatched in the bounded
+  form this feature builds and read no file end to end. The departure from a context line to a
   rewrite was ruled FAITHFUL, a strengthening within the GM's own reason.
