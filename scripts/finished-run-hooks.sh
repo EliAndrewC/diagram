@@ -38,10 +38,33 @@
 #
 # ONCE PER RUN IS THE WHOLE RELEASE VALVE, AND THERE IS NO TOKEN ESCAPE - because a Stop hook's payload
 # carries no command, so there is nowhere for a session to put one (tried, and the suite caught it). The turn
-# is refused the first time it would close over a given live run, keyed on the make PIDs, which is enough to
-# force the decision; a second attempt goes through. That matters: a session answering the GM while a gate
-# runs is doing the right thing and must not be trapped, and the marker is cleared the moment nothing is
-# live, so the next run gets its own single refusal.
+# is refused the first time it would close over a given live run, keyed on the ROOT make of the run, which is
+# enough to force the decision; a second attempt goes through. That matters: a session answering the GM while
+# a gate runs is doing the right thing and must not be trapped, and the marker is cleared the moment nothing
+# is live, so the next run gets its own single refusal.
+#
+# ...AND THE GUARD ASKS THE SECOND QUESTION: IS ANYONE WAITING? (feature 246, GM 2026-09-13: "the fact that
+# we keep seeing this message over and over again makes me wonder whether we should take a different
+# approach ... it seems generally not good if we keep stepping on the same rake over and over again"). In
+# its first day the rule refused 18 turn-ends on 13 runs, 5 of them repeats on a run it had already refused,
+# and every one in the session that measured it landed on a state that was already right: a `make done`
+# started through the Bash tool's background mode, which the harness wakes the session for when it exits,
+# with a waiter loop armed on its log besides (`specs/246-*/research.md` R1-R3). Two things were wrong. The
+# marker held EVERY live make pid, and a gate is four phases each with its own child pid, so "once per run"
+# was once per phase. And the rule asked only "is a make alive", never "will anything wake the session" -
+# so it could not tell the run the 2026-09-12 incident was about (detached with `setsid nohup`, nobody
+# watching) from the two shapes that need nothing. Both are answered from `/proc`, by pid, never by pattern:
+#   TRACKED   an ancestor of the make is the `claude` process - the harness itself - which is what every
+#             background-mode command looks like (R2: the command's shell writes to the task file, and its
+#             parent is `claude`); the harness notifies at exit.  -> let through, one line of context.
+#   WATCHED   a loop of the shape `stale_waiters` recognizes (`until`/`while` ... `grep` ... `sleep`), outside
+#             this hook's own ancestry, names the file the make's stdout goes to.  -> let through, one line.
+#   UNWATCHED neither: a detached run with no watcher, the one shape that can go unread.  -> REFUSED, once
+#             per root make, exactly as before.
+# The refusal's remedy names the run's own log in the loop it prescribes, and says a background-mode run
+# needs no loop - the old text sent sessions to build a second wakeup for an event the harness already
+# reports (R3). A periodic "are you still waiting" timer was priced and declined (R4): polling with a period
+# at a turn per tick, where the event wakeup exists twice over and did not fail.
 #
 # Modes:
 #   prompt  (UserPromptSubmit) one line per unsurfaced finished run, then mark them surfaced
@@ -49,6 +72,7 @@
 #   check <clone>  one-shot for any clone, marking nothing (the suite uses this)
 #   seen <clone>   mark everything currently finished as surfaced (the suite uses this)
 #   live <clone>   print one line per live make run in that clone (the suite and `make audit` use this)
+#   judge <clone>  one line per ROOT live make run with its status - tracked | watched | unwatched (feature 246)
 #   stale          print one line per waiter loop whose producer is dead (the suite uses this)
 set -uo pipefail
 MODE=${1:-}
@@ -77,6 +101,88 @@ for d in glob.glob("/proc/[0-9]*"):
     # the TARGET is the first bare word after the make binary - what a session would wait on
     target = next((a for a in argv[1:] if a and not a.startswith("-") and "=" not in a), "")
     print(f"{d.rsplit('/', 1)[-1]} {target or 'make'}")
+PY
+}
+
+judge_runs() { # judge_runs <clone> -> "<pid> <target> <status> <detail>" per ROOT live make run (feature 246)
+  # ROOT = a live make none of whose ancestors is a live make: the `done` of a four-phase gate, not its
+  # `static`/`_reference`/`test-full`/`test` children, so the refusal marker keys on something that does not
+  # change at every phase boundary (R1: that is what turned "once per run" into once per phase).
+  # STATUS is answered from the kernel by pid - `comm` and the stdout link of each ancestor, the cmdline of
+  # every other process for a waiter - never by a pattern over this hook's own command line.
+  python3 - "$1" "$$" <<'PY'
+import glob, os, re, sys
+
+clone, mine = os.path.realpath(sys.argv[1]), int(sys.argv[2])
+
+def ppid(p):
+    try:
+        return int(open(f"/proc/{p}/stat").read().rsplit(") ", 1)[1].split()[1])
+    except (OSError, IndexError, ValueError):
+        return 0
+
+def comm(p):
+    try:
+        return open(f"/proc/{p}/comm").read().strip()
+    except OSError:
+        return ""
+
+def stdout_of(p):
+    try:
+        return os.readlink(f"/proc/{p}/fd/1")
+    except OSError:
+        return ""
+
+def ancestors(p):  # p's parent, grandparent, ... up to init
+    out, q = [], ppid(p)
+    while q > 1:
+        out.append(q)
+        q = ppid(q)
+    return out
+
+live = {}
+for d in glob.glob("/proc/[0-9]*"):
+    p = int(d.rsplit("/", 1)[-1])
+    try:
+        if comm(p) not in ("make", "gmake"):
+            continue
+        if not os.path.realpath(os.readlink(f"{d}/cwd")).startswith(clone):
+            continue
+        argv = open(f"{d}/cmdline").read().split("\0")
+    except OSError:
+        continue
+    live[p] = next((a for a in argv[1:] if a and not a.startswith("-") and "=" not in a), "") or "make"
+
+hook_tree = set(ancestors(mine)) | {mine}
+loops = []  # (pid, cmdline) of every file-watching loop that is not this hook's own tree
+for d in glob.glob("/proc/[0-9]*"):
+    p = int(d.rsplit("/", 1)[-1])
+    if p in hook_tree:
+        continue
+    try:
+        cmd = open(f"{d}/cmdline").read().replace("\0", " ")
+    except OSError:
+        continue
+    if re.search(r"\b(until|while)\b.*\bgrep\b", cmd) and "sleep" in cmd:
+        loops.append((p, cmd))
+
+for p, target in sorted(live.items()):
+    anc = ancestors(p)
+    if any(a in live for a in anc):
+        continue  # a phase child: its root speaks for it
+    tracked = next((a for a in anc if comm(a) == "claude"), None)
+    if tracked is not None:
+        # the task file is the stdout of the harness's own shell - the child of `claude` on this chain
+        shell = [a for a in anc if ppid(a) == tracked]
+        print(f"{p} {target} tracked {stdout_of(shell[0]) if shell else 'the harness'}")
+        continue
+    log = stdout_of(p)
+    if log.startswith("/") and os.path.isfile(log):
+        waiter = next((lp for lp, cmd in loops if log in cmd), None)
+        if waiter is not None:
+            print(f"{p} {target} watched {waiter} {log}")
+            continue
+    print(f"{p} {target} unwatched {log or '(no file)'}")
 PY
 }
 
@@ -185,20 +291,49 @@ except Exception: pass' 2>/dev/null)
         # shellcheck source=/dev/null
         . "$FR_HERE/_guardlog.sh"
         SEEN_F="$CLONE/.git/live-run.told"
-        PIDS=$(printf '%s\n' "$LIVE" | cut -d' ' -f1 | tr '\n' ',')
-        if [ "$(cat "$SEEN_F" 2>/dev/null)" = "$PIDS" ]; then
-          exit 0   # already told for exactly these runs: never a loop, and a turn may close deliberately
+        ROOTS=$(judge_runs "$CLONE")
+        UNWATCHED=$(printf '%s\n' "$ROOTS" | awk '$3 == "unwatched"')
+        if [ -z "$UNWATCHED" ]; then
+          # EVERY ROOT RUN WILL WAKE THE SESSION (feature 246): tracked by the harness, or watched by a loop on
+          # its log. One line each, recorded, and the turn closes - the wait is already armed.
+          while read -r pid target status detail; do
+            [ -n "$pid" ] || continue
+            if [ "$status" = tracked ]; then
+              printf 'finished-run: `make %s` (pid %s) is still going; the harness will wake this session when it finishes (its output: %s). Nothing more to arm.\n' "$target" "$pid" "$detail"
+              guard_log finished-run permitted "$pid $target $detail" tracked-run
+            else
+              printf 'finished-run: `make %s` (pid %s) is still going; a waiter (pid %s) is watching %s and will wake this session. Nothing more to arm.\n' "$target" "$pid" "${detail%% *}" "${detail#* }"
+              guard_log finished-run permitted "$pid $target $detail" waiter-armed
+            fi
+          done <<< "$ROOTS"
+        else
+          # keyed on the UNWATCHED ROOTS, so a phase child appearing under the same run refuses nothing new
+          PIDS=$(printf '%s\n' "$UNWATCHED" | cut -d' ' -f1 | tr '\n' ',')
+          if [ "$(cat "$SEEN_F" 2>/dev/null)" = "$PIDS" ]; then
+            exit 0   # already told for exactly these runs: never a loop, and a turn may close deliberately
+          fi
+          printf '%s' "$PIDS" > "$SEEN_F" 2>/dev/null || true
+          printf 'A MAKE RUN IS STILL GOING, NOTHING WILL WAKE THIS SESSION FOR IT, and this turn was about to end:\n' >&2
+          printf '%s\n' "$LIVE" | sed 's/^/  pid /' >&2
+          while read -r pid target status detail; do
+            [ -n "$pid" ] || continue
+            case "$status" in
+              unwatched) printf '\npid %s `make %s` is DETACHED with no watcher - its output goes to %s.\n' "$pid" "$target" "$detail" >&2
+                         printf 'Wait for it: background a loop on that log (`until grep -qE "verification-state|GATE FAILED" %s; do sleep 20; done`)\n' "$detail" >&2
+                         printf 'and the no-poll guard will add the proof-of-life check for you. Then REPORT WHAT IT SAID.\n' >&2 ;;
+              tracked)   printf '\npid %s `make %s` is fine: started through the Bash tool'"'"'s background mode, the harness wakes this session at exit.\n' "$pid" "$target" >&2 ;;
+              watched)   printf '\npid %s `make %s` is fine: a waiter (pid %s) is on its log.\n' "$pid" "$target" "${detail%% *}" >&2 ;;
+            esac
+          done <<< "$ROOTS"
+          printf '\nA run started through the Bash tool'"'"'s background mode needs NO loop - the harness wakes the session\n' >&2
+          printf 'when it exits and this guard sees that. The loop is for a run detached with setsid/nohup, which nothing else watches.\n' >&2
+          printf 'Reporting a result you have not seen is the thing this prevents: on 2026-09-12 a detached gate failed 58 s\n' >&2
+          printf 'after a turn ended on "the gate is running" and sat unread for 52 minutes.\n' >&2
+          printf 'Ending the turn deliberately (the GM asked something else) is fine: end it again and this lets it through.\n' >&2
+          guard_log finished-run blocked "$LIVE" run-still-going
+          exit 2
         fi
-        printf '%s' "$PIDS" > "$SEEN_F" 2>/dev/null || true
-        printf 'A MAKE RUN IS STILL GOING and this turn was about to end without waiting for it:\n' >&2
-        printf '%s\n' "$LIVE" | sed 's/^/  pid /' >&2
-        printf '\nWait for it: background a loop on its log (`until grep -qE "verification-state|GATE FAILED" <log>; do sleep 20; done`)\n' >&2
-        printf 'and the no-poll guard will add the proof-of-life check for you. Then REPORT WHAT IT SAID.\n' >&2
-        printf 'Reporting a result you have not seen is the thing this prevents: on 2026-09-12 a gate failed 58 s\n' >&2
-        printf 'after a turn ended on "the gate is running" and sat unread for 52 minutes.\n' >&2
-        printf 'Ending the turn deliberately (the GM asked something else) is fine: end it again and this lets it through.\n' >&2
-        guard_log finished-run blocked "$LIVE" run-still-going
-        exit 2
+        exit 0
       fi
       rm -f "$CLONE/.git/live-run.told" 2>/dev/null || true   # nothing live: the next run starts clean
       # ...AND A WAITER WHOSE PRODUCER IS DEAD IS REPORTED, NEVER LEFT SPINNING (the third rule; see
@@ -220,6 +355,7 @@ except Exception: pass' 2>/dev/null)
   check) report "${2:?clone}" nomark; exit 0 ;;
   seen)  report "${2:?clone}" mark >/dev/null; exit 0 ;;
   live)  live_runs "${2:?clone}"; exit 0 ;;
+  judge) judge_runs "${2:?clone}"; exit 0 ;;
   stale) stale_waiters; exit 0 ;;
   *) echo "usage: $0 prompt|stop|check <clone>|seen <clone>|live <clone>" >&2; exit 2 ;;
 esac

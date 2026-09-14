@@ -94,6 +94,76 @@ rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.jso
 print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
 check "the refusal is recorded with its own rule" yes "$(has "$RULES" "'blocked', 'run-still-going'")"
 
+# GUARD_EDIT_OK: feature 246 (GM 2026-09-13) - THE SECOND QUESTION: is anyone WAITING for the live run? In its first
+# day the rule refused 18 turn-ends on 13 runs, 5 of them repeats on a run it had already refused, every one in the
+# measuring session on a run the harness was tracking with a waiter loop armed besides. So a run with an ancestor
+# named `claude` (the harness; a background-mode command) and a run with a loop on its log are let through with one
+# line each, the refusal keys on the ROOT make so a phase child refuses nothing new, and only a detached run nobody
+# watches is refused. Every case drives a REAL process; nothing here is a pattern over a command line.
+echo "--- 6b. a run the HARNESS tracks is let through: an ancestor named claude (feature 246) ---"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1; rm -f "$LV/.git/live-run.told"
+cat > "$LV/Makefile" <<'MK'
+sleeper:
+	@sleep 12
+phases:
+	@$(MAKE) --no-print-directory p1; $(MAKE) --no-print-directory p2
+p1:
+	@sleep 3
+p2:
+	@sleep 9
+MK
+mkdir -p "$T/tasks"; cp "$(command -v bash)" "$T/claude"
+# THE FIXTURES DETACH FOR REAL, AND THE STAND-IN HARNESS STAYS ALIVE - two shell facts the first run of this section
+# got wrong: a process is reparented to init only when its PARENT exits (so every fixture is started inside a
+# subshell that exits at once; started bare, its parent is this suite, whose ancestor is the REAL harness, and the
+# judge reports it tracked - correctly); and `bash -c "... && make x"` execs INTO its last command, so the
+# `claude`-named shell vanished and left the make with no ancestor at all - the trailing `; :` keeps it a parent.
+( "$T/claude" -c "cd $LV && make sleeper; :" > "$T/tasks/t1.output" 2>&1 & ) ; sleep 1
+check "the judge sees the run as tracked" yes "$(has "$("$HOOK" judge "$LV")" ' sleeper tracked ')"
+OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$LV" | "$HOOK" stop 2>"$T/fr.err"); RC=$?
+check "stop lets a tracked run through" 0 "$RC"
+check "...with one line of context saying the harness will wake the session" yes "$(has "$OUT" 'harness will wake this session')"
+check "...and no refusal text" no "$(has "$(cat "$T/fr.err")" 'STILL GOING')"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$T/claude" 2>/dev/null; sleep 1
+
+echo "--- 6c. a detached run with a WAITER on its log is let through; one on another file is not ---"
+rm -f "$LV/.git/live-run.told"
+( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/run.log" 2>&1 & )
+sleep 1
+check "detached and unwatched: the judge says so, naming the log" yes "$(has "$("$HOOK" judge "$LV")" " unwatched $T/run.log")"
+setsid nohup bash -c "until grep -q NEVER_APPEARS $T/other.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+sleep 1
+lstop; check "a waiter on a DIFFERENT file does not count: refused" 2 "$?"
+check "...and the refusal prescribes the loop on the run's OWN log" yes "$(has "$(cat "$T/fr.err")" "GATE FAILED\" $T/run.log")"
+check "...and says a background-mode run needs no loop" yes "$(has "$(cat "$T/fr.err")" 'needs NO loop')"
+setsid nohup bash -c "until grep -q NEVER_APPEARS $T/run.log; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+sleep 1
+rm -f "$LV/.git/live-run.told"
+check "the judge sees the run as watched, with its waiter" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
+OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$LV" | "$HOOK" stop 2>"$T/fr.err"); RC=$?
+check "stop lets a watched run through" 0 "$RC"
+check "...with one line naming the waiter" yes "$(has "$OUT" 'a waiter (pid')"
+pkill -f "NEVER_APPEARS" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
+
+echo "--- 6d. ONCE PER ROOT RUN: a phase child appearing does not refuse again (the R1 shape) ---"
+rm -f "$LV/.git/live-run.told"
+( setsid nohup bash -c "cd $LV && exec make phases" </dev/null > "$T/phases.log" 2>&1 & )
+sleep 1
+check "the two-phase run shows ONE root (the child speaks through it)" 1 "$("$HOOK" judge "$LV" | wc -l)"
+FIRST=$("$HOOK" live "$LV" | tr '\n' ' ')
+lstop; check "refused once, with p1 live" 2 "$?"
+sleep 4
+SECOND=$("$HOOK" live "$LV" | tr '\n' ' ')
+check "the live set has CHANGED (p2 is the child now)" no "$([ "$FIRST" = "$SECOND" ] && echo yes || echo no)"
+check "...and the same root does NOT refuse again" 0 "$(lstop; echo $?)"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
+RULES3=$(python3 -c "
+import collections, glob, json, os
+rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
+print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
+check "the tracked pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'tracked-run'")"
+check "the watched pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'waiter-armed'")"
+
 # GUARD_EDIT_OK: GM 2026-09-12 - THE THIRD RULE: a waiter spinning on a DEAD PRODUCER. The GM found three in
 # their own status line, re-grepping every 15 s for EIGHT HOURS on logs from the OOM-killed runs of that
 # morning - the same incident that produced the proof-of-life clause, whose waiters predate it. Two census

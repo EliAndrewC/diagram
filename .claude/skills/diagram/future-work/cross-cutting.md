@@ -430,3 +430,18 @@ elements per hover rather than feature 201's whole-class restacking - which is t
 223 ms figure does not transfer, and the first thing to measure if anyone picks this up. The
 alternative, splitting the water stroke geometrically where a fixture crosses it, is cheaper on the
 page and is REFUSED: it would change the SVG and the PNG, which spec 134 FR-010 forbids.
+
+## A single fallback wakeup for a LOST harness notification (deferred by feature 246, 2026-09-13)
+
+The GM, watching the finished-run guard refuse one gate's turn-end three times, floated *"automatically
+starting a timer that prompts you every N minutes until the task is finished"*. Feature 246 declined the
+periodic form (`specs/246` research.md R4): each tick is a model turn, and the event wakeup already exists
+twice over - the harness notifies the session when a background-mode command exits, and a detached run
+carries a file-watching loop with its proof-of-life clause - and neither failed on any of the gates
+measured (zero of three). What that leaves open is the one case a period would cover and an event does
+not: a tracked run whose completion notification is LOST. No such loss has been observed. If one is, the
+shape to build is ONE long fallback wakeup armed when the guard lets a tracked run through - at the
+target's recorded median duration times two (`scripts/_gatecost.py` has the median) - not a period; and
+the first thing to establish is how the notification was lost, because a hook cannot schedule a wakeup
+today (`ScheduleWakeup` is the session's tool), so the mechanism would need the harness's own support or
+a `Monitor` the guard starts.
