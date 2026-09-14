@@ -1,6 +1,6 @@
 # Feature 248 - reviews one per map
 
-**Status**: DRAFT - rounds 1 and 2 returned changes, all taken; awaiting round 3.
+**Status**: FAITHFUL (`spec-fidelity`, round 3 of 5, 2026-09-14; rounds 1 and 2 CHANGES REQUIRED, all taken; rounds 3 and later ran on this session's model after the Opus weekly limit was reached mid-feature, by the session's decision, disclosed here). Round 3's aside - the refusal count - taken as an amendment, verified in round 4.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - the serialized review's cost and the ledger's answer, where the push refusal's time went, what a hook can guarantee, the classification, how a dispatch names its maps.
 **Predecessors**: 151 (the paired gate), 231 (a review owed only when a layout moved), 240 (the verdict record, the prerequisite check), 246 (a run still going is not abandoned).
@@ -80,7 +80,7 @@ stated rather than promised (research R3, D4, D6).
   and the derived pair - the pointer's feature rendering-only beside a delta-touched open-task feature
   that is not (owed), and the same pair both rendering-only (waived) - so D7's conjunction is proved by
   a fixture rather than by one clone's state. `scripts/test-review-gate.sh`
-  proves each of FR-006's three passes and both refusals. The firing-log census sees every new rule.
+  proves each of FR-006's three passes and three refusals. The firing-log census sees every new rule.
 
 ## Success criteria
 
@@ -94,8 +94,9 @@ stated rather than promised (research R3, D4, D6).
   reports no map owed with the rendering reason although four manifests differ from main; with feature
   230's beside it in the derived set, it reports the four.
 - **SC-004** (FR-006): the review gate passes feature 247's four manifests on their PASS records at the
-  landed engine key with no notes touch, refuses a manifest whose only record is NOT-REVIEWABLE, and
-  refuses one with a PASS record at another engine key and no notes touch.
+  landed engine key with no notes touch, refuses a manifest whose only record is NOT-REVIEWABLE, refuses
+  one with a PASS record at another engine key and no notes touch, and refuses one with no record and no
+  notes touch.
 - **SC-005** (FR-007, FR-008): the contract and CLAUDE.md say the rules; `make hooks-test` green; the
   firing-log census and the guard corpus green; lands DIRECT (guard scripts and tooling tests, no engine
   code).
@@ -159,3 +160,6 @@ stated rather than promised (research R3, D4, D6).
   the amendment left stale: T05 still named the pointer-alone helper (now `active_features`, the derived
   set), and FR-008's proof forms predated the derived set (the empty set restated, the derived pair added
   in both directions).
+- **Round 3 (2026-09-14, MODE 3, on this session's model - the Opus attempt was terminated by the
+  weekly rate limit): FAITHFUL.** Both round-2 lines resolved. Its aside taken as an amendment: FR-008
+  and SC-004 now count FR-006's three refusals, as T06 does.
