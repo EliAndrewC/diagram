@@ -1,6 +1,7 @@
 # Feature 242 - cite the unfootnoted assertions
 
-**Status:** specified; awaiting a FAITHFUL verdict (see Review history).
+**Status:** accepted, including the 2026-09-14 amendment (the download list's format, and the guidelines that
+carry it - FR-010, FR-015, D6; FAITHFUL at amendment round 2, see Review history). Implementation not started.
 
 ## Summary
 
@@ -21,6 +22,10 @@ marker is thereby closed. The work list is a FILTER over the four reader reports
 **A second class of 119 items** carries an absence note whose text says no query was ever run
 (`m:absence-notes-never-searched`; `research.md` R2). Those are backlog, not settled questions, and D1
 records why this feature owns them.
+
+**And since 2026-09-14 the feature owes the GM's FORMAT for the list of documents it hands them**, and
+owes the project guidelines a statement of that format, so no later session hands over a list in
+another shape (FR-010, FR-015, D6; `request.md`).
 
 This feature writes no engine code (D3), so its delta takes the DIRECT route.
 
@@ -84,11 +89,33 @@ dispatched to the `entry-drift` agent and the modal prose rewritten, or discharg
 **FR-009 - the work lands in batches.** A page's items are finished, checked and committed together, so
 an interrupted run leaves finished pages rather than a half-noted record.
 
-**FR-010 - the documents that cannot be read are appended to the END of `TO-DOWNLOAD.md` Part 4.** The
-GM's condition, in their words: *"you should definitely append them to the end rather than burying them
-in the middle so that I will be able to make sure that I get to all of them."* Each entry is a clickable
-markdown link - an exact one where it exists, a Google-search link where it does not - and says what
-rests on it and what blocked the fetch.
+**FR-010 - the documents that cannot be read are appended to the END of `TO-DOWNLOAD.md` Part 4, each in
+the GM's format.** The GM's condition on PLACEMENT, in their words: *"you should definitely append them
+to the end rather than burying them in the middle so that I will be able to make sure that I get to all
+of them."* The GM's condition on FORM (2026-09-14, D6): *"each source has a link to what you think the URL
+is and a link to the Google search as a backup where the Google search should uniquely identify the
+resource."* So every entry is written in markdown as:
+
+- a heading naming the work (author or publisher, title, and what it is about where the title does not say);
+- a clickable link to **the URL the session believes the document lives at** - its best guess, kept even
+  when the fetch failed there or the address could not be verified, because the GM's browser may succeed
+  where the container did not;
+- a clickable **Google-search link as the backup**, whose query is chosen so that the search **uniquely
+  identifies the resource** - the title plus whatever it takes (author, host, a distinctive phrase, the
+  file name) for the work to be the first result and no other work to match it; the query is URL-encoded
+  so the link is live;
+- **what rests on it** - which footnotes on which pages the record would lose if the work did not say what
+  it is thought to say;
+- **what blocked the fetch, or why the item is on the list where nothing blocked it** - the host's answer to
+  the container and, where known, what a browser will see; for a work the session never had an address for,
+  what was searched and why the work is thought to exist.
+
+**Both links are present on every entry.** The direct link is not dropped because it is unverified, and
+the search link is not dropped because the direct link looks certain: the two exist so that a wrong or
+dead address costs the GM one extra click rather than a hunt. The rule governs every entry this feature
+appends to Part 4 and every later hand-over (FR-015); Part 1 as it stands, already worked by the GM, is
+not retrofitted - and it is not the model to copy, because most of its entries carry no search link at
+all, which is the omission this requirement exists to stop.
 
 **FR-011 - the completion condition, and what is NAMED rather than absorbed.** The feature is
 complete when every item on the FR-001 list **and every item on the D1 list of 119 never-searched
@@ -120,6 +147,22 @@ it stands.
 as tidying: the honest label now sits at the assertion while the section's `Sources:` line still
 carries it too. Fifty-one edits, no change of meaning in any.
 
+**FR-015 - the project guidelines carry the format, so that every future list is written in it.** The GM's
+reason, in their words: *"anytime you do have a source for me to look at, then it should be saved in
+markdown in this format since that is much easier for me to find things."* The rule is written where the
+guidelines already say that the GM downloads what the container cannot fetch - the paragraph "A page the
+container cannot fetch is not thereby unreadable" in
+`.claude/skills/diagram/research/CLAUDE.md` - and the root `CLAUDE.md`'s citation rule points at it. It
+says: whenever a session has a source, page or document for the GM to look at, fetch or download - from a
+research pass, a `source-reader` verdict of SUMMARY-ONLY, a `quote-check` NOT-READABLE, a dead link with a
+possible copy elsewhere, or anything else - it is saved in markdown in the FR-010 shape (the named heading,
+the guessed direct link, the uniquely identifying Google-search link, what rests on it, what blocked it),
+**appended at the END of the standing list** (`/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` today,
+mounted from the GM's `l7r/academic-sources/`), never inserted into its middle and never handed over only
+in a chat message. It records the GM's words as the why, the same as every other rule in that file, and
+it says plainly that nothing enforces it mechanically: the list lives outside this repository, in the
+GM's own checkout, so no gate here reads it.
+
 **FR-014 - nothing here is engine code.** The two items 238 could not settle are both settled: the
 Xuxiebian site name is an absence the record already carries, and the caravan inn's story count was
 RULED a knob by the GM on 2026-09-13 (*"if there are opposing sources then it's a toggle"*) - which is
@@ -140,8 +183,14 @@ engine work and has its own feature, so this one stays research-only and on the 
   `source-applicability` over every new key, with the verdicts recorded in the task.
 - **SC-006** (FR-008) - `scripts/_entry_owed.py` names no unanswered pair at push.
 - **SC-007** (FR-009) - every commit leaves the record in a state a reader could read.
-- **SC-008** (FR-010) - Part 4 of `TO-DOWNLOAD.md` has grown only at its end, and every entry is a
-  working link.
+- **SC-008** (FR-010) - Part 4 of `TO-DOWNLOAD.md` has grown only at its end; every entry carries BOTH
+  links - the guessed direct address and a Google search whose query names the work uniquely - and says
+  what rests on it and what blocked the fetch; every search link is live, and every direct link is the
+  address the session believed in, whether or not the host answered the container.
+- **SC-015** (FR-015) - `.claude/skills/diagram/research/CLAUDE.md` states the format in the paragraph
+  that says the GM downloads what the container cannot fetch, names the list and the format's five parts, says the
+  entry is appended at the end, and quotes the GM's 2026-09-14 reason; the root `CLAUDE.md` points at it
+  from its citation rule.
 - **SC-009** (FR-011) - the closing report states, per unclosed item, whether it was searched and
   failed or never searched.
 - **SC-010** (FR-012) - no item is worked while an item of a stronger tier is open, over the whole tier
@@ -177,7 +226,7 @@ exactly that and no more. The pages are still opened to place footnotes and are 
 `record-format` and `quote-check`. Stated because the draft this replaces said flatly *"It does not
 re-read the record"*, which a session could read as license to skip FR-007.
 
-**D3 - this feature is research-only and takes the DIRECT route.** Nothing in FR-001 to FR-013 touches
+**D3 - this feature is research-only and takes the DIRECT route.** Nothing in any requirement here touches
 `l7r/**/*.py` or a pool generator. FR-014 is what keeps it that way: the caravan-inn knob is the one
 inherited item that would be engine code, the GM ruled it a knob on 2026-09-13, and it is built in
 feature 244 with its own gate and pool sweep - not here.
@@ -191,6 +240,22 @@ instead (FR-012).
 **D5 - the fifty-one roster disclosures are worked here rather than deferred a second time.** Feature
 238 deferred them by volume and named them, as its FR-012 required. Repeating "deferred by volume" in
 the successor would defer them to nowhere, so FR-013 makes them work.
+
+**D6 - the download list has ONE format, the GM's, and the guidelines state it - RULED by the GM,
+2026-09-14** (`request.md`, their words in full). The format is the one they had the session use in
+`TO-DOWNLOAD.md` Part 1: the guessed direct link AND a Google-search backup that uniquely identifies the
+work, on every entry. Two facts made this an amendment rather than a restatement. The guidelines had no
+format at all - `research/CLAUDE.md` said the GM downloads into `academic-sources/` and stopped there -
+and FR-010 as accepted asked for one link or the other (*"an exact one where it exists, a Google-search
+link where it does not"*), which is weaker than the format the GM had already approved by using it, and
+which a session following the spec literally would have produced. The GM's stated reason is findability
+(*"much easier for me to find things"*): a direct link that is wrong or dead leaves them with nothing to
+click, and a search link alone makes them read results for a work the session already knew the address
+of. The alternatives priced: leaving the format in FR-010 alone (declined - a rule in one feature's spec
+binds one feature, and the GM asked for *"in the future, anytime"*), and putting it only in the root
+`CLAUDE.md` (declined - the operative home is the paragraph that already says the GM downloads, so a
+session reading how to handle an unreadable page meets the format in the same place). Part 1 of the list
+is not retrofitted: the GM has already worked it, and they asked for the rule *"in the future"*.
 
 ## Review history
 
@@ -271,3 +336,19 @@ the successor would defer them to nowhere, so FR-013 makes them work.
 - **Amendment round 2, `spec-fidelity`: FAITHFUL.** No requirement, criterion or task treats either
   item as open for the GM; SC-012 verifies both halves of FR-014; the completion condition is
   untouched. The spec stands accepted with the ruling recorded.
+- **Amendment (2026-09-14), counter reset.** The GM asked, before implementation, whether their preferred
+  format for the download list was in the guidelines or the feature; it was in neither (`request.md`).
+  FR-010 restated to the both-links form, FR-015 added for the guidelines, SC-008 restated, SC-015 and
+  D6 added, T20 restated and T23 added. Nothing else moved.
+  - **Amendment round 1 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, three items, all applied: the
+  count of Part 1 entries lacking a fallback was wrong and two of the entries it called downloaded are
+  marked closed in the file's own table, so the count is gone and the ground is the GM's own - the rule is
+  for the future - with Part 1 named as the shape NOT to copy (1); the rule's placement in the root
+  `CLAUDE.md`'s "Deliberately NOT enforced" list was unrequested and not what that list is for, removed
+  from FR-015, SC-015 and T23 (2); D3's enumeration stopped at FR-013 and now covers every requirement (3).
+  The fifth entry part is restated as "what blocked the fetch, or why the item is on the list", which is
+  what the file carries and what FR-015's wider trigger needs.
+  - **Amendment round 2 (2026-09-14), `spec-fidelity`: FAITHFUL**, on a review that re-derived the Part 1
+  census itself (most entries carry no search link), confirmed all three items applied, and checked every
+  FR against an SC, every task id and the two files the requirement names. Its one aside is applied:
+  SC-015 says "the format's five parts", so the sentence cannot be read as claiming the GM's file has five.

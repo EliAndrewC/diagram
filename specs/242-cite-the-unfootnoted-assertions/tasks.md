@@ -119,12 +119,20 @@ governed or lived in, which is what put it on the list.
       research: rendering
       verify:
 - [ ] T20 `TO-DOWNLOAD.md` Part 4 carries every document this pass could not read, appended at the END,
-      each a clickable link saying what rests on it and what blocked the fetch
+      each in the GM's format (FR-010): a named heading, the guessed direct link, a Google-search link
+      whose query uniquely identifies the work, what rests on it and what blocked the fetch - both links
+      on every entry
       research: rendering
       verify:
 - [ ] T21 the closing report: what closed, and per unclosed item whether it was searched and failed or
       never searched; the two items 238 left to the GM noted as settled and where (the inn's form knob in
       feature 244, the Xuxiebian absence note as the record carries it)
+      research: rendering
+      verify:
+- [ ] T23 the project guidelines carry the download list's format (FR-015): the paragraph "A page the
+      container cannot fetch is not thereby unreadable" in `.claude/skills/diagram/research/CLAUDE.md`
+      states the shape, the list, append-at-the-end and the GM's 2026-09-14 reason; the root `CLAUDE.md`
+      citation rule points at it
       research: rendering
       verify:
 - [ ] T22 `make page-check` green, `make done` green, the push clean
