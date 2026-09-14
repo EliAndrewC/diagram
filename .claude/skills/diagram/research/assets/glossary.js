@@ -461,7 +461,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "Six Chambers",
   "variants": [
-   "Six Chambers"
+   "Six Chambers",
+   "six fang"
   ],
   "def": "The six clerical offices of a Chinese local government, housed at county scale as side halls flanking the yamen's courtyards rather than as separate buildings."
  },
@@ -4914,5 +4915,118 @@ window.RECORD_GLOSSARY = [
    "Taishō"
   ],
   "def": "The Japanese era between Meiji and Showa, 1912 to 1926 - modern Japan, by which time the railway had begun displacing packhorse traffic."
+ },
+ {
+  "term": "ghat",
+  "variants": [
+   "ghat"
+  ],
+  "def": "A flight of stone steps down a riverbank to the water, used for landing boats, washing and drawing water - and at Varanasi for cremation."
+ },
+ {
+  "term": "han",
+  "variants": [
+   "han's",
+   "han"
+  ],
+  "def": "A daimyo's domain under the Tokugawa shogunate: the territory, and the lord's house and government that held it."
+ },
+ {
+  "term": "yacheng",
+  "variants": [
+   "yacheng"
+  ],
+  "def": "The innermost walled ring of a Chinese prefectural seat, holding the government offices - the administrative city inside the inner city."
+ },
+ {
+  "term": "zicheng",
+  "variants": [
+   "zicheng"
+  ],
+  "def": "The inner walled city of a Chinese prefectural seat, standing between the offices' own ring and the outer city."
+ },
+ {
+  "term": "luocheng",
+  "variants": [
+   "luocheng"
+  ],
+  "def": "The outer city wall of a Chinese walled city, enclosing the residential and commercial quarters around the inner city."
+ },
+ {
+  "term": "yicheng",
+  "variants": [
+   "yicheng"
+  ],
+  "def": "A wing wall: an extra ring some Chinese cities threw around a suburb that had grown beyond the outer wall, as at Quanzhou."
+ },
+ {
+  "term": "rinkaku",
+  "variants": [
+   "rinkaku"
+  ],
+  "def": "A castle plan whose baileys ring the main bailey on every side, one enclosure inside the next."
+ },
+ {
+  "term": "renkaku",
+  "variants": [
+   "renkaku"
+  ],
+  "def": "A castle plan whose baileys stand in a row, one beside the next along a ridge or a riverbank."
+ },
+ {
+  "term": "teikaku",
+  "variants": [
+   "teikaku"
+  ],
+  "def": "A castle plan whose main bailey stands at one edge, against a cliff, a river or the sea, with the other baileys spread on the open side."
+ },
+ {
+  "term": "light bamboo",
+  "variants": [
+   "light bamboo"
+  ],
+  "def": "The lighter of the two bamboo rods of Chinese legal flogging; a sentence of blows with it was the mildest punishment the codes set."
+ },
+ {
+  "term": "xiang",
+  "variants": [
+   "xiang"
+  ],
+  "def": "An administrative ward of a Chinese city, the unit into which the settled ground inside and outside the wall was divided."
+ },
+ {
+  "term": "mitochigai",
+  "variants": [
+   "mitochigai"
+  ],
+  "def": "A moat stepped by weirs into pools at different levels, so that its water does not stand as one sheet."
+ },
+ {
+  "term": "jo",
+  "variants": [
+   "jo"
+  ],
+  "def": "A Japanese unit of length of ten shaku, about 3 meters (10 feet); as the suffix -jo on a place name it means castle."
+ },
+ {
+  "term": "fu",
+  "variants": [
+   "fu"
+  ],
+  "def": "In the Rites of Zhou, a square of land a hundred paces on a side, the module by which the classical capital's court and market are each sized."
+ },
+ {
+  "term": "ake-mutsu",
+  "variants": [
+   "ake-mutsu"
+  ],
+  "def": "The sixth hour of dawn in the Edo reckoning, about 6 in the morning, when a town's gates and wickets opened."
+ },
+ {
+  "term": "kure-mutsu",
+  "variants": [
+   "kure-mutsu"
+  ],
+  "def": "The sixth hour of dusk in the Edo reckoning, about 6 in the evening, when a town's gates and wickets closed."
  }
 ];
