@@ -1,0 +1,6 @@
+{
+  "utc": "20260911T114138Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no map moved: every pool manifest differs from HEAD only in ink_classes (paths counted where lines were) and no title, band or view changed; spec 222 D5 first route, the GM"
+}
