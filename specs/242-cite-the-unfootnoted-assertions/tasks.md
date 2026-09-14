@@ -18,6 +18,10 @@ confidence order runs inside it.
 Every page task is `research: physical` - each item is a claim about how a place was built, farmed,
 governed or lived in, which is what put it on the list.
 
+**The GM split the feature on 2026-09-14** (spec D7, `request.md`): `cities/sizing.html`, which had been
+T16, is feature 250's, and T21's closing report names every deferred class. The task ids above T16 keep
+their numbers.
+
 ## Phase 1 - the pages, heaviest first (FR-001 to FR-009)
 
 - [ ] T01 `cities/capitals.html` - at most 92 bare items, each searched and footnoted in one of the three forms
@@ -95,11 +99,6 @@ governed or lived in, which is what put it on the list.
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
       verify:
 
-- [ ] T16 `cities/sizing.html` - at most 6 bare items, each searched and footnoted in one of the three forms
-      research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
-      verify:
-
 - [ ] T17 `ways.html` - at most 5 bare items, each searched and footnoted in one of the three forms
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
@@ -126,7 +125,8 @@ governed or lived in, which is what put it on the list.
       verify:
 - [ ] T21 the closing report: what closed, and per unclosed item whether it was searched and failed or
       never searched; the two items 238 left to the GM noted as settled and where (the inn's form knob in
-      feature 244, the Xuxiebian absence note as the record carries it)
+      feature 244, the Xuxiebian absence note as the record carries it); each class the GM's split
+      deferred to feature 250 named with its count and where its items are listed (D7)
       research: rendering
       verify:
 - [ ] T23 the project guidelines carry the download list's format (FR-015): the paragraph "A page the

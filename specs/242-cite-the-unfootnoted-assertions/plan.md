@@ -13,7 +13,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 - **XIV**: a defect found on a page while footnoting it (a truncated sentence, a wrong figure) is fixed in
   that page's batch and recorded in `research.md` (FR-006).
 - **XVI**: the spec is accepted (FAITHFUL, amended twice with FAITHFUL verdicts); this plan is reviewed
-  in MODE 4 before any task is ticked.
+  in MODE 4 before any task is ticked. **The 2026-09-14 split (spec D7) is the GM's own ruling**, not a
+  narrowing by this plan: what this plan defers to feature 250 is exactly what the spec's D7 names, and
+  the amended spec and this amended plan are each re-reviewed on a counter reset to zero.
 - **Route**: no engine code (FR-014) - `research/*.html`, `SOURCES.html`, `citations/`, the derived `.js`,
   this feature's directory, `.claude/skills/diagram/research/CLAUDE.md` and the root `CLAUDE.md` (FR-015),
   and the GM's `TO-DOWNLOAD.md` outside the repository -> DIRECT.
@@ -74,3 +76,16 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   with the GM's 2026-09-14 reason quoted and the plain statement that no gate here reads the list; the root
   `CLAUDE.md`'s citation rule gains a pointer to it. Written before the first Part 4 entry is appended, so
   this feature's own hand-over is the first under the rule.
+- **P10 the close under the split** (spec D7, D8; the GM's 2026-09-14 ruling in `request.md`). The
+  thirteen whole-record check reports are applied where they bear on honesty - every quote-check
+  NOT-ON-PAGE, DOES-NOT-SUPPORT, MISPLACED and DIFFERS verdict, every reader-visible defect and
+  untranslated quotation the record-format reports name, the batch-1 applicability corrections - and the
+  rest is named to feature 250. The confirmation after those edits is one `quote-check` and one
+  `record-format` per edited page, each given the changed notes and sections rather than the whole page
+  (the page was already checked whole; the feature-249 principle that a later round reads the diff). The
+  entry-drift pairs are answered by measurement: `measure/prose_moved.py` classifies every moved section
+  as MARKS-ONLY (the reader's prose identical once marks, comments and the roster line are stripped) or
+  WORDING-MOVED, `entry-drift` is dispatched at every named pair with a WORDING-MOVED section and the
+  prose it calls DRIFTED is rewritten, and the MARKS-ONLY pairs are discharged with one recorded
+  `ENTRY_DRIFT_OK` whose reason cites the measurement. `cities/sizing.html` is not footnoted here; T16 is
+  removed from `tasks.md` and the page is feature 250's FR-001.

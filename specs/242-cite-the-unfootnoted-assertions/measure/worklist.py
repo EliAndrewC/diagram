@@ -45,8 +45,53 @@ def section_of(text: str, upto: int) -> str:
     return sec
 
 
+MARK = "⟦fn⟧"  # what a `<sup class="fn">` becomes in the marked rendering below
+_BLOCK_START = re.compile(r"^\s*<(?:p|li|h[1-6]|td|th|dd|dt)\b")
+
+
+def marked(s: str) -> str:
+    """The visible text with every footnote mark kept as one MARK token, so a sentence can be asked
+    whether it carries a note wherever the mark fell - on the line the window matched, on the wrapped
+    continuation, or after the sentence's own period."""
+    s = re.sub(r"<!--.*?-->", " ", s, flags=re.S)
+    s = re.sub(r'<sup\b[^>]*class="fn"[^>]*>.*?</sup>', MARK, s, flags=re.S)
+    s = re.sub(r"<[^>]+>", "", s)
+    s = html.unescape(s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def block_of(lines: list[str], hit: int) -> str:
+    """The raw block element (a `<p>`, `<li>`, heading or cell) the hit line belongs to, joined."""
+    lo = hit
+    while lo > 0 and not _BLOCK_START.match(lines[lo]):
+        lo -= 1
+    hi = hit + 1
+    while hi < len(lines) and not _BLOCK_START.match(lines[hi]):
+        hi += 1
+    return "\n".join(lines[lo:hi])
+
+
+def sentence_status(block: str, window: str) -> str:
+    """FOOTNOTED when the SENTENCE holding `window` carries a mark - inside it or immediately after its
+    closing period - else LOCATED. The test used to be per LINE (`'<sup class="fn">' in lines[hit]`), and
+    the handoff of 2026-09-14 found that reading noisy: most LOCATED items were marks on a wrapped
+    continuation line or a mark placed after the period, so the residue could not be counted."""
+    text = marked(block)
+    i = text.find(window)
+    if i < 0:
+        return "LOCATED"
+    starts = [text.rfind(sep, 0, i) for sep in (". ", "。", "! ", "? ")]
+    start = max(starts) + 1 if max(starts) >= 0 else 0
+    m = re.compile(r"[.。!?](?=\s|$)").search(text, i + len(window))
+    end = m.end() if m else len(text)
+    tail = re.match(r"(?:\s*" + re.escape(MARK) + r")*", text[end:])
+    end += tail.end() if tail else 0
+    return "FOOTNOTED" if MARK in text[start:end] else "LOCATED"
+
+
 def locate(sentence: str, lines: list[str]) -> tuple[int, str]:
-    """(1-based line, status) - the line whose visible text holds the longest clean window of the sentence."""
+    """(1-based line, status) - the line whose visible text holds the longest clean window of the
+    sentence, and whether that SENTENCE carries a footnote mark (`sentence_status`)."""
     s = visible(sentence).replace("...", " ").strip(" .")
     words = s.split()
     if len(words) < 4:
@@ -59,8 +104,7 @@ def locate(sentence: str, lines: list[str]) -> tuple[int, str]:
             window = " ".join(words[start : start + size])
             hits = [i for i, v in enumerate(vis) if window in v]
             if len(hits) == 1:
-                status = "FOOTNOTED" if '<sup class="fn">' in lines[hits[0]] else "LOCATED"
-                return hits[0] + 1, status
+                return hits[0] + 1, sentence_status(block_of(lines, hits[0]), window)
             if len(hits) > 1:
                 return hits[0] + 1, f"AMBIGUOUS({len(hits)})"
     return 0, "NOT-LOCATED"

@@ -253,3 +253,139 @@ Download list: entries 141 to 224 appended for these pages. Checks dispatched: q
 ## R11 - handoff (2026-09-14)
 
 The feature paused on the GM's instruction with the checks filed and unapplied; the state, the reports and the remaining work are in [`HANDOFF.md`](HANDOFF.md), with the thirteen check reports copied verbatim to `handoff/reports/`.
+
+## R12 - the closing report under the split (2026-09-14, T21, D7, D8)
+
+The GM split the feature on 2026-09-14 (`request.md`). This is the state the feature lands in, the
+two counts FR-011 keeps apart, the classes deferred to feature 250, and the measurement behind the
+entry-drift answer. Every figure here is from a run on the closing tree (commit noted where it matters).
+
+### The FR-001 list, page by page, at sentence level
+
+`measure/worklist.py` used to judge an item FOOTNOTED by the LINE its sentence was found on, and the
+handoff of 2026-09-14 (`HANDOFF.md` section 4) counted 118 LOCATED items that way - almost all of them a
+mark on a wrapped continuation line or after the sentence's period. `sentence_status` replaced the
+line test: the block element holding the hit is rendered with every `<sup class="fn">` kept as a token,
+the sentence around the matched window is cut at its own period, and a mark inside it or immediately
+after it counts. On the closing tree (before the check corrections, commit `23ec945b`'s parent):
+
+| page | FOOTNOTED | LOCATED | NOT-LOCATED | TOO-SHORT | AMBIGUOUS |
+|---|---|---|---|---|---|
+| cities/capitals | 85 | 0 | 6 | 1 | 0 |
+| urban-features | 80 | 1 | 4 | 1 | 1 |
+| homesteads | 39 | 3 | 3 | 0 | 0 |
+| water | 34 | 0 | 3 | 5 | 0 |
+| fields | 32 | 1 | 3 | 1 | 0 |
+| religion-and-death | 31 | 1 | 1 | 0 | 0 |
+| archetypes | 25 | 0 | 1 | 0 | 0 |
+| buildings | 19 | 0 | 0 | 0 | 0 |
+| vegetation | 18 | 0 | 0 | 1 | 0 |
+| cities/river-cities | 18 | 0 | 0 | 0 | 0 |
+| cities/defenses | 15 | 1 | 1 | 0 | 0 |
+| towns | 13 | 1 | 0 | 0 | 0 |
+| cities/fabric | 14 | 0 | 0 | 0 | 0 |
+| cities/government | 13 | 0 | 0 | 0 | 0 |
+| cities/hinterland | 6 | 0 | 0 | 0 | 0 |
+| ways | 5 | 0 | 0 | 0 | 0 |
+| cities/sizing (feature 250) | 1 | 5 | 0 | 0 | 0 |
+| **total** | **448** | **13** | **22** | **9** | **1** |
+
+The 8 LOCATED items on the sixteen landed pages were each opened by hand: every one carries its note
+(the harness had matched a `Sources:` roster line, a wrapped list item, or a rewritten heading), and the
+one on `homesteads.html` (the Tonami model homestead) carries an inline absence disclosure of the form
+feature 238's R7 class 1 closes. So the landed pages carry NO item the harness can locate and finds
+bare. The 32 items it cannot locate (NOT-LOCATED, TOO-SHORT, AMBIGUOUS) are the class D7 discloses:
+their sentences were rewritten or corrected during the passes, the handoff record says every inventory
+item was in a reader batch, and this session did not verify that item by item. They are feature 250's
+FR-006, listed by `worklist.py <page> --json` on each page above.
+
+### The D1 list
+
+`measure/note_census.py --json` on the closing tree: 1,442 citation notes, 314 absence notes each with a
+real search, 3 grounds notes, and **0** absence notes whose text says no query of its own was run. The 120
+never-searched notes were rewritten page by page inside T01 to T17; `note_census.py --list --json`
+returns an empty list.
+
+### What the thirteen check reports found, and what was applied here
+
+Five `source-applicability` batches (117 keys, none NOT-APPLICABLE), four whole-record `quote-check`
+reports (233 notes, none NOT-READABLE) and four `record-format` reports were filed before the split
+(`HANDOFF.md` section 5; the reports are verbatim under `handoff/reports/`). Applied at the close, by
+four editing forks over disjoint page groups and one over the registry (commit `23ec945b`): every
+NOT-ON-PAGE, DOES-NOT-SUPPORT, MISPLACED and DIFFERS verdict (the Shanghai moat passages re-pointed to
+zh.wikipedia 上海县城墙 under the new key `shanghai-xiancheng-chengqiang-zhwiki`, judged
+APPLICABLE-WITH-LIMITS by `source-applicability` and its write-up corrected from that verdict; the
+Tone boat's 27 m dropped as unsupported; the Tang ward-gate curfew scoped; twelve quotations made
+verbatim; six marks moved to the sentence their passage supports, the vacated assertions given absence
+notes); the reader-visible defects (the nested comment leaking on `vegetation.html`, the missing `<p>` on
+`cities/hinterland.html`, the unmatched `</strong>` on `archetypes.html`, the broken roster on
+`cities/government.html`, the duplicated anchors heading in `SOURCES.html`); every untranslated
+quotation the record-format reports named, now translation-first with the original after; the history
+passages those reports named, into comments; the batch-1 applicability corrections (six write-ups, nine
+missing limits, two overstatements) and the registry defects the forks reported (fetch verdicts and
+history clauses in write-ups, a garbled sentence, an entity-encoded citation line, an unfinished one).
+Nine more download-list entries (225 to 232) for the image-only PDFs, in the GM's format.
+
+### Deferred to feature 250 (D7)
+
+- `cities/sizing.html`: 5 bare items (the table above), untouched by any reader batch.
+- The bare assertions the quote-checks found OUTSIDE the FR-001 inventory, listed per section at the end
+  of each `handoff/reports/qc-*.md`, `hw-quotecheck.md` and `urban-quotecheck.md`; the handoff's estimate
+  is about forty.
+- The record-format VOCABULARY findings (glossary terms), listed per section in each
+  `handoff/reports/rf-*.md`, `hw-recordformat.md` and `urban-recordformat.md`, plus the two variants (the
+  `ochiba` collision on the manor of that name, the hyphenated `fire-gap`).
+- The registry citation lines whose titles are only in Japanese or Chinese (the record-format reports'
+  count: roughly seventy in the feature-242 band).
+- The 32 unlocatable FR-001 items above (this session's addition to the cut, disclosed in D7).
+
+### The entry-drift answer (D8)
+
+`measure/prose_moved.py` against the merge base (`879ce4b0`), on the closing tree: 239 research sections
+moved, 64 MARKS-ONLY (the reader's prose identical once marks, comments, tags and the roster line are
+stripped) and 175 WORDING-MOVED. `scripts/_entry_owed.py` named 52 modal pairs before the corrections and
+the classification put 45 of them under a WORDING-MOVED section (three joined the list when the fork
+edits moved their sections); all 45 were dispatched to `entry-drift`, one agent per pair, each given the
+section's sentence-level prose diff. Verdicts: 33 IN-STEP, 12 DRIFTED - `byre` (the magariya's reason),
+`duck pen` and `pig sty` (the district's 20 m dikes and the manual's ceiling), `fry pond` (the fingerling
+stage and the nursery share), `homestead bamboo` (the north-west strip withdrawn, the side rolled),
+`barley` and `soy` (the catena ordering is this record's reading), `farmhouse` (the read part of the
+setback is a watercourse extended to the paddy), `notice board` (the assembly place and the shrine
+precinct are the record's ranking), `garden` (the sun rule is derived), `woodpile` (cheaper and older is
+the record's reading), `well` (two typical and the sharing ratio are estimates; the Edo intake), `village
+lane` (the access passage and the alleys form are unread). Each was rewritten in its `Kind` docstring;
+`buckwheat` and `millet` (the same catena note) and `bund` (the walking bund's width, which the
+paddy-plots section now calls the record's guess) were fixed on the agents' adjacent findings. The pairs
+still named at push - the IN-STEP ones, whose prose did not change, and the 7 MARKS-ONLY - are
+discharged with one `ENTRY_DRIFT_OK` citing this run.
+
+### The two items feature 238 left to the GM
+
+Both settled, as FR-014 records: the caravan inn's form is a knob, built in feature 244; the Xuxiebian
+site name stands as the absence note the record already carries.
+
+### The scoped confirmation (FR-007 as amended)
+
+After the corrections, one `quote-check` and one `record-format` per edited page, each given the diff of
+the page and its citations page against the pre-correction commit and told to judge only the notes and
+sections it touched: 13 quote-checks (the twelve pages plus the one privy sentence on `homesteads.html`)
+and 12 record-formats. No note was NOT-READABLE and no host refused. What they found and what was done
+(commit `a64cdafd`): on `buildings.html` a corrected character was the wrong one (貲, reverted) and a
+comma had been added inside a quotation (removed); on `fields.html` a passage was attributed to the
+kotobank page when it is on the Seika page (its own link added); on `cities/river-cities.html` the
+Shanghai dredging anchor was a splice of two passages (re-anchored on the moat section's sentence, which
+also carries the silting) and the Tone boat's 27 m had been withdrawn although kotobank carries it
+(restored); on `religion-and-death.html` the Akita count was paraphrased rather than quoted (quoted); on
+`homesteads.html` the privy's inline quotation 「背戸口や脇便所、戸口便所として独立した便所」 is on none of the
+three sinyoken pages (replaced by an absence disclosure, the privy modal rewritten to say which seats
+are read); on `archetypes.html` an inline original 「低洼易有洪患之处」 was on no cited page (replaced by the
+page's own words) and three new notes carried a cause or a stage their passage does not (scoped); on
+`cities/defenses.html` an elision was unmarked and the 6.4 km perimeter unquoted (marked, quoted); on
+`cities/government.html` a gloss claimed a sentence stood on a page it does not (rewritten), three
+list-row quotations carried a constructed prefix (removed), a truncation dropped its scoping clause
+(restored); on `cities/hinterland.html`, `cities/fabric.html`, `towns.html`, `ways.html` and
+`vegetation.html` glosses that overreached their passages were scoped and the record's own phrases
+taken out of 「」. The record-format passes confirmed every applied correction and named the residue
+that is feature 250's: the VOCABULARY lists per page, and a few HISTORY and SESSION-NOTE borderlines
+they judged keep-or-drop, which were dropped where the fix was a phrase and left where it was a
+paragraph's structure.

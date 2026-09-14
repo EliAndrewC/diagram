@@ -51,3 +51,22 @@ accepted asked for *"an exact one where it exists, a Google-search link where it
 or the other, where the GM's format has both on every entry. So FR-010 is restated and FR-015 added.
 
 
+
+## The GM's ruling that split the feature (2026-09-14)
+
+After fourteen page passes and thirteen check reports, with no task ticked, the GM said:
+
+> We have previously done a lot of work on the 242 feature in this clone. I think this feature is too
+> big and I would like to get it to a good stopping point so we can get what we've done so far back into
+> the main checkout, with the rest deferred to a future feature. What do you think a good approach would
+> be to leave things in a good state?
+
+The session proposed a cut: land the footnoting on the sixteen pages it reached with the quote-check
+corrections, the reader-visible defects, the batch-1 registry corrections and the untranslated
+quotations applied; defer to a successor the sizing page, the additional bare assertions the
+quote-checks found outside the derived inventory, and the cosmetic record-format findings (the glossary
+terms, the history passages into comments, the registry's untranslated citation titles); re-check once,
+scoped to the changed notes and sections; answer the entry-drift pairs by measuring which sections'
+wording moved. The GM:
+
+> Yes that does suit me, please do that - thanks!

@@ -1,7 +1,9 @@
 # Feature 242 - cite the unfootnoted assertions
 
-**Status:** accepted, including the 2026-09-14 amendment (the download list's format, and the guidelines that
-carry it - FR-010, FR-015, D6; FAITHFUL at amendment round 2, see Review history). Implementation not started.
+**Status:** AMENDED 2026-09-14 on the GM's ruling that split the feature (D7, D8, FR-011 restated, SC-016;
+`request.md`), counter reset - awaiting re-review. Previously accepted, including the 2026-09-14
+amendment on the download list's format (FR-010, FR-015, D6; FAITHFUL at amendment round 2, see Review
+history). Implementation was fourteen page passes and thirteen check reports in when the split was made.
 
 ## Summary
 
@@ -26,6 +28,13 @@ records why this feature owns them.
 **And since 2026-09-14 the feature owes the GM's FORMAT for the list of documents it hands them**, and
 owes the project guidelines a statement of that format, so no later session hands over a list in
 another shape (FR-010, FR-015, D6; `request.md`).
+
+**And on 2026-09-14 the GM split it** (D7, `request.md`): sixteen of the seventeen pages were footnoted
+and thirteen check reports filed when they said the feature was too big and asked for a good stopping
+point, with the rest deferred to a future feature. What lands here is the footnoting on those sixteen
+pages and every check finding that bears on honesty; what moves to feature 250 is the sizing page, the
+bare assertions the checks found beyond this feature's derived list, and the cosmetic findings. FR-011
+states the completion condition as split; D8 says how the entry-drift pairs are answered.
 
 This feature writes no engine code (D3), so its delta takes the DIRECT route.
 
@@ -80,7 +89,12 @@ used to say.
 
 **FR-007 - the checks the changed material owes.** `quote-check` and `record-format` over every changed
 page; `source-applicability` over every new registry key, and before its numbers, claims or details
-reach a map or a rule.
+reach a map or a rule. **The confirmation after the checks' findings are applied is SCOPED** (the
+GM's 2026-09-14 ruling, D7: the cut they accepted said *"re-check once, scoped to the changed notes and
+sections"*): a page that has already been checked whole owes one `quote-check` and one `record-format`
+over the notes and sections its corrections changed, each agent given those rather than the whole page,
+the way a later `spec-fidelity` round reads the diff (feature 249). A page checked whole for the first
+time is checked whole.
 
 **FR-008 - every `entry-drift` pair is answered.** Each pair `scripts/_entry_owed.py` names is either
 dispatched to the `entry-drift` agent and the modal prose rewritten, or discharged with one recorded
@@ -118,14 +132,21 @@ not retrofitted - and it is not the model to copy, because most of its entries c
 all, which is the omission this requirement exists to stop.
 
 **FR-011 - the completion condition, and what is NAMED rather than absorbed.** The feature is
-complete when every item on the FR-001 list **and every item on the D1 list of 120 never-searched
-absence notes** carries one of FR-004's three forms, the two counted and reported separately so they
-never blur. What the pass cannot close is named in the closing report, and an item that was
-**searched and failed** is distinguished from one that was **never searched** - 238's own closing
-report warns that most of this remainder has never been searched and that a successor should not
-read it as a failed hunt. If the work proves too large to finish, the split is proposed to the GM
-with a count rather than taken unilaterally: *"a successor for the rest"* asked for the whole
-remainder.
+complete when every item on the FR-001 list **on the sixteen pages other than `cities/sizing.html`**,
+**and every item on the D1 list of 120 never-searched absence notes**, carries one of FR-004's three
+forms, the two counted and reported separately so they never blur; when every quote-check verdict of
+NOT-ON-PAGE, DOES-NOT-SUPPORT, MISPLACED or DIFFERS on the thirteen check reports is applied, so no
+footnote quotes text its page does not carry or sits on a sentence its passage does not support; when
+every reader-visible defect and every untranslated quotation the record-format reports name is fixed;
+and when the batch-1 applicability corrections are in the registry. What the pass cannot close is named
+in the closing report, and an item that was **searched and failed** is distinguished from one that was
+**never searched** - 238's own closing report warns that most of this remainder has never been searched
+and that a successor should not read it as a failed hunt. The split itself was the GM's, made on
+2026-09-14 rather than proposed by the session (D7): `cities/sizing.html`, the bare assertions the
+quote-checks found outside the FR-001 list, the glossary and history findings of the record-format
+reports, the registry's untranslated citation titles, and the FR-001 items on the landed pages whose
+sentence the work list harness cannot locate (D7's disclosed addition) are feature 250's, and the
+closing report names each class with its count and where its items are listed.
 
 **FR-012 - the order of work is the readers' own confidence labels**, strongest first: HIGH,
 MEDIUM-HIGH, MEDIUM, LOW-MEDIUM, LOW. The readers rated the 494 parsed bare items HIGH 222,
@@ -203,6 +224,10 @@ engine work and has its own feature, so this one stays research-only and on the 
 - **SC-013** (FR-011) - the 120 never-searched absence notes are worked and counted separately from
   the FR-001 list, and neither count is folded into the other in any report.
 - **SC-014** (spec-wide) - `make page-check` green and the push clean.
+- **SC-016** (FR-011, FR-008) - feature 250's `spec.md` exists in the same delta and names every class
+  FR-011 defers, each pointing at where its items are listed; and the entry-drift pairs are answered as
+  D8 says - `entry-drift` dispatched at every named pair whose section's wording moved, the one recorded
+  waiver covering only pairs the measurement calls MARKS-ONLY.
 
 ## Decisions recorded
 
@@ -256,6 +281,48 @@ binds one feature, and the GM asked for *"in the future, anytime"*), and putting
 `CLAUDE.md` (declined - the operative home is the paragraph that already says the GM downloads, so a
 session reading how to handle an unreadable page meets the format in the same place). Part 1 of the list
 is not retrofitted: the GM has already worked it, and they asked for the rule *"in the future"*.
+
+**D7 - the feature is SPLIT, and the line is honesty - RULED by the GM, 2026-09-14** (`request.md`:
+*"this feature is too big and I would like to get it to a good stopping point so we can get what we've
+done so far back into the main checkout, with the rest deferred to a future feature"*, and *"Yes that
+does suit me, please do that"* to the cut the session proposed). FR-011 had said a split is proposed to
+the GM with a count rather than taken unilaterally; the GM made it themselves, so this records their
+ruling and the cut they accepted. **What lands**: the footnoting on sixteen pages; the quote-check
+findings that make a note dishonest if left - a quotation not on its page, a mark on a sentence its
+passage does not support, a misplaced mark, a quotation that differs from the page; the reader-visible
+defects (a leaked comment, a missing paragraph tag, an unmatched tag, a broken roster, a duplicated
+heading); the untranslated quotations, which an existing rule already forbids; the batch-1 registry
+corrections. **What moves to feature 250**: `cities/sizing.html`, untouched; the bare assertions the
+quote-checks listed beyond the FR-001 inventory, which this feature never owned; the record-format
+VOCABULARY findings (glossary terms), the HISTORY passages not already moved, and the registry's
+citation lines whose titles are only in Japanese or Chinese. **Alternatives declined**: ticking the
+tasks as they stood, with the check findings unapplied - the research boxes say *confirmed*, and a
+confirmed check whose NOT-ON-PAGE verdicts stand is a false record; and shipping the pages with the
+quote-check corrections deferred - a footnote quoting text its page does not carry is worse than the
+bare assertion it replaced, by the citation rule's own words. **Cost accepted**: the successor inherits
+a list written by the checks rather than by a fresh inventory, and the handoff reports under
+`handoff/reports/` are its authority on identity. The counts are in `research.md` R12.
+**One class the cut as put to the GM did NOT name, disclosed here**: the FR-001 items on the sixteen
+landed pages whose sentence the work list harness cannot find on the page at all - NOT-LOCATED,
+TOO-SHORT or AMBIGUOUS in `measure/worklist.py` - because the passes rewrote or corrected their
+wording. The handoff record says every inventory item was in a reader batch, and this session did not
+verify that claim item by item; the count is in R12 and the items are feature 250's FR-006 to confirm
+or work. (The LOCATED class the handoff counted was a line-level artifact: the sentence-level test
+`sentence_status` reduced it to a handful on the landed pages, and each of those was opened by hand
+and carries its note or an inline absence disclosure - R12.) This addition is the session's, not the
+GM's, and is raised to them with the closing report.
+
+**D8 - the entry-drift pairs are answered by MEASUREMENT, not by one waiver over all of them.** FR-008
+allows one recorded `ENTRY_DRIFT_OK` over a sweep in which no finding moved, and this feature moved
+findings on purpose (FR-006): a footnoted section usually gained only marks and notes, but a corrected
+one changed what it says. `scripts/_entry_owed.py` cannot tell the two apart, so
+`measure/prose_moved.py` does: per moved section it strips footnote marks, HTML comments, tags and the
+`Sources:` roster line, collapses whitespace, and compares the reader's prose against the merge base -
+MARKS-ONLY when identical, WORDING-MOVED otherwise. Every named pair with a WORDING-MOVED section is
+dispatched to `entry-drift` and the prose it calls DRIFTED is rewritten; the pairs whose sections are
+all MARKS-ONLY are discharged with one `ENTRY_DRIFT_OK` whose reason cites the run. The alternative
+priced and declined: one waiver over every pair with the reason "footnotes only", which would have
+been false for most of them (`research.md` R12 carries the run's counts).
 
 ## Review history
 
@@ -352,3 +419,16 @@ is not retrofitted: the GM has already worked it, and they asked for the rule *"
   census itself (most entries carry no search link), confirmed all three items applied, and checked every
   FR against an SC, every task id and the two files the requirement names. Its one aside is applied:
   SC-015 says "the format's five parts", so the sentence cannot be read as claiming the GM's file has five.
+- **Amendment (2026-09-14, the split), counter reset.** The GM split the feature after fourteen page
+  passes and thirteen check reports (`request.md`). FR-011 restated to the split completion condition,
+  D7 (the split and the line) and D8 (the entry-drift pairs answered by measurement) added, SC-016 added,
+  T16 removed from `tasks.md` and T21 restated, plan P10 and three lines under its XVI bullet added.
+  Nothing else moved.
+  - **Amendment round 1 (2026-09-14), `spec-fidelity`: CHANGES REQUIRED**, three items, all applied: the
+  scoped confirmation pass the GM accepted was in the plan and not the spec, so FR-007 now carries it in
+  the request's words (1); the work list's LOCATED residue on the sixteen landed pages was being deferred
+  by feature 250's FR-006 while neither FR-011 nor D7 named it - the line-level test that produced that
+  residue was replaced by a sentence-level one (`measure/worklist.py`, `sentence_status`), the residue
+  re-measured, and D7 names the class with the count, states that it was NOT part of the cut as put to
+  the GM, and it is raised to them with the closing report (2); the Review history's entry names the
+  plan's XVI lines (3).
