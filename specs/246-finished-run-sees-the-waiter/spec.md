@@ -1,6 +1,6 @@
 # Feature 246 - the finished-run guard sees the waiter
 
-**Status**: FAITHFUL (`spec-fidelity`, round 1 of 5, 2026-09-13). Plan review pending.
+**Status**: IMPLEMENTED - FAITHFUL (`spec-fidelity`, round 1 of 5, 2026-09-13); the plan CLEAR at round 1. SC-003's live observation is taken after landing, because a session's hooks run from the mirror's copy (tasks.md T04).
 **Request**: [`request.md`](request.md) - the GM's words verbatim, and the assessment they approved.
 **Research**: [`research.md`](research.md) - the firing census, what a tracked run looks like in `/proc`, the double wakeup, the timer priced.
 **Predecessors**: 170 (the finished-run rule), the still-going rule of 2026-09-12 (the same script), 227 (the proof-of-life clause on a waiter), 212 (a guard does the right thing and tells the session).

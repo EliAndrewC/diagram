@@ -1,0 +1,57 @@
+{
+ "feature": "246-finished-run-sees-the-waiter",
+ "plan_sha256": "7a74312b807ce8c8657ca4dc7251649c6643455add7ae3ba53b752fdbe44673a",
+ "reviewed": "2026-09-13",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "P1",
+   "summary": "A new python block `judge_runs <clone> <hook-pid>` prints one line per ROOT live make as `<pid> <target> <status> <detail>`, with status tracked/watched/unwatched.",
+   "class": "within",
+   "why": "A structural choice the spec leaves open; it is exactly the second question FR-001/FR-002/FR-003/FR-005 require the guard to answer, asked once per root as FR-003 keys it."
+  },
+  {
+   "id": "P2",
+   "summary": "`live_runs` keeps its existing `<pid> <target>` output for the `live` mode, `make audit` and the suite; the new judgment is added beside it.",
+   "class": "within",
+   "why": "Preserves surfaces the spec did not ask to change and the Out of scope section holds unchanged; it removes nothing the request or spec asks for."
+  },
+  {
+   "id": "P3",
+   "summary": "A run counts as `watched` only when its stdout target is a REGULAR FILE and a loop-shaped process names that path; a make whose stdout is a pipe therefore falls to `unwatched`.",
+   "class": "within",
+   "why": "FR-002 defines watched as a loop naming 'the file the make's stdout is written to', so a run with no such file cannot be watched under the spec's own wording. It resolves toward the refusal the GM asked to keep for a run nobody watches, not away from it."
+  },
+  {
+   "id": "P4",
+   "summary": "Ancestry (for tracked, and for excluding the hook's own ancestry from the waiter scan) is walked from `/proc/<pid>/stat`, as `stale_waiters` already does.",
+   "class": "within",
+   "why": "Spec D1 requires reading from /proc by pid so nothing matches its own command line; this is that decision's mechanism, and it reuses the script's existing walk."
+  },
+  {
+   "id": "P5",
+   "summary": "The once-per-run marker is `.git/live-run.told` holding the UNWATCHED ROOT pids; a refusal fires unless the marker already equals that set, and the marker is cleared when nothing is live.",
+   "class": "within",
+   "why": "FR-003 asks for the marker to be keyed on the root make, the second attempt to close the turn, and the marker cleared when nothing is live; this names the file and the exact key."
+  },
+  {
+   "id": "P6",
+   "summary": "The permitted branch prints one context line per root ('the harness will wake this session when it finishes' / 'a waiter (pid M) is watching <file>'), records permitted/tracked-run or permitted/waiter-armed per root, exit 0.",
+   "class": "within",
+   "why": "FR-001, FR-002 and FR-005 specify one line naming the run, exit 0, and those two rule slugs; the wording is the only thing added."
+  },
+  {
+   "id": "P7",
+   "summary": "Suite fixtures: a copy of bash renamed `claude` as the tracked ancestor writing to `tasks/t.output`; a detached `make sleeper > run.log` with an `until grep` loop; the same loop naming another file; a `phases` target running `$(MAKE) p1` (sleep 3) then `$(MAKE) p2` (sleep 8) checked again four seconds in.",
+   "class": "within",
+   "why": "FR-006 enumerates exactly these five cases on real processes; the durations and the renamed binary are the mechanics of driving them, and the existing once-per-run and no-token-escape cases are kept."
+  },
+  {
+   "id": "P8",
+   "summary": "Route DIRECT on the guard-script stamp from a green `make hooks-test`; every edit to the hook and its suite carries `GUARD_EDIT_OK` with a reason.",
+   "class": "within",
+   "why": "SC-005 states the delta carries no engine code and lands DIRECT; the GUARD_EDIT_OK requirement is standing repository doctrine for guard files, not a new scope decision."
+  }
+ ],
+ "verdict": "CLEAR"
+}
