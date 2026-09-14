@@ -1084,7 +1084,8 @@
   "dBA": {
     "def": "A-weighted decibels - loudness measured the way a human ear weights it.",
     "variants": [
-      "dBA"
+      "dBA",
+      "dB"
     ]
   },
   "dS/m": {
@@ -3470,7 +3471,8 @@
     "def": "A village headman: the villager who answered to the domain for the village's taxes, registers and order.",
     "variants": [
       "shoya",
-      "nanushi"
+      "nanushi",
+      "kimoiri"
     ]
   },
   "shubiki": {
@@ -4216,7 +4218,8 @@
       "ōkajiba",
       "okajiba",
       "ōkaji",
-      "okaji"
+      "okaji",
+      "sageba"
     ]
   },
   "umayado": {
@@ -4351,6 +4354,204 @@
     "def": "The sixth hour of dusk in the Edo reckoning, about 6 in the evening, when a town's gates and wickets closed.",
     "variants": [
       "kure-mutsu"
+    ]
+  },
+  "tread": {
+    "def": "The worn surface of a way: the strip a road, street, lane or alley is actually walked and carted on.",
+    "variants": [
+      "tread",
+      "treads"
+    ]
+  },
+  "verge": {
+    "def": "The strip at a road's edge, beside the tread but not on it, where a notice board or a boundary stone stands.",
+    "variants": [
+      "verge",
+      "verges"
+    ]
+  },
+  "tier": {
+    "def": "One rung of the ladder of settlement sizes these maps draw - hamlet, village, town, provincial city, capital - each at its own scale and densities.",
+    "variants": [
+      "tier",
+      "tiers"
+    ]
+  },
+  "the pool": {
+    "def": "The set of settlement maps this project has drawn and keeps as its worked exhibits; a tolerance or a figure is calibrated against them.",
+    "variants": [
+      "the pool",
+      "pool map",
+      "pool maps"
+    ]
+  },
+  "apron": {
+    "def": "The open worked ground in front of a shed or forge: room to lead a horse in and turn it, or to stand fresh charcoal out to cool.",
+    "variants": [
+      "apron",
+      "aprons"
+    ]
+  },
+  "fines": {
+    "def": "The dust and small broken pieces of charcoal; packed tight they hold the heat of their own slow burning, which is what sets a fresh heap alight.",
+    "variants": [
+      "fines"
+    ]
+  },
+  "fire gap": {
+    "def": "The clear ground kept between a fire and what would burn: about 6 ft at an attended forge, 30 ft around an unattended charcoal stack, 60 ft around a kiln body.",
+    "variants": [
+      "fire gap",
+      "fire gaps"
+    ]
+  },
+  "hoarding": {
+    "def": "A plank screen or fence around a working ground; the county execution ground is drawn without one.",
+    "variants": [
+      "hoarding",
+      "hoardings"
+    ]
+  },
+  "farrier": {
+    "def": "The smith who shoes horses and oxen and trims their hooves; on these maps a trade of the gate caravan yard and the Imperial-road relay town.",
+    "variants": [
+      "farrier",
+      "farriers",
+      "farriery"
+    ]
+  },
+  "throwing": {
+    "def": "Shaping a pot on the wheel - one of the stages, with digging, weathering, drying and firing, that a kiln works gathers on one spot.",
+    "variants": [
+      "throwing"
+    ]
+  },
+  "weathering": {
+    "def": "Leaving dug clay lying in the open to break down before it is worked.",
+    "variants": [
+      "weathering"
+    ]
+  },
+  "Danzaemon": {
+    "def": "The hereditary head of the eta of eastern Japan under the shogunate; his Asakusa compound held his residences, storehouses, a shrine, a courtroom and a jail.",
+    "variants": [
+      "Danzaemon"
+    ]
+  },
+  "chori": {
+    "def": "The head of an outcast community, who guarded it and was paid by its residents; the shogunate ruled the eta and hinin through the chori heads.",
+    "variants": [
+      "chori",
+      "choriboshi"
+    ]
+  },
+  "Yoshiwara": {
+    "def": "Edo's licensed pleasure quarter, moved in 1656 to Nihon-zutsumi behind Senso-ji, in the city's northeast.",
+    "variants": [
+      "Yoshiwara"
+    ]
+  },
+  "kebiishi": {
+    "def": "The capital's police and judicial office, under which the hinin did the cleaning and the executioner's work.",
+    "variants": [
+      "kebiishi"
+    ]
+  },
+  "alternate attendance": {
+    "def": "The shogunate's requirement that a domain lord spend alternate years in Edo, which is why every daimyo kept upper, middle and lower residences there.",
+    "variants": [
+      "alternate attendance",
+      "sankin-kotai"
+    ]
+  },
+  "Sphere": {
+    "def": "The humanitarian minimum-standards handbook whose water figures - about 400 users to one open well - the record reads backward from.",
+    "variants": [
+      "Sphere"
+    ]
+  },
+  "Song Yingxing": {
+    "def": "The author of the Tiangong Kaiwu of 1637, the illustrated Chinese treatise on crafts and industry this record quotes for the fining hearth.",
+    "variants": [
+      "Song Yingxing"
+    ]
+  },
+  "petuntse": {
+    "def": "Porcelain stone: the crushed rock that, with white clay, makes a Chinese porcelain body.",
+    "variants": [
+      "petuntse"
+    ]
+  },
+  "jagama": {
+    "def": "A snake kiln: the very long single-chamber tunnel kiln of the anagama family.",
+    "variants": [
+      "jagama"
+    ]
+  },
+  "ō-aza": {
+    "def": "The largest division of a modern Japanese municipality, each answering to one of the old villages it was made from.",
+    "variants": [
+      "ō-aza",
+      "o-aza",
+      "oaza"
+    ]
+  },
+  "shizai": {
+    "def": "The death-penalty class of Edo sentence.",
+    "variants": [
+      "shizai"
+    ]
+  },
+  "reducing firing": {
+    "def": "Firing with the kiln's air choked, so the starved flame pulls oxygen out of the clay and turns the ware gray.",
+    "variants": [
+      "reducing firing",
+      "reducing atmosphere"
+    ]
+  },
+  "ablution well": {
+    "def": "The well kept beside a shrine or temple hall for the washing of hands and mouth before worship.",
+    "variants": [
+      "ablution well",
+      "ablution wells"
+    ]
+  },
+  "warren": {
+    "def": "The dense block of small commoner dwellings behind the street frontage, packed tight and threaded only by footpaths.",
+    "variants": [
+      "warren",
+      "warrens"
+    ]
+  },
+  "cooper": {
+    "def": "A barrel and tub maker.",
+    "variants": [
+      "cooper",
+      "coopers",
+      "cooperage"
+    ]
+  },
+  "hot-shoeing": {
+    "def": "Shaping the shoe hot at the forge and fitting it to the hoof, as against nailing on a ready-made one.",
+    "variants": [
+      "hot-shoeing",
+      "hot shoeing"
+    ]
+  },
+  "isohyet": {
+    "def": "A line on a map joining places of equal rainfall; an isotherm joins places of equal temperature.",
+    "variants": [
+      "isohyet",
+      "isohyets",
+      "isotherm",
+      "isotherms"
+    ]
+  },
+  "Sue ware": {
+    "def": "The gray stoneware of ancient Japan, fired hard in a reducing kiln from the fifth century on; the ware of the Nara-period tile-and-pottery kilns.",
+    "variants": [
+      "Sue ware",
+      "sueki"
     ]
   }
 }
