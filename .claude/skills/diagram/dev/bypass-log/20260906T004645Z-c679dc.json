@@ -1,0 +1,6 @@
+{
+  "utc": "20260906T004645Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "feature 189 - re-recording the green done after a test-file run demoted the verification state; the engine key is unchanged, so this short-circuits"
+}
