@@ -4,8 +4,9 @@
 
 A one-shot observation, observed 2026-09-14; method: the session transcript's timestamps and the
 two subagents' usage lines, one pass, on the feature 242 amendment of that day. The whole change took 700 s from prompt to report. Round 1
-of `spec-fidelity` ran 229 s, 13 tool uses, 165k tokens; round 2 ran 160 s, 9 tool uses, 110k tokens;
-together 363 s, over half the change. Both rounds read `spec.md`, `request.md` and `tasks.md` end to
+of `spec-fidelity` ran 229 s, 13 tool uses, 165k tokens; round 2 ran 160 s, 9 tool uses, 110k tokens -
+389 s of agent time, which overlaps the session's own turns at each end; the session's two WAITS on
+them, from dispatch to notification, were 206 s and 157 s, 363 s, over half the change. Both rounds read `spec.md`, `request.md` and `tasks.md` end to
 end. The agent's contract already said a round after the first reads only the changed passages
 (MODE 3, *"only rereviewing the new stuff"*, feature 236 item 6) and that a reviewer not told which
 passages changed should ASK rather than re-read. Neither round asked. The cause is the dispatch: round 1
