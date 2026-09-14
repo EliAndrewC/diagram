@@ -40,8 +40,10 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   equals the previous code's on the same input (the old laying reproduced inline in the test).
   `tests/settlement/test_fields.py` - the draw-site pond drop removes a part left with one bead and
   keeps a part of two; the record's flat list equals the kept runs flattened. `tests/gate/
-  test_bunds_and_dikes.py` - the reference hamlet's segments derived from `plot_rings` + `bund_beans` by
-  the R1 method all hold two or more.
+  test_bunds_and_dikes.py` - parametrized over the shipped hamlet generators in `_pool.POOL` with
+  `Kuwabata` (no bead-bearing field) among them, each manifest read through `_pool.obtain` so the sweep's
+  one roll serves it: the segments derived from `plot_rings` + `bund_beans` by the R1 method all hold two
+  or more, and a map with no beads is skipped, not passed.
 - The record: `research/fields.html` convention paragraph gains one sentence; the `BundBeans` class Note
   gains the same; `make glossary CHECK=1` / `make citations CHECK=1` confirm nothing stale.
 - The maps: `make map GEN=pool/hamlets/inashiro/inashiro.gen.py`, look at it, then `make maps`, then

@@ -1,6 +1,6 @@
 # Feature 247 - two beads per bund
 
-**Status**: DRAFT - round 1 returned three changes, all taken; awaiting round 2.
+**Status**: FAITHFUL (`spec-fidelity`, round 2 of 5, 2026-09-14); FR-005 then widened to every shipped hamlet on the round-2 aside, awaiting its verify round.
 **Request**: [`request.md`](request.md) - the GM's words verbatim.
 **Research**: [`research.md`](research.md) - where a single bead comes from, the count on the shipped maps, the forms the rule could take.
 **Predecessors**: the bead line (GM 2026-08-15, water-honest beads), 230 (the ditches recorded before the field), 245 (lit beads at low zoom).
@@ -45,7 +45,8 @@ the rule from what it already records.
   entry-drift pair is left open.
 - **FR-005 The manifest is unchanged in shape, and the gate holds the rule from it.** The field record
   keeps its `bund_beans` list and its `plot_rings` exactly as today and gains no field. A gate test over
-  the reference hamlet's rolled manifest (the gate's own reader of the pool map) derives the segments
+  every shipped hamlet manifest, each read through the gate's own pool reader (so a cold cache rolls a
+  map once, for the sweep and this test alike, and a warm one rolls nothing), derives the segments
   from those two records - two beads in one segment when they lie within one and a half spacings of each
   other and both sit on one recorded ring edge, the method of R1 - and asserts every segment holds two
   or more. Unit tests cover: the thirds rule on a short edge and the unchanged laying on a long one; the
@@ -57,8 +58,8 @@ the rule from what it already records.
 
 ## Success criteria
 
-- **SC-001** (FR-001, FR-005): the gate test passes on the reference hamlet, and the R1 script counts
-  zero single-bead runs on every regenerated shipped manifest.
+- **SC-001** (FR-001, FR-005): the gate test passes on every shipped hamlet manifest, and the R1 script
+  counts zero single-bead runs on each of them after regeneration.
 - **SC-002** (FR-002, FR-003): the unit tests pass, including the one that compares the random state
   after the call with the previous code's on the same input.
 - **SC-003** (FR-004): the research paragraph and the modal Note say the new thing; `make page-check`
@@ -111,3 +112,8 @@ the rule from what it already records.
   its beans either (FR-002, D1). (3) A new manifest field was unpriced against deriving the runs from the
   rings already recorded; no field is added and the gate derives (FR-005, D3). R1 re-counted by the
   contiguous-run method after the reviewer showed the nearest-edge count split runs on shared bunds.
+- **Round 2 (2026-09-14, MODE 3): FAITHFUL.** All three items resolved; the thirds form judged inside
+  the request (the floor is met by adding a glyph, and nothing the GM sees is removed but the
+  singletons). One aside taken after the verdict: the gate test runs over every shipped hamlet manifest
+  rather than the reference alone, since a manifest read through the pool reader costs no roll (FR-005,
+  SC-001). The other aside - a glance at the shortest beaded edge on the reference map - is T05's.
