@@ -78,14 +78,16 @@ class WetPaddy(Kind):
 class Bund(Kind):
     """
     What: The aze: a puddled-mud ridge one to two feet wide and about a foot high between two basins, re-plastered
-    every spring so each paddy holds its water; the walking bunds ran two to five feet. Where bunds cross,
+    every spring so each paddy holds its water; the walking bunds ran wider - two to five feet in this record's
+    reading, the one measured figure being a modern consolidation crest of a foot or two. Where bunds cross,
     the earth is piled into a lumpy node - the most-worked point in a field.
 
     Why: A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting
     at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach
     the plots; the footplanks over the ditches serve that walking.
 
-    Note: Construction, width and the shared-wall finding are read; the drawn stroke is at true size.
+    Note: Construction, the field bund's width and the shared-wall finding are read; the walking bund's width is
+    this record's reading; the drawn stroke is at true size.
 
     Name: bund
     Covers: the stroke of every paddy plot and the piled junctions between them
@@ -129,7 +131,8 @@ class Millet(Kind):
     the higher, well-drained ground the water cannot command - the hem above the paddy and the raised ground
     the homesteads sit on - and coppice crowns the hills above.
 
-    Note: Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and
+    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
+    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop MIX on any one map (how much millet against buckwheat and
     barley) is rolled from the seed and is a GUESS at the proportions.
 
     Caveat: the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and
@@ -152,7 +155,8 @@ class Buckwheat(Kind):
 
     Why: Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.
 
-    Note: Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the
+    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
+    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
@@ -174,7 +178,8 @@ class Barley(Kind):
 
     Why: Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground.
 
-    Note: Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the
+    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
+    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.
@@ -197,7 +202,8 @@ class Soy(Kind):
     Why: Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground;
     the bean fixes its own nitrogen, which is why it also went along the bunds.
 
-    Note: Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the
+    Note: The catena's elements - paddy, dry field, coppice - are read; that the dry crops take the higher ground
+    above the paddy is this record's own reading of that mosaic, which no page read orders that way; the crop mix per map is rolled from the seed and is a GUESS at the
     proportions.
 
     Caveat: the crop mix per map is rolled from the seed and is a GUESS at the proportions.

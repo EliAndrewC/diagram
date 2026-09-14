@@ -259,10 +259,10 @@ class PigSty(Kind):
     Note: GUESS: the practice is read, and so is the reason the shed sits at the water, but nothing read gives
     how many households kept a sty in Ming or Qing - the per-hamlet share band is the generator's. The few feet
     of clearance at the sluice is a guess too: the record gives dike widths and no spacing along a dike at all.
-    And the one width it does give, a shed-carrying dike of five to ten meters, the drawn bank does not meet -
-    the planted collar under these sheds is two to five meters. That figure is a modern design requirement
-    rather than a measurement of any old dike, and no older one was found to judge the bank by, but a reader
-    measuring the collar should know it is snug.
+    And the widths it does give, the drawn bank does not meet - the planted collar under these sheds is two to
+    five meters, where a modern manual asks five to ten of a shed-carrying dike and the same district's dikes
+    ran twenty meters before commercial fish farming eroded them, a figure from before the 1980s rather than
+    a demonstrably premodern one; a reader measuring the collar should know it is snug against both.
 
     Name: pig sty
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond dike
@@ -282,9 +282,10 @@ class DuckPen(Kind):
 
     Why: Fish-cum-duck ponds fence part of the dike as a dry run and part of the water as a wet run; ducks were
     among the stock the dike-pond loop kept to manure its ponds, and the droppings feed the water the same way a
-    pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where the
-    one width the record gives for a dike carrying an animal shed is five to ten, and that is a modern design
-    requirement whose ceiling is set by cart traffic and pipework a hand-piled dike never carried. The fence
+    pig shed's do. The dry run stands on the same planted collar a pig shed does - two to five meters, where a
+    modern manual asks five to ten of a dike carrying an animal shed, a ceiling it sets by the pigsties, piping
+    and traffic the dike must bear (dike-borne traffic came with commercialization), and where the same
+    district's dikes ran twenty meters wide before commercial fish farming eroded them. The fence
     keeps off the culvert for the plain reason that a fence across the opening a pond is filled and drained
     through would be in the way of working it.
 
@@ -304,17 +305,18 @@ class DuckPen(Kind):
 
 class FryPond(Kind):
     """
-    What: A small nursery pond where carp fry are reared before they are stocked into the grow-out ponds - the
-    hamlet's own hatchery corner of the dike-pond block.
+    What: A small nursery pond where carp fry are reared, then grown on as fingerlings, before they are stocked
+    into the grow-out ponds - the hamlet's own hatchery corner of the dike-pond block.
 
     Why: Fry were a trade of their own in the delta: a seventeenth-century account of Guangdong has the men
     trading fish fry while the women feed and tend the silkworms. A hamlet stocking its ponds each year keeps
-    a few small ponds for the fry; the smallest parcels of the block are read as those.
+    a few small ponds for the fry and fingerlings; the smallest parcels of the block are read as those.
 
-    Note: GUESS: the fry trade and the nursery stage are read, but the naming of one township and the century the
-    trade rose in are not - the work that carried them is not readable anywhere - and nothing read gives how
-    many fry ponds a hamlet kept or which parcels, so the one-in-ten share and the choice of the smallest
-    parcels are the generator's.
+    Note: GUESS: the fry trade and the nursery stages are read, but the naming of one township and the century
+    the trade rose in are not - the work that carried them is not readable anywhere - and nothing read gives how
+    many nursery ponds a premodern hamlet kept or which parcels: a modern manual puts nursery water at a
+    quarter to three tenths of pond area, a design prescription rather than an observation of an old block,
+    so the one-in-ten share and the choice of the smallest parcels are the generator's.
 
     Name: fry pond
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels

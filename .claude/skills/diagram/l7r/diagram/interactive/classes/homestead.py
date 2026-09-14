@@ -22,8 +22,9 @@ class Farmhouse(Kind):
 
     Note: Placement and form follow the read record. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is a GUESS, an eave overhang that is unsourced and one part that is
-    read, so the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
-    10 to 13 ft, well clear of it, close enough that the household works its own ground.
+    read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
+    it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
+    close enough that the household works its own ground.
 
     Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
     10 to 13 ft, well clear of it, close enough that the household works its own ground.
@@ -75,11 +76,13 @@ class Byre(Kind):
     household can walk to it. Both are attested and neither dominates, so this map rolls between them per
     settlement - which is also what lets two hamlets differ honestly.
 
-    Note: The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a
-    cold-country form and is deliberately not drawn. The animal's nearness to the HOUSE is read; its nearness
-    to the wellhead is not on any page read, and neither is the commons siting itself.
+    Note: The separate byre is the temperate reading of the record; the attached stable wing (magariya) belongs
+    to Tohoku's horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not
+    drawn - that the cold made the form is this record's own reading. The animal's nearness to the HOUSE is
+    read; its nearness to the wellhead is not on any page read, and neither is the commons siting itself.
 
-    Caveat: the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.
+    Caveat: the attached stable wing (magariya) belongs to Tohoku's horse-breeding districts, its stable warmed
+    from the kitchen hearth, and is deliberately not drawn
 
     Name: byre
     Covers: `byres` - the draft-animal sheds
@@ -125,14 +128,16 @@ class ThreshingYard(Kind):
 
 class Garden(Kind):
     """
-    What: The household's kitchen garden: a tilled bed in planted rows of greens, beside the house.
+    What: The household's kitchen garden: a tilled bed in planted rows of daikon and greens, beside the house.
 
     Why: A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's
     shadow to the south and clear of the windbreak's afternoon shade to the west.
 
-    Note: Presence and the sun rule are read; the record fixes the bed's AREA and that it is hand-worked and
-    irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at
-    this scale.
+    Note: Presence is read; the sun rule is DERIVED from the geometry - its season rests on daikon standing in
+    the bed through autumn (the other autumn greens are this record's reading), and its west lane is sized to
+    a working belt of about 10 m, the low end of a surveyed band whose measured trees reach 22 m; the record
+    fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so
+    those are drawn to read as a worked kitchen bed at this scale.
 
     Caveat: the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row
     count, so those are drawn to read as a worked kitchen bed at this scale.
@@ -153,10 +158,12 @@ class Privy(Kind):
     the main house.
 
     Why: Near-universal: the Nipponica entry calls the detached privy the norm, and the 1972 survey counted one
-    on 87 of 100 households. Its seat is rolled from three attested positions - by the back door, at the
-    gate, or by the shed.
+    on 87 of 100 households. Its seat is rolled among three positions - by the back door, at the
+    gate, or by the stable and shed - of which only the last is on a page read; the back door and the gate
+    are this record's own reading.
 
-    Note: Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one
+    Note: Presence and the detached form are read (kotobank, sinyoken), and one seat; the other two seats are
+    this record's reading; the 6 x 6 ft footprint is a GUESS - the one
     sizing page is dead.
 
     Caveat: the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.
@@ -176,10 +183,11 @@ class Woodpile(Kind):
     What: The household's fuel: split logs stacked head-high against a wall, out of the rain.
 
     Why: Firewood and charcoal were the fuel, and a shed for them stood on three farms in four; the open stack
-    under the eaves is the cheaper and older form, and the one drawn.
+    under the eaves is the simpler form, and the one drawn.
 
-    Note: The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found
-    nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.
+    Note: The firewood SHED is read (Boso-no-Mura); that the open stack is the cheaper and older form is this
+    record's own reading, on no page read; where the STACK stood relative to the house was found nowhere -
+    the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.
 
     Name: woodpile
     Covers: `farm_fixtures[kind=woodpile]`

@@ -11,17 +11,23 @@ from ._base import Kind
 
 class HomesteadBamboo(Kind):
     """
-    What: A household's own bamboo stand on the damp north or west strip of its plot - a clonal thicket with a
-    hard edge, drawn as paired culm strokes with a leafy fork.
+    What: A household's own bamboo stand on its plot - a clonal thicket with a hard edge, drawn as paired culm
+    strokes with a leafy fork.
 
     Why: Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, poles, fences,
-    fans, food wrappings - and the shady, always-damp service side of the yashiki was where it stood. A cold
-    upland hamlet may have none; whether a hamlet has bamboo is rolled per settlement.
+    fans, food wrappings. Which side of the plot it stood on was done more than one way - on the Tonami plain
+    with the storehouses and fruit trees to the south, its roots holding the soil; at the wet edge; on the
+    wind side - so the side is rolled per farmstead, weighted toward the back of the house and the shed's
+    side (that it stood on the shady north-west service strip is on no page read). A cold upland hamlet may
+    have none; whether a hamlet has bamboo is rolled per settlement, and that about three farmsteads in five
+    keep a stand is a guess.
 
     Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to
     show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at
     one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
-    Japan's own topographic legend uses. Presence and place are read.
+    Japan's own topographic legend uses. Presence below the frost line and the stand's two places (the
+    household's plot, the village-edge thicket) are read; the side of the plot is rolled from the forms the
+    record attests, and the share of farmsteads keeping one is a guess.
 
     Name: homestead bamboo
     Covers: `bamboo_stands[role=homestead]`

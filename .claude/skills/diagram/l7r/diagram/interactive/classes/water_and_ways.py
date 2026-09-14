@@ -236,14 +236,17 @@ class VillageLane(Kind):
     center line.
 
     Why: Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what
-    compactness is for - and the narrow lateral lanes are colonized as semi-private space by the houses
-    beside them, which is why they are narrow and irregular. A lane bends like a line feet wear: as few
+    compactness is for - and the narrow lateral lanes are taken over as semi-private space by the houses
+    beside them, which in this record's reading is why they are narrow and irregular (the one readable case
+    is Shanghai's lane housing, a city form standing in for a village's). A lane bends like a line feet wear: as few
     turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates
     the settlement; the lanes between the farmsteads were trodden by the households already living there.
     And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main
     village of the district the settlement belongs to.
 
-    Note: Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a
+    Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
+    forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
+    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a
     wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
@@ -289,17 +292,22 @@ class Footbridge(Kind):
 
 class Well(Kind):
     """
-    What: A communal wellhead: a stone curb and the dark water of the shaft, under a small roof.
+    What: A communal wellhead: a stone curb and the dark water of the shaft, under a small roof. (In Edo a
+    tenement's communal "well" was often an aqueduct intake rather than a dug shaft.)
 
-    Why: A pre-modern rice village of about seventy households ran one to three communal wells, two typical -
-    drinking water came mostly from surface water, settled and boiled, and a well was expensive durable
-    capital dug by subscription only as surface quality forced. Shared wells outnumbered private ones.
+    Why: A pre-modern rice village of about seventy households ran one to three communal wells, two being
+    typical in this record's estimate - drinking water came mostly from surface water, settled and boiled,
+    and a well was expensive durable capital dug by subscription only as surface quality forced. Shared wells
+    outnumbered private ones, in this record's reading: per-household wells appear only where the water
+    table is shallow.
 
     Note: we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof -
     many times its true size, in order to make the well visible at map scale: the glyph marks where the well
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
-    frame itself was not found. Count and sharing are read (the Sphere/UNICEF figures, jawiki).
+    frame itself was not found. The one-to-three count is read (the Sphere/UNICEF capacity figure); the
+    typical two, and the households-per-well ratio, were searched for and not found, and stand as this
+    record's estimate.
 
     Name: well
     Covers: `wells` - the wellheads
@@ -320,13 +328,17 @@ class NoticeBoard(Kind):
     all who pass, so the board stands where the settlement's one lane carries everyone. The circulars
     reached the farmers through exactly this board, read aloud where needed - one reader per settlement
     makes it work. The record names SEVERAL such places rather than one, so which of them a settlement uses
-    is rolled from its own seed: the center where villagers assembled, the entrance where the track arrives,
-    or the frontage of the village official's gate. Two more the record attests - a bridgehead, and the
-    shrine precinct - are real at town and city scale and are deliberately not offered at a hamlet, whose
-    crossings are 10 ft ditch planks and whose only shrine is a household hokora in someone's dooryard.
+    is rolled from its own seed: the village center, the entrance where the track arrives, or the frontage of
+    the village official's gate (that the center was where villagers assembled, and that a shrine precinct
+    served, are this record's own ranking of the likely spots rather than attested sites). One more the
+    record attests - a bridgehead - and the shrine precinct are real at town and city scale and are
+    deliberately not offered at a hamlet, whose crossings are 10 ft ditch planks and whose only shrine is a
+    household hokora in someone's dooryard.
 
-    Note: Presence and siting are both read. The placement is chosen from the attested set the map can actually
-    site, never from one preferred reading; at hamlet grain the glyph is drawn at its true 12 x 5 ft.
+    Note: Presence is read, and so is the siting at the center, the entrance, the official's gate and a
+    bridgehead; the assembly place and the shrine precinct are this record's inference. The placement is
+    chosen from the attested set the map can actually site, never from one preferred reading; at hamlet grain
+    the glyph is drawn at its true size, about 12 x 5 ft in this record's reading of the frame.
 
     Name: notice board
     Covers: `kosatsuba`, with its label
