@@ -1,7 +1,7 @@
 # Feature 242 - cite the unfootnoted assertions
 
-**Status:** accepted; amended 2026-09-14 (the download list's format, and the guidelines that carry it -
-FR-010, FR-015, D6), the amendment awaiting a FAITHFUL verdict on a reset counter (see Review history).
+**Status:** accepted, including the 2026-09-14 amendment (the download list's format, and the guidelines that
+carry it - FR-010, FR-015, D6; FAITHFUL at amendment round 2, see Review history). Implementation not started.
 
 ## Summary
 
@@ -188,7 +188,7 @@ engine work and has its own feature, so this one stays research-only and on the 
   what rests on it and what blocked the fetch; every search link is live, and every direct link is the
   address the session believed in, whether or not the host answered the container.
 - **SC-015** (FR-015) - `.claude/skills/diagram/research/CLAUDE.md` states the format in the paragraph
-  that says the GM downloads what the container cannot fetch, names the list and its five parts, says the
+  that says the GM downloads what the container cannot fetch, names the list and the format's five parts, says the
   entry is appended at the end, and quotes the GM's 2026-09-14 reason; the root `CLAUDE.md` points at it
   from its citation rule.
 - **SC-009** (FR-011) - the closing report states, per unclosed item, whether it was searched and
@@ -348,3 +348,7 @@ is not retrofitted: the GM has already worked it, and they asked for the rule *"
   from FR-015, SC-015 and T23 (2); D3's enumeration stopped at FR-013 and now covers every requirement (3).
   The fifth entry part is restated as "what blocked the fetch, or why the item is on the list", which is
   what the file carries and what FR-015's wider trigger needs.
+  - **Amendment round 2 (2026-09-14), `spec-fidelity`: FAITHFUL**, on a review that re-derived the Part 1
+  census itself (most entries carry no search link), confirmed all three items applied, and checked every
+  FR against an SC, every task id and the two files the requirement names. Its one aside is applied:
+  SC-015 says "the format's five parts", so the sentence cannot be read as claiming the GM's file has five.
