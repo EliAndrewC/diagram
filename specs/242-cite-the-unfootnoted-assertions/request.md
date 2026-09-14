@@ -30,3 +30,24 @@ Asked whether the 119 absence notes whose text says no query was ever run belong
 
 > I also agree that never-searched absence notes are in scope for 242.
 
+## The GM's addition on the download list's FORMAT (2026-09-14)
+
+Asked before implementation began, in their words:
+
+> I would like you to implement feature 242, but before you start: have I made clear my preferred format
+> for how to save off links you have for me to try to download as a human? I had you use the format in
+> TO-DOWNLOAD.md where each source has a link to what you think the URL is and a link to the Google
+> search as a backup where the Google search should uniquely identify the resource. Can you make sure
+> that this feature also Updates the project guidelines to make it clear that in the future, anytime you
+> do have a source for me to look at, then it should be saved in markdown in this format since that is
+> much easier for me to find things. Go ahead and add that as a requirement to feature 242 unless that
+> is already in the project guidelines or already part of the feature. After you've done that, I'll tell
+> you whether to proceed with the feature.
+
+The check they asked for was made: the format was in neither place. The project guidelines said only
+that the GM downloads what the container cannot fetch (`research/CLAUDE.md`, "A page the container
+cannot fetch is not thereby unreadable"), with nothing about the form of the list; and FR-010 as
+accepted asked for *"an exact one where it exists, a Google-search link where it does not"* - one link
+or the other, where the GM's format has both on every entry. So FR-010 is restated and FR-015 added.
+
+
