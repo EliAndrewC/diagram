@@ -162,3 +162,48 @@ the reader's item number (`measure/worklist.py cities/capitals.html` order at th
 **The three checks over the page** (quote-check, record-format, and source-applicability over the 112
 new registry keys in four batches) were dispatched together after the eighth batch landed; their verdicts
 and what they changed are R6.
+
+## R6 - the checks' verdicts over the capitals page (2026-09-14)
+
+- **quote-check** over the 72 new citation notes and 23 absence notes: 71 readable and one host unreachable
+  (`qiaokou.gov.cn`, whose half of one note was dropped, the other source carrying the sentence); 61 quotations
+  verbatim and ten differing from the page in small ways, every one brought to the page's wording (a dropped
+  「（中略）」, a variant character quoted as the base text, a particle, a full-width comma, an omitted gloss); 0
+  DOES-NOT-SUPPORT and 18 PARTIAL, of which ten were over-readings in the prose and were brought down to what the
+  quotes carry (R5 lists them), the rest already disclosed in their notes' glosses; all 23 absence notes correctly
+  formed. Five assertions it found carrying no footnote at all went to a twelfth reader; four now carry a citation
+  and one an absence note, and one figure the reader found wrong ("four of them seating thousands" where the
+  memoir says the largest one does) was corrected.
+- **record-format** over the page, its notes and the 112 new registry entries: sixteen vocabulary terms added to the
+  glossary; thirteen session tails (download-list pointers and "until X can be read") moved into HTML comments;
+  HISTORY clauses ("which is why this page no longer says") removed from two notes and thirteen write-ups; three
+  visible defects repaired (a literal backslash-n, a broken sentence tail, a duplicated anchor); the two rosters'
+  session notes trimmed.
+- **source-applicability** over the 112 keys in four batches: 0 NOT-APPLICABLE; `What it is:` inaccurate on three
+  (the firebrand paper's authors and kind, the Kaifeng feature's section, the bansui article's authors and standing),
+  all corrected; limits MISSING on 44 write-ups and now stated - the imperial- and shogunal-capital ceiling on the
+  Beijing, Edo, Kaifeng and Hankou keys, the present-day regime behind the Yanagawa, Imabari, Pingyao and Hirosaki
+  measurements, the same-datum and same-town pairs that do not corroborate one another, the encyclopedia's own
+  sourcing notices, the self-media authorship of the Sina reposts.
+
+## R7 - the urban-features pass (2026-09-14, FR-005 to FR-007)
+
+- **Counts** (observed 2026-09-14; method: the worklist over the page, then the notes json applied): 87 bare items
+  and 10 never-searched notes went to ten readers; 60 items now carry a citation from a page read, 21 an absence
+  note, one a grounds note; the ten never-searched notes and nine older absence notes for which a citation was found
+  were replaced in place. 73 registry entries were added. The session's web-search allowance ran out early in this
+  pass, so the readers worked by fetching likely pages by address; every absence note says so, and 34 works that
+  would settle the absences went on the GM's download list (entries 34 to 67).
+- **Corrected in the prose** because a page contradicted it: rice's salt threshold (FAO 29: `3.0 dS/m` soil, `2.0`
+  water, moderately sensitive - not the most sensitive cereal at `0.9`); the charcoal ratio (three to five to one by
+  weight, not six); the ōkajiba's feed (pig iron decarburized to hōchō-tetsu, not low-carbon fractions to wari-tetsu);
+  the fire tower's hansho carrying a time signal outside Edo; a well being diggable on high ground; Xingcheng's
+  tower `21 m` square; the Kokuchō bell fee per ken of frontage rather than per house; kawaramono as a name given,
+  not taken; the Danzaemon compound's four hundred as officials' families; Edo's outlying estates as daimyo villas;
+  the kido as the town block's own gate; the horseshoe common in Yuan China.
+- **Labeled as this page's reading** because no page read carries it: the kimon alignment of Edo's northern
+  institutions, kilns pushed out by fire law, the siege-labor reason for an in-wall quarter, the kegare siting of
+  the ground downwind and downstream, the courier hoof-wear rate, the one-flame-height rule, the ox's water and
+  the trough dimensions, the caravanserai's single well as a choice, the brewer's rate per seat, the well counts
+  per village and per block, the kabu-ido case as a peculiarity, the assembly place and shrine precinct for a
+  village board, the hamlet's senior farmer as reader.
