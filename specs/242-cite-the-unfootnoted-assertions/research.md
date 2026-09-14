@@ -218,3 +218,17 @@ and what they changed are R6.
   arrangement; the magariya's hearth-warmed stable; the privy from the floor-plan page itself; Himeji's moats by
   circuit and Osaka's `90 m`; the Isawa fan's `20,000 ha`; the Yodo's renaming at a border; the marsh belt's year;
   Beijing's moat inlet and outfall from the Chinese article.
+
+## R9 - the fields, religion-and-death and archetypes passes (2026-09-14)
+
+Eleven readers (fetch by address only; the search allowance stayed exhausted). Notes placed: fields 41 (26 citations, 15 absence; fn-92/93/96 replaced), religion-and-death 40 (fn-101 to fn-106 replaced), archetypes 28 (17 citations, 11 absence). New registry entries: 9 + 18 + 11.
+
+Corrections the reading forced, page by page:
+
+- fields: the alluvial-fan sentence had the landform backwards (a fan widens from its apex) and now speaks of the DRAWN fan; the terrace-bench economics contradicted the FAO page it cites (beds are made as wide as the slope allows to save labor); 1.3 koku/tan is the middle-grade kokumori, a tax rate; the 614 m2 mu is the 1915 law's Qing definition, not "Ming-Qing", and one mu is 0.15 acre at it (0.16 at the 1930 mu), not 0.17; the azemichi 2-5 ft against the one readable 300-600 mm crest; weeding "by hand and foot" reduced to hand and hand claw; the "shared water schedule" left as this page's reading against Obata's attribution to the preceding crop (and free valley water lengthening the window past twenty days); the "each family has some paddy and some hatake" quotation marks removed - the words are this page's.
+- religion-and-death: Kyoto ~80 temples replaced by kotobank's Sakai (~60 + ~50) and Akita (43, 1663); the wenmiao decree is Tang (630) and the Ming act Taizu's enfeoffment of city gods; Sanuki's kokubunji precinct 240 x 220 m is the small end (Shimotsuke 457 x 413); Osaka's seven graveyards attest CONSOLIDATION onto the rim, not fragmentation, and nothing on pits; the clan mausoleum rewritten from Zuihoden's page (outside the castle, facing the keep) with the inside-the-walls placement labeled this project's; the temple-fair renting rests on a 1991 compilation, the gazetteers are Qing and Republican; "100 generations" to "scores"; "rice grows submerged" to "stands in water".
+- archetypes: deep-water lotus is the page's "more than 40 cm" class (species to 2.5 m), the paddy's 5-9 cm optimum unread; hojo seibi's 30 a plot is 24 x 125 m, the 1963 and 30 x 100 m dropped; willow-fascine antiquity unread; the bare dike is the MODERN tell (concrete dropped); the "mosaic-like constructed ponds" quotation reduced to paraphrase; "coppice barely fruits" unread, the bush height from Morus (1.5-1.8 m); fry ponds corrected to the fry-fingerling-grow-out chain at 15-30 percent of pond area; the dike-width ceiling attributed to the FAO page's own pigsties, piping and traffic.
+
+Tooling defects found by the homesteads/water record-format pass and fixed in `apply_notes.py`: a wrapped roster's first line was rewritten as a closed paragraph (five homesteads rosters restored from the pre-pass commit); a footnote mark landed inside a decimal figure (the terminator regex now refuses a period between digits); the registry key's address is the entry's first link, as the tests read it. The absence notes' `searched` field must not carry its own `searched YYYY-MM-DD:` prefix (41 doubled dates removed).
+
+Download list: entries 93 to 140 appended for these three pages.
