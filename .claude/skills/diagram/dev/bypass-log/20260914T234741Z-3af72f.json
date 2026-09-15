@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-14T23:47:41Z",
+  "target": "entry-gate",
+  "commit": "5e1c5686",
+  "why": "feature 242 D8: measure/prose_moved.py against merge base 879ce4b0 classified 239 moved research sections as 64 MARKS-ONLY and 175 WORDING-MOVED; of the 52 modal pairs _entry_owed.py named, 45 lay under a WORDING-MOVED section and were each dispatched to entry-drift (12 DRIFTED, rewritten; 33 IN-STEP), the other 7 gained only marks and notes; this waiver covers the 33 IN-STEP pairs and the 7 MARKS-ONLY pairs, whose modal prose is unchanged and still correct (research.md R12)"
+}

@@ -362,7 +362,8 @@ case $MODE in
       if git -C "$MAIN" rev-parse --verify -q origin/main >/dev/null 2>&1 \
          && ! git -C "$MAIN" merge-base --is-ancestor "$main_head" origin/main 2>/dev/null; then
         echo "BLOCKED: the mirror $MAIN is carrying a commit GitHub main does not have ($(git -C "$MAIN" log -1 --format='%h %s' 2>/dev/null)), so this clone cannot be judged against it - and \`sync-in\` will NOT fix it: it fetches GitHub, finds nothing new, and reports success." >&2
-        echo "That is a STRAY COMMIT in main's tree, almost always a bare \`cd /diagram\` that leaked into the next command (CLAUDE.md, 'NAME THE TREE IN THE COMMAND'). Main is an integration point, never a workspace, so no session may build on it." >&2
+        # GUARD_EDIT_OK: message pointer retargeted - the CLAUDE.md section it named moved to docs/session-clones.md on 2026-09-15; no rule or verdict changed
+        echo "That is a STRAY COMMIT in main's tree, almost always a bare \`cd /diagram\` that leaked into the next command (docs/session-clones.md, 'Name the tree in the command'). Main is an integration point, never a workspace, so no session may build on it." >&2
         echo "It belongs to whoever made it. Do NOT reset it unless it is yours - the mirror's working tree may be the only copy. Find that session (ListAgents / SendMessage); the recovery that loses nothing is: format-patch or copy the content into THAT session's clone and commit it there, check \`git -C $MAIN status --porcelain\` for untracked files a reset would destroy, then \`git -C $MAIN reset --hard origin/main\`." >&2
         cs_block stray-mirror-commit "$MAIN"
         exit 2
@@ -429,7 +430,7 @@ case $MODE in
       fjnotice="$MAPDIR/$sid.feature-json-notice"
       if [ ! -f "$fjnotice" ]; then
         : > "$fjnotice"
-        echo "clone-sync: .specify/feature.json is TRACKED again in $clone - it must stay gitignored. It OUTRANKS SPECIFY_FEATURE when spec-kit resolves FEATURE_DIR, so a peer session's copy silently redirects your spec-kit writes into THEIR specs/NNN-*/. Fix: cd $clone && git rm --cached .specify/feature.json && git commit -m 'chore: untrack spec-kit active-feature pointer'   (CLAUDE.md 'Concurrent sessions')"
+        echo "clone-sync: .specify/feature.json is TRACKED again in $clone - it must stay gitignored. It OUTRANKS SPECIFY_FEATURE when spec-kit resolves FEATURE_DIR, so a peer session's copy silently redirects your spec-kit writes into THEIR specs/NNN-*/. Fix: cd $clone && git rm --cached .specify/feature.json && git commit -m 'chore: untrack spec-kit active-feature pointer'   (docs/session-clones.md 'Concurrent sessions')"   # GUARD_EDIT_OK: message pointer retargeted to docs/session-clones.md on 2026-09-15; no rule changed
       fi
     fi
 

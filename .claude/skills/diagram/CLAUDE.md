@@ -4,12 +4,12 @@ Guidance for *working on the diagram engine* (the `settlement/` package, the `ov
 generators), as opposed to *invoking* `/diagram` to draw a map (that is `SKILL.md`). This file
 auto-loads whenever a session edits files in this directory - which is exactly when it applies.
 
-The project-wide iteration doctrine lives in the root [`CLAUDE.md`](../../../CLAUDE.md)
-"Iteration-loop efficiency" section (batch recon into fewer bigger turns; iterate on the ONE
-motivating artifact, then run the full test bed once at the end; background the final gate; never
-cut the procedure/guardrail steps). Read that first; this file carries the concrete diagram numbers
-and the DIAGRAM-SPECIFIC lessons that section does not cover - each earned by costing real
-round-trips.
+The project-wide iteration doctrine is the root [`CLAUDE.md`](../../../CLAUDE.md) "Verification
+and iteration" section, and in full [`docs/efficiency-tooling.md`](../../../docs/efficiency-tooling.md)
+(batch recon into fewer bigger turns; iterate on the ONE motivating artifact, then run the full test
+bed once at the end; background the final gate; never cut the procedure/guardrail steps). This file
+carries the concrete diagram numbers and the DIAGRAM-SPECIFIC lessons those do not cover - each
+earned by costing real round-trips.
 
 ## Where things live (read this first; load only the index you need)
 

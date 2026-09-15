@@ -1,6 +1,6 @@
 ---
 name: source-reader
-description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - runs on Sonnet by design (GM 2026-08-27, feature 133 T45); it never decides a rule, it reports what a page says.
+description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - on Opus like every subagent check (GM 2026-09-07); it never decides a rule, it reports what a page says.
 model: opus
 tools: WebFetch, WebSearch, Read
 ---

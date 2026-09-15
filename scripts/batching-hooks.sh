@@ -166,7 +166,8 @@ case "$MODE" in
         echo " - Dependent follow-up: fold the ACTION into the same command as the read. After a patch MISS, send anchor-grep + corrected patch + regen + check as ONE script with asserts - not grep now, patch next turn."
         echo " - About to read a result and then act on it? Put the action in the same command (grep the anchor && apply && re-run the check)."
         echo " - NEVER pad with no-op turns to age the window - a wasted turn costs the same round trip as recon, and only quick single reads are ever blocked (heredocs, &&/; folds, pytest/make/git-commit runs always pass), so there is nothing to game."
-        echo "Then continue. The bar re-arms at $REARM serial turns of the last $WINDOW and decays back to $THRESHOLD as you batch. (CLAUDE.md 'Batch into fewer, bigger turns'; measured 2026-08-08: 147 of 162 round trips single-call - 22.7 min of latency for 4.0 min of work; 2026-08-10: 49 of 52 blocks hit already-substantive calls, hence the shape test.)"
+        # GUARD_EDIT_OK: message pointer retargeted - the CLAUDE.md section it named moved to docs/ on 2026-09-15; no rule or verdict changed
+        echo "Then continue. The bar re-arms at $REARM serial turns of the last $WINDOW and decays back to $THRESHOLD as you batch. (docs/efficiency-tooling.md; measured 2026-08-08: 147 of 162 round trips single-call - 22.7 min of latency for 4.0 min of work; 2026-08-10: 49 of 52 blocks hit already-substantive calls, hence the shape test.)"
       } >&2
       # GUARD_EDIT_OK: feature 168 - THE LOUDEST GUARD FINALLY RECORDS (GM 2026-08-30). 119 firings in
       # six days, more than every other guard combined, and not one of them written down - so nobody

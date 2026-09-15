@@ -144,7 +144,7 @@ mirror_refresh() {
   if git -C "$MAIN" rev-parse --verify -q origin/main >/dev/null 2>&1 \
      && ! git -C "$MAIN" merge-base --is-ancestor HEAD origin/main 2>/dev/null; then
     die "mirror $MAIN is AHEAD of GitHub main - it carries $(git -C "$MAIN" log -1 --format='%h %s') which GitHub does not have, so nothing was merged into this clone.
-Main is a MIRROR and nobody's workspace: this is a commit made in main's tree, almost always a bare 'cd $MAIN' that leaked into the next command (CLAUDE.md, 'NAME THE TREE IN THE COMMAND'). It blocks EVERY clean clone, not just this one.
+Main is a MIRROR and nobody's workspace: this is a commit made in main's tree, almost always a bare 'cd $MAIN' that leaked into the next command (docs/session-clones.md, 'Name the tree in the command'; GUARD_EDIT_OK: message pointer retargeted 2026-09-15, no rule changed). It blocks EVERY clean clone, not just this one.
 It belongs to whoever made it - do NOT reset it unless it is yours, because the mirror's working tree may be the only copy. Recovery: format-patch or copy the content into THAT session's clone and commit it there, check 'git -C $MAIN status --porcelain' for untracked files a reset would destroy, then 'git -C $MAIN reset --hard origin/main'."
   fi
 }
