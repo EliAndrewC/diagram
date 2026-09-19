@@ -55,7 +55,7 @@ Cases are 251's R5 and R7 cases, re-prepared from the same transcripts. For both
 is 251's own run of the same case at the same tier WITHOUT the candidate (R7's opus / medium `record-format` runs;
 R5's opus / medium `quote-check` run), which is what a control would have been.
 
-| agent, case | recorded findings | the candidate's result | turns: 251's run -> candidate | weight: recorded / 251's run / candidate |
+| agent, case | recorded findings (observed 2026-09-19; method: read from the recorded reply and the run's own reply) | the candidate's result | turns: 251's run -> candidate | weight: recorded / 251's run / candidate |
 |---|---|---|---|---|
 | `record-format`, one homesteads section (`881af52a/abea4bd5` cut to "The garden's sun, and how far the windbreak shades") | 2 stray `</strong>`, a sentence contradicting its clause, a fetch-verdict phrase ("the pages read record"), `the frame`, `clump` | both tags and the contradiction hit; **the fetch-verdict phrase, `the frame` and `clump` MISSED** (it raised `(unsourced)` and `shoulder month` instead) | 11 -> 7 | (7.99, two pages) / 2.05 / 1.29 |
 | `record-format`, towns scoped re-check (`79288e26/8861f73e`, all nine sections the diff touches handed over) | a prose session note ("the city-tier research validated"), the one history passage (the 450 ft avenue), `ward` | the session note and the history passage each SEEN and DISMISSED, `ward` not listed: **all three MISSED**. The run says it opened neither page | 8 -> 5 | 3.33 / 2.13 / 1.51 |
@@ -106,7 +106,7 @@ recorded prompt by a regular expression, not by a model. Cases: 251's three (`a2
 `ada2e102` 09-12). Recorded weights here are folded today from each transcript at R1's rates (0.60, 0.69, 0.92); 251's R5 table
 prints 0.24 and 0.28 for the first two and the same 0.92 for the third, and that difference was not traced.
 
-| case | pointers saved | recorded findings | the candidate's result | turns rec -> new | weight rec -> new |
+| case | pointers saved | recorded findings (observed 2026-09-19; method: read from the recorded reply and the run's own reply) | the candidate's result | turns rec -> new | weight rec -> new |
 |---|---|---|---|---|---|
 | 08-28 (25 claims) | 8 of 9 (one TLS timeout) | CONTRADICTED: the clause "except those who are not engaged in agricultural or fishing work" is "not in the text anywhere near it"; "boats determine the village plan" READ | **the recorded CONTRADICTED was wrong, and the candidate corrected it**: the sentence is on the page verbatim, clause and all (the saved archive.org text, line 2381, checked by hand), so READ; "boats determine..." READ verbatim; one NOT-FOUND the recorded run also gave | 4 -> 16 | 0.60 -> 0.69 |
 | 08-29 | 0 of 1 (403) | CONTRADICTED (the privy is not sited by wind) | CONTRADICTED, hit - by other sources, the paper unreachable as in every re-run of this case | 15 -> 31 | 0.69 -> 0.92 |
@@ -180,7 +180,7 @@ reproducible from history - Kuwabata after feature 233 (`17e1cafe/a18e043a`, the
 with Mizuguchi at feature 230's pass 14 (`012f2cee/5fd7e2f3`, the tree at `17ee271c`). The renders are gitignored,
 so each map was regenerated inside its worktree by that commit's own engine (`make map`) before the run.
 
-| case | recorded ERRORS | the candidate's result | turns rec -> new | weight rec -> new |
+| case | recorded ERRORS (observed 2026-09-19; method: read from the recorded reply and the run's own reply) | the candidate's result | turns rec -> new | weight rec -> new |
 |---|---|---|---|---|
 | Kuwabata / 233 | (1) the research entry's 6.5 m "shared bank" is one pond's two collars summed, the real dike being 13.2 m; (2) the notes carry no entry for feature 233 | **both MISSED** - the run's CONFIRMATIONS say the record "was brought into line with the drawing". It raised a different error (three sties seated on a corner chamfer) and three nitpicks | 40 -> 48 | 4.24 -> 5.37 |
 | Sawada + Mizuguchi / 230 pass 14 | (1) Mizuguchi's board gave up 3-4 farmhouses of traffic for clearance it did not need; (2) Sawada's notes state a 6.6 ft clearance the drawing contradicts | (1) **MISSED** - the run confirms "Change 2 did not cost either board its traffic seat"; (2) hit, filed as QUESTIONABLE, and sharpened (the plank stood under the crown at that commit). A different error raised (Mizuguchi's caption lies across the connector) | 41 -> 33 | 4.40 -> 3.94 |
@@ -200,7 +200,7 @@ script and test are in commit `8d2ebf64`). Moving the examples alone is worth ab
 
 ## What the feature found
 
-| candidate | verdict | what it would have saved | what it cost |
+| candidate | verdict | what it would have saved (observed 2026-09-19; method: the weights in the tables above) | what it cost |
 |---|---|---|---|
 | R1 entries handed to `source-applicability` | NOT ADOPTED | about 70% of a run | the recorded limits, on three runs of three |
 | R2 scoped text for `record-format` / `quote-check` | NOT ADOPTED | a third of a `record-format` run; nothing for `quote-check` | three of six and three of three findings; one under-called support verdict |
