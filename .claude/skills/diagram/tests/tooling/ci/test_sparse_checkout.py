@@ -166,5 +166,7 @@ def test_only_three_places_reach_a_bundles_render() -> None:
     assert sites == [
         "l7r/diagram/pipeline/pool_index.py",  # existence probes only; a missing render reads "render not synced"
         "tests/pipeline/test_poolmaps.py",  # asserts the path STRING, on a tmp fixture pool
+        "tests/test_mode_a_sheets.py",  # the Mode A sweep (feature 254): a sheet's svg is TRACKED SOURCE, not a render; a draft's is regenerated when absent
         "tests/test_villages.py",  # the raster/viewBox agreement - hamlets tier, real pool, renders RETAINED
+        "tests/tools/test_registry.py",  # the same tracked Mode A sheets, one check at a time (feature 254)
     ], f"a new reader of a bundle render appeared: {sites} - re-take the roster's evidence before trusting it"

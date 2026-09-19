@@ -19,15 +19,15 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from ...buildings.types import BuildingType
+from ...buildings.types import BuildingType, load_types
 from . import checks as c
 from . import shared as s
 from .grids import FTPX
 from .parse import ParsedPlan
 
-MAGISTRACY = "magistracies"
-SHRINE = "country-shrines"
-BOTH = frozenset({MAGISTRACY, SHRINE})
+# WHICH TYPES A CHECK APPLIES TO IS THE DECLARATION'S TO SAY: a check is `shared` (every sheet) or it is
+# per-type, and a per-type check applies to exactly the tiers whose `checks` list names it
+# (`buildings/types.json`). So no tier is named here - the census test holds the engine to that.
 
 
 @dataclass(frozen=True)
@@ -44,12 +44,19 @@ class Context:
 class Check:
     name: str
     run: Callable[[Context], list[str]]
-    types: frozenset[str] | None  # None = the shared layer, every sheet
+    shared: bool  # True = the shared layer, every sheet; False = per-type, the declaration lists it
     fixture: str  # a red fixture under tests/fixtures/ on which the check FIRES
     fix: str  # the compliant fix a failure prints
 
+    @property
+    def types(self) -> frozenset[str] | None:
+        """The tiers this check applies to: None for the shared layer, else derived from the declaration."""
+        if self.shared:
+            return None
+        return frozenset(t.tier for t in load_types() if self.name in t.checks)
+
     def applies_to(self, tier: str | None) -> bool:
-        return self.types is None or tier in self.types
+        return self.shared or tier in (self.types or frozenset())
 
 
 def _tub_adrift(ctx: Context) -> list[str]:
@@ -105,46 +112,42 @@ CHECKS: tuple[Check, ...] = (
     Check(
         "structures_overlap",
         lambda ctx: s.structures_overlap(ctx.plan),
-        None,
+        True,
         "ochiba-overlap-red.svg",
         "move one footprint clear of the other, or draw a contained part (an engawa, a porch) fully inside its building",
     ),
-    Check("structures_on_walls", _on_wall, None, "ubame-privy-in-wall-red.svg", "set the structure against the wall's inner face, or break the wall around it if it IS part of the wall"),
-    Check("occluded_foreground", _occluded, None, "ubame-occlusion-red.svg", "move the buried label or glyph to the top layer"),
-    Check("overlapping_labels", _clash, None, "ochiba-label-clash-red.svg", "move one label apart so neither smears the other"),
-    Check("dark_on_dark_labels", _dark, None, "hayakawa-layout-red.svg", "nudge the label off the dark feature or give it a light fill"),
-    Check("floating_doors", _doors, None, "ochiba-layout-red.svg", "set the door glyph on the wall it opens through"),
-    Check("orphan_group_labels", _orphan, None, "ochiba-layout-red.svg", "put the group label beside a glyph it names"),
-    Check("passage_blockers", _passage, None, "ochiba-stones-in-passage-red.svg", "move the object clear of the track - stones and posts FLANK a passage"),
+    Check("structures_on_walls", _on_wall, True, "ubame-privy-in-wall-red.svg", "set the structure against the wall's inner face, or break the wall around it if it IS part of the wall"),
+    Check("occluded_foreground", _occluded, True, "ubame-occlusion-red.svg", "move the buried label or glyph to the top layer"),
+    Check("overlapping_labels", _clash, True, "ochiba-label-clash-red.svg", "move one label apart so neither smears the other"),
+    Check("dark_on_dark_labels", _dark, True, "hayakawa-layout-red.svg", "nudge the label off the dark feature or give it a light fill"),
+    Check("floating_doors", _doors, True, "ochiba-layout-red.svg", "set the door glyph on the wall it opens through"),
+    Check("orphan_group_labels", _orphan, True, "ochiba-layout-red.svg", "put the group label beside a glyph it names"),
+    Check("passage_blockers", _passage, True, "ochiba-stones-in-passage-red.svg", "move the object clear of the track - stones and posts FLANK a passage"),
     Check(
-        "gate_widths", lambda ctx: s.gate_widths(ctx.plan), None, "ochiba-capped-gates-red.svg", "draw the opening at passage width from the INK (pull each flanking endpoint back by half a stroke)"
+        "gate_widths", lambda ctx: s.gate_widths(ctx.plan), True, "ochiba-capped-gates-red.svg", "draw the opening at passage width from the INK (pull each flanking endpoint back by half a stroke)"
     ),
-    Check("scale_bar_present", lambda ctx: s.scale_bar_present(ctx.plan), None, "ochiba-no-scale-red.svg", "add the 90 px scale bar with its `30 ft` and `(3 px = 1 ft)` labels"),
-    Check("viewbox_cropped", lambda ctx: s.viewbox_cropped(ctx.text, ctx.plan), None, "ochiba-wide-viewbox-red.svg", "crop the viewBox to ~15-25 px of parchment around the ink"),
-    # --- fire-water: required by BOTH programs, so declared for both (spec 254 FR-003, round-1 item 2) ---
-    Check("fire_water_adrift", _tub_adrift, BOTH, "ochiba-tub-adrift-red.svg", "move the tub to a wall or eaves corner - a tensuioke is gutter-fed"),
-    Check("tubs_in_buildings", _tub_in_building, BOTH, "ubame-tubs-inside-red.svg", "move the tub OUT, clear of the wall"),
-    Check("tubs_on_wells", _tub_on_well, BOTH, "ochiba-tub-on-well-red.svg", "move the tub to a different eaves corner"),
+    Check("scale_bar_present", lambda ctx: s.scale_bar_present(ctx.plan), True, "ochiba-no-scale-red.svg", "add the 90 px scale bar with its `30 ft` and `(3 px = 1 ft)` labels"),
+    Check("viewbox_cropped", lambda ctx: s.viewbox_cropped(ctx.text, ctx.plan), True, "ochiba-wide-viewbox-red.svg", "crop the viewBox to ~15-25 px of parchment around the ink"),
+    # --- fire-water: required by BOTH programs, so both declarations list it (spec 254 FR-003, round-1 item 2) ---
+    Check("fire_water_adrift", _tub_adrift, False, "ochiba-tub-adrift-red.svg", "move the tub to a wall or eaves corner - a tensuioke is gutter-fed"),
+    Check("tubs_in_buildings", _tub_in_building, False, "ubame-tubs-inside-red.svg", "move the tub OUT, clear of the wall"),
+    Check("tubs_on_wells", _tub_on_well, False, "ochiba-tub-on-well-red.svg", "move the tub to a different eaves corner"),
     # --- the magistracy's own ---
-    Check("notice_board_adrift", _board, frozenset({MAGISTRACY}), "ochiba-layout-red.svg", "move the notice board to within 20 ft of a gate opening"),
-    Check("coverage_band", lambda ctx: s.coverage_band(ctx.plan), frozenset({MAGISTRACY}), "ochiba-coverage-red.svg", "consolidate loose slack or add a program building - never shrink the envelope"),
-    Check(
-        "perimeter_hugging", lambda ctx: s.perimeter_hugging(ctx.plan), frozenset({MAGISTRACY}), "ochiba-hugging-red.svg", "move the building against its wall - the center of each court stays open"
-    ),
+    Check("notice_board_adrift", _board, False, "ochiba-layout-red.svg", "move the notice board to within 20 ft of a gate opening"),
+    Check("coverage_band", lambda ctx: s.coverage_band(ctx.plan), False, "ochiba-coverage-red.svg", "consolidate loose slack or add a program building - never shrink the envelope"),
+    Check("perimeter_hugging", lambda ctx: s.perimeter_hugging(ctx.plan), False, "ochiba-hugging-red.svg", "move the building against its wall - the center of each court stays open"),
     Check(
         "two_court_zoning",
         lambda ctx: s.two_court_zoning(ctx.plan),
-        frozenset({MAGISTRACY}),
+        False,
         "ochiba-zoning-red.svg",
         "put the hearing court on the gate's side of the divider and the residence behind it",
     ),
     # --- the country shrine's own (fixtures cut from the exemplar once it exists; synthetic until then) ---
-    Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), frozenset({SHRINE}), "shrine-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
-    Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), frozenset({SHRINE}), "shrine-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
-    Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), frozenset({SHRINE}), "shrine-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
-    Check(
-        "fence_not_wall", lambda ctx: s.fence_not_wall(ctx.text, ctx.plan), frozenset({SHRINE}), "shrine-walled-red.svg", "bound the precinct with a fence or hedge group, not a compound wall stroke"
-    ),
+    Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "shrine-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
+    Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), False, "shrine-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
+    Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), False, "shrine-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
+    Check("fence_not_wall", lambda ctx: s.fence_not_wall(ctx.text, ctx.plan), False, "shrine-walled-red.svg", "bound the precinct with a fence or hedge group, not a compound wall stroke"),
 )
 
 

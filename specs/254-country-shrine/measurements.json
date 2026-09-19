@@ -4,5 +4,18 @@
     "unit": "tests passed",
     "quantity": "make quick ALL=1 in a detached worktree at 7cc2e95b, 2026-09-19: 3640 passed, 5 skipped, 33.78 s; make hooks-test: all checks passed",
     "command": "git worktree add --detach /tmp/base HEAD && make -C /tmp/base quick ALL=1 && make -C /tmp/base hooks-test"
+  },
+  "sweep-cost": {
+    "value": 4.56,
+    "unit": "s",
+    "varies": true,
+    "quantity": "wall time of `make test-file FILE=tests/test_mode_a_sheets.py` over the five magistracy sheets, xdist workers included, 2026-09-19",
+    "command": "make test-file FILE=tests/test_mode_a_sheets.py"
+  },
+  "hugging-floor": {
+    "value": 51,
+    "unit": "%",
+    "quantity": "the lowest perimeter-hugging figure of the five pool sheets (51, 52, 53, 57, 58%) - `make pack-audit ARGS=pool/magistracies/<name>/<name>.svg`, 2026-09-19; the check's floor is 45%, one pulled-in building below it",
+    "command": "for s in pool/magistracies/*/*.svg; do make pack-audit ARGS=$s | grep perimeter-hugging; done"
   }
 }

@@ -72,18 +72,20 @@ def test_names_are_unique_and_declarations_name_registered_checks() -> None:
         unknown = set(t.checks) - set(names)
         assert not unknown, f"{t.tier} declares checks the registry does not have: {sorted(unknown)}"
         for c in R.CHECKS:
-            if c.types is not None and t.tier in c.types and c.name not in ("fire_water_adrift", "tubs_in_buildings", "tubs_on_wells"):
-                assert c.name in t.checks, f"{c.name} is registered for {t.tier} but the declaration does not list it"
+            if not c.shared:
+                assert c.types, f"{c.name} is per-type but no declaration lists it"
+            else:
+                assert c.name not in t.checks, f"{c.name} is shared; a declaration need not list it"
 
 
 def test_checks_for_and_run_checks_follow_the_types() -> None:
     shared = R.checks_for(None)
-    assert all(c.types is None for c in shared) and len(shared) >= 11
+    assert all(c.shared and c.types is None for c in shared) and len(shared) >= 11
     magi = {c.name for c in R.checks_for("magistracies")}
     assert {"coverage_band", "perimeter_hugging", "two_court_zoning", "notice_board_adrift", "fire_water_adrift"} <= magi
     shrine = {c.name for c in R.checks_for("country-shrines")}
     assert "fire_water_adrift" in shrine and "coverage_band" not in shrine
-    assert R.Check("x", lambda ctx: [], frozenset({"a"}), "f", "fix").applies_to("b") is False
+    assert R.Check("x", lambda ctx: [], False, "f", "fix").applies_to("b") is False and R.Check("x", lambda ctx: [], False, "f", "fix").types == frozenset()
     ctx = _ctx(os.path.join(FIX, "ochiba-no-scale-red.svg"))
     fired = {ch.name for ch, found in R.run_checks(ctx, None) if found}
     assert fired == {"scale_bar_present"}

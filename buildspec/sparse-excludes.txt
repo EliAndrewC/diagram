@@ -28,10 +28,13 @@
 #     their siblings rather than split on a distinction no consumer makes.
 #
 # THE CENSUS THAT MAKES THE TWO LINES BELOW AFFIRMATIVE (2026-09-03). Every access to a bundle's
-# render goes through `poolmaps.MapBundle.path()`, and there are exactly three call sites:
+# render goes through `poolmaps.MapBundle.path()`, and there are exactly five call sites (three until
+# feature 254 added the Mode A sweep, 2026-09-19):
 #   pool_index.py:244-246   existence probes only; a missing render renders "render not synced"
 #   tests/pipeline/test_poolmaps.py:113,121   asserts the path STRING, on a tmp fixture pool
 #   tests/test_villages.py:379-386            the raster/viewBox agreement, hamlets tier, real pool
+#   tests/test_mode_a_sheets.py, tests/tools/test_registry.py   the Mode A sheets under pool/<tier>/,
+#     which are TRACKED SOURCE (never excluded here); a draft's gitignored svg is regenerated when absent
 # plus a grep for hardcoded `legacy-hand-authored-pool/**.png|svg` literals, which finds only
 # fixture-built pages. Neither pattern below is reachable from any of them.
 
