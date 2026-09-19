@@ -84,3 +84,6 @@ is now true.
   turned an exclusion list into a WHITELIST of three files, silently dropping operative text other features hold
   (`data-model.md`, `contracts/`, `quickstart.md`, ledgers) and `gm-request.md`: the default is flipped back - every
   text file is searched except what is named. FR-002's "prevents" softened to "may prevent", beside R2's count.
+- **Round 3 (2026-09-19) - CHANGES REQUIRED, two one-line items in `research.md` R1, applied.** Round 2's item verified.
+  R1 still described the three-file rule FR-001 had abolished, and put all sixteen false candidates in `research.md`
+  where the reviewer's re-run found fifteen there and one in `spec.md`. No requirement or figure moved.

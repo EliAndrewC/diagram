@@ -5,9 +5,11 @@
 Feature 251's directory at the dispatch of its first amendment review (`36d34718`) against what the previous
 round saw (`a5d5051e`):
 
-- searching every Markdown file: 18 candidates, 2 of them real. The 16 false ones were all in `research.md`,
-  whose results tables legitimately keep the tier that was TESTED ("| record-format towns | sonnet / medium |").
-- searching the operative text only (`spec.md`, `plan.md`, task lines): 3 candidates - FR-007's "`source-reader`
+- searching every text file, `research.md` included: 18 candidates, 2 of them real. 15 of the 16 false ones were
+  in `research.md`, whose results tables legitimately keep the tier that was TESTED (the sixteenth is FR-002's own
+  note on the proposal, below) ("| record-format towns | sonnet / medium |").
+- searching everything but `research.md` (and the other named exclusions - on this case that is `spec.md`,
+  `plan.md`, the task lines and `checklists/requirements.md`): 3 candidates, all in `spec.md` - FR-007's "`source-reader`
   moves to Sonnet at high effort" (real; that round's item 1), FR-008's "(Opus, medium, the same tools)" (real;
   part of item 2), and FR-002's own note "the proposal had `record-format` on sonnet / medium" (not stale: it
   describes the proposal). Two of three is a list worth reading; that is why `research.md` is not searched.
