@@ -308,3 +308,4 @@ and every new make target is listed where the others are.
   was tried" and landed `record-format` at opus / high: both now point at R7. (3) The Haiku caveat had gone into
   `CLAUDE.md` and the rule file with no requirement behind it: FR-010 carries it. (4) SC-004's closing clause was
   false for `record-format`: restated.
+- **Amendment review after R7, round 2 (2026-09-19) - FAITHFUL.** All four items verified resolved; nothing new introduced.
