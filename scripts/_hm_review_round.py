@@ -52,7 +52,7 @@ from _hm_escape import escape_reason, reason_is_enough  # noqa: E402
 
 TOKEN = "REVIEW_ROUND_OK"
 AGENT = "spec-fidelity"
-#: MODE 3 at medium effort (feature 251, GM 2026-09-19): a later round is a narrower job than a first
+#: MODE 3 on its own shorter contract (feature 251, GM 2026-09-19): a later round is a narrower job than a first
 #: reading - the previous verdict's items and the diff - and it is most of the rounds, so a rewritten
 #: round is ROUTED to this agent. Proven before it was relied on: a hook's `updatedInput` may change
 #: `subagent_type` (specs/251-tiered-subagent-checks/research.md R4).
@@ -283,7 +283,7 @@ def judge(payload: dict, clone: str) -> dict:
             ctx = (
                 f"review-round: specs/{feature} already records a review round, but the tooling holds no earlier "
                 "snapshot of it to diff against, so this dispatch is not rewritten. This is a round after the first: "
-                f"dispatch `{TWIN}` (MODE 3 at medium effort) rather than `{AGENT}`, and "
+                f"dispatch `{TWIN}` (the later-round contract) rather than `{AGENT}`, and "
                 "make sure the prompt carries the previous round's items and ONLY the passages that changed. "
                 "From this dispatch on the tooling snapshots the directory and builds the diff itself."
             )
@@ -308,7 +308,7 @@ def judge(payload: dict, clone: str) -> dict:
 
     ctx = (
         f"review-round: this dispatch was rewritten into MODE 3 round {round_no} of specs/{feature} and ROUTED to "
-        f"`{TWIN}` (Opus at medium effort - feature 251, the GM 2026-09-19) "
+        f"`{TWIN}` (the same review's later-round contract - feature 251, the GM 2026-09-19) "
         "(feature 249, the GM 2026-09-14): the previous round's verdict and the diff of the feature directory since "
         "that dispatch were prepended, and the reviewer is told to read those plus grep hits only. Your own prompt "
         f'follows them unchanged. For a deliberate full re-read, put {TOKEN}="<reason>" in the prompt.'

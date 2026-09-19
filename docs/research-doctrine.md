@@ -47,7 +47,9 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   which support the assertion that we are making. There is no point in including a reference if it is
   not being quoted"*). A citation is a FOOTNOTE at the assertion carrying the key, its link and the
   quoted passage(s) verbatim, one per assertion, several in a sentence that makes several; the
-  `quote-check` agent confirms the quote is on the page, supports the assertion, and that every
+  quote is confirmed to be on the page by a SCRIPT (`make quote-verbatim`, feature 251: a model reads
+  tokens, not characters, and blurs exactly the hyphen-for-a-dash the record must keep), and the
+  `quote-check` agent, handed its report, confirms the quote supports the assertion and that every
   relevant assertion has one, before the entry lands. A foreign-language passage is quoted in
   English translation, marked as one (GM 2026-09-07: *"for foreign language things we want to quote
   the English translation rather than the original text but we also want to note that it is a

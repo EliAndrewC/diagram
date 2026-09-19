@@ -88,7 +88,7 @@ def test_decode_honors_the_declared_charset_then_the_meta_then_falls_back():
     sjis = "<meta charset='shift_jis'><p>屋敷林</p>".encode("shift_jis")
     assert "屋敷林" in (qv.decode(sjis) or "")
     assert "屋敷林" in (qv.decode("屋敷林".encode("euc_jp"), "euc-jp") or "")
-    assert qv.decode("plain".encode(), "no-such-charset") == "plain"
+    assert qv.decode(b"plain", "no-such-charset") == "plain"
 
 
 def test_a_nested_japanese_quote_is_one_passage():
@@ -156,7 +156,13 @@ def test_the_report_matches_the_original_and_sends_the_residue_to_the_agent(tmp_
 def test_a_page_that_was_read_and_lacks_the_passage_is_not_readable(tmp_path):
     url = "https://en.example/page"
     _offline(tmp_path, url, f"<p>The {BRIT} of the grove {DASH} dark in winter.</p>")
-    note = {"id": "fn-1", "key": "k", "links": [url, "https://en.example/missing"], "class": "citation", "passages": [{"quote": "The color of the grove - dark in winter.", "original": "", "language": ""}]}
+    note = {
+        "id": "fn-1",
+        "key": "k",
+        "links": [url, "https://en.example/missing"],
+        "class": "citation",
+        "passages": [{"quote": "The color of the grove - dark in winter.", "original": "", "language": ""}],
+    }
     got = qv.judge_note(note, qv.Pages(offline=tmp_path))
     assert got["passages"][0]["quotation"] == "DIFFERS"
     assert got["readability"].startswith("NOT-READABLE (the page was read")
@@ -221,3 +227,15 @@ def test_main_writes_the_report_the_agent_is_handed(tmp_path, capsys):
     assert qv.main(["absent", "--root", str(tmp_path)]) == 2
     assert qv.main(["x", "--root", str(tmp_path), "--offline", str(saved)]) == 0, "with no --json the report lands under .git/quote-verbatim/"
     assert (tmp_path / ".git" / "quote-verbatim" / "x.json").is_file()
+
+
+def test_a_scoped_check_names_its_notes_and_fetches_nothing_else(tmp_path, capsys):
+    assert qv.wanted("") is None and qv.wanted("fn-2, 4-6") == {"fn-2", "fn-4", "fn-5", "fn-6"}
+    research = tmp_path / ".claude/skills/diagram/research"
+    (research / "citations").mkdir(parents=True)
+    (research / "x.html").write_text(RESEARCH, encoding="utf-8")
+    (research / "citations" / "x.html").write_text(NOTE, encoding="utf-8")
+    out = tmp_path / "r.json"
+    assert qv.main(["x", "--root", str(tmp_path), "--offline", str(tmp_path), "--notes", "3-4", "--json", str(out)]) == 0
+    capsys.readouterr()
+    assert [f["id"] for f in json.loads(out.read_text(encoding="utf-8"))["footnotes"]] == ["fn-3", "fn-4"]

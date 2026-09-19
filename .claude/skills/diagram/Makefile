@@ -1038,12 +1038,14 @@ quote-verbatim: ## [project] is every quoted passage on the page it cites, chara
 ##  PAGE=<name>    a research page (`hamlets`, `cities/tango`); its citations page is read beside it
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
 	@if [ -z "$(PAGE)" ]; then printf 'make quote-verbatim: PAGE=<research page name> is required - e.g. make quote-verbatim PAGE=hamlets\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(OUT),--json "$(abspath $(OUT))",)
+# GUARD_EDIT_OK: feature 251 - NOTES= scopes the new quote-verbatim operation to the notes a check is about; no guard changes.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a research page - run BEFORE record-format   PAGE=hamlets
 ##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
 	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)"
+# GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
 size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
 ##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute

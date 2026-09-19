@@ -67,3 +67,15 @@ checks that each downgraded agent still catches known findings.
 ## The GM's third message
 
 > That sounds great. Please claim a feature number and write the spec and then implement this from start to finish. Thanks.
+
+## The GM's fourth message (mid-implementation, on the seeded runs)
+
+> How much research are you rechecking here exactly? I mean, I understand that in order to test out these agents, you do need to run them on some amount of actual research. But you're not doing a pass over everything that we've ever done or anything silly like that, are you?
+
+The session answered with the run list and proposed cutting the three large cases to slices. The GM:
+
+> Yes, that seems fine. Definitely do a trimmed batch. And since batch one is already small, then you can let it finish. But yes, in general, please be mindful that we are trying to conserve tokens here. So redoing old work is only useful insofar as it does give us sensible measurements about whether the defaults that we are choosing for tuning these different checks are actually what we want. So again, I'm not objecting to you doing this. I just want to make sure that we're careful about it. Thanks.
+
+## The GM's fifth message (after the first misses were reported)
+
+> Thanks, please keep going with the checks and then eventually with the scoring and updating the docs to the tiers that pass. then we can look at what other experiments we need to run on the specific checks that failed or otherwise scored poorly to see what other different models and effort levels. Will actually be suitable to our needs.

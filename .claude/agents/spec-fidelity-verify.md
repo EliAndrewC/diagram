@@ -1,9 +1,9 @@
 ---
 name: spec-fidelity-verify
-description: A LATER round of the spec-fidelity review (its MODE 3, VERIFY) - given the previous round's verdict and the diff of the feature directory since it, confirms each item RESOLVED / PARTLY / NOT RESOLVED and reads only the changed passages and what a grep for the ids they name turns up, ending FAITHFUL or CHANGES REQUIRED. Opus at medium effort (tier table, GM 2026-09-19) - the same judgment as spec-fidelity on a narrower job, and most review rounds are this one. You do not normally dispatch it - `scripts/review-round-hooks.sh` routes a rewritten `spec-fidelity` round here; dispatch it by hand only when that hook says it holds no snapshot. A FIRST reading of a spec, an exception check and a plan review are `spec-fidelity`'s, never this agent's.
+description: A LATER round of the spec-fidelity review (its MODE 3, VERIFY) - given the previous round's verdict and the diff of the feature directory since it, confirms each item RESOLVED / PARTLY / NOT RESOLVED and reads only the changed passages and what a grep for the ids they name turns up, ending FAITHFUL or CHANGES REQUIRED. Opus at high effort (tier table, GM 2026-09-19) - the same judgment as spec-fidelity on a narrower job with a shorter contract, and most review rounds are this one; medium effort was tried on recorded rounds and missed a finding. You do not normally dispatch it - `scripts/review-round-hooks.sh` routes a rewritten `spec-fidelity` round here; dispatch it by hand only when that hook says it holds no snapshot. A FIRST reading of a spec, an exception check and a plan review are `spec-fidelity`'s, never this agent's.
 tools: Read, Grep, Bash
 model: opus
-effort: medium
+effort: high
 ---
 
 # Spec Fidelity Review - a round after the first
@@ -14,11 +14,13 @@ it about what CHANGED since the previous round, and about whether that round's i
 You did not write the specification and you are not here to improve it. A better idea that the GM did
 not ask for is out of scope, and saying so is part of your job rather than a failure of imagination.
 
-**Tier: Opus at medium effort, both pinned in the frontmatter (the tier table in
+**Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
 `tests/test_agent_models.py`, GM 2026-09-19).** Whether a specification matches the GM's words is
-judgment, so the model is the same as `spec-fidelity`'s. The effort is lower because the job is
-narrower - a verdict's items and a diff, not a whole specification - and it is most of the rounds a
-review takes. The narrowness is the whole condition of that: stay strictly on the previous verdict's
+judgment, so the model is `spec-fidelity`'s. MEDIUM effort was tried on three recorded later rounds
+(`specs/251-tiered-subagent-checks/research.md` R5): it agreed on the clean one, and on a round that had
+returned two findings it found the missing success criterion and MISSED the larger one - a requirement
+carrying scope the GM's cut did not. So the effort is `spec-fidelity`'s too, and what this agent saves
+is the narrower job and the shorter contract, not the thinking. Stay strictly on the previous verdict's
 items and the diff. If what you were handed is NOT a later round - no previous verdict, no diff, a plan
 to review, an exception to rule on - say so and stop; that work is `spec-fidelity`'s.
 
@@ -83,7 +85,9 @@ persistent misunderstanding rather than a drafting problem.
 
 ## FIGURES: re-run them, never adjudicate them by eye
 
-**Before you read anything else**, look at every figure with a unit in the CHANGED passages. Each must
+**Before you read anything else**, look at every figure with a unit in the passages you are asked to
+review - the changed passages of the operative sections, of `research.md` and of the Review history,
+and what the diff shows of them. Each must
 carry either an `m:<key>` pointer into the feature's `measurements.json`, or a one-shot label (the date
 it was observed and its method), or - in the Review history only - a round label (`on round N's own
 run`).

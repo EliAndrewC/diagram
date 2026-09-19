@@ -94,11 +94,74 @@ fast-forwards. A seeded run dispatched with the Agent tool would therefore test 
 runs (R5) go through a headless session started in the clone instead - `claude -p --agent <name>` with
 the clone as its working directory - which loads the clone's agent file, its `model:` and its `effort:`.
 
-## R5 - the seeded-fault runs
+## R5 - the seeded-fault runs (2026-09-19)
 
-Filled by T08: per downgraded agent, the artifacts (commit and path, or the recorded report), the
-findings the recorded result had, hits, misses, new findings judged real or false, tokens for the run,
-and the agent's per-run mean from R1.
+**Method.** Each case re-runs a RECORDED check under its new tier: the prompt the past session sent and the
+reply the Opus agent gave are read from the run's transcript (`measure/seeded.py`), a detached worktree of
+this clone at the last commit before the recorded run gives the agent the files that run read, the current
+agent files are copied in, and the run is a headless session started in the worktree (`claude -p --agent
+<name>`, hooks off - R4 says why it is not an Agent dispatch). The GM asked for the runs to stay small
+(2026-09-19: *"redoing old work is only useful insofar as it does give us sensible measurements"*), so
+the three large recorded runs were cut to slices: `quote-check` to 23 of a run's 102 notes, `record-format`
+to one scoped page and one section. Seventeen runs in all. "Weight" is R1's scale (Sonnet priced at its own
+list rates); recorded figures are that run's own transcript, not the agent's mean.
+
+| case | tier tested | recorded result | new result | verdict | turns rec -> new | input rec -> new | weight rec -> new |
+|---|---|---|---|---|---|---|---|
+| entry-drift farmhouse | opus / medium | DRIFTED | DRIFTED, same passage | hit | 7 -> 7 | 0.95 M -> 0.36 M | 1.65 -> 0.97 |
+| entry-drift notice board | opus / medium | DRIFTED | DRIFTED | hit | 4 -> 5 | 0.52 M -> 0.36 M | 1.37 -> 0.99 |
+| entry-drift well | opus / medium | DRIFTED | DRIFTED | hit | 4 -> 12 | 0.51 M -> 1.08 M | 1.34 -> 1.40 |
+| entry-drift marsh (clean) | opus / medium | IN-STEP | IN-STEP | clean, no false alarm | 4 -> 9 | 0.43 M -> 0.58 M | 1.28 -> 1.06 |
+| escalation-check 247 | opus / medium | 3 KEEP, 2 REWRITE, 1 CUT; the unverifiable "137" | same CUT, same "137", same missing fact; one REWRITE moved to KEEP | hit | 8 -> 24 | 0.65 M -> 0.62 M | 1.12 -> 1.07 |
+| escalation-check 239 | opus / medium | 6 KEEP, 2 REWRITE, 3 CUT | all 3 CUTs cut, plus a 4th; one KEEP moved to REWRITE; a stale SHA newly found | hit | 6 -> 22 | 0.43 M -> 0.43 M | 0.86 -> 0.84 |
+| escalation-check 242 | opus / medium | 3 KEEP, 1 REWRITE, 2 CUT | identical | hit | 14 -> 17 | 1.04 M -> 0.72 M | 1.31 -> 1.06 |
+| spec-fidelity-verify 250 | opus / medium | CHANGES REQUIRED, 2 items | CHANGES REQUIRED, 1 item: the missing success criterion found, **the unrequested scope in FR-004 MISSED** | **MISS** | 7 -> 11 | 0.53 M -> 0.46 M | 1.01 -> 0.95 |
+| spec-fidelity-verify c670 | opus / medium | NOT-REVIEWABLE (five unkeyed figures) | reviewed the substance instead | not scored: the twin's FIGURES rule had been narrowed to changed passages by this session's drafting; restored | 8 -> 16 | 0.65 M -> 1.14 M | 1.01 -> 1.75 |
+| spec-fidelity-verify (clean) | opus / medium | FAITHFUL | FAITHFUL | clean | 3 -> 11 | 0.20 M -> 0.43 M | 0.54 -> 0.75 |
+| source-reader 08-28 (25 claims) | **sonnet** / high | 1 CONTRADICTED (an exception clause the source does not carry) | the same clause noticed and the verdict given as "READ (partial)" | **MISS** (under-called) | 4 -> 12 | 0.14 M -> 0.05 M | 0.24 -> 0.17 |
+| source-reader 08-29 | **sonnet** / high | CONTRADICTED, from the paper's full text | the paper never reached (403 on five hosts); CONTRADICTED reached from a second source | hit by another route | 15 -> 18 | 0.70 M -> 0.42 M | 0.28 -> 0.41 |
+| source-reader 09-12 (clean) | **sonnet** / high | 3 READ, 2 NOT-FOUND, with two partial passages found (the pigsty dike's 5-10 m width; pond water on the dike vegetables) | both passages **MISSED**: NOT-FOUND for each; four sources read where the recorded run read seven | **MISS** (false NOT-FOUND) | 7 -> 8 | 0.48 M -> 0.09 M | 0.92 -> 0.14 |
+| quote-check, 17 + 6 notes | opus / medium + the script | in the slice: DIFFERS fn-91, 92, 96, 103/108, 104; NOT-ON-PAGE fn-237; undisclosed PARTIAL fn-94, 95, 237 | every support finding hit (94, 95, 237); DIFFERS 92, 103, 104, 108, 237 from the script, **plus fn-98 and fn-105, which the recorded run missed**; fn-91 and fn-96 VERBATIM | hit (see below) | 37 -> 26 | 12.8 M (102 notes) -> 2.5 M (23 notes) | 10.47 -> 2.98 |
+| record-format towns (scoped) | **sonnet** / medium + the pre-pass | one residual SESSION NOTE in prose, one HISTORY passage, `ward` | `ward` found; **the session note and the history passage MISSED** | **MISS** | 11 -> 30 | 2.1 M -> 4.7 M | 3.33 -> 1.77 |
+| record-format one section | **sonnet** / medium + the pre-pass | 2 stray tags, a sentence contradicting its clause, a fetch-verdict phrase, `the frame`, `clump` | the tags and `the frame` found; **the contradiction, the fetch-verdict phrase and `clump` MISSED** | **MISS** | (27, two pages) -> 21 | (8.5 M) -> 2.8 M | (7.99) -> 1.35 |
+| record-format ways (clean) | **sonnet** / medium + the pre-pass | - | no session note or history reported; ten glossary terms proposed | clean; the terms are proposals, not alarms | - -> 28 | - -> 2.5 M | - -> 1.15 |
+
+**The `quote-check` row, which is the script's test as much as the agent's.** The recorded Opus run called
+fn-91 DIFFERS - the page, it said, reads 「神田上水の給水順次」 where the note quotes 「神田上水による給水順次」. The
+live page, fetched directly on 2026-09-19, carries 「神田上水による給水順次」: the quotation is exact and the
+recorded DIFFERS was a false alarm (or the page changed in five days; the script's answer is the page's
+present text either way). fn-96 (大阪 against 大坂) the script also reports VERBATIM; not independently
+re-fetched. And the script found two real differences the recorded run passed over (fn-98, fn-105). That is
+the proposal's claim measured: a model is the wrong instrument for a character comparison, in both directions.
+
+**What stands and what went back** (FR-011; and the GM, 2026-09-19, on the ones that missed: *"then we can
+look at what other experiments we need to run on the specific checks that failed or otherwise scored
+poorly"* - so a tier that missed returns to its known-good tier, the recorded runs standing as that tier's
+result, and no further tier was tried in this feature):
+
+| agent | proposed | result | lands as |
+|---|---|---|---|
+| `quote-check` | opus / medium + script | every recorded finding hit; two new true ones; one recorded false alarm removed | **opus / medium + script** |
+| `entry-drift` | opus / medium | 4 of 4 | **opus / medium** |
+| `escalation-check` | opus / medium | 3 of 3 | **opus / medium** |
+| `spec-fidelity-verify` | opus / medium | missed one of two findings on a recorded round | **opus / high** (the twin and its routing stay: a 111-line contract against 236) |
+| `source-reader` | sonnet / high | one CONTRADICTED under-called, two passages missed | **opus / high** |
+| `record-format` | sonnet / medium + pre-pass | the pattern-findable hit, the reading-only findings missed, on both cases | **opus / high + pre-pass** |
+
+**What the runs say about EFFORT (SC-005).** Medium against the session's high moved turns, output and
+weight in no consistent direction: `entry-drift` 5.64 -> 4.42 over four cases, `escalation-check` 3.29 ->
+2.97 over three, the twin 2.56 -> 3.45. Several medium runs took MORE turns. One confound is unremoved: a
+headless session is a main thread, not a subagent, and its fixed context differs. Read with R1 (output is
+10-26% of a check), the honest summary is that effort is a small lever and this sample cannot price it;
+it costs nothing to keep where the findings held. The measured savings of this feature are the scripts'
+(no fetches, no character comparison, a false alarm and two misses corrected) and the no-inherit rule's
+(R1: 62 ad-hoc runs and 19 settlement reviews on Fable).
+
+**Candidates for the follow-up the GM named, not run here:** Sonnet at HIGH effort for `record-format`
+(medium was the tier tested, so the model and the effort are confounded there); Sonnet for `source-reader`
+with a harder contract (a verdict word may not be softened; read every pointer given); `source-reader` and
+`record-format` on Opus at MEDIUM; the twin at medium with the restored FIGURES rule; and Haiku or Sonnet
+for an ad-hoc fetch-and-extract reader, which is the largest consumer in R1 and was not tested at all.
 
 ## R6 - an unset effort is the session's
 

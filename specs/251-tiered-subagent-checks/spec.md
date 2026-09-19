@@ -1,6 +1,7 @@
 # Feature 251 - subagent checks tiered by model and effort, with the mechanical parts in scripts
 
-**Status:** FAITHFUL at round 2 (2026-09-19, see Review history); planning.
+**Status:** implemented 2026-09-19 - FAITHFUL at round 2, plan CLEAR on its second review; amended by the
+GM's instructions of the same day (see Review history).
 
 ## Summary
 
@@ -84,12 +85,12 @@ entry fails, so a new agent owes its tier the day it lands. The table:
 
 | agent | model | effort |
 |---|---|---|
-| `record-format` | sonnet | medium |
-| `source-reader` | sonnet | high |
+| `record-format` | opus | high |
+| `source-reader` | opus | high |
 | `quote-check` | opus | medium |
 | `entry-drift` | opus | medium |
 | `escalation-check` | opus | medium |
-| `spec-fidelity-verify` | opus | medium |
+| `spec-fidelity-verify` | opus | high |
 | `spec-fidelity` | opus | high |
 | `source-applicability` | opus | high |
 | `size-audit` | opus | high |
@@ -97,7 +98,10 @@ entry fails, so a new agent owes its tier the day it lands. The table:
 | `settlement-review` | opus | high |
 | `perf-audit` | opus | high |
 
-A row changed by FR-011's result is changed in the table, in the file and in this spec together.
+A row changed by FR-011's result is changed in the table, in the file and in this spec together. THREE
+WERE (2026-09-19, `research.md` R5): the proposal had `record-format` on sonnet / medium, `source-reader` on
+sonnet / high and the twin at medium; each missed a finding a recorded Opus run had caught and went back
+up. The table above is what landed.
 
 **FR-003 - the verbatim check is a script.** `scripts/_quote_verbatim.py`, run as `make quote-verbatim
 PAGE=<name>` (`cities/<name>` for a city page), reads the research page and its citations page and
@@ -250,3 +254,12 @@ and every new make target is listed where the others are.
 - **Round 2 (2026-09-19) - FAITHFUL.** All three items and the aside verified resolved; nothing new
   introduced. The reviewer's aside for the plan: the session model is Fable, so R1 reports which past
   ad-hoc runs inherited Fable specifically.
+- **Amendments by the GM's instruction, 2026-09-19, after acceptance** (their words are in `request.md`,
+  messages four and five). (1) The seeded runs were CUT DOWN - slices of the large recorded runs, seventeen
+  small runs in all - where FR-011 had said "at least two artifacts ... and at least one known CLEAN" per
+  agent with no bound on their size; `quote-check` got no separate clean page (the no-finding notes inside
+  its slice serve), because the page chosen cites only the GM's canon. (2) FR-011's "the run is repeated at
+  the new tier" was NOT done for the three agents that missed: the GM asked to land the tiers that passed
+  and to choose the further experiments together, so each returned to its known-good tier, for which the
+  recorded runs are the result. (3) FR-007's Sonnet tiers and the twin's medium did not survive FR-011, as
+  FR-002 now shows.

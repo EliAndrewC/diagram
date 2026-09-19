@@ -1,10 +1,12 @@
 """Every subagent check runs on the tier recorded for it: a model AND an effort, pinned in its file.
 
-THE RULING (GM 2026-09-19, feature 251). Judgment stays on Opus; a check that is verification and whose
-cost is the pages it reads may run on Sonnet; what is purely mechanical is a script and runs on no model
-(`make quote-verbatim`, `make record-prepass`, `make size-table`). Each tier below was the GM-approved
-proposal's, and each DOWNGRADE in it was proven on artifacts with known findings before it stood
-(`specs/251-tiered-subagent-checks/research.md` R5).
+THE RULING (GM 2026-09-19, feature 251). Judgment stays on Opus; what is purely mechanical is a script and
+runs on no model (`make quote-verbatim`, `make record-prepass`, `make size-table`); and a DOWNGRADE stands
+only after it is run on artifacts with known findings. The GM-approved proposal put `record-format` and
+`source-reader` on Sonnet and the later-round twin at medium effort; all three MISSED findings the recorded
+Opus runs had caught and went back up, and `quote-check`, `entry-drift` and `escalation-check` held at medium
+(`specs/251-tiered-subagent-checks/research.md` R5). `sonnet` stays a legal value for the day a seeded run
+supports it.
 
 WHAT NEVER CHANGES. Nothing is inherited. An agent file with no `model:` runs on the SESSION's model,
 which is how nineteen settlement reviews ran on Fable while that file said `inherit` (research R1), and a
@@ -27,12 +29,12 @@ EFFORTS = ("low", "medium", "high", "xhigh", "max")
 
 #: agent -> (model, effort)
 TIERS: dict[str, tuple[str, str]] = {
-    "record-format": ("sonnet", "medium"),
-    "source-reader": ("sonnet", "high"),
+    "record-format": ("opus", "high"),  # Sonnet at medium tried and missed: research R5
+    "source-reader": ("opus", "high"),  # Sonnet tried and missed: research R5
     "quote-check": ("opus", "medium"),
     "entry-drift": ("opus", "medium"),
     "escalation-check": ("opus", "medium"),
-    "spec-fidelity-verify": ("opus", "medium"),
+    "spec-fidelity-verify": ("opus", "high"),  # medium tried and missed: research R5
     "spec-fidelity": ("opus", "high"),
     "source-applicability": ("opus", "high"),
     "size-audit": ("opus", "high"),

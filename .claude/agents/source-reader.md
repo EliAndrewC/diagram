@@ -1,7 +1,7 @@
 ---
 name: source-reader
-description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - Sonnet at high effort, with quote-check behind it (tier table, GM 2026-09-19); it never decides a rule, it reports what a page says.
-model: sonnet
+description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - Opus at high effort (tier table, GM 2026-09-19: Sonnet was tried on recorded runs and under-called what Opus found); it never decides a rule, it reports what a page says.
+model: opus
 effort: high
 tools: WebFetch, WebSearch, Read
 ---
@@ -79,10 +79,11 @@ rewriting of the entry - the session does that with your quotes in hand.
 
 ## Model
 
-Sonnet at high effort, both pinned in the frontmatter (the tier table in `tests/test_agent_models.py`,
-GM 2026-09-19); neither is ever inherited from the session. The work is verification - fetch, quote,
-compare - nearly all of its cost is the pages it reads, and `quote-check` stands behind it. The effort
-is high because the part that goes wrong is careful reading: a scope, a hedge, what a noun refers to
-(Procedure step 3). The tier was proven on past CONTRADICTED verdicts before it was set
-(`specs/251-tiered-subagent-checks/research.md` R5), and the model does not change what you are allowed
-to decide (nothing).
+Opus at high effort, both pinned in the frontmatter (the tier table in `tests/test_agent_models.py`, GM
+2026-09-19); neither is ever inherited from the session. The work is verification - fetch, quote,
+compare - and Sonnet was TRIED for it, because nearly all of this agent's cost is the pages it reads. On
+three recorded runs (`specs/251-tiered-subagent-checks/research.md` R5) it called a CONTRADICTED claim
+"READ (partial)", and returned NOT-FOUND on two claims whose passages the recorded Opus run had found,
+reading four sources where Opus read seven. A false NOT-FOUND is the silent failure here - the record
+gets an absence note where a citable passage existed - so the model stayed. Do not lower it without a
+seeded run that says otherwise. The model does not change what you are allowed to decide (nothing).

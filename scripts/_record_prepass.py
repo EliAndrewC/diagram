@@ -141,6 +141,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("page", help="a research page name: hamlets, cities/tango, citations/hamlets, SOURCES")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", default="")
+    ap.add_argument("--section", default="", help="only the sections whose heading contains this text")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root)
     name = args.page.removesuffix(".html")
@@ -150,7 +151,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     gloss_path = root / GLOSSARY
     glossary = json.loads(gloss_path.read_text(encoding="utf-8")) if gloss_path.is_file() else {}
-    listing = prepass(path.read_text(encoding="utf-8"), glossary)
+    listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary) if args.section.casefold() in s["section"].casefold()]
+
     print(render(name, listing))
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps({"page": name, "sections": listing}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

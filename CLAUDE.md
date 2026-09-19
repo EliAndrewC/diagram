@@ -70,7 +70,10 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   `Entry:` names.
 - Reading and checking are dispatched to agents, in the background: `source-reader` (read what you
   cite), `quote-check`, `record-format`, `source-applicability` (judged BEFORE a source's numbers
-  reach a map or a rule), `entry-drift`.
+  reach a map or a rule), `entry-drift`. What is mechanical runs FIRST, as a script, and its output goes
+  in the agent's prompt: `make quote-verbatim PAGE=<name> [NOTES=<ids>]` before `quote-check` (is the
+  passage on the page, character for character), `make record-prepass PAGE=<name>` before
+  `record-format`, `make size-table PLAN=<svg>` before `size-audit`.
 
 ## Development workflow
 
@@ -112,8 +115,11 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Review subagents (`settlement-review`, `building-review`, `size-audit`) run at acceptance, in the
   background, one map per agent; every pass is a row in `docs/review-ledger.md`. To improve one, add
   the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
-  GM go through `escalation-check` first. Every subagent runs on Opus (`model: opus` in every
-  `.claude/agents/*.md`; ad-hoc agents too). The review agents are pre-authorized through
+  GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
+  effort, never inherited (`tests/test_agent_models.py` holds the table; judgment is on Opus, and a
+  downgrade stands only after a seeded-fault run on known findings). An ad-hoc agent is dispatched with
+  an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges -
+  and never with none: with none it runs on the session's model. The review agents are pre-authorized through
   `container-scripts/append-system-prompt.md`; if one is skipped, check `type claude` first.
 
 ## Verification and iteration
@@ -186,7 +192,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
 | `pair-hooks.sh` + `_review_owed.py` | the gate and the settlement-review run together when a pool map's layout moved; one map per agent | `PAIR_OK` |
 | `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends | `ESCALATION_OK` |
-| `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff | `REVIEW_ROUND_OK` |
+| `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify` | `REVIEW_ROUND_OK` |
 | `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |

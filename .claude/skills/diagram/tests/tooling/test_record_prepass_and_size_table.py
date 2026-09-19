@@ -149,3 +149,12 @@ def test_the_table_reads_a_real_pool_plan():
     assert plans, "non-vacuity: the pool holds Mode A plans"
     data = st.table(plans[0].read_text(encoding="utf-8"))
     assert len(data["rects"]) > 20 and data["gaps"] and any(w >= 2.0 for w in data["strokes_ft"])
+
+
+def test_a_scoped_prepass_lists_one_section(tmp_path, capsys):
+    research = tmp_path / rp.RESEARCH
+    research.mkdir(parents=True)
+    (research / "lanes.html").write_text(PAGE, encoding="utf-8")
+    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "how wide"]) == 0
+    text = capsys.readouterr().out
+    assert "1 sections" in text and "Grounds:" in text and "tameike" not in text

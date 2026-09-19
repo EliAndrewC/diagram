@@ -201,7 +201,7 @@ reads it - the rule stands here with its reason.
 
 Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
 resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
-quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus like every check agent - GM 2026-09-07, verification not
+quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus at medium effort, AFTER `make quote-verbatim PAGE=<name> [NOTES=<ids>]` has checked every passage against its page character for character with no model and its report is named in the prompt - feature 251; verification not
 judgment - the sibling of `source-reader`) holds the half a test cannot: per footnote, is the quote VERBATIM on
 the page (or DIFFERS / NOT-ON-PAGE), does it SUPPORT the assertion it is attached to (or PARTIAL /
 DOES-NOT-SUPPORT), and per section, which assertions carry no footnote. Run it in the background on every new or
@@ -256,7 +256,7 @@ are the form of every entry from here, new or revised:
 mechanical half at the gate: the fields are comments, every page loads the glossary, the asset equals its
 derivation, every term is used, and the shapes of session-speak and history that recurred (a feature number, a
 task id, a correction date, a fetch verdict, "used to say") are absent from the visible text. The
-**`record-format` agent** (`.claude/agents/record-format.md`, Opus like every check agent) holds the half a
+**`record-format` agent** (`.claude/agents/record-format.md`, Opus at high effort, handed the listing of `make record-prepass PAGE=<name>` in its prompt - feature 251) holds the half a
 test cannot: per section, the VOCABULARY that deserves a tooltip (with a definition drafted from the record),
 the SESSION NOTES still visible, and the HISTORY still visible, each quoted with the rewrite it proposes. Run
 it beside `quote-check` on every new or changed entry before the feature lands, and record its verdicts in the
@@ -298,7 +298,7 @@ the actual content."* So every research page `research/<name>.html` has a citati
   gate: a new source is not cited until its entry says what it is and why it applies. Both write-ups are written for
   the reader (the rules above: tooltips, comments, no history).
 - **A source is JUDGED before it is used, and when its write-up lands.** The **`source-applicability` agent**
-  (`.claude/agents/source-applicability.md`, Opus like every check agent) reads the work and reports whether it is
+  (`.claude/agents/source-applicability.md`, Opus at high effort) reads the work and reports whether it is
   APPLICABLE, APPLICABLE-WITH-LIMITS (each limit named) or NOT-APPLICABLE to a premodern East Asian setting modeled on
   imperial China and pre-Meiji Japan, and whether the write-up's limits are HONEST, MISSING one or OVERSTATED. It runs
   at TWO moments: whenever a source's write-ups are added or changed (every new registry key), and BEFORE a session

@@ -5,7 +5,7 @@ WHY A SCRIPT AND NOT A MODEL. The GM, 2026-09-19: "it probably is a perfectly fi
 what are functionally mechanical checks, such as making sure that a quotation excerpt does accurately
 quote the text in question" - and then approved going one step further: a character-for-character
 comparison is the one thing a language model is WORSE at than twenty lines of code. It reads tokens,
-not characters, so a hyphen where the source has a dash, or "color" where the source has "color", is
+not characters, so a hyphen where the source has a dash, or an American spelling where the source has a British one, is
 exactly what it blurs - and the record keeps a source's own characters (GM 2026-09-06: *"The house
 style should not normalize british spellings or em-dashes inside things we are quoting"*). This does
 that comparison exactly, for no tokens, and hands the `quote-check` agent what is left: whether the
@@ -375,9 +375,19 @@ def render(page: str, entries: list[dict], refused: dict[str, str]) -> str:
     return "\n".join(lines)
 
 
+def wanted(spec: str) -> set[str] | None:
+    """`90-108,113` -> the fn ids it names; empty -> None (every note). A scoped check is the usual one."""
+    ids: set[str] = set()
+    for part in filter(None, (p.strip() for p in spec.split(","))):
+        lo, _, hi = part.removeprefix("fn-").partition("-")
+        ids.update(f"fn-{n}" for n in range(int(lo), int(hi or lo) + 1))
+    return ids or None
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("page", help="a research page name: hamlets, cities/tango")
+    ap.add_argument("--notes", default="", help="only these notes, e.g. 90-108,113 - nothing else is fetched")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", default="")
     ap.add_argument("--offline", default="", help="a directory of saved pages named by Pages.name_for(url)")
@@ -389,7 +399,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"quote-verbatim: no such page - wanted {page_file} and {cite_file}", file=sys.stderr)
         return 2
     pages = Pages(pathlib.Path(args.offline) if args.offline else None)
-    entries = report(footnotes(cite_file.read_text(encoding="utf-8")), assertions(page_file.read_text(encoding="utf-8")), pages)
+    only = wanted(args.notes)
+    notes = [n for n in footnotes(cite_file.read_text(encoding="utf-8")) if only is None or n["id"] in only]
+    entries = report(notes, assertions(page_file.read_text(encoding="utf-8")), pages)
     print(render(name, entries, pages.refused))
     out = pathlib.Path(args.json) if args.json else pathlib.Path(args.root) / ".git" / "quote-verbatim" / (name.replace("/", "-") + ".json")
     out.parent.mkdir(parents=True, exist_ok=True)

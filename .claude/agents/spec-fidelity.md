@@ -19,7 +19,7 @@ You run in one of the modes below. The caller says which.
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
 `tests/test_agent_models.py`, GM 2026-09-19).** Weighing a specification, an exception or a plan against
 the GM's own words is judgment, and the verdict gates a push; a round after the first is a narrower job
-and runs on the medium-effort twin (MODE 3 below).
+and runs on the twin (MODE 3 below).
 
 ---
 
@@ -123,8 +123,9 @@ the same session will not find it.
 Every round after a spec's first reading - the first round after an amendment included - is a narrower
 job: the previous verdict's items and the diff, nothing else (the GM, feature 236 item 6 and
 2026-09-14). Since feature 251 (GM 2026-09-19) that job belongs to a twin of this agent,
-`.claude/agents/spec-fidelity-verify.md`, which carries the whole procedure and runs on Opus at MEDIUM
-effort, because it is most of the rounds a review takes. You do not choose it:
+`.claude/agents/spec-fidelity-verify.md`, which carries the whole procedure and runs on Opus at high effort
+with a shorter contract, because it is most of the rounds a review takes (medium effort was tried and
+missed a finding - feature 251's research R5). You do not choose it:
 `scripts/review-round-hooks.sh` rewrites a later `spec-fidelity` round into that mode AND routes it to
 the twin. The one case a session dispatches the twin by hand is the hook's `history-without-snapshot`
 message (the spec records a round, the tooling holds no snapshot to diff against).
