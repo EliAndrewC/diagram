@@ -256,7 +256,7 @@ are the form of every entry from here, new or revised:
 mechanical half at the gate: the fields are comments, every page loads the glossary, the asset equals its
 derivation, every term is used, and the shapes of session-speak and history that recurred (a feature number, a
 task id, a correction date, a fetch verdict, "used to say") are absent from the visible text. The
-**`record-format` agent** (`.claude/agents/record-format.md`, Opus at high effort, handed the listing of `make record-prepass PAGE=<name>` in its prompt - feature 251) holds the half a
+**`record-format` agent** (`.claude/agents/record-format.md`, Opus at medium effort, handed the listing of `make record-prepass PAGE=<name>` in its prompt - feature 251) holds the half a
 test cannot: per section, the VOCABULARY that deserves a tooltip (with a definition drafted from the record),
 the SESSION NOTES still visible, and the HISTORY still visible, each quoted with the rewrite it proposes. Run
 it beside `quote-check` on every new or changed entry before the feature lands, and record its verdicts in the

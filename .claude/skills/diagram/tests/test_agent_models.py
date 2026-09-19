@@ -29,7 +29,7 @@ EFFORTS = ("low", "medium", "high", "xhigh", "max")
 
 #: agent -> (model, effort)
 TIERS: dict[str, tuple[str, str]] = {
-    "record-format": ("opus", "high"),  # Sonnet at medium tried and missed: research R5
+    "record-format": ("opus", "medium"),  # Sonnet missed at medium (R5) and at high (R7); opus/medium hit everything
     "source-reader": ("opus", "high"),  # Sonnet tried and missed: research R5
     "quote-check": ("opus", "medium"),
     "entry-drift": ("opus", "medium"),

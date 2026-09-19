@@ -1,8 +1,8 @@
 ---
 name: record-format
-description: Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on every new or changed research entry before its feature lands, beside quote-check, and over every page in a sweep. Verification, not judgment about the map - Opus at high effort, handed `make record-prepass` (tier table, GM 2026-09-19: Sonnet was tried on recorded runs and missed the findings no pattern can find); it never decides a rule and never edits, it reports what a reader would see. (Tools: Read, Grep)
+description: Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on every new or changed research entry before its feature lands, beside quote-check, and over every page in a sweep. Verification, not judgment about the map - Opus at medium effort, handed `make record-prepass` (tier table, GM 2026-09-19: medium held on recorded runs at about half the input; Sonnet, at medium and at high, missed the findings no pattern can find); it never decides a rule and never edits, it reports what a reader would see. (Tools: Read, Grep)
 model: opus
-effort: high
+effort: medium
 tools: Read, Grep
 ---
 
@@ -51,11 +51,13 @@ already where it belongs, and you do not report it.
 
 ## Procedure
 
-0. **You are handed a pre-pass (feature 251, GM 2026-09-19).** (Why you are still on Opus at high effort: Sonnet at
-   medium was tried on recorded runs with this pre-pass in hand - `specs/251-tiered-subagent-checks/research.md` R5 -
-   and it found what the patterns found and the stray markup, and MISSED what only reading finds: a session note
+0. **You are handed a pre-pass (feature 251, GM 2026-09-19).** (Why you are on Opus, at medium effort: Sonnet was
+   tried on recorded runs with this pre-pass in hand, at medium and then at high effort -
+   `specs/251-tiered-subagent-checks/research.md` R5 and R7 - and both times it found what the patterns found and
+   the stray markup, and MISSED what only reading finds: a session note
    worded as prose, the one history passage left on a page, a sentence contradicting the clause before it, a
-   drawing term with no definition. Those are this agent's whole reason, so the model stayed.) The session runs `make record-prepass PAGE=<name>`
+   drawing term with no definition. Those are this agent's whole reason, so the model stayed. Opus at MEDIUM found every one of them on
+   the same two cases.) The session runs `make record-prepass PAGE=<name>`
    before dispatching you and puts its listing in your prompt: per section, the SESSION NOTE shapes a pattern can
    find (a `Grounds:` field, a feature number, a task id, a spec path, a make target, a file path, an engine
    identifier in code markup, a fetch verdict) and the VOCABULARY candidates (a run of kanji or kana, an

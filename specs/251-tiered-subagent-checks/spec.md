@@ -85,7 +85,7 @@ entry fails, so a new agent owes its tier the day it lands. The table:
 
 | agent | model | effort |
 |---|---|---|
-| `record-format` | opus | high |
+| `record-format` | opus | medium |
 | `source-reader` | opus | high |
 | `quote-check` | opus | medium |
 | `entry-drift` | opus | medium |
@@ -101,7 +101,9 @@ entry fails, so a new agent owes its tier the day it lands. The table:
 A row changed by FR-011's result is changed in the table, in the file and in this spec together. THREE
 WERE (2026-09-19, `research.md` R5): the proposal had `record-format` on sonnet / medium, `source-reader` on
 sonnet / high and the twin at medium; each missed a finding a recorded Opus run had caught and went back
-up. The table above is what landed.
+up. The follow-up experiments the GM then ordered (`research.md` R7) moved one row more: `record-format` to
+opus / medium, where it hit every recorded finding at about two thirds of the cost. The table above is what
+landed.
 
 **FR-003 - the verbatim check is a script.** `scripts/_quote_verbatim.py`, run as `make quote-verbatim
 PAGE=<name>` (`cities/<name>` for a city page), reads the research page and its citations page and
@@ -291,3 +293,6 @@ and every new make target is listed where the others are.
   wrong (the files measure 114 and 215 lines): the counts are dropped. The reviewer's aside is answered in
   R5's Method: the two `quote-check` slices were ONE run, so seventeen stands.
 - **Amendment review, round 3 (2026-09-19) - FAITHFUL.** Both round-2 items verified resolved; nothing new introduced.
+- **Follow-up experiments (2026-09-19, the GM: *"I agree that each of the follow-up experiments is worth
+  running, so go ahead and run all of them"*) - `research.md` R7.** One row of FR-002 moved on their result,
+  by FR-002's own rule: `record-format` to opus / medium. Every other tier stood.

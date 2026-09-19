@@ -163,6 +163,41 @@ with a harder contract (a verdict word may not be softened; read every pointer g
 `record-format` on Opus at MEDIUM; the twin at medium with the restored FIGURES rule; and Haiku or Sonnet
 for an ad-hoc fetch-and-extract reader, which is the largest consumer in R1 and was not tested at all.
 
+## R7 - the follow-up experiments (2026-09-19)
+
+The GM, shown R5's candidate list: *"I agree that each of the follow-up experiments is worth running, so go
+ahead and run all of them."* Fifteen runs, R5's method and R5's recorded cases; total weight 12.0 on R1's
+scale (Haiku priced at its own list rates), about two ordinary settlement reviews (observed 2026-09-19;
+method: each run's own `usage`, the recorded figures from that run's transcript).
+
+| experiment | case | result against the recorded run (observed 2026-09-19; method: the run's reply read against the recorded reply) | turns rec -> new | weight rec -> new |
+|---|---|---|---|---|
+| `record-format` sonnet / **high** | towns (scoped) | the prose session note and the history passage **MISSED again** | 11 -> 11 | 3.33 -> 1.03 |
+| `record-format` sonnet / **high** | one section | the contradiction now found; the fetch-verdict phrase and `clump` **MISSED again** | (27) -> 13 | (7.99) -> 1.11 |
+| `record-format` **opus / medium** | towns (scoped) | both reading-only findings hit, and `ward` | 11 -> 8 | 3.33 -> 2.13 |
+| `record-format` **opus / medium** | one section | all six hit: both stray tags, the contradiction, the fetch-verdict phrase, `the frame`, `clump` | (27) -> 11 | (7.99) -> 2.05 |
+| `source-reader` opus / medium | 08-28 (25 claims) | the unsupported exception clause reported as "NOT-FOUND as quoted ... the exception clause is not there" - the finding surfaced, under a different word than the recorded CONTRADICTED | 4 -> 16 | 0.24 -> 0.43 |
+| `source-reader` opus / medium | 08-29 | CONTRADICTED, hit | 15 -> 37 | 0.28 -> 1.01 |
+| `source-reader` opus / medium | 09-12 (clean) | the pigsty dike's 5-10 m width **MISSED** (NOT-FOUND), as Sonnet missed it; a vegetables passage found and judged not to carry the claim | 7 -> 18 | 0.92 -> 0.51 |
+| twin opus / medium, FIGURES rule restored | c670 | NOT-REVIEWABLE, hit - R5's unscored case was the drafting, not the effort | 8 -> 27 | 1.01 -> 2.33 |
+| twin opus / medium | 250 | the missing success criterion found; the unrequested scope in FR-004 **MISSED a second time** | 7 -> 9 | 1.01 -> 0.88 |
+| ad-hoc reader, **sonnet** | FAO stall table | the table extracted row for row as the recorded Opus run had it, and the cross-column claim correctly refused | 8 -> 12 | 0.96 -> 0.25 |
+| ad-hoc reader, **haiku** | FAO stall table | **WRONG**: gave "Milking cows 3.0 x 1.2" - it read the bedded-area column as the stall length, the very cross-column error the prompt was asking about | 8 -> 9 | 0.96 -> 0.07 |
+| ad-hoc reader, sonnet | two "what kind of publication" sets (3 pages each) | same publishers, authors, dates and cautions as the recorded runs | 3 -> 5 | 0.44 -> 0.09 each |
+| ad-hoc reader, haiku | the same two sets | the same facts, flatter; one date the recorded run had not given | 3 -> 5 | 0.44 -> 0.03 each |
+
+**What changes.** `record-format` lands on **opus / medium**: every recorded finding hit on both cases at
+about two thirds of the recorded weight and fewer turns, which is the first effort downgrade in this feature
+with a measured saving. **What stands.** `record-format` does not go to Sonnet - high effort did not recover
+what medium missed, so R5's miss was the model and not the effort. `source-reader` stays on opus / high: medium
+cost MORE on two of three cases (it took two to four times the turns) and missed the same width passage Sonnet
+missed; whether that passage is a matter of effort or of which pages a run happens to open, this sample cannot
+say, and the expensive direction is the wrong one to guess in. The twin stays at high: with its FIGURES rule
+restored it matched the recorded NOT-REVIEWABLE, and it missed the same unrequested-scope finding twice at
+medium. **The ad-hoc rule is now measured, not only written:** Sonnet is a sound fetch-and-extract reader at
+a fifth to a quarter of the recorded Opus weight; Haiku is sound for a plain description of a page and NOT for
+a table or a number. `scripts/agent-model-rule.txt` and root `CLAUDE.md` say so.
+
 ## R6 - an unset effort is the session's
 
 Verified 2026-09-19 in the installed 2.1.278 binary: the subagent's request effort is read as the

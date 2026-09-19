@@ -119,7 +119,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   effort, never inherited (`tests/test_agent_models.py` holds the table; judgment is on Opus, and a
   downgrade stands only after a seeded-fault run on known findings). An ad-hoc agent is dispatched with
   an explicit `model` - `sonnet` to read, fetch, translate or extract, `opus` for anything that judges -
-  and never with none: with none it runs on the session's model. The review agents are pre-authorized through
+  and never with none: with none it runs on the session's model, and `agent-model-hooks.sh` refuses it
+  (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). The review agents are pre-authorized through
   `container-scripts/append-system-prompt.md`; if one is skipped, check `type claude` first.
 
 ## Verification and iteration
