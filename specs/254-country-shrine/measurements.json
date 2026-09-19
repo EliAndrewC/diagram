@@ -6,10 +6,10 @@
     "command": "git worktree add --detach /tmp/base HEAD && make -C /tmp/base quick ALL=1 && make -C /tmp/base hooks-test"
   },
   "sweep-cost": {
-    "value": 4.56,
+    "value": 4.55,
     "unit": "s",
     "varies": true,
-    "quantity": "wall time of `make test-file FILE=tests/test_mode_a_sheets.py` over the five magistracy sheets, xdist workers included, 2026-09-19",
+    "quantity": "wall time of `make test-file FILE=tests/test_mode_a_sheets.py` over the six Mode A sheets (five magistracies and the Hoshigaoka shrine), xdist workers included, 2026-09-19",
     "command": "make test-file FILE=tests/test_mode_a_sheets.py"
   },
   "hugging-floor": {
