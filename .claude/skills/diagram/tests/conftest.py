@@ -48,6 +48,18 @@ def pytest_addoption(parser):  # type: ignore[no-untyped-def]
     )
 
 
+@pytest.hookimpl(trylast=True)
+def pytest_configure(config):  # type: ignore[no-untyped-def]
+    """testmon's xdist sync wrote `.testmondata` while slow workers were still reading it, and
+    `make quick` failed on the first run after a test was added (`tests/_testmon_sync.py`).
+
+    TRYLAST, MEASURED: a conftest registers after testmon and pluggy calls the later plugin first, so
+    unmarked this ran before testmon had registered the plugin it replaces, and replaced nothing."""
+    from tests._testmon_sync import install
+
+    install(config)
+
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def]
     """TRYFIRST, AND THE REASON IS A TARGET THAT RAN NOTHING (feature 170, found by feature 169's

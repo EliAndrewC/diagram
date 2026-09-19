@@ -1051,6 +1051,13 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
+# GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
+source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
+##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
+##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=
+	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)")
+
 # GUARD_EDIT_OK: feature 253 - a new operation (the search the review-round guard runs, by hand); no guard changes.
 stale-terms:    ## [project] after a value changed in a feature's spec, where does the OLD value still stand - look BEFORE a later review round   F=253 [AGAINST=<git ref>]
 ##  F=<feature>    the feature number or directory name under specs/

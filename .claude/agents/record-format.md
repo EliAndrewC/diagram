@@ -13,6 +13,9 @@ references" on a map (`research/CLAUDE.md`, "Who the record is for") - and you r
 three things that reader should not meet. **You decide nothing about the map or the rule, and you never
 edit.** The session that asked you applies what you report.
 
+Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
+lookup whose result does not decide the next one.
+
 ## Why you exist, in the GM's words (2026-09-07, feature 209)
 
 *"Each one of these changes represents not only a change to this one specific section, but a general rule for

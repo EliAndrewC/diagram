@@ -94,7 +94,7 @@ prose without a key - *"Wikipedia 'Desire path'"* in an older `**Sources (read):
 sentence - is linked the same way, by looking its key up; and so is a citation by AUTHOR SURNAME in a finding's
 body (*"Sugiura counts a firewood SHED on 0.76"*, *"that is Tabayashi's rule"*; GM 2026-09-06: *"Yes link them
 too"*), at its first mention in a section, later mentions in the same section staying plain. A read document with
-no entry gets one first (the `source-reader` fetches the page; the entry records the URL and the READ date) and is
+no entry gets one first (the `source-reader` reads the page - since feature 255 from the full text `make source-pages OUT=<dir> URL=<u>` saved before it was dispatched, grepped rather than fetched as an extract; the entry records the URL and the READ date) and is
 never linked to a URL nobody fetched; before a key is coined the registry is searched by URL, percent-decoded, and
 by the whole entry - six "unregistered" documents in feature 190 were registered under keys the prose did not
 suggest. A `**Pointers, not read:**` item with no entry, a page named only as silent or unreadable, and an

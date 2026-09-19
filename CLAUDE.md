@@ -71,7 +71,8 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
 - Reading and checking are dispatched to agents, in the background: `source-reader` (read what you
   cite), `quote-check`, `record-format`, `source-applicability` (judged BEFORE a source's numbers
   reach a map or a rule), `entry-drift`. What is mechanical runs FIRST, as a script, and its output goes
-  in the agent's prompt: `make quote-verbatim PAGE=<name> [NOTES=<ids>]` before `quote-check` (is the
+  in the agent's prompt: `make source-pages OUT=<dir> URL=<u>` before `source-reader` (the page itself, saved
+  to grep, where a fetch gives an extract), `make quote-verbatim PAGE=<name> [NOTES=<ids>]` before `quote-check` (is the
   passage on the page, character for character), `make record-prepass PAGE=<name>` before
   `record-format`, `make size-table PLAN=<svg>` before `size-audit`.
 
