@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mode A building types (l7r/diagram/buildings/types.json)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["tier", "title", "program", "hand_drawn", "required", "checks"],
+    "additionalProperties": false,
+    "properties": {
+      "tier": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+      "title": {"type": "string"},
+      "program": {"type": "string"},
+      "hand_drawn": {"type": "boolean"},
+      "generated_exceptions": {"type": "array", "items": {"type": "string"}},
+      "required": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["id", "label", "band_ft", "class", "why"],
+          "additionalProperties": false,
+          "properties": {
+            "id": {"type": "string"},
+            "label": {"type": "string"},
+            "band_ft": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "w": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+                "h": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+                "area": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}
+              }
+            },
+            "optional": {"type": "boolean"},
+            "class": {"enum": ["accurate", "deviation", "convention", "guess"]},
+            "why": {"type": "string"}
+          }
+        }
+      },
+      "checks": {"type": "array", "items": {"type": "string"}},
+      "notes": {"type": "string"}
+    }
+  }
+}
