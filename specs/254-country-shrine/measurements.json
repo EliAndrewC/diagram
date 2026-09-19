@@ -15,7 +15,7 @@
   "hugging-floor": {
     "value": 51,
     "unit": "%",
-    "quantity": "the lowest perimeter-hugging figure of the five pool sheets (51, 52, 53, 57, 58%) - `make pack-audit ARGS=pool/magistracies/<name>/<name>.svg`, 2026-09-19; the check's floor is 45%, one pulled-in building below it",
-    "command": "for s in pool/magistracies/*/*.svg; do make pack-audit ARGS=$s | grep perimeter-hugging; done"
+    "quantity": "the lowest perimeter-hugging figure of the six pool sheets' magistracies (Ubame 51, Ochiba 53, Hayakawa 58; the two placer drafts 76 and 78 after their point features were seated) - the check's floor is 45%, one pulled-in building below the lowest hand-drawn sheet, 2026-09-19",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
   }
 }

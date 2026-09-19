@@ -160,8 +160,9 @@ not used. (The source figures in this paragraph: observed 2026-09-19; method: th
   building at its audited size); the record's own entry floors a jin'ya at Takayama's ~33% built, so
   the check's floor is 33 and its ceiling 42 plus two points, and the entry's stale "both manors at
   37-38%" sentence was corrected.
-- **The hugging floor is derived**: the five sheets measure 51-58% (`m:hugging-floor`); the floor is
-  45, one pulled-in building under the lowest.
+- **The hugging floor is derived**: the three hand-drawn sheets measure 51-58% and the two drafts 76-78%
+  after their point features were seated (`m:hugging-floor`); the floor is 45, one pulled-in building
+  under the lowest.
 - **Whole-word group labels**: the orphan check matched `well` inside `dwelling`; found by the second
   type, fixed with its test.
 - **Declared ids for the shrine's composition checks**: `hall`, `sanctuary`, `approach`, `arch`, `well`

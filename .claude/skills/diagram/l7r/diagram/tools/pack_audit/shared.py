@@ -23,9 +23,9 @@ from .parse import WALL_STROKE, ParsedPlan, Rect
 # lap on them is a joining corridor's end.
 OVERLAP_SHARE: float = 0.30
 # The coverage band: the record's "~37-42%" (research/buildings.html, the packing entry) is the page's
-# own measurement of jin'ya plans, and the same entry puts the lowest attested jin'ya - Takayama, 1,000
-# of 3,000 tsubo built - at ~33%. So the FLOOR is Takayama's 33% and the ceiling the page's 42% with
-# two points for a rule written with a tilde. Hayakawa ships at 35% with every building at its
+# own measurement of jin'ya plans with no readable source, and the same entry gives Takayama at ~33%
+# built (1,000 of 3,000 tsubo) as a figure that rests on no page read. Both are the page's own; the
+# FLOOR is that 33 and the ceiling the page's 42 with two points for a rule written with a tilde. Hayakawa ships at 35% with every building at its
 # size-audited footprint (the audit of 2026-07 shrank four laundered sizes AFTER the entry called it
 # 37-38%): inside the attested spread, so the exact 37 was the check's defect, not the sheet's
 # (feature 254 T06/T08, plan D9); the entry's stale sentence is corrected in the same work.
