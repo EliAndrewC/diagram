@@ -299,19 +299,19 @@ under its tier with its program type.
 
 ### Measurable Outcomes
 
-- **SC-001**: after the feature, a type's name appears outside its declaration, its pool tier, its
+- **SC-001**: (FR-001, FR-007) after the feature, a type's name appears outside its declaration, its pool tier, its
   program prose, its fixtures, its tests and the docs in ZERO engine files (a gate test counts).
-- **SC-002**: every Mode A sheet in `pool/` is swept by `make quick` and `make done`; the sweep's cost on
+- **SC-002**: (FR-002, FR-003, FR-004) every Mode A sheet in `pool/` is swept by `make quick` and `make done`; the sweep's cost on
   the six sheets (five magistracies and the shrine) is measured at implementation and recorded in the
   feature's measurements file, and the gate's ratchet holds it.
-- **SC-003**: every shared and per-type check has a red fixture on which it fails and a pool sheet on
+- **SC-003**: (FR-005) every shared and per-type check has a red fixture on which it fails and a pool sheet on
   which it passes - every check, none excepted, counted by a test over the check registry.
-- **SC-004**: the record's two new sections and the revised village section pass `quote-check` with
+- **SC-004**: (FR-012, FR-013, FR-014) the record's two new sections and the revised village section pass `quote-check` with
   every footnote READABLE and VERBATIM, `record-format` with no SESSION NOTE or HISTORY finding, and
   every new source APPLICABLE or APPLICABLE-WITH-LIMITS with HONEST write-ups.
-- **SC-005**: the exemplar passes `building-review` and `size-audit` with no open finding, each pass a
+- **SC-005**: (FR-006, FR-015, FR-016) the exemplar passes `building-review` and `size-audit` with no open finding, each pass a
   ledger row.
-- **SC-006**: the GM's three questions are each answered in one section heading a reader can reach
+- **SC-006**: (FR-008, FR-009, FR-010, FR-011) the GM's three questions are each answered in one section heading a reader can reach
   from a map's references modal, with the label (accurate / deviation / convention / guess) on each
   finding.
 
@@ -320,14 +320,14 @@ under its tier with its program type.
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | the country monk lives at the shrine; the dwelling stands on the precinct | accurate (Japan, the jingūji / bettō-ji, "common for over a millennium", and the parish temple's kuri; China, the resident keeper the Mianning temples "generally" engaged; the RPG's "most had at least one resident monk"), with the disclosure that a pure Shinto village shrine had no resident, that some rural temples were unstaffed, and that no page counts how many village shrines had a temple of their own (source-reader, 2026-09-19) | the GM's ruling and the sources coincide; no knob | `research/religion-and-death.html`, "Does the country monk live at the shrine?"; `buildings/programs.md`, the shrine program; the exemplar's notes |
-| sanctuary about 6 ft square, one bay | accurate | the ikkensha honden is the commonest form; a 1789 example measures 1.98 by 1.82 m | the same section; the size band in the declaration |
-| hall 20 to 35 ft on a side | accurate as a band | three measured Edo halls and one haiden span it; the one-roof band's single example, Kaie-ji, is an urban Zen temple's hall-and-kuri, said so on the page and in the entry | the same |
-| dwelling at the farmhouse's 46 by 28 ft | form accurate, size guess | the kuri "resembles the farmhouse of its region"; no small kuri measured | the same; the declaration |
-| precinct size | guess, bounded by its contents | no Japanese precinct area could be read; the one Chinese compound of 2.5 mu is a temple rebuilt 1999-2012 (source-applicability, 2026-09-19) | the same |
+| sanctuary about 6 ft square, one bay | accurate | the ikkensha honden is the commonest form; a 1789 example measures 1.98 by 1.82 m (`research.md` R3) | the same section; the size band in the declaration |
+| hall 20 to 35 ft on a side | accurate as a band | three measured Edo halls and one haiden span it (`research.md` R3); the one-roof band's single example, Kaie-ji, is an urban Zen temple's hall-and-kuri, said so on the page and in the entry | the same |
+| dwelling at the farmhouse's 46 by 28 ft | form accurate, size guess | the kuri "resembles the farmhouse of its region"; no small kuri measured (`research.md` R3) | the same; the declaration |
+| precinct size | guess, bounded by its contents | no Japanese precinct area could be read; the one Chinese compound of 2.5 mu is a temple rebuilt 1999-2012 (`research.md` R3, R6) | the same |
 | a fence or hedge, never a wall | accurate | the tamagaki and the grove bound a shrine; a wall is a compound's | the same; the shared layer's precinct rule |
 | hall and dwelling under one roof as the DEFAULT form; two buildings as the knob's other value | accurate (attested at Kaie-ji, "unusual for early-Edo temple architecture"; the ordinary form is two buildings) | the GM's words of 2026-09-19 pick the attested-but-rare form: "the shrine is both their home and the place where the villagers come" | the program's knobs; the residence section |
 | bell tower as a knob | guess | the minimal temple as "a main hall and a bell tower" rests on one undated commercial page in the present tense (source-applicability, 2026-09-19); a village hall may have neither | the program's knobs; the declaration's `bell_tower` item |
-| the 60 by 48 ft village hall on the Mode B maps is the one-roof form, hall and dwelling in one building | accurate | it lies inside the one-roof form's measured band (Kaie-ji, 200-330 sq m); no village map changes | the revised village section |
+| the 60 by 48 ft village hall on the Mode B maps is the one-roof form, hall and dwelling in one building | accurate | it lies inside the one-roof form's measured band (Kaie-ji, 200-330 sq m; `research.md` R3); no village map changes | the revised village section |
 | *the source figures in this table: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands; the 60 by 48 ft: observed 2026-09-19; method: read off the record's own rule text (religion-and-death.html, homesteads.html) - the project's drawn values, not a source's* | | | |
 | the registers live in the dwelling (a writing room or chest), not a building | accurate | the temple issued the certificate and the headman compiled the ledger; a small shrine had no office building | the program; the second new section |
 
