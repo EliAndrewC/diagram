@@ -22,7 +22,7 @@ FIX = os.path.join(SKILL, "tests", "fixtures")
 
 
 # A fixture's tier is in its name: the sheet it was cut from says which program it is judged against.
-FIXTURE_TIER = {"ochiba": "magistracies", "hayakawa": "magistracies", "ubame": "magistracies", "shrine": "country-shrines"}
+FIXTURE_TIER = {"ochiba": "magistracies", "hayakawa": "magistracies", "ubame": "magistracies", "hoshigaoka": "country-shrines"}
 
 
 def _ctx(path: str) -> R.Context:
@@ -40,20 +40,11 @@ def test_every_check_fires_on_its_red_fixture(check: R.Check) -> None:
     assert check.fix and len(check.fix) > 20, f"{check.name}: a failure names its compliant fix"
 
 
-# A tier with no pool sheet yet is stood in for by its clean SYNTHETIC sheet, so the quiet-on-a-clean-sheet
-# half of the proof is not vacuous before the exemplar lands (feature 254 T12; T17 retires the stand-in when
-# the shrine's fixtures are cut from the exemplar).
-CLEAN_STANDIN = {"country-shrines": os.path.join(FIX, "shrine-synthetic.svg")}
-
-
 def _pool_sheets() -> list[tuple[str, str]]:
     out = []
     for b in poolmaps.bundles(trees=(poolmaps.LIVE_TREE,), kinds={"compound"}, skill_dir=SKILL):
         if os.path.isfile(b.path(".svg")):
             out.append((b.tier, b.path(".svg")))
-    for tier, path in CLEAN_STANDIN.items():
-        if not any(t == tier for t, _ in out):
-            out.append((tier, path))
     return out
 
 

@@ -1030,7 +1030,8 @@
  "corvee": {
   "def": "Labor owed to a lord in place of tax - the work that built a town's moats, dikes and canals.",
   "variants": [
-   "corvee"
+   "corvee",
+   "corvée"
   ]
  },
  "county seat": {
@@ -3735,7 +3736,9 @@
  "tatami": {
   "def": "A straw floor mat about 90 by 180 centimeters; a room's size is counted in them.",
   "variants": [
-   "tatami"
+   "tatami",
+   "mat",
+   "twelve-mat"
   ]
  },
  "tatara": {
@@ -3891,7 +3894,10 @@
   "variants": [
    "tudi miao",
    "tudigong",
-   "土地庙"
+   "土地庙",
+   "earth god",
+   "earth-god",
+   "earth-god shrine"
   ]
  },
  "tulou": {
@@ -4707,6 +4713,53 @@
   "variants": [
    "Kaie-ji",
    "Kaie-ji's"
+  ]
+ },
+ "kami": {
+  "def": "A god of the Japanese tradition - the spirit of a place, a natural force or an ancestor - housed in a shrine's sanctuary. Before 1868 the kami were served together with the Buddhas, at the same sites and by the same monks.",
+  "variants": [
+   "kami"
+  ]
+ },
+ "parish": {
+  "def": "The households registered with one Buddhist temple, which buries their dead, conducts their memorials and is supported by their offerings; every household belonged to one.",
+  "variants": [
+   "parish",
+   "parishioners",
+   "parish temple",
+   "parish's"
+  ]
+ },
+ "bay": {
+  "def": "The span between two posts of a building, about one ken (1.8 m); a Japanese building's size is given as so many bays along the ridge by so many across the beams.",
+  "variants": [
+   "bay",
+   "bays",
+   "one-bay",
+   "three bays"
+  ]
+ },
+ "ridge span": {
+  "def": "The two plan dimensions of a Japanese building: its length along the line of the roof's ridge, normally the front, and its depth across the beams that run the other way.",
+  "variants": [
+   "ridge span",
+   "along the ridge",
+   "beam span",
+   "across the beams"
+  ]
+ },
+ "honmune-zukuri": {
+  "def": "A regional Japanese farmhouse form with a heavy decorated ridge; a temple dwelling built this way is a farmhouse in all but name.",
+  "variants": [
+   "honmune-zukuri"
+  ]
+ },
+ "fire-water": {
+  "def": "Water kept standing beside a wooden building against fire - a barrel, tub or small pond within reach of the eaves.",
+  "variants": [
+   "fire-water",
+   "fire water",
+   "fire-water tubs"
   ]
  }
 }

@@ -16,6 +16,7 @@ MIN_BLDG_AREA_PX: float = 500.0  # ~55 sqft; below this it is furniture, not a b
 # a false "fire tub adrift" on Hayakawa (the tub sits 1.8 ft off the shrine the tool stopped seeing).
 
 _RECT_TAG_RE = re.compile(r"<rect\b([^>]*)>")
+_ID_RE = re.compile(r'\sid="([^"]+)"')
 _ATTR_ANY_RE = re.compile(r'([\w:-]+)="([^"]*)"')
 # THE PRECINCT IS DECLARED, NOT INFERRED (feature 254, spec FR-002). A sheet marks the rect (or rects)
 # bounding the ground its checks reason over with `id="precinct"`. The parser used to take every
@@ -177,6 +178,7 @@ class ParsedPlan:
     structures: tuple[Rect, ...] = ()  # every built footprint, NO area floor (porches/sheds count)
     fills: tuple[Rect, ...] = ()  # every drawn rect (any fill) - the fill-blind occluder set
     furniture: tuple[Rect, ...] = ()  # sub-building rects (privy, door, board, mat): foreground
+    ids: frozenset[str] = frozenset()  # every `id="..."` on the sheet - what it DECLARES (a fence group, an arch rect)
 
     def by_id(self, ident: str) -> tuple[Rect, ...]:
         """The rects the sheet marked `id="<ident>"`, in draw order."""
@@ -329,5 +331,6 @@ def parse_svg(text: str) -> ParsedPlan:
         tuple(_wall_bands(text)),
         tuple(r for r in rects if r.fill in STRUCTURE_FILLS),
         fills=fills,
+        ids=frozenset(_ID_RE.findall(text)),
         furniture=furniture,
     )

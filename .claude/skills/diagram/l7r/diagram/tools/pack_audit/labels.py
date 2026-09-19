@@ -58,8 +58,10 @@ def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None) -> li
     for item in btype.required:
         if item.optional or item.band_for(form) is None:
             continue
-        if not matches(item, plan.labels):
-            out.append(f"no `{item.id}` on the sheet (a label matching /{item.label.pattern}/)")
+        if not matches(item, plan.labels) and item.id not in plan.ids:
+            # present by LABEL, or DECLARED by id (an arch, an approach, a well, a fence group need no caption
+            # saying what they plainly are - the no-obvious-labels rule; the id is what the checks read)
+            out.append(f"no `{item.id}` on the sheet (a label matching /{item.label.pattern}/, or an element marked id=\"{item.id}\")")
     return out
 
 

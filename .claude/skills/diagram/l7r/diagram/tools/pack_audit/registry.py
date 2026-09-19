@@ -159,11 +159,11 @@ CHECKS: tuple[Check, ...] = (
         "ochiba-zoning-red.svg",
         "put the hearing court on the gate's side of the divider and the residence behind it",
     ),
-    # --- the country shrine's own (fixtures cut from the exemplar once it exists; synthetic until then) ---
-    Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "shrine-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
-    Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), False, "shrine-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
-    Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), False, "shrine-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
-    Check("fence_not_wall", lambda ctx: s.fence_not_wall(ctx.text, ctx.plan), False, "shrine-walled-red.svg", "bound the precinct with a fence or hedge group, not a compound wall stroke"),
+    # --- the country shrine's own, each fixture cut from the Hoshigaoka exemplar ---
+    Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),
+    Check("arch_on_approach", lambda ctx: s.arch_on_approach(ctx.plan), False, "hoshigaoka-arch-adrift-red.svg", "stand the arch over the approach where it crosses the fence"),
+    Check("well_clear_of_arch", lambda ctx: s.well_clear_of_arch(ctx.plan), False, "hoshigaoka-well-on-approach-red.svg", "move the well beside the approach, clear of the way and the arch"),
+    Check("fence_not_wall", lambda ctx: s.fence_not_wall(ctx.text, ctx.plan), False, "hoshigaoka-walled-red.svg", "bound the precinct with a fence or hedge group, not a compound wall stroke"),
 )
 
 

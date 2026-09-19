@@ -281,7 +281,7 @@
     "required": [
       {
         "id": "sanctuary",
-        "label": "sanctuary",
+        "label": "^sanctuary",
         "band_ft": {
           "w": [
             4,
@@ -317,7 +317,7 @@
           }
         },
         "class": "accurate",
-        "why": "a village hall of 20-35 ft on a side (a 1778 Kannon hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m; a hondō 5 by 5 ken); under one roof with the dwelling, the Kaie-ji band of 200-330 sq m"
+        "why": "a village hall of 20-35 ft on a side from measured rural examples (a 1778 Kannon hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m), with a Nara temple hondō of 5 by 5 ken as the upper bound, not a village example; under one roof with the dwelling, the Kaie-ji band of 200-330 sq m - one attested example, a city Zen temple's, called rare by its own listing"
       },
       {
         "id": "dwelling",
@@ -415,8 +415,8 @@
           ]
         },
         "optional": true,
-        "class": "accurate",
-        "why": "the minimal temple is a main hall and a bell tower; a village hall may have neither - the bell knob"
+        "class": "guess",
+        "why": "the minimal temple as 'a main hall and a bell tower' rests on one undated commercial page in the present tense; a village hall may have neither - the bell knob, its presence rule a guess for that reason"
       }
     ]
   }

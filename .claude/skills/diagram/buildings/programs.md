@@ -93,8 +93,8 @@ The seat of a village district's **country monk** - the one tax-free religious f
 <!-- types.json:country-shrines -->
 | item | found by the label | band (feet; either orientation) | class | why |
 |---|---|---|---|---|
-| `sanctuary` | `/sanctuary/` | 4-10 by 4-10 ft | accurate | a one-bay honden; a village example of 1789 measures 1.98 by 1.82 m |
-| `hall` | `/^hall|shrine hall|hall and dwelling/` | 18-38 by 18-38 ft (under `one roof`: 2100-3600 sq ft) | accurate | a village hall of 20-35 ft on a side (a 1778 Kannon hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m; a hondō 5 by 5 ken); under one roof with the dwelling, the Kaie-ji band of 200-330 sq m |
+| `sanctuary` | `/^sanctuary/` | 4-10 by 4-10 ft | accurate | a one-bay honden; a village example of 1789 measures 1.98 by 1.82 m |
+| `hall` | `/^hall|shrine hall|hall and dwelling/` | 18-38 by 18-38 ft (under `one roof`: 2100-3600 sq ft) | accurate | a village hall of 20-35 ft on a side from measured rural examples (a 1778 Kannon hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m), with a Nara temple hondō of 5 by 5 ken as the upper bound, not a village example; under one roof with the dwelling, the Kaie-ji band of 200-330 sq m - one attested example, a city Zen temple's, called rare by its own listing |
 | `dwelling` | `/dwelling|monk's house|kuri/` | 34-60 by 18-38 ft (under `one roof`: absent) | guess | form accurate - a kuri resembling the farmhouse of its region; size the map's own farmhouse of 46 by 28 ft, no small kuri measured; absent as a separate building under one roof |
 | `arch` | `/^arch$|torii/` | presence | accurate | the area within the torii is the sacred precinct; an arch fronts every shrine a way runs up to |
 | `approach` | `/^approach$/` | presence | accurate | the sandō from the arch to the hall |
@@ -105,7 +105,7 @@ The seat of a village district's **country monk** - the one tax-free religious f
 | `kitchen_garden` | `/^kitchen garden$|^vegetable garden$/` | presence | accurate | the household bed at the dwelling |
 | `privy` | `/^privy$|^latrine$/` | presence | accurate | attached to the dwelling |
 | `fire_water` | `/^fire-water/` | presence | accurate | tensuioke at the wooden buildings, as at the magistracy |
-| `bell_tower` | `/bell/` | 6-16 by 6-16 ft - optional, a knob | accurate | the minimal temple is a main hall and a bell tower; a village hall may have neither - the bell knob |
+| `bell_tower` | `/bell/` | 6-16 by 6-16 ft - optional, a knob | guess | the minimal temple as 'a main hall and a bell tower' rests on one undated commercial page in the present tense; a village hall may have neither - the bell knob, its presence rule a guess for that reason |
 
 The country monk lives at the shrine: the hall is the villagers' rite-place and the monk's home in one building by default (the GM's words of 2026-09-19; attested at Kaie-ji and called rare there), or two buildings in the ordinary parish temple's form. The bands are the measured village halls, honden and kuri of the research pass (specs/254-country-shrine/research.md R3); the precinct itself is a guess bounded by what it must contain.
 <!-- /types.json:country-shrines -->

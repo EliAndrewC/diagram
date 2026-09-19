@@ -1186,7 +1186,8 @@ window.RECORD_GLOSSARY = [
  {
   "term": "corvee",
   "variants": [
-   "corvee"
+   "corvee",
+   "corvée"
   ],
   "def": "Labor owed to a lord in place of tax - the work that built a town's moats, dikes and canals."
  },
@@ -4300,7 +4301,9 @@ window.RECORD_GLOSSARY = [
  {
   "term": "tatami",
   "variants": [
-   "tatami"
+   "twelve-mat",
+   "tatami",
+   "mat"
   ],
   "def": "A straw floor mat about 90 by 180 centimeters; a room's size is counted in them."
  },
@@ -4478,7 +4481,10 @@ window.RECORD_GLOSSARY = [
  {
   "term": "tudi miao",
   "variants": [
+   "earth-god shrine",
    "tudi miao",
+   "earth god",
+   "earth-god",
    "tudigong",
    "土地庙"
   ],
@@ -5421,5 +5427,58 @@ window.RECORD_GLOSSARY = [
    "Kaie-ji"
   ],
   "def": "A Zen temple in Sakai whose early-Edo main hall and priest's quarters are one building - the one measured example of a hall and dwelling under one roof."
+ },
+ {
+  "term": "kami",
+  "variants": [
+   "kami"
+  ],
+  "def": "A god of the Japanese tradition - the spirit of a place, a natural force or an ancestor - housed in a shrine's sanctuary. Before 1868 the kami were served together with the Buddhas, at the same sites and by the same monks."
+ },
+ {
+  "term": "parish",
+  "variants": [
+   "parish temple",
+   "parishioners",
+   "parish's",
+   "parish"
+  ],
+  "def": "The households registered with one Buddhist temple, which buries their dead, conducts their memorials and is supported by their offerings; every household belonged to one."
+ },
+ {
+  "term": "bay",
+  "variants": [
+   "three bays",
+   "one-bay",
+   "bays",
+   "bay"
+  ],
+  "def": "The span between two posts of a building, about one ken (1.8 m); a Japanese building's size is given as so many bays along the ridge by so many across the beams."
+ },
+ {
+  "term": "ridge span",
+  "variants": [
+   "across the beams",
+   "along the ridge",
+   "ridge span",
+   "beam span"
+  ],
+  "def": "The two plan dimensions of a Japanese building: its length along the line of the roof's ridge, normally the front, and its depth across the beams that run the other way."
+ },
+ {
+  "term": "honmune-zukuri",
+  "variants": [
+   "honmune-zukuri"
+  ],
+  "def": "A regional Japanese farmhouse form with a heavy decorated ridge; a temple dwelling built this way is a farmhouse in all but name."
+ },
+ {
+  "term": "fire-water",
+  "variants": [
+   "fire-water tubs",
+   "fire-water",
+   "fire water"
+  ],
+  "def": "Water kept standing beside a wooden building against fire - a barrel, tub or small pond within reach of the eaves."
  }
 ];

@@ -14,9 +14,11 @@ Japanese fusion of the kami and the Buddhas.
 
 - **Japan, the village Buddhist temple (檀那寺, the parish temple every household was registered
   with).** The priest LIVED there: the kuri (庫裏) is "the living place of temple priests"
-  (ja.wikipedia 庫裏), and the surviving kuri are "a suite of raised-floor living rooms" with "an
-  earthen floored entry and service area" that "have many features in common with traditional
-  vernacular houses of the same period" (en.wikipedia Kuri). A late-Edo kuri (Chōnen-ji, Kawasaki)
+  (ja.wikipedia 庫裏), and the one designated kuri whose form its record describes "has a form resembling the
+  honmune-zukuri farmhouse characteristic of this region" (bunka.go.jp, Tokuun-ji). (A first reader
+  attributed a sentence about raised floors and vernacular houses to en.wikipedia's Kuri page; a
+  second reading found it is not on the page, which says only that the kuri was in origin the
+  abbot's kitchen - the form claim rests on Tokuun-ji.) A late-Edo kuri (Chōnen-ji, Kawasaki)
   held the priest's living quarters, a kitchen with hearth, a ten-mat reception room, a tea room and
   a study. The limit: some rural temples were 無住, unstaffed, with a distant priest commuting
   (ja.wikipedia 住職).
