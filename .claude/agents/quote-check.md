@@ -44,13 +44,32 @@ world. Those owe a citation or an absence note however they are dressed, and a g
 exactly the failure the form was created to prevent - a research question relabelled as a decision, leaving the
 backlog while the record gets less honest.
 
+## What a script has already done, and what is left for you (feature 251, GM 2026-09-19)
+
+The character-for-character half of this check is done by `make quote-verbatim PAGE=<name>` BEFORE you are
+dispatched, by no model: a language model reads tokens, not characters, and a hyphen for the source's dash is
+exactly what it blurs. The session runs it and names its JSON report in your prompt. Per footnote the report
+carries the id, key, links, class (citation / absence / grounds), each quoted passage - for a translated one the
+`quote` and the `original`, the original being what was matched - the ASSERTION the footnote closes, a
+`quotation` verdict (`VERBATIM`, `DIFFERS` with the page's text and the differing characters, `NOT-ON-PAGE`,
+`UNFETCHABLE`, `NOT-CHECKED` with why) and a `readability` verdict (`READABLE`, `NOT-READABLE` with which, or `-`
+where the script could not tell).
+
+**Take those two verdicts as given and do not re-fetch a page to re-derive them.** A `DIFFERS` whose
+`only_reference_markers` is true differs only by the page's own `[3]` markers: report it as the script did and say
+so. What is left is yours, and it is the judgment: **Support** for every footnote, the **faithfulness of each
+translation** against its original, a **grounds note** carrying a physical claim, the **unfootnoted assertions**,
+and the RESIDUE - a footnote the script marked `UNFETCHABLE`, `NOT-CHECKED` (a PDF, an undecodable page) or `-`,
+which you fetch and judge yourself by the full procedure below. If your prompt names NO report, say so first, then
+run the whole procedure: nothing this check covers goes unchecked for want of the script.
+
 ## Procedure
 
-1. `Read` the file (or section). List every footnote reference in reading order with the sentence it is attached
-   to - the ASSERTION - and its definition: key, URL, quoted passage.
-2. For each DISTINCT URL, fetch the page ONCE (one attempt per host; a refused host is recorded, never
+1. `Read` the report, then the file (or section) for context. The report lists every footnote with its ASSERTION;
+   where it names none, find the sentence yourself.
+2. Fetch ONLY the residue, each DISTINCT URL ONCE (one attempt per host; a refused host is recorded, never
    retried). The URL you fetch is the footnote's OWN link - not the registry entry, not a page you know of.
-3. Per footnote, three verdicts. The first is the GM's rule of 2026-09-06 (feature 195): *"if we are not able to
+3. Per footnote, three verdicts - the first two from the report except for the residue. The first is the GM's rule of 2026-09-06 (feature 195): *"if we are not able to
    simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a
    page on the public internet where that quote can be read, then we should NOT be claiming that the source
    supports us."*

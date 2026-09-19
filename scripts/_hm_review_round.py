@@ -52,6 +52,12 @@ from _hm_escape import escape_reason, reason_is_enough  # noqa: E402
 
 TOKEN = "REVIEW_ROUND_OK"
 AGENT = "spec-fidelity"
+#: MODE 3 at medium effort (feature 251, GM 2026-09-19): a later round is a narrower job than a first
+#: reading - the previous verdict's items and the diff - and it is most of the rounds, so a rewritten
+#: round is ROUTED to this agent. Proven before it was relied on: a hook's `updatedInput` may change
+#: `subagent_type` (specs/251-tiered-subagent-checks/research.md R4).
+TWIN = "spec-fidelity-verify"
+AGENTS = (AGENT, TWIN)
 GUARD = "review-round"
 _FEATURE = re.compile(r"specs/(\d{3}-[a-z0-9][a-z0-9-]*)")
 _SPEC_MODE = re.compile(r"\bMODE\s*[23]\b", re.I)
@@ -244,7 +250,10 @@ def _refusal(token: str) -> str:
 def judge(payload: dict, clone: str) -> dict:
     """The whole decision. Returns {event, rule, detail, exit, stdout, stderr}."""
     ti = payload.get("tool_input") or {}
-    if payload.get("tool_name") != "Agent" or ti.get("subagent_type") != AGENT:
+    # EITHER type is a round of the same review: a hand dispatch of the twin (the no-snapshot branch below
+    # tells the session to make one) must take and refresh the snapshot too, or the round after it has
+    # nothing to diff against (feature 251, spec-fidelity's aside on round 1).
+    if payload.get("tool_name") != "Agent" or ti.get("subagent_type") not in AGENTS:
         return {"event": "", "rule": "", "detail": "", "exit": 0, "stdout": "", "stderr": ""}
     prompt = str(ti.get("prompt") or "")
     mode = classify_mode(prompt)
@@ -274,7 +283,8 @@ def judge(payload: dict, clone: str) -> dict:
             ctx = (
                 f"review-round: specs/{feature} already records a review round, but the tooling holds no earlier "
                 "snapshot of it to diff against, so this dispatch is not rewritten. This is a round after the first: "
-                "make sure the prompt carries the previous round's items and ONLY the passages that changed (MODE 3). "
+                f"dispatch `{TWIN}` (MODE 3 at medium effort) rather than `{AGENT}`, and "
+                "make sure the prompt carries the previous round's items and ONLY the passages that changed. "
                 "From this dispatch on the tooling snapshots the directory and builds the diff itself."
             )
             return {"event": "reminded", "rule": "history-without-snapshot", "detail": feature, "exit": 0, "stdout": _context(ctx), "stderr": ""}
@@ -294,8 +304,11 @@ def judge(payload: dict, clone: str) -> dict:
     _write_state(state, round_no)
     updated = dict(ti)
     updated["prompt"] = new_prompt
+    updated["subagent_type"] = TWIN
+
     ctx = (
-        f"review-round: this spec-fidelity dispatch was rewritten into MODE 3 round {round_no} of specs/{feature} "
+        f"review-round: this dispatch was rewritten into MODE 3 round {round_no} of specs/{feature} and ROUTED to "
+        f"`{TWIN}` (Opus at medium effort - feature 251, the GM 2026-09-19) "
         "(feature 249, the GM 2026-09-14): the previous round's verdict and the diff of the feature directory since "
         "that dispatch were prepended, and the reviewer is told to read those plus grep hits only. Your own prompt "
         f'follows them unchanged. For a deliberate full re-read, put {TOKEN}="<reason>" in the prompt.'

@@ -51,8 +51,17 @@ already where it belongs, and you do not report it.
 
 ## Procedure
 
-1. `Read` the page (or section) and `Read` the glossary. Work on the VISIBLE text only: what is left after the
-   comments and the tags are gone.
+0. **You are handed a pre-pass (feature 251, GM 2026-09-19).** The session runs `make record-prepass PAGE=<name>`
+   before dispatching you and puts its listing in your prompt: per section, the SESSION NOTE shapes a pattern can
+   find (a `Grounds:` field, a feature number, a task id, a spec path, a make target, a file path, an engine
+   identifier in code markup, a fetch verdict) and the VOCABULARY candidates (a run of kanji or kana, an
+   italicized term, an italicized binomial) that no glossary term or variant covers. Each line is a CANDIDATE, not
+   a finding: confirm it with its proposal, or dismiss it with a word (`defined inline`, a source key, a quoted
+   ruling). Then read the page for what no pattern finds - a HISTORY passage, an instruction to a future session,
+   a hard word in plain English, a term the listing missed. If your prompt carries no listing, say so and do the
+   whole procedure yourself.
+1. `Read` the page (or section); `Read` the glossary only to settle a doubtful term - the pre-pass has already
+   dropped what it covers. Work on the VISIBLE text only: what is left after the comments and the tags are gone.
 2. Per `<h2>` / `<h3>` section, three lists:
    - **VOCABULARY** - each word or phrase a casual reader would not know that the glossary does not define: a
      Japanese or Chinese word, a unit, an office, a caste, a technical term of farming, water or building, a

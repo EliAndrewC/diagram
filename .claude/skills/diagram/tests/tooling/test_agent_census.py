@@ -128,3 +128,22 @@ def test_render_prints_per_run_means_and_the_ad_hoc_block():
     assert "general-purpose" in text and "200" in text, "out/run is the mean of 100 and 300"
     assert "with no model: claude-fable-5-1 x2" in text
     assert ac.render([], []).count("\n") == 1, "an empty census is a header and a rule"
+
+
+def test_until_makes_a_recorded_census_rerunnable(tmp_path, capsys):
+    """The transcripts only grow, so a recorded figure names the day it stops at (`make figures` re-runs it)."""
+    runs = [_run("source-reader", 1, ts="2026-09-01T10:00:00Z"), _run("source-reader", 1, ts="2026-09-19T10:00:00Z")]
+    assert ac.rows(runs, until="2026-09-19")[0][0]["runs"] == 1
+    _tree(tmp_path, "-diagram", "a1", "general-purpose", [json.dumps(_rec("m1", 7, model="claude-fable-5-1", ts="2026-09-10T00:00:00Z"))])
+    record = tmp_path / "measurements.json"
+    record.write_text(json.dumps({"other.key": {"value": 1}, "census.stale.runs": {"value": 9}}), encoding="utf-8")
+    assert ac.main(["--root", str(tmp_path), "--until", "2026-09-19", "--record", str(record)]) == 0
+    capsys.readouterr()
+    saved = json.loads(record.read_text())
+    assert saved["other.key"] == {"value": 1} and "census.stale.runs" not in saved
+    assert saved["census.general-purpose.runs"]["value"] == 1
+    assert saved["census.adhoc.general-purpose.on_fable"]["value"] == 1
+    assert "--until 2026-09-19" in saved["census.general-purpose.runs"]["command"]
+    fresh = tmp_path / "fresh.json"
+    assert ac.main(["--root", str(tmp_path), "--record", str(fresh)]) == 0
+    assert json.loads(fresh.read_text())["census.general-purpose.runs"]["command"] == "", "an open-ended census is not re-runnable and says so"

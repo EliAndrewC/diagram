@@ -77,6 +77,16 @@ Paths under `/diagram/.claude/skills/diagram/`:
 1. List EVERY sized feature on the sheet: every building and room (width x
    depth in ft), every wall opening (gate, postern, door - measure the gap),
    wall thickness, courts and gardens, and the point glyphs (wells, markers).
+   **START FROM THE TABLE YOU WERE HANDED** (feature 251, GM 2026-09-19): the
+   session runs `make size-table PLAN=<svg>` before dispatching you and puts its
+   output in your prompt - every rect in feet with its nearest label and how far
+   away that label is, every gap between collinear wall segments with the wall's
+   thickness, every stroke width. The arithmetic is done; do not redo it. Your
+   part of this step is to CHECK the table against the sheet: a label many feet
+   from its rect is a guess, a row marked `transform not applied` needs its real
+   size worked out, and a thing drawn as a path, a circle or a glyph is not in
+   the table at all - add it. If no table is in your prompt, say so and build
+   the list yourself from the SVG.
 2. For each, establish a **historical anchor**: what did the real equivalent
    measure in Edo-period Japan (first) or Ming/Qing China (second)? Use your
    own knowledge where it is solid; use WebSearch/WebFetch to verify any anchor

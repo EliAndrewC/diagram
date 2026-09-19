@@ -25,6 +25,14 @@
 # takes the snapshot silently. Every branch records; the one refusal is the reason floor every escape
 # carries (`REVIEW_ROUND_OK="<reason>"` for a deliberate full re-read).
 #
+# AND IT ROUTES (GUARD_EDIT_OK: feature 251, GM 2026-09-19 - adding an operation to this guard; nothing it
+# blocked is unblocked). A rewritten round's `subagent_type` becomes `spec-fidelity-verify`, the same
+# review's MODE 3 on Opus at MEDIUM effort: a later round is a narrower job and it is most of the rounds.
+# That a hook's `updatedInput` may change the type was proven by probe before this relied on it
+# (specs/251-tiered-subagent-checks/research.md R4). A dispatch of EITHER type is a round of the same
+# review - a hand dispatch of the twin takes and refreshes the snapshot too - and the decision lives in
+# `_hm_review_round.py` (`AGENTS`, `TWIN`).
+#
 # The decision is `_hm_review_round.py judge` (a function, so the suite and a replay can drive it);
 # this file resolves the session's clone, logs the branch and prints what the harness reads.
 #

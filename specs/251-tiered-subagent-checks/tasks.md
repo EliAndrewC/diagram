@@ -4,7 +4,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 physical behind it.
 
 - [ ] T01 the census: `scripts/_agent_census.py`, `make agent-census`, its test module; the first run
-      recorded in `research.md` R1 and `measurements.json`; R2 confirmed on a real transcript (FR-001)
+      recorded in `research.md` R1 and `measurements.json` (`--until` makes it re-runnable by `make figures`); R2
+      confirmed on a real transcript (FR-001)
       research: rendering
 - [ ] T02 the tier table in `tests/test_agent_models.py` and `model:` + `effort:` in every agent file,
       each file's description and Model paragraph restated to the present ruling (FR-002, FR-007)
@@ -24,8 +25,8 @@ physical behind it.
       starts from the table (FR-006)
       research: rendering
 - [ ] T07 `.claude/agents/spec-fidelity-verify.md`; `_hm_review_round.py` admits either type and routes
-      a rewritten round to the twin; new suite cases; the authorized list; R4 proven on a real later
-      round (FR-008)
+      a rewritten round to the twin; new suite cases; the authorized list; the routing itself was proven
+      by probe before this task (research R4) (FR-008)
       research: rendering
 - [ ] T08 the seeded-fault runs, R5 filled, any agent that missed stepped back up and re-run, the
       table, the file and FR-002 moved together (FR-011, SC-004, SC-005)

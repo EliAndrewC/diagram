@@ -1,6 +1,6 @@
 {
  "feature": "251-tiered-subagent-checks",
- "plan_sha256": "d0bc7a7291b5ef27d34bfccb03d611313d67eb3fdad9cc20659af315392ea179",
+ "plan_sha256": "9b0c10636397aa65026604547ac0c21dab5851fc380b1a84f32529663d1f0384",
  "reviewed": "2026-09-19",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,135 +8,152 @@
    "id": "D01",
    "summary": "Census walks only projects named -diagram or beginning -diagram- (the mirror and its clones), agent type from the meta's agentType, ROOT= override for the test.",
    "class": "within",
-   "why": "FR-001 asks for every subagent transcript whose project is this repository or one of its clones; clone project dirs begin -diagram-."
+   "why": "FR-001 asks for every subagent transcript whose project is this repository or one of its clones; clone project dirs begin -diagram-. Plan text unchanged since the round 1 record."
   },
   {
    "id": "D02",
    "summary": "Usage folded per message.id as the per-field maximum; the model read from message.model, not from the dispatch override.",
    "class": "within",
-   "why": "FR-001 states both rules; R2 records the why and the rejected alternative."
+   "why": "FR-001 states both rules; R2 records the why and the rejected alternative. Unchanged since round 1."
   },
   {
    "id": "D03",
    "summary": "Census columns add per-run means and a models tally, plus an ad-hoc block for agent types with no file under .claude/agents/ - how many runs carried no dispatch model and which models they ran on, Fable named.",
    "class": "within",
-   "why": "FR-010 requires R1 to record how many past ad-hoc runs inherited and on which model; round 2's aside asked for Fable specifically."
+   "why": "FR-010 requires R1 to record how many past ad-hoc runs inherited and on which model. Unchanged since round 1."
   },
   {
    "id": "D04",
    "summary": "SINCE= filters on the transcript's first timestamp.",
    "class": "within",
-   "why": "FR-001 offers SINCE=YYYY-MM-DD and leaves its semantics open; this is inside it."
+   "why": "FR-001 offers SINCE=YYYY-MM-DD and leaves its semantics open. Unchanged since round 1."
   },
   {
    "id": "D05",
    "summary": "_quote_verbatim.py is three pure stages (footnotes, visible_text, verdict) with an --offline DIR fixture mode so the test needs no network.",
    "class": "within",
-   "why": "Implementation shape for FR-003 plus SC-002's fixture test; adds no behavior the spec did not ask for."
+   "why": "Implementation shape for FR-003 plus SC-002's fixture test. Unchanged since round 1."
   },
   {
    "id": "D06",
    "summary": "Decoding order: HTTP header, then meta charset, then utf-8, then shift_jis; NOT-CHECKED when none decodes cleanly.",
    "class": "within",
-   "why": "FR-003 asks for the declared or sniffed encoding honored with Shift_JIS read correctly, and NOT-CHECKED with why for an undecodable page."
+   "why": "FR-003 asks for the declared or sniffed encoding honored with Shift_JIS read correctly. Unchanged since round 1."
   },
   {
    "id": "D07",
    "summary": "DIFFERS is chosen over NOT-ON-PAGE by difflib.SequenceMatcher over a sliding window at the passage's length, best ratio 0.85 or more.",
    "class": "within",
-   "why": "FR-003 names both verdicts but not how to tell them apart. The threshold only picks which of two FAILING words is printed, both go to the session, and no passage passes by it."
+   "why": "FR-003 names both verdicts but not how to tell them apart; the threshold only picks which of two FAILING words is printed. Unchanged since round 1."
   },
   {
    "id": "D08",
-   "summary": "Fetch policy: one urlopen per distinct URL, 20 s timeout, a browser user agent, one attempt per HOST per run with later URLs on a refused host UNFETCHABLE without a request, PDF content type or path NOT-CHECKED.",
+   "summary": "Fetch policy: one urlopen per distinct URL, 20 s timeout, a browser user agent, one attempt per HOST per run, PDF content type or path NOT-CHECKED.",
    "class": "within",
-   "why": "FR-003 asks for one fetch per distinct link, one attempt per host, a bounded timeout, a refused host never retried, and a PDF as NOT-CHECKED."
+   "why": "FR-003 asks for exactly this fetch policy. Unchanged since round 1."
   },
   {
    "id": "D09",
    "summary": "A passage carrying an elision (... or [...]) is matched piece by piece in order rather than as one substring.",
    "class": "within",
-   "why": "FR-003's exactness clause governs NORMALIZATION (a hyphen for a dash, a spelling), and every fragment is still matched exactly with none. An elided excerpt is several quoted fragments, and a literal one-substring rule would report every correctly elided footnote NOT-ON-PAGE. Residual risk, noted not ruled: order-only matching cannot see text wrongly dropped at the elision."
+   "why": "FR-003's exactness clause governs NORMALIZATION, and every fragment is still matched exactly with none. Unchanged since round 1."
   },
   {
    "id": "D10",
    "summary": "For a marked translation the ORIGINAL is what is matched against the page; the entry carries both so the agent judges the translation.",
    "class": "within",
-   "why": "The spec's edge case and FR-004 say exactly this."
+   "why": "The spec's edge case and FR-004 say exactly this. Unchanged since round 1."
   },
   {
    "id": "D11",
-   "summary": "quote-check's Procedure step 2 takes the script's Readability and Quotation verdicts as given and fetches only the UNFETCHABLE and NOT-CHECKED residue; verdict vocabulary and Output untouched; the run-the-script-first rule goes in research/CLAUDE.md, root CLAUDE.md and docs/research-doctrine.md.",
+   "summary": "quote-check's Procedure step 2 takes the script's Readability and Quotation verdicts as given and fetches only the UNFETCHABLE and NOT-CHECKED residue; verdict vocabulary and Output untouched; the run-the-script-first rule goes in three named documents.",
    "class": "within",
-   "why": "FR-004 names the behavior, the unchanged output format and those three documents."
+   "why": "FR-004 names the behavior, the unchanged output format and those three documents. Unchanged since round 1."
   },
   {
    "id": "D12",
-   "summary": "Pre-pass imports visible_text from the verbatim script, splits sections on h2/h3, uses a (label, regex) table for session notes, and takes vocabulary candidates as CJK runs, <i>/<em> spans and capitalized Latin binomials, each dropped when glossary.json holds it as a term or variant.",
+   "summary": "Pre-pass imports visible_text from the verbatim script, splits sections on h2/h3, uses a (label, regex) table for session notes, and takes vocabulary candidates as CJK runs, <i>/<em> spans and capitalized Latin binomials, each dropped when glossary.json holds it.",
    "class": "within",
-   "why": "FR-005's pattern list is covered item for item. The markup test covers FR-005's 'italicized or romanized term' in this record as it is actually written - the research pages carry no <i> at all and mark romanized terms in <em> (for example <em>tameike</em>), which this review checked."
+   "why": "FR-005's pattern list is covered item for item. Unchanged since round 1."
   },
   {
    "id": "D13",
-   "summary": "Size table: rects at 3 px = 1 ft honoring a parent translate with other transforms flagged 'transform not applied'; collinear wall segments taken as sharing an axis within 1 px; label = nearest <text> by center distance with the distance printed.",
+   "summary": "Size table: rects at 3 px = 1 ft honoring a parent translate with other transforms flagged; collinear wall segments within 1 px; label = nearest <text> with the distance printed.",
    "class": "within",
-   "why": "FR-006 asks for rects, collinear wall gaps, stroke widths, the 3 px = 1 ft conversion and the nearest label; the flags disclose a limit rather than dropping a row, and the agent still checks the table against the sheet."
+   "why": "FR-006 asks for rects, collinear wall gaps, stroke widths, the conversion and the nearest label. Unchanged since round 1."
   },
   {
    "id": "D14",
-   "summary": "Tier test shape: a TIERS dict, FR-002's five assertions as separate tests plus a non-vacuity count; test_entry_owed.py's model: opus assertion for entry-drift is left in place with its message pointed at the tier table.",
+   "summary": "Tier test shape: a TIERS dict, FR-002's five assertions as separate tests plus a non-vacuity count; test_entry_owed.py's model: opus assertion for entry-drift left in place.",
    "class": "within",
-   "why": "FR-002 asks for the table and the assertions; entry-drift stays opus so the older assertion remains true and contradicts nothing."
+   "why": "FR-002 asks for the table and the assertions; entry-drift stays opus so the older assertion remains true. Unchanged since round 1."
   },
   {
    "id": "D15",
    "summary": "spec-fidelity-verify frontmatter: opus, medium, tools Read, Grep, Bash; body = MODE 3, FIGURES, the round-limit note and 'What you do NOT do'.",
    "class": "within",
-   "why": "FR-008 asks for Opus, medium, the same tools and exactly those sections; spec-fidelity.md's own frontmatter reads 'tools: Read, Grep, Bash', which this review checked."
+   "why": "FR-008 asks for Opus, medium, the same tools and exactly those sections. Unchanged since round 1."
   },
   {
    "id": "D16",
    "summary": "spec-fidelity.md's MODE 3 shrinks to a pointer to the twin plus the hand-dispatch case.",
    "class": "within",
-   "why": "FR-008 keeps MODE 3 in spec-fidelity as a pointer, and the spec's edge case contemplates a hand dispatch when the no-snapshot branch does not rewrite. A one-line hand-dispatch note is inside that; a second copy of MODE 3 would not be."
+   "why": "FR-008 keeps MODE 3 in spec-fidelity as a pointer, and the spec's edge case contemplates a hand dispatch. Unchanged since round 1."
   },
   {
    "id": "D17",
-   "summary": "Waist handling: AGENTS/TWIN in _hm_review_round.py with the rewrite branch setting subagent_type, the guard header, new hook test cases, the authorized list and the settings matcher CHANGED; plan-verdict and _plan_gate.py keep AS=spec-fidelity, and review-gate.sh, escalation, pair, prereq, discard and spec-lint recorded as not keyed on the type.",
+   "summary": "Waist handling: AGENTS/TWIN in _hm_review_round.py with the rewrite branch setting subagent_type, the guard header, new hook test cases, the authorized list and the settings matcher CHANGED; plan-verdict and _plan_gate.py keep AS=spec-fidelity; review-gate.sh, escalation, pair, prereq, discard and spec-lint recorded as not keyed on the type.",
    "class": "within",
-   "why": "FR-008 asks for exactly this enumeration with each item changed or recorded, and the twin carries nothing of MODE 4, so the plan reviewer's declaration staying spec-fidelity follows from the spec."
+   "why": "FR-008 asks for exactly this enumeration with each item changed or recorded, and the twin carries nothing of MODE 4. Unchanged since round 1."
   },
   {
    "id": "D18",
-   "summary": "R4 does not verify whether the harness honors a changed subagent_type in updatedInput. The plan implements the type rewrite anyway and defers the proof to T07, reading this feature's own next later round's transcript meta, with the spec's fallback applied only if that round shows it did not route.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The accepted spec settles this the other way: 'plan.md verifies this before FR-008 relies on it, and if it cannot, the hook instead prepends the instruction and the session re-dispatches - recorded as the fallback'. The plan does neither. It is not impossible to verify: the installed 2.1.278 executable is greppable, and this review found 114 lines carrying updatedInput and 54 carrying subagent_type in it, including the operator message 'updatedInput is missing or empty, falling back to original tool input' and a tengu_subagent_type_normalized event - the same method R6 used to settle the effort frontmatter question. The deferral also rests on an event the feature does not control: the spec is already accepted and a MODE 4 plan review is not rewritten by the hook, so this feature may dispatch no later round at all, and FR-008's routing would land neither proven nor fallen back. Nothing in request.md implies the deferral. Fix: record the verification in R4 before T07 - the binary read, or a probe dispatch whose transcript meta names the agent that ran - or adopt the spec's recorded fallback."
+   "summary": "AMENDED since the round 1 record: the plan no longer defers the proof. P7 states that the harness honors a changed subagent_type in updatedInput, PROVEN before the design relies on it (R4, 2026-09-19): a probe project, a PreToolUse hook rewriting a dispatch of probe-a into probe-b, the reply probe-b's and the run's transcript meta naming probe-b. The spec's fallback is recorded as not needed.",
+   "class": "within",
+   "why": "This is what the accepted spec's Assumption required - 'plan.md verifies this before FR-008 relies on it'. Verified independently this round, not taken from the session's summary: the probe project's session transcript records \"subagent_type\":\"probe-a\" on the dispatch, the subagent meta records {\"agentType\":\"probe-b\"} and the reply is 'I AM PROBE-B'. Round 1's NOT LEGITIMATE narrowing is resolved, and the fallback branch it protected is correctly dropped rather than quietly abandoned."
   },
   {
    "id": "D19",
-   "summary": "Seeded-fault runs: artifacts materialized under the scratchpad with git show so the tree does not change; six downgraded agents x three artifacts = eighteen runs, one artifact per agent, background, tokens from make agent-census SINCE=.",
+   "summary": "AMENDED: seeded-fault runs are HEADLESS SESSIONS started in the clone (claude -p --agent <name>, working directory the clone), not Agent-tool dispatches, because this session's agent types load from the mirror (R4) and the Agent tool has no effort parameter; artifacts materialized under the scratchpad with git show; one artifact per run, in the background; each run's tokens read from its own transcript by the census's fold_usage; six agents x three artifacts = eighteen runs.",
    "class": "within",
-   "why": "FR-011 asks for at least two known-finding artifacts and one known-clean per downgraded agent, one artifact per agent, in the background, with tokens beside the recorded per-run mean."
+   "why": "FR-011 asks for at least two known-finding artifacts and one known-clean per downgraded agent, the NEW tier run on each, one artifact per run, in the background, with tokens beside the recorded per-run mean; it fixes no dispatch mechanism. The change serves FR-011's purpose rather than narrowing it: an Agent dispatch from this session would run the mirror's OLD agent file and so would not test the downgrade at all. --agent exists in the installed CLI (checked this round). Residual, noted not ruled: that a headless --agent session honors the file's model: and effort: is asserted, not proven as R4 proved the routing; the run's own transcript records message.model, so T08 can confirm the model that actually ran from the data it already reads."
   },
   {
    "id": "D20",
    "summary": "Record updates per FR-012 plus ## [project] help lines on the new make targets so test_make_docs.py sees them.",
    "class": "within",
-   "why": "FR-012 asks for the documents and that every new make target is listed where the others are."
+   "why": "FR-012 asks for the documents and that every new make target is listed where the others are. Unchanged since round 1."
   },
   {
    "id": "D21",
    "summary": "Order T01 census first through T10 land; R1 may reorder T03-T07 but may not remove one.",
    "class": "within",
-   "why": "FR-001 makes the census task zero whose result may reorder the work, and FR-009 keeps the approved pieces in."
+   "why": "FR-001 makes the census task zero whose result may reorder the work, and FR-009 keeps the approved pieces in. Unchanged since round 1."
   },
   {
    "id": "D22",
    "summary": "Every task is research: rendering; the delta takes the DIRECT route.",
    "class": "within",
-   "why": "The spec says nothing here is engine code and takes the DIRECT route; no physical question is decided."
+   "why": "The spec says nothing here is engine code and takes the DIRECT route; no physical question is decided. Unchanged since round 1."
+  },
+  {
+   "id": "D23",
+   "summary": "NEW in P2: a footnote carrying more than one link (the key's page and an '(on <page>)' alternative) is VERBATIM when the passage is on ANY of them.",
+   "class": "within",
+   "why": "FR-003 fetches 'each distinct link of a citation' and reports one quotation verdict per footnote, leaving the combination rule open. ANY serves the rule's purpose - the passage is quoted from a public page the reader can open - and forgives no character; every link is still matched exactly."
+  },
+  {
+   "id": "D24",
+   "summary": "NEW in P2: a page's own reference markers ([3]) inside a quoted sentence stay DIFFERS, literal; the entry carries only_reference_markers: true when removing them is all it takes.",
+   "class": "within",
+   "why": "This is the literal reading of FR-003 ('No other normalization ... IS a difference', GM 2026-09-06): the plan declines the exception it could have written and discloses the case in a report field instead. The hint changes no verdict and is inside FR-003's per-footnote report."
+  },
+  {
+   "id": "D25",
+   "summary": "NEW in the Order: the FR-010 question for the GM - whether a hook should fill a missing model on an ad-hoc dispatch - is scheduled after T10, carrying R1's count (72 no-model runs, 62 of them on Fable), and goes through escalation-check.",
+   "class": "within",
+   "why": "FR-010 says the question is 'put to the GM with R1's count once the feature works', which is after T10, and CLAUDE.md routes findings for the GM through escalation-check first. The figure was re-measured this round by re-running the census: 72 no-model general-purpose runs, 48 claude-fable-5-1 + 14 claude-fable-5 = 62, identical to measurements.json census-2026-09-19."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

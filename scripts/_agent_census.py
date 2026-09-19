@@ -105,16 +105,19 @@ def transcripts(root: pathlib.Path) -> list[pathlib.Path]:
     return found
 
 
-def rows(runs: list[tuple[dict, dict]], since: str = "") -> tuple[list[dict], list[dict]]:
+def rows(runs: list[tuple[dict, dict]], since: str = "", until: str = "") -> tuple[list[dict], list[dict]]:
     """(one row per agent type, one row per ad-hoc type) from `(meta, usage)` pairs.
 
     A run with no assistant turn (an agent that never answered) is counted as a run and adds nothing.
-    `since` is an ISO date prefix compared against the run's first timestamp.
+    `since` (inclusive) and `until` (exclusive) are ISO date prefixes compared against the run's first
+    timestamp; `until` is what makes a recorded census re-runnable, since the transcripts only grow.
     """
     by_type: dict[str, dict] = {}
     adhoc: dict[str, dict] = {}
     for meta, use in runs:
         if since and use["started"][: len(since)] < since:
+            continue
+        if until and use["started"][: len(until)] >= until:
             continue
         kind = str(meta.get("agentType") or "unknown")
         row = by_type.setdefault(kind, {"agent": kind, "runs": 0, "turns": 0, **dict.fromkeys(FIELDS, 0), "models": Counter()})
@@ -161,17 +164,39 @@ def render(table: list[dict], adhoc: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def figures(table: list[dict], adhoc: list[dict], command: str) -> dict:
+    """The census in the `measurements.json` shape `make figures` re-runs: one keyed value per figure."""
+    out: dict[str, dict] = {}
+    for r in table:
+        runs = max(r["runs"], 1)
+        for name, value in (("runs", r["runs"]), ("turns_per_run", round(r["turns"] / runs)), ("input_per_run", round((r["fresh"] + r["cached"]) / runs)), ("output_per_run", round(r["output"] / runs))):
+            out[f"census.{r['agent']}.{name}"] = {"value": value, "command": command}
+    for ad in adhoc:
+        out[f"census.adhoc.{ad['agent']}.no_model"] = {"value": ad["no_model"], "command": command}
+        out[f"census.adhoc.{ad['agent']}.on_fable"] = {"value": sum(c for m, c in ad["inherited"].items() if "fable" in m), "command": command}
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=str(pathlib.Path.home() / ".claude" / "projects"))
     ap.add_argument("--since", default="", help="YYYY-MM-DD: only runs that started on or after it")
+    ap.add_argument("--until", default="", help="YYYY-MM-DD: only runs that started BEFORE it - a recorded census names one")
     ap.add_argument("--json", default="", help="also write the rows to this file")
+    ap.add_argument("--record", default="", help="merge the census into this measurements.json, keyed for `make figures`")
     args = ap.parse_args(argv)
     runs = [read_run(t) for t in transcripts(pathlib.Path(args.root))]
-    table, adhoc = rows(runs, args.since)
+    table, adhoc = rows(runs, args.since, args.until)
     print(render(table, adhoc))
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps({"since": args.since, "agents": table, "adhoc": adhoc}, indent=1) + "\n", encoding="utf-8")
+    if args.record:
+        path = pathlib.Path(args.record)
+        kept = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+        command = f"python3 scripts/_agent_census.py --until {args.until} --record {args.record}" if args.until else ""
+        kept = {k: v for k, v in kept.items() if not k.startswith("census.")}
+        kept.update(figures(table, adhoc, command))
+        path.write_text(json.dumps(kept, indent=1) + "\n", encoding="utf-8")
     return 0
 
 

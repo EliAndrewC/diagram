@@ -3,7 +3,7 @@
 ## R1 - the census (task zero)
 
 Taken 2026-09-19 with `make agent-census` over every recorded subagent run of this repository's
-sessions (1,163 runs); the full rows are `measurements.json`, key `census-2026-09-19`. "Weight" prices a
+sessions that started before 2026-09-19 (1,160 runs; `python3 scripts/_agent_census.py --until 2026-09-19 --record ...` is the re-runnable form, keyed `census.*` in `measurements.json`). "Weight" prices a
 run at Opus list rates (fresh input 6.25, cached input 0.5, output 25 per million - cache-creation's
 1.25x applied to all fresh input, so a slight overstatement) purely to put the four token columns on
 one scale; it is a relative weight, not a bill, and the GM's plan is not metered this way.
@@ -12,7 +12,7 @@ one scale; it is a relative weight, not a bill, and the GM's plan is not metered
 |---|---|---|---|---|---|---|---|---|
 | `general-purpose` (ad hoc) | 295 | 22 | 3.89 M | 25.8 k | 3.70 | 1,092 | 17% | 50% |
 | `settlement-review` | 123 | 43 | 6.63 M | 44.1 k | 5.54 | 681 | 20% | 58% |
-| `spec-fidelity` | 419 | 9 | 0.84 M | 11.8 k | 1.33 | 557 | 22% | 28% |
+| `spec-fidelity` | 416 | 9 | 0.84 M | 11.8 k | 1.34 | 556 | 22% | 28% |
 | `quote-check` | 65 | 14 | 3.50 M | 28.5 k | 3.96 | 257 | 18% | 41% |
 | `source-reader` | 117 | 10 | 1.44 M | 21.8 k | 2.19 | 256 | 25% | 29% |
 | `record-format` | 38 | 17 | 4.52 M | 36.7 k | 5.18 | 197 | 18% | 40% |

@@ -1,211 +1,242 @@
 {
-  "census-2026-09-19": {
-    "taken": "2026-09-19",
-    "command": "make agent-census",
-    "note": "usage folded per message id as the per-field maximum (research R2); fresh = uncached + cache-creation input",
-    "agents": [
-      {
-        "agent": "general-purpose",
-        "runs": 295,
-        "turns": 6585,
-        "fresh": 57219286,
-        "cached": 1090133237,
-        "output": 7598161,
-        "thinking": 3616368,
-        "models": {
-          "claude-opus-5": 168,
-          "claude-sonnet-5": 65,
-          "claude-fable-5-1": 48,
-          "claude-fable-5": 14
-        }
-      },
-      {
-        "agent": "settlement-review",
-        "runs": 123,
-        "turns": 5313,
-        "fresh": 24063112,
-        "cached": 791915569,
-        "output": 5421507,
-        "thinking": 2855520,
-        "models": {
-          "claude-opus-5": 104,
-          "claude-fable-5": 19
-        }
-      },
-      {
-        "agent": "spec-fidelity",
-        "runs": 419,
-        "turns": 3629,
-        "fresh": 44902134,
-        "cached": 307091202,
-        "output": 4944310,
-        "thinking": 3426119,
-        "models": {
-          "claude-opus-5": 413,
-          "claude-fable-5-1": 6
-        }
-      },
-      {
-        "agent": "quote-check",
-        "runs": 65,
-        "turns": 933,
-        "fresh": 16909785,
-        "cached": 210537306,
-        "output": 1854079,
-        "thinking": 1046264,
-        "models": {
-          "claude-opus-5": 64,
-          "claude-sonnet-5": 1
-        }
-      },
-      {
-        "agent": "record-format",
-        "runs": 38,
-        "turns": 634,
-        "fresh": 13208500,
-        "cached": 158727118,
-        "output": 1394290,
-        "thinking": 842544,
-        "models": {
-          "claude-opus-5": 38
-        }
-      },
-      {
-        "agent": "source-reader",
-        "runs": 117,
-        "turns": 1224,
-        "fresh": 18858703,
-        "cached": 149595640,
-        "output": 2547415,
-        "thinking": 1213751,
-        "models": {
-          "claude-opus-5": 93,
-          "claude-sonnet-5": 24
-        }
-      },
-      {
-        "agent": "source-applicability",
-        "runs": 26,
-        "turns": 506,
-        "fresh": 7339696,
-        "cached": 98139041,
-        "output": 742810,
-        "thinking": 397554,
-        "models": {
-          "claude-opus-5": 26
-        }
-      },
-      {
-        "agent": "entry-drift",
-        "runs": 52,
-        "turns": 293,
-        "fresh": 8557917,
-        "cached": 31283267,
-        "output": 297461,
-        "thinking": 178924,
-        "models": {
-          "claude-opus-5": 52
-        }
-      },
-      {
-        "agent": "fork",
-        "runs": 7,
-        "turns": 106,
-        "fresh": 1151222,
-        "cached": 21856211,
-        "output": 237217,
-        "thinking": 105364,
-        "models": {
-          "claude-fable-5-1": 5,
-          "claude-opus-5": 2
-        }
-      },
-      {
-        "agent": "perf-audit",
-        "runs": 10,
-        "turns": 166,
-        "fresh": 1042964,
-        "cached": 13830525,
-        "output": 185657,
-        "thinking": 110431,
-        "models": {
-          "claude-opus-5": 10
-        }
-      },
-      {
-        "agent": "escalation-check",
-        "runs": 7,
-        "turns": 76,
-        "fresh": 612609,
-        "cached": 5463402,
-        "output": 68837,
-        "thinking": 35568,
-        "models": {
-          "claude-opus-5": 7
-        }
-      },
-      {
-        "agent": "claude-code-guide",
-        "runs": 3,
-        "turns": 17,
-        "fresh": 152852,
-        "cached": 605277,
-        "output": 4990,
-        "thinking": 1699,
-        "models": {
-          "claude-haiku-4-5-20251001": 3
-        }
-      },
-      {
-        "agent": "Explore",
-        "runs": 1,
-        "turns": 1,
-        "fresh": 0,
-        "cached": 0,
-        "output": 0,
-        "thinking": 0,
-        "models": {
-          "<synthetic>": 1
-        }
-      }
-    ],
-    "adhoc": [
-      {
-        "agent": "general-purpose",
-        "runs": 295,
-        "no_model": 72,
-        "inherited": {
-          "claude-fable-5-1": 48,
-          "claude-fable-5": 14,
-          "claude-opus-5": 6,
-          "claude-sonnet-5": 4
-        }
-      },
-      {
-        "agent": "fork",
-        "runs": 7,
-        "no_model": 7,
-        "inherited": {
-          "claude-fable-5-1": 5,
-          "claude-opus-5": 2
-        }
-      },
-      {
-        "agent": "claude-code-guide",
-        "runs": 3,
-        "no_model": 3,
-        "inherited": {
-          "claude-haiku-4-5-20251001": 3
-        }
-      },
-      {
-        "agent": "Explore",
-        "runs": 1,
-        "no_model": 1,
-        "inherited": {
-          "<synthetic>": 1
-        }
-      }
-    ]
+  "census.general-purpose.runs": {
+    "value": 295,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.general-purpose.turns_per_run": {
+    "value": 22,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.general-purpose.input_per_run": {
+    "value": 3889331,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.general-purpose.output_per_run": {
+    "value": 25756,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.settlement-review.runs": {
+    "value": 123,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.settlement-review.turns_per_run": {
+    "value": 43,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.settlement-review.input_per_run": {
+    "value": 6633973,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.settlement-review.output_per_run": {
+    "value": 44077,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.spec-fidelity.runs": {
+    "value": 416,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.spec-fidelity.turns_per_run": {
+    "value": 9,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.spec-fidelity.input_per_run": {
+    "value": 844484,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.spec-fidelity.output_per_run": {
+    "value": 11826,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.quote-check.runs": {
+    "value": 65,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.quote-check.turns_per_run": {
+    "value": 14,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.quote-check.input_per_run": {
+    "value": 3499186,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.quote-check.output_per_run": {
+    "value": 28524,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.record-format.runs": {
+    "value": 38,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.record-format.turns_per_run": {
+    "value": 17,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.record-format.input_per_run": {
+    "value": 4524622,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.record-format.output_per_run": {
+    "value": 36692,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-reader.runs": {
+    "value": 117,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-reader.turns_per_run": {
+    "value": 10,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-reader.input_per_run": {
+    "value": 1439781,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-reader.output_per_run": {
+    "value": 21773,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-applicability.runs": {
+    "value": 26,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-applicability.turns_per_run": {
+    "value": 19,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-applicability.input_per_run": {
+    "value": 4056874,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.source-applicability.output_per_run": {
+    "value": 28570,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.entry-drift.runs": {
+    "value": 52,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.entry-drift.turns_per_run": {
+    "value": 6,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.entry-drift.input_per_run": {
+    "value": 766177,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.entry-drift.output_per_run": {
+    "value": 5720,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.fork.runs": {
+    "value": 7,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.fork.turns_per_run": {
+    "value": 15,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.fork.input_per_run": {
+    "value": 3286776,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.fork.output_per_run": {
+    "value": 33888,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.perf-audit.runs": {
+    "value": 10,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.perf-audit.turns_per_run": {
+    "value": 17,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.perf-audit.input_per_run": {
+    "value": 1487349,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.perf-audit.output_per_run": {
+    "value": 18566,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.escalation-check.runs": {
+    "value": 7,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.escalation-check.turns_per_run": {
+    "value": 11,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.escalation-check.input_per_run": {
+    "value": 868002,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.escalation-check.output_per_run": {
+    "value": 9834,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.claude-code-guide.runs": {
+    "value": 3,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.claude-code-guide.turns_per_run": {
+    "value": 6,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.claude-code-guide.input_per_run": {
+    "value": 252710,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.claude-code-guide.output_per_run": {
+    "value": 1663,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.Explore.runs": {
+    "value": 1,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.Explore.turns_per_run": {
+    "value": 1,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.Explore.input_per_run": {
+    "value": 0,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.Explore.output_per_run": {
+    "value": 0,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.general-purpose.no_model": {
+    "value": 72,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.general-purpose.on_fable": {
+    "value": 62,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.fork.no_model": {
+    "value": 7,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.fork.on_fable": {
+    "value": 5,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.claude-code-guide.no_model": {
+    "value": 3,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.claude-code-guide.on_fable": {
+    "value": 0,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.Explore.no_model": {
+    "value": 1,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
+  },
+  "census.adhoc.Explore.on_fable": {
+    "value": 0,
+    "command": "python3 scripts/_agent_census.py --until 2026-09-19 --record specs/251-tiered-subagent-checks/measurements.json"
   }
 }

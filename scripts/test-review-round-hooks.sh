@@ -145,6 +145,25 @@ out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture REVIEW_ROUND_OK')
 grep -q 'no reason' "$T/err" && ok "...saying it needs a reason" || no "the refusal does not ask for a reason"
 logged REVIEW_ROUND_OK-no-reason && ok "...recorded blocked/REVIEW_ROUND_OK-no-reason" || no "the no-reason refusal was not recorded"
 
+# GUARD_EDIT_OK: feature 251 - two new cases for the routing the guard gained (a rewritten round goes to the
+# medium-effort twin; a hand dispatch of the twin is a round of the same review); no existing case changes.
+echo "9. a rewritten round is ROUTED to spec-fidelity-verify, and a hand dispatch of the twin is the same review"
+type_of() { python3 -c 'import json,sys; print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"].get("subagent_type",""))'; }
+printf '\n**FR-006**\n' >> "$FIX/specs/301-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
+[ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "a rewritten spec-fidelity round carries the twin's subagent_type" || no "the rewrite did not route to the twin" "(${out:0:120})"
+printf '%s' "$out" | python3 -c 'import json,sys; d=json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]; sys.exit(0 if d.get("description")=="x" else 1)' && ok "...with every other field of the dispatch kept" || no "the rewrite dropped a field of the dispatch"
+printf '%s' "$out" | grep -q 'ROUTED to' && ok "...and the context line says it was routed" || no "the context line does not mention the routing"
+printf '\n**FR-007**\n' >> "$FIX/specs/301-fixture/spec.md"
+out=$(agent spec-fidelity-verify "Round N of specs/301-fixture, dispatched by hand")
+P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
+printf '%s' "$P" | grep -q '^+\*\*FR-007' && ok "a HAND dispatch of the twin gets the preamble and the diff" || no "the twin's own dispatch was not rewritten" "(${out:0:120})"
+printf '%s' "$P" | grep -q '^+\*\*FR-006' && no "the twin's diff reaches back past the previous round" || ok "...diffed against the previous round's snapshot"
+[ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "...and stays the twin" || no "the twin's type was changed"
+grep -q 'FR-007' "$FIX/.git/review-round/301-fixture/snapshot/spec.md" && ok "...and the snapshot was refreshed, so the round after it has something to diff against" || no "the twin's dispatch did not refresh the snapshot"
+out=$(agent settlement-review "look at specs/301-fixture")
+[ -z "$out" ] && ok "any other agent still passes untouched" || no "an unrelated agent was rewritten"
+
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]
