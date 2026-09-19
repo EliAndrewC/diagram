@@ -293,7 +293,7 @@ under its tier with its program type.
   the six sheets (five magistracies and the shrine) is measured at implementation and recorded in the
   feature's measurements file, and the gate's ratchet holds it.
 - **SC-003**: every shared and per-type check has a red fixture on which it fails and a pool sheet on
-  which it passes - 100% of checks, counted by a test over the check registry.
+  which it passes - every check, none excepted, counted by a test over the check registry.
 - **SC-004**: the record's two new sections and the revised village section pass `quote-check` with
   every footnote READABLE and VERBATIM, `record-format` with no SESSION NOTE or HISTORY finding, and
   every new source APPLICABLE or APPLICABLE-WITH-LIMITS with HONEST write-ups.
