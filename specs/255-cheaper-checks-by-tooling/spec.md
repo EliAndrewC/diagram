@@ -1,6 +1,6 @@
 # Feature 255 - cheaper checks by tooling: fewer turns, less read per turn, a smaller fixed context
 
-**Status:** draft 2026-09-19 - round 1 CHANGES REQUIRED applied (see Review history).
+**Status:** FAITHFUL at round 2 (2026-09-19, see Review history); planned, not yet implemented.
 
 ## Summary
 
@@ -68,7 +68,7 @@ Everything else the probes measure - the project `CLAUDE.md` and `research/CLAUD
 prompt, the harness's system prompt and tool definitions - is REPORTED with its size and left unchanged; if a
 document a check does not need turns out to be large, that finding goes to the GM with the number.
 
-**FR-008 - the record.** `tests/test_agent_models.py` is untouched (no tier moves). Each adopted change is
+**FR-008 - the record.** `.claude/skills/diagram/tests/test_agent_models.py` is untouched (no tier moves). Each adopted change is
 stated where the check is described - root `CLAUDE.md`'s research bullet, `research/CLAUDE.md`,
 `docs/efficiency-tooling.md`, `docs/make-targets.html` - and each NOT ADOPTED candidate is recorded in
 `research.md` with its runs, so it is not tried again blind. Every new script has a test module under
@@ -100,3 +100,4 @@ stated where the check is described - root `CLAUDE.md`'s research bullet, `resea
   the report ruled out and FR-001 cannot test: restricted to the seven contracts this feature opens. (2) FR-007's
   trim class was open-ended and would have licensed cutting the project `CLAUDE.md`: closed to two named things,
   everything else reported with its size.
+- **Round 2 (2026-09-19) - FAITHFUL.** Both items verified; nothing new introduced. Aside taken: FR-008 gives the tier test's full path.
