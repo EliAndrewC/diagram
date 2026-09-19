@@ -50,8 +50,10 @@ Japanese fusion of the kami and the Buddhas.
   Shinden, summarizing Emerald Empire pp. 176-178). The wiki paraphrases the books; it is cited as
   what it is, a public tertiary summary.
 
-**What it decides.** The country shrine is drawn as the fused site: a sanctuary and a hall for the
-villagers, and the monk's dwelling on the same precinct. The GM's preference and history coincide, so
+**What it decides.** The country shrine is drawn as the fused site: a sanctuary, and a hall that is the
+villagers' rite-place and the monk's home in one building by default (the GM's words: "the shrine is
+both their home and the place where the villagers come"; the form is attested at Kaie-ji, R3, and called
+rare there - the ordinary parish temple kept a separate kuri, which is the knob's other value). The GM's preference and history coincide, so
 the residence is labeled ACCURATE (Japan, jingūji/bettō-ji; the parish temple's kuri) with the
 disclosure that a pure Shinto village shrine had no resident and that some rural temples stood
 unstaffed. No knob is needed for residence: the setting's canon fixes it and the record supports it.
@@ -60,7 +62,7 @@ unstaffed. No knob is needed for residence: the setting's canon fixes it and the
 
 From the sources, the parts of a small rural sacred site, Japan-first:
 
-| part (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | evidence | keep? |
+| part | evidence | keep? |
 |---|---|---|
 | a sanctuary (honden) where the deity's object is kept | the ikkensha nagare-zukuri is "the most common honden style nationwide" and its front is ONE bay (ja.wikipedia 流造); a measured Kansei-era village honden is 1.98 by 1.82 m (Ehime pref., 1789) | yes - tiny, at the back, on the axis |
 | a hall where the villagers gather (haiden / hondō) | the same site's haiden is 9.78 by 10.62 m (1790); the minimal temple "generally has only a main hall and a bell tower" (homemate, 七堂伽藍) | yes - the compound's largest building |
@@ -74,15 +76,17 @@ From the sources, the parts of a small rural sacred site, Japan-first:
 | an office building (shamusho) | NOT at small shrines (JAANUS) | no |
 | the tax-free plot | 除地 covers "shrine/temple precincts and fields or residences holding a document of tax exemption" (ja.wikipedia 除地); 朱印地 ran "as little as 1 koku" (ja.wikipedia 朱印地); Chinese temple land came by gift, "some donated fields and land outright, some partly purchased and partly donated" (Liu) | the fields lie OUTSIDE the sheet; the sheet shows the kitchen garden and the yard |
 | the registers | temples "prepared registers equivalent to today's household registers" and issued the travel certificate (ja.wikipedia 寺請制度), while the ledger itself was compiled "town/village by town/village, by village headmen" (ja.wikipedia 宗門人別改帳); China: the baojia, never the temple | a writing room / record chest in the dwelling; nothing separate |
+| *the figures in this table: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands* | | |
 
 ## R3. How big is it, and is it bigger than a farmhouse? (the GM's second question)
 
 The village maps draw a farmhouse at 46 by 28 ft (about 120 sq m) and the village shrine as one hall
-of 60 by 48 ft (about 275 sq m), a band the record labels "this project's own calibration". (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
+of 60 by 48 ft (about 275 sq m), a band the record labels "this project's own calibration" (observed 2026-09-19; method: read off the record's own rule text (religion-and-death.html, homesteads.html) - the project's drawn values, not a source's).
 
-What the sources give, in feet (3.28 ft per m; a ken is 6 shaku, about 5.97 ft): (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
+What the sources give, in feet (3.28 ft per m; a ken is 6 shaku, about 5.97 ft - conversion constants, not
+measurements; the tables' measured columns: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands; the ft and sq m columns are converted at 3.28 ft per m and 5.97 ft per ken from the measured value in the same row):
 
-| building (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | measured example | ft | sq m |
+| building | measured example | ft | sq m |
 |---|---|---|---|
 | honden, village, 1789 (Ehime) | 1.98 by 1.82 m | 6.5 by 6 | 3.6 |
 | haiden, same site, 1790 | 9.78 by 10.62 m | 32 by 35 | 104 |
@@ -93,18 +97,21 @@ What the sources give, in feet (3.28 ft per m; a ken is 6 shaku, about 5.97 ft):
 | earth-god hall, a large one (Xietang) | 10 by 7 m, three bays | 33 by 23 | 70 |
 | earth-god shrine, ordinary (zh.wikipedia) | "a few square meters ... to over ten" | - | 3-15 |
 | village temple compound, Zhejiang (Gantang) | 2.5 mu | - | ~1,670 |
+| *measured column: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands; the ft and sq m columns are converted at 3.28 ft per m and 5.97 ft per ken from the measured value in the same row* | | | |
 
 Two things follow. (1) **The precinct is larger than a farmhouse, because it contains one**: the
-dwelling alone is farmhouse-class (Chōnen-ji's kuri is a rich temple's; a village kuri is a farmhouse),
-and the hall stands beside it. (2) **The hall the village maps draw is not wrong in area** - 275 sq m
-sits inside the band of a village hall-and-dwelling under one roof (Kaie-ji, 200-330 sq m) - but it
-is drawn as one building where a precinct has two or three, and the maps draw no dwelling for the
-monk. That is a Mode B question this feature records and does not fix (the GM's request is a Mode A
-type; the village tier is frozen hand-authored work).
+dwelling is farmhouse-class (Chōnen-ji's kuri is a rich temple's; a village kuri is a farmhouse), and
+the villagers' hall is added to it - beside it at the ordinary parish temple, under the same roof at
+Kaie-ji. (2) **The hall the village maps draw is the one-roof form, and it is honest in area**: 275 sq m
+sits inside the band of a village hall-and-dwelling under one roof (Kaie-ji, 200-330 sq m). The GM's
+words make that form the default - "the shrine is both their home and the place where the villagers
+come" - so the village maps already draw the country shrine as ruled, and the two-building form is the
+knob's other value. Nothing on a village map changes; the record's entry is corrected to say what the
+hall is (the figures in this paragraph: observed 2026-09-19; method: read off the record's own rule text (religion-and-death.html, homesteads.html) - the project's drawn values, not a source's; the Kaie-ji band: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands).
 
 **The follow-up on SMALL rural halls** (the first pass had verified only large temples):
 
-| building (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | measured example | ft | sq m |
+| building | measured example | ft | sq m |
 |---|---|---|---|
 | village Kannon hall, three bays square, 1778 (Saitama) | 6.540 by 6.540 m | 21.5 by 21.5 | 43 |
 | Yakushi hall on a temple's grounds, 1685 (Chikusei) | 3.83 by 3.83 m | 12.6 by 12.6 | 15 |
@@ -112,6 +119,7 @@ type; the village tier is frozen hand-authored work).
 | kuri, late Edo (Tokuun-ji): "12 ken by 8 ken" and "a form resembling the honmune-zukuri minka characteristic of this region" | 12 by 8 ken | 72 by 48 | 320 |
 | four more Edo kuri (bunka.go.jp): 17.5-20 m by 10.3-12.2 m | - | 57-66 by 34-40 | 180-240 |
 | a town temple's precinct, Senju (taxed land, from the Adachi fudoki) | 5 tan 4 se 14 bu | - | ~5,400 |
+| *measured column: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands; the ft and sq m columns are converted at 3.28 ft per m and 5.97 ft per ken from the measured value in the same row* | | | |
 
 So the villagers' hall of a small rural site runs from a three-bay hall of about 20 ft square (43 sq m)
 up to about 30 ft square (83 sq m), with the Ehime haiden at 32 by 35 ft (104 sq m) the large end of
@@ -120,7 +128,7 @@ and the one that states its form says it resembles the region's farmhouse. No SM
 measured, so the village monk's dwelling takes the farmhouse's own footprint (46 by 28 ft, 120 sq m)
 as ACCURATE by form and a GUESS by size - the kuri "resembling the minka" is the attestation, the
 minka's size is the map's own. The "3 by 3 ken" halls that turned up are Muromachi, not Edo, and are
-not used. (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
+not used. (The source figures in this paragraph: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands; the farmhouse's 46 by 28 ft: observed 2026-09-19; method: read off the record's own rule text (religion-and-death.html, homesteads.html) - the project's drawn values, not a source's.)
 
 ## R4. Where the record is silent
 
@@ -133,4 +141,4 @@ not used. (observed 2026-09-19; method: the figure as printed on the cited page,
 - The "3 by 3 ken village hall" figure that search results repeat could not be found on a page and is
   NOT used.
 - Baidu Baike (庙祝, 村庙, 里社) refuses fetches; the Sinica and Palace Museum PDFs on Ming temple-land
-  exemption would not read. The Chinese tax-exemption claim is therefore not cited. (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
+  exemption would not read. The Chinese tax-exemption claim is therefore not cited. (The 2.5 mu: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands.)
