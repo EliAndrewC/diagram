@@ -361,4 +361,4 @@ under its tier with its program type.
   converted, the project's own drawn value) in prose or a final table row. The reviewer's aside on
   knob 3 (dedication is a deferred choice, not a knob with values) is carried to the plan: the
   exemplar takes a dedication from the village's clan patron Fortunes, the record's town rule.
-- Round 2 (2026-09-19, `spec-fidelity-verify`, Opus, on the diff 5ad5fc83..31d8436c): all four items RESOLVED; FAITHFUL. The reviewer re-derived the three label claims (the record's 60 by 48 ft and 46 by 28 ft, the Kaie-ji band) and found them sound.
+- Round 2 (2026-09-19, `spec-fidelity-verify`, Opus, on the diff 5ad5fc83..31d8436c): all four items RESOLVED; FAITHFUL. The reviewer re-derived the three label claims (the record's drawn hall and farmhouse values, the Kaie-ji band) and found them sound.
