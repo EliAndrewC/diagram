@@ -1,0 +1,192 @@
+# Tasks - feature 254, the country shrine and checks in two layers
+
+Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). Research: [`research.md`](research.md) (R1-R4
+the pass; the plan's decisions D1-D13 in `plan.md`). Every prose or code task: American spellings,
+hyphens only.
+
+## Phase 0 - baseline and the declaration (FR-001; D1, D2, D3)
+
+- [ ] T01 The constitution XIII baseline: `git worktree add --detach /tmp/base HEAD`; there, `make quick
+      ALL=1` and `make hooks-test`; the counts in `specs/254-country-shrine/measurements.json` as
+      `m:baseline-quick`; each later failure checked against the clone
+      research: procedure
+      measure: the worktree's own `make quick ALL=1` output
+      verify: the JSON entry exists before any edit under `l7r/`
+- [ ] T02 The declaration: `.claude/skills/diagram/l7r/diagram/buildings/__init__.py`, `types.json`
+      (the magistracy declared with its labels and bands from `programs.md`'s existing anchors; the
+      country shrine declared from FR-008 to FR-010 with `class` and `why` per item) and `types.py`
+      (`load_types`, `by_tier`, `hand_drawn_tiers`, shape validation per `contracts/types.schema.json`);
+      `tests/test_building_types.py` red first (shape violations refused, both tiers present)
+      research: rendering
+      scaffold: `interactive/content.py`'s asset reader for the JSON
+      verify: `make quick`; the shape test fails on a mutated copy before the reader lands
+- [ ] T03 Consumers derive (D2): `pipeline/poolmaps.py` classifies `compound` by declared tier and
+      retires `COMPOUND_GENS`; `pipeline/pool_index.py` derives `MODE_A_DIRS` and the tier titles from
+      the declaration, `pool_index_text.json` keeps the Mode B tiers only; `scripts/_size_table.py`'s
+      usage line names `pool/<tier>/`; `tests/pipeline/test_poolmaps.py`, `test_pool_index.py` and
+      `tests/test_villages.py` follow; the census test
+      `test_no_type_name_outside_its_declaration` red first (a planted literal in `l7r/` fails it)
+      research: rendering
+      scaffold: `poolmaps.bundles()`'s tier field
+      verify: `make quick`; the census test goes red when its exemption list is emptied, green after
+- [ ] T04 The ignore rule per tier (D3): `.gitignore`'s three per-file negations become one per
+      hand-drawn tier plus a re-ignore per declared generated exception;
+      `test_ignore_file_matches_the_declaration` red first; `git check-ignore` on all five magistracy
+      svgs and the two generated exceptions unchanged; `tests/pipeline/test_render_cache.py` green
+      research: rendering
+      verify: `git -C <clone> check-ignore -v` per file listed in the task's log; `make quick`
+
+## Phase 1 - the parser and the registry (FR-002, FR-003, FR-005; D4-D9)
+
+- [ ] T05 The precinct marker (D4): `id="precinct"` on the court-earth interior rect of the five
+      `pool/magistracies/*/*.svg` (and on the two generated examples' emitters in `compound.py`
+      `emit_svg`); `tools/pack_audit/parse.py` reads marked rects as `interior`, raises naming the
+      sheet when none is marked, drops the fill requirement; `tests/tools/test_pack_audit.py`'s
+      synthetic sheets carry the marker; PNGs of the three hand-drawn sheets byte-identical
+      (`tools/picture_diff.py` before and after)
+      research: rendering
+      verify: `make quick`; the unmarked-sheet test red first; picture_diff reports zero changed pixels
+- [ ] T06 The registry (D5, D6): `tools/pack_audit/registry.py` with `Check(name, run, types, fixture,
+      fix)` and `CHECKS` over the eleven shared and one magistracy check now in `checks.py`, the
+      fire-water three declaring both tiers; `report.py` composes from it; `make pack-audit` output
+      unchanged on Ochiba (diffed); every registered fixture exists and fires
+      (`test_every_check_fires_on_its_fixture_and_passes_the_pool`), the fixtures that do not yet
+      exist cut from a pool sheet in this task (`tests/fixtures/<sheet>-<check>-red.svg`)
+      research: rendering
+      scaffold: the existing red fixtures under `tests/fixtures/`
+      verify: `make quick`; the report diff on Ochiba is empty
+- [ ] T07 New shared checks (D8): `structures_overlap` (sorted-edge sweep over structure rects,
+      rounding floor `WALL_OVERLAP_MIN_PX`), `scale_bar_present`, `viewbox_cropped`; the magistracy's
+      `two_court_zoning`; each registered with a red fixture cut from Ochiba or Hayakawa and a `fix`
+      sentence; `pool/magistracies` clean under all four
+      research: rendering
+      scaffold: `structures_on_walls` for the rect-overlap form
+      verify: `make quick`; each fixture red before its check lands
+- [ ] T08 Defects the registration finds (D9, constitution XIV): every firing of a registered check on a
+      shipped magistracy sheet is a defect in the sheet or the check - fixed here, the sheet's
+      `.notes.md` Review log carrying the entry; nothing ledgered as pre-existing
+      research: rendering
+      verify: `make pack-audit` on all five reports no check firing; `make quick`
+
+## Phase 2 - the sweep (FR-004; D10)
+
+- [ ] T09 `tests/gate/test_mode_a_sheets.py` parametrized over the declared tiers' bundles, every
+      applicable check asserted quiet with a message naming sheet, check and fix; the roster
+      `tests/fixtures/gate_check_names.json`; the cost measured with `scripts/_gatecost.py` on the
+      gate's durations record and written as `m:sweep-cost`
+      research: rendering
+      measure: `scripts/_gatecost.py` after one `make done`
+      verify: `make quick` green on the five; the JSON entry present
+
+## Phase 3 - the program and the shrine's checks (FR-006 to FR-011; D1, D7, D8, D11)
+
+- [ ] T10 `check_program` and `check_bands` (D7): generic over the declaration; the nearest-label
+      pairing moved from `scripts/_size_table.py` into `tools/pack_audit/labels.py` (the script a thin
+      caller, `make size-table` output unchanged on Ochiba, diffed); the notes file's `**Form**: one roof`
+      read to count a combined building as hall and dwelling; registered per type; fixtures for a
+      missing item and an out-of-band item cut from Ochiba
+      research: rendering
+      scaffold: `_size_table.py`'s `nearest label by center distance`
+      verify: `make quick`; the size-table diff on Ochiba is empty
+- [ ] T11 `buildings/programs.md`: the "Country shrine (a village district's shrine)" entry - the
+      required-items table rendered between `<!-- types.json:country-shrines -->` markers by a new
+      `make building-programs` (`CHECK=1` on the gate, like `make glossary`), the knobs (FR-009), the
+      size anchors (FR-010), residence (FR-011), staffing from the campaign notes (one country monk,
+      part-time acolytes on loan), in prose; `buildings.md`: the vocabulary for the sanctuary, the arch,
+      the fence and hedge, the swept-gravel ground pattern `keidai-gravel` and the grave markers, and
+      the section "Adding a building type" listing exactly the files a type touches (FR-007); the
+      review agents' prompts name the program by type (FR-006)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      verify: `make building-programs CHECK=1` green; `make quick`; the pass is R1-R3; the boxes tick
+      with T13-T15
+- [ ] T12 The shrine's checks (D8): `sanctuary_on_axis`, `arch_on_approach`, `well_clear_of_arch`,
+      `fence_not_wall`, registered under `country-shrines`; their fixtures are cut from the exemplar
+      in T17 - this task lands the checks with synthetic-sheet tests and T17 lands the fixtures
+      research: rendering
+      scaffold: `torii_clear_of_shrine` in `settlement/shrines_wells/torii.py` for the arch-on-axis form
+      verify: `make quick`; each check red on its synthetic defect before it lands
+
+## Phase 4 - the record (FR-012 to FR-014; D13)
+
+- [ ] T13 `research/religion-and-death.html`: two new sections after the village-shrine section - "Does
+      the country monk live at the shrine?" and "How big is a country shrine, and what stands in its
+      precinct?" - with `Sources:` lines, footnotes fn-143 onward on `citations/religion-and-death.html`
+      quoting each passage (English translation marked, original kept), the four labels; the village
+      section revised per FR-013; glossary terms (kuri, honden, haiden, bettō, jingūji, miyaza, jochi,
+      shasō) in `interactive/assets/glossary.json`; every page read registered in `SOURCES.html` with
+      its two write-ups (FR-014's list) and the unreadable pages in an absence note; `make citations`
+      and `make glossary`; the village shrine's class entries name the two new questions
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      measure: `make quote-verbatim PAGE=religion-and-death` before quote-check; `make record-prepass
+      PAGE=religion-and-death` before record-format
+      verify: `make citations CHECK=1`, `make glossary CHECK=1`, `make page-check`; the boxes tick with
+      T14 and T15
+- [ ] T14 The verification agents, in the background, in order: `source-reader` on the two new sections
+      (READ per claim; a CONTRADICTED verdict changes the text); `quote-check` after the verbatim script;
+      `record-format` after the prepass; `entry-drift` on every class entry `scripts/_entry_owed.py`
+      names for the revised village section; each verdict folded in and recorded in `research.md` R5
+      research: rendering
+      verify: the four verdicts in R5 with what changed; `make quick`
+- [ ] T15 `source-applicability` over every new registry key, three dispatches by group (the Japanese
+      encyclopedia and cultural-property pages; the Chinese pages; the RPG wiki), BEFORE T16 draws
+      from their numbers; each limit written into the entry's write-ups; a NOT-APPLICABLE source
+      removed from the sections and the program
+      research: rendering
+      verify: the verdicts in `research.md` R6; `make citations CHECK=1` green
+
+## Phase 5 - the exemplar (FR-015, FR-016; D12)
+
+- [ ] T16 `pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg` hand-drawn to the program at
+      3 px = 1 ft from the Ochiba template's style: the fenced precinct marked `id="precinct"` on
+      swept gravel, the one-roof hall-and-dwelling (knob 1 default), the sanctuary behind it on the
+      approach axis, the arch where the approach crosses the fence, the well beside the approach, the
+      kitchen garden and privy at the dwelling end, fire-water, the grove and the burial ground beside
+      the precinct, the scale bar, the title; `hoshigaoka-shrine.gen.py` rasterizing only;
+      `hoshigaoka-shrine.notes.md` with program type, `**Form**: one roof`, every knob (dedication from
+      the clan patron Fortune in Hoshigaoka's notes; bell absent; grove and burial-ground sides from
+      Hoshigaoka's map; wealth average), particulars left open for the GM, an empty Review log
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      verify: `make size-table PLAN=pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg` read
+      in feet; the sheet renders at 2400 px; the boxes tick from T13-T15
+- [ ] T17 The shrine's four fixtures cut from the exemplar (`tests/fixtures/hoshigaoka-*-red.svg`),
+      registered in T12's rows; `make quick` sweeps six sheets green; the pool index lists the tier
+      with the program type (`make pool-index`)
+      research: rendering
+      verify: `make quick`; the index row present
+- [ ] T18 `size-audit` from `make size-table`, then `building-review`, both in the background; findings
+      fixed and re-run until clean or overruled with the rationale in the notes' Review log; one row
+      each in `docs/review-ledger.md`; the closing bookend - the PNG re-read against R1-R3 and the
+      result written in `research.md` R7
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      verify: both agents' last reports clean; the ledger rows; `escalation-check` on anything for the GM
+
+## Phase 6 - the gate and the push (SC-001 to SC-006)
+
+- [ ] T19 `spec-fidelity` round 3 if the spec was amended during implementation, MODE 3 = VERIFY
+      items from round 2: none - FAITHFUL
+      changed since: whatever the implementation amended, listed here when it happens
+      figures: specs/254-country-shrine/measurements.json - re-run with `make figures SPEC=specs/254-country-shrine`
+      research: rendering
+      verify: skipped and said so if nothing in `spec.md` changed
+- [ ] T20 `make done` in the background (the whole gate; 100% coverage over `l7r`; the file-size bar;
+      the ratchet); every failure fixed together and re-run once; `scripts/sync-with-main.sh done` from
+      the clone (engine code in the delta: the GATED route); the memory file updated
+      research: procedure
+      verify: the gate stamp green; the push reported; `git status -sb` clean and level with origin
+
+## Dependencies
+
+T01 before any edit under `l7r/`. T02 -> T03 -> T04. T05 -> T06 -> T07 -> T08 -> T09. T10 after T06.
+T11 after T02 and T10. T12 after T06. T13 -> T14; T15 before T16. T16 after T11, T12, T15. T17 after
+T16. T18 after T17. T19, T20 last. Parallel: T02 with T05 (different packages); T13 with T05-T09 (the
+record and the engine share no file); T11's prose with T10's code.
+
+## Strategy
+
+US1 (T02-T10) is the MVP: the magistracy re-declared and swept proves the architecture before the
+shrine exists. US2 (T11, T13-T15) can land before US3 and is what the GM asked to know. US3 (T12,
+T16-T18) is the exemplar.
