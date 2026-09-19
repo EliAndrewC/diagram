@@ -218,3 +218,24 @@ script and test are in commit `8d2ebf64`). Moving the examples alone is worth ab
 
 Total spent on seeded runs: 26.6 weight units over 18 runs (the sum of the weights in the tables above), and twelve
 Haiku probes.
+
+## R7 - after landing: the harness CAN leave both files out of a defined subagent (2026-09-19)
+
+The GM, shown R5: *"I think our defined subagents should not [receive them] ... If there's something that a subagent
+should know, it should be in the subagent specification."* The Claude Code documentation (`sub-agents`, read by a
+`claude-code-guide` agent) names an agent-frontmatter field, `omitClaudeMd: true` (v2.1.271 or later; this container
+runs 2.1.278): the subagent launches without the user, project and local `CLAUDE.md` files, and it is per agent
+file, so the main session and ad-hoc agents are untouched. The same documentation says a subagent does not receive
+auto memory at all, which R5 measured to be false here. Probed (observed 2026-09-19; method: `measure/probe.sh`
+from `/diagram`, tools `Read`, `PROBE_EXTRA='"omitClaudeMd":true'` for the second leg):
+
+| probe | subagent's first-turn input |
+|---|---|
+| `/diagram`, as R5 | 14,094 |
+| `/diagram`, the agent carrying `omitClaudeMd: true` | **2,290** |
+
+One field removes BOTH the project `CLAUDE.md` and the memory index - 11,804 tokens of every turn of every check -
+which the documentation does not say and the measurement does. Nothing was changed in any agent file under this
+feature: R1, R2 and R6 are three measurements that a judging agent handed less can find less, the root `CLAUDE.md`
+carries rules some checks lean on without restating (house style, the caste sense of "people"), and FR-001's test
+is what decides it. It is a candidate for a feature of its own.

@@ -8,7 +8,7 @@
 LABEL=$1; CWD=$2; TOOLS=$3; shift 3
 CL="$(command -v claude)"
 if [ "$TOOLS" = ALL ]; then AG='{"probe":{"description":"a probe","prompt":"Reply with the single word OK and nothing else.","model":"haiku"}}'
-else AG="{\"probe\":{\"description\":\"a probe\",\"prompt\":\"Reply with the single word OK and nothing else.\",\"model\":\"haiku\",\"tools\":$TOOLS}}"; fi
+else AG="{\"probe\":{\"description\":\"a probe\",\"prompt\":\"Reply with the single word OK and nothing else.\",\"model\":\"haiku\",\"tools\":$TOOLS${PROBE_EXTRA:+,$PROBE_EXTRA}}}"; fi   # PROBE_EXTRA: one more frontmatter field as a JSON fragment, e.g. '"omitClaudeMd":true'
 OUT=$(cd "$CWD" && timeout 300 "$CL" -p --model haiku --agents "$AG" --settings '{"disableAllHooks": true}' --permission-mode bypassPermissions --output-format json "$@" \
   "Use the Agent tool exactly once: subagent_type probe, prompt: go. Then reply with its answer and stop." 2>/dev/null)
 SID=$(printf '%s' "$OUT" | jq -r '.session_id // empty')
