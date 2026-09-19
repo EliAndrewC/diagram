@@ -1045,16 +1045,17 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 ##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
 	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)" --text,)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
-# GUARD_EDIT_OK: feature 255 - a new operation (the registry entries and citing footnotes of named keys); no guard changes.
-source-entries: ## [project] the registry entries of the named keys and every footnote citing them - run BEFORE source-applicability   KEYS=kikoba-kenchi,ndl-kokumori
-##  KEYS=<k1,k2>   registry keys, comma-separated; a key the registry lacks is said to be lacking
-	@if [ -z "$(KEYS)" ]; then printf 'make source-entries: KEYS=<k1,k2,...> is required - e.g. make source-entries KEYS=kikoba-kenchi\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_entries.py" --root "$$(git rev-parse --show-toplevel)" "$(KEYS)"
+# GUARD_EDIT_OK: feature 255 - a new operation (a settlement review's opening measurements in one call); no guard changes.
+review-facts: ## [project] a map's files, manifest inventory, delta against main, labels and settled notes in ONE call - run BEFORE settlement-review   MAP=pool/hamlets/kuwabata [AGAINST=<git ref>] [SNAPSHOT=<dir>]
+##  MAP=<pool map>   the map's folder, or the path without its extension
+##  AGAINST=<ref>    the git ref its manifest is compared with (default HEAD); SNAPSHOT=<dir> uses a review snapshot's main/ side instead
+	@if [ -z "$(MAP)" ]; then printf 'make review-facts: MAP=<pool map> is required - e.g. make review-facts MAP=pool/hamlets/kuwabata\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_facts.py" "$(MAP)" $(if $(AGAINST),--against "$(AGAINST)",) $(if $(SNAPSHOT),--snapshot "$(abspath $(SNAPSHOT))",)
 
-# GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text for source-reader to grep); no guard changes.
-source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
+# GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries operation added beside it was NOT ADOPTED on its seeded runs and is removed - specs/255 research R1.)
+source-pages: ## [project] save the full visible text of the named pointers, with a manifest - the PAGE, where a fetch gives an extract (source-reader's use of it awaits the GM: specs/255 research R4)   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
 ##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=
 	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi

@@ -136,38 +136,12 @@ def render(page: str, listing: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def source_lines(raw: str, needle: str) -> list[tuple[int, str]]:
-    """The numbered SOURCE lines of every section whose heading contains `needle` - comments and tags kept,
-    because a scoped agent reports markup defects and must see the markup (feature 255, FR-003)."""
-    out: list[tuple[int, str]] = []
-    inside = False
-    for number, line in enumerate(raw.splitlines(), 1):
-        heading = re.search(r"<h[23]\b[^>]*>.*?</h[23]>", line, re.S | re.I)
-        if heading:
-            inside = needle.casefold() in text_of(strip_comments(heading.group(0))).casefold()
-        if inside:
-            out.append((number, line))
-    return out
-
-
-def render_text(path: str, raw: str, needle: str) -> str:
-    """The scoped reading list: each matching section's visible text, then its numbered source lines."""
-    lines = ["", f"THE TEXT IN SCOPE (feature 255) - for a scoped check this is the reading list; open {path} only to settle a doubt"]
-    for heading, body in sections(raw):
-        if needle.casefold() in heading.casefold():
-            lines += [f"## {heading} - visible text", text_of(body)]
-    lines.append(f"## source lines of {path} (line number, then the line as written; a comment is invisible to the reader)")
-    lines += [f"{number:>5}  {line}" for number, line in source_lines(raw, needle)]
-    return "\n".join(lines)
-
-
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("page", help="a research page name: hamlets, cities/tango, citations/hamlets, SOURCES")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", default="")
     ap.add_argument("--section", default="", help="only the sections whose heading contains this text")
-    ap.add_argument("--text", action="store_true", help="with --section: also print the section's visible text and its numbered source lines")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root)
     name = args.page.removesuffix(".html")
@@ -180,8 +154,6 @@ def main(argv: list[str] | None = None) -> int:
     listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary) if args.section.casefold() in s["section"].casefold()]
 
     print(render(name, listing))
-    if args.text and args.section:
-        print(render_text(f"{RESEARCH}/{name}.html", path.read_text(encoding="utf-8"), args.section))
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps({"page": name, "sections": listing}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     return 0

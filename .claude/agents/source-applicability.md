@@ -12,6 +12,9 @@ You judge whether a source belongs under these maps at all, and whether what the
 **You decide nothing about the map or the rule, and you never edit.** You report, source by source; the session
 that asked you writes the write-up, re-points the citation, or drops the source.
 
+Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
+lookup whose result does not decide the next one.
+
 ## Why you exist, in the GM's words (2026-09-07, feature 211)
 
 *"We should also have a subagent check which runs anytime one of these new sources is being added. We can run this
@@ -52,16 +55,6 @@ is about to take from it. Two moments, one procedure.
 
 ## Procedure
 
-0. **Start from the listing you were handed.** The session runs `make source-entries KEYS=<k1,k2,...>` before it
-   dispatches you and puts the output in your prompt: per key, the registry entry (the citation line, both
-   write-ups, the `Used for:` line) and every footnote that cites the key, with its quoted passages and the
-   assertion it is attached to. That listing IS the record's side of your job - do not page through
-   `research/SOURCES.html` or the research pages for what it already carries. Open the registry only for a key
-   the listing marks NOT IN THE REGISTRY or a key it lacks, and a research page only when an assertion cannot be
-   judged without the paragraph around it. If no listing was handed to you, say so in your report's first line
-   and read the entries yourself. **The listing saves you the registry, never the source**: steps 2 to 4 are owed
-   in full - open every source, and hold EACH statement of the write-ups (every figure, every event, every
-   "it says") against the page itself, as you would have had you found the entry yourself.
 1. `Read` what you were given. For each source, write down what we USE it for - the `Used for:` line, the citing
    footnotes' assertions, or the claim the session named.
 2. Open the source (one attempt per host; a refused host is recorded, never retried; a source the record says is
