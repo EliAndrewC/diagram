@@ -24,12 +24,14 @@ The research pass ran first (constitution XII) and is recorded in `research.md`.
 line each: **the monk lives there, and that is the historically accurate form** - before 1868 a
 Japanese village's sacred site was ordinarily a shrine with a small Buddhist temple attached where the
 shrine-monk lived and performed the villagers' rites, and the parish temple's priest lived in its kuri;
-**a country shrine is a small precinct of two or three buildings** - a tiny sanctuary, a hall for the
-villagers, the monk's farmhouse-class dwelling - with an arch on its approach, a well, a fence, its
-grove and the burial ground beside it; **it is larger than a farmhouse because it contains one**, the
-hall alone running from about 20 ft square to 35 ft square on measured village examples, and the 60 by
-48 ft hall the village maps draw is honest in area only read as a hall and dwelling under one roof, a
-form that is attested but called rare. (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
+**a country shrine is a small precinct** - a tiny sanctuary, and a hall that is at once the villagers' rite-place and
+the monk's home, the GM's form ("the shrine is both their home and the place where the villagers come"),
+which the sources attest as a hall and dwelling under one roof and call rare against the ordinary parish
+temple's separate hall and priest's house - with an arch on its approach, a well, a fence, its grove and
+the burial ground beside it; **it is larger than a farmhouse because it contains one**: a village hall
+alone runs from about 20 ft square to 35 ft square on measured examples, and the one-roof building adds
+a farmhouse to it, so the 60 by 48 ft hall the village maps draw is inside the one-roof form's measured
+band. (The source dimensions: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands. The 60 by 48 ft: observed 2026-09-19; method: read off the record's own rule text (religion-and-death.html, homesteads.html) - the project's drawn values, not a source's.)
 
 Three things are delivered: (1) the check architecture for many building types - a type is declared
 ONCE and everything keys off the declaration; the checks are a shared layer and a per-type layer; every
@@ -111,8 +113,8 @@ says no source gives a footprint.
    on the sheet are accurate, which are guesses, and why.
 3. **Given** the existing section "Where does a village put its shrine, and how big is it?", **When**
    it is revised, **Then** it cites the measured halls, says the drawn 60 by 48 ft hall reads as a hall
-   and dwelling under one roof, and notes that the village maps draw no separate dwelling for the monk -
-   recorded as a limitation of the frozen village tier, not fixed here.
+   and dwelling under one roof - the GM's form, the attested Kaie-ji form - and is inside that form's
+   measured band, so the village maps draw the country shrine the GM described.
 4. **Given** every source the pass brought in, **When** `source-applicability` judges it, **Then** each
    is APPLICABLE or APPLICABLE-WITH-LIMITS with the limits written into its registry entry (the RPG
    wiki as a tertiary summary of the rulebooks; the Chinese Mianning study as Qing Sichuan; the modern
@@ -153,13 +155,14 @@ under its tier with its program type.
 - A magistracy sheet that generates its SVG (`county-magistracy-example`, `ochiba-roundtrip-test`)
   alongside hand-drawn ones in the same tier: the ignore rule is per tier and per file-kind, and a
   generated SVG in a hand-authored tier is a declared exception, not a pattern.
-- The two knob forms of the hall and dwelling - one roof (Kaie-ji, attested and called rare) or two
-  buildings (the ordinary parish temple): the program-completeness check counts a combined building
-  as both items when the notes declare the form.
+- The two knob forms of the hall and dwelling - one roof (the default, the GM's form; Kaie-ji, attested
+  and called rare) or two buildings (the ordinary parish temple's hall and kuri): the program-completeness
+  check counts a combined building as both items when the notes declare the form.
 - A shrine with no bell tower: the knob's absent value; the check does not require one.
 - A check the shared layer inherits from the magistracy that is really the magistracy's (the coverage
-  band of 37-42%, perimeter hugging, fire-water tubs, the notice board by the gate): each is moved to
-  the magistracy's layer, not generalized.
+  band of 37-42%, perimeter hugging, the notice board by the gate, two-court zoning): each is moved to
+  the magistracy's layer, not generalized. Fire-water is NOT one of these: both programs require it, so
+  the check declares both types.
 
 ## Requirements *(mandatory)*
 
@@ -182,8 +185,9 @@ under its tier with its program type.
   reads the precinct from the sheet's own declaration of it (a marked boundary element), never by
   requiring a compound wall or an earth-court fill; a sheet that declares no precinct fails naming that.
 - **FR-003 - a per-type layer.** A check declares the types it applies to; those that are the
-  magistracy's (coverage band, perimeter hugging, fire-water tubs, notice board by the gate, two-court
-  zoning) move under the magistracy, and the shrine gets its own (below). Two checks are per-type in
+  magistracy's (coverage band, perimeter hugging, notice board by the gate, two-court zoning) move under
+  the magistracy, and the shrine gets its own (below). A check declares EVERY type it applies to, and a
+  check two programs require declares both: fire-water declares the magistracy and the country shrine. Two checks are per-type in
   MECHANISM but generic in code: program completeness (every required item's label present) and size
   bands (every item within its band, from the same size table `size-audit` is handed), both reading the
   declaration.
@@ -216,20 +220,30 @@ under its tier with its program type.
   cleared opening; the **burial ground** beside the precinct; a **kitchen garden** and a **privy** at the
   dwelling; **fire-water** at the wooden buildings. No office building, no bell as a requirement, no
   guardian figures as a requirement. The tax-free fields lie off the sheet.
-- **FR-009 - the knobs.** (1) **Hall-and-dwelling form**: two buildings (default; the parish temple's
-  hall and kuri) or one roof (attested at Kaie-ji, called rare). (2) **Bell tower**: absent (default)
+- **FR-009 - the knobs.** (1) **Hall-and-dwelling form**: one roof (the default - the hall is the monk's home and the villagers'
+  rite-place in one building, attested at Kaie-ji and called rare there) or two buildings (the ordinary
+  parish temple's hall and kuri). The default is set against the sources' "rare" on the GM's own words
+  of 2026-09-19 - "the shrine is both their home and the place where the villagers come ... if there is
+  any choice in the matter, then I want to make that the case" - and the entry says so. (2) **Bell tower**: absent (default)
   or present. (3) **Dedication and its furniture**: the Fortune the shrine serves and what that puts on
   the sheet - the instance particular, designed with the GM. (4) **Grove and burial-ground side**: which
   side of the precinct each takes, by the site. (5) **Wealth**: a poor district's thatch and plain
   timber against a rich one's tile and lanterns. Each knob's setting is written in the notes file.
 - **FR-010 - the size anchors.** Sanctuary about 6 ft square (a one-bay honden, 1.98 by 1.82 m
-  measured; ACCURATE). Hall 20 to 35 ft on a side (a 1778 village hall 6.54 m square; a 1790 haiden
-  9.78 by 10.62 m; a hondō 5 by 5 ken; ACCURATE as a band). Dwelling the farmhouse's 46 by 28 ft (form
-  ACCURATE - a kuri "resembling the farmhouse of its region"; size a GUESS, no small kuri measured).
-  Precinct a GUESS bounded by its contents, disclosed as such (no Japanese precinct area read; the one
-  compound figure is Chinese, 2.5 mu). The hierarchy holds: hall > dwelling >= sanctuary in footprint,
-  and the hall is not out-footed by any other building.
-- **FR-011 - residence is fixed, not a knob.** The monk lives at the shrine. The record labels it
+  measured; ACCURATE). The one-roof building - the villagers' hall and the monk's home together, the
+  default - 200 to 330 sq m (Kaie-ji, 25.2 m long by 8 to 13 m deep; ACCURATE as a band from one
+  attested example, disclosed as such), its hall end 20 to 35 ft on a side (a 1778 village hall 6.54 m
+  square; a 1790 haiden 9.78 by 10.62 m; a hondō 5 by 5 ken; ACCURATE as a band) and its dwelling end
+  the farmhouse's 46 by 28 ft (form ACCURATE - a kuri "resembling the farmhouse of its region"; size
+  a GUESS, no small kuri measured). In the two-building form the same two bands apply to the two
+  buildings. Precinct a GUESS bounded by its contents, disclosed as such (no Japanese precinct area
+  read; the one compound figure is Chinese, 2.5 mu). The hierarchy holds: the hall-and-dwelling
+  building out-foots every other building on the sheet, and the sanctuary is the smallest. (The source
+  figures: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or
+  encyclopedia page, read by a Sonnet reader; the 46 by 28 ft is the project's drawn farmhouse from
+  the record.)
+- **FR-011 - residence is fixed, not a knob.** The monk lives at the shrine, and on the sheet that means
+  UNDER THE HALL'S ROOF by default (knob 1), not merely within the fence. The record labels it
   ACCURATE (the jingūji and bettō-ji before 1868; the parish temple's kuri; the RPG's own statement)
   and discloses the two forms history also had - a pure Shinto village shrine with no resident, tended
   by the parishioners' rota, and the unstaffed rural temple with a commuting priest - as forms the
@@ -244,13 +258,12 @@ under its tier with its program type.
   jingūji, miyaza, jochi, and the four labels applied. Both are `research: physical` work with the five
   boxes.
 - **FR-013 - the village section corrected.** "Where does a village put its shrine, and how big is it?"
-  drops "No source gives a village shrine a footprint", cites the measured halls, states that the
-  drawn 60 by 48 ft hall reads as a hall and dwelling under one roof (the attested Kaie-ji form,
-  called rare), and records that the village maps draw no separate dwelling for the monk as a
-  limitation of the frozen village tier - what it costs (the map under-reads the precinct by one
-  farmhouse), the alternative priced (redrawing 18 frozen exhibits by hand, the trade the GM declined
-  on 2026-08-13), and that the fix lands when the village tier is converted. `entry-drift` is run on
-  every class entry that names the section.
+  drops "No source gives a village shrine a footprint", cites the measured halls, and states that the
+  drawn 60 by 48 ft hall IS the one-roof form - the monk's home and the villagers' hall in one building,
+  the GM's form, attested at Kaie-ji - and lies inside that form's measured band (200-330 sq m), labeled
+  ACCURATE with the disclosure that the sources call the one-roof form rare and the two-building form
+  ordinary. No village map is redrawn: nothing on them is wrong. `entry-drift` is run on every class
+  entry that names the section.
 - **FR-014 - the registry.** Every page read gets a registry entry with its two write-ups, judged by
   `source-applicability` before its numbers reach the program: the Japanese Wikipedia pages on the
   kuri, the jūshoku, the miyaza, the shake, the bettō, the bettō-ji, the jingūji, the shrine, the
@@ -271,8 +284,7 @@ under its tier with its program type.
   so. It passes both reviewers with ledger rows, and it is the sheet the shrine's red fixtures are cut
   from.
 - **FR-016 - the Mode B glyph is not changed.** The village tier is frozen; no village map is redrawn
-  under this feature. The finding is recorded (FR-013) and the migration plan's status table gains a
-  line under the village tier naming it.
+  under this feature, and none needs to be: the record now states what the drawn hall is (FR-013).
 
 ### Key Entities
 
@@ -305,7 +317,7 @@ under its tier with its program type.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
-| Decision (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | Class | Why | Recorded at |
+| Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | the country monk lives at the shrine; the dwelling stands on the precinct | accurate (Japan, the jingūji / bettō-ji before 1868 and the parish temple's kuri; China, the resident keeper at Mianning; the RPG's "most had at least one resident monk"), with the disclosure that a pure Shinto village shrine had no resident and some rural temples were unstaffed | the GM's ruling and the sources coincide; no knob | `research/religion-and-death.html`, "Does the country monk live at the shrine?"; `buildings/programs.md`, the shrine program; the exemplar's notes |
 | sanctuary about 6 ft square, one bay | accurate | the ikkensha honden is the commonest form; a 1789 example measures 1.98 by 1.82 m | the same section; the size band in the declaration |
@@ -313,9 +325,10 @@ under its tier with its program type.
 | dwelling at the farmhouse's 46 by 28 ft | form accurate, size guess | the kuri "resembles the farmhouse of its region"; no small kuri measured | the same; the declaration |
 | precinct size | guess, bounded by its contents | no Japanese precinct area could be read; one Chinese compound of 2.5 mu | the same |
 | a fence or hedge, never a wall | accurate | the tamagaki and the grove bound a shrine; a wall is a compound's | the same; the shared layer's precinct rule |
-| hall-and-dwelling under one roof as a knob value | accurate, rare | Kaie-ji's combined building, "unusual for early-Edo temple architecture" | the program's knobs |
+| hall and dwelling under one roof as the DEFAULT form; two buildings as the knob's other value | accurate (attested at Kaie-ji, "unusual for early-Edo temple architecture"; the ordinary form is two buildings) | the GM's words of 2026-09-19 pick the attested-but-rare form: "the shrine is both their home and the place where the villagers come" | the program's knobs; the residence section |
 | bell tower as a knob | accurate | the minimal temple is "a main hall and a bell tower"; a village hall may have neither | the program's knobs |
-| the 60 by 48 ft village hall on the Mode B maps reads as a hall and dwelling under one roof, and the maps draw no separate dwelling | accepted limitation of the frozen tier | the cost (one farmhouse under-read), the alternative priced (redrawing 18 exhibits, declined 2026-08-13), the GM's; fixed at conversion | the revised village section; `migration-plan.md` status table |
+| the 60 by 48 ft village hall on the Mode B maps is the one-roof form, hall and dwelling in one building | accurate | it lies inside the one-roof form's measured band (Kaie-ji, 200-330 sq m); no village map changes | the revised village section |
+| *the source figures in this table: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands; the 60 by 48 ft: observed 2026-09-19; method: read off the record's own rule text (religion-and-death.html, homesteads.html) - the project's drawn values, not a source's* | | | |
 | the registers live in the dwelling (a writing room or chest), not a building | accurate | the temple issued the certificate and the headman compiled the ledger; a small shrine had no office building | the program; the second new section |
 
 ## Assumptions
@@ -336,4 +349,16 @@ under its tier with its program type.
 
 ## Review history
 
-- Round 1: pending `spec-fidelity`.
+- Round 1 (2026-09-19, `spec-fidelity`, Opus): CHANGES REQUIRED, four items. (1) Knob 1's default
+  was two buildings, against the GM's "the shrine is both their home and the place where the villagers
+  come ... if there is any choice in the matter, then I want to make that the case" - the default is
+  now one roof, FR-011 says what "lives at the shrine" means on the sheet, and FR-013 stops calling the
+  village maps' single hall a limitation: it IS the GM's form. (2) Fire-water was filed as the
+  magistracy's alone while FR-008 requires it of the shrine - a check now declares every type it
+  applies to, and fire-water declares both. (3) One Decisions row carried a class outside the four -
+  now `accurate`, the cost and the ruling in Why. (4) The one-shot labels named one method for three
+  families of figure and sat in table header cells - now labeled by family (source-measured,
+  converted, the project's own drawn value) in prose or a final table row. The reviewer's aside on
+  knob 3 (dedication is a deferred choice, not a knob with values) is carried to the plan: the
+  exemplar takes a dedication from the village's clan patron Fortunes, the record's town rule.
+- Round 2: pending `spec-fidelity-verify`.
