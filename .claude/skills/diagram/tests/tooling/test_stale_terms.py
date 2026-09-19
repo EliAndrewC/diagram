@@ -28,7 +28,12 @@ def _load():  # noqa: ANN202
 
 st = _load()
 
-OLD = {"spec.md": "# F\n\n| `reader` | sonnet | high |\n\n**FR-7** `reader` moves to Sonnet at high effort.\n\nThe `checker` stays.\n\n## Review history\n\n- round 1: `reader` on sonnet.\n", "request.md": "> put `reader` on sonnet\n", "tasks.md": "- [x] T1 the table only\n      verify: DONE. `reader` sonnet\n", "research.md": "| `reader` | sonnet tested |\n"}
+OLD = {
+    "spec.md": "# F\n\n| `reader` | sonnet | high |\n\n**FR-7** `reader` moves to Sonnet at high effort.\n\nThe `checker` stays.\n\n## Review history\n\n- round 1: `reader` on sonnet.\n",
+    "request.md": "> put `reader` on sonnet\n",
+    "tasks.md": "- [x] T1 the table only\n      verify: DONE. `reader` sonnet\n",
+    "research.md": "| `reader` | sonnet tested |\n",
+}
 NEW = {**OLD, "spec.md": OLD["spec.md"].replace("| `reader` | sonnet | high |", "| `reader` | opus | high |")}
 
 
@@ -38,7 +43,14 @@ def test_the_old_value_beside_its_subject_is_a_candidate_and_nothing_else_is():
     assert "moves to Sonnet" in found[0]["text"] and found[0]["changed_in"] == "spec.md"
     live = {**NEW, "tasks.md": "- [ ] T2 put `reader` on sonnet\n      verify: DONE. `reader` sonnet\n"}
     assert [(c["file"], c["line"]) for c in st.stale_candidates(OLD, live)] == [("spec.md", 5), ("tasks.md", 1)], "a TASK line is live text; its dated verify note is not"
-    wide = {**NEW, "data-model.md": "`reader`: model sonnet\n", "contracts/api.md": "the `reader` contract assumes sonnet\n", "gm-request.md": "> `reader` on sonnet\n", "measure/h.py": "# `reader` sonnet\n", "plan-review.json": "{\"x\": \"`reader` sonnet\"}"}
+    wide = {
+        **NEW,
+        "data-model.md": "`reader`: model sonnet\n",
+        "contracts/api.md": "the `reader` contract assumes sonnet\n",
+        "gm-request.md": "> `reader` on sonnet\n",
+        "measure/h.py": "# `reader` sonnet\n",
+        "plan-review.json": "{\"x\": \"`reader` sonnet\"}",
+    }
     assert sorted(c["file"] for c in st.stale_candidates(OLD, wide)) == ["contracts/api.md", "data-model.md", "spec.md"], "a file kind nobody named is SEARCHED; the named ones are not"
 
 
