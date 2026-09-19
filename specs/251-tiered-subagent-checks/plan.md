@@ -43,7 +43,11 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   fetch: one `urlopen` per distinct URL, 20 s timeout, a browser user agent, one attempt per HOST per
   run (a second URL on a host that refused is UNFETCHABLE without a request); `Content-Type` of
   `application/pdf` or a `.pdf` path is NOT-CHECKED (pdf). A passage with an elision (`...` or `[...]`)
-  is matched piece by piece in order. The translated form: the ORIGINAL (after `original:`) is what is
+  is matched piece by piece in order. A note that carries more than one link (the key's page and an
+  "(on <page>)" alternative) is VERBATIM when the passage is on ANY of them. A page's own reference
+  markers (`[3]`) inside a quoted sentence are NOT forgiven - the verdict stays DIFFERS, literal - but
+  the entry carries `only_reference_markers: true` when removing them is all it takes, so the reader of
+  the report dismisses it at a glance. The translated form: the ORIGINAL (after `original:`) is what is
   matched; the entry carries both so the agent can judge the translation. `make quote-verbatim
   PAGE=<name> [OUT=<json>]`; `--offline DIR` reads pages from files named by URL hash, which is how the
   test runs with no network.
@@ -91,15 +95,18 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
   spec's text for FAITHFUL), `_plan_gate.py`/`plan-gate.sh`/`plan-verdict` (`AS=spec-fidelity` is the
   plan reviewer, MODE 4, which stays on `spec-fidelity`), `escalation-hooks.sh` (its roster is the three
   map reviewers), `pair-hooks.sh`, `_review_prereq.py`, `discard-hooks.sh`, `spec-lint.py` (mentions in
-  comments). Whether the harness honors a changed `subagent_type` in `updatedInput` is PROVEN, not
-  assumed (R4): the first later round dispatched after the change is this feature's own next review
-  round, and its transcript meta names the agent type that ran; if it did not route, the spec's recorded
-  fallback applies.
+  comments). That the harness honors a changed `subagent_type` in `updatedInput` was PROVEN before this
+  design relied on it (R4, 2026-09-19): a probe hook rewrote a dispatch of `probe-a` into `probe-b`, the
+  reply was `probe-b`'s and the transcript meta names `probe-b`. The spec's fallback is not needed.
 - **P8 the seeded-fault runs (FR-011).** Artifacts are picked by R5 from the record, each materialized
   under the scratchpad from `git show <commit-before-fix>:<path>` so nothing in the tree changes; one
-  artifact per agent, in the background, all in one message per agent type; R5's table is filled from
-  the returns; the per-run tokens come from `make agent-census SINCE=` filtered to those runs. Budget:
-  six agents x three artifacts = eighteen runs.
+  artifact per run, in the background. THE RUNS ARE HEADLESS SESSIONS STARTED IN THE CLONE (`claude -p
+  --agent <name>`, working directory the clone), not Agent-tool dispatches: this session's agent types
+  are the mirror's (R4), so an Agent dispatch would test the tier being replaced, and the Agent tool has
+  no effort parameter. A headless session in the clone loads the clone's agent file with its pinned
+  model and effort, which is the thing under test. Each run's reply is saved beside the artifact and its
+  tokens are read from its own transcript by the census's `fold_usage`. R5's table is filled from the
+  replies. Budget: six agents x three artifacts = eighteen runs.
 - **P9 the record (FR-010, FR-012).** Root `CLAUDE.md`: the review-subagents bullet restated (tiers
   pinned per file, ad-hoc agents carry an explicit model - sonnet to read, opus to judge - never none),
   the research bullet gains "the verbatim check is a script, run first", the guard table's
@@ -111,5 +118,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 
 T01 census (task zero) -> T02 tier table + files -> T03 verbatim script -> T04 quote-check contract ->
 T05 pre-pass + record-format -> T06 feet table + size-audit -> T07 twin + routing -> T08 seeded runs ->
-T09 the record -> T10 `make hooks-test`, `make quick`, land. R1 may reorder T03-T07; it cannot remove
-one, because each is a thing the GM approved.
+T09 the record -> T10 `make hooks-test`, `make quick`, land, and THEN the question FR-010 owes the GM -
+whether a hook should fill a missing model on an ad-hoc dispatch - put to them with R1's count (72
+no-model runs, 62 of them on Fable), through `escalation-check` like any question for the GM. R1 may
+reorder T03-T07; it cannot remove one, because each is a thing the GM approved.

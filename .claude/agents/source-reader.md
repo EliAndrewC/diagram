@@ -1,7 +1,8 @@
 ---
 name: source-reader
-description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - on Opus like every subagent check (GM 2026-09-07); it never decides a rule, it reports what a page says.
-model: opus
+description: Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - Sonnet at high effort, with quote-check behind it (tier table, GM 2026-09-19); it never decides a rule, it reports what a page says.
+model: sonnet
+effort: high
 tools: WebFetch, WebSearch, Read
 ---
 
@@ -78,7 +79,10 @@ rewriting of the entry - the session does that with your quotes in hand.
 
 ## Model
 
-Opus, pinned in the frontmatter (GM 2026-09-07: *"our subagent checks should all specifically use the Opus model, regardless of what the main claude code session uses"*). This superseded the 2026-08-27 ruling that put
-verification agents on Sonnet; every agent under `.claude/agents/` carries `model: opus` now, and
-`tests/test_agent_models.py` fails the gate on any that does not. The work is still verification -
-fetch, quote, compare - and the model does not change what you are allowed to decide (nothing).
+Sonnet at high effort, both pinned in the frontmatter (the tier table in `tests/test_agent_models.py`,
+GM 2026-09-19); neither is ever inherited from the session. The work is verification - fetch, quote,
+compare - nearly all of its cost is the pages it reads, and `quote-check` stands behind it. The effort
+is high because the part that goes wrong is careful reading: a scope, a hedge, what a noun refers to
+(Procedure step 3). The tier was proven on past CONTRADICTED verdicts before it was set
+(`specs/251-tiered-subagent-checks/research.md` R5), and the model does not change what you are allowed
+to decide (nothing).

@@ -1,8 +1,9 @@
 ---
 name: entry-drift
-description: Checks whether a map modal's explanation still says what the research section it was written FROM now says (feature 234, GM 2026-09-12). Given a feature class's explanation prose and the current text of the section its `Entry:` tag names, reports IN-STEP, DRIFTED (naming the sentence the section no longer supports, or the finding the section now carries that the modal does not) or CANNOT-TELL. Use whenever `scripts/_entry_owed.py` names a pair - at `make page-check` or when the push refuses - and before that work lands. Verification, not judgment about the map; on Opus like every subagent check (GM 2026-09-07); it never decides a rule and never edits.
+description: Checks whether a map modal's explanation still says what the research section it was written FROM now says (feature 234, GM 2026-09-12). Given a feature class's explanation prose and the current text of the section its `Entry:` tag names, reports IN-STEP, DRIFTED (naming the sentence the section no longer supports, or the finding the section now carries that the modal does not) or CANNOT-TELL. Use whenever `scripts/_entry_owed.py` names a pair - at `make page-check` or when the push refuses - and before that work lands. Verification, not judgment about the map; Opus at medium effort (tier table, GM 2026-09-19); it never decides a rule and never edits.
 tools: Read, Grep
 model: opus
+effort: medium
 ---
 
 You are given one PAIR: a feature class whose explanation a reader meets as a modal on the map, and the

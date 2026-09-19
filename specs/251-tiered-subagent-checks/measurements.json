@@ -1,0 +1,211 @@
+{
+  "census-2026-09-19": {
+    "taken": "2026-09-19",
+    "command": "make agent-census",
+    "note": "usage folded per message id as the per-field maximum (research R2); fresh = uncached + cache-creation input",
+    "agents": [
+      {
+        "agent": "general-purpose",
+        "runs": 295,
+        "turns": 6585,
+        "fresh": 57219286,
+        "cached": 1090133237,
+        "output": 7598161,
+        "thinking": 3616368,
+        "models": {
+          "claude-opus-5": 168,
+          "claude-sonnet-5": 65,
+          "claude-fable-5-1": 48,
+          "claude-fable-5": 14
+        }
+      },
+      {
+        "agent": "settlement-review",
+        "runs": 123,
+        "turns": 5313,
+        "fresh": 24063112,
+        "cached": 791915569,
+        "output": 5421507,
+        "thinking": 2855520,
+        "models": {
+          "claude-opus-5": 104,
+          "claude-fable-5": 19
+        }
+      },
+      {
+        "agent": "spec-fidelity",
+        "runs": 419,
+        "turns": 3629,
+        "fresh": 44902134,
+        "cached": 307091202,
+        "output": 4944310,
+        "thinking": 3426119,
+        "models": {
+          "claude-opus-5": 413,
+          "claude-fable-5-1": 6
+        }
+      },
+      {
+        "agent": "quote-check",
+        "runs": 65,
+        "turns": 933,
+        "fresh": 16909785,
+        "cached": 210537306,
+        "output": 1854079,
+        "thinking": 1046264,
+        "models": {
+          "claude-opus-5": 64,
+          "claude-sonnet-5": 1
+        }
+      },
+      {
+        "agent": "record-format",
+        "runs": 38,
+        "turns": 634,
+        "fresh": 13208500,
+        "cached": 158727118,
+        "output": 1394290,
+        "thinking": 842544,
+        "models": {
+          "claude-opus-5": 38
+        }
+      },
+      {
+        "agent": "source-reader",
+        "runs": 117,
+        "turns": 1224,
+        "fresh": 18858703,
+        "cached": 149595640,
+        "output": 2547415,
+        "thinking": 1213751,
+        "models": {
+          "claude-opus-5": 93,
+          "claude-sonnet-5": 24
+        }
+      },
+      {
+        "agent": "source-applicability",
+        "runs": 26,
+        "turns": 506,
+        "fresh": 7339696,
+        "cached": 98139041,
+        "output": 742810,
+        "thinking": 397554,
+        "models": {
+          "claude-opus-5": 26
+        }
+      },
+      {
+        "agent": "entry-drift",
+        "runs": 52,
+        "turns": 293,
+        "fresh": 8557917,
+        "cached": 31283267,
+        "output": 297461,
+        "thinking": 178924,
+        "models": {
+          "claude-opus-5": 52
+        }
+      },
+      {
+        "agent": "fork",
+        "runs": 7,
+        "turns": 106,
+        "fresh": 1151222,
+        "cached": 21856211,
+        "output": 237217,
+        "thinking": 105364,
+        "models": {
+          "claude-fable-5-1": 5,
+          "claude-opus-5": 2
+        }
+      },
+      {
+        "agent": "perf-audit",
+        "runs": 10,
+        "turns": 166,
+        "fresh": 1042964,
+        "cached": 13830525,
+        "output": 185657,
+        "thinking": 110431,
+        "models": {
+          "claude-opus-5": 10
+        }
+      },
+      {
+        "agent": "escalation-check",
+        "runs": 7,
+        "turns": 76,
+        "fresh": 612609,
+        "cached": 5463402,
+        "output": 68837,
+        "thinking": 35568,
+        "models": {
+          "claude-opus-5": 7
+        }
+      },
+      {
+        "agent": "claude-code-guide",
+        "runs": 3,
+        "turns": 17,
+        "fresh": 152852,
+        "cached": 605277,
+        "output": 4990,
+        "thinking": 1699,
+        "models": {
+          "claude-haiku-4-5-20251001": 3
+        }
+      },
+      {
+        "agent": "Explore",
+        "runs": 1,
+        "turns": 1,
+        "fresh": 0,
+        "cached": 0,
+        "output": 0,
+        "thinking": 0,
+        "models": {
+          "<synthetic>": 1
+        }
+      }
+    ],
+    "adhoc": [
+      {
+        "agent": "general-purpose",
+        "runs": 295,
+        "no_model": 72,
+        "inherited": {
+          "claude-fable-5-1": 48,
+          "claude-fable-5": 14,
+          "claude-opus-5": 6,
+          "claude-sonnet-5": 4
+        }
+      },
+      {
+        "agent": "fork",
+        "runs": 7,
+        "no_model": 7,
+        "inherited": {
+          "claude-fable-5-1": 5,
+          "claude-opus-5": 2
+        }
+      },
+      {
+        "agent": "claude-code-guide",
+        "runs": 3,
+        "no_model": 3,
+        "inherited": {
+          "claude-haiku-4-5-20251001": 3
+        }
+      },
+      {
+        "agent": "Explore",
+        "runs": 1,
+        "no_model": 1,
+        "inherited": {
+          "<synthetic>": 1
+        }
+      }
+    ]
+  }
+}

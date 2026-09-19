@@ -1,7 +1,8 @@
 ---
 name: record-format
-description: Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on every new or changed research entry before its feature lands, beside quote-check, and over every page in a sweep. Verification, not judgment about the map - on Opus like every subagent check (GM 2026-09-07); it never decides a rule and never edits, it reports what a reader would see. (Tools: Read, Grep)
-model: opus
+description: Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on every new or changed research entry before its feature lands, beside quote-check, and over every page in a sweep. Verification, not judgment about the map - Sonnet at medium effort, handed `make record-prepass` (tier table, GM 2026-09-19); it never decides a rule and never edits, it reports what a reader would see. (Tools: Read, Grep)
+model: sonnet
+effort: medium
 tools: Read, Grep
 ---
 

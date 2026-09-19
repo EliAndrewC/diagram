@@ -1027,6 +1027,29 @@ claim:          ## [project] claim the next spec-kit feature number under the ho
 	@: "GUARD_EDIT_OK: feature 197 - the slug follows '--' so a slug beginning with a hyphen is refused as a BAD SLUG, not misread as an option; RENUMBER passes the directory and no slug"; \
 	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
 
+# GUARD_EDIT_OK: feature 251 - four new operations (the token census and the three script pre-passes that
+# take the mechanical part of a subagent check out of a model); no existing target or guard changes.
+agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]
+##  SINCE=<date>   only the runs that started on or after it
+##  OUT=<json>     also write the rows to this file
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_agent_census.py" $(if $(SINCE),--since "$(SINCE)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+
+quote-verbatim: ## [project] is every quoted passage on the page it cites, character for character - run BEFORE quote-check   PAGE=hamlets [OUT=<json>]
+##  PAGE=<name>    a research page (`hamlets`, `cities/tango`); its citations page is read beside it
+##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
+	@if [ -z "$(PAGE)" ]; then printf 'make quote-verbatim: PAGE=<research page name> is required - e.g. make quote-verbatim PAGE=hamlets\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(OUT),--json "$(abspath $(OUT))",)
+
+record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a research page - run BEFORE record-format   PAGE=hamlets
+##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
+	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)"
+
+size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
+##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute
+	@if [ -z "$(PLAN)" ]; then printf 'make size-table: PLAN=<plan svg> is required - e.g. make size-table PLAN=pool/magistracies/x/x.svg\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_size_table.py" "$(abspath $(PLAN))"
+
 review-accept:  ## [project] record a review finding as deliberately LEFT, with a reason - logged like an escape   MAP=<map> FINDING=<id> REASON="..."
 ##  MAP=<map>        the pool map whose last settlement-review verdict raised the finding
 ##  FINDING=<id>     the finding's id, as that verdict record names it

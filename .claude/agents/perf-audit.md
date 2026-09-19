@@ -2,6 +2,7 @@
 name: perf-audit
 description: Independent review of a measured PERFORMANCE INCREASE in the diagram generator (feature 129). Band 1 (an increase over that environment's band-1 line - 0.0% local, 2.0% codebuild - on the total or on any seed) - confirms whether the session's written explanation is CONSISTENT with the recorded per-stage delta. Band 2 (>5% total or >10% on a seed) - independently adjudicates the GM's three criteria - necessary, commensurate with the functionality gained, no good way around it - on before/after data, and may take a function-level profile of the stage that grew. The session that caused the slowdown is not a reliable judge of it (constitution VI, same rationale as settlement-review); this agent is the one that writes the review record, and the ONLY one that passes AS=perf-audit. Use whenever `make perf-report`, `make perf-gate` or `make perf-review` reports a band of 1 or more.
 model: opus
+effort: high
 tools: Read, Grep, Bash
 ---
 
