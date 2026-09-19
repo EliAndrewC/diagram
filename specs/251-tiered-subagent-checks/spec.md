@@ -154,7 +154,7 @@ the earlier ones.
 
 **FR-008 - later `spec-fidelity` rounds go to a narrower twin.** A new agent file,
 `.claude/agents/spec-fidelity-verify.md` (Opus, high, the same tools - the proposal's medium was tried, missed
-a finding on a recorded round (R5), and the twin is kept for its 111-line contract against 236 while the
+a finding on a recorded round (R5), and the twin is kept for its MODE 3-only contract, about half the length of `spec-fidelity`'s, while the
 effort question goes to the GM's follow-up list), carries MODE 3, the FIGURES
 rule, the round-limit note and "What you do NOT do" - and nothing of MODES 1, 2 and 4. Its instructions
 stay strictly about the previous verdict's items and the diff. `scripts/review-round-hooks.sh`, on the
@@ -271,7 +271,8 @@ and every new make target is listed where the others are.
   has one recorded run in two slices and no separate clean page (the page chosen cites only the GM's canon;
   the VERBATIM notes inside the slice, and the recorded fn-91 false alarm the script removed, measure its
   false alarms), and `escalation-check` has three drafts that all carried CUTs and no clean one (the KEEP
-  items it could have wrongly cut measure its false alarms - it cut none). (2) FR-011's "the run is repeated at
+  and REWRITE items it could have wrongly cut measure its false alarms: 247 and 242 cut exactly what the
+  recorded runs cut; 239 cut one item more, which R5 scores as one over-cut). (2) FR-011's "the run is repeated at
   the new tier" was NOT done for the three agents that missed: the GM asked to land the tiers that passed
   and to choose the further experiments together, so each returned to its known-good tier, for which the
   recorded runs are the result. (3) FR-007's Sonnet tiers and the twin's medium did not survive FR-011, as
@@ -282,3 +283,8 @@ and every new make target is listed where the others are.
   run and its two-artifacts-and-a-clean shape, SC-004's "re-run", and FR-011 / SC-005's per-run mean where R5
   pairs each run with the same recorded run. The reviewer's aside: `plan.md` budgets eighteen runs and
   seventeen were run; the plan is unchanged so its recorded verdict stands.
+- **Amendment review, round 2 (2026-09-19) - CHANGES REQUIRED, two items, both applied.** The six items of
+  round 1 verified resolved. (1) The history's "it cut none" was contradicted by R5's own 239 row: corrected
+  here, and R5 now scores the fourth CUT. (2) FR-008's "111-line contract against 236" was unlabeled and
+  wrong (the files measure 114 and 215 lines): the counts are dropped. The reviewer's aside is answered in
+  R5's Method: the two `quote-check` slices were ONE run, so seventeen stands.

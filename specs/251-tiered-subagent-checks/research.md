@@ -102,7 +102,7 @@ this clone at the last commit before the recorded run gives the agent the files 
 agent files are copied in, and the run is a headless session started in the worktree (`claude -p --agent
 <name>`, hooks off - R4 says why it is not an Agent dispatch). The GM asked for the runs to stay small
 (2026-09-19: *"redoing old work is only useful insofar as it does give us sensible measurements"*), so
-the three large recorded runs were cut to slices: `quote-check` to 23 of a run's 102 notes, `record-format`
+the three large recorded runs were cut to slices: `quote-check` to 23 of a run's 102 notes (two slices, 17 + 6, in ONE run), `record-format`
 to one scoped page and one section. Seventeen runs in all. "Weight" is R1's scale (Sonnet priced at its own
 list rates); recorded figures are that run's own transcript, not the agent's mean.
 
@@ -113,7 +113,7 @@ list rates); recorded figures are that run's own transcript, not the agent's mea
 | entry-drift well | opus / medium | DRIFTED | DRIFTED | hit | 4 -> 12 | 0.51 M -> 1.08 M | 1.34 -> 1.40 |
 | entry-drift marsh (clean) | opus / medium | IN-STEP | IN-STEP | clean, no false alarm | 4 -> 9 | 0.43 M -> 0.58 M | 1.28 -> 1.06 |
 | escalation-check 247 | opus / medium | 3 KEEP, 2 REWRITE, 1 CUT; the unverifiable "137" | same CUT, same "137", same missing fact; one REWRITE moved to KEEP | hit | 8 -> 24 | 0.65 M -> 0.62 M | 1.12 -> 1.07 |
-| escalation-check 239 | opus / medium | 6 KEEP, 2 REWRITE, 3 CUT | all 3 CUTs cut, plus a 4th; one KEEP moved to REWRITE; a stale SHA newly found | hit | 6 -> 22 | 0.43 M -> 0.43 M | 0.86 -> 0.84 |
+| escalation-check 239 | opus / medium | 6 KEEP, 2 REWRITE, 3 CUT | all 3 CUTs cut, plus a 4th ("the figure check's first run found four real problems and one false positive" - the recorded run kept it, rewritten, as a measurement; cutting it is scored ONE OVER-CUT, the false-alarm kind for this agent); one KEEP moved to REWRITE; a stale SHA newly found (real: the draft's SHA was two commits behind) | hit, 1 over-cut | 6 -> 22 | 0.43 M -> 0.43 M | 0.86 -> 0.84 |
 | escalation-check 242 | opus / medium | 3 KEEP, 1 REWRITE, 2 CUT | identical | hit | 14 -> 17 | 1.04 M -> 0.72 M | 1.31 -> 1.06 |
 | spec-fidelity-verify 250 | opus / medium | CHANGES REQUIRED, 2 items | CHANGES REQUIRED, 1 item: the missing success criterion found, **the unrequested scope in FR-004 MISSED** | **MISS** | 7 -> 11 | 0.53 M -> 0.46 M | 1.01 -> 0.95 |
 | spec-fidelity-verify c670 | opus / medium | NOT-REVIEWABLE (five unkeyed figures) | reviewed the substance instead | not scored: the twin's FIGURES rule had been narrowed to changed passages by this session's drafting; restored | 8 -> 16 | 0.65 M -> 1.14 M | 1.01 -> 1.75 |
@@ -144,7 +144,7 @@ result, and no further tier was tried in this feature):
 | `quote-check` | opus / medium + script | every recorded finding hit; two new true ones; one recorded false alarm removed | **opus / medium + script** |
 | `entry-drift` | opus / medium | 4 of 4 | **opus / medium** |
 | `escalation-check` | opus / medium | 3 of 3 | **opus / medium** |
-| `spec-fidelity-verify` | opus / medium | missed one of two findings on a recorded round | **opus / high** (the twin and its routing stay: a 111-line contract against 236) |
+| `spec-fidelity-verify` | opus / medium | missed one of two findings on a recorded round | **opus / high** (the twin and its routing stay: a MODE 3-only contract about half the length of `spec-fidelity`'s) |
 | `source-reader` | sonnet / high | one CONTRADICTED under-called, two passages missed | **opus / high** |
 | `record-format` | sonnet / medium + pre-pass | the pattern-findable hit, the reading-only findings missed, on both cases | **opus / high + pre-pass** |
 
