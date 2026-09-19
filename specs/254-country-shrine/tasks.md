@@ -9,7 +9,7 @@ hyphens only.
 - [ ] T01 The constitution XIII baseline: `git worktree add --detach /tmp/base HEAD`; there, `make quick
       ALL=1` and `make hooks-test`; the counts in `specs/254-country-shrine/measurements.json` as
       `m:baseline-quick`; each later failure checked against the clone
-      research: procedure
+      research: rendering
       measure: the worktree's own `make quick ALL=1` output
       verify: the JSON entry exists before any edit under `l7r/`
 - [ ] T02 The declaration: `.claude/skills/diagram/l7r/diagram/buildings/__init__.py`, `types.json`
@@ -47,8 +47,7 @@ hyphens only.
       research: rendering
       verify: `make quick`; the unmarked-sheet test red first; picture_diff reports zero changed pixels
 - [ ] T06 The registry (D5, D6): `tools/pack_audit/registry.py` with `Check(name, run, types, fixture,
-      fix)` and `CHECKS` over the eleven shared and one magistracy check now in `checks.py`, the
-      fire-water three declaring both tiers; `report.py` composes from it; `make pack-audit` output
+      fix)` and `CHECKS` over the eleven shared checks now in `checks.py`, the fire-water three declaring both tiers, and the magistracy's `notice_board_adrift`, `coverage_band` (the 37-42% band the report prints, made pass/fail) and `perimeter_hugging` (its floor derived from the five pool sheets, measured first and recorded as `m:hugging-floor`); `report.py` composes from it; `make pack-audit` output
       unchanged on Ochiba (diffed); every registered fixture exists and fires
       (`test_every_check_fires_on_its_fixture_and_passes_the_pool`), the fixtures that do not yet
       exist cut from a pool sheet in this task (`tests/fixtures/<sheet>-<check>-red.svg`)
@@ -88,14 +87,16 @@ hyphens only.
       research: rendering
       scaffold: `_size_table.py`'s `nearest label by center distance`
       verify: `make quick`; the size-table diff on Ochiba is empty
-- [ ] T11 `buildings/programs.md`: the "Country shrine (a village district's shrine)" entry - the
-      required-items table rendered between `<!-- types.json:country-shrines -->` markers by a new
-      `make building-programs` (`CHECK=1` on the gate, like `make glossary`), the knobs (FR-009), the
+- [ ] T11 `buildings/programs.md`: BOTH types' required-items tables rendered between
+      `<!-- types.json:<tier> -->` markers by a new `make building-programs` (`CHECK=1` on the gate,
+      like `make glossary`) - the magistracy's bullets converted, their per-item reasoning moved into
+      each item's `why` - and the "Country shrine (a village district's shrine)" entry with the knobs (FR-009), the
       size anchors (FR-010), residence (FR-011), staffing from the campaign notes (one country monk,
       part-time acolytes on loan), in prose; `buildings.md`: the vocabulary for the sanctuary, the arch,
       the fence and hedge, the swept-gravel ground pattern `keidai-gravel` and the grave markers, and
-      the section "Adding a building type" listing exactly the files a type touches (FR-007); the
-      review agents' prompts name the program by type (FR-006)
+      the section "Adding a building type" listing exactly the files a type touches (FR-007);
+      `.claude/agents/building-review.md` and `size-audit.md` name the program by type and read the
+      type's rendered block (FR-006)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
       verify: `make building-programs CHECK=1` green; `make quick`; the pass is R1-R3; the boxes tick
@@ -175,7 +176,7 @@ hyphens only.
 - [ ] T20 `make done` in the background (the whole gate; 100% coverage over `l7r`; the file-size bar;
       the ratchet); every failure fixed together and re-run once; `scripts/sync-with-main.sh done` from
       the clone (engine code in the delta: the GATED route); the memory file updated
-      research: procedure
+      research: rendering
       verify: the gate stamp green; the push reported; `git status -sb` clean and level with origin
 
 ## Dependencies

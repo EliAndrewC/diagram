@@ -109,13 +109,9 @@ failures at merge; a pre-existing failure is ledgered.
 - **D5 - a check registry, with fixtures as data.** `tools/pack_audit/registry.py` holds
   `CHECKS: tuple[Check, ...]`, each `Check(name, run, types, fixture, fix)` - `types=None` for the
   shared layer, a frozenset of tier names otherwise; `fixture` the red fixture's filename under
-  `tests/fixtures/`; `fix` the compliant-fix sentence a failure prints. Measurements that are not
-  pass/fail (coverage, hugging, vacant rectangles, region density, aligned gaps) stay as the report's
-  figures and are not registered as checks. `report.py` composes from the registry. Within the spec
+  `tests/fixtures/`; `fix` the compliant-fix sentence a failure prints. Vacant rectangles, region density and aligned gaps are the report's figures, not pass/fail, and are not registered; coverage and perimeter hugging ARE registered as the magistracy's checks (D6), because the spec names them as such. `report.py` composes from the registry. Within the spec
   (FR-003, FR-005).
-- **D6 - which existing checks are the magistracy's.** Per-type under `magistracies`: coverage band,
-  perimeter hugging (both reported, not registered - see D5), `notice_board_adrift`, the two-court
-  zoning check (new, D8). Shared: `occluded_foreground`, `overlapping_labels`, `dark_on_dark_labels`,
+- **D6 - which existing checks are the magistracy's.** Per-type under `magistracies`: `coverage_band` (the jin'ya band of 37-42% the report already prints, made pass/fail), `perimeter_hugging` (its floor DERIVED from the five pool sheets - the lowest shipped value less a margin, measured and recorded as `m:hugging-floor` before the check lands; if no honest floor separates the five from a defect, that is an exception put to the GM, never a silent demotion), `notice_board_adrift`, and the two-court zoning check (new, D8). Each with a red fixture (a magistracy sheet with its buildings pulled into the center, and one with a building deleted below the band). Shared: `occluded_foreground`, `overlapping_labels`, `dark_on_dark_labels`,
   `floating_doors`, `structures_on_walls`, `passage_blockers`, `wall_openings` (against the width a
   comment states), `orphan_group_labels`, `fire_water_adrift`, `tubs_in_buildings`, `tubs_on_wells` -
   the fire-water three declare BOTH types by the spec's ruling, which in the registry is
@@ -149,14 +145,7 @@ failures at merge; a pre-existing failure is ledgered.
   sheet's tier and asserts none fires, the message naming sheet, check and fix; listed in the gate's
   roster (`tests/fixtures/gate_check_names.json`). Its cost is measured (`m:sweep-cost`). Within the
   spec (FR-004, SC-002).
-- **D11 - the program prose is rendered from the declaration.** `programs.md`'s "Country shrine"
-  entry carries the knobs, anchors and staffing in prose (hand-written, as the magistracy's is) and its
-  required-items table between `<!-- types.json:country-shrines -->` markers written by
-  `make building-programs` (`CHECK=1` fails the gate when stale, like `make glossary`). The magistracy's
-  required list is NOT converted to the rendered block in this feature: its prose carries reasoning
-  per item that a table would lose, and the declaration for it holds labels and bands only. This is a
-  scope decision within FR-001 ("rendered from" applies to the new type; the old type is declared, not
-  re-rendered) - flagged for the plan review as the one place the plan reads the spec narrowly.
+- **D11 - the program prose is rendered from the declaration, for BOTH types.** Each type's entry in `programs.md` carries its knobs, anchors and staffing in hand-written prose around a required-items table between `<!-- types.json:<tier> -->` markers written by `make building-programs` (`CHECK=1` fails the gate when stale, like `make glossary`); the table's rows are the declaration's items with their labels, bands, classes and whys. The magistracy's existing required-program bullets are converted: the per-item reasoning they carry moves into each item's `why` in the declaration (the field exists for exactly this), and prose that is about the type rather than an item (the cart route, the guest-door rule, the divider gate) stays as prose above the table. The plan's first draft kept the magistracy's list hand-written; the plan review ruled that a narrowing of FR-001's "declared once ... and the docs render from", and it is withdrawn. Within the spec.
 - **D12 - the exemplar.** `pool/country-shrines/hoshigaoka-shrine/`: the country shrine of Hoshigaoka
   village district. Knobs: form one roof (the GM's default); bell absent; dedication the clan patron
   Fortune named in Hoshigaoka's notes; grove west and burial ground east (the site's water-mouth side,
@@ -176,7 +165,7 @@ failures at merge; a pre-existing failure is ledgered.
 
 ## Phases
 
-**Phase 0 - baseline and declaration** (`research: procedure`). The worktree baseline (XIII).
+**Phase 0 - baseline and declaration** (`research: rendering` - tooling, nothing physical behind it). The worktree baseline (XIII).
 `types.json` with both types; `types.py`; `poolmaps`, `pool_index`, `_size_table`, `.gitignore`
 derived (D2, D3); the census and ignore tests red then green; `make quick`.
 
@@ -189,9 +178,7 @@ use. Reference: Ochiba; pool: the five magistracies. Defects fixed as found (D9)
 **Phase 2 - the sweep** (`research: rendering`). `test_mode_a_sheets.py` (D10); the roster; the cost
 measured and recorded (`m:sweep-cost`); `make quick` green on the five.
 
-**Phase 3 - the program and the shrine's checks** (`research: physical`; the pass is R1-R3, the boxes
-below). The declaration's `country-shrines` entry (D1); `programs.md`'s entry with the rendered block
-(D11); `buildings.md`: the vocabulary for the sanctuary, the arch, the fence, the gravel ground and the
+**Phase 3 - the program and the shrine's checks** (`research: physical`; the pass is R1-R3, the boxes below). The declaration's `country-shrines` entry (D1); `programs.md`'s entries for both types with their rendered blocks (D11); the reviewer prompts `.claude/agents/building-review.md` and `.claude/agents/size-audit.md` name the program by type and read the type's rendered block (FR-006); `buildings.md`: the vocabulary for the sanctuary, the arch, the fence, the gravel ground and the
 grave markers, and the "Adding a building type" section (FR-007); the shrine's four checks (D8) -
 their fixtures wait for the exemplar.
 
@@ -215,6 +202,7 @@ delta carries engine code, so the route is GATED.
 ├── l7r/diagram/pipeline/             # poolmaps.py, pool_index.py, pool_index_text.json (derive from the declaration)
 ├── buildings/programs.md             # + Country shrine (rendered block between markers)
 ├── buildings.md                      # + vocabulary, "Adding a building type"
+.claude/agents/building-review.md, size-audit.md   # the program named by type (FR-006)
 ├── pool/country-shrines/hoshigaoka-shrine/   # NEW tier: .svg, .gen.py, .notes.md
 ├── pool/magistracies/*/*.svg         # id="precinct" on the interior rect
 ├── research/religion-and-death.html  # two sections, one revised; citations/ and SOURCES.html
