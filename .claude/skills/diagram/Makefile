@@ -1047,14 +1047,7 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
-# GUARD_EDIT_OK: feature 255 - a new operation (a settlement review's opening measurements in one call); no guard changes.
-review-facts: ## [project] a map's files, manifest inventory, delta against main, labels and settled notes in ONE call - run BEFORE settlement-review   MAP=pool/hamlets/kuwabata [AGAINST=<git ref>] [SNAPSHOT=<dir>]
-##  MAP=<pool map>   the map's folder, or the path without its extension
-##  AGAINST=<ref>    the git ref its manifest is compared with (default HEAD); SNAPSHOT=<dir> uses a review snapshot's main/ side instead
-	@if [ -z "$(MAP)" ]; then printf 'make review-facts: MAP=<pool map> is required - e.g. make review-facts MAP=pool/hamlets/kuwabata\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_facts.py" "$(MAP)" $(if $(AGAINST),--against "$(AGAINST)",) $(if $(SNAPSHOT),--snapshot "$(abspath $(SNAPSHOT))",)
-
-# GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries operation added beside it was NOT ADOPTED on its seeded runs and is removed - specs/255 research R1.)
+# GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - the PAGE, where a fetch gives an extract (source-reader's use of it awaits the GM: specs/255 research R4)   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
 ##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=

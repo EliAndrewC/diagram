@@ -17,9 +17,12 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T05 the fixed-context probes recorded; the memory index and unused tools trimmed and re-probed (FR-007)
       research: rendering
       verify: DONE. ten probes recorded; the memory index trimmed (209 tokens on a re-probe), no tool trim because removing Grep beside Bash saves 0; research R5
-- [ ] T06 `make review-facts` and the shorter `settlement-review` contract; two seeded runs scored; the ledger row (FR-005)
+- [x] T06 `make review-facts` and the shorter `settlement-review` contract; two seeded runs scored; the ledger row (FR-005)
       research: rendering
-- [ ] T07 the record: docs, make-targets page, NOT ADOPTED candidates written up (FR-008)
+      verify: DONE. NOT ADOPTED - one of four recorded errors hit over two seeded reviews, 81 turns both ways, weight 8.64 to 9.31; contract restored, script removed, ledger row written; research R6
+- [x] T07 the record: docs, make-targets page, NOT ADOPTED candidates written up (FR-008)
       research: rendering
-- [ ] T08 `make hooks-test` and `make quick` green; land DIRECT
+      verify: DONE. docs/efficiency-tooling.md row, docs/make-targets.html regenerated (source-pages), the ledger row, every NOT ADOPTED candidate written up in research.md
+- [x] T08 `make hooks-test` and `make quick` green; land DIRECT
       research: rendering
+      verify: DONE. make quick and make hooks-test green 2026-09-19; nothing under l7r/ or pool/ changed

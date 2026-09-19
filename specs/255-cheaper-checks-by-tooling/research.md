@@ -168,3 +168,46 @@ characters, roughly 12 k tokens) and whatever nested `CLAUDE.md` its reading pul
 fixed context - 6.4 k tokens after the trim, paid on every turn of every check, for an index none of the checks
 consults - and the project `CLAUDE.md` is next at 5.0 k. Whether a subagent should receive either is the harness's
 behavior and the GM's call; no check's contract refers to the memory index at all.
+
+## R6 - `settlement-review` measures in one call and carries a shorter contract (FR-005, T06): NOT ADOPTED
+
+The candidate: `make review-facts MAP=<pool map>` (`scripts/_review_facts.py`: the artifacts present and their age,
+the manifest's `meta` and every key with its count, the per-key DELTA against a git ref, every label with its
+count, the notes' headings and the "Settled by the GM" section) appended to the prompt; a Tooling paragraph telling
+the agent to start from it; and the `Validated examples` section (7.9 k characters of a 48 k contract) moved
+verbatim to `docs/settlement-review-examples.md` behind a pointer. Cases: two recorded reviews whose subject is
+reproducible from history - Kuwabata after feature 233 (`17e1cafe/a18e043a`, the tree at `240ad0fe`) and Sawada
+with Mizuguchi at feature 230's pass 14 (`012f2cee/5fd7e2f3`, the tree at `17ee271c`). The renders are gitignored,
+so each map was regenerated inside its worktree by that commit's own engine (`make map`) before the run.
+
+| case | recorded ERRORS | the candidate's result | turns rec -> new | weight rec -> new |
+|---|---|---|---|---|
+| Kuwabata / 233 | (1) the research entry's 6.5 m "shared bank" is one pond's two collars summed, the real dike being 13.2 m; (2) the notes carry no entry for feature 233 | **both MISSED** - the run's CONFIRMATIONS say the record "was brought into line with the drawing". It raised a different error (three sties seated on a corner chamfer) and three nitpicks | 40 -> 48 | 4.24 -> 5.37 |
+| Sawada + Mizuguchi / 230 pass 14 | (1) Mizuguchi's board gave up 3-4 farmhouses of traffic for clearance it did not need; (2) Sawada's notes state a 6.6 ft clearance the drawing contradicts | (1) **MISSED** - the run confirms "Change 2 did not cost either board its traffic seat"; (2) hit, filed as QUESTIONABLE, and sharpened (the plank stood under the crown at that commit). A different error raised (Mizuguchi's caption lies across the connector) | 41 -> 33 | 4.40 -> 3.94 |
+| total | four | one of four hit | 81 -> 81 | 8.64 -> 9.31 |
+
+**Verdict: NOT ADOPTED** - three of four recorded errors missed, and no saving: the same 81 turns and more weight.
+The listing did not shorten a review; the agent still asked the manifest its own questions, which are about the
+delta in hand and not the inventory (251 R9's "39 Bash calls" are judgment-specific measurements, not an opening
+ritual a script can pre-answer). Two honest limits on reading the misses as the candidate's doing: no same-setting
+control was run (at about 4.5 units a run it was not bought), and a review's findings vary from pass to pass more
+than any other check's - both runs found real-looking defects the recorded passes had not. And one confound: the
+current contract's FIRST STAGE names make targets that do not exist at those old commits, and both runs spent turns
+discovering that. None of it rescues the candidate under FR-001: it missed, and it was not cheaper. The contract
+is as it was apart from R3's line; the script, its test, the make target and the `docs/` file are removed (the
+script and test are in commit `8d2ebf64`). Moving the examples alone is worth about 2 k tokens of a first turn near
+50 k, under one percent of a run, and is not worth a second test at this price.
+
+## What the feature found
+
+| candidate | verdict | what it would have saved | what it cost |
+|---|---|---|---|
+| R1 entries handed to `source-applicability` | NOT ADOPTED | about 70% of a run | the recorded limits, on three runs of three |
+| R2 scoped text for `record-format` / `quote-check` | NOT ADOPTED | a third of a `record-format` run; nothing for `quote-check` | three of six and three of three findings; one under-called support verdict |
+| R3 the batching line | **ADOPTED**, seven contracts | about a quarter of a later review round (a third of its turns) | nothing |
+| R4 saved pages for `source-reader` | the GM's decision (FR-006) | nothing - it costs about a quarter MORE | nothing missed; one recorded false CONTRADICTED corrected, one always-missed passage found |
+| R5 fixed context | measured; the index trimmed by 209 tokens; no tool trim exists | - | - |
+| R6 `review-facts` and the moved examples | NOT ADOPTED | nothing | three of four recorded errors |
+
+Total spent on seeded runs: 26.6 weight units over 18 runs (the sum of the weights in the tables above), and twelve
+Haiku probes.
