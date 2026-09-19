@@ -57,7 +57,7 @@ failures at merge; a pre-existing failure is ledgered.
   Rites, the registers); no new named figure; the dedication follows the clan patron Fortune the
   record's town rule already uses.
 - **X. Python discipline**: ruff, ruff format, pyrefly, red-green for every check (the red fixture IS
-  the red), 100% coverage over `l7r` the day it lands; no file past 1,000 lines (`checks.py` is about half the bar today;
+  the red), 100% coverage over `l7r` the day it lands; no file past 1,000 lines (`checks.py` is 542;
   the registry and the three new shared checks are a new module `registry.py` in the package, not
   appended); the one overlap check this feature adds (structures overlapping structures, D8) is an
   O(n log n) sweep over sorted rect edges, built once per sheet, over at most a few dozen rects - no
@@ -200,7 +200,7 @@ delta carries engine code, so the route is GATED.
 ├── l7r/diagram/buildings/            # NEW package: types.json, types.py (the declaration and its reader)
 ├── l7r/diagram/tools/pack_audit/     # parse.py (precinct marker), checks.py, registry.py (NEW), labels.py (NEW), report.py
 ├── l7r/diagram/pipeline/             # poolmaps.py, pool_index.py, pool_index_text.json (derive from the declaration)
-├── buildings/programs.md             # both types' required-items tables rendered between markers; + Country shrine
+├── buildings/programs.md             # + Country shrine (rendered block between markers)
 ├── buildings.md                      # + vocabulary, "Adding a building type"
 .claude/agents/building-review.md, size-audit.md   # the program named by type (FR-006)
 ├── pool/country-shrines/hoshigaoka-shrine/   # NEW tier: .svg, .gen.py, .notes.md
