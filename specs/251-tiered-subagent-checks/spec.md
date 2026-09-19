@@ -297,7 +297,14 @@ and every new make target is listed where the others are.
   R5's Method: the two `quote-check` slices were ONE run, so seventeen stands.
 - **Amendment review, round 3 (2026-09-19) - FAITHFUL.** Both round-2 items verified resolved; nothing new introduced.
 - **Follow-up experiments (2026-09-19, the GM: *"I agree that each of the follow-up experiments is worth
-  running, so go ahead and run all of them"*) - `research.md` R7.** One row of FR-002 moved on their result,
+  running, so go ahead and run all of them"*) - `research.md` R7.** Eighteen runs: all five of R5's candidates, the
+  Sonnet `source-reader` under a harder contract among them (left out at first, caught by the amendment review's
+  round 1, run the same day; it missed on all three cases). One row of FR-002 moved on their result,
   by FR-002's own rule: `record-format` to opus / medium. Every other tier stood. The measured Haiku caveat
   went into FR-010, root `CLAUDE.md` and `scripts/agent-model-rule.txt` (feature 252's message file, which
   reads the rule from there).
+- **Amendment review after R7, round 1 (2026-09-19) - CHANGES REQUIRED, four items, all applied.** (1) One of the
+  five experiments the GM ordered had not been run: run, three cases, recorded in R7. (2) R5 said "no further tier
+  was tried" and landed `record-format` at opus / high: both now point at R7. (3) The Haiku caveat had gone into
+  `CLAUDE.md` and the rule file with no requirement behind it: FR-010 carries it. (4) SC-004's closing clause was
+  false for `record-format`: restated.
