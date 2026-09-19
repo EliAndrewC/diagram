@@ -121,8 +121,8 @@
   <!-- South gate at x=470..550; east postern at y=490..540.          -->
   <!-- ============================================================ -->
   <!-- compound interior fill (earth) -->
-  <rect x="140" y="150" width="740" height="600" fill="url(#court-earth)"/>
-  <rect x="880" y="180" width="120" height="220" fill="url(#court-earth)"/>
+  <rect x="140" y="150" width="740" height="600" fill="url(#court-earth)" id="precinct"/>
+  <rect x="880" y="180" width="120" height="220" fill="url(#court-earth)" id="precinct"/>
 
   <!-- Wall segments -->
   <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square">

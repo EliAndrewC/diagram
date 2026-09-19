@@ -1,101 +1,98 @@
 {
  "feature": "254-country-shrine",
- "plan_sha256": "9133ea0dee85cd25f9fe8f9673cf26738d42a7b3fdaa1f6317acbccbb19acdf8",
+ "plan_sha256": "ee0a3d04ae0213287f4ce215ce6ecc9c9176cb2df2d1ffab9bbef4d844b8c2e1",
  "reviewed": "2026-09-19",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "the declaration is l7r/diagram/buildings/types.json read by types.py, one object per type with tier/title/program/hand_drawn/generated_exceptions/required(label regex + band_ft)/checks/notes",
+   "summary": "the declaration is l7r/diagram/buildings/types.json read by types.py, one object per type with tier/title/program/hand_drawn/generated_exceptions/required (label regex + band_ft, optional)/checks/notes",
    "class": "within",
-   "why": "FR-001 asks for exactly these fields declared once as data the engine reads; the JSON-asset-outside-the-engine-key shape follows feature 207 and settles a mechanism the spec left open."
+   "why": "FR-001 asks for exactly these fields declared once as data the engine reads; the JSON-asset-outside-the-engine-key shape follows feature 207 and settles a mechanism the spec left open. Unchanged at round 2."
   },
   {
    "id": "D2",
    "summary": "poolmaps.classify, pool_index.MODE_A_DIRS, _size_table's usage line and the sweep derive from the declaration; COMPOUND_GENS retired; a census test greps l7r/ and scripts/ for a tier name outside its allowed homes",
    "class": "within",
-   "why": "FR-001 names those four consumers verbatim and SC-001 asks for the census; the undeclared-tier case staying 'unknown, loudly' is the spec's first edge case."
+   "why": "FR-001 names those four consumers verbatim and SC-001 asks for the census; the undeclared-tier case staying 'unknown, loudly' is the spec's first edge case. Unchanged at round 2."
   },
   {
    "id": "D3",
    "summary": ".gitignore keeps one negation per hand-drawn tier plus a re-ignore per declared generated exception, held to the declaration by a test",
    "class": "within",
-   "why": "FR-001's last sentence asks for the ignore rule per tier with a test holding it to the declaration; the second edge case asks for the generated-exception handling."
+   "why": "FR-001's last sentence asks for the ignore rule per tier with a test holding it to the declaration; the second edge case asks for the generated-exception handling. Unchanged at round 2."
   },
   {
    "id": "D4",
    "summary": "the precinct is the rect(s) marked id=\"precinct\"; the five magistracy SVGs gain the attribute on their court-earth rect (PNGs byte-identical); the parser raises when none is marked",
    "class": "within",
-   "why": "FR-002 asks the shared layer to read the precinct from the sheet's own declaration of it (a marked boundary element) and to fail naming a sheet that declares none; US1 scenario 3 is the fence-and-hedge case this serves."
+   "why": "FR-002 asks the shared layer to read the precinct from the sheet's own declaration of it and to fail naming a sheet that declares none; US1 scenario 3 is the fence-and-hedge case this serves. Unchanged at round 2."
   },
   {
    "id": "D5",
-   "summary": "a Check registry in tools/pack_audit/registry.py - Check(name, run, types, fixture, fix), types=None meaning shared - from which report.py composes",
+   "summary": "a Check registry in tools/pack_audit/registry.py - Check(name, run, types, fixture, fix), types=None meaning shared - from which report.py composes; vacant rectangles, region density and aligned gaps stay report figures and are not registered; coverage and perimeter hugging ARE registered (D6)",
    "class": "within",
-   "why": "FR-003 and FR-005 ask for checks that declare their types and each carry a red fixture; the dataclass shape and the module split are mechanism the spec left open. Its exclusion clause is ruled separately below."
-  },
-  {
-   "id": "N1",
-   "summary": "D5 and D6 declassify the coverage band and perimeter hugging from checks to report figures: they are not registered, so they carry no red fixture (FR-005), are not counted by SC-003's registry test, and are not asserted by the gate sweep (FR-004, D10)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The spec names both twice as CHECKS that move into the magistracy's layer - FR-003 ('those that are the magistracy's (coverage band, perimeter hugging, notice board by the gate, two-court zoning) move under the magistracy') and the Edge Case 'A check the shared layer inherits from the magistracy that is really the magistracy's (the coverage band of 37-42%, perimeter hugging, ...): each is moved to the magistracy's layer'. Under the plan, US1's own Independent Test fails for two named per-type checks: a magistracy sheet given a deliberate coverage defect would not fail make quick. Ruled item by item, as an exception covering two unlike things must be: coverage ALREADY has a pass/fail band in the shipped report (report.py prints 'jin'ya band 37-42%'), so registering it is trivial and no impossibility argument exists; perimeter hugging has no recorded threshold, but a missing threshold is a derivation task (five pool sheets are available) and, if the session believes one cannot be honestly set, that is an exception to put to the GM under FR-003, not a silent reclassification. Nothing here is physically impossible, implied by the GM's words, or needed to keep the request's purpose - the purpose (checks that run automatically, in two layers) is what the registration serves. D5's other exclusions (vacant rectangles, region density, aligned gaps) are within: the spec never calls those checks."
+   "why": "FR-003 and FR-005 ask for checks that declare their types and each carry a red fixture; the dataclass shape and the module split are mechanism the spec left open. Round 1's N1 - the declassification of the coverage band and perimeter hugging to report figures - is WITHDRAWN here; the three that remain unregistered (vacant rectangles, region density, aligned gaps) are never called checks by the spec, so excluding them narrows nothing."
   },
   {
    "id": "D6",
-   "summary": "which existing checks are the magistracy's (notice board, two-court zoning) and which are shared; the fire-water three declare types=frozenset({magistracies, country-shrines})",
+   "summary": "the magistracy's checks are coverage_band (the shipped 37-42% jin'ya band made pass/fail), perimeter_hugging (floor DERIVED from the five pool sheets, measured and recorded as m:hugging-floor before the check lands, an exception put to the GM if no honest floor exists), notice_board_adrift and two_court_zoning, each with a named red fixture; eleven checks are shared; the fire-water three declare types=frozenset({magistracies, country-shrines})",
    "class": "within",
-   "why": "FR-003 as amended at round 1 says a check declares EVERY type it applies to and fire-water declares both; the shared list covers every item FR-002 enumerates. The coverage/hugging clause of this decision is ruled at N1."
+   "why": "This is round 1's N1 finding resolved as the verdict asked. FR-003 ('those that are the magistracy's (coverage band, perimeter hugging, notice board by the gate, two-court zoning) move under the magistracy') and the Edge Case of the same name are now carried in full: both are registered, so FR-005's red fixture, SC-003's registry count and FR-004's gate sweep reach them, and US1's Independent Test (b) holds for every named per-type check. The 37-42% band was verified by re-reading the shipped report (report.py line 47 prints \"jin'ya band 37-42%\"), so making it pass/fail needs no new derivation; perimeter_hugging has no shipped threshold (report.py line 50 prints a bare percentage at a 25 ft depth), and deriving the floor from the five sheets with the escalation route named, rather than demoting the check, is the course the round-1 verdict prescribed. The conditional 'exception put to the GM' is an escalation, not a decision taken here, so it carries no ruling."
   },
   {
    "id": "D7",
    "summary": "program completeness and size bands are generic code over the declaration; the size table's nearest-label pairing moves into pack_audit/labels.py and _size_table.py becomes a thin caller; a notes 'form: one roof' makes one building count as hall and dwelling",
    "class": "within",
-   "why": "FR-003 says both are per-type in mechanism but generic in code reading the declaration and the same size table size-audit is handed; edge case 3 asks for the combined-building counting when the notes declare the form."
+   "why": "FR-003 says both are per-type in mechanism but generic in code reading the declaration and the same size table size-audit is handed; edge case 3 asks for the combined-building counting when the notes declare the form. Unchanged at round 2."
   },
   {
    "id": "D8",
    "summary": "three new shared checks (structures_overlap by sorted-edge sweep, scale_bar_present, viewbox_cropped with a 25 px margin bound), one new magistracy check (two_court_zoning) and four shrine checks (sanctuary_on_axis, arch_on_approach, well_clear_of_arch, fence_not_wall), each with a red fixture",
    "class": "within",
-   "why": "FR-002 names structures overlapping, the scale bar and the cropped viewBox; US1 names the sanctuary-behind-the-hall-on-the-axis composition rule for the shrine; FR-008 puts the arch, the well and the fence-never-a-wall in the program. The 25 px bound and the tolerances are numeric choices the spec left open."
+   "why": "FR-002 names structures overlapping, the scale bar and the cropped viewBox; US1 names the sanctuary-behind-the-hall-on-the-axis composition rule; FR-008 puts the arch, the well and the fence-never-a-wall in the program. WALL_OVERLAP_MIN_PX was verified to exist at 0.5 px (checks.py line 33); the 25 px bound and the tolerances are numeric choices the spec left open. Unchanged at round 2."
   },
   {
    "id": "D9",
    "summary": "any check that fires on a shipped magistracy sheet during registration is fixed in this work and recorded in that sheet's notes, never ledgered as pre-existing",
    "class": "within",
-   "why": "FR-004 requires the live pool to pass the sweep, and constitution XIV requires fixing defects where found."
+   "why": "FR-004 requires the live pool to pass the sweep, and constitution XIV requires fixing defects where found. Unchanged at round 2, and it now also covers whatever the two newly registered magistracy checks turn up."
   },
   {
    "id": "D10",
    "summary": "the sweep is tests/gate/test_mode_a_sheets.py parametrized over poolmaps.bundles(kinds=('compound',)), listed in the gate roster, cost recorded as m:sweep-cost",
    "class": "within",
-   "why": "FR-004 asks for a gate test of the pool listed in the roster whose failure names sheet, check and fix; SC-002 asks for the measured cost under the ratchet."
+   "why": "FR-004 asks for a gate test of the pool listed in the roster whose failure names sheet, check and fix; SC-002 asks for the measured cost under the ratchet. Unchanged at round 2."
   },
   {
    "id": "D11",
-   "summary": "the program prose is rendered from the declaration for the country shrine only; the magistracy's required-items list stays hand-written and unrendered, its declaration holding labels and bands alone (the plan flags this as reading the spec narrowly)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-001's rule is 'declared once, as data the engine reads and THE DOCS RENDER FROM', and Key Entities defines Program as 'the prose a reviewer reads for a type, rendered from and consistent with the declaration' - for a type, and US1 re-declares the magistracy as a type. After D11 the magistracy's required items exist in two places (types.json for the checks, programs.md prose for the reviewers) with no consistency mechanism, which is the drift the 'declared once' rule exists to prevent and which FR-006 makes live, since building-review reads that prose at review time. The stated reason - 'its prose carries reasoning per item that a table would lose' - is an elegance argument, which is expressly not a ground for an exception, and the plan's own design refutes it: the shrine entry keeps hand-written knob/anchor prose AROUND a rendered block between markers, and the data model gives every required item 'class' and 'why' fields to carry per-item reasoning. Not impossible, not implied by the GM's words, and applying the rule literally serves rather than defeats the purpose the GM asked for (one declaration, everything else derived, so a type is cheap to add)."
-  },
-  {
-   "id": "N2",
-   "summary": "no phase or project-structure entry carries FR-006's change to the reviewers' prompts; .claude/agents/building-review.md and size-audit.md are untouched by the plan as written",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 requires that the two reviewers' prompts 'name the program by type rather than by the magistracy'. The plan's Project structure block is its statement of the files touched and lists no agent file, and Phases 3 and 5 run the reviewers without editing them; building-review.md still points at buildings.md's 'Compound programs' section and carries magistracy-only worked examples, so as planned the shrine exemplar in Phase 5 is reviewed against a prompt that never learned the type. Dropping a requirement is the narrowing this gate exists for; no impossibility, no implication in the GM's words. Add the prompt edit to a phase (naturally Phase 3, with the programs.md and buildings.md work)."
+   "summary": "the required-items table in programs.md is rendered from the declaration for BOTH types between <!-- types.json:<tier> --> markers written by make building-programs; the magistracy's existing bullets are converted, their per-item reasoning moving into each item's why; type-level prose (knobs, anchors, staffing, the cart route, the guest-door rule, the divider gate) stays hand-written around the block",
+   "class": "within",
+   "why": "This is round 1's N1/D11 finding resolved as the verdict asked: the narrowing that left the magistracy's required list hand-written and unrendered is explicitly withdrawn, so FR-001's 'declared once, as data the engine reads and the docs render from' and Key Entities' Program ('rendered from and consistent with the declaration') now hold for every declared type, and FR-006's reviewers read a block that cannot drift from the checks. What stays hand-written is type-level prose the declaration does not hold - FR-001 enumerates required items, labels, bands, checks and the hand-drawn flag, and FR-009 asks for the knobs in the entry - so rendering it is not something the request asks for; the treatment is symmetric across both types, which is what the round-1 finding turned on. Noted for the author, not a narrowing: the Project structure block's comment on buildings/programs.md still reads '+ Country shrine (rendered block between markers)' and under-describes the magistracy's conversion that D11 and Phase 3 both carry."
   },
   {
    "id": "D12",
    "summary": "the exemplar is pool/country-shrines/hoshigaoka-shrine/, with knobs set to one roof, bell absent, dedication from Hoshigaoka's clan patron Fortune, grove west / burial ground east, wealth average",
    "class": "within",
-   "why": "The spec's Assumptions leave the village choice to the plan, from the legacy village exhibits - Hoshigaoka is one (legacy-hand-authored-pool/villages/hoshigaoka) - and carry the round-1 aside that the exemplar takes its dedication from the clan patron Fortune by the record's town rule. The knob settings match FR-009's defaults."
+   "why": "The spec's Assumptions leave the village choice to the plan, from the legacy village exhibits - Hoshigaoka is one - and carry the round-1 aside that the exemplar takes its dedication from the clan patron Fortune by the record's town rule. The knob settings match FR-009's defaults. Unchanged at round 2."
   },
   {
    "id": "D13",
    "summary": "record mechanics: two new h2 sections after the village-shrine section, footnotes fn-143 on, SOURCES.html entries, eight glossary terms, make citations / make glossary, class entries updated, and the agent order source-reader, quote-verbatim + quote-check, record-prepass + record-format, source-applicability in three grouped dispatches, entry-drift",
    "class": "within",
-   "why": "FR-012 to FR-014 and SC-004 ask for exactly this content and these agents; the section placement, footnote numbering and dispatch grouping are mechanism the spec left open."
+   "why": "FR-012 to FR-014 and SC-004 ask for exactly this content and these agents; the section placement, footnote numbering and dispatch grouping are mechanism the spec left open. Unchanged at round 2."
+  },
+  {
+   "id": "D14",
+   "summary": "Phase 3 carries the FR-006 edits to .claude/agents/building-review.md and .claude/agents/size-audit.md - the prompts name the program by type and read the type's rendered block - and the Project structure block lists both agent files",
+   "class": "within",
+   "why": "This is round 1's N2 finding resolved as the verdict asked: FR-006's requirement that the two reviewers' prompts 'name the program by type rather than by the magistracy' was in no phase and no structure entry, and is now in the phase the verdict named (Phase 3, with the programs.md and buildings.md work) and in the files-touched block, so the Phase 5 exemplar is reviewed against prompts that know the type. Adding no agent, as FR-006 requires."
+  },
+  {
+   "id": "D15",
+   "summary": "Phase 0 is labeled 'research: rendering' (tooling, nothing physical behind it) rather than the round-1 draft's third class 'research: procedure'",
+   "class": "within",
+   "why": "Not a narrowing of the request or the spec; it settles the round-1 note that tests/test_task_research_boxes.py admits only 'research: rendering' and 'research: physical', and the declaration/tooling work behind Phase 0 makes no physical claim."
   },
   {
    "id": "U1",
@@ -104,29 +101,23 @@
    "why": "The spec does not constrain the algorithm; CLAUDE.md only asks that a plan adding an overlap check say how it is indexed, which this does."
   },
   {
-   "id": "U2",
-   "summary": "Phase 0 is labeled 'research: procedure', a third class beside rendering and physical",
-   "class": "within",
-   "why": "Not a narrowing of the request or the spec - the research classes are a task-level convention. Noted for the author only: tests/test_task_research_boxes.py admits 'research: rendering' and 'research: physical', so the tasks derived from Phase 0 will need one of those two."
-  },
-  {
    "id": "U3",
    "summary": "the constitution XIII baseline is make quick ALL=1 plus make hooks-test in a detached worktree, recorded as m:baseline-quick, rather than a full gate baseline",
    "class": "within",
-   "why": "The spec sets no baseline form; constitution XIII asks for a measured baseline in a detached worktree, which this is."
+   "why": "The spec sets no baseline form; constitution XIII asks for a measured baseline in a detached worktree, which this is, and measurements.json now records it (3640 passed, 5 skipped, at 7cc2e95b)."
   },
   {
    "id": "U4",
    "summary": "every required item in the declaration carries 'class' (one of the four labels) and 'why' (a research anchor) beyond the fields FR-001 enumerates",
    "class": "within",
-   "why": "An addition, not a narrowing, and it serves the research doctrine's requirement that every rendering decision carry its class at the point of change."
+   "why": "An addition, not a narrowing, and it serves the research doctrine's requirement that every rendering decision carry its class at the point of change; at round 2 the 'why' field also carries the magistracy's converted per-item reasoning (D11)."
   },
   {
    "id": "U5",
    "summary": "a new make target, make building-programs, writes the rendered required-items block between markers and CHECK=1 fails the gate when it is stale",
    "class": "within",
-   "why": "The mechanism by which FR-001's 'the docs render from' is enforced; the spec left the mechanism open. Its scope restriction to the shrine is ruled at D11."
+   "why": "The mechanism by which FR-001's 'the docs render from' is enforced; the spec left the mechanism open, and at round 2 it applies to both types."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

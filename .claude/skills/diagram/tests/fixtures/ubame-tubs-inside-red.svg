@@ -91,7 +91,7 @@
   <!-- THE COMPOUND WALL - x 200..1070, y 150..750 (290 x 200 ft)    -->
   <!-- East wall = the Fox/Scorpion border.                          -->
   <!-- ============================================================ -->
-  <rect x="200" y="150" width="870" height="600" fill="url(#court-earth)"/>
+  <rect x="200" y="150" width="870" height="600" fill="url(#court-earth)" id="precinct"/>
 
   <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square">
     <!-- North -->

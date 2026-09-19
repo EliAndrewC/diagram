@@ -17,8 +17,10 @@ COURT = "url(#court-earth)"
 _FIX = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fixtures")
 
 
-def _rect(x: float, y: float, w: float, h: float, fill: str) -> str:
-    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}"/>'
+def _rect(x: float, y: float, w: float, h: float, fill: str, precinct: bool | None = None) -> str:
+    """A synthetic rect; a court-earth rect is the precinct unless `precinct=False` says otherwise (feature 254)."""
+    mark = ' id="precinct"' if (fill == COURT if precinct is None else precinct) else ""
+    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}"{mark}/>'
 
 
 def _svg(*bodies: str) -> str:
@@ -45,9 +47,22 @@ def test_parse_svg_classifies_interior_building_open_and_glyphs() -> None:
     assert len(plan.glyphs) == 2  # r=5 circle + ellipse; r=2 ignored
 
 
-def test_parse_svg_raises_without_interior() -> None:
-    with pytest.raises(ValueError, match="interior"):
+def test_parse_svg_raises_without_a_declared_precinct() -> None:
+    """Feature 254: the precinct is DECLARED with id="precinct" - a court-earth fill alone no longer makes one."""
+    with pytest.raises(ValueError, match='id="precinct"'):
         pa.parse_svg(_svg(_rect(0, 0, 10, 10, "#DDB87A")))
+    with pytest.raises(ValueError, match='id="precinct"'):
+        pa.parse_svg(_svg(_rect(0, 0, 100, 100, COURT, precinct=False)))
+
+
+def test_parse_svg_reads_the_precinct_whatever_the_fill_and_attribute_order() -> None:
+    gravel = '<rect id="precinct" fill="url(#keidai-gravel)" x="0" y="0" width="100" height="80"/>'
+    plan = pa.parse_svg(_svg(gravel, _rect(10, 10, 30, 30, "#DDB87A")))
+    assert plan.bounds == (0.0, 0.0, 100.0, 80.0)
+    assert len(plan.buildings) == 1 and plan.interior[0].precinct and not plan.buildings[0].precinct
+    assert all(not r.precinct for r in plan.fills)
+    # a rect with no fill or a non-numeric size is not a rect the audit reasons about
+    assert pa.parse_svg(_svg(gravel, '<rect x="1" y="1" width="5" height="5"/>', '<rect x="a" y="1" width="5" height="5" fill="#000"/>')).fills == ()
 
 
 # --- coverage ---

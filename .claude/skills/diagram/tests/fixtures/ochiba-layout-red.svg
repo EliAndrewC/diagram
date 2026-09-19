@@ -75,7 +75,7 @@
   <!-- South wall is broken by the main gate at x=560..640            -->
   <!-- ============================================================ -->
   <!-- compound interior fill (earth) -->
-  <rect x="200" y="150" width="800" height="600" fill="url(#court-earth)"/>
+  <rect x="200" y="150" width="800" height="600" fill="url(#court-earth)" id="precinct"/>
 
   <!-- Wall as four segments (so the south gate opening is clean) -->
   <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square">

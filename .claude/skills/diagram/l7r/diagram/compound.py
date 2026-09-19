@@ -300,8 +300,9 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 2
     iw, ih = env.w_ft * FTPX, env.h_ft * FTPX
     cw, ch = iw + 2 * ox, ih + 2 * oy
 
-    def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float) -> str:
-        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
+    def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "") -> str:
+        tag = f' id="{ident}"' if ident else ""
+        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"/>'
 
     def label(cx: float, cy: float, s: str, size: int, italic: bool, fill: str) -> str:
         st = ' font-style="italic"' if italic else ' font-weight="bold"'
@@ -311,7 +312,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 2
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {cw:.0f} {ch:.0f}" font-family="Georgia, \'Times New Roman\', serif">',
         _DEFS,
         f'<rect x="0" y="0" width="{cw:.0f}" height="{ch:.0f}" fill="#EFE3C2"/>',
-        rect(0, 0, env.w_ft, env.h_ft, "url(#court-earth)", "none", 0),
+        rect(0, 0, env.w_ft, env.h_ft, "url(#court-earth)", "none", 0, ident="precinct"),  # the declared precinct (feature 254)
         label(env.w_ft / 2, -9, program.title, 20, False, "#3A2E1C"),
         label(env.w_ft / 2, -3, "(perimeter-first composed draft - refine by hand)", 10, True, "#6B4F2A"),
     ]

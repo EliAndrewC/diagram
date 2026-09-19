@@ -15,7 +15,14 @@ MIN_BLDG_AREA_PX: float = 500.0  # ~55 sqft; below this it is furniture, not a b
 # modest shrine is 693 px2 - and the old floor silently dropped them from coverage/adjacency, emitting
 # a false "fire tub adrift" on Hayakawa (the tub sits 1.8 ft off the shrine the tool stopped seeing).
 
-_RECT_RE = re.compile(r'<rect x="([\-\d.]+)" y="([\-\d.]+)" width="([\d.]+)" height="([\d.]+)"[^>]*?fill="([^"]+)"')
+_RECT_TAG_RE = re.compile(r"<rect\b([^>]*)>")
+_ATTR_ANY_RE = re.compile(r'([\w:-]+)="([^"]*)"')
+# THE PRECINCT IS DECLARED, NOT INFERRED (feature 254, spec FR-002). A sheet marks the rect (or rects)
+# bounding the ground its checks reason over with `id="precinct"`. The parser used to take every
+# court-earth rect as the interior, which tied the shared layer to one type's ground: a shrine's
+# precinct is swept gravel inside a fence, not earth inside a wall. A sheet that marks nothing is
+# refused by name - a check that ran over no ground would be green for nothing.
+PRECINCT_ID = "precinct"
 _CIRCLE_RE = re.compile(r'<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"')
 _ELLIPSE_RE = re.compile(r'<ellipse cx="([\d.]+)" cy="([\d.]+)" rx="([\d.]+)" ry="([\d.]+)"')
 DIVIDER_STROKE = "#3F3A30"  # internal court-divider wall; buildings legitimately back it, so it
@@ -89,6 +96,7 @@ class Rect:
     h: float
     fill: str = ""
     pos: int = -1  # byte offset in the source SVG (document/draw order; higher = drawn later, on top)
+    precinct: bool = False  # marked `id="precinct"`: the ground the checks reason over
 
     @property
     def x2(self) -> float:
@@ -245,12 +253,27 @@ def _wall_bands(text: str) -> list[Rect]:
     return out
 
 
+def _rects(text: str) -> list[Rect]:
+    """Every `<rect>` with x, y, width, height and a fill, whatever its attribute order, in draw order."""
+    out: list[Rect] = []
+    for m in _RECT_TAG_RE.finditer(text):
+        attrs = dict(_ATTR_ANY_RE.findall(m.group(1)))
+        if not {"x", "y", "width", "height", "fill"} <= set(attrs):
+            continue
+        try:
+            x, y, w, h = (float(attrs[k]) for k in ("x", "y", "width", "height"))
+        except ValueError:
+            continue
+        out.append(Rect(x, y, w, h, attrs["fill"], m.start(), attrs.get("id") == PRECINCT_ID))
+    return out
+
+
 def parse_svg(text: str) -> ParsedPlan:
     """Parse an SVG into interior / building / open-feature / point-glyph rects + labels + walls."""
-    rects = [Rect(float(m.group(1)), float(m.group(2)), float(m.group(3)), float(m.group(4)), m.group(5), m.start()) for m in _RECT_RE.finditer(text)]
-    interior = tuple(r for r in rects if r.fill == INTERIOR_FILL)
+    rects = _rects(text)
+    interior = tuple(r for r in rects if r.precinct)
     if not interior:
-        raise ValueError("no court-earth interior rect found in the SVG")
+        raise ValueError(f'no rect marked id="{PRECINCT_ID}" in the SVG - a Mode A sheet declares its precinct on the rect(s) bounding the ground the checks reason over (feature 254)')
     buildings = tuple(r for r in rects if (r.fill in BUILDING_FILLS or r.fill in BUILDING_PATTERNS) and r.area_px >= MIN_BLDG_AREA_PX)
     open_features = tuple(r for r in rects if r.fill in OPEN_PATTERNS)
     glyphs: list[Rect] = []
@@ -277,7 +300,7 @@ def parse_svg(text: str) -> ParsedPlan:
             x1, y1, x2, y2 = (float(ln.group(i)) for i in range(1, 5))
             wall_segs.append(Rect(min(x1, x2), min(y1, y2), max(abs(x2 - x1), 2.0), max(abs(y2 - y1), 2.0)))
     wells = tuple(r for r in rects if r.fill == WELL_FILL)
-    fills = tuple(r for r in rects if r.fill != INTERIOR_FILL)
+    fills = tuple(r for r in rects if not r.precinct)
     furniture = tuple(r for r in fills if r.area_px < FURNITURE_MAX_AREA_PX)
     dark_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px >= MIN_DARK_AREA_PX)
     door_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px < DOOR_MAX_AREA_PX)
