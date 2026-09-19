@@ -164,6 +164,33 @@ grep -q 'FR-007' "$FIX/.git/review-round/301-fixture/snapshot/spec.md" && ok "..
 out=$(agent settlement-review "look at specs/301-fixture")
 [ -z "$out" ] && ok "any other agent still passes untouched" || no "an unrelated agent was rewritten"
 
+# GUARD_EDIT_OK: feature 253 - new cases for the operation the guard gained (the old value is looked for before
+# a later round is spent); no existing case changes.
+echo "10. a value changed and its OLD value still stands beside its subject: the round is refused before it is spent"
+# GUARD_EDIT_OK: feature 253 - the fixture spec ends in its Review history, which the search rightly skips, so
+# the new lines open a section of their own.
+printf '\n## More requirements\n\n| `gizmo` | sonnet | high |\n\n**FR-009** `gizmo` runs on Sonnet at high effort.\n' >> "$FIX/specs/301-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
+[ "$(rc)" -eq 0 ] && ok "lines only ADDED carry no old value: the round goes through (and the snapshot now holds them)" || no "an append was refused" "(rc=$(rc))"
+python3 - "$FIX/specs/301-fixture/spec.md" <<'PY'
+import sys, pathlib
+p = pathlib.Path(sys.argv[1]); p.write_text(p.read_text().replace("| `gizmo` | sonnet | high |", "| `gizmo` | opus | high |"))
+PY
+before=$(state 301-fixture)
+out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
+[ "$(rc)" -eq 2 ] && [ -z "$out" ] && ok "the table moved to opus and FR-009 still says Sonnet: the dispatch is REFUSED" || no "a stale value was dispatched to a reviewer" "(rc=$(rc))"
+grep -q 'spec.md:[0-9]' "$T/err" && grep -q 'gizmo' "$T/err" && grep -qi 'sonnet' "$T/err" && ok "...naming the line, the subject and the old value" || no "the refusal does not name the candidate"
+grep -q 'STALE_TERMS_OK' "$T/err" && grep -q 'make stale-terms' "$T/err" && ok "...and both ways on" || no "the refusal does not say what to do"
+[ "$(state 301-fixture)" = "$before" ] && grep -q 'sonnet | high' "$FIX/.git/review-round/301-fixture/snapshot/spec.md" && ok "...with no round counted and the snapshot unmoved" || no "a refused dispatch moved the state"
+logged stale-terms && ok "...recorded blocked/stale-terms" || no "stale-terms not recorded"
+out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture STALE_TERMS_OK')
+[ "$(rc)" -eq 2 ] && ok "a bare STALE_TERMS_OK is refused" || no "a bare token was allowed"
+out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture STALE_TERMS_OK="FR-009 describes the proposal, not the landing"')
+[ "$(rc)" -eq 0 ] && [ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "with a reason the round is rewritten and routed as ever" || no "the escape did not pass" "(rc=$(rc))"
+logged mode-3-preamble-stale-ok && ok "...and the escape is recorded with its reason" || no "the escape was not recorded"
+out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
+[ "$(rc)" -eq 0 ] && ok "the next round, with nothing replaced since, is untouched by the search" || no "a clean round was refused" "(rc=$(rc))"
+
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

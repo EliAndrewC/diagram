@@ -49,6 +49,13 @@ import time
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from _hm_escape import escape_reason, reason_is_enough  # noqa: E402
+from _stale_terms import read_dir, render as render_stale, stale_candidates  # noqa: E402
+
+#: feature 253 (GM 2026-09-19): before a later round is SPENT, the feature directory is searched for the old
+#: value of whatever changed; candidates refuse the dispatch once, and this token (with a reason) says they
+#: were looked at and are not stale.
+STALE_TOKEN = "STALE_TERMS_OK"
+
 
 TOKEN = "REVIEW_ROUND_OK"
 AGENT = "spec-fidelity"
@@ -247,6 +254,18 @@ def _refusal(token: str) -> str:
     )
 
 
+def _stale_refusal(feature: str, candidates: list[dict]) -> str:
+    return (
+        f"\n\033[1mBLOCKED: specs/{feature} still carries the OLD value of something this change moved - look before a review round is spent on it.\033[0m\n"
+        + render_stale(candidates)
+        + "\n\nA later spec-fidelity round costs nearly what a first reading does, and the commonest thing it finds is text left saying the\n"
+        "old thing (feature 253, the GM 2026-09-19). Nothing was dispatched and no round was counted. Either:\n"
+        "  - fix the lines above (and anything else the change made untrue), then dispatch again; or\n"
+        f'  - if they are NOT stale, dispatch again with {STALE_TOKEN}="<why they stand>" in the prompt.\n'
+        f"`make stale-terms F={feature.split('-')[0]}` re-runs the search. (scripts/_stale_terms.py, scripts/review-round-hooks.sh)\n"
+    )
+
+
 def judge(payload: dict, clone: str) -> dict:
     """The whole decision. Returns {event, rule, detail, exit, stdout, stderr}."""
     ti = payload.get("tool_input") or {}
@@ -289,6 +308,18 @@ def judge(payload: dict, clone: str) -> dict:
             )
             return {"event": "reminded", "rule": "history-without-snapshot", "detail": feature, "exit": 0, "stdout": _context(ctx), "stderr": ""}
         return {"event": "permitted", "rule": "first-round", "detail": feature, "exit": 0, "stdout": "", "stderr": ""}
+    # THE OLD VALUE IS LOOKED FOR FIRST (feature 253), before any snapshot or round state moves: a refused
+    # dispatch spends nothing, not even one of the five rounds.
+    stale_note = ""
+    if STALE_TOKEN in prompt:
+        stale_reason = escape_reason(prompt, STALE_TOKEN)
+        if not reason_is_enough(stale_reason):
+            return {"event": "blocked", "rule": f"{STALE_TOKEN}-no-reason", "detail": prompt[:200], "exit": 2, "stdout": "", "stderr": _refusal(STALE_TOKEN)}
+        stale_note = f" {STALE_TOKEN}: {stale_reason}"
+    else:
+        candidates = stale_candidates(read_dir(snap), read_dir(feature_dir))
+        if candidates:
+            return {"event": "blocked", "rule": "stale-terms", "detail": f"{feature}: {len(candidates)} candidate(s)", "exit": 2, "stdout": "", "stderr": _stale_refusal(feature, candidates)}
     diff = diff_since(snap, feature_dir)
     v_text, v_word = previous_verdict(str(payload.get("transcript_path") or ""), feature)
     v_from = "transcript" if v_text else ""
@@ -314,7 +345,8 @@ def judge(payload: dict, clone: str) -> dict:
         f'follows them unchanged. For a deliberate full re-read, put {TOKEN}="<reason>" in the prompt.'
     )
     out = json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "updatedInput": updated, "additionalContext": ctx}})
-    return {"event": "rewrote", "rule": "mode-3-preamble", "detail": f"{feature} round {round_no}", "exit": 0, "stdout": out, "stderr": ""}
+    rule = "mode-3-preamble-stale-ok" if stale_note else "mode-3-preamble"   # the escape is recorded with its reason
+    return {"event": "rewrote", "rule": rule, "detail": f"{feature} round {round_no}{stale_note}", "exit": 0, "stdout": out, "stderr": ""}
 
 
 def _context(text: str) -> str:

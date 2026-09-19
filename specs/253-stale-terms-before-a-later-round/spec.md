@@ -1,6 +1,6 @@
 # Feature 253 - the old value is looked for before a later review round is spent on it
 
-**Status:** draft 2026-09-19 - awaiting `spec-fidelity`.
+**Status:** draft 2026-09-19 - round 1 CHANGES REQUIRED applied (see Review history).
 
 ## Summary
 
@@ -18,9 +18,14 @@ REPLACED (paired old and new line), the SUBJECTS are the backticked terms the ol
 the OLD VALUES are the words and numbers the old line had and the new line does not. A candidate is any
 OTHER line of the present feature directory that names a subject AND still carries an old value. A changed
 line with no backticked subject yields nothing: without an anchor the search cannot tell a stale passage
-from an unrelated use of a common word. It reads `.md` files only and skips what legitimately keeps the old
-value: `request.md` (the GM's words), the `Review history` section of `spec.md`, and `tasks.md` (dated verify
-notes). It decides nothing and edits nothing; a candidate is a line for the session to look at.
+from an unrelated use of a common word. Matching is case-insensitive (the table said `sonnet`, the stale
+sentence said "Sonnet"). It searches the live, operative text - `spec.md`, `plan.md` and the TASK lines of
+`tasks.md` - and each thing it does not search is named with why it legitimately keeps an old value: the
+`Review history` section (it records what used to be); a task's `verify:` note (a dated record); `request.md`
+(the GM's words); `research.md` (a results table keeps the value that was TESTED - measured on the real case,
+`research.md` R1: with it included 16 of 18 candidates were false); `measurements.json` and `plan-review.json`
+(recorded figures and a recorded verdict, re-derived or re-issued, never hand-edited); `measure/` (a harness's
+code). It decides nothing and edits nothing; a candidate is a line for the session to look at.
 
 **FR-002 - run where a later round is dispatched.** The review-round guard (`scripts/_hm_review_round.py`,
 `review-round-hooks.sh`), on the branch where it rewrites a later round, first runs the search between its
@@ -41,7 +46,7 @@ look before it dispatches.
 directory as it stood at the dispatch of its first amendment review (commit `36d34718`) against the state
 its previous round saw (commit `a5d5051e`), and asserts the search names FR-007's "`source-reader` moves
 to Sonnet" line - a finding that round spent itself on - and names nothing in `request.md`, the Review
-history or `tasks.md`. `research.md` records, for ALL the stale-text findings of 251's amendment rounds,
+history or a `verify:` note. `research.md` records, for ALL the stale-text findings of 251's amendment rounds,
 which the search would have caught and which it cannot (SC-002 states the count honestly). The guard suite
 gains cases for the refusal, the escape with and without a reason, and the no-candidate pass. The root
 `CLAUDE.md` guard row, `docs/guards.md`, `docs/spec-kit-and-reviews.md` and the make-targets page say what
@@ -50,7 +55,7 @@ is now true.
 ## Success criteria
 
 - **SC-001** (FR-001, FR-004) On feature 251's real before-and-after, the search reports the FR-007 line and
-  reports no line from `request.md`, the Review history or `tasks.md`.
+  reports no line from `request.md`, the Review history or a `verify:` note.
 - **SC-002** (FR-004) `research.md` lists each stale-text finding of 251's amendment rounds with CAUGHT or
   NOT CAUGHT and why; the feature claims no more than that count.
 - **SC-003** (FR-002, FR-003) In the guard suite a later round with a stale candidate is refused with the
@@ -64,3 +69,11 @@ is now true.
   search from the guard, as it gets no rewrite.
 - The search is a heuristic with a stated reach: it finds a value left behind beside a named subject, not a
   sentence made false in other words ("stepped back up and re-run"). Those still cost a round.
+
+## Review history
+
+- **Round 1 (2026-09-19) - CHANGES REQUIRED, two items, both applied.** The refusal in FR-002 was ruled WITHIN the
+  request (the suggestion's load-bearing word is "first": an advisory note rides along with a dispatch that is
+  already going, and the round is spent anyway). (1) `tasks.md` was excluded whole where only its dated `verify:`
+  notes keep an old value legitimately: task lines are now searched. (2) "`.md` files only" was an exclusion with
+  no reason: every unsearched thing is now named with its reason, `research.md` on a measurement.

@@ -1047,6 +1047,13 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
+# GUARD_EDIT_OK: feature 253 - a new operation (the search the review-round guard runs, by hand); no guard changes.
+stale-terms:    ## [project] after a value changed in a feature's spec, where does the OLD value still stand - look BEFORE a later review round   F=253 [AGAINST=<git ref>]
+##  F=<feature>    the feature number or directory name under specs/
+##  AGAINST=<ref>  compare with the feature directory at this git ref (default: what the previous review round saw)
+	@if [ -z "$(F)" ]; then printf 'make stale-terms: F=<feature> is required - e.g. make stale-terms F=253\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_stale_terms.py" "$(F)" --clone "$$(git rev-parse --show-toplevel)" $(if $(AGAINST),--against "$(AGAINST)",); test $$? -le 1
+
 size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
 ##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute
 	@if [ -z "$(PLAN)" ]; then printf 'make size-table: PLAN=<plan svg> is required - e.g. make size-table PLAN=pool/magistracies/x/x.svg\n' >&2; exit 2; fi
