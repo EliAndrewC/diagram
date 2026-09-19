@@ -87,7 +87,7 @@ hyphens only.
       research: rendering
       scaffold: `_size_table.py`'s `nearest label by center distance`
       verify: DONE. labels.py: structure_for (smallest containing footprint, else nearest within 30 ft), check_program (optional and form-absent items skipped), check_bands (the form's band; area or w-by-h message); registered as program_complete and size_bands with fixtures ochiba-no-cell-red and ochiba-big-bath-red; scripts/_size_table.py pairs through nearest_label, output on Ochiba diffed identical; the placer drafts pass the whole program after the exception was ruled NOT LEGITIMATE and the emitter gained the point features; make quick ALL=1 green
-- [ ] T11 `buildings/programs.md`: BOTH types' required-items tables rendered between
+- [x] T11 `buildings/programs.md`: BOTH types' required-items tables rendered between
       `<!-- types.json:<tier> -->` markers by a new `make building-programs` (`CHECK=1` on the gate,
       like `make glossary`) - the magistracy's bullets converted, their per-item reasoning moved into
       each item's `why` - and the "Country shrine (a village district's shrine)" entry with the knobs (FR-009), the
@@ -98,9 +98,8 @@ hyphens only.
       `.claude/agents/building-review.md` and `size-audit.md` name the program by type and read the
       type's rendered block (FR-006)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-      verify: `make building-programs CHECK=1` green; `make quick`; the pass is R1-R3; the boxes tick
-      with T13-T15
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. programs.md: both types' required-items tables rendered by make building-programs (CHECK=1 green; registered as an operation); the country shrine's composition rules, knobs, anchors, staffing in prose; buildings.md: the shrine vocabulary, 'Adding a building type'; building-review.md and size-audit.md read the type's table. Boxes: the pass is R1-R3; source-reader READ every page but one (fn-144 re-sourced); recorded and cited fn-143 to fn-205; quote-check 47 VERBATIM, 5 PARTIALs closed with the readers' sentences, the wiki retired to an absence note; source-applicability none NOT-APPLICABLE, nine write-ups given their limits
 - [x] T12 The shrine's checks (D8): `sanctuary_on_axis`, `arch_on_approach`, `well_clear_of_arch`,
       `fence_not_wall`, registered under `country-shrines`; their fixtures are cut from the exemplar
       in T17 - this task lands the checks with synthetic-sheet tests and T17 lands the fixtures
@@ -110,7 +109,7 @@ hyphens only.
 
 ## Phase 4 - the record (FR-012 to FR-014; D13)
 
-- [ ] T13 `research/religion-and-death.html`: two new sections after the village-shrine section - "Does
+- [x] T13 `research/religion-and-death.html`: two new sections after the village-shrine section - "Does
       the country monk live at the shrine?" and "How big is a country shrine, and what stands in its
       precinct?" - with `Sources:` lines, footnotes fn-143 onward on `citations/religion-and-death.html`
       quoting each passage (English translation marked, original kept), the four labels; the village
@@ -119,27 +118,26 @@ hyphens only.
       its two write-ups (FR-014's list) and the unreadable pages in an absence note; `make citations`
       and `make glossary`; the village shrine's class entries name the two new questions
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       measure: `make quote-verbatim PAGE=religion-and-death` before quote-check; `make record-prepass
       PAGE=religion-and-death` before record-format
-      verify: `make citations CHECK=1`, `make glossary CHECK=1`, `make page-check`; the boxes tick with
-      T14 and T15
-- [ ] T14 The verification agents, in the background, in order: `source-reader` on the two new sections
+      verify: DONE. two sections on religion-and-death.html, the village section corrected to the one-roof reading, fn-143 to fn-205 (five absence notes), 35 registry entries with write-ups, 20 glossary terms; make citations and make glossary in sync; entry-drift owes no modal (no class names the section - only hamlets are scripted). Boxes as T11
+- [x] T14 The verification agents, in the background, in order: `source-reader` on the two new sections
       (READ per claim; a CONTRADICTED verdict changes the text); `quote-check` after the verbatim script;
       `record-format` after the prepass; `entry-drift` on every class entry `scripts/_entry_owed.py`
       names for the revised village section; each verdict folded in and recorded in `research.md` R5
       research: rendering
-      verify: the four verdicts in R5 with what changed; `make quick`
-- [ ] T15 `source-applicability` over every new registry key, three dispatches by group (the Japanese
+      verify: DONE. source-reader (R6), quote-check (47 VERBATIM, 5 PARTIAL closed, 9 unfootnoted sentences sourced or marked the sheet's own), record-format (10 vocabulary, 2 session phrases, 5 unused terms) all folded in; entry-drift: _entry_owed names no pair; verdicts in research.md R6
+- [x] T15 `source-applicability` over every new registry key, three dispatches by group (the Japanese
       encyclopedia and cultural-property pages; the Chinese pages; the RPG wiki), BEFORE T16 draws
       from their numbers; each limit written into the entry's write-ups; a NOT-APPLICABLE source
       removed from the sections and the program
       research: rendering
-      verify: the verdicts in `research.md` R6; `make citations CHECK=1` green
+      verify: DONE. two dispatches over 34 keys: none NOT-APPLICABLE; the Mianning author corrected (Long Sheng), Gantang and Xietang written up honestly, nine entries given their limits; the bell knob's class downgraded to guess; verdicts in R6
 
 ## Phase 5 - the exemplar (FR-015, FR-016; D12)
 
-- [ ] T16 `pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg` hand-drawn to the program at
+- [x] T16 `pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg` hand-drawn to the program at
       3 px = 1 ft from the Ochiba template's style: the fenced precinct marked `id="precinct"` on
       swept gravel, the one-roof hall-and-dwelling (knob 1 default), the sanctuary behind it on the
       approach axis, the arch where the approach crosses the fence, the well beside the approach, the
@@ -149,21 +147,20 @@ hyphens only.
       the clan patron Fortune in Hoshigaoka's notes; bell absent; grove and burial-ground sides from
       Hoshigaoka's map; wealth average), particulars left open for the GM, an empty Review log
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-      verify: `make size-table PLAN=pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg` read
-      in feet; the sheet renders at 2400 px; the boxes tick from T13-T15
-- [ ] T17 The shrine's four fixtures cut from the exemplar (`tests/fixtures/hoshigaoka-*-red.svg`),
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. pool/country-shrines/hoshigaoka-shrine/: svg (precinct, hall, sanctuary, approach, arch, well, fence, kitchen garden declared by id; one roof, 76 x 36 ft, hall and dwelling end to end), gen (rasterizes), notes (program type, Form, five knobs, particulars open, Review log); size-table taken; the sheet clean under every registered check; 2400 px render read twice. Boxes as T11
+- [x] T17 The shrine's four fixtures cut from the exemplar (`tests/fixtures/hoshigaoka-*-red.svg`),
       registered in T12's rows; `make quick` sweeps six sheets green; the pool index lists the tier
       with the program type (`make pool-index`)
       research: rendering
-      verify: `make quick`; the index row present
-- [ ] T18 `size-audit` from `make size-table`, then `building-review`, both in the background; findings
+      verify: DONE. four fixtures cut from the exemplar (sanctuary off axis, arch adrift, well on the approach, walled) replace the synthetic stand-in; the registry test's CLEAN_STANDIN retired; make quick ALL=1 sweeps six sheets green; the pool index lists the tier
+- [x] T18 `size-audit` from `make size-table`, then `building-review`, both in the background; findings
       fixed and re-run until clean or overruled with the rationale in the notes' Review log; one row
       each in `docs/review-ledger.md`; the closing bookend - the PNG re-read against R1-R3 and the
       result written in `research.md` R7
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
-      verify: both agents' last reports clean; the ledger rows; `escalation-check` on anything for the GM
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. size-audit (5 findings, 4 applied, the fifth resolved by drawing the basin true) and building-review (10 errors applied, 4 questionables applied, 3 overruled with reasons in the notes) - both rows in docs/review-ledger.md; the closing bookend: the re-planned PNG read against R1-R3 (kitchen off the axis, the sanctuary behind the hall in its wood, the graves beside). Boxes as T11
 
 ## Phase 6 - the gate and the push (SC-001 to SC-006)
 
