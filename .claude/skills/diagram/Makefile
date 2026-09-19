@@ -1045,7 +1045,20 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 ##  PAGE=<name>    a research page, a citations page (`citations/hamlets`) or `SOURCES`
 	@if [ -z "$(PAGE)" ]; then printf 'make record-prepass: PAGE=<research page name> is required - e.g. make record-prepass PAGE=hamlets\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)" --text,)
+
+# GUARD_EDIT_OK: feature 255 - a new operation (the registry entries and citing footnotes of named keys); no guard changes.
+source-entries: ## [project] the registry entries of the named keys and every footnote citing them - run BEFORE source-applicability   KEYS=kikoba-kenchi,ndl-kokumori
+##  KEYS=<k1,k2>   registry keys, comma-separated; a key the registry lacks is said to be lacking
+	@if [ -z "$(KEYS)" ]; then printf 'make source-entries: KEYS=<k1,k2,...> is required - e.g. make source-entries KEYS=kikoba-kenchi\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_entries.py" --root "$$(git rev-parse --show-toplevel)" "$(KEYS)"
+
+# GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text for source-reader to grep); no guard changes.
+source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
+##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
+##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=
+	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)")
 
 # GUARD_EDIT_OK: feature 253 - a new operation (the search the review-round guard runs, by hand); no guard changes.
 stale-terms:    ## [project] after a value changed in a feature's spec, where does the OLD value still stand - look BEFORE a later review round   F=253 [AGAINST=<git ref>]

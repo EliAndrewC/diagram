@@ -65,7 +65,14 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
 
 ## Procedure
 
-1. `Read` the report, then the file (or section) for context. The report lists every footnote with its ASSERTION;
+1. **A SCOPED check reads the report and not the pages (feature 255).** When the session scoped the script to the
+   notes in question (`make quote-verbatim PAGE=<name> NOTES=<ids>`), the report carries, for every note in scope,
+   its passages, its original where it is a translation, and the ASSERTION it closes: for a scoped check the
+   report IS the reading list. Do not `Read` the research page or the citations page; open one only to settle a
+   doubt the report cannot - an assertion cut short, a note whose class looks wrong - saying in your report what
+   you opened and why. The unfootnoted-assertions list is owed only where the session asks for it, and then the
+   section it names is read.
+   Otherwise `Read` the report, then the file (or section) for context. The report lists every footnote with its ASSERTION;
    where it names none, find the sentence yourself.
 2. Fetch ONLY the residue, each DISTINCT URL ONCE (one attempt per host; a refused host is recorded, never
    retried). The URL you fetch is the footnote's OWN link - not the registry entry, not a page you know of.

@@ -158,3 +158,18 @@ def test_a_scoped_prepass_lists_one_section(tmp_path, capsys):
     assert rp.main(["lanes", "--root", str(tmp_path), "--section", "how wide"]) == 0
     text = capsys.readouterr().out
     assert "1 sections" in text and "Grounds:" in text and "tameike" not in text
+
+
+def test_a_scoped_prepass_with_text_hands_over_the_reading_list(tmp_path, capsys):
+    """Feature 255, FR-003: the section's visible text, then its numbered source lines with the markup kept."""
+    research = tmp_path / rp.RESEARCH
+    research.mkdir(parents=True)
+    (research / "lanes.html").write_text(PAGE, encoding="utf-8")
+    assert rp.main(["lanes", "--root", str(tmp_path), "--section", "how wide", "--text"]) == 0
+    text = capsys.readouterr().out
+    assert "THE TEXT IN SCOPE" in text and "## How wide is a lane? - visible text" in text
+    numbered = rp.source_lines(PAGE, "how wide")
+    assert numbered and "How wide is a lane?" in numbered[0][1] and all("And a bund?" not in line for _, line in numbered)
+    assert f"{numbered[0][0]:>5}  {numbered[0][1]}" in text
+    assert rp.main(["lanes", "--root", str(tmp_path), "--text"]) == 0, "--text with no --section prints the listing alone"
+    assert "THE TEXT IN SCOPE" not in capsys.readouterr().out

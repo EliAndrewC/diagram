@@ -66,7 +66,14 @@ already where it belongs, and you do not report it.
    ruling). Then read the page for what no pattern finds - a HISTORY passage, an instruction to a future session,
    a hard word in plain English, a term the listing missed. If your prompt carries no listing, say so and do the
    whole procedure yourself.
-1. `Read` the page (or section); `Read` the glossary only to settle a doubtful term - the pre-pass has already
+1. **A SCOPED check is handed its text (feature 255).** When the check is of one section, the session runs the
+   pre-pass as `make record-prepass PAGE=<name> SECTION=<heading>`, and after the candidates the listing carries
+   THE TEXT IN SCOPE: the section's visible text, then its numbered source lines with the markup and the comments
+   as written (a markup defect is reported by that line number). For a scoped check that text IS the reading
+   list: do not `Read` the page, and open it only to settle a doubt the handed text cannot - a term that may be
+   defined in another section, a sentence that points outside the scope - saying in your report what you opened
+   and why. A whole-page check has no such text and reads the page as before.
+   Otherwise `Read` the page (or section); `Read` the glossary only to settle a doubtful term - the pre-pass has already
    dropped what it covers. Work on the VISIBLE text only: what is left after the comments and the tags are gone.
 2. Per `<h2>` / `<h3>` section, three lists:
    - **VOCABULARY** - each word or phrase a casual reader would not know that the glossary does not define: a
