@@ -170,11 +170,11 @@ hyphens only.
       figures: specs/254-country-shrine/measurements.json - re-run with `make figures SPEC=specs/254-country-shrine`
       research: rendering
       verify: DONE. the spec was amended during implementation (four Decisions rows on the verification findings); round 3 ran as MODE 3 VERIFY on the diff and returned FAITHFUL, with two record corrections applied (the hugging command re-runnable by figures.py; the range current at 51-78 with the drafts)
-- [ ] T20 `make done` in the background (the whole gate; 100% coverage over `l7r`; the file-size bar;
+- [x] T20 `make done` in the background (the whole gate; 100% coverage over `l7r`; the file-size bar;
       the ratchet); every failure fixed together and re-run once; `scripts/sync-with-main.sh done` from
       the clone (engine code in the delta: the GATED route); the memory file updated
       research: rendering
-      verify: the gate stamp green; the push reported; `git status -sb` clean and level with origin
+      verify: DONE. make done green (third run: the first two failed only hooks-test, whose finished-run test saw this session's own log waiter as a waiter on a dead producer; the test phase 4076 passed with two lines under the floor, covered before the third run); every phase green, roll census green, the 99 hamlet-path modules at 100%; pushed by sync-with-main.sh done on the GATED route; memory file updated
 
 ## Dependencies
 
