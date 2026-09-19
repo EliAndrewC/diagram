@@ -1,0 +1,8 @@
+{
+  "baseline-quick": {
+    "value": 3640,
+    "unit": "tests passed",
+    "quantity": "make quick ALL=1 in a detached worktree at 7cc2e95b, 2026-09-19: 3640 passed, 5 skipped, 33.78 s; make hooks-test: all checks passed",
+    "command": "git worktree add --detach /tmp/base HEAD && make -C /tmp/base quick ALL=1 && make -C /tmp/base hooks-test"
+  }
+}
