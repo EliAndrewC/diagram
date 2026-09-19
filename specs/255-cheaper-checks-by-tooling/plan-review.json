@@ -1,6 +1,6 @@
 {
  "feature": "255-cheaper-checks-by-tooling",
- "plan_sha256": "e46710c9f9c9d5c3c6bd0b804257a95e46d6a9068d1b7223d0bb2ee3c207b27b",
+ "plan_sha256": "b2a33027d2bcace70565355f3888d71aad74dc65d89979befe7f3c0d28a220ef",
  "reviewed": "2026-09-19",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,82 +8,80 @@
    "id": "P0-harness",
    "summary": "Feature 251's seeded harness reused as it stands (prepare, run_seeded.sh, R5 weight arithmetic); the candidate's agent-file edit is made in the clone so the worktree copy carries it; a NOT ADOPTED candidate is reverted before the next batch.",
    "class": "within",
-   "why": "FR-001 names 251's seeded.py as the acceptance test and says a failing candidate leaves the agent as it was; this is how, not what."
+   "why": "Carried from round 1, plan text unchanged. FR-001 names 251's seeded.py as the acceptance test and says a failing candidate leaves the agent as it was; this is how, not what."
   },
   {
    "id": "P0-cases",
    "summary": "source-applicability's two cases are picked by seeded.py catalog from its 26 recorded runs, one with a NOT-APPLICABLE or MISSING verdict and one clean; batches run three at a time with run count and rough weight stated before launch.",
    "class": "within",
-   "why": "FR-002 asks for two seeded cases and leaves the selection open; the pre-launch statement is FR-001's own instruction. Both counts (26 runs, 123 runs) re-run clean from scripts/_agent_census.py --until 2026-09-19, the command recorded under census.* in 251's measurements.json."
+   "why": "Carried from round 1, plan text unchanged. FR-002 asks for two seeded cases and leaves selection open; the pre-launch statement is FR-001's own instruction. Both counts (26 runs, 123 runs) re-run clean again this round from scripts/_agent_census.py --until 2026-09-19."
   },
   {
    "id": "P1-source-entries",
    "summary": "scripts/_source_entries.py parses SOURCES.html plus the citations pages by importing _quote_verbatim.footnotes/assertions; the contract gains a 'step 0'.",
    "class": "within",
-   "why": "FR-002 specifies exactly this output (citation line, both write-ups, Used for:, the citing footnotes with assertions) and the contract instruction. Both imported helpers exist."
+   "why": "Carried from round 1, plan text unchanged. FR-002 specifies exactly this output and the contract instruction."
   },
   {
    "id": "P2-scoped-text",
    "summary": "_record_prepass.py --section gains --text (visible text plus numbered HTML source lines after the candidate list); quote-verbatim --notes already carries passage and assertion.",
    "class": "within",
-   "why": "FR-003 asks for the section's visible text and its HTML source lines, and states quote-verbatim already carries its part."
+   "why": "Carried from round 1, plan text unchanged. FR-003 asks for the section's visible text and its HTML source lines."
   },
   {
    "id": "P3-batching-line",
    "summary": "One identical sentence placed under each of the seven contracts' opening paragraph, tested on the twin's verify-250-cr and verify-clean cases against R7's runs and the recorded runs.",
    "class": "within",
-   "why": "FR-004 asks for one instruction in the same words in exactly those seven files, tested on two later spec-fidelity rounds on the twin."
+   "why": "Carried from round 1, plan text unchanged. FR-004 asks for one instruction in the same words in exactly those seven files, tested on two later spec-fidelity rounds on the twin."
   },
   {
    "id": "P4-source-pages",
    "summary": "scripts/_source_pages.py promoted from 253's measure/fetch_text.py with a pointer|file|state manifest; the reader greps then reads around hits; URLs taken from each recorded prompt by the session, not by a model.",
    "class": "within",
-   "why": "FR-006 asks for a no-model page saver and the grep-then-read contract, judged on R5's three cases."
+   "why": "Carried from round 1, plan text unchanged. FR-006 asks for a no-model page saver and the grep-then-read contract, judged on R5's three cases."
   },
   {
    "id": "P5-probes",
-   "summary": "The fixed-context probes run on Haiku from /diagram, varying one suspect at a time: the tool list, a scratch copy of the repository with CLAUDE.md removed, the appended system prompt present or absent.",
+   "summary": "Haiku --agents probes, each MEASURING a subagent's first-turn input, varying one suspect at a time: CLAUDE.md (scratch copy with and without), the appended system prompt, the probe's tool list.",
    "class": "within",
-   "why": "FR-007 asks for probe runs on the cheapest model dispatched inside this repository, with and without each suspect, and a recorded breakdown."
+   "why": "FR-007 asks for probe runs on the cheapest model dispatched inside this repository, with and without each suspect, and a recorded breakdown. The amended text states the measurement explicitly for each leg."
   },
   {
-   "id": "P5-memory-fallback",
-   "summary": "The session memory index is probed with and without ONLY IF the harness allows pointing at a scratch copy of the memory directory; otherwise its size is reported from its character count and the per-token ratio measured on the other probes.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-007 requires probe runs that MEASURE what each suspect adds to a subagent's first-turn input, the memory index named as one of four, and the request's finding this feature exists to close is that what fills the 47-67 k fixed context 'was not established'. A character count times a ratio estimates a document's size; it does not establish what the index adds to a dispatch, which is the one thing the finding says is unknown. Nor is the measurement impossible: the plan's own CLAUDE.md leg already probes from a scratch copy of the repository, and a scratch copy has its own (empty) project memory directory, so the paired probe (scratch copy with CLAUDE.md present, no memory index) against /diagram (CLAUDE.md present, memory index present) IS the measured delta on instruments the plan already builds. A carve-out written in advance against an untested harness limitation is a session excusing itself from a measurement before it has tried to take one. Remove the fallback: probe the memory index like the other three suspects, and if it genuinely proves impossible after the attempt, that is a measured obstacle to put to the GM, not a pre-authorized substitution."
+   "id": "P5-memory-index-measured",
+   "summary": "The session memory index's contribution is MEASURED by a paired probe - the same probe run in a scratch copy of the repository (CLAUDE.md present, its own empty memory directory) and from /diagram (both present); a leg that cannot be run is a measured obstacle reported to the GM, never replaced by an estimate.",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE narrowing is gone. This is what FR-007 asks for - a probe that measures what the memory index adds to a subagent's first-turn input - and it closes the request's own open finding that what fills the 47-67 k fixed context 'was not established'. The character-count estimate and its pre-authorized fallback are removed, and the impossibility path now ends at the GM with a measurement rather than at a substitution."
   },
   {
    "id": "P5-trims",
-   "summary": "Memory index lines shortened to a hook of at most 120 characters, every entry kept; a tool an agent's recorded runs never called (R9's per-tool counts) removed from its tools: line.",
+   "summary": "Memory index lines shortened to a hook of at most 120 characters, every entry kept; from an agent's tools: line, only a tool that NEITHER its recorded runs called (R9's per-tool counts) NOR its contract tells it to use.",
    "class": "within",
-   "why": "FR-007 permits exactly two trims in these terms, and 'every entry kept, lines shortened' is honored. Note for the session, not a fidelity finding: 'never called in the recorded runs' is weaker than FR-007's 'a tool the check never calls' - a tool the contract itself tells the agent to use is not removable on a sample of runs."
+   "why": "FR-007 permits exactly two trims in these terms and this is both of them. Round 1's note is answered: the two-part test is how the plan establishes FR-007's 'a tool the check never calls' - a tool the contract tells the agent to use could be called in a case the recorded sample missed, so excluding it is evidence handling, not a narrowing. FR-007 grants permission to trim, not an obligation, so trimming fewer tools than the sample alone would allow removes nothing the request asked for."
   },
   {
    "id": "P6-review-facts",
    "summary": "scripts/_review_facts.py runs in one call the measurements settlement-review.md's Tooling section already names and prints them together; two cases picked by seeded.py catalog from the smallest of the 123 recorded runs.",
    "class": "within",
-   "why": "FR-005 asks for that script and two seeded runs; both named contract sections exist in the file."
+   "why": "Carried from round 1, plan text unchanged. FR-005 asks for that script and two seeded runs; both named contract sections exist in the file."
   },
   {
-   "id": "P6-examples-move-dropped",
-   "summary": "The Validated examples section moves to .claude/agents/settlement-review-examples.md, and the move is DROPPED if test_agent_models.py cannot tell that file from an agent without changing what it asserts.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 states the move as part of the candidate: the contract's Validated examples section MOVES to a file the agent opens only when a finding of that kind is in doubt, and FR-001 decides adoption by measured findings-and-weight, not by a test's convenience. The plan's stated ground is also factually wrong: test_agent_models.py derives its roster from AGENTS.glob('*.md'), and frontmatter() asserts 'no YAML frontmatter' on a file that carries none, so a frontmatter-less examples file in .claude/agents/ fails the test - the condition is not a contingency, it fires. That makes the carve-out an unconditional dropping of a spec requirement dressed as an if. It is also plainly avoidable: nothing in the request or the spec puts the examples file in .claude/agents/, so the section can move to any path outside the agents directory (docs/, or a skill path) with the test untouched, as FR-008 requires. Remove the condition and name a location that does not collide with the roster."
+   "id": "P6-examples-move",
+   "summary": "The Validated examples section moves UNCONDITIONALLY to docs/settlement-review-examples.md, outside .claude/agents/, and the contract names that path as the place to look when a finding of that kind is in doubt.",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE conditional drop is gone; the move now happens as FR-005 states it, to a file the agent is told to open only when a finding of that kind is in doubt. The collision is genuinely avoided rather than excused: test_agent_models.py builds its roster from AGENTS.glob('*.md') under .claude/agents/ (verified this round, line 54) and frontmatter() asserts on each, so a docs/ path leaves FR-008's 'test_agent_models.py is untouched' intact. Nothing in the request or the spec fixes the examples file's location."
   },
   {
    "id": "Order",
    "summary": "T01 source-entries, T02 scoped text, T03 batching line, T04 source-pages, T05 probes and trims, T06 review-facts, T07 record, T08 gates; each of T01-T06 ends with its batch scored and the candidate ADOPTED or NOT ADOPTED.",
    "class": "within",
-   "why": "The spec's own assumption sets this cheapest-first order with settlement-review last, and SC-002 requires the per-candidate verdict."
+   "why": "Carried from round 1, plan text unchanged. The spec's own assumption sets this cheapest-first order with settlement-review last, and SC-002 requires the per-candidate verdict."
   },
   {
    "id": "Route",
    "summary": "No engine code; scripts, agents, the skill Makefile (GUARD_EDIT_OK with a reason), tests/tooling and docs route DIRECT.",
    "class": "within",
-   "why": "The spec's Summary states the DIRECT route and SC-004 requires nothing under l7r/ or pool/ to change."
+   "why": "Carried from round 1, plan text unchanged. The spec's Summary states the DIRECT route and SC-004 requires nothing under l7r/ or pool/ to change."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
