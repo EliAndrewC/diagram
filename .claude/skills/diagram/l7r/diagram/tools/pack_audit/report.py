@@ -13,7 +13,7 @@ from .parse import ParsedPlan, parse_svg
 from .registry import Context, run_checks
 
 
-def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | None = None, btype: BuildingType | None = None, form: str | None = None) -> str:
+def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | None = None, btype: BuildingType | None = None, form: str | None = None, draft: bool = False) -> str:
     """Human-readable packing report (the CLI prints this; pure so it is testable).
 
     `text` is the sheet's source (the crop check reads it), `tier` the sheet's declared type (None: the
@@ -70,7 +70,7 @@ def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | N
     if not openings:
         lines.append("    (no openings found in the compound wall)")
     lines += [f"    {o.ft:5.1f} ft  at svg({o.x:.0f},{o.y:.0f})   compare with the width this opening's comment claims" for o in openings]
-    lines += check_lines(Context(plan, text, btype, form), tier)
+    lines += check_lines(Context(plan, text, btype, form, draft), tier)
     return "\n".join(lines)
 
 
@@ -115,6 +115,8 @@ def main(argv: list[str] | None = None) -> int:
         tier = os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(path))))
         tier = tier if tier in tiers() else None
         print(f"=== {path.split('/')[-1]} ===")
-        print(format_report(plan, text=text, tier=tier, btype=by_tier(tier) if tier else None, form=read_form(path)))
+        btype = by_tier(tier) if tier else None
+        stem = os.path.basename(path)[: -len(".svg")] if path.endswith(".svg") else ""
+        print(format_report(plan, text=text, tier=tier, btype=btype, form=read_form(path), draft=btype is not None and stem in btype.generated_exceptions))
         print()
     return 0

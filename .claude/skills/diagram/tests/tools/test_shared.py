@@ -6,7 +6,9 @@ import os
 
 import pytest
 
+from l7r.diagram.buildings import types as _bt
 from l7r.diagram.tools import pack_audit as pa
+from l7r.diagram.tools.pack_audit import labels as L
 from l7r.diagram.tools.pack_audit import shared as s
 
 COURT = "url(#court-earth)"
@@ -201,13 +203,13 @@ def test_shrine_checks_name_a_missing_declaration() -> None:
 
 def test_sanctuary_in_front_of_the_hall_and_a_horizontal_axis() -> None:
     text, _ = _shrine()
-    front = pa.parse_svg(text.replace('<rect x="190" y="90" width="20" height="20"', '<rect x="190" y="300" width="20" height="20"'))
+    front = pa.parse_svg(text.replace('<rect x="190" y="100" width="20" height="20"', '<rect x="190" y="320" width="20" height="20"'))
     assert any("BEHIND the hall" in f for f in s.sanctuary_on_axis(front))
     # rotate the composition: an approach running east-west, the sanctuary west of the hall
     wide = (
-        text.replace('<rect x="185" y="250" width="30" height="180" fill="none" id="approach"/>', '<rect x="260" y="180" width="100" height="30" fill="none" id="approach"/>')
-        .replace('<rect x="170" y="418" width="60" height="24" fill="none" id="arch"/>', '<rect x="340" y="170" width="24" height="60" fill="none" id="arch"/>')
-        .replace('<rect x="190" y="90" width="20" height="20"', '<rect x="100" y="185" width="20" height="20"')
+        text.replace('<rect x="185" y="270" width="30" height="200" fill="none" id="approach"/>', '<rect x="260" y="180" width="100" height="30" fill="none" id="approach"/>')
+        .replace('<rect x="170" y="458" width="60" height="24" fill="none" id="arch"/>', '<rect x="340" y="170" width="24" height="60" fill="none" id="arch"/>')
+        .replace('<rect x="190" y="100" width="20" height="20"', '<rect x="100" y="185" width="20" height="20"')
     )
     assert s.sanctuary_on_axis(pa.parse_svg(wide)) == []
     off = pa.parse_svg(wide.replace('<rect x="100" y="185" width="20" height="20"', '<rect x="100" y="120" width="20" height="20"'))
@@ -216,7 +218,7 @@ def test_sanctuary_in_front_of_the_hall_and_a_horizontal_axis() -> None:
 
 def test_arch_inside_the_precinct_and_a_wall_on_the_boundary() -> None:
     text, _ = _shrine()
-    inside = pa.parse_svg(text.replace('<rect x="170" y="418" width="60" height="24" fill="none" id="arch"/>', '<rect x="170" y="300" width="60" height="24" fill="none" id="arch"/>'))
+    inside = pa.parse_svg(text.replace('<rect x="170" y="458" width="60" height="24" fill="none" id="arch"/>', '<rect x="170" y="300" width="60" height="24" fill="none" id="arch"/>'))
     findings = s.arch_on_approach(inside)
     assert any("inside the precinct" in f for f in findings) and not any("straddle" in f for f in findings)
     walled = text.replace(
@@ -224,7 +226,7 @@ def test_arch_inside_the_precinct_and_a_wall_on_the_boundary() -> None:
         '<g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none"><g stroke="#2D2A24" stroke-width="9"><line x1="40" y1="70" x2="360" y2="70"/></g>',
     )
     assert any("compound wall stroke" in f for f in s.fence_not_wall(walled, pa.parse_svg(walled)))
-    interior_wall = text.replace('<rect x="240" y="330"', '<g stroke="#2D2A24" stroke-width="9"><line x1="100" y1="250" x2="130" y2="250"/></g><rect x="240" y="330"')
+    interior_wall = text.replace('<rect x="240" y="350"', '<g stroke="#2D2A24" stroke-width="9"><line x1="100" y1="250" x2="130" y2="250"/></g><rect x="240" y="330"')
     assert s.fence_not_wall(interior_wall, pa.parse_svg(interior_wall)) == []  # a wall stroke away from the boundary is not the fence's business
 
 
@@ -234,3 +236,48 @@ def test_a_group_label_matches_whole_words_only() -> None:
     assert pa.orphan_group_labels(pa.parse_svg(sheet)) == []
     sheet = _svg(PRECINCT, '<text x="60" y="60" font-size="11">the well</text>', _rect(300, 300, 22, 22, pa.WELL_FILL))
     assert len(pa.orphan_group_labels(pa.parse_svg(sheet))) == 1
+
+
+# --- the label pairing and the program checks (labels.py) ---
+
+
+def _text(x: float, y: float, s: str, size: int = 11) -> str:
+    return f'<text x="{x}" y="{y}" text-anchor="middle" font-size="{size}">{s}</text>'
+
+
+def test_structure_for_prefers_the_smallest_containing_footprint_then_the_nearest_within_reach() -> None:
+    _, plan = _plan(_rect(40, 40, 200, 100, BLDG), _rect(60, 60, 30, 20, "#E8D2A8"), _text(75, 74, "porch"), _text(140, 130, "near"), _text(300, 300, "ground"))
+    by = {lb.text: lb for lb in plan.labels}
+    assert L.structure_for(by["porch"], plan.structures).w == 30.0  # the strip, not the block it lies in
+    assert L.structure_for(by["near"], plan.structures).w == 200.0  # 30 px under the block's edge
+    assert L.structure_for(by["ground"], plan.structures) is None  # far from every footprint
+    assert L.nearest_label(0, 0, []) is None and L.nearest_label(0, 0, [(3.0, 4.0, "a")]) == ("a", 5.0)
+
+
+def test_program_and_band_checks_over_a_tiny_declaration() -> None:
+    types = _bt.parse_types(
+        [
+            {
+                "tier": "huts",
+                "title": "Huts",
+                "program": "Hut",
+                "hand_drawn": True,
+                "checks": [],
+                "required": [
+                    {"id": "hut", "label": "^hut$", "band_ft": {"w": [10, 20], "h": [10, 20]}, "class": "guess", "why": "a hut"},
+                    {"id": "yard", "label": "^yard$", "band_ft": {}, "class": "guess", "why": "ground"},
+                    {"id": "shed", "label": "^shed$", "band_ft": {"area": [50, 200]}, "optional": True, "class": "guess", "why": "a shed"},
+                    {"id": "loft", "label": "^loft$", "band_ft": {"w": [5, 8], "h": [5, 8]}, "forms": {"one roof": None}, "class": "guess", "why": "a loft"},
+                ],
+            }
+        ]
+    )[0]
+    _, plan = _plan(_rect(40, 40, 45, 45, BLDG), _text(62, 66, "hut"), _text(200, 300, "yard"), _text(62, 300, "loft"))
+    assert L.check_program(plan, types, None) == []  # loft is labeled (on open ground), shed optional
+    assert L.check_program(plan, types, "one roof") == []
+    assert "no `hut`" in L.check_program(pa.parse_svg(_svg(PRECINCT)), types, None)[0]
+    assert L.check_bands(plan, types, None) == []  # 15 x 15 ft in band; yard presence-only; loft on ground skipped
+    _, big = _plan(_rect(40, 40, 90, 45, BLDG), _text(85, 66, "hut"), _rect(200, 200, 60, 60, BLDG), _text(230, 230, "shed"))
+    findings = L.check_bands(big, types, None)
+    assert any("`hut`" in f and "w 10-20 by h 10-20 ft" in f for f in findings)
+    assert any("`shed`" in f and "area 50-200 sq ft" in f for f in findings)  # 20 x 20 ft = 400

@@ -21,6 +21,7 @@ from dataclasses import dataclass
 
 from ...buildings.types import BuildingType, load_types
 from . import checks as c
+from . import labels as lbl
 from . import shared as s
 from .grids import FTPX
 from .parse import ParsedPlan
@@ -38,6 +39,7 @@ class Context:
     text: str = ""
     btype: BuildingType | None = None
     form: str | None = None
+    draft: bool = False  # a declared generated exception (a placer draft): swept by geometry and composition, not judged as a finished program
 
 
 @dataclass(frozen=True)
@@ -128,6 +130,21 @@ CHECKS: tuple[Check, ...] = (
     ),
     Check("scale_bar_present", lambda ctx: s.scale_bar_present(ctx.plan), True, "ochiba-no-scale-red.svg", "add the 90 px scale bar with its `30 ft` and `(3 px = 1 ft)` labels"),
     Check("viewbox_cropped", lambda ctx: s.viewbox_cropped(ctx.text, ctx.plan), True, "ochiba-wide-viewbox-red.svg", "crop the viewBox to ~15-25 px of parchment around the ink"),
+    # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
+    Check(
+        "program_complete",
+        lambda ctx: lbl.check_program(ctx.plan, ctx.btype, ctx.form) if ctx.btype and not ctx.draft else [],
+        True,
+        "ochiba-no-cell-red.svg",
+        "draw and label the missing program item, or record in the notes why this instance lacks it",
+    ),
+    Check(
+        "size_bands",
+        lambda ctx: lbl.check_bands(ctx.plan, ctx.btype, ctx.form) if ctx.btype and not ctx.draft else [],
+        True,
+        "ochiba-big-bath-red.svg",
+        "redraw the footprint inside its band, or record the instance particular that justifies it and re-derive the band",
+    ),
     # --- fire-water: required by BOTH programs, so both declarations list it (spec 254 FR-003, round-1 item 2) ---
     Check("fire_water_adrift", _tub_adrift, False, "ochiba-tub-adrift-red.svg", "move the tub to a wall or eaves corner - a tensuioke is gutter-fed"),
     Check("tubs_in_buildings", _tub_in_building, False, "ubame-tubs-inside-red.svg", "move the tub OUT, clear of the wall"),

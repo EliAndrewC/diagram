@@ -45,18 +45,9 @@
       {
         "id": "clerks",
         "label": "^clerks'",
-        "band_ft": {
-          "w": [
-            18,
-            40
-          ],
-          "h": [
-            10,
-            28
-          ]
-        },
+        "band_ft": {},
         "class": "guess",
-        "why": "the program's ~28 by 18 ft workroom for 3-4 clerks"
+        "why": "the program's ~28 by 18 ft workroom for 3-4 clerks - a ROOM of the office hall on the drawn sheets, with no footprint of its own to measure, so held to presence"
       },
       {
         "id": "tax_archive",
@@ -147,7 +138,7 @@
       },
       {
         "id": "kitchen",
-        "label": "^kitchen",
+        "label": "^kitchen(?! garden)",
         "band_ft": {
           "w": [
             20,
@@ -190,7 +181,7 @@
         "band_ft": {
           "w": [
             20,
-            80
+            90
           ],
           "h": [
             8,
@@ -198,7 +189,7 @@
           ]
         },
         "class": "guess",
-        "why": "a nagaya for ~10 servants; no measured example behind the band"
+        "why": "a nagaya for ~10 servants (Ubame's runs 85 ft); no measured example behind the band"
       },
       {
         "id": "shrine",

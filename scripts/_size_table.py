@@ -25,11 +25,16 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
+import os
 import pathlib
 import re
 import sys
 import xml.etree.ElementTree as ET
+
+# THE PAIRING IS THE PACKAGE'S (feature 254, D7): `pack_audit.labels.nearest_label` is the one rule that
+# says which label a footprint carries, shared with the band check, so the two cannot drift apart.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".claude", "skills", "diagram"))
+from l7r.diagram.tools.pack_audit.labels import nearest_label  # noqa: E402
 
 PX_PER_FT = 3.0
 SKIP = {"defs", "pattern", "symbol", "clipPath", "mask", "marker"}
@@ -104,7 +109,7 @@ def table(svg_text: str) -> dict:
             if w <= 0 or h <= 0:
                 continue
             cx, cy = x + w / 2, y + h / 2
-            near = min(labels, key=lambda lab: math.hypot(lab[0] - cx, lab[1] - cy), default=None)
+            near = nearest_label(cx, cy, labels)
             rects.append(
                 {
                     "x_px": round(x, 1),
@@ -112,8 +117,8 @@ def table(svg_text: str) -> dict:
                     "w_ft": ft(w),
                     "h_ft": ft(h),
                     "area_sqft": round(ft(w) * ft(h)),
-                    "label": near[2] if near else "",
-                    "label_ft_away": ft(math.hypot(near[0] - cx, near[1] - cy)) if near else None,
+                    "label": near[0] if near else "",
+                    "label_ft_away": ft(near[1]) if near else None,
                     "note": "transform not applied" if other else "",
                 }
             )

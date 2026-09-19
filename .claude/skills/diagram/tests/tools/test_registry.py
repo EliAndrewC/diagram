@@ -61,7 +61,10 @@ def test_every_check_passes_the_pool_sheets_of_its_tiers(check: R.Check) -> None
             continue
         seen += 1
         ctx = _ctx(path)
-        assert not check.run(R.Context(ctx.plan, ctx.text, bt.by_tier(tier), pa.read_form(path))), f"{check.name} fires on the shipped sheet {os.path.basename(path)}"
+        btype = bt.by_tier(tier)
+        stem = os.path.basename(path)[: -len(".svg")]
+        draft = btype is not None and stem in btype.generated_exceptions
+        assert not check.run(R.Context(ctx.plan, ctx.text, btype, pa.read_form(path), draft=draft)), f"{check.name} fires on the shipped sheet {os.path.basename(path)}"
     assert seen, f"{check.name}: no pool sheet of its tiers on disk"
 
 
