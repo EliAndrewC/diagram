@@ -1,0 +1,47 @@
+{
+ "feature": "253-stale-terms-before-a-later-round",
+ "plan_sha256": "9216806474cbf36b7cbd953ccc355ea65777f7cbb643a7ac5fe12853328455a5",
+ "reviewed": "2026-09-19",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "P1-old-values-token-rule",
+   "summary": "P1 defines an OLD VALUE as a case-folded word of three letters or more, or a number, that the old line had and the new lacks, minus a short list of common words and minus the subject's own words. FR-001 says only 'the words and numbers the old line had and the new line does not'.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The request asks the session to grep for 'the old value' - singular and concrete (a tier, a figure, a decision). Treating every function word on a replaced line as an old value would mark nearly every line that names the changed subject, so the search would report noise and cost turns instead of saving them, defeating the request's own stated purpose (target the 61% later-round cost). The filter is implied by the request's own words and is the rule the accepted spec's own measurement (research.md R1, 18 / 16 false / 3) was taken under. Noted, not a finding: a genuine old value of one or two letters (a short tool name) is invisible to this rule; the spec's Assumptions already call the search a heuristic with a stated reach."
+  },
+  {
+   "id": "P4-shallow-checkout-skip",
+   "summary": "P4 skips the feature-251 half of tests/tooling/test_stale_terms.py on a shallow checkout; FR-004 and SC-001 require the proof to be taken from commits 36d34718 and a5d5051e.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "In a shallow checkout those git objects are absent, so the reconstruction FR-004 names is physically impossible there rather than merely awkward. The plain-input half of the module still runs everywhere, and the session clones this project works in are full clones, so SC-001's proof runs on every route that can run it."
+  },
+  {
+   "id": "P3-candidates-are-not-a-make-failure",
+   "summary": "make stale-terms exits 0 even with candidates, while the script itself exits 1.",
+   "class": "within",
+   "why": "FR-003 asks only that the target run the same search by hand and PRINT the candidates, as a look before a dispatch; the gate on a dispatch is FR-002's guard branch, which is unaffected."
+  },
+  {
+   "id": "P2-escape-short-circuits-the-search",
+   "summary": "With STALE_TERMS_OK present the guard checks the reason and rewrites without running the search; absent, the search runs before the diff, the snapshot refresh and the round count, and any candidate returns blocked/stale-terms with exit 2.",
+   "class": "within",
+   "why": "FR-002 asks for exactly this: a refusal before any snapshot or round state moves, and a second way on via STALE_TERMS_OK with a required reason; the escape means the session has already judged the candidates."
+  },
+  {
+   "id": "P1-exclusions-and-no-snapshot-exit",
+   "summary": "watched_lines skips request.md, gm-request.md, research.md, measurements.json, plan-review.json and measure/, plus the Review history section and verify: notes; exit 2 when there is nothing to compare with.",
+   "class": "within",
+   "why": "The list is FR-001's named exclusions item for item, searching every other text file by default, and the no-snapshot case is the spec's stated Assumption."
+  },
+  {
+   "id": "P1-P4-shapes-route-and-record",
+   "summary": "difflib replace opcodes zipped for the pairs, two {path: text} maps so the test needs no repository, tests/tooling/test_stale_terms.py and suite section 10, the four doc surfaces, DIRECT route.",
+   "class": "within",
+   "why": "FR-001's paired old and new lines, FR-004's guard-suite cases and its four named documents, and the spec Summary's 'no engine code: the delta routes DIRECT'."
+  }
+ ],
+ "verdict": "CLEAR"
+}

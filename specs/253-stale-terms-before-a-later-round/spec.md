@@ -1,6 +1,6 @@
 # Feature 253 - the old value is looked for before a later review round is spent on it
 
-**Status:** FAITHFUL at round 4 (2026-09-19, see Review history).
+**Status:** implemented 2026-09-19 - FAITHFUL at round 4, plan CLEAR.
 
 ## Summary
 
