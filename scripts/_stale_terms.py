@@ -18,9 +18,10 @@ passage cannot be told from an innocent use of a common word. And it finds a VAL
 sentence made false in other words ("stepped back up and re-run" after the re-run was dropped). A candidate
 is a line to look at, never a verdict; the caller decides.
 
-WHERE IT LOOKS: `spec.md`, `plan.md` and the task lines of `tasks.md` - the live, operative text. Each thing it
-does NOT search legitimately keeps an old value: the `Review history` section (it records what used to be); a
-task's `verify:` note (a dated record); `request.md` (the GM's words); `research.md` (a results table keeps the
+WHERE IT LOOKS: EVERY text file of the feature directory - `spec.md`, `plan.md`, the task lines of `tasks.md`, and
+whatever else a feature holds (`data-model.md`, `contracts/`, `quickstart.md`, a ledger) - EXCEPT what is named
+here, each of which legitimately keeps an old value: the `Review history` section (it records what used to be); a
+task's `verify:` note (a dated record); `request.md` and `gm-request.md` (the GM's words); `research.md` (a results table keeps the
 value that was TESTED - including it made 16 of 18 candidates false on the real case this was proven on);
 `measurements.json` and `plan-review.json` (recorded figures and a recorded verdict, re-derived or re-issued,
 never edited by hand); `measure/` (a harness's code, not a statement about the feature).
@@ -37,7 +38,10 @@ import sys
 
 #: only the OPERATIVE documents are searched. Measured on feature 251 (specs/253 research R1): with `research.md`
 #: included, 16 of 18 candidates were false - a results table legitimately records the tier that was TESTED.
-WATCHED_FILES = ("spec.md", "plan.md", "tasks.md")
+#: EVERY text file of the feature directory is searched EXCEPT what is named here, so a file kind nobody anticipated
+#: (`data-model.md`, `contracts/`, `quickstart.md`, a ledger) is searched by default rather than skipped in silence.
+SKIP_NAMES = ("request.md", "gm-request.md", "research.md", "measurements.json", "plan-review.json")
+SKIP_DIRS = ("measure",)
 #: words that change in any rewording and point at nothing
 COMMON = frozenset(
     "the and for that this with from are was were has have had not but its their they them then than into onto over each "
@@ -68,7 +72,8 @@ def changed_pairs(old: str, new: str) -> list[tuple[str, str]]:
 
 def watched_lines(name: str, text: str) -> list[tuple[int, str]]:
     """(line number, line) of `text` that may be a candidate: none of a skipped file, none of the Review history."""
-    if pathlib.PurePath(name).name not in WATCHED_FILES:
+    path = pathlib.PurePath(name)
+    if path.name in SKIP_NAMES or set(path.parts[:-1]) & set(SKIP_DIRS):
         return []
     out, in_history = [], False
     for n, line in enumerate(text.splitlines(), 1):
@@ -85,7 +90,7 @@ def stale_candidates(old_files: dict[str, str], new_files: dict[str, str]) -> li
     found: list[dict] = []
     seen: set[tuple[str, int]] = set()
     for name, new_text in sorted(new_files.items()):
-        if name not in old_files or not name.endswith(".md"):
+        if name not in old_files or not watched_lines(name, "x"):
             continue
         for old_line, new_line in changed_pairs(old_files[name], new_text):
             subj = subjects(old_line) & subjects(new_line)
@@ -105,7 +110,14 @@ def stale_candidates(old_files: dict[str, str], new_files: dict[str, str]) -> li
 
 
 def read_dir(root: pathlib.Path) -> dict[str, str]:
-    return {str(p.relative_to(root)): p.read_text(encoding="utf-8", errors="replace") for p in sorted(root.rglob("*.md")) if p.is_file()}
+    out = {}
+    for p in sorted(root.rglob("*")):
+        if p.is_file() and "__pycache__" not in p.parts and p.stat().st_size < 1_000_000:
+            try:
+                out[str(p.relative_to(root))] = p.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                continue  # not a text file
+    return out
 
 
 def read_ref(clone: pathlib.Path, ref: str, feature: str) -> dict[str, str]:
@@ -114,8 +126,11 @@ def read_ref(clone: pathlib.Path, ref: str, feature: str) -> dict[str, str]:
     names = subprocess.run(["git", "-C", str(clone), "ls-tree", "-r", "--name-only", ref, "--", base], capture_output=True, text=True, check=False).stdout.split()
     out = {}
     for full in names:
-        if full.endswith(".md"):
-            out[full[len(base) :]] = subprocess.run(["git", "-C", str(clone), "show", f"{ref}:{full}"], capture_output=True, text=True, check=False).stdout
+        shown = subprocess.run(["git", "-C", str(clone), "show", f"{ref}:{full}"], capture_output=True, check=False).stdout
+        try:
+            out[full[len(base) :]] = shown.decode("utf-8")
+        except UnicodeDecodeError:
+            continue  # not a text file
     return out
 
 

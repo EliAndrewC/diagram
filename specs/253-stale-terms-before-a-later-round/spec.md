@@ -19,10 +19,12 @@ the OLD VALUES are the words and numbers the old line had and the new line does 
 OTHER line of the present feature directory that names a subject AND still carries an old value. A changed
 line with no backticked subject yields nothing: without an anchor the search cannot tell a stale passage
 from an unrelated use of a common word. Matching is case-insensitive (the table said `sonnet`, the stale
-sentence said "Sonnet"). It searches the live, operative text - `spec.md`, `plan.md` and the TASK lines of
-`tasks.md` - and each thing it does not search is named with why it legitimately keeps an old value: the
+sentence said "Sonnet"). It searches EVERY text file of the feature directory - `spec.md`, `plan.md`, the TASK
+lines of `tasks.md`, and whatever else a feature holds (`data-model.md`, `contracts/`, `quickstart.md`, a
+ledger), so a file kind nobody anticipated is searched by default - EXCEPT what is named here, each with why it
+legitimately keeps an old value: the
 `Review history` section (it records what used to be); a task's `verify:` note (a dated record); `request.md`
-(the GM's words); `research.md` (a results table keeps the value that was TESTED - measured on the real case,
+and `gm-request.md` (the GM's words); `research.md` (a results table keeps the value that was TESTED - measured on the real case,
 `research.md` R1: with it included 16 of 18 candidates were false); `measurements.json` and `plan-review.json`
 (recorded figures and a recorded verdict, re-derived or re-issued, never hand-edited); `measure/` (a harness's
 code). It decides nothing and edits nothing; a candidate is a line for the session to look at.
@@ -36,7 +38,8 @@ on - and the two ways on: fix the lines and dispatch again, or dispatch again wi
 `STALE_TERMS_OK="<reason>"` in the prompt when the candidates are not stale (a reason is required, as for
 every escape, and the firing is recorded). A refusal is the right shape here by the project's guard
 doctrine: whether a candidate is stale is a decision only the session can supply, and the refusal costs one
-turn where the review round it prevents costs a subagent run and usually a second one.
+turn where the review round it MAY prevent costs a subagent run and usually a second one (`research.md` R2
+measures how often that is: on feature 251's thirteen findings, never a whole round).
 
 **FR-003 - also a make target.** `make stale-terms F=<feature>` runs the same search by hand against the
 guard's snapshot (or `AGAINST=<git ref>` when there is none) and prints the candidates, so a session can
@@ -77,3 +80,7 @@ is now true.
   already going, and the round is spent anyway). (1) `tasks.md` was excluded whole where only its dated `verify:`
   notes keep an old value legitimately: task lines are now searched. (2) "`.md` files only" was an exclusion with
   no reason: every unsearched thing is now named with its reason, `research.md` on a measurement.
+- **Round 2 (2026-09-19) - CHANGES REQUIRED, one item, applied.** Both round-1 items verified. The fix for item 2 had
+  turned an exclusion list into a WHITELIST of three files, silently dropping operative text other features hold
+  (`data-model.md`, `contracts/`, `quickstart.md`, ledgers) and `gm-request.md`: the default is flipped back - every
+  text file is searched except what is named. FR-002's "prevents" softened to "may prevent", beside R2's count.

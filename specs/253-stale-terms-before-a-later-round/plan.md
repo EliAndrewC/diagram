@@ -14,8 +14,8 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Research: [`res
 - **P1 the search** (`scripts/_stale_terms.py`, stdlib): `changed_pairs` (difflib over lines, `replace` opcodes
   zipped), `subjects` (backticked spans the old and new line share), old values (case-folded words of three
   letters or more and numbers the old line had and the new one lacks, minus a short list of common words and
-  minus the subject's own words), `watched_lines` (the operative files, outside the Review history, not a
-  `verify:` note), `stale_candidates` over two `{relative path: text}` maps so the test needs no repository,
+  minus the subject's own words), `watched_lines` (every text file EXCEPT the named ones - the GM's request files, `research.md`, the two
+  recorded JSON files, `measure/` - and outside the Review history, not a `verify:` note), `stale_candidates` over two `{relative path: text}` maps so the test needs no repository,
   `read_dir` for the guard's snapshot and `read_ref` for a git ref. Exit 1 with candidates, 0 with none, 2 when
   there is nothing to compare with.
 - **P2 the guard branch** (`scripts/_hm_review_round.py`): on the rewrite branch, BEFORE the diff, the snapshot

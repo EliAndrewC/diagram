@@ -38,6 +38,8 @@ def test_the_old_value_beside_its_subject_is_a_candidate_and_nothing_else_is():
     assert "moves to Sonnet" in found[0]["text"] and found[0]["changed_in"] == "spec.md"
     live = {**NEW, "tasks.md": "- [ ] T2 put `reader` on sonnet\n      verify: DONE. `reader` sonnet\n"}
     assert [(c["file"], c["line"]) for c in st.stale_candidates(OLD, live)] == [("spec.md", 5), ("tasks.md", 1)], "a TASK line is live text; its dated verify note is not"
+    wide = {**NEW, "data-model.md": "`reader`: model sonnet\n", "contracts/api.md": "the `reader` contract assumes sonnet\n", "gm-request.md": "> `reader` on sonnet\n", "measure/h.py": "# `reader` sonnet\n", "plan-review.json": "{\"x\": \"`reader` sonnet\"}"}
+    assert sorted(c["file"] for c in st.stale_candidates(OLD, wide)) == ["contracts/api.md", "data-model.md", "spec.md"], "a file kind nobody named is SEARCHED; the named ones are not"
 
 
 def test_no_change_no_subject_or_no_dropped_value_yields_nothing():
