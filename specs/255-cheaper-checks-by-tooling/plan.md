@@ -38,19 +38,19 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   of 253's `measure/fetch_text.py`, promoted to a script with a manifest (`pointer | file | state`); the contract
   tells the reader to Grep then Read around hits. R5's three `source-reader` cases; the URLs are taken from each
   recorded prompt by the session, not by a model.
-- **P5 the fixed-context probes** (FR-007): `--agents` JSON probes on Haiku run from `/diagram` itself (so the
-  session memory index is in play), varying one thing at a time: the tool list; a copy of the repository with
-  `CLAUDE.md` removed (a scratch worktree, never the clone); `--append-system-prompt` present or absent; and the
-  memory index present or moved aside IN A SCRATCH COPY of the project's memory directory only if the harness
-  allows pointing at one - otherwise its size is reported from its character count and the measured per-token
-  ratio of the other probes. Trims: memory index lines shortened to a hook of at most 120 characters; a tool an
-  agent's recorded runs never called (R9's per-tool counts) removed from its `tools:` line.
+- **P5 the fixed-context probes** (FR-007): `--agents` JSON probes on Haiku, each MEASURING a subagent's first-turn
+  input, varying one thing at a time. The memory index: a scratch copy of the repository is its own project and so
+  has an empty memory directory - the same probe run there (with `CLAUDE.md`, no index) and from `/diagram` (both)
+  gives the index's measured delta. `CLAUDE.md`: the scratch copy with and without it (never the clone). The
+  appended system prompt: `--append-system-prompt` present or absent. The tool list: the probe's `tools`. If a leg
+  cannot be run, that is a measured obstacle reported to the GM, not replaced by an estimate. Trims: memory index
+  lines shortened to a hook of at most 120 characters, every entry kept; and from an agent's `tools:` line, only a
+  tool that NEITHER its recorded runs called (R9's per-tool counts) NOR its contract tells it to use.
 - **P6 `scripts/_review_facts.py`, `make review-facts MAP=<pool map>`** (FR-005): one call that runs the
   measurements `settlement-review.md`'s "Tooling" section already names and prints them together; the
-  `Validated examples` section moves to `.claude/agents/settlement-review-examples.md`, which the agents-directory
-  test must not mistake for an agent (it carries no frontmatter; `tests/test_agent_models.py`'s roster is files
-  WITH a `name:` - checked before the move, and the move is dropped if that test cannot tell them apart without
-  changing what it asserts). Two recorded `settlement-review` runs with findings, picked by `seeded.py catalog`
+  `Validated examples` section moves to `docs/settlement-review-examples.md` - OUTSIDE `.claude/agents/`, whose
+  every `*.md` the tier test reads as an agent file and requires frontmatter of - and the contract names that path
+  as the place to look when a finding of that kind is in doubt. Two recorded `settlement-review` runs with findings, picked by `seeded.py catalog`
   from the smallest of the 123.
 
 ## Order
