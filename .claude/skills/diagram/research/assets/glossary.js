@@ -5312,5 +5312,114 @@ window.RECORD_GLOSSARY = [
    "fit-zoom"
   ],
   "def": "The whole map shown at once on the screen - the view a reader opens the page in, as against a zoomed-in one."
+ },
+ {
+  "term": "kuri",
+  "variants": [
+   "kuri"
+  ],
+  "def": "The building of a Japanese Buddhist temple that holds its kitchen and, in ordinary usage, the quarters where its monks live; at a village temple, the priest's house."
+ },
+ {
+  "term": "honden",
+  "variants": [
+   "honden"
+  ],
+  "def": "The sanctuary of a Shinto shrine, the small closed building where the deity's object is kept; worshippers stand before it, never in it."
+ },
+ {
+  "term": "bettō",
+  "variants": [
+   "bettō-ji",
+   "bettō-ji",
+   "bettō",
+   "betto"
+  ],
+  "def": "Before 1868, the Buddhist monk who headed the temple attached to a shrine and performed the shrine's rites in Buddhist form."
+ },
+ {
+  "term": "jingūji",
+  "variants": [
+   "jingū-ji",
+   "jingūji",
+   "jinguji"
+  ],
+  "def": "A temple attached to a Shinto shrine in the centuries when kami and Buddhas were worshipped together, staffed by monks who served the shrine; almost all were closed or demolished after 1868."
+ },
+ {
+  "term": "shasō",
+  "variants": [
+   "shasō",
+   "shaso"
+  ],
+  "def": "A \"shrine monk\": the Buddhist monk of a jingūji who was at once the shrine's priest, before 1868."
+ },
+ {
+  "term": "miyaza",
+  "variants": [
+   "miyaza",
+   "tōya"
+  ],
+  "def": "The closed association of village households that ran a village shrine's rites, its members serving as priest by yearly turn where the shrine had none."
+ },
+ {
+  "term": "jochi",
+  "variants": [
+   "jochi"
+  ],
+  "def": "Land the Edo authorities exempted from the annual tax - temple and shrine precincts and holdings with a document of exemption - outside the vermilion- and black-seal grants."
+ },
+ {
+  "term": "shuinchi",
+  "variants": [
+   "kokuinchi",
+   "shuinchi"
+  ],
+  "def": "Temple or shrine land confirmed by a shogunal vermilion-seal document (or a daimyo's black seal), tax-free and ranging from thousands of koku down to one."
+ },
+ {
+  "term": "temizuya",
+  "variants": [
+   "temizuya",
+   "chōzuya"
+  ],
+  "def": "The basin or well beside a shrine's approach where a visitor rinses hands and mouth before going on."
+ },
+ {
+  "term": "tamagaki",
+  "variants": [
+   "tamagaki"
+  ],
+  "def": "The low fence that bounds a shrine's precinct."
+ },
+ {
+  "term": "terauke",
+  "variants": [
+   "terauke seido",
+   "terauke"
+  ],
+  "def": "The Edo-period requirement that every household be certified by a Buddhist temple, which issued the papers a person needed to travel or move."
+ },
+ {
+  "term": "fuse",
+  "variants": [
+   "fuse"
+  ],
+  "def": "The offering a parish household pays its temple for rites - a gift in name, a fee in practice."
+ },
+ {
+  "term": "lijia",
+  "variants": [
+   "lijia"
+  ],
+  "def": "The Ming and Qing system that grouped households by the hundred for tax and corvée; where a Chinese village's population was registered."
+ },
+ {
+  "term": "Kaie-ji",
+  "variants": [
+   "Kaie-ji's",
+   "Kaie-ji"
+  ],
+  "def": "A Zen temple in Sakai whose early-Edo main hall and priest's quarters are one building - the one measured example of a hall and dwelling under one roof."
  }
 ];
