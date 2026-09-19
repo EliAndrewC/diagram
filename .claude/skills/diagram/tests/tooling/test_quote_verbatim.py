@@ -239,3 +239,10 @@ def test_a_scoped_check_names_its_notes_and_fetches_nothing_else(tmp_path, capsy
     assert qv.main(["x", "--root", str(tmp_path), "--offline", str(tmp_path), "--notes", "3-4", "--json", str(out)]) == 0
     capsys.readouterr()
     assert [f["id"] for f in json.loads(out.read_text(encoding="utf-8"))["footnotes"]] == ["fn-3", "fn-4"]
+
+
+def test_a_phrase_quoted_inside_the_notes_own_gloss_is_not_a_passage():
+    """Found on `ways` fn-23: "(the path on the baulk; 「never crosses row crops」 is this page's)" is the note's gloss."""
+    got = qv.passages("「Sown in autumn.」 (translated from the Japanese by this project; original: 「秋に種をまき」) (a gloss; 「our own phrase」 is this page's) and 「a second passage」")
+    assert [p["quote"] for p in got] == ["Sown in autumn.", "a second passage"]
+    assert got[0]["original"] == "秋に種をまき"

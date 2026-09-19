@@ -154,6 +154,12 @@ def passages(note_text: str) -> list[dict]:
     k = 0
     while k < len(spans):
         start, end = spans[k]
+        # A quoted phrase INSIDE a parenthetical is the note's own gloss - "(「never crosses row crops」 is this
+        # page's)" - and was never claimed to be the source's, so it is not a passage. A translation's original
+        # also sits in parentheses, but it is consumed with its translation below and never reaches this test.
+        if note_text.count("(", 0, start) > note_text.count(")", 0, start):
+            k += 1
+            continue
         quote = note_text[start + 1 : end - 1]
         entry = {"quote": quote, "original": "", "language": ""}
         if k + 1 < len(spans):
