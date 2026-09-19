@@ -281,3 +281,9 @@ def test_program_and_band_checks_over_a_tiny_declaration() -> None:
     findings = L.check_bands(big, types, None)
     assert any("`hut`" in f and "w 10-20 by h 10-20 ft" in f for f in findings)
     assert any("`shed`" in f and "area 50-200 sq ft" in f for f in findings)  # 20 x 20 ft = 400
+
+
+def test_fence_check_ignores_a_court_divider_stroke() -> None:
+    """A divider band is a wall band of another color; the fence check reasons only about the compound stroke."""
+    text, plan = _plan('<g id="fence" stroke="#7A6A4A" stroke-width="2"><line x1="20" y1="20" x2="380" y2="20"/></g>' + DIVIDER)
+    assert s.fence_not_wall(text, plan) == []

@@ -250,3 +250,12 @@ def test_a_feature_with_no_clear_seat_is_left_out() -> None:
     result = c.place(boxed)
     parts = c._point_features(boxed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
     assert parts.count("R") <= 3  # at most the notice board and what still fits; no well squeezed into the block
+
+
+def test_a_seat_that_would_leave_the_envelope_is_refused() -> None:
+    """A stable hugging the south wall of a 20 ft deep envelope has no room in front of it for a well
+    (9 ft out) or even a tub (2.5 ft out): every candidate falls past the envelope's edge and nothing is seated."""
+    env = _env(200.0, 20.0, 10.0, 13.0)
+    prog = c.CompoundProgram("t", env, (), (_b("stables", 30.0, 15.0, "outer", "S", order=5),))
+    parts = c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a: "L", 0.0, 0.0)
+    assert ">well<" not in "".join(parts) and "<circle" not in "".join(parts)
