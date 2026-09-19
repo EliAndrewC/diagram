@@ -205,6 +205,55 @@ medium. **The ad-hoc rule is now measured, not only written:** Sonnet is a sound
 a fifth to a quarter of the recorded Opus weight; Haiku is sound for a plain description of a page and NOT for
 a table or a number. `scripts/agent-model-rule.txt` and root `CLAUDE.md` say so.
 
+## R8 - `source-reader` split into a fetcher and a reader (2026-09-19)
+
+The GM's idea: *"I wonder whether the source reader could be made into a source fetcher and a source reader.
+Because things like finding an alternate source, if one is blocked, might not require an extremely high effort or
+high fidelity model."* Tried on R5's three recorded cases (observed 2026-09-19; method: `specs/253-stale-terms-
+before-a-later-round/measure/run_split.sh` - a Sonnet session puts each source's FULL visible text on disk with
+`fetch_text.py`, trying alternates when refused and judging nothing; then the `source-reader` agent, Opus at high,
+reads the files; weights from each stage's own `usage`).
+
+| case | what the split found (observed 2026-09-19; method: the reader's reply read against the recorded reply) | weight: fetch + read = total | recorded run |
+|---|---|---|---|
+| 08-28 (25 claims) | the exception clause CONTRADICTED - the recorded finding, under its recorded word; "boats determine the village plan" READ verbatim | 0.13 + 1.22 = 1.35 | 0.24 |
+| 08-29 | two CONTRADICTED; the key paper still unreached by the fetcher, the contradiction carried by other sources read in full | 0.91 + 1.26 = 2.17 | 0.28 |
+| 09-12 (clean) | the pigsty dike's 5-10 m width FOUND - the passage Sonnet missed three times and Opus at medium once - and pond water "fertigating" the dike crops | 0.71 + 1.25 = 1.96 | 0.92 |
+
+**Quality up, cost up.** Reading whole pages from disk, the Opus reader found everything the recorded runs found
+and the passage every cheaper tier had missed. But it cost two to eight times the recorded runs: a whole page is
+far larger than the extract the fetch tool returns, and the reader re-reads it every turn (39 turns on one case);
+and the Sonnet fetcher wandered (30 and 45 turns on two cases). So the split is not a token saving. What it
+suggests is about ACCURACY: the fetch tool hands an agent a small model's extract of a page, never the page, and
+the one passage that kept being missed was found the first time the page itself was read. A cheaper form worth
+trying is narrower than a fetcher agent: a SCRIPT that saves the named pointers' text (no model, no wandering),
+the reader told to `Grep` the saved pages for the claim's terms and `Read` only around the hits.
+
+## R9 - where a check's tokens go (2026-09-19)
+
+(observed 2026-09-19; method: `specs/253-stale-terms-before-a-later-round/measure/profile.py` over every recorded
+subagent transcript - no model run. "Fixed context" is the input of a run's first turn, before it has read
+anything: the system prompt, the tool definitions, the agent's contract, the project's `CLAUDE.md` and memory.)
+
+| agent | median turns | fixed context at turn 1 | what it reads per run |
+|---|---|---|---|
+| `settlement-review` | 43 | 47 k tokens | 39 Bash calls (91 k chars) and 12 Reads, mostly images; its contract alone is 48 k chars |
+| `source-applicability` | 20 | 65 k | `SOURCES.html` read 10.5 times a run (138 k chars) - paging through the whole registry for a few entries |
+| `record-format` | 16 | 61 k | whole research pages (372 k chars a run), the glossary 1.6 times, `SOURCES.html` 1.6 times |
+| `quote-check` | 10 | 59 k | whole research pages (308 k chars a run) plus 20 fetches |
+| `perf-audit` | 15 | 61 k | 21 Bash calls |
+| `source-reader` | 9 | 67 k | 20 fetches, 4 Reads |
+| `spec-fidelity` | 7 | 50 k | 7.5 Bash calls (40 k chars), `spec.md` once |
+
+A bare agent in an empty project starts at about 2 k tokens; the same agent inside this repository starts at
+12-15 k (the project's `CLAUDE.md`), and the real checks at 47-67 k. **A check's cost is, to a first approximation,
+its TURNS times (its fixed context plus everything it has read so far)** - which is why a later `spec-fidelity`
+round costs nearly what a first reading does (1.27 against 1.44) although it reads far less, and why effort barely
+moved anything in R5 and R7. The levers this points at, none of them a model change: fewer turns (independent
+tool calls sent together; one script call that returns every standard measurement instead of thirty-nine); less
+read per turn (the sections or notes in scope handed over, not the whole page; the registry entries by key, not
+the registry); a smaller fixed context (the longest contracts trimmed of their worked examples).
+
 ## R6 - an unset effort is the session's
 
 Verified 2026-09-19 in the installed 2.1.278 binary: the subagent's request effort is read as the

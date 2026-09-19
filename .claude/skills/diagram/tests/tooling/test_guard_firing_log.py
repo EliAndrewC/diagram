@@ -324,6 +324,13 @@ _ESCAPES = {
         "branches - a prompt is prose with no command grammar; its REVIEW_ROUND_OK=\"reason\" form is refused "
         "without a reason and logged with one (feature 249)",
     ),
+    "STALE_TERMS_OK": (
+        "command",
+        "matched in a spec-fidelity dispatch PROMPT only (`STALE_TOKEN in prompt` in _hm_review_round.py), the same "
+        "stated exclusion as REVIEW_ROUND_OK's - a prompt is prose with no command grammar; its "
+        "STALE_TERMS_OK=\"reason\" form is refused without a reason and recorded with one on the rewrite it lets "
+        "through (feature 253)",
+    ),
     "REVIEW_PREREQ_OK": (
         "command",
         "matched in a settlement-review dispatch PROMPT only (`case \"$ptext\"`, the prompt's own text taken from the "
