@@ -1,0 +1,75 @@
+{
+ "feature": "252-adhoc-agents-name-their-model",
+ "plan_sha256": "c9cc29b58a3e5fee8d758da63b89a5c801da23edbbc2f8a322090a7140f06e59",
+ "reviewed": "2026-09-19",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D01",
+   "summary": "P1 hook shape: bash with one python block on the review-round-hooks.sh model; the four fields joined with a unit separator because `read` collapses whitespace and the model field is usually empty.",
+   "class": "within",
+   "why": "Implementation mechanics for FR-001's refusal; the request names only a hook that rejects and a message, and this decides nothing about who is refused."
+  },
+  {
+   "id": "D02",
+   "summary": "P1 order of tests: non-Agent exits silently, then fork, then a non-empty model, then an agent file, else blocked/no-model.",
+   "class": "within",
+   "why": "Each branch is an FR the spec already settles (FR-001 pinned-type and model-named pass, FR-003 fork passes, FR-004's four slugs). The ORDER only decides which permit slug a fork carrying a model logs under, and both orders permit it."
+  },
+  {
+   "id": "D03",
+   "summary": "P1 an omitted subagent_type is read as general-purpose.",
+   "class": "within",
+   "why": "FR-001 names an omitted type among the ad-hoc set that is refused, and FR-004 requires the suite to cover it. Reading it as general-purpose refuses it."
+  },
+  {
+   "id": "D04",
+   "summary": "P1 root resolution for `.claude/agents/<type>.md`: clone-sync-hooks.sh resolve's clone, else the git top level of the payload's cwd, else the repository the hook lives in.",
+   "class": "within",
+   "why": "FR-001 gives the first two; the third is a last-resort fallback so a pinned type is still recognized when neither resolves, which serves FR-001's 'a dispatch of a type that HAS an agent file passes untouched' rather than cutting into the refusal."
+  },
+  {
+   "id": "D05",
+   "summary": "P1 a payload that is not JSON never blocks.",
+   "class": "within",
+   "why": "FR-001 refuses only when BOTH conditions are established from the payload - an ad-hoc subagent_type and no model. An unparseable payload establishes neither, so this is the rule being unevaluable, not an exception carved out of it. The measured failure (ad-hoc dispatches that named no model) arrives as harness JSON and is untouched."
+  },
+  {
+   "id": "D06",
+   "summary": "P3 an EMPTY model is refused, and a named model - `fable` included - passes.",
+   "class": "within",
+   "why": "An empty model is a dispatch that names none, so it runs on the session's model: refusing it is what the GM asked for ('the caller has to specify a model'). Passing any named model is FR-001 as written."
+  },
+  {
+   "id": "D07",
+   "summary": "P2 the rule text lives once in scripts/agent-model-rule.txt, read by the message; the suite asserts root CLAUDE.md carries the same two clauses.",
+   "class": "within",
+   "why": "FR-002 requires the guidance to be READ from one place the docs also state so a later change is made once; the plan picks that place and adds the drift assertion."
+  },
+  {
+   "id": "D08",
+   "summary": "P2 message composition: a bold first line naming the type and the session's model, the body from the rule file, then the script's name and the feature.",
+   "class": "within",
+   "why": "Consistent with FR-002 and SC-002, which still require all of the ordered content (the session's model and the 62-on-Fable measurement, the instruction to re-send with a model, and the sonnet/opus rule) to appear in the message the hook prints."
+  },
+  {
+   "id": "D09",
+   "summary": "P4 the hook is wired FIRST in the .claude/settings.json Agent matcher list, ahead of the pair, escalation and review-round guards.",
+   "class": "within",
+   "why": "FR-004 asks only that it be wired beside the other Agent-matched guards; position is free and refusing before the other guards act on a dispatch that will not run is inside that."
+  },
+  {
+   "id": "D10",
+   "summary": "P3/P4 suite scope (fixture repository with one agent file, every branch, the log records, the message, the unknown mode, a Bash call), the firing-log payload row, the CLAUDE.md and docs/guards.md rows, no new make target.",
+   "class": "within",
+   "why": "FR-004 asks for exactly these; the unknown-mode case and the Bash case are coverage of the guard's own entry points, not new behavior."
+  },
+  {
+   "id": "D11",
+   "summary": "Order T01 hook+rule file+suite, T02 wiring+log row+record, T03 make hooks-test, make quick, prove it fires by deleting the refusal branch, land; route DIRECT; no escape token added.",
+   "class": "within",
+   "why": "SC-003 asks for the green suites and the delete-the-branch proof; FR-004 says there is no escape token; the spec states the DIRECT route."
+  }
+ ],
+ "verdict": "CLEAR"
+}

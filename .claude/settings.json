@@ -205,6 +205,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "/diagram/scripts/agent-model-hooks.sh pretool  # GUARD_EDIT_OK: feature 252 - a NEW guard (the GM 2026-09-19): an ad-hoc agent dispatch names its model or is refused; first in the list so a refused dispatch is refused before the other Agent guards act on it"
+          },
+          {
+            "type": "command",
             "command": "/diagram/scripts/pair-hooks.sh pretool"
           },
           {

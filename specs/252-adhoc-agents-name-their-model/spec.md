@@ -1,6 +1,6 @@
 # Feature 252 - an ad-hoc agent dispatch names its model, or is refused
 
-**Status:** FAITHFUL at round 1 (2026-09-19, see Review history); FR-003's carve-out ruled LEGITIMATE.
+**Status:** implemented 2026-09-19 - FAITHFUL at round 1, plan CLEAR; FR-003's carve-out ruled LEGITIMATE.
 
 ## Summary
 

@@ -56,6 +56,10 @@ CASES = [
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 4: PLAN REVIEW of specs/999-nowhere"), "permitted", "other-mode"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt='MODE 3 of specs/999-nowhere REVIEW_ROUND_OK="a restructured spec, read it whole"'), "escaped", "review-round-ok"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 3 of specs/999-nowhere REVIEW_ROUND_OK"), "blocked", "REVIEW_ROUND_OK-no-reason"),
+    # feature 252 (GM 2026-09-19): an ad-hoc agent dispatch names its model, or is refused
+    ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", prompt="read three pages"), "blocked", "no-model"),
+    ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", model="sonnet", prompt="read three pages"), "permitted", "model-named"),
+    ("agent-model", _payload(_tool="Agent", subagent_type="fork", prompt="carry on"), "permitted", "fork-inherits"),
     ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
     ("no-branch", _payload(command="git checkout -b side"), "blocked", "branch-creation"),
     ("no-branch", _payload(command="git checkout -b side  # NO_BRANCH_OK: a throwaway bisect"), "escaped", "no-branch-ok"),

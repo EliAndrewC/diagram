@@ -6,7 +6,8 @@ SC=$1; shift
 CL="$(command -v claude)"
 run_one() {
   local name=${1%%:*} agent=${1##*:} d="$SC/${1%%:*}"
-  ( cd "$d/tree" && timeout 1500 "$CL" -p --agent "$agent" --settings '{"disableAllHooks": true}' --permission-mode bypassPermissions --output-format json < "$d/prompt.txt" > "$d/run.json" 2> "$d/run.err"
+  local who=(--agent "$agent"); case "$agent" in model=*) who=(--model "${agent#model=}");; esac   # an ad-hoc reader has no agent file: `name:model=sonnet`
+  ( cd "$d/tree" && timeout 1500 "$CL" -p "${who[@]}" --settings '{"disableAllHooks": true}' --permission-mode bypassPermissions --output-format json < "$d/prompt.txt" > "$d/run.json" 2> "$d/run.err"
     jq -r '.result // "NO RESULT"' "$d/run.json" > "$d/reply.md" 2>/dev/null
     echo "done $name rc=$? $(jq -c '{turns: .num_turns, in: (.usage.input_tokens + .usage.cache_creation_input_tokens + .usage.cache_read_input_tokens), out: .usage.output_tokens, models: (.modelUsage|keys)}' "$d/run.json" 2>/dev/null)" >> "$SC/progress.log" )
 }
