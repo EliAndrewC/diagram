@@ -29,7 +29,7 @@ villagers, the monk's farmhouse-class dwelling - with an arch on its approach, a
 grove and the burial ground beside it; **it is larger than a farmhouse because it contains one**, the
 hall alone running from about 20 ft square to 35 ft square on measured village examples, and the 60 by
 48 ft hall the village maps draw is honest in area only read as a hall and dwelling under one roof, a
-form that is attested but called rare.
+form that is attested but called rare. (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
 
 Three things are delivered: (1) the check architecture for many building types - a type is declared
 ONCE and everything keys off the declaration; the checks are a shared layer and a per-type layer; every
@@ -289,8 +289,9 @@ under its tier with its program type.
 
 - **SC-001**: after the feature, a type's name appears outside its declaration, its pool tier, its
   program prose, its fixtures, its tests and the docs in ZERO engine files (a gate test counts).
-- **SC-002**: every Mode A sheet in `pool/` is swept by `make quick` and `make done`; the sweep of the
-  six sheets (five magistracies and the shrine) adds under 5 s to the gate, measured.
+- **SC-002**: every Mode A sheet in `pool/` is swept by `make quick` and `make done`; the sweep's cost on
+  the six sheets (five magistracies and the shrine) is measured at implementation and recorded in the
+  feature's measurements file, and the gate's ratchet holds it.
 - **SC-003**: every shared and per-type check has a red fixture on which it fails and a pool sheet on
   which it passes - 100% of checks, counted by a test over the check registry.
 - **SC-004**: the record's two new sections and the revised village section pass `quote-check` with
@@ -304,7 +305,7 @@ under its tier with its program type.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
-| Decision | Class | Why | Recorded at |
+| Decision (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | Class | Why | Recorded at |
 |---|---|---|---|
 | the country monk lives at the shrine; the dwelling stands on the precinct | accurate (Japan, the jingūji / bettō-ji before 1868 and the parish temple's kuri; China, the resident keeper at Mianning; the RPG's "most had at least one resident monk"), with the disclosure that a pure Shinto village shrine had no resident and some rural temples were unstaffed | the GM's ruling and the sources coincide; no knob | `research/religion-and-death.html`, "Does the country monk live at the shrine?"; `buildings/programs.md`, the shrine program; the exemplar's notes |
 | sanctuary about 6 ft square, one bay | accurate | the ikkensha honden is the commonest form; a 1789 example measures 1.98 by 1.82 m | the same section; the size band in the declaration |

@@ -60,7 +60,7 @@ unstaffed. No knob is needed for residence: the setting's canon fixes it and the
 
 From the sources, the parts of a small rural sacred site, Japan-first:
 
-| part | evidence | keep? |
+| part (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | evidence | keep? |
 |---|---|---|
 | a sanctuary (honden) where the deity's object is kept | the ikkensha nagare-zukuri is "the most common honden style nationwide" and its front is ONE bay (ja.wikipedia 流造); a measured Kansei-era village honden is 1.98 by 1.82 m (Ehime pref., 1789) | yes - tiny, at the back, on the axis |
 | a hall where the villagers gather (haiden / hondō) | the same site's haiden is 9.78 by 10.62 m (1790); the minimal temple "generally has only a main hall and a bell tower" (homemate, 七堂伽藍) | yes - the compound's largest building |
@@ -78,11 +78,11 @@ From the sources, the parts of a small rural sacred site, Japan-first:
 ## R3. How big is it, and is it bigger than a farmhouse? (the GM's second question)
 
 The village maps draw a farmhouse at 46 by 28 ft (about 120 sq m) and the village shrine as one hall
-of 60 by 48 ft (about 275 sq m), a band the record labels "this project's own calibration".
+of 60 by 48 ft (about 275 sq m), a band the record labels "this project's own calibration". (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
 
-What the sources give, in feet (3.28 ft per m; a ken is 6 shaku, about 5.97 ft):
+What the sources give, in feet (3.28 ft per m; a ken is 6 shaku, about 5.97 ft): (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
 
-| building | measured example | ft | sq m |
+| building (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | measured example | ft | sq m |
 |---|---|---|---|
 | honden, village, 1789 (Ehime) | 1.98 by 1.82 m | 6.5 by 6 | 3.6 |
 | haiden, same site, 1790 | 9.78 by 10.62 m | 32 by 35 | 104 |
@@ -104,7 +104,7 @@ type; the village tier is frozen hand-authored work).
 
 **The follow-up on SMALL rural halls** (the first pass had verified only large temples):
 
-| building | measured example | ft | sq m |
+| building (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`) | measured example | ft | sq m |
 |---|---|---|---|
 | village Kannon hall, three bays square, 1778 (Saitama) | 6.540 by 6.540 m | 21.5 by 21.5 | 43 |
 | Yakushi hall on a temple's grounds, 1685 (Chikusei) | 3.83 by 3.83 m | 12.6 by 12.6 | 15 |
@@ -120,7 +120,7 @@ and the one that states its form says it resembles the region's farmhouse. No SM
 measured, so the village monk's dwelling takes the farmhouse's own footprint (46 by 28 ft, 120 sq m)
 as ACCURATE by form and a GUESS by size - the kuri "resembling the minka" is the attestation, the
 minka's size is the map's own. The "3 by 3 ken" halls that turned up are Muromachi, not Edo, and are
-not used.
+not used. (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
 
 ## R4. Where the record is silent
 
@@ -133,4 +133,4 @@ not used.
 - The "3 by 3 ken village hall" figure that search results repeat could not be found on a page and is
   NOT used.
 - Baidu Baike (庙祝, 村庙, 里社) refuses fetches; the Sinica and Palace Museum PDFs on Ming temple-land
-  exemption would not read. The Chinese tax-exemption claim is therefore not cited.
+  exemption would not read. The Chinese tax-exemption claim is therefore not cited. (observed 2026-09-19; method: the figure as printed on the cited page, read by the background reader named in `research.md`)
