@@ -1,6 +1,6 @@
 # Feature 251 - subagent checks tiered by model and effort, with the mechanical parts in scripts
 
-**Status:** draft 2026-09-19 - awaiting `spec-fidelity`.
+**Status:** FAITHFUL at round 2 (2026-09-19, see Review history); planning.
 
 ## Summary
 
@@ -247,3 +247,6 @@ and every new make target is listed where the others are.
   aligned. (3) The exemption for the Opus-high agents rested on an unstated default: established (an
   unset effort is the session's, configured `high`) and stated in Assumptions. The reviewer's aside -
   a hand dispatch of the twin took no snapshot - is now in FR-008 and the edge cases.
+- **Round 2 (2026-09-19) - FAITHFUL.** All three items and the aside verified resolved; nothing new
+  introduced. The reviewer's aside for the plan: the session model is Fable, so R1 reports which past
+  ad-hoc runs inherited Fable specifically.
