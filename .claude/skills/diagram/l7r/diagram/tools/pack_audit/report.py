@@ -2,31 +2,22 @@
 
 from __future__ import annotations
 
+import os
+import re
 import sys
 
-from .checks import (
-    TUB_MAX_GAP_FT,
-    aligned_gaps,
-    dark_on_dark_labels,
-    fire_water_adrift,
-    floating_doors,
-    gap_tag,
-    notice_board_adrift,
-    occluded_foreground,
-    orphan_group_labels,
-    overlapping_labels,
-    passage_blockers,
-    structures_on_walls,
-    tubs_in_buildings,
-    tubs_on_wells,
-    wall_openings,
-)
+from ...buildings.types import BuildingType, by_tier, tiers
+from .checks import TUB_MAX_GAP_FT, aligned_gaps, fire_water_adrift, gap_tag, tubs_in_buildings, wall_openings
 from .grids import FTPX, _grids, perimeter_hugging_pct, region_density, top_vacant_rects
 from .parse import ParsedPlan, parse_svg
+from .registry import Context, run_checks
 
 
-def format_report(plan: ParsedPlan, cell: int = 2) -> str:
-    """Human-readable packing report (the CLI prints this; pure so it is testable)."""
+def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | None = None, btype: BuildingType | None = None, form: str | None = None) -> str:
+    """Human-readable packing report (the CLI prints this; pure so it is testable).
+
+    `text` is the sheet's source (the crop check reads it), `tier` the sheet's declared type (None: the
+    shared layer only), `btype` and `form` what the program checks read (feature 254)."""
     g = _grids(plan, cell)
     inside = built = openc = empty = 0
     for gy in range(g.h):
@@ -44,7 +35,7 @@ def format_report(plan: ParsedPlan, cell: int = 2) -> str:
     hug = perimeter_hugging_pct(plan, cell=cell)
     lines = [
         f"walled interior: {(maxx - minx) / FTPX:.0f} x {(maxy - miny) / FTPX:.0f} ft = {inside * cell * cell / (FTPX * FTPX):,.0f} sqft",
-        f"building coverage: {100 * built / inside:.0f}%  (jin'ya band 37-42%)",
+        f"building coverage: {100 * built / inside:.0f}%  (a jin'ya runs ~33-42% built: Takayama's floor to the record's band)",
         f"purposeful open (garden/court/glyphs): {100 * openc / inside:.0f}%  (features)",
         f"bare open ground: {100 * empty / inside:.0f}%  (courts are open - not a defect alone)",
         f"perimeter-hugging: {100 * hug:.0f}% of building footprint within 25 ft of a wall  (high = buildings ring the courts)",
@@ -74,52 +65,41 @@ def format_report(plan: ParsedPlan, cell: int = 2) -> str:
             f"    TUB IN BUILDING: a fire-water tub at svg({t.x:.0f},{t.y:.0f}) reaches {t.into_ft:.1f} ft INTO a building - a tensuioke is gutter-fed and bucket-served, so move it OUT clear of the wall"
             for t in intruding
         ]
-    lines.append("LAYER/LABEL checks:")
-    occ = occluded_foreground(plan)
-    if not occ:
-        lines.append("    labels/tubs on top: OK (nothing buried under a later feature)")
-    lines += [f"    BURIED: {o.kind} {(repr(o.text) + ' ') if o.text else ''}at svg({o.x:.0f},{o.y:.0f}) is under a feature drawn later - move it to the top layer" for o in occ]
-    for orp in orphan_group_labels(plan):
-        lines.append(f"    ORPHAN LABEL: {orp.text!r} at svg({orp.x:.0f},{orp.y:.0f}) is {orp.gap_ft:.1f} ft from the nearest glyph it names - move it beside one")
-    for bd in notice_board_adrift(plan):
-        lines.append(f"    NOTICE BOARD: at svg({bd.x:.0f},{bd.y:.0f}) is {bd.gap_ft:.1f} ft from the nearest gate opening - move it to a gate")
-    for dk in dark_on_dark_labels(plan):
-        fix = f"nudge ({dk.nudge_dx_ft:+.0f},{dk.nudge_dy_ft:+.0f}) ft clears it" if dk.fixable else "no small nudge clears it - relocate"
-        lines.append(f"    DARK-ON-DARK: {dk.text!r} at svg({dk.x:.0f},{dk.y:.0f}) - black ink over a dark feature; {fix}")
-    for cl in overlapping_labels(plan):
-        lines.append(f"    LABEL CLASH: {cl.a!r} and {cl.b!r} overlap at svg({cl.x:.0f},{cl.y:.0f}) - move one apart")
-    for dr in floating_doors(plan):
-        lines.append(f"    DOOR ADRIFT: a door at svg({dr.x:.0f},{dr.y:.0f}) floats {dr.gap_ft:.1f} ft inside the building - set it on the wall")
-    for tw in tubs_on_wells(plan):
-        lines.append(f"    TUB ON WELL: a fire-water tub at svg({tw.x:.0f},{tw.y:.0f}) overlaps a well - move it to a different eaves corner")
     lines.append("GATE OPENINGS (compound wall, measured from the INK - a square cap eats 1.5 ft per end):")
     openings = wall_openings(plan)
     if not openings:
         lines.append("    (no openings found in the compound wall)")
     lines += [f"    {o.ft:5.1f} ft  at svg({o.x:.0f},{o.y:.0f})   compare with the width this opening's comment claims" for o in openings]
-    blocked = passage_blockers(plan)
-    if blocked:
-        lines.append("PASSAGE check (a gateway's track stays clear - stones and posts flank it, they never stand in it):")
-        lines += [
-            f"    IN THE PASSAGE: a {b.w_ft:.1f} x {b.h_ft:.1f} ft object at svg({b.x:.0f},{b.y:.0f}) stands in a {b.opening_ft:.1f} ft opening - "
-            "move it clear of the road (a threshold stone flanks the passage, above ground)"
-            for b in blocked
-        ]
-    else:
-        lines.append("PASSAGE check: every gateway's track is clear: OK")
-    lines.append("STRUCTURE/WALL check (a structure abuts a wall, never stands in it):")
-    if not plan.wall_bands:
-        lines.append("    (no wall strokes in this plan)")
-    else:
-        onwall = structures_on_walls(plan)
-        if not onwall:
-            lines.append(f"    all {len(plan.structures)} structures clear the wall ink: OK")
-        lines += [
-            f"    ON WALL: a {sw.w_ft:.0f} x {sw.h_ft:.0f} ft structure at svg({sw.x:.0f},{sw.y:.0f}) reaches {sw.into_ft:.1f} ft into the {sw.wall} - "
-            "set it against the wall's inner face, or break the wall around it if it IS part of the wall"
-            for sw in onwall
-        ]
+    lines += check_lines(Context(plan, text, btype, form), tier)
     return "\n".join(lines)
+
+
+_FORM_RE = re.compile(r"^\*\*Form\*\*:\s*([^\n]+?)\s*$", re.M)
+
+
+def read_form(svg_path: str) -> str | None:
+    """The `**Form**: ...` line of the sheet's notes file (`<stem>.notes.md` beside it), or None."""
+    notes = svg_path[: -len(".svg")] + ".notes.md" if svg_path.endswith(".svg") else ""
+    if not notes or not os.path.isfile(notes):
+        return None
+    with open(notes, encoding="utf-8") as fh:
+        m = _FORM_RE.search(fh.read())
+    return m.group(1).strip() if m else None
+
+
+def check_lines(ctx: Context, tier: str | None) -> list[str]:
+    """The REGISTERED checks (feature 254): each applicable check in registry order, its findings or OK.
+
+    The report used to compose these by hand, one block per check, which is how the tub check gained
+    a fill list its docstring contradicted (2026-07-25). Now the registry is the one list: a check
+    the sweep runs is a check the report prints, with the same fix sentence."""
+    lines = [f"CHECKS ({'shared layer only' if tier is None else 'shared layer + ' + tier}):"]
+    for ch, found in run_checks(ctx, tier):
+        if not found:
+            lines.append(f"    {ch.name}: OK")
+            continue
+        lines += [f"    {ch.name.upper()}: {f} - {ch.fix}" for f in found]
+    return lines
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -129,8 +109,12 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     for path in args:
         with open(path, encoding="utf-8") as fh:
-            plan = parse_svg(fh.read())
+            text = fh.read()
+        plan = parse_svg(text)
+        # the sheet's type is its pool tier when the folder above its own is a declared one (feature 254)
+        tier = os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(path))))
+        tier = tier if tier in tiers() else None
         print(f"=== {path.split('/')[-1]} ===")
-        print(format_report(plan))
+        print(format_report(plan, text=text, tier=tier, btype=by_tier(tier) if tier else None, form=read_form(path)))
         print()
     return 0

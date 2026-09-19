@@ -5,7 +5,7 @@
     "program": "Magistrate's manor (county magistracy)",
     "hand_drawn": true,
     "generated_exceptions": ["county-magistracy-example", "ochiba-roundtrip-test"],
-    "checks": ["notice_board_adrift", "two_court_zoning"],
+    "checks": ["notice_board_adrift", "coverage_band", "perimeter_hugging", "two_court_zoning"],
     "notes": "The bands are the Mode A vocabulary's sizes (buildings.md, 'Building vocabulary'), each re-derived by the size-audit in 2026-07 where it says so; a band written from the program's prose alone is labeled a guess. A zone label (RESIDENCE, HEARING COURT, inner garden) names ground or a suite rather than one structure, so it is held to presence only.",
     "required": [
       {"id": "office_hall", "label": "official study", "band_ft": {"w": [80, 150], "h": [20, 45]}, "class": "guess", "why": "the vocabulary's ~360 by 84 px working block; no measured jin'ya office wing behind it"},

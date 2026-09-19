@@ -494,7 +494,7 @@ def test_dark_on_dark_unfixable_when_dark_everywhere() -> None:
 
 def test_format_report_layer_sections() -> None:
     clean = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 200, 200, COURT), _rect(0, 0, 60, 60, "#DDB87A"))))
-    assert "labels/tubs on top: OK" in clean
+    assert "occluded_foreground: OK" in clean
     dirty = pa.format_report(
         pa.parse_svg(
             _svg(
@@ -508,10 +508,11 @@ def test_format_report_layer_sections() -> None:
                 _rect(60, 300, 60, 40, "#2D2A24"),
                 _text(70, 320, "dim", 'fill="#3A2E1C"'),
             )
-        )
+        ),
+        tier="magistracies",
     )
-    for token in ("BURIED", "ORPHAN LABEL", "NOTICE BOARD", "DARK-ON-DARK"):
-        assert token in dirty
+    for token in ("OCCLUDED_FOREGROUND:", "ORPHAN_GROUP_LABELS:", "NOTICE_BOARD_ADRIFT:", "DARK_ON_DARK_LABELS:"):
+        assert token in dirty, token
 
 
 def test_layout_checks_fire_on_frozen_ochiba_fixture() -> None:
@@ -564,7 +565,7 @@ def test_format_report_clash_and_door_sections() -> None:
         _text(58, 52, "beta", 'font-size="12"'),  # clashes with alpha
     )
     report = pa.format_report(pa.parse_svg(svg))
-    assert "LABEL CLASH" in report and "DOOR ADRIFT" in report
+    assert "OVERLAPPING_LABELS:" in report and "FLOATING_DOORS:" in report
 
 
 def test_frozen_fixtures_show_the_floating_kura_door() -> None:
@@ -694,7 +695,7 @@ def test_tub_on_well_flagged_and_clear_passes() -> None:
 
 def test_format_report_tub_on_well_section() -> None:
     svg = _svg(_rect(0, 0, 300, 300, COURT), _rect(0, 0, 50, 120, "#DDB87A"), _rect(50, 50, 22, 22, pa.WELL_FILL), _tubgroup('<circle cx="60" cy="60" r="5"/>'))
-    assert "TUB ON WELL" in pa.format_report(pa.parse_svg(svg))
+    assert "TUBS_ON_WELLS:" in pa.format_report(pa.parse_svg(svg), tier="magistracies")
 
 
 # --- structures on walls (a structure abuts a wall, never occupies it) ---
@@ -845,9 +846,9 @@ def test_passage_blockers_fire_on_the_frozen_stones_in_passage_fixture() -> None
 
 def test_format_report_passage_section_states_each_case() -> None:
     ok = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), _wallgroup((0, 100, 100, 100), (140, 100, 300, 100)))))
-    assert "every gateway's track is clear: OK" in ok
+    assert "passage_blockers: OK" in ok
     bad = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), _wallgroup((0, 100, 100, 100), (140, 100, 300, 100)), _rect(112, 96, 10, 14, "#A03020"))))
-    assert "IN THE PASSAGE" in bad
+    assert "PASSAGE_BLOCKERS:" in bad
 
 
 def test_format_report_gate_openings_section_states_each_case() -> None:
@@ -870,12 +871,10 @@ def test_structures_on_walls_reports_the_divider_and_the_worst_overlap_first() -
 
 
 def test_format_report_structure_wall_section_states_each_case() -> None:
-    nowall = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 200, 200, COURT), _rect(0, 0, 60, 60, "#DDB87A"))))
-    assert "no wall strokes in this plan" in nowall
     ok = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 200, 200, COURT), _wallgroup((0, 190, 200, 190)), _rect(0, 0, 60, 60, "#DDB87A"))))
-    assert "structures clear the wall ink: OK" in ok
+    assert "structures_on_walls: OK" in ok
     bad = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 200, 200, COURT), _wallgroup((0, 100, 200, 100)), _rect(0, 60, 60, 45, "#DDB87A"))))
-    assert "ON WALL" in bad
+    assert "STRUCTURES_ON_WALLS:" in bad and "set the structure against the wall's inner face" in bad
 
 
 def test_structure_on_wall_fires_on_the_frozen_ochiba_fixture() -> None:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
 
 from .grids import FTPX
@@ -210,7 +211,9 @@ def orphan_group_labels(plan: ParsedPlan, max_ft: float = GROUP_LABEL_MAX_FT) ->
     for lab in plan.labels:
         low = lab.text.lower()
         for key, kind in GROUP_LABEL_GLYPHS.items():
-            if key not in low:
+            # a WHOLE-WORD match: `well` inside `dwelling` named no well, and a shrine's `hall and dwelling`
+            # label was reported orphaned from every well on the sheet (found by the second type, 2026-09-19)
+            if not re.search(r"\b" + re.escape(key) + r"s?\b", low):
                 continue
             centers = kinds[kind]
             if centers:

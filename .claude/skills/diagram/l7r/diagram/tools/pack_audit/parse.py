@@ -96,7 +96,13 @@ class Rect:
     h: float
     fill: str = ""
     pos: int = -1  # byte offset in the source SVG (document/draw order; higher = drawn later, on top)
-    precinct: bool = False  # marked `id="precinct"`: the ground the checks reason over
+    ident: str = ""  # the rect's `id`, when the sheet DECLARES what it is: `precinct`, and for a shrine
+    # `hall`, `sanctuary`, `approach`, `arch`, `well` (feature 254 - a composition check reads a declared
+    # feature rather than guessing it from the nearest label)
+
+    @property
+    def precinct(self) -> bool:
+        return self.ident == PRECINCT_ID
 
     @property
     def x2(self) -> float:
@@ -171,6 +177,10 @@ class ParsedPlan:
     structures: tuple[Rect, ...] = ()  # every built footprint, NO area floor (porches/sheds count)
     fills: tuple[Rect, ...] = ()  # every drawn rect (any fill) - the fill-blind occluder set
     furniture: tuple[Rect, ...] = ()  # sub-building rects (privy, door, board, mat): foreground
+
+    def by_id(self, ident: str) -> tuple[Rect, ...]:
+        """The rects the sheet marked `id="<ident>"`, in draw order."""
+        return tuple(r for r in self.fills + self.interior if r.ident == ident)
 
     @property
     def bounds(self) -> tuple[float, float, float, float]:
@@ -264,7 +274,7 @@ def _rects(text: str) -> list[Rect]:
             x, y, w, h = (float(attrs[k]) for k in ("x", "y", "width", "height"))
         except ValueError:
             continue
-        out.append(Rect(x, y, w, h, attrs["fill"], m.start(), attrs.get("id") == PRECINCT_ID))
+        out.append(Rect(x, y, w, h, attrs["fill"], m.start(), attrs.get("id", "")))
     return out
 
 

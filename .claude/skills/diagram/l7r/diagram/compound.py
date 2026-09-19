@@ -293,12 +293,16 @@ _DEFS = (
 )
 
 
-def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 20.0) -> str:
-    """Build a composed draft SVG (feet -> px). Not a final map - the GM refines it."""
+def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7.0) -> str:
+    """Build a composed draft SVG (feet -> px). Not a final map - the GM refines it.
+
+    The parchment margin is the checklist's ~15-25 px (7 ft = 21 px; `viewbox_cropped` holds every
+    sheet to it, the drafts included since feature 254); the top adds the title band and the scale bar."""
     env = program.envelope
-    ox = oy = margin_ft * FTPX
+    ox = margin_ft * FTPX
+    oy = (margin_ft + 8.0) * FTPX
     iw, ih = env.w_ft * FTPX, env.h_ft * FTPX
-    cw, ch = iw + 2 * ox, ih + 2 * oy
+    cw, ch = iw + 2 * ox, ih + oy + margin_ft * FTPX
 
     def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str, sw: float, ident: str = "") -> str:
         tag = f' id="{ident}"' if ident else ""
@@ -332,8 +336,18 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 2
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2))
         parts.append(label(p.x_ft + p.spec.w_ft / 2, p.y_ft + p.spec.h_ft / 2 + 1, p.spec.name, 10, False, "#3A2E1C"))
-    # compound wall (4 segments; S wall broken by the gate) + divider
+    # the scale bar every Mode A sheet carries (buildings.md "Scale"; the registered check `scale_bar_present`)
+    sx, sy = ox, oy - 12 * FTPX
+    parts.append(
+        f'<g stroke="#3A2E1C"><line x1="{sx:.0f}" y1="{sy:.0f}" x2="{sx + 90:.0f}" y2="{sy:.0f}" stroke-width="2"/><line x1="{sx:.0f}" y1="{sy - 5:.0f}" x2="{sx:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 90:.0f}" y1="{sy - 5:.0f}" x2="{sx + 90:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 45:.0f}" y1="{sy - 3:.0f}" x2="{sx + 45:.0f}" y2="{sy + 3:.0f}" stroke-width="1"/></g>'
+    )
+    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>')
+    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>')
+    # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
+    # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are
+    # swept by the gate like the hand-drawn sheets, so they are drawn the way the checks read)
     gl, gr = _gate_interval(env)
+    parts.append('<g stroke="#2D2A24" stroke-width="9">')
     for x1, y1, x2, y2 in [
         (0, 0, env.w_ft, 0),
         (0, 0, 0, env.h_ft),
@@ -341,8 +355,9 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 2
         (0, env.h_ft, gl, env.h_ft),
         (gr, env.h_ft, env.w_ft, env.h_ft),
     ]:
-        parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}" stroke="#2D2A24" stroke-width="9"/>')
-    parts.append(f'<line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}" stroke="#3F3A30" stroke-width="6"/>')
+        parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}"/>')
+    parts.append("</g>")
+    parts.append(f'<g stroke="#3F3A30" stroke-width="6"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>')
     parts.append("</svg>")
     return "\n".join(parts)
 
