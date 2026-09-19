@@ -288,3 +288,4 @@ and every new make target is listed where the others are.
   here, and R5 now scores the fourth CUT. (2) FR-008's "111-line contract against 236" was unlabeled and
   wrong (the files measure 114 and 215 lines): the counts are dropped. The reviewer's aside is answered in
   R5's Method: the two `quote-check` slices were ONE run, so seventeen stands.
+- **Amendment review, round 3 (2026-09-19) - FAITHFUL.** Both round-2 items verified resolved; nothing new introduced.
