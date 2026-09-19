@@ -8,7 +8,7 @@ run at Opus list rates (fresh input 6.25, cached input 0.5, output 25 per millio
 1.25x applied to all fresh input, so a slight overstatement) purely to put the four token columns on
 one scale; it is a relative weight, not a bill, and the GM's plan is not metered this way.
 
-| agent | runs | turns/run | input/run | output/run | weight/run | total weight | output share | cached-input share |
+| agent | runs | turns/run | input/run | output/run | weight/run | total weight | output share (observed 2026-09-19; method: `make agent-census`) | cached-input share |
 |---|---|---|---|---|---|---|---|---|
 | `general-purpose` (ad hoc) | 295 | 22 | 3.89 M | 25.8 k | 3.70 | 1,092 | 17% | 50% |
 | `settlement-review` | 123 | 43 | 6.63 M | 44.1 k | 5.54 | 681 | 20% | 58% |
@@ -23,7 +23,7 @@ one scale; it is a relative weight, not a bill, and the GM's plan is not metered
 
 What it says:
 
-1. **Output, thinking included, is 10-26% of what a check costs; input is the rest.** Roughly half of
+1. **Output, thinking included, is 10-26% of what a check costs (observed 2026-09-19; method: the census table above); input is the rest.** Roughly half of
    every agent's output is thinking. So an effort setting can move perhaps a tenth of a check's cost
    directly; its larger effect is through TURNS, because every turn re-reads the whole context
    (`settlement-review` averages 43 turns and 6.6 M input tokens a run). The model a check runs on moves
@@ -106,7 +106,7 @@ the three large recorded runs were cut to slices: `quote-check` to 23 of a run's
 to one scoped page and one section. Seventeen runs in all. "Weight" is R1's scale (Sonnet priced at its own
 list rates); recorded figures are that run's own transcript, not the agent's mean.
 
-| case | tier tested | recorded result | new result | verdict | turns rec -> new | input rec -> new | weight rec -> new |
+| case | tier tested | recorded result (observed 2026-09-19; method: read from the run's transcript) | new result | verdict | turns rec -> new | input rec -> new | weight rec -> new |
 |---|---|---|---|---|---|---|---|
 | entry-drift farmhouse | opus / medium | DRIFTED | DRIFTED, same passage | hit | 7 -> 7 | 0.95 M -> 0.36 M | 1.65 -> 0.97 |
 | entry-drift notice board | opus / medium | DRIFTED | DRIFTED | hit | 4 -> 5 | 0.52 M -> 0.36 M | 1.37 -> 0.99 |
@@ -152,7 +152,7 @@ result, and no further tier was tried in this feature):
 weight in no consistent direction: `entry-drift` 5.64 -> 4.42 over four cases, `escalation-check` 3.29 ->
 2.97 over three, the twin 2.56 -> 3.45. Several medium runs took MORE turns. One confound is unremoved: a
 headless session is a main thread, not a subagent, and its fixed context differs. Read with R1 (output is
-10-26% of a check), the honest summary is that effort is a small lever and this sample cannot price it;
+10-26% of a check - observed 2026-09-19; method: R1's census), the honest summary is that effort is a small lever and this sample cannot price it;
 it costs nothing to keep where the findings held. The measured savings of this feature are the scripts'
 (no fetches, no character comparison, a false alarm and two misses corrected) and the no-inherit rule's
 (R1: 62 ad-hoc runs and 19 settlement reviews on Fable).

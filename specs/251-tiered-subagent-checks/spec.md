@@ -140,7 +140,8 @@ output format is unchanged. Model and effort per FR-002.
 
 **FR-006 - `size-audit` is handed the feet.** `scripts/_size_table.py`, run as `make size-table
 PLAN=<pool svg>`, lists every rect, every gap between collinear wall segments and every stroke width in
-the plan, each converted at 3 px = 1 ft and labeled with the nearest text label, as a table. The agent's
+the plan, each converted at 3 px = 1 ft (the Mode A constant as observed 2026-09-19 in `size-audit.md`'s Inputs;
+`research.md` holds no measurement behind it) and labeled with the nearest text label, as a table. The agent's
 Method step 1 starts from the table and checks it against the sheet rather than building it; anchors,
 ratios, the proportion sweep and the packing sweep are unchanged and remain its own.
 
@@ -225,17 +226,18 @@ and every new make target is listed where the others are.
 
 ## Success criteria
 
-- **SC-001** The census table exists in `research.md` with its date, and accounts for every agent type
+- **SC-001** (FR-001, FR-010) The census table exists in `research.md` with its date, and accounts for every agent type
   the transcripts hold.
-- **SC-002** On the verbatim fixtures, the script's verdicts are exact: every seeded character
+- **SC-002** (FR-003, FR-004) On the verbatim fixtures, the script's verdicts are exact: every seeded character
   difference is reported DIFFERS and no exact quotation is.
-- **SC-003** No agent file inherits or omits a model or an effort, and the gate proves it.
-- **SC-004** Every downgraded agent has an R5 row set, and each either missed nothing the recorded
+- **SC-003** (FR-002, FR-007) No agent file inherits or omits a model or an effort, and the gate proves it.
+- **SC-004** (FR-011) Every downgraded agent has an R5 row set, and each either missed nothing the recorded
   result caught or was stepped back up, with the recorded Opus run standing as that tier's result and the
   confirming run deferred per the GM's instruction of 2026-09-19.
-- **SC-005** R5 states, per downgraded agent, tokens per seeded run against the same recorded run's own tokens -
+- **SC-005** (FR-011) R5 states, per downgraded agent, tokens per seeded run against the same recorded run's own tokens -
   the first measurement of what the tiering saves.
-- **SC-006** `make hooks-test` and `make quick` are green; nothing under `l7r/` or `pool/` changed.
+- **SC-006** (FR-005, FR-006, FR-008, FR-009, FR-012) `make hooks-test` and `make quick` are green - the
+  suites that hold the pre-pass, the size table, the routing and the docs to what these requirements say; nothing under `l7r/` or `pool/` changed.
 
 ## Assumptions
 
