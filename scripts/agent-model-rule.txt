@@ -1,0 +1,10 @@
+That is how 62 ad-hoc runs landed on Fable (feature 251's census), and no test pins an ad-hoc agent.
+
+Re-send the SAME dispatch with a `model`, chosen by what you are asking the agent to do:
+
+    model: "sonnet"   to read, fetch, translate or extract - the agent reports what is there
+    model: "opus"     for anything that judges - does this support that, is this right, what is missing
+
+If it does both, it judges: use opus. A named check (`quote-check`, `settlement-review`, ...) needs no
+model - its file under .claude/agents/ pins its tier. Which one fits is yours to decide; that is why
+this is a refusal and not a default.

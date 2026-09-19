@@ -1,6 +1,6 @@
 # Feature 252 - an ad-hoc agent dispatch names its model, or is refused
 
-**Status:** draft 2026-09-19 - awaiting `spec-fidelity`.
+**Status:** FAITHFUL at round 1 (2026-09-19, see Review history); FR-003's carve-out ruled LEGITIMATE.
 
 ## Summary
 
@@ -29,7 +29,8 @@ the message is READ from one place the docs also state, so a later change to the
 follow-up experiments may add a tier) is made once.
 
 **FR-003 - `fork` passes, and says why.** A dispatch whose `subagent_type` is `fork` is not refused: a
-fork always runs on its parent's model and the harness ignores a `model` on it, so a refusal would demand
+fork always runs on its parent's model and the harness ignores a `model` on it (the Agent tool's own
+description: *"always runs on your model - a `model` override is ignored"*), so a refusal would demand
 a field that changes nothing. It is recorded (`permitted`/`fork-inherits`) so `make audit` shows how often
 the session's model is spent this way.
 
@@ -56,3 +57,12 @@ row. There is no escape token: the compliant dispatch is always available, and i
   key when the caller set none (the transcripts' dispatch metas show both shapes; feature 251 R1).
 - A refusal costs one model round trip each time a session forgets; the message is the teaching, and
   the GM chose that cost over a silent default.
+
+## Review history
+
+- **Round 1 (2026-09-19) - FAITHFUL.** FR-003 (`fork` passes, recorded) was put to the reviewer as a MODE 1
+  question and ruled LEGITIMATE: the harness discards a model on a fork, so the GM's message would be false as
+  applied and there is no choice for the caller to make; the measured failure (72 no-model `general-purpose`
+  runs, 62 on Fable) is untouched by it. Passing any named model, and having no escape token, were both ruled
+  within the request. Aside taken: FR-003 now quotes the tool description. Aside noted: counting every ad-hoc
+  type the no-model set is 83 runs, 67 on Fable; the spec's 62 is `general-purpose` alone and true as written.
