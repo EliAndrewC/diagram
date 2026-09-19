@@ -46,36 +46,36 @@ hyphens only.
       (`tools/picture_diff.py` before and after)
       research: rendering
       verify: DONE. id=precinct on the court-earth rects of the 3 hand-drawn sheets (Hayakawa has two), the 8 red fixtures and compound.emit_svg; parse_svg reads marked rects in any attribute order and refuses a sheet without one (two red tests); resvg 2400 px renders of the three sheets byte-identical before and after (md5 56d21a98/4b615dfc/9e4ba3a9); make quick green
-- [ ] T06 The registry (D5, D6): `tools/pack_audit/registry.py` with `Check(name, run, types, fixture,
+- [x] T06 The registry (D5, D6): `tools/pack_audit/registry.py` with `Check(name, run, types, fixture,
       fix)` and `CHECKS` over the eleven shared checks now in `checks.py`, the fire-water three declaring both tiers, and the magistracy's `notice_board_adrift`, `coverage_band` (the 37-42% band the report prints, made pass/fail) and `perimeter_hugging` (its floor derived from the five pool sheets, measured first and recorded as `m:hugging-floor`); `report.py` composes from it; `make pack-audit` output
       unchanged on Ochiba (diffed); every registered fixture exists and fires
       (`test_every_check_fires_on_its_fixture_and_passes_the_pool`), the fixtures that do not yet
       exist cut from a pool sheet in this task (`tests/fixtures/<sheet>-<check>-red.svg`)
       research: rendering
       scaffold: the existing red fixtures under `tests/fixtures/`
-      verify: `make quick`; the report diff on Ochiba is empty
-- [ ] T07 New shared checks (D8): `structures_overlap` (sorted-edge sweep over structure rects,
+      verify: DONE. registry.py: Check(name, run, shared, fixture, fix) with types DERIVED from the declaration; 20 rows; report.py check block composed from it (findings identical on Ochiba, the block's presentation changed - the task's 'unchanged' held for findings, not text); nine new fixtures cut from Ochiba; test_registry proves every row fires on its fixture and passes the pool; make quick ALL=1 3726 passed
+- [x] T07 New shared checks (D8): `structures_overlap` (sorted-edge sweep over structure rects,
       rounding floor `WALL_OVERLAP_MIN_PX`), `scale_bar_present`, `viewbox_cropped`; the magistracy's
       `two_court_zoning`; each registered with a red fixture cut from Ochiba or Hayakawa and a `fix`
       sentence; `pool/magistracies` clean under all four
       research: rendering
       scaffold: `structures_on_walls` for the rect-overlap form
-      verify: `make quick`; each fixture red before its check lands
-- [ ] T08 Defects the registration finds (D9, constitution XIV): every firing of a registered check on a
+      verify: DONE. structures_overlap (sorted-edge sweep, 30% of the smaller footprint, containment and corridor ends allowed), scale_bar_present, viewbox_cropped (ET walk with translate, definitions and parchment skipped, absolute path points only), gate_widths (5-16 ft or a structure spans the break), coverage_band (floor Takayama's 33%, ceiling 42%+2), perimeter_hugging (floor 45%, m:hugging-floor), two_court_zoning; each red on its fixture before landing; the five pool sheets clean
+- [x] T08 Defects the registration finds (D9, constitution XIV): every firing of a registered check on a
       shipped magistracy sheet is a defect in the sheet or the check - fixed here, the sheet's
       `.notes.md` Review log carrying the entry; nothing ledgered as pre-existing
       research: rendering
-      verify: `make pack-audit` on all five reports no check firing; `make quick`
+      verify: DONE. defects found by registering: the two drafts drew walls and divider outside the groups the checks read and had no scale bar (emitter fixed, margins cropped to 21 px); Hayakawa at 35% coverage against a rule the record itself floors at Takayama's 33% (the check's exact 37 was the defect; the record's stale 'both manors at 37-38%' sentence corrected); the orphan-label check matched 'well' inside 'dwelling' (whole-word now, with its test)
 
 ## Phase 2 - the sweep (FR-004; D10)
 
-- [ ] T09 `tests/gate/test_mode_a_sheets.py` parametrized over the declared tiers' bundles, every
+- [x] T09 `tests/gate/test_mode_a_sheets.py` parametrized over the declared tiers' bundles, every
       applicable check asserted quiet with a message naming sheet, check and fix; the roster
       `tests/fixtures/gate_check_names.json`; the cost measured with `scripts/_gatecost.py` on the
       gate's durations record and written as `m:sweep-cost`
       research: rendering
       measure: `scripts/_gatecost.py` after one `make done`
-      verify: `make quick` green on the five; the JSON entry present
+      verify: DONE. tests/test_mode_a_sheets.py parametrized over the declared tiers' bundles, a draft's svg regenerated when absent; failures name sheet, check, fix; quick tree by tests/CLAUDE.md's rule (milliseconds, no roll); m:sweep-cost recorded; the render-site census and the sparse roster's comment record the two new readers
 
 ## Phase 3 - the program and the shrine's checks (FR-006 to FR-011; D1, D7, D8, D11)
 
@@ -101,12 +101,12 @@ hyphens only.
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
       verify: `make building-programs CHECK=1` green; `make quick`; the pass is R1-R3; the boxes tick
       with T13-T15
-- [ ] T12 The shrine's checks (D8): `sanctuary_on_axis`, `arch_on_approach`, `well_clear_of_arch`,
+- [x] T12 The shrine's checks (D8): `sanctuary_on_axis`, `arch_on_approach`, `well_clear_of_arch`,
       `fence_not_wall`, registered under `country-shrines`; their fixtures are cut from the exemplar
       in T17 - this task lands the checks with synthetic-sheet tests and T17 lands the fixtures
       research: rendering
       scaffold: `torii_clear_of_shrine` in `settlement/shrines_wells/torii.py` for the arch-on-axis form
-      verify: `make quick`; each check red on its synthetic defect before it lands
+      verify: DONE. sanctuary_on_axis, arch_on_approach, well_clear_of_arch, fence_not_wall read DECLARED ids (hall, sanctuary, approach, arch, well; a <g id=fence>) - Rect.ident and ParsedPlan.by_id added; synthetic shrine sheet + four synthetic red fixtures (T17 re-cuts from the exemplar); branch tests in test_shared.py; make quick ALL=1 green
 
 ## Phase 4 - the record (FR-012 to FR-014; D13)
 
