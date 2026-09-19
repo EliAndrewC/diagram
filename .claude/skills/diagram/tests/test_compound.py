@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from l7r.diagram import compound as c
 
 
@@ -197,3 +199,54 @@ def test_main_reports_overflow(tmp_path, monkeypatch, capsys) -> None:
     monkeypatch.setattr(c, "county_magistracy_program", lambda: prog)
     c.main([str(tmp_path / "o.svg")])
     assert "OVERFLOW" in capsys.readouterr().out
+
+
+# --- the point features the emitter seats (feature 254): wells, privies, tubs, a bath, the notice board ---
+
+
+def _tub_circles(svg: str) -> int:
+    """The circles inside the fire-water group (the pattern definitions carry circles of their own)."""
+    return svg.split('<g fill="#8FB0C6"')[1].split("</g>")[0].count("<circle") if '<g fill="#8FB0C6"' in svg else 0
+
+
+def _prog(*buildings: c.BuildingSpec, spine: tuple[c.CourtZone, ...] = ()) -> c.CompoundProgram:
+    return c.CompoundProgram("t", _env(200.0, 200.0, 100.0, 13.0), spine, buildings)
+
+
+@pytest.mark.parametrize(
+    ("wall", "court", "normal"),
+    [("N", "inner", (0.0, 1.0)), ("S", "outer", (0.0, -1.0)), ("E", "outer", (-1.0, 0.0)), ("W", "outer", (1.0, 0.0)), ("divider", "inner", (0.0, -1.0)), ("divider", "outer", (0.0, 1.0))],
+)
+def test_court_face_normal_points_into_the_court(wall: str, court: str, normal: tuple[float, float]) -> None:
+    p = c.Placed(_b("x", 20.0, 10.0, court, wall), 50.0, 50.0)
+    nx, ny, _fx, _fy = c._court_face(p, _env())
+    assert (nx, ny) == normal
+
+
+def test_point_features_follow_the_masses_and_skip_what_the_program_lacks() -> None:
+    full = _prog(
+        _b("kitchen", 40.0, 30.0, "inner", "W", order=5),
+        _b("stables", 30.0, 20.0, "outer", "S", order=5),
+        _b("barracks", 30.0, 30.0, "outer", "E", order=4),
+        _b("servants", 60.0, 14.0, "inner", "N", order=2),
+        _b("archive", 30.0, 26.0, "outer", "W", order=6),
+        spine=(c.CourtZone("garden", 60.0, 30.0, 80.0, 30.0),),
+    )
+    full = c.CompoundProgram(full.title, full.envelope, full.spine, (*full.buildings, c.BuildingSpec("kura", "kura", 30.0, 26.0, "outer", "W", order=1)))
+    svg = c.emit_svg(full, c.place(full))
+    assert svg.count(">well<") == 3 and svg.count(">latrine<") == 3 and ">bath<" in svg and ">notice board<" in svg and ">fire-water tubs<" in svg
+    assert _tub_circles(svg) == 6  # two at the kitchen, one at each other wooden building, none at the kura
+    bare = _prog(_b("hall", 40.0, 20.0, "outer", "divider", order=10))
+    svg = c.emit_svg(bare, c.place(bare))
+    assert ">well<" not in svg and ">latrine<" not in svg and ">bath<" not in svg and ">notice board<" in svg and _tub_circles(svg) == 1
+
+
+def test_a_feature_with_no_clear_seat_is_left_out() -> None:
+    """A building whose court face is walled in by its neighbors seats nothing against it."""
+    boxed = _prog(
+        _b("kitchen", 40.0, 30.0, "inner", "W", order=9),
+        _b("block", 60.0, 60.0, "inner", "W", order=8, rank=2),  # a rank-2 mass right behind the kitchen's face
+    )
+    result = c.place(boxed)
+    parts = c._point_features(boxed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
+    assert parts.count("R") <= 3  # at most the notice board and what still fits; no well squeezed into the block

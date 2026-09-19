@@ -142,3 +142,26 @@ not used. (The source figures in this paragraph: observed 2026-09-19; method: th
   NOT used.
 - Baidu Baike (庙祝, 村庙, 里社) refuses fetches; the Sinica and Palace Museum PDFs on Ming temple-land
   exemption would not read. The Chinese tax-exemption claim is therefore not cited. (The 2.5 mu: observed 2026-09-19; method: the dimension as printed on the cited cultural-property or encyclopedia page, read by a Sonnet reader whose report is in the session's scratchpad and becomes the footnote when the entry lands.)
+
+
+## R5. Decisions the implementation met (2026-09-19)
+
+- **The placer drafts are swept like every other sheet.** Registering the program and band checks
+  fired on the two generated drafts, whose placer omitted the point features. The exemption "a draft is
+  swept by geometry and composition, not judged as a finished program" was put to `spec-fidelity` as a
+  MODE 1 exception and ruled NOT LEGITIMATE: FR-004 says "every sheet", SC-002 counts "five
+  magistracies", edge case 2 is about the ignore rule only, and the compliant route existed - the
+  emitter now seats the five point features (wells, latrines, tubs, a bath, the notice board) against
+  the placed masses, the two draft programs carry the clerks' room, the guest room and the practice
+  ground, and the worked example's shrine is drawn at the ~36 by 30 ft ceiling rather than over it.
+- **The coverage floor is Takayama's.** `coverage_band` at an exact 37% fired on Hayakawa (35%, every
+  building at its audited size); the record's own entry floors a jin'ya at Takayama's ~33% built, so
+  the check's floor is 33 and its ceiling 42 plus two points, and the entry's stale "both manors at
+  37-38%" sentence was corrected.
+- **The hugging floor is derived**: the five sheets measure 51-58% (`m:hugging-floor`); the floor is
+  45, one pulled-in building under the lowest.
+- **Whole-word group labels**: the orphan check matched `well` inside `dwelling`; found by the second
+  type, fixed with its test.
+- **Declared ids for the shrine's composition checks**: `hall`, `sanctuary`, `approach`, `arch`, `well`
+  on rects and a `<g id="fence">` - a composition check reads what the sheet declares, as the precinct
+  is declared, rather than guessing from the nearest label.

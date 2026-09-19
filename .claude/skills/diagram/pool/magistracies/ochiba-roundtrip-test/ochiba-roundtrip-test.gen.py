@@ -8,9 +8,10 @@ and compound.emit_svg(). The point is not to replace Ochiba but to see whether t
 given Ochiba's ACTUAL program, composes it the way the GM hand-composed it, and to surface
 exactly where the two diverge (that divergence is the finding of the test).
 
-Garden pavilions and point features (bath, wells, latrines, porch, privy, fire-tubs) are NOT
-massed perimeter buildings - they are hand-placed in the final map regardless - so they are
-omitted here; the placer only arranges the wall-ranging masses.
+Garden pavilions and point features (bath, wells, latrines, privy, fire-tubs, the notice board) are
+NOT massed perimeter buildings - the placer arranges the wall-ranging masses and the emitter seats
+the point features against them (feature 254: a draft in the pool is swept by the gate with the
+whole program, so it carries the whole program).
 
 Run:  python3 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py   (from the skill dir)
 """
@@ -39,6 +40,7 @@ def ochiba_program() -> C.CompoundProgram:
         C.CourtZone("garden", 107.0, 53.0, 97.0, 45.0),  # inner garden (center of inner court)
         C.CourtZone("oshirasu", 73.0, 139.0, 120.0, 35.0),  # the sanded hearing court
         C.CourtZone("forecourt", 95.0, 180.0, 76.0, 17.0),  # just inside the main gate
+        C.CourtZone("practice ground", 200.0, 104.0, 30.0, 30.0),  # beside the E-wall barracks, as on the sheet (feature 254: the whole program)
     )
     b = C.BuildingSpec
     buildings = (
@@ -59,6 +61,8 @@ def ochiba_program() -> C.CompoundProgram:
         b("cell", "cell", 18.0, 15.0, "outer", "E", order=1),
         b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8),
         b("stables", "service", 29.0, 22.0, "outer", "S", order=5),
+        b("clerks' room", "service", 28.0, 18.0, "outer", "W", order=3),  # a room of the hall on the sheet; a mass here (feature 254)
+        b("guest room", "lord", 22.0, 15.0, "inner", "E", order=2),  # a room of the residence on the sheet; a mass here (feature 254)
     )
     return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings)
 

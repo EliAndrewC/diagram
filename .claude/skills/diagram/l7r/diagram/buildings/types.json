@@ -21,7 +21,7 @@
     "required": [
       {
         "id": "office_hall",
-        "label": "official study",
+        "label": "official study|^office hall$",
         "band_ft": {
           "w": [
             80,
@@ -37,7 +37,7 @@
       },
       {
         "id": "hearing_court",
-        "label": "^HEARING COURT$",
+        "label": "^HEARING COURT$|^oshirasu$",
         "band_ft": {},
         "class": "accurate",
         "why": "the oshirasu before the dais - buildings.md, 'Hearing court'"
@@ -131,7 +131,7 @@
       },
       {
         "id": "residence",
-        "label": "^RESIDENCE$",
+        "label": "^residence",
         "band_ft": {},
         "class": "accurate",
         "why": "the lord's wing, 180-200 ft long, audited and validated; a zone label"
@@ -170,14 +170,14 @@
       },
       {
         "id": "inner_garden",
-        "label": "^inner garden$",
+        "label": "^inner garden$|^garden$",
         "band_ft": {},
         "class": "accurate",
         "why": "the inner court's garden; a zone"
       },
       {
         "id": "servants",
-        "label": "^servants' quarters$",
+        "label": "^servants",
         "band_ft": {
           "w": [
             20,

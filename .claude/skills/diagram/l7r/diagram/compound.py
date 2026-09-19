@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from .buildings.types import load_types
@@ -336,6 +337,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2))
         parts.append(label(p.x_ft + p.spec.w_ft / 2, p.y_ft + p.spec.h_ft / 2 + 1, p.spec.name, 10, False, "#3A2E1C"))
+    parts += _point_features(program, result, rect, label, ox, oy)
     # the scale bar every Mode A sheet carries (buildings.md "Scale"; the registered check `scale_bar_present`)
     sx, sy = ox, oy - 12 * FTPX
     parts.append(
@@ -360,6 +362,90 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7
     parts.append(f'<g stroke="#3F3A30" stroke-width="6"><line x1="{ox:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + iw:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/></g>')
     parts.append("</svg>")
     return "\n".join(parts)
+
+
+def _court_face(p: Placed, env: Envelope) -> tuple[float, float, float, float]:
+    """The side of a placed building that faces its court, as a unit normal (nx, ny) and the face's
+    two end points along it - what a gutter-fed tub, a well or a privy stands against."""
+    wall = p.spec.wall
+    if wall == "divider":
+        wall = "S" if p.spec.court == "inner" else "N"  # an inner-court divider building faces north; an outer one south
+    if wall == "N":
+        return 0.0, 1.0, p.x_ft, p.y2
+    if wall == "S":
+        return 0.0, -1.0, p.x_ft, p.y_ft
+    if wall == "E":
+        return -1.0, 0.0, p.x_ft, p.y_ft
+    return 1.0, 0.0, p.x2, p.y_ft
+
+
+def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], label: Callable[..., str], ox: float, oy: float) -> list[str]:
+    """The program's point features, seated by the composition (feature 254): fire-water tubs at every
+    wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
+    a privy beside the barracks, the stables and the servants' row, a bath in the garden, and the notice
+    board outside the main gate. The placer arranges the wall-ranging masses; these follow them, each
+    seated at the first spot along its building's court face that is CLEAR of every mass and of every
+    feature already seated - a draft swept by the gate carries the whole program, not the masses alone."""
+    env = program.envelope
+    parts: list[str] = []
+    taken: list[tuple[float, float, float, float]] = [(p.x_ft, p.y_ft, p.x2, p.y2) for p in result.placed]
+    by_name = {p.spec.name: p for p in result.placed}
+
+    def clear(x: float, y: float, w: float, h: float, margin: float = 1.0) -> bool:
+        if x < margin or y < margin or x + w > env.w_ft - margin or y + h > env.h_ft - margin:
+            return False
+        return all(x + w + margin <= tx or tx2 + margin <= x or y + h + margin <= ty or ty2 + margin <= y for tx, ty, tx2, ty2 in taken)
+
+    def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...]) -> tuple[float, float] | None:
+        """The center of a `size`-square feature against `p`'s court face: the first clear (frac, off)."""
+        nx, ny, fx, fy = _court_face(p, env)
+        for off in offs:
+            for frac in fracs:
+                cx, cy = (fx + p.spec.w_ft * frac, fy + ny * off) if ny else (fx + nx * off, fy + p.spec.h_ft * frac)
+                if clear(cx - size / 2, cy - size / 2, size, size):
+                    taken.append((cx - size / 2, cy - size / 2, cx + size / 2, cy + size / 2))
+                    return cx, cy
+        return None
+
+    tubs: list[tuple[float, float]] = []
+    wells: list[tuple[float, float]] = []
+    privies: list[tuple[float, float]] = []
+    for name in ("kitchen", "stables"):  # wells first: they take the middle of a face
+        if name in by_name and (w := seat(by_name[name], 7.3, (0.5, 0.3, 0.7), (9.0, 12.0, 15.0))):
+            wells.append(w)
+    for z in program.spine:
+        if z.name == "garden":
+            wells.append((z.x_ft + 5.0, z.y_ft + 5.0))
+            taken.append((z.x_ft + 1.35, z.y_ft + 1.35, z.x_ft + 8.65, z.y_ft + 8.65))
+            bx, by = z.x2 - 18.0, z.y_ft + max(0.0, (z.h_ft - 12.0) / 2)
+            taken.append((bx, by, bx + 15.0, by + 12.0))
+            parts.append(rect(bx, by, 15.0, 12.0, KINDS["service"][0], KINDS["service"][1], 1.5))
+            parts.append(label(bx + 7.5, by + 7.0, "bath", 8, False, "#3A2E1C"))
+    for name in ("barracks", "stables", "servants"):
+        if name in by_name and (v := seat(by_name[name], 5.0, (0.85, 0.15, 0.5), (4.5, 7.0))):
+            privies.append(v)
+    for p in result.placed:
+        if p.spec.kind == "kura":
+            continue  # a plaster storehouse carries no tub (buildings.md, "Fire-water tubs")
+        for _ in range(2 if p.spec.name.startswith("kitchen") else 1):
+            if tub := seat(p, 2.6, (0.15, 0.85, 0.4, 0.6), (2.5,)):
+                tubs.append(tub)
+    for cx, cy in wells:
+        parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2))
+        parts.append(label(cx, cy + 9.0, "well", 8, True, "#3A2E1C"))
+    for cx, cy in privies:
+        parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8))
+        parts.append(label(cx, cy + 7.0, "latrine", 7, True, "#3A2E1C"))
+    if tubs:
+        parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1">')
+        parts += [f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="3.8"/>' for cx, cy in tubs]
+        parts.append("</g>")
+        tx, ty = tubs[0]
+        parts.append(label(tx + 9.0, ty + 1.0, "fire-water tubs", 7, True, "#3A5060"))
+    gl, _gr = _gate_interval(env)
+    parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6))
+    parts.append(label(gl - 11.0, env.h_ft + 9.0, "notice board", 7, True, "#3A2E1C"))
+    return parts
 
 
 # ---- a built-in county-magistracy program ------------------------------------------------
@@ -396,7 +482,7 @@ def county_magistracy_program() -> CompoundProgram:
         b("residence", "lord", 92.0, 36.0, "inner", "N", order=10),
         b("servants", "service", 66.0, 15.0, "inner", "N", order=2),
         b("kitchen", "service", 44.0, 36.0, "inner", "W", order=5),
-        b("shrine", "shrine", 40.0, 32.0, "inner", "E", order=4),
+        b("shrine", "shrine", 36.0, 30.0, "inner", "E", order=4),  # at the hall-shrine ceiling (~36 x 30 ft); the 40 x 32 it was drew over it (feature 254)
         b("guest house", "lord", 33.0, 30.0, "inner", "E", order=3),
         b("karo's house", "lord", 37.0, 26.0, "inner", "divider", order=3),
         # outer (administrative) court - office hall backs the divider (oshirasu in front)

@@ -39,7 +39,6 @@ class Context:
     text: str = ""
     btype: BuildingType | None = None
     form: str | None = None
-    draft: bool = False  # a declared generated exception (a placer draft): swept by geometry and composition, not judged as a finished program
 
 
 @dataclass(frozen=True)
@@ -133,14 +132,14 @@ CHECKS: tuple[Check, ...] = (
     # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
     Check(
         "program_complete",
-        lambda ctx: lbl.check_program(ctx.plan, ctx.btype, ctx.form) if ctx.btype and not ctx.draft else [],
+        lambda ctx: lbl.check_program(ctx.plan, ctx.btype, ctx.form) if ctx.btype else [],
         True,
         "ochiba-no-cell-red.svg",
         "draw and label the missing program item, or record in the notes why this instance lacks it",
     ),
     Check(
         "size_bands",
-        lambda ctx: lbl.check_bands(ctx.plan, ctx.btype, ctx.form) if ctx.btype and not ctx.draft else [],
+        lambda ctx: lbl.check_bands(ctx.plan, ctx.btype, ctx.form) if ctx.btype else [],
         True,
         "ochiba-big-bath-red.svg",
         "redraw the footprint inside its band, or record the instance particular that justifies it and re-derive the band",

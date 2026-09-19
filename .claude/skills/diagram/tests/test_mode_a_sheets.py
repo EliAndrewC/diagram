@@ -49,8 +49,7 @@ def test_every_mode_a_sheet_passes_its_checks(bundle: poolmaps.MapBundle) -> Non
     assert os.path.isfile(svg), f"{bundle.tier}/{bundle.stem}: no svg on disk and it is not a declared generated exception"
     with open(svg, encoding="utf-8") as fh:
         text = fh.read()
-    btype = bt.by_tier(bundle.tier)
-    ctx = R.Context(pa.parse_svg(text), text, btype, pa.read_form(svg), draft=btype is not None and bundle.stem in btype.generated_exceptions)
+    ctx = R.Context(pa.parse_svg(text), text, bt.by_tier(bundle.tier), pa.read_form(svg))
     failures = [f"{bundle.stem}: {ch.name}: {f} - fix: {ch.fix}" for ch, found in R.run_checks(ctx, bundle.tier) for f in found]
     assert not failures, "\n".join(failures)
 

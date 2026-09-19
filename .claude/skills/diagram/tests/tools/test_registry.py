@@ -21,10 +21,15 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 FIX = os.path.join(SKILL, "tests", "fixtures")
 
 
+# A fixture's tier is in its name: the sheet it was cut from says which program it is judged against.
+FIXTURE_TIER = {"ochiba": "magistracies", "hayakawa": "magistracies", "ubame": "magistracies", "shrine": "country-shrines"}
+
+
 def _ctx(path: str) -> R.Context:
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
-    return R.Context(pa.parse_svg(text), text)
+    tier = FIXTURE_TIER.get(os.path.basename(path).split("-")[0])
+    return R.Context(pa.parse_svg(text), text, bt.by_tier(tier) if tier else None, pa.read_form(path))
 
 
 @pytest.mark.parametrize("check", R.CHECKS, ids=[c.name for c in R.CHECKS])
@@ -61,10 +66,7 @@ def test_every_check_passes_the_pool_sheets_of_its_tiers(check: R.Check) -> None
             continue
         seen += 1
         ctx = _ctx(path)
-        btype = bt.by_tier(tier)
-        stem = os.path.basename(path)[: -len(".svg")]
-        draft = btype is not None and stem in btype.generated_exceptions
-        assert not check.run(R.Context(ctx.plan, ctx.text, btype, pa.read_form(path), draft=draft)), f"{check.name} fires on the shipped sheet {os.path.basename(path)}"
+        assert not check.run(R.Context(ctx.plan, ctx.text, bt.by_tier(tier), pa.read_form(path))), f"{check.name} fires on the shipped sheet {os.path.basename(path)}"
     assert seen, f"{check.name}: no pool sheet of its tiers on disk"
 
 
