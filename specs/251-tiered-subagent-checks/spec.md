@@ -35,8 +35,9 @@ recorded tier table. *Independent test:* delete one `effort:` line and watch the
 
 **US4 (P2) - a downgrade is proven, not assumed.** For each agent whose model or effort went DOWN, the
 new tier is run on artifacts whose findings are already known and the hits and false alarms are counted
-against the recorded Opus result. An agent that misses a finding the recorded result caught goes back to
-its previous tier, and the spec records it. *Independent test:* `research.md` R5 holds one row per
+against the recorded Opus result. An agent that misses a finding the recorded result caught goes back
+up - to Opus when its model was lowered, one effort step when only its effort was (FR-011) - and the
+spec records it. *Independent test:* `research.md` R5 holds one row per
 downgraded agent per artifact.
 
 **US5 (P2) - a later `spec-fidelity` round runs at medium effort without the session choosing it.** The
@@ -55,7 +56,10 @@ hook that already rewrites a later round into MODE 3 also routes it to `spec-fid
   rewritten today and is not routed; the session dispatches `spec-fidelity-verify` by hand, and the
   hook's message says so.
 - A session dispatches an ad-hoc agent (`general-purpose`) with no `model`: it would inherit the
-  session's model. FR-010.
+  session's model. FR-010 states the rule against it and measures how often it happened.
+- A session dispatches `spec-fidelity-verify` BY HAND: the round guard treats it as a round of the same
+  review - it takes and refreshes the snapshot and counts the round - so the round after it still has
+  something to diff against (FR-008).
 
 ## Functional requirements
 
@@ -148,7 +152,9 @@ the earlier ones.
 rule, the round-limit note and "What you do NOT do" - and nothing of MODES 1, 2 and 4. Its instructions
 stay strictly about the previous verdict's items and the diff. `scripts/review-round-hooks.sh`, on the
 branch where it rewrites a dispatch into MODE 3, also sets `subagent_type` to `spec-fidelity-verify` in
-the `updatedInput` it returns, and its `history-without-snapshot` message names the twin. `spec-fidelity`
+the `updatedInput` it returns, and its `history-without-snapshot` message names the twin. The guard
+fires on a dispatch of EITHER type: a hand dispatch of the twin gets the same preamble, snapshot and
+round count, and is not re-routed. `spec-fidelity`
 keeps its MODE 3 section as a pointer to the twin. Every place that recognizes a `spec-fidelity`
 dispatch or verdict recognizes the twin's as the same review: the list is ENUMERATED in `plan.md` from
 a grep of the agent's name over `scripts/`, the Makefiles, `.claude/settings.json` and the tests (the
@@ -164,11 +170,10 @@ that measurement has a baseline).
 **FR-010 - an ad-hoc agent never inherits.** The rule, in the root `CLAUDE.md` where "Every subagent
 runs on Opus" now stands: a named check runs on the tier its file pins; an ad-hoc agent is dispatched
 with an explicit `model` - `sonnet` for reading, fetching, translating and extracting, `opus` for
-anything that judges - and never with none. A guard makes it automatic: on an Agent dispatch whose
-`subagent_type` has no pinned definition (`general-purpose`, `claude`, `Explore`, `Plan`) and carries no
-`model`, it returns `updatedInput` with `model: "opus"` and one line of context naming the rule and the
-cheaper choice; it never refuses. `fork` is exempt, because a fork cannot take an override. R1 records
-how many past ad-hoc runs inherited, and on which model.
+anything that judges - and never with none. R1 records how many past ad-hoc runs inherited, and on
+which model. This feature states the rule and takes the measurement; it builds no guard for it
+(`spec-fidelity` round 1: a guard was in neither proposal). Whether a hook should fill a missing model
+is put to the GM with R1's count once the feature works.
 
 **FR-011 - the seeded-fault test gates each downgrade.** The downgraded agents are `record-format`
 (model and effort), `source-reader` (model), `quote-check`, `entry-drift`, `escalation-check` (effort,
@@ -179,15 +184,19 @@ report (the feature 232 entry-drift pairs; the feature 242 handoff reports for `
 recorded escalation draft) - and at least one artifact known CLEAN. The new tier is run on each, one
 artifact per agent, in the background. Per run R5 records: findings the recorded result had, findings
 hit, findings missed, new findings and whether each is real or a false alarm, and the run's tokens
-beside the agent's recorded per-run mean. The rule: a MISS of a finding the recorded result caught sends
-that agent back one step (effort up first; then the model), the run is repeated at that step, and the
-table, the file and FR-002 change together. A false alarm does not fail the agent; more false alarms
-than the recorded result had is recorded as a cost. The agents that stayed on Opus at high effort are
-not re-tested: high is at or below what they ran at before.
+beside the agent's recorded per-run mean. The rule: a MISS of a finding the recorded result caught
+returns a MODEL-downgraded agent (`record-format`, `source-reader`) to Opus at the effort it ran at
+before, and returns an EFFORT-only downgrade (`quote-check`, `entry-drift`, `escalation-check`,
+`spec-fidelity-verify`) one effort step up; in either case the run is repeated at the new tier, and the
+table, the agent file and FR-002 change together. A false alarm does not fail the agent; more false
+alarms than the recorded result had is recorded as a cost. The agents pinned to Opus at `high` are not
+downgraded and owe no test: an agent file with no `effort:` runs at the SESSION's effort (Assumptions),
+the configured session effort is `high`, so `high` is what they ran at, now pinned rather than
+inherited.
 
 **FR-012 - the record says what is now true.** The root `CLAUDE.md` (the review-subagents bullet and the
 gate row naming `test_agent_models.py`), `docs/spec-kit-and-reviews.md`, `docs/research-doctrine.md`,
-`docs/guards.md` (the new guard), `docs/efficiency-tooling.md` (the census and the three scripts),
+`docs/guards.md` (the review-round guard's row, which now routes), `docs/efficiency-tooling.md` (the census and the three scripts),
 `research/CLAUDE.md`, `container-scripts/append-system-prompt.md` (the twin joins the authorized list),
 and the session memory `feedback_subagent_checks_on_opus.md` are updated to the tiering, each stating
 the present rule only. Every new script has a test companion run by `make hooks-test` or `make quick`,
@@ -219,8 +228,22 @@ and every new make target is listed where the others are.
 - `effort:` is a supported frontmatter key for a subagent file in the installed Claude Code (verified
   2026-09-19 in the 2.1.278 binary: the agent-definition schema carries `effort` with the five levels,
   and the changelog names "`effort:` frontmatter on custom commands, skills, and subagents").
+- An agent file with no `effort:` runs at the session's effort (verified 2026-09-19 in the same binary:
+  the subagent's effort is read as the definition's value, else the session's layered effort), and the
+  configured session effort is `high` (`~/.claude/settings.json`, `effortLevel`). A session whose effort
+  was raised by hand ran its checks higher; the transcripts do not record it, so it is not claimed.
 - A hook's `updatedInput` may change `subagent_type` as it may change `prompt`; `plan.md` verifies this
   before FR-008 relies on it, and if it cannot, the hook instead prepends the instruction and the
   session re-dispatches - recorded as the fallback, raised with the GM after.
 - The seeded runs cost tokens once; the GM approved "test before trusting" as the acceptance.
 - The container can fetch public pages from a script as `curl` does today.
+
+## Review history
+
+- **Round 1 (2026-09-19) - CHANGES REQUIRED, three items, all applied.** (1) FR-010's guard was
+  unrequested: the rule and the measurement stay, the hook is dropped and goes to the GM as a question
+  once the feature works. (2) FR-011's "one step back" left a Sonnet agent that missed on Sonnet: a
+  model downgrade that misses now returns to Opus; an effort-only downgrade goes one step up; US4
+  aligned. (3) The exemption for the Opus-high agents rested on an unstated default: established (an
+  unset effort is the session's, configured `high`) and stated in Assumptions. The reviewer's aside -
+  a hand dispatch of the twin took no snapshot - is now in FR-008 and the edge cases.
