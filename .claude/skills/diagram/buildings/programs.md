@@ -32,7 +32,7 @@ The seat of a County Magistrate (Rank 5): a walled compound in the county town c
 **Required program**, rendered from the declaration:
 
 <!-- types.json:magistracies -->
-| item | found by the label | band (feet; either orientation) | class | why |
+| item | found by the label (or declared by id) | band (feet; either orientation) | class | why |
 |---|---|---|---|---|
 | `office_hall` | `/official study|^office hall$/` | 80-150 by 20-45 ft | guess | the vocabulary's ~360 by 84 px working block; no measured jin'ya office wing behind it |
 | `hearing_court` | `/^HEARING COURT$|^oshirasu$/` | presence | accurate | the oshirasu before the dais - buildings.md, 'Hearing court' |
@@ -91,7 +91,7 @@ The seat of a village district's **country monk** - the one tax-free religious f
 **Required program**, rendered from the declaration:
 
 <!-- types.json:country-shrines -->
-| item | found by the label | band (feet; either orientation) | class | why |
+| item | found by the label (or declared by id) | band (feet; either orientation) | class | why |
 |---|---|---|---|---|
 | `sanctuary` | `/^sanctuary/` | 4-10 by 4-10 ft | accurate | a one-bay honden; a village example of 1789 measures 1.98 by 1.82 m |
 | `hall` | `/^hall|shrine hall|hall and dwelling/` | 18-38 by 18-38 ft (under `one roof`: 2100-3600 sq ft) | accurate | a village hall of 20-35 ft on a side from measured rural examples (a 1778 Kannon hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m), with a Nara temple hondō of 5 by 5 ken as the upper bound, not a village example; under one roof with the dwelling, the Kaie-ji band of 200-330 sq m - one attested example, a city Zen temple's, called rare by its own listing |
@@ -118,6 +118,6 @@ The country monk lives at the shrine: the hall is the villagers' rite-place and 
 4. **Grove and burial-ground side**: which side of the precinct each takes, by the site (read the village map: the water-mouth grove is where the shrine already stands).
 5. **Wealth**: a poor district's thatch and plain timber against a rich one's tile and lanterns.
 
-**Size anchors** (research R3; the bands in the table): the sanctuary about 6 ft square (a one-bay honden, 1.98 by 1.82 m measured; accurate); the one-roof building 200 to 330 sq m (Kaie-ji, 25.2 m long by 8 to 13 m deep; accurate as a band from one attested example), its hall end 20 to 35 ft on a side (a 1778 village hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m; a hondō 5 by 5 ken) and its dwelling end the farmhouse's 46 by 28 ft (form accurate - a kuri "resembling the farmhouse of its region"; size a guess, no small kuri measured); the precinct a GUESS bounded by its contents (no Japanese precinct area could be read; the one compound figure is Chinese, 2.5 mu). The hierarchy: the hall-and-dwelling building out-foots every other building on the sheet, and the sanctuary is the smallest.
+**Size anchors** (research R3; the bands in the table): the sanctuary about 6 ft square (a one-bay honden, 1.98 by 1.82 m measured; accurate); the one-roof building 200 to 330 sq m (Kaie-ji, 25.2 m long by 8 to 13 m deep; accurate as a band from one attested example), its hall end 20 to 35 ft on a side (a 1778 village hall 6.54 m square; a 1790 haiden 9.78 by 10.62 m; a hondō 5 by 5 ken) and its dwelling end the farmhouse's 46 by 28 ft (form accurate - a kuri "resembling the farmhouse of its region"; size a guess, no small kuri measured); the precinct a GUESS bounded by its contents (no Japanese precinct area could be read; the one compound figure is Chinese, 2.5 mu). The hierarchy: the hall-and-dwelling building out-foots every other building on the sheet, and the sanctuary is the smallest building of the shrine proper (a privy is smaller, and is not one).
 
 **Staffing and income** (the campaign notes): one country monk, with a few acolytes who help farm the tax-free plot on a part-time basis, on loan from larger families in the village; the monk's income is the plot's produce plus gifts and fees for the rites performed for the villagers - which is the parish temple's own economy, the danka's fuse and the temple's exempt land.

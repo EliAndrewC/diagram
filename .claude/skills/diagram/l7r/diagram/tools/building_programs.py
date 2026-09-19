@@ -38,7 +38,7 @@ def _band(item_band) -> str:
 def render(btype: BuildingType) -> str:
     """The Markdown table for one type: item, the label it is found by, its band, its class, its why."""
     lines = [
-        "| item | found by the label | band (feet; either orientation) | class | why |",
+        "| item | found by the label (or declared by id) | band (feet; either orientation) | class | why |",
         "|---|---|---|---|---|",
     ]
     for it in btype.required:

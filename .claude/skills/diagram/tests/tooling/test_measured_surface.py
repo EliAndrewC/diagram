@@ -64,7 +64,7 @@ def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     assert sum("/l7r/diagram/ci/" in f for f in files) == 17, (
         "ci/ is inside the gate's surface now (was 0; 12 before feature 207 added incremental.py, selection.py and gate_plugin.py; 15 before feature 213 added rollcensus.py and rollverdict.py)"
     )
-    assert sum("/l7r/" not in f and "/tests/" not in f for f in files) == 37, "the add-only rule: these must not be dropped"
+    assert sum("/l7r/" not in f and "/tests/" not in f for f in files) == 38, "the add-only rule: these must not be dropped"  # 38 since feature 254: the country shrine's gen joined the pool
     assert sum("/tests/" in f for f in files) == 0, "FR-024 is untouched - a tests-only change still owes no gate"
 
 
