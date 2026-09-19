@@ -102,8 +102,25 @@ is drawn as one building where a precinct has two or three, and the maps draw no
 monk. That is a Mode B question this feature records and does not fix (the GM's request is a Mode A
 type; the village tier is frozen hand-authored work).
 
-*The follow-up reader on SMALL rural halls and kuri is still to report; its figures are appended
-below when it does.*
+**The follow-up on SMALL rural halls** (the first pass had verified only large temples):
+
+| building | measured example | ft | sq m |
+|---|---|---|---|
+| village Kannon hall, three bays square, 1778 (Saitama) | 6.540 by 6.540 m | 21.5 by 21.5 | 43 |
+| Yakushi hall on a temple's grounds, 1685 (Chikusei) | 3.83 by 3.83 m | 12.6 by 12.6 | 15 |
+| a Nara temple hondō, early 17th c. | 5 by 5 ken | 30 by 30 | 83 |
+| kuri, late Edo (Tokuun-ji): "12 ken by 8 ken" and "a form resembling the honmune-zukuri minka characteristic of this region" | 12 by 8 ken | 72 by 48 | 320 |
+| four more Edo kuri (bunka.go.jp): 17.5-20 m by 10.3-12.2 m | - | 57-66 by 34-40 | 180-240 |
+| a town temple's precinct, Senju (taxed land, from the Adachi fudoki) | 5 tan 4 se 14 bu | - | ~5,400 |
+
+So the villagers' hall of a small rural site runs from a three-bay hall of about 20 ft square (43 sq m)
+up to about 30 ft square (83 sq m), with the Ehime haiden at 32 by 35 ft (104 sq m) the large end of
+what a village would build; every designated kuri that could be read is a rich temple's (180-320 sq m),
+and the one that states its form says it resembles the region's farmhouse. No SMALL kuri was found
+measured, so the village monk's dwelling takes the farmhouse's own footprint (46 by 28 ft, 120 sq m)
+as ACCURATE by form and a GUESS by size - the kuri "resembling the minka" is the attestation, the
+minka's size is the map's own. The "3 by 3 ken" halls that turned up are Muromachi, not Edo, and are
+not used.
 
 ## R4. Where the record is silent
 
