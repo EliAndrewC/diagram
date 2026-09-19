@@ -27,7 +27,8 @@ The main agent passes you a subject name. All paths are under `/diagram/.claude/
 - `pool/<subject>.png` - the rendered plan (Read it as an image; this is what the GM sees)
 - `pool/<subject>.svg` - the source (geometry: divide px by 3 for real feet)
 - `pool/<subject>.notes.md` - the design notes: intent, knob settings, particulars, deliberate choices, and the **Review log** of previously overruled findings
-- `buildings.md` - the Mode A vocabulary, the building-type programs ("Compound programs" section), the scale rules, and the historical grounding
+- `buildings/programs.md` - the building-type PROGRAMS, one heading per type (the magistrate's manor, the country shrine): the composition rules and knobs in prose, and each type's required-items table RENDERED from the declaration in `l7r/diagram/buildings/types.json` (feature 254) - read the type's own heading, named in the notes file's `**Program type**` line, and hold the sheet to that table and those rules, never to another type's
+- `buildings.md` - the Mode A vocabulary, the scale rules, and the historical grounding
 - `SKILL.md` - shared conventions (palette, labeling rules, title block, orientation) if needed
 
 If the notes file is missing, say so prominently and review anyway, flagging that intent is unknown.

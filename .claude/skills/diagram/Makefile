@@ -518,6 +518,10 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 ##  M=<glob>  which manifests to refresh (default: every manifest in both pool trees)
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
+# GUARD_EDIT_OK: feature 254 - a new operation, `building-programs`: the required-items tables of the Mode A types, derived.
+building-programs: ## [docs] render each declared Mode A type's required-items table into buildings/programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
+	$(RUN).tools.building_programs $(if $(CHECK),--check,)
+
 glossary:       ## [docs] write research/assets/glossary.js from interactive/glossary.py - the ONE glossary the map's modals and the record's pages share (feature 209)   CHECK=1: exit 1 if stale
 	$(RUN).tools.glossary_asset $(if $(CHECK),--check,)
 

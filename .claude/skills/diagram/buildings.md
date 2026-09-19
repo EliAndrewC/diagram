@@ -107,6 +107,13 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 - **Modest shrine (standalone)** - small wooden structure with torii silhouette nearby (adjacent modest shrines may share one approach torii). May carry thin vermillion edging; the hall-class shrine below is distinguished by SIZE and internal altar rails, not by edging alone. For routine rural Inari shrines and the like.
 - **Hall shrine (L5R-style, e.g., Fox lands)** - full building with vermillion edging (`#A03020` strips at top and bottom). Internal rail division for multiple altars; identifiers like torii silhouette (east) or straw-doll silhouette (west) for distinct altar aspects. **SIZE CEILING:** even a deliberately grand hall stays SUBORDINATE to the lord's residence - draw it at ~110×90 px (~36×30 ft) at most (a real substantial haiden is ~24-30 ft; the honden proper stays tiny, 1-3 ken). It must be ≤ ~half a residence block, and the whole sacred complex (hall + any workshop) ≤ ~2/3 of the residence. The divergence licenses a *grand hall*, not a hall that out-measures the magistrate's own house (the old 53×53 ft square did both; size-audit direction-vs-magnitude, 2026-07).
 - **Workshop colonnade** - open hatched area (`colonnade-hatch` pattern) attached to a shrine's working side, for sacred craft production (e.g., cinnabar painting of threshold stones).
+- **Sanctuary (honden)** - the deity's house at a country shrine: a one-bay hall about 6 ft square (a 1789 village example measures 1.98 by 1.82 m), drawn true-size as an 18-20 px vermilion-edged rect (`#C9876C` fill, `#6B2A18` stroke) on a plinth line, marked `id="sanctuary"`, at the BACK of the precinct on the approach axis. The smallest building on the sheet.
+- **Shrine hall and dwelling** - a country shrine's hall (`#DDB87A`, marked `id="hall"`): the villagers' rite-place, and under the one-roof form the monk's home too - the hall end toward the arch, the dwelling end behind with an earthen-floored kitchen, a writing room for the district's registers, the kitchen garden and the privy at its back corner. Bands in the program.
+- **Arch (torii) and approach** - a Mode A arch is two posts and a lintel in vermilion (`#A03020`), spanning ~12 ft (36 px) over the approach where the way crosses the fence, with an invisible bounding rect `id="arch"` (`fill="none"`) for the checks; the approach is a gravel strip ~10 ft wide from the arch to the hall, marked `id="approach"`. The arch is the one built thing a way runs under (`arch_on_approach`).
+- **Fence and hedge** - a country shrine is FENCED, never walled: a `<g id="fence" stroke="#7A6A4A" stroke-width="2">` of lines along the precinct's edge (a tamagaki), a hedge as a dashed variant. The wall stroke `#2D2A24` on a precinct edge is the defect `fence_not_wall` names.
+- **Swept gravel (`keidai-gravel`)** - the precinct's ground: a pale pattern (`#E6DCC4` with faint rake lines), lighter than court-earth. The precinct rect carries `id="precinct"` as every Mode A sheet's does.
+- **Grave markers** - the burial ground beside the precinct: rows of small gray rects (~2 by 1 ft, `#8A8478`) on bare ground outside the fence, labeled `burial ground` once.
+- **Grove** - the sacred wood around the precinct: canopy circles (`#7A8C5C`, r 12-20 px) outside the fence, labeled `grove` once; the hall, the arch and the approach sit in a cleared opening.
 
 ### Approaches and surroundings
 
@@ -127,7 +134,20 @@ The historical Mode A layout is NOT "buildings scattered inside the walls with b
 
 ## Compound programs
 
-A building TYPE with a documented program has it recorded in [`buildings/programs.md`](buildings/programs.md) - load that file when the subject matches one. Today the catalog holds the **county magistrate's manor** (the 8-knob generic program, its Japan-first interior doctrine, and the heimen-clerk budget cascade).
+A building TYPE with a documented program has it recorded in [`buildings/programs.md`](buildings/programs.md) - load that file when the subject matches one. Today the catalog holds the **county magistrate's manor** (the 8-knob generic program, its Japan-first interior doctrine, and the heimen-clerk budget cascade) and the **country shrine** (a village district's shrine, where the country monk lives). Each type's required items are DECLARED ONCE in [`l7r/diagram/buildings/types.json`](l7r/diagram/buildings/types.json) - the label a check finds each by, its size band, its class and why - and the catalog's tables are rendered from that declaration (`make building-programs`); the checks read the same declaration, so the reviewer's table and the gate's sweep cannot disagree.
+
+## Adding a building type
+
+A type is one declaration and one folder; nothing else in the engine learns its name (the census test `tests/test_building_types.py` refuses a tier name anywhere else). In order:
+
+1. **The research pass first** (constitution XII): what the real thing was, its parts and their measured sizes, who lived there - recorded on the research page with footnotes, then `source-reader`, `quote-check`, `record-format` and `source-applicability` before any number reaches the declaration.
+2. **Declare the type**: one object in `l7r/diagram/buildings/types.json` - `tier` (the pool folder name), `title`, `program` (the catalog heading), `hand_drawn`, `generated_exceptions` (maps in the tier whose gen writes the svg), `required` (each item's `id`, `label` regex, `band_ft`, `class`, `why`, and `optional` or per-`forms` bands), `checks` (the per-type checks that apply), `notes`.
+3. **The catalog entry**: a heading in `buildings/programs.md` with the composition rules, knobs, anchors and staffing in prose around a `<!-- types.json:<tier> -->` block; `make building-programs` renders the table (`CHECK=1` on the gate).
+4. **Per-type checks, if the type has composition rules of its own**: a function in `tools/pack_audit/shared.py` (or `checks.py`), a row in `tools/pack_audit/registry.py` with a red fixture under `tests/fixtures/` that it fires on, and the check's name in the declaration's `checks` list. A composition check reads what the sheet DECLARES (`id="precinct"`, and for a shrine `hall`, `sanctuary`, `approach`, `arch`, `well`, a `<g id="fence">`), never a guess from the nearest label.
+5. **The exemplar** under `pool/<tier>/<name>/`: `<name>.svg` (tracked source, its precinct marked), `<name>.gen.py` (rasterizes only), `<name>.notes.md` (`**Program type**`, `**Form**` where the type has one, every knob, particulars, a Review log); `make size-table` then `size-audit`, then `building-review`, each pass a row in `docs/review-ledger.md`.
+6. **The ignore rule**: one `!pool/<tier>/*/*.svg` line in `.gitignore` for a hand-drawn tier (the declaration test holds the file to it).
+
+The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration; `make quick` runs it.
 
 ## Checklist for a new diagram
 

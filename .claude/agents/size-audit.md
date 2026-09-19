@@ -64,6 +64,7 @@ Paths under `/diagram/.claude/skills/diagram/`:
   (divide px by 3). Parse the actual rects, line gaps (gate openings are gaps
   between wall segments or between gate posts), and stroke widths.
 - `pool/<subject>.notes.md` - function context only (who uses what, which knobs).
+- `buildings/programs.md` - the type's required-items table (rendered from `l7r/diagram/buildings/types.json`, feature 254): each item's band, its class and the finding it rests on - a band is a claim to RE-VERIFY like any documented tolerance, and the notes file's `**Program type**` line says which type's table applies
 - `buildings.md` - the vocabulary's stated sizes and the Scale section's
   exemptions, all subject to re-verification.
 - `tools/pack_audit.py` - a read-only packing/whitespace reporter. RUN it from the
