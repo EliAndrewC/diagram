@@ -11,7 +11,7 @@ models involved", approved a per-agent tiering by model and by reasoning effort,
 for the quote check, and indeed to split out anything that can be split out into a smaller model", and
 asked for the whole to be implemented. This feature does that, in the order the proposal gave: measure
 first (a token census), move what is mechanical into scripts, set each agent's model and effort, route
-later `spec-fidelity` rounds to a medium-effort twin, and prove each downgraded agent against artifacts
+later `spec-fidelity` rounds to a narrower twin, and prove each downgraded agent against artifacts
 with known findings before the downgrade stands. The GM's two standing conditions are kept: judgment
 stays on Opus, and no check ever inherits the session's model (the reason for the 2026-09-07 ruling, and
 the way scarce Fable usage would leak into a check).
@@ -41,7 +41,7 @@ up - to Opus when its model was lowered, one effort step when only its effort wa
 spec records it. *Independent test:* `research.md` R5 holds one row per
 downgraded agent per artifact.
 
-**US5 (P2) - a later `spec-fidelity` round runs at medium effort without the session choosing it.** The
+**US5 (P2) - a later `spec-fidelity` round runs on its own narrower contract without the session choosing it.** The
 hook that already rewrites a later round into MODE 3 also routes it to `spec-fidelity-verify`.
 
 ### Edge cases
@@ -144,15 +144,18 @@ the plan, each converted at 3 px = 1 ft and labeled with the nearest text label,
 Method step 1 starts from the table and checks it against the sheet rather than building it; anchors,
 ratios, the proportion sweep and the packing sweep are unchanged and remain its own.
 
-**FR-007 - the remaining tiers are set in the files.** `source-reader` moves to Sonnet at high effort;
+**FR-007 - the remaining tiers are set in the files.** `source-reader` stays on Opus at high effort - the proposal's Sonnet tier was tried on 2026-09-19 and missed
+(`research.md` R5), as was `record-format`'s;
 `entry-drift` and `escalation-check` stay on Opus at medium; `source-applicability`, `size-audit`,
 `building-review`, `settlement-review`, `perf-audit` and `spec-fidelity` stay on Opus at high. Each
 agent file's description and body say its tier and the one-line reason, replacing "on Opus like every
 subagent check"; `source-reader`'s "Model" section is rewritten to the present ruling with no account of
 the earlier ones.
 
-**FR-008 - later `spec-fidelity` rounds go to a medium-effort twin.** A new agent file,
-`.claude/agents/spec-fidelity-verify.md` (Opus, medium, the same tools), carries MODE 3, the FIGURES
+**FR-008 - later `spec-fidelity` rounds go to a narrower twin.** A new agent file,
+`.claude/agents/spec-fidelity-verify.md` (Opus, high, the same tools - the proposal's medium was tried, missed
+a finding on a recorded round (R5), and the twin is kept for its 111-line contract against 236 while the
+effort question goes to the GM's follow-up list), carries MODE 3, the FIGURES
 rule, the round-limit note and "What you do NOT do" - and nothing of MODES 1, 2 and 4. Its instructions
 stay strictly about the previous verdict's items and the diff. `scripts/review-round-hooks.sh`, on the
 branch where it rewrites a dispatch into MODE 3, also sets `subagent_type` to `spec-fidelity-verify` in
@@ -181,17 +184,23 @@ is put to the GM with R1's count once the feature works.
 
 **FR-011 - the seeded-fault test gates each downgrade.** The downgraded agents are `record-format`
 (model and effort), `source-reader` (model), `quote-check`, `entry-drift`, `escalation-check` (effort,
-from the unset default) and `spec-fidelity-verify` (effort). For each, `research.md` R5 names at least
-two artifacts with KNOWN findings - taken at the commit before the fix, from `git`, or from a recorded
+from the unset default) and `spec-fidelity-verify` (effort). For each, `research.md` R5 names
+artifacts with KNOWN findings - taken at the commit before the fix, from `git`, or from a recorded
 report (the feature 232 entry-drift pairs; the feature 242 handoff reports for `record-format` and
 `quote-check`; past CONTRADICTED verdicts for `source-reader`; a recorded later round for the twin; a
-recorded escalation draft) - and at least one artifact known CLEAN. The new tier is run on each, one
-artifact per agent, in the background. Per run R5 records: findings the recorded result had, findings
+recorded escalation draft) - and, where the record holds one, an artifact known CLEAN. The batch is the
+TRIMMED one the GM asked for on 2026-09-19 (`request.md`, fourth message): slices of the large recorded
+runs, seventeen runs in all, so `quote-check` has ONE artifact in two slices and no clean page, and
+`escalation-check` has three drafts and no clean one; false alarms are still counted there - the VERBATIM
+notes of the `quote-check` slice, and the KEEP items an `escalation-check` run could have wrongly cut. The
+new tier is run on each, one artifact per run, in the background. Per run R5 records: findings the recorded result had, findings
 hit, findings missed, new findings and whether each is real or a false alarm, and the run's tokens
-beside the agent's recorded per-run mean. The rule: a MISS of a finding the recorded result caught
+beside the tokens of THE SAME RECORDED RUN (the fairer pairing than the agent's mean, which R1 holds). The rule: a MISS of a finding the recorded result caught
 returns a MODEL-downgraded agent (`record-format`, `source-reader`) to Opus at the effort it ran at
 before, and returns an EFFORT-only downgrade (`quote-check`, `entry-drift`, `escalation-check`,
-`spec-fidelity-verify`) one effort step up; in either case the run is repeated at the new tier, and the
+`spec-fidelity-verify`) one effort step up - each being that agent's known-good tier, for which the recorded runs are the result;
+the confirming run at the stepped-back tier, and any other tier, is deferred to the further experiments
+the GM asked to choose together (`request.md`, fifth message); and the
 table, the agent file and FR-002 change together. A false alarm does not fail the agent; more false
 alarms than the recorded result had is recorded as a cost. The agents pinned to Opus at `high` are not
 downgraded and owe no test: an agent file with no `effort:` runs at the SESSION's effort (Assumptions),
@@ -222,8 +231,9 @@ and every new make target is listed where the others are.
   difference is reported DIFFERS and no exact quotation is.
 - **SC-003** No agent file inherits or omits a model or an effort, and the gate proves it.
 - **SC-004** Every downgraded agent has an R5 row set, and each either missed nothing the recorded
-  result caught or was stepped back up and re-run.
-- **SC-005** R5 states, per downgraded agent, tokens per seeded run against the recorded per-run mean -
+  result caught or was stepped back up, with the recorded Opus run standing as that tier's result and the
+  confirming run deferred per the GM's instruction of 2026-09-19.
+- **SC-005** R5 states, per downgraded agent, tokens per seeded run against the same recorded run's own tokens -
   the first measurement of what the tiering saves.
 - **SC-006** `make hooks-test` and `make quick` are green; nothing under `l7r/` or `pool/` changed.
 
@@ -257,9 +267,18 @@ and every new make target is listed where the others are.
 - **Amendments by the GM's instruction, 2026-09-19, after acceptance** (their words are in `request.md`,
   messages four and five). (1) The seeded runs were CUT DOWN - slices of the large recorded runs, seventeen
   small runs in all - where FR-011 had said "at least two artifacts ... and at least one known CLEAN" per
-  agent with no bound on their size; `quote-check` got no separate clean page (the no-finding notes inside
-  its slice serve), because the page chosen cites only the GM's canon. (2) FR-011's "the run is repeated at
+  agent with no bound on their size. Two agents fall short of that shape and FR-011 now says so: `quote-check`
+  has one recorded run in two slices and no separate clean page (the page chosen cites only the GM's canon;
+  the VERBATIM notes inside the slice, and the recorded fn-91 false alarm the script removed, measure its
+  false alarms), and `escalation-check` has three drafts that all carried CUTs and no clean one (the KEEP
+  items it could have wrongly cut measure its false alarms - it cut none). (2) FR-011's "the run is repeated at
   the new tier" was NOT done for the three agents that missed: the GM asked to land the tiers that passed
   and to choose the further experiments together, so each returned to its known-good tier, for which the
   recorded runs are the result. (3) FR-007's Sonnet tiers and the twin's medium did not survive FR-011, as
   FR-002 now shows.
+- **Amendment review, round 1 (2026-09-19) - CHANGES REQUIRED, six items, all applied.** The three amendments
+  were found faithful to the GM's fourth and fifth messages; the findings were the spec text left saying the
+  pre-amendment thing - FR-007's Sonnet tier, FR-008 / the Summary / US5's medium-effort twin, FR-011's repeat
+  run and its two-artifacts-and-a-clean shape, SC-004's "re-run", and FR-011 / SC-005's per-run mean where R5
+  pairs each run with the same recorded run. The reviewer's aside: `plan.md` budgets eighteen runs and
+  seventeen were run; the plan is unchanged so its recorded verdict stands.
