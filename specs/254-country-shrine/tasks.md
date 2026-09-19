@@ -79,14 +79,14 @@ hyphens only.
 
 ## Phase 3 - the program and the shrine's checks (FR-006 to FR-011; D1, D7, D8, D11)
 
-- [ ] T10 `check_program` and `check_bands` (D7): generic over the declaration; the nearest-label
+- [x] T10 `check_program` and `check_bands` (D7): generic over the declaration; the nearest-label
       pairing moved from `scripts/_size_table.py` into `tools/pack_audit/labels.py` (the script a thin
       caller, `make size-table` output unchanged on Ochiba, diffed); the notes file's `**Form**: one roof`
       read to count a combined building as hall and dwelling; registered per type; fixtures for a
       missing item and an out-of-band item cut from Ochiba
       research: rendering
       scaffold: `_size_table.py`'s `nearest label by center distance`
-      verify: `make quick`; the size-table diff on Ochiba is empty
+      verify: DONE. labels.py: structure_for (smallest containing footprint, else nearest within 30 ft), check_program (optional and form-absent items skipped), check_bands (the form's band; area or w-by-h message); registered as program_complete and size_bands with fixtures ochiba-no-cell-red and ochiba-big-bath-red; scripts/_size_table.py pairs through nearest_label, output on Ochiba diffed identical; the placer drafts pass the whole program after the exception was ruled NOT LEGITIMATE and the emitter gained the point features; make quick ALL=1 green
 - [ ] T11 `buildings/programs.md`: BOTH types' required-items tables rendered between
       `<!-- types.json:<tier> -->` markers by a new `make building-programs` (`CHECK=1` on the gate,
       like `make glossary`) - the magistracy's bullets converted, their per-item reasoning moved into
