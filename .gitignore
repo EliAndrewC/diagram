@@ -75,10 +75,16 @@ __pycache__
 # check fires, with no generator anywhere. That is the whole exception list now.
 .claude/skills/diagram/pool/*/*/*.svg
 .claude/skills/diagram/pool/*/*/*.png
-# ...except the three hand-drawn Mode A plans, which no generator can rebuild (note 2 above)
-!.claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg
-!.claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg
-!.claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg
+# ...except the hand-drawn Mode A plans, which no generator can rebuild (note 2 above). ONE LINE PER
+# HAND-DRAWN TIER (feature 254): a building type declares its tier hand-drawn in
+# `l7r/diagram/buildings/types.json`, and `tests/test_building_types.py` holds this file to that
+# declaration - a tier un-ignored here that is not declared, or declared and not here, fails the gate.
+# The two maps in the magistracy tier whose gen WRITES the svg are the declared generated exceptions,
+# re-ignored by name below the tier's line.
+!.claude/skills/diagram/pool/magistracies/*/*.svg
+.claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.svg
+.claude/skills/diagram/pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg
+!.claude/skills/diagram/pool/country-shrines/*/*.svg
 .claude/skills/diagram/pool/*/*/*.html
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.svg
 .claude/skills/diagram/legacy-hand-authored-pool/*/*/*.png

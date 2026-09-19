@@ -15,7 +15,7 @@ their own idea of what the pool contains - this module is so they cannot drift a
   A frozen map's defects against NEW rules are expected and are not bugs; the map gets fixed by
   CONVERSION, not retrofit. The list is CLOSED - hand-authoring a new Mode B map is deprecated, so
   extending it takes an explicit GM decision.
-- **compound** - a Mode A compound plan (magistracies). Not a settlement at all: no manifest for
+- **compound** - a Mode A compound plan (a magistracy, a country shrine). Not a settlement at all: no manifest for
   the gate, out of the migration's scope (migration-plan.md section 1), still hand-authored by
   design and still actively maintained.
 - **unknown** - anything else. `tests/test_villages.py`'s ratchet fails the suite by name on these,
@@ -41,21 +41,16 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
+from ..buildings.types import tiers as building_tiers
+
 # Scripted-generation engine modules. A gen that imports one of these is a LIVE scripted map; add
 # each new engine (a future village/town generator) here and its maps join the sweep automatically.
 SCRIPTED_ENGINES = ("hamletgen",)
 
-# Mode A compound gens, by basename rather than detected, so a gen that is neither a known
-# compound nor a recognized scripted map is a loud "unknown" instead of a silent omission.
-COMPOUND_GENS = frozenset(
-    {
-        "hayakawa-magistracy.gen.py",
-        "ubame-magistracy.gen.py",
-        "county-magistracy-example.gen.py",
-        "ochiba-magistracy.gen.py",
-        "ochiba-roundtrip-test.gen.py",
-    }
-)
+# Mode A compound plans are classified by their TIER - the pool folder that a building type declares
+# as its name (`buildings/types.json`, feature 254). The closed list of gen basenames this replaced
+# was one of the five places a second type had to be typed into by hand; a gen in an undeclared tier
+# that imports no engine is still a loud "unknown" rather than a silent omission.
 
 # The frozen hand-authored Mode B pool, in full (GM 2026-08-16). CLOSED: do not add to this list
 # without the GM's say-so - a new settlement map should be scripted instead.
@@ -93,11 +88,11 @@ def classify(gen: str) -> str:
     Scripted maps are detected by which engine the gen imports (the same source-text heuristic the
     sweep always used - see the 2026-08-11 incident in test_villages.py's ratchet: a gen built on
     an engine module nobody listed is invisible, so new engines must be added to SCRIPTED_ENGINES).
-    Legacy and compound maps are explicit closed lists, because both sets are finished: nothing new
-    is ever supposed to join them without a human deciding so.
+    Legacy maps are an explicit closed list, because the set is finished: nothing new is ever
+    supposed to join it without a human deciding so. Compound plans are the declared Mode A tiers.
     """
     base = os.path.basename(gen)
-    if base in COMPOUND_GENS:
+    if os.path.basename(os.path.dirname(os.path.dirname(gen))) in building_tiers():
         return "compound"
     with open(gen) as fh:
         src = fh.read()

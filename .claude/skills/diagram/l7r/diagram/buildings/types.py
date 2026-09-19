@@ -8,7 +8,7 @@ of them may be specific to individual building types". A type declared as data i
 check stay ignorant of types and a per-type check declare the tiers it applies to; and it is what
 makes adding a third type a data change and a folder rather than five edits in five files (the
 classifier's closed gen list, the index's tier set, the ignore file's per-file lines, the size
-table's usage text, the sweep) - which is what a grep for `magistracies` found on 2026-09-19.
+table's usage text, the sweep) - which is what a grep for the magistracy tier's name found on 2026-09-19.
 """
 
 from __future__ import annotations

@@ -20,10 +20,16 @@ CLI:  python3 compound.py            # place the built-in county magistracy, wri
 
 from __future__ import annotations
 
+import os
 import sys
 from dataclasses import dataclass, field
 
+from .buildings.types import load_types
+
 FTPX: float = 3.0  # 3 px = 1 ft (emit-time only)
+# The built-in example's pool tier: the type that declares the example as its generated exception
+# (feature 254) - the folder is the declaration's to name, not this module's.
+_EXAMPLE_TIER: str = next(t.tier for t in load_types() if "county-magistracy-example" in t.generated_exceptions)
 FIRE_GAP_FT: float = 7.0  # default gap between hugging buildings (a real fire-gap)
 WALL_MARGIN_FT: float = 3.0  # a building's inset from the very corner / wall stroke
 # A wall is a built object with real thickness, drawn to scale and CENTERED on the boundary it
@@ -393,7 +399,7 @@ def county_magistracy_program() -> CompoundProgram:
 
 def main(argv: list[str] | None = None) -> int:
     args = sys.argv[1:] if argv is None else argv
-    out = args[0] if args else "pool/magistracies/county-magistracy-example/county-magistracy-example.svg"
+    out = args[0] if args else os.path.join("pool", _EXAMPLE_TIER, "county-magistracy-example", "county-magistracy-example.svg")
     program = county_magistracy_program()
     result = place(program)
     with open(out, "w", encoding="utf-8") as fh:

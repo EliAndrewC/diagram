@@ -1056,7 +1056,7 @@ stale-terms:    ## [project] after a value changed in a feature's spec, where do
 
 size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
 ##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute
-	@if [ -z "$(PLAN)" ]; then printf 'make size-table: PLAN=<plan svg> is required - e.g. make size-table PLAN=pool/magistracies/x/x.svg\n' >&2; exit 2; fi
+	@if [ -z "$(PLAN)" ]; then printf 'make size-table: PLAN=<plan svg> is required - e.g. make size-table PLAN=pool/<tier>/<name>/<name>.svg\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_size_table.py" "$(abspath $(PLAN))"
 
 review-accept:  ## [project] record a review finding as deliberately LEFT, with a reason - logged like an escape   MAP=<map> FINDING=<id> REASON="..."

@@ -48,6 +48,8 @@ import html
 import json
 import os
 
+from ..buildings.types import load_types
+from ..buildings.types import tiers as building_tiers
 from . import poolmaps
 
 SKILL_DIR = os.path.abspath(
@@ -59,10 +61,14 @@ SKILL_DIR = os.path.abspath(
 # THE HEADINGS AND BANNERS ARE DATA - `pool_index_text.json` beside this module (feature 207): prose a reader sees.
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pool_index_text.json"), encoding="utf-8") as _fh:
     _TEXT = json.load(_fh)
-TIER_SECTIONS: tuple[tuple[str, str], ...] = tuple((key, title) for key, title in _TEXT["tier_sections"])
+# The Mode B tiers in reading order from the text file, then every declared Mode A tier with its declared
+# title (feature 254: the declaration, not this module, knows the Mode A tiers).
+TIER_SECTIONS: tuple[tuple[str, str], ...] = tuple((key, title) for key, title in _TEXT["tier_sections"]) + tuple((t.tier, t.title) for t in load_types())
 
-# Tiers holding Mode A compound plans: tracked svg source, no JSON manifest, 3 px = 1 ft.
-MODE_A_DIRS = frozenset({"magistracies"})
+# Tiers holding Mode A compound plans: tracked svg source, no JSON manifest, 3 px = 1 ft. DERIVED from
+# the building-type declaration (feature 254): the Mode B tiers are the text file's, and each declared
+# Mode A tier follows them with its declared title.
+MODE_A_DIRS = building_tiers()
 
 # What each tree is called on the page, and the one line that says what it IS. The banner is not
 # decoration: a frozen exhibit and a live map look identical in a table, and the difference (one is
