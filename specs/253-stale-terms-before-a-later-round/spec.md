@@ -1,6 +1,6 @@
 # Feature 253 - the old value is looked for before a later review round is spent on it
 
-**Status:** draft 2026-09-19 - round 1 CHANGES REQUIRED applied (see Review history).
+**Status:** FAITHFUL at round 4 (2026-09-19, see Review history).
 
 ## Summary
 
@@ -87,3 +87,4 @@ is now true.
 - **Round 3 (2026-09-19) - CHANGES REQUIRED, two one-line items in `research.md` R1, applied.** Round 2's item verified.
   R1 still described the three-file rule FR-001 had abolished, and put all sixteen false candidates in `research.md`
   where the reviewer's re-run found fifteen there and one in `spec.md`. No requirement or figure moved.
+- **Round 4 (2026-09-19) - FAITHFUL.** Both items verified by the reviewer's own re-run of the search (18 / 15 / 3).
