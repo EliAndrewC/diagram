@@ -1,7 +1,7 @@
 # Feature 255 - cheaper checks by tooling: fewer turns, less read per turn, a smaller fixed context
 
 **Status:** FAITHFUL at round 2 (2026-09-19, see Review history); IMPLEMENTED 2026-09-19 - one candidate ADOPTED
-(FR-004), four NOT ADOPTED (FR-002, FR-003, FR-005), one put to the GM (FR-006); every run is in `research.md`.
+(FR-004), three NOT ADOPTED (FR-002, FR-003, FR-005), one ADOPTED on the GM's decision of 2026-09-19 (FR-006); every run is in `research.md`.
 
 ## Summary
 

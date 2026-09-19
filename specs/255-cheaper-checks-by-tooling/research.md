@@ -96,7 +96,7 @@ runs got shorter - 22 turns to 3-5, 11 to 7, 8 to 5 - while the one candidate th
 read lost nothing. 251's R9 priced a check as turns times context and pointed at both levers; on these agents the
 context is not only cost. What a judging agent reads on its way to a finding is part of how it finds it.
 
-## R4 - `source-reader` greps saved pages (FR-006, T04): misses nothing, costs more - the GM's decision
+## R4 - `source-reader` greps saved pages (FR-006, T04): misses nothing, costs more - ADOPTED by the GM's decision
 
 The candidate: `make source-pages OUT=<dir> URL=...` (`scripts/_source_pages.py`: each pointer fetched once by
 `_quote_verbatim.Pages`, its full visible text saved one sentence to a line, a manifest `pointer | file | state`),
@@ -120,9 +120,16 @@ a session rewrite a correct sentence - and the width passage is found on the fir
 251 R8's whole-page reading of the same three cases (5.48 in all by R8's table: 3.73 for the reader, 1.75 for the
 fetcher). Where the script reached nothing
 (08-29) the candidate is simply the old procedure with more turns. `make source-pages`, its script and its test stay
-(they are the means of the decision either way, and useful to a session that wants a page rather than an extract);
-the contract's step 0 and the `Grep` tool are in commit `4c0486d5` plus the step's text in this feature's history,
-ready to restore on a yes. One mechanical note: make keeps only the last of a repeated `URL=`, so several pointers
+(they are the means of the decision either way, and useful to a session that wants a page rather than an extract).
+
+**The GM's decision, 2026-09-19: ADOPTED.** Shown the table, the GM left the call to the session (*"whatever you
+think seems most sensible, then let's go ahead and go with that"*), and the session's reading is the one above: a
+quarter more weight on the cheapest research check buys a wrong CONTRADICTED not reaching the record and a passage
+found on the first try, and `source-reader` is the check whose errors cost the most downstream, because a session
+edits the record on its word. Step 0 and the `Grep` tool are in `source-reader.md`; root `CLAUDE.md`,
+`research/CLAUDE.md` and the make target say to run the script first. (A correction to this section's earlier
+text: it said the step was held in commit `4c0486d5`. It was not in any commit - it was drafted and reverted
+between two of them - and was restored from the session that wrote it.) One mechanical note: make keeps only the last of a repeated `URL=`, so several pointers
 are passed as `URLS="<u1> <u2>"`.
 
 ## R5 - what fills a subagent's fixed context (FR-007, T05)
@@ -205,7 +212,7 @@ script and test are in commit `8d2ebf64`). Moving the examples alone is worth ab
 | R1 entries handed to `source-applicability` | NOT ADOPTED | about 70% of a run | the recorded limits, on three runs of three |
 | R2 scoped text for `record-format` / `quote-check` | NOT ADOPTED | a third of a `record-format` run; nothing for `quote-check` | three of six and three of three findings; one under-called support verdict |
 | R3 the batching line | **ADOPTED**, seven contracts | about a quarter of a later review round (a third of its turns) | nothing |
-| R4 saved pages for `source-reader` | the GM's decision (FR-006) | nothing - it costs about a quarter MORE | nothing missed; one recorded false CONTRADICTED corrected, one always-missed passage found |
+| R4 saved pages for `source-reader` | **ADOPTED** on the GM's decision (FR-006) | nothing - it costs about a quarter MORE | nothing missed; one recorded false CONTRADICTED corrected, one always-missed passage found |
 | R5 fixed context | measured; the index trimmed by 209 tokens; no tool trim exists | - | - |
 | R6 `review-facts` and the moved examples | NOT ADOPTED | nothing | three of four recorded errors |
 
