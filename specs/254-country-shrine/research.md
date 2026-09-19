@@ -167,3 +167,33 @@ not used. (The source figures in this paragraph: observed 2026-09-19; method: th
 - **Declared ids for the shrine's composition checks**: `hall`, `sanctuary`, `approach`, `arch`, `well`
   on rects and a `<g id="fence">` - a composition check reads what the sheet declares, as the precinct
   is declared, rather than guessing from the nearest label.
+
+## R6. The verification agents' verdicts and what changed (2026-09-19)
+
+- **`source-reader`** (Opus, the two new sections): READ on every page but one - fn-144's sentence on
+  the kuri's raised floors and vernacular houses is NOT on en.wikipedia's Kuri page (a first Sonnet
+  reader had merged it); re-sourced: the kuri's origin as the abbot's kitchen (fn-144), the farmhouse
+  form on Tokuun-ji's listing alone (fn-180). CONTRADICTED: the gloss "(the period is the Edo)" on
+  fn-147 - the page's period is "particularly from the 14th century onwards"; the gloss now says so.
+  Two findings strengthened the record: the Mianning page says village temples "generally" engaged a
+  resident monk (fn-156 now carries 各村庙宇普遍), and ja.wikipedia's shrine page says jingūji monks
+  "sometimes" kept small shrines (fn-197). One finding narrowed it: no page counts how common a
+  jingūji was at a VILLAGE shrine; "the ordinary one before 1868" became "common before 1868" with
+  fn-196 ("remained common for over a millennium") and an absence note (fn-198), and the ACCURATE label
+  discloses that prevalence at village scale is uncounted. Xietang's page never calls its temple
+  "large" - the comparison is now stated as this project's.
+- **`record-format`** (Opus): ten vocabulary gaps (kami, parish, bay, ridge span, honmune-zukuri,
+  fire-water; variants for the earth god, corvée, the tatami mat) added to the glossary; two session
+  phrases ("the declaration's, rendered in the program catalog" moved to a comment; "the pass" reworded);
+  five glossary terms that no prose used are now used in the prose; the village sentence narrowed to
+  "no source read gives a Japanese village shrine a precinct or a ceiling".
+- **`source-applicability`** (Opus, two dispatches, 34 keys): none NOT-APPLICABLE. Write-ups corrected:
+  the Mianning study is by Long Sheng (Folklore Studies 2020 no. 5), not "Liu", and is peer-reviewed;
+  Gantang's essay is an academic ethnography of a temple rebuilt 1999-2012, the record's only compound
+  area, so the precinct is a guess anchored on a modern rebuild; Kaie-ji is an urban Zen temple, a
+  hall-and-kuri not a shrine, and one large building - all three said now in the entry and on the
+  page; the jingūji entry marks village-scale prevalence uncounted; the earth-god page's size band is
+  a modern measurement of a premodern form; the lijia is a Ming institution; the RPG wiki's words are
+  the wiki's own and subordinate to the GM's notes. The bell knob's presence rule rests on one undated
+  commercial page and is labeled a GUESS in the declaration.
+- **`quote-check`, `size-audit`, `building-review`**: see R7 when they report.
