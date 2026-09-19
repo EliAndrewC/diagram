@@ -35,6 +35,6 @@ each would still have returned CHANGES REQUIRED. The session's premise - "most l
 stale" - was true; its remedy reaches only the narrowest kind of stale text, a VALUE left beside its subject.
 What the rounds mostly found were SENTENCES made false by a decision that moved, and omissions. This feature
 ships the search because the GM asked for it and it is cheap and quiet (three candidates on the real case), and
-it says plainly here that it is not where the 61% goes (later rounds' share of the review process's cost, observed
-2026-09-19; method: every recorded `spec-fidelity` run classed by its prompt's mode and weighted as feature 251's R1). Where that goes is turns: a later round re-reads about
+it says plainly here that it is not where the 61% goes (later rounds' share of the review process's cost,
+observed 2026-09-19; method: every recorded `spec-fidelity` run classed by its prompt's mode and weighted as feature 251's R1). Where that goes is turns: a later round re-reads about
 50 k tokens of fixed context on each of about 7 turns (`measure/profile.py`), whatever it was asked to look at.
