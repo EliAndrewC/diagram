@@ -180,7 +180,9 @@ that measurement has a baseline).
 **FR-010 - an ad-hoc agent never inherits.** The rule, in the root `CLAUDE.md` where "Every subagent
 runs on Opus" now stands: a named check runs on the tier its file pins; an ad-hoc agent is dispatched
 with an explicit `model` - `sonnet` for reading, fetching, translating and extracting, `opus` for
-anything that judges - and never with none. R1 records how many past ad-hoc runs inherited, and on
+anything that judges - and never with none; `haiku` is admissible only for a plain description of a page,
+never for a table, a number or a quotation (measured: `research.md` R7, where it misread a table's columns
+and sonnet did not). R1 records how many past ad-hoc runs inherited, and on
 which model. This feature states the rule and takes the measurement; it builds no guard for it
 (`spec-fidelity` round 1: a guard was in neither proposal). Whether a hook should fill a missing model
 is put to the GM with R1's count once the feature works.
@@ -234,8 +236,9 @@ and every new make target is listed where the others are.
   difference is reported DIFFERS and no exact quotation is.
 - **SC-003** (FR-002, FR-007) No agent file inherits or omits a model or an effort, and the gate proves it.
 - **SC-004** (FR-011) Every downgraded agent has an R5 row set, and each either missed nothing the recorded
-  result caught or was stepped back up, with the recorded Opus run standing as that tier's result and the
-  confirming run deferred per the GM's instruction of 2026-09-19.
+  result caught or was stepped back up. For `source-reader` and the twin the recorded Opus runs stand as the
+  stepped-back tier's result (R7's further runs confirmed both); `record-format`'s landed tier, opus / medium,
+  is carried by R7's own two runs.
 - **SC-005** (FR-011) R5 states, per downgraded agent, tokens per seeded run against the same recorded run's own tokens -
   the first measurement of what the tiering saves.
 - **SC-006** (FR-005, FR-006, FR-008, FR-009, FR-012) `make hooks-test` and `make quick` are green - the
@@ -295,4 +298,6 @@ and every new make target is listed where the others are.
 - **Amendment review, round 3 (2026-09-19) - FAITHFUL.** Both round-2 items verified resolved; nothing new introduced.
 - **Follow-up experiments (2026-09-19, the GM: *"I agree that each of the follow-up experiments is worth
   running, so go ahead and run all of them"*) - `research.md` R7.** One row of FR-002 moved on their result,
-  by FR-002's own rule: `record-format` to opus / medium. Every other tier stood.
+  by FR-002's own rule: `record-format` to opus / medium. Every other tier stood. The measured Haiku caveat
+  went into FR-010, root `CLAUDE.md` and `scripts/agent-model-rule.txt` (feature 252's message file, which
+  reads the rule from there).

@@ -137,7 +137,7 @@ the proposal's claim measured: a model is the wrong instrument for a character c
 **What stands and what went back** (FR-011; and the GM, 2026-09-19, on the ones that missed: *"then we can
 look at what other experiments we need to run on the specific checks that failed or otherwise scored
 poorly"* - so a tier that missed returns to its known-good tier, the recorded runs standing as that tier's
-result, and no further tier was tried in this feature):
+result, and no further tier was tried in R5; the GM then ordered the follow-up experiments, R7):
 
 | agent | proposed | result | lands as |
 |---|---|---|---|
@@ -146,7 +146,7 @@ result, and no further tier was tried in this feature):
 | `escalation-check` | opus / medium | 3 of 3 | **opus / medium** |
 | `spec-fidelity-verify` | opus / medium | missed one of two findings on a recorded round | **opus / high** (the twin and its routing stay: a MODE 3-only contract about half the length of `spec-fidelity`'s) |
 | `source-reader` | sonnet / high | one CONTRADICTED under-called, two passages missed | **opus / high** |
-| `record-format` | sonnet / medium + pre-pass | the pattern-findable hit, the reading-only findings missed, on both cases | **opus / high + pre-pass** |
+| `record-format` | sonnet / medium + pre-pass | the pattern-findable hit, the reading-only findings missed, on both cases | **opus / high + pre-pass**, superseded by R7: **opus / medium + pre-pass** |
 
 **What the runs say about EFFORT (SC-005).** Medium against the session's high moved turns, output and
 weight in no consistent direction: `entry-drift` 5.64 -> 4.42 over four cases, `escalation-check` 3.29 ->

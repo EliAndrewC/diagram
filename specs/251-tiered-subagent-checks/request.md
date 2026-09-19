@@ -79,3 +79,9 @@ The session answered with the run list and proposed cutting the three large case
 ## The GM's fifth message (after the first misses were reported)
 
 > Thanks, please keep going with the checks and then eventually with the scoring and updating the docs to the tiers that pass. then we can look at what other experiments we need to run on the specific checks that failed or otherwise scored poorly to see what other different models and effort levels. Will actually be suitable to our needs.
+
+## The GM's sixth message (after the close of 251 was reported, with R5's candidate experiments listed)
+
+> I agree that each of the follow-up experiments is worth running, so go ahead and run all of them. Thanks.
+
+(The same message chose the refusing hook, which became feature 252; its words are in that feature's `request.md`.)
