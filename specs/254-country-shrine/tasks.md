@@ -6,21 +6,21 @@ hyphens only.
 
 ## Phase 0 - baseline and the declaration (FR-001; D1, D2, D3)
 
-- [ ] T01 The constitution XIII baseline: `git worktree add --detach /tmp/base HEAD`; there, `make quick
+- [x] T01 The constitution XIII baseline: `git worktree add --detach /tmp/base HEAD`; there, `make quick
       ALL=1` and `make hooks-test`; the counts in `specs/254-country-shrine/measurements.json` as
       `m:baseline-quick`; each later failure checked against the clone
       research: rendering
       measure: the worktree's own `make quick ALL=1` output
-      verify: the JSON entry exists before any edit under `l7r/`
-- [ ] T02 The declaration: `.claude/skills/diagram/l7r/diagram/buildings/__init__.py`, `types.json`
+      verify: DONE. worktree /tmp/base at 7cc2e95b: make quick ALL=1 3640 passed 5 skipped 33.78 s; make hooks-test all checks passed; recorded as m:baseline-quick before any edit under l7r
+- [x] T02 The declaration: `.claude/skills/diagram/l7r/diagram/buildings/__init__.py`, `types.json`
       (the magistracy declared with its labels and bands from `programs.md`'s existing anchors; the
       country shrine declared from FR-008 to FR-010 with `class` and `why` per item) and `types.py`
       (`load_types`, `by_tier`, `hand_drawn_tiers`, shape validation per `contracts/types.schema.json`);
       `tests/test_building_types.py` red first (shape violations refused, both tiers present)
       research: rendering
       scaffold: `interactive/content.py`'s asset reader for the JSON
-      verify: `make quick`; the shape test fails on a mutated copy before the reader lands
-- [ ] T03 Consumers derive (D2): `pipeline/poolmaps.py` classifies `compound` by declared tier and
+      verify: DONE. l7r/diagram/buildings/{__init__,types}.py + types.json with both tiers; parse_types refuses nine malformed shapes by name (parametrized); Band.holds both orientations and area; forms change or remove an item's band; make quick green
+- [x] T03 Consumers derive (D2): `pipeline/poolmaps.py` classifies `compound` by declared tier and
       retires `COMPOUND_GENS`; `pipeline/pool_index.py` derives `MODE_A_DIRS` and the tier titles from
       the declaration, `pool_index_text.json` keeps the Mode B tiers only; `scripts/_size_table.py`'s
       usage line names `pool/<tier>/`; `tests/pipeline/test_poolmaps.py`, `test_pool_index.py` and
@@ -28,24 +28,24 @@ hyphens only.
       `test_no_type_name_outside_its_declaration` red first (a planted literal in `l7r/` fails it)
       research: rendering
       scaffold: `poolmaps.bundles()`'s tier field
-      verify: `make quick`; the census test goes red when its exemption list is emptied, green after
-- [ ] T04 The ignore rule per tier (D3): `.gitignore`'s three per-file negations become one per
+      verify: DONE. poolmaps.classify by declared tier (COMPOUND_GENS retired), pool_index MODE_A_DIRS and TIER_SECTIONS derived, pool_index_text.json Mode B only, size-table usage generic, compound.py example path from the declaration; census test red on the planted literal and on the six real hits, green after; test_villages off-tier assertion; make quick green
+- [x] T04 The ignore rule per tier (D3): `.gitignore`'s three per-file negations become one per
       hand-drawn tier plus a re-ignore per declared generated exception;
       `test_ignore_file_matches_the_declaration` red first; `git check-ignore` on all five magistracy
       svgs and the two generated exceptions unchanged; `tests/pipeline/test_render_cache.py` green
       research: rendering
-      verify: `git -C <clone> check-ignore -v` per file listed in the task's log; `make quick`
+      verify: DONE. .gitignore: one negation per hand-drawn tier + the two generated exceptions re-ignored; git check-ignore: hayakawa tracked, county-magistracy-example and ochiba-roundtrip-test ignored, a country-shrines svg tracked; the ignore test reads the declaration; make quick green
 
 ## Phase 1 - the parser and the registry (FR-002, FR-003, FR-005; D4-D9)
 
-- [ ] T05 The precinct marker (D4): `id="precinct"` on the court-earth interior rect of the five
+- [x] T05 The precinct marker (D4): `id="precinct"` on the court-earth interior rect of the five
       `pool/magistracies/*/*.svg` (and on the two generated examples' emitters in `compound.py`
       `emit_svg`); `tools/pack_audit/parse.py` reads marked rects as `interior`, raises naming the
       sheet when none is marked, drops the fill requirement; `tests/tools/test_pack_audit.py`'s
       synthetic sheets carry the marker; PNGs of the three hand-drawn sheets byte-identical
       (`tools/picture_diff.py` before and after)
       research: rendering
-      verify: `make quick`; the unmarked-sheet test red first; picture_diff reports zero changed pixels
+      verify: DONE. id=precinct on the court-earth rects of the 3 hand-drawn sheets (Hayakawa has two), the 8 red fixtures and compound.emit_svg; parse_svg reads marked rects in any attribute order and refuses a sheet without one (two red tests); resvg 2400 px renders of the three sheets byte-identical before and after (md5 56d21a98/4b615dfc/9e4ba3a9); make quick green
 - [ ] T06 The registry (D5, D6): `tools/pack_audit/registry.py` with `Check(name, run, types, fixture,
       fix)` and `CHECKS` over the eleven shared checks now in `checks.py`, the fire-water three declaring both tiers, and the magistracy's `notice_board_adrift`, `coverage_band` (the 37-42% band the report prints, made pass/fail) and `perimeter_hugging` (its floor derived from the five pool sheets, measured first and recorded as `m:hugging-floor`); `report.py` composes from it; `make pack-audit` output
       unchanged on Ochiba (diffed); every registered fixture exists and fires
