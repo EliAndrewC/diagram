@@ -65,9 +65,13 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in their format.
 - The record is HTML under `research/`, each heading the question a reader would ask from the map,
   each entry written for a casual reader: glossary tooltips for terms, session notes in HTML
-  comments, nothing about what the entry used to say. Footnotes live on
-  `research/citations/<name>.html`; a modal's explanation is written from a research section its
-  `Entry:` names.
+  comments, nothing about what the entry used to say. A modal's explanation is written from a research
+  section its `Entry:` names. It is written PER ENTRY and ASSEMBLED into the pages a reader opens
+  (feature 258): a question is `research/<page>/NNN-<heading id>.html`, its footnotes are the
+  `.notes.html` beside it, a source is `research/sources/NNNN-<key>.html`, and `make record` writes the
+  pages, `research/citations/<name>.html` among them. Find an entry with a glob on the key or a grep over
+  the page's directory - there is no index - and never edit an assembled page; footnote numbers are
+  allocated at assembly and are typed nowhere.
 - Reading and checking are dispatched to agents, in the background: `source-reader` (read what you
   cite), `quote-check`, `record-format`, `source-applicability` (judged BEFORE a source's numbers
   reach a map or a rule), `entry-drift`. What is mechanical runs FIRST, as a script, and its output goes
@@ -201,6 +205,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends | `ESCALATION_OK` |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
 | `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
+| `record-edit-hooks.sh` | an Edit aimed at an assembled record page is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
 | `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |

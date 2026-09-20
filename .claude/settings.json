@@ -88,6 +88,17 @@
         ]
       },
       {
+        "_comment": "GUARD_EDIT_OK: feature 258 - registering a NEW guard, record-edit-hooks.sh: an edit aimed at an assembled record page is re-aimed at the one fragment holding its text, or refused where no fragment or several hold it. No existing guard changes.",
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/diagram/scripts/record-edit-hooks.sh pretool",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {

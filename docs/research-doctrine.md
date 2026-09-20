@@ -139,3 +139,32 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   implement what it says; if it supports two forms, add the knob; only if it is silent does the GM
   rule. (The "calibrated liberty" clause covers a DEGREE along a continuum - how large, how dense,
   how often - never a choice between distinct FORMS.)
+
+## The record is written per entry, and the pages are assembled (feature 258, GM 2026-09-20)
+
+The GM asked whether the record's HTML pages should be split into per-entry files that a script
+assembles back into the same documents, because editing a file of hundreds of kilobytes costs tokens.
+The measurement said yes and moved the reason: reads of `research/` by the SESSION are 0.56% of all tool
+output and 90% of them already ask for a window, but one research page was **23% to 98% of everything
+that entered a checking agent's context** - a median of 68% over seventeen recorded runs - to check one
+entry (`specs/258-split-the-record-into-per-entry-files/research.md` R2, R3).
+
+So a question is `research/<page>/NNN-<heading id>.html`, its footnotes are the `.notes.html` beside it,
+a source is `research/sources/NNNN-<key>.html`, and `make record` writes the pages a reader opens. The
+operative rules - how to find an entry without reading a page, how to add a question or a footnote, what
+to hand a check - are in `.claude/skills/diagram/research/CLAUDE.md`.
+
+Three things worth knowing beyond the mechanics:
+
+- **Footnote numbers are allocated at assembly, in document order, and are typed nowhere.** Before this,
+  16 of 19 pages carried their references out of order, because a note added mid-page either renumbers
+  everything after it by hand or is appended out of order. Two defects fell out of allocating rather
+  than typing: 4 references carried no `id` at all, and 2 pages carried a duplicated one.
+- **Byte-identity is what made the split checkable, and it is not enough by itself.** Splitting and
+  rejoining is lossless wherever you cut, so a splitter that cut through an HTML comment would assemble
+  back byte for byte while writing fragments that correspond to nothing - which is exactly the trap
+  `SOURCES.html` carries, an 8,042-byte comment holding two whole `<h2>` groups no reader sees. The
+  tests assert the section count and the heading ids as well as the bytes.
+- **The rule that a check reads the fragment lives in the agent CONTRACTS**, because a defined agent
+  launches without this repository's `CLAUDE.md` files (feature 256). It is the whole saving; an agent
+  that still opens the page collects nothing from the split.
