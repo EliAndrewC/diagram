@@ -276,3 +276,10 @@ the tier test carries that one exception by name with the ruling as its reason, 
 `settlement-review` and `perf-audit` are watched at their first real dispatches in place of a seeded pair. What puts
 the field back on `spec-fidelity`: three samples a leg on feature 251's round-1 case, about four weight units by
 R6's per-run weights, scored as R6 was.
+
+**One aside from the plan review, left in the plan rather than applied** (2026-09-20): P6 still describes the guard
+as "for every file in the derived roster", which is what Amendment 1 built; P10 records the one named exception that
+came later, so the plan is right read whole. The pointer was added and then reverted, because editing the plan after
+its CLEAR verdict invalidates that verdict and the reviewer had called this "an aside, not a finding, because it
+changes no decision" - a third review round for a cross-reference is the kind of cost this project's tooling exists
+to avoid.
