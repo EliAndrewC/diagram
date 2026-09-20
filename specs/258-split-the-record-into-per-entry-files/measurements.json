@@ -1,9 +1,16 @@
 {
   "baseline-done": {
-    "value": 0,
+    "value": 4113,
     "unit": "tests",
-    "quantity": "make done in /tmp/base258, a detached worktree at origin/main 9d11c6e2 - the constitution XIII baseline for feature 258, replacing the quick-only one the plan review of 2026-09-20 struck; filled in when the run lands",
+    "quantity": "make done in /tmp/base258, a detached worktree at origin/main 9d11c6e2 - the constitution XIII baseline for feature 258: 4113 passed, 4 skipped, 4 warnings in 51.40 s, gate green, all three coverage floors enforced (scope FULL, 10 workers)",
     "observed": "2026-09-20",
-    "note": "RUNNING at the time of writing; the first attempt was taken at a HEAD that carried this feature's own spec and failed on spec-lint over it, which is why the baseline is taken at origin/main."
+    "note": "The plan review of 2026-09-20 struck an earlier quick-only baseline: it cannot tell a new coverage-floor or tests/full/ failure from an old one, and those are the surfaces this feature moves. A first attempt at this run was void - taken at a HEAD carrying this feature's own spec, it failed on spec-lint over it, which is why the baseline is taken at origin/main."
+  },
+  "record-check-cost": {
+    "value": 0.11,
+    "unit": "s",
+    "varies": true,
+    "quantity": "wall time of `make record CHECK=1` over the whole record (20 pages, 1,251 fragments), measured by the plan review 2026-09-20 on a shared container at load 0.75; the plan's bar is under 2 s",
+    "observed": "2026-09-20"
   }
 }

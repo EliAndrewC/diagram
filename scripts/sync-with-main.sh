@@ -241,6 +241,12 @@ push_cmd() {
   python3 "$ROOT/scripts/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/check-entry-headings.py before pushing"
   python3 "$ROOT/scripts/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
   "$ROOT/scripts/entry-gate.sh" || exit 1
+  # GUARD_EDIT_OK: feature 258 - the record's assembly check runs HERE as well as at the gate, and for
+  # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where
+  # the gate never runs, so a check only at the gate has a hole exactly where this feature's own commits
+  # land. It costs 0.11 s over the whole record (specs/258 R7).
+  ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory record CHECK=1 >/dev/null ) \
+    || die "a committed record page differs from what its fragments would assemble (run \`make record\` in .claude/skills/diagram, then commit) - feature 258, spec FR-004"
   # GUARD_EDIT_OK: feature 236 - spec-lint runs HERE as well as at the gate, for the reason its four
   # siblings above do: the delta it judges is a `specs/` edit that touches no Python, which takes the
   # DIRECT route and runs no gate at all. It reads only the spec directories the delta touches, and a
