@@ -113,8 +113,9 @@ commit before this feature, and the clone with the pass in it):
 | the same command AFTER | 0.48, 0.47, 0.48 |
 | FR-010's bar | 5 |
 
-The pass costs about **0.37 s an invocation**, nearly all of it the corpus walk, and lands at a tenth of
-the bar. There is no before counterpart to the 0.83 s in-process sweep, because before this feature
+The pass costs about **0.37 s an invocation** (observed 2026-09-20; method: the difference of the two
+rows above, each the median of three runs of the same command on a quiet machine), nearly all of it the
+corpus walk, and lands at a tenth of the bar. There is no before counterpart to the 0.83 s in-process sweep, because before this feature
 there was no pass to sweep; the per-invocation pair is the comparison FR-010 is about, since the bar
 exists so that a session runs this before every dispatch rather than skipping it.
 
@@ -140,8 +141,9 @@ are given:
 
 Largest list on the question pages: **115**, `archetypes`, the dike-pond hamlet question; smallest 0.
 On the wider set the largest is 626, the whole notes file of `urban-features`, which is not an entry a
-check is dispatched on. The question-page sweep takes **0.83 s** and the wider one **4.01 s**, both
-under FR-010's 5 s bar - and no dispatch ever asks for either, since a session runs one page. The spec
+check is dispatched on. The question-page sweep takes **0.83 s** and the wider one **4.01 s** (both
+observed 2026-09-20; method: `measure.py R4`, one process per enumeration, wall clock on a shared
+container), both under FR-010's 5 s bar - and no dispatch ever asks for either, since a session runs one page. The spec
 review re-ran `measure.py R4` on the same commit and got 0.91 s and 4.07 s: about a tenth of drift on a
 shared container, which is why the bar is five seconds and not one.
 
