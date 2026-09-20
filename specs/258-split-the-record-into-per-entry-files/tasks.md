@@ -159,15 +159,15 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 
 ## Phase 5 - landing
 
-- [ ] T26 `make done` green, backgrounded, acted on by its notification; every failure checked against
+- [x] T26 `make done` green, backgrounded, acted on by its notification; every failure checked against
       T01's baseline before it is called new (constitution XIII)
       research: rendering
-      verify:
-- [ ] T27 The gate-cost bookend, after (R7): `make record CHECK=1` over the whole record, and `make done`'s
+      verify: DONE. gate green in 92 s: 4,179 passed, 4 skipped, all three coverage floors, every new module at 100%. Against T01's baseline (4,113 passed, 4 skipped) that is 66 more tests and zero new failures. Three red runs on the way, each a real finding: spec-lint over this feature's own spec, a missing operations-registry row for the new entry point, and 152 uncovered statements
+- [x] T27 The gate-cost bookend, after (R7): `make record CHECK=1` over the whole record, and `make done`'s
       phase timings against T02. Over 2 s for the check, or a visible move in the gate, is diagnosed here
       in writing with the number
       research: rendering
-      verify:
+      verify: DONE. R7-after: the test phase is 46.65 s over 4,179 tests against the baseline's 51.40 s over 4,113 - no slower, and the same to within a shared container's noise. make record CHECK=1 over the whole record is 0.11 s against the plan's 2 s bar, so the delta-scoped fallback it named is not needed and was not built
 - [x] T28 `docs/research-doctrine.md` and `docs/efficiency-tooling.md` carry the new shape and the reason
       for it - the measurement, not the preference
       research: rendering
