@@ -10,7 +10,17 @@ its own gets a directory named exactly as its own file is, without the extension
 
 ## Where a page is cut
 
-At every `<hN` that opens a real section, which is not the same as every `<hN` in the file:
+A research page is cut on `<h2>` and nothing else. 14 `<h3>` headings stand inside questions on six
+pages, and a modal's `Entry:` tag may name one (`sources.py` resolves both levels), so breaking them out
+would fragment a question and lose the entry a modal points at. Only the registry's works roster has
+entries of its own, at `<h3>`, and the level is passed to the splitter rather than guessed.
+
+A page's closing run - the citations-page pointer where there is one, then `</main></body></html>` - is
+the tail, not part of the last question. Every one of the record's 38 pages ends in exactly that, and a
+page that does not is refused rather than cut by guesswork.
+
+Within that, a section begins at every `<hN` that opens a real one, which is not the same as every `<hN`
+in the file:
 
 - **a heading inside an HTML comment is not a section.** The registry carries an 8,042-byte commented-out
   block holding two whole `<h2>` groups - the old citing rules and the re-sourcing queue (R1). Cutting on
@@ -33,8 +43,9 @@ The registry therefore has THREE visible sections, not the five a plain `<h2>` c
 | `NNN-<slug>/` | the entries of that section, where it has them (the registry's works roster) | its prefix |
 | `NNNN-<key>.html` | one entry inside such a directory: its `<h3 id=...>` and its body | its prefix |
 | `_tail.html` | everything after the last section: the closing tags, and a research page's pointer to its citations page | last, always |
-| `_citations-front.html` | the citations page from `<!DOCTYPE` to just before `<section class="works">` | first on that page |
-| `_citations-works.html` | the works section - DERIVED by `make citations`, never hand-edited | after the front |
+| `_citations-front.html` | the citations page from `<!DOCTYPE` through the works section's own opening - `<section class="works">` and its `<h2 id="works-cited">` heading | first on that page |
+| (the works block) | DERIVED at assembly by the engine's existing derivation, from the assembled page. NOT a fragment | after the front |
+| `_citations-mid.html` | the hand-authored bytes between the works block and the notes: `</section>`, the `<h2 id="notes">` heading, and `<section class="footnotes"><ol>` | after the works block |
 | `_citations-tail.html` | `</ol></section>` and the closing tags | last on that page |
 
 - **The prefix is gapped by ten** (`010`, `020`, `030`) - three digits for a page's questions, four for the

@@ -129,8 +129,9 @@ files they replace; the diff is empty.
 **Acceptance Scenarios**:
 
 1. **Given** the split has landed, **When** the assembled pages are compared with the pre-split files,
-   **Then** stages 1 and 2 differ in no byte, and stage 3 differs only in footnote numbers and the
-   reference ids and back links that carry them.
+   **Then** stages 1 and 2 differ in no byte, and stage 3 differs only in the footnote numbers, the ids
+   and back links that carry them, and the ORDER of the notes on a citations page, which now follows the
+   order of the assertions (SC-003).
 2. **Given** a committed page that no longer matches its fragments, **When** the gate or a push runs,
    **Then** both refuse and name the page.
 3. **Given** a map modal linking to a research section, **When** the reader clicks it, **Then** it opens
@@ -233,7 +234,9 @@ files they replace; the diff is empty.
 **Collecting the saving**
 
 - **FR-023**: The check-preparing scripts MUST be able to address one question - the sections prepass, the
-  quotation prepass and the drift report - and MUST name the fragment files a check should read.
+  quotation prepass and the drift report - and MUST name the fragment files a check should read. Where a
+  modal's `Entry:` names an `<h3>` heading inside a question (14 of them stand on six pages), the fragment
+  named MUST be the question that contains it: a research page is cut on `<h2>` alone.
 - **FR-024**: The contracts of `record-format`, `quote-check`, `entry-drift` and `source-applicability`
   MUST tell the agent to read the fragment it is given rather than the assembled page. The defined agents
   launch with `omitClaudeMd: true` (feature 256), so their own contract is the only place this rule can
@@ -257,7 +260,8 @@ files they replace; the diff is empty.
   holds the text where exactly one does, refused with the candidates named where none or several do.
 - **FR-029**: The engine's own reading of the record - the modal's questions and sources, the works
   derivation, the glossary - MUST continue to read the assembled pages, not the fragments, so that the
-  split does not become a second parser of the record.
+  split does not become a second parser of the record. Where the assembly itself needs a derivation, it
+  MUST hand the engine an assembled page rather than teach the engine about fragments.
 
 ### Key Entities
 
@@ -287,9 +291,13 @@ files they replace; the diff is empty.
   because it depends on how much of a given run is the page: the recorded runs range from 23% to 98%
   (R3). (FR-023, FR-024, FR-026)
 - **SC-003**: At the landing of stages 1 and 2, every assembled page is byte-identical to the file it
-  replaces: the diff is empty. At stage 3 the only differences are footnote numbers and the reference ids
-  and back links that carry them, and the set of (assertion, note) pairs is unchanged. (FR-001, FR-006,
-  FR-009, FR-013, FR-014, FR-019)
+  replaces: the diff is empty. At stage 3 two things change, both consequences of allocating numbers in
+  document order: the numbers themselves with the ids and back links that carry them, and - on the 16
+  pages whose references are not in ascending order (R4) - the ORDER of the notes on the citations page,
+  which now follows the order of the assertions. What is held fixed and checked is the pairing: every
+  assertion carries the same note body it carried before, matched by the reference's position in the
+  text, and the multiset of note bodies on each page is unchanged. (FR-001, FR-006, FR-009, FR-013,
+  FR-014, FR-019)
 - **SC-004**: No footnote number is typed by hand anywhere in the sources: a search of the fragments finds
   no `fn-<n>`, `fnref-<n>` or hand-written back link. (FR-017, FR-018, FR-021, FR-022)
 - **SC-005**: A stale committed page cannot reach main: it fails the gate and both push routes refuse it,
@@ -375,3 +383,16 @@ sees, so they are declared here rather than left to the diff.
   rule written into `data-model.md` and `contracts/fragment-format.md` with the reason byte-identity
   alone could never have caught it - splitting and rejoining is lossless wherever you cut, so the tests
   assert the section count and the heading ids too.
+- Amendment after acceptance (2026-09-20), the second, from the PLAN review's findings: the plan gate
+  returned BLOCKED on five items, three of which reach the spec. (1) **FR-029 was being quietly granted
+  away** - the plan had `citations.py` reading notes from the fragments, which is the second parser of
+  the record FR-029 forbids; the assembly now runs two passes and hands it an assembled page, and
+  FR-029 says so explicitly. (2) **SC-003 was wrong about stage 3.** A citations page lists its notes
+  ascending by number while 16 of 19 research pages cite out of order, so assembling notes in question
+  order MOVES them: "strip the numbers and require equality" would have failed on those 16 pages. SC-003
+  now declares the reordering and holds the thing that is actually invariant - every assertion keeps the
+  note body it had, matched by the reference's position in the text. (3) **FR-023** now says which
+  fragment a check reads when a modal's `Entry:` names an `<h3>` inside a question: the question that
+  contains it, because a research page is cut on `<h2>` alone. The other two findings were the plan's
+  own - a `make quick` baseline where constitution XIII asks for `make done`, and a citations-page
+  fragment inventory that dropped the hand-authored bytes between the works block and the notes.

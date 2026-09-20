@@ -18,10 +18,13 @@ Three stages, each shippable, each proven on one page before the other eighteen:
 |---|---|---|
 | 1 - the registry | `SOURCES.html` -> `research/sources/` | the assembled registry is byte-identical |
 | 2 - the questions | `research/<page>.html` -> `research/<page>/` | every assembled page is byte-identical |
-| 3 - the notes | `research/citations/<page>.html` notes -> `research/<page>/*.notes.html` | numbers allocated at assembly; nothing else differs |
+| 3 - the notes | `research/citations/<page>.html` notes -> `research/<page>/*.notes.html` | numbers allocated at assembly, notes in document order; the assertion-to-note pairing unchanged |
 
-Stage 3 carries the renumbering, so it is the only stage whose output differs from what it replaced, and
-it differs in exactly one declared way.
+Stage 3 carries the renumbering, so it is the only stage whose output differs from what it replaced. It
+differs in two ways, both declared and both consequences of the same decision: the numbers are
+reallocated in document order, and on the 16 pages whose references are out of order (R4) the notes move
+on the citations page to match (D4a). What is held fixed is the PAIRING - every assertion keeps the note
+body it had.
 
 ## Technical Context
 
@@ -31,8 +34,9 @@ it differs in exactly one declared way.
 use (`interactive/sources.py`, `interactive/citations.py`); introducing an HTML parser here would put a
 second, differently-behaved reader of the record beside the one the engine already trusts.
 
-**Storage**: files under `.claude/skills/diagram/research/`. About 1,400 new fragments; the assembled
-pages stay exactly where they are.
+**Storage**: files under `.claude/skills/diagram/research/`. 1,569 new fragments - 288 questions, 261
+notes files, 925 for the registry and 95 of per-page scaffolding, counted rather than estimated; the
+assembled pages stay exactly where they are.
 
 **Testing**: pytest, in the interactive tree (`tests/interactive/`), plus `make hooks-test` for the guard.
 
@@ -48,8 +52,8 @@ the plan's fallback is to check only the pages whose fragments the delta touched
 **Constraints**: byte-identity at stages 1 and 2, which forbids any normalization - the fragments hold
 the record's bytes as they are, including its trailing spaces and its blank lines.
 
-**Scale/Scope**: 19 research pages (2 to 39 questions each), 19 citations pages, 1,850 notes, 1,860
-references, 920 registry entries (R1, R4, R5).
+**Scale/Scope**: 19 research pages (288 questions between them, 2 to 39 each), 19 citations pages, 1,850
+notes, 1,860 references, 920 registry entries (R1, R4, R5).
 
 **Single-artifact target**: **`research/ways.html`** and its citations page - the smallest complete case
 (5 questions, 26 notes, a `cities/`-style relative link absent, so stage 2's second artifact is
@@ -79,7 +83,7 @@ the ratchet already fails a target that gets slower.
 - **VI. Verify Before Reporting Done**: **PASS** - every task names its verification. The record is not a
   map, so `settlement-review` and `size-audit` do not apply; the checks that do are `make done`, the
   byte-identity diff, and - for the work's own subject - a `record-format` and a `quote-check` re-run over
-  a fragment against their recorded whole-page runs (FR-026, task T27).
+  a fragment against their recorded whole-page runs (FR-026, task T25).
 - **VII. De-Localized Generation by Default**: N/A - nothing is generated about a place.
 - **VIII. Direct Voice Over Framing Distance**: N/A - no in-world content.
 - **IX. Setting Integration**: N/A - no setting detail is asserted, invented or moved. Every byte of
@@ -90,11 +94,12 @@ the ratchet already fails a target that gets slower.
     the first test asserts `assemble(split(page)) == page` for `ways.html` and fails for want of a module.
   - **Clause 13, file scale**: the work splits naturally into `interactive/record/` as a
     directory-module - `fragments.py` (the layout: what a fragment is and where it lives), `split.py`,
-    `assemble.py`, `notes.py` (keys, allocation, back links) - none near the 1,000-line bar, with the
+    `assemble.py`, `store.py` (the fragments on disk, and every refusal), `notes.py` (keys, allocation,
+    back links) - none near the 1,000-line bar, with the
     package's `__init__.py` composing the surface `tools/record_asset.py` imports. If any one file passes
     ~600 lines the split point is `notes.py`, which is the only part with real algorithm in it.
   - **Clause 15, the efficient form**: the assembler's one lookup that could go quadratic is "which
-    fragment holds this text" (the guard, FR-028) over about 1,400 fragments. It builds one index of
+    fragment holds this text" (the guard, FR-028) over 1,569 fragments. It builds one index of
     fragment -> content once per invocation and asks it per candidate, rather than re-reading the
     directory per edit.
 - **XII. Historical Grounding Bookends (NON-NEGOTIABLE)**: **N/A, stated precisely.** This feature
@@ -108,8 +113,10 @@ the ratchet already fails a target that gets slower.
 - **XIII. No Known Regressions (NON-NEGOTIABLE)**: **PASS with a measured baseline.** The record has an
   existing test bed - `test_record.py`, `test_footnotes.py`, `test_citations.py`, `test_sources.py`,
   `test_record_format.py`, `test_classes.py`, `test_place.py`, `test_page.py` - and this feature rewrites
-  what they all read. Baseline: `git worktree add --detach /tmp/base-258 HEAD`, `make done` there, the
-  result recorded in R6 before the first edit. Zero new failures at merge; a pre-existing failure is
+  what they all read. Baseline: `git worktree add --detach /tmp/base258 HEAD`, **`make done`** there - not `make quick`,
+  which cannot tell a new coverage-floor or `tests/full/` failure from an old one, and those are exactly
+  the surfaces this feature moves - recorded in R6 before the first edit. The plan review of 2026-09-20
+  caught T01 promising the weaker run. Zero new failures at merge; a pre-existing failure is
   ledgered, not fixed here.
 
 ## Project Structure
@@ -141,10 +148,11 @@ specs/258-split-the-record-into-per-entry-files/
 │   ├── fragments.py                      # where a fragment lives, and what its name means
 │   ├── split.py                          # page -> fragments (the one-time migration, kept as the inverse)
 │   ├── assemble.py                       # fragments -> page
+│   ├── store.py                          # the fragments on disk: names, order, every refusal
 │   └── notes.py                          # note keys, number allocation, back links
 ├── l7r/diagram/tools/record_asset.py     # NEW - the CLI behind `make record`
-├── l7r/diagram/interactive/citations.py  # CHANGED at stage 3 only: notes read from fragments,
-│                                         #   the works section written to its own fragment
+├── l7r/diagram/interactive/citations.py  # UNCHANGED as a reader (FR-029): the assembly hands it
+│                                         #   an assembled page, as it reads a committed one today
 ├── research/                             # the record, restructured
 │   ├── SOURCES.html                      # ASSEMBLED (stage 1)
 │   ├── sources/                          # NEW - the registry's fragments
@@ -174,12 +182,24 @@ the staleness message and the test shape already exist to copy.
 
 ## The design, in the order it will be built
 
-### D1 - One command, one direction each way
+### D1 - One command, one direction each way, and ONE reader of the record
 
 `make record` assembles; `make record CHECK=1` exits 1 and names every page whose committed bytes differ
 from its assembly; `make record SPLIT=<page>` performs the one-time split of a page that is still whole.
-`make citations` keeps its job and its name (stage 3 moves its output into a fragment rather than into
-the middle of a page, so the two derivations never write the same bytes).
+
+**`citations.py` keeps reading an ASSEMBLED page and never a fragment** (FR-029). An earlier draft had it
+read the notes from the fragments, which is the second parser of the record FR-029 exists to forbid; the
+plan review of 2026-09-20 struck it. The works section depends on the notes and the notes depend on
+nothing, so the assembly resolves it in two passes and no cycle survives:
+
+1. assemble the citations page with the works region empty;
+2. hand THAT page to `citations.derive()`, which reads it exactly as it reads a committed page today, and
+   returns the works HTML and the hover script;
+3. write the page with the derived works region in place, and the script beside it.
+
+`make citations` keeps its name and delegates. This also retires the second Complexity Tracking entry the
+first draft carried: there are not two derivations writing parts of one page - there is one assembly that
+calls the existing derivation, and `_citations-works.html` is not a fragment at all.
 
 ### D2 - The layout
 
@@ -200,10 +220,18 @@ research/ways/_front.html                        doctype, head, h1, intro, <hr> 
 research/ways/010-<slug>.html                    one question: its <h2> and everything to the next
 research/ways/010-<slug>.notes.html              that question's notes (stage 3)
 research/ways/_tail.html                         the citations-page pointer and the closing tags
-research/ways/_citations-front.html              the citations page's head, h1 and intro
-research/ways/_citations-works.html              DERIVED by `make citations` (stage 3)
-research/ways/_citations-tail.html               the closing tags
+research/ways/_citations-front.html              head, h1, intro, and the works section's own opening
+research/ways/_citations-mid.html                between the works block and the notes: `</section>`,
+                                                 the `<h2 id="notes">` heading, `<section
+                                                 class="footnotes"><ol>` - hand-authored bytes that
+                                                 belong to no derivation and to no question
+research/ways/_citations-tail.html               `</ol></section>` and the closing tags
 ```
+
+**A research page is cut on `<h2>` ONLY.** 14 `<h3>` headings stand inside questions on six pages, and a
+modal's `Entry:` tag may name one (`sources.py` resolves both levels), so a splitter that broke them out
+would fragment a question and then trip the registry's own key refusal. Only the registry's roster has
+entries of its own, and the level is passed in rather than guessed.
 
 Full grammar, every field and every refusal: [data-model.md](data-model.md),
 [contracts/fragment-format.md](contracts/fragment-format.md).
@@ -223,6 +251,24 @@ A note is named, not numbered. The splitter derives each key from the note's own
 1,850 notes do, R5) - and, for the 326 notes that lead with no source key, from the question's slug and
 the note's ordinal within it. After the split a key is whatever its author writes; the assembler only
 requires that it is unique within its page.
+
+### D4a - Stage 3 REORDERS the notes, and that is the change, not a side effect
+
+A citations page lists its notes ascending by number. The research pages' references are not in
+ascending order - 16 of 19 (R4) - so today a note's position on the citations page has nothing to do with
+where its assertion stands. Storing each note beside its question and numbering in document order makes
+the two agree, which means **stage 3 moves note bodies on those 16 pages**.
+
+This is the renumbering, seen from the other page, and the plan states it rather than discovering it in a
+diff. The consequence for the test: "strip the numbers and require equality" is WRONG on those pages and
+would fail. What stage 3 actually holds is the pairing:
+
+- the multiset of note bodies on a citations page is unchanged;
+- every assertion on the research page still carries the same note body it carried before, matched by the
+  reference's position in the page's text rather than by its number;
+- nothing else differs.
+
+SC-003 says the same thing in the spec, corrected by the same review.
 
 ### D5 - Numbering, and the two defects it fixes
 
@@ -256,24 +302,24 @@ Then FR-026's re-run measures whether the scoped check still finds what the whol
 
 ## Phases
 
-**Phase 0 - baseline and design** (tasks T01-T03). The detached-worktree `make done` baseline (R6); the
+**Phase 0 - the baselines** (T01, T02). The detached-worktree `make done` baseline (R6); the
 gate-cost bookend (R7); the fragment grammar written down in `data-model.md` and `contracts/` before any
 code.
 
-**Phase 1 - the registry** (T04-T09). The module skeleton and the round-trip test on the registry; the
+**Phase 1 - the registry** (T03-T08a). The module skeleton and the round-trip test on the registry; the
 splitter; `make record`; the byte-identity proof; the sweep is the registry's own 920 entries. Ships
 whole.
 
-**Phase 2 - the questions** (T10-T16). `ways.html` first, then `cities/defenses.html` for the relative
+**Phase 2 - the questions** (T09-T14). `ways.html` first, then `cities/defenses.html` for the relative
 links, then the sweep over the other seventeen. Byte-identity at each step.
 
-**Phase 3 - the notes and the numbers** (T17-T23). The notes fragments, the keys, the allocation, the two
+**Phase 3 - the notes and the numbers** (T15-T20). The notes fragments, the keys, the allocation, the two
 defects; `make citations` moves to its fragment; the diff is inspected and declared - numbers only.
 
-**Phase 4 - collecting it** (T24-T28). The scripts' per-question modes; the four agent contracts; the
+**Phase 4 - collecting it** (T21-T25). The scripts' per-question modes; the four agent contracts; the
 guard and its companion test; `research/CLAUDE.md`; the FR-026 re-run and its report.
 
-**Phase 5 - landing** (T29-T31). `make done` green, the regression comparison against R6, the gate-cost
+**Phase 5 - landing** (T26-T29). `make done` green, the regression comparison against R6, the gate-cost
 bookend against R7, the push.
 
 ## Complexity Tracking
@@ -281,4 +327,7 @@ bookend against R7, the push.
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |---|---|---|
 | A splitter kept in the tree after its one-time use | It is the assembler's inverse, and keeping it lets one test assert `assemble(split(page)) == page` over the real record on every run, forever | Deleting it after the migration leaves the assembler with only hand-written fixtures to prove itself against, which is exactly how a parser and its input drift apart. Its cost is the 100% floor, which it owes like anything else |
-| Two derivations writing parts of one citations page (`make record`, `make citations`) | The works section is derived from the registry and the notes from the fragments; they are different sources | Folding the works derivation into the assembler would make `make record` depend on the registry's parse and duplicate `citations.py`'s logic; giving each its own fragment file means neither writes the other's bytes |
+
+The first draft carried a second entry - two derivations writing parts of one citations page - which the
+plan review of 2026-09-20 dissolved rather than justified. D1's two-pass assembly means there is one
+assembly, calling the derivation the engine already has, on the page it already reads.

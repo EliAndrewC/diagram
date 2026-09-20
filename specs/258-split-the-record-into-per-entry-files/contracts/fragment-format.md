@@ -17,10 +17,19 @@ than copies are footnote numbers and the anchors that carry them (below).
 The citations page is the same shape:
 
     assembled citations page = _citations-front.html
-                             + _citations-works.html
-                             + "<section class=\"footnotes\"><ol>\n"
+                             + the works block, DERIVED at assembly (below)
+                             + _citations-mid.html
                              + each question's notes, in question order, numbered
                              + _citations-tail.html
+
+No page bytes live in the program: the `<section class="footnotes"><ol>` opener, the `<h2 id="notes">`
+heading and the works section's own wrapper are all hand-authored fragments, because they are hand-authored
+bytes.
+
+**The works block is derived from the ASSEMBLED page, in two passes**, so that `citations.py` keeps
+reading a page and never a fragment (FR-029): assemble the citations page with the works region empty,
+hand that page to the existing derivation, then write the page with the region filled. The works depend
+on the notes and the notes on nothing, so two passes settle it and there is no cycle.
 
 ## Where the splitter cuts
 
@@ -40,7 +49,7 @@ Commented-out text rides with whatever fragment it falls inside; it is never a f
 | fragment | must | must not |
 |---|---|---|
 | `_front.html` | begin `<!DOCTYPE html>`; contain exactly one `<h1` | contain any `<h2` |
-| `NNN-<slug>.html` | begin with `<h2 id="..."` | contain a second `<h2`; contain `fn-<n>` or `fnref-<n>` |
+| `NNN-<slug>.html` | begin with `<h2 id="..."`; an `<h3>` inside it stays inside it | contain a second `<h2`; from stage 3 on, contain `fn-<n>` or `fnref-<n>` |
 | `NNN-<slug>.notes.html` | hold only `<li data-note="<key>">...</li>` items | carry a number, an `id="fn-...`, or a `<a class="fnback">` |
 | `NNNN-<key>.html` | begin with `<h3 id="..."`; its filename key matches the key its heading registers | contain a second `<h3` |
 | `_tail.html` | close every tag the front opened | contain any `<h2` |
@@ -87,7 +96,7 @@ recognize. Every message names the file.
 | a note no reference names | the key, the notes fragment |
 | a key defined twice on one page | the key and both notes fragments |
 | a key that is not lower-case kebab | the key and its file |
-| a fragment holds a hand-typed `fn-<n>`, `fnref-<n>` or `class="fnback"` | the file and the offending text |
+| a fragment holds a hand-typed `fn-<n>`, `fnref-<n>` or `class="fnback"` (FROM STAGE 3 ON - stages 1 and 2 are byte-identical, so their fragments still carry the numbers the pages carry) | the file and the offending text |
 | a question fragment holds a second `<h2` | the file and the second heading |
 | a registry entry's filename key differs from the key its heading registers | the file, both keys |
 | `_front.html` or `_tail.html` missing | the page directory, and what is missing |
@@ -104,7 +113,15 @@ For every page in the record:
 
     assemble(split(committed_page)) == committed_page
 
-at stages 1 and 2 byte for byte, and at stage 3 up to footnote numbers - where "up to footnote numbers"
-is itself checked, not asserted: the test strips `fn-<n>`, `fnref-<n>` and the visible number from both
-sides and requires equality, and separately requires that the multiset of (question, note body) pairs is
-unchanged across the renumbering.
+at stages 1 and 2 byte for byte.
+
+**At stage 3 the pages change in two declared ways**, and a naive "strip the numbers and compare" would
+fail on 16 of 19 pages rather than pass: the numbers are reallocated in document order, AND the notes
+move on the citations page to match, because a citations page lists its notes ascending by number while
+the research pages' references are not ascending (R4). What is held fixed is the PAIRING, and that is
+what the test checks:
+
+- every assertion on the research page carries the same note body it carried before, matched by the
+  reference's position in the page's text rather than by its number;
+- the multiset of note bodies on each citations page is unchanged;
+- with the numbers and the note order set aside, nothing else differs.

@@ -10,11 +10,12 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 
 ## Phase 0 - the baselines (constitution XIII, and the gate's cost)
 
-- [ ] T01 The regression baseline: `git worktree add --detach /tmp/base258 HEAD`; there, `make quick ALL=1`
-      and `make hooks-test`; the counts recorded in `measurements.json` as `m:baseline-quick`; every later
-      failure checked against the clone before it is called new
+- [ ] T01 The regression baseline: `git worktree add --detach /tmp/base258 HEAD`; there, **`make done`** -
+      not `make quick`, which cannot tell a new coverage-floor or `tests/full/` failure from an old one,
+      and those are the surfaces this feature moves; the counts recorded in `measurements.json` as
+      `m:baseline-done`; every later failure checked against the clone before it is called new
       research: rendering
-      measure: the worktree's own `make quick ALL=1` output
+      measure: the worktree's own `make done` output
       verify:
 - [ ] T02 The gate-cost bookend, before: `make done` phase timings on unmodified code, recorded in
       `research.md` as R7-before. The assembly check joins the gate in T13; this is what it is judged
@@ -99,19 +100,20 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       research: rendering
       verify:
 - [ ] T16 The splitter derives the 1,850 keys by R5's rule (the leading source key, an ordinal where a page
-      repeats one, the question's slug and an ordinal for the 326 that lead with none); `citations.py`
-      reads notes from the fragments and `make citations` writes `_citations-works.html` instead of
-      writing between markers in the page
+      repeats one, the question's slug and an ordinal for the 326 that lead with none). `citations.py` is
+      NOT changed as a reader (FR-029): the assembly runs two passes and hands it an assembled page, as it
+      reads a committed one today
       research: rendering
       verify:
 - [ ] T17 **`ways` notes split** (the reference artifact again): the diff of `research/citations/ways.html`
-      is inspected line by line and declared - footnote numbers, the ids that carry them, and nothing else
+      is inspected line by line and declared - the numbers, the ids that carry them, and the note ORDER
+      (`ways` cites 12, 13, 1, 14 ... so its notes move), and nothing else
       research: rendering
       measure: the diff, classified
       verify:
-- [ ] T18 **The sweep**: the other eighteen citations pages. The whole renumbering diff is checked by the
-      contract's own test - strip the numbers from both sides and require equality, and require the
-      multiset of (question, note body) pairs to be unchanged (SC-003)
+- [ ] T18 **The sweep**: the other eighteen citations pages, 16 of which reorder (R4). The diff is checked
+      by the contract's own test - every assertion keeps the note body it had, matched by the reference's
+      position in the text; the multiset of note bodies per page unchanged; nothing else moved (SC-003)
       research: rendering
       verify:
 - [ ] T19 The two defects, fixed by construction (FR-021, R4, R5): the 4 references that carry no id and
