@@ -16,7 +16,7 @@ approved by eye, with the checks and tests backfilled afterwards as ratchets**. 
 irrigation pond + sluice + comb supply net + paddies + drain; the dry *hatake* margin, reed marsh,
 and the grazing-scrub *satoyama* ring; the nucleated farmhouse cluster with its kura, threshing
 yards, kitchen gardens, shared draft-animal byres and communal wells; the fengshui windbreak grove;
-the earth-god shrine (with its own ablution well) at the water-mouth and the back-slope graveyard;
+the village shrine - Bishamon's, the country monk Otsuki's seat (GM 2026-09-20) - with its own ablution well, at the water-mouth and the back-slope graveyard;
 the lanes, connector track and plank footbridges across the ditches.
 
 ## Map notes

@@ -7,7 +7,7 @@ broken ground). Built water-first, layer by layer, each approved by eye, with th
 backfilled as ratchets: the irrigation pond + sluice + comb supply net + paddies + drain; the
 dry hatake margin, reed marsh, and the grazing-scrub satoyama ring; the nucleated farmhouse
 cluster with its kura, threshing yards, kitchen gardens, shared draft-animal byres, and communal
-wells; the fengshui windbreak grove; the earth-god shrine (with its own ablution well) at the
+wells; the fengshui windbreak grove; the village shrine of Bishamon (with its own ablution well) at the
 water-mouth and the back-slope graveyard; the lanes + connector track and the plank footbridges
 across the ditches. (Kikuta was later rebuilt on this foundation; Hikari no Sato is the split
 multi-block variant.)
