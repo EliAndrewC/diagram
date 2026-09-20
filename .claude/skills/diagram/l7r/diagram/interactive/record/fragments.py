@@ -67,15 +67,14 @@ def notes_file(section_file_name: str) -> str:
 
 def key_of(heading_id: str) -> str:
     """A registry entry's source key: `work-fei-1939` -> `fei-1939`."""
-    return heading_id[len(WORK_PREFIX):] if heading_id.startswith(WORK_PREFIX) else heading_id
+    return heading_id[len(WORK_PREFIX) :] if heading_id.startswith(WORK_PREFIX) else heading_id
 
 
 def ordered(names: list[str]) -> list[str]:
     """The entry fragments of a directory, in prefix order. Names that carry no prefix are not
     entries and are left to the caller - `_front.html` and the rest are placed by the assembly, never
     by sorting, so that a rename cannot silently reorder a page."""
-    return sorted((n for n in names if _PREFIXED.match(n) and not n.endswith(NOTES_SUFFIX)),
-                  key=lambda n: (int(_PREFIXED.match(n).group(1)), n))  # type: ignore[union-attr]
+    return sorted((n for n in names if _PREFIXED.match(n) and not n.endswith(NOTES_SUFFIX)), key=lambda n: (int(_PREFIXED.match(n).group(1)), n))  # type: ignore[union-attr]
 
 
 def position_of(name: str) -> int:

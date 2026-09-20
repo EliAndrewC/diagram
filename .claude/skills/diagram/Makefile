@@ -543,6 +543,11 @@ footnote-census: ## [docs] count the record's footnotes by kind - cited, grounds
 citations:      ## [docs] write each research page's citations script (research/citations/<name>.js) and the works section at the top of its citations page, from the page's notes and SOURCES.html (feature 211)   CHECK=1: exit 1 if stale or a cited key has no write-up
 	$(RUN).tools.citations_asset $(if $(CHECK),--check,)
 
+# GUARD_EDIT_OK: feature 258 - a new operation, `record`: the record's pages assembled from their
+# per-entry fragments. No guard changes; the same shape as `citations` above, and for the same reason.
+record:         ## [docs] write the record's pages from their per-entry fragments under research/<page>/ (feature 258)   CHECK=1: exit 1 if a committed page differs from its assembly   PAGE=<name>: one page   SPLIT=<name>: the one-time split of a page that is still whole
+	$(RUN).tools.record_asset $(if $(CHECK),--check,) $(if $(PAGE),--page $(PAGE),) $(if $(SPLIT),--split $(SPLIT),)
+
 
 
 

@@ -1,0 +1,156 @@
+<h2 id="what-drawing-at-true-size-left-open">What drawing at TRUE SIZE left open</h2>
+<!-- Grounds: the dry-hem stand-off in the carve; channel_footbridges; MIN_CHANNEL_PX against aze_w -->
+<!-- Evidence: derived (measurements from the settlement-review pass on the true-size Inashiro) -->
+<p><strong>Sources:</strong> the true-size decision above, of which these are consequences; <a href="http://jsszy.org.cn/UserFiles/file/20221103/20221103155002_6437.pdf"><code>jsslkx-002-2021</code></a> (the minimum bank top of a lateral or farm canal)</p><!-- recorded so they are not rediscovered one map at a time -->
+<p>Drawing the net at true size leaves several neighboring rules to be re-set against it. Each of these is
+measured.<!-- and each carries the sketch its fix would follow --></p><!-- it did not break anything the gate catches; none is shipped broken -->
+<ul>
+<li><strong>The dry-hem stand-off is DERIVED from the canal's bank.</strong> It is the stroke's LOCAL half-width
+  at each hem boundary point plus a <strong>5.0 ft berm</strong>:
+  a ~1 m embankment top, which is the minimum bank top a Jiangsu design guideline sets for a lateral or farm canal,<sup class="fn"><a id="fnref-49" href="citations/water.html#fn-49">49</a></sup> plus room to stand for
+  the annual dredging.<sup class="fn"><a id="fnref-175" href="citations/water.html#fn-175">175</a></sup> The guideline declares its own canal designs subject to GB 50288, China's national
+  irrigation and drainage standard, which is where the number comes from; GB 50288 itself is on no page this
+  project has been able to read, so the attribution is second-hand. The dredging half of the berm is this
+  record's own reason - the guideline's stated reason for the bank top is vehicle passage where it doubles
+  as a road, and it gives none where it does not. Measured: bare berm <strong>4.89 ft median</strong>, held unbroken over a 1,592 ft chain, with the residue at the
+  fork recorded below.<!-- FIXED 2026-08-17. It had been a flat 8 * g from the CENTERLINE, so it did not track the narrowing: centerline-to-nearest-dry-plot was identical before and after (min/median 15.4 / 16.0 px) while the water inside that gap shrank threefold, and the bare berm therefore GREW to 14.8 px median - a canal running hard against the paddy on one side with a ~15 ft empty verge on the other. The berm is CANAL_BERM_FT = 5.0, applied via the shared supply_bank_clearance. The old effective ~10 ft was never chosen - it is what 16 ft from the centerline left once a 12.4 px canal was subtracted, i.e. an artifact of the inflation. --></li>
+</ul>
+<!-- And a guard, whose THRESHOLD took four attempts - worth recording because the shape recurs. The
+  stand-off is applied along one canal's normal, which does not clear a stroke running at a different
+  angle; at the bunsuiguchi two hem corners came out <strong>0.2 ft</strong> off the head-race's bank against an
+  intended 5.0. A cell whose corner <strong>or edge</strong> (corners alone missed it - the same trap
+  <code>_quad_in_supply</code> documents) lands too near any supply stroke is now dropped. But "too near" cannot
+  be the berm itself: the berm is measured at a boundary point against ITS canal, while the guard
+  measures anywhere on the cell against the NEAREST canal, and those disagree wherever a canal curves
+  or a cell's nearest stroke is not the one it was laid against. At the full berm the hem collapsed
+  <strong>23 cells -&gt; 8</strong>; at half it wiped <strong>347 px</strong> off the fork triangle's west reach, freeing ground
+  that re-packed the wells and left one holding the map's frame open (cohort seed 4 broke); at a
+  QUARTER it still dropped four cells on cohort seed 41, whose wells moved the same way and broke the
+  4-of-4 ratchet in <code>tests/hamletgen/test_driver.py</code>. It settles at <strong>0.5 px</strong> - the same margin
+  <code>_quad_in_supply</code> uses - which drops only ground genuinely in the water, and that is all that was
+  ever wrong. Two lessons: a guard that re-measures a rule from a different reference is a FLOOR under
+  that rule, never a restatement of it, and its threshold has to be calibrated against the defect
+  rather than inherited from the rule; and <strong>a guard that DELETES a map feature hands its footprint to
+  the next placer</strong>, so its blast radius is never confined to the thing it deletes - every one of the
+  three failures above was freed ground re-packing something else. -->
+<p><em>What remains, measured and ACCEPTED.</em> Three hem corners at the bunsuiguchi keep less than the full
+  berm - <strong>2.00 ft</strong>, <strong>2.19</strong> and <strong>2.90</strong><!-- at (1590.0, 489.8), (1486.6, 584.0) and (1600.9, 490.6) respectively --> -
+  against a 4.89 ft median held over the whole 1,592 ft chain. Geometric rather than a bug: the
+  stand-off runs along ONE canal's normal and cannot clear a stroke crossing at an angle, and a fork
+  is where three strokes meet. Invisible at fit zoom, and accepted.<!-- The fix, if
+  ever wanted, is NOT a wider clearance - a wider one frees ground that re-packs something else (not the guard's floor: those costs are priced in the comment above). It is to CHAMFER
+  the offending corner in a repair pass after the boundary points are placed: measure true
+  perpendicular distance to the nearest stroke and cut the corner back along its own two edges, which
+  frees a few square feet rather than a whole cell and therefore cannot move anything else. --></p>
+<p><strong>The taper is SUB-PERCEPTUAL at true scale - RULED ON, not merely noticed.</strong> The GM looked at the
+  finished map and asked the right question: <em>"Is that getting narrower as it goes down into the
+  fields, or along the edge at the top, though? It doesn't visually look like it is."</em> It is not.
+  What matters here is the GRADIENT, not the ratio, and the two had been quietly conflated:</p>
+<table>
+<thead>
+<tr>
+<th>stroke</th>
+<th>run</th>
+<th>width</th>
+<th>ft lost per 100 ft<!-- px lost per 100 px; Inashiro draws at a foot to the pixel --></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>canal A (the top edge)</td>
+<td>1,504 ft</td>
+<td>4.5 -&gt; 1.5</td>
+<td><strong>0.20</strong></td>
+</tr>
+<tr>
+<td>delivery ditch (down into the fields)</td>
+<td>~500 ft</td>
+<td>2.5 -&gt; 1.5</td>
+<td><strong>0.20</strong></td>
+</tr>
+<tr>
+<td>canal B (short west arm)</td>
+<td>343 ft</td>
+<td>4.0 -&gt; 1.5</td>
+<td>0.73</td>
+</tr>
+<tr>
+<td><em>a delivery drawn ~3x oversize</em></td>
+<td>540 ft</td>
+<td>8.0 -&gt; 3.0</td>
+<td><em>0.93</em></td>
+</tr>
+</tbody>
+</table>
+<p>So a delivery sheds ONE FOOT of width over five hundred, and canal A three over fifteen hundred. The ink is
+  monotone and the head-to-tail ratio is honest, so the two ENDS of a canal differ plainly side by
+  side - but there is no gradient to follow along a stroke, and canal B is the only one that reads,
+  because it is short. Canal A's gradient is identical to a delivery's; only its total drop is larger.</p>
+<!-- Correcting an earlier claim in this file: it does NOT "still read on the canals". -->
+<p><em>Why this is the honest outcome rather than a defect.</em> A real ditch narrowing from ~1.4 m to
+  ~0.45 m over 460 m is not visually dramatic from above either.<sup class="fn"><a id="fnref-170" href="citations/water.html#fn-170">170</a></sup> A taper the eye can follow comes from
+  inflating the net, not from the taper law<!-- the taper people remember from the pre-2026-08-17 maps came from the 2-5x inflation --> - so true absolute size and a
+  visible taper are in genuine tension and no amount of engineering dissolves it.</p>
+<p><em>The decision, with the alternatives priced.</em> Both were put to the GM against keeping true size:
+  <strong>x1.5</strong> (delivery 3.75 -&gt; 1.8, gradient 0.39) and <strong>x2</strong> (5.0 -&gt; 2.4, gradient 0.52), each a single
+  documented multiplier preserving every relative size. <strong>The GM chose true size.</strong> Recorded here so
+  a future reader meets a deliberate trade rather than an apparent bug.<!-- do not re-inflate the net to
+  make the taper show, and do not write doctrine promising a reader they will see it --></p>
+<p><strong>A plank is laid only over water you cannot stride across.</strong> A plank bridge is a real object a household builds and
+  maintains, and nobody builds one over something they step over.<sup class="fn"><a id="fnref-169" href="citations/water.html#fn-169">169</a></sup><!-- FIXED 2026-08-17. The rule had been about LENGTH alone - any ditch over ~140 px got a plank about midway - which was harmless while the net was oversize and absurd at true size: eight of Inashiro's fifteen bridges decked water 1.7-2.3 ft wide, with 3-4 ft abutments each side. The geometry had tracked the narrowing correctly (spans fell 18.4 -> 10.5 px, nothing short or floating); it was the FEATURE's justification that did not travel. --></p>
+<p>The line is judged on the ditch's WIDEST point (a run wide at its head and a thread at its tail is worth
+  a crossing somewhere, and the plank is seated where the water is wide enough for one).<!-- "and the placer slides to find where), and the placer PREFERS wide seats rather than
+  refusing narrow ones, because its other constraints - houses, hem crop, other decks, oblique confluences -
+  can rule out every wide seat on a ditch that still earns a crossing." --></p>
+<!-- FOOTPLANK_MIN_FT = 3.0 (2026-08-17), about a stride, judged on the ditch's WIDEST point (a run wide at its
+  head and a thread at its tail is worth a crossing somewhere, and the placer slides to find where).
+  The measured pool leaves a clean gap for it - delivery ditches carry 1.8-2.5 ft and supply canals
+  3.0-4.5 - so the line separates "step over it" from "lay a board" without cutting through either
+  group. On Inashiro: 15 planks -&gt; 7, exactly the 8 delivery-ditch decks removed. <strong>One predicate,
+  <code>worth_planking</code>, called by BOTH the placer and <code>long_ditches_have_a_footbridge</code></strong> - a ditch the
+  placer declines to deck while the check still demands one is precisely the placer/check
+  disagreement this engine keeps rediscovering, and here it would have fired on every hamlet.</p>
+<p><em>Two scopes, and getting them wrong cost a round each.</em> Judged on the DITCH, the predicate answers
+  "is this worth a crossing anywhere", which is the gate's question. Judged on a SEAT, it answers "is
+  the water wide enough here", which is the placer's - and judging only the ditch let a run that
+  qualifies on its 3.0 ft head seat a board over 2.4 ft, narrower than decks the same rule had just
+  removed (caught by review). But making the seat width a hard REFUSAL re-opened the split from the
+  other side: cohort seeds 41 and 43 had a long ditch the gate demanded a plank on and the placer
+  would not lay, because its other constraints - houses, hem crop, other decks, oblique confluences -
+  ruled out every wide seat. <strong>So the placer PREFERS wide seats rather than refusing narrow ones</strong>
+  (candidates sorted wide-first), and the check was tightened to match from its own side:
+  <code>_ditch_plankable</code> now requires useful ground AND enough water at the SAME sample, so it stops
+  demanding a crossing on a ditch that is merely wide at one end and crossable at the other. The
+  general shape: when a placer has constraints its checker cannot model, a hard refusal on a shared
+  rule will always find the gap between them - make the shared rule a PREFERENCE on the placer's side
+  and tighten the checker's own question instead. -->
+<p><strong>RULED 2026-08-26 (GM): the line is 2.0 ft.</strong><!-- feature 133 T11; the line moved from 3.0 ft to 2.0 ft --> The GM asked
+  of the reference hamlet: <em>"I think there should probably be plank bridges over the irrigated
+  channels in a few places. Right? Or are these too narrow for that? They don't look too narrow. Is
+  it intentional that they're missing or an oversight?"</em><!-- It was intentional - the 2026-08-17 line above - but the 3.0 ft figure was a session's reading of "a stride", never researched and never put to the GM. --> The research pass (web, Japanese and English, six queries): the traditional
+  farm-level water channel is <strong>2 shaku, ~60 cm</strong> (farm paths 3 shaku, the <em>sanshaku-michi</em>),
+  which is precisely the width of our delivery ditches (2.<sup class="fn"><a id="fnref-168" href="citations/water.html#fn-168">168</a></sup>5 -&gt; 1.2 ft); modern
+  ほ場整備 standard drawings size the smallest field ditches at 30-60 cm and carry a crossing at every
+  plot entrance, but that is machinery-era practice;<sup class="fn"><a id="fnref-167" href="citations/water.html#fn-167">167</a></sup> and NOTHING found says whether an Edo farmer
+  laid a board over a 2-shaku ditch or stepped it. The GM had already ruled on the map.<!-- "Two supportable readings would have become a
+  knob; a silent record goes to the GM, and the GM had already ruled on the map." -->
+  So the line is <strong>2.0 ft</strong><!-- FOOTPLANK_MIN_FT = 2.0 -->: the standard farm ditch earns a board, the ~1.2-1.5 ft tails do
+  not. On Inashiro: 10 planks - one per delivery branch (2.0 / 2.0 / 1.95 ft of water, seated
+  just below the branch heads because the head itself is a confluence) and two more down the main
+  (2.8 / 2.4 ft); the two 1.8 ft branches stay unplanked.<!-- The placer's wide-first seating and the single shared predicate are untouched, so the placer/check split cannot reopen. -->
+  The three branch planks sit at the TAIL of each branch's qualifying run, 160-250 ft below the head,
+  each on a bund crossing mid-field - accepted, since a head seat would stand ~120 ft from the canal
+  plank at the junction. The parallel pair at x~2225/2240 has one branch planked and its twin 12 ft
+  away not, the price of two deliveries running 5-25 ft apart for 300 ft. And at 2.7 ft of drawn width against
+  3.0-3.7<!-- 2.7 px against 3.0-3.7 px at 1 ft/px -->, the unplanked 1.8 ft branches are indistinguishable from the planked ones on the page:
+  the map shows some branches with a crossing and some without.<!-- Review record (settlement-review, pass): the tail seating is because n is counted over the qualifying run while the slot's base is still mid-ditch, and the wide-first sort takes the qualifying seat nearest it. The width under a seat is taper_w (square-root taper); the review's linear read gave 1.95 ft for one seat that the authoritative taper puts at or above 2.0 - so that is the measurement to use, not w -> w_tail interpolated linearly. The parallel pair is pre-existing geometry, not worth a rule. --></p>
+<p><strong>ACCEPTED (not fixed) 2026-08-17: the visibility floor lands exactly on the paddy bund's stroke
+  width.</strong> The channel floor is 1.5 ft at hamlet scale and the bund is also 1.5<!-- 1.5 px each -->, so the finest water tier
+  is drawn at precisely the width of the field boundaries it runs among, separated only by hue.
+  <strong>A floor of 1.2 ft was tried and rejected</strong><!-- 1.2 px -->: the floor is not cosmetic - it also sets the clearance
+  the bunds keep from a supply channel, so lowering it moves every bund that hems a supply stroke and
+  re-welds the plot seams. <strong>A floor of 1.2 ft broke the paddy seams of two of the twenty-four maps rolled for it
+  that hold at 1.5.</strong> A cosmetic ambiguity does not buy two broken maps.<!-- "Against the 24-seed cohort, 1.2 broke the paddy seams of two maps (22/24 -> 20/24) that pass at 1.5."; MIN_CHANNEL_PX is 1.5 and aze_w at hamlet grain is also 1.5; 1.2 was implemented and reverted: the constant feeds supply_bank_clearance, and close_seams then welds a different set of scraps; isolated by reverting that one line against the 24-seed cohort, 1.2 costs seeds 19 and 22 to paddy_plot_seams_shared --></p>
+<p><!-- The lever, if it is ever worth closing, is the OTHER side. -->The bund width is 1.5 ft by its own research<!-- AZE_FT --> (a
+  plain aze ran ~1-2 ft),<sup class="fn"><a id="fnref-50" href="citations/water.html#fn-50">50</a></sup> so there is room to take the BUND to ~1.3 and leave the water alone - which
+  changes a stroke width and touches no clearance at all.<!-- Not attempted here. --></p>

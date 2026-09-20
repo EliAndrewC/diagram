@@ -290,15 +290,18 @@ files they replace; the diff is empty.
   fragment it was given and its notes. On the recorded case of FR-026 that is a few thousand bytes
   against the 91,926 its whole-page run read (R3), and it reports the same findings. The fall in the
   agent's WHOLE input is reported by FR-026's run rather than held to a bar, because it depends on
-  how much of a given run was the page, which the recorded runs put between a quarter and nearly all
-  of it (R3).
+  how much of a given run was the page, which the recorded runs put between 23% and 98%, median 68% (R3,
+  observed 2026-09-20; method: `measure.py R3`).
 - **SC-003**: (FR-001, FR-006, FR-009, FR-013, FR-014, FR-019) At the landing of stages 1 and 2, every assembled page is byte-identical to the file it
   replaces: the diff is empty. At stage 3 two things change, both consequences of allocating numbers in
   document order: the numbers themselves with the ids and back links that carry them, and - on the 16
   pages whose references are not in ascending order (R4) - the ORDER of the notes on the citations page,
-  which now follows the order of the assertions. What is held fixed and checked is the pairing: every
-  assertion carries the same note body it carried before, matched by the reference's position in the
-  text, and the multiset of note bodies on each page is unchanged.
+  which now follows the order of the assertions; and, in consequence, the ORDER of the works list at
+  the top of a citations page, which is derived by walking those notes and so follows them. What is held
+  fixed and checked is the pairing and the sets: every assertion carries the same note body it carried
+  before, matched by the reference's position in the text; the multiset of note bodies on each page is
+  unchanged; and the SET of works cited on each page is unchanged, though its order now tracks where
+  each work is first cited in the reader's page - which is what that list has always claimed to be.
 - **SC-004**: (FR-017, FR-018, FR-021, FR-022) No footnote number is typed by hand anywhere in the sources: a search of the fragments finds
   no `fn-<n>`, `fnref-<n>` or hand-written back link.
 - **SC-005**: (FR-002, FR-003, FR-004) A stale committed page cannot reach main: it fails the gate and both push routes refuse it,
@@ -354,8 +357,9 @@ sees, so they are declared here rather than left to the diff.
   no record page carries today and which would have added reader-visible bytes at the moment SC-003 says
   the diff is empty - deleted, dropped from SC-005's list, and the instruction moved to where it costs no
   byte of the record: FR-025's operative doc and FR-028's guard message. (2) SC-002's bar was unreachable
-  under its plain reading, because most of a recorded run's input is not the page - it now states the
-  bytes it means, and has FR-026 report the whole-input fall rather than bar it. (3) The GM's premise that the citations page is script-assembled is the opposite of
+  under its plain reading, because the page is never ALL of a run's input - on `255-qc-urban` it was
+  68,648 of 100,873 bytes (R3), so swapping a fragment for it cuts 62% of the total, not 90% (round 5's own run of `measure.py R3`) - it now
+  states the bytes it means, and has FR-026 report the whole-input fall rather than bar it. (3) The GM's premise that the citations page is script-assembled is the opposite of
   the truth and stage 3 depends on which is so - the Summary now corrects it, as it already corrected the
   premise R2 answers. (4) FR-012 cited the GM's ungapped example as the authority for gapping - it now
   cites decision 1 of the four they approved, and states the gap. (5) Three figures: the upper per-page

@@ -1,0 +1,49 @@
+<h2 id="what-is-the-farmland-around-a-town-or-a-city-made-of">What is the farmland around a town or a city made of?</h2>
+<!-- researched 2026-09-12, feature 229; moved from the retired rule file, "NEAR-RING PADDY IS COMB FIELDS ONLY" and "Near-ring farmland density" -->
+<!-- Grounds: none yet - no scripted generator draws a town or a city; the two near-ring tilers in settlement/land/nearring.py are called by no map -->
+<!-- Evidence: reconstruction (the gradient), GM ruling 2026-07-23 (what the near ring is made of), liberty (the density floors, calibrated on our own maps) -->
+<p><strong>Sources:</strong> the GM's ruling of 2026-07-23; the marketing-community and county-seat material in <a href="#tract-sizes---no-settlement-class-cap">Tract sizes</a> above; this project's measurements of its own drawn town and city maps; <a href="https://journals.openedition.org/eue/1039"><code>tajima-2007-night-soil</code></a> (a premodern manual's ladder of fertilizer regimes by distance from a castle town, and the transport cost that produces it), <a href="https://www.jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_pdf"><code>tabayashi-1987</code></a></p>
+<p><em>What the research found.</em> A market town or county seat sits in the middle of its best land,
+and the ring worked hardest is the one closest in. A Tokugawa farming manual sets the gradient out as
+a ladder around Kanazawa: within one <em>ri</em>, about 4 km, the fields get urine and abundant manure;
+out to about three <em>ri</em>, manure with rapeseed cake and dried sardine; beyond four, manure, ash
+and sardine; and in remote places gathered bushes and grasses, which is the cheapest input there
+is.<sup class="fn"><a id="fnref-86" href="citations/fields.html#fn-86">86</a></sup> The mechanism is carriage: night soil is mostly water and heavy, so what it costs to
+move is what limits how far out it goes.<sup class="fn"><a id="fnref-103" href="citations/fields.html#fn-103">103</a></sup> The gradient is measured in fertilizer regime rather than in
+the share of ground cultivated, and it is a castle town's, so a county seat's rings are tighter than
+those distances. The second half of the picture - the labor-limited fallow retreating to the far
+margins - rests on nothing read: that source says nothing about fallow at all. The
+tempting alternative - a few paddy clusters in a sea of scrub right up to the gate - has that
+gradient exactly upside down. What a town map shows is a SAMPLE, though: the far countryside is
+implied off the sheet, and coverage of the near ring need not be total, since in the GM's words
+<em>"the presumption is that there's more we don't see"</em>.</p>
+<p><em>The decision it drove (GM 2026-07-23).</em> The farmland around a town or a city is drawn
+EXCLUSIVELY with the same real irrigation works as a village's: a sluice tapped on a real source, a
+head-race forking into supply canals, flooded basins cascading downhill, a dry hem on the upslope
+margin, a drain, and farmhouses ringed alongside. The near ring is the settlement embedded in those
+fans, and the open ground between them reads as pasture and commons and as the head of paddy country
+carrying on past the frame.</p>
+<p><em>Two fillers are excluded.</em> A quilt of dry and garden tiles, and gridded paddy basins with no waterworks of their own, are both cheaper than comb fans and both are ruled out: each would draw the near ring as something other than comb fans, which is precisely what the ruling forbids.<!-- a higher density floor calibrated with the quilt in place would force it back; the floor is calibrated without it. Both tilers are still present in the engine, each with a docstring arguing for it, and NO map calls either one; none should. settlement/land/nearring.py: near_ring_cropland (the 013 quilt) and near_ring_paddy (the 014 basins) -->
+</p>
+<p class="spec"><strong>The rule the map follows:</strong> on a TOWN map at least one field runs OFF the map
+edge. A partial field at the margin is what says "more farmland beyond", and a town that shows only
+enclosed fans claims to show all of its hinterland, which no town sheet can. A field running off the
+edge is exempt from the rules that want a field ringed with farmhouses and tied to a water source,
+because its houses and its water are off the map too.</p>
+<p class="spec"><strong>The rule the map follows:</strong> the near ring reads PACKED, not sampled away to
+bare scrub. Within about 800 ft of the rampart of a walled CITY at least 12% of the ground is
+cultivated, and on a TOWN at least 28%; the sample is taken in the map's own space rather than in
+whatever the frame happens to show, so widening or tightening the frame cannot change the answer.
+Both figures are calibrated against our own drawn maps - a bare city ring measured about 7% and a
+five-fan town about 31% - rather than derived from a source. The look they aim at is a dense
+wet-rice near-city plain, roughly 70-75% paddy with the rest bunds, ditches, lanes and farmsteads,
+at about 1.5-2 farming households per hectare of paddy (this rests on general reading; no source is
+cited).<sup class="fn"><a id="fnref-102" href="citations/fields.html#fn-102">102</a></sup><sup class="fn"><a id="fnref-87" href="citations/fields.html#fn-87">87</a></sup></p>
+<p class="spec"><strong>The rule the map follows:</strong> on a CITY map the head of a fan is planted, not
+left bare - the ground along the supply canals and the triangle between the two arms at the
+head-race fork. That ground sits at or above its own canals, so gravity cannot command rice onto it,
+and it is exactly the well-drained high ground that <a href="#where-dry-hatake-crops-go---the-topographic-catena">dry crops</a>
+take: barley, millet and buckwheat beside the head-race.<sup class="fn"><a id="fnref-101" href="citations/fields.html#fn-101">101</a></sup> No more than a fifth of the ground sampled
+along the main channels may read as bare parchment. The one-fifth ceiling is calibrated against the
+drawn maps, which ran about 25% before the heads were quilted and 13-16% after, not derived from a
+source.</p>

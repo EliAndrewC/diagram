@@ -1,134 +1,130 @@
 {
  "feature": "258-split-the-record-into-per-entry-files",
- "plan_sha256": "669c97cc620e23c1b1654000298b35670987e00782d6f6f71e53e602d5535341",
+ "plan_sha256": "d5da7da314fd598d58a8929ebb8898135994b95749c1b6b25cf0c4923a84b61b",
  "reviewed": "2026-09-20",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "One command `make record` with assemble / CHECK=1 / PAGE= / SPLIT= modes, shaped on `make citations`",
+   "summary": "One command `make record` (assemble / CHECK=1 / PAGE= / SPLIT=), and the citations page assembled in TWO PASSES so `citations.py` keeps reading an assembled page",
    "class": "within",
-   "why": "FR-001 asks for one command that writes every page from its sources plus a check mode that names each stale page; the modes add nothing the spec did not ask for."
+   "why": "Round 1's D-citations-reader finding is RESOLVED. The plan's source-code table now marks citations.py UNCHANGED as a reader, T16 says the same, and the second Complexity Tracking entry is dissolved rather than justified - which is what FR-029 asks for. Two mechanical caveats the implementation must close, neither a fidelity departure: (a) `citations.derive(page_rel)` reads the page from DISK, so `hand THAT page to the derivation` means writing the first-pass page before calling it; (b) `with_works()` RAISES unless the page carries WORKS_OPEN and WORKS_CLOSE, and both marker comments are emitted by `works_html()` (program bytes today), so an `empty works region` must still carry the two markers - taken from citations.py's constants, not retyped - and the contract's new sentence `No page bytes live in the program` needs to say `no hand-authored page bytes`."
   },
   {
    "id": "D2-layout",
    "summary": "A page is a directory of fragments: _front, NNN-<slug>, _tail, prefixes gapped by ten, three digits a question and four a registry entry",
    "class": "within",
-   "why": "FR-011 and FR-012 state exactly this, including the gap and the digit counts."
+   "why": "FR-011 and FR-012 state exactly this, including the gap and the digit counts. Unchanged from round 1."
   },
   {
    "id": "D2-registry",
-   "summary": "The registry is a page whose works-cited section (010) carries its 920 entries in a subdirectory, with attested-instances (020) and setting-canon (030) as sibling files",
+   "summary": "The registry is a page whose works-cited section carries its 920 entries in a subdirectory, with attested-instances and setting-canon as siblings",
    "class": "within",
-   "why": "FR-007 and FR-009. Verified against SOURCES.html: 920 <h3> entries, all inside works-cited, with no markup between the last entry and the next live <h2>, so the cut is clean."
+   "why": "FR-007 and FR-009, verified against SOURCES.html in round 1. Unchanged."
   },
   {
    "id": "D2-dead-groups",
-   "summary": "The citing rules and the re-sourcing queue ride inside _front.html as part of the 8,021-byte commented block, rather than each becoming its own file",
+   "summary": "The citing rules and the re-sourcing queue ride inside _front.html as part of the commented-out block rather than each becoming its own file",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-008 asks for four groups each in its own file. Measured on the real registry: `citing` and `re-sourcing-queue` sit inside ONE 8,021-byte HTML comment (offsets 674 and 3269 are both between <!-- and -->), so they are not live sections and FR-008's premise about them is factually wrong. The requirement's stated purpose - that no prose of the registry lives only inside a program - is met in full, since every byte stays in a hand-authored file. FR-008's wording should be corrected to match in the spec's own review."
+   "why": "Unchanged from round 1: measured, both offsets fall inside ONE 8,042-byte HTML comment, so FR-008's premise that they are live sections is factually wrong, and its stated purpose - no prose of the registry living only inside a program - is met in full."
   },
   {
    "id": "D2-citations-inventory",
-   "summary": "The citations page is assembled as _citations-front + _citations-works (DERIVED, beginning with the make-citations marker line) + a literal \"<section class=\\\"footnotes\\\"><ol>\\n\" + the notes + _citations-tail",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Measured on all 19 citations pages: between the works section and the footnotes list every page carries the hand-authored bytes `</section>\\n<h2 id=\"notes\">The notes</h2>\\n`, and before the derived block it carries `<section class=\"works\">\\n<h2 id=\"works-cited\">The works cited on this page</h2>\\n`. `make citations` today writes only between WORKS_OPEN and WORKS_CLOSE (citations.py `with_works`), so those bytes are hand-authored and belong to no fragment in the stated grammar. As written the assembly drops them, which defeats FR-001 and SC-003 (stage 3 differs only in numbers). The inventory must name a fragment that holds them."
-  },
-  {
-   "id": "D5-note-order",
-   "summary": "Notes are stored per question and assembled in question order, the stage-3 diff declared as 'numbers only' and tested by stripping fn-<n>/fnref-<n> from both sides and requiring equality",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Measured: every citations page lists its <li> in ascending fn-N while the research page's reference order is not ascending (archetypes 3,2,1,118...; water 1,186,182...; ways 12,13,1...). Assembling notes in question order therefore REORDERS the note bodies on the 16 pages R4 found out of order. The plan's declared test (equality after stripping the numbers) cannot pass, and the reordering is a reader-visible change that neither the plan's stage table ('nothing else differs') nor SC-003 declares. The plan must declare the reordering and hold it with an order-aware comparison, and SC-003 must be amended to match."
-  },
-  {
-   "id": "D-citations-reader",
-   "summary": "At stage 3 `interactive/citations.py` reads the notes from the fragments and writes the works section into _citations-works.html (plan Source code table, task T16)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-029 requires the engine's own reading of the record - naming the works derivation - to keep reading the assembled pages, not the fragments, 'so that the split does not become a second parser of the record'. Making citations.py read note fragments is that second parser, which is the purpose FR-029 exists to serve. The cycle (the works fragment is an input to the assembly) is real but resolvable in two passes, so this is awkward rather than impossible, and it is not the plan's to grant."
-  },
-  {
-   "id": "T01-baseline",
-   "summary": "The constitution XIII baseline is taken as `make quick ALL=1` + `make hooks-test` in the detached worktree, recorded as m:baseline-quick",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The plan's own Constitution Check XIII promises a detached-worktree `make done`, recorded as R6, and T26 checks every `make done` failure 'against T01's baseline'. A quick-only baseline cannot say whether a coverage-floor failure or a tests/full failure is new, which is exactly the surface this feature moves (it rewrites what eight record test files read). Either T01 runs `make done` or the plan's XIII claim is false."
+   "summary": "_citations-front runs through `<section class=\"works\">` and its `<h2 id=\"works-cited\">`; a new _citations-mid holds `</section>`, `<h2 id=\"notes\">` and `<section class=\"footnotes\"><ol>`",
+   "class": "within",
+   "why": "RESOLVED. Re-measured on all 19 citations pages: the bytes before the derived block are `<section class=\"works\">\\n<h2 id=\"works-cited\">The works cited on this page</h2>\\n`, identical on all 19, and the bytes after WORKS_CLOSE are `\\n</section>\\n<h2 id=\"notes\">The notes</h2>\\n<section class=\"footnotes\"><ol>`, identical on all 19. Both now belong to a fragment, so no hand-authored byte is dropped or retyped in the program. One leftover the fix missed: contracts/fragment-format.md's `What each fragment must contain` table still carries a row for `_citations-works.html`, the fragment D1 abolished, and carries no row for `_citations-mid.html` or `_citations-tail.html`."
   },
   {
    "id": "D2-boundaries",
-   "summary": "Sections are cut on `<h2`, a section 'that has entries of its own' gets a directory, and every refusal in contracts/fragment-format.md applies from Phase 1",
+   "summary": "A research page is cut on `<h2>` alone; the closing run is the tail and a page that does not end that way is refused; the `fn-<n>` refusal applies from stage 3 on",
+   "class": "within",
+   "why": "RESOLVED on all three of round 1's boundaries, and each stated premise re-measured here. (a) All 39 files of the record (19 research pages, 19 citations pages, SOURCES.html) end `</main></body></html>`, so data-model.md's `every one of the record's 38 pages ends in exactly that` holds and the tail is defined rather than guessed. (b) Exactly 14 `<h3>` stand outside comments in research pages, on the six pages named (capitals 2, government 3, sizing 1, fields 5, homesteads 2, urban-features 1); the cut-on-`<h2>`-alone rule keeps them inside their question, and FR-023 now says a check pointed at one reads the question that contains it. (c) The `fn-<n>`/`fnref-<n>` refusal is staged to stage 3 in both the rules table and the refusals table, so it no longer forbids what a byte-identical stage-2 fragment must carry."
+  },
+  {
+   "id": "T01-baseline",
+   "summary": "The constitution XIII baseline is a detached-worktree `make done`, recorded as m:baseline-done",
+   "class": "within",
+   "why": "RESOLVED. T01 and the plan's XIII clause both name `make done` and state the reason a quick-only baseline cannot serve (it cannot tell a new coverage-floor or tests/full failure from an old one). The run is reported in flight. Owed when it lands: measurements.json still holds only `baseline-quick`, whose note calls itself `Constitution XIII baseline for feature 258`; that note must be corrected or the entry retired when `baseline-done` is recorded, or the record carries two claims to the same title."
+  },
+  {
+   "id": "D4a-note-order",
+   "summary": "Stage 3 MOVES the notes on the 16 pages whose references are not ascending; the invariant held and tested is the assertion-to-note PAIRING plus the unchanged multiset of note bodies per page",
+   "class": "within",
+   "why": "RESOLVED as a declaration. The reorder is entailed by the structure the GM approved (the notes split by the SAME section as the prose, siblings of their question) plus the renumbering he brought into scope, so it is not a narrowing; what round 1 found wrong was that it was undeclared and that the declared test - strip the numbers and require equality - could not pass. It is now declared in the plan's stage table, D4a, the contract's invariant section, spec SC-003, US4 scenario 1, and T17/T18, and the test is order-aware."
+  },
+  {
+   "id": "D4a-works-order",
+   "summary": "Stage 3's reader-visible diff is declared complete at the numbers and the note order - `nothing else differs` (plan D4a, spec SC-003, contracts/fragment-format.md's round-trip section)",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "Three boundaries the real record exercises are unstated, and byte-identity depends on all three. (a) Where the last question ends: all 19 pages carry `<section class=\"citations\">...` and the closing tags after the last <h2>, and nothing says that starts _tail. (b) 14 <h3> sub-headings live inside questions on 6 research pages (capitals 2, government 3, fields 5, homesteads 2, sizing 1, urban-features 1) and are addressable by a modal's `Entry:` (sources.py resolves ## and ### headings); the general rule 'a section that has entries of its own gets a directory' would break them out and then fire the 'filename key differs from the heading's key' refusal. (c) The refusal 'a fragment holds a hand-typed fn-<n>/fnref-<n>' forbids exactly what a stage-2 fragment must contain, since stage 2 is byte-identical and the numbers move only at stage 3; the staging is unstated and T08 asks for 'every refusal' at Phase 1."
+   "why": "MEASURED, and false: the WORKS SECTION reorders too, on exactly the same 16 pages. `citations.cited_keys()` lists the works `in order of first citation` by walking the notes in their order on the citations page, so D1's second pass derives the works block from the REORDERED page. Simulating stage 3 over the real record - notes taken in the research page's reference order, then `cited_keys` re-derived - changes the works key order on 16 of 19 pages (ways: nrcs-ts14q-abutments first instead of ritter-timber-bridges; capitals, fields, water and 12 others likewise; the key SET is unchanged on every page). The works section is 16 to 231 `<h3>` blocks a reader sees at the top of the page, so this is a third reader-visible change, and it is the one the GM's approved point 3 was about (`the diff proves the split changed nothing a reader sees`) - the renumbering is the carve-out he granted, this one nobody has stated or put to him. Concretely it breaks the plan's own acceptance: SC-003's `nothing else differs` and the contract's `with the numbers and the note order set aside, nothing else differs` would FAIL on 16 pages at T18. The plan must either (i) declare the works reorder as a third consequence in D4a, SC-003 and the contract's invariant list, and hold the works key SET rather than its order, or (ii) preserve the works order by deriving `cited_keys` from something the renumbering does not move; the choice is the plan's, the silence is not."
   },
   {
    "id": "D3",
    "summary": "No index file: a source is found by a glob on its key, a question by a grep over its page directory",
    "class": "within",
-   "why": "The GM left the index open and accepted the session's answer that there be none; the spec records it in Assumptions and FR-010."
+   "why": "The GM left the index open and accepted the session's answer that there be none; the spec records it in Assumptions and FR-010. Unchanged."
   },
   {
    "id": "D4",
    "summary": "Note keys derived by the splitter from the leading source key, an ordinal for a repeat, the question slug plus ordinal for the 326 notes that lead with none",
    "class": "within",
-   "why": "FR-017 requires a stable unique key and R5 measures the derivation's inputs; the rule invents no policy the spec left open."
+   "why": "FR-017 and R5. Unchanged."
   },
   {
    "id": "D5-numbering",
-   "summary": "Numbers allocated at assembly in document order; each reference gets a document-unique id (fnref-N, fnref-N-2); the 4 missing ids and the 2 duplicated ones fall out fixed",
+   "summary": "Numbers allocated at assembly in document order; each reference gets a document-unique id; the 4 missing ids and the 2 duplicated ones fall out fixed",
    "class": "within",
-   "why": "FR-019, FR-021 and FR-022, and constitution XIV for the two defects; the GM brought the renumbering into scope with 'do that as part of it'."
+   "why": "FR-019, FR-021, FR-022 and constitution XIV; the GM brought the renumbering in with `do that as part of it`. Unchanged."
   },
   {
    "id": "D6",
-   "summary": "The staleness check runs both at the gate (a test) and at the push (sync-with-main.sh), because a record-only delta takes the DIRECT route",
+   "summary": "The staleness check runs both at the gate and at the push, because a record-only delta takes the DIRECT route",
    "class": "within",
-   "why": "FR-003 and FR-004 name both places for that stated reason; it enforces the requested behavior and nothing else."
+   "why": "FR-003 and FR-004 name both places for that stated reason; it enforces the requested behavior and nothing else. Unchanged."
   },
   {
    "id": "D7",
    "summary": "record-edit-hooks.sh rewrites an Edit aimed at an assembled page to the one fragment holding its old_string, refuses where none or several do, and always refuses a Write",
    "class": "within",
-   "why": "FR-028 word for word. Its reach is the record's assembled pages only - it enforces what the GM asked for and adds no behavior elsewhere."
+   "why": "FR-028 word for word, and its reach is the record's assembled pages only. Unchanged."
   },
   {
    "id": "D8",
    "summary": "The three prepass scripts learn to address one question and the four agent contracts are rewritten to read the fragment",
    "class": "within",
-   "why": "FR-023 and FR-024, with feature 256's omitClaudeMd as the stated reason the rule must live in the contracts."
+   "why": "FR-023 and FR-024, with feature 256's omitClaudeMd as the stated reason the rule must live in the contracts. FR-023 now also settles the `<h3>` case. Unchanged otherwise."
   },
   {
    "id": "CT1",
    "summary": "The splitter is kept in the tree after its one-time use, to hold assemble(split(page)) == page over the real record",
    "class": "within",
-   "why": "The justification is real - a hand-fixture-only assembler is how a parser drifts from its input - and the cost (the 100% floor) is named rather than waived."
-  },
-  {
-   "id": "CT2",
-   "summary": "Two derivations write parts of one citations page (make citations -> _citations-works.html, make record -> the rest), with the Makefile stating the order",
-   "class": "within",
-   "why": "The sources really are different (the registry and the note fragments), and the alternative is rejected for duplicating citations.py's logic rather than for effort. The fragment it writes must be widened - see D2-citations-inventory."
+   "why": "The justification is real and the cost (the 100% floor) is named rather than waived. Unchanged."
   },
   {
    "id": "Perf-NA",
-   "summary": "The performance bookends are N/A and the gate's cost is measured instead (R7, tasks T02 and T27)",
+   "summary": "The performance bookends are N/A and the gate's cost is measured instead (R7, T02 and T27)",
    "class": "within",
-   "why": "Honest: no generator, no .gen.py and no map-drawing code is touched, so `make perf` has nothing to compare; what this feature can slow is the gate, and the plan measures it before and after with a stated bar."
+   "why": "Honest: no generator, no .gen.py and no map-drawing code is touched; what this feature can slow is the gate, and the plan measures it at both ends. Unchanged."
   },
   {
    "id": "XII-NA",
-   "summary": "Constitution XII (historical grounding) is N/A because every assertion keeps its text, its footnote and its evidence class",
+   "summary": "Constitution XII is N/A because every assertion keeps its text, its footnote and its evidence class",
    "class": "within",
-   "why": "Honest on the evidence: no claim about the world is added, removed or re-grounded; the only reader-visible change is presentational and is declared in the spec's Decisions Recorded as a map drawing convention. No research pass is owed and no task is research: physical."
+   "why": "Honest on the evidence: no claim about the world is added, removed or re-grounded. Unchanged."
   },
   {
    "id": "Staging",
    "summary": "Three stages, each landing on its own, the renumbering last",
    "class": "within",
-   "why": "The spec's Assumptions state exactly this, and stage 3 does not destroy the earlier proof: stages 1 and 2 are proven by an empty git diff at their own landing commits and the round-trip test over the real record survives."
+   "why": "The spec's Assumptions state exactly this, and stages 1 and 2 are proven by an empty diff at their own landing commits. Unchanged."
+  },
+  {
+   "id": "Figures",
+   "summary": "R1's figures, re-run rather than read",
+   "class": "within",
+   "why": "`python3 specs/258-.../measure.py R1` re-ran here and reproduces every figure the plan and spec quote, including the largest single question, 37,583 bytes (fields.html). An independent comment-aware cut over all 19 research pages agrees: fields.html 37,583, then urban-features 24,322 (measure.py's 24,346 differs only by where the tail is cut). Round 1's `largest is 24,346` was wrong - it was urban-features' own maximum, not the record's - and R1 and SC-001 are right. SC-001's 40,000-byte bar therefore STANDS, clearing the largest question by 2,417 bytes; the spec already says it clears `with little to spare - deliberately`, so the bar is stated honestly and needs no change."
   }
  ],
  "verdict": "BLOCKED"
