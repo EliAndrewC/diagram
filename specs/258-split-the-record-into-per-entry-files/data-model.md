@@ -12,12 +12,14 @@ its own gets a directory named exactly as its own file is, without the extension
 
 At every `<hN` that opens a real section, which is not the same as every `<hN` in the file:
 
-- **a heading inside an HTML comment is not a section.** The registry carries an 8,021-byte commented-out
+- **a heading inside an HTML comment is not a section.** The registry carries an 8,042-byte commented-out
   block holding two whole `<h2>` groups - the old citing rules and the re-sourcing queue (R1). Cutting on
   the plain text splits that comment in two and invents two sections no reader sees. The comment rides
   with the front matter, verbatim.
-- **a heading is recognized wherever it stands on its line.** One real heading in the registry follows a
-  space rather than starting its line, so a cut anchored to the line start would miss a whole section.
+- **a heading is recognized wherever it stands on its line.** No heading in the record needs this today:
+  the only two that do not begin their line are both inside that same comment, and are therefore not
+  sections anyway. It is stated so that the cut is never anchored to the line start, which would pass on
+  today's record and fail on the first page that indents a heading.
 
 The registry therefore has THREE visible sections, not the five a plain `<h2>` count reports.
 
@@ -51,7 +53,7 @@ The registry therefore has THREE visible sections, not the five a plain `<h2>` c
 research/
 ├── SOURCES.html                                   ASSEMBLED
 ├── sources/
-│   ├── _front.html                                 incl. the 8,021-byte commented-out block
+│   ├── _front.html                                 incl. the 8,042-byte commented-out block
 │   ├── 010-works-cited.html                        the roster's heading and its 213-byte intro
 │   ├── 010-works-cited/
 │   │   ├── 0010-kitamoto-mushiro-niwa.html

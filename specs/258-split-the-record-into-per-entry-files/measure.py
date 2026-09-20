@@ -95,7 +95,7 @@ def r1() -> None:
     print("\nTHE FRAGMENTS SC-001's BAR IS DECIDED BY")
     registry = read("SOURCES.html")
     cuts = [m.start() for m in headings(registry, 2)] + [len(registry)]
-    commented = max((b - a for a, b in comments(registry)), default=0)
+    commented = max((size(registry[a:b]) for a, b in comments(registry)), default=0)
     print(f"  registry front matter                {size(registry[:cuts[0]]):>7}   of which a commented-out block: {commented}")
     for start, stop in zip(cuts, cuts[1:]):
         part = registry[start:stop]

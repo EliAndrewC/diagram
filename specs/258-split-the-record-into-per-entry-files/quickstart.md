@@ -65,6 +65,6 @@ in the contracts and not in a `CLAUDE.md`, because since feature 256 a defined a
 
 ## A source
 
-`research/sources/030-works-cited/NNNN-<key>.html` holds one registry entry: its heading, its citation
+`research/sources/010-works-cited/NNNN-<key>.html` holds one registry entry: its heading, its citation
 line, and the two write-ups (what it is; why it applies, and its limits). Adding a source is a new file
 with a free prefix at the end; `source-applicability` then reads that one file.

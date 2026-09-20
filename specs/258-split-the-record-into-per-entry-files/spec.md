@@ -173,6 +173,11 @@ files they replace; the diff is empty.
   stale page reach main.
 - **FR-006**: The assembly MUST be deterministic: the same sources produce the same bytes, on any machine
   and in any order of files on disk.
+- **FR-006a**: A split MUST be checked against the page it came from by its SECTION COUNT and its heading
+  ids, and not by its bytes alone. Splitting and rejoining is lossless wherever the cut falls, so a
+  splitter that cut a comment in half would assemble back byte for byte while writing fragments that
+  correspond to nothing a reader's page has: byte-identity cannot catch a wrong cut, and this is the
+  check that can.
 
 **The registry, one file per source**
 
@@ -181,12 +186,15 @@ files they replace; the diff is empty.
 - **FR-008**: Everything of the registry that is not an entry MUST keep its text verbatim in a file of
   its own, so that no prose of the registry lives only inside a program: its front matter, each of its
   three visible sections (the works roster's heading and intro, the attested instances, the setting
-  canon), and its closing. The front matter includes an 8,021-byte block that is commented OUT, holding
+  canon), and its closing. The front matter includes an 8,042-byte block that is commented OUT, holding
   two further headings and the old citing rules (R1); it is carried verbatim with the front matter, and
   is not a section.
 - **FR-008a**: A heading inside an HTML comment MUST NOT be treated as a section, and a heading MUST be
-  recognized wherever it stands on its line. The registry carries one of each (R1); a cut on the plain
-  text would split a comment in two and invent two sections that no reader sees.
+  recognized wherever it stands on its line. The registry carries the first case (R1): a cut on the
+  plain text would split its comment in two and invent two sections that no reader sees. The second
+  clause guards a case the record does not carry today - the only two headings in it that do not begin
+  their line are both inside that same comment - and is stated so that a cut is never anchored to the
+  line start, which would be correct on today's record and wrong on the first page that indents one.
 - **FR-009**: The assembled registry MUST carry its entries in the order it carries them today.
 - **FR-010**: A source MUST be findable by its key alone, with one glob and no index file to consult.
 
@@ -270,7 +278,7 @@ files they replace; the diff is empty.
   the entry a session or an agent opens is about 1,200 bytes for a source (the median of 920) and
   between 2,664 and 9,279 for a question, by page average. The bar clears the two largest fragments the
   split will create that are not questions, both measured: the registry's front matter at 8,712 bytes
-  (8,021 of them the commented-out block) and the largest notes file any question would get, 28,118
+  (8,042 of them the commented-out block) and the largest notes file any question would get, 28,118
   (R1). (FR-007, FR-008, FR-008a, FR-011, FR-013, FR-016)
 - **SC-002**: A check over one entry reads that entry: on the recorded case of FR-026 the RECORD bytes
   entering the agent's context fall by at least 90% against its recorded whole-page run - it reads the
@@ -287,15 +295,17 @@ files they replace; the diff is empty.
 - **SC-005**: A stale committed page cannot reach main: it fails the gate and both push routes refuse it,
   each naming the page. (FR-002, FR-003, FR-004)
 - **SC-006**: A dangling reference, an unreferenced note, a duplicate key and a duplicate prefix each fail
-  the assembly with the offending name and file in the message. (FR-020, FR-014)
+  the assembly with the offending name and file in the message; and a split whose section count or
+  heading ids differ from the page it came from fails, proven on the registry, where a comment-blind cut
+  finds five sections where a reader sees three. (FR-006a, FR-014, FR-020)
 - **SC-007**: Every test that reads the record passes unchanged, and the map modals resolve the same
   questions and open the same anchors as before. (FR-027, FR-029)
 - **SC-008**: An edit aimed at an assembled page never silently lands: it is rewritten to the fragment or
   refused with the candidates named. (FR-028)
 - **SC-009**: A session can find and open any entry without reading a page: one glob by source key, one
   grep over a page directory. (FR-010, FR-012, FR-015, FR-025)
-- **SC-010**: The registry's prose survives the split: every word of its five groups is in a file, and
-  none of it is inside a program. (FR-008)
+- **SC-010**: The registry's prose survives the split: every word of its front matter, its three visible
+  sections and its closing is in a file, and none of it is inside a program. (FR-008)
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -355,9 +365,11 @@ sees, so they are declared here rather than left to the diff.
   applied.
 - Amendment after acceptance (2026-09-20), which resets the round counter: **the registry is not shaped
   the way a plain `<h2>` count reports it.** Checking the splitter's assumptions against the record
-  before writing it turned up an 8,021-byte HTML comment in `SOURCES.html` holding two whole `<h2>`
-  groups - the old citing rules and the re-sourcing queue - and one real heading that follows a space
-  rather than starting its line. So: FR-008 rewritten to describe the registry as it is (three visible
+  before writing it turned up an 8,042-byte HTML comment in `SOURCES.html` holding two whole `<h2>`
+  groups - the old citing rules and the re-sourcing queue. (Round 3 corrected the other half of what this
+  session first claimed: the two headings in the record that do not begin their line are both inside that
+  same comment, so FR-008a's second clause guards a case the record does not carry, and says so.) So:
+  FR-008 rewritten to describe the registry as it is (three visible
   sections, the commented block carried verbatim with the front matter); FR-008a added for the cut rule;
   SC-001's cited figures corrected from the group-prose 5,443 to the front matter's 8,712; and the cut
   rule written into `data-model.md` and `contracts/fragment-format.md` with the reason byte-identity

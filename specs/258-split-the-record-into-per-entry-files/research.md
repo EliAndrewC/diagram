@@ -47,14 +47,16 @@ and the largest notes file any one question would get, **28,118 bytes** (`cities
 "Servant housing in the samurai ward", 35 notes). Both clear the bar. They were added to `measure.py R1`
 on the spec review's aside of 2026-09-20.
 
-**And the registry is not shaped the way it looks.** 8,021 of those 8,712 front-matter bytes are a
+**And the registry is not shaped the way it looks.** 8,042 of those 8,712 front-matter bytes are a
 single HTML COMMENT, and inside it are two whole `<h2>` groups - the citing rules and the re-sourcing
 queue - which no reader of the page sees. The registry has **three visible sections**: the works roster
 (its own heading and intro are 213 bytes, then 920 entries), the attested instances (1,746) and the
 setting canon (317). A naive cut on `<h2` finds five, splits the comment in half, and invents two
-sections; it also misses that one real heading stands after a space rather than at the start of its
-line. Hence FR-008a, and the cut rule in `contracts/fragment-format.md`: a heading inside a comment is
-not a section. This was found by checking the splitter's assumptions against the record before writing
+sections. (The two headings in the whole record that do not begin their line are both inside that same
+comment, so the second half of FR-008a's rule - a heading is found wherever it stands on its line -
+guards a case the record does not carry today. It is stated anyway, so that the cut is never anchored to
+the line start.) Hence FR-008a, and the cut rule in `contracts/fragment-format.md`: a heading inside a
+comment is not a section. This was found by checking the splitter's assumptions against the record before writing
 it, which is the whole reason the byte-identity requirement is worth what it costs.
 
 **What it decides.** The ratio is three orders of magnitude at the registry (1,150,367 against a

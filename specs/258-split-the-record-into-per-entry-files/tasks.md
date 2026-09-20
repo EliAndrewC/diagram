@@ -43,8 +43,8 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       `contracts/record-cli.md` states, including the message shapes
       research: rendering
       verify:
-- [ ] T07 **The registry is split**: `research/sources/` - front, the five group files, 920 entries under
-      `030-works-cited/`, tail. `make record CHECK=1` reports in sync and `git diff --stat
+- [ ] T07 **The registry is split**: `research/sources/` - front (with the commented-out block), the three
+      section files, 920 entries under `010-works-cited/`, tail. `make record CHECK=1` reports in sync and `git diff --stat
       research/SOURCES.html` is empty (FR-009, SC-003)
       research: rendering
       measure: the byte diff of the assembled registry against the file it replaced
@@ -52,6 +52,11 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 - [ ] T08 Every refusal in `contracts/fragment-format.md` that applies to a section page - duplicate
       prefix, stray file, missing front or tail, a registry key that differs from its filename, an
       exhausted gap - each with a test that fails without it and a message that names the file
+      research: rendering
+      verify:
+- [ ] T08a FR-006a, the check byte-identity cannot make: the split's SECTION COUNT and heading ids
+      against the page it came from, proven on the registry - where a comment-blind cut finds five
+      sections and a reader sees three - and on a plain string carrying both traps
       research: rendering
       verify:
 

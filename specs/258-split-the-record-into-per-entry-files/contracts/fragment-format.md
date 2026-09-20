@@ -24,10 +24,11 @@ The citations page is the same shape:
 
 ## Where the splitter cuts
 
-A section begins at an `<hN` that is **not inside an HTML comment**, wherever it stands on its line. Both
-halves of that rule are load-bearing, and both were found in the registry before the splitter was written
-(R1): an 8,021-byte comment holds two whole `<h2>` groups, and one real heading follows a space rather
-than starting its line. A cut on the plain text would split the comment in half, invent two sections no
+A section begins at an `<hN` that is **not inside an HTML comment**, wherever it stands on its line. The first half is load-bearing on today's
+record and was found in the registry before the splitter was written (R1): an 8,042-byte comment holds
+two whole `<h2>` groups. The second half guards a case the record does not carry - the only two headings
+that do not begin their line are inside that same comment - and exists so that no cut is ever anchored to
+the line start. A cut on the plain text would split the comment in half, invent two sections no
 reader sees, and - because splitting and rejoining is lossless wherever you cut - assemble back to
 byte-identical output while doing it, so byte-identity alone would never have caught it. The tests
 therefore assert the section COUNT and the heading ids as well as the bytes.

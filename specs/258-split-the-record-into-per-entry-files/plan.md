@@ -187,10 +187,13 @@ A page is a directory of fragments; a section that has entries of its own gets a
 The registry is not a special case, it is a page whose `works-cited` section has 920 entries:
 
 ```text
-research/sources/_front.html                     doctype, head, h1, intro - verbatim
-research/sources/010-citing.html                 one section: its <h2> and its prose
-research/sources/030-works-cited.html            the section heading and its 213-byte intro
-research/sources/030-works-cited/0010-<key>.html one registry entry each, gapped by ten
+research/sources/_front.html                     doctype, head, h1, intro - verbatim, and with it the
+                                                 8,042-byte commented-out block that holds two dead <h2>
+                                                 groups (R1): a heading in a comment is not a section
+research/sources/010-works-cited.html            the section heading and its 213-byte intro
+research/sources/010-works-cited/0010-<key>.html one registry entry each, gapped by ten
+research/sources/020-attested-instances.html     one section: its <h2> and its prose
+research/sources/030-setting-canon.html          the same
 research/sources/_tail.html                      </main></body></html> - verbatim
 
 research/ways/_front.html                        doctype, head, h1, intro, <hr> - verbatim
