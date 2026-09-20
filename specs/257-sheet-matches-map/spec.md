@@ -265,3 +265,6 @@ sheet is on no map and checks nothing.
   command (the worktree it ran in is this container's). The reviewer's aside - FR-006's "every
   registered check" against a crop check that declines to run on a sheet on a map - is settled in
   FR-006's own words: the check reports that the frame is the map's instead of running.
+- Round 5 (2026-09-20, `spec-fidelity-verify`, Opus): FAITHFUL. Both round-4 items RESOLVED; the
+  FR-006 amendment judged the request's own consequence, not new scope. (A round-5 dispatch made
+  while the round-4 fixes had only half landed was stopped before it reported and is not a round.)

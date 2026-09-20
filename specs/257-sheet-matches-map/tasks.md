@@ -44,6 +44,8 @@ historical question.
       (R2), `Transform`, `frame_in_map`, `inventory` (the features inside the frame, per class), and
       `check(ctx)` running directions (b) and (c) with `MAP_GRAIN_PX = 15` (`m:map-grain`, R1), (d) with one map px per side, and the
       declaration refusals (no manifest, no feature of the key at the position, an unknown sheet class);
+      the crop check yields to a declared map and the report says so (D11, spec FR-006) - a sheet on a
+      map shows what the map shows there, empty ground included;
       `tests/tools/test_mapmatch.py` red first on a synthetic manifest: each direction red then green, a
       feature at the grain's edge, each refusal, the "on no map" line
       research: rendering
