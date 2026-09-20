@@ -5,9 +5,10 @@ term at a time and putting it back gives the same bytes. `glossary.json` is read
 import, by the page writer, and by every test over the record's visible text, so a byte that moved
 would move under all of them at once.
 
-Term ORDER is asserted too, and separately, because it is load-bearing in a way that byte-identity
-alone would not explain to the next reader: 7 variants are claimed by two terms each, and the page's
-matcher lets the later one win (`specs/259-glossary-per-term/research.md` R2).
+Term ORDER is asserted too, and separately, because byte-identity alone would not explain to the next
+reader why it matters: the assembled key order IS the file's order. It was load-bearing in a sharper
+way when this feature began - 7 variants were claimed by two terms each and the page's matcher let the
+later one win (R2) - and the last test in this file is what keeps that from returning.
 """
 
 from __future__ import annotations
@@ -39,7 +40,7 @@ def test_the_glossary_splits_and_assembles_back_to_the_same_bytes() -> None:
 
 
 def test_the_split_keeps_the_terms_in_their_file_order() -> None:
-    """FR-003: sorting them would change which definition a reader is shown for 7 variants (R2)."""
+    """FR-003: the assembled object's key order IS the file's order, so byte-identity needs it kept."""
     raw = GLOSSARY.read_text(encoding="utf-8")
     assert [t["term"] for t in split(raw)] == list(json.loads(raw))
 

@@ -8,7 +8,7 @@ assembled `assets/glossary.json` and the derived `research/assets/glossary.js` a
 one tab-separated line per variant, and the term that owns it.
 
     ls l7r/diagram/interactive/assets/glossary/       the term list - the filenames ARE it
-    ls l7r/diagram/interactive/assets/glossary/*girder*    one term, by its word
+    ls l7r/diagram/interactive/assets/glossary/*towpath*   one term, by its word
 
 A word in prose is usually a VARIANT, and only the index maps it to its term - a grep over the term
 files answers with candidates, because a definition may mention a word another term owns. Adding a term

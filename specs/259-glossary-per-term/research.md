@@ -98,8 +98,9 @@ Against the baseline's 4,179 and 4 that is 12 more tests and **zero new failures
 this feature landed at the 100% the floor requires.
 
 **What the assembly costs the gate**: nothing measurable. `make glossary CHECK=1` reads 720 files of
-about 154 bytes and compares two strings; the test phase is no slower than the baseline's, which was
-51.40 s on the same machine for 12 fewer tests (observed 2026-09-20; method: the two runs' own
+about 154 bytes and compares two strings; the test phase is no slower than this feature's own baseline,
+which was 46.65 s for 12 fewer tests (that is feature 258's LANDING run, `m:baseline-done`; 51.40 s was
+258's own baseline in a detached worktree, a different run) (observed 2026-09-20; method: the two runs' own
 test-phase lines, wall-clock on a shared container, so they are the same to within their noise).
 
 ## R5 - The re-run FR-010 asks for, and the one thing it does not support

@@ -45,8 +45,8 @@ the glossary, and the findings it reports.
 
 1. **Given** the glossary split one word per file, **When** a check needs the term list, **Then** a
    directory listing of 13,730 bytes answers it and no definition is read.
-2. **Given** a word that is not a term but a VARIANT of one - `well sweep`, which the term `well-sweep`
-   owns - **When** the check tests it, **Then** the derived variant index names the owning term in one
+2. **Given** a word that is not a term but a VARIANT of one - `towpaths`, which the term `towpath`
+   owns (verified in the index, not assumed) - **When** the check tests it, **Then** the derived variant index names the owning term in one
    lookup, without opening a term file. A grep would not do: measured, `windlass` matches three term
    files, because a definition may mention a word another term owns (FR-008).
 3. **Given** a check that wants a definition - to judge whether it covers the sense, or to match the
