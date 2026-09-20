@@ -14,9 +14,8 @@ local GATE"; `delta.is_engine` answers "does it owe a PAID BUILD". FR-025 stands
 
 from __future__ import annotations
 
-import pathlib
-
 import importlib.util
+import pathlib
 from pathlib import Path
 
 import pytest

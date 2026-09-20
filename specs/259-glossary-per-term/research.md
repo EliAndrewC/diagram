@@ -92,7 +92,14 @@ gate short-circuited GREEN - "already verified, nothing the gate exercises has c
 green run" - against feature 258's own landing run of **4,179 passed, 4 skipped, all three coverage
 floors, 92 s**. That run is this feature's baseline, recorded as `m:baseline-done`.
 
-**After** is taken at T12, against this.
+**After** (observed 2026-09-20; method: the green `make done` in the clone, its own test-phase line):
+**4,191 passed, 4 skipped in 42.31 s**, gate green in 124 s, coverage 27,113 statements and 0 missing.
+Against the baseline's 4,179 and 4 that is 12 more tests and **zero new failures**, with every module
+this feature landed at the 100% the floor requires.
+
+**What the assembly costs the gate**: nothing measurable. `make glossary CHECK=1` reads 720 files of
+about 154 bytes and compares two strings; the test phase is no slower than the baseline's, which was
+51.40 s on the same machine for 12 fewer tests.
 
 ## R5 - The re-run FR-010 asks for, and the one thing it does not support
 
