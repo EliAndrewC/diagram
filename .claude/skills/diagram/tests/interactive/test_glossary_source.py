@@ -120,8 +120,7 @@ def test_the_split_and_the_assembly_on_disk(tmp_path: pathlib.Path) -> None:
     from l7r.diagram.interactive import glossary_source as gs
 
     (tmp_path / "assets").mkdir()
-    small = {"girder": {"def": "the main beam", "variants": ["girder", "girders"]},
-             "dS/m": {"def": "a salinity unit", "variants": ["dS/m"]}}
+    small = {"girder": {"def": "the main beam", "variants": ["girder", "girders"]}, "dS/m": {"def": "a salinity unit", "variants": ["dS/m"]}}
     raw = json.dumps(small, ensure_ascii=False, indent=1) + "\n"
     (tmp_path / "assets" / "glossary.json").write_text(raw, encoding="utf-8")
     written = gs.write_term_files(str(tmp_path))
@@ -146,8 +145,7 @@ def test_a_split_that_would_not_rebuild_is_refused(tmp_path: pathlib.Path, monke
     from l7r.diagram.interactive import glossary_source as gs
 
     (tmp_path / "assets").mkdir()
-    (tmp_path / "assets" / "glossary.json").write_text(
-        json.dumps({"a": {"def": "x", "variants": ["a"]}}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    (tmp_path / "assets" / "glossary.json").write_text(json.dumps({"a": {"def": "x", "variants": ["a"]}}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     monkeypatch.setattr(gs, "assemble", lambda terms: "not the file at all")
     with pytest.raises(GlossaryError, match="does not assemble back"):
         gs.write_term_files(str(tmp_path))
@@ -167,9 +165,7 @@ def test_the_refusals_that_name_the_file(tmp_path: pathlib.Path) -> None:
     assert "one is 3 characters" in gs._first_difference("abc", "ab")
 
 
-def test_the_command_checks_assembles_and_splits(tmp_path: pathlib.Path,
-                                                 monkeypatch: pytest.MonkeyPatch,
-                                                 capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_command_checks_assembles_and_splits(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     """`make glossary` and its three modes, through the CLI the Makefile calls."""
     from l7r.diagram.interactive import glossary_source as gs
     from l7r.diagram.tools import glossary_asset
