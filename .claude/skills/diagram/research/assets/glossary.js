@@ -5399,6 +5399,33 @@ window.RECORD_GLOSSARY = [
   "def": "The low fence that bounds a shrine's precinct."
  },
  {
+  "term": "Bishamon",
+  "variants": [
+   "Bishamonten",
+   "Vaiśravaṇa",
+   "Bishamon",
+   "Tamonten"
+  ],
+  "def": "The Fortune of Strength, whom warriors swear their vows to; in Japan Bishamonten, an armored guardian deity so bound to the tiger that his shrine sets a pair of stone tigers at its entrance in place of the usual lion-dogs."
+ },
+ {
+  "term": "votive plaque",
+  "variants": [
+   "votive plaques",
+   "votive plaque"
+  ],
+  "def": "A small wooden tablet a worshipper leaves at a shrine, carrying a wish or thanks and painted with the deity's emblem - a tiger at a shrine of Bishamon."
+ },
+ {
+  "term": "lion-dog",
+  "variants": [
+   "lion-dogs",
+   "lion-dog",
+   "komainu"
+  ],
+  "def": "One of the pair of stone guardian beasts, komainu, set at a shrine's entrance; a shrine of Bishamon sets tigers in their place."
+ },
+ {
   "term": "terauke",
   "variants": [
    "terauke seido",

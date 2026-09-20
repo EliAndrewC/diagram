@@ -1,6 +1,6 @@
 # Design notes: Hoshigaoka Country Shrine
 
-**Subject**: the shrine of Hoshigaoka village district - the seat of the district's country monk, who lives here, keeps the district's registers, and performs the villagers' rites. Hoshigaoka is the reference village of the water-first family (`legacy-hand-authored-pool/villages/hoshigaoka/`), whose district names the GM dictated on 2026-08-29; on its village map the shrine stands at the water-mouth entrance inside its grove, and this sheet is that precinct at 3 px = 1 ft. The exemplar of the country-shrine program (feature 254): the generic program with no particulars beyond the dedication, which are the GM's to add.
+**Subject**: the shrine of Hoshigaoka village district - the seat of the district's country monk - Otsuki, of the Order of Bishamon, whose record is the Obsidian Portal character of that name - who lives here, keeps the district's registers, and performs the villagers' rites. Hoshigaoka is the reference village of the water-first family (`legacy-hand-authored-pool/villages/hoshigaoka/`), whose district names the GM dictated on 2026-08-29; on its village map the shrine stands at the water-mouth entrance inside its grove, and this sheet is that precinct at 3 px = 1 ft. The exemplar of the country-shrine program (feature 254): the generic program with no particulars beyond the dedication, which are the GM's to add.
 
 **Program type**: Country shrine (a village district's shrine) - see `buildings/programs.md`.
 
@@ -10,11 +10,11 @@
 
 1. Hall-and-dwelling form: **one roof** (the default - the GM's form, 2026-09-19). The building is 76 by 36 ft (2,736 sq ft, inside the Kaie-ji band of 2,100-3,600), its two uses END TO END along the ridge as at Kaie-ji: the kitchen's earthen floor and hearth at the west end (with its own door on the north wall), the villagers' hall in the center, 40 ft wide, facing the approach with its raised step and its altar at the rear toward the sanctuary, and the monk's rooms at the east end with a 12 ft writing room for the district's registers and the dwelling's own door on the east wall. The hall room's 40 ft is a room of the one-roof building, whose band governs; the 18-38 ft band is a separate hall's.
 2. Bell tower: **absent** (the default).
-3. Dedication: **Inari**, the Fortune of rice and foxes (the campaign notes' name; the magistracy program's default too) - the ordinary rural dedication, pending the GM's word on this district's; nothing else of the dedication is drawn.
+3. Dedication: **Bishamon**, the Fortune of Strength - the GM's word for this district (2026-09-20: Hoshigaoka's village shrine is Otsuki's shrine of Bishamon, and Inari, the rice Fortune, stays the program's default). The dedication is named on the sanctuary and nothing else of it is drawn: at average wealth the sheet carries no guardian figures, and the research pass on what a Bishamon dedication puts in a rural precinct is recorded under knob 3 in `buildings/programs.md`.
 4. Grove and burial-ground side: the grove **west and north**, pressing inside the north corners of the fence around the sanctuary (the village map's water-mouth wood stands there), with a few trees flanking the burial ground on the east; the burial ground **east**, outside the fence on bare ground, 44 by 135 ft.
 5. Wealth: **average** - thatch and plain timber, no lanterns, no guardian figures.
 
-**Particulars**: none yet. This is the generic instance; a relic, a second altar, a bell, a festival stage or a named monk are the GM's to add, and each goes in this file when it does.
+**Particulars**: the named monk. Otsuki registers the district's births and marriages, stamps its travel papers and teaches the village's sons and daughters their letters in the hall; his chief clerk Sadaji, the headman's second son, and two of the district's licensed ashigaru keep the records and the correspondence, so the writing room and its record chest are in daily use (his Obsidian Portal record). A relic, a second altar, a bell or a festival stage are still the GM's to add, and each goes in this file when it does.
 
 **Deliberate choices and tolerated stretches**:
 
