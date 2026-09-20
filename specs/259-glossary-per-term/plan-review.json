@@ -1,0 +1,70 @@
+{
+ "feature": "259-glossary-per-term",
+ "plan_sha256": "38f71f293c806236f7bbee43eb104b1d79e218863b211e3391bd395ea5658a15",
+ "reviewed": "2026-09-20",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-prefix",
+   "summary": "Term files carry a gapped ordering prefix (0010-<term>.json) rather than being named for the word alone",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The GM asked for 'the same thing with the glossary that we are doing with other files', and the record's own per-entry files (research/sources/NNNN-<key>.html) carry exactly this gapped prefix, so the prefix is the GM's own comparison rather than a session's addition; the word itself stays in the name, so a directory listing IS the term list and a glob still finds a term, which is the purpose the request was for. The premise is measured, not assumed: research/assets/record.js:56 and interactive/assets/page.js:23 both build defs[variant.toLowerCase()] = entry.def walking the glossary in FILE order, so a later term silently wins, and measure.py R2 counts 7 variants claimed by two terms each (plus one self-duplicate); sorting the terms would change two tooltips with nobody deciding it. Spec FR-003 and the spec's Assumptions already carry it, and plan.md declares it in Complexity Tracking with two alternatives rejected on the right grounds (accepting a silent reader-visible change; a second file to keep in step)."
+  },
+  {
+   "id": "D1-shape",
+   "summary": "One file per term under interactive/assets/glossary/, holding term + def + variants, the term read from the file's CONTENT and never from its name, percent-encoded only where a filename cannot carry a character (dS/m)",
+   "class": "within",
+   "why": "Spec FR-001, FR-002 and the third Assumption settle the split, the naming and the encoding; R3 measures the one illegal name and the eight legal macron names."
+  },
+  {
+   "id": "D2",
+   "summary": "make glossary assembles glossary.json from the term files, then derives glossary.js; CHECK=1 reports either stale; SPLIT=1 does the one-time split; the order is fixed in the Makefile",
+   "class": "within",
+   "why": "Spec FR-004 and FR-005: one command assembles, a check mode reports a stale committed file, and glossary.js stays derived from glossary.json unchanged."
+  },
+  {
+   "id": "D3",
+   "summary": "The assembled-page edit guard (scripts/_hm_record.py) gains glossary.json as a case rather than a second guard",
+   "class": "within",
+   "why": "Spec FR-007 names this exactly - 'the guard feature 258 built, extended to this file rather than duplicated'. The generic mechanism fits: fragments_holding() greps the fragment directory and decide() already has the one/none/several branches."
+  },
+  {
+   "id": "D4",
+   "summary": "The 7 variant clashes are resolved by a rule - the term whose own NAME is the variant keeps it - not case by case, and a test holds the property",
+   "class": "within",
+   "why": "Spec FR-011 states the same rule and the same two reader-visible corrections; the spec's Decisions Recorded declares them."
+  },
+  {
+   "id": "D5",
+   "summary": "The VOCABULARY instruction (list the directory, grep it, read a term file only for a definition you name) goes in the agent contracts",
+   "class": "within",
+   "why": "Spec FR-008, and feature 256: a defined agent launches without this repository's CLAUDE.md files, so the contract is the only place the instruction can reach it."
+  },
+  {
+   "id": "P-order",
+   "summary": "Phase order: byte-identity of glossary.json and glossary.js is proven at T06, BEFORE the clash resolution at T08",
+   "class": "within",
+   "why": "It is how FR-004/SC-003 (byte-identical assembly) and FR-011 (remove the duplicate claims) can both be true: T06 proves the splitter and assembler reproduce the file exactly, and T08's declared variant removals are then the only permitted delta. The plan decides this sequencing; the spec left it open."
+  },
+  {
+   "id": "CC-XII",
+   "summary": "Constitution XII recorded N/A, with the two changed tooltips called a presentation decision recorded with their measurement",
+   "class": "within",
+   "why": "Honest on checking: no definition TEXT changes (the working diff is variant removals only), no element is added, removed or redrawn, and the two tooltip changes are each a word being shown its own term's existing definition instead of another term's - the spec's Decisions Recorded carries them with R2. Nothing new is asserted about the world, so there is no research question to reopen."
+  },
+  {
+   "id": "CC-PERF",
+   "summary": "Performance bookends recorded N/A because no generator changes, with the gate measured before and after instead",
+   "class": "within",
+   "why": "Honest: no .gen.py and no generator module is touched, and the render path keeps reading the assembled glossary.json, which stays where it is. What 720 new files can slow is the gate, which T02/T12 bookend the way feature 258's did. One caveat for the wording rather than the judgment: FR-011's variant removals do change what glossary_for() inlines into a rolled map page for the affected words, so 'no map is drawn' is true of this feature's code but not of its data - no committed page artifact drifts (docs/make-targets.html is the only committed non-record HTML), so nothing is owed a regeneration."
+  },
+  {
+   "id": "T13",
+   "summary": "docs/efficiency-tooling.md records the new shape and the measurement, which no FR names",
+   "class": "within",
+   "why": "It documents the tooling change the GM asked for at the doc this project keeps the tooling record in; it adds no behavior and no verification of anything the request does not contain."
+  }
+ ],
+ "verdict": "CLEAR"
+}

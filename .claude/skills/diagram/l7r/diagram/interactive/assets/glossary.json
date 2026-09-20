@@ -2019,7 +2019,6 @@
   "variants": [
    "jiegao",
    "shadoof",
-   "well-sweep",
    "well sweep"
   ]
  },
@@ -2513,8 +2512,7 @@
  "lijin": {
   "def": "Chinese customs barriers on the canals and trade routes - a Ming-Qing tariff post and a later Qing transit tax; neither stood at a county seat's gates.",
   "variants": [
-   "lijin",
-   "chaoguan"
+   "lijin"
   ]
  },
  "lineage": {
@@ -2564,7 +2562,6 @@
  "lulu": {
   "def": "A windlass on a frame over a well, the usual water-lifting gear of north China.",
   "variants": [
-   "windlass",
    "lulu"
   ]
  },
@@ -2834,8 +2831,7 @@
   "def": "The Japanese earthen walls: plastered earth over a post core (neribei), earth on a stone plinth (dobei), and rammed earth up to a meter thick (tsuijibei); each carries its own small tiled roof.",
   "variants": [
    "neribei",
-   "dobei",
-   "tsuijibei"
+   "dobei"
   ]
  },
  "night soil": {
@@ -3491,8 +3487,6 @@
  "shuikou": {
   "def": "The water mouth: the fengshui grove at a Chinese village's entrance, where its stream flows out of the village.",
   "variants": [
-   "water mouth",
-   "water-mouth",
    "shuikou"
   ]
  },
@@ -3835,8 +3829,7 @@
   "def": "The path along one bank on which teams hauled boats upstream; it exists because of the boats and goes only where they go.",
   "variants": [
    "towpaths",
-   "towpath",
-   "qiandao"
+   "towpath"
   ]
  },
  "tozama": {
@@ -4637,7 +4630,6 @@
   "variants": [
    "bettō",
    "betto",
-   "bettō-ji",
    "bettō-ji"
   ]
  },
