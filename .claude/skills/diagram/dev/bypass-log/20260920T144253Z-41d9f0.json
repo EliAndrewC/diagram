@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T14:42:53Z",
+  "target": "entry-gate",
+  "commit": "d4feebda",
+  "why": "feature 258 reallocated every footnote number in document order and moved each note beside the question that cites it; no finding, no sentence of prose and no evidence class changed, which the migration proves before it lands - it refuses unless every assertion still carries the note body it carried. What moved is the numbering, not the record"
+}

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T14:42:57Z",
+  "target": "plan-gate push",
+  "commit": "d4feebda",
+  "why": "the plan's CLEAR verdict of 2026-09-20 asked for two corrections itself - the works-order claim belongs to the derivation's documented contract and not to any page heading, and the stage 1-2 fragment count is 1,251 - and said the decision stands without them, to be folded into the next amendment. Folding them is the only change to plan.md since that verdict; no decision moved, and the same case landed under this escape on feature 256"
+}
