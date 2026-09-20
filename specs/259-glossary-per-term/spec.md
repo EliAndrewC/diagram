@@ -193,3 +193,22 @@ term's definition today because of an order nobody chose.
   is why it is a script at all.
 - The split is of the SOURCE under `interactive/assets/`. The glossary is shared by the map's modals and
   the record, and it keeps one home.
+
+## Review history
+
+- Round 1 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, seven items, all applied. The round
+  re-ran every figure and they all reproduced; two of its findings were things it measured that this
+  spec had asserted. (1) **FR-004 and SC-003 contradicted FR-011**: byte-identity cannot hold while a
+  content correction moves the same bytes. Byte-identity is now the criterion for the SPLIT, and the
+  correction lands as a second diff - which is how it was in fact landed, two commits. (2) **FR-011's
+  rule did not decide `water mouth`**, claimed by `shuikou` and the term spelled `water-mouth`: the
+  rule now states the folding of case, spaces and hyphens it silently depended on, and the
+  implementation hit exactly that case. (3) R2's count was restated against the stated rule. (4) **The
+  derived variant index the GM's own approved answer named had been dropped in favor of a grep** - and
+  the round measured why that fails: `windlass` matches three term files, because a definition may
+  mention a word another term owns. The index is back, as FR-008. (5) US1-AC2's `girders`/`girder`
+  example is in the glossary 0 times; it now names a pair that exists. (6) SC-002 pinned a figure R1
+  explicitly declines to predict; it states the criterion and leaves the figure to FR-010's run.
+  (7) FR-011 and SC-006 are marked as what they are - a content correction not entailed by the split,
+  proceeding under constitution XIV, raised with the GM rather than folded in silently.
+
