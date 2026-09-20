@@ -189,3 +189,39 @@ script prints and what a check is asked to do.
   proposed are reachable no other way, which is why FR-007 asks for both.
 - Features 258 and 259 keep their specs as written, including 259's SC-002 recorded as unmet. A spec is
   a record of what was decided when; this feature is what changed the decision.
+
+## Review history
+
+- Round 1 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, six items, all applied. The largest
+  was the headline: this spec led with "the list catches 9 of the 12 known terms", and the round
+  measured what that number counted. It folded in `obliquity`, a term every one of feature 259's three
+  runs DISMISSED as defined inline, and it buried the three terms whose presence actually varied
+  between runs inside eight that never varied at all. The number that decides whether this feature
+  works is **2 of 3**, and it is smaller and less flattering. The round also struck FR-004's premise
+  that a citation key is "rare by construction" - `ritter-timber-bridges` is in 3 fragments and is kept
+  off by the cutoff, not by the registry exclusion - so FR-004 is recorded as a floor that removes
+  nothing measured rather than as a saving.
+- Round 2 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, three items, all applied. Every one of
+  them was a place round 1's correction had not reached. (1) FR-002 - the requirement that ORDERS the
+  number written where the cutoff is applied - still said "9 of the 12"; so, it turned out, did
+  `plan.md` three times, `spec.md`'s Assumptions, `research.md` R3 and, worst, the `RARE_IN_AT_MOST`
+  comment in `scripts/_record_prepass.py`, which is the operative statement FR-002 exists to place.
+  (2) The Edge Cases bullet still carried the struck "rare by construction" premise, as did
+  `registry_keys`'s docstring and its test's. (3) FR-009a claimed all three surviving statements of the
+  old bar were about a model-TIER downgrade; `docs/efficiency-tooling.md`'s feature-255 row is about
+  SCOPING - the same decision FR-009 restates - so the spec was leaving two bars on one decision while
+  calling the survivor someone else's business. FR-009a now splits them two-and-one, and the row keeps
+  its finding verbatim and points at the new bar.
+- Round 3 (2026-09-20, `spec-fidelity`, Opus): **FAITHFUL**. All three items confirmed resolved, with
+  the sweeps checked rather than the named lines: a repo-wide grep leaves "9 of 12" alive only where it
+  is explicitly labeled as history, and the old premise survives nowhere. It re-ran `measure.py`
+  R1-R4 rather than reading the figures; every count reproduced, and its two wall clocks came in about
+  a tenth over the recorded ones, which R4 now records as shared-container drift.
+
+A **plan review** ran alongside on `plan.md`'s decisions (`make plan-verdict F=260 AS=spec-fidelity`).
+Round 1 blocked on the text the pass walks - the prepass parses the ASSEMBLED page, and the plan had to
+say it walks the question fragment AND its notes, which is what the check is handed. Round 2 returned
+CLEAR with four items, all applied; the one that mattered found that the "9 of 12" sweep had kept a
+number in D1 while changing what it counted, and re-measured the whole-record sweep, whose denominator
+did not reproduce - the cause being that R4 was the one finding in this feature that was not a
+re-runnable command. It is `measure.py R4` now.
