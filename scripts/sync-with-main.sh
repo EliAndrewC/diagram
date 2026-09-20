@@ -250,6 +250,10 @@ push_cmd() {
   if [ -d "$ROOT/.claude/skills/diagram/research/sources" ]; then
     ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory record CHECK=1 >/dev/null ) \
       || die "a committed record page differs from what its fragments would assemble (run \`make record\` in .claude/skills/diagram, then commit) - feature 258, spec FR-004"
+    # GUARD_EDIT_OK: feature 259 - the glossary is assembled from per-term files now, and takes the
+    # DIRECT route for the same reason the record does: a definition edit touches no engine code.
+    ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory glossary CHECK=1 >/dev/null ) \
+      || die "the committed glossary differs from its per-term files (run \`make glossary\` in .claude/skills/diagram, then commit) - feature 259, spec FR-006"
   fi
   # GUARD_EDIT_OK: feature 236 - spec-lint runs HERE as well as at the gate, for the reason its four
   # siblings above do: the delta it judges is a `specs/` edit that touches no Python, which takes the

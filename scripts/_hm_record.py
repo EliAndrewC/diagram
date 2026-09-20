@@ -22,6 +22,9 @@ import os
 import sys
 
 RECORD = os.path.join(".claude", "skills", "diagram", "research")
+#: The glossary is the same kind of file in a different tree (feature 259): assembled from one file
+#: per term, read by the engine, and never hand-edited. One case here rather than a second guard.
+GLOSSARY = os.path.join(".claude", "skills", "diagram", "l7r", "diagram", "interactive", "assets", "glossary.json")
 #: Where a page's fragments live. The citations page's notes live in the RESEARCH page's directory -
 #: one question's prose and its notes are siblings, which is the whole of stage 3.
 _REGISTRY = "SOURCES.html"
@@ -35,6 +38,8 @@ def page_dir_for(rel: str) -> str | None:
     `research/SOURCES.html` -> `research/sources`.
     """
     rel = rel.replace(os.sep, "/")
+    if rel.endswith(GLOSSARY.replace(os.sep, "/")):
+        return rel[: -len(".json")]                   # `.../assets/glossary.json` -> `.../assets/glossary`
     if RECORD.replace(os.sep, "/") + "/" not in rel + "/" or not rel.endswith(".html"):
         return None
     inside = rel.split(RECORD.replace(os.sep, "/") + "/", 1)[1]
@@ -95,6 +100,12 @@ def fragments_for(page: str, section: str, root: str) -> list[str]:
     return out
 
 
+def _rebuild(rel: str) -> str:
+    """The command that rebuilds this assembled file - named in the refusal, because a refusal a
+    session cannot act on costs the same round trip as no refusal."""
+    return "make glossary" if rel.endswith("glossary.json") else "make record"
+
+
 def decide(tool: str, file_path: str, tool_input: dict, root: str) -> dict:
     """`{"verdict": "pass"}`, or a rewrite carrying the fragment, or a refusal carrying its message."""
     if tool not in ("Edit", "Write") or not file_path:
@@ -103,24 +114,26 @@ def decide(tool: str, file_path: str, tool_input: dict, root: str) -> dict:
     page_dir = page_dir_for(rel)
     if page_dir is None or not os.path.isdir(os.path.join(root, page_dir)):
         return {"verdict": "pass", "reason": "not an assembled page, or its stage has not landed"}
-    page = os.path.basename(rel)
     if tool == "Write":
         return {"verdict": "refuse", "rule": "write-to-assembled-page", "page": rel, "dir": page_dir,
                 "message": f"{rel} is ASSEMBLED from {page_dir}/ and is never written by hand - the next "
                            f"`make record` would overwrite it, and the fragments a session and every "
                            f"checking agent read would still say the old thing. A whole-file write "
-                           f"cannot be routed to a fragment: edit the fragments, then run `make record` "
-                           f"in .claude/skills/diagram."}
+                           f"cannot be routed to a fragment: edit the fragments, then run "
+                           f"`{_rebuild(rel)}` in .claude/skills/diagram."}
     old = str(tool_input.get("old_string", ""))
     holders = fragments_holding(page_dir, old, root)
     if len(holders) == 1:
         return {"verdict": "rewrite", "rule": "edit-moved-to-fragment", "page": rel, "fragment": holders[0]}
     if not holders:
+        why = ("Either it is JSON the assembly WRITES - the object's braces, its one-space indentation, "
+               "a term's own key - which no term file carries; or the file is stale"
+               if rel.endswith("glossary.json") else
+               "Either it is text the assembly WRITES - a footnote number, a reference id, a back link, "
+               "the derived works block - which is not edited at all; or the page is stale")
         return {"verdict": "refuse", "rule": "text-in-no-fragment", "page": rel, "dir": page_dir,
                 "message": f"{rel} is ASSEMBLED from {page_dir}/, and the text this edit replaces is in "
-                           f"none of its fragments. Either it is text the assembly WRITES - a footnote "
-                           f"number, a reference id, a back link, the derived works block - which is not "
-                           f"edited at all; or the page is stale, and `make record` will restore it."}
+                           f"none of its fragments. {why}, and `{_rebuild(rel)}` will restore it."}
     return {"verdict": "refuse", "rule": "text-in-several-fragments", "page": rel, "dir": page_dir,
             "message": f"{rel} is ASSEMBLED from {page_dir}/, and the text this edit replaces stands in "
                        f"{len(holders)} fragments:\n  " + "\n  ".join(holders)
@@ -183,6 +196,14 @@ def selftest() -> int:
         assert decide("Edit", os.path.join(page_dir, "010-x.html"), {"old_string": "the deck"}, root)["verdict"] == "pass"
         assert decide("Edit", os.path.join(root, RECORD, "towns.html"), {"old_string": "x"}, root)["verdict"] == "pass", \
             "a page whose stage has not landed is edited the old way"
+        terms = os.path.join(root, os.path.dirname(GLOSSARY), "glossary")
+        os.makedirs(terms)
+        with open(os.path.join(terms, "0010-girder.json"), "w", encoding="utf-8") as fh:
+            fh.write('{"term": "girder", "variants": ["girder"], "def": "the main beam"}')
+        glossary = os.path.join(root, GLOSSARY)
+        moved = decide("Edit", glossary, {"old_string": "the main beam"}, root)
+        assert moved["verdict"] == "rewrite" and moved["fragment"].endswith("0010-girder.json"), moved
+        assert "make glossary" in decide("Write", glossary, {}, root)["message"]
         with open(os.path.join(page_dir, "010-x.notes.html"), "w", encoding="utf-8") as fh:
             fh.write('<li data-note="k">body</li>\n')
         assert fragments_for("ways", "010", root) == [f"{RECORD}/ways/010-x.html", f"{RECORD}/ways/010-x.notes.html"]

@@ -135,7 +135,7 @@ def term_files(root: str | None = None) -> list[dict]:
     seen: dict[int, str] = {}
     out = []
     for name in sorted(os.listdir(here)):
-        claimed = term_of(name)                       # refuses a stray file by its name
+        term_of(name)                                 # refuses a stray file by its name
         at = position_of(name)
         if at in seen:
             raise GlossaryError(f"{TERMS}/: {seen[at]} and {name} both claim prefix {at:0{DIGITS}d} - "
@@ -143,9 +143,11 @@ def term_files(root: str | None = None) -> list[dict]:
         seen[at] = name
         with open(os.path.join(here, name), encoding="utf-8") as fh:
             entry = json.load(fh)
-        if entry.get("term") != claimed:
-            raise GlossaryError(f"{TERMS}/{name}: its filename says `{claimed}` and its content says "
-                                f"`{entry.get('term')}` - one of the two is wrong")
+        # COMPARED IN THE ENCODE DIRECTION (the plan review, 2026-09-20): decoding a filename is not
+        # injective the moment a term contains a `%`, while encoding a term is exact forever.
+        if name != file_name(at // GAP, str(entry.get("term"))):
+            raise GlossaryError(f"{TERMS}/{name}: its filename says `{term_of(name)}` and its content "
+                                f"says `{entry.get('term')}` - one of the two is wrong")
         out.append(entry)
     return out
 

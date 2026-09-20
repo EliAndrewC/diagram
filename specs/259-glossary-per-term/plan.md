@@ -30,7 +30,7 @@ small feature rather than a repeat of that one:
 **Testing**: pytest in the interactive tree, plus `make hooks-test` for the guard's companion.
 
 **Performance goals**: the assembly is a few hundred kilobytes of JSON; the bar is that it does not show
-up on the gate, judged the way 258's was (R4, T02/T12).
+up on the gate, judged the way 258's was (R4, written by T02 and closed by T12).
 
 **Constraints**: byte-identity on `glossary.json` and `glossary.js`, which forbids re-ordering and any
 re-formatting; the source is written with `indent=1`, which the assembly reproduces exactly.
@@ -44,8 +44,14 @@ reference case is the term `girder` (added by feature 258's own check run): one 
 
 ## Performance bookends
 
-**N/A - no generator changes.** No map is drawn and no `.gen.py` runs. What this can slow is the gate,
-which R4 measures before and after, exactly as feature 258's R7 did.
+**N/A - no generator changes.** No map is drawn and no `.gen.py` runs; the render path keeps reading the
+assembled `glossary.json`, which stays where it is. What this can slow is the gate, which R4 measures
+before and after, exactly as feature 258's R7 did.
+
+**One thing that is true of the code and not of the data** (the plan review, 2026-09-20): FR-011's
+variant removals change what a rolled map page INLINES for `chaoguan` and `qiandao`, because both words
+occur in class prose. Nothing is owed a regeneration - every pool page re-renders at each landing - but
+this line should not be read as "no rolled page changes".
 
 ## Constitution Check
 
@@ -76,19 +82,29 @@ which R4 measures before and after, exactly as feature 258's R7 did.
 │   ├── 0010-Akiba.json ... 7200-fire-water.json
 ├── l7r/diagram/interactive/assets/glossary.json  ASSEMBLED, byte-identical
 ├── l7r/diagram/interactive/glossary_source.py    NEW - split, assemble, check
-├── l7r/diagram/tools/glossary_asset.py           CHANGED - assembles before it derives
-└── tests/interactive/test_glossary_source.py     NEW
+├── l7r/diagram/tools/glossary_asset.py           CHANGED - assembles, derives, writes the index
+├── research/assets/glossary-variants.json        NEW - the DERIVED variant index (FR-008)
+├── research/CLAUDE.md                            CHANGED - where a term lives (FR-009)
+├── tests/interactive/test_glossary_source.py     NEW
+└── tests/interactive/test_record_format.py       the gate test that already holds glossary.js in sync
 
 scripts/
 ├── _hm_record.py            CHANGED - the assembled-page guard learns this one file
-└── test-record-edit-hooks.sh  CHANGED - its cases
+├── test-record-edit-hooks.sh  CHANGED - its cases
+└── sync-with-main.sh        CHANGED - `make glossary CHECK=1` beside `make record CHECK=1` (FR-006)
+
+.claude/agents/record-format.md                   CHANGED - read the index, not the glossary (FR-008a)
+docs/efficiency-tooling.md                        CHANGED - the shape and the measurement (T13)
 ```
 
 ## The design
 
 ### D1 - One file per term, named for the term, ordered by a prefix
 
-`0010-<term>.json`, gapped by ten as `research/sources/` is, holding `{"term", "variants", "def"}`. The
+`0010-<term>.json`, gapped by ten as `research/sources/` is, holding `term`, then the entry's own keys
+in the order the assembled file carries them - `def`, then `variants`, in all 720. Emitting them the
+other way round would leave SC-003's diff non-empty, which is the kind of thing byte-identity exists
+to catch and prose does not. The
 term is IN the file as well as in the name, and the assembly reads it from the content: a filename is a
 convenience, and `dS/m` proves it cannot always be the whole truth (R3). A character a filename cannot
 carry is percent-encoded; nothing else is transformed, so the eight terms with macrons keep them.
@@ -124,6 +140,10 @@ saving was actually collected.
 
 **Phase 1 - the split** (T03-T07). The round-trip test red first; the module; the command; the split of
 all 720; byte-identity proven on `glossary.json` and `glossary.js`.
+
+**The committed `glossary.json` will NOT be byte-identical to today's when the feature lands**, and the
+phase order is what makes that honest: T06's empty diff proves the machinery, and T08's declared variant
+removals are then the only permitted delta on top of it. Each lands as its own commit.
 
 **Phase 2 - what it is for** (T08-T10). The clash resolution and its test; the guard's new case; the
 contracts and the operative doc.

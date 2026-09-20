@@ -1,5 +1,20 @@
 # research/ - the historical record, and who it is written for
 
+## The glossary is one file per word (feature 259)
+
+`l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one term each, about 154 bytes. The
+assembled `assets/glossary.json` and the derived `research/assets/glossary.js` are written by
+`make glossary` and never hand-edited; `research/assets/glossary-variants.json` is the derived index
+from every variant to the term that owns it.
+
+    ls l7r/diagram/interactive/assets/glossary/       the term list - the filenames ARE it
+    ls l7r/diagram/interactive/assets/glossary/*girder*    one term, by its word
+
+A word in prose is usually a VARIANT, and only the index maps it to its term - a grep over the term
+files answers with candidates, because a definition may mention a word another term owns. Adding a term
+is a new file with a free prefix between its neighbors, then `make glossary`; the prefixes are what
+keep the assembled order, and the order decides which definition wins where two terms claim one variant.
+
 ## The record is written PER ENTRY, and the pages are assembled (feature 258)
 
 The GM, 2026-09-20: *"split our questions into individual files and split our citations into individual
