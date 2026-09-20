@@ -35,7 +35,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   (`escalation-check` among them). A moved rule is written once, short, in the contract's own voice, in the section
   that already covers its subject, or under `## House rules you check against` where none does.
 - **P2 the field (FR-002).** `omitClaudeMd: true` on its own line in each frontmatter, after `effort:`. (P10 takes it
-  off `spec-fidelity.md` again, by the GM's ruling.)
+  off `spec-fidelity.md` again, approved by the GM on the session's recommendation (2026-09-20).)
 - **P3 the proof (FR-003, FR-004).** `measure/dispatch_seeded.sh`: a headless Sonnet session in the case's worktree
   reads `prompt.txt` and dispatches the agent ONCE with it; the SUBAGENT's transcript gives the reply, the turns,
   the usage folded per message id, the first-turn input, and whether the prompt it received is the recorded one
@@ -66,7 +66,7 @@ FR-004's second pair -> T04 the before-and-after measurement -> T05 the record -
 
 - **P6 the guard (FR-007).** One test in `tests/test_agent_models.py`, `test_every_agent_launches_without_the_claude_md_files`:
   for every file in the derived roster, `frontmatter(...)["omitClaudeMd"] == "true"`, its message naming the field,
-  the GM's ruling and this feature. The module docstring gains the ruling. The tier table is untouched. It is a
+  the GM's ruling of 2026-09-19 and this feature. The module docstring gains that ruling. The tier table is untouched. It is a
   gate guard already listed in root `CLAUDE.md`'s table (`test_agent_models.py`), so that row gains the clause.
 - **P7 the fidelity contracts (FR-008).** In `spec-fidelity.md`, question 4's "extra verification the GM did not
   request" becomes "verification of something the GM did not ask for", and a paragraph after question 5 states the
@@ -95,10 +95,10 @@ Order: T07 -> T08 -> T09 -> T10 -> T11.
 
 ## Amendment 2 (2026-09-20)
 
-- **P10 the GM's three rulings (FR-012 to FR-014).** No new machinery. The contract wording is sharpened in place
+- **P10 the GM's approval of three recommendations (FR-012 to FR-014).** No new machinery. The contract wording is sharpened in place
   (P7's paragraph gains the test-versus-guard sentence); `omitClaudeMd` is deleted from `spec-fidelity.md` alone and
   the tier test gains `KEEPS_CLAUDE_MD`, a name-to-reason table the guard skips and asserts is not stale, so the hole
-  in FR-007's guard is exactly the size of the ruling and cannot silently grow; root `CLAUDE.md`, the guard table's
+  in FR-007's guard is exactly the size of what the GM approved and cannot silently grow; root `CLAUDE.md`, the guard table's
   gate row, `docs/efficiency-tooling.md` and `research.md` R8 say so. `settlement-review` and `perf-audit` get no
   harness at all - FR-014 is watching, and FR-004 is already the route for what watching finds.
 

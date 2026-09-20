@@ -14,11 +14,13 @@ file with no `effort:` runs at the session's effort (R6). So both keys are owed 
 test derives the roster from the directory: a new agent owes its tier here the day it lands.
 
 WHAT A DEFINED AGENT IS NOT HANDED (GM 2026-09-19, feature 256). *"If there's something that a subagent should know,
-it should be in the subagent specification."* Every file here carries `omitClaudeMd: true`, so the agent launches
-without the root `CLAUDE.md`, the nested ones and the session's memory index (measured: a first turn of 55-63 k tokens
+it should be in the subagent specification."* Every file here carries `omitClaudeMd: true` except the one
+`KEEPS_CLAUDE_MD` names below, so the agent launches without the root `CLAUDE.md`, the nested ones and the session's
+memory index (measured: a first turn of 55-63 k tokens
 fell to 8-12 k and nothing recorded was missed - `specs/256-defined-subagents-without-claude-md/research.md`). The
 GM asked for this to be enforced by a test (2026-09-20), and the roster is derived from the directory, so a new agent
-owes the field the day it lands - and owes its contract every project rule its job depends on.
+owes the field the day it lands - and owes its contract every project rule its job depends on. An
+exception is a measured case the GM approved, in `KEEPS_CLAUDE_MD`, never a session's own call.
 
 TO CHANGE A TIER: change the row here and the frontmatter together, and record why - for a downgrade,
 the seeded-fault run that justifies it.
@@ -87,12 +89,17 @@ def test_every_agent_file_agrees_with_the_tier_table() -> None:
     assert not wrong, f"frontmatter disagrees with TIERS (file says -> table says): { {a: (v, TIERS[a]) for a, v in wrong.items()} }"
 
 
-#: agent -> why it KEEPS the CLAUDE.md files. An entry here is the GM's ruling, never a session's convenience.
+#: agent -> why it KEEPS the CLAUDE.md files. An entry here is a MEASURED case the GM approved, never a session's
+#: convenience: the session shows what the field cost that check on recorded findings and recommends, the GM answers,
+#: and the row quotes both. Nothing goes in here on a session's own authority.
 KEEPS_CLAUDE_MD: dict[str, str] = {
     "spec-fidelity": (
-        "GM 2026-09-20: with the field it raised one of three recorded required changes where its control raised all "
+        "Approved by the GM on the session's recommendation, 2026-09-20 (they answered \"go with your recommendations\" "
+        "to a measurement and a proposal; they did not raise the question): with the field it raised one of three "
+        "recorded required changes where its control raised all "
         "three, and a moved rule did not settle it (specs/256 research R6); it gates every spec and the field saves it "
-        "little. It goes back on when a three-samples-a-leg run tells the field from the agent's own variance."
+        "little, so the session recommended taking it off until a three-samples-a-leg run tells the field from the "
+        "agent's own variance; that run puts it back."
     ),
 }
 

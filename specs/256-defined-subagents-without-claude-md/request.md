@@ -37,7 +37,7 @@ field of every agent file as unrequested, and that only two of the twelve agents
 >
 > Is there any particular reason not to test the other 10 reviewers with seeded proofs?
 
-## The GM's rulings on the amendment's results (2026-09-20)
+## The GM's answer on the amendment's results (2026-09-20) - three recommendations approved
 
 The session reported the eight pairs and the fidelity-contract proof and put three decisions, in these words:
 

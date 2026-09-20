@@ -11,7 +11,7 @@ session's memory index: what such an agent needs to know belongs in its own spec
 session dispatches keeps both. The harness has the switch - `omitClaudeMd: true` in an agent file's frontmatter,
 measured in feature 255's R7 to remove both files from a subagent's first turn. This feature first moves into each
 contract whatever that check was relying on the root `CLAUDE.md` to tell it, then sets the field in all twelve agent
-files (eleven from Amendment 2, which excepts `spec-fidelity` by the GM's ruling - FR-013), and proves on recorded
+files (eleven from Amendment 2, which excepts `spec-fidelity` approved by the GM on the session's recommendation (2026-09-20) - FR-013), and proves on recorded
 findings that the checks still find what they found. No engine code: the delta routes
 DIRECT.
 
@@ -102,26 +102,29 @@ agents proven, ten resting on the reading, by D1's sizing. The GM's question of 
 FR-010 governs from here: on completion ten of the twelve have a seeded pair of their own and two do not.
 `research.md` keeps R4 as the record of the first landing and says so, and holds the new tally beside the new rows.
 
-## Amendment 2 (2026-09-20) - the GM's three rulings on Amendment 1's results (`request.md`, third block)
+## Amendment 2 (2026-09-20) - the GM's approval of three recommendations on Amendment 1's results (`request.md`, third block)
 
 **FR-012 - the fidelity-contract change stands on an inconclusive proof, with its wording sharpened.** SC-007 is NOT
 met and is recorded as not met (`research.md` R7): the unamended contract also kept the guard, and neither run raised
-all of round 1's other items. By the GM's ruling the change is accepted as the statement of their rule where the
-reviewer reads it. In the same change both contracts say what R6 showed the first wording let through: a test that
+all of round 1's other items. The GM, shown that and the session's recommendation to accept it anyway, answered *"go with your
+recommendations to all three"*, so the change stands as the statement of their rule where the reviewer reads it. In the same change both contracts say what R6 showed the first wording let through: a test that
 only FAILS when the requested thing is absent is verification; a guard that REFUSES, BLOCKS or REWRITES work is
 behavior, in scope only for the exact thing the GM asked to have enforced, its reach beyond that reported
 UNREQUESTED part by part.
 
 **FR-013 - `spec-fidelity` keeps the `CLAUDE.md` files until a test can tell the field from variance.** FR-004 left
-this to the GM, and the GM ruled: the field comes off `spec-fidelity.md` alone. FR-002's "all twelve" and SC-002 read "all twelve but `spec-fidelity`" from
+this to the GM; the session put the measurement and a recommendation, and the GM approved it (*"go with your
+recommendations to all three"* - they did not raise the question or decide it independently). So the field comes off
+`spec-fidelity.md` alone. FR-002's "all twelve" and SC-002 read "all twelve but `spec-fidelity`" from
 here; FR-007's "every agent file" and SC-006 read "every agent file the tier test does not name as the GM's
-exception, with the ruling as its reason" - a new agent file still owes the field, and a row that has gone stale
-fails the gate; and the Summary's and the Status line's "all twelve" are the first landing's state, eleven from here. The tier test carries the exception BY NAME with the ruling as its
-reason (`KEEPS_CLAUDE_MD`), and fails on a row that has gone stale. What puts the field back: three samples a leg on
+exception, with the measurement and the approval as its reason" - a new agent file still owes the field, and a row that has gone stale
+fails the gate; and the Summary's and the Status line's "all twelve" are the first landing's state, eleven from here. The tier test carries the exception BY NAME with its reason
+(`KEEPS_CLAUDE_MD`) - the measurement, and the GM's approval of the session's recommendation - and fails on a row
+that has gone stale. What puts the field back: three samples a leg on
 the recorded case, about four weight units, run when someone asks for it - it is not part of this feature.
 
-**FR-014 - `settlement-review` and `perf-audit` get no seeded pair now.** By the GM's ruling their first real
-dispatches are watched instead: a settlement review or a performance audit that comes back not knowing a project
+**FR-014 - `settlement-review` and `perf-audit` get no seeded pair now.** The session priced both and recommended
+watching them instead; the GM approved. So their first real dispatches are watched: a settlement review or a performance audit that comes back not knowing a project
 rule, or breaking a guard it was never told of, is a contract to amend (FR-004's route).
 
 ## Success criteria
@@ -144,7 +147,7 @@ rule, or breaking a guard it was never told of, is a contract to amend (FR-004's
   left, and the tally as it now stands; R4 is marked as the first landing's.
 
 - **SC-010** (FR-012, FR-013, FR-014) T08 is ticked with SC-007 recorded as unmet and accepted by the GM; eleven agent files
-  carry the field and the tier test names the twelfth with the ruling; `research.md` says what would put it back.
+  carry the field and the tier test names the twelfth with its measured reason and the approval; `research.md` says what would put it back.
 
 ## Assumptions
 

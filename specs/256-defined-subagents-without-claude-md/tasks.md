@@ -34,7 +34,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
       verify: DONE. eight pairs scored finding by finding by an independent reader - variance in six, a one-sided loss in entry-drift (repaired by a moved rule, re-run DRIFTED) and in spec-fidelity (not settled, raised with the GM); settlement-review and perf-audit priced; the tally ten of twelve; research R6
 - [x] T11 the field off `spec-fidelity.md` and the tier test's named exception; `settlement-review` and `perf-audit` recorded as watched (FR-013, FR-014)
       research: rendering
-      verify: DONE. omitClaudeMd off spec-fidelity.md alone; KEEPS_CLAUDE_MD names it with the GM's ruling and fails on a stale row (8 passed); settlement-review and perf-audit recorded as watched in research R8
+      verify: DONE. omitClaudeMd off spec-fidelity.md alone; KEEPS_CLAUDE_MD names it with the measurement and the GM's approval of the recommendation, and fails on a stale row (8 passed); settlement-review and perf-audit recorded as watched in research R8
 - [x] T12 `make hooks-test` and `make quick` green; land
       research: rendering
       verify: DONE. make quick and make hooks-test green 2026-09-20; nothing under l7r/ or pool/ changed

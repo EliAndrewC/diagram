@@ -124,7 +124,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
   (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in
   the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
-  an ad-hoc agent keeps all three, and so does `spec-fidelity` alone, by the GM's ruling of 2026-09-20 (the tier test
+  an ad-hoc agent keeps all three, and so does `spec-fidelity` alone, which the GM approved on the session's
+  measured recommendation, 2026-09-20 (the tier test
   names the exception and enforces the field on every other agent file). The review agents are pre-authorized through
   `container-scripts/append-system-prompt.md`; if one is skipped, check `type claude` first.
 
