@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T20:20:28Z",
+  "target": "plan-gate tick 259-glossary-per-term",
+  "commit": "32ded419",
+  "why": "the CLEAR verdict's own notes folded in - the entry key order, the encode-direction check, the glossary's own refusal wording, R4, the file list and the byte-identity sequencing; no decision moved, and the same case landed under this escape on features 256 and 258"
+}

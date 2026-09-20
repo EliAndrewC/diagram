@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T20:20:38Z",
+  "target": "plan-gate tick 259-glossary-per-term",
+  "commit": "32ded419",
+  "why": "the CLEAR verdict's own notes folded in; no decision moved (features 256 and 258 precedent)"
+}
