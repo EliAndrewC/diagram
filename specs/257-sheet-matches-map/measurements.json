@@ -4,5 +4,11 @@
     "unit": "map px",
     "quantity": "the village map's set-apart placement step: the shrine well's ring radii 54, 66, 80, 96, 112 px (steps 12, 14, 16, 16; median 15) and the torii avenue pitch 15 px, read from settlement/shrines_wells/wells.py and shrines.py on 2026-09-20; 30 ft at the village scale of 2 ft per px",
     "command": "grep -n 'for rr in' .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py; grep -n '1096 + i \\* 15' .claude/skills/diagram/legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.gen.py"
+  },
+  "baseline-quick": {
+    "value": 3755,
+    "unit": "tests passed",
+    "quantity": "make quick ALL=1 in a detached worktree at HEAD (the 257 claim commit), 2026-09-20: 3755 passed, 5 skipped, 4 warnings in 32.57s; make hooks-test: 26 guard suites green",
+    "command": "git worktree add --detach /tmp/base257 HEAD && make -C /tmp/base257/.claude/skills/diagram quick ALL=1 && make -C /tmp/base257/.claude/skills/diagram hooks-test"
   }
 }

@@ -19,7 +19,7 @@ manifest):**
 
 - The set-apart shrine's own well is placed on rings of 54, 66, 80, 96 and 112 map px around the
   hall's center at 30 degree steps - the ring steps are 12, 14, 16 and 16 px, median 15 px; on the
-  Hoshigaoka map it landed on the first ring due north, at map (392, 1020). (a one-shot observation, 2026-09-20, read from the map's placement code and its recorded manifest)
+  Hoshigaoka map it landed on the first ring due north, at map (392, 1020). (observed 2026-09-20; method: the map's placement code and its recorded manifest, read by hand)
 - The torii avenue's points march 15 px apart; the one torii the map records stands 22 px from the
   hall's center, 10 px in front of the hall's face.
 - A tree crown in the manifest is a circle of radius 3.7 to 7.8 px in the crowns read; a grove clump
@@ -59,7 +59,7 @@ position is the feature's CENTER in map px unless said otherwise:
 
 The subject's position is its center: the Hoshigaoka shrine is `religious[0]` at (392, 1074), 30 by
 24 px - 60 by 48 ft - and its torii at (392, 1096) stands 10 px beyond the hall's south face, which is
-only possible if (x, y) is the center. The map's `meta.ftpx` gives its scale. (a one-shot observation, 2026-09-20, read from the map's placement code and its recorded manifest)
+only possible if (x, y) is the center. The map's `meta.ftpx` gives its scale. (observed 2026-09-20; method: the map's placement code and its recorded manifest, read by hand)
 
 **Decision.** The class table is data in the check (plan D2), one row per sheet class; a class the
 sheet marks that the table lacks is a finding ("the sheet marks `id="pond"` and the check knows no
@@ -68,9 +68,9 @@ such class"), so a new class is added deliberately.
 ## R3. What the Hoshigaoka map shows at the shrine - the inventory the sheet must match
 
 **Read from the manifest, every feature within 160 map px (320 ft) of the shrine's center, and the
-map's own render (2026-09-20):** (a one-shot observation, 2026-09-20, read from the map's placement code and its recorded manifest)
+map's own render (2026-09-20):** (observed 2026-09-20; method: the map's placement code and its recorded manifest, read by hand)
 
-- the shrine hall, 60 by 48 ft, its long side east-west, facing south; (a one-shot observation, 2026-09-20, read from the map's placement code and its recorded manifest)
+- the shrine hall, 60 by 48 ft, its long side east-west, facing south; (observed 2026-09-20; method: the map's placement code and its recorded manifest, read by hand)
 - ONE torii, 20 ft south of the hall's face, on its axis - the generator's comment promises a
   seven-arch avenue but the manifest records `torii_count: 1` and the render draws one (reported to
   the GM under spec FR-009; the sheet matches what is drawn);
@@ -84,7 +84,7 @@ map's own render (2026-09-20):** (a one-shot observation, 2026-09-20, read from 
 - the connector lane passes about 112 to 172 ft east of the hall's axis, outside a frame of 100 ft
   half-width; the nearest byre is 224 ft north, the crescent pond 340 ft north-west - both outside.
 
-**Decision.** The redrawn sheet (spec FR-006) shows the hall at 60 by 48 ft (a one-shot observation, 2026-09-20, read from the map's placement code and its recorded manifest), the arch 20 ft in front
+**Decision.** The redrawn sheet (spec FR-006) shows the hall at 60 by 48 ft (observed 2026-09-20; method: the map's placement code and its recorded manifest, read by hand), the arch 20 ft in front
 of it, the well 108 ft behind it on the axis, swept ground to the frame's edge, and nothing else the
 program lists as surroundings; its frame is held to 100 ft either side of the axis and from 60 ft in
 front of the arch to 20 ft behind the well, so the lane, the grove, the pond and the byre stay outside
