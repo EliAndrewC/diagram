@@ -1,0 +1,15 @@
+{
+  "baseline-done": {
+    "value": 4179,
+    "unit": "tests",
+    "quantity": "make done in the clone on unmodified code at d7cbe8a8 - it short-circuited green ('already verified, nothing the gate exercises has changed'), so the baseline is feature 258's own landing run: 4,179 passed, 4 skipped, all three coverage floors, 92 s",
+    "observed": "2026-09-20",
+    "note": "Constitution XIII baseline for feature 259. The short-circuit is the honest baseline here rather than a shortcut: the gate's own key says nothing it exercises had changed."
+  },
+  "glossary-variant-index": {
+    "value": 22564,
+    "unit": "bytes",
+    "quantity": "research/assets/glossary-variants.txt as written by make glossary - 1,179 variants and the term that owns each, one tab-separated line apiece, against the 144,524-byte glossary.js a check read before it",
+    "observed": "2026-09-20"
+  }
+}

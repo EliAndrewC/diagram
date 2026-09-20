@@ -17,7 +17,7 @@ per term:
 
 | what you want | where it is | about |
 |---|---|---|
-| does this WORD have a definition, under any term? | `research/assets/glossary-variants.json` - every variant, and the term that owns it | 30 KB, one read |
+| does this WORD have a definition, under any term? | `research/assets/glossary-variants.txt` - one tab-separated line per variant, and the term that owns it | 22 KB, one read |
 | is this word itself a TERM? | `ls l7r/diagram/interactive/assets/glossary/` - the filenames ARE the term list | 14 KB, no file opened |
 | what does one term actually say? | that term's own file, `NNNN-<term>.json` | about 154 bytes |
 

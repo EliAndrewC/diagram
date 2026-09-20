@@ -4,8 +4,8 @@
 
 `l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one term each, about 154 bytes. The
 assembled `assets/glossary.json` and the derived `research/assets/glossary.js` are written by
-`make glossary` and never hand-edited; `research/assets/glossary-variants.json` is the derived index
-from every variant to the term that owns it.
+`make glossary` and never hand-edited; `research/assets/glossary-variants.txt` is the derived index -
+one tab-separated line per variant, and the term that owns it.
 
     ls l7r/diagram/interactive/assets/glossary/       the term list - the filenames ARE it
     ls l7r/diagram/interactive/assets/glossary/*girder*    one term, by its word
