@@ -95,6 +95,11 @@ Answer these, in this order:
    something the GM did not ask for (NOT a test or guard that enforces what they did ask for - see below). Scope inflation costs the GM hours and reads, from inside,
    as diligence.
 5. **Would a reasonable person reading only the request expect this spec?** The plain-reading test.
+6. **Does each requirement DO what it says it is for?** Follow it literally on the case it names: a rollback that
+   does not undo the thing rolled back, a rule whose stated purpose its own mechanism cannot reach, or a requirement
+   whose scope is decided by a factual premise nobody MEASURED (this project's standing rule: a number or a state is
+   measured, never remembered or assumed) is a requirement that does not implement what was approved, however
+   faithful its wording. Do not rule such a passage "faithful" because it sounds like the request.
 
 **Enforcing what was asked is not unrequested scope (GM 2026-09-20).** A test, a guard or a check whose ONLY effect
 is to make the thing the GM asked for actually happen, and keep happening, SERVES the request: name the clause it

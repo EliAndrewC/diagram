@@ -172,7 +172,7 @@ session on a one-line prompt; nothing written under the mirror.)
 
 About 16 k tokens leave every turn of the smallest check: the root `CLAUDE.md` and the memory index together.
 
-## R4 - what was proven and what was not (FR-005)
+## R4 - what was proven and what was not, AT THE FIRST LANDING (FR-005; superseded by R6's tally - FR-011)
 
 Two agents have a seeded proof: `spec-fidelity-verify` and `record-format`. Three have no recorded run to replay and
 carry the field on the reading alone, as the GM agreed: `perf-audit`, `building-review`, `size-audit`. The other
@@ -181,3 +181,87 @@ seven DO have recorded runs and were not re-run either, by D1's sizing: `entry-d
 therefore rest on R1's reading and on the field behaving for them as it measurably did for the two. The first real
 dispatch of each after landing is the next evidence; a check that comes back asking what a rule is, or breaking a
 guard it was never told of, is a contract to amend (FR-004's route), not a reason to unset the field.
+
+## R5 - Amendment 1: the guard, the leftovers (FR-007, FR-009)
+
+`test_every_agent_launches_without_the_claude_md_files` in `tests/test_agent_models.py`: 8 passed with the field in
+all twelve; with the field removed from `entry-drift.md` the test FAILED naming `['entry-drift']`; restored, 8 passed
+(observed 2026-09-20; method: `make test-file FILE=tests/test_agent_models.py`, three times). `make scatter-bases
+MAP=<pool map> [BOX=...]` wraps the engine's `parse_bases` through `scripts/_scatter_bases.py` (the engine module has
+no command-line entry and none was added, so the delta stays DIRECT; four tests in `tests/tooling/`) and
+`settlement-review` names it; the three `(Tools: ...)` description tails are cut; seven contracts cite the tier table
+by its real path.
+
+## R6 - Amendment 1: eight more seeded pairs (FR-010), scored by an independent reader
+
+Method as R2 (observed 2026-09-20; method: `measure/dispatch_seeded.sh`; each leg's reply read IN FULL and scored
+finding by finding, in both directions, by an Opus agent that did not write the change - the session is not a
+reliable scorer of its own feature; where two legs contradicted each other on a fact, the scorer checked the source).
+"Missed" counts control findings the with-field leg did not make; "only on" counts the reverse.
+
+| case | agent | control findings | hit with the field | missed with the field | found ONLY with the field | planted / recorded finding (on / off) | turns on / off | weight on / off |
+|---|---|---|---|---|---|---|---|---|
+| farmhouse modal | `entry-drift` | 3 | 1 (+1 weaker) | **the DRIFTED verdict itself - IN-STEP returned, on two independent samples** | 0 | recorded DRIFTED: no / yes | 4 / 4 | 0.55 / 0.90 |
+| feature 242's draft | `escalation-check` | 8 | 5 (+1 classified as the recorded run did) | 2 (the headline counts; the requested rewrite) | 2 | recorded's six verdicts: 6 of 6 / 5 of 6 | 6 / 4 | 0.36 / 0.59 |
+| capitals fn-235..240 | `quote-check` | 12, one a false positive | 9 (+1 weaker) | 1 sub-finding | 4, and it correctly rejected the control's false positive | - | 11 / 4 | 1.17 / 1.00 |
+| dike-pond claims | `source-reader` | 15 | 11 | 4 sub-quotes; all five claim verdicts agree | 8 | both partial passages: yes / yes | 10 / 6 | 0.70 / 0.91 |
+| feature 251's spec, round 1 | `spec-fidelity` | 3 required changes | 1 | **2, both examined and ruled "faithful"** | 0 | recorded's three: 1 of 3 / 3 of 3 | 3 / 5 | 0.62 / 0.71 |
+| Shanghai county wall | `source-applicability` | 10 true, 2 false positives | 7 | 2 (the two moat lengths; one era limit) | 3 (1 true, 2 false positives) | recorded's two limits: one each | 18 / 5 | 2.01 / 1.05 |
+| Ochiba sheet, scale bar removed | `building-review` | 12 | 7 (+2 partial) | 4, one a verified fire-gap defect between two buildings | 9 | planted defect: yes / yes | 9 / 6 | 1.76 / 1.99 |
+| Ochiba sheet, one bath enlarged | `size-audit` | 12 | 7 (+3 weaker) | 2 | 4, one substantive | planted defect: yes / yes | 5 / 6 | 1.53 / 1.69 |
+
+**By FR-003's rule as written - "misses nothing its control caught" - the field fails all eight**, and so would any
+second run of the same agent on the same input: in six of the eight BOTH legs caught things the other did not, in
+comparable number, which is the run-to-run variance feature 255 measured (R1's two candidate runs, R6's two
+reviews). Both planted defects were caught by both legs. Two results are NOT variance: **`entry-drift` and
+`spec-fidelity` lost one-sidedly** - nothing found only with the field, the control and the recorded run agreeing
+against it, and in both the with-field run SAW the item and ruled the other way. The scorer also named where the
+with-field legs' losses cluster elsewhere: re-verifying a documented tolerance or overrule rather than accepting it
+(the bath's fire tub, the glyph-exemption list, the cell's contradictory record). Two legs cost MORE with the field
+(`quote-check`, and `source-applicability` at 18 turns against 5, paging `SOURCES.html` for a block the control found
+at once). One leg (`size-audit` with the field) was re-run for a dispatcher that did not pass the prompt verbatim.
+
+**FR-004's route, taken for the two one-sided losses** - the miss read against what the field removes, and a GENERAL
+rule written into the contract where something accounts for it, then the with-field leg run once more:
+
+| agent | what the removed files carried that the contract did not | the rule moved | the re-run (with the field) |
+|---|---|---|---|
+| `entry-drift` | the root file's research doctrine - a reader is never told a thing is attested when it is not; the four classes; an unlabeled guess is the one failure - which is what makes a newly disclosed LIMIT on a source a finding and not maintenance | the `Note:` is the modal's accounting of read / guess / extension, and a change to the standing of anything it counts is a moved finding even when `What:` and `Why:` are untouched | **DRIFTED, the recorded finding, in the recorded place**; 4 turns, 0.52 |
+| `spec-fidelity` | the root and skill files' measure-never-assume rule, and the habit of following a rule literally to see whether it does what it claims | question 6: does each requirement DO what it says it is for - a rollback that does not roll back, a scope decided by an unmeasured premise | the unmeasured-premise item now RAISED; the step-back item still passed; and the unrequested-guard item, which the first with-field run had raised, NOT raised this time. One of the recorded three, a different one; 6 turns, 0.95 |
+
+So `entry-drift` is repaired and `spec-fidelity` is not settled: three with-field runs (counting R7's) raised one,
+one and two of their recorded items, never the same set, against a control that raised all three once. Nothing here
+can say whether that is the field or the agent's own variance at N=1 per leg. Per FR-004 the field stays set and the
+case goes to the GM.
+
+**The tally (FR-011).** With a seeded pair of their own: `spec-fidelity-verify`, `record-format` (R2), and the eight
+above - ten of twelve. Without: `settlement-review` and `perf-audit`, put to the GM with their reasons and prices:
+`settlement-review` - one pair is about 9 weight units by feature 255's R6 (5.37 and 3.94 for its two runs), the
+eight pairs above cost 17.5 together (the sum of their sixteen weights), and R6 shows two careful passes over one map finding different real defects,
+so a single pair cannot separate a miss from variance; three samples a leg would be about 27 units. `perf-audit` -
+no recorded run and no frozen artifact; a pair needs a manufactured performance increase between two commits with
+its recorded explanation, roughly a day's session work before the first run, the runs themselves about 2 units each.
+
+## R7 - Amendment 1: the fidelity reviewer and the enforcement of what was asked (FR-008)
+
+The cause was in the contract: question 4 of `spec-fidelity.md` listed "extra verification the GM did not request"
+as scope inflation, so round 1 cutting this feature's guard was the contract working as written. Both contracts now
+carry the GM's distinction. Proof (observed 2026-09-20; method: `dispatch_seeded.sh` on round 1's own recorded
+prompt, tree at the spec's first commit), scored by the same independent reader against round 1's four items:
+
+| round 1's item | amended contract | control: the UNAMENDED contract, same setting |
+|---|---|---|
+| 1 the failure branch leaves the field unset | raised | raised |
+| 2 "nothing is moved from the memory index" too broad | NOT raised (cleared as within) | raised |
+| 3 the guard cut as unrequested | **kept, citing the new rule** | **also kept** - "it mechanizes the GM's ruling" |
+| 4 SC-004 mislabels what went unproven | not raised | not raised |
+| new | FR-004 does not say which contract the proof's legs run | - |
+
+A first amended run was discarded as evidence: its contract paragraph NAMED this feature's guard as the worked
+example, so it had been shown its own answer; the example was made general before the run above. **SC-007 as written
+is NOT met**: the amended run kept the guard, but so did the control - the original cut does not reproduce, so this
+proof cannot show the amendment CAUSES the keep - and neither run raised all of the other three items. What the
+contract change does do is state the GM's rule where the reviewer reads it; what it risks is R6's last row, where a
+with-field `spec-fidelity` run passed a guard the recorded review had called unrequested ("within, as enforcement").
+That guard REFUSES and rewrites dispatches the request never touched, which is the "new behavior riding in as a
+check" the paragraph excludes - so the wording may need to be sharper. T08 stays open on this.

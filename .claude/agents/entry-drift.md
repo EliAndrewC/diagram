@@ -44,6 +44,13 @@ changes for two quite different reasons, and only one of them touches a modal:
 
 Read for the second and do not report the first as drift.
 
+**The `Note:` is the modal's accounting of what is READ, what is a GUESS and what is this project's own extension** -
+the project's whole research doctrine is that a reader is never told a thing is attested when it is not. So a change
+in the section to the STANDING of anything the `Note:` or `Caveat:` counts - a source now said to support less than
+it did, a part moved from read to extended, guessed or unsourced, a limit newly disclosed on a derivation the modal
+sums up - is a moved FINDING even when the `What:` and `Why:` never mention it. Before you call such a change
+maintenance, find the clause of the `Note:` that counts that part and ask whether it is still true as worded.
+
 **Things to check specifically.**
 
 - Does the explanation state as a finding something the section now labels a guess, a convention or a

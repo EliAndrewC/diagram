@@ -28,7 +28,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T09 a make target wraps the scatter parse and `settlement-review` names it; the `(Tools: ...)` tails and the tier-table paths corrected (FR-009)
       research: rendering
       verify: DONE. make scatter-bases wraps the engine's parse (scripts/_scatter_bases.py, 4 tests; Sawada 20,713 blades) and settlement-review names it; the three (Tools: ...) tails cut; the tier table cited by its real path in seven contracts
-- [ ] T10 eight seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity on recorded cases, building-review and size-audit on frozen defective sheets - scored; settlement-review and perf-audit priced for the GM; the tally restated (FR-010, FR-011)
+- [x] T10 eight seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity on recorded cases, building-review and size-audit on frozen defective sheets - scored; settlement-review and perf-audit priced for the GM; the tally restated (FR-010, FR-011)
       research: rendering
+      verify: DONE. eight pairs scored finding by finding by an independent reader - variance in six, a one-sided loss in entry-drift (repaired by a moved rule, re-run DRIFTED) and in spec-fidelity (not settled, raised with the GM); settlement-review and perf-audit priced; the tally ten of twelve; research R6
 - [ ] T11 `make hooks-test` and `make quick` green; land
       research: rendering
