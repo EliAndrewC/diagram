@@ -1,6 +1,6 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** round 2 CHANGES REQUIRED on one orphaned id (2026-09-20), applied; awaiting round 3.
+**Status:** FAITHFUL at round 3 (2026-09-20, see Review history); planned, not yet implemented.
 
 ## Summary
 
@@ -95,3 +95,5 @@ map is made).
   aside - the field may also drop the nested `CLAUDE.md` files - is taken into FR-001 and FR-004.
 - **Round 2 (2026-09-20) - all four items RESOLVED; CHANGES REQUIRED on one new item, applied.** The renumbering
   left `measure/dispatch_seeded.sh` citing FR-004 for the dispatch setting, which is FR-003 now: corrected.
+- **Round 3 (2026-09-20) - FAITHFUL.** The orphaned id verified corrected; every id `plan.md` and `tasks.md` cite
+  exists and means what it is cited for; nothing new introduced.
