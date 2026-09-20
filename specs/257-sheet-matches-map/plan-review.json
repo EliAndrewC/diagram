@@ -1,6 +1,6 @@
 {
  "feature": "257-sheet-matches-map",
- "plan_sha256": "074b14e7575138a3985028f2342e000594c9d42283f6fb06c3c5814e4e416d24",
+ "plan_sha256": "434e876b927158209a4168111d41250160156b9022e22561fe5e281a7c369b33",
  "reviewed": "2026-09-20",
  "declared": "spec-fidelity",
  "decisions": [
@@ -9,70 +9,70 @@
    "summary": "a tree is a circle with the canopy fill (TREE_FILL #7A8C5C), own or its group's, or in <g id=\"trees\">; the fence group's lines become fence_segs",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-001 word for word - a tree is known by its drawing so the sheets drawn before this feature carry trees without a retrofit; the fill is the one every pool sheet's canopies already carry (verified: the shrine sheet and the four magistracy sheets). fence_segs is what FR-002's 'a wall or fence stroke' needs."
+   "why": "FR-001 word for word - a tree is known by its drawing so the sheets drawn before this feature carry trees without a retrofit. fence_segs is what FR-002's 'a wall or fence stroke' needs. Unchanged by the D7 amendment and re-stated from the CLEAR verdict of 2026-09-20."
   },
   {
    "id": "D2",
    "summary": "shared.trees_overlap: a canopy against every footprint, furniture rect, wall band, divider, fence segment, non-tree glyph, tub and label by closest-point distance and against every other canopy, tolerance WALL_OVERLAP_MIN_PX; fixture = the Hoshigaoka sheet as committed",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "the list matches FR-002's list; the tolerance is the built-footprint overlap check's own constant (checks.py WALL_OVERLAP_MIN_PX = 0.5, used by shared.py's footprint overlap), which is what FR-002 demanded instead of a second number. FR-002 itself names the committed sheet as the artifact the check must fire on, so using it as the red fixture serves both clauses; US1's building-corner case is owed by T03's unit tests, not by the fixture."
+   "why": "the list matches FR-002's list; the tolerance is the built-footprint overlap check's own constant, which is what FR-002 demanded instead of a second number; FR-002 names the committed sheet as the artifact the check must fire on. Unchanged by the D7 amendment and re-stated."
   },
   {
    "id": "D3",
    "summary": "the declaration line and its parser: **On map**: <manifest> - <key> at (x, y) = <sheet id>, Context.on_map",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-003's line, with one field added: the trailing '= <sheet id>' names the rect that IS the subject, which FR-004(a)'s transform needs an origin for and which FR-003's own shape does not supply. It adds information rather than removing any, and FR-003's named parts are all present. RECORD-KEEPING: FR-003 quotes the line literally and should be amended to carry the field, so spec, contracts/on-map.md and onmap.py agree."
+   "why": "FR-003's line. The previous round's RECORD-KEEPING item is now closed: FR-003 as amended quotes the whole line including '= <the sheet id of the subject>', so spec, plan and contracts/on-map.md agree."
   },
   {
    "id": "D4",
    "summary": "mapmatch.py: load_map, the CLASSES table, the Transform, frame_in_map, and check(ctx) running directions (b), (c), (d) with MAP_GRAIN_PX = 15",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "the class table reproduces FR-004's table row for row, the water point (well or basin) as one class included; the grain is m:map-grain (R1), whose command re-runs and reproduces the ring radii 54/66/80/96/112 and the torii pitch of 15 px; the declaration refusals are FR-005's."
+   "why": "the class table reproduces FR-004's table row for row, the water point (well or basin) as one class included; the grain is m:map-grain (R1), whose recorded command re-runs clean (make figures: 0 moved, 0 outside band, 0 not re-measured); the declaration refusals are FR-005's. Unchanged by the D7 amendment."
   },
   {
    "id": "D5",
    "summary": "two registry rows, both shared, each with a red fixture; the report prints both in registry order",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-002, FR-004 and FR-008 as written."
+   "why": "FR-002, FR-004 and FR-008 as written. Unchanged by the D7 amendment."
   },
   {
    "id": "D6",
    "summary": "site items: a required program item gains \"site\": \"<class>\" and is asked for only where the declared map shows that class inside the frame; the shrine's grove (tree) and burial_ground are the two; with no declaration the item is required as before",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "this is the GM's own sentence - 'we shouldn't put any trees or graveyard on the shrine diagram if those are not in correspnding places on the village map' - and both classes it covers are classes the GM named, so the one justification is not stretched over two unlike things. FR-006 requires no grove and no burial ground on the redrawn sheet and FR-007 requires the shrine program's site knob to say so; a program item left unconditional would have made FR-006 fail check_program. The no-declaration path keeps every other sheet's program whole."
+   "why": "this is the GM's own sentence - 'we shouldn't put any trees or graveyard on the shrine diagram if those are not in correspnding places on the village map' - and both classes are classes the GM named, so the one justification is not stretched over two unlike things. FR-006 requires no grove and no burial ground; FR-007 requires the program's site knob to say so. Unchanged by the D7 amendment."
   },
   {
    "id": "D7",
-   "summary": "the redraw per R3: hall 60 x 48 ft facing south, arch 20 ft in front, well 108 ft north on the axis inside a fence carried north, swept ground to the frame, no grove, no burial ground, no lane outside the arch; the frame and the overrides in the notes",
+   "summary": "the redraw per R3: hall 60 x 48 ft facing south, arch 20 ft in front, the well 108 ft north of the hall's center on the axis OUTSIDE the fence, which closes 15 ft behind the sanctuary; swept ground to the frame, no grove, no burial ground, no lane outside the arch; the frame (100 ft either side, 60 ft in front of the arch, 20 ft behind the well) and the overrides in the notes",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "every figure is FR-006's or R3's, including the frame (60 ft in front of the arch, 20 ft behind the well, 100 ft either side). Dropping the lane outside the arch is not in FR-006's list but follows from FR-004(b): the map records no lane there, so a sheet lane would be a feature the map does not show."
+   "why": "RE-REVIEWED after the amendment. Every map-derived figure is FR-006's and R3's, and each re-derives from the recorded manifest independently: religious[0] at (392, 1074), 30 by 24 px at meta.ftpx 2 = 60 by 48 ft; the shrine well at (392, 1020) = 54 px = 108 ft due north of the hall's center on the axis; the one torii at (392, 1096) = 22 px south of center = 20 ft in front of the 48 ft hall's south face. The well's PLACE is unchanged by the amendment, so the correspondence the GM asked for - the sheet showing what the map shows at the shrine - is untouched. The one thing that moved is where the FENCE runs, and a fence is not a class the map records (FR-004's table omits it; R3 puts the fence below the map's resolution), so FR-004's own words make the map's silence about it not evidence and leave the fence to the sheet: the plan says as much ('the map records no fence, so where it runs is the sheet's own'). Closing the fence 15 ft behind the sanctuary is therefore a drawing dimension inside what FR-006 as amended states in words ('outside the fence, which closes behind the sanctuary as a shrine's does'), not a narrowing of it; at 7.5 map px it is under the 15 px grain and cannot make or break a correspondence finding. The frame is unchanged, so the well stays inside it (20 ft behind the well) and R3's inventory of what falls in the frame still holds. Dropping the lane outside the arch remains FR-004(b)'s consequence: the map records no lane there."
   },
   {
    "id": "D8",
    "summary": "the rule written into buildings.md, the shrine program's knob 4, and a building-review pass",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-007's three places, no more."
+   "why": "FR-007's three places, no more. Unchanged by the D7 amendment."
   },
   {
    "id": "D9",
    "summary": "size-audit and building-review on the redrawn sheet, one agent each, two ledger rows, escalation-check",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-006's last sentence."
+   "why": "FR-006's last sentence. Unchanged by the D7 amendment - the size-audit finding that produced the amendment is the pass FR-006 already asked for, applied to the sheet rather than added to the scope."
   },
   {
    "id": "D10",
    "summary": "unit tests per module, the registry test, the sweep, make done at 100%, m:sweep-cost re-measured",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-008 and SC-004."
+   "why": "FR-008 and SC-004. Unchanged by the D7 amendment; m:sweep-cost re-runs inside its stated band."
   },
   {
    "id": "D11",
@@ -80,14 +80,14 @@
    "class": "narrowing",
    "ruling": "LEGITIMATE",
    "verdict": "EXCEPTION",
-   "why": "It IS an except-when against a registered check, and FR-006 says the redrawn sheet 'passes every registered check', so it was judged as an exception rather than waved through. It survives all three tests. (1) Impossible otherwise: FR-006 fixes the frame in feet - 100 ft either side of the axis, 60 ft in front of the arch, 20 ft behind the well - precisely so the lane, grove, pond and byre stay outside it (R3), while viewbox_cropped requires no side to leave more than ~25 px of parchment beyond the INK, and ink_bounds discounts a page-filling ground rect (its 'nothing drawn to crop to' path), so the swept ground cannot supply the ink. The two rules cannot both hold without changing FR-006's stated numbers. (2) Implied by the GM's words: 'make the diagram view match what is shown on the larger map' makes the map, not the ink, the chooser of the view; the crop rule's premise is the opposite one and is what the request inverts. (3) It does not gut the rule's purpose: an oversized frame is still bounded, by FR-004(c), which requires every map feature inside the frame to be on the sheet, and the two non-margin findings are not lost - mapmatch reports 'the sheet has no viewBox, so its frame cannot be laid on the map'. RECORD-KEEPING: the exception lives only in plan.md and registry.py; FR-006's 'passes every registered check' should carry the clause."
+   "why": "Re-stated from the CLEAR verdict of 2026-09-20 and unaffected by D7, whose frame is unchanged. It survives all three tests. (1) Impossible otherwise: FR-006 fixes the frame in feet precisely so the lane, grove, pond and byre stay outside it (R3), while viewbox_cropped requires no side to leave more than about 25 px of parchment beyond the INK and discounts a page-filling ground rect, so the swept ground cannot supply the ink; the two rules cannot both hold without changing FR-006's stated numbers. (2) Implied by the GM's words: 'make the diagram view match what is shown on the larger map' makes the map, not the ink, the chooser of the view. (3) It does not gut the rule's purpose: the frame is still bounded by FR-004(c), and the missing-viewBox finding is not lost - mapmatch reports it. The previous round's RECORD-KEEPING item is now closed: FR-006 carries the clause ('passes every registered check that runs on a sheet on a map - the crop check does not run on one, and reports that the frame is the map's instead')."
   },
   {
    "id": "D12",
    "summary": "a size is held to one map px per side, a position to the 15 px grain",
    "class": "within",
    "verdict": "CLEAR",
-   "why": "FR-004(d) as amended states exactly this, with the same reason (the map records a footprint to the pixel and a sheet can draw it exactly; the grain is for positions the map placed by search), and R1's decision paragraph says it too. The plan restates the spec rather than deciding anything."
+   "why": "FR-004(d) as amended states exactly this, with the same reason, and R1's decision paragraph says it too. The plan restates the spec rather than deciding anything. Unchanged by the D7 amendment."
   },
   {
    "id": "U1",
@@ -102,6 +102,13 @@
    "class": "within",
    "verdict": "CLEAR",
    "why": "the spec's Decisions Recorded table places the record in exactly those places and says the record's country-shrine section is unchanged; the map overrides this SHEET, not the research."
+  },
+  {
+   "id": "U3",
+   "summary": "unlabeled, new with the amendment: the fence's set-back of 15 ft behind the sanctuary is a drawing dimension the plan chooses, carried with its source (the size-audit of 2026-09-20) rather than measured from the map",
+   "class": "within",
+   "verdict": "CLEAR",
+   "why": "the spec leaves the distance open ('closes behind the sanctuary') and the map records no fence, so no map figure is being contradicted; the number is labeled with the date and the pass that produced it, and it is below the map's drawing grain, so it changes no correspondence the GM asked for. Adjudicated separately from D7's map-derived figures rather than under one justification."
   }
  ],
  "verdict": "CLEAR"

@@ -77,8 +77,11 @@ map's own render (2026-09-20):** (observed 2026-09-20; method: the map's placeme
   seven-arch avenue but the manifest records `torii_count: 1` and the render draws one (reported to
   the GM under spec FR-009; the sheet matches what is drawn);
 - the shrine's own well, 108 ft due north of the hall's center, on its axis, behind the hall;
-- swept ground: the manifest's `clearings` around the shrine cover about 292 by 272 ft - the whole
-  of a sheet frame two hundred feet on a side;
+- bare ground: the manifest's `clearings` around the shrine cover about 292 by 272 ft of the hall's
+  surroundings, their north edge about 20 ft behind the hall on the axis; the frame's north band, the
+  well included, lies on the map's grazing commons, whose scrub scatter is draw-time ink below a
+  sheet's resolution (the map's render shows plain ground there, the tufts beginning about at the
+  frame's west edge and east of the lane) - so the sheet draws bare ground to the frame's edge;
 - no tree crown, grove clump or forest patch inside the frame, and none near it: the nearest
   recorded tree crown is 238 ft from the hall's center, the water-mouth grove's nearest clump center
   258 ft, and the grove's drawn outline comes no nearer than 163 ft - the outline's nearest edge
