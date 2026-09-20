@@ -47,7 +47,7 @@ def read(rel: str) -> str:
 
 def comments(html: str) -> list[tuple[int, int]]:
     """The [start, end) of every HTML comment. A heading inside one is not a section: the registry
-    carries an 8,021-byte commented-out block holding two whole `<h2>` groups (R1)."""
+    carries an 8,042-byte commented-out block holding two whole `<h2>` groups (R1)."""
     return [(m.start(), m.end()) for m in re.finditer(r"<!--.*?-->", html, re.S)]
 
 

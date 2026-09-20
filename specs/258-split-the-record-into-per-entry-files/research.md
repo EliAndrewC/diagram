@@ -144,7 +144,7 @@ without a human choosing them. Is there anything in a note to derive a key FROM,
 
 **Finding.** Over the whole record: **1,860 references** and **1,850 notes**.
 
-- **1,524 notes (82%) lead with their source key** - `<a href="..."><code>fei-1939</code></a> - which is
+- **1,524 of the 1,850 notes lead with their source key** - `<a href="..."><code>fei-1939</code></a> - which is
   the natural key. The other **326 lead with no key** (an absence note, a note that reasons from several
   works, a note that quotes the GM), and take a key from their question's slug and their ordinal.
 - **A source key is repeated within one page 635 times**, so the key alone is not unique: the rule is

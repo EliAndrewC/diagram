@@ -278,42 +278,43 @@ files they replace; the diff is empty.
 
 ### Measurable Outcomes
 
-- **SC-001**: The largest hand-edited file in the record falls from 1,150,367 bytes to under 40,000, and
+- **SC-001**: (FR-007, FR-008, FR-008a, FR-011, FR-013, FR-016) The largest hand-edited file in the record falls from 1,150,367 bytes to under 40,000, and
   the entry a session or an agent opens is about 1,200 bytes for a source (the median of 920) and
-  between 2,664 and 9,279 for a question, by page average. The bar clears the two largest fragments the
+  between 2,664 and 9,279 for a question, by page average. The fragment that actually decides the bar is
+  the largest single question, `fields.html`'s paddy plots at 37,583 - 2,417 bytes of headroom, kept
+  deliberately tight (R1). The bar clears the two largest fragments the
   split will create that are not questions, both measured: the registry's front matter at 8,712 bytes
   (8,042 of them the commented-out block) and the largest notes file any question would get, 28,118
-  (R1). (FR-007, FR-008, FR-008a, FR-011, FR-013, FR-016)
-- **SC-002**: A check over one entry reads that entry: on the recorded case of FR-026 the RECORD bytes
-  entering the agent's context fall by at least 90% against its recorded whole-page run - it reads the
-  fragment it was given and its notes, and nothing else under `research/` - and it reports the same
-  findings. The fall in the agent's WHOLE input is reported by FR-026's run rather than held to a bar,
-  because it depends on how much of a given run is the page: the recorded runs range from 23% to 98%
-  (R3). (FR-023, FR-024, FR-026)
-- **SC-003**: At the landing of stages 1 and 2, every assembled page is byte-identical to the file it
+  (R1).
+- **SC-002**: (FR-023, FR-024, FR-026) A check over one entry reads that entry, and nothing else under `research/`: the
+  fragment it was given and its notes. On the recorded case of FR-026 that is a few thousand bytes
+  against the 91,926 its whole-page run read (R3), and it reports the same findings. The fall in the
+  agent's WHOLE input is reported by FR-026's run rather than held to a bar, because it depends on
+  how much of a given run was the page, which the recorded runs put between a quarter and nearly all
+  of it (R3).
+- **SC-003**: (FR-001, FR-006, FR-009, FR-013, FR-014, FR-019) At the landing of stages 1 and 2, every assembled page is byte-identical to the file it
   replaces: the diff is empty. At stage 3 two things change, both consequences of allocating numbers in
   document order: the numbers themselves with the ids and back links that carry them, and - on the 16
   pages whose references are not in ascending order (R4) - the ORDER of the notes on the citations page,
   which now follows the order of the assertions. What is held fixed and checked is the pairing: every
   assertion carries the same note body it carried before, matched by the reference's position in the
-  text, and the multiset of note bodies on each page is unchanged. (FR-001, FR-006, FR-009, FR-013,
-  FR-014, FR-019)
-- **SC-004**: No footnote number is typed by hand anywhere in the sources: a search of the fragments finds
-  no `fn-<n>`, `fnref-<n>` or hand-written back link. (FR-017, FR-018, FR-021, FR-022)
-- **SC-005**: A stale committed page cannot reach main: it fails the gate and both push routes refuse it,
-  each naming the page. (FR-002, FR-003, FR-004)
-- **SC-006**: A dangling reference, an unreferenced note, a duplicate key and a duplicate prefix each fail
+  text, and the multiset of note bodies on each page is unchanged.
+- **SC-004**: (FR-017, FR-018, FR-021, FR-022) No footnote number is typed by hand anywhere in the sources: a search of the fragments finds
+  no `fn-<n>`, `fnref-<n>` or hand-written back link.
+- **SC-005**: (FR-002, FR-003, FR-004) A stale committed page cannot reach main: it fails the gate and both push routes refuse it,
+  each naming the page.
+- **SC-006**: (FR-006a, FR-014, FR-020) A dangling reference, an unreferenced note, a duplicate key and a duplicate prefix each fail
   the assembly with the offending name and file in the message; and a split whose section count or
   heading ids differ from the page it came from fails, proven on the registry, where a comment-blind cut
-  finds five sections where a reader sees three. (FR-006a, FR-014, FR-020)
-- **SC-007**: Every test that reads the record passes unchanged, and the map modals resolve the same
-  questions and open the same anchors as before. (FR-027, FR-029)
-- **SC-008**: An edit aimed at an assembled page never silently lands: it is rewritten to the fragment or
-  refused with the candidates named. (FR-028)
-- **SC-009**: A session can find and open any entry without reading a page: one glob by source key, one
-  grep over a page directory. (FR-010, FR-012, FR-015, FR-025)
-- **SC-010**: The registry's prose survives the split: every word of its front matter, its three visible
-  sections and its closing is in a file, and none of it is inside a program. (FR-008)
+  finds five sections where a reader sees three.
+- **SC-007**: (FR-027, FR-029) Every test that reads the record passes unchanged, and the map modals resolve the same
+  questions and open the same anchors as before.
+- **SC-008**: (FR-028) An edit aimed at an assembled page never silently lands: it is rewritten to the fragment or
+  refused with the candidates named.
+- **SC-009**: (FR-010, FR-012, FR-015, FR-025) A session can find and open any entry without reading a page: one glob by source key, one
+  grep over a page directory.
+- **SC-010**: (FR-008) The registry's prose survives the split: every word of its front matter, its three visible
+  sections and its closing is in a file, and none of it is inside a program.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -352,10 +353,9 @@ sees, so they are declared here rather than left to the diff.
   (1) FR-005 required every assembled page to carry a "this is assembled" notice in its own text, which
   no record page carries today and which would have added reader-visible bytes at the moment SC-003 says
   the diff is empty - deleted, dropped from SC-005's list, and the instruction moved to where it costs no
-  byte of the record: FR-025's operative doc and FR-028's guard message. (2) SC-002's 90% bar was
-  unreachable under its plain reading (on `255-qc-urban`, swapping a fragment for the page is a 62% fall
-  in total input) - it now holds the RECORD bytes to 90% and has FR-026 report the whole-input fall
-  rather than bar it. (3) The GM's premise that the citations page is script-assembled is the opposite of
+  byte of the record: FR-025's operative doc and FR-028's guard message. (2) SC-002's bar was unreachable
+  under its plain reading, because most of a recorded run's input is not the page - it now states the
+  bytes it means, and has FR-026 report the whole-input fall rather than bar it. (3) The GM's premise that the citations page is script-assembled is the opposite of
   the truth and stage 3 depends on which is so - the Summary now corrects it, as it already corrected the
   premise R2 answers. (4) FR-012 cited the GM's ungapped example as the authority for gapping - it now
   cites decision 1 of the four they approved, and states the gap. (5) Three figures: the upper per-page
@@ -396,3 +396,20 @@ sees, so they are declared here rather than left to the diff.
   contains it, because a research page is cut on `<h2>` alone. The other two findings were the plan's
   own - a `make quick` baseline where constitution XIII asks for `make done`, and a citations-page
   fragment inventory that dropped the hand-authored bytes between the works block and the notes.
+- Round 3 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED on the amendment, six items, all
+  applied. (1) Half of FR-008a was FALSE: the two headings in the record that do not begin their line are
+  both inside the comment, so no real heading stands off the line start - the clause is kept, and now says
+  it guards a case the record does not carry, so that no cut is ever anchored to the line start. (2) 8,021
+  was a character count stated as bytes: 8,042, and `measure.py` now computes it through `size()` like
+  every other figure. (3) SC-010, (4) T07 and (5) `quickstart.md` still counted five registry groups.
+  (6) The remedy the amendment named was required nowhere - FR-006a now requires the section count and the
+  heading ids to be checked against the page, cited by SC-006, with task T08a.
+- Round 4 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, two items, both applied - the
+  `comments()` docstring in `measure.py` still asserted the 8,021 figure round 3 had removed, and the
+  Review history had no round 3 entry. The round also settled two contested figures by re-measuring: the
+  largest single question is 37,583 (`fields.html`), not round 3's 24,346, which is `urban-features.html`'s
+  own maximum - so SC-001's 40,000-byte bar holds with 2,417 bytes of headroom, and the criterion now names
+  that binding figure on the reviewer's aside. It also confirmed FR-006a's tests check the page rather than
+  agreeing with the splitter, and noted that the split direction cannot fire the section-count refusal (the
+  page's sections are counted by the same function the split used) - T08a builds it in the assembly
+  direction, where it can fail.
