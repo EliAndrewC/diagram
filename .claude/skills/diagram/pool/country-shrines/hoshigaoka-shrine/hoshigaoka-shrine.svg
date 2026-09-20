@@ -56,16 +56,17 @@
     <text x="211" y="815" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
   </g>
 
-  <!-- THE PRECINCT: swept gravel inside the fence (100 x 162 ft), carried north to hold the well the map puts 108 ft behind the hall -->
-  <rect x="290" y="146" width="300" height="486" fill="url(#keidai-gravel)" id="precinct"/>
+  <!-- THE PRECINCT: swept gravel inside the fence (140 x 99 ft), closing 15 ft behind the sanctuary as a shrine's does; the well the map
+       puts 108 ft behind the hall stands OUTSIDE it on the axis, reached from the village side (the size-audit of 2026-09-20) -->
+  <rect x="230" y="335" width="420" height="297" fill="url(#keidai-gravel)" id="precinct"/>
   <!-- The fence (tamagaki): a low paling all round, broken at the south for the arch and at the west for the household's service way -->
   <g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none" stroke-linecap="square">
-    <line x1="290" y1="146" x2="590" y2="146"/>
-    <line x1="290" y1="146" x2="290" y2="470"/>
-    <line x1="290" y1="488" x2="290" y2="632"/>
-    <line x1="590" y1="146" x2="590" y2="632"/>
-    <line x1="290" y1="632" x2="416" y2="632"/>
-    <line x1="464" y1="632" x2="590" y2="632"/>
+    <line x1="230" y1="335" x2="650" y2="335"/>
+    <line x1="230" y1="335" x2="230" y2="470"/>
+    <line x1="230" y1="488" x2="230" y2="632"/>
+    <line x1="650" y1="335" x2="650" y2="632"/>
+    <line x1="230" y1="632" x2="416" y2="632"/>
+    <line x1="464" y1="632" x2="650" y2="632"/>
   </g>
 
   <!-- The approach (sando): a 10 ft gravel way from the arch to the hall's front step - 20 ft, as the map has it -->
@@ -80,7 +81,7 @@
     <rect x="421" y="627" width="38" height="2"/>
   </g>
 
-  <!-- The shrine's well - its one water point - 108 ft behind the hall on the axis, where the village map sites it -->
+  <!-- The shrine's well - its one water point - 108 ft behind the hall on the axis, where the village map sites it, outside the fence -->
   <rect x="433" y="169" width="15" height="15" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" id="well"/>
   <circle cx="440.5" cy="176.5" r="4" fill="#3A3A34"/>
   <text x="464" y="180" text-anchor="start" font-size="7" font-style="italic" fill="#4A4640">well</text>
@@ -96,7 +97,9 @@
     <line x1="482" y1="428" x2="482" y2="572"/>
     <line x1="482" y1="536" x2="530" y2="536"/>
     <line x1="494" y1="536" x2="494" y2="572"/>
+    <line x1="398" y1="470" x2="482" y2="470"/>
   </g>
+  <!-- the altar bay: the hall's rear 14 ft against the sanctuary wall, the worship floor 28 x 34 ft before it (a village hall's measured depth) -->
   <!-- the villagers' hall: its raised step on the approach, the altar band at its rear toward the sanctuary -->
   <rect x="398" y="572" width="84" height="6" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
   <rect x="416" y="432" width="48" height="5" fill="#6B2A18"/>
@@ -108,8 +111,8 @@
   <text x="512" y="550" text-anchor="middle" font-size="6" font-style="italic" fill="#5C4830">writing</text>
   <text x="512" y="557" text-anchor="middle" font-size="6" font-style="italic" fill="#5C4830">room</text>
   <text x="512" y="565" text-anchor="middle" font-size="5.5" font-style="italic" fill="#5C4830">(registers)</text>
-  <!-- the dwelling's own door, on the east wall by its entry floor -->
-  <rect x="526" y="506" width="4" height="12" fill="#4A3318"/>
+  <!-- the dwelling's own door, on the east wall opening onto its entry floor beside the writing room -->
+  <rect x="526" y="548" width="4" height="12" fill="#4A3318"/>
   <!-- the kitchen end: the hearth, and the kitchen door on the north wall -->
   <text x="374" y="532" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">kitchen</text>
   <rect x="370" y="460" width="8" height="8" fill="#3A2010"/>

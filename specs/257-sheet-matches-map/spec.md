@@ -151,8 +151,9 @@ sheet is on no map and checks nothing.
 - **FR-006 - the Hoshigaoka sheet matches the Hoshigaoka map.** The country-shrine exemplar is redrawn
   to what the village map shows at the shrine: the hall at the map's footprint and facing, the arch
   where the map's torii stands, the shrine's one water point where the map's well stands - behind
-  the hall on its axis, so the fence runs north far enough to hold it, and no second water point
-  beside the approach - swept ground around, no grove and no burial ground. Its frame is stated in
+  the hall on its axis, outside the fence, which closes behind the sanctuary as a shrine's does,
+  and no second water point beside the approach - swept ground around, no grove and no burial
+  ground. Its frame is stated in
   the notes and shows what the map shows there and nothing the map does not: 60 ft in front of the
   arch to 20 ft behind the well, and 100 ft either side of the axis, so the connector lane (nearest
   148 ft from the arch, 112 to 172 ft east of the axis), the water-mouth grove, the crescent pond and
@@ -222,7 +223,9 @@ sheet is on no map and checks nothing.
 - The map draws ONE torii in front of the shrine (its manifest records one; its generator's comment
   promises seven) - the sheet matches the one drawn; the disagreement is reported to the GM (FR-009).
 - The map's shrine well stands 108 ft due north of the hall's center, 84 ft behind the hall's rear
-  face; the redrawn sheet's fence and frame extend north to hold it (research.md R3).
+  face; the redrawn sheet's frame extends north to hold it, its fence closes behind the sanctuary
+  and the well stands outside the fence on the axis (research.md R3; the size-audit of
+  2026-09-20 ruled that a fence carried to the well put public ground behind the deity's house).
 - The map's connector lane, water-mouth grove, crescent pond, nearest byre and the village graveyard
   all lie outside the sheet's stated frame - 100 ft either side of the axis, from 60 ft in front of
   the arch to 20 ft behind the well (research.md R3); the swept clearing the map records around the
@@ -268,3 +271,6 @@ sheet is on no map and checks nothing.
 - Round 5 (2026-09-20, `spec-fidelity-verify`, Opus): FAITHFUL. Both round-4 items RESOLVED; the
   FR-006 amendment judged the request's own consequence, not new scope. (A round-5 dispatch made
   while the round-4 fixes had only half landed was stopped before it reported and is not a round.)
+- Amendment after acceptance (2026-09-20): FR-006 and the well assumption - the fence closes behind
+  the sanctuary and the well stands outside it, on the size-audit's finding that a fence carried to
+  the well enclosed public ground behind the deity's house; the well's place is unchanged (the map's).
