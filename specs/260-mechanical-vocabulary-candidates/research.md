@@ -130,8 +130,10 @@ are given:
 | the **question pages** - the 19 assembled pages with a fragment directory beside them, `cities/`'s seven included | 19 | 321 | 5,584 | 13 | **0** |
 | **every** HTML under `research/` but `assets/` - the citations pages and the per-source pages too | 1,511 | 3,766 | 32,836 | 4 | **0** |
 
-Largest list either way: **115**, `archetypes`, the dike-pond hamlet question; smallest 0. The
-question-page sweep takes **0.83 s**, against FR-010's 5 s bar.
+Largest list on the question pages: **115**, `archetypes`, the dike-pond hamlet question; smallest 0.
+On the wider set the largest is 626, the whole notes file of `urban-features`, which is not an entry a
+check is dispatched on. The question-page sweep takes **0.83 s** and the wider one **4.01 s**, both
+under FR-010's 5 s bar - and no dispatch ever asks for either, since a session runs one page.
 
 **SC-003 is claimed on the WIDER of the two**, because "no registry source key appears in a candidate
 list over the whole record" should be the strongest reading: 32,836 candidates over 1,511 files, and
