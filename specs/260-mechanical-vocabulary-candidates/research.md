@@ -93,6 +93,21 @@ wall clock on a shared container):
 
 (seconds, wall clock on a shared container)
 
+**Before and after, the number a session actually experiences** (observed 2026-09-20; method: the same
+command three times in each of two trees on a quiet machine - a detached worktree at `26f8bb4f`, the
+commit before this feature, and the clone with the pass in it):
+
+| | |
+|---|---|
+| `make record-prepass PAGE=ways SECTION=010` BEFORE | 0.11, 0.11, 0.10 |
+| the same command AFTER | 0.48, 0.47, 0.48 |
+| FR-010's bar | 5 |
+
+The pass costs about **0.37 s an invocation**, nearly all of it the corpus walk, and lands at a tenth of
+the bar. There is no before counterpart to the 0.79 s in-process sweep, because before this feature
+there was no pass to sweep; the per-invocation pair is the comparison FR-010 is about, since the bar
+exists so that a session runs this before every dispatch rather than skipping it.
+
 **And one thing it cost before it was measured** (observed 2026-09-20, same method). The first version
 walked the record for every section's notes, and read the corpus once per page: the whole-record sweep
 took **7.52 seconds**, over the bar. Both are the shape this engine's performance doc names as the only slow shape it has ever found -

@@ -1,65 +1,75 @@
 {
  "feature": "260-mechanical-vocabulary-candidates",
- "plan_sha256": "33f6a24997c2d8d902e40f846d2f92b3413b73abd67f0e2bd9229659513ba11d",
+ "plan_sha256": "3a3c2f1609c221be512c1ec919f703e118fa885579bf85496fa43da9cea54bd4",
  "reviewed": "2026-09-20",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1-text-basis",
-   "summary": "D1 names the candidate pass's first input as 'the section's visible text (the prepass strips comments and tags today)', i.e. the assembled page section the prepass parses now.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Measured on the plan's own single-artifact target: the assembled ways.html section yields 181 distinct words and 7 candidates at cutoff 2, catching 3 of the 12 known terms (girder, footplank, obliquity). The spec's 34 candidates and 9 of 12 (SC-001, SC-002, R2) were measured over the entry FRAGMENT plus its .notes.html - 27 of the 34 come from the notes file. Followed literally, the plan cannot meet SC-001 or SC-002. The plan must say which text the pass walks, and it is the fragment plus its .notes.html that R2 measured; fragments_for('ways','010') already returns both."
+   "summary": "D1 now names the text the candidate pass walks: the question fragment AND its .notes.html, because that is what record-format is handed, with the assembled-page basis stated beside it.",
+   "class": "within",
+   "why": "Round 1's first block is resolved. Re-measured at this HEAD: the assembled ways section gives 181 distinct words and 7 candidates; the fragment plus its notes gives 34, of which 27 come only from the notes; the shipped prepass reports 34 on make record-prepass PAGE=ways SECTION=010. The basis now matches SC-001 and SC-002. ONE FIGURE IN IT IS WRONG: D1 says the assembled basis 'catches 3 of the eleven proposed terms'. Measured, the 7 are beam's, decks, footplank, girder, obliquity, sine, undercutting - 2 of the eleven proposed (girder, footplank, both CORE) and 0 of the 3 that varied; the third was obliquity, which every run DISMISSED and which the eleven do not include. The old '3 of 12' was right only while 12 counted the dismissal. The correct numbers make D1's own argument stronger, since all of the variance-relevant catch lives in the notes (0 of 3 against 2 of 3)."
   },
   {
    "id": "D1-registry-keys",
-   "summary": "D1 enumerates the function as candidates(text, index, corpus, cutoff=2) - 'three inputs, and every one of them already exists' - with no key input and no definition of how a registry source key is recognized.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-004 and SC-003 require that a registry source key never be a candidate. The plan's enumerated mechanism drops it; only T04 restores it, unspecified. It is not free: at cutoff 2 the list carries nrcs (2 fragments), nrcs-designed and timber-bridge, and nrcs is one of R2's 9 caught terms, so a loose 'is a key or a piece of one' test moves both SC-001's 34 and SC-002's 9. D1 must carry the key set as a fourth input and say how a key is matched (whole token against the registry's own keys, not a substring)."
+   "summary": "D1 lists the registry keys as a fourth input to rare_words and states the match rule: whole token against SOURCES.html's own key ids, never a substring.",
+   "class": "within",
+   "why": "Round 1's second block is resolved, and the rule is the right one: nrcs is a candidate at 2 fragments and is the prefix of the key nrcs-ts14q-abutments, so a substring test would delete one of the two varying terms the list catches. The implementation matches (registry_keys reads the h3 ids; rare_words tests word membership). Swept independently over all 20 assembled pages including the seven cities pages: 1,245 sections, 10,133 candidates, no registry key raised anywhere (SC-003)."
   },
   {
    "id": "D1-purity",
-   "summary": "The candidate function is pure over its inputs so its test needs no filesystem; the reading stays in the prepass at run time (Technical Context: 'Storage: none. The corpus is derived at run time').",
+   "summary": "rare_words is pure over its four inputs so its test needs no filesystem; the caller reads them.",
    "class": "within",
-   "why": "Serves FR-006 and the project's rule that a hard-to-test inner function is lifted and tested on plain inputs. Purity is achievable with two file-backed inputs because the caller reads them: the prepass's one real caller is the Makefile record-prepass target, which already resolves the repository root."
+   "why": "Serves FR-006 and the project's rule that a hard-to-test inner function is lifted and tested on plain inputs. Unchanged from round 1."
+  },
+  {
+   "id": "D1-code-spans-unstated",
+   "summary": "FR-004 now also requires that text inside a code span not be scanned at all; D1's text bullet does not mention it, and neither does T04.",
+   "class": "within",
+   "why": "Not a narrowing: the plan decides nothing against it, the implementation does it (without_code), and FR-004 itself records that it removes nothing measured on this entry. It is an omission of wording, not of scope, and D1's text bullet should carry the clause so the plan describes the text the pass actually walks."
   },
   {
    "id": "D2-cutoff-2",
-   "summary": "The cutoff is 2 and the number lives beside the code that applies it, with its measurement.",
+   "summary": "The cutoff is 2, stated beside the code that applies it, and now justified on the honest count - 2 of the 3 terms that varied and 6 of the 8 core - instead of the retracted 9 of 12.",
    "class": "within",
-   "why": "FR-002 states the cutoff and requires it stated where applied. R2 re-runs: 34 candidates and 9 of 12 at 2, and 101 candidates and still 9 of 12 at 20."
+   "why": "FR-002 states the cutoff and requires the measurement beside it. Re-run of measure.py R2 at this HEAD: 21 candidates and TAIL 1 of 3 at cutoff 1; 34 and TAIL 2 of 3, core 6 of 8 at 2; 41, 53, 75, 101 at 3, 5, 10, 20 for the same catch. The plateau argument survives the recount, so the decision stands on the new counting as it did on the old."
   },
   {
    "id": "D3-contract-carries-the-limits",
-   "summary": "What the word-level filter cannot reach (a phrase, a record-common word) goes in record-format's contract, not only in the research record.",
+   "summary": "What the word-level filter cannot reach - two phrases and one record-common word - goes into record-format's contract, not only into the research record.",
    "class": "within",
-   "why": "FR-008 asks for exactly this. The contract is also the only place that can carry it: a defined agent launches with omitClaudeMd (feature 256), so the record is not in the model's context."
+   "why": "FR-008 asks for exactly this, and the contract is the only place that can carry it since a defined agent launches with omitClaudeMd. R3 re-runs: carried deck and spread footing are multi-word, embankment is in 23 fragments. R5, recorded since round 1, shows the run adding all three beyond the list."
   },
   {
    "id": "D4-bar-in-the-operative-doc",
    "summary": "The acceptance bar moves in research/CLAUDE.md; features 258 and 259 keep their specs, including 259's SC-002 recorded unmet.",
    "class": "within",
-   "why": "FR-009 says both halves in the same words."
+   "why": "FR-009 says both halves in the same words. The spec has since grown FR-009a's second bullet, which requires the feature-255 row in docs/efficiency-tooling.md to point at the new bar rather than stand as a second one; D4 does not mention that doc, though the change is already made. Wording to add, not a decision that narrows."
   },
   {
    "id": "CT-corpus-walk-per-invocation",
-   "summary": "Complexity Tracking accepts a walk over the record's 1,479 fragments on every prepass invocation; a shipped word list and a cached frequency file are both rejected.",
+   "summary": "Complexity Tracking accepts a corpus walk on every prepass invocation, rejects a shipped word list and a cached frequency file, and now carries measured figures: 0.31 s for the corpus, 0.79 s for the candidate pass over all 321 entries, and 7.52 s for the first implementation before the notes index and the memoized inputs.",
    "class": "within",
-   "why": "FR-006 requires the corpus derived at run time with nothing shipped or hand-maintained, so the walk is the spec's own choice rather than the plan's addition. The rejection of the cache rests on R4, which research.md has not recorded yet; measured independently today at this HEAD, measure.py R2 - which walks all 1,479 fragments and then walks them again to count - runs in 0.24 s wall, against FR-010's 5 s bar, so the premise holds. The plan should cite that figure rather than an R4 that is still pending."
+   "why": "FR-006 requires the corpus derived at run time with nothing shipped or hand-maintained, so the walk is the spec's choice, not the plan's addition, and round 1's non-blocking item is resolved: the figures are measured, not promised. Re-run at this HEAD, the cheapness premise holds independently - corpus walk 0.31 s (exact match), notes index 0.04 s, candidate pass over every assembled page 1.27 s, 1.78 s in all against FR-010's 5 s bar, and one session invocation 0.45 s (exact match). The DENOMINATOR does not reproduce: R4's '321 sections, 5,592 candidates, median 13' against a sweep over all 20 pages giving 1,245 sections, 10,133 candidates, median 5 (the largest, 115 at the archetypes dike-pond question, matches exactly), and R4's sweep appears not to have covered the seven cities pages. The conclusion is unaffected; the count is to be re-measured and corrected in R4 and here."
   },
   {
    "id": "CC-XII-and-the-bookends",
-   "summary": "Constitution XII marked N/A (no assertion about the world changes) and the performance bookends marked N/A (no generator changes).",
+   "summary": "Constitution XII marked N/A and the performance bookends marked N/A - no generator changes, no research assertion moved.",
    "class": "within",
-   "why": "Correct on both. No research text is edited and no historical question is reopened - tasks.md carries no research: physical task, consistent with that. The change is to scripts/_record_prepass.py, two contract documents and a doc, none of them engine code, so no map is drawn and no perf band moves; the one cost this feature can add is the prepass's own wall time, which FR-010 bars and T02 and T11 bookend."
+   "why": "Correct on both, and unchanged since round 1. The one cost this feature adds is the prepass's own wall time, which FR-010 bars and T02 and T11 bookend."
   },
   {
    "id": "Phase-0-and-the-single-artifact-target",
    "summary": "Phase 0 takes a make done baseline; the single-artifact target is the ways 010 entry feature 259 measured three times.",
    "class": "within",
-   "why": "Constitution XIII, and the spec's own SC-001 and SC-002 are stated on that entry, so the plan measures what the spec was measured on."
+   "why": "Constitution XIII, and SC-001 and SC-002 are stated on that entry, so the plan measures what the spec was measured on."
+  },
+  {
+   "id": "Phases-do-not-name-FR-011",
+   "summary": "Phase 3 is enumerated as T09-T12 and names no step for FR-011 and SC-007 - telling the GM what mechanism was substituted for the one they approved.",
+   "class": "within",
+   "why": "Not a narrowing: tasks.md carries T11a, which is the step, so nothing is dropped by the plan's silence. But FR-011 exists precisely so that this cannot be the thing that falls off the end, and the plan's own phase list is where a session looks last; Phase 3 should name it."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
