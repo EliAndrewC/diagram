@@ -13,7 +13,8 @@ of it is touched. `SOURCES.html` is 1,150,367 bytes and 920 entries; `citations/
 The GM asked whether these should be split into per-entry files that assemble back into the same pages.
 The measurement says yes, and says why: it is not the session's own editing that pays - reads of
 `research/` are 0.56% of all tool output across 284 transcripts, and 90% of them already ask for a window
-rather than a file (R2). It is the CHECKING AGENTS. One research page was 23-98% of everything that
+rather than a file (R2; observed 2026-09-20, method: `measure.py R2` over every transcript on this
+machine - a store that grows, so the totals are a one-shot observation and the shares are what is read). It is the CHECKING AGENTS. One research page was 23-98% of everything that
 entered a recorded agent's context, a median of 68% over the 17 recorded runs - `source-applicability`
 98%, `quote-check` 90%, `record-format` 88%, `entry-drift` 82% (R3) - and feature 251 measured input at 75-90% of an agent's cost. An agent dispatched
 to check one entry reads the other thirty.
@@ -252,9 +253,10 @@ files they replace; the diff is empty.
 - **SC-001**: The largest hand-edited file in the record falls from 1,150,367 bytes to under 40,000, and
   the entry a session or an agent opens is about 1,200 bytes for a source (the median of 920) and
   between 2,664 and 9,290 for a question, by page average (R1). (FR-007, FR-011, FR-013, FR-016)
-- **SC-002**: A check over one entry reads that entry. On the recorded case of FR-026, the bytes the agent
-  reads fall by at least 90% against its recorded whole-page run, and it reports the same findings
-  (R3 for the baseline). (FR-023, FR-024, FR-026)
+- **SC-002**: A check over one entry reads that entry: on the recorded case of FR-026 the agent reads the
+  fragment it was given and its notes, and nothing else under `research/` - against the 91,926 bytes of
+  one page its recorded whole-page run read (R3) - and it reports the same findings. (FR-023, FR-024,
+  FR-026)
 - **SC-003**: At the landing of stages 1 and 2, every assembled page is byte-identical to the file it
   replaces: the diff is empty. At stage 3 the only differences are footnote numbers and the reference ids
   and back links that carry them, and the set of (assertion, note) pairs is unchanged. (FR-001, FR-006,

@@ -54,7 +54,10 @@ has to be ingested. Does the transcript record bear that out?
 **Finding.** Over 284 transcripts: 195,845,246 bytes of tool results in all, of which 1,097,220 -
 **0.56%** - were reads of files under `research/`. Of the 91 reads of record files, **82 (90%) asked
 for a window** rather than a whole file. Over the whole history there were 95 `Edit`/`Write` calls on
-record files, 87,004 bytes of payload between them.
+record files, 87,004 bytes of payload between them. (Observed 2026-09-20; method: `measure.py R2`, over
+`~/.claude/projects/*/*.jsonl` on this machine. The store grows as sessions are recorded - the totals
+moved by 161,473 bytes between two runs an hour apart - so the totals are a one-shot observation and the
+share is the finding.)
 
 **What it decides.** The premise is true of the file and false of the session: a big file does not
 force a big read, because a grep and a windowed read already avoid it. This is why the spec's Summary
@@ -82,7 +85,11 @@ the 17 recorded agent runs (features 251, 255 and 256, each in its own worktree)
 | `entry-drift` (seeded-entry-drift-farmhouse) | 38,805 | 25,827 | 66% |
 | `record-format` (seeded-x-format-towns-opus-medium) | 234,147 | 110,504 | 47% |
 
-Six further runs sit between 23% and 36%; the **median of all 17 is 68%**. Feature 251's census
+(Observed 2026-09-20; method: `measure.py R3`, over the worktree transcripts of features 251, 255 and
+256 kept under `~/.claude/projects/-tmp-*tree/`.)
+
+Six further runs sit between 23% and 36%; the **median of all 17 is 68%** (observed 2026-09-20, same
+method and the same 17 runs as the table above). Feature 251's census
 (`specs/251-*/research.md`) measured input at 75-90% of an agent's cost, so the share above is very
 nearly the share of the bill.
 
