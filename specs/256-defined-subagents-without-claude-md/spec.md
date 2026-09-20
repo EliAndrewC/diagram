@@ -1,6 +1,6 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** AMENDED 2026-09-20 (Amendment 1, awaiting its review - the counter resets); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - the field is set in all twelve,
+**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - the field is set in all twelve,
 the proof is clean on its three cases, every run is in `research.md`.
 
 ## Summary
@@ -128,7 +128,7 @@ FR-010 governs from here: on completion ten of the twelve have a seeded pair of 
 
 ## Decisions Recorded
 
-- **D1 - the proof is sized small, by the GM's standing instruction** (2026-09-19, *"redoing old work is only useful
+- **D1 (the FIRST landing only - reopened by the GM on 2026-09-20, see FR-011) - the proof is sized small, by the GM's standing instruction** (2026-09-19, *"redoing old work is only useful
   insofar as it does give us sensible measurements"*): three cases on the two cheapest tested agents, each with a
   control, as the proposal the GM answered "go" to said. The other seven agents that do have recorded runs are
   covered by FR-001's reading and by the same field behaving the same way, not by a seeded run each.
@@ -153,3 +153,5 @@ FR-010 governs from here: on completion ten of the twelve have a seeded pair of 
   run, and only `settlement-review` and `perf-audit` go to the GM, each with its particular reason. (2) FR-010
   reversed D1 and falsified FR-005 and SC-004 without saying so: FR-011 marks the three as the first landing's and
   states the new tally.
+- **Amendment 1, round 2 (2026-09-20) - FAITHFUL.** Both items verified; the reasons given for holding back
+  `settlement-review` and `perf-audit` ruled particular in the sense of the GM's question. D1 gains a pointer to FR-011.
