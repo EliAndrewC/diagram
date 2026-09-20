@@ -1,0 +1,8 @@
+{
+ "term": "tier",
+ "def": "One rung of the ladder of settlement sizes these maps draw - hamlet, village, town, provincial city, capital - each at its own scale and densities.",
+ "variants": [
+  "tier",
+  "tiers"
+ ]
+}

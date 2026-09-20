@@ -1,0 +1,8 @@
+{
+ "term": "glyph",
+ "def": "The mark a map draws to stand for a feature - a shape chosen so the thing reads at map scale, which is not always the shape the thing has.",
+ "variants": [
+  "glyph",
+  "glyphs"
+ ]
+}

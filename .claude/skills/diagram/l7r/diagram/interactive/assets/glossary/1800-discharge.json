@@ -1,0 +1,7 @@
+{
+ "term": "discharge",
+ "def": "The volume of water a channel carries past a point each second - the flow whose square root sets the channel's width.",
+ "variants": [
+  "discharge"
+ ]
+}

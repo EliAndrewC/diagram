@@ -1,0 +1,8 @@
+{
+ "term": "Manning",
+ "def": "The engineering formula for flow in an open channel from its slope, section and roughness; it yields a width only once four parameters are assumed.",
+ "variants": [
+  "Manning's formula",
+  "Manning"
+ ]
+}

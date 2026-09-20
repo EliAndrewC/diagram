@@ -1,0 +1,7 @@
+{
+ "term": "lognormal",
+ "def": "A right-skewed spread in which most values sit near the median and a long tail runs toward the large - the shape the cadastres show for house and yard sizes.",
+ "variants": [
+  "lognormal"
+ ]
+}

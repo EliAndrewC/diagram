@@ -58,8 +58,12 @@ reader sees (SC-003). And FR-011: the clashes are resolved so that the order sto
 in a place nobody is looking.
 
 **The resolution, and what it changes.** The rule is the obvious one - the term whose own NAME is the
-variant keeps it - and it is checkable rather than a judgment call. Five of the seven already resolve
-that way, so nothing moves; **two change what a reader sees**, and both are corrections:
+variant keeps it - with one thing stated that the first draft left implicit: names and variants are
+compared with case, spaces and hyphens folded. Without that folding the rule does not decide `water
+mouth` at all, because the term that owns it is spelled `water-mouth`; the spec review of 2026-09-20
+measured that and it is the reason the folding is written down. With it, five of the seven resolve to
+the term the page already shows, so nothing moves; **two change what a reader sees**, and both are
+corrections:
 
 - hovering `chaoguan` shows the `chaoguan` definition instead of `lijin`'s;
 - hovering `qiandao` shows the `qiandao` definition instead of `towpath`'s.

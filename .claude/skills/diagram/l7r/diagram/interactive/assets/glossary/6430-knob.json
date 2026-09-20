@@ -1,0 +1,8 @@
+{
+ "term": "knob",
+ "def": "A setting the map varies from settlement to settlement: where the research supports more than one form, the map rolls between them from its own seed instead of the record choosing one for every map.",
+ "variants": [
+  "knob",
+  "knobs"
+ ]
+}

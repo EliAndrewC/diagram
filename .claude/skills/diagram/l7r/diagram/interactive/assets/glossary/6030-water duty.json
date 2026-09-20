@@ -1,0 +1,10 @@
+{
+ "term": "water duty",
+ "def": "The water a crop is owed per unit of land - for paddy about a liter a second per hectare, plus the one-off soaking that puddling takes.",
+ "variants": [
+  "water duty",
+  "duty of water",
+  "true duty",
+  "irrigation duty"
+ ]
+}

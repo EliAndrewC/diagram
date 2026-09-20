@@ -1,0 +1,7 @@
+{
+ "term": "sigma",
+ "def": "The width of a lognormal spread: the larger it is, the further the biggest and smallest cases run from the median.",
+ "variants": [
+  "sigma"
+ ]
+}

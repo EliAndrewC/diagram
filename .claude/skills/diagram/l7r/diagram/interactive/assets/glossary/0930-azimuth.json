@@ -1,0 +1,7 @@
+{
+ "term": "azimuth",
+ "def": "The compass bearing of the sun, in degrees clockwise from north; with its height it fixes where a shadow falls.",
+ "variants": [
+  "azimuth"
+ ]
+}
