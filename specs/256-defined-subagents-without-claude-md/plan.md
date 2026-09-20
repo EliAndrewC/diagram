@@ -7,7 +7,8 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
 
 - **XVI**: the spec is reviewed against the GM's words before any of this is done; this plan is reviewed (MODE 4)
   before a task is ticked. The field is set on all twelve agents in every case (FR-002, FR-004) - no exception at the
-  first landing; Amendment 2's P10 carries the GM's one exception, `spec-fidelity`, named in the tier test.
+  first landing; Amendment 2's P10 carries the one exception the GM approved on the session's
+  measured recommendation, `spec-fidelity`, named in the tier test.
 - **I / VI**: no check's judgment is touched. What changes is what a check is handed at launch, and it is proven on
   recorded findings with a same-setting control (FR-003).
 - **X**: no engine code, no new Python under `l7r/`. One shell harness under the feature's `measure/`, as 251 and

@@ -298,5 +298,9 @@ is theirs and is still described as such.
 Two asides from the plan review that closed that correction (2026-09-20): the tier test's module docstring still said
 every file carries the field - fixed, it now names the exception table. And `plan.md`'s Constitution Check says
 "the GM's one exception", which the reviewer ruled true (only the GM could grant it, and it does not claim they
-ruled unprompted) and not a finding; it is left as it stands, because editing `plan.md` invalidates its CLEAR
-verdict and owes a fresh review round, which is not worth spending on a phrase a reviewer has just called accurate.
+ruled unprompted) and not a finding; it was corrected too, under the plan gate's own escape
+(`PLAN_REVIEW_OK` with its reason, recorded to the guard log and `dev/bypass-log/`). The session had first told the GM
+the edit would cost a fresh review round; the GM asked whether cosmetic edits can be escaped, and they can - that is
+what the escape is for, and the gate's own refusal message says so. Two plan reviews were spent today avoiding it,
+both on edits made AFTER a verdict; the cheaper order is to make a cosmetic edit BEFORE dispatching the review, or
+to batch it with the next substantive change.
