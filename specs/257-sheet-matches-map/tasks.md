@@ -1,6 +1,6 @@
 # Tasks - feature 257, a sheet on a map matches the map, and trees overlap nothing
 
-Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D10). Research: [`research.md`](research.md)
+Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D12). Research: [`research.md`](research.md)
 (R1-R3). Every prose or code task: American spellings, hyphens only. No task here is
 `research: physical`: the feature measures this project's own drawings (R1-R3) and reopens no
 historical question.
@@ -80,7 +80,8 @@ historical question.
       `docs/review-ledger.md`
       research: rendering
 - [ ] T12 The sweep and the registry test green over every pool sheet; the fixtures of feature 254 still
-      fire (they are cut from the old sheet and keep it)
+      fire (they are cut from the old sheet and keep it); the village map's directory unchanged (`git diff
+      --stat` over `legacy-hand-authored-pool/villages/hoshigaoka/` against the claim commit is empty - SC-003)
       research: rendering
 
 ## Phase 5 - the rule, the gate, the push (FR-007, FR-008, FR-009; D8, D10)
