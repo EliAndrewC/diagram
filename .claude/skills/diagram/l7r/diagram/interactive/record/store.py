@@ -32,8 +32,7 @@ def record_pages(record_dir: str = RESEARCH_DIR) -> list[str]:
     research page, from the same directory (stage 3)."""
     top = sorted(f for f in os.listdir(record_dir) if f.endswith(".html"))
     cities_dir = os.path.join(record_dir, "cities")
-    cities = sorted(f"cities/{f}" for f in os.listdir(cities_dir) if f.endswith(".html")) \
-        if os.path.isdir(cities_dir) else []
+    cities = sorted(f"cities/{f}" for f in os.listdir(cities_dir) if f.endswith(".html")) if os.path.isdir(cities_dir) else []
     return top + cities
 
 
@@ -61,9 +60,11 @@ def write_fragments(page_rel: str, record_dir: str = RESEARCH_DIR) -> list[str]:
     written.append(_write(record_dir, where, frag.TAIL, page.tail))
     rebuilt = read_page(page_rel, record_dir)
     if rebuilt != text:
-        raise RecordError(f"{page_rel}: the split does not assemble back to the same bytes "
-                          f"({_first_difference(text, rebuilt)}) - nothing has been removed, but the "
-                          f"fragments in {where}/ are wrong and must not be committed")
+        raise RecordError(
+            f"{page_rel}: the split does not assemble back to the same bytes "
+            f"({_first_difference(text, rebuilt)}) - nothing has been removed, but the "
+            f"fragments in {where}/ are wrong and must not be committed"
+        )
     return written
 
 
@@ -93,7 +94,7 @@ def check(record_dir: str = RESEARCH_DIR) -> list[str]:
     stale = []
     for page_rel in record_pages(record_dir):
         if not os.path.isdir(os.path.join(record_dir, frag.page_dir(page_rel))):
-            continue                                  # not split yet - a stage that has not landed
+            continue  # not split yet - a stage that has not landed
         with open(os.path.join(record_dir, page_rel), encoding="utf-8") as fh:
             committed = fh.read()
         if committed != read_page(page_rel, record_dir):
@@ -110,8 +111,7 @@ def _write(record_dir: str, where: str, name: str, text: str) -> str:
 def _required(where: str, root: str, names: list[str]) -> tuple[str, str]:
     missing = [n for n in (frag.FRONT, frag.TAIL) if n not in names]
     if missing:
-        raise RecordError(f"{where}/: {' and '.join(missing)} missing - a page's front matter and its "
-                          f"closing are fragments like any other, and the assembly will not invent them")
+        raise RecordError(f"{where}/: {' and '.join(missing)} missing - a page's front matter and its closing are fragments like any other, and the assembly will not invent them")
     out = []
     for name in (frag.FRONT, frag.TAIL):
         with open(os.path.join(root, name), encoding="utf-8") as fh:
@@ -126,15 +126,13 @@ def _ordered_sections(where: str, names: list[str]) -> list[str]:
         if name in known or name in ordered or name.endswith(frag.NOTES_SUFFIX):
             continue
         if os.path.isdir(os.path.join(where, name)) or not name.endswith(".html"):
-            continue                                  # an entries directory, checked with its section
-        raise RecordError(f"{where}/{name}: not a fragment name. A page directory holds {frag.FRONT}, "
-                          f"{frag.TAIL}, <prefix>-<heading id>.html and their .notes.html, and nothing else")
+            continue  # an entries directory, checked with its section
+        raise RecordError(f"{where}/{name}: not a fragment name. A page directory holds {frag.FRONT}, {frag.TAIL}, <prefix>-<heading id>.html and their .notes.html, and nothing else")
     seen: dict[int, str] = {}
     for name in ordered:
         at = frag.position_of(name)
         if at in seen:
-            raise RecordError(f"{where}/: {seen[at]} and {name} both claim prefix {at:0{frag.SECTION_DIGITS}d} - "
-                              f"the assembly will not choose between them")
+            raise RecordError(f"{where}/: {seen[at]} and {name} both claim prefix {at:0{frag.SECTION_DIGITS}d} - the assembly will not choose between them")
         seen[at] = name
     return ordered
 
@@ -150,8 +148,7 @@ def _entries(where: str, root: str, section_name: str) -> tuple[Entry, ...]:
             text = fh.read()
         entry = Entry(id=_id_of(name), text=text)
         if frag.key_of(_heading_id(text)) != frag.key_of(entry.id):
-            raise RecordError(f"{where}/{sub}/{name}: its filename says `{frag.key_of(entry.id)}` and its "
-                              f"heading registers `{frag.key_of(_heading_id(text))}` - one of the two is wrong")
+            raise RecordError(f"{where}/{sub}/{name}: its filename says `{frag.key_of(entry.id)}` and its heading registers `{frag.key_of(_heading_id(text))}` - one of the two is wrong")
         out.append(Entry(id=_heading_id(text), text=text))
     return tuple(out)
 
@@ -168,7 +165,7 @@ def _heading_id(text: str) -> str:
 
 
 def _first_difference(want: str, got: str) -> str:
-    for at, (a, b) in enumerate(zip(want, got)):
+    for at, (a, b) in enumerate(zip(want, got, strict=False)):
         if a != b:
-            return f"first difference at byte {at}: {want[at:at + 40]!r} against {got[at:at + 40]!r}"
+            return f"first difference at byte {at}: {want[at : at + 40]!r} against {got[at : at + 40]!r}"
     return f"one is {len(want)} characters and the other {len(got)}"

@@ -1,0 +1,61 @@
+<h2 id="the-muck-heap-that-reads-as-the-neighbors">The muck heap that reads as the neighbor's</h2>
+<!-- accepted 2026-08-29, feature 152 -->
+<p>The researched rule is that the heap lies BEYOND the privy (see "The farmstead's fixtures"). Once the
+privy moved to the sun side,<sup class="fn"><a id="fnref-88" href="citations/homesteads.html#fn-88">88</a></sup> that rule sometimes puts the heap nearer a neighbor's farmhouse than the
+one it serves. Measured over the 13-map pool, <strong>6 of 66 privies and heaps</strong> stand nearer a neighbor's
+drawn FOOTPRINT than their own - the number that matters, because a reader compares against the drawn
+rectangle rather than against a recorded center point. (Measured center to center<!-- By center-to-center, the metric the placement code itself sorts on --> it is 4 of 66; the two figures disagree because a fixture can clear a distant
+house's center while standing against its wall. The worst case is Kashikawa's heap:<!-- at (2194.1, 2759.2) -->
+32.0 ft from its own farmhouse's wall and 8.4 ft from a neighbor's, which the center metric
+renders as a mild 46.7 against 33.0.) A reader attributes such a pit to the nearer house; the map's own record<!-- the manifest -->
+says otherwise, and only the interactive page resolves it on click.</p>
+<p><strong>This is an ACCEPTED limitation, and THREE priced alternatives were declined on measurement.</strong></p>
+<table>
+<thead>
+<tr>
+<th>lever</th>
+<th>misattributed (centers)</th>
+<th>misattributed (footprints)</th>
+<th>heaps beyond their privy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eight hand-picked seats + ownership tie-break (<strong>what the map draws</strong>)</td>
+<td>4 of 66</td>
+<td>6 of 66</td>
+<td>14 of 14</td>
+</tr>
+<tr>
+<td>sector search beyond the privy, radii 2-24 ft, swung +/-54 deg</td>
+<td>5 of 68</td>
+<td>-</td>
+<td>16 of 16</td>
+</tr>
+<tr>
+<td>sorting candidates by ownership MARGIN over the whole seat list</td>
+<td>4 of 67</td>
+<td>-</td>
+<td><strong>9 of 15</strong></td>
+</tr>
+<tr>
+<td>the margin sort INSIDE the beyond-the-privy group only</td>
+<td>4 of 66</td>
+<td>6 of 66</td>
+<td>14 of 14</td>
+</tr>
+</tbody>
+</table>
+<p>The sector search - the shape that worked for the privy itself - seats more heaps but none of them
+better placed. The margin sort wins its margin by pulling the heap back toward the house, which breaks
+the researched rule outright; a reader-legibility nicety is not worth a researched finding. The fourth
+row is a genuinely new mechanism - partitioning the
+seats on the "beyond" term means the margin can only reorder seats that already satisfy the rule, so
+it cannot fail the way row three did. It came back identical to the
+shipped state on every metric.<!-- The fourth row is the acceptance review's own proposal, and it is a genuinely new mechanism. It was implemented and rolled and came back identical to the shipped state on every metric. --> That is the answer: the levers are sound and the GEOMETRY is what is
+fixed. What is
+left is the geometry: where a privy stands on the sun side and the neighbor is that way too, every seat
+beyond it belongs to that arc, exactly as it would in a real interlocked cluster. Ownership therefore
+stays a TIE-BREAK, promoting an unambiguous seat whenever the ground offers one.</p>
+<!-- The lever NOT yet tried: seat the fixtures BEFORE the yard and gardens (a stage reorder, the same one the sun-share entry above names). for whoever reopens this: nothing else on this list should be re-pulled without a new mechanism -->
+<p><strong>Sources:</strong> <a href="https://repository.kulib.kyoto-u.ac.jp/server/api/core/bitstreams/3ffc3bcb-2b8a-4727-96b6-7c76dd5e6f0a/content"><code>wang-ochiai-2022</code></a> (the sun-side share the heap inherits).</p>

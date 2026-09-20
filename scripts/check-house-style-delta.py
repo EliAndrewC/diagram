@@ -32,6 +32,7 @@ edits it exists to catch.
 
 from __future__ import annotations
 
+import functools
 import pathlib
 import re
 import subprocess
@@ -132,6 +133,33 @@ def delta_lines(root: pathlib.Path) -> tuple[dict[str, list[tuple[int, str]]], s
     return added, removed
 
 
+@functools.cache
+def already_in_base(root: pathlib.Path, line: str) -> bool:
+    """Does this exact line already stand in the tree the change began from?
+
+    The MOVED exemption above catches a line the change also REMOVED - a file split, where the text
+    leaves one file and arrives in another. A COPY leaves the original in place, so nothing is
+    removed and the rule misses it: feature 258 writes each entry of the research record into its own
+    fragment while the assembled page keeps every byte, and five capitalized British spellings inside
+    an organization's NAME ("Network of Aquaculture Centres in Asia-Pacific") were reported as though
+    this change had written them. Americanizing them would misname a real body in a citation, and a
+    backtick span would put an organization's name in code font on the page, so neither correction the
+    guard offers is right - which is the signature of a guard firing on correct work.
+
+    Asked only when a hit has already been found and is not otherwise exempt, so the cost is one
+    `git grep` per offending line, not per line of the delta. It weakens nothing: text a session
+    genuinely writes for the first time is not in the base tree, and a British spelling that IS
+    already in the tree was already there to fix - under someone else's feature, not sneaked in here.
+    """
+    stripped = line.strip()
+    if len(stripped) < 12:
+        return False                          # too short to identify a line; let the finding stand
+    base = _git(root, "merge-base", "HEAD", "origin/main").strip() or "HEAD"
+    found = subprocess.run(["git", "-C", str(root), "grep", "-q", "-F", "--", stripped, base],
+                           capture_output=True, text=True, timeout=60)
+    return found.returncode == 0
+
+
 def findings(root: pathlib.Path) -> list[str]:
     """Every British spelling this change WROTE, as `path:line: word`."""
     words = brit_words()
@@ -159,6 +187,8 @@ def findings(root: pathlib.Path) -> list[str]:
                 start = (offsets[n - 1] if n - 1 < len(offsets) else 0) + hit.start()
                 if any(a <= start < b for a, b in spans):
                     continue                  # a code span names the word; a quotation is someone else's
+                if already_in_base(root, text):
+                    continue                  # COPIED: the line already stood in the tree this began from
                 out.append(f"{path}:{n}: {hit.group(0)!r} - CLAUDE.md: American spellings, project-wide")
     return out
 
@@ -193,6 +223,14 @@ def selftest() -> None:
         assert any("new.md:1" in x for x in got), got
         assert any("base.md:2" in x for x in got), got
         assert not any("base.md:1" in x for x in got), "a pre-existing line is not in the delta"
+        # A COPY of a line that already stands in the base tree is not something this change WROTE
+        # (feature 258: the record's fragments duplicate the assembled page byte for byte).
+        already_in_base.cache_clear()
+        (root / "copied.md").write_text("the pre-existing colour stays\n")
+        got = findings(root)
+        assert not any("copied.md" in x for x in got), ("a copied line is not written text", got)
+        assert any("new.md:1" in x for x in got), ("and the genuinely new one still fires", got)
+        already_in_base.cache_clear()
     print("check-house-style-delta selftest ok")
 
 

@@ -69,8 +69,7 @@ def comments(html: str) -> list[tuple[int, int]]:
 def headings(html: str, level: int) -> list[re.Match[str]]:
     """Every `<hN` that opens a real section: not one inside a comment, wherever it sits on its line."""
     hidden = comments(html)
-    return [m for m in re.finditer(rf"<h{level}\b", html)
-            if not any(start <= m.start() < end for start, end in hidden)]
+    return [m for m in re.finditer(rf"<h{level}\b", html) if not any(start <= m.start() < end for start, end in hidden)]
 
 
 def heading_id(html: str, at: int) -> str:
@@ -79,8 +78,7 @@ def heading_id(html: str, at: int) -> str:
     tag_end = html.index(">", at)
     found = _ID.search(html[at:tag_end])
     if not found:
-        raise ValueError(f"a heading with no id at offset {at}: {html[at:tag_end + 1]!r} - "
-                         f"the record's anchors are heading ids, and a fragment is named for one")
+        raise ValueError(f"a heading with no id at offset {at}: {html[at : tag_end + 1]!r} - the record's anchors are heading ids, and a fragment is named for one")
     return found.group(1)
 
 
@@ -101,7 +99,7 @@ def split(html: str, entry_level: int | None = None, level: int = 2) -> Page:
     opens = [m.start() for m in headings(html, level) if m.start() < tail_at]
     if not opens:
         return Page(front=html[:tail_at], sections=(), tail=html[tail_at:])
-    bounds = list(zip(opens, opens[1:] + [tail_at]))
+    bounds = list(zip(opens, opens[1:] + [tail_at], strict=True))
     return Page(
         front=html[: opens[0]],
         sections=tuple(_section(html, start, stop, entry_level) for start, stop in bounds),
@@ -116,7 +114,7 @@ def _section(html: str, start: int, stop: int, entry_level: int | None) -> Secti
     opens = [m.start() for m in headings(body, entry_level)]
     if not opens:
         return Section(id=heading_id(html, start), text=body)
-    bounds = list(zip(opens, opens[1:] + [len(body)]))
+    bounds = list(zip(opens, opens[1:] + [len(body)], strict=True))
     return Section(
         id=heading_id(html, start),
         text=body[: opens[0]],
@@ -129,6 +127,5 @@ def _tail_start(html: str) -> int:
     every page of the record ends is a page this splitter has not been shown."""
     found = _TAIL.search(html)
     if not found:
-        raise ValueError("this page does not end with `</main></body></html>` and its optional "
-                         "citations pointer - the splitter has not been shown its shape")
+        raise ValueError("this page does not end with `</main></body></html>` and its optional citations pointer - the splitter has not been shown its shape")
     return found.start()

@@ -1,0 +1,30 @@
+<h2 id="a-delivery-is-never-drawn-wider-than-the-canal-feeding-it">A delivery is never drawn wider than the canal feeding it</h2>
+<!-- Grounds: DELIVERY_PARENT_FRAC, SUB_PARENT_FRAC, and the head_ft a thread carries from _comb_threads to _comb_canal_pieces -->
+<!-- Evidence: derived -->
+<p><strong>Sources:</strong> none - this is a legibility rule following from the width-as-rank convention, not a finding about real channels</p>
+<!-- The defect. A delivery ditch's head was a flat constant while its parent supply canal tapered below
+it, so low in the tree the LATERAL was drawn wider than the canal feeding it - measured on Inashiro at
+(2524.8, 1540): lateral 7.96 px against a parent at 5.73 and a continuation at 5.35. Found by settlement-review twice, the second time noting the arc-sampling fix had nudged it further the wrong
+way (that lateral's first segment is 6 px long, so its arc midpoint sits at t ~ 0.01 and the head piece
+inks at nearly the full flat head). -->
+<p><em>Why it matters more than it looks.</em> <a href="#drawn-width-is-rank-not-discharge---junctions-do-not-conserve-it">Drawn width is RANK, not discharge</a> - that ruling
+says the in-and-out widths at a junction are not meant to add up, because width conveys position in
+the hierarchy.<!-- "that ruling explicitly tells reviewers not to check conservation arithmetic at junctions, because width exists to convey position in the hierarchy" --> A child drawn wider than its parent breaks the ONE thing the
+convention is for, which is why this is a defect where an unbalanced junction is not.</p>
+<p><em>The decision.</em> A delivery's head is capped at 0.8 of its parent's LOCAL width
+at the takeoff, and a mid-block sub-ditch at 0.75 of the delivery it branches off<!-- DELIVERY_PARENT_FRAC, SUB_PARENT_FRAC -->.
+The cap only bites low in the tree, where the parent has already dwindled - at the first offtake the
+delivery keeps its full tier.<!-- _canal_ft is now the single definition of a canal's width profile, read both by the drawing pass and by the thread constructor that sizes the delivery, because the previous arrangement had that profile written out in one place and nowhere in the other. --></p>
+<p><em>What was deliberately NOT done.</em> Deriving the delivery's width from the flow the parent sheds at that
+offtake<!-- sqrt(w_before^2 - w_after^2) --> is the physically exact version and was rejected: it is
+conservation at junctions by another name, which the 2026-08-16 ruling forbids, and it makes a
+delivery's width depend on how steeply its parent happens to taper there. The cap is the weaker and
+sufficient guarantee. Measured on Inashiro: <strong>zero inversions</strong>, every delivery head
+(1.8-2.5 ft) below its parent's local width (2.2-4.5 ft).<!-- the same figures in sheet pixels, Inashiro drawing at 1 ft/px; measured from the SVG's per-piece stroke widths rather than from the manifest's declarations --></p>
+<p><em>One asymmetry, and it was measured rather than chosen.</em> A delivery is capped against its canal's
+LOCAL width; a mid-block SUB-ditch is capped against its parent delivery's <strong>HEAD</strong>. Sizing the sub
+against the local width too is worse: at true scale a delivery is
+~2.2 ft a third of the way down, so 0.75 of that is 1.64 ft, which against the visibility floor -
+1.5 ft at hamlet scale<!-- 1.5 px --> - leaves a sub-ditch <strong>0.14 ft of room to taper in</strong><!-- 0.14 px -->. The taper rule (a tail under 0.85 of the
+head) rejected it on <strong>22 of 24</strong> test maps, and rightly - a ditch that cannot taper should
+not be drawn claiming to.<!-- "22 of 24 cohort maps"; delivery_ditches_taper (w_tail < 0.85 * w). So the docs were corrected to match the code rather than the reverse. --></p>

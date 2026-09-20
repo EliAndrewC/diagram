@@ -46,11 +46,7 @@ def test_a_heading_inside_a_comment_is_not_a_section() -> None:
 def test_a_heading_is_found_wherever_it_stands_on_its_line() -> None:
     """FR-008a's other half, on plain strings: a heading after a space opens a section, one in a
     comment does not, and the comment goes to the fragment it falls inside."""
-    page = (
-        '<!DOCTYPE html>\n<h1 id="t">T</h1>\n<p>front</p>\n'
-        '<!-- <h2 id="dead">Dead</h2>\n<p>commented out</p> -->\n'
-        ' <h2 id="live">Live</h2>\n<p>body</p>\n</main>\n</body>\n</html>\n'
-    )
+    page = '<!DOCTYPE html>\n<h1 id="t">T</h1>\n<p>front</p>\n<!-- <h2 id="dead">Dead</h2>\n<p>commented out</p> -->\n <h2 id="live">Live</h2>\n<p>body</p>\n</main>\n</body>\n</html>\n'
     parts = sections_of(page)
     assert [s.id for s in parts] == ["live"]
     assert "commented out" in split(page).front

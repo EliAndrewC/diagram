@@ -268,6 +268,15 @@ would fail. What stage 3 actually holds is the pairing:
   reference's position in the page's text rather than by its number;
 - nothing else differs.
 
+**And the works list moves with them.** `citations.cited_keys()` builds the works section at the top of
+a citations page by walking the notes in their page order, so reordering the notes reorders that list
+too - measured on the real record by the plan review of 2026-09-20: the key ORDER changes on the same 16
+pages, the key SET on none. That is a third reader-visible change at stage 3, and it is declared rather
+than discovered. It is also the same correction as the renumbering: the list's own heading says "in
+order of first citation", which today means first in the notes' arbitrary order and afterwards means
+first in the reader's page. What the test holds is the SET of works per page, and that its order equals
+the document order of first citation.
+
 SC-003 says the same thing in the spec, corrected by the same review.
 
 ### D5 - Numbering, and the two defects it fixes

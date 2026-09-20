@@ -1,9 +1,9 @@
 {
-  "baseline-quick": {
-    "value": 3782,
+  "baseline-done": {
+    "value": 0,
     "unit": "tests",
-    "quantity": "make quick ALL=1 in /tmp/base258, a detached worktree at HEAD (the spec commits only; no engine code changed)",
+    "quantity": "make done in /tmp/base258, a detached worktree at origin/main 9d11c6e2 - the constitution XIII baseline for feature 258, replacing the quick-only one the plan review of 2026-09-20 struck; filled in when the run lands",
     "observed": "2026-09-20",
-    "note": "3782 passed, 5 skipped, 4 warnings in 34.14 s; make hooks-test: 26 guard suites green. Constitution XIII baseline for feature 258 - every later failure is checked against this before it is called new."
+    "note": "RUNNING at the time of writing; the first attempt was taken at a HEAD that carried this feature's own spec and failed on spec-lint over it, which is why the baseline is taken at origin/main."
   }
 }

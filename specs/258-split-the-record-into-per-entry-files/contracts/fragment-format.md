@@ -22,7 +22,7 @@ The citations page is the same shape:
                              + each question's notes, in question order, numbered
                              + _citations-tail.html
 
-No page bytes live in the program: the `<section class="footnotes"><ol>` opener, the `<h2 id="notes">`
+No HAND-AUTHORED page bytes live in the program: the `<section class="footnotes"><ol>` opener, the `<h2 id="notes">`
 heading and the works section's own wrapper are all hand-authored fragments, because they are hand-authored
 bytes.
 
@@ -53,7 +53,11 @@ Commented-out text rides with whatever fragment it falls inside; it is never a f
 | `NNN-<slug>.notes.html` | hold only `<li data-note="<key>">...</li>` items | carry a number, an `id="fn-...`, or a `<a class="fnback">` |
 | `NNNN-<key>.html` | begin with `<h3 id="..."`; its filename key matches the key its heading registers | contain a second `<h3` |
 | `_tail.html` | close every tag the front opened | contain any `<h2` |
-| `_citations-works.html` | begin with the DERIVED marker line `make citations` writes | be hand-edited |
+| `_citations-mid.html` | carry the bytes between the works block and the notes - `</section>`, the `<h2 id="notes">` heading, `<section class="footnotes"><ol>` | be derived; it is hand-authored |
+| `_citations-tail.html` | close the notes list and the document | contain a note |
+
+(There is no `_citations-works.html`: the works block is derived at assembly, between the two marker
+comments the derivation itself emits, and is never a fragment.)
 
 ## References and notes
 
@@ -124,4 +128,6 @@ what the test checks:
 - every assertion on the research page carries the same note body it carried before, matched by the
   reference's position in the page's text rather than by its number;
 - the multiset of note bodies on each citations page is unchanged;
-- with the numbers and the note order set aside, nothing else differs.
+- the SET of works listed at the top of each citations page is unchanged - its ORDER moves with the
+  notes, because that list is derived by walking them, and afterwards it means what its heading says;
+- with the numbers, the note order and the works order set aside, nothing else differs.

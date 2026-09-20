@@ -1,0 +1,86 @@
+<h2 id="the-comb-net-is-drawn-at-true-size">The comb net is drawn at TRUE SIZE</h2>
+<!-- Grounds: the ladder in waterfields/frame.py - HEAD_RACE_FT, CANAL_A_FT, CANAL_B_FT, DELIVERY_FT, DRAIN_FT - converted by chan_px, floored by MIN_CHANNEL_PX -->
+<!-- Evidence: attested, derived -->
+<p><strong>Sources:</strong> <a href="https://repository.geologyscience.ru/bitstream/handle/123456789/34521/Save_03.pdf?sequence=1"><code>lacey-regime</code></a>, <a href="https://www.fao.org/4/u5835e/u5835e04.htm"><code>fao-paddy-duty</code></a>, <a href="http://nyncj.gz.gov.cn/attachment/8/8037/8037125/10854794.pdf"><code>conghua-2026-design</code></a> (the lateral's built width), <a href="https://en.wikipedia.org/wiki/Weir"><code>weir-enwiki</code></a>, <a href="https://en.wikipedia.org/wiki/Mill_race"><code>mill-race-enwiki</code></a>, <a href="https://www.fao.org/4/r4082e/r4082e06.htm"><code>fao-irrigation-canals-ch5</code></a></p>
+<p><em>What prompted it.</em> Having sourced the taper law, the same sources let the ABSOLUTE widths be priced<!-- the net then drawn was about 5-6x oversize -->: Inashiro's 20.9-acre (~8.5 ha) fan carries roughly 0.025 m3/s at the puddling
+peak,<sup class="fn"><a id="fnref-47" href="citations/water.html#fn-47">47</a></sup> for which <a href="https://doi.org/10.1016/S0022-1694(03)00069-6">Lacey</a> gives a wetted perimeter near 0.76 m<sup class="fn"><a id="fnref-6" href="citations/water.html#fn-6">6</a></sup> and Manning a ~0.6 m top width on a
+hand-dug 1:1 earthen section - call it 2.5 to 5 ft depending on how much freeboard and bank you count
+as "the channel".<sup class="fn"><a id="fnref-176" href="citations/water.html#fn-176">176</a></sup> The GM's ruling (2026-08-17), given the measurement:
+<em>"we can narrow the widths to be more realistic... update the net to be actual size (at least for
+hamlets)... it sounds like we want to keep things absolute scale."</em></p>
+<p><em>How each figure was set.</em> The <strong>attested tier ladder is primary</strong> and the hydraulic calculation only
+corroborates it, deliberately: the tiers are measurements of real channels, while a Manning figure
+rests on four assumed parameters (roughness, grade, section aspect, freeboard) and moves by a factor
+of two if you nudge them. So each stroke is placed on the attested ladder by the COMMAND AREA it
+serves - a field ditch watering one paddy ~0.3 m, a distribution lateral ~1 m,<sup class="fn"><a id="fnref-48" href="citations/water.html#fn-48">48</a></sup> a district main
+(<em>yosui</em>) ~5 m<sup class="fn"><a id="fnref-140" href="citations/water.html#fn-140">140</a></sup> - and a hamlet fan of 8.5 ha lands its head-race between the lateral and small-main
+tiers. The result, in true feet:</p>
+<table>
+<thead>
+<tr>
+<th>stroke</th>
+<th>true width</th>
+<th>tier it sits on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>head-race (whole fan, above the fork)</td>
+<td>6.0</td>
+<td>small main</td>
+</tr>
+<tr>
+<td>canal A (high margin)</td>
+<td>4.5 -&gt; 1.5</td>
+<td>main dwindling to lateral</td>
+</tr>
+<tr>
+<td>canal B (far margin)</td>
+<td>4.0 -&gt; 1.5</td>
+<td>branch dwindling to lateral</td>
+</tr>
+<tr>
+<td>delivery ditch</td>
+<td>2.5 -&gt; 1.2</td>
+<td>lateral dwindling to field ditch</td>
+</tr>
+<tr>
+<td>drain / <em>akusui</em></td>
+<td>1.2 -&gt; 5.5</td>
+<td>field ditch gathering to a branch drain</td>
+</tr>
+</tbody>
+</table>
+<p><em>Where the head-race sits on that ladder, and why it is 6.0 ft rather than 5.0.</em> A fan of this size
+  lands its trunk between the lateral and the small-main tiers, which is a band rather than a point, and
+  low in that band the top THREE tiers sit within a foot of each other, so the one junction where the hierarchy most wants to read - the division point where the trunk forks
+  into its two arms - was where it read least. The trunk carries both arms, and under the width-goes-as-
+  the-square-root-of-discharge law this record already adopts, a trunk carrying a 4.5 ft arm and a 4.0 ft
+  arm is the root of the sum of their squares: 6.0 ft. That is TIER SELECTION within the attested band,
+  using the law as a sanity check on where the trunk sits - not conservation at junctions, which is
+  separately ruled against (<a href="#drawn-width-is-rank-not-discharge---junctions-do-not-conserve-it">drawn
+  width is RANK, not discharge</a>: never chain drawn widths down from the source). It also has a real
+  referent: a sluice-fed head-race genuinely is slower than the water feeding it, ponding above the weir (wider is this page's reading; a mill's own race below the pond is the narrow, swift member).<sup class="fn"><a id="fnref-171" href="citations/water.html#fn-171">171</a></sup>
+<p>A collector is sized for drawdown plus storm runoff rather than for the irrigation duty, so it may
+  carry appreciably more water than the supply ever delivered - a reading of the hydrology, not a sourced
+  figure. The maps do not draw it that way: the drain's tail is 5.5 ft against a 6.0 ft head race, so the
+  collector is the wider stroke only against the ditches it collects from, not against the race at the head.
+  Raising the tail above the race was tried and MEASURED on the reference hamlet: the wider band takes the
+  margin the settlement stands on, and the cluster came to rest 102 ft from the field it works, against a
+  60 ft bar. The figure is left where it is and the relationship is stated as drawn.</p>
+<p><em>The decision, and the one place SCALE enters.</em> Widths are stored in FEET and converted at draw time
+<!-- chan_px(ft, grain) -->so the same real channel is the same real size on every sheet - which is what
+"to-scale" has always meant for every other feature on these maps. The single scale-dependent figure is the floor a channel's stroke may not go below, a foot and a half<!-- MIN_CHANNEL_PX 1.5 px; "the single scale-dependent knob" -->: true widths are honest at hamlet and village resolution and vanish above it (at a provincial city's scale the terminal tier is no longer a line at all<!-- 0.4 px at 3 ft/px -->), so a stroke draws at its true width or the floor, whichever is larger. The coarser the sheet, the more of the ladder
+collapses onto that floor. This is the honest form of the minimum-visibility convention the water-width
+ladder already sanctions - a floor on the finest tier.</p>
+<p><em>Measured on Inashiro, which draws at a foot to the pixel.</em> Head-race 6.0 ft; canal A 4.5;
+delivery ditches 2.5 at the head and 1.5 at the tail; drain outfall 5.5.<!-- the same figures in sheet pixels --> The
+paddy fabric dominates the sheet and the water reads as a fine engineered net over it, rather than
+as blue ropes laid across the crop. The hierarchy survives the narrowing (6.0 &gt; 4.5 &gt; 4.0 &gt; 2.5 &gt; 1.5 ft,
+a 4:1 span) because the floor sits below the finest tier rather than on top of it.</p>
+<!-- What it changed: head-race 14 -> 6.0 px; canal A 12.4 -> 4.5; delivery ditches 8.0 -> 2.5 at the head and 3.0 -> 1.5 at the tail; drain outfall 12.0 -> 5.5 -->
+<p><em>The departure we are taking knowingly.</em> The floor is a real, if small, inflation of the finest tier
+at hamlet scale: a 1.2 ft delivery tail draws at 1.5 ft rather than 1.2. The GM sanctioned a floor of about 2 ft at the
+narrowest point; 1.5 was chosen instead precisely so the finest tier still SHOWS a taper rather than
+arriving pre-flattened at the floor.<!-- at 2.0 a delivery ditch would run 2.5 -> 2.0 px and the taper work above would be invisible on the very tier it matters most for --> Re-inflating the FEET to
+make a coarse-scale map read better would lie about every scale to fix one.<!-- the lever is the pixel floor, raised with the GM: raise MIN_CHANNEL_PX, or raise it with the GM --></p>
