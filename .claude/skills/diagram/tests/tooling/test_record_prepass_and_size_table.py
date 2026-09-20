@@ -158,3 +158,53 @@ def test_a_scoped_prepass_lists_one_section(tmp_path, capsys):
     assert rp.main(["lanes", "--root", str(tmp_path), "--section", "how wide"]) == 0
     text = capsys.readouterr().out
     assert "1 sections" in text and "Grounds:" in text and "tameike" not in text
+
+
+
+# --------------------------------------------------------------- feature 260: the candidate words
+
+
+def test_a_rare_undefined_word_is_a_candidate_and_an_ordinary_one_is_not() -> None:
+    """FR-001: the model should rule on a list, not notice an open one (specs/260, the GM's option C)."""
+    text = "The girder bears on an abutment sill, and the deck is wide."
+    defined = {"abutment", "sill", "deck"}
+    frequency = {"the": 900, "girder": 1, "bears": 40, "on": 900, "an": 900, "and": 900, "is": 900,
+                 "wide": 120, "abutment": 9, "sill": 9, "deck": 30}
+    got = rp.rare_words(text, defined, frequency, cutoff=2)
+    assert [w for w, _n in got] == ["girder"], got
+    assert got[0][1] == 1, "the count travels with the word, so a reader sees why it is there"
+
+
+def test_a_word_the_record_uses_often_is_not_a_candidate() -> None:
+    """R3: `embankment` is in 23 fragments and is not raised - which is why the contract asks the
+    model to add what it notices (FR-008)."""
+    got = rp.rare_words("the embankment holds", set(), {"the": 900, "embankment": 23, "holds": 88})
+    assert got == []
+
+
+def test_a_registry_source_key_is_not_a_candidate() -> None:
+    """FR-004: a citation key is rare by construction and is not a word a reader is asked to know."""
+    text = "as ritter-timber-bridges puts it, the girder bears"
+    freq = {"as": 900, "ritter-timber-bridges": 1, "puts": 90, "it": 900, "the": 900, "girder": 1, "bears": 40}
+    got = rp.rare_words(text, set(), freq, keys={"ritter-timber-bridges"})
+    assert [w for w, _n in got] == ["girder"], got
+
+
+def test_the_candidate_list_over_the_real_entry() -> None:
+    """SC-001: 34 where the prepass reports 0 today, on the entry feature 259 measured three times."""
+    record = SKILL / "research"
+    text = rp.text_of(rp.strip_comments(
+        (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.html").read_text(encoding="utf-8")
+        + (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.notes.html").read_text(encoding="utf-8")))
+    got = rp.rare_words(text, rp.defined_words(str(record)), rp.corpus_frequency(str(record)),
+                             keys=rp.registry_keys(str(record)))
+    words = [w for w, _n in got]
+    assert 20 <= len(words) <= 50, f"{len(words)} candidates - tens, not hundreds (R1, R2)"
+    assert "girder" in words and "obliquity" in words and "stringers" in words
+    assert "and" not in words and "the" not in words
+
+
+def test_a_corpus_that_has_never_seen_the_words_raises_nothing() -> None:
+    """FAILS CLOSED: with no corpus every word looks rare, which is R1's 314-of-324 failure. A
+    candidate list is evidence, and a list built from no evidence is worse than none."""
+    assert rp.rare_words("the girder bears on an abutment sill", set(), {}) == []
