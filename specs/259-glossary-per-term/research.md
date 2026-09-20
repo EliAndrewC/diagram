@@ -117,10 +117,7 @@ tells it to read the variant index.
 | VOCABULARY reported | 12 items, 10 drafts | 10 terms, 8 drafts |
 
 **What it supports.** The check never opened `glossary.js`, never opened a term file it did not name,
-and reported on the same entry from 45,921 bytes instead of 62,720. The index has since been written in
-its cheapest readable form - one tab-separated line per variant, 22,564 bytes against the 30,820 the
-measured run read - so a run after this one reads less still; that figure is the file's size, not a
-run's, and is labeled as such.
+and reported on the same entry from 45,921 bytes instead of 62,720. The index's own size is recorded below.
 
 **The findings, over three runs of the same check on the same entry.** One sample of a stochastic
 check settles nothing either way, so a second scoped run was made (2026-09-20). What the three agree on
@@ -138,9 +135,13 @@ and what they do not:
 **What this decides, and it is the thing FR-010 exists to ask.** Eight terms are found by every run:
 that is the check's stable core, and the scoping does not touch it. The tail varies **in both
 directions** - the whole-glossary run missed `embankment`, which a scoped run found, and the scoped runs
-between them missed `NRCS` and `out-to-out`, which the whole-glossary run found. A condition that
-caused findings to be lost would not produce a miss in the condition that reads MORE. So the variation
-is the model's, not the scoping's, and this is now a measurement rather than an explanation.
+between them missed `NRCS` and `out-to-out`, which the whole-glossary run found.
+
+What that refutes, and what it does not. It REFUTES the reading that every tail difference is a finding
+the scoping destroyed: the condition that reads MORE missed a term too. It does NOT measure a condition
+effect, and this design cannot - one run in one condition and two in the other could not separate a
+scoping loss sitting on top of model variance from variance alone. On the evidence there is no sign of
+one, and that is the honest statement.
 
 **SC-002 as written is still not met by any single run**, because it asks for the same findings and no
 two runs of this check agree on the tail - in either condition. The criterion assumes a determinism the

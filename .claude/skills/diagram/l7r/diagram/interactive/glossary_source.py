@@ -49,7 +49,7 @@ class GlossaryError(Exception):
 
 
 def file_name(position: int, term: str) -> str:
-    """`0010-girder.json`. The TERM is the name, as the GM asked - percent-encoded only where a
+    """`5790-towpath.json`. The TERM is the name, as the GM asked - percent-encoded only where a
     filename cannot carry a character, which today is one term (`dS/m`) and no others (R3). A macron
     is left alone: a filename carries it, and transliterating would make a term harder to find."""
     return f"{position * GAP:0{DIGITS}d}-{_encode(term)}.json"

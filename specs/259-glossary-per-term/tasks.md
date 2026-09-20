@@ -17,7 +17,7 @@ today because of a file order nobody chose (R2), which is a presentation decisio
       verify: DONE. make done on unmodified code at d7cbe8a8 short-circuited green - nothing the gate exercises had changed since feature 258's landing run, which is therefore this feature's baseline: 4,179 passed, 4 skipped, all three floors, 92 s (m:baseline-done)
 - [x] T02 The gate-cost bookend, before (R4): the test phase's time and count from T01
       research: rendering
-      verify: DONE. R4-before: the baseline's test phase, 51.40 s over 4,179 tests
+      verify: DONE. R4-before: the baseline's test phase, 46.65 s over 4,179 tests - feature 258's landing run (m:baseline-done). 51.40 s was 258's OWN baseline in a detached worktree, over 4,113 tests, and is a different run
 
 ## Phase 1 - the split (FR-001 to FR-005; D1, D2)
 
@@ -73,7 +73,7 @@ today because of a file order nobody chose (R2), which is a presentation decisio
       findings are the same. A check that reads less and finds less has not been improved. Recorded as R5
       research: rendering
       measure: the dispatch's own transcript, by `specs/258-*/measure.py R3`'s method
-      verify: DONE. the re-run measured and recorded honestly in R5 - the check read 45,921 bytes against 62,720 and never opened glossary.js, but reported one fewer item (out-to-out); the membership information was identical in both runs, so the difference is the model's choice and not the scoping, and that is an explanation rather than a measurement
+      verify: DONE. R5 records THREE runs of the same check on the same entry. The bytes: 45,921 against 62,720, and glossary.js never opened. The findings: eight terms proposed by every run - the stable core - and a tail that varies in BOTH directions, the whole-glossary run missing `embankment` that a scoped run found, the scoped runs missing `NRCS` and `out-to-out` that it found. SC-002 is met by no single run in either condition and is NOT reworded: it is recorded unmet and put to the GM
 - [x] T12 The gate-cost bookend, after (R4), and `make done` green; every failure checked against T01
       research: rendering
       verify: DONE. gate green in 124 s: 4,191 passed, 4 skipped, 100% over 27,113 statements; twelve more tests than the baseline and zero new failures

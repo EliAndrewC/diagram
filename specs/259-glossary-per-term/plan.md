@@ -38,7 +38,9 @@ re-formatting; the source is written with `indent=1`, which the assembly reprodu
 **Scale/Scope**: 720 terms, 7 variant clashes to resolve, 1 filename to percent-encode.
 
 **Single-artifact target**: the glossary itself is the one artifact - there is no per-map work here. The
-reference case is the term `girder` (added by feature 258's own check run): one file, one round trip.
+reference case is `towpath`, a term that exists (`5790-towpath.json`): one file, one round trip. It is
+named here rather than `girder`, which three review rounds found being taught as an existing term - it
+is one `record-format` has PROPOSED and nobody has added.
 
 **Every step is two steps**: prove the round trip on one term, then on all 720 (T05, T06).
 

@@ -160,7 +160,10 @@ must be invisible.
 - **SC-002**: (FR-008, FR-008a, FR-010) On the recorded case of FR-010, the check reads the variant
   index or the directory listing, and no definition it does not name, in place of the whole glossary -
   and it reports the same findings. What that costs is what FR-010's run reports; R1 declines to predict
-  it, and so does this criterion.
+  it, and so does this criterion. **NOT MET as written, and not reworded**: three runs of the check on
+  one entry agree on eight terms and differ in the tail, in both conditions (R5). The criterion
+  assumes a determinism `record-format` does not have; what to replace it with is a decision about
+  what that check is, which is the GM's and not this feature's.
 - **SC-003**: (FR-004) At the SPLIT's landing, `glossary.json` and `glossary.js` are byte-identical to
   the files they replace: the diff is empty. FR-011's resolution lands after it and on its own, so
   that its diff is exactly the variants it removes and nothing else - the same sequencing feature
@@ -211,4 +214,21 @@ term's definition today because of an order nobody chose.
   explicitly declines to predict; it states the criterion and leaves the figure to FR-010's run.
   (7) FR-011 and SC-006 are marked as what they are - a content correction not entailed by the split,
   proceeding under constitution XIV, raised with the GM rather than folded in silently.
+- Round 2 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, six items, all applied. It checked the
+  round-1 replacements against the artifacts and found one wrong - `well sweep` is owned by `jiegao`,
+  not by `well-sweep` - which is the same class of miss it had raised as its own item 5. R4 compared
+  against the wrong run's test phase; `measure.py R2` printed 8 where the record says 7, counting a
+  term's own duplicate as a clash between terms; the module and its test still described the abolished
+  state in the present tense; and the contract and the operative doc still taught `girders`/`girder`,
+  which is in the glossary 0 times. Its sixth item was the substantive one: SC-002 was not satisfied
+  and was not to be reworded, and one sample of a stochastic check could settle it neither way.
+- Round 3 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, five items, all applied. A second
+  scoped run was made for round 2's item 6, and R5 now records three runs: eight terms proposed by
+  every one, a tail that varies in both directions, and SC-002 met by none of them. The round accepted
+  that leaving the criterion unmet and escalated is right rather than rewording it - *"rewording a
+  success criterion after measuring against it, so that the delivered result clears it, is editing the
+  yardstick"* - and narrowed R5's own inference, which had claimed the variation IS the model's where
+  the data only refutes the claim that the tail differences are scoping losses. It also observed that
+  this was the third round in which a corrected example was corrected only where the review pointed:
+  the `girder` token was swept this time, and the two places it remains each say why it is there.
 
