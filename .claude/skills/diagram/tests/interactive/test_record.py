@@ -71,11 +71,24 @@ def _repo_root() -> pathlib.Path:
     return pathlib.Path(RESEARCH_DIR).resolve().parents[3]
 
 
+def _as_the_page_reads_it(containing_rel: str) -> pathlib.PurePosixPath:
+    """The directory a relative token in this file is read from.
+
+    For a FRAGMENT of the record (feature 258, `research/<page>/...`) that is the directory of the page
+    it assembles into, not the fragment's own: the fragment's text becomes the page's text, and a
+    `../x.md` written for `research/buildings.html` is one level up from `research/buildings/`. Reading
+    it from the fragment's directory reports a link that resolves perfectly on the page a reader opens.
+    """
+    here = pathlib.PurePosixPath(containing_rel).parent
+    record = pathlib.PurePosixPath(f"{_SKILL}/research")
+    return here.parent if here != record and record in here.parents else here
+
+
 def _resolves_to_converted(token: str, containing_rel: str) -> bool:
     """FR-013's rule: a token is in scope only if it RESOLVES - against its file's directory, or as a skill-root or
     repository-root path - to one of the 16 converted files."""
     record = f"{_SKILL}/research/"
-    for base in (pathlib.PurePosixPath(containing_rel).parent, pathlib.PurePosixPath(_SKILL), pathlib.PurePosixPath(".")):
+    for base in (_as_the_page_reads_it(containing_rel), pathlib.PurePosixPath(_SKILL), pathlib.PurePosixPath(".")):
         cand = str(pathlib.PurePosixPath(base, token))
         cand = str(pathlib.PurePosixPath(*[p for p in cand.split("/") if p not in ("", ".")]))
         parts: list[str] = []

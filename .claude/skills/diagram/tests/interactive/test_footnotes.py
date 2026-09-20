@@ -22,8 +22,13 @@ from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, registry_k
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
 #: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
-_REF = re.compile(r'<sup class="fn"><a (?:id="fnref-(?:\d+)" )?href="[^"#]*#fn-(\d+)">\1</a></sup>')
-_REF_TARGET = re.compile(r'<sup class="fn"><a (?:id="fnref-\d+" )?href="([^"#]*)#fn-\d+">')
+# A REFERENCE ID MAY CARRY AN ORDINAL (feature 258): where one note is cited more than once on a page,
+# the assembly allocates `fnref-N`, `fnref-N-2`, so that every id in the document is unique and every
+# reference can be returned to. Before it, a repeat was either a DUPLICATED id (2 pages) or a hand-made
+# suffix (`fnref-75b` on `water.html`) - and this pattern matched neither, so those references were
+# invisible to every check in this file.
+_REF = re.compile(r'<sup class="fn"><a (?:id="fnref-(?:\d+(?:-\d+)?)" )?href="[^"#]*#fn-(\d+)">\1</a></sup>')
+_REF_TARGET = re.compile(r'<sup class="fn"><a (?:id="fnref-\d+(?:-\d+)?" )?href="([^"#]*)#fn-\d+">')
 _KEY_LINK = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 _QUOTE = re.compile(r"[\"“「『]([^\"”」』]{12,})[\"”」』]")
 _HEADING = re.compile(r"<h([2-4])[ >]")
