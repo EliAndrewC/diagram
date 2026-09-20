@@ -122,12 +122,33 @@ its cheapest readable form - one tab-separated line per variant, 22,564 bytes ag
 measured run read - so a run after this one reads less still; that figure is the file's size, not a
 run's, and is labeled as such.
 
-**What it does NOT support, stated plainly.** SC-002 asks for the same findings, and this run made one
-fewer: feature 258's run proposed a definition for **`out-to-out`** and this one did not mention it.
-(It also did not restate `bearing length`, which 258 had already dismissed as defined inline - that one
-is not a lost finding.) The membership information was identical in both runs: `out-to-out` is absent
-from the glossary and absent from the index, so nothing the scoping removed could have hidden it. The
-difference is which words the model chose to flag, not what it could see. **That is an explanation, not
-a measurement** - distinguishing variance from a real loss needs a second run on the same entry, which
-has not been made. SC-002 is therefore met on the bytes and NOT met on the findings, and the GM is told
-so rather than the criterion being reworded to fit.
+**The findings, over three runs of the same check on the same entry.** One sample of a stochastic
+check settles nothing either way, so a second scoped run was made (2026-09-20). What the three agree on
+and what they do not:
+
+| term | 258, whole glossary | 259 run 1, index | 259 run 2, index |
+|---|---|---|---|
+| girder, carried deck, footplank, stringer, spread footing, backwall, wingwall, superstructure | proposed | proposed | proposed |
+| `NRCS` | proposed | proposed | **not raised** |
+| `out-to-out` | proposed | **not raised** | **not raised** |
+| `embankment` | **not raised** | **not raised** | proposed |
+| `obliquity` | dismissed inline | dismissed inline | dismissed inline |
+| `bearing length` | dismissed inline | not mentioned | not mentioned |
+
+**What this decides, and it is the thing FR-010 exists to ask.** Eight terms are found by every run:
+that is the check's stable core, and the scoping does not touch it. The tail varies **in both
+directions** - the whole-glossary run missed `embankment`, which a scoped run found, and the scoped runs
+between them missed `NRCS` and `out-to-out`, which the whole-glossary run found. A condition that
+caused findings to be lost would not produce a miss in the condition that reads MORE. So the variation
+is the model's, not the scoping's, and this is now a measurement rather than an explanation.
+
+**SC-002 as written is still not met by any single run**, because it asks for the same findings and no
+two runs of this check agree on the tail - in either condition. The criterion assumes a determinism the
+check does not have. That is recorded here rather than reworded, and put to the GM: the honest form of
+that bar is the stable core plus a stated tail, and fixing it is a decision about what the check is,
+not about this feature.
+
+**What the bytes did**, which is not in doubt: the check read 45,921 bytes against 62,720 and never
+opened `glossary.js`. The index has since been written in its cheapest readable form - one
+tab-separated line per variant, 22,564 bytes against the 30,820 the measured run read - so a run after
+this one reads less still; that figure is the file's size, not a run's.
