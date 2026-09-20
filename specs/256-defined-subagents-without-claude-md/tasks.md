@@ -23,8 +23,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T07 the tier test requires `omitClaudeMd: true` of every agent file; proven red on a file without it (FR-007)
       research: rendering
       verify: DONE. test_every_agent_launches_without_the_claude_md_files - 8 passed; proven red by removing the field from entry-drift (1 failed, naming it), green again restored
-- [ ] T08 both fidelity contracts distinguish enforcing what was asked from unrequested verification; the seeded round-1 run (FR-008)
+- [x] T08 both fidelity contracts distinguish enforcing what was asked from unrequested verification; the seeded round-1 run (FR-008)
       research: rendering
+      verify: DONE. both fidelity contracts carry the GM's distinction, with the test-versus-guard wording sharpened after R6; the seeded proof kept the guard but so did the control, so SC-007 is recorded UNMET and accepted by the GM (Amendment 2, FR-012); research R7
 - [x] T09 a make target wraps the scatter parse and `settlement-review` names it; the `(Tools: ...)` tails and the tier-table paths corrected (FR-009)
       research: rendering
       verify: DONE. make scatter-bases wraps the engine's parse (scripts/_scatter_bases.py, 4 tests; Sawada 20,713 blades) and settlement-review names it; the three (Tools: ...) tails cut; the tier table cited by its real path in seven contracts

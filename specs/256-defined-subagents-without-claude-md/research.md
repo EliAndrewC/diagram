@@ -265,3 +265,14 @@ contract change does do is state the GM's rule where the reviewer reads it; what
 with-field `spec-fidelity` run passed a guard the recorded review had called unrequested ("within, as enforcement").
 That guard REFUSES and rewrites dispatches the request never touched, which is the "new behavior riding in as a
 check" the paragraph excludes - so the wording may need to be sharper. T08 stays open on this.
+
+## R8 - Amendment 2: the GM's rulings (FR-012 to FR-014)
+
+The GM, shown R6 and R7 with three recommendations: *"go with your recommendations to all three."* So: the
+fidelity-contract change stands with SC-007 recorded as unmet, and its wording now separates a test that only FAILS
+from a guard that REFUSES, BLOCKS or REWRITES (R7's last paragraph is why); `spec-fidelity.md` loses the field and
+the tier test carries that one exception by name with the ruling as its reason, failing on a stale row
+(`KEEPS_CLAUDE_MD`; 8 passed, observed 2026-09-20; method: `make test-file FILE=tests/test_agent_models.py`); and
+`settlement-review` and `perf-audit` are watched at their first real dispatches in place of a seeded pair. What puts
+the field back on `spec-fidelity`: three samples a leg on feature 251's round-1 case, about four weight units by
+R6's per-run weights, scored as R6 was.

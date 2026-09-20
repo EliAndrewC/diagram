@@ -124,7 +124,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   (`haiku` only for a plain description of a page - it misread a table's columns where sonnet did not). A DEFINED agent launches without this file, the nested `CLAUDE.md` files and the memory index
   (`omitClaudeMd: true`, feature 256, GM 2026-09-19: *"If there's something that a subagent should know, it should be in
   the subagent specification"*) - a rule a check needs is written in its contract, and a new agent file carries the field;
-  an ad-hoc agent keeps all three. The review agents are pre-authorized through
+  an ad-hoc agent keeps all three, and so does `spec-fidelity` alone, by the GM's ruling of 2026-09-20 (the tier test
+  names the exception and enforces the field on every other agent file). The review agents are pre-authorized through
   `container-scripts/append-system-prompt.md`; if one is skipped, check `type claude` first.
 
 ## Verification and iteration
@@ -203,7 +204,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
 | at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh`, `check-file-scale.py`, `spec-lint.py`, `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal | per script, each with a reason |
-| the gate | the 100% floor, the 1,000-line bar, `_ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` | `FILE_SIZE_OK` in the file |
+| the gate | the 100% floor, the 1,000-line bar, `_ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file |
 
 Every escape states a reason of two words or more, and every firing is recorded (`make audit`,
 `make guard-log GUARD=<name>`). A guard that can produce the compliant command produces it; a refusal
