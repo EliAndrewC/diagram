@@ -46,7 +46,7 @@ spec-fidelity, SV spec-fidelity-verify.
 | R34 | every check runs on the tier its file pins (workflow) | S | - | S | - | - | S | S | S | - | S | S | S |
 | R35 | everything runs through `make`; a bare interpreter is refused or rewritten (verification) | M | - | - | S | - | - | S | M | - | - | S | S |
 | R36 | background the long run; never poll (verification) | - | - | - | M | - | - | M | - | - | - | - | - |
-| R37 | ruff, pyrefly, 100% coverage, the 1,000-line bar (verification) | - | - | - | - | - | - | - | - | - | - | - | - |
+| R37 | ruff, pyrefly, the coverage floor, the file-length bar (verification) | - | - | - | - | - | - | - | - | - | - | - | - |
 | R38 | read derived data from the recorded manifest (verification) | - | - | - | - | - | - | S | - | - | - | - | - |
 | R39 | batch the lookups; the batching hook blocks single-call recon turns (verification) | M | M | M | M | S | S | S | M | S | S | S | S |
 | R40 | work in the clone; `/diagram` is a mirror (clones) | M | M | M | M | M | M | S | M | M | M | M | M |
@@ -134,3 +134,50 @@ QUESTIONABLE tier offering "a GM ruling"; EC protecting a two-forms fork as the 
 lost: `settlement-review` tells the agent to import `l7r.diagram.tools.scatter_audit.parse_bases`, which no make
 target wraps any longer; three descriptions end with a literal `(Tools: ...)` that duplicates the frontmatter; and
 several contracts cite `tests/test_agent_models.py` by a path that is right only from the skill directory.
+
+## R2 - the proof (FR-003, T03): the field stands on all three cases
+
+Method (observed 2026-09-20; method: `measure/dispatch_seeded.sh` - a headless Sonnet session in the case's worktree
+dispatches the agent ONCE with the recorded prompt, so the agent runs as a SUBAGENT, where the field acts; turns,
+first-turn input and weight are the subagent's own, from its transcript, usage folded per message id at R1's rates
+of feature 251). Both legs of a pair run the SAME contract, moved rules included; the only difference is the
+`omitClaudeMd: true` line. The cases are feature 255's R3 rounds and R2 section. A worktree is its own project, so
+neither leg loads the memory index: this is the proof of the `CLAUDE.md` files leaving (the index is R3's).
+
+| case | agent | recorded findings | control (no field): result, turns, first turn, weight | with the field: result, turns, first turn, weight |
+|---|---|---|---|---|
+| feature 250 round 2 | `spec-fidelity-verify` | CHANGES REQUIRED: FR-004's unrequested scope; its added half has no success criterion | both items; 4 turns; 56,017; 0.70 | both items; 4 turns; 11,536; 0.39 |
+| feature 250 round 2, after the fix | `spec-fidelity-verify` | FAITHFUL | FAITHFUL; 3 turns; 54,783; 0.55 | FAITHFUL; 6 turns; 10,301; 0.40 |
+| homesteads, "The garden's sun, and how far the windbreak shades" | `record-format` | two stray `</strong>`, a sentence contradicting its clause, the fetch-verdict phrase "the pages read record", `the frame`, `clump` | five of six - `the frame` MISSED; 8 turns; 63,134; 1.22 | all six; 7 turns; 7,552; 1.03 |
+| total | | | 15 turns; 2.47 | 17 turns; 1.82 |
+
+**Every run with the field caught everything its control caught** (and on the third case one recorded finding the
+control missed), so FR-004's second pair was never needed. The weight is about a quarter lower with the field and
+the first turn is a fifth to an eighth of what it was - far more than the root file's 5 k, because in a real check
+the nested `CLAUDE.md` files were arriving too. One run was DISCARDED unscored and re-run, as the plan requires: the
+first `tw-250` leg with the field, whose Sonnet dispatcher dropped 57 characters of the recorded prompt (its result
+is kept beside the case as `discarded/`; it too returned both items). Assumption checked: the harness honors the
+field in a project agent FILE, not only in an inline agent - the first-turn column is the evidence.
+
+## R3 - a real defined agent's first turn, from where the index loads (FR-006, T04)
+
+(observed 2026-09-20; method: `measure/first_turn.sh .claude/agents/entry-drift.md /diagram` - the agent defined
+inline from its own frontmatter and contract body at its pinned model, dispatched once from `/diagram` by a Haiku
+session on a one-line prompt; nothing written under the mirror.)
+
+| leg | `entry-drift`'s first-turn input |
+|---|---|
+| as it was | 20,435 tokens |
+| with `omitClaudeMd: true` | 4,477 tokens |
+
+About 16 k tokens leave every turn of the smallest check: the root `CLAUDE.md` and the memory index together.
+
+## R4 - what was proven and what was not (FR-005)
+
+Two agents have a seeded proof: `spec-fidelity-verify` and `record-format`. Three have no recorded run to replay and
+carry the field on the reading alone, as the GM agreed: `perf-audit`, `building-review`, `size-audit`. The other
+seven DO have recorded runs and were not re-run either, by D1's sizing: `entry-drift`, `escalation-check`,
+`quote-check`, `settlement-review`, `source-applicability`, `source-reader`, `spec-fidelity`. Ten of the twelve
+therefore rest on R1's reading and on the field behaving for them as it measurably did for the two. The first real
+dispatch of each after landing is the next evidence; a check that comes back asking what a rule is, or breaking a
+guard it was never told of, is a contract to amend (FR-004's route), not a reason to unset the field.

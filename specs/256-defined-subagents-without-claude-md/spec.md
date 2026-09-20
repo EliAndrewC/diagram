@@ -1,6 +1,7 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** FAITHFUL at round 3 (2026-09-20, see Review history); planned, not yet implemented.
+**Status:** FAITHFUL at round 3 (2026-09-20, see Review history); IMPLEMENTED 2026-09-20 - the field is set in all twelve,
+the proof is clean on its three cases, every run is in `research.md`.
 
 ## Summary
 
