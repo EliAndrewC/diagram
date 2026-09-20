@@ -84,9 +84,7 @@ the 17 recorded agent runs (features 251, 255 and 256, each in its own worktree)
 | `quote-check` (255-qc-urban) | 100,873 | 68,648 | 68% |
 | `entry-drift` (seeded-entry-drift-farmhouse) | 38,805 | 25,827 | 66% |
 | `record-format` (seeded-x-format-towns-opus-medium) | 234,147 | 110,504 | 47% |
-
-(Observed 2026-09-20; method: `measure.py R3`, over the worktree transcripts of features 251, 255 and
-256 kept under `~/.claude/projects/-tmp-*tree/`.)
+| *(observed 2026-09-20; method: `measure.py R3`, over the kept worktree transcripts of features 251, 255 and 256)* | | | |
 
 Six further runs sit between 23% and 36%; the **median of all 17 is 68%** (observed 2026-09-20, same
 method and the same 17 runs as the table above). Feature 251's census
