@@ -65,7 +65,7 @@ FR-004's second pair -> T04 the before-and-after measurement -> T05 the record -
 ## Amendment 1 (2026-09-20)
 
 - **P6 the guard (FR-007).** One test in `tests/test_agent_models.py`, `test_every_agent_launches_without_the_claude_md_files`:
-  for every file in the derived roster, `frontmatter(...)["omitClaudeMd"] == "true"`, its message naming the field,
+  for every file in the derived roster (P10 excepts the one agent the GM named), `frontmatter(...)["omitClaudeMd"] == "true"`, its message naming the field,
   the GM's ruling and this feature. The module docstring gains the ruling. The tier table is untouched. It is a
   gate guard already listed in root `CLAUDE.md`'s table (`test_agent_models.py`), so that row gains the clause.
 - **P7 the fidelity contracts (FR-008).** In `spec-fidelity.md`, question 4's "extra verification the GM did not
