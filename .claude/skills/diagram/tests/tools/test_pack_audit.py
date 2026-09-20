@@ -942,3 +942,32 @@ def test_the_package_keeps_its_python_dash_m_entry_point(monkeypatch, tmp_path, 
         runpy.run_module("l7r.diagram.tools.pack_audit", run_name="__main__")
     assert exit_info.value.code in (0, None), "the CLI ran and exited cleanly"
     assert capsys.readouterr().out, "and printed its report"
+
+
+# --- trees and the fence (feature 257) ---
+
+
+def test_parse_svg_knows_a_tree_by_its_fill_or_its_group_and_never_as_a_glyph() -> None:
+    text = _svg(
+        "<defs><pattern id=\"p\"><circle cx=\"3\" cy=\"3\" r=\"0.8\" fill=\"#7A8C5C\"/></pattern></defs>",
+        _rect(0, 0, 400, 400, COURT),
+        '<g fill="#7A8C5C" stroke="#5C6E44"><circle cx="50" cy="50" r="16"/><circle cx="90" cy="50" r="14"/></g>',
+        '<circle cx="150" cy="50" r="12" fill="#7A8C5C"/>',
+        '<g id="trees" fill="#6A7C4C"><circle cx="200" cy="50" r="10"/></g>',
+        '<circle cx="250" cy="50" r="6" fill="#3A3A34"/>',
+        '<circle cx="300" cy="50" r="2" fill="#7A8C5C"/>',
+    )
+    plan = pa.parse_svg(text)
+    assert sorted(round(t.x + t.w / 2) for t in plan.trees) == [50, 90, 150, 200]  # the group, the bare canopy, the trees group
+    assert all(t.fill == pa.TREE_FILL for t in plan.trees)
+    assert [round(g.x + g.w / 2) for g in plan.glyphs] == [250]  # the dark circle stays a glyph; a canopy is never one
+
+
+def test_parse_svg_reads_the_fence_lines_as_segments() -> None:
+    text = _svg(
+        _rect(0, 0, 400, 400, COURT),
+        '<g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none"><line x1="20" y1="20" x2="380" y2="20"/><line x1="20" y1="20" x2="20" y2="380"/></g>',
+        '<g stroke="#7A6A4A"><line x1="0" y1="0" x2="10" y2="0"/></g>',
+    )
+    plan = pa.parse_svg(text)
+    assert [(s.x, s.y, s.w, s.h) for s in plan.fence_segs] == [(20.0, 20.0, 360.0, 2.0), (20.0, 20.0, 2.0, 360.0)]

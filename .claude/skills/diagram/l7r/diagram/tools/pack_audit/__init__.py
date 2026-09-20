@@ -116,6 +116,7 @@ from .parse import Rect as Rect
 from .parse import _bold_char_w as _bold_char_w
 from .parse import _luma as _luma
 from .parse import parse_svg as parse_svg
+from .parse import TREE_FILL as TREE_FILL
 from .registry import CHECKS as CHECKS
 from .registry import Check as Check
 from .registry import Context as Context

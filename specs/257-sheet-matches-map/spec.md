@@ -240,4 +240,4 @@ sheet is on no map and checks nothing.
   frame assumption could not hold the map's well far behind the hall - the frame is stated and
   the fence runs north to the well. (5) Decisions row 4 reclassed from "historically accurate" to a
   deliberate deviation on the GM's word. The reviewer's aside for the GM (the seven-arch sando drawn
-  as one arch since the count re-roll; the well 108 ft behind the hall) is carried to the writeup.
+  as one arch since the count re-roll; the well far behind the hall) is carried to the writeup.

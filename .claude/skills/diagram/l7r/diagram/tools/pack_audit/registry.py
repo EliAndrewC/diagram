@@ -129,6 +129,13 @@ CHECKS: tuple[Check, ...] = (
     ),
     Check("scale_bar_present", lambda ctx: s.scale_bar_present(ctx.plan), True, "ochiba-no-scale-red.svg", "add the 90 px scale bar with its `30 ft` and `(3 px = 1 ft)` labels"),
     Check("viewbox_cropped", lambda ctx: s.viewbox_cropped(ctx.text, ctx.plan), True, "ochiba-wide-viewbox-red.svg", "crop the viewBox to ~15-25 px of parchment around the ink"),
+    Check(
+        "trees_overlap",
+        lambda ctx: s.trees_overlap(ctx.plan),
+        True,
+        "hoshigaoka-tree-on-fence-red.svg",
+        "move the tree onto open ground - off the building, the fence, the well, the label and the next canopy (a canopy may touch another, not cover it)",
+    ),
     # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
     Check(
         "program_complete",

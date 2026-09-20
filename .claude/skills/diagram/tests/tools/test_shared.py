@@ -287,3 +287,54 @@ def test_fence_check_ignores_a_court_divider_stroke() -> None:
     """A divider band is a wall band of another color; the fence check reasons only about the compound stroke."""
     text, plan = _plan('<g id="fence" stroke="#7A6A4A" stroke-width="2"><line x1="20" y1="20" x2="380" y2="20"/></g>' + DIVIDER)
     assert s.fence_not_wall(text, plan) == []
+
+
+# --- trees overlap nothing (feature 257) ---
+
+_CANOPY = '<g fill="#7A8C5C"><circle cx="{x}" cy="{y}" r="{r}"/></g>'
+
+
+def test_a_tree_on_open_ground_is_fine_and_one_on_anything_else_is_named() -> None:
+    _, plan = _plan(
+        _rect(0, 0, 400, 400, "url(#court-earth)", "precinct"),
+        _rect(100, 100, 60, 40, "#DDB87A", "hall"),
+        '<g id="fence" stroke="#7A6A4A" fill="none"><line x1="20" y1="300" x2="380" y2="300"/></g>',
+        '<text x="300" y="60" font-size="10">a label</text>',
+        _CANOPY.format(x=40, y=40, r=15),  # on the gravel
+        _CANOPY.format(x=95, y=120, r=15),  # 10 px into the hall
+        _CANOPY.format(x=200, y=305, r=15),  # across the fence line
+        _CANOPY.format(x=305, y=57, r=15),  # under the label
+    )
+    findings = s.trees_overlap(plan)
+    assert not [f for f in findings if "svg(40,40)" in f]
+    assert any("svg(95,120)" in f and "into a building" in f for f in findings)
+    assert any("svg(200,305)" in f and "into the fence" in f for f in findings)
+    assert any("svg(305,57)" in f and "the label 'a label'" in f for f in findings)
+
+
+def test_two_canopies_may_touch_but_not_cover_each_other() -> None:
+    _, plan = _plan(
+        _rect(0, 0, 400, 400, "url(#court-earth)", "precinct"),
+        _CANOPY.format(x=50, y=50, r=15),
+        _CANOPY.format(x=80, y=50, r=15),  # touching: 30 apart, radii sum 30
+        _CANOPY.format(x=200, y=50, r=15),
+        _CANOPY.format(x=215, y=50, r=15),  # half on top of the other
+    )
+    findings = s.trees_overlap(plan)
+    assert not [f for f in findings if "svg(50,50)" in f]
+    assert [f for f in findings if "two trees" in f and "svg(200,50)" in f] and len(findings) == 1
+
+
+def test_a_tree_may_stand_on_a_garden_bed_and_over_no_glyph_or_tub() -> None:
+    _, plan = _plan(
+        _rect(0, 0, 400, 400, "url(#court-earth)", "precinct"),
+        _rect(20, 20, 100, 100, "url(#garden-stipple)"),
+        '<rect x="200" y="200" width="15" height="15" fill="#9C8C70" id="well"/><circle cx="207" cy="207" r="4" fill="#3A3A34"/>',
+        '<g fill="#8FB0C6"><circle cx="300" cy="300" r="3.8"/></g>',
+        _CANOPY.format(x=60, y=60, r=20),  # on the bed
+        _CANOPY.format(x=212, y=195, r=14),  # over the well and its glyph
+        _CANOPY.format(x=296, y=296, r=12),  # over the tub
+    )
+    findings = s.trees_overlap(plan)
+    assert not [f for f in findings if "svg(60,60)" in f]
+    assert any("svg(212,195)" in f for f in findings) and any("svg(296,296)" in f and "tub" in f for f in findings)

@@ -9,6 +9,7 @@ its red fixture and its fix sentence.
 
 from __future__ import annotations
 
+import math
 import re
 import xml.etree.ElementTree as ET
 
@@ -349,4 +350,46 @@ def fence_not_wall(text: str, plan: ParsedPlan) -> list[str]:
         if min(abs(cx - minx), abs(cx - maxx), abs(cy - miny), abs(cy - maxy)) <= tol + max(band.w, band.h):
             out.append(f"a compound wall stroke at svg({band.x:.0f},{band.y:.0f}) bounds the precinct - a shrine is fenced, a compound is walled")
             break
+    return out
+
+
+# A TREE STANDS ON OPEN GROUND AND ON NOTHING ELSE (feature 257; the GM, 2026-09-20: "an automated check
+# to prevent trees from overlapping with other things"). The ground - the precinct's gravel, a court, a
+# garden bed - is what a canopy grows from; a building, a fence, a well, a label or another canopy under it
+# reads as a mistake, which is what the GM saw on the Hoshigaoka sheet. Two canopies may touch and no
+# more; the touching tolerance is the one the built-footprint overlap check owns, not a second number.
+def _canopy_depth(cx: float, cy: float, r: float, rect: Rect) -> float:
+    """How far a canopy of radius `r` at (cx, cy) reaches into `rect` (px); zero or less = clear of it."""
+    dx = max(rect.x - cx, 0.0, cx - rect.x2)
+    dy = max(rect.y - cy, 0.0, cy - rect.y2)
+    return r - math.hypot(dx, dy)
+
+
+def _things_under_a_tree(plan: ParsedPlan) -> list[tuple[str, Rect]]:
+    """Everything a canopy may not cover, named: built footprints, furniture, walls, the fence, glyphs, tubs, labels.
+    Open ground (the precinct, a court, a garden bed - any pattern-filled or open-feature rect) is left out."""
+    ground = set(plan.interior) | set(plan.open_features)
+    out: list[tuple[str, Rect]] = [("a building", r) for r in plan.structures]
+    out += [("furniture", r) for r in plan.furniture if r not in ground and not r.fill.startswith("url(") and r not in plan.structures]
+    out += [("a wall", r) for r in plan.wall_bands] + [("a divider", r) for r in plan.dividers] + [("the fence", r) for r in plan.fence_segs]
+    out += [("a glyph", r) for r in plan.glyphs] + [("a fire-water tub", r) for r in plan.tubs]
+    out += [(f"the label {lb.text!r}", Rect(lb.x, lb.y, lb.w, lb.h)) for lb in plan.labels]
+    return out
+
+
+def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[str]:
+    """Every canopy that covers something that is not open ground, and every pair of canopies that overlap."""
+    out: list[str] = []
+    things = _things_under_a_tree(plan)
+    trees = [(t.x + t.w / 2, t.y + t.h / 2, t.w / 2) for t in plan.trees]
+    for cx, cy, r in trees:
+        for kind, rect in things:
+            depth = _canopy_depth(cx, cy, r, rect)
+            if depth > tol:
+                out.append(f"a tree at svg({cx:.0f},{cy:.0f}) ({2 * r / FTPX:.0f} ft canopy) reaches {depth / FTPX:.1f} ft into {kind} at svg({rect.x:.0f},{rect.y:.0f})")
+    for i, (ax, ay, ar) in enumerate(trees):
+        for bx, by, br in trees[i + 1 :]:
+            lap = ar + br - math.hypot(ax - bx, ay - by)
+            if lap > tol:
+                out.append(f"two trees at svg({ax:.0f},{ay:.0f}) and svg({bx:.0f},{by:.0f}) overlap by {lap / FTPX:.1f} ft")
     return out
