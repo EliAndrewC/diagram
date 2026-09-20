@@ -80,7 +80,14 @@ def test_a_sheet_that_matches_its_map_is_quiet_and_one_on_no_map_is_skipped(tmp_
 
 def test_direction_b_a_sheet_feature_the_map_lacks(tmp_path: object) -> None:
     path = _manifest(str(tmp_path))
-    text, plan = _sheet(HALL, WELL, ARCH, '<g fill="#7A8C5C"><circle cx="60" cy="60" r="15"/></g>', '<rect x="450" y="100" width="100" height="200" fill="url(#bare-earth)" id="burial_ground"/>', viewbox="0 -60 600 540")
+    text, plan = _sheet(
+        HALL,
+        WELL,
+        ARCH,
+        '<g fill="#7A8C5C"><circle cx="60" cy="60" r="15"/></g>',
+        '<rect x="450" y="100" width="100" height="200" fill="url(#bare-earth)" id="burial_ground"/>',
+        viewbox="0 -60 600 540",
+    )
     found = mm.matches_map(plan, text, OnMap(path, "religious", 100, 100, "hall"))
     assert any(f.startswith("tree at svg(60,60) has no tree on the map") for f in found)
     assert any(f.startswith("burial ground at svg(500,200) has no burial ground on the map") for f in found)

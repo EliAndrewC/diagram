@@ -82,7 +82,7 @@ sheet is on no map and checks nothing.
 2. **Given** the same sheet, **When** the audit runs, **Then** every map feature of those classes that
    falls inside the sheet's frame has a counterpart on the sheet, or is named.
 3. **Given** the same sheet, **When** the audit runs, **Then** the subject's footprint on the sheet is
-   the footprint the map draws, within the map's own drawing grain, or is named.
+   the footprint the map draws, within the map's own resolution - one map px per side - or is named.
 4. **Given** a sheet whose notes declare no map, **When** the audit runs, **Then** the check reports
    that the sheet is on no map and nothing else.
 5. **Given** the redrawn Hoshigaoka sheet, **When** the GM compares it with the village map, **Then**
