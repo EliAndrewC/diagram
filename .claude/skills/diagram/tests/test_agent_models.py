@@ -13,6 +13,13 @@ which is how nineteen settlement reviews ran on Fable while that file said `inhe
 file with no `effort:` runs at the session's effort (R6). So both keys are owed by every file, and this
 test derives the roster from the directory: a new agent owes its tier here the day it lands.
 
+WHAT A DEFINED AGENT IS NOT HANDED (GM 2026-09-19, feature 256). *"If there's something that a subagent should know,
+it should be in the subagent specification."* Every file here carries `omitClaudeMd: true`, so the agent launches
+without the root `CLAUDE.md`, the nested ones and the session's memory index (measured: a first turn of 55-63 k tokens
+fell to 8-12 k and nothing recorded was missed - `specs/256-defined-subagents-without-claude-md/research.md`). The
+GM asked for this to be enforced by a test (2026-09-20), and the roster is derived from the directory, so a new agent
+owes the field the day it lands - and owes its contract every project rule its job depends on.
+
 TO CHANGE A TIER: change the row here and the frontmatter together, and record why - for a downgrade,
 the seeded-fault run that justifies it.
 """
@@ -78,6 +85,15 @@ def test_every_agent_file_agrees_with_the_tier_table() -> None:
     pinned = _pinned()
     wrong = {a: (pinned[a].get("model"), pinned[a].get("effort")) for a in TIERS if a in pinned and (pinned[a].get("model"), pinned[a].get("effort")) != TIERS[a]}
     assert not wrong, f"frontmatter disagrees with TIERS (file says -> table says): { {a: (v, TIERS[a]) for a, v in wrong.items()} }"
+
+
+def test_every_agent_launches_without_the_claude_md_files() -> None:
+    wrong = sorted(a for a, fm in _pinned().items() if fm.get("omitClaudeMd") != "true")
+    assert not wrong, (
+        f"a defined agent carries `omitClaudeMd: true` in its frontmatter (feature 256, GM 2026-09-19: what a subagent "
+        f"should know belongs in its own specification, not in CLAUDE.md or the memory index) - missing in: {wrong}. "
+        f"Add the field, and write into the contract each project rule the check's job depends on."
+    )
 
 
 def test_the_tier_table_itself_is_well_formed() -> None:

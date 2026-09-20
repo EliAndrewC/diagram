@@ -1,98 +1,116 @@
 {
  "feature": "256-defined-subagents-without-claude-md",
- "plan_sha256": "15b73d26f09f01a0749ce6f7f61d209e414c50d933de765076923fe999ed975f",
+ "plan_sha256": "f1913edb40c5d8b7a07346d619715f5448acceb3a07682c6741c4ea966f30278",
  "reviewed": "2026-09-20",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "P1-method",
-   "summary": "Every rule of the root CLAUDE.md - house style, research, development workflow, verification and iteration, session clones, what is enforced, key paths - is put to EACH of the twelve contracts one rule and one agent at a time, with no class of rule settled in advance; research.md holds a row per rule, a column per agent, each cell stated / moved / does not bear.",
+   "summary": "Every rule of the root CLAUDE.md is put to each of the twelve contracts, one rule and one agent at a time, no class settled in advance; research.md holds a row per rule and a column per agent (stated / moved / does not bear).",
    "class": "within",
-   "why": "This is FR-001's own test ('read rule by rule against the contract') and FR-001's own record ('per agent, each rule considered and whether it was already stated, was moved, or does not bear'). Round 1's narrowing - a whole class of session rules declared to bear on no check - is gone: the plan now names the session-shaped work several checks do (perf-audit and the gate's bands with make perf-confirm, both fidelity agents running make figures, spec-fidelity recording make plan-verdict, settlement-review and size-audit running make targets) and says a rule about make, the gate, the clones or spec-kit is read against them like any other and may come out 'moved'. RESOLVED."
+   "why": "Carried forward from the 2026-09-20 CLEAR pass; text unchanged. FR-001's own test and FR-001's own record."
   },
   {
    "id": "P1-nested-assignment",
-   "summary": "Both nested files are read for every check that works under either tree, by a criterion rather than a roster: the skill's CLAUDE.md for every agent that reads or runs anything under .claude/skills/diagram/ (the five research agents, whose pages live inside that tree; entry-drift, whose subject is the interactive docstrings; both fidelity agents, which run make figures from there), and research/CLAUDE.md for every agent that reads under research/ (escalation-check among them). The table says per agent which tree it reads.",
+   "summary": "Both nested CLAUDE.md files are read for every check that works under either tree, by a behavioral criterion rather than a roster; the table says per agent which tree it reads.",
    "class": "within",
-   "why": "FR-001 asks for the same reading of the two nested files 'for the checks that work there'. Round 1's narrowing was a pair of disjoint rosters that left spec-fidelity, spec-fidelity-verify and escalation-check with neither reading; the assignment is now a behavioral criterion, both files may apply to one agent, the three previously dropped checks are covered by name or by the criterion, and the per-agent disposition is recorded. No check is excluded by construction, and a check that works under neither tree needs no nested reading by FR-001's own words. RESOLVED."
+   "why": "Carried forward; text unchanged. FR-001 asks the same reading of the two nested files for the checks that work there."
   },
   {
    "id": "P1-heading",
-   "summary": "A moved rule is written once, short, in the contract's own voice, in the section that already covers its subject, or under '## House rules you check against' where none does.",
+   "summary": "A moved rule is written once, short, in the contract's own voice, in the section that already covers its subject or under a House rules heading.",
    "class": "within",
-   "why": "FR-001 asks exactly for the contract's own voice and no longer than the check needs; where it is placed is drafting."
+   "why": "Carried forward; text unchanged. FR-001 asks for the contract's own voice and no longer than the check needs."
   },
   {
    "id": "P2-placement",
    "summary": "omitClaudeMd: true on its own line in each frontmatter, after effort:.",
    "class": "within",
-   "why": "FR-002 asks for the field in the frontmatter of all twelve; the line's position is mechanical."
+   "why": "Carried forward; text unchanged. FR-002 asks for the field in all twelve."
   },
   {
-   "id": "P3-dispatcher",
-   "summary": "A headless Sonnet session in the case's worktree is the dispatcher; it reads prompt.txt and dispatches the agent under test ONCE, and the SUBAGENT's transcript gives the reply, the turns, the usage per message id and the first-turn input.",
+   "id": "P3-harness",
+   "summary": "measure/dispatch_seeded.sh: a headless session in the case's worktree dispatches the agent once with the recorded prompt; the subagent's transcript gives reply, turns, usage and prompt-verbatim; a non-verbatim run is discarded and re-run; control and candidate trees differ only in the field; scoring against the control first and the recorded findings second.",
    "class": "within",
-   "why": "FR-003 specifies this setting and leaves the dispatcher's model open; the dispatcher judges nothing and the agent under test runs on its own pinned tier. The recorded first-turn input per leg is also what makes the candidate legs - real agent FILES carrying the field - a check that the harness honors the field for a project agent file, which the spec's Assumption needs."
-  },
-  {
-   "id": "P3-scoring",
-   "summary": "Scoring is against the control first and the recorded findings second.",
-   "class": "within",
-   "why": "FR-003's standard IS the control ('the run with the field misses nothing its control caught'); the recorded findings are the second reference the spec also names."
-  },
-  {
-   "id": "P3-verbatim-discard",
-   "summary": "A run whose prompt was not handed over character for character is discarded and re-run, not scored.",
-   "class": "within",
-   "why": "FR-003 requires the recorded prompt verbatim, so a run that fails that precondition is not the specified experiment; the test is mechanical (result.json prompt_verbatim), not a judgment about the finding."
-  },
-  {
-   "id": "P3-trees",
-   "summary": "Case directories from 251's seeded.py prepare; the control tree gets the clone's agent files with the field removed, the candidate tree with it.",
-   "class": "within",
-   "why": "FR-003 asks for each case run twice in the same setting, with the field and without; both legs carry FR-001's moved rules, which isolates the field as the spec intends."
-  },
-  {
-   "id": "P3-record-format-prompt",
-   "summary": "The record-format case is prepared with the pre-pass listing but WITHOUT feature 255's rejected scoped text.",
-   "class": "within",
-   "why": "FR-003 names 'the contract as it stands on main', and 255 R2 was NOT ADOPTED - the scoped text, its script and its target were left as they were, while make record-prepass is on main."
-  },
-  {
-   "id": "P3-no-index-limit",
-   "summary": "P4 states the limit for P3: its worktree legs, candidate and control alike, run with no memory index, so the proof is of the CLAUDE.md files leaving; the index leaving is covered by FR-001's finding that no contract refers to it and by FR-006's measurement.",
-   "class": "within",
-   "why": "It is an honest statement of a limit the SPEC itself creates, not a narrowing of FR-003. FR-003 prescribes the setting ('a headless session in the case's worktree'), and feature 255 R5 measured that a scratch worktree is its own project and loads no index - so no plan honoring FR-003 can show the index leaving in a proof run, and nothing is being excused or skipped. The two coverers it names are the spec's own: FR-001 decides the index is not swept 'by the GM's words ... and no check's contract refers to the index (feature 255, R5)', and FR-006 is the before-and-after measurement. Writing the limit down is what the repository asks of an accepted limitation."
+   "why": "Carried forward; text unchanged. FR-003's setting, method and rule."
   },
   {
    "id": "P4-setting",
-   "summary": "FR-006's two legs are dispatched from /diagram, where the memory index loads, in 255 R7's probe shape: a headless session with the agent defined inline (--agents) from entry-drift's REAL frontmatter and contract body - its pinned model and tools - once as it stands and once with omitClaudeMd: true; nothing is written under /diagram.",
+   "summary": "FR-006's two legs are dispatched from /diagram, where the memory index loads, with the agent defined inline from entry-drift's real frontmatter and contract body; nothing written under the mirror; the worktree legs' no-index limit is stated.",
    "class": "within",
-   "why": "FR-006 asks for the first-turn input of 'one real defined agent, dispatched from this repository before and after the field'. Round 1's narrowing was the worktree, which 255 R5 measured to load no index and so could not show half of what the feature claims; both legs now run at the one path where the index loads, on a real contract at its pinned tier, and the mirror is not written to (CLAUDE.md: /diagram is never a workspace; the open-task rule bars landing the field there first). The residue is named and covered rather than hidden: the inline definition leaves the harness's treatment of a project agent FILE to P3's candidate legs, which run the clone's real agent files with the field and record each leg's first-turn input. RESOLVED."
-  },
-  {
-   "id": "P4-agent",
-   "summary": "entry-drift, the smallest real contract, is the agent measured; two short Opus runs because the agent file pins its model.",
-   "class": "within",
-   "why": "FR-006 asks for one real defined agent and does not name it; the tier is the agent file's, which is the point of the measurement."
+   "why": "Carried forward; text unchanged. FR-006 asks for one real defined agent measured before and after."
   },
   {
    "id": "P5-record",
-   "summary": "Root CLAUDE.md's review-subagents bullet gains one sentence; docs/efficiency-tooling.md's feature-255 row gains the outcome; docs/make-targets.html is unaffected.",
+   "summary": "Root CLAUDE.md's review-subagents bullet gains a sentence; docs/efficiency-tooling.md's feature-255 row gains the outcome; review-ledger untouched.",
    "class": "within",
-   "why": "FR-006 names those two documents and no other; docs/review-ledger.md is untouched as the spec requires."
+   "why": "Carried forward; text unchanged. FR-006 names those documents and no other."
   },
   {
-   "id": "CC-route",
-   "summary": "Constitution Check: no engine code, one shell harness under the feature's measure/, no guard file edited, tests/test_agent_models.py not touched, route DIRECT.",
+   "id": "CC-guard-files",
+   "summary": "Amendment 1 edits two guard files - .claude/skills/diagram/tests/test_agent_models.py (the field's test, P6) and the skill Makefile (make scatter-bases, P8) - each with GUARD_EDIT_OK and a reason, where the first landing edited none.",
    "class": "within",
-   "why": "The delta is .claude/agents/, root CLAUDE.md, docs/ and specs/, which is the DIRECT route by the repository's own rule; leaving the tier test alone is what round 1 of the SPEC review required after the frontmatter guard was cut as unrequested."
+   "why": "FR-007 asks for the requirement in test_agent_models.py by name ('which already derives its roster from .claude/agents/') and FR-009 asks for a make target wrapping the scatter parse; the Makefile and that test are guard files, so guard-file-hooks.sh requires the escape. Nothing is being excepted: the escape is the repository's own route for an edit the spec demands, and the line records which two files and why."
   },
   {
-   "id": "Order",
-   "summary": "T01 reading -> T02 field -> T03 proof (six runs, plus FR-004's second pair if needed) -> T04 measurement -> T05 record -> T06 gates and landing.",
+   "id": "CC-route-amendment",
+   "summary": "The Route line is left at DIRECT although Amendment 1's delta now reaches the skill Makefile, tests/test_agent_models.py and scripts/.",
    "class": "within",
-   "why": "It follows the requirement order and puts the reading before the field, as FR-001 and FR-002 are written; FR-004's second pair sits inside T03."
+   "why": "The route is chosen from the delta by the repository's rule - engine code is l7r/**/*.py and pool/*.gen.py|*.json - and none of the amendment's paths are engine code, so DIRECT still holds. The enumeration in the Route line is now incomplete as prose (it lists .claude/agents/, root CLAUDE.md, docs/, specs/), but the decision it records is unchanged and correct."
+  },
+  {
+   "id": "P6-test-shape",
+   "summary": "One test in test_agent_models.py, test_every_agent_launches_without_the_claude_md_files, requiring the field of every file in the already-derived roster, with a message naming the field, the GM's ruling and the feature; the module docstring gains the ruling; the tier table is untouched.",
+   "class": "within",
+   "why": "FR-007 word for word: the module that already derives the roster 'also requires omitClaudeMd: true of every agent file, so an agent added later launches without the three files or the gate fails'. Deriving from the roster rather than a hand list is what makes a LATER agent file fail, which is the clause's own purpose. Leaving the tier table alone keeps the amendment to what was asked."
+  },
+  {
+   "id": "P6-proof-and-table-row",
+   "summary": "The guard is proven by removing the field from one file and watching the test go red, and root CLAUDE.md's gate row for test_agent_models.py gains a clause naming what it now enforces.",
+   "class": "within",
+   "why": "The red proof is FR-007's second sentence verbatim. The CLAUDE.md row is a one-clause documentation edit to a row that already exists for this very file, recording an enforcement the GM asked for; it adds no behavior and no scope, and the repository's own rule is that every guard appears in that table."
+  },
+  {
+   "id": "P7-contract-wording",
+   "summary": "spec-fidelity.md question 4's 'extra verification the GM did not request' becomes 'verification of something the GM did not ask for', with a paragraph after question 5 stating the distinction on this feature's round 1 as the worked example; spec-fidelity-verify.md gains the same paragraph.",
+   "class": "within",
+   "why": "FR-008 asks that BOTH fidelity contracts carry the GM's distinction and identifies question 4's phrase as the sentence that caused the cut. The rewording is the minimum edit that removes the trap, and the paragraph carries both halves FR-008 names (what serves the request, and what stays out of scope - unrequested verification, and new behavior riding in under the name of a check)."
+  },
+  {
+   "id": "P7-one-seeded-run",
+   "summary": "The fidelity-contract change is proven by ONE seeded run: dispatch_seeded.sh on round 1's own recorded prompt, the tree at the spec's first commit, the amended contract copied in, scored on four items - old FR-003 must not be cut, and the failure branch, the memory-index sentence and SC-004 must still be raised. No control leg and no second case.",
+   "class": "within",
+   "why": "This is FR-008's own sentence ('the amended contract is run on round 1's own recorded prompt, and it must no longer cut old FR-003 while still raising that round's other three items') and the repository's stated method for improving a review agent ('add the general rule, prove it fires on the unfixed artifact, then fix the artifact') - one run on the unfixed artifact is that method, not a reduction of it. A control leg is FR-003's rule for the FIELD proof, where the question is whether removing three files costs a finding; here the control already exists in the record - round 1's verdict is what the UNAMENDED contract returned on this same prompt, and it is the thing the run must differ from on exactly one item and match on three. The four scored items are round 1's four items exactly, as the spec's Review history records them, so nothing of that round is dropped."
+  },
+  {
+   "id": "P8-make-target",
+   "summary": "make scatter-bases MAP=<pool map> is added to the skill Makefile (GUARD_EDIT_OK, a new read-only diagnostic) running l7r.diagram.tools.scatter_audit on the map's SVG, and settlement-review's paragraph names the target; the three (Tools: ...) description tails are cut; the seven contracts citing tests/test_agent_models.py cite .claude/skills/diagram/tests/test_agent_models.py.",
+   "class": "within",
+   "why": "FR-009 asks precisely for 'a make target wraps it and the contract names the target', plus the two cosmetic fixes the GM listed. The GM's words are 'fix anything left unfixed, including the settlement-review issue ... and the two cosmetic path and description duplications'; a make target is the repository's only sanctioned route to an engine entry point, so wrapping rather than giving the module a new CLI is the literal fix and adds no behavior beyond a read-only diagnostic. HOW the recipe reaches parse_bases (inline, or through a helper script under scripts/) is drafting the plan does not decide; the working tree currently adds scripts/_scatter_bases.py with its own test, which is still within FR-009 but is not recorded in this plan text - if the plan is amended to say so, the digest moves and a fresh verdict is owed."
+  },
+  {
+   "id": "P9-six-recorded-cases",
+   "summary": "The six agents with recorded runs are paired on named recorded cases: entry-drift farmhouse (251 R5), escalation-check 242 (251 R5), quote-check capitals fn-235..240 with its make quote-verbatim report (255 R2), source-applicability Shanghai (255 R1), source-reader 09-12 with its saved pages (255 R4), spec-fidelity feature 251's MODE 2 round 1.",
+   "class": "within",
+   "why": "FR-010 asks for exactly these six agents 'each on one recorded case with known findings'. Each case named is a row of the cited record with its own findings - checked: 251 R5 carries 'entry-drift farmhouse ... DRIFTED' and 'escalation-check 242 ... 3 KEEP, 1 REWRITE, 2 CUT'; 255 R2 carries 'quote-check, capitals fn-235..240 (6 notes) | fn-237 NOT-ON-PAGE at its link, and \"23\" in no quote'. The phrase 'cut to a slice where the recorded run was large' describes cases the RECORD already scored as slices (255 R2 scored the capitals slice on its own findings), which keeps FR-003's 'recorded prompt, verbatim' intact; a slice the record does not carry would not, and the plan does not propose one."
+  },
+  {
+   "id": "P9-two-fixture-pairs",
+   "summary": "building-review is paired on tests/fixtures/ochiba-no-scale-red.svg (scale bar removed) and size-audit on tests/fixtures/ochiba-big-bath-red.svg (an oversized bath), each staged in a HEAD worktree as a pool subject pool/magistracies/ochiba-red/ beside a copy of the Ochiba magistracy's notes and rendered to PNG.",
+   "class": "within",
+   "why": "FR-010 asks for exactly this: 'each on a frozen defective sheet under tests/fixtures/ whose defect is known by construction', scored against the CONTROL first by FR-003's rule. Both sheets are known by construction and are the defect each agent's own contract names ('Scale bar -> REQUIRED ... If ABSENT -> ERROR'; an oversized fixture rect of 90x90 px against the sheet's 40x33). The borrowed notes do not contaminate the pair: the two fixtures ARE the Ochiba magistracy sheet with one line changed (diff against pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg is a single rect in one and the scale-bar text in the other), so the copied notes are that sheet's OWN notes rather than a stranger's; the notes' Review log settles the divider gate, the pond and the cell size and nothing touching the scale bar or the bath - it records the bath at 13x11 ft, which makes the injected defect easier to see, not laundered; and both legs of each pair carry identical staging, so anything the notes add appears in the control too and FR-003's control-first rule absorbs it. Staging in a scratch worktree leaves the clone's pool/ untouched, as SC-005 requires."
+  },
+  {
+   "id": "P9-harness-and-pricing",
+   "summary": "All eight pairs run by FR-003's harness and rule with FR-004 governing a miss; sixteen runs, the batch's size stated before launch; settlement-review and perf-audit are priced in research.md with their reasons.",
+   "class": "within",
+   "why": "FR-010 says every pair is run by FR-003's method and scored by FR-003's rule, and that the two left out are put to the GM with their particular reasons and prices, not decided by the session; T10 carries 'priced for the GM'. Two restatement gaps to honor from the spec rather than the plan, neither a decision to do otherwise: FR-003 asks that the batch's size AND its rough weight be stated before launch, where P9 says size only; and FR-010's 'put to the GM ... the eight results in hand' means the question reaches the GM, not only research.md."
+  },
+  {
+   "id": "Order-amendment",
+   "summary": "T07 -> T08 -> T09 -> T10 -> T11.",
+   "class": "within",
+   "why": "It follows FR-007 to FR-011 in order and puts the guard and the contract change before the sixteen runs and the landing gate; tasks.md T07-T11 name the same work with the same requirement ids."
   }
  ],
  "verdict": "CLEAR"

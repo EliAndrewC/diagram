@@ -10,7 +10,7 @@ omitClaudeMd: true
 # Size Audit (Mode A compound plans)
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`tests/test_agent_models.py`, GM 2026-09-19).** The arithmetic of this audit - every drawn thing
+`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19).** The arithmetic of this audit - every drawn thing
 converted from px to feet - is done by a script with no model (`make size-table PLAN=<svg>`, run by the
 session and handed to you). What is left is yours and is not mechanical: researching what the real
 thing measured, independently of the documented tolerances, and ruling on the ratios and the ordering.

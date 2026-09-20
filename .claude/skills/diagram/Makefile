@@ -501,6 +501,13 @@ pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A
 ##  ARGS=<in.svg>  the Mode A compound SVG to measure
 	$(RUN).tools.pack_audit $(ARGS)
 
+# GUARD_EDIT_OK: feature 256 - a new read-only diagnostic wrapping the engine's scatter parse, which settlement-review's contract named and no target ran; no guard changes.
+scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base points per family, parsed from its SVG   MAP=pool/hamlets/sawada [BOX=x0,y0,x1,y1]
+##  MAP=<pool map>      the map's folder, its stem, or its .svg
+##  BOX=x0,y0,x1,y1     also list the bases inside this world-coordinate window
+	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
+
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
 ##  the reviewer's page measurement (feature 231): raster mode at the opening view, VECTOR=1 past the switch

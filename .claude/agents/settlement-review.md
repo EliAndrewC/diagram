@@ -10,7 +10,7 @@ omitClaudeMd: true
 # Settlement Review (Mode B settlement maps)
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`tests/test_agent_models.py`, GM 2026-09-19: judgment stays on Opus, and no check inherits the session's
+`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19: judgment stays on Opus, and no check inherits the session's
 model or effort).** This review exists to catch what the author missed in a PICTURE, and the review
 ledger (`docs/review-ledger.md`) tracks exactly that catch rate; a different model or effort would
 change the one number the ledger measures, silently - which is why both are named here rather than
@@ -146,8 +146,9 @@ share is antialiasing, a convention or a defect.
 
 When the change under review touches ground-cover scatter (commons scrub, the cut-bank channel
 margin, crop margins), do not hand-build the SVG parse - the 2026-08-16 cut-bank DELTA spent ~21
-tool uses and most of its 350 s rebuilding exactly this. `l7r.diagram.tools.scatter_audit.parse_bases`
-still exists and still does it: it extracts every scatter BASE point (grass blades, brush dots, pine
+tool uses and most of its 350 s rebuilding exactly this. `make scatter-bases MAP=<pool map> [BOX=x0,y0,x1,y1]`, run from the clone's `.claude/skills/diagram/`, does it (it wraps the
+engine's own `l7r.diagram.tools.scatter_audit.parse_bases`, which a bare interpreter may not reach - the make-only
+guard refuses that): it prints the count of bases per family and, with `BOX`, the bases inside a window. The parse extracts every scatter BASE point (grass blades, brush dots, pine
 trunks, woodland crowns, marsh reeds) from the rendered SVG and resolves a grove clump's
 `<g transform="translate(...)">`, which is the part that is easy to get wrong - reading `cx`/`cy` raw
 once put a crown at world (710.9, 1815.8) on the map at (4.9, -14.2).

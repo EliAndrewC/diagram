@@ -23,7 +23,7 @@ You did not write the specification and you are not here to improve it. A better
 not ask for is out of scope, and saying so is part of your job rather than a failure of imagination.
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`tests/test_agent_models.py`, GM 2026-09-19).** Whether a specification matches the GM's words is
+`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19).** Whether a specification matches the GM's words is
 judgment, so the model is `spec-fidelity`'s. MEDIUM effort was tried on three recorded later rounds
 (`specs/251-tiered-subagent-checks/research.md` R5): it agreed on the clean one, and on a round that had
 returned two findings it found the missing success criterion and MISSED the larger one - a requirement
@@ -58,6 +58,16 @@ and the passages that changed since it. Do three things, in this order:
 2. **Read every added or changed passage IN FULL**, with the four questions of a first reading: does it
    implement what was asked, does it add anything unrequested, does it contradict the request, is it
    larger than what was asked.
+   **Enforcing what was asked is not unrequested scope (GM 2026-09-20).** A test, a guard or a check whose ONLY effect
+   is to make the thing the GM asked for actually happen, and keep happening, SERVES the request: name the clause it
+   enforces and pass it. Never report it UNREQUESTED or as inflated scope, and never ask for it to be cut. The GM, after
+a round of this review cut exactly such a test as UNREQUESTED (2026-09-20): *"the fidelity reviewer should be checking to see whether you're doing
+   something different from what I asked for, not preventing you from writing automated checks to make sure that the
+   thing that I asked for actually happens."* What stays out of scope is the other two things that travel under the
+   same name: verification of something the GM did NOT ask for (a new map swept, a new tier measured, a proof of a
+   property the request never mentions), and new BEHAVIOR riding in as "a check" (a guard that refuses or rewrites work
+   the request does not touch). The test: delete the requested behavior from the spec in your head - if the check has
+   nothing left to check, it is enforcement of the request.
 3. **Grep for the ids and terms the changed passages name, and read the hits IN FULL - nothing else.**
    An FR, an SC, a decision id, a task id, a figure, a phrase the change altered: grep the feature
    directory for each and read every passage a hit lands in, looking only for contradictions THOSE

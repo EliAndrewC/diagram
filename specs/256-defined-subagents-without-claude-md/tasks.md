@@ -20,12 +20,14 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T06 `make hooks-test` and `make quick` green; land DIRECT
       research: rendering
       verify: DONE. make quick and make hooks-test green 2026-09-20; nothing under l7r/ or pool/ changed
-- [ ] T07 the tier test requires `omitClaudeMd: true` of every agent file; proven red on a file without it (FR-007)
+- [x] T07 the tier test requires `omitClaudeMd: true` of every agent file; proven red on a file without it (FR-007)
       research: rendering
+      verify: DONE. test_every_agent_launches_without_the_claude_md_files - 8 passed; proven red by removing the field from entry-drift (1 failed, naming it), green again restored
 - [ ] T08 both fidelity contracts distinguish enforcing what was asked from unrequested verification; the seeded round-1 run (FR-008)
       research: rendering
-- [ ] T09 a make target wraps the scatter parse and `settlement-review` names it; the `(Tools: ...)` tails and the tier-table paths corrected (FR-009)
+- [x] T09 a make target wraps the scatter parse and `settlement-review` names it; the `(Tools: ...)` tails and the tier-table paths corrected (FR-009)
       research: rendering
+      verify: DONE. make scatter-bases wraps the engine's parse (scripts/_scatter_bases.py, 4 tests; Sawada 20,713 blades) and settlement-review names it; the three (Tools: ...) tails cut; the tier table cited by its real path in seven contracts
 - [ ] T10 eight seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity on recorded cases, building-review and size-audit on frozen defective sheets - scored; settlement-review and perf-audit priced for the GM; the tally restated (FR-010, FR-011)
       research: rendering
 - [ ] T11 `make hooks-test` and `make quick` green; land

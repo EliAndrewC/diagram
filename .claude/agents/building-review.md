@@ -10,7 +10,7 @@ omitClaudeMd: true
 # Building Review (Mode A compound plans)
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`tests/test_agent_models.py`, GM 2026-09-19: judgment stays on Opus, and no check inherits the session's
+`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19: judgment stays on Opus, and no check inherits the session's
 model or effort).** This review exists to catch what the author missed in a PICTURE, and the review
 ledger (`docs/review-ledger.md`) tracks exactly that catch rate; a different model or effort would
 change the one number the ledger measures, silently - which is why both are named here rather than
