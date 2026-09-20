@@ -90,3 +90,14 @@ FR-004's second pair -> T04 the before-and-after measurement -> T05 the record -
   `settlement-review` and `perf-audit` are priced in `research.md` with their reasons (FR-010).
 
 Order: T07 -> T08 -> T09 -> T10 -> T11.
+
+## Amendment 2 (2026-09-20)
+
+- **P10 the GM's three rulings (FR-012 to FR-014).** No new machinery. The contract wording is sharpened in place
+  (P7's paragraph gains the test-versus-guard sentence); `omitClaudeMd` is deleted from `spec-fidelity.md` alone and
+  the tier test gains `KEEPS_CLAUDE_MD`, a name-to-reason table the guard skips and asserts is not stale, so the hole
+  in FR-007's guard is exactly the size of the ruling and cannot silently grow; root `CLAUDE.md`, the guard table's
+  gate row, `docs/efficiency-tooling.md` and `research.md` R8 say so. `settlement-review` and `perf-audit` get no
+  harness at all - FR-014 is watching, and FR-004 is already the route for what watching finds.
+
+Order: T07 -> T08 -> T09 -> T10 -> T11 -> T12.

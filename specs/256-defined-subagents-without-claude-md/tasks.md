@@ -32,5 +32,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T10 eight seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity on recorded cases, building-review and size-audit on frozen defective sheets - scored; settlement-review and perf-audit priced for the GM; the tally restated (FR-010, FR-011)
       research: rendering
       verify: DONE. eight pairs scored finding by finding by an independent reader - variance in six, a one-sided loss in entry-drift (repaired by a moved rule, re-run DRIFTED) and in spec-fidelity (not settled, raised with the GM); settlement-review and perf-audit priced; the tally ten of twelve; research R6
-- [ ] T11 `make hooks-test` and `make quick` green; land
+- [ ] T11 the field off `spec-fidelity.md` and the tier test's named exception; `settlement-review` and `perf-audit` recorded as watched (FR-013, FR-014)
+      research: rendering
+- [ ] T12 `make hooks-test` and `make quick` green; land
       research: rendering

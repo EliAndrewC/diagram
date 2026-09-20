@@ -1,7 +1,8 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2; Amendment 2, the GM's three rulings, awaiting its review); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - the field is set in all twelve,
-the proof is clean on its three cases, every run is in `research.md`.
+**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2; Amendment 2, the GM's three rulings, awaiting its review); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - at that landing the field was set in all
+twelve and the proof was clean on its three cases; Amendment 2 excepts `spec-fidelity` (FR-013), so eleven carry it
+and the tier test names the twelfth. Every run is in `research.md`.
 
 ## Summary
 
@@ -10,7 +11,8 @@ session's memory index: what such an agent needs to know belongs in its own spec
 session dispatches keeps both. The harness has the switch - `omitClaudeMd: true` in an agent file's frontmatter,
 measured in feature 255's R7 to remove both files from a subagent's first turn. This feature first moves into each
 contract whatever that check was relying on the root `CLAUDE.md` to tell it, then sets the field in all twelve agent
-files, and proves on recorded findings that the checks still find what they found. No engine code: the delta routes
+files (eleven from Amendment 2, which excepts `spec-fidelity` by the GM's ruling - FR-013), and proves on recorded
+findings that the checks still find what they found. No engine code: the delta routes
 DIRECT.
 
 ## Functional requirements
@@ -111,8 +113,10 @@ behavior, in scope only for the exact thing the GM asked to have enforced, its r
 UNREQUESTED part by part.
 
 **FR-013 - `spec-fidelity` keeps the `CLAUDE.md` files until a test can tell the field from variance.** FR-004 left
-this to the GM, and the GM ruled: the field comes off `spec-fidelity.md` alone. FR-002's "all twelve" and SC-002
-read "all twelve but `spec-fidelity`" from here. The tier test carries the exception BY NAME with the ruling as its
+this to the GM, and the GM ruled: the field comes off `spec-fidelity.md` alone. FR-002's "all twelve" and SC-002 read "all twelve but `spec-fidelity`" from
+here; FR-007's "every agent file" and SC-006 read "every agent file the tier test does not name as the GM's
+exception, with the ruling as its reason" - a new agent file still owes the field, and a row that has gone stale
+fails the gate; and the Summary's and the Status line's "all twelve" are the first landing's state, eleven from here. The tier test carries the exception BY NAME with the ruling as its
 reason (`KEEPS_CLAUDE_MD`), and fails on a row that has gone stale. What puts the field back: three samples a leg on
 the recorded case, about four weight units, run when someone asks for it - it is not part of this feature.
 
