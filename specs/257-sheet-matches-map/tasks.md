@@ -109,9 +109,11 @@ historical question.
       research: rendering
       measure: `make test-file FILE=tests/test_mode_a_sheets.py` wall time; the gate's own output
       verify: DONE. make done green (done257b.log: 4085 passed, every module at 100%, the roll census green, hamlet floor 99 modules at 100%); m:sweep-cost 4.671 s recorded
-- [ ] T15 The writeup for the GM through `escalation-check`: the three answers (what fires, what the sheet
+- [x] T15 The writeup for the GM through `escalation-check`: the three answers (what fires, what the sheet
       now shows, what the map itself says), the seven-arch disagreement and the well 108 ft behind the
       hall as the map's own record (FR-009), the reviewer's aside
       procedure
-- [ ] T16 Stop-work: commit; `scripts/sync-with-main.sh done` (GATED - engine code); render-sync once green
+      verify: DONE. the writeup drafted and judged by escalation-check (4 keep, 2 rewrite, 3 cut): the two checks and the two sheets they changed kept; the seven-arch conflict kept as two GM rulings in conflict; the well and frame questions cut (the record answered them); the 48 ft block a measurement; sent as the final message
+- [x] T16 Stop-work: commit; `scripts/sync-with-main.sh done` (GATED - engine code); render-sync once green
       procedure
+      verify: DONE. commit; scripts/sync-with-main.sh done on the green gate (GATED route - engine code); render-sync after
