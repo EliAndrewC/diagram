@@ -19,7 +19,7 @@ import re
 FRONT = "_front.html"
 TAIL = "_tail.html"
 CITATIONS_FRONT = "_citations-front.html"
-CITATIONS_WORKS = "_citations-works.html"
+CITATIONS_MID = "_citations-mid.html"
 CITATIONS_TAIL = "_citations-tail.html"
 #: A question's notes live beside it: `010-how-deep.html` -> `010-how-deep.notes.html`.
 NOTES_SUFFIX = ".notes.html"

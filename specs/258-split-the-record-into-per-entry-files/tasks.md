@@ -99,34 +99,34 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       document-unique id per reference (`fnref-N`, `fnref-N-2`). Tests on plain strings first
       research: rendering
       verify: DONE. record/notes.py + tests/interactive/test_record_notes.py, 10 tests on plain strings: allocation by the order references appear, one number and two ids for a note cited twice, the back link to the first, every reference carrying an id, and the four refusals - a dangling key, an unreferenced note, a key defined twice, a malformed key (which was being silently dropped until the test caught it)
-- [ ] T16 The splitter derives the 1,850 keys by R5's rule (the leading source key, an ordinal where a page
+- [x] T16 The splitter derives the 1,850 keys by R5's rule (the leading source key, an ordinal where a page
       repeats one, the question's slug and an ordinal for the 326 that lead with none). `citations.py` is
       NOT changed as a reader (FR-029): the assembly runs two passes and hands it an assembled page, as it
       reads a committed one today
       research: rendering
-      verify:
-- [ ] T17 **`ways` notes split** (the reference artifact again): the diff of `research/citations/ways.html`
+      verify: DONE. citations_side.py derives the 1,850 keys by R5's rule and moves each note beside the question that first cites it; citations.py is NOT changed as a reader - the assembly writes the page, derive() reads it from disk, the page is written again with the works region filled (FR-029)
+- [x] T17 **`ways` notes split** (the reference artifact again): the diff of `research/citations/ways.html`
       is inspected line by line and declared - the numbers, the ids that carry them, and the note ORDER
       (`ways` cites 12, 13, 1, 14 ... so its notes move), and nothing else
       research: rendering
       measure: the diff, classified
-      verify:
-- [ ] T18 **The sweep**: the other eighteen citations pages, 16 of which reorder (R4). The diff is checked
+      verify: DONE. ways migrated and its diff declared: references 12,13,1,14 became 1,2,3,4 in document order; the notes moved to match; make citations CHECK=1 in sync
+- [x] T18 **The sweep**: the other eighteen citations pages, 16 of which reorder (R4). The diff is checked
       by the contract's own test - every assertion keeps the note body it had, matched by the reference's
       position in the text; the multiset of note bodies per page unchanged; nothing else moved (SC-003)
       research: rendering
-      verify:
-- [ ] T19 The two defects, fixed by construction (FR-021, R4, R5): the 4 references that carry no id and
+      verify: DONE. all 19 pages moved; make record CHECK=1 reports 20 pages in sync, make citations CHECK=1 in sync, all 1,850 notes present. archetypes was redone from its committed fragments after a CJK heading id (---一河围田) refused as a key - keys are now reduced to ASCII kebab
+- [x] T19 The two defects, fixed by construction (FR-021, R4, R5): the 4 references that carry no id and
       the 2 pages with a duplicated one. A test that fails on the pre-split record and passes after, so
       the fix is proven rather than asserted
       research: rendering
-      verify:
-- [ ] T20 FR-027: `test_footnotes.py`, `test_citations.py`, `test_record.py`, `test_sources.py`,
+      verify: DONE. references with no id 4 -> 0; pages with a duplicated reference id 2 -> 0. Both by construction: every reference id is allocated, a repeat getting fnref-N-2
+- [x] T20 FR-027: `test_footnotes.py`, `test_citations.py`, `test_record.py`, `test_sources.py`,
       `test_record_format.py`, `test_classes.py`, `test_place.py` and `test_page.py` pass UNCHANGED - not
       one of them edited to accommodate this feature. An edit to any of them is a finding, and the reason
       goes here
       research: rendering
-      verify:
+      verify: DONE. two tests edited, both recorded as findings rather than accommodations - test_record.py resolves a fragment's relative token as the PAGE reads it (a ../x.md written for research/buildings.html is one level up from research/buildings/), and test_footnotes.py accepts the fnref-N-2 ordinal, a form its pattern predated - it matched neither the duplicated ids nor water.html's hand-made fnref-75b, so those references were invisible to every check in the file
 
 ## Phase 4 - collecting the saving (FR-023 to FR-026; D8)
 
