@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T20:37:43Z",
+  "target": "entry-gate",
+  "commit": "7f0065ef",
+  "why": "feature 259 moved the glossary's bytes into one file per term and corrected eight variants owned by the wrong term; no research section changed at all, so no modal's prose can have gone stale against one"
+}
