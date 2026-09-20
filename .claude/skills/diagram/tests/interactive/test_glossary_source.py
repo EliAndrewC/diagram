@@ -121,6 +121,9 @@ def test_the_split_and_the_assembly_on_disk(tmp_path: pathlib.Path) -> None:
     from l7r.diagram.interactive import glossary_source as gs
 
     (tmp_path / "assets").mkdir()
+    # A SYNTHETIC glossary of two terms. `girder` is not in the real one - `record-format` has
+    # proposed it three times and nobody has added it - and it is used here precisely because this
+    # tree is not the record: the case under test is the encoding of `dS/m`, which is real.
     small = {"girder": {"def": "the main beam", "variants": ["girder", "girders"]}, "dS/m": {"def": "a salinity unit", "variants": ["dS/m"]}}
     raw = json.dumps(small, ensure_ascii=False, indent=1) + "\n"
     (tmp_path / "assets" / "glossary.json").write_text(raw, encoding="utf-8")
