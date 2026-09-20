@@ -58,7 +58,7 @@ model is handed.
 
 ## R3 - What the filter cannot reach, named rather than discovered later
 
-**Finding.** Of the twelve terms those three runs proposed, three are not raised at the cutoff:
+**Finding.** Of the eleven terms those three runs proposed, three are not raised at the cutoff:
 
 | term | why not |
 |---|---|
@@ -105,4 +105,38 @@ four derived inputs are memoized within a run, which is the whole of the fix.
 
 ## R5 - What the check then does
 
-Taken by T09, and recorded here when it is.
+**Question.** Given the list, does `record-format` rule on it - and does the floor cost it the noticing
+it was doing before?
+
+**Method** (observed 2026-09-20). One `record-format` dispatch on the same entry all three of feature
+259's runs checked, handed the prepass output verbatim and asked for the three things FR-007 and FR-008
+name: a verdict on every candidate, anything beyond the list, and the two visible-text classes the
+contract already asked for.
+
+**Finding.**
+
+| | |
+|---|---|
+| candidates ruled on | **34 of 34**, in the list's order, one line each |
+| PROPOSE | 11 |
+| DEFINED INLINE | 3 (`decking`, `embedment`, `obliquity`) |
+| ORDINARY | 20 |
+| terms reported BEYOND the list | 6 |
+
+SC-004 is met, and met item by item: every candidate carries its verdict, and the plainly ordinary ones
+are one short line each rather than an argument.
+
+**The part that decides whether the floor is safe.** Three of the six terms it added beyond the list are
+exactly the three R3 named as unreachable - `carried deck` and `spread footing` (phrases the word-level
+filter cannot see) and `embankment` (23 fragments, so not rare). It also added `bearing seat`, which it
+called the entry's hinge, `landing` and `USDA`. The floor did not replace the noticing; the run found
+more beyond the list than any of feature 259's three runs proposed in total.
+
+**Against feature 259's three runs**, which is the comparison this feature was created by: those runs
+agreed on eight terms and differed in a tail of three, and no pair of them met "the same findings". This
+run's relationship to the list is not a tail at all - it is 34 verdicts against 34 names. What still
+varies is what a run finds BEYOND the list, and the contract says in as many words that a report is not
+judged incomplete for containing it.
+
+**What it decides.** SC-004, and the substitution FR-011 puts to the GM: the bar is checkable, and what
+it certifies is the floor, not the whole of the check.

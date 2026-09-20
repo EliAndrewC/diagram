@@ -63,7 +63,8 @@ one already exists on disk:
 - **the text**: the question fragment AND its `.notes.html`. This is the correction the plan review of
   2026-09-20 blocked on, and it is worth stating plainly: the prepass parses the ASSEMBLED page and
   slices it by heading, and on that basis the entry has 181 words, yields 7 candidates and catches 3 of
-  the 12 known terms. R2 measured the fragment plus its notes - 324 words, 34 candidates, 9 of 12 -
+  the eleven proposed terms. R2 measured the fragment plus its notes - 324 words, 34 candidates, 2 of
+  the 3 varying terms and 6 of the 8 core -
   because that is what `record-format` is handed. 27 of the 34 come from the quoted passages in the
   notes. The candidate list must walk what the check reads, or it is a list about a different document.
 - **what is defined**: the variant index feature 259 derives.
@@ -76,13 +77,14 @@ It is pure so its test needs no filesystem; the caller reads the four and passes
 
 ### D2 - Why the cutoff is 2, stated where it is applied
 
-R2 measured the whole curve: the catch plateaus at 9 of 12 from a cutoff of 2 onward while the list
+R2 measured the whole curve: the catch plateaus from a cutoff of 2 onward - 2 of the 3 terms that
+varied between runs, 6 of the 8 core - while the list
 keeps growing, so 2 is the cheapest cutoff that catches what this filter can catch. The number lives
 beside the code that applies it with that measurement, not in a doc.
 
 ### D3 - What the filter cannot reach goes in the CONTRACT, not only in the research
 
-Three of the twelve known terms are unreachable by a word-level rarity filter (R3): two phrases and one
+Three of the eleven proposed terms are unreachable by a word-level rarity filter (R3): two phrases and one
 word the record uses 23 times. If the contract does not say so, an empty list reads as an empty
 question - which is exactly the failure mode a mechanical pre-pass introduces. So FR-008 is a contract
 change, and it is the one part of this feature that is about the model rather than the script.

@@ -80,8 +80,12 @@ landed with it recorded as failed. This is what replaces it.
   is word-level (R3). Same cover.
 - **A word in the prose only as a plural** IS raised, in the prose's own form - `stringers`, `wingwalls`
   - which is the form the reader meets.
-- **A citation key** (`ritter-timber-bridges`, `nrcs-ts14q-abutments`) is rare by construction and is
-  not a word a reader is asked to know; it is excluded by being a key in the registry.
+- **A citation key** (`ritter-timber-bridges`, `nrcs-ts14q-abutments`) is not a word a reader is asked
+  to know, and none appears on any list - but not because FR-004 excludes it. What keeps keys off today
+  is the rarity cutoff (`ritter-timber-bridges` is in 3 fragments) and the word regex (which splits
+  `nrcs-ts14q-abutments` at its digits into two shards, both over the cutoff). The registry-key and
+  `<code>` exclusions are a floor against a key rare enough to survive that, and remove nothing on the
+  measured entry (R3).
 - **An entry whose every rare word is already defined** produces an empty list, which is a result and
   not a failure.
 
@@ -93,8 +97,9 @@ landed with it recorded as failed. This is what replaces it.
   that have no line in the derived variant index and that appear in no more than a stated number of the
   record's question fragments.
 - **FR-002**: The cutoff MUST be 2 fragments, and the number MUST be stated where it is applied, with
-  its measurement: at 2 the list is 34 words and catches 9 of the 12 known terms; raising it to 20 adds
-  67 words and catches no more (R2).
+  its measurement, counted the way SC-002 counts: at 2 the list is 34 words and catches **2 of the 3
+  terms whose presence varied between feature 259's runs**, and 6 of the 8 core terms every run proposed
+  anyway; raising it to 20 adds 67 words and catches no more of either (R2).
 - **FR-003**: Each candidate MUST carry the count of fragments it appears in, so a reader of the list
   can see why it is there.
 - **FR-004**: A registry source key MUST NOT be a candidate, and text inside a `<code>` span MUST NOT
@@ -118,14 +123,22 @@ landed with it recorded as failed. This is what replaces it.
   seconds over the whole record, which R4 measures against; it is a bar and not an observation,
   chosen because a session runs this before a dispatch and anything slower gets skipped.
 
-- **FR-009a**: The statements of the old bar that this feature does NOT change MUST be named, because a
-  criterion that claims a reach it does not have is the defect this feature was created by. Three
-  survive, all of them about a different decision - whether a CHECK may run on a cheaper model, not
-  whether it may read less: `CLAUDE.md`'s "a downgrade stands only after a seeded-fault run on known
-  findings", the same rule at length in `docs/spec-kit-and-reviews.md`, and
-  `docs/efficiency-tooling.md`'s "kept only if it hit every recorded finding for less". They rest on the
-  same assumption and are left deliberately: a tier downgrade is the GM's own doctrine, and changing it
-  is not this feature's to do. It is raised with them instead (FR-011).
+- **FR-009a**: The statements of the old bar that this feature does NOT change MUST be named, and named
+  for what they actually govern, because a criterion that claims a reach it does not have is the defect
+  this feature was created by. Three survive in the operative docs, and they are **not one kind**:
+  - **Two are about a different decision** - whether a check may run on a CHEAPER MODEL, not whether it
+    may read less: `CLAUDE.md`'s "a downgrade stands only after a seeded-fault run on known findings",
+    and the same rule at length in `docs/spec-kit-and-reviews.md` (`tests/test_agent_models.py`'s header
+    restates it a third time, in a test rather than an operative doc). They rest on the same assumption
+    this feature disproved and are left deliberately: a tier downgrade is the GM's own doctrine, and
+    changing it is not this feature's to do. It is raised with them instead (FR-011).
+  - **One is about SCOPING** - the same decision FR-009 restates the bar for: `docs/efficiency-tooling.md`'s
+    feature-255 row, whose candidates each "cut what a check READS" and were "kept only if it hit every
+    recorded finding for less". Its FINDING is history and stands - those candidates did lose recorded
+    findings. Its CRITERION is the one this feature replaces, so leaving it unqualified would put two
+    bars on one decision. The row keeps its measurement and gains a pointer to the new bar. The spec
+    review of 2026-09-20 found this, having caught the first draft of this requirement calling all
+    three a tier rule.
 - **FR-011**: The mechanism this feature substituted for the one the GM approved MUST be put to them
   once the implementation works, naming what changed and what it costs - that "every candidate ruled
   on" now certifies only the words a word-level rarity filter can reach, so a check that misses every
@@ -153,8 +166,10 @@ landed with it recorded as failed. This is what replaces it.
   is true today with or without FR-004, and is recorded as such (R3).
 - **SC-004**: (FR-007, FR-008) A `record-format` run given the list rules on every candidate, and its
   report says so item by item.
-- **SC-005**: (FR-009, FR-009a) `research/CLAUDE.md` states the new bar, and the three other operative
-  statements of the old one are named in this spec as knowingly left, with the reason.
+- **SC-005**: (FR-009, FR-009a) `research/CLAUDE.md` states the new bar; the two TIER-downgrade
+  statements of the old one are named in this spec as knowingly left, with the reason; and the one
+  SCOPING statement that survives - `docs/efficiency-tooling.md`'s feature-255 row - points at the new
+  bar instead of standing as a second one.
 - **SC-006**: (FR-010) The prepass stays cheap enough to run before every dispatch: its wall time
   over the whole record is recorded in R4 and stays under the bar FR-010 states.
 - **SC-007**: (FR-009a, FR-011) The GM is told what was substituted and what the approved bar now
@@ -170,7 +185,7 @@ script prints and what a check is asked to do.
 - The GM chose the PURPOSE - move the noticing into the script so the model rules on a fixed list. The
   mechanism is the measurement's to decide, and the mechanism they were offered (every undefined word)
   is not the one that works.
-- The model's own noticing is not replaced, only given a floor. Three of the twelve known terms are
-  reachable no other way, which is why FR-007 asks for both.
+- The model's own noticing is not replaced, only given a floor. Three of the eleven terms those runs
+  proposed are reachable no other way, which is why FR-007 asks for both.
 - Features 258 and 259 keep their specs as written, including 259's SC-002 recorded as unmet. A spec is
   a record of what was decided when; this feature is what changed the decision.
