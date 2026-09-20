@@ -3,7 +3,6 @@
  "def": "The path along one bank on which teams hauled boats upstream; it exists because of the boats and goes only where they go.",
  "variants": [
   "towpaths",
-  "towpath",
-  "qiandao"
+  "towpath"
  ]
 }

@@ -2321,7 +2321,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "jiegao",
   "variants": [
-   "well-sweep",
    "well sweep",
    "shadoof",
    "jiegao"
@@ -2892,7 +2891,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "lijin",
   "variants": [
-   "chaoguan",
    "lijin"
   ],
   "def": "Chinese customs barriers on the canals and trade routes - a Ming-Qing tariff post and a later Qing transit tax; neither stood at a county seat's gates."
@@ -2951,7 +2949,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "lulu",
   "variants": [
-   "windlass",
    "lulu"
   ],
   "def": "A windlass on a frame over a well, the usual water-lifting gear of north China."
@@ -3262,7 +3259,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "neribei",
   "variants": [
-   "tsuijibei",
    "neribei",
    "dobei"
   ],
@@ -4019,8 +4015,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "shuikou",
   "variants": [
-   "water mouth",
-   "water-mouth",
    "shuikou"
   ],
   "def": "The water mouth: the fengshui grove at a Chinese village's entrance, where its stream flows out of the village."
@@ -4415,8 +4409,7 @@ window.RECORD_GLOSSARY = [
   "term": "towpath",
   "variants": [
    "towpaths",
-   "towpath",
-   "qiandao"
+   "towpath"
   ],
   "def": "The path along one bank on which teams hauled boats upstream; it exists because of the boats and goes only where they go."
  },
@@ -5336,7 +5329,6 @@ window.RECORD_GLOSSARY = [
  {
   "term": "bettō",
   "variants": [
-   "bettō-ji",
    "bettō-ji",
    "bettō",
    "betto"
