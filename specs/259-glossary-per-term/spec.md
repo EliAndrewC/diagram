@@ -45,9 +45,10 @@ the glossary, and the findings it reports.
 
 1. **Given** the glossary split one word per file, **When** a check needs the term list, **Then** a
    directory listing of 13,730 bytes answers it and no definition is read.
-2. **Given** a word that is not a term but a VARIANT of one ("girders" for "girder"), **When** the check
-   tests it, **Then** a grep over the directory finds the file that claims it, and the check reads that
-   one file.
+2. **Given** a word that is not a term but a VARIANT of one - `well sweep`, which the term `well-sweep`
+   owns - **When** the check tests it, **Then** the derived variant index names the owning term in one
+   lookup, without opening a term file. A grep would not do: measured, `windlass` matches three term
+   files, because a definition may mention a word another term owns (FR-008).
 3. **Given** a check that wants a definition - to judge whether it covers the sense, or to match the
    house style of a draft - **When** it reads one, **Then** it reads that term's file and no other.
 
@@ -107,8 +108,10 @@ must be invisible.
   percent-encoded, and the file records the term exactly (one term needs this today: `dS/m`).
 - **FR-003**: The term files MUST carry an ordering prefix, gapped as feature 258's are, because term
   order decides which definition wins for a variant two terms claim - 7 of them today (R2).
-- **FR-004**: `glossary.json` MUST become an assembled file, byte-identical to the one it replaces, and
-  `glossary.js` MUST continue to be derived from it unchanged.
+- **FR-004**: `glossary.json` MUST become an assembled file, and `glossary.js` MUST continue to be
+  derived from it unchanged. The assembly of the term files, BEFORE any content correction, MUST be
+  byte-identical to the `glossary.json` it replaces - that is what proves the split changed nothing.
+  FR-011's correction lands as a second diff, after it, carrying its own before-and-after listing.
 - **FR-005**: One command MUST assemble it, and a check mode MUST report a stale committed file.
 - **FR-006**: The gate and both push routes MUST refuse a `glossary.json` that differs from what its term
   files assemble, for the reason feature 258 established: a record-only change takes the DIRECT route,
@@ -116,17 +119,29 @@ must be invisible.
 - **FR-007**: An Edit aimed at the assembled `glossary.json` MUST be re-aimed at the one term file
   holding its text, or refused where none or several do - the guard feature 258 built, extended to this
   file rather than duplicated.
-- **FR-008**: The contracts of the checks that judge VOCABULARY MUST tell the agent to list the
-  directory and grep it, and to read a term file only when it wants that term's definition. This is the
-  only place the instruction can reach them (feature 256).
+- **FR-008**: A DERIVED index of every variant and the term that owns it MUST be written beside the
+  term files and checked like any other derived asset. This is point 3 of the answer the GM approved,
+  and it is load-bearing rather than a convenience: a plain grep over the term files answers with
+  CANDIDATES, not the claimant - measured, `windlass` matches three term files and `water mouth`
+  three, because a definition may mention a word another term owns.
+- **FR-008a**: The contracts of the checks that judge VOCABULARY MUST tell the agent to read that index
+  - or list the directory, for the narrower question of whether a word is itself a term - and to open a
+  term file only when it wants that term's definition. This is the only place the instruction can reach
+  them (feature 256).
 - **FR-009**: The record's own operative doc MUST state where a term lives and how to find one.
 - **FR-010**: The saving MUST be demonstrated on a recorded case before the feature lands: the same
   check over the same entry, reporting the bytes read under the glossary and whether the findings are
   the same. A check that reads less but finds less has not been improved (feature 255).
 - **FR-011**: No variant may be claimed by two terms, and no term may list one variant twice, once this
   lands - or the order FR-003 preserves stays load-bearing in a place nobody is looking. The resolving
-  rule is the checkable one: the term whose own NAME is the variant keeps it. Five of the seven already
-  resolve that way; two change what a reader is shown, and both are corrections (R2).
+  rule is the checkable one: the term whose own NAME is the variant keeps it, comparing names and
+  variants with case, spaces and hyphens folded - without that folding the rule does not decide `water
+  mouth`, claimed by `shuikou` and the term `water-mouth`, which is named with a hyphen (R2). Five of
+  the seven resolve with no change to what a reader sees; two change it, and both are corrections.
+  **This is a content correction, not part of the split**: FR-003 delivers the whole of what the GM
+  asked for without touching a definition, and the split's own verification (FR-004) stands independent
+  of this. It proceeds under constitution XIV - a defect found in the work at hand - and is raised with
+  the GM once the implementation works.
 
 ### Key Entities
 
@@ -142,16 +157,21 @@ must be invisible.
 - **SC-001**: (FR-001, FR-002, FR-003) The largest hand-edited glossary file falls from 137,059 bytes to
   about 154 (the median term), and the term list a check needs is a directory listing of 13,730 bytes
   rather than a 144,524-byte read (R1).
-- **SC-002**: (FR-008, FR-010) On the recorded case of FR-010, the check reads the term LIST and no
-  definition it does not name - 13,730 bytes of listing against the 144,524-byte read it makes today
-  (R1) - and it reports the same findings.
-- **SC-003**: (FR-004) `glossary.json` and `glossary.js` are byte-identical to the files they replace:
-  the diff is empty.
+- **SC-002**: (FR-008, FR-008a, FR-010) On the recorded case of FR-010, the check reads the variant
+  index or the directory listing, and no definition it does not name, in place of the whole glossary -
+  and it reports the same findings. What that costs is what FR-010's run reports; R1 declines to predict
+  it, and so does this criterion.
+- **SC-003**: (FR-004) At the SPLIT's landing, `glossary.json` and `glossary.js` are byte-identical to
+  the files they replace: the diff is empty. FR-011's resolution lands after it and on its own, so
+  that its diff is exactly the variants it removes and nothing else - the same sequencing feature
+  258 used for its renumbering.
 - **SC-004**: (FR-005, FR-006) A stale committed `glossary.json` cannot reach main: it fails the gate and
   both push routes refuse it.
 - **SC-005**: (FR-007, FR-009) An edit aimed at the assembled file never silently lands, and the
   operative doc states where a term lives.
-- **SC-006**: (FR-011) No variant is claimed by two terms, and a test fails if one is.
+- **SC-006**: (FR-011) No variant is claimed by two terms and no term lists one twice; a test fails if
+  either happens again. The 8 changes this makes are listed in the commit that makes them, separately
+  from the split.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

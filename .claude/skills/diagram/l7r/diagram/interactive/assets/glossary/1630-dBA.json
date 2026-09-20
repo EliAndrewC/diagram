@@ -1,0 +1,8 @@
+{
+ "term": "dBA",
+ "def": "A-weighted decibels - loudness measured the way a human ear weights it.",
+ "variants": [
+  "dBA",
+  "dB"
+ ]
+}

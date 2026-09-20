@@ -529,8 +529,11 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 building-programs: ## [docs] render each declared Mode A type's required-items table into buildings/programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
 	$(RUN).tools.building_programs $(if $(CHECK),--check,)
 
-glossary:       ## [docs] write research/assets/glossary.js from interactive/glossary.py - the ONE glossary the map's modals and the record's pages share (feature 209)   CHECK=1: exit 1 if stale
-	$(RUN).tools.glossary_asset $(if $(CHECK),--check,)
+# GUARD_EDIT_OK: feature 259 - the glossary's SOURCE is now one file per term, so this target assembles
+# `interactive/assets/glossary.json` from `interactive/assets/glossary/` BEFORE it derives the asset. The
+# order is stated here rather than left to the caller: the asset is derived from the assembled file.
+glossary:       ## [docs] assemble interactive/assets/glossary.json from its per-term files, then write research/assets/glossary.js from it - the ONE glossary the map's modals and the record's pages share (features 209, 259)   CHECK=1: exit 1 if either is stale   SPLIT=1: the one-time split into per-term files
+	$(RUN).tools.glossary_asset $(if $(CHECK),--check,) $(if $(SPLIT),--split,)
 
 # GUARD_EDIT_OK: feature 235 - ADDING AN OPERATION, `footnote-census`. Nothing in this project counted the
 # record's footnotes; `notes-census` above counts MAP FEATURES and is unrelated. Every footnote figure quoted
