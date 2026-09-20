@@ -9,6 +9,26 @@ tools: Read, Grep
 
 # Record Format
 
+## The glossary is one file per word, and you do not read it whole (feature 259)
+
+VOCABULARY is judged against the glossary, and you have been reading all 144,524 bytes of
+`research/assets/glossary.js` to ask a question that needs none of its definitions. It is now one file
+per term:
+
+| what you want | where it is | about |
+|---|---|---|
+| does this WORD have a definition, under any term? | `research/assets/glossary-variants.json` - every variant, and the term that owns it | 30 KB, one read |
+| is this word itself a TERM? | `ls l7r/diagram/interactive/assets/glossary/` - the filenames ARE the term list | 14 KB, no file opened |
+| what does one term actually say? | that term's own file, `NNNN-<term>.json` | about 154 bytes |
+
+**Read the variant index, not the glossary.** A word in the prose is usually a variant (`girders` for
+`girder`), and only the index maps one to the other. Do NOT grep the term files for it instead: measured,
+`windlass` matches three of them, because a definition may mention a word another term owns.
+
+Open a term file only when you want that term's definition - to judge whether it covers the sense in
+front of you, or to match the house style of a draft. One or two is normal; all 720 is the thing this
+exists to stop.
+
 ## Read the FRAGMENT you are given, not the assembled page (feature 258)
 
 The record is written per entry. A research page `research/<page>.html` is ASSEMBLED from the files in

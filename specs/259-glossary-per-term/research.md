@@ -84,3 +84,12 @@ corrections:
 **What it decides.** FR-002: the filename is the term, percent-encoded only where a filename cannot
 carry a character, and the file records the term itself so the assembly reads it from the content and
 never from the name.
+
+## R4 - What the assembly costs the gate
+
+**Before** (observed 2026-09-20; method: `make done` in the clone on unmodified code at `d7cbe8a8`): the
+gate short-circuited GREEN - "already verified, nothing the gate exercises has changed since the last
+green run" - against feature 258's own landing run of **4,179 passed, 4 skipped, all three coverage
+floors, 92 s**. That run is this feature's baseline, recorded as `m:baseline-done`.
+
+**After** is taken at T12, against this.
