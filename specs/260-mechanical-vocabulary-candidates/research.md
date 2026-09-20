@@ -133,7 +133,9 @@ are given:
 Largest list on the question pages: **115**, `archetypes`, the dike-pond hamlet question; smallest 0.
 On the wider set the largest is 626, the whole notes file of `urban-features`, which is not an entry a
 check is dispatched on. The question-page sweep takes **0.83 s** and the wider one **4.01 s**, both
-under FR-010's 5 s bar - and no dispatch ever asks for either, since a session runs one page.
+under FR-010's 5 s bar - and no dispatch ever asks for either, since a session runs one page. The spec
+review re-ran `measure.py R4` on the same commit and got 0.91 s and 4.07 s: about a tenth of drift on a
+shared container, which is why the bar is five seconds and not one.
 
 **SC-003 is claimed on the WIDER of the two**, because "no registry source key appears in a candidate
 list over the whole record" should be the strongest reading: 32,836 candidates over 1,511 files, and
