@@ -11,7 +11,9 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   recorded findings with a same-setting control (FR-003).
 - **X**: no engine code, no new Python under `l7r/`. One shell harness under the feature's `measure/`, as 251 and
   255 kept theirs.
-- **Guard files**: none edited. `tests/test_agent_models.py` is not touched.
+- **Guard files**: none edited at the first landing. Amendment 1 edits two on the GM's word of 2026-09-20:
+  `tests/test_agent_models.py` gains the field's test (P6) and the skill Makefile gains `make scatter-bases` (P8),
+  each with `GUARD_EDIT_OK` where the guard asks for it.
 - **Route**: `.claude/agents/`, root `CLAUDE.md`, `docs/`, `specs/` -> DIRECT.
 
 ## Design
@@ -75,12 +77,16 @@ FR-004's second pair -> T04 the before-and-after measurement -> T05 the record -
   read-only diagnostic) running `l7r.diagram.tools.scatter_audit` on the map's SVG; the contract's paragraph names
   the target. The `(Tools: ...)` tails cut from three descriptions. `tests/test_agent_models.py` ->
   `.claude/skills/diagram/tests/test_agent_models.py` in the seven contracts that cite it.
-- **P9 the six pairs (FR-010).** FR-003's harness and rule. Cases, each a recorded run with known findings, cut to a
+- **P9 the eight pairs (FR-010, FR-011).** FR-003's harness and rule. Cases, each a recorded run with known findings, cut to a
   slice where the recorded run was large: `entry-drift` farmhouse (251 R5, DRIFTED); `escalation-check` 242 (251 R5,
   3 KEEP 1 REWRITE 2 CUT); `quote-check` capitals fn-235..240 with its `make quote-verbatim` report (255 R2);
   `source-applicability` Shanghai (255 R1, the two MISSING limits); `source-reader` 09-12 with its saved pages (255
   R4, the two partial passages); `spec-fidelity` feature 251's MODE 2 round 1 (`6a88965e/23035d6f`, CHANGES
-  REQUIRED). Twelve runs; the batch's size is stated before launch. The four agents left are priced from their
-  recorded weights and the fixtures available, in `research.md`.
+  REQUIRED). And two pairs with no recorded run, scored against the control and the fixture's KNOWN defect:
+  `building-review` on `tests/fixtures/ochiba-no-scale-red.svg` (a sheet with its scale bar removed - an ERROR that
+  review names) and `size-audit` on `tests/fixtures/ochiba-big-bath-red.svg` (an oversized bath), each staged in a
+  HEAD worktree as a pool subject `pool/magistracies/ochiba-red/` beside a copy of the Ochiba magistracy's notes, and
+  rendered to PNG by the engine's rasterizer. Sixteen runs; the batch's size is stated before launch.
+  `settlement-review` and `perf-audit` are priced in `research.md` with their reasons (FR-010).
 
 Order: T07 -> T08 -> T09 -> T10 -> T11.

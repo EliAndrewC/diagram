@@ -82,15 +82,23 @@ descriptions that end in a literal `(Tools: ...)` duplicating their frontmatter 
 the tier table as `tests/test_agent_models.py` cites its real path. Anything else stale met on the way is fixed in
 the same work.
 
-**FR-010 - the other agents get their seeded proofs.** The GM asked whether there is any reason not to. The only
-reasons were the session's: price, and for three agents the lack of a recorded run. So: the six agents with
-recorded runs that are cheap to replay - `entry-drift`, `escalation-check`, `quote-check`, `source-applicability`,
-`source-reader`, `spec-fidelity` - each get one recorded case with known findings, run with the field and without
-it by FR-003's method and scored by FR-003's rule, FR-004 governing a miss. `settlement-review`, whose pair costs
-about as much as those six together and whose findings vary most from pass to pass (feature 255, R6), and the
-three agents with no recorded run (`building-review` and `size-audit`, which could be run on the frozen defective
-sheets under `tests/fixtures/`, and `perf-audit`, which has no such artifact) are priced in `research.md` and put to
-the GM with the six results in hand, not decided by the session.
+**FR-010 - the other agents get their seeded proofs.** The GM asked whether there is any particular reason not to.
+For eight of the ten there is none, so they are run: the six agents with recorded runs that are cheap to replay -
+`entry-drift`, `escalation-check`, `quote-check`, `source-applicability`, `source-reader`, `spec-fidelity` - each on
+one recorded case with known findings; and `building-review` and `size-audit`, which have no recorded run but do not
+need one, because FR-003 scores a pair against its CONTROL first - each on a frozen defective sheet under
+`tests/fixtures/` whose defect is known by construction. Every pair is run with the field and without it by FR-003's
+method and scored by FR-003's rule, FR-004 governing a miss. Two are put to the GM with their particular reasons and
+prices, the eight results in hand, and are not decided by the session: `settlement-review`, whose one pair costs
+about as much as the six recorded-run pairs together and whose findings vary most from pass to pass (feature 255,
+R6: two careful passes over one map found different real defects), so that a single pair cannot tell a miss from
+that variance; and `perf-audit`, which has neither a recorded run nor any frozen artifact - its subject is a
+measured performance increase between two commits, which would have to be manufactured.
+
+**FR-011 - what this amendment supersedes.** FR-005, SC-004 and D1 describe the feature AS IT FIRST LANDED: two
+agents proven, ten resting on the reading, by D1's sizing. The GM's question of 2026-09-20 reopened that sizing, and
+FR-010 governs from here: on completion ten of the twelve have a seeded pair of their own and two do not.
+`research.md` keeps R4 as the record of the first landing and says so, and holds the new tally beside the new rows.
 
 ## Success criteria
 
@@ -108,7 +116,8 @@ the GM with the six results in hand, not decided by the session.
   raises the other three items, and `research.md` holds the run.
 - **SC-008** (FR-009) No contract names a command the make-only guard refuses, a `(Tools: ...)` tail, or the tier
   table by a wrong path.
-- **SC-009** (FR-010) `research.md` holds a row per run for the six pairs, and the priced list of the four agents left.
+- **SC-009** (FR-010, FR-011) `research.md` holds a row per run for the eight pairs, the priced reasons for the two agents
+  left, and the tally as it now stands; R4 is marked as the first landing's.
 
 ## Assumptions
 
@@ -138,3 +147,9 @@ the GM with the six results in hand, not decided by the session.
   left `measure/dispatch_seeded.sh` citing FR-004 for the dispatch setting, which is FR-003 now: corrected.
 - **Round 3 (2026-09-20) - FAITHFUL.** The orphaned id verified corrected; every id `plan.md` and `tasks.md` cite
   exists and means what it is cited for; nothing new introduced.
+- **Amendment 1, round 1 (2026-09-20) - CHANGES REQUIRED, two items, both applied.** FR-008 and FR-009 ruled faithful.
+  (1) FR-010 held `building-review` and `size-audit` back for want of a recorded run while conceding in the same
+  sentence that the frozen defective sheets could serve, and FR-003 scores against the control first: both are now
+  run, and only `settlement-review` and `perf-audit` go to the GM, each with its particular reason. (2) FR-010
+  reversed D1 and falsified FR-005 and SC-004 without saying so: FR-011 marks the three as the first landing's and
+  states the new tally.

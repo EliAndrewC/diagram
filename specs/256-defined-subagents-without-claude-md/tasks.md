@@ -26,7 +26,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
       research: rendering
 - [ ] T09 a make target wraps the scatter parse and `settlement-review` names it; the `(Tools: ...)` tails and the tier-table paths corrected (FR-009)
       research: rendering
-- [ ] T10 six seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity - scored; the four agents left priced for the GM (FR-010)
+- [ ] T10 eight seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity on recorded cases, building-review and size-audit on frozen defective sheets - scored; settlement-review and perf-audit priced for the GM; the tally restated (FR-010, FR-011)
       research: rendering
 - [ ] T11 `make hooks-test` and `make quick` green; land
       research: rendering
