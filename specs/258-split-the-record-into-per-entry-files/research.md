@@ -184,16 +184,19 @@ shared container, so it is a one-shot observation and the comparison below is li
 `m:record-check-cost`). The plan's bar was under 2 s, so the fallback it named - checking only the pages
 whose fragments the delta touched - is not needed and is not built.
 
-**After** (2026-09-20, the green gate in the clone): the test phase is **46.65 s over 4,179 tests** -
+**After** (observed 2026-09-20; method: the green `make done` in the clone, its own test-phase line):
+the test phase is **46.65 s over 4,179 tests** -
 66 more tests than the baseline's 4,113, and no slower; a wall-clock timing on a shared container, so
 the two are the same to within their own noise and nothing here needs diagnosing. Gate green in 92 s.
 
-**What the assembly costs the gate is therefore its own 0.11 s and nothing measurable besides.** The
+**What the assembly costs the gate is therefore its own 0.11 s and nothing measurable besides**
+(`m:record-check-cost`, observed 2026-09-20; method: `make record CHECK=1` over the whole record). The
 plan's fallback - checking only the pages whose fragments the delta touched - is not needed and was not
 built.
 
 **Zero new failures** (constitution XIII): 4,179 passed and 4 skipped against the baseline's 4,113 and
-4, with all three coverage floors enforced on both runs. Every module this feature landed is at 100%.
+4, with all three coverage floors enforced on both runs, and every module this feature landed at the
+100% the floor requires (observed 2026-09-20; method: the same green gate's coverage table).
 
 ## R8 - The re-run FR-026 asks for: does a scoped check still find what the whole-page check found?
 
