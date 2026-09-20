@@ -36,10 +36,16 @@ character is three bytes: counting characters understates the registry alone by 
 Against that, ONE entry is small:
 
 - **a registry entry**: 920 of them, median 1,174 bytes, largest 3,791;
-- **a question**: 19 to 39 a page (2 to 39 counting the two smallest pages), a page's average
-  between 2,664 (`buildings.html`) and 9,290 (`cities/sizing.html`), largest single question 37,583
-  (`fields.html`). `water.html`'s 28 questions average 5,777, the figure `spec.md` US1 quotes;
-- **a note**: 3 to 231 a page, a page's average between 437 and 774 bytes.
+- **a question**: 2 to 39 a page, a page's average between 2,664 (`buildings.html`) and 9,279
+  (`cities/sizing.html`), largest single question 37,583 (`fields.html`). `water.html`'s 28 questions
+  average 5,777, the figure `spec.md` US1 quotes;
+- **a note**: 3 to 231 a page, a page's average between 437 and 840 bytes.
+
+Two further figures decide whether SC-001's 40,000-byte bar can be met, because they are the largest
+fragments the split will create that are not questions: the registry's largest group of prose (its
+heading and its text, no entries) is **5,443 bytes**, and the largest notes file any one question would
+get is **28,118 bytes** (`cities/government.html`, "Servant housing in the samurai ward", 35 notes).
+Both clear the bar. They were added to `measure.py R1` on the spec review's aside of 2026-09-20.
 
 **What it decides.** The ratio is three orders of magnitude at the registry (1,150,367 against a
 median entry of 1,174) and roughly thirty to one on a page. SC-001's 40,000-byte bar for the largest
@@ -53,8 +59,9 @@ has to be ingested. Does the transcript record bear that out?
 
 **Finding.** Over 284 transcripts: 195,845,246 bytes of tool results in all, of which 1,097,220 -
 **0.56%** - were reads of files under `research/`. Of the 91 reads of record files, **82 (90%) asked
-for a window** rather than a whole file. Over the whole history there were 95 `Edit`/`Write` calls on
-record files, 87,004 bytes of payload between them. (Observed 2026-09-20; method: `measure.py R2`, over
+for a window** rather than a whole file. Over the whole history there were 96 `Edit`/`Write` calls on
+record files, 92,986 bytes of payload between them - a line `measure.py R2` prints, added on the spec
+review's finding of 2026-09-20 that the figure had no route back to a run. (Observed 2026-09-20; method: `measure.py R2`, over
 `~/.claude/projects/*/*.jsonl` on this machine. The store grows as sessions are recorded - the totals
 moved by 161,473 bytes between two runs an hour apart - so the totals are a one-shot observation and the
 share is the finding.)
@@ -117,6 +124,32 @@ is invalid HTML, and the note's single back link can only return to one of the t
 **What it decides.** FR-019 (allocate at assembly, in document order) and FR-021 (a document-unique id
 per reference, the back link to the first). The duplicated ids are a defect found while working here
 and fixed in the same work, under constitution XIV, rather than left for someone else.
+
+## R5 - What a note key can be derived from, and what else the allocation fixes
+
+**Question.** Stage 3 names notes instead of numbering them, and the splitter has to derive 1,850 keys
+without a human choosing them. Is there anything in a note to derive a key FROM, and is it unique?
+
+**Finding.** Over the whole record: **1,860 references** and **1,850 notes**.
+
+- **1,524 notes (82%) lead with their source key** - `<a href="..."><code>fei-1939</code></a> - which is
+  the natural key. The other **326 lead with no key** (an absence note, a note that reasons from several
+  works, a note that quotes the GM), and take a key from their question's slug and their ordinal.
+- **A source key is repeated within one page 635 times**, so the key alone is not unique: the rule is
+  `fei-1939`, then `fei-1939-2`, `fei-1939-3`, in the order the notes appear.
+- **4 references carry no `id` at all** (`archetypes.html`, `vegetation.html`), so nothing can link back
+  to them. This is a second latent defect beside R4's duplicated ids, and both disappear when every
+  reference's id is allocated rather than typed.
+
+**What it decides.** The splitter's key rule (D4 in the plan), and FR-021's statement that a reference's
+id is document-unique - which, measured here, fixes 4 missing ids and 2 duplicated ones rather than only
+serving the twice-referenced note.
+
+## R6 and R7 - owed, not yet taken
+
+R6 (the `make done` baseline in a detached worktree, constitution XIII) and R7 (the gate's cost before
+and after the assembly check joins it) are taken by tasks T01 and T02 and recorded here when they are.
+They are listed now so that a reader of the plan can see what is outstanding.
 
 ## What was NOT measured, and why
 

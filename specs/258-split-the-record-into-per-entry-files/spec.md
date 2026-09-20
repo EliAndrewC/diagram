@@ -10,6 +10,13 @@ The record's pages are hand-authored HTML that has grown to where a whole page i
 of it is touched. `SOURCES.html` is 1,150,367 bytes and 920 entries; `citations/cities/capitals.html` is
 376,566 bytes; 19 files in the record are over 100,000 bytes (R1).
 
+One premise of the request has to be corrected before stage 3 makes sense. The GM took the citations
+page to be *"automatically assembled from a script which reads a couple of JSON files ... So that part is
+probably okay"*. It is the other way around: `research/citations/<name>.html` is hand-authored HTML, and
+what is derived from it is the hover script `citations/<name>.js` beside it, together with the works
+section at its top, which comes from the registry. The 376,566-byte citations page is a file someone
+types into, which is why splitting it is stage 3 and not out of scope.
+
 The GM asked whether these should be split into per-entry files that assemble back into the same pages.
 The measurement says yes, and says why: it is not the session's own editing that pays - reads of
 `research/` are 0.56% of all tool output across 284 transcripts, and 90% of them already ask for a window
@@ -164,8 +171,6 @@ files they replace; the diff is empty.
 - **FR-004**: Both push routes MUST refuse while any committed page differs from its assembly. A
   record-only change takes the DIRECT route, which does not run the gate, so the gate alone would let a
   stale page reach main.
-- **FR-005**: Every assembled page MUST carry, in its own text, a statement that it is assembled and
-  where its sources are, so a reader who opens the file is not misled into editing it.
 - **FR-006**: The assembly MUST be deterministic: the same sources produce the same bytes, on any machine
   and in any order of files on disk.
 
@@ -184,8 +189,11 @@ files they replace; the diff is empty.
 - **FR-011**: Each research page MUST become a directory holding one file per question, each named by a
   gapped numeric prefix and a slug of its heading, plus one file for the page's front matter and one for
   its closing, both verbatim.
-- **FR-012**: Prefixes MUST be gapped - the GM: *"with a prefix like `01-`, `02-`"* - so that inserting a
-  question between two others renames nothing.
+- **FR-012**: Prefixes MUST be gapped, three digits a question and four a registry entry, counting by
+  ten (`010`, `020`; `0010`, `0020`), so that inserting one between two others renames nothing. The
+  authority is decision 1 of the four the GM approved - *"Gapped (`010-`, `020-`) so inserting a question
+  doesn't renumber the directory"* - and not their own example *"a prefix like `01-`, `02-`"*, which is
+  ungapped.
 - **FR-013**: A question fragment MUST hold its heading, its prose and its HTML comments exactly as they
   stand on the page today, with nothing added and nothing normalized.
 - **FR-014**: The assembly MUST place the questions in prefix order, and MUST refuse a duplicate prefix
@@ -217,8 +225,10 @@ files they replace; the diff is empty.
   launch with `omitClaudeMd: true` (feature 256), so their own contract is the only place this rule can
   reach them.
 - **FR-025**: The record's own operative doc MUST state how to find an entry without reading a page - a
-  glob by key for a source, a grep over a page's directory for a question - and MUST state that the
-  assembled pages are not edited.
+  glob by key for a source, a grep over a page's directory for a question - and MUST state that an
+  assembled page is never hand-edited and where its sources are. This is where that instruction lives,
+  together with the guard's own message (FR-028): NOT in the assembled pages themselves, which carry no
+  such banner today and whose bytes SC-003 holds unchanged.
 - **FR-026**: The saving MUST be demonstrated on a recorded case before the feature lands: one check
   re-run over a fragment against its recorded whole-page run, reporting the bytes read in each and
   whether the findings are the same. A check that reads less but finds less has not been improved
@@ -252,11 +262,15 @@ files they replace; the diff is empty.
 
 - **SC-001**: The largest hand-edited file in the record falls from 1,150,367 bytes to under 40,000, and
   the entry a session or an agent opens is about 1,200 bytes for a source (the median of 920) and
-  between 2,664 and 9,290 for a question, by page average (R1). (FR-007, FR-011, FR-013, FR-016)
-- **SC-002**: A check over one entry reads that entry: on the recorded case of FR-026 the agent reads the
-  fragment it was given and its notes, and nothing else under `research/` - against the 91,926 bytes of
-  one page its recorded whole-page run read (R3) - and it reports the same findings. (FR-023, FR-024,
-  FR-026)
+  between 2,664 and 9,279 for a question, by page average. The bar clears the two fragments that decide
+  it, both measured: the registry's largest group of prose is 5,443 bytes and the largest notes file any
+  question would get is 28,118 (R1). (FR-007, FR-011, FR-013, FR-016)
+- **SC-002**: A check over one entry reads that entry: on the recorded case of FR-026 the RECORD bytes
+  entering the agent's context fall by at least 90% against its recorded whole-page run - it reads the
+  fragment it was given and its notes, and nothing else under `research/` - and it reports the same
+  findings. The fall in the agent's WHOLE input is reported by FR-026's run rather than held to a bar,
+  because it depends on how much of a given run is the page: the recorded runs range from 23% to 98%
+  (R3). (FR-023, FR-024, FR-026)
 - **SC-003**: At the landing of stages 1 and 2, every assembled page is byte-identical to the file it
   replaces: the diff is empty. At stage 3 the only differences are footnote numbers and the reference ids
   and back links that carry them, and the set of (assertion, note) pairs is unchanged. (FR-001, FR-006,
@@ -264,7 +278,7 @@ files they replace; the diff is empty.
 - **SC-004**: No footnote number is typed by hand anywhere in the sources: a search of the fragments finds
   no `fn-<n>`, `fnref-<n>` or hand-written back link. (FR-017, FR-018, FR-021, FR-022)
 - **SC-005**: A stale committed page cannot reach main: it fails the gate and both push routes refuse it,
-  each naming the page. (FR-002, FR-003, FR-004, FR-005)
+  each naming the page. (FR-002, FR-003, FR-004)
 - **SC-006**: A dangling reference, an unreferenced note, a duplicate key and a duplicate prefix each fail
   the assembly with the offending name and file in the message. (FR-020, FR-014)
 - **SC-007**: Every test that reads the record passes unchanged, and the map modals resolve the same
@@ -305,3 +319,23 @@ sees, so they are declared here rather than left to the diff.
   imperfect without consequence.
 - The feature is tooling: no map is regenerated, no rule about a settlement changes, and no research pass
   is owed. Every task is `research: rendering`.
+
+## Review history
+
+- Round 1 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, five items, all applied; nothing in the
+  request found missing, and every addition cleared as enforcement or as within what the GM approved.
+  (1) FR-005 required every assembled page to carry a "this is assembled" notice in its own text, which
+  no record page carries today and which would have added reader-visible bytes at the moment SC-003 says
+  the diff is empty - deleted, dropped from SC-005's list, and the instruction moved to where it costs no
+  byte of the record: FR-025's operative doc and FR-028's guard message. (2) SC-002's 90% bar was
+  unreachable under its plain reading (on `255-qc-urban`, swapping a fragment for the page is a 62% fall
+  in total input) - it now holds the RECORD bytes to 90% and has FR-026 report the whole-input fall
+  rather than bar it. (3) The GM's premise that the citations page is script-assembled is the opposite of
+  the truth and stage 3 depends on which is so - the Summary now corrects it, as it already corrected the
+  premise R2 answers. (4) FR-012 cited the GM's ungapped example as the authority for gapping - it now
+  cites decision 1 of the four they approved, and states the gap. (5) Three figures: the upper per-page
+  question average is 9,279 and not 9,290; "19 to 39 a page" contradicted R1's own table and is now "2 to
+  39"; and R2's Edit/Write line had no run behind it, so `measure.py R2` now prints it (96 calls, 92,986
+  bytes). The reviewer's aside is taken up too: SC-001's bar now cites the two fragments that decide it,
+  the registry's largest group of prose (5,443 bytes) and the largest notes file a question would get
+  (28,118), both added to `measure.py R1`.
