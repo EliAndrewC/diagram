@@ -14,7 +14,7 @@
     "value": 4.671,
     "unit": "s",
     "varies": true,
-    "quantity": "wall time of `make test-file FILE=tests/test_mode_a_sheets.py` over the six Mode A sheets with the two new checks (trees_overlap, matches_map - the Hoshigaoka sheet loads the village manifest), 2026-09-20: 4.671 s (feature 254 measured 4.55 s before them)",
-    "command": "make test-file FILE=tests/test_mode_a_sheets.py"
+    "quantity": "wall time of `make test-file FILE=tests/test_mode_a_sheets.py` over the six Mode A sheets with the two new checks (trees_overlap, matches_map - the Hoshigaoka sheet loads the village manifest), 2026-09-20: 4.671 s (feature 254 measured 4.55 s before them); a wall-clock timing that varies with the machine's load, its band 3 to 8 s",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/test_mode_a_sheets.py"
   }
 }

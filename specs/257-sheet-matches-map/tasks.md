@@ -71,7 +71,8 @@ historical question.
 ## Phase 4 - the sheet (FR-006; D7, D9)
 
 - [ ] T10 The Hoshigaoka sheet redrawn to R3 (D7): the hall 60 by 48 ft, the arch 20 ft in front, the well
-      108 ft behind on the axis inside a fence carried north, no grove, no burial ground, no lane outside
+      108 ft behind on the axis OUTSIDE the fence, which closes behind the sanctuary (the size-audit's
+      ruling of 2026-09-20; FR-006 as amended), no grove, no burial ground, no lane outside
       the arch, swept ground to the stated frame; the notes gain `**On map**`, the frame and the
       "overridden by the map" list; `make pack-audit` green on every check; the PNG rendered
       research: rendering

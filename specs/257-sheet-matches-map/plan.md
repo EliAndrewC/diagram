@@ -101,7 +101,9 @@ T01: a detached worktree at HEAD, `make quick ALL=1` and `make hooks-test`, the 
   the long side east-west, its face south; the arch 20 ft in front of the face on the axis, at the
   fence's south side; the approach 10 ft wide from the arch to the step; the sanctuary on the axis
   behind the hall; the shrine's one water point - the well, marked `id="well"` - 108 ft north of the
-  hall's center on the axis, the fence carried north to 10 ft beyond it; the kitchen garden, privy
+  hall's center on the axis, OUTSIDE the fence, which closes 15 ft behind the sanctuary as a shrine's
+  does (the size-audit of 2026-09-20: a fence carried to the well put public ground behind the
+  deity's house; the map records no fence, so where it runs is the sheet's own); the kitchen garden, privy
   and fire-water at the building as before; swept ground to the frame's edge, no grove, no burial
   ground, no lane outside the arch (the map records none there - the sando is swept ground). The
   frame: 100 ft either side of the axis, 60 ft in front of the arch, 20 ft behind the well. The

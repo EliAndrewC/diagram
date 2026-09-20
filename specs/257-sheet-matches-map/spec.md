@@ -125,8 +125,9 @@ sheet is on no map and checks nothing.
   has a red fixture on which it fires, and it fires on the Hoshigaoka sheet as committed before this
   feature (its canopies straddle the fence line and two lie on each other).
 - **FR-003 - a sheet declares the map its subject stands on.** The sheet's notes file carries one
-  line, `**On map**: <the map's recorded manifest, by path> - <the subject's class> at (<x>, <y>)`,
-  naming the Mode B map and the subject's position in that map's own coordinates. The manifest is
+  line, `**On map**: <the map's recorded manifest, by path> - <the subject's class> at (<x>, <y>) =
+  <the sheet id of the subject>`, naming the Mode B map, the subject's position in that map's own
+  coordinates, and the element on the sheet that is the subject. The manifest is
   the map's recorded output (the JSON the pool keeps beside every map), never the generator re-run.
   A sheet whose subject stands on no map carries no such line.
 - **FR-004 - the map-correspondence check, shared.** A registered check, in the shared layer, that on
@@ -245,7 +246,8 @@ sheet is on no map and checks nothing.
   record a basin, so it could not override one - the basin and the well are one class, the water
   point, and FR-006 says the shrine's one water point stands where the map's well stands. (4) The
   frame assumption could not hold the map's well far behind the hall - the frame is stated and
-  the fence runs north to the well. (5) Decisions row 4 reclassed from "historically accurate" to a
+  the fence runs north to the well (later amended: the fence closes behind the sanctuary, the well
+  outside it - see the amendment below). (5) Decisions row 4 reclassed from "historically accurate" to a
   deliberate deviation on the GM's word. The reviewer's aside for the GM (the seven-arch sando drawn
   as one arch since the count re-roll; the well far behind the hall) is carried to the writeup.
 - Round 2 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, four items, all applied. (1) Key
