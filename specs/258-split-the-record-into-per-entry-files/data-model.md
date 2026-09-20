@@ -8,6 +8,19 @@ every refusal, is [contracts/fragment-format.md](contracts/fragment-format.md).
 A page is a directory of fragments; a fragment is one entry of the record; a section that has entries of
 its own gets a directory named exactly as its own file is, without the extension.
 
+## Where a page is cut
+
+At every `<hN` that opens a real section, which is not the same as every `<hN` in the file:
+
+- **a heading inside an HTML comment is not a section.** The registry carries an 8,021-byte commented-out
+  block holding two whole `<h2>` groups - the old citing rules and the re-sourcing queue (R1). Cutting on
+  the plain text splits that comment in two and invents two sections no reader sees. The comment rides
+  with the front matter, verbatim.
+- **a heading is recognized wherever it stands on its line.** One real heading in the registry follows a
+  space rather than starting its line, so a cut anchored to the line start would miss a whole section.
+
+The registry therefore has THREE visible sections, not the five a plain `<h2>` count reports.
+
 ## Names
 
 | name | what it holds | ordered by |
@@ -38,16 +51,14 @@ its own gets a directory named exactly as its own file is, without the extension
 research/
 ├── SOURCES.html                                   ASSEMBLED
 ├── sources/
-│   ├── _front.html
-│   ├── 010-citing.html
-│   ├── 020-re-sourcing-queue.html
-│   ├── 030-works-cited.html
-│   ├── 030-works-cited/
+│   ├── _front.html                                 incl. the 8,021-byte commented-out block
+│   ├── 010-works-cited.html                        the roster's heading and its 213-byte intro
+│   ├── 010-works-cited/
 │   │   ├── 0010-kitamoto-mushiro-niwa.html
 │   │   ├── 0020-kodaira-niwa.html
 │   │   └── ... 920 entries
-│   ├── 040-attested-instances.html
-│   ├── 050-setting-canon.html
+│   ├── 020-attested-instances.html
+│   ├── 030-setting-canon.html
 │   └── _tail.html
 ├── ways.html                                      ASSEMBLED
 ├── ways/

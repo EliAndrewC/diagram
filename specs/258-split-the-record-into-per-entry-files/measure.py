@@ -45,6 +45,19 @@ def read(rel: str) -> str:
         return fh.read()
 
 
+def comments(html: str) -> list[tuple[int, int]]:
+    """The [start, end) of every HTML comment. A heading inside one is not a section: the registry
+    carries an 8,021-byte commented-out block holding two whole `<h2>` groups (R1)."""
+    return [(m.start(), m.end()) for m in re.finditer(r"<!--.*?-->", html, re.S)]
+
+
+def headings(html: str, level: int) -> list[re.Match[str]]:
+    """Every `<hN` that opens a real section - not one inside a comment."""
+    hidden = comments(html)
+    return [m for m in re.finditer(rf"<h{level}\b", html)
+            if not any(a <= m.start() < b for a, b in hidden)]
+
+
 def size(text: str) -> int:
     """BYTES, not characters. The record quotes Chinese and Japanese, where one character is three
     bytes: `len()` understates the registry by 21,893 and every note that carries a quotation."""
@@ -79,12 +92,16 @@ def r1() -> None:
         if notes:
             print(f"  citations/{rel:28} n={len(notes):>3}  avg={sum(map(size, notes)) // len(notes):>5}")
 
-    print("\nTHE TWO FRAGMENTS SC-001's BAR IS DECIDED BY")
-    registry = H2.split(read("SOURCES.html"))
-    groups = [(re.search(r'id="([^"]*)"', g).group(1), size(g.split("<h3")[0])) for g in registry[1:]]
-    print(f"  registry front matter                {size(registry[0]):>7}")
-    for name, nbytes in groups:
-        print(f"  registry group {name:22}{nbytes:>7}   (its heading and its prose, no entries)")
+    print("\nTHE FRAGMENTS SC-001's BAR IS DECIDED BY")
+    registry = read("SOURCES.html")
+    cuts = [m.start() for m in headings(registry, 2)] + [len(registry)]
+    commented = max((b - a for a, b in comments(registry)), default=0)
+    print(f"  registry front matter                {size(registry[:cuts[0]]):>7}   of which a commented-out block: {commented}")
+    for start, stop in zip(cuts, cuts[1:]):
+        part = registry[start:stop]
+        name = re.search(r'id="([^"]*)"', part).group(1)
+        print(f"  registry section {name:20}{size(part.split('<h3')[0]):>7}   (its heading and its prose, "
+              f"{len(re.findall('<h3', part))} entries)")
     biggest = ("", 0, 0)
     for rel in pages():
         try:

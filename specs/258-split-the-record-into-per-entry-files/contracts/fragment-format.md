@@ -22,6 +22,18 @@ The citations page is the same shape:
                              + each question's notes, in question order, numbered
                              + _citations-tail.html
 
+## Where the splitter cuts
+
+A section begins at an `<hN` that is **not inside an HTML comment**, wherever it stands on its line. Both
+halves of that rule are load-bearing, and both were found in the registry before the splitter was written
+(R1): an 8,021-byte comment holds two whole `<h2>` groups, and one real heading follows a space rather
+than starting its line. A cut on the plain text would split the comment in half, invent two sections no
+reader sees, and - because splitting and rejoining is lossless wherever you cut - assemble back to
+byte-identical output while doing it, so byte-identity alone would never have caught it. The tests
+therefore assert the section COUNT and the heading ids as well as the bytes.
+
+Commented-out text rides with whatever fragment it falls inside; it is never a fragment of its own.
+
 ## What each fragment must contain
 
 | fragment | must | must not |
@@ -78,6 +90,7 @@ recognize. Every message names the file.
 | a question fragment holds a second `<h2` | the file and the second heading |
 | a registry entry's filename key differs from the key its heading registers | the file, both keys |
 | `_front.html` or `_tail.html` missing | the page directory, and what is missing |
+| a split whose section count or heading ids differ from the page it came from | the page, both counts, and the ids that differ |
 | a prefix gap is exhausted (no free number between two neighbors) | the two neighbors, and the re-spacing command |
 | the committed page differs from the assembly (`CHECK=1`) | every such page, and `make record` |
 

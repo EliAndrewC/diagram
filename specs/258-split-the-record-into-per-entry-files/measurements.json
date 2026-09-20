@@ -1,0 +1,9 @@
+{
+  "baseline-quick": {
+    "value": 3782,
+    "unit": "tests",
+    "quantity": "make quick ALL=1 in /tmp/base258, a detached worktree at HEAD (the spec commits only; no engine code changed)",
+    "observed": "2026-09-20",
+    "note": "3782 passed, 5 skipped, 4 warnings in 34.14 s; make hooks-test: 26 guard suites green. Constitution XIII baseline for feature 258 - every later failure is checked against this before it is called new."
+  }
+}

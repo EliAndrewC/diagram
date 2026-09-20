@@ -178,9 +178,15 @@ files they replace; the diff is empty.
 
 - **FR-007**: Each entry of the registry's works roster MUST become one file named by its ordering prefix
   and its source key, in a directory of source files.
-- **FR-008**: The registry's other four groups - its front matter and the prose of the citing rules, the
-  re-sourcing queue, the attested instances and the setting canon - MUST keep their text verbatim in
-  their own files, so that no prose of the registry lives only inside a program.
+- **FR-008**: Everything of the registry that is not an entry MUST keep its text verbatim in a file of
+  its own, so that no prose of the registry lives only inside a program: its front matter, each of its
+  three visible sections (the works roster's heading and intro, the attested instances, the setting
+  canon), and its closing. The front matter includes an 8,021-byte block that is commented OUT, holding
+  two further headings and the old citing rules (R1); it is carried verbatim with the front matter, and
+  is not a section.
+- **FR-008a**: A heading inside an HTML comment MUST NOT be treated as a section, and a heading MUST be
+  recognized wherever it stands on its line. The registry carries one of each (R1); a cut on the plain
+  text would split a comment in two and invent two sections that no reader sees.
 - **FR-009**: The assembled registry MUST carry its entries in the order it carries them today.
 - **FR-010**: A source MUST be findable by its key alone, with one glob and no index file to consult.
 
@@ -262,9 +268,10 @@ files they replace; the diff is empty.
 
 - **SC-001**: The largest hand-edited file in the record falls from 1,150,367 bytes to under 40,000, and
   the entry a session or an agent opens is about 1,200 bytes for a source (the median of 920) and
-  between 2,664 and 9,279 for a question, by page average. The bar clears the two fragments that decide
-  it, both measured: the registry's largest group of prose is 5,443 bytes and the largest notes file any
-  question would get is 28,118 (R1). (FR-007, FR-011, FR-013, FR-016)
+  between 2,664 and 9,279 for a question, by page average. The bar clears the two largest fragments the
+  split will create that are not questions, both measured: the registry's front matter at 8,712 bytes
+  (8,021 of them the commented-out block) and the largest notes file any question would get, 28,118
+  (R1). (FR-007, FR-008, FR-008a, FR-011, FR-013, FR-016)
 - **SC-002**: A check over one entry reads that entry: on the recorded case of FR-026 the RECORD bytes
   entering the agent's context fall by at least 90% against its recorded whole-page run - it reads the
   fragment it was given and its notes, and nothing else under `research/` - and it reports the same
@@ -339,3 +346,20 @@ sees, so they are declared here rather than left to the diff.
   bytes). The reviewer's aside is taken up too: SC-001's bar now cites the two fragments that decide it,
   the registry's largest group of prose (5,443 bytes) and the largest notes file a question would get
   (28,118), both added to `measure.py R1`.
+- Round 2 (2026-09-20, `spec-fidelity`, Opus): **FAITHFUL.** All five items confirmed RESOLVED, each
+  figure re-run rather than read. On the aside's 28,153 against this session's 28,118: the difference is
+  exactly one byte per note, the reviewer's hand count having included the newline between the `<li>`
+  elements; the spec keeps the figure that comes out of a command, and both are upper bounds because the
+  notes fragment that actually lands carries neither `id="fn-N"` nor the generated back link. The
+  reviewer's one hygiene note - `research.md`'s preamble still said "all four" after R5 was added - is
+  applied.
+- Amendment after acceptance (2026-09-20), which resets the round counter: **the registry is not shaped
+  the way a plain `<h2>` count reports it.** Checking the splitter's assumptions against the record
+  before writing it turned up an 8,021-byte HTML comment in `SOURCES.html` holding two whole `<h2>`
+  groups - the old citing rules and the re-sourcing queue - and one real heading that follows a space
+  rather than starting its line. So: FR-008 rewritten to describe the registry as it is (three visible
+  sections, the commented block carried verbatim with the front matter); FR-008a added for the cut rule;
+  SC-001's cited figures corrected from the group-prose 5,443 to the front matter's 8,712; and the cut
+  rule written into `data-model.md` and `contracts/fragment-format.md` with the reason byte-identity
+  alone could never have caught it - splitting and rejoining is lossless wherever you cut, so the tests
+  assert the section count and the heading ids too.
