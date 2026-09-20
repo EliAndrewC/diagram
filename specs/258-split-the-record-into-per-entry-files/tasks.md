@@ -172,7 +172,7 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       for it - the measurement, not the preference
       research: rendering
       verify: DONE. docs/research-doctrine.md carries the measurement, the three things worth knowing (numbers allocated not typed; byte-identity is checkable but insufficient; the rule lives in the agent contracts); docs/efficiency-tooling.md carries make record, its 0.11 s cost, why it runs in both places, and the per-question commands
-- [ ] T29 Stop-work: commit, `scripts/sync-with-main.sh done`. The delta touches engine code, so the route
+- [x] T29 Stop-work: commit, `scripts/sync-with-main.sh done`. The delta touches engine code, so the route
       is GATED on T26's green gate
       research: rendering
-      verify:
+      verify: DONE. everything the push is gated on is verified at this tick: make done green in the clone (4,179 passed, 4 skipped, all three floors), make record CHECK=1 in sync over 20 pages, make citations CHECK=1 in sync, make hooks-test green, spec-lint --delta clean, the working tree committed. The delta touches engine code so the route is GATED on that green gate; the entry gate takes one ENTRY_DRIFT_OK for the whole sweep, since what moved is the numbering and not the record
