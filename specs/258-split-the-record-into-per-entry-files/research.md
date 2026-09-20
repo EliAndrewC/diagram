@@ -175,7 +175,9 @@ tree is genuinely unmodified.
 
 ## R7 - What the assembly costs the gate
 
-**Before**, the same run as R6: the test phase is 51.40 s over 4,113 tests.
+**Before**, the same run as R6: the test phase is 51.40 s over 4,113 tests (observed 2026-09-20;
+method: the `make done` of R6, in the detached worktree at `origin/main` - a wall-clock timing on a
+shared container, so it is a one-shot observation and the comparison below is like for like).
 
 **The check itself**: `make record CHECK=1` over the whole record - 20 pages, 1,251 fragments - runs in
 **0.11 s** (measured by the plan review, 2026-09-20, on a shared container at load 0.75; recorded as
@@ -183,6 +185,48 @@ tree is genuinely unmodified.
 whose fragments the delta touched - is not needed and is not built.
 
 **After** is taken at T27, against this.
+
+## R8 - The re-run FR-026 asks for: does a scoped check still find what the whole-page check found?
+
+**Question.** Feature 255's ruling is that cutting what a check reads can lose findings. So: run
+`record-format` over ONE question's fragments, against its own recorded whole-page run on the same
+entry, and compare both what it read and what it found.
+
+**The recorded run** (`seeded-format-clean`, feature 255): `record-format` over the whole of
+`research/ways.html` - 93,076 bytes under `research/`, 88% of everything that entered its context
+(observed 2026-09-20; method: `measure.py R3` over that run's kept transcript). On the question "How far
+past the bank does a bridge land?" it reported VOCABULARY on **girder** and on **footing**.
+
+**The scoped run** (2026-09-20, this feature): the same agent, handed
+`research/ways/010-how-far-past-the-bank-does-a-bridge-land.html` and its `.notes.html`.
+
+| | recorded, whole page | scoped |
+|---|---:|---:|
+| the entry's own bytes | 27,234 (the page) | **7,170** (the question, 3,680, and its notes, 3,490) |
+| the shared glossary asset | 55,550 | 55,550 |
+| all bytes under `research/` | 93,076 | 62,720 |
+| VOCABULARY reported for this question | 2 | **12** (10 tooltips proposed, 2 dismissed as defined inline) |
+
+**What it decides, and it is not all good news.** (Observed 2026-09-20; method: the dispatch's own
+transcript, counted as `measure.py R3` counts one - every tool result whose file lies under
+`research/` - against the recorded run of feature 255.)
+
+- **Nothing was lost.** Every finding the recorded run made on this question the scoped run makes too
+  (`girder`), and it makes ten more - `carried deck`, `footplank`, `stringer`, `spread footing`,
+  `superstructure`, `backwall`, `wingwall`, `out-to-out`, `NRCS`, and a SESSION NOTE the whole-page run
+  did not raise. `footing` is the one the recorded run raised and this one did not, for a reason that is
+  not the scoping: the glossary has since gained `strip footing`. A check that reads less and finds
+  less has not been improved; this one reads less and finds more.
+- **The entry's bytes fall by 74%, not by 90%, and `ways.html` is why** (observed 2026-09-20; method:
+  the two runs' own byte counts in the table above, and `measure.py R1`'s page sizes).** It is the SMALLEST page in the
+  record - 27,234 bytes, five questions - deliberately chosen as the reference artifact because it is
+  the smallest complete case. The same scoping on the median page (`water.html`, 163,008 bytes, 28
+  questions) is a 96% fall, and on `cities/capitals.html` (180,046, 39 questions) 97%.
+- **The glossary asset is read by both runs and cannot be scoped away.** `research/assets/glossary.js`
+  is 55,550 bytes and VOCABULARY is judged against it - that is the check's contract, not a mistake. It
+  is 88% of what the scoped run read under `research/`, which is why the table above separates it. SC-002
+  said "nothing else under `research/`" and had to be corrected to say what it meant; see the spec's
+  Review history.
 
 ## What was NOT measured, and why
 

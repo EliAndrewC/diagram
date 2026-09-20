@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T14:26:20Z",
+  "target": "plan-gate tick 258-split-the-record-into-per-entry-files",
+  "commit": "ac543f61",
+  "why": "the CLEAR verdict's own corrections folded in; no decision moved"
+}

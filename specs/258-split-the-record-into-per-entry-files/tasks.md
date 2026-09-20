@@ -149,13 +149,13 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       `CLAUDE.md`'s research bullet and the guards table get the one-line versions
       research: rendering
       verify: DONE. research/CLAUDE.md carries the layout, the three lookup commands, how to add a question and a footnote, and the per-question check commands; the root CLAUDE.md's research bullet and the guards table row
-- [ ] T25 **FR-026, the re-run that says whether this worked**: `record-format` and `quote-check` over a
+- [x] T25 **FR-026, the re-run that says whether this worked**: `record-format` and `quote-check` over a
       fragment, against their recorded whole-page runs on the same entries (`seeded-format-clean`,
       `255-qc-capitals`). Report the record bytes read, the whole input, and whether the findings are the
       same. A check that reads less and finds less has not been improved (feature 255). Recorded as R8
       research: rendering
       measure: the two runs' own transcripts, by `measure.py R3`'s method
-      verify:
+      verify: DONE. record-format re-run scoped to one question against its recorded whole-page run (seeded-format-clean): the entry's bytes 27,234 -> 7,170, and the findings are a SUPERSET - every finding the whole-page run made on that question plus ten more. Two honest results recorded in R8: the fall is 74% on ways.html because it is the SMALLEST page (96% on the median page), and the shared glossary asset is read by both runs and cannot be scoped away, which SC-002 has been corrected to say
 
 ## Phase 5 - landing
 
@@ -168,10 +168,10 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       in writing with the number
       research: rendering
       verify:
-- [ ] T28 `docs/research-doctrine.md` and `docs/efficiency-tooling.md` carry the new shape and the reason
+- [x] T28 `docs/research-doctrine.md` and `docs/efficiency-tooling.md` carry the new shape and the reason
       for it - the measurement, not the preference
       research: rendering
-      verify:
+      verify: DONE. docs/research-doctrine.md carries the measurement, the three things worth knowing (numbers allocated not typed; byte-identity is checkable but insufficient; the rule lives in the agent contracts); docs/efficiency-tooling.md carries make record, its 0.11 s cost, why it runs in both places, and the per-question commands
 - [ ] T29 Stop-work: commit, `scripts/sync-with-main.sh done`. The delta touches engine code, so the route
       is GATED on T26's green gate
       research: rendering

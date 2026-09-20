@@ -286,8 +286,9 @@ files they replace; the diff is empty.
   split will create that are not questions, both measured: the registry's front matter at 8,712 bytes
   (8,042 of them the commented-out block) and the largest notes file any question would get, 28,118
   (R1).
-- **SC-002**: (FR-023, FR-024, FR-026) A check over one entry reads that entry, and nothing else under `research/`: the
-  fragment it was given and its notes. On the recorded case of FR-026 that is a few thousand bytes
+- **SC-002**: (FR-023, FR-024, FR-026) A check over one entry reads that entry: the fragment it was given
+  and its notes, and no other ENTRY of the record - the shared glossary asset excepted, which VOCABULARY
+  is judged against and which the whole-page run reads too. On the recorded case of FR-026 that is a few thousand bytes
   against the 91,926 its whole-page run read (R3), and it reports the same findings. The fall in the
   agent's WHOLE input is reported by FR-026's run rather than held to a bar, because it depends on
   how much of a given run was the page, which the recorded runs put between 23% and 98%, median 68% (R3,
@@ -417,3 +418,24 @@ sees, so they are declared here rather than left to the diff.
   agreeing with the splitter, and noted that the split direction cannot fire the section-count refusal (the
   page's sections are counted by the same function the split used) - T08a builds it in the assembly
   direction, where it can fail.
+- Round 5 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, two items, both applied, and the round
+  ended by saying so in as many words - *"Apply them and land; do not open a sixth reading of the spec.
+  If the session judges that another review round is needed after applying them, that is the point at
+  which the matter goes to the GM rather than to me."* Both items were sentences THIS round's own commit
+  had written. (1) The Review history's account of why SC-002's old bar was unreachable said "most of a
+  recorded run's input is not the page", which R3 measures the other way round - the median share is 68%
+  and eleven of seventeen runs are at 47% or above. It now says what is true and what makes the bar
+  unreachable: the page is never ALL of a run's input, so on `255-qc-urban` swapping a fragment for it
+  cuts 62% of the total, not 90%. (2) SC-002's closing clause had blurred "23% to 98%" into "a quarter to
+  nearly all", on the mistaken premise that the endpoints had no run behind them; R3 carries both with
+  their method, so the figures are restored. The round also verified that the SC rewrite moved ids only -
+  SC-001's list is its own and SC-010 still names FR-008, after an intermediate transform of this
+  session's had briefly put SC-010's list on SC-001 - and that `spec-lint --delta` is clean.
+- Landing correction (2026-09-20), not a review round: FR-026's re-run (R8) measured the scoped check
+  reading the shared glossary asset `research/assets/glossary.js`, which SC-002's "nothing else under
+  `research/`" forbade. The criterion meant no other ENTRY, and now says so: the glossary is what
+  VOCABULARY is judged against, it is the check's own contract, and the whole-page run read it too.
+  R8 also records what the re-run found, which is the thing FR-026 exists to ask: the scoped run makes
+  every finding the recorded whole-page run made on that question and ten more. Round 5 asked that
+  corrections of this kind be applied and landed rather than opened as a sixth reading; this one is
+  flagged to the GM in the session's report instead.
