@@ -24,8 +24,15 @@ assumed a determinism the check does not have.
 "Every word in the entry with no line in the variant index" raises **314 of the entry's 324 distinct
 words** (R1), because ordinary English is not in a glossary. What works needs no shipped word list:
 rarity within the record's own corpus. A word in **2 or fewer** of the record's 1,479 question
-fragments, and not in the variant index, is a candidate - **34 of them** on that entry, catching 9 of
-the 12 terms feature 259's three runs proposed (R2).
+fragments, and not in the variant index, is a candidate - **34 of them** on that entry.
+
+**What that catches, counted the way the question demands.** Feature 259's three runs proposed eleven
+terms between them: eight that every run proposed - the stable core, which never varied and is not the
+problem - and three that varied from run to run, which is the whole of the variance this feature
+exists to remove. The list catches **2 of those 3** (`nrcs`, `out-to-out`; `embankment` is in 23
+fragments and is not rare), and 6 of the 8 core. A first draft of this spec reported "9 of 12", which
+counted a term every run DISMISSED as a term to catch and buried the tail inside a core that was never
+at issue (R2, R3).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -90,7 +97,12 @@ landed with it recorded as failed. This is what replaces it.
   67 words and catches no more (R2).
 - **FR-003**: Each candidate MUST carry the count of fragments it appears in, so a reader of the list
   can see why it is there.
-- **FR-004**: A registry source key MUST NOT be a candidate.
+- **FR-004**: A registry source key MUST NOT be a candidate, and text inside a `<code>` span MUST NOT
+  be scanned at all - those carry keys and identifiers, not words a reader is asked to know. **Measured,
+  this removes nothing on the entry the feature was built against**: the shards a key breaks into
+  (`nrcs-ts`, `q-abutments`) are already over the rarity cutoff, and `ritter-timber-bridges` is in 3
+  fragments. It is a floor against a key rare enough to survive the cutoff, not a filter that fires
+  today, and it is written down as that rather than as a saving it does not make.
 - **FR-005**: The text searched MUST be what a READER meets: HTML comments and tags are not words.
 - **FR-006**: The frequency corpus MUST be the record's own question fragments, derived at run time. No
   word list is shipped, and nothing about it is maintained by hand.
@@ -98,12 +110,28 @@ landed with it recorded as failed. This is what replaces it.
   which verdict each got, and to add anything it notices that the list did not raise.
 - **FR-008**: The contract MUST state what the list cannot reach - a multi-word term, and a word the
   record uses often - so that the model does not read an empty list as an empty question.
-- **FR-009**: The acceptance bar for a scoping change MUST be restated in the record's operative doc:
-  every candidate ruled on, rather than the same findings. Features 258 and 259 carry the old bar in
-  their specs; those are history and are not edited, but the doc a session reads MUST carry the new one.
+- **FR-009**: The acceptance bar for a scoping change MUST be restated in
+  `.claude/skills/diagram/research/CLAUDE.md`, the operative doc a session reads before it dispatches a
+  record check: every candidate ruled on, rather than the same findings. Features 258 and 259 carry the
+  old bar in their specs; those are history and are not edited.
 - **FR-010**: The prepass MUST stay cheap enough to run before every dispatch. The bar is five
   seconds over the whole record, which R4 measures against; it is a bar and not an observation,
   chosen because a session runs this before a dispatch and anything slower gets skipped.
+
+- **FR-009a**: The statements of the old bar that this feature does NOT change MUST be named, because a
+  criterion that claims a reach it does not have is the defect this feature was created by. Three
+  survive, all of them about a different decision - whether a CHECK may run on a cheaper model, not
+  whether it may read less: `CLAUDE.md`'s "a downgrade stands only after a seeded-fault run on known
+  findings", the same rule at length in `docs/spec-kit-and-reviews.md`, and
+  `docs/efficiency-tooling.md`'s "kept only if it hit every recorded finding for less". They rest on the
+  same assumption and are left deliberately: a tier downgrade is the GM's own doctrine, and changing it
+  is not this feature's to do. It is raised with them instead (FR-011).
+- **FR-011**: The mechanism this feature substituted for the one the GM approved MUST be put to them
+  once the implementation works, naming what changed and what it costs - that "every candidate ruled
+  on" now certifies only the words a word-level rarity filter can reach, so a check that misses every
+  multi-word term and every record-common one clears it in both conditions. Constitution XVI's route
+  for a departure that proves necessary is to carry on and raise it; the raising is a requirement here
+  so that it cannot be the thing that gets dropped at the end.
 
 ### Key Entities
 
@@ -117,15 +145,20 @@ landed with it recorded as failed. This is what replaces it.
 
 - **SC-001**: (FR-001, FR-002, FR-003, FR-005) On the entry feature 259 measured three times, the
   prepass reports 34 candidates where it reports 0 today, each with its fragment count.
-- **SC-002**: (FR-002, FR-006) The list catches 9 of the 12 terms those three runs proposed, and the
-  three it does not are named in the record with the reason (R3).
-- **SC-003**: (FR-004) No registry source key appears in a candidate list.
+- **SC-002**: (FR-002, FR-006) Of the THREE terms whose presence varied between feature 259's runs -
+  the variance this feature exists to remove - the list raises 2, and the one it does not is named with
+  the reason (R3). Of the eight the runs never disagreed about it raises 6. Both numbers are stated;
+  the first is the one that decides whether this worked.
+- **SC-003**: (FR-004) No registry source key appears in a candidate list over the whole record - which
+  is true today with or without FR-004, and is recorded as such (R3).
 - **SC-004**: (FR-007, FR-008) A `record-format` run given the list rules on every candidate, and its
   report says so item by item.
-- **SC-005**: (FR-009) The operative doc states the new bar, and a session reading it is not sent to the
-  criterion features 258 and 259 could not meet.
+- **SC-005**: (FR-009, FR-009a) `research/CLAUDE.md` states the new bar, and the three other operative
+  statements of the old one are named in this spec as knowingly left, with the reason.
 - **SC-006**: (FR-010) The prepass stays cheap enough to run before every dispatch: its wall time
   over the whole record is recorded in R4 and stays under the bar FR-010 states.
+- **SC-007**: (FR-009a, FR-011) The GM is told what was substituted and what the approved bar now
+  certifies, and the three unchanged statements of the old bar are named.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

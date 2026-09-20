@@ -19,9 +19,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RECORD = os.path.normpath(os.path.join(HERE, "..", "..", ".claude", "skills", "diagram", "research"))
 #: The entry all three of feature 259's runs checked, so this feature measures the same one.
 ENTRY = ("ways", "010-how-far-past-the-bank-does-a-bridge-land")
-#: The eight terms every one of those runs proposed, plus the two that varied (specs/259 R5).
-KNOWN = ("girder", "carried deck", "footplank", "stringer", "spread footing", "backwall", "wingwall",
-         "superstructure", "nrcs", "out-to-out", "embankment", "obliquity")
+#: What feature 259's three runs actually did with this entry (specs/259 R5), split the way the
+#: question demands: the CORE every run proposed, the TAIL that varied between runs - which is the
+#: variance this feature exists to remove - and the one term every run DISMISSED as defined inline.
+#: The headline "n of 12" the first draft used counted the dismissal as a term to catch, and buried
+#: the tail inside a core that was never the problem.
+CORE = ("girder", "carried deck", "footplank", "stringer", "spread footing", "backwall", "wingwall",
+        "superstructure")
+TAIL = ("nrcs", "out-to-out", "embankment")
+DISMISSED = ("obliquity",)
+KNOWN = CORE + TAIL
 _WORD = re.compile(r"[A-Za-z][A-Za-z'-]+")
 
 
@@ -92,10 +99,12 @@ def r2() -> None:
     corpus = len(fragments())
     print(f"  corpus: {corpus} question fragments, {len(freq)} distinct words\n")
     for cut in (1, 2, 3, 5, 10, 20):
-        cands = [w for w in words if w not in known and freq[w] <= cut]
-        caught = sorted(k for k in KNOWN if caught_by(k, set(cands)))
-        print(f"  in <= {cut:>2} fragments: {len(cands):>3} candidates, catching {len(caught):>2} of "
-              f"{len(KNOWN)} known: {caught}")
+        cands = set(w for w in words if w not in known and freq[w] <= cut)
+        core = sorted(k for k in CORE if caught_by(k, cands))
+        tail = sorted(k for k in TAIL if caught_by(k, cands))
+        print(f"  in <= {cut:>2} fragments: {len(cands):>3} candidates | core {len(core)}/{len(CORE)} "
+              f"| TAIL {len(tail)}/{len(TAIL)} {tail} | dismissed-inline caught: "
+              f"{sorted(d for d in DISMISSED if caught_by(d, cands))}")
 
 
 def r3() -> None:

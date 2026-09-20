@@ -222,13 +222,22 @@ def prepass(markup: str, glossary: dict, record_dir: str | None = None) -> list[
         # THE SAME TEXT THE CHECK READS (feature 260). `record-format` is handed the question fragment
         # AND its notes, so a candidate list drawn from the question alone would leave every term that
         # appears only in a quoted passage unraised - and those are the technical ones.
-        scanned = text_of(body) + " " + notes.get(_slug(heading), "") if record_dir else ""
+        scanned = without_code(body) + " " + notes.get(_slug(heading), "") if record_dir else ""
         out.append({
             "section": heading,
             "items": session_notes(body) + vocabulary(body, known),
             "rare": rare_words(scanned, defined, freq, keys=keys) if record_dir else [],
         })
     return out
+
+
+def without_code(markup: str) -> str:
+    """Visible text with `<code>` spans removed - they carry keys and identifiers, not words a reader
+    is asked to know (FR-004). Measured on the entry this feature was built against, it removes
+    nothing: the shards a key breaks into (`nrcs-ts`, `q-abutments`) are already over the rarity
+    cutoff. It is a floor against a key rare enough to survive that cutoff, not a filter that fires
+    today, and the spec says so rather than claiming a saving it does not make."""
+    return text_of(re.sub(r"<code\b[^>]*>.*?</code>", " ", markup, flags=re.S))
 
 
 @functools.cache
@@ -250,7 +259,7 @@ def notes_index(record_dir: str | None) -> dict[str, str]:
             if not name.endswith(".notes.html"):
                 continue
             with open(os.path.join(base, name), encoding="utf-8") as fh:
-                out[name.split("-", 1)[-1][: -len(".notes.html")]] = text_of(strip_comments(fh.read()))
+                out[name.split("-", 1)[-1][: -len(".notes.html")]] = without_code(strip_comments(fh.read()))
     return out
 
 

@@ -29,7 +29,8 @@ asked to do; no research text is edited and no historical question is reopened.
       research: rendering
       verify:
 - [ ] T05 `make record-prepass` prints the list under its own heading, with the count beside each word
-      and the cutoff stated; proven on `ways` 010, where it reports 34 where it reported 0
+      and the cutoff stated; proven on `ways` 010, where it reports 34 where it reported 0, over the text
+      the CHECK reads - the question fragment and its notes, not the assembled page's section
       research: rendering
       measure: the command's own output against `measure.py R2`
       verify:
@@ -63,6 +64,13 @@ asked to do; no research text is edited and no historical question is reopened.
       research: rendering
       verify:
 - [ ] T11 R4-after: the prepass's wall time with the pass in it, against FR-010's bar
+      research: rendering
+      verify:
+- [ ] T11a **FR-011, SC-007**: the GM is told what was substituted for the mechanism they approved and
+      what the approved bar now certifies - that "every candidate ruled on" reaches only the words a
+      word-level rarity filter can see, so a check missing every phrase and every record-common term
+      clears it in both conditions - and the three statements of the old bar this feature does not
+      change are named to them
       research: rendering
       verify:
 - [ ] T12 Stop-work: commit, `scripts/sync-with-main.sh done`
