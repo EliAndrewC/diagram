@@ -36,8 +36,7 @@ def main(argv: list[str] | None = None) -> int:
     # derivation taken before the assembly would be of the file as it stood one edit ago.
     stale = source.check()
     if args.check and stale:
-        print(f"glossary.json: STALE against its per-term files - run `make glossary` ({', '.join(stale)})",
-              file=sys.stderr)
+        print(f"glossary.json: STALE against its per-term files - run `make glossary` ({', '.join(stale)})", file=sys.stderr)
         return 1
     if not args.check:
         if source.write_source():

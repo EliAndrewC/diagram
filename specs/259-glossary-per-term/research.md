@@ -93,3 +93,32 @@ green run" - against feature 258's own landing run of **4,179 passed, 4 skipped,
 floors, 92 s**. That run is this feature's baseline, recorded as `m:baseline-done`.
 
 **After** is taken at T12, against this.
+
+## R5 - The re-run FR-010 asks for, and the one thing it does not support
+
+**The run** (2026-09-20): `record-format` over the same entry feature 258 measured - `ways`, the
+question "How far past the bank does a bridge land?" - with the split glossary and the contract that
+tells it to read the variant index.
+
+| | feature 258's run | this run |
+|---|---:|---:|
+| the entry's own fragments | 7,170 | 7,170 |
+| the glossary | **55,550** (`glossary.js`) | **37,255** (the variant index as the read returned it) |
+| all bytes under `research/` | 62,720 | 45,921 |
+| VOCABULARY reported | 12 items, 10 drafts | 10 terms, 8 drafts |
+
+**What it supports.** The check never opened `glossary.js`, never opened a term file it did not name,
+and reported on the same entry from 45,921 bytes instead of 62,720. The index has since been written in
+its cheapest readable form - one tab-separated line per variant, 22,564 bytes against the 30,820 the
+measured run read - so a run after this one reads less still; that figure is the file's size, not a
+run's, and is labeled as such.
+
+**What it does NOT support, stated plainly.** SC-002 asks for the same findings, and this run made one
+fewer: feature 258's run proposed a definition for **`out-to-out`** and this one did not mention it.
+(It also did not restate `bearing length`, which 258 had already dismissed as defined inline - that one
+is not a lost finding.) The membership information was identical in both runs: `out-to-out` is absent
+from the glossary and absent from the index, so nothing the scoping removed could have hidden it. The
+difference is which words the model chose to flag, not what it could see. **That is an explanation, not
+a measurement** - distinguishing variance from a real loss needs a second run on the same entry, which
+has not been made. SC-002 is therefore met on the bytes and NOT met on the findings, and the GM is told
+so rather than the criterion being reworded to fit.

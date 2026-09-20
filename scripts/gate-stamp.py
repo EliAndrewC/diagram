@@ -173,9 +173,13 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...], area: str
     module nobody has added yet is still code the gate ran on, and omitting it would let an
     untracked file slip past. `area` names which area's exclusions apply (feature 206: two areas
     share a root now); left None, it is derived from the root as before."""
+    # GUARD_EDIT_OK: feature 259 - `-z`, because `git ls-files` QUOTES a path with a non-ASCII byte in
+    # it ("...bett\305\215.json"), and a quoted name is not a file: the stamp hashed nothing for it and
+    # an edit to it would not have invalidated the area. Found when the glossary became one file per
+    # term and eight of the terms carry a macron; the hole was older than that and covered every area.
     out = _git(
         "ls-files",
-        "-co",
+        "-coz",
         "--exclude-standard",
         "--",
         *(f"{area_path}/{pat}" for pat in patterns),
@@ -184,7 +188,7 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...], area: str
     return sorted(
         {
             root / line
-            for line in out.splitlines()
+            for line in out.split("\0")
             if line.strip() and not _excluded(line, area_path, area)
         }
     )

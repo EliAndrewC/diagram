@@ -224,3 +224,33 @@ read those and not the page.
 
 `scripts/record-edit-hooks.sh` keeps the fragments the source: an Edit aimed at an assembled page is
 re-aimed at the one fragment holding its text, and refused where none or several hold it.
+
+## The glossary is one file per word (feature 259)
+
+Feature 258's own report said the shared glossary asset "cannot be scoped away". The GM asked why not,
+and the measurement said the claim was wrong by 114,727 bytes: `record-format` judges VOCABULARY by
+asking whether a word is already defined, a question that needs every term's NAME and never a
+definition (`specs/259-glossary-per-term/research.md` R1).
+
+So `interactive/assets/glossary/NNNN-<term>.json`, 720 of them at about 154 bytes each, assembled by
+`make glossary` into the `glossary.json` the engine reads and the `glossary.js` the record's pages
+load - both unchanged, byte for byte, at the split's landing. What a check reads instead of 144,524
+bytes:
+
+| the question | what answers it | bytes |
+|---|---|---|
+| does this WORD have a definition, under any term? | `research/assets/glossary-variants.txt`, derived | 22,564 |
+| is this word itself a TERM? | the directory listing - the filenames ARE the term list | 13,730 |
+| what does one term say? | that term's own file | ~154 |
+
+**The index is not a convenience.** A grep over the term files answers with candidates, not the
+claimant: measured, `windlass` matches three of them, because a definition may mention a word another
+term owns. That was found by the plan review, after the first draft had replaced the index with a grep.
+
+**Why the filename carries a prefix** when the GM's own form was the bare word: term ORDER decides which
+definition a reader is shown where two terms claim one variant - `record.js` builds `defs[variant] =
+def` in file order - and seven variants were in that state. The prefix keeps the order, which is what
+makes the assembled file byte-identical, which is what makes the split checkable. The seven were then
+resolved (the term whose own name is the variant keeps it), so the order stopped being load-bearing
+anywhere a reader can see; two tooltips changed, each of which had been showing another term's
+definition.

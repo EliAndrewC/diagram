@@ -58,8 +58,7 @@ def term_of(name: str) -> str:
     """The term a filename claims - for checking against the file's own content, never for the value."""
     found = _NAMED.match(name)
     if not found:
-        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix "
-                            f"four digits counting by ten")
+        raise GlossaryError(f"{name}: not a term file. A term file is <prefix>-<term>.json, the prefix four digits counting by ten")
     return _decode(found.group(2))
 
 
@@ -116,9 +115,7 @@ def write_term_files(root: str | None = None) -> list[str]:
         written.append(os.path.join(TERMS, name))
     rebuilt = assemble(term_files(base))
     if rebuilt != raw:
-        raise GlossaryError(f"the split does not assemble back to the same bytes "
-                            f"({_first_difference(raw, rebuilt)}) - the term files in {TERMS}/ are "
-                            f"wrong and must not be committed")
+        raise GlossaryError(f"the split does not assemble back to the same bytes ({_first_difference(raw, rebuilt)}) - the term files in {TERMS}/ are wrong and must not be committed")
     return written
 
 
@@ -135,34 +132,33 @@ def term_files(root: str | None = None) -> list[dict]:
     seen: dict[int, str] = {}
     out = []
     for name in sorted(os.listdir(here)):
-        term_of(name)                                 # refuses a stray file by its name
+        term_of(name)  # refuses a stray file by its name
         at = position_of(name)
         if at in seen:
-            raise GlossaryError(f"{TERMS}/: {seen[at]} and {name} both claim prefix {at:0{DIGITS}d} - "
-                                f"the assembly will not choose between them")
+            raise GlossaryError(f"{TERMS}/: {seen[at]} and {name} both claim prefix {at:0{DIGITS}d} - the assembly will not choose between them")
         seen[at] = name
         with open(os.path.join(here, name), encoding="utf-8") as fh:
             entry = json.load(fh)
         # COMPARED IN THE ENCODE DIRECTION (the plan review, 2026-09-20): decoding a filename is not
         # injective the moment a term contains a `%`, while encoding a term is exact forever.
         if name != file_name(at // GAP, str(entry.get("term"))):
-            raise GlossaryError(f"{TERMS}/{name}: its filename says `{term_of(name)}` and its content "
-                                f"says `{entry.get('term')}` - one of the two is wrong")
+            raise GlossaryError(f"{TERMS}/{name}: its filename says `{term_of(name)}` and its content says `{entry.get('term')}` - one of the two is wrong")
         out.append(entry)
     return out
 
 
-def check(root: str | None = None) -> list[str]:
+def check(root: str | None = None, index: str | None = None) -> list[str]:
     """The committed files that differ from what the term files assemble, as messages."""
     base = root or _HERE
     if not os.path.isdir(os.path.join(base, TERMS)):
-        return []                                     # not split yet - a stage that has not landed
+        return []  # not split yet - a stage that has not landed
     with open(_source_of(base), encoding="utf-8") as fh:
         committed = fh.read()
     terms = term_files(base)
     stale = [] if committed == assemble(terms) else [os.path.join("assets", "glossary.json")]
-    if _read(index_path(root)) != variant_index(terms):
-        stale.append(os.path.relpath(index_path(root), base))
+    where = index or index_path(root)
+    if _read(where) != variant_index(terms):
+        stale.append(os.path.relpath(where, base))
     return stale
 
 
@@ -179,18 +175,21 @@ def variant_index(terms: list[dict]) -> str:
     for entry in terms:
         for variant in entry["variants"]:
             out[variant.lower()] = entry["term"]
-    return json.dumps(dict(sorted(out.items())), **_DUMP) + "\n"
+    # ONE LINE PER VARIANT, not JSON. Measured: 22,564 bytes against 30,820 for the same content as
+    # `indent=1` JSON and 27,282 compact. The whole point of this file is the bytes it costs a check
+    # to read, and a tab-separated line is the cheapest form that is still plainly readable.
+    return "".join(f"{variant}\t{term}\n" for variant, term in sorted(out.items()))
 
 
 def index_path(root: str | None = None) -> str:
     """Beside the derived script the record's pages load, which is where a check already looks."""
     base = root or _HERE
-    return os.path.normpath(os.path.join(base, "..", "..", "..", "research", "assets", "glossary-variants.json"))
+    return os.path.normpath(os.path.join(base, "..", "..", "..", "research", "assets", "glossary-variants.txt"))
 
 
-def write_index(root: str | None = None) -> int:
+def write_index(root: str | None = None, index: str | None = None) -> int:
     want = variant_index(term_files(root))
-    path = index_path(root)
+    path = index or index_path(root)
     if _read(path) == want:
         return 0
     with open(path, "w", encoding="utf-8") as fh:
@@ -226,5 +225,5 @@ def _source_of(base: str) -> str:
 def _first_difference(want: str, got: str) -> str:
     for at, (a, b) in enumerate(zip(want, got, strict=False)):
         if a != b:
-            return f"first difference at character {at}: {want[at:at + 40]!r} against {got[at:at + 40]!r}"
+            return f"first difference at character {at}: {want[at : at + 40]!r} against {got[at : at + 40]!r}"
     return f"one is {len(want)} characters and the other {len(got)}"

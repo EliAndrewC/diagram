@@ -13,14 +13,15 @@ matcher lets the later one win (`specs/259-glossary-per-term/research.md` R2).
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 
 import pytest
 
 from l7r.diagram.interactive.glossary_source import (
-    GlossaryError,
     SOURCE,
     TERMS,
+    GlossaryError,
     assemble,
     check,
     file_name,
@@ -90,13 +91,11 @@ def test_no_variant_is_claimed_by_two_terms_or_listed_twice() -> None:
 def test_a_directory_of_term_files_is_read_back_in_prefix_order(tmp_path: pathlib.Path) -> None:
     """What the assembly does on disk, and the refusals it makes rather than guessing."""
     (tmp_path / TERMS).mkdir(parents=True)
-    for name, body in (("0010-a.json", {"term": "a", "variants": ["a"], "def": "first"}),
-                       ("0020-b.json", {"term": "b", "variants": ["b"], "def": "second"})):
+    for name, body in (("0010-a.json", {"term": "a", "variants": ["a"], "def": "first"}), ("0020-b.json", {"term": "b", "variants": ["b"], "def": "second"})):
         (tmp_path / TERMS / name).write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
     assert [t["term"] for t in term_files(str(tmp_path))] == ["a", "b"]
 
-    (tmp_path / TERMS / "0020-c.json").write_text(
-        json.dumps({"term": "c", "variants": ["c"], "def": "third"}, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / TERMS / "0020-c.json").write_text(json.dumps({"term": "c", "variants": ["c"], "def": "third"}, ensure_ascii=False), encoding="utf-8")
     with pytest.raises(GlossaryError, match="both claim prefix"):
         term_files(str(tmp_path))
     (tmp_path / TERMS / "0020-c.json").unlink()
@@ -106,9 +105,7 @@ def test_a_directory_of_term_files_is_read_back_in_prefix_order(tmp_path: pathli
         term_files(str(tmp_path))
     (tmp_path / TERMS / "notes.txt").unlink()
 
-    (tmp_path / TERMS / "0030-d.json").write_text(
-        json.dumps({"term": "different", "variants": ["d"], "def": "fourth"}, ensure_ascii=False),
-        encoding="utf-8")
+    (tmp_path / TERMS / "0030-d.json").write_text(json.dumps({"term": "different", "variants": ["d"], "def": "fourth"}, ensure_ascii=False), encoding="utf-8")
     with pytest.raises(GlossaryError, match="its filename says"):
         term_files(str(tmp_path))
 
@@ -116,3 +113,90 @@ def test_a_directory_of_term_files_is_read_back_in_prefix_order(tmp_path: pathli
 def test_a_committed_glossary_that_differs_from_its_term_files_is_reported() -> None:
     """FR-005, FR-006: what the gate and the push run."""
     assert check() == [], "run `make glossary`"
+
+
+def test_the_split_and_the_assembly_on_disk(tmp_path: pathlib.Path) -> None:
+    """The one-time split, the write-back, and the refusal that stops a bad split being committed."""
+    from l7r.diagram.interactive import glossary_source as gs
+
+    (tmp_path / "assets").mkdir()
+    small = {"girder": {"def": "the main beam", "variants": ["girder", "girders"]},
+             "dS/m": {"def": "a salinity unit", "variants": ["dS/m"]}}
+    raw = json.dumps(small, ensure_ascii=False, indent=1) + "\n"
+    (tmp_path / "assets" / "glossary.json").write_text(raw, encoding="utf-8")
+    written = gs.write_term_files(str(tmp_path))
+    assert len(written) == 2 and (tmp_path / TERMS / "0020-dS%2Fm.json").is_file()
+    index = str(tmp_path / "variants.txt")
+    assert gs.write_index(str(tmp_path), index) == 1 and gs.write_index(str(tmp_path), index) == 0
+    assert gs.check(str(tmp_path), index) == [], "the split assembles back to the committed bytes"
+    assert gs.write_source(str(tmp_path)) == 0, "nothing to write when it already matches"
+
+    # the index, and what it is for
+    index = gs.variant_index(gs.term_files(str(tmp_path)))
+    assert "girders\tgirder\n" in index and "ds/m\tdS/m\n" in index
+    # a term file edited by hand, then assembled back
+    one = tmp_path / TERMS / "0010-girder.json"
+    one.write_text(one.read_text(encoding="utf-8").replace("the main beam", "the beam"), encoding="utf-8")
+    assert gs.check(str(tmp_path), index)[0] == os.path.join("assets", "glossary.json")
+    assert gs.write_source(str(tmp_path)) == 1
+    assert "the beam" in (tmp_path / "assets" / "glossary.json").read_text(encoding="utf-8")
+
+
+def test_a_split_that_would_not_rebuild_is_refused(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from l7r.diagram.interactive import glossary_source as gs
+
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets" / "glossary.json").write_text(
+        json.dumps({"a": {"def": "x", "variants": ["a"]}}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    monkeypatch.setattr(gs, "assemble", lambda terms: "not the file at all")
+    with pytest.raises(GlossaryError, match="does not assemble back"):
+        gs.write_term_files(str(tmp_path))
+
+
+def test_the_refusals_that_name_the_file(tmp_path: pathlib.Path) -> None:
+    from l7r.diagram.interactive import glossary_source as gs
+
+    with pytest.raises(GlossaryError, match="no term files"):
+        gs.term_files(str(tmp_path))
+    with pytest.raises(GlossaryError, match="not a term file"):
+        gs.position_of("glossary.json")
+    with pytest.raises(GlossaryError, match="one home"):
+        gs.assemble([{"term": "a", "def": "x", "variants": []}, {"term": "a", "def": "y", "variants": []}])
+    assert gs.check(str(tmp_path)) == [], "a tree with no term files is not stale, it is unsplit"
+    assert "first difference at character 1" in gs._first_difference("abc", "axc")
+    assert "one is 3 characters" in gs._first_difference("abc", "ab")
+
+
+def test_the_command_checks_assembles_and_splits(tmp_path: pathlib.Path,
+                                                 monkeypatch: pytest.MonkeyPatch,
+                                                 capsys: pytest.CaptureFixture[str]) -> None:
+    """`make glossary` and its three modes, through the CLI the Makefile calls."""
+    from l7r.diagram.interactive import glossary_source as gs
+    from l7r.diagram.tools import glossary_asset
+
+    assert glossary_asset.main(["--check"]) == 0, "the committed tree is in sync"
+    assert "in sync" in capsys.readouterr().out
+
+    monkeypatch.setattr(gs, "check", lambda *a, **k: ["assets/glossary.json"])
+    assert glossary_asset.main(["--check"]) == 1
+    assert "STALE against its per-term files" in capsys.readouterr().err
+
+    monkeypatch.setattr(gs, "check", lambda *a, **k: [])
+    out = tmp_path / "glossary.js"
+    assert glossary_asset.main(["--path", str(out)]) == 0, "it writes the asset where it is told"
+    assert out.read_text(encoding="utf-8").startswith("// DERIVED FILE")
+    assert glossary_asset.main(["--check", "--path", str(tmp_path / "missing.js")]) == 1
+    assert "glossary.js: STALE" in capsys.readouterr().err
+
+    split_calls = []
+    monkeypatch.setattr(gs, "write_term_files", lambda *a, **k: split_calls.append(1) or ["one", "two"])
+    assert glossary_asset.main(["--split"]) == 0 and split_calls == [1]
+    assert "split into 2 term file(s)" in capsys.readouterr().out
+
+    # THE RELOAD BRANCH: the asset is derived from the file the assembly just wrote, not from the one
+    # `interactive/glossary.py` imported at start-up (feature 259, D2).
+    reloaded = []
+    monkeypatch.setattr(gs, "write_source", lambda *a, **k: 1)
+    monkeypatch.setattr(gs, "write_index", lambda *a, **k: 0)
+    monkeypatch.setattr(glossary_asset.importlib, "reload", lambda mod: reloaded.append(mod))
+    assert glossary_asset.main(["--path", str(out)]) == 0 and reloaded, "it reloads after it assembles"
