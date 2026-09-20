@@ -87,8 +87,21 @@ def test_every_agent_file_agrees_with_the_tier_table() -> None:
     assert not wrong, f"frontmatter disagrees with TIERS (file says -> table says): { {a: (v, TIERS[a]) for a, v in wrong.items()} }"
 
 
+#: agent -> why it KEEPS the CLAUDE.md files. An entry here is the GM's ruling, never a session's convenience.
+KEEPS_CLAUDE_MD: dict[str, str] = {
+    "spec-fidelity": (
+        "GM 2026-09-20: with the field it raised one of three recorded required changes where its control raised all "
+        "three, and a moved rule did not settle it (specs/256 research R6); it gates every spec and the field saves it "
+        "little. It goes back on when a three-samples-a-leg run tells the field from the agent's own variance."
+    ),
+}
+
+
 def test_every_agent_launches_without_the_claude_md_files() -> None:
-    wrong = sorted(a for a, fm in _pinned().items() if fm.get("omitClaudeMd") != "true")
+    pinned = _pinned()
+    wrong = sorted(a for a, fm in pinned.items() if a not in KEEPS_CLAUDE_MD and fm.get("omitClaudeMd") != "true")
+    stale = sorted(a for a in KEEPS_CLAUDE_MD if a not in pinned or pinned[a].get("omitClaudeMd") == "true")
+    assert not stale, f"KEEPS_CLAUDE_MD names an agent that is gone or that carries the field after all - drop the row: {stale}"
     assert not wrong, (
         f"a defined agent carries `omitClaudeMd: true` in its frontmatter (feature 256, GM 2026-09-19: what a subagent "
         f"should know belongs in its own specification, not in CLAUDE.md or the memory index) - missing in: {wrong}. "

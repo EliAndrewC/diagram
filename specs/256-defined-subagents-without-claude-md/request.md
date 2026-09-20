@@ -36,3 +36,15 @@ field of every agent file as unrequested, and that only two of the twelve agents
 > Please fix anything left unfixed, including the settlement-review issue tou mentioned and the two cosmetic path and description duplications, etc.  I do indeed want the guard enforced by a test - and Why would the fidelity reviewer have cut something which enforces something that I want and ask for? I mean, the fidelity reviewer should be checking to see whether you're doing something different from what I asked for, not preventing you from writing automated checks to make sure that the thing that I asked for actually happens. So I'm concerned if something like this was dropped, not in spite of the fidelity reviewer, but because of it.
 >
 > Is there any particular reason not to test the other 10 reviewers with seeded proofs?
+
+## The GM's rulings on the amendment's results (2026-09-20)
+
+The session reported the eight pairs and the fidelity-contract proof and put three decisions, in these words:
+
+> 1. **T08.** Should I accept the fidelity-contract change with the honest record that its proof is inconclusive? That lets everything land. I recommend yes, and I would sharpen the "new behavior presented as a check" wording in the same change. The alternative is that everything waits.
+> 2. **`spec-fidelity` and the field.** I can keep the field on or take it off for this one agent. It gates every spec, its saving is small (16k to 10k tokens on the first turn), and its results are the least settled. I recommend taking it off until a three-samples-per-leg test, about 4 weight units, can tell field from variance.
+> 3. **`settlement-review`.** A single pair costs about 9 weight units and cannot separate a miss from variance; three samples per leg would be about 27. `perf-audit` has nothing to replay, so a proof needs a manufactured slowdown between two commits, roughly a day of session work. My recommendation is to skip both for now and watch their first real dispatches, but it is your call.
+
+The GM:
+
+> go with your recommendations to all three

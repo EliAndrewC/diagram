@@ -65,8 +65,10 @@ a round of this review cut exactly such a test as UNREQUESTED (2026-09-20): *"th
    something different from what I asked for, not preventing you from writing automated checks to make sure that the
    thing that I asked for actually happens."* What stays out of scope is the other two things that travel under the
    same name: verification of something the GM did NOT ask for (a new map swept, a new tier measured, a proof of a
-   property the request never mentions), and new BEHAVIOR riding in as "a check" (a guard that refuses or rewrites work
-   the request does not touch). The test: delete the requested behavior from the spec in your head - if the check has
+   property the request never mentions), and new BEHAVIOR riding in as "a check". A test that only FAILS when the requested thing is absent is verification. A
+   guard that REFUSES, BLOCKS or REWRITES work is behavior: it is in scope only for the exact thing the GM asked to have
+   enforced, and each part of its reach beyond that - other agent types, other commands, a default the GM did not
+   approve - is reported UNREQUESTED, part by part, not waved through as enforcement. The test: delete the requested behavior from the spec in your head - if the check has
    nothing left to check, it is enforcement of the request.
 3. **Grep for the ids and terms the changed passages name, and read the hits IN FULL - nothing else.**
    An FR, an SC, a decision id, a task id, a figure, a phrase the change altered: grep the feature

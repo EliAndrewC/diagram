@@ -1,6 +1,6 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - the field is set in all twelve,
+**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2; Amendment 2, the GM's three rulings, awaiting its review); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - the field is set in all twelve,
 the proof is clean on its three cases, every run is in `research.md`.
 
 ## Summary
@@ -100,6 +100,26 @@ agents proven, ten resting on the reading, by D1's sizing. The GM's question of 
 FR-010 governs from here: on completion ten of the twelve have a seeded pair of their own and two do not.
 `research.md` keeps R4 as the record of the first landing and says so, and holds the new tally beside the new rows.
 
+## Amendment 2 (2026-09-20) - the GM's three rulings on Amendment 1's results (`request.md`, third block)
+
+**FR-012 - the fidelity-contract change stands on an inconclusive proof, with its wording sharpened.** SC-007 is NOT
+met and is recorded as not met (`research.md` R7): the unamended contract also kept the guard, and neither run raised
+all of round 1's other items. By the GM's ruling the change is accepted as the statement of their rule where the
+reviewer reads it. In the same change both contracts say what R6 showed the first wording let through: a test that
+only FAILS when the requested thing is absent is verification; a guard that REFUSES, BLOCKS or REWRITES work is
+behavior, in scope only for the exact thing the GM asked to have enforced, its reach beyond that reported
+UNREQUESTED part by part.
+
+**FR-013 - `spec-fidelity` keeps the `CLAUDE.md` files until a test can tell the field from variance.** FR-004 left
+this to the GM, and the GM ruled: the field comes off `spec-fidelity.md` alone. FR-002's "all twelve" and SC-002
+read "all twelve but `spec-fidelity`" from here. The tier test carries the exception BY NAME with the ruling as its
+reason (`KEEPS_CLAUDE_MD`), and fails on a row that has gone stale. What puts the field back: three samples a leg on
+the recorded case, about four weight units, run when someone asks for it - it is not part of this feature.
+
+**FR-014 - `settlement-review` and `perf-audit` get no seeded pair now.** By the GM's ruling their first real
+dispatches are watched instead: a settlement review or a performance audit that comes back not knowing a project
+rule, or breaking a guard it was never told of, is a contract to amend (FR-004's route).
+
 ## Success criteria
 
 - **SC-001** (FR-001) `research.md` holds, per agent, the rules considered and the disposition of each.
@@ -118,6 +138,9 @@ FR-010 governs from here: on completion ten of the twelve have a seeded pair of 
   table by a wrong path.
 - **SC-009** (FR-010, FR-011) `research.md` holds a row per run for the eight pairs, the priced reasons for the two agents
   left, and the tally as it now stands; R4 is marked as the first landing's.
+
+- **SC-010** (FR-012, FR-013, FR-014) T08 is ticked with SC-007 recorded as unmet and accepted by the GM; eleven agent files
+  carry the field and the tier test names the twelfth with the ruling; `research.md` says what would put it back.
 
 ## Assumptions
 
