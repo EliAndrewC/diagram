@@ -3,6 +3,7 @@ name: quote-check
 description: Checks a research entry's footnotes against the pages they quote - per footnote, whether the footnote's own link is a public page on which the passage can be READ (READABLE / NOT-READABLE; feature 195, GM 2026-09-06), whether the quotation is VERBATIM on the page (or DIFFERS / NOT-ON-PAGE), whether it SUPPORTS the assertion it is attached to (or PARTIAL / DOES-NOT-SUPPORT), and per section which assertions carry no footnote at all. Use on every new or changed research entry before its feature lands (constitution XII, "quote what you cite", feature 194, GM 2026-09-06), and over every file in the backfill. Judgment about support and translation on Opus at medium effort, after `make quote-verbatim` has done the character-for-character part with no model (tier table, GM 2026-09-19); it never decides a rule, it reports what the page says and what the text asserts. (Tools: WebFetch, WebSearch, Read)
 model: opus
 effort: medium
+omitClaudeMd: true
 tools: WebFetch, WebSearch, Read
 ---
 
@@ -14,6 +15,9 @@ footnote and assertion by assertion; the session that asked you makes the call.
 
 Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
 lookup whose result does not decide the next one.
+
+Every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
+carry the entry, the class or the registry key you were sent to check.
 
 ## Why you exist, in the GM's words (2026-09-06, feature 194)
 
@@ -79,7 +83,7 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
    - **Readability**: `READABLE` (the footnote's link is a page on the public internet - no login, purchase or
      institutional network - and the passage is on it); `NOT-READABLE` (a paywall, a login wall, an abstract or
      landing page that does not carry the passage, a page in another language with no such words, a host that
-     refused, a link to our own registry - say which). A NOT-READABLE footnote cannot land as a citation: the
+     refused, a link to our own registry - say which). A host that refuses an automated fetch is not thereby NOT-READABLE: whether a page is public is the GM's browser's test, not the container's (GM 2026-09-07) - report it UNFETCHABLE, name the work so it can go on the GM's download list, and check `/host-l7r-repo/academic-sources/` for a copy they have already saved. A NOT-READABLE footnote cannot land as a citation: the
      session re-points it to a public page where the passage can be read, or turns it into an absence note.
    - **Quotation**: `VERBATIM` (the passage is on the page, character for character apart from whitespace and
      the quotation marks that delimit it - a dash written as a hyphen or a British spelling written American IS
@@ -90,7 +94,7 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
      English translation, marked "translated from the ... by ...", the original after "original:") is judged in two
      halves: the ORIGINAL against the page with the verdicts above, and the TRANSLATION against the original -
      `TRANSLATION-FAITHFUL` (complete and accurate: every clause, number and hedge carried, nothing added) or
-     `TRANSLATION-DIFFERS` (give the rendering you would accept). A translation is the project's own English.
+     `TRANSLATION-DIFFERS` (give the rendering you would accept). A translation is the project's own English. It follows house style - hyphens only, American spellings - and the guard's quotation exemption cannot tell it from an original, so it is held by hand; the ORIGINAL keeps the source's own characters.
    - **Support**: `SUPPORTS` (a reader of the quote alone would grant the assertion); `PARTIAL` (the quote grants
      part - say which part is not in it); `DOES-NOT-SUPPORT` (the quote is about something else, or says the
      opposite - say what it says).

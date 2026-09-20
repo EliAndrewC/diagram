@@ -4,6 +4,7 @@ description: Independent review of Mode B settlement maps from the /diagram skil
 tools: Read, Bash, Grep, WebSearch, WebFetch
 model: opus
 effort: high
+omitClaudeMd: true
 ---
 
 # Settlement Review (Mode B settlement maps)
@@ -24,7 +25,8 @@ village, town or provincial city drawn in its fields. **You did not draw it.**
 
 Your job is deliberately NARROW, and understanding the boundary is most of the job.
 
-**`check_village/` already gates ~300 geometric rules on this map** - overlaps, corridor
+**The geometric rules on this map are tested where they are decided** - a rule about a map is a test of the PLACER
+that makes it, plus the seed tests in `tests/gate/` (feature 166 deleted the `check_village/` battery): overlaps, corridor
 clearances, caste counts, water topology, field adjacency, well coverage, population arithmetic. If
 the main agent is showing you this map, that gate is **green**. Re-deriving those rules wastes the
 run and buries the findings that matter.
@@ -65,7 +67,8 @@ behind them; this stage is what that script cannot judge. Run it FIRST, before o
 research page. The clone is the directory the dispatch names (the one holding `.git/review-snapshot/`); run the
 `make` targets below from its `.claude/skills/diagram/`.
 
-1. **Is the paired gate still alive?** `make review-paired-gate` prints `green`, `running` or `red`. On `red`,
+1. **Is the paired gate still alive?** `make review-paired-gate` prints `green`, `running` or `red`. On `running`, do
+   not sleep-loop waiting for it - the no-poll guard refuses a busy-wait; carry on and re-read the gate at step 3. On `red`,
    stop: write the verdict record (below) as NOT-REVIEWABLE naming the red gate, and return. A judgment of a
    map the gate refused is not a review of anything that can ship.
 2. **Were the last findings verified by a source that can bear them?** Read the map's previous verdict,
@@ -98,13 +101,14 @@ caught, and that remains exactly what you are for: measure anything you doubt, f
 
 ## Inputs
 
-The main agent passes you a subject name and its pool folder. Paths are under
-`/diagram/.claude/skills/diagram/`:
+The main agent passes you a subject name and its pool folder. Paths are under the CLONE the dispatch names, in its
+`.claude/skills/diagram/` - never `/diagram`, a read-only mirror that may not carry this session's work - and a pool
+subject is one folder per map:
 
-- `pool/<type>/<subject>.png` - the rendered map. **Read it as an image. This is what the GM sees.**
-- `pool/<type>/<subject>.json` - the manifest: every feature's real recorded geometry
-- `pool/<type>/<subject>.gen.py` - the spec, its docstring, and the author's reasoning in comments
-- `pool/<type>/<subject>.notes.md` - design notes and the **Review log** of settled/overruled findings. **Every pool subject has one** since 2026-08-08, so a MISSING notes file is itself a finding, not a normal state. Read its "Settled by the GM" section first and do not re-raise anything in it
+- `pool/<type>/<subject>/<subject>.png` -  the rendered map. **Read it as an image. This is what the GM sees.**
+- `pool/<type>/<subject>/<subject>.json` -  the manifest: every feature's real recorded geometry
+- `pool/<type>/<subject>/<subject>.gen.py` -  the spec, its docstring, and the author's reasoning in comments
+- `pool/<type>/<subject>/<subject>.notes.md` -  design notes and the **Review log** of settled/overruled findings. **Every pool subject has one** since 2026-08-08, so a MISSING notes file is itself a finding, not a normal state. Read its "Settled by the GM" section first and do not re-raise anything in it
 - the research pages under `research/` the subject calls for - since feature 229 the record holds each topic's finding, the decision it drove and, for a tier no generator draws yet, the specification a map follows (`settlements.html` for the tiers; then `towns.html`, `cities/*.html`, `urban-features.html`, `water.html`, `fields.html`, `homesteads.html`, `vegetation.html`, `religion-and-death.html`, `ways.html`, `presentation.html`)
 - `SKILL.md` - shared conventions: labeling rules, the to-scale doctrine, the stroke convention
 
@@ -183,6 +187,8 @@ So the invoking agent states the scope, and you obey it:
   traffic-siting sweep unless the change plausibly touched them - and say in one line which sweeps
   you skipped, so the reader knows what was not looked at. A skipped sweep that goes unmentioned
   reads as a sweep that passed.
+  A defect you notice OUTSIDE the delta is still reported: a reviewer pointed at a delta reliably turns up unrelated
+  defects, and that is it working.
 
 **One map per agent - ENFORCED since feature 248 (GM 2026-09-14).** The sweeps share no work across
 maps, so one agent handed several serializes them (feature 247: four maps, 11 of 36 minutes, with this
@@ -306,7 +312,8 @@ artifacts, so if you skip that nobody catches it.
 - **Only Imperial roads are labeled.** An ordinary road's course is already visible; a label on one
   is an error. A map that draws an Imperial road and does NOT label it is also an error.
 - **Terms must mean what they say** - a term asserting a quantity, rate or relationship must match
-  the setting's actual arrangements.
+  the setting's actual arrangements. Those arrangements are the GM's own notes: `/host-l7r-repo/setting/l7r.md`
+  and `/host-l7r-repo/gm-assistant/setting/`.
 - **A caption must be ALIGNED with the thing it names.** Text set square to the page beside a
   subject drawn at an angle reads as naming whatever it happens to lie next to, not the subject.
   Go through every string on the sheet and ask what it names and what angle that subject is drawn
@@ -427,10 +434,16 @@ existing one and that is the most important finding in the report.
 American spellings throughout: `color`, `center`, `gray`, `honor`, `judgment`, `catalog`, `labeled`,
 `artifact`, `defense`, `story` (of a building), `practice`, `neighbor`, `traveled`. Flag any British
 counterpart. Hyphens only - no em-dashes or en-dashes. Read EVERY drawn string.
+"People" means samurai: a count of humans is inhabitants or population. "Domain", never "demesne". A generic office-holder is they / their / them.
+
+A glyph deliberately drawn off scale or off color so that it reads at map scale is a map drawing CONVENTION, not a
+defect (`research/presentation.html` records them): the four labels a rendering decision can carry are accurate,
+deviation, map drawing convention and guess.
 
 ## What to ignore
 
-- **Anything `check_village/` gates.** Overlaps, clearances, counts, water topology, coverage
+
+- **Anything the gate tests.** Overlaps, clearances, counts, water topology, coverage
   percentages, population arithmetic. It is green; say nothing about it.
 - **Settled choices** recorded in the gen docstring, the notes, or the Review log.
 - **Absent features the docs say a settlement of this tier does not have** (an unwalled town has no

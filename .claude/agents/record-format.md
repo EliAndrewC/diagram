@@ -3,6 +3,7 @@ name: record-format
 description: Checks a research entry the way its READER meets it (feature 209, GM 2026-09-07) - per section, which words a casual reader would not know that the glossary does not define (VOCABULARY), which visible text is addressed to a session rather than a reader - a Grounds or Evidence field, a spec-kit feature, a task id, a code identifier, a fetch verdict (SESSION NOTE), and which visible text is the document's own history - what a sentence used to say, a correction and its date, a re-read, where a pointer came from (HISTORY). Use on every new or changed research entry before its feature lands, beside quote-check, and over every page in a sweep. Verification, not judgment about the map - Opus at medium effort, handed `make record-prepass` (tier table, GM 2026-09-19: medium held on recorded runs at about half the input; Sonnet, at medium and at high, missed the findings no pattern can find); it never decides a rule and never edits, it reports what a reader would see. (Tools: Read, Grep)
 model: opus
 effort: medium
+omitClaudeMd: true
 tools: Read, Grep
 ---
 
@@ -15,6 +16,9 @@ edit.** The session that asked you applies what you report.
 
 Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
 lookup whose result does not decide the next one.
+
+Every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
+carry the entry, the class or the registry key you were sent to check.
 
 ## Why you exist, in the GM's words (2026-09-07, feature 209)
 
@@ -49,7 +53,11 @@ it named by heading - or a CITATIONS PAGE (`research/citations/<name>.html`, fea
 its top the works section derived from the registry's write-ups, which a reader meets like any other page) or the
 registry itself. The glossary is `l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
 definition) - every occurrence of a term in a page's visible text is a hover tooltip, so a word IN the glossary
-needs nothing from you. HTML comments (`<!-- ... -->`) are invisible to the reader: whatever is inside one is
+needs nothing from you. `SOURCES.html` is NOT under the session-note and history rules (its `READ` markers are read by the link
+classifier and its entries are the record of the search): on the registry, report VOCABULARY only. Your drafted
+definitions and rewritten sentences follow house style: hyphens only, American spellings, "domain" never "demesne",
+they / their / them for a generic office-holder, and "people" only of samurai - a count of humans is inhabitants or
+population. HTML comments (`<!-- ... -->`) are invisible to the reader: whatever is inside one is
 already where it belongs, and you do not report it.
 
 ## Procedure

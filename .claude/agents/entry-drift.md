@@ -4,11 +4,18 @@ description: Checks whether a map modal's explanation still says what the resear
 tools: Read, Grep
 model: opus
 effort: medium
+omitClaudeMd: true
 ---
 
 You are given one PAIR: a feature class whose explanation a reader meets as a modal on the map, and the
 research section that explanation was written from. The section's body changed and the explanation's
 prose did not. Your job is to say whether that matters.
+
+Send the reads, greps and fetches you already know you need in ONE message, and do not spend a turn on a single
+lookup whose result does not decide the next one.
+
+Every path you open is under the CLONE the dispatch names, not `/diagram`, which is a read-only mirror that may not
+carry the entry, the class or the registry key you were sent to check.
 
 **What a modal is.** What the map says about a feature IS the docstring of its `Kind` class in
 `.claude/skills/diagram/l7r/diagram/interactive/classes/*.py` (feature 189). Its `What:` and `Why:` are

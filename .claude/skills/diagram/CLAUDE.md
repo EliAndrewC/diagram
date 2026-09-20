@@ -263,7 +263,7 @@ Feature 126 was asked for as "farmhouses before lanes" and specified as farmhous
 EXCEPT the connector and the field spur; both of those register no-build corridors, so both kept
 constraining the placement the feature existed to free. An exception goes to an independent Opus 5
 subagent with the GM's request verbatim, and a finished `spec.md` gets the same treatment before
-implementation starts. Three rounds, then escalate.
+implementation starts. Five rounds on an initial acceptance, then escalate (GM 2026-08-30).
 
 **Fix defects where you find them** (constitution Principle XIV, NON-NEGOTIABLE) - this engine is
 where the rule bites hardest, because its reviewers and diagnostics surface defects constantly and
