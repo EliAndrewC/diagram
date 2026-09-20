@@ -22,11 +22,9 @@ in the reader's page.
 
 from __future__ import annotations
 
-import os
 import re
 
 from l7r.diagram.interactive.citations import WORKS_CLOSE, WORKS_OPEN
-from l7r.diagram.interactive.record import fragments as frag
 from l7r.diagram.interactive.record.notes import Placed, derive_key, render_note
 
 #: A reference as the record carries it today, before the move: the two shapes it is written in
@@ -123,8 +121,3 @@ def works_region(citations_html: str) -> str:
 def notes_fragment(bodies: list[tuple[str, str]]) -> str:
     """A question's notes file: one `<li data-note=...>` per note, in the order the question cites them."""
     return "".join(f'<li data-note="{key}">{body}</li>\n' for key, body in bodies)
-
-
-def question_slugs(record_dir: str, page_rel: str, names: list[str]) -> dict[str, str]:
-    """{fragment file name: its heading id}, which is the slug a keyless note is named from."""
-    return {name: frag.ordered([name])[0].split("-", 1)[1][: -len(".html")] for name in names if os.path.basename(name).split("-", 1)[0].isdigit()}

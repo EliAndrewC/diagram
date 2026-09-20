@@ -47,8 +47,9 @@ def entry_level(page_rel: str) -> int | None:
 def write_fragments(page_rel: str, record_dir: str = RESEARCH_DIR) -> list[str]:
     """Split a page that is still whole and write its fragments. Returns the paths written, relative
     to the record. Refuses to leave a split behind that does not assemble back to the same bytes."""
-    with open(os.path.join(record_dir, page_rel), encoding="utf-8") as fh:
-        text = fh.read()
+    text = _read(os.path.join(record_dir, page_rel))
+    if text is None:
+        raise RecordError(f"{page_rel}: no such page in the record - `make record SPLIT=` names a page that is still whole, and this one is not there at all")
     page = split(text, entry_level=entry_level(page_rel))
     where = frag.page_dir(page_rel)
     os.makedirs(os.path.join(record_dir, where), exist_ok=True)
