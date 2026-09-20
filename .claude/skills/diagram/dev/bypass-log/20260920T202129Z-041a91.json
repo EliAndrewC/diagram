@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T20:21:29Z",
+  "target": "entry-gate",
+  "commit": "3ce9d712",
+  "why": "feature 259: the glossary's bytes moved into per-term files; no research section changed"
+}
