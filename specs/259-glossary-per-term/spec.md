@@ -231,4 +231,11 @@ term's definition today because of an order nobody chose.
   the data only refutes the claim that the tail differences are scoping losses. It also observed that
   this was the third round in which a corrected example was corrected only where the review pointed:
   the `girder` token was swept this time, and the two places it remains each say why it is there.
+- Round 4 (2026-09-20, `spec-fidelity`, Opus): **FAITHFUL.** All five of round 3's items confirmed, with
+  the two timings traced back to the runs that produced them rather than read. One correction to this
+  session's own account: the `girder` token survives in THREE places in the engine tree, not two - the
+  synthetic fixture and two `file_name` assertions, which assert a string format on a synthetic input
+  and claim nothing about the real glossary. The round's closing aside, for the GM: SC-002's real
+  successor is a determinism question about `record-format` itself - a stable core plus a declared
+  tail - and R5 is the evidence to hand them when they decide it.
 
