@@ -157,3 +157,17 @@ def test_features_of_every_recorded_shape() -> None:
     assert mm._seg_distance(0, 0, (3, 4), (3, 4)) == 5.0 and not mm._seg_crosses((3, 4), (3, 4), (0, 0, 10, 10))
     rect = mm.MapFeature("building", 10, 10, 4, 4)
     assert rect.distance(10, 10) == 0.0 and rect.distance(15, 10) == 3.0 and rect.in_frame((0, 0, 9, 9)) and not rect.in_frame((20, 20, 30, 30))
+
+
+def test_site_classes_answer_the_program_check_or_stay_out_of_it(tmp_path: object) -> None:
+    d = str(tmp_path)
+    text, plan = _sheet(HALL, WELL, ARCH, viewbox="0 -60 600 540")
+    assert mm.site_classes(plan, text, None) is None  # no declaration: every site item is asked for
+    assert mm.site_classes(plan, text, OnMap(os.path.join(d, "none.json"), "religious", 100, 100, "hall")) is None  # no manifest: matches_map names it
+    path = _manifest(d)
+    assert mm.site_classes(plan, text, OnMap(path, "religious", 100, 100, "nothing")) is None  # no subject on the sheet
+    text3 = text.replace(' viewBox="0 -60 600 540"', "")
+    assert mm.site_classes(pa.parse_svg(text3), text3, OnMap(path, "religious", 100, 100, "hall")) is None  # no frame
+    got = mm.site_classes(plan, text, OnMap(path, "religious", 100, 100, "hall"))
+    assert got == {"tree": False, "burial_ground": False, "water_point": True, "arch": True, "water": False, "lane": False, "building": False}
+    assert mm.frame_is_the_maps(None) is None and mm.frame_is_the_maps(OnMap(path, "religious", 100, 100, "hall"))
