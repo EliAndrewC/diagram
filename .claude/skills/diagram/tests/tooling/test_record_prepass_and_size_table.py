@@ -183,7 +183,11 @@ def test_a_word_the_record_uses_often_is_not_a_candidate() -> None:
 
 
 def test_a_registry_source_key_is_not_a_candidate() -> None:
-    """FR-004: a citation key is rare by construction and is not a word a reader is asked to know."""
+    """FR-004: a citation key is an identifier, not a word a reader is asked to know.
+
+    A floor rather than a saving - R3 measured that the cutoff already keeps every key in the record
+    off every list - so this test states the guarantee on a key rare enough to survive the cutoff.
+    """
     text = "as ritter-timber-bridges puts it, the girder bears"
     freq = {"as": 900, "ritter-timber-bridges": 1, "puts": 90, "it": 900, "the": 900, "girder": 1, "bears": 40}
     got = rp.rare_words(text, set(), freq, keys={"ritter-timber-bridges"})

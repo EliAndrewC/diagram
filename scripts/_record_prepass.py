@@ -105,10 +105,12 @@ def session_notes(markup: str) -> list[dict]:
     return found
 
 
-#: HOW RARE A WORD HAS TO BE (feature 260, FR-002). Measured over the whole curve in specs/260 R2: at a
-#: cutoff of 2 the list is 34 words and catches 9 of the 12 terms three recorded `record-format` runs
-#: proposed; at 3 it is 41 for the same 9, at 20 it is 101 for the same 9. The catch plateaus at once
-#: while the list keeps growing, so 2 is the cheapest cutoff that catches what this filter can catch.
+#: HOW RARE A WORD HAS TO BE (feature 260, FR-002). Measured over the whole curve in specs/260 R2, and
+#: counted the way the question demands: of the THREE terms whose presence VARIED between three recorded
+#: `record-format` runs of one entry - the variance this pass exists to remove - a cutoff of 2 raises 2,
+#: in a list of 34 words; it also raises 6 of the 8 terms every run proposed anyway. At 3 the list is 41
+#: for the same catch, at 20 it is 101 for the same catch. The catch plateaus at once while the list
+#: keeps growing, so 2 is the cheapest cutoff that catches what this filter can catch.
 RARE_IN_AT_MOST = 2
 _WORD = re.compile(r"[A-Za-z][A-Za-z'-]+")
 
@@ -155,7 +157,12 @@ def defined_words(record_dir: str) -> set[str]:
 
 @functools.cache
 def registry_keys(record_dir: str) -> set[str]:
-    """The source keys of `SOURCES.html` - rare by construction, and not words a reader must know."""
+    """The source keys of `SOURCES.html` - identifiers, not words a reader is asked to know.
+
+    A FLOOR, not a filter that fires today: measured over the whole record (specs/260 R3), the rarity
+    cutoff and the word regex already keep every key off every list, so this removes nothing now. It is
+    here for the key rare enough to survive the cutoff.
+    """
     try:
         with open(os.path.join(record_dir, "SOURCES.html"), encoding="utf-8") as fh:
             return {m.group(1) for m in re.finditer(r'<h3 id="([a-z0-9][a-z0-9-]*)"', fh.read())}
