@@ -157,11 +157,32 @@ without a human choosing them. Is there anything in a note to derive a key FROM,
 id is document-unique - which, measured here, fixes 4 missing ids and 2 duplicated ones rather than only
 serving the twice-referenced note.
 
-## R6 and R7 - owed, not yet taken
+## R6 - The regression baseline (constitution XIII)
 
-R6 (the `make done` baseline in a detached worktree, constitution XIII) and R7 (the gate's cost before
-and after the assembly check joins it) are taken by tasks T01 and T02 and recorded here when they are.
-They are listed now so that a reader of the plan can see what is outstanding.
+**Command.** `git worktree add --detach /tmp/base258 origin/main`, then `make done` there.
+
+**Finding**, at `9d11c6e2`, 2026-09-20: **gate green. 4,113 passed, 4 skipped, 4 warnings in 51.40 s**,
+scope FULL, 10 workers, all three coverage floors enforced. Recorded as `m:baseline-done`.
+
+Two attempts were needed, and the first is instructive rather than embarrassing. It was taken at the
+clone's own HEAD, which by then carried this feature's spec - and it failed, on `spec-lint --delta` over
+that spec: 41 findings, nearly all of them check 3 ("FR-NNN is named by no success criterion"), because
+this spec wrote each criterion's FR list at the END of a multi-line bullet and the check reads the ids
+from the marker's own LINE. The clone's own invocation had not been showing them. So the baseline caught
+a real defect in this feature's paperwork before any reviewer spent a round on it, which is what a
+baseline at the right commit is for; the baseline itself was then re-taken at `origin/main`, where the
+tree is genuinely unmodified.
+
+## R7 - What the assembly costs the gate
+
+**Before**, the same run as R6: the test phase is 51.40 s over 4,113 tests.
+
+**The check itself**: `make record CHECK=1` over the whole record - 20 pages, 1,251 fragments - runs in
+**0.11 s** (measured by the plan review, 2026-09-20, on a shared container at load 0.75; recorded as
+`m:record-check-cost`). The plan's bar was under 2 s, so the fallback it named - checking only the pages
+whose fragments the delta touched - is not needed and is not built.
+
+**After** is taken at T27, against this.
 
 ## What was NOT measured, and why
 

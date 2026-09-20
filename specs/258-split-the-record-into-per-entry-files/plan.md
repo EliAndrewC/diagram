@@ -36,7 +36,8 @@ second, differently-behaved reader of the record beside the one the engine alrea
 
 **Storage**: files under `.claude/skills/diagram/research/`. 1,569 new fragments - 288 questions, 261
 notes files, 925 for the registry and 95 of per-page scaffolding, counted rather than estimated; the
-assembled pages stay exactly where they are.
+assembled pages stay exactly where they are. Stages 1 and 2 account for 1,251 of them (288 + 925 + 38
+page scaffolding files); stage 3 adds the notes and the citations scaffolding.
 
 **Testing**: pytest, in the interactive tree (`tests/interactive/`), plus `make hooks-test` for the guard.
 
@@ -272,9 +273,11 @@ would fail. What stage 3 actually holds is the pairing:
 a citations page by walking the notes in their page order, so reordering the notes reorders that list
 too - measured on the real record by the plan review of 2026-09-20: the key ORDER changes on the same 16
 pages, the key SET on none. That is a third reader-visible change at stage 3, and it is declared rather
-than discovered. It is also the same correction as the renumbering: the list's own heading says "in
-order of first citation", which today means first in the notes' arbitrary order and afterwards means
-first in the reader's page. What the test holds is the SET of works per page, and that its order equals
+than discovered. It is also the same correction as the renumbering, though not one a reader
+is promised: the page's heading says only "The works cited on this page". It is the DERIVATION's own
+contract that claims "in order of first citation" - `citations.py`'s docstring, `interactive/CLAUDE.md`
+and `research/CLAUDE.md` - and today that means first in the notes' arbitrary order, afterwards first in
+the reader's page. The reorder makes the documented contract true. What the test holds is the SET of works per page, and that its order equals
 the document order of first citation.
 
 SC-003 says the same thing in the spec, corrected by the same review.

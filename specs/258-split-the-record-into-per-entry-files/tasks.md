@@ -10,82 +10,82 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 
 ## Phase 0 - the baselines (constitution XIII, and the gate's cost)
 
-- [ ] T01 The regression baseline: `git worktree add --detach /tmp/base258 HEAD`; there, **`make done`** -
+- [x] T01 The regression baseline: `git worktree add --detach /tmp/base258 HEAD`; there, **`make done`** -
       not `make quick`, which cannot tell a new coverage-floor or `tests/full/` failure from an old one,
       and those are the surfaces this feature moves; the counts recorded in `measurements.json` as
       `m:baseline-done`; every later failure checked against the clone before it is called new
       research: rendering
       measure: the worktree's own `make done` output
-      verify:
-- [ ] T02 The gate-cost bookend, before: `make done` phase timings on unmodified code, recorded in
+      verify: DONE. gate green at origin/main 9d11c6e2: 4113 passed, 4 skipped in 51.40 s, scope FULL, all three floors; m:baseline-done. The first attempt, at a HEAD carrying this feature's spec, failed on spec-lint over it - recorded in R6
+- [x] T02 The gate-cost bookend, before: `make done` phase timings on unmodified code, recorded in
       `research.md` as R7-before. The assembly check joins the gate in T13; this is what it is judged
       against
       research: rendering
-      verify:
+      verify: DONE. R7-before: the baseline's test phase is 51.40 s over 4113 tests; make record CHECK=1 over the whole record is 0.11 s against a 2 s bar (m:record-check-cost)
 
 ## Phase 1 - the registry, one file per source (FR-007 to FR-010; D1, D2)
 
-- [ ] T03 RED: `tests/interactive/test_record_assembly.py` asserts `assemble(split(page)) == page` over
+- [x] T03 RED: `tests/interactive/test_record_assembly.py` asserts `assemble(split(page)) == page` over
       `research/SOURCES.html` and fails for want of `l7r.diagram.interactive.record`
       research: rendering
-      verify:
-- [ ] T04 `interactive/record/fragments.py` - the layout as `data-model.md` states it: what a fragment is
+      verify: DONE. the test asserts assemble(split(page)) == page over the real record and failed with ModuleNotFoundError before the module existed
+- [x] T04 `interactive/record/fragments.py` - the layout as `data-model.md` states it: what a fragment is
       named, what its prefix means, where a page's directory is, which names are legal in one, and the
       gapped allocation (three digits a question, four a registry entry, counting by ten). Tests over
       names alone, no filesystem
       research: rendering
-      verify:
-- [ ] T05 `interactive/record/split.py` and `assemble.py` for the section shape: front, sections in prefix
+      verify: DONE. fragments.py - gapped prefixes (3 digits a question, 4 an entry), page_dir, keys stripped of work-, free_prefix refusing an exhausted gap
+- [x] T05 `interactive/record/split.py` and `assemble.py` for the section shape: front, sections in prefix
       order, a section's own entries in prefix order, tail. Byte-for-byte concatenation, no normalization
       (FR-006, FR-013)
       research: rendering
-      verify:
-- [ ] T06 `tools/record_asset.py` and `make record` with `CHECK=1`, `PAGE=`, `SPLIT=`, exactly as
+      verify: DONE. split.py and assemble.py - the cut is comment-aware, the tail is the closing run, assembly is byte-for-byte concatenation; 20 pages round-trip
+- [x] T06 `tools/record_asset.py` and `make record` with `CHECK=1`, `PAGE=`, `SPLIT=`, exactly as
       `contracts/record-cli.md` states, including the message shapes
       research: rendering
-      verify:
-- [ ] T07 **The registry is split**: `research/sources/` - front (with the commented-out block), the three
+      verify: DONE. tools/record_asset.py and make record with CHECK=1, PAGE=, SPLIT=, message shapes as contracts/record-cli.md states
+- [x] T07 **The registry is split**: `research/sources/` - front (with the commented-out block), the three
       section files, 920 entries under `010-works-cited/`, tail. `make record CHECK=1` reports in sync and `git diff --stat
       research/SOURCES.html` is empty (FR-009, SC-003)
       research: rendering
       measure: the byte diff of the assembled registry against the file it replaced
-      verify:
-- [ ] T08 Every refusal in `contracts/fragment-format.md` that applies to a section page - duplicate
+      verify: DONE. research/sources/ - 925 fragments, three visible sections, 920 entries under 010-works-cited/; SOURCES.html byte-identical, git diff empty
+- [x] T08 Every refusal in `contracts/fragment-format.md` that applies to a section page - duplicate
       prefix, stray file, missing front or tail, a registry key that differs from its filename, an
       exhausted gap - each with a test that fails without it and a message that names the file
       research: rendering
-      verify:
-- [ ] T08a FR-006a, the check byte-identity cannot make: the split's SECTION COUNT and heading ids
+      verify: DONE. tests/interactive/test_record_store.py - 13 tests: duplicate prefix, stray file, missing front or tail, no fragment directory (naming the SPLIT command), a registry key that differs from its filename, a page that does not close the way the record closes, a heading with no id, an exhausted gap, and the staleness check both ways
+- [x] T08a FR-006a, the check byte-identity cannot make: the split's SECTION COUNT and heading ids
       against the page it came from, proven on the registry - where a comment-blind cut finds five
       sections and a reader sees three - and on a plain string carrying both traps
       research: rendering
-      verify:
+      verify: DONE. test_a_heading_inside_a_comment_is_not_a_section (the registry's three ids against five under a comment-blind cut) and the line-start case on a plain string
 
 ## Phase 2 - the questions (FR-011 to FR-015; D2, D3)
 
-- [ ] T09 **`research/ways.html` is split** (the reference artifact): `_front`, 5 questions, `_tail`.
+- [x] T09 **`research/ways.html` is split** (the reference artifact): `_front`, 5 questions, `_tail`.
       Byte-identical, proven by an empty diff
       research: rendering
       measure: `git diff --stat research/ways.html`
-      verify:
-- [ ] T10 **`research/cities/defenses.html` is split** - the one-level-down case, whose references carry
+      verify: DONE. research/ways/ - 7 fragments, ways.html byte-identical
+- [x] T10 **`research/cities/defenses.html` is split** - the one-level-down case, whose references carry
       `../citations/cities/...`. Byte-identical
       research: rendering
-      verify:
-- [ ] T11 **The sweep**: the other seventeen research pages, in one commit, each byte-identical. This is
+      verify: DONE. research/cities/defenses/ - 11 fragments, byte-identical, the one-level-down case
+- [x] T11 **The sweep**: the other seventeen research pages, in one commit, each byte-identical. This is
       the second of the two steps, with its own verification (plan, "every step is two steps")
       research: rendering
       measure: `git diff --stat research/` - every page 0 changed
-      verify:
-- [ ] T12 `test_record_assembly.py` parametrizes over the REAL record - every page, every round trip -
+      verify: DONE. the other seventeen pages split; make record CHECK=1 reports 20 pages in sync, git diff over research/ empty
+- [x] T12 `test_record_assembly.py` parametrizes over the REAL record - every page, every round trip -
       rather than over a fixture, so the test cannot drift from the thing it checks
       research: rendering
-      verify:
-- [ ] T13 The staleness check in both places (FR-003, FR-004, D6): the test at the gate, `make record
+      verify: DONE. test_record_assembly.py parametrizes over record_pages() - the real record, not a fixture
+- [x] T13 The staleness check in both places (FR-003, FR-004, D6): the test at the gate, `make record
       CHECK=1` in `sync-with-main.sh` before either route. A record-only delta takes DIRECT, where the
       gate never runs - so a check in one place only has a hole exactly where this feature's commits land
       research: rendering
-      verify:
+      verify: DONE. the gate: test_every_committed_page_is_what_its_fragments_assemble in tests/interactive/; the push: make record CHECK=1 in sync-with-main.sh beside entry-gate.sh, for the same reason - a record-only delta takes DIRECT and never reaches the gate
 - [ ] T14 The guard (FR-028, D7): `scripts/record-edit-hooks.sh` rewrites an `Edit` aimed at an assembled
       page to the one fragment holding its `old_string`, refuses where none or several do and names them,
       and always refuses a `Write`. `tests/tooling/test_record_edit_hooks.py` and a `make hooks-test` row;

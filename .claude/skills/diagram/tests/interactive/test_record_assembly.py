@@ -17,6 +17,7 @@ import pathlib
 import pytest
 
 from l7r.diagram.interactive.record import assemble, sections_of, split
+from l7r.diagram.interactive.record.store import check
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
 RECORD = pathlib.Path(RESEARCH_DIR)
@@ -34,6 +35,16 @@ def test_a_page_splits_and_assembles_back_to_the_same_bytes(page: str) -> None:
     """FR-006, FR-013, SC-003: concatenation with no normalization, over the whole record."""
     text = (RECORD / page).read_text(encoding="utf-8")
     assert assemble(split(text)) == text
+
+
+def test_every_committed_page_is_what_its_fragments_assemble() -> None:
+    """FR-003 at the gate: a page edited instead of its fragments, or a fragment edited and the page
+    not rebuilt, fails here. The PUSH runs the same check (`sync-with-main.sh`), because a
+    record-only change takes the DIRECT route and never reaches the gate at all.
+
+    A page not split yet is not a failure - `check` passes over it - so a stage that has not landed
+    does not turn this red."""
+    assert check(str(RECORD)) == [], "a committed page differs from its fragments - run `make record`"
 
 
 def test_a_heading_inside_a_comment_is_not_a_section() -> None:
