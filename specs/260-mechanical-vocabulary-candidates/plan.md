@@ -75,8 +75,13 @@ one already exists on disk:
 - **what is defined**: the variant index feature 259 derives.
 - **how common a word is**: a document-frequency map over the record's question fragments.
 - **the registry keys** (FR-004): matched as a WHOLE TOKEN against `SOURCES.html`'s own key ids, never
-  as a substring - `nrcs` is both a registry key's prefix and one of the nine terms the list must
-  catch, so a loose test would delete a finding.
+  as a substring - `nrcs` is both a registry key's prefix and **one of the three terms whose presence
+  varied between feature 259's runs**, which is to say one of the two this list exists to catch, so a
+  loose substring test would delete the finding the feature is for. FR-004 has a second half, on the
+  same reasoning and in the same place: text inside a `<code>` span is not scanned at all, because a
+  span carries a key or an identifier rather than a word a reader is asked to know. Both are FLOORS -
+  measured on the entry this was built against, each removes nothing, and R3 records that rather than
+  claiming a saving.
 
 It is pure so its test needs no filesystem; the caller reads the four and passes them in.
 

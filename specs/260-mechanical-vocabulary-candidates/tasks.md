@@ -23,9 +23,9 @@ asked to do; no research text is edited and no historical question is reopened.
       `and`, and fails for want of the function
       research: rendering
       verify:
-- [ ] T04 The pure function: the section's visible words, minus the variant index, minus the registry
-      keys, kept where the corpus frequency is at most 2, each with its count. Tests on plain inputs -
-      no filesystem
+- [ ] T04 The pure function: the section's visible words with `<code>` spans dropped, minus the variant
+      index, minus the registry keys, kept where the corpus frequency is at most 2, each with its
+      count. Tests on plain inputs - no filesystem
       research: rendering
       verify:
 - [ ] T05 `make record-prepass` prints the list under its own heading, with the count beside each word
