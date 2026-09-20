@@ -80,6 +80,14 @@ spec review of 2026-09-20 measured this and struck the first draft's premise tha
 construction", which is false. FR-004 is kept as a FLOOR - a key rare enough to survive the cutoff
 would otherwise be raised - and the spec says it removes nothing today rather than claiming a saving.
 
+**FR-004's OTHER half, measured the same way.** The `<code>`-span exclusion removes nothing either, and
+this record says so rather than leaving it to a docstring (the plan review of 2026-09-20 pointed out
+that this paragraph covered only the registry-key half). The entry's question fragment carries **two**
+`<code>` spans, `ritter-timber-bridges` and `nrcs-ts14q-abutments` - both registry keys, and both
+already kept off by the cutoff and the word regex. Candidates with the exclusion: **34**. Without it:
+**34**. It removes nothing, and it is a floor against a `<code>` span carrying something rare that is
+not a key, not a filter that fires today.
+
 ## R4 - What it costs
 
 **Finding** (observed 2026-09-20; method: the pass run in one process over every section of the
