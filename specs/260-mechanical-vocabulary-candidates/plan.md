@@ -55,12 +55,24 @@ R4 measures, and to the gate, which it does not touch.
 
 ## The design
 
-### D1 - The candidate pass, and where its two inputs come from
+### D1 - The candidate pass, its four inputs, and WHICH text it walks
 
-`candidates(text, index, corpus, cutoff=2)` is a pure function over three inputs, and every one of them
-already exists: the section's visible text (the prepass strips comments and tags today), the variant
-index feature 259 derives, and a document-frequency map over the record's question fragments. It is
-pure so its test needs no filesystem, and the three callers of the prepass need no new arguments.
+`rare_words(text, defined, frequency, cutoff=2, keys)` is a pure function over four inputs, and every
+one already exists on disk:
+
+- **the text**: the question fragment AND its `.notes.html`. This is the correction the plan review of
+  2026-09-20 blocked on, and it is worth stating plainly: the prepass parses the ASSEMBLED page and
+  slices it by heading, and on that basis the entry has 181 words, yields 7 candidates and catches 3 of
+  the 12 known terms. R2 measured the fragment plus its notes - 324 words, 34 candidates, 9 of 12 -
+  because that is what `record-format` is handed. 27 of the 34 come from the quoted passages in the
+  notes. The candidate list must walk what the check reads, or it is a list about a different document.
+- **what is defined**: the variant index feature 259 derives.
+- **how common a word is**: a document-frequency map over the record's question fragments.
+- **the registry keys** (FR-004): matched as a WHOLE TOKEN against `SOURCES.html`'s own key ids, never
+  as a substring - `nrcs` is both a registry key's prefix and one of the nine terms the list must
+  catch, so a loose test would delete a finding.
+
+It is pure so its test needs no filesystem; the caller reads the four and passes them in.
 
 ### D2 - Why the cutoff is 2, stated where it is applied
 
@@ -97,4 +109,4 @@ after; the push.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |---|---|---|
-| A corpus walk on every prepass invocation | "Rare in the record" cannot be known without the record; caching it would be a derived file to keep in step, which is what feature 259 spent a review round removing | Shipping a common-word list was rejected because it is external data with its own provenance, and this project's rule is derive rather than maintain. A cached frequency file was rejected because R4 measures the walk as cheap enough that a cache would be a second source of truth bought for nothing |
+| A corpus walk on every prepass invocation | "Rare in the record" cannot be known without the record; caching it to a file would be a derived thing to keep in step, which is what feature 259 spent a review round removing | Shipping a common-word list was rejected because it is external data with its own provenance, and this project's rule is derive rather than maintain. A cached frequency FILE was rejected because the walk is cheap: 0.31 s for the corpus, and 0.79 s for the candidate pass over all 321 entries of the record (R4), against FR-010's five-second bar. The walk is memoized WITHIN a run - four derived inputs read once, not once per page, which took the whole-record sweep from 7.52 s to 0.79 s |

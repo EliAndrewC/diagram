@@ -1,0 +1,65 @@
+{
+ "feature": "260-mechanical-vocabulary-candidates",
+ "plan_sha256": "33f6a24997c2d8d902e40f846d2f92b3413b73abd67f0e2bd9229659513ba11d",
+ "reviewed": "2026-09-20",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-text-basis",
+   "summary": "D1 names the candidate pass's first input as 'the section's visible text (the prepass strips comments and tags today)', i.e. the assembled page section the prepass parses now.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured on the plan's own single-artifact target: the assembled ways.html section yields 181 distinct words and 7 candidates at cutoff 2, catching 3 of the 12 known terms (girder, footplank, obliquity). The spec's 34 candidates and 9 of 12 (SC-001, SC-002, R2) were measured over the entry FRAGMENT plus its .notes.html - 27 of the 34 come from the notes file. Followed literally, the plan cannot meet SC-001 or SC-002. The plan must say which text the pass walks, and it is the fragment plus its .notes.html that R2 measured; fragments_for('ways','010') already returns both."
+  },
+  {
+   "id": "D1-registry-keys",
+   "summary": "D1 enumerates the function as candidates(text, index, corpus, cutoff=2) - 'three inputs, and every one of them already exists' - with no key input and no definition of how a registry source key is recognized.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 and SC-003 require that a registry source key never be a candidate. The plan's enumerated mechanism drops it; only T04 restores it, unspecified. It is not free: at cutoff 2 the list carries nrcs (2 fragments), nrcs-designed and timber-bridge, and nrcs is one of R2's 9 caught terms, so a loose 'is a key or a piece of one' test moves both SC-001's 34 and SC-002's 9. D1 must carry the key set as a fourth input and say how a key is matched (whole token against the registry's own keys, not a substring)."
+  },
+  {
+   "id": "D1-purity",
+   "summary": "The candidate function is pure over its inputs so its test needs no filesystem; the reading stays in the prepass at run time (Technical Context: 'Storage: none. The corpus is derived at run time').",
+   "class": "within",
+   "why": "Serves FR-006 and the project's rule that a hard-to-test inner function is lifted and tested on plain inputs. Purity is achievable with two file-backed inputs because the caller reads them: the prepass's one real caller is the Makefile record-prepass target, which already resolves the repository root."
+  },
+  {
+   "id": "D2-cutoff-2",
+   "summary": "The cutoff is 2 and the number lives beside the code that applies it, with its measurement.",
+   "class": "within",
+   "why": "FR-002 states the cutoff and requires it stated where applied. R2 re-runs: 34 candidates and 9 of 12 at 2, and 101 candidates and still 9 of 12 at 20."
+  },
+  {
+   "id": "D3-contract-carries-the-limits",
+   "summary": "What the word-level filter cannot reach (a phrase, a record-common word) goes in record-format's contract, not only in the research record.",
+   "class": "within",
+   "why": "FR-008 asks for exactly this. The contract is also the only place that can carry it: a defined agent launches with omitClaudeMd (feature 256), so the record is not in the model's context."
+  },
+  {
+   "id": "D4-bar-in-the-operative-doc",
+   "summary": "The acceptance bar moves in research/CLAUDE.md; features 258 and 259 keep their specs, including 259's SC-002 recorded unmet.",
+   "class": "within",
+   "why": "FR-009 says both halves in the same words."
+  },
+  {
+   "id": "CT-corpus-walk-per-invocation",
+   "summary": "Complexity Tracking accepts a walk over the record's 1,479 fragments on every prepass invocation; a shipped word list and a cached frequency file are both rejected.",
+   "class": "within",
+   "why": "FR-006 requires the corpus derived at run time with nothing shipped or hand-maintained, so the walk is the spec's own choice rather than the plan's addition. The rejection of the cache rests on R4, which research.md has not recorded yet; measured independently today at this HEAD, measure.py R2 - which walks all 1,479 fragments and then walks them again to count - runs in 0.24 s wall, against FR-010's 5 s bar, so the premise holds. The plan should cite that figure rather than an R4 that is still pending."
+  },
+  {
+   "id": "CC-XII-and-the-bookends",
+   "summary": "Constitution XII marked N/A (no assertion about the world changes) and the performance bookends marked N/A (no generator changes).",
+   "class": "within",
+   "why": "Correct on both. No research text is edited and no historical question is reopened - tasks.md carries no research: physical task, consistent with that. The change is to scripts/_record_prepass.py, two contract documents and a doc, none of them engine code, so no map is drawn and no perf band moves; the one cost this feature can add is the prepass's own wall time, which FR-010 bars and T02 and T11 bookend."
+  },
+  {
+   "id": "Phase-0-and-the-single-artifact-target",
+   "summary": "Phase 0 takes a make done baseline; the single-artifact target is the ways 010 entry feature 259 measured three times.",
+   "class": "within",
+   "why": "Constitution XIII, and the spec's own SC-001 and SC-002 are stated on that entry, so the plan measures what the spec was measured on."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

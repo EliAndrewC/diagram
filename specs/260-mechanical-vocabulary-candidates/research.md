@@ -61,6 +61,28 @@ replacement for it: three of twelve are reachable no other way, so the contract 
 on the list AND to add what it sees, and says plainly what the list cannot reach - otherwise an empty
 list reads as an empty question.
 
-## R4 - What it costs, and R5 - what the check then does
+## R4 - What it costs
 
-Taken by T02 and T09 respectively, and recorded here when they are.
+**Finding** (observed 2026-09-20; method: the pass run over every entry of the record in one process,
+wall clock on a shared container):
+
+| | |
+|---|---|
+| the corpus walk - 1,479 fragments | 0.31 s |
+| the candidate pass over all 321 entries | **0.79 s** |
+| one invocation, as a session runs it (`make record-prepass PAGE=ways SECTION=010`) | 0.45 s |
+| FR-010's bar | 5 s |
+
+**And one thing it cost before it was measured.** The first version walked the record for every
+section's notes, and read the corpus once per page: the whole-record sweep took **7.52 s**, over the
+bar. Both are the shape this engine's performance doc names as the only slow shape it has ever found -
+a per-candidate scan of ground that does not change during the scan. The notes are indexed once and the
+four derived inputs are memoized within a run, which is the whole of the fix.
+
+**What the sweep also establishes**: 321 sections, 5,592 candidates, median 13 a section, largest 115
+(`archetypes`, the dike-pond hamlet question), smallest 0 - and **no registry key raised anywhere**
+(SC-003).
+
+## R5 - What the check then does
+
+Taken by T09, and recorded here when it is.

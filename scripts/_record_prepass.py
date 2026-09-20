@@ -16,6 +16,12 @@ or as a variant, is dropped: every occurrence of it is already a hover tooltip.
 
 This decides nothing and never edits. A line here is a CANDIDATE: `<code>` holds source keys as well as
 engine identifiers, and an `<em>` holds a quoted ruling as often as a Japanese word.
+
+THE CANDIDATE WORDS (feature 260, the GM's choice of 2026-09-20). `record-format` was doing two jobs at
+once - NOTICING which words a reader might not know, and JUDGING them - and the first is why its output
+wandered: three runs on one entry agreed on eight terms and differed in the tail, in both conditions
+(`specs/259-*/research.md` R5). The noticing is mechanical now that the glossary is an index, so it
+happens here and the model rules on a list.
 """
 
 from __future__ import annotations
@@ -24,7 +30,10 @@ import argparse
 import html
 import json
 import pathlib
+import functools
 import re
+from collections.abc import Mapping
+import os
 import sys
 
 GLOSSARY = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json"
@@ -96,6 +105,85 @@ def session_notes(markup: str) -> list[dict]:
     return found
 
 
+#: HOW RARE A WORD HAS TO BE (feature 260, FR-002). Measured over the whole curve in specs/260 R2: at a
+#: cutoff of 2 the list is 34 words and catches 9 of the 12 terms three recorded `record-format` runs
+#: proposed; at 3 it is 41 for the same 9, at 20 it is 101 for the same 9. The catch plateaus at once
+#: while the list keeps growing, so 2 is the cheapest cutoff that catches what this filter can catch.
+RARE_IN_AT_MOST = 2
+_WORD = re.compile(r"[A-Za-z][A-Za-z'-]+")
+
+
+def rare_words(text: str, defined: set[str], frequency: Mapping[str, int],
+               cutoff: int = RARE_IN_AT_MOST, keys: set[str] | None = None) -> list[tuple[str, int]]:
+    """The words of one entry that the glossary does not define and the record rarely uses.
+
+    PURE, so its test needs no filesystem: the three things it knows - what is defined, how common a
+    word is, and which tokens are citation keys - are passed in.
+
+    WHY RARITY AND NOT "not in the glossary" (R1): the entry has 324 distinct words and 314 of them
+    have no glossary line, because ordinary English is not in a glossary. Rarity in the record's OWN
+    corpus separates the two without shipping a word list to maintain.
+
+    WHAT IT CANNOT REACH, which its caller's contract has to say (R3): a MULTI-WORD term (`carried
+    deck`), because this is word-level; and a word the record uses often though the glossary does not
+    define it (`embankment`, 23 fragments). The list is a floor under the model's noticing, never a
+    replacement for it.
+    """
+    out: dict[str, int] = {}
+    for raw in _WORD.findall(text):
+        word = raw.lower()
+        seen = frequency.get(word, 0)
+        # FAILS CLOSED. A word the corpus has never seen is not rare - it means the corpus does not
+        # contain this entry, and then the filter cannot judge rarity at all. Raising everything in
+        # that case is exactly R1's failure (314 of 324 words), so it raises nothing instead: a
+        # candidate list is evidence, and a list built from no evidence is worse than none.
+        if not seen or word in defined or word in (keys or set()) or seen > cutoff:
+            continue
+        out[word] = seen
+    return sorted(out.items())
+
+
+@functools.cache
+def defined_words(record_dir: str) -> set[str]:
+    """Every variant the glossary defines, from the index feature 259 derives."""
+    try:
+        with open(os.path.join(record_dir, "assets", "glossary-variants.txt"), encoding="utf-8") as fh:
+            return {line.split("\t")[0] for line in fh if line.strip()}
+    except OSError:
+        return set()
+
+
+@functools.cache
+def registry_keys(record_dir: str) -> set[str]:
+    """The source keys of `SOURCES.html` - rare by construction, and not words a reader must know."""
+    try:
+        with open(os.path.join(record_dir, "SOURCES.html"), encoding="utf-8") as fh:
+            return {m.group(1) for m in re.finditer(r'<h3 id="([a-z0-9][a-z0-9-]*)"', fh.read())}
+    except OSError:
+        return set()
+
+
+@functools.cache
+def corpus_frequency(record_dir: str) -> dict[str, int]:
+    """How many of the record's question fragments each word appears in.
+
+    The corpus is derived at run time from the fragments on disk - no file is shipped and none is kept
+    in step. Measured cost is in specs/260 R4; the bar it is held to is FR-010's five seconds.
+    """
+    freq: dict[str, int] = {}
+    for base, _dirs, names in os.walk(record_dir):
+        if "citations" in base or base.endswith("assets") or base == record_dir:
+            continue
+        for name in names:
+            if not name.endswith(".html") or name.startswith("_"):
+                continue
+            with open(os.path.join(base, name), encoding="utf-8") as fh:
+                body = text_of(strip_comments(fh.read()))
+            for word in {w.lower() for w in _WORD.findall(body)}:
+                freq[word] = freq.get(word, 0) + 1
+    return freq
+
+
 def vocabulary(markup: str, known: set[str]) -> list[dict]:
     text = text_of(markup)
     seen: set[str] = set()
@@ -118,14 +206,57 @@ def vocabulary(markup: str, known: set[str]) -> list[dict]:
     return found
 
 
-def prepass(markup: str, glossary: dict) -> list[dict]:
-    """Per section: its heading and the candidate lines, session notes first."""
+def prepass(markup: str, glossary: dict, record_dir: str | None = None) -> list[dict]:
+    """Per section: its heading, the candidate lines, and the RARE WORDS the model must rule on.
+
+    `record_dir` is what the rare-word pass needs (the variant index, the registry keys, the corpus);
+    without it the section carries no `rare` list, which is what keeps this callable on a string.
+    """
     known = known_terms(glossary)
-    return [{"section": heading, "items": session_notes(body) + vocabulary(body, known)} for heading, body in sections(markup)]
+    defined = defined_words(record_dir) if record_dir else set()
+    keys = registry_keys(record_dir) if record_dir else set()
+    freq = corpus_frequency(record_dir) if record_dir else {}
+    notes = notes_index(record_dir)
+    out = []
+    for heading, body in sections(markup):
+        # THE SAME TEXT THE CHECK READS (feature 260). `record-format` is handed the question fragment
+        # AND its notes, so a candidate list drawn from the question alone would leave every term that
+        # appears only in a quoted passage unraised - and those are the technical ones.
+        scanned = text_of(body) + " " + notes.get(_slug(heading), "") if record_dir else ""
+        out.append({
+            "section": heading,
+            "items": session_notes(body) + vocabulary(body, known),
+            "rare": rare_words(scanned, defined, freq, keys=keys) if record_dir else [],
+        })
+    return out
+
+
+@functools.cache
+def notes_index(record_dir: str | None) -> dict[str, str]:
+    """{question slug: the visible text of its notes}, built ONCE.
+
+    Built once and asked per section, not walked per section (constitution X clause 15). The first
+    version walked the record for every heading: measured, that made a sweep over all 321 entries take
+    6.97 s where the index makes it 0.4 s - the same per-candidate-scan-of-unchanging-ground shape this
+    engine's performance doc names as the only slow shape it has ever found.
+    """
+    if not record_dir:
+        return {}
+    out: dict[str, str] = {}
+    for base, _dirs, names in os.walk(record_dir):
+        if "citations" in base or base == record_dir:
+            continue
+        for name in names:
+            if not name.endswith(".notes.html"):
+                continue
+            with open(os.path.join(base, name), encoding="utf-8") as fh:
+                out[name.split("-", 1)[-1][: -len(".notes.html")]] = text_of(strip_comments(fh.read()))
+    return out
 
 
 def render(page: str, listing: list[dict]) -> str:
     total = sum(len(s["items"]) for s in listing)
+    rare = sum(len(s.get("rare", ())) for s in listing)
     lines = [f"record-prepass: {page} - {len(listing)} sections, {total} candidates (each is for record-format to confirm or dismiss)"]
     for sec in listing:
         if not sec["items"]:
@@ -133,6 +264,20 @@ def render(page: str, listing: list[dict]) -> str:
         lines.append(f"## {sec['section']}")
         for it in sec["items"]:
             lines.append(f"  {it['class']} [{it['label']}] {it['match']!r} - {it['sentence']}")
+    if rare:
+        lines.append("")
+        lines.append(f"## WORDS TO RULE ON ({rare}) - feature 260")
+        lines.append("")
+        lines.append("Every word below is in this entry, is defined by no glossary term, and appears in at most")
+        lines.append(f"{RARE_IN_AT_MOST} of the record's question fragments (the count is beside each one). `record-format` rules")
+        lines.append("on EVERY one of them and says which verdict each got. The list is a floor, not the question:")
+        lines.append("it cannot see a MULTI-WORD term, and it does not raise a word the record uses often though")
+        lines.append("the glossary does not define it - so anything else you notice is reported too.")
+        for sec in listing:
+            if not sec.get("rare"):
+                continue
+            lines.append(f"### {sec['section']}")
+            lines.append("  " + ", ".join(f"{word} ({n})" for word, n in sec["rare"]))
     return "\n".join(lines)
 
 
@@ -175,7 +320,7 @@ def main(argv: list[str] | None = None) -> int:
     # and finds nothing for the second, which is the form the fragment paths are in.
     wanted_ids = {pathlib.Path(f).name.split("-", 1)[1][: -len(".html")] for f in fragments
                   if not f.endswith(".notes.html")}
-    listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary)
+    listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary, str(root / RESEARCH))
                if args.section.casefold() in s["section"].casefold() or _slug(s["section"]) in wanted_ids]
 
     print(render(name, listing))
