@@ -21,8 +21,8 @@ per term:
 | is this word itself a TERM? | `ls l7r/diagram/interactive/assets/glossary/` - the filenames ARE the term list | 14 KB, no file opened |
 | what does one term actually say? | that term's own file, `NNNN-<term>.json` | about 154 bytes |
 
-**Read the variant index, not the glossary.** A word in the prose is usually a variant (`girders` for
-`girder`), and only the index maps one to the other. Do NOT grep the term files for it instead: measured,
+**Read the variant index, not the glossary.** A word in the prose is usually a variant (`towpaths` for
+`towpath`), and only the index maps one to the other. Do NOT grep the term files for it instead: measured,
 `windlass` matches three of them, because a definition may mention a word another term owns.
 
 Open a term file only when you want that term's definition - to judge whether it covers the sense in

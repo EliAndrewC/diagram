@@ -56,12 +56,17 @@ def r2() -> None:
     for term, entry in g.items():
         for variant in entry["variants"]:
             claimed[variant.lower()].append(term)
-    clash = {v: ts for v, ts in claimed.items() if len(ts) > 1}
+    # COUNTED THE WAY THE RECORD COUNTS IT: two distinct TERMS claiming one variant. A term listing a
+    # variant twice in its own array is a different defect and is reported on its own line below.
+    clash = {v: ts for v, ts in claimed.items() if len(set(ts)) > 1}
+    twice = {v: ts[0] for v, ts in claimed.items() if len(ts) > 1 and len(set(ts)) == 1}
     order = list(g)
     print(f"  variants claimed by more than one term: {len(clash)}")
     for variant, terms in clash.items():
         winner = max(terms, key=order.index)          # record.js: defs[v] = def, in file order
         print(f"    {variant!r:<22} claimed by {terms} - the page shows {winner!r}, because it is later in the file")
+    for variant, term in twice.items():
+        print(f"    {variant!r:<22} listed TWICE by {term!r} - its own array, not a clash between terms")
 
 
 def r3() -> None:

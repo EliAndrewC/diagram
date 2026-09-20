@@ -14,10 +14,11 @@ wants that term - about 154 bytes.
 
 **WHY THE FILENAME CARRIES A PREFIX** (R2), which the GM's own form did not. `research/assets/record.js`
 builds its matcher as `defs[variant] = entry.def`, walking the glossary in FILE ORDER, and only then
-sorts the variants by length. Where two terms claim one variant the LATER one silently wins, and seven
-variants are in that state. Sorting the terms - which a bare `<term>.json` would force - would change
-which definition a reader is shown for those words, with nothing to notice it. The prefix keeps the
-order, which keeps `glossary.json` byte-identical, which is what makes the split checkable at all.
+sorts the variants by length. Where two terms claimed one variant the LATER one silently won, and seven
+variants WERE in that state when this feature began - which is why the split could not simply sort the
+terms. They no longer are: FR-011 gave each variant to the term whose own name it is, and a test fails
+if that ever recurs. The prefix's live reason is the simpler one - assembling in file order is what
+reproduces the committed key order, and that is what keeps `glossary.json` byte-identical.
 
 **WHAT THIS MODULE MAY NOT DO**: reformat. `glossary.json` is exactly
 `json.dumps(obj, ensure_ascii=False, indent=1) + "\\n"`, and the engine, the page writer and every test
