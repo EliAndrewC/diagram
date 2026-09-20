@@ -158,8 +158,9 @@ sheet is on no map and checks nothing.
   148 ft from the arch, 112 to 172 ft east of the axis), the water-mouth grove, the crescent pond and
   the nearest byre stay outside it (research.md R3). Its notes declare the map (FR-003) and say, item by item, which
   program items the map overrode (the grove, the burial ground, the water point's place) and that
-  the map is the canon for the site. The redrawn sheet passes every registered check, is reviewed by `building-review` and
-  `size-audit`, and the passes are ledgered.
+  the map is the canon for the site. The redrawn sheet passes every registered check that runs on a sheet on a map - the crop
+  check does not run on one, and reports that the frame is the map's instead - is reviewed by
+  `building-review` and `size-audit`, and the passes are ledgered.
 - **FR-007 - the rule is written where the next sheet is drawn.** `buildings.md` states, under its
   surroundings rule and its "Adding a building type" procedure, that a sheet of a subject a settlement
   map already draws declares the map and matches it, program items included; the country-shrine
@@ -257,3 +258,10 @@ sheet is on no map and checks nothing.
   measured clearances to the frame itself, and the edge named right. (2) The measurement commands
   chained with `&&`, which the figures script (no shell) cannot run - now one command each; the
   baseline names its commit. Items 1 and 2 of round 2 confirmed RESOLVED.
+- Round 4 (2026-09-20, `spec-fidelity-verify`, Opus): CHANGES REQUIRED, two items, both applied.
+  (1) Acceptance scenario 3 still held the footprint to the placement grain after FR-004 (d) moved
+  to the map's resolution - now one map px per side there too, and in the tasks and the contract.
+  (2) The baseline entry named a commit that does not exist - now the claim commit, with no
+  command (the worktree it ran in is this container's). The reviewer's aside - FR-006's "every
+  registered check" against a crop check that declines to run on a sheet on a map - is settled in
+  FR-006's own words: the check reports that the frame is the map's instead of running.

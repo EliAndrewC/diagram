@@ -25,7 +25,7 @@ the sheet maps to `(x, y)`; north is up on both.
 
 ## The grain
 
-`MAP_GRAIN_PX = 15` map px (`m:map-grain`, research.md R1).
+A POSITION is the same feature within `MAP_GRAIN_PX = 15` map px (`m:map-grain`, research.md R1); a SIDE of the subject's footprint matches within `SIZE_GRAIN_PX = 1` map px, the map's own resolution.
 
 ## The classes
 
@@ -45,7 +45,7 @@ A class the sheet marks that the table lacks is a finding.
 
 - (b) `<class> at svg(x,y) has no <class> on the map within <grain> (map (mx,my))`
 - (c) `the map's <class> at map (mx,my) = svg(x,y) is inside the frame and not on the sheet`
-- (d) `the subject is W x H ft on the sheet; the map draws it W' x H' ft`
+- (d) `the subject is W x H ft on the sheet; the map draws it W' x H' ft` (a side more than one map px off)
 - the declaration: `the manifest <path> cannot be read`, `no <key> feature within <grain> of (x, y)`,
   `the sheet marks id="<id>" and the check knows no such class`
 - none: `on no map`

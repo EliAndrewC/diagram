@@ -8,7 +8,6 @@
   "baseline-quick": {
     "value": 3755,
     "unit": "tests passed",
-    "quantity": "make quick ALL=1 in a detached worktree at 9bd2cbf9 (the 257 claim commit), 2026-09-20: 3755 passed, 5 skipped, 4 warnings in 32.57s; make hooks-test: 26 guard suites green",
-    "command": "make -C /tmp/base257/.claude/skills/diagram quick ALL=1"
+    "quantity": "make quick ALL=1 in a detached worktree at 6dfce73b (the 257 claim commit), observed 2026-09-20; method: git worktree add --detach /tmp/base257 HEAD, then make quick ALL=1 and make hooks-test there: 3755 passed, 5 skipped, 4 warnings in 32.57s; hooks-test: 26 guard suites green"
   }
 }
