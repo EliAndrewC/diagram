@@ -9,6 +9,35 @@ tools: Read, Grep
 
 # Record Format
 
+## Rule on the WORDS TO RULE ON list (feature 260)
+
+Your dispatch's prepass output carries a section headed **WORDS TO RULE ON**: every word in this entry
+that no glossary term defines and that appears in at most 2 of the record's question fragments, with
+that count beside it. It is drawn from the same text you read - the question fragment AND its notes.
+
+**Rule on every one of them, and say which verdict each got.** A word is one of three things:
+
+- a term a reader would not know, and you propose a definition for it;
+- ordinary English that happens to be rare in this record (`sawn`, `pushes`), and you say so in one
+  word - it does not need a paragraph;
+- already explained where it stands, which is `defined inline`.
+
+A list of tens is normal; the median entry raises 13 and the largest 115. Grouping the plainly-ordinary
+ones into a single line is not only allowed, it is what keeps the report readable: *"ordinary English,
+dismissed: allowable, anticipated, applicable, ..."*.
+
+**The list is a FLOOR, not the question.** It cannot see:
+
+- a MULTI-WORD term - `carried deck`, `spread footing` - because it is word-level;
+- a word the record uses often though the glossary does not define it (`embankment`, in 23 fragments).
+
+So report anything else you notice, and your report is not judged incomplete for containing it. An
+empty list means the filter found nothing, never that the entry has nothing to find.
+
+**Why this exists**: you were doing two jobs at once - noticing which words a reader might not know,
+and judging them - and the noticing wandered. Three runs on one entry agreed on eight terms and
+differed on three others, in both directions. The noticing is mechanical now; the judging is yours.
+
 ## The glossary is one file per word, and you do not read it whole (feature 259)
 
 VOCABULARY is judged against the glossary, and you have been reading all 144,524 bytes of

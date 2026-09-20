@@ -1,5 +1,23 @@
 # research/ - the historical record, and who it is written for
 
+## What proves a cheaper check is still a good check (feature 260)
+
+Not "it reports the same findings". `record-format` does not reproduce its own tail: three runs on one
+entry agreed on eight terms and differed on three, in both directions - including the run that read
+MORE (`specs/259-*/research.md` R5, `specs/260-*/research.md` R2). Features 258 and 259 both wrote that
+bar into their specs and 259 landed with it recorded as unmet.
+
+**The bar is: every candidate the prepass raised was ruled on.** `make record-prepass` names the words -
+the ones no glossary term defines and the record rarely uses - and the check's report must carry a
+verdict for each. That is checkable against the list. What the model notices beyond the list is
+welcome and is not part of the bar, because it is the part that varies.
+
+Two things this does NOT cover, so that nobody reads it as covering them: the list is word-level and
+cannot see a multi-word term, and it does not raise a word the record uses often. And the rule for a
+TIER downgrade - whether a check may run on a cheaper model - is a different decision and still reads
+"a seeded-fault run on known findings" in the root `CLAUDE.md` and in `docs/spec-kit-and-reviews.md`.
+It rests on the same assumption about reproducibility and is deliberately left as the GM's to change.
+
 ## The glossary is one file per word (feature 259)
 
 `l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one term each, about 154 bytes. The
