@@ -224,6 +224,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.tools.glossary_asset": ("glossary", "cheap"),  # feature 209: the record's derived glossary asset
     "l7r.diagram.tools.building_programs": ("building-programs", "cheap"),  # feature 254: the Mode A catalog tables, rendered from the type declaration
     "l7r.diagram.tools.citations_asset": ("citations", "cheap"),  # feature 211: the citations pages' derived scripts and works sections
+    "l7r.diagram.tools.record_asset": ("record", "cheap"),  # feature 258: the record's pages, assembled from their per-entry fragments (0.11 s over the whole record)
     "l7r.diagram.tools.page_lit": ("page-lit", "expensive"),  # feature 231: it opens a browser on the page
     "l7r.diagram.tools.picture_diff": ("picture-diff", "cheap"),  # feature 231: two renders, and resvg for an SVG argument
     "l7r.diagram.tools.footnote_census": ("footnote-census", "cheap"),  # feature 235: it reads the citations pages and counts
