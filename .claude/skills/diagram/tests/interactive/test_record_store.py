@@ -37,7 +37,10 @@ def record(tmp_path: pathlib.Path) -> pathlib.Path:
 def test_a_page_splits_into_the_fragments_its_layout_names(record: pathlib.Path) -> None:
     """The happy path first, so the refusals below are refusals and not a broken fixture."""
     assert sorted(p.name for p in (record / "ways").iterdir()) == [
-        "010-first.html", "020-second.html", frag.FRONT, frag.TAIL,
+        "010-first.html",
+        "020-second.html",
+        frag.FRONT,
+        frag.TAIL,
     ]
     assert read_page("ways.html", str(record)) == PAGE
     assert check(str(record)) == []
@@ -93,8 +96,7 @@ def test_a_registry_entry_whose_filename_and_heading_disagree_is_refused(tmp_pat
 
 
 def test_a_page_that_does_not_close_the_way_the_record_closes_is_refused(tmp_path: pathlib.Path) -> None:
-    (tmp_path / "ways.html").write_text('<!DOCTYPE html>\n<h2 id="x">X</h2>\n<p>no closing run</p>\n',
-                                        encoding="utf-8")
+    (tmp_path / "ways.html").write_text('<!DOCTYPE html>\n<h2 id="x">X</h2>\n<p>no closing run</p>\n', encoding="utf-8")
     with pytest.raises(ValueError, match="has not been shown its shape"):
         write_fragments("ways.html", str(tmp_path))
 
@@ -113,8 +115,7 @@ def test_an_exhausted_gap_is_refused_rather_than_collided(record: pathlib.Path) 
 
 def test_a_page_whose_committed_bytes_drift_from_its_fragments_is_reported(record: pathlib.Path) -> None:
     """What the gate and the push run: FR-003, FR-004."""
-    (record / "ways.html").write_text(PAGE.replace("<p>one</p>", "<p>edited in the wrong file</p>"),
-                                      encoding="utf-8")
+    (record / "ways.html").write_text(PAGE.replace("<p>one</p>", "<p>edited in the wrong file</p>"), encoding="utf-8")
     assert check(str(record)) == ["ways.html"]
 
 
@@ -130,4 +131,4 @@ def test_the_assembly_adds_nothing_of_its_own(record: pathlib.Path) -> None:
     assert assemble(page) == PAGE
     assert page.front.endswith("<hr>\n\n")
     assert page.tail == "\n</main>\n</body>\n</html>\n", "the newline before the closing run is the tail's"
-    assert "".join(s.text for s in page.sections) == PAGE[len(page.front): -len(page.tail)]
+    assert "".join(s.text for s in page.sections) == PAGE[len(page.front) : -len(page.tail)]

@@ -95,10 +95,10 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 
 ## Phase 3 - the notes, and the numbers nobody types (FR-016 to FR-022; D4, D5)
 
-- [ ] T15 `interactive/record/notes.py`: keys, allocation in document order, the back link, and the
+- [x] T15 `interactive/record/notes.py`: keys, allocation in document order, the back link, and the
       document-unique id per reference (`fnref-N`, `fnref-N-2`). Tests on plain strings first
       research: rendering
-      verify:
+      verify: DONE. record/notes.py + tests/interactive/test_record_notes.py, 10 tests on plain strings: allocation by the order references appear, one number and two ids for a note cited twice, the back link to the first, every reference carrying an id, and the four refusals - a dangling key, an unreferenced note, a key defined twice, a malformed key (which was being silently dropped until the test caught it)
 - [ ] T16 The splitter derives the 1,850 keys by R5's rule (the leading source key, an ordinal where a page
       repeats one, the question's slug and an ordinal for the 326 that lead with none). `citations.py` is
       NOT changed as a reader (FR-029): the assembly runs two passes and hands it an assembled page, as it
