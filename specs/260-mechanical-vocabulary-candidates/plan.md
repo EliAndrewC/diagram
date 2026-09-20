@@ -62,11 +62,16 @@ one already exists on disk:
 
 - **the text**: the question fragment AND its `.notes.html`. This is the correction the plan review of
   2026-09-20 blocked on, and it is worth stating plainly: the prepass parses the ASSEMBLED page and
-  slices it by heading, and on that basis the entry has 181 words, yields 7 candidates and catches 3 of
-  the eleven proposed terms. R2 measured the fragment plus its notes - 324 words, 34 candidates, 2 of
-  the 3 varying terms and 6 of the 8 core -
-  because that is what `record-format` is handed. 27 of the 34 come from the quoted passages in the
-  notes. The candidate list must walk what the check reads, or it is a list about a different document.
+  slices it by heading, and on that basis the entry has 181 words, yields 7 candidates and catches **2
+  of the eleven proposed terms** (`girder` and `footplank`, both of them core) and **none of the three
+  that varied between runs**. R2 measured the fragment plus its notes - 324 words, 34 candidates, 2 of
+  the 3 varying terms and 6 of the 8 core - because that is what `record-format` is handed. 27 of the
+  34 come from the quoted passages in the notes, and every variance-relevant catch is among them: on
+  the assembled basis this feature's own headline number would be 0 of 3. The candidate list must walk
+  what the check reads, or it is a list about a different document. (The plan review of 2026-09-20
+  measured this line: the "3" here was correct only while the count of 12 included `obliquity`, which
+  every run dismissed, and the sweep that replaced "12 known" with "eleven proposed" kept the number
+  and made it wrong.)
 - **what is defined**: the variant index feature 259 derives.
 - **how common a word is**: a document-frequency map over the record's question fragments.
 - **the registry keys** (FR-004): matched as a WHOLE TOKEN against `SOURCES.html`'s own key ids, never
@@ -95,6 +100,13 @@ change, and it is the one part of this feature that is about the model rather th
 259's SC-002 recorded as unmet: a spec records what was decided when, and rewriting one to match a
 later decision is the yardstick-editing this project refused two rounds ago.
 
+**One other operative doc changes, and only because it states the OLD bar on the SAME decision.**
+`docs/efficiency-tooling.md`'s feature-255 row judged candidates that "cut what a check READS" by
+whether each "hit every recorded finding for less". Its finding stands and is kept verbatim; its
+criterion is the one this feature replaces, so the row gains a pointer to the new bar rather than
+standing beside it as a second one (FR-009a). The two survivors named in FR-009a are about a model-TIER
+downgrade, a different decision, and are deliberately untouched.
+
 ## Phases
 
 **Phase 0 - the baseline** (T01, T02). `make done` on unmodified code; R4's before.
@@ -104,11 +116,13 @@ then every entry.
 
 **Phase 2 - what it is for** (T07, T08). The contract and the operative doc.
 
-**Phase 3 - landing** (T09-T12). The `record-format` run judged by the new bar; `make done`; R4's
-after; the push.
+**Phase 3 - landing** (T09-T12, T11a). The `record-format` run judged by the new bar; `make done`;
+R4's after; **the substitution put to the GM** (T11a, FR-011 and SC-007 - it is a numbered step rather
+than a closing courtesy precisely so that it cannot be the thing that falls off the end of a long
+chain); the push.
 
 ## Complexity Tracking
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |---|---|---|
-| A corpus walk on every prepass invocation | "Rare in the record" cannot be known without the record; caching it to a file would be a derived thing to keep in step, which is what feature 259 spent a review round removing | Shipping a common-word list was rejected because it is external data with its own provenance, and this project's rule is derive rather than maintain. A cached frequency FILE was rejected because the walk is cheap: 0.31 s for the corpus, and 0.79 s for the candidate pass over all 321 entries of the record (R4), against FR-010's five-second bar. The walk is memoized WITHIN a run - four derived inputs read once, not once per page, which took the whole-record sweep from 7.52 s to 0.79 s |
+| A corpus walk on every prepass invocation | "Rare in the record" cannot be known without the record; caching it to a file would be a derived thing to keep in step, which is what feature 259 spent a review round removing | Shipping a common-word list was rejected because it is external data with its own provenance, and this project's rule is derive rather than maintain. A cached frequency FILE was rejected because the walk is cheap: 0.31 s for the corpus, and 0.83 s for the candidate pass over all 321 sections of the record's 19 question pages (R4, re-measured after the plan review reported a different denominator), against FR-010's five-second bar. The walk is memoized WITHIN a run - four derived inputs read once, not once per page, which took the whole-record sweep from 7.52 s to 0.83 s |
