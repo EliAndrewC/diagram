@@ -109,18 +109,21 @@ sheet is on no map and checks nothing.
 
 ### Functional Requirements
 
-- **FR-001 - trees are declared.** A Mode A sheet draws its trees as canopies inside one group marked
-  `id="trees"`, as the fence is marked `id="fence"` and the precinct `id="precinct"` (feature 254);
-  the audit's parser reads that group and nothing else as trees. A sheet with no such group has no
-  trees.
+- **FR-001 - a tree is known by its drawing.** A Mode A sheet draws a tree as a canopy circle in the
+  vocabulary's canopy green (the fill every pool sheet already uses for a tree), and the audit's
+  parser classifies a circle as a tree by that fill - its own or its group's - or by standing in a
+  group marked `id="trees"`. So the sheets drawn before this feature carry trees the check reads
+  without a retrofit, and a canopy drawn outside any group is still a tree; a sheet that draws no
+  canopy has no trees. The vocabulary in `buildings.md` names the fill.
 - **FR-002 - the tree-overlap check, shared.** A registered check, in the shared layer, reports every
   tree canopy that overlaps a thing that is not open ground: a built footprint, a piece of
   furniture (a privy, a door, a marker, a board, a mat), a wall or fence stroke, a point glyph (a
-  well, a tub, a basin), or a text label - with what it overlaps and by how much in feet. Open ground
-  (the precinct interior, a court, a garden bed, a plot's earth) is where a tree stands and never an
-  overlap. Two canopies overlapping by more than half the smaller are reported as one tree drawn
-  twice. The check names its fix. It has a red fixture on which it fires, and it fires on the
-  Hoshigaoka sheet as committed before this feature.
+  well, a tub, a basin), a text label, or another tree - with what it overlaps and by how much in
+  feet. Open ground (the precinct interior, a court, a garden bed, a plot's earth) is where a tree
+  stands and never an overlap. Two canopies may touch and no more: the touching tolerance is the one
+  the built-footprint overlap check already uses, not a second number. The check names its fix. It
+  has a red fixture on which it fires, and it fires on the Hoshigaoka sheet as committed before this
+  feature (its canopies straddle the fence line and two lie on each other).
 - **FR-003 - a sheet declares the map its subject stands on.** The sheet's notes file carries one
   line, `**On map**: <the map's recorded manifest, by path> - <the subject's class> at (<x>, <y>)`,
   naming the Mode B map and the subject's position in that map's own coordinates. The manifest is
@@ -134,19 +137,26 @@ sheet is on no map and checks nothing.
   counterpart within that grain, and (d) reports the subject's footprint when it differs from the
   map's by more than that grain per side. The corresponding classes are a table the check owns:
   trees to the map's tree crowns, grove clumps and forest; a burial ground to its cemeteries; a
-  well to its wells; an arch to its torii; water to its streams, ponds and channels; a lane to its
-  lanes; any other building to its houses, buildings, storehouses, byres and sheds. The grain is a
+  water point - a well or a purification basin, one class, because the map's shrine well IS the
+  shrine's ablution water - to its wells; an arch to its torii; water to its streams, ponds and
+  channels; a lane to its lanes; any other building to its houses, buildings, storehouses, byres and
+  sheds. A class the map cannot record (a fence, a sanctuary, a garden bed, a privy, a tub) is not in
+  the table and the map's silence about it is not evidence. The grain is a
   measurement (research.md R1), never a remembered number.
 - **FR-005 - a sheet on no map is said to be on no map.** On a sheet with no declaration the check
   reports "on no map" and nothing else; a declaration that names a manifest that does not exist, or
   a position at which the manifest has no feature of the named class, is a finding.
 - **FR-006 - the Hoshigaoka sheet matches the Hoshigaoka map.** The country-shrine exemplar is redrawn
   to what the village map shows at the shrine: the hall at the map's footprint and facing, the arch
-  where the map's torii stands, the well where the map's well stands, swept ground around, no grove
-  and no burial ground; its frame shows what the map shows there and nothing the map does not. Its
-  notes declare the map (FR-003) and say, item by item, which program items the map overrode
-  (the grove, the burial ground, the basin beside the approach) and that the map is the canon for the
-  site. The redrawn sheet passes every registered check, is reviewed by `building-review` and
+  where the map's torii stands, the shrine's one water point where the map's well stands - behind
+  the hall on its axis, so the fence runs north far enough to hold it, and no second water point
+  beside the approach - swept ground around, no grove and no burial ground. Its frame is stated in
+  the notes and shows what the map shows there and nothing the map does not: it reaches from the
+  lane's edge in front of the arch to behind the well, and either side of the axis short of the
+  connector lane, so the lane, the water-mouth grove, the crescent pond and the nearest byre stay
+  outside it (research.md R3). Its notes declare the map (FR-003) and say, item by item, which
+  program items the map overrode (the grove, the burial ground, the water point's place) and that
+  the map is the canon for the site. The redrawn sheet passes every registered check, is reviewed by `building-review` and
   `size-audit`, and the passes are ledgered.
 - **FR-007 - the rule is written where the next sheet is drawn.** `buildings.md` states, under its
   surroundings rule and its "Adding a building type" procedure, that a sheet of a subject a settlement
@@ -195,10 +205,10 @@ sheet is on no map and checks nothing.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| The map is the canon for a sheet whose subject it draws: the sheet's grove, burial ground and basin follow the map, not the program | deliberate deviation from the program's research (the temizuya beside the approach; the grove around the sanctuary) | the GM, 2026-09-20: the diagram view matches what is shown on the larger map | `buildings.md` (the rule), the sheet's notes (the overrides, item by item), `programs.md` knob 4 |
-| A tree may stand on open ground and on nothing else | map drawing convention | a canopy is drawn over the ground it grows from; over a building, a fence or a label it reads as a mistake, which is what the GM saw | the check's docstring; `buildings.md` |
+| The map is the canon for a sheet whose subject it draws: the sheet's grove, burial ground and water point follow the map, not the program | deliberate deviation from the program's research (the temizuya beside the approach; the grove around the sanctuary) | the GM, 2026-09-20: the diagram view matches what is shown on the larger map | `buildings.md` (the rule), the sheet's notes (the overrides, item by item), `programs.md` knob 4 |
+| A tree may stand on open ground and on nothing else, another tree included | map drawing convention | a canopy is drawn over the ground it grows from; over a building, a fence, a label or another canopy it reads as a mistake, which is what the GM saw - the GM, 2026-09-20, "trees ... overlapping with other things" | the check's docstring; `buildings.md` |
 | Correspondence is judged within the map's own drawing grain, measured | map drawing convention | a settlement map places a glyph to a few pixels at its scale; a sheet drawn at the building scale cannot be held tighter than the map that placed the thing | research.md R1; the check's docstring |
-| The hall on the sheet takes the map's footprint | historically accurate (the one-roof band holds the map's footprint) | the map's block is the one-roof form; a sheet that grew or shrank it would not be the building on the map | the sheet's notes; the record's country-shrine section unchanged |
+| The hall on the sheet takes the map's footprint | deliberate deviation from the program's own proportions, on the GM's word of 2026-09-20 | the map's block is the building the GM drew; the one-roof band still holds it, which corroborates but does not decide | the sheet's notes; the record's country-shrine section unchanged |
 
 ## Assumptions
 
@@ -207,9 +217,12 @@ sheet is on no map and checks nothing.
   the `religious` entry of kind `shrine` at map (392, 1074), a 30 by 24 px block - 60 by 48 ft.
 - The map draws ONE torii in front of the shrine (its manifest records one; its generator's comment
   promises seven) - the sheet matches the one drawn; the disagreement is reported to the GM (FR-009).
+- The map's shrine well stands 108 ft due north of the hall's center, 84 ft behind the hall's rear
+  face; the redrawn sheet's fence and frame extend north to hold it (research.md R3).
 - The map's connector lane, water-mouth grove, crescent pond, nearest byre and the village graveyard
-  all lie outside a sheet frame of about two hundred feet on a side around the shrine; the swept
-  clearing the map records around the shrine covers the whole of such a frame.
+  all lie outside the sheet's stated frame - 100 ft either side of the axis, from the lane's edge in
+  front of the arch to 20 ft behind the well (research.md R3); the swept clearing the map records
+  around the shrine covers the whole of that frame.
 - The magistracy sheets stand on no declared map today (the county towns are legacy maps not yet
   matched); they carry no declaration and the check says so; matching them is a later feature.
 - The audit stays a hand-drawn sheet's tool; the check reads a recorded manifest and never runs a
@@ -217,4 +230,14 @@ sheet is on no map and checks nothing.
 
 ## Review history
 
-(none yet)
+- Round 1 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, five items, all applied. (1) FR-001
+  declared trees by a group id no live sheet carried, so the check could not fire on the sheet the GM
+  saw - a tree is now known by its drawing (the canopy fill), the group id an alternative. (2) FR-002
+  left tree-on-tree overlap to a duplicate rule with an unsourced threshold - a canopy may now touch
+  another and no more, with the built-footprint check's own touching tolerance. (3) The map cannot
+  record a basin, so it could not override one - the basin and the well are one class, the water
+  point, and FR-006 says the shrine's one water point stands where the map's well stands. (4) The
+  frame assumption could not hold the map's well 108 ft behind the hall - the frame is stated and
+  the fence runs north to the well. (5) Decisions row 4 reclassed from "historically accurate" to a
+  deliberate deviation on the GM's word. The reviewer's aside for the GM (the seven-arch sando drawn
+  as one arch since the count re-roll; the well 108 ft behind the hall) is carried to the writeup.
