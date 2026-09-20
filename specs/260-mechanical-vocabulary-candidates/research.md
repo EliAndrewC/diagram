@@ -4,7 +4,7 @@ Every figure in `spec.md` points at a finding here, and each re-runs as one comm
 
     python3 specs/260-mechanical-vocabulary-candidates/measure.py R1
 
-All three read the repository and re-run anywhere. Taken 2026-09-20 at `26f8bb4f` (feature 259's
+All four read the repository and re-run anywhere. Taken 2026-09-20 at `26f8bb4f` (feature 259's
 landing), on the entry feature 259's three `record-format` runs all checked: `ways`, the question "How
 far past the bank does a bridge land?".
 
@@ -71,8 +71,9 @@ replacement for it: three of the eleven proposed terms are reachable no other wa
 the model to rule on the list AND to add what it sees, and says plainly what the list cannot reach -
 otherwise an empty list reads as an empty question.
 
-**And what FR-004 does not do.** No registry source key appears among the 34, and none appears anywhere
-in the record's 321 candidate lists - but not because FR-004 excludes them. `ritter-timber-bridges` is
+**And what FR-004 does not do.** No registry source key appears among the 34, and none appears in any
+candidate list anywhere in the record, on either enumeration R4 counts - but not because FR-004
+excludes them. `ritter-timber-bridges` is
 in 3 fragments and is kept off by the rarity cutoff; `nrcs-ts14q-abutments` never survives the word
 regex, which splits it at the digits into `nrcs-ts` and `q-abutments`, both also over the cutoff. The
 spec review of 2026-09-20 measured this and struck the first draft's premise that a key is "rare by
@@ -81,13 +82,14 @@ would otherwise be raised - and the spec says it removes nothing today rather th
 
 ## R4 - What it costs
 
-**Finding** (observed 2026-09-20; method: the pass run over every entry of the record in one process,
-wall clock on a shared container):
+**Finding** (observed 2026-09-20; method: the pass run in one process over every section of the
+record's 19 question pages - the enumeration the table below the next one spells out - wall clock on a
+shared container):
 
 | | |
 |---|---|
 | the corpus walk - 1,479 fragments | 0.31 |
-| the candidate pass over all 321 entries | **0.79** |
+| the candidate pass over the 321 sections of the 19 question pages | **0.83** |
 | one invocation, as a session runs it (`make record-prepass PAGE=ways SECTION=010`) | 0.45 |
 | FR-010's bar | 5 |
 
@@ -104,7 +106,7 @@ commit before this feature, and the clone with the pass in it):
 | FR-010's bar | 5 |
 
 The pass costs about **0.37 s an invocation**, nearly all of it the corpus walk, and lands at a tenth of
-the bar. There is no before counterpart to the 0.79 s in-process sweep, because before this feature
+the bar. There is no before counterpart to the 0.83 s in-process sweep, because before this feature
 there was no pass to sweep; the per-invocation pair is the comparison FR-010 is about, since the bar
 exists so that a session runs this before every dispatch rather than skipping it.
 
@@ -112,11 +114,29 @@ exists so that a session runs this before every dispatch rather than skipping it
 walked the record for every section's notes, and read the corpus once per page: the whole-record sweep
 took **7.52 seconds**, over the bar. Both are the shape this engine's performance doc names as the only slow shape it has ever found -
 a per-candidate scan of ground that does not change during the scan. The notes are indexed once and the
-four derived inputs are memoized within a run, which is the whole of the fix.
+four derived inputs are memoized within a run, which is the whole of the fix. **The two landed together
+and were measured together**, so 7.52 -> 0.83 is the one pair this record states; no share of it is
+attributed to the index alone, because no run separated them. (`notes_index`'s docstring carried a
+second pair, 6.97 -> 0.4, from a mid-implementation run that cannot be reconciled with this one. The
+plan review of 2026-09-20 asked which was which; the answer is that only this one was taken on the
+finished artifact, and the docstring now says so instead of competing with it.)
 
-**What the sweep also establishes**: 321 sections, 5,592 candidates, median 13 a section, largest 115
-(`archetypes`, the dike-pond hamlet question), smallest 0 - and **no registry key raised anywhere**
-(SC-003).
+**What the sweep also establishes, and the enumeration it counts** (re-measured 2026-09-20 after the
+plan review reported a different denominator). "The whole record" has two defensible readings, so both
+are given:
+
+| the set swept | files | sections | candidates | median | registry keys raised |
+|---|---:|---:|---:|---:|---:|
+| the **question pages** - the 19 assembled pages with a fragment directory beside them, `cities/`'s seven included | 19 | 321 | 5,584 | 13 | **0** |
+| **every** HTML under `research/` but `assets/` - the citations pages and the per-source pages too | 1,511 | 3,766 | 32,836 | 4 | **0** |
+
+Largest list either way: **115**, `archetypes`, the dike-pond hamlet question; smallest 0. The
+question-page sweep takes **0.83 s**, against FR-010's 5 s bar.
+
+**SC-003 is claimed on the WIDER of the two**, because "no registry source key appears in a candidate
+list over the whole record" should be the strongest reading: 32,836 candidates over 1,511 files, and
+not one of them a key. An earlier draft of this section reported 5,592 candidates for the question
+pages; the figure is 5,584 re-measured on the finished pass, and it is corrected rather than explained.
 
 ## R5 - What the check then does
 

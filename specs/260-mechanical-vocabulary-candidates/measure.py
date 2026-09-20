@@ -6,6 +6,7 @@
 R1 what "every word with no glossary line" actually raises on one entry (the shape the GM was offered)
 R2 rarity within the record's own corpus: the candidate count at each cutoff, and what it catches
 R3 what a word-level filter cannot reach - the multi-word terms and the record-common ones
+R4 the whole-record sweep, on BOTH readings of "the whole record" - counts, keys raised, wall clock
 """
 
 from __future__ import annotations
@@ -129,10 +130,58 @@ def r3() -> None:
         print(f"    {term:<16} not raised: {why}")
 
 
+def prepass_module():  # noqa: ANN201
+    """The shipped pass itself, loaded by path - this measures the artifact, not a restatement of it."""
+    import importlib.util
+
+    path = os.path.normpath(os.path.join(HERE, "..", "..", "scripts", "_record_prepass.py"))
+    spec = importlib.util.spec_from_file_location("_record_prepass", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def r4() -> None:
+    """The whole-record sweep. "The whole record" has two readings, so both are counted.
+
+    The plan review of 2026-09-20 swept a different set from the first version of this measurement and
+    got a different denominator, which is exactly the failure a measurement that is not re-runnable
+    invites. Both enumerations are named here and both re-run as this one command.
+    """
+    import json
+    import pathlib
+    import statistics
+    import time
+
+    rp = prepass_module()
+    repo = pathlib.Path(os.path.normpath(os.path.join(HERE, "..", "..")))
+    record = repo / rp.RESEARCH
+    glossary = json.loads((repo / rp.GLOSSARY).read_text(encoding="utf-8"))
+    registry = rp.registry_keys(str(record))
+    every = [h for h in sorted(record.rglob("*.html"))
+             if h.relative_to(record).parts[0] != "assets" and not h.name.startswith("_")]
+    questions = [h for h in every
+                 if h.relative_to(record).parts[0] not in ("citations", "sources") and h.with_suffix("").is_dir()]
+
+    for label, files in (("the 19 question pages", questions), ("every html but assets/", every)):
+        t0 = time.perf_counter()
+        counts, keys, biggest = [], 0, ("", 0)
+        for path in files:
+            for sec in rp.prepass(path.read_text(encoding="utf-8"), glossary, str(record)):
+                counts.append(len(sec["rare"]))
+                keys += sum(1 for w, _n in sec["rare"] if w in registry)
+                if len(sec["rare"]) > biggest[1]:
+                    biggest = (f"{path.name} - {sec['section']}", len(sec["rare"]))
+        print(f"  {label:<24} files {len(files):>5}  sections {len(counts):>5}  candidates {sum(counts):>6}  "
+              f"median {statistics.median(counts):>3.0f}  KEYS RAISED {keys}  {time.perf_counter() - t0:.2f} s")
+        print(f"  {'':<24} largest {biggest[1]} ({biggest[0]}), smallest {min(counts)}")
+
+
 def main(argv: list[str]) -> int:
-    which = {"R1": r1, "R2": r2, "R3": r3}
+    which = {"R1": r1, "R2": r2, "R3": r3, "R4": r4}
     if len(argv) != 2 or argv[1].upper() not in which:
-        print(f"usage: {os.path.basename(__file__)} R1|R2|R3", file=sys.stderr)
+        print(f"usage: {os.path.basename(__file__)} R1|R2|R3|R4", file=sys.stderr)
         return 2
     which[argv[1].upper()]()
     return 0

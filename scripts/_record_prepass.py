@@ -252,9 +252,12 @@ def notes_index(record_dir: str | None) -> dict[str, str]:
     """{question slug: the visible text of its notes}, built ONCE.
 
     Built once and asked per section, not walked per section (constitution X clause 15). The first
-    version walked the record for every heading: measured, that made a sweep over all 321 entries take
-    6.97 s where the index makes it 0.4 s - the same per-candidate-scan-of-unchanging-ground shape this
-    engine's performance doc names as the only slow shape it has ever found.
+    version walked the record for every heading - the same per-candidate-scan-of-unchanging-ground
+    shape this engine's performance doc names as the only slow shape it has ever found. This index and
+    the memoization of the other three derived inputs landed together and were measured together, so
+    the one honest pair is the whole fix, and it is in specs/260 R4: the whole-record sweep went
+    7.52 s to 0.83 s against a 5 s bar. No share of that is attributed to this function alone,
+    because no run separated them.
     """
     if not record_dir:
         return {}
