@@ -26,3 +26,13 @@ The session proposed, in these words:
 The GM:
 
 > go
+
+## The GM's words after the feature landed (2026-09-20) - the amendment
+
+The session reported what it had left: `settlement-review` telling the agent to import a module no make target
+wraps, two cosmetic path and description duplications, that the spec review had cut a tier-test guard requiring the
+field of every agent file as unrequested, and that only two of the twelve agents had a seeded proof. The GM:
+
+> Please fix anything left unfixed, including the settlement-review issue tou mentioned and the two cosmetic path and description duplications, etc.  I do indeed want the guard enforced by a test - and Why would the fidelity reviewer have cut something which enforces something that I want and ask for? I mean, the fidelity reviewer should be checking to see whether you're doing something different from what I asked for, not preventing you from writing automated checks to make sure that the thing that I asked for actually happens. So I'm concerned if something like this was dropped, not in spite of the fidelity reviewer, but because of it.
+>
+> Is there any particular reason not to test the other 10 reviewers with seeded proofs?

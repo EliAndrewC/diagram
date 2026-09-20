@@ -20,3 +20,13 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md). All `research: rendering
 - [x] T06 `make hooks-test` and `make quick` green; land DIRECT
       research: rendering
       verify: DONE. make quick and make hooks-test green 2026-09-20; nothing under l7r/ or pool/ changed
+- [ ] T07 the tier test requires `omitClaudeMd: true` of every agent file; proven red on a file without it (FR-007)
+      research: rendering
+- [ ] T08 both fidelity contracts distinguish enforcing what was asked from unrequested verification; the seeded round-1 run (FR-008)
+      research: rendering
+- [ ] T09 a make target wraps the scatter parse and `settlement-review` names it; the `(Tools: ...)` tails and the tier-table paths corrected (FR-009)
+      research: rendering
+- [ ] T10 six seeded pairs - entry-drift, escalation-check, quote-check, source-applicability, source-reader, spec-fidelity - scored; the four agents left priced for the GM (FR-010)
+      research: rendering
+- [ ] T11 `make hooks-test` and `make quick` green; land
+      research: rendering

@@ -1,6 +1,6 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** FAITHFUL at round 3 (2026-09-20, see Review history); IMPLEMENTED 2026-09-20 - the field is set in all twelve,
+**Status:** AMENDED 2026-09-20 (Amendment 1, awaiting its review - the counter resets); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - the field is set in all twelve,
 the proof is clean on its three cases, every run is in `research.md`.
 
 ## Summary
@@ -59,6 +59,39 @@ before and after the field, is recorded in `research.md`. Root `CLAUDE.md`'s rev
 that what it needs is written in its contract; `docs/review-ledger.md` is not touched (no review pass of a shipping
 map is made).
 
+## Amendment 1 (2026-09-20) - the GM's words after landing (`request.md`, second block)
+
+**FR-007 - the field is enforced by a test.** `.claude/skills/diagram/tests/test_agent_models.py`, which already
+derives its roster from `.claude/agents/`, also requires `omitClaudeMd: true` of every agent file, so an agent added
+later launches without the three files or the gate fails. It is proven to fire by removing the field from one file
+and watching the test go red.
+
+**FR-008 - the fidelity reviewer stops cutting the enforcement of what was asked.** Round 1 of this feature cut
+exactly that guard as UNREQUESTED, and it did so BECAUSE of its contract: question 4 of `spec-fidelity.md` lists
+"extra verification the GM did not request" as scope inflation. Both fidelity contracts are amended with the GM's
+distinction: a test, guard or check whose only effect is to make the thing the GM asked for actually happen, and
+keep happening, SERVES the request and is never reported UNREQUESTED or as inflated scope; what stays out of scope
+is verification of something the GM did not ask for, and new BEHAVIOR riding in under the name of a check. Proven
+the way this repository improves a review agent: the amended contract is run on round 1's own recorded prompt, and
+it must no longer cut old FR-003 while still raising that round's other three items.
+
+**FR-009 - what the reading left unfixed is fixed.** `settlement-review` names
+`l7r.diagram.tools.scatter_audit.parse_bases`, which no make target wraps, so the make-only guard refuses what the
+contract tells the agent to run: a make target wraps it and the contract names the target. The three agent
+descriptions that end in a literal `(Tools: ...)` duplicating their frontmatter lose it. Every contract that cites
+the tier table as `tests/test_agent_models.py` cites its real path. Anything else stale met on the way is fixed in
+the same work.
+
+**FR-010 - the other agents get their seeded proofs.** The GM asked whether there is any reason not to. The only
+reasons were the session's: price, and for three agents the lack of a recorded run. So: the six agents with
+recorded runs that are cheap to replay - `entry-drift`, `escalation-check`, `quote-check`, `source-applicability`,
+`source-reader`, `spec-fidelity` - each get one recorded case with known findings, run with the field and without
+it by FR-003's method and scored by FR-003's rule, FR-004 governing a miss. `settlement-review`, whose pair costs
+about as much as those six together and whose findings vary most from pass to pass (feature 255, R6), and the
+three agents with no recorded run (`building-review` and `size-audit`, which could be run on the frozen defective
+sheets under `tests/fixtures/`, and `perf-audit`, which has no such artifact) are priced in `research.md` and put to
+the GM with the six results in hand, not decided by the session.
+
 ## Success criteria
 
 - **SC-001** (FR-001) `research.md` holds, per agent, the rules considered and the disposition of each.
@@ -69,6 +102,13 @@ map is made).
   with recorded runs were also not re-run, per D1.
 - **SC-005** (FR-006) The before-and-after first-turn input of a real defined agent is recorded; `make hooks-test`
   and `make quick` are green; nothing under `l7r/` or `pool/` changed.
+
+- **SC-006** (FR-007) The tier test requires the field, and goes red when one agent file loses it.
+- **SC-007** (FR-008) Both fidelity contracts carry the distinction; the seeded round-1 run keeps the guard and still
+  raises the other three items, and `research.md` holds the run.
+- **SC-008** (FR-009) No contract names a command the make-only guard refuses, a `(Tools: ...)` tail, or the tier
+  table by a wrong path.
+- **SC-009** (FR-010) `research.md` holds a row per run for the six pairs, and the priced list of the four agents left.
 
 ## Assumptions
 
