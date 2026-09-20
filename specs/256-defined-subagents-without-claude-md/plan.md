@@ -16,19 +16,21 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
 
 ## Design
 
-- **P1 the reading (FR-001).** The root `CLAUDE.md` is taken section by section - house style, research, development
-  workflow, verification, session clones, what is enforced - and each rule is put to each of the twelve contracts
-  with one question: does this check's JOB depend on it? A rule about how a SESSION works (clones, make, the gate,
-  spec-kit) bears on no check, because a check edits nothing and lands nothing. The candidates are the rules about
-  what the record and the maps must SAY: hyphens only and American spellings with the quotation exemption; the caste
-  sense of "people"; "domain", never "demesne"; gender-neutral office-holders; the kanji triangle; the four decision
-  classes and the knob-or-liberty rule; a citation's form and the GM's notes as canon. A first grep (2026-09-20)
-  shows which contracts already carry which; the reading confirms each by eye and `research.md` holds the table.
-  The two nested files are read the same way for the checks that work under them: `research/CLAUDE.md` for
-  `source-reader`, `quote-check`, `record-format`, `source-applicability`, `entry-drift`; the skill's `CLAUDE.md`
-  for `settlement-review`, `building-review`, `size-audit`, `perf-audit`. A moved rule is written once, short, in
-  the contract's own voice, under a heading `## House rules you check against` (or folded into the section that
-  already covers it).
+- **P1 the reading (FR-001).** Every rule of the root `CLAUDE.md` - house style, research, development workflow,
+  verification and iteration, session clones, what is enforced, key paths - is put to EACH of the twelve contracts,
+  one rule and one agent at a time, with one question: does this check's JOB depend on it, and does the contract
+  already say it? No class of rule is settled in advance. Several checks do session-shaped work - `perf-audit`
+  reads the gate's bands and writes its record with `make perf-confirm`, both fidelity agents run `make figures` and
+  `spec-fidelity` records `make plan-verdict`, `settlement-review` and `size-audit` run make targets - so a rule
+  about make, the gate, the clones or spec-kit is read against them like any other and may come out "moved".
+  `research.md` holds the table: a row per rule, a column per agent, each cell `stated`, `moved` or `does not bear`.
+  The two nested files are read the same way for every check that works under either tree, and the table says per
+  agent which tree it reads: the skill's `CLAUDE.md` for every agent that reads or runs anything under
+  `.claude/skills/diagram/` (which includes the five research agents, whose pages live inside the skill tree,
+  `entry-drift`, whose subject is the docstrings under `l7r/diagram/interactive/`, and both fidelity agents, which
+  run `make figures` from there), and `research/CLAUDE.md` for every agent that reads under `research/`
+  (`escalation-check` among them). A moved rule is written once, short, in the contract's own voice, in the section
+  that already covers its subject, or under `## House rules you check against` where none does.
 - **P2 the field (FR-002).** `omitClaudeMd: true` on its own line in each frontmatter, after `effort:`.
 - **P3 the proof (FR-003, FR-004).** `measure/dispatch_seeded.sh`: a headless Sonnet session in the case's worktree
   reads `prompt.txt` and dispatches the agent ONCE with it; the SUBAGENT's transcript gives the reply, the turns,
@@ -39,9 +41,15 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   `79288e26/3fc3f084` and `79288e26/427f9b4c`) on `spec-fidelity-verify`; the homesteads "garden's sun" section
   (`881af52a/abea4bd5`, cut as in 255 R2, with the pre-pass listing but WITHOUT 255's rejected scoped text) on
   `record-format`. Scoring is against the control first and the recorded findings second.
-- **P4 the measurement (FR-006).** The first-turn input of `entry-drift` - the smallest real contract - dispatched
-  by the same harness from a worktree, with the field and without it, on a one-line prompt; both legs are rows in
-  `research.md`. Haiku cannot stand in here because the agent file pins its model, so this is two short Opus runs.
+- **P4 the measurement (FR-006), taken where the index actually loads.** A scratch worktree is its own project and
+  loads no memory index (feature 255, R5), so it cannot show the index leaving. Both legs are therefore dispatched
+  from `/diagram`, the way 255 R7's probe was: `measure/probe.sh`-style, a headless session started in `/diagram`
+  with the agent defined inline (`--agents`) from `entry-drift`'s REAL frontmatter and contract body - its pinned
+  model and tools - once as it stands and once with `omitClaudeMd: true`, on a one-line prompt; the subagent's
+  first-turn input is read from its own transcript. Nothing is written under `/diagram`. Two short Opus runs. The
+  same limit is stated for P3: its worktree legs, candidate and control alike, run with no memory index, so the
+  proof is of the `CLAUDE.md` files leaving; the index leaving is covered by FR-001's finding that no contract
+  refers to it, and by this measurement.
 - **P5 the record (FR-006).** Root `CLAUDE.md`'s review-subagents bullet gains one sentence; `docs/efficiency-
   tooling.md`'s feature-255 row gains the outcome; `docs/make-targets.html` is unaffected (no target added).
 
