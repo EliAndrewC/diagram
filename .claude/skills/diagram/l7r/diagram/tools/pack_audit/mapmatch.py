@@ -32,8 +32,9 @@ from .grids import FTPX
 from .onmap import OnMap
 from .parse import ParsedPlan, Rect
 
-MAP_GRAIN_PX: float = 15.0  # m:map-grain (research.md R1)
-SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+MAP_GRAIN_PX: float = 15.0  # m:map-grain (research.md R1): a POSITION is the same feature within this
+SIZE_GRAIN_PX: float = 1.0  # a SIDE matches within the map's own resolution: the map records a footprint to the px and a sheet draws it exactly
+SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))  # pack_audit -> tools -> diagram -> l7r -> the skill
 _VIEWBOX_RE = re.compile(r'viewBox="\s*([\-\d.]+)\s+([\-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*"')
 
 # THE CORRESPONDENCE CLASSES (contracts/on-map.md): a sheet class, the manifest keys it corresponds to.
@@ -252,9 +253,37 @@ def matches_map(plan: ParsedPlan, text: str, on_map: OnMap | None, grain: float 
     # (d) the subject's footprint, per side
     sw, sh = subject[0].w / FTPX, subject[0].h / FTPX
     mw, mh = subject_map[0].w * ftpx, subject_map[0].h * ftpx
-    if abs(sw - mw) > grain * ftpx or abs(sh - mh) > grain * ftpx:
+    if abs(sw - mw) > SIZE_GRAIN_PX * ftpx or abs(sh - mh) > SIZE_GRAIN_PX * ftpx:
         out.append(f"the subject is {sw:.0f} x {sh:.0f} ft on the sheet; the map draws it {mw:.0f} x {mh:.0f} ft")
     return out
+
+
+def site_classes(plan: ParsedPlan, text: str, on_map: OnMap | None) -> dict[str, bool] | None:
+    """Which correspondence classes the declared map shows inside the sheet's frame - what the program check
+    asks a SITE item against; None when the sheet declares no map or the declaration cannot be laid on it
+    (then `matches_map` names why and every site item is asked for)."""
+    if on_map is None:
+        return None
+    path = manifest_path(on_map)
+    if not os.path.isfile(path):
+        return None
+    m = load_map(path)
+    ftpx = float(m.get("meta", {}).get("ftpx", 0) or 0)
+    subject_map = [f for f in _features(on_map.key, "subject", m.get(on_map.key)) if math.hypot(f.x - on_map.x, f.y - on_map.y) <= MAP_GRAIN_PX]
+    subject = plan.by_id(on_map.sheet_id)
+    if ftpx <= 0 or not subject_map or not subject:
+        return None
+    sx, sy = _center(subject[0])
+    frame = Transform(ftpx, sx, sy, subject_map[0].x, subject_map[0].y).frame(text)
+    if frame is None:
+        return None
+    return {cls: bool(feats) for cls, feats in inventory(on_map, frame).items()}
+
+
+def frame_is_the_maps(on_map: OnMap | None) -> str | None:
+    """Why the crop check does not run on a sheet on a map: its frame shows what the map shows there, empty
+    ground included (spec FR-006), so parchment around the ink is the site, not waste."""
+    return None if on_map is None else "the frame is the map's (a sheet on a map shows what the map shows there, empty ground included)"
 
 
 def skipped(on_map: OnMap | None) -> str | None:

@@ -100,8 +100,8 @@ The seat of a village district's **country monk** - the one tax-free religious f
 | `approach` | `/^approach$/` | presence | accurate | the sandō from the arch to the hall |
 | `well` | `/^well$|basin/` | presence | accurate | the temizuya beside the approach, never under the arch |
 | `fence` | `/^fence$|^hedge$/` | presence | accurate | a tamagaki or hedge bounds a shrine; a wall is a compound's |
-| `grove` | `/grove/` | presence | accurate | the chinju no mori the precinct stands in |
-| `burial_ground` | `/burial|graves/` | presence | accurate | the village burial ground in the shrine's yard - the record's village rule |
+| `grove` | `/grove/` | presence - a site item: drawn where the sheet's declared map shows a tree inside the frame | accurate | the chinju no mori the precinct stands in |
+| `burial_ground` | `/burial|graves/` | presence - a site item: drawn where the sheet's declared map shows a burial ground inside the frame | accurate | the village burial ground in the shrine's yard - the record's village rule |
 | `kitchen_garden` | `/^kitchen garden$|^vegetable garden$/` | presence | accurate | the household bed at the dwelling |
 | `privy` | `/^privy$|^latrine$/` | presence | accurate | attached to the dwelling |
 | `fire_water` | `/^fire-water/` | presence | accurate | tensuioke at the wooden buildings, as at the magistracy |

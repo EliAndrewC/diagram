@@ -6,6 +6,8 @@
 
 **Form**: one roof
 
+**On map**: legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.json - religious at (392, 1074) = hall
+
 **Knob settings** (every knob, defaults included):
 
 1. Hall-and-dwelling form: **one roof** (the default - the GM's form, 2026-09-19). The building is 76 by 36 ft (2,736 sq ft, inside the Kaie-ji band of 2,100-3,600), its two uses END TO END along the ridge as at Kaie-ji: the kitchen's earthen floor and hearth at the west end (with its own door on the north wall), the villagers' hall in the center, 40 ft wide, facing the approach with its raised step and its altar at the rear toward the sanctuary, and the monk's rooms at the east end with a 12 ft writing room for the district's registers and the dwelling's own door on the east wall. The hall room's 40 ft is a room of the one-roof building, whose band governs; the 18-38 ft band is a separate hall's.

@@ -134,8 +134,10 @@ sheet is on no map and checks nothing.
   the map's coordinates through the subject's position and the two scales, (b) reports every sheet
   feature of a corresponding class with no map counterpart within the map's drawing grain, (c)
   reports every map feature of a corresponding class inside the sheet's frame with no sheet
-  counterpart within that grain, and (d) reports the subject's footprint when it differs from the
-  map's by more than that grain per side. The corresponding classes are a table the check owns:
+  counterpart within that grain, and (d) reports the subject's footprint when a side differs from the
+  map's by more than the map's own resolution - one map px - because the map records a footprint
+  to the pixel and a sheet can draw it exactly; the grain is for positions, which the map places
+  by search. The corresponding classes are a table the check owns:
   trees to the map's tree crowns, grove clumps and forest; a burial ground to its cemeteries; a
   water point - a well or a purification basin, one class, because the map's shrine well IS the
   shrine's ablution water - to its wells; an arch to its torii; water to its streams, ponds and
@@ -245,8 +247,13 @@ sheet is on no map and checks nothing.
 - Round 2 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, four items, all applied. (1) Key
   Entities still defined a tree by the group id round 1 struck - now FR-001's definition. (2) The
   frame's south edge named "the lane's edge in front of the arch", a landmark the map does not have
-  there - now 60 ft in front of the arch, the lane's true distances stated. (3) R3's tree and grove
-  figures were wrong by about a hundred feet - re-derived from the manifest (nearest crown 238 ft,
-  nearest clump 258 ft, the grove outline's nearest edge 163 ft), with the frame-to-outline clearance
-  stated and why it is not the check's concern (the outline is not a feature the check reads).
-  (4) `m:map-grain`'s recorded command did not re-run - the pattern quoted.
+  there - now stated as research.md R3 states it, with the lane's true distances. (3) R3's tree and grove
+  figures were wrong by about a hundred feet - re-derived from the manifest (the nearest crown,
+  clump and grove edge, each stated in R3), with the frame-to-outline clearance stated and why it is
+  not the check's concern (the outline is not a feature the check reads).
+  (4) the grain measurement's recorded command did not re-run - now one command.
+- Round 3 (2026-09-20, `spec-fidelity-verify`, Opus): CHANGES REQUIRED, two items, both applied.
+  (1) R3's new clearance clause mixed two axes (a center distance less the half-width) - now the
+  measured clearances to the frame itself, and the edge named right. (2) The measurement commands
+  chained with `&&`, which the figures script (no shell) cannot run - now one command each; the
+  baseline names its commit. Items 1 and 2 of round 2 confirmed RESOLVED.

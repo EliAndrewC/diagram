@@ -132,7 +132,14 @@ CHECKS: tuple[Check, ...] = (
         "gate_widths", lambda ctx: s.gate_widths(ctx.plan), True, "ochiba-capped-gates-red.svg", "draw the opening at passage width from the INK (pull each flanking endpoint back by half a stroke)"
     ),
     Check("scale_bar_present", lambda ctx: s.scale_bar_present(ctx.plan), True, "ochiba-no-scale-red.svg", "add the 90 px scale bar with its `30 ft` and `(3 px = 1 ft)` labels"),
-    Check("viewbox_cropped", lambda ctx: s.viewbox_cropped(ctx.text, ctx.plan), True, "ochiba-wide-viewbox-red.svg", "crop the viewBox to ~15-25 px of parchment around the ink"),
+    Check(
+        "viewbox_cropped",
+        lambda ctx: [] if ctx.on_map else s.viewbox_cropped(ctx.text, ctx.plan),
+        True,
+        "ochiba-wide-viewbox-red.svg",
+        "crop the viewBox to ~15-25 px of parchment around the ink",
+        skipped=lambda ctx: mm.frame_is_the_maps(ctx.on_map),
+    ),
     Check(
         "trees_overlap",
         lambda ctx: s.trees_overlap(ctx.plan),
@@ -151,7 +158,7 @@ CHECKS: tuple[Check, ...] = (
     # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
     Check(
         "program_complete",
-        lambda ctx: lbl.check_program(ctx.plan, ctx.btype, ctx.form) if ctx.btype else [],
+        lambda ctx: lbl.check_program(ctx.plan, ctx.btype, ctx.form, mm.site_classes(ctx.plan, ctx.text, ctx.on_map)) if ctx.btype else [],
         True,
         "ochiba-no-cell-red.svg",
         "draw and label the missing program item, or record in the notes why this instance lacks it",

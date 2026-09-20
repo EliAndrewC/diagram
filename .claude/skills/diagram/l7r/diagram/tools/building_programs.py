@@ -44,6 +44,8 @@ def render(btype: BuildingType) -> str:
     for it in btype.required:
         forms = "; ".join(f"under `{f}`: {'absent' if b is None else _band(b)}" for f, b in it.forms.items())
         band = _band(it.band) + (f" ({forms})" if forms else "") + (" - optional, a knob" if it.optional else "")
+        if it.site:  # a SITE item (feature 257): drawn where the declared map shows its class, and only there
+            band += f" - a site item: drawn where the sheet's declared map shows a {it.site.replace('_', ' ')} inside the frame"
         lines.append(f"| `{it.id}` | `/{it.label.pattern}/` | {band} | {it.cls} | {it.why} |")
     if btype.notes:
         lines += ["", btype.notes]

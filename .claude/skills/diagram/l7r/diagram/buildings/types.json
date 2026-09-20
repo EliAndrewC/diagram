@@ -371,14 +371,16 @@
         "label": "grove",
         "band_ft": {},
         "class": "accurate",
-        "why": "the chinju no mori the precinct stands in"
+        "why": "the chinju no mori the precinct stands in",
+        "site": "tree"
       },
       {
         "id": "burial_ground",
         "label": "burial|graves",
         "band_ft": {},
         "class": "accurate",
-        "why": "the village burial ground in the shrine's yard - the record's village rule"
+        "why": "the village burial ground in the shrine's yard - the record's village rule",
+        "site": "burial_ground"
       },
       {
         "id": "kitchen_garden",

@@ -32,7 +32,9 @@ is stated in MAP px, so the same check serves a hamlet map (1 ft per px) or a ci
 px) without a second number. `m:map-grain`. A sheet feature whose mapped center lies within the
 grain of a map feature of a corresponding class is that feature; a map feature inside the sheet's
 frame with no sheet feature within the grain is missing; the subject's footprint matches when each
-side is within the grain of the map's. The number lives in the check beside its reason and is not
+side is within ONE map px of the map's - the map records a footprint to the pixel and the sheet can
+draw it exactly, so the placement grain, which is for a position the map found by search, is not
+the size's tolerance. The number lives in the check beside its reason and is not
 repeated in the record (the record's page is not touched by this feature).
 
 ## R2. What the map records, by class, and how each is shaped
@@ -45,7 +47,7 @@ position is the feature's CENTER in map px unless said otherwise:
 
 | sheet class (how the sheet marks it) | manifest key(s) | shape |
 |---|---|---|
-| tree (a circle in `id="trees"`) | `tree_crowns` | a flat list of `x, y, r` triplets |
+| tree (a canopy circle, by its fill or a `trees` group) | `tree_crowns` | a flat list of `x, y, r` triplets |
 | | `village_groves[*].clumps` | points, each a clump of the grove's radius `r` |
 | | `forest_patches` | none on this map; read as `x, y, w, h` when present |
 | burial ground (`id="burial_ground"`) | `cemeteries` | `x, y, w, h, rot` |
@@ -80,9 +82,10 @@ map's own render (2026-09-20):** (observed 2026-09-20; method: the map's placeme
 - no tree crown, grove clump or forest patch inside the frame, and none near it: the nearest
   recorded tree crown is 238 ft from the hall's center, the water-mouth grove's nearest clump center
   258 ft, and the grove's drawn outline comes no nearer than 163 ft - the outline's nearest edge
-  clears the frame's north-east corner by 19 ft, under the grain, but the outline is the grove's
-  boundary, not a feature the check reads: the check reads crowns and clumps, and the nearest of
-  those stands 138 ft beyond the frame's edge, well over the grain;
+  clears the frame's north edge by 19 ft (9.6 px, at x = 427), under the grain, but the outline is
+  the grove's boundary, not a feature the check reads: the check reads crowns and clumps, and the
+  nearest crown stands 74.6 ft (37.3 px) beyond the frame's edge, the nearest clump 96.7 ft (48.4 px),
+  both well over the 15 px grain;
 - NO cemetery within 320 ft: the village graveyard is about 430 ft west;
 - the connector lane passes about 112 to 172 ft east of the hall's axis and comes no nearer the
   arch than 148 ft, outside a frame of 100 ft half-width; the nearest byre is 224 ft north, the

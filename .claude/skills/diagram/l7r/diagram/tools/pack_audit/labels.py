@@ -11,7 +11,7 @@ check's fill list, 2026-07-25). So both come here.
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 from ...buildings.types import BuildingType, RequiredItem
 from .grids import FTPX
@@ -51,13 +51,17 @@ def matches(item: RequiredItem, labels: Sequence[Label]) -> list[Label]:
     return [lb for lb in labels if item.label.search(" ".join(lb.text.split()))]
 
 
-def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None) -> list[str]:
+def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None, site: Mapping[str, bool] | None = None) -> list[str]:
     """Every required item of the type's program is on the sheet by label; an item a knob or the declared
-    form makes absent is not asked for."""
+    form makes absent is not asked for, and a SITE item (feature 257) only where `site` - the classes the
+    declared map shows inside the sheet's frame - says the map has its class there (None: no declaration,
+    every site item is asked for)."""
     out: list[str] = []
     for item in btype.required:
         if item.optional or item.band_for(form) is None:
             continue
+        if item.site is not None and site is not None and not site.get(item.site, False):
+            continue  # the map shows none of that class at the subject: the sheet draws none (the GM, 2026-09-20)
         if not matches(item, plan.labels) and item.id not in plan.ids:
             # present by LABEL, or DECLARED by id (an arch, an approach, a well, a fence group need no caption
             # saying what they plainly are - the no-obvious-labels rule; the id is what the checks read)

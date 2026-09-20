@@ -59,6 +59,7 @@ class RequiredItem:
     why: str
     optional: bool = False
     forms: dict[str, Band | None] = field(default_factory=dict)  # a form's own band, or None = absent under that form
+    site: str | None = None  # a SITE item (feature 257): its correspondence class; asked for only where the declared map shows that class inside the frame (always, with no declaration)
 
     def band_for(self, form: str | None) -> Band | None:
         """The band under `form` (a notes file's `**Form**:` value): the form's own, None if the item
@@ -97,9 +98,11 @@ def _band(raw: Any, where: str) -> Band:
 
 
 def _item(raw: Any, where: str) -> RequiredItem:
-    keys = {"id", "label", "band_ft", "class", "why", "optional", "forms"}
+    keys = {"id", "label", "band_ft", "class", "why", "optional", "forms", "site"}
     if not isinstance(raw, dict) or not {"id", "label", "band_ft", "class", "why"} <= set(raw) or set(raw) - keys:
-        raise ValueError(f"{where}: a required item carries id, label, band_ft, class, why (and optional, forms), not {sorted(raw) if isinstance(raw, dict) else raw!r}")
+        raise ValueError(f"{where}: a required item carries id, label, band_ft, class, why (and optional, forms, site), not {sorted(raw) if isinstance(raw, dict) else raw!r}")
+    if "site" in raw and (not isinstance(raw["site"], str) or not raw["site"]):
+        raise ValueError(f"{where}/{raw['id']}: site names a correspondence class (a non-empty string), not {raw['site']!r}")
     if raw["class"] not in CLASSES:
         raise ValueError(f"{where}/{raw['id']}: class must be one of {CLASSES}, not {raw['class']!r}")
     forms: dict[str, Band | None] = {}
@@ -113,6 +116,7 @@ def _item(raw: Any, where: str) -> RequiredItem:
         why=str(raw["why"]),
         optional=bool(raw.get("optional", False)),
         forms=forms,
+        site=str(raw["site"]) if "site" in raw else None,
     )
 
 

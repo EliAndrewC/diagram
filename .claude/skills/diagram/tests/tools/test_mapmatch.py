@@ -114,7 +114,7 @@ def test_the_grain_is_the_edge(tmp_path: object) -> None:
     near = '<rect x="292" y="52" width="16" height="16" fill="#9C8C70" id="well"/>'  # 14 map px south of the map's well
     text, plan = _sheet(HALL, near, ARCH, viewbox="0 -60 600 540")
     assert mm.matches_map(plan, text, on) == []
-    far = '<rect x="292" y="70" width="16" height="16" fill="#9C8C70" id="well"/>'  # 17 map px
+    far = '<rect x="292" y="148" width="16" height="16" fill="#9C8C70" id="well"/>'  # 30 map px south: 22 px from the well's edge
     text2, plan2 = _sheet(HALL, far, ARCH, viewbox="0 -60 600 540")
     assert len(mm.matches_map(plan2, text2, on)) == 2  # (b) the sheet's well, (c) the map's
 
@@ -126,12 +126,12 @@ def test_the_refusals(tmp_path: object) -> None:
     path = _manifest(d)
     assert mm.matches_map(plan, text, OnMap(path, "religious", 500, 500, "hall")) == [f"no `religious` feature within 15 map px of (500, 500) in {path}"]
     assert mm.matches_map(plan, text, OnMap(path, "religious", 100, 100, "subject")) == ['no element marked id="subject" on the sheet - the declaration names it as the subject']
-    noscale = _manifest(d, meta={})
-    assert mm.matches_map(plan, text, OnMap(noscale, "religious", 100, 100, "hall")) == [f"the manifest {noscale} records no scale (meta.ftpx)"]
     text2, plan2 = _sheet(HALL, WELL, ARCH, '<rect x="10" y="10" width="20" height="20" fill="#B8C4D0" id="pond"/>', viewbox="0 -60 600 540")
     assert any('the sheet marks id="pond", a manifest key' in f for f in mm.matches_map(plan2, text2, OnMap(path, "religious", 100, 100, "hall")))
     text3 = text.replace(' viewBox="0 -60 600 540"', "")
     assert mm.matches_map(pa.parse_svg(text3), text3, OnMap(path, "religious", 100, 100, "hall")) == ["the sheet has no viewBox, so its frame cannot be laid on the map"]
+    noscale = _manifest(d, meta={})  # last: it overwrites the manifest
+    assert mm.matches_map(plan, text, OnMap(noscale, "religious", 100, 100, "hall")) == [f"the manifest {noscale} records no scale (meta.ftpx)"]
 
 
 def test_features_of_every_recorded_shape() -> None:

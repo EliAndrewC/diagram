@@ -125,6 +125,14 @@ T01: a detached worktree at HEAD, `make quick ALL=1` and `make hooks-test`, the 
   the registry test picks the two rows up; the sweep runs over every pool sheet; `make done` green
   at 100%; `m:sweep-cost` re-measured.
 
+- **D11 - the crop check yields to the map.** `viewbox_cropped` asks for 15-25 px of parchment
+  around the ink; a sheet on a map shows what the map shows there, empty ground included (spec
+  FR-006's frame), so on a sheet with a declaration the check does not run and the report says why
+  (`frame_is_the_maps`); every other sheet is cropped as before.
+- **D12 - a size is held to the map's resolution, a position to its grain.** The map records a
+  footprint to the pixel and a sheet can draw it exactly, so direction (d) allows one map px per side
+  (spec FR-004 as amended after round 2); positions, which the map finds by search, get the grain.
+
 ## Phases
 
 - **Phase 0 - baseline and the parser** (T01-T02): the worktree baseline; D1.
