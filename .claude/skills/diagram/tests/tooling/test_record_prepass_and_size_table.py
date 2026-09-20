@@ -160,7 +160,6 @@ def test_a_scoped_prepass_lists_one_section(tmp_path, capsys):
     assert "1 sections" in text and "Grounds:" in text and "tameike" not in text
 
 
-
 # --------------------------------------------------------------- feature 260: the candidate words
 
 
@@ -168,8 +167,7 @@ def test_a_rare_undefined_word_is_a_candidate_and_an_ordinary_one_is_not() -> No
     """FR-001: the model should rule on a list, not notice an open one (specs/260, the GM's option C)."""
     text = "The girder bears on an abutment sill, and the deck is wide."
     defined = {"abutment", "sill", "deck"}
-    frequency = {"the": 900, "girder": 1, "bears": 40, "on": 900, "an": 900, "and": 900, "is": 900,
-                 "wide": 120, "abutment": 9, "sill": 9, "deck": 30}
+    frequency = {"the": 900, "girder": 1, "bears": 40, "on": 900, "an": 900, "and": 900, "is": 900, "wide": 120, "abutment": 9, "sill": 9, "deck": 30}
     got = rp.rare_words(text, defined, frequency, cutoff=2)
     assert [w for w, _n in got] == ["girder"], got
     assert got[0][1] == 1, "the count travels with the word, so a reader sees why it is there"
@@ -197,11 +195,13 @@ def test_a_registry_source_key_is_not_a_candidate() -> None:
 def test_the_candidate_list_over_the_real_entry() -> None:
     """SC-001: 34 where the prepass reports 0 today, on the entry feature 259 measured three times."""
     record = SKILL / "research"
-    text = rp.text_of(rp.strip_comments(
-        (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.html").read_text(encoding="utf-8")
-        + (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.notes.html").read_text(encoding="utf-8")))
-    got = rp.rare_words(text, rp.defined_words(str(record)), rp.corpus_frequency(str(record)),
-                             keys=rp.registry_keys(str(record)))
+    text = rp.text_of(
+        rp.strip_comments(
+            (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.html").read_text(encoding="utf-8")
+            + (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.notes.html").read_text(encoding="utf-8")
+        )
+    )
+    got = rp.rare_words(text, rp.defined_words(str(record)), rp.corpus_frequency(str(record)), keys=rp.registry_keys(str(record)))
     words = [w for w, _n in got]
     assert 20 <= len(words) <= 50, f"{len(words)} candidates - tens, not hundreds (R1, R2)"
     assert "girder" in words and "obliquity" in words and "stringers" in words
