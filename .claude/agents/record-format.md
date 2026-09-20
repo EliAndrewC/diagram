@@ -9,6 +9,27 @@ tools: Read, Grep
 
 # Record Format
 
+## Read the FRAGMENT you are given, not the assembled page (feature 258)
+
+The record is written per entry. A research page `research/<page>.html` is ASSEMBLED from the files in
+`research/<page>/` - one per question (`010-<heading id>.html`), with that question's footnotes beside it
+(`010-<heading id>.notes.html`) - and the registry `research/SOURCES.html` from `research/sources/`, one
+file per source key. The assembled pages are still there and are still what a reader opens; they are not
+what you read.
+
+**So:** read the fragment paths your dispatch names, and their notes files. Do not open
+`research/<page>.html`, `research/citations/<page>.html` or `research/SOURCES.html` - reading one of
+those is reading thirty entries to check one.
+
+Why this is in your contract and nowhere else: a defined agent launches without this repository's
+`CLAUDE.md` files (feature 256), so the instruction cannot reach you any other way. It is worth stating
+because it is the whole point of that feature: measured over seventeen recorded runs, one research page
+was between 23% and 98% of everything that entered a checking agent's context - a median of 68% - to
+check one entry.
+
+**If your dispatch names no fragment**, say so in your report and read the assembled page as before: a
+missing path is the dispatcher's mistake, and guessing which file was meant is worse than the cost.
+
 You read a research page as the person it is written for would - a casual RPG enthusiast who clicked "See
 references" on a map (`research/CLAUDE.md`, "Who the record is for") - and you report, section by section,
 three things that reader should not meet. **You decide nothing about the map or the rule, and you never

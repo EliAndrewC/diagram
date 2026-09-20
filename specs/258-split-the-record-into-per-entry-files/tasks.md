@@ -86,12 +86,12 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       gate never runs - so a check in one place only has a hole exactly where this feature's commits land
       research: rendering
       verify: DONE. the gate: test_every_committed_page_is_what_its_fragments_assemble in tests/interactive/; the push: make record CHECK=1 in sync-with-main.sh beside entry-gate.sh, for the same reason - a record-only delta takes DIRECT and never reaches the gate
-- [ ] T14 The guard (FR-028, D7): `scripts/record-edit-hooks.sh` rewrites an `Edit` aimed at an assembled
+- [x] T14 The guard (FR-028, D7): `scripts/record-edit-hooks.sh` rewrites an `Edit` aimed at an assembled
       page to the one fragment holding its `old_string`, refuses where none or several do and names them,
       and always refuses a `Write`. `tests/tooling/test_record_edit_hooks.py` and a `make hooks-test` row;
       proved by deleting the guard and watching the test go red
       research: rendering
-      verify:
+      verify: DONE. scripts/record-edit-hooks.sh + _hm_record.py + test-record-edit-hooks.sh (14 cases, all green); registered in .claude/settings.json for Edit|Write; proved by deleting its refusal branch and watching 5 cases go red; make hooks-test green
 
 ## Phase 3 - the notes, and the numbers nobody types (FR-016 to FR-022; D4, D5)
 
@@ -130,25 +130,25 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 
 ## Phase 4 - collecting the saving (FR-023 to FR-026; D8)
 
-- [ ] T21 `scripts/_record_prepass.py` addresses one question - a fragment path, or `PAGE=` with
+- [x] T21 `scripts/_record_prepass.py` addresses one question - a fragment path, or `PAGE=` with
       `SECTION=` - and prints the fragment paths a check should read
       research: rendering
-      verify:
-- [ ] T22 `scripts/_quote_verbatim.py` grows `--section`; `scripts/_entry_owed.py` reports the fragment
+      verify: DONE. _record_prepass.py prints the fragment paths for the sections it reported, matching a section by its prefix, its heading id or the words as they read on the page
+- [x] T22 `scripts/_quote_verbatim.py` grows `--section`; `scripts/_entry_owed.py` reports the fragment
       path for a drifted pair, so the drift report names what to open
       research: rendering
-      verify:
-- [ ] T23 The four contracts (FR-024): `record-format`, `quote-check`, `entry-drift` and
+      verify: DONE. _quote_verbatim.py --section takes only the notes one question cites (water: 10 instead of 188); _entry_owed.py names the fragment to read under each drifted pair
+- [x] T23 The four contracts (FR-024): `record-format`, `quote-check`, `entry-drift` and
       `source-applicability` are told to read the fragment they are given and not the assembled page.
       This is the only place the rule can reach them - a defined agent launches with `omitClaudeMd: true`
       (feature 256). `test_agent_models.py` still passes: no tier moves
       research: rendering
-      verify:
-- [ ] T24 `research/CLAUDE.md` (FR-025): how to find an entry without reading a page - the glob by key,
+      verify: DONE. record-format, quote-check, entry-drift and source-applicability each carry the rule - read the fragment you are given, not the assembled page, and say so if the dispatch names none; test_agent_models.py still green, no tier moved
+- [x] T24 `research/CLAUDE.md` (FR-025): how to find an entry without reading a page - the glob by key,
       the grep over a page directory - and that an assembled page is never hand-edited. The root
       `CLAUDE.md`'s research bullet and the guards table get the one-line versions
       research: rendering
-      verify:
+      verify: DONE. research/CLAUDE.md carries the layout, the three lookup commands, how to add a question and a footnote, and the per-question check commands; the root CLAUDE.md's research bullet and the guards table row
 - [ ] T25 **FR-026, the re-run that says whether this worked**: `record-format` and `quote-check` over a
       fragment, against their recorded whole-page runs on the same entries (`seeded-format-clean`,
       `255-qc-capitals`). Report the record bytes read, the whole input, and whether the findings are the

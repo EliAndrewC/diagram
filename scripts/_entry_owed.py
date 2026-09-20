@@ -159,7 +159,8 @@ def named_pairs(
     for key in sorted(anchors):
         hit = sorted(anchors[key] & moved)
         if hit and key in was and was[key] == now.get(key):
-            out.append(f"{key} - {' '.join(hit)} - prose at {(at or {}).get(key, CLASSES)}")
+            out.append(f"{key} - {' '.join(hit)} - prose at {(at or {}).get(key, CLASSES)}"
+                   + _fragments_line(hit))
     return out
 
 
@@ -187,6 +188,26 @@ def owed(root: Path) -> tuple[str, list[str]]:
 
     anchors = {key: {q["url"].rsplit("/", 1)[-1] for q in sources.research_questions(fc.entry)} for key, fc in REGISTRY.items()}
     return desc, named_pairs(moved, anchors, now, was, at)
+
+
+def _fragments_line(hit: Sequence[str]) -> str:
+    """The fragment an `entry-drift` dispatch should READ, named in the report that dispatches it.
+
+    Feature 258: the section a modal was written from is a file of its own now, and a recorded
+    `entry-drift` run spent 82% of everything in its context on the whole page (spec research R3). The
+    anchors in `hit` are `<page>.html#<heading id>`; the fragment is that heading's own file.
+    """
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from _hm_record import fragments_for  # noqa: PLC0415
+
+    out: list[str] = []
+    for anchor in hit:
+        page, _, heading = str(anchor).partition("#")
+        if not heading:
+            continue
+        out += [f for f in fragments_for(page.removesuffix(".html"), heading, os.getcwd())
+                if not f.endswith(".notes.html")]
+    return ("\n      read: " + ", ".join(dict.fromkeys(out))) if out else ""
 
 
 def ruling(desc: str, lines: Sequence[str]) -> str:

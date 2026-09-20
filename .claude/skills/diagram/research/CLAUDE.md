@@ -1,5 +1,49 @@
 # research/ - the historical record, and who it is written for
 
+## The record is written PER ENTRY, and the pages are assembled (feature 258)
+
+The GM, 2026-09-20: *"split our questions into individual files and split our citations into individual
+files so that they get assembled into documents that are identical to what we have now ... but where
+when you have to make an edit, then you are opening a file which is relatively small."*
+
+| what you want | where it is |
+|---|---|
+| a source's registry entry | `research/sources/NNNN-<key>.html` - one file, about 1.2 KB |
+| a question | `research/<page>/NNN-<heading id>.html` |
+| that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
+| a `cities/` page | `research/cities/<page>/...`, the same shape one level down |
+| the page a reader opens | `research/<page>.html` - ASSEMBLED, never hand-edited |
+
+**Finding one, without reading a page.** There is no index to consult and none to keep in step:
+
+    ls research/sources/*/*fei-1939*            a source, by its key
+    grep -rl "dike-pond" research/water/        a question, by something it says
+    ls research/water/                          a page's questions, in order
+
+Do not `ls research/sources/` bare - it is 920 entries. Do not open `research/<page>.html` to edit it:
+the guard will re-aim an Edit at the one fragment holding its text, and refuse where none or several do.
+
+**Editing.** Open the fragment, edit it, run `make record` in `.claude/skills/diagram`. The gate and the
+push both refuse a committed page that no longer matches its fragments.
+
+**Adding a question**: a free prefix between its neighbors - they count by ten, so there are nine - and
+the file begins with its `<h2 id="...">`, which is the record's anchor.
+
+**Adding a footnote**: no number, anywhere. In the prose,
+`<sup class="fn" data-note="<key>"></sup>`; in the `.notes.html` beside it,
+`<li data-note="<key>">...</li>`. `make record` allocates every number in document order and writes the
+reference, the note, the back link and the hover script. A key is unique within its page; where a page
+cites one work several times they are `fei-1939`, `fei-1939-2`, and so on.
+
+**Checking one entry**, which is what the split is for:
+
+    make record-prepass PAGE=water SECTION=<the question>     names the fragments to read
+    make quote-verbatim PAGE=water SECTION=<the question>     only the notes that question cites
+
+Then dispatch `record-format` or `quote-check` with those paths. Their contracts tell them to read the
+fragment and not the page - it has to be there, because a defined agent launches without this file
+(feature 256).
+
 This file auto-loads when a research entry is being written or changed - which is exactly when the
 rule below applies. The entry FORMAT, the evidence classes, the citing rules and the table of which
 research file grounds which rule file are in [`README.md`](README.md); this file carries the one thing

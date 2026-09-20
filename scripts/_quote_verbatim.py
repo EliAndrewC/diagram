@@ -394,6 +394,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("page", help="a research page name: hamlets, cities/tango")
     ap.add_argument("--notes", default="", help="only these notes, e.g. 90-108,113 - nothing else is fetched")
+    ap.add_argument("--section", default="", help="only the notes ONE question cites, named by its fragment "
+                                                  "(a prefix, a heading id, or part of either) - feature 258")
     ap.add_argument("--root", default=".")
     ap.add_argument("--json", default="")
     ap.add_argument("--offline", default="", help="a directory of saved pages named by Pages.name_for(url)")
@@ -406,6 +408,27 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     pages = Pages(pathlib.Path(args.offline) if args.offline else None)
     only = wanted(args.notes)
+    fragments: list[str] = []
+    if args.section:
+        # THE NOTES ONE QUESTION CITES (feature 258, spec FR-023). Taken from the assembled page's own
+        # section rather than from the notes fragment, because what a quote-check needs is the notes
+        # behind THESE assertions, and the page is where an assertion and its reference stand together.
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+        from _hm_record import fragments_for  # noqa: PLC0415
+
+        fragments = fragments_for(name, args.section, str(pathlib.Path(args.root).resolve()))
+        body = page_file.read_text(encoding="utf-8")
+        chosen = [f for f in fragments if not f.endswith(".notes.html")]
+        wanted_ids: set[str] = set()   # `fn-26`, the form `footnotes()` and `wanted()` both use
+        for fragment in chosen:
+            heading = pathlib.Path(fragment).name.split("-", 1)[1][: -len(".html")]
+            marker = f'<h2 id="{heading}"'
+            if marker not in body:
+                continue
+            start = body.index(marker)
+            end = body.find("<h2 ", start + 4)
+            wanted_ids |= {f"fn-{n}" for n in re.findall(r"#fn-(\d+)", body[start: end if end > 0 else len(body)])}
+        only = wanted_ids if only is None else (only & wanted_ids)
     notes = [n for n in footnotes(cite_file.read_text(encoding="utf-8")) if only is None or n["id"] in only]
     entries = report(notes, assertions(page_file.read_text(encoding="utf-8")), pages)
     print(render(name, entries, pages.refused))

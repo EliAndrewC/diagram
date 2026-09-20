@@ -245,8 +245,12 @@ push_cmd() {
   # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where
   # the gate never runs, so a check only at the gate has a hole exactly where this feature's own commits
   # land. It costs 0.11 s over the whole record (specs/258 R7).
-  ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory record CHECK=1 >/dev/null ) \
-    || die "a committed record page differs from what its fragments would assemble (run \`make record\` in .claude/skills/diagram, then commit) - feature 258, spec FR-004"
+  # ...where there IS a record to check. A test fixture is a bare git tree with no skill in it, and a
+  # check that fails on the absence of the thing it checks is a check that fails everywhere else.
+  if [ -d "$ROOT/.claude/skills/diagram/research/sources" ]; then
+    ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory record CHECK=1 >/dev/null ) \
+      || die "a committed record page differs from what its fragments would assemble (run \`make record\` in .claude/skills/diagram, then commit) - feature 258, spec FR-004"
+  fi
   # GUARD_EDIT_OK: feature 236 - spec-lint runs HERE as well as at the gate, for the reason its four
   # siblings above do: the delta it judges is a `specs/` edit that touches no Python, which takes the
   # DIRECT route and runs no gate at all. It reads only the spec directories the delta touches, and a

@@ -136,6 +136,24 @@ def render(page: str, listing: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def _slug(heading: str) -> str:
+    """A heading's own id, as the record writes it - which is what a fragment is named for."""
+    return re.sub(r"-{2,}", "-", re.sub(r"[^a-z0-9]+", "-", re.sub(r"<[^>]+>", "", heading).lower())).strip("-")
+
+
+def _fragments(page: str, section: str, root: str) -> list[str]:
+    """The per-entry files a check should read (feature 258, spec FR-023).
+
+    A recorded `record-format` run spent 88% of everything that entered its context on one research
+    page, to check one entry (spec research R3). The prepass is what the dispatch is built from, so it
+    is where the fragment paths belong.
+    """
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    from _hm_record import fragments_for  # noqa: PLC0415 - one call, and only when the page is split
+
+    return fragments_for(page, section, str(pathlib.Path(root).resolve()))
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("page", help="a research page name: hamlets, cities/tango, citations/hamlets, SOURCES")
@@ -151,9 +169,20 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     gloss_path = root / GLOSSARY
     glossary = json.loads(gloss_path.read_text(encoding="utf-8")) if gloss_path.is_file() else {}
-    listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary) if args.section.casefold() in s["section"].casefold()]
+    fragments = _fragments(args.page, args.section, args.root)
+    # ONE flag, two matchers (feature 258): `--section` names a question the way it reads ("the bund
+    # runs along...") or the way its file spells it ("040"). The heading filter alone answers the first
+    # and finds nothing for the second, which is the form the fragment paths are in.
+    wanted_ids = {pathlib.Path(f).name.split("-", 1)[1][: -len(".html")] for f in fragments
+                  if not f.endswith(".notes.html")}
+    listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary)
+               if args.section.casefold() in s["section"].casefold() or _slug(s["section"]) in wanted_ids]
 
     print(render(name, listing))
+    if fragments:
+        print("\n## What to hand the check (feature 258)\n")
+        print("The fragments these sections are written in - read THESE, not the assembled page:\n")
+        print("\n".join(f"  {f}" for f in fragments))
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps({"page": name, "sections": listing}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     return 0

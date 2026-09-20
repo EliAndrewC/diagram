@@ -205,3 +205,22 @@ somebody reads.
 - **`make done` reports ALL failures together.** Fix everything it lists, then re-run once. On a coverage failure it also prints the lines you changed that no test reaches.
 - **Background the final gate - and NEVER poll it.** Act on the completion notification. ENFORCED by `scripts/no-poll-hooks.sh`, which blocks `pgrep -f`, sleep-loops, and the `command sleep` bypass. (A wait on genuinely EXTERNAL state passes by putting `POLL_OK` in the command with a note saying what it waits for.)
 - **Read derived data from the recorded artifact, not by re-running the generator.** Regenerate when you need to change what a generator DRAWS; read its manifest/output when you need to know what it drew.
+
+## `make record` - the record's pages are derived (feature 258)
+
+`make record` assembles every page of the research record from the per-entry fragments under
+`research/<page>/` and `research/sources/`; `CHECK=1` reports any committed page that differs, in
+**0.11 s** over the whole record (20 pages, 1,251 fragments). It runs in two places, and the second is
+not redundant: the gate (`tests/interactive/test_record_assembly.py`) and the push
+(`scripts/sync-with-main.sh`), because a record-only change takes the DIRECT route and never reaches the
+gate at all - the same reason `entry-gate.sh` is in both.
+
+What it saves is not the session's own editing (0.56% of all tool output, and 90% of those reads were
+already windowed) but the CHECKING AGENTS: `record-format`, `quote-check`, `entry-drift` and
+`source-applicability` were spending 23-98% of their whole context on one page to check one entry
+(median 68% over 17 recorded runs). `make record-prepass PAGE=<p> SECTION=<q>` and `make quote-verbatim
+PAGE=<p> SECTION=<q>` name the fragments a check should read; the agents' own contracts tell them to
+read those and not the page.
+
+`scripts/record-edit-hooks.sh` keeps the fragments the source: an Edit aimed at an assembled page is
+re-aimed at the one fragment holding its text, and refused where none or several hold it.
