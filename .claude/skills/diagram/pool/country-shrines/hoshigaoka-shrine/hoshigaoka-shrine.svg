@@ -1,8 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 60 600 620" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 116 600 696" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the approach enters from the village, south.     -->
   <!-- 3 px = 1 ft. The country shrine's program: buildings/programs.md -->
+  <!-- THE SHEET MATCHES THE VILLAGE MAP (feature 257): the hall's     -->
+  <!-- center is map (392, 1074) of hoshigaoka.json; 6 sheet px = 1   -->
+  <!-- map px. What the map shows here is the hall, one arch 20 ft in  -->
+  <!-- front, the shrine's well 108 ft behind, and swept ground - no   -->
+  <!-- grove, no burial ground, no lane. Nothing else is drawn.        -->
   <!-- ============================================================ -->
   <defs>
     <!-- Swept gravel of the shrine precinct (keidai): pale, with faint rake lines -->
@@ -11,6 +16,12 @@
       <line x1="0" y1="4" x2="16" y2="4" stroke="#D2C4A4" stroke-width="0.5"/>
       <line x1="0" y1="12" x2="16" y2="12" stroke="#D2C4A4" stroke-width="0.5"/>
       <circle cx="9" cy="8" r="0.5" fill="#C9B884"/>
+    </pattern>
+    <!-- The swept clearing around the precinct: bare earth kept clear of scrub (the map's clearing) -->
+    <pattern id="swept-earth" patternUnits="userSpaceOnUse" width="18" height="18">
+      <rect width="18" height="18" fill="#E9DDBF"/>
+      <circle cx="5" cy="7" r="0.5" fill="#C9B884"/>
+      <circle cx="13" cy="14" r="0.5" fill="#C9B884"/>
     </pattern>
     <!-- Kitchen garden stipple -->
     <pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14">
@@ -23,157 +34,114 @@
       <rect width="12" height="12" fill="#CDB07A"/>
       <circle cx="3" cy="5" r="0.5" fill="#A88E58"/><circle cx="9" cy="10" r="0.5" fill="#A88E58"/>
     </pattern>
-    <!-- Bare ground of the burial yard -->
-    <pattern id="bare-earth" patternUnits="userSpaceOnUse" width="16" height="16">
-      <rect width="16" height="16" fill="#D9C9A6"/>
-      <circle cx="5" cy="7" r="0.6" fill="#B9A67E"/>
-      <circle cx="12" cy="3" r="0.6" fill="#B9A67E"/>
-    </pattern>
   </defs>
 
-  <!-- Outer land -->
-  <rect x="0" y="0" width="900" height="800" fill="#EFE3C2"/>
-
-  <!-- The village lane arriving at the arch from the south (runs off the sheet) -->
-  <g>
-    <path d="M 365 680 L 365 600" stroke="#B89060" stroke-width="30" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 365 680 L 365 600" stroke="#9C7448" stroke-width="30" stroke-dasharray="12 10" fill="none" opacity="0.4"/>
-  </g>
+  <!-- Outer land: the parchment, then the swept clearing the map records around the shrine, to the frame's edge -->
+  <rect x="0" y="0" width="900" height="900" fill="#EFE3C2"/>
+  <rect x="140" y="116" width="600" height="696" fill="url(#swept-earth)"/>
 
   <!-- Title block -->
-  <text x="440" y="92" text-anchor="middle" font-size="26" font-weight="bold" fill="#3A2E1C">Hoshigaoka Country Shrine</text>
-  <text x="440" y="112" text-anchor="middle" font-size="12" font-style="italic" fill="#6B4F2A">the shrine of Hoshigaoka village district</text>
+  <text x="152" y="150" text-anchor="start" font-size="26" font-weight="bold" fill="#3A2E1C">Hoshigaoka Country Shrine</text>
+  <text x="152" y="170" text-anchor="start" font-size="12" font-style="italic" fill="#6B4F2A">the shrine of Hoshigaoka village district</text>
 
   <!-- Scale bar (3 px = 1 ft), bottom-left, clear of the title -->
   <g>
     <g stroke="#3A2E1C">
-      <line x1="166" y1="642" x2="256" y2="642" stroke-width="2"/>
-      <line x1="166" y1="637" x2="166" y2="647" stroke-width="2"/>
-      <line x1="256" y1="637" x2="256" y2="647" stroke-width="2"/>
-      <line x1="211" y1="639" x2="211" y2="645" stroke-width="1"/>
+      <line x1="166" y1="770" x2="256" y2="770" stroke-width="2"/>
+      <line x1="166" y1="765" x2="166" y2="775" stroke-width="2"/>
+      <line x1="256" y1="765" x2="256" y2="775" stroke-width="2"/>
+      <line x1="211" y1="767" x2="211" y2="773" stroke-width="1"/>
     </g>
-    <text x="211" y="658" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>
-    <text x="211" y="669" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
+    <text x="211" y="786" text-anchor="middle" font-size="10" fill="#3A2E1C">30 ft</text>
+    <text x="211" y="797" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">(3 px = 1 ft)</text>
   </g>
 
-  <!-- The sacred wood around the precinct (chinju no mori): canopy outside the fence, west and north -->
-  <g fill="#7A8C5C" stroke="#5C6E44" stroke-width="0.8" opacity="0.85">
-    <circle cx="178" cy="216" r="16"/><circle cx="172" cy="222" r="16"/><circle cx="184" cy="262" r="19"/><circle cx="170" cy="304" r="15"/>
-    <circle cx="182" cy="344" r="18"/><circle cx="172" cy="386" r="16"/><circle cx="186" cy="428" r="19"/><circle cx="172" cy="470" r="15"/>
-    <circle cx="184" cy="512" r="18"/><circle cx="174" cy="554" r="16"/><circle cx="186" cy="594" r="17"/>
-    <circle cx="222" cy="182" r="16"/><circle cx="262" cy="176" r="14"/><circle cx="302" cy="182" r="16"/><circle cx="344" cy="176" r="14"/>
-    <circle cx="386" cy="182" r="16"/><circle cx="428" cy="176" r="14"/><circle cx="470" cy="182" r="16"/><circle cx="512" cy="178" r="14"/>
-    <circle cx="552" cy="186" r="15"/><circle cx="556" cy="226" r="14"/>
-    <circle cx="560" cy="500" r="15"/><circle cx="556" cy="540" r="17"/><circle cx="558" cy="582" r="15"/>
-  </g>
-  <text x="176" y="616" text-anchor="middle" font-size="9" font-style="italic" fill="#4A5C34">grove</text>
-
-  <!-- The burial yard beside the precinct, outside the fence to the east: rows of grave markers on bare ground, sized to a district's dead (the record's 0.12-0.38 acre band; drawn 44 x 135 ft = 0.14 acre) -->
-  <rect x="580" y="196" width="132" height="404" fill="url(#bare-earth)" stroke="#B9A67E" stroke-width="0.8" stroke-dasharray="3 3"/>
-  <g fill="#8A8478" stroke="#5C5850" stroke-width="0.5">
-    <rect x="606" y="210" width="6" height="3"/><rect x="620" y="210" width="6" height="3"/><rect x="634" y="210" width="6" height="3"/><rect x="648" y="210" width="6" height="3"/><rect x="662" y="210" width="6" height="3"/><rect x="676" y="210" width="6" height="3"/><rect x="690" y="210" width="6" height="3"/>
-    <rect x="592" y="230" width="6" height="3"/><rect x="606" y="230" width="6" height="3"/><rect x="620" y="230" width="6" height="3"/><rect x="634" y="230" width="6" height="3"/><rect x="648" y="230" width="6" height="3"/><rect x="676" y="230" width="6" height="3"/><rect x="690" y="230" width="6" height="3"/>
-    <rect x="592" y="250" width="6" height="3"/><rect x="606" y="250" width="6" height="3"/><rect x="620" y="250" width="6" height="3"/><rect x="634" y="250" width="6" height="3"/><rect x="648" y="250" width="6" height="3"/><rect x="662" y="250" width="6" height="3"/><rect x="676" y="250" width="6" height="3"/><rect x="690" y="250" width="6" height="3"/>
-    <rect x="592" y="270" width="6" height="3"/><rect x="606" y="270" width="6" height="3"/><rect x="620" y="270" width="6" height="3"/><rect x="634" y="270" width="6" height="3"/><rect x="662" y="270" width="6" height="3"/><rect x="676" y="270" width="6" height="3"/><rect x="690" y="270" width="6" height="3"/>
-    <rect x="592" y="290" width="6" height="3"/><rect x="606" y="290" width="6" height="3"/><rect x="620" y="290" width="6" height="3"/><rect x="634" y="290" width="6" height="3"/><rect x="648" y="290" width="6" height="3"/><rect x="662" y="290" width="6" height="3"/><rect x="676" y="290" width="6" height="3"/><rect x="690" y="290" width="6" height="3"/>
-    <rect x="592" y="310" width="6" height="3"/><rect x="606" y="310" width="6" height="3"/><rect x="620" y="310" width="6" height="3"/><rect x="648" y="310" width="6" height="3"/><rect x="662" y="310" width="6" height="3"/><rect x="676" y="310" width="6" height="3"/><rect x="690" y="310" width="6" height="3"/>
-    <rect x="592" y="330" width="6" height="3"/><rect x="606" y="330" width="6" height="3"/><rect x="620" y="330" width="6" height="3"/><rect x="634" y="330" width="6" height="3"/><rect x="648" y="330" width="6" height="3"/><rect x="662" y="330" width="6" height="3"/><rect x="676" y="330" width="6" height="3"/><rect x="690" y="330" width="6" height="3"/>
-    <rect x="592" y="350" width="6" height="3"/><rect x="606" y="350" width="6" height="3"/><rect x="634" y="350" width="6" height="3"/><rect x="648" y="350" width="6" height="3"/><rect x="662" y="350" width="6" height="3"/><rect x="676" y="350" width="6" height="3"/><rect x="690" y="350" width="6" height="3"/>
-    <rect x="592" y="370" width="6" height="3"/><rect x="606" y="370" width="6" height="3"/><rect x="620" y="370" width="6" height="3"/><rect x="634" y="370" width="6" height="3"/><rect x="648" y="370" width="6" height="3"/><rect x="662" y="370" width="6" height="3"/><rect x="676" y="370" width="6" height="3"/>
-    <rect x="592" y="390" width="6" height="3"/><rect x="620" y="390" width="6" height="3"/><rect x="634" y="390" width="6" height="3"/><rect x="648" y="390" width="6" height="3"/><rect x="662" y="390" width="6" height="3"/><rect x="676" y="390" width="6" height="3"/><rect x="690" y="390" width="6" height="3"/>
-    <rect x="592" y="410" width="6" height="3"/><rect x="606" y="410" width="6" height="3"/><rect x="620" y="410" width="6" height="3"/><rect x="634" y="410" width="6" height="3"/><rect x="648" y="410" width="6" height="3"/><rect x="662" y="410" width="6" height="3"/><rect x="690" y="410" width="6" height="3"/>
-    <rect x="606" y="430" width="6" height="3"/><rect x="620" y="430" width="6" height="3"/><rect x="634" y="430" width="6" height="3"/><rect x="648" y="430" width="6" height="3"/><rect x="662" y="430" width="6" height="3"/><rect x="676" y="430" width="6" height="3"/><rect x="690" y="430" width="6" height="3"/>
-    <rect x="592" y="450" width="6" height="3"/><rect x="606" y="450" width="6" height="3"/><rect x="620" y="450" width="6" height="3"/><rect x="634" y="450" width="6" height="3"/><rect x="648" y="450" width="6" height="3"/><rect x="676" y="450" width="6" height="3"/><rect x="690" y="450" width="6" height="3"/>
-    <rect x="592" y="470" width="6" height="3"/><rect x="606" y="470" width="6" height="3"/><rect x="620" y="470" width="6" height="3"/><rect x="634" y="470" width="6" height="3"/><rect x="648" y="470" width="6" height="3"/><rect x="662" y="470" width="6" height="3"/><rect x="676" y="470" width="6" height="3"/><rect x="690" y="470" width="6" height="3"/>
-    <rect x="592" y="490" width="6" height="3"/><rect x="606" y="490" width="6" height="3"/><rect x="620" y="490" width="6" height="3"/><rect x="634" y="490" width="6" height="3"/><rect x="662" y="490" width="6" height="3"/><rect x="676" y="490" width="6" height="3"/><rect x="690" y="490" width="6" height="3"/>
-    <rect x="592" y="510" width="6" height="3"/><rect x="606" y="510" width="6" height="3"/><rect x="620" y="510" width="6" height="3"/><rect x="634" y="510" width="6" height="3"/><rect x="648" y="510" width="6" height="3"/><rect x="662" y="510" width="6" height="3"/><rect x="676" y="510" width="6" height="3"/><rect x="690" y="510" width="6" height="3"/>
-    <rect x="592" y="530" width="6" height="3"/><rect x="606" y="530" width="6" height="3"/><rect x="620" y="530" width="6" height="3"/><rect x="648" y="530" width="6" height="3"/><rect x="662" y="530" width="6" height="3"/><rect x="676" y="530" width="6" height="3"/><rect x="690" y="530" width="6" height="3"/>
-    <rect x="592" y="550" width="6" height="3"/><rect x="606" y="550" width="6" height="3"/><rect x="620" y="550" width="6" height="3"/><rect x="634" y="550" width="6" height="3"/><rect x="648" y="550" width="6" height="3"/><rect x="662" y="550" width="6" height="3"/><rect x="676" y="550" width="6" height="3"/><rect x="690" y="550" width="6" height="3"/>
-    <rect x="592" y="570" width="6" height="3"/><rect x="606" y="570" width="6" height="3"/><rect x="634" y="570" width="6" height="3"/><rect x="648" y="570" width="6" height="3"/><rect x="662" y="570" width="6" height="3"/><rect x="676" y="570" width="6" height="3"/><rect x="690" y="570" width="6" height="3"/>
-  </g>
-  <text x="646" y="620" text-anchor="middle" font-size="9" font-style="italic" fill="#4A4640">burial ground</text>
-
-  <!-- THE PRECINCT: swept gravel inside the fence (110 x 150 ft) -->
-  <rect x="200" y="196" width="330" height="404" fill="url(#keidai-gravel)" id="precinct"/>
-  <!-- The fence (tamagaki): a low paling all round, broken at the south for the arch -->
+  <!-- THE PRECINCT: swept gravel inside the fence (140 x 99 ft), closing 15 ft behind the sanctuary as a shrine's does; the well the map
+       puts 108 ft behind the hall stands OUTSIDE it on the axis, reached from the village side (the size-audit of 2026-09-20) -->
+  <rect x="230" y="335" width="420" height="297" fill="url(#keidai-gravel)" id="precinct"/>
+  <!-- The fence (tamagaki): a low paling all round, broken at the south for the arch, at the west for the household's service way
+       (the doma's yard, the privy, the kitchen garden) and its water way to the well outside, and at the east for the dwelling's door -->
   <g id="fence" stroke="#7A6A4A" stroke-width="2" fill="none" stroke-linecap="square">
-    <line x1="200" y1="196" x2="530" y2="196"/>
-    <line x1="200" y1="196" x2="200" y2="386"/>
-    <line x1="200" y1="404" x2="200" y2="600"/>
-    <line x1="530" y1="196" x2="530" y2="600"/>
-    <line x1="200" y1="600" x2="340" y2="600"/>
-    <line x1="388" y1="600" x2="530" y2="600"/>
+    <line x1="230" y1="335" x2="650" y2="335"/>
+    <line x1="230" y1="335" x2="230" y2="350"/>
+    <line x1="230" y1="368" x2="230" y2="548"/>
+    <line x1="230" y1="566" x2="230" y2="632"/>
+    <line x1="650" y1="335" x2="650" y2="548"/>
+    <line x1="650" y1="566" x2="650" y2="632"/>
+    <line x1="230" y1="632" x2="416" y2="632"/>
+    <line x1="464" y1="632" x2="650" y2="632"/>
   </g>
 
-  <!-- the wood pressing in around the sanctuary, inside the north corners of the fence (drawn over the gravel) -->
-  <g fill="#7A8C5C" stroke="#5C6E44" stroke-width="0.8" opacity="0.85">
-    <circle cx="232" cy="222" r="16"/><circle cx="268" cy="212" r="13"/><circle cx="304" cy="224" r="12"/><circle cx="426" cy="224" r="12"/><circle cx="462" cy="212" r="13"/><circle cx="498" cy="222" r="16"/>
-  </g>
-  <!-- The approach (sando): a 10 ft gravel way from the arch to the hall's front step -->
-  <rect x="350" y="404" width="30" height="196" fill="#D9CFB4" stroke="#C4B48E" stroke-width="0.8" id="approach"/>
+  <!-- The approach (sando): a 10 ft gravel way from the arch to the hall's front step - 20 ft, as the map has it -->
+  <rect x="425" y="572" width="30" height="60" fill="#D9CFB4" stroke="#C4B48E" stroke-width="0.8" id="approach"/>
 
-  <!-- The arch (torii) over the approach where the way crosses the fence: two posts and a lintel, 12 ft span -->
-  <rect x="341" y="588" width="46" height="24" fill="none" id="arch"/>
+  <!-- The arch (torii) over the approach where the way crosses the fence, 20 ft in front of the hall's face (the map's one torii): two posts and a lintel, 15 ft outer span -->
+  <rect x="417" y="620" width="46" height="24" fill="none" id="arch"/>
   <g fill="#A03020" stroke="#6B2A18" stroke-width="0.8">
-    <rect x="344" y="592" width="4" height="20"/>
-    <rect x="380" y="592" width="4" height="20"/>
-    <rect x="341" y="588" width="46" height="3"/>
-    <rect x="345" y="595" width="38" height="2"/>
+    <rect x="420" y="624" width="4" height="20"/>
+    <rect x="456" y="624" width="4" height="20"/>
+    <rect x="417" y="620" width="46" height="3"/>
+    <rect x="421" y="627" width="38" height="2"/>
   </g>
 
-  <!-- The purification well beside the approach, east of it, never on it -->
-  <rect x="398" y="474" width="15" height="15" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" id="well"/>
-  <circle cx="405.5" cy="481.5" r="4" fill="#3A3A34"/>
+  <!-- The shrine's well - its one water point - 108 ft behind the hall on the axis, where the village map sites it, outside the fence -->
+  <rect x="433" y="169" width="15" height="15" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" id="well"/>
+  <circle cx="440.5" cy="176.5" r="4" fill="#3A3A34"/>
+  <text x="464" y="180" text-anchor="start" font-size="7" font-style="italic" fill="#4A4640">well</text>
 
-  <!-- THE HALL AND DWELLING under one roof (76 x 36 ft), hall and dwelling END TO END along the ridge as at Kaie-ji:
-       the kitchen's earthen floor at the west end, the villagers' hall in the center facing the approach, the monk's rooms
-       and the writing room at the east end; the hall's rear faces the sanctuary with nothing between them -->
-  <rect x="251" y="292" width="228" height="108" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2" id="hall"/>
+  <!-- THE HALL AND DWELLING under one roof, at the footprint the village map draws (60 x 48 ft), hall and dwelling END TO END
+       along the ridge as at Kaie-ji: the kitchen's earthen floor at the west end, the villagers' hall in the center facing the
+       approach, the monk's rooms and the writing room at the east end; the hall's rear faces the sanctuary with nothing between -->
+  <rect x="350" y="428" width="180" height="144" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2" id="hall"/>
   <!-- the doma: the kitchen's earthen floor, drawn as earth -->
-  <rect x="252" y="293" width="52" height="106" fill="url(#doma-earth)"/>
+  <rect x="351" y="429" width="47" height="142" fill="url(#doma-earth)"/>
   <g stroke="#6B4F2A" stroke-width="1" stroke-dasharray="4 3" fill="none">
-    <line x1="305" y1="292" x2="305" y2="400"/>
-    <line x1="425" y1="292" x2="425" y2="400"/>
-    <line x1="425" y1="364" x2="479" y2="364"/>
-    <line x1="443" y1="364" x2="443" y2="400"/>
+    <line x1="398" y1="428" x2="398" y2="572"/>
+    <line x1="482" y1="428" x2="482" y2="572"/>
+    <line x1="482" y1="536" x2="530" y2="536"/>
+    <line x1="518" y1="536" x2="518" y2="572"/>
+    <line x1="398" y1="470" x2="482" y2="470"/>
   </g>
+  <!-- the altar bay: the hall's rear 14 ft against the sanctuary wall, the worship floor 28 x 34 ft before it (a village hall's measured depth) -->
   <!-- the villagers' hall: its raised step on the approach, the altar band at its rear toward the sanctuary -->
-  <rect x="305" y="400" width="120" height="6" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
-  <rect x="341" y="296" width="48" height="5" fill="#6B2A18"/>
-  <rect x="359" y="304" width="12" height="6" fill="#A03020" stroke="#6B2A18" stroke-width="0.6"/>
-  <text x="365" y="356" text-anchor="middle" font-size="12" font-weight="bold" fill="#3A2E1C">hall and dwelling</text>
+  <rect x="398" y="572" width="84" height="6" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
+  <rect x="416" y="432" width="48" height="5" fill="#6B2A18"/>
+  <rect x="434" y="440" width="12" height="6" fill="#A03020" stroke="#6B2A18" stroke-width="0.6"/>
+  <text x="440" y="504" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">hall and dwelling</text>
   <!-- the dwelling end -->
-  <text x="452" y="322" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">the monk's</text>
-  <text x="452" y="333" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">rooms</text>
-  <text x="461" y="380" text-anchor="middle" font-size="6.5" font-style="italic" fill="#5C4830">writing</text>
-  <text x="461" y="388" text-anchor="middle" font-size="6.5" font-style="italic" fill="#5C4830">room</text>
-  <text x="461" y="396" text-anchor="middle" font-size="6" font-style="italic" fill="#5C4830">(registers)</text>
-  <!-- the dwelling's own door, on the east wall by its entry floor -->
-  <rect x="475" y="376" width="4" height="12" fill="#4A3318"/>
-  <!-- the kitchen end: the hearth, and the kitchen door on the north wall -->
-  <text x="278" y="350" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">kitchen</text>
-  <rect x="274" y="320" width="8" height="8" fill="#3A2010"/>
-  <circle cx="278" cy="324" r="1.6" fill="#E08A30"/>
-  <rect x="268" y="292" width="12" height="4" fill="#4A3318"/>
+  <text x="506" y="470" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">the monk's</text>
+  <text x="506" y="480" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">rooms</text>
+  <text x="500" y="552" text-anchor="middle" font-size="6" font-style="italic" fill="#5C4830">writing</text>
+  <text x="500" y="560" text-anchor="middle" font-size="6" font-style="italic" fill="#5C4830">room</text>
+  <!-- the dwelling's entry: a 4 ft earthen-floored vestibule inside the east door, beside the writing room -->
+  <rect x="519" y="537" width="11" height="34" fill="url(#doma-earth)"/>
+  <rect x="526" y="548" width="4" height="12" fill="#4A3318"/>
+  <!-- the kitchen end: the hearth, and the doma's yard door on the WEST gable, facing the kitchen garden and the service way
+       (never onto the sanctuary's ground behind the hall) -->
+  <text x="374" y="532" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">kitchen</text>
+  <rect x="370" y="460" width="8" height="8" fill="#3A2010"/>
+  <circle cx="374" cy="464" r="1.6" fill="#E08A30"/>
+  <rect x="350" y="500" width="4" height="12" fill="#4A3318"/>
 
   <!-- THE SANCTUARY (honden): one bay, 6 ft square, on the axis behind the hall, on its plinth -->
-  <rect x="352" y="246" width="26" height="4" fill="#B8AE98" stroke="#7A7060" stroke-width="0.6"/>
-  <rect x="356" y="226" width="18" height="18" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4" id="sanctuary"/>
-  <text x="365" y="218" text-anchor="middle" font-size="8" font-style="italic" fill="#6B2A18">sanctuary of Bishamon</text>
+  <rect x="427" y="398" width="26" height="4" fill="#B8AE98" stroke="#7A7060" stroke-width="0.6"/>
+  <rect x="431" y="380" width="18" height="18" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4" id="sanctuary"/>
+  <text x="440" y="372" text-anchor="middle" font-size="8" font-style="italic" fill="#6B2A18">sanctuary of Bishamon</text>
 
-  <!-- The privy at the dwelling's back corner, and the kitchen garden at the west end -->
-  <rect x="252" y="277" width="15" height="15" fill="#7E726A" stroke="#4A3318" stroke-width="0.8"/>
-  <text x="259" y="273" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">privy</text>
-  <rect x="207" y="300" width="38" height="66" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="3 2" id="kitchen_garden"/>
-  <text x="226" y="330" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">kitchen</text>
-  <text x="226" y="340" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">garden</text>
+  <!-- The privy at the west gable's FRONT corner - reached under cover from the doma, clear of the kitchen door, off the sanctuary's
+       ground, near the service way for the night-soil collector - and the kitchen garden beside the west end -->
+  <rect x="335" y="557" width="15" height="15" fill="#7E726A" stroke="#4A3318" stroke-width="0.8"/>
+  <text x="342" y="553" text-anchor="middle" font-size="7" font-style="italic" fill="#4A4640">privy</text>
+  <rect x="296" y="450" width="42" height="90" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="3 2" id="kitchen_garden"/>
+  <text x="317" y="490" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">kitchen</text>
+  <text x="317" y="500" text-anchor="middle" font-size="7" font-style="italic" fill="#3A4A28">garden</text>
 
   <!-- Fire-water tubs at the hall's front corners and the kitchen end (gutter-fed, against the wall) -->
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1">
-    <circle cx="290" cy="286" r="3.8"/>
-    <circle cx="302" cy="286" r="3.8"/>
-    <circle cx="258" cy="407" r="3.8"/>
-    <circle cx="472" cy="407" r="3.8"/>
+    <circle cx="362" cy="422" r="3.8"/>
+    <circle cx="386" cy="422" r="3.8"/>
+    <circle cx="356" cy="579" r="3.8"/>
+    <circle cx="524" cy="579" r="3.8"/>
   </g>
-  <text x="524" y="415" text-anchor="end" font-size="7" font-style="italic" fill="#3A5060">fire-water tubs</text>
+  <text x="586" y="586" text-anchor="end" font-size="7" font-style="italic" fill="#3A5060">fire-water tubs</text>
 </svg>

@@ -29,7 +29,7 @@ def _ctx(path: str) -> R.Context:
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
     tier = FIXTURE_TIER.get(os.path.basename(path).split("-")[0])
-    return R.Context(pa.parse_svg(text), text, bt.by_tier(tier) if tier else None, pa.read_form(path))
+    return R.Context(pa.parse_svg(text), text, bt.by_tier(tier) if tier else None, pa.read_form(path), pa.read_on_map(path))
 
 
 @pytest.mark.parametrize("check", R.CHECKS, ids=[c.name for c in R.CHECKS])
@@ -57,7 +57,7 @@ def test_every_check_passes_the_pool_sheets_of_its_tiers(check: R.Check) -> None
             continue
         seen += 1
         ctx = _ctx(path)
-        assert not check.run(R.Context(ctx.plan, ctx.text, bt.by_tier(tier), pa.read_form(path))), f"{check.name} fires on the shipped sheet {os.path.basename(path)}"
+        assert not check.run(R.Context(ctx.plan, ctx.text, bt.by_tier(tier), pa.read_form(path), pa.read_on_map(path))), f"{check.name} fires on the shipped sheet {os.path.basename(path)}"
     assert seen, f"{check.name}: no pool sheet of its tiers on disk"
 
 

@@ -33,6 +33,18 @@ _LINE_RE = re.compile(r'<line x1="([\-\d.]+)" y1="([\-\d.]+)" x2="([\-\d.]+)" y2
 FIRE_WATER_FILL = "#8FB0C6"  # tensuioke (rain-water fire tubs). They are GUTTER-FED by roof runoff,
 # so each must sit at a building's wall/eaves; a tub standing out in the open court is fed by nothing.
 _TUB_GROUP_RE = re.compile(rf'<g fill="{re.escape(FIRE_WATER_FILL)}"[^>]*>(.*?)</g>', re.DOTALL)
+# A TREE IS KNOWN BY ITS DRAWING (feature 257, spec FR-001): a canopy is a circle in the vocabulary's canopy
+# green - the fill every pool sheet's trees already carry (the shrine's grove, Ubame's garden trees) - on
+# the circle or on its group; or any circle in a group marked `id="trees"`. So the sheets drawn before the
+# check carry trees it reads, and a canopy drawn outside any group is still a tree. A tree is not a glyph.
+TREE_FILL = "#7A8C5C"
+_TREE_GROUP_RE = re.compile(rf'<g\b(?:[^>]*\bid="trees"|[^>]*\bfill="{re.escape(TREE_FILL)}")[^>]*>(.*?)</g>', re.DOTALL)
+_CIRCLE_TAG_RE = re.compile(r"<circle\b([^>]*)>")
+# The fence's lines (`<g id="fence">`, feature 254) as thin rects, as the wall groups' lines are `wall_segs`:
+# a canopy across the fence line is an overlap (feature 257).
+_FENCE_GROUP_RE = re.compile(r'<g\b[^>]*\bid="fence"[^>]*>(.*?)</g>', re.DOTALL)
+_DEFS_RE = re.compile(r"<defs\b.*?</defs>", re.DOTALL)
+MIN_TREE_R_PX: float = 4.0  # the glyph floor: a canopy-green dot smaller than this is a pattern's stipple, not a tree
 # building. A tub is meant to stand ~1.7-2 ft OFF the wall, so unlike a wall-abutting structure it has
 # no legitimate flush case - any real contact is a defect and this is a rounding floor, not a
 # tolerance. Same 0.5 px floor as WALL_OVERLAP_MIN_PX and for the same reason: emit rounding and
@@ -179,6 +191,8 @@ class ParsedPlan:
     fills: tuple[Rect, ...] = ()  # every drawn rect (any fill) - the fill-blind occluder set
     furniture: tuple[Rect, ...] = ()  # sub-building rects (privy, door, board, mat): foreground
     ids: frozenset[str] = frozenset()  # every `id="..."` on the sheet - what it DECLARES (a fence group, an arch rect)
+    trees: tuple[Rect, ...] = ()  # canopy circles, as their bounding rects (`fill` = TREE_FILL); never also a glyph
+    fence_segs: tuple[Rect, ...] = ()  # the fence group's line segments (thin rects), for the tree-overlap check
 
     def by_id(self, ident: str) -> tuple[Rect, ...]:
         """The rects the sheet marked `id="<ident>"`, in draw order."""
@@ -288,11 +302,18 @@ def parse_svg(text: str) -> ParsedPlan:
         raise ValueError(f'no rect marked id="{PRECINCT_ID}" in the SVG - a Mode A sheet declares its precinct on the rect(s) bounding the ground the checks reason over (feature 254)')
     buildings = tuple(r for r in rects if (r.fill in BUILDING_FILLS or r.fill in BUILDING_PATTERNS) and r.area_px >= MIN_BLDG_AREA_PX)
     open_features = tuple(r for r in rects if r.fill in OPEN_PATTERNS)
+    trees = _trees(text)
+    tree_pos = {t.pos for t in trees}
     glyphs: list[Rect] = []
     for c in _CIRCLE_RE.finditer(text):
         cx, cy, rad = float(c.group(1)), float(c.group(2)), float(c.group(3))
-        if rad >= 4.0:
+        if rad >= 4.0 and c.start() not in tree_pos:
             glyphs.append(Rect(cx - rad, cy - rad, 2 * rad, 2 * rad, "", c.start()))
+    fence_segs: list[Rect] = []
+    for grp in _FENCE_GROUP_RE.finditer(text):
+        for ln in _LINE_RE.finditer(grp.group(1)):
+            x1, y1, x2, y2 = (float(ln.group(i)) for i in range(1, 5))
+            fence_segs.append(Rect(min(x1, x2), min(y1, y2), max(abs(x2 - x1), 2.0), max(abs(y2 - y1), 2.0)))
     for e in _ELLIPSE_RE.finditer(text):
         ex, ey, rx, ry = float(e.group(1)), float(e.group(2)), float(e.group(3)), float(e.group(4))
         glyphs.append(Rect(ex - rx, ey - ry, 2 * rx, 2 * ry, "", e.start()))
@@ -333,4 +354,31 @@ def parse_svg(text: str) -> ParsedPlan:
         fills=fills,
         ids=frozenset(_ID_RE.findall(text)),
         furniture=furniture,
+        trees=trees,
+        fence_segs=tuple(fence_segs),
     )
+
+
+def _trees(text: str) -> tuple[Rect, ...]:
+    """Every canopy on the sheet as its bounding rect, `pos` the circle's byte offset (so a glyph pass can skip it)."""
+    starts: set[int] = set()
+    for grp in _TREE_GROUP_RE.finditer(text):
+        base = grp.start() + grp.group(0).index(grp.group(1))
+        for c in _CIRCLE_TAG_RE.finditer(grp.group(1)):
+            starts.add(base + c.start())
+    for c in _CIRCLE_TAG_RE.finditer(text):
+        attrs = dict(_ATTR_ANY_RE.findall(c.group(1)))
+        if attrs.get("fill") == TREE_FILL:
+            starts.add(c.start())
+    defs = [(m.start(), m.end()) for m in _DEFS_RE.finditer(text)]  # a pattern's dots are not trees
+    out: list[Rect] = []
+    for start in sorted(starts):
+        if any(a <= start < b for a, b in defs):
+            continue
+        c = _CIRCLE_TAG_RE.match(text, start)
+        assert c is not None  # `start` is a `<circle` offset by construction
+        attrs = dict(_ATTR_ANY_RE.findall(c.group(1)))
+        cx, cy, rad = float(attrs.get("cx", "0")), float(attrs.get("cy", "0")), float(attrs.get("r", "0"))
+        if rad >= MIN_TREE_R_PX:
+            out.append(Rect(cx - rad, cy - rad, 2 * rad, 2 * rad, TREE_FILL, start))
+    return tuple(out)

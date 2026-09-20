@@ -89,6 +89,9 @@ from .grids import coverage as coverage
 from .grids import perimeter_hugging_pct as perimeter_hugging_pct
 from .grids import region_density as region_density
 from .grids import top_vacant_rects as top_vacant_rects
+from .onmap import OnMap as OnMap
+from .onmap import parse_on_map as parse_on_map
+from .onmap import read_on_map as read_on_map
 from .parse import BUILDING_FILLS as BUILDING_FILLS
 from .parse import BUILDING_PATTERNS as BUILDING_PATTERNS
 from .parse import CAPS_RATIO as CAPS_RATIO
@@ -106,6 +109,7 @@ from .parse import MIN_BLDG_AREA_PX as MIN_BLDG_AREA_PX
 from .parse import MIN_DARK_AREA_PX as MIN_DARK_AREA_PX
 from .parse import OPEN_PATTERNS as OPEN_PATTERNS
 from .parse import STRUCTURE_FILLS as STRUCTURE_FILLS
+from .parse import TREE_FILL as TREE_FILL
 from .parse import UTILITY_FILLS as UTILITY_FILLS
 from .parse import WALL_KIND as WALL_KIND
 from .parse import WALL_STROKE as WALL_STROKE

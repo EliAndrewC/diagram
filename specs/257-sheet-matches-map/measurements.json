@@ -1,0 +1,20 @@
+{
+  "map-grain": {
+    "value": 15,
+    "unit": "map px",
+    "quantity": "the village map's set-apart placement step: the shrine well's ring radii 54, 66, 80, 96, 112 px (steps 12, 14, 16, 16; median 15) and the torii avenue pitch 15 px, read from settlement/shrines_wells/wells.py and shrines.py on 2026-09-20; 30 ft at the village scale of 2 ft per px",
+    "command": "grep -nE \"for rr in|1096 \\+ i \\* 15\" .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py .claude/skills/diagram/legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.gen.py"
+  },
+  "baseline-quick": {
+    "value": 3755,
+    "unit": "tests passed",
+    "quantity": "make quick ALL=1 in a detached worktree at 6dfce73b (the 257 claim commit), observed 2026-09-20; method: git worktree add --detach /tmp/base257 HEAD, then make quick ALL=1 and make hooks-test there: 3755 passed, 5 skipped, 4 warnings in 32.57s; hooks-test: 26 guard suites green"
+  },
+  "sweep-cost": {
+    "value": 4.671,
+    "unit": "s",
+    "varies": true,
+    "quantity": "wall time of `make test-file FILE=tests/test_mode_a_sheets.py` over the six Mode A sheets with the two new checks (trees_overlap, matches_map - the Hoshigaoka sheet loads the village manifest), 2026-09-20: 4.671 s (feature 254 measured 4.55 s before them); a wall-clock timing that varies with the machine's load, its band 3 to 8 s",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/test_mode_a_sheets.py"
+  }
+}
