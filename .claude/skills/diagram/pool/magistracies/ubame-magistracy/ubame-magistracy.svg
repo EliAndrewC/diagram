@@ -381,16 +381,14 @@
   <!-- Shrine grove (chinju no mori) enclosing the Inari shrine, its approach torii,
        and the wood-kami altar -->
   <rect x="912" y="164" width="144" height="278" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+  <!-- the wood stands in the grove's margins, clear of the hall, its labels, the altar, the tub and each other
+       (feature 257: a canopy covers open ground and nothing else) -->
   <g fill="#7A8C5C" opacity="0.75">
-    <circle cx="940" cy="196" r="28"/>
-    <circle cx="1028" cy="198" r="28"/>
-    <circle cx="940" cy="268" r="28"/>
-    <circle cx="1028" cy="270" r="28"/>
-    <circle cx="940" cy="340" r="28"/>
-    <circle cx="1028" cy="342" r="28"/>
-    <circle cx="940" cy="410" r="28"/>
-    <circle cx="1028" cy="410" r="28"/>
-    <circle cx="984" cy="408" r="26"/>
+    <circle cx="925" cy="182" r="13"/><circle cx="1043" cy="182" r="13"/>
+    <circle cx="925" cy="248" r="13"/><circle cx="1043" cy="248" r="13"/>
+    <circle cx="925" cy="304" r="13"/><circle cx="1043" cy="304" r="13"/>
+    <circle cx="925" cy="392" r="13"/><circle cx="1043" cy="392" r="13"/>
+    <circle cx="925" cy="428" r="13"/><circle cx="1043" cy="428" r="13"/>
   </g>
 
   <!-- Inari shrine - a modest standalone hall set in its grove. Inari is the default

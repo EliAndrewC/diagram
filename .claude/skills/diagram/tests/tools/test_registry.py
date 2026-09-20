@@ -29,7 +29,7 @@ def _ctx(path: str) -> R.Context:
     with open(path, encoding="utf-8") as fh:
         text = fh.read()
     tier = FIXTURE_TIER.get(os.path.basename(path).split("-")[0])
-    return R.Context(pa.parse_svg(text), text, bt.by_tier(tier) if tier else None, pa.read_form(path))
+    return R.Context(pa.parse_svg(text), text, bt.by_tier(tier) if tier else None, pa.read_form(path), pa.read_on_map(path))
 
 
 @pytest.mark.parametrize("check", R.CHECKS, ids=[c.name for c in R.CHECKS])

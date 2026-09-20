@@ -9,11 +9,12 @@ import sys
 from ...buildings.types import BuildingType, by_tier, tiers
 from .checks import TUB_MAX_GAP_FT, aligned_gaps, fire_water_adrift, gap_tag, tubs_in_buildings, wall_openings
 from .grids import FTPX, _grids, perimeter_hugging_pct, region_density, top_vacant_rects
+from .onmap import OnMap, read_on_map
 from .parse import ParsedPlan, parse_svg
 from .registry import Context, run_checks
 
 
-def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | None = None, btype: BuildingType | None = None, form: str | None = None) -> str:
+def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | None = None, btype: BuildingType | None = None, form: str | None = None, on_map: OnMap | None = None) -> str:
     """Human-readable packing report (the CLI prints this; pure so it is testable).
 
     `text` is the sheet's source (the crop check reads it), `tier` the sheet's declared type (None: the
@@ -70,7 +71,7 @@ def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | N
     if not openings:
         lines.append("    (no openings found in the compound wall)")
     lines += [f"    {o.ft:5.1f} ft  at svg({o.x:.0f},{o.y:.0f})   compare with the width this opening's comment claims" for o in openings]
-    lines += check_lines(Context(plan, text, btype, form), tier)
+    lines += check_lines(Context(plan, text, btype, form, on_map), tier)
     return "\n".join(lines)
 
 
@@ -96,7 +97,8 @@ def check_lines(ctx: Context, tier: str | None) -> list[str]:
     lines = [f"CHECKS ({'shared layer only' if tier is None else 'shared layer + ' + tier}):"]
     for ch, found in run_checks(ctx, tier):
         if not found:
-            lines.append(f"    {ch.name}: OK")
+            why = ch.skipped(ctx)
+            lines.append(f"    {ch.name}: {'skipped - ' + why if why else 'OK'}")
             continue
         lines += [f"    {ch.name.upper()}: {f} - {ch.fix}" for f in found]
     return lines
@@ -115,6 +117,6 @@ def main(argv: list[str] | None = None) -> int:
         tier = os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(path))))
         tier = tier if tier in tiers() else None
         print(f"=== {path.split('/')[-1]} ===")
-        print(format_report(plan, text=text, tier=tier, btype=by_tier(tier) if tier else None, form=read_form(path)))
+        print(format_report(plan, text=text, tier=tier, btype=by_tier(tier) if tier else None, form=read_form(path), on_map=read_on_map(path)))
         print()
     return 0

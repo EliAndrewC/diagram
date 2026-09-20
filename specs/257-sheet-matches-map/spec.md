@@ -151,10 +151,10 @@ sheet is on no map and checks nothing.
   where the map's torii stands, the shrine's one water point where the map's well stands - behind
   the hall on its axis, so the fence runs north far enough to hold it, and no second water point
   beside the approach - swept ground around, no grove and no burial ground. Its frame is stated in
-  the notes and shows what the map shows there and nothing the map does not: it reaches from the
-  lane's edge in front of the arch to behind the well, and either side of the axis short of the
-  connector lane, so the lane, the water-mouth grove, the crescent pond and the nearest byre stay
-  outside it (research.md R3). Its notes declare the map (FR-003) and say, item by item, which
+  the notes and shows what the map shows there and nothing the map does not: 60 ft in front of the
+  arch to 20 ft behind the well, and 100 ft either side of the axis, so the connector lane (nearest
+  148 ft from the arch, 112 to 172 ft east of the axis), the water-mouth grove, the crescent pond and
+  the nearest byre stay outside it (research.md R3). Its notes declare the map (FR-003) and say, item by item, which
   program items the map overrode (the grove, the burial ground, the water point's place) and that
   the map is the canon for the site. The redrawn sheet passes every registered check, is reviewed by `building-review` and
   `size-audit`, and the passes are ledgered.
@@ -173,8 +173,9 @@ sheet is on no map and checks nothing.
 
 ### Key Entities
 
-- **Tree canopy**: a circle inside the sheet's `id="trees"` group; a thing the tree-overlap check
-  compares with everything that is not open ground.
+- **Tree canopy**: a circle in the vocabulary's canopy green, by its own fill or its group's, or a
+  circle in a group marked `id="trees"`; a thing the tree-overlap check compares with everything
+  that is not open ground.
 - **Map declaration**: the `**On map**:` line of a sheet's notes - a manifest path, a subject class,
   a map position.
 - **Correspondence class**: one row of the check's table - a sheet class (by declared id or by the
@@ -220,9 +221,9 @@ sheet is on no map and checks nothing.
 - The map's shrine well stands 108 ft due north of the hall's center, 84 ft behind the hall's rear
   face; the redrawn sheet's fence and frame extend north to hold it (research.md R3).
 - The map's connector lane, water-mouth grove, crescent pond, nearest byre and the village graveyard
-  all lie outside the sheet's stated frame - 100 ft either side of the axis, from the lane's edge in
-  front of the arch to 20 ft behind the well (research.md R3); the swept clearing the map records
-  around the shrine covers the whole of that frame.
+  all lie outside the sheet's stated frame - 100 ft either side of the axis, from 60 ft in front of
+  the arch to 20 ft behind the well (research.md R3); the swept clearing the map records around the
+  shrine covers the whole of that frame.
 - The magistracy sheets stand on no declared map today (the county towns are legacy maps not yet
   matched); they carry no declaration and the check says so; matching them is a later feature.
 - The audit stays a hand-drawn sheet's tool; the check reads a recorded manifest and never runs a
@@ -241,3 +242,11 @@ sheet is on no map and checks nothing.
   the fence runs north to the well. (5) Decisions row 4 reclassed from "historically accurate" to a
   deliberate deviation on the GM's word. The reviewer's aside for the GM (the seven-arch sando drawn
   as one arch since the count re-roll; the well far behind the hall) is carried to the writeup.
+- Round 2 (2026-09-20, `spec-fidelity`, Opus): CHANGES REQUIRED, four items, all applied. (1) Key
+  Entities still defined a tree by the group id round 1 struck - now FR-001's definition. (2) The
+  frame's south edge named "the lane's edge in front of the arch", a landmark the map does not have
+  there - now 60 ft in front of the arch, the lane's true distances stated. (3) R3's tree and grove
+  figures were wrong by about a hundred feet - re-derived from the manifest (nearest crown 238 ft,
+  nearest clump 258 ft, the grove outline's nearest edge 163 ft), with the frame-to-outline clearance
+  stated and why it is not the check's concern (the outline is not a feature the check reads).
+  (4) `m:map-grain`'s recorded command did not re-run - the pattern quoted.

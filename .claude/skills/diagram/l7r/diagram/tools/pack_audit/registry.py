@@ -22,8 +22,10 @@ from dataclasses import dataclass
 from ...buildings.types import BuildingType, load_types
 from . import checks as c
 from . import labels as lbl
+from . import mapmatch as mm
 from . import shared as s
 from .grids import FTPX
+from .onmap import OnMap
 from .parse import ParsedPlan
 
 # WHICH TYPES A CHECK APPLIES TO IS THE DECLARATION'S TO SAY: a check is `shared` (every sheet) or it is
@@ -39,6 +41,7 @@ class Context:
     text: str = ""
     btype: BuildingType | None = None
     form: str | None = None
+    on_map: OnMap | None = None  # the notes' `**On map**:` declaration (feature 257), None = on no map
 
 
 @dataclass(frozen=True)
@@ -48,6 +51,7 @@ class Check:
     shared: bool  # True = the shared layer, every sheet; False = per-type, the declaration lists it
     fixture: str  # a red fixture under tests/fixtures/ on which the check FIRES
     fix: str  # the compliant fix a failure prints
+    skipped: Callable[[Context], str | None] = lambda ctx: None  # why the check did not run on this sheet (the report prints it), else None
 
     @property
     def types(self) -> frozenset[str] | None:
@@ -135,6 +139,14 @@ CHECKS: tuple[Check, ...] = (
         True,
         "hoshigaoka-tree-on-fence-red.svg",
         "move the tree onto open ground - off the building, the fence, the well, the label and the next canopy (a canopy may touch another, not cover it)",
+    ),
+    Check(
+        "matches_map",
+        lambda ctx: mm.matches_map(ctx.plan, ctx.text, ctx.on_map),
+        True,
+        "hoshigaoka-off-map-red.svg",
+        "draw what the map shows at the subject and nothing it does not - move, add or remove the feature, or size the subject to the map's footprint (the map is the canon for the site)",
+        skipped=lambda ctx: mm.skipped(ctx.on_map),
     ),
     # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
     Check(

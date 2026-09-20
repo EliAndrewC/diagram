@@ -3,7 +3,7 @@
     "value": 15,
     "unit": "map px",
     "quantity": "the village map's set-apart placement step: the shrine well's ring radii 54, 66, 80, 96, 112 px (steps 12, 14, 16, 16; median 15) and the torii avenue pitch 15 px, read from settlement/shrines_wells/wells.py and shrines.py on 2026-09-20; 30 ft at the village scale of 2 ft per px",
-    "command": "grep -n 'for rr in' .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py; grep -n '1096 + i \\* 15' .claude/skills/diagram/legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.gen.py"
+    "command": "grep -n 'for rr in' .claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py && grep -nF '1096 + i * 15' .claude/skills/diagram/legacy-hand-authored-pool/villages/hoshigaoka/hoshigaoka.gen.py"
   },
   "baseline-quick": {
     "value": 3755,

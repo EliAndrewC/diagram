@@ -77,12 +77,16 @@ map's own render (2026-09-20):** (observed 2026-09-20; method: the map's placeme
 - the shrine's own well, 108 ft due north of the hall's center, on its axis, behind the hall;
 - swept ground: the manifest's `clearings` around the shrine cover about 292 by 272 ft - the whole
   of a sheet frame two hundred feet on a side;
-- NO tree crown, grove clump or forest patch within 320 ft; the water-mouth grove's nearest clump is
-  about 150 ft north-east of the hall's center, its polygon's nearest edge about 120 ft, outside a
-  frame that ends 100 ft from the center;
+- no tree crown, grove clump or forest patch inside the frame, and none near it: the nearest
+  recorded tree crown is 238 ft from the hall's center, the water-mouth grove's nearest clump center
+  258 ft, and the grove's drawn outline comes no nearer than 163 ft - the outline's nearest edge
+  clears the frame's north-east corner by 19 ft, under the grain, but the outline is the grove's
+  boundary, not a feature the check reads: the check reads crowns and clumps, and the nearest of
+  those stands 138 ft beyond the frame's edge, well over the grain;
 - NO cemetery within 320 ft: the village graveyard is about 430 ft west;
-- the connector lane passes about 112 to 172 ft east of the hall's axis, outside a frame of 100 ft
-  half-width; the nearest byre is 224 ft north, the crescent pond 340 ft north-west - both outside.
+- the connector lane passes about 112 to 172 ft east of the hall's axis and comes no nearer the
+  arch than 148 ft, outside a frame of 100 ft half-width; the nearest byre is 224 ft north, the
+  crescent pond 340 ft north-west - both outside.
 
 **Decision.** The redrawn sheet (spec FR-006) shows the hall at 60 by 48 ft (observed 2026-09-20; method: the map's placement code and its recorded manifest, read by hand), the arch 20 ft in front
 of it, the well 108 ft behind it on the axis, swept ground to the frame's edge, and nothing else the

@@ -117,6 +117,9 @@ from .parse import _bold_char_w as _bold_char_w
 from .parse import _luma as _luma
 from .parse import parse_svg as parse_svg
 from .parse import TREE_FILL as TREE_FILL
+from .onmap import OnMap as OnMap
+from .onmap import parse_on_map as parse_on_map
+from .onmap import read_on_map as read_on_map
 from .registry import CHECKS as CHECKS
 from .registry import Check as Check
 from .registry import Context as Context
