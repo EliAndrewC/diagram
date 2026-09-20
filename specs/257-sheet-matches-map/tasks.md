@@ -104,10 +104,11 @@ historical question.
       (the map pass)
       research: rendering
       verify: DONE. buildings.md (the surroundings rule, the Trees entry, step 5), programs.md knob 4 and the burial-ground sentence, building-review.md's map pass
-- [ ] T14 The sweep's cost re-measured over every sheet (`m:sweep-cost`); `make done` green with both checks
+- [x] T14 The sweep's cost re-measured over every sheet (`m:sweep-cost`); `make done` green with both checks
       covered in full; the gate's coverage floor reports 100%
       research: rendering
       measure: `make test-file FILE=tests/test_mode_a_sheets.py` wall time; the gate's own output
+      verify: DONE. make done green (done257b.log: 4085 passed, every module at 100%, the roll census green, hamlet floor 99 modules at 100%); m:sweep-cost 4.671 s recorded
 - [ ] T15 The writeup for the GM through `escalation-check`: the three answers (what fires, what the sheet
       now shows, what the map itself says), the seven-arch disagreement and the well 108 ft behind the
       hall as the map's own record (FR-009), the reviewer's aside
