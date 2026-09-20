@@ -1,6 +1,6 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** round 1 CHANGES REQUIRED (2026-09-20), four items applied; awaiting round 2.
+**Status:** round 2 CHANGES REQUIRED on one orphaned id (2026-09-20), applied; awaiting round 3.
 
 ## Summary
 
@@ -93,3 +93,5 @@ map is made).
   test requiring the field of every future agent file was unrequested: cut, with the half of SC-002 that leaned on
   it. (4) SC-004 read as though nine agents were proven: it now says ten of twelve get no seeded run. The reviewer's
   aside - the field may also drop the nested `CLAUDE.md` files - is taken into FR-001 and FR-004.
+- **Round 2 (2026-09-20) - all four items RESOLVED; CHANGES REQUIRED on one new item, applied.** The renumbering
+  left `measure/dispatch_seeded.sh` citing FR-004 for the dispatch setting, which is FR-003 now: corrected.

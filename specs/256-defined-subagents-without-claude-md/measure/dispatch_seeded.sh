@@ -1,6 +1,6 @@
 #!/bin/bash
 # dispatch_seeded.sh <scratch dir> <case>... - each case is `name:agent`; a case directory was made by feature 251's
-# `seeded.py prepare` (tree/, prompt.txt). Feature 256, FR-004: `omitClaudeMd` is IGNORED when an agent runs as a
+# `seeded.py prepare` (tree/, prompt.txt). Feature 256, FR-003: `omitClaudeMd` is IGNORED when an agent runs as a
 # session's main agent, which is how 251's `run_seeded.sh` runs a check - so here a headless Sonnet session in the
 # case's worktree only DISPATCHES the agent, once, with the recorded prompt, and the agent runs as a SUBAGENT, as in
 # real use. Hooks off (they are wired to the mirror). The subagent's own transcript is the result: its reply, its
