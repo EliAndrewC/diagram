@@ -1,32 +1,24 @@
 {
  "feature": "256-defined-subagents-without-claude-md",
- "plan_sha256": "476dcdd0fdc06e997aa7567396ad207529cf4fa5489a63d856a481e73899eaea",
+ "plan_sha256": "15b73d26f09f01a0749ce6f7f61d209e414c50d933de765076923fe999ed975f",
  "reviewed": "2026-09-20",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "P1-method",
-   "summary": "The root CLAUDE.md is taken section by section and each rule put to each of the twelve contracts with one question - does this check's JOB depend on it? A first grep shows which contracts already carry which, the reading confirms each by eye, research.md holds the table.",
+   "summary": "Every rule of the root CLAUDE.md - house style, research, development workflow, verification and iteration, session clones, what is enforced, key paths - is put to EACH of the twelve contracts one rule and one agent at a time, with no class of rule settled in advance; research.md holds a row per rule, a column per agent, each cell stated / moved / does not bear.",
    "class": "within",
-   "why": "This is FR-001's own test and FR-001's own record (per agent, each rule considered and its disposition). T01 keeps the sweep over the root and both nested files."
-  },
-  {
-   "id": "P1-session-rules",
-   "summary": "A whole class of root rules - 'about how a SESSION works (clones, make, the gate, spec-kit)' - is declared to bear on NO check, 'because a check edits nothing and lands nothing', and the candidates are then given as a closed list of record-and-map rules.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-001 asks that the root CLAUDE.md be read rule by rule AGAINST THE CONTRACT, with a per-agent disposition recorded; this decides a class of dispositions before the reading, and its stated ground is false for several of the twelve. perf-audit's whole job is the gate's perf bands, the ratchet and a baseline taken in a worktree, and it WRITES the review record (make perf-confirm / make perf-audit AS=perf-audit). spec-fidelity's whole job is the spec-kit workflow and it records a verdict with make plan-verdict; spec-fidelity-verify and spec-fidelity re-run make figures; size-audit and settlement-review run make targets and a review pass is a row in docs/review-ledger.md. Nothing in the GM's words excludes a class in advance - the words are the opposite ('If there is something that a subagent should know, it should be in the subagent specification'), and the rule is laborious rather than impossible."
+   "why": "This is FR-001's own test ('read rule by rule against the contract') and FR-001's own record ('per agent, each rule considered and whether it was already stated, was moved, or does not bear'). Round 1's narrowing - a whole class of session rules declared to bear on no check - is gone: the plan now names the session-shaped work several checks do (perf-audit and the gate's bands with make perf-confirm, both fidelity agents running make figures, spec-fidelity recording make plan-verdict, settlement-review and size-audit running make targets) and says a rule about make, the gate, the clones or spec-kit is read against them like any other and may come out 'moved'. RESOLVED."
   },
   {
    "id": "P1-nested-assignment",
-   "summary": "The two nested CLAUDE.md files are assigned to disjoint groups: research/CLAUDE.md for source-reader, quote-check, record-format, source-applicability, entry-drift; the skill's CLAUDE.md for settlement-review, building-review, size-audit, perf-audit. spec-fidelity, spec-fidelity-verify and escalation-check get neither reading.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-001 says the same reading is made of those two files 'for the checks that work there', and this assignment is narrower than the checks that work there. escalation-check is told by its own contract to ask whether research/ carries a heading on the finding (escalation-check.md line 85). entry-drift's subject is the docstrings of .claude/skills/diagram/l7r/diagram/interactive/classes/*.py (entry-drift.md line 14), under the skill tree. The five research agents read .claude/skills/diagram/research/<name>.html, a path INSIDE the skill tree, so the skill's CLAUDE.md is in their chain as well as research/CLAUDE.md. spec-fidelity and spec-fidelity-verify run make figures from .claude/skills/diagram/ (spec-fidelity.md line 200, spec-fidelity-verify.md line 102) and read whatever tree the spec under review touches. Reading both files for every check that works under either tree is more work, not an impossibility."
+   "summary": "Both nested files are read for every check that works under either tree, by a criterion rather than a roster: the skill's CLAUDE.md for every agent that reads or runs anything under .claude/skills/diagram/ (the five research agents, whose pages live inside that tree; entry-drift, whose subject is the interactive docstrings; both fidelity agents, which run make figures from there), and research/CLAUDE.md for every agent that reads under research/ (escalation-check among them). The table says per agent which tree it reads.",
+   "class": "within",
+   "why": "FR-001 asks for the same reading of the two nested files 'for the checks that work there'. Round 1's narrowing was a pair of disjoint rosters that left spec-fidelity, spec-fidelity-verify and escalation-check with neither reading; the assignment is now a behavioral criterion, both files may apply to one agent, the three previously dropped checks are covered by name or by the criterion, and the per-agent disposition is recorded. No check is excluded by construction, and a check that works under neither tree needs no nested reading by FR-001's own words. RESOLVED."
   },
   {
    "id": "P1-heading",
-   "summary": "A moved rule is written once, short, in the contract's own voice, under a heading '## House rules you check against' or folded into the section that already covers it.",
+   "summary": "A moved rule is written once, short, in the contract's own voice, in the section that already covers its subject, or under '## House rules you check against' where none does.",
    "class": "within",
    "why": "FR-001 asks exactly for the contract's own voice and no longer than the check needs; where it is placed is drafting."
   },
@@ -38,9 +30,9 @@
   },
   {
    "id": "P3-dispatcher",
-   "summary": "A headless Sonnet session in the case's worktree is the dispatcher; it reads prompt.txt and dispatches the agent under test ONCE, and the SUBAGENT's transcript is the result.",
+   "summary": "A headless Sonnet session in the case's worktree is the dispatcher; it reads prompt.txt and dispatches the agent under test ONCE, and the SUBAGENT's transcript gives the reply, the turns, the usage per message id and the first-turn input.",
    "class": "within",
-   "why": "FR-003 specifies this setting and leaves the dispatcher's model open; the dispatcher judges nothing and the agent under test still runs on its own pinned tier, which result.json records."
+   "why": "FR-003 specifies this setting and leaves the dispatcher's model open; the dispatcher judges nothing and the agent under test runs on its own pinned tier. The recorded first-turn input per leg is also what makes the candidate legs - real agent FILES carrying the field - a check that the harness honors the field for a project agent file, which the spec's Assumption needs."
   },
   {
    "id": "P3-scoring",
@@ -52,7 +44,7 @@
    "id": "P3-verbatim-discard",
    "summary": "A run whose prompt was not handed over character for character is discarded and re-run, not scored.",
    "class": "within",
-   "why": "FR-003 requires the recorded prompt verbatim, so a run that fails that precondition is not the specified experiment. The test is mechanical (result.json prompt_verbatim), not a judgment about the finding."
+   "why": "FR-003 requires the recorded prompt verbatim, so a run that fails that precondition is not the specified experiment; the test is mechanical (result.json prompt_verbatim), not a judgment about the finding."
   },
   {
    "id": "P3-trees",
@@ -67,17 +59,22 @@
    "why": "FR-003 names 'the contract as it stands on main', and 255 R2 was NOT ADOPTED - the scoped text, its script and its target were left as they were, while make record-prepass is on main."
   },
   {
-   "id": "P4-agent",
-   "summary": "FR-006's measurement is taken on entry-drift, the smallest real contract, as two short Opus runs on a one-line prompt because the agent file pins its model.",
+   "id": "P3-no-index-limit",
+   "summary": "P4 states the limit for P3: its worktree legs, candidate and control alike, run with no memory index, so the proof is of the CLAUDE.md files leaving; the index leaving is covered by FR-001's finding that no contract refers to it and by FR-006's measurement.",
    "class": "within",
-   "why": "FR-006 asks for one real defined agent and does not name it; the tier is the agent file's, which is the point of the measurement."
+   "why": "It is an honest statement of a limit the SPEC itself creates, not a narrowing of FR-003. FR-003 prescribes the setting ('a headless session in the case's worktree'), and feature 255 R5 measured that a scratch worktree is its own project and loads no index - so no plan honoring FR-003 can show the index leaving in a proof run, and nothing is being excused or skipped. The two coverers it names are the spec's own: FR-001 decides the index is not swept 'by the GM's words ... and no check's contract refers to the index (feature 255, R5)', and FR-006 is the before-and-after measurement. Writing the limit down is what the repository asks of an accepted limitation."
   },
   {
-   "id": "P4-worktree",
-   "summary": "FR-006's before-and-after first-turn input is measured 'dispatched by the same harness from a worktree'.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 says 'dispatched from this repository', and the distinction is measured, not stylistic: feature 255 R5 recorded that a detached worktree in the scratchpad is its own project, so NO memory index loads there (repo copy with CLAUDE.md 7,495 tokens against /diagram's 14,146 with the index). A worktree leg therefore cannot show the memory index leaving, which is half of what this feature claims and half of what the GM ruled on, and it cannot check the Assumption that FR-006 exists to check. The spec draws the line itself: the PROOF runs in worktrees (Assumptions), the MEASUREMENT is 'from this repository'. Measuring where the index loads is a sequencing problem (the after leg at the mirror path once the field lands, or an agent file placed at that path as R7 did), not an impossibility."
+   "id": "P4-setting",
+   "summary": "FR-006's two legs are dispatched from /diagram, where the memory index loads, in 255 R7's probe shape: a headless session with the agent defined inline (--agents) from entry-drift's REAL frontmatter and contract body - its pinned model and tools - once as it stands and once with omitClaudeMd: true; nothing is written under /diagram.",
+   "class": "within",
+   "why": "FR-006 asks for the first-turn input of 'one real defined agent, dispatched from this repository before and after the field'. Round 1's narrowing was the worktree, which 255 R5 measured to load no index and so could not show half of what the feature claims; both legs now run at the one path where the index loads, on a real contract at its pinned tier, and the mirror is not written to (CLAUDE.md: /diagram is never a workspace; the open-task rule bars landing the field there first). The residue is named and covered rather than hidden: the inline definition leaves the harness's treatment of a project agent FILE to P3's candidate legs, which run the clone's real agent files with the field and record each leg's first-turn input. RESOLVED."
+  },
+  {
+   "id": "P4-agent",
+   "summary": "entry-drift, the smallest real contract, is the agent measured; two short Opus runs because the agent file pins its model.",
+   "class": "within",
+   "why": "FR-006 asks for one real defined agent and does not name it; the tier is the agent file's, which is the point of the measurement."
   },
   {
    "id": "P5-record",
@@ -89,7 +86,7 @@
    "id": "CC-route",
    "summary": "Constitution Check: no engine code, one shell harness under the feature's measure/, no guard file edited, tests/test_agent_models.py not touched, route DIRECT.",
    "class": "within",
-   "why": "The delta is .claude/agents/, root CLAUDE.md, docs/ and specs/, which is the DIRECT route by the repository's own rule; leaving the tier test alone is what round 1 of the spec review required after the frontmatter guard was cut as unrequested."
+   "why": "The delta is .claude/agents/, root CLAUDE.md, docs/ and specs/, which is the DIRECT route by the repository's own rule; leaving the tier test alone is what round 1 of the SPEC review required after the frontmatter guard was cut as unrequested."
   },
   {
    "id": "Order",
@@ -98,5 +95,5 @@
    "why": "It follows the requirement order and puts the reading before the field, as FR-001 and FR-002 are written; FR-004's second pair sits inside T03."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
