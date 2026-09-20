@@ -1,7 +1,7 @@
 # Implementation Plan: A sheet on a map matches the map, and trees overlap nothing
 
 **Feature**: `257-sheet-matches-map` | **Date**: 2026-09-20 | **Spec**: [spec.md](spec.md)
-**Input**: the spec (round 1 applied; round 2 pending), [`research.md`](research.md) R1-R3.
+**Input**: the spec (rounds 1-3 applied), [`research.md`](research.md) R1-R3.
 
 ## Summary
 
