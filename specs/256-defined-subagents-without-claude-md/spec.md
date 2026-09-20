@@ -1,6 +1,6 @@
 # Feature 256 - defined subagents launch without the root `CLAUDE.md` and the memory index
 
-**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2; Amendment 2, the GM's three rulings, awaiting its review); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - at that landing the field was set in all
+**Status:** AMENDED 2026-09-20 (Amendment 1 FAITHFUL at its round 2; Amendment 2 FAITHFUL at its round 2); the original spec FAITHFUL at round 3 (see Review history) and IMPLEMENTED 2026-09-20 - at that landing the field was set in all
 twelve and the proof was clean on its three cases; Amendment 2 excepts `spec-fidelity` (FR-013), so eleven carry it
 and the tier test names the twelfth. Every run is in `research.md`.
 
@@ -182,3 +182,8 @@ rule, or breaking a guard it was never told of, is a contract to amend (FR-004's
   states the new tally.
 - **Amendment 1, round 2 (2026-09-20) - FAITHFUL.** Both items verified; the reasons given for holding back
   `settlement-review` and `perf-audit` ruled particular in the sense of the GM's question. D1 gains a pointer to FR-011.
+- **Amendment 2, round 1 (2026-09-20) - CHANGES REQUIRED, one item, applied.** FR-013 superseded FR-002 and SC-002 but
+  left FR-007, SC-006, the Summary and the Status line claiming the tier test requires the field of every agent file,
+  which the shipped test does not: FR-013 now names all four with their new reading.
+- **Amendment 2, round 2 (2026-09-20) - FAITHFUL.** The item verified against the shipped test; P10 reviewed in the same
+  round and ruled to decide nothing the GM did not ask for. Aside taken: the plan's opening and P2 now point at P10.

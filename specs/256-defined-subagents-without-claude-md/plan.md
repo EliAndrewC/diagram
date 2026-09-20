@@ -6,7 +6,8 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
 ## Constitution Check
 
 - **XVI**: the spec is reviewed against the GM's words before any of this is done; this plan is reviewed (MODE 4)
-  before a task is ticked. The field is set on all twelve agents in every case (FR-002, FR-004) - no exception.
+  before a task is ticked. The field is set on all twelve agents in every case (FR-002, FR-004) - no exception at the
+  first landing; Amendment 2's P10 carries the GM's one exception, `spec-fidelity`, named in the tier test.
 - **I / VI**: no check's judgment is touched. What changes is what a check is handed at launch, and it is proven on
   recorded findings with a same-setting control (FR-003).
 - **X**: no engine code, no new Python under `l7r/`. One shell harness under the feature's `measure/`, as 251 and
@@ -33,7 +34,8 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   run `make figures` from there), and `research/CLAUDE.md` for every agent that reads under `research/`
   (`escalation-check` among them). A moved rule is written once, short, in the contract's own voice, in the section
   that already covers its subject, or under `## House rules you check against` where none does.
-- **P2 the field (FR-002).** `omitClaudeMd: true` on its own line in each frontmatter, after `effort:`.
+- **P2 the field (FR-002).** `omitClaudeMd: true` on its own line in each frontmatter, after `effort:`. (P10 takes it
+  off `spec-fidelity.md` again, by the GM's ruling.)
 - **P3 the proof (FR-003, FR-004).** `measure/dispatch_seeded.sh`: a headless Sonnet session in the case's worktree
   reads `prompt.txt` and dispatches the agent ONCE with it; the SUBAGENT's transcript gives the reply, the turns,
   the usage folded per message id, the first-turn input, and whether the prompt it received is the recorded one

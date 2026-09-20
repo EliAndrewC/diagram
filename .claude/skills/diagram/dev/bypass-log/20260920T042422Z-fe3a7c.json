@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-20T04:24:22Z",
+  "target": "plan-gate tick 256-defined-subagents-without-claude-md",
+  "commit": "1eaa98eb",
+  "why": "as T11 - the plan delta since the CLEAR verdict is the reviewer's own requested pointers"
+}
