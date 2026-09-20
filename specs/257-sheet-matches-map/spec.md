@@ -237,7 +237,7 @@ sheet is on no map and checks nothing.
   another and no more, with the built-footprint check's own touching tolerance. (3) The map cannot
   record a basin, so it could not override one - the basin and the well are one class, the water
   point, and FR-006 says the shrine's one water point stands where the map's well stands. (4) The
-  frame assumption could not hold the map's well 108 ft behind the hall - the frame is stated and
+  frame assumption could not hold the map's well far behind the hall - the frame is stated and
   the fence runs north to the well. (5) Decisions row 4 reclassed from "historically accurate" to a
   deliberate deviation on the GM's word. The reviewer's aside for the GM (the seven-arch sando drawn
   as one arch since the count re-roll; the well 108 ft behind the hall) is carried to the writeup.
