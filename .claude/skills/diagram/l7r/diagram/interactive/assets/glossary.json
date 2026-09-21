@@ -1131,7 +1131,10 @@
  "daimyo": {
   "def": "A domain lord: the hereditary ruler of a domain held from the shogunate, ranked by the assessed rice yield of their land.",
   "variants": [
-   "daimyo"
+   "daimyo",
+   "daimyō",
+   "daimyos",
+   "daimyōs"
   ]
  },
  "daizu": {
@@ -4776,6 +4779,46 @@
    "fire-water",
    "fire water",
    "fire-water tubs"
+  ]
+ },
+ "intramural": {
+  "def": "Inside the walls - the ground a town's wall encloses, as against the suburbs and estates that stand outside it.",
+  "variants": [
+   "intramural"
+  ]
+ },
+ "rampart": {
+  "def": "The defensive earth-and-stone wall around a city, thick enough to be drawn as a band rather than a line.",
+  "variants": [
+   "rampart",
+   "ramparts"
+  ]
+ },
+ "patrol strip": {
+  "def": "The clear walkway kept along the inside of a rampart so guards can pass along the wall.",
+  "variants": [
+   "patrol strip",
+   "patrol strips"
+  ]
+ },
+ "muster perimeter": {
+  "def": "The boundary of the ground where troops form up; nothing physical marks it, so the map draws it as a dashed line.",
+  "variants": [
+   "muster perimeter",
+   "muster perimeters"
+  ]
+ },
+ "precinct": {
+  "def": "The walled grounds of a temple or shrine taken together: its halls, gates, courtyards and garden.",
+  "variants": [
+   "precinct",
+   "precincts"
+  ]
+ },
+ "Six Ministries": {
+  "def": "The six departments of government in this setting - Rites, Revenue, Retainers, War, Works and Justice - found at every level from the Empire down to the province, where they carry out the policy the chancellery sets.",
+  "variants": [
+   "Six Ministries"
   ]
  }
 }

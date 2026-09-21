@@ -87,13 +87,31 @@ The slice is real work and stays. It is not pushed: a feature with an open task 
 footnote" listing. The listing has no one shape (the plan review measured it, 2026-09-21): five of the
 six reports open it with a markdown heading, worded differently each time, and
 `qc-fields-religion-archetypes.md` opens it three times mid-document with a plain bold line
-(`Unfootnoted real-world assertions, by section:`, once per page) and no heading at all. So the script
-matches a LINE, heading or not, wherever it falls in the report, that carries "assertion" and one of
-"footnote" / "unfootnoted", case-blind; takes the bullets that follow it up to the next heading or blank
-run; and FAILS on a report in which it finds no such line, so a new shape stops the run and cannot
-silently drop a page. Where a report states its own count (that report's summary table does), the
-script compares and fails on a mismatch. The task list names no count; the closing report prints the
-script's.
+(`Unfootnoted real-world assertions, by section:`, once per page) and no heading at all. The script is
+written and was run on the six reports (2026-09-21), and this decision states what it does, which its
+docstring carries beside the code:
+
+- **The opener** is a LINE, heading or not, wherever it falls, carrying "assertion" and "footnote"
+  (which "unfootnoted" contains), case-blind, that is NOT itself a bullet or a table row - a listing's
+  own bullet (`hw-quotecheck.md` line 123) and the summary tables' count rows carry both words and
+  would otherwise open a block.
+- **The block ends** at the next horizontal rule or the next heading at the opener's level or above -
+  never at a blank line, because `hw-quotecheck.md` puts one between every item.
+- **An item** is a top-level bullet in the block, except one beginning "Skipped", "Nothing else" or
+  "Other sections" - the reports' notes of what they passed over.
+- **The page** comes from a deeper heading inside the block naming `<page>.html` (the fabric and
+  river-cities reports), else the nearest bold line (`hw-quotecheck.md`), else the opener
+  (`qc-buildings-vegetation.md`), else the nearest heading above it (`qc-fields-...`); the one report
+  about a single page names it nowhere and is mapped by file name. **The section** comes from the
+  nearest bold-only line above the item inside the block, else the item's own leading italic prefix,
+  else a trailing `("...")`.
+- **Two guards.** A report with no opener FAILS the run. Where a report's summary table states its own
+  count the script compares and fails on a mismatch (one report states a bare total, measured equal;
+  `qc-buildings-vegetation.md` states "7 (buildings) + 5 (vegetation)", which the script does not parse
+  and which was compared by hand: equal).
+
+Measured: every item the script returns carries both a page and a section - 0 without, over six
+reports and twelve pages. The task list names no count; the closing report prints the script's.
 
 ### D5 - FR-006's items are found by their own words, grepped over the page's fragments
 

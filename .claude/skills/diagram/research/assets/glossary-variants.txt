@@ -186,6 +186,9 @@ daikan	daikan
 daikansho	daikansho
 daikon	daikon
 daimyo	daimyo
+daimyos	daimyo
+daimyō	daimyo
+daimyōs	daimyo
 daizu	daizu
 danka	danna-dera
 danna-ba	kusaba
@@ -463,6 +466,7 @@ intendants	daikan
 interceptor	interceptor
 interceptor channel	interceptor
 interlinear commentary	interlinear commentary
+intramural	intramural
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
 iriai	iriai
@@ -697,6 +701,8 @@ mulberry-dike fishpond	dike-pond
 murataka	murataka
 muromachi	Muromachi
 mushiro	mushiro
+muster perimeter	muster perimeter
+muster perimeters	muster perimeter
 nagaya	nagaya
 nagaya-mon	nagayamon
 nagayamon	nagayamon
@@ -766,6 +772,8 @@ parish's	parish
 parishioners	parish
 party wall	row house
 party walls	row house
+patrol strip	patrol strip
+patrol strips	patrol strip
 pearl delta	Pearl delta
 pearl river delta	Pearl delta
 pearl-delta	Pearl delta
@@ -796,6 +804,8 @@ post towns	shukuba
 post-station	shukuba
 post-stations	shukuba
 postern	postern
+precinct	precinct
+precincts	precinct
 puddled	puddling
 puddling	puddling
 qiandao	qiandao
@@ -811,6 +821,8 @@ quays	quay
 quercus acutissima	kunugi
 quercus serrata	konara
 rammed earth	rammed earth
+rampart	rampart
+ramparts	rampart
 rape	rape
 rapeseed	rape
 recharge	recharge
@@ -935,6 +947,7 @@ siku quanshu	Siku Quanshu
 sill	sill
 six chambers	Six Chambers
 six fang	Six Chambers
+six ministries	Six Ministries
 skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
