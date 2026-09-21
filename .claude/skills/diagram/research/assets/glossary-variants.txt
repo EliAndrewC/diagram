@@ -364,6 +364,8 @@ geomantic	geomancy
 geta	geta
 ghat	ghat
 ginmisho	ginmisho
+girder	girder
+girders	girder
 gis	GIS
 glacis	glacis
 glebe	glebe

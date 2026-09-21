@@ -4820,5 +4820,12 @@
   "variants": [
    "Six Ministries"
   ]
+ },
+ "girder": {
+  "def": "The main beam of a bridge, which carries the deck and rests at each end on the abutment.",
+  "variants": [
+   "girder",
+   "girders"
+  ]
  }
 }
