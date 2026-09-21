@@ -118,6 +118,10 @@ def build(session: pathlib.Path, marks: list[dict]) -> list[dict]:
                 "description": str(meta.get("description") or "")[:60],
                 **total(msgs),
                 "peak_context": max(m["fresh"] + m["cached"] for m in msgs),
+                # what the agent holds BEFORE it has read anything: the harness's system prompt and tool
+                # schemas, the agent's contract, and the dispatch prompt - the floor no file split moves
+                "first_turn": min(msgs, key=lambda m: m["ts"])["fresh"] + min(msgs, key=lambda m: m["ts"])["cached"],
+                "read_chars": sum(size for size, _what in reads(recs)),
                 "reads": reads(recs)[:6],
             }
         )
@@ -147,6 +151,7 @@ def render(report: list[dict]) -> str:
         for a in w["agents"]:
             who = f"{a['agent']} [{a['class']}]"
             lines.append(f"{who:<34}{a['model']:<22}{a['turns']:>6}{_n(a['fresh']):>12}{_n(a['cached']):>13}{_n(a['output']):>10}{_n(a['peak_context']):>11}")
+            lines.append(f"      first turn {_n(a['first_turn'])} tokens before anything was read; everything it then read: {_n(a['read_chars'])} chars (~{_n(a['read_chars'] // 4)} tokens)")
             for size, what in a["reads"]:
                 lines.append(f"      {_n(size):>10} chars  {what}")
             for f in FIELDS:

@@ -38,6 +38,8 @@ azolla	azolla
 azuchi	azuchi
 backswamp	backswamp
 backswamps	backswamp
+backwall	backwall
+backwalls	backwall
 backwater	backwater
 backwaters	backwater
 bailey	bailey
@@ -253,6 +255,8 @@ edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
 eiro	eiro
+embankment	embankment
+embankments	embankment
 emergent	emergent
 emergent plant	emergent
 emergent plants	emergent
@@ -324,6 +328,10 @@ flophouse	kichin-yado
 flophouses	kichin-yado
 flora	flora
 flume	kakehi
+footing	footing
+footings	footing
+footplank	footplank
+footplanks	footplank
 forest litter	forest litter
 forest litters	forest litter
 fortune	Fortune
@@ -732,6 +740,8 @@ nihonbashi	Nihonbashi
 ninomaru	ninomaru
 noborigama	noborigama
 northern song	Song dynasty
+nrcs	NRCS
+nrcs-designed	NRCS
 nucleated	nucleated
 numajiro	numajiro
 nunosarashi	nunosarashi
@@ -966,6 +976,7 @@ sphere	Sphere
 spillway	spillway
 spillways	spillway
 spiraea	Spiraea
+spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
 steading	steading
@@ -973,6 +984,8 @@ steadings	steading
 stem density	stem density
 stilling pool	stilling pool
 stone pitching	stone pitching
+stringer	stringer
+stringers	stringer
 strip footing	strip footing
 strip footings	strip footing
 stupa	stupa
@@ -989,6 +1002,7 @@ suimon	suimon
 superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
+superstructure	superstructure
 sus	Sus
 sward	sward
 tagoshi kangai	tagoshi kangai
@@ -1129,6 +1143,8 @@ white-tawed	shironameshi
 willow association	plant association
 willow palisade	Willow Palisade
 windlass	windlass
+wingwall	wingwall
+wingwalls	wingwall
 withies	withies
 withy	withies
 wokou	wokou

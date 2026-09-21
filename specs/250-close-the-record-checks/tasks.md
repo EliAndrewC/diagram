@@ -47,8 +47,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [ ] T09 FR-003, the `record-format` re-check of T08's entry: every candidate ruled on
       research: rendering
 - [ ] T10 **The measurement the GM asked for**: `measure/tokens.py report` over T01 to T09, recorded in
-      `research.md` R1 with the per-window table, what each agent read, and what it implies for phases
-      2 to 4
+      `research.md` R1 with the per-window table, what each agent read, what it implies for phases
+      2 to 4, and BY NAME every agent the slice did not measure (D3), so the figures are not read as
+      complete
       research: rendering
       measure: `python3 specs/250-close-the-record-checks/measure/tokens.py report`
 

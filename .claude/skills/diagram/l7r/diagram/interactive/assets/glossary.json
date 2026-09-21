@@ -4827,5 +4827,61 @@
    "girder",
    "girders"
   ]
+ },
+ "footing": {
+  "def": "The slab or timber pad spread under a bridge's abutment that carries its weight into the ground; a strip footing is a shallow one laid in a band rather than sunk deep.",
+  "variants": [
+   "footing",
+   "footings",
+   "spread footing"
+  ]
+ },
+ "stringer": {
+  "def": "A lengthwise beam running from abutment to abutment that carries the decking; in a timber bridge, a whole or sawn log.",
+  "variants": [
+   "stringer",
+   "stringers"
+  ]
+ },
+ "superstructure": {
+  "def": "Everything a bridge carries above its supports - beams, decking and rail - as opposed to the abutments and footings beneath.",
+  "variants": [
+   "superstructure"
+  ]
+ },
+ "backwall": {
+  "def": "The upright face at the back of an abutment that holds the roadway fill from spilling onto the beam's seat.",
+  "variants": [
+   "backwall",
+   "backwalls"
+  ]
+ },
+ "wingwall": {
+  "def": "A short wall angling back from an abutment, holding the embankment fill at a bridge's end from sliding sideways.",
+  "variants": [
+   "wingwall",
+   "wingwalls"
+  ]
+ },
+ "footplank": {
+  "def": "A single plank laid across a narrow watercourse for those on foot, resting on the banks with no abutment under it.",
+  "variants": [
+   "footplank",
+   "footplanks"
+  ]
+ },
+ "embankment": {
+  "def": "A raised bank of earth - the one a roadway runs on where it approaches a bridge, or the one that holds water back.",
+  "variants": [
+   "embankment",
+   "embankments"
+  ]
+ },
+ "NRCS": {
+  "def": "The US Natural Resources Conservation Service, whose technical supplements govern the design of small rural bridges.",
+  "variants": [
+   "NRCS",
+   "NRCS-designed"
+  ]
  }
 }
