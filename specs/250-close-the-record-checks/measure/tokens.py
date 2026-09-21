@@ -68,7 +68,7 @@ def reads(recs: list[dict]) -> list[tuple[int, str]]:
             if block.get("type") == "tool_use":
                 inp = block.get("input") or {}
                 what = inp.get("file_path") or inp.get("url") or inp.get("pattern") or inp.get("command") or inp.get("query") or ""
-                asked[block.get("id", "")] = f"{block.get('name')} {str(what)[:110]}"
+                asked[block.get("id", "")] = f"{block.get('name')} {' '.join(str(what).split())[:110]}"
             elif block.get("type") == "tool_result":
                 body = block.get("content")
                 text = body if isinstance(body, str) else "".join(str(p.get("text", "")) for p in body or [] if isinstance(p, dict))
@@ -122,6 +122,10 @@ def build(session: pathlib.Path, marks: list[dict]) -> list[dict]:
                 # schemas, the agent's contract, and the dispatch prompt - the floor no file split moves
                 "first_turn": min(msgs, key=lambda m: m["ts"])["fresh"] + min(msgs, key=lambda m: m["ts"])["cached"],
                 "read_chars": sum(size for size, _what in reads(recs)),
+                # CLAUDE.md files the harness attached when the agent first read under their directory -
+                # `omitClaudeMd` drops the launch copy, not these (measured on this slice: three per check)
+                "nested_chars": sum(len(str((r.get("attachment") or {}).get("content") or r.get("attachment"))) for r in recs if r.get("type") == "attachment" and (r.get("attachment") or {}).get("type") == "nested_memory"),
+                "nested_files": sum(1 for r in recs if r.get("type") == "attachment" and (r.get("attachment") or {}).get("type") == "nested_memory"),
                 "reads": reads(recs)[:6],
             }
         )
@@ -151,7 +155,7 @@ def render(report: list[dict]) -> str:
         for a in w["agents"]:
             who = f"{a['agent']} [{a['class']}]"
             lines.append(f"{who:<34}{a['model']:<22}{a['turns']:>6}{_n(a['fresh']):>12}{_n(a['cached']):>13}{_n(a['output']):>10}{_n(a['peak_context']):>11}")
-            lines.append(f"      first turn {_n(a['first_turn'])} tokens before anything was read; everything it then read: {_n(a['read_chars'])} chars (~{_n(a['read_chars'] // 4)} tokens)")
+            lines.append(f"      first turn {_n(a['first_turn'])} tokens before anything was read; everything it then read: {_n(a['read_chars'])} chars (~{_n(a['read_chars'] // 4)} tokens); nested CLAUDE.md attached: {a['nested_files']} file(s), {_n(a['nested_chars'])} chars (~{_n(a['nested_chars'] // 4)} tokens)")
             for size, what in a["reads"]:
                 lines.append(f"      {_n(size):>10} chars  {what}")
             for f in FIELDS:
@@ -180,6 +184,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     report = build(pathlib.Path(args.session), marks)
     print(render(report))
+    # What made the MAIN session's context grow: a tool result stays in context for every later turn, so
+    # one 40,000-character result at turn 20 of 90 is paid for seventy times over, as cached input.
+    main_reads = reads([r for r in records(pathlib.Path(args.session)) if not r.get("isSidechain")])
+    print("\n== the main session: the largest tool results that entered its context (each is re-read every later turn)")
+    for size, what in main_reads[:14]:
+        print(f"  {_n(size):>10} chars  {what}")
+    print(f"  {_n(sum(s for s, _w in main_reads)):>10} chars in all, over {len(main_reads)} tool results")
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
     return 0

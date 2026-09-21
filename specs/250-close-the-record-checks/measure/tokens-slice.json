@@ -1,0 +1,627 @@
+[
+ {
+  "window": "(before the first mark)",
+  "main": {
+   "fresh": 73113,
+   "cached": 700284,
+   "output": 11418,
+   "thinking": 4136,
+   "turns": 10,
+   "peak_context": 97853
+  },
+  "agents": []
+ },
+ {
+  "window": "P0 plan and tasks",
+  "main": {
+   "fresh": 24977,
+   "cached": 421288,
+   "output": 6605,
+   "thinking": 1656,
+   "turns": 4,
+   "peak_context": 122823
+  },
+  "agents": []
+ },
+ {
+  "window": "P1 plan review (spec-fidelity) + T01 baseline",
+  "main": {
+   "fresh": 13466,
+   "cached": 1159447,
+   "output": 7242,
+   "thinking": 2257,
+   "turns": 9,
+   "peak_context": 136271
+  },
+  "agents": [
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review feature 250",
+    "fresh": 82706,
+    "cached": 989917,
+    "output": 30778,
+    "thinking": 20336,
+    "turns": 17,
+    "peak_context": 83717,
+    "first_turn": 26588,
+    "read_chars": 46962,
+    "nested_chars": 38971,
+    "nested_files": 1,
+    "reads": [
+     [
+      8619,
+      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/spec.md"
+     ],
+     [
+      6534,
+      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan.md"
+     ],
+     [
+      6307,
+      "Read /diagram/.clones/diagram-research/specs/260-mechanical-vocabulary-candidates/plan-review.json"
+     ],
+     [
+      4254,
+      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/tasks.md"
+     ],
+     [
+      3132,
+      "Bash cd /diagram/.clones/diagram-research && grep -niE \"(no footnote|unfootnoted|bare assertion|without a footnote|"
+     ],
+     [
+      2764,
+      "Read /diagram/.clones/diagram-research/specs/242-cite-the-unfootnoted-assertions/measure/worklist.py"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "T03 sizing: source-reader pass",
+  "main": {
+   "fresh": 110679,
+   "cached": 164607,
+   "output": 1498,
+   "thinking": 245,
+   "turns": 2,
+   "peak_context": 138470
+  },
+  "agents": [
+   {
+    "agent": "source-reader",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Read sources for sizing items",
+    "fresh": 52267,
+    "cached": 101698,
+    "output": 6851,
+    "thinking": 1420,
+    "turns": 4,
+    "peak_context": 52262,
+    "first_turn": 7890,
+    "read_chars": 21454,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      6968,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/01-en.wikipedia.org.txt"
+     ],
+     [
+      5350,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/030-a-county-seats-street-shar"
+     ],
+     [
+      4039,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/02-www.japanesewiki.com.t"
+     ],
+     [
+      2483,
+      "WebSearch castle town sogamae proportion of samurai residences located outside the outer moat"
+     ],
+     [
+      1711,
+      "Grep densit|per cent|percent|%|area|land|crowd|space"
+     ],
+     [
+      903,
+      "Grep ashigaru|samurai|retainer|sogamae|outer moat|inside the|outside the wall"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "T04 sizing: write the notes",
+  "main": {
+   "fresh": 49693,
+   "cached": 2609560,
+   "output": 15340,
+   "thinking": 4532,
+   "turns": 16,
+   "peak_context": 186478
+  },
+  "agents": []
+ },
+ {
+  "window": "P2 plan review round 2 + record-tool fix",
+  "main": {
+   "fresh": 15283,
+   "cached": 2111073,
+   "output": 10515,
+   "thinking": 1502,
+   "turns": 11,
+   "peak_context": 201739
+  },
+  "agents": [
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review round 2, feature 250",
+    "fresh": 39305,
+    "cached": 236741,
+    "output": 13860,
+    "thinking": 7949,
+    "turns": 7,
+    "peak_context": 49975,
+    "first_turn": 26078,
+    "read_chars": 27118,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      10866,
+      "Bash sha256sum /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan.md; echo \"---PREV---\"; cat "
+     ],
+     [
+      4199,
+      "Bash git -C /diagram/.clones/diagram-research diff 81ac3e3c b98e9f1e -- specs/250-close-the-record-checks/plan.md"
+     ],
+     [
+      3717,
+      "Bash cd /diagram/.clones/diagram-research; awk 'NR>=180 && NR<=205' specs/242-cite-the-unfootnoted-assertions/hando"
+     ],
+     [
+      3484,
+      "Bash cd /diagram/.clones/diagram-research/specs/242-cite-the-unfootnoted-assertions/handoff/reports/; for f in *.md"
+     ],
+     [
+      3109,
+      "Bash cd /diagram/.clones/diagram-research; awk 'NR>=107 && NR<=132 {printf \"%d|%s\\n\", NR, $0}' specs/242-cite-the-u"
+     ],
+     [
+      846,
+      "Bash cd /diagram/.clones/diagram-research; grep -n \"T10\" specs/250-close-the-record-checks/plan.md specs/250-close-"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "T05-T07 sizing: the checks, one agent per entry or key",
+  "main": {
+   "fresh": 73226,
+   "cached": 4120945,
+   "output": 20436,
+   "thinking": 5219,
+   "turns": 17,
+   "peak_context": 274931
+  },
+  "agents": [
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "quote-check sizing entry 010",
+    "fresh": 49329,
+    "cached": 52223,
+    "output": 3653,
+    "thinking": 1328,
+    "turns": 3,
+    "peak_context": 49326,
+    "first_turn": 6923,
+    "read_chars": 19504,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      10173,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
+     ],
+     [
+      5350,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/030-a-county-seats-street-shar"
+     ],
+     [
+      2669,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
+     ],
+     [
+      1312,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
+     ]
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "source-applicability edo-enwiki",
+    "fresh": 50597,
+    "cached": 47331,
+    "output": 4475,
+    "thinking": 2138,
+    "turns": 3,
+    "peak_context": 50594,
+    "first_turn": 5998,
+    "read_chars": 24626,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      23560,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/01-en.wikipedia.org.txt"
+     ],
+     [
+      932,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/010-works-cited/4220-edo-enwiki.html"
+     ],
+     [
+      134,
+      "Bash cd /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing && grep -n -i -E \"dens"
+     ]
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format sizing entry 010",
+    "fresh": 67311,
+    "cached": 119581,
+    "output": 8867,
+    "thinking": 3444,
+    "turns": 4,
+    "peak_context": 67306,
+    "first_turn": 8428,
+    "read_chars": 42482,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      27229,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/assets/glossary-variants.txt"
+     ],
+     [
+      10173,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
+     ],
+     [
+      2669,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/010-how-big-is-a-citys-wall-fo"
+     ],
+     [
+      1312,
+      "Grep ."
+     ],
+     [
+      623,
+      "Grep ."
+     ],
+     [
+      476,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-010.txt"
+     ]
+    ]
+   },
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format sizing entry 020",
+    "fresh": 43549,
+    "cached": 114239,
+    "output": 11703,
+    "thinking": 6476,
+    "turns": 4,
+    "peak_context": 50657,
+    "first_turn": 8455,
+    "read_chars": 14921,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      9715,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
+     ],
+     [
+      3015,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
+     ],
+     [
+      1389,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-020.txt"
+     ],
+     [
+      571,
+      "Grep (?i)^(yamen|burakumin|machi|daimyo|daimy\u014ds?|rampart|precinct|warren|ward|quarter|muster|hitching|bund|comb|pre"
+     ],
+     [
+      141,
+      "Grep (?i)(populated|polygon|void|footprint|dead ground|dead zone|civic|reserve|neighborhood|forecourt|beaten earth|"
+     ],
+     [
+      90,
+      "Grep (?i)(rampart|precinct|muster|hitching|intramural|prefectural|patrol strip|ring road|stable|^acre|^quarter|^war"
+     ]
+    ]
+   },
+   {
+    "agent": "source-applicability",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "source-applicability jokamachi-wiki",
+    "fresh": 39238,
+    "cached": 10666,
+    "output": 3201,
+    "thinking": 1548,
+    "turns": 2,
+    "peak_context": 43938,
+    "first_turn": 5966,
+    "read_chars": 9164,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      7587,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/02-www.japanesewiki.com.t"
+     ],
+     [
+      1577,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/010-works-cited/4350-jokamachi-wiki."
+     ]
+    ]
+   },
+   {
+    "agent": "quote-check",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "quote-check sizing entry 020",
+    "fresh": 45688,
+    "cached": 61607,
+    "output": 6299,
+    "thinking": 2365,
+    "turns": 3,
+    "peak_context": 51213,
+    "first_turn": 7230,
+    "read_chars": 18214,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      9715,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
+     ],
+     [
+      5350,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/030-a-county-seats-street-shar"
+     ],
+     [
+      3015,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/sizing/020-how-densely-is-a-quarter-b"
+     ],
+     [
+      134,
+      "Bash cd /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/250-sizing/ && grep -n -i \"densel"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "P3 plan review round 3 + T08/T09 one 242-named entry",
+  "main": {
+   "fresh": 24262,
+   "cached": 3170505,
+   "output": 8866,
+   "thinking": 1732,
+   "turns": 11,
+   "peak_context": 299171
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format ways entry 010",
+    "fresh": 40553,
+    "cached": 61737,
+    "output": 6109,
+    "thinking": 2379,
+    "turns": 3,
+    "peak_context": 47663,
+    "first_turn": 8353,
+    "read_chars": 9643,
+    "nested_chars": 113715,
+    "nested_files": 3,
+    "reads": [
+     [
+      3439,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge"
+     ],
+     [
+      3171,
+      "Read /diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge"
+     ],
+     [
+      1471,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-ways-010.txt"
+     ],
+     [
+      1312,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/pp-ways-010.txt"
+     ],
+     [
+      250,
+      "Grep (?i)^(abutment|abutments|scour|riprap|gabion|gabions|glulam|stringer|stringers|sill|embankment|obliquity|footp"
+     ]
+    ]
+   },
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review round 3, feature 250",
+    "fresh": 44696,
+    "cached": 170715,
+    "output": 9946,
+    "thinking": 6761,
+    "turns": 5,
+    "peak_context": 52350,
+    "first_turn": 26225,
+    "read_chars": 29702,
+    "nested_chars": 38971,
+    "nested_files": 1,
+    "reads": [
+     [
+      7736,
+      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan-review.json"
+     ],
+     [
+      6555,
+      "Read /diagram/.clones/diagram-research/specs/250-close-the-record-checks/measure/assertions.py"
+     ],
+     [
+      5977,
+      "Bash cd /diagram/.clones/diagram-research/specs/242-cite-the-unfootnoted-assertions/handoff/reports && grep -n -i -"
+     ],
+     [
+      3434,
+      "Bash cd /diagram/.clones/diagram-research && sha256sum specs/250-close-the-record-checks/plan.md && git -C /diagram"
+     ],
+     [
+      1955,
+      "Bash cd /diagram/.clones/diagram-research && python3 specs/250-close-the-record-checks/measure/assertions.py --list"
+     ],
+     [
+      1280,
+      "Bash cd /diagram/.clones/diagram-research && sed -n '45,60p' specs/250-close-the-record-checks/tasks.md; echo \"=== "
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "P4 plan review round 4 + the report",
+  "main": {
+   "fresh": 16000,
+   "cached": 2426895,
+   "output": 6310,
+   "thinking": 2315,
+   "turns": 8,
+   "peak_context": 315155
+  },
+  "agents": [
+   {
+    "agent": "spec-fidelity",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "Plan review round 4, feature 250",
+    "fresh": 28404,
+    "cached": 185051,
+    "output": 6396,
+    "thinking": 1574,
+    "turns": 7,
+    "peak_context": 36053,
+    "first_turn": 26060,
+    "read_chars": 9843,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      7524,
+      "Bash cat specs/250-close-the-record-checks/plan-review.json; echo \"=== makefile ===\"; grep -n \"plan-verdict\" -A12 M"
+     ],
+     [
+      983,
+      "Bash sha256sum /diagram/.clones/diagram-research/specs/250-close-the-record-checks/plan.md; git -C /diagram/.clones"
+     ],
+     [
+      975,
+      "Bash python3 specs/250-close-the-record-checks/measure/assertions.py 2>&1; echo \"=== targets ===\"; ls; grep -rln \"p"
+     ],
+     [
+      260,
+      "Bash cat > /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/plan-review-r4.json <<'JSON' {"
+     ],
+     [
+      60,
+      "Bash ls specs/250-close-the-record-checks/ && ls specs/250-close-the-record-checks/*verdict* 2>/dev/null; find . -p"
+     ],
+     [
+      41,
+      "Bash grep -rn \"plan-verdict\" Makefile* makefiles/ 2>/dev/null | head; echo \"=== script check for unattributed ===\";"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "window": "X1 experiment: record-format ways 010 from copies OUTSIDE the tree",
+  "main": {
+   "fresh": 8544,
+   "cached": 1272483,
+   "output": 3246,
+   "thinking": 403,
+   "turns": 4,
+   "peak_context": 323691
+  },
+  "agents": [
+   {
+    "agent": "record-format",
+    "class": "named",
+    "model": "claude-opus-5",
+    "description": "record-format ways 010, outside tree",
+    "fresh": 7391,
+    "cached": 55227,
+    "output": 5737,
+    "thinking": 2245,
+    "turns": 5,
+    "peak_context": 14496,
+    "first_turn": 8397,
+    "read_chars": 9887,
+    "nested_chars": 0,
+    "nested_files": 0,
+    "reads": [
+     [
+      3440,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/outside/010-how-far-past-the-bank-do"
+     ],
+     [
+      3171,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/outside/010-how-far-past-the-bank-do"
+     ],
+     [
+      1349,
+      "Read /tmp/claude-1000/-diagram/e34913cb-bb99-485e-9f5d-ecbd754898cd/scratchpad/outside/prepass.txt"
+     ],
+     [
+      1312,
+      "Grep (?i)^(carried|spread|bearing|tier|tiers|sheet|deck|decking|toe|watercourse|channel|obliquity|sine|centerline|i"
+     ],
+     [
+      396,
+      "Grep (?i)^(abutment|abutments|scour|girder|sill|glulam|stringers|stringer|riprap|gabions|footplank|jetty|footing|fo"
+     ],
+     [
+      219,
+      "Grep (?i)(carried|spread|strip|tier|sheet|deck|watercourse|channel)"
+     ]
+    ]
+   }
+  ]
+ }
+]

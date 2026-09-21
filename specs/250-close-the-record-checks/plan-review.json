@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "23e698906aa68ed410675dbfa47be0249baa506c8f567e339c313715337bfee5",
+ "plan_sha256": "d60423a54e742d0dcc40944904067605dd8f8d24b86d74ae36254311d0f122ef",
  "reviewed": "2026-09-21",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,7 +8,7 @@
    "id": "D1-paths-read-through-the-split",
    "summary": "The spec's named edit targets are assembled files; the requirement is judged on the assembled file and the EDIT lands in the fragment.",
    "class": "within",
-   "why": "Unchanged since round 1 (b98e9f1e touches only D3, D4, D5). Changes the address of an edit, not what it must achieve; record-edit-hooks.sh makes hand-editing an assembled page impossible."
+   "why": "Unchanged since round 1. Changes the address of an edit, not what it must achieve; record-edit-hooks.sh makes hand-editing an assembled page impossible."
   },
   {
    "id": "D1-notes-hand-placed",
@@ -33,21 +33,21 @@
    "summary": "Phase 1 does FR-001 whole on cities/sizing plus FR-003 for one entry, reports the token measurement (T10), and stops for the GM.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "RESOLVED. Ruling unchanged from round 1 (the narrowing is the GM's own instruction of 2026-09-21, quoted in the decision). Round 1's non-blocking caveat is met: the decision no longer claims the slice runs EVERY agent, and now names the two it cannot run (entry-drift, owed only at the close under FR-007; source-applicability, only if the slice changes a registry write-up) and requires T10 to name every agent the slice did not measure. Note for the implementer, not a finding against the plan: tasks.md T10 (lines 49-53) still asks only for the per-window table, what each agent read, and the implication for phases 2 to 4 - it does not yet carry the naming clause D3 now promises."
+   "why": "RESOLVED at round 2 and unchanged since (the round-3 and round-4 diffs touch only D4's Measured line). The narrowing is the GM's own instruction of 2026-09-21, quoted in the decision; the decision names the two agents the slice cannot run (entry-drift, owed only at the close under FR-007; source-applicability, only if the slice changes a registry write-up) and requires T10 to name every agent the slice did not measure. Standing note for the implementer, not a finding against the plan: tasks.md T10 still asks only for the per-window table, what each agent read, and the implication for phases 2 to 4 - it does not carry the naming clause D3 promises."
   },
   {
    "id": "D4-FR-002s-list-derived-by-a-script-over-the-reports",
-   "summary": "measure/assertions.py matches a LINE, heading or not, carrying 'assertion' plus 'footnote'/'unfootnoted', takes the bullets that follow it up to the next heading or blank run, fails where a report has no such line, and compares against a report's own stated count.",
+   "summary": "measure/assertions.py matches a LINE, heading or not, carrying 'assertion' plus 'footnote'/'unfootnoted', takes the bullets that follow it by the measured block rule, fails where a report has no such line, excludes a matched line that is itself a bullet or a table row, and names where each item's page and section come from; the closing report prints the script's own count.",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "PARTLY RESOLVED. The round-1 defect is genuinely fixed: I ran the restated matcher over the reports at this HEAD and every one of the six quote-check reports now has at least one match, qc-fields-religion-archetypes.md included (its three bold lines at 187, 279, 346), and the remembered 'six wordings' parenthetical is gone, replaced by the measured shape. What is still stated rather than measured is the BLOCK - which bullets belong to a matched line - and the bullet block has no more single shape than the opener did. Measured at this HEAD: qc-fields lists its items as a contiguous bullet run after one blank line, while hw-quotecheck's listing (heading at 109) is a run of bold page-and-section lines each followed by ONE bullet, every pair separated by a single blank line, with a prose paragraph at line 111 before the first bullet. Under 'up to the next heading or blank run' read literally, the script takes zero bullets from hw-quotecheck, the report with the most of them, and neither guard catches it: the fail-loud clause fires only where NO matching line is found, and hw-quotecheck has one; the stated-count comparison reaches only the two reports that carry a count row (measured: qc-buildings-vegetation line 199, qc-fields line 374), and hw-quotecheck carries none. Silently dropping a page's assertions is the exact failure the fail-loud clause was added to prevent, so FR-002's derivation still does not reliably happen. Two further measured over-matches the rule as written does not exclude: hw-quotecheck line 123 is a BULLET inside its own listing that carries both words and would open a second, duplicate block, and the two summary table rows (199, 374) match as listing openers although they are the stated counts the comparison clause reads. The decision must say, measured, how a block ENDS and where the page and section come from - in hw-quotecheck both come from the bold lines above each bullet, in qc-fields from each bullet's own italic prefix, and D4 names neither carrier - and must exclude a matched line that is itself a bullet or a table row."
+   "ruling": "LEGITIMATE",
+   "why": "RESOLVED. Round 2's fatal finding was that the block rule and the page/section carriers were stated rather than measured, so hw-quotecheck's pair-per-bullet listing would silently yield zero items; round 3 confirmed the substance is fixed and left one wrong figure ('twelve pages' where the script returns fifteen). Commit 50969d46 corrects that clause to 'fifteen pages, 72 items' and prints the three figures from the script's own last line; the round-4 diff (d48298a4..50969d46 over plan.md) touches nothing else. Re-run at this HEAD, not read: 'total: 72 item(s) over 6 reports and 15 page(s)', with hw-quotecheck now yielding 7 items ({'homesteads': 5, 'water': 2}) rather than zero, and each of the six reports printing '0 with no section found', which is the 'every item carries both a page and a section - 0 without' claim measured. A narrowing of HOW FR-002's list is derived that makes the derivation reliably happen rather than gutting it."
   },
   {
    "id": "D5-unlocated-items-found-by-their-own-words",
    "summary": "worklist.py's section label is treated as a hint only; each NOT-LOCATED, TOO-SHORT or AMBIGUOUS item is found by grepping its distinctive words over research/<page>/*.html, and an item no fragment carries is recorded as such with the words tried and searched by subject, never confirmed against a fragment the grep did not name.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "RESOLVED. The decision now states the measured fact round 1 established - section_of returns the last ### heading of the REPORT, so on cities/sizing three of six items carry another entry's or another page's heading and on fields one carries an empty label and three carry a heading no fragment of research/fields/ has - and replaces the mechanism with one grounded in the item's own text rather than in that label. The final clause ('never confirmed against a fragment the grep did not name') closes the failure that made round 1 fatal: an item confirmed against the wrong text. A narrowing of HOW the search is done that serves FR-006 and SC-006 rather than gutting them."
+   "why": "RESOLVED at round 2 and unchanged since. The decision states the measured fact that section_of returns the last ### heading of the REPORT, and replaces the mechanism with one grounded in the item's own text; 'never confirmed against a fragment the grep did not name' closes the round-1 failure of an item confirmed against the wrong text. A narrowing of HOW the search is done that serves FR-006 and SC-006."
   },
   {
    "id": "Technical-context-route-and-the-record-tests",
@@ -71,8 +71,8 @@
    "id": "Phase-2-pairs-FR-002-with-FR-006",
    "summary": "FR-006's items are worked beside FR-002 page by page.",
    "class": "within",
-   "why": "Unchanged since round 1: an ordering the spec itself pairs ('worked as a bare item under FR-002'). The FR-006 half no longer inherits a defect now that D5 is corrected; the FR-002 half waits on D4."
+   "why": "Unchanged since round 1: an ordering the spec itself pairs ('worked as a bare item under FR-002'). Both halves are now clear, D4 and D5 being resolved."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
