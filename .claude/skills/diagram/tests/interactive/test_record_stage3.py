@@ -214,7 +214,7 @@ def test_the_command_writes_checks_splits_and_refuses(record: pathlib.Path, caps
     assert record_asset.main(["--check", "--research-dir", str(record)]) == 1
     assert "STALE" in capsys.readouterr().err
     assert record_asset.main(["--research-dir", str(record)]) == 0
-    assert "wrote 1 page" in capsys.readouterr().out
+    assert "wrote 1 file" in capsys.readouterr().out
     assert record_asset.main(["--page", "ways", "--research-dir", str(record)]) == 0
     assert record_asset.main(["--split", "sources", "--research-dir", str(record)]) == 0
     assert "assembles back to the same bytes" in capsys.readouterr().out
@@ -222,12 +222,30 @@ def test_the_command_writes_checks_splits_and_refuses(record: pathlib.Path, caps
     assert "record:" in capsys.readouterr().err
 
 
+def test_the_command_writes_the_citations_page_a_new_footnote_lands_on(record: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """A footnote added to a question reaches BOTH committed files, so the check the command owes goes green.
+
+    Found on `cities/sizing` (feature 250): the command wrote the research page alone, `--check` then named
+    the citations page STALE and said to run the command that had just run.
+    """
+    from l7r.diagram.interactive.record.store import write_notes_fragments
+
+    write_notes_fragments("ways.html", str(record))
+    assert record_asset.main(["--research-dir", str(record)]) == 0
+    notes = sorted((record / "ways").glob("*.notes.html"))[0]
+    question = notes.with_name(notes.name.replace(".notes.html", ".html"))
+    question.write_text(question.read_text(encoding="utf-8").replace("</p>", '<sup class="fn" data-note="added"></sup></p>', 1), encoding="utf-8")
+    notes.write_text(notes.read_text(encoding="utf-8") + '<li data-note="added">no publicly readable source (searched 2026-09-21: nothing read)</li>\n', encoding="utf-8")
+    assert record_asset.main(["--research-dir", str(record)]) == 0
+    assert "nothing read" in (record / "citations" / "ways.html").read_text(encoding="utf-8")
+    assert record_asset.main(["--check", "--research-dir", str(record)]) == 0, capsys.readouterr().err
+
+
 def test_the_command_names_the_registry_by_either_name() -> None:
     assert record_asset._page_rel("sources") == "SOURCES.html"
     assert record_asset._page_rel("SOURCES") == "SOURCES.html"
     assert record_asset._page_rel("cities/fabric") == "cities/fabric.html"
     assert record_asset._page_rel("ways.html") == "ways.html"
-    assert record_asset._read("/no/such/file") is None
 
 
 def test_the_small_refusals_of_the_layout() -> None:

@@ -17,7 +17,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-from l7r.diagram.interactive.record.store import RecordError, check, read_page, record_pages, write_fragments
+from l7r.diagram.interactive.record.store import RecordError, check, record_pages, write_fragments, write_pages
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
 
@@ -59,14 +59,11 @@ def _write(page: str, research_dir: str) -> int:
     pages = [_page_rel(page)] if page else record_pages(research_dir)
     written = 0
     for page_rel in pages:
-        want = read_page(page_rel, research_dir)
-        path = f"{research_dir}/{page_rel}"
-        if _read(path) == want:
-            continue
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(want)
-        written += 1
-    print(f"record: wrote {written} page(s)")
+        # `write_pages`, never the research page alone: a footnote added to a question lands on the
+        # CITATIONS page too, and `--check` judges both. Writing one half left `make record` unable to
+        # clear the STALE its own check reported (found on cities/sizing, feature 250, 2026-09-21).
+        written += write_pages(page_rel, research_dir)
+    print(f"record: wrote {written} file(s)")
     return 0
 
 
@@ -75,14 +72,6 @@ def _page_rel(name: str) -> str:
     if name in ("sources", "SOURCES"):
         return "SOURCES.html"
     return name if name.endswith(".html") else f"{name}.html"
-
-
-def _read(path: str) -> str | None:
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return fh.read()
-    except OSError:
-        return None
 
 
 if __name__ == "__main__":
