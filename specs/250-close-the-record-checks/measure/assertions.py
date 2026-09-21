@@ -103,6 +103,7 @@ def items_of(lines: list[str]) -> list[dict]:
 def main(argv: list[str]) -> int:
     failed = False
     total = 0
+    all_pages: set[str] = set()
     for name in NAMES:
         lines = (REPORTS / name).read_text(encoding="utf-8").splitlines()
         items = [{**item, "page": item["page"] or _ONE_PAGE.get(name, "")} for item in items_of(lines)]
@@ -119,10 +120,11 @@ def main(argv: list[str]) -> int:
         failed = failed or (stated is not None and stated != len(items))
         print(f"{name}: {len(items)} item(s), {bare} with no section found  {pages}{note}")
         total += len(items)
+        all_pages.update(pages)
         if "--list" in argv:
             for item in items:
                 print(f"    [{item['page']}] {item['section'][:50]} | {item['text'][:110]}")
-    print(f"total: {total}")
+    print(f"total: {total} item(s) over {len(NAMES)} reports and {len(all_pages)} page(s)")
     return 1 if failed else 0
 
 

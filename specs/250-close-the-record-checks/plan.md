@@ -111,7 +111,8 @@ docstring carries beside the code:
   and which was compared by hand: equal).
 
 Measured: every item the script returns carries both a page and a section - 0 without, over six
-reports and twelve pages. The task list names no count; the closing report prints the script's.
+reports and fifteen pages, 72 items (the script's own last line prints all three). The task list names
+no count; the closing report prints the script's.
 
 ### D5 - FR-006's items are found by their own words, grepped over the page's fragments
 
