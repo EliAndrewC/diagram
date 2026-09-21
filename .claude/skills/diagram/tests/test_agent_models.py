@@ -23,7 +23,10 @@ owes the field the day it lands - and owes its contract every project rule its j
 exception is a measured case the GM approved, in `KEEPS_CLAUDE_MD`, never a session's own call.
 
 TO CHANGE A TIER: change the row here and the frontmatter together, and record why - for a downgrade,
-the seeded-fault run that justifies it.
+the seeded-fault runs that justify it, THREE A LEG (GM 2026-09-21). One run does not settle it: feature
+256 measured both legs of most pairs catching what the other missed, so a single MISS may be variance
+and a single HIT may be luck. The doctrine, and why three is inherited from 256 rather than measured,
+is in `docs/spec-kit-and-reviews.md`.
 """
 
 from __future__ import annotations
