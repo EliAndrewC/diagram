@@ -2,5 +2,17 @@
  {
   "label": "P0 plan and tasks",
   "ts": "2026-09-21T04:47:53.773Z"
+ },
+ {
+  "label": "P1 plan review (spec-fidelity) + T01 baseline",
+  "ts": "2026-09-21T04:49:16.383Z"
+ },
+ {
+  "label": "T03 sizing: source-reader pass",
+  "ts": "2026-09-21T04:50:44.105Z"
+ },
+ {
+  "label": "T04 sizing: write the notes",
+  "ts": "2026-09-21T04:52:35.676Z"
  }
 ]

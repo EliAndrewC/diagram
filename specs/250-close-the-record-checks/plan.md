@@ -66,8 +66,10 @@ up by the main session, how many by each named subagent, how many by the ad hoc 
 measuring this, we can then check whether we need to make any more structural changes before we proceed
 with the rest of the feature."*
 
-So Phase 1 is a slice chosen to run EVERY agent the full feature will run, once, on the smallest real
-work that does so, and Phase 2 onward waits for the GM. `measure/tokens.py` cuts the session into one
+So Phase 1 is a slice chosen to run as many of the agents the full feature will run as the smallest
+real work allows, and Phase 2 onward waits for the GM. It cannot run all of them: `entry-drift` is owed
+only at the close (FR-007), and `source-applicability` runs only if the slice adds or changes a registry
+write-up. T10 names every agent the slice did NOT measure, so the figures are not read as complete. `measure/tokens.py` cuts the session into one
 window per task (`mark`) and reports the main session, each named agent and each ad-hoc agent per
 window, with what each agent read, largest first. The slice:
 
@@ -81,16 +83,29 @@ The slice is real work and stays. It is not pushed: a feature with an open task 
 
 ### D4 - FR-002's count is derived by a script over the reports
 
-`measure/assertions.py` cuts each quote-check report at its "assertions with no footnote" heading and
-lists the bullets per page and section. The heading wording differs in every report (measured: six
-wordings over six reports), so the script matches a heading containing both "footnote" and
-"assertion", case-blind, and FAILS on a report where it finds none, so a seventh wording cannot
-silently drop a page. The task list names no count; the closing report prints the script's.
+`measure/assertions.py` lists, per report, page and section, the bullets under each "assertions with no
+footnote" listing. The listing has no one shape (the plan review measured it, 2026-09-21): five of the
+six reports open it with a markdown heading, worded differently each time, and
+`qc-fields-religion-archetypes.md` opens it three times mid-document with a plain bold line
+(`Unfootnoted real-world assertions, by section:`, once per page) and no heading at all. So the script
+matches a LINE, heading or not, wherever it falls in the report, that carries "assertion" and one of
+"footnote" / "unfootnoted", case-blind; takes the bullets that follow it up to the next heading or blank
+run; and FAILS on a report in which it finds no such line, so a new shape stops the run and cannot
+silently drop a page. Where a report states its own count (that report's summary table does), the
+script compares and fails on a mismatch. The task list names no count; the closing report prints the
+script's.
 
-### D5 - FR-006's items that landed in a rewritten sentence are found per fragment
+### D5 - FR-006's items are found by their own words, grepped over the page's fragments
 
-`worklist.py` names the section of each NOT-LOCATED, TOO-SHORT or AMBIGUOUS item. The hand search opens
-that section's one fragment, not the page.
+`worklist.py` prints a section label beside each item, and the label is NOT the record section the
+sentence lives in: `section_of` returns the last `###` heading of the inventory REPORT above the item.
+Measured by the plan review, 2026-09-21: on `cities/sizing` three of the six items carry a heading from
+another page or the other entry, and on `fields` a NOT-LOCATED item carries an empty label and three
+carry a heading no fragment of `research/fields/` has. So the label is a hint and nothing more. Each
+NOT-LOCATED, TOO-SHORT or AMBIGUOUS item is found by grepping its distinctive words - a figure, a proper
+noun, a term - over `research/<page>/*.html`, and the fragment the grep names is the one opened. An item
+whose words no fragment carries is recorded as such, with the words tried, and is then searched by its
+subject; it is never confirmed against a fragment the grep did not name.
 
 ## Phases
 

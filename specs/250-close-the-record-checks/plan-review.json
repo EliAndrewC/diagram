@@ -1,0 +1,78 @@
+{
+ "feature": "250-close-the-record-checks",
+ "plan_sha256": "c022f546b4ceaf8a69a35f417583832698f497447a4cf4a243f9913338c8a121",
+ "reviewed": "2026-09-21",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-paths-read-through-the-split",
+   "summary": "The spec's named edit targets (cities/sizing.html, the registry, glossary.json) are now assembled files; the requirement is still judged on the assembled file and the EDIT lands in the fragment that assembles into it, with no amendment to the accepted spec.",
+   "class": "within",
+   "why": "Changes the address of an edit, not what the edit must achieve: every success criterion (SC-001, SC-003, SC-005) is still read off the assembled artifact, and features 258 and 259 make hand-editing an assembled page impossible - record-edit-hooks.sh re-aims such an Edit and refuses a Write. The GM's 2026-09-21 message names that split as the thing to be measured, so working through fragments is what they expect. Not amending an accepted spec over a change of address matches the position feature 260 D4 took and ruled within. Measured: research/cities/sizing/ holds exactly two question fragments (010-how-big-is-a-citys-wall..., 020-how-densely-is-a-quarter-built...) plus their .notes.html, and the five bare items split across both (010 carries 'two thirds of a city', 020 carries 'commoner warren packs far denser' and 'civic buildings alone are only a few percent')."
+  },
+  {
+   "id": "D1-notes-hand-placed",
+   "summary": "242's apply_notes.py placed notes by line into a whole page and wrote footnote numbers; notes are now hand-placed as a sup data-note in the fragment and an li data-note in the .notes.html beside it.",
+   "class": "within",
+   "why": "The per-entry rule and the assembly-time allocation of footnote numbers make the old harness inapplicable; the note forms FR-001 requires (citation, absence, grounds) are unchanged, and nothing about which assertions get a note moves."
+  },
+  {
+   "id": "D1-worklist-still-judges-SC-001",
+   "summary": "242's measure/worklist.py reads the assembled page and still runs, so SC-001 and SC-006 are judged with it unchanged.",
+   "class": "within",
+   "why": "Reproduced on my own run at this HEAD: 'cities/sizing.html: 6 bare items; FOOTNOTED 1, LOCATED 5', the exact figure the plan states. For SC-001 the status column is what the criterion reads, and it is sound. The SC-006 half of this claim rests on the script's section attribution and is ruled separately under D5 - the script still runs, but what it prints as a section is not what D5 needs."
+  },
+  {
+   "id": "D2-check-per-entry-with-its-pre-pass",
+   "summary": "quote-check, record-format, source-applicability and source-reader are dispatched per entry with their script pre-pass, never per page.",
+   "class": "within",
+   "why": "FR-007 asks for checks 'scoped to the changed notes and sections' on the pages 242 checked whole, so per-entry is the scope the spec names. FR-001 asks for the checks 'over the page' on cities/sizing, which 242 never checked - and there the two forms coincide as measured: the page holds two question entries and both carry flagged items, so per changed entry covers the whole body. The dispatch shape is the change 242's own cost measurement asked for and the project rule already requires the pre-pass to run first."
+  },
+  {
+   "id": "D3-a-measured-slice-first-then-the-GM",
+   "summary": "Phase 1 does FR-001 whole on cities/sizing plus FR-003 for one entry, reports the token measurement (T10), and stops for the GM; phases 2 to 4 wait.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It narrows the accepted spec's work to a fraction, but the narrowing is the GM's own instruction of 2026-09-21, quoted in the decision: 'begin feature 250, but then only perform a few of its tasks, and then measure the token usage for the different aspects of each task ... we can then check whether we need to make any more structural changes before we proceed with the rest of the feature.' The size is a fair reading of 'a few of its tasks': one page's five items and one entry's vocabulary findings, against FR-002 over six reports' worth of pages and three whole cosmetic sweeps. Keeping the slice's edits in the clone unpushed follows the standing open-task rule, and the slice is real work that stays rather than a throwaway. One caveat, measured against the plan's own task list rather than blocking: the claim that the slice runs EVERY agent the full feature will run is true only of source-reader, quote-check and record-format; T05 dispatches source-applicability only if T04 adds a registry key, and entry-drift (FR-007, T16) cannot run in the slice at all, so T10's report must say which named agents went unmeasured or the GM's structural read will be taken as complete when it is not."
+  },
+  {
+   "id": "D4-FR-002s-list-derived-by-a-script-over-the-reports",
+   "summary": "measure/assertions.py cuts each quote-check report at its 'assertions with no footnote' HEADING, matching a heading containing both 'footnote' and 'assertion' case-blind, on the stated premise of 'six wordings over six reports', and fails on a report where it finds none.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The premise does not reproduce and the mechanism does not reach the corpus SC-002 names. Measured at this HEAD over the six quote-check reports in specs/242-cite-the-unfootnoted-assertions/handoff/reports/: five carry such a heading (hw-quotecheck '## 7. Assertions with NO footnote that rest on something outside the record', qc-buildings-vegetation '### Unfootnoted assertions about the real world', qc-fabric-government-hinterland-ways '## Assertions carrying NO footnote, per section', qc-river-cities-defenses-towns '## Assertions with no footnote, by section', urban-quotecheck '## Unfootnoted assertions resting on something outside the record'), and the sixth, qc-fields-religion-archetypes.md, carries NO heading with the word 'assertion' at all - it lists its bare assertions under a plain bold line 'Unfootnoted real-world assertions, by section:' repeated three times mid-document, at lines 187, 279 and 346, not at the end. Its own summary table counts nine of them (3 fields, 4 religion, 2 archetypes). So the described rule is five wordings, not six, and the sixth report's nine assertions are outside its reach; the fail-loud clause converts that into a stopped script rather than a silent drop, but the derivation FR-002 requires still does not happen. The decision must state the measured shape - a heading OR a non-heading listing line, matched wherever it falls in the report, not only at the end - and drop the '(measured: six wordings over six reports)' parenthetical, which is a remembered figure that my re-measurement contradicts."
+  },
+  {
+   "id": "D5-unlocated-items-found-per-fragment-from-the-work-lists-section",
+   "summary": "worklist.py names the section of each NOT-LOCATED, TOO-SHORT or AMBIGUOUS item, and the hand search under FR-006 opens that section's one fragment rather than the page.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The mechanism cannot do what the decision says it is for, and the premise was stated rather than measured. worklist.py's section_of (line 41) returns the last markdown '###' heading of the REPORT above the item block, not the record section the sentence lives in; because every report lists its bare assertions in a trailing or interleaved block, the label is whatever entry heading last appeared in the report's body. Measured at this HEAD: on cities/sizing the item 'About two thirds of a city's samurai households live inside the wall' is labeled h3 'Why the bund shows at all in high summer' while its sentence is in fragment 010-how-big-is-a-citys-wall...; 'a commoner warren packs far denser' and 'civic buildings alone are only a few percent' are labeled with 010's h3 'Does the map draw a house for every household the figure promises?' while both sit in fragment 020-how-densely-is-a-quarter-built.... On the exact class D5 scopes itself to, fields.html reports NOT-LOCATED 3 and TOO-SHORT 1: one NOT-LOCATED row ('the walking bunds (azemichi) ran ~2-5 ft') carries an EMPTY section, and the other two plus the TOO-SHORT carry h3 'Why the bund shows at all in high summer' - a heading that exists as no fragment in research/fields/ at all, while their material ('pre-modern yield ~1.3 koku/tan', 'at the Ming-Qing mu of ~614 m2') lives in 110-plot-sizes-pond-sizing-and-acreage-from-population.html and 120-tract-sizes---no-settlement-class-cap.html. Opening 'that section's one fragment' therefore opens the wrong fragment or none, and an item confirmed or declared missing against the wrong text defeats FR-006 and SC-006, whose whole point is that 242 never verified these item by item. The decision must name a search that is actually grounded in the item's text - the sentence's own words grepped across the page's fragments, with the report's label treated as a hint only - or state the measured fact that the label is unreliable and say what is used instead."
+  },
+  {
+   "id": "Technical-context-route-and-the-record-tests",
+   "summary": "DIRECT route, no engine Python; the four record tests after each page and make page-check at the close.",
+   "class": "within",
+   "why": "Spec D2 names the DIRECT route and SC-010 names make page-check; the per-page test runs are the regression discipline the constitution already requires, and they enforce what the spec asks rather than adding scope."
+  },
+  {
+   "id": "Performance-bookends-none-owed",
+   "summary": "No performance bookends: no engine code, no map moves.",
+   "class": "within",
+   "why": "Correct on the feature's own delta - the edits are record fragments, the glossary's per-term files and the registry; nothing under l7r/**/*.py or a pool generator changes."
+  },
+  {
+   "id": "Constitution-check-XII-XIII-XVI",
+   "summary": "Every FR-001 and FR-002 task is research: physical with the five boxes; T01 takes the regression baseline; D1 and D3 are put to spec-fidelity before a task is ticked.",
+   "class": "within",
+   "why": "Restates standing project rules and the spec's own pipeline; it decides nothing the spec left open."
+  },
+  {
+   "id": "Phase-2-pairs-FR-002-with-FR-006",
+   "summary": "FR-006's items are worked beside FR-002 page by page, since both open the same fragments.",
+   "class": "within",
+   "why": "An ordering, not a scope change: FR-006 already ends 'worked as a bare item under FR-002', so the spec itself pairs them. Note that the pairing inherits D5's defect for the FR-006 half until that decision is corrected."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
