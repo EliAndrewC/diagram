@@ -14,9 +14,11 @@ welcome and is not part of the bar, because it is the part that varies.
 
 Two things this does NOT cover, so that nobody reads it as covering them: the list is word-level and
 cannot see a multi-word term, and it does not raise a word the record uses often. And the rule for a
-TIER downgrade - whether a check may run on a cheaper model - is a different decision and still reads
-"a seeded-fault run on known findings" in the root `CLAUDE.md` and in `docs/spec-kit-and-reviews.md`.
-It rests on the same assumption about reproducibility and is deliberately left as the GM's to change.
+TIER downgrade - whether a check may run on a cheaper model - is a different decision, and its bar is
+not this one: the new tier is re-run on known findings, **three runs a leg** (root `CLAUDE.md`,
+`docs/spec-kit-and-reviews.md`; GM 2026-09-21). That rule fixes its target in advance the way this one
+does, so it was never broken the way "the same findings" was; what it was missing was the count, since
+one run of a judging agent is not a stable oracle (feature 256).
 
 ## The glossary is one file per word (feature 259)
 
