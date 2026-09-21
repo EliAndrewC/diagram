@@ -14,7 +14,7 @@ what is billed; "peak" is the largest context any one turn held.
 
 | who | input | output | share of input |
 |---|---|---|---|
-| the main session (92 turns) | 18.6 million | 91,000 | 87% |
+| the main session (92 turns) | 18.6 million | 91,000 | 87% (observed 2026-09-21; method: `measure/tokens.py report`, the last table, main over main plus named) |
 | named agents (13 runs, all Opus) | 2.8 million | 118,000 | 13% |
 | ad-hoc agents | 0 | 0 | none was dispatched |
 
@@ -43,7 +43,8 @@ second held about 45,000. The difference is not the record: the moment an agent 
 `.claude/skills/diagram/CLAUDE.md` and `research/CLAUDE.md` - 113,700 characters, about 28,400 tokens,
 as `nested_memory`. `omitClaudeMd: true` (feature 256) drops the copy given at LAUNCH and does not touch
 these. Measured on all nine check runs: three files attached, every time. That is 55% to 65% of a check's
-peak context, and five to twelve times what it read of the record.
+peak context (observed 2026-09-21; method: 28,400 over each run's `peak_context` in
+`measure/tokens-slice.json`), and five to twelve times what it read of the record.
 
 **The experiment (X1).** `record-format` over `ways` 010 twice, same fragment, same prepass, same tier:
 
@@ -52,7 +53,8 @@ peak context, and five to twelve times what it read of the record.
 | in the tree (`research/ways/...`) | 3 | 47,700 | 102,300 | 33 of 33 |
 | copies in the scratchpad | 0 | 14,500 | 62,600 | 25 of 25 |
 
-Peak context fell 70%; billed input 39% (the second run took five turns where the first took three). One
+Peak context fell 70% and billed input 39% (both observed 2026-09-21; method: the two rows above, one
+run each) (the second run took five turns where the first took three). One
 run a leg, so the size of the saving is an estimate and its direction is not: the attachment count went
 from three to none. The two lists differ because eight terms were defined between the runs. Whether the
 check's FINDINGS hold without those files is not shown by one run and is owed three a leg before it is
