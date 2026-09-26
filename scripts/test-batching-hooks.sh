@@ -8,11 +8,11 @@ PASS=0; FAIL=0
 # GUARD_EDIT_OK: feature 168 - batching-hooks.sh now RECORDS, so this suite writes into a throwaway
 # log rather than the session's real one; otherwise `make audit`'s census counts fixture firings.
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
-# GUARD_EDIT_OK: feature 261 - the captured stderr was a FIXED path, /tmp/bt.err, shared by every clone on the
-# machine; two sessions' gates running hooks-test at once overwrote each other's capture and this suite failed
-# 3-4 message checks in one clone while passing in another (measured 2026-09-26). Each run gets its own now.
-BT_ERR="$GUARD_LOG_ROOT/bt.err"
-trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - the block message is captured in a file of THIS run's own. It was the fixed "$BT_ERR",
+# which every concurrent hooks-test (one per session's gate) truncated and rewrote, so the greps below failed on
+# whichever checks another run happened to overwrite: 1 and then 3 of them in two back-to-back runs.
+BT_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$BT_ERR"' EXIT
 
 setup() {  # fresh state dir + fast thresholds so the tests do not sleep for real
   STATE_DIR=$(mktemp -d)

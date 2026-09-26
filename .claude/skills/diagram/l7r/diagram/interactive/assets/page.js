@@ -106,9 +106,20 @@
     var g = target && target.closest ? target.closest("g.f") : null;
     return g ? g.getAttribute("data-k") : null;
   }
-  // in raster mode the vector groups are hidden and the id map answers instead (below, `keyAtPoint`)
-  svg.addEventListener("pointerover", function (e) { if (mode() !== "raster") highlight(keyAt(e.target)); });
-  svg.addEventListener("pointerleave", function () { highlight(null); });
+  // THE LINK HAND OVER WHAT CAN BE CLICKED (GM 2026-09-26): a kind with an explanation turns the cursor into
+  // the pointer a link shows, except the broad kinds - grassland, marsh, paddies, copses, windbreaks, woodland
+  // commons - which carry `plain` (page.py PLAIN_CURSOR) and keep the arrow, as does bare ground. Set from the
+  // key under the pointer, not by CSS on the groups, because in raster mode the groups are hidden and the id
+  // map answers instead (below, `keyAtPoint`).
+  var cursorKey;
+  function cursorFor(key) {
+    if (key === cursorKey) return;
+    cursorKey = key;
+    stage.style.cursor = key !== null && data[key] && !data[key].plain ? "pointer" : "";
+  }
+  function pointAt(key) { cursorFor(key); highlight(key); }
+  svg.addEventListener("pointerover", function (e) { if (mode() !== "raster") pointAt(keyAt(e.target)); });
+  svg.addEventListener("pointerleave", function () { pointAt(null); });
   function unpin() { pinned = null; highlight(null); }
 
   function setText(id, s) { document.getElementById(id).textContent = s || ""; }
@@ -379,7 +390,7 @@
     var snapped = Math.round(v / raster.step) * raster.step;
     return (Math.abs(v - snapped) <= 1 && raster.palette[String(snapped)]) || null;
   }
-  stage.addEventListener("pointermove", function (e) { if (mode() === "raster") highlight(keyAtPoint(e.clientX, e.clientY)); });
+  stage.addEventListener("pointermove", function (e) { if (mode() === "raster") pointAt(keyAtPoint(e.clientX, e.clientY)); });
   stage.addEventListener("click", function (e) {
     if (mode() !== "raster") return;
     var k = keyAtPoint(e.clientX, e.clientY);
@@ -413,6 +424,7 @@
     highlight: highlight,
     open: open,
     current: function () { return current; },
+    cursor: function () { return stage.style.cursor || "auto"; },
     pinned: function () { return pinned; },
     openRefs: openRefs,
     classes: Object.keys(groups),

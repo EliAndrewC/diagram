@@ -20,6 +20,7 @@ from l7r.diagram.interactive.glossary import GLOSSARY
 from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.page import (
     CAVEAT_LEAD,
+    PLAIN_CURSOR,
     explanations,
     glossary_for,
     hit_copies,
@@ -119,6 +120,17 @@ def test_unregistered_classes_names_keys_the_registry_lacks() -> None:
 def test_present_classes_reads_every_tag_shape() -> None:
     tags = ["farmhouse", "-", None, Split("paddy", "bund"), ((None, "x"), ("byre", "y"))]
     assert present_classes(tags) == {"farmhouse", "paddy", "bund", "byre"}
+
+
+def test_the_broad_kinds_keep_the_arrow_and_every_other_kind_gets_the_hand() -> None:
+    """GM 2026-09-26: the cursor stays normal over grassland, marshland, paddies, copses, windbreak forests and
+    woodland commons, and turns into the link hand over every other feature. Every name on the list is a class
+    the registry knows - a renamed key would otherwise drop off the list with no test failing."""
+    assert {"scrub and rough grazing", "marsh", "paddy", "wet paddy", "copse", "windbreak", "woodland commons"} == PLAIN_CURSOR
+    assert set(CLASSES) >= PLAIN_CURSOR
+    data = explanations(set(CLASSES))
+    assert {k for k, d in data.items() if d["plain"]} == PLAIN_CURSOR
+    assert not explanations({"flying castle"})["flying castle"].get("plain"), "an unregistered stub is still clickable"
 
 
 def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
