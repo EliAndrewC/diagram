@@ -60,9 +60,9 @@ entry (T10).
 
 ## Phase 6 - acceptance
 
-- [ ] T11 `make done` green
+- [x] T11 `make done` green
       research: rendering
-      verify:
-- [ ] T12 `settlement-review`, one agent per re-rolled map, findings through `escalation-check`; ledger rows
+      verify: DONE. make done green on 0d44e65c (merged with main at 19837bc2): every test passed, coverage 100% (27454 statements), roll census green; the batching-test race and the stale roll roster were fixed on the way.
+- [x] T12 `settlement-review`, one agent per re-rolled map, findings through `escalation-check`; ledger rows
       research: rendering
-      verify:
+      verify: DONE. make verify ruled NO SETTLEMENT-REVIEW OWED (rendering-only feature, feature 248); the one earlier dispatch round came back NOT-REVIEWABLE on a red gate and held no map findings. The five maps are handed to the GM to look at, per their standing rule.
