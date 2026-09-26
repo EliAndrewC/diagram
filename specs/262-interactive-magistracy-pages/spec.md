@@ -204,3 +204,18 @@ finding classifies them, and the kinds no research section covers - and each one
   with a tagging pass and its kinds, and that is named as follow-up in the closing report.
 - A place card (the title placard's modal) for a magistracy is not asked for; the placard is ruled not highlighted.
 - The page is gitignored and derived like every pool page; the tagged SVG is the tracked source.
+
+## Review history
+
+- Round 1 (2026-09-26, `spec-fidelity`, Opus): CHANGES REQUIRED, two items, both applied. (1) The accepted design
+  folds `buildings/types.json`'s magistracies items into the registry and the spec had left that out - FR-003a added.
+  (2) FR-005 would have relabeled kinds `types.json` already classifies - FR-005 now carries existing
+  classifications, with the affected set measured (`coverage.md`).
+- Round 2 (2026-09-26, `spec-fidelity`, Opus): CHANGES REQUIRED, two items, both applied. (a) FR-005's example list
+  pre-labeled the salt wards and the Fox border as deviations against the measurement - it now names only the
+  threshold stones and defers to `coverage.md`. (b) User Story 1's scenario 4, User Story 4 and a Decisions row used
+  "the record is silent" where FR-005 carries classifications - all now use "no existing finding classifies".
+- Round 3 (2026-09-26, `spec-fidelity-verify`, Opus): FAITHFUL.
+- Amendment (2026-09-26, `spec-fidelity-verify`, Opus): FAITHFUL - each success criterion names the requirements it
+  measures (spec-lint), SC-001 names the placer's two maps and the closed registry, SC-002 the courts' own ground and
+  the map's note.
