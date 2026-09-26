@@ -57,6 +57,7 @@ from .geom import push_clear_of_fabric as push_clear_of_fabric
 from .geom import push_out_of as push_out_of
 from .geom import shadowing_lane as shadowing_lane
 from .geom import steading_footprints as steading_footprints
+from .joints import straighten_joints as straighten_joints
 from .route import _EASE_FT as _EASE_FT
 from .route import _EASE_STEPS as _EASE_STEPS
 from .route import _ease_corner as _ease_corner

@@ -80,29 +80,10 @@ block() { # reason, then the make target to use instead
   guard_log make-only blocked "$(guard_cmd)" "$VERDICT"
   printf 'BLOCKED: %s\n\n' "$1" >&2
   printf 'Run this instead:  %s\n\n' "$2" >&2
-  # GUARD_EDIT_OK: feature 162 - the LADDER LOSES ITS HARDCODED NUMBERS (GM 2026-08-30: *"I think
-  # those numbers for `make quick` are wrong and outdated"*). They were: this message quoted "done
-  # ~75 s locked / ~4.5 min unlocked (measured 2026-08-26)" while the scope had been UNLOCKED since
-  # 2026-08-27 and the gate's own run log put the median at 111 s. The ordering is what a session
-  # needs here and it does not go stale; the one number worth stating is asked of the recorded runs
-  # at the moment it is printed, and omitted when the log cannot answer.
-  DONE_COST=$("$HERE/_gatecost.py" done 2>/dev/null || true)
-  cat >&2 <<'TAIL'
-Every operation in this project goes through a make target, so the expensive ones can ask whether
-the cheap one would do first. Cheapest first, so the choice is informed rather than habitual:
-
-    make quick        lint, types, and every test that does not roll a map, stops at the first
-    make done         reference + lint/types + the suite; NOT the quick check
-    make done FULL=1  + every pool map + the seeds 41-44 ratchet; prompts, cancels by default
-TAIL
-  [ -n "$DONE_COST" ] && printf '\n`make done` has cost a median of %s s over its recent recorded runs (`make audit` for the history).\n' "$DONE_COST" >&2
-  cat >&2 <<'TAIL'
-
-If this fired on correct work, that is a BUG in the hook and worth fixing rather than working
-around - put GUARD_EDIT_OK in the command with a reason, and say what it false-positived on.
-
-(scripts/make-only-hooks.sh; GM 2026-08-24, feature 127)
-TAIL
+  # GUARD_EDIT_OK: the refusal is its reason and the command to run (GM 2026-09-26: hook output "relatively terse").
+  # The make ladder, the gate's median cost and the feature line went: "Run this instead" already names the target,
+  # and the ladder lives in the skill's CLAUDE.md. Dropping the cost line also drops a python start per refusal.
+  printf 'If this fired on correct work, it is a bug in the hook: put GUARD_EDIT_OK and a reason in the command.\n' >&2
   exit 2
 }
 

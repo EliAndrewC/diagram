@@ -119,18 +119,15 @@ block() {  # reason, alternative, RULE
   # and "no-poll fired 32 times" cannot say which one is carrying the cost. Nothing about what it
   # refuses changes.
   guard_log no-poll blocked "$(guard_cmd)" "${3:-block}"
+  # GUARD_EDIT_OK: the message is cut to the alternative (GM 2026-09-26, terse hook output); the 2026-07-25
+  # measurement it used to quote is in this file's header.
   echo "BLOCKED (no-poll): $1
 
 $2
 
-Do this instead: background the work (run_in_background), spend the turn on something useful - docs,
-the commit message, the next edit - and act on the completion notification when it arrives. The
-harness re-invokes you; you never have to watch for it. If you truly must wait on EXTERNAL state the
-harness cannot see (a server port, a remote queue), put POLL_OK in the command with a note saying
-what you are waiting for.
-
-(scripts/no-poll-hooks.sh. Measured 2026-07-25: two such waits cost 10.9 minutes - 35% - of a
-31-minute feature, watching gates that had finished in 97s and 98s.)" >&2
+Do this instead: run the work with run_in_background and act on the completion notification; the harness
+re-invokes you. For EXTERNAL state the harness cannot see (a port, a remote queue), put POLL_OK and what you
+are waiting for in the command." >&2
   exit 2
 }
 

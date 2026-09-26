@@ -2055,6 +2055,21 @@ bund end or outline vertex within ~30 ft (`field_face` chords give the candidate
 `field_spur_reaches_the_field` becomes a placer unit test rather than a check. Deferred under 145
 (a performance feature) with this measurement; not a regression of it.
 
+## Is the in-field grave island attested? (research owed, GM 2026-09-26)
+
+`research: physical`, held by the GM until the research procedure is retuned to conserve tokens - do not
+start it before they say so. The grave island (`field_graves`, drawn on ~30% of valley, terrace and ribbon
+maps) is labeled a deliberate deviation on thin evidence: the one quote cited for it (`ryobosei-jawiki`)
+puts burials beside the bunds, at a field's edge, not out in a plot; the north-China dry-plain precedent is
+on no page read; and the 0.3 rate (`settlement/fields/features.py`, `_paddy_features`) was the session's
+choice in feature 012, not the GM's - their ruling survives only as the paraphrase "both are fine"
+(2026-07-20). The GM's decision on 2026-09-26: keep the island and its label as they are, reword the note so
+it claims no approved rate, and leave the question for a later pass. The pass asks: did Japanese or
+rice-south Chinese villages put graves among the working paddy, and how often? If attested, the label moves
+to accurate and the rate is set from the finding; if not, the island stays a disclosed deviation with a
+source-backed statement of what the record puts in its place. The modal (`GraveIsland` in
+`interactive/classes/water_and_ways.py`) and the research entry (`research/fields/010-*`) move together.
+
 ## Carve the paddy around an in-field grave island (settlement-review, Kashikawa, 2026-08-28)
 
 `_plot_grave_island` draws the mound OVER an intact lattice: on Kashikawa three plot rings and nine bund

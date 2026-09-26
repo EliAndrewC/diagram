@@ -9,13 +9,16 @@ HOOK="$HERE/no-poll-hooks.sh"
 # whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
 # time these conversions ran their suites.
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
-trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
 PASS=0; FAIL=0
 
 run() {  # feed a Bash command through the hook, return its exit code
   python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1" \
-    | "$HOOK" pretool 2>/tmp/np.err
+    | "$HOOK" pretool 2>"$HOOK_ERR"
 }
 
 check() { # label, expected(ok|blocked), command
@@ -23,7 +26,7 @@ check() { # label, expected(ok|blocked), command
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
-    echo "  FAIL    $1 (expected $2, rc=$rc)"; [ -s /tmp/np.err ] && sed 's/^/          /' /tmp/np.err; FAIL=$((FAIL+1))
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; [ -s "$HOOK_ERR" ] && sed 's/^/          /' "$HOOK_ERR"; FAIL=$((FAIL+1))
   fi
 }
 
@@ -64,9 +67,9 @@ SELF=$(run 'pgrep -f "make done"' 2>/dev/null)
 printf '%s' "$SELF" | grep -q "finds the searching shell itself" && { echo "  ok      the correction names the self-match fault"; PASS=$((PASS+1)); } || { echo "  FAIL    self-match not explained"; FAIL=$((FAIL+1)); }
 printf '%s' "$SELF" | grep -q "Corrected rather than refused" && { echo "  ok      ...and says why it was corrected rather than refused"; PASS=$((PASS+1)); } || { echo "  FAIL    the correction does not say why"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
-grep -q "completion notification" /tmp/np.err && { echo "  ok      a real busy-wait still points at the notification"; PASS=$((PASS+1)); } || { echo "  FAIL    no alternative offered"; FAIL=$((FAIL+1)); }
+grep -q "completion notification" "$HOOK_ERR" && { echo "  ok      a real busy-wait still points at the notification"; PASS=$((PASS+1)); } || { echo "  FAIL    no alternative offered"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
-grep -q "POLL_OK" /tmp/np.err && { echo "  ok      documents the escape hatch"; PASS=$((PASS+1)); } || { echo "  FAIL    escape hatch not documented"; FAIL=$((FAIL+1)); }
+grep -q "POLL_OK" "$HOOK_ERR" && { echo "  ok      documents the escape hatch"; PASS=$((PASS+1)); } || { echo "  FAIL    escape hatch not documented"; FAIL=$((FAIL+1)); }
 
 # GUARD_EDIT_OK: feature 164 - A MENTION IS NOT AN INVOCATION. This guard refused four pieces of
 # correct work in one session, every one of them a DOCUMENT about the guard: the command writing its
@@ -97,7 +100,7 @@ while :; do sleep 5; done'
 echo "5. the detached-run wait, and nothing wider (feature 165)"
 bgrun() {  # feed a Bash command with run_in_background set, return the exit code
   python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1],"run_in_background":sys.argv[2]=="1"}}))' "$1" "$2" \
-    | "$HOOK" pretool 2>/tmp/np.err
+    | "$HOOK" pretool 2>"$HOOK_ERR"
 }
 bgcheck() { # label, expected, command, background(1|0)
   bgrun "$3" "$4" >/dev/null; local rc=$?

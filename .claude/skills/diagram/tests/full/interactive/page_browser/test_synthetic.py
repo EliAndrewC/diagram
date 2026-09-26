@@ -134,13 +134,33 @@ def test_the_wheel_scrolls_and_a_press_is_only_a_click(synthetic: Page) -> None:
     synthetic.page.mouse.up()
     synthetic.page.wait_for_timeout(50)
     assert synthetic.js("() => window.l7rMap.view()") == before, "a drag moves nothing"
-    assert synthetic.js("() => getComputedStyle(document.getElementById('stage')).cursor") == "auto"
-    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f')).cursor") == "auto", "a normal pointer over the features"
     synthetic.page.mouse.click(x2, y2)
     synthetic.page.wait_for_timeout(50)
     assert synthetic.dialog()["k"] == "farmhouse"
     synthetic.page.keyboard.press("Escape")
     synthetic.js("() => window.l7rMap.fitWidth()")
+
+
+def test_the_cursor_is_the_link_hand_over_a_feature_and_the_arrow_over_a_broad_kind(synthetic: Page) -> None:
+    """GM 2026-09-26: the cursor keeps its normal form over nothing clickable and over the very large kinds -
+    grassland, marshland, paddies, copses, windbreak forests, woodland commons - and becomes the link hand over
+    every other feature. A REAL pointer drives it, since the cursor follows the pointer, not a highlight call."""
+    synthetic.js("() => window.l7rMap.fit()")
+    for key in ("farmhouse", "storage shed", "notice board", "village lane"):
+        synthetic.point_at(key)
+        assert synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{key}\"] *')).cursor") == "pointer", key
+    # the placard is clickable only when the page carries its card; this page's meta names no settlement type
+    synthetic.point_at(PLACE)
+    has_card = synthetic.js(f"() => JSON.parse(document.getElementById('classes').textContent).classes['{PLACE}'] !== undefined")
+    assert synthetic.js("() => window.l7rMap.cursor()") == ("pointer" if has_card else "auto")
+    for key in ("windbreak", "copse", "marsh", "paddy"):
+        synthetic.point_at(key)
+        assert synthetic.js(f"() => getComputedStyle(document.querySelector('g.f[data-k=\"{key}\"] *')).cursor") == "auto", key
+    # bare ground: the sheet between the feature row (y 10-30) and the paddy (y 60), at map (5, 45)
+    x, y = synthetic.js("() => { const r = document.getElementById('stage').getBoundingClientRect(), v = window.l7rMap.view(); return [r.left + v.tx + 5 * v.s, r.top + v.ty + 45 * v.s]; }")
+    synthetic.page.mouse.move(x, y)
+    assert synthetic.js("() => window.l7rMap.cursor()") == "auto", "bare ground"
+    synthetic.clear()
 
 
 def test_the_wheel_scrolls_the_map_when_the_pointer_is_not_over_the_open_modal(synthetic: Page) -> None:
