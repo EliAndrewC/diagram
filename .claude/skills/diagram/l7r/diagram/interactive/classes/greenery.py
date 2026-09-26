@@ -11,20 +11,20 @@ from ._base import Kind
 
 class HomesteadBamboo(Kind):
     """
-    What: A household's own bamboo stand on its plot - a clonal thicket with a hard edge, drawn as paired culm
-    strokes with a leafy fork.
+    What: A household's own bamboo stand on its plot - a clonal thicket, in most cases of nearly one species,
+    drawn as paired culm strokes with a leafy fork.
 
-    Why: Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, poles, fences,
-    fans, food wrappings. Which side of the plot it stood on was done more than one way - on the Tonami plain
-    with the storehouses and fruit trees to the south, its roots holding the soil; at the wet edge; on the
+    Why: Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, fans, food
+    wrappings, building timber and everyday tools. Which side of the plot it stood on was done more than one way - on the Tonami plain
+    with the storehouses and fruit trees to the south; at the wet edge, its roots holding the soil; on the
     wind side - so the side is rolled per farmstead, weighted toward the back of the house and the shed's
     side (that it stood on the shady north-west service strip is on no page read). A cold upland hamlet may
     have none; whether a hamlet has bamboo is rolled per settlement, and that about three farmsteads in five
     keep a stand is a guess.
 
     Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to
-    show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at
-    one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
+    show a stand that cannot be drawn at true scale: a culm is only inches across (no page read gives the
+    figure), a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
     Japan's own topographic legend uses. Presence below the frost line and the stand's two places (the
     household's plot, the village-edge thicket) are read; the side of the plot is rolled from the forms the
     record attests, and the share of farmsteads keeping one is a guess.
@@ -41,14 +41,16 @@ class HomesteadBamboo(Kind):
 
 class SharedBambooGrove(Kind):
     """
-    What: A bamboo thicket held by the hamlet at the field margin, cut like a coppice.
+    What: A bamboo thicket standing on its own at the field margin, cut in moderation and renewed from its shoots.
 
     Why: The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own
-    at the village edge, harvested under the village's rules. The record supports both, so a map rolls each rather than the project picking one.
+    at the village edge, where the plain meets the worked hills. The record supports both, so a map rolls each rather than the project picking one.
 
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
-    strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn
-    at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.
+    strokes on a 7 ft grid - in order to show it at all: a culm is only inches across (no page read gives the
+    figure) and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
+    Bamboo below the frost line and its two places are read, though the page placing the thicket at the plain's
+    edge describes the present day; that it was cut like a coppice is this record's likeness, no page making it.
 
     Name: shared bamboo grove
     Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the field margin
@@ -89,14 +91,14 @@ class Windbreak(Kind):
 
 class Copse(Kind):
     """
-    What: A stand of fruit-tree and broadleaf greenery in the open ground among the houses - shade and fruit, not
-    shelter.
+    What: A stand of bamboo and fruit trees in the open ground among the houses - useful trees, not shelter.
 
     Why: The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove
     roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands
     on a roof, a yard or a crop.
 
-    Note: The role is attested with the fengshui-grove system; how much ground one takes is nowhere given, so a
+    Note: That fruit trees and bamboo were the useful species planted in a fengshui wood is read; that they fill the
+    gaps throughout the cluster is the GM's reading of a leafy village, on no page read; how much ground one takes is nowhere given, so a
     copse is drawn to whatever gaps the houses, yards and crop leave it.
 
     Caveat: how much ground one takes is nowhere given, so a copse is drawn to whatever gaps the houses, yards and
@@ -114,8 +116,8 @@ class Copse(Kind):
 
 class WoodlandCommons(Kind):
     """
-    What: A managed coppice wood on the slope above the paddy: spaced crowns with an open canopy, the floor raked
-    clear of leaf litter.
+    What: A managed coppice wood on the slope above the paddy: overlapping crowns over a floor raked clear of
+    leaf litter.
 
     Why: The village woods were iriai commons - customary common land held by the village and governed by its own
     rules on who might cut, when, and how much - coppiced on a 15-20 year cycle for firewood, forage and the
@@ -123,7 +125,8 @@ class WoodlandCommons(Kind):
     brush; the wood sits on the slope break above the fields, one part of the satoyama the community worked
     as a whole.
 
-    Note: The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); a lot's
+    Note: The commons regime and the raked floor are read (the Yamaguni study, the satoyama entries); the crowns'
+    density and size are interpolated from two papers whose pages could not be read; a lot's
     boundary was NOT laid out as a surveyed square, so the patches are irregular.
 
     Caveat: a lot's boundary was NOT laid out as a surveyed square, so the patches are irregular.
@@ -144,10 +147,12 @@ class ScrubAndRoughGrazing(Kind):
     cut.
 
     Why: Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked:
-    scrub stands six feet off every field edge (one scythe swath - land hunger keeps the margin to that),
-    off open water and off the cut banks of the channels.
+    scrub stands six feet off every field edge, where the grass beside a crop was kept cut (the record reasons
+    that land hunger kept the margin narrow), off open water and off the cut banks of the channels.
 
-    Note: The margins are read; nothing describes how the clumps sit within them, so the scatter is drawn to read
+    Note: That bund grass was cut several times a season, and that cut land does not go over to scrub, is read;
+    both 6 ft widths are this record's choice, no page giving one, and the bank takes the crop margin's figure
+    by analogy with the paddy levee; nothing describes how the clumps sit within them, so the scatter is drawn to read
     as rough grazing rather than as any surveyed pattern.
 
     Caveat: nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing
