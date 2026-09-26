@@ -69,6 +69,24 @@ re-deciding it), so the page does not announce a liberty - but a reader finds no
 7. **The notice board** - the bench's board kept separate from the town's kosatsuba is `programs.md`'s
    division, not the record's.
 
+### Opened by the 2026-09-26 reception move on Ochiba (building-review)
+
+- **Should a guest cross the viewing garden to reach the genkan?** The genkan now sits on the reception's
+  garden face. 'Guest doors feed courts, not flanks' allows "court or garden", and 'The shady rear is the
+  service strip' places the garden south of the formal rooms, but neither says the genkan opened onto that
+  garden; Takayama Jinya's entrance faces the gate's approach and its reception looks onto a separate
+  garden. Was the approach a forecourt fenced off from the viewing garden (a naka-kaki or shiorido), or a
+  path through it? If both are attested, a knob.
+- **The pond on the nakamon-to-genkan axis** - the ceremonial route detours round it with no drawn path; the
+  fix is a drawn stepping-stone path or the genkan moved west within the reception bay (x ~528-568), once
+  the question above is answered.
+- **Did an ordinary posting's private rooms have a small garden of their own?** Ochiba's lord's and family
+  rooms now look south onto the kitchen roof.
+- **The reception privy's night-soil route** (drawing, not research) - the privy attached to the reception
+  block's rear corner is reachable only through the inner garden: the 2 ft slot between the servants'
+  quarters and the west block is filled by the servants' door. The family privy (west face) is served from
+  the kitchen postern. The rule that a collector never crosses the inner court is the project's own.
+
 ### Canon gaps (for the GM, not research)
 
 - Ubame, Hayakawa, the Kurogi, Moriguchi and Nagahara are absent from the mounted `l7r.md`, though Ubame's
