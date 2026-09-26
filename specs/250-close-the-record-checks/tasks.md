@@ -166,21 +166,25 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1f - the fifth round (GM 2026-09-26; plan D14)
 
-- [ ] T47 A bundle per check (`FOR=`), and the check briefs dispatch each agent with its own
+- [x] T47 A bundle per check (`FOR=`), and the check briefs dispatch each agent with its own
       research: rendering
-- [ ] T48 The question-size cap: `scripts/check-question-size.py` in `make quick`, `make question-sizes`, the rule in
+      verify: DONE. built in a10cb973; verified in the recovery session: the government check sessions dispatched FOR= bundles, check-question-size clean over the record's touched questions (18 untouched over the cap), the four split sessions reviewed (ids kept, every note moved unchanged to one part, joins point and do not restate)
+- [x] T48 The question-size cap: `scripts/check-question-size.py` in `make quick`, `make question-sizes`, the rule in
       both research docs
       research: rendering
-- [ ] T49 The splits this feature owes: `cities/government` 080 by hand; homesteads 040 and 210, vegetation 150,
+      verify: DONE. built in a10cb973; verified in the recovery session: the government check sessions dispatched FOR= bundles, check-question-size clean over the record's touched questions (18 untouched over the cap), the four split sessions reviewed (ids kept, every note moved unchanged to one part, joins point and do not restate)
+- [x] T49 The splits this feature owes: `cities/government` 080 by hand; homesteads 040 and 210, vegetation 150,
       religion-and-death 200 by split sessions; each judged for lost context
       research: rendering
+      verify: DONE. built in a10cb973; verified in the recovery session: the government check sessions dispatched FOR= bundles, check-question-size clean over the record's touched questions (18 untouched over the cap), the four split sessions reviewed (ids kept, every note moved unchanged to one part, joins point and do not restate); the six modals written from homesteads 210/040 re-pointed to the parts holding their text (entry-drift answers stay with T23); the clone guard now lets a page session through as its dispatcher's child (L7R_DISPATCHER, 1fee77a3)
 - [x] T50 FR-002 for `cities/government`, worked as the last two pages were (D14)
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. cities/government closed: 020/070 (2a) and 080/081 (2b) quote-checked, record-formatted and applied with one re-check round each; 4 source-applicability (2a); 3 FR-002 items cited (session 1, 080 split to 081); FR-006 worklist 13 bare items - FOOTNOTED 10, NOT-LOCATED 3 (the three sentences session 1 and 2a rewrote to what their quotes carry); 5 glossary terms in 2b + 5 in 2a; 2b's step 7-8 run by the recovery session after the crash; quote-verbatim fixed to find a passage through Wikipedia reference markers
-- [ ] T51 **The comparison the GM asked for** (D14): T50 against R1 to R5, recorded as R6 with the table over all six
+- [x] T51 **The comparison the GM asked for** (D14): T50 against R1 to R5, recorded as R6 with the table over all six
       rounds
       research: rendering
+      verify: DONE. research.md R6: government 6.38 M measured (about 7.0 M with the dead 2b session's estimated tail) over 4 questions checked - 1.59 M a question against 1.67 (defenses) and 1.90 (religion); quote-check read 19,400 chars against 34,800, record-format 15,000 against 31,300; mean agent run 60,000 against 89,000; main session now 83% of the spend, the apply step its largest part; four recommendations for the GM
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
