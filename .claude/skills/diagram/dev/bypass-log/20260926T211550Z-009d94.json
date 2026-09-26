@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-26T21:15:50Z",
+  "target": "plan-gate tick 263-stale-wakeup-guard",
+  "commit": "397f1bd0",
+  "why": "\"the only plan edit after the CLEAR review is the constitution line naming the ruled exception, the reviewer own aside; no decision changed\""
+}
