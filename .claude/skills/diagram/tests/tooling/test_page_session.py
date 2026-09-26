@@ -66,7 +66,11 @@ def test_a_then_step_queues_the_briefs_it_prints(tmp_path: pathlib.Path, monkeyp
             ps.subprocess.CompletedProcess(cmd, 0, stdout="/b/veg-2a.md\n/b/veg-2b.md\n" if cmd[0] == str(step) else ""),
         )[1],
     )
-    ps.work(str(tmp_path), "n", [], [{"then": str(step)}])
+    run_log = tmp_path / "run.log"
+    ps.work(str(tmp_path), "n", [], [{"then": str(step)}], str(run_log))
     assert ran == [str(step), "/b/veg-2a.md", "/b/veg-2b.md"], ran
+    lines = run_log.read_text(encoding="utf-8").splitlines()
+    assert lines[0].startswith("planned 2") and lines[-1] == "ALL DONE", lines
+    assert [ln.split()[0] for ln in lines[1:-1]] == ["started", "ended", "started", "ended"], "a line as each session starts and ends"
     index = (tmp_path / ".git" / "page-sessions" / "index.txt").read_text(encoding="utf-8").splitlines()
     assert [ln.split()[1] for ln in index] == ["/b/veg-2a.md", "/b/veg-2b.md"]

@@ -350,3 +350,17 @@ question twice more (`quote-check` three times on 060), a loop the brief does no
 4. **Give every clone session the floor fix.** The duplicated root `CLAUDE.md` loads in every session that works
    in a clone, the GM's own included - about 5,000 tokens a turn. A `claudeMdExcludes` for the mirror's copy in each
    clone's untracked `.claude/settings.local.json`, written when the clone is made or synced, removes it everywhere.
+
+### Two tooling defects this round found, fixed where found
+
+- **A wait whose producer died printed a success.** The no-poll guard adds a liveness check to a backgrounded
+  file-watching loop (feature 227); when the check found no writer it ended the LOOP, and the command after it ran
+  as though the wait had succeeded. On this page a wait on `tasks.md` - edited now and then, never held open - was
+  declared dead after two minutes and printed `ticked` while the write session was still reading sources. The
+  clause now ends the whole command with status 3 (`scripts/_hm_shape.py`), and `test-no-poll-hooks.sh` proves both
+  loop forms stop there, nothing after them running.
+- **A page's sessions left nothing to wait on.** The runner now keeps one run log open for its whole queue - a line
+  as each session starts and ends, then `ALL DONE` - and the launcher prints the backgrounded wait to use, so the
+  wait ends when the runner does, finished or killed, and the guard's liveness check finds the runner holding the
+  file. The last session of this page ended at 18:14; the hand-built wait that replaced the dead one reported at
+  18:15:43, after its own 90-second check that no further session was starting.

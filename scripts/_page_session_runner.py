@@ -61,9 +61,16 @@ def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]
     return queue
 
 
-def work(root: str, name: str, extra: list[str], queue: list[dict]) -> None:
-    """The detached loop: each session in turn; a `then` step's printed briefs join the queue where it stood."""
+def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str = os.devnull) -> None:
+    """The detached loop: each session in turn; a `then` step's printed briefs join the queue where it stood.
+
+    THE RUN LOG (feature 250, 2026-09-26): one file, held OPEN for the whole queue, with a line as each session
+    starts and ends and `ALL DONE` last. A caller waits on it with the ordinary backgrounded file-watch, and the
+    liveness check the no-poll guard adds finds the runner holding it - so the wait ends when the runner does,
+    finished or killed. Before it, a page's sessions left no one file to wait on, and a wait on `tasks.md` (edited,
+    never held open) was declared dead after two minutes while the sessions ran on."""
     index = os.path.join(root, ".git", "page-sessions", "index.txt")
+    runlog = open(run_log, "a", buffering=1)  # noqa: SIM115 - held open on purpose for the whole queue
     while queue:
         item = queue.pop(0)
         if "then" in item:
@@ -75,26 +82,35 @@ def work(root: str, name: str, extra: list[str], queue: list[dict]) -> None:
                 os.makedirs(log)
                 late.append({"sid": sid, "log": log, "brief": brief, "cmd": command(root, name, extra, brief, sid)})
             queue[:0] = late
+            runlog.write(f"planned {len(late)} session(s) from {os.path.basename(item['then'])}\n")
             continue
         with open(index, "a") as fh:
             fh.write(f"{item['sid']} {item['brief']}\n")
+        runlog.write(f"started {item['sid']} {os.path.basename(item['brief'])}\n")
         with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
-            subprocess.run(item["cmd"], cwd=root, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False)
+            rc = subprocess.run(item["cmd"], cwd=root, stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+        runlog.write(f"ended {item['sid']} rc={rc}\n")
+    runlog.write("ALL DONE\n")
+    runlog.close()
 
 
 def main(argv: list[str]) -> int:
     if argv and argv[0] == "--work":
-        _, root, name, extra, queue = argv
-        work(root, name, json.loads(extra), json.loads(queue))
+        _, root, name, extra, queue, run_log = argv
+        work(root, name, json.loads(extra), json.loads(queue), run_log)
         return 0
     root, name, projects, *rest = argv
     cut = rest.index("--")
     extra, items = rest[:cut], rest[cut + 1:]
     queue = plan(root, name, projects, extra, items)
-    subprocess.Popen([sys.executable, os.path.abspath(__file__), "--work", root, name, json.dumps(extra), json.dumps(queue)],
+    run_log = os.path.join(root, ".git", "page-sessions", f"run-{uuid.uuid4().hex[:8]}.log")
+    open(run_log, "w").close()  # it exists before the wait starts, so the wait never races its creation
+    subprocess.Popen([sys.executable, os.path.abspath(__file__), "--work", root, name, json.dumps(extra), json.dumps(queue), run_log],
                      cwd=root, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                      start_new_session=True, close_fds=True)
     print("page-session: started - each result.json is written when its session ends, and the next session begins")
+    print(f"page-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n"
+          f"    until grep -q '^ALL DONE' {run_log}; do sleep 60; done; tail -20 {run_log}")
     return 0
 
 
