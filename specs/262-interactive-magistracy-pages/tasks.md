@@ -87,13 +87,15 @@ finding (FR-005). No map draws anything new: every sheet's PNG is measured pixel
       (tag what you draw), the programs table; the Hoshigaoka country shrine named as follow-up
       research: rendering
       verify: DONE. DONE. interactive/CLAUDE.md section, buildings.md checklist item and program note, programs.md rendered; the Hoshigaoka shrine named as follow-up in the closing report.
-- [ ] T16 `building-review` of the Ochiba page at acceptance, in the background, one map; a ledger row;
+- [x] T16 `building-review` of the Ochiba page at acceptance, in the background, one map; a ledger row;
       its findings through `escalation-check` before the GM sees them
       research: rendering
+      verify: DONE. DONE. building-review of the Ochiba page returned needs-work; every prose, caveat and notes finding applied (compound_kinds, notes block, a Mode A caveat lead); ledger row added; findings for the GM filtered by escalation-check (3 keep, 2 rewrite, 4 cut).
 - [x] T17 `make done` green, every failure checked against T01
       research: rendering
       measure: the gate's own output
       verify: DONE. DONE. make done green on the merged tree in 123 s, the browser package run.
-- [ ] T18 The closing report to the GM lists both sets (User Story 4): the kinds labeled `guess` because no
+- [x] T18 The closing report to the GM lists both sets (User Story 4): the kinds labeled `guess` because no
       finding classifies them, and the kinds no research section covers
       research: rendering
+      verify: DONE. DONE. The closing report lists the kinds labeled guess (clerks' room, karo's house, kennel, writing pavilion, salt wards) and the kinds no research section covers, per the escalation-check filter.
