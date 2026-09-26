@@ -116,19 +116,25 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 
 ## Phase 1d - the third round (GM 2026-09-26; plan D12)
 
-- [ ] T34 The session floor: the runner's launch flags (tools, no MCP servers, no skills, the mirror's CLAUDE.md
+- [x] T34 The session floor: the runner's launch flags (tools, no MCP servers, no skills, the mirror's CLAUDE.md
       excluded in a clone); tested
       research: rendering
-- [ ] T35 Check sessions of two questions each, planned from the handoff by a `then:` step; tested
+      verify: DONE. DONE. _page_session_runner.floor_flags: research's tools, --strict-mcp-config, --disable-slash-commands, and in a clone claudeMdExcludes for the mirror's CLAUDE.md; probes 2026-09-26: first turn 40,280 -> 28,590 -> 21,267 tokens; tested.
+- [x] T35 Check sessions of two questions each, planned from the handoff by a `then:` step; tested
       research: rendering
-- [ ] T36 The check brief applies a report's findings in one turn
+      verify: DONE. DONE. brief.py checks turns the handoff into check briefs of two questions (keys to the first, the last closes); the runner's then: step queues them when the write session ends; a dry run on vegetation's handoff made three; tested.
+- [x] T36 The check brief applies a report's findings in one turn
       research: rendering
-- [ ] T37 `research/CLAUDE.md` holds the rules; the full text is `docs/research-record-rules.md`
+      verify: DONE. DONE. The check brief's step 6: every finding of one report in ONE message, the record commands and tests once for all of it.
+- [x] T37 `research/CLAUDE.md` holds the rules; the full text is `docs/research-record-rules.md`
       research: rendering
-- [ ] T38 `entry-drift` in each check group's brief, on the modals of its own questions
+      verify: DONE. DONE. research/CLAUDE.md 45,051 -> 13,290 characters, every rule kept (two review rounds compared the files section by section); the full text verbatim in docs/research-record-rules.md, links resolving; 144 record tests green.
+- [x] T38 `entry-drift` in each check group's brief, on the modals of its own questions
       research: rendering
-- [ ] T39 The raster-mode browser check waits for its state; three runs green
+      verify: DONE. DONE. Each check group's brief runs _entry_owed.py and checks the modals written from its own questions with KIND= bundles, re-checking a rewritten modal.
+- [x] T39 The raster-mode browser check waits for its state; three runs green
       research: rendering
+      verify: DONE. DONE. The raster-mode check reads each opacity through the driver's bounded settles; three runs of the browser file green (19 passed each); the expected values unchanged.
 - [ ] T40 FR-002 and FR-006 for `cities/defenses`, in a write session and check sessions of two (D12)
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed

@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "23fee4d2e6e24fc45b9ed51ce6bf57f9bd7cc78894599cd2520f44c7553df6d1",
+ "plan_sha256": "daa80c6b850e29661a66b2644f838074ee09eecd78cfd8acf0ec8ca8608db24f",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
@@ -24,10 +24,9 @@
   },
   {
    "id": "D12-4",
-   "summary": "research/CLAUDE.md trimmed to rules (11,100 chars); full text moved verbatim to docs/research-record-rules.md; plan claims 'No rule is dropped'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Round after digest 67a79810: every rule on the previous list is now in research/CLAUDE.md under its heading - (259) glossary.json/glossary.js never hand-edited; (190) no link to a URL nobody fetched, percent-decoded URL search, Pointers item plain, REGISTERED name linked; (194) roster key with nothing to quote leaves, translator named, own English needs no note; (195) Not cited, settled re-opens, the GM-downloaded copy (read the copy, link the public page, quote-check the copy), abstract-only citation, several GROUNDS reasons and the written argument; (209) definitions from the record's text, two agents in one turn (spec 209 D5); (211) NOT-APPLICABLE assertions keep their label until the GM rules; (229) pixel figure in a comment, retired once encoded, the why on the page with the comment pointing at the anchor. The re-check of 37c20e57's file that the caller asked for, read in full, finds operative rules the previous list also missed, still absent, so 'keeps every rule' remains false and the adopted R3 rec 4 ('trim to its operative rules') is still narrowed: (195) a CITATION link is the full-text view rather than a library landing page, and the original-language page rather than an English rendering that is on no page; what a read copy does NOT say is written down where the claim stands, the rest labeled GUESS; settling an absence note is never obligatory; and the restored GROUNDS sentence drops 'on an existing note' - the old rule required the written argument only for using an unexemplified reason ON AN EXISTING NOTE, the new text requires it for any use, which is a changed rule, not a compacted one; (190) a page named only as silent or unreadable, and an unregistered summary-only or withdrawn item, stay plain (only the Pointers case is kept); a new registry entry records the URL and the READ date; (194) the quotation form holds in body prose and in a SOURCES.html entry as well; the original is the checker's anchor, never a second quote; a sentence resting on two sources carries two footnotes; (209) a Sources-roster key's parenthetical says what the work contributed, nothing about when or how it was read; an absence note's provenance ('the passage came from key') is an HTML comment in its li; (229) a spec paragraph names no engine identifier OR CHECK in its visible text, and where it rests on no finding says which - a convention, a calibration against the drawn exhibits, or a guess. Sections 260, 259, 258, 180, 183, 211 (apart from the above), HTML and 234 lose only rationale, mechanics a tool performs, or enforcement facts; no finding there. Restore each item compactly under its heading (restore 'on an existing note' verbatim), then re-state the plan's size figure with an observed label: the file now measures 12,393 characters / 12,409 bytes (observed 2026-09-26, python len and wc -c), and the plan's 12,400 and 43,500 carry no m: key or one-shot label. Nothing makes keeping these impossible or defeats the rec's purpose; they are a few hundred characters."
+   "summary": "research/CLAUDE.md trimmed to its operative rules (13,290 chars, observed 2026-09-26) under the same headings; full text (45,051 chars at 37c20e57) moved verbatim to docs/research-record-rules.md",
+   "class": "within",
+   "why": "Round after digest 23fee4d2, read from the diff 06eac8a2..HEAD only. Every item of the previous BLOCKED list is now in research/CLAUDE.md under its heading: (195) the CITATION link is the full-text view not a library landing page, and the original-language page not an English rendering on no page; what a read copy does NOT say is written where the claim stands, the rest labeled GUESS; settling is never obligatory; the GROUNDS sentence restores on an existing note verbatim; (190) a page named only as silent or unreadable and an unregistered summary-only or withdrawn item stay plain; a new entry records the URL and its READ date; (194) the form holds in body prose and in a SOURCES.html entry; the original is the checker anchor, never a second quote; two footnotes on a sentence resting on two sources; (209) the roster key parenthetical says what the work contributed, never when or how it was read; an absence note provenance is an HTML comment in its li; (229) no engine identifier or check in the spec visible text, and where it rests on no finding it says which: a convention, a calibration against the drawn exhibits, or a guess. The plan figures carry a one-shot label (observed 2026-09-26, len at 37c20e57 and after) and re-measure exactly: wc -m gives 45,051 for the file at 37c20e57 and 13,290 for the current file. With every rule kept and the full reasoning moved verbatim, this is R3 rec 4 as adopted (trim to the operative rules), not a narrowing of it."
   },
   {
    "id": "D12-5",
@@ -54,5 +53,5 @@
    "why": "'Two sessions each' is superseded by D12's write session plus check groups, which govern phase 2 through D7/D12; the added exclusion and the later cut follow from T40/T41. Nothing is dropped from the task's scope."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
