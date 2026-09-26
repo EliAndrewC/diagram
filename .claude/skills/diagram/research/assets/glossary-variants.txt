@@ -122,6 +122,7 @@ castanopsis	Castanopsis
 catchment	catchment
 catena	catena
 causeway	causeway
+celestial order	Celestial Order
 center-pivot	center-pivot
 cesspit	koedame
 cesspits	koedame
@@ -275,6 +276,7 @@ edauchi	edauchi
 edge castle	edge castle
 edge-runner	edge-runner mill
 edge-runner mill	edge-runner mill
+edo	Edo
 edo fabric	building fabric
 edo period	Edo period
 edo-period	Edo period
@@ -314,7 +316,7 @@ fascine	fascine
 fascines	fascine
 fen	fen
 feng shui	feng shui
-fengshui	fengshui grove
+fengshui	feng shui
 fengshui back grove	fengshui grove
 fengshui forest	fengshui grove
 fengshui grove	fengshui grove
@@ -349,6 +351,8 @@ fishways	fishway
 fit zoom	fit zoom
 fit-zoom	fit zoom
 five dynasties	Five Dynasties
+five-ring pagoda	five-ring pagoda
+five-ring pagodas	five-ring pagoda
 flood stage	river stage
 flophouse	kichin-yado
 flophouses	kichin-yado
@@ -410,6 +414,7 @@ go	go
 goemon-buro	goemon-buro
 goemonburo	goemon-buro
 gongxiefang	gongxiefang
+gorinto	five-ring pagoda
 goten	goten
 goulan	goulan
 goyoba	goyoba
@@ -473,6 +478,7 @@ hoardings	hoarding
 hojo seibi	hojo seibi
 hojutsu	onmyodo
 hokora	hokora
+holding jail	holding jail
 honden	honden
 hongo	hongo
 honmaru	honmaru
@@ -579,6 +585,7 @@ kamiza	kamiza
 kan	kan
 kanagashi	kanagashi
 kanden	kanden
+kangxi	Kangxi
 kannon	Kannon
 kannushi	kannushi
 kaogongji	Kaogongji
@@ -750,6 +757,7 @@ monzen	monzen
 moso	moso
 mozi	Mozi
 mu	mu
+muen	muenzuka
 muen-zuka	muenzuka
 muenbotoke	muenzuka
 muenzuka	muenzuka
@@ -757,6 +765,8 @@ mugi	mugi
 mulberry-dike fishpond	dike-pond
 murataka	murataka
 muromachi	Muromachi
+musashi	Musashi
+musashi province	Musashi
 mushiro	mushiro
 muster perimeter	muster perimeter
 muster perimeters	muster perimeter
@@ -996,6 +1006,7 @@ shichiya	shichiya
 shijin soo	four gods
 shijin-soo	four gods
 shinden	shinden
+shinsei	Shinsei
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -1023,6 +1034,7 @@ shuimen	water gate
 shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
+shunzhi	Shunzhi
 sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
@@ -1188,6 +1200,7 @@ uzumimon	umon
 vaiśravaṇa	Bishamon
 verge	verge
 verges	verge
+vermilion line	shubiki
 village district	village district
 votive plaque	votive plaque
 votive plaques	votive plaque

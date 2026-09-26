@@ -1390,7 +1390,8 @@
  "feng shui": {
   "def": "The Chinese practice of siting graves, houses and villages by the lie of hills, water and wind.",
   "variants": [
-   "feng shui"
+   "feng shui",
+   "fengshui"
   ]
  },
  "fengshui grove": {
@@ -1399,7 +1400,6 @@
    "fengshui forest",
    "fengshui back grove",
    "fengshui grove",
-   "fengshui",
    "fung shui woods",
    "fung shui wood",
    "fung shui",
@@ -2747,7 +2747,8 @@
   "variants": [
    "muenzuka",
    "muen-zuka",
-   "muenbotoke"
+   "muenbotoke",
+   "muen"
   ]
  },
  "mugi": {
@@ -3488,7 +3489,8 @@
  "shubiki": {
   "def": "The 'red line' on the map that marked Edo's official city limit.",
   "variants": [
-   "shubiki"
+   "shubiki",
+   "vermilion line"
   ]
  },
  "shugenja": {
@@ -5165,7 +5167,7 @@
   ]
  },
  "Caishen": {
-  "def": "The Chinese god of wealth.",
+  "def": "The Chinese god of wealth, whose image a shop or a household shrine keeps.",
   "variants": [
    "Caishen"
   ]
@@ -5180,6 +5182,57 @@
   "def": "The Confucian temple attached to a Chinese prefectural or county school, required for every county school by a Tang decree of 630.",
   "variants": [
    "wenmiao"
+  ]
+ },
+ "Kangxi": {
+  "def": "The reign of the Qing emperor Kangxi (1661-1722); a year is counted within the reign, so Kangxi 9 is 1670.",
+  "variants": [
+   "Kangxi"
+  ]
+ },
+ "Shunzhi": {
+  "def": "The reign of the first Qing emperor to rule from Beijing (1644-1661).",
+  "variants": [
+   "Shunzhi"
+  ]
+ },
+ "five-ring pagoda": {
+  "def": "A Japanese stone memorial pagoda built of five stacked pieces, set over a grave or a mound.",
+  "variants": [
+   "five-ring pagoda",
+   "five-ring pagodas",
+   "gorinto"
+  ]
+ },
+ "Musashi": {
+  "def": "The old province that Edo stood in; the Musashi gazetteer is its Edo-period local history.",
+  "variants": [
+   "Musashi",
+   "Musashi province"
+  ]
+ },
+ "Edo": {
+  "def": "The shogun's capital, now Tokyo.",
+  "variants": [
+   "Edo"
+  ]
+ },
+ "Celestial Order": {
+  "def": "The setting's caste system: samurai, then the half-people (farmers and merchants), then the non-people (laborers, servants and entertainers), with the burakumin lowest. Monks stand outside it.",
+  "variants": [
+   "Celestial Order"
+  ]
+ },
+ "Shinsei": {
+  "def": "In the setting, the holy figure whose example the monks follow, with one foot in this world and one in the spiritual realm.",
+  "variants": [
+   "Shinsei"
+  ]
+ },
+ "holding jail": {
+  "def": "The Edo-period holding prison at Shinagawa; more than seven hundred inmates died in it between 1691 and 1765, and their bodies were buried at a temple nearby.",
+  "variants": [
+   "holding jail"
   ]
  }
 }
