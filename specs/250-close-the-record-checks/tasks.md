@@ -198,9 +198,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
 - [x] T54 `tokens.py summary`, per question checked (D15.4)
       research: rendering
       verify: DONE. built in 519865d6; verified: tests/tooling/test_apply_edits.py, test_source_pages.py and the brief/summary run by hand (government summary reproduces R6's rows; the fabric brief names 140 over the cap); make quick clean; plan review CLEAR
-- [ ] T55 FR-002 for `cities/fabric`, worked as the last three pages were (D15.5)
+- [x] T55 FR-002 for `cities/fabric`, worked as the last three pages were (D15.5)
       research: physical
-      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+      - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
+      verify: DONE. cities/fabric closed over sessions 2a-2c: 040, 050, 140, 143 and 146 checked by quote-check and record-format and applied, one re-check round each; 146's fn-82 PARTIAL narrowed and re-checked to SUPPORTS; zongjia, pu and fang glossed and the 2b kidoban term given its bare variant; FR-006 worklist 14 of 14 FOOTNOTED; the four record tests 257 passed; no modal owed on the page
 - [ ] T56 **The comparison the GM asked for** (D15): T55 against R4 to R6, recorded as R7
       research: rendering
 
