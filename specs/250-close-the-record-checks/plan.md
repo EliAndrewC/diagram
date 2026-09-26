@@ -225,12 +225,43 @@ measured:
 The page is `vegetation` - five FR-002 items (as both earlier pages had) and one FR-006 - worked in two sessions
 and measured with `measure/tokens.py` over both transcripts, against R1 and R2. Recorded as R3.
 
+### D12 - The third round: R3's five recommendations, the flaky browser check, and another measured page (GM 2026-09-26)
+
+The GM, on R3: *"Yes, I like those recommendations. So my decision is that you should do all five and then measure
+again the same way as this round. Thanks. You should also fix the flaky timing check if you didn't already fix
+that."* Each built in its smallest form:
+
+1. **The session floor.** `_page_session_runner.py` starts a page session with only research's tools, no MCP
+   servers, no skill listing, and - in a clone - `claudeMdExcludes` naming the MIRROR's root `CLAUDE.md`, which
+   sits above every clone and otherwise loads beside the clone's own copy (found while pricing this; measured on
+   probes 2026-09-26: a first turn of 40,280 tokens as launched, 28,590 with the tool and service cuts, 21,267
+   with the duplicate excluded).
+2. **One or two questions per check session.** The write session's handoff is turned into check briefs of TWO
+   questions each (`brief.py checks`), by a `then:` step the runner executes when the write session ends; each
+   group is a fresh session, and the last one closes the page. The registry keys go to the first group.
+3. **A report's findings in one turn.** The check brief's apply step says: every finding of one report in ONE
+   message, the record commands and tests once for all of it.
+4. **`research/CLAUDE.md` holds the rules only.** Its 43,500 characters move VERBATIM to
+   `docs/research-record-rules.md` (links rewritten), and the file keeps every rule, compactly, at 11,100 -
+   under the same headings, so the full reasoning is one lookup away. No rule is dropped; the two tests that read
+   the file are green.
+5. **`entry-drift` belongs to the check session, budgeted.** Each group's brief runs `_entry_owed.py` and checks
+   the modals written from its own questions, with the question they were written from.
+
+**The flaky check.** `test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not` read a computed
+opacity in the same tick as the highlight; under a loaded gate the style had not been recomputed (one FULL run:
+`('1', '1')` against `('0.45', '1')`; green alone twice). It now waits for the state with the driver's bounded
+`settles`, the pattern its sibling tests use (feature 145) - exactly as strict: a value that never arrives fails.
+
+The page is `cities/defenses` - five FR-002 items and one FR-006, the size of the last - measured over every
+session the runner starts (listed in `.git/page-sessions/index.txt`) against R1 to R3. Recorded as R4.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).
 1. **The measured slice** (T03 to T09), ending in the measurement report (T10). STOP for the GM - who ruled
    on 2026-09-26 (D6).
-1b. **The token work** (T11 to T16), and its second round (T26 to T33, D11): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
+1b. **The token work** (T11 to T16), its second round (T26 to T33, D11) and its third (T34 to T41, D12): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
    seeded-fault runs (D6), and the comparison (D9) - which is phase 2's first page.
 2. FR-002 page by page, one page per session; FR-006 beside it, since both open the same fragments.
 3. FR-003, FR-004, FR-005 (the cosmetic sweeps).

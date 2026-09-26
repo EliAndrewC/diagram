@@ -1,0 +1,492 @@
+# The research record's rules, in full - with the GM's words and the incidents behind them
+
+<!-- Moved here verbatim from `.claude/skills/diagram/research/CLAUDE.md` by feature 250 (research R3,
+recommendation 4; the GM 2026-09-26): that file auto-loads into every session that reads a research file, on
+every turn, and at 43,500 characters it was about 8% of a research session's mean turn. It now carries the
+rules; this carries why each is the rule. Paths in backticks are relative to the skill directory
+`.claude/skills/diagram/`; links are relative to this file. -->
+
+## What proves a cheaper check is still a good check (feature 260)
+
+Not "it reports the same findings". `record-format` does not reproduce its own tail: three runs on one
+entry agreed on eight terms and differed on three, in both directions - including the run that read
+MORE (`specs/259-*/research.md` R5, `specs/260-*/research.md` R2). Features 258 and 259 both wrote that
+bar into their specs and 259 landed with it recorded as unmet.
+
+**The bar is: every candidate the prepass raised was ruled on.** `make record-prepass` names the words -
+the ones no glossary term defines and the record rarely uses - and the check's report must carry a
+verdict for each. That is checkable against the list. What the model notices beyond the list is
+welcome and is not part of the bar, because it is the part that varies.
+
+Two things this does NOT cover, so that nobody reads it as covering them: the list is word-level and
+cannot see a multi-word term, and it does not raise a word the record uses often. And the rule for a
+TIER downgrade - whether a check may run on a cheaper model - is a different decision, and its bar is
+not this one: the new tier is re-run on known findings, **three runs a leg** (root `CLAUDE.md`,
+`docs/spec-kit-and-reviews.md`; GM 2026-09-21). That rule fixes its target in advance the way this one
+does, so it was never broken the way "the same findings" was; what it was missing was the count, since
+one run of a judging agent is not a stable oracle (feature 256).
+
+## The glossary is one file per word (feature 259)
+
+`l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one term each, about 154 bytes. The
+assembled `assets/glossary.json` and the derived `research/assets/glossary.js` are written by
+`make glossary` and never hand-edited; `research/assets/glossary-variants.txt` is the derived index -
+one tab-separated line per variant, and the term that owns it.
+
+    ls l7r/diagram/interactive/assets/glossary/       the term list - the filenames ARE it
+    ls l7r/diagram/interactive/assets/glossary/*towpath*   one term, by its word
+
+A word in prose is usually a VARIANT, and only the index maps it to its term - a grep over the term
+files answers with candidates, because a definition may mention a word another term owns. Adding a term
+is a new file with a free prefix between its neighbors, then `make glossary`; the prefixes are what
+keep the assembled order, and the order decides which definition wins where two terms claim one variant.
+
+## The record is written PER ENTRY, and the pages are assembled (feature 258)
+
+The GM, 2026-09-20: *"split our questions into individual files and split our citations into individual
+files so that they get assembled into documents that are identical to what we have now ... but where
+when you have to make an edit, then you are opening a file which is relatively small."*
+
+| what you want | where it is |
+|---|---|
+| a source's registry entry | `research/sources/NNNN-<key>.html` - one file, about 1.2 KB |
+| a question | `research/<page>/NNN-<heading id>.html` |
+| that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
+| a `cities/` page | `research/cities/<page>/...`, the same shape one level down |
+| the page a reader opens | `research/<page>.html` - ASSEMBLED, never hand-edited |
+
+**Finding one, without reading a page.** There is no index to consult and none to keep in step:
+
+    ls research/sources/*/*fei-1939*            a source, by its key
+    grep -rl "dike-pond" research/water/        a question, by something it says
+    ls research/water/                          a page's questions, in order
+
+Do not `ls research/sources/` bare - it is 920 entries. Do not open `research/<page>.html` to edit it:
+the guard will re-aim an Edit at the one fragment holding its text, and refuse where none or several do.
+
+**Editing.** Open the fragment, edit it, run `make record` in `.claude/skills/diagram`. The gate and the
+push both refuse a committed page that no longer matches its fragments.
+
+**Adding a question**: a free prefix between its neighbors - they count by ten, so there are nine - and
+the file begins with its `<h2 id="...">`, which is the record's anchor.
+
+**Adding a footnote**: no number, anywhere. In the prose,
+`<sup class="fn" data-note="<key>"></sup>`; in the `.notes.html` beside it,
+`<li data-note="<key>">...</li>`. `make record` allocates every number in document order and writes the
+reference, the note, the back link and the hover script. A key is unique within its page; where a page
+cites one work several times they are `fei-1939`, `fei-1939-2`, and so on.
+
+**Checking one entry**, which is what the split is for:
+
+    make check-bundle PAGE=water SECTION=<the question>     one question, copied OUT of the repository
+    make check-bundle KEY=<registry key>                    one source, with its page saved
+
+The bundle holds the fragment, its notes, the prepass (`make record-prepass`), the quote-verbatim report
+(`make quote-verbatim`), the registry entries the notes cite and the glossary's variant index, each written
+inline in one `MANIFEST.md` under its origin, so a check reads one file in one turn. Dispatch `quote-check`, `record-format`, `source-applicability` or
+`source-reader` naming that MANIFEST and nothing under `/diagram`; `check-bundle-hooks.sh` refuses a
+dispatch that points into the repository and prints the command. **Why copies** (feature 250, research
+R1): an agent that reads a file here gets every `CLAUDE.md` above it attached - this file among them,
+about 28,400 tokens - which `omitClaudeMd` does not stop; on the measured runs that was 55-65% of a
+check's context. **The report is compact**: counts on its first line, then only what the session must act on, a pass in one
+line (the harness refuses a subagent's report file, so the reply is the report).
+
+**Two sessions per page** (feature 250 D7, and research R2's recommendation 2). A session's cost is its turns times its context, and every
+report, file and tool result stays in the context for every later turn: on the measured slice the main
+session was 87% of the input and ended at 324,000 tokens a turn. So a research feature is worked a page
+at a time, each page in two FRESH sessions - one locates, reads and writes, the next checks and applies - started
+from written briefs (`make page-session BRIEF="<1> <2>"` runs them in order), and the briefs and the handoff
+between them, not the context, carry the state. `make notes PAGE= SECTION= KEYS=` prints a few notes and the
+paragraphs carrying them; a re-check names only the notes that moved (`make check-bundle ... NOTES=<key,key>`).
+
+This file auto-loads when a research entry is being written or changed - which is exactly when the
+rule below applies. The entry FORMAT, the evidence classes, the citing rules and the table of which
+research file grounds which rule file are in [`README.md`](../.claude/skills/diagram/research/README.md); this file carries the one thing
+that is not a format rule: who the reader is.
+
+## Who the record is for, and how it is organized for them (GM 2026-09-05, feature 180)
+
+The reader this record ultimately serves is not the next session - it is the person looking at an
+interactive map. The GM's description of them: *"casual RPG enthusiasts who might be interested to
+learn a little more about why these settlements are the way that they are. You know, like the different
+types of crops that are grown, that kind of thing."* They are curious, not scholarly, and *"they are not
+immediately presented with an overwhelming amount of third party sources that they could go read to
+become an expert."*
+
+**So the record is organized as QUESTIONS**, and the reader reaches it through a chain with one step per
+level of curiosity:
+
+1. **The map.** They hover a feature and click it; the modal says what it is and why it stands there.
+2. **"See references."** The references modal lists the questions we asked while working out that kind
+   of feature - the headings of the research sections its explanation was written from, each a link.
+3. **The answer.** A question links to its section of the research PAGE, locally from the map
+   (`../../../research/<file>.html#<anchor>`; feature 194 - it was the GitHub rendering of the Markdown before),
+   where the well-formatted markdown gives the finding, the decision it drove and any disclosed liberty.
+4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](../.claude/skills/diagram/research/SOURCES.html)
+   carries the URL where the work can be read (constitution v2.13.0), so a reader who truly wants to
+   check can - *"which both demonstrates that this was based on actual research and also gives them the
+   ability to go read Wikipedia or whatever other public source we have linked to."*
+
+The sources are deliberately one click further out than the questions. A reader who stops at step 2 has
+learned what was looked into; one who stops at step 3 has the answer; the works themselves are for the
+reader who asks for them.
+
+**What this asks of an entry:**
+
+- **Its heading is the question a reader might ask from the map**, and the answer may follow in the same
+  line - *"How close does a farmhouse stand to the paddy? Up against it - but never on the bund"*, *"Is
+  every farmhouse reached by a lane, and in what FORM?"*. A heading is the line the reader sees on the
+  modal, so write it for them. **The bookkeeping is never in the heading** (GM 2026-09-07: *"A parenthetical
+  footnote is not useful to a human. If it is useful to you for your future efforts, then you should save it as an
+  HTML comment"*): the date, the feature and the task - *"researched 2026-08-27, feature 133 T41"* - go in an HTML
+  comment on the line after the heading, `<!-- researched 2026-08-27, feature 133 T41 -->`, where a session parsing
+  the page reads it and a reader never sees it. The 28 headings that carried one were converted on 2026-09-07 and
+  their anchors recomputed (`interactive/sources.py` `github_anchor` of the clean text); `question_text` still
+  strips a dated tail defensively. The map's class entries name a heading by PREFIX (`_names`), so a converted
+  heading still matches an entry that quotes the old tail.
+- **Its anchor is stable** (already the rule in README's "Adding to the record"): the modal links to the
+  heading's anchor (GitHub's rule, kept), so a rename must fix its inbound links - the rule files, and the class entries
+  in `interactive/classes.py` that quote the heading.
+- **A class's explanation names the entries it was written from** (`interactive/classes.py`, the `entry`
+  field), and that pointer is the whole of what puts a question on a modal: the page resolves it at
+  write time, so a new section reaches every map the moment a class entry names it. Nothing is re-typed.
+- **The questions the GM has said they will add** are of this kind, in their words: *"how many farmers
+  lived in each farmhouse, or why are there more rice plots than there are farmhouses, and how many rice
+  plots were farmed by each farmhouse, or how many different types of crops were grown, that kind of
+  thing."* Each is a research entry with its citations first, and only then a line on a modal. Feature
+  180 added none of them - it shows only the questions the record already held (*"For now, you can just
+  limit yourself to the questions that we already have"*); the GM will say at a later time which new
+  questions they want added to what is shown.
+
+## Four labels, and the GM's line between two of them (GM 2026-09-05, feature 183)
+
+An entry's finding, and the class explanation written from it, carries one of FOUR labels (constitution
+XII; `README.md` still lists the original three and is the GM's to update): **accurate**, **deviation**,
+**convention**, **guess**. The GM's rule for the two in the middle, verbatim: a deviation is *"our
+fictional setting being different from the actual history and historical places it is based on"*; a map
+drawing convention is *"rendering glyphs on a map which are differently scaled or differently colored than
+what the features would be in order to make the map more readable and legible to human eyes."* So the
+oversized wellhead, the 6 ft hokora, the stand-level bamboo glyph, the dark bund beads and a stream drawn
+by rank are CONVENTIONS; a hamlet with no headman, the 6:4 dike reading and the 30 ft trunk road are
+DEVIATIONS. A convention's modal note is written in the GM's form - *"Note: we have rendered the bund
+beans as ... in order to make them visible on the map at this scale"* - and ends with the real size or
+color from the record, or says in so many words that it was searched for and not found. Write the word
+the same way in the entry, the rule file, the code comment and the map's notes: since feature 183 the
+record says "a map drawing convention" wherever it used to say "a deviation for legibility".
+
+## Every reference is a link (GM 2026-09-06, feature 190)
+
+The GM: *"I want all of our references to be links ... Any reference to an external document which we were
+able to read in order to do our research should be a link to that external document."* So a key in a
+research file is never bare. Write it as a link, and the target follows from the key's CITATION LINE in
+`SOURCES.html` (the entry's first paragraph, the one that names the work and its URL):
+
+- a document we READ - the citation line carries a URL and no not-read marker - links to that URL, the FIRST
+  one on the line: `` [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810) ``;
+- a document we did NOT read - the line says `SUMMARY-ONLY` or `URL: none`, or records its URL as `unfetched`
+  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](../.claude/skills/diagram/research/SOURCES.html#ma-2024-desire-paths) ``
+  (`../SOURCES.md#...` from `cities/`), because the entry is where "we could not read it" is said, and a link
+  to the page would present an unread source as a read one.
+
+The key stays the link text (the registry, the tests and the class entries name keys). A document named in
+prose without a key - *"Wikipedia 'Desire path'"* in an older `**Sources (read):**` paragraph or a body
+sentence - is linked the same way, by looking its key up; and so is a citation by AUTHOR SURNAME in a finding's
+body (*"Sugiura counts a firewood SHED on 0.76"*, *"that is Tabayashi's rule"*; GM 2026-09-06: *"Yes link them
+too"*), at its first mention in a section, later mentions in the same section staying plain. A read document with
+no entry gets one first (the `source-reader` reads the page - since feature 255 from the full text `make source-pages OUT=<dir> URL=<u>` saved before it was dispatched, grepped rather than fetched as an extract; the entry records the URL and the READ date) and is
+never linked to a URL nobody fetched; before a key is coined the registry is searched by URL, percent-decoded, and
+by the whole entry - six "unregistered" documents in feature 190 were registered under keys the prose did not
+suggest. A `**Pointers, not read:**` item with no entry, a page named only as silent or unreadable, and an
+unregistered summary-only or withdrawn item stay plain; a REGISTERED name is linked whatever label surrounds it.
+`tests/interactive/test_sources.py` holds the rule: a bare key anywhere in a research file, a mis-targeted link,
+or a duplicate `### ` heading in the registry fails the gate. The one-off conversion (459 keyed sites, 202
+prose-named citations, 32 new entries; five review rounds and the GM's ruling) is recorded in
+`specs/190-source-keys-are-links/`.
+
+## A reference QUOTES the passage it rests on, and the quote is checked (GM 2026-09-06, feature 194)
+
+The GM: *"Anytime we add a new reference in order to support something, then in our references section, we
+quote the passage or passages from the reference which support the assertion that we are making. There is no
+point in including a reference if it is not being quoted."* So the citation form is a FOOTNOTE that quotes:
+
+- after the assertion, `<sup class="fn"><a id="fnref-n" href="#fn-n">n</a></sup>` - one per assertion, *"even if this means multiple footnote links per paragraph or
+  even multiple per sentence in sentences which make multiple assertions"*; a sentence that rests on two sources
+  carries two;
+- on the page's CITATIONS PAGE (feature 211, below; it was the page's own foot until then), in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
+  「the quoted passage」 (one clause on what it bears on when that is not plain) <a class="fnback" href="../<name>.html#fnref-n">back</a></li>` -
+  and when the passage is not English, **the quote is the English translation, marked as one** (GM 2026-09-07, feature
+  202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated from the Japanese by this project; original: 「原文」)` - the note names the language
+  and the translator (this project; the GM's browser, a machine translation saved on a date; the source's own English
+  elsewhere on the page), and the original follows the note as the anchor a checker finds on the page, never as a
+  second quote; a translation is this project's own English and follows house style (the guard's 「」 exemption
+  cannot tell it from an original - held by hand); a source's own English needs no note. The same form holds in body
+  prose and in a `SOURCES.html` entry. The record's 472 foreign-language passages were converted on 2026-09-07
+  (`specs/202-quote-the-translation/`) - the key linked by feature 190's rule, the
+  passage VERBATIM from the page, or PASSAGES when one is not enough - verbatim INCLUDING the source's own spelling and dashes: the house-style guard holds quoted spans (「」, “”, a straight-quoted span in prose) out of its corrections (GM 2026-09-06: *"The house style should not normalize british spellings or em-dashes inside things we are quoting, because that requires us to edit other people's quotes"*), and a `quote-check` reports a hyphen for a dash or an Americanized spelling as `DIFFERS`. A SUMMARY-ONLY source is NOT cited (feature 195, below); the
+  GM's own notes (`URL: none`) quote the note. Nothing is quoted from memory.
+- the section's `<p><strong>Sources:</strong> ...</p>` roster stays (the map's modal reads it) and every key on it is quoted by at least
+  one footnote in that section - a key with nothing to quote leaves the roster.
+
+## A citation LINKS to a page where its quote can be READ - or there is no citation (GM 2026-09-06, feature 195)
+
+The GM: *"If we are linking to online sources whose content which is quotable from public sources does not support our claims then we should not cite it. For example, even if a given source is "known" to support a point we are making, if we are not able to simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a page on the public internet where that quote can be read, then we should NOT be claiming that the source supports us."* Two halves, both or neither: the quoted passage that backs the assertion, and a link to a page on
+the public internet where that passage can be read. So a footnote is one of THREE forms:
+
+- **CITATION**: `<a href="https://..."><code>key</code></a> - 「passage」 (gloss)`, the link an `http(s)` page on which the
+  passage can be read - the paper's public PDF rather than its abstract page, the full-text view rather than a library
+  landing page, the original-language page rather than an English rendering that is on no page. A paywalled or
+  login-walled text, a search summary, an abstract that does not carry the passage: none is such a page.
+- **ABSENCE**: `no publicly readable source (searched YYYY-MM-DD: what was tried; the passage the record carried came from
+  the registry entry key, which is no longer cited)` - no key link (not even a bare `<code>` one), no URL. The assertion stands, honestly
+  labeled as resting on nothing a reader can check (constitution XII: an unlabeled guess is the one failure); the
+  registry entry stays as the record of the search, marked *Not cited*. An absence note that has been searched to
+  exhaustion - **two independent passes on different dates, each naming the tools it used, the second naming one the
+  first lacked** - may carry `settled DATE` beside its search and leave the backlog; it re-opens on anything that
+  changes what can be read. Settling is never obligatory, and a note left open costs nothing but an honest number:
+  feature 232's second pass found readable sources for 90 of 162 notes a first pass had called absent.
+
+- **GROUNDS**: `no source is owed: <reason>` - no key, no link, no passage, because there is nothing to find
+  (GM 2026-09-12, feature 235: an absence note *"implies that there is a action that we need to take"*, and a
+  sentence that owes no action was being counted in the category that means one). The reason comes from a CLOSED
+  list of six - `measured on our own maps`, `the record's own silence`, `follows from the definitions`,
+  `physical necessity`, `a drawing convention`, `this project's decision` - and a note may name more than one where
+  a sentence rests on more than one. **Two things it may never carry**: a claim about how a place was built,
+  farmed, planted, governed or lived in, and a sentence the record labels a GUESS about the physical world. Both
+  owe a citation or an absence note however they are dressed, and that prohibition is the whole guard - without it
+  a hard research question can be relabelled a decision and the backlog flatters itself. Only two of the six are
+  exemplified in today's record; the rest are vocabulary for the future, and using one on an existing note takes a
+  written argument at that note's page. Where a note converts FROM an absence note, its recorded search is kept in
+  an HTML comment: a reader owed no source has no use for it, and it is the evidence the question was asked before
+  the note left the backlog.
+
+The one exception, by KEY, RULED by the GM (2026-09-07: *"it is correct to make L7R setting notes an exception to the citation rule, so that should indeed be a documented exception"*): the GM's own campaign notes (`l7r.md`, `budgets.md`; today `l7r-median-domain`) are canon,
+not a source claimed to support a historical point - they keep their registry link. Nothing else is carved out: not a
+`URL: none` print-only book, not a page that has gone away, not a SUMMARY-ONLY entry. This superseded the 2026-08-27
+SUMMARY-ONLY citation clause (constitution v2.19.0); the 2026-09-06 sweep that brought the record under it - 780
+footnotes, every one without a recorded SEEN verdict re-fetched - is `specs/195-cite-only-what-can-be-read/`.
+
+**A page the container cannot fetch is not thereby unreadable.** mdpi.com, Wiley, Springer, ScienceDirect and others
+refuse automated fetches while serving a person; when a source matters, the GM downloads it (2026-09-07: *"I can try to
+download them myself as a human and then save them somewhere that you can see them"*) into `l7r/academic-sources/`,
+mounted here at `/host-l7r-repo/academic-sources/`. The session reads the copy (an Opus reader per paper, passages
+verbatim with page or section), the footnote links the PUBLIC page and says the copy was read, and the quote-check runs
+against the copy. A paywalled full text whose abstract is public is cited for the abstract's words only. **Whether a page is public is the GM's
+test, not the container's**: the GM has no academic subscription, so a page they can open is open to anyone (GM 2026-09-07: *"if it is
+visible to me then you can presume in the future that it is visible to anyone"*) - a 403 to an automated fetch says nothing about
+a reader. The Wiley Biological Flora page behind `packer-2017-phragmites` was confirmed public that way. What the paper
+does NOT say is written down where the claim stands - the first six papers read this way (feature 195 T07) supported
+about half of what the record had attributed to them, and the rest is labeled GUESS now.
+
+**A source the GM is to fetch by hand goes on the download list, in the GM's format, appended at the END** (feature 242,
+GM 2026-09-14). Whenever a session has a source, page or document for the GM to look at or download - a `source-reader`
+that could not fetch a page a person can open, a `quote-check` NOT-READABLE, a dead link with a likely copy elsewhere, a
+paper only a library holds - it is saved in MARKDOWN in `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` (the GM's
+`l7r/academic-sources/`, mounted here), one entry per work, appended after the last entry of the current part and never
+inserted into the middle, so the GM can work down the list and know that everything above where they stopped is done.
+Each entry carries: a heading naming the work (author or publisher, title, and what it is about where the title does not
+say); a clickable link to **the URL the session believes the document lives at** - its best guess, kept even when the
+fetch failed there or the address could not be verified, because the GM's browser may succeed where the container did
+not; a clickable **Google-search link as the backup**, whose query is chosen so that the search uniquely identifies the
+resource (the title plus whatever it takes - author, host, a distinctive phrase, the file name - for the work to be the
+first result and no other work to match), URL-encoded so the link is live; **what rests on it** - which footnotes on which
+pages the record would lose if the work did not say what it is thought to say; and **what blocked the fetch, or why the
+item is on the list where nothing blocked it**. BOTH links on every entry, always: the GM (2026-09-14): *"I had you use the
+format in TO-DOWNLOAD.md where each source has a link to what you think the URL is and a link to the Google search as a
+backup where the Google search should uniquely identify the resource ... anytime you do have a source for me to look at,
+then it should be saved in markdown in this format since that is much easier for me to find things."* A wrong or dead
+direct link then costs them one extra click rather than a hunt. A list handed over only in a chat message is not saved.
+Nothing enforces this mechanically: the list lives in the GM's own checkout, outside this repository, so no gate here
+reads it - the rule stands here with its reason.
+
+Two checks hold it. `tests/interactive/test_footnotes.py` holds the mechanical half at the gate: every reference
+resolves, every definition is referenced, names a registry key and carries a quotation, and every roster key is
+quoted in its section. The **`quote-check` agent** (`.claude/agents/quote-check.md`, Opus at medium effort, AFTER `make quote-verbatim PAGE=<name> [NOTES=<ids>]` has checked every passage against its page character for character with no model and its report is named in the prompt - feature 251; verification not
+judgment - the sibling of `source-reader`) holds the half a test cannot: per footnote, is the quote VERBATIM on
+the page (or DIFFERS / NOT-ON-PAGE), does it SUPPORT the assertion it is attached to (or PARTIAL /
+DOES-NOT-SUPPORT), and per section, which assertions carry no footnote. Run it in the background on every new or
+changed research entry before the feature lands, and record its verdicts in the feature's tasks (a physical
+task's `source-reader confirmed` box is `quote-check confirmed` from here). The page renders the footnotes with
+the ACOUP hover (`html/`, below): hover a reference and the note appears beside it.
+
+## Written for the reader: tooltips, comments, no history (GM 2026-09-07, feature 209)
+
+The GM read the first entry of `homesteads.html` as a reader would and ruled three things, each *"not only a
+change to this one specific section, but a general rule for how these research sections should look"*. They
+are the form of every entry from here, new or revised:
+
+1. **A term the reader would not know is a tooltip, as on the map.** *"Please apply the same kind of tooltip
+   rules to our research sections that we have in our diagram HTML pages ... having a tool tip with the actual
+   definition of this would be helpful."* ONE glossary serves both surfaces: `l7r/diagram/interactive/assets/glossary.json`, loaded by `glossary.py` (feature 207 made the entries data).
+   Add the term there, with its variants and a definition written from the record's own text, and run
+   `make glossary`, which writes `research/assets/glossary.js`; every page loads it, and `assets/record.js`
+   wraps every occurrence in the visible text - headings, prose, footnotes, never a code span - in the map's
+   dotted-underline `.gl` span, the definition shown in the footnote box on hover. Nothing is wrapped by hand.
+   The gate holds the asset in sync and fails a term no modal and no page uses
+   (`tests/interactive/test_record_format.py`).
+2. **A note for a session is an HTML comment.** *"anything which is a note for you, which is to say a note
+   for Claude code sessions, which are modifying these things, should be hidden in HTML comments. This
+   includes, but is not limited to, references to spec kit features or the history of how things came to be
+   this way ... If you feel that you actually need this because it helps you to understand what each research
+   section is in reference to, then that is fine, and you can keep that sort of thing in HTML comments."* So an
+   entry's `Grounds:` and `Evidence:` fields are comments on the lines after the heading (`<!-- Grounds: ... -->`,
+   `<!-- Evidence: ... -->`; of `Evidence: attested` the GM: *"not especially helpful to a human reader"*), and a
+   spec-kit feature, a task id, a spec directory, a test, a make target, an engine identifier - a constant, a
+   function, a knob's code name, a module path - or a fetch verdict (`READ`, `SUMMARY-ONLY`, `UNFETCHABLE`) in the
+   body goes into a comment beside the sentence it annotates, or is dropped when the sentence reads whole
+   without it. The `Sources:` roster stays visible: it is the reader's list of the works, and each key's
+   parenthetical says what the work contributed, nothing about when or how it was read. What is NOT a note for
+   a session: a source key that links to its work; a GM ruling and the alternatives it declined (the decision the
+   record owes its reader); the honest label on a claim - a GUESS, or a search that found nothing, with its date.
+3. **No history of the document in the document.** *"I do not see any purpose in recording in our research
+   findings references to things which used to be in these documents that were wrong and have since been
+   removed ... the commentary about the history of how this research document came to read as it does now is
+   pointless. If we ever need to get that information, we can look it up in our version control history. And
+   the purpose of this document is to contain information which continues to be useful in an ongoing basis for
+   our project, both for future Claude Code sessions, which are using this research to drive the generation of
+   our maps, and for the humans who read this document."* So no "corrected 2026-09-06: the page gives X, not
+   Y", no "used to say", no "re-read with the charset honored", no "the pointer was summary-only until", no
+   "carried from the 2026-07 chat research", no "feature 143 re-sourced this". When a finding changes, the entry
+   is REWRITTEN to say the finding; the old wording lives in git. What stays is what continues to be useful: the
+   figure, the quoted evidence, the decision and who made it, and the honest label on what the record could not
+   support. The feature-195 absence note keeps its visible half - `no publicly readable source (searched
+   YYYY-MM-DD: what was tried)` - and its provenance ("the passage came from `key`") is a comment in the `<li>`.
+
+**Two checks hold it**, the same split as feature 194's. `tests/interactive/test_record_format.py` holds the
+mechanical half at the gate: the fields are comments, every page loads the glossary, the asset equals its
+derivation, every term is used, and the shapes of session-speak and history that recurred (a feature number, a
+task id, a correction date, a fetch verdict, "used to say") are absent from the visible text. The
+**`record-format` agent** (`.claude/agents/record-format.md`, Opus at medium effort, handed the listing of `make record-prepass PAGE=<name>` in its prompt - feature 251) holds the half a
+test cannot: per section, the VOCABULARY that deserves a tooltip (with a definition drafted from the record),
+the SESSION NOTES still visible, and the HISTORY still visible, each quoted with the rewrite it proposes. Run
+it beside `quote-check` on every new or changed entry before the feature lands, and record its verdicts in the
+feature's tasks. **They stay two agents, dispatched in the same turn** (GM 2026-09-07, spec 209 D5): one fetches
+and can stall, the other reads one file; one verifies characters, the other judges what a reader meets; the rule
+of thumb is one agent per question you would want answered even if the other's answer never arrived. The registry (`SOURCES.html`) loads the glossary but is not under rules 2 and 3 (spec 209 D6:
+its `READ` markers are read by the link classifier and its entries are the record of the search); whether it
+should be is the GM's question.
+
+## The notes live on a CITATIONS PAGE, and every cited work says what it is (GM 2026-09-07, feature 211)
+
+The GM: *"this is making the research pages fairly long ... I think that we should have, inside to our research/
+directory, a research/citations directory ... All of the citations at the end of a research file can be moved into
+the citations document. We should be careful to avoid duplicating content because currently the tooltips ... display
+the actual content."* So every research page `research/<name>.html` has a citations page
+`research/citations/<name>.html` (`citations/cities/<name>.html` for a `cities/` page), and three things follow:
+
+- **The notes are on the citations page, once.** Its `<section class="footnotes"><ol>` holds every `<li id="fn-n">` -
+  the key link, the quoted passage, the gloss, exactly as before; a note may run to several paragraphs (`<p>` inside
+  the `<li>`) when a quotation is lengthened or explanation added. The research page keeps the references
+  (`<sup class="fn"><a id="fnref-n" href="citations/<name>.html#fn-n">n</a></sup>`; `../citations/cities/<name>.html#fn-n`
+  from `cities/`) and, where the notes were, one line linking to the citations page. **The hover still shows the
+  note**: the research page loads `citations/<name>.js`, a DERIVED script `make citations` writes from the citations
+  page (a page opened from disk cannot fetch a sibling file, so the note reaches it as a script), and
+  `tests/interactive/test_citations.py` fails while the committed script differs from its derivation. Nothing is
+  typed twice. **To add a footnote**: the `<li>` on the citations page (its back link `../<name>.html#fnref-n`),
+  the reference on the research page, then `make citations`.
+- **Every cited work is explained ONCE, in its registry entry.** Since feature 211 a `SOURCES.html` entry carries,
+  after its citation line, `<p><em>What it is:</em> ...</p>` (one to three sentences: the kind of work, its authors,
+  its date, what it is about) and `<p><em>Why it applies, and its limits:</em> ...</p>` (one to three sentences: why it
+  is a good and valid source for what we use it to look up, and its honest limitations - the GM's examples: *"some of
+  our research may be from the year nineteen hundred ... much of the land surveyed in China during that period was not
+  yet industrialized ... However, we should still be honest that there were modern agricultural techniques which would
+  have been employed"*; *"we use sources on Korea and Korean agriculture because we were not able to find publicly
+  available sources that were more directly applicable"*). The WORKS section at the top of every citations page -
+  each work its footnotes cite, in order of first citation, with its citation line and both write-ups - is DERIVED
+  from those entries by `make citations` between two markers, so a work cited from two pages has one write-up
+  (*"we do not want to have multiple different write ups of a single paper"*). A cited key with no write-up fails the
+  gate: a new source is not cited until its entry says what it is and why it applies. Both write-ups are written for
+  the reader (the rules above: tooltips, comments, no history).
+- **A source is JUDGED before it is used, and when its write-up lands.** The **`source-applicability` agent**
+  (`.claude/agents/source-applicability.md`, Opus at high effort) reads the work and reports whether it is
+  APPLICABLE, APPLICABLE-WITH-LIMITS (each limit named) or NOT-APPLICABLE to a premodern East Asian setting modeled on
+  imperial China and pre-Meiji Japan, and whether the write-up's limits are HONEST, MISSING one or OVERSTATED. It runs
+  at TWO moments: whenever a source's write-ups are added or changed (every new registry key), and BEFORE a session
+  integrates a new source's numbers, claims or details into a map or a rule - a `research: physical` task's fifth
+  box, `source-applicability confirmed` (constitution XII; `tests/test_task_research_boxes.py`, from feature 211 on).
+  The GM: *"whatever subagent check we create in order to justify whether a source is applicable to be used in the
+  creation of our diagrams, that subagent check should also be run when we first begin to make use of the source
+  prior to integrating its numbers or claims or details into our maps."* A source it finds NOT-APPLICABLE is recorded
+  as such in its write-up and listed for the GM; the assertions resting on it keep their label until the GM rules
+  what the map should call them (spec 211 D5). The check of the record's 319 cited sources on 2026-09-07 is
+  `specs/211-citations-pages/research.md` R3.
+
+## The record IS HTML - edit the page (feature 194, the GM's ruling through its spec review)
+
+Since 2026-09-06 the record's files are `research/<name>.html` (`cities/<name>.html`, `SOURCES.html`, and since feature
+211 `citations/<name>.html` beside each), hand-authored
+and tracked; the Markdown they were converted from is gone (the GM: *"the markdown on GitHub will no longer exist
+as it has been replaced with HTML"*). A page's `<head>` carries the charset, the title and two relative links -
+`assets/record.css` and `assets/record.js` (the footnote hover; `../assets/` from `cities/`) - plus, on a research
+page, its derived `citations/<name>.js` before `record.js` - and its body is one
+`<main>`. Section ids are the record's anchors (`github_anchor` in `interactive/sources.py` - GitHub's rule, kept
+when the record converted), the registry's entries are `<h3 id="<key>"><code>key</code></h3>`, and a section's
+sources roster is `<p><strong>Sources:</strong> ...</p>`, which the map's modal reads. The maps' "See references"
+opens these pages locally (`../../../research/<name>.html#<id>`). GitHub shows a committed `.html` as source, so
+the reading path is the local page, not GitHub. `README.md` and this file stay Markdown: they are instructions,
+not the record.
+The mechanics of the page side - the anchor rule, the ordering, the button - are in
+[`../l7r/diagram/interactive/CLAUDE.md`](../.claude/skills/diagram/l7r/diagram/interactive/CLAUDE.md), "The references modal
+lists QUESTIONS".
+
+## The record is the ONE home per topic - the rule files retired into it (GM 2026-09-12, feature 229)
+
+The `settlements/*.md` rule files were written to tell a session how to hand-place features. Once the hamlet
+tier was scripted the GM asked whether they still earned their place, and an audit of every pair found each
+rule file to be, by bytes, mostly text already on its research page, already in the engine with its reasoning,
+or describing the validator feature 166 deleted - with a thin layer of decision record and specification that
+existed nowhere else. The GM: *"if there are ... explanations in the markdown versions of the files that explain
+what we are doing, and the research is explaining why, then that would best be combined just into the research
+files"*, and, on the tiers nothing scripts yet, *"moving those into the research pages as well is the right
+move ... those specifications will move into the scripted generators once those exist."* So since 2026-09-12:
+
+- **A research page holds, per question, three things**: the finding, the decision it drove (the GM's ruling
+  with its date and words, the alternatives declined, a fix tried and reverted with its measurement), and - for
+  a rule no generator yet encodes - the **specification** the future generator must satisfy.
+- **A specification is `<p class="spec">`, opening `<strong>The rule the map follows:</strong>`**, one per rule
+  or tight family, under the question whose finding grounds it. It speaks in the reader's terms - real feet at
+  the tier's scale (hamlet and town 1 ft per px, village 2, city and capital 3), the pixel figure in a comment
+  beside it - names no engine identifier or check in its visible text, and where the rule has no finding behind
+  it says so: a convention chosen so the feature reads at map scale, a calibration against the drawn exhibits,
+  or a guess. The class attribute is how the feature that scripts a tier finds every rule it owes and nothing
+  else; when the generator encodes a rule with its reasoning at the point of change, the paragraph is retired.
+- **A rule the engine already encodes with its reasoning is not written a second time.** The page keeps the
+  finding and the decision; the number lives in the code. Where the code's comment lacked the why the rule file
+  carried, the why moved onto the page and the comment points at the anchor.
+- **Nothing in the tree names a retired rule file.** `tests/interactive/test_record.py` holds it - by path and by
+  bare basename, judged per reference - with the same exemptions as the converted-Markdown rule (`specs/`, the
+  guard replay corpus, `README.md`) plus the frozen pre-189 class fixture. The four pages this brought into
+  being are `settlements.html` (the tiers, what a page states, waivers), `ways.html`, `presentation.html` (the
+  drawing conventions, which say they are conventions) and `cities/sizing.html`.
+- The inventory of what moved where - every decision, every specification, every finding that only a rule
+  file carried, the contradictions resolved on the way - is `specs/229-rule-files-into-research/research.md`.
+
+## When a section a modal was written FROM moves (GM 2026-09-12, feature 234)
+
+What a map's modal says about a feature IS the docstring of its `Kind` class
+(`interactive/classes/`, feature 189), written FROM a research section the class names in its `Entry:`
+tag. Nothing used to notice when that section's content moved underneath it, and the GM asked the
+question that closed the gap - told to update the pigsty write-up, *"if I hadn't said that ... then
+would you have done it?"*
+
+**What is owed.** `scripts/_entry_owed.py` names every class whose section's BODY changed while its own
+explanation prose did not. `make page-check` prints that list and does not block. **The push REFUSES**
+until each named pair is answered: dispatch the `entry-drift` agent at it, rewrite the prose it calls
+DRIFTED - or, where the sections moved without any FINDING moving, discharge the lot with one recorded
+line, `ENTRY_DRIFT_OK="<what moved, and why no modal is now wrong>"`, which `make audit` lists.
+
+It is enforced rather than expected, on the GM's ruling: *"I don't believe that we should have any such
+thing as an unenforced doctrine. If it is unenforced, then it is not a doctrine. something should either
+not be considered doctrinal or it should be enforced."* Narrowing the key so it would fire less was
+priced first and does not work - firing only on what a reader SEES takes 28 of 30 research-only commits to 27 of 30 (`specs/234-entry-owed-when-the-record-moves/research.md` R5), because separating "this
+section now says something different" from "this section was maintained" is a judgment about meaning.
+
+**`record-format` and `quote-check` are NOT this check.** They read a research ENTRY - whether a reader
+would understand it, whether its quotations are on the page and support what they are attached to.
+Neither of them ever opens a `Kind` docstring, so neither can tell you a modal has gone stale. They are
+the changed research entry's own standing obligations and a green pass from either says nothing about
+any modal.
+
+**And a renamed heading owes its inbound links** - the rule this file already stated, now checked:
+`scripts/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
+section. A section deliberately not written is written in the declared form
+`research/<file>.html (no dedicated entry - recorded as silent)`, which `make audit` enumerates.

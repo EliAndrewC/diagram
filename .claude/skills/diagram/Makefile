@@ -1073,9 +1073,9 @@ notes: ## [project] print the named notes of ONE question and only the blocks of
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)" --notes "$(KEYS)" --print-notes
 
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
-page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from a written brief - one page per session keeps the context small (feature 250 D7)   BRIEF=<file> [NAME=<session name, default this clone's>] [MODEL=<model>]
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>]
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(abspath $(BRIEF))" "$(NAME)" "$(MODEL)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)"
 
 # GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
 check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   PAGE=ways SECTION=010 | KEY=edo-enwiki

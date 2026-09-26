@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """The brief a fresh page session starts from (feature 250 D7): what ONE page owes, and how to do it.
 
-    brief.py <page> <task>      writes briefs/<page>-1.md (locate, read, write) and briefs/<page>-2.md (check,
-                                apply, close) - two FRESH sessions per page (feature 250, recommendation 2: the first
-                                page's applying turns ran at the end of a session that had read every source, and were
-                                a third of it)
+    brief.py <page> <task>          writes briefs/<page>-1.md (locate, read, write) and briefs/<page>-checks.sh
+    brief.py checks <page> <task>   run by the runner when session 1 ends: one check brief per group of two of the
+                                    questions its handoff names, printed a path a line - each a FRESH session
+                                    (feature 250: R2's recommendation 2 split write from check; R3's split the
+                                    checks, after one check session grew to 218,000 over five questions)
 
 The items are DERIVED - FR-002's from `assertions.py`, FR-006's from 242's `worklist.py` - never typed.
 The procedure is the plan's (D2, D5, D6, D8) written out so the session does not have to read the spec,
@@ -104,52 +105,102 @@ fragment the grep did not name.
    in a fresh context. Your last message is one paragraph saying what you wrote.
 """
 
-CHECK = COMMON + """Session 1 has written this page's notes and committed them. Its handoff, `{handoff}`, lists the questions
-and registry keys it changed - read it first; it is your work list.
+CHECK = COMMON + """Session 1 wrote this page's notes and committed them; its handoff is `{handoff}`. You check and apply
+ONE GROUP of the questions it changed - a fresh session per group keeps every context small (feature 250 R3,
+recommendation 2). Read only your own lines of the handoff.
 
-## The procedure (session 2: check, apply, close)
+**Your questions:** {sections}
+**Your registry keys:** {keys}
 
-5. **Check, one agent per changed question or key, all in one message, in the background.** For each question:
+## The procedure (check, apply{closing})
+
+5. **Check, all in one message, in the background.** For each of your questions:
    `make check-bundle PAGE={page} SECTION=<NNN>`, then `quote-check` and `record-format`, each naming the
-   MANIFEST.md it printed and nothing else (the MANIFEST holds every copy inline). For each new or changed key:
-   `make check-bundle KEY=<key>` and `source-applicability`. Each replies with its counts first, then only what
-   you must act on.
-6. **Apply** every finding (a glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then
-   `make glossary`), then re-run the record commands and tests.
-7. **Re-check only what moved.** If you changed a note on a check's finding, re-check THAT note alone:
-   `make check-bundle PAGE={page} SECTION=<NNN> NOTES=<key,key>` and one `quote-check` naming its MANIFEST.
-8. **Close.** `python3 specs/242-cite-the-unfootnoted-assertions/measure/worklist.py {page}.html` (from
+   MANIFEST.md it printed and nothing else (the MANIFEST holds every copy inline). For each of your keys:
+   `make check-bundle KEY=<key>` and `source-applicability`. And the map's modals: run
+   `python3 scripts/_entry_owed.py` from the clone root; for each class it names whose entry is one of YOUR
+   questions, `make check-bundle PAGE={page} SECTION=<NNN> NO_QUOTES=1 KIND=<class>` and `entry-drift` naming its
+   MANIFEST (a drifted modal is owed at the push, so it is checked here, with the question it was written from).
+6. **Apply ONE REPORT PER TURN.** Every finding of one report goes in ONE message: all its edits as parallel
+   `Edit` calls (or one patch), never one finding a turn - every turn re-reads your whole context. Then run
+   `make record && make citations` and the four record tests ONCE for everything applied, not once per report.
+   A glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then `make glossary`.
+7. **Re-check only what moved.** A note changed on a check's finding: `make check-bundle PAGE={page}
+   SECTION=<NNN> NOTES=<key,key>` and one `quote-check` naming its MANIFEST. A modal rewritten: one `entry-drift`
+   on its bundle again.
+{close}"""
+
+CLOSE_LAST = """8. **Close the page.** `python3 specs/242-cite-the-unfootnoted-assertions/measure/worklist.py {page}.html` (from
    `.claude/skills/diagram`) for the FR-006 figure; commit; tick with
-   `make tick F=250-close-the-record-checks T={task} BOXES=1 NOTE="<what closed, with the counts>"`. Do NOT run
-   `scripts/sync-with-main.sh done`.
-9. **Report.** One paragraph: items closed per form, FR-006 items confirmed or worked, the agents run, anything
-   left open and why. A finding that needs the GM (the record contradicts itself, a rule would change) is not
-   decided: leave the text and say so.
+   `make tick F=250-close-the-record-checks T={task} BOXES=1 NOTE="<what closed on the page, with the counts>"`.
+   Do NOT run `scripts/sync-with-main.sh done`.
+9. **Report.** One paragraph: what your group closed, the agents run, anything left open and why. A finding that
+   needs the GM (the record contradicts itself, a rule would change) is not decided: leave the text and say so.
 """
+
+CLOSE_GROUP = """8. **Commit** with a message naming your questions; do NOT tick - a later group closes the page.
+9. **Report.** One paragraph: what your group closed, the agents run, anything left open and why.
+"""
+
+GROUP = 2   # questions a check session takes: R3 measured one session growing to 218,000 over five
+
+
+def check_groups(handoff: str) -> tuple[list[list[str]], list[str]]:
+    """(the handoff's questions in groups of GROUP, its keys) - read off its `SECTION=NNN` and `KEY=k` lines."""
+    sections = list(dict.fromkeys(re.findall(r"SECTION=(\d{3})", handoff)))
+    keys = list(dict.fromkeys(re.findall(r"KEY=([a-z0-9][a-z0-9-]*)", handoff)))
+    return [sections[i:i + GROUP] for i in range(0, len(sections), GROUP)], keys
+
+
+def checks(page: str, task: str) -> int:
+    """After session 1: one check brief per group of questions, printed one path a line for the runner."""
+    slug = page.replace("/", "-")
+    briefs = FEATURE / "briefs"
+    handoff = briefs / f"{slug}-handoff.md"
+    if not handoff.is_file():
+        print(f"brief: no handoff at {handoff} - session 1 did not finish", file=sys.stderr)
+        return 2
+    groups, keys = check_groups(handoff.read_text(encoding="utf-8"))
+    fields = _fields(page, task)
+    for n, group in enumerate(groups, 1):
+        last = n == len(groups)
+        out = briefs / f"{slug}-2{chr(96 + n)}.md"
+        out.write_text(CHECK.format(n=f"2{chr(96 + n)}", what=f"check and apply, group {n} of {len(groups)}", sections=", ".join(f"SECTION={s}" for s in group),
+                                    keys=", ".join(f"KEY={k}" for k in keys) if n == 1 and keys else "none - another group has them" if keys else "none",
+                                    closing=" and close the page" if last else "", close=(CLOSE_LAST if last else CLOSE_GROUP).format(**fields), **fields), encoding="utf-8")
+        print(out)
+    return 0
+
+
+def _fields(page: str, task: str) -> dict:
+    slug = page.replace("/", "-")
+    briefs = FEATURE / "briefs"
+    return dict(page=page, task=task, clone=CLONE, marks=(HERE / f"marks-{slug}.json").relative_to(CLONE), slug=slug,
+                handoff=(briefs / f"{slug}-handoff.md").relative_to(CLONE))
 
 
 def main(argv: list[str]) -> int:
+    if len(argv) == 3 and argv[0] == "checks":
+        return checks(argv[1], argv[2])
     if len(argv) != 2:
-        print("usage: brief.py <page> <task>", file=sys.stderr)
+        print("usage: brief.py <page> <task>  |  brief.py checks <page> <task>", file=sys.stderr)
         return 2
     page, task = argv
     items2, items6 = fr002(page), fr006(page)
     if not items2 and not items6:
         print(f"brief: {page} owes nothing under FR-002 or FR-006", file=sys.stderr)
         return 2
-    slug = page.replace("/", "-")
+    fields = _fields(page, task)
     briefs = FEATURE / "briefs"
     briefs.mkdir(exist_ok=True)
-    marks = HERE / f"marks-{slug}.json"
-    fields = dict(page=page, task=task, clone=CLONE, marks=marks.relative_to(CLONE), slug=slug,
-                  handoff=(briefs / f"{slug}-handoff.md").relative_to(CLONE),
-                  fr002="\n".join(items2) or "- none", fr006="\n".join(items6) or "- none")
-    outs = []
-    for n, (what, template) in enumerate((("locate, read and write", WRITE), ("check, apply and close", CHECK)), 1):
-        out = briefs / f"{slug}-{n}.md"
-        out.write_text(template.format(n=n, what=what, **fields), encoding="utf-8")
-        outs.append(out)
-    print(f"brief: {len(items2)} FR-002 and {len(items6)} FR-006 item(s) -> " + " then ".join(str(o) for o in outs))
+    write = briefs / f"{fields['slug']}-1.md"
+    write.write_text(WRITE.format(n=1, what="locate, read and write", fr002="\n".join(items2) or "- none",
+                                  fr006="\n".join(items6) or "- none", **fields), encoding="utf-8")
+    then = briefs / f"{fields['slug']}-checks.sh"
+    then.write_text(f"#!/bin/sh\n# the check briefs, made from session 1's handoff when it ends (feature 250 R3, recommendation 2)\n"
+                    f"exec python3 {HERE / 'brief.py'} checks {page} {task}\n", encoding="utf-8")
+    then.chmod(0o755)
+    print(f"brief: {len(items2)} FR-002 and {len(items6)} FR-006 item(s) -> {write}, then the check groups: then:{then}")
     return 0
 
 
