@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The seeded-fault runs of feature 250 D6: does a check still find what it found when it reads a bundle?
 
-Three agents, two legs, three runs a leg (the tier rule). Every run of a case reads the SAME bytes; the
+Five agents, two legs, three runs a leg (the tier rule). Every run of a case reads the SAME bytes; the
 legs differ only in WHERE the files are: the TREE leg reads them under `research/_seeded250/`, where the
 harness attaches every CLAUDE.md above them; the BUNDLE leg reads them under `/tmp/l7r-seeded/`, where it
 attaches none. A run is judged on whether its REPORT names every planted fault.

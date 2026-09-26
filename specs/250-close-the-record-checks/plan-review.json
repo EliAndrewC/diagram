@@ -1,6 +1,6 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "c961678cd3dd169802f820723a926afdd8e69d66ff5e93239a2a8946478fb839",
+ "plan_sha256": "ce6d99194a734b41bce30bf245e1ddfe382aca62e9d9f7124d9eedc71888c4d3",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
@@ -74,17 +74,10 @@
    "why": "Unchanged since round 1: an ordering the spec itself pairs ('worked as a bare item under FR-002'). Both halves are now clear, D4 and D5 being resolved."
   },
   {
-   "id": "D6-bundle-for-four-check-agents",
-   "summary": "make check-bundle copies what one check reads to /tmp/l7r-check/ with a MANIFEST.md; quote-check, record-format, source-applicability and source-reader read only the bundle.",
+   "id": "D6-bundle-for-five-check-agents",
+   "summary": "make check-bundle copies what one check reads to /tmp/l7r-check/ with a MANIFEST.md; quote-check, record-format, source-applicability, source-reader and entry-drift (KIND=<class> adds kind.txt, its modal docstring) read only the bundle.",
    "class": "within",
-   "why": "Recommendation 1 as the GM was shown it on 2026-09-26 (transcript: 'Stop the ~28K CLAUDE.md attachment on check agents, for example by handing them copies of the files outside the repo'), adopted by 'all of those recommendations should be implemented'. The GM was shown THREE recommendations, not R1's five, so leaving R1 items 4 and 5 out is not a narrowing."
-  },
-  {
-   "id": "D6-entry-drift-left-out-of-the-bundle",
-   "summary": "entry-drift is not bundled: its input is a modal's explanation in the engine's assets, and the slice did not measure it.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The adopted recommendation is for 'check agents', and entry-drift is one this feature dispatches (spec FR-007, T23). Its contract reads the research FRAGMENTS and notes files its dispatch names, under research/, as well as engine assets under .claude/skills/diagram/ - both under nested CLAUDE.md files, so the premise that its input lies outside the attachment is half wrong. 'The slice did not measure it' is not impossibility, is not implied by the GM's words, and literal application does not defeat the purpose. Fix: bundle entry-drift too, with its own three-a-leg seeded runs, or bring the exclusion to the GM."
+   "why": "Recommendation 1 as the GM was shown it on 2026-09-26 (\"Stop the ~28K CLAUDE.md attachment on check agents ...\"), adopted by \"all of those recommendations should be implemented\". Round-5 item 1 RESOLVED: entry-drift is now bundled; checked at f4f89cdd in .claude/agents/entry-drift.md (bundle section, kind.txt), scripts/_check_bundle.py --kind, the Makefile KIND= plumbing and check-bundle-hooks.sh CHECKS listing all five."
   },
   {
    "id": "D6-guard-check-bundle-hooks",
@@ -93,24 +86,10 @@
    "why": "A refusing guard is behavior, scoped part by part: its reach is exactly the check agents the adopted recommendation names and exactly the thing it asks (they read outside the repo). No other agent types, commands or defaults. Enforcement of what was asked."
   },
   {
-   "id": "D6-seeded-runs-record-format-quote-check",
-   "summary": "record-format and quote-check: one entry with planted faults, three runs in the tree and three from the bundle; a leg that loses a finding keeps the agent on the tree.",
+   "id": "D6-seeded-runs-all-five-agents",
+   "summary": "Seeded-fault runs, three a leg, tree and bundle, for each of the five bundled agents; a leg that loses a finding keeps that agent on the tree.",
    "class": "within",
-   "why": "The precondition the GM was shown with recommendation 1: 'three test runs per leg to confirm the checks' findings don't get worse before adopting it'."
-  },
-  {
-   "id": "D6-seeded-runs-source-applicability-one-tree-run",
-   "summary": "source-applicability's check is the recorded edo-enwiki case: three bundle runs against the ONE recorded in-tree verdict.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The GM adopted 'three test runs per leg'; the in-tree leg here is one recorded run, the exact 'one run of a judging agent is not a stable oracle' the tier rule exists for. Rerunning the tree leg three times on the same recorded case is possible and cheap, the GM's words do not imply the shortcut, and the literal form does not defeat the purpose. Fix: three in-tree runs on the recorded case as well."
-  },
-  {
-   "id": "D6-source-reader-bundled-without-seeded-runs",
-   "summary": "source-reader's contract is moved onto the bundle, but D6 and T15 name seeded runs only for record-format, quote-check and source-applicability.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Recommendation 1 as adopted carries its precondition ('three test runs per leg ... before adopting it'); D6 drops it for one of the four agents it bundles, with no reason stated. Not impossible, not implied by the GM. Fix: three-a-leg seeded runs for source-reader in T15, or leave source-reader on the tree."
+   "why": "The precondition the GM was shown with recommendation 1 (\"three test runs per leg ... before adopting it\"). Round-5 items 3 and 4 RESOLVED: measure/seeded.py CASES carries rf, qc, sa, ed and sr, and make_runs loops leg in (tree, bundle) x range(1, RUNS+1) with RUNS = 3 for every case, so source-applicability gets three in-tree runs on the recorded edo-enwiki case and source-reader gets its own case (a CONTRADICTED 70% claim and a READ claim against the saved Edo page). Not a finding: the module docstring still says \"Three agents\"."
   },
   {
    "id": "D7-one-page-per-session",
@@ -120,16 +99,9 @@
   },
   {
    "id": "D8-report-to-file-one-line-reply",
-   "summary": "The four bundled check contracts gain Write; the whole report goes to REPORT.md in the bundle and the reply is one line of counts naming it; no guard on the write.",
+   "summary": "The five bundled check contracts gain Write; the whole report goes to REPORT.md in the bundle and the reply is one line of counts naming it; no guard on the write.",
    "class": "within",
-   "why": "Recommendation 3 ('Write agent reports to a file and return only a one-line verdict'), adopted, for the four agents. Declining a guard adds nothing unasked."
-  },
-  {
-   "id": "D8-entry-drift-left-out-of-one-line-reports",
-   "summary": "D8 applies to 'the four contracts D6 names', so entry-drift keeps returning its whole report into the session.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Recommendation 3 as shown to the GM is 'Write agent reports to a file', not limited to bundled agents; entry-drift runs in this feature (FR-007). D8 inherits D6's exclusion without its own reason, and D6's reason (the slice did not measure its reading) does not bear on where its report goes. Fix: entry-drift writes REPORT.md and replies one line too."
+   "why": "Recommendation 3 (\"Write agent reports to a file and return only a one-line verdict\"), adopted. Round-5 item 2 RESOLVED: D8 now says five, and entry-drift.md at f4f89cdd carries tools Read, Grep, Write and the REPORT.md/one-line rule, as do the other four contracts."
   },
   {
    "id": "D9-the-comparison",
@@ -156,5 +128,5 @@
    "why": "Diff 50969d46..f8abf77c read in full: no FR dropped or reworded; the only removed clause is old T12's 'in the order T11 prints', a plan-level ordering the spec does not carry (spec has no ordering requirement), displaced by D9's choice of homesteads first. plan.md and spec.md carry no stale task number."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
