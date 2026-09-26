@@ -13,7 +13,7 @@ from __future__ import annotations
 import math
 from collections.abc import Mapping, Sequence
 
-from ...buildings.types import BuildingType, RequiredItem
+from ...buildings.types import BuildingType, RequiredItem, classification
 from .grids import FTPX
 from .parse import Label, ParsedPlan, Rect
 
@@ -46,9 +46,33 @@ def structure_for(label: Label, structures: Sequence[Rect], max_ft: float = PAIR
     return best
 
 
-def matches(item: RequiredItem, labels: Sequence[Label]) -> list[Label]:
-    """The sheet's labels that name `item` (its `label` regex, case-insensitive, over the whole text)."""
+def matches(item: RequiredItem, labels: Sequence[Label], label_kinds: Mapping[int, str] | None = None) -> list[Label]:
+    """The sheet's labels that name `item`: for a KIND item (feature 262), the labels the sheet itself tags with that
+    kind (`label_kinds`, the parser's offset -> kind map); otherwise those its `label` regex finds, case-insensitive,
+    over the whole text."""
+    if item.kind is not None:
+        return [lb for lb in labels if (label_kinds or {}).get(lb.pos) == item.kind]
+    assert item.label is not None  # a declaration item is labeled or kinded (types.py `_item` refuses anything else)
     return [lb for lb in labels if item.label.search(" ".join(lb.text.split()))]
+
+
+def _present(item: RequiredItem, plan: ParsedPlan) -> bool:
+    """Whether the sheet draws `item`: a kind item by any element tagged with its kind, a labeled one by a label its
+    regex finds - and either by an element DECLARED with its id (an arch, an approach, a well, a fence group need no
+    caption saying what they plainly are - the no-obvious-labels rule; the id is what the checks read)."""
+    if item.id in plan.ids:
+        return True
+    if item.kind is not None:
+        return item.kind in plan.kinds
+    return bool(matches(item, plan.labels))
+
+
+def _how_found(item: RequiredItem) -> str:
+    """How the sheet shows an item, in the words a missing-item finding uses."""
+    if item.kind is not None:
+        return f'an element tagged data-kind="{item.kind}"'
+    assert item.label is not None
+    return f"a label matching /{item.label.pattern}/"
 
 
 def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None, site: Mapping[str, bool] | None = None) -> list[str]:
@@ -62,10 +86,8 @@ def check_program(plan: ParsedPlan, btype: BuildingType, form: str | None, site:
             continue
         if item.site is not None and site is not None and not site.get(item.site, False):
             continue  # the map shows none of that class at the subject: the sheet draws none (the GM, 2026-09-20)
-        if not matches(item, plan.labels) and item.id not in plan.ids:
-            # present by LABEL, or DECLARED by id (an arch, an approach, a well, a fence group need no caption
-            # saying what they plainly are - the no-obvious-labels rule; the id is what the checks read)
-            out.append(f"no `{item.id}` on the sheet (a label matching /{item.label.pattern}/, or an element marked id=\"{item.id}\")")
+        if not _present(item, plan):
+            out.append(f"no `{item.id}` on the sheet ({_how_found(item)}, or an element marked id=\"{item.id}\")")
     return out
 
 
@@ -76,7 +98,7 @@ def check_bands(plan: ParsedPlan, btype: BuildingType, form: str | None) -> list
         band = item.band_for(form)
         if band is None or band.presence_only:
             continue
-        for lb in matches(item, plan.labels):
+        for lb in matches(item, plan.labels, plan.label_kinds):
             r = structure_for(lb, plan.structures)
             if r is None:
                 continue  # a label on open ground: the program check's business, not a size's
@@ -88,6 +110,7 @@ def check_bands(plan: ParsedPlan, btype: BuildingType, form: str | None) -> list
                 else:
                     assert bw is not None and bh is not None  # `holds` passes anything without both, so this is the w-by-h case
                     want = f"w {bw[0]:.0f}-{bw[1]:.0f} by h {bh[0]:.0f}-{bh[1]:.0f} ft"
-                out.append(f"`{item.id}` ({lb.text!r}) is {w_ft:.0f} x {h_ft:.0f} ft ({w_ft * h_ft:.0f} sq ft) at svg({r.x:.0f},{r.y:.0f}) - the band is {want} ({item.cls}: {item.why})")
+                cls, why = classification(item)
+                out.append(f"`{item.id}` ({lb.text!r}) is {w_ft:.0f} x {h_ft:.0f} ft ({w_ft * h_ft:.0f} sq ft) at svg({r.x:.0f},{r.y:.0f}) - the band is {want} ({cls}: {why})")
             break  # one footprint per item: the first label that stands on a structure
     return out

@@ -1,0 +1,99 @@
+{
+ "feature": "262-interactive-magistracy-pages",
+ "plan_sha256": "5994e2335df8b77251b74d94d209b5e95111c26fc67065dd68bd43319a440e4d",
+ "reviewed": "2026-09-26",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Tech-tokenizer",
+   "summary": "The reader is a regex tokenizer over the SVG text, not an XML library, so the page carries the sheet's own bytes.",
+   "class": "within",
+   "why": "Mechanism; serves FR-009 (the page is a second serialization of the same drawing) and narrows nothing asked."
+  },
+  {
+   "id": "Order-ochiba-first",
+   "summary": "Ochiba is the single-artifact target; the other four maps follow as their own task.",
+   "class": "within",
+   "why": "Ordering only: all five maps remain owed (FR-001, SC-001, User Story 2). Ochiba is the GM's named example."
+  },
+  {
+   "id": "Perf-bookends-NA",
+   "summary": "No performance bookends: no settlement-generator change; emit_svg gains attributes only.",
+   "class": "within",
+   "why": "Project procedure the request does not touch; FR-011 is still held by the hamlet interactive tests."
+  },
+  {
+   "id": "ConstVI-building-review",
+   "summary": "building-review runs on Ochiba's page at acceptance, one map per agent.",
+   "class": "within",
+   "why": "Project review procedure; removes nothing the GM asked for."
+  },
+  {
+   "id": "D1",
+   "summary": "data-kind on the element or an enclosing <g>, nearest wins; data-kind=\"-\" is the not-highlighted ruling; a label is a child of its feature's group and the modal heading is the registry name. Side file and label inference rejected.",
+   "class": "within",
+   "why": "FR-002 word for word and the accepted design ('data-kind attributes'); the '-' ruling is the spec's edge case; the side file is rejected for the GM's own one-source constraint."
+  },
+  {
+   "id": "D2",
+   "summary": "flatten() re-opens tagged ancestors around each differently-tagged child fragment, document order kept; <svg> and <defs> ruled '-'; a re-opened ancestor's id dropped after the first copy.",
+   "class": "within",
+   "why": "Implements the spec's nested-kind and defs edge cases; paint order unchanged serves FR-009."
+  },
+  {
+   "id": "D3",
+   "summary": "The page functions take a registry defaulting to the hamlet CLASSES; no place card for a sheet; lane default only for the hamlet key.",
+   "class": "within",
+   "why": "FR-001 (same interactive page) and FR-011 (no hamlet page changes); no place card follows the spec's Assumption, which rules the placard not highlighted."
+  },
+  {
+   "id": "D4",
+   "summary": "One registry interactive/compound_kinds/ in four family modules; setting particulars are kinds; a one-map fact about a generic kind goes in that map's .notes.md Features block keyed by kind.",
+   "class": "within",
+   "why": "FR-003 (one registry, docstring form, shared), the accepted design (particulars as per-map kinds) and FR-010 word for word."
+  },
+  {
+   "id": "D5-classification",
+   "summary": "Each kind's Label carried from an existing finding (section -> accurate; folded types.json item -> its class and why, a guessed size as caveat; canon -> deviation; record-sanctioned enlargement -> convention; else guess saying the record is silent); an uncovered kind lists no questions; the closing report lists both sets.",
+   "class": "within",
+   "why": "FR-005 in full, measured against coverage.md; the silent-Entry form is exactly the missing 'See references' of scenario 4 and User Story 4."
+  },
+  {
+   "id": "D5-two-forms",
+   "summary": "clerks and guest, a room on some sheets and a building on others, are one kind each (clerks' room, guest quarters) written true of both forms; the room's label carries the kind where drawn as a room.",
+   "class": "within",
+   "why": "FR-003a has each item name the Mode A kind it is; one kind per item keeps the classification stated once, and every drawn form stays highlightable. Round 2 checked in the tree: household.py GuestQuarters' Entry (line 185) names 'Guest doors feed courts, not flanks' - a citation of an existing finding, no new research (FR-005)."
+  },
+  {
+   "id": "D6",
+   "summary": "Each hand sheet's precinct rect is split at the divider into inner- and outer-court rects, both keeping id=precinct; the seam-free join (abut or 1-unit underlap) is measured per sheet; every sheet's PNG and audit identical after the split; Ubame's border court is its own ground rect (x 920 y 462, 106x94) carrying the border court's kind with its label and lantern.",
+   "class": "within",
+   "why": "FR-004 (each court, 'and any further court a sheet draws, such as Ubame's border court', a region of its own ground with its label lighting) under FR-009/SC-003. The round-1 else-branch (label and furniture only) is gone from the plan text; no fallback remains. Verified in the tree: ubame-magistracy.svg line 295 <g data-kind=\"border court\"> encloses the garden-stipple rect x=920 y=462 106x94 and the stone lantern, and line 617's BORDER COURT text carries the same kind. Abut versus underlap is mechanism; either keeps FR-004 and FR-009, and the choice is stated as measured rather than assumed."
+  },
+  {
+   "id": "D7",
+   "summary": "BuildingSpec gains feature; emit_svg writes data-kind on every building, spine zone, point feature, wall, divider, gate, notice board; title/subtitle/scale bar '-'; the precinct split at divider_ft; a building with no feature refused at emit time.",
+   "class": "within",
+   "why": "FR-008 word for word; the split carries FR-004 to placer sheets; the emit-time refusal only enforces FR-008's 'the kind of every element it draws'."
+  },
+  {
+   "id": "D8",
+   "summary": "Each .gen.py writes its page after its render, with_raster following DIAGRAM_SKIP_RENDER; one pool test flattens all five sheets and asserts no unclassed ink, no unregistered kind, every kind drawn somewhere, and the GM's two Ochiba examples.",
+   "class": "within",
+   "why": "FR-001, FR-006, FR-007, SC-001, SC-002 and the vector-only edge case; the tests fail only when the requested behavior is absent - enforcement of the request."
+  },
+  {
+   "id": "D9",
+   "summary": "RequiredItem is EITHER labeled (country-shrine tier, unchanged) OR kinded, a mix refused; kind presence and labels found by tag offset; band measured on the first such label's structure; classification() returns the kind's label and note.",
+   "class": "within",
+   "why": "FR-003a and SC-006 exactly, the country-shrine tier out of scope per FR-003a; the mix refusal enforces 'no magistracy item keeps a class, a why or a label pattern'; pool audit identity is FR-009's own measure."
+  },
+  {
+   "id": "D10",
+   "summary": "The Mode A red fixtures are re-derived as the tagged sheet plus their own defect by three-way merge, checked for no untagged ink and an unchanged audit output.",
+   "class": "within",
+   "why": "Keeps each existing audit test showing its one defect once FR-003a moves the audit onto tags. Checked in the tree: all 19 ochiba/ubame/hayakawa *-red.svg fixtures now carry data-kind; ochiba-no-cell-red.svg removes the whole cell group and says why in a comment (under tag-based presence, an unlabeled but tagged cell is present). That keeps the fixture's defect - 'no cell' - rather than changing what it tests; it narrows nothing the GM asked."
+  }
+ ],
+ "verdict": "CLEAR"
+}

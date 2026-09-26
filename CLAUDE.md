@@ -204,7 +204,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no branches | `NO_BRANCH_OK` |
 | `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`; a file-watching loop is backgrounded and given a proof of life | `POLL_OK` |
-| `batching-hooks.sh` | blocks a run of single-call recon turns, warning one turn early | - |
+| `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
 | `measure-hooks.sh` | a second expensive run with nothing changed between | `MEASURE_OK` |
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
 | `pair-hooks.sh` + `_review_owed.py` | the gate and the settlement-review run together when a pool map's layout moved; one map per agent | `PAIR_OK` |
@@ -213,7 +213,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `agent-model-hooks.sh` | an ad-hoc agent dispatch (no file under `.claude/agents/`) that names no `model` is refused, with the rule for choosing one | none - name the model |
 | `check-bundle-hooks.sh` | a `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift` dispatch that points into the repository instead of at a bundle is refused, with the `make check-bundle` command for the question it names | `CHECK_BUNDLE_OK` |
 | `record-edit-hooks.sh` | an Edit aimed at an assembled record page is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
-| `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported | - |
+| `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported - each only for the session's own working tree | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
 | at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh`, `check-file-scale.py`, `spec-lint.py`, `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal | per script, each with a reason |

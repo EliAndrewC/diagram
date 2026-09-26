@@ -93,7 +93,9 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
 
 
 def test_the_order_is_the_spec_s_and_comes_from_the_families_in_sequence() -> None:
-    assert sorted(CLASSES) == sorted(k.key for k in Kind.registry), "every registered kind is in CLASSES, once"
+    # the hamlet families only: `Kind` also registers the Mode A kinds (`compound_kinds/`, feature 262), which build their own registry
+    hamlet = [k.key for k in Kind.registry if k.__module__.startswith("l7r.diagram.interactive.classes.")]
+    assert sorted(CLASSES) == sorted(hamlet), "every registered hamlet kind is in CLASSES, once"
     assert list(CLASSES)[:3] == ["farmhouse", "storage shed", "byre"] and list(CLASSES)[-1] == "perimeter dike"
 
 

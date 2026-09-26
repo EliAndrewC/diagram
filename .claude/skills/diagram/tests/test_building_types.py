@@ -54,12 +54,14 @@ def test_every_declared_tier_is_a_pool_folder_or_about_to_be() -> None:
     [
         (lambda d: d[0].pop("checks"), "carries"),
         (lambda d: d[0].__setitem__("tier", "Magistracies"), "kebab"),
-        (lambda d: d[0]["required"][0].__setitem__("class", "sort of accurate"), "class must be one of"),
+        (lambda d: d[1]["required"][0].__setitem__("class", "sort of accurate"), "class must be one of"),
+        (lambda d: d[0]["required"][0].__setitem__("class", "accurate"), "whose class and why are its kind's"),
+        (lambda d: d[0]["required"][0].__setitem__("kind", ""), "kind names a Mode A kind"),
         (lambda d: d[0]["required"][0].__setitem__("band_ft", {"w": [30, 10]}), "min <= max"),
         (lambda d: d[0]["required"][0].__setitem__("band_ft", {"depth": [1, 2]}), "only w, h and area"),
         (lambda d: d[0]["required"].append(dict(d[0]["required"][0])), "ids repeat"),
         (lambda d: d.append(dict(d[0])), "declared twice"),
-        (lambda d: d[0]["required"][0].pop("why"), "required item carries"),
+        (lambda d: d[1]["required"][0].pop("why"), "required item carries"),
         (lambda d: d.clear(), "non-empty list"),
     ],
 )
@@ -159,3 +161,25 @@ def test_git_sees_hand_drawn_source_as_tracked_and_generated_as_ignored() -> Non
                 continue
             ignored = subprocess.run(["git", "-C", REPO, "check-ignore", "-q", svg], check=False).returncode == 0
             assert ignored == (stem in t.generated_exceptions), f"{t.tier}/{stem}: svg ignored={ignored}, generated exception={stem in t.generated_exceptions}"
+
+
+def test_the_magistracy_program_is_folded_into_the_registry() -> None:
+    """Feature 262 FR-003a / SC-006: every magistracies item names the Mode A kind it is and states no class, why or
+    label pattern of its own; its class and why ARE the kind's registry entry, read back by `classification`."""
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+
+    magi = bt.by_tier("magistracies")
+    assert magi is not None and magi.required
+    for item in magi.required:
+        assert item.kind in COMPOUND_CLASSES, item.id
+        assert item.label is None and item.cls == "" and item.why == "", item.id
+        fc = COMPOUND_CLASSES[item.kind]
+        assert bt.classification(item) == (fc.label, fc.label_note)
+    shrine = bt.by_tier("country-shrines")
+    assert shrine is not None and all(i.kind is None and bt.classification(i) == (i.cls, i.why) for i in shrine.required)
+
+
+def test_a_kind_the_registry_does_not_know_is_refused_by_name() -> None:
+    item = bt.parse_types([{"tier": "t", "title": "T", "program": "p", "hand_drawn": True, "checks": [], "required": [{"id": "x", "kind": "no such kind", "band_ft": {}}]}])[0].required[0]
+    with pytest.raises(ValueError, match="no such kind"):
+        bt.classification(item)

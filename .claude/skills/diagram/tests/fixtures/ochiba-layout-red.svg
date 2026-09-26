@@ -41,10 +41,10 @@
   </defs>
 
   <!-- Outer land (surrounding countryside / town outskirts) -->
-  <rect x="0" y="0" width="1200" height="900" fill="#EFE3C2"/>
+  <rect x="0" y="0" width="1200" height="900" fill="#EFE3C2" data-kind="-"/>
 
   <!-- Imperial road approaching the south gate (13.3 ft, matching the gate) -->
-  <g>
+  <g data-kind="road">
     <path d="M 600 900 L 600 750" stroke="#B89060" stroke-width="40" stroke-linecap="butt" opacity="0.55"/>
     <path d="M 600 900 L 600 750" stroke="#9C7448" stroke-width="40" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
     <text x="636" y="816" font-size="12" fill="#6B4F2A" font-style="italic">to the Imperial road</text>
@@ -52,11 +52,11 @@
 
   <!-- Title block (just above the compound; no redundant summary line - the
        plan itself shows it is walled, two-court, main-gate-south) -->
-  <text x="600" y="114" text-anchor="middle" font-size="30" font-weight="bold" fill="#3A2E1C">Ochiba County Magistracy</text>
-  <text x="600" y="136" text-anchor="middle" font-size="14" font-style="italic" fill="#6B4F2A">Minami province, Fox Clan lands - seat of County Magistrate Kitsune Tatsuya</text>
+  <text x="600" y="114" text-anchor="middle" font-size="30" font-weight="bold" fill="#3A2E1C" data-kind="-">Ochiba County Magistracy</text>
+  <text x="600" y="136" text-anchor="middle" font-size="14" font-style="italic" fill="#6B4F2A" data-kind="-">Minami province, Fox Clan lands - seat of County Magistrate Kitsune Tatsuya</text>
 
   <!-- Scale bar (3 px = 1 ft), top-left beside the title -->
-  <g>
+  <g data-kind="-">
     <g stroke="#3A2E1C">
       <line x1="196" y1="112" x2="286" y2="112" stroke-width="2"/>
       <line x1="196" y1="107" x2="196" y2="117" stroke-width="2"/>
@@ -75,10 +75,15 @@
   <!-- South wall is broken by the main gate at x=560..640            -->
   <!-- ============================================================ -->
   <!-- compound interior fill (earth) -->
-  <rect x="200" y="150" width="800" height="600" fill="url(#court-earth)" id="precinct"/>
+  <!-- The precinct as ONE RECT PER COURT (feature 262), so the page can light each court's ground on its own.
+       Both keep id="precinct" - the audit reads the precinct as the rect(s) so marked. The two ABUT at the divider:
+       measured, the render is pixel-identical to the one rect (a 1 px overlap was not - 72 px differed where the
+       seam crosses the divider's gate opening). -->
+  <rect x="200" y="150" width="800" height="300" fill="url(#court-earth)" id="precinct" data-kind="inner court"/>
+  <rect x="200" y="450" width="800" height="300" fill="url(#court-earth)" id="precinct" data-kind="outer court"/>
 
   <!-- Wall as four segments (so the south gate opening is clean) -->
-  <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square">
+  <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square" data-kind="compound wall">
     <!-- North -->
     <line x1="200" y1="150" x2="1000" y2="150"/>
     <!-- West (broken by the kitchen postern at y=374..394 - a ~6.7 ft handcart
@@ -99,26 +104,26 @@
   </g>
 
   <!-- Gate posts (flank the south gate opening) -->
-  <g fill="#2D2A24">
+  <g fill="#2D2A24" data-kind="main gate">
     <rect x="564" y="744" width="16" height="14"/>
     <rect x="620" y="744" width="16" height="14"/>
   </g>
   <!-- Kitchen postern posts (west service door: deliveries and night-soil
        never cross the hearing court) -->
-  <g fill="#2D2A24">
+  <g fill="#2D2A24" data-kind="side gate">
     <rect x="194" y="366" width="12" height="8"/>
     <rect x="194" y="394" width="12" height="8"/>
   </g>
-  <text x="210" y="303" text-anchor="start" font-size="8" font-style="italic" fill="#5C4830">kitchen postern</text>
+  <text x="210" y="303" text-anchor="start" font-size="8" font-style="italic" fill="#5C4830" data-kind="side gate">kitchen postern</text>
   <!-- Service-gate posts (south wall, just east of the stables) -->
-  <g fill="#2D2A24">
+  <g fill="#2D2A24" data-kind="side gate">
     <rect x="384" y="744" width="16" height="14"/>
     <rect x="428" y="744" width="16" height="14"/>
   </g>
-  <text x="414" y="776" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830">service gate</text>
+  <text x="414" y="776" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830" data-kind="side gate">service gate</text>
 
   <!-- THE THRESHOLD STONE (senior Pact-Bowl checkpoint) at south gate -->
-  <g>
+  <g data-kind="threshold stones">
     <rect x="586" y="748" width="28" height="14" fill="#A03020" stroke="#5C0A04" stroke-width="1.2"/>
     <text x="600" y="789" text-anchor="middle" font-size="10" fill="#5C0A04" font-style="italic">threshold stone</text>
     <text x="600" y="801" text-anchor="middle" font-size="9" fill="#5C0A04" font-style="italic">(senior Pact-Bowl checkpoint)</text>
@@ -126,7 +131,7 @@
 
   <!-- Notice board just outside the wall, on the east flank of the MAIN gate
        (it faces the formal approach, not the service door) -->
-  <g>
+  <g data-kind="notice board">
     <rect x="700" y="758" width="44" height="12" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
     <circle cx="706" cy="772" r="1.5" fill="#4A3318"/>
     <circle cx="738" cy="772" r="1.5" fill="#4A3318"/>
@@ -134,13 +139,13 @@
   </g>
 
   <!-- Internal divider wall between outer (south) and inner (north) courts -->
-  <g stroke="#3F3A30" stroke-width="6" fill="none" stroke-dasharray="0">
+  <g stroke="#3F3A30" stroke-width="6" fill="none" stroke-dasharray="0" data-kind="court divider">
     <line x1="200" y1="450" x2="588" y2="450"/>
     <line x1="612" y1="450" x2="1000" y2="450"/>
   </g>
   <!-- Internal gate posts (a household door ~8 ft - a real nakamon, well
        under the ceremonial main gate) -->
-  <g fill="#3F3A30">
+  <g fill="#3F3A30" data-kind="court divider">
     <rect x="578" y="446" width="10" height="10"/>
     <rect x="612" y="446" width="10" height="10"/>
   </g>
@@ -149,14 +154,14 @@
   <!-- OUTER COURT (south half) - public / administrative            -->
   <!-- y = 450 to y = 750                                             -->
   <!-- ============================================================ -->
-  <text x="600" y="471" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2">OUTER COURT</text>
-  <text x="486" y="712" text-anchor="middle" font-size="10" font-style="italic" fill="#7A6A4A">forecourt</text>
+  <text x="600" y="471" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="outer court">OUTER COURT</text>
+  <text x="486" y="712" text-anchor="middle" font-size="10" font-style="italic" fill="#7A6A4A" data-kind="outer court">forecourt</text>
 
   <!-- Stables (SW corner) - 32x22 ft, a ~3-stall umaya for the magistrate's and
        messengers' few mounts; deliberately kept SMALLER than the barracks (a
        stable for a handful of horses must not out-foot the watch's quarters -
        size-audit hierarchy sweep, 2026-07) -->
-  <g>
+  <g data-kind="stables">
     <rect x="220" y="674" width="88" height="66" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- stall divisions -->
     <line x1="249" y1="674" x2="249" y2="740" stroke="#6B4F2A" stroke-width="1"/>
@@ -166,7 +171,7 @@
 
   <!-- Tax archive (W side) - sealed plaster kura: the ledgers are the
        county's tax base, so they get fireproof walls -->
-  <g>
+  <g data-kind="tax archive">
     <rect x="220" y="500" width="96" height="84" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="306" y="535" width="8" height="14" fill="#4A3318"/>
     <text x="268" y="547" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">tax archive</text>
@@ -175,17 +180,17 @@
   <!-- Office hall: the working block. Rear day rooms (day office + official
        study), front dais band overlooking the sand - the courtroom is a room
        OF the office hall, not a freestanding stage. -->
-  <g>
+  <g data-kind="office hall">
     <rect x="420" y="478" width="360" height="84" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2.5"/>
     <line x1="420" y1="528" x2="780" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="540" y1="478" x2="540" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="660" y1="478" x2="660" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <text x="480" y="506" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">clerks' room</text>
+    <text x="480" y="506" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="clerks' room">clerks' room</text>
     <text x="600" y="506" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">day office</text>
     <text x="720" y="506" text-anchor="middle" font-size="11" font-weight="bold" fill="#3A2E1C">official study</text>
     <!-- The magistrate's tatami dais (centered, on the court face) -->
-    <rect x="555" y="530" width="90" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1"/>
-    <text x="600" y="549" text-anchor="middle" font-size="10" fill="#FFFAE6" font-weight="bold">magistrate's dais</text>
+    <rect x="555" y="530" width="90" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="magistrate's dais"/>
+    <text x="600" y="549" text-anchor="middle" font-size="10" fill="#FFFAE6" font-weight="bold" data-kind="magistrate's dais">magistrate's dais</text>
     <!-- Clerks' positions flanking the dais -->
     <rect x="455" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
     <text x="495" y="547" text-anchor="middle" font-size="9" fill="#3A2E1C">clerk</text>
@@ -194,10 +199,10 @@
   </g>
 
   <!-- Oshirasu (white-sand hearing court) - the open sanded courtyard the dais overlooks -->
-  <g>
+  <g data-kind="hearing court">
     <rect x="420" y="567" width="360" height="105" fill="url(#oshirasu-sand)" stroke="#9C7A40" stroke-width="1.2" stroke-dasharray="2 2"/>
     <text x="600" y="592" text-anchor="middle" font-size="14" font-weight="bold" fill="#5C4318" letter-spacing="1">HEARING COURT</text>
-    <text x="600" y="610" text-anchor="middle" font-size="9" font-style="italic" fill="#7A5C30">Fox-Fire Lantern brought to the dais at evening</text>
+    <text x="600" y="610" text-anchor="middle" font-size="9" font-style="italic" fill="#7A5C30" data-kind="fox-fire lantern">Fox-Fire Lantern brought to the dais at evening</text>
     <!-- Defendant / petitioner positions on the sand (kneeling marks) -->
     <g fill="#A88454" stroke="#7A5430" stroke-width="0.5" opacity="0.85">
       <rect x="540" y="640" width="30" height="14"/>
@@ -212,7 +217,7 @@
        (grain passes through toward Nagahara), not a terminal granary row - depth
        trimmed from a ~45 ft fat box to a real single-kura footprint, and kept
        under a residence block (size-audit hierarchy sweep 2026-07) -->
-  <g>
+  <g data-kind="granary">
     <rect x="820" y="490" width="150" height="78" fill="url(#granary-slats)" stroke="#5A3F1E" stroke-width="2"/>
     <!-- raised stilts at corners (small dark blocks under the structure) -->
     <rect x="822" y="562" width="10" height="8" fill="#4A3318"/>
@@ -229,7 +234,7 @@
        Each tub is set AGAINST its building at an eaves corner / downspout: a tensuioke
        is gutter-fed by roof runoff, so it must sit at the wall base under a drain, not
        standing out in the open court where no roof sheds into it (GM 2026-07). -->
-  <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1">
+  <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
     <!-- kitchen (2, highest fire risk) - at the NE and SE eaves corners, east wall -->
     <circle cx="346" cy="318" r="5"/>
     <circle cx="346" cy="402" r="5"/>
@@ -252,13 +257,13 @@
     <!-- servants' quarters (east eaves corner) -->
     <circle cx="476" cy="165" r="5"/>
   </g>
-  <text x="360" y="366" text-anchor="start" font-size="8" font-style="italic" fill="#3A5060">fire-water tubs</text>
+  <text x="360" y="366" text-anchor="start" font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs">fire-water tubs</text>
 
   <!-- Holding cell (single small lattice-cage block, SE) - 18x15 ft, remand-only
        for 1-2; trimmed so the lattice-legibility bump reads as a LINEAR ~2x on
        one axis only, not an area license, and stays well under the barracks
        (size-audit 2026-07) -->
-  <g>
+  <g data-kind="cell">
     <rect x="820" y="616" width="54" height="46" fill="#B89868" stroke="#5C4318" stroke-width="1.5"/>
     <!-- lattice indication -->
     <line x1="828" y1="622" x2="828" y2="656" stroke="#3A2010" stroke-width="0.6"/>
@@ -272,7 +277,7 @@
   <!-- Bushi / ashigaru barracks (SE) - abuts the cell to form a guard range
        under the granary, pulled up to leave a real ~16 ft loading apron (not a
        24 ft void) below the storehouse; packing consolidation, feature 007 -->
-  <g>
+  <g data-kind="barracks">
     <rect x="874" y="616" width="92" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <line x1="920" y1="616" x2="920" y2="716" stroke="#6B4F2A" stroke-width="1"/>
     <!-- apron-facing door (informal) -->
@@ -283,19 +288,19 @@
   <!-- Garrison latrine - serves the barracks and duty watch (a privy per
        functional zone; sanitation sweep 2026-07), between cell and barracks
        toward the south service edge -->
-  <g>
+  <g data-kind="latrine">
     <rect x="828" y="674" width="16" height="22" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text x="840" y="710" text-anchor="middle" font-size="7.5" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 
   <!-- Outer-court latrine, tucked along W wall between tax archive and stables -->
-  <g>
+  <g data-kind="latrine">
     <rect x="206" y="642" width="20" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text x="230" y="653" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 
   <!-- Stables well - just east of stables, in the open courtyard -->
-  <g>
+  <g data-kind="well">
     <rect x="330" y="692" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="341" cy="703" r="6" fill="#2D2A24"/>
     <text x="341" y="728" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
@@ -304,7 +309,7 @@
   <!-- Senior retainers' quarters (a rowhouse; option (a) lodges the full
        platoon on-grounds, but senior retainers get their own quarters, not a
        bay of the lord's wing - interior-audit correction 2026-07) -->
-  <g>
+  <g data-kind="retainers' quarters">
     <rect x="232" y="598" width="152" height="52" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <line x1="283" y1="598" x2="283" y2="650" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="334" y1="598" x2="334" y2="650" stroke="#6B4F2A" stroke-width="1"/>
@@ -315,7 +320,7 @@
   </g>
 
   <!-- Gatehouse (guard post just inside and BESIDE the gate - never across it) -->
-  <g>
+  <g data-kind="gatehouse">
     <rect x="656" y="700" width="120" height="42" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
     <text x="716" y="726" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFFAE6">gatehouse</text>
   </g>
@@ -324,7 +329,7 @@
   <!-- INNER COURT (north half) - residence and shrine               -->
   <!-- y = 150 to y = 450                                             -->
   <!-- ============================================================ -->
-  <text x="576" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2">INNER COURT</text>
+  <text x="576" y="174" text-anchor="middle" font-size="13" font-weight="bold" fill="#5C4830" letter-spacing="2" data-kind="inner court">INNER COURT</text>
 
   <!-- Residence - TWO offset blocks (gankō / flying-geese massing, as real
        shoin residences massed; was a single bar - interior-audit fix 2026-07).
@@ -333,7 +338,7 @@
        senior retainer never lodged in the lord's own wing. The freed bays gave
        room for the formal reception (zashiki). Occupant labels kept as the
        GM's schematic convention. -->
-  <g>
+  <g data-kind="residence">
     <text x="510" y="196" text-anchor="middle" font-size="11" font-weight="bold" fill="#5C4830" letter-spacing="2">RESIDENCE</text>
     <!-- West block: formal reception + the lord's rooms (each label is a
          multi-room ZONE, not one room; engawa veranda along the south face) -->
@@ -353,14 +358,14 @@
     <line x1="660" y1="222" x2="660" y2="298" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <text x="590" y="260" text-anchor="middle" font-size="11" fill="#3A2E1C">family</text>
     <text x="590" y="274" text-anchor="middle" font-size="11" fill="#3A2E1C">quarters</text>
-    <text x="730" y="267" text-anchor="middle" font-size="11" fill="#3A2E1C">guest room</text>
+    <text x="730" y="267" text-anchor="middle" font-size="11" fill="#3A2E1C" data-kind="guest quarters">guest room</text>
   </g>
 
   <!-- Kitchen + pantries (west range) - 40x33 ft; a large institutional
        daidokoro (it feeds household, clerks, and the watch), but kept SMALLER
        than a residence living block - the cookhouse does not out-foot the
        family's own quarters (size-audit 2026-07) -->
-  <g>
+  <g data-kind="kitchen">
     <rect x="220" y="310" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- hearth indication -->
     <rect x="240" y="325" width="30" height="22" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
@@ -368,9 +373,9 @@
     <text x="278" y="362" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>
     <text x="278" y="380" text-anchor="middle" font-size="11" fill="#3A2E1C">&amp; pantries</text>
     <!-- Kitchen well (the primary, busiest well - inside the daidokoro floor) -->
-    <rect x="300" y="386" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
-    <circle cx="311" cy="397" r="6" fill="#2D2A24"/>
-    <text x="311" y="422" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C">well</text>
+    <rect x="300" y="386" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
+    <circle cx="311" cy="397" r="6" fill="#2D2A24" data-kind="well"/>
+    <text x="311" y="422" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well">well</text>
   </g>
 
   <!-- Inari shrine hall (east range, upper portion) - two altars under one roof.
@@ -383,7 +388,7 @@
        its back is flush to the wall - was floated ~23 ft off it, leaving a dead
        NE strip a subordinate hall should not (size-audit backing-void sweep, 2026-07);
        the freed strip went to the inner garden. -->
-  <g>
+  <g data-kind="compound shrine">
     <rect x="880" y="200" width="110" height="92" fill="#C9876C" stroke="#6B2A18" stroke-width="2.5"/>
     <!-- internal rail dividing W (Ta-no-Kami) and E (Myobu) -->
     <line x1="935" y1="208" x2="935" y2="284" stroke="#5C1A0A" stroke-width="2"/>
@@ -397,7 +402,7 @@
     </g>
     <text x="907" y="260" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFAE6">Ta-no-Kami</text>
     <text x="907" y="272" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(rice)</text>
-    <text x="907" y="283" text-anchor="middle" font-size="7.5" fill="#FFFAE6">Fox-Fire Lantern</text>
+    <text x="907" y="283" text-anchor="middle" font-size="7.5" fill="#FFFAE6" data-kind="fox-fire lantern">Fox-Fire Lantern</text>
     <!-- E altar marker (Myobu) - torii silhouette -->
     <g transform="translate(963, 218)">
       <line x1="-10" y1="0" x2="10" y2="0" stroke="#FFFAE6" stroke-width="2.5"/>
@@ -407,7 +412,7 @@
     </g>
     <text x="963" y="258" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFAE6">Myobu</text>
     <text x="963" y="270" text-anchor="middle" font-size="8" font-style="italic" fill="#FFFAE6">(fox)</text>
-    <text x="963" y="283" text-anchor="middle" font-size="7.5" fill="#FFFAE6">Akami-fude</text>
+    <text x="963" y="283" text-anchor="middle" font-size="7.5" fill="#FFFAE6" data-kind="fox relics">Akami-fude</text>
   </g>
 
   <!-- Shrine garden: nests the shrine + workshop's south side, filling the SE inner-court
@@ -415,16 +420,16 @@
        column is shorter than the wall so the leftover wall-space becomes garden, not bare
        slack - backing-void follow-up, GM 2026-07). Drawn here (before the relic annotation
        and workshop) so those paint on top of it. -->
-  <g>
+  <g data-kind="garden">
     <rect x="860" y="375" width="132" height="70" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
   </g>
 
   <!-- Shrine hall label (above) -->
-  <text x="935" y="195" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C1A0A" letter-spacing="1">INARI SHRINE</text>
+  <text x="935" y="195" text-anchor="middle" font-size="12" font-weight="bold" fill="#5C1A0A" letter-spacing="1" data-kind="compound shrine">INARI SHRINE</text>
 
   <!-- Fox relics kept at the Myobu altar (annotation below the workshop, in the
        open court freed by the smaller hall) -->
-  <g>
+  <g data-kind="fox relics">
     <text x="935" y="392" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C1A0A">Chigiri-no-Chou &amp;</text>
     <text x="935" y="404" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C1A0A">warding materials</text>
     <text x="935" y="416" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5C1A0A">(at the Myobu altar)</text>
@@ -432,7 +437,7 @@
 
   <!-- Cinnabar workshop colonnade (south of shrine, hatched to indicate covered open-air).
        Shifted +60 px east with the shrine to back the east wall (backing-void fix). -->
-  <g>
+  <g data-kind="cinnabar workshop">
     <rect x="880" y="300" width="110" height="72" fill="url(#colonnade-hatch)" stroke="#6B2A18" stroke-width="2"/>
     <!-- post markers -->
     <circle cx="890" cy="310" r="3" fill="#3A1810"/>
@@ -453,7 +458,7 @@
   </g>
 
   <!-- Inner garden / open space (center of inner court) -->
-  <g>
+  <g data-kind="garden">
     <rect x="520" y="310" width="345" height="135" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <!-- a small ornamental pond -->
     <ellipse cx="620" cy="380" rx="42" ry="22" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2"/>
@@ -462,7 +467,7 @@
 
   <!-- Bath house (yuya) - small detached pavilion in the NW of the garden
        (13 x 11 ft - a real manor bath; honest sizes per size-audit 2026-07) -->
-  <g>
+  <g data-kind="bath">
     <rect x="435" y="325" width="40" height="33" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- small steam plume suggestion -->
     <path d="M 445 320 q 3 -8 -2 -14 M 458 320 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
@@ -472,7 +477,7 @@
   <!-- Karo's house - the house elder keeps a SEPARATE dwelling in the
        residence court (a chief retainer never lodged in the lord's own wing;
        interior-audit historical correction 2026-07) -->
-  <g>
+  <g data-kind="karo's house">
     <rect x="400" y="372" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
     <!-- informal side entrance (a modest door, not a second genkan) -->
     <rect x="430" y="442" width="26" height="8" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1"/>
@@ -481,7 +486,7 @@
   </g>
 
   <!-- Well (with stone curb) - east side of garden -->
-  <g>
+  <g data-kind="well">
     <rect x="730" y="395" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="742" cy="407" r="7" fill="#2D2A24"/>
     <text x="742" y="438" text-anchor="middle" font-size="9" font-style="italic" fill="#3A2E1C">well</text>
@@ -493,7 +498,7 @@
        north wall; the family privy ATTACHES to the residence's rear corner,
        cesspit toward the wall for night-soil collection (not a lone block adrift
        in open ground). -->
-  <g>
+  <g data-kind="servants' quarters">
     <!-- Servants' quarters (nagaya for the ~10 on-grounds servants) -->
     <rect x="250" y="156" width="220" height="40" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <line x1="305" y1="156" x2="305" y2="196" stroke="#6B4F2A" stroke-width="1"/>
@@ -504,7 +509,7 @@
     <text x="360" y="180" text-anchor="middle" font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
   <!-- Family privy attached to the residence's rear (north) corner -->
-  <g>
+  <g data-kind="latrine">
     <rect x="524" y="208" width="18" height="14" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text x="546" y="219" font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
@@ -515,13 +520,13 @@
        is boxed into the SW service corner with no room for an adjacent plot, so the
        compound's vegetables come from this rear plot (servant-tended) + outside via
        the kitchen postern - normal for a compact walled magistracy (GM 2026-07). -->
-  <g>
+  <g data-kind="vegetable garden">
     <rect x="662" y="156" width="218" height="44" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <text x="731" y="182" text-anchor="middle" font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
   <!-- Formal entry porch (genkan) at the reception block -->
-  <g>
+  <g data-kind="residence">
     <rect x="380" y="286" width="40" height="14" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1.2"/>
     <text x="400" y="312" text-anchor="middle" font-size="8" font-style="italic" fill="#3A2E1C">entry porch</text>
   </g>
@@ -531,7 +536,7 @@
   <!-- ============================================================ -->
 
   <!-- Threshold stone annotation -->
-  <g stroke="#5C0A04" stroke-width="0.8" fill="none">
+  <g stroke="#5C0A04" stroke-width="0.8" fill="none" data-kind="threshold stones">
     <path d="M 600 762 L 600 778"/>
   </g>
 

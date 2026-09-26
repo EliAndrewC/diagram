@@ -20,6 +20,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))  # <tree>/<tier>/<map>/ - one level deeper since feature 161 gave every map its own folder
 
 from l7r.diagram import compound as C  # noqa: E402
+from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES  # noqa: E402
+from l7r.diagram.interactive.sheet import write_sheet_page  # noqa: E402
 
 OUT_SVG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "county-magistracy-example.svg")
 
@@ -37,6 +39,12 @@ def main() -> int:
             ["resvg", "--width", "2400", "--serif-family", "DejaVu Serif", OUT_SVG, OUT_SVG[:-4] + ".png"],
             check=True,
         )
+    # the interactive page (feature 262): the emitter wrote each element's kind, so the page reads the draft as it
+    # reads a hand-drawn sheet
+    census = write_sheet_page(OUT_SVG, COMPOUND_CLASSES)
+    if census.unclassed or census.unregistered:
+        print(f"{os.path.basename(OUT_SVG)}: untagged ink {census.unclassed}; unknown kinds {census.unregistered}", file=sys.stderr)
+        return 1
     return 0
 
 

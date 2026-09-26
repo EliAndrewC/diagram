@@ -768,6 +768,7 @@ monk outlet	monk outlet
 monk-style outlet	monk outlet
 monospecific	monospecific
 monzen	monzen
+morijio	morijio
 moso	moso
 mozi	Mozi
 mu	mu
@@ -789,6 +790,7 @@ nagaya-mon	nagayamon
 nagayamon	nagayamon
 nagewatashi	nagewatashi
 nakaboshi	nakaboshi
+nakamon	nakamon
 nanbu	Tohoku
 nando	nando
 nanohana	rape

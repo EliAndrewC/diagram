@@ -161,7 +161,11 @@ class ThreshingYardsMixin:
         cleared the ground there, so this turns the yard in place about that center. Turning it about its
         own center alone, as first shipped, slid it up to 3 ft along the front wall."""
         ox, oy, yw, yh = spot
-        flat = self._quad(ox, oy, yw, yh, 0.10, 41.0)
+        # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard
+        # is the south front; the legacy fallback may seat it east or west, and the facing edge follows it
+        _dx, _dy = ox - hx, oy - hy
+        _facing = ("N" if _dy >= 0 else "S") if abs(_dy) >= abs(_dx) else ("W" if _dx > 0 else "E")
+        flat = self._quad(ox, oy, yw, yh, 0.10, 41.0, level=_facing)
         poly = turn_about(flat, ox, oy, rot)
         # A NO-RICE HAMLET DRAWS NO THRESHING FLOOR (feature 150, GM 2026-08-28: "thrashing yards on a
         # no-rice hamlet seem bad and should be eliminated"). The ground is still RECORDED, as a

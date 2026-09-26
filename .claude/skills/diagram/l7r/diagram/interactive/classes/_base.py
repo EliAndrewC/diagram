@@ -135,8 +135,14 @@ def lead_sentence(label: Label, note: str) -> str:
 
 
 def slug(key: str) -> str:
-    """The CSS token for a class key: `storage shed` -> `storage-shed`."""
-    return key.replace(" ", "-")
+    """The CSS token for a class key: `storage shed` -> `storage-shed`, `karo's house` -> `karo-s-house`.
+
+    EVERY CHARACTER OUTSIDE `[a-z0-9-]` BECOMES A HYPHEN (feature 262). It used to replace spaces only, which was
+    enough for the hamlet vocabulary; the first Mode A keys with an apostrophe produced `f-karo's-house`, which the
+    raster id map's group pattern does not read - so every such kind silently fell out of the pointer map below
+    the raster switch and the ground beneath it answered instead (measured on the Ochiba page: a click inside the
+    karo's house opened the inner court). The key itself, on `data-k`, is unchanged."""
+    return re.sub(r"[^a-z0-9-]", "-", key.lower())
 
 
 # ---- the class form (feature 189) -----------------------------------------------------------------

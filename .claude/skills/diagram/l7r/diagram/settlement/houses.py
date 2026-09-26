@@ -634,21 +634,29 @@ class HousesMixin:
         about when rotation is decided had to change."""
         return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
 
-    def _quad(self: Settlement, cx: float, cy: float, w: float, h: float, jit: float, salt: float) -> list[Pt]:  # type: ignore[misc]
+    def _quad(self: Settlement, cx: float, cy: float, w: float, h: float, jit: float, salt: float, level: str | None = None) -> list[Pt]:  # type: ignore[misc]
         """A slightly-IRREGULAR 4-sided polygon INSCRIBED in the (cx,cy,w,h) rect: each corner is pulled
         INWARD by a deterministic, position-seeded fraction (0..jit of the half-span), so the footprint loses
         its perfect 90-degree corners while staying ENTIRELY within its reserved rect - so it can never create
         a new overlap the rect-based placement/checks didn't already clear. Real dooryard plots were bounded by
         paths, walls, and awkward soil, not surveyed to a clean rectangle. `jit` sets how irregular: a garden
         gets more (a hand-worked bed), a threshing yard less (a swept work surface stays near-square). Returns
-        the 4 corners [NW, NE, SE, SW] as (x, y) tuples."""
+        the 4 corners [NW, NE, SE, SW] as (x, y) tuples.
+
+        `level` names ONE edge ("N", "E", "S" or "W") whose two corners share a single inward pull, so that edge
+        stays straight and parallel to its frame (GM 2026-09-26, of the threshing yard: *"the northern edge
+        should be parallel with the house"* - with each corner pulled on its own, the edge facing the house ran
+        up to 3 degrees off the house's wall, and the gap read wider at one end). The other edges keep their
+        irregularity."""
         hw, hh = w / 2.0, h / 2.0
-        out: list[Pt] = []
-        for i, (sx, sy) in enumerate(((-1, -1), (1, -1), (1, 1), (-1, 1))):  # NW, NE, SE, SW
-            jx = self._hjit(cx, cy, salt + i * 0.19) * jit  # each corner its own inward pull
-            jy = self._hjit(cx, cy, salt + i * 0.19 + 0.5) * jit
-            out.append((cx + sx * hw * (1.0 - jx), cy + sy * hh * (1.0 - jy)))
-        return out
+        pulls = [(self._hjit(cx, cy, salt + i * 0.19) * jit, self._hjit(cx, cy, salt + i * 0.19 + 0.5) * jit) for i in range(4)]  # each corner its own inward pull
+        if level in ("N", "S"):
+            a, b = (0, 1) if level == "N" else (3, 2)
+            pulls[b] = (pulls[b][0], pulls[a][1])  # the edge's two corners at one depth
+        elif level in ("E", "W"):
+            a, b = (1, 2) if level == "E" else (0, 3)
+            pulls[b] = (pulls[a][0], pulls[b][1])
+        return [(cx + sx * hw * (1.0 - jx), cy + sy * hh * (1.0 - jy)) for (sx, sy), (jx, jy) in zip(((-1, -1), (1, -1), (1, 1), (-1, 1)), pulls, strict=True)]  # NW, NE, SE, SW
 
     def _toscale(self: Settlement) -> bool:  # type: ignore[misc]
         """Whether this map uses the to-scale HOMESTEAD BUNDLE (house + grove + yard + garden as one packed
