@@ -42,8 +42,10 @@ with "This is a deliberate deviation".
    courtroom and the two-court split.
 3. **Given** the Ochiba page, **When** the GM clicks the threshold stones, **Then** the modal leads "This is a
    deliberate deviation - ..." and says what the setting's canon makes of them (the senior Pact-Bowl checkpoint).
-4. **Given** any kind whose research record is silent, **When** the GM clicks it, **Then** the modal leads "This is
-   a guess - ..." and says in so many words that the record has no entry on it yet.
+4. **Given** a kind no existing finding classifies (no research section and no folded `types.json` item), **When**
+   the GM clicks it, **Then** the modal leads "This is a guess - ..." and says in so many words that the record has
+   no entry on it yet; and a kind that only a folded `types.json` item classifies shows the gap by having no "See
+   references" link.
 
 ---
 
@@ -93,12 +95,12 @@ with that kind.
 
 ### User Story 4 - The page shows where the research is thin (Priority: P2)
 
-Because every kind carries its classification, a kind whose record is silent is labeled a guess on the page. The GM
-can click through a magistracy and see which parts rest on research and which do not, which is the "big bonus" they
-named.
+Because every kind carries its classification, a kind no existing finding classifies is labeled a guess on the page,
+and a kind no research section covers has no "See references" link. The GM can click through a magistracy and see
+which parts rest on research and which do not, which is the "big bonus" they named.
 
-**Independent Test**: the list of Mode A kinds labeled `guess` because the record is silent is printed in this
-feature's closing report to the GM, and each one's modal says so.
+**Independent Test**: the closing report to the GM lists both sets - the kinds labeled `guess` because no existing
+finding classifies them, and the kinds no research section covers - and each one's modal shows it as stated.
 
 ### Edge Cases
 
@@ -143,9 +145,9 @@ feature's closing report to the GM, and each one's modal says so.
   keeps that classification, carried with its reason into the kind's note (a size the item called a guess or a
   convention becomes the kind's stated caveat); where no research section covers it, the kind names no question,
   so the page's missing references show the gap. `guess` because the record is silent applies only to a kind no
-  existing finding classifies, and its note says the record has no entry on it. A thing specific to the setting
-  (the threshold stones, the salt wards, the Fox border) is labeled `deviation` and written from the GM's canon
-  (`l7r.md`) and the map's design notes. Which kinds fall in each case is MEASURED against the record before the
+  existing finding classifies, and its note says the record has no entry on it. A kind `coverage.md` measures as made by the
+  setting's canon or the map's story, with no historical counterpart the record covers (the threshold stones, the
+  GM's own example), is labeled `deviation` and written from the GM's canon (`l7r.md`) and the map's design notes. Which kinds fall in each case is MEASURED against the record before the
   writing starts (`coverage.md`), not assumed.
 - **FR-006**: A test MUST fail, naming the element, when any drawn element of a pool magistracy carries no kind and
   is not ruled out; and naming the kind, when a kind is not in the registry.
