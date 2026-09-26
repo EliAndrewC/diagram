@@ -171,7 +171,20 @@ def copy(src: pathlib.Path, out: pathlib.Path, name: str | None = None) -> str:
     return str(dest.relative_to(out))
 
 
-def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "", notes: frozenset[str] = frozenset()) -> int:
+#: WHAT EACH CHECK READS (feature 250 D14, research R5): every agent was handed the same bundle, and on a large
+#: question about half of it was material that agent never uses - the quote report and the registry entries for
+#: `record-format`, the word list for `quote-check`. `FOR=<agent>` keeps only that agent's parts; the question and
+#: its notes are always in, and `all` (the default) is every part, as before.
+PARTS = {
+    "quote-check": {"quote"},
+    "record-format": {"prepass", "variants"},
+    "entry-drift": {"kind"},
+    "all": {"quote", "prepass", "variants", "registry", "kind"},
+}
+
+
+def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
+                 notes: frozenset[str] = frozenset(), for_: str = "all") -> int:
     sys.path.insert(0, str(HERE))
     from _hm_record import fragments_for  # noqa: PLC0415
 
@@ -199,13 +212,15 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         rows.append((name, rel, what))
         if rel.endswith(".notes.html"):
             keys += cited_keys((out / name).read_text(encoding="utf-8"))
-    code, text = run_script("_record_prepass.py", [page, "--root", str(root), "--section", section], root)
-    (out / "prepass.txt").write_text(text, encoding="utf-8")
-    rows.append(("prepass.txt", f"make record-prepass PAGE={page} SECTION={section}", "for record-format: the WORDS TO RULE ON and the pattern candidates"))
-    if code:
-        print(text, file=sys.stderr)
-        return code
-    if quotes:
+    want = PARTS[for_]
+    if "prepass" in want:
+        code, text = run_script("_record_prepass.py", [page, "--root", str(root), "--section", section], root)
+        (out / "prepass.txt").write_text(text, encoding="utf-8")
+        rows.append(("prepass.txt", f"make record-prepass PAGE={page} SECTION={section}", "for record-format: the WORDS TO RULE ON and the pattern candidates"))
+        if code:
+            print(text, file=sys.stderr)
+            return code
+    if quotes and "quote" in want:
         code, text = run_script("_quote_verbatim.py", [page, "--root", str(root), "--section", section, "--json", str(out / "quote-verbatim.json")], root)
         if notes and not code:
             text = scoped_verbatim(out, text)
@@ -214,15 +229,16 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         if code:
             print(text, file=sys.stderr)
             return code
-    for key in dict.fromkeys(keys):
+    for key in dict.fromkeys(keys) if "registry" in want else ():
         src = registry_entry(root, key)
         if src is not None:
             rows.append((copy(src, out, f"sources/{key}.html"), str(src.relative_to(root)), f"the registry entry of `{key}`"))
-    rows.append((copy(root / VARIANTS, out), str(VARIANTS), "the glossary's variant index: one line per defined word - grep it"))
+    if "variants" in want:
+        rows.append((copy(root / VARIANTS, out), str(VARIANTS), "the glossary's variant index: one line per defined word - grep it"))
     for path in extra:
         src = (root / path) if not pathlib.Path(path).is_absolute() else pathlib.Path(path)
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
-    (out / MANIFEST).write_text(manifest(out, f"{page}, question {section}", rows), encoding="utf-8")
+    (out / MANIFEST).write_text(manifest(out, f"{page}, question {section}" + ("" if for_ == "all" else f", for {for_}"), rows), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 
@@ -288,6 +304,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--extra", nargs="*", default=[], help="further files to copy in, relative to the root")
     ap.add_argument("--notes", default="", help="re-check only these note keys, comma-separated: the notes file and the fragment are cut to them")
     ap.add_argument("--print-notes", action="store_true", help="print the named notes and the blocks carrying them, and write nothing (make notes)")
+    ap.add_argument("--for", dest="for_", default="all", choices=sorted(PARTS), help="keep only what this check reads")
     ap.add_argument("--kind", default="", help="a modal class name, for entry-drift: its docstring is copied in")
     ap.add_argument("--no-quotes", action="store_true", help="skip the quote-verbatim report (it fetches every cited page)")
     ap.add_argument("--root", default=".")
@@ -300,8 +317,8 @@ def main(argv: list[str] | None = None) -> int:
     wanted = frozenset(k.strip() for k in args.notes.split(",") if k.strip())
     if args.print_notes:
         return print_notes(root, args.page.removesuffix(".html"), args.section, wanted)
-    out = pathlib.Path(args.out or DEFAULT_ROOT / f"{slug(args.page)}-{slug(args.section)}")
-    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes, args.kind, wanted)
+    out = pathlib.Path(args.out or DEFAULT_ROOT / f"{slug(args.page)}-{slug(args.section)}{'' if args.for_ == 'all' else '-' + args.for_}")
+    return entry_bundle(root, args.page.removesuffix(".html"), args.section, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_)
 
 
 if __name__ == "__main__":

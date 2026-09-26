@@ -99,6 +99,14 @@ fragment the grep did not name.
    `research/sources/010-works-cited/NNNN-<key>.html`. `Edit` a file you have read; never script it. Then in
    `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`.
+3b. **Keep every question you touched under the size cap** - 20,000 bytes, question plus notes
+   (`python3 scripts/check-question-size.py` from the clone root names any over it; `make quick` fails on one). A
+   question over it is SPLIT along its topics: a finding stays with the decision it drove; each part becomes its own
+   question - a free prefix, an `<h2 id>` that is the question a reader would ask, its own `Sources:` line naming the
+   keys its notes quote, and the notes that its sentences cite moved into its own `.notes.html`; and the sentences that
+   join the parts POINT at each other (a link and what the other question is about) rather than restating its
+   evidence, so a check reading one part alone meets no claim without its footnote. If a split would separate a
+   finding from what it needs to be understood, say so in the handoff instead of splitting.
 4. **Hand off.** Write `{handoff}`: one line per changed question (`SECTION=<NNN>`), one per new or changed
    registry key (`KEY=<key>`), each item's form (citation / absence / grounds), each FR-006 item's verdict, and
    anything left open and why. Commit. Do NOT run the checks, do NOT tick, do NOT push - session 2 does the checks
@@ -115,18 +123,19 @@ recommendation 2). Read only your own lines of the handoff.
 ## The procedure (check, apply{closing})
 
 5. **Check, all in one message, in the background.** For each of your questions:
-   `make check-bundle PAGE={page} SECTION=<NNN>`, then `quote-check` and `record-format`, each naming the
-   MANIFEST.md it printed and nothing else (the MANIFEST holds every copy inline). For each of your keys:
+   `make check-bundle PAGE={page} SECTION=<NNN> FOR=quote-check` for `quote-check`, and `... FOR=record-format`
+   for `record-format` - each bundle holds only what that check reads - each agent naming its own MANIFEST.md and
+   nothing else. For each of your keys:
    `make check-bundle KEY=<key>` and `source-applicability`. And the map's modals: run
    `python3 scripts/_entry_owed.py` from the clone root; for each class it names whose entry is one of YOUR
-   questions, `make check-bundle PAGE={page} SECTION=<NNN> NO_QUOTES=1 KIND=<class>` and `entry-drift` naming its
+   questions, `make check-bundle PAGE={page} SECTION=<NNN> NO_QUOTES=1 FOR=entry-drift KIND=<class>` and `entry-drift` naming its
    MANIFEST (a drifted modal is owed at the push, so it is checked here, with the question it was written from).
 6. **Apply ONE REPORT PER TURN.** Every finding of one report goes in ONE message: all its edits as parallel
    `Edit` calls (or one patch), never one finding a turn - every turn re-reads your whole context. Then run
    `make record && make citations` and the four record tests ONCE for everything applied, not once per report.
    A glossary term is a file in `l7r/diagram/interactive/assets/glossary/`, then `make glossary`.
 7. **Re-check ONCE, only what moved.** A note changed on a check's finding: `make check-bundle PAGE={page}
-   SECTION=<NNN> NOTES=<key,key>` and one `quote-check` naming its MANIFEST. A modal rewritten: one `entry-drift`
+   SECTION=<NNN> NOTES=<key,key> FOR=quote-check` and one `quote-check` naming its MANIFEST. A modal rewritten: one `entry-drift`
    on its bundle again. That is the only re-check round: a PARTIAL left after it is not re-checked again - label it
    honestly in the note (what the quote carries and what it does not, or the assertion narrowed to the quote) and
    move on (feature 250 R4: one group re-checked a question three times, a third of its session).
@@ -181,7 +190,50 @@ def _fields(page: str, task: str) -> dict:
                 handoff=(briefs / f"{slug}-handoff.md").relative_to(CLONE))
 
 
+SPLIT = """# Brief - feature 250: split ONE research question under the size cap
+
+You are a FRESH session with one job: the question `{path}` is {size:,} bytes with its notes, over the 20,000-byte cap
+(`scripts/check-question-size.py`, feature 250 D14). Split it. Work in this clone (`{clone}`); its CLAUDE.md files
+apply; read the rule as written in `.claude/skills/diagram/research/CLAUDE.md`, "A question has a size", and nothing
+else to orient.
+
+1. Read the question and its notes (`{notes}`). Find its TOPICS - the separate things a map reader might ask about -
+   not its entry parts: a finding stays with the decision it drove and with the departures that qualify it.
+2. Split it: each topic its own question, a free prefix after `{prefix}` (they count by ten), an `<h2 id>` that is the
+   question a reader would ask, the Grounds/Evidence comments that apply, its own `Sources:` line naming exactly the
+   keys its notes quote, and the notes its sentences cite moved into its own `.notes.html` - every note in exactly one
+   place, none rewritten. Keep the ORIGINAL question's heading and id on the part that carries its main finding (map
+   modals and links point at it). The sentences that join the parts POINT - a link and what the other question is
+   about - and never restate the other part's evidence.
+3. Every part under 20,000 bytes with its notes. If a part cannot get there without stripping a finding of what it
+   needs, stop and say so rather than splitting it further.
+4. In `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
+   tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py
+   tests/interactive/test_record.py"`, and `python3 ../../../scripts/check-entry-headings.py`. Commit. Do not push.
+5. Report in one paragraph, which the session that dispatched you will use to judge the split: the questions you
+   made, each one's size, and for each part WHAT IT RELIES ON FROM THE OTHERS - and whether a reader, or a check that
+   reads that part alone, has what it needs.
+"""
+
+
+def split_brief(page: str, section: str) -> int:
+    sys.path.insert(0, str(HERE.parents[2] / "scripts"))
+    d = CLONE / ".claude/skills/diagram/research" / page
+    q = next((p for p in sorted(d.glob(f"{section}-*.html")) if not p.name.endswith(".notes.html")), None)
+    if q is None:
+        print(f"brief: no question {section} on {page}", file=sys.stderr)
+        return 2
+    n = q.with_name(q.name[:-5] + ".notes.html")
+    size = q.stat().st_size + (n.stat().st_size if n.exists() else 0)
+    out = FEATURE / "briefs" / f"split-{page.replace('/', '-')}-{section}.md"
+    out.write_text(SPLIT.format(path=q.relative_to(CLONE), notes=n.relative_to(CLONE), size=size, clone=CLONE, prefix=section), encoding="utf-8")
+    print(out)
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if len(argv) == 3 and argv[0] == "split":
+        return split_brief(argv[1], argv[2])
     if len(argv) == 3 and argv[0] == "checks":
         return checks(argv[1], argv[2])
     if len(argv) != 2:

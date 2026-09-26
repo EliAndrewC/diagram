@@ -116,3 +116,17 @@ def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pyte
     out = capsys.readouterr().out
     assert 'data-note="ritter-timber-bridges"' in out and out.count("<li data-note=") == 1
     assert cb.main(["ways", "--section", "010", "--print-notes", "--root", str(REPO)]) == 2
+
+
+def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
+    """D14: a quote-check bundle holds no word list, variant index or registry entries; a record-format bundle holds no
+    quote report or registry entries - the question and its notes are in both."""
+    rf = tmp_path / "rf"
+    assert cb.main(["ways", "--section", "010", "--out", str(rf), "--no-quotes", "--for", "record-format", "--root", str(REPO)]) == 0
+    names = {p.relative_to(rf).as_posix() for p in rf.rglob("*") if p.is_file()}
+    assert {"prepass.txt", "glossary-variants.txt"} <= names and not any(n.startswith("sources/") for n in names)
+    qc = tmp_path / "qc"
+    assert cb.main(["ways", "--section", "010", "--out", str(qc), "--no-quotes", "--for", "quote-check", "--root", str(REPO)]) == 0
+    names = {p.relative_to(qc).as_posix() for p in qc.rglob("*") if p.is_file()}
+    assert "prepass.txt" not in names and "glossary-variants.txt" not in names and not any(n.startswith("sources/") for n in names)
+    assert "010-how-far-past-the-bank-does-a-bridge-land.notes.html" in names

@@ -164,6 +164,23 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: rendering
       verify: DONE. research.md R5: religion-and-death (5 items) 7.42 million, 1.48 million an item; first turn 19,300, largest context 92,000, mean main turn 58,000; one re-check round held; the table over all five rounds.
 
+## Phase 1f - the fifth round (GM 2026-09-26; plan D14)
+
+- [ ] T47 A bundle per check (`FOR=`), and the check briefs dispatch each agent with its own
+      research: rendering
+- [ ] T48 The question-size cap: `scripts/check-question-size.py` in `make quick`, `make question-sizes`, the rule in
+      both research docs
+      research: rendering
+- [ ] T49 The splits this feature owes: `cities/government` 080 by hand; homesteads 040 and 210, vegetation 150,
+      religion-and-death 200 by split sessions; each judged for lost context
+      research: rendering
+- [ ] T50 FR-002 for `cities/government`, worked as the last two pages were (D14)
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
+- [ ] T51 **The comparison the GM asked for** (D14): T50 against R1 to R5, recorded as R6 with the table over all six
+      rounds
+      research: rendering
+
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
 - [ ] T17 `measure/assertions.py` derives FR-002's list from the six quote-check reports (D4)
@@ -173,7 +190,8 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. homesteads: FR-002 5 items - 3 now CITATION (kyuhi-jawiki; tonami-yashikirin-haichi for the Tonami grove sides and winds; the 040 height band on kashima-kainyo-1987 + minami-2022), 2 stay ABSENCE re-searched 2026-09-26 (060 in-house well, 080 interconnected-lanes quotation) plus the 030 6-7 m ridge ABSENCE confirmed; the Tonami model-homestead remainder re-dated ABSENCE; 0 GROUNDS. FR-006 3 of 3 confirmed by grep (22 -> the-gardens-sun...-4 citation, 23 -> kikanchiiki-igune citation + -3 absence, 24 -> yashikirin-jawiki-5 citation); worklist: 45 items, 40 FOOTNOTED, 2 LOCATED (080 items 11-12, outside this brief), 3 NOT-LOCATED (22-24). New keys kyuhi-jawiki, tonami-yashikirin-haichi, kikanchiiki-igune. Agents: 1 source-reader, 3 source-applicability, 4 quote-check (2 rounds), 2 record-format; all findings applied bar the scanned PDFs (6 added to TO-DOWNLOAD 233-238) and the Kameyama NW roll (for the GM); 8 glossary terms, 6 variants.
 - [ ] T19 FR-002 and FR-006 for every other page `assertions.py` names (not `homesteads`, `vegetation`,
-      `cities/defenses` or `religion-and-death`), one task per page, cut when T46's figures are read
+      `cities/defenses`, `religion-and-death` or
+      `cities/government`), one task per page, cut when T51's figures are read
       research: physical
       - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited  - [ ] quote-check confirmed  - [ ] source-applicability confirmed
 

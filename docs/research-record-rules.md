@@ -490,3 +490,33 @@ any modal.
 `scripts/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
 section. A section deliberately not written is written in the declared form
 `research/<file>.html (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
+
+## A question has a size (feature 250 D14, GM 2026-09-26)
+
+The GM, on the fourth measured page of feature 250: *"we have control over whether our page is longer or shorter and
+whether it gets split up. In fact, I could have sworn that we already had rules in place to require that research
+findings be split up for precisely this reason."* Feature 258 had split the record into one file per QUESTION; nothing
+bounded a question. On that page one question of 23,000 bytes (prose 9,000, notes 14,000) was what doubled the reading
+of the check on it (`specs/250-close-the-record-checks/research.md` R5). The GM, asked for the size: *"I do not have a
+clear sense on what the maximum size a question should grow to is. Since you have already done a bunch of
+measurements, then perhaps you would be able to pick something sensible, and then we can try that out."*
+
+**The cap is 20,000 bytes, question file plus notes file.** When it was set the record held 288 questions: median
+6,750, 75th percentile 12,400, 90th 18,200, largest 56,200; 23 were over 20,000 (observed 2026-09-26; method:
+`check-question-size.py --report` and the size of every `NNN-*.html` with its notes). It is about 5,000 tokens, which
+a check reads in one turn; it sits at the record's 90th percentile, so it touches only the unusually large; and the
+first question split under it - `cities/government` 080, 38,500 bytes - came out as a 19,800-byte question that still
+holds its whole argument, which is the test of a sensible cap: the smallest coherent unit fits under it.
+
+**Applied to what a change touches**, not to the whole record at once: a question over the cap is split by the
+session working its page, which has read it. **How to split without losing context** - the GM's concern, a reader
+must not be stranded and a later check must not meet a claim it cannot verify:
+
+- split along TOPICS, never along the entry's own parts: a finding stays with the decision it drove and the
+  departures that qualify it, because a check of the decision needs its finding;
+- each part is a question a reader would ask from the map, with its own `Sources:` line and its own notes - a note
+  moves with the sentence that cites it, and no note is in two places;
+- the sentences that join the parts POINT - a link and what the other question is about - and never restate the
+  other part's evidence: a restatement is an unfootnoted claim to a check that reads one part alone (the first split
+  wrote two such bridges and was corrected before it landed);
+- a split that would strip a finding of what it needs to be understood is not made; the session says so instead.

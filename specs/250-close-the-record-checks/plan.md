@@ -286,12 +286,43 @@ The page is `religion-and-death` - four FR-002 items and one FR-006, the nearest
 exactly as `cities/defenses` was (a write session, then check sessions of two questions) and measured the same way.
 Recorded as R5, with the updated table over all five rounds.
 
+### D14 - The fifth round: per-check bundles, a size for a question, and another measured page (GM 2026-09-26)
+
+The GM, asked whether "the page's content" in R5 meant the web or our record: it meant OUR files - a check on that
+page read 82,000 tokens of the question files and their notes against 4,000 of web pages. The GM: *"I think we
+should do both of them, but I do not have a clear sense on what the maximum size a question should grow to is ...
+perhaps you would be able to pick something sensible, and then we can try that out ... if we end up splitting up
+some of our existing questions, then you should look and see whether you think there is important context being
+lost or if those questions linking to each other is good enough for a human without depriving necessary context from
+a future reviewer who is doing the subagent checks ... after you've made the tooling change, go ahead and do one
+more round on one more page, and then do another set of measurements."*
+
+1. **A bundle per check.** `make check-bundle ... FOR=quote-check|record-format|entry-drift` keeps only the parts
+   that check reads - the question and its notes always, then the quote report for `quote-check`, the word list and
+   the variant index for `record-format`, the modal's docstring for `entry-drift`; the registry entries only in
+   `FOR=all`. The check briefs dispatch each agent with its own.
+2. **A question has a size: 20,000 bytes, question plus notes.** The record's 90th percentile when set (288
+   questions, median 6,750; observed 2026-09-26, method: `scripts/check-question-size.py --report`), about 5,000
+   tokens. Checked on what a change TOUCHES (`make quick` fails on one over it); 22 untouched questions are over it and
+   are split when their pages are worked. The rule and how to split without losing context are in
+   `research/CLAUDE.md` and `docs/research-record-rules.md`, "A question has a size".
+3. **The splits this feature owes.** `cities/government` 080 (38,500 bytes) was split by hand into three - the Japanese
+   finding with its decision and departure (19,800), China checked second (7,000), and where the foot soldiers lived
+   (13,400) - and the review of it found two bridging sentences that restated the other parts' evidence, a claim
+   without a footnote to a check reading one part alone; both now only point. The four other questions this feature
+   touched and left over the cap (homesteads 040 and 210, vegetation 150, religion-and-death 200) are split by fresh
+   sessions from a split brief, each reporting what every part relies on from the others, and the session that
+   dispatched them judges each split for lost context before it lands.
+4. **The measured page** is `cities/government` - three FR-002 items, one of them in 080 - worked as the last two
+   pages were, measured the same way and set against R1 to R5 as R6. It is the smallest page measured, so its per-item
+   figure is the noisiest; R6 says so.
+
 ## Phases
 
 0. Baseline and the meter (T01, T02).
 1. **The measured slice** (T03 to T09), ending in the measurement report (T10). STOP for the GM - who ruled
    on 2026-09-26 (D6).
-1b. **The token work** (T11 to T16), its second round (T26 to T33, D11) its third (T34 to T41, D12) and its fourth (T42 to T46, D13): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
+1b. **The token work** (T11 to T16), its second round (T26 to T33, D11) its third (T34 to T41, D12) its fourth (T42 to T46, D13) and its fifth (T47 to T51, D14): the fixes, the bundle and the guard (D6, D8), the page session (D7), the
    seeded-fault runs (D6), and the comparison (D9) - which is phase 2's first page.
 2. FR-002 page by page, one page per session; FR-006 beside it, since both open the same fragments.
 3. FR-003, FR-004, FR-005 (the cosmetic sweeps).

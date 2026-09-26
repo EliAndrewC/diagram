@@ -39,6 +39,14 @@ ONE turn - every turn re-reads the whole context.
 **A cheaper check is proved** by every candidate the prepass raised being ruled on (feature 260) - not by "the
 same findings"; a TIER downgrade is proved by seeded runs on known findings, three a leg.
 
+## A question has a size (feature 250 D14, GM 2026-09-26)
+
+A question with its notes stays under 20,000 bytes (`scripts/check-question-size.py`; `make quick` fails on one a
+change touched; `make question-sizes` lists all). One over it is split along its topics: a finding stays with the
+decision it drove; each part is its own question with its heading, `Sources:` line and notes; the joins POINT at each
+other, never restate each other's evidence. A split that would strip a finding of what it needs is not made - it is
+raised instead.
+
 ## Who the record is for (GM 2026-09-05, feature 180)
 
 The reader is a casual RPG enthusiast at the map, not the next session. They go map -> modal -> "See
