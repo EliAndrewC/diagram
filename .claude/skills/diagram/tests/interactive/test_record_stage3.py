@@ -214,7 +214,7 @@ def test_the_command_writes_checks_splits_and_refuses(record: pathlib.Path, caps
     assert record_asset.main(["--check", "--research-dir", str(record)]) == 1
     assert "STALE" in capsys.readouterr().err
     assert record_asset.main(["--research-dir", str(record)]) == 0
-    assert "wrote 1 file" in capsys.readouterr().out
+    assert "wrote 1 page" in capsys.readouterr().out
     assert record_asset.main(["--page", "ways", "--research-dir", str(record)]) == 0
     assert record_asset.main(["--split", "sources", "--research-dir", str(record)]) == 0
     assert "assembles back to the same bytes" in capsys.readouterr().out
