@@ -82,10 +82,9 @@ re-deciding it), so the page does not announce a liberty - but a reader finds no
   the question above is answered.
 - **Did an ordinary posting's private rooms have a small garden of their own?** Ochiba's lord's and family
   rooms now look south onto the kitchen roof.
-- **The reception privy's night-soil route** (drawing, not research) - the privy attached to the reception
-  block's rear corner is reachable only through the inner garden: the 2 ft slot between the servants'
-  quarters and the west block is filled by the servants' door. The family privy (west face) is served from
-  the kitchen postern. The rule that a collector never crosses the inner court is the project's own.
+- **The order of the residence's rooms** - Ochiba now runs reception, then the lord's rooms, then the family's
+  deepest (omote, naka-oku, oku), on the building-review's reading of Takayama Jinya; no research entry records
+  the gradient. A rendering choice awaiting its research.
 
 ### Canon gaps (for the GM, not research)
 
