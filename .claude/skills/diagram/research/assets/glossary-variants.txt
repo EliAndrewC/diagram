@@ -320,6 +320,7 @@ fabric is later	building fabric
 fairway	fairway
 fan head	alluvial fan
 fan's head	alluvial fan
+fang	fang
 fao	FAO
 farrier	farrier
 farriers	farrier
@@ -637,6 +638,7 @@ keyaki	keyaki
 khitan	Khitan
 kichin-yado	kichin-yado
 kido	kido
+kidoban	kidoban
 kidobans	kidoban
 kimoiri	shoya
 kimon	kimon
@@ -914,6 +916,7 @@ provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
 provincial-capital	provincial seat
+pu	pu
 public monasteries	public monastery
 public monastery	public monastery
 puddled	puddling
@@ -1332,6 +1335,7 @@ zhou	department
 zicheng	zicheng
 zokibayashi	zokibayashi
 zonation	zonation
+zongjia	zongjia
 zooplankton	zooplankton
 zuku	zuku
 ō-aza	ō-aza

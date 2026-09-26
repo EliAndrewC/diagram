@@ -5355,7 +5355,26 @@
  "kidoban": {
   "def": "The watchman the townsmen of Edo kept at the ward gate (kido) on a machi's boundary.",
   "variants": [
+   "kidoban",
    "kidobans"
+  ]
+ },
+ "zongjia": {
+  "def": "In Ming China, the headman of the lowest level of local government, in charge of fire and theft; the posts' heads and firemen of a county town worked under him.",
+  "variants": [
+   "zongjia"
+  ]
+ },
+ "pu": {
+  "def": "In Ming China, a post: a small neighborhood unit of a town, with a head and three to five firemen who took turns keeping the night watch against fire and theft.",
+  "variants": [
+   "pu"
+  ]
+ },
+ "fang": {
+  "def": "A ward of a Chinese city: one of the neighborhood units a town was divided into, each holding several posts of the night watch.",
+  "variants": [
+   "fang"
   ]
  }
 }
