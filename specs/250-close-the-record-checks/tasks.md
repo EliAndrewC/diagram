@@ -109,9 +109,10 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. vegetation checked and applied: 5 questions (020 060 090 110 150) quote-checked and record-formatted, meadow-enwiki source-applicability APPLICABLE-WITH-LIMITS (write-up corrected); ~35 findings applied (claims narrowed to their quotes or labeled as the record's reasoning, scythe-swath framing dropped, 3 translations fixed, 1 new citation each in 020 and 150, stale history and session notes removed), 14 glossary terms + 10 variants; 5 note-scoped re-checks, remaining PARTIALs closed; 5 entry-drift DRIFTED modals rewritten; FR-006 19/19 footnoted; open: Coggins, Aomori and forests-2020 PDF quotes unverifiable here (no PDF text tool)
-- [ ] T33 **The comparison the GM asked for** (D11): T32 measured against R1 and R2, recorded as R3 with the
+- [x] T33 **The comparison the GM asked for** (D11): T32 measured against R1 and R2, recorded as R3 with the
       next recommendations
       research: rendering
+      verify: DONE. research.md R3: vegetation (6 items) in two page sessions - 15.5 million, 2.58 million an item against 1.60 (slice) and 1.56 (homesteads); a main turn 37% cheaper than the slice and an agent run 48% cheaper, but 18 main turns an item (more work applied, one call a turn, a 40,000 floor); one-file bundle leg 15 of 15; five next recommendations.
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 

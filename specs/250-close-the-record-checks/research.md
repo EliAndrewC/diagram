@@ -228,3 +228,78 @@ the main session.
 What the remaining work costs at this rate: FR-002 has 64 items left over 14 pages. At 1.56 million tokens and
 about $1.30 an item, that is on the order of 100 million tokens and $80 to $90 before recommendations 1 to 5,
 and before the cosmetic sweeps (FR-003 to FR-005) and the close.
+
+## R3 - the second round against the first two (2026-09-26, T31 to T33, plan D11)
+
+The GM adopted R2's five recommendations the same day: one-file bundles, two sessions per page, the engine's dev
+loop moved out from over the record, `make notes`, and note-scoped re-checks. The next page was `vegetation` -
+five FR-002 items and one FR-006 - in two fresh sessions. Figures from `measure/tokens.py`
+(`measure/tokens-vegetation-*.json`, `measure/seeded-results.json`); "input" is fresh plus cached input summed
+over turns.
+
+### The one-file bundle, on the same planted inputs (T31)
+
+| agent | tree | multi-file bundle | one-file bundle | planted findings named |
+|---|---|---|---|---|
+| `record-format` | 196,000 in 3.3 turns | 166,000 in 6.0 | 112,000 in 4.0 | 3 of 3 in every leg |
+| `quote-check` | 254,000 in 4.0 | 110,000 in 4.0 | 53,000 in 2.0 | 3 of 3 |
+| `source-applicability` | 162,000 in 3.0 | 152,000 in 5.0 | 107,000 in 4.0 | 3 of 3 |
+| `entry-drift` | 227,000 in 3.7 | 104,000 in 4.0 | 57,000 in 2.0 | 3 of 3 |
+| `source-reader` | 132,000 in 3.0 | 102,000 in 4.0 | 74,000 in 3.0 | 3 of 3 |
+
+No finding lost in 45 runs; the one-file bundle halved the input of the checks that read most.
+
+### The three measured rounds
+
+| | the slice (R1) | `homesteads` (R2) | `vegetation` (R3) |
+|---|---|---|---|
+| items | 5 | 8 | 6 |
+| sessions | the long one | one fresh | two fresh |
+| main session | 7.13 million, 35 turns | 11.28 million, 70 turns | 14.04 million, 110 turns (40 + 70) |
+| mean main turn | 204,000 | 161,000 | **128,000** |
+| agents | 7 runs, 0.86 million | 10 runs, 1.22 million | 23 runs, 1.45 million |
+| mean input per agent run | 122,000 | 122,000 | **63,000** |
+| total | 7.98 million | 12.51 million | 15.48 million |
+| per item | 1.60 million | 1.56 million | **2.58 million** |
+| harness cost | - | $10.21 | $11.77 ($2.82 + $8.95) |
+
+(Observed 2026-09-26; method: the rows of `measure/tokens-*.json`, main and agents summed per page; the mean turn
+is the main session's input over its turns.)
+
+**Read honestly: every unit got cheaper and the page got dearer.** A main-session turn cost 37% less than in
+the slice and an agent run 48% less (observed 2026-09-26; method: the mean-turn and per-run rows of the table above) - the two things the changes aimed at. But the page took 18 main turns an
+item where homesteads took 9 and the slice 7, and turns times context is the whole bill. Three reasons, each
+measured on the transcripts:
+
+- **More work.** The check session ran 23 agents, not 10: eleven first-round checks, five note-scoped
+  re-checks, and five `entry-drift` checks with five modal rewrites in `greenery.py`. The last is FR-007 work
+  owed at the push, which homesteads left to T23 and this session did early. It applied about 35 findings and
+  wrote 14 glossary terms.
+- **One step a turn.** Of the check session's 67 tool turns, 63 carried a single call: 20 reads, 12 patches, 11
+  record-and-test runs, one at a time, each re-reading a context that averaged 150,000.
+- **A fixed floor.** Every turn of every session began from about 40,000 tokens of harness, tool schemas, MCP
+  instructions, skill listing and CLAUDE.md before any work - 110 turns at 40,000 is 4.4 million, 28% of the
+  page's main session (observed 2026-09-26; method: each session's first-turn context times its turns, over its main input).
+
+The write session is the change's clearest result: locating, reading and writing six items took 40 turns at a
+mean of 89,000, where homesteads' same steps ran at 64,000 to 145,000 a turn in the middle of one long session.
+
+### Recommendations for the next round
+
+1. **Lower the session floor.** Start a page session with only the tools a research page uses (Bash, Read,
+   Edit, Write, Grep, Agent, WebFetch, WebSearch) and no MCP servers or skill listing; a headless check whose tool
+   list is pinned starts at 22,000 where a page session starts at 40,000. At 110 turns that is about 2 million a
+   page. A one-line change to the launcher, measured on its first page.
+2. **Check and apply one question per session.** The check session's context grew to 218,000 as 23 reports
+   arrived. Two or three questions a session - bundles, checks, apply, re-check, entry-drift for that question -
+   would each start at the floor and end near 100,000.
+3. **A report's findings in one turn.** Apply every finding of one report as one patch or one message of parallel
+   `Edit` calls, then run the record commands and tests once. The brief says so, and the step reads so.
+4. **Trim `research/CLAUDE.md`** to its operative rules. It attaches to every research session at about 10,900
+   tokens, 8% of this page's mean turn (observed 2026-09-26; method: 10,900 over the check session's mean turn of 150,000); its rationale and history belong in `docs/research-doctrine.md`.
+5. **Hold the pages to the brief's scope.** Either `entry-drift` belongs in the per-page check session (it is owed
+   at the push, so this page did the honest thing) and the brief should say so and budget it, or it waits for
+   T23; the comparison between pages needs one or the other.
+
+What the rest costs at this round's rate: 62 FR-002 items remain over 13 pages - on the order of 160 million
+tokens and $120 at vegetation's 2.58 million an item, or 97 million at homesteads' 1.56 million.
