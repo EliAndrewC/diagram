@@ -1,58 +1,58 @@
 {
  "feature": "250-close-the-record-checks",
- "plan_sha256": "7966fc3f9f5fb1ae9a03f056f91659d2a01cf86de75db49852a7cc1dd81dba51",
+ "plan_sha256": "67a79810f6e60e7be8be81629eb0f67ea19c0168398e0f787292eaaba19535fc",
  "reviewed": "2026-09-26",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D11.1-inline",
-   "summary": "One file per bundle: every copy inline in MANIFEST.md under its origin; contracts say read it once; proven by a one-file seeded leg of three runs per agent (T26, T31)",
+   "id": "D12-1",
+   "summary": "Session floor: research tools only (Bash, Read, Edit, Write, Grep, Glob, Agent, WebFetch, WebSearch), --strict-mcp-config, --disable-slash-commands, and claudeMdExcludes of the mirror's root CLAUDE.md in a clone",
    "class": "within",
-   "why": "R2 rec 1 asks for a single file holding every copy inline under its origin heading so a check reads it in one turn, and a seeded re-run of three a leg; built as that. The file name MANIFEST.md rather than BUNDLE.md is not a change of substance."
+   "why": "R3 rec 1 as recommended. Glob beyond the rec's list widens rather than narrows; excluding the mirror's duplicate root CLAUDE.md serves the rec's stated purpose (lower the floor) and removes no content the clone's own copy does not carry."
   },
   {
-   "id": "D11.1-grep-targets",
-   "summary": "The glossary variant index and a source's saved pages stay files beside the MANIFEST (grep targets), not inlined; quote-verbatim.json stays a file (its report is inlined as quote-verbatim.txt)",
+   "id": "D12-2",
+   "summary": "Check sessions of two questions each, planned from the handoff by a then: step; registry keys to the first group; the last group closes the page",
+   "class": "within",
+   "why": "R3 rec 2's body says two or three questions a session, each with bundles, checks, apply, re-check and entry-drift; the brief carries all five steps per group."
+  },
+  {
+   "id": "D12-3",
+   "summary": "Check brief: every finding of one report applied in one message, record commands and tests once",
+   "class": "within",
+   "why": "R3 rec 3 as written (brief step 6)."
+  },
+  {
+   "id": "D12-4",
+   "summary": "research/CLAUDE.md trimmed to rules (11,100 chars); full text moved verbatim to docs/research-record-rules.md; plan claims 'No rule is dropped'",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Narrows R2's 'every copy inline'. Legitimate on the purpose test: the GM adopted the five to cut token cost ('let's see if that helps'), and R2 rec 1's mechanism is fewer turns because every turn re-reads the whole context. Inlining a grep target puts it in the context of every later turn: glossary-variants.txt is 23,661 bytes (measured 2026-09-26, wc -c), larger than the 040 bundle's fragment or notes, and saved pages are whole source pages whose grep-not-read form the GM adopted in feature 255. Adjudicated separately: variant index - literal inlining would add ~6k tokens to every turn of every check, defeating the purpose; saved pages - same, and reading them whole reverses a GM-adopted rule; quote-verbatim.json - a machine duplicate of the inlined .txt report, so nothing a check reads is withheld. Every file a check READS whole is inlined (checked in _check_bundle.inline)."
+   "ruling": "NOT LEGITIMATE",
+   "why": "R3 rec 4, adopted by the GM, is to trim the file TO its operative rules and move rationale and history out. The built file drops operative rules, not only rationale, so the plan's 'keeps every rule' is false on a section-by-section comparison against 37c20e57's file: (259) the assembled assets/glossary.json and research/assets/glossary.js are written by make glossary and never hand-edited; (190) never link a URL nobody fetched, the registry searched by percent-decoded URL, a 'Pointers, not read' item with no entry stays plain while a REGISTERED name is linked whatever label surrounds it; (194) a roster key with nothing to quote leaves the roster, a translation note names its translator, a source's own English needs no note; (195) the absence note's registry entry stays, marked Not cited; a 'settled' note re-opens on anything that changes what can be read; a GM-downloaded copy is read by the session, the footnote links the PUBLIC page and says the copy was read, quote-check runs against the copy; a paywalled text with a public abstract is cited for the abstract's words only; a GROUNDS note may name several reasons, and using one of the four unexemplified reasons on an existing note takes a written argument at that note's page; (209) a glossary definition is written from the record's own text; record-format and quote-check stay two agents dispatched in the same turn (spec 209 D5); (211) assertions resting on a NOT-APPLICABLE source keep their label until the GM rules; (229) a spec paragraph's pixel figure goes in a comment beside it, the paragraph is retired when a generator encodes the rule with its reasoning, and a why the code lacked goes on the page with the comment pointing at the anchor. Nothing makes keeping these impossible or defeats the rec's purpose: they are a few hundred characters against a 32,000-character cut. Restore each to its section of research/CLAUDE.md (compactly), or record it as rationale with a reason, and re-measure the claim. Aside, not a finding: the rec named docs/research-doctrine.md as the home for the rationale; a new docs/research-record-rules.md narrows nothing."
   },
   {
-   "id": "D11.2",
-   "summary": "Two sessions per page: write brief (locate, read, write) and check brief (check, apply, close) joined by a handoff; make page-session runs several briefs in order",
+   "id": "D12-5",
+   "summary": "entry-drift in each check group's brief, on the modals of its own questions, with the question they were written from",
    "class": "within",
-   "why": "R2 rec 2 is 'write, then check-and-apply', the second session fresh and starting from the committed fragments; D11 and briefs/vegetation-1.md, -2.md implement that split. The sequential runner is the mechanism for running both, not added scope."
+   "why": "R3 rec 5 offered two branches; D12 takes the first (in the per-page check session, the brief says so and scopes it), as the rec allowed."
   },
   {
-   "id": "D11.3",
-   "summary": "Skill CLAUDE.md body moves to l7r/diagram/CLAUDE.md; pool/ and tests/ import it; skill CLAUDE.md becomes a short index; nothing in the doctrine changes",
+   "id": "D12-flaky",
+   "summary": "Raster-mode lit-paddy/beads browser check waits for its state with the driver's bounded settles (2 s), assertions unchanged; T39 three runs green",
    "class": "within",
-   "why": "R2 rec 3: content belongs to l7r/diagram/ and pool/, a short skill-level index stays. Verified: the moved body differs from the old one only in link targets plus a header comment (diff with links normalized); the index is short. The tests/ import extends rather than narrows - tests/ never lies under research/, so it costs a research session nothing and keeps the dev loop where test work had it."
+   "why": "Fixed, not hidden: no skip, xfail, retry or loosened expectation; the asserted tuples are unchanged and a value that never arrives within the bound still fails. A stale read equal to the wanted value could pass, but the original same-tick read passed on the same stale value, so it is no weaker than before."
   },
   {
-   "id": "D11.4",
-   "summary": "make notes PAGE= SECTION= KEYS= prints named notes and their carrying blocks; briefs say use it and never dump a notes file",
+   "id": "D12-measure",
+   "summary": "cities/defenses (5 FR-002, 1 FR-006) worked and measured over every session in .git/page-sessions/index.txt against R1-R3, recorded as R4 (T40, T41)",
    "class": "within",
-   "why": "R2 rec 4 exactly; Makefile target and _check_bundle.print_notes exist, both briefs carry the instruction."
-  },
-  {
-   "id": "D11.5",
-   "summary": "check-bundle NOTES=<keys> cuts notes, fragment and quote-verbatim report to the named notes; the check brief's re-check uses it",
-   "class": "within",
-   "why": "R2 rec 5 ('quote-verbatim NOTES= and a note-scoped bundle ... check the corrected notes alone'); implemented in entry_bundle/scoped_verbatim and used at vegetation-2.md step 30."
-  },
-  {
-   "id": "D11-page",
-   "summary": "The next measured page is vegetation (five FR-002, one FR-006), two sessions, measured with tokens.py against R1 and R2, recorded as R3 (T32, T33)",
-   "class": "within",
-   "why": "The GM: 'then do another measured page, the same as this round, and then let's see if that helps'. Same measurement as R2, compared against it; worked in two sessions because the GM adopted rec 2."
+   "why": "'measure again the same way as this round': one page of the same size, measured with the same meter against the earlier rounds."
   },
   {
    "id": "T19-reword",
-   "summary": "T19 now excludes homesteads and vegetation, runs two sessions per page, and is cut when T33's figures are read",
+   "summary": "T19 excludes cities/defenses too, drops 'two sessions each', cut at T41 instead of T33",
    "class": "within",
-   "why": "Drops nothing: every page assertions.py names is still covered (homesteads by T18, vegetation by T32, the rest by T19), one task per page and the five research boxes are kept; two sessions follows the adopted rec 2; waiting for T33 follows 'then let's see if that helps'."
+   "why": "'Two sessions each' is superseded by D12's write session plus check groups, which govern phase 2 through D7/D12; the added exclusion and the later cut follow from T40/T41. Nothing is dropped from the task's scope."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

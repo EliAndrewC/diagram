@@ -24,7 +24,8 @@ Find one with a glob on the key (`ls research/sources/*/*fei-1939*`) or a grep o
 in `.claude/skills/diagram`. **A question**: a free prefix between its neighbors (they count by ten), the file
 opening with its `<h2 id="...">`. **A footnote**: no number anywhere - `<sup class="fn" data-note="<key>"></sup>`
 in the prose, `<li data-note="<key>">...</li>` in the `.notes.html`; repeats of one work are `key`, `key-2`, ...
-**A term**: a new file with a free prefix; the prefix order decides which term wins a shared variant.
+**A term**: a new file with a free prefix; the prefix order decides which term wins a shared variant. The
+assembled `assets/glossary.json` and `research/assets/glossary.js` are written by `make glossary` and never hand-edited.
 
 **Checking** (feature 250). `make check-bundle PAGE=<p> SECTION=<q>` (or `KEY=<k>`; `KIND=<class>` for
 `entry-drift`; `NOTES=<key,key>` to re-check only those) copies what ONE check reads out of the repository,
@@ -64,7 +65,9 @@ map's notes.
 A key is never bare. A document we READ links to the first URL on its registry citation line; one we did not
 read (`SUMMARY-ONLY`, `URL: none`, `unfetched` without `READ`) links to its registry entry. The key is the link
 text. A work named in prose, or by its author's surname at first mention in a section, is linked the same way;
-a read document with no entry gets one first (after searching the registry by URL and by the whole entry).
+a read document with no entry gets one first (after searching the registry by URL, percent-decoded, and by the
+whole entry), and nothing links to a URL nobody fetched. A `Pointers, not read:` item with no entry stays plain; a
+REGISTERED name is linked whatever label surrounds it.
 `tests/interactive/test_sources.py` holds it.
 
 ## A reference QUOTES what it rests on (GM 2026-09-06, feature 194)
@@ -73,8 +76,9 @@ A footnote per assertion - several a sentence when it asserts several things - a
 passage it rests on, VERBATIM including the source's own spelling and dashes (the house-style guard exempts
 quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated from the
 Japanese by this project; original: 「原文」)` - the translation follows house style, the original follows the note.
-The section's `<p><strong>Sources:</strong> ...</p>` roster stays, and every key on it is quoted by a footnote in
-that section. Nothing is quoted from memory.
+The note names the language and the translator; a source's own English needs no note. The section's
+`<p><strong>Sources:</strong> ...</p>` roster stays, every key on it is quoted by a footnote in that section, and a key
+with nothing to quote leaves the roster. Nothing is quoted from memory.
 
 ## A citation links to a page where its quote can be READ - or it is not a citation (GM 2026-09-06, feature 195)
 
@@ -83,17 +87,22 @@ A note is one of THREE forms:
 - **CITATION**: `<a href="https://..."><code>key</code></a> - 「passage」 (gloss)` - the link a public page on which
   the passage can be read (the paper's PDF, not its abstract; not a paywall, a login wall or a search summary).
 - **ABSENCE**: `no publicly readable source (searched YYYY-MM-DD: what was tried)` - no key, no URL; the
-  assertion stands, honestly labeled. It may carry `settled DATE` only after two independent passes on different
-  dates, the second using a tool the first lacked.
+  assertion stands, honestly labeled; the registry entry stays, marked *Not cited*. It may carry `settled DATE`
+  only after two independent passes on different dates, the second using a tool the first lacked, and it re-opens
+  on anything that changes what can be read.
 - **GROUNDS**: `no source is owed: <reason>` from a CLOSED list - `measured on our own maps`, `the record's own
   silence`, `follows from the definitions`, `physical necessity`, `a drawing convention`, `this project's
   decision`. NEVER for a claim about how a place was built, farmed, planted, governed or lived in, nor for a
-  labeled GUESS about the physical world - those owe a citation or an absence note. A note converted from an
-  absence note keeps its search in an HTML comment.
+  labeled GUESS about the physical world - those owe a citation or an absence note. A note may name more than one
+  reason; using one of the four not yet exemplified takes a written argument at that note's page. A note converted
+  from an absence note keeps its search in an HTML comment.
 
 The one exception, by the GM's ruling: the GM's own campaign notes are canon and keep their registry link. A page
 the container cannot fetch is not thereby unreadable - if the GM can open it, anyone can; a source only the GM
-can fetch goes at the END of `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in Markdown, one entry per work:
+can fetch is downloaded by them to `/host-l7r-repo/academic-sources/` - the session reads the copy, the footnote
+links the PUBLIC page and says the copy was read, and the quote-check runs against the copy; a paywalled text with a
+public abstract is cited for the abstract's words only. A source for the GM to fetch goes at the END of
+`/host-l7r-repo/academic-sources/TO-DOWNLOAD.md`, in Markdown, one entry per work:
 a heading naming it, a link to where the session believes it lives, a Google-search link that uniquely finds it,
 what rests on it, and what blocked the fetch - BOTH links, always.
 
@@ -103,8 +112,8 @@ every new or changed entry, its verdicts recorded in the task (`quote-check conf
 
 ## Written for the reader (GM 2026-09-07, feature 209)
 
-1. **A term the reader would not know is a glossary tooltip** - one glossary for the map and the record; nothing
-   is wrapped by hand. A term nothing uses fails the gate.
+1. **A term the reader would not know is a glossary tooltip** - one glossary for the map and the record, each
+   definition written from the record's own text; nothing is wrapped by hand. A term nothing uses fails the gate.
 2. **A note for a session is an HTML comment**: the `Grounds:` and `Evidence:` fields, a feature, a task, a spec,
    a test, a make target, an engine identifier, a fetch verdict. Visible: the `Sources:` roster, a source key's
    link, a GM ruling and the alternatives it declined, the honest label on a claim (a GUESS, a dated search).
@@ -113,7 +122,7 @@ every new or changed entry, its verdicts recorded in the task (`quote-check conf
 
 `tests/interactive/test_record_format.py` holds the mechanical half; the **`record-format`** agent (after
 `make record-prepass`) the rest - VOCABULARY, SESSION NOTE, HISTORY - beside `quote-check` on every new or
-changed entry. The registry is not under rules 2 and 3.
+changed entry - two agents, dispatched in the same turn (spec 209 D5). The registry is not under rules 2 and 3.
 
 ## The notes live on a CITATIONS PAGE; every cited work says what it is (GM 2026-09-07, feature 211)
 
@@ -124,7 +133,8 @@ changed entry. The registry is not under rules 2 and 3.
   and method. A cited key without both fails the gate; the works section of a citations page is derived from them.
 - **A source is judged before it is used**: the **`source-applicability`** agent on every new or changed write-up,
   and BEFORE a source's numbers, claims or details reach a map or a rule (a physical task's fifth box). A
-  NOT-APPLICABLE source is recorded and listed for the GM.
+  NOT-APPLICABLE source is recorded and listed for the GM, and the assertions resting on it keep their label until the
+  GM rules.
 
 ## The record IS HTML (feature 194)
 
@@ -137,8 +147,10 @@ are the anchors. `README.md` and this file stay Markdown. The page mechanics are
 
 Per question a page holds the finding, the decision it drove (the ruling, its date and words, the alternatives
 declined), and - for a rule no generator yet encodes - the **specification**, `<p class="spec"><strong>The rule
-the map follows:</strong> ...</p>`, in real feet at the tier's scale, naming no engine identifier, saying where it
-rests on no finding. A rule the engine encodes with its reasoning is not written twice. Nothing names a retired
+the map follows:</strong> ...</p>`, in real feet at the tier's scale (the pixel figure in a comment beside it), naming no engine identifier, saying
+where it rests on no finding; it is retired once a generator encodes the rule with its reasoning. A rule the engine
+encodes with its reasoning is not written twice; a reason its code comment lacks goes on the page, and the comment
+points at the anchor. Nothing names a retired
 `settlements/*.md` rule file (`tests/interactive/test_record.py`).
 
 ## When a section a modal was written FROM moves (GM 2026-09-12, feature 234)

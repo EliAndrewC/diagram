@@ -58,8 +58,14 @@ def test_a_then_step_queues_the_briefs_it_prints(tmp_path: pathlib.Path, monkeyp
     step.write_text("#!/bin/sh\necho /b/veg-2a.md\necho /b/veg-2b.md\n", encoding="utf-8")
     step.chmod(0o755)
     ran: list[str] = []
-    monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **kw: (ran.append(cmd[0] if cmd[0] != "claude" else cmd[2].split("Read ")[1].split(" first")[0]),
-                                                                ps.subprocess.CompletedProcess(cmd, 0, stdout="/b/veg-2a.md\n/b/veg-2b.md\n" if cmd[0] == str(step) else "")) [1])
+    monkeypatch.setattr(
+        ps.subprocess,
+        "run",
+        lambda cmd, **kw: (
+            ran.append(cmd[0] if cmd[0] != "claude" else cmd[2].split("Read ")[1].split(" first")[0]),
+            ps.subprocess.CompletedProcess(cmd, 0, stdout="/b/veg-2a.md\n/b/veg-2b.md\n" if cmd[0] == str(step) else ""),
+        )[1],
+    )
     ps.work(str(tmp_path), "n", [], [{"then": str(step)}])
     assert ran == [str(step), "/b/veg-2a.md", "/b/veg-2b.md"], ran
     index = (tmp_path / ".git" / "page-sessions" / "index.txt").read_text(encoding="utf-8").splitlines()
