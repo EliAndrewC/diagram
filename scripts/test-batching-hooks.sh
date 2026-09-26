@@ -109,20 +109,23 @@ check "the backgrounded call is allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a backgrounded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
 
-# GUARD_EDIT_OK: 2026-09-26 - THE NOTICE KEEPS SPEAKING WHILE THE WINDOW STAYS LOADED. It fired only at EXACTLY one
-# below the bar, so a session that heeded it with a folded command (still one quick round trip, so still counted)
-# sat at the bar with no further word and was refused cold on a later bare read.
-echo "2e. a session that folds after the notice hears it again before a bare read is refused"
+# GUARD_EDIT_OK: 2026-09-26 - OPTION A (the GM's choice): A FOLDED COMMAND DOES NOT FILL THE WINDOW. It used to count (one
+# quick round trip) while only a bare read could be blocked, so a session folding as asked was refused on its first bare
+# read afterwards. The fixture sends the real PostToolUse shape, which carries the command, because that is what decides.
+echo "2e. folded commands never fill the window; bare reads still do, and the notice says which is which"
 setup
-serial_turn; serial_turn
-fold() { sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep a f; grep b g"}}' 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$(ev Bash)" >/dev/null 2>&1; return $RC; }
-fold >/dev/null; check "folded call one below the bar allowed" ok $?
-NOTICE=$(fold); check "the next folded call, AT the bar, is allowed" ok $?
-printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and carries the notice again"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice at the bar - the next bare read is refused cold"; FAIL=$((FAIL+1)); }
-printf '%s' "$NOTICE" | grep -q "folded command" && { echo "  ok    ...saying a folded command still counts"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice does not say folding still counts"; FAIL=$((FAIL+1)); }
-sleep 0.35; OUT=$("$HOOK" pretool <<<"$(ev Read)" 2>"$BT_ERR"); check "a bare read at the bar is refused" blocked $?
+FOLD='{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep a f; grep b g"}}'
+fold() { sleep 0.35; "$HOOK" pretool <<<"$FOLD" 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$FOLD" >/dev/null 2>&1; return $RC; }
+fold >/dev/null; fold >/dev/null; fold >/dev/null; fold >/dev/null
+serial_turn; check "four folded turns then a bare read: allowed" ok $?
+serial_turn; check "...and a second bare read (window holds two)" ok $?
+NOTICE=$(fold); check "a folded call one below the bar is allowed" ok $?
+printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one below the bar"; FAIL=$((FAIL+1)); }
+printf '%s' "$NOTICE" | grep -q "folded command does not count" && { echo "  ok    ...saying a folded command does not count"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice does not say folding is exempt"; FAIL=$((FAIL+1)); }
+serial_turn; check "a third bare read reaches the bar, allowed" ok $?
+sleep 0.35; OUT=$("$HOOK" pretool <<<"$(ev Read)" 2>"$BT_ERR"); check "a fourth bare read is refused" blocked $?
 [ -z "$OUT" ] && { echo "  ok    ...with no notice printed alongside the refusal"; PASS=$((PASS+1)); } || { echo "  FAIL  a refused call also printed the notice"; FAIL=$((FAIL+1)); }
-grep -rhq 'history 1' "$GUARD_LOG_ROOT" && { echo "  ok    the log records the window state"; PASS=$((PASS+1)); } || { echo "  FAIL  the log carries no window state"; FAIL=$((FAIL+1)); }
+grep -rhq 'history ' "$GUARD_LOG_ROOT" && { echo "  ok    the log records the window state"; PASS=$((PASS+1)); } || { echo "  FAIL  the log carries no window state"; FAIL=$((FAIL+1)); }
 teardown
 
 echo "3. a batched turn is never interrupted below the threshold"
@@ -226,6 +229,10 @@ sleep 0.35
 printf '{"session_id":"t1","tool_name":"Edit","tool_input":{"file_path":"x.py"}}' | "$HOOK" pretool 2>"$BT_ERR"
 check "an Edit (real work) passes" ok $?
 printf '{"session_id":"t1","tool_name":"Edit","tool_input":{"file_path":"x.py"}}' | "$HOOK" posttool >/dev/null 2>&1
+# option A (GM 2026-09-26): the four substantive turns above recorded as NOT counting, so the window is "110000"
+H=$("$HOOK" status <<<"$(ev Read)" | sed 's/.*history=\([01]*\).*/\1/')
+[ "$H" = 110000 ] && { echo "  ok    the heredoc, fold, test run and Edit did not fill the window"; PASS=$((PASS+1)); } || { echo "  FAIL  substantive turns filled the window (history $H)"; FAIL=$((FAIL+1)); }
+serial_turn; serial_turn; serial_turn         # three bare reads re-arm it: "000111"
 bash_turn "grep -n foo settlement.py"; check "a naked single grep IS blocked" blocked $?
 teardown
 
