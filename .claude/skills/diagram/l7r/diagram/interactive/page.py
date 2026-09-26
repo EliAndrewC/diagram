@@ -56,6 +56,12 @@ CAVEAT_LEAD: str = _TEXT["caveat_lead"]
 #: is a link to a written answer with its sources. "Questions" is the GM's own word for them.
 REFERENCES_LEAD: str = _TEXT["references_lead"]
 
+#: The BROAD kinds, over which the cursor stays the normal arrow (GM 2026-09-26: *"very large things don't need to
+#: turn the mouse into a pointer"* - grassland, marshland, paddies, copses, windbreak forests and woodland commons).
+#: Every other clickable kind turns it into the link hand (`page.js`, `cursorFor`). Grassland is the scrub and rough
+#: grazing class, and paddies are both paddy classes.
+PLAIN_CURSOR: frozenset[str] = frozenset(_TEXT["plain_cursor"])
+
 
 _LINE = re.compile(r'<line ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
 _CIRCLE = re.compile(r'<circle ((?:[a-z0-9-]+="[^"]*"\s*)+)/>')
@@ -635,6 +641,9 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             # local fact for a general one - and absent for every class the notes do not annotate,
             # which is nearly all of them on nearly every map.
             "on_this_map": notes.features.get(key, ""),
+            # the cursor stays the arrow over a broad kind (`PLAIN_CURSOR`); an entry without the key - the
+            # place card, a Mode A sheet's kinds, an unregistered stub - gets the link hand
+            "plain": key in PLAIN_CURSOR,
         }
     for key in sorted(present - registry.keys() - {PLACE}):
         out[key] = {
