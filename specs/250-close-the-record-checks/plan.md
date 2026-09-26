@@ -178,9 +178,11 @@ is a deliberate harness rule, not a bug, so it is not worked around. What replac
 report, and the contracts of the five checks say its first line is the counts, then only the findings the
 session must act on, a pass in one line - never the quotation again or the reasoning that it passed. `Write`
 is off their tool lists again. The alternative priced and not taken: run each check as a headless process
-whose output a launcher writes to a file - the seeded runs measured a headless floor about three times a
-subagent's, which on a four-to-six-turn check costs about what an inline report of three to five thousand
-tokens costs over a session's remaining turns (research R2).
+whose output a launcher writes to a file. Measured (observed 2026-09-26; method: `measure/d8-pricing.txt` - the first turn of the 15 seeded bundle runs against the 10 subagent checks of the page session, and each report's length times the main-session turns after it): a headless check's first turn holds 22,300 tokens
+against a subagent's 7,200 (3.1 times), so over a check's 5.8 turns it costs about 87,000 tokens more; an
+inline report averaged 1,600 tokens and was re-read on a mean of 30 later turns, about 51,000. The file route
+would cost the GM's own measure more than it saves, so the narrowing serves the recommendation's purpose -
+keeping the reports' cost out of the session - by the cheaper road. It is raised with the GM with the result.
 
 ### D9 - The comparison (research R2)
 

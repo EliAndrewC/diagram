@@ -188,8 +188,9 @@ As subagents, every check in the page session tried to write its `REPORT.md` and
 *"Subagents should return findings as text, not write report files."* That is a deliberate harness rule and is
 not worked around. Each attempt cost the agent a turn. The contracts now reply with the report itself - counts
 on the first line, then only what the session must act on, a pass in one line - and `Write` is off their tool
-lists. Running each check as a headless process whose output a launcher files was priced and not taken: the
-seeded runs put a headless session's floor at about three times a subagent's.
+lists. Running each check as a headless process whose output a launcher files was priced and not taken (observed 2026-09-26; method: `measure/d8-pricing.txt` - the first turn of the 15 seeded bundle runs against the 10 subagent checks of the page session, and each report's length times the main-session turns after it): a
+headless check's first turn holds 22,300 tokens against a subagent's 7,200, about 87,000 more over a check's
+5.8 turns, while an inline report averaged 1,600 tokens re-read on 30 later turns - about 51,000.
 
 ### Where the page session's tokens went
 
@@ -199,7 +200,7 @@ Its context grew from 40,000 to 264,000 over 70 turns. The largest parts, measur
 - 106 tool results, 174,000 characters (about 43,000 tokens), the largest a 20,000-character grep of notes;
 - the nested CLAUDE.md files in its OWN main session - the engine dev loop (about 7,500 tokens, nothing in it
   bears on research) and `research/CLAUDE.md` (about 10,900) - attached on its first read under `research/`;
-- ten agent reports inline, about 20,000 tokens.
+- ten agent reports inline, 16,300 tokens (the lengths in `measure/d8-pricing.txt`).
 
 The 17 turns of applying findings, at 190,000 to 247,000 a turn, cost 3.8 million by themselves - a third of
 the main session.
