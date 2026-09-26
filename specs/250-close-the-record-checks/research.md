@@ -531,5 +531,6 @@ tool calls of its transcript, in order):
    only the part its item falls in, keeps both savings.
 3. **Size the check groups by bytes, not by count**, so a split's small parts share a session (146 alone was a
    whole session at 7,200 bytes).
-4. **One more page before the rest, with the tool defects fixed**, since a third of this round's growth was the
-   first use of the new tooling and the canon-heavy items; one page is not yet a trend.
+4. **One more page before the rest, with the tool defects fixed**, since part of this round's growth was the first
+   use of the new tooling (0.54 million measured directly, more around it) and part was two canon-heavy items; one
+   page is not yet a trend.

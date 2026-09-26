@@ -202,8 +202,9 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5). American spellin
       research: physical
       - [x] research pass  - [x] source-reader confirmed  - [x] recorded and cited  - [x] quote-check confirmed  - [x] source-applicability confirmed
       verify: DONE. cities/fabric closed over sessions 2a-2c: 040, 050, 140, 143 and 146 checked by quote-check and record-format and applied, one re-check round each; 146's fn-82 PARTIAL narrowed and re-checked to SUPPORTS; zongjia, pu and fang glossed and the 2b kidoban term given its bare variant; FR-006 worklist 14 of 14 FOOTNOTED; the four record tests 257 passed; no modal owed on the page
-- [ ] T56 **The comparison the GM asked for** (D15): T55 against R4 to R6, recorded as R7
+- [x] T56 **The comparison the GM asked for** (D15): T55 against R4 to R6, recorded as R7
       research: rendering
+      verify: DONE. research.md R7: cities/fabric 10.81 M over 5 questions checked (2.16 M a question) against 1.56-1.90 M on R4-R6; agents cheaper again (quote-check read 14,300 chars, mean run 54,000); growth all main-session: write session 3.62 M (canon greps, the 140 split carried), a third check session, four first-use tool defects (fixed); four recommendations for the GM
 
 ## Phase 2 - FR-002 and FR-006, one page per session (D7)
 
