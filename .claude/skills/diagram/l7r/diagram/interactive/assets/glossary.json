@@ -935,7 +935,8 @@
  "chinju": {
   "def": "A settlement's own tutelary shrine, the seat of the deity that guards it.",
   "variants": [
-   "chinju"
+   "chinju",
+   "Chinjusan"
   ]
  },
  "chinju no mori": {
@@ -1292,7 +1293,8 @@
  "edauchi": {
   "def": "Limb-pruning: cutting the side branches from a grove tree so it grows tall and clean-stemmed, as against topping it at a fixed height.",
   "variants": [
-   "edauchi"
+   "edauchi",
+   "枝打ち"
   ]
  },
  "edge castle": {
@@ -2463,9 +2465,10 @@
   ]
  },
  "kyuhi": {
-  "def": "Stable manure: the litter and grass of a byre or stable, rotted down and put on the fields.",
+  "def": "Stable manure: the stable's litter - straw and fallen leaves - mixed with the dung, trodden by the cattle and horses until it rots, and put on the fields.",
   "variants": [
-   "kyuhi"
+   "kyuhi",
+   "umayagoe"
   ]
  },
  "landrace": {
@@ -3870,7 +3873,8 @@
  "tsuijimatsu": {
   "def": "The black pines of an Izumo homestead grove, clipped flat-topped every few years - the one attested topping of grove trees.",
   "variants": [
-   "tsuijimatsu"
+   "tsuijimatsu",
+   "築地松"
   ]
  },
  "tsuke-tsubo": {
@@ -4103,13 +4107,15 @@
  "yashikigami": {
   "def": "The homestead deity: the household's own god, enshrined in a small hokora in a corner of the house plot.",
   "variants": [
-   "yashikigami"
+   "yashikigami",
+   "yashikigami-sama"
   ]
  },
  "yashikirin": {
   "def": "A homestead grove: the belt of trees planted around a farmhouse plot as its own shelter from wind and sun.",
   "variants": [
-   "yashikirin"
+   "yashikirin",
+   "屋敷林"
   ]
  },
  "yato": {
@@ -4882,6 +4888,61 @@
   "variants": [
    "NRCS",
    "NRCS-designed"
+  ]
+ },
+ "shoulder month": {
+  "def": "The harvest month at the end of the growing season, when the sun stands low - about 28 degrees at 9am and 3pm at 38N - while the grain is being threshed and the autumn greens are still in the ground; its long shadows set how much clear ground a yard or bed needs.",
+  "variants": [
+   "shoulder month"
+  ]
+ },
+ "threshing yard": {
+  "def": "The flat, open, sunlit yard beside a farmhouse where the harvested grain was threshed; the record keeps 39 ft of clear ground south of it.",
+  "variants": [
+   "threshing yard",
+   "threshing yards",
+   "threshing-yard"
+  ]
+ },
+ "enoki": {
+  "def": "Japanese hackberry, a tall, broad-crowned deciduous tree, one of the trees of a Tonami homestead grove.",
+  "variants": [
+   "enoki"
+  ]
+ },
+ "sun lane": {
+  "def": "A strip of ground kept clear of trees beside a yard or garden bed so a grove's shadow cannot reach it; here, 50 ft west and southwest of every yard and bed.",
+  "variants": [
+   "sun lane",
+   "sun lanes"
+  ]
+ },
+ "ujigami": {
+  "def": "A guardian god of a household or lineage; at a farmstead, one of the gods kept in the corner shrine as the homestead's protector.",
+  "variants": [
+   "ujigami"
+  ]
+ },
+ "Hyakusho Denki": {
+  "def": "A Japanese farming manual of 1681, quoted on rotting night soil in a storage jar before it goes on the fields.",
+  "variants": [
+   "Hyakusho Denki",
+   "百姓伝記"
+  ]
+ },
+ "Nogyo Zensho": {
+  "def": "A Japanese farming book published in 1697, which advises letting dung lie and rot until ripe before it is used.",
+  "variants": [
+   "Nogyo Zensho",
+   "農業全書"
+  ]
+ },
+ "soffit": {
+  "def": "The underside of an overhanging eave; firewood stacked beneath one stays out of the rain.",
+  "variants": [
+   "soffit",
+   "soffits",
+   "eave soffit"
   ]
  }
 }

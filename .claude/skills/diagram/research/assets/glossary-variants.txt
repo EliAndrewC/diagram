@@ -128,6 +128,7 @@ chi	chi
 china fir	China fir
 chinju	chinju
 chinju no mori	chinju no mori
+chinjusan	chinju
 cho	cho
 chonin	chonin
 chonin-chi	buke-chi
@@ -244,6 +245,7 @@ earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
 eastern han	Han dynasty
+eave soffit	soffit
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
 edago	hongo
@@ -265,6 +267,7 @@ enceinte	enceinte
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	mamian
+enoki	enoki
 eunis	EUNIS
 eutrophic	eutrophication
 eutrophication	eutrophication
@@ -453,6 +456,7 @@ houzhaofang	houzhaofang
 hucheng he	hucheng he
 hutong	hutong
 hutongs	hutong
+hyakusho denki	Hyakusho Denki
 hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
@@ -739,6 +743,7 @@ nightsoil	night soil
 nihonbashi	Nihonbashi
 ninomaru	ninomaru
 noborigama	noborigama
+nogyo zensho	Nogyo Zensho
 northern song	Song dynasty
 nrcs	NRCS
 nrcs-designed	NRCS
@@ -944,6 +949,7 @@ shokuho period	Shokuho period
 shop-house	machiya
 shophouse	machiya
 shophouses	machiya
+shoulder month	shoulder month
 showa	Showa
 shoya	shoya
 shubiki	shubiki
@@ -963,6 +969,8 @@ six ministries	Six Ministries
 skimmer wall	skimmer wall
 sluice	sluice
 sluices	sluice
+soffit	soffit
+soffits	soffit
 sogamae	sogamae
 sokohi	sokohi
 solidity	solidity
@@ -999,6 +1007,8 @@ suid	suid
 suiden	suiden
 suids	suid
 suimon	suimon
+sun lane	sun lane
+sun lanes	sun lane
 superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
@@ -1051,6 +1061,9 @@ the pool	the pool
 thousand character classic	Thousand Character Classic
 three bays	bay
 three officials	Three Officials
+threshing yard	threshing yard
+threshing yards	threshing yard
+threshing-yard	threshing yard
 throwing	throwing
 tian'geng	bund
 tiangeng	bund
@@ -1092,10 +1105,12 @@ tōhoku	Tohoku
 tōkaidō	Tokaido
 tōya	miyaza
 ujidera	bodaiji
+ujigami	ujigami
 ujiko	ujiko
 umagutsu	umagutsu
 umaya	umaya
 umayado	umayado
+umayagoe	kyuhi
 umazouri	umagutsu
 umon	umon
 understory	understory
@@ -1159,6 +1174,7 @@ yam	yam
 yamen	yamen
 yashiki	yashiki
 yashikigami	yashikigami
+yashikigami-sama	yashikigami
 yashikirin	yashikirin
 yato	yato
 yatsu	yato
@@ -1201,10 +1217,15 @@ zuku	zuku
 圃場整備	hojo seibi
 土地庙	tudi miao
 塘泺	tanglao
+屋敷林	yashikirin
 御蔵	kura
+枝打ち	edauchi
 梁間	hari-ma
 清明上河図	Qingming Shanghe Tu
 畑永法	hata-ei
+百姓伝記	Hyakusho Denki
+築地松	tsuijimatsu
 纤道	qiandao
+農業全書	Nogyo Zensho
 鈔關	chaoguan
 馬宿	umayado
