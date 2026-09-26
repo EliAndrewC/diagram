@@ -171,6 +171,8 @@ corvee	corvee
 corvée	corvee
 county seat	county seat
 county seats	county seat
+crenelated	crenellated
+crenellated	crenellated
 crib	cribbing
 cribbing	cribbing
 cribs	cribbing
@@ -238,6 +240,7 @@ dobashi	dobashi
 dobei	neribei
 dojo	dojo
 doma	doma
+dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doshin	doshin
 dosojin	dosojin
@@ -464,6 +467,8 @@ honden	honden
 hongo	hongo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
+horse-face	mamian
+horse-faces	mamian
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
 houlongshan	houlongshan
@@ -731,6 +736,7 @@ monk-style outlet	monk outlet
 monospecific	monospecific
 monzen	monzen
 moso	moso
+mozi	Mozi
 mu	mu
 muen-zuka	muenzuka
 muenbotoke	muenzuka
@@ -992,6 +998,7 @@ shokuho period	Shokuho period
 shop-house	machiya
 shophouse	machiya
 shophouses	machiya
+shoucheng lu	Shoucheng Lu
 shoulder month	shoulder month
 showa	Showa
 shoya	shoya
@@ -1212,6 +1219,7 @@ withies	withies
 withy	withies
 wokou	wokou
 wrought iron	wrought iron
+wujing zongyao	Wujing Zongyao
 xiang	xiang
 yacheng	yacheng
 yachida	yato

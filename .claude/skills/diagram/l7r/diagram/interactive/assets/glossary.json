@@ -2635,7 +2635,9 @@
    "mamian",
    "enemy platforms",
    "enemy platform",
-   "enemy tower"
+   "enemy tower",
+   "horse-face",
+   "horse-faces"
   ]
  },
  "maoqu": {
@@ -5080,6 +5082,37 @@
    "prefectural cities",
    "prefecture",
    "prefectures"
+  ]
+ },
+ "crenellated": {
+  "def": "Of a parapet: notched along its top with regular gaps that defenders shoot through, the solid stretches between them giving cover.",
+  "variants": [
+   "crenellated",
+   "crenelated"
+  ]
+ },
+ "Wujing Zongyao": {
+  "def": "The Northern Song state military compendium of 1044, which prescribes how a city wall, its mamian and their towers are built.",
+  "variants": [
+   "Wujing Zongyao"
+  ]
+ },
+ "Mozi": {
+  "def": "A Warring States Chinese philosophical text whose later chapters are manuals of city defense.",
+  "variants": [
+   "Mozi"
+  ]
+ },
+ "Shoucheng Lu": {
+  "def": "A Southern Song treatise by Chen Gui on defending a walled city, written from the siege of De'an.",
+  "variants": [
+   "Shoucheng Lu"
+  ]
+ },
+ "Dongjing Meng Hua Lu": {
+  "def": "Meng Yuanlao's memoir of 1147 recalling life in Kaifeng, the Northern Song capital.",
+  "variants": [
+   "Dongjing Meng Hua Lu"
   ]
  }
 }
