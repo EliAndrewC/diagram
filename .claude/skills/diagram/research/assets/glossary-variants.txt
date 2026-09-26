@@ -246,6 +246,7 @@ dozō	kura
 drainage ditch	drainage ditch
 drainage ditches	drainage ditch
 drawdown	drawdown
+dressed stone	dressed stone
 drill ground	drill ground
 drum tower	gulou
 ds/m	dS/m
@@ -796,11 +797,13 @@ onmyodo	onmyodo
 oshi	oshi
 oshirasu	oshirasu
 ossuary	ossuary
+ote	ote-mon
 ote-mon	ote-mon
 ote-suji	ote-suji
 otedori	ote-suji
 otemon	ote-mon
 otesuji	ote-suji
+oute	ote-mon
 outfall	outfall
 outwork	outwork
 outworks	outwork
@@ -848,6 +851,14 @@ post-stations	shukuba
 postern	postern
 precinct	precinct
 precincts	precinct
+prefectural cities	prefectural city
+prefectural city	prefectural city
+prefecture	prefectural city
+prefectures	prefectural city
+provincial capital	provincial seat
+provincial capitals	provincial seat
+provincial seats	provincial seat
+provincial-capital	provincial seat
 puddled	puddling
 puddling	puddling
 qi	qi
@@ -915,6 +926,7 @@ saien	saien
 sakagura	sakagura
 sally gate	sally port
 sally port	sally port
+sallyport	sally port
 salvage excavation	salvage excavation
 sand sluice	sand sluice
 sando	sando
@@ -1149,6 +1161,7 @@ understory	understory
 ura-dana	ura-dana
 ura-nagaya	ura-nagaya
 usufruct	usufruct
+uzumimon	umon
 vaiśravaṇa	Bishamon
 verge	verge
 verges	verge
@@ -1185,6 +1198,7 @@ weirs	weir
 weitian	weitian
 well sweep	jiegao
 well-sweep	well-sweep
+weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	chenghuangmiao
 wetted perimeter	wetted perimeter

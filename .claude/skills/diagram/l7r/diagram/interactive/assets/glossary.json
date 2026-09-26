@@ -2957,7 +2957,9 @@
   "def": "A castle's front gate, at the head of the ceremonial approach; the rear gate (karamete-mon) is typically opposite it.",
   "variants": [
    "ote-mon",
-   "otemon"
+   "otemon",
+   "ote",
+   "oute"
   ]
  },
  "ote-suji": {
@@ -3247,7 +3249,8 @@
   "def": "A small gate in a fortification through which defenders go out to attack a besieger and come back in.",
   "variants": [
    "sally port",
-   "sally gate"
+   "sally gate",
+   "sallyport"
   ]
  },
  "salvage excavation": {
@@ -3934,7 +3937,8 @@
  "umon": {
   "def": "A walled-up postern: a small gate through a Japanese wall, kept blocked except when it is wanted.",
   "variants": [
-   "umon"
+   "umon",
+   "uzumimon"
   ]
  },
  "understory": {
@@ -4042,7 +4046,8 @@
  "wengcheng": {
   "def": "A barbican: a small walled enclosure outside a Chinese city gate whose own gate is set off the line of the main one, so an attacker must turn under fire.",
   "variants": [
-   "wengcheng"
+   "wengcheng",
+   "Weng Cheng"
   ]
  },
  "wetted perimeter": {
@@ -5051,6 +5056,30 @@
   "variants": [
    "internode",
    "internodes"
+  ]
+ },
+ "provincial seat": {
+  "def": "The walled city where a province's governor and offices sit, one rank above a county seat. Xi'an, inside its Ming wall, is the standing example.",
+  "variants": [
+   "provincial seats",
+   "provincial capital",
+   "provincial capitals",
+   "provincial-capital"
+  ]
+ },
+ "dressed stone": {
+  "def": "Stone cut and squared into regular blocks, laid as a wall's footing or face - at Panmen the base of the barbican court's wall, with brick laid above it.",
+  "variants": [
+   "dressed stone"
+  ]
+ },
+ "prefectural city": {
+  "def": "The seat of a prefecture, the administrative tier above the county; its walled city ordinarily had more gates than a county seat's - eight against four.",
+  "variants": [
+   "prefectural city",
+   "prefectural cities",
+   "prefecture",
+   "prefectures"
   ]
  }
 }
