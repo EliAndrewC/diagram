@@ -144,14 +144,16 @@ forms, and the room's label carries the kind on the sheets that draw it as a roo
 
 ### D6 - The courts are ground rects of their own
 
-Each hand sheet's single `id="precinct"` court-earth rect is split at the divider into an inner-court
-rect and an outer-court rect, both keeping `id="precinct"` (the audit reads the precinct as "the rect(s)"
-so marked - Hayakawa already declares two). The inner rect runs 1 px under the outer so the two
-anti-aliased edges never leave a seam through the divider's gate opening; the ground pattern is in user
-space, so the overlap paints exactly what one rect did. PNG identity and audit identity are measured
-(T-verify), and if the audit's coverage figure moves because of the overlap the split is made seam-free
-without an overlap instead. Ubame's border court is tagged as its own court if it is drawn as ground of
-its own; if it is not, its label and furniture are.
+Each hand sheet's `id="precinct"` court-earth rect is split at the divider into an inner-court rect and an
+outer-court rect, both keeping `id="precinct"` (the audit reads the precinct as "the rect(s)" so marked -
+Hayakawa already declared two). The ground pattern is in user space, so two rects paint what one did; where
+their anti-aliased edges meet, the seam must not show through the divider's gate opening. Which join is
+seam-free is MEASURED per sheet, never assumed: on Ochiba the two rects ABUT (0 px differ; a 1 px overlap
+left 72 px differing where the seam crosses the opening), on Ubame the inner rect runs 1 unit under the
+outer (abutting left the seam visible in its household-door gap). Every sheet's PNG and audit are measured
+identical after the split. Ubame's border court is drawn as ground of its own (the receiving garden's rect
+under its BORDER COURT label, x 920 y 462, 106 by 94 px), so that rect carries the border court's kind with
+its label and lantern.
 
 ### D7 - The placer writes kinds
 
